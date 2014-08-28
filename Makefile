@@ -2,6 +2,6 @@
 
 
 archive:
-	HOOT_TARNAME=hootenanny-`$$HOOT_HOME/scripts/GitVersion.sh` ; \
+	HOOT_TARNAME=hootenanny-translations-`$$HOOT_HOME/scripts/GitVersion.sh` ; \
 	rm -f $$HOOT_TARNAME.tar.gz ; \
 	tar czf $$HOOT_TARNAME.tar.gz plugins-local
