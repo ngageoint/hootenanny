@@ -14,7 +14,9 @@ utp.rules = {
      ['F_CODE','AC000','facility','yes'], // Processing Facility - NFDD AL010
      ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
      ['F_CODE','AL015',undefined,undefined], // Building - NFDD AL013 - gets rid of warnings
+     ['F_CODE','AL121','military','anti_aircraft_artillery'], // Anti Aircraft Artillery Site (DFDD) - NFDD ???? 
      ['F_CODE','AL240','man_made','tower'], // Tower - NFDD AL241
+     ['F_CODE','AQ064','man_made','causeway'], // Causeway - NFDD AQ063
      ['F_CODE','AT030','power','line'], // Power Line - NFDD AT005
      ['F_CODE','AT040','pylon','yes'], // Pylon - NFDD AT042
      ['F_CODE','AT050','use','communication'], // Communication Building - No code
@@ -22,7 +24,7 @@ utp.rules = {
      ['F_CODE','BB190','waterway','dock'], // Pier/Wharf/Quay - NFDD BB081
      ['F_CODE','BB042','man_made','mole'], // Mole - NFDD BB081
      ['F_CODE','BH080','water','lake'], // Lake/Pond - NFDD BH082
-     ['F_CODE','BH130','landuse','reservoir'], // Reservoir - NFDD BH082
+     ['F_CODE','BH130','water','reservoir'], // Reservoir - NFDD BH082
      ['F_CODE','EC030','landuse','forest'], // Trees - NFDD EC015
      ['F_CODE','IE020','poi','yes'], // Miscellaneous - No code
      ['F_CODE','SU003','building','port_facility'], // Port Facility - NFDD BB009 Port is not a good fit
@@ -199,17 +201,28 @@ utp.rules = {
      ['HYC','Dry (3)','intermittent','dry'], // Dry
 
      // RIT - Road Interchange Type
+     ['RIT','Cloverleaf','junction','cloverleaf'], // Cloverleaf
      ['RIT','Cloverleaf (1)','junction','cloverleaf'], // Cloverleaf
-     ['RIT',' Diamond (2)','junction','diamond'], // Diamond
+     ['RIT','Diamond','junction','diamond'], // Diamond
+     ['RIT','Diamond (2)','junction','diamond'], // Diamond
+     ['RIT','Fork','junction','fork'], // Fork
      ['RIT','Fork (3)','junction','fork'], // Fork
-     ['RIT','Other (999)','junction','other'], // Other
+     ['RIT','Other','junction','other'], // Other
+     ['RIT','Other','junction','other'], // Other
      ['RIT','Rotary/Traffic Circle/Ro','junction','roundabout'], // Rotary
+     ['RIT','Rotary/Traffic Circle/Roundabout','junction','roundabout'], // Rotary
      ['RIT','Rotary/Traffic Circle/Roundabout (4)','junction','roundabout'], // Rotary
+     ['RIT','Staggered Ramps','junction','staggered_ramps'], // Staggered Ramps
      ['RIT','Staggered Ramps (5)','junction','staggered_ramps'], // Staggered Ramps
+     ['RIT','Standard Ramps','junction','standard_ramps'], // Standard Ramps
      ['RIT','Standard Ramps (6)','junction','standard_ramps'], // Standard Ramps
+     ['RIT','Symmetrical Ramps','junction','symmetrical_ramps'], // Symmetrical Ramps
      ['RIT','Symmetrical Ramps (7)','junction','symmetrical_ramps'], // Symmetrical Ramps
+     ['RIT','Trumpet','junction','trumpet'], // Trumpet
      ['RIT','Trumpet (8)','junction','trumpet'], // Trumpet
+     ['RIT','Turban','junction','turban'], // Turban
      ['RIT','Turban (9)','junction','turban'], // Turban
+     ['RIT','Wye','junction','wye'], // Wye
      ['RIT','Wye (10)','junction','wye'], // Wye
 
      // ZI017_RRA - Track Information : Railway Power Method
@@ -274,6 +287,7 @@ utp.rules = {
      ['MCC','Soil','material','soil'],
      ['MCC','Steel','material','steel'], // Steel
      ['MCC','Steel (107)','material','steel'], // Steel
+     ['MCC','Stone','material','stone'], // Stone
      ['MCC','Stone (108)','material','stone'], // Stone
      ['MCC','Other','material','other'], // Other
      ['MCC','Other (999)','material','other'], // Other
@@ -282,10 +296,13 @@ utp.rules = {
      ['FUNCTION','Administration Building','office','administrative'], // Administration
      ['FUNCTION','Administration Building (28)','office','administrative'], // Administration
      ['FUNCTION','Aircraft Maintenance Shop','repair','aircraft'],
-     ['FUNCTION','Aircraft Maintenance Shop (29)','repair','aircraft'],
+     ['FUNCTION','Aircraft Maintenance Shop','repair','aircraft'],
+     ['FUNCTION','Aerator','man_made','aerator'],
+     ['FUNCTION','Aerator (72)','man_made','aerator'],
      ['FUNCTION','Airport Terminal','aeroway','terminal'],
      ['FUNCTION','Airport Terminal (129)','aeroway','terminal'],
      ['FUNCTION','Armory','military','armory'],
+     ['FUNCTION','Auditorium','amenity','auditorium'],
      ['FUNCTION','Auditorium (87)','amenity','auditorium'],
      ['FUNCTION','Bank','amenity','bank'], // Retail Banking
      ['FUNCTION','Bank (53)','amenity','bank'], // Retail Banking
@@ -295,6 +312,7 @@ utp.rules = {
      ['FUNCTION','Barracks/Dormitory (36)','military','barracks'],
      ['FUNCTION','Bus Station','amenity','bus_station'], // Extra tags in post processing
      ['FUNCTION','Bus Station (130)','amenity','bus_station'], // Extra tags in post processing
+     ['FUNCTION','City Hall','amenity','townhall'],
      ['FUNCTION','City Hall (119)','amenity','townhall'],
      ['FUNCTION','Cemetery Building','building','cemetery_building'],
      ['FUNCTION','Cemetery Building (18)','building','cemetery_building'],
@@ -304,8 +322,11 @@ utp.rules = {
      ['FUNCTION','Consulate (67)','building','consulate'],
      ['FUNCTION','Courthouse','amenity','courthouse'],
      ['FUNCTION','Courthouse (61)','amenity','courthouse'],
+     ['FUNCTION','Customs House','amenity','customs'],
      ['FUNCTION','Customs House (31)','amenity','customs'],
      ['FUNCTION','Depot Terminal (27)','man_made','depot'], // Not good
+     ['FUNCTION','Dependents Housing/Bivouac Area','building','dependents_housing'], // Not good
+     ['FUNCTION','Dependents Housing/Bivouac Area (93)','building','dependents_housing'],
      ['FUNCTION','Diplomatic Building','amenity','diplomatic_building'], // Diplomacy
      ['FUNCTION','Diplomatic Building (96)','amenity','diplomatic_building'], // Diplomacy
      ['FUNCTION','Dormatory','building','dormitory'],
@@ -315,6 +336,7 @@ utp.rules = {
      ['FUNCTION','Factory (116)','industrial','manufacturing'],
      ['FUNCTION','Fire Station','amenity','fire_station'],
      ['FUNCTION','Fire Station (37)','amenity','fire_station'],
+     ['FUNCTION','Garage','use','garage'],
      ['FUNCTION','Garage (21)','use','garage'],
      ['FUNCTION','Government Administration Building','amenity','government_administration_building'],
      ['FUNCTION','Government Administration Building (5)','amenity','government_administration_building'],
@@ -349,6 +371,7 @@ utp.rules = {
      ['FUNCTION','Military Administration/Operations Building','building','military'], // Defence Activities
      ['FUNCTION','Military Administration/Operations Building (8)','building','military'], // Defence Activities
      ['FUNCTION','Mission','building','mission'],
+     ['FUNCTION','Multi Unit Dwelling','building','appartments'],
      ['FUNCTION','Multi Unit Dwelling (17)','building','appartments'],
      ['FUNCTION','Municipal Hall','amenity','community_centre'], // not great
      ['FUNCTION','Museum','tourism','museum'],
@@ -357,13 +380,17 @@ utp.rules = {
      ['FUNCTION','Non-Governmental building of Significance','building','yes'], // ????
      ['FUNCTION','Non-Governmental building of Significance (140)','building','yes'], // ????
      ['FUNCTION','Non-Governmental building of Significance. (140)','building','yes'], // ????
+     ['FUNCTION','Observatory','building','observatory'],
      ['FUNCTION','Observatory (10)','building','observatory'],
+     ['FUNCTION','Oil/Gas Facilities Building','industrial','oil_gas_facility'],
      ['FUNCTION','Oil/Gas Facilities Building (102)','industrial','oil_gas_facility'],
      ['FUNCTION','Other','building','other'],
      ['FUNCTION','Other (999)','building','other'],
+     ['FUNCTION','Palace','building','palace'],
      ['FUNCTION','Palace (11)','building','palace'],
      ['FUNCTION','Police Station','amenity','police'], // Law Enforcement
      ['FUNCTION','Police Station (12)','amenity','police'],
+     ['FUNCTION','Post Office','amenity','post_office'],
      ['FUNCTION','Post Office (35)','amenity','post_office'],
      ['FUNCTION','Power Generation','use','power_generation'],
      ['FUNCTION','Power Generation (83)','use','power_generation'],
@@ -372,19 +399,23 @@ utp.rules = {
      ['FUNCTION','Processing/Treatment (89)','industrial','manufacturing'],
      ['FUNCTION','Pumphouse','man_made','pumping_station'],
      ['FUNCTION','Pumphouse (90)','man_made','pumping_station'],
+     ['FUNCTION','Railroad Station','railway','station'],
      ['FUNCTION','Railroad Station (94)','railway','station'],
+     ['FUNCTION','Railroad Storage/Repair Facility','repair','railroad'],
      ['FUNCTION','Railroad Storage/Repair Facility (26)','repair','railroad'],
      ['FUNCTION','Repair Facility','repair','yes'],
      ['FUNCTION','Repair Facility (124)','repair','yes'],
      ['FUNCTION','Research and Development Lab/Research Facility (59)','building','research'],
      ['FUNCTION','Restaurant','amenity','restaurant'], // Restaurant
      ['FUNCTION','Restaurant (57)','amenity','restaurant'],
+     ['FUNCTION','Sanitarium','amenity','sanatorium'], // OSM Spelling
      ['FUNCTION','Sanitarium (106)','amenity','sanatorium'], // OSM Spelling
      ['FUNCTION','School','building','school'], // Education
      ['FUNCTION','School (15)','building','school'],
      ['FUNCTION',"Senior Citizen's Home (109)",'social_facility','senior'], // NOTE QUOTES. Fixed in Post Proc
      ['FUNCTION','Service/Refueling Station','shop','fuel'], // Petrol Sale -- links to AQ170 Motor Vehicle Station
      ['FUNCTION','Service/Refueling Station (54)','shop','fuel'], // Petrol Sale -- links to AQ170 Motor Vehicle Station
+     ['FUNCTION','Shipyard','amenity','shipyard'],
      ['FUNCTION','Shipyard (110)','amenity','shipyard'],
      ['FUNCTION','Sportsplex','leisure','sports_centre'],
      ['FUNCTION','Sportsplex (111)','leisure','sports_centre'],
@@ -393,9 +424,11 @@ utp.rules = {
      ['FUNCTION','Telephone Switching Station','building','branch_telephone_exchange'],
      ['FUNCTION','Theater','amenity','theatre'],
      ['FUNCTION','Theater (127)','amenity','theatre'],
+     ['FUNCTION','Town Hall','amenity','townhall'],
      ['FUNCTION','Town Hall (52)','amenity','townhall'],
      ['FUNCTION','Warehouse','building','warehouse'], // Warehousing and Storage
      ['FUNCTION','Warehouse (24)','building','warehouse'],
+     ['FUNCTION','Weather Station','man_made','weather_station'],
      ['FUNCTION','Weather Station (92)','man_made','weather_station'],
 
      // POS - Power Source
@@ -557,6 +590,7 @@ utp.rules = {
      // ['TRS','-999999',undefined,undefined], // No Information
      ['TUC','Pedestrian','transport:type','pedestrian'], // Pedestrian
      ['TUC','Pedestrian (17)','transport:type','pedestrian'], // Pedestrian
+     ['TUC','Railroad','transport:type','railway'], // Railway
      ['TUC','Railroad (3)','transport:type','railway'], // Railway
      ['TUC','Road','transport:type','road'], // Road
      ['TUC','Road (4)','transport:type','road'], // Road

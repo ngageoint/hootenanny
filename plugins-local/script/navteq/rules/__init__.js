@@ -239,7 +239,7 @@ navteq.rules = {
      ['FAC_TYPE','9562','shop','flowers'], // Flowers & Jewelry
      ['FAC_TYPE','9563','shop','antiques'], // Gift, Antique & Art
      ['FAC_TYPE','9564','shop','optician'], // Optical
-     ['FAC_TYPE','9565','shop','chemist'], // Pharmacy
+     ['FAC_TYPE','9565','amenity','pharmacy'], // Pharmacy
      ['FAC_TYPE','9566','shop','video'], // Record, CD & Video
      ['FAC_TYPE','9567','shop','specialty'], // Specialty Store
      ['FAC_TYPE','9568','shop','sports'], // Sports Store
