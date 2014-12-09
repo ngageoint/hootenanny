@@ -2,7 +2,7 @@
     UTP One2one rules
 */
 
-__setupPackage__(__extension__);
+// __setupPackage__(__extension__);
 
 utp.rules = {
     // ##### Start of One2One Rules #####
@@ -208,7 +208,6 @@ utp.rules = {
      ['RIT','Fork','junction','fork'], // Fork
      ['RIT','Fork (3)','junction','fork'], // Fork
      ['RIT','Other','junction','other'], // Other
-     ['RIT','Other','junction','other'], // Other
      ['RIT','Rotary/Traffic Circle/Ro','junction','roundabout'], // Rotary
      ['RIT','Rotary/Traffic Circle/Roundabout','junction','roundabout'], // Rotary
      ['RIT','Rotary/Traffic Circle/Roundabout (4)','junction','roundabout'], // Rotary
@@ -295,7 +294,6 @@ utp.rules = {
      // FUNCTION - Taken from FFN
      ['FUNCTION','Administration Building','office','administrative'], // Administration
      ['FUNCTION','Administration Building (28)','office','administrative'], // Administration
-     ['FUNCTION','Aircraft Maintenance Shop','repair','aircraft'],
      ['FUNCTION','Aircraft Maintenance Shop','repair','aircraft'],
      ['FUNCTION','Aerator','man_made','aerator'],
      ['FUNCTION','Aerator (72)','man_made','aerator'],

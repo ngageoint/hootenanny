@@ -9,9 +9,8 @@
     MattJ, Mar 14
 */
 
-__setupPackage__(__extension__);
+//__setupPackage__(__extension__);
 
-require('translate');
 
 navteq = {
     // ##### Start of the xxToOsmxx Block #####
@@ -168,7 +167,14 @@ navteq = {
     { 
         tags = {};  // The final output Tag list
 
-        if (getHootConfig('ogr.debug.dumpattrs')) for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        // Set up some config values
+        var debugDumpAttrs = getHootConfig('ogr.debug.dumpattrs');
+        if (debugDumpAttrs == "") debugDumpAttrs = config.getOgrDebugDumpattrsDefaultValue();
+        
+        var debugDumpTags = getHootConfig('ogr.debug.dumptags');
+        if (debugDumpTags == "") debugDumpAttrs = config.getOgrDebugDumptagsDefaultValue();
+        
+        if (debugDumpAttrs == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
 
         if (navteq.lookup == undefined)
         {
@@ -179,7 +185,7 @@ navteq = {
         navteq.applyToOsmPreProcessing(attrs, layerName);
 
         // one 2 one
-        translate.applyOne2One(attrs, tags, navteq.lookup);
+        translate.applyOne2One(attrs, tags, {'k':'v'}, navteq.lookup);
 
         // apply the simple number and text biased rules
         translate.applySimpleTxtBiased(attrs, tags, navteq.rules.txtBiased, 'forward');
@@ -187,7 +193,7 @@ navteq = {
         // post processing
         navteq.applyToOsmPostProcessing(attrs, tags, layerName);
 
-        if (getHootConfig('ogr.debug.dumptags')) for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
+        if (debugDumpTags == 'true') for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
 
         return tags;
     } // End of toOsm

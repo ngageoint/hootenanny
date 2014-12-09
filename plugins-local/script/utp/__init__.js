@@ -6,17 +6,10 @@
     ##### This has been chopped down from the bigger NFDD script. #####
 
     See the big__init__.js file for the rest of the values
-
     Based on nfdd/__init__.js script
-
-    Possible attribute values are taken from somewhere....
-
-    MattJ, Feb 14
 */
 
-__setupPackage__(__extension__);
-
-require('translate');
+// __setupPackage__(__extension__);
 
 utp = {
     // ##### Start of the xxToOsmxx Block #####
@@ -290,24 +283,40 @@ utp = {
     { 
         tags = {};  // The final output Tag list
 
+        // Set up some config values
+        var debugDumpAttrs = getHootConfig('ogr.debug.dumpattrs');
+        if (debugDumpAttrs == "") debugDumpAttrs = config.getOgrDebugDumpattrsDefaultValue();
+        
+        var debugDumpTags = getHootConfig('ogr.debug.dumptags');
+        if (debugDumpTags == "") debugDumpAttrs = config.getOgrDebugDumptagsDefaultValue();
+ 
+        var debugAddFcode = getHootConfig('ogr.debug.addfcode');
+        if (debugAddFcode == "") debugAddFcode = config.getOgrDebugDumptagsDefaultValue();
+        
         if (utp.lookup == undefined)
         {
-            // Add the common FCODE rules
-            // utp.rules.one2one.push.apply(utp.rules.one2one,utp.rules.fcodeOne2one);
+            // Setup lookup tables to make translation easier. I'm aumeing that since this is not set, the 
+            // other tables are not set either.
+
+            // Add the FCODE rules to the one2one rules.
             utp.rules.one2one.push.apply(utp.rules.one2one,fcodeCommon.one2one);
-
-            // Add the UTP specific FCODEs
             utp.rules.one2one.push.apply(utp.rules.one2one,utp.rules.fcodeOne2oneIn);
-
+            
             utp.lookup = translate.createLookup(utp.rules.one2one);
+
+            // Build an Object with both the SimpleText & SimpleNum lists
+            utp.biasedList = translate.joinList(utp.rules.numBiased, utp.rules.txtBiased);
+            
+            // Add features to ignore
+            utp.biasedList.F_CODE = '';
         }
 
         // pre processing
         utp.applyToOsmPreProcessing(attrs, layerName);
 
         // one 2 one
-        translate.applyOne2One(attrs, tags, utp.lookup);
-
+        translate.applyOne2One(attrs, tags, utp.lookup, {'k':'v'}, utp.biasedList);
+        
         // apply the simple number and text biased rules
         translate.applySimpleNumBiased(attrs, tags, utp.rules.numBiased, 'forward');
         translate.applySimpleTxtBiased(attrs, tags, utp.rules.txtBiased, 'forward');
@@ -315,11 +324,11 @@ utp = {
         // post processing
         utp.applyToOsmPostProcessing(attrs, tags, layerName);
 
-        if (getHootConfig('ogr.debug.dumpattrs')) for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
-        if (getHootConfig('ogr.debug.dumptags')) for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
+        if (debugDumpAttrs == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        if (debugDumpTags == 'true') for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
 
         // debug: Add the FCODE to the tags
-        if (getHootConfig('ogr.debug.addfcode')) tags['raw:debugFcode'] = attrs.F_CODE;
+        if (debugAddFcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
         return tags;
     }, // End of toOsm
