@@ -283,16 +283,6 @@ utp = {
     { 
         tags = {};  // The final output Tag list
 
-        // Set up some config values
-        var debugDumpAttrs = getHootConfig('ogr.debug.dumpattrs');
-        if (debugDumpAttrs == "") debugDumpAttrs = config.getOgrDebugDumpattrsDefaultValue();
-        
-        var debugDumpTags = getHootConfig('ogr.debug.dumptags');
-        if (debugDumpTags == "") debugDumpAttrs = config.getOgrDebugDumptagsDefaultValue();
- 
-        var debugAddFcode = getHootConfig('ogr.debug.addfcode');
-        if (debugAddFcode == "") debugAddFcode = config.getOgrDebugDumptagsDefaultValue();
-        
         if (utp.lookup == undefined)
         {
             // Setup lookup tables to make translation easier. I'm aumeing that since this is not set, the 
@@ -324,11 +314,11 @@ utp = {
         // post processing
         utp.applyToOsmPostProcessing(attrs, tags, layerName);
 
-        if (debugDumpAttrs == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
-        if (debugDumpTags == 'true') for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
+        if (getHootConfig('ogr.debug.dumpattrs') == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        if (getHootConfig('ogr.debug.dumptags') == 'true') for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
 
         // debug: Add the FCODE to the tags
-        if (debugAddFcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+        if (getHootConfig('ogr.debug.addfcode') == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
         return tags;
     }, // End of toOsm
