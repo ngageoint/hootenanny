@@ -11,6 +11,8 @@
 
 // __setupPackage__(__extension__);
 
+require('translate')
+
 utp = {
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName) 
