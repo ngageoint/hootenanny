@@ -167,7 +167,7 @@ navteq = {
     { 
         tags = {};  // The final output Tag list
 
-        if (getHootConfig('ogr.debug.dumpattrs') == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
 
         if (navteq.lookup == undefined)
         {
@@ -186,7 +186,7 @@ navteq = {
         // post processing
         navteq.applyToOsmPostProcessing(attrs, tags, layerName);
 
-        if (getHootConfig('ogr.debug.dumptags') == 'true') for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
 
         return tags;
     } // End of toOsm
