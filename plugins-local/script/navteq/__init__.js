@@ -178,7 +178,7 @@ navteq = {
         navteq.applyToOsmPreProcessing(attrs, layerName);
 
         // one 2 one
-        translate.applyOne2One(attrs, tags, {'k':'v'}, navteq.lookup);
+        translate.applyOne2One(attrs, tags, navteq.lookup, {'k':'v'}, navteq.rules.txtBiased);
 
         // apply the simple number and text biased rules
         translate.applySimpleTxtBiased(attrs, tags, navteq.rules.txtBiased, 'forward');
