@@ -693,25 +693,25 @@ utp.rules = {
      // ['WORSHIP','999','building:religious','other'], // Other - to avoid conflicts
 
      // SEC_CLASS - Security classification
-     ['SEC_CLASS','5','security:classification','unclassified'], // Really, this is a first
-     ['SEC_CLASS','Unclassified','security:classification','unclassified'],
-     ['SEC_CLASS','Unclassified (5)','security:classification','unclassified'],
-     ['SEC_CLASS','Unclassified (5) (5)','security:classification','unclassified'],
-     ['SEC_CLASS','Restricted','security:classification','restricted'],
-     ['SEC_CLASS','Confidential','security:classification','confidential'],
-     ['SEC_CLASS','Secret','security:classification','secret'],
-     ['SEC_CLASS','Top Secret','security:classification','top_secret'],
+     ['SEC_CLASS','5','security:classification','U'], // Really, this is a first
+     ['SEC_CLASS','Unclassified','security:classification','U'],
+     ['SEC_CLASS','Unclassified (5)','security:classification','U'],
+     ['SEC_CLASS','Unclassified (5) (5)','security:classification','U'],
+     ['SEC_CLASS','Restricted','security:classification','R'],
+     ['SEC_CLASS','Confidential','security:classification','C'],
+     ['SEC_CLASS','Secret','security:classification','S'],
+     ['SEC_CLASS','Top Secret','security:classification','TS'],
 
      // ZSAX_RX3 - Restriction Information : Security Attributes Group (resource non-intelligence community markings)
-     ['QLE','LIMDIS','security:non_ic_dissemination_control','limited_distribution'],
-     ['QLE','Limited Distribution','security:non_ic_dissemination_control','limited_distribution'],
-     ['QLE','FOUO','security:ic_dissemination_control','for_official_use_only'],
-     ['QLE','LIMIDS','security:non_ic_dissemination_control','limited_distribution'], // Really ??
-     ['QLE','FOULO','security:ic_dissemination_control','for_official_use_only'], // Really ??
+     ['QLE','LIMDIS','security:non_ic_dissemination_control','DS'],
+     ['QLE','Limited Distribution','security:non_ic_dissemination_control','DS'],
+     ['QLE','FOUO','security:ic_dissemination_control','FOUO'],
+     ['QLE','LIMIDS','security:non_ic_dissemination_control','DS'], // Really ??
+     ['QLE','FOULO','security:ic_dissemination_control','FOUO'], // Really ??
 
      // Modification of ZSAX_RX3 for SOURCE releasability
      // Kind of ugly and will probably cause problems with dirty-word checkers
-     ['SRC_RELSE','LIMDIS','source:non_ic_dissemination_control','limited_distribution'],
+     ['SRC_RELSE','LIMDIS','source:non_ic_dissemination_control','DS'],
 
      // ZI004_RCG - Process Step Information : Resource Content Originator
      // This is just plain Ugly

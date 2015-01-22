@@ -287,7 +287,7 @@ utp = {
 
         if (utp.lookup == undefined)
         {
-            // Setup lookup tables to make translation easier. I'm aumeing that since this is not set, the 
+            // Setup lookup tables to make translation easier. I'm assuming that since this is not set, the 
             // other tables are not set either.
 
             // Add the FCODE rules to the one2one rules.
