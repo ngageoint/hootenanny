@@ -27,11 +27,7 @@
 
 /*
     UTP conversion script
-        UTP -> OSM, and
-    ##### This has been chopped down from the bigger NFDD script. #####
-
-    See the big__init__.js file for the rest of the values
-    Based on nfdd/__init__.js script
+        UTP -> OSM
 */
 
 utp = {

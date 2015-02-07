@@ -234,9 +234,9 @@ utp.rules = {
      ['RIT','Fork','junction','fork'], // Fork
      ['RIT','Fork (3)','junction','fork'], // Fork
      ['RIT','Other','junction','other'], // Other
-     ['RIT','Rotary/Traffic Circle/Ro','junction','roundabout'], // Rotary
-     ['RIT','Rotary/Traffic Circle/Roundabout','junction','roundabout'], // Rotary
-     ['RIT','Rotary/Traffic Circle/Roundabout (4)','junction','roundabout'], // Rotary
+     ['RIT','Rotary/Traffic Circle/Ro','junction','rotary'], // Rotary
+     ['RIT','Rotary/Traffic Circle/Roundabout','junction','rotary'], // Rotary
+     ['RIT','Rotary/Traffic Circle/Roundabout (4)','junction','rotary'], // Rotary
      ['RIT','Staggered Ramps','junction','staggered_ramps'], // Staggered Ramps
      ['RIT','Staggered Ramps (5)','junction','staggered_ramps'], // Staggered Ramps
      ['RIT','Standard Ramps','junction','standard_ramps'], // Standard Ramps
@@ -729,11 +729,11 @@ utp.rules = {
      ['SEC_CLASS','Top Secret','security:classification','TS'],
 
      // ZSAX_RX3 - Restriction Information : Security Attributes Group (resource non-intelligence community markings)
-     ['QLE','LIMDIS','security:non_ic_dissemination_control','DS'],
-     ['QLE','Limited Distribution','security:non_ic_dissemination_control','DS'],
-     ['QLE','FOUO','security:ic_dissemination_control','FOUO'],
-     ['QLE','LIMIDS','security:non_ic_dissemination_control','DS'], // Really ??
-     ['QLE','FOULO','security:ic_dissemination_control','FOUO'], // Really ??
+     ['QLE','LIMDIS','security:dissemination_control:non_ic','DS'],
+     ['QLE','Limited Distribution','security:dissemination_control:non_ic','DS'],
+     ['QLE','FOUO','security:dissemination_control:ic','FOUO'],
+     ['QLE','LIMIDS','security:dissemination_control:non_ic','DS'], // Really ??
+     ['QLE','FOULO','security:dissemination_control:ic','FOUO'], // Really ??
 
      // Modification of ZSAX_RX3 for SOURCE releasability
      // Kind of ugly and will probably cause problems with dirty-word checkers
@@ -742,7 +742,7 @@ utp.rules = {
      // ZI004_RCG - Process Step Information : Resource Content Originator
      // This is just plain Ugly
      // Only one of these. I don't think anyone else actually makes UTP
-     ['ORIG','US Army Geospatial Center','attribution','usArmyGeospatialCenter'], // U.S.ArmyGeospatialCenter(AGC)
+     ['ORIG','US Army Geospatial Center','attribution','u.s._army_geospatial_center_(agc)'], // U.S.ArmyGeospatialCenter(AGC)
 
      ], // End one2one
 
