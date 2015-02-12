@@ -70,7 +70,7 @@ utp.rules = {
      'ROUTE_NUM':'ref', // Route Number?
      'RTN':'ref', // Route Number?
      'SOURCE':'source:name', // Source
-     'PUB_DATE':'source:creation_date', // 
+     'PUB_DATE':'source:date_time', //
      }, // End txtBiased
 
     // One2one rules for Number attributes
