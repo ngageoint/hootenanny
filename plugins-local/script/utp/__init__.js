@@ -48,7 +48,7 @@ utp = {
         /* 
            Now fix up the crazyness with RST, SURFACE, SMC, MATERIAL and MCC.
            MCC & MATERIAL _really_ should be just for vertical construction (building, tower etc) but some of the 
-           _wonderful_ folks who make UTP havw a habit of mixing RST with SURFACE with SMC with MATERIAL with MCC. 
+           _wonderful_ folks who make UTP have a habit of mixing RST with SURFACE with SMC with MATERIAL with MCC.
            Some files have SURFACE = RST, others have SURFACE = SMC. Also some have MATERIAL = MCC, others have 
            MATERIAL = RST.   AAARRRGGGHHH!!!
         */
@@ -263,17 +263,6 @@ utp = {
             delete tags.surface;
         }
 
-        // Add a building tag to buildings if we don't have one.
-        // for: amenity = XXX etc
-        if (attrs.F_CODE == 'AL015' && !(tags.building))  tags.building = 'yes';
-
-        // Add a building tag to "Communications Buildings"
-        if (attrs.F_CODE == 'AT050' && !(tags.building))  tags.building = 'yes';
-
-        // temp hack from the osm rules replacing type='yes' with type='building'
-        // Not sure why.
-        // if (attrs.F_CODE == 'AL015' && !(tags.building))  tags.building = 'building';
-
         // If we have a Tower, Add a man_made tag
         if (tags['tower:type']) tags.man_made = 'tower';
 
@@ -291,6 +280,12 @@ utp = {
             delete tags.social_facility;
         }
 
+        // Default values for common features
+        if (attrs.F_CODE == 'AL015' && !(tags.building))  tags.building = 'yes';
+        if (attrs.F_CODE == 'AP020' && !(tags.junction)) tags.junction = 'yes';
+        if (attrs.F_CODE == 'AQ040' && !(tags.bridge)) tags.bridge = 'yes';
+        if (attrs.F_CODE == 'AT050' && !(tags.building))  tags.building = 'yes';
+        if (attrs.F_CODE == 'BH140' && !(tags.waterway)) tags.waterway = 'river';
 
     }, // End of applyToOsmPostProcessing
   
@@ -302,20 +297,23 @@ utp = {
     { 
         tags = {};  // The final output Tag list
 
+        // Debug:
+        if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+
         if (utp.lookup == undefined)
         {
-            // Setup lookup tables to make translation easier. I'm assuming that since this is not set, the 
+            // Setup lookup tables to make translation easier. I'm assuming that since this is not set, the
             // other tables are not set either.
 
             // Add the FCODE rules to the one2one rules.
             utp.rules.one2one.push.apply(utp.rules.one2one,fcodeCommon.one2one);
             utp.rules.one2one.push.apply(utp.rules.one2one,utp.rules.fcodeOne2oneIn);
-            
+
             utp.lookup = translate.createLookup(utp.rules.one2one);
 
             // Build an Object with both the SimpleText & SimpleNum lists
             utp.biasedList = translate.joinList(utp.rules.numBiased, utp.rules.txtBiased);
-            
+
             // Add features to ignore
             utp.biasedList.F_CODE = '';
         }
@@ -325,7 +323,7 @@ utp = {
 
         // one 2 one
         translate.applyOne2One(attrs, tags, utp.lookup, {'k':'v'}, utp.biasedList);
-        
+
         // apply the simple number and text biased rules
         translate.applySimpleNumBiased(attrs, tags, utp.rules.numBiased, 'forward');
         translate.applySimpleTxtBiased(attrs, tags, utp.rules.txtBiased, 'forward');
@@ -333,10 +331,10 @@ utp = {
         // post processing
         utp.applyToOsmPostProcessing(attrs, tags, layerName);
 
-        if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        // Debug:
         if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
 
-        // debug: Add the FCODE to the tags
+        // If needed, Add the FCODE to the tags
         if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
         return tags;
