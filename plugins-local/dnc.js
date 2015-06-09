@@ -1,0 +1,183 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ */
+
+/*
+    DNC conversion script
+        DNC -> OSM
+        
+    Based on tds/__init__.js script
+*/
+
+dnc = {
+    // ##### Start of the xxToOsmxx Block #####
+    applyToOsmPreProcessing: function(attrs, layerName) 
+    {
+        // List of data values to drop/ignore
+        var ignoreList = { 'UNK':1, 'N/A':1, 'noinformation':1, '-32768':1 };
+
+        // This is a handy loop. We use it to:
+        // 1) Remove all of the "No Information" and -999999 fields
+        // 2) Convert all of the Attrs to uppercase - if needed
+        // 3) Swap some of the funky named attrs around. 
+        // 4) Move the appropriate XXX2 and XXX3 attributes to a 'Note'
+        for (var col in attrs)
+        {
+            // Trim off the whitespace
+            attrs[col] = attrs[col].trim();
+        
+            // slightly ugly but we would like to account for: 'No Information', 'noInformation' etc
+            // First, push to lowercase
+            var attrValue = attrs[col].toString().toLowerCase();
+
+            // Get rid of the spaces in the text
+            attrValue = attrValue.replace(/\s/g, '');
+
+            // Wipe out the useless values
+            if (attrs[col] == '' || attrValue in ignoreList || attrs[col] in ignoreList)
+            {
+                delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
+                continue;
+            }
+
+            // Push the attribute to upper case - if needed
+            var c = col.toUpperCase();
+            if (c !== col)
+            {
+                attrs[c] = attrs[col];
+                delete attrs[col];
+                col = c; // For the rest of this loop iteration
+            }
+
+        } // End in attrs loop
+
+    }, // End of applyToOsmPreProcessing
+
+    applyToOsmPostProcessing : function (attrs, tags, layerName)
+    {
+        // DNC doesn't have a lot of info for land features
+        if (attrs.F_CODE == 'AP020') tags.junction = 'yes';
+        if (attrs.F_CODE == 'AP030') tags.highway = 'road';
+        if (attrs.F_CODE == 'BH140') tags.waterway = 'river';
+
+        // If we have a UFI, store it.
+        tags.source = 'dnc'; 
+        if (attrs.UFI)
+        {
+            tags.uuid = '{' + attrs['UFI'].toString().toLowerCase() + '}';
+        }
+        else
+        {
+            tags.uuid = createUuid(); 
+        }
+
+        if (dnc.osmPostRules == undefined)
+        {
+            // ##############
+            // A "new" way of specifying rules. Jason came up with this while playing around with NodeJs
+            //
+            // Rules format:  ["test expression","output result"];
+            // Note: t = tags, a = attrs and attrs can only be on the RHS
+            var rulesList = [
+            ["t.man_made == 'radar_station'","t['radar:use'] = 'early_warning';"],
+            ["t['cable:type'] && !(t.cable)","t.cable = 'yes';"],
+            ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
+            ["t.foreshore && !(t.tidal)","t.tidal = 'yes'; t.natural = 'water'"],
+            ["t.tidal && !(t.water)","t.natural = 'water'"]
+            ];
+
+            dnc.osmPostRules = translate.buildComplexRules(rulesList);
+        }
+
+        // translate.applyComplexRules(tags,attrs,rulesList);
+        translate.applyComplexRules(tags,attrs,dnc.osmPostRules);
+
+    }, // End of applyToOsmPostProcessing
+  
+    // ##### End of the xxToOsmxx Block #####
+
+    // toOsm - Translate Attrs to Tags
+    // This is the main routine to convert _TO_ OSM
+    toOsm : function(attrs, layerName)
+    {
+        tags = {};  // The final output Tag list
+
+        // Debug:
+        // print('LayerName = ' + layerName.toString().toLowerCase())
+        
+        // Debug:
+        if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+
+        if (dnc.lookup == undefined)
+        {
+            // Setup lookup tables to make translation easier. I'm assumeing that since this is not set, the 
+            // other tables are not set either.
+
+            // Add the FCODE input rules
+            // We add these since they don't conflict with the TDS one2one rules
+            dnc.rules.one2one.push.apply(dnc.rules.one2one,fcodeCommon.one2one);
+            dnc.rules.one2one.push.apply(dnc.rules.one2one,dnc.rules.fcodeOne2oneIn);
+            
+            dnc.lookup = translate.createLookup(dnc.rules.one2one);
+
+            // Build an Object with both the SimpleText & SimpleNum lists
+            dnc.ignoreList = translate.joinList(dnc.rules.numBiased, dnc.rules.txtBiased);
+            
+            // Add features to ignore
+            dnc.ignoreList.F_CODE = '';
+            dnc.ignoreList.FAC_ID = '';
+            dnc.ignoreList.ID = '';
+            dnc.ignoreList.TILE_ID = '';
+            dnc.ignoreList.EDG_ID = '';
+            dnc.ignoreList.END_ID = '';
+        }
+
+        // pre processing
+        dnc.applyToOsmPreProcessing(attrs, layerName);
+
+        // one 2 one
+        translate.applyOne2One(attrs, tags, dnc.lookup, {'k':'v'}, dnc.ignoreList);
+
+        // apply the simple number and text biased rules
+        translate.applySimpleNumBiased(attrs, tags, dnc.rules.numBiased, 'forward');
+        translate.applySimpleTxtBiased(attrs, tags, dnc.rules.txtBiased, 'forward');
+
+        // post processing
+        dnc.applyToOsmPostProcessing(attrs, tags, layerName);
+
+        // debug: Add the FCODE to the tags
+        if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+        
+        if (config.getOgrDebugDumptags() == 'true') 
+        {
+            for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
+            print('');
+        }
+
+        return tags;
+    }, // End of toOsm
+
+} // End of dnc

@@ -131,13 +131,13 @@ navteq.rules = {
 
      // SPEED_CAT
      ['SPEED_CAT','1','maxspeed','none'], // > 130kph 80mph
-     ['SPEED_CAT','2','maxspeed','130 kph'], // 101-130 kph / 65-80 mph
-     ['SPEED_CAT','3','maxspeed','100 kph'], // 91-100 kph / 55-64 mph
-     ['SPEED_CAT','4','maxspeed','90 kph'], // 71-90 kph / 41-54 mph
-     ['SPEED_CAT','5','maxspeed','70 kph'], // 51-70 kph / 31-40 mph
-     ['SPEED_CAT','6','maxspeed','50 kph'], // 31-50 kph / 21-30 mph
-     ['SPEED_CAT','7','maxspeed','30 kph'], // 11-30 kph / 6-20 mph
-     ['SPEED_CAT','8','maxspeed','11 kph'], // Less than 11 kph / 6 mph
+     ['SPEED_CAT','2','maxspeed','130_kph'], // 101-130 kph / 65-80 mph
+     ['SPEED_CAT','3','maxspeed','100_kph'], // 91-100 kph / 55-64 mph
+     ['SPEED_CAT','4','maxspeed','90_kph'], // 71-90 kph / 41-54 mph
+     ['SPEED_CAT','5','maxspeed','70_kph'], // 51-70 kph / 31-40 mph
+     ['SPEED_CAT','6','maxspeed','50_kph'], // 31-50 kph / 21-30 mph
+     ['SPEED_CAT','7','maxspeed','30_kph'], // 11-30 kph / 6-20 mph
+     ['SPEED_CAT','8','maxspeed','11_kph'], // Less than 11 kph / 6 mph
 
      // TOLLWAY 
      ['TOLLWAY','Y','toll','yes'], 
@@ -206,7 +206,7 @@ navteq.rules = {
      ['FAC_TYPE','9502','amenity','telephone'], // Telephone Services
      ['FAC_TYPE','9503','shop','laundry'], // Cleaning & Laundry - close
      ['FAC_TYPE','9504','shop','beauty'], // Hair & Beauty - close
-     ['FAC_TYPE','9505','amenity','health_care'], // Health Care Services - close
+     ['FAC_TYPE','9505','amenity','healthcare'], // Health Care Services - close
      ['FAC_TYPE','9506','amenity','mover'], // Mover ?? No Idea
      ['FAC_TYPE','9507','shop','photo'], // Photography
      ['FAC_TYPE','9508','shop','video_games'], // Video Game Rental

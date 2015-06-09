@@ -258,9 +258,9 @@ utp.rules = {
      ['RRA','999','electrified','other'], // Other
 
      // RRC - Railway Use
-     ['RRC','Main Line/Branch Line (18)','usage','main_or_branch'], // Not great
-     ['RRC','Main Line (16)','usage','main'], // Main Line
-     ['RRC','Branch Line (17)','usage','branch'], // Branch-line
+     ['RRC','Main Line/Branch Line (18)','usage','main_or_branch_line'], // Not great
+     ['RRC','Main Line (16)','usage','main_line'], // Main Line
+     ['RRC','Branch Line (17)','usage','branch_line'], // Branch-line
      ['RRC','Other (999)','usage','other'], // Other
 
       // RSA - Branch Railway Type
@@ -432,8 +432,8 @@ utp.rules = {
      ['FUNCTION','Research and Development Lab/Research Facility (59)','building','research'],
      ['FUNCTION','Restaurant','amenity','restaurant'], // Restaurant
      ['FUNCTION','Restaurant (57)','amenity','restaurant'],
-     ['FUNCTION','Sanitarium','amenity','sanatorium'], // OSM Spelling
-     ['FUNCTION','Sanitarium (106)','amenity','sanatorium'], // OSM Spelling
+     ['FUNCTION','Sanitarium','amenity','sanatorium'],
+     ['FUNCTION','Sanitarium (106)','amenity','sanatorium'],
      ['FUNCTION','School','building','school'], // Education
      ['FUNCTION','School (15)','building','school'],
      ['FUNCTION',"Senior Citizen's Home (109)",'social_facility','senior'], // NOTE QUOTES. Fixed in Post Proc
