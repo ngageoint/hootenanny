@@ -3,7 +3,7 @@ Hootenanny was developed to provide an open source, standards-based approach to 
 Hootenanny is designed to facilitate automated and semi-automated conflation of critical foundation GEOINT features in the topographic domain, namely roads (polylines), buildings (polygons), and points-of-interest (POI's) (points). Conflation happens at the dataset level, where the user's workflow determines the best reference dataset and source content, geometry and attributes, to transfer to the output map.
 
 ###Origin
-Hootenanny was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with DigitalGlobe. The government
+Hootenanny was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with [DigitalGlobe](http://www.digitalglobeblog.com/). The government
 has "unlimited rights" and is releasing this software to increase the impact of government instruments by providing developers
 with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the GNU General Public License.
 
