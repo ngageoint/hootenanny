@@ -1,0 +1,128 @@
+
+////
+// Ultimately I'd like to write a little script that strips out all the references that are unnecessary. For now we'll just put way too many references in all the documents. Oh, well. :(
+////
+
+[bibliography]
+== References
+
+[bibliography]
+.Hootenanny Documentation
+- [[[hootuser]]] "Hootenanny - Supplemental User Documentation"
+- [[[hootalgo]]] "Hootenanny - Algorithms"
+- [[[hootUI]]] "Hootenanny - User Interface Guide"
+- [[[hootDevGuide]]] "Hootenanny Developer Guide": Provides developer guidance on building a Hootenanny instance on Ubuntu 14.04 manually as well as in a semi-automated fashion using the preconfigured Vagrant script procedure.  This guide also provides background on optional third party tools that are useful for extending out of the box Hootenanny capabilities.
+- [[[hootInstall]]] "Hootenanny -Installation Guide": Provides installation instruction for CentOS/RHEL 6.5 for Hootenanny and its dependencies.
+
+
+// Please use the Chicago Manual of Style guidelines for citation formatting.
+// The easiest way to get the citation style is using Google Scholar to find the
+// article, then click cite. You can just copy/paste the citation. It is also
+// nice to include a link to the PDF when possible.
+// http://www.ieee.org/documents/ieeecitationref.pdf
+[bibliography]
+.Articles
+- [[[bernardini99]]] Bernardini, Fausto, Chandrajit L. Bajaj, Jindong Chen, and
+  Daniel R. Schikore.
+  http://www.cs.utexas.edu/~bajaj/papers/1996/conference/sharp.pdf["Automatic
+  reconstruction of 3D CAD models from digital scans."] _International Journal
+  of Computational Geometry & Applications_ 9, no.  04n05 (1999): 327-369.
+- [[[breiman2001]]] Breiman, Leo. "Random forests." Machine learning 45.1 (2001):
+  5-32.
+- [[[walter99]]] Walter, Volker, and Dieter Fritsch. "Matching Spatial Data Sets: A Statistical Approach." _International Journal of Geographical Information Science_ 13.5 (1999): 445-73. Web.
+- [[[baeza1994]]] Baeza-Yates, Ricardo, Walter Cunto, Udi Manber, and Sun Wu.
+  http://www.dcc.uchile.cl/~rbaeza/ftp/fqtrees.ps.gz["Proximity matching using
+  fixed-queries trees."] In Combinatorial Pattern Matching, pp. 198-212.
+  Springer Berlin Heidelberg, 1994.
+- [[[benjamin2010]]] Adams Benjamin, L. L. (2010). _A General Framework for Conflation._ Retrieved September 7, 2012, from GeoScience 2012: http://www.giscience2010.org/pdfs/paper_211.pdf
+- [[[bentley1975]]] Bentley, J. L. (1975). Multidimensional binary search trees used for associative searching. _Communications of the ACM_ , 18(9):509-517.
+- [[[chen2006]]] CC Chen, C. K. (2006). Automatically conflating road vector data with orthoimagery. _GeoInformatica_ .
+- [[[doucette2013]]] Doucette, Peter, et al. "Evaluating conflation methods using uncertainty modeling." _SPIE Defense, Security, and Sensing._ International Society for Optics and Photonics, 2013.
+- [[[edwards2002]]] Edwards, D. a. (2002). _Integration and access of multi-source._ Ottawa, Canada: Geospatial Theory, Processing and Applications, ISPRS Commission IV.
+- [[[guttman1984]]] Guttman, Antonin.
+  http://www.cs.cmu.edu/afs/cs/usr/christos/www/courses/826-resources/PAPERS+BOOK/r-trees.PDF[R-trees:
+  a dynamic index structure for spatial searching]. Vol. 14, no. 2. ACM, 1984.
+- [[[hall2009]]] Hall, Mark, et al. "The WEKA data mining software: an update."
+  ACM SIGKDD explorations newsletter 11.1 (2009): 10-18.
+- [[[kamel1993]]] I Kamel, C. F. (1993). _Hilbert R-tree: An improved R-tree using fractals._ 
+- [[[leutenegger1997]]] Leutenegger, Scott T., Mario A. Lopez, and Jeffrey
+  Edgington. "STR: A simple and efficient algorithm for R-tree packing." In Data
+  Engineering, 1997. Proceedings. 13th International Conference on, pp. 497-506.
+  IEEE, 1997.
+- [[[levenshtein1966]]] Levenshtein, Vladimir I. "Binary codes capable of
+  correcting deletions, insertions and reversals." In Soviet physics doklady,
+  vol. 10, p. 707. 1966.
+- [[[li2011]]] Linna Li, M. F. (2011). An optimisation model for linear feature matching in geographical data conflation. _International Journal of Image and Data Fusion_ , 2:4, 309-328.
+- [[[brinkhoff1993]]] Brinkhoff, Thomas, Hans-Peter Kriegel, and Bernhard Seeger.
+  "Efficient processing of spatial joins using R-trees." (1993): 237-246.
+- [[[nta2009]]] National Technology Alliance. (2009). _Conflation Services in an R&D Fusion Environment._ 
+- [[[doucette2004]]] P Doucette, P. A. (2004). Automated Road Extraction from High Resolution Multispectral Imagery. _Photogrammetric Engineering and Remote Sensing_ .
+- [[[smart2010]]] Philip D. Smart, C. B. (2010). Multi-Source Toponym Data Integration and Mediation for a Meta-Gazetteer Service. _Geographic Information Science_ .
+- [[[saalfeld1985]]] Saalfeld, M. P. (1985). Conflation: Automated Map Compilation - A Video Game Approach. _American Society of Photogrammetry_ .
+- [[[saalfeld1987]]] Saalfeld, A. (1987). _Conflation: Automated Map Creation._ Bureau of the Census, Statistical Research Division, Suitland, MD.
+- [[[savary2005]]] Savary, Lionel, and Karine Zeitouni. "Automated linear
+  geometric conflation for spatial data warehouse integration process." The 8th
+  AGILE Conference on GIScience. Estirl, Portugal. 2005.
+- [[[sehgal2006]]] Sehgal, V. ,. (2006). _Entity Resolution in Geospatial Data Integration._ Arlington, Virginia: ACM-GIS .
+- [[[seth2008]]] Seth, Sharad, and Ashok Samal. "Conflation of Features." In
+  Encyclopedia of GIS, pp. 129-133. Springer US, 2008.
+- [[[vi1966]]] VI, L. (1966). Binary codes capable of correcting deletions, insertions, and reversals. _Soviet Physics Doklady_ , 10: 707–10.
+
+[bibliography]
+.Websites
+- [[[google2013]]] Google Inc. (n.d.). _Protocol Buffers - Google's data
+  interchange format_ . Retrieved 1 31, 2013, from
+  http://code.google.com/p/protobuf/
+- [[[icu2012]]] _International Components for Unicode_ . (n.d.). Retrieved
+  August 29, 2012, from http://site.icu-project.org/
+- [[[osmpbf2013]]] OpenStreetMap. (n.d.). _PBF Format_ . Retrieved 1 31, 2013, from http://wiki.openstreetmap.org/wiki/Pbf
+- [[[ortega2012]]] Ortega, I. S. (2012, August 13). _Ogr2osm - OpenStreetMap Wiki_ . Retrieved August 29, 2012, from OpenStreetMap Wiki: http://wiki.openstreetmap.org/wiki/Ogr2osm
+- [[[vividSolutions2005]]] VividSolutions. (2005, January 27). _RoadMatcher_ . Retrieved August 31, 2012, from http://www.vividsolutions.com/products.asp?catg=spaapp&code=roadmatcher
+
+////
+// Please add terms that may not be obvious to non-developers. Each term should
+// have a simple definition and where a appropriate a link to Wikipedia or
+// similar.
+////
+== Glossary
+[glossary]
+[[API]]API::
+  http://en.wikipedia.org/wiki/Application_programming_interface[Application
+  Programming Interface]
+[[Conflation]]Conflation::
+  http://wiki.gis.com/wiki/index.php/Conflation[In GIS], conflation is defined 
+  as the process of combining geographic information from overlapping sources so
+  as to retain accuracte data, minimize redundancy, and reconcile data 
+  conflicts.
+[[ConnectedComponent]]Connected component::
+  In graph theory, a
+  http://en.wikipedia.org/wiki/Connected_component_%28graph_theory%29[connected
+  component] (or just component) of an undirected graph is a subgraph in which
+  any two vertices are connected to each other by paths, and which is connected
+  to no additional vertices in the supergraph.
+[[JS]]JS::
+  http://en.wikipedia.org/wiki/JavaScript[JavaScript], a dynamic scripting language most popular in web browsers
+[[MGCP]]MGCP::
+  http://calval.cr.usgs.gov/wordpress/wp-content/uploads/Dellagnello_Marzio_MGCP-Brief_JACIE-shorter_Approved-for-Public-Release-12-2041.pdf[Multinational
+  Geospatial Co-Production Program]
+[[Node.js]]Node.js::
+  http://en.wikipedia.org/wiki/Node.js[Node.js] is an open source,
+  cross-platform runtime environment for server-side and networking
+  applications. Node.js applications are written in JavaScript.
+[[OpenStreetMap]]OpenStreetMap::
+  OpenStreetMap (OSM) is a collaborative project to create a free editable map
+  of the world. http://www.openstreetmap.org/ 
+[[RMSE]]RMSE::
+  http://en.wikipedia.org/wiki/Root-mean-square_deviation[Root Mean Squared
+  Error] - is a frequently used measure of the differences between value (Sample
+  and population values) predicted by a model or an estimator and the values
+  actually observed.
+[[UFD]]Urban Feature Data::
+  Urban Feature Data - NGA Produced urban level data.
+[[UUID]]Universally Unique Identifier::
+  A universally unique identifier (UUID) is an identifier standard used in
+  software construction, standardized by the Open Software Foundation (OSF) as
+  part of the Distributed Computing Environment (DCE). The intent of UUIDs is to
+  enable distributed systems to uniquely identify information without
+  significant central coordination.
+  (from: http://en.wikipedia.org/wiki/Universally_unique_identifier)

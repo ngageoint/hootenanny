@@ -1,0 +1,18 @@
+
+CONFIG += release 
+CONFIG -= debug
+
+#CONFIG += debug
+#CONFIG -= release
+
+debug {
+  DEFINES += DEBUG
+
+  # Runs expensive validation on several data structures to make sure everything is in sync.
+  #DEFINES += VALIDATE_ON
+}
+
+release {
+  DEFINES -= DEBUG
+}
+

@@ -1,0 +1,157 @@
+
+== JavaScript Overview
+
+The Hootenanny <<JS,JavaScript>> Interfaces provide ways to both call Hootenanny       
+programmatically using <<Node.js,Node.js>> and also embed routines within Hootenanny to     
+change the way that Hootenanny conflates data. This documentation both explains 
+how to use JavaScript in both ways as well as provides reference documentation  
+for some of the commonly used JavaScript interfaces.                            
+
+At this point there are two different implementations of JavaScript within Hootenanny. The older interface uses QtScript for the implementation within the translation scripts. There are plans to replace the QtScript interface with the newer V8 implementation (used by node.js and described below). Until that happens the JavaScript functions described below are not accessible to translation files.
+
+=== Prerequisites
+
+Install node.js in a way appropriate to your system.
+
+During the configure stage of installing Hoot be sure to specify 
++--with-nodejs+.
+
+E.g.
+ 
+----
+./configure --with-nodejs
+----
+
+NOTE: Hootenanny JavaScript support should be considered experimental at best.
+
+=== Using Hootenanny from Node.js
+
+Hoot creates a file called +HootJs.node+ that can be used as part of a node.js
+require statement to include Hootenanny functionality. This file is place in
+the +lib+ directory in +$HOOT_HOME+. 
+
+==== Simple Example
+
+For this script to work you must have the +HOOT_HOME+ environment variable set
+properly.
+
+----
+var HOOT_HOME = process.env.HOOT_HOME                                           
+var hoot = require(HOOT_HOME + '/lib/HootJs');                                  
+                                                                                
+// print hello world to show we can talk to hoot                                        
+console.log(hoot.hello());                                                      
+----
+
+To run the example above save a file called MyExample.js and call:
+
+----
+node MyExample.js
+----
+
+==== Conflate Example
+
+The following example loads data from the test-files directory, conflates it
+and writes the result out to ../tmp/Conflated.osm. The associated file can
+be found in +$HOOT_HOME/scripts/ConflateExample.js+.
+
+----
+/**                                                                             
+ * This is a small example that loads, cleans and conflates two files. There    
+ * is also a little bonus ways splitting on just one of the input files.        
+ *                                                                              
+ * This doesn't address a specific use case, but demonstrates some of the       
+ * functionality exposed to node.js via hootenanny.                             
+ */                                                                             
+var HOOT_HOME = process.env.HOOT_HOME                                           
+var hoot = require(HOOT_HOME + '/lib/HootJs');                                  
+                                                                                
+// print hello world to gain confidence                                         
+console.log(hoot.hello());                                                      
+                                                                                                                          
+                                                                                
+// create a new map and populate it with two input files                        
+var map = new hoot.OsmMap();                                                    
+hoot.loadMap(map, "test-files/ToyTestA.osm", false, 1);                         
+                                                                                
+// clean the data                                                               
+new hoot.MapCleaner().apply(map);                                               
+                                                                                
+// artificially make the ways short in the first input                          
+new hoot.WaySplitterOp({'way.splitter.max.length' : 20}).apply(map);            
+                                                                                
+// load the second input, its ways aren't shortened.                            
+hoot.loadMap(map, "test-files/ToyTestB.osm", false, 2);                         
+                                                                                
+// conflate                                                                     
+new hoot.UnifyingConflator().apply(map)                                         
+                                                                                
+// write the map once w/ debug info                                             
+hoot.set({'writer.include.debug': true});                                       
+hoot.saveMap(map, "../tmp/ConflatedDebug.osm");                                 
+                                                                                
+// write the map a second time without debug info                               
+hoot.set({'writer.include.debug': false});                                      
+hoot.saveMap(map, "../tmp/Conflated.osm");                   
+----
+
+To run the example above use:
+
+----
+cd $HOOT_HOME/scripts
+mkdir -p ../tmp
+node ConflateExample.js
+----
+
+=== Modifying Hootenanny with Javascript
+
+node.js does not provide a convenient way to access it from the command line. To work
+around this issue Hootenanny uses the V8 engine (same as Google Chrome) to
+call Javascript methods. This gives you all the power of Javascript, but you
+do not have access to some of the node.js specific methods such as +console+ and
++require+.
+
+At this point Hootenanny provides the ability to extend the matching and
+merging operations through Javascript.
+
+==== Extending Conflation
+
+In +$HOOT_HOME/rules+ there is an example Javascript file for conflating 
+buildings. The specifics of the API are discussed in _Javascript Conflation
+Reference_ section. These rules are loaded at runtime by Hootenanny if they
+are enabled through the following defines:
+
+* +match.creators+ - List of classes and appropriate parameters to enable
+  specific match creators.
+* +merger.creators+ - List of classes and appropriate parameters to enable
+  specific merger creators.
+
+A match and merger are generally paired together and by enabling or disabling
+specific creators you can dramatically change the way the system works. In our
+simple examples we'll simply set the creators to only use our example +.js+
+files, but you could just as easily enable additional creators.
+
+To use the +PolygonBuilding.js+ example found in +$HOOT_HOME/rules+ we enable
+the appropriate creators with the following commands:
+
+----
+cd $HOOT_HOME
+mkdir -p tmp
+hoot conflate -D match.creators=hoot::ScriptMatchCreator,PolygonBuilding.js -D merger.creators=hoot::ScriptMergerCreator test-files/conflate/unified/AllDataTypesA.osm test-files/conflate/unified/AllDataTypesB.osm tmp/Conflated.osm
+----
+
+After the conflation run completes you can see the conflated buildings towards
+the top of the file (in the southern Denver region).
+
+==== Conflating Sets
+////
+// NOTE: Needs to be flushed out.
+////
+If `isWholeGroup` returns true, then you can simply implement `mergePairs` -- 
+this gives a fair amount of flexibility, but will only handle simple 1:1 merge
+situations. Complex situations like 1:n, m:1, m:n will be marked as needing
+review. You could implement 
+
+If `isWholeGroup` returns false, then you must implement `mergeSets` or risk
+getting an error. This can handle complex merge situations, but generally uses
+pre-canned merge strategies to keep the JavaScript complexity down.

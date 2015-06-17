@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-1118' action='modify' visible='true' lat='34.09963272997' lon='28.93974163759' />
+  <node id='-1116' action='modify' visible='true' lat='34.10082162738' lon='28.94080548731' />
+  <node id='-1114' action='modify' visible='true' lat='34.09957777195' lon='28.93968484695' />
+  <node id='-1112' action='modify' visible='true' lat='34.10062334201' lon='28.93788426007'>
+    <tag k='hoot:id' v='-3' />
+  </node>
+  <node id='-1110' action='modify' visible='true' lat='34.09998639136' lon='28.93894623821'>
+    <tag k='hoot:id' v='-9' />
+  </node>
+  <node id='-1108' action='modify' visible='true' lat='34.10000086329' lon='28.93891791321'>
+    <tag k='hoot:id' v='-10' />
+  </node>
+  <node id='-1106' action='modify' visible='true' lat='34.09999183843' lon='28.93892806007'>
+    <tag k='hoot:id' v='-11' />
+  </node>
+  <node id='-1104' action='modify' visible='true' lat='34.0999813622' lon='28.93895574321'>
+    <tag k='hoot:id' v='-62' />
+  </node>
+  <node id='-1102' action='modify' visible='true' lat='34.09999568885' lon='28.93892382887'>
+    <tag k='hoot:id' v='-65' />
+  </node>
+  <way id='-1126' action='modify' visible='true'>
+    <nd ref='-1114' />
+    <nd ref='-1118' />
+    <tag k='accuracy' v='12.6' />
+    <tag k='all_weather' v='yes' />
+    <tag k='highway' v='motorway' />
+    <tag k='hoot:id' v='-1042' />
+    <tag k='hoot:status' v='2' />
+    <tag k='lanes' v='2' />
+    <tag k='note' v='4' />
+    <tag k='raw:COE' v='0' />
+    <tag k='surface' v='paved' />
+    <tag k='width' v='5' />
+  </way>
+  <way id='-1124' action='modify' visible='true'>
+    <nd ref='-1116' />
+    <nd ref='-1114' />
+    <tag k='accuracy' v='15' />
+    <tag k='highway' v='residential' />
+    <tag k='hoot:id' v='-67' />
+    <tag k='hoot:status' v='1' />
+    <tag k='note' v='3' />
+    <tag k='source' v='Yahoo imagery' />
+  </way>
+  <way id='-1122' action='modify' visible='true'>
+    <nd ref='-1102' />
+    <nd ref='-1110' />
+    <nd ref='-1106' />
+    <nd ref='-1108' />
+    <nd ref='-1102' />
+    <tag k='accuracy' v='12.6' />
+    <tag k='all_weather' v='yes' />
+    <tag k='bridge' v='' />
+    <tag k='highway' v='secondary' />
+    <tag k='hoot:id' v='-36' />
+    <tag k='hoot:status' v='2' />
+    <tag k='lanes' v='4' />
+    <tag k='note' v='2' />
+    <tag k='raw:COE' v='0' />
+    <tag k='surface' v='paved' />
+    <tag k='tunnel' v='' />
+    <tag k='width' v='10' />
+  </way>
+  <way id='-1120' action='modify' visible='true'>
+    <nd ref='-1112' />
+    <nd ref='-1102' />
+    <tag k='accuracy' v='15' />
+    <tag k='bridge' v='' />
+    <tag k='highway' v='unclassified' />
+    <tag k='hoot:id' v='-7' />
+    <tag k='hoot:status' v='1' />
+    <tag k='note' v='1' />
+    <tag k='source' v='Yahoo imagery' />
+    <tag k='tunnel' v='' />
+  </way>
+</osm>

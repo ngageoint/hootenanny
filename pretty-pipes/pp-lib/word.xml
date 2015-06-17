@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<configuration>
+  <!--property>
+    <name>mapred.job.tracker</name>
+    <value>local</value>
+  </property-->
+
+  <property>
+    <name>hadoop.pipes.executable</name>
+    <value>/hoot/HootPipes</value>
+  </property>
+  <property>
+    <name>hadoop.pipes.java.recordreader</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>hadoop.pipes.java.recordwriter</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>mapred.map.tasks</name>
+    <value>1</value>
+  </property>
+  <property>
+    <name>mapred.tasktracker.map.tasks.maximum</name>
+    <value>1</value>
+  </property>
+  <property>
+    <name>mapred.input.format.class</name>
+    <value>org.mrgeo.core.format.HootInputFormat</value>
+  </property>
+  <property>
+    <name>mapred.jar</name>
+    <value>/home/jason.surratt/geoeye/src/mrgeo/mrgeo-core/build/mrgeo-core-full.jar</value>
+  </property>
+</configuration>

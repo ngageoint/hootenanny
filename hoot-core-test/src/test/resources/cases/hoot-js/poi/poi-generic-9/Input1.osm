@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-1939932' action='modify' visible='true' lat='48.1458483' lon='11.6376592'>
+    <tag k='REF1' v='01c422' />
+    <tag k='addr:city' v='München' />
+    <tag k='addr:country' v='DE' />
+    <tag k='addr:housenumber' v='5' />
+    <tag k='addr:postcode' v='81927' />
+    <tag k='addr:street' v='Warthestraße' />
+    <tag k='amenity' v='restaurant' />
+    <tag k='cuisine' v='malaysian' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='Champor' />
+    <tag k='uuid' v='{c50e9a71-63a7-5197-a808-2c9422815b5d}' />
+    <tag k='website' v='http://www.champor.de/' />
+  </node>
+</osm>

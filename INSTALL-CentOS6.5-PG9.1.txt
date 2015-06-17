@@ -1,0 +1,249 @@
+#!/bin/bash
+
+set -e
+
+# CentOS/RHEL 6.5 - Postgres 9.1 #
+
+# I strongly suggest considering Ubuntu 12.04, CentOS/RHEL is significantly
+# more complex and gets a lot less testing.
+
+# Last verified with Hootenanny <not verified>.
+
+#*******************************************************************************
+# Note to those who want to breeze through the install quickly --
+#
+# To an experienced admin these instructions may seem a bit odd. We bend over
+# backwards to ensure we don't stomp on OS library versions which has the added
+# benefit of provided an install that only requires root priveledges for the
+# initial yum install. This means we can have exactly the library version listed
+# below without causing system wide problems.
+#
+# You can likely install all these libraries into the system with RPMs, etc, and
+# possibly use different version numbers, but you aren't going to get any
+# support. Some library versions don't work at all (e.g. OpenCV 2.4.3),
+# others compile fine, but will crash as soon as you throw a little data at it.
+# Following these instructions exactly will likely save you pain
+# later.
+#
+# If you still want to swap out version numbers and change paths I strongly
+# recommend you run all tests after the install and pay attention to any
+# warnings or errors.
+# *******************************************************************************
+
+#
+# Using these instructions:
+#
+# The astute reader may notice that these instructions look a heck of a lot
+# like a shell script. Well, that is because it is a shell script. There are
+# a number of options specified below. You can customize the install location
+# and some other bits. By default the script will download all the deps from
+# the associated websites and install them in /usr/local/. If something goes
+# wrong, you can always fall back on reading the instructions (Eee! Gads!).
+#
+# However, before this will work you need to download FileGDB and OpenCV
+# and put them in the current directory. See the associated directions
+# below for specifics.
+#
+# If you already downloaded everything else then the download step will be
+# skipped and the install will commence directly.
+#
+# I suggest running this script like this:
+#
+# cd $HOME
+# mkdir src
+# # get and upack hoot source tree here
+# bash hootenanny-<your version>/INSTALL-CentOS6.5-PG9.1.txt
+#
+# If you have a wholly wacky or wonky config then please feel free to just
+# read the instructions and modify to suite your needs. But, please don't
+# expect support.
+#
+# Because of the long runtime between install commands you may want to
+# increase your sudo timeout by editing /etc/sudoers by adding:
+# Defaults timestamp_timeout=120
+
+## Decide on an Installation Location ##
+
+#
+# This is where the hoot libraries will live. It will contain all the hoot
+# specific libraries.
+
+  export HOOT_DEST=/usr/local/
+  export SUDO=sudo
+
+#Or, if you don't have admin rights:
+#
+#  export HOOT_DEST=$HOME/local/
+#  export SUDO=''
+
+# Install some packages for building Hootenanny:
+
+sudo yum -y install gcc gcc-c++ libicu-devel boost-devel python-devel gdb cmake python-numeric swig glpk glpk-devel python-argparse apr-devel apr-util-devel nodejs-devel nodejs v8-devel
+# Make qmake-qt4 accessible via "qmake". There is probably a better way.
+sudo rm -f /usr/bin/qmake
+sudo ln -s /usr/lib64/qt4/qmake /usr/bin/qmake
+
+# Install from source as described in the sections below:
+# * CPPUnit (optional)
+# * Log4cxx (optional)
+# * Proj 4
+# * FileGDB
+# * GDAL
+# * GEOS
+# * Open CV
+# * Protocol Buffers
+# * STXXL (optional)
+
+### CPPUnit ###
+
+rm -rf cppunit-1.12.1
+# onsite replace these URL's with valid ones
+test -f cppunit-1.12.1.tar.gz || \
+    wget http://sourceforge.net/projects/cppunit/files/cppunit/1.12.1/cppunit-1.12.1.tar.gz/download -O cppunit-1.12.1.tar.gz
+tar -xzf cppunit-1.12.1.tar.gz
+cd cppunit-1.12.1
+./configure --prefix=$HOOT_DEST/ && make && $SUDO make install
+cd ..
+
+### Log4cxx ###
+
+# You need to patch Log4cxx to get it working. See https://issues.apache.org/jira/browse/LOGCXX-360
+# onsite replace these URL's with valid ones
+#test -f apache-log4cxx-0.10.0.tar.gz || \
+#    wget http://apache.spinellicreations.com/logging/log4cxx/0.10.0/apache-log4cxx-0.10.0.tar.gz
+#tar -xzf apache-log4cxx-0.10.0.tar.gz
+#cd apache-log4cxx-0.10.0
+#./configure --prefix=$HOOT_DEST && make && $SUDO make install
+#cd ..
+
+### Proj 4 ###
+
+rm -rf proj-4.8.0
+# onsite replace these URL's with valid ones
+test -f proj-4.8.0.tar.gz || \
+    wget http://download.osgeo.org/proj/proj-4.8.0.tar.gz
+tar xzf proj-4.8.0.tar.gz
+cd proj-4.8.0
+./configure --prefix=$HOOT_DEST && make && $SUDO make install
+cd ..
+
+### GEOS ###
+
+# You can get the patched version of GEOS from the files section on DG Redmine:
+# https://github.com/ngageoint/hootenanny/releases/download/0.2.14/geos-3.3.8-patched.tgz
+rm -rf geos-3.3.8
+test -f geos-3.3.8-patched.tgz || \
+    (echo Please get a copy of the patched GEOS. ; false )
+tar -xzf geos-3.3.8-patched.tgz
+cd geos-3.3.8
+./configure --prefix=$HOOT_DEST && make && $SUDO make install
+cd ..
+
+### FileGDB ###
+
+# This step is optional but is required if you want to read/write FileGDB.
+#
+# These instructions are loosely based on the instructions here: http://trac.osgeo.org/gdal/wiki/FileGDB
+#
+# * Download FileGDB API 1.3 version for Linux 64-bit from here: http://www.esri.com/apps/products/download/
+# ** This requires a free ESRI Global Account.
+
+tar -xzf FileGDB_API_1_3-64.tar.gz
+$SUDO mv FileGDB_API $HOOT_DEST/FileGDB_API-1.3
+$SUDO cp $HOOT_DEST/FileGDB_API-1.3/lib/* $HOOT_DEST/lib/
+
+### GDAL ###
+
+rm -rf gdal-1.10.1
+# onsite replace these URL's with valid ones
+test -f gdal-1.10.1.tar.gz || \
+    wget http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz
+tar xzf gdal-1.10.1.tar.gz
+cd gdal-1.10.1
+# If you aren't using FileGDB, then remove the --with-fgdb=... argument
+./configure -q --with-pg=/usr/pgsql-9.1/bin/pg_config --with-fgdb=$HOOT_DEST/FileGDB_API-1.3/ --with-python --prefix=$HOOT_DEST && make && $SUDO make install
+cd swig/python
+python setup.py build && $SUDO python setup.py install
+cd $HOOT_DEST
+
+### Open CV ###
+
+# Download the Linux/Mac version from here: http://opencv.org/downloads.html
+# I had serious problems compiling an older version of hoot with OpenCV 2.4.3,
+# but 2.4.5 seems fine.
+
+rm -rf opencv-2.4.5
+tar xzf opencv-2.4.5.tar.gz
+cd opencv-2.4.5
+mkdir release
+cd release
+# Disable Python, CUDA, and Examples.
+cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=$HOOT_DEST -D BUILD_PYTHON_SUPPORT=OFF -D BUILD_EXAMPLES=OFF -D WITH_CUDA=OFF ..
+make && $SUDO make install
+cd ../..
+
+### Protocol Buffers ###
+
+rm -rf protobuf-2.4.1
+# onsite replace these URL's with valid ones
+test -f protobuf-2.4.1.tar.bz2 || \
+    wget http://protobuf.googlecode.com/files/protobuf-2.4.1.tar.bz2
+tar -xjf protobuf-2.4.1.tar.bz2
+cd protobuf-2.4.1
+./configure --prefix=$HOOT_DEST && make && $SUDO make install
+cd ..
+
+### STXXL ###
+
+# Optional
+#rm -rf stxxl-1.3.1
+# onsite replace these URL's with valid ones
+#test -f stxxl-1.3.1.tar.gz || \
+#    wget http://downloads.sourceforge.net/project/stxxl/stxxl/1.3.1/stxxl-1.3.1.tar.gz
+#tar -xzf stxxl-1.3.1.tar.gz
+#cd stxxl-1.3.1
+#make config_gnu || echo "Ignore the error"
+#ENABLED_SHARED=yes ; make library_g++
+#$SUDO cp lib/libstxxl.* $HOOT_DEST/lib/
+#$SUDO cp -R include/* $HOOT_DEST/include/
+#cd ..
+
+### argparse ###
+
+#Most of the time argparse installs via yum:
+
+  sudo yum -y install python-argparse || export ARGPARSE_FAILED=1
+
+# If it doesn't for some reason, then install vi easy_install:
+
+if [ "$ARGPARSE_FAILED" == "1" ]; then
+  sudo yum -y install python-setuptools
+  sudo easy_install argparse
+fi
+
+### asciidoc ###
+
+# onsite replace these URL's with valid ones
+# NOTE:  These instructions have been proven to fail for some CentOS 6.x installations.  The issue
+# is being tracked internally with #5514.
+sudo yum install asciidoc
+sudo yum install texlive
+cd ~
+wget http://sourceforge.net/projects/dblatex/files/dblatex/dblatex-0.3.4/dblatex-0.3.4.tar.bz2
+tar -xvf ~/dblatex-0.3.4.tar.bz2
+cd dblatex-0.3.4
+sudo python ./setup.py install --prefix=/usr/local
+
+## Build the Source ##
+
+echo Follow the instructions to build the hoot source now
+# tar -xvzf hootenanny-<your version>.tar.gz
+# cd hootenanny-<your version>.tar.gz
+# source ./SetupEnv.sh
+# ./configure --with-services -q --prefix=$HOOT_DEST/hootenanny-<your version> && make -s && $SUDO make install
+
+# Optionally link to the hoot executable and directory:
+
+# rm -f $HOOT_DEST/hoot /usr/local/bin/hoot
+# ln -s $HOOT_DEST/hootenanny-<your version>/bin/hoot /usr/local/bin/hoot
+# ln -s $HOOT_DEST/hootenanny-<your version> $HOOT_DEST/hoot

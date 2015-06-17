@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-4001' action='modify' visible='true' lat='-0.36502421849' lon='42.54549008696' />
+  <node id='-3999' action='modify' visible='true' lat='-0.36500479817' lon='42.54570152185' />
+  <node id='-3997' action='modify' visible='true' lat='-0.36487839559' lon='42.54569150179' />
+  <node id='-3995' action='modify' visible='true' lat='-0.36489570577' lon='42.5454800669' />
+  <way id='-4003' visible='true'>
+    <nd ref='-3995' />
+    <nd ref='-3997' />
+    <nd ref='-3999' />
+    <nd ref='-4001' />
+    <nd ref='-3995' />
+    <tag k='amenity' v='police' />
+    <tag k='building' v='yes' />
+    <tag k='building:levels' v='2' />
+    <tag k='condition' v='functional' />
+    <tag k='height' v='9' />
+    <tag k='roof:shape' v='flat' />
+    <tag k='security:classification' v='unclassified' />
+    <tag k='security:non_ic_dissem_ctl' v='limited_distribution' />
+    <tag k='source:res_owner' v='USA' />
+  </way>
+</osm>

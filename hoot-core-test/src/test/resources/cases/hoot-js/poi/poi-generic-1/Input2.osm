@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-118182' visible='true' lat='30.47250998838' lon='31.53239'>
+    <tag k='REF2' v='000de8' />
+    <tag k='alt_name' v='`Izbat Hawd an Nada;عزبة حوض الندى;‘Izbat Ḩawḑ an Nadá' />
+    <tag k='error:circular' v='1000' />
+    <tag k='name' v='‘Izbat Ḩawḑ an Nadá' />
+    <tag k='place' v='populated' />
+    <tag k='uuid' v='GeoNames.org:415705' />
+  </node>
+  <node id='-118180' visible='true' lat='30.48149998839' lon='31.52837'>
+    <tag k='REF2' v='000dd8' />
+    <tag k='alt_name' v='`Izbat as Sab`in;عزبة السبعين;‘Izbat as Sab‘īn' />
+    <tag k='error:circular' v='1000' />
+    <tag k='name' v='‘Izbat as Sab‘īn' />
+    <tag k='place' v='populated' />
+    <tag k='uuid' v='GeoNames.org:415707' />
+  </node>
+</osm>

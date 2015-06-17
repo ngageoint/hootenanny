@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-688928' visible='true' lat='0.00332573307' lon='0.00072876865' />
+  <node id='-688926' visible='true' lat='0.0033807933' lon='0.00213280461' />
+  <node id='-688924' visible='true' lat='0.00577579022' lon='0.00214295844' />
+  <node id='-688922' visible='true' lat='0.00577579022' lon='0.00071139236' />
+  <way id='-688930' action='modify' visible='true'>
+    <nd ref='-688922' />
+    <nd ref='-688924' />
+    <nd ref='-688926' />
+    <nd ref='-688928' />
+    <nd ref='-688922' />
+    <tag k='building' v='yes' />
+    <tag k='leisure' v='stadium' />
+    <tag k='name' v='Broncos' />
+    <tag k='uuid' v='B' />
+  </way>
+</osm>

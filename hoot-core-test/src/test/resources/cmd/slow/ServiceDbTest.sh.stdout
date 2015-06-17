@@ -1,0 +1,83 @@
+Reprojecting 0 / 135         
+07:57:16.384 INFO  .../core/ops/CalculateStatsOp.cpp(  92) Calculating map statistics...
+07:57:17.084 INFO  ...lygon/BuildingMatchCreator.cpp( 178) Loading model from: /home/greg/workspace/hoot/conf/BuildingModel.rf
+07:57:17.454 INFO  ...ighway/HighwayRfClassifier.cpp(  74) Loading highway model from: /home/greg/workspace/hoot/conf/HighwayModel.rf
+07:57:18.416 INFO  ...ighway/HighwayRfClassifier.cpp(  85) factorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
+07:57:18.416 INFO  ...ighway/HighwayRfClassifier.cpp( 104) extractorNames: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
+07:57:18.416 INFO  ...ighway/HighwayRfClassifier.cpp( 105) missingExtractors: [0]{}
+07:57:18.416 INFO  ...ighway/HighwayRfClassifier.cpp( 106) _rfFactorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
+07:57:18.449 INFO  .../core/ops/CalculateStatsOp.cpp( 520) Map statistics calculated.
+Stat Name	test-output/cmd/ServiceDbTest/output.osm
+Node Count	135
+Way Count	22
+Relation Count	1
+Minimum Node ID	-297
+Maximum Node ID	-2
+Minimum Way ID	-251
+Maximum Way ID	-1
+Minimum Relation ID	-4
+Maximum Relation ID	-4
+Total Feature Tags	92
+Total Feature Information Tags	92
+Total Feature Metadata Tags	0
+Unique Names	19
+Meters of Linear Features	1268.38994693
+Meters Squared of Area Features	25291.6725809
+Meters of Highway	1268.38994693
+Highway Unique Name Count	0
+Meters Squared of Buildings	25291.6725809
+Building Unique Name Count	13
+Total Feature Count	31
+Total Conflatable Features	0
+Percentage of Total Features Conflatable	0
+Total Unconflatable Features	0
+Percentage of Total Features Unconflatable	0
+Total Features Processed By Conflation	21
+Number of Match Creators	3
+Features Conflatable by: hoot::BuildingMatchCreator	0
+Features Conflatable by: hoot::PlacesPoiMatchCreator	0
+Features Conflatable by: hoot::HighwayMatchCreator	0
+Total Conflated Features	21
+Percentage of Total Features Conflated	67.7419354839
+Total Features Marked for Review	0
+Percentage of Total Features Marked for Review	0
+Total Number of Reviews to be Made	0
+Total Unmatched Features	10
+Percentage of Total Features Unmatched	32.2580645161
+POI Count	8
+Conflatable POIs	0
+Conflated POIs	8
+POIs Marked for Review	0
+Number of POI Reviews to be Made	0
+Unmatched POIs	0
+Percentage of POIs Conflated	100
+Percentage of POIs Marked for Review	0
+Percentage of Unmatched POIs	0
+Highway Count	9
+Conflatable Highways	0
+Conflated Highways	8
+Highways Marked for Review	0
+Number of Highway Reviews to be Made	0
+Unmatched Highways	1
+Meters of Highway Processed by Conflation	1193.10716676
+Percentage of Highways Conflated	88.8888888889
+Percentage of Highways Marked for Review	0
+Percentage of Unmatched Highways	11.1111111111
+Building Count	11
+Conflatable Buildings	0
+Conflated Buildings	4
+Buildings Marked for Review	0
+Number of Building Reviews to be Made	0
+Unmatched Buildings	7
+Meters Squared of Buildings Processed by Conflation	14062.3796522
+Percentage of Buildings Conflated	36.3636363636
+Percentage of Buildings Marked for Review	0
+Percentage of Unmatched Buildings	63.6363636364
+Longest Tag	52
+Translated Populated Tag Percent	0.605882352941
+Translated Populated Tag Count	103
+Translated Default Tag Count	67
+Translated Null Tag Count	0
+Building Translated Populated Tag Percent	0.5
+Highway Translated Populated Tag Percent	0.666666666667
+POI Translated Populated Tag Percent	0.704545454545

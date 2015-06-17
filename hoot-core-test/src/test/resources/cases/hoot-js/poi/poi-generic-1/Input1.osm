@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-118178' visible='true' lat='30.48055598838' lon='31.526667'>
+    <tag k='REF1' v='000dd8' />
+    <tag k='alt_name' v='عزبة السبعين' />
+    <tag k='error:circular' v='15' />
+    <tag k='int_name' v='‘Izbat as Sab‘īn, Izbat al Sabin' />
+    <tag k='is_in' v='Egypt, جمهورية مصر العربية' />
+    <tag k='name' v='عزبة السبعين' />
+    <tag k='name:ar' v='عزبة السبعين' />
+    <tag k='name:ar1' v='عزبة السبعين' />
+    <tag k='name:de' v='Izbat al Sabin' />
+    <tag k='name:en' v='Izbat al Sabin' />
+    <tag k='name:fr' v='Izbat al Sabin' />
+    <tag k='place' v='village' />
+  </node>
+  <node id='-118176' visible='true' lat='30.47277798838' lon='31.5325'>
+    <tag k='REF1' v='000de8' />
+    <tag k='alt_name' v='عزبة حوض الندى' />
+    <tag k='error:circular' v='15' />
+    <tag k='int_name' v='‘Izbat Ḩawḑ an Nadá, Izbat Hawd an Nada' />
+    <tag k='is_in' v='Egypt, جمهورية مصر العربية' />
+    <tag k='name' v='عزبة حوض الندى' />
+    <tag k='name:ar' v='عزبة حوض الندى' />
+    <tag k='name:ar1' v='عزبة حوض الندى' />
+    <tag k='name:de' v='Izbat Hawd an Nada' />
+    <tag k='name:en' v='Izbat Hawd an Nada' />
+    <tag k='name:fr' v='Izbat Hawd an Nada' />
+    <tag k='place' v='village' />
+  </node>
+</osm>

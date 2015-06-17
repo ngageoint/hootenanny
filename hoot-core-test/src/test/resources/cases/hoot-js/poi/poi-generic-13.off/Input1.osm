@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-208780' action='modify' visible='true' lat='48.1766691' lon='11.5285062'>
+    <tag k='REF1' v='01163b' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='Georg-Brauchle-Ring' />
+    <tag k='railway' v='subway_entrance' />
+    <tag k='uuid' v='{31c4a84b-5604-55da-8266-07af71bb3740}' />
+    <tag k='wheelchair' v='no' />
+  </node>
+  <node id='-208779' action='modify' visible='true' lat='48.1766835' lon='11.5285066'>
+    <tag k='REF1' v='0045a8' />
+    <tag k='description' v='Georg-Brauchle-Ring' />
+    <tag k='error:circular' v='15' />
+    <tag k='railway' v='subway_entrance' />
+    <tag k='uuid' v='{40822740-275a-5758-bb90-4e25b9d30d49}' />
+    <tag k='wheelchair' v='no' />
+  </node>
+</osm>

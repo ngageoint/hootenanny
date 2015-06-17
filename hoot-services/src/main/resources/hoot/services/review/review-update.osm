@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny" >
+  <create/>
+  <modify>
+   <!-- reviewable item in reviewedItems; will be marked as reviewed -->
+   <node visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1" changeset="" lat="38.9025841913319113" lon="-77.0547476118420747">
+     <tag k="hoot:review:score" v="0.750459"/>
+     <tag k="hoot:review:uuid" v="{5c131c00-a30f-11e3-a5e2-0800200c9a66}"/>
+     <tag k="uuid" v="{25e1aa70-a30f-11e3-a5e2-0800200c9a66}"/>
+     <tag k="hoot:review:needs" v="yes"/>
+     <tag k="name" v="25th St NE"/>
+     <tag k="highway" v="unclassified"/>
+     <tag k="error:circular" v="10"/>
+    </node>
+    <!-- reviewable item not in reviewedItems; will not be marked as reviewed -->
+    <node visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1" changeset="" lat="38.9025841913319113" lon="-77.0529999999999831">
+     <tag k="hoot:review:score" v="0.750459"/>
+     <tag k="hoot:review:uuid" v="{de285618-a4df-4536-b218-5009c25f7107}"/>
+     <tag k="uuid" v="{de285618-a4df-4536-b218-5009c25f7107}"/>
+     <tag k="hoot:review:needs" v="yes"/>
+     <tag k="name" v="25th St SW"/>
+     <tag k="highway" v="unclassified"/>
+     <tag k="error:circular" v="10"/>
+    </node>
+    <!-- reviewable item in reviewedItems; will be marked as reviewed -->
+    <way visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1" changeset="" >
+      <nd ref="-33"/>
+      <nd ref="-34"/>
+      <nd ref="-35"/>
+      <nd ref="-36"/>
+      <tag k="hoot:review:score" v="0.750459"/>
+      <tag k="hoot:review:uuid" v="{f5639540-aaf4-47ac-8c5e-82ad05abc29f};{2258bbcc-b474-41fe-aa81-76ffc6e2be42}"/>
+      <tag k="uuid" v="{46d98769-dee2-489e-8fd6-ff265842ed55};{28fe6088-cb30-45a2-88dd-1146092dcd0e}"/>
+      <tag k="hoot:review:needs" v="yes"/>
+      <tag k="name" v="25th St SE"/>
+      <tag k="highway" v="unclassified"/>
+      <tag k="error:circular" v="10"/>
+    </way>
+    <!-- reviewable item not in reviewedItems; will not be marked as reviewed -->
+    <way visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" changeset="" >
+      <!-- within test query bounds -->
+      <nd ref="-32"/>
+      <nd ref="-45"/>
+      <nd ref="-60"/>
+      <tag k="hoot:review:score" v="0.832799"/>
+      <tag k="hoot:review:uuid" v="{f5639540-aaf4-47ac-8c5e-82ad05abc29f};{2258bbcc-b474-41fe-aa81-76ffc6e2be42}"/>
+      <tag k="uuid" v="{46d98769-dee2-489e-8fd6-ff265842ed55};{dfcd4a0e-04d5-46ee-b7a0-1a2c591ddf54}"/>
+      <tag k="hoot:review:needs" v="yes"/>
+      <tag k="name" v="26th St SW"/>
+      <tag k="highway" v="unclassified"/>
+      <tag k="error:circular" v="10"/>
+    </way>
+    <!-- not a reviewable item; will not be marked as reviewed -->
+    <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" changeset="" >
+      <nd ref="-52"/>
+      <nd ref="-33"/>
+      <tag k="name" v="Snows Ct NW"/>
+      <tag k="highway" v="unclassified"/>
+      <tag k="error:circular" v="10"/>
+      <!-- no review tags -->
+    </way>
+    <!-- reviewable item in reviewedItems; will be marked as reviewed -->
+    <relation visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" changeset="" >
+      <member type="way" role="role1" ref="-16"/>
+      <!-- within test query bounds -->
+      <member type="node" role="role2" ref="-64"/>
+      <tag k="hoot:review:score" v="0.939793"/>
+      <tag k="hoot:review:uuid" v="{de285618-a4df-4536-b218-5009c25f7107}"/>
+      <tag k="uuid" v="{0c9f69f0-dad5-11e3-9c1a-0800200c9a66}"/>
+      <tag k="hoot:review:needs" v="yes"/>
+      <tag k="name" v="KST"/>
+      <tag k="highway" v="road"/>
+      <tag k="error:circular" v="16"/>
+    </relation>
+  </modify>
+  <delete>
+    <!-- reviewable item in reviewedItems; will be marked as reviewed -->
+    <node id="-71" version="1" changeset="" />
+    <!-- not a reviewable item; will not be marked as reviewed -->
+    <!-- node id="-65" version="1" changeset="" / -->
+    <!-- reviewable item in reviewedItems; will be marked as reviewed -->
+    <way id="-42" version="1" changeset="" />
+    <!-- reviewable item not in reviewedItems; will not be marked as reviewed -->
+    <!-- node id="-67" version="1" changeset="" / -->
+    <!-- reviewable item not in reviewedItems; will not be marked as reviewed -->
+    <way id="-40" version="1" changeset="" />
+    <!-- not a reviewable item; will not be marked as reviewed -->
+    <way id="-18" version="1" changeset="" />
+  </delete>
+</osmChange>

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-3200079' visible='true' lat='48.0479399' lon='11.7012814'>
+    <tag k='REF1' v='010227' />
+    <tag k='amenity' v='post_office' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:mismatch' v='1' />
+    <tag k='hoot:wrong' v='1' />
+    <tag k='operator' v='Deutsche Post' />
+    <tag k='source' v='survey' />
+    <tag k='uuid' v='{801c0abc-9e5d-585e-87c4-21a99d3d3e40}' />
+    <tag k='wheelchair' v='no' />
+  </node>
+</osm>

@@ -1,0 +1,261 @@
+# GENERAL
+
+# Port Jersey tests running on the Grizzy framework uses; only needed by Jersey async calls
+grizzlyPort=9998
+
+# generic setting for max to send to sql limit/offset queries; this setting could be duplicated and
+# made more specific for different types of queries
+maxRecordSelectSize=5000
+
+# generic setting for max size of records when executing batch query; this setting could be
+# duplicated and made more specific for different types of queries
+maxRecordBatchSize=1000
+
+# allows for printing executed sql statement
+debugSql=false
+
+# Internal job server location
+coreJobServerUrl=http://localhost:8080
+
+# For the case where hoot home can not be obtained
+homeFolder=$(HOOT_HOME)
+
+# amount of time in ms the job status polling class used only in test code waits before attempting
+# to determine the status of a running job; 250 is a good value for development environments and
+# prevents the services tests from taking a long time to run; may need to increase to as much as
+# 2000 or more in some continuous integration environments where postgres seems to respond more
+# slowly to queries
+testJobStatusPollerTimeout=2000
+
+# OSM SERVICES
+
+# OSM header info
+osmVersion=0.6
+generator=Hootenanny server
+copyright=?
+attribution=?
+license=?
+
+# maximum area a query can cover
+maxQueryAreaDegrees=0.25
+
+# maximum number of nodes that may be returned in a query
+maxQueryNodes=50000
+
+# zindex dimensions for the map query
+mapQueryDimensions=2
+
+# maximum number of elements allowed in a changeset uploaded
+maximumChangesetElements=50000
+
+# maximum number of nodes that can be assigned to a way
+maximumWayNodes=2000
+
+# amount to auto-expand changeset by after an update
+changesetBoundsExpansionFactorDeegrees=0.1
+
+# maximum amount of time that may pass without a changeset being updated before its closed
+changesetIdleTimeoutMinutes=60
+
+# maximum amount of time a changeset can remain open
+changesetMaxOpenTimeHours=24
+
+# allows for faster testing of changeset auto closing
+testChangesetAutoClose=false
+
+# allows nodes to have negative ID's to be compatible with hoot-core command line
+hootCoreServicesDatabaseWriterCompatibility=false
+
+# ETL SERVICE
+
+# the folder location of the make file script for some processlet like ETLProcesslet
+coreScriptPath=$(homeFolder)/scripts
+
+# intermediate file output location (working folder)
+coreScriptOutputPath=$(homeFolder)/test-output/ETL_OUTPUT
+
+# ETL make files script
+ETLMakefile=makeetl
+
+# Conflate make file script
+ConflateMakefilePath=makeconflate
+
+# CookieCutter make file script
+CookieCutterMakefilePath=makecookiecutter
+
+# Translation javascript header script path
+jsHeaderScriptPath=$(homeFolder)/scripts/rh.js
+
+# Translation header used for just function scanning
+dummyjsHeaderScriptPath=$(homeFolder)/scripts/empty_rh.js
+
+# Translation javascript path
+translationScriptPath=$(homeFolder)/translations
+
+# Temporary OSM output path
+osmTempOutputPath=$(homeFolder)/tmp
+
+# Translation osm conversion batch script
+osmConvertorScript=osmconvert.sh
+
+# osm2ogr script used in export
+ExportScript=osm2ogrscript
+
+# Temporary output path
+tempOutputPath=$(homeFolder)/tmp
+
+# CleanData Service Make file name
+cleanDataMakePath=makecleandata
+
+# Custom Script Service folder location
+customScriptPath=customscript
+
+# Db Name
+dbName=${DB_NAME}
+
+# Db server user id
+dbUserId=${DB_USER}
+
+# Db server user password
+dbPassword=${DB_PASSWORD}
+
+
+# Db server user host
+dbHost=${DB_HOST}:${DB_PORT}
+
+
+# WFS Store Connection Name
+wfsStoreConnName=WFS_Connection
+
+# WFS Store db name
+wfsStoreDb=${WFS_DB_NAME}
+
+# Translation extension install folder
+translationExtPath=$(homeFolder)/plugins-local/script/utp
+
+
+# Ingest service staging folder
+ingestStagingPath=$(homeFolder)/ingest/upload
+
+# Tile server folder
+tileServerPath=$(homeFolder)/ingest/processed
+
+# Ingest service make file
+IngestMakefile=ingestraster
+
+# Raster to tile make file
+RasterToTiles=makerastertotiles
+
+# Basemap Raster to tile make file
+BasemapRasterToTiles=makebasemaprastertotiles.sh
+
+# Supported basemap type extensions
+BasemapRasterExtensions=png,tif
+
+# Catalina log location
+ErrorLogPath=/var/log/tomcat6/catalina.out
+
+# Job query interval in milli second
+JobQueryInterval=3000
+
+# Default translations config file
+defaultTranslationsConfig=$(homeFolder)/conf/DefaultTranslations.json
+
+# Main document name
+documentName=Hootenanny - User Interface Guide.pdf
+
+# The interval of ping during internal chain job status tracking in millisec (minimum is 1000)
+chainJosStatusPingInterval=1000
+
+# The size of thread pool used by JobResource.
+internalJobThreadSize=5
+
+# The maximum time to wait for the connection with internal rest endpoint
+internalJobRequestWaitTimeMilli=3000
+
+# Translation Node Server port
+translationServerPort=8094
+
+# Translation Server Thread Count (0 means auto config which end up being cpu count)
+translationServerThreadCount=0
+
+# Translation Server Script in scripts folder
+translationServerScript=TranslationServer.js
+
+# Ogr Attributes script name
+GetOgrAttributeScript=makeGetOgrAttrib
+
+# Report storage location
+reportDataPath=data/reports
+
+# Conflation advanced options node script
+confAdvOptsScript=confAdvOpts.js
+
+# Ingest size threshold
+ingestSizeThreshold=200000000
+
+# Conflate size threshold
+conflateSizeThreshold=200000000
+
+# Export size threshold
+exportSizeThreshold=400000000
+
+# Config options asciidoc location
+configAsciidocPath=conf/ConfigOptions.asciidoc
+
+# Advanced options template
+advOptTemplate=conf/conflateAdvOps.json
+
+# Advanced options reference override
+advOptRefOverride=conf/conflationRefOps.json
+
+# Advanced options horizontal override
+advOptHorizontalOverride=conf/conflationHorizontalOps.json
+
+
+# Advanced options horizontal override
+advOptAverageOverride=conf/conflationAverageOps.json
+
+
+# POI to POI Node Server port
+P2PServerPort=8096
+
+# POI to POI Server Thread Count (0 means auto config which end up being cpu count)
+P2PServerThreadCount=0
+
+# POI to POI Server Script in scripts folder
+P2PServerScript=P2PServer.js
+
+# REVIEW SERVICE
+
+# review prepare
+
+# default setting for overwriting existing review data
+reviewPrepareOverwriteExistingDataDefault=false
+
+# review stats
+
+# default lowest review score threshold the stats calculator will recognize when looking at
+# reviewable items
+reviewStatsReviewScoreThresholdMinimumDefault=0.0
+# default geographic bounds restriction on reviewable item stats calculations
+reviewStatsGeospatialBoundsDefault=-180,-90,180,90
+
+# review get
+
+# default number of reviewable items returned in a single service call
+reviewGetNumItemsDefault=1
+# default reviewable item sorting parameter; if true, reviewable items are returned with the
+# highest review scored items first
+reviewGetHighestReviewScoreFirstDefault=true
+# default lowest review score threshold a returned reviewable item will have
+reviewGetReviewScoreThresholdMinimumDefault=0.5
+# default geographic bounds restriction on reviewable item requests
+reviewGetGeospatialBoundsDefault=-180,-90,180,90
+# maximum number of review items that can be retrieved at once
+reviewGetMaxGetSize=50000
+# negative values zoom out; positive values zoom in
+reviewDisplayBoundsZoomAdjustDefault=-0.0015
+# method by which the display bounds is calculated for review item pairs; valid values are:
+# reviewableItemOnly, reviewAgainstItemOnly, reviewableAndReviewAgainstItemCombined
+reviewDisplayBoundsMethod=reviewableAndReviewAgainstItemCombined

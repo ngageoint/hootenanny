@@ -1,0 +1,713 @@
+#!/bin/bash
+
+# This script creates a release as defined at 
+# https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/Developer_-_Release_Procedure 
+#
+# NOTE: hoot-ui is a submodule and developers are expected manually point hoot to the correct version 
+# of it, so you don't need to enter a separate commit ID for it.
+#
+# WARNING: This script interacts with source control and should be run with care.  Always run this
+# script once in dry run mode by setting the PUSH_CHANGES variable to false. 
+# USE THIS SCRIPT AT YOUR OWN RISK.
+#
+# This script will:
+# - build a release based off of the release candidate branch; also, optionally performing any required
+# automated testing, license header updates, etc.
+# - create a change log with the known issues included
+# - pause to give you chance to do any additional manual testing of the release that you may desire
+# after its built
+# - tag the release
+# - merge the release back into the stable branch and allow for manual merge conflict resolution or
+# aborting a merge completely (returns all branches back to their state before running the script)
+# - finally, push the changes and tags made to both the stable and release candidate branches for 
+# all hoot related repositories
+
+# VARS HERE MUST BE SET EACH TIME THE SCRIPT IS RUN.
+# of the form X.Y.Z
+NEW_VERSION=
+# to get this, from Redmine: My account --> API access key --> Show
+REDMINE_API_ACCESS_KEY=
+# your user name used to access the FOUO server (at last check that server is selma)
+FOUO_SERVER_USERNAME=
+
+STABLE_BRANCH=master
+RELEASE_CANDIDATE_BRANCH=rc
+BUILD_FOUO_TRANSLATIONS=true
+FOUO_TRANSLATIONS_HOME=/fouo/fouo-translations
+PREVIOUS_VERSION=`git describe --abbrev=0 --tags`
+FAILURE_MESSAGE="Correct Hootenanny release issues for v$NEW_VERSION and re-run this script."
+BRANCH_REVERT_MESSAGE="You can delete the release branch created by this script when you are finished with it with: 'git branch -D make-release-$NEW_VERSION'."
+NIGHTLY_TESTS_HOME=/fouo/hoot-tests
+UPDATE_NIGHTLY_TESTS=true
+
+# Var(s) in this section are for script testing purposes and should normally all be set to true.  
+# ONLY SET THESE TO FALSE FOR SCRIPT TESTING PURPOSES!
+UPDATE_LICENSE_HEADERS=false
+COMPILE_CODE=true
+UPDATE_CHANGE_LOG=true
+# A pre-requisite is that $HOOT_HOME/KnownIssues has been updated for this release version and pushed
+# to the release candidate branch.
+ADD_KNOWN_ISSUES_TO_CHANGE_LOG=true
+# These should *only* be set to false if you're building a release based off of a commit that was
+# already fully tested with nightly regression testing.  The configuration tests take a fairly long
+# time to run, so not repeating those if they've passed on the nightly server is acceptable.  The
+# regular tests can also be skipped if they've already been run on the nightly server, but since
+# some code files are modified during this process, although only the header comments, its probably
+# wise to run the tests anyway (which is what this script defaults to).
+RUN_TESTS=false
+RUN_CONFIGURATION_TESTS=false
+BUILD_ARCHIVES=true
+# This is set to false by default to avoid pushing bad tags.  Practice your release at least once
+# first before setting this to true.
+PUSH_CHANGES=false
+
+if [ "$NEW_VERSION" == "" ]; then
+  echo Please enter a NEW_VERSION for the new release in the form of X.Y.Z.
+  exit -1
+fi
+if [ "$REDMINE_API_ACCESS_KEY" == "" ]; then
+  echo Please add your Redmine API access key to this script before running it.
+  exit -1
+fi
+if [ "$STABLE_BRANCH" == "" ]; then
+  echo Please enter a stable source control branch name.
+  exit -1
+fi
+if [ "$RELEASE_CANDIDATE_BRANCH" == "" ]; then
+  echo Please enter a release candidate source control branch name.
+  exit -1
+fi
+
+echo Creating Hootenanny release v"$NEW_VERSION" ...
+if [ "$RUN_TESTS" == "false" ]; then
+  echo
+  echo WARNING: This release is not being tested.  Hopefully, this commit ID has already been tested or you are doing a dry run.
+fi
+if [ "$PUSH_CHANGES" == "false" ]; then
+  echo
+  echo WARNING: This release will not be pushed to the source control server.
+fi
+echo
+
+echo
+echo Pulling hoot off of release candidate branch: $RELEASE_CANDIDATE_BRANCH ...
+cd $HOOT_HOME
+git stash save "hoot before release script run for v$NEW_VERSION"
+git checkout $RELEASE_CANDIDATE_BRANCH
+git pullall
+echo Hoot pulled.
+sleep 3
+
+source ./SetupEnv.sh
+
+if [ "$ADD_KNOWN_ISSUES_TO_CHANGE_LOG" == "true" ]; then
+  KNOWN_ISSUES_FIRST_LINE=$(head -n 1 $HOOT_HOME/KnownIssues)
+  if [[ ! $KNOWN_ISSUES_FIRST_LINE == *$NEW_VERSION* ]]; then
+    echo Version in known issues header file does not match release version: $NEW_VERSION
+    exit -1
+  fi
+fi
+
+# Create a release branch separate from the release candidate branch so that its easier to get
+# rid of unwanted commits if the script fails.
+echo
+echo Creating release branch off of the release candidate branch: $RELEASE_CANDIDATE_BRANCH ...
+NEW_RELEASE_BRANCH=make-release-$NEW_VERSION
+BRANCHES=`echo $(git branch --list $NEW_RELEASE_BRANCH | tr -d ' ')`
+if [ "$BRANCHES" == "$NEW_RELEASE_BRANCH" ]; then
+	echo Deleting existing release branch...
+	git branch -D $NEW_RELEASE_BRANCH
+fi
+git checkout -b $NEW_RELEASE_BRANCH
+echo Release branch off of the release candidate populated.
+sleep 3
+
+echo
+if [ "$UPDATE_LICENSE_HEADERS" == "true" ]; then
+	echo Updating license headers...
+	make licenses > /dev/null
+	echo License headers updated.
+else
+  echo WARNING: Skipping updating license headers.
+fi
+
+if [ "$COMPILE_CODE" == "true" ]; then
+  echo 
+  echo Configuring release build...
+  ./configure -q --with-services --with-rnd > /dev/null
+  echo Release build configured.
+  sleep 3
+
+  echo
+  if [ "$RUN_CONFIGURATION_TESTS" == "true" ]; then
+	  echo Running configuration tests...
+    scripts/TestConfigure.sh && make -j8 test #TODO: how do you know when this one fails?
+    echo Configuration tests complete.
+  else
+    echo
+    echo WARNING: Skipping configuration tests.
+  fi
+
+  echo
+  # It's important to do a full clean here, because when hoot is installed it will be compiled 
+  # from scratch, not compiled over an existing installation.
+  # NOTE: not doing a clean all here to keep from clearing out the database
+  if [ "$RUN_TESTS" == "true" ]; then
+	  echo Compiling and testing release...
+	  make -sj8 clean > /dev/null  
+    make -sj8 test-all
+	  echo Examine the hoot test output.  Any failures? y/n?
+	  read failures
+	  if [ "$failures" == "y" ]; then
+	  	echo $FAILURE_MESSAGE
+		  exit -1
+	  fi
+	  echo Release compiled and tested.
+  elif [ "$COMPILE_CODE" == "true" ]; then
+	  echo Compiling release...
+	  make -sj8 clean > /dev/null
+    make -sj8
+	  echo Release compiled.
+  fi
+else
+  echo
+  echo WARNING: Code not compiled.
+fi
+sleep 3
+
+echo
+if [ "$UPDATE_CHANGE_LOG" == "true" ]; then
+  echo Retrieving updates to change log...
+  # get all referenced ticket numbers between the last release and this one; organize them into a 
+  # ticket number ordered, delimited list with no dupes (last sed bit removes the trailing delimiter)
+  if [ "$PREVIOUS_VERSION" == "" ]; then
+	  LOG_TEXT=`git log --pretty=medium`
+  else
+	  LOG_TEXT=`git log --pretty=medium $PREVIOUS_VERSION..HEAD`
+  fi
+  #echo "LOG_TEXT: " $LOG_TEXT
+  RELEASE_TICKET_IDS=`echo $LOG_TEXT | grep -o "\\#[0-9]*" | grep -o "[0-9]*" | sort | uniq | tr "\\n" "," | sed 's/\(.*\),/\1/'`
+  #echo "RELEASE_TICKET_IDS: " $RELEASE_TICKET_IDS
+  # query the redmine tickets to get the ticket info - There doesn't seem to be a way to filter issues 
+  # by ID in Redmine without applying a patch, so just get all the closed/complete issues for the 
+  # project, and only parse the ones that are in our list compiled from git.
+  RELEASE_TICKET_QUERY_URL="https://insightcloud.digitalglobe.com/redmine/issues.json?key=$REDMINE_API_ACCESS_KEY&project_id=37&cf_2=ICE%20Phase%20II&status_id=5&sort=id"
+  #echo "RELEASE_TICKET_QUERY_URL: " $RELEASE_TICKET_QUERY_URL
+  # Occasionally, these two vars will be empty for some reason...not sure why.
+  if [ "$RELEASE_TICKET_IDS" == "" -o "$RELEASE_TICKET_QUERY_URL" == "" ]; then
+    echo An error occurred during change log generation.  $FAILURE_MESSAGE
+    echo The tag: v$NEW_VERSION will be automatically deleted.
+    echo $BRANCH_REVERT_MESSAGE
+	  git tag -d v$NEW_VERSION
+    exit -1 
+  fi
+  CHANGE_LOG_TEXT=`echo $(python scripts/GetChangeLogText.py $RELEASE_TICKET_IDS $RELEASE_TICKET_QUERY_URL)`
+  if [ "$CHANGE_LOG_TEXT" == "" ]; then
+    echo An error occurred during change log generation.  $FAILURE_MESSAGE
+    echo The tag: v$NEW_VERSION will be automatically deleted.
+    echo $BRANCH_REVERT_MESSAGE
+	  git tag -d v$NEW_VERSION
+    exit -1 
+  fi
+  #echo "CHANGE_LOG_TEXT: " $CHANGE_LOG_TEXT
+  # add the info to the change log
+  if [ "$ADD_KNOWN_ISSUES_TO_CHANGE_LOG" == "true" ]; then
+    echo Appending known issues to change log file...
+    # known issues file contains only the issues for the current release and is cleared out at 
+    # the beginning of each release
+    # For whatever reason, if I don't add extra new line chars at the end of each line, sed doesn't
+    # write the known issues correctly.
+    KNOWN_ISSUES=""
+    while read line
+    do
+      if [ "$KNOWN_ISSUES" == "" ]; then
+        KNOWN_ISSUES=$line
+      else
+        KNOWN_ISSUES=$KNOWN_ISSUES"\n"$line
+      fi
+    done < $HOOT_HOME/KnownIssues
+    #echo $KNOWN_ISSUES
+    sed -i "1i $KNOWN_ISSUES\n" $HOOT_HOME/ChangeLog
+    echo Known issues appended to change log file.
+  else
+    echo
+    echo WARNING: Known issues not updated.
+  fi
+  DATE=`date +%m-%d-%Y`
+  sed -i "1i $CHANGE_LOG_TEXT" $HOOT_HOME/ChangeLog
+  sed -i "1i Tasks Completed for Hootenanny v$NEW_VERSION\n" $HOOT_HOME/ChangeLog
+  sed -i '1i '$DATE' v'$NEW_VERSION'\n' $HOOT_HOME/ChangeLog
+  echo Change log updated.
+else
+  echo
+  echo WARNING: Change log not updated.
+fi
+sleep 3
+
+echo
+echo Committing release changes and tagging...
+git commit -a -m "Created release v$NEW_VERSION"
+# tag before making the archive, so the archive files are named properly with the version
+CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+if [ "$CURRENT_VERSION" == "" ]; then
+  echo Creating new tag: v$NEW_VERSION...
+  git tag v$NEW_VERSION
+else
+  echo Updating existing tag...
+  git tag -f v$NEW_VERSION
+fi
+echo Release changes committed and tagged.
+sleep 3
+
+if [ "$BUILD_ARCHIVES" == "true" ]; then
+  echo
+  echo Creating release archive files...
+  rm -f hootenanny-$NEW_VERSION.tar.gz
+  rm -f hootenanny-services-$NEW_VERSION.war
+  make -s archive > /dev/null
+  echo Release archive files created.
+  sleep 3
+else
+  echo
+  echo WARNING: Archives not built.
+fi
+
+if [ "$BUILD_FOUO_TRANSLATIONS" == "true" ]; then
+  # Don't bother with creating a release branch separate from the release candidate branch here,
+  # since we don't change any files in this process and only create and push a new tag.
+	echo
+  echo Creating FOUO translations archive file...
+  cd $FOUO_TRANSLATIONS_HOME
+  git stash save "hoot before release script run for v$NEW_VERSION"
+  git checkout $RELEASE_CANDIDATE_BRANCH
+  git pull
+  CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+  if [ "$CURRENT_VERSION" == "" ]; then
+    echo Creating new tag...
+  	git tag v$NEW_VERSION
+	else
+  	echo Updating existing tag...
+  	git tag -f v$NEW_VERSION
+	fi
+  rm -f hootenanny-translations-*.tar.gz
+  make > /dev/null
+	# hack to correctly name the archive file (#4830)
+  if [ ! -f "hootenanny-translations-$NEW_VERSION.tar.gz" ]; then
+	  mv hootenanny-translations-*.tar.gz hootenanny-translations-$NEW_VERSION.tar.gz
+  fi
+  echo FOUO translations archive file created.
+  sleep 3
+fi
+
+if [ "$UPDATE_NIGHTLY_TESTS" == "true" ]; then
+  # Don't bother with creating a release branch separate from the release candidate branch here,
+  # since we don't change any files in this process and only create and push a new tag.
+	echo
+  echo Updating nightly tests repo...
+  cd $NIGHTLY_TESTS_HOME
+  git stash save "hoot before release script run for v$NEW_VERSION"
+  git checkout $RELEASE_CANDIDATE_BRANCH
+  git pull
+  CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+  if [ "$CURRENT_VERSION" == "" ]; then
+    echo Creating new tag...
+    git tag v$NEW_VERSION
+	else
+  	echo Updating existing tag...
+    git tag -f v$NEW_VERSION
+	fi
+  sleep 3
+fi
+
+cd $HOOT_HOME
+
+echo
+echo Manually test the hoot release by running the installation script for it in a mirrored 
+echo production environment, if necessary, now ... I will wait for you ...
+echo All done?  Automated/manual tests passed?  Answer no, if you are not sure.  This is the last chance 
+echo to prevent the release from being pushed to source control in non dry run mode.  tests passed?  y/n?
+read passed
+if [ "$passed" == "y" ]; then
+  echo
+
+  # TODO: This section of the script has gotten a little out of control due to recent process changes
+  # and could be greatly simplified with a little refactoring.
+
+  MERGE_FAILURE_MESSAGE="Cancel the release by entering c OR Open another terminal, go to the source control directory, fix the merge failures, commit the fixes, verify the tests, and then enter p to proceed with the release process.  p/c?"
+
+  if [ "$BUILD_FOUO_TRANSLATIONS" == "true" ]; then
+		echo
+	  echo Merging FOUO translations release candidate branch back into the stable branch: $STABLE_BRANCH ...
+    cd $FOUO_TRANSLATIONS_HOME
+    git checkout $STABLE_BRANCH
+    git pull
+    sleep 3
+    STABLE_MERGE_RESULT=`git merge $RELEASE_CANDIDATE_BRANCH`
+    #echo Result of merging the FOUO translations release candidate branch back into the stable branch:
+    #TODO: This string has its new line chars removed and is hard to read.
+    #echo $STABLE_MERGE_RESULT
+    if [[ $STABLE_MERGE_RESULT == *"fail"* ]] #TODO: this may not be the best way to test that the merge failed
+    then
+      echo A Failure occurred merging the FOUO translations release candidate branch back into the stable branch: $STABLE_BRANCH .
+      echo $MERGE_FAILURE_MESSAGE
+      read fixedStableMerge
+      if [ "$fixedStableMerge" == "c" ]; then
+        echo $FAILURE_MESSAGE
+        echo The tag: v$NEW_VERSION will be automatically deleted.
+        echo $BRANCH_REVERT_MESSAGE
+        echo
+        echo Reverting hoot merges....
+        CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+        if [ ! "$CURRENT_VERSION" == "" ]; then
+	        git tag -d v$NEW_VERSION
+        fi
+        git reset --hard remotes/origin/$STABLE_BRANCH
+        git checkout $RELEASE_CANDIDATE_BRANCH
+        CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+        if [ ! "$CURRENT_VERSION" == "" ]; then
+	        git tag -d v$NEW_VERSION
+        fi
+        git reset --hard remotes/origin/$RELEASE_CANDIDATE_BRANCH
+        echo Hoot merges reverted.
+        exit -1
+      fi
+    fi
+    echo FOUO translations release candidate branch merged back into stable branch: $STABLE_BRANCH ...
+    sleep 3
+  fi
+
+  if [ "$UPDATE_NIGHTLY_TESTS" == "true" ]; then
+		echo
+	  echo Merging nightly tests release candidate branch back into the stable branch: $STABLE_BRANCH ...
+    cd $NIGHTLY_TESTS_HOME
+    git checkout $STABLE_BRANCH
+    git pull
+    sleep 3
+    STABLE_MERGE_RESULT=`git merge $RELEASE_CANDIDATE_BRANCH`
+    #echo Result of merging the nightly tests release candidate branch back into the stable branch:
+    #TODO: This string has its new line chars removed and is hard to read.
+    #echo $STABLE_MERGE_RESULT
+    if [[ $STABLE_MERGE_RESULT == *"fail"* ]] #TODO: this may not be the best way to test that the merge failed
+    then
+      echo A Failure occurred merging the nightly tests release candidate branch back into the stable branch: $STABLE_BRANCH .
+      echo $MERGE_FAILURE_MESSAGE
+      read fixedStableMerge
+      if [ "$fixedStableMerge" == "c" ]; then
+        echo $FAILURE_MESSAGE
+        echo The tag: v$NEW_VERSION will be automatically deleted.
+        echo $BRANCH_REVERT_MESSAGE
+        # back out of everything tagged so far
+        echo
+        echo Reverting nightly tests merges...
+	      CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+        if [ ! "$CURRENT_VERSION" == "" ]; then
+	        git tag -d v$NEW_VERSION
+        fi
+        git reset --hard remotes/origin/$STABLE_BRANCH
+        git checkout $RELEASE_CANDIDATE_BRANCH
+        CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+        if [ ! "$CURRENT_VERSION" == "" ]; then
+	        git tag -d v$NEW_VERSION
+        fi
+        git reset --hard remotes/origin/$RELEASE_CANDIDATE_BRANCH
+        echo Nightly tests merges reverted.
+        if [ "$BUILD_FOUO_TRANSLATIONS" == "true" ]; then
+          echo
+          echo Reverting FOUO translations merges...
+          cd $FOUO_TRANSLATIONS_HOME
+          git checkout $STABLE_BRANCH
+          CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+          if [ ! "$CURRENT_VERSION" == "" ]; then
+	          git tag -d v$NEW_VERSION
+          fi
+          git reset --hard remotes/origin/$STABLE_BRANCH
+          git checkout $RELEASE_CANDIDATE_BRANCH
+          CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+          if [ ! "$CURRENT_VERSION" == "" ]; then
+	          git tag -d v$NEW_VERSION
+          fi
+          git reset --hard remotes/origin/$RELEASE_CANDIDATE_BRANCH
+          echo FOUO translations merges reverted.
+        fi
+        exit -1
+      fi
+    fi
+    echo Nightly tests release candidate branch merged back into stable branch: $STABLE_BRANCH ...
+    sleep 3
+	fi
+
+  echo
+  echo Merging hoot release branch back into the release candidate branch: $RELEASE_CANDIDATE_BRANCH ...
+  cd $HOOT_HOME
+  git checkout $RELEASE_CANDIDATE_BRANCH
+  # nothing should have been modified on this branch, so don't pull here; TODO: re-evaluate this?
+  RC_MERGE_RESULT=`git merge make-release-$NEW_VERSION`
+  #echo Result of merging the release branch back into the release candidate branch:
+  #TODO: This string has its new line chars removed and is hard to read.
+  #echo $RC_MERGE_RESULT
+  if [[ $RC_MERGE_RESULT == *"fail"* ]] #TODO: this may not be the best way to test that the merge failed
+  then
+    echo A Failure occurred merging the release branch back into the release candidate branch.
+    echo $MERGE_FAILURE_MESSAGE
+    read fixedRcMerge
+    if [ "$fixedRcMerge" == "c" ]; then
+      echo $FAILURE_MESSAGE
+      echo The tag: v$NEW_VERSION will be automatically deleted.
+      echo $BRANCH_REVERT_MESSAGE
+      # back out of everything tagged so far
+	    CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+      if [ ! "$CURRENT_VERSION" == "" ]; then
+	      git tag -d v$NEW_VERSION
+      fi
+      git reset --hard remotes/origin/$RELEASE_CANDIDATE_BRANCH
+      if [ "$BUILD_FOUO_TRANSLATIONS" == "true" ]; then
+        echo
+        echo Reverting FOUO translations merges ...
+        cd $FOUO_TRANSLATIONS_HOME
+        git checkout $STABLE_BRANCH
+        CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+        if [ ! "$CURRENT_VERSION" == "" ]; then
+	        git tag -d v$NEW_VERSION
+        fi
+        git reset --hard remotes/origin/$STABLE_BRANCH
+        git checkout $RELEASE_CANDIDATE_BRANCH
+        CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+        if [ ! "$CURRENT_VERSION" == "" ]; then
+	        git tag -d v$NEW_VERSION
+        fi
+        git reset --hard remotes/origin/$RELEASE_CANDIDATE_BRANCH
+        echo FOUO translations merges reverted.
+      fi
+      if [ "$UPDATE_NIGHTLY_TESTS" == "true" ]; then
+        echo 
+        echo Reverting nightly tests merges ...
+        cd $NIGHTLY_TESTS_HOME
+        git checkout $STABLE_BRANCH
+        CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+        if [ ! "$CURRENT_VERSION" == "" ]; then
+	        git tag -d v$NEW_VERSION
+        fi
+        git reset --hard remotes/origin/HEAD
+        git checkout $RELEASE_CANDIDATE_BRANCH
+        CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+        if [ ! "$CURRENT_VERSION" == "" ]; then
+	        git tag -d v$NEW_VERSION
+        fi
+        git reset --hard remotes/origin/$RELEASE_CANDIDATE_BRANCH
+        echo Nightly tests merges reverted.
+      fi
+      exit -1
+    fi
+  fi
+  echo Hoot release branch merged back into release candidate branch: $RELEASE_CANDIDATE_BRANCH ...
+
+  echo
+  echo Merging hoot release candidate branch back into the stable branch: $STABLE_BRANCH ...
+  cd $HOOT_HOME
+  git checkout $STABLE_BRANCH
+  git pullall
+  sleep 3
+  STABLE_MERGE_RESULT=`git merge $RELEASE_CANDIDATE_BRANCH`
+  #echo Result of merging the hoot release candidate branch back into the stable branch:
+  #TODO: This string has its new line chars removed and is hard to read.
+  #echo $STABLE_MERGE_RESULT
+  if [[ $STABLE_MERGE_RESULT == *"fail"* ]] #TODO: this may not be the best way to test that the merge failed
+  then
+    echo A Failure occurred merging the hoot release candidate branch back into the stable branch: $STABLE_BRANCH .
+    echo $MERGE_FAILURE_MESSAGE
+    read fixedStableMerge
+    if [ "$fixedStableMerge" == "c" ]; then
+      echo $FAILURE_MESSAGE
+      echo The tag: v$NEW_VERSION will be automatically deleted.
+      echo $BRANCH_REVERT_MESSAGE
+      # back out of everything tagged so far
+      echo
+      echo Reverting hoot merges...
+	    CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+      if [ ! "$CURRENT_VERSION" == "" ]; then
+	      git tag -d v$NEW_VERSION
+      fi
+      git reset --hard remotes/origin/$STABLE_BRANCH
+      git checkout $RELEASE_CANDIDATE_BRANCH
+      CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+      if [ ! "$CURRENT_VERSION" == "" ]; then
+	      git tag -d v$NEW_VERSION
+      fi
+      echo Hoot merges reverted.
+      git reset --hard remotes/origin/$RELEASE_CANDIDATE_BRANCH
+      if [ "$BUILD_FOUO_TRANSLATIONS" == "true" ]; then
+        echo
+        echo Reverting FOUO translations merges ...
+        cd $FOUO_TRANSLATIONS_HOME
+        git checkout $STABLE_BRANCH
+        CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+        if [ ! "$CURRENT_VERSION" == "" ]; then
+	        git tag -d v$NEW_VERSION
+        fi
+        git reset --hard remotes/origin/$STABLE_BRANCH
+        git checkout $RELEASE_CANDIDATE_BRANCH
+        CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+        if [ ! "$CURRENT_VERSION" == "" ]; then
+	        git tag -d v$NEW_VERSION
+        fi
+        git reset --hard remotes/origin/$RELEASE_CANDIDATE_BRANCH
+        echo FOUO translations merges reverted.
+      fi
+      if [ "$UPDATE_NIGHTLY_TESTS" == "true" ]; then
+        echo 
+        echo Reverting nightly tests merges ...
+        cd $NIGHTLY_TESTS_HOME
+        git checkout $STABLE_BRANCH
+        CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+        if [ ! "$CURRENT_VERSION" == "" ]; then
+	        git tag -d v$NEW_VERSION
+        fi
+        git reset --hard remotes/origin/HEAD
+        git checkout $RELEASE_CANDIDATE_BRANCH
+        CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+        if [ ! "$CURRENT_VERSION" == "" ]; then
+	        git tag -d v$NEW_VERSION
+        fi
+        git reset --hard remotes/origin/$RELEASE_CANDIDATE_BRANCH
+        echo Nightly tests merges reverted.
+      fi
+      exit -1
+    fi
+  fi
+  echo Hoot release candidate branch merged back into stable branch: $STABLE_BRANCH ...
+
+  # we don't want to push any tags anywhere until all merges have been done successfully
+
+  if [ "$PUSH_CHANGES" == "true" ]; then
+    if [ "$BUILD_FOUO_TRANSLATIONS" == "true" ]; then
+      echo
+      echo Pushing FOUO translations tag on release candidate branch: $RELEASE_CANDIDATE_BRANCH to source control and copying archive to regression test server...
+      cd $FOUO_TRANSLATIONS_HOME
+      git checkout $RELEASE_CANDIDATE_BRANCH
+      git push --tags
+      git push
+      git checkout $STABLE_BRANCH
+      git push --tags
+      git push
+      scp hootenanny-translations-$NEW_VERSION.tar.gz $FOUO_SERVER_USERNAME@selma:$FOUO_TRANSLATIONS_HOME
+      echo FOUO Translations tag pushed to source control and file copied to regression test server.
+    fi
+
+    if [ "$UPDATE_NIGHTLY_TESTS" == "true" ]; then
+		  echo
+	    echo Pushing nightly tests tag on release candidate branch: $RELEASE_CANDIDATE_BRANCH to source control ...
+      cd $NIGHTLY_TESTS_HOME
+      git checkout $RELEASE_CANDIDATE_BRANCH
+	    git push --tags
+      git push
+      git checkout $STABLE_BRANCH
+      git push --tags
+      git push
+      echo Nightly tests tag pushed to source control.
+	    sleep 3
+    fi
+    
+    cd $HOOT_HOME
+    git checkout $RELEASE_CANDIDATE_BRANCH
+    echo
+    echo Pushing commits and tag to release candidate branch: $RELEASE_CANDIDATE_BRANCH ...
+  	git push --tags
+  	git push
+    echo Pushing commits and tag to stable branch: $STABLE_BRANCH ...
+    git checkout $STABLE_BRANCH
+  	git push --tags
+  	git push
+		echo Hootenanny release v$NEW_VERSION created and pushed to source control.
+    #TODO: copy release to redmine files section, create news entry, and send an email notification to the team
+    sleep 3
+  else
+    #Since we're not planning on pushing these changes, we want to back out any merges done regardless.
+    echo
+    echo Reverting merges since changes are not being pushed remotely ...
+
+    if [ "$BUILD_FOUO_TRANSLATIONS" == "true" ]; then
+      echo
+      echo Reverting FOUO translations merges...
+      cd $FOUO_TRANSLATIONS_HOME
+      git checkout $RELEASE_CANDIDATE_BRANCH
+      CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+      if [ ! "$CURRENT_VERSION" == "" ]; then
+	      git tag -d v$NEW_VERSION
+      fi
+      git reset --hard remotes/origin/$RELEASE_CANDIDATE_BRANCH
+      git checkout $STABLE_BRANCH
+      CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+      if [ ! "$CURRENT_VERSION" == "" ]; then
+	      git tag -d v$NEW_VERSION
+      fi
+      git reset --hard remotes/origin/HEAD
+      echo FOUO translations merges reverted.
+    fi
+
+    if [ "$UPDATE_NIGHTLY_TESTS" == "true" ]; then
+      echo
+      echo Reverting nightly tests merges... 
+      cd $NIGHTLY_TESTS_HOME     
+      git checkout $RELEASE_CANDIDATE_BRANCH
+      CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+      if [ ! "$CURRENT_VERSION" == "" ]; then
+	      git tag -d v$NEW_VERSION
+      fi
+      git reset --hard remotes/origin/$RELEASE_CANDIDATE_BRANCH
+      git checkout $STABLE_BRANCH
+      CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+      if [ ! "$CURRENT_VERSION" == "" ]; then
+	      git tag -d v$NEW_VERSION
+      fi
+      git reset --hard remotes/origin/HEAD
+      echo Nightly tests merges reverted.
+    fi
+    
+    echo
+    echo Reverting hoot merges...
+    cd $HOOT_HOME
+    git checkout $RELEASE_CANDIDATE_BRANCH
+    CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+    if [ ! "$CURRENT_VERSION" == "" ]; then
+	    git tag -d v$NEW_VERSION
+    fi
+    git reset --hard remotes/origin/$RELEASE_CANDIDATE_BRANCH
+    git checkout $STABLE_BRANCH
+    CURRENT_VERSION=`git tag --list | grep $NEW_VERSION`
+    if [ ! "$CURRENT_VERSION" == "" ]; then
+	    git tag -d v$NEW_VERSION
+    fi
+    git reset --hard remotes/origin/HEAD  
+    echo Hoot merges reverted.
+
+  fi
+
+	echo
+  echo Hootenanny release v$NEW_VERSION files available at: 
+  echo
+  echo   $HOOT_HOME/hootenanny-$NEW_VERSION.tar.gz
+  echo   $HOOT_HOME/hootenanny-services-$NEW_VERSION.war
+  sleep 3
+
+  if [ "$BUILD_FOUO_TRANSLATIONS" == "true" ]; then
+    echo
+    echo Hootenanny translations release v$NEW_VERSION file available at: 
+    echo
+    echo   $FOUO_SERVER_USERNAME@selma:/hootenanny-translations-$NEW_VERSION.tar.gz
+    sleep 3
+  fi
+
+	echo
+	echo Now, complete the Post Release Build Steps listed in the Release Process section of the Hootenanny Developers Guide
+  if [ ! "$PUSH_CHANGES" == "true" ]; then
+    echo Release created in dry run mode.
+    echo $REVERT_MESSAGE
+    echo You can delete the tag created by this script with: git tag -d v$NEW_VERSION.
+    echo $BRANCH_REVERT_MESSAGE
+  fi
+else
+  echo $FAILURE_MESSAGE
+  echo The tag: v$NEW_VERSION will be automatically deleted.
+  echo $BRANCH_REVERT_MESSAGE
+	git tag -d v$NEW_VERSION
+fi

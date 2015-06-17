@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-1737417' visible='true' lat='48.1262332' lon='11.5515365'>
+    <tag k='REF1' v='00c1f7' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='Poccistraße' />
+    <tag k='railway' v='subway_entrance' />
+    <tag k='ref' v='U3,U6' />
+    <tag k='station' v='subway_entrance' />
+    <tag k='uuid' v='{175cdcb6-5790-5ec7-98fd-4f10a0cdf1da}' />
+    <tag k='wheelchair' v='no' />
+  </node>
+</osm>

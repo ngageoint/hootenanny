@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<configuration>
+  <!--property>
+    <name>mapred.job.tracker</name>
+    <value>local</value>
+  </property-->
+
+  <property>
+    <name>hadoop.pipes.executable</name>
+    <value>/pretty-pipes/PrettyPipes</value>
+  </property>
+  <property>
+    <name>hadoop.pipes.java.recordreader</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>hadoop.pipes.java.recordwriter</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>mapred.map.tasks</name>
+    <value>1</value>
+  </property>
+  <property>
+    <name>mapred.tasktracker.map.tasks.maximum</name>
+    <value>1</value>
+  </property>
+  <!--property>
+    <name>mapred.input.format.class</name>
+    <value>hoot.PbfInputFormatJava</value>
+  </property-->
+  <property>
+    <name>mapred.jar</name>
+    <value>/home/jason.surratt/geoeye/src/hootenanny/lib/HootHadoop-0.0.1.jar</value>
+  </property>
+  <property>
+    <name>pretty.pipes.mapper</name>
+    <value>WordCountMap</value>
+  </property>
+  <property>
+    <name>pretty.pipes.reducer</name>
+    <value>WordCountReduce</value>
+  </property>
+
+  <property>
+    <name>mapred.reduce.tasks</name>
+    <value>1</value>
+  </property>
+
+</configuration>

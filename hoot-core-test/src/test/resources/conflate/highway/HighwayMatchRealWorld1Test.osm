@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-916' action='modify' visible='true' lat='-5.92544009924' lon='106.66164367315'>
+    <tag k='hoot:id' v='-1898' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-914' action='modify' visible='true' lat='-5.92546872297' lon='106.66115150815'>
+    <tag k='hoot:id' v='-1897' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-912' action='modify' visible='true' lat='-5.92541456673' lon='106.66269270515'>
+    <tag k='hoot:id' v='-1891' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-910' action='modify' visible='true' lat='-5.92543886555' lon='106.66169435815'>
+    <tag k='hoot:id' v='-1890' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-908' action='modify' visible='true' lat='-5.9253927918' lon='106.66267251115'>
+    <tag k='hoot:id' v='-1198' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-906' action='modify' visible='true' lat='-5.92542631151' lon='106.66115681115'>
+    <tag k='hoot:id' v='-1254' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <way id='-922' action='modify' visible='true'>
+    <nd ref='-914' />
+    <nd ref='-916' />
+    <nd ref='-910' />
+    <tag k='all_weather' v='yes' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='unclassified' />
+    <tag k='hoot:status' v='2' />
+    <tag k='lanes' v='1' />
+    <tag k='note' v='2' />
+    <tag k='surface' v='paved' />
+    <tag k='width' v='2.5' />
+  </way>
+  <way id='-920' action='modify' visible='true'>
+    <nd ref='-910' />
+    <nd ref='-912' />
+    <tag k='all_weather' v='yes' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='unclassified' />
+    <tag k='hoot:status' v='2' />
+    <tag k='lanes' v='1' />
+    <tag k='note' v='3' />
+    <tag k='surface' v='paved' />
+    <tag k='width' v='2.5' />
+  </way>
+  <way id='-918' action='modify' visible='true'>
+    <nd ref='-906' />
+    <nd ref='-908' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+    <tag k='hoot:id' v='-1' />
+    <tag k='hoot:status' v='1' />
+    <tag k='name' v='Haji Palila' />
+    <tag k='note' v='1' />
+    <tag k='source' v='Bing' />
+  </way>
+</osm>

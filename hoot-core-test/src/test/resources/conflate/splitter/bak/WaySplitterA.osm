@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-1357' visible='true' lat='38.854819390649325' lon='-104.89710012846108' />
+  <node id='-1355' visible='true' lat='38.854704400215745' lon='-104.89733754644938' />
+  <node id='-1353' visible='true' lat='38.854566862394144' lon='-104.89789634732429' />
+  <node id='-1351' visible='true' lat='38.8543571730723' lon='-104.89808164916882' />
+  <node id='-1349' visible='true' lat='38.85420836092046' lon='-104.89842909012732' />
+  <node id='-1347' visible='true' lat='38.854179049399306' lon='-104.89882575188827' />
+  <node id='-1345' visible='true' lat='38.85403023687476' lon='-104.89893577485844' />
+  <node id='-1343' visible='true' lat='38.85381152699334' lon='-104.89882285654694' />
+  <node id='-1341' visible='true' lat='38.85363114720362' lon='-104.89868677550486' />
+  <node id='-1339' visible='true' lat='38.85355448565447' lon='-104.89884022859488' />
+  <node id='-1337' visible='true' lat='38.853558995159645' lon='-104.8991384487509' />
+  <node id='-1335' visible='true' lat='38.85343723841947' lon='-104.8993324366194' />
+  <node id='-1333' visible='true' lat='38.853261367204574' lon='-104.89956695926635' />
+  <node id='-1329' visible='true' lat='38.85325234815618' lon='-104.89979569123066' />
+  <node id='-1327' action='modify' visible='true' lat='38.85355899515966' lon='-104.89971751701498' />
+  <node id='-1325' visible='true' lat='38.8538701503265' lon='-104.89967698223651' />
+  <node id='-1323' visible='true' lat='38.854113662116255' lon='-104.89972909838028' />
+  <node id='-1321' visible='true' lat='38.854260219735984' lon='-104.8997725285001' />
+  <node id='-1319' visible='true' lat='38.85494339973211' lon='-104.89976963315878' />
+  <way id='-1361' visible='true'>
+    <nd ref='-1329' />
+    <nd ref='-1333' />
+    <nd ref='-1335' />
+    <nd ref='-1337' />
+    <nd ref='-1339' />
+    <nd ref='-1341' />
+    <nd ref='-1343' />
+    <nd ref='-1345' />
+    <nd ref='-1347' />
+    <nd ref='-1349' />
+    <nd ref='-1351' />
+    <nd ref='-1353' />
+    <nd ref='-1355' />
+    <nd ref='-1357' />
+  </way>
+  <way id='-1359' action='modify' visible='true'>
+    <nd ref='-1319' />
+    <nd ref='-1321' />
+    <nd ref='-1323' />
+    <nd ref='-1325' />
+    <nd ref='-1327' />
+    <nd ref='-1329' />
+  </way>
+</osm>

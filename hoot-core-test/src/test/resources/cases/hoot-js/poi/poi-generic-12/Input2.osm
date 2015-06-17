@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-140985' visible='true' lat='48.16056' lon='11.51384'>
+    <tag k='access' v='yes' />
+    <tag k='addr:housenumber' v='15' />
+    <tag k='addr:language' v='GER' />
+    <tag k='addr:street' v='STIEVESTRASSE' />
+    <tag k='error:circular' v='15' />
+    <tag k='language' v='GER' />
+    <tag k='leisure' v='sports_centre' />
+    <tag k='name' v='PARK CLUB NYMPENBURG' />
+    <tag k='phone' v='89-1782055' />
+    <tag k='source' v='navteq' />
+  </node>
+</osm>

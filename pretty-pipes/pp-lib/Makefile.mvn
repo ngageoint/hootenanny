@@ -1,0 +1,27 @@
+
+####
+# This makefile is here to give a consistent interface to all the projects.
+# In other words, I don't like remembering cryptic maven commands. -JRS
+####
+
+# If the silent flag is passed to make then make Maven quiet too.
+ifneq (,$(findstring s,$(MAKEFLAGS)))
+    MVN_QUIET="-q"
+endif
+
+default: build
+
+MVN_DEFAULTS=$(MVN_QUIET) -DskipTests
+
+build:
+	rm -f ../lib/PrettyPipesLib-*.jar
+	mvn $(MVN_DEFAULTS) package
+
+clean:
+	mvn $(MVN_DEFAULTS) clean
+
+test:
+	mvn $(MVN_QUIET) test
+
+test-all:
+	mvn $(MVN_QUIET) verify

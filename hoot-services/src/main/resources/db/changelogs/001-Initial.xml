@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet author="jason.surratt" id="1" context="default">
+    	<comment>
+    		This is the initial database design for hoot-services.
+    		See #2730 for details.
+    	</comment>
+    
+    	<!-- dropAll doesn't drop enumerations, so this line is here to avoid errors after a dropAll -->
+    	<sql>DROP TYPE IF EXISTS nwr_enum</sql>
+		<sql>CREATE TYPE nwr_enum AS ENUM ('node','way','relation')</sql>
+		
+		<rollback>
+			DROP TYPE nwr_enum
+		</rollback>
+
+        <createTable tableName="users">
+            <column name="email" type="varchar(255)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="id" type="bigserial" autoIncrement="true">
+            	<constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="display_name" type="varchar(255)">
+            	<constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="maps">
+            <column name="id" type="bigserial" autoIncrement="true">
+            	<constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="display_name" type="varchar(255)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="public" type="boolean" defaultValueBoolean="false">
+            	<constraints nullable="false"/>
+            </column>
+			<!-- See the modifySql command at the end for the "WITHOUT TIME ZONE" bit -->
+            <column name="created_at" type="timestamp">
+            	<constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint 
+        	constraintName="maps_user_id_fkey" 
+        	baseTableName="maps" 
+        	baseColumnNames="user_id" 
+        	referencedTableName="users" 
+        	referencedColumnNames="id"/>
+
+		<!-- Changeset tables -->
+        <createTable tableName="changesets">
+            <column name="id" type="bigserial" autoIncrement="true">
+            	<constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="map_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+			<!-- See the modifySql command at the end for the "WITHOUT TIME ZONE" bit -->
+            <column name="created_at" type="timestamp">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="min_lat" type="int">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="max_lat" type="int">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="min_lon" type="int">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="max_lon" type="int">
+            	<constraints nullable="false"/>
+            </column>
+			<!-- See the modifySql command at the end for the "WITHOUT TIME ZONE" bit -->
+            <column name="closed_at" type="timestamp">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="num_changes" type="int" defaultValueNumeric="0">
+            	<constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint 
+        	constraintName="changesets_user_id_fkey" 
+        	baseTableName="changesets" 
+        	baseColumnNames="user_id" 
+        	referencedTableName="users" 
+        	referencedColumnNames="id"/>
+        <addForeignKeyConstraint 
+        	constraintName="changesets_map_id_fkey" 
+        	baseTableName="changesets" 
+        	baseColumnNames="map_id" 
+        	referencedTableName="maps" 
+        	referencedColumnNames="id"/>
+
+        <createTable tableName="changeset_tags">
+            <column name="changeset_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="k" type="varchar(255)" defaultValue="">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="v" type="varchar(255)" defaultValue="">
+            	<constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey 
+        	constraintName="changeset_tags_pkey" 
+        	tableName="changeset_tags" 
+        	columnNames="changeset_id,k" />
+        <addForeignKeyConstraint 
+        	constraintName="changeset_tags_id_fkey" 
+        	baseTableName="changeset_tags" 
+        	baseColumnNames="changeset_id" 
+        	referencedTableName="changesets" 
+        	referencedColumnNames="id"/>
+       	<createIndex tableName="changeset_tags" indexName="changeset_tags_id_idx">
+       		<column name="changeset_id"></column>
+       	</createIndex>
+
+		<!-- Node Tables -->
+        <createTable tableName="current_nodes">
+            <column name="id" type="bigserial" autoIncrement="true">
+            	<constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="map_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="latitude" type="int">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="longitude" type="int">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="changeset_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="visible" type="boolean">
+            	<constraints nullable="false"/>
+            </column>
+			<!-- See the modifySql command at the end for the "WITHOUT TIME ZONE" bit -->
+            <column name="timestamp" type="timestamp">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="tile" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint 
+        	constraintName="current_nodes_changeset_id_fkey" 
+        	baseTableName="current_nodes" 
+        	baseColumnNames="changeset_id" 
+        	referencedTableName="changesets" 
+        	referencedColumnNames="id"/>
+        <addForeignKeyConstraint 
+        	constraintName="current_nodes_map_id_fkey" 
+        	baseTableName="current_nodes" 
+        	baseColumnNames="map_id" 
+        	referencedTableName="maps" 
+        	referencedColumnNames="id"/>
+       	<createIndex tableName="current_nodes" indexName="current_nodes_tile_idx">
+       		<column name="tile"></column>
+       	</createIndex>
+       	<createIndex tableName="current_nodes" indexName="current_nodes_timestamp_idx">
+       		<column name="timestamp"></column>
+       	</createIndex>
+
+        <createTable tableName="current_node_tags">
+            <column name="node_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="k" type="varchar(255)" defaultValue="">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="v" type="varchar(255)" defaultValue="">
+            	<constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey 
+        	constraintName="current_node_tags_pkey" 
+        	tableName="current_node_tags" 
+        	columnNames="node_id,k" />
+        <addForeignKeyConstraint 
+        	constraintName="current_node_tags_id_fkey" 
+        	referencedTableName="current_nodes" 
+        	baseColumnNames="node_id" 
+        	baseTableName="current_node_tags" 
+        	referencedColumnNames="id"/>
+
+		<!-- Way Tables -->
+        <createTable tableName="current_ways">
+            <column name="id" type="bigserial" autoIncrement="true">
+            	<constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="map_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="changeset_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+			<!-- See the modifySql command at the end for the "WITHOUT TIME ZONE" bit -->
+            <column name="timestamp" type="timestamp">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="visible" type="boolean">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint 
+        	constraintName="current_ways_changeset_id_fkey" 
+        	baseTableName="current_ways" 
+        	baseColumnNames="changeset_id" 
+        	referencedTableName="changesets" 
+        	referencedColumnNames="id"/>
+       	<createIndex tableName="current_ways" indexName="current_ways_timestamp_idx">
+       		<column name="timestamp"></column>
+       	</createIndex>
+
+        <createTable tableName="current_way_tags">
+            <column name="way_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="k" type="varchar(255)" defaultValue="">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="v" type="varchar(255)" defaultValue="">
+            	<constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey 
+        	constraintName="current_way_tags_pkey" 
+        	tableName="current_way_tags" 
+        	columnNames="way_id,k" />
+        <addForeignKeyConstraint 
+        	constraintName="current_way_tags_id_fkey" 
+        	referencedTableName="current_ways" 
+        	baseColumnNames="way_id" 
+        	baseTableName="current_way_tags" 
+        	referencedColumnNames="id"/>
+
+		<!-- Relation Tables -->
+        <createTable tableName="current_relations">
+            <column name="id" type="bigserial" autoIncrement="true">
+            	<constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="map_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="changeset_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+			<!-- See the modifySql command at the end for the "WITHOUT TIME ZONE" bit -->
+            <column name="timestamp" type="timestamp">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="visible" type="boolean">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint 
+        	constraintName="current_relations_changeset_id_fkey" 
+        	baseTableName="current_relations" 
+        	baseColumnNames="changeset_id" 
+        	referencedTableName="changesets" 
+        	referencedColumnNames="id"/>
+        <addForeignKeyConstraint 
+        	constraintName="current_relations_map_id_fkey" 
+        	baseTableName="current_relations" 
+        	baseColumnNames="map_id" 
+        	referencedTableName="maps" 
+        	referencedColumnNames="id"/>
+       	<createIndex tableName="current_relations" indexName="current_relations_timestamp_idx">
+       		<column name="timestamp"></column>
+       	</createIndex>
+
+        <createTable tableName="current_relation_tags">
+            <column name="relation_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="k" type="varchar(255)" defaultValue="">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="v" type="varchar(255)" defaultValue="">
+            	<constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey 
+        	constraintName="current_relation_tags_pkey" 
+        	tableName="current_relation_tags" 
+        	columnNames="relation_id,k" />
+        <addForeignKeyConstraint 
+        	constraintName="current_relation_tags_id_fkey" 
+        	referencedTableName="current_relations" 
+        	baseColumnNames="relation_id" 
+        	baseTableName="current_relation_tags" 
+        	referencedColumnNames="id"/>
+
+        <createTable tableName="current_relation_members">
+            <column name="relation_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="member_type" type="nwr_enum">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="member_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="member_role" type="varchar(255)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="sequence_id" type="integer" defaultValueNumeric="0">
+            	<constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey 
+        	constraintName="current_relation_members_pkey" 
+        	tableName="current_relation_members" 
+        	columnNames="relation_id,member_type,member_id,member_role,sequence_id" />
+       	<createIndex tableName="current_relation_members" indexName="current_relation_members_member_idx">
+       		<column name="member_type"></column>
+       		<column name="member_id"></column>
+       	</createIndex>
+
+		<!-- There isn't an obvious way to specify without time zone in liquibase -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+		</modifySql>
+    </changeSet>
+</databaseChangeLog>

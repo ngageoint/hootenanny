@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-140961' visible='true' lat='48.0957238' lon='11.4977454'>
+    <tag k='REF1' v='0134fd' />
+    <tag k='addr:city' v='München' />
+    <tag k='addr:country' v='DE' />
+    <tag k='addr:housenumber' v='74' />
+    <tag k='addr:postcode' v='81476' />
+    <tag k='addr:street' v='Forstenrieder Allee' />
+    <tag k='building' v='public' />
+    <tag k='error:circular' v='15' />
+    <tag k='layer' v='1' />
+    <tag k='leisure' v='sports_centre' />
+    <tag k='name' v='Hollywood Super Bowling' />
+    <tag k='phone' v='+4989753921' />
+    <tag k='sport' v='10pin' />
+    <tag k='website' v='http://hsb-muc.bowlingag.com' />
+  </node>
+</osm>

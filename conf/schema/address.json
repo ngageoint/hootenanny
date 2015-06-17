@@ -1,0 +1,63 @@
+{
+    "###": "",
+    "###": "address related tags.",
+    "###": "",
+
+    "tag": {
+        "name": "abstract_address",
+        "influence": 2.0,
+        "type": "text",
+        "mismatchScore": 0.25,
+        "geometries": ["node", "area", "relation"]
+    },
+
+    "tag": { "name": "addr:housenumber=*", "isA": "abstract_address" },
+    "tag": { 
+        "name": "addr:housename=*", 
+        "isA": "abstract_address",
+        "categories": ["name"]
+    },
+    "tag": { "name": "addr:street", "isA": "abstract_address", "type": "text" },
+    "tag": { "name": "addr:place=*", "isA": "abstract_address" },
+    "tag": { "name": "addr:postcode=*", "isA": "abstract_address" },
+    "tag": { "name": "addr:city", "isA": "abstract_address", "type": "text" },
+    "tag": { "name": "addr:country", "isA": "abstract_address", "type": "text" },
+    "tag": { "name": "addr:full=*", "isA": "abstract_address" },
+    "tag": { "name": "addr:hamlet", "isA": "abstract_address", "type": "text" },
+    "tag": { "name": "addr:suburb", "isA": "abstract_address", "type": "text" },
+    "tag": { "name": "addr:subdistrict", "isA": "abstract_address", "type": "text" },
+    "tag": { "name": "addr:district", "isA": "abstract_address", "type": "text" },
+    "tag": { "name": "addr:province", "isA": "abstract_address", "type": "text" },
+    "tag": { "name": "addr:state", "isA": "abstract_address", "type": "text" },
+
+    "tag": {
+        "name": "addr:interpolation",
+        "influence": 2.0,
+        "type": "text",
+        "geometries": ["linestring"]
+    },
+
+    "tag": {
+        "name": "addr:inclusion",
+        "influence": 2.0,
+        "type": "enumeration",
+        "geometries": ["linestring"]
+    },
+
+    "tag": {
+        "name": "addr:inclusion=actual",
+        "isA": "addr:inclusion"
+    },
+
+    "tag": {
+        "name": "addr:inclusion=estimate",
+        "isA": "addr:inclusion"
+    },
+
+    "tag": {
+        "name": "addr:inclusion=potential",
+        "isA": "addr:inclusion"
+    },
+
+    "#": "end"
+}

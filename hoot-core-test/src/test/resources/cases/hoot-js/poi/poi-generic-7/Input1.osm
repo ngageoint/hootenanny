@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-2477476' action='modify' visible='true' lat='48.132867' lon='11.6921556'>
+    <tag k='REF1' v='013e59' />
+    <tag k='email' v='h5563@accor.com' />
+    <tag k='error:circular' v='15' />
+    <tag k='internet_access' v='yes' />
+    <tag k='name' v='Novotel München Messe' />
+    <tag k='tourism' v='hotel' />
+    <tag k='uuid' v='{74924da5-f54b-5469-bf03-62eb1c09baa2}' />
+    <tag k='website' v='http://www.novotel.com/gb/hotel-5563-novotel-muenchen-messe/index.shtml' />
+  </node>
+</osm>

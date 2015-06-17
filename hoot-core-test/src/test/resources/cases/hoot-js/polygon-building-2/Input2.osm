@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-3774' action='modify' visible='true' lat='-0.36489096151' lon='42.54571041414' />
+  <node id='-3773' action='modify' visible='true' lat='-0.36487154119' lon='42.54592184903' />
+  <node id='-3772' action='modify' visible='true' lat='-0.36474513861' lon='42.54591182897' />
+  <node id='-3771' action='modify' visible='true' lat='-0.36476244879' lon='42.54570039408' />
+  <node id='-3750' visible='true' lat='-0.364892954' lon='42.545681665' />
+  <node id='-3748' action='modify' visible='true' lat='-0.36487467225' lon='42.54590021606' />
+  <node id='-3746' action='modify' visible='true' lat='-0.36474656182' lon='42.54588962671' />
+  <node id='-3744' visible='true' lat='-0.364763872' lon='42.54567563' />
+  <way id='-3770' visible='true'>
+    <nd ref='-3771' />
+    <nd ref='-3772' />
+    <nd ref='-3773' />
+    <nd ref='-3774' />
+    <nd ref='-3771' />
+    <tag k='amenity' v='police' />
+    <tag k='building' v='yes' />
+    <tag k='building:levels' v='2' />
+    <tag k='condition' v='functional' />
+    <tag k='height' v='9' />
+    <tag k='roof:shape' v='flat' />
+    <tag k='security:classification' v='unclassified' />
+    <tag k='security:non_ic_dissem_ctl' v='limited_distribution' />
+    <tag k='source:res_owner' v='USA' />
+  </way>
+  <way id='-3752' action='modify' visible='true'>
+    <nd ref='-3744' />
+    <nd ref='-3746' />
+    <nd ref='-3748' />
+    <nd ref='-3750' />
+    <nd ref='-3744' />
+    <tag k='amenity' v='police' />
+    <tag k='building' v='yes' />
+    <tag k='building:levels' v='2' />
+    <tag k='condition' v='functional' />
+    <tag k='height' v='9' />
+    <tag k='roof:shape' v='flat' />
+    <tag k='security:classification' v='unclassified' />
+    <tag k='security:non_ic_dissem_ctl' v='limited_distribution' />
+    <tag k='source:res_owner' v='USA' />
+  </way>
+</osm>

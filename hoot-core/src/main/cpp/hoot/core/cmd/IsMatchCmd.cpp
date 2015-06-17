@@ -1,0 +1,110 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ */
+
+// Hoot
+#include <hoot/core/Factory.h>
+#include <hoot/core/MapReprojector.h>
+#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/scoring/MapComparator.h>
+#include <hoot/core/util/Settings.h>
+
+namespace hoot
+{
+
+class IsMatchCmd : public BaseCommand
+{
+public:
+
+  static string className() { return "hoot::IsMatchCmd"; }
+
+  IsMatchCmd() { }
+
+  virtual QString getHelp() const
+  {
+    // 80 columns
+    //  | <---                                                                      ---> |
+    return getName() + " [--ignore-uuid] (input1) (input2)\n"
+        "  Checks to see if maps are essentially the same. Returns 0 if they're the same\n"
+        "  or 1 if they differ significantly. If they differ significantly warnings will\n"
+        "  be printed with more information.\n"
+        "  --ignore-uuid - Ignore UUID's in the map comparison\n"
+        "  --use-datetime - Use the ingest datetime in the map comparison\n"
+        "  * input1 - Input 1 (e.g. .osm file).\n"
+        "  * intpu2 - Input 2 (e.g. .osm file).";
+  }
+
+  virtual QString getName() const { return "is-match"; }
+
+  virtual int runSimple(QStringList args)
+  {
+
+    MapComparator mapCompare;
+
+    if (args.contains("--ignore-uuid"))
+    {
+      args.removeAll("--ignore-uuid");
+      mapCompare.setIgnoreUUID();
+    }
+
+    if (args.contains("--use-datetime"))
+    {
+      args.removeAll("--use-datetime");
+      mapCompare.setUseDateTime();
+    }
+
+
+    if (args.size() != 2)
+    {
+      cout << getHelp() << endl << endl;
+      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+    }
+
+    shared_ptr<OsmMap> map1(new OsmMap());
+    loadMap(map1, args[0], true, Status::Unknown1);
+    shared_ptr<OsmMap> map2(new OsmMap());
+    loadMap(map2, args[1], true, Status::Unknown1);
+
+    int result;
+    // if (MapComparator().isMatch(map1, map2))
+
+    if (mapCompare.isMatch(map1, map2))
+    {
+      result = 0;
+    }
+    else
+    {
+      result = 1;
+    }
+
+    return result;
+  }
+};
+
+HOOT_FACTORY_REGISTER(Command, IsMatchCmd)
+
+}
+

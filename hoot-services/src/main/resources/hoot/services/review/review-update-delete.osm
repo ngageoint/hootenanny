@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny" >
+  <create/>
+  <modify/>
+  <delete>
+    <way id="-41" version="1" changeset="" />
+  </delete>
+</osmChange>

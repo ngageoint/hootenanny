@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-3333079' action='modify' visible='true' lat='48.1225133' lon='11.6606558'>
+    <tag k='REF1' v='01a8ce' />
+    <tag k='amenity' v='fuel' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:mismatch' v='1' />
+    <tag k='hoot:wrong' v='1' />
+    <tag k='name' v='Shell' />
+    <tag k='uuid' v='{4e3fcbeb-1935-5e6b-822e-7fb3f44792cb}' />
+  </node>
+</osm>

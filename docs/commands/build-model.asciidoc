@@ -1,0 +1,13 @@
+== build-model
+
+=== Description 
+The +build-model+ command reads the inputs, generates a model and writes the result to a .arff and .rf files.
+
+* +input1+ - Input with REF1 tags (e.g. .osm file).
+* +input2+ - Input with REF2 tags (e.g. .osm file).
+* +output+ - Output model base name.
+
+=== Usage
+--------------------------------------
+build-model (ref1 ref2) [ref1 ref2 ...] (output)
+--------------------------------------

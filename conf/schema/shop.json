@@ -1,0 +1,22 @@
+{
+    "tag": {
+        "name": "shop",
+        "isA": "poi",
+        "influence": 1.0,
+        "type": "enumeration",
+        "geometries": ["node", "area"]
+    },
+
+    "#" : " The catch all",
+    "tag": { "name": "shop=*", "isA": "shop" },
+    "tag": { "name": "shop=car",
+        "isA": "shop",
+        "similarTo": { "name": "shop=car_repair", "weight": 0.8 }
+    },
+    "tag": { "name": "shop=car_repair", 
+        "isA": "shop",
+        "similarTo": { "name": "amenity=motor_vehicle_station", "weight": 0.8 }
+    },
+
+    "#" : "end"
+}

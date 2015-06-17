@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-761' action='modify' visible='true' lat='-6.31098143084' lon='106.867041324'>
+    <tag k='hoot:id' v='-213' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-759' action='modify' visible='true' lat='-6.31092003834' lon='106.866893524'>
+    <tag k='hoot:id' v='-512' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-757' action='modify' visible='true' lat='-6.31033181019' lon='106.865938024'>
+    <tag k='created_by' v='Merkaartor 0.13' />
+    <tag k='hoot:id' v='-853' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-755' action='modify' visible='true' lat='-6.30986196758' lon='106.864562124'>
+    <tag k='hoot:id' v='-251' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-753' action='modify' visible='true' lat='-6.31013870689' lon='106.865335355'>
+    <tag k='hoot:id' v='-1378' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-751' action='modify' visible='true' lat='-6.31023393653' lon='106.865297413'>
+    <tag k='hoot:id' v='-1379' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-749' action='modify' visible='true' lat='-6.31030797984' lon='106.865267912'>
+    <tag k='hoot:id' v='-1380' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-747' action='modify' visible='true' lat='-6.31027083071' lon='106.8651083'>
+    <tag k='hoot:id' v='-1381' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-745' action='modify' visible='true' lat='-6.31093461034' lon='106.8649507'>
+    <tag k='hoot:id' v='-1382' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-743' action='modify' visible='true' lat='-6.31076824763' lon='106.864161185'>
+    <tag k='hoot:id' v='-1383' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <way id='-765' action='modify' visible='true'>
+    <nd ref='-761' />
+    <nd ref='-759' />
+    <nd ref='-757' />
+    <nd ref='-755' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='primary' />
+    <tag k='hoot:status' v='1' />
+    <tag k='note' v='-52' />
+    <tag k='oneway' v='yes' />
+  </way>
+  <way id='-763' action='modify' visible='true'>
+    <nd ref='-753' />
+    <nd ref='-751' />
+    <nd ref='-749' />
+    <nd ref='-747' />
+    <nd ref='-745' />
+    <nd ref='-743' />
+    <tag k='all_weather' v='yes' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='3' />
+    <tag k='note' v='-812' />
+    <tag k='surface' v='paved' />
+    <tag k='width' v='7.5' />
+  </way>
+</osm>

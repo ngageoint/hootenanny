@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<changeSet author="jason.surratt" id="10" context="default">
+		<comment>
+            This is a destructive operation that will effectively delete all
+            your data. You have been warned. See #4920 for details
+		</comment>
+
+        <sql>
+            DELETE FROM current_relation_members;
+            DELETE FROM current_relations;
+            DELETE FROM current_way_nodes; 
+            DELETE FROM current_ways;
+            DELETE FROM current_nodes;
+            DELETE FROM changeset_tags;
+            DELETE FROM changesets;
+            DELETE FROM maps;
+        </sql>
+
+        <dropTable cascadeConstraints="true" tableName="changeset_tags"/>
+        <addColumn tableName="changesets">
+            <column name="tags" type="hstore" />
+        </addColumn>
+
+        <dropForeignKeyConstraint baseTableName="current_way_nodes" constraintName="current_way_nodes_node_id_fkey" />
+        <dropForeignKeyConstraint baseTableName="current_way_nodes" constraintName="current_way_nodes_way_id_fkey" />
+
+        <dropPrimaryKey constraintName="current_nodes_pkey" tableName="current_nodes" />
+        <dropPrimaryKey constraintName="current_relations_pkey" tableName="current_relations" />
+        <dropPrimaryKey constraintName="current_relation_members_pkey" tableName="current_relation_members" />
+        <dropPrimaryKey constraintName="current_way_nodes_pkey" tableName="current_way_nodes" />
+        <dropPrimaryKey constraintName="current_ways_pkey" tableName="current_ways" />
+
+        <dropColumn columnName="map_id" tableName="changesets" />
+        <dropColumn columnName="map_id" tableName="current_nodes" />
+        <dropColumn columnName="map_id" tableName="current_relation_members" />
+        <dropColumn columnName="map_id" tableName="current_relations" />
+        <dropColumn columnName="map_id" tableName="current_way_nodes" />
+        <dropColumn columnName="map_id" tableName="current_ways" />
+
+        <addPrimaryKey columnNames="id" constraintName="current_nodes_pkey" tableName="current_nodes" />
+        <addPrimaryKey columnNames="id" constraintName="current_relations_pkey" tableName="current_relations" />
+        <addPrimaryKey columnNames="relation_id, member_type, member_id, member_role, sequence_id" constraintName="current_relation_members_pkey" tableName="current_relation_members" />
+        <addPrimaryKey columnNames="way_id, sequence_id" constraintName="current_way_nodes_pkey" tableName="current_way_nodes" />
+        <addPrimaryKey columnNames="id" constraintName="current_ways_pkey" tableName="current_ways" />
+
+        <dropIndex indexName="current_nodes_timestamp_idx" 
+            tableName="current_nodes"/>
+        <dropIndex indexName="current_relations_timestamp_idx" 
+            tableName="current_relations"/>
+        <dropIndex indexName="current_ways_timestamp_idx" 
+            tableName="current_ways"/>
+	</changeSet>
+</databaseChangeLog>

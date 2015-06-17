@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-140983' visible='true' lat='48.1603975' lon='11.513151'>
+    <tag k='REF1' v='00deca' />
+    <tag k='addr:housenumber' v='15' />
+    <tag k='addr:street' v='Stievestraße' />
+    <tag k='error:circular' v='15' />
+    <tag k='leisure' v='sports_centre' />
+    <tag k='name' v='Park Club Nymphenburg' />
+    <tag k='sport' v='squash;batminton' />
+  </node>
+</osm>

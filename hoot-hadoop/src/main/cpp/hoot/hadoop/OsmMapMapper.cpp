@@ -1,0 +1,65 @@
+/*
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+#include "OsmMapMapper.h"
+
+// Hadoop Utils
+#include <hadoop/SerialUtils.hh>
+
+// Hoot
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/io/PbfReader.h>
+
+// Pretty Pipes
+#include <pp/Factory.h>
+#include <pp/Hdfs.h>
+
+namespace hoot
+{
+
+void OsmMapMapper::map(HadoopPipes::MapContext& context)
+{
+  _context = &context;
+  _path = context.getInputKey();
+  bool ok;
+  _start = QString::fromStdString(context.getInputValue()).toLong(&ok);
+  if (ok == false)
+  {
+    throw HootException("Error parsing start value.");
+  }
+
+  shared_ptr<OsmMap> m(new OsmMap());
+
+  _loadMap(m);
+
+  _map(m, context);
+}
+
+void OsmMapMapper::_loadMap(shared_ptr<OsmMap>& m)
+{
+  PbfReader reader(true);
+  reader.setUseFileStatus(true);
+
+  pp::Hdfs fs("default", 0);
+  auto_ptr<istream> is(fs.open(_path));
+
+  // parse blob only needs the start location.
+  PbfReader::BlobLocation bl;
+  bl.headerOffset = _start;
+  reader.parseBlob(bl, is.get(), m);
+}
+
+}

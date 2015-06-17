@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<changeSet author="jason.surratt" id="6" context="default">
+		<comment>
+            Drop the current_node_tags table and move the tags into the current_nodes table.
+		</comment>
+
+        <!-- way changes to speed up inserts -->
+        <addDefaultValue tableName="current_ways" columnName="timestamp" defaultValueComputed="NOW()" />
+        <addDefaultValue tableName="current_ways" columnName="visible" defaultValueComputed="TRUE" />
+        <addDefaultValue tableName="current_ways" columnName="version" defaultValueComputed="1" />
+		
+		<addColumn tableName="current_ways">
+            <column name="tags" type="hstore">
+                <constraints nullable="true" />
+            </column>
+            <!--column name="node_ids" type="bigint[]">
+                <constraints nullable="true" />
+            </column-->
+        </addColumn>
+
+        <dropTable cascadeConstraints="true" tableName="current_way_tags" />
+        <!--dropTable cascadeConstraints="true" tableName="current_way_nodes" /-->
+
+        <!-- node changes to speed up inserts -->
+        <addDefaultValue tableName="current_nodes" columnName="timestamp" defaultValueComputed="NOW()" />
+        <addDefaultValue tableName="current_nodes" columnName="visible" defaultValueComputed="TRUE" />
+        <addDefaultValue tableName="current_nodes" columnName="version" defaultValueComputed="1" />
+
+		<addColumn tableName="current_nodes">
+            <column name="tags" type="hstore">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+
+        <dropTable cascadeConstraints="true" tableName="current_node_tags" />
+
+        <addDefaultValue tableName="current_relations" columnName="timestamp" defaultValueComputed="NOW()" />
+        <addDefaultValue tableName="current_relations" columnName="visible" defaultValueComputed="TRUE" />
+        <addDefaultValue tableName="current_relations" columnName="version" defaultValueComputed="1" />
+
+		<addColumn tableName="current_relations">
+            <column name="tags" type="hstore">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+
+        <dropTable cascadeConstraints="true" tableName="current_relation_tags" />
+	</changeSet>
+</databaseChangeLog>

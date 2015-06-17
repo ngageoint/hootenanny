@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-240789' visible='true' lat='33.6698334' lon='-117.6608783' />
+  <node id='-240788' visible='true' lat='33.6704557' lon='-117.6596419' />
+  <node id='-240022' visible='true' version='1' lat='33.66772763186' lon='-117.6639786' />
+  <node id='-240020' visible='true' version='1' lat='33.67148147352' lon='-117.6564891' />
+  <node id='-240018' visible='true' version='1' lat='33.6714694144' lon='-117.65652312781' />
+  <node id='-240016' visible='true' version='1' lat='33.6714688144' lon='-117.65662992781' />
+  <node id='-240014' visible='true' version='1' lat='33.67146368107' lon='-117.65673672781' />
+  <node id='-240012' visible='true' version='1' lat='33.6714332144' lon='-117.65696572781' />
+  <node id='-240010' visible='true' version='1' lat='33.6714456144' lon='-117.65718699448' />
+  <node id='-240008' visible='true' version='1' lat='33.67143788107' lon='-117.65734699448' />
+  <node id='-240006' visible='true' version='1' lat='33.6714148144' lon='-117.65746152781' />
+  <node id='-240004' visible='true' version='1' lat='33.6713850144' lon='-117.65756072781' />
+  <node id='-240002' visible='true' version='1' lat='33.6713386144' lon='-117.65779732781' />
+  <node id='-240000' visible='true' version='1' lat='33.67128128107' lon='-117.65796512781' />
+  <node id='-239998' visible='true' version='1' lat='33.67118968107' lon='-117.65823979448' />
+  <node id='-239996' visible='true' version='1' lat='33.6710000144' lon='-117.65872039448' />
+  <node id='-239994' visible='true' version='1' lat='33.67086568107' lon='-117.65895699448' />
+  <node id='-239992' visible='true' version='1' lat='33.6707432144' lon='-117.65908659448' />
+  <node id='-239990' visible='true' version='1' lat='33.6705960144' lon='-117.65921619448' />
+  <node id='-239988' visible='true' version='1' lat='33.67038888107' lon='-117.65956719448' />
+  <node id='-239986' visible='true' version='1' lat='33.67026808107' lon='-117.65982692781' />
+  <node id='-239984' visible='true' version='1' lat='33.6701680144' lon='-117.65998692781' />
+  <node id='-239982' visible='true' version='1' lat='33.67013368107' lon='-117.66007092781' />
+  <node id='-239980' visible='true' version='1' lat='33.6700336144' lon='-117.66024652781' />
+  <node id='-239978' visible='true' version='1' lat='33.66973728107' lon='-117.66083379447' />
+  <node id='-239976' visible='true' version='1' lat='33.6695120144' lon='-117.66123052781' />
+  <node id='-239974' visible='true' version='1' lat='33.6693776144' lon='-117.66148999447' />
+  <node id='-239972' visible='true' version='1' lat='33.66932748107' lon='-117.66156619447' />
+  <node id='-239970' visible='true' version='1' lat='33.66928648107' lon='-117.66165012781' />
+  <node id='-239968' visible='true' version='1' lat='33.66924101441' lon='-117.66173412781' />
+  <node id='-239966' visible='true' version='1' lat='33.66907681441' lon='-117.6620699278' />
+  <node id='-239964' visible='true' version='1' lat='33.66887888107' lon='-117.6623903278' />
+  <node id='-239962' visible='true' version='1' lat='33.66869461441' lon='-117.66271079447' />
+  <node id='-239960' visible='true' version='1' lat='33.66855801441' lon='-117.66296259447' />
+  <node id='-239958' visible='true' version='1' lat='33.66840121441' lon='-117.6631913278' />
+  <node id='-239956' visible='true' version='1' lat='33.66825328107' lon='-117.6634355278' />
+  <node id='-239954' visible='true' version='1' lat='33.66813081441' lon='-117.66356539447' />
+  <way id='-240787' action='modify' visible='true'>
+    <nd ref='-240788' />
+    <nd ref='-240789' />
+    <tag k='REF2' v='0081bd' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Serrano Creek' />
+    <tag k='note' v='2' />
+    <tag k='osm_id' v='59238966' />
+    <tag k='source' v='osm' />
+    <tag k='type' v='stream' />
+    <tag k='uuid' v='{e0e6988c-619f-4275-b83f-e0a0ec52ac56}' />
+    <tag k='width' v='0' />
+  </way>
+  <way id='-240024' action='modify' visible='true' version='1'>
+    <nd ref='-240020' />
+    <nd ref='-240018' />
+    <nd ref='-240016' />
+    <nd ref='-240014' />
+    <nd ref='-240012' />
+    <nd ref='-240010' />
+    <nd ref='-240008' />
+    <nd ref='-240006' />
+    <nd ref='-240004' />
+    <nd ref='-240002' />
+    <nd ref='-240000' />
+    <nd ref='-239998' />
+    <nd ref='-239996' />
+    <nd ref='-239994' />
+    <nd ref='-239992' />
+    <nd ref='-239990' />
+    <nd ref='-239988' />
+    <nd ref='-239986' />
+    <nd ref='-239984' />
+    <nd ref='-239982' />
+    <nd ref='-239980' />
+    <nd ref='-239978' />
+    <nd ref='-239976' />
+    <nd ref='-239974' />
+    <nd ref='-239972' />
+    <nd ref='-239970' />
+    <nd ref='-239968' />
+    <nd ref='-239966' />
+    <nd ref='-239964' />
+    <nd ref='-239962' />
+    <nd ref='-239960' />
+    <nd ref='-239958' />
+    <nd ref='-239956' />
+    <nd ref='-239954' />
+    <nd ref='-240022' />
+    <tag k='Enabled' v='1' />
+    <tag k='FCode' v='46003' />
+    <tag k='FDate' v='2012/01/24' />
+    <tag k='FType' v='460' />
+    <tag k='FlowDir' v='1' />
+    <tag k='GNIS_ID' v='00273632' />
+    <tag k='LengthKM' v='7.0659999999999998' />
+    <tag k='REF1' v='0081bd' />
+    <tag k='ReachCode' v='18070204000481' />
+    <tag k='Resolution' v='2' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='Serrano Creek' />
+    <tag k='note' v='1' />
+    <tag k='source' v='USGS-NHD' />
+  </way>
+</osm>

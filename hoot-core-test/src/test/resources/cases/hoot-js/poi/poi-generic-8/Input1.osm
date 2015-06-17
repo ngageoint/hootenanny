@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-1804986' visible='true' lat='48.190675' lon='11.6165934'>
+    <tag k='REF1' v='01d659' />
+    <tag k='addr:city' v='München' />
+    <tag k='addr:housenumber' v='36' />
+    <tag k='addr:postcode' v='80939' />
+    <tag k='addr:street' v='Situlistraße' />
+    <tag k='amenity' v='fuel' />
+    <tag k='brand' v='Sprint' />
+    <tag k='error:circular' v='15' />
+    <tag k='fuel:biodiesel' v='yes' />
+    <tag k='fuel:diesel' v='yes' />
+    <tag k='fuel:lpg' v='yes' />
+    <tag k='fuel:octane_91' v='yes' />
+    <tag k='fuel:octane_95' v='yes' />
+    <tag k='fuel:octane_98' v='yes' />
+    <tag k='hoot:mismatch' v='1' />
+    <tag k='hoot:wrong' v='1' />
+    <tag k='name' v='Auto-Friedl' />
+    <tag k='note' v='LPG mit ACME Anschluß' />
+    <tag k='operator' v='Sprint' />
+    <tag k='phone' v='+49 89 3256423' />
+    <tag k='shop' v='kiosk' />
+    <tag k='uuid' v='{722338b3-e645-58bc-9c27-b54c293380a3}' />
+  </node>
+</osm>

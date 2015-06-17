@@ -1,0 +1,354 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-701984' action='modify' visible='true' lat='-25.38193832562' lon='153.05395517103' />
+  <node id='-701983' action='modify' visible='true' lat='-25.36315457699' lon='153.05408140785'>
+    <tag k='bridge' v='yes' />
+    <tag k='name' v='Point Bridge on a Road' />
+  </node>
+  <node id='-701982' action='modify' visible='true' lat='-25.37254681636' lon='153.05401828944' />
+  <node id='-701981' action='modify' visible='true' lat='-25.35376160771' lon='153.05414452625' />
+  <node id='-701980' action='modify' visible='true' lat='-25.34436790872' lon='153.05420764466' />
+  <node id='-701872' action='modify' visible='true' lat='-25.35059014147' lon='153.06424427444'>
+    <tag k='bridge' v='yes' />
+    <tag k='name' v='The Troll Bridge' />
+  </node>
+  <node id='-701786' action='modify' visible='true' lat='-25.36322252254' lon='153.06312504998' />
+  <node id='-701783' action='modify' visible='true' lat='-25.37261475663' lon='153.06306193158' />
+  <node id='-701782' action='modify' visible='true' lat='-25.38200626061' lon='153.06299881317' />
+  <node id='-701778' action='modify' visible='true' lat='-25.35359478587' lon='153.04561194884' />
+  <node id='-701777' action='modify' visible='true' lat='-25.38177154267' lon='153.04542259362' />
+  <node id='-701776' action='modify' visible='true' lat='-25.34420107392' lon='153.04567506725' />
+  <node id='-701775' action='modify' visible='true' lat='-25.36298776811' lon='153.04554883044' />
+  <node id='-701774' action='modify' visible='true' lat='-25.37238002045' lon='153.04548571203' />
+  <node id='-701716' action='modify' visible='true' lat='-25.37264000461' lon='153.07196256831' />
+  <node id='-701714' action='modify' visible='true' lat='-25.38203150662' lon='153.0718994499' />
+  <node id='-701712' action='modify' visible='true' lat='-25.34446111869' lon='153.07215192353' />
+  <node id='-701710' action='modify' visible='true' lat='-25.35385481044' lon='153.07208880512' />
+  <node id='-701708' action='modify' visible='true' lat='-25.36324777248' lon='153.07202568672' />
+  <node id='-701706' action='modify' visible='true' lat='-25.38103138279' lon='153.1455304784' />
+  <node id='-701704' action='modify' visible='true' lat='-25.36906107802' lon='153.14546478685' />
+  <node id='-701702' action='modify' visible='true' lat='-25.38130655502' lon='153.13350890793' />
+  <node id='-701700' action='modify' visible='true' lat='-25.36974955466' lon='153.13361354021' />
+  <node id='-701698' action='modify' visible='true' lat='-25.36932396176' lon='153.12184027612' />
+  <node id='-701696' action='modify' visible='true' lat='-25.36286204045' lon='153.08467547716' />
+  <node id='-701694' action='modify' visible='true' lat='-25.38164583455' lon='153.08454924035' />
+  <node id='-701692' action='modify' visible='true' lat='-25.37225430255' lon='153.08461235875' />
+  <node id='-701690' action='modify' visible='true' lat='-25.35346904844' lon='153.08473859556' />
+  <node id='-701688' action='modify' visible='true' lat='-25.34407532672' lon='153.08480171397' />
+  <node id='-701686' action='modify' visible='true' lat='-25.35609545462' lon='153.12183048377' />
+  <node id='-701684' action='modify' visible='true' lat='-25.3820493246' lon='153.10891473755' />
+  <node id='-701682' action='modify' visible='true' lat='-25.36952716151' lon='153.10899889543' />
+  <node id='-701680' action='modify' visible='true' lat='-25.38078458219' lon='153.12189041203' />
+  <node id='-701678' action='modify' visible='true' lat='-25.38234248098' lon='153.09561814489' />
+  <node id='-701676' action='modify' visible='true' lat='-25.36942628586' lon='153.09563685799' />
+  <node id='-701674' action='modify' visible='true' version='1' lat='-25.35650870992' lon='153.09565557109' />
+  <node id='-701672' action='modify' visible='true' version='1' lat='-25.34358975368' lon='153.09567428418' />
+  <node id='-701670' action='modify' visible='true' version='1' lat='-25.35700370056' lon='153.1090830533' />
+  <node id='-701668' action='modify' visible='true' version='1' lat='-25.34447894221' lon='153.10916721118' />
+  <node id='-701666' action='modify' visible='true' version='1' lat='-25.3549778179' lon='153.14538750799' />
+  <node id='-701664' action='modify' visible='true' version='1' lat='-25.34457371158' lon='153.14533042348' />
+  <node id='-701662' action='modify' visible='true' version='1' lat='-25.35507676174' lon='153.13374636716' />
+  <node id='-701660' action='modify' visible='true' version='1' lat='-25.34467102908' lon='153.13384055635' />
+  <node id='-701658' action='modify' visible='true' version='1' lat='-25.35609545462' lon='153.12183048377' />
+  <node id='-701656' action='modify' visible='true' version='1' lat='-25.34455509076' lon='153.12183048377' />
+  <way id='-701987' action='modify' visible='true'>
+    <nd ref='-701980' />
+    <nd ref='-701981' />
+    <tag k='divider' v='yes' />
+    <tag k='highway' v='primary' />
+    <tag k='lanes' v='1' />
+    <tag k='layer' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='yes' />
+    <tag k='name' v='Just a road' />
+    <tag k='oneway' v='no' />
+    <tag k='ref' v='1' />
+    <tag k='surface' v='concrete' />
+  </way>
+  <way id='-701986' action='modify' visible='true'>
+    <nd ref='-701982' />
+    <nd ref='-701984' />
+    <tag k='condition' v='damaged' />
+    <tag k='divider' v='yes' />
+    <tag k='highway' v='primary' />
+    <tag k='lanes' v='1' />
+    <tag k='layer' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='yes' />
+    <tag k='name' v='Just a road' />
+    <tag k='oneway' v='no' />
+    <tag k='ref' v='1' />
+    <tag k='surface' v='concrete' />
+  </way>
+  <way id='-701985' action='modify' visible='true'>
+    <nd ref='-701981' />
+    <nd ref='-701983' />
+    <nd ref='-701982' />
+    <tag k='condition' v='functional' />
+    <tag k='highway' v='primary' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='Just a road' />
+    <tag k='surface' v='concrete' />
+  </way>
+  <way id='-701787' action='modify' visible='true'>
+    <nd ref='-701786' />
+    <nd ref='-701783' />
+    <nd ref='-701782' />
+    <tag k='bridge' v='yes' />
+    <tag k='condition' v='functional' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='Just a bridge' />
+    <tag k='surface' v='concrete' />
+  </way>
+  <way id='-701781' action='modify' visible='true'>
+    <nd ref='-701776' />
+    <nd ref='-701778' />
+    <tag k='divider' v='yes' />
+    <tag k='highway' v='primary' />
+    <tag k='lanes' v='1' />
+    <tag k='layer' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='yes' />
+    <tag k='name' v='Just a road' />
+    <tag k='oneway' v='no' />
+    <tag k='ref' v='1' />
+    <tag k='surface' v='concrete' />
+  </way>
+  <way id='-701780' action='modify' visible='true'>
+    <nd ref='-701774' />
+    <nd ref='-701777' />
+    <tag k='condition' v='damaged' />
+    <tag k='divider' v='yes' />
+    <tag k='highway' v='primary' />
+    <tag k='lanes' v='1' />
+    <tag k='layer' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='yes' />
+    <tag k='name' v='Just a road' />
+    <tag k='oneway' v='no' />
+    <tag k='ref' v='1' />
+    <tag k='surface' v='concrete' />
+  </way>
+  <way id='-701779' action='modify' visible='true'>
+    <nd ref='-701778' />
+    <nd ref='-701775' />
+    <nd ref='-701774' />
+    <tag k='condition' v='functional' />
+    <tag k='highway' v='primary' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='Just a road' />
+    <tag k='surface' v='concrete' />
+  </way>
+  <way id='-701758' visible='true'>
+    <nd ref='-701716' />
+    <nd ref='-701714' />
+    <tag k='condition' v='damaged' />
+    <tag k='divider' v='yes' />
+    <tag k='highway' v='primary' />
+    <tag k='lanes' v='1' />
+    <tag k='layer' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='yes' />
+    <tag k='name' v='Beach' />
+    <tag k='oneway' v='no' />
+    <tag k='ref' v='1' />
+    <tag k='surface' v='concrete' />
+  </way>
+  <way id='-701756' action='modify' visible='true'>
+    <nd ref='-701710' />
+    <nd ref='-701708' />
+    <nd ref='-701716' />
+    <tag k='bridge' v='yes' />
+    <tag k='condition' v='functional' />
+    <tag k='highway' v='primary' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='Beach' />
+    <tag k='surface' v='concrete' />
+  </way>
+  <way id='-701754' visible='true'>
+    <nd ref='-701712' />
+    <nd ref='-701710' />
+    <tag k='divider' v='yes' />
+    <tag k='highway' v='primary' />
+    <tag k='lanes' v='1' />
+    <tag k='layer' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='yes' />
+    <tag k='name' v='Beach' />
+    <tag k='oneway' v='no' />
+    <tag k='ref' v='1' />
+    <tag k='surface' v='concrete' />
+  </way>
+  <way id='-701752' action='modify' visible='true'>
+    <nd ref='-701704' />
+    <nd ref='-701706' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='Big Train' />
+    <tag k='railway' v='rail' />
+  </way>
+  <way id='-701750' action='modify' visible='true'>
+    <nd ref='-701666' />
+    <nd ref='-701704' />
+    <tag k='bridge' v='yes' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='Big Train' />
+    <tag k='railway' v='rail' />
+  </way>
+  <way id='-701748' action='modify' visible='true'>
+    <nd ref='-701700' />
+    <nd ref='-701702' />
+    <tag k='condition' v='dismantled' />
+    <tag k='electrified' v='contact_line' />
+    <tag k='gauge' v='4' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='location' v='overground' />
+    <tag k='railway' v='rail' />
+    <tag k='railway:track' v='monorail' />
+  </way>
+  <way id='-701746' action='modify' visible='true'>
+    <nd ref='-701662' />
+    <nd ref='-701700' />
+    <tag k='bridge' v='yes' />
+    <tag k='condition' v='dismantled' />
+    <tag k='electrified' v='contact_line' />
+    <tag k='gauge' v='4' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='location' v='overground' />
+    <tag k='railway' v='rail' />
+    <tag k='railway:track' v='monorail' />
+  </way>
+  <way id='-701744' action='modify' visible='true'>
+    <nd ref='-701698' />
+    <nd ref='-701680' />
+    <tag k='condition' v='functional' />
+    <tag k='highway' v='track' />
+    <tag k='name' v='Kokoda' />
+  </way>
+  <way id='-701742' action='modify' visible='true'>
+    <nd ref='-701682' />
+    <nd ref='-701684' />
+    <tag k='highway' v='primary' />
+    <tag k='name' v='Beach' />
+    <tag k='surface' v='concrete' />
+  </way>
+  <way id='-701740' action='modify' visible='true'>
+    <nd ref='-701670' />
+    <nd ref='-701682' />
+    <tag k='bridge' v='yes' />
+    <tag k='highway' v='primary' />
+    <tag k='name' v='Beach' />
+  </way>
+  <way id='-701738' action='modify' visible='true'>
+    <nd ref='-701676' />
+    <nd ref='-701678' />
+    <tag k='highway' v='unclassified' />
+    <tag k='name' v='Sesame' />
+    <tag k='oneway' v='yes' />
+    <tag k='surface' v='asphalt' />
+  </way>
+  <way id='-701736' action='modify' visible='true'>
+    <nd ref='-701674' />
+    <nd ref='-701676' />
+    <tag k='bridge' v='yes' />
+    <tag k='highway' v='unclassified' />
+    <tag k='in_tunnel' v='yes' />
+    <tag k='name' v='Sesame' />
+    <tag k='oneway' v='yes' />
+    <tag k='surface' v='asphalt' />
+  </way>
+  <way id='-701734' action='modify' visible='true'>
+    <nd ref='-701692' />
+    <nd ref='-701694' />
+    <tag k='condition' v='damaged' />
+    <tag k='divider' v='yes' />
+    <tag k='highway' v='primary' />
+    <tag k='lanes' v='1' />
+    <tag k='layer' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='yes' />
+    <tag k='name' v='Beach' />
+    <tag k='oneway' v='no' />
+    <tag k='ref' v='1' />
+    <tag k='surface' v='concrete' />
+  </way>
+  <way id='-701732' action='modify' visible='true'>
+    <nd ref='-701690' />
+    <nd ref='-701696' />
+    <nd ref='-701692' />
+    <tag k='bridge' v='yes' />
+    <tag k='condition' v='functional' />
+    <tag k='divider' v='yes' />
+    <tag k='highway' v='primary' />
+    <tag k='lanes' v='1' />
+    <tag k='layer' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='yes' />
+    <tag k='name' v='Beach' />
+    <tag k='oneway' v='no' />
+    <tag k='ref' v='1' />
+    <tag k='surface' v='concrete' />
+  </way>
+  <way id='-701730' action='modify' visible='true'>
+    <nd ref='-701688' />
+    <nd ref='-701690' />
+    <tag k='divider' v='yes' />
+    <tag k='highway' v='primary' />
+    <tag k='lanes' v='1' />
+    <tag k='layer' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='yes' />
+    <tag k='name' v='Beach' />
+    <tag k='oneway' v='no' />
+    <tag k='ref' v='1' />
+    <tag k='surface' v='concrete' />
+  </way>
+  <way id='-701728' action='modify' visible='true'>
+    <nd ref='-701658' />
+    <nd ref='-701698' />
+    <tag k='bridge' v='yes' />
+    <tag k='condition' v='functional' />
+    <tag k='highway' v='track' />
+    <tag k='name' v='Kokoda' />
+  </way>
+  <way id='-701726' action='modify' visible='true'>
+    <nd ref='-701656' />
+    <nd ref='-701686' />
+    <nd ref='-701686' />
+    <tag k='condition' v='functional' />
+    <tag k='highway' v='track' />
+    <tag k='name' v='Kokoda' />
+  </way>
+  <way id='-701724' action='modify' visible='true'>
+    <nd ref='-701660' />
+    <nd ref='-701662' />
+    <tag k='condition' v='dismantled' />
+    <tag k='electrified' v='contact_line' />
+    <tag k='gauge' v='4' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='location' v='overground' />
+    <tag k='railway' v='rail' />
+    <tag k='railway:track' v='monorail' />
+  </way>
+  <way id='-701722' action='modify' visible='true'>
+    <nd ref='-701664' />
+    <nd ref='-701666' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='Big Train' />
+    <tag k='railway' v='rail' />
+  </way>
+  <way id='-701720' action='modify' visible='true'>
+    <nd ref='-701668' />
+    <nd ref='-701670' />
+    <tag k='highway' v='primary' />
+    <tag k='name' v='Beach' />
+    <tag k='surface' v='concrete' />
+  </way>
+  <way id='-701718' action='modify' visible='true'>
+    <nd ref='-701672' />
+    <nd ref='-701674' />
+    <tag k='highway' v='unclassified' />
+    <tag k='name' v='Sesame' />
+    <tag k='oneway' v='yes' />
+    <tag k='surface' v='asphalt' />
+  </way>
+</osm>

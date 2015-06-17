@@ -1,0 +1,4 @@
+{
+    "#" : "Do not modify this file directly, modify conf/DatabaseConfig.sh instead.",
+    "services.db.test.url" : "postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}/testMap"
+}

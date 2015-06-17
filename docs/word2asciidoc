@@ -1,0 +1,49 @@
+#!/bin/bash
+#
+# Export your file from word as "Web Page, Filtered (*.htm,*.html)"
+#
+# Run as:
+#  word2asciidoc <input.html> <output.asciidoc>
+#
+# There are certainly cituations when this won't work. Mostly notably special
+# characters may require some more care and feeding.
+#
+set -e
+
+echo $1
+
+# Create a unique temporary file prefix
+export PREFIX=/tmp/$RANDOM$RANDOM
+
+iconv -f UTF-8 -t UTF-8 -c "$1" -o $PREFIX-utf8.html
+
+cat $PREFIX-utf8.html \
+    | sed -e "s/<\/\?o:p>//g" \
+    | sed -e "s/<\/\?v:[^>\n]\+>//g" \
+    | sed -e "s/&nbsp;/ /g" \
+    | sed -e "s/<!\[[^>\n]\+>/ /g" \
+    | sed -e "s/<!--((?!-->).)*-->/ /g" \
+    | sed -e "s/“/\"/g" \
+    | sed -e "s/”/\"/g" \
+    | sed -e "s/–/-/g" \
+    > $PREFIX-step1.html
+
+
+tidy -ashtml -i -wrap 20000 --output-encoding utf8 --output-xml true --hide-endtags false --hide-comments true --new-blocklevel-tags "v:shapetype,o:lock,v:shape,v:imagedata" $PREFIX-step1.html > $PREFIX-tidy.xhtml || true
+
+cat $PREFIX-tidy.xhtml \
+    | sed -e "s/<!DOCTYPE[^>]\+>/ /g" \
+    | sed -e "s/<meta [^>]\+>//g" \
+    | sed -e "s/<br>/<br \\/>/g" \
+    | sed -e "s/&nbsp;/ /g" \
+    | sed -e "s/&ndash;/-/g" \
+    | sed -e "s/&rsquo;/\"/g" \
+    | sed -e "s/&lsquo;/\"/g" \
+    | sed -e "s/&rdquo;/\"/g" \
+    | sed -e "s/&ldquo;/\"/g" \
+    | sed -e "s/\xb7/*/g" \
+    | sed -e "s/~/\\\\~/g" \
+    > $PREFIX-step3.xhtml
+
+xsltproc WordHtmlToAsciiDoc.xslt $PREFIX-step3.xhtml > "$2"
+rm -f $PREFIX-*
