@@ -303,7 +303,7 @@ conf/words.sqlite: conf/words1.sqlite
 # If you create a new words.sqlite please just increment the number rather than
 # replacing the old file. This way we can maintain the history.
 conf/words1.sqlite:
-	wget -N -P conf/ https://github.com/ngageoint/hootenanny/releases/download/v0.2.15/words1.sqlite
+	wget -N -P conf/ https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/words1.sqlite
 
 bin/HootEnv.sh: scripts/HootEnv.sh
 	mkdir -p bin

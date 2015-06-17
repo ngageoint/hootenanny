@@ -130,7 +130,7 @@ cd ..
 ### GEOS ###
 
 # You can get the patched version of GEOS from the files section on DG Redmine:
-# https://github.com/ngageoint/hootenanny/releases/download/0.2.14/geos-3.3.8-patched.tgz
+# https://github.com/ngageoint/hootenanny/releases/download/v0.2.15/geos-3.3.8-patched.tgz
 rm -rf geos-3.3.8
 test -f geos-3.3.8-patched.tgz || \
     (echo Please get a copy of the patched GEOS. ; false )

@@ -9,11 +9,11 @@ If you have any support questions please contact Hootenanny.Help@DigitalGlobe.co
 Hootenanny has been tested on both CentOS/RHEL 6.5 and Ubuntu 14.04. Ubuntu
 14.04 receives more active development and more streamlined installation
 instructions. Please see [Hootenanny - Developers
-Guide.pdf](https://github.com/ngageoint/hootenanny/releases/download/v0.2.15/Hootenanny.-.Developer.Guide.pdf) for detailed instructions on Ubuntu 14.04. Both set of instructions are tailored to an audience that is deeply familiar with scripting and install procedures on Linux.
+Guide.pdf](https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/Hootenanny.-.Developer.Guide.pdf) for detailed instructions on Ubuntu 14.04. Both set of instructions are tailored to an audience that is deeply familiar with scripting and install procedures on Linux.
 
 System Administrators who would like to install on CentOS/RHEL 6.5 should follow
 the [Hootenanny - Installation
-Instructions.pdf](https://github.com/ngageoint/hootenanny/releases/download/v0.2.14/Hootenanny.-.Installation.Instructions.pdf).
+Instructions.pdf](https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/Hootenanny.-.Installation.Instructions.pdf).
 
 For those Ubuntu 14.04 users who wish to follow a more streamed-lined set of instructions, please refer to the Vagrant (VM container) set up instructions in the Developers Guide.  There is currently no Vagrant set up for CentOS/RHEL 6.5 so if you wish to use that environment please contact us at Hootenanny.Help@DigitalGlobe.com.
 
