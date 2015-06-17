@@ -1,0 +1,8 @@
+
+Pretty Pipes
+Copyright 2012 DigitalGlobe (formerly GeoEye, Inc.)
+
+This product includes software by DigitalGlobe. Licensed under Apache License Version 2.0.
+
+This product includes software developed by The Apache Software
+Foundation (http://www.apache.org/).

@@ -1,0 +1,43 @@
+# @PREFIX@
+# @prefix@
+
+MAKEFILE = Makefile.qmake
+
+LIBS += @LIBS@
+INCLUDEPATH += $$PWD
+QMAKE_CXXFLAGS += @CPPFLAGS@ 
+QMAKE_CXXFLAGS += @DEFS@
+QMAKE_CXXFLAGS += -frounding-math
+
+CONFIG += @HAS_LOG4CXX@ @HAS_NEWMAT@ @HAS_CPPUNIT@ @HAS_HADOOP@ \
+  @HAS_COVERAGE@ @HAS_OCTAVE@ @HAS_SERVICES@ @HAS_STXXL@ @HAS_RND@ @HAS_NODEJS@
+
+# Default to release mode, this can be overridden in LocalConfig.pri
+CONFIG += release
+CONFIG -= debug
+
+# We don't use multiple threads in Hootenanny, speed things up a bit.
+DEFINES += BOOST_SP_DISABLE_THREADS
+
+exists(LocalConfig.pri):include(LocalConfig.pri)
+
+coverage {
+  CONFIG += debug
+  CONFIG -= release
+  QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage
+  # Some help says that --coverage or -lgcov may work too.
+  QMAKE_LFLAGS += -fprofile-arcs -ftest-coverage
+}
+
+debug {
+  DEFINES += DEBUG
+
+  # Runs expensive validation on several data structures to make sure everything is in sync.
+  #DEFINES += VALIDATE_ON
+}
+
+release {
+  DEFINES -= DEBUG
+  DEFINES += NDEBUG
+}
+

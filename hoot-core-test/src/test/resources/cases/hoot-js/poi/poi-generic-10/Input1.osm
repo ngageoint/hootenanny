@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-140945' visible='true' lat='48.0529244' lon='11.6691004'>
+    <tag k='REF1' v='01628c' />
+    <tag k='error:circular' v='15' />
+    <tag k='historic' v='memorial' />
+    <tag k='name' v='Ottosäule' />
+    <tag k='wheelchair' v='yes' />
+  </node>
+</osm>

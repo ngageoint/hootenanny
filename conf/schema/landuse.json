@@ -1,0 +1,19 @@
+{
+    "tag": {
+        "name": "landuse",
+        "isA": "poi",
+        "influence": 1.0,
+        "type": "enumeration",
+        "geometries": ["node", "area"]
+    },
+
+    "#" : " The catch all",
+    "tag": { "name": "landuse=*", "isA": "landuse" },
+    "tag": { "name": "landuse=recreation_ground",
+        "isA": "landuse",
+        "similarTo": { "name": "leisure=recreation_ground", "weight": 0.9 }
+    },
+
+
+    "#" : "end"
+}

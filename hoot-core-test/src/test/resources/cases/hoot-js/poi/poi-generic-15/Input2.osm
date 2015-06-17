@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-951429' visible='true' lat='31.5661085' lon='35.7704385'>
+    <tag k='REF2' v='00097b' />
+    <tag k='error:circular' v='28.65' />
+    <tag k='name' v='Umm al ‘Iz̧ām' />
+    <tag k='name:feature_id' v='-974490' />
+    <tag k='name:id' v='-1450810' />
+    <tag k='place' v='locality' />
+    <tag k='source' v='mgcp' />
+    <tag k='source:abs_horiz_accuracy' v='25' />
+    <tag k='source:abs_horiz_accuracy_eval' v='emc_product_specification' />
+    <tag k='source:abs_vert_accuracy' v='-32765' />
+    <tag k='source:abs_vert_accuracy_eval' v='NA' />
+    <tag k='source:commercial_distribution_restriction' v='Limited distribution. Official use only by MGCP members.' />
+    <tag k='source:copyright' v='Copyright 2012 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' />
+    <tag k='source:date_time' v='2010-11-01T00:00:00Z' />
+    <tag k='source:description' v='Very High Resolution Commercial Monoscopic Imagery' />
+    <tag k='source:horiz_accuracy_cat' v='accurate' />
+    <tag k='source:name' v='very_high_resolution_commercial_monoscopic_imagery' />
+    <tag k='source:review_source_type' v='NA' />
+    <tag k='source:text' v='Hill' />
+    <tag k='source:vertical_source_category' v='no_elevations' />
+    <tag k='uuid' v='mgcp:0942E189-8A20-488F-AAAA-373EFFA9176F' />
+  </node>
+  <node id='-951428' visible='true' lat='31.5656075' lon='35.751737'>
+    <tag k='REF2' v='0006de' />
+    <tag k='error:circular' v='28.65' />
+    <tag k='name' v='Al ‘Āşī' />
+    <tag k='name:feature_id' v='-970038' />
+    <tag k='name:id' v='-1440057' />
+    <tag k='place' v='locality' />
+    <tag k='source' v='mgcp' />
+    <tag k='source:abs_horiz_accuracy' v='25' />
+    <tag k='source:abs_horiz_accuracy_eval' v='emc_product_specification' />
+    <tag k='source:abs_vert_accuracy' v='-32765' />
+    <tag k='source:abs_vert_accuracy_eval' v='NA' />
+    <tag k='source:commercial_distribution_restriction' v='Limited distribution. Official use only by MGCP members.' />
+    <tag k='source:copyright' v='Copyright 2012 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.' />
+    <tag k='source:date_time' v='2010-11-01T00:00:00Z' />
+    <tag k='source:description' v='Very High Resolution Commercial Monoscopic Imagery' />
+    <tag k='source:horiz_accuracy_cat' v='accurate' />
+    <tag k='source:name' v='very_high_resolution_commercial_monoscopic_imagery' />
+    <tag k='source:review_source_type' v='NA' />
+    <tag k='source:text' v='Hill' />
+    <tag k='source:vertical_source_category' v='no_elevations' />
+    <tag k='uuid' v='mgcp:0786A6D0-CD75-48A3-A93C-6D206389DFD5' />
+  </node>
+</osm>

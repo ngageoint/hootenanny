@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-1' action='modify' visible='true' lat='6.747866802201043' lon='47.42857871126742'>
+    <tag k='name' v='foo' />
+    <tag k='poi' v='yes' />
+  </node>
+</osm>

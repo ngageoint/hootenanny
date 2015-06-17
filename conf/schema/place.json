@@ -1,0 +1,18 @@
+{
+    "tag": {
+        "name": "place",
+        "isA": "poi"
+    },
+
+    "#" : " The catch all",
+    "tag": { "name": "place=*", "isA": "place" },
+
+    "tag": { "name": "place=populated", "isA": "place" },
+    "tag": {
+        "name": "place=village",
+        "isA": "place",
+        "similarTo": { "name": "place=populated", "weight": 0.8 }
+    },
+
+    "#" : "end"
+}

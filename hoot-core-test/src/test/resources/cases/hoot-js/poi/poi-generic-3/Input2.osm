@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-3200108' action='modify' visible='true' lat='48.04804' lon='11.70149'>
+    <tag k='REF2' v='none' />
+    <tag k='access' v='yes' />
+    <tag k='addr:language' v='GER' />
+    <tag k='addr:street' v='TAUFKIRCHNER STRASSE' />
+    <tag k='error:circular' v='150' />
+    <tag k='language' v='GER' />
+    <tag k='name' v='HOHENBRUNN' />
+    <tag k='poi' v='yes' />
+    <tag k='source' v='navteq' />
+    <tag k='uuid' v='{52900336}' />
+  </node>
+</osm>

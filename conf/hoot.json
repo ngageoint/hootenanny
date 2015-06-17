@@ -1,0 +1,45 @@
+{
+  "#description" : "conflator.manipulators - List of manipulators to enable in the conflator.",
+  "#conflator.manipulators" : "hoot::WayTagMerger",
+  "#max.memory.usage": "5GB",
+  "#log.format": "%m%n",
+
+  "#description" : "match.model.enabled - If set to 'true' then the ProbabilityMatch class will use a model for evaluating the probability of a match.",
+  "#match.model.enabled" : "true",
+
+  "#description" : "match.model.name - The name of the model to use when classifying a pair of ways as a match or miss.",
+  "match.model.name" : "dc-attributes",
+  "#match.model.name" : "dc-noattributes",
+  "#match.model.name" : "dc-attr-intersection",
+
+  "#description" : "merge.nearby.nodes.distance - When merging nodes during --ogr2osm, what tolerance should be used for deciding two nodes are identical. Units in meters and defaults to 1.0m.",
+  "#merge.nearby.nodes.distance" : 1,
+
+  "#description" : "node.matcher.strictness - How strict the node matching should be. 0 is let everything through regardless of angle, 1 is low, 2 is reasonable, etc. Under the covers this uses a P(theta) = cos(diff) ^ strictness.",
+  "#node.matcher.strictness" : 1,
+
+  "#description" : "ogr2osm.ops - Operations that should be applied to ingested data before saving the data.",
+  "ogr2osm.ops" : "hoot::MergeNearbyNodes;hoot::BuildingPartMergeOp",
+
+  "#description" : "hoot.hadoop.libpath - The list of directories that contain libraries necessary for Hoot to run on Hadoop.",
+  "#hoot.hadoop.libpath" : "${HOOT_HOME}/lib/;${HOOT_HOME}/local/lib/;${HADOOP_HOME}/c++/Linux-amd64-64/lib/;${HOOT_HOME}/pretty-pipes/lib/",
+
+  "#description" : "hoot.hadoop.pixelSize - The size of a pixel when calculating node density. See User Manual for details.",
+  "hoot.hadoop.pixelSize" : "0.01",
+
+  "#description" : "hoot.hadoop.maxNodeCount - The maximum number of nodes that can be processed by a single task tracker. See User Manual for details.",
+  "hoot.hadoop.maxNodeCount" : "5000000",
+
+  "#description" : "Used by the building matching code.",
+  "hoot.hadoop.file.deps" : "${HOOT_HOME}/conf/BuildingModel.rf",
+
+  "#description" : "services.db.reader.max.elements.per.partial.map - The maximum number of OSM elements that may be read from the services database into a single OSM map during a partial map read.",
+  "services.db.reader.max.elements.per.partial.map" : 50000,
+  
+  "#description" : "pbf.reader.max.elements.per.partial.map - The maximum number of OSM elements that may be read from the services database into a single OSM map during a partial map read.",
+  "pbf.reader.max.elements.per.partial.map" : 50000,
+
+  "#places.tag.merger": "hoot::GeneralizeTagMerger",
+
+  "#" : "end"
+}

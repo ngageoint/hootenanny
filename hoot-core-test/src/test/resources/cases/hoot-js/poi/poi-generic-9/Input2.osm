@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-1939934' action='modify' visible='true' lat='48.14586' lon='11.6372'>
+    <tag k='REF2' v='none' />
+    <tag k='REVIEW' v='01c422' />
+    <tag k='access' v='yes' />
+    <tag k='addr:housenumber' v='5' />
+    <tag k='addr:language' v='GER' />
+    <tag k='addr:street' v='WARTHESTRASSE' />
+    <tag k='amenity' v='restaurant' />
+    <tag k='cuisine' v='thai' />
+    <tag k='error:circular' v='15' />
+    <tag k='language' v='GER' />
+    <tag k='name' v='NITAYA&apos;S RESTAURANT' />
+    <tag k='phone' v='89-99317764' />
+    <tag k='source' v='navteq' />
+    <tag k='uuid' v='{1d139ba7-b5d9-5688-b3e7-164cedf3b78b}' />
+  </node>
+</osm>

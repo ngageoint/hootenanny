@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-9430' action='modify' visible='true' lat='38.861855794246296' lon='-104.87869050894541'>
+    <tag k='accuracy' v='1000' />
+    <tag k='leisure' v='park' />
+    <tag k='name' v='Garden of the Gods' />
+    <tag k='poi' v='yes' />
+  </node>
+  <node id='-9428' action='modify' visible='true' lat='38.84672181207975' lon='-104.88521484109495'>
+    <tag k='accuracy' v='1000' />
+    <tag k='leisure' v='park' />
+    <tag k='name' v='Red Rock Canyon' />
+    <tag k='poi' v='yes' />
+  </node>
+  <node id='-9426' action='modify' visible='true' lat='38.85930253322145' lon='-104.91975861621356'>
+    <tag k='accuracy' v='2000' />
+    <tag k='name' v='Manitou Springs' />
+    <tag k='place' v='town' />
+    <tag k='poi' v='yes' />
+  </node>
+  <node id='-9424' action='modify' visible='true' lat='38.85715664286675' lon='-104.9070371581716'>
+    <tag k='accuracy' v='1500' />
+    <tag k='name' v='Manitou Springs' />
+    <tag k='place' v='town' />
+    <tag k='poi' v='yes' />
+  </node>
+  <node id='-9422' action='modify' visible='true' lat='38.85805124128402' lon='-104.7869287551586'>
+    <tag k='accuracy' v='20000' />
+    <tag k='name' v='Colorado Springs' />
+    <tag k='place' v='city' />
+    <tag k='poi' v='yes' />
+  </node>
+  <node id='-9420' action='modify' visible='true' lat='38.875195529581624' lon='-104.71793999702227'>
+    <tag k='accuracy' v='1000' />
+    <tag k='amenity' v='cafe' />
+    <tag k='name' v='Starbucks' />
+    <tag k='note' v='1-d' />
+    <tag k='poi' v='yes' />
+  </node>
+  <node id='-9418' action='modify' visible='true' lat='38.87459414278289' lon='-104.71964588195577'>
+    <tag k='accuracy' v='1000' />
+    <tag k='amenity' v='cafe' />
+    <tag k='name' v='Starbucks' />
+    <tag k='note' v='1-e' />
+    <tag k='poi' v='yes' />
+  </node>
+  <node id='-9416' action='modify' visible='true' lat='38.91096927679354' lon='-104.71456936520681'>
+    <tag k='accuracy' v='100' />
+    <tag k='amenity' v='cafe' />
+    <tag k='name' v='Starbucks' />
+    <tag k='note' v='1-a' />
+    <tag k='poi' v='yes' />
+  </node>
+  <node id='-9414' action='modify' visible='true' lat='38.88851192738243' lon='-104.71755649299625'>
+    <tag k='accuracy' v='1000' />
+    <tag k='amenity' v='cafe' />
+    <tag k='name' v='Starbucks' />
+    <tag k='note' v='1-c' />
+    <tag k='poi' v='yes' />
+  </node>
+  <node id='-9412' action='modify' visible='true' lat='38.894086070560164' lon='-104.71749580153443'>
+    <tag k='accuracy' v='200' />
+    <tag k='amenity' v='cafe' />
+    <tag k='name' v='Starbucks' />
+    <tag k='note' v='1-b' />
+    <tag k='poi' v='yes' />
+  </node>
+  <node id='-9410' action='modify' visible='true' lat='38.92397740402272' lon='-104.84394811928935'>
+    <tag k='accuracy' v='50' />
+    <tag k='amenity' v='cafe' />
+    <tag k='name' v='Starbucks' />
+    <tag k='poi' v='yes' />
+  </node>
+</osm>

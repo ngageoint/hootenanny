@@ -1,0 +1,12 @@
+== union-polygons
+
+=== Description
+Reads polygons from one or more inputs, unions them and writes the single polygon to output.  
+
+* +output+ - Output file name.
+* +inputs+ - One or more inputs.
+
+=== Usage
+--------------------------------------
+union-polygons (output) (input1) [input2 ...]
+--------------------------------------

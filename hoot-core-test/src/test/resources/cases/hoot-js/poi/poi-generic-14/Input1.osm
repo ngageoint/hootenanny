@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-430184' visible='true' lat='30.12132148822' lon='31.3138683'>
+    <tag k='REF1' v='0020a1' />
+    <tag k='error:circular' v='15' />
+    <tag k='int_name' v='El-Matareyya' />
+    <tag k='name' v='المطرية' />
+    <tag k='name:ar' v='المطرية' />
+    <tag k='name:en' v='El-Matareyya' />
+    <tag k='railway' v='station' />
+  </node>
+</osm>

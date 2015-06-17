@@ -1,0 +1,18 @@
+09:17:41.692 INFO  ...oot/core/cmd/BigOgr2OsmCmd.cpp( 122) Reading: test-files/empty_shapefile.shp empty_shapefile
+09:17:41.698 INFO  ...oot/core/cmd/BigOgr2OsmCmd.cpp( 161) Done writing file.
+Node Count	0
+Way Count	0
+Relation Count	0
+09:17:41.996 INFO  ...pp/hoot/core/cmd/BigCatCmd.cpp( 182) Done writing file.
+Node Count	0
+Way Count	0
+Relation Count	0
+09:17:42.305 INFO  ...oot/core/cmd/BigOgr2OsmCmd.cpp( 122) Reading: test-files/jakarta_raya_coastline.shp jakarta_raya_coastline
+09:17:42.313 INFO  ...oot/core/cmd/BigOgr2OsmCmd.cpp( 161) Done writing file.
+Node Count	604
+Way Count	6
+Relation Count	0
+09:17:42.694 INFO  ...pp/hoot/core/cmd/BigCatCmd.cpp( 182) Done writing file.
+Node Count	604
+Way Count	6
+Relation Count	0

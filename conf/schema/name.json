@@ -1,0 +1,41 @@
+{
+    "###": "",
+    "###": "name related tags.",
+    "###": "",
+
+    "tag": {
+        "name": "abstract_name",
+        "influence": 2.0,
+        "type": "text",
+        "geometries": ["node", "way", "relation"],
+        "categories": ["name"]
+    },
+
+    "tag": { "name": "name", "isA": "abstract_name" },
+    "tag": { "name": "alt_name", "isA": "abstract_name" },
+    "tag": { "name": "regex?name:.*", "isA": "abstract_name" },
+    "tag": { "name": "loc_name", "isA": "abstract_name" },
+    "tag": { "name": "int_name", "isA": "abstract_name" },
+    "tag": { "name": "nat_name", "isA": "abstract_name" },
+    "tag": { "name": "official_name", "isA": "abstract_name" },
+    "tag": { "name": "old_name", "isA": "abstract_name" },
+    "tag": { "name": "reg_name", "isA": "abstract_name" },
+    "tag": { "name": "ref", "isA": "abstract_name" },
+
+    "###": "",
+    "###": "Tags that contain names, but not necessarily the place name.",
+    "###": "",
+
+    "tag": {
+        "name": "pseudo_name",
+        "influence": 1.0,
+        "type": "text",
+        "geometries": ["node", "way", "relation"],
+        "categories": ["pseudoname"]
+    },
+
+    "tag": { "name": "operator", "isA": "pseudo_name" },
+    "tag": { "name": "brand", "isA": "pseudo_name" },
+
+    "#end" : ""
+}

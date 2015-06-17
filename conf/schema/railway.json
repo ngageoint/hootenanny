@@ -1,0 +1,42 @@
+{
+    "tag": {
+        "name": "railway",
+        "influence": 1.0,
+        "type": "enumeration",
+        "geometries": ["node","area"],
+        "isA": "poi"
+    },
+
+    "#" : " The catch all",
+
+    "tag": { "name": "railway=subway_entrance",
+        "isA": "railway",
+        "similarTo": { "name": "station=subway_entrance", "weight": 0.8 },
+        "similarTo": { "name": "station=light_rail", "weight": 0.8 },
+        "similarTo": { "name": "transport=station", "weight": 0.8 }
+    },
+
+    "tag": {
+        "name": "railway=halt",
+        "isA": "railway",
+        "similarTo": { "name": "railway=station", "weight": 0.8 },
+        "similarTo": { "name": "railway=subway_entrance", "weight": 0.8 },
+        "similarTo": { "name": "station=subway_entrance", "weight": 0.8 },
+        "similarTo": { "name": "station=light_rail", "weight": 0.8 },
+        "similarTo": { "name": "transport=station", "weight": 0.8 }
+    },
+    "tag": {
+        "name": "railway=station",
+        "isA": "railway",
+        "similarTo": { "name": "building=train_station", "weight": 0.8 },
+        "similarTo": { "name": "railway=halt", "weight": 0.8 },
+        "similarTo": { "name": "railway=station", "weight": 0.8 },
+        "similarTo": { "name": "railway=subway_entrance", "weight": 0.8 },
+        "similarTo": { "name": "station=subway_entrance", "weight": 0.8 },
+        "similarTo": { "name": "station=light_rail", "weight": 0.8 },
+        "similarTo": { "name": "transport=station", "weight": 0.8 }
+    },
+
+
+    "#" : "end"
+}

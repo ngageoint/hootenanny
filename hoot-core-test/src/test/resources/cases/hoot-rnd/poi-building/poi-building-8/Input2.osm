@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-1148843' action='modify' visible='true' lat='37.75043248388062' lon='-122.4093965538643'>
+    <tag k='amenity' v='school' />
+    <tag k='name' v='Hilltop Special Services Center' />
+    <tag k='operator' v='San Francisco Unified School District' />
+  </node>
+</osm>

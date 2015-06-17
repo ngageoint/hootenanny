@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-140947' visible='true' lat='48.05249' lon='11.66967'>
+    <tag k='REF2' v='01628c' />
+    <tag k='access' v='yes' />
+    <tag k='addr:housenumber' v='128' />
+    <tag k='addr:language' v='GER' />
+    <tag k='addr:street' v='ROSENHEIMER LANDSTRASSE' />
+    <tag k='error:circular' v='15' />
+    <tag k='historic' v='monument' />
+    <tag k='language' v='GER' />
+    <tag k='name' v='OTTOSÄULE' />
+    <tag k='source' v='navteq' />
+    <tag k='uuid' v='{52819123}' />
+  </node>
+</osm>

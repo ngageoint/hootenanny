@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-3200116' visible='true' lat='48.0481' lon='11.70201'>
+    <tag k='REF2' v='none' />
+    <tag k='access' v='yes' />
+    <tag k='addr:housenumber' v='1' />
+    <tag k='addr:language' v='GER' />
+    <tag k='addr:street' v='PFARRER-WENK-PLATZ' />
+    <tag k='amenity' v='townhall' />
+    <tag k='error:circular' v='15' />
+    <tag k='language' v='GER' />
+    <tag k='name' v='RATHAUS HOHENBRUNN' />
+    <tag k='phone' v='8102-8000' />
+    <tag k='source' v='navteq' />
+    <tag k='uuid' v='{52820107}' />
+  </node>
+</osm>

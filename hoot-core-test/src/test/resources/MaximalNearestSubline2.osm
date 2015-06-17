@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-890' action='modify' visible='true' lat='30.56171086216' lon='47.84990654666'>
+    <tag k='hoot:id' v='-65' />
+  </node>
+  <node id='-888' action='modify' visible='true' lat='30.56200313855' lon='47.85010747442'>
+    <tag k='hoot:id' v='-14' />
+  </node>
+  <node id='-886' action='modify' visible='true' lat='30.56113624559' lon='47.85076719805'>
+    <tag k='hoot:id' v='-48' />
+  </node>
+  <node id='-884' action='modify' visible='true' lat='30.56215083623' lon='47.85020929301'>
+    <tag k='hoot:id' v='-64' />
+  </node>
+  <node id='-882' action='modify' visible='true' lat='30.56216353811' lon='47.85018253174'>
+    <tag k='hoot:id' v='-63' />
+  </node>
+  <node id='-880' action='modify' visible='true' lat='30.56169596419' lon='47.84993846101'>
+    <tag k='hoot:id' v='-62' />
+  </node>
+  <node id='-878' action='modify' visible='true' lat='30.56170685819' lon='47.84991077786'>
+    <tag k='hoot:id' v='-11' />
+  </node>
+  <node id='-876' action='modify' visible='true' lat='30.56113913511' lon='47.85076976828'>
+    <tag k='hoot:id' v='-45' />
+  </node>
+  <node id='-874' action='modify' visible='true' lat='30.56171624295' lon='47.849900631'>
+    <tag k='hoot:id' v='-10' />
+  </node>
+  <node id='-872' action='modify' visible='true' lat='30.5617011939' lon='47.849928956'>
+    <tag k='hoot:id' v='-9' />
+  </node>
+  <node id='-870' action='modify' visible='true' lat='30.56094752001' lon='47.84941357786'>
+    <tag k='hoot:id' v='-7' />
+  </node>
+  <node id='-868' action='modify' visible='true' lat='30.5612291858' lon='47.84961087786'>
+    <tag k='hoot:id' v='-6' />
+  </node>
+  <node id='-866' action='modify' visible='true' lat='30.5621338681' lon='47.85019759326'>
+    <tag k='hoot:id' v='-5' />
+  </node>
+  <node id='-864' action='modify' visible='true' lat='30.56042744771' lon='47.85199447786'>
+    <tag k='hoot:id' v='-4' />
+  </node>
+  <node id='-862' action='modify' visible='true' lat='30.56236354528' lon='47.84886697786'>
+    <tag k='hoot:id' v='-3' />
+  </node>
+  <node id='-860' action='modify' visible='true' lat='30.56252266945' lon='47.85052347786'>
+    <tag k='hoot:id' v='-2' />
+  </node>
+  <node id='-858' action='modify' visible='true' lat='30.56080049006' lon='47.85125847786'>
+    <tag k='hoot:id' v='-1' />
+  </node>
+  <node id='-856' action='modify' visible='true' lat='30.56127627954' lon='47.85066756474' />
+  <node id='-854' action='modify' visible='true' lat='30.5625697381' lon='47.85178820511' />
+  <node id='-852' action='modify' visible='true' lat='30.56129762324' lon='47.85069555459' />
+  <way id='-898' action='modify' visible='true'>
+    <nd ref='-862' />
+    <nd ref='-890' />
+    <tag k='accuracy' v='15' />
+    <tag k='bridge' v='' />
+    <tag k='highway' v='unclassified' />
+    <tag k='hoot:id' v='-7' />
+    <tag k='hoot:status' v='1' />
+    <tag k='note' v='1' />
+    <tag k='source' v='Yahoo imagery' />
+    <tag k='tunnel' v='' />
+  </way>
+  <way id='-896' action='modify' visible='true'>
+    <nd ref='-890' />
+    <nd ref='-872' />
+    <nd ref='-878' />
+    <nd ref='-874' />
+    <nd ref='-890' />
+    <tag k='accuracy' v='12.6' />
+    <tag k='all_weather' v='yes' />
+    <tag k='bridge' v='' />
+    <tag k='highway' v='secondary' />
+    <tag k='hoot:id' v='-36' />
+    <tag k='hoot:status' v='2' />
+    <tag k='lanes' v='4' />
+    <tag k='note' v='2' />
+    <tag k='raw:COE' v='0' />
+    <tag k='surface' v='paved' />
+    <tag k='tunnel' v='' />
+    <tag k='width' v='10' />
+  </way>
+  <way id='-894' action='modify' visible='true'>
+    <nd ref='-856' />
+    <nd ref='-854' />
+    <tag k='highway' v='residential' />
+    <tag k='note' v='3' />
+  </way>
+  <way id='-892' action='modify' visible='true'>
+    <nd ref='-852' />
+    <nd ref='-856' />
+    <tag k='highway' v='unclassified' />
+    <tag k='note' v='4' />
+  </way>
+</osm>

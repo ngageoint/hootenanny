@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<bean id="processStreamInterface" singleton="true" 
+		class="hoot.services.nativeInterfaces.ProcessStreamInterface" init-method="init" destroy-method="destroy">
+	</bean>
+	
+	<bean id="jobExecutionManagerNative" singleton="true" 
+		class="hoot.services.nativeInterfaces.JobExecutionManager" init-method="init" destroy-method="destroy">
+		<property name="nativeInterface" ref="processStreamInterface"/>
+	</bean>
+  
+  <!-- reviewPrepareDbWriter2 is the new implementation to fix some -->
+  <bean id="reviewPrepareDbWriter" singleton="true" 
+    class="hoot.services.writers.review.ReviewPrepareDbWriter" init-method="init" 
+    destroy-method="destroy">
+  </bean>
+  <bean id="reviewPrepareDbWriter2" singleton="true" 
+    class="hoot.services.writers.review.ReviewPrepareDbWriter2" init-method="init" 
+    destroy-method="destroy">
+  </bean>
+
+	<bean id="ResourcesCleanUtil" singleton="true" 
+		class="hoot.services.utils.ResourcesCleanUtil" init-method="init" destroy-method="destroy">
+	</bean>
+	
+	<bean id="TunningService" singleton="true" 
+		class="hoot.services.controllers.services.TunningService" init-method="init" destroy-method="destroy">
+	</bean>	
+	
+</beans>

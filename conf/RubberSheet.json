@@ -1,0 +1,4 @@
+{
+    "map.cleaner.transforms" : "$(map.cleaner.transforms);hoot::RubberSheet",
+    "#end" : ""
+}

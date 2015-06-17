@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<changeSet author="jason.surratt" id="9" context="default">
+		<comment>
+            Increase the sequence minimum value. 
+            This avoids conflicts between Java and C++.
+            See #3607 for details.
+		</comment>
+
+        <sql>
+            SELECT SETVAL('current_nodes_id_seq', 
+                GREATEST(NEXTVAL('current_nodes_id_seq'), 10000000000));
+
+            SELECT SETVAL('current_ways_id_seq', 
+                GREATEST(NEXTVAL('current_ways_id_seq'), 10000000000));
+
+            SELECT SETVAL('current_relations_id_seq', 
+                GREATEST(NEXTVAL('current_relations_id_seq'), 10000000000));
+        </sql>
+
+	</changeSet>
+</databaseChangeLog>

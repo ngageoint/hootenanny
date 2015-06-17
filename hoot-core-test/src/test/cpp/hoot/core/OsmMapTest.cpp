@@ -1,0 +1,447 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ */
+
+// CPP Unit
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/extensions/TestFactoryRegistry.h>
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+
+// Hoot
+#include <hoot/core/Conflator.h>
+#include <hoot/core/MapReprojector.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/index/KnnWayIterator.h>
+#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/util/Log.h>
+using namespace hoot;
+
+
+// Qt
+#include <QDebug>
+#include <QTime>
+
+// TGS
+#include <tgs/RStarTree/KnnIterator.h>
+#include <tgs/RStarTree/RStarTreePrinter.h>
+using namespace Tgs;
+
+#include "TestUtils.h"
+
+namespace hoot
+{
+
+class OsmMapTest : public CppUnit::TestFixture
+{
+  CPPUNIT_TEST_SUITE(OsmMapTest);
+  CPPUNIT_TEST(runCopyTest);
+  CPPUNIT_TEST(runFindWayNeighbors);
+  CPPUNIT_TEST(runNnTest);
+  CPPUNIT_TEST(runRemoveTest);
+  CPPUNIT_TEST(runReplaceNodeTest);
+  CPPUNIT_TEST_SUITE_END();
+
+public:
+
+  void _checkKnnWayIterator(shared_ptr<OsmMap> map)
+  {
+    shared_ptr<const HilbertRTree> tree = map->getIndex().getWayTree();
+
+    ElementConverter ec(map);
+    const WayMap& ways = map->getWays();
+    for (WayMap::const_iterator itw = ways.begin(); itw != ways.end(); itw++)
+    {
+      const shared_ptr<Way>& w = itw->second;
+      shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+      KnnWayIterator it(*map, w, tree.get(), map->getIndex().getTreeIdToWidMap());
+
+      int count = 0;
+      double lastDistance = 0.0;
+      while (it.hasNext())
+      {
+        double d = ec.convertToLineString(it.getWay())->distance(ls.get());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(d, it.getDistance(), 1e-5);
+        CPPUNIT_ASSERT(it.getDistance() >= lastDistance);
+        lastDistance = it.getDistance();
+        count++;
+      }
+
+      CPPUNIT_ASSERT_EQUAL((int)ways.size(), count);
+    }
+  }
+
+  void changeMapForCopyTest(OsmMapPtr map)
+  {
+    map->getNode(-1669793)->setX(0);
+    map->getNode(-1669793)->getTags()["foo"] = "bar";
+
+    map->getWay(-1669801)->addNode(-1669723);
+
+    map->getRelation(-1)->addElement("outer", ElementId::way(-1669797));
+  }
+
+  OsmMapPtr createMapForCopyTest()
+  {
+    shared_ptr<OsmMap> map(new OsmMap());
+    OsmReader reader;
+    reader.setUseDataSourceIds(true);
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/ToyTestA.osm", map);
+
+    RelationPtr r(new Relation(Status::Unknown1, -1, 10, "multipolygon"));
+    r->addElement("outer", ElementId::way(-1669799));
+    map->addRelation(r);
+
+    return map;
+  }
+
+  /**
+   * OsmMap does some fanciness to do copy on write rather than always copying. Handy, but it was
+   * a bit buggy. This tests for those bugs.
+   */
+  void runCopyTest()
+  {
+    OsmMapPtr map = createMapForCopyTest();
+    OsmMapPtr copy = OsmMapPtr(new OsmMap(map));
+
+    QString nodePreChange = copy->getNode(-1669793)->toString();
+    QString wayPreChange = copy->getWay(-1669801)->toString();
+    QString relationPreChange = copy->getRelation(-1)->toString();
+
+    // change the original
+    changeMapForCopyTest(map);
+
+    HOOT_STR_EQUALS(nodePreChange, copy->getNode(-1669793)->toString());
+    HOOT_STR_EQUALS(wayPreChange, copy->getWay(-1669801)->toString());
+    HOOT_STR_EQUALS(relationPreChange, copy->getRelation(-1)->toString());
+
+    // now change the copy
+    map = createMapForCopyTest();
+    copy = OsmMapPtr(new OsmMap(map));
+    changeMapForCopyTest(copy);
+
+    HOOT_STR_EQUALS(nodePreChange, map->getNode(-1669793)->toString());
+    HOOT_STR_EQUALS(wayPreChange, map->getWay(-1669801)->toString());
+    HOOT_STR_EQUALS(relationPreChange, map->getRelation(-1)->toString());
+  }
+
+  void runFindWayNeighbors()
+  {
+    OsmReader reader;
+
+    QTime t;
+    t.start();
+
+    LOG_INFO("Reading file...");
+
+    shared_ptr<OsmMap> map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/ToyTestA.osm", map);
+
+    LOG_INFO("Finished reading file. " << t.elapsed() << "ms");
+    LOG_INFO("Map size: " << map->getWays().size());
+
+    t.restart();
+
+    MapReprojector::reprojectToOrthographic(map);
+    const WayMap& ways = map ->getWays();
+
+    LOG_INFO("Finished reprojecting. " << t.elapsed() << "ms");
+
+    t.restart();
+
+    // build the tree before the benchmark.
+    map->getIndex().getWayTree();
+    if (Log::getInstance().isDebugEnabled())
+    {
+      RStarTreePrinter::print(map->getIndex().getWayTree());
+    }
+
+    LOG_INFO("Index build elapsed: " << t.elapsed() << "ms");
+
+    t.restart();
+    int i = 0;
+    for (WayMap::const_iterator itw = ways.begin(); itw != ways.end() && i < 20; itw++)
+    {
+      const shared_ptr<Way>& w = itw->second;
+
+      std::vector<long> wids = map->getIndex().findWayNeighbors(w, 30.0);
+      //LOG_WARN("wid count: " << wids.size());
+
+      i++;
+    }
+
+    LOG_INFO("Time per way (indexed): " << (double)t.elapsed() / (double)i << "ms");
+
+    t.restart();
+    i = 0;
+    for (WayMap::const_iterator itw = ways.begin(); itw != ways.end() && i < 20; itw++)
+    {
+      shared_ptr<Way> w = itw->second;
+
+      std::vector<long> wids = map->getIndex().findWayNeighborsBruteForce(w, 30.0);
+      //LOG_WARN("wid count: " << wids.size());
+
+      i++;
+    }
+
+    LOG_INFO("Time per way (brute force): " << (double)t.elapsed() / (double)i << "ms");
+
+  }
+
+  void runNnTest()
+  {
+    OsmReader reader;
+
+    shared_ptr<OsmMap> map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/ToyTestA.osm", map);
+
+    MapReprojector::reprojectToOrthographic(map);
+
+    shared_ptr<const HilbertRTree> tree = map->getIndex().getWayTree();
+
+    for (int i = 0; i < 10; i++)
+    {
+      KnnIterator it(tree.get(), rand() % 200 - 100, rand() % 200 - 100);
+
+      double lastDistance = 0.0;
+      while (it.hasNext())
+      {
+        CPPUNIT_ASSERT(it.getDistance() >= lastDistance);
+        lastDistance = it.getDistance();
+      }
+    }
+
+    _checkKnnWayIterator(map);
+  }
+
+  void runRemoveTest()
+  {
+    OsmReader reader;
+
+    shared_ptr<OsmMap> map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/ToyTestA.osm", map);
+
+    MapReprojector::reprojectToOrthographic(map);
+
+    // force it to build the tree before we start removing nodes.
+    map->getIndex().getWayTree();
+
+    map->removeWay(map->findWays("note", "0")[0]);
+    _checkKnnWayIterator(map);
+
+    map->removeWay(map->findWays("note", "1")[0]);
+    _checkKnnWayIterator(map);
+
+    map->removeWay(map->findWays("note", "2")[0]);
+    _checkKnnWayIterator(map);
+
+    map->removeWay(map->findWays("note", "3")[0]);
+    _checkKnnWayIterator(map);
+  }
+
+  void runReplaceNodeTest()
+  {
+    OsmReader reader;
+
+    // Turns out when you're counting on IDs not changing depending on what tests are run
+    //    before yours? Reset the IDs back to the beginning. :)
+    OsmMap::resetCounters();
+
+    shared_ptr<OsmMap> map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/ToyTestA.osm", map);
+
+    /*
+    const OsmMap::NodeMap displayNodes = map->getNodeMap();
+    for ( OsmMap::NodeMap::const_iterator nodeIter = displayNodes.constBegin();
+          nodeIter != displayNodes.constEnd(); ++nodeIter )
+    {
+      const shared_ptr<const Node> n = nodeIter.value();
+      //LOG_DEBUG(n->toString());
+      //LOG_WARN("Test map has node " << n->getId());
+    }
+    */
+
+    // Sample data does not have any relations, have to add some with nodes in them
+    RelationPtr relations[5] =
+    {
+      RelationPtr( new Relation(Status::Unknown1, 100, 3.0, "relationtype0") ),
+      RelationPtr( new Relation(Status::Unknown1, 101, 4.1, "relationtype1") ),
+      RelationPtr( new Relation(Status::Unknown1, 102, 5.2, "relationtype2") ),
+      RelationPtr( new Relation(Status::Unknown1, 103, 6.3, "relationtype3") ),
+      RelationPtr( new Relation(Status::Unknown1, 104, 7.4, "relationtype4") ),
+    };
+
+    // Add relations to the map
+    for ( int i = 0; i < 5; i++ )
+    {
+      relations[i]->addElement("correlated_streetlight", ElementId::node(-10 - i));
+      relations[i]->addElement("correlated_streetlight", ElementId::node(-11 - i));
+
+      // LOG_DEBUG(relations[i]->toString());
+
+      map->addRelation(relations[i]);
+    }
+
+    // Replace selected nodes
+    for ( int i = -2; i > -22; i -= 2 )
+    {
+      map->replaceNode( i, -10 + i);
+    }
+
+    // Original data had nodes -1 through -36.  Make sure that even-numbered nodes -2 through
+    //  -20 are gone
+
+    const OsmMap::NodeMap nodes = map->getNodeMap();
+    CPPUNIT_ASSERT_EQUAL(26, nodes.size());
+    for ( OsmMap::NodeMap::const_iterator nodeIter = nodes.constBegin();
+          nodeIter != nodes.constEnd(); ++nodeIter )
+    {
+      const shared_ptr<const Node> n = nodeIter.value();
+      //LOG_DEBUG("Node: " << n->getId());
+      CPPUNIT_ASSERT( (n->getId() >= -36) && (n->getId() <= -1) );
+
+      // If it's in the range where nodes were replaced, make sure only ones left are odd IDs
+      if ( n->getId() >= -21 )
+      {
+        //LOG_DEBUG("Even test on negative number: " << (n->getId() % 2) );
+        CPPUNIT_ASSERT( (n->getId() % 2) == -1 );
+      }
+    }
+
+    // Make sure replacement did correct thing with ways
+    WayMap ways = map->getWays();
+    CPPUNIT_ASSERT( 4 == ways.size() );
+
+    int i = 1;
+    for ( WayMap::const_iterator iterator = ways.begin(); iterator != ways.end(); iterator++ )
+    {
+      WayPtr way = iterator->second;
+      //LOG_DEBUG(way->toString());
+      std::vector<long> nodeIds = way->getNodeIds();
+      CPPUNIT_ASSERT( (-5 + i) == way->getId() );
+      if ( i == 1 )
+      {
+        const int correctSize = 4;
+        CPPUNIT_ASSERT( nodeIds.size() == correctSize );
+        long correctIds[correctSize] = { -35, -34, -33, -30 };
+        std::vector<long> correctIdVector(correctIds, correctIds + sizeof(correctIds) / sizeof(long));
+        CPPUNIT_ASSERT(correctIdVector == nodeIds);
+      }
+      else if ( i == 2 )
+      {
+        const int correctSize = 30;
+        CPPUNIT_ASSERT( nodeIds.size() == correctSize );
+        long correctIds[correctSize] = { -3, -24, -5, -26, -7, -32, -31, -30, -36, -29, -28, -27, -26,
+                                -25, -24, -23, -22, -21, -30, -19, -28, -17, -26, -15, -24,
+                                -13, -22, -11, -30, -9 };
+        std::vector<long> correctIdVector(correctIds, correctIds + sizeof(correctIds) / sizeof(long));
+        CPPUNIT_ASSERT(correctIdVector == nodeIds);
+      }
+      else if ( i == 3 )
+      {
+        const int correctSize = 3;
+        CPPUNIT_ASSERT( nodeIds.size() == correctSize );
+        long correctIds[correctSize] = { -33, -28, -7 };
+        std::vector<long> correctIdVector(correctIds, correctIds + sizeof(correctIds) / sizeof(long));
+        CPPUNIT_ASSERT(correctIdVector == nodeIds);
+      }
+      else if (i == 4 )
+      {
+        const int correctSize = 3;
+        CPPUNIT_ASSERT( nodeIds.size() == correctSize );
+        long correctIds[correctSize] = { -32, -22, -1 };
+        std::vector<long> correctIdVector(correctIds, correctIds + sizeof(correctIds) / sizeof(long));
+        CPPUNIT_ASSERT(correctIdVector == nodeIds);
+      }
+
+      i++;
+    }
+
+    // Make sure relations were updated properly
+    RelationMap checkRelations = map->getRelationMap();
+    i = 0;
+    CPPUNIT_ASSERT(5 == checkRelations.size());
+
+    for ( RelationMap::const_iterator iterator = checkRelations.begin();
+          iterator != checkRelations.end(); ++iterator )
+    {
+      RelationPtr myRelation = iterator->second;
+      //LOG_DEBUG(myRelation->toString());
+      CPPUNIT_ASSERT(myRelation->getId() == 100 + i);
+      //LOG_DEBUG(myRelation->getType());
+      QString checkRelationship("relationtype" + QString::number(i) );
+      //LOG_DEBUG("Checktype: " << checkRelationship);
+      CPPUNIT_ASSERT(myRelation->getType() == checkRelationship);
+      std::vector<RelationData::Entry> entries = myRelation->getMembers();
+      CPPUNIT_ASSERT(entries.size() == 2);\
+
+      switch (i)
+      {
+      case 0:
+        CPPUNIT_ASSERT(entries[0].getElementId() == ElementId::node(-30));
+        CPPUNIT_ASSERT(entries[1].getElementId() == ElementId::node(-11));
+        break;
+
+      case 1:
+        CPPUNIT_ASSERT(entries[0].getElementId() == ElementId::node(-11));
+        CPPUNIT_ASSERT(entries[1].getElementId() == ElementId::node(-22));
+        break;
+
+      case 2:
+        CPPUNIT_ASSERT(entries[0].getElementId() == ElementId::node(-22));
+        CPPUNIT_ASSERT(entries[1].getElementId() == ElementId::node(-13));
+        break;
+
+      case 3:
+        CPPUNIT_ASSERT(entries[0].getElementId() == ElementId::node(-13));
+        CPPUNIT_ASSERT(entries[1].getElementId() == ElementId::node(-24));
+        break;
+
+      case 4:
+        CPPUNIT_ASSERT(entries[0].getElementId() == ElementId::node(-24));
+        CPPUNIT_ASSERT(entries[1].getElementId() == ElementId::node(-15));
+        break;
+
+      }
+
+      i++;
+    }
+  }
+};
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmMapTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmMapTest, "current");
+
+}

@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-140963' visible='true' lat='48.09528' lon='11.49803'>
+    <tag k='REF2' v='0134fd' />
+    <tag k='access' v='yes' />
+    <tag k='addr:housenumber' v='74' />
+    <tag k='addr:language' v='GER' />
+    <tag k='addr:street' v='FORSTENRIEDER ALLEE' />
+    <tag k='error:circular' v='15' />
+    <tag k='language' v='GER' />
+    <tag k='name' v='HOLLYWOOD SUPER BOWLING' />
+    <tag k='phone' v='89-753921' />
+    <tag k='source' v='navteq' />
+    <tag k='sport' v='10pin' />
+    <tag k='uuid' v='{52916756}' />
+  </node>
+</osm>

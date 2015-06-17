@@ -1,0 +1,170 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ */
+
+// Hoot
+#include <hoot/core/Factory.h>
+#include <hoot/core/MapReprojector.h>
+#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/ops/MergeNearbyNodes.h>
+#include <hoot/core/io/OgrReader.h>
+#include <hoot/core/io/PbfWriter.h>
+#include <hoot/core/util/Settings.h>
+
+// Standard
+#include <fstream>
+
+namespace hoot
+{
+
+class BigOgr2OsmCmd : public BaseCommand
+{
+public:
+
+  static string className() { return "hoot::BigOgr2OsmCmd"; }
+
+  BigOgr2OsmCmd() { }
+
+  virtual QString getHelp() const
+  {
+    return getName() + " (translation) (output.osm.pbf) (input1[;layer]) [input2[;layer]] ...\n"
+        "  * translation - python script base name. This looks in the 'translations'\n"
+        "    directory and takes the same format translations file as ogr2osm.py.\n"
+        "    leave off the '.py' to use the files in PYTHONPATH or specify the relative\n"
+        "    or absolute path name with the '.py'.\n"
+        "  * output.osm - Output file name.\n"
+        "  * inputs - One or more OGR compatible inputs. If you're using a layer within a\n"
+        "    data source then delimit it with a semicolon. E.g:\n"
+        "       myshapefile.shp \"myfgb.gdb;mylayer\"";
+;
+  }
+
+  virtual QString getName() const { return "big-ogr2osm"; }
+
+  virtual int runSimple(QStringList args)
+  {
+    if (args.size() < 3)
+    {
+      cout << getHelp() << endl << endl;
+      throw HootException(QString("%1 takes at least three parameters.").arg(getName()));
+    }
+
+    QString translation = args[0];
+    QString output = args[1];
+
+    if (output.endsWith(".osm.pbf") == false)
+    {
+      throw HootException("The output must be .osm.pbf.");
+    }
+
+    PbfWriter writer;
+    ofstream fp;
+    fp.open(output.toUtf8().data(), ios::out | ios::binary);
+    if (fp.is_open() == false)
+    {
+      throw HootException("Error opening " + output + " for writing.");
+    }
+    writer.intializePartial(&fp);
+
+    int nodeCount = 0;
+    int wayCount = 0;
+
+    OgrReader reader;
+    reader.setTranslationFile(translation);
+
+    for (int i = 2; i < args.size(); i++)
+    {
+      QString input = args[i];
+
+      QStringList layers;
+      if (input.contains(";"))
+      {
+        QStringList list = input.split(";");
+        input = list.at(0);
+        layers.append(list.at(1));
+      }
+      else
+      {
+          layers = reader.getFilteredLayerNames(input);
+      }
+
+      if (layers.size() == 0)
+      {
+        LOG_WARN("Could not find any valid layers to read from in " + input + ".");
+      }
+
+      for (int i = 0; i < layers.size(); i++)
+      {
+          // Added this so the output is roughly the same as Ogr2OsmCmp.cpp
+          LOG_INFO("Reading: " + input + " " + layers[i]);
+
+          shared_ptr<ElementIterator> iterator(reader.createIterator(input, layers[i]));
+
+          while(iterator->hasNext())
+          {
+              shared_ptr<Element> e = iterator->next();
+
+              //        // Interesting problem: If there are no elements in the file, e == 0
+              //        // Need to look at the ElementIterator.cpp file to fix this.
+              //        if (e == 0)
+              //        {
+              //          LOG_WARN("No features in: " + input + " " + layer);
+              //          break;
+              //        }
+
+              shared_ptr<Way> w = dynamic_pointer_cast<Way>(e);
+              shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
+
+              if (w != 0)
+              {
+                  writer.writePartial(w);
+                  wayCount++;
+              }
+              else if (n != 0)
+              {
+                  writer.writePartial(n);
+                  nodeCount++;
+              }
+              else
+              {
+                  throw HootException("Unexpected element type.");
+              }
+          }
+      }
+    }
+
+    writer.finalizePartial();
+
+    LOG_INFO("Done writing file.");
+
+    return 0;
+  }
+};
+
+HOOT_FACTORY_REGISTER(Command, BigOgr2OsmCmd)
+
+}
+

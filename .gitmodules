@@ -1,0 +1,4 @@
+[submodule "hoot-ui"]
+	path = hoot-ui
+	url = git@github.com:DigitalGlobe/hoot-ui-dry-run.git
+    branch = master

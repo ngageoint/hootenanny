@@ -1,0 +1,11 @@
+@RELATION manipulations
+
+@ATTRIBUTE a NUMERIC
+@ATTRIBUTE b NUMERIC
+@ATTRIBUTE c NUMERIC
+@ATTRIBUTE class {match,miss,review}
+
+@DATA
+1.1,1.2,?,match
+2.1,2.2,2.3,miss
+?,3.2,?,review

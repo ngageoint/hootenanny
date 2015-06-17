@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40" fill="white">
+  <path
+     d="m 20,0 a 20,20 0 1 0 0,40 20,20 0 0 0 0,-40 m 0,5 a 15,15 0 0 1 0,30 15,15 0 1 1 0,-30"
+     style="opacity:0.25" />
+  <path d="m 20,0 a 20,20 0 0 1 20,20 l -5,0 A 15,15 0 0 0 20,5 z">
+    <animateTransform
+       attributeName="transform"
+       type="rotate"
+       from="0 20 20"
+       to="360 20 20"
+       dur="0.8s"
+       repeatCount="indefinite" />
+  </path>
+</svg>

@@ -1,0 +1,170 @@
+#### Shapefile Output ####
+AAL015
+
+Layer name: AAL015
+OGRFeature(AAL015):0
+ NAM (String) = w1
+ ARA (Real) = 10.000000000000000
+ POLYGON : 4 points
+
+OGRFeature(AAL015):1
+ NAM (String) = r1
+ ARA (Real) = 10.000000000000000
+ POLYGON : 4 points, 1 inner rings (4 points)
+
+LAP010
+
+Layer name: LAP010
+OGRFeature(LAP010):0
+ NAM (String) = w2
+ ARA (Real) = -999999.000000000000000
+ PCF (Integer) = 1
+ LINESTRING : 2 points
+
+LAP030
+
+Layer name: LAP030
+OGRFeature(LAP030):0
+ NAM (String) = w3
+ ARA (Real) = -999999.000000000000000
+ PCF (Integer) = 2
+ LTN (Integer) = 2
+ LINESTRING : 2 points
+
+PAL015
+
+Layer name: PAL015
+OGRFeature(PAL015):0
+ NAM (String) = n1
+ ARA (Real) = -999999.000000000000000
+ POINT : 
+
+#### FileGDB Output ####
+AAL015
+
+Layer name: AAL015
+OGRFeature(AAL015):1
+ NAM (String) = w1
+ ARA (Real) = 10
+ MULTIPOLYGON : 1 geometries:
+ POLYGON : 4 points
+
+OGRFeature(AAL015):2
+ NAM (String) = r1
+ ARA (Real) = 10
+ MULTIPOLYGON : 1 geometries:
+ POLYGON : 4 points, 1 inner rings (4 points)
+
+LAP010
+
+Layer name: LAP010
+OGRFeature(LAP010):1
+ NAM (String) = w2
+ ARA (Real) = -999999
+ PCF (Integer) = 1
+ MULTILINESTRING : 1 geometries:
+ LINESTRING : 2 points
+
+LAP030
+
+Layer name: LAP030
+OGRFeature(LAP030):1
+ NAM (String) = w3
+ ARA (Real) = -999999
+ PCF (Integer) = 2
+ LTN (Integer) = 2
+ MULTILINESTRING : 1 geometries:
+ LINESTRING : 2 points
+
+PAL015
+
+Layer name: PAL015
+OGRFeature(PAL015):1
+ NAM (String) = n1
+ ARA (Real) = -999999
+ POINT : 
+
+#### Test prepending layer names and lazy layer creation ####
+bar_AAL015
+
+Layer name: bar_AAL015
+OGRFeature(bar_AAL015):0
+ NAM (String) = w1
+ ARA (Real) = 10.000000000000000
+ POLYGON : 4 points
+
+OGRFeature(bar_AAL015):1
+ NAM (String) = r1
+ ARA (Real) = 10.000000000000000
+ POLYGON : 4 points, 1 inner rings (4 points)
+
+bar_LAP010
+
+Layer name: bar_LAP010
+OGRFeature(bar_LAP010):0
+ NAM (String) = w2
+ ARA (Real) = -999999.000000000000000
+ PCF (Integer) = 1
+ LINESTRING : 2 points
+
+bar_LAP030
+
+Layer name: bar_LAP030
+OGRFeature(bar_LAP030):0
+ NAM (String) = w3
+ ARA (Real) = -999999.000000000000000
+ PCF (Integer) = 2
+ LTN (Integer) = 2
+ LINESTRING : 2 points
+
+bar_PAL015
+
+Layer name: bar_PAL015
+OGRFeature(bar_PAL015):0
+ NAM (String) = n1
+ ARA (Real) = -999999.000000000000000
+ POINT : 
+
+foo_AAL015
+
+Layer name: foo_AAL015
+OGRFeature(foo_AAL015):0
+ NAM (String) = w1
+ ARA (Real) = 10.000000000000000
+ POLYGON : 4 points
+
+OGRFeature(foo_AAL015):1
+ NAM (String) = r1
+ ARA (Real) = 10.000000000000000
+ POLYGON : 4 points, 1 inner rings (4 points)
+
+foo_LAP010
+
+Layer name: foo_LAP010
+OGRFeature(foo_LAP010):0
+ NAM (String) = w2
+ ARA (Real) = -999999.000000000000000
+ PCF (Integer) = 1
+ LINESTRING : 2 points
+
+foo_LAP020
+
+Layer name: foo_LAP020
+foo_LAP030
+
+Layer name: foo_LAP030
+OGRFeature(foo_LAP030):0
+ NAM (String) = w3
+ ARA (Real) = -999999.000000000000000
+ PCF (Integer) = 2
+ LTN (Integer) = 2
+ LINESTRING : 2 points
+
+foo_PAL015
+
+Layer name: foo_PAL015
+OGRFeature(foo_PAL015):0
+ NAM (String) = n1
+ ARA (Real) = -999999.000000000000000
+ POINT : 
+

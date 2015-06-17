@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-1804988' visible='true' lat='48.19051' lon='11.61708'>
+    <tag k='REF2' v='01d659' />
+    <tag k='access' v='yes' />
+    <tag k='addr:full' v='SITULISTRASSE 36 80939 MÜNCHEN' />
+    <tag k='addr:language' v='GER' />
+    <tag k='addr:street' v='FREISINGER LANDSTRASSE' />
+    <tag k='amenity' v='fuel' />
+    <tag k='brand' v='SPRINT' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:mismatch' v='2' />
+    <tag k='hoot:wrong' v='1' />
+    <tag k='language' v='GER' />
+    <tag k='name' v='SPRINT' />
+    <tag k='phone' v='89-325642' />
+    <tag k='source' v='navteq' />
+    <tag k='uuid' v='{5d55c2a2-1fa6-5c9f-8adf-6d0f1facb169}' />
+  </node>
+</osm>

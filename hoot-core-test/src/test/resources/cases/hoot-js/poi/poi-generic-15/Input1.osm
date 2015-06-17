@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-951425' visible='true' lat='31.566667' lon='35.75'>
+    <tag k='REF1' v='0006de' />
+    <tag k='error:circular' v='15' />
+    <tag k='int_name' v='El ‘Asi; Al Asi' />
+    <tag k='is_in' v='Jordan, الأردن' />
+    <tag k='name' v='العاصي' />
+    <tag k='name:ar' v='العاصي' />
+    <tag k='name:de' v='Al Asi' />
+    <tag k='name:en' v='Al Asi' />
+    <tag k='name:fr' v='Al Asi' />
+    <tag k='natural' v='peak' />
+  </node>
+</osm>

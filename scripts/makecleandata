@@ -1,0 +1,23 @@
+#
+#  Clean Data Make file
+#
+
+HOOT_OPTS+= -D services.db.writer.overwrite.map=true -D services.db.writer.create.user=true
+HOOT_OPTS+= -D services.db.writer.email=test@test.com -D services.db.reader.email=test@test.com
+#DB_URL=postgresql://hoot:hoottest@localhost:5432/hoot
+OP_INPUT=$(HOOT_HOME)/$(INPUT)
+OP_OUTPUT=$(HOOT_HOME)/$(OUTPUT)
+
+ifeq "$(INPUT_TYPE)" "DB" 
+	OP_INPUT=$(DB_URL)/$(INPUT)
+endif
+
+ifeq "$(OUTPUT_TYPE)" "DB" 
+	OP_OUTPUT=$(DB_URL)/$(OUTPUT)
+endif
+
+###
+# Transform and load data
+###
+step1: 
+	hoot --cleanup $(HOOT_OPTS) "$(OP_INPUT)" "$(OP_OUTPUT)"

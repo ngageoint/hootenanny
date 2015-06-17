@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-1737415' visible='true' lat='48.12624' lon='11.55175'>
+    <tag k='REF2' v='002c1e' />
+    <tag k='access' v='yes' />
+    <tag k='addr:language' v='GER' />
+    <tag k='addr:street' v='LINDWURMSTRASSE' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:mismatch' v='2' />
+    <tag k='hoot:wrong' v='1' />
+    <tag k='language' v='GER' />
+    <tag k='name' v='U-BAHN-POCCISTRASSE' />
+    <tag k='source' v='navteq' />
+    <tag k='station' v='light_rail' />
+    <tag k='uuid' v='{e32e4c85-51aa-5b5e-bfb4-a5a3e174b715}' />
+  </node>
+</osm>

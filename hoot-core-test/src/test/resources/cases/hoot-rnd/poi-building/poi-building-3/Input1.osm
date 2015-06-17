@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-24969' visible='true' lat='-0.3493510610647377' lon='42.551574645403264' />
+  <node id='-24968' action='modify' visible='true' lat='-0.349200186807451' lon='42.551505075606826'>
+    <tag k='amenity' v='place_of_worship' />
+    <tag k='building' v='mosque' />
+    <tag k='uuid' v='c' />
+  </node>
+  <node id='-24967' visible='true' lat='-0.3493079780823791' lon='42.55138219690616' />
+  <node id='-24966' action='modify' visible='true' lat='-0.349268583137416' lon='42.55155721104464'>
+    <tag k='man_made' v='tower' />
+    <tag k='uuid' v='b' />
+  </node>
+  <node id='-24965' visible='true' lat='-0.3490907191518744' lon='42.55163231289717' />
+  <node id='-24964' visible='true' lat='-0.3490478038075793' lon='42.551439696762' />
+  <way id='-24970' action='modify' visible='true'>
+    <nd ref='-24964' />
+    <nd ref='-24965' />
+    <nd ref='-24969' />
+    <nd ref='-24967' />
+    <nd ref='-24964' />
+    <tag k='amenity' v='place_of_worship' />
+    <tag k='building' v='mosque' />
+    <tag k='uuid' v='a' />
+  </way>
+</osm>

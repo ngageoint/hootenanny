@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-2232982' action='modify' visible='true' lat='38.85805124128' lon='-104.78692875516'>
+    <tag k='error:circular' v='20000' />
+    <tag k='name' v='Colorado Springs' />
+    <tag k='place' v='city' />
+    <tag k='poi' v='yes' />
+    <tag k='uuid' v='{f6224e55-cfa6-5364-bb78-e482e2d6e1c5};{b18057ff-736d-5d20-b873-837f0c172e33}' />
+  </node>
+</osm>

@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-2232980' action='modify' visible='true' lat='38.87519552958' lon='-104.71793999702'>
+    <tag k='amenity' v='cafe' />
+    <tag k='error:circular' v='1000' />
+    <tag k='name' v='Starbucks' />
+    <tag k='note' v='1-d' />
+    <tag k='poi' v='yes' />
+    <tag k='uuid' v='{87f8a061-d9f1-5bc9-ac28-27f07c8febae}' />
+  </node>
+</osm>

@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-2786418' visible='true' lat='8.8892394' lon='-12.0356509' />
+  <node id='-2786417' visible='true' lat='8.88839' lon='-12.0368923' />
+  <way id='-2786416' visible='true'>
+    <nd ref='-2786417' />
+    <nd ref='-2786418' />
+    <tag k='attribution' v='usNationalGeoIntelAgency' />
+    <tag k='condition' v='functional' />
+    <tag k='divider' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='unclassified' />
+    <tag k='in_tunnel' v='no' />
+    <tag k='incline:interval:closure' v='closed_interval' />
+    <tag k='layer' v='0' />
+    <tag k='length' v='165.74065410260101' />
+    <tag k='location' v='surface' />
+    <tag k='median:interval:closure' v='closed_interval' />
+    <tag k='on_bridge' v='no' />
+    <tag k='oneway' v='no' />
+    <tag k='ref:road:type' v='road' />
+    <tag k='ref:road_class' v='local' />
+    <tag k='seasonal' v='fair' />
+    <tag k='security:classification' v='unclassified' />
+    <tag k='security:non_ic_dissemination_control' v='limited_distribution' />
+    <tag k='security:resource_owner' v='United States' />
+    <tag k='source' v='nfdd' />
+    <tag k='surface' v='flexible_pavement' />
+    <tag k='uuid' v='{2c5fb14a-730a-4a96-b809-ef1e93f516ec}' />
+  </way>
+</osm>

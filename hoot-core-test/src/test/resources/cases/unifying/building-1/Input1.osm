@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-4264925' action='modify' visible='true' lat='0.005885910688739382' lon='6.563321282309215E-4' />
+  <node id='-4264923' action='modify' visible='true' lat='0.005913440805414717' lon='0.002996392058281262' />
+  <node id='-4264921' action='modify' visible='true' lat='0.003243142718364658' lon='0.0030137683502049076' />
+  <node id='-4264919' action='modify' visible='true' lat='0.003215612601581075' lon='7.287686538028096E-4' />
+  <way id='-4264929' visible='true'>
+    <nd ref='-4264925' />
+    <nd ref='-4264923' />
+    <nd ref='-4264921' />
+    <nd ref='-4264919' />
+    <nd ref='-4264925' />
+    <tag k='building' v='yes' />
+    <tag k='uuid' v='B' />
+  </way>
+</osm>

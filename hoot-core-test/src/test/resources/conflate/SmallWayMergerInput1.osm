@@ -1,0 +1,209 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-1340' action='modify' visible='true' lat='49.27786347641' lon='8.71452788354'>
+    <tag k='hoot:id' v='-167937' />
+  </node>
+  <node id='-1334' action='modify' visible='true' lat='49.27787672925' lon='8.71430388354'>
+    <tag k='hoot:id' v='-167935' />
+  </node>
+  <node id='-1332' action='modify' visible='true' lat='49.27787824386' lon='8.71428538354'>
+    <tag k='hoot:id' v='-167933' />
+  </node>
+  <node id='-1330' action='modify' visible='true' lat='49.27787937982' lon='8.71426638354'>
+    <tag k='hoot:id' v='-167931' />
+  </node>
+  <node id='-1328' action='modify' visible='true' lat='49.27787937982' lon='8.71424688354'>
+    <tag k='hoot:id' v='-167929' />
+  </node>
+  <node id='-1324' action='modify' visible='true' lat='49.27787748655' lon='8.71421738354'>
+    <tag k='hoot:id' v='-167927' />
+  </node>
+  <node id='-1314' action='modify' visible='true' lat='49.27787521464' lon='8.71419788354'>
+    <tag k='hoot:id' v='-167925' />
+  </node>
+  <node id='-1306' action='modify' visible='true' lat='49.27787142811' lon='8.71417888354'>
+    <tag k='hoot:id' v='-167923' />
+  </node>
+  <node id='-1298' action='modify' visible='true' lat='49.2778691562' lon='8.71416888354'>
+    <tag k='hoot:id' v='-167921' />
+  </node>
+  <node id='-1294' action='modify' visible='true' lat='49.27786499102' lon='8.71415038354'>
+    <tag k='hoot:id' v='-167919' />
+  </node>
+  <node id='-1290' action='modify' visible='true' lat='49.27765559601' lon='8.71494888354'>
+    <tag k='hoot:id' v='-134774' />
+  </node>
+  <node id='-1288' action='modify' visible='true' lat='49.27785893258' lon='8.71413188354'>
+    <tag k='hoot:id' v='-167917' />
+  </node>
+  <node id='-1286' action='modify' visible='true' lat='49.27770444225' lon='8.71488938354'>
+    <tag k='hoot:id' v='-134772' />
+  </node>
+  <node id='-1284' action='modify' visible='true' lat='49.27785249549' lon='8.71411438354'>
+    <tag k='hoot:id' v='-167915' />
+  </node>
+  <node id='-1280' action='modify' visible='true' lat='49.27773246257' lon='8.71486638354'>
+    <tag k='hoot:id' v='-4295' />
+  </node>
+  <node id='-1278' action='modify' visible='true' lat='49.27784870896' lon='8.71410538354'>
+    <tag k='hoot:id' v='-167914' />
+  </node>
+  <node id='-1276' action='modify' visible='true' lat='49.27777411438' lon='8.71484788354'>
+    <tag k='hoot:id' v='-4294' />
+  </node>
+  <node id='-1274' action='modify' visible='true' lat='49.2777105007' lon='8.71488438354'>
+    <tag k='hoot:id' v='-134770' />
+  </node>
+  <node id='-1272' action='modify' visible='true' lat='49.27784113591' lon='8.71408938354'>
+    <tag k='hoot:id' v='-167913' />
+  </node>
+  <node id='-1270' action='modify' visible='true' lat='49.27783280555' lon='8.71407338354'>
+    <tag k='hoot:id' v='-167912' />
+  </node>
+  <node id='-1266' action='modify' visible='true' lat='49.27782371789' lon='8.71405838354'>
+    <tag k='hoot:id' v='-167911' />
+  </node>
+  <node id='-1264' action='modify' visible='true' lat='49.27767566463' lon='8.71380488354'>
+    <tag k='hoot:id' v='-167910' />
+  </node>
+  <node id='-1262' action='modify' visible='true' lat='49.27763287683' lon='8.71362138354'>
+    <tag k='hoot:id' v='-167909' />
+  </node>
+  <node id='-1242' action='modify' visible='true' lat='49.27774457946' lon='8.71537988354'>
+    <tag k='hoot:id' v='-230763' />
+  </node>
+  <node id='-1240' action='modify' visible='true' lat='49.27777108516' lon='8.71534288354'>
+    <tag k='hoot:id' v='-230761' />
+  </node>
+  <node id='-1238' action='modify' visible='true' lat='49.27777903687' lon='8.71533138354'>
+    <tag k='hoot:id' v='-230759' />
+  </node>
+  <node id='-1236' action='modify' visible='true' lat='49.27778698857' lon='8.71531888354'>
+    <tag k='hoot:id' v='-230757' />
+  </node>
+  <node id='-1232' action='modify' visible='true' lat='49.2777972122' lon='8.71529888354'>
+    <tag k='hoot:id' v='-230755' />
+  </node>
+  <node id='-1230' action='modify' visible='true' lat='49.27780364929' lon='8.71528438354'>
+    <tag k='hoot:id' v='-230753' />
+  </node>
+  <node id='-1228' action='modify' visible='true' lat='49.277811601' lon='8.71526238354'>
+    <tag k='hoot:id' v='-230751' />
+  </node>
+  <node id='-1226' action='modify' visible='true' lat='49.27781614483' lon='8.71524738354'>
+    <tag k='hoot:id' v='-230750' />
+  </node>
+  <node id='-1222' action='modify' visible='true' lat='49.27782031001' lon='8.71523188354'>
+    <tag k='hoot:id' v='-230749' />
+  </node>
+  <node id='-1220' action='modify' visible='true' lat='49.27782333923' lon='8.71521588354'>
+    <tag k='hoot:id' v='-230748' />
+  </node>
+  <node id='-1218' action='modify' visible='true' lat='49.2778259898' lon='8.71519938354'>
+    <tag k='hoot:id' v='-230747' />
+  </node>
+  <node id='-1214' action='modify' visible='true' lat='49.27782750441' lon='8.71518388354'>
+    <tag k='hoot:id' v='-230746' />
+  </node>
+  <node id='-1210' action='modify' visible='true' lat='49.27782864037' lon='8.71516788354'>
+    <tag k='hoot:id' v='-230744' />
+  </node>
+  <node id='-1208' action='modify' visible='true' lat='49.27782901902' lon='8.71515188354'>
+    <tag k='hoot:id' v='-230743' />
+  </node>
+  <node id='-1206' action='modify' visible='true' lat='49.27784643704' lon='8.71483188354'>
+    <tag k='hoot:id' v='-230742' />
+  </node>
+  <node id='-1182' action='modify' visible='true' lat='49.27792746868' lon='8.71481788354'>
+    <tag k='hoot:id' v='-175427' />
+  </node>
+  <node id='-1140' action='modify' visible='true' lat='49.27795738221' lon='8.71481288354'>
+    <tag k='hoot:id' v='-26987' />
+  </node>
+  <way id='-1424' action='modify' visible='true'>
+    <nd ref='-1206' />
+    <nd ref='-1276' />
+    <nd ref='-1280' />
+    <nd ref='-1274' />
+    <tag k='accuracy' v='12.6' />
+    <tag k='bridge' v='' />
+    <tag k='highway' v='secondary' />
+    <tag k='hoot:id' v='-9947' />
+    <tag k='hoot:status' v='1' />
+  </way>
+  <way id='-1422' action='modify' visible='true'>
+    <nd ref='-1140' />
+    <nd ref='-1182' />
+    <tag k='accuracy' v='12.6' />
+    <tag k='bridge' v='' />
+    <tag k='highway' v='secondary' />
+    <tag k='hoot:id' v='-5327' />
+    <tag k='hoot:status' v='1' />
+  </way>
+  <way id='-1420' action='modify' visible='true'>
+    <nd ref='-1206' />
+    <nd ref='-1208' />
+    <nd ref='-1210' />
+    <nd ref='-1214' />
+    <nd ref='-1218' />
+    <nd ref='-1220' />
+    <nd ref='-1222' />
+    <nd ref='-1226' />
+    <nd ref='-1228' />
+    <nd ref='-1230' />
+    <nd ref='-1232' />
+    <nd ref='-1236' />
+    <nd ref='-1238' />
+    <nd ref='-1240' />
+    <nd ref='-1242' />
+    <tag k='accuracy' v='12.6' />
+    <tag k='bridge' v='' />
+    <tag k='highway' v='secondary' />
+    <tag k='hoot:id' v='-7066' />
+    <tag k='hoot:status' v='1' />
+  </way>
+  <way id='-1406' action='modify' visible='true'>
+    <nd ref='-1182' />
+    <nd ref='-1206' />
+    <tag k='accuracy' v='12.6' />
+    <tag k='bridge' v='' />
+    <tag k='highway' v='secondary' />
+    <tag k='hoot:id' v='-20436' />
+    <tag k='hoot:status' v='1' />
+  </way>
+  <way id='-1390' action='modify' visible='true'>
+    <nd ref='-1262' />
+    <nd ref='-1264' />
+    <nd ref='-1266' />
+    <nd ref='-1270' />
+    <nd ref='-1272' />
+    <nd ref='-1278' />
+    <nd ref='-1284' />
+    <nd ref='-1288' />
+    <nd ref='-1294' />
+    <nd ref='-1298' />
+    <nd ref='-1306' />
+    <nd ref='-1314' />
+    <nd ref='-1324' />
+    <nd ref='-1328' />
+    <nd ref='-1330' />
+    <nd ref='-1332' />
+    <nd ref='-1334' />
+    <nd ref='-1340' />
+    <tag k='accuracy' v='12.6' />
+    <tag k='bridge' v='' />
+    <tag k='highway' v='secondary' />
+    <tag k='hoot:id' v='-17215' />
+    <tag k='hoot:status' v='1' />
+  </way>
+  <way id='-1352' action='modify' visible='true'>
+    <nd ref='-1274' />
+    <nd ref='-1286' />
+    <nd ref='-1290' />
+    <tag k='accuracy' v='12.6' />
+    <tag k='bridge' v='' />
+    <tag k='highway' v='secondary' />
+    <tag k='hoot:id' v='-16272' />
+    <tag k='hoot:status' v='1' />
+  </way>
+</osm>

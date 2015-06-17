@@ -1,0 +1,79 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ */
+#ifndef BUILDINGOUTLINEUPDATEOP_H
+#define BUILDINGOUTLINEUPDATEOP_H
+
+// Hoot
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/io/Serializable.h>
+
+// Standard
+#include <set>
+
+namespace hoot
+{
+using namespace Tgs;
+
+/**
+ * Goes through all building relations and updates the outline of the building by taking the union
+ * of all the building parts.
+ */
+class BuildingOutlineUpdateOp : public OsmMapOperation, public Serializable
+{
+public:
+
+  static string className() { return "hoot::BuildingOutlineUpdateOp"; }
+
+  BuildingOutlineUpdateOp();
+
+  virtual void apply(shared_ptr<OsmMap>& map);
+
+  virtual string getClassName() const { return className(); }
+
+  virtual void readObject(QDataStream& /*is*/) {}
+
+  virtual void writeObject(QDataStream& /*os*/) const {}
+
+private:
+  shared_ptr<OsmMap> _map;
+
+  void _createOutline(const shared_ptr<Relation>& building);
+
+  void _extractUsedNodes(const shared_ptr<Relation>& r, set<long>& nodes);
+
+  /**
+   * Match nodes in change to nodes in reference. If there is an exact node match then change
+   * "changed" by replacing the nodes with the equivalent nodes in reference.
+   */
+  void _mergeNodes(const shared_ptr<Element>& changed,
+    const shared_ptr<Relation>& reference);
+};
+
+}
+
+#endif // BUILDINGOUTLINEUPDATEOP_H

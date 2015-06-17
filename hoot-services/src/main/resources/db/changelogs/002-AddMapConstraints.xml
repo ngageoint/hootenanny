@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet author="jason.surratt" id="2" context="default">
+    	<comment>
+                While working on #2846 I realized that the node and related tables are setup
+                such that the id is unique, but in our design it should be a combination of the
+                node_id and map_id that is unique.
+
+    		See #2730 for details.
+    	</comment>
+
+        <!-- drop all the stuff we don't want first, order matters -->
+
+        <dropForeignKeyConstraint
+                baseTableName="current_node_tags"
+                constraintName="current_node_tags_id_fkey" />
+        <dropPrimaryKey tableName="current_node_tags" />
+        <dropPrimaryKey tableName="current_nodes" />
+
+        <dropForeignKeyConstraint
+                baseTableName="current_way_tags"
+                constraintName="current_way_tags_id_fkey" />
+        <dropPrimaryKey tableName="current_way_tags" />
+        <dropPrimaryKey tableName="current_ways" />
+
+        <dropForeignKeyConstraint
+                baseTableName="current_relation_tags"
+                constraintName="current_relation_tags_id_fkey" />
+        <dropPrimaryKey tableName="current_relation_tags" />
+        <dropPrimaryKey tableName="current_relations" />
+
+        <dropPrimaryKey tableName="current_relation_members" />
+
+        <!-- Add back in all the stuff we want -->
+
+        <addPrimaryKey
+                constraintName="current_nodes_pkey"
+                tableName="current_nodes"
+                columnNames="id,map_id" />
+
+        <addColumn tableName="current_node_tags">
+            <column name="map_id" type="bigint">
+              <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addPrimaryKey
+                constraintName="current_node_tags_pkey"
+                tableName="current_node_tags"
+                columnNames="node_id,map_id, k" />
+        <addForeignKeyConstraint
+                constraintName="current_node_tags_id_fkey"
+                referencedTableName="current_nodes"
+                baseColumnNames="node_id,map_id"
+                baseTableName="current_node_tags"
+                referencedColumnNames="id,map_id" />
+
+        <addPrimaryKey
+                constraintName="current_ways_pkey"
+                tableName="current_ways"
+                columnNames="id,map_id" />
+
+        <addColumn tableName="current_way_tags">
+            <column name="map_id" type="bigint">
+              <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addPrimaryKey
+                constraintName="current_way_tags_pkey"
+                tableName="current_way_tags"
+                columnNames="way_id,map_id, k" />
+        <addForeignKeyConstraint
+                constraintName="current_way_tags_id_fkey"
+                referencedTableName="current_ways"
+                baseColumnNames="way_id,map_id"
+                baseTableName="current_way_tags"
+                referencedColumnNames="id,map_id" />
+
+        <addPrimaryKey
+                constraintName="current_relations_pkey"
+                tableName="current_relations"
+                columnNames="id,map_id" />
+
+        <addColumn tableName="current_relation_tags">
+            <column name="map_id" type="bigint">
+              <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addPrimaryKey
+                constraintName="current_relation_tags_pkey"
+                tableName="current_relation_tags"
+                columnNames="relation_id,map_id,k" />
+        <addForeignKeyConstraint
+                constraintName="current_relation_tags_id_fkey"
+                referencedTableName="current_relations"
+                baseColumnNames="relation_id,map_id"
+                baseTableName="current_relation_tags"
+                referencedColumnNames="id,map_id" />
+
+        <addColumn tableName="current_relation_members">
+            <column name="map_id" type="bigint">
+              <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addPrimaryKey
+                constraintName="current_relation_members_pkey"
+                tableName="current_relation_members"
+                columnNames="relation_id,map_id,member_type,member_id,member_role,sequence_id" />
+
+        <!-- Add in the current_way_nodes table. -->
+
+        <createTable tableName="current_way_nodes">
+            <column name="map_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="way_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="node_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sequence_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey
+                constraintName="current_way_nodes_pkey"
+                tableName="current_way_nodes"
+                columnNames="map_id, way_id, sequence_id" />
+        <addForeignKeyConstraint
+                constraintName="current_way_nodes_node_id_fkey"
+                baseTableName="current_way_nodes"
+                baseColumnNames="node_id,map_id"
+                referencedTableName="current_nodes"
+                referencedColumnNames="id,map_id"/>
+        <addForeignKeyConstraint
+                constraintName="current_way_nodes_way_id_fkey"
+                baseTableName="current_way_nodes"
+                baseColumnNames="way_id,map_id"
+                referencedTableName="current_ways"
+                referencedColumnNames="id,map_id"/>
+
+    </changeSet>
+</databaseChangeLog>

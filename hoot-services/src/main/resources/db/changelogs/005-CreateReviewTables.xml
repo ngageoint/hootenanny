@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<changeSet author="brandon.witham" id="5" context="default">
+		<comment>
+			tables needed by the conflated data review process
+		</comment>
+		
+		<sql>DROP TYPE IF EXISTS review_status_enum</sql>
+    <sql>CREATE TYPE review_status_enum AS ENUM ('unreviewed','reviewed')</sql>
+    <rollback>
+      DROP TYPE review_status_enum
+    </rollback>
+		
+		<createTable tableName="review_map">
+      <column name="map_id" type="bigint">
+        <constraints nullable="false" />
+      </column>
+      <column name="review_prepare_job_id" type="varchar(64)" />
+    </createTable>
+    <addPrimaryKey constraintName="review_map_pkey" tableName="review_map" columnNames="map_id" />
+    <addForeignKeyConstraint 
+      constraintName="review_map_prepare_job_id_fkey" 
+      baseTableName="review_map" 
+      baseColumnNames="review_prepare_job_id" 
+      referencedTableName="job_status" 
+      referencedColumnNames="job_id"/>
+		
+		<createTable tableName="element_id_mappings">
+		 <!-- This may be multiple UUID's concatenated together, so a string type must be used. -->
+     <column name="element_id" type="text">
+        <constraints nullable="false" />
+      </column>
+      <column name="map_id" type="bigint">
+        <constraints nullable="false" />
+      </column>
+      <column name="osm_element_id" type="bigint">
+        <constraints nullable="false" />
+      </column>
+      <column name="osm_element_type" type="nwr_enum">
+        <constraints nullable="false" />
+      </column>
+      <!-- column name="osm_version" type="bigint">
+        <constraints nullable="false" />
+      </column -->
+    </createTable>
+    <!-- hoot conflation will generate the same UUID's for different conflated maps, so need 
+    the map_id in here as well -->
+    <addPrimaryKey constraintName="element_id_mappings_pkey" tableName="element_id_mappings" 
+      columnNames="element_id,map_id" />
+    <addForeignKeyConstraint 
+      constraintName="element_id_mappings_map_id_fkey" 
+      baseTableName="element_id_mappings" 
+      baseColumnNames="map_id" 
+      referencedTableName="review_map" 
+      referencedColumnNames="map_id"/>
+	  
+	  <createTable tableName="review_items">
+	    <column name="review_id" type="bigserial" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="map_id" type="bigint">
+        <constraints nullable="false" />
+      </column>
+	     <!-- This may be multiple UUID's concatenated together, so a string type must be used. -->
+      <column name="reviewable_item_id" type="text">
+        <constraints nullable="false" />
+      </column>
+      <column name="review_score" type="double">
+        <constraints nullable="false" />
+      </column>
+      <!-- Even though, this is guaranteed to always be one UUID, and the UUID type could be used 
+      here, a string type is used for consistency's sake. -->
+      <column name="review_against_item_id" type="text" />
+      <column name="review_status" type="review_status_enum">
+        <constraints nullable="false" />
+      </column>
+      <column name="changeset_id" type="bigint" />
+    </createTable>
+    <addForeignKeyConstraint 
+      constraintName="review_items_map_id_fkey" 
+      baseTableName="review_items" 
+      baseColumnNames="map_id" 
+      referencedTableName="review_map" 
+      referencedColumnNames="map_id"/>
+    <addForeignKeyConstraint 
+      constraintName="review_items_id_fkey" 
+      baseTableName="review_items" 
+      baseColumnNames="reviewable_item_id,map_id" 
+      referencedTableName="element_id_mappings" 
+      referencedColumnNames="element_id,map_id"/>
+    <addForeignKeyConstraint 
+      constraintName="review_items_review_against_item_id_fkey" 
+      baseTableName="review_items" 
+      baseColumnNames="review_against_item_id,map_id" 
+      referencedTableName="element_id_mappings" 
+      referencedColumnNames="element_id,map_id"/>
+      
+	</changeSet>
+</databaseChangeLog>

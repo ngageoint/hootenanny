@@ -1,0 +1,9 @@
+== version
+
+=== Description
+Prints the version of Hootenanny.
+
+=== Usage
+--------------------------------------
+hoot version
+--------------------------------------

@@ -1,0 +1,141 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ */
+
+#ifndef TESTUTILS_H
+#define TESTUTILS_H
+
+// CPP Unit
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/extensions/TestFactoryRegistry.h>
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+
+// hoot
+#include <hoot/core/OsmMap.h>
+
+// Qt
+#include <QString>
+
+// Standard
+#include <string>
+#include <sstream>
+
+inline QString toQString(const QString& s)
+{
+  return s;
+}
+
+inline QString toQString(const char* s)
+{
+  return QString::fromUtf8(s);
+}
+
+inline QString toQString(const std::string& s)
+{
+  return QString::fromStdString(s);
+}
+
+#define HOOT_STR_EQUALS(v1, v2) \
+{ \
+  stringstream ss1, ss2; \
+  ss1 << v1; \
+  ss2 << v2; \
+  CPPUNIT_ASSERT_EQUAL(ss1.str(), ss2.str()); \
+} \
+
+#define HOOT_FILE_EQUALS(expected, actual)              \
+{ \
+  QString expectedStr = toQString(expected); \
+  QString actualStr = toQString(actual); \
+  if (expectedStr.endsWith(".osm") && actualStr.endsWith(".osm")) \
+  { \
+    if (TestUtils::compareMaps(expected, actual) == false) \
+    { \
+      CPPUNIT_FAIL((QString("Maps do not match: ") + \
+        expected + " " + actual).toStdString()); \
+    } \
+  } \
+  else if (TestUtils::readFile(expected) != TestUtils::readFile(actual)) \
+  { \
+    CPPUNIT_FAIL((QString("Files do not match: ") + \
+      expected + " " + actual).toStdString()); \
+  } \
+} \
+
+namespace hoot
+{
+using namespace std;
+
+class TestUtils
+{
+public:
+
+  TestUtils();
+
+  static void dumpString(const string& str);
+
+  static std::string readFile(QString f1);
+
+  static bool compareMaps(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2);
+
+  static bool compareMaps(const QString& map1, const QString map2);
+
+  static NodePtr createNode(OsmMapPtr map, Status status, double x, double y, double circularError,
+                            Tags tags = Tags());
+
+  static WayPtr createWay(OsmMapPtr map, Status s, Coordinate c[], Meters ce,
+                          const QString& note = "");
+
+  static WayPtr createWay(
+    OsmMapPtr map, const QList<NodePtr>& nodes, Status status = Status::Unknown1,
+    Meters circularError = 15);
+
+  static RelationPtr createRelation(
+    OsmMapPtr map, const QList<ElementPtr>& elements, Status status = Status::Unknown1,
+    Meters circularError = 15);
+
+  static ElementPtr getElement(OsmMapPtr map, QString note);
+
+  /**
+   * Return the way with the note value 'note'. Bad things will happen if it doesn't exist.
+   */
+  static WayPtr getWay(OsmMapPtr map, QString note);
+
+  /**
+   * Resets the test environment to a known state.
+   */
+  static void resetEnvironment();
+
+  /**
+   * Converts a string into a format that can be cut/paste into c++ code.
+   */
+  static QString toQuotedString(QString str);
+};
+
+}
+
+#endif // TESTUTILS_H

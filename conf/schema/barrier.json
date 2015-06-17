@@ -1,0 +1,21 @@
+{
+    "tag": {
+        "name": "barrier",
+        "influence": 1.0,
+        "type": "enumeration",
+        "geometries": ["node", "linestring"]
+    },
+
+    "#" : " The catch all",
+
+    "tag": { "name": "barrier=wall", "isA": "barrier" },
+    "tag": {
+        "name": "barrier=toll_booth",
+        "isA": "barrier",
+        "categories": ["poi"],
+        "geometries": ["node"],
+        "similarTo": { "name": "building=transportation", "weight": 0.8 }
+    },
+
+    "#" : "end"
+}

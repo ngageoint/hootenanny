@@ -1,0 +1,403 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-653' action='modify' visible='true' lat='39.59403635798' lon='-104.80414629063' />
+  <node id='-651' action='modify' visible='true' lat='39.59424225047' lon='-104.80391839146' />
+  <node id='-649' action='modify' visible='true' lat='39.59443603108' lon='-104.80414629063' />
+  <node id='-648' action='modify' visible='true' lat='39.59422408351' lon='-104.80439776557' />
+  <node id='-643' action='modify' visible='true' lat='39.59357915335' lon='-104.80438204839' />
+  <node id='-641' action='modify' visible='true' lat='39.59357915335' lon='-104.80413843204' />
+  <node id='-639' action='modify' visible='true' lat='39.59382138135' lon='-104.80412271485' />
+  <node id='-638' action='modify' visible='true' lat='39.59381532566' lon='-104.80438597768' />
+  <node id='-421' visible='true' lat='39.59312176895' lon='-104.80621209589'>
+    <tag k='hoot:id' v='-71' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-420' visible='true' lat='39.59314328651' lon='-104.80621527231'>
+    <tag k='hoot:id' v='-72' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-419' visible='true' lat='39.5931524411' lon='-104.80612558114'>
+    <tag k='hoot:id' v='-73' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-418' visible='true' lat='39.59312385993' lon='-104.80611361862'>
+    <tag k='hoot:id' v='-74' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-417' visible='true' lat='39.59312711114' lon='-104.80608690952'>
+    <tag k='hoot:id' v='-75' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-416' visible='true' lat='39.59330344897' lon='-104.80612305771'>
+    <tag k='hoot:id' v='-76' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-415' visible='true' lat='39.59329697067' lon='-104.80625126391'>
+    <tag k='hoot:id' v='-77' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-413' visible='true' lat='39.59327909074' lon='-104.80646975858'>
+    <tag k='hoot:id' v='-78' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-412' visible='true' lat='39.59330740063' lon='-104.80637694668'>
+    <tag k='hoot:id' v='-79' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-411' visible='true' lat='39.59329101069' lon='-104.80636921236'>
+    <tag k='hoot:id' v='-80' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-410' visible='true' lat='39.59311519116' lon='-104.80634794297'>
+    <tag k='hoot:id' v='-81' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-409' visible='true' lat='39.59311370116' lon='-104.80640014966'>
+    <tag k='hoot:id' v='-82' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-408' visible='true' lat='39.59310625117' lon='-104.80644075486'>
+    <tag k='hoot:id' v='-83' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-407' visible='true' lat='39.59312413115' lon='-104.80645235635'>
+    <tag k='hoot:id' v='-84' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-406' visible='true' lat='39.59311370116' lon='-104.80652776601'>
+    <tag k='hoot:id' v='-85' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-405' visible='true' lat='39.59327760075' lon='-104.80655676972'>
+    <tag k='hoot:id' v='-86' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-343' visible='true' lat='39.59185387122' lon='-104.8052113027'>
+    <tag k='hoot:id' v='-56' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-342' visible='true' lat='39.59104026536' lon='-104.80499272811'>
+    <tag k='hoot:id' v='-10' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-341' visible='true' lat='39.5918195893' lon='-104.80272414589'>
+    <tag k='hoot:id' v='-93' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-340' visible='true' lat='39.59181412259' lon='-104.80416452236'>
+    <tag k='hoot:id' v='-14' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-339' visible='true' lat='39.59093588104' lon='-104.80485755595'>
+    <tag k='hoot:id' v='-47' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-338' visible='true' lat='39.59185380573' lon='-104.80496531207'>
+    <tag k='hoot:id' v='-1' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-337' visible='true' lat='39.59182534735' lon='-104.80426065174'>
+    <tag k='hoot:id' v='-15' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-336' visible='true' lat='39.59185932599' lon='-104.80405838383'>
+    <tag k='hoot:id' v='-52' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-335' visible='true' lat='39.59186015541' lon='-104.80473665564'>
+    <tag k='hoot:id' v='-6' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-334' visible='true' lat='39.59140417982' lon='-104.80345646495'>
+    <tag k='hoot:id' v='-89' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-333' visible='true' lat='39.59182752953' lon='-104.80453228941'>
+    <tag k='hoot:id' v='-20' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-332' visible='true' lat='39.59186174283' lon='-104.80476343522'>
+    <tag k='hoot:id' v='-7' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-331' visible='true' lat='39.59182867093' lon='-104.80375267286'>
+    <tag k='hoot:id' v='-97' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-330' visible='true' lat='39.59181328616' lon='-104.80453404187'>
+    <tag k='hoot:id' v='-11' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-329' visible='true' lat='39.59093702297' lon='-104.80378280992'>
+    <tag k='hoot:id' v='-48' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-328' visible='true' lat='39.59188396669' lon='-104.80496943201'>
+    <tag k='hoot:id' v='-2' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-327' visible='true' lat='39.59182275359' lon='-104.80416324461'>
+    <tag k='hoot:id' v='-16' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-326' visible='true' lat='39.59188555411' lon='-104.80486231368'>
+    <tag k='hoot:id' v='-3' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-325' visible='true' lat='39.5914146304' lon='-104.80283941834'>
+    <tag k='hoot:id' v='-90' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-324' visible='true' lat='39.5918268196' lon='-104.80476137526'>
+    <tag k='hoot:id' v='-8' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-323' visible='true' lat='39.59127354739' lon='-104.8028326376'>
+    <tag k='hoot:id' v='-91' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-322' visible='true' lat='39.59182823047' lon='-104.80444947967'>
+    <tag k='hoot:id' v='-12' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-321' visible='true' lat='39.59181845575' lon='-104.80406432138'>
+    <tag k='hoot:id' v='-53' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-320' visible='true' lat='39.59187126734' lon='-104.80486643362'>
+    <tag k='hoot:id' v='-4' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-319' visible='true' lat='39.59123179498' lon='-104.80374657403'>
+    <tag k='hoot:id' v='-87' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-318' visible='true' lat='39.59107924859' lon='-104.80522667916'>
+    <tag k='hoot:id' v='-45' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-317' visible='true' lat='39.59179731936' lon='-104.80378280992'>
+    <tag k='hoot:id' v='-49' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-316' visible='true' lat='39.59126570943' lon='-104.80272753626'>
+    <tag k='hoot:id' v='-92' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-315' visible='true' lat='39.59181390028' lon='-104.80426409728'>
+    <tag k='hoot:id' v='-17' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-314' visible='true' lat='39.59182842967' lon='-104.80463246665'>
+    <tag k='hoot:id' v='-54' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-313' visible='true' lat='39.59181689757' lon='-104.80463094939'>
+    <tag k='hoot:id' v='-55' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-312' visible='true' lat='39.59104700029' lon='-104.80487037226'>
+    <tag k='hoot:id' v='-9' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-311' visible='true' lat='39.591223907' lon='-104.80345985532'>
+    <tag k='hoot:id' v='-88' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-310' visible='true' lat='39.59108822849' lon='-104.80499548267'>
+    <tag k='hoot:id' v='-46' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-309' visible='true' lat='39.59182670914' lon='-104.80434835197'>
+    <tag k='hoot:id' v='-13' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-308' visible='true' lat='39.59180258349' lon='-104.80386221973'>
+    <tag k='hoot:id' v='-50' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-307' visible='true' lat='39.59181476409' lon='-104.80434603904'>
+    <tag k='hoot:id' v='-18' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-306' visible='true' lat='39.59186234518' lon='-104.80386465583'>
+    <tag k='hoot:id' v='-51' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-305' visible='true' lat='39.59187444218' lon='-104.8047263558'>
+    <tag k='hoot:id' v='-5' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-304' visible='true' lat='39.59181750703' lon='-104.80444722738'>
+    <tag k='hoot:id' v='-19' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <way id='-650' action='modify' visible='true'>
+    <nd ref='-648' />
+    <nd ref='-649' />
+    <nd ref='-651' />
+    <nd ref='-653' />
+    <nd ref='-648' />
+    <tag k='building' v='yes' />
+    <tag k='note' v='freddys' />
+  </way>
+  <way id='-640' action='modify' visible='true'>
+    <nd ref='-638' />
+    <nd ref='-639' />
+    <nd ref='-641' />
+    <nd ref='-643' />
+    <nd ref='-638' />
+    <tag k='building' v='yes' />
+    <tag k='note' v='jewelry' />
+  </way>
+  <way id='-422' visible='true'>
+    <nd ref='-410' />
+    <nd ref='-409' />
+    <nd ref='-408' />
+    <nd ref='-407' />
+    <nd ref='-406' />
+    <nd ref='-405' />
+    <nd ref='-413' />
+    <nd ref='-412' />
+    <nd ref='-411' />
+    <nd ref='-415' />
+    <nd ref='-416' />
+    <nd ref='-417' />
+    <nd ref='-418' />
+    <nd ref='-419' />
+    <nd ref='-420' />
+    <nd ref='-421' />
+    <nd ref='-410' />
+    <tag k='REF1' v='Panera' />
+    <tag k='REF2' v='Panera' />
+    <tag k='alt_name' v='Maid-Rite;Maid-Rite Diner' />
+    <tag k='building' v='yes' />
+    <tag k='hoot:building:match' v='true' />
+    <tag k='hoot:id' v='-19' />
+    <tag k='hoot:status' v='3' />
+    <tag k='name' v='Panera Bread' />
+  </way>
+  <way id='-414' action='modify' visible='true'>
+    <nd ref='-411' />
+    <nd ref='-415' />
+    <nd ref='-416' />
+    <nd ref='-417' />
+    <nd ref='-418' />
+    <nd ref='-419' />
+    <nd ref='-420' />
+    <nd ref='-421' />
+    <nd ref='-410' />
+    <nd ref='-411' />
+    <tag k='building:part' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:id' v='-11' />
+    <tag k='hoot:status' v='2' />
+    <tag k='note' v='panera' />
+  </way>
+  <way id='-404' action='modify' visible='true'>
+    <nd ref='-405' />
+    <nd ref='-406' />
+    <nd ref='-407' />
+    <nd ref='-408' />
+    <nd ref='-409' />
+    <nd ref='-410' />
+    <nd ref='-411' />
+    <nd ref='-412' />
+    <nd ref='-413' />
+    <nd ref='-405' />
+    <tag k='building:part' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:id' v='-12' />
+    <tag k='hoot:status' v='2' />
+    <tag k='note' v='pho' />
+  </way>
+  <way id='-345' action='modify' visible='true'>
+    <nd ref='-331' />
+    <nd ref='-341' />
+    <nd ref='-316' />
+    <nd ref='-323' />
+    <nd ref='-325' />
+    <nd ref='-334' />
+    <nd ref='-311' />
+    <nd ref='-319' />
+    <nd ref='-331' />
+    <tag k='hoot:id' v='-13' />
+    <tag k='hoot:status' v='2' />
+    <tag k='name' v='Best Buy' />
+    <tag k='note' v='bestbuy' />
+  </way>
+  <way id='-344' action='modify' visible='true'>
+    <nd ref='-343' />
+    <nd ref='-338' />
+    <nd ref='-328' />
+    <nd ref='-326' />
+    <nd ref='-320' />
+    <nd ref='-305' />
+    <nd ref='-335' />
+    <nd ref='-332' />
+    <nd ref='-324' />
+    <nd ref='-313' />
+    <nd ref='-314' />
+    <nd ref='-333' />
+    <nd ref='-330' />
+    <nd ref='-304' />
+    <nd ref='-322' />
+    <nd ref='-309' />
+    <nd ref='-307' />
+    <nd ref='-315' />
+    <nd ref='-337' />
+    <nd ref='-327' />
+    <nd ref='-340' />
+    <nd ref='-321' />
+    <nd ref='-336' />
+    <nd ref='-306' />
+    <nd ref='-308' />
+    <nd ref='-317' />
+    <nd ref='-329' />
+    <nd ref='-339' />
+    <nd ref='-312' />
+    <nd ref='-342' />
+    <nd ref='-310' />
+    <nd ref='-318' />
+    <nd ref='-343' />
+    <tag k='REF1' v='Target' />
+    <tag k='REF2' v='Target' />
+    <tag k='alt_name' v='Target - Aurora South;Target Grocery;Target Pharmacy' />
+    <tag k='building' v='yes' />
+    <tag k='hoot:building:match' v='true' />
+    <tag k='hoot:id' v='-7' />
+    <tag k='hoot:status' v='3' />
+    <tag k='name' v='Target' />
+    <tag k='note' v='target' />
+  </way>
+  <relation id='-646' action='modify' visible='true'>
+    <member type='way' ref='-650' role='outer' />
+    <member type='way' ref='-640' role='outer' />
+    <tag k='note' v='jewelryandfreddys' />
+    <tag k='shop' v='mall' />
+    <tag k='type' v='multipolygon' />
+  </relation>
+  <relation id='-633' action='modify' visible='true'>
+    <member type='way' ref='-345' role='outer' />
+    <member type='way' ref='-344' role='outer' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='note' v='targetandbestbuy' />
+    <tag k='type' v='multipolygon' />
+  </relation>
+  <relation id='-403' action='modify' visible='true'>
+    <member type='way' ref='-404' role='part' />
+    <member type='way' ref='-414' role='part' />
+    <member type='way' ref='-422' role='outline' />
+    <tag k='REF1' v='Panera' />
+    <tag k='REF2' v='Panera' />
+    <tag k='alt_name' v='Maid-Rite;Maid-Rite Diner' />
+    <tag k='building' v='yes' />
+    <tag k='hoot:building:match' v='true' />
+    <tag k='hoot:id' v='-2' />
+    <tag k='hoot:status' v='3' />
+    <tag k='name' v='Panera Bread' />
+    <tag k='note' v='paneragroup' />
+    <tag k='type' v='building' />
+  </relation>
+</osm>

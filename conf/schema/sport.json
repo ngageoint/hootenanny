@@ -1,0 +1,368 @@
+{
+    "tag": {
+        "name": "sport",
+        "influence": 1.0,
+        "type": "enumeration",
+        "geometries": ["node","area"]
+    },
+
+    "#" : " The catch all",
+    "tag": { "name": "sport=*", "isA": "sport" },
+
+    "#" : "The following is an edited version of the top 250 sports according to taginfo",
+    "#" : "http://taginfo.openstreetmap.org/api/4/key/values?key=sport&filter=all&lang=en&sortname=count&sortorder=desc&page=1&rp=250&qtype=value&format=json_pretty",
+
+    "tag": { "name": "sport=9pin", "isA": "sport",
+        "similarTo": { "name": "sport=10pin", "weight": 0.9 }  },
+    "tag": { "name": "sport=10pin", "isA": "sport" },
+    "tag": { "name": "sport=bowling", "isA": "sport=10pin" },
+
+    "tag": { "name": "sport=bowls", "isA": "sport" },
+    "tag": { "name": "sport=lawn_bowling", "isA": "sport=bowls" },
+    "tag": { "name": "sport=lawn_bowls", "isA": "sport=bowls" },
+
+    "tag": { "name": "sport=boules", "isA": "sport" },
+    "tag": { "name": "sport=bocce", "isA": "sport=boules" },
+    "tag": { "name": "sport=petanque", "isA": "sport=boules" },
+    "tag": { "name": "sport=petanca", "isA": "sport=petanque" },
+    "tag": { "name": "sport=pétanque", "isA": "sport=petanque" },
+
+    "#" : "Martial Arts is a broad term",
+    "tag": { "name": "sport=martial_arts", "isA": "sport" },
+    "tag": { "name": "sport=aikido", "isA": "sport=martial_arts" },
+    "tag": { "name": "sport=judo", "isA": "sport=martial_arts" },
+    "tag": { "name": "sport=karate", "isA": "sport=martial_arts" },
+    "tag": { "name": "sport=taekwondo", "isA": "sport=martial_arts" },
+    "tag": { "name": "sport=boxing", "isA": "sport=martial_arts" },
+    "tag": { "name": "sport=mma", "isA": "sport=martial_arts" },
+    "tag": { "name": "sport=fencing", "isA": "sport",
+        "similarTo": { "name": "sport=martial_arts", "weight": 0.8 } },
+    "tag": { "name": "sport=wrestling", "isA": "sport",
+        "similarTo": { "name": "sport=martial_arts", "weight": 0.8 }  },
+    "tag": { "name": "sport=lucha_canaria", "isA": "sport=wrestling" },
+
+    "#" : "Football can be lots of things",
+    "tag": { "name": "sport=football", "isA": "sport" },
+
+    "tag": { "name": "sport=soccer", "isA": "sport",
+        "similarTo": { "name": "sport=football", "weight": 0.9 } },
+
+    "tag": { "name": "sport=association_football", "isA": "sport=soccer" },
+    "tag": { "name": "sport=futbol", "isA": "sport=soccer" },
+    "tag": { "name": "sport=futsal", "isA": "sport=soccer" },
+    "tag": { "name": "sport=5-a-side", "isA": "sport=soccer" },
+
+    "tag": { "name": "sport=australian_football", "isA": "sport",
+        "similarTo": { "name": "sport=football", "weight": 0.9 } },
+    "tag": { "name": "sport=american_football", "isA": "sport",
+        "similarTo": { "name": "sport=football", "weight": 0.9 } },
+    "tag": { "name": "sport=canadian_football", "isA": "sport",
+        "similarTo": { "name": "sport=football", "weight": 0.9 } },
+
+    "tag": { "name": "sport=rugby", "isA": "sport",
+        "similarTo": { "name": "sport=football", "weight": 0.9 } },
+    "tag": { "name": "sport=rugby_union", "isA": "sport=rugby" },
+    "tag": { "name": "sport=rugby_league", "isA": "sport",
+        "similarTo": { "name": "sport=rugby", "weight": 0.8 } },
+
+    "tag": { "name": "sport=gaelic_football", "isA": "sport",
+        "similarTo": { "name": "sport=football", "weight": 0.9 } },
+
+    "tag": { "name": "sport=archery", "isA": "sport" },
+
+    "tag": { "name": "sport=athletics", "isA": "sport" },
+    "tag": { "name": "sport=running", "isA": "sport",
+        "similarTo": { "name": "sport=athletics", "weight": 0.9 } },
+    "tag": { "name": "sport=track", "isA": "sport=athletics" },
+    "tag": { "name": "sport=jogging", "isA": "sport",
+        "similarTo": { "name": "sport=running", "weight": 0.9 } },
+    "tag": { "name": "sport=shotput", "isA": "sport",
+        "similarTo": { "name": "sport=athletics", "weight": 0.7 } },
+    "tag": { "name": "sport=shot_put", "isA": "sport=shotput" },
+    "tag": { "name": "sport=long_jump", "isA": "sport",
+        "similarTo": { "name": "sport=athletics", "weight": 0.7 } },
+
+    "tag": { "name": "sport=base", "isA": "sport=skydiving" },
+    "tag": { "name": "sport=skydiving", "isA": "sport" },
+
+    "tag": { "name": "sport=baseball", "isA": "sport" },
+    "tag": { "name": "sport=softball", "isA": "sport",
+        "similarTo": { "name": "sport=baseball", "weight": 0.9 } },
+    "tag": { "name": "sport=soft_ball", "isA": "sport=softball" },
+
+    "tag": { "name": "sport=basketball", "isA": "sport" },
+    "tag": { "name": "sport=streetball", "isA": "sport",
+        "similarTo": { "name": "sport=basketball", "weight": 0.7 }  },
+
+    "tag": { "name": "sport=beachsoccer", "isA": "sport" },
+
+    "tag": { "name": "sport=beachvolleyball", "isA": "sport" },
+
+    "tag": { "name": "sport=cycling", "isA": "sport" },
+    "tag": { "name": "sport=bicycle", "isA": "sport=cycling" },
+    "tag": { "name": "sport=bmx", "isA": "sport=cycling" },
+    "tag": { "name": "sport=mtb", "isA": "sport=cycling" },
+
+    "tag": { "name": "sport=billiards", "isA": "sport" },
+    "tag": { "name": "sport=billard", "isA": "sport=billiards" },
+    "tag": { "name": "sport=billards", "isA": "sport=billiards" },
+    "tag": { "name": "sport=snooker", "isA": "sport",
+        "similarTo": { "name": "sport=billiards", "weight": 0.8 } },
+
+    "tag": { "name": "sport=bobsleigh", "isA": "sport" },
+    "tag": { "name": "sport=toboggan", "isA": "sport",
+        "similarTo": { "name": "sport=bobsleigh", "weight": 0.8 } },
+    "tag": { "name": "sport=sled", "isA": "sport",
+        "similarTo": { "name": "sport=bobsleigh", "weight": 0.7 } },
+
+    "tag": { "name": "sport=bullfighting", "isA": "sport" },
+
+    "tag": { "name": "sport=camel_racing", "isA": "sport" },
+
+    "tag": { "name": "sport=kayak", "isA": "sport" },
+    "tag": { "name": "sport=canoe", "isA": "sport" },
+    "tag": { "name": "sport=canoeing", "isA": "sport=canoe" },
+
+    "tag": { "name": "sport=castells", "isA": "sport" },
+
+    "tag": { "name": "sport=chess", "isA": "sport" },
+
+    "tag": { "name": "sport=cliff_diving", "isA": "sport" },
+
+    "tag": { "name": "sport=climbing", "isA": "sport" },
+    "tag": { "name": "sport=climbing_adventure", "isA": "sport",
+        "similarTo": { "name": "sport=climbing", "weight": 0.9 } },
+    "tag": { "name": "sport=via_ferrata", "isA": "sport",
+        "similarTo": { "name": "sport=climbing", "weight": 0.7 } },
+
+    "tag": { "name": "sport=cockfighting", "isA": "sport" },
+
+    "tag": { "name": "sport=cricket", "isA": "sport" },
+    "tag": { "name": "sport=cricket_nets", "isA": "sport=cricket" },
+
+    "tag": { "name": "sport=croquet", "isA": "sport" },
+    "tag": { "name": "sport=gateball", "isA": "sport",
+        "similarTo": { "name": "sport=croquet", "weight": 0.7 } },
+
+    "tag": { "name": "sport=skiing", "isA": "sport" },
+    "tag": { "name": "sport=ski", "isA": "sport=skiing" },
+    "tag": { "name": "sport=cross_country_skiing", "isA": "sport=skiing" },
+    "tag": { "name": "sport=biathlon", "isA": "sport",
+        "similarTo": { "name": "sport=skiing", "weight": 0.8 },
+        "similarTo": { "name": "sport=shooting", "weight": 0.7 } },
+
+    "tag": { "name": "sport=ski_jumping", "isA": "sport" },
+    "tag": { "name": "sport=ski_jump_take_off", "isA": "sport" },
+
+    "tag": { "name": "sport=fitness", "isA": "sport" },
+    "tag": { "name": "sport=workout", "isA": "sport=fitness" },
+    "tag": { "name": "sport=crossfit", "isA": "sport=fitness" },
+    "tag": { "name": "sport=pilates", "isA": "sport",
+        "similarTo": { "name": "sport=fitness", "weight": 0.9 } },
+    "tag": { "name": "sport=yoga", "isA": "sport",
+        "similarTo": { "name": "sport=fitness", "weight": 0.9 } },
+    "tag": { "name": "sport=gym", "isA": "sport",
+        "similarTo": { "name": "sport=fitness", "weight": 0.9 } },
+    "tag": { "name": "sport=gim", "isA": "sport=gym" },
+    "tag": { "name": "sport=exercise", "isA": "sport=fitness" },
+    "tag": { "name": "sport=exercise_area", "isA": "sport=fitness" },
+    "tag": { "name": "sport=weightlifting", "isA": "sport",
+        "similarTo": { "name": "sport=gym", "weight": 0.8 } },
+    "tag": { "name": "sport=zona_de_musculación_al_aire_libre", "isA": "sport=exercise_area" },
+    "tag": { "name": "sport=gymnastics", "isA": "sport" },
+
+    "tag": { "name": "sport=curling", "isA": "sport" },
+    "tag": { "name": "sport=ice_stock", "isA": "sport",
+        "similarTo": { "name": "sport=curling", "weight": 0.8 } },
+
+    "tag": { "name": "sport=dance", "isA": "sport" },
+    "tag": { "name": "sport=dancing", "isA": "sport=dance" },
+
+    "tag": { "name": "sport=darts", "isA": "sport" },
+    "tag": { "name": "sport=disc_golf", "isA": "sport" },
+    "tag": { "name": "sport=diving", "isA": "sport",
+        "similarTo": { "name": "sport=scuba_diving", "weight": 0.5 },
+        "similarTo": { "name": "sport=swimming", "weight": 0.7 } },
+
+    "tag": { "name": "sport=dog", "isA": "sport" },
+    "tag": { "name": "sport=dog_racing", "isA": "sport" },
+    "tag": { "name": "sport=dog_training", "isA": "sport" },
+
+    "tag": { "name": "sport=fishing", "isA": "sport" },
+
+    "tag": { "name": "sport=free_flying", "isA": "sport" },
+    "tag": { "name": "sport=ultralight_aviation", "isA": "sport",
+        "similarTo": { "name": "sport=free_flying", "weight": 0.8 } },
+    "tag": { "name": "sport=paragliding", "isA": "sport",
+        "similarTo": { "name": "sport=free_flying", "weight": 0.8 }  },
+    "tag": { "name": "sport=gliding", "isA": "sport",
+        "similarTo": { "name": "sport=free_flying", "weight": 0.8 }  },
+
+    "tag": { "name": "sport=pelota", "isA": "sport" },
+    "tag": { "name": "sport=fronton", "isA": "sport=pelota" },
+
+    "tag": { "name": "sport=gaelic_games", "isA": "sport" },
+    "tag": { "name": "sport=gaa", "isA": "sport=gaelic_games" },
+
+    "tag": { "name": "sport=geocaching", "isA": "sport" },
+
+    "tag": { "name": "sport=golf", "isA": "sport" },
+
+    "tag": { "name": "sport=handball", "isA": "sport" },
+    "tag": { "name": "sport=team_handball", "isA": "sport=handball" },
+    "tag": { "name": "sport=four_square", "isA": "sport",
+        "similarTo": { "name": "sport=handball", "weight": 0.6 } },
+
+    "tag": { "name": "sport=ropes_course", "isA": "sport" },
+    "tag": { "name": "sport=high_ropes_course", "isA": "sport=ropes_course" },
+
+    "tag": { "name": "sport=hiking", "isA": "sport" },
+
+    "tag": { "name": "sport=equestrian", "isA": "sport" },
+    "tag": { "name": "sport=horse_riding", "isA": "sport=equestrian" },
+    "tag": { "name": "sport=horse", "isA": "sport=equestrian" },
+    "tag": { "name": "sport=riding", "isA": "sport=equestrian" },
+
+    "tag": { "name": "sport=horse_racing", "isA": "sport" },
+
+    "tag": { "name": "sport=horseshoes", "isA": "sport" },
+
+    "tag": { "name": "sport=hockey", "isA": "sport" },
+    "tag": { "name": "sport=field_hockey", "isA": "sport",
+        "similarTo": { "name": "sport=hockey", "weight": 0.7 } },
+    "tag": { "name": "sport=shinty", "isA": "sport",
+        "similarTo": { "name": "sport=field_hockey", "weight": 0.5 }  },
+    "tag": { "name": "sport=bandy", "isA": "sport",
+        "similarTo": { "name": "sport=ice_hockey", "weight": 0.8 } },
+    "tag": { "name": "sport=ice_hockey", "isA": "sport",
+        "similarTo": { "name": "sport=hockey", "weight": 0.7 } },
+    "tag": { "name": "sport=icehockey", "isA": "sport=ice_hockey" },
+
+    "tag": { "name": "sport=skating", "isA": "sport" },
+    "tag": { "name": "sport=ice_skating", "isA": "sport",
+        "similarTo": { "name": "sport=skating", "weight": 0.9 } },
+
+    "tag": { "name": "sport=inline_skating", "isA": "sport",
+        "similarTo": { "name": "sport=roller_skating", "weight": 0.8 } },
+    "tag": { "name": "sport=roller_skating", "isA": "sport",
+        "similarTo": { "name": "sport=skating", "weight": 0.8 } },
+    "tag": { "name": "sport=rollerskates", "isA": "sport=roller_skating" },
+
+    "tag": { "name": "sport=jumping", "isA": "sport" },
+
+    "tag": { "name": "sport=kitesurfing", "isA": "sport",
+        "similarTo": { "name": "sport=windsurfing", "weight": 0.7 }  },
+    "tag": { "name": "sport=windsurfing", "isA": "sport" },
+
+    "tag": { "name": "sport=korfball", "isA": "sport" },
+    "tag": { "name": "sport=korfbal", "isA": "sport=korfball" },
+
+    "tag": { "name": "sport=lacrosse", "isA": "sport" },
+
+    "tag": { "name": "sport=miniature_golf", "isA": "sport" },
+    "tag": { "name": "sport=minigolf", "isA": "sport=miniature_golf" },
+    "tag": { "name": "sport=mini_golf", "isA": "sport=miniature_golf" },
+
+    "tag": { "name": "sport=model_aerodrome", "isA": "sport" },
+
+    "tag": { "name": "sport=model_car_racing", "isA": "sport=rc_car" },
+    "tag": { "name": "sport=rc_car", "isA": "sport" },
+
+    "tag": { "name": "sport=motor", "isA": "sport" },
+    "tag": { "name": "sport=karting", "isA": "sport",
+        "similarTo": { "name": "sport=motor", "weight": 0.8 }  },
+    "tag": { "name": "sport=gokart", "isA": "sport=karting" },
+    "tag": { "name": "sport=gocard", "isA": "sport=karting" },
+    "tag": { "name": "sport=car_racing", "isA": "sport",
+        "similarTo": { "name": "sport=motor", "weight": 0.8 }  },
+    "tag": { "name": "sport=speedway", "isA": "sport=car_racing" },
+    "tag": { "name": "sport=motocross", "isA": "sport",
+        "similarTo": { "name": "sport=motor", "weight": 0.8 }  },
+    "tag": { "name": "sport=motorcross", "isA": "sport=motocross" },
+
+
+    "tag": { "name": "sport=multi", "isA": "sport" },
+
+    "tag": { "name": "sport=netball", "isA": "sport" },
+
+    "tag": { "name": "sport=obstacle_course", "isA": "sport" },
+
+    "tag": { "name": "sport=orienteering", "isA": "sport" },
+
+    "tag": { "name": "sport=paintball", "isA": "sport" },
+
+    "tag": { "name": "sport=pickleball", "isA": "sport" },
+
+    "tag": { "name": "sport=playground", "isA": "sport" },
+
+    "tag": { "name": "sport=polo", "isA": "sport" },
+
+    "tag": { "name": "sport=racquet", "isA": "sport" },
+    "tag": { "name": "sport=racquetball", "isA": "sport=racquet" },
+    "tag": { "name": "sport=squash", "isA": "sport",
+        "similarTo": { "name": "sport=racquetball", "weight": 0.7 } },
+    "tag": { "name": "sport=badminton", "isA": "sport",
+        "similarTo": { "name": "sport=racquet", "weight": 0.6 },
+        "similarTo": { "name": "sport=volleyball", "weight": 0.4 } },
+
+    "tag": { "name": "sport=rodeo", "isA": "sport" },
+
+    "tag": { "name": "sport=rowing", "isA": "sport" },
+
+    "tag": { "name": "sport=safety_training", "isA": "sport" },
+
+    "tag": { "name": "sport=sailing", "isA": "sport" },
+
+    "tag": { "name": "sport=scuba_diving", "isA": "sport" },
+
+    "tag": { "name": "sport=shooting", "isA": "sport" },
+    "tag": { "name": "sport=shooting_range", "isA": "sport=shooting" },
+
+    "tag": { "name": "sport=shuffleboard", "isA": "sport" },
+
+    "tag": { "name": "sport=skateboard", "isA": "sport" },
+
+    "tag": { "name": "sport=surfing", "isA": "sport" },
+    "tag": { "name": "sport=surf", "isA": "sport=surfing" },
+
+    "tag": { "name": "sport=swimming", "isA": "sport" },
+    "tag": { "name": "sport=swimming_pool", "isA": "sport=swimming" },
+    "tag": { "name": "sport=pool", "isA": "sport",
+        "similarTo": { "name": "sport=swimming", "weight": 0.6 },
+        "similarTo": { "name": "sport=billiards", "weight": 0.5 } },
+
+    "tag": { "name": "sport=table_soccer", "isA": "sport" },
+
+    "tag": { "name": "sport=table_tennis", "isA": "sport" },
+
+    "tag": { "name": "sport=tamburello", "isA": "sport=tambourin" },
+    "tag": { "name": "sport=tambourin", "isA": "sport" },
+
+    "tag": { "name": "sport=tennis", "isA": "sport" },
+    "tag": { "name": "sport=mini_tennis", "isA": "sport",
+        "similarTo": { "name": "sport=tennis", "weight": 0.8 } },
+    "tag": { "name": "sport=paddle_tennis", "isA": "sport",
+        "similarTo": { "name": "sport=tennis", "weight": 0.7 } },
+    "tag": { "name": "sport=paddle", "isA": "sport=paddle_tennis" },
+    "tag": { "name": "sport=paddle-tennis", "isA": "sport=paddle_tennis" },
+    "tag": { "name": "sport=padel", "isA": "sport=paddle_tennis" },
+    "tag": { "name": "sport=pádel", "isA": "sport=paddle_tennis" },
+
+
+    "tag": { "name": "sport=tetherball", "isA": "sport" },
+
+    "tag": { "name": "sport=trampoline", "isA": "sport",
+        "similarTo": { "name": "sport=gymnastics", "weight": 0.8 } },
+
+    "tag": { "name": "sport=volleyball", "isA": "sport" },
+    "tag": { "name": "sport=fistball", "isA": "sport",
+        "similarTo": { "name": "sport=volleyball", "weight": 0.8 } },
+
+    "tag": { "name": "sport=water_ski", "isA": "sport=water_sports" },
+
+    "tag": { "name": "sport=water_sports", "isA": "sport" },
+
+
+
+    "#" : "end"
+}

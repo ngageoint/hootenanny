@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
+  <create>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9025284025709652" lon="-77.0531686073267110"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9025283665126551" lon="-77.0531847423008429"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9025284756570855" lon="-77.0533059865429522"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9013479955254553" lon="-77.0533115242774471"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9015683595187980" lon="-77.0533105980894106"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9018138185822266" lon="-77.0533095667189230"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9023225500816139" lon="-77.0533076275108044"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9023955139525839" lon="-77.0533073491499749"/>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9027936215982635" lon="-77.0547506880453739"/>
+    <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9029999999999845" lon="-77.0547473311472118"/>
+    <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9010000000000034" lon="-77.0533134794384580"/>
+    <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9025277731387504" lon="-77.0529999999999831"/>
+    <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9025849999999807" lon="-77.0533059999999921"/>
+    <!-- within test query bounds -->
+    <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9025730000000038" lon="-77.0547419999999761"/>
+    <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9015689999999950" lon="-77.0533109999999652"/>
+    <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9017610000000005" lon="-77.0533099999999820"/>
+    <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9023229999999813" lon="-77.0533080000000012"/>
+    <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9024849999999915" lon="-77.0533059999999921"/>
+    <node visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9024839999999941" lon="-77.0547409999999928"/>
+    <!-- within test query bounds -->
+    <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9025319999999937" lon="-77.0547399999999669"/>
+    <!-- within test query bounds -->
+    <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9027940000000143" lon="-77.0547509999999818"/>
+    <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9014979999999966" lon="-77.0540369999999797"/>
+    <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9012689999999921" lon="-77.0540280000000024"/>
+    <node visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9015340000000052" lon="-77.0539349999999814"/>
+    <node visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9015676891464537" lon="-77.0529999999999831"/>
+    <node visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9024821014884878" lon="-77.0529999999999831"/>
+    <node visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9024821014884878" lon="-77.0529999999999831"/>
+    <node visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9025841913319113" lon="-77.0529999999999831"/>
+    <node visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9029999999999987" lon="-77.0547476118420747"/>
+    <node visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9009999999999962" lon="-77.0533133447801930"/>
+    <node visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9025841913319113" lon="-77.0529999999999831"/>
+    <!-- synthetically generated element; generates 1 element ID mapping; generates 1 review -->
+    <!-- within test query bounds -->
+    <node visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9025841913319113" lon="-77.0547476118420747">
+     <tag k="hoot:review:score" v="0.750459"/>
+     <tag k="hoot:review:uuid" v="{5c131c00-a30f-11e3-a5e2-0800200c9a66}"/>
+     <tag k="uuid" v="{25e1aa70-a30f-11e3-a5e2-0800200c9a66}"/>
+     <tag k="hoot:review:needs" v="yes"/>
+     <tag k="name" v="25th St NW"/>
+     <tag k="highway" v="unclassified"/>
+     <tag k="error:circular" v="10"/>
+    </node>
+    <!-- synthetically generated element; generates 1 element ID mapping; generates 0 reviews -->
+	  <node visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9025841913319113" lon="-77.0529999999999831">
+     <tag k="hoot:review:score" v="0.90"/>
+     <tag k="hoot:review:uuid" v="{25e1aa70-a30f-11e3-a5e2-0800200c9a66}"/>
+     <tag k="uuid" v="{5c131c00-a30f-11e3-a5e2-0800200c9a66}"/>
+     <tag k="hoot:review:needs" v="yes"/>
+     <tag k="name" v="25th St NW"/>
+     <tag k="highway" v="unclassified"/>
+     <tag k="error:circular" v="10"/>
+    </node>
+    <!-- item reviewed against itself; generates 1 element ID mapping; generates 1 review -->
+    <node visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9025841913319113" lon="-77.0529999999999831">
+     <tag k="hoot:review:score" v="0.750459"/>
+     <tag k="hoot:review:uuid" v="{de285618-a4df-4536-b218-5009c25f7107}"/>
+     <tag k="uuid" v="{de285618-a4df-4536-b218-5009c25f7107}"/>
+     <tag k="hoot:review:needs" v="yes"/>
+     <tag k="name" v="25th St NW"/>
+     <tag k="highway" v="unclassified"/>
+     <tag k="error:circular" v="10"/>
+    </node>
+    <!-- synthetically generated element; item with missing review score tag and a review against 
+    item; score is automatically set to 1.0; generates 1 element ID mapping; generates 1 review -->
+    <node visible="true" id="-71" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9025841913319113" lon="-77.0529999999999831">
+     <tag k="hoot:review:uuid" v="{25e1aa70-a30f-11e3-a5e2-0800200c9a66}"/>
+     <tag k="uuid" v="{99b917d0-8c23-4469-b028-b749a38a8841}"/>
+     <tag k="hoot:review:needs" v="yes"/>
+     <tag k="name" v="25th St NW"/>
+     <tag k="highway" v="unclassified"/>
+     <tag k="error:circular" v="10"/>
+    </node>
+    <!-- generates 1 element ID mapping; generates 2 reviews -->
+    <way visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" >
+      <nd ref="-33"/>
+      <nd ref="-34"/>
+      <nd ref="-35"/>
+      <nd ref="-36"/>
+      <tag k="hoot:review:score" v="0.750459"/>
+      <tag k="hoot:review:uuid" v="{f5639540-aaf4-47ac-8c5e-82ad05abc29f};{2258bbcc-b474-41fe-aa81-76ffc6e2be42}"/>
+      <tag k="uuid" v="{46d98769-dee2-489e-8fd6-ff265842ed55};{28fe6088-cb30-45a2-88dd-1146092dcd0e}"/>
+      <tag k="hoot:review:needs" v="yes"/>
+      <tag k="name" v="25th St NW"/>
+      <tag k="highway" v="unclassified"/>
+      <tag k="error:circular" v="10"/>
+    </way>
+    <!-- generates 1 element ID mapping; generates 2 reviews -->
+    <way visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" >
+      <nd ref="-61"/>
+      <nd ref="-33"/>
+      <tag k="hoot:review:score" v="0.800795"/>
+      <tag k="hoot:review:uuid" v="{f5639540-aaf4-47ac-8c5e-82ad05abc29f};{2258bbcc-b474-41fe-aa81-76ffc6e2be42}"/>
+      <tag k="uuid" v="{46d98769-dee2-489e-8fd6-ff265842ed55};{f917b7e1-412b-4294-acdc-37bd0fb13b4c}"/>
+      <tag k="hoot:review:needs" v="yes"/>
+      <tag k="name" v="25th St NW"/>
+      <tag k="highway" v="unclassified"/>
+      <tag k="error:circular" v="10"/>
+    </way>
+    <!-- generates 1 element ID mapping; generates 2 reviews -->
+    <way visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" >
+      <!-- within test query bounds -->
+      <nd ref="-32"/>
+      <nd ref="-45"/>
+      <nd ref="-60"/>
+      <tag k="hoot:review:score" v="0.832799"/>
+      <tag k="hoot:review:uuid" v="{f5639540-aaf4-47ac-8c5e-82ad05abc29f};{2258bbcc-b474-41fe-aa81-76ffc6e2be42}"/>
+      <tag k="uuid" v="{46d98769-dee2-489e-8fd6-ff265842ed55};{dfcd4a0e-04d5-46ee-b7a0-1a2c591ddf54}"/>
+      <tag k="hoot:review:needs" v="yes"/>
+      <tag k="name" v="26th St NW"/>
+      <tag k="highway" v="unclassified"/>
+      <tag k="error:circular" v="10"/>
+    </way>
+    <!-- generates 1 element ID mapping; generates 2 reviews -->
+    <way visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" >
+      <nd ref="-43"/>
+      <!-- within test query bounds -->
+      <nd ref="-44"/>
+      <!-- within test query bounds -->
+      <nd ref="-32"/>
+      <tag k="hoot:review:score" v="0.832799"/>
+		  <tag k="hoot:review:uuid" v="{f5639540-aaf4-47ac-8c5e-82ad05abc29f};{2258bbcc-b474-41fe-aa81-76ffc6e2be42}"/>
+      <tag k="uuid" v="{46d98769-dee2-489e-8fd6-ff265842ed55};{81d2aff0-88e5-480e-95cb-c502d120f51f}"/>
+      <tag k="hoot:review:needs" v="yes"/>
+      <tag k="name" v="26th St NW"/>
+      <tag k="highway" v="unclassified"/>
+      <tag k="error:circular" v="10"/>
+    </way>
+    <!-- generates 1 element ID mapping; generates 1 review -->
+    <way visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" >
+      <nd ref="-57"/>
+      <nd ref="-31"/>
+      <!-- no review score here; will automatically be set to 1.0 and reviewed against itself -->
+      <tag k="uuid" v="{81d2aff0-88e5-480e-95cb-c502d120f51f}"/>
+      <tag k="hoot:review:needs" v="yes"/>
+      <tag k="name" v="US Hwy 29"/>
+      <tag k="highway" v="secondary"/>
+      <tag k="error:circular" v="10"/>
+    </way>
+    <!-- generates 1 element ID mapping; generates 2 reviews -->
+    <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" >
+      <nd ref="-53"/>
+      <nd ref="-36"/>
+      <tag k="hoot:review:score" v="0.928129"/>
+      <tag k="hoot:review:uuid" v="{f5639540-aaf4-47ac-8c5e-82ad05abc29f};{2258bbcc-b474-41fe-aa81-76ffc6e2be42}"/>
+      <tag k="uuid" v="{46d98769-dee2-489e-8fd6-ff265842ed55};{f5639540-aaf4-47ac-8c5e-82ad05abc29f}"/>
+      <tag k="hoot:review:needs" v="yes"/>
+      <tag k="name" v="US Hwy 29"/>
+      <tag k="highway" v="secondary"/>
+      <tag k="error:circular" v="10"/>
+    </way>
+    <!-- synthetically generated element; generates 1 element ID mapping; generates 1 review -->
+    <way visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" >
+      <nd ref="-20"/>
+      <nd ref="-25"/>
+      <tag k="hoot:review:score" v="0.832799"/>
+      <tag k="hoot:review:uuid" v="{7ea9ac60-a310-11e3-a5e2-0800200c9a66}"/>
+      <tag k="uuid" v="{51cd8890-a312-11e3-a5e2-0800200c9a66}"/>
+      <tag k="hoot:review:needs" v="yes"/>
+      <tag k="name" v="26THST"/>
+      <tag k="highway" v="road"/>
+      <tag k="error:circular" v="15"/>
+    </way>
+    <!-- synthetically generated element; generates 0 element ID mappings; generates 0 reviews -->
+    <way visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" >
+      <nd ref="-33"/>
+      <nd ref="-49"/>
+      <nd ref="-46"/>
+      <!-- synthetic attribute -->
+      <tag k="hoot:review:needs" v="no"/>
+      <tag k="name" v="Queen Annes Ln NW"/>
+      <tag k="highway" v="unclassified"/>
+      <tag k="error:circular" v="10"/>
+    </way>
+    <!-- synthetically generated element; generates 0 element ID mappings; generates 0 reviews -->
+    <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" >
+      <nd ref="-52"/>
+      <nd ref="-33"/>
+      <tag k="name" v="Snows Ct NW"/>
+      <tag k="highway" v="unclassified"/>
+      <tag k="error:circular" v="10"/>
+      <!-- no review tags -->
+    </way>
+    <!-- synthetically generated element; generates 1 element ID mapping; generates 0 reviews -->
+    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" >
+      <member type="way" role="role1" ref="-16"/>
+      <member type="node" role="role2" ref="-64"/>
+      <tag k="hoot:review:score" v="0.939793"/>
+      <tag k="hoot:review:uuid" v="{51cd8890-a312-11e3-a5e2-0800200c9a66}"/>
+			<tag k="uuid" v="{7ea9ac60-a310-11e3-a5e2-0800200c9a66}"/>
+      <tag k="hoot:review:needs" v="yes"/>
+      <tag k="name" v="KST"/>
+      <tag k="highway" v="road"/>
+      <tag k="error:circular" v="15"/>
+    </relation>
+    <!-- synthetically generated element; generates 0 element ID mappings; generates 0 reviews -->
+    <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" >
+      <member type="node" role="role1" ref="-65"/>
+      <tag k="name" v="KST"/>
+      <tag k="highway" v="road"/>
+      <tag k="error:circular" v="15"/>
+      <!-- no review tags -->
+    </relation>
+    <!-- synthetically generated element; generates 1 element ID mapping; generates 1 review -->
+    <relation visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" >
+      <member type="way" role="role1" ref="-16"/>
+      <!-- within test query bounds -->
+      <member type="node" role="role2" ref="-64"/>
+      <tag k="hoot:review:score" v="0.939793"/>
+      <tag k="hoot:review:uuid" v="{de285618-a4df-4536-b218-5009c25f7107}"/>
+      <tag k="uuid" v="{0c9f69f0-dad5-11e3-9c1a-0800200c9a66}"/>
+      <tag k="hoot:review:needs" v="yes"/>
+      <tag k="name" v="KST"/>
+      <tag k="highway" v="road"/>
+      <tag k="error:circular" v="15"/>
+    </relation>
+    <!-- SYNTHETICALLY GENERATED ERROR CASES -->
+    <!-- In all cases, for now, the code should ignore these and log an error.  If errors should 
+    actually be thrown, then separate unit tests will have to  be added for each error case. - 
+    doing these with nodes only, for now -->
+    <!-- duplicate unique id's (this duplicates the uuid of an above item); 
+    generates 0 element ID mappings; generates 0 reviews -->
+    <node visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9025841913319113" lon="-77.0529999999999831">
+     <tag k="hoot:review:score" v="0.750459"/>
+     <tag k="hoot:review:uuid" v="{5c131c00-a30f-11e3-a5e2-0800200c9a66}"/>
+     <tag k="uuid" v="{25e1aa70-a30f-11e3-a5e2-0800200c9a66}"/>
+     <tag k="hoot:review:needs" v="yes"/>
+     <tag k="name" v="25th St NW"/>
+     <tag k="highway" v="unclassified"/>
+     <tag k="error:circular" v="10"/>
+    </node>
+    <!-- item missing unique id tag; generates 0 element ID mappings; generates 0 reviews -->
+    <node visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9025841913319113" lon="-77.0529999999999831">
+     <tag k="hoot:review:score" v="0.750459"/>
+     <tag k="hoot:review:uuid" v="{25e1aa70-a30f-11e3-a5e2-0800200c9a66}"/>
+     <tag k="hoot:review:needs" v="yes"/>
+     <tag k="name" v="25th St NW"/>
+     <tag k="highway" v="unclassified"/>
+     <tag k="error:circular" v="10"/>
+    </node>
+    <!-- item with empty unique id tag value; generates 0 element ID mappings; generates 0 reviews -->
+    <node visible="true" id="-69" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9025841913319113" lon="-77.0529999999999831">
+     <tag k="hoot:review:score" v="0.750459"/>
+     <tag k="hoot:review:uuid" v="{25e1aa70-a30f-11e3-a5e2-0800200c9a66}"/>
+     <tag k="uuid" v=""/>
+     <tag k="hoot:review:needs" v="yes"/>
+     <tag k="name" v="25th St NW"/>
+     <tag k="highway" v="unclassified"/>
+     <tag k="error:circular" v="10"/>
+    </node>
+    <!-- item with empty review score tag value and a review against item; generates 0 element ID 
+    mappings; generates 0 reviews -->
+    <node visible="true" id="-72" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9025841913319113" lon="-77.0529999999999831">
+     <tag k="hoot:review:score" v=""/>
+     <tag k="hoot:review:uuid" v="{25e1aa70-a30f-11e3-a5e2-0800200c9a66}"/>
+     <tag k="uuid" v="{b423e612-3d14-4605-8ea1-894968230074}"/>
+     <tag k="hoot:review:needs" v="yes"/>
+     <tag k="name" v="25th St NW"/>
+     <tag k="highway" v="unclassified"/>
+     <tag k="error:circular" v="10"/>
+    </node>
+    <!-- item with invalid review score tag value and a review against item; generates 0 element 
+    ID mappings; generates 0 reviews -->
+    <node visible="true" id="-73" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9025841913319113" lon="-77.0529999999999831">
+     <tag k="hoot:review:score" v="blah"/>
+     <tag k="hoot:review:uuid" v="{25e1aa70-a30f-11e3-a5e2-0800200c9a66}"/>
+     <tag k="uuid" v="{c8770d73-5677-4992-bd84-ce35760032be}"/>
+     <tag k="hoot:review:needs" v="yes"/>
+     <tag k="name" v="25th St NW"/>
+     <tag k="highway" v="unclassified"/>
+     <tag k="error:circular" v="10"/>
+    </node>
+    <!-- generates 1 element ID mapping; generates 0 reviews due to invalid review uuid -->
+    <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" >
+      <nd ref="-63"/>
+      <nd ref="-31"/>
+      <tag k="hoot:review:score" v="0.025"/>
+      <tag k="hoot:review:uuid" v="{46d98769-dee2-489e-8fd6-ff265842ed55}"/>
+      <tag k="uuid" v="{f5639540-aaf4-47ac-8c5e-82ad05abc29f}"/>
+      <tag k="name" v="K St NW"/>
+      <tag k="highway" v="secondary"/>
+      <tag k="error:circular" v="10"/>
+    </way>
+    <!-- generates 1 element ID mapping; generates 0 reviews due to invalid review uuid -->
+    <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" >
+      <nd ref="-55"/>
+      <nd ref="-36"/>
+      <tag k="hoot:review:score" v="0.885851"/>
+      <tag k="hoot:review:uuid" v="{46d98769-dee2-489e-8fd6-ff265842ed55}"/>
+      <tag k="uuid" v="{2258bbcc-b474-41fe-aa81-76ffc6e2be42}"/>
+      <tag k="hoot:review:needs" v="yes"/>
+      <tag k="name" v="K St NW"/>
+      <tag k="highway" v="secondary"/>
+      <tag k="error:circular" v="10"/>
+    </way>
+  </create>
+</osmChange>

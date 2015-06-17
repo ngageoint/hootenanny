@@ -1,0 +1,49 @@
+{
+    "tag": {
+        "name": "poi",
+        "influence": 1.0,
+        "type": "enumeration",
+        "geometries": ["node","area"],
+        "categories": ["poi"]
+    },
+
+    "#" : "For water POI's, see WaterwaySchema.json.",
+
+    "#" : "Generic POI made up to handle poor data.",
+    "tag": { "name": "poi=yes", "isA": "poi" },
+    "tag": { "name": "aeroway=*", "isA": "poi" },
+    "tag": { "name": "historic=*", "isA": "poi" },
+    "tag": { 
+        "name": "historic=memorial",
+        "isA": "historic=*",
+        "similarTo": { "name": "historic=monument", "weight": 0.8 }
+    },
+    "tag": { "name": "historic=monument", "isA": "historic=*" },
+
+    "tag": { "name": "highway=rest_area", "isA": "poi" },
+    "tag": { "name": "highway=services", "isA": "poi" },
+    "tag": { "name": "industrial=*", "isA": "poi" },
+    "tag": { "name": "mountain_pass=*", "isA": "poi" },
+    "tag": { "name": "office=*", "isA": "poi" },
+    "tag": { "name": "slope=yes", "isA": "poi" },
+    "tag": { "name": "tourism=*", "isA": "poi" },
+    "tag": { "name": "station", "isA": "poi" },
+    "tag": { "name": "station=*", "isA": "station" },
+    "tag": { "name": "station=subway_entrance", "isA": "station" },
+    "tag": { "name": "station=light_rail", "isA": "station" },
+
+    "tag": {
+        "name": "use",
+        "influence": 1.0,
+        "type": "enumeration",
+        "geometries": ["node","area"],
+        "categories": ["use"]
+    },
+    "tag": { "name": "use=*", "isA": "use", "categories": ["use"] },
+
+
+    "#" : "end"
+}
+
+
+

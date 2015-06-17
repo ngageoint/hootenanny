@@ -1,0 +1,21 @@
+{
+    "tag": {
+        "name": "artwork_type",
+        "influence": 1.0,
+        "type": "enumeration"
+    },
+
+    "#" : " The catch all",
+    "tag": { "name": "artwork_type=*", "isA": "artwork_type" },
+
+    "tag": { "name": "artwork_type=statue", "isA": "artwork_type",
+        "similarTo": { "name": "artwork_type=sculpture", "weight": 0.8 },
+        "similarTo": { "name": "historic=monument", "weight": 0.8 } },
+    "tag": { "name": "artwork=statue", "isA": "artwork_type=statue" },
+
+    "tag": { "name": "artwork_type=sculpture", "isA": "artwork_type",
+        "similarTo": { "name": "historic=monument", "weight": 0.8 } },
+    "tag": { "name": "artwork=sculpture", "isA": "artwork_type=sculpture" },
+
+    "#" : "end"
+}

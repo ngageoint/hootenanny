@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-208782' action='modify' visible='true' lat='48.17659' lon='11.52793'>
+    <tag k='REF2' v='0045a8;01163b' />
+    <tag k='access' v='yes' />
+    <tag k='addr:language' v='GER' />
+    <tag k='addr:street' v='GEORG-BRAUCHLE-RING' />
+    <tag k='error:circular' v='15' />
+    <tag k='language' v='GER' />
+    <tag k='name' v='U-BAHN-GEORG-BRAUCHLE-RING' />
+    <tag k='source' v='navteq' />
+    <tag k='station' v='light_rail' />
+    <tag k='uuid' v='{5c7b69a5-dc0f-5bc2-80fb-c2503e83d9b7}' />
+  </node>
+</osm>

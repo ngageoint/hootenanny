@@ -1,0 +1,110 @@
+
+== Scope
+
+=== Identification 
+
+This document describes the web service structure and architecture for Hootenanny.  
+
+=== System Overview
+
+Hootenanny is a suite of emerging non-proprietary tools to support fully-automated and semi-automated conflation of vector roads, buildings, and points of interest (POI) across multiple geographical scales. The Hootenanny platform includes a simple and intuitive web-based client and associated services designed to invoke core routines and algorithms that automate traditional manual conflation workflows in a highly efficient and optimized manner. The overarching goal is to deliver an enhanced thin-client interface that exposes Hootenanny’s scalable conflation processes and conforms to data steward workflows.
+
+Key Hootenanny features:
+
+* Feature matching and merging logic for both geometry and attribute information. 
+* Conflate large scale data sets (10s of GB in size).
+* Flexible key value schema based on OpenStreetMap.
+* Service oriented architecture (SOA) that leverages OGC services (WFS, WPS).
+* Integrated with the MapBox iD Web-based editor 
+* Support various import/export formats (OpenStreetMap, Shapefiles, or ESRI FGDB). 
+* Government Open Source Software (GOSS) and available for download at https://software.forge.mil/sf/projects/hootenanny
+
+[[n-tier-webarch]]
+.Hootenanny N-Tier Architecture
+image::developer/images/n-tier-arch.png[]
+
+<<n-tier-webarch>> describes the N-Tier Architecture that supports the web enabled environment for Hootenanny Conflation. The web client is a customized version of the MapBox iD Editor  that has been extended to handle conflation routines using REST service end points specifically tailored to meet the NSG user requirements. It is the only UI that can currently interact with the Hootenanny Web Services and core components. Conflation input data (FGDB, Shapefile, .osm) can be loaded into the system using the Hootenanny ETL and Translation services accessed via the Hootenanny iD Editor web client. Conflated data can be exported in the same file formats from either Hootenanny command line or the web client in addition to streaming as a WFS service to compliant applications. The Hootenanny web services have WPS/XML end points as well but do not require them when communicating with Hoot Core libraries and the RDBMS. The Hoot Core represents the algorithms and routines that handle the bulk of conflation operations. Both the Web Services and Hoot core interact with the PostgreSQL RDBMS for invoking SQL queries and updating conflated data. Apache Hadoop/MapReduce distributed processing has been implemented within Hootenanny Core for handling larger, country level data sets (POI and Road primarily). 
+
+=== Document Overview
+
+The purpose of this document is twofold:
+
+* Provide a high level diagram and overview of all software components included in the Hootenanny web enabled-environment including iD, Hootenanny Services, the Postgres DB and Hootenanny Core.
+* Describe and document publicly exposed REST, XML, WPS and WFS endpoints implemented with Hootenanny.
+
+== Hootenanny Component Overview
+
+===  Web Enabled Architecture 
+
+[[HootWebEnabledArchOverview]]
+.Hootenanny Web-enabled Architecture
+image::developer/images/web-enabled-arch.png[]
+
+<<HootWebEnabledArchOverview>> provides a more detailed overview of the Hootenanny web-enabled architecture. A list of all of the associated web services is provided under each of the two available service types: Hootenanny Conflation Services and OSM Services. A description of each of these services, parameters, and sample request templates are provided in section 3.1.3 and Appendix A. 
+
+==== Hootenanny Core
+
+Hootenanny is a software platform designed for expert users to perform fully automated and semi-automated conflation of two disparate data sets to create a single conflated output file. To achieve this successfully for a range of source input data types, Hootenanny relies on a core set of algorithms and functions that can be invoked using command line and web service end points. 
+
+In terms of data management and performance, Hootenanny has many built-in mechanisms for dealing with a wide range of data types and complexities. Although system performance is generally bound to the host environment, intelligent tuning/scaling web services can be invoked to evaluate conflation tasks in terms of source data complexity and processing requirements. Regional and local scale datasets containing POIs, roads, and buildings are conflated using local server CPU processing resources while larger jobs operating against country-level data (POIs and roads) can be redirected to pre-configured Hadoop clusters, which are better suited for distributed processing across a large array of CPU nodes. 
+
+==== PostgreSQL Database
+
+Hootenanny leverages a PostgreSQL RDBMS architecture for storing, retrieving, and writing data related to any core conflation routine invoked by a given web service. The database schema used by Hootenanny is modeled on the OSM database schema v0.6 for storing nodes, ways, relations, and tag attribution with added modifications that enable it to be better performant in data rich environments. Data stored in ESRI file geodatabases, shapefiles, or osm format are loaded into Postgres using ETL processes. Hootenanny web services can read/write directly to/from Postgres and are invoked through Hootenanny web services made by the iD Editor. 
+
+[[HootenannyDatabaseSchema]]
+.Hootenanny Database Schema
+image::developer/images/hootdbschema.png[]
+
+NOTE: The hoot database schema diagram needs to be updated.
+
+=== Hootenanny Web Service
+
+Hootenanny core functions and capabilities can be invoked using two general types of web service implementations. The first type consists of Hootenanny Core Conflation Services and can be invoked using either Jersey non-OGC REST/XML service requests or an equivalent OGC WPS v 1.0.0 service end point. The second category of web services implemented are the Hootenanny OSM Services, which consist of a subset of modified OSM API v0.6 services implemented via Jersey REST/XML service end points. Each web service and their associated sub-routines are depicted in <<HootWebEnabledArchOverview>>. 
+
+All service calls made from the Hootenanny iD editor to the each of the web services are made using the non-OGC interfaces to mimic the public OSM API. Additional web service clients can be developed using either the OGC or non-OGC service API but the current implementation of iD does not utilize any WPS service endpoint. <<HootWebServiceChain>> provides a high level diagram of the data flow, iD Editor interface and Hootenanny web services for a typical conflation scenario. A description of each service component is provided in the <<WebServiceAppendix,appendix>>.  Hootenanny web services have been organized for convenience purposes into five groups based on their core functionality; _Ingest, Job, OGR, OSM,_ and _Info_.[[hootservicestructure]]
+
+[[HootWebServiceChain]]
+.Hootenanny Web Service Chain
+image::developer/images/hoot-srv-chain.png[]
+
+==== Hootenanny WFS Services
+
+Hootenanny provides the ability to view conflated outputs as a Web Feature Service (WFS) post with read-only capabilities. It is implemented using deegree’s Java SDK and provides a read-only data output. The following core WFS capabilities are supported within Hootenanny.
+
+* WFS version 2.0.0 and earlier
+* Serving from PostgreSQL (8.3, 8.4, 9.0, 9.1, 9.2) with PostGIS extension (1.4, 1.5, 2.0)
+* Connections to remote OGC web services
+* KVP, XML and SOAP requests
+* GML 2/3.0/3.1/3.2 output/input (WFS)
+* GetGmlObject requests and XLinks
+* On-the-fly coordinate transformation
+* ISO 19107-compliant geometry model: Complex geometries (e.g. non-linear curves)
+* Advanced filter expression support based on XPath 1.0
+
+=== iD Editor
+
+Hootenanny deploys with an interactive web-based UI called iD Editor , which is a modified version of the MapBox iD Editor developed for the OpenStreetMap communities’ collaborative OSM data mapping effort . Its primary purpose here is to provide visualization and editing of source data leveraged in the conflation process and for visualization of the final conflated data outputs. It should be noted that the Hootenanny iD Editor represents merely a customized version of the MapBox iD that has been modified to execute conflation operations and request map data via the web services described in this document. The Hootenanny UI is tightly coupled to the iD Editor and is required for the application to function properly. 
+
+====  Hootenanny iD Editor Architecture and Core Data Model
+
+The Hootenanny iD editor is deployed inside the Apache Tomcat servlet engine as a web application archive or .war file. Tomcat communicates with Hootenanny core conflation routines via Conflation and OSM web services described in sections 3.1.3.1 and 3.1.3.2. It is primarily designed to interact with the OpenStreetMap core data model, which includes three basic data types: nodes, ways, and relations. Hootenanny implements a slightly modified OSM data schema that has been optimized for increased performance against large feature rich datasets and has been extended to support export to FGDB format based on TDS version 4.0.
+
+The iD editor is developed in JavaScript and can be easily customized for various open source applications like Hootenanny that leverage OSM data formats and architecture. The Hootenanny project maintains its own custom version of iD source code that has been modified to work with Hootenanny data and web services. The web interface supports the integration of a base map using Tile Map Service (TMS) protocols like OGC’s Web Map Tile Service (WMTS) or other OpenLayers TileCache implementations.  A complete step by step instruction guide of the user interface can be found in the Hootenanny User Interface Guide, which can be downloaded by clicking on the _Hootenanny_ version link in the top left corner of the web application.
+
+[[HootUIGuidedownload]]
+.Accessing the Hootenanny User Interface Guide
+image::developer/images/hootiD-UI_download.png[]
+
+[[WebServiceAppendix]]
+== Appendix
+
+The following section provides service descriptions, input parameters, URL request structure and example input/outputs grouped using the functionality classes described <<hootservicestructure,here>>.  Both the REST and WPS service end points are provided where relevant noting that not all services maintain an equivalent WPS service. 
+
+
+
+
+
+
+
+

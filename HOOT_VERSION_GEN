@@ -1,0 +1,64 @@
+#!/bin/sh
+
+set -e
+
+HVF=HOOT_VERSION_FILE
+DEF_VER=UNKNOWN-VERSION
+
+LF='
+'
+
+# Is this a git repo? Do we have git?
+if test -d .git -o -f .git && command -v git >/dev/null 2>/dev/null; then
+    HAS_GIT=true
+fi
+
+# First see if there is a version file (included in release tarballs),
+# then try git-describe, then default.
+if test -f version
+then
+        VN=$(cat version) || VN="$DEF_VER"
+elif test "$HAS_GIT" = "true" &&
+        VN=$(git describe --match "v[0-9]*" --abbrev=7 --tags HEAD 2>/dev/null) &&
+        case "$VN" in
+        *$LF*) (exit 1) ;;
+        v[0-9]*)
+                git update-index -q --refresh
+                test -z "$(git diff-index --name-only HEAD --)" ||
+                VN="$VN-dirty" ;;
+        esac
+then
+        #VN=$(echo "$VN" | sed -e 's/-/./g');
+        PASS=1
+else
+        VN="$DEF_VER"
+fi
+
+# VN is the full version number. E.g. 0.1.0 if it is a tag. 0.1.0-2-deadbeef 
+# if it is not a tagged version
+VN=$(expr "$VN" : v*'\(.*\)')
+
+# Parse out the old hoot version as "VC"
+if test -r $HVF
+then
+        VC=$(sed -e 's/^HOOT_VERSION = //' <$HVF)
+else
+        VC=unset
+fi
+
+# If this is a git checkout then get the revision number
+if test "$HAS_GIT" = "true"; then
+    HOOT_REVISION=$(git rev-parse --short HEAD)
+fi
+
+# If the version has changed, then rewrite the version header file.
+test "$VN" = "$VC" || {
+    echo "HOOT_VERSION = $VN" >$HVF
+
+    cat hoot-core/src/main/cpp/hoot/core/VersionDefines.h.in |  \
+    sed -e "s/@HOOT_VERSION@/$VN/g" |  \
+    sed -e "s/@HOOT_REVISION@/$HOOT_REVISION/g" |  \
+    sed -e "s/@HOOT_BUILT_BY@/$(whoami)/g" > \
+    hoot-core/src/main/cpp/hoot/core/VersionDefines.h
+}
+

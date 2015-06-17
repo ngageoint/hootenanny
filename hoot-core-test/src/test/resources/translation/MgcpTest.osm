@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-76238' action='modify' visible='true' lat='0.5080809079231722' lon='0.5008496700894106' />
+  <node id='-76236' action='modify' visible='true' lat='0.5075676844973989' lon='0.4987087111351208' />
+  <node id='-76235' action='modify' visible='true' lat='0.5073917221706136' lon='0.4973449496094431' />
+  <node id='-76228' action='modify' visible='true' lat='0.5065265739943411' lon='0.500175121377785' />
+  <node id='-76226' action='modify' visible='true' lat='0.5065412375237152' lon='0.4982834521647482' />
+  <node id='-76225' action='modify' visible='true' lat='0.5057640704211912' lon='0.49672905730752404' />
+  <way id='-76237' action='modify' visible='true'>
+    <nd ref='-76235' />
+    <nd ref='-76236' />
+    <nd ref='-76238' />
+    <tag k='HCT' v='1' />
+    <tag k='LTN' v='1' />
+    <tag k='WTC' v='2' />
+    <tag k='UID' v='4fb4200b-c94d-4916-a4ed-144658b22ae3' />
+  </way>
+  <way id='-76227' action='modify' visible='true'>
+    <nd ref='-76225' />
+    <nd ref='-76226' />
+    <nd ref='-76228' />
+    <tag k='HCT' v='2' />
+    <tag k='LTN' v='asdf' />
+    <tag k='WTC' v='1' />
+    <tag k='UID' v='9640f2cf-19f0-47b0-b081-5478bb03eb3c' />
+  </way>
+</osm>

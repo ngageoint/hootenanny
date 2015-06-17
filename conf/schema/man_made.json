@@ -1,0 +1,21 @@
+{
+    "tag": {
+        "name": "man_made",
+        "isA": "poi",
+        "influence": 1.0,
+        "type": "enumeration",
+        "geometries": ["node", "area"]
+    },
+
+    "#" : " The catch all",
+    "tag": { "name": "man_made=*", "isA": "man_made" },
+    "tag": { "name": "man_made=tower",
+        "isA": "man_made",
+        "similarTo": { "name": "man_made=gantry", "weight": 0.8 }
+    },
+    "tag": { "name": "man_made=gantry", "isA": "man_made" },
+    "tag": { "name": "man_made=storage_tank", "isA": "man_made", "categories": ["poi", "building"] },
+    "tag": { "name": "man_made=pipeline", "isA": "man_made", "categories": [], "geometries": ["linestring"]},
+
+    "#" : "end"
+}

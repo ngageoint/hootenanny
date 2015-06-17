@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-2231902' visible='true' lat='30.16352458824' lon='31.4665112'>
+    <tag k='REF1' v='001285' />
+    <tag k='barrier' v='toll_booth' />
+    <tag k='error:circular' v='15' />
+  </node>
+</osm>
