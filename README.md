@@ -29,8 +29,6 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 Imagery provided by permission from DigitalGlobe. Users are responsible for complying with terms of use for data and imagery they use in conjunction with Hootenanny. Specifically, the must properly protect and comply with all legal, copyright, and licensing terms.
 
-This document contains domestic imagery, which has been included consistent with applicable laws, directives and policies. Handle in accordance with recipients intelligence oversight and or information handling procedures.
-
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 
 # Developers
