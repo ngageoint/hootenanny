@@ -23,8 +23,12 @@ Vagrant.configure(2) do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
+  # tomcat service
   config.vm.network "forwarded_port", guest: 8080, host: 8888
+  # translation nodejs service
   config.vm.network "forwarded_port", guest: 8094, host: 8094
+  # merge nodejs service
+  config.vm.network "forwarded_port", guest: 8096, host: 8096
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -39,7 +43,7 @@ Vagrant.configure(2) do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  config.vm.synced_folder ".", "/home/vagrant/hoot"#, group: "tomcat6"
+  config.vm.synced_folder ".", "/home/vagrant/hoot", group: "tomcat6"
   # UNCOMMENT group after initial provisioning, then run vagrant reload
 
   # Provider-specific configuration so you can fine-tune various
