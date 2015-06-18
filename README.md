@@ -36,6 +36,7 @@ This program is free software; you can redistribute it and/or modify it under th
 In alphabetical order:
 
 * Jong Choi (Jong.Choi@digitalglobe.com)
+* Jason Goffeney (jason.goffeney@digitalglobe.com)
 * Brian Hatchl (Brian.Hatchl@digitalglobe.com)
 * Matt Jackson (Matthew.Jackson@digitalglobe.com)
 * Terry Ott (Terry.Ott@digitalglobe.com)
@@ -43,38 +44,4 @@ In alphabetical order:
 * Josh Sisskind (Josh.Sisskind@digitalglobe.com)
 * Greg Schmidt (Greg.Schmidt@digitalglobe.com)
 * Brandon Witham (Brandon.Witham@digitalglobe.com)
-
-# Contributors
-
-In alphabetical order:
-
-* Drew Bower (drew.bower@digitalglobe.com)
-* Leroy C. Bryant (Lbryant77@gmail.com)
-* Nathan Campbell (nathan.campbell@digitalglobe.com)
-* Roberto Canavosio-Zuzelski (Roberto.P.Canavosiozuzelski.ctr@nga.mil)
-* Jong Choi (jong.choi@digitalglobe.com)
-* Stephanie Cox (Stephanie.L.Cox@nga.mil)
-* Ryan Davies (Ryan.Davies@digitalglobe.com)
-* Pete Doucette (pdoucette@integrity-apps.com)
-* John (Will) Frey (jfrey89@gmail.com)
-* Jason Goffeney (jason.goffeney@digitalglobe.com)
-* Joseph Governski (Joe.Governski@digitalglobe.com)
-* Brian Hatchl (Brian.Hatchl@digitalglobe.com)
-* Tom Hersey (toherse@nsa.gov)
-* Ashley C. Holt (Ashley.C.Holt@nga.mil)
-* Matthew (Matt) Jackson (matthew.jackson@digitalglobe.com)
-* Mike Jeffe (Mike.Jeffe@digitalglobe.com)
-* Andrew Jenkins (andrew.jenkins@digitalglobe.com)
-* Kyle Kalwarski (kyle.kalwarski@digitalglobe.com)
-* Terry Ott (Terry.Ott@digitalglobe.com)
-* Timothy O’Leary (timothy.oleary@digitalglobe.com)
-* Dennis (Denny) Motsko (Dennis.J.Motsko@nga.mil)
-* Gregory (Tex) Peterson (Gregory.S.Peterson.ctr@nga.mil)
-* Josh Sisskind (Josh.Sisskind@digitalglobe.com)
-* Chad Shuey (chad.shuey@digitalglobe.com)
-* Ryan Smith (ryan.smith@digitalglobe.com)
-* Matthew (Matt) Sorenson (Matthew.L.Sorenson.ctr@nga.mil)
-* Jason R. Surratt (jason.surratt@digitalglobe.com)
-* Jason Valore (jason.valore@gmail.com)
-* Brandon Witham (brandon.witham@digitalglobe.com)
 
