@@ -253,7 +253,7 @@ utp = {
         // Gardens
         if (tags['garden:type']) tags.leisure = 'garden';
 
-      // Should be disabled until polygons are fixed....
+        // Should be disabled until polygons are fixed....
         translate.fixConstruction(tags, 'highway');
         translate.fixConstruction(tags, 'railway');
 
@@ -282,6 +282,8 @@ utp = {
 
         // Default values for common features
         if (attrs.F_CODE == 'AL015' && !(tags.building))  tags.building = 'yes';
+        if (attrs.F_CODE == 'AN050' && !(tags.railway))  tags.railway = 'rail';
+        if (attrs.F_CODE == 'AN060' && !(tags.railway))  tags.railway = 'rail';
         if (attrs.F_CODE == 'AP020' && !(tags.junction)) tags.junction = 'yes';
         if (attrs.F_CODE == 'AQ040' && !(tags.bridge)) tags.bridge = 'yes';
         if (attrs.F_CODE == 'AT050' && !(tags.building))  tags.building = 'yes';
@@ -300,14 +302,22 @@ utp = {
         // Debug:
         if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
 
+        // Set up the fcode translation rules
+        if (utp.fcodeLookup == undefined)
+        {
+            fcodeCommon.one2one.push.apply(fcodeCommon.one2one,utp.rules.fcodeOne2oneIn);
+
+            utp.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
+
+            // Debug:
+            // translate.dumpOne2OneLookup(utp.fcodeLookup);
+        }
+
+
         if (utp.lookup == undefined)
         {
             // Setup lookup tables to make translation easier. I'm assuming that since this is not set, the
             // other tables are not set either.
-
-            // Add the FCODE rules to the one2one rules.
-            utp.rules.one2one.push.apply(utp.rules.one2one,fcodeCommon.one2one);
-            utp.rules.one2one.push.apply(utp.rules.one2one,utp.rules.fcodeOne2oneIn);
 
             utp.lookup = translate.createLookup(utp.rules.one2one);
 
@@ -316,10 +326,27 @@ utp = {
 
             // Add features to ignore
             utp.biasedList.F_CODE = '';
+            utp.biasedList.SHAPE_AREA = '';
+            utp.biasedList.SHAPE_LENG = '';
+            utp.biasedList.SUBFIELD = '';
+            utp.biasedList.SUMMARY = '';
+            utp.biasedList.DESCRIPT = '';
+            utp.biasedList.FEATURE = '';
+            utp.biasedList.DESCRIPT = '';
+            utp.biasedList.MGRS = '';
         }
 
         // pre processing
         utp.applyToOsmPreProcessing(attrs, layerName);
+
+        // Use the FCODE to add some tags.
+        if (attrs.F_CODE)
+        {
+            var ftag = utp.fcodeLookup['F_CODE'][attrs.F_CODE];
+            tags[ftag[0]] = ftag[1];
+            // Debug: Dump out the tags from the FCODE
+            // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+        }
 
         // one 2 one
         translate.applyOne2One(attrs, tags, utp.lookup, {'k':'v'}, utp.biasedList);
