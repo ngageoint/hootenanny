@@ -127,13 +127,12 @@ fi
 # Restart PostgreSQL
 sudo service postgresql restart
 
-## Configure and Build
+# Configure and Build
 cd /home/vagrant/hoot
 cp ./conf/DatabaseConfig.sh.orig ./conf/DatabaseConfig.sh
 source ./SetupEnv.sh
 
 echo "Configuring Hoot"
-##scripts/ezBuildAll.sh
 aclocal && autoconf && autoheader && automake && ./configure -q --with-rnd --with-services
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri'
@@ -141,7 +140,7 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'QMAKE_CXX=ccache g++' >> LocalConfig.pri
 fi
 echo "Building Hoot"
-make clean && make -sj4
+make clean && make -sj4 && make docs
 
 # Tweak dev environment to make tests run faster
 echo 'testJobStatusPollerTimeout=250' > $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
@@ -168,6 +167,15 @@ PATH=$HOOT_HOME/bin:$PATH
 EOT
 fi
 
+# Change Tomcat umask to group write
+if ! grep -i --quiet 'umask 002' /etc/default/tomcat6; then
+echo "Changing Tomcat umask to group write"
+sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
+# Set tomcat6 umask to group write because all files in shared folder are owned by vagrant
+umask 002
+EOT
+fi
+
 # Deploy to Tomcat
 echo "Stopping Tomcat"
 sudo service tomcat6 stop
@@ -182,4 +190,3 @@ if [ ! -d /usr/share/tomcat6/.deegree ]; then
     sudo mkdir /usr/share/tomcat6/.deegree
     sudo chown tomcat6:tomcat6 /usr/share/tomcat6/.deegree
 fi
-
