@@ -34,16 +34,20 @@
 */
 
 hgis20 = {
-    // getDbSchema - Load the standard schema or modify it into the TDS structure.
+    // getDbSchema - Load the standard schema.
     getDbSchema: function() {
 
         // Warning: This is <GLOBAL> so we can get access to it from other functions
         rawSchema = hgis20.schema.getDbSchema();
 
-        // Debug:
-        // translate.dumpSchema(newSchema);
+        // Now add an o2s[A,L,P] feature to the rawSchema
+        // We can drop features but this is a nice way to see what we would drop
+        rawSchema = translate.addEmptyFeature(rawSchema);
 
-        return newSchema;
+        // Debug:
+        // translate.dumpSchema(rawSchema);
+
+        return rawSchema;
 
     }, // End getDbSchema
 
@@ -51,6 +55,8 @@ hgis20 = {
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName) 
     {
+        if (hgis20.osmPostRules == undefined)
+
         // This is a handy loop. We use it to:
         // 1) Remove all of the "No Information" and -999999 fields
         // 2) Convert all of the Attrs to uppercase - if needed
@@ -81,137 +87,31 @@ hgis20 = {
 
         } // End in attrs loop
 
-        // TODO: Bend this to use the layer names
-        // Now find an F_CODE
-        if (attrs.F_CODE)
+        //Sort out TYPE, TYPE1 & TYPE2.
+        if (hgis20.rules.layerNames[layerName] !== undefined)
         {
-            // Nothing to do :-)
-        }
-        else if (attrs.FCODE)
-        {
-            attrs.F_CODE = attrs.FCODE;
-            delete attrs.FCODE;
-        }
-        else
-        {
-            // Time to find an FCODE based on the filename
-            var fCodeMap = [
-                ['AF010', ['af010','smokestack_p']], // Smokestack
-                ['AH025', ['ah025','engineered_earthwork_s','engineered_earthwork_p']], // Engineered Earthwork
-                ['AH060', ['ah060','underground_bunker_s','underground_bunker_p']], // Underground Bunker
-                ['AL010', ['al010','facility_s','facility_p']], // Facility
-                ['AL013', ['al013','building_s','building_p']], // Building
-                ['AL018', ['al018','building_superstructure_s','building_superstructure_c','building_superstructure_p']], // Building Superstructure
-                ['AL020', ['al020','built-up_area_s','built-up_area_p']], // Built up area
-                ['AL030', ['al030','cemetery_s','cemetery_p']], // Cemetary
-                ['AL070', ['al070','fence_c']], // Fence
-                ['AL099', ['al099','hut_p']], // Hut
-                ['AL105', ['al105','settlement_s','settlement_p']], // Settlement
-                ['AL130', ['al130','memorial_monument_s','memorial_monument_p']], // Memorial Monument
-                ['AL200', ['al200','ruins_s','ruins_p']], // Ruins
-                ['AL208', ['al208','shanty_town_s','shanty_town_p']], // Shanty Town
-                ['AL241', ['al241','tower_s','tower_p']], // Tower
-                ['AL260', ['al260','wall_c']], // Wall
-                ['AM080', ['am080','water_tower_p','water_tower_s']], // Water Tower
-                ['AN010', ['an010','railway_c']], // Railway
-                ['AN050', ['an050','railway_sidetrack_c']], // Railway Sidetrack
-                ['AN060', ['an060','railway_yard_s']], // Railway Yard
-                ['AN075', ['an075','railway_turntable_p','railway_turntable_p']], // Railway Yard
-                ['AN076', ['an076','roundhouse_s','roundhouse_p']], // Roundhouse
-                ['AP010', ['ap010','cart_track_c']], // Cart Track
-                ['AP020', ['ap020','road_interchange_p']], // Interchange
-                ['AP030', ['ap030','road_c']], // Road
-                ['AP040', ['ap040','gate_c','gate_p']], // Gate
-                ['AP041', ['ap041','vehicle_barrier_c','vehicle_barrier_p']], // Vehicle Barrier
-                ['AP050', ['ap050','trail_c']], // Trail
-                ['AQ040', ['aq040','bridge_c','bridge_p']], // Bridge 
-                ['AQ045', ['aq045','bridge_span_c','bridge_span_p']], // Bridge Span
-                ['AQ065', ['aq065','culvert_c','culvert_p']], // Culvert
-                ['AQ070', ['aq070','ferry_crossing_c']], // Ferry Crossing
-                ['AQ095', ['aq095','tunnel_mouth_p']], // Tunnel Mouth
-                ['AQ113', ['aq113','pipeline_c']], // Pipeline
-                ['AQ125', ['aq125','transportation_station_s','transportation_station_p']], // Transportation Station
-                ['AQ130', ['aq130','tunnel_c']], // Tunnel
-                ['AQ140', ['aq140','vehicle_lot_s']], // Vehicle Lot
-                ['AQ141', ['aq141','parking_garage_s','parking_garage_p']], // Parking Garage
-                ['AQ170', ['aq170','motor_vehicle_station_s','motor_vehicle_station_p']], // Motor Vehicle Station
-                ['AT010', ['at010','dish_aerial_p']], // Dish Aerial
-                ['AT042', ['at042','pylon_p']], // Pylon
-                ['BH010', ['bh010','aqueduct_s','aqueduct_c']], // Aqueduct
-                ['BH020', ['bh020','canal_s','canal_c']], // Canal
-                ['BH030', ['bh030','ditch_s','ditch_c']], // Ditch 
-                ['BH070', ['bh070','ford_c','ford_p']], // Ford 
-                ['BH082', ['bh082','inland_waterbody_s','inland_waterbody_p']], // Inland Waterbody 
-                ['BH140', ['bh140', 'river_s','river_c']], // River
-                ['BH170', ['bh170','natural_pool_p']], // Natural Pool
-                ['BH230', ['bh230', 'water_well_p','water_well_s']], // Water Well
-                ['BI010', ['bi010', 'cistern_p']], // Cistern
-                ['DB070', ['db070','cut_c']], // Cut
-                ['DB150', ['db150','mountain_pass_p']], // Mountain Pass
-                ['GB050', ['gb050','aircraft_revetment_c']], // Aircraft Revetment
-                ['ZD040', ['zd040','named_location_s','named_location_c','named_location_p']], // Named Location
-                ['ZD045', ['zd045','annotated_location_s','annotated_location_c','annotated_location_p']], // Named Location
-                ];
+            var tName = hgis20.rules.layerNames[layerName];
 
-            // Funky but it makes life easier
-            var llayerName = layerName.toString().toLowerCase();
-
-            for (var row in fCodeMap)
+            if (attrs.TYPE)
             {
-                for (var val in fCodeMap[row][1])
-                {
-                    if (llayerName.match(fCodeMap[row][1][val])) attrs.F_CODE = fCodeMap[row][0];
-                }
+                attrs[tName + '$TYPE'] = attrs.TYPE;
+                delete attrs.TYPE;
             }
-        } // End of Find an FCode
+            else if (attrs.TYPE1)
+            {
+                attrs[tName + '$TYPE1'] = attrs.TYPE1;
+                delete attrs.TYPE1;
+
+                attrs[tName + '$TYPE2'] = attrs.TYPE2;
+                delete attrs.TYPE2;
+            }
+        }
+
 
     }, // End of applyToOsmPreProcessing
 
     applyToOsmPostProcessing : function (attrs, tags, layerName)
     {
-        // Roads. TDSv61 are a bit simpler than TDSv30 & TDSv40
-        if (attrs.F_CODE == 'AP030') // Make sure we have a road
-        {
-             // Set a Default: "It is a road but we don't know what it is"
-            tags.highway = 'road';
-
-            // Top level
-            if (tags['ref:road:type'] == 'motorway' || tags['ref:road:class'] == 'national_motorway')
-            {
-                tags.highway = 'motorway';
-            }
-            else if (tags['ref:road:type'] == 'limited_access_motorway' || tags['ref:road:class'] == 'primary')
-            {
-                tags.highway = 'trunk';
-            }
-            else if (tags['ref:road:class'] == 'secondary')
-            {
-                tags.highway = 'primary';
-            }
-            else if (tags['ref:road:class'] == 'local')
-            {
-                tags.highway = 'secondary';
-            }
-            else if (tags['ref:road:type'] == 'road')
-            {
-                tags.highway = 'tertiary';
-            }
-            else if (tags['ref:road:type'] == 'street')
-            {
-                tags.highway = 'unclassified';
-            }
-            // Other should get picked up by the OTH field
-            else if (tags['ref:road:type'] == 'other')
-            {
-                tags.highway = 'road';
-            }
-            // Catch all for the rest of the ref:road:type: close, circle drive etc
-            else if (tags['ref:road:type'])
-            {
-                tags.highway = 'residential';
-            }
-        } // End if AP030
-
 
         // New TDSv61 Attribute - ROR (Road Interchange Ramp)
         if (tags.highway && tags.link_road == 'yes')
@@ -221,15 +121,8 @@ hgis20 = {
         }
 
         // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
-        tags.source = 'tdsv61'; 
-        if (attrs.UFI)
-        {
-            tags.uuid = '{' + attrs['UFI'].toString().toLowerCase() + '}';
-        }
-        else
-        {
-            tags.uuid = createUuid(); 
-        }
+        tags.source = 'hgisv20';
+        tags.uuid = '{' + attrs['UFI'].toString().toLowerCase() + '}';
 
 
         if (hgis20.osmPostRules == undefined)
@@ -730,7 +623,9 @@ hgis20 = {
         // push the feature to o2s layer
         var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
-        if (!(nfddAttrLookup[gFcode])) 
+
+
+        if (!(hgisTableNameLookup[gFcode]))
         {
             logError('Layer and Geometry: ' + gFcode + ' is not in the schema');
 
