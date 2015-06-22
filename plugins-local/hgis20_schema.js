@@ -46,8 +46,8 @@ getDbSchema: function()
 //           geom:"Line",
 
     var schema = [
-        { name:"Agriculture_POI",
-          desc:"Agriculture POI",
+        { name:"Agricultural_POI",
+          desc:"Agricultural POI",
           geom:"Point",
           columns:[
                    { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
