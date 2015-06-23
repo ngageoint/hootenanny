@@ -143,6 +143,7 @@ echo "Building Hoot"
 make clean && make -sj4 && make docs
 
 # Tweak dev environment to make tests run faster
+# FIXME: make this command not destructive to local.conf
 echo 'testJobStatusPollerTimeout=250' > $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
 
 # Run Tests
@@ -160,7 +161,7 @@ sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
 #--------------
 HOOT_HOME=/home/vagrant/hoot
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT_HOME/pretty-pipes/lib
-GDAL_DATA=/usr/share/gdal/1.10
+GDAL_DATA=/usr/local/share/gdal
 GDAL_LIB_DIR=/usr/local/lib
 HOOT_WORKING_NAME=hoot
 PATH=$HOOT_HOME/bin:$PATH
@@ -174,6 +175,24 @@ sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
 # Set tomcat6 umask to group write because all files in shared folder are owned by vagrant
 umask 002
 EOT
+fi
+
+# Fix env var path for GDAL_DATA
+if grep -i --quiet 'gdal/1.10' /etc/default/tomcat6; then
+    echo "Fixing Tomcat GDAL_DATA env var path"
+    sudo sed -i.bak s@^GDAL_DATA=.*@GDAL_DATA=\/usr\/local\/share\/gdal@ /etc/default/tomcat6
+fi
+
+# Create Tomcat context path for tile images
+if ! grep -i --quiet 'ingest/processed' /etc/tomcat6/server.xml; then
+    echo "Adding Tomcat context path for tile images"
+    sudo sed -i.bak "s@<\/Host>@  <Context docBase=\"\/home\/vagrant\/hoot\/ingest\/processed\" path=\"\/static\" \/>\n      &@" /etc/tomcat6/server.xml
+fi
+
+# Allow linking in Tomcat context
+if ! grep -i --quiet 'allowLinking="true"' /etc/tomcat6/context.xml; then
+    echo "Set allowLinking to true in Tomcat context"
+    sudo sed -i.bak "s@^<Context>@<Context allowLinking=\"true\">@" /etc/tomcat6/context.xml
 fi
 
 # Deploy to Tomcat
