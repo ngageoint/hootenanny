@@ -13,15 +13,18 @@ Once Vagrant has been installed, you can start an environment by checking out th
     vagrant up
 
 
-This will take a up to two hours to download required software from the internet and set it up as a running system. Once it is complete, uncomment the '#, group: "tomcat6"' portion of the in Vagrantfile to allow the webapp to write to shared folders.
+This will take a up to two hours to download required software from the internet and set it up as a running system. Once it is complete, uncomment the `#, group: "tomcat6"` portion of the in Vagrantfile to allow the webapp to write to shared folders.
 
     # argument is a set of non-required options.
-    config.vm.synced_folder ".", "/home/vagrant/hoot", group: "tomcat6"
+    config.vm.synced_folder ".", "/home/vagrant/hoot", group: "tomcat6", mount_options: ["dmode=775,fmode=775"]
     # UNCOMMENT group after inital provisioning, then run vagrant reload
 
 Then issue the reload command for the changes to take effect on the vm:
 
     vagrant reload
+    vagrant ssh --command 'sudo service tomcat6 restart'
+
+Restarting Tomcat is currently necessary after reload because of issue #2.
 
 You should be able to log into the running VM by typing:
 
@@ -33,7 +36,7 @@ Within this login shell, you can build the code, run the server or the tests. Fo
     source ./SetupEnv.sh
     make test
 
-To access the web pages you access the site in your [local browser](http://localhost:8888/hootenanny-id).
+To access the web pages you access the site in your [local Chrome browser](http://localhost:8888/hootenanny-id).
 
 If you've updated the code, you must connect to the vm via ssh to build and redeploy to Tomcat:
 
