@@ -23,6 +23,12 @@
 		"CANEXPORT" : false,
 		"PATH" : "translations/OSM_Ingest.js",
 	},
+    	{
+        	"NAME" : "GEONAMES",
+        	"DESCRIPTION" : "Geonames",
+        	"CANEXPORT" : false,
+        	"PATH" : "translations/GeoNames.js",
+    	},
 	{
 		"NAME" : "UTP",
 		"DESCRIPTION" : "Urban Tactical Planner (UTP)",
