@@ -44,6 +44,9 @@ hgis20 = {
         // We can drop features but this is a nice way to see what we would drop
         rawSchema = translate.addEmptyFeature(rawSchema);
 
+        // Add the empty Review layers
+        rawSchema = translate.addReviewFeature(rawSchema);
+
         hgis20.layersInSchema = {};
         hgis20.attrLookup = {};
 

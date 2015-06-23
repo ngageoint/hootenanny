@@ -335,7 +335,7 @@ hgis20.rules = {
      ['medical$TYPE1','Hospital','amenity','hospital'],
      ['medical$TYPE1','Medical Facility','raw:medicalTYPE1','medical_facility'],
      ['medical$TYPE1','Clinic','amenity','clinic'],
-     ['medical$TYPE1','Dispensary','raw:medicalTYPE1','dispensary'], // Look at this
+     ['medical$TYPE1','Dispensary','amenity','dispensary'],
      ['medical$TYPE1','Pharmacy','amenity','pharmacy'],
      ['transport$TYPE1','Ferry','raw:transportTYPE1','ferry'],
      ['transport$TYPE1','Bus','raw:transportTYPE1','bus'],
