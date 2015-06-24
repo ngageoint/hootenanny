@@ -204,6 +204,7 @@ getDbSchema: function()
                    { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Conflict_Points
+
         { name:"Crime_Data",
           desc:"Crime Data",
           geom:"Point",
@@ -228,6 +229,7 @@ getDbSchema: function()
                    { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Crime_Data
+
         { name:"Cultural_POI",
           desc:"Cultural Points of Interest",
           geom:"Point",
@@ -300,6 +302,50 @@ getDbSchema: function()
                    { name:"SOURCE_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
                   ] // End of Columns
         }, // End of feature Geonames
+
+        { name:"HADR",
+          desc:"HADR",
+          geom:"Point",
+          columns:[
+                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"AREA_AFF",desc:"AREA_AFF",length:"150",type:"String",defValue:""}, // End of AREA_AFF
+                   { name:"TYPE1",desc:"TYPE1",length:"30",type:"String",defValue:""}, // End of TYPE1
+                   { name:"TYPE2",desc:"TYPE2",length:"30",type:"String",defValue:""}, // End of TYPE2
+                   { name:"DISEASE",desc:"DISEASE",length:"50",type:"String",defValue:""}, // End of DISEASE
+                   { name:"START_DT",desc:"START_DT",length:"20",type:"String",defValue:""}, // End of START_DT
+                   { name:"END_DT",desc:"END_DT",length:"20",type:"String",defValue:""}, // End of END_DT
+                   { name:"TL_AFFECT",desc:"TL_AFFECT",type:"Integer",defValue:"0"}, // End of TL_AFFECT
+                   { name:"FATALITY",desc:"FATALITY",type:"Integer",defValue:"0"}, // End of FATALITY
+                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                  ] // End of Columns
+        }, // End of feature HADR
+
+        { name:"Health_Events",
+          desc:"Health Events",
+          geom:"Point",
+          columns:[
+                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"AREA_AFF",desc:"AREA_AFF",length:"150",type:"String",defValue:""}, // End of AREA_AFF
+                   { name:"TYPE",desc:"TYPE",length:"50",type:"String",defValue:""}, // End of TYPE
+                   { name:"DISEASE",desc:"DISEASE",length:"50",type:"String",defValue:""}, // End of DISEASE
+                   { name:"START_DT",desc:"START_DT",length:"20",type:"String",defValue:""}, // End of START_DT
+                   { name:"END_DT",desc:"END_DT",length:"20",type:"String",defValue:""}, // End of END_DT
+                   { name:"TL_AFFECT",desc:"TL_AFFECT",type:"Integer",defValue:"0"}, // End of TL_AFFECT
+                   { name:"FATALITY",desc:"FATALITY",type:"Integer",defValue:"0"}, // End of FATALITY
+                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                  ] // End of Columns
+        }, // End of feature Health_Events
+
 
 
         { name:"Internet_Cafes",

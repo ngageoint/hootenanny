@@ -320,15 +320,19 @@ hgis20 = {
         if (tags.amenity == 'swimming_pool') attrs.XtableName = 'Recreation_POI';
         if (tags.leisure || tags.sport)
         {
-            attrs.XtableName = 'Recreation_POI';
-            if (!attrs.TYPE)
+            // Water park is a Tourist Location POI
+            if (!attrs.leisure == 'water_park')
             {
-            attrs.TYPE = 'Other';
+                attrs.XtableName = 'Recreation_POI';
+                if (!attrs.TYPE)
+                {
+                    attrs.TYPE = 'Other';
 
-            var othVal = 'Type:';
-            (tags.leisure) ? othVal += tags.leisure : othVal += tags.sport ;
+                    var othVal = 'Type:';
+                    (tags.leisure) ? othVal += tags.leisure : othVal += tags.sport ;
 
-            attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,othVal,';');
+                    attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,othVal,';');
+                }
             }
         }
 
@@ -336,6 +340,16 @@ hgis20 = {
         // Religious Institutions
         if (tags.amenity == 'place_of_worship' && geometryType == 'Point') attrs.XtableName = 'Religious_Institutions';
 
+        // Tourist Locations POI
+        if (tags.tourism && tags.tourism !== 'information')
+        {
+            attrs.XtableName = 'Recreation_POI';
+            if (!attrs.TYPE)
+            {
+            attrs.TYPE = 'Other';
+            attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'Type:' + attrs.tourism,';');
+            }
+        }
 
 
 
