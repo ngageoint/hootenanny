@@ -14,7 +14,7 @@ Once Vagrant has been installed, you can start an environment by checking out th
 
 *On Windows hosts,*
 
-* Be sure to clone with the --config core.autocrlf=input option.
+* Be sure to clone with the `--config core.autocrlf=input` option.
 * Windows hosts will also have to create a symlink that's in the git repo, but seems to be treated as a file when cloning to windows.
 
     `vagrant ssh`  
@@ -22,7 +22,7 @@ Once Vagrant has been installed, you can start an environment by checking out th
     `rm test-files`  
     `ln -s hoot-core-test/src/test/resources test-files`  
 
-The initialization of the vagrant vm will take a up to two hours to download required software from the internet and set it up as a running system. Once it is complete, uncomment the '#, group: "tomcat6"' portion of the in Vagrantfile to allow the webapp to write to shared folders.
+The initialization of the vagrant vm will take a up to two hours to download required software from the internet and set it up as a running system. Once it is complete, uncomment the `#, group: "tomcat6"` portion of the in Vagrantfile to allow the webapp to write to shared folders.
 
     # argument is a set of non-required options.
     config.vm.synced_folder ".", "/home/vagrant/hoot", group: "tomcat6", mount_options: ["dmode=775,fmode=775"]
