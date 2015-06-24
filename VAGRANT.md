@@ -12,8 +12,17 @@ Once Vagrant has been installed, you can start an environment by checking out th
     git submodule update
     vagrant up
 
+*On Windows hosts,*
 
-This will take a up to two hours to download required software from the internet and set it up as a running system. Once it is complete, uncomment the `#, group: "tomcat6"` portion of the in Vagrantfile to allow the webapp to write to shared folders.
+* Be sure to clone with the --config core.autocrlf=input option.
+* Windows hosts will also have to create a symlink that's in the git repo, but seems to be treated as a file when cloning to windows.
+
+    `vagrant ssh`  
+    `cd hoot`  
+    `rm test-files`  
+    `ln -s hoot-core-test/src/test/resources test-files`  
+
+The initialization of the vagrant vm will take a up to two hours to download required software from the internet and set it up as a running system. Once it is complete, uncomment the '#, group: "tomcat6"' portion of the in Vagrantfile to allow the webapp to write to shared folders.
 
     # argument is a set of non-required options.
     config.vm.synced_folder ".", "/home/vagrant/hoot", group: "tomcat6", mount_options: ["dmode=775,fmode=775"]
@@ -33,7 +42,7 @@ You should be able to log into the running VM by typing:
 Within this login shell, you can build the code, run the server or the tests. For example, to run the tests:
 
     cd hoot
-    source ./SetupEnv.sh
+    source SetupEnv.sh
     make test
 
 To access the web pages you access the site in your [local Chrome browser](http://localhost:8888/hootenanny-id).
@@ -42,7 +51,7 @@ If you've updated the code, you must connect to the vm via ssh to build and rede
 
     vagrant ssh
     cd hoot
-    source ./SetupEnv.sh
+    source SetupEnv.sh
     scripts/ezClean.sh
     scripts/ezBuildAll.sh
     sudo -u tomcat6 scripts/vagrantDeployTomcat.sh
