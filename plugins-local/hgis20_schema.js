@@ -302,7 +302,51 @@ getDbSchema: function()
         }, // End of feature Geonames
 
 
+        { name:"Internet_Cafes",
+          desc:"Internet Cafes",
+          geom:"Point",
+          columns:[
+                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"NAME",desc:"NAME",length:"100",type:"String",defValue:""}, // End of NAME
+                   { name:"CITY",desc:"CITY",length:"50",type:"String",defValue:""}, // End of CITY
+                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                  ] // End of Columns
+        }, // End of feature Internet_Cafes
 
+        { name:"Libraries",
+          desc:"Libraries",
+          geom:"Point",
+          columns:[
+                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"NAME",desc:"NAME",length:"100",type:"String",defValue:""}, // End of NAME
+                   { name:"CITY",desc:"CITY",length:"50",type:"String",defValue:""}, // End of CITY
+                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                  ] // End of Columns
+        }, // End of feature Libraries
 
 
         { name:"Medical_Facilities",
@@ -348,6 +392,60 @@ getDbSchema: function()
                    { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Natural_POI
+
+        { name:"Power_Plants",
+          desc:"Power Plants",
+          geom:"Point",
+          columns:[
+                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"NAME",desc:"NAME",length:"100",type:"String",defValue:""}, // End of NAME
+                   { name:"TYPE",desc:"TYPE",length:"35",type:"String",defValue:""}, // End of TYPE
+                   { name:"CITY",desc:"CITY",length:"50",type:"String",defValue:""}, // End of CITY
+                   { name:"NUM_GEN",desc:"NUM_GEN",length:"10",type:"String",defValue:""}, // End of NUM_GEN
+                   { name:"TOT_CAP_MW",desc:"TOT_CAP_MW",length:"12",type:"String",defValue:""}, // End of TOT_CAP_MW
+                   { name:"OP_STATUS",desc:"OP_STATUS",length:"25",type:"String",defValue:""}, // End of OP_STATUS
+                   { name:"OP_CON",desc:"OP_CON",length:"25",type:"String",defValue:""}, // End of OP_CON
+                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                  ] // End of Columns
+        }, // End of feature Power_Plants
+
+        { name:"Prisons",
+          desc:"Prisons",
+          geom:"Point",
+          columns:[
+                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"NAME",desc:"NAME",length:"100",type:"String",defValue:""}, // End of NAME
+                   { name:"TYPE",desc:"TYPE",length:"30",type:"String",defValue:""}, // End of TYPE
+                   { name:"EST_PRIS",desc:"EST_PRIS",type:"REAL",defValue:"0"}, // End of EST_PRIS
+                   { name:"CITY",desc:"CITY",length:"50",type:"String",defValue:""}, // End of CITY
+                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                  ] // End of Columns
+        }, // End of feature Prisons
+
 
 
         { name:"Recreation_POI",

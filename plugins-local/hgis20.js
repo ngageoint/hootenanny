@@ -285,7 +285,14 @@ hgis20 = {
             }
         }
 
-        // Hardcoded geonames
+        // ######################
+        // Hardcoded Layer selection. Yes, this is ugly
+        // Will move this to a custom rules function - soon
+
+        // Educational_Institutions
+        if (tags.amenity == 'school' || tags.building == 'school') attrs.XtableName = 'Educational_Institutions';
+
+        // Geonames
         if (attrs.DSG || (attrs.place && attrs.place !== 'farm'))
         {
             attrs.XtableName = 'Geonames';
@@ -296,6 +303,40 @@ hgis20 = {
                 delete attrs.NAME;
             }
         }
+
+        // Internet_Cafes
+        if (tags.amenity == 'internet_cafe') attrs.XtableName = 'Internet_Cafes';
+
+        // Libraries
+        if (tags.amenity == 'library') attrs.XtableName = 'Libraries';
+
+        // Power Plants
+        if (tags.power == 'plant') attrs.XtableName = 'Power_Plants';
+
+        // Prisons
+        if (tags.amenity == 'prison') attrs.XtableName = 'Prisons';
+
+        // Recreation POI
+        if (tags.amenity == 'swimming_pool') attrs.XtableName = 'Recreation_POI';
+        if (tags.leisure || tags.sport)
+        {
+            attrs.XtableName = 'Recreation_POI';
+            if (!attrs.TYPE)
+            {
+            attrs.TYPE = 'Other';
+
+            var othVal = 'Type:';
+            (tags.leisure) ? othVal += tags.leisure : othVal += tags.sport ;
+
+            attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,othVal,';');
+            }
+        }
+
+
+        // Religious Institutions
+        if (tags.amenity == 'place_of_worship' && geometryType == 'Point') attrs.XtableName = 'Religious_Institutions';
+
+
 
 
     }, // End applyToHgisPostProcessing

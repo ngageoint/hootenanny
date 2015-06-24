@@ -35,20 +35,23 @@ hgis20.rules = {
     // One2one rules for Text Fields
     txtBiased : {
      'ADDRESS':'addr:full', // Address
+     'ALT_NAME':'alt_name', // Geographic Name Information : Full Name
      'CITY':'is_in:city', // City Name
      'COUNTRY':'is_in:country', // Country Name
      'NAME':'name', // Geographic Name Information : Full Name
-     'ALT_NAME':'alt_name', // Geographic Name Information : Full Name
+     'NUM_GEN':'generator:number', // Number of Generators
      'COMMENTS':'note', // Note : Memorandum
      'SOURCE':'source', // Source Information : Source Description
      'SOURCE2':'source:2', // Source Information : Source Description
      'SOURCE_DT':'source:datetime', // Source Information : Source Date and Time
      'SOURCE2_DT':'source:datetime:2', // Source Information : Source Date and Time
+     'TOT_CAP_MW':'generator:output:electricity', // Generator Output
      }, // End txtBiased
 
     // One2one ruled for Number fields
     numBiased : {
-     }, // End numBiased
+     'EST_PRIS':'prison:num_prisoners', // Number of prisoners
+    }, // End numBiased
     
 
     // Common one2one rules. Used for both import and export
@@ -83,11 +86,21 @@ hgis20.rules = {
      ['FC','U','geonames:feature_class','u'], // Undersea
      ['FC','V','geonames:feature_class','v'], // forest, heath
 
+     // OP_STATUS - Operational Status
+     ['OP_STATUS','Operational','operational_status','operational'],
+     ['OP_STATUS','Under Construction','condition','construction'],
+     ['OP_STATUS','999999','operational_status','other'],
+
+     // OP_CON - Operational Control?
+     ['OP_CON','Commercial','controlling_authority','public'],
+     ['OP_CON','Government','controlling_authority','national'],
+     ['OP_CON','999999','controlling_authority','other'],
 
     // TYPE is shared by a lot of features
      ['airfield$TYPE','Paved','aeroway:pavement','paved'],
      ['airfield$TYPE','Unpaved','aeroway:pavement','unpaved'],
      ['airfield$TYPE','999999','aeroway:pavement','other'],
+
      ['crime$TYPE','Armed Robbery','raw:crimeTYPE','armed_robbery'],
      ['crime$TYPE','Assault','raw:crimeTYPE','assault'],
      ['crime$TYPE','Hijack','raw:crimeTYPE','hijack'],
@@ -103,6 +116,7 @@ hgis20.rules = {
      ['crime$TYPE','Robbery','raw:crimeTYPE','robbery'],
      ['crime$TYPE','Violence','raw:crimeTYPE','violence'],
      ['crime$TYPE','Weapons Smuggling','raw:crimeTYPE','weapons_smuggling'],
+
      ['cultural$TYPE','Monument','historic','monument'],
      ['cultural$TYPE','Museum','tourism','museum'],
      ['cultural$TYPE','Burial Site','raw:culturalTYPE','burial_site'],
@@ -113,6 +127,7 @@ hgis20.rules = {
      ['cultural$TYPE','Cultural Center','raw:culturalTYPE','cultural_center'],
      ['cultural$TYPE','Memorial','historic','memorial'],
      ['cultural$TYPE','999999','raw:culturalTYPE','999999'],
+
      ['dams$TYPE','Irrigation','raw:damsTYPE','irrigation'],
      ['dams$TYPE','Water Supply','raw:damsTYPE','water supply'],
      ['dams$TYPE','Electricity','raw:damsTYPE','electricity'],
@@ -120,6 +135,7 @@ hgis20.rules = {
      ['dams$TYPE','Electricity, Water Supply','raw:damsTYPE','electricity, water supply'],
      ['dams$TYPE','Irrigation, Water Supply','raw:damsTYPE','irrigation, water supply'],
      ['dams$TYPE','999999','raw:damsTYPE','999999'],
+
      ['electrical$TYPE','Generator','raw:electricalTYPE','generator'],
      ['electrical$TYPE','Solar Panel','raw:electricalTYPE','solar panel'],
      ['electrical$TYPE','Substation','raw:electricalTYPE','substation'],
@@ -127,14 +143,17 @@ hgis20.rules = {
      ['electrical$TYPE','Transmission Tower','raw:electricalTYPE','transmission tower'],
      ['electrical$TYPE','999999','raw:electricalTYPE','999999'],
      ['electrical$TYPE','Transformer','raw:electricalTYPE','transformer'],
+
      ['embassy$TYPE','Embassy','diplomatic','embassy'],
      ['embassy$TYPE','Consulate','diplomatic','consulate'],
      ['embassy$TYPE','Foreign Mission','diplomatic','mission'],
      ['embassy$TYPE','999999','raw:embassyTYPE','999999'],
+
      ['health$TYPE','Viral Infectious Diseases','raw:healthTYPE','viral infectious diseases'],
      ['health$TYPE','Bacterial Infectious Diseases','raw:healthTYPE','bacterial infectious diseases'],
      ['health$TYPE','Parasite Borne','raw:healthTYPE','parasite borne'],
      ['health$TYPE','999999','raw:healthTYPE','999999'],
+
      ['hydrop$TYPE','Lake','raw:hydropTYPE','lake'],
      ['hydrop$TYPE','River','raw:hydropTYPE','river'],
      ['hydrop$TYPE','Inland Water','raw:hydropTYPE','inland water'],
@@ -149,6 +168,7 @@ hgis20.rules = {
      ['hydrol$TYPE','Inland Water','raw:hydrolTYPE','inland water'],
      ['hydrol$TYPE','Land Subject to Inundation','raw:hydrolTYPE','land subject to inundation'],
      ['hydrol$TYPE','999999','raw:hydrolTYPE','999999'],
+
      ['marine$TYPE','Lighthouses & Beacons','raw:marineTYPE','lighthouses & beacons'],
      ['marine$TYPE','Harbor','raw:marineTYPE','harbor'],
      ['marine$TYPE','Beach','raw:marineTYPE','beach'],
@@ -160,11 +180,13 @@ hgis20.rules = {
      ['marine$TYPE','999999','raw:marineTYPE','999999'],
      ['marine$TYPE','Ship Yard','raw:marineTYPE','ship yard'],
      ['marine$TYPE','Pier','raw:marineTYPE','pier'],
+
      ['media$TYPE','Television','raw:mediaTYPE','television'],
      ['media$TYPE','Radio','raw:mediaTYPE','radio'],
      ['media$TYPE','Newspaper','raw:mediaTYPE','newspaper'],
      ['media$TYPE','Magazine','raw:mediaTYPE','magazine'],
      ['media$TYPE','Yearbook','raw:mediaTYPE','yearbook'],
+
      ['military$TYPE','Army','military:service','army'],
      ['military$TYPE','Air Force','military:service','air_force'],
      ['military$TYPE','Navy','military:service','navy'],
@@ -174,45 +196,51 @@ hgis20.rules = {
      ['military$TYPE','Security Force','military:service','security_force'],
      ['military$TYPE','999999','military:service','other'],
      ['military$TYPE','Special Operations Force','military:service','special_operations_force'],
+
      ['natural$TYPE','Preserve/Refuge','raw:naturalTYPE','preserve/refuge'],
      ['natural$TYPE','Landmark','raw:naturalTYPE','landmark'],
-     ['natural$TYPE','Mountain','raw:naturalTYPE','mountain'],
-     ['natural$TYPE','Peak','raw:naturalTYPE','peak'],
-     ['natural$TYPE','Volcano','raw:naturalTYPE','volcano'],
-     ['natural$TYPE','Gorge','raw:naturalTYPE','gorge'],
-     ['natural$TYPE','Desert','raw:naturalTYPE','desert'],
-     ['natural$TYPE','Waterfall','raw:naturalTYPE','waterfall'],
-     ['natural$TYPE','Ponds','raw:naturalTYPE','ponds'],
-     ['natural$TYPE','Other','raw:naturalTYPE','other'],
+     ['natural$TYPE','Mountain','natural','mountain'],
+     ['natural$TYPE','Peak','natural','peak'],
+     ['natural$TYPE','Volcano','natural','volcano'],
+     ['natural$TYPE','Gorge','natural','gorge'],
+     ['natural$TYPE','Desert','natural','desert'],
+     ['natural$TYPE','Waterfall','waterway','waterfall'],
+     ['natural$TYPE','Ponds','water','pond'],
+     ['natural$TYPE','Other','waterway','other'],
      ['natural$TYPE','999999','raw:naturalTYPE','999999'],
-     ['pplant$TYPE','Coal','raw:pplantTYPE','coal'],
-     ['pplant$TYPE','Diesel','raw:pplantTYPE','diesel'],
-     ['pplant$TYPE','Electric','raw:pplantTYPE','electric'],
-     ['pplant$TYPE','Gas','raw:pplantTYPE','gas'],
-     ['pplant$TYPE','Geothermal','raw:pplantTYPE','geothermal'],
-     ['pplant$TYPE','Hydroelectricity','raw:pplantTYPE','hydroelectricity'],
-     ['pplant$TYPE','Nuclear','raw:pplantTYPE','nuclear'],
-     ['pplant$TYPE','Oil','raw:pplantTYPE','oil'],
-     ['pplant$TYPE','Wind','raw:pplantTYPE','wind'],
-     ['pplant$TYPE','Combustion','raw:pplantTYPE','combustion'],
-     ['pplant$TYPE','999999','raw:pplantTYPE','999999'],
-     ['public$TYPE','Administrative Facility','raw:publicTYPE','administrative facility'],
-     ['public$TYPE','Customs','raw:publicTYPE','customs'],
-     ['public$TYPE','Police Station','raw:publicTYPE','police station'],
-     ['public$TYPE','Security Station','raw:publicTYPE','security station'],
-     ['public$TYPE','Fire Station','raw:publicTYPE','fire station'],
+
+     ['pplant$TYPE','Coal','generator:source','coal'],
+     ['pplant$TYPE','Diesel','generator:source','diesel'],
+     ['pplant$TYPE','Electric','plant:output:electricity','yes'], // ????
+     ['pplant$TYPE','Gas','generator:source','gas'],
+     ['pplant$TYPE','Geothermal','generator:source','geothermal'],
+     ['pplant$TYPE','Hydroelectricity','generator:source','hydro'],
+     ['pplant$TYPE','Nuclear','generator:source','nuclear'],
+     ['pplant$TYPE','Oil','generator:source','oil'],
+     ['pplant$TYPE','Wind','generator:source','wind'],
+     ['pplant$TYPE','Combustion','generator:source','combustion'], // ????
+     ['pplant$TYPE','999999','generator:source','other'],
+
+     ['public$TYPE','Administrative Facility','ofice','public_administration'],
+     ['public$TYPE','Customs','amenity','customs'],
+     ['public$TYPE','Police Station','amenity','police'],
+     ['public$TYPE','Security Station','use','security_services'], // TDSv61
+     ['public$TYPE','Fire Station','amenity','fire_station'],
      ['public$TYPE','999999','raw:publicTYPE','999999'],
-     ['prison$TYPE','National','raw:prisonTYPE','national'],
-     ['prison$TYPE','Regional','raw:prisonTYPE','regional'],
-     ['prison$TYPE','999999','raw:prisonTYPE','999999'],
-     ['prison$TYPE','General','raw:prisonTYPE','general'],
-     ['prison$TYPE','Solitary','raw:prisonTYPE','solitary'],
-     ['prison$TYPE','Juvenile','raw:prisonTYPE','juvenile'],
-     ['recreation$TYPE','Sports Facility','raw:recreationTYPE','sports facility'],
-     ['recreation$TYPE','Pool','raw:recreationTYPE','pool'],
-     ['recreation$TYPE','Park','raw:recreationTYPE','park'],
-     ['recreation$TYPE','Other','raw:recreationTYPE','other'],
+
+     ['prison$TYPE','National','prison:type','national'],
+     ['prison$TYPE','Regional','prison:type','regional'],
+     ['prison$TYPE','999999','prison:type','other'],
+     ['prison$TYPE','General','prison:type','general'],
+     ['prison$TYPE','Solitary','prison:type','solitary'],
+     ['prison$TYPE','Juvenile','amenity','juvenile_corrections'],
+
+     ['recreation$TYPE','Sports Facility','sport','multi'],
+     ['recreation$TYPE','Pool','leisure','swimming_pool'],
+     ['recreation$TYPE','Park','leisure','park'],
+     ['recreation$TYPE','Other','leisure','other'],
      ['recreation$TYPE','999999','raw:recreationTYPE','999999'],
+
      ['refugee$TYPE','Refugee Camp','raw:refugeeTYPE','refugee camp'],
      ['refugee$TYPE','Refugee Location','raw:refugeeTYPE','refugee location'],
      ['refugee$TYPE','Refugee Settlement','raw:refugeeTYPE','refugee settlement'],
@@ -220,13 +248,15 @@ hgis20.rules = {
      ['refugee$TYPE','IDP Camp','raw:refugeeTYPE','idp camp'],
      ['refugee$TYPE','Village of Interest','raw:refugeeTYPE','village of interest'],
      ['refugee$TYPE','Refugee Return','raw:refugeeTYPE','refugee return'],
-     ['religioni$TYPE','Mosque','raw:religioniTYPE','mosque'],
-     ['religioni$TYPE','Church','raw:religioniTYPE','church'],
-     ['religioni$TYPE','Mission','raw:religioniTYPE','mission'],
-     ['religioni$TYPE','Youth Center','raw:religioniTYPE','youth center'],
-     ['religioni$TYPE','Temple','raw:religioniTYPE','temple'],
-     ['religioni$TYPE','Shrine','raw:religioniTYPE','shrine'],
-     ['religioni$TYPE','Monastery','raw:religioniTYPE','monastery'],
+
+     ['religioni$TYPE','Mosque','building','mosque'],
+     ['religioni$TYPE','Church','church','church'],
+     ['religioni$TYPE','Mission','building','mission'],
+     ['religioni$TYPE','Youth Center','building','youth_center'],
+     ['religioni$TYPE','Temple','building','temple'],
+     ['religioni$TYPE','Shrine','building','shrine'],
+     ['religioni$TYPE','Monastery','amenity','monastery'],
+
      ['road$TYPE','Primary','highway','primary'],
      ['road$TYPE','Secondary','highway','secondary'],
      ['road$TYPE','Tertiary','highway','tertiary'],
@@ -254,6 +284,7 @@ hgis20.rules = {
      ['road$TYPE','Tertiary Link','highway','tertiary_link'],
      ['road$TYPE','Trunk','highway','trunk'],
      ['road$TYPE','Trunk Link','highway','trunk_link'],
+
      ['smugglingp$TYPE','Weapons','raw:smugglingpTYPE','weapons'],
      ['smugglingp$TYPE','Human','raw:smugglingpTYPE','human'],
      ['smugglingp$TYPE','Narcotics/Drugs','raw:smugglingpTYPE','narcotics/drugs'],
@@ -268,6 +299,7 @@ hgis20.rules = {
      ['smugglingl$TYPE','Shipping Lane','raw:smugglinglTYPE','shipping lane'],
      ['smugglingl$TYPE','Trail','raw:smugglinglTYPE','trail'],
      ['smugglingl$TYPE','999999','raw:smugglinglTYPE','999999'],
+
      ['tourist$TYPE','Game Reserve','raw:touristTYPE','game reserve'],
      ['tourist$TYPE','National Park','raw:touristTYPE','national park'],
      ['tourist$TYPE','Historical','raw:touristTYPE','historical'],
@@ -297,10 +329,13 @@ hgis20.rules = {
      ['agriculture$TYPE1','Orchard','landuse','orchard'],
      ['agriculture$TYPE1','Vineyard','landuse','vineyard'],
      ['agriculture$TYPE1','999999','raw:agricultureTYPE1','999999'],
+
      ['border$TYPE1','Official','raw:borderTYPE1','official'],
      ['border$TYPE1','Unofficial','raw:borderTYPE1','unofficial'],
+
      ['bridge$TYPE1','Bridge','bridge','yes'],
      ['bridge$TYPE1','Tunnel','tunnel','yes'],
+
      ['commercial$TYPE1','Service','raw:commercialTYPE1','service'],
      ['commercial$TYPE1','Retail','raw:commercialTYPE1','retail'],
      ['commercial$TYPE1','Manufacturing','raw:commercialTYPE1','manufacturing'],
@@ -309,15 +344,18 @@ hgis20.rules = {
      ['commercial$TYPE1','Financial','raw:commercialTYPE1','financial'],
      ['commercial$TYPE1','Automotive','raw:commercialTYPE1','automotive'],
      ['commercial$TYPE1','999999','raw:commercialTYPE1','999999'],
-     ['education$TYPE1','Primary','raw:educationTYPE1','primary'],
-     ['education$TYPE1','Secondary','raw:educationTYPE1','secondary'],
+
+     ['education$TYPE1','Primary','isced:level','1'],
+     ['education$TYPE1','Secondary','isced:level','2'],
      ['education$TYPE1','Tertiary','amenity','university'],
      ['education$TYPE1','Vocational','amenity','college'],
+
      ['government$TYPE1','Political','raw:governmentTYPE1','political'],
      ['government$TYPE1','Civic','raw:governmentTYPE1','civic'],
      ['government$TYPE1','Foreign','raw:governmentTYPE1','foreign'],
      ['government$TYPE1','Other','raw:governmentTYPE1','other'],
      ['government$TYPE1','999999','raw:governmentTYPE1','999999'],
+
      ['hadr$TYPE1','Drought','raw:hadrTYPE1','drought'],
      ['hadr$TYPE1','Epidemic','raw:hadrTYPE1','epidemic'],
      ['hadr$TYPE1','Wildfire','raw:hadrTYPE1','wildfire'],
@@ -329,14 +367,31 @@ hgis20.rules = {
      ['hadr$TYPE1','Insect Infestation','raw:hadrTYPE1','insect_infestation'],
      ['hadr$TYPE1','Earthquake','raw:hadrTYPE1','earthquake'],
      ['hadr$TYPE1','999999','raw:hadrTYPE1','999999'],
+
      ['lodging$TYPE1','Permanent','raw:lodgingTYPE1','permanent'],
      ['lodging$TYPE1','Transient','raw:lodgingTYPE1','transient'],
      ['lodging$TYPE1','999999','raw:lodgingTYPE1','999999'],
+
      ['medical$TYPE1','Hospital','amenity','hospital'],
      ['medical$TYPE1','Medical Facility','raw:medicalTYPE1','medical_facility'],
      ['medical$TYPE1','Clinic','amenity','clinic'],
      ['medical$TYPE1','Dispensary','amenity','dispensary'],
      ['medical$TYPE1','Pharmacy','amenity','pharmacy'],
+
+     ['religious$TYPE1','0','religion','christian'],
+     ['religious$TYPE1','1','religion','muslim'],
+     ['religious$TYPE1','2','religion','hindu'],
+     ['religious$TYPE1','3','religion','buddhist'],
+     ['religious$TYPE1','5','religion','jewish'],
+     ['religious$TYPE1','6','religion','ethnic'],
+     ['religious$TYPE1','7','religion','juche'],
+     ['religious$TYPE1','8','religion','sikh'],
+     ['religious$TYPE1','9','religion','unaffiliated'],
+     ['religious$TYPE1','10','religion','999999'],
+     ['religious$TYPE1','11','religion','agnostic'],
+     ['religious$TYPE1','12','religion','mixed'],
+     ['religious$TYPE1','13','religion','gnostic'],
+
      ['transport$TYPE1','Ferry','raw:transportTYPE1','ferry'],
      ['transport$TYPE1','Bus','raw:transportTYPE1','bus'],
      ['transport$TYPE1','Rail','raw:transportTYPE1','rail'],
@@ -346,6 +401,7 @@ hgis20.rules = {
      ['transport$TYPE1','Trolley','raw:transportTYPE1','trolley'],
      ['transport$TYPE1','Car','raw:transportTYPE1','car'],
      ['transport$TYPE1','999999','raw:transportTYPE1','999999'],
+
      ['railwayp$TYPE1','Freight','raw:railwayptTYPE1','freight'],
      ['railwayp$TYPE1','Passenger','raw:railwayptTYPE1','passenger'],
      ['railwayp$TYPE1','Freight & Passenger','raw:railwayptTYPE1','freight & passenger'],
@@ -373,16 +429,19 @@ hgis20.rules = {
      ['agriculture$TYPE2','Rice Field','raw:agricultureTYPE2','rice field'],
      ['agriculture$TYPE2','Salt','raw:agricultureTYPE2','salt'],
      ['agriculture$TYPE2','999999','raw:agricultureTYPE2','999999'],
+
      ['border$TYPE2','Border Structure','raw:borderTYPE2','border structure'],
      ['border$TYPE2','Established Path','raw:borderTYPE2','established path'],
      ['border$TYPE2','Multiple Tire Tracks','raw:borderTYPE2','multiple tire tracks'],
      ['border$TYPE2','Trail','raw:borderTYPE2','trail'],
      ['border$TYPE2','Village','raw:borderTYPE2','village'],
      ['border$TYPE2','999999','raw:borderTYPE2','999999'],
+
      ['bridge$TYPE2','Road','raw:bridgeTYPE2','road'],
      ['bridge$TYPE2','Rail','raw:bridgeTYPE2','rail'],
      ['bridge$TYPE2','Pedestrian','raw:bridgeTYPE2','pedestrian'],
      ['bridge$TYPE2','999999','raw:bridgeTYPE2','999999'],
+
      ['commercial$TYPE2','Bakery','raw:commercialTYPE2','bakery'],
      ['commercial$TYPE2','Bank','raw:commercialTYPE2','bank'],
      ['commercial$TYPE2','Beauty Salon','raw:commercialTYPE2','beauty salon'],
@@ -424,9 +483,11 @@ hgis20.rules = {
      ['commercial$TYPE2','Telecommunications','raw:commercialTYPE2','telecommunications'],
      ['commercial$TYPE2','Tourist','raw:commercialTYPE2','tourist'],
      ['commercial$TYPE2','999999','raw:commercialTYPE2','999999'],
-     ['education$TYPE2','Public','raw:educationTYPE2','public'],
-     ['education$TYPE2','Private','raw:educationTYPE2','private'],
-     ['education$TYPE2','Military','raw:educationTYPE2','military'],
+
+     ['education$TYPE2','Public','school:type','public'],
+     ['education$TYPE2','Private','school:type','private'],
+     ['education$TYPE2','Military','school:type','military'],
+
      ['government$TYPE2','National Facility','raw:governmentTYPE2','national facility'],
      ['government$TYPE2','Other','raw:governmentTYPE2','other'],
      ['government$TYPE2','Political Party Facility','raw:governmentTYPE2','political party facility'],
@@ -434,6 +495,7 @@ hgis20.rules = {
      ['government$TYPE2','Social','raw:governmentTYPE2','social'],
      ['government$TYPE2','State Facility','raw:governmentTYPE2','state facility'],
      ['government$TYPE2','Local Government Facility','raw:governmentTYPE2','local government facility'],
+
      ['hadr$TYPE2','Drought','raw:hadrTYPE2','drought'],
      ['hadr$TYPE2','Bacterial Infectious Disease','raw:hadrTYPE2','bacterial infectious disease'],
      ['hadr$TYPE2','Viral Infectious Disease','raw:hadrTYPE2','viral infectious disease'],
@@ -451,6 +513,7 @@ hgis20.rules = {
      ['hadr$TYPE2','Tropical Storm','raw:hadrTYPE2','tropical storm'],
      ['hadr$TYPE2','Cyclone','raw:hadrTYPE2','cyclone'],
      ['hadr$TYPE2','999999','raw:hadrTYPE2','999999'],
+
      ['health$TYPE2','Cholera','disease','cholera'],
      ['health$TYPE2','Malaria','disease','malaria'],
      ['health$TYPE2','Measles','disease','measles'],
@@ -479,6 +542,7 @@ hgis20.rules = {
      ['health$TYPE2','Rabies','disease','rabies'],
      ['health$TYPE2','Tuberculosis','disease','tuberculosis'],
      ['health$TYPE2','Chikungunya','disease','chikungunya'],
+
      ['lodging$TYPE2','Apartment','raw:lodgingTYPE2','apartment'],
      ['lodging$TYPE2','Dormitory','raw:lodgingTYPE2','dormitory'],
      ['lodging$TYPE2','Elite Area','raw:lodgingTYPE2','elite area'],
@@ -495,11 +559,33 @@ hgis20.rules = {
      ['lodging$TYPE2','Villas','raw:lodgingTYPE2','villas'],
      ['lodging$TYPE2','999999','raw:lodgingTYPE2','999999'],
      ['lodging$TYPE2','Camp Site','raw:lodgingTYPE2','camp site'],
+
      ['medical$TYPE2','Children','raw:medicalTYPE2','children'],
      ['medical$TYPE2','Dental','raw:medicalTYPE2','dental'],
      ['medical$TYPE2','Emergency','raw:medicalTYPE2','emergency'],
      ['medical$TYPE2','Pharmaceutical','raw:medicalTYPE2','pharmaceutical'],
      ['medical$TYPE2','Spa','raw:medicalTYPE2','spa'],
+
+     ['religion$TYPE2','Mahayana','denomination','mahayana'],
+     ['religion$TYPE2','Theravada','denomination','theravada'],
+     ['religion$TYPE2','Vajrayana','denomination','vajrayana'],
+     ['religion$TYPE2','Protestant','denomination','protestant'],
+     ['religion$TYPE2','Orthodox','denomination','orthodox'],
+     ['religion$TYPE2','Catholic','denomination','catholic'],
+     ['religion$TYPE2','Animism','denomination','animist'],
+     ['religion$TYPE2','Chinese Folk Religionists','denomination','chinese'],
+     ['religion$TYPE2','Shamanism','denomination','shamanic'],
+     ['religion$TYPE2','Druze','denomination','druze'],
+     ['religion$TYPE2','Vaishnavism','denomination','viashnavism'],
+     ['religion$TYPE2','Shaivism','denomination','shaivism'],
+     ['religion$TYPE2','Smartism','denomination','smartism'],
+     ['religion$TYPE2','Conservative','denomination','conservative'],
+     ['religion$TYPE2','Reform','denomination','reform'],
+     ['religion$TYPE2','Udasi','denomination','udasi'],
+     ['religion$TYPE2','Sahajdharis','denomination','sahajdharis'],
+     ['religion$TYPE2','Keshadharis','denomination','keshadharis'],
+     ['religion$TYPE2','999999','denomination','other'],
+
      ['transport$TYPE2','Station','raw:transportTYPE2','station'],
      ['transport$TYPE2','Stop','raw:transportTYPE2','stop'],
      ['transport$TYPE2','Terminal','raw:transportTYPE2','terminal'],
@@ -507,6 +593,7 @@ hgis20.rules = {
      ['transport$TYPE2','Tunnel','raw:transportTYPE2','tunnel'],
      ['transport$TYPE2','Parking Lot','raw:transportTYPE2','parking lot'],
      ['transport$TYPE2','999999','raw:transportTYPE2','999999'],
+
      ['railwayp$TYPE2','Stop','raw:railwaypTYPE2','stop'],
      ['railwayp$TYPE2','Station','raw:railwaypTYPE2','station'],
      ['railwayp$TYPE2','Yard','raw:railwaypTYPE2','yard'],
