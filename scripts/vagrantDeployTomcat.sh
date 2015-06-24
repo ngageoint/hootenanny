@@ -2,7 +2,7 @@
 
 export TOMCAT6_HOME=/var/lib/tomcat6
 
-rm $TOMCAT6_HOME/webapps/hoot-services.war
+rm -f $TOMCAT6_HOME/webapps/hoot-services.war
 cp hoot-services/target/hoot-services-*.war $TOMCAT6_HOME/webapps/hoot-services.war
 rm -rf $TOMCAT6_HOME/webapps/hootenanny-id/
 cp -R hoot-ui $TOMCAT6_HOME/webapps/hootenanny-id
