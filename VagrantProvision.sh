@@ -140,7 +140,9 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'QMAKE_CXX=ccache g++' >> LocalConfig.pri
 fi
 echo "Building Hoot"
-make clean && make -sj4 && make docs
+make clean
+make -sj4
+make docs
 
 # Tweak dev environment to make tests run faster
 # FIXME: make this command not destructive to local.conf
