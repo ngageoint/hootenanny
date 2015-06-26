@@ -807,7 +807,7 @@ vector<Tags> JavaScriptTranslator::translateToOgrTags(Tags& tags, ElementType el
 QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
   ElementType elementType, geos::geom::GeometryTypeId geometryType)
 {
-  LOG_DEBUG("Started translateToOgr");
+  //LOG_DEBUG("Started translateToOgr");
 
   _tags = &tags;
 

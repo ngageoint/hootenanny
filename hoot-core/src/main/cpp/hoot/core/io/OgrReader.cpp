@@ -29,6 +29,7 @@
 
 // GDAL
 #include <ogr_geometry.h>
+#include <ogr_spatialref.h>
 
 // GEOS
 #include <geos/geom/LineString.h>
@@ -41,6 +42,9 @@ using namespace geos::geom;
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/io/OgrUtilities.h>
+#include <hoot/core/util/Progress.h>
+
+#include <boost/shared_ptr.hpp>
 
 // Qt
 #include <QDir>
@@ -97,6 +101,22 @@ public:
 
   void setTranslationFile(QString translate) { _finalizeTranslate(); _translatePath = translate; }
 
+  void initializePartial();
+
+  void setUseDataSourceIds(bool useIds);
+
+  void setLayerName(QString layerName);
+
+  QString getLayerName();
+
+  ElementPtr readNextElement();
+
+  bool hasMoreElements();
+
+  boost::shared_ptr<OGRSpatialReference> getProjection() const;
+
+  Progress streamGetProgress() const;
+
 protected:
   Meters _circularError;
   Status _status;
@@ -105,12 +125,26 @@ protected:
   long _limit;
   long _count;
   long _featureCount;
+  bool _useFileId;
   shared_ptr<OGRDataSource> _dataSource;
   QString _path;
   QString _layerName;
   OGRCoordinateTransformation* _transform;
   auto_ptr<OGRSpatialReference> _wgs84;
   auto_ptr<ScriptTranslator> _translator;
+  long _streamFeatureCount;
+
+  /*
+  long _partialNodesRead;
+  long _partialWaysRead;
+  long _partialRelationsRead;
+  bool _firstPartialReadCompleted;
+  */
+
+  //partial read iterators
+  OsmMap::NodeMap::const_iterator _nodesItr;
+  WayMap::const_iterator _waysItr;
+  RelationMap::const_iterator _relationsItr;
 
   // store all key/value strings in this QHash, this promotes implicit sharing of string data. The
   // QHash goes away when the reading is done, but the memory sharing remains.
@@ -147,6 +181,8 @@ protected:
   const QString& _saveMemory(const QString& s);
 
   virtual void _translate(Tags&);
+
+  void populateElementMap();
 };
 
 class OgrElementIterator : public ElementIterator
@@ -182,6 +218,7 @@ protected:
     {
       _addElement(_map->getWay(it->first));
     }
+
   }
 
 private:
@@ -193,6 +230,24 @@ private:
 OgrReader::OgrReader()
 {
   _d = new OgrReaderInternal();
+}
+
+OgrReader::OgrReader(QString path)
+{
+  _d = new OgrReaderInternal();
+  if ( isSupported(path) == true )
+  {
+    _d->open(path, QString(""));
+  }
+}
+
+OgrReader::OgrReader(QString path, QString layer)
+{
+  _d = new OgrReaderInternal();
+  if ( isSupported(path) == true )
+  {
+    _d->open(path, layer);
+  }
 }
 
 OgrReader::~OgrReader()
@@ -284,15 +339,88 @@ void OgrReader::setTranslationFile(QString translate)
   _d->setTranslationFile(translate);
 }
 
+void OgrReader::initializePartial()
+{
+  _d->initializePartial();
+}
+
+bool OgrReader::hasMoreElements()
+{
+  return _d->hasMoreElements();
+}
+
+ElementPtr OgrReader::readNextElement()
+{
+  return _d->readNextElement();
+}
+
+void OgrReader::close()
+{
+  return _d->close();
+}
+
+void OgrReader::finalizePartial()
+{
+  _elementsRead = 0;
+}
+
+bool OgrReader::isSupported(QString url)
+{
+  QFileInfo fileInfo(url);
+  if (fileInfo.isDir())
+  {
+    throw HootException("Can't handle dirs with partial read yet.");
+  }
+
+  QFile input(url);
+
+  // Just need to know the file exists, we don't restrict file extensions
+  return input.exists();
+}
+
+void OgrReader::setUseDataSourceIds(bool useDataSourceIds)
+{
+  _d->setUseDataSourceIds(useDataSourceIds);
+}
+
+void OgrReader::setLayerName(QString layerName)
+{
+  _d->setLayerName(layerName);
+}
+
+QString OgrReader::getLayerName()
+{
+  return _d->getLayerName();
+}
+
+void OgrReader::open(QString url)
+{
+  _d->open(url, _d->getLayerName());
+}
+
+boost::shared_ptr<OGRSpatialReference> OgrReader::getProjection() const
+{
+  return _d->getProjection();
+}
+
+Progress OgrReader::streamGetProgress() const
+{
+  return _d->streamGetProgress();
+}
 
 OgrReaderInternal::OgrReaderInternal()
 {
+  _map = boost::shared_ptr<OsmMap>(new OsmMap());
+  _nodesItr = _map->getNodeMap().begin();
+  _waysItr =  _map->getWays().begin();
+  _relationsItr = _map->getRelationMap().begin();
   _layer = NULL;
   _transform = NULL;
   _status = Status::Invalid;
   _circularError = 15.0;
   _limit = -1;
   _featureCount = 0;
+  _streamFeatureCount = 0;
 }
 
 OgrReaderInternal::~OgrReaderInternal()
@@ -377,21 +505,26 @@ void OgrReaderInternal::_addGeometry(OGRGeometry* g, Tags& t)
       switch (wkbFlatten(g->getGeometryType()))
       {
         case wkbLineString:
+          //LOG_DEBUG("Adding line string");
           _addLineString((OGRLineString*)g, t);
           break;
         case wkbPoint:
+          //LOG_DEBUG("Adding point");
           _addPoint((OGRPoint*)g, t);
           break;
         case wkbPolygon:
+          //LOG_DEBUG("Adding polygon");
           _addPolygon((OGRPolygon*)g, t);
           break;
         case wkbMultiPolygon:
+          //LOG_DEBUG("Adding multi-polygon");
           _addMultiPolygon((OGRMultiPolygon*)g, t);
           break;
         case wkbMultiPoint:
         case wkbMultiLineString:
         case wkbGeometryCollection:
         {
+          LOG_DEBUG("Adding geometry collection (multipoint, multiline, etc.)");
           OGRGeometryCollection* gc = dynamic_cast<OGRGeometryCollection*>(g);
           int nParts = gc->getNumGeometries();
           for (int i = 0; i < nParts; i++)
@@ -511,6 +644,8 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, shared_ptr<Relation> r, Meter
 void OgrReaderInternal::close()
 {
   // no need to finalize the translation here. We may need it again.
+
+  _useFileId = false;
 
   if (_dataSource != NULL)
   {
@@ -712,6 +847,125 @@ void OgrReaderInternal::_translate(Tags& t)
   {
     _translator->translateToOsm(t, _layer->GetLayerDefn()->GetName());
   }
+}
+
+void OgrReaderInternal::initializePartial()
+{
+  _map.reset(new OsmMap());
+  _nodesItr = _map->getNodeMap().begin();
+  _waysItr =  _map->getWays().begin();
+  _relationsItr = _map->getRelationMap().begin();
+
+  _useFileId = false;
+
+}
+
+void OgrReaderInternal::setUseDataSourceIds(bool useIds)
+{
+  _useFileId = useIds;
+}
+
+void OgrReaderInternal::setLayerName(QString layerName)
+{
+  _layerName = layerName;
+}
+
+QString OgrReaderInternal::getLayerName()
+{
+  return _layerName;
+}
+
+bool OgrReaderInternal::hasMoreElements()
+{
+  // If we're not open, definitely no more elements
+  if ( _layer == NULL )
+  {
+    return false;
+  }
+
+  // Do we have data already in map from previous reads?
+  if ( (_nodesItr != _map->getNodeMap().end()) || (_waysItr != _map->getWays().end())
+      || (_relationsItr != _map->getRelationMap().end()) )
+  {
+    return true;
+  }
+
+  // Let's try a read and see if that put anything into the map
+
+  // Do a read if the element maps are empty
+  populateElementMap();
+
+  // Is there data to iterate over?
+  return ( (_nodesItr != _map->getNodeMap().end()) || (_waysItr != _map->getWays().end())
+      || (_relationsItr != _map->getRelationMap().end()) );
+}
+
+ElementPtr OgrReaderInternal::readNextElement()
+{
+  //LOG_DEBUG("Inside OGR::readNextElement");
+
+  if ( (_nodesItr == _map->getNodeMap().end()) && (_waysItr == _map->getWays().end())
+      && (_relationsItr == _map->getRelationMap().end()) )
+  {
+    // Load the next OGR feature, with 1..N elemenents per feature, into the map of the various
+    //    element types
+    populateElementMap();
+  }
+
+  ElementPtr returnElement;
+  if ( _nodesItr != _map->getNodeMap().end() )
+  {
+    returnElement.reset(new Node(*_nodesItr.value()));
+    _nodesItr++;
+  }
+  else if ( _waysItr != _map->getWays().end() )
+  {
+    returnElement.reset(new Way(*_waysItr->second.get()));
+    _waysItr++;
+  }
+  else
+  {
+    returnElement.reset(new Relation(*_relationsItr->second.get()));
+    _relationsItr++;
+  }
+
+  return returnElement;
+}
+
+void OgrReaderInternal::populateElementMap()
+{
+    _map->clear();
+
+    readNext(_map);
+
+    _nodesItr = _map->getNodeMap().begin();
+    _waysItr =  _map->getWays().begin();
+    _relationsItr = _map->getRelationMap().begin();
+
+    _streamFeatureCount++;
+}
+
+boost::shared_ptr<OGRSpatialReference> OgrReaderInternal::getProjection() const
+{
+  boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
+  if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
+  {
+    throw HootException("Error creating EPSG:4326 projection.");
+  }
+
+  return wgs84;
+}
+
+Progress OgrReaderInternal::streamGetProgress() const
+{
+  Progress streamProgress("OGRReader");
+
+  const float floatCount = _streamFeatureCount;
+  const float percentComplete = floatCount / _featureCount * 100;
+  streamProgress.setPercentComplete( percentComplete );
+  //LOG_DEBUG("Percent complete set to " << percentComplete );
+
+  return streamProgress;
 }
 
 }

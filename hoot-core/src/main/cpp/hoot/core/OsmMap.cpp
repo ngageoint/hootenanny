@@ -89,6 +89,65 @@ OsmMap::~OsmMap()
 {
 }
 
+//TODO: If this method stays, make sure error checking is adequate and update associated unit tests.
+void OsmMap::append(ConstOsmMapPtr appendFromMap)
+{
+  if (this == appendFromMap.get())
+  {
+    throw HootException("Can't append to the same map.");
+  }
+  if (getProjection() != appendFromMap->getProjection())
+  {
+    throw HootException("Incompatible maps.");
+  }
+  _srs = appendFromMap->getProjection();
+
+  //wish there was a way to do this more generically, but I don't know how at this point...
+  const RelationMap& allRelations = appendFromMap->getRelationMap();
+  for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
+  {
+    RelationPtr relation = it->second;
+    if (containsElement(ElementId(relation->getElementId())))
+    {
+      throw HootException("Map already contains this element.");
+    }
+    shared_ptr<Relation> r = shared_ptr<Relation>(new Relation(*relation));
+    addRelation(r);
+  }
+
+  WayMap::const_iterator it = appendFromMap->_ways.begin();
+  while (it != appendFromMap->_ways.end())
+  {
+    WayPtr way = it->second;
+    if (containsElement(ElementId(way->getElementId())))
+    {
+      throw HootException("Map already contains this element.");
+    }
+    shared_ptr<Way> w = shared_ptr<Way>(new Way(*way));
+    addWay(w);
+    ++it;
+  }
+
+  QHash<long, shared_ptr<Node> >::const_iterator itn = appendFromMap->_nodes.constBegin();
+  while (itn != appendFromMap->_nodes.constEnd())
+  {
+    NodePtr node = itn.value();
+    if (containsElement(ElementId(node->getElementId())))
+    {
+      throw HootException("Map already contains this element.");
+    }
+    NodePtr n = NodePtr(new Node(*node));
+    addNode(n);
+    ++itn;
+  }
+
+  for (size_t i = 0; i < appendFromMap->getListeners().size(); i++)
+  {
+    shared_ptr<OsmMapListener> l = appendFromMap->getListeners()[i];
+    _listeners.push_back(l->clone());
+  }
+}
+
 void OsmMap::addElement(const shared_ptr<Element>& e)
 {
   switch(e->getElementType().getEnum())
@@ -241,6 +300,7 @@ void OsmMap::_copy(boost::shared_ptr<const OsmMap> from)
     shared_ptr<Relation> r = shared_ptr<Relation>(new Relation(*(it->second)));
     r->registerListener(_index.get());
     _relations[it->first] = r;
+    // no need to add it to the index b/c the index is created in a lazy fashion.
     i++;
   }
 
@@ -250,6 +310,7 @@ void OsmMap::_copy(boost::shared_ptr<const OsmMap> from)
     shared_ptr<Way> w = shared_ptr<Way>(new Way(*(it->second)));
     w->registerListener(_index.get());
     _ways[it->first] = w;
+    // no need to add it to the index b/c the index is created in a lazy fashion.
     ++it;
   }
 
@@ -257,6 +318,7 @@ void OsmMap::_copy(boost::shared_ptr<const OsmMap> from)
   while (itn != from->_nodes.constEnd())
   {
     _nodes.insert(itn.key(), shared_ptr<Node>(new Node(*itn.value())));
+    // no need to add it to the index b/c the index is created in a lazy fashion.
     ++itn;
   }
 
@@ -485,7 +547,7 @@ size_t OsmMap::getElementCount() const
   return getNodeMap().size() + getWays().size() + getRelationMap().size();
 }
 
-boost::shared_ptr<const Node> OsmMap::getNode(long id) const
+const boost::shared_ptr<const Node> OsmMap::getNode(long id) const
 {
   assert(_nodes.contains(id));
   return _nodes[id];

@@ -32,7 +32,7 @@
 namespace hoot
 {
 
-class ExtractWaysVisitor : public ElementConstOsmMapVisitor
+class ExtractWaysVisitor :  public ElementConstOsmMapVisitor
 {
 public:
 
@@ -54,6 +54,7 @@ public:
   {
     vector<ConstWayPtr> result;
     ExtractWaysVisitor v(result);
+
     v.setOsmMap(map.get());
     e->visitRo(*map, v);
     return result;

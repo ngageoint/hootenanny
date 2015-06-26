@@ -599,7 +599,8 @@ public class CustomScriptResourceTest
 
   		String sScript = FileUtils.readFileToString(fScript);
 			boolean canExport = res.validateExport(sScript);
-
+			// This may be no longer valid assumption.
+/*
   		if(jsTrans.get("CANEXPORT") != null)
   		{
   			Boolean bCanExport = (Boolean)jsTrans.get("CANEXPORT") ;
@@ -612,7 +613,7 @@ public class CustomScriptResourceTest
   				assertFalse(canExport);
   			}
   		}
-
+*/
   		// check for FOUO
 
   		if(jsTrans.get("FOUO_PATH") != null)

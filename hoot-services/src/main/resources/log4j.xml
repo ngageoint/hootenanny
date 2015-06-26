@@ -50,6 +50,50 @@
     <appender-ref ref="ConsoleAppender" />
     <!-- appender-ref ref="FileAppender" / -->
   </logger>
+  
+  <!-- these guys have debug logging worth keeping, but we'll want it turned off most of the time
+       when debugging hoot issues -->
+  <logger name="hoot.services.command.CommandRunner" additivity="false">
+    <level value="warn"/>
+    <appender-ref ref="ConsoleAppender" />
+    <!-- appender-ref ref="FileAppender" / -->
+  </logger>
+  <logger name="hoot.services.command.CommandRunner.CharPump" additivity="false">
+    <level value="warn"/>
+    <appender-ref ref="ConsoleAppender" />
+    <!-- appender-ref ref="FileAppender" / -->
+  </logger>
+  <logger name="hoot.services.db.DbClientAbstract" additivity="false">
+    <level value="warn"/>
+    <appender-ref ref="ConsoleAppender" />
+    <!-- appender-ref ref="FileAppender" / -->
+  </logger>
+  <logger name="hoot.services.controllers.wps.BaseProcesslet" additivity="false">
+    <level value="warn"/>
+    <appender-ref ref="ConsoleAppender" />
+    <!-- appender-ref ref="FileAppender" / -->
+  </logger>
+  <logger name="hoot.services.controllers.osm.MapResource" additivity="false">
+    <level value="warn"/>
+    <appender-ref ref="ConsoleAppender" />
+    <!-- appender-ref ref="FileAppender" / -->
+  </logger>
+  <logger name="hoot.services.models.osm.Map" additivity="false">
+    <level value="warn"/>
+    <appender-ref ref="ConsoleAppender" />
+    <!-- appender-ref ref="FileAppender" / -->
+  </logger>
+  <logger name="hoot.services.models.osm.ModelDaoUtils" additivity="false">
+    <level value="warn"/>
+    <appender-ref ref="ConsoleAppender" />
+    <!-- appender-ref ref="FileAppender" / -->
+  </logger>
+  <logger name="hoot.services.writers.osm.MapQueryResponseWriter" additivity="false">
+    <level value="warn"/>
+    <appender-ref ref="ConsoleAppender" />
+    <!-- appender-ref ref="FileAppender" / -->
+  </logger>
+  
   <logger name="hoot.services" additivity="false">
     <level value="warn"/>
     <appender-ref ref="ConsoleAppender" />

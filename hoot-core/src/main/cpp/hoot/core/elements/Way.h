@@ -127,6 +127,8 @@ public:
    */
   int getNodeIndex(long nodeId) const;
 
+  long getFirstNodeId() const { return getNodeId(0); }
+
   long getLastNodeId() const { return getNodeId(getNodeCount() - 1); }
 
   size_t getNodeCount() const { return _wayData->getNodeIds().size(); }
@@ -148,6 +150,12 @@ public:
   bool isValidPolygon() const;
 
   /**
+   * Returns True if the first and last node in the Way have the same node ID, provided the way
+   * contains two or more nodes. If way has zero or one nodes, returns false
+   */
+  bool isFirstLastNodeIdentical() const;
+
+  /**
    * Replaces any node instance with oldId with newId. If oldId isn't referenced by this way then
    * no action is taken.
    */
@@ -166,9 +174,9 @@ public:
 
   QString toString() const;
 
-  virtual void visitRo(const OsmMap& map, ElementVisitor& filter) const;
+  virtual void visitRo(const ElementProvider& map, ElementVisitor& filter) const;
 
-  virtual void visitRw(OsmMap& map, ElementVisitor& filter);
+  virtual void visitRw(ElementProvider& map, ElementVisitor& filter);
 
 protected:
 

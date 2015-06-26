@@ -28,6 +28,8 @@
 #define PARTIALOSMMAPWRITER_H
 
 #include "OsmMapWriter.h"
+#include "ElementOutputStream.h"
+#include "ElementInputStream.h"
 
 namespace hoot
 {
@@ -36,7 +38,7 @@ namespace hoot
  * Partial writing will be initialized by a call to OsmMapWriter::open. The partial writer should
  * be able to write out arbitrarily large data sets (AKA not memory bound).
  */
-class PartialOsmMapWriter : public OsmMapWriter
+class PartialOsmMapWriter : public OsmMapWriter, public ElementOutputStream
 {
 public:
   PartialOsmMapWriter();
@@ -75,6 +77,8 @@ public:
 
   virtual void writePartial(const shared_ptr<const Relation>& r) = 0;
   void writePartial(const shared_ptr<Relation>& r);
+
+  virtual void writeElement(ElementInputStream& in) { writePartial(in.readNextElement()); }
 
 };
 

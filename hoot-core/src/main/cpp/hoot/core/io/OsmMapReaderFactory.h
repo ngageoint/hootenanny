@@ -61,6 +61,8 @@ public:
    */
   bool hasPartialReader(QString url);
 
+  bool hasElementInputStream(QString url);
+
   bool hasReader(QString url);
 
   static void read(shared_ptr<OsmMap> map, QString url, bool useFileId = true,

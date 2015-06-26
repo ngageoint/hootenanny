@@ -1158,6 +1158,9 @@ bool OsmSchema::isArea(const Tags& t, ElementType type) const
     return false;
   }
 
+  // Print out tags
+  //LOG_DEBUG("Tags: " << t.toString() );
+
   result |= isBuilding(t, type);
   result |= t.isTrue("building:part");
   result |= t.isTrue("area");
@@ -1232,10 +1235,16 @@ bool OsmSchema::isAreaForStats(const ConstElementPtr& e) const
 bool OsmSchema::isBuilding(const Tags& t, ElementType type) const
 {
   bool result = false;
-  if (type != ElementType::Node && hasCategory(t, "building"))
+  if ((type != ElementType::Node) && (hasCategory(t, "building") == true))
   {
     result = true;
   }
+
+  if ( result == true )
+  {
+    LOG_DEBUG("In OsmSchema::isBuilding, returning true")
+  }
+
   return result;
 }
 

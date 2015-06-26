@@ -78,21 +78,6 @@ public:
 
   virtual ElementPtr readNextElement() = 0;
 
-  /**
-   * @brief streamHasMoreElements
-   * @return true if more elements can be read, else false
-   */
-  virtual bool streamHasMoreElements(
-      void );
-
-  /**
-   * @brief streamReadNextElement
-   * @return Pointer to next element read from stream
-   */
-  virtual ElementPtr streamReadNextElement(
-      void );
-
-
 protected:
 
   long _maxElementsPerMap;

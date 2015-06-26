@@ -57,16 +57,4 @@ void PartialOsmMapReader::readPartial(shared_ptr<OsmMap> map)
   _elementsRead = 0;
 }
 
-bool PartialOsmMapReader::streamHasMoreElements(
-    void )
-{
-  return hasMoreElements();
-}
-
-ElementPtr PartialOsmMapReader::streamReadNextElement(
-    void )
-{
-  return readNextElement();
-}
-
 }

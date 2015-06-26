@@ -75,8 +75,8 @@ class PbfReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runFactoryReadMapTest);
   CPPUNIT_TEST(runReadMapPartialTest);
   CPPUNIT_TEST(runReadMapPartialMultipleBlobsTest);
-  CPPUNIT_TEST(runStreamHasMoreElementsTest);
-  CPPUNIT_TEST(runStreamReadNextElementTest);
+  CPPUNIT_TEST(runHasMoreElementsTest);
+  CPPUNIT_TEST(runReadNextElementTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -517,37 +517,37 @@ public:
     CPPUNIT_ASSERT_EQUAL(4, ctr);
   }
 
-  void runStreamHasMoreElementsTest(
+  void runHasMoreElementsTest(
       void )
   {
     PbfReader reader1;
 
     // If we haven't opened a file, it best not be ready to read
-    CPPUNIT_ASSERT_EQUAL(reader1.streamHasMoreElements(), false);
+    CPPUNIT_ASSERT_EQUAL(reader1.hasMoreElements(), false);
 
     // Try to open invalid file
     PbfReader reader2(QString("test-files/totalgarbage.osm.pbf"));
-    CPPUNIT_ASSERT_EQUAL(reader2.streamHasMoreElements(), false);
+    CPPUNIT_ASSERT_EQUAL(reader2.hasMoreElements(), false);
 
     // Open valid file
     PbfReader reader3(QString("test-files/ToyTestA.osm.pbf"));
-    CPPUNIT_ASSERT_EQUAL(reader3.streamHasMoreElements(), true);
+    CPPUNIT_ASSERT_EQUAL(reader3.hasMoreElements(), true);
 
     // Close file and check again
     reader3.close();
-    CPPUNIT_ASSERT_EQUAL(reader3.streamHasMoreElements(), false);
+    CPPUNIT_ASSERT_EQUAL(reader3.hasMoreElements(), false);
   }
 
-  void runStreamReadNextElementTest(
+  void runReadNextElementTest(
       void )
   {
     PbfReader reader(QString("test-files/ToyTestA.osm.pbf"));
 
     // Iterate through all items
     int numberOfElements(0);
-    while ( reader.streamHasMoreElements() == true )
+    while ( reader.hasMoreElements() == true )
     {
-      ElementPtr tempElement = reader.streamReadNextElement();
+      ElementPtr tempElement = reader.readNextElement();
       numberOfElements++;
       //LOG_DEBUG(tempElement->toString())
     }

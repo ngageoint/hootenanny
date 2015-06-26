@@ -556,4 +556,16 @@ void ServicesDbReader::setConfiguration(const Settings& conf)
   setUserEmail(conf.getString(emailKey(), ""));
 }
 
+boost::shared_ptr<OGRSpatialReference> ServicesDbReader::getProjection() const
+{
+  boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
+  if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
+  {
+    throw HootException("Error creating EPSG:4326 projection.");
+  }
+
+  return wgs84;
+}
+
+
 }

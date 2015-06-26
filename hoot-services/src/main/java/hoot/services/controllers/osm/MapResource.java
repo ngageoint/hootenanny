@@ -200,7 +200,7 @@ public class MapResource
     nodeElem.setAttribute("id", "0");
     nodeElem.setAttribute("timestamp", strDate);
     nodeElem.setAttribute("user", "hootenannyuser");
-    nodeElem.setAttribute("visible", "false");
+    nodeElem.setAttribute("visible", "true");
     nodeElem.setAttribute("version", "1");
     nodeElem.setAttribute("lat", maxlat);
     nodeElem.setAttribute("lon", minlon);
@@ -210,7 +210,7 @@ public class MapResource
     nodeElem.setAttribute("id", "1");
     nodeElem.setAttribute("timestamp", strDate);
     nodeElem.setAttribute("user", "hootenannyuser");
-    nodeElem.setAttribute("visible", "false");
+    nodeElem.setAttribute("visible", "true");
     nodeElem.setAttribute("version", "1");
     nodeElem.setAttribute("lat", maxlat);
     nodeElem.setAttribute("lon", maxlon);
@@ -220,7 +220,7 @@ public class MapResource
     nodeElem.setAttribute("id", "2");
     nodeElem.setAttribute("timestamp", strDate);
     nodeElem.setAttribute("user", "hootenannyuser");
-    nodeElem.setAttribute("visible", "false");
+    nodeElem.setAttribute("visible", "true");
     nodeElem.setAttribute("version", "1");
     nodeElem.setAttribute("lat", minlat);
     nodeElem.setAttribute("lon", maxlon);
@@ -230,7 +230,7 @@ public class MapResource
     nodeElem.setAttribute("id", "3");
     nodeElem.setAttribute("timestamp", strDate);
     nodeElem.setAttribute("user", "hootenannyuser");
-    nodeElem.setAttribute("visible", "false");
+    nodeElem.setAttribute("visible", "true");
     nodeElem.setAttribute("version", "1");
     nodeElem.setAttribute("lat", minlat);
     nodeElem.setAttribute("lon", minlon);

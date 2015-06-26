@@ -28,7 +28,6 @@
 #include "Way.h"
 
 // Hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -97,23 +96,21 @@ bool Way::containsNodeId(long nid) const
   return false;
 }
 
-void Way::visitRo(const OsmMap& map, ElementVisitor& filter) const
+void Way::visitRo(const ElementProvider& map, ElementVisitor& filter) const
 {
   filter.visit(map.getWay(getId()));
   const std::vector<long>& nids = getNodeIds();
 
-  const OsmMap::NodeMap& nodes = map.getNodeMap();
   for (size_t i = 0; i < nids.size(); i++)
   {
-    OsmMap::NodeMap::const_iterator it = nodes.find(nids[i]);
-    if (it != nodes.end())
+    if (map.containsNode(nids[i]))
     {
-      filter.visit(it.value());
+      filter.visit(map.getNode(nids[i]));
     }
   }
 }
 
-void Way::visitRw(OsmMap& map, ElementVisitor& filter)
+void Way::visitRw(ElementProvider& map, ElementVisitor& filter)
 {
   visitRo(map, filter);
 }
@@ -306,6 +303,16 @@ QString Way::toString() const
   ss << "cached envelope: " << GeometryUtils::toString(_cachedEnvelope).toStdString() << endl;
   ss << "status: " << getStatusString().toStdString();
   return QString::fromStdString(ss.str());
+}
+
+bool Way::isFirstLastNodeIdentical() const
+{
+  if ( getNodeCount() < 2 )
+  {
+    return false;
+  }
+
+  return ( getFirstNodeId() == getLastNodeId() );
 }
 
 }

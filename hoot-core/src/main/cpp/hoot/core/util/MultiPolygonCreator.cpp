@@ -39,7 +39,8 @@
 #include <geos/util/TopologyException.h>
 
 // hoot
-#include <hoot/core/OsmMap.h>
+//#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -50,8 +51,9 @@
 namespace hoot
 {
 
-MultiPolygonCreator::MultiPolygonCreator(const ConstOsmMapPtr& map, const ConstRelationPtr& r) :
-  _map(map),
+MultiPolygonCreator::MultiPolygonCreator(const ConstElementProviderPtr& provider,
+  const ConstRelationPtr& r) :
+  _provider(provider),
   _r(r)
 {
 }
@@ -158,7 +160,7 @@ void MultiPolygonCreator::_addWayToSequence(ConstWayPtr w, CoordinateSequence& c
 
   for (int i = start; i < (int)w->getNodeCount() && i >= 0; i += increment)
   {
-    Coordinate c = _map->getNode(w->getNodeId(i))->toCoordinate();
+    Coordinate c = _provider->getNode(w->getNodeId(i))->toCoordinate();
     if (cs.getSize() == 0 || c != cs.getAt(cs.getSize() - 1))
     {
       cs.add(c);
@@ -184,11 +186,11 @@ shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
     if (e.getElementId().getType() == ElementType::Relation &&
         (e.role == "outer" || e.role == "part"))
     {
-      shared_ptr<const Relation> r = _map->getRelation(e.getElementId().getId());
+      shared_ptr<const Relation> r = _provider->getRelation(e.getElementId().getId());
       if (r->isMultiPolygon() ||
         OsmSchema::getInstance().isArea(r->getTags(), ElementType::Relation))
       {
-        shared_ptr<Geometry> child(MultiPolygonCreator(_map, r).createMultipolygon());
+        shared_ptr<Geometry> child(MultiPolygonCreator(_provider, r).createMultipolygon());
         try
         {
           result.reset(result->Union(child.get()));
@@ -216,7 +218,7 @@ void MultiPolygonCreator::_createRings(const QString& role, vector<LinearRing *>
     const RelationData::Entry& e = elements[i];
     if (e.getElementId().getType() == ElementType::Way && e.role == role)
     {
-      const shared_ptr<const Way>& w = _map->getWay(e.getElementId().getId());
+      const shared_ptr<const Way>& w = _provider->getWay(e.getElementId().getId());
 
       if (!w)
       {
@@ -393,19 +395,19 @@ LinearRing* MultiPolygonCreator::_toLinearRing(const ConstWayPtr& w) const
   size_t i = 0;
   for (; i < ids.size(); i++)
   {
-    shared_ptr<const Node> n = _map->getNode(ids[i]);
+    shared_ptr<const Node> n = _provider->getNode(ids[i]);
     cs->setAt(n->toCoordinate(), i);
   }
 
   // a linestring cannot contain 1 point. Do this to keep it valid.
   if (ids.size() == 1)
   {
-    shared_ptr<const Node> n = _map->getNode(ids[0]);
+    shared_ptr<const Node> n = _provider->getNode(ids[0]);
     cs->setAt(n->toCoordinate(), i++);
   }
   else if (ids[0] != ids[ids.size() - 1])
   {
-    shared_ptr<const Node> n = _map->getNode(ids[0]);
+    shared_ptr<const Node> n = _provider->getNode(ids[0]);
     cs->setAt(n->toCoordinate(), i++);
   }
 

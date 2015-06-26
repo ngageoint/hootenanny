@@ -33,6 +33,7 @@ using namespace boost;
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/HootException.h>
@@ -451,9 +452,9 @@ size_t MapReprojector::_findBestScore(vector<PlanarTestResult>& results)
   return orderByScore[0].i;
 }
 
-bool MapReprojector::isGeographic(const shared_ptr<const OsmMap>& map)
+bool MapReprojector::isGeographic(const ConstElementProviderPtr& provider)
 {
-  return map->getProjection()->IsGeographic();
+  return provider->getProjection()->IsGeographic();
 }
 
 Coordinate MapReprojector::reproject(const Coordinate& c, shared_ptr<OGRSpatialReference> srs1,

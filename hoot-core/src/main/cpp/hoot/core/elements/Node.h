@@ -86,9 +86,10 @@ public:
 
   QString toString() const;
 
-  void visitRo(const OsmMap& map, ElementVisitor& filter) const;
+  virtual void visitRo(const ElementProvider& map, ElementVisitor& visitor) const;
 
-  void visitRw(OsmMap& map, ElementVisitor& filter);
+  virtual void visitRw(ElementProvider& map, ElementVisitor& visitor);
+
 
 protected:
 

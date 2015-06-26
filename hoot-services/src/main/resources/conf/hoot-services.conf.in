@@ -27,6 +27,11 @@ homeFolder=$(HOOT_HOME)
 # slowly to queries
 testJobStatusPollerTimeout=2000
 
+# If true, the entire services database will be cleared before every test run.  Normally, this 
+# would not need to be set to true, unless the database was in an inconsistent state somehow which
+# causes the tests to not be able to insert maps properly.
+servicesTestClearEntireDb=false
+
 # OSM SERVICES
 
 # OSM header info

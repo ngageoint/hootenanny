@@ -142,9 +142,9 @@ public:
 
   QString toString() const;
 
-  virtual void visitRo(const OsmMap& map, ElementVisitor& filter) const;
+  virtual void visitRo(const ElementProvider& map, ElementVisitor& filter) const;
 
-  virtual void visitRw(OsmMap& map, ElementVisitor& filter);
+  virtual void visitRw(ElementProvider& map, ElementVisitor& filter);
 
 private:
 

@@ -28,7 +28,6 @@ package hoot.services.osm;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.format.DateTimeFormat;
@@ -42,10 +41,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
-import hoot.services.db.DataDefinitionManager;
 import hoot.services.db.DbUtils;
+import hoot.services.db2.QMaps;
+import hoot.services.db2.QUsers;
 import hoot.services.review.ReviewTestUtils;
 
+import com.mysema.query.sql.SQLQuery;
+import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.sun.jersey.api.client.AsyncWebResource;
 import com.sun.jersey.test.framework.JerseyTest;
 
@@ -66,7 +68,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
   protected static DateTimeFormatter timeFormatter =
     DateTimeFormat.forPattern(DbUtils.TIMESTAMP_DATE_FORMAT);
 
-  protected long userId = -1;
+  protected static long userId = -1;
   protected long mapId = -1;
 
   protected static Connection conn = null;
@@ -104,10 +106,20 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
   {
     try
     {
-      DbUtils.clearServicesDb(conn);
-
-
-      userId = DbUtils.insertUser(conn);
+    	if (Boolean.parseBoolean(
+    			  HootProperties.getInstance().getProperty(
+              "servicesTestClearEntireDb", HootProperties.getDefault("servicesTestClearEntireDb"))))
+    	{
+    		DbUtils.clearServicesDb(conn);
+    	}
+    	
+    	//TODO: This is going to result in a lot of users created by the services test, now that
+    	//we don't clear out the database automatically between tests.  Only inserting one user is
+    	//causing UserResourceTest failures for a not so obvious reason.
+    	//if (userId == -1)
+    	//{
+    		userId = DbUtils.insertUser(conn);
+    	//}
     	mapId = DbUtils.insertMap(userId, conn);
 
       OsmTestUtils.userId = userId;
@@ -128,7 +140,30 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
   {
     try
     {
-
+    	//no need to clear out each map, if we're clearing the whole db out before each run
+    	if (!Boolean.parseBoolean(
+  			  HootProperties.getInstance().getProperty(
+            "servicesTestClearEntireDb", HootProperties.getDefault("servicesTestClearEntireDb"))))
+    	{
+    		DbUtils.deleteOSMRecord(conn, mapId);
+        
+        QMaps maps = QMaps.maps;
+        SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
+        final List<Long> mapIds = 
+        	query.from(maps).where(maps.id.eq(ReviewTestUtils.secondMapId)).list(maps.id);
+        assert(mapIds.size() == 0 || mapIds.size() == 1);
+        if (mapIds.size() == 1)
+        {
+        	DbUtils.deleteOSMRecord(conn, ReviewTestUtils.secondMapId);
+        }
+        
+        /*if (userId != DbUtils.getTestUserId(conn))
+        {
+        	new SQLDeleteClause(conn, DbUtils.getConfiguration(), QUsers.users)
+      	    .where(QUsers.users.id.eq(userId))
+      	    .execute();
+        }*/
+    	}
     }
     catch (Exception e)
     {
@@ -142,8 +177,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
   {
     try
     {
-      //DbUtils.clearServicesDb(conn);
-      OsmTestUtils.conn = null;
+    	OsmTestUtils.conn = null;
       ReviewTestUtils.conn = null;
     }
     catch (Exception e)
@@ -156,6 +190,4 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
       DbUtils.closeConnection(conn);
     }
   }
-
-
 }

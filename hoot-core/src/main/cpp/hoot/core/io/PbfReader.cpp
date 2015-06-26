@@ -50,6 +50,11 @@ using namespace hoot::pb;
 // TGS
 #include <tgs/System/Time.h>
 
+#include <boost/shared_ptr.hpp>
+
+#include <ogr_spatialref.h>
+
+
 // ZLib Includes
 #include <zlib.h>
 
@@ -1163,6 +1168,17 @@ void PbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)
       }
     }
   }
+}
+
+boost::shared_ptr<OGRSpatialReference> PbfReader::getProjection() const
+{
+  boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
+  if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
+  {
+    throw HootException("Error creating EPSG:4326 projection.");
+  }
+
+  return wgs84;
 }
 
 }

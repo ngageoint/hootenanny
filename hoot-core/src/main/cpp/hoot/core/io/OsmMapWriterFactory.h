@@ -50,6 +50,8 @@ public:
 
   static OsmMapWriterFactory& getInstance() { return _theInstance; }
 
+  bool hasElementOutputStream(QString url);
+
   bool hasPartialWriter(QString url);
 
   bool hasWriter(QString url);

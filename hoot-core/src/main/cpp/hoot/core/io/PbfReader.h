@@ -47,6 +47,11 @@
 // tgs
 #include <tgs/BigContainers/BigMap.h>
 
+#include <boost/shared_ptr.hpp>
+
+#include <ogr_spatialref.h>
+
+
 namespace hoot
 {
   namespace pb
@@ -166,6 +171,8 @@ public:
 
   virtual void closeStream(
       void );
+
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
 private:
 

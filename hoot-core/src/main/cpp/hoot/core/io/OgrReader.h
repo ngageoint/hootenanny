@@ -33,6 +33,8 @@
 #include <hoot/core/elements/ElementIterator.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/util/Progress.h>
 
 // Qt
 #include <QHash>
@@ -40,6 +42,10 @@
 #include <QStringList>
 #include <QXmlDefaultHandler>
 class QString;
+
+#include <boost/shared_ptr.hpp>
+
+#include <ogr_spatialref.h>
 
 // Standard
 #include <vector>
@@ -53,7 +59,7 @@ class OgrReaderInternal;
  * This class is broken out into an internal and external class to avoid issues with Python's
  * include file approach.
  */
-class OgrReader
+class OgrReader : public PartialOsmMapReader
 {
 public:
 
@@ -64,6 +70,10 @@ public:
   static bool isReasonablePath(QString path);
 
   OgrReader();
+
+  OgrReader(QString path);
+
+  OgrReader(QString path, QString layer);
 
   ~OgrReader();
 
@@ -84,6 +94,31 @@ public:
   void setTranslationFile(QString translate);
 
   long getFeatureCount(QString path, QString layer);
+
+  virtual void initializePartial();
+
+  virtual bool hasMoreElements();
+
+  virtual ElementPtr readNextElement();
+
+  Progress streamGetProgress() const;
+
+  virtual void close();
+
+  virtual bool isSupported(QString url);
+
+  void setLayerName(QString layerName);
+
+  QString getLayerName();
+
+  virtual void open(QString url);
+
+  virtual void setUseDataSourceIds(bool useDataSourceIds);
+
+  virtual void finalizePartial();
+
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+
 
 protected:
   OgrReaderInternal* _d;

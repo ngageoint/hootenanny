@@ -25,6 +25,9 @@
  * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
+#include <ogr_spatialref.h>
+#include <boost/shared_ptr.hpp>
+
 #include "ElementConverter.h"
 
 // GEOS
@@ -37,6 +40,7 @@
 #include <geos/geom/Polygon.h>
 
 // hoot
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/MapReprojector.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
@@ -55,9 +59,18 @@
 namespace hoot
 {
 
+ElementConverter::ElementConverter(const ConstElementProviderPtr& provider) :
+  _constProvider(provider),
+  _spatialReference(provider->getProjection())
+{
+  ;
+}
+
 Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
 {
-  assert(MapReprojector::isPlanar(_constMap));
+  // Doing length/distance calcs only make sense if we've projected down onto a flat surface
+  assert(MapReprojector::isPlanar(_constProvider));
+
   // if the element is not a point and is not an area.
   // NOTE: Originally I was using isLinear. This was a bit too strict in that it wants evidence of
   // being linear before the length is calculated. Conversely, this wants evidence that is is not
@@ -125,15 +138,16 @@ shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const 
 shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Relation>& e, const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, true, statsFlag);
+
   if (gid == GEOS_MULTIPOLYGON)
   {
-    return MultiPolygonCreator(_constMap, e).createMultipolygon();
+    return MultiPolygonCreator(_constProvider, e).createMultipolygon();
   }
   else if (gid == GEOS_MULTILINESTRING)
   {
     MultiLineStringVisitor v;
-    v.setOsmMap(_constMap.get());
-    e->visitRo(*_constMap, v);
+    v.setElementProvider(_constProvider);
+    e->visitRo(*_constProvider, v);
     shared_ptr<Geometry> result(v.createMultiLineString());
     return result;
   }
@@ -163,14 +177,14 @@ shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWayPtr& 
 
   for (size_t i = 0; i < ids.size(); i++)
   {
-    shared_ptr<const Node> n = _constMap->getNode(ids[i]);
+    shared_ptr<const Node> n = _constProvider->getNode(ids[i]);
     cs->setAt(n->toCoordinate(), i);
   }
 
   // a linestring cannot contain 1 point. Do this to keep it valid.
   if (ids.size() == 1)
   {
-    shared_ptr<const Node> n = _constMap->getNode(ids[0]);
+    shared_ptr<const Node> n = _constProvider->getNode(ids[0]);
     cs->setAt(n->toCoordinate(), 1);
   }
 
@@ -205,7 +219,7 @@ shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr& w) con
   size_t i;
   for (i = 0; i < ids.size(); i++)
   {
-    shared_ptr<const Node> n = _constMap->getNode(ids[i]);
+    shared_ptr<const Node> n = _constProvider->getNode(ids[i]);
     cs->setAt(n->toCoordinate(), i);
   }
 
@@ -213,7 +227,7 @@ shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr& w) con
   while (i < size)
   {
     // add the first point onto the end.
-    shared_ptr<const Node> n = _constMap->getNode(ids[0]);
+    shared_ptr<const Node> n = _constProvider->getNode(ids[0]);
     cs->setAt(n->toCoordinate(), i);
     i++;
   }
@@ -241,6 +255,7 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
     {
       ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
       assert(w);
+
       if(statsFlag)
       {
         if (w->isValidPolygon() && OsmSchema::getInstance().isAreaForStats(w->getTags(), ElementType::Way))
@@ -253,6 +268,8 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
         else
           return GEOS_LINESTRING;
       }
+
+      break;
     }
 
   case ElementType::Relation:
@@ -271,17 +288,23 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
         else if (OsmSchema::getInstance().isLinear(*r))
           return GEOS_MULTILINESTRING;
       }
+
+      break;
+
     }
 
   default:
-    if (throwError)
-    {
-      throw IllegalArgumentException("Unknown geometry type.");
-    }
-    else
-    {
-      return GeometryTypeId(-1);
-    }
+    LOG_ERROR("Element was not a node, way, or relation");
+    break;
+  }
+
+  if (throwError)
+  {
+    throw IllegalArgumentException("Unknown geometry type.");
+  }
+  else
+  {
+    return GeometryTypeId(-1);
   }
 }
 

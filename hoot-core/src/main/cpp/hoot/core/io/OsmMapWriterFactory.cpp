@@ -30,6 +30,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/io/OsmMapWriter.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
+#include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
@@ -75,23 +76,28 @@ shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
   return writer;
 }
 
+bool OsmMapWriterFactory::hasElementOutputStream(QString url)
+{
+  bool result = false;
+  shared_ptr<OsmMapWriter> writer = createWriter(url);
+  shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
+  if (streamWriter)
+  {
+    result = true;
+  }
+
+  return result;
+}
+
+
 bool OsmMapWriterFactory::hasPartialWriter(QString url)
 {
-  vector<std::string> names = Factory::getInstance().getObjectNamesByBase(
-    OsmMapWriter::className());
-
   bool result = false;
-  for (size_t i = 0; i < names.size() && !result; ++i)
+  shared_ptr<OsmMapWriter> writer = createWriter(url);
+  shared_ptr<PartialOsmMapWriter> streamWriter = dynamic_pointer_cast<PartialOsmMapWriter>(writer);
+  if (streamWriter)
   {
-    shared_ptr<OsmMapWriter> writer(Factory::getInstance().constructObject<OsmMapWriter>(names[i]));
-    if (writer->isSupported(url))
-    {
-      shared_ptr<PartialOsmMapWriter> pw = dynamic_pointer_cast<PartialOsmMapWriter>(writer);
-      if (pw)
-      {
-        result = true;
-      }
-    }
+    result = true;
   }
 
   return result;

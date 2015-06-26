@@ -31,17 +31,8 @@
 // Hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/MapReprojector.h>
-#include <hoot/core/algorithms/AlphaShape.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/conflate/SuperfluousWayRemover.h>
-#include <hoot/core/io/PbfWriter.h>
-#include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/visitors/UnionPolygonsVisitor.h>
-
-// Standard
-#include <fstream>
+#include <hoot/core/conflate/CookieCutter.h>
 
 namespace hoot
 {
@@ -111,44 +102,12 @@ public:
 
     shared_ptr<OsmMap> cutterShapeMap(new OsmMap());
     loadMap(cutterShapeMap, cutterShapePath, true, Status::Unknown1);
-    OGREnvelope env = cutterShapeMap->calculateBounds();
 
     // load up the "dough"
     shared_ptr<OsmMap> doughMap(new OsmMap());
     loadMap(doughMap, doughPath, true, Status::Unknown1);
-    env.Merge(doughMap->calculateBounds());
-
-    // reproject the dough and cutter into the same planar projection.
-    MapReprojector::reprojectToPlanar(doughMap, env);
-    MapReprojector::reprojectToPlanar(cutterShapeMap, env);
-
-    // create a complex geometry representing the alpha shape
-    UnionPolygonsVisitor v;
-    cutterShapeMap->visitRo(v);
-    shared_ptr<Geometry> cutterShape = v.getUnion();
-
-    if (buffer != 0.0)
-    {
-      cutterShape.reset(cutterShape->buffer(buffer));
-    }
-
-    if (cutterShape->getArea() == 0.0)
-    {
-      LOG_WARN("Cutter area is zero. Try increasing the buffer size or check the input.");
-    }
-
-    shared_ptr<OsmMap> result;
-
-    // free up a little RAM
-    cutterShapeMap.reset();
-    // remove the cookie cutter portion from the "dough"
-    // if crop is true, then the cookie cutter portion is kept and the "dough" is dropped.
-    MapCropper::crop(doughMap, cutterShape, !crop);
-    // clean up any ugly bits left over
-    SuperfluousWayRemover::removeWays(doughMap);
-    doughMap = SuperfluousNodeRemover::removeNodes(doughMap);
-
-    result = doughMap;
+    CookieCutter(crop, buffer).cut(cutterShapeMap, doughMap);
+    OsmMapPtr result = doughMap;
 
     // reproject back into lat/lng
     MapReprojector::reprojectToWgs84(result);

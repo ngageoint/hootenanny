@@ -116,6 +116,10 @@ public class User extends Users
 
   	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
   	Long mapid = query.from(maps).where(maps.userId.eq(getId())).singleResult(maps.id);
+  	if (mapid == null || mapid < 0)
+  	{
+  		return -1;
+  	}
 
   	query = new SQLQuery(conn, DbUtils.getConfiguration(mapid));
   	return

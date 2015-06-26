@@ -33,6 +33,10 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 
+#include <boost/shared_ptr.hpp>
+
+#include <ogr_spatialref.h>
+
 // tgs
 #include <tgs/BigContainers/BigMap.h>
 
@@ -96,6 +100,7 @@ public:
 
   virtual shared_ptr<Element> readNextElement();
 
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
 private:
 

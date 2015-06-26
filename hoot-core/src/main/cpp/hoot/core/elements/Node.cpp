@@ -94,12 +94,12 @@ QString Node::toString() const
     arg(getTags().toString());
 }
 
-void Node::visitRo(const OsmMap& map, ElementVisitor& filter) const
+void Node::visitRo(const ElementProvider& map, ElementVisitor& filter) const
 {
   filter.visit(map.getNode(getId()));
 }
 
-void Node::visitRw(OsmMap& map, ElementVisitor& filter)
+void Node::visitRw(ElementProvider& map, ElementVisitor& filter)
 {
   filter.visit(map.getNode(getId()));
 }

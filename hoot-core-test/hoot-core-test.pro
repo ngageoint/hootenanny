@@ -186,9 +186,10 @@ nodejs:SOURCES += \
 
 SOURCES += \
     src/test/cpp/hoot/core/conflate/SearchRadiusCalculatorTest.cpp \
+    src/test/cpp/hoot/core/io/ElementCacheLruTest.cpp \
     src/test/cpp/hoot/core/algorithms/string/TextFileWordWeightDictionaryTest.cpp \
     src/test/cpp/hoot/core/schema/ScoreMatrixTest.cpp \
     src/test/cpp/hoot/core/algorithms/string/WeightedWordDistanceTest.cpp \
     src/test/cpp/hoot/core/algorithms/string/SqliteWeightedWordDistanceTest.cpp \
-    src/test/cpp/hoot/core/filters/BuildingCriterionTest.cpp
-
+    src/test/cpp/hoot/core/filters/BuildingCriterionTest.cpp \
+    src/test/cpp/hoot/core/visitors/SplitLongLinearWaysVisitorTest.cpp

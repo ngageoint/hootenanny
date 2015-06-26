@@ -507,7 +507,8 @@ public class CommandRunner implements ICommandRunner {
 	                    }
 	                    if ( pumpLog.isDebugEnabled () ) {
 	                        t2 = System.currentTimeMillis ();
-	                        pumpLog.debug ( "CharPump read " + n + " bytes in " + ( t2 - t1 ) + " ms." );
+	                        //see comment made in CharPump writing
+	                        //pumpLog.debug ( "CharPump read " + n + " bytes in " + ( t2 - t1 ) + " ms." );
 	                    }
 	                    if ( pumpLog.isDebugEnabled () ) {
 	                        t1 = System.currentTimeMillis ();
@@ -515,7 +516,9 @@ public class CommandRunner implements ICommandRunner {
 	                    iOut.write ( buf, 0, n );
 	                    if ( pumpLog.isDebugEnabled () ) {
 	                        t2 = System.currentTimeMillis ();
-	                        pumpLog.debug ( "CharPump wrote " + n + " bytes in " + ( t2 - t1 ) + " ms." );
+	                        //This adds too much clutter and can't get it to disable from log4j, so 
+	                        //only re-enable as needed.
+	                        //pumpLog.debug ( "CharPump wrote " + n + " bytes in " + ( t2 - t1 ) + " ms." );
 	                    }
 	                    iOut.flush ();
 	                }

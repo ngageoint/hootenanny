@@ -148,10 +148,12 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			int shpCnt = 0;
 			int osmCnt = 0;
 			int fgdbCnt = 0;
+			int geonamesCnt = 0;
 			
 			int zipCnt = 0;
 			int shpZipCnt = 0;
 			int osmZipCnt = 0;
+			int geonamesZipCnt = 0;
 			int fgdbZipCnt = 0;
 			List<String> zipList = new ArrayList<String>();
 			
@@ -186,6 +188,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 		       shpZipCnt += (Integer) zipStat.get("shpzipcnt");
 		       fgdbZipCnt += (Integer) zipStat.get("fgdbzipcnt");
 		       osmZipCnt += (Integer) zipStat.get("osmzipcnt");
+		       geonamesZipCnt += (Integer) zipStat.get("geonameszipcnt");
 		       
 
 		       zipList.add(fName);
@@ -196,6 +199,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 	      	 shpCnt += (Integer) zipStat.get("shpcnt");
 		       fgdbCnt += (Integer) zipStat.get("fgdbcnt");
 		       osmCnt += (Integer) zipStat.get("osmcnt");
+		       geonamesCnt += (Integer) zipStat.get("geonamescnt");
 	       }
 			}
 			
@@ -208,7 +212,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			String batchJobReqStatus = "success";
 			String batchJobId = UUID.randomUUID().toString();
 			JSONArray jobArgs = _createNativeRequest(reqList, zipCnt, shpZipCnt,
-					fgdbZipCnt, osmZipCnt, shpCnt, fgdbCnt, osmCnt,
+					fgdbZipCnt, osmZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 					zipList, translation, jobId, 
 					etlName, inputsList);
 
@@ -236,7 +240,8 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 	
 	
 	protected JSONArray _createNativeRequest(final JSONArray reqList, final int zipCnt, final int shpZipCnt,
-			final int fgdbZipCnt, final int osmZipCnt, final int shpCnt, final int fgdbCnt, final int osmCnt,
+			final int fgdbZipCnt, final int osmZipCnt, final int geonamesZipCnt, final int shpCnt, final int fgdbCnt, 
+			final int osmCnt, final int geonamesCnt,
 			final List<String> zipList, final String translation, final String jobId, 
 			final String etlName, final List<String> inputsList) throws Exception
 	{
@@ -279,6 +284,12 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 					String mergedZipList = StringUtils.join(zipList.toArray(), ';');
 					param.put("UNZIP_LIST", mergedZipList);
 				}
+				else if(geonamesCnt > 0) // Mix of One or more all osm zip + osm
+				{
+					curInputType = "GEONAMES";
+					String mergedZipList = StringUtils.join(zipList.toArray(), ';');
+					param.put("UNZIP_LIST", mergedZipList);
+				}
 				else //One or more zip (all ogr) || One or more zip (all osm)
 				{
 					// If contains zip of just shape or osm then we will etl zip directly
@@ -306,6 +317,10 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 		else if(fgdbCnt > 0)
 		{
 			curInputType = "FGDB";
+		}
+		else if(geonamesCnt > 0)
+		{
+			curInputType = "GEONAMES";
 		}
 		
 		
@@ -391,9 +406,22 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			osmZipCnt = (Integer)oOsmStat;
 		}
   	
+  	
+  	int geonamesZipCnt = 0;
+  	Object oGeonamesStat = zipStat.get("geonameszipcnt");
+  	if(oGeonamesStat == null)
+		{
+			zipStat.put("geonameszipcnt", 0);
+		}
+		else
+		{
+			geonamesZipCnt = (Integer)oGeonamesStat;
+		}
+  	
   	int osmCnt = 0;
   	int shpCnt = 0;
   	int fgdbCnt = 0;
+  	int geonamesCnt = 0;
   	
 		if(ext.equalsIgnoreCase("osm"))
     {
@@ -402,6 +430,14 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
     	reqType.put("name", inputFileName);
 			reqList.add(reqType);
 			osmCnt++;
+    }
+		else if(ext.equalsIgnoreCase("geonames"))
+    {
+    	JSONObject reqType = new JSONObject();
+    	reqType.put("type", "GEONAMES");
+    	reqType.put("name", inputFileName);
+			reqList.add(reqType);
+			geonamesCnt++;
     }
     else if(ext.equalsIgnoreCase("shp"))
     {
@@ -421,6 +457,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			shpZipCnt += (Integer) res.get("shpcnt");
 			fgdbZipCnt += (Integer) res.get("fgdbcnt");
 			osmZipCnt += (Integer) res.get("osmcnt");
+			geonamesZipCnt += (Integer) res.get("geonamescnt");
    	 
    	 	// We do not allow mix of ogr and osm in zip
 			if((shpZipCnt + fgdbZipCnt) > 0 && osmZipCnt > 0 )
@@ -431,6 +468,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			zipStat.put("shpzipcnt", shpZipCnt);
 			zipStat.put("fgdbzipcnt", fgdbZipCnt);
 			zipStat.put("osmzipcnt", osmZipCnt);
+			zipStat.put("geonameszipcnt", geonamesZipCnt);
     }
     else if(ext.equalsIgnoreCase("gdb"))
     {
@@ -444,6 +482,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 		zipStat.put("shpcnt", shpCnt);
 		zipStat.put("fgdbcnt", fgdbCnt);
 		zipStat.put("osmcnt", osmCnt);
+		zipStat.put("geonamescnt", geonamesCnt);
 	}
 	
 	
@@ -454,10 +493,11 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 	protected JSONObject _getZipContentType(final String zipFilePath, JSONArray contentTypes, String fName) throws Exception
 	{
 		JSONObject resultStat = new JSONObject();
-		String[] extList = {"gdb","osm","shp"};
+		String[] extList = {"gdb","osm","shp","geonames"};
 		
 		int shpCnt = 0;
 		int osmCnt = 0;
+		int geonamesCnt = 0;
 		int fgdbCnt = 0;
 		ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFilePath));
 		ZipEntry ze = zis.getNextEntry();
@@ -526,6 +566,14 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 	  	  				contentTypes.add(contentType);
 	  	  				osmCnt++;
   						}
+  						else if(ext.equals("geonames"))
+  						{
+  							JSONObject contentType = new JSONObject();
+	  	  				contentType.put("type", "GEONAMES_ZIP");
+	  	  				contentType.put("name", fName + "/" + zipName);
+	  	  				contentTypes.add(contentType);
+	  	  				geonamesCnt++;
+  						}
   						else
   						{
   							// We will not throw error here since shape file can contain mutiple types of support files.
@@ -551,6 +599,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
   	resultStat.put("shpcnt", shpCnt);
   	resultStat.put("fgdbcnt", fgdbCnt);
   	resultStat.put("osmcnt", osmCnt);
+  	resultStat.put("geonamescnt", geonamesCnt);
 		
 		return resultStat;
 	}

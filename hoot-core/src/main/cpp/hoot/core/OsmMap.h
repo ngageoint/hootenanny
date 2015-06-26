@@ -108,6 +108,11 @@ public:
 
   ~OsmMap();
 
+  /**
+   * Append all the elements in map to this map. There cannot be any id overlap.
+   */
+  void append(shared_ptr<const OsmMap> map);
+
   void addElement(const shared_ptr<Element>& e);
   template<class T>
   void addElements(T it, T end);
@@ -148,11 +153,11 @@ public:
   /**
    * Returns true if the node is in this map.
    */
-  bool containsNode(long id) const { return _nodes.find(id) != _nodes.end(); }
+  virtual bool containsNode(long id) const { return _nodes.find(id) != _nodes.end(); }
 
-  bool containsRelation(long id) const { return _relations.find(id) != _relations.end(); }
+  virtual bool containsRelation(long id) const { return _relations.find(id) != _relations.end(); }
 
-  bool containsWay(long id) const { return _ways.find(id) != _ways.end(); }
+  virtual bool containsWay(long id) const { return _ways.find(id) != _ways.end(); }
 
   /**
    * Returns a copy of this map that only contains the specified ways. This can be handy when
@@ -224,32 +229,32 @@ public:
    */
   const OsmMapIndex& getIndex() const { return *_index; }
 
-  boost::shared_ptr<const Node> getNode(long id) const;
+  virtual const boost::shared_ptr<const Node> getNode(long id) const;
 
-  const shared_ptr<Node>& getNode(long id);
+  virtual const shared_ptr<Node> getNode(long id);
 
   ConstNodePtr getNode(const ElementId& eid) const { return getNode(eid.getId()); }
 
-  const NodePtr& getNode(const ElementId& eid) { return getNode(eid.getId()); }
+  const NodePtr getNode(const ElementId& eid) { return getNode(eid.getId()); }
 
   const NodeMap& getNodeMap() const { return _nodes; }
 
   /**
    * Returns the SRS for this map. The SRS should never be changed and defaults to WGS84.
    */
-  boost::shared_ptr<OGRSpatialReference> getProjection() const { return _srs; }
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const { return _srs; }
 
-  const shared_ptr<const Relation> getRelation(long id) const;
+  virtual const shared_ptr<const Relation> getRelation(long id) const;
 
-  const shared_ptr<Relation>& getRelation(long id);
+  virtual const shared_ptr<Relation> getRelation(long id);
 
   const RelationMap& getRelationMap() const { return _relations; }
 
   /**
    * Return the way with the specified id or null if it doesn't exist.
    */
-  const shared_ptr<Way>& getWay(long id);
-  const shared_ptr<Way>& getWay(ElementId eid);
+  virtual const shared_ptr<Way> getWay(long id);
+  const shared_ptr<Way> getWay(ElementId eid);
   
   /**
    * Similar to above but const'd.
@@ -422,7 +427,7 @@ void addElements(T it, T end)
   }
 }
 
-inline const shared_ptr<Node>& OsmMap::getNode(long id)
+inline const shared_ptr<Node> OsmMap::getNode(long id)
 {
   NodeMap::Iterator it = _nodes.find(id);
   if (it == _nodes.end())
@@ -446,7 +451,7 @@ inline const shared_ptr<const Relation> OsmMap::getRelation(long id) const
   }
 }
 
-inline const shared_ptr<Relation>& OsmMap::getRelation(long id)
+inline const shared_ptr<Relation> OsmMap::getRelation(long id)
 {
   _tmpRelationIt = _relations.find(id);
   if (_tmpRelationIt != _relations.end())
@@ -478,7 +483,7 @@ inline const shared_ptr<const Way> OsmMap::getWay(ElementId eid) const
   return getWay(eid.getId());
 }
 
-inline const shared_ptr<Way>& OsmMap::getWay(long id)
+inline const shared_ptr<Way> OsmMap::getWay(long id)
 {
   _tmpWayIt = _ways.find(id);
   if (_tmpWayIt != _ways.end())
@@ -491,7 +496,7 @@ inline const shared_ptr<Way>& OsmMap::getWay(long id)
   }
 }
 
-inline const shared_ptr<Way>& OsmMap::getWay(ElementId eid)
+inline const shared_ptr<Way> OsmMap::getWay(ElementId eid)
 {
   assert(eid.getType() == ElementType::Way);
   return getWay(eid.getId());

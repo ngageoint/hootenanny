@@ -14,6 +14,10 @@ ifeq "$(INPUT_TYPE)" "ZIP"
 	OP_INPUT="/vsizip/$(HOOT_HOME)/$(INPUT_PATH)/$(subst ;,/" "/vsizip/$(HOOT_HOME)/$(INPUT_PATH)/,$(INPUT))/"
 endif
 
+ifeq "$(INPUT_TYPE)" "GEONAMES" 
+	HOOT_OPTS+= -D convert.ops=hoot::TranslationOp
+	HOOT_OPTS+= -D translation.script="$(OP_TRANSLATION)"
+endif
 
 ###
 # Transform and load data
@@ -37,6 +41,10 @@ endif
 
   ifeq "$(INPUT_TYPE)" "FGDB" 
 	  cd "$(OP_INPUT_PATH)" && hoot --ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
+  endif
+
+  ifeq "$(INPUT_TYPE)" "GEONAMES" 
+	  cd "$(OP_INPUT_PATH)" && hoot convert $(HOOT_OPTS) $(OP_INPUT) "$(DB_URL)/$(INPUT_NAME)" 
   endif
 	rm -rf "$(OP_INPUT_PATH)"
 

@@ -3811,7 +3811,7 @@ tds.rules = {
 
      // ZI019_ASX - Aerodrome Pavement Information : Aerodrome Movement Area Surface Category
      // ['ZI019_ASX','-999999',undefined,undefined], // No Information
-     ['ZI019_ASX','1','aeroway:pavement','completely_paved'], // Completely Paved
+     ['ZI019_ASX','1','aeroway:pavement','paved'], // Completely Paved
      ['ZI019_ASX','2','aeroway:pavement','mostly_paved'], // Mostly Paved
      ['ZI019_ASX','3','aeroway:pavement','unprepared'], // Unprepared
      ['ZI019_ASX','4','aeroway:pavement','partially_paved'], // Partially Paved

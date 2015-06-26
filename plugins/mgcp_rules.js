@@ -466,7 +466,7 @@ mgcp.rules = {
         // FPT - Airfield Type 
         // ['FPT','0','aeroway:airfield:type','unknown'], // Unknown 
         ['FPT','0',undefined,undefined], // Unknown 
-        ['FPT','1','aeroway:airfield:type','major'], // Major 
+        ['FPT','1','aeroway:airfield:type','major_airfield'], // Major
         ['FPT','2','aeroway:airfield:type','minor_and_hard'], // Minor and Hard 
         ['FPT','3','aeroway:airfield:type','minor_and_soft'], // Minor and Soft 
         ['FPT','999','aeroway:airfield:type','other'], // Other 

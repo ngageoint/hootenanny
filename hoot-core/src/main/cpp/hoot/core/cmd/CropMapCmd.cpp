@@ -79,8 +79,7 @@ public:
         "  * input - The input OSM data path.\n"
         "  * output - The output OSM data path.\n"
         "  * bounds - Comma delimited bounds. minx,miny,maxx,maxy E.g.\n"
-        "    38,-105,39,-104\n"        "  Delete a map from the database\n"
-        "  * Map Name - The name of the map.";
+        "    -105,38,-104,39\n";
   }
 
   virtual QString getName() const { return "crop-map"; }

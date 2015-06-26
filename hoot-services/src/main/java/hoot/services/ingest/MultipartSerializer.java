@@ -151,7 +151,7 @@ public class MultipartSerializer {
 
 				String[] subArr = ArrayUtils.removeElement(nameParts, nameParts[nameParts.length-1]);
 				String filename = StringUtils.join(subArr, '.');
-				if(extension.equalsIgnoreCase("OSM") ||
+				if(extension.equalsIgnoreCase("OSM") || extension.equalsIgnoreCase("GEONAMES") ||
 						extension.equalsIgnoreCase("SHP") || extension.equalsIgnoreCase("ZIP"))
 				{
 					uploadedFiles.put(filename, extension);

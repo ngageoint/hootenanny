@@ -52,6 +52,8 @@ class OgrReaderTest : public CppUnit::TestFixture
     CPPUNIT_TEST(runBasicTest);
     CPPUNIT_TEST(runJavaScriptTranslateTest);
     CPPUNIT_TEST(runPythonTranslateTest);
+    CPPUNIT_TEST(runStreamHasMoreElementsTest);
+    CPPUNIT_TEST(runStreamReadNextElementTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -128,6 +130,43 @@ public:
       CPPUNIT_ASSERT_EQUAL(1, water);
     }
 
+    void runStreamHasMoreElementsTest(
+        void )
+    {
+      OgrReader reader1;
+
+      // If we haven't opened a file, it best not be ready to read
+      CPPUNIT_ASSERT_EQUAL(reader1.hasMoreElements(), false);
+
+      // Try to open invalid file
+      OgrReader reader2(QString("test-files/totalgarbage.osm.pbf"));
+      CPPUNIT_ASSERT_EQUAL(reader2.hasMoreElements(), false);
+
+      // Open valid file
+      OgrReader reader3(QString("test-files/jakarta_raya_coastline.shp"));
+      CPPUNIT_ASSERT_EQUAL(reader3.hasMoreElements(), true);
+
+      // Close file and check again
+      reader3.close();
+      CPPUNIT_ASSERT_EQUAL(reader3.hasMoreElements(), false);
+    }
+
+    void runStreamReadNextElementTest(
+        void )
+    {
+      OgrReader reader(QString("test-files/jakarta_raya_coastline.shp"));
+
+      // Iterate through all items
+      int numberOfElements(0);
+      while ( reader.hasMoreElements() == true )
+      {
+        ElementPtr tempElement = reader.readNextElement();
+        numberOfElements++;
+        //LOG_DEBUG(tempElement->toString());
+      }
+
+      CPPUNIT_ASSERT_EQUAL(610, numberOfElements);
+    }
 };
 
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OgrReaderTest, "current");

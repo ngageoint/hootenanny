@@ -299,6 +299,10 @@ public class HootProperties
     {
       return "250";
     }
+    else if (key.equals("servicesTestClearEntireDb"))
+    {
+      return "false";
+    }
     return null;
   }
 }

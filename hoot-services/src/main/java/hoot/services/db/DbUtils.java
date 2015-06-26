@@ -26,12 +26,8 @@
  */
 package hoot.services.db;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.BatchUpdateException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -49,7 +45,6 @@ import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelations;
 import hoot.services.db2.CurrentWays;
 import hoot.services.db2.JobStatus;
-import hoot.services.db2.Maps;
 import hoot.services.db2.QChangesets;
 import hoot.services.db2.QCurrentNodes;
 import hoot.services.db2.QCurrentRelationMembers;
@@ -604,8 +599,6 @@ public class DbUtils
 
     	conn.setAutoCommit(false);
 			Configuration configuration = getConfiguration();
-
-
 
     	QMaps maps = QMaps.maps;
     	new SQLDeleteClause(conn, configuration, maps)

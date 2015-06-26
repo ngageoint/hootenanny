@@ -33,6 +33,8 @@
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/visitors/SplitLongLinearWaysVisitor.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {

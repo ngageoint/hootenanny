@@ -223,6 +223,40 @@ The string that lists the types of conflation used in the user interface.  The p
 
 Specifies one or more semi-colon delimited operations to perform before writing data. This is only applicable to the convert command.
 
+=== cookie.cutter.alpha
+
+* Data Type: double
+* Default Value: `1000.0`
+
+The size in meters used for alpha by the cookie cutter map operation (CookieCutterOp). A larger
+value makes a smoother shape and a smaller value will create a rough shape with more holes. Value
+in meters.
+
+=== cookie.cutter.alpha.shape.buffer
+
+* Data Type: double
+* Default Value: `0.0`
+
+The buffer to add to the alpha shape before cutting by the cookie cutter map operation
+(CookieCutterOp). A negative value will make the shape smaller.  Value in meters.
+
+=== cookie.cutter.output.buffer
+
+* Data Type: double
+* Default Value: `0.0`
+
+Optional buffer value used by the cookie cutter map operation (CookieCutterOp).  If the buffer
+value is provided then the shape is buffered by this many meters before cutting. The buffer may be
+positive or negative.
+
+=== cookie.cutter.output.crop
+
+* Data Type: bool
+* Default Value: `false`
+
+Crops based on the polygon rather than doing a cookie cut when using the cookie cutter map
+operation (CookieCutterOp).
+
 === crop.bounds
 
 * Data Type: string
@@ -1189,7 +1223,7 @@ Path to the statistics generator rules in javascript format.
 === stats.translate.script
 
 * Data Type: string
-* Default Value: `${HOOT_HOME}/translations/TDSv40.js`
+* Default Value: `${HOOT_HOME}/translations/TDSv61.js`
 
 Path to the translation script to use when translating tags for stats. If the path is empty then
 all translation stats are disabled.
@@ -1305,6 +1339,13 @@ useful with the hoot::TranslationOp.
 * Default Value: ``
 
 Script to use for translation.
+
+=== unify.enable.optimal.constrained.matches
+
+* Data Type: bool
+* Default Value: `true`
+
+Enable the calculation of Optimal Constrained Matches during conflation. When enabled, Hootenanny will use either Optimal Constrained Matches (via GLPK) or Greedy Constrained Matches. If disabled, Hootenanny will only use Greedy Constrained Matches.
 
 === unify.optimizer.time.limit
 
@@ -1444,6 +1485,13 @@ The distance around a point on a way to look when calculating the heading. A lar
 smooth out the heading values on a line. A smaller value will make the heading values correspond
 directly to the heading on the way at that point. This is primarily used in subline matching.
 Values are in meters.
+
+=== way.max.nodes.per.way
+
+* Data Type: int
+* Default Value: `1900`
+
+If unset, or set to zero, there will be no maximum number of nodes stored in a way. If the value is set to a non-zero positive value, all way which contain more nodes than this value will be broken up into two or more separate ways, all of which will contain the number of nodes in this value (or less), and the original way will be removed from the map. Default set to 1900 as OSM imports through API DB are capped at 2000 nodes per way.
 
 === way.matcher.max.angle
 

@@ -203,7 +203,7 @@ QString Relation::toString() const
   return QString::fromUtf8(ss.str().data());
 }
 
-void Relation::visitRo(const OsmMap& map, ElementVisitor &filter) const
+void Relation::visitRo(const ElementProvider& map, ElementVisitor& filter) const
 {
   filter.visit(map.getRelation(getId()));
 
@@ -234,7 +234,7 @@ void Relation::visitRo(const OsmMap& map, ElementVisitor &filter) const
   }
 }
 
-void Relation::visitRw(OsmMap& map, ElementVisitor& filter)
+void Relation::visitRw(ElementProvider& map, ElementVisitor& filter)
 {
   filter.visit(map.getRelation(getId()));
 

@@ -1664,12 +1664,13 @@ public class MapResourceTest extends OsmResourceTestAbstract
   public void testGetLayers() throws Exception
   {
     List<Long> mapIds = new ArrayList<Long>();
+    //existing test layer
     mapIds.add(mapId);
     //create some more maps
-    long mapId = DbUtils.insertMap(userId, conn);
-    mapIds.add(mapId);
-    mapId = DbUtils.insertMap(userId, conn);
-    mapIds.add(mapId);
+    long mapId2 = DbUtils.insertMap(userId, conn);
+    mapIds.add(mapId2);
+    long mapId3 = DbUtils.insertMap(userId, conn);
+    mapIds.add(mapId3);
 
     //query out the layers
     final MapLayers mapLayers =
@@ -1680,19 +1681,44 @@ public class MapResourceTest extends OsmResourceTestAbstract
 
     Assert.assertNotNull(mapLayers);
     Assert.assertNotNull(mapLayers.getLayers());
-    Assert.assertEquals(3, mapLayers.getLayers().length);
+    Assert.assertTrue(mapLayers.getLayers().length >= 3);
 
-    for (int i = 0; i < 3; i++)
+    boolean foundFirstId = false;
+    boolean foundSecondId = false;
+    boolean foundThirdId = false;
+    for (int i = 0; i < mapLayers.getLayers().length; i++)
     {
       MapLayer layer = mapLayers.getLayers()[i];
-      Assert.assertEquals((long)mapIds.get(i), layer.getId());
-      Assert.assertEquals("map-with-id-" + mapIds.get(i), layer.getName());
+      int mapIdsIndex = -1;
+      if (layer.getId() == mapIds.get(0))
+      {
+      	foundFirstId = true;
+      	mapIdsIndex = 0;
+      }
+      else if (layer.getId() == mapIds.get(1))
+      {
+      	foundSecondId = true;
+      	mapIdsIndex = 1;
+      }
+      else if (layer.getId() == mapIds.get(2))
+      {
+      	foundThirdId = true;
+      	mapIdsIndex = 2;
+      }
+      if (mapIdsIndex != -1)
+      {
+      	Assert.assertEquals("map-with-id-" + mapIds.get(mapIdsIndex), layer.getName());
+      }
     }
+    Assert.assertTrue(foundFirstId && foundSecondId && foundThirdId);
+    
+    DbUtils.deleteOSMRecord(conn, mapId2);
+    DbUtils.deleteOSMRecord(conn, mapId3);
   }
 
   @Test
   @Category(UnitTest.class)
-  public void testGetLayersNoLayersExist() throws Exception
+  public void testGetDeletedLayer() throws Exception
   {
     //delete the only existing map
   	QMaps maps = QMaps.maps ;
@@ -1706,14 +1732,14 @@ public class MapResourceTest extends OsmResourceTestAbstract
     		);
 
     //query out the layers
-    final MapLayers mapLayers =
+    /*final MapLayers mapLayers =
       resource()
         .path("api/0.6/map/layers")
         .accept(MediaType.APPLICATION_JSON)
         .get(MapLayers.class);
 
     Assert.assertNotNull(mapLayers);
-    Assert.assertNull(mapLayers.getLayers());
+    Assert.assertNull(mapLayers.getLayers());*/
   }
 
 }

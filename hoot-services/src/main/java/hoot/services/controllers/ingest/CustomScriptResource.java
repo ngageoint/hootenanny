@@ -547,12 +547,38 @@ public class CustomScriptResource
     String script = "";
     try
     {
-      File scriptFile = new File(homeFolder + "/" + scriptPath);
+    	// See Bug #6483 Read vulnerability in services script API
+    	boolean bPathValidated = false;
+    	JSONArray defList = _getDefaultList();
+    	for(int i=0; i<defList.size(); i++) {
+    		JSONObject item = (JSONObject)defList.get(i);
+    		
+    		Object oPath = item.get("PATH");
+    		
+    		if(oPath != null && scriptPath.equals(oPath.toString())) {
+    			bPathValidated = true;
+    			break;
+    		}
+    		
+    		Object oFouoPath = item.get("FOUO_PATH");
+    		if(oFouoPath != null && scriptPath.equals(oFouoPath.toString())) {
+    			bPathValidated = true;
+    			break;
+    		}
+    	}
+    	if(bPathValidated) {
+    		File scriptFile = new File(homeFolder + "/" + scriptPath);
 
-      if (scriptFile.exists())
-      {
-      	script = FileUtils.readFileToString(scriptFile);
-      }
+        if (scriptFile.exists())
+        {
+        	script = FileUtils.readFileToString(scriptFile);
+        }
+    	}
+    	else
+    	{
+    		throw new Exception("Invalid script path.");
+    	}
+      
     }
     catch (Exception ex)
     {

@@ -85,7 +85,7 @@ QString ScriptTest::_removeIgnoredSubstrings(QString output) const
   {
     bool keep = true;
     if (inLines[i].contains(" INFO ") || inLines[i].contains(" DEBUG ") ||
-        inLines[i].contains(" elapsed: "))
+        inLines[i].contains(" elapsed: ") )
     {
       keep = false;
     }

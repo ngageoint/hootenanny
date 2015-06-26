@@ -100,6 +100,10 @@ if(cluster.isMaster){
 				osmtotds(request, response);
 			} else if(subPath == '/tdstoosm') {
 				tdstoosm(request, response);
+			} else if(subPath == '/taginfo/key/values') {
+				getTaginfoKeyFields(request, response);
+			} else if(subPath == '/taginfo/keys/all') {
+				getTaginfoKeys(request, response);
 			} else {
 				response.writeHead(404, {"Content-Type": "text/plain", 'Access-Control-Allow-Origin' : '*'});
 				response.write("404 Not Found\n");
@@ -197,6 +201,160 @@ var tdstoosm = function(request, response)
 	}	
 }
 
+// TDS taginfo service
+// This retrieves associated tag keys/fields for requested fcode
+// http://localhost:8233/taginfo/key/values?fcode=AP030&filter=ways&key=SGCC&page=1&query=Clo&rp=25&sortname=count_ways&sortorder=desc&translation=TDSv61
+var getTaginfoKeyFields = function(request, response)
+{
+	if(request.method === "POST"){
+		response.writeHead(404, {"Content-Type": "text/plain", 'Access-Control-Allow-Origin' : '*'});
+		response.write("Post not supported\n");
+		response.end();
+	} else if(request.method === "GET"){
+		// When we get get request on  /osmtotds then produce fields based on supplied fcode
+		var  url_parts = url.parse(request.url,true);
+		var params = url_parts.query;
+		var featWGeomMatchSchema = null;
+		// Line, Point, Area
+		var geom = [];
+
+		if(params.filter == 'nodes') {
+			geom = ['Point'];
+		} else if(params.filter == 'ways') {
+			geom = ['Line','Area'];
+		} 
+
+		var trns = params.translation;
+		var schema = schemaMap['TDSv61'].getDbSchema();
+		if(trns){
+			var schModule = schemaMap[trns];
+			if(schModule){
+				schema = schModule.getDbSchema();
+			}
+		}
+		for(var ii=0; ii<schema.length; ii++){
+			var elem = schema[ii];
+			if(elem.fcode === params.fcode){
+				// We will take anything first and then if there is matching the geom
+				// then it will take precedent
+				for(var iii=0; iii<geom.length; iii++){
+					var curGeom = geom[iii];
+					if(curGeom === elem.geom){
+						featWGeomMatchSchema = elem;
+					}
+				}
+				
+			}
+		}
+
+		var fData = [];
+		if(featWGeomMatchSchema){
+			var fields = featWGeomMatchSchema.columns;
+			for(var j=0; j<fields.length; j++) {
+				var f = fields[j];
+				
+				if(f.name == params.key && f.enumerations){
+					
+					for(var jj=0; jj<f.enumerations.length; jj++) {
+						var nf = {};
+						var fEnum = f.enumerations[jj];
+						nf['value'] = fEnum.name;
+						nf['count'] = 1;
+						nf['fraction'] = 0.19;
+						nf['in_wiki'] = false;
+						nf['description'] = fEnum.name;
+						nf['internal_val'] = fEnum.value;
+						fData.push(nf);
+					}
+				}
+			}
+		}
+
+		var output = {};
+		output['page'] = 1;
+		output['rp'] = fData.length;
+		output['total'] = fData.length;
+		output['url'] = '';
+		output['data'] = fData;
+		response.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
+		response.end(JSON.stringify(output));
+	}	
+}
+
+// TDS taginfo service
+// This retrieves associated tag keys/fields for requested fcode
+// http://localhost:8233/taginfo/keys/all?page=1&rp=10&sortname=count_ways&sortorder=desc&fcode=AP030&translation=TDSv61&geometry=Line
+var getTaginfoKeys = function(request, response)
+{
+	if(request.method === "POST"){
+		response.writeHead(404, {"Content-Type": "text/plain", 'Access-Control-Allow-Origin' : '*'});
+		response.write("Post not supported\n");
+		response.end();
+	} else if(request.method === "GET"){
+		// When we get get request on  /osmtotds then produce fields based on supplied fcode
+		var  url_parts = url.parse(request.url,true);
+		var params = url_parts.query;
+		var featWGeomMatchSchema = null;
+		var lastMatchingFeatureSchema = null;
+		// Line, Point, Area
+		var geom = params.rawgeom;
+		var trns = params.translation;
+		var schema = schemaMap['TDSv61'].getDbSchema();
+		if(trns){
+			var schModule = schemaMap[trns];
+			if(schModule){
+				schema = schModule.getDbSchema();
+			}
+		}
+		for(var ii=0; ii<schema.length; ii++){
+			var elem = schema[ii];
+			if(elem.fcode === params.fcode){
+				if(geom === elem.geom){
+					featWGeomMatchSchema = elem;
+				}
+				lastMatchingFeatureSchema = elem;
+			}
+		}
+
+		// Sometimes Point is only availble in area (i.e. AK120) so if no match then use whatever available.
+		if(!featWGeomMatchSchema) {
+			featWGeomMatchSchema = lastMatchingFeatureSchema;
+		}
+		var fData = [];
+		if(featWGeomMatchSchema){
+			var fields = featWGeomMatchSchema.columns;
+			for(var j=0; j<fields.length; j++) {
+				var f = fields[j];
+				var nf = {};
+				
+				nf['key'] = f.name;
+				nf['count_all'] = 100001;
+				nf['count_all_fraction'] = 0.1;
+				nf['count_nodes'] = 100001;
+				nf['count_nodes_fraction'] = 0.1;
+				nf['count_ways'] = 100001;
+				nf['count_ways_fraction'] = 0.1;
+				nf['count_relations'] = 100001;
+				nf['count_relations_fraction'] = 0.1;
+				nf['values_all'] = 100;
+				nf['users_all'] = 100;
+				nf['in_wiki'] = false;
+				nf['in_josm'] = false;
+
+				fData.push(nf);
+			}
+		}
+
+		var output = {};
+		output['page'] = 1;
+		output['rp'] = fData.length;
+		output['total'] = fData.length;
+		output['url'] = '';
+		output['data'] = fData;
+		response.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
+		response.end(JSON.stringify(output));
+	}	
+}
 
 // This is where all interesting things happen interfacing with hoot core lib directly
 var postHandler = function(data, response, translatorMap)

@@ -460,6 +460,11 @@ SOURCES += \
     src/main/cpp/hoot/core/io/ElementOutputStream.cpp \
     src/main/cpp/hoot/core/io/ElementInputStream.cpp \
     src/main/cpp/hoot/core/io/VisitorElementInputStream.cpp \
+    src/main/cpp/hoot/core/visitors/TranslationVisitor.cpp \
+    src/main/cpp/hoot/core/io/ElementVisitorInputStream.cpp \
+    src/main/cpp/hoot/core/io/ElementCacheLRU.cpp \
+    src/main/cpp/hoot/core/cmd/ExportCmd.cpp \
+    src/main/cpp/hoot/core/visitors/MatchCandidateCountVisitor.cpp \
     src/main/cpp/hoot/core/algorithms/string/WeightedWordDistance.cpp \
     src/main/cpp/hoot/core/algorithms/string/TextFileWordWeightDictionary.cpp \
     src/main/cpp/hoot/core/algorithms/string/MinSumWordSetDistance.cpp \
@@ -468,10 +473,13 @@ SOURCES += \
     src/main/cpp/hoot/core/algorithms/string/SqliteWordWeightDictionary.cpp \
     src/main/cpp/hoot/core/algorithms/string/StringTokenizer.cpp \
     src/main/cpp/hoot/core/conflate/ConflateStatsHelper.cpp \
-    src/main/cpp/hoot/core/visitors/MatchCandidateCountVisitor.cpp \
     src/main/cpp/hoot/core/filters/HighwayCriterion.cpp \
     src/main/cpp/hoot/core/visitors/RemoveTagVisitor.cpp \
-    src/main/cpp/hoot/core/visitors/KeepTagsVisitor.cpp
+    src/main/cpp/hoot/core/visitors/KeepTagsVisitor.cpp \
+    src/main/cpp/hoot/core/ops/CookieCutterOp.cpp \
+    src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.cpp \
+    src/main/cpp/hoot/core/conflate/CookieCutter.cpp \
+    src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -915,6 +923,12 @@ HEADERS += \
     src/main/cpp/hoot/core/io/ElementInputStream.h \
     src/main/cpp/hoot/core/io/ElementOutputStream.h \
     src/main/cpp/hoot/core/io/VisitorElementInputStream.h \
+    src/main/cpp/hoot/core/visitors/TranslationVisitor.h \
+    src/main/cpp/hoot/core/io/ElementVisitorInputStream.h \
+    src/main/cpp/hoot/core/io/ElementCache.h \
+    src/main/cpp/hoot/core/io/ElementCacheLRU.h \
+    src/main/cpp/hoot/core/visitors/MatchCandidateCountVisitor.h \
+    src/main/cpp/hoot/core/util/DataProducer.h \
     src/main/cpp/hoot/core/algorithms/string/WeightedWordDistance.h \
     src/main/cpp/hoot/core/algorithms/string/WordWeightDictionary.h \
     src/main/cpp/hoot/core/algorithms/string/TextFileWordWeightDictionary.h \
@@ -925,9 +939,12 @@ HEADERS += \
     src/main/cpp/hoot/core/algorithms/string/SqliteWordWeightDictionary.h \
     src/main/cpp/hoot/core/algorithms/string/StringTokenizer.h \
     src/main/cpp/hoot/core/conflate/ConflateStatsHelper.h \
-    src/main/cpp/hoot/core/visitors/MatchCandidateCountVisitor.h \
     src/main/cpp/hoot/core/util/DataProducer.h \
     src/main/cpp/hoot/core/filters/HighwayCriterion.h \
     src/main/cpp/hoot/core/visitors/KeepTagsVisitor.h \
-    src/main/cpp/hoot/core/cmd/ConflateCmd.h
+    src/main/cpp/hoot/core/cmd/ConflateCmd.h \
+    src/main/cpp/hoot/core/ops/CookieCutterOp.h \
+    src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.h \
+    src/main/cpp/hoot/core/conflate/CookieCutter.h \
+    src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.h
 

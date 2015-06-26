@@ -28,6 +28,10 @@
 #ifndef ELEMENTCONVERTER_H
 #define ELEMENTCONVERTER_H
 
+#include <ogr_spatialref.h>
+
+#include <boost/shared_ptr.hpp>
+
 // GEOS
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
@@ -51,6 +55,7 @@ namespace geos
 #include <ogr_geometry.h>
 
 // Hoot
+#include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/OsmMap.h>
 
 // Qt
@@ -72,8 +77,12 @@ public:
 
   /**
    * see class description
+   *
+   * @note If the element provider passed as a parameter is an OsmMap, the spatial reference
+   *      from the parameter will be set as the spatial reference for the element converter
+   * @note the default spatial reference used is WGS84
    */
-  ElementConverter(const ConstOsmMapPtr& map) : _constMap(map) { assert(map.get()); }
+  ElementConverter(const ConstElementProviderPtr& provider);
 
   /**
    * Calculate the length of the given way in meters. The projection must be planar.
@@ -103,7 +112,8 @@ public:
     bool throwError=true, const bool statsFlag=false);
 
 protected:
-  ConstOsmMapPtr _constMap;
+  ConstElementProviderPtr                 _constProvider;
+  boost::shared_ptr<OGRSpatialReference>  _spatialReference;
 };
 
 }

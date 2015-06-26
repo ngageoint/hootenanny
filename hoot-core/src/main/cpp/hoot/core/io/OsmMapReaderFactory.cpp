@@ -30,6 +30,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
@@ -57,22 +58,27 @@ bool OsmMapReaderFactory::hasReader(QString url)
   return result;
 }
 
+bool OsmMapReaderFactory::hasElementInputStream(QString url)
+{
+  bool result = false;
+  shared_ptr<OsmMapReader> reader = createReader(url, true, Status::Unknown1);
+  shared_ptr<ElementInputStream> eis = dynamic_pointer_cast<ElementInputStream>(reader);
+  if (eis)
+  {
+    result = true;
+  }
+
+  return result;
+}
+
 bool OsmMapReaderFactory::hasPartialReader(QString url)
 {
-  vector<std::string> names =
-    Factory::getInstance().getObjectNamesByBase(OsmMapReader::className());
   bool result = false;
-  for (size_t i = 0; i < names.size() && !result; ++i)
+  shared_ptr<OsmMapReader> reader = createReader(url, true, Status::Unknown1);
+  shared_ptr<PartialOsmMapReader> pr = dynamic_pointer_cast<PartialOsmMapReader>(reader);
+  if (pr)
   {
-    shared_ptr<OsmMapReader> reader(Factory::getInstance().constructObject<OsmMapReader>(names[i]));
-    if (reader->isSupported(url))
-    {
-      shared_ptr<PartialOsmMapReader> pr = dynamic_pointer_cast<PartialOsmMapReader>(reader);
-      if (pr)
-      {
-        result = true;
-      }
-    }
+    result = true;
   }
 
   return result;

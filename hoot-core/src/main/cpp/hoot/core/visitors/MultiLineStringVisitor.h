@@ -27,12 +27,14 @@
 #ifndef MULTILINESTRINGVISITOR_H
 #define MULTILINESTRINGVISITOR_H
 
+#include <boost/shared_ptr.hpp>
+
 // geos
 #include <geos/geom/MultiLineString.h>
 
 // hoot
-#include <hoot/core/OsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ElementProvider.h>
 
 // standard
 #include <string>
@@ -50,14 +52,14 @@ using namespace std;
  * Creates a multi-linestring out of all ways that are visited. There are no checks to be certain
  * that the ways are actually linear ways. Any way with < 2 nodes will be skipped.
  */
-class MultiLineStringVisitor : public ElementVisitor, public OsmMapConsumer
+class MultiLineStringVisitor : public ElementVisitor
 {
 public:
   static string className() { return "hoot::MultiLineStringVisitor"; }
 
   MultiLineStringVisitor();
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
+  void setElementProvider(const ConstElementProviderPtr& provider ) { _provider = provider; }
 
   /**
    * Retrieves the multi line string created by this visitor. The caller retains ownership. If the
@@ -72,7 +74,7 @@ public:
   virtual void visit(const shared_ptr<const Way>& w);
 
 protected:
-  const OsmMap* _map;
+  ConstElementProviderPtr _provider;
   vector<Geometry*>* _ls;
 };
 
