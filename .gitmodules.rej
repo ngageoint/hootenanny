@@ -1,0 +1,7 @@
+diff a/.gitmodules b/.gitmodules	(rejected hunks)
+@@ -9,4 +9,4 @@
+ [submodule "hoot-ui"]
+ 	path = hoot-ui
+ 	url = git@github.com:DigitalGlobe/hoot-ui.git
+-	branch = rc
++	branch = master
