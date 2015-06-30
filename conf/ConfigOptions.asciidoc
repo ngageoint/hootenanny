@@ -1088,13 +1088,6 @@ Export some of the images used when evaluating the graph connections between two
 
 List of scripts to use for matching features.
 
-=== search.radius.building
-
-* Data Type: double
-* Default Value: `${search.radius.default}`
-
-The search radius to use when conflating buildings.  See `search.radius.default`.
-
 === search.radius.default
 
 * Data Type: double
