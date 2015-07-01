@@ -36,10 +36,6 @@
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 
-// Qt
-#include <QUuid>
-#include <QFile>
-
 namespace hoot
 {
 
@@ -85,36 +81,9 @@ void CookieCutterOp::apply(shared_ptr<OsmMap>& map)
   LOG_VARD(cookieCutMap->getNodeMap().size());
     
   //combine the unknown1 map with the cookie cut unknown2 map back into the input map
-  //TODO: not confident yet if the append operation is wise or solid, so leaving the code in here
-  //for now that has the extra round of I/O
-  const bool combineInMemory = true;
-  if (combineInMemory)
-  {
-    refMap->append(cookieCutMap);
-    OsmMapPtr result = refMap;
-    map.reset(new OsmMap(result));
-  }
-  else
-  {
-    //TODO: since there isn't any easy way to do this in memory yet, writing out to file and reading
-    //back in, for now
-    MapReprojector::reprojectToWgs84(refMap);
-    const QString refMapPath = "tmp/ref-map-" + QUuid::createUuid().toString() + ".osm";
-    OsmUtils::saveMap(refMap, refMapPath);
-    MapReprojector::reprojectToWgs84(cookieCutMap);
-    const QString cookieCutMapPath = "tmp/cookie-cut-map-" + QUuid::createUuid().toString() + ".osm";
-    OsmUtils::saveMap(cookieCutMap, cookieCutMapPath);
-
-    OsmMapPtr result(new OsmMap());
-    OsmUtils::loadMap(result, refMapPath, true, Status::Unknown1);
-    LOG_VARD(result->getNodeMap().size());
-    QFile::remove(refMapPath);
-    OsmUtils::loadMap(result, cookieCutMapPath, true, Status::Unknown2);
-    LOG_VARD(result->getNodeMap().size());
-    QFile::remove(cookieCutMapPath);
-    map.reset(new OsmMap(result));
-    LOG_VARD(map->getNodeMap().size());
-  }
+  refMap->append(cookieCutMap);
+  OsmMapPtr result = refMap;
+  map.reset(new OsmMap(result));
 }
 
 }
