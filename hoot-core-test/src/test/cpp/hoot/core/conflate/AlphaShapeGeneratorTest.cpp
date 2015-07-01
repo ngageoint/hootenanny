@@ -57,49 +57,49 @@ class AlphaShapeGeneratorTest : public CppUnit::TestFixture
 
 public:
 
-    void runBasicTest()
-    {
-      Settings::getInstance().clear();
-      OsmReader reader;
-      OsmMap::resetCounters();
-      OsmSchema::getInstance().loadDefault();
-      shared_ptr<OsmMap> map(new OsmMap());
-      reader.setDefaultStatus(Status::Unknown1);
-      reader.read("test-files/DcTigerRoads.osm", map);
+  void runBasicTest()
+  {
+    Settings::getInstance().clear();
+    OsmReader reader;
+    OsmMap::resetCounters();
+    OsmSchema::getInstance().loadDefault();
+    shared_ptr<OsmMap> map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/DcTigerRoads.osm", map);
 
-      OsmMapPtr cutShapeMap = AlphaShapeGenerator(1000.0, 0.0).generate(map);
+    OsmMapPtr cutShapeMap = AlphaShapeGenerator(1000.0, 0.0).generate(map);
 
-      MapReprojector::reprojectToWgs84(cutShapeMap);
+    MapReprojector::reprojectToWgs84(cutShapeMap);
 
-      QDir().mkpath("test-output/conflate");
-      OsmWriter writer;
-      writer.write(cutShapeMap, "test-output/conflate/AlphaShapeGeneratorBasicTest.osm");
+    QDir().mkpath("test-output/conflate");
+    OsmWriter writer;
+    writer.write(cutShapeMap, "test-output/conflate/AlphaShapeGeneratorBasicTest.osm");
 
-      HOOT_FILE_EQUALS("test-files/conflate/AlphaShapeGeneratorBasicTest.osm",
-                       "test-output/conflate/AlphaShapeGeneratorBasicTest.osm");
-    }
+    HOOT_FILE_EQUALS("test-files/conflate/AlphaShapeGeneratorBasicTest.osm",
+                    "test-output/conflate/AlphaShapeGeneratorBasicTest.osm");
+  }
 
-    void runBufferTest()
-    {
-      Settings::getInstance().clear();
-      OsmReader reader;
-      OsmMap::resetCounters();
-      OsmSchema::getInstance().loadDefault();
-      shared_ptr<OsmMap> map(new OsmMap());
-      reader.setDefaultStatus(Status::Unknown1);
-      reader.read("test-files/DcTigerRoads.osm", map);
+  void runBufferTest()
+  {
+    Settings::getInstance().clear();
+    OsmReader reader;
+    OsmMap::resetCounters();
+    OsmSchema::getInstance().loadDefault();
+    shared_ptr<OsmMap> map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/DcTigerRoads.osm", map);
 
-      OsmMapPtr cutShapeMap = AlphaShapeGenerator(1000.0, 100.0).generate(map);
+    OsmMapPtr cutShapeMap = AlphaShapeGenerator(1000.0, 100.0).generate(map);
 
-      MapReprojector::reprojectToWgs84(cutShapeMap);
+    MapReprojector::reprojectToWgs84(cutShapeMap);
 
-      QDir().mkpath("test-output/conflate");
-      OsmWriter writer;
-      writer.write(cutShapeMap, "test-output/conflate/AlphaShapeGeneratorBufferTest.osm");
+    QDir().mkpath("test-output/conflate");
+    OsmWriter writer;
+    writer.write(cutShapeMap, "test-output/conflate/AlphaShapeGeneratorBufferTest.osm");
 
-      HOOT_FILE_EQUALS("test-files/conflate/AlphaShapeGeneratorBufferTest.osm",
-                       "test-output/conflate/AlphaShapeGeneratorBufferTest.osm");
-    }
+    HOOT_FILE_EQUALS("test-files/conflate/AlphaShapeGeneratorBufferTest.osm",
+                    "test-output/conflate/AlphaShapeGeneratorBufferTest.osm");
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AlphaShapeGeneratorTest, "slow");
