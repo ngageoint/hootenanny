@@ -379,6 +379,11 @@ public:
   bool isBuildingPart(const Tags& t, ElementType type) const;
 
   /**
+   * Returns true if this is a geometry collection.
+   */
+  bool isCollection(const Element& e) const;
+
+  /**
    * Returns true if the element is a highway type (e.g. road, primary, path, etc.)
    *
    * This is not an exhaustive list, be sure and check the function to make sure it will do what
