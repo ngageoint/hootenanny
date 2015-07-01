@@ -1263,6 +1263,25 @@ bool OsmSchema::isBuildingPart(const Tags& t, ElementType type) const
   return result;
 }
 
+bool OsmSchema::isCollection(const Element& e) const
+{
+  bool result = false;
+
+  if (e.getElementType() == ElementType::Relation)
+  {
+    const Relation& r = dynamic_cast<const Relation&>(e);
+    if (r.getType() == "waterway" ||
+        r.getType() == "network" ||
+        r.getType() == "route_master" ||
+        r.getType() == "route")
+    {
+      result = true;
+    }
+  }
+
+  return result;
+}
+
 bool OsmSchema::isLinearHighway(const Tags& t, ElementType type)
 {
   bool result = false;
