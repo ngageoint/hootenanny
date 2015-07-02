@@ -27,6 +27,7 @@
 #ifndef REVIEWMARKER_H
 #define REVIEWMARKER_H
 
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Element.h>
 
 namespace hoot
@@ -57,24 +58,19 @@ public:
    * Marks e1 and e2 as needing review and sets them to reference each other. If the score is
    * negative then the score is omitted.
    */
-  void mark(ElementPtr& e1, ElementPtr& e2, const QString& note, double score = -1);
+  void mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, const QString& note,
+    double score = -1);
 
   /**
-   * Marks a single element as needing review, but no reviewUuidKey() field is populated.
+   * Marks a single element as needing review.
    */
-  void mark(ElementPtr& e, const QString& note, double score = -1);
-
-  /**
-   * Adds review tags only to e1 and references the UUID in other. Other may get a new UUID but
-   * will not be changed otherwise.
-   */
-  void markElement(ElementPtr& e, ElementPtr& other, const QString& note, double score = -1);
+  void mark(const OsmMapPtr &map, ElementPtr& e, const QString& note, double score = -1);
 
 private:
   // don't use these keys directly, instead call the helper functions above.
+  static QString revieweeKey() { return "reviewee"; }
   static QString reviewUuidKey() { return "hoot:review:uuid"; }
   static QString reviewScoreKey() { return "hoot:review:score"; }
-  static QString reviewSourceKey() { return "hoot:review:source"; }
   static QString reviewNeedsKey() { return "hoot:review:needs"; }
   static QString reviewNoteKey() { return "hoot:review:note"; }
 

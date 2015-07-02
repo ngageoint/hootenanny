@@ -57,7 +57,7 @@ void MarkForReviewMerger::apply(const OsmMapPtr& map,
     ElementPtr e1 = map->getElement(eid1);
     ElementPtr e2 = map->getElement(eid2);
 
-    ReviewMarker().mark(e1, e2, _note, _score);
+    ReviewMarker().mark(map, e1, e2, _note, _score);
   }
 }
 

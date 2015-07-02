@@ -47,6 +47,7 @@ public:
 
   void runSimpleTest()
   {
+    OsmMapPtr map(new OsmMap());
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
     ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
 
@@ -56,7 +57,7 @@ public:
 
     ReviewMarker uut;
 
-    uut.mark(n1, n2, "a note");
+    uut.mark(map, n1, n2, "a note");
 
     HOOT_STR_EQUALS("hoot:review:needs = yes\n"
                     "hoot:review:source = 1\n"
@@ -78,6 +79,7 @@ public:
    */
   void runMultipleScoresTest()
   {
+    OsmMapPtr map(new OsmMap());
     DisableLog dl;
 
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
@@ -90,7 +92,7 @@ public:
 
     ReviewMarker uut;
 
-    uut.mark(n1, n2, "a note", 0.15);
+    uut.mark(map, n1, n2, "a note", 0.15);
 
     HOOT_STR_EQUALS("hoot:review:needs = yes\n"
                     "hoot:review:source = 1\n"

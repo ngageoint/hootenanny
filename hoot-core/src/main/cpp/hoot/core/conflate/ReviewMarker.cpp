@@ -47,66 +47,36 @@ bool ReviewMarker::isNeedsReview(ConstElementPtr e1, ConstElementPtr e2)
      e2->getTags().get(reviewUuidKey()).contains(e1->getTags().get("uuid")));
 }
 
-void ReviewMarker::mark(ElementPtr& e1, ElementPtr& e2, const QString& note, double score)
+void ReviewMarker::mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, const QString& note,
+  double score)
 {
-  markElement(e1, e2, note, score);
-  markElement(e2, e1, note, score);
-}
-
-void ReviewMarker::mark(ElementPtr& e, const QString& note, double score)
-{
-  e->getTags().set(reviewNeedsKey(), true);
-  e->getTags().set(reviewSourceKey(), QString::number(e->getStatus().getEnum()));
+  LOG_WARN("Marking for review");
+  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, "review"));
+  r->getTags().set(reviewNeedsKey(), true);
   if (note.isEmpty())
   {
     throw IllegalArgumentException("You must specify a review note.");
   }
-  e->getTags().appendValueIfUnique(reviewNoteKey(), note);
-  _updateScore(e->getTags(), score);
+  r->getTags().appendValueIfUnique(reviewNoteKey(), note);
+  r->getTags().set(reviewScoreKey(), score);
+  r->addElement(revieweeKey(), e1->getElementId());
+  r->addElement(revieweeKey(), e2->getElementId());
+  map->addElement(r);
 }
 
-void ReviewMarker::markElement(ElementPtr& e, ElementPtr& other, const QString& note, double score)
+void ReviewMarker::mark(const OsmMapPtr& map, ElementPtr& e, const QString& note, double score)
 {
-  e->getTags().appendValueIfUnique(reviewUuidKey(), other->getTags().getCreateUuid());
-  e->getTags().set(reviewNeedsKey(), true);
-  e->getTags().set(reviewSourceKey(), QString::number(e->getStatus().getEnum()));
+  LOG_WARN("Marking for review");
+  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, "review"));
+  r->getTags().set(reviewNeedsKey(), true);
   if (note.isEmpty())
   {
     throw IllegalArgumentException("You must specify a review note.");
   }
-  e->getTags().appendValueIfUnique(reviewNoteKey(), note);
-  _updateScore(e->getTags(), score);
-}
-
-void ReviewMarker::_updateScore(Tags& t, double score)
-{
-  if (score >= 0)
-  {
-    QStringList l = t.getList(reviewScoreKey());
-
-    if (l.size() > 1)
-    {
-      LOG_WARN("Found an unexpected list of scores. Did you forget to strip reviews "
-               "before running conflate (-C RemoveReview2Pre.conf)? " + t.get(reviewScoreKey()));
-    }
-
-    double maxScore = score;
-    for (int i = 0; i < l.size(); i++)
-    {
-      bool ok;
-      double s = l[i].toDouble(&ok);
-      if (ok)
-      {
-        maxScore = max(s, maxScore);
-      }
-      else
-      {
-        LOG_WARN("Found an invalid score in tags: " + t.toString());
-      }
-    }
-
-    t.set(reviewScoreKey(), maxScore);
-  }
+  r->getTags().appendValueIfUnique(reviewNoteKey(), note);
+  r->getTags().set(reviewScoreKey(), score);
+  r->addElement(revieweeKey(), e->getElementId());
+  map->addElement(r);
 }
 
 }

@@ -171,7 +171,8 @@ bool HighwaySnapMerger::_doesWayConnect(long node1, long node2, const ConstWayPt
       (w->getNodeId(0) == node2 && w->getLastNodeId() == node1);
 }
 
-void HighwaySnapMerger::_markNeedsReview(ElementPtr e1, ElementPtr e2, QString note) const
+void HighwaySnapMerger::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1, ElementPtr e2,
+  QString note) const
 {
   if (!e1 && !e2)
   {
@@ -180,15 +181,15 @@ void HighwaySnapMerger::_markNeedsReview(ElementPtr e1, ElementPtr e2, QString n
 
   if (e1 && e2)
   {
-    ReviewMarker().mark(e1, e2, note);
+    ReviewMarker().mark(map, e1, e2, note);
   }
   else if (e1)
   {
-    ReviewMarker().mark(e1, note);
+    ReviewMarker().mark(map, e1, note);
   }
   else if (e2)
   {
-    ReviewMarker().mark(e2, note);
+    ReviewMarker().mark(map, e2, note);
   }
 }
 
@@ -219,7 +220,7 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   // this in the conflict code at this time, so we'll ignore the merge.
   if (!e1 || !e2)
   {
-    _markNeedsReview(e1, e2, "Missing match pair");
+    _markNeedsReview(result, e1, e2, "Missing match pair");
     return;
   }
 
@@ -238,13 +239,13 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   }
   catch (NeedsReviewException& e)
   {
-    _markNeedsReview(e1, e2, e.getWhat());
+    _markNeedsReview(result, e1, e2, e.getWhat());
     return;
   }
 
   if (!match.isValid())
   {
-    _markNeedsReview(e1, e2, "Complex conflict causes an empty match");
+    _markNeedsReview(result, e1, e2, "Complex conflict causes an empty match");
     return;
   }
 
