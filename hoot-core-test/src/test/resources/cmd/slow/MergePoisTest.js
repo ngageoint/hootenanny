@@ -1,5 +1,6 @@
 var HOOT_HOME = process.env.HOOT_HOME;
 var hoot = require(HOOT_HOME + '/lib/HootJs');
+hoot.Settings.set({"tag.merger.default":"hoot::OverwriteTagMerger"});
 var script = 'PoiGeneric.js';
 
 var input1 = "<?xml version='1.0' encoding='UTF-8'?>\

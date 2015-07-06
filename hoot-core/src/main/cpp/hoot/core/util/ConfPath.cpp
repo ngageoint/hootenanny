@@ -140,25 +140,22 @@ QString ConfPath::search(QString baseName, QString searchDir)
     return QFileInfo(hootHome + "/" + searchDir + "/" + baseName).absoluteFilePath();
   }
 
-  QString result = "";
+  // If we still can't find it, try searching subdirectories.
+  // Not sure if this should also have a go with "hootHome/searchDir" as well as "searchDir"
+  QDir startDir(searchDir);
 
-  // Now try sub directories with HootHome
-  if (hootHome.isEmpty() == false)
+  // Should we allow following symlinks?
+  startDir.setFilter(QDir::Files | QDir::Dirs | QDir::NoDot | QDir::NoDotDot | QDir::NoSymLinks);
+
+  startDir.setNameFilters(QStringList(baseName));
+
+  QDirIterator it(startDir, QDirIterator::Subdirectories);
+
+  // Take the first matching file.
+  if (it.hasNext())
   {
-    result = _subDirSearch(baseName, hootHome + "/" + searchDir);
+    QString result(QFileInfo(it.next()).absoluteFilePath());
 
-    if (result.isEmpty() == false)
-    {
-      return result;
-    }
-  }
-
-  // Now try searching just sub directories
-  // Note: This may never occur. We _always_ have HOOT_HOME, don't we?
-  result = _subDirSearch(baseName, searchDir);
-
-  if (result.isEmpty() == false)
-  {
     return result;
   }
 
