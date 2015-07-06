@@ -8,14 +8,14 @@
     },
 
     "#" : "For water POI's, see WaterwaySchema.json.",
+    "#" : "For places POI's, see PlacesSchema.json.",
 
     "#" : "Generic POI made up to handle poor data.",
     "tag": { "name": "poi=yes", "isA": "poi" },
     "tag": { "name": "aeroway=*", "isA": "poi" },
     "tag": { "name": "historic=*", "isA": "poi" },
     "tag": { 
-        "name": "historic=memorial",
-        "isA": "historic=*",
+        "name": "historic=memorial", "isA": "historic=*",
         "similarTo": { "name": "historic=monument", "weight": 0.8 }
     },
     "tag": { "name": "historic=monument", "isA": "historic=*" },

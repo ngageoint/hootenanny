@@ -1,18 +1,105 @@
 {
-    "tag": {
-        "name": "place",
-        "isA": "poi"
-    },
+    "#" : "Places tags from OSM Taginfo and from the GeoNames translation script",
+    "#" : "http://taginfo.openstreetmap.org/api/4/key/values?key=place&filter=all&lang=en&sortname=count&sortorder=desc&page=1&rp=35&qtype=value&format=json_pretty",
 
-    "#" : " The catch all",
-    "tag": { "name": "place=*", "isA": "place" },
+    "#" : "The catch all",
+    "tag": { "name": "place=*", "isA": "poi" },
 
-    "tag": { "name": "place=populated", "isA": "place" },
-    "tag": {
-        "name": "place=village",
-        "isA": "place",
-        "similarTo": { "name": "place=populated", "weight": 0.8 }
-    },
 
-    "#" : "end"
+    "#" : "Water Areas",
+    "tag": { "name": "place=ocean", "isA": "poi" },
+    "tag": { "name": "place=sea", "isA": "poi",
+        "similarTo": { "name": "place=ocean", "weight": 0.8 } },
+
+    "tag": { "name": "place=archipelago", "isA": "poi" },
+    "tag": { "name": "place=island", "isA": "poi",
+        "similarTo": { "name": "place=archipelago", "weight": 0.7  },
+    "tag": { "name": "place=atol", "isA": "poi",
+        "similarTo": { "name": "place=island", "weight": 0.7  },
+    "tag": { "name": "place=islet", "isA": "poi",
+        "similarTo": { "name": "place=island", "weight": 0.7 } },
+
+
+    "#" : "Land Areas",
+    "tag": { "name": "place=continent", "isA": "poi" },
+
+    "tag": { "name": "place=country", "isA": "poi" },
+
+    "tag": { "name": "place=political_entity", "isA": "poi" },
+    "tag": { "name": "place=historical_political_entity", "isA": "place=political_entity" },
+    "tag": { "name": "place=independent_political_entity", "isA": "place=political_entity" },
+    "tag": { "name": "place=section_of_independent_political_entity", "isA": "poi" },
+    "tag": { "name": "place=semi-independent_political_entity", "isA": "poi" },
+
+    "tag": { "name": "place=state", "isA": "poi" },
+    "tag": { "name": "place=province", "isA": "poi" },
+    "tag": { "name": "place=region", "isA": "poi" },
+    "tag": { "name": "place=territory", "isA": "poi" },
+
+    "tag": { "name": "place=county", "isA": "poi" },
+    "tag": { "name": "place=district", "isA": "poi" },
+    "tag": { "name": "place=borough", "isA": "poi" },
+    "tag": { "name": "place=municipality", "isA": "poi" },
+    "tag": { "name": "place=parish", "isA": "poi" },
+
+    "tag": { "name": "place=subdistrict", "isA": "poi" },
+
+    "tag": { "name": "place=city", "isA": "poi" },
+
+    "tag": { "name": "place=suburb", "isA": "poi" },
+    "tag": { "name": "place=quarter", "isA": "poi" },
+
+    "tag": { "name": "place=neighbourhood", "isA": "poi",
+        "aliases":["place=neighborhood","place=official_neighborhood"]},
+    "tag": { "name": "place=subdivision", "isA": "poi" },
+
+    "tag": { "name": "place=city_block", "isA": "poi" },
+    "tag": { "name": "place=block", "isA": "poi" },
+
+
+    "tag": { "name": "place=town", "isA": "poi" },
+    "tag": { "name": "place=township", "isA": "place=town" },
+
+    "tag": { "name": "place=allotments", "isA": "poi" },
+    "tag": { "name": "place=plot", "isA": "poi" },
+
+    "tag": { "name": "place=farm", "isA": "poi" },
+    "tag": { "name": "place=croft", "isA": "poi" },
+    "tag": { "name": "place=marine_farm", "isA": "poi",
+        "similarTo": { "name": "place=farm", "weight": 0.9 } },
+    "tag": { "name": "place=maritime_farm", "isA": "place=marine_farm" },
+    "tag": { "name": "abandoned:place=farm", "isA": "poi",
+        "similarTo": { "name": "place=farm", "weight": 0.8 } },
+
+    "tag": { "name": "place=village", "isA": "poi" },
+
+    "tag": { "name": "place=settlement", "isA": "poi" },
+
+    "tag": { "name": "place=shanty_town", "isA": "poi" },
+
+    "tag": { "name": "place=hamlet", "isA": "poi" },
+
+    "tag": { "name": "place=isolated_dwelling", "isA": "poi" },
+
+    "tag": { "name": "place=populated", "isA": "poi" },
+    "tag": { "name": "poi:type=populated_place", "isA": "place=populated" },
+    "tag": { "name": "abandoned:place=populated", "isA": "place=populated" },
+    "tag": { "name": "distroyed:place=populated", "isA": "place=populated" },
+
+    "tag": { "name": "place=locality", "isA": "poi" },
+
+
+    "#" : "Other Areas",
+    "tag": { "name": "place=administrative", "isA": "poi" },
+
+    "tag": { "name": "place=buffer_zone", "isA": "poi" },
+
+    "tag": { "name": "place=census-designated", "isA": "poi" },
+
+    "tag": { "name": "place=free_trade_zone", "isA": "poi" },
+
+    "tag": { "name": "place=tribal_area", "isA": "poi" },
+
+    "tag": { "name": "place=unknown", "isA": "poi" },
+
 }
