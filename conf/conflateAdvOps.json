@@ -416,19 +416,6 @@
         "hoot_key": "merger.creators",
 				"required":"true"
       },
-     {
-        "id": "search_radius_building",
-        "minvalue": "-1",
-        "elem_type": "double",
-        "description": "The search radius to use when conflating highways. If two features are within the search radius then they will be considered for conflation. If the value is -1 then the circular error will be used to calculate an appropriate search radius.",
-        "maxvalue": "",
-        "name": "Search Radius Building",
-        "defaultvalue": "-1",
-		"override":{
-						"defaultvalue": "-1"
-					},
-        "hoot_key": "search.radius.building"
-      },
     ]
   },
   {
