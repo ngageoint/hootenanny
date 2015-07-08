@@ -547,7 +547,7 @@
         "description": "Enable waterway options",
         "name": "Enabled",
         "defaultvalue": "false",
-        "onchange": "var e = d3.select('#hoot_enable_waterway_options').property('checked');d3.select('#hoot_waterway_options_group').selectAll('input').property('disabled',!e);d3.select('#hoot_enable_waterway_options').property('disabled',false);d3.select('#search_radius_waterway').property('disabled',e);"
+        "onchange": "var e = d3.select('#hoot_enable_waterway_options').property('checked');d3.select('#hoot_waterway_options_group').selectAll('input').property('disabled',!e);d3.select('#hoot_enable_waterway_options').property('disabled',false);var f=d3.select('#waterway_auto_calc_search_radius').property('checked');d3.select('#search_radius_waterway').property('disabled',f);d3.select('#waterway_rubber_sheet_minimum_ties').property('disabled',f);d3.select('#waterway_rubber_sheet_ref').property('disabled',f);"
 			},
 		   {
 		    "id": "waterway_match_creator",
@@ -609,7 +609,7 @@
         "name": "Waterway Auto Calc Search Radius",
         "defaultvalue": "true",
         "hoot_key": "waterway.auto.calc.search.radius",
-"onchange": "var e = d3.select('#waterway_auto_calc_search_radius').property('checked');d3.select('#search_radius_waterway').property('disabled',e);"
+"onchange": "var e = d3.select('#waterway_auto_calc_search_radius').property('checked');d3.select('#search_radius_waterway').property('disabled',e);d3.select('#waterway_rubber_sheet_minimum_ties').property('disabled',e);d3.select('#waterway_rubber_sheet_ref').property('disabled',e);"
       },
       {
         "id": "search_radius_waterway",
