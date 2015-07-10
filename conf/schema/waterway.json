@@ -17,12 +17,14 @@
     "tag": { "name": "river_flow=*", "isA": "waterway" },
     "tag": { "name": "river_type=*", "isA": "waterway" },
     "tag": { "name": "waterway=riverbank", "isA": "waterway" },
+    "tag": { "name": "waterway=dam", "isA": "waterway" },
+    "tag": { "name": "waterway=ditch", "isA": "waterway" },
+    "tag": { "name": "waterway=wadi", "isA": "waterway" },
+    "tag": { "name": "bridge=aqueduct", "isA": "waterway" },
     
     "tag": { "name": "type=stream", "isA": "waterway" },
     "tag": { "name": "type=river", "isA": "waterway" },
     "tag": { "name": "FlowDir=*", "isA": "waterway" },
-
-    "tag": { "name": "waterway=dam", "isA": "waterway" },
 
     "#" : "end"
 }
