@@ -286,7 +286,15 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
         if (r->isMultiPolygon() || OsmSchema::getInstance().isArea(r->getTags(), ElementType::Relation))
           return GEOS_MULTIPOLYGON;
         else if (OsmSchema::getInstance().isLinear(*r))
+        {
           return GEOS_MULTILINESTRING;
+        }
+        else if (r->getMembers().size() == 0 ||
+                 OsmSchema::getInstance().isCollection(*r))
+        {
+          // an empty geometry, pass back a collection
+          return GEOS_GEOMETRYCOLLECTION;
+        }
       }
 
       break;
