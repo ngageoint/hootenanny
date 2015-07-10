@@ -23,9 +23,9 @@
 		"CANEXPORT" : false,
 		"PATH" : "translations/OSM_Ingest.js",
 	},
-    	{
+        {
         	"NAME" : "GEONAMES",
-        	"DESCRIPTION" : "Geonames",
+        	"DESCRIPTION" : "GeoNames.org",
         	"CANEXPORT" : false,
         	"PATH" : "translations/GeoNames.js",
     	},
