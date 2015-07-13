@@ -55,10 +55,10 @@ class CookieCutterTest : public CppUnit::TestFixture
     CPPUNIT_TEST(runTest);
     //TODO: I've been unable to get output buffering or cropping working with this test dataset...
     //need to have this reviewed to see if my test is valid.
-    //CPPUNIT_TEST(runCropTest);
-    //CPPUNIT_TEST(runBufferTest);
-    //CPPUNIT_TEST(runNegativeBufferTest);
-    //CPPUNIT_TEST(runCropAndBufferTest);
+    CPPUNIT_TEST(runCropTest);
+    CPPUNIT_TEST(runBufferTest);
+    CPPUNIT_TEST(runNegativeBufferTest);
+    CPPUNIT_TEST(runCropAndBufferTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -73,7 +73,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     shared_ptr<OsmMap> cutShapeMap(new OsmMap());
-    reader.read("test-files/conflate/AlphaShapeGeneratorBufferTest.osm", doughMap);
+    reader.read("test-files/conflate/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(false).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
@@ -98,7 +98,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     shared_ptr<OsmMap> cutShapeMap(new OsmMap());
-    reader.read("test-files/conflate/AlphaShapeGeneratorBufferTest.osm", doughMap);
+    reader.read("test-files/conflate/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(true).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
@@ -123,7 +123,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     shared_ptr<OsmMap> cutShapeMap(new OsmMap());
-    reader.read("test-files/conflate/AlphaShapeGeneratorBufferTest.osm", doughMap);
+    reader.read("test-files/conflate/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(false, 100.0).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
@@ -148,7 +148,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     shared_ptr<OsmMap> cutShapeMap(new OsmMap());
-    reader.read("test-files/conflate/AlphaShapeGeneratorBufferTest.osm", doughMap);
+    reader.read("test-files/conflate/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(false, -100.0).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
@@ -157,10 +157,10 @@ public:
 
     QDir().mkpath("test-output/conflate");
     OsmWriter writer;
-    writer.write(cookieCutMap, "test-output/conflate/CookieCutterBufferTest.osm");
+    writer.write(cookieCutMap, "test-output/conflate/CookieCutterNegativeBufferTest.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/CookieCutterBufferTest.osm",
-                     "test-output/conflate/CookieCutterBufferTest.osm");
+    HOOT_FILE_EQUALS("test-files/conflate/CookieCutterNegativeBufferTest.osm",
+                     "test-output/conflate/CookieCutterNegativeBufferTest.osm");
   }
 
   void runCropAndBufferTest()
@@ -173,7 +173,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     shared_ptr<OsmMap> cutShapeMap(new OsmMap());
-    reader.read("test-files/conflate/AlphaShapeGeneratorBufferTest.osm", doughMap);
+    reader.read("test-files/conflate/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(true, 100.0).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
@@ -189,7 +189,7 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CookieCutterTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CookieCutterTest, "quick");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CookieCutterTest, "current");
 
 }

@@ -96,7 +96,13 @@ void OsmMap::append(ConstOsmMapPtr appendFromMap)
   {
     throw HootException("Can't append to the same map.");
   }
-  if (getProjection() != appendFromMap->getProjection())
+  /*char* wkt1 = 0;
+  getProjection()->exportToPrettyWkt(&wkt1);
+  char* wkt2 = 0;
+  appendFromMap->getProjection()->exportToPrettyWkt(&wkt2);
+  LOG_VARD(wkt1);
+  LOG_VARD(wkt2);*/
+  if (!getProjection()->IsSame(appendFromMap->getProjection().get()))
   {
     throw HootException("Incompatible maps.");
   }

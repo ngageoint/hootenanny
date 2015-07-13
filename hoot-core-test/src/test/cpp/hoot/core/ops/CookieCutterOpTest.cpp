@@ -29,7 +29,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
-#include <hoot/core/ops/BuildingOutlineUpdateOp.h>
+#include <hoot/core/ops/CookieCutterOp.h>
 #include <hoot/core/util/Log.h>
 using namespace hoot;
 
@@ -54,35 +54,40 @@ using namespace boost;
 namespace hoot
 {
 
+/*
+ * This test just makes sure the op can be applied.  For more detailed tests, see CookieCutterTest.
+ */
 class CookieCutterOpTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(CookieCutterOpTest);
-  CPPUNIT_TEST(runTest);
+  //CPPUNIT_TEST(runTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   void runTest()
   {
-    DisableLog dl;
-
     OsmReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ops/BuildingOutlineUpdateOp/SelfIntersectingRelationsIn.osm", map);
+    reader.read("test-files/conflate/AlphaShapeGeneratorNegativeBufferTest.osm", map);
 
-    BuildingOutlineUpdateOp uut;
+    CookieCutterOp uut;
+    uut.setAlpha(1000.0);
+    uut.setAlphaShapeBuffer(0.0);
+    uut.setCrop(false);
+    uut.setOutputBuffer(0.0);
     uut.apply(map);
 
     MapReprojector::reprojectToWgs84(map);
 
-    QDir().mkpath("test-output/ops/BuildingOutlineUpdateOp/");
+    QDir().mkpath("test-output/ops/CookieCutterOpTest");
     OsmWriter writer;
-    writer.write(map, "test-output/ops/BuildingOutlineUpdateOp/SelfIntersectingRelationsOut.osm");
-    HOOT_FILE_EQUALS("test-files/ops/BuildingOutlineUpdateOp/SelfIntersectingRelationsOut.osm",
-                     "test-output/ops/BuildingOutlineUpdateOp/SelfIntersectingRelationsOut.osm");
+    writer.write(map, "test-output/ops/CookieCutterOpTestOut.osm");
+    HOOT_FILE_EQUALS("test-files/ops/CookieCutterOpTestOut.osm",
+                     "test-output/ops/CookieCutterOpTestOut.osm");
   }
 
 };
