@@ -37,9 +37,8 @@ TagCountVisitor::TagCountVisitor() :
 
 }
 
-void TagCountVisitor::visit(ElementType type, long id)
+void TagCountVisitor::visit(const ConstElementPtr& e)
 {
-  shared_ptr<const Element> e = _map->getElement(type, id);
   _totalCount += e->getTags().getNonDebugCount();
   _informationCount += e->getTags().getInformationCount();
 }

@@ -46,7 +46,7 @@ public:
 
   virtual ~GetElementIdsVisitor() {}
 
-  virtual void visit(ElementType type, long id) { _bag.insert(ElementId(type, id)); }
+  virtual void visit(const ConstElementPtr& e) { _bag.insert(ElementId(e->getElementType(), e->getId())); }
 
 private:
   set<ElementId>& _bag;

@@ -63,7 +63,7 @@ public:
    * greater than zero then the element is tagged with a REF1. The unique string is simply a counter
    * so it isn't going to be unique across multiple runs.
    */
-  virtual void visit(ElementType type, long id);
+  virtual void visit(const ConstElementPtr& e);
 
 private:
   OsmMap* _map;

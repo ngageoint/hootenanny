@@ -57,11 +57,11 @@ public:
 
   NodeIdVisitor(set<long>& nodes) : allNodes(nodes) {}
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    if (type == ElementType::Node)
+    if (e->getElementType() == ElementType::Node)
     {
-      allNodes.insert(id);
+      allNodes.insert(e->getId());
     }
   }
 };
@@ -72,11 +72,11 @@ public:
   NodeReplaceVisitor(OsmMap& map, const std::map<long, long>& fromTo) : _fromTo(fromTo), _map(map)
   {}
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    if (type == ElementType::Way)
+    if (e->getElementType() == ElementType::Way)
     {
-      const shared_ptr<Way>& w = _map.getWay(id);
+      const shared_ptr<Way>& w = _map.getWay(e->getId());
       std::vector<long> oldNodes = w->getNodeIds();
       std::vector<long> newNodes = w->getNodeIds();
 

@@ -33,10 +33,10 @@
 namespace hoot
 {
 
-void ElementOsmMapVisitor::visit(ElementType type, long id)
+void ElementOsmMapVisitor::visit(const ConstElementPtr& e)
 {
-  shared_ptr<Element> e = _map->getElement(type, id);
-  visit(e);
+  shared_ptr<Element> ee = _map->getElement(e->getElementId());
+  visit(ee);
 }
 
 }

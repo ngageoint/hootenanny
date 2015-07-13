@@ -46,11 +46,14 @@ class FindNodesVisitor : public ElementVisitor
 public:
   FindNodesVisitor(OsmMapPtr map) : _map(map) {}
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    ElementPtr e = _map->getElement(type, id);
+    ElementType type = e->getElementType();
+    long id = e->getId();
 
-    if (type == ElementType::Node && e->getTags().getNonDebugCount() > 0)
+    ElementPtr ee = _map->getElement(type, id);
+
+    if (type == ElementType::Node && ee->getTags().getNonDebugCount() > 0)
     {
       _nodes.insert(ElementId(type, id));
     }
@@ -64,11 +67,11 @@ private:
   set<ElementId> _nodes;
 };
 
-void KeepNodesVisitor::visit(ElementType type, long id)
+void KeepNodesVisitor::visit(const ConstElementPtr& e)
 {
-  shared_ptr<Element> e = _map->getElement(type, id);
+  //shared_ptr<Element> ee = _map->getElement(e->getElementId());
 
-  if (type != ElementType::Node || e->getTags().getNonDebugCount() == 0)
+  if (e->getElementType() != ElementType::Node || e->getTags().getNonDebugCount() == 0)
   {
     // check to see if any of this element's children are Nodes.
     FindNodesVisitor v(_map->shared_from_this());
