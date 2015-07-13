@@ -131,7 +131,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
     LOG_DEBUG("Writing debug map.");
     OsmMapPtr debug(new OsmMap(map));
     MapReprojector::reprojectToWgs84(debug);
-    OsmMapWriterFactory::write(debug, "tmp/debug.osm");
+    OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
 
     _stats.append(SingleStat("Write Debug Map Time (sec)", timer.getElapsedAndRestart()));
   }
