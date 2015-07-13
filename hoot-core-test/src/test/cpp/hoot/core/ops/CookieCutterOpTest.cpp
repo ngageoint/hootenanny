@@ -44,6 +44,7 @@ using namespace boost;
 
 // hoot
 #include <hoot/core/MapReprojector.h>
+#include <hoot/core/conflate/MapCleaner.h>
 
 // Qt
 #include <QDebug>
@@ -54,13 +55,10 @@ using namespace boost;
 namespace hoot
 {
 
-/*
- * This test just makes sure the op can be applied.  For more detailed tests, see CookieCutterTest.
- */
 class CookieCutterOpTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(CookieCutterOpTest);
-  //CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(runTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -72,7 +70,11 @@ public:
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/AlphaShapeGeneratorNegativeBufferTest.osm", map);
+    reader.read("test-files/ops/CookieCutterOp/DcTigerRoads-cropped.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read("test-files/DcGisRoads.osm", map);
+
+    MapCleaner().apply(map);
 
     CookieCutterOp uut;
     uut.setAlpha(1000.0);
@@ -83,11 +85,11 @@ public:
 
     MapReprojector::reprojectToWgs84(map);
 
-    QDir().mkpath("test-output/ops/CookieCutterOpTest");
+    QDir().mkpath("test-output/ops/CookieCutterOp");
     OsmWriter writer;
-    writer.write(map, "test-output/ops/CookieCutterOpTestOut.osm");
-    HOOT_FILE_EQUALS("test-files/ops/CookieCutterOpTestOut.osm",
-                     "test-output/ops/CookieCutterOpTestOut.osm");
+    writer.write(map, "test-output/ops/CookieCutterOp/CookieCutterOpTest.osm");
+    HOOT_FILE_EQUALS("test-files/ops/CookieCutterOp/CookieCutterOpTest.osm",
+                     "test-output/ops/CookieCutterOp/CookieCutterOpTest.osm");
   }
 
 };

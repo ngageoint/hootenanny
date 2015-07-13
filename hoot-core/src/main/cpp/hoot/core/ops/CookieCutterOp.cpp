@@ -84,6 +84,7 @@ void CookieCutterOp::apply(shared_ptr<OsmMap>& map)
   refMap->setProjection(cookieCutMap->getProjection());
   refMap->append(cookieCutMap);
   OsmMapPtr result = refMap;
+  LOG_VARD(result->getNodeMap().size());
   map.reset(new OsmMap(result));
 }
 

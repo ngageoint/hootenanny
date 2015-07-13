@@ -53,8 +53,6 @@ class CookieCutterTest : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(CookieCutterTest);
     CPPUNIT_TEST(runTest);
-    //TODO: I've been unable to get output buffering or cropping working with this test dataset...
-    //need to have this reviewed to see if my test is valid.
     CPPUNIT_TEST(runCropTest);
     CPPUNIT_TEST(runBufferTest);
     CPPUNIT_TEST(runNegativeBufferTest);
