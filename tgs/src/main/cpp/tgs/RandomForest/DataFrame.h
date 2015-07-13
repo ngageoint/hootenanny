@@ -1,33 +1,15 @@
-/*
- * This file is part of Hootenanny.
- *
- * Hootenanny is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * --------------------------------------------------------------------
- *
- * The following copyright notices are generated automatically. If you
- * have a new notice to add, please use the format:
- * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
- * copyrights will be updated automatically.
- *
- * @copyright Copyright (C) 2013, 2015 DigitalGlobe (http://www.digitalglobe.com/)
- */
+/***************************************************************************
+* Copyright (c) 2005-2008 by SPADAC Inc. (formerly Spatial Data Analytics Corporation).  All rights reserved.
+****************************************************************************/
 
 #ifndef __DATA_FRAME_H__
 #define __DATA_FRAME_H__
 
+//Qt Includes
+#include <QDomDocument>
+#include <QDomElement>
+
+//Std Includes
 #include <limits>
 #include <map>
 #include <set>
@@ -125,6 +107,13 @@ namespace Tgs
     *  @return true is DataFrame contains 0 data vectors
     */
     bool empty(){return _data.empty();}
+
+    /**
+     * @brief exportData exports the data to an XML document
+     * @param modelDoc the main XML doc object
+     * @param parentNode the node to add the data to
+     */
+    void exportData(QDomDocument & modelDoc, QDomElement & parentNode);
 
     /**
     *  Export the data frame as XML through to the file stream
@@ -252,11 +241,36 @@ namespace Tgs
     std::string getTrainingLabel(unsigned int dIdx) const;
 
     /**
+     * @brief getTrainingLabelList
+     * @return the list of class labels corresponding to the training data vectors
+     */
+    std::vector<std::string> getTrainingLabelList(){return _trainingLabels;}
+
+    /**
+     * @brief hasFactorTypes
+     * @return true is factor types have been set
+     */
+    bool hasFactorTypes(){return !_factorType.empty();}
+
+    /**
+     * @brief hasNullTreatments
+     * @return true if null treatment values have been set
+     */
+    bool hasNullTreatments(){return !_nullTreatment.empty();}
+
+    /**
     *  Import the data frame from the file stream
     *
     * @param fileStream the input file stream
     */
     void import(std::istream & fileStream);
+
+    /**
+    *  Import the data frame
+    *
+    * @param e a QDomElement containing the contents of tag <DataFrame> from an XML file
+    */
+    void import(QDomElement & e);
 
     /**
     *  Checks to see if the data vectors belonging to the set of indices
@@ -322,6 +336,13 @@ namespace Tgs
      * Assignment operator, copies all data. Potentially very expensive.
      */
     void operator=(const DataFrame& from);
+
+    /**
+     * @brief operator [] provides access to the stored training data vectors
+     * @param vIdx the index to the vector of interest
+     * @return a reference to the data vector
+     */
+    std::vector<double> & operator[](unsigned int vIdx);
 
     /**
     *  Remaps all the classes to different labels.  The original class
@@ -415,6 +436,13 @@ namespace Tgs
   private:
      
     /**
+    *  Imports a data vectpr
+    *
+    * @param e a QDomElement containing the contents of child node within tag <DataVectors> from an XML file
+    */
+    void _importDataVector(QDomElement & e);
+
+    /**
     * Sorts a vector of indices to data vectors by the selected factor
     * value.  
     *
@@ -446,6 +474,8 @@ namespace Tgs
     std::vector< std::vector< double > > _data; ///The set of data vectors
     std::vector< int > _factorType; ///< Numeric or Nominal
     std::map<std::string, int> _trainingLabelEnum;
+    std::vector<std::map<std::string, double> > _medianMaps;  //For each factor a map of each class to its median value
+
     /**
      * true if nulls should be interpreted as values, false if nulls should be interpreted as 
      * missing values. See http://en.wikipedia.org/wiki/Missing_value for a discussion.
