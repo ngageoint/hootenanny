@@ -57,30 +57,31 @@ void CookieCutterOp::setConfiguration(const Settings& conf)
 
 void CookieCutterOp::apply(shared_ptr<OsmMap>& map)
 {
-  //filter unknown1 out of the input map into another map
+  //remove unknown2 out of the input map and create a new map, which will be our ref map
   OsmMapPtr refMap(new OsmMap(map));
-  RemoveElementsVisitor unknown1Visitor(ElementCriterionPtr(new StatusCriterion(Status::Unknown1)));
-  unknown1Visitor.setRecursive(true);
-  refMap->visitRw(unknown1Visitor);
+  RemoveElementsVisitor unknown2Remover(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)));
+  unknown2Remover.setRecursive(true);
+  refMap->visitRw(unknown2Remover);
   LOG_VARD(refMap->getNodeMap().size());
     
-  //create an alpha shape based on the filtered unknown1 map
+  //create an alpha shape based on the ref map (unknown1)
   OsmMapPtr cutShapeMap = AlphaShapeGenerator(_alpha, _alphaShapeBuffer).generate(refMap);
   LOG_VARD(cutShapeMap->getNodeMap().size());
     
-  //filter unknown2 out of the input map into another map
+  //remove unknown1 out of the input and create a new map, which will be our source map (unknown2)
   OsmMapPtr doughMap(new OsmMap(map));
-  RemoveElementsVisitor unknown2Visitor(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)));
-  unknown2Visitor.setRecursive(true);
-  doughMap->visitRw(unknown2Visitor);
+  RemoveElementsVisitor unknown1Remover(ElementCriterionPtr(new StatusCriterion(Status::Unknown1)));
+  unknown1Remover.setRecursive(true);
+  doughMap->visitRw(unknown1Remover);
   LOG_VARD(doughMap->getNodeMap().size());
   
-  //cookie cut the alpha shape from the unknown2 map
+  //cookie cut the alpha shape obtained from the ref map out of the source map
   CookieCutter(_crop, _outputBuffer).cut(cutShapeMap, doughMap);
   OsmMapPtr cookieCutMap = doughMap;
   LOG_VARD(cookieCutMap->getNodeMap().size());
     
-  //combine the unknown1 map with the cookie cut unknown2 map back into the input map
+  //combine the ref map back with the source map; Effectively, we've replaced all of the data in the
+  //source map whose AOI coincides with the ref map with the ref map's data.
   refMap->setProjection(cookieCutMap->getProjection());
   refMap->append(cookieCutMap);
   OsmMapPtr result = refMap;
