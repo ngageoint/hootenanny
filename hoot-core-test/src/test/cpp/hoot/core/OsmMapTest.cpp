@@ -44,10 +44,10 @@
 #include <hoot/core/util/Log.h>
 using namespace hoot;
 
-
 // Qt
 #include <QDebug>
 #include <QTime>
+#include <QDir>
 
 // TGS
 #include <tgs/RStarTree/KnnIterator.h>
@@ -67,6 +67,12 @@ class OsmMapTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runNnTest);
   CPPUNIT_TEST(runRemoveTest);
   CPPUNIT_TEST(runReplaceNodeTest);
+  CPPUNIT_TEST(runAppendTest);
+  CPPUNIT_TEST(runAppendDuplicateNodeTest);
+  CPPUNIT_TEST(runAppendDuplicateWayTest);
+  CPPUNIT_TEST(runAppendDuplicateRelationTest);
+  CPPUNIT_TEST(runAppendSameMapTest);
+  CPPUNIT_TEST(runAppendDifferentCoordinateSystemsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -151,6 +157,176 @@ public:
     HOOT_STR_EQUALS(nodePreChange, map->getNode(-1669793)->toString());
     HOOT_STR_EQUALS(wayPreChange, map->getWay(-1669801)->toString());
     HOOT_STR_EQUALS(relationPreChange, map->getRelation(-1)->toString());
+  }
+
+  void runAppendTest()
+  {
+    OsmReader reader;
+    reader.setUseDataSourceIds(true);
+
+    reader.setDefaultStatus(Status::Unknown1);
+    shared_ptr<OsmMap> mapA(new OsmMap());
+    reader.read("test-files/ToyTestA.osm", mapA);
+
+    reader.setDefaultStatus(Status::Unknown2);
+    shared_ptr<OsmMap> mapB(new OsmMap());
+    reader.read("test-files/ToyTestB.osm", mapB);
+
+    mapA->append(mapB);
+
+    MapReprojector::reprojectToWgs84(mapA);
+
+    OsmWriter writer;
+    writer.write(mapA, "test-output/OsmMapAppendTest.osm");
+    HOOT_FILE_EQUALS("test-files/OsmMapAppendTest.osm",
+                     "test-output/OsmMapAppendTest.osm");
+  }
+
+  void runAppendDuplicateNodeTest()
+  {
+    OsmReader reader;
+    reader.setUseDataSourceIds(true);
+
+    reader.setDefaultStatus(Status::Unknown1);
+    shared_ptr<OsmMap> mapA(new OsmMap());
+    reader.read("test-files/ToyTestA.osm", mapA);
+
+    reader.setDefaultStatus(Status::Unknown2);
+    shared_ptr<OsmMap> mapB(new OsmMap());
+    reader.read("test-files/ToyTestB.osm", mapB);
+
+    NodePtr duplicateNode(
+      new Node(Status::Unknown1, -1669765, 38.85423271202119, -104.89831096020139, 15.0));
+    mapB->addNode(duplicateNode);
+    QString exceptionMsg;
+    try
+    {
+      mapA->append(mapB);
+    }
+    catch (HootException e)
+    {
+      exceptionMsg = QString::fromAscii(e.what());
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Map already contains this node"));
+  }
+
+  void runAppendDuplicateWayTest()
+  {
+    OsmReader reader;
+    reader.setUseDataSourceIds(true);
+
+    reader.setDefaultStatus(Status::Unknown1);
+    shared_ptr<OsmMap> mapA(new OsmMap());
+    reader.read("test-files/ToyTestA.osm", mapA);
+
+    reader.setDefaultStatus(Status::Unknown2);
+    shared_ptr<OsmMap> mapB(new OsmMap());
+    reader.read("test-files/ToyTestB.osm", mapB);
+
+    //the duplicated way only needs to have the same ID...the rest doesn't matter
+    vector<long> nodeIds;
+    NodePtr node1(
+      new Node(Status::Unknown1, -1, 38.85423271202119, -104.89831096020139, 15.0));
+    nodeIds.push_back(node1->getId());
+    mapB->addNode(node1);
+    NodePtr node2(
+      new Node(Status::Unknown1, -2, 38.85423271202119, -104.89831096020139, 15.0));
+    nodeIds.push_back(node2->getId());
+    mapB->addNode(node2);
+    WayPtr duplicateWay(new Way(Status::Unknown1, -1669801, 15.0));
+    duplicateWay->addNodes(nodeIds);
+    mapB->addWay(duplicateWay);
+
+    QString exceptionMsg;
+    try
+    {
+      mapA->append(mapB);
+    }
+    catch (HootException e)
+    {
+      exceptionMsg = QString::fromAscii(e.what());
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Map already contains this way"));
+  }
+
+  void runAppendDuplicateRelationTest()
+  {
+    OsmReader reader;
+    reader.setUseDataSourceIds(true);
+
+    reader.setDefaultStatus(Status::Unknown1);
+    shared_ptr<OsmMap> mapA(new OsmMap());
+    reader.read("test-files/ToyTestA.osm", mapA);
+
+    reader.setDefaultStatus(Status::Unknown2);
+    shared_ptr<OsmMap> mapB(new OsmMap());
+    reader.read("test-files/ToyTestB.osm", mapB);
+
+    RelationPtr relation(new Relation(Status::Unknown1, -1, 15.0));
+    relation->addElement("", mapA->getWay(mapA->findWays("note", "1")[0]));
+    mapA->addRelation(relation);
+    RelationPtr duplicatedRelation(new Relation(Status::Unknown1, -1, 15.0));
+    duplicatedRelation->addElement("", mapA->getWay(mapA->findWays("note", "1")[0]));
+    mapB->addRelation(duplicatedRelation);
+
+    QString exceptionMsg;
+    try
+    {
+      mapA->append(mapB);
+    }
+    catch (HootException e)
+    {
+      exceptionMsg = QString::fromAscii(e.what());
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Map already contains this relation"));
+  }
+
+  void runAppendSameMapTest()
+  {
+    OsmReader reader;
+    reader.setUseDataSourceIds(true);
+
+    reader.setDefaultStatus(Status::Unknown1);
+    shared_ptr<OsmMap> mapA(new OsmMap());
+    reader.read("test-files/ToyTestA.osm", mapA);
+
+    const char* exceptionMsg;
+    try
+    {
+      mapA->append(mapA);
+    }
+    catch (HootException e)
+    {
+      exceptionMsg = e.what();
+    }
+    HOOT_STR_EQUALS(exceptionMsg, "Can't append to the same map.");
+  }
+
+  void runAppendDifferentCoordinateSystemsTest()
+  {
+    OsmReader reader;
+    reader.setUseDataSourceIds(true);
+
+    reader.setDefaultStatus(Status::Unknown1);
+    shared_ptr<OsmMap> mapA(new OsmMap());
+    reader.read("test-files/ToyTestA.osm", mapA);
+
+    reader.setDefaultStatus(Status::Unknown2);
+    shared_ptr<OsmMap> mapB(new OsmMap());
+    reader.read("test-files/ToyTestB.osm", mapB);
+
+    MapReprojector::reprojectToPlanar(mapB);
+
+    QString exceptionMsg;
+    try
+    {
+      mapA->append(mapB);
+    }
+    catch (HootException e)
+    {
+      exceptionMsg = QString::fromAscii(e.what());
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Incompatible maps"));
   }
 
   void runFindWayNeighbors()
