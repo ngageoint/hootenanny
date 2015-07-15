@@ -48,11 +48,12 @@ public:
 
   HistogramVisitor(Histogram& h, const OsmMap& map) : _h(h), _map(map) {}
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    if (type == ElementType::Way)
+    if (e->getElementType() == ElementType::Way)
     {
-      const ConstWayPtr& w = _map.getWay(id);
+      const ConstWayPtr& w = dynamic_pointer_cast<const Way>(e);
+      //const ConstWayPtr& w = _map.getWay(e->getId());
 
       vector<long> nodes = w->getNodeIds();
       if (nodes[0] != nodes[nodes.size() - 1])

@@ -47,11 +47,11 @@ Meters LengthOfWaysVisitor::getLengthOfWays(const OsmMapPtr& map, ElementPtr e)
   return v.getLengthOfWays();
 }
 
-void LengthOfWaysVisitor::visit(ElementType type, long id)
+void LengthOfWaysVisitor::visit(const ConstElementPtr& e)
 {
-  if (type == ElementType::Way)
+  if (e->getElementType() == ElementType::Way)
   {
-    const shared_ptr<const Way> w = _map->getWay(id);
+    const shared_ptr<const Way> w = _map->getWay(e->getId());
     _total += ElementConverter(_map->shared_from_this()).convertToLineString(w)->getLength();
   }
 }

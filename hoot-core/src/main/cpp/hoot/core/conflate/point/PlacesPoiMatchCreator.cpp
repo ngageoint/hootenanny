@@ -164,9 +164,8 @@ public:
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
   }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    shared_ptr<const Element> e(_map->getElement(type, id));
     if (isMatchCandidate(e))
     {
       checkForMatch(dynamic_pointer_cast<const Node>(e));

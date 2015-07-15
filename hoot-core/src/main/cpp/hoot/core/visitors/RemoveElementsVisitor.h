@@ -63,7 +63,7 @@ public:
     _filter = e;
   }
 
-  virtual void visit(ElementType type, long id);
+  virtual void visit(const ConstElementPtr& e);
 
   virtual void setConfiguration(const Settings& conf);
 

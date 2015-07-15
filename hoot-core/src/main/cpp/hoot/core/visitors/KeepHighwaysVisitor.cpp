@@ -41,9 +41,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, KeepHighwaysVisitor)
 
-void KeepHighwaysVisitor::visit(ElementType type, long id)
+void KeepHighwaysVisitor::visit(const ConstElementPtr& e)
 {
-  shared_ptr<Element> e = _map->getElement(type, id);
+  ElementType type = e->getElementType();
+  long id = e->getId();
 
   if (OsmSchema::getInstance().isLinearHighway(e->getTags(), type) == false ||
       OsmSchema::getInstance().isArea(e->getTags(), type))
@@ -54,7 +55,7 @@ void KeepHighwaysVisitor::visit(ElementType type, long id)
     {
       if (_map->getIndex().getParents(e->getElementId()).size() == 0)
       {
-        _map->removeRelation(e->getId());
+        _map->removeRelation(id);
       }
     }
     else

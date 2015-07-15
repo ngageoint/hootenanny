@@ -59,7 +59,7 @@ public:
   /**
    * Adds a tag with a UUID to all valid elements.
    */
-  virtual void visit(ElementType type, long id);
+  virtual void visit(const ConstElementPtr& e);
 
 private:
   OsmMap* _map;

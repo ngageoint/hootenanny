@@ -77,7 +77,7 @@ public:
   virtual void setOsmMap(OsmMap* map);
   virtual void setOsmMap(const OsmMap* map);
 
-  virtual void visit(ElementType type, long id);
+  virtual void visit(const ConstElementPtr& e);
 
 private:
   const ElementCriterion* _criterion;

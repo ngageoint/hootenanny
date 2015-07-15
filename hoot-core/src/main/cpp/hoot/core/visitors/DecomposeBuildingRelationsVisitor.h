@@ -51,7 +51,7 @@ public:
 
   DecomposeBuildingRelationsVisitor();
 
-  virtual void visit(ElementType type, long id);
+  virtual void visit(const ConstElementPtr& e);
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 

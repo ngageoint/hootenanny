@@ -133,19 +133,19 @@ public:
       return result;
     }
 
-    virtual void visit(ElementType type, long id)
+    virtual void visit(const ConstElementPtr& e)
     {
-      ElementId eid(type, id);
+      ElementId eid = e->getElementId();
 
-      ElementPtr e = _map->getElement(eid);
+      ElementPtr ee = _map->getElement(eid);
 
-      if (e->getTags().get("note") == _scenario)
+      if (ee->getTags().get("note") == _scenario)
       {
-        if (e->getStatus() == Status::Unknown1)
+        if (ee->getStatus() == Status::Unknown1)
         {
           _e1.push_back(eid);
         }
-        else if (e->getStatus() == Status::Unknown2)
+        else if (ee->getStatus() == Status::Unknown2)
         {
           _e2.push_back(eid);
         }

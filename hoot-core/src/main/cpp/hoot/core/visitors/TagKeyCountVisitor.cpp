@@ -36,9 +36,8 @@ _keyCount(0)
 
 }
 
-void TagKeyCountVisitor::visit(ElementType type, long id)
+void TagKeyCountVisitor::visit(const ConstElementPtr& e)
 {
-  shared_ptr<const Element> e = _map->getElement(type, id);
   if (e->getTags().contains(_key))
   {
     _keyCount++;

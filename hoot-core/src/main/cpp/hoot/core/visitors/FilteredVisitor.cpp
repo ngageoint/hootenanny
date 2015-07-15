@@ -95,10 +95,8 @@ void FilteredVisitor::setOsmMap(const OsmMap* map)
   }
   _map = map;
 }
-
-void FilteredVisitor::visit(ElementType type, long id)
+void FilteredVisitor::visit(const ConstElementPtr& e)
 {
-  shared_ptr<const Element> e = _map->getElement(type, id);
   if (_criterion->isSatisfied(e))
   {
     _visitor->visit(e);

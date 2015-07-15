@@ -51,7 +51,7 @@ public:
    */
   const set<ElementId>& getElementSet() const { return _elements; }
 
-  virtual void visit(ElementType type, long id) { _elements.insert(ElementId(type, id)); }
+  virtual void visit(const ConstElementPtr& e) { _elements.insert(ElementId(e->getElementType(), e->getId())); }
 
 private:
   set<ElementId> _elements;

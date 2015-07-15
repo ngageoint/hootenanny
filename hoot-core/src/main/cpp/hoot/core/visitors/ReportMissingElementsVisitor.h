@@ -54,7 +54,7 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { assert(!_removeMissing); _constMap = map; }
 
-  virtual void visit(ElementType type, long id);
+  virtual void visit(const ConstElementPtr& e);
 
 protected:
   OsmMap* _map;

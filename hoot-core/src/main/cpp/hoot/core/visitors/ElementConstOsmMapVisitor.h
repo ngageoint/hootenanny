@@ -55,12 +55,6 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(ElementType type, long id)
-  {
-    shared_ptr<const Element> e = _map->getElement(type, id);
-    visit(e);
-  }
-
   virtual void visit(const shared_ptr<const Element>& e) = 0;
 
 protected:

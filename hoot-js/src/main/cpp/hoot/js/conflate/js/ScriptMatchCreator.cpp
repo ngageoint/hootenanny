@@ -295,12 +295,11 @@ public:
     return f->BooleanValue();
   }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    shared_ptr<const Element> element(_map->getElement(type, id));
-    if (element->getStatus() == Status::Unknown1 && isMatchCandidate(element))
+    if (e->getStatus() == Status::Unknown1 && isMatchCandidate(e))
     {
-      checkForMatch(element);
+      checkForMatch(e);
     }
   }
 
