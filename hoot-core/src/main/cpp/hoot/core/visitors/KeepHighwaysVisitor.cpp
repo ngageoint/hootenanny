@@ -43,8 +43,6 @@ HOOT_FACTORY_REGISTER(ElementVisitor, KeepHighwaysVisitor)
 
 void KeepHighwaysVisitor::visit(const ConstElementPtr& e)
 {
-    cout << "in keephighwaysvisitor" << endl;
-  //shared_ptr<Element> e = _map->getElement(type, id);
   ElementType type = e->getElementType();
   long id = e->getId();
 
