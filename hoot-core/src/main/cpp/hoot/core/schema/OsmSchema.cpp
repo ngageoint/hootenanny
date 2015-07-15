@@ -251,24 +251,35 @@ public:
   }
 
 
-  QString average(const QString& kvp1, double w1, const QString& kvp2, double w2, double& score)
+  QString average(QString kvp1, double w1, QString kvp2, double w2, double& score)
   {
-    if (_kvp2Vertex.contains(kvp1) == false || _kvp2Vertex.contains(kvp2) == false)
+    QString result;
+    QString kvpNormalized1 = normalizeEnumeratedKvp(kvp1);
+    QString kvpNormalized2 = normalizeEnumeratedKvp(kvp2);
+    if (kvpNormalized1.isEmpty() || kvpNormalized2.isEmpty())
     {
       score = 0.0;
-      return kvp1;
+      result = kvp1;
+    }
+    else if (kvpNormalized2.endsWith("*"))
+    {
+      result = kvp1;
+    }
+    else if (kvpNormalized1.endsWith("*"))
+    {
+      result = kvp2;
     }
     else
     {
-      VertexId vid1 = _kvp2Vertex[kvp1];
-      VertexId vid2 = _kvp2Vertex[kvp2];
+      VertexId vid1 = _kvp2Vertex[kvpNormalized1];
+      VertexId vid2 = _kvp2Vertex[kvpNormalized2];
 
       AverageKey key(vid1, w1, vid2, w2);
       HashMap<AverageKey, AverageResult>::iterator it = _cachedAverages.find(key);
       if (it != _cachedAverages.end())
       {
         score = it->second.score;
-        return _graph[it->second.vid].name;
+        result = _graph[it->second.vid].name;
       }
       else
       {
@@ -276,9 +287,11 @@ public:
 
         _cachedAverages[key] = AverageResult(avgVid, score);
 
-        return _graph[avgVid].name;
+        result = _graph[avgVid].name;
       }
     }
+
+    return result;
   }
 
   void createTestingGraph()
@@ -532,63 +545,24 @@ public:
    */
   QString normalizeEnumeratedKvp(const QString& kvp)
   {
-    if (_kvp2Vertex.contains(kvp))
+    QString result = _normalizeEnumeratedKvp(kvp);
+    if (result.isEmpty())
     {
-      return kvp;
+      result = _normalizeEnumeratedKvp(kvp.toLower());
     }
-    else
-    {
-      QString newKvp = getKey(kvp) + "=*";
-      if (_kvp2Vertex.contains(newKvp))
-      {
-        return newKvp;
-      }
-      else
-      {
-        return QString();
-      }
-    }
+
+    return result;
   }
 
   QString normalizeKvp(const QString& kvp) const
   {
-    QString key = getKey(kvp);
-    if (_kvp2Vertex.contains(kvp))
+    QString result = _normalizeKvp(kvp);
+    if (result.isEmpty())
     {
-      return kvp;
+      result = _normalizeKvp(kvp.toLower());
     }
-    else if (_kvp2Vertex.contains(key + "=*"))
-    {
-      return getKey(kvp) + "=*";
-    }
-    else if (_kvp2Vertex.contains(key))
-    {
-      const TagVertex& v = _graph[_kvp2Vertex[key]];
-      if (v.valueType == Text || v.valueType == Int)
-      {
-        return key;
-      }
-      else
-      {
-        return QString();
-      }
-    }
-    else
-    {
-      // check to see if any of the regular expressions match
-      for (QList< pair<QRegExp, VertexId> >::const_iterator it = _regexKeys.begin();
-           it != _regexKeys.end(); ++it)
-      {
-        const QRegExp& re = it->first;
-        if (re.exactMatch(key))
-        {
-          VertexId vid = it->second;
-          return _graph[vid].key;
-        }
-      }
 
-      return QString();
-    }
+    return result;
   }
 
   double score(const QString& kvp1, const QString& kvp2)
@@ -914,6 +888,67 @@ private:
   bool _isValid(VertexId vid)
   {
     return vid != numeric_limits<VertexId>::max();
+  }
+
+  QString _normalizeEnumeratedKvp(const QString& kvp)
+  {
+    if (_kvp2Vertex.contains(kvp))
+    {
+      return kvp;
+    }
+    else
+    {
+      QString newKvp = getKey(kvp) + "=*";
+      if (_kvp2Vertex.contains(newKvp))
+      {
+        return newKvp;
+      }
+      else
+      {
+        return QString();
+      }
+    }
+  }
+
+  QString _normalizeKvp(const QString& kvp) const
+  {
+    QString key = getKey(kvp);
+    if (_kvp2Vertex.contains(kvp))
+    {
+      return kvp;
+    }
+    else if (_kvp2Vertex.contains(key + "=*"))
+    {
+      return getKey(kvp) + "=*";
+    }
+    else if (_kvp2Vertex.contains(key))
+    {
+      const TagVertex& v = _graph[_kvp2Vertex[key]];
+      if (v.valueType == Text || v.valueType == Int)
+      {
+        return key;
+      }
+      else
+      {
+        return QString();
+      }
+    }
+    else
+    {
+      // check to see if any of the regular expressions match
+      for (QList< pair<QRegExp, VertexId> >::const_iterator it = _regexKeys.begin();
+           it != _regexKeys.end(); ++it)
+      {
+        const QRegExp& re = it->first;
+        if (re.exactMatch(key))
+        {
+          VertexId vid = it->second;
+          return _graph[vid].key;
+        }
+      }
+
+      return QString();
+    }
   }
 
   void _percolateInheritance()
