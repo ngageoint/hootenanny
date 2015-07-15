@@ -4391,7 +4391,8 @@ tds61.rules = {
      [undefined,undefined,'building','industrial'], // Industrial
      [undefined,undefined,'man_made','works'], // Works
      ['FFN','2','building','farm'], // Agriculture
-     ['FFN','850','building','school'], 
+     ['FFN','850','amenity','kindergarten'], // Education
+     ['FFN','850','building','school'],
      ['FFN','855','building','university'], 
      ['FFN','572','amenity','cafe'], // Restaurant
      ['FFN','572','building','restaurant'], // Restaurant
