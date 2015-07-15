@@ -48,6 +48,9 @@ dum*
 fouo
 gdb
 go
+hoot-cmd/Makefile
+hoot-core-test/Makefile
+hoot-core/Makefile
 hoot-core/src/main/cpp/hoot/core/VersionDefines.h
 hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h
 hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h
@@ -94,6 +97,8 @@ src/proto/*.pb.cc
 src/proto/*.pb.h
 stamp-h1
 **/target/
+tbs/Makefile
+tgs/Makefile
 test-files/*.db
 test-output/**
 **/test-output/*
