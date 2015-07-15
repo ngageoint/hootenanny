@@ -107,7 +107,9 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
             final String uniqueElementIdStr = StringUtils.trimToNull(tags.get("uuid"));
             if (uniqueElementIdStr == null)
             {
-              log.warn(
+              //this should probably be a warn, but is happening a lot and cluttering up the logs...
+            	//not worrying about it for now, since new implementation is on the way
+              log.debug(
                 "Invalid UUID: " + uniqueElementIdStr + " for map with ID: " + mapId +
                 ".  Skipping adding unique ID record...");
             }
@@ -136,7 +138,9 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                 	  .where(elementIdMappings.mapId.eq(mapId)
                   		.and(elementIdMappings.elementId.eq(uniqueElementId))).count() > 0)
                 {
-                  log.warn(
+                  //this should probably be a warn, but is happening a lot and cluttering up the logs...
+                	//not worrying about it for now, since new implementation is on the way
+                  log.debug(
                     "UUID: " + uniqueElementId + " for map with ID: " + mapId + " already exists.  " +
                     "Skipping adding unique ID record...");
                 }
@@ -152,7 +156,9 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                   }
                   else
                   {
-                    log.warn(
+                    //this should probably be a warn, but is happening a lot and cluttering up the logs...
+                  	//not worrying about it for now, since new implementation is on the way
+                    log.debug(
                       "Duplicate element ID: " + uniqueElementId.toString() + " for map with ID: " +
                       mapId + ".  Skipping adding unique ID record...");
                   }
@@ -219,7 +225,9 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
             final String reviewableItemIdStr = StringUtils.trimToNull(tags.get("uuid"));
             if (StringUtils.isEmpty(reviewableItemIdStr))
             {
-              log.warn(
+            	//this should probably be a warn, but is happening a lot and cluttering up the logs...
+            	//not worrying about it for now, since new implementation is on the way
+              log.debug(
                 "Invalid UUID: " + reviewableItemIdStr + " for map with ID: " + mapId +
                 " Skipping adding review record...");
             }
@@ -297,7 +305,9 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                       		  .and(elementIdMappings.elementId.eq(reviewAgainstItemId)))
                       		.count() == 0)
                     {
-                      log.warn(
+                      //this should probably be a warn, but is happening a lot and cluttering up the logs...
+                    	//not worrying about it for now, since new implementation is on the way
+                      log.debug(
                         "No element ID mapping exists for review against item with ID: " +
                         reviewAgainstItemId + " for map with ID: " + mapId + ".  Skipping adding " +
                         "review record...");
