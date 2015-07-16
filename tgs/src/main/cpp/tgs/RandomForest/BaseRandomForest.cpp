@@ -218,7 +218,7 @@ namespace Tgs
 
           QString tag = e.tagName().toUpper();
 
-          bool parseOkay;
+          bool parseOkay = true;
 
           if(tag == "NUMTREES")
           {
