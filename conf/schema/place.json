@@ -1,7 +1,7 @@
 {
     "tag": {
         "name": "place",
-        "isA": "poi"
+        "isA": "poi=yes"
     },
 
     "#" : " The catch all",

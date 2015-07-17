@@ -4,7 +4,7 @@
         "influence": 1.0,
         "type": "enumeration",
         "geometries": ["node","area"],
-        "isA": "poi"
+        "isA": "poi=yes"
     },
 
     "#" : " The catch all",
