@@ -569,7 +569,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Way>& newWay)
    * Make sure this way has any hope of working (i.e., are there enough spots in the cache
    * for all its nodes?
    */
-  if ( newWay->getNodeCount() > _currElementCacheCapacity )
+  if ((long)newWay->getNodeCount() > _currElementCacheCapacity )
   {
     LOG_FATAL("Cannot do partial write of Way ID " << newWay->getId() <<
       " as it contains " << newWay->getNodeCount() << " nodes but our cache can only hold " <<
