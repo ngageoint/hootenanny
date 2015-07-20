@@ -42,12 +42,49 @@
 // Qt
 #include <QFileInfo>
 
+// Standard
+#include <deque>
+
+// TGS
+#include <tgs/RStarTree/IntersectionIterator.h>
+#include <tgs/RStarTree/MemoryPageStore.h>
+
 #include "ScriptMatch.h"
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(MatchCreator, ScriptMatchCreator)
+
+/**
+ * This visitor creates an index of only the Unknown2 input elements. The evelope plus the search
+ * radius is created as the index box for each element. This is more efficient than using the
+ * OsmMapIndex index. Also, only elements that are match candidates are indexed.
+ */
+class IndexElementsVisitor : public ElementVisitor
+{
+public:
+  shared_ptr<HilbertRTree>& _index;
+  deque<ElementId>& _indexToEid;
+  ScriptMatchVisitor& _smv;
+  std::vector<Box> _boxes;
+  std::vector<int> _fids;
+
+  IndexElementsVisitor(shared_ptr<HilbertRTree>& index, deque<ElementId>& indexToEid,
+    ScriptMatchVisitor& smv) :
+    _index(index),
+    _indexToEid(indexToEid),
+    _smv(smv)
+  {
+  }
+
+  void finalizeIndex()
+  {
+    _index->bulkInsert(_boxes, _fids);
+  }
+
+  virtual void visit(const ConstElementPtr& e);
+};
 
 class ScriptMatchVisitor;
 class SmWorstCircularErrorVisitor : public ElementVisitor
@@ -123,22 +160,14 @@ public:
     HandleScope handleScope;
     Context::Scope context_scope(_script->getContext());
 
+    // create an envlope around the e plus the search radius.
     auto_ptr<Envelope> env(e->getEnvelope(_map));
-    //if _searchRadius is unchanged, don't use it as an auto-calculated search radius value and
-    //expand the search envelope based on the element's circular error and map worst circular error
-    //instead
-    if (_searchRadius == -1.0)
-    {
-      env->expandBy(_candidateDistanceSigma * _worstCircularError + getSearchRadius(e));
-    }
-    else
-    {
-      env->expandBy(_candidateDistanceSigma * _searchRadius);
-    }
+    Meters searchRadius = getSearchRadius(e);
+    env->expandBy(searchRadius);
 
     // find other nearby candidates
-    set<ElementId> neighbors = _map->findElements(*env);
-    ElementId from(e->getElementType(), e->getId());
+    set<ElementId> neighbors = findNeighbors(*env);
+    ElementId from = e->getElementId();
 
     _elementsEvaluated++;
     int neighborCount = 0;
@@ -166,6 +195,28 @@ public:
     _neighborCountSum += neighborCount;
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
   }
+
+  set<ElementId> findNeighbors(const Envelope& env)
+  {
+    set<ElementId> result;
+
+    vector<double> min(2), max(2);
+    min[0] = env.getMinX();
+    min[1] = env.getMinY();
+    max[0] = env.getMaxX();
+    max[1] = env.getMaxY();
+    IntersectionIterator it(getIndex().get(), min, max);
+
+    while (it.next())
+    {
+      // map the tree id to an element id and push into result.
+      result.insert(_indexToEid[it.getId()]);
+    }
+
+    return result;
+  }
+
+  ConstOsmMapPtr getMap() const { return _map; }
 
   static double getNumber(Handle<Object> obj, QString key, double minValue, double defaultValue)
   {
@@ -215,11 +266,20 @@ public:
     return plugin;
   }
 
+  // See the "Calculating Search Radius" section in the user docs for more information.
   Meters getSearchRadius(const ConstElementPtr& e)
   {
+    Meters result;
     if (_getSearchRadius.IsEmpty())
     {
-      return e->getCircularError() * _candidateDistanceSigma;
+      if (_searchRadius < 0)
+      {
+        result = e->getCircularError() * _candidateDistanceSigma;
+      }
+      else
+      {
+        result = _searchRadius * _candidateDistanceSigma;
+      }
     }
     else
     {
@@ -230,8 +290,10 @@ public:
 
       Handle<Value> f = _getSearchRadius->Call(getPlugin(), argc, jsArgs);
 
-      return toCpp<Meters>(f);
+      result = toCpp<Meters>(f) * _candidateDistanceSigma;
     }
+
+    return result;
   }
 
   /*
@@ -267,6 +329,24 @@ public:
     //this is meant to have been set externally in a js rules file
     _searchRadius = getNumber(plugin, "searchRadius", -1.0, 15.0);
   }
+
+  shared_ptr<HilbertRTree>& getIndex()
+  {
+    if (!_index)
+    {
+      // No tuning was done, I just copied these settings from OsmMapIndex.
+      // 10 children - 368
+      shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+      _index.reset(new HilbertRTree(mps, 2));
+
+      IndexElementsVisitor iev(_index, _indexToEid, *this);
+      _map->visitRo(iev);
+      iev.finalizeIndex();
+    }
+
+    return _index;
+  }
+
 
   bool isMatchCandidate(ConstElementPtr e)
   {
@@ -316,6 +396,8 @@ private:
   Meters _worstCircularError;
   shared_ptr<PluginContext> _script;
   Persistent<v8::Function> _getSearchRadius;
+  shared_ptr<HilbertRTree> _index;
+  deque<ElementId> _indexToEid;
 
   double _candidateDistanceSigma;
   //used for automatic search radius calculation; it is expected that this is set from the Javascript
@@ -326,6 +408,25 @@ private:
 
 };
 
+
+void IndexElementsVisitor::visit(const ConstElementPtr& e)
+{
+  if (_smv.isMatchCandidate(e) && e->getStatus() == Status::Unknown2)
+  {
+    _fids.push_back((int)_indexToEid.size());
+    _indexToEid.push_back(e->getElementId());
+
+    Box b(2);
+    Meters searchRadius = _smv.getSearchRadius(e);
+    ConstOsmMapPtr map = _smv.getMap();
+    auto_ptr<Envelope> env(e->getEnvelope(map));
+    env->expandBy(searchRadius);
+    b.setBounds(0, env->getMinX(), env->getMaxX());
+    b.setBounds(1, env->getMinY(), env->getMaxY());
+
+    _boxes.push_back(b);
+  }
+}
 
 void SmWorstCircularErrorVisitor::visit(const ConstElementPtr& e)
 {
