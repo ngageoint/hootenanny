@@ -60,6 +60,7 @@ public:
 
   void setUp()
   {
+    TestUtils::resetEnvironment();
     conf().set(ConfigOptions::getStatsTranslateScriptKey(), "${HOOT_HOME}/translations/HootTest.js");
   }
 
