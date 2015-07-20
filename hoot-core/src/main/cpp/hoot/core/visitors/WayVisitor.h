@@ -55,11 +55,11 @@ public:
   virtual void setOsmMap(OsmMap* map) { _map = map; }
   virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    if (type == ElementType::Way)
+    if (e->getElementType() == ElementType::Way)
     {
-      WayPtr w = _map->getWay(id);
+      WayPtr w = _map->getWay(e->getId());
       if (w)
       {
         visit(w);

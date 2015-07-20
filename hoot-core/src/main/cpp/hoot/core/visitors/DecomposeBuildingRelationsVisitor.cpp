@@ -40,12 +40,11 @@ DecomposeBuildingRelationsVisitor::DecomposeBuildingRelationsVisitor()
 {
 }
 
-void DecomposeBuildingRelationsVisitor::visit(ElementType type, long id)
+void DecomposeBuildingRelationsVisitor::visit(const ConstElementPtr& e)
 {
-  if (type == ElementType::Relation)
+  if (e->getElementType() == ElementType::Relation)
   {
-    const shared_ptr<Relation>& r = _map->getRelation(id);
-
+    const shared_ptr<Relation>& r = _map->getRelation(e->getId());
     if (r->getType() == "building")
     {
       _decomposeBuilding(r);

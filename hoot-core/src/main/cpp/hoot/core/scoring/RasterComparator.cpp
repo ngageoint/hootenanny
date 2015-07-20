@@ -122,9 +122,9 @@ public:
   PaintVisitor(OsmMapPtr map, GeometryPainter& gp, QPainter& pt, QMatrix& m) :
     _map(map), _gp(gp), _pt(pt), _m(m) { }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    vector<ConstWayPtr> ways = ExtractWaysVisitor::extractWays(_map, _map->getElement(type, id));
+    vector<ConstWayPtr> ways = ExtractWaysVisitor::extractWays(_map, e);
 
     for (size_t i = 0; i < ways.size(); i++)
     {

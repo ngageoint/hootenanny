@@ -41,20 +41,20 @@ public:
   {
   }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    ElementId eid(type, id);
+    ElementId eid = e->getElementId();
 
     // if the element is not exempt and it isn't already in the map
     if (eid != _exempt && _to->containsElement(eid) == false)
     {
       // create a copy of the element
-      ElementPtr e(_from->getElement(eid)->clone());
+      ElementPtr ee(_from->getElement(eid)->clone());
 
       // if it is a node, just copy it, we don't need to worry about dependencies.
-      if (type == ElementType::Node)
+      if (ee->getElementType() == ElementType::Node)
       {
-        _to->addElement(e);
+        _to->addElement(ee);
       }
       // if this is not a node then we need to worry about dependencies.
       else
@@ -63,7 +63,7 @@ public:
         AddAllVisitor v(_from, _to, eid);
         _from->getElement(eid)->visitRo(*_from, v);
         // finally, add this element to the map.
-        _to->addElement(e);
+        _to->addElement(ee);
       }
     }
   }

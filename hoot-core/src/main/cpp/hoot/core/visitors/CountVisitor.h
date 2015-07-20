@@ -52,7 +52,7 @@ public:
 
   double getStat() const { return _count; }
 
-  virtual void visit(ElementType /*type*/, long /*id*/) { _count++; }
+  virtual void visit(const ConstElementPtr& /*e*/) { _count++; }
 
 private:
   int _count;

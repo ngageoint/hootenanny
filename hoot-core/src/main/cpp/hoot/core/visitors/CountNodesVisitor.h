@@ -48,7 +48,8 @@ public:
 
   int getCount() const { return _count; }
 
-  virtual void visit(ElementType type, long /*id*/) { if (type == ElementType::Node) _count++; }
+  virtual void visit(const ConstElementPtr& e) { if (e->getElementType() == ElementType::Node) _count++; }
+  //virtual void visit(ElementType type, long /*id*/) { if (type == ElementType::Node) _count++; }
 
 private:
   int _count;

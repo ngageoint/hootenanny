@@ -35,9 +35,10 @@
 namespace hoot
 {
 
-void FindIntersectionsVisitor::visit(ElementType /*type*/, long id)
+void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
 {
   shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
+  long id = e->getId();
 
   const set<long>& wids = n2w->getWaysByNode(id);
 

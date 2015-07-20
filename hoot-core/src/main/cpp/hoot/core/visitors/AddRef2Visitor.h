@@ -56,7 +56,7 @@ public:
    * Adds a REF2 tag with a "todo" to all valid elements. If the Tags::getNonDebugCount() is greater
    * than zero then the element is tagged with a REF2.
    */
-  virtual void visit(ElementType type, long id);
+  virtual void visit(const ConstElementPtr& e);
 
 private:
   OsmMap* _map;

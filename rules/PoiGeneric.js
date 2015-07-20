@@ -527,6 +527,15 @@ exports.matchScore = function(map, e1, e2) {
     return result;
 };
 
+function printTags(tags) {
+    hoot.warn("Tags:");
+    var keys = Object.keys(tags.toDict());
+    keys.sort();
+    for (var i = 0; i < keys.length; i++) {
+        hoot.warn(keys[i] + ": " + tags.toDict()[keys[i]]);
+    }
+}
+
 exports.mergePair = function(map, e1, e2)
 {
     var newTags = mergeTags(e1, e2);

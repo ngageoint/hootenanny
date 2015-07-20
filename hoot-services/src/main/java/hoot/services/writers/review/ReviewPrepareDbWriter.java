@@ -230,7 +230,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 					final boolean uuidsExist = parseElementUniqueIdTags(mapId);
 					if (!uuidsExist)
 					{
-						log.warn("Parsing unique element ID's: " + noRecordsParsedMessage);
+						log.info("Parsing unique element ID's: " + noRecordsParsedMessage);
 					}
 					else
 					{
@@ -239,7 +239,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 						reviewableItemsExist = parseElementReviewTags(mapId);
 						if (!reviewableItemsExist)
 						{
-							log.warn("Parsing review tags: " + noRecordsParsedMessage);
+							log.info("Parsing review tags: " + noRecordsParsedMessage);
 						}
 					}
 					if (!uuidsExist || !reviewableItemsExist)
@@ -622,7 +622,9 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 						String uniqueElementId = StringUtils.trimToNull(tags.get("uuid"));
 						if (uniqueElementId == null)
 						{
-							log.warn(
+						  //this should probably be a warn, but is happening a lot and cluttering up the logs...
+            	//not worrying about it for now, since new implementation is on the way
+							log.debug(
 								"Invalid UUID: " + uniqueElementId + " for map with ID: " + mapId + 
 								".  Skipping adding unique ID record...");
 						}
@@ -633,7 +635,9 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 						             .and(elementIdMappings.elementId.eq(uniqueElementId)))
 						           .count() > 0)
 						{
-							log.warn(
+						  //this should probably be a warn, but is happening a lot and cluttering up the logs...
+            	//not worrying about it for now, since new implementation is on the way
+							log.debug(
 								"UUID: " + uniqueElementId + " for map with ID: " + mapId + " already exists.  " +
 							  "Skipping adding unique ID record...");
 						}
@@ -650,7 +654,9 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 							}
 							else
 							{
-								log.warn(
+						  	//this should probably be a warn, but is happening a lot and cluttering up the logs...
+	            	//not worrying about it for now, since new implementation is on the way
+								log.debug(
 								  "Duplicate element ID: " + uniqueElementId.toString() + " for map with ID: " + 
 								  mapId + ".  Skipping adding unique ID record...");
 							}
@@ -755,7 +761,9 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 						String reviewableItemId = StringUtils.trimToNull(tags.get("uuid"));
 						if (StringUtils.isEmpty(reviewableItemId))
 						{
-							log.warn(
+						  //this should probably be a warn, but is happening a lot and cluttering up the logs...
+            	//not worrying about it for now, since new implementation is on the way
+							log.debug(
 								"Invalid UUID: " + tags.get("uuid") + " for map with ID: " + mapId + 
                 " Skipping adding review record...");
 						}
@@ -815,7 +823,9 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 									          .and(elementIdMappings.elementId.eq(reviewAgainstItemId)))
 									       .count() == 0)
 									{
-										log.warn(
+									  //this should probably be a warn, but is happening a lot and cluttering up the logs...
+			            	//not worrying about it for now, since new implementation is on the way
+										log.debug(
 											"No element ID mapping exists for review against item with ID: " + 
 										  reviewAgainstItemId + " for map with ID: " + mapId + 
 										  ".  Skipping adding " + "review record...");

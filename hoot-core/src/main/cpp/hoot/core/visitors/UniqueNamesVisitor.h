@@ -60,9 +60,8 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    shared_ptr<const Element> e = _map->getElement(type, id);
     QStringList names = e->getTags().getNames();
 
     for (int i = 0; i < names.size(); i++)

@@ -52,7 +52,7 @@ public:
   virtual void setOsmMap(OsmMap* map) { _map = map; }
   virtual void setOsmMap(const OsmMap* /*map*/) { throw NotImplementedException(); }
 
-  virtual void visit(ElementType type, long id);
+  virtual void visit(const ConstElementPtr& e);
   virtual void visit(const shared_ptr<Element>& e) = 0;
 
 protected:

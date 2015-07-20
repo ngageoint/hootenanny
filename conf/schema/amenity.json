@@ -1,7 +1,7 @@
 {
     "tag": {
         "name": "amenity",
-        "isA": "poi",
+        "isA": "poi=yes",
         "influence": 1.0,
         "type": "enumeration",
         "geometries": ["node", "area"]
@@ -19,6 +19,7 @@
         "similarTo": { "name": "amenity=parking_entrance", "weight": 0.8 }
     },
     "tag": { "name": "amenity=parking_entrance", "isA": "amenity" },
+    "tag": { "name": "amenity=post_office", "isA": "amenity" },
 
     "tag": { "name": "amenity=bus_station",
         "isA": "amenity",
