@@ -44,6 +44,7 @@ HOOT_FACTORY_REGISTER(StringDistance, TranslateStringDistance)
 TranslateStringDistance::TranslateStringDistance(StringDistance *d)
 {
   _d.reset(d);
+  setConfiguration(conf());
 }
 
 double TranslateStringDistance::compare(const QString& s1, const QString& s2) const
