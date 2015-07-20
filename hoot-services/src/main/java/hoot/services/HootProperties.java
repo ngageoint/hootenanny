@@ -310,6 +310,10 @@ public class HootProperties
     {
       return "true";
     }
+    else if (key.equals("reviewPrepareCleanup"))
+    {
+      return "true";
+    }
     return null;
   }
 }
