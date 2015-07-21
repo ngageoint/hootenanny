@@ -681,6 +681,24 @@ The regexp to be used to filter the layer names when importing layers from an ES
 
 The number of identical log messages that will be emitted before they're silenced.
 
+=== ogr.reader.bounding.box
+
+* Data Type: string
+* Default Value: ``
+
+If specified the OGR reader will limit data read from the data source to only features that
+intersect the given bounding box. The format is "minx,miny,maxx,maxy" specified in the projection
+of the input data source.
+
+The method OGRLayer::SetSpatialFilterRect is used to limit the bounding box. Some formats will
+intelligently use indexes, others will simply filter features after reading from the data source.
+
+Example Usage:
+
+----
+hoot ogr2osm -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/Identity.js output.osm test-files/jakarta_raya_coastline.shp
+----
+
 === ogr.split.o2s
 
 * Data Type: bool
