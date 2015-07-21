@@ -37,7 +37,7 @@ namespace hoot
 
 /**
  * Splits the map into ref/source (unknown1/unknown2), cuts the ref's shape out of the source, then
- * combines the maps back together
+ * combines the the entire ref map back with the source map with the hole cut in it.
  */
 class CookieCutterOp : public OsmMapOperation, public Configurable
 {

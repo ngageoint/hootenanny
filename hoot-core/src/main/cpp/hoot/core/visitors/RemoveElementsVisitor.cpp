@@ -60,16 +60,18 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
   _recursive = ConfigOptions(conf).getRemoveElementsVisitorRecursive();
 }
 
-void RemoveElementsVisitor::visit(ElementType type, long id)
+void RemoveElementsVisitor::visit(const ConstElementPtr& e)
 {
   assert(_filter);
-  const shared_ptr<Element>& e = _map->getElement(type, id);
+  ElementType type = e->getElementType();
+  long id = e->getId();
+  const shared_ptr<Element>& ee = _map->getElement(type, id);
 
-  if (_filter->isSatisfied(e))
+  if (_filter->isSatisfied(ee))
   {
     if (_recursive)
     {
-      RecursiveElementRemover(e->getElementId()).apply(_map->shared_from_this());
+      RecursiveElementRemover(ee->getElementId()).apply(_map->shared_from_this());
     }
     else
     {

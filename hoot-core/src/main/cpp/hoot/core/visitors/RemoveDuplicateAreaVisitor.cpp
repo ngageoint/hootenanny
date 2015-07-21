@@ -145,12 +145,12 @@ void RemoveDuplicateAreaVisitor::_removeOne(shared_ptr<Element> e1, shared_ptr<E
   }
 }
 
-void RemoveDuplicateAreaVisitor::visit(ElementType type, long id)
+void RemoveDuplicateAreaVisitor::visit(const ConstElementPtr& e)
 {
-  if (type != ElementType::Node)
+  if(e->getElementType() != ElementType::Node)
   {
-    shared_ptr<Element> e = _map->getElement(type, id);
-    visit(e);
+    shared_ptr<Element> ee = _map->getElement(e->getElementId());
+    visit(ee);
   }
 }
 

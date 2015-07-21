@@ -44,13 +44,13 @@ RemoveEmptyAreasVisitor::RemoveEmptyAreasVisitor()
 {
 }
 
-void RemoveEmptyAreasVisitor::visit(ElementType type, long id)
+void RemoveEmptyAreasVisitor::visit(const ConstElementPtr& e)
 {
   // no need to visit nodes.
-  if (type != ElementType::Node)
+  if (e->getElementType() != ElementType::Node)
   {
-    shared_ptr<Element> e = _map->getElement(type, id);
-    visit(e);
+    shared_ptr<Element> ee = _map->getElement(e->getElementId());
+    visit(ee);
   }
 }
 

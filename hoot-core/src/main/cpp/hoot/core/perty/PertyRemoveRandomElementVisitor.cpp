@@ -70,12 +70,12 @@ void PertyRemoveRandomElementVisitor::setConfiguration(const Settings& conf)
   }
 }
 
-void PertyRemoveRandomElementVisitor::visit(ElementType type, long id)
+void PertyRemoveRandomElementVisitor::visit(const ConstElementPtr& e)
 {
   boost::uniform_real<> uni(0.0, 1.0);
   if (uni(*_rng) <= _p)
   {
-    RecursiveElementRemover(ElementId(type, id)).apply(_map->shared_from_this());
+    RecursiveElementRemover(ElementId(e->getElementType(), e->getId())).apply(_map->shared_from_this());
   }
 }
 

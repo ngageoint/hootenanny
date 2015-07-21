@@ -68,15 +68,15 @@ void ReportMissingElementsVisitor::_reportMissing(ElementId referer, ElementId m
   }
 }
 
-void ReportMissingElementsVisitor::visit(ElementType type, long id)
+void ReportMissingElementsVisitor::visit(const ConstElementPtr& e)
 {
   if (_removeMissing)
   {
-    _visitRw(type, id);
+    _visitRw(e->getElementType(), e->getId());
   }
   else
   {
-    _visitRo(type, id);
+    _visitRo(e->getElementType(), e->getId());
   }
 }
 

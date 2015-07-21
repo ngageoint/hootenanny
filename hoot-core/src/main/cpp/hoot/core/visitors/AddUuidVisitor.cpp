@@ -41,11 +41,11 @@ AddUuidVisitor::AddUuidVisitor(QString key) : _key(key)
 {
 }
 
-void AddUuidVisitor::visit(ElementType type, long id)
+void AddUuidVisitor::visit(const ConstElementPtr& e)
 {
-  shared_ptr<Element> e = _map->getElement(type, id);
+  shared_ptr<Element> ee = _map->getElement(e->getElementId());
 
-  e->getTags()[_key] = UuidHelper::createUuid().toString();
+  ee->getTags()[_key] = UuidHelper::createUuid().toString();
 }
 
 }

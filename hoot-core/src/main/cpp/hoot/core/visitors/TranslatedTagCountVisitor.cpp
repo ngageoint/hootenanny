@@ -86,10 +86,8 @@ void TranslatedTagCountVisitor::_countTags(shared_ptr<Feature>& f)
   }
 }
 
-void TranslatedTagCountVisitor::visit(ElementType type, long id)
+void TranslatedTagCountVisitor::visit(const ConstElementPtr& e)
 {
-  shared_ptr<const Element> e = _map->getElement(type, id);
-
   if (e->getTags().getInformationCount() > 0)
   {
     shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e);

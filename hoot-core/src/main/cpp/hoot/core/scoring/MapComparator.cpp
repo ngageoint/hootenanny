@@ -114,7 +114,34 @@ public:
     }
 
 
-    CHECK_MSG(in1 == in2, "Tags do not match: " << in1.toString() << " vs. " << in2.toString());
+    if (in1 != in2)
+    {
+      _matches = false;
+      _errorCount++;
+      if (_errorCount <= 10)
+      {
+        LOG_WARN("Tags do not match:");
+        QStringList keys = in1.keys();
+        keys.append(in2.keys());
+        keys.removeDuplicates();
+        keys.sort();
+
+        if (_errorCount < 10)
+        {
+          for (int i = 0; i < keys.size(); i++)
+          {
+            QString k = keys[i];
+            if (in1[k] != in2[k])
+            {
+              LOG_WARN("< " + k + " = " + in1[k]);
+              LOG_WARN("> " + k + " = " + in2[k]);
+            }
+          }
+        }
+      }
+      return;
+    }
+    //CHECK_MSG(in1 == in2, "Tags do not match: " << in1.toString() << " vs. " << in2.toString());
 
     CHECK_DOUBLE(re->getCircularError(), e->getCircularError(), _threshold);
     CHECK_MSG(re->getStatus() == e->getStatus(),

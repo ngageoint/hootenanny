@@ -1,6 +1,7 @@
 {
     "tag": {
         "name": "amenity",
+        "isA": "poi=yes",
         "influence": 1.0,
         "type": "enumeration",
         "geometries": ["node","area"]
@@ -12,7 +13,6 @@
     "#" : "The catch all",
     "tag": { "name": "amenity", "isA": "poi" },
     "tag": { "name": "amenity=*", "isA": "amenity" },
-
 
     "#" : "Town & City",
     "tag": { "name": "amenity=embassy", "isA": "amenity",

@@ -113,7 +113,52 @@
         "name": "Small Way Merger Threshold",
         "defaultvalue": "15",
         "hoot_key": "small.way.merger.threshold"
-      }
+      },
+			{
+				"id":"horizontal_unify_pre_ops",
+				"elem_type":"string",
+				"description":"Unify pre ops",
+				"name":"Unify Pre Ops",
+				"defaultvalue":"hoot::CookieCutterOp",
+				"hoot_key":"unify.pre.ops",
+				"required":"true"
+			},
+			{
+				"id":"horizontal_cookie_cutter_alpha",
+				"elem_type":"double",
+				"description":"Cookie Cutter Alpha",
+				"name":"Cookie Cutter Alpha",
+				"defaultvalue":"2500",
+				"hoot_key":"cookie.cutter.alpha",
+				"required":"true"
+			},
+			{
+				"id":"horizontal_cookie_cutter_alpha_shape_buffer",
+				"elem_type":"double",
+				"description":"Cookie Cutter Alpha Shape Buffer",
+				"name":"Cookie Cutter Alpha Shape Buffer",
+				"defaultvalue":"0",
+				"hoot_key":"cookie.cutter.alpha.shape.buffer",
+				"required":"true"
+			},
+			{
+				"id":"horizontal_cookie_cutter_output_buffer",
+				"elem_type":"double",
+				"description":"Cookie Cutter Output Buffer",
+				"name":"Cookie Cutter Output Buffer",
+				"defaultvalue":"-1000",
+				"hoot_key":"cookie.cutter.output.buffer",
+				"required":"true"
+			},
+			{
+				"id":"horizontal_cookie_cutter_output_crop",
+				"elem_type":"bool",
+				"description":"Cookie Cutter Output Crop",
+				"name":"Cookie Cutter Output Crop",
+				"defaultvalue":"false",
+				"hoot_key":"cookie.cutter.output.crop",
+				"required":"true"
+			}
 	]
 
 }

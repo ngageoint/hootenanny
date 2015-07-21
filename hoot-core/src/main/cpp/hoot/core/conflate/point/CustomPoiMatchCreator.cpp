@@ -111,12 +111,11 @@ public:
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
   }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    shared_ptr<const Element> element(_map->getElement(type, id));
-    if (isMatchCandidate(element))
+    if (isMatchCandidate(e))
     {
-      checkForMatch(element);
+      checkForMatch(e);
     }
   }
 

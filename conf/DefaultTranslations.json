@@ -25,7 +25,7 @@
 	},
 	{
 		"NAME" : "GEONAMES",
-		"DESCRIPTION" : "Geonames",
+		"DESCRIPTION" : "GeoNames.org",
 		"CANEXPORT" : false,
 		"PATH" : "translations/GeoNames.js",
 	}

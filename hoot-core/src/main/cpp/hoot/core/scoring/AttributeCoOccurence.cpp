@@ -62,10 +62,8 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    shared_ptr<const Element> e = _map->getElement(type, id);
-
     QStringList refs;
     if (e->getTags().contains(_ref))
     {
@@ -78,7 +76,7 @@ public:
     {
       for (int i = 0; i < refs.size(); i++)
       {
-        _ref2Eid[refs[i]].insert(ElementId(type, id));
+        _ref2Eid[refs[i]].insert(e->getElementId());
       }
     }
   }
@@ -102,10 +100,8 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    shared_ptr<const Element> e = _map->getElement(type, id);
-
     QStringList refs;
     if (e->getTags().contains("REF1"))
     {

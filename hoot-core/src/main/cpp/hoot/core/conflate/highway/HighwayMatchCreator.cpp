@@ -141,12 +141,11 @@ public:
     }
   }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    shared_ptr<const Element> element(_map->getElement(type, id));
-    if (element->getStatus() == _matchStatus && isMatchCandidate(element))
+    if (e->getStatus() == _matchStatus && isMatchCandidate(e))
     {
-      checkForMatch(element);
+      checkForMatch(e);
     }
   }
 

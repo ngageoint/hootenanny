@@ -57,7 +57,7 @@ public:
 
   RemoveDuplicateAreaVisitor();
 
-  virtual void visit(ElementType type, long id);
+  virtual void visit(const ConstElementPtr& e);
 
   virtual void visit(const shared_ptr<Element>& e1);
 

@@ -26,9 +26,6 @@
  */
 #include "MatchCandidateCountVisitor.h"
 
-// hoot
-#include <hoot/core/conflate/MatchCreator.h>
-
 namespace hoot
 {
 
@@ -40,8 +37,10 @@ _candidateCount(0)
   for (size_t i = 0; i < _matchCreators.size(); ++i)
   {
     vector<MatchCreator::Description> matchCreatorDescriptions = _matchCreators[i]->getAllCreators();
+    sort(matchCreatorDescriptions.begin(), matchCreatorDescriptions.end(), _matchDescriptorCompare);
     //TODO: Grabbing the first element doesn't seem right here, but its behavior has been expected
     //so far.
+    LOG_VARD(matchCreatorDescriptions.at(0).className);
      _matchCreatorDescriptions.append(
        QString::fromStdString(matchCreatorDescriptions.at(0).className));
   }
@@ -57,8 +56,8 @@ void MatchCandidateCountVisitor::visit(const shared_ptr<const Element>& e)
     {
      _candidateCount++;
 
-     //vector<MatchCreator::Description> matchCreatorDescriptions = matchCreator->getAllCreators();
      const QString matchCreatorName = _matchCreatorDescriptions.at(i);
+     LOG_VARD(matchCreatorName);
      if (_matchCandidateCountsByMatchCreator.contains(matchCreatorName))
      {
        _matchCandidateCountsByMatchCreator[matchCreatorName] =
@@ -68,8 +67,15 @@ void MatchCandidateCountVisitor::visit(const shared_ptr<const Element>& e)
      {
        _matchCandidateCountsByMatchCreator[matchCreatorName] = 1;
      }
+     //LOG_VARD(_matchCandidateCountsByMatchCreator[matchCreatorName]);
     }
   }
+}
+
+bool MatchCandidateCountVisitor::_matchDescriptorCompare(const MatchCreator::Description& m1,
+                                                         const MatchCreator::Description& m2)
+{
+  return m1.className > m2.className;
 }
 
 }
