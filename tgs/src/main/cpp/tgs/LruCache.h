@@ -34,7 +34,7 @@ public:
    */
   void insert(const K& k, const V& v)
   {
-    assert(_cacheMap.find(k) == _cache.end());
+    assert(_cacheMap.find(k) == _cacheMap.end());
 
     _cacheList.push_back(Entry(k, v));
     typename CacheList::iterator e = _cacheList.end();
