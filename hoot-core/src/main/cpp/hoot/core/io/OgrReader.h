@@ -63,6 +63,8 @@ class OgrReader : public PartialOsmMapReader
 {
 public:
 
+  static string className() { return "hoot::OgrReader"; }
+
   /**
    * Returns true if this appears to be a reasonable path without actually attempting to open the
    * data source.

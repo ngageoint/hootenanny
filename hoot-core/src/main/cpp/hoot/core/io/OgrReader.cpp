@@ -43,6 +43,7 @@ using namespace geos::geom;
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/Factory.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -56,6 +57,8 @@ using namespace geos::geom;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(OsmMapReader, OgrReader)
 
 /**
  * I've put this in the C++ to avoid too much header nastiness for the classes that use the
@@ -302,6 +305,7 @@ QStringList OgrReader::getFilteredLayerNames(QString path)
 
 bool OgrReader::isReasonablePath(QString path)
 {
+  LOG_VAR(path);
   return OgrUtilities::getInstance().isReasonableUrl(path);
 }
 
@@ -366,16 +370,7 @@ void OgrReader::finalizePartial()
 
 bool OgrReader::isSupported(QString url)
 {
-  QFileInfo fileInfo(url);
-  if (fileInfo.isDir())
-  {
-    throw HootException("Can't handle dirs with partial read yet.");
-  }
-
-  QFile input(url);
-
-  // Just need to know the file exists, we don't restrict file extensions
-  return input.exists();
+  return isReasonablePath(url);
 }
 
 void OgrReader::setUseDataSourceIds(bool useDataSourceIds)
