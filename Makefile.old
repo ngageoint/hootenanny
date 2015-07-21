@@ -302,12 +302,12 @@ conf/WordsAbridged.sqlite: conf/WordsAbridged.sqlite.gz
 
 conf/words.sqlite: conf/words1.sqlite
 	rm -f conf/words.sqlite
-	ln -s words1.sqlite conf/words.sqlite
+	[ -e $^ ] && ln -s words1.sqlite conf/words.sqlite
 
 # If you create a new words.sqlite please just increment the number rather than
 # replacing the old file. This way we can maintain the history.
 conf/words1.sqlite:
-	wget -N -P conf/ https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/words1.sqlite
+	wget -N -P conf/ https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/words1asdf.sqlite || echo "Failure downloading words1.sqlite. Build will continue, but conflation accuracy may suffer."
 
 bin/HootEnv.sh: scripts/HootEnv.sh
 	mkdir -p bin
