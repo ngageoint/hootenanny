@@ -305,7 +305,6 @@ QStringList OgrReader::getFilteredLayerNames(QString path)
 
 bool OgrReader::isReasonablePath(QString path)
 {
-  LOG_VAR(path);
   return OgrUtilities::getInstance().isReasonableUrl(path);
 }
 
@@ -716,6 +715,35 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
   if (_layer == NULL)
   {
     throw HootException("Failed to identify source layer from data source.");
+  }
+
+  QString bboxStr = ConfigOptions().getOgrReaderBoundingBox();
+  if (bboxStr.isEmpty() == false)
+  {
+    QStringList bbox = bboxStr.split(",");
+
+    if (bbox.size() != 4)
+    {
+      LOG_INFO(ConfigOptions().getOgrReaderBoundingBoxDescription());
+      throw HootException("Error parsing " + ConfigOptions().getOgrReaderBoundingBoxKey() + " " +
+        bboxStr);
+    }
+
+    bool ok;
+    vector<double> bboxValues(4);
+    for (size_t i = 0; i < 4; i++)
+    {
+      bboxValues[i] = bbox[i].toDouble(&ok);
+      if (!ok)
+      {
+        LOG_INFO(ConfigOptions().getOgrReaderBoundingBoxDescription());
+        throw HootException("Error parsing " + ConfigOptions().getOgrReaderBoundingBoxKey() + " " +
+          bboxStr);
+      }
+    }
+
+    _layer->SetSpatialFilterRect(bboxValues[0], bboxValues[1], bboxValues[2], bboxValues[3]);
+    LOG_DEBUG("Setting spatial filter on " << layer << " to: " << bboxValues);
   }
 
   OGRSpatialReference *sourceSrs = _layer->GetSpatialRef();

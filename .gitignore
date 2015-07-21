@@ -18,6 +18,7 @@ conf/DatabaseConfig.sh
 conf/LocalHoot.json
 conf/*.rf
 conf/words*.sqlite
+conf/WordsAbridged.sqlite
 config.h.in
 config.h
 config.status
