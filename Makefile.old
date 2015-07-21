@@ -20,7 +20,8 @@ default: build
 all: build
 always:
 
-build: js-make qt-make pp-build services-build model-build conf/words.sqlite
+build: js-make qt-make pp-build services-build model-build conf/words.sqlite \
+	conf/WordsAbridged.sqlite
 
 clean: Makefile.qmake services-clean
 	$(MAKE) -f Makefile.qmake clean
@@ -295,6 +296,9 @@ tmp/coverage/tbs/index.html:
 	genhtml tmp/coverage/TbsTrimmed.info --output-directory tmp/coverage/tbs/
 
 coverage: services-coverage tmp/coverage/core/index.html  tmp/coverage/hadoop/index.html tmp/coverage/tbs/index.html
+
+conf/WordsAbridged.sqlite: conf/WordsAbridged.sqlite.gz
+	gunzip -c $^ > $@
 
 conf/words.sqlite: conf/words1.sqlite
 	rm -f conf/words.sqlite

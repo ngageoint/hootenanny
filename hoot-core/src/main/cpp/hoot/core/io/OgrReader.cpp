@@ -305,7 +305,6 @@ QStringList OgrReader::getFilteredLayerNames(QString path)
 
 bool OgrReader::isReasonablePath(QString path)
 {
-  LOG_VAR(path);
   return OgrUtilities::getInstance().isReasonableUrl(path);
 }
 
