@@ -44,6 +44,7 @@
 
 // Standard
 #include <deque>
+#include <math.h>
 
 // TGS
 #include <tgs/RStarTree/IntersectionIterator.h>
@@ -225,7 +226,7 @@ public:
     if (obj->Has(cdtKey))
     {
       Local<Value> v = obj->Get(cdtKey);
-      if (v->IsNumber() == false)
+      if (v->IsNumber() == false || isnan(v->NumberValue()))
       {
         throw IllegalArgumentException("Expected " + key + " to be a number.");
       }
