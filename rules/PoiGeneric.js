@@ -21,6 +21,8 @@ var weightedWordDistance = new hoot.NameExtractor(
     new hoot.WeightedWordDistance(
         {"token.separator": "[\\s-,';]+", "weighted.word.distance.p": 0.5},
         new hoot.TranslateStringDistance(
+            // runs just a little faster w/ tokenize off
+            {"translate.string.distance.tokenize": "false"},
             new hoot.LevenshteinDistance(
                 {"levenshtein.distance.alpha": 1.5}))));
 
@@ -144,7 +146,7 @@ function getTagDistance(commonKvp, e1, e2) {
         return undefined;
     }
 
-    // find the best match between the two cuisine types
+    // find the best match between the two tag types
     for (var i in c1) {
         for (var j in c2) {
             result = Math.min(1 - hoot.OsmSchema.score(c1[i], c2[j]), result);

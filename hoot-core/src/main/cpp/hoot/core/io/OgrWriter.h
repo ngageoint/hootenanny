@@ -145,7 +145,7 @@ protected:
   shared_ptr<const Schema> _schema;
   StrictChecking _strictChecking;
   static const unsigned long _maxCacheElementsPerTypeDefault = 20000;
-  unsigned long _currElementCacheCapacity;
+  long _currElementCacheCapacity;
   ElementCachePtr _elementCache;
   OGRSpatialReference _wgs84;
 
