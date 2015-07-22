@@ -109,7 +109,13 @@ public:
   ~OsmMap();
 
   /**
-   * Append all the elements in map to this map. There cannot be any id overlap.
+   * Append all the elements in input map to this map.
+   *
+   * @param map
+   * @throws If there is element ID overlap.
+   * @throws If the map being appended to is the same as the map being appended from.
+   * @throws If the map being appended to does not have the same projection as the map being
+   * appended from
    */
   void append(shared_ptr<const OsmMap> map);
 

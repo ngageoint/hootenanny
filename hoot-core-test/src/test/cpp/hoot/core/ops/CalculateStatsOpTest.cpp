@@ -60,6 +60,7 @@ public:
 
   void setUp()
   {
+    TestUtils::resetEnvironment();
     conf().set(ConfigOptions::getStatsTranslateScriptKey(), "${HOOT_HOME}/translations/HootTest.js");
   }
 
@@ -76,7 +77,6 @@ public:
    */
   void runStatsTest()
   {
-    LOG_INFO("Here");
     shared_ptr<CalculateStatsOp> calcStatsOp =
       _calcStats("test-files/ops/CalculateStatsOp/all-data-types.osm");
 
@@ -327,6 +327,6 @@ private:
 }
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::CalculateStatsOpTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CalculateStatsOpTest, "current");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::CalculateStatsOpTest, "current");
 
 

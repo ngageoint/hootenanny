@@ -31,6 +31,9 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/RubberSheet.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/filters/StatusCriterion.h>
+#include <hoot/core/filters/ChainCriterion.h>
 
 namespace hoot
 {
@@ -70,12 +73,37 @@ void SearchRadiusCalculator::setUnifyPreOps(QStringList ops)
 
 void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
 {
+  //make a copy of the map with previously conflated data removed, as the rubber sheeting can't
+  //use it
+  OsmMapPtr mapWithOnlyUnknown1And2(new OsmMap(map));
+  RemoveElementsVisitor elementRemover1(ElementCriterionPtr(new StatusCriterion(Status::Conflated)));
+  elementRemover1.setRecursive(true);
+  mapWithOnlyUnknown1And2->visitRw(elementRemover1);
+  RemoveElementsVisitor elementRemover2(ElementCriterionPtr(new StatusCriterion(Status::Invalid)));
+  elementRemover2.setRecursive(true);
+  mapWithOnlyUnknown1And2->visitRw(elementRemover2);
+  if (map->getElementCount() > mapWithOnlyUnknown1And2->getElementCount())
+  {
+    LOG_INFO(
+      "Skipping " << map->getElementCount() - mapWithOnlyUnknown1And2->getElementCount() <<
+      " conflated or invalid features out of " << map->getElementCount() << " total features.");
+  }
+  if (mapWithOnlyUnknown1And2->getElementCount() == 0)
+  {
+    //TODO: is this the right setting to use here?
+    _result = _circularError;
+    LOG_WARN(
+      "Unable to automatically calculate search radius.  All features have already been " <<
+      "conflated or are invalid.\n Using default search radius value = " << QString::number(_result));
+    return;
+  }
+
   RubberSheet rubberSheet;
   rubberSheet.setReference(_rubberSheetRef);
   rubberSheet.setMinimumTies(_minTies);
   try
   {
-    rubberSheet.calculateTransform(map);
+    rubberSheet.calculateTransform(mapWithOnlyUnknown1And2);
   }
   catch (const HootException& e)
   {
@@ -84,8 +112,20 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
     LOG_INFO(
       "An error occurred calculating the rubber sheet transform during automatic search radius " <<
       "calculation.  Cleaning the data and attempting to calculate the transform again...");
-    MapCleaner().apply(map);
-    rubberSheet.calculateTransform(map);
+    MapCleaner().apply(mapWithOnlyUnknown1And2);
+    try
+    {
+      rubberSheet.calculateTransform(mapWithOnlyUnknown1And2);
+    }
+    catch (const HootException& e)
+    {
+      //TODO: is this the right setting to use here?
+      _result = _circularError;
+      LOG_WARN(
+        QString("Unable to automatically calculate search radius: ") + e.getWhat() + QString("\n") +
+        QString("Using default search radius value = ") + QString::number(_result));
+      return;
+    }
   }
 
   vector<double> tiePointDistances;
