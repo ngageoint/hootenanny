@@ -244,6 +244,9 @@ P2PServerScript=P2PServer.js
 
 # default setting for overwriting existing review data
 reviewPrepareOverwriteExistingDataDefault=false
+# If true, temp UUID database records will be cleaned up after review records are prepared.  Since
+# this sometimes causes problems with some datasets, making it optional as a temporary solution.
+reviewPrepareCleanup=true
 
 # review stats
 
