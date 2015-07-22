@@ -1587,8 +1587,8 @@ tds61.rules = {
      ['FFN','961','shop','laundry'], // Laundry
      ['FFN','962','shop','beauty_treatment'], // Beauty Treatment
      ['FFN','963','shop','funeral_services'], // Funeral Services
-     ['FFN','964','amenity','cremation'], // Cremation
-     ['FFN','965','amenity','mortuary_services'], // Mortuary Services
+     ['FFN','964','amenity','crematorium'], // Cremation
+     ['FFN','965','amenity','mortuary'], // Mortuary Services
      ['FFN','966','amenity','adult_entertainment'], // Adult Entertainment
      ['FFN','967','amenity','storage_of_human_remains'], // Storage of Human Remains
      ['FFN','970','use','meeting_place'], // Meeting Place
@@ -4460,7 +4460,7 @@ tds61.rules = {
      ['FFN','923','sport','10pin'], // Hobbies and/or Leisure Activities
      ['FFN','909','amenity','casino'], // Gambling
      ['FFN','912','leisure','sports_complex'], // Sports Centre
-     ['FFN','970','amenity','town_hall'], // Meeting Place
+     ['FFN','970','amenity','townhall'], // Meeting Place
      [undefined,undefined,'historic','yes'], // Not a good translation, push to o2s
 
      // ### From OSM - This list could never end.....

@@ -15,7 +15,7 @@
         <tag k="REF1" v="000dd8"/>
         <tag k="name:fr" v="Izbat al Sabin"/>
         <tag k="REF2" v="000dd8"/>
-        <tag k="place" v="populated"/>
+        <tag k="place" v="village"/>
         <tag k="name:en" v="Izbat al Sabin"/>
         <tag k="uuid" v="{b18057ff-736d-5d20-b873-837f0c172e33};GeoNames.org:415707"/>
         <tag k="name:ar" v="عزبة السبعين"/>
@@ -36,7 +36,7 @@
         <tag k="REF1" v="000de8"/>
         <tag k="name:fr" v="Izbat Hawd an Nada"/>
         <tag k="REF2" v="000de8"/>
-        <tag k="place" v="populated"/>
+        <tag k="place" v="village"/>
         <tag k="name:en" v="Izbat Hawd an Nada"/>
         <tag k="uuid" v="{1c3e97f5-7430-5a1f-b030-9ce1e7038682};GeoNames.org:415705"/>
         <tag k="name:ar" v="عزبة حوض الندى"/>

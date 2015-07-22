@@ -1,4 +1,5 @@
 
+hoot.log("Initializing.");
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("poi.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("poi.miss.threshold"));
@@ -20,6 +21,8 @@ var weightedWordDistance = new hoot.NameExtractor(
     new hoot.WeightedWordDistance(
         {"token.separator": "[\\s-,';]+", "weighted.word.distance.p": 0.5},
         new hoot.TranslateStringDistance(
+            // runs just a little faster w/ tokenize off
+            {"translate.string.distance.tokenize": "false"},
             new hoot.LevenshteinDistance(
                 {"levenshtein.distance.alpha": 1.5}))));
 
@@ -143,7 +146,7 @@ function getTagDistance(commonKvp, e1, e2) {
         return undefined;
     }
 
-    // find the best match between the two cuisine types
+    // find the best match between the two tag types
     for (var i in c1) {
         for (var j in c2) {
             result = Math.min(1 - hoot.OsmSchema.score(c1[i], c2[j]), result);
@@ -338,6 +341,7 @@ exports.getSearchRadius = function(e) {
  * Runs before match creation occurs and provides an opportunity to perform custom initialization.
  */
 exports.init = function(map) {
+    hoot.log("Initializing...");
 }
 
 /**
@@ -451,6 +455,8 @@ function additiveScore(map, e1, e2) {
     return score;
 }
 
+var totalCount = 0;
+
 /**
  * Returns the match score for the three class relationships.
  * - match
@@ -461,6 +467,7 @@ function additiveScore(map, e1, e2) {
  * mercilessly and we'll normalize it anyway. :P
  */
 exports.matchScore = function(map, e1, e2) {
+    totalCount += 1;
     var result = { miss: 1.0, explain:'Miss' };
 
     if (e1.getStatusString() == e2.getStatusString()) {
@@ -527,8 +534,21 @@ exports.matchScore = function(map, e1, e2) {
     return result;
 };
 
+function printTags(tags) {
+    hoot.warn("Tags:");
+    var keys = Object.keys(tags.toDict());
+    keys.sort();
+    for (var i = 0; i < keys.length; i++) {
+        hoot.warn(keys[i] + ": " + tags.toDict()[keys[i]]);
+    }
+}
+
 exports.mergePair = function(map, e1, e2)
 {
+    if (totalCount >= 0) {
+        hoot.log("totalCount: " + totalCount);
+        totalCount = -1;
+    }
     var newTags = mergeTags(e1, e2);
     e1.setTags(newTags);
 

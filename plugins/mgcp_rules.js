@@ -1407,7 +1407,7 @@ mgcp.rules = {
         ['CFC','0',undefined,undefined],
         ['CFC','1','amenity','prison'],
         ['CFC','2','amenity','jail'], // Valid on wiki but maps to prison
-        ['CFC','3','amenity','reformitory'],
+        ['CFC','3','amenity','reformatory'],
         ['CFC','4','amenity','correctional_institute'],
         ['CFC','998',undefined,undefined],
         ['CFC','999','building','correctional'], // Not good but better than 'other'
@@ -2105,7 +2105,7 @@ mgcp.rules = {
 
         // CFC - Corrections Facility Type
         ['FFN','843','amenity','jail'], // Valid on wiki but maps to prison
-        ['FFN','843','amenity','reformitory'],
+        ['FFN','843','amenity','reformatory'],
         ['FFN','843','amenity','correctional_institute'],
         ['FFN','843','building','correctional'],
 
@@ -2218,7 +2218,7 @@ mgcp.rules = {
         // ICF - Manufacturing Facility Type - the rest of these are in biased rules
         ['FFN','999','building','aeration'], // ???
         ['FFN','999','building','processing'],
-        ['FFN','999','amenity','ship_yard'], // No good match
+        ['FFN','999','amenity','shipyard'], // No good match
         ['FFN','99','man_made','kiln'], //Not a good match for kiln
         ['FFN','99','building','manufacturing_outbuilding'],
         ['FFN','99','building','manufacturing'],

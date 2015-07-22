@@ -596,8 +596,8 @@ public class CommandRunner implements ICommandRunner {
 
         int out = 0;
         String pCmdString = ArrayUtils.toString ( pCmd );
-        if ( _log.isInfoEnabled () )
-            _log.info ( "Executing '" + pCmdString + "' with Environment '" + ArrayUtils.toString ( env ) + "'" );
+        if ( _log.isDebugEnabled() )
+            _log.debug ( "Executing '" + pCmdString + "' with Environment '" + ArrayUtils.toString ( env ) + "'" );
         StopWatch clock = new StopWatch ();
         clock.start ();
         try {
@@ -625,7 +625,7 @@ public class CommandRunner implements ICommandRunner {
             env.putAll ( unsortedEnv );
 
             _log.info ( "Executing '" + pCmdString + "'" );
-            _log.info ( "Enviroment:" );
+            _log.debug ( "Enviroment:" );
             FileWriter writer = null;
             try {
                 if ( _log.isDebugEnabled () ) {
@@ -634,7 +634,7 @@ public class CommandRunner implements ICommandRunner {
                     _log.debug ( "ENVVARS will be written to " + envvarFile.getAbsolutePath () );
                 }
                 for ( String key : env.keySet () ) {
-                    _log.info ( String.format ( "  %s", new Object[] { key + "=" + env.get ( key ) } ) );
+                    _log.debug ( String.format ( "  %s", new Object[] { key + "=" + env.get ( key ) } ) );
                     if ( _log.isDebugEnabled () )
                         writer.write ( String.format ( "  %s%n", new Object[] { key + "=" + env.get ( key ) } ) );
                 }
