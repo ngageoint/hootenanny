@@ -353,7 +353,7 @@ sudo service tomcat6 restart
 
 === Install Hootenanny
 
-InstallHoot.sh ($HOOT_HOME/scripts) installs a new or updated instance of Hootenanny to an
+InstallHoot-CentOS65.sh ($HOOT_HOME/scripts) installs a new or updated instance of Hootenanny to an
 environment automatically assuming all of the Hootenanny dependencies have previously been installed.
 The script applies to the production CentOS 6/5 environment only.
 
@@ -366,16 +366,16 @@ export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.65.x86_64 # Your JAVA_HOM
 cd ~
 cp hootenanny-X.Y.Z.tar.gz ~
 cp hootenanny-services-X.Y.Z.war ~
-cp hootenanny-translations-X.Y.Z.tar.gz ~ # optional; required if UPDATE_FOUO_TRANSLATIONS in InstallHoot.sh is set to true
+cp hootenanny-translations-X.Y.Z.tar.gz ~ # optional; required if UPDATE_FOUO_TRANSLATIONS in InstallHoot-CentOS65.sh is set to true
 tar -xzvf hootenanny-X.Y.Z.tar.gz
 
 # Verify the settings in this script before running it.  If for some reason a part of the script
 # fails, sections of the script may be run separately by enabling/disabling certain install settings
 # (see the script comments for more details).
-nano hootenanny-X.Y.Z/scripts/InstallHoot.sh
+nano hootenanny-X.Y.Z/scripts/InstallHoot-CentOS65.sh
 
 # run the script
-hootenanny-X.Y.Z/scripts/InstallHoot.sh
+hootenanny-X.Y.Z/scripts/InstallHoot-CentOS65.sh
 --------------------------------------
 
 . Completely clear your browser history.
