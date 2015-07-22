@@ -151,3 +151,4 @@ hoot-core-test/src/test/resources/cmd/current
 test-files/DcTigerRoadsHighwayExactMatchInputs.osm
 data/
 .vagrant/
+inputFeatures.png

@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/algorithms/Translator.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -43,12 +44,25 @@ HOOT_FACTORY_REGISTER(StringDistance, TranslateStringDistance)
 TranslateStringDistance::TranslateStringDistance(StringDistance *d)
 {
   _d.reset(d);
+  setConfiguration(conf());
 }
 
 double TranslateStringDistance::compare(const QString& s1, const QString& s2) const
 {
-  QStringList t1 = Translator::getInstance().toEnglishAll(s1);
-  QStringList t2 = Translator::getInstance().toEnglishAll(s2);
+  QStringList t1;
+  QStringList t2;
+  if (_tokenize)
+  {
+    t1 = Translator::getInstance().toEnglishAll(s1);
+    t2 = Translator::getInstance().toEnglishAll(s2);
+  }
+  else
+  {
+    t1.append(s1);
+    t2.append(s2);
+    t1 = Translator::getInstance().toEnglishAll(t1);
+    t2 = Translator::getInstance().toEnglishAll(t2);
+  }
 
   double bestScore = -1;
   QString best1, best2;
@@ -70,6 +84,12 @@ double TranslateStringDistance::compare(const QString& s1, const QString& s2) co
 //           " best score: " << bestScore);
 
   return bestScore;
+}
+
+void TranslateStringDistance::setConfiguration(const Settings& conf)
+{
+  ConfigOptions c(conf);
+  _tokenize = c.getTranslateStringDistanceTokenize();
 }
 
 }

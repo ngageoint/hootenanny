@@ -1317,6 +1317,13 @@ Another useful option is `[\s-,';]+`. This will split on white space, or several
 punctuation. See http://doc.qt.io/qt-4.8/QRegExp.html for a useful list of regular expression
 options.
 
+=== translate.string.distance.tokenize
+
+* Data Type: bool
+* Default Value: `true`
+
+Set to true if the strings should be tokenized (split into words) before translating the values.
+
 === translated.tag.differencer.ignore.list
 
 * Data Type: string
