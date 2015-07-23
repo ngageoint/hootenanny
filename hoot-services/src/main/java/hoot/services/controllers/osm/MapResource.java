@@ -27,11 +27,14 @@
 package hoot.services.controllers.osm;
 
 import hoot.services.db.DbUtils;
+//import hoot.services.db2.Folders;
 import hoot.services.db2.Maps;
+//import hoot.services.db2.QFolders;
 import hoot.services.db2.QMaps;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobExecutioner;
 import hoot.services.models.osm.Element.ElementType;
+//import hoot.services.models.osm.FolderRecords;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.ModelDaoUtils;
@@ -174,6 +177,85 @@ public class MapResource
     return mapLayers;
   }
 
+	/**
+	 * <NAME>Map Service - List Folders </NAME>
+	 * <DESCRIPTION>
+	 * 	Returns a list of all folders in the services database
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	a JSON object containing a list of folders
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/map/folders</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 * <OUTPUT>
+	 *  {
+	 *    "folders":
+	 *    [
+	 *      {
+	 *        "id": 1,
+	 *       "name": "layer 1",
+	 *       "parentid":0,
+	 *      },
+	 *      {
+	 *        "id": 2,
+	 *        "name": "layer 2",
+	 *        "parentid":1,
+	 *      }
+	 *    ]
+	 *  }
+	 * </OUTPUT>
+	 * </EXAMPLE>
+*
+* Returns a list of all folders in the services database
+*
+* @return a JSON object containing a list of folders
+* @throws Exception
+*/
+  /*
+@GET
+@Path("/folders")
+@Consumes(MediaType.TEXT_PLAIN)
+@Produces(MediaType.APPLICATION_JSON)
+public FolderRecords getFolders() throws Exception
+{
+	Connection conn = DbUtils.createConnection();
+  FolderRecords folderRecords = null;
+  try
+  {
+    log.info("Retrieving folders list...");
+
+    log.debug("Initializing database connection...");
+
+    QFolders folders = QFolders.folders;
+    SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
+
+    final List<Folders> folderRecordSet = query.from(folders).orderBy(folders.displayName.asc()).list(folders);
+
+    folderRecords = Map.mapFolderRecordsToFolders(folderRecordSet);
+  }
+  catch (Exception e)
+  {
+    handleError(e, null, null);
+  }
+  finally
+  {
+    DbUtils.closeConnection(conn);
+  }
+  String message = "Returning map layers response";
+  if (folderRecords != null && folderRecords.getFolders() != null)
+  {
+    message += " of size: " + folderRecords.getFolders().length;
+  }
+  log.debug(message);
+  return folderRecords;
+}
+  */
+  
   private Document _generateExtentOSM(String maxlon, String maxlat, String minlon, String minlat)
     throws Exception
   {

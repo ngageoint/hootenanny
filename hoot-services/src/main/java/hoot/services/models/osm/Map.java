@@ -1103,4 +1103,25 @@ public class Map extends Maps
     mapLayers.setLayers(mapLayerList.toArray(new MapLayer[]{}));
     return mapLayers;
   }
+  
+  /**
+   * Converts a set of folder database records into an object returnable by a web service
+   *
+   * @param folderRecordSet set of map layer records
+   * @return folders web service object
+   */
+ /* public static FolderRecords mapFolderRecordsToFolders(List<Folders> folderRecordSet)
+  {
+    FolderRecords folderRecords = new FolderRecords();
+    List<FolderRecord> folderRecordList = new ArrayList<FolderRecord>();
+    for (Folders folderRecord : folderRecordSet)
+    {
+      FolderRecord folder = new FolderRecord();
+      folder.setId(folderRecord.getId());
+      folder.setName(folderRecord.getDisplayName());
+      folderRecordList.add(folder);
+    }
+    folderRecords.setFolders(folderRecordList.toArray(new FolderRecord[]{}));
+    return folderRecords;
+  }*/
 }
