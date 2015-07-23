@@ -75,7 +75,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.mysema.query.Tuple;
+import com.mysema.query.sql.Configuration;
 import com.mysema.query.sql.SQLQuery;
+import com.mysema.query.sql.dml.SQLUpdateClause;
 
 /**
  * Service endpoint for maps containing OSM data
@@ -696,5 +698,46 @@ public class MapResource
     JSONObject res = new JSONObject();
     res.put("jobId", jobId);
     return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+  }
+  
+  
+  /*
+   * 
+   */
+  @POST
+  @Path("/modify")
+  @Consumes(MediaType.TEXT_PLAIN)
+  @Produces(MediaType.TEXT_PLAIN)
+  public Response modifyName(@QueryParam("mapId") final String mapId, @QueryParam("modName") final String _modName, @QueryParam("inputType") final String inputType) throws Exception
+  {
+	  Long _mapId = Long.parseLong(mapId);
+	  Connection conn = DbUtils.createConnection();
+	  
+	  try
+	  {
+		  log.debug("Initializing database connection...");
+		  
+		  QMaps maps = QMaps.maps;
+		  Configuration configuration = DbUtils.getConfiguration();
+		  
+		  new SQLUpdateClause(conn, configuration, maps)
+		  .where(maps.id.eq(_mapId))
+		  .set(maps.displayName,_modName)
+		  .execute();
+		  
+		  log.debug("Renamed map with id " + mapId + " " + _modName + "...");
+	  }
+	  catch (Exception e)
+	  {
+		  handleError(e, null, null);
+	  } 
+	  finally
+	  {
+		  DbUtils.closeConnection(conn);
+	  }
+	  
+	  JSONObject res = new JSONObject();
+	  res.put("success",true);
+	  return Response.ok(res.toJSONString(),MediaType.APPLICATION_JSON).build();
   }
 }

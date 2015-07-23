@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<changeSet author="josh.sisskind" id="11" context="default">
+		<comment>
+			tables needed by the folder structure
+		</comment>
+		
+		    <createTable tableName="folders">
+            <column name="id" type="bigserial" autoIncrement="true">
+            	<constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="display_name" type="varchar(255)">
+            	<constraints nullable="false"/>
+            </column>
+						<column name="parent_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="public" type="boolean" defaultValueBoolean="false">
+            	<constraints nullable="false"/>
+            </column>
+			<!-- See the modifySql command at the end for the "WITHOUT TIME ZONE" bit -->
+            <column name="created_at" type="timestamp">
+            	<constraints nullable="false"/>
+            </column>            
+        </createTable>
+        
+ 		    <createTable tableName="folder_map_mappings">
+            <column name="id" type="bigserial" autoIncrement="true">
+            	<constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="map_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>    
+						<column name="folder_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>      
+        </createTable>
+
+	</changeSet>
+</databaseChangeLog>
