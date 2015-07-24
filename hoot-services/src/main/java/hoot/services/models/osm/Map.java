@@ -266,10 +266,10 @@ public class Map extends Maps
     				.list(currentnodes.longitude.max(), currentnodes.longitude.min(),
     						currentnodes.latitude.max(), currentnodes.latitude.min() );
 
-      Integer maxLon = geospatialQueryNodeResults.get(0).get(0, Integer.class);
-      Integer minLon = geospatialQueryNodeResults.get(0).get(1, Integer.class);
-      Integer maxLat = geospatialQueryNodeResults.get(0).get(2, Integer.class);
-      Integer minLat = geospatialQueryNodeResults.get(0).get(3, Integer.class);
+      Long maxLon = geospatialQueryNodeResults.get(0).get(0, Long.class);
+      Long minLon = geospatialQueryNodeResults.get(0).get(1, Long.class);
+      Long maxLat = geospatialQueryNodeResults.get(0).get(2, Long.class);
+      Long minLat = geospatialQueryNodeResults.get(0).get(3, Long.class);
       ret.put("maxlon", maxLon);
       ret.put("minlon", minLon);
       ret.put("maxlat", maxLat);
@@ -351,8 +351,8 @@ public class Map extends Maps
     				.limit(1)
     				.list(currentnodes.longitude, currentnodes.latitude);
 
-      Integer lon = geospatialQueryNodeResults.get(0).get(0, Integer.class);
-      Integer lat = geospatialQueryNodeResults.get(0).get(1, Integer.class);
+      Long lon = geospatialQueryNodeResults.get(0).get(0, Long.class);
+      Long lat = geospatialQueryNodeResults.get(0).get(1, Long.class);
 
       ret.put("lon", lon);
       ret.put("lat", lat);

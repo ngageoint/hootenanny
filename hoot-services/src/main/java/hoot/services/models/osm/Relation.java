@@ -277,9 +277,9 @@ public class Relation extends Element
             {
               Node parsedNode = (Node) parsedNodes.get(member.getOldId());
               coordsToComputeBoundsFrom.add(new Coordinates(DbUtils
-                  .fromDbCoordValue((Integer) MethodUtils.invokeMethod(parsedNode.getRecord(),
+                  .fromDbCoordValue((Long) MethodUtils.invokeMethod(parsedNode.getRecord(),
                       "getLatitude", new Object[] {})), DbUtils
-                  .fromDbCoordValue((Integer) MethodUtils.invokeMethod(parsedNode.getRecord(),
+                  .fromDbCoordValue((Long) MethodUtils.invokeMethod(parsedNode.getRecord(),
                       "getLongitude", new Object[] {}))));
             }
             else
@@ -309,9 +309,9 @@ public class Relation extends Element
                 {
                   Node parsedNode = (Node) parsedNodes.get(wayNodeId);
                   coordsToComputeBoundsFrom.add(new Coordinates(DbUtils
-                      .fromDbCoordValue((Integer) MethodUtils.invokeMethod(parsedNode.getRecord(),
+                      .fromDbCoordValue((Long) MethodUtils.invokeMethod(parsedNode.getRecord(),
                           "getLatitude", new Object[] {})), DbUtils
-                      .fromDbCoordValue((Integer) MethodUtils.invokeMethod(parsedNode.getRecord(),
+                      .fromDbCoordValue((Long) MethodUtils.invokeMethod(parsedNode.getRecord(),
                           "getLongitude", new Object[] {}))));
                 }
                 else

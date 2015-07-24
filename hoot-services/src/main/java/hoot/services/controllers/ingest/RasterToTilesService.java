@@ -131,10 +131,10 @@ public class RasterToTilesService extends JobControllerBase {
       	currMap.retrieveNodesMBR(queryBounds);
 
 
-			double dMinLon = DbUtils.fromDbCoordValue((Integer)extents.get("minlon"));
-			double dMaxLon = DbUtils.fromDbCoordValue((Integer)extents.get("maxlon"));
-			double dMinLat = DbUtils.fromDbCoordValue((Integer)extents.get("minlat"));
-			double dMaxLat = DbUtils.fromDbCoordValue((Integer)extents.get("maxlat"));
+			double dMinLon = DbUtils.fromDbCoordValue((Long)extents.get("minlon"));
+			double dMaxLon = DbUtils.fromDbCoordValue((Long)extents.get("maxlon"));
+			double dMinLat = DbUtils.fromDbCoordValue((Long)extents.get("minlat"));
+			double dMaxLat = DbUtils.fromDbCoordValue((Long)extents.get("maxlat"));
 
 			double deltaLon = dMaxLon - dMinLon;
 			double deltaLat = dMaxLat - dMinLat;
@@ -205,10 +205,10 @@ public class RasterToTilesService extends JobControllerBase {
       	currMap.retrieveNodesMBR(queryBounds);
 
 
-			double dMinLon = DbUtils.fromDbCoordValue((Integer)extents.get("minlon"));
-			double dMaxLon = DbUtils.fromDbCoordValue((Integer)extents.get("maxlon"));
-			double dMinLat = DbUtils.fromDbCoordValue((Integer)extents.get("minlat"));
-			double dMaxLat = DbUtils.fromDbCoordValue((Integer)extents.get("maxlat"));
+			double dMinLon = DbUtils.fromDbCoordValue((Long)extents.get("minlon"));
+			double dMaxLon = DbUtils.fromDbCoordValue((Long)extents.get("maxlon"));
+			double dMinLat = DbUtils.fromDbCoordValue((Long)extents.get("minlat"));
+			double dMaxLat = DbUtils.fromDbCoordValue((Long)extents.get("maxlat"));
 
 			double deltaLon = dMaxLon - dMinLon;
 			double deltaLat = dMaxLat - dMinLat;

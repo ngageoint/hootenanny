@@ -34,10 +34,10 @@ public class GeoUtils
   public static final double DEFAULT_COORD_VALUE = -181.0;
   
   /**
-   * coordinates are stored in the databse as integers and this factor is used for converting them 
+   * coordinates are stored in the database as integers and this factor is used for converting them 
    * to and from decimals
    */
-  public static final int GEO_RECORD_SCALE = 10000000;
+  public static final long GEO_RECORD_SCALE = 100000000000L;
   
   /**
    * Determines if a pair of coordinates lie within world boundaries

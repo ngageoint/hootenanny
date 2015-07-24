@@ -762,10 +762,10 @@ public class DbUtils
 	    "(id bigserial NOT NULL, " +
 	    " user_id bigint NOT NULL, " +
 	    " created_at timestamp without time zone NOT NULL, " +
-	    " min_lat integer NOT NULL, " +
-	    " max_lat integer NOT NULL, " +
-	    " min_lon integer NOT NULL, " +
-	    " max_lon integer NOT NULL, " +
+	    " min_lat bigint NOT NULL, " +
+	    " max_lat bigint NOT NULL, " +
+	    " min_lon bigint NOT NULL, " +
+	    " max_lon bigint NOT NULL, " +
 	    " closed_at timestamp without time zone NOT NULL, " +
 	    " num_changes integer NOT NULL DEFAULT 0, " +
 	    " tags hstore, " +
@@ -780,8 +780,8 @@ public class DbUtils
 	  	// current_nodes
 	  	createTblSql = "CREATE TABLE current_nodes_" + mapId +
 	    "(id bigserial NOT NULL, " +
-	    " latitude integer NOT NULL, " +
-	    " longitude integer NOT NULL, " +
+	    " latitude bigint NOT NULL, " +
+	    " longitude bigint NOT NULL, " +
 	    " changeset_id bigint NOT NULL, " +
 	    " visible boolean NOT NULL DEFAULT true, " +
 	    " \"timestamp\" timestamp without time zone NOT NULL DEFAULT now(), " +
@@ -1194,8 +1194,8 @@ public class DbUtils
 
 
 	      			ps.setLong(1, node.getId());
-	      			ps.setInt(2, node.getLatitude());
-	      			ps.setInt(3, node.getLongitude());
+	      			ps.setLong(2, node.getLatitude());
+	      			ps.setLong(3, node.getLongitude());
 	      			ps.setLong(4, node.getChangesetId());
 	      			ps.setBoolean(5, node.getVisible());
 	      			ps.setTimestamp(6, node.getTimestamp());
@@ -1240,8 +1240,8 @@ public class DbUtils
           	{
           		CurrentNodes node  = (CurrentNodes)o;
 
-	      			ps.setInt(1, node.getLatitude());
-	      			ps.setInt(2, node.getLongitude());
+	      			ps.setLong(1, node.getLatitude());
+	      			ps.setLong(2, node.getLongitude());
 	      			ps.setLong(3, node.getChangesetId());
 	      			ps.setBoolean(4, node.getVisible());
 	      			ps.setTimestamp(5, node.getTimestamp());
@@ -1693,9 +1693,9 @@ public class DbUtils
    *          coordinate value to convert
    * @return a converted coordinate value
    */
-  public static int toDbCoordValue(double coordVal)
+  public static long toDbCoordValue(double coordVal)
   {
-    return (int)(toDbCoordPrecision(coordVal) * GeoUtils.GEO_RECORD_SCALE);
+    return (long)(toDbCoordPrecision(coordVal) * GeoUtils.GEO_RECORD_SCALE);
   }
 
   /**
@@ -1705,7 +1705,7 @@ public class DbUtils
    *          coordinate value to convert
    * @return a converted coordinate value
    */
-  public static double fromDbCoordValue(int coordVal)
+  public static double fromDbCoordValue(long coordVal)
   {
     return coordVal / (double) GeoUtils.GEO_RECORD_SCALE;
   }

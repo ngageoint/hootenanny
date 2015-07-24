@@ -502,7 +502,7 @@ public:
           ServicesDb::_getNodesTableName(mapId) +
           " WHERE id=:id "
           "ORDER BY longitude",
-          "380000000;-1040000000;true;1329332431;1",
+          "3800000000000;-10400000000000;true;1329332431;1",
           (qlonglong)nodeId);
 
 
@@ -515,7 +515,7 @@ public:
           ServicesDb::_getNodesTableName(mapId) +
           " WHERE id=:id "
           "ORDER BY longitude",
-          "31415000;27182800;true;3222453693;1",
+          "314150000000;271828000000;true;3222453693;1",
           (qlonglong)nodeId);
   }
 

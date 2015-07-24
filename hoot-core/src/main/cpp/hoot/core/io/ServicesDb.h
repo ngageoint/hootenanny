@@ -76,7 +76,7 @@ class ServicesDb
 {
 public:
 
-  static const int COORDINATE_SCALE = 1e7;
+  static const long COORDINATE_SCALE = 1e11;
   // below are the column indexes when calling select*Elements()
   // Not all parts of the code use these consts. Please convert "magic numbers" when you find
   // them.
@@ -90,7 +90,7 @@ public:
   /**
    * This value should be updated after the DB is upgraded and all tests run successfully.
    */
-  static QString expectedDbVersion() { return "10:jason.surratt"; }
+  static QString expectedDbVersion() { return "11:brandon.witham"; }
   static int maximumChangeSetEdits() { return 50000; }
 
   static const Status DEFAULT_ELEMENT_STATUS;

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<changeSet author="brandon.witham" id="11" context="default">
+		<comment>
+			changes lat/lon fields from int to bigint to support storing higher resolution coordinates
+		</comment>
+    
+    <modifyDataType tableName="changesets" columnName="min_lat" newDataType="bigint" />
+    <modifyDataType tableName="changesets" columnName="max_lat" newDataType="bigint" />
+    <modifyDataType tableName="changesets" columnName="min_lon" newDataType="bigint" />
+    <modifyDataType tableName="changesets" columnName="max_lon" newDataType="bigint" />
+    
+    <modifyDataType tableName="current_nodes" columnName="latitude" newDataType="bigint" />
+    <modifyDataType tableName="current_nodes" columnName="longitude" newDataType="bigint" />
+      
+	</changeSet>
+</databaseChangeLog>

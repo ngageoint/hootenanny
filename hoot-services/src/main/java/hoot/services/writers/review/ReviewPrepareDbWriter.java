@@ -479,8 +479,8 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 					CurrentNodes nodes = new CurrentNodes();
 					nodes.setId(rs.getLong("id"));
 
-					nodes.setLatitude(rs.getInt("latitude"));
-					nodes.setLongitude(rs.getInt("longitude"));
+					nodes.setLatitude(rs.getLong("latitude"));
+					nodes.setLongitude(rs.getLong("longitude"));
 					nodes.setChangesetId(rs.getLong("changeset_id"));
 					nodes.setVisible(rs.getBoolean("visible"));
 					nodes.setTimestamp(rs.getTimestamp("timestamp"));
@@ -566,8 +566,8 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 					CurrentNodes nodes = new CurrentNodes();
 					nodes.setId(rs.getLong("id"));
 
-					nodes.setLatitude(rs.getInt("latitude"));
-					nodes.setLongitude(rs.getInt("longitude"));
+					nodes.setLatitude(rs.getLong("latitude"));
+					nodes.setLongitude(rs.getLong("longitude"));
 					nodes.setChangesetId(rs.getLong("changeset_id"));
 					nodes.setVisible(rs.getBoolean("visible"));
 					nodes.setTimestamp(rs.getTimestamp("timestamp"));

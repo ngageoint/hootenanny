@@ -61,19 +61,19 @@ public class BoundingBox
   
   private double minLon = GeoUtils.DEFAULT_COORD_VALUE;
   public double getMinLon() { return minLon; }
-  public int getMinLonDb() { return (int)(minLon * GeoUtils.GEO_RECORD_SCALE); }
+  public long getMinLonDb() { return (long)(minLon * GeoUtils.GEO_RECORD_SCALE); }
   
   private double minLat = GeoUtils.DEFAULT_COORD_VALUE;
   public double getMinLat() { return minLat; }
-  public int getMinLatDb() { return (int)(minLat * GeoUtils.GEO_RECORD_SCALE); }
+  public long getMinLatDb() { return (long)(minLat * GeoUtils.GEO_RECORD_SCALE); }
   
   private double maxLon = GeoUtils.DEFAULT_COORD_VALUE;
   public double getMaxLon() { return maxLon; }
-  public int getMaxLonDb() { return (int)(maxLon * GeoUtils.GEO_RECORD_SCALE); }
+  public long getMaxLonDb() { return (long)(maxLon * GeoUtils.GEO_RECORD_SCALE); }
   
   private double maxLat = GeoUtils.DEFAULT_COORD_VALUE;
   public double getMaxLat() { return maxLat; }
-  public int getMaxLatDb() { return (int)(maxLat * GeoUtils.GEO_RECORD_SCALE); }
+  public long getMaxLatDb() { return (long)(maxLat * GeoUtils.GEO_RECORD_SCALE); }
   
   @Override
   public String toString()

@@ -179,8 +179,8 @@ public:
                    ServicesDb::_getNodesTableName(mapId) +
                    " ORDER BY longitude",
                    "0;0;true;3221225472;1;\"note\"=>\"n1\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"10\"\n"
-                   "0;1000000;true;3221225992;1;\"note\"=>\"n2\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"11\"\n"
-                   "0;2000000;true;3221227552;1;\"note\"=>\"n3\", \"hoot:status\"=>\"3\", \"error:circular\"=>\"12\"",
+                   "0;10000000000;true;3221225992;1;\"note\"=>\"n2\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"11\"\n"
+                   "0;20000000000;true;3221227552;1;\"note\"=>\"n3\", \"hoot:status\"=>\"3\", \"error:circular\"=>\"12\"",
                    (qlonglong)mapId);
 
     compareRecords("SELECT id, visible, version, tags FROM " +
@@ -266,8 +266,8 @@ public:
                    ServicesDb::_getNodesTableName(mapId) +
                    " ORDER BY longitude",
                    "0;0;true;3221225472;1;\"note\"=>\"n1\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"10\"\n"
-                   "0;1000000;true;3221225992;1;\"note\"=>\"n2\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"11\"\n"
-                   "0;2000000;true;3221227552;1;\"note\"=>\"n3\", \"hoot:status\"=>\"3\", \"error:circular\"=>\"12\"",
+                   "0;10000000000;true;3221225992;1;\"note\"=>\"n2\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"11\"\n"
+                   "0;20000000000;true;3221227552;1;\"note\"=>\"n3\", \"hoot:status\"=>\"3\", \"error:circular\"=>\"12\"",
                    (qlonglong)mapId);
 
     compareRecords("SELECT visible, version, tags FROM " +
