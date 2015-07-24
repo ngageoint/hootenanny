@@ -38,7 +38,7 @@ import java.util.Vector;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
-
+import hoot.services.db2.Folders;
 import hoot.services.db2.Maps;
 import hoot.services.db2.QChangesets;
 import hoot.services.db2.QCurrentNodes;
@@ -52,7 +52,6 @@ import hoot.services.geo.zindex.Range;
 import hoot.services.geo.zindex.ZCurveRanger;
 import hoot.services.geo.zindex.ZValue;
 import hoot.services.models.osm.Element.ElementType;
-
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -1110,7 +1109,7 @@ public class Map extends Maps
    * @param folderRecordSet set of map layer records
    * @return folders web service object
    */
- /* public static FolderRecords mapFolderRecordsToFolders(List<Folders> folderRecordSet)
+  public static FolderRecords mapFolderRecordsToFolders(List<Folders> folderRecordSet)
   {
     FolderRecords folderRecords = new FolderRecords();
     List<FolderRecord> folderRecordList = new ArrayList<FolderRecord>();
@@ -1123,5 +1122,5 @@ public class Map extends Maps
     }
     folderRecords.setFolders(folderRecordList.toArray(new FolderRecord[]{}));
     return folderRecords;
-  }*/
+  }
 }

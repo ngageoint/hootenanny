@@ -26,15 +26,16 @@
  */
 package hoot.services.controllers.osm;
 
+import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
-//import hoot.services.db2.Folders;
+import hoot.services.db2.Folders;
 import hoot.services.db2.Maps;
-//import hoot.services.db2.QFolders;
+import hoot.services.db2.QFolders;
 import hoot.services.db2.QMaps;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobExecutioner;
 import hoot.services.models.osm.Element.ElementType;
-//import hoot.services.models.osm.FolderRecords;
+import hoot.services.models.osm.FolderRecords;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.ModelDaoUtils;
@@ -45,7 +46,9 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.SocketException;
 import java.sql.Connection;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -80,7 +83,10 @@ import org.w3c.dom.Element;
 import com.mysema.query.Tuple;
 import com.mysema.query.sql.Configuration;
 import com.mysema.query.sql.SQLQuery;
+import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
+import com.mysema.query.types.expr.NumberExpression;
+import com.mysema.query.types.template.NumberTemplate;
 
 /**
  * Service endpoint for maps containing OSM data
@@ -216,7 +222,7 @@ public class MapResource
 * @return a JSON object containing a list of folders
 * @throws Exception
 */
-  /*
+  
 @GET
 @Path("/folders")
 @Consumes(MediaType.TEXT_PLAIN)
@@ -254,7 +260,7 @@ public FolderRecords getFolders() throws Exception
   log.debug(message);
   return folderRecords;
 }
-  */
+  
   
   private Document _generateExtentOSM(String maxlon, String maxlat, String minlon, String minlat)
     throws Exception
@@ -783,8 +789,36 @@ public FolderRecords getFolders() throws Exception
   }
   
   
-  /*
-   * 
+  /**
+	 * <NAME>Modify Dataset or Folder Name</NAME>
+	 * <DESCRIPTION>
+	 * Modify Dataset or Folder Name provides the ability to change the name of a dataset or Folder
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * <mapId>
+	 * 	ID of map record or folder to be modified
+	 * </mapId>
+	 * <modName>
+	 * The new name for the dataset
+	 * </modName>
+	 * <inputType>
+	 * Flag for either dataset or folder
+	 * </inputType>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * jobId
+	 * 	Success = True/False
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/map/modify?mapId=123456&inputType='Dataset'&modName='New Dataset'</URL>
+	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 * <OUTPUT>{"jobId": "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT>
+	 * </EXAMPLE>
+   * @param mapId
+   * @return
+   * @throws Exception
    */
   @POST
   @Path("/modify")
@@ -794,20 +828,35 @@ public FolderRecords getFolders() throws Exception
   {
 	  Long _mapId = Long.parseLong(mapId);
 	  Connection conn = DbUtils.createConnection();
-	  
+	  String _inputType = inputType.toLowerCase();
+	  	  
 	  try
 	  {
 		  log.debug("Initializing database connection...");
 		  
-		  QMaps maps = QMaps.maps;
-		  Configuration configuration = DbUtils.getConfiguration();
+		  if (_inputType == "dataset") {
+			  QMaps maps = QMaps.maps;
+			  Configuration configuration = DbUtils.getConfiguration();
+			  
+			  new SQLUpdateClause(conn, configuration, maps)
+			  .where(maps.id.eq(_mapId))
+			  .set(maps.displayName,_modName)
+			  .execute();
+			  
+			  log.debug("Renamed map with id " + mapId + " " + _modName + "...");
+		} else {
+			  QFolders folders = QFolders.folders;
+			  Configuration configuration = DbUtils.getConfiguration();
+			  
+			  new SQLUpdateClause(conn, configuration, folders)
+			  .where(folders.id.eq(_mapId))
+			  .set(folders.displayName,_modName)
+			  .execute();
+			  
+			  log.debug("Renamed folder with id " + mapId + " " + _modName + "...");
+		}
 		  
-		  new SQLUpdateClause(conn, configuration, maps)
-		  .where(maps.id.eq(_mapId))
-		  .set(maps.displayName,_modName)
-		  .execute();
-		  
-		  log.debug("Renamed map with id " + mapId + " " + _modName + "...");
+
 	  }
 	  catch (Exception e)
 	  {
@@ -822,4 +871,78 @@ public FolderRecords getFolders() throws Exception
 	  res.put("success",true);
 	  return Response.ok(res.toJSONString(),MediaType.APPLICATION_JSON).build();
   }
+  
+  /**
+ 	 * <NAME>Add Folder </NAME>
+ 	 * <DESCRIPTION>
+ 	 * Adds new folder
+ 	 * </DESCRIPTION>
+ 	 * <PARAMETERS>
+ 	 * <folderName>
+ 	 * 	Display name of folder
+ 	 * </folderName>
+ 	 * <parentId>
+ 	 * The parent folder of the new folder.  If at root level, is equal to 0.
+ 	 * </parentId>
+ 	 * <OUTPUT>
+ 	 * jobId
+ 	 * 	Success = True/False
+ 	 * </OUTPUT>
+ 	 * <EXAMPLE>
+ 	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/map/addfolder?folderName={foldername}&parentId={parentId}</URL>
+ 	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
+ 	 * 	<INPUT>
+ 	 *	</INPUT>
+ 	 * <OUTPUT>{"jobId": "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT>
+ 	 * </EXAMPLE>
+    * @param mapId
+    * @return
+    * @throws Exception
+    */
+   @POST
+   @Path("/addfolder")
+   @Consumes(MediaType.TEXT_PLAIN)
+   @Produces(MediaType.TEXT_PLAIN)
+   public Response addFolder(@QueryParam("folderName") final String folderName, @QueryParam("parentId") final String parentId) throws Exception
+   {
+ 	  Long _parentId = Long.parseLong(parentId);
+ 	  Long newId = (long) -1;
+ 	  NumberExpression<Long> expression = NumberTemplate.create(Long.class, "nextval('folders_id_seq')");
+ 	  Connection conn = DbUtils.createConnection();
+
+ 	  QFolders folders = QFolders.folders;
+ 	  Configuration configuration = DbUtils.getConfiguration();
+ 	  SQLQuery query = new SQLQuery(conn, configuration);
+   	
+ 	  long userId = 1;
+ 	  //String userid = HootProperties.getProperty("dbUserId");
+ 	   	  
+ 	  try {
+ 		List<Long> ids = query.from()
+ 				.list(expression);
+
+ 		if(ids != null && ids.size() > 0)
+ 		{
+ 			newId = ids.get(0);
+ 			final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+
+ 			new SQLInsertClause(conn, configuration, folders)
+ 				.columns(folders.id, folders.createdAt, folders.displayName, folders.publicCol, folders.userId, folders.parentId)
+ 				.values(newId, now, folderName, true, userId, _parentId)
+ 				.execute();
+ 			}
+	  }
+ 	  catch (Exception e)
+ 	  {
+ 		  handleError(e, null, null);
+ 	  } 
+ 	  finally
+ 	  {
+ 		  DbUtils.closeConnection(conn);
+ 	  }
+ 	  
+ 	  JSONObject res = new JSONObject();
+ 	  res.put("success",true);
+ 	  return Response.ok(res.toJSONString(),MediaType.APPLICATION_JSON).build();
+   }
 }
