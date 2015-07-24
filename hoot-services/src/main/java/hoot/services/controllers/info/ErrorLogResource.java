@@ -74,7 +74,26 @@ public class ErrorLogResource {
 			log.error(ex.getMessage());
 		}
 	}
-
+	
+	
+	 /**
+   * <NAME>Logging Debug Log Service</NAME>
+   * <DESCRIPTION>Service method endpoint for retrieving the Hootenanny tomcat log.</DESCRIPTION>
+   * <PARAMETERS></PARAMETERS>
+	 * <OUTPUT>
+	 * 	JSON containing debug log
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/info/logging/debuglog</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+   * <OUTPUT>
+ 	 * {
+   * "log": " Reprojecting 2000 / 22601 Reprojecting 3000 / 22601 ..."
+   * } 
+   * </OUTPUT>
+   * </EXAMPLE>
+   * 
+   */
 	@GET
   @Path("/debuglog")
   @Produces(MediaType.TEXT_PLAIN)
@@ -100,7 +119,22 @@ public class ErrorLogResource {
 		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
 	}
 
-
+	 /**
+  * <NAME>Logging Export Service</NAME>
+  * <DESCRIPTION>Service method endpoint for exporting logging information.</DESCRIPTION>
+  * <PARAMETERS></PARAMETERS>
+	 * <OUTPUT>
+	 * 	Octet stream
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/info/logging/export</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+  * <OUTPUT>
+	* 	Binary octet stream
+  * </OUTPUT>
+  * </EXAMPLE>
+  * 
+  */
 	@GET
   @Path("/export")
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
