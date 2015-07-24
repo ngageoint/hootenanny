@@ -109,85 +109,26 @@ public class ReviewableItemsStatisticsCalculator
   {
     ReviewableItemsStatistics stats = new ReviewableItemsStatistics();
 
-    // the number of reviewed items should always be determined regardless of
-    // filters, so we know
-    // know how many items in the layer have been reviewed over time
 
     final long numReviewedItems = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
         .from(remviewItems)
-        .join(elementIdMappings)
-        .on(elementIdMappings.elementId.eq(remviewItems.reviewableItemId))
         .where(
             remviewItems.reviewStatus.eq(DbUtils.review_status_enum.reviewed)
-                .and(remviewItems.mapId.eq(mapId)).and(elementIdMappings.mapId.eq(mapId))).count();
+                .and(remviewItems.mapId.eq(mapId))).count();
 
-    int numReviewableItems = 0;
-    java.util.Map<ElementType, Set<Long>> elementIdsWithinBoundsByType = null;
-    if (!geospatialBounds.equals(BoundingBox.worldBounds()))
-    {
-      // retrieve the ID's of all elements by type from the map that fall within
-      // the requested
-      // geospatial bounds
-      elementIdsWithinBoundsByType = (new Map(mapId, conn)).queryForElementIds(geospatialBounds);
-    }
+    final long numReviewableItems =  new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+	    .from(remviewItems)
+	    .where(
+	        remviewItems.reviewStatus.eq(DbUtils.review_status_enum.unreviewed)
+	            .and(remviewItems.mapId.eq(mapId))).count();
 
-    for (ElementType elementType : ElementType.values())
-    {
-      if (!elementType.equals(ElementType.Changeset))
-      {
-        final Element prototype = ElementFactory.getInstance().create(mapId, elementType, conn);
-
-        /*
-         * Condition elementJoinCondition =
-         * Tables.ELEMENT_ID_MAPPINGS.OSM_ELEMENT_ID
-         * .eq(prototype.getElementIdField())
-         * .and(prototype.getMapIdField().eq(mapId));
-         */
-        BooleanExpression elementJoinCondition = elementIdMappings.osmElementId.eq(
-            prototype.getElementIdField());
-        if (elementIdsWithinBoundsByType != null
-            && elementIdsWithinBoundsByType.get(elementType).size() > 0)
-        {
-          assert (geospatialBounds != null && !geospatialBounds.equals(BoundingBox.worldBounds()));
-          elementJoinCondition = elementJoinCondition.and(prototype.getElementIdField().in(
-              elementIdsWithinBoundsByType.get(elementType)));
-        }
-
-        numReviewableItems += new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-            .from(remviewItems)
-            .join(elementIdMappings)
-            .on(elementIdMappings.elementId.eq(remviewItems.reviewableItemId))
-            .where(
-            //
-                elementIdMappings.elementId
-                    .eq(remviewItems.reviewableItemId)
-                    .and(remviewItems.mapId.eq(mapId))
-                    .and(elementIdMappings.mapId.eq(mapId))
-                    .and(
-                        elementIdMappings.osmElementType.eq(Element
-                            .elementEnumForElementType(elementType))))
-            .join(prototype.getElementTable())
-            .on(elementJoinCondition)
-            .where(
-                remviewItems.reviewStatus.eq(DbUtils.review_status_enum.unreviewed).and(
-                    remviewItems.reviewScore.goe(reviewScoreThresholdMinimum))).count();
-      }
-    }
-
-    int numTotalItems = 0;
-    for (ElementType elementType : ElementType.values())
-    {
-      if (!elementType.equals(ElementType.Changeset))
-      {
-        final Element prototype = ElementFactory.getInstance().create(mapId, elementType, conn);
-
-        numTotalItems += new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-            .from(prototype.getElementTable()).count();
-      }
-    }
+    final long numTotalItems = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+    .from(remviewItems)
+    .where(remviewItems.mapId.eq(mapId)).count();
+   
 
     stats.setMapId(mapId);
-    stats.setNumReviewableItems(numReviewableItems);
+    stats.setNumReviewableItems((int)numReviewableItems);
     stats.setNumReviewedItems((int) numReviewedItems);
     stats.setNumTotalItems(numTotalItems);
 
