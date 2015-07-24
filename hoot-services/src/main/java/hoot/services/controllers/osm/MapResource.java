@@ -28,14 +28,17 @@ package hoot.services.controllers.osm;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
+import hoot.services.db2.FolderMapMappings;
 import hoot.services.db2.Folders;
 import hoot.services.db2.Maps;
+import hoot.services.db2.QFolderMapMappings;
 import hoot.services.db2.QFolders;
 import hoot.services.db2.QMaps;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobExecutioner;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.FolderRecords;
+import hoot.services.models.osm.LinkRecords;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.ModelDaoUtils;
@@ -261,6 +264,73 @@ public FolderRecords getFolders() throws Exception
   return folderRecords;
 }
   
+/**
+ * <NAME>Map Service - List Links </NAME>
+ * <DESCRIPTION>
+ * 	Returns a list of all folder-map links
+ * </DESCRIPTION>
+ * <PARAMETERS>
+ * </PARAMETERS>
+ * <OUTPUT>
+ * 	a JSON object containing a list of folders
+ * </OUTPUT>
+ * <EXAMPLE>
+ * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/map/links</URL>
+ * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+ * 	<INPUT>
+ *	</INPUT>
+ * <OUTPUT>
+ *  {
+ *    "links":
+ *    [
+ *      {
+ *        "mapid": 1,
+ *       "folderid":1
+ *      }
+ *    ]
+ *  }
+ * </OUTPUT>
+ * </EXAMPLE>
+*
+* Returns a list of all folders in the services database
+*
+* @return a JSON object containing a list of folders
+* @throws Exception
+*/
+
+@GET
+@Path("/links")
+@Consumes(MediaType.TEXT_PLAIN)
+@Produces(MediaType.APPLICATION_JSON)
+public LinkRecords getLinks() throws Exception
+{
+Connection conn = DbUtils.createConnection();
+LinkRecords linkRecords = null;
+try
+{
+log.info("Retrieving links list...");
+
+log.debug("Initializing database connection...");
+
+QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
+SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
+
+final List<FolderMapMappings> linkRecordSet = query.from(folderMapMappings).orderBy(folderMapMappings.folderId.asc()).list(folderMapMappings);
+
+linkRecords = Map.mapLinkRecordsToLinks(linkRecordSet);
+}
+catch (Exception e)
+{
+handleError(e, null, null);
+}
+finally
+{
+DbUtils.closeConnection(conn);
+}
+String message = "Returning links response";
+log.debug(message);
+return linkRecords;
+}
   
   private Document _generateExtentOSM(String maxlon, String maxlat, String minlon, String minlat)
     throws Exception
@@ -844,7 +914,7 @@ public FolderRecords getFolders() throws Exception
 			  .execute();
 			  
 			  log.debug("Renamed map with id " + mapId + " " + _modName + "...");
-		} else {
+		} else if (_inputType == "folder") {
 			  QFolders folders = QFolders.folders;
 			  Configuration configuration = DbUtils.getConfiguration();
 			  
@@ -945,4 +1015,98 @@ public FolderRecords getFolders() throws Exception
  	  res.put("success",true);
  	  return Response.ok(res.toJSONString(),MediaType.APPLICATION_JSON).build();
    }
+   
+   /**
+  	 * <NAME>Link Map and Folder </NAME>
+  	 * <DESCRIPTION>
+  	 * Adds or modifies record in folder_map_mappings if layer is created or modified
+  	 * </DESCRIPTION>
+  	 * <PARAMETERS>
+  	 * <folderId>
+  	 * ID of folder
+  	 * </folderName>
+  	 * <mapId>
+  	 * name of map.  Need to get Id from Map table.
+  	 * </mapId>
+  	 * <newRecord>
+  	 * If true, inserts new record.  If false, modifies existing record based on layer name.
+  	 * There should only be one record for each layer, but can have many folders referenced.
+  	 * </newRecord>
+  	 * <OUTPUT>
+  	 * jobId
+  	 * 	Success = True/False
+  	 * </OUTPUT>
+  	 * <EXAMPLE>
+  	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/map/addfolder?folderName={foldername}&parentId={parentId}</URL>
+  	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
+  	 * 	<INPUT>
+  	 *	</INPUT>
+  	 * <OUTPUT>{"jobId": "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT>
+  	 * </EXAMPLE>
+     * @param mapId
+     * @return
+     * @throws Exception
+     */
+    @POST
+    @Path("/linkMapFolder")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response updateFolderMapLink(@QueryParam("folderId") final String folderId, @QueryParam("mapId") final String mapId, @QueryParam("newRecord") final Boolean newRecord) throws Exception
+    {
+  	  Long _folderId = Long.parseLong(folderId);
+  	  Long newId = (long) -1;
+  	  NumberExpression<Long> expression = NumberTemplate.create(Long.class, "nextval('folder_map_mappings_id_seq')");
+  	  Connection conn = DbUtils.createConnection();
+
+  	  QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
+  	  Configuration configuration = DbUtils.getConfiguration();
+  	  SQLQuery query = new SQLQuery(conn, configuration);
+  	  QMaps maps = QMaps.maps;
+    	  
+  	  long _mapId = 0;
+  	  
+  	  try {
+  		_mapId = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
+  	  }
+  	  catch (Exception e){
+  		_mapId = 0;
+  	  }
+  	  
+  	  try {
+  		if(newRecord)
+  		{
+	  		  List<Long> ids = query.from()
+	  				.list(expression);
+	
+	  		if(ids != null && ids.size() > 0)
+	  		{
+	  			newId = ids.get(0);
+	  			
+	  			new SQLInsertClause(conn, configuration, folderMapMappings)
+	  				.columns(folderMapMappings.id, folderMapMappings.mapId, folderMapMappings.folderId)
+	  				.values(newId, _mapId,_folderId)
+	  				.execute();
+	  			}
+  		} else {
+  			//find current record for the layer and update with new folder
+  			new SQLUpdateClause(conn, configuration, folderMapMappings)
+			  .where(folderMapMappings.mapId.eq(_mapId))
+			  .set(folderMapMappings.folderId,_folderId)
+			  .execute();
+  		}
+ 	  }
+  	  catch (Exception e)
+  	  {
+  		  handleError(e, null, null);
+  	  } 
+  	  finally
+  	  {
+  		  DbUtils.closeConnection(conn);
+  	  }
+  	  
+  	  JSONObject res = new JSONObject();
+  	  res.put("success",true);
+  	  return Response.ok(res.toJSONString(),MediaType.APPLICATION_JSON).build();
+    }
 }
+

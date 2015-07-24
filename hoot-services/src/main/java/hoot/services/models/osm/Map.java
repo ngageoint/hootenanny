@@ -38,6 +38,7 @@ import java.util.Vector;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
+import hoot.services.db2.FolderMapMappings;
 import hoot.services.db2.Folders;
 import hoot.services.db2.Maps;
 import hoot.services.db2.QChangesets;
@@ -1122,5 +1123,27 @@ public class Map extends Maps
     }
     folderRecords.setFolders(folderRecordList.toArray(new FolderRecord[]{}));
     return folderRecords;
+  }
+  
+  /**
+   * Converts a set of database records into an object returnable by a web service
+   *
+   * @param folderRecordSet set of map layer records
+   * @return folders web service object
+   */
+  public static LinkRecords mapLinkRecordsToLinks(List<FolderMapMappings> linkRecordSet)
+  {
+	LinkRecords linkRecords = new LinkRecords();
+    List<LinkRecord> linkRecordList = new ArrayList<LinkRecord>();
+    for (FolderMapMappings linkRecord : linkRecordSet)
+    {
+     LinkRecord link = new LinkRecord();
+     link.setId(linkRecord.getId());
+     link.setFolderId(linkRecord.getFolderId());
+     link.setMapId(linkRecord.getMapId());
+     linkRecordList.add(link);
+    }
+    linkRecords.setLinks(linkRecordList.toArray(new LinkRecord[]{}));
+    return linkRecords;
   }
 }
