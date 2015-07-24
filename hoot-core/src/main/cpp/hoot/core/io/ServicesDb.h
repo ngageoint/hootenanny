@@ -33,6 +33,7 @@
 // hoot
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QUrl>
@@ -76,7 +77,6 @@ class ServicesDb
 {
 public:
 
-  static const long COORDINATE_SCALE = 1e11;
   // below are the column indexes when calling select*Elements()
   // Not all parts of the code use these consts. Please convert "magic numbers" when you find
   // them.
@@ -92,6 +92,8 @@ public:
    */
   static QString expectedDbVersion() { return "11:brandon.witham"; }
   static int maximumChangeSetEdits() { return 50000; }
+
+  static long getCoordinateScale();
 
   static const Status DEFAULT_ELEMENT_STATUS;
   static const Meters DEFAULT_ELEMENT_CIRCULAR_ERROR = 0.0;

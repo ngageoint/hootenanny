@@ -78,6 +78,10 @@ testChangesetAutoClose=false
 # allows nodes to have negative ID's to be compatible with hoot-core command line
 hootCoreServicesDatabaseWriterCompatibility=false
 
+# controls the level of precision to which coordinates are stored; must match coordinate.scale 
+# value in conf/ConfigOptions.asciidoc (see parameter description for details)
+coordinateScale=11
+
 # ETL SERVICE
 
 # the folder location of the make file script for some processlet like ETLProcesslet

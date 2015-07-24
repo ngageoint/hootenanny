@@ -54,26 +54,26 @@ public class BoundingBox
 {
   public static final double LON_LIMIT = 180.0;
   public static final double LAT_LIMIT = 90.0;
-  public static final double SCALED_LON_LIMIT = LON_LIMIT * GeoUtils.GEO_RECORD_SCALE;
-  public static final double SCALED_LAT_LIMIT = LAT_LIMIT * GeoUtils.GEO_RECORD_SCALE;
+  public static final double SCALED_LON_LIMIT = LON_LIMIT * GeoUtils.getCoordinateScale();
+  public static final double SCALED_LAT_LIMIT = LAT_LIMIT * GeoUtils.getCoordinateScale();
   
   //coords in degrees
   
   private double minLon = GeoUtils.DEFAULT_COORD_VALUE;
   public double getMinLon() { return minLon; }
-  public long getMinLonDb() { return (long)(minLon * GeoUtils.GEO_RECORD_SCALE); }
+  public long getMinLonDb() { return (long)(minLon * GeoUtils.getCoordinateScale()); }
   
   private double minLat = GeoUtils.DEFAULT_COORD_VALUE;
   public double getMinLat() { return minLat; }
-  public long getMinLatDb() { return (long)(minLat * GeoUtils.GEO_RECORD_SCALE); }
+  public long getMinLatDb() { return (long)(minLat * GeoUtils.getCoordinateScale()); }
   
   private double maxLon = GeoUtils.DEFAULT_COORD_VALUE;
   public double getMaxLon() { return maxLon; }
-  public long getMaxLonDb() { return (long)(maxLon * GeoUtils.GEO_RECORD_SCALE); }
+  public long getMaxLonDb() { return (long)(maxLon * GeoUtils.getCoordinateScale()); }
   
   private double maxLat = GeoUtils.DEFAULT_COORD_VALUE;
   public double getMaxLat() { return maxLat; }
-  public long getMaxLatDb() { return (long)(maxLat * GeoUtils.GEO_RECORD_SCALE); }
+  public long getMaxLatDb() { return (long)(maxLat * GeoUtils.getCoordinateScale()); }
   
   @Override
   public String toString()

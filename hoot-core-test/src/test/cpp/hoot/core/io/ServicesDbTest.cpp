@@ -60,6 +60,8 @@ class ServicesDbTest : public CppUnit::TestFixture
 
 public:
 
+  static const long COORDINATE_SCALE = 1e11;
+
   static QString userEmail() { return "ServicesDbTest@hoottestcpp.org"; }
 
   long mapId;
@@ -327,9 +329,9 @@ public:
     {
       HOOT_STR_EQUALS(nodeId, nodeResultIterator->value(0).toLongLong());
       HOOT_STR_EQUALS(38.0, nodeResultIterator->value(1).toLongLong() /
-        (double)ServicesDb::COORDINATE_SCALE);
+        (double)COORDINATE_SCALE);
       HOOT_STR_EQUALS(-104.0, nodeResultIterator->value(2).toLongLong() /
-        (double)ServicesDb::COORDINATE_SCALE);
+        (double)COORDINATE_SCALE);
       HOOT_STR_EQUALS("foo = bar\n", ServicesDb::unescapeTags(nodeResultIterator->value(8)));
 
       ctr++;
@@ -391,9 +393,9 @@ public:
         {
           HOOT_STR_EQUALS(nodeId1, nodeResultIterator->value(0).toLongLong());
           HOOT_STR_EQUALS(37.9, nodeResultIterator->value(1).toLongLong() /
-            (double)ServicesDb::COORDINATE_SCALE);
+            (double)COORDINATE_SCALE);
           HOOT_STR_EQUALS(-105.0, nodeResultIterator->value(2).toLongLong() /
-            (double)ServicesDb::COORDINATE_SCALE);
+            (double)COORDINATE_SCALE);
           HOOT_STR_EQUALS("foo = bar\n", ServicesDb::unescapeTags(nodeResultIterator->value(8)));
         }
         break;
@@ -402,9 +404,9 @@ public:
         {
           HOOT_STR_EQUALS(nodeId2, nodeResultIterator->value(0).toLongLong());
           HOOT_STR_EQUALS(38.1, nodeResultIterator->value(1).toLongLong() /
-            (double)ServicesDb::COORDINATE_SCALE);
+            (double)COORDINATE_SCALE);
           HOOT_STR_EQUALS(-106.0, nodeResultIterator->value(2).toLongLong() /
-            (double)ServicesDb::COORDINATE_SCALE);
+            (double)COORDINATE_SCALE);
           HOOT_STR_EQUALS("foo2 = bar2\n", ServicesDb::unescapeTags(nodeResultIterator->value(8)));
         }
         break;
@@ -443,9 +445,9 @@ public:
         {
           HOOT_STR_EQUALS(nodeId1, nodeResultIterator->value(0).toLongLong());
           HOOT_STR_EQUALS(38.0, nodeResultIterator->value(ServicesDb::NODES_LATITUDE).toLongLong() /
-            (double)ServicesDb::COORDINATE_SCALE);
+            (double)COORDINATE_SCALE);
           HOOT_STR_EQUALS(-104.0, nodeResultIterator->value(
-            ServicesDb::NODES_LONGITUDE).toLongLong() / (double)ServicesDb::COORDINATE_SCALE);
+            ServicesDb::NODES_LONGITUDE).toLongLong() / (double)COORDINATE_SCALE);
           HOOT_STR_EQUALS("accuracy = 20.0\n"
                           "hoot:status = Unknown1\n",
                           ServicesDb::unescapeTags(nodeResultIterator->value(8)));
@@ -456,9 +458,9 @@ public:
         {
           HOOT_STR_EQUALS(nodeId2, nodeResultIterator->value(0).toLongLong());
           HOOT_STR_EQUALS(38.0, nodeResultIterator->value(ServicesDb::NODES_LATITUDE).toLongLong() /
-            (double)ServicesDb::COORDINATE_SCALE);
+            (double)COORDINATE_SCALE);
           HOOT_STR_EQUALS(-105.0, nodeResultIterator->value(
-            ServicesDb::NODES_LONGITUDE).toLongLong() / (double)ServicesDb::COORDINATE_SCALE);
+            ServicesDb::NODES_LONGITUDE).toLongLong() / (double)COORDINATE_SCALE);
           HOOT_STR_EQUALS("error:circular = 20.0\n",
                           ServicesDb::unescapeTags(nodeResultIterator->value(8)));
         }
@@ -468,9 +470,9 @@ public:
         {
           HOOT_STR_EQUALS(nodeId3, nodeResultIterator->value(0).toLongLong());
           HOOT_STR_EQUALS(38.0, nodeResultIterator->value(ServicesDb::NODES_LATITUDE).toLongLong() /
-            (double)ServicesDb::COORDINATE_SCALE);
+            (double)COORDINATE_SCALE);
           HOOT_STR_EQUALS(-106.0, nodeResultIterator->value(
-            ServicesDb::NODES_LONGITUDE).toLongLong() / (double)ServicesDb::COORDINATE_SCALE);
+            ServicesDb::NODES_LONGITUDE).toLongLong() / (double)COORDINATE_SCALE);
           HOOT_STR_EQUALS("",
                           ServicesDb::unescapeTags(nodeResultIterator->value(8)));
         }

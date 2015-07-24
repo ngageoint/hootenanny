@@ -1695,7 +1695,7 @@ public class DbUtils
    */
   public static long toDbCoordValue(double coordVal)
   {
-    return (long)(toDbCoordPrecision(coordVal) * GeoUtils.GEO_RECORD_SCALE);
+    return (long)(toDbCoordPrecision(coordVal) * GeoUtils.getCoordinateScale());
   }
 
   /**
@@ -1707,7 +1707,7 @@ public class DbUtils
    */
   public static double fromDbCoordValue(long coordVal)
   {
-    return coordVal / (double) GeoUtils.GEO_RECORD_SCALE;
+    return coordVal / (double) GeoUtils.getCoordinateScale();
   }
 
   /**

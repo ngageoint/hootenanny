@@ -481,11 +481,11 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
           new Long((long)(DbUtils.toDbCoordPrecision(originalBounds.getMinLat()) *
-            GeoUtils.GEO_RECORD_SCALE)),
+            GeoUtils.getCoordinateScale())),
           nodeRecord.getLatitude());
         Assert.assertEquals(
           new Long((long)(DbUtils.toDbCoordPrecision(originalBounds.getMinLon()) *
-            GeoUtils.GEO_RECORD_SCALE)),
+            GeoUtils.getCoordinateScale())),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
         Assert.assertEquals(
@@ -501,11 +501,11 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
           new Long((long)(DbUtils.toDbCoordPrecision(originalBounds.getMaxLat()) *
-            GeoUtils.GEO_RECORD_SCALE)),
+            GeoUtils.getCoordinateScale())),
           nodeRecord.getLatitude());
         Assert.assertEquals(
           new Long((long)(DbUtils.toDbCoordPrecision(originalBounds.getMaxLon()) *
-            GeoUtils.GEO_RECORD_SCALE)),
+            GeoUtils.getCoordinateScale())),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
         Assert.assertEquals(
@@ -521,11 +521,11 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
           new Long((long)(DbUtils.toDbCoordPrecision((originalBounds.getMinLat() - .001)) *
-            GeoUtils.GEO_RECORD_SCALE)),
+            GeoUtils.getCoordinateScale())),
           nodeRecord.getLatitude());
         Assert.assertEquals(
           new Long((long)(DbUtils.toDbCoordPrecision((originalBounds.getMinLon() - .001)) *
-            GeoUtils.GEO_RECORD_SCALE)),
+            GeoUtils.getCoordinateScale())),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
         Assert.assertEquals(
