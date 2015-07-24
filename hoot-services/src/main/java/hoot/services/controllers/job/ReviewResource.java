@@ -30,10 +30,12 @@ import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.geo.BoundingBox;
+import hoot.services.job.JobStatusManager;
 import hoot.services.models.review.MarkItemsReviewedRequest;
 import hoot.services.models.review.MarkItemsReviewedResponse;
 import hoot.services.models.review.ReviewableItem;
@@ -41,11 +43,13 @@ import hoot.services.models.review.ReviewableItemsResponse;
 import hoot.services.models.review.ReviewableItemsStatistics;
 import hoot.services.readers.review.ReviewableItemRetriever;
 import hoot.services.readers.review.ReviewableItemsStatisticsCalculator;
+import hoot.services.readers.review.ReviewableItemsReader;
 import hoot.services.review.DisplayBoundsCalculator;
 import hoot.services.review.ReviewItemsMarker;
 import hoot.services.review.ReviewItemsPreparer;
 import hoot.services.review.ReviewUtils;
 import hoot.services.validators.review.ReviewInputParamsValidator;
+import hoot.services.writers.review.ReviewItemsDbWriter;
 import hoot.services.writers.review.ReviewableItemsResponseWriter;
 
 import javax.ws.rs.Consumes;
@@ -57,6 +61,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+
+
+
 
 //import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -99,6 +106,10 @@ public class ReviewResource
   }
 
 	/**
+	 * DEPRICATE!!!!!!!!!!!
+	 * 
+	 * 
+	 * 
 	 * <NAME>Conflated Data Review Service Prepare Items for Review</NAME>
 	 * <DESCRIPTION>
 	 * Prepares conflated data for review for the specified map ID
@@ -191,6 +202,53 @@ public class ReviewResource
 
     return jobId;
   }
+  
+  
+  public String prepareItemsForReviewDirect(   
+      String mapId)
+      throws Exception
+    {
+      Connection conn = DbUtils.createConnection();
+      String jobId = UUID.randomUUID().toString();
+      JobStatusManager jobStatusManager = null;
+      final String errorMessageStart = "preparing items for review";
+      try
+      {
+      	jobStatusManager = new JobStatusManager(conn);
+  			jobStatusManager.addJob(jobId);
+  			
+        Map<String, Object> inputParams = new HashMap<String, Object>();
+        inputParams.put("mapId", mapId);
+        ReviewInputParamsValidator inputParamsValidator = new ReviewInputParamsValidator(inputParams);
+        mapId =
+          (String)inputParamsValidator.validateAndParseInputParam("mapId", "", null, null, false, null);
+
+
+        log.debug("Initializing database connection...");
+
+        ReviewItemsDbWriter w = new ReviewItemsDbWriter(conn, mapId);
+        w.populateTable();
+        jobStatusManager.setComplete(jobId);
+      }
+      catch(Exception ex)
+      {
+      	jobStatusManager.setFailed(jobId, ex.getMessage());
+      	throw new Exception(errorMessageStart + ":" + ex.getMessage());
+      }
+      finally
+      {
+        try
+        {
+          DbUtils.closeConnection(conn);
+        }
+        catch (Exception e)
+        {
+        	throw new Exception(errorMessageStart + ":" + e.getMessage());
+        }
+      }
+
+      return jobId;
+    }
 
 	/**
 	 * <NAME>Conflated Data Review Service Retrieve Statistics for Reviewable Items</NAME>
@@ -535,11 +593,15 @@ public class ReviewResource
       log.debug("Initializing database connection...");
 
       //query for review items
-      ReviewableItemRetriever itemRetriever = new ReviewableItemRetriever(conn, mapId);
+      /*ReviewableItemRetriever itemRetriever = new ReviewableItemRetriever(conn, mapId);
       final List<ReviewableItem> reviewItems =
         itemRetriever.getReviewItems(
           numItems, highestReviewScoreFirst, reviewScoreThresholdMinimum, geospatialBoundsObj,
-          displayBoundsZoomAdjust, boundsDisplayMethodEnumVal);
+          displayBoundsZoomAdjust, boundsDisplayMethodEnumVal);*/
+
+      ReviewableItemsReader itemsReader = new ReviewableItemsReader(conn, mapId);
+      final List<ReviewableItem> reviewItems = 
+      	itemsReader.getReviewItems(numItems, highestReviewScoreFirst, reviewScoreThresholdMinimum);
       assert(reviewItems.size() <= numItems);
 
       //write the items out to the response
@@ -547,7 +609,7 @@ public class ReviewResource
       //application/json
       reviewableItemsResponse =
         (new ReviewableItemsResponseWriter()).writeResponse(
-          reviewItems, itemRetriever.getMapId(), numItems, highestReviewScoreFirst,
+          reviewItems, itemsReader.getMapId(), numItems, highestReviewScoreFirst,
           reviewScoreThresholdMinimum,  geospatialBoundsObj);
     }
     catch (Exception e)

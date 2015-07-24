@@ -87,13 +87,13 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 	protected static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
 	protected Connection conn;
 
-	private long mapId;
+	protected long mapId;
 	protected long uniqueIdsParsed = 0;
 	protected boolean idMappingRecordWritten = false;
 	protected long reviewRecordsParsed = 0;
 	protected boolean reviewRecordWritten = false;
-	private long totalParseableRecords = 0;
-	private long totalReviewableRecords = 0;
+	protected long totalParseableRecords = 0;
+	protected long totalReviewableRecords = 0;
 	protected int maxRecordSelectSize;
 	protected int maxRecordBatchSize;
 	protected ListMultimap<String, String> previouslyReviewedItemIdToReviewAgainstItemIds;
@@ -932,7 +932,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		reviewRecordsToInsert.clear();
 	}
 
-	private void deleteExistingUnreviewedItems(final long mapId) throws Exception
+	protected void deleteExistingUnreviewedItems(final long mapId) throws Exception
 	{
 		final String logMsgStart = 
 			"Deleting existing unreviewed records for map with ID: " + mapId + ".  Step 1 of 4.";

@@ -184,15 +184,15 @@ public class ConflationResource extends JobControllerBase {
 			param.put("paramtype", String.class.getName());
 			param.put("isprimitivetype", "false");
 			reviewArgs.add(param);
-
+/*
 			param = new JSONObject();
 			param.put("value", false);
 			param.put("paramtype", Boolean.class.getName());
 			param.put("isprimitivetype", "true");
-			reviewArgs.add(param);
+			reviewArgs.add(param);*/
 
 			JSONObject prepareItemsForReviewCommand = _createReflectionJobReq(reviewArgs, "hoot.services.controllers.job.ReviewResource",
-					"prepareItemsForReview");
+					"prepareItemsForReviewDirect");
 			//String argStr = createPostBody(commandArgs);
 
 //	  Density Raster
