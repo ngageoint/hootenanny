@@ -177,6 +177,9 @@ JobQueryInterval=3000
 # Default translations config file
 defaultTranslationsConfig=$(homeFolder)/conf/DefaultTranslations.json
 
+# Default FOUO translations config file
+defaultFOUOTranslationsConfig=$(homeFolder)/translations-local/DefaultTranslationsFOUO.json
+
 # Main document name
 documentName=Hootenanny - User Interface Guide.pdf
 

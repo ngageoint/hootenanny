@@ -48,9 +48,9 @@ public class ConflationResourceTest {
 	public void testProcess() throws Exception
 	{
 		String params = "{\"INPUT1_TYPE\":\"DB\",\"INPUT1\":\"DcGisRoads\",\"INPUT2_TYPE\":\"DB\",\"INPUT2\":\"DcTigerRoads\",";
-		params += "\"OUTPUT_NAME\":\"Merged_Roads_e0d\",\"CONFLATION_TYPE\":\"Reference\",\"MATCH_THRESHOLD\":\"0.6\",\"MISS_THRESHOLD\":\"0.6\"}";
+		params += "\"OUTPUT_NAME\":\"Merged_Roads_e0d\",\"CONFLATION_TYPE\":\"Reference\",\"MATCH_THRESHOLD\":\"0.6\",\"MISS_THRESHOLD\":\"0.6\",\"USER_EMAIL\":\"test@test.com\"}";
 
-		String jobArgs = "\"exec\":\"makeconflate\",\"params\":[{\"CONFLATION_TYPE\":\"Reference\"}," +
+		String jobArgs = "\"exec\":\"makeconflate\",\"params\":[{\"USER_EMAIL\":\"test@test.com\"},{\"CONFLATION_TYPE\":\"Reference\"}," +
 				"{\"MATCH_THRESHOLD\":\"0.6\"},{\"INPUT1_TYPE\":\"DB\"},{\"MISS_THRESHOLD\":\"0.6\"}," +
 				"{\"INPUT2_TYPE\":\"DB\"},{\"INPUT2\":\"DcTigerRoads\"},{\"INPUT1\":\"DcGisRoads\"}," +
 				"{\"OUTPUT_NAME\":\"Merged_Roads_e0d\"},{\"IS_BIG\":\"false\"}],\"exectype\":\"make\"}," +
@@ -58,7 +58,7 @@ public class ConflationResourceTest {
 				"[{\"isprimitivetype\":\"false\",\"value\":\"Merged_Roads_e0d\",\"paramtype\":\"java.lang.String\"}," +
 				"{\"isprimitivetype\":\"true\",\"value\":false,\"paramtype\":\"java.lang.Boolean\"}],\"exectype\":\"reflection\"}," +
 				"{\"class\":\"hoot.services.controllers.ingest.RasterToTilesService\",\"method\":\"ingestOSMResourceDirect\",\"params\":" +
-				"[{\"isprimitivetype\":\"false\",\"value\":\"Merged_Roads_e0d\",\"paramtype\":\"java.lang.String\"}],\"exectype\":\"reflection\"}]";
+				"[{\"isprimitivetype\":\"false\",\"value\":\"Merged_Roads_e0d\",\"paramtype\":\"java.lang.String\"},{\"isprimitivetype\":\"false\",\"value\":\"test@test.com\",\"paramtype\":\"java.lang.String\"}],\"exectype\":\"reflection\"}]";
 		ConflationResource spy = Mockito.spy(new ConflationResource());
 		Mockito.doNothing().when((JobControllerBase)spy).postChainJobRquest(anyString(), anyString());
 		Response resp = spy.process(params);

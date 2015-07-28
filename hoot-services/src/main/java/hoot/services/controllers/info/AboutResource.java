@@ -67,6 +67,7 @@ public class AboutResource
   
   private static ClassPathXmlApplicationContext appContext = null;
   
+  
   public AboutResource()
   {
     appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
@@ -93,10 +94,26 @@ public class AboutResource
   }
   
   /**
-   * Service method endpoint for retrieving the Hootenanny services version
+   * <NAME>Version Information Service</NAME>
+   * <DESCRIPTION>Service method endpoint for retrieving the Hootenanny services version.</DESCRIPTION>
+   * <PARAMETERS></PARAMETERS>
+	 * <OUTPUT>
+	 * 	JSON containing Hoot service version information
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/info/about/servicesVersionInfo</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+   * <OUTPUT>
+   * {
+   *   "name": "Hootenanny Web Services",
+   *   "version": "0.2.16-53-g7a74f64",
+   *   "builtBy": "root"
+   * }
+   * </OUTPUT>
+   * </EXAMPLE>
    * 
    * @return a version string
- * @throws Exception 
+   * @throws Exception 
    */
   @GET
   @Path("/servicesVersionInfo")
@@ -127,12 +144,41 @@ public class AboutResource
 	return versionInfo;
   }
   
+
   /**
-   * Service method endpoint for retrieving detailed information about the Hootenanny Services
-   * environment
+   * <NAME>Service Version Detail</NAME>
+   * <DESCRIPTION>Service method endpoint for retrieving detailed information about the Hootenanny Services environment.</DESCRIPTION>
+   * <PARAMETERS></PARAMETERS>
+	 * <OUTPUT>
+	 * 	JSON Array containing Hoot service configuration detail
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/info/about/servicesVersionDetail</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+   * <OUTPUT>
+	 *	{
+	 *   "properties":
+	 *   [
+	 *	       {
+	 *	           "name": "BasemapRasterExtensions",
+	 *	           "value": "png,tif"
+	 *	       },
+	 *	       {
+	 *	           "name": "ErrorLogPath",
+	 *	           "value": "/var/log/tomcat6/catalina.out"
+	 *	       },
+	 *	       {
+	 *	           "name": "wfsStoreDb",
+	 *		           "value": "wfsstoredb"
+	 *	       },  
+	 *					.....
+	 *   ] 
+   * </OUTPUT>
+   * </EXAMPLE>
    * 
    * @return a ServicesDetail object
    */
+
   @GET
   @Path("/servicesVersionDetail")
   @Produces(MediaType.APPLICATION_JSON)
@@ -218,12 +264,30 @@ public class AboutResource
 	  ((JobExecutionManager)appContext.getBean(
 	    "jobExecutionManagerNative")).execWithResult(command).get("stdout").toString();
   }
-  
+ 
+
   /**
-   * Service method endpoint for retrieving the Hootenanny core (command line application) version
+   * <NAME>Hootenanny Core Version Information</NAME>
+   * <DESCRIPTION>Service method endpoint for retrieving the Hootenanny core (command line application) version.</DESCRIPTION>
+   * <PARAMETERS></PARAMETERS>
+	 * <OUTPUT>
+	 * 	JSON containing Hoot core version information
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/info/about/coreVersionInfo</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+   * <OUTPUT>
+   * {
+   * 	"name": "Hootenanny Core",
+   * 	"version": "0.2.16-53-g7a74f64",
+   * 	"builtBy": "root"
+   * }
+   * </OUTPUT>
+   * </EXAMPLE>
    * 
    * @return a version info object
    */
+
   @GET
   @Path("/coreVersionInfo")
   @Produces(MediaType.APPLICATION_JSON)
@@ -254,12 +318,37 @@ public class AboutResource
 	return versionInfo;
   }
   
+
+
   /**
-   * Service method endpoint for retrieving detailed environment information about the 
-   * Hootenanny core (command line application)
+   * <NAME>Hootenanny Core Version Detail</NAME>
+   * <DESCRIPTION>Service method endpoint for retrieving detailed environment information about the Hootenanny core (command line application).</DESCRIPTION>
+   * <PARAMETERS></PARAMETERS>
+	 * <OUTPUT>
+	 * 	JSON Array containing Hoot core version detail
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/info/about/coreVersionDetail</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+   * <OUTPUT>
+   * {
+   *    "environmentInfo":
+   *    [
+   *        "15:07:33.857 DEBUG src/main/cpp/hoot/core/cmd/VersionCmd.cpp(89) GEOS Version: 3.3.8",
+   *        "15:07:33.857 DEBUG src/main/cpp/hoot/core/cmd/VersionCmd.cpp(90) GDAL Version: 1.10.1",
+   *        "15:07:33.857 DEBUG src/main/cpp/hoot/core/cmd/VersionCmd.cpp(91) GLPK Version: 4.40",
+   *        "15:07:33.857 DEBUG src/main/cpp/hoot/core/cmd/VersionCmd.cpp(92) Qt Version: 4.8.6",
+   *        "15:07:33.857 DEBUG src/main/cpp/hoot/core/cmd/VersionCmd.cpp(96) Boost Version: 1.41.0",
+   *        "15:07:33.857 DEBUG src/main/cpp/hoot/core/cmd/VersionCmd.cpp(101) CppUnit Version: 1.12.1",
+   *        "15:07:33.859 DEBUG src/main/cpp/hoot/core/cmd/VersionCmd.cpp(104) Memory usage, vm: 348.8MB rss: 25.41MB"
+   *    ]
+   * }
+   * </OUTPUT>
+   * </EXAMPLE>
    * 
    * @return a version string
    */
+
   @GET
   @Path("/coreVersionDetail")
   @Produces(MediaType.APPLICATION_JSON)

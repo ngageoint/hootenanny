@@ -82,10 +82,10 @@ public class RasterToTilesService extends JobControllerBase {
 		}
 	}
 
-	public String ingestOSMResourceDirect(String name) throws Exception
+	public String ingestOSMResourceDirect(String name, String userEmail) throws Exception
 	{
 		String jobId = UUID.randomUUID().toString();
-		return ingestOSMResourceDirect(name,  jobId);
+		return ingestOSMResourceDirect(name, userEmail, jobId);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class RasterToTilesService extends JobControllerBase {
 	 * @return
 	 * @throws Exception
 	 */
-	public String ingestOSMResourceDirect(String name, String jobId) throws Exception
+	public String ingestOSMResourceDirect(String name, String userEmail, String jobId) throws Exception
 	{
 		//_zoomLevels
 		Connection conn = DbUtils.createConnection();
@@ -149,8 +149,9 @@ public class RasterToTilesService extends JobControllerBase {
 			String zoomList = zoomInfo.get("zoomlist").toString();
 			int rasterSize = (Integer)zoomInfo.get("rastersize");
 
-			JSONObject argStr =  _createCommandObj(name, zoomList, rasterSize);
+			JSONObject argStr =  _createCommandObj(name, zoomList, rasterSize, userEmail);
 			argStr.put("jobId", jobId);
+
 			//postJobRquest( jobId,  argStr);
 			JobExecutionManager jobExecManager = (JobExecutionManager)appContext.getBean("jobExecutionManagerNative");
 			jobExecManager.exec(argStr);
@@ -240,7 +241,7 @@ public class RasterToTilesService extends JobControllerBase {
 		return jobId;
 	}
 
-	protected JSONObject _createCommandObj(String name, String zoomList, int rasterSize) throws Exception
+	protected JSONObject _createCommandObj(String name, String zoomList, int rasterSize, String userEmail) throws Exception
 	{
 		String argStr = null;
 
@@ -261,6 +262,13 @@ public class RasterToTilesService extends JobControllerBase {
 		arg = new JSONObject();
 		arg.put("RASTER_SIZE", "" + rasterSize);
 		commandArgs.add(arg);
+		
+		if(userEmail != null)
+		{
+			arg = new JSONObject();
+			arg.put("USER_EMAIL", "" + userEmail);
+			commandArgs.add(arg);
+		}
 
 		JSONObject jsonArgs = _createPostBody(commandArgs);
 		jsonArgs.put("throwerror", "false");
@@ -271,7 +279,7 @@ public class RasterToTilesService extends JobControllerBase {
 
 	protected String _createCommand(String name, String zoomList, int rasterSize) throws Exception
 	{
-		return _createCommandObj( name,  zoomList,  rasterSize).toJSONString();
+		return _createCommandObj( name,  zoomList,  rasterSize, null).toJSONString();
 	}
 
 	protected JSONObject _getZoomInfo(double maxDelta) throws Exception
