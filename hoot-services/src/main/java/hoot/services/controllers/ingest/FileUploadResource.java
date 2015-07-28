@@ -101,6 +101,9 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 	 * 	<INPUT_NAME>
 	 * 	optional input name which is used in hoot db. Defaults to the file name.
 	 * 	</INPUT_NAME>
+	 * <USER_EMAIL>
+	 * Email address of the user requesting job
+	 * </USER_EMAIL>
 	 * </PARAMETERS>
 	 * <OUTPUT>
 	 * Array of job status

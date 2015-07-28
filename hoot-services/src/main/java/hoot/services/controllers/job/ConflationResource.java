@@ -113,15 +113,24 @@ public class ConflationResource extends JobControllerBase {
 	 * <CONFLATION_TYPE>
 	 * 	 [average] | [reference]
 	 * </CONFLATION_TYPE>
-	 * <MATCH_THRESHOLD>
-	 * 	The threshold for calling a relationship a match. Defaults to 0.6. The higher the value the lower the TPR, but likely also the lower the FPR.
-	 * </MATCH_THRESHOLD>
-	 * <MISS_THRESHOLD>
-	 * 	The threshold for calling a relationship a miss. Defaults to 0.6. The higher the value the lower the TNR, but likely also the lower the FNR.
-	 * </MISS_THRESHOLD>
 	 * <REFERENCE_LAYER>
 	 * 	The reference layer which will be dominant tags. Default is 1 and if 2 selected, layer 2 tags will be dominant with layer 1 as geometry snap layer.
 	 * </REFERENCE_LAYER>
+	 * <AUTO_TUNNING>
+	 * 	Not used. Always false
+	 * </AUTO_TUNNING>
+	 * <GENERATE_REPORT>
+	 * 	true to generate conflation report
+	 * </GENERATE_REPORT>
+	 * <TIME_STAMP>
+	 * 	Time stamp used in generated report if GENERATE_REPORT is true
+	 * </TIME_STAMP>
+	 * <USER_EMAIL>
+	 * 	Email address of the user requesting the conflation job. 
+	 * </USER_EMAIL>
+	 * <ADV_OPTIONS>
+	 * Advanced options list for hoot-core command
+	 * </ADV_OPTIONS>
 	 * </PARAMETERS>
 	 * <OUTPUT>
 	 * 	Job ID
