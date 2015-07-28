@@ -5,9 +5,7 @@
 # $HOOT_HOME/docs/Hootenanny - Installation Instructions.pdf
 # - assumes all Hootenanny dependencies have previously been installed
 # - assumes JAVA_HOME has already been set 
-# - applies to the production CentOS 6.5 environment only
-# - at last check, will take up to ~10-15 min to run, depending on the specifics of the hardware
-# being installed to
+# - applies to the production CentOS 6.x environment only
 # - *does not* back out of the entire installation process if any errors occur during the 
 # installation
 #
@@ -228,6 +226,8 @@ if [ "$UPDATE_SERVICES" == "true" ]; then
   if [ -d "hoot-services" ]; then
     sudo rm -rf hoot-services
   fi
+  sudo chmod 754 $TEMP_DIR/hootenanny-services-$NEW_VERSION.war
+  sudo chown root:$CORE_RUNTIME_USER_GROUP $TEMP_DIR/hootenanny-services-$NEW_VERSION.war
   sudo cp $TEMP_DIR/hootenanny-services-$NEW_VERSION.war hoot-services.war
   echo "Waiting for web server to extract war file initially..."
   sleep 10
