@@ -44,6 +44,8 @@ BACKUP_DIR_NAME=Backup
 DATE=`date +%m-%d-%Y`
 # Add port 8080 to this URL if port forwarding to port 80 hasn't been activated.
 BASE_SERVICES_URL="http://localhost"
+# TODO: This really should be read from the hoot-services.conf ingestStagingPath setting
+BASEMAP_HOME=hoot-services/ingest/upload
 
 # In general you should always update all parts of Hootenanny at the same time, but the variables 
 # in the next section allow you to not have to do so.  Having this capability can be useful when 
@@ -204,6 +206,10 @@ if [ "$UPDATE_SERVICES" == "true" ]; then
 	sudo mkdir -p $DEEGREE_DIR_ROOT/.deegree
 	sudo chown root:$CORE_RUNTIME_USER_GROUP $DEEGREE_DIR_ROOT/.deegree	
 	cd $TOMCAT_HOME
+
+  # backup basemaps
+  sudo cp -R webapps/$BASEMAP_HOME/BASEMAPS $TEMP_DIR
+
 	if [ "$BACKUP_DIR_NAME" != "" ]; then
     if [ -f "hoot-services.war" ]; then
   	  sudo mv hoot-services.war $TEMP_DIR/$BACKUP_DIR_NAME/hootenanny-services-$DATE.war
@@ -226,7 +232,7 @@ if [ "$UPDATE_SERVICES" == "true" ]; then
   if [ -d "hoot-services" ]; then
     sudo rm -rf hoot-services
   fi
-  sudo chmod 754 $TEMP_DIR/hootenanny-services-$NEW_VERSION.war
+  sudo chmod 775 $TEMP_DIR/hootenanny-services-$NEW_VERSION.war
   sudo chown root:$CORE_RUNTIME_USER_GROUP $TEMP_DIR/hootenanny-services-$NEW_VERSION.war
   sudo cp $TEMP_DIR/hootenanny-services-$NEW_VERSION.war hoot-services.war
   echo "Waiting for web server to extract war file initially..."
@@ -235,11 +241,20 @@ if [ "$UPDATE_SERVICES" == "true" ]; then
     sudo cp $TEMP_DIR/local.conf webapps/hoot-services/WEB-INF/classes/conf
     echo "Copied backed up version of services local.conf file."
   fi
+
+  # restore basemaps
+  if [ -d "webapps/$BASEMAP_HOME/BASEMAPS" ]; then
+  	sudo rm -rf webapps/$BASEMAP_HOME/BASEMAPS
+	fi
+  sudo cp -R $TEMP_DIR/BASEMAPS webapps/$BASEMAP_HOME
+
   sudo chown -R root:$CORE_RUNTIME_USER_GROUP hoot-services
   sudo chmod -R 775 hoot-services
 	# needed by WFS
   sudo chmod -R 777 hoot-services/WEB-INF/workspace
   sudo service tomcat6 restart
+  echo "Waiting for web server to restart..."
+  sleep 10
   echo "hoot services updated."
   echo
   sleep 3
