@@ -904,7 +904,7 @@ return linkRecords;
 	  {
 		  log.debug("Initializing database connection...");
 		  
-		  if (_inputType == "dataset") {
+		  if (_inputType.equals("dataset")) {
 			  QMaps maps = QMaps.maps;
 			  Configuration configuration = DbUtils.getConfiguration();
 			  
@@ -914,7 +914,7 @@ return linkRecords;
 			  .execute();
 			  
 			  log.debug("Renamed map with id " + mapId + " " + _modName + "...");
-		} else if (_inputType == "folder") {
+		} else if (_inputType.equals("folder")) {
 			  QFolders folders = QFolders.folders;
 			  Configuration configuration = DbUtils.getConfiguration();
 			  
@@ -1013,6 +1013,7 @@ return linkRecords;
  	  
  	  JSONObject res = new JSONObject();
  	  res.put("success",true);
+ 	  res.put("folderId", newId);
  	  return Response.ok(res.toJSONString(),MediaType.APPLICATION_JSON).build();
    }
    

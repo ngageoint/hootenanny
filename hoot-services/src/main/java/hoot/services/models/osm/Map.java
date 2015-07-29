@@ -1119,6 +1119,7 @@ public class Map extends Maps
       FolderRecord folder = new FolderRecord();
       folder.setId(folderRecord.getId());
       folder.setName(folderRecord.getDisplayName());
+      folder.setParentId(folderRecord.getParentId());
       folderRecordList.add(folder);
     }
     folderRecords.setFolders(folderRecordList.toArray(new FolderRecord[]{}));
