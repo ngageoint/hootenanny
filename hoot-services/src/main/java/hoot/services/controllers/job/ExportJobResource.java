@@ -130,9 +130,9 @@ public class ExportJobResource extends JobControllerBase {
 	 * <outputtype>
 	 * 	[gdb | shp | wfs]. gdb will produce file gdb, shp will output shapefile. if outputtype = wfs then a wfs front end will be created
 	 * </outputtype>
-	 * <removereview>
-	 * Removes all unreviewed items. NOTE: removereview will alway be true.
-	 * </removereview>
+	 * <USER_EMAIL>
+	 * Email address of the user requesting the job.
+	 * </USER_EMAIL>
 	 * </PARAMETERS>
 	 * <OUTPUT>
 	 * 	Job ID
