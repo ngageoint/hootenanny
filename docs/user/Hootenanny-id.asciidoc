@@ -46,7 +46,7 @@ Similar to editing data in link:$$http://wiki.openstreetmap.org/wiki/Editing$$[O
 
 [[Filter-by-Type]]
 .Changing the displayed tag schema in Hootenanny. The left image shows the selected feature displayed in OSM while right side shows the identical feature in TDSv61. Note the differences in the _All Tags_ (e.g. TDS uses F_CODE). Haiti OSM highway data displayed with DigitalGlobeBasemap (GBM) as background imagery. 
-image::user/images/id/hoot_OSMvTDS.png[scaledwidth="50%"]
+image::user/images/id/hoot_OSMvTDS.png[scaledwidth="75%"]
 
 NOTE: Users can view any element's attributes by simply hovering the mouse over a feature but in order to edit, scroll to display all tags, or switch to the TDS 6.x/4.x tag schema(s), a single feature must be selected.  
 

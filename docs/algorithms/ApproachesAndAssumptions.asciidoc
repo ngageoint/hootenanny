@@ -38,16 +38,16 @@ anti-meridian problem is proposed in <<HootExplFutureWork>>.
 [[HootConflationWorkflow]]
 === Conflation Workflow
 
-The general case of the Hootenanny conflation workflow is shown in <<HootConflationWorkflow>> 
+The general case of the Hootenanny conflation workflow is shown in <<HootConflationWorkflowDiagram>> 
 and depicts the high-level steps necessary to conflate data and generate an output 
 map in Hootenanny. It is important for the user to understand these functions as 
 each have implications on the conflated results. The squares represent a specific 
 conflation task, while the oval canisters represent a database function. The 
 workflow is described as follows:
 
-[[HootConflationWorkflow]]
+[[HootConflationWorkflowDiagram]]
 .Hootenanny Conflation Workflow.
-image::user/images/id/hootiD-HootGeneralConflation.png[]
+image::algorithms/images/hoot_general_workflow.png[]
 
 [[HootExplFileConversion]]
 === File Conversion
