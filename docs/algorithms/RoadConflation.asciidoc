@@ -1,0 +1,237 @@
+
+
+[[RoadConflation]]
+== Road Conflation
+
+Road Conflation refers to conflating all road-like linear transportations
+features. The list of road-like features includes:
+
+* Typical roads (residential, primary, secondary, motorway, etc.)
+* Roads with bridges
+* Roads with tunnels
+* Paths (footpath, cycleway, bridleway, etc.)
+* Cart tracks
+
+This does not include other linear features such as railways, rivers and walls.
+
+The following sections discuss the approach used to conflate roads. To see how
+this fits within the larger conflation picture please see the
+<<UnifyingConflation,Unifying Conflation>> section.
+
+=== Road Match Candidate
+
+Like other conflation types within unifying conflation the road types first
+identify all candidate matches. This process is described in pseudocode below.
+
+[[RoadMatchCandidatePseudocode]]
+.Road Match Candidate Pseudocode
+[source,python]
+-----
+# Go through all the roads in the first input
+for road1 in input1:
+  # get the circular error of the current road
+  ce = road.getCircularError();
+  # get all the neighbors that intersect the current road's envelope + ce.
+  neighbors = findAllElements(road.envelope().expandBy(ce));
+  # go through all the neighbors
+  for n in neighbors:
+    # if it is a legit road
+    if n != road1 && n.isLinearHighway() && n.isFromSecondInput():
+      # do a thorough check for a match. See below
+      m = new HighwayMatch(road1, n);
+      if m.getType() != miss:
+        result.add(m);
+-----
+
+The +findAllElements+ function above uses the internal Hilbert R-Tree
+<<kamel1993>> index to limit the number of candidates based on the distance.
+This provides _O(M log~M~n)_ average query performance where _M_ is the number
+of children at each level.
+
+The astute reader may notice that the circular error of the second input is not
+being accounted for when searching the R-Tree for neighboring elements. The
+elements in the R-Tree contain the envelope of the element buffered by the
+circular error. This creates an efficient way to query out only the elements
+whose envelopes are within +ce1 + ce2+ distance.
+
+As mentioned in the <<RoadConflationFutureWork,Future Work>> section below,
+building an index made up solely of candidate roads may be more efficient than
+searching the larger, existing index. This may be especially true if the map
+contains many non-road types such as buildings and rivers.
+
+NOTE: As of 12/9/2014, _M_ is 20 in Hootenanny
+
+=== Road Matching Criteria
+
+All candidate matches as determined using the method described above are
+evaluated further for the associated match score. This is depicted by the
++HighwayMatch+ class in <<RoadMatchCandidatePseudocode>>. Within this class the
+road match is further evaluated to determine the match relationship.
+
+[[RoadMatchingFlow]]
+.Road Matching Flow
+[graphviz]
+---------------------------------------------------------------------
+digraph G
+{
+rankdir = LR;
+node [shape=record,width=2,height=1,style=filled,fillcolor="#e7e7f3"];
+review [label = "If Needs\nReview",shape=diamond,height=1.5];
+addreview [label = "Add Review\nExplanation"]
+{ rank = same; "Done"; addreview };
+"Determine Matching\nSublines" -> "Classify the Match";
+"Classify the Match" -> review;
+review -> addreview [tailport=e, label = "yes"];
+review -> "Done" [tailport=s, label = "no"];
+addreview -> "Done";
+}
+---------------------------------------------------------------------
+
+==== Determine the Matching Subline
+
+Before two lines can be classified as a match, the matching subline must be
+determined. In the simplest case both of the lines match in their entirety.
+However, we must also handle the cases when there is only a partial match. The
+details of determining a subline match will be addressed in another section.
+
+At a high level the subline matching routines use the distance between the lines
+and the difference in angle between the lines to determine what portion of the
+subline match. 
+
+See also:
+
+* `way.matcher.heading.delta` configuration option, <<hootuser>>
+* `way.matcher.max.angle` configuration option, <<hootuser>>
+* `way.subline.matcher` configuration option, <<hootuser>>
+* `way.subline.string.matcher` configuration option, <<hootuser>>
+
+[[ClassifyTheMatch]]
+==== Classify the Match
+
+The match relationship is determined using a trained Random Forests
+<<breiman2001>> classifier. The model is trained using the following manually
+matched highway data:
+
+* <<MGCP,MGCP>> matched to <<OpenStreetMap,OpenStreetMap>> - Laascaanood, Somalia
+** 174km of roads
+** 184 road features
+* <<MGCP,MGCP>> matched to <<OpenStreetMap,OpenStreetMap>> - Beledweyne, Somalia
+** 15km of roads
+** 66 road features
+* <<MGCP,MGCP>> matched to <<UFD,UFD>> - Hargeysa, Somalia
+** 144km of roads
+** 464 road features
+* <<OpenStreetMap,OpenStreetMap>> matched to <<UFD,UFD>> - Hargeysa, Somalia
+** 93km of roads
+** 1,155 road features
+* <<MGCP,MGCP>> matched to <<OpenStreetMap, OpenStreetMap>> - Port au Prince, Haiti
+** 562km of roads
+** 1,258 road features
+
+The manually matched data is then broken into three groups:
+
+* All data
+* Training group 1 - Half of the data
+* Training group 2 - Half of the data that does not overlap with Training group
+  1.
+
+The two training groups are used to train and test a model without using
+training data for the testing data. (AKA 2-fold cross validation) By using such
+coarse testing groups it simplifies the testing process and avoids using data
+from a single geographic region for both training and testing.
+
+After evaluation is complete all the data is used to train the final model that
+is utilized by Hootenanny. The trained model is stored in the Hootenanny source
+tree as `conf/HighwayModel.rf`. The trained model uses the following features
+for classification:
+
+* Edge distance with <<RMSE,RMSE>> aggregation - Edge distance samples each
+  input feature at regular intervals and calculates the distance between those
+  each sample. The aggregator is used combine all the distance measures into a
+  single feature. In this case the aggregator is RMSE.
+* Edge distance with http://en.wikipedia.org/wiki/Standard_deviation[standard
+  deviation] aggregation - Similar to above, but the aggregator is the standard
+  deviation of the distance samples.
+* Angle Histogram (taken from RoadMatcher) - Creates a histogram of the angles
+  of each input and then calculates the difference between those histograms.
+* Weighted Metric Distance with RMSE aggregation - Similar to metric distance
+  described in <<savary2005>>.
+
+The features above were determined by using various feature selection techniques
+within Weka <<hall2009>>. Approximately 50 different feature extraction
+approaches were evaluated. Many of those were simply parameterized versions of
+11 different extraction approaches. The features evaluated include:
+
+* Name comparison - using various combinations of comparison techniques and
+  distance algorithms including:
+** Treat name as a bag of words
+** Translate/transliterate the names before comparison
+** Exact string match
+** http://en.wikipedia.org/wiki/Levenshtein_distance[Levenshtein distance] 
+   <<levenshtein1966>>
+** http://en.wikipedia.org/wiki/Soundex[Soundex]
+* Hausdorff distance
+* Attribute distance
+* Attribute score
+* Distance score
+* Weighted shape distance <<savary2005>>
+
+NOTE: If you would like more details on any of these feature extracting
+techniques please contact Hootenanny.Help@digitalglobe.com.
+
+The model is trained on all three relationship types: match, miss and review.
+The classification generated by the model is used directly for determining the
+match type. See <<EstimatePairwiseRelationships>> for a description of how the
+relationship scores are resolved into a single relationship value.
+
+==== Add Review Explanation
+
+In addition to the reviews generated using the classifier, sometimes line
+matches are either too computationally complex to establish, or simply too
+complex to definitively mark as being either a match or miss. In these cases the
+features will be marked as needing a review.
+
+Examples where these situations may occur include:
+
+* Invalid geometries (e.g. `multilinestring` relation that contains nodes)
+* MultiLineStrings:
+** Star pattern
+** Parallel lines within a MultiLineString
+** MultiLineStrings with too man sublines (computationally complex)
+
+If these situations occur the review will contain a description of the issue
+encountered in the `hoot:review:note` tag.
+
+=== Road Conflict Criteria
+
+Two road matches are considered conflicts if applying one of the resulting
+merges causes the other match to be a non- _match_. This usually occurs if
+applying one match does not leave enough of the feature left over to apply the
+other match though it could also occur if the remaining portion of the feature
+could be matched, but results in a _miss_ or _review_ classification.
+
+=== Road Merging Logic
+
+The legacy road conflation routine supported road averaging by default. The
+newer unifying road conflation routine only supports snapping roads together. In
+this case it means snapping the roads from the second input to the first input.
+Besides breaking roads where necessary, the first input will not be moved.
+
+Tags are merged using the default tag merging approach as defined by the
+`tag.merger.default` configuration option.
+
+See also:
+
+* `tag.merger.default` configuration option <<hootuser>>
+
+[[RoadConflationFutureWork]]
+=== Future Work
+
+* Creating a custom index (rather than using the global index) will likely be
+  faster.
+* There has been discussion around creating a new conflation approach that uses
+  collective classifiers with intersections to improve performance.
+* Expand the training data to include a more diverse set of regions and input
+  types.
+
+
