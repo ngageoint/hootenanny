@@ -70,7 +70,8 @@ function translateToOgr(tags, elementType, geometryType)
     if (tags.tags)
     {
         // The "tags" value is a string with this structure: "cables"=>"3", "voltage"=>"230000"
-        var tList = tags['tags'].split(',');
+        // Trying to split on ", instead of just , due to having comma's inside the data values. Arrrggghhh!
+        var tList = tags['tags'].split('\",');
 
         for (var i = 0, tLen = tList.length; i < tLen; i++)
         {
