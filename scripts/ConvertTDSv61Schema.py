@@ -81,21 +81,15 @@ def printJavascript(schema):
             if 'length' in schema[f]['columns'][k]:
                 print '                       length:"%s", ' % (schema[f]['columns'][k]['length'])
 
-            if schema[f]['columns'][k]['type'] == 'enumeration':
-                print '                       type:"%s",' % (schema[f]['columns'][k]['type'])
+            #if schema[f]['columns'][k]['type'] == 'enumeration':
+            if schema[f]['columns'][k]['type'].find('numeration') != -1:
+                #print '                       type:"%s",' % (schema[f]['columns'][k]['type'])
+                print '                       type:"enumeration",'
                 print '                       defValue:"%s", ' % (schema[f]['columns'][k]['defValue'])
                 print '                       enumerations:['
                 for l in schema[f]['columns'][k]['enum']:
                     print '                           { name:"%s", value:"%s" }, ' % (l['name'],l['value'])
                 print '                        ] // End of Enumerations '
-
-            # Convert all of the Text Enumerations to be plain strings
-            elif schema[f]['columns'][k]['type'] == 'textEnumeration':
-                print '                       type:"String",'
-                print '                       defValue:"%s" ' % (schema[f]['columns'][k]['defValue'])
-                # For debugging: Dump all of the text enumerations out
-                #for l in schema[f]['columns'][k]['enum']:
-                    #print '           DEBUG:          { name:"%s", value:"%s" }, ' % (l['name'],l['value'])
 
             else:
                 print '                       type:"%s",' % (schema[f]['columns'][k]['type'])
@@ -124,6 +118,17 @@ def printJavascript(schema):
     print
 
 # End printJavascript
+
+
+# Drop all of the text enumerations and replace them with strings
+def dropTextEnumerations(schema):
+    for i in schema:
+        for j in schema[i]['columns']:
+            if schema[i]['columns'][j]['type'] == 'textEnumeration':
+                schema[i]['columns'][j]['type'] = 'String'
+
+    return schema
+# End dropTextEnumerations
 
 
 def asint(s):
@@ -1635,6 +1640,7 @@ parser.add_argument('--fcodelist', help='Dump out a list of attributes',action='
 parser.add_argument('--toenglish', help='Dump out To English translation rules',action='store_true')
 parser.add_argument('--fromenglish', help='Dump out From English translation rules',action='store_true')
 parser.add_argument('--attributecsv', help='Dump out attributes as a CSV file',action='store_true')
+parser.add_argument('--fullschema', help='Dump out a schema with text enumerations',action='store_true')
 parser.add_argument('mainfile', help='The main TDS spec csv file', action='store')
 parser.add_argument('otherfile', help='The NGA Additional attributes csv file', action='store')
 
@@ -1680,7 +1686,10 @@ elif args.fromenglish:
     printFromEnglish(schema)
 elif args.attributecsv:
     printAttributeCsv(schema)
+elif args.fullschema:
+    printJavascript(schema)
 else:
+    dropTextEnumerations(schema)
     printJavascript(schema)
 
 # End
