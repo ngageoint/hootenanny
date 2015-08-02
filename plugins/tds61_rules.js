@@ -51,7 +51,6 @@ tds61.rules = {
      ['F_CODE','AL020','landuse','industrial'], // From OSM - Map to BUA
      ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
      ['F_CODE','AL105','tourism','caravan_site'], // From OSM data, not a building so...
-     ['F_CODE','AL130','tourism','attraction'], // From OSM data, not great
      ['F_CODE','AL130','historic','memorial'], // From OSM data, not great
      ['F_CODE','AL200','historic','ruins'], // Ruins
      ['F_CODE','AL241','tower','communication'], 
@@ -3289,17 +3288,17 @@ tds61.rules = {
 
      // WEQ - Well Equipment
      // ['WEQ','-999999',undefined,undefined], // No Information
-     ['WEQ','1','raw:WEQ','wellhead'], // Wellhead
-     ['WEQ','2','raw:WEQ','christmas_tree'], // Christmas Tree
-     ['WEQ','3','raw:WEQ','manifold'], // Manifold
-     ['WEQ','4','raw:WEQ','protective_structure'], // Protective Structure
-     ['WEQ','5','raw:WEQ','pump'], // Pump
-     ['WEQ','6','raw:WEQ','rod_pump'], // Rod Pump
-     ['WEQ','7','raw:WEQ','separator'], // Separator
-     ['WEQ','8','raw:WEQ','stock_tank'], // Stock Tank
-     ['WEQ','9','raw:WEQ','treater'], // Treater
-     ['WEQ','10','raw:WEQ','capped'], // Capped
-     ['WEQ','999','raw:WEQ','other'], // Other
+     ['WEQ','1','well:equipment','wellhead'], // Wellhead
+     ['WEQ','2','well:equipment','christmas_tree'], // Christmas Tree
+     ['WEQ','3','well:equipment','manifold'], // Manifold
+     ['WEQ','4','well:equipment','protective_structure'], // Protective Structure
+     ['WEQ','5','pump','yes'], // Pump
+     ['WEQ','6','well:equipment','rod_pump'], // Rod Pump
+     ['WEQ','7','well:equipment','separator'], // Separator
+     ['WEQ','8','well:equipment','stock_tank'], // Stock Tank
+     ['WEQ','9','well:equipment','treater'], // Treater
+     ['WEQ','10','well:equipment','capped'], // Capped
+     ['WEQ','999','well:equipment','other'], // Other
 
      // WFT - Well Type
      // ['WFT','-999999',undefined,undefined], // No Information

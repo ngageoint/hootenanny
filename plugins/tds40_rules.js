@@ -52,7 +52,6 @@ tds.rules = {
      ['F_CODE','AL020','landuse','industrial'], // From OSM - Map to BUA
      ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
      ['F_CODE','AL105','tourism','caravan_site'], // From OSM data, not a building so...
-     ['F_CODE','AL130','tourism','attraction'], // From OSM data, not great
      ['F_CODE','AL130','historic','memorial'], // From OSM data, not great
      ['F_CODE','AL200','historic','ruins'], // Ruins
      ['F_CODE','AL241','tower','communication'], 

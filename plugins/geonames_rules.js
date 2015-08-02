@@ -112,7 +112,7 @@ geonames.rules = {
         'BUSTP':{'highway':'bus_stop'}, //  bus stop: a place lacking station facilities
         'BUTE':{'geological':'butte'}, //  butte(s): a small, isolated, usually flat-topped hill with steep sides
         'CAPE':{'natural':'cape'}, //  cape: a land area, more prominent than a point, projecting into the sea and marking a notable change in coastal direction
-        'CAPG':{'gacier:type':'icecap'}, //  icecap: a dome-shaped mass of glacial ice covering an area of mountain summits or other high lands; smaller than an ice sheet
+        'CAPG':{'natural':'glacier','gacier:type':'icecap'}, //  icecap: a dome-shaped mass of glacial ice covering an area of mountain summits or other high lands; smaller than an ice sheet
         'CARN':{'man_made':'cairn'}, //  cairn: a heap of stones erected as a landmark or for other purposes
         'CAVE':{'natural':'cave_entrance'}, //  cave(s): an underground passageway or chamber, or cavity on the side of a cliff
         'CDAU':{'geological':'undersea_cordillera'}, //  cordillera: an entire mountain system including the subordinate ranges, interior plateaus, and basins
@@ -434,7 +434,7 @@ geonames.rules = {
         'PLAT':{'natural':'plateau'}, //  plateau: an elevated plain with steep slopes on one or more sides, and often with incised streams
         'PLATX':{'poi':'section_of_plateau'}, //  section of plateau:
         'PLDR':{'natural':'polder'}, //  polder: an area reclaimed from the sea by diking and draining
-        'PLN':{'naturan':'plain'}, //  plain(s): an extensive area of comparatively level to gently undulating land, lacking surface irregularities, and usually adjacent to a higher area
+        'PLN':{'natural':'plain'}, //  plain(s): an extensive area of comparatively level to gently undulating land, lacking surface irregularities, and usually adjacent to a higher area
         'PLNU':{'natural':'undersea_plain'}, //  plain: a flat, gently sloping or nearly level region
         'PLNX':{'natural':'section_of_plain'}, //  section of plain:
         'PLTU':{'natural':'undersea_plateau'}, //  plateau: a comparatively flat-topped feature of considerable extent, dropping off abruptly on one or more sides

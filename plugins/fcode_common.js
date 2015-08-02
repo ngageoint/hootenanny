@@ -41,24 +41,24 @@ fcodeCommon = {
     // Common rules: import and export with "unique" values
     one2one : [
       ['F_CODE','AA010','landuse','surface_mining'], // Extraction Mine 
-      ['F_CODE','AA011','raw:fcode','AA011'], // Shear Wall 
+      ['F_CODE','AA011','natural','shear_wall'], // Shear Wall
       ['F_CODE','AA020','mine:superstructure','yes'], // Mine Shaft Superstructure 
       ['F_CODE','AA040','man_made','rig'], // Rig/Superstructure
-      ['F_CODE','AA045','raw:fcode','AA045'], // Borehole 
-      ['F_CODE','AA052','raw:fcode','AA052'], // Hydrocarbons Field 
-      ['F_CODE','AA054','raw:fcode','AA054'], // Non-water Well 
+      ['F_CODE','AA045','man_made','borehole'], // Borehole
+      ['F_CODE','AA052','landuse','hydrocarbons_field'], // Hydrocarbons Field
+      ['F_CODE','AA054','man_made','well'], // Non-water Well
       ['F_CODE','AB000','landuse','landfill'], // Disposal Site / Waste Pile
       ['F_CODE','AB010','amenity','recycling'], // Wrecking Yard/Scrap Yard, Recycling Site
-      ['F_CODE','AB021','raw:fcode','AB021'], // Liquid Diffuser
+      ['F_CODE','AB021','man_made','liquid_diffuser'], // Liquid Diffuser
       ['F_CODE','AB030','amenity','waste_processing'], // Waste Processing 
       ['F_CODE','AB040','landuse','aeration_basin'], // Aeration Basin
-      ['F_CODE','AB507','raw:fcode','AB507'], // Waste Heap
-      ['F_CODE','AC010','raw:fcode','AC010'], // Blast-furnace 
-      ['F_CODE','AC020','industrial','catalytic_cracker'], // Catalytic Cracker 
+      ['F_CODE','AB507','man_made','waste_heap'], // Waste Heap
+      ['F_CODE','AC010','man_made','blast_furnace'], // Blast-furnace
+      ['F_CODE','AC020','man_made','catalytic_cracker'], // Catalytic Cracker
       ['F_CODE','AC030','water','settling_basin'], // Settling Basin/Sludge Pond, Settling Pond
       ['F_CODE','AC040','raw:fcode','AC040'], // Hydrocarbon Products Facility, Oil/Gas Facilities
-      ['F_CODE','AC060','raw:fcode','AC060'], // Industrial Furnace
-      ['F_CODE','AC507','raw:fcode','AC507'], // Sewage Treatment Plant
+      ['F_CODE','AC060','man_made','furnace'], // Industrial Furnace
+      ['F_CODE','AC507','man_made','wastewater_plant'], // Sewage Treatment Plant
       ['F_CODE','AD010','power','plant'], // Electric Power Station, Power Plant
       ['F_CODE','AD020','raw:fcode','AD020'], // Solar Panel 
       ['F_CODE','AD025','raw:fcode','AD025'], // Solar Farm 
@@ -68,9 +68,9 @@ fcodeCommon = {
       ['F_CODE','AD055','raw:fcode','AD055'], // Cooling Facility 
       ['F_CODE','AD060','raw:fcode','AD060'], // Wind Farm 
       ['F_CODE','AF010','man_made','chimney'], // Chimney/Smokestack 
-      ['F_CODE','AF020','conveyor','yes'], // Conveyor
-      ['F_CODE','AF021','raw:fcode','AF021'], // Bucket Elevator 
-      ['F_CODE','AF030','tower:type','cooling'], // Cooling Tower  
+      ['F_CODE','AF020','man_made','goods_conveyor'], // Conveyor
+      ['F_CODE','AF021','conveyer:type','bucket:'], // Bucket Elevator
+      ['F_CODE','AF030','tower:type','cooling'], // Cooling Tower
       ['F_CODE','AF040','man_made','crane'], // Crane 
       ['F_CODE','AF050','raw:fcode','AF050'], // Excavating Machine 
       ['F_CODE','AF060','raw:fcode','AF060'], // Engine Test Cell 
@@ -83,14 +83,14 @@ fcodeCommon = {
       ['F_CODE','AH055','fortified','yes'], // Fortified Building 
       ['F_CODE','AH060','military','bunker'], // Underground Bunker 
       ['F_CODE','AH070','barrier','check_point'], // Checkpoint 
-      ['F_CODE','AI020','raw:fcode','AI020'], // Caravan Park, Mobile Home/Mobile Home Park 
-      ['F_CODE','AI021','raw:fcode','AI021'], // Mobile Home Park 
+      ['F_CODE','AI020','tourism','caravan_site'], // Caravan Park, Mobile Home/Mobile Home Park
+      ['F_CODE','AI021','amenity','trailer_park'], // Mobile Home Park / Manufactured Home Park
       ['F_CODE','AI030','camp','yes'], // Camp 
-      ['F_CODE','AJ030','raw:fcode','AJ030'], // Feedlot/Stockyard, Holding Pen
+      ['F_CODE','AJ030','landuse','holding_pen'], // Feedlot/Stockyard, Holding Pen
       ['F_CODE','AJ050','man_made','windmill'], // Windmill
       ['F_CODE','AJ051','generator:source','wind'], // Windmotor, Wind Turbine 
-      ['F_CODE','AJ055','raw:fcode','AJ055'], // Water Mill 
-      ['F_CODE','AJ080','raw:fcode','AJ080'], // Stable 
+      ['F_CODE','AJ055','man_made','water_mill'], // Water Mill
+      ['F_CODE','AJ080','building','stable'], // Stable
       ['F_CODE','AJ085','building','barn'], // Barn 
       ['F_CODE','AJ110','building','greenhouse'], // Greenhouse 
       ['F_CODE','AK020','tourism','theme_park_attraction'], // Amusement Park Attraction 
@@ -98,26 +98,26 @@ fcodeCommon = {
       ['F_CODE','AK040','leisure','pitch'], // Athletic Field, Sports Ground 
       // ['F_CODE','AK050','sport','tennis'], // Tennis Court - Valid NFDD but not in TDS Spec
       ['F_CODE','AK060','tourism','camp_site'], // Campground/Campsite 
-      ['F_CODE','AK061','raw:fcode','AK061'], // Picnic Site 
-      ['F_CODE','AK070','raw:fcode','AK070'], // Drive In Theater 
+      ['F_CODE','AK061','tourism','picnic_site'], // Picnic Site
+      ['F_CODE','AK070','drive_in','yes'], // Drive In Theater
       ['F_CODE','AK080','man_made','outdoor_theatre_screen'], // Outdoor Theatre Screen
       ['F_CODE','AK090','leisure','fairground'], // Fairground
       ['F_CODE','AK100','leisure','golf_course'], // Golf Course 
-      ['F_CODE','AK101','raw:fcode','AK101'], // Golf Driving Range 
+      ['F_CODE','AK101','golf','driving_range'], // Golf Driving Range
       ['F_CODE','AK110','building','grandstand'], // Grandstand 
       ['F_CODE','AK120','leisure','park'], // Park 
-      ['F_CODE','AK121','raw:fcode','AK121'], // Lookout 
+      ['F_CODE','AK121','tourism','viewpoint'], // Lookout
       ['F_CODE','AK130','leisure','track'], // Racetrack 
-      ['F_CODE','AK150','raw:fcode','AK150'], // Ski-jump 
-      ['F_CODE','AK155','raw:fcode','AK155'], // Ski-run 
+      ['F_CODE','AK150','man_made','ski_jump'], // Ski-jump
+      ['F_CODE','AK155','sport','skiing'], // Ski-run # Not good
       ['F_CODE','AK160','leisure','stadium'], // Stadium/Amphitheater 
-      ['F_CODE','AK161','raw:fcode','AK161'], // Scoreboard 
-      ['F_CODE','AK164','raw:fcode','AK164'], // Amphitheatre 
+      ['F_CODE','AK161','man_made','scoreboard'], // Scoreboard
+      ['F_CODE','AK164','theatre:type','amphi'], // Amphitheatre
       ['F_CODE','AK170','leisure','swimming_pool'], // Swimming Pool 
       ['F_CODE','AK180','tourism','zoo'], // Zoo/Safari Park
       ['F_CODE','AL010','facility','yes'], // Facility 
       ['F_CODE','AL011','raw:fcode','AL011'], // Installation 
-      ['F_CODE','AL012','raw:fcode','AL012'], // Archeological Site 
+      ['F_CODE','AL012','historic','archaeological_site'], // Archeological Site
       ['F_CODE','AL013','building','yes'], // Building - See custom rules
       ['F_CODE','AL014','raw:fcode','AL014'], // Non-building Structure 
       ['F_CODE','AL017','emergency','fire_hydrant'], // Fire Hydrant 
@@ -127,8 +127,8 @@ fcodeCommon = {
       ['F_CODE','AL025','man_made','cairn'], // Cairn 
       ['F_CODE','AL030','landuse','cemetery'], // Cemetery 
       ['F_CODE','AL036','tomb','yes'], // Tomb 
-      ['F_CODE','AL060','raw:fcode','AL060'], // Dragon's Teeth 
-      ['F_CODE','AL065','raw:fcode','AL065'], // Minefield 
+      ['F_CODE','AL060','barrier','dragons_teeth'], // Dragon's Teeth
+      ['F_CODE','AL065','hazard','minefield'], // Minefield
       ['F_CODE','AL070','barrier','fence'], // Fence 
       ['F_CODE','AL073','man_made','flagpole'], // Flagpole 
       ['F_CODE','AL080','man_made','gantry'], // Gantry 
@@ -137,20 +137,20 @@ fcodeCommon = {
       ['F_CODE','AL110','tower:type','light'], // Light Support Structure 
       ['F_CODE','AL120','military','missile_site'], // Missile Site
       ['F_CODE','AL130','historic','monument'], // Memorial Monument 
-      ['F_CODE','AL140','raw:fcode','AL140'], // Particle Accelerator 
-      ['F_CODE','AL142','raw:fcode','AL142'], // Astronomical Observatory 
+      ['F_CODE','AL140','man_made','particle_accelerator'], // Particle Accelerator
+      ['F_CODE','AL142','landuse','observatory'], // Astronomical Observatory
       ['F_CODE','AL155','overhead_obstruction','yes'], // Overhead Obstruction
       ['F_CODE','AL165','raw:fcode','AL165'], // Pipeline Or Pipe Crossing Point 
-      ['F_CODE','AL170','raw:fcode','AL170'], // Plaza/City Square, Public Square 
-      ['F_CODE','AL175','raw:fcode','AL175'], // Courtyard 
-      ['F_CODE','AL180','raw:fcode','AL180'], // Retail Stand 
+      ['F_CODE','AL170','landuse','plaza'], // Plaza/City Square, Public Square
+      ['F_CODE','AL175','man_made','courtyard'], // Courtyard
+      ['F_CODE','AL180','shop','kiosk'], // Retail Stand
       ['F_CODE','AL195','ramp','yes'], // Ramp
       ['F_CODE','AL200','ruins','yes'], // Ruins 
-      ['F_CODE','AL201','raw:fcode','AL201'], // Interest Site 
+      ['F_CODE','AL201','tourism','attraction'], // Interest Site
       ['F_CODE','AL208','place','shanty_town'], // Shanty Town 
       ['F_CODE','AL211','route:protection','yes'], // Transportation Route Protection Structure 
       ['F_CODE','AL241','man_made','tower'], // Tower 
-      ['F_CODE','AL250','raw:fcode','AL250'], // Underground Dwelling 
+      ['F_CODE','AL250','building:underground','yes'], // Underground Dwelling
       ['F_CODE','AL260','barrier','wall'], // Wall 
       ['F_CODE','AL270','landuse','plantation'], // Industrial Farm 
       ['F_CODE','AL351','space_facility','yes'], // Space Facility
@@ -306,23 +306,23 @@ fcodeCommon = {
       ['F_CODE','BJ060','natural','ice_peak'], // Ice Peak 
       ['F_CODE','BJ065','natural','ice_shelf'], // Ice Shelf 
       ['F_CODE','BJ080','raw:fcode','BJ080'], // Polar Ice 
-      ['F_CODE','BJ099','raw:fcode','BJ099'], // Ice-cap 
+      ['F_CODE','BJ099','glacier:type','icecap'], // Ice-cap
       ['F_CODE','BJ100','landcover','snowfield'], // Snow Field and/or Ice-field
       ['F_CODE','BJ110','natural','tundra'], // Tundra 
       ['F_CODE','CA010','contour','elevation'], // Elevation Contour
       ['F_CODE','CA030','raw:fcode','CA030'], // Spot Elevation 
-      ['F_CODE','DA005','raw:fcode','DA005'], // Asphalt Lake 
+      ['F_CODE','DA005','natural','asphalt_lake'], // Asphalt Lake
       ['F_CODE','DA010','raw:fcode','DA010'], // Soil Surface Region 
       ['F_CODE','DB010','natural','cliff'], // Bluff/Cliff/Escarpment, Steep Terrain Face 
       ['F_CODE','DB028','raw:fcode','DB028'], // Cave Chamber
       ['F_CODE','DB029','natural','cave_entrance'], // Cave Mouth
       ['F_CODE','DB061','natural','crevice'], // Crevice
-      ['F_CODE','DB070','cut','yes'], // Cut 
+      ['F_CODE','DB070','cutting','yes'], // Cut
       ['F_CODE','DB071','man_made','cut_edge'], // Cut Line ## In TDS, this is the edge of the cut
       ['F_CODE','DB080','raw:fcode','DB088'], // Depression 
       ['F_CODE','DB090','man_made','embankment'], // Embankment, Embankment/Fill 
-      ['F_CODE','DB100','raw:fcode','DB100'], // Esker 
-      ['F_CODE','DB110','raw:fcode','DB110'], // Fault, Geologic Fault 
+      ['F_CODE','DB100','landform','esker'], // Esker
+      ['F_CODE','DB110','geological','fault'], // Fault, Geologic Fault
       ['F_CODE','DB115','raw:fcode','DB155'], // Geothermal Feature, Geothermal Outlet 
       ['F_CODE','DB150','mountain_pass','yes'], // Mountain Pass 
       ['F_CODE','DB160','raw:fcode','DB160'], // Rock Formation 
@@ -341,15 +341,15 @@ fcodeCommon = {
       ['F_CODE','EB020','natural','thicket'], // Thicket (was FACC Scrub/Brush/Bush)
       ['F_CODE','EB070','natural','scrub'], // Brush
       ['F_CODE','EC005','natural','tree'], // Tree 
-      ['F_CODE','EC010','raw:fcode','EC010'], // Bamboo/Cane 
+      ['F_CODE','EC010','natural','cane'], // Bamboo/Cane
       ['F_CODE','EC015','landuse','forest'], // Forest 
       ['F_CODE','EC020','raw:fcode','EC020'], // Oasis 
       ['F_CODE','EC040','man_made','cutline'], // Cleared Way/Cut Line/Firebreak 
-      ['F_CODE','EC060','raw:fcode','EC060'], // Forest Clearing 
+      ['F_CODE','EC060','natural','forest_clearing'], // Forest Clearing
       ['F_CODE','ED010','wetland','marsh'], // Marsh
       ['F_CODE','ED020','wetland','swamp'], // Swamp 
       ['F_CODE','EE010','raw:fcode','EE010'], // Logging Area, Logging Site 
-      ['F_CODE','EE030','raw:fcode','EE030'], // Desert 
+      ['F_CODE','EE030','natural','desert'], // Desert
       ['F_CODE','FA000','raw:fcode','FA000'], // Administrative Boundary 
       ['F_CODE','FA012','raw:fcode','FA012'], // Contaminated Region 
       ['F_CODE','FA015','military','range'], // Firing Range/Gunnery Range 
