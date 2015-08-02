@@ -118,7 +118,7 @@ fcodeCommon = {
       ['F_CODE','AL010','facility','yes'], // Facility 
       ['F_CODE','AL011','raw:fcode','AL011'], // Installation 
       ['F_CODE','AL012','raw:fcode','AL012'], // Archeological Site 
-      ['F_CODE','AL013',undefined,undefined], // Building - See custom rules
+      ['F_CODE','AL013','building','yes'], // Building - See custom rules
       ['F_CODE','AL014','raw:fcode','AL014'], // Non-building Structure 
       ['F_CODE','AL017','emergency','fire_hydrant'], // Fire Hydrant 
       ['F_CODE','AL018','building:superstructure','yes'], // Building Superstructure Addition 
@@ -170,14 +170,14 @@ fcodeCommon = {
       ['F_CODE','AM075','amenity','fuel_storage'], // Fuel Storage Facility 
       ['F_CODE','AM080','man_made','water_tower'], // Water Tower 
       ['F_CODE','AN010','railway','rail'], // Railway 
-      ['F_CODE','AN050','railway','sidetrack'], // Railway Sidetrack 
+      ['F_CODE','AN050','service','siding'], // Railway Sidetrack
       ['F_CODE','AN060','service','yard'], // Railway Yard 
       ['F_CODE','AN075','railway','turntable'], // Railway Turntable 
       ['F_CODE','AN076','railway','roundhouse'], // Roundhouse 
       ['F_CODE','AN085','raw:fcode','AN085'], // Railway Signal 
       ['F_CODE','AP010','highway','track'], // Cart Track 
-      ['F_CODE','AP020',undefined,undefined], // Road Interchange - See RIT
-      ['F_CODE','AP030',undefined,undefined], // Road - See Custom rules
+      ['F_CODE','AP020','junction','yes'], // Road Interchange - See RIT
+      ['F_CODE','AP030','highway','road'], // Road - See Custom rules
       ['F_CODE','AP033','raw:fcode','AP033'], // Engineered Turn Around Site
       ['F_CODE','AP055','raw:fcode','AP055'], // Tank Trail
       ['F_CODE','AP056','raw:fcode','AP056'], // Tank Crossing
@@ -278,7 +278,7 @@ fcodeCommon = {
       ['F_CODE','BH116','raw:fcode','BH116'], // Aquifer 
       ['F_CODE','BH120','waterway','rapids'], // Rapids 
       ['F_CODE','BH135','landuse','rice_field'], // Rice Field 
-      ['F_CODE','BH140',undefined,undefined], // River - See custom rules
+      ['F_CODE','BH140','waterway','river'], // River - See custom rules
       ['F_CODE','BH145','waterway','vanishing_point'], // Vanishing point 
       ['F_CODE','BH150','raw:fcode','BH150'], // Salt Flat, Salt Pan 
       ['F_CODE','BH155','raw:fcode','BH155'], // Salt Evaporator 

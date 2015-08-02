@@ -596,7 +596,7 @@ tds = {
                 ['AN010', ['an010','railway_c']], // Railway
                 ['AN050', ['an050','railway_sidetrack_c']], // Railway Sidetrack
                 ['AN060', ['an060','railway_yard_s']], // Railway Yard
-                ['AN075', ['an075','railway_turntable_p','railway_turntable_p']], // Railway Yard
+                ['AN075', ['an075','railway_turntable_p','railway_turntable_p']], // Railway Turntable
                 ['AN076', ['an076','roundhouse_s','roundhouse_p']], // Roundhouse
                 ['AP010', ['ap010','cart_track_c']], // Cart Track
                 ['AP020', ['ap020','road_interchange_p']], // Interchange
@@ -640,7 +640,11 @@ tds = {
             {
                 for (var val in fCodeMap[row][1])
                 {
-                    if (llayerName.match(fCodeMap[row][1][val])) attrs.F_CODE = fCodeMap[row][0];
+                    if (llayerName == fCodeMap[row][1][val])
+                    {
+                        attrs.F_CODE = fCodeMap[row][0];
+                        break;
+                    }
                 }
             }
         } // End of Find an FCode
@@ -746,6 +750,7 @@ tds = {
             ["t.pylon =='yes' && t['cable:type'] == 'cableway'"," t.aerialway = 'pylon'"],
             ["t.pylon =='yes' && t['cable:type'] == 'power'"," t.power = 'tower'"],
             ["t.service == 'yard'","t.railway = 'yes'"],
+            ["t.service == 'siding'","t.railway = 'yes'"],
             ["t.social_facility","t.amenity = 'social_facility'; t['social_facility:for'] = t.social_facility; t.social_facility = 'shelter'"],
             ["t['tower:material']","t.material = t['tower:material']; delete t['tower:material']"],
             ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
@@ -1343,7 +1348,7 @@ tds = {
     // This is the main routine to convert _TO_ OSM
     toOsm : function(attrs, layerName)
     {
-        // This is filed by the layerNameFilter function.
+        // This is filtered by the layerNameFilter function.
         //
         // The Nuke Option: Some of the ESRI FGDB have layers named SRC_Xxxxx
         // We don't want these so we drop them
@@ -1354,6 +1359,17 @@ tds = {
         // Debug:
         if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
 
+        // Set up the fcode translation rules. We need this due to clashes between the one2one and
+        // the fcode one2one rules
+        if (tds.fcodeLookup == undefined)
+        {
+            // Add the FCODE rules for Import
+            fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds.rules.fcodeOne2oneIn);
+
+            tds.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
+            // translate.dumpOne2OneLookup(tds.fcodeLookup);
+        }
+
         if (tds.lookup == undefined)
         {
             // Setup lookup tables to make translation easier. I'm assumeing that since this is not set, the 
@@ -1362,11 +1378,6 @@ tds = {
             // Support TDS v30 and other Import Only attributes
             tds.rules.one2one.push.apply(tds.rules.one2one,tds.rules.one2oneIn);
 
-            // Add the FCODE input rules
-            // We add these since they don't conflict with the TDS one2one rules
-            tds.rules.one2one.push.apply(tds.rules.one2one,fcodeCommon.one2one);
-            tds.rules.one2one.push.apply(tds.rules.one2one,tds.rules.fcodeOne2oneIn);
-            
             tds.lookup = translate.createLookup(tds.rules.one2one);
 
             // Build an Object with both the SimpleText & SimpleNum lists
@@ -1380,6 +1391,15 @@ tds = {
 
         // pre processing
         tds.applyToOsmPreProcessing(attrs, layerName);
+
+        // Use the FCODE to add some tags.
+        if (attrs.F_CODE)
+        {
+            var ftag = tds.fcodeLookup['F_CODE'][attrs.F_CODE];
+            tags[ftag[0]] = ftag[1];
+            // Debug: Dump out the tags from the FCODE
+            // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+        }
 
         // one 2 one
         translate.applyOne2One(attrs, tags, tds.lookup, {'k':'v'}, tds.ignoreList);
