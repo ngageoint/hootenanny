@@ -1051,12 +1051,37 @@ return linkRecords;
   	  Connection conn = DbUtils.createConnection();
 
   	  QFolders folders = QFolders.folders;
+  	  QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
   	  Configuration configuration = DbUtils.getConfiguration();
     	  
   	  try {
+  		  SQLQuery query = new SQLQuery(conn, configuration);
+  		  List<Long> parentId = query.from(folders)
+  				  .where(folders.id.eq(_folderId))
+  				  .list(folders.parentId);
+  		  
+  		  Long _parentId = Long.parseLong("0");
+  		  
+  		  try {
+  			  _parentId = parentId.get(0);
+  		  } catch (Exception e){
+  			_parentId = Long.parseLong("0");
+  		  }   		  
+  		    		  
+  		  new SQLUpdateClause(conn,configuration,folders)
+  		  	.where(folders.parentId.eq(_folderId))
+  		  	.set(folders.parentId,_parentId)
+  		  	.execute();
+  		  	
+  		  
   		  new SQLDeleteClause(conn, configuration, folders)
   		  	.where(folders.id.eq(_folderId))
 			.execute();	
+  		  
+  		  new SQLUpdateClause(conn, configuration, folderMapMappings)
+  		  	.where(folderMapMappings.folderId.eq(_folderId))
+  		  	.set(folderMapMappings.folderId,Long.parseLong("0"))
+  		  	.execute();
  	  }
   	  catch (Exception e)
   	  {
