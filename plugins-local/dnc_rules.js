@@ -82,7 +82,7 @@ dnc.rules = {
         'CVL':'raw:CVL', // Depth Curve or Contour Value - Low
         'DEP':'depth', // Depth
         'DOF':'flow_direction', // Direction of FLow
-        'EOL':'raw:EOL', // Elevation of Light
+        'EOL':'seamark:light:height', // Elevation of Light
         'HDH':'hydrographic_drying_height', // Hydrographic Drying Height
         'HDP':'depth:hydrographic', // Hydrographic Depth
         'HSB':'height:above_sea_bottom', // Height above sea bottom
@@ -306,9 +306,9 @@ dnc.rules = {
 
 
         // COD - Certainty of Delineation
-        ['COD','0','raw:COD','unknown'], // Unknown 
-        ['COD','1','raw:COD','limits_and_information_known'], // Limits and Information Known 
-        ['COD','2','raw:COD','limits_and_information_unknown'], // Limits and Information Unknown 
+        ['COD','0','deliniation','information_unknown'], // Unknown
+        ['COD','1','deliniation','known'], // Limits and Information Known
+        ['COD','2','deliniation','unknown'], // Limits and Information Unknown
     
 
         // ELA - Elevation Accuracy Category
