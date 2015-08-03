@@ -56,7 +56,7 @@ fcodeCommon = {
       ['F_CODE','AC010','man_made','blast_furnace'], // Blast-furnace
       ['F_CODE','AC020','man_made','catalytic_cracker'], // Catalytic Cracker
       ['F_CODE','AC030','water','settling_basin'], // Settling Basin/Sludge Pond, Settling Pond
-      ['F_CODE','AC040','raw:fcode','AC040'], // Hydrocarbon Products Facility, Oil/Gas Facilities
+      ['F_CODE','AC040','industrial','refinery'], // Hydrocarbon Products Facility, Oil/Gas Facilities
       ['F_CODE','AC060','man_made','furnace'], // Industrial Furnace
       ['F_CODE','AC507','man_made','wastewater_plant'], // Sewage Treatment Plant
       ['F_CODE','AD010','power','plant'], // Electric Power Station, Power Plant
@@ -64,8 +64,8 @@ fcodeCommon = {
       ['F_CODE','AD025','landuse','solar_farm'], // Solar Farm
       ['F_CODE','AD030','power','substation'], // Power Substation, Substation/Transformer Yard 
       ['F_CODE','AD041','building','nuclear_reactor_containment'], // Nuclear Reactor Containment
-      ['F_CODE','AD050','raw:fcode','AD050'], // Heating Facility 
-      ['F_CODE','AD055','raw:fcode','AD055'], // Cooling Facility 
+      ['F_CODE','AD050','amenity','heating'], // Heating Facility
+      ['F_CODE','AD055','amenity','cooling'], // Cooling Facility
       ['F_CODE','AD060','landuse','wind_farm'], // Wind Farm
       ['F_CODE','AF010','man_made','chimney'], // Chimney/Smokestack 
       ['F_CODE','AF020','man_made','goods_conveyor'], // Conveyor
@@ -140,7 +140,7 @@ fcodeCommon = {
       ['F_CODE','AL140','man_made','particle_accelerator'], // Particle Accelerator
       ['F_CODE','AL142','landuse','observatory'], // Astronomical Observatory
       ['F_CODE','AL155','overhead_obstruction','yes'], // Overhead Obstruction
-      ['F_CODE','AL165','raw:fcode','AL165'], // Pipeline Or Pipe Crossing Point 
+      ['F_CODE','AL165','man_made','pipeline_crossing'], // Pipeline Or Pipe Crossing Point
       ['F_CODE','AL170','landuse','plaza'], // Plaza/City Square, Public Square
       ['F_CODE','AL175','man_made','courtyard'], // Courtyard
       ['F_CODE','AL180','shop','kiosk'], // Retail Stand
@@ -154,7 +154,7 @@ fcodeCommon = {
       ['F_CODE','AL260','barrier','wall'], // Wall 
       ['F_CODE','AL270','landuse','plantation'], // Industrial Farm 
       ['F_CODE','AL351','space_facility','yes'], // Space Facility
-      ['F_CODE','AL371','raw:fcode','AL371'], // Manor House
+      ['F_CODE','AL371','building','manor_house'], // Manor House # Not great
       ['F_CODE','AL375','historic','castle'], // Castle
       ['F_CODE','AL376','historic','castle_complex'], // Castle Complex
       ['F_CODE','AL510','man_made','tethered_balloon'], // Tethered Balloon
@@ -164,9 +164,9 @@ fcodeCommon = {
       ['F_CODE','AM030','man_made','grain_elevator'], // Grain Elevator 
       ['F_CODE','AM040','landuse','mineral_pile'], // Mineral Pile 
       ['F_CODE','AM060','man_made','bunker'], // Surface Bunker 
-      ['F_CODE','AM065','raw:fcode','AM065'], // Munition Storage Facility 
+      ['F_CODE','AM065','amenity','munitions_storage'], // Munition Storage Facility
       ['F_CODE','AM070','man_made','storage_tank'], // Storage Tank 
-      ['F_CODE','AM071','raw:fcode','AM071'], // Tank Farm 
+      ['F_CODE','AM071','landuse','tank_farm'], // Tank Farm
       ['F_CODE','AM075','amenity','fuel_storage'], // Fuel Storage Facility 
       ['F_CODE','AM080','man_made','water_tower'], // Water Tower 
       ['F_CODE','AN010','railway','rail'], // Railway 
@@ -174,11 +174,11 @@ fcodeCommon = {
       ['F_CODE','AN060','service','yard'], // Railway Yard 
       ['F_CODE','AN075','railway','turntable'], // Railway Turntable 
       ['F_CODE','AN076','railway','roundhouse'], // Roundhouse 
-      ['F_CODE','AN085','raw:fcode','AN085'], // Railway Signal 
+      ['F_CODE','AN085','railway','signal'], // Railway Signal
       ['F_CODE','AP010','highway','track'], // Cart Track 
       ['F_CODE','AP020','junction','yes'], // Road Interchange - See RIT
       ['F_CODE','AP030','highway','road'], // Road - See Custom rules
-      ['F_CODE','AP033','raw:fcode','AP033'], // Engineered Turn Around Site
+      ['F_CODE','AP033','highway','turning_circle'], // Engineered Turn Around Site
       ['F_CODE','AP055','highway','tank_trail'], // Tank Trail
       ['F_CODE','AP056','crossing','tank'], // Tank Crossing
       ['F_CODE','AP040','barrier','gate'], // Gate
@@ -197,14 +197,14 @@ fcodeCommon = {
       ['F_CODE','AQ065','tunnel','culvert'], // Culvert 
       ['F_CODE','AQ068','barrier','block'], // Transportation Block 
       ['F_CODE','AQ070','route','ferry'], // Ferry Crossing 
-      ['F_CODE','AQ075','raw:fcode','AQ075'], // Ice Route 
+      ['F_CODE','AQ075','ice_road','yes'], // Ice Route
       ['F_CODE','AQ080','amenity','ferry_terminal'], // Ferry Station, Ferry Site 
       ['F_CODE','AQ090','entrance','yes'], // Entrance and/or exit - Valid NFDD but not in TDS Spec
       ['F_CODE','AQ095','tunnel','mouth'], // Tunnel Mouth 
-      ['F_CODE','AQ110','raw:fcode','AQ110'], // Mooring Mast 
-      ['F_CODE','AQ111','raw:fcode','AQ111'], // Prepared Watercourse Crossing 
+      ['F_CODE','AQ110','seamark:type','mooring'], // Mooring Mast
+      ['F_CODE','AQ111','man_made','watercourse_crossing'], // Prepared Watercourse Crossing
       ['F_CODE','AQ113','man_made','pipeline'], // Pipeline 
-      ['F_CODE','AQ114','raw:fcode','AQ114'], // Storm Drain 
+      ['F_CODE','AQ114','man_made','storm_drain'], // Storm Drain # In TDS, it's a point, not a line, as the entry point
       ['F_CODE','AQ115','man_made','utility_cover'], // Utility Cover
       ['F_CODE','AQ116','man_made','pumping_station'], // Pumping Station 
       ['F_CODE','AQ118','sharp_curve','yes'], // Sharp Curve

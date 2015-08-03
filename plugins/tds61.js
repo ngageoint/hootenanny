@@ -656,7 +656,7 @@ tds61 = {
     applyToOsmPostProcessing : function (attrs, tags, layerName)
     {
         // Roads. TDSv61 are a bit simpler than TDSv30 & TDSv40
-        if (attrs.F_CODE == 'AP030') // Make sure we have a road
+        if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
         {
              // Set a Default: "It is a road but we don't know what it is"
             tags.highway = 'road';
@@ -739,6 +739,7 @@ tds61 = {
             ["t['glacier:type'] == 'icecap' && t.natural == 'glacier'","delete t.natural"],
             ["t.golf == 'driving_range' && !(t.leisure)","t.leisure = 'golf_course'"],
             ["t.historic == 'castle' && !(t.ruins) && !(t.building)","t.building = 'yes'"],
+            ["t.industrial && !(t.landuse)","t.landuse = 'industrial'"],
             ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['material:vertical']","t.material = t['material:vertical']; delete t['material:vertical']"],
@@ -1230,7 +1231,7 @@ tds61 = {
 
         // Custom Road rules
         // - Fix the "highway=" stuff that cant be done in the one2one rules
-        if (attrs.F_CODE == 'AP030')
+        if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
         {
             // If we havent fixed up the road type/class, have a go with the
             // highway tag.
