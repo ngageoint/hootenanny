@@ -726,10 +726,10 @@ tds61 = {
             // Rules format:  ["test expression","output result"];
             // Note: t = tags, a = attrs and attrs can only be on the RHS
             var rulesList = [
-            ["t.navigationaid && !(t.aeroway)","t.aeroway = 'navigationaid';"],
-            ["t.amenity == 'stop' && t['transport:type'] == 'bus'","t.highway = 'bus_stop';"],
-            ["t.boundary == 'protected_area' && !(t.protect_class)","t.protect_class = '4';"],
-            ["t.bunker_type' && !(t.military)","t.military = 'bunker';"],
+            ["t.navigationaid && !(t.aeroway)","t.aeroway = 'navigationaid'"],
+            ["t.amenity == 'stop' && t['transport:type'] == 'bus'","t.highway = 'bus_stop'"],
+            ["t.boundary == 'protected_area' && !(t.protect_class)","t.protect_class = '4'"],
+            ["t.bunker_type && !(t.military)","t.military = 'bunker'"],
             ["t.control_tower == 'yes' && t.use == 'air_traffic_control'","t['tower:type'] = 'observation'"],
             ["t.crossing == 'tank'","t.highway = 'crossing'"],
             ["t.desert_surface","t.surface = t.desert_surface; delete t.desert_surface"],
@@ -737,7 +737,7 @@ tds61 = {
             ["t.drive_in == 'yes'","t.amenity = 'cinema'"],
             ["t['generator:source']","t.power = 'generator'"],
             ["t['glacier:type'] == 'icecap' && t.natural == 'glacier'","delete t.natural"],
-            ["t.golf == 'driving_range' && !(t.leisure)","t.leisure = 'golf_course';"],
+            ["t.golf == 'driving_range' && !(t.leisure)","t.leisure = 'golf_course'"],
             ["t.historic == 'castle' && !(t.ruins) && !(t.building)","t.building = 'yes'"],
             ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
             ["t.leisure == 'stadium'","t.building = 'yes'"],
@@ -1170,6 +1170,7 @@ tds61 = {
         // Inland Water Body (BH082) also covers a lot of features
         if (attrs.IWT && !(attrs.F_CODE)) attrs.F_CODE = 'BH082';
 
+
         // The follwing bit of ugly code is to account for the specs haveing two different attributes
         // with similar names and roughly the same attributes. Bleah!
         // Format is: <FCODE>:[<from>:<to>]
@@ -1384,7 +1385,7 @@ tds61 = {
         // one 2 one
         translate.applyOne2One(attrs, tags, tds61.lookup, {'k':'v'}, tds61.ignoreList);
 
-        
+
         // apply the simple number and text biased rules
         translate.applySimpleNumBiased(attrs, tags, tds61.rules.numBiased, 'forward');
         translate.applySimpleTxtBiased(attrs, tags, tds61.rules.txtBiased, 'forward');
@@ -1394,7 +1395,7 @@ tds61 = {
 
         // post processing
         tds61.applyToOsmPostProcessing(attrs, tags, layerName);
-        
+
         // Debug:
         if (config.getOgrDebugDumptags() == 'true') 
         {

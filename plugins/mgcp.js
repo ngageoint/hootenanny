@@ -739,6 +739,9 @@ mgcp = {
             }
         }
 
+        // The FCODE for Buildings changed...
+        if (attrs.F_CODE == 'AL013') attrs.F_CODE = 'AL015';
+
     }, // End applyToMgcpPreProcessing
 
 
@@ -1042,6 +1045,7 @@ mgcp = {
             mgcp.ignoreList['note:extra'] = '';
             mgcp.ignoreList['hoot:status'] = '';
             mgcp.ignoreList['error:circular'] = '';
+            mgcp.ignoreList['source:ingest:datetime'] = '';
         }
 
         // pre processing
