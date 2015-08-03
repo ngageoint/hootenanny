@@ -86,10 +86,10 @@ utp.rules = {
      'LENG':'length', // Length
      'LENGTH':'length', // Length
      'LENGTH_M':'length', // Length
-     'LINES':'cable_count', // Number of parallel lines
+     'LINES':'cables', // Number of parallel lines
      'LTN':'lanes', // Track or Lane Count
-     'NUMOFLINES':'cable_count', // Number of parallel lines
-     'NPL':'cable_count', // Number of parallel lines
+     'NUMOFLINES':'cables', // Number of parallel lines
+     'NPL':'cables', // Number of parallel lines
      'TRCKLNNUM':'lanes', // Track or Lane Count
      'TRKS_LANES':'lanes', // Track or Lane Count
      'WID':'width', // Width
