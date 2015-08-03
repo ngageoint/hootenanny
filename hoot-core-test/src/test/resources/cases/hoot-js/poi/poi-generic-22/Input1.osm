@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-376469' visible='true' lat='31.5' lon='35.783333'>
+    <tag k='REF1' v='000612' />
+    <tag k='error:circular' v='15' />
+    <tag k='int_name' v='‘Arab Banī Hamīda; Arab Bani Hamida' />
+    <tag k='is_in' v='Jordan, الأردن' />
+    <tag k='name' v='Arab Bani Hamida - عرب بني حميدة' />
+    <tag k='name:ar' v='عرب بني حميدة' />
+    <tag k='name:de' v='Arab Bani Hamida' />
+    <tag k='name:en' v='Arab Bani Hamida' />
+    <tag k='name:fr' v='Arab Bani Hamida' />
+    <tag k='place' v='locality' />
+  </node>
+</osm>
