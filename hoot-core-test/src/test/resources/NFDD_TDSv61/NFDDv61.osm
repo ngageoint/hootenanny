@@ -618,7 +618,7 @@
         <tag k="light:obstacle" v="no"/>
         <tag k="material" v="plant_material"/>
         <tag k="security:resource_owner" v="USA"/>
-        <tag k="shop" v="pet-shop"/>
+        <tag k="shop" v="pet"/>
         <tag k="building:levels" v="2"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="attached" v="yes"/>

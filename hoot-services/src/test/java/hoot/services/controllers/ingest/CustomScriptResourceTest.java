@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -576,11 +576,12 @@ public class CustomScriptResourceTest
   @Category(UnitTest.class)
   public void testGetDefaultList() throws Exception
   {
-
   	// Try to test current DefaultTranslations.json setup and the mechanism.
   	// The value in DefaultTranslations.json should be valid at build time..
 
-  	JSONArray trans = res._getDefaultList();
+  	List<String> configFiles = new ArrayList<String>();
+  	configFiles.add(HootProperties.getProperty("defaultTranslationsConfig"));
+  	JSONArray trans = res._getDefaultList(configFiles);
   	for(Object o : trans)
   	{
   		JSONObject jsTrans = (JSONObject)o;

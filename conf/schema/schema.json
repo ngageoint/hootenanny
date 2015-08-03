@@ -19,7 +19,9 @@
     "import": "railway.json",
     "import": "shop.json",
     "import": "sport.json",
+    "import": "religion.json",
     "import": "transport.json",
+
 
     "###": "",
     "###": "Highway related tags.",

@@ -27,6 +27,7 @@ all: \
 	Hootenanny\ -\ User\ Interface\ Guide.pdf \
 	Hootenanny\ -\ Installation\ Instructions.pdf \
 	Hootenanny\ -\ Developer\ Guide.pdf \
+  Hootenanny\ -\ Algorithms.pdf \
 
 requirements: ICE\ Phase\ II\ -\ Requirements\ Status.pdf  
 
