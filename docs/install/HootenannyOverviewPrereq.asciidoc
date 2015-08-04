@@ -1,7 +1,7 @@
 
 == Hootenanny Installation Instructions
 
-The following document describes how to install Hootenanny on an end user production machine running CentOS/RHEL 6.5. For instructions on how to install in an development machine running Ubuntu 14.04 and create a release package, please refer to the Hootenanny Developer Guide.
+The following document describes how to install Hootenanny on an end user production machine running CentOS/RHEL.
 
 The overarching goal with the Hootenanny installation process is to create a much simpler and automated process (e.g. RPM install) by which installs can be replicated.  Until that goal has been achieved, the following manual installation process must be completed using the specific order and dependencies listed below.  
 
@@ -9,7 +9,10 @@ The overarching goal with the Hootenanny installation process is to create a muc
 
 These installation instructions describe a complete Hootenanny installation process that has been validated in CentOS/RHEL 6.5. Any modifications to the versions and package dependencies listed in this document are not recommended.
 
-The <<fullinstall, Full Install>> section of the document has been written for a clean install of Hootenanny. If a package has already been installed but does not match the expected version, your install will likely be unsupported. In such situations, the behavior of Hootenanny may range from inability to compile, to unexpected or severe runtime results that result in a failed install.  
+The <<fullinstall, Full Install>> section of the document has been written for a clean install of Hootenanny. If a package has already been installed but does not match the expected version, your install will likely be unsupported. In such situations, the behavior of Hootenanny may range from inability to compile, to unexpected or severe runtime results that result in a failed install. 
+
+Alternatively, a more fully automated install script for CentOS/RHEL and is now available at scripts/InstallHootDependencies-CentOS-RHEL-Full-EXPERIMENTAL.sh.  It has been tested on CentOS 6.6 and is meant to be a temporary solution until a Vagrant install can be created for Hootenanny on CentOS/RHEL.  If you want to 
+install both the dependencies and application on CentOS/RHEL at once, you can use scripts/InstallHootDependenciesAndApplication-CentOS-RHEL-EXPERIMENTAL.sh.
 
 == Prerequisites
 

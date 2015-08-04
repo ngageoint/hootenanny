@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-376465' visible='true' lat='31.89149' lon='35.59984'>
+    <tag k='REF2' v='none' />
+    <tag k='alt_name' v='Al Kharsa`ah;Al Kharsa‘ah;El Kherse`e;El Kherse‘e;Khirbat Khursa`a;Khirbat Khursa‘a;Khirbat al Kharsa`ah;Khirbat al Kharsa‘ah;Khirbat el Kharsa&apos;a;Khirbat el Kharsa’a' />
+    <tag k='error:circular' v='1000' />
+    <tag k='name' v='Khirbat al Kharsa‘ah' />
+    <tag k='poi' v='yes' />
+    <tag k='uuid' v='GeoNames.org:248622' />
+  </node>
+</osm>
