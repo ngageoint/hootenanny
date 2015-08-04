@@ -86,6 +86,7 @@ import org.w3c.dom.Element;
 import com.mysema.query.Tuple;
 import com.mysema.query.sql.Configuration;
 import com.mysema.query.sql.SQLQuery;
+import com.mysema.query.sql.SQLSubQuery;
 import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
@@ -306,6 +307,7 @@ public FolderRecords getFolders() throws Exception
 public LinkRecords getLinks() throws Exception
 {
 Connection conn = DbUtils.createConnection();
+Configuration configuration = DbUtils.getConfiguration();	  
 LinkRecords linkRecords = null;
 try
 {
@@ -314,7 +316,27 @@ log.info("Retrieving links list...");
 log.debug("Initializing database connection...");
 
 QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
+QMaps maps = QMaps.maps;
 SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
+
+new SQLDeleteClause(conn, configuration, folderMapMappings)
+	.where(new SQLSubQuery()
+		.from(maps)	
+		.where(folderMapMappings.mapId.eq(maps.id))
+		.notExists())
+	.execute();
+
+/*
+ *  new SQLUpdateClause(conn, configuration, maps)
+			  .where(maps.id.eq(_mapId))
+			  .set(maps.displayName,_modName)
+			  .execute();
+			  
+	DB.update(d).set(d.name, "AAA")
+	.where(DB.subQuery(p)
+	.where(p.departmentId.eq(d.id))
+	.notExists()).execute();
+ */
 
 final List<FolderMapMappings> linkRecordSet = query.from(folderMapMappings).orderBy(folderMapMappings.folderId.asc()).list(folderMapMappings);
 
@@ -1067,7 +1089,7 @@ return linkRecords;
   		  } catch (Exception e){
   			_parentId = Long.parseLong("0");
   		  }   		  
-  		    		  
+  			  
   		  new SQLUpdateClause(conn,configuration,folders)
   		  	.where(folders.parentId.eq(_folderId))
   		  	.set(folders.parentId,_parentId)
@@ -1197,6 +1219,7 @@ return linkRecords;
     public Response updateFolderMapLink(@QueryParam("folderId") final String folderId, @QueryParam("mapId") final String mapId, @QueryParam("updateType") final String updateType) throws Exception
     {
   	  Long _folderId = Long.parseLong(folderId);
+  	  Long _mapId = Long.parseLong(mapId);
   	  Long newId = (long) -1;
   	  NumberExpression<Long> expression = NumberTemplate.create(Long.class, "nextval('folder_map_mappings_id_seq')");
   	  Connection conn = DbUtils.createConnection();
@@ -1206,17 +1229,23 @@ return linkRecords;
   	  SQLQuery query = new SQLQuery(conn, configuration);
   	  QMaps maps = QMaps.maps;
     	  
-  	  long _mapId = 0;
+  	 /* long _mapId = 0;
   	  
   	  try {
   		_mapId = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
   	  }
   	  catch (Exception e){
   		_mapId = 0;
-  	  }
+  	  }*/
   	  
   	  try {
-  		if(updateType.equalsIgnoreCase("new"))
+  		  
+  		  // Delete any existing to avoid duplicate entries
+  		new SQLDeleteClause(conn, configuration, folderMapMappings)
+			.where(folderMapMappings.mapId.eq(Long.parseLong(mapId)))
+			.execute();
+  		  
+  		if(updateType.equalsIgnoreCase("new") || updateType.equalsIgnoreCase("update") )
   		{
 	  		  List<Long> ids = query.from()
 	  				.list(expression);
@@ -1230,18 +1259,13 @@ return linkRecords;
 	  				.values(newId, _mapId,_folderId)
 	  				.execute();
 	  			}
-  		} else if (updateType.equalsIgnoreCase("update")) {
+  		} /*else if (updateType.equalsIgnoreCase("update")) {
   			//find current record for the layer and update with new folder
   			new SQLUpdateClause(conn, configuration, folderMapMappings)
 			  .where(folderMapMappings.mapId.eq(_mapId))
 			  .set(folderMapMappings.folderId,_folderId)
 			  .execute();
-  		} else if (updateType.equalsIgnoreCase("delete")) {
-  			//find current record for the layer and delete
-  			new SQLDeleteClause(conn, configuration, folderMapMappings)
-  				.where(folderMapMappings.mapId.eq(Long.parseLong(mapId)))
-  				.execute();
-  		}
+  		} */
  	  }
   	  catch (Exception e)
   	  {
