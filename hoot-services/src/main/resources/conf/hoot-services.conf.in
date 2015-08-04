@@ -245,6 +245,9 @@ P2PServerScript=P2PServer.js
 # default setting for overwriting existing review data
 reviewPrepareOverwriteExistingDataDefault=false
 
+# review item lock time in millisec
+reviewLockTime=300000
+
 # review stats
 
 # default lowest review score threshold the stats calculator will recognize when looking at
