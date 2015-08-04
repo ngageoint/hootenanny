@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OGRWRITER_H
@@ -145,7 +145,7 @@ protected:
   shared_ptr<const Schema> _schema;
   StrictChecking _strictChecking;
   static const unsigned long _maxCacheElementsPerTypeDefault = 20000;
-  unsigned long _currElementCacheCapacity;
+  long _currElementCacheCapacity;
   ElementCachePtr _elementCache;
   OGRSpatialReference _wgs84;
 

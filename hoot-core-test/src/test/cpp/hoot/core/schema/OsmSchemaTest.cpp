@@ -223,6 +223,7 @@ public:
 
     OsmSchema uut;
 //    JsonSchemaLoader::load(uut, hootHome + "/conf/schema.json");
+//    JsonSchemaLoader::load(uut, hootHome + "/conf/schema/schema.json");
     JsonSchemaLoader::load(uut, ConfPath::search("schema.json"));
 
     QFile fp("tmp/schema.dot");

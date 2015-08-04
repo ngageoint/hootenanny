@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <hoot/core/HootConfig.h>
@@ -478,7 +478,19 @@ public:
 
   QString getKey(const QString& kvp) const
   {
-    return kvp.split("=")[0];
+    // this is faster than using split and it gets called a lot.
+    QString result;
+    int index = kvp.indexOf('=');
+    if (index == -1)
+    {
+      result = kvp;
+    }
+    else
+    {
+      result = kvp.left(index);
+    }
+
+    return result;
   }
 
   vector<TagVertex> getTagByCategory(OsmSchemaCategory c)
@@ -892,13 +904,14 @@ private:
 
   QString _normalizeEnumeratedKvp(const QString& kvp)
   {
+    static QString equalStar = "=*";
     if (_kvp2Vertex.contains(kvp))
     {
       return kvp;
     }
     else
     {
-      QString newKvp = getKey(kvp) + "=*";
+      QString newKvp = getKey(kvp) + equalStar;
       if (_kvp2Vertex.contains(newKvp))
       {
         return newKvp;
@@ -1443,6 +1456,7 @@ void OsmSchema::loadDefault()
 
 double OsmSchema::score(const QString& kvp1, const QString& kvp2)
 {
+  // I tried using a LruCache here to speed up scoring, but it had a negative impact. :(
   return std::max(d->score(kvp1, kvp2), d->score(kvp2, kvp1));
 }
 

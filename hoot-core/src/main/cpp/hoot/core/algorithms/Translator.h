@@ -22,18 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TRANSLATOR_H
 #define TRANSLATOR_H
 
 // Qt
+#include <QRegExp>
 #include <QSet>
 #include <QString>
 
 // ICU
 #include <unicode/translit.h>
+
+// Tgs
+#include <tgs/LruCache.h>
 
 namespace hoot
 {
@@ -84,11 +88,13 @@ public:
 private:
   char* _buffer;
   int _bufferLength;
+  Tgs::LruCache<QString, QString> _cache;
   static Translator* _theInstance;
   JsonDictionary* _dictionary;
   QSet<QString> _streetTypes;
   Transliterator* _transliterator;
   Transliterator* _titler;
+  QRegExp _whiteSpace;
 
   QString _transform(icu::Transliterator* t, const QString& input);
 };

@@ -173,6 +173,9 @@ JobQueryInterval=3000
 # Default translations config file
 defaultTranslationsConfig=$(homeFolder)/conf/DefaultTranslations.json
 
+# Default FOUO translations config file
+defaultFOUOTranslationsConfig=$(homeFolder)/translations-local/DefaultTranslationsFOUO.json
+
 # Main document name
 documentName=Hootenanny - User Interface Guide.pdf
 
@@ -244,6 +247,9 @@ P2PServerScript=P2PServer.js
 
 # default setting for overwriting existing review data
 reviewPrepareOverwriteExistingDataDefault=false
+# If true, temp UUID database records will be cleaned up after review records are prepared.  Since
+# this sometimes causes problems with some datasets, making it optional as a temporary solution.
+reviewPrepareCleanup=true
 
 # review item lock time in millisec
 reviewLockTime=300000

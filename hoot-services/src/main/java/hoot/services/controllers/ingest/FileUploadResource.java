@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -101,6 +101,9 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 	 * 	<INPUT_NAME>
 	 * 	optional input name which is used in hoot db. Defaults to the file name.
 	 * 	</INPUT_NAME>
+	 * <USER_EMAIL>
+	 * Email address of the user requesting job
+	 * </USER_EMAIL>
 	 * </PARAMETERS>
 	 * <OUTPUT>
 	 * Array of job status
@@ -126,6 +129,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 	public Response processUpload2( @QueryParam("TRANSLATION") final String translation,
 			@QueryParam("INPUT_TYPE") final String inputType,
 			@QueryParam("INPUT_NAME") final String inputName,
+			@QueryParam("USER_EMAIL") final String userEmail,
 			@Context HttpServletRequest request)
 	{
 		String etlName = inputName;
@@ -214,7 +218,9 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			JSONArray jobArgs = _createNativeRequest(reqList, zipCnt, shpZipCnt,
 					fgdbZipCnt, osmZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 					zipList, translation, jobId, 
-					etlName, inputsList);
+					etlName, inputsList, userEmail);
+			
+			//userEmail
 
 			log.debug("Posting Job Request for Job :" + batchJobId+ " With Args: " + jobArgs.toJSONString());
 			postChainJobRquest( batchJobId,  jobArgs.toJSONString());
@@ -243,7 +249,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			final int fgdbZipCnt, final int osmZipCnt, final int geonamesZipCnt, final int shpCnt, final int fgdbCnt, 
 			final int osmCnt, final int geonamesCnt,
 			final List<String> zipList, final String translation, final String jobId, 
-			final String etlName, final List<String> inputsList) throws Exception
+			final String etlName, final List<String> inputsList, final String userEmail) throws Exception
 	{
 		JSONArray jobArgs = new JSONArray();
 		String curInputType = null;
@@ -342,6 +348,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 		param.put("INPUT_PATH", "upload/" + jobId);			
 		param.put("INPUT", inputs );
 		param.put("INPUT_NAME", etlName);
+		param.put("USER_EMAIL", userEmail);
 		
 		
 		JSONArray commandArgs = parseParams(param.toJSONString());
@@ -353,6 +360,12 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 		JSONArray rasterTilesArgs = new JSONArray();
 		JSONObject rasterTilesparam = new JSONObject();
 		rasterTilesparam.put("value", etlName);
+		rasterTilesparam.put("paramtype", String.class.getName());
+		rasterTilesparam.put("isprimitivetype", "false");
+		rasterTilesArgs.add(rasterTilesparam);
+
+		rasterTilesparam = new JSONObject();
+		rasterTilesparam.put("value", userEmail);
 		rasterTilesparam.put("paramtype", String.class.getName());
 		rasterTilesparam.put("isprimitivetype", "false");
 		rasterTilesArgs.add(rasterTilesparam);

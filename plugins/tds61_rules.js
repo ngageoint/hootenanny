@@ -1394,7 +1394,7 @@ tds61.rules = {
      ['FFN','475','amenity','marketplace'], // Market
      ['FFN','476','shop','grocery'], // Grocery
      ['FFN','477','amenity','pharmacy'], // Pharmacy
-     ['FFN','478','shop','pet-shop'], // Pet-shop
+     ['FFN','478','shop','pet'], // Pet-shop
      ['FFN','480','use','transportation'], // Transport
      ['FFN','481','use','terminal'], // Terminal
      ['FFN','482','public_transport','station'], // Station
@@ -1556,7 +1556,7 @@ tds61.rules = {
      ['FFN','882','social_facility','homeless'], // Homeless Shelter
      ['FFN','883','social_facility','refugee'], // Refugee Shelter
      ['FFN','884','social_facility','youth_emergency'], // Emergency Youth Shelter
-     ['FFN','885','amenity','day_care'], // Day Care
+     ['FFN','885','amenity','child_care'], // Day Care
      ['FFN','887','use','social_work'], // Social Work
      ['FFN','888','use','emergency_relief_services'], // Emergency Relief Services
      ['FFN','890','amenity','arts_centre'], // Cultural, Arts and Entertainment
@@ -1586,9 +1586,9 @@ tds61.rules = {
      ['FFN','955','leisure','yacht_club'], // Yacht-club
      ['FFN','961','shop','laundry'], // Laundry
      ['FFN','962','shop','beauty_treatment'], // Beauty Treatment
-     ['FFN','963','shop','funeral_services'], // Funeral Services
-     ['FFN','964','amenity','cremation'], // Cremation
-     ['FFN','965','amenity','mortuary_services'], // Mortuary Services
+     ['FFN','963','shop','funeral_directors'], // Funeral Services
+     ['FFN','964','amenity','crematorium'], // Cremation
+     ['FFN','965','amenity','mortuary'], // Mortuary Services
      ['FFN','966','amenity','adult_entertainment'], // Adult Entertainment
      ['FFN','967','amenity','storage_of_human_remains'], // Storage of Human Remains
      ['FFN','970','use','meeting_place'], // Meeting Place
@@ -4391,7 +4391,8 @@ tds61.rules = {
      [undefined,undefined,'building','industrial'], // Industrial
      [undefined,undefined,'man_made','works'], // Works
      ['FFN','2','building','farm'], // Agriculture
-     ['FFN','850','building','school'], 
+     ['FFN','850','amenity','kindergarten'], // Education
+     ['FFN','850','building','school'],
      ['FFN','855','building','university'], 
      ['FFN','572','amenity','cafe'], // Restaurant
      ['FFN','572','building','restaurant'], // Restaurant
@@ -4459,7 +4460,7 @@ tds61.rules = {
      ['FFN','923','sport','10pin'], // Hobbies and/or Leisure Activities
      ['FFN','909','amenity','casino'], // Gambling
      ['FFN','912','leisure','sports_complex'], // Sports Centre
-     ['FFN','970','amenity','town_hall'], // Meeting Place
+     ['FFN','970','amenity','townhall'], // Meeting Place
      [undefined,undefined,'historic','yes'], // Not a good translation, push to o2s
 
      // ### From OSM - This list could never end.....
@@ -4475,6 +4476,24 @@ tds61.rules = {
    ], // End one2oneOut
 
     // ##### End of One2One Rules #####
+
+    // ##### Start of shopList #####
+    // This list is taken from the top 100 values for "shop" on taginfo with the values in the one2one rules removed
+    // http://taginfo.openstreetmap.org/api/4/key/values?key=shop&filter=all&lang=en&sortname=count&sortorder=desc&page=1&rp=100&qtype=value&format=json_pretty
+    shopList : [
+        "alcohol", "antiques", "art", "baby_goods", "bag", "bakery", "bathroom_furnishing", "beauty", "bed",
+        "beverages", "bicycle", "bookmaker", "books", "boutique", "butcher", "car", "car_parts", "carpet",
+        "charity", "chemist", "clothes", "computer", "confectionery", "copyshop", "cosmetics", "craft",
+        "curtain", "deli", "department_store", "doityourself", "dry_cleaning", "electronics", "energy", "erotic",
+        "estate_agent", "fabric", "farm", "fashion", "fishmonger", "florist", "food", "frame", "funeral_directors",
+        "furniture", "garden_centre", "general", "gift", "greengrocer", "hairdresser", "hardware", "hearing_aids",
+        "hifi", "houseware", "ice_cream", "interior_decoration", "jewelry", "kiosk", "kitchen", "locksmith",
+        "lottery", "mall", "massage", "medical_supply", "mobile_phone", "motorcycle", "music", "musical_instrument",
+        "newsagent", "no", "optician", "organic", "outdoor", "paint", "pawnbroker", "seafood", "second_hand",
+        "shoes", "sports", "stationery", "supermarket", "tailor", "tattoo", "tea", "ticket", "tobacco", "toys",
+        "trade", "tyres", "vacant", "variety_store", "video", "video_games", "wine"
+    ],
+    // ##### End of shopList #####
 
     // ##### Start of Thematic Group Rules #####
     thematicGroupList : {

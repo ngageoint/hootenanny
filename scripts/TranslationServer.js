@@ -104,7 +104,9 @@ if(cluster.isMaster){
 				getTaginfoKeyFields(request, response);
 			} else if(subPath == '/taginfo/keys/all') {
 				getTaginfoKeys(request, response);
-			} else {
+			} else if(subPath == '/schema') {
+				getFilteredSchema(request, response);
+			}else {
 				response.writeHead(404, {"Content-Type": "text/plain", 'Access-Control-Allow-Origin' : '*'});
 				response.write("404 Not Found\n");
 				response.end();
@@ -390,6 +392,127 @@ var postHandler = function(data, response, translatorMap)
     response.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
 	response.end(JSON.stringify(result));
 }
+
+var getFilteredSchema = function(request, response) {
+	if(request.method === "POST"){
+		response.writeHead(404, {"Content-Type": "text/plain", 'Access-Control-Allow-Origin' : '*'});
+		response.write("Post not supported\n");
+		response.end();
+	} else if(request.method === "GET"){
+		var  url_parts = url.parse(request.url,true);
+		var params = url_parts.query;
+
+		// get query params
+		var geomType = params.geometry;
+		var searchStr = params.searchstr;
+		var translation = params.translation;
+		var maxLevDistance = 1*params.maxlevdst;
+		var limitResult = 1*params.limit;
+
+
+		var schema = schemaMap['TDSv61'].getDbSchema();
+		if(translation){
+			var schModule = schemaMap[translation];
+			if(schModule){
+				schema = schModule.getDbSchema();
+			}
+		}
+
+		var levDistList = [];
+		for(var ii=0; ii<schema.length; ii++){
+			var elem = schema[ii];
+			if(geomType === elem.geom.toLowerCase()){
+				var targetStr = elem.desc;
+				var levDist = 1*getLevenshteinDistance(searchStr, targetStr);
+
+				if(levDist <= maxLevDistance) {
+					var scoredElem = {};
+					scoredElem['levdist'] = levDist;
+					scoredElem['name'] = elem.name;
+					scoredElem['fcode'] = elem.fcode;
+					scoredElem['desc'] = elem.desc;
+					scoredElem['geom'] = elem.geom;
+					levDistList.push(scoredElem);
+				}
+
+				var targetFCode = elem.fcode;
+				levDist = 1*getLevenshteinDistance(searchStr, targetFCode);
+
+				if(levDist <= maxLevDistance) {
+					var scoredElem = {};
+					scoredElem['levdist'] = levDist;
+					scoredElem['name'] = elem.name;
+					scoredElem['fcode'] = elem.fcode;
+					scoredElem['desc'] = elem.desc;
+					scoredElem['geom'] = elem.geom;
+					levDistList.push(scoredElem);
+				}
+			}	
+		}
+
+		var sorted = levDistList.sort(function(a,b){
+			return (1*a.levdist) - (1*b.levdist);
+		});
+		
+		var nRes = sorted.length;
+		if(nRes > limitResult) {
+			nRes = limitResult;
+		}
+		var result = [];
+		for(var n=0; n<nRes; n++) {
+			result.push(sorted[n]);
+		}
+		response.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
+		response.end(JSON.stringify(result));
+	}
+}
+
+//https://en.wikipedia.org/wiki/Levenshtein_distance#cite_note-5
+//http://www.codeproject.com/Articles/13525/Fast-memory-efficient-Levenshtein-algorithm
+var getLevenshteinDistance = function(s, t) {
+	if(s === t){
+		return 0;
+	}
+
+	if(s.length === 0) {
+		return t.length;
+	}
+
+	if(t.length === 0) {
+		return s.length;
+	}
+
+	var v0 = [];
+	var v1 = [];
+
+	var v0Len = t.length + 1;
+
+	for(var i=0; i<v0Len; i++) {
+		v0[i] = i;
+	}
+
+	for(var i=0; i<s.length; i++) {
+		v1[0] = i + 1;
+
+		for(var j=0; j<t.length; j++) {
+			var cost = 1;
+			if(s.charAt(j) === t.charAt(j)) {
+				cost = 0;
+			}
+
+			v1[j+1] = Math.min(Math.min(v1[j] + 1, v0[j + 1] + 1), v0[j] + cost);
+		}
+
+		for(var j=0; j<v0.length; j++) {
+			v0[j] = v1[j];
+		}
+	}
+
+	return v1[t.length];
+
+}
+
+
 
 
 

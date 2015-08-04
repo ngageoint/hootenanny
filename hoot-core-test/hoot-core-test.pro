@@ -160,7 +160,10 @@ SOURCES += \
     src/test/cpp/hoot/core/conflate/point/CustomPoiMatchCreatorTest.cpp \
     src/test/cpp/hoot/core/conflate/ConflateStatsHelperTest.cpp \
     src/test/cpp/hoot/core/visitors/MatchCandidateCountVisitorTest.cpp \
-    src/test/cpp/hoot/core/visitors/KeepTagsVisitorTest.cpp
+    src/test/cpp/hoot/core/visitors/KeepTagsVisitorTest.cpp \
+    src/test/cpp/hoot/core/conflate/CookieCutterTest.cpp \
+    src/test/cpp/hoot/core/conflate/AlphaShapeGeneratorTest.cpp \
+    src/test/cpp/hoot/core/ops/CookieCutterOpTest.cpp
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \

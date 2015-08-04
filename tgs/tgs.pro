@@ -143,7 +143,8 @@ HEADERS += src/main/cpp/tgs/HashMap.h \
     src/main/cpp/tgs/System/DisableCout.h \
     src/main/cpp/tgs/System/Timer.h \
     src/main/cpp/tgs/BigContainers/BigMapHybrid.h \
-    src/main/cpp/tgs/System/DisableCerr.h
+    src/main/cpp/tgs/System/DisableCerr.h \
+    src/main/cpp/tgs/LruCache.h
 
 win32:HEADERS += src/main/cpp/tgs/RStarTree/FilePageStore.h \
     src/main/cpp/tgs/SpinImage/GroundPlaneRemover.h \
@@ -251,6 +252,7 @@ cppunit:SOURCES += \
     src/test/cpp/tgs/Io/StdIoDeviceTest.cpp \
     src/test/cpp/tgs/BigContainers/BigMapTest.cpp \
     src/test/cpp/tgs/BigContainers/BasicBloomFilterTest.cpp \
+    src/test/cpp/tgs/LruCacheTest.cpp
 
 win32:SOURCES += src/main/cpp/tgs/RStarTree/FilePageStore.cpp \
     src/main/cpp/tgs/SpinImage/GroundPlaneRemover.cpp \

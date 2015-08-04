@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-292922' visible='true' lat='31.783333' lon='35.833333'>
+    <tag k='REF1' v='000263' />
+    <tag k='error:circular' v='15' />
+    <tag k='historic' v='ruins' />
+    <tag k='hoot:mismatch' v='1' />
+    <tag k='hoot:wrong' v='1' />
+    <tag k='int_name' v='Khirbat Māsūḩ; Khirbat Masuh' />
+    <tag k='is_in' v='Jordan, الأردن' />
+    <tag k='name' v='خربة ماسوح' />
+    <tag k='name:ar' v='خربة ماسوح' />
+    <tag k='name:de' v='Khirbat Masuh' />
+    <tag k='name:en' v='Khirbat Masuh' />
+    <tag k='name:fr' v='Khirbat Masuh' />
+    <tag k='place' v='locality' />
+    <tag k='uuid' v='{501aee30-3fac-558b-8985-8c78bdcd7464}' />
+  </node>
+</osm>

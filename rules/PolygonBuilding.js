@@ -6,7 +6,6 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("building.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("building.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("building.review.threshold"));
-exports.searchRadius = parseFloat(hoot.get("search.radius.building"));
 
 /**
  * Runs before match creation occurs and provides an opportunity to perform custom initialization.

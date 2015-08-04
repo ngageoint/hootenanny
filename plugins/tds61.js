@@ -791,6 +791,12 @@ tds61 = {
             {
                 tags.building = 'industrial';
             }
+            // Sort out shops
+            else if (tds61.rules.shopList.indexOf(tags.use) > -1)
+            {
+                tags.shop = tags.use;
+                delete tags.use;
+            }
       /*
             else if (tags.use in facilityList)
             {
@@ -798,7 +804,7 @@ tds61 = {
                 // delete tags.use;
             }
        */
-        }
+        } // End building & use tags
 
         // A facility is an area. Therefore "use" becomes "amenity". "Building" becomes "landuse"
         if (tags.facility && tags.use)

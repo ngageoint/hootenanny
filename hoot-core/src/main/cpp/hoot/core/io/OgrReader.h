@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __OGR_READER_H__
@@ -62,6 +62,8 @@ class OgrReaderInternal;
 class OgrReader : public PartialOsmMapReader
 {
 public:
+
+  static string className() { return "hoot::OgrReader"; }
 
   /**
    * Returns true if this appears to be a reasonable path without actually attempting to open the
