@@ -45,18 +45,15 @@ tds61.rules = {
      ['F_CODE','AK120','leisure','playground'], // Park
      ['F_CODE','AK120','landuse','recreation_ground'], // Park
      ['F_CODE','AK120','leisure','common'], // Park - close but not great
-     ['F_CODE','AL013','building','yes'], // To fix amenity, shop etc
      ['F_CODE','AL020','landuse','residential'], // From OSM - Map to BUA
      ['F_CODE','AL020','landuse','industrial'], // From OSM - Map to BUA
      ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
-     ['F_CODE','AL105','tourism','caravan_site'], // From OSM data, not a building so...
      ['F_CODE','AL130','historic','memorial'], // From OSM data, not great
      ['F_CODE','AL200','historic','ruins'], // Ruins
      ['F_CODE','AL241','tower','communication'], 
      ['F_CODE','AL241','tower','yes'], // OSM
-     ['F_CODE','AL241','man_made','mast'], // OSM
      ['F_CODE','AM080','tower:type','water'], // 
-     ['F_CODE','AN060','railway','yes'], // Rail yards
+//      ['F_CODE','AN060','railway','yes'], // Rail yards
      ['F_CODE','AP030','highway','motorway'], // Limited Access Motorway
      ['F_CODE','AP030','highway','motorway_link'], // Limited Access Motorway
      ['F_CODE','AP030','highway','trunk'], // Motorway
@@ -70,7 +67,6 @@ tds61.rules = {
      ['F_CODE','AP030','highway','residential'], 
      ['F_CODE','AP030','highway','unclassified'], 
      ['F_CODE','AP030','highway','service'], 
-     ['F_CODE','AP030','highway','road'], 
      ['F_CODE','AP030','highway','yes'], // Just in case...
      ['F_CODE','AP040','railway','level_crossing'], // Level Crossing - See custom rules
      ['F_CODE','AP040','railway','crossing'], // Pedestrian Crossing - See custom rules

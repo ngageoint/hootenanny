@@ -445,7 +445,7 @@ tds61 = {
         return newAttrs;
     }, // End twoFeatures
 
-
+// #####################################################################################################
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName) 
     {
@@ -653,6 +653,8 @@ tds61 = {
 
     }, // End of applyToOsmPreProcessing
 
+
+// #####################################################################################################
     applyToOsmPostProcessing : function (attrs, tags, layerName)
     {
         // Roads. TDSv61 are a bit simpler than TDSv30 & TDSv40
@@ -749,8 +751,8 @@ tds61 = {
             ["t.protect_class && !(t.boundary)","t.boundary = 'protected_area'"],
             ["t.pylon =='yes' && t['cable:type'] == 'cableway'"," t.aerialway = 'pylon'"],
             ["t.pylon =='yes' && t['cable:type'] == 'power'"," t.power = 'tower'"],
-            ["t.service == 'yard'","t.railway = 'yes'"],
-            ["t.service == 'siding'","t.railway = 'yes'"],
+            ["t.sidetrack && !(t.railway)","t.railway = 'rail'"],
+            ["t.sidetrack && !(t.service)","t.service = 'siding'"],
             ["t.social_facility","t.amenity = 'social_facility'; t['social_facility:for'] = t.social_facility; t.social_facility = 'shelter'"],
             ["t['theatre:type'] && !(t.amenity)","t.amenity = 'theatre'"],
             ["t['tower:material']","t.material = t['tower:material']; delete t['tower:material']"],
@@ -853,6 +855,8 @@ tds61 = {
   
     // ##### End of the xxToOsmxx Block #####
 
+// #####################################################################################################
+
     // ##### Start of the xxToNfddxx Block #####
 
     applyToNfddPreProcessing: function(tags, attrs, geometryType)
@@ -889,7 +893,7 @@ tds61 = {
             ["t.control_tower && t.man_made == 'tower'","delete t.man_made"],
             ["t.crossing == 'tank' && t.highway == 'crossing'","delete t.highway"],
             ["t.dock && t.waterway == 'dock'","delete t.waterway"],
-            ["t.golf = 'driving_range' && t.leisure == 'golf_course'","delete t.leisure"],
+            ["t.golf == 'driving_range' && t.leisure == 'golf_course'","delete t.leisure"],
             ["t.highway == 'bus_stop'","t['transport:type'] = 'bus'"],
             ["t.highway == 'crossing'","t['transport:type'] = 'road';a.F_CODE = 'AQ062'; delete t.highway"],
             ["t.highway == 'mini_roundabout'","t.junction = 'roundabout'"],
@@ -1089,6 +1093,16 @@ tds61 = {
         // If we have a point, we need to make sure that it becomes a bridge, not a road.
         if (tags.bridge && geometryType =='Point') attrs.F_CODE = 'AQ040';
 
+
+        // Railway sidetracks
+        if (tags.service == 'siding' || tags.service == 'spur' || tags.service == 'passing' || tags.service == 'crossover')
+        {
+            tags.sidetrack = 'yes';
+            if (tags.railway) delete tags.railway;
+
+        }
+
+
         // Now use the lookup table to find an FCODE. This is here to stop clashes with the 
         // standard one2one rules
         if (!(attrs.F_CODE) && tds61.fcodeLookup)
@@ -1162,6 +1176,8 @@ tds61 = {
 
 
     }, // End applyToNfddPreProcessing
+
+// #####################################################################################################
 
     applyToNfddPostProcessing : function (tags, attrs, geometryType)
     {
@@ -1323,6 +1339,8 @@ tds61 = {
 
     }, // End applyToNfddPostProcessing
 
+// #####################################################################################################
+
     // ##### End of the xxToNfddxx Block #####
 
     // toOsm - Translate Attrs to Tags
@@ -1332,7 +1350,11 @@ tds61 = {
         tags = {};  // The final output Tag list
 
         // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        if (config.getOgrDebugDumpattrs() == 'true')
+        {
+            print('In Layername: ' + layerName);
+            for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        }
 
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
         // the fcode one2one rules
@@ -1361,6 +1383,7 @@ tds61 = {
             // Add features to ignore
             tds61.ignoreList.F_CODE = '';
             tds61.ignoreList.FCSUBTYPE = '';
+            tds61.ignoreList.SHAPE_LENGTH = '';
             tds61.ignoreList.UFI = '';
         }
 
@@ -1426,7 +1449,11 @@ tds61 = {
                 
         // Start processing here
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
+            for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
+        }
 
         // The Nuke Option: If we have a relation, drop the feature and carry on
         if (tags['building:part']) return null;

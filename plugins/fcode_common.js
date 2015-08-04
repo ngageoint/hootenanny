@@ -170,7 +170,7 @@ fcodeCommon = {
       ['F_CODE','AM075','amenity','fuel_storage'], // Fuel Storage Facility 
       ['F_CODE','AM080','man_made','water_tower'], // Water Tower 
       ['F_CODE','AN010','railway','rail'], // Railway 
-      ['F_CODE','AN050','service','siding'], // Railway Sidetrack
+      ['F_CODE','AN050','sidetrack','yes'], // Railway Sidetrack
       ['F_CODE','AN060','service','yard'], // Railway Yard 
       ['F_CODE','AN075','railway','turntable'], // Railway Turntable 
       ['F_CODE','AN076','railway','roundhouse'], // Roundhouse 
@@ -286,7 +286,7 @@ fcodeCommon = {
       ['F_CODE','BH165','waterway','spillway'], // Spillway 
       ['F_CODE','BH170','natural','spring'], // Natural Pool, Spring/Water Hole 
       ['F_CODE','BH180','waterway','waterfall'], // Waterfall 
-      ['F_CODE','BH220','man_made','waterworks'], // Waterwork
+      ['F_CODE','BH220','man_made','water_works'], // Waterwork
       ['F_CODE','BH230','man_made','water_well'], // Water Well
       ['F_CODE','BI005','waterway','boat_lift'], // Vessel Lift
       ['F_CODE','BI006','man_made','ship_elevator'], // Ship Elevator

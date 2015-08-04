@@ -51,7 +51,7 @@ mgcp.rules = {
         ['F_CODE','AC000','facility','yes'], // Processing Facility - NFDD AN010
         ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
         ['F_CODE','AJ010','farm:irrigation','centre_pivot'], // Circular Irrigation System - FCODE Retired
-        ['F_CODE','AK190','man_made','recreation_pier'], // Recreational Pier - NFDD BB081
+        ['F_CODE','AK190','man_made','recreational_pier'], // Recreational Pier - NFDD BB081
         ['F_CODE','AL015',undefined,undefined], // General Building - NFDD AL013 - to stop warnings
         ['F_CODE','AL210','route:protection','yes'], // Protection Shed - NFDD AL211
         ['F_CODE','AT030','power','line'], // Power Line - NFDD AT005
