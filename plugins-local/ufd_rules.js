@@ -41,7 +41,7 @@ ufd.rules = {
         ['F_CODE','AC000','facility','yes'], // Processing/Treatment Plant - NFDD AL010
         ['F_CODE','AE010','facility','yes'], // Assembly Plant - NFDD AL010
         ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
-        ['F_CODE','AK190','man_made','recreation_pier'], // Fishing Pier/Promenade Pier - NFDD BB081
+        ['F_CODE','AK190','man_made','recreational_pier'], // Fishing Pier/Promenade Pier - NFDD BB081
         ['F_CODE','AL015',undefined,undefined], // Building - NFDD AL013 - To Stop Warnings
         ['F_CODE','AL045','facility','yes'], // Complex Outline - No FCODE, moving to AL010 Facility
         ['F_CODE','AL100','building','hut'], // Hut - NFDD AL099
@@ -141,11 +141,11 @@ ufd.rules = {
         'LTN':'lanes', // Track or Lane Count
         'MVC':'max_clearance', // Maximum Vertical Clearance
         'MWG':'divider:width', // Median Width with greater than 1 meter resolution
-        'NPL':'cable_count', // Number of Parallel Lines
+        'NPL':'cables', // Number of Parallel Lines
         'OHB':'height', // Overall Height of Bridge
         'OHC':'max_clearance', // Overhead Clearance Category
         'PFG':'height:predominant', // Predominant Feature Height
-        'PHT':'raw:PHT', // Predominant Height
+        'PHT':'height', // Predominant Height
         'SCALE':'source:scale', // Feature Scale (e.g., 50000, 100000)
         'SDO':'raw:SDO', // Sand Dune Orientation
         'SGC':'raw:SGC', // Gradient/Slope
@@ -973,20 +973,20 @@ ufd.rules = {
         ['MST','999','missile','other'], // Other 
 
         // NST - Navigation System Types 
-        // ['NST','0','navigation_aid','unknown'], // Unknown
+        // ['NST','0','navigationaid','unknown'], // Unknown
         ['NST','0',undefined,undefined], // Unknown 
-        ['NST','2','navigation_aid','consol'], // CONSOL
-        ['NST','3','navigation_aid','decca'], // DECCA
-        ['NST','7','navigation_aid','long_range_air_navigation_system'], // Long Range Air Navigation System (LORAN)
-        ['NST','8','navigation_aid','omega'], // OMEGA
-        ['NST','11','navigation_aid','radar'], // Radar
-        ['NST','12','navigation_aid','radio'], // Radio
-        ['NST','13','navigation_aid','radio_telephone'], // Radio Telephone
-        ['NST','15','navigation_aid','television'], // TV
-        ['NST','16','navigation_aid','microwave'], // Microwave
-        ['NST','33','navigation_aid','radio_telegraph'], // Radio Telegraph
-        ['NST','997','navigation_aid','unpopulated'], // Unpopulated
-        ['NST','999','navigation_aid','other'], // Other
+        ['NST','2','navigationaid','consol'], // CONSOL
+        ['NST','3','navigationaid','decca'], // DECCA
+        ['NST','7','navigationaid','loran'], // Long Range Air Navigation System (LORAN)
+        ['NST','8','navigationaid','omega'], // OMEGA
+        ['NST','11','navigationaid','radar'], // Radar
+        ['NST','12','navigationaid','radio'], // Radio
+        ['NST','13','navigationaid','radio_telephone'], // Radio Telephone
+        ['NST','15','navigationaid','television'], // TV
+        ['NST','16','navigationaid','microwave'], // Microwave
+        ['NST','33','navigationaid','radio_telegraph'], // Radio Telegraph
+        ['NST','997','navigationaid','unpopulated'], // Unpopulated
+        ['NST','999','navigationaid','other'], // Other
 
         // OCC - Overhead Clearance Category Code 
         // ['OCC','0','raw:OCC','unknown'], // Unknown 

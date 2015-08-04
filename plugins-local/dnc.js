@@ -131,16 +131,22 @@ dnc = {
         // Debug:
         if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
 
+        // Set up the fcode translation rules. We need this due to clashes between the one2one and
+        // the fcode one2one rules
+        if (dnc.fcodeLookup == undefined)
+        {
+            // Add the FCODE rules for Import
+            fcodeCommon.one2one.push.apply(fcodeCommon.one2one,dnc.rules.fcodeOne2oneIn);
+
+            dnc.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
+            // translate.dumpOne2OneLookup(dnc.fcodeLookup);
+        }
+
         if (dnc.lookup == undefined)
         {
             // Setup lookup tables to make translation easier. I'm assumeing that since this is not set, the 
             // other tables are not set either.
 
-            // Add the FCODE input rules
-            // We add these since they don't conflict with the TDS one2one rules
-            dnc.rules.one2one.push.apply(dnc.rules.one2one,fcodeCommon.one2one);
-            dnc.rules.one2one.push.apply(dnc.rules.one2one,dnc.rules.fcodeOne2oneIn);
-            
             dnc.lookup = translate.createLookup(dnc.rules.one2one);
 
             // Build an Object with both the SimpleText & SimpleNum lists
@@ -157,6 +163,22 @@ dnc = {
 
         // pre processing
         dnc.applyToOsmPreProcessing(attrs, layerName);
+
+        // Use the FCODE to add some tags.
+        if (attrs.F_CODE)
+        {
+            var ftag = dnc.fcodeLookup['F_CODE'][attrs.F_CODE];
+            if (ftag)
+            {
+                tags[ftag[0]] = ftag[1];
+                // Debug: Dump out the tags from the FCODE
+                // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+            }
+            else
+            {
+                hoot.logWarn('Translation for FCODE ' + attrs.F_CODE + ' not found');
+            }
+        }
 
         // one 2 one
         translate.applyOne2One(attrs, tags, dnc.lookup, {'k':'v'}, dnc.ignoreList);

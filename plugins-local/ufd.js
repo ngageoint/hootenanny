@@ -434,23 +434,37 @@ ufd = {
 
     // toOsm - Translate Attrs to Tags
     toOsm : function(attrs, layerName)
-    { 
+    {
         tags = {};
+
+        // Debug
+        if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+
+        // Set up the fcode translation rules. We need this due to clashes between the one2one and
+        // the fcode one2one rules
+        if (ufd.fcodeLookup == undefined)
+        {
+            // Add the FCODE rules for Import
+            fcodeCommon.one2one.push.apply(fcodeCommon.one2one,ufd.rules.fcodeOne2oneIn);
+
+            ufd.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
+            // translate.dumpOne2OneLookup(ufd.fcodeLookup);
+        }
 
         if (ufd.lookup == undefined)
         {
-            // Setup lookup tables to make translation easier. I'm assumeing that since this is not set, the 
+            // Setup lookup tables to make translation easier. I'm assumeing that since this is not set, the
             // other tables are not set either.
-            
+
             // Add the common FCODE rules
             ufd.rules.one2one.push.apply(ufd.rules.one2one,fcodeCommon.one2one);
             ufd.rules.one2one.push.apply(ufd.rules.one2one,ufd.rules.fcodeOne2oneIn);
 
             ufd.lookup = translate.createLookup(ufd.rules.one2one);
-            
+
             // Build an Object with both the SimpleText & SimpleNum lists
             ufd.biasedList = translate.joinList(ufd.rules.numBiased, ufd.rules.txtBiased);
-            
+
             // Add features to ignore
             ufd.biasedList.F_CODE = '';
             ufd.biasedList.GFID = '';
@@ -460,6 +474,21 @@ ufd = {
         // pre processing
         ufd.applyToOsmPreProcessing(attrs, layerName);
 
+        // Use the FCODE to add some tags.
+        if (attrs.F_CODE)
+        {
+            var ftag = ufd.fcodeLookup['F_CODE'][attrs.F_CODE];
+            if (ftag)
+            {
+                tags[ftag[0]] = ftag[1];
+                // Debug: Dump out the tags from the FCODE
+                // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+            }
+            else
+            {
+                hoot.logWarn('Translation for FCODE ' + attrs.F_CODE + ' not found');
+            }
+        }
         // one 2 one
         translate.applyOne2One(attrs, tags, ufd.lookup, {'k':'v'}, ufd.biasedList);
 
@@ -470,7 +499,6 @@ ufd = {
         // post processing
         ufd.applyToOsmPostProcessing(attrs, tags, layerName);
 
-        if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
         if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
 
         // debug: Add the FCODE to the tags
