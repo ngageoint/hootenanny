@@ -9,7 +9,11 @@
 
     "#" : " The catch all",
     "tag": { "name": "landuse=*", "isA": "landuse" },
-    "tag": { "name": "landuse=cemetary", "isA": "landuse" },
+    "tag": {
+        "name": "landuse=cemetery",
+        "isA": "landuse",
+        "aliases": ["landuse=cemetary"]
+    },
     "tag": { "name": "landuse=recreation_ground",
         "isA": "landuse",
         "similarTo": { "name": "leisure=recreation_ground", "weight": 0.9 }
