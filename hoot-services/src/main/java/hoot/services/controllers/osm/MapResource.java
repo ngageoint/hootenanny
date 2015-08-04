@@ -90,8 +90,11 @@ import com.mysema.query.sql.SQLSubQuery;
 import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
+import com.mysema.query.support.Expressions;
+import com.mysema.query.types.Expression;
 import com.mysema.query.types.expr.NumberExpression;
 import com.mysema.query.types.template.NumberTemplate;
+import com.sun.org.apache.bcel.internal.generic.Select;
 
 /**
  * Service endpoint for maps containing OSM data
@@ -324,6 +327,19 @@ new SQLDeleteClause(conn, configuration, folderMapMappings)
 		.from(maps)	
 		.where(folderMapMappings.mapId.eq(maps.id))
 		.notExists())
+	.execute();
+
+QFolderMapMappings f = new QFolderMapMappings("mapid");
+
+new SQLInsertClause(conn,configuration,folderMapMappings)
+	.columns(folderMapMappings.mapId,folderMapMappings.folderId)
+	.select(new SQLSubQuery()
+		.from(maps)
+		.where(maps.id.notIn(query
+				.distinct()
+				.from(f)
+				.list(f.mapId)))
+		.list(maps.id,NumberTemplate.create(Long.class, "0")))
 	.execute();
 
 final List<FolderMapMappings> linkRecordSet = query.from(folderMapMappings).orderBy(folderMapMappings.folderId.asc()).list(folderMapMappings);
