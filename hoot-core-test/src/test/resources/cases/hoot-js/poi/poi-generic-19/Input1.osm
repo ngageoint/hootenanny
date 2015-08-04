@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-7179' action='modify' visible='true' lat='31.1525' lon='29.850278'>
+    <tag k='error:circular' v='15' />
+    <tag k='int_name' v='El Maks, Al Maks' />
+    <tag k='is_in' v='Egypt, جمهورية مصر العربية' />
+    <tag k='is_in:country_code' v='EG' />
+    <tag k='name' v='المكس' />
+    <tag k='name:ar' v='المكس' />
+    <tag k='name:ar1' v='المكس' />
+    <tag k='name:de' v='Al Maks' />
+    <tag k='name:en' v='Al Maks' />
+    <tag k='name:fr' v='Al Maks' />
+    <tag k='place' v='village' />
+    <tag k='source' v='geonames' />
+  </node>
+</osm>

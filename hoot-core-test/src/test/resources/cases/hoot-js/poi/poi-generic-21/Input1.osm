@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-376463' visible='true' lat='31.890833' lon='35.611944'>
+    <tag k='REF1' v='0007f1' />
+    <tag k='error:circular' v='15' />
+    <tag k='historic' v='ruins' />
+    <tag k='int_name' v='El Kherse‘e; Al Khersee' />
+    <tag k='is_in' v='Jordan, الأردن' />
+    <tag k='name' v='الخرسعة' />
+    <tag k='name:ar' v='الخرسعة' />
+    <tag k='name:de' v='Al Khersee' />
+    <tag k='name:en' v='Al Khersee' />
+    <tag k='name:fr' v='Al Khersee' />
+    <tag k='place' v='locality' />
+  </node>
+</osm>

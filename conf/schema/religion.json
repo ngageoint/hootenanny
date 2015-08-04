@@ -137,6 +137,8 @@
         "tag": { "name": "religion=taoist", "isA": "religion",
         "similarTo": { "name": "religion=buddhist", "weight": 0.3 } },
 
+    "tag": { "name": "denomination=mahayana", "isA": "religion=buddhist" },
+    "tag": { "name": "denomination=theravada", "isA": "religion=buddhist" },
     "tag": { "name": "denomination=huayan", "isA": "religion=buddhist" },
     "tag": { "name": "denomination=jishu", "isA": "religion=buddhist" },
     "tag": { "name": "denomination=jodo_shinshu", "isA": "religion=buddhist" },
@@ -307,6 +309,9 @@
         "similarTo": { "name": "religion=shamanic", "weight": 0.4 } },
 
     "tag": { "name": "religion=sikh", "isA": "religion" },
+    "tag": { "name": "denomination=udasi", "isA": "religion=sikh" },
+    "tag": { "name": "denomination=sahajdharis", "isA": "religion=sikh" },
+    "tag": { "name": "denomination=keshadharis", "isA": "religion=sikh" },
 
     "tag": { "name": "religion=sukyo_mahikari", "isA": "religion" },
 

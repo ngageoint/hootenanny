@@ -108,7 +108,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<G
   for (QVariantMap::const_iterator it = vm.constBegin(); it != vm.constEnd(); ++it)
   {
     const QVariant& v = it.value();
-    QByteArray ba = it.key().toAscii();
+    QByteArray ba = it.key().toUtf8();
 
     // If the field DOESN'T exist in the output layer, skip it.
     if (poFeature->GetFieldIndex(ba.constData()) == -1)
@@ -129,7 +129,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<G
       break;
     case QVariant::String:
     {
-      QByteArray vba = v.toString().toAscii();
+      QByteArray vba = v.toString().toUtf8();
       poFeature->SetField(ba.constData(), vba.constData());
       break;
     }

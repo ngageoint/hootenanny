@@ -7,7 +7,7 @@
         <tag k="hoot:review:source" v="1"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:uuid" v="mgcp:2956feb1-c46e-11e2-8540-002481c154f7"/>
-        <tag k="hoot:review:note" v="Close, but not close enough"/>
+        <tag k="hoot:review:note" v="Close - very close together, similar poi type"/>
         <tag k="uuid" v="{b18057ff-736d-5d20-b873-837f0c172e33}"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -23,7 +23,7 @@
         <tag k="material" v="unknown"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="source:vertical_source_category" v="no_elevations"/>
-        <tag k="hoot:review:note" v="Close, but not close enough"/>
+        <tag k="hoot:review:note" v="Close - very close together, similar poi type"/>
         <tag k="source:abs_horiz_accuracy" v="25"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:copyright" v="Copyright 2013 by the Bundeswehr GeoInformation Office. All rights reserved."/>
