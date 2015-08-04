@@ -2,7 +2,13 @@
 [[fullinstall]]
 == Full Install
 
-If you are installing Hootenanny for the first time on a new machine, please follow the procedures in this section.  These steps assume a JDK has already been installed on the system.
+This document describes the steps for installing Hootenanny manually from scratch, including all of its dependencies.  It has been tested on CentOS 6.5.
+
+=== JDK
+
+--------------------------------------
+sudo yum install java-1.7.0-openjdk-devel
+--------------------------------------
 
 === Python
 
@@ -191,7 +197,7 @@ sudo service postgresql-9.1 restart
 
 Hootenanny uses Postgis for exposing a OGC WFS.
 
-*This step must be completed after adding the hoot database schema and completing the hoot core install, since the INSTALL-CentOS6.5-PG9.1.txt script ($HOOT_HOME/INSTALL-CentOS6.5-PG9.1.txt) referenced installs some of the PostGIS dependencies.*
+*This step must be completed after adding the hoot database schema and completing the hoot core install, since the scripts/InstallHootDependences-CentOS-RHEL-Partial.txt script ($HOOT_HOME/scripts/InstallHootDependences-CentOS-RHEL-Partial.txt) referenced installs some of the PostGIS dependencies.*
 
 . Install Postgis
 +
@@ -304,11 +310,11 @@ NOTE: The following steps must be completed after the Tomcat install so the tomc
 . Copy over hoot core (if not done during the Hoot database schema loading instructions)
 +
 
-. Install dependencies from INSTALL-CentOS6.5-PG9.1.txt script ($HOOT_HOME/INSTALL-CentOS6.5-PG9.1.txt) using the bash script command shown below replacing hootenanny-X.Y.Z with the correct hootenanny version number.  Note that this script will remove any existing compiled dependencies in +/usr/local+ and recompile them. To compile a subset of the dependencies from the complete list, edit the script accordingly.
+. Install dependencies from scripts/InstallHootDependences-CentOS-RHEL-Partial.txt script ($HOOT_HOME/scripts/InstallHootDependences-CentOS-RHEL-Partial.txt) using the bash script command shown below replacing hootenanny-X.Y.Z with the correct hootenanny version number.  Note that this script will remove any existing compiled dependencies in +/usr/local+ and recompile them. To compile a subset of the dependencies from the complete list, edit the script accordingly.
 +
 --------------------------------------
 cd /usr/local
-sudo bash hootenanny-X.Y.Z/INSTALL-CentOS6.5-PG9.1.txt
+sudo bash hootenanny-X.Y.Z/scripts/InstallHootDependences-CentOS-RHEL-Partial.txt
 --------------------------------------
 
 . Ensure that both "FileGDB" and "PostgreSQL" formats are supported by GDAL by running the +ogrinfo+ command.  Both must appear in order for Hootenanny to function properly. See the section <<HootInstallTroubleshooting>> to troubleshoot if necessary.
