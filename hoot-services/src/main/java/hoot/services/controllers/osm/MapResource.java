@@ -326,18 +326,6 @@ new SQLDeleteClause(conn, configuration, folderMapMappings)
 		.notExists())
 	.execute();
 
-/*
- *  new SQLUpdateClause(conn, configuration, maps)
-			  .where(maps.id.eq(_mapId))
-			  .set(maps.displayName,_modName)
-			  .execute();
-			  
-	DB.update(d).set(d.name, "AAA")
-	.where(DB.subQuery(p)
-	.where(p.departmentId.eq(d.id))
-	.notExists()).execute();
- */
-
 final List<FolderMapMappings> linkRecordSet = query.from(folderMapMappings).orderBy(folderMapMappings.folderId.asc()).list(folderMapMappings);
 
 linkRecords = Map.mapLinkRecordsToLinks(linkRecordSet);
