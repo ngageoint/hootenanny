@@ -196,7 +196,7 @@ tds.rules = {
      'LCA':'crane:max_load', // Lifting Capacity
      'LEA':'depth:minimum_below_surface', // Least Depth Below Surface Level
      'LNU':'length:interior_useable', // Usable Length
-     'LOG':'length:gradient', // Gradient Length
+     'LOG':'gradient:length', // Gradient Length
      'LTN':'lanes', // Track or Lane Count
      'LZN':'length', // Length
      'MWG':'divider:width', // Centerline Spacing

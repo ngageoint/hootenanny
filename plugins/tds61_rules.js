@@ -242,7 +242,7 @@ tds61.rules = {
      'LDC':'length:crest', // Dam Crest Length
      'LEA':'depth:minimum_below_surface', // Least Depth Below Surface Level
      'LNU':'length:interior_useable', // Usable Length
-     'LOG':'length:gradient', // Gradient Length
+     'LOG':'gradient:length', // Gradient Length
      'LTN':'lanes', // Track or Lane Count
      'LZN':'length', // Lengthf
      'MAG':'magnetic_variation', // Magnetic Variation
