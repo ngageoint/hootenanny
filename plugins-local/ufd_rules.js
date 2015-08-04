@@ -41,7 +41,7 @@ ufd.rules = {
         ['F_CODE','AC000','facility','yes'], // Processing/Treatment Plant - NFDD AL010
         ['F_CODE','AE010','facility','yes'], // Assembly Plant - NFDD AL010
         ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
-        ['F_CODE','AK190','man_made','recreation_pier'], // Fishing Pier/Promenade Pier - NFDD BB081
+        ['F_CODE','AK190','man_made','recreational_pier'], // Fishing Pier/Promenade Pier - NFDD BB081
         ['F_CODE','AL015',undefined,undefined], // Building - NFDD AL013 - To Stop Warnings
         ['F_CODE','AL045','facility','yes'], // Complex Outline - No FCODE, moving to AL010 Facility
         ['F_CODE','AL100','building','hut'], // Hut - NFDD AL099
