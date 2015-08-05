@@ -7,11 +7,55 @@
     "#" : " The catch all",
     "tag": { "name": "place=*", "isA": "place" },
 
+    "#" : "This tag provides absolutely no information so we don't consider it a proper place",
+    "tag": { "name": "place=locality", "isA": "poi" },
+
+    "tag": {
+        "name": "place=administrative",
+        "isA": "place",
+        "similarTo": { "name": "place=built_up_area", "weight": 0.8 },
+        "similarTo": { "name": "place=neighborhood", "weight": 0.8 },
+        "similarTo": { "name": "place=suburb", "weight": 0.8 }
+    },
+    "tag": { "name": "place=built_up_area", "isA": "place" },
+    "tag": {
+        "name": "place=city",
+        "isA": "place",
+        "similarTo": { "name": "place=town", "weight": 0.8 }
+    },
+    "tag": {
+        "name": "place=hamlet",
+        "isA": "place",
+        "similarTo": { "name": "place=isolated_dwelling", "weight": 0.8 },
+        "similarTo": { "name": "place=village", "weight": 0.8 }
+    },
+    "tag": { "name": "place=isolated_dwelling", "isA": "place" },
+    "tag": {
+        "name": "place=neighbourhood",
+        "isA": "place",
+        "similarTo": { "name": "place=built_up_area", "weight": 0.8 },
+        "similarTo": { "name": "place=populated", "weight": 0.8 },
+        "similarTo": { "name": "place=hamlet", "weight": 0.8 },
+        "similarTo": { "name": "place=suburb", "weight": 0.8 },
+        "similarTo": { "name": "place=town", "weight": 0.8 },
+        "similarTo": { "name": "place=village", "weight": 0.8 }
+    },
     "tag": { "name": "place=populated", "isA": "place" },
+    "tag": {
+        "name": "place=suburb",
+        "isA": "place",
+        "similarTo": { "name": "place=built_up_area", "weight": 0.8 },
+        "similarTo": { "name": "place=populated", "weight": 0.8 },
+        "similarTo": { "name": "place=town", "weight": 0.8 }
+    },
+    "tag": { "name": "place=town", "isA": "place" },
+    "tag": { "name": "place=tribal_area", "isA": "place" },
     "tag": {
         "name": "place=village",
         "isA": "place",
-        "similarTo": { "name": "place=populated", "weight": 0.8 }
+        "similarTo": { "name": "place=populated", "weight": 0.8 },
+        "similarTo": { "name": "place=hamlet", "weight": 0.8 },
+        "similarTo": { "name": "place=built_up_area", "weight": 0.8 }
     },
 
     "#" : "end"

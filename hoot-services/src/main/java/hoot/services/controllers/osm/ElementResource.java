@@ -564,7 +564,7 @@ public class ElementResource
     {
       log.debug("Initializing database connection...");
       
-      elementDoc = getElementsXml(mapId, elemIds, elementTypeVal, false, false, conn);
+      elementDoc = getElementsXml(mapId, elemIds, elementTypeVal, false, true, conn);
     }
     finally
     {

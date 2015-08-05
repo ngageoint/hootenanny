@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-292925' visible='true' lat='31.7833' lon='35.83667'>
+    <tag k='REF2' v='000263' />
+    <tag k='alt_name' v='Khirbat Masuh;Khirbat Māsūḩ;Masuh;Māsūḩ;maswh;ماسوح' />
+    <tag k='error:circular' v='1000' />
+    <tag k='hoot:mismatch' v='2' />
+    <tag k='hoot:wrong' v='1' />
+    <tag k='name' v='Māsūḩ' />
+    <tag k='place' v='populated' />
+    <tag k='uuid' v='{33e41748-afd1-5a87-bcf2-120630cae28d}' />
+  </node>
+</osm>

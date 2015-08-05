@@ -12,13 +12,6 @@
     "#" : "Generic POI made up to handle poor data.",
     "tag": { "name": "poi=yes", "isA": "poi" },
     "tag": { "name": "aeroway=*", "isA": "poi=yes" },
-    "tag": { "name": "historic=*", "isA": "poi=yes" },
-    "tag": { 
-        "name": "historic=memorial",
-        "isA": "historic=*",
-        "similarTo": { "name": "historic=monument", "weight": 0.8 }
-    },
-    "tag": { "name": "historic=monument", "isA": "historic=*" },
 
     "tag": { "name": "highway=rest_area", "isA": "poi=yes" },
     "tag": { "name": "highway=services", "isA": "poi=yes" },

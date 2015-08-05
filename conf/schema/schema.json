@@ -4,6 +4,7 @@
     "import": "artworkType.json",
     "import": "barrier.json",
     "import": "building.json",
+    "import": "historic.json",
     "import": "landuse.json",
     "import": "leisure.json",
     "import": "man_made.json",

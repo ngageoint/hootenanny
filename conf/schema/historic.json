@@ -1,0 +1,22 @@
+{
+    "tag": { "name": "historic", "isA": "poi" },
+    "tag": { "name": "historic=*", "isA": "historic" },
+    "tag": {
+        "name": "historic=memorial",
+        "isA": "historic",
+        "similarTo": { "name": "historic=monument", "weight": 0.8 }
+    },
+    "tag": { "name": "historic=monument", "isA": "historic" },
+    "tag": {
+        "name": "historic=castle",
+        "isA": "historic",
+        "similarTo": { "name": "building=fort", "weight": 0.8 }
+    },
+    "tag": {
+        "name": "historic=ruins",
+        "isA": "historic",
+        "similarTo": { "name": "place=populated", "weight": 0.4 }
+    },
+
+    "#" : "end"
+}

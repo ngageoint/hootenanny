@@ -48,6 +48,7 @@ void OsmSchemaJs::Init(Handle<Object> exports)
   Handle<Object> schema = Object::New();
   exports->Set(String::NewSymbol("OsmSchema"), schema);
   schema->Set(String::NewSymbol("getCategories"), FunctionTemplate::New(getCategories)->GetFunction());
+  schema->Set(String::NewSymbol("isAncestor"), FunctionTemplate::New(isAncestor)->GetFunction());
   schema->Set(String::NewSymbol("isArea"), FunctionTemplate::New(isArea)->GetFunction());
   schema->Set(String::NewSymbol("isBuilding"), FunctionTemplate::New(isBuilding)->GetFunction());
   schema->Set(String::NewSymbol("isLinear"), FunctionTemplate::New(isLinear)->GetFunction());
@@ -62,6 +63,15 @@ Handle<Value> OsmSchemaJs::getCategories(const Arguments& args) {
   QString kvp = toCpp<QString>(args[0]);
 
   return scope.Close(toV8(OsmSchema::getInstance().getCategories(kvp).toStringList()));
+}
+
+Handle<Value> OsmSchemaJs::isAncestor(const Arguments& args) {
+  HandleScope scope;
+
+  QString childKvp = toCpp<QString>(args[0]);
+  QString parentKvp = toCpp<QString>(args[1]);
+
+  return scope.Close(Boolean::New(OsmSchema::getInstance().isAncestor(childKvp, parentKvp)));
 }
 
 Handle<Value> OsmSchemaJs::isArea(const Arguments& args) {

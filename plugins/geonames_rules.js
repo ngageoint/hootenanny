@@ -511,7 +511,7 @@ geonames.rules = {
         'REG':{'natural':'desert', 'desert':'stony'}, //  stony desert: a desert plain characterized by a surface veneer of gravel and stones
         'RESA':{'landuse':'agricultural_reserve'}, //  agricultural reserve: a tract of land reserved for agricultural reclamation and/or development
         'RESF':{'landuse':'forest_reserve'}, //  forest reserve: a forested area set aside for preservation or controlled use
-        'RESH':{'landuse':'hunting_reserve'}, //  hunting reserve: a tract of land used primarily for hunting
+        'RESH':{'landuse':'game_reserve'}, //  hunting reserve: a tract of land used primarily for hunting
         'RESN':{'leisure':'nature_reserve'}, //  nature reserve: an area reserved for the maintenance of a natural habitat
         'RES':{'landuse':'reserve'}, //  reserve: a tract of public land reserved for future use or restricted as to use
         'RESP':{'landuse':'palm_tree_reserve'}, //  palm tree reserve: an area of palm trees where use is controlled

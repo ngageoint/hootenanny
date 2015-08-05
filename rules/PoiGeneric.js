@@ -1,5 +1,4 @@
 
-hoot.log("Initializing.");
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("poi.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("poi.miss.threshold"));
@@ -41,7 +40,7 @@ var distances = [
     {k:'station',                       match:100,      review:200},
     {k:'transport',                     match:100,      review:200},
     {k:'railway',                       match:500,      review:1000},
-    {k:'natural',                       match:200,      review:500},
+    {k:'natural',                       match:1000,     review:1500},
     {k:'building',  v:'hospital',       match:300,      review:500},
     {k:'barrier', v:'toll_booth',       match:25,       review:50},
 ];
@@ -73,13 +72,13 @@ var dontMerge = [
 ];
 
 /**
- * Returns all the kvps that are related to cuisine (even a little).
+ * Returns all the kvps that are related to a specified kvp (even a little).
  */
 function getRelatedTags(relateToKvp, d) {
     var result = [];
     for (var k in d) {
         var kvp = k + '=' + d[k];
-        if (kvp != "poi=yes") {
+        if (kvp != "poi=yes" && kvp != "place=locality") {
             if (hoot.OsmSchema.score(relateToKvp, kvp) > 0) {
                 result.push(kvp);
             }
@@ -89,13 +88,29 @@ function getRelatedTags(relateToKvp, d) {
 }
 
 /**
+ * Returns all the kvps that share a common ancestor
+ */
+function getTagsByAncestor(ancestorKvp, d) {
+    var result = [];
+    for (var k in d) {
+        var kvp = k + '=' + d[k];
+        if (hoot.OsmSchema.isAncestor(kvp, ancestorKvp)) {
+            result.push(kvp);
+        }
+    }
+    return result;
+}
+
+
+/**
  * Returns all the kvps that are in a category.
  */
 function getTagsByCategory(category, d) {
     var result = [];
     for (var k in d) {
         var kvp = k + '=' + d[k];
-        if (kvp != "poi=yes") {
+        // if it is not a generic POI type
+        if (kvp != "poi=yes" && kvp != "place=locality") {
             if (hoot.OsmSchema.getCategories(kvp).indexOf(category) >= 0) {
                 result.push(kvp);
             }
@@ -119,7 +134,7 @@ function getTagCategoryDistance(category, e1, e2) {
         return undefined;
     }
 
-    // find the best match between the two cuisine types
+    // find the best match between the two types
     for (var i in c1) {
         for (var j in c2) {
             result = Math.min(1 - hoot.OsmSchema.score(c1[i], c2[j]), result);
@@ -341,7 +356,6 @@ exports.getSearchRadius = function(e) {
  * Runs before match creation occurs and provides an opportunity to perform custom initialization.
  */
 exports.init = function(map) {
-    hoot.log("Initializing...");
 }
 
 /**
@@ -393,6 +407,11 @@ function hasTypeTag(e1) {
 }
 
 function additiveScore(map, e1, e2) {
+    var result = {};
+    result.score = 0;
+    result.reasons = [];
+
+    var reason = result.reasons;
 
     var searchRadius = Math.max(exports.getSearchRadius(e1), 
         exports.getSearchRadius(e2));
@@ -400,20 +419,26 @@ function additiveScore(map, e1, e2) {
     var d = distance(e1, e2);
 
     if (d > searchRadius) {
-        return 0;
+        return result;
     }
 
     var nameMultiplier = 1;
     // if there is no type information to compare the name becomes more 
     // important
-    if (hasTypeTag(e1) == false || hasTypeTag(e2) == false) {
+    var oneGeneric = hasTypeTag(e1) == false || hasTypeTag(e2) == false
+    if (oneGeneric) {
         nameMultiplier = 2;
     }
+    hoot.log(oneGeneric);
+
+    var t1 = e1.getTags().toDict();
+    var t2 = e2.getTags().toDict();
 
     var mean = translateMeanWordSetLevenshtein_1_5.extract(map, e1, e2);
     var amenityDistanceScore = amenityDistance(e1, e2);
     var weightedWordDistanceScore = weightedWordDistance.extract(map, e1, e2);
     var weightedPlusMean = mean + weightedWordDistanceScore;
+    var placeScore = getTagCategoryDistance("place", e1, e2);
     var poiScore = getTagCategoryDistance("poi", e1, e2);
     var cuisineDistance = getTagDistance("cuisine", e1, e2);
     var sportDistance = getTagDistance("sport", e1, e2);
@@ -422,24 +447,61 @@ function additiveScore(map, e1, e2) {
     hoot.debug(nameMultiplier);
     if (weightedPlusMean > 0.987403 && weightedPlusMean < 1.2) {
         score += 0.5 * nameMultiplier;
+        reason.push("similar names");
     }
     hoot.debug(score);
     if (weightedPlusMean >= 1.2) {
         score += 1 * nameMultiplier;
-    }
-    if (cuisineDistance <= 0.3) {
-        score += 1;
-    }
-    if (sportDistance <= 0.3) {
-        score += 1;
-    }
-    if (poiScore <= 0.5) {
-        score += 1;
+        reason.push("very similar names");
     }
     if (isSuperClose(e1, e2)) {
         score += 0.5;
+        reason.push("very close together");
     }
-    hoot.debug(score);
+
+    // if at least one feature contains a place
+    var placeCount = getTagsByAncestor("place", t1).length + 
+        getTagsByAncestor("place", t2).length;
+
+    // if at least one of the points has a place and neither of them are
+    // generic poi types
+    if (placeCount > 0 && oneGeneric == false) {
+        var d = getTagDistance("place", e1, e2);
+        hoot.log(d);
+        // if the places don't match
+        if (d == undefined) {
+            // don't give name similarity or proximity a high weight
+            score = Math.min(0.5, score);
+            reason.push('no place match');
+        // if the places are very dissimilar
+        } else if (d > 0.8) {
+            // don't give name similarity or proximity a high weight
+            score = Math.min(0.5, score);
+            reason.push('poor place match');
+        // else if the places match, only increase score if the names match too.
+        } else if (weightedPlusMean > 0.987403) {
+            if (poiScore <= 0.5) {
+                score += 1;
+                reason.push("similar name and place type");
+            }
+        }
+    // if one is generic then we shouldn't match it outright.
+    } else if (placeCount > 0 && oneGeneric) {
+        score = Math.min(0.6, score);
+        reason.push('generic type to place match');
+    } else if (poiScore <= 0.5) {
+        score += 1;
+        reason.push("similar poi type");
+    }
+
+    if (cuisineDistance <= 0.3) {
+        score += 1;
+        reason.push("similar cuisine");
+    }
+    if (sportDistance <= 0.3) {
+        score += 1;
+        reason.push("similar sport");
+    }
 
     // we're unlikely to get more evidence than the fact that it is a tower
     // or pole. If the power tag matches exactly, give it 2 points of evidence
@@ -447,12 +509,18 @@ function additiveScore(map, e1, e2) {
     var powerDistance = getTagDistance("power", e1, e2);
     if (powerDistance == 0) {
         score += 2;
+        reason.push("same power type");
     } else if (powerDistance <= 0.4) {
         score += 1;
+        reason.push("similar power type");
     }
 
+    result.score = score;
+    result.reasons = reason;
+    hoot.log(score);
+    hoot.log(reason);
 
-    return score;
+    return result;
 }
 
 var totalCount = 0;
@@ -474,14 +542,16 @@ exports.matchScore = function(map, e1, e2) {
         return result;
     }
 
-    var score = additiveScore(map, e1, e2);
+    var additiveResult = additiveScore(map, e1, e2);
+    var score = additiveResult.score;
+    var reasons = additiveResult.reasons;
 
     if (score <= 0.5) {
         return {miss: 1, explain: 'Not much evidence of match'};
     } else if (score < 1.9) {
-        return {review: 1, explain: 'Close, but not close enough'};
+        return {review: 1, explain: "Close - " + reasons.join(", ") };
     } else {
-        return {match: 1, explain: 'Very similar'};
+        return {match: 1, explain: "Very similar - " + reasons.join(", ") };
     }
 
 /*
@@ -571,7 +641,7 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
   fd['closeAmenity'] = closeAmenity(e1, e2);
   fd['different'] = isDifferent(e1, e2);
   fd['cuisine'] = getCuisineDistance(e1, e2);
-  fd['additive'] = additiveScore(map, e1, e2);
+  fd['additive'] = additiveScore(map, e1, e2).score;
 
   return fd;
 };
