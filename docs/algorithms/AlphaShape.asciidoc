@@ -1,0 +1,98 @@
+
+== Cookie Cutter
+
+The _Cookie Cutter_ is a method of clipping a region out of a map before
+conflation. See `--cookie-cutter` in <<hootuser>> for more details. When one
+data set is far superior to another this can improve the conflation quality and
+reduce amount of time reviewing.
+
+Hootenanny uses the
+https://insightcloud.digitalglobe.com/redmine/attachments/download/2858/2011-B-03-AlphaShapes.pdf[alpha
+shape] algorithm to define the shape of a finite set of points. In this case we
+treat the vertexes of the input shapefile as the set of points when calculating
+the alpha shape. 
+
+[[alphashape]]
+.Simple Alpha Shape
+image::algorithms/AlphaShape.png[A simple example of an alpha shape,scalewidth="50%"]
+
+By tuning the _alpha_ value the alpha shape can be made to generalize the set of
+points, or tightly fit the points. If a large enough alpha value is specified
+then the shape will be a convex hull.
+
+=== Automatically Selecting an Alpha Value (Proposed)
+
+In <<bernardini99>> (Section 6.2) they discuss an approach of performing a
+binary search across possible alpha values to determine an alpha value that
+meets the following criteria:
+
+* All points are connected
+* All the points are on a boundary or in an interior
+* Its boundary is a two-manifold (3D object) -- In our case we're just looking
+  for a single legit polygon -- no lines.
+
+// Unfortunately Asciidoc doesn't like this URL. Too man underscores?
+// The real URL is http://doc.cgal.org/latest/Alpha_shapes_2/classCGAL_1_1Alpha__shape__2.html#afd047290bb8e9d12194eed582e82a9f1
+In http://tinyurl.com/meocd4y[CGAL 4.5] they mention calculating the alpha value
+such that a specified number of components are returned. In this case it may be
+desirable to return two or more polygons if we know that there is significant
+distance between two mapped areas such as cities.
+
+==== Efficiently Selecting an Alpha Value (Proposed)
+
+NOTE: This approach has not been tested.
+
+The approach described in <<bernardini99>> is fairly computationally inefficient
+in that each time an alpha value is evaluated the alpha shape must be
+recalculated and every point evaluated for meeting the criteria.
+
+First a couple of definitions:
+
+* connected - We call two points connected if the distance between them is less
+  than alpha value and there is an edge resulting from the Delaunay
+  Triangulation.
+* connected triangle - Three points are all connected in a triangle.
+
+Rather than implementing that full <<bernardini99>> mechanism, another possible
+approach is to evaluate each point incrementally as you increase the alpha value
+and stop when you have reached an alpha value that satisfies the following
+criteria:
+
+1. Every point is part of a connected triangle
+2. The combined points create the specified number of components or less
+   (similar to CGAL)
+
+The first criterion is equivalent to being on a boundary or interior. I'm sure a
+math PhD could spend the afternoon proving this, but for now we're going on an
+informal rational & intuition. If the point is on a connected triangle it must
+be part of either an interior or boundary. The logic going:
+
+The point can be in one of four states:
+
+1. On a boundary - To be on a boundary the point must be adjacent to areas
+   outside the polygon and inside the polygon. If it is part of a connected
+   triangle and part of a disconnected triangle then the point is on a boundary.
+2. Isolated - If the point is not connected to any other point.
+3. Connected via a line - The point is connected to one or more other points,
+   but the points do not form a triangle.
+4. An interior point - A point is only part of connected triangles.
+
+Given those definitions, if the point is part of at least one connected triangle
+it is either an interior point or a boundary point. We should be able to
+determine this by traversing the graph produced by the Delaunay Triangulation.
+
+Now that we have that out of the way, we need to determine how many components
+make up the alpha shape. This can be determined via a Disjoint Set. Rather than
+describe the idea, I'll describe the implementation:
+
+. Order all the edges in the Delaunay Triangulation by length ascending. This is
+  the list of alpha values that need to be evaluated.
+. Initialize the disjoint set with one value per point
+. While there are still edges
+.. Pop an edge
+.. Set our current alpha value to the edge length
+.. If the two points connected by the edge are now part of a connected triangle,
+... Join the two points into a single component use the disjoint set.
+... If we're now down to the desired number of components, stop
+
+

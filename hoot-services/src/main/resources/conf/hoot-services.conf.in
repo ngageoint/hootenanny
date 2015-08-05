@@ -255,6 +255,9 @@ reviewPrepareOverwriteExistingDataDefault=false
 # this sometimes causes problems with some datasets, making it optional as a temporary solution.
 reviewPrepareCleanup=true
 
+# review item lock time in millisec
+reviewLockTime=300000
+
 # review stats
 
 # default lowest review score threshold the stats calculator will recognize when looking at

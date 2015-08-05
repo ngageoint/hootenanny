@@ -214,8 +214,7 @@ SOURCES += src/main/cpp/tgs/StreamUtils.cpp \
     src/main/cpp/tgs/BigContainers/BigMap.cpp \
     src/main/cpp/tgs/BigContainers/BasicBloomFilter.cpp \
     src/main/cpp/tgs/System/DisableCout.cpp \
-    src/main/cpp/tgs/System/DisableCerr.cpp \
-    src/test/cpp/tgs/LruCacheTest.cpp
+    src/main/cpp/tgs/System/DisableCerr.cpp
 
 cppunit:SOURCES += \
     src/test/cpp/tgs/ProbablePath/ProbablePathCalculatorTest.cpp \
@@ -253,6 +252,7 @@ cppunit:SOURCES += \
     src/test/cpp/tgs/Io/StdIoDeviceTest.cpp \
     src/test/cpp/tgs/BigContainers/BigMapTest.cpp \
     src/test/cpp/tgs/BigContainers/BasicBloomFilterTest.cpp \
+    src/test/cpp/tgs/LruCacheTest.cpp
 
 win32:SOURCES += src/main/cpp/tgs/RStarTree/FilePageStore.cpp \
     src/main/cpp/tgs/SpinImage/GroundPlaneRemover.cpp \
