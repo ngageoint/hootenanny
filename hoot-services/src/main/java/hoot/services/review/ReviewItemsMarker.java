@@ -353,13 +353,12 @@ public class ReviewItemsMarker
   	
 		if(offset > -1)
 		{
-
+			// get last occurrence
 			for(int i=0; i<avList.size(); i++)
 			{
 				if(avList.get(i).toString().equals(offsetId))
 				{
 					offset = i;
-					break;
 				}
 			}
 		}
