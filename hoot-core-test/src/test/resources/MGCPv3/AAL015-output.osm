@@ -40,7 +40,7 @@
         <nd ref="-39"/>
         <nd ref="-36"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2015-02-26T06:02:01.892Z"/>
+        <tag k="source:ingest:datetime" v="2015-08-03T03:25:34.381Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="military" v="barracks"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
@@ -63,7 +63,7 @@
         <nd ref="-34"/>
         <nd ref="-31"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2015-02-26T06:02:01.892Z"/>
+        <tag k="source:ingest:datetime" v="2015-08-03T03:25:34.381Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="source:vertical_source:type" v="no_elevations"/>
@@ -86,7 +86,7 @@
         <nd ref="-29"/>
         <nd ref="-26"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2015-02-26T06:02:01.891Z"/>
+        <tag k="source:ingest:datetime" v="2015-08-03T03:25:34.381Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="source:vertical_source:type" v="no_elevations"/>
@@ -108,7 +108,7 @@
         <nd ref="-24"/>
         <nd ref="-21"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2015-02-26T06:02:01.891Z"/>
+        <tag k="source:ingest:datetime" v="2015-08-03T03:25:34.381Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="controlling_authority" v="international"/>
@@ -130,7 +130,7 @@
         <nd ref="-19"/>
         <nd ref="-16"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2015-02-26T06:02:01.891Z"/>
+        <tag k="source:ingest:datetime" v="2015-08-03T03:25:34.380Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="controlling_authority" v="joint_military_civilian"/>
@@ -153,7 +153,7 @@
         <nd ref="-14"/>
         <nd ref="-11"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2015-02-26T06:02:01.891Z"/>
+        <tag k="source:ingest:datetime" v="2015-08-03T03:25:34.380Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="controlling_authority" v="military"/>
@@ -177,7 +177,7 @@
         <nd ref="-9"/>
         <nd ref="-6"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2015-02-26T06:02:01.891Z"/>
+        <tag k="source:ingest:datetime" v="2015-08-03T03:25:34.380Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="controlling_authority" v="national"/>
@@ -200,7 +200,7 @@
         <nd ref="-4"/>
         <nd ref="-1"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2015-02-26T06:02:01.890Z"/>
+        <tag k="source:ingest:datetime" v="2015-08-03T03:25:34.380Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="source:vertical_source:type" v="no_elevations"/>
