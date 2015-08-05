@@ -90,7 +90,7 @@ public:
   /**
    * This value should be updated after the DB is upgraded and all tests run successfully.
    */
-  static QString expectedDbVersion() { return "12:brandon.witham"; }
+  static QString expectedDbVersion() { return "13:brandon.witham"; }
   static int maximumChangeSetEdits() { return 50000; }
 
   static long getCoordinateScale();
