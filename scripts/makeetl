@@ -13,7 +13,7 @@ OPT_EMAIL= -D services.db.writer.email=$(USER_EMAIL) -D services.db.reader.email
 ifeq ($(strip $(USER_EMAIL)), )
 	OPT_EMAIL= -D services.db.writer.email=test@test.com -D services.db.reader.email=test@test.com
 endif
-HOOT_OPTS+=OPT_EMAIL
+HOOT_OPTS+=$(OPT_EMAIL)
 
 # This replaces semicolon with vsizip and path 
 ifeq "$(INPUT_TYPE)" "ZIP" 
