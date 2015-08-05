@@ -464,7 +464,8 @@ ufd.rules = {
         ['BUD','3','undergrowth:density','medium'], // Medium (>15%<=50%) 
         ['BUD','4','undergrowth:density','dense'], // Dense (>50%) 
         ['BUD','997','undergrowth:density','unpopulated'], // Unpopulated 
-        ['BUD','998','undergrowth:density','not_applicable'], // Not Applicable 
+        // ['BUD','998','undergrowth:density','not_applicable'], // Not Applicable
+        ['BUD','998',undefined,undefined], // Not Applicable
 
         // CAB - Cable Classification 
         // ['CAB','0','cable:type','unknown'], // Unknown 
@@ -1100,7 +1101,8 @@ ufd.rules = {
         ['PPC','9','generator:source','substation'], // Substation 
         ['PPC','10','generator:source','transformer_yard'], // Transformer Yard 
         ['PPC','997','generator:source','unpopulated'], // Unpopulated 
-        ['PPC','998','generator:source','not_applicable'], // Not Applicable 
+        // ['PPC','998','generator:source','not_applicable'], // Not Applicable
+        ['PPC','998',undefined,undefined], // Not Applicable
         ['PPC','999','generator:source','other'], // Other 
 
         // PPT - Populated Place Type 
@@ -1626,7 +1628,8 @@ ufd.rules = {
         ['TST','1','cable:shape','symmetric_catenary'], // Normal Suspension 
         ['TST','2','cable:shape','mountain_catenary'], // Catenary (Over Mountains) 
         ['TST','3','cable:shape','overwater_catenary'], // Catenary (Over Water) 
-        ['TST','998','cable:shape','not_applicable'], // Not Applicable 
+        // ['TST','998','cable:shape','not_applicable'], // Not Applicable
+        ['TST','998',undefined,undefined], // Not Applicable
         ['TST','999','cable:shape','other'], // Other 
 
         // TTC - Tower Type Category 
@@ -1876,7 +1879,8 @@ ufd.rules = {
         ['VDC','28','source:datum:sounding','highest_high_water'], // Highest High Water
         ['VDC','30','source:datum:sounding','indian_spring_high_water!'], // Indian Spring High Water!
         ['VDC','90','source:datum:sounding','lowest_low_water'], // Lowest Low Water
-        ['VDC','998','source:datum:sounding','not_applicable'], // Not Applicable
+        // ['VDC','998','source:datum:sounding','not_applicable'], // Not Applicable
+        ['VDC','998',undefined,undefined], // Not Applicable
         ['VDC','999','source:datum:sounding','other'], // Other
 
         // VEG - Vegetation Characteristics 
@@ -1922,7 +1926,8 @@ ufd.rules = {
         ['VH3','4','vegetation:height','>20_and_<=40'], // >20 and <=40 
         ['VH3','5','vegetation:height','>40'], // >40 
         ['VH3','997','vegetation:height','unpopulated'], // Unpopulated 
-        ['VH3','998','vegetation:height','not_applicable'], // Not Applicable 
+        // ['VH3','998','vegetation:height','not_applicable'], // Not Applicable
+        ['VH3','998',undefined,undefined], // Not Applicable
 
         // VOL - Volume 
         ['VOL','1','raw:VOL','empty'], // Empty 
@@ -1973,7 +1978,8 @@ ufd.rules = {
         ['YSU','4','military:service','marines'], // Marines 
         ['YSU','5','military:service','navy'], // Navy 
         ['YSU','7','military:service','joint'], // Joint 
-        ['YSU','998','military:service','not_applicable'], // Not Applicable 
+        // ['YSU','998','military:service','not_applicable'], // Not Applicable
+        ['YSU','998',undefined,undefined], // Not Applicable
         ['YSU','999','military:service','other'], // Other
 
         // Z_VALUE_TYPE - Z-Coordinate Type 
