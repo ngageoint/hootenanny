@@ -61,27 +61,21 @@ public class BoundingBox
   
   private double minLon = GeoUtils.DEFAULT_COORD_VALUE;
   public double getMinLon() { return minLon; }
-  public long getMinLonDb() { return (long)(minLon * GeoUtils.getCoordinateScale()); }
   
   private double minLat = GeoUtils.DEFAULT_COORD_VALUE;
   public double getMinLat() { return minLat; }
-  public long getMinLatDb() { return (long)(minLat * GeoUtils.getCoordinateScale()); }
   
   private double maxLon = GeoUtils.DEFAULT_COORD_VALUE;
   public double getMaxLon() { return maxLon; }
-  public long getMaxLonDb() { return (long)(maxLon * GeoUtils.getCoordinateScale()); }
   
   private double maxLat = GeoUtils.DEFAULT_COORD_VALUE;
   public double getMaxLat() { return maxLat; }
-  public long getMaxLatDb() { return (long)(maxLat * GeoUtils.getCoordinateScale()); }
   
   @Override
   public String toString()
   {
     return 
-      "minLon: " + minLon + ", minLat: " + minLat + ", maxLon: " + maxLon + ", maxLat: " + maxLat + 
-      "; minLonDb: " + getMinLonDb() + ", minLatDb: " + getMinLatDb() + ", maxLonDb: " + 
-      getMaxLonDb() + ", maxLatDb: " + getMaxLatDb();
+      "minLon: " + minLon + ", minLat: " + minLat + ", maxLon: " + maxLon + ", maxLat: " + maxLat;
   }
   
   /**
@@ -211,8 +205,8 @@ public class BoundingBox
     
     for (CurrentNodes node : nodes)
     {
-      final double lat = DbUtils.fromDbCoordValue(node.getLatitude());
-      final double lon = DbUtils.fromDbCoordValue(node.getLongitude());
+      final double lat = node.getLatitude();
+      final double lon = node.getLongitude();
       if (lat < minLat)
       {
         minLat = lat;
@@ -255,25 +249,25 @@ public class BoundingBox
     {
       throw new Exception("Invalid coordinate.  Invalid minimum longitude value: " + minLon);
     }
-    this.minLon = DbUtils.toDbCoordPrecision(minLon);
+    this.minLon = minLon;
     
     if (minLat < (-1 * LAT_LIMIT) || minLat > LAT_LIMIT)
     {
       throw new Exception("Invalid coordinate.  Invalid minimum latitude value: " + minLat);
     }
-    this.minLat = DbUtils.toDbCoordPrecision(minLat);
+    this.minLat = minLat;
     
     if (maxLon < (-1 * LON_LIMIT) || maxLon > LON_LIMIT)
     {
       throw new Exception("Invalid maximum longitude value: " + maxLon);
     }
-    this.maxLon = DbUtils.toDbCoordPrecision(maxLon);
+    this.maxLon = maxLon;
     
     if (maxLat < (-1 * LAT_LIMIT) || maxLat > LAT_LIMIT)
     {
       throw new Exception("Invalid maximum latitude value: " + maxLat);
     }
-    this.maxLat = DbUtils.toDbCoordPrecision(maxLat);
+    this.maxLat = maxLat;
   }
   
   /**

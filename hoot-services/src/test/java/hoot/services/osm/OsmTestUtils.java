@@ -313,21 +313,19 @@ public class OsmTestUtils
       changeset.getCreatedAt().before(now));
     Assert.assertTrue(changeset.getClosedAt().after(changeset.getCreatedAt()));
     Assert.assertEquals(
-      new Long(DbUtils.toDbCoordValue(GeoUtils.DEFAULT_COORD_VALUE)),
+      new Double(GeoUtils.DEFAULT_COORD_VALUE),
       changeset.getMaxLat());
     Assert.assertEquals(
-      new Long(DbUtils.toDbCoordValue(GeoUtils.DEFAULT_COORD_VALUE)),
+      new Double(GeoUtils.DEFAULT_COORD_VALUE),
       changeset.getMaxLon());
     Assert.assertEquals(
-      new Long(DbUtils.toDbCoordValue(GeoUtils.DEFAULT_COORD_VALUE)),
+      new Double(GeoUtils.DEFAULT_COORD_VALUE),
       changeset.getMinLon());
     Assert.assertEquals(
-      new Long(DbUtils.toDbCoordValue(GeoUtils.DEFAULT_COORD_VALUE)),
+      new Double(GeoUtils.DEFAULT_COORD_VALUE),
       changeset.getMinLat());
     Assert.assertEquals(new Integer(0), changeset.getNumChanges());
     Assert.assertEquals(new Long(userId), changeset.getUserId());
-
-
   }
 
   public static void verifyTestDataUnmodified(final BoundingBox originalBounds,
@@ -459,12 +457,10 @@ public class OsmTestUtils
       CurrentNodes nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[0]);
       Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
       Assert.assertEquals(
-        new Long((long)(DbUtils.toDbCoordPrecision(originalBounds.getMinLat()) *
-          GeoUtils.getCoordinateScale())),
+        new Double((double)originalBounds.getMinLat()),
         nodeRecord.getLatitude());
       Assert.assertEquals(
-        new Long((long)(DbUtils.toDbCoordPrecision(originalBounds.getMinLon()) *
-          GeoUtils.getCoordinateScale())),
+        new Double((double)originalBounds.getMinLon()),
         nodeRecord.getLongitude());
       Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
       Assert.assertEquals(new Long(1), nodeRecord.getVersion());
@@ -489,12 +485,10 @@ public class OsmTestUtils
       nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[1]);
       Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
       Assert.assertEquals(
-        new Long((long)(DbUtils.toDbCoordPrecision(originalBounds.getMaxLat()) *
-          GeoUtils.getCoordinateScale())),
+        new Double((double)originalBounds.getMaxLat()),
         nodeRecord.getLatitude());
       Assert.assertEquals(
-        new Long((long)(DbUtils.toDbCoordPrecision(originalBounds.getMaxLon()) *
-          GeoUtils.getCoordinateScale())),
+        new Double((double)originalBounds.getMaxLon()),
         nodeRecord.getLongitude());
       Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
       Assert.assertEquals(new Long(1), nodeRecord.getVersion());
@@ -515,12 +509,10 @@ public class OsmTestUtils
       nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[2]);
       Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
       Assert.assertEquals(
-        new Long((long)(DbUtils.toDbCoordPrecision(originalBounds.getMinLat()) *
-          GeoUtils.getCoordinateScale())),
+        new Double((double)originalBounds.getMinLat()),
         nodeRecord.getLatitude());
       Assert.assertEquals(
-        new Long((long)(DbUtils.toDbCoordPrecision(originalBounds.getMinLon()) *
-          GeoUtils.getCoordinateScale())),
+        new Double((double)originalBounds.getMinLon()),
         nodeRecord.getLongitude());
       Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
       Assert.assertEquals(new Long(1), nodeRecord.getVersion());
@@ -541,12 +533,10 @@ public class OsmTestUtils
       nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[3]);
       Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
       Assert.assertEquals(
-        new Long((long)(DbUtils.toDbCoordPrecision(originalBounds.getMinLat()) *
-          GeoUtils.getCoordinateScale())),
+        new Double((double)originalBounds.getMinLat()),
         nodeRecord.getLatitude());
       Assert.assertEquals(
-        new Long((long)(DbUtils.toDbCoordPrecision(originalBounds.getMinLon()) *
-          GeoUtils.getCoordinateScale())),
+        new Double((double)originalBounds.getMinLon()),
         nodeRecord.getLongitude());
       Assert.assertEquals(nodeIdsArr[3], nodeRecord.getId());
       Assert.assertEquals(new Long(1), nodeRecord.getVersion());
@@ -568,12 +558,10 @@ public class OsmTestUtils
       nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[4]);
       Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
       Assert.assertEquals(
-        new Long((long)(DbUtils.toDbCoordPrecision(originalBounds.getMinLat()) *
-          GeoUtils.getCoordinateScale())),
+        new Double((double)originalBounds.getMinLat()),
         nodeRecord.getLatitude());
       Assert.assertEquals(
-        new Long((long)(DbUtils.toDbCoordPrecision(originalBounds.getMinLon()) *
-          GeoUtils.getCoordinateScale())),
+        new Double((double)originalBounds.getMinLon()),
         nodeRecord.getLongitude());
       Assert.assertEquals(nodeIdsArr[4], nodeRecord.getId());
       Assert.assertEquals(new Long(1), nodeRecord.getVersion());
@@ -1202,11 +1190,11 @@ public class OsmTestUtils
         userId,
         Long.parseLong(xpath.evaluate("//osm/node[" + index + "]/@uid", responseData)));
       Assert.assertEquals(
-        DbUtils.toDbCoordPrecision(lat),
+        lat,
         Double.parseDouble(xpath.evaluate("//osm/node[" + index + "]/@lat", responseData)),
         0.0);
       Assert.assertEquals(
-        DbUtils.toDbCoordPrecision(lon),
+        lon,
         Double.parseDouble(xpath.evaluate("//osm/node[" + index + "]/@lon", responseData)),
         0.0);
     }

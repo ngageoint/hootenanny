@@ -574,13 +574,13 @@ public class MapResource
       final JSONObject anode = currMap.retrieveANode(queryBounds);
       long nodeCnt = currMap.getNodesCount(queryBounds);
 
-      double dMinLon = DbUtils.fromDbCoordValue((Long) extents.get("minlon"));
-      double dMaxLon = DbUtils.fromDbCoordValue((Long) extents.get("maxlon"));
-      double dMinLat = DbUtils.fromDbCoordValue((Long) extents.get("minlat"));
-      double dMaxLat = DbUtils.fromDbCoordValue((Long) extents.get("maxlat"));
+      double dMinLon = (Double)extents.get("minlon");
+      double dMaxLon = (Double) extents.get("maxlon");
+      double dMinLat = (Double) extents.get("minlat");
+      double dMaxLat = (Double) extents.get("maxlat");
 
-      double dFirstLon = DbUtils.fromDbCoordValue((Long) anode.get("lon"));
-      double dFirstLat = DbUtils.fromDbCoordValue((Long) anode.get("lat"));
+      double dFirstLon = (Double)anode.get("lon");
+      double dFirstLat = (Double)anode.get("lat");
 
       ret.put("minlon", dMinLon);
       ret.put("maxlon", dMaxLon);

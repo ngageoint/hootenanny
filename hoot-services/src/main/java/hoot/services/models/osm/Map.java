@@ -169,10 +169,10 @@ public class Map extends Maps
   {
   	QCurrentNodes nodes = QCurrentNodes.currentNodes;
 
-  	return nodes.longitude.goe(bounds.getMinLonDb())
-  			.and(nodes.latitude.goe(bounds.getMinLatDb()))
-  			.and(nodes.longitude.loe(bounds.getMaxLonDb()))
-  			.and(nodes.latitude.loe(bounds.getMaxLatDb()));
+  	return nodes.longitude.goe(bounds.getMinLon())
+  			.and(nodes.latitude.goe(bounds.getMinLat()))
+  			.and(nodes.longitude.loe(bounds.getMaxLon()))
+  			.and(nodes.latitude.loe(bounds.getMaxLat()));
   		/*
     return
       Tables.CURRENT_NODES.LONGITUDE.greaterOrEqual(bounds.getMinLonDb())

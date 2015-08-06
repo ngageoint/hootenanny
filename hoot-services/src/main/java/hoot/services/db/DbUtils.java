@@ -57,10 +57,8 @@ import hoot.services.db2.QMaps;
 import hoot.services.db2.QReviewItems;
 import hoot.services.db2.QReviewMap;
 import hoot.services.db2.QUsers;
-import hoot.services.geo.GeoUtils;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.apache.commons.math.util.MathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -1194,8 +1192,8 @@ public class DbUtils
 
 
 	      			ps.setLong(1, node.getId());
-	      			ps.setLong(2, node.getLatitude());
-	      			ps.setLong(3, node.getLongitude());
+	      			ps.setDouble(2, node.getLatitude());
+	      			ps.setDouble(3, node.getLongitude());
 	      			ps.setLong(4, node.getChangesetId());
 	      			ps.setBoolean(5, node.getVisible());
 	      			ps.setTimestamp(6, node.getTimestamp());
@@ -1240,8 +1238,8 @@ public class DbUtils
           	{
           		CurrentNodes node  = (CurrentNodes)o;
 
-	      			ps.setLong(1, node.getLatitude());
-	      			ps.setLong(2, node.getLongitude());
+	      			ps.setDouble(1, node.getLatitude());
+	      			ps.setDouble(2, node.getLongitude());
 	      			ps.setLong(3, node.getChangesetId());
 	      			ps.setBoolean(4, node.getVisible());
 	      			ps.setTimestamp(5, node.getTimestamp());
@@ -1684,44 +1682,4 @@ public class DbUtils
 		
 		return ret;
 	}
-
-  
-  /**
-   * Converts a geo-coordinate value to the database storage format
-   *
-   * @param coordVal
-   *          coordinate value to convert
-   * @return a converted coordinate value
-   */
-  public static long toDbCoordValue(double coordVal)
-  {
-    return (long)(toDbCoordPrecision(coordVal) * GeoUtils.getCoordinateScale());
-  }
-
-  /**
-   * Converts a geo-coordinate value from the database storage format
-   *
-   * @param coordVal
-   *          coordinate value to convert
-   * @return a converted coordinate value
-   */
-  public static double fromDbCoordValue(long coordVal)
-  {
-    return coordVal / (double) GeoUtils.getCoordinateScale();
-  }
-
-  /**
-   * Sets a geo-coordinate value to the decimal precision expected by the
-   * services database
-   *
-   * @param coordVal
-   *          a coordinate value
-   * @return input coordinate value with the correct number of decimal places
-   */
-  public static double toDbCoordPrecision(double coordVal)
-  {
-    return MathUtils.round(coordVal, 7);
-  }
-
-
 }

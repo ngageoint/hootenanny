@@ -257,20 +257,6 @@ positive or negative.
 Crops based on the polygon rather than doing a cookie cut when using the cookie cutter map
 operation (CookieCutterOp).
 
-=== services.db.coordinate.scale
-
-* Data Type: int
-* Default Value: `11`
-
-Controls the level of precision to which coordinates are stored; If using the Hootenanny web user
-interface, the value must match the coordinateScale parameter value in
-hoot-services/src/main/resources/conf/hoot-services.conf.  Valid values are 7 (100 nanodegrees
-precision) to 16 (1e-7 nanodegrees precision).  Higher values result in potentially less data
-inaccuracies but higher storage costs.  Changing the value will only affect new data added to the
-services database and will result in no change to existing data.  Only values 7 through 11 have been
-tested.  In general, a value of 7 will result in data inaccuracies of up to ~1 cm, and a value of 11
-will result in data inaccuracies immeasurable in QGIS.
-
 === crop.bounds
 
 * Data Type: string

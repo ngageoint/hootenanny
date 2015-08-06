@@ -127,14 +127,12 @@ public class RasterToTilesService extends JobControllerBase {
       }
 
       hoot.services.models.osm.Map currMap = new hoot.services.models.osm.Map(mapIdNum, conn);
-      final JSONObject extents =
-      	currMap.retrieveNodesMBR(queryBounds);
+      final JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
 
-
-			double dMinLon = DbUtils.fromDbCoordValue((Long)extents.get("minlon"));
-			double dMaxLon = DbUtils.fromDbCoordValue((Long)extents.get("maxlon"));
-			double dMinLat = DbUtils.fromDbCoordValue((Long)extents.get("minlat"));
-			double dMaxLat = DbUtils.fromDbCoordValue((Long)extents.get("maxlat"));
+			double dMinLon = (Double)extents.get("minlon");
+			double dMaxLon = (Double)extents.get("maxlon");
+			double dMinLat = (Double)extents.get("minlat");
+			double dMaxLat = (Double)extents.get("maxlat");
 
 			double deltaLon = dMaxLon - dMinLon;
 			double deltaLat = dMaxLat - dMinLat;
@@ -153,7 +151,8 @@ public class RasterToTilesService extends JobControllerBase {
 			argStr.put("jobId", jobId);
 
 			//postJobRquest( jobId,  argStr);
-			JobExecutionManager jobExecManager = (JobExecutionManager)appContext.getBean("jobExecutionManagerNative");
+			JobExecutionManager jobExecManager = 
+				(JobExecutionManager)appContext.getBean("jobExecutionManagerNative");
 			jobExecManager.exec(argStr);
 			jobStatusManager.setComplete(jobId);
 		}
@@ -206,10 +205,10 @@ public class RasterToTilesService extends JobControllerBase {
       	currMap.retrieveNodesMBR(queryBounds);
 
 
-			double dMinLon = DbUtils.fromDbCoordValue((Long)extents.get("minlon"));
-			double dMaxLon = DbUtils.fromDbCoordValue((Long)extents.get("maxlon"));
-			double dMinLat = DbUtils.fromDbCoordValue((Long)extents.get("minlat"));
-			double dMaxLat = DbUtils.fromDbCoordValue((Long)extents.get("maxlat"));
+			double dMinLon = (Double)extents.get("minlon");
+			double dMaxLon = (Double)extents.get("maxlon");
+			double dMinLat = (Double)extents.get("minlat");
+			double dMaxLat = (Double)extents.get("maxlat");
 
 			double deltaLon = dMaxLon - dMinLon;
 			double deltaLat = dMaxLat - dMinLat;

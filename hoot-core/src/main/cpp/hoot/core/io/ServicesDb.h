@@ -86,14 +86,13 @@ public:
   static const int RELATIONS_TAGS = 5;
   static const int WAYS_TAGS = 5;
 
-
   /**
    * This value should be updated after the DB is upgraded and all tests run successfully.
    */
   static QString expectedDbVersion() { return "13:brandon.witham"; }
   static int maximumChangeSetEdits() { return 50000; }
 
-  static long getCoordinateScale();
+  //static long getCoordinateScale();
 
   static const Status DEFAULT_ELEMENT_STATUS;
   static const Meters DEFAULT_ELEMENT_CIRCULAR_ERROR = 0.0;

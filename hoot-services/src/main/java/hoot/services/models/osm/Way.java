@@ -314,8 +314,8 @@ public class Way extends Element
     for (Object record : nodeRecords)
     {
       final CurrentNodes nodeRecord = (CurrentNodes) record;
-      final double lat = DbUtils.fromDbCoordValue(nodeRecord.getLatitude());
-      final double lon = DbUtils.fromDbCoordValue(nodeRecord.getLongitude());
+      final double lat = nodeRecord.getLatitude();
+      final double lon = nodeRecord.getLongitude();
       if (lat < minLat)
       {
         minLat = lat;
@@ -549,8 +549,8 @@ public class Way extends Element
       Node node = (Node) parsedElementIdsToElementsByType.get(ElementType.Node).get(parsedNodeId);
       CurrentNodes nodeRecord = (CurrentNodes) node.getRecord();
       actualNodeId = nodeRecord.getId();
-      nodeCoords.lat = DbUtils.fromDbCoordValue(nodeRecord.getLatitude());
-      nodeCoords.lon = DbUtils.fromDbCoordValue(nodeRecord.getLongitude());
+      nodeCoords.lat = nodeRecord.getLatitude();
+      nodeCoords.lon = nodeRecord.getLongitude();
     }
     // element not referenced in this request, so should already exist in the db
     // and its info up
@@ -574,8 +574,8 @@ public class Way extends Element
       {
         throw new Exception("Node with ID: " + actualNodeId + " is not visible for way.");
       }
-      nodeCoords.lat = DbUtils.fromDbCoordValue(existingNodeRecord.getLatitude());
-      nodeCoords.lon = DbUtils.fromDbCoordValue(existingNodeRecord.getLongitude());
+      nodeCoords.lat = existingNodeRecord.getLatitude();
+      nodeCoords.lon = existingNodeRecord.getLongitude();
     }
     assert (actualNodeId > 0);
     nodeCoordsCollection.put(actualNodeId, nodeCoords);

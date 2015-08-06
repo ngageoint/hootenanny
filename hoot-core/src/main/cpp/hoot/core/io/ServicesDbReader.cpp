@@ -487,10 +487,8 @@ shared_ptr<Node> ServicesDbReader::_resultToNode(const QSqlQuery& resultIterator
     new Node(
       _status,
       nodeId,
-      resultIterator.value(ServicesDb::NODES_LONGITUDE).toLongLong() /
-          (double)ServicesDb::getCoordinateScale(),
-      resultIterator.value(ServicesDb::NODES_LATITUDE).toLongLong() /
-          (double)ServicesDb::getCoordinateScale(),
+      resultIterator.value(ServicesDb::NODES_LONGITUDE).toDouble(),
+      resultIterator.value(ServicesDb::NODES_LATITUDE).toDouble(),
       ServicesDb::DEFAULT_ELEMENT_CIRCULAR_ERROR));
 
   result->setTags(ServicesDb::unescapeTags(resultIterator.value(ServicesDb::NODES_TAGS)));

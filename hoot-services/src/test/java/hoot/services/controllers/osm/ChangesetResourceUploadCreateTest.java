@@ -52,7 +52,6 @@ import org.w3c.dom.NodeList;
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.db.DbUtils;
-
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelations;
 import hoot.services.db2.CurrentWayNodes;
@@ -480,18 +479,14 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
         CurrentNodes nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Long((long)(DbUtils.toDbCoordPrecision(originalBounds.getMinLat()) *
-            GeoUtils.getCoordinateScale())),
-          nodeRecord.getLatitude());
+          new Double((double)originalBounds.getMinLat()), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Long((long)(DbUtils.toDbCoordPrecision(originalBounds.getMinLon()) *
-            GeoUtils.getCoordinateScale())),
-          nodeRecord.getLongitude());
+          new Double((double)originalBounds.getMinLon()), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
-            DbUtils.fromDbCoordValue(nodeRecord.getLatitude()),
-            DbUtils.fromDbCoordValue(nodeRecord.getLongitude()))),
+            nodeRecord.getLatitude(),
+            nodeRecord.getLongitude())),
           nodeRecord.getTile());
         Assert.assertTrue(nodeRecord.getTimestamp().before(now));
         Assert.assertEquals(new Long(1), nodeRecord.getVersion());
@@ -500,18 +495,14 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
         nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Long((long)(DbUtils.toDbCoordPrecision(originalBounds.getMaxLat()) *
-            GeoUtils.getCoordinateScale())),
-          nodeRecord.getLatitude());
+          new Double((double)originalBounds.getMaxLat()), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Long((long)(DbUtils.toDbCoordPrecision(originalBounds.getMaxLon()) *
-            GeoUtils.getCoordinateScale())),
-          nodeRecord.getLongitude());
+          new Double((double)originalBounds.getMaxLon()), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
-            DbUtils.fromDbCoordValue(nodeRecord.getLatitude()),
-            DbUtils.fromDbCoordValue(nodeRecord.getLongitude()))),
+            nodeRecord.getLatitude(),
+            nodeRecord.getLongitude())),
           nodeRecord.getTile());
         Assert.assertTrue(nodeRecord.getTimestamp().before(now));
         Assert.assertEquals(new Long(1), nodeRecord.getVersion());
@@ -520,18 +511,14 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
         nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[2]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Long((long)(DbUtils.toDbCoordPrecision((originalBounds.getMinLat() - .001)) *
-            GeoUtils.getCoordinateScale())),
-          nodeRecord.getLatitude());
+          new Double((long)(originalBounds.getMinLat() - .001)), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Long((long)(DbUtils.toDbCoordPrecision((originalBounds.getMinLon() - .001)) *
-            GeoUtils.getCoordinateScale())),
-          nodeRecord.getLongitude());
+          new Double((long)(originalBounds.getMinLon() - .001)), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
-            DbUtils.fromDbCoordValue(nodeRecord.getLatitude()),
-            DbUtils.fromDbCoordValue(nodeRecord.getLongitude()))),
+            nodeRecord.getLatitude(),
+            nodeRecord.getLongitude())),
           nodeRecord.getTile());
         Assert.assertTrue(nodeRecord.getTimestamp().before(now));
         Assert.assertEquals(new Long(1), nodeRecord.getVersion());
