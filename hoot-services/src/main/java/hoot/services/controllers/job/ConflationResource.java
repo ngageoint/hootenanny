@@ -204,7 +204,8 @@ public class ConflationResource extends JobControllerBase {
 					"prepareItemsForReview");
 			//String argStr = createPostBody(commandArgs);
 
-			String userEmail = oParams.get("USER_EMAIL").toString();
+			Object oUserEmail = oParams.get("USER_EMAIL");
+			String userEmail = (oUserEmail ==  null)? null : oUserEmail.toString();
 //	  Density Raster
 			JSONArray rasterTilesArgs = new JSONArray();
 			JSONObject rasterTilesparam = new JSONObject();
@@ -213,11 +214,14 @@ public class ConflationResource extends JobControllerBase {
 			rasterTilesparam.put("isprimitivetype", "false");
 			rasterTilesArgs.add(rasterTilesparam);
 			
-			rasterTilesparam = new JSONObject();
-			rasterTilesparam.put("value", userEmail);
-			rasterTilesparam.put("paramtype", String.class.getName());
-			rasterTilesparam.put("isprimitivetype", "false");
-			rasterTilesArgs.add(rasterTilesparam);
+			if(userEmail != null)
+			{
+				rasterTilesparam = new JSONObject();
+				rasterTilesparam.put("value", userEmail);
+				rasterTilesparam.put("paramtype", String.class.getName());
+				rasterTilesparam.put("isprimitivetype", "false");
+				rasterTilesArgs.add(rasterTilesparam);
+			}
 
 
 
