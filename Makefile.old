@@ -271,7 +271,7 @@ tmp/schema.dot: qt-make
 	HootTest --single hoot::OsmSchemaTest
 
 tmp/schema.png: tmp/schema.dot
-	neato -Tpng -Gsize=50,50\! -GK=3 -Gratio=.5 -Gmindist=1 -Gmclimit=10 -Gnodesep=4 -Granksep=4 -Gsplines=true -Glen=0.5 -Gconcentrate=true -Gdpi=50 -Elen=3 -o tmp/schema.png tmp/schema.dot
+	neato -Tpng -Gsize=50,50\! -GK=3 -Gratio=.5 -Gmindist=1 -Gmclimit=10 -Gnodesep=4 -Granksep=4 -Gsplines=true -Glen=0.5 -Gconcentrate=true -Gdpi=50 -Goverlap=false -Elen=3 -o tmp/schema.png tmp/schema.dot
 
 # Code Coverage
 
