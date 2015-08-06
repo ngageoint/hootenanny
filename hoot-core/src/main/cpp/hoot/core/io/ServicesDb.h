@@ -190,13 +190,20 @@ public:
   long getOrCreateUser(QString email, QString displayName);
 
   /**
+   * Set user ID for current session, will be passed to DB in all places user ID is required
+   *
+   * @param sessionUserId The user ID to establish for this session
+   */
+  void setUserId(const long sessionUserId);
+
+  /**
    * Deletes a map and all of it's dependencies.
    */
   void deleteMap(long mapId);
 
   void deleteUser(long userId);
 
-  long insertChangeSet(long mapId, long userId, const Tags& tags = Tags(),
+  long insertChangeSet(long mapId, const Tags& tags = Tags(),
     Envelope env = Envelope());
 
   /**
@@ -209,7 +216,7 @@ public:
    * @param publicVisibility Is the map publicly visible?
    * @return
    */
-  long insertMap(QString mapName, int userId, bool publicVisibility = true);
+  long insertMap(QString mapName, bool publicVisibility = true);
 
   long insertNode(long mapId, long id, double lat, double lon, long changeSetId,
     const Tags &tags, bool createNewId = false);
@@ -234,7 +241,7 @@ public:
    */
   void rollback();
 
-  set<long> selectMapIds(QString name, long userId);
+  set<long> selectMapIds(QString name);
 
   /**
    * Given a QVariant (string), unscape the tags into a full tag map.
@@ -294,6 +301,8 @@ private:
   QVector<long> _pendingMapIndexes;
 
   long _lastMapId;
+
+  long _currUserId;
 
   /**
    * This is here to improve query caching. In most cases users open a single ServiceDb and then

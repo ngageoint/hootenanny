@@ -128,10 +128,10 @@ public:
     database.transaction();
 
     QList<long> ids;
-    long userId = database.getOrCreateUser(userEmail(), "ServicesDbTest");
-    long mapId = database.insertMap("foo", userId, true);
+    database.setUserId(database.getOrCreateUser(userEmail(), "ServicesDbTest"));
+    long mapId = database.insertMap("foo", true);
     ids.append(mapId);
-    long changeSetId = database.insertChangeSet(mapId, userId, Tags());
+    long changeSetId = database.insertChangeSet(mapId, Tags());
     ids.append(changeSetId);
 
     Tags t;
@@ -164,10 +164,10 @@ public:
     database.transaction();
 
     QList<long> ids;
-    long userId = database.getOrCreateUser(userEmail(), "ServicesDbTest");
-    long mapId = database.insertMap("foo", userId, true);
+    database.setUserId(database.getOrCreateUser(userEmail(), "ServicesDbTest"));
+    long mapId = database.insertMap("foo", true);
     ids.append(mapId);
-    long changeSetId = database.insertChangeSet(mapId, userId);
+    long changeSetId = database.insertChangeSet(mapId);
 
     Tags t;
     long nodeId = database.insertNode(mapId, -1, 38.0, -104, changeSetId, t, true);
@@ -215,10 +215,10 @@ public:
   {
     QList<long> ids;
     database.transaction();
-    long userId = database.getOrCreateUser(userEmail(), "ServicesDbTest");
-    long mapId = database.insertMap("foo", userId, true);
+    database.setUserId(database.getOrCreateUser(userEmail(), "ServicesDbTest"));
+    long mapId = database.insertMap("foo", true);
     ids.append(mapId);
-    long changeSetId = database.insertChangeSet(mapId, userId);
+    long changeSetId = database.insertChangeSet(mapId);
 
     Tags t;
     t["hoot:status"] = "Unknown1";
@@ -506,8 +506,8 @@ public:
           (qlonglong)nodeId);
 
 
-    long userId = database.getOrCreateUser(userEmail(), "ServicesDbTest");
-    long changeSetId = database.insertChangeSet(mapId, userId);
+    database.setUserId(database.getOrCreateUser(userEmail(), "ServicesDbTest"));
+    long changeSetId = database.insertChangeSet(mapId);
     database.updateNode(mapId, nodeId, 3.1415, 2.71828, changeSetId, Tags());
 
     ServicesDbTestUtils::compareRecords(

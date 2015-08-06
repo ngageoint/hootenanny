@@ -512,11 +512,15 @@ void ServicesDb::_init()
 
   // arbitrary, needs benchmarking
   _relationsPerBulkInsert = recordsPerBulkInsert;
+
+  _currUserId = -1;
 }
 
-long ServicesDb::insertChangeSet(long mapId, long userId, const Tags& tags,
+long ServicesDb::insertChangeSet(long mapId, const Tags& tags,
   geos::geom::Envelope env)
 {
+  const long userId = _currUserId;
+
   _checkLastMapId(mapId);
   if (_insertChangeSet == 0)
   {
@@ -538,8 +542,10 @@ long ServicesDb::insertChangeSet(long mapId, long userId, const Tags& tags,
   return _insertRecord(*_insertChangeSet);
 }
 
-long ServicesDb::insertMap(QString displayName, int userId, bool publicVisibility)
+long ServicesDb::insertMap(QString displayName, bool publicVisibility)
 {
+  const int userId = _currUserId;
+
   if (_insertMap == 0)
   {
     _insertMap.reset(new QSqlQuery(_db));
@@ -831,6 +837,14 @@ long ServicesDb::getOrCreateUser(QString email, QString displayName)
   return result;
 }
 
+void ServicesDb::setUserId(const long sessionUserId)
+{
+  _currUserId = sessionUserId;
+
+  LOG_INFO("User ID updated to " + QString::number(_currUserId));
+}
+
+
 long ServicesDb::getUserId(QString email, bool throwWhenMissing)
 {
   if (_selectUserByEmail == 0)
@@ -1079,8 +1093,10 @@ long ServicesDb::_round(double x, int precision)
   //return (long)(ceil(x * (10 * (precision - 1))) / (10 * (precision - 1)));
 }
 
-set<long> ServicesDb::selectMapIds(QString name, long userId)
+set<long> ServicesDb::selectMapIds(QString name)
 {
+  const long userId = _currUserId;
+
   if (_selectMapIds == 0)
   {
     _selectMapIds.reset(new QSqlQuery(_db));

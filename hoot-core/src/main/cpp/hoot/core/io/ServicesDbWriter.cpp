@@ -105,7 +105,7 @@ void ServicesDbWriter::open(QString urlStr)
 {
   QString mapName = _openDb(urlStr, _overwriteMap);
 
-  _mapId = _sdb.insertMap(mapName, _userId);
+  _mapId = _sdb.insertMap(mapName);
 
   _startNewChangeSet();
 }
@@ -144,14 +144,17 @@ QString ServicesDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
   // create the user before we have a transaction so we can make sure the user gets added.
   if (_createUserIfNotFound)
   {
-    _userId = _sdb.getOrCreateUser(_userEmail, _userEmail);
+    _sdb.setUserId(_sdb.getOrCreateUser(_userEmail, _userEmail));
+  }
+  else
+  {
+    _sdb.setUserId(_sdb.getUserId(_userEmail, true));
   }
 
   // start the transaction. We'll close it when finalizePartial is called.
   _sdb.transaction();
-  _userId = _sdb.getUserId(_userEmail, true);
 
-  set<long> mapIds = _sdb.selectMapIds(mapName, _userId);
+  set<long> mapIds = _sdb.selectMapIds(mapName);
 
   if (mapIds.size() > 0)
   {
@@ -259,7 +262,7 @@ void ServicesDbWriter::_startNewChangeSet()
   Tags tags;
   tags["bot"] = "yes";
   tags["created_by"] = "hootenanny";
-  _changeSetId = _sdb.insertChangeSet(_mapId, _userId, tags);
+  _changeSetId = _sdb.insertChangeSet(_mapId, tags);
 }
 
 void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)

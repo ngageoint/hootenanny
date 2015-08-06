@@ -150,8 +150,8 @@ void ServicesDbReader::open(QString urlStr)
                           "via: " + emailKey());
     }
     mapName = pList[pList.size() - 1];
-    long userId = _database.getUserId(_email);
-    set<long> mapIds = _database.selectMapIds(mapName, userId);
+    _database.setUserId(_database.getUserId(_email));
+    set<long> mapIds = _database.selectMapIds(mapName);
     if (mapIds.size() != 1)
     {
       QString str = QString("Expected 1 map with the name '%1' but found %2 maps.").arg(mapName)
