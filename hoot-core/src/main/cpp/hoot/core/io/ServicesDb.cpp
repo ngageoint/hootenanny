@@ -134,7 +134,7 @@ void ServicesDb::closeChangeSet(long changeSetId, Envelope env, int numChanges)
 {
   const long mapId = _currMapId;
 
-  if (!changesetExists(mapId, changeSetId))
+  if (!changesetExists(changeSetId))
   {
     throw HootException("No changeset exists with ID: " + changeSetId);
   }
@@ -1214,8 +1214,10 @@ bool ServicesDb::mapExists(const long id)
   return _mapExists->next();
 }
 
-bool ServicesDb::changesetExists(long mapId, const long id)
+bool ServicesDb::changesetExists(const long id)
 {
+  const long mapId = _currMapId;
+
   _checkLastMapId(mapId);
   if (_changesetExists == 0)
   {

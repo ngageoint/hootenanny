@@ -277,7 +277,7 @@ public:
     const shared_ptr<QList<long> > ids = insertTestMap1(database);
 
     const long changesetId = ids->at(1);
-    CPPUNIT_ASSERT(database.changesetExists(ids->at(0), changesetId));
+    CPPUNIT_ASSERT(database.changesetExists(changesetId));
   }
 
   void runNumElementsTest()

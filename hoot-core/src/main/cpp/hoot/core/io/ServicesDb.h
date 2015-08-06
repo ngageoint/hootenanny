@@ -138,7 +138,7 @@ public:
   /**
    * Returns true if the changeset with the specified ID exists in the services database
    */
-  bool changesetExists(long mapId, const long id);
+  bool changesetExists(const long id);
 
   /**
    * Returns the number of OSM elements of a given type for a particular map in the services
