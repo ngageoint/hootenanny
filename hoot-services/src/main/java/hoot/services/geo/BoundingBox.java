@@ -54,8 +54,6 @@ public class BoundingBox
 {
   public static final double LON_LIMIT = 180.0;
   public static final double LAT_LIMIT = 90.0;
-  public static final double SCALED_LON_LIMIT = LON_LIMIT * GeoUtils.getCoordinateScale();
-  public static final double SCALED_LAT_LIMIT = LAT_LIMIT * GeoUtils.getCoordinateScale();
   
   //coords in degrees
   
@@ -376,20 +374,20 @@ public class BoundingBox
       if (bounds.getMinLon() < minLon)
       {
         minLon = 
-          Math.max((-1 * SCALED_LON_LIMIT), (bounds.getMinLon() + margin * (minLon - maxLon)));
+          Math.max((-1 * LON_LIMIT), (bounds.getMinLon() + margin * (minLon - maxLon)));
       }
       if (bounds.getMinLat() < minLat)
       {
         minLat = 
-          Math.max((-1 * SCALED_LAT_LIMIT), (bounds.getMinLat() + margin * (minLat - maxLat)));
+          Math.max((-1 * LAT_LIMIT), (bounds.getMinLat() + margin * (minLat - maxLat)));
       }
       if (bounds.getMaxLon() > maxLon)
       {
-        maxLon = Math.min(SCALED_LON_LIMIT, (bounds.getMaxLon() + margin * (maxLon - minLon)));
+        maxLon = Math.min(LON_LIMIT, (bounds.getMaxLon() + margin * (maxLon - minLon)));
       }
       if (bounds.getMaxLat() > maxLat)
       {
-        maxLat = Math.min(SCALED_LAT_LIMIT, (bounds.getMaxLat() + margin * (maxLat - minLat)));
+        maxLat = Math.min(LAT_LIMIT, (bounds.getMaxLat() + margin * (maxLat - minLat)));
       }
     }
   }

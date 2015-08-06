@@ -314,10 +314,6 @@ public class HootProperties
     {
       return "true";
     }
-    else if (key.equals("coordinateScale"))
-    {
-      return "11";
-    }
     return null;
   }
 }

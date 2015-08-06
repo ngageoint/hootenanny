@@ -41,36 +41,6 @@ public class GeoUtils
 	public static final double DEFAULT_COORD_VALUE = -181.0;
   
   /**
-   * coordinates are stored in the database as integers and this factor is used for converting them 
-   * to and from decimals
-   */
-  public static long getCoordinateScale()
-  {
-  	int coordinateScale = -1;
-  	try
-  	{
-  		coordinateScale = 
-  		  Integer.parseInt(
-  	      HootProperties.getInstance().getProperty(
-            "coordinateScale", HootProperties.getDefault("coordinateScale")));
-  		if (coordinateScale < 7 || coordinateScale > 16)
-  		{
-  			log.warn(
-  			  "Invalid coordinate scale value: " + String.valueOf(coordinateScale) + 
-  			  ".  Must be in the range of 7 to 16.");
-  			coordinateScale = Integer.parseInt(HootProperties.getDefault("coordinateScale"));
-  			log.warn("Using default coordinate scale value: " + coordinateScale);
-  		}
-  		return (long)Math.pow(10, coordinateScale);
-  	}
-  	catch (Exception e)
-  	{
-  		coordinateScale = Integer.parseInt(HootProperties.getDefault("coordinateScale"));
-  		return (long)Math.pow(10, coordinateScale);
-  	}
-  }
-  
-  /**
    * Determines if a pair of coordinates lie within world boundaries
    * 
    * @param lat latitude coordinate

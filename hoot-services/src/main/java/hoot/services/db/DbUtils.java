@@ -87,7 +87,6 @@ public class DbUtils
   public static final String TIMESTAMP_DATE_FORMAT = "YYYY-MM-dd HH:mm:ss";
 
   protected static SQLTemplates templates = null;
-  //protected static Configuration configuration = null;
 
   protected static org.apache.commons.dbcp.BasicDataSource dbcp_datasource = null;
   private static ClassPathXmlApplicationContext appContext = null;
@@ -114,14 +113,11 @@ public class DbUtils
     DELETE
   }
 
-
-
 	public enum nwr_enum {
 		 node,
 		 way,
 		 relation
 	}
-
 
 	public enum review_status_enum
 	{
@@ -746,10 +742,11 @@ public class DbUtils
   }
 
 
+  //TODO: this code needs to be changed to dynamically read in the data types from querydsl.  If
+  //I make a change to the schema in liquibase, it will never be picked up unless this static code
+  //is also changed.  See #
   public static void createMap(final long mapId) throws Exception
   {
-
-
   	try {
 			String dbname = HootProperties.getProperty("dbName");
 
@@ -760,10 +757,10 @@ public class DbUtils
 	    "(id bigserial NOT NULL, " +
 	    " user_id bigint NOT NULL, " +
 	    " created_at timestamp without time zone NOT NULL, " +
-	    " min_lat bigint NOT NULL, " +
-	    " max_lat bigint NOT NULL, " +
-	    " min_lon bigint NOT NULL, " +
-	    " max_lon bigint NOT NULL, " +
+	    " min_lat double precision NOT NULL, " +
+	    " max_lat double precision NOT NULL, " +
+	    " min_lon double precision NOT NULL, " +
+	    " max_lon double precision NOT NULL, " +
 	    " closed_at timestamp without time zone NOT NULL, " +
 	    " num_changes integer NOT NULL DEFAULT 0, " +
 	    " tags hstore, " +
@@ -778,8 +775,8 @@ public class DbUtils
 	  	// current_nodes
 	  	createTblSql = "CREATE TABLE current_nodes_" + mapId +
 	    "(id bigserial NOT NULL, " +
-	    " latitude bigint NOT NULL, " +
-	    " longitude bigint NOT NULL, " +
+	    " latitude double precision NOT NULL, " +
+	    " longitude double precision NOT NULL, " +
 	    " changeset_id bigint NOT NULL, " +
 	    " visible boolean NOT NULL DEFAULT true, " +
 	    " \"timestamp\" timestamp without time zone NOT NULL DEFAULT now(), " +
