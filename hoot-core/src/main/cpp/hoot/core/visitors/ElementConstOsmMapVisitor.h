@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCONSTOSMMAPVISITOR_H
 #define ELEMENTCONSTOSMMAPVISITOR_H
@@ -54,12 +54,6 @@ public:
   virtual ~ElementConstOsmMapVisitor() {}
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
-
-  virtual void visit(ElementType type, long id)
-  {
-    shared_ptr<const Element> e = _map->getElement(type, id);
-    visit(e);
-  }
 
   virtual void visit(const shared_ptr<const Element>& e) = 0;
 

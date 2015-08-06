@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services;
 
@@ -57,7 +57,6 @@ public class HootProperties
       properties = new Properties();
       properties.load(
         HootProperties.class.getClassLoader().getResourceAsStream("conf/hoot-services.conf"));
-
     }
 
     // This block of code checks for the local.conf and if there is one then it overrides the
@@ -66,7 +65,7 @@ public class HootProperties
     {
     	localProperties = new Properties();
     	InputStream inRes = HootProperties.class.getClassLoader().getResourceAsStream("conf/local.conf");
-    	if(inRes != null)
+    	if (inRes != null)
     	{
 	    	localProperties.load(inRes);
 
@@ -302,6 +301,18 @@ public class HootProperties
     else if (key.equals("servicesTestClearEntireDb"))
     {
       return "false";
+    }
+    else if (key.equals("logPropsDynamicChangeScanInterval"))
+    {
+      return "1";
+    }
+    else if (key.equals("autoScanForLogPropsChanges"))
+    {
+      return "true";
+    }
+    else if (key.equals("reviewPrepareCleanup"))
+    {
+      return "true";
     }
     return null;
   }

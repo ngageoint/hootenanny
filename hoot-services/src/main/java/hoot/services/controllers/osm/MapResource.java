@@ -22,16 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
+import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
+import hoot.services.db2.FolderMapMappings;
+import hoot.services.db2.Folders;
 import hoot.services.db2.Maps;
+import hoot.services.db2.QFolderMapMappings;
+import hoot.services.db2.QFolders;
 import hoot.services.db2.QMaps;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobExecutioner;
 import hoot.services.models.osm.Element.ElementType;
+import hoot.services.models.osm.FolderRecords;
+import hoot.services.models.osm.LinkRecords;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.ModelDaoUtils;
@@ -42,7 +49,9 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.SocketException;
 import java.sql.Connection;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -75,7 +84,17 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.mysema.query.Tuple;
+import com.mysema.query.sql.Configuration;
 import com.mysema.query.sql.SQLQuery;
+import com.mysema.query.sql.SQLSubQuery;
+import com.mysema.query.sql.dml.SQLDeleteClause;
+import com.mysema.query.sql.dml.SQLInsertClause;
+import com.mysema.query.sql.dml.SQLUpdateClause;
+import com.mysema.query.support.Expressions;
+import com.mysema.query.types.Expression;
+import com.mysema.query.types.expr.NumberExpression;
+import com.mysema.query.types.template.NumberTemplate;
+import com.sun.org.apache.bcel.internal.generic.Select;
 
 /**
  * Service endpoint for maps containing OSM data
@@ -172,6 +191,177 @@ public class MapResource
     return mapLayers;
   }
 
+	/**
+	 * <NAME>Map Service - List Folders </NAME>
+	 * <DESCRIPTION>
+	 * 	Returns a list of all folders in the services database
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	a JSON object containing a list of folders
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/map/folders</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 * <OUTPUT>
+	 *  {
+	 *    "folders":
+	 *    [
+	 *      {
+	 *        "id": 1,
+	 *       "name": "layer 1",
+	 *       "parentid":0,
+	 *      },
+	 *      {
+	 *        "id": 2,
+	 *        "name": "layer 2",
+	 *        "parentid":1,
+	 *      }
+	 *    ]
+	 *  }
+	 * </OUTPUT>
+	 * </EXAMPLE>
+*
+* Returns a list of all folders in the services database
+*
+* @return a JSON object containing a list of folders
+* @throws Exception
+*/
+  
+@GET
+@Path("/folders")
+@Consumes(MediaType.TEXT_PLAIN)
+@Produces(MediaType.APPLICATION_JSON)
+public FolderRecords getFolders() throws Exception
+{
+	Connection conn = DbUtils.createConnection();
+  FolderRecords folderRecords = null;
+  try
+  {
+    log.info("Retrieving folders list...");
+
+    log.debug("Initializing database connection...");
+
+    QFolders folders = QFolders.folders;
+    SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
+
+    final List<Folders> folderRecordSet = query.from(folders).orderBy(folders.displayName.asc()).list(folders);
+
+    folderRecords = Map.mapFolderRecordsToFolders(folderRecordSet);
+  }
+  catch (Exception e)
+  {
+    handleError(e, null, null);
+  }
+  finally
+  {
+    DbUtils.closeConnection(conn);
+  }
+  String message = "Returning map layers response";
+  if (folderRecords != null && folderRecords.getFolders() != null)
+  {
+    message += " of size: " + folderRecords.getFolders().length;
+  }
+  log.debug(message);
+  return folderRecords;
+}
+  
+/**
+ * <NAME>Map Service - List Links </NAME>
+ * <DESCRIPTION>
+ * 	Returns a list of all folder-map links
+ * </DESCRIPTION>
+ * <PARAMETERS>
+ * </PARAMETERS>
+ * <OUTPUT>
+ * 	a JSON object containing a list of folders
+ * </OUTPUT>
+ * <EXAMPLE>
+ * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/map/links</URL>
+ * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+ * 	<INPUT>
+ *	</INPUT>
+ * <OUTPUT>
+ *  {
+ *    "links":
+ *    [
+ *      {
+ *        "mapid": 1,
+ *       "folderid":1
+ *      }
+ *    ]
+ *  }
+ * </OUTPUT>
+ * </EXAMPLE>
+*
+* Returns a list of all folders in the services database
+*
+* @return a JSON object containing a list of folders
+* @throws Exception
+*/
+
+@GET
+@Path("/links")
+@Consumes(MediaType.TEXT_PLAIN)
+@Produces(MediaType.APPLICATION_JSON)
+public LinkRecords getLinks() throws Exception
+{
+Connection conn = DbUtils.createConnection();
+Configuration configuration = DbUtils.getConfiguration();	  
+LinkRecords linkRecords = null;
+try
+{
+log.info("Retrieving links list...");
+
+log.debug("Initializing database connection...");
+
+QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
+QMaps maps = QMaps.maps;
+SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
+
+new SQLDeleteClause(conn, configuration, folderMapMappings)
+	.where(new SQLSubQuery()
+		.from(maps)	
+		.where(folderMapMappings.mapId.eq(maps.id))
+		.notExists())
+	.execute();
+
+try{
+	SQLInsertClause insertMissing = new SQLInsertClause(conn,configuration,folderMapMappings)
+		.columns(folderMapMappings.mapId,folderMapMappings.folderId)
+		.select(new SQLSubQuery()
+			.from(maps)
+			.where(maps.id.notIn(new SQLSubQuery()
+					.distinct()
+					.from(folderMapMappings)
+					.list(folderMapMappings.mapId)))
+			.list(maps.id,NumberTemplate.create(Long.class, "0")));
+	
+	insertMissing.execute();
+}
+catch(Exception e)
+{log.error("Could not add missing records...");}
+
+final List<FolderMapMappings> linkRecordSet = query.from(folderMapMappings).orderBy(folderMapMappings.folderId.asc()).list(folderMapMappings);
+
+linkRecords = Map.mapLinkRecordsToLinks(linkRecordSet);
+}
+catch (Exception e)
+{
+handleError(e, null, null);
+}
+finally
+{
+DbUtils.closeConnection(conn);
+}
+String message = "Returning links response";
+log.debug(message);
+return linkRecords;
+}
+  
   private Document _generateExtentOSM(String maxlon, String maxlat, String minlon, String minlat)
     throws Exception
   {
@@ -697,4 +887,405 @@ public class MapResource
     res.put("jobId", jobId);
     return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
   }
+  
+  
+  /**
+	 * <NAME>Modify Dataset or Folder Name</NAME>
+	 * <DESCRIPTION>
+	 * Modify Dataset or Folder Name provides the ability to change the name of a dataset or Folder
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * <mapId>
+	 * 	ID of map record or folder to be modified
+	 * </mapId>
+	 * <modName>
+	 * The new name for the dataset
+	 * </modName>
+	 * <inputType>
+	 * Flag for either dataset or folder
+	 * </inputType>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * jobId
+	 * 	Success = True/False
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/map/modify?mapId=123456&inputType='Dataset'&modName='New Dataset'</URL>
+	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 * <OUTPUT>{"jobId": "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT>
+	 * </EXAMPLE>
+   * @param mapId
+   * @return
+   * @throws Exception
+   */
+  @POST
+  @Path("/modify")
+  @Consumes(MediaType.TEXT_PLAIN)
+  @Produces(MediaType.TEXT_PLAIN)
+  public Response modifyName(@QueryParam("mapId") final String mapId, @QueryParam("modName") final String _modName, @QueryParam("inputType") final String inputType) throws Exception
+  {
+	  Long _mapId = Long.parseLong(mapId);
+	  Connection conn = DbUtils.createConnection();
+	  String _inputType = inputType.toLowerCase();
+	  	  
+	  try
+	  {
+		  log.debug("Initializing database connection...");
+		  
+		  if (_inputType.equals("dataset")) {
+			  QMaps maps = QMaps.maps;
+			  Configuration configuration = DbUtils.getConfiguration();
+			  
+			  new SQLUpdateClause(conn, configuration, maps)
+			  .where(maps.id.eq(_mapId))
+			  .set(maps.displayName,_modName)
+			  .execute();
+			  
+			  log.debug("Renamed map with id " + mapId + " " + _modName + "...");
+		} else if (_inputType.equals("folder")) {
+			  QFolders folders = QFolders.folders;
+			  Configuration configuration = DbUtils.getConfiguration();
+			  
+			  new SQLUpdateClause(conn, configuration, folders)
+			  .where(folders.id.eq(_mapId))
+			  .set(folders.displayName,_modName)
+			  .execute();
+			  
+			  log.debug("Renamed folder with id " + mapId + " " + _modName + "...");
+		}
+		  
+
+	  }
+	  catch (Exception e)
+	  {
+		  handleError(e, null, null);
+	  } 
+	  finally
+	  {
+		  DbUtils.closeConnection(conn);
+	  }
+	  
+	  JSONObject res = new JSONObject();
+	  res.put("success",true);
+	  return Response.ok(res.toJSONString(),MediaType.APPLICATION_JSON).build();
+  }
+  
+  /**
+ 	 * <NAME>Add Folder </NAME>
+ 	 * <DESCRIPTION>
+ 	 * Adds new folder
+ 	 * </DESCRIPTION>
+ 	 * <PARAMETERS>
+ 	 * <folderName>
+ 	 * 	Display name of folder
+ 	 * </folderName>
+ 	 * <parentId>
+ 	 * The parent folder of the new folder.  If at root level, is equal to 0.
+ 	 * </parentId>
+ 	 * <OUTPUT>
+ 	 * jobId
+ 	 * 	Success = True/False
+ 	 * </OUTPUT>
+ 	 * <EXAMPLE>
+ 	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/map/addfolder?folderName={foldername}&parentId={parentId}</URL>
+ 	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
+ 	 * 	<INPUT>
+ 	 *	</INPUT>
+ 	 * <OUTPUT>{"jobId": "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT>
+ 	 * </EXAMPLE>
+    * @param mapId
+    * @return
+    * @throws Exception
+    */
+   @POST
+   @Path("/addfolder")
+   @Consumes(MediaType.TEXT_PLAIN)
+   @Produces(MediaType.TEXT_PLAIN)
+   public Response addFolder(@QueryParam("folderName") final String folderName, @QueryParam("parentId") final String parentId) throws Exception
+   {
+ 	  Long _parentId = Long.parseLong(parentId);
+ 	  Long newId = (long) -1;
+ 	  NumberExpression<Long> expression = NumberTemplate.create(Long.class, "nextval('folders_id_seq')");
+ 	  Connection conn = DbUtils.createConnection();
+
+ 	  QFolders folders = QFolders.folders;
+ 	  Configuration configuration = DbUtils.getConfiguration();
+ 	  SQLQuery query = new SQLQuery(conn, configuration);
+   	
+ 	  long userId = 1;
+ 	  //String userid = HootProperties.getProperty("dbUserId");
+ 	   	  
+ 	  try {
+ 		List<Long> ids = query.from()
+ 				.list(expression);
+
+ 		if(ids != null && ids.size() > 0)
+ 		{
+ 			newId = ids.get(0);
+ 			final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+
+ 			new SQLInsertClause(conn, configuration, folders)
+ 				.columns(folders.id, folders.createdAt, folders.displayName, folders.publicCol, folders.userId, folders.parentId)
+ 				.values(newId, now, folderName, true, userId, _parentId)
+ 				.execute();
+ 			}
+	  }
+ 	  catch (Exception e)
+ 	  {
+ 		  handleError(e, null, null);
+ 	  } 
+ 	  finally
+ 	  {
+ 		  DbUtils.closeConnection(conn);
+ 	  }
+ 	  
+ 	  JSONObject res = new JSONObject();
+ 	  res.put("success",true);
+ 	  res.put("folderId", newId);
+ 	  return Response.ok(res.toJSONString(),MediaType.APPLICATION_JSON).build();
+   }
+
+   /**
+  	 * <NAME>Delete Folder </NAME>
+  	 * <DESCRIPTION>
+  	 * Deletes folder
+  	 * </DESCRIPTION>
+  	 * <PARAMETERS>
+  	 * <folderId>
+  	 * 	Folder Id
+  	 * </folderName>
+  	 * <OUTPUT>
+  	 * jobId
+  	 * </OUTPUT>
+  	 * <EXAMPLE>
+  	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/map/deletefolder?folderId={folderId}</URL>
+  	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
+  	 * 	<INPUT>
+  	 *	</INPUT>
+  	 * <OUTPUT>{"jobId": "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT>
+  	 * </EXAMPLE>
+     * @param mapId
+     * @return
+     * @throws Exception
+     */
+    @POST
+    @Path("/deletefolder")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response deleteFolder(@QueryParam("folderId") final String folderId) throws Exception
+    {
+  	  Long _folderId = Long.parseLong(folderId);
+  	  Connection conn = DbUtils.createConnection();
+
+  	  QFolders folders = QFolders.folders;
+  	  QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
+  	  Configuration configuration = DbUtils.getConfiguration();
+    	  
+  	  try {
+  		  SQLQuery query = new SQLQuery(conn, configuration);
+  		  List<Long> parentId = query.from(folders)
+  				  .where(folders.id.eq(_folderId))
+  				  .list(folders.parentId);
+  		  
+  		  Long _parentId = Long.parseLong("0");
+  		  
+  		  try {
+  			  _parentId = parentId.get(0);
+  		  } catch (Exception e){
+  			_parentId = Long.parseLong("0");
+  		  }   		  
+  			  
+  		  new SQLUpdateClause(conn,configuration,folders)
+  		  	.where(folders.parentId.eq(_folderId))
+  		  	.set(folders.parentId,_parentId)
+  		  	.execute();
+  		  	
+  		  
+  		  new SQLDeleteClause(conn, configuration, folders)
+  		  	.where(folders.id.eq(_folderId))
+			.execute();	
+  		  
+  		  new SQLUpdateClause(conn, configuration, folderMapMappings)
+  		  	.where(folderMapMappings.folderId.eq(_folderId))
+  		  	.set(folderMapMappings.folderId,Long.parseLong("0"))
+  		  	.execute();
+ 	  }
+  	  catch (Exception e)
+  	  {
+  		  handleError(e, null, null);
+  	  } 
+  	  finally
+  	  {
+  		  DbUtils.closeConnection(conn);
+  	  }
+  	  
+  	  JSONObject res = new JSONObject();
+  	  res.put("success",true);
+  	  return Response.ok(res.toJSONString(),MediaType.APPLICATION_JSON).build();
+    }
+   
+   /**
+  	 * <NAME>Update Parent ID </NAME>
+  	 * <DESCRIPTION>
+  	 * Modifies the parent ID of a folder
+  	 * </DESCRIPTION>
+  	 * <PARAMETERS>
+  	 * <folderId>
+  	 * ID of folder
+  	 * </folderId>
+  	 * <parentId>
+  	 * ID of parent folder
+  	 * </mapId>
+  	 * <OUTPUT>
+  	 * jobId
+  	 * 	Success = True/False
+  	 * </OUTPUT>
+  	 * <EXAMPLE>
+  	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/map/updateParentId?folderId={folderId}&parentId={parentId}</URL>
+  	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
+  	 * 	<INPUT>
+  	 *	</INPUT>
+  	 * <OUTPUT>{"jobId": "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT>
+  	 * </EXAMPLE>
+     * @param folderId
+     * @return
+     * @throws Exception
+     */
+    @POST
+    @Path("/updateParentId")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response updateParentId(@QueryParam("folderId") final String folderId, @QueryParam("parentId") final String parentId, @QueryParam("newRecord") final Boolean newRecord) throws Exception
+    {
+  	  Long _folderId = Long.parseLong(folderId);
+  	  Long _parentId = Long.parseLong(parentId);
+  	  Connection conn = DbUtils.createConnection();
+
+  	  QFolders folders = QFolders.folders;
+  	  Configuration configuration = DbUtils.getConfiguration();
+  	  SQLQuery query = new SQLQuery(conn, configuration);
+  	    	  
+  	  try {
+  		  new SQLUpdateClause(conn, configuration, folders)
+  		  .where(folders.id.eq(_folderId))
+  		  .set(folders.parentId,_parentId)
+  		  .execute();
+ 	  }
+  	  catch (Exception e)
+  	  {
+  		  handleError(e, null, null);
+  	  } 
+  	  finally
+  	  {
+  		  DbUtils.closeConnection(conn);
+  	  }
+  	  
+  	  JSONObject res = new JSONObject();
+  	  res.put("success",true);
+  	  return Response.ok(res.toJSONString(),MediaType.APPLICATION_JSON).build();
+    }   
+   
+   /**
+  	 * <NAME>Link Map and Folder </NAME>
+  	 * <DESCRIPTION>
+  	 * Adds or modifies record in folder_map_mappings if layer is created or modified
+  	 * </DESCRIPTION>
+  	 * <PARAMETERS>
+  	 * <folderId>
+  	 * ID of folder
+  	 * </folderName>
+  	 * <mapId>
+  	 * name of map.  Need to get Id from Map table.
+  	 * </mapId>
+  	 * <updateType>
+  	 * 	new: creates new link
+  	 * 	update: updates link
+  	 * 	delete: deletes link
+  	 * </updateType>
+  	 * <OUTPUT>
+  	 * jobId
+  	 * 	Success = True/False
+  	 * </OUTPUT>
+  	 * <EXAMPLE>
+  	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/map/addfolder?folderName={foldername}&parentId={parentId}</URL>
+  	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
+  	 * 	<INPUT>
+  	 *	</INPUT>
+  	 * <OUTPUT>{"jobId": "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT>
+  	 * </EXAMPLE>
+     * @param mapId
+     * @return
+     * @throws Exception
+     */
+    @POST
+    @Path("/linkMapFolder")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response updateFolderMapLink(@QueryParam("folderId") final String folderId, @QueryParam("mapId") final String mapId, @QueryParam("updateType") final String updateType) throws Exception
+    {
+  	  Long _folderId = Long.parseLong(folderId);
+  	  Long _mapId = Long.parseLong(mapId);
+  	  Long newId = (long) -1;
+  	  NumberExpression<Long> expression = NumberTemplate.create(Long.class, "nextval('folder_map_mappings_id_seq')");
+  	  Connection conn = DbUtils.createConnection();
+
+  	  QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
+  	  Configuration configuration = DbUtils.getConfiguration();
+  	  SQLQuery query = new SQLQuery(conn, configuration);
+  	  QMaps maps = QMaps.maps;
+    	  
+  	 /* long _mapId = 0;
+  	  
+  	  try {
+  		_mapId = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
+  	  }
+  	  catch (Exception e){
+  		_mapId = 0;
+  	  }*/
+  	  
+  	  try {
+  		  
+  		  // Delete any existing to avoid duplicate entries
+  		new SQLDeleteClause(conn, configuration, folderMapMappings)
+			.where(folderMapMappings.mapId.eq(Long.parseLong(mapId)))
+			.execute();
+  		  
+  		if(updateType.equalsIgnoreCase("new") || updateType.equalsIgnoreCase("update") )
+  		{
+	  		  List<Long> ids = query.from()
+	  				.list(expression);
+	
+	  		if(ids != null && ids.size() > 0)
+	  		{
+	  			newId = ids.get(0);
+	  			
+	  			new SQLInsertClause(conn, configuration, folderMapMappings)
+	  				.columns(folderMapMappings.id, folderMapMappings.mapId, folderMapMappings.folderId)
+	  				.values(newId, _mapId,_folderId)
+	  				.execute();
+	  			}
+  		} /*else if (updateType.equalsIgnoreCase("update")) {
+  			//find current record for the layer and update with new folder
+  			new SQLUpdateClause(conn, configuration, folderMapMappings)
+			  .where(folderMapMappings.mapId.eq(_mapId))
+			  .set(folderMapMappings.folderId,_folderId)
+			  .execute();
+  		} */
+ 	  }
+  	  catch (Exception e)
+  	  {
+  		  handleError(e, null, null);
+  	  } 
+  	  finally
+  	  {
+  		  DbUtils.closeConnection(conn);
+  	  }
+  	  
+  	  JSONObject res = new JSONObject();
+  	  res.put("success",true);
+  	  return Response.ok(res.toJSONString(),MediaType.APPLICATION_JSON).build();
+    }
 }
+

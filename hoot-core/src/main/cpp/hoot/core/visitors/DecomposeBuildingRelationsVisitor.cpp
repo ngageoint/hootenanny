@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "DecomposeBuildingRelationsVisitor.h"
 
@@ -40,12 +40,11 @@ DecomposeBuildingRelationsVisitor::DecomposeBuildingRelationsVisitor()
 {
 }
 
-void DecomposeBuildingRelationsVisitor::visit(ElementType type, long id)
+void DecomposeBuildingRelationsVisitor::visit(const ConstElementPtr& e)
 {
-  if (type == ElementType::Relation)
+  if (e->getElementType() == ElementType::Relation)
   {
-    const shared_ptr<Relation>& r = _map->getRelation(id);
-
+    const shared_ptr<Relation>& r = _map->getRelation(e->getId());
     if (r->getType() == "building")
     {
       _decomposeBuilding(r);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDREF2VISITOR_H
 #define ADDREF2VISITOR_H
@@ -56,7 +56,7 @@ public:
    * Adds a REF2 tag with a "todo" to all valid elements. If the Tags::getNonDebugCount() is greater
    * than zero then the element is tagged with a REF2.
    */
-  virtual void visit(ElementType type, long id);
+  virtual void visit(const ConstElementPtr& e);
 
 private:
   OsmMap* _map;

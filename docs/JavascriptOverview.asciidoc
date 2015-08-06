@@ -155,3 +155,95 @@ review. You could implement
 If `isWholeGroup` returns false, then you must implement `mergeSets` or risk
 getting an error. This can handle complex merge situations, but generally uses
 pre-canned merge strategies to keep the JavaScript complexity down.
+
+=== Calculating Search Radius
+
+There are several ways to calculate the search radius in a JavaScript
+extension. This section discusses these approaches and gives a couple
+of examples. The search radius only applies to determining candidate
+points and will not be exact. Typically the minimum bounding rectangle
+is used to determine candidates so you may get more candidates than
+expected. If you would like to filter candidates it is recommended that you
+further filter each candidate based on distance in the matchScore method.
+
+==== Default Search Radius
+
+By default if no parameters are specified the circular error of the
+points in question are used to determine if two features are a candidate for
+matching. As a reminder, the circular error (CE) is stored in the
++error:circular+ tag on all features. This values is stored as the CE95 in
+meters. In other words, the 95% of the well defined points fall within this
+distance of the actual location.
+
+By default all features where the distance between the feature pair is less
+than or equal to the sum of the CEs is considered a candidate for match. See
+the diagram below for an example. In this case _A_/_C_ are candidates for
+match, but _A_/_B_ and _B_/_C_ are not.
+
+[[DefaultSearchRadiusExample]]
+.Default Search Radius Example - The blue lines represent the bounds of the CE after buffering the feature.
+image::user/images/DefaultSearchRadiusExample.jpg[]
+
+==== Candidate Sigma Distance
+
+The +candidateDistanceSigma+ parameter provides the ability to modify the
+candidate threshold using CE. The +candidateDistanceSigma+ value is simply
+multiplied against the CE before determining the search radius. So a larger
+value creates more candidates and a smaller value creates fewer candidates.
+By default the value is 1.0 which has no effect.
+
+The diagram below shows both the CE buffer and the buffer after multiplying
+CE by an example +candidateDistanceSigma+ of 2.0. In this case _A_/_C_ and
+_B_/_C_ are candidates for matching. However, _A_/_B_ is still not a
+candidate for matching as the red circles do not overlap.
+
+[[CandidateSigmaDistanceExample]]
+.Candidate Sigma Distance Example - The blue lines represent the bounds of the CE after buffering the feature. The red lines represent buffering the feature by CE * +candidateDistanceSigma+ where in this case +candidateDistanceSigma+ is set to 2.0.
+image::user/images/CandidateDistanceSigmaExample.jpg[]
+
+==== Overriding the Circular Error
+
+It is also possible to override using the CE in calculating the search radius
+with either a global value, or by specifying a function that determines an
+appropriate search radius on a per feature basis. These two approaches are
+described below.
+
+Sometimes it is desirable to override the CE value with a global search radius.
+This sometimes happens when the CE values are known to be unreliable or the
+feature represented is large enough to make the CE values irrelevant.
+This is done by setting the +searchRadius+ parameter to a value greater than
+or equal to zero. If this is done then all +circular:error+ values are ignored
+and the +searchRadius+ * +candidateDistanceSigma+ is used instead. The example
+below shows how overriding the +searchRadius+ value impacts the match
+candidates. In this case all three features are match candidates with each other.
+
+[[SearchRadiusExample]]
+.Search Radius Example - The blue lines represent the bounds of the CE after buffering the feature. The green lines represent buffering the feature by +searchRadius+ * +candidateDistanceSigma+.
+image::user/images/SearchRadiusExample.jpg[]
+
+To provide full control over the search radius value you can also override the
+search radius entirely by creating a +getSearchRadius+ method. This method
+may use any operation you choose to derive an appropriate search radius. For
+example in some of the POI matching routines cities have a large search radius
+and restaurants have a very small search radius. In the example below _B_/_C_
+is the only match candidate.
+
+[[GetSearchRadiusExample]]
+.Get Search Radius Example - The blue lines represent the bounds of the CE after buffering the feature. The orange lines represent buffering the feature by a custom value per feature. The definition of the custom value is set by the user in the +getSearchRadius+ method and multiplied by the +candidateDistanceSigma+. In this case the values are arbitrary.
+image::user/images/GetSearchRadiusExample.jpg[]
+
+==== Search Radius Review
+
+* You may get more features than your search radius strictly defines. It is up
+  to the matchScore method to further limit the candidates.
+* By default the CE of each feature is used to determine the search radius of
+  the feature. If the buffer of the features using their respective CEs overlap
+  then the features are considered candidates.
+* The search radius can be tuned by specifying the +candidateSigmaDistance+
+  value. Values larger than 1 increase the search radius and smaller than 1
+  decrease the search radius.
+* Using the CE of features can be overriden by specifying a default search
+  radius with the +searchRadius+ value.
+* Search radius values can be fined tuned by defining a custom
+  +getSearchRadius+ method.
+

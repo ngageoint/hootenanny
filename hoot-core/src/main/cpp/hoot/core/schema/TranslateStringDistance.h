@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TRANSLATESTRINGDISTANCE_H
 #define TRANSLATESTRINGDISTANCE_H
 
 // hoot
 #include <hoot/core/algorithms/StringDistanceConsumer.h>
+#include <hoot/core/util/Configurable.h>
 
 // tgs
 #include <tgs/SharedPtr.h>
@@ -41,7 +42,8 @@ namespace hoot
  * variations on the translation may be derived in which case the best matching translation will
  * be used.
  */
-class TranslateStringDistance : public StringDistance, public StringDistanceConsumer
+class TranslateStringDistance : public StringDistance, public StringDistanceConsumer,
+  public Configurable
 {
 public:
   static string className() { return "hoot::TranslateStringDistance"; }
@@ -59,10 +61,13 @@ public:
    */
   virtual double compare(const QString& s1, const QString& s2) const;
 
+  virtual void setConfiguration(const Settings& conf);
+
   virtual QString toString() const { return "Translate " + _d->toString(); }
 
 private:
   StringDistancePtr _d;
+  bool _tokenize;
 };
 
 }

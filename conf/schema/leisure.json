@@ -1,7 +1,7 @@
 {
     "tag": {
         "name": "leisure",
-        "isA": "poi",
+        "isA": "poi=yes",
         "influence": 1.0,
         "type": "enumeration",
         "geometries": ["node", "linestring"]

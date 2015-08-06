@@ -47,16 +47,12 @@ public:
 
   static std::string className() { return "hoot::ElementVisitor"; }
 
-  virtual void visit(const ConstElementPtr& e) { visit(e->getElementType(), e->getId()); }
+  virtual void visit(const ConstElementPtr& e) = 0;
 
   /**
     Returns a string representation of the visitor
     */
   virtual QString toString() { return ""; }
-
-protected:
-  // poor man's pure virtual.
-  virtual void visit(ElementType /*type*/, long /*id*/) { assert(false); }
 
 };
 

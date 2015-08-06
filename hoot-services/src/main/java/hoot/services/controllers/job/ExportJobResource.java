@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
@@ -130,9 +130,9 @@ public class ExportJobResource extends JobControllerBase {
 	 * <outputtype>
 	 * 	[gdb | shp | wfs]. gdb will produce file gdb, shp will output shapefile. if outputtype = wfs then a wfs front end will be created
 	 * </outputtype>
-	 * <removereview>
-	 * Removes all unreviewed items. NOTE: removereview will alway be true.
-	 * </removereview>
+	 * <USER_EMAIL>
+	 * Email address of the user requesting the job.
+	 * </USER_EMAIL>
 	 * </PARAMETERS>
 	 * <OUTPUT>
 	 * 	Job ID

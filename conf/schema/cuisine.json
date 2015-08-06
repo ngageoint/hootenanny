@@ -6,105 +6,508 @@
         "geometries": ["node","area"]
     },
 
-    "tag": { "name": "cuisine=bagel", "isA": "cuisine" },
-    "tag": { "name": "cuisine=barbecue", "isA": "cuisine" },
-    "tag": { "name": "cuisine=bougatsa", "isA": "cuisine" },
-    "tag": { "name": "cuisine=burger", "isA": "cuisine" },
-    "tag": { "name": "cuisine=cake", "isA": "cuisine" },
-    "tag": { "name": "cuisine=casserole", "isA": "cuisine" },
-    "tag": { "name": "cuisine=chicken", "isA": "cuisine" },
-    "tag": { "name": "cuisine=coffee_shop", "isA": "cuisine" },
-    "tag": { "name": "cuisine=crepe", "isA": "cuisine" },
-    "tag": { "name": "cuisine=couscous", "isA": "cuisine" },
-    "tag": { "name": "cuisine=curry", "isA": "cuisine" },
-    "tag": { "name": "cuisine=dessert", "isA": "cuisine" },
-    "tag": { "name": "cuisine=donut", "isA": "cuisine" },
-    "tag": {
-        "name": "cuisine=doughnut",
-        "isA": "cuisine",
-        "similarTo": { "name": "cuisine=coffee_shop", "weight": 0.4 }
-    },
-    "tag": { "name": "cuisine=empanada", "isA": "cuisine" },
-    "tag": { "name": "cuisine=fish", "isA": "cuisine" },
-    "tag": { "name": "cuisine=fish_and_chips", "isA": "cuisine" },
-    "tag": { "name": "cuisine=fried_food", "isA": "cuisine" },
-    "tag": { "name": "cuisine=friture", "isA": "cuisine" },
-    "tag": { "name": "cuisine=gyro", "isA": "cuisine" },
-    "tag": { "name": "cuisine=ice_cream", "isA": "cuisine" },
-    "tag": { "name": "cuisine=kebab", "isA": "cuisine" },
-    "tag": { "name": "cuisine=mediterranean", "isA": "cuisine" },
-    "tag": { "name": "cuisine=noodle", "isA": "cuisine" },
-    "tag": { "name": "cuisine=pancake", "isA": "cuisine" },
-    "tag": { "name": "cuisine=pasta", "isA": "cuisine" },
-    "tag": { "name": "cuisine=pie", "isA": "cuisine" },
-    "tag": { "name": "cuisine=pizza", "isA": "cuisine" },
-    "tag": { "name": "cuisine=regional", "isA": "cuisine" },
-    "tag": { "name": "cuisine=sandwich", "isA": "cuisine" },
-    "tag": { "name": "cuisine=sausage", "isA": "cuisine" },
-    "tag": { "name": "cuisine=savory_pancakes", "isA": "cuisine" },
-    "tag": { "name": "cuisine=seafood", "isA": "cuisine" },
-    "tag": { "name": "cuisine=steak_house", "isA": "cuisine" },
-    "tag": { "name": "cuisine=sub", "isA": "cuisine" },
-    "tag": { "name": "cuisine=sushi", "isA": "cuisine" },
-    "tag": { "name": "cuisine=tapas", "isA": "cuisine" },
-    "tag": { "name": "cuisine=vegan", "isA": "cuisine" },
-    "tag": { "name": "cuisine=vegetarian", "isA": "cuisine" },
-    "tag": { "name": "cuisine=wings", "isA": "cuisine" },
+    "#" : "The top 250 entries from TagInfo",
+    "#" : "http://taginfo.openstreetmap.org/api/4/key/values?key=cuisine&filter=all&lang=en&sortname=count&sortorder=desc&page=1&rp=250&qtype=value&format=json_pretty",
+
+    "#": "The catch all",
+    "tag": { "name": "cuisine=*", "isA": "cuisine" },
+
+
+    "#" : "Middle East",
+    "tag": { "name": "cuisine=middle_eastern", "isA": "cuisine",
+        "aliases": ["cuisine=arabic", "cuisine=arab"] },
+
+    "tag": { "name": "cuisine=döner", "isA": "cuisine=middle_eastern" },
+
+    "tag": { "name": "cuisine=kebab", "isA": "cuisine=middle_eastern" },
+
+    "tag": { "name": "cuisine=couscous", "isA": "cuisine=middle_eastern" },
+
+    "tag": { "name": "cuisine=falafel", "isA": "cuisine=middle_eastern" },
+
+    "tag": { "name": "cuisine=egyptian", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=middle_eastern", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=iranian", "isA": "cuisine",
+        "aliases" : ["cuisine=persian"],
+        "similarTo": { "name": "cuisine=middle_eastern", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=syrian", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=middle_eastern", "weight": 0.9 } },
+
+
+    "#" : "Mediterranean",
+    "tag": { "name": "cuisine=mediterranean", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=european", "weight": 0.4 } },
+
+    "tag": { "name": "cuisine=kosher", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=mediterranean", "weight": 0.8 },
+        "similarTo": { "name": "cuisine=middle_eastern", "weight": 0.4 } },
+
+    "tag": { "name": "cuisine=lebanese", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=middle_eastern", "weight": 0.7 },
+        "similarTo": { "name": "cuisine=mediterranean", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=moroccan", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=middle_eastern", "weight": 0.7 },
+        "similarTo": { "name": "cuisine=mediterranean", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=turkish", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=middle_eastern", "weight": 0.6 },
+        "similarTo": { "name": "cuisine=mediterranean", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=portugese", "isA": "cuisine",
+        "aliases": ["cuisine=portuguese"],
+        "similarTo": { "name": "cuisine=mediterranean", "weight": 0.9 } },
+
+
+    "#" : "European",
+    "tag": { "name": "cuisine=european", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=austrian", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=heuriger", "isA": "cuisine=austrian" },
+
+    "tag": { "name": "cuisine=balkan", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=croatian", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=balkan", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=yugoslavian", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=balkan", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=greek", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=mediterranean", "weight": 0.9 },
+        "similarTo": { "name": "cuisine=balkan", "weight": 0.6 } },
+
+    "tag": { "name": "cuisine=gyro", "isA": "cuisine=greek",
+        "aliases": ["cuisine=gyros"] },
+
+    "tag": { "name": "cuisine=bougatsa", "isA": "cuisine=greek" },
+
+    "tag": { "name": "cuisine=german", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=bavarian", "isA": "cuisine=german" },
+
+    "tag": { "name": "cuisine=buschenschank", "isA": "cuisine=german" },
+
+    "tag": { "name": "cuisine=rhenish", "isA": "cuisine=german" },
+
+    "tag": { "name": "cuisine=swabian", "isA": "cuisine=german" },
+
+    "tag": { "name": "cuisine=westphalian", "isA": "cuisine=german" },
+
+    "tag": { "name": "cuisine=british", "isA": "cuisine",
+        "aliases" : ["cuisine=english"],
+        "similarTo": { "name": "cuisine=european", "weight": 0.4 } },
+
+    "tag": { "name": "cuisine=russian", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=european", "weight": 0.4 } },
+
+    "tag": { "name": "cuisine=georgian", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=russian", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=belarusian", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=russian", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=ukrainian", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=russian", "weight": 0.7 },
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=armenian", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=belgian", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=czech", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=danish", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=dutch", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=french", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=hungarian", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=irish", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 },
+        "similarTo": { "name": "cuisine=british", "weight": 0.7 } },
+
+    "tag": { "name": "cuisine=polish", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=swedish", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=swiss", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=fondue", "isA": "cuisine=swiss" },
+
+    "tag": { "name": "cuisine=alpine_hut", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=swiss", "weight": 0.8 } },
+
+    "tag": { "name": "cuisine=italian", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=european", "weight": 0.7 },
+        "similarTo": { "name": "cuisine=mediterranean", "weight": 0.8 } },
+
+    "tag": { "name": "cuisine=pasta", "isA": "cuisine=italian",
+        "similarTo": { "name": "cuisine=noodle", "weight": 0.3 } },
+
+    "tag": { "name": "cuisine=piadina", "isA": "cuisine=italian" },
+
+    "tag": { "name": "cuisine=pizza", "isA": "cuisine=italian" },
+
+    "tag": { "name": "cuisine=spanish", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=european", "weight": 0.5 },
+        "similarTo": { "name": "cuisine=mediterranean", "weight": 0.8 } },
+
+    "tag": { "name": "cuisine=basque", "isA": "cuisine=spanish" },
+
+    "tag": { "name": "cuisine=sagardotegia", "isA": "cuisine=spanish" },
+
+    "tag": { "name": "cuisine=tapas", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=spanish", "weight": 0.9 } },
+
+
+    "#" : "African",
     "tag": { "name": "cuisine=african", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=ethiopian", "isA": "cuisine=african" },
+
+    "tag": { "name": "cuisine=malagasy", "isA": "cuisine=african" },
+
+
+    "#" : "North American",
     "tag": { "name": "cuisine=american", "isA": "cuisine" },
-    "tag": { "name": "cuisine=arab", "isA": "cuisine" },
-    "tag": { "name": "cuisine=argentinian", "isA": "cuisine" },
-    "tag": { "name": "cuisine=asian", "isA": "cuisine" },
-    "tag": { "name": "cuisine=australian", "isA": "cuisine" },
-    "tag": { "name": "cuisine=baiana", "isA": "cuisine" },
-    "tag": { "name": "cuisine=balkan", "isA": "cuisine" },
-    "tag": { "name": "cuisine=basque", "isA": "cuisine" },
-    "tag": { "name": "cuisine=bavarian", "isA": "cuisine" },
-    "tag": { "name": "cuisine=belarusian", "isA": "cuisine" },
-    "tag": { "name": "cuisine=brazilian", "isA": "cuisine" },
-    "tag": { "name": "cuisine=cantonese", "isA": "cuisine" },
-    "tag": { "name": "cuisine=capixaba", "isA": "cuisine" },
-    "tag": { "name": "cuisine=caribbean", "isA": "cuisine" },
-    "tag": { "name": "cuisine=chinese", "isA": "cuisine" },
-    "tag": { "name": "cuisine=croatian", "isA": "cuisine" },
-    "tag": { "name": "cuisine=czech", "isA": "cuisine" },
-    "tag": { "name": "cuisine=danish", "isA": "cuisine" },
-    "tag": { "name": "cuisine=french", "isA": "cuisine" },
-    "tag": { "name": "cuisine=gaucho", "isA": "cuisine" },
-    "tag": { "name": "cuisine=german", "isA": "cuisine" },
-    "tag": { "name": "cuisine=greek", "isA": "cuisine" },
-    "tag": { "name": "cuisine=hunan", "isA": "cuisine" },
-    "tag": { "name": "cuisine=hungarian", "isA": "cuisine" },
-    "tag": { "name": "cuisine=indian", "isA": "cuisine" },
-    "tag": { "name": "cuisine=international", "isA": "cuisine" },
-    "tag": { "name": "cuisine=iranian", "isA": "cuisine" },
-    "tag": { "name": "cuisine=italian", "isA": "cuisine" },
-    "tag": { "name": "cuisine=japanese", "isA": "cuisine" },
-    "tag": { "name": "cuisine=korean", "isA": "cuisine" },
-    "tag": { "name": "cuisine=kyo_ryouri", "isA": "cuisine" },
-    "tag": { "name": "cuisine=latin_american", "isA": "cuisine" },
-    "tag": { "name": "cuisine=lebanese", "isA": "cuisine" },
-    "tag": { "name": "cuisine=malaysian", "isA": "cuisine" },
-    "tag": { "name": "cuisine=malagasy", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=hawaiian", "isA": "cuisine=american" },
+
+    "tag": { "name": "cuisine=cajun", "isA": "cuisine=american" },
+
+    "tag": { "name": "cuisine=tex-mex", "isA": "cuisine=american" },
+
+    "tag": { "name": "cuisine=chili", "isA": "cuisine=american" },
+
+    "tag": { "name": "cuisine=barbecue", "isA": "cuisine=american",
+        "aliases": ["cuisine=barbeque", "cuisine=bbq"] },
+
     "tag": { "name": "cuisine=mexican", "isA": "cuisine" },
-    "tag": { "name": "cuisine=mineira", "isA": "cuisine" },
-    "tag": { "name": "cuisine=okinawa_ryori", "isA": "cuisine" },
-    "tag": { "name": "cuisine=pakistani", "isA": "cuisine" },
-    "tag": { "name": "cuisine=peruvian", "isA": "cuisine" },
-    "tag": { "name": "cuisine=polish", "isA": "cuisine" },
-    "tag": { "name": "cuisine=portuguese", "isA": "cuisine" },
-    "tag": { "name": "cuisine=rhenish", "isA": "cuisine" },
-    "tag": { "name": "cuisine=russian", "isA": "cuisine" },
-    "tag": { "name": "cuisine=shandong", "isA": "cuisine" },
-    "tag": { "name": "cuisine=sichuan", "isA": "cuisine" },
-    "tag": { "name": "cuisine=spanish", "isA": "cuisine" },
-    "tag": {
-        "name": "cuisine=thai",
-        "isA": "cuisine",
-        "similarTo": { "name": "cuisine=malaysian", "weight": 0.8 }
-    },
-    "tag": { "name": "cuisine=turkish", "isA": "cuisine" },
-    "tag": { "name": "cuisine=vietnamese", "isA": "cuisine" },
-    "tag": { "name": "cuisine=westphalian", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=taco", "isA": "cuisine=mexican",
+        "similarTo": { "name": "cuisine=fast_food", "weight": 0.7 } },
+
+    "tag": { "name": "cuisine=caribbean", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=jamaican", "isA": "cuisine=caribbean" },
+
+
+    "#" : "Latin American",
+    "tag": { "name": "cuisine=latin_american", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=cuban", "isA": "cuisine=latin_american" },
+
+    "tag": { "name": "cuisine=empanada", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=latin_american", "weight": 0.8 } },
+
+    "#" : "South American",
+    "tag": { "name": "cuisine=argentinian", "isA": "cuisine"},
+
+    "tag": { "name": "cuisine=brazilian", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=argentinian", "weight": 0.7 } },
+
+    "tag": { "name": "cuisine=gaucho", "isA": "cuisine=brazilian" },
+    "tag": { "name": "cuisine=baiana", "isA": "cuisine=brazilian" },
+    "tag": { "name": "cuisine=capixaba", "isA": "cuisine=brazilian" },
+    "tag": { "name": "cuisine=mineira", "isA": "cuisine=brazilian" },
+
+    "tag": { "name": "cuisine=peruvian", "isA": "cuisine"},
+
+
+    "#" : "South East Asia",
+    "tag": { "name": "cuisine=asian", "isA": "cuisine",
+        "aliases": ["cuisine=oriental"] },
+
+    "tag": { "name": "cuisine=chinese", "isA": "cuisine=asian" },
+    "tag": { "name": "cuisine=hunan", "isA": "cuisine=chinese" },
+    "tag": { "name": "cuisine=sichuan", "isA": "cuisine=chinese" },
+    "tag": { "name": "cuisine=shandong", "isA": "cuisine=chinese" },
+    "tag": { "name": "cuisine=cantonese", "isA": "cuisine=chinese" },
+
+    "tag": { "name": "cuisine=philippine", "isA": "cuisine=asian",
+        "aliases": ["cuisine=filipino"] },
+
+    "tag": { "name": "cuisine=indonesian", "isA": "cuisine=asian",
+        "similarTo": { "name": "cuisine=malaysian", "weight": 0.8 }  },
+
+    "tag": { "name": "cuisine=korean", "isA": "cuisine=asian" },
+
+    "tag": { "name": "cuisine=lao", "isA": "cuisine=asian",
+        "similarTo": { "name": "cuisine=thai", "weight": 0.8 }  },
+
+    "tag": { "name": "cuisine=malaysian", "isA": "cuisine=asian" },
+
+    "tag": { "name": "cuisine=mongolian", "isA": "cuisine=asian",
+        "similarTo": { "name": "cuisine=chinese", "weight": 0.7 }  },
+
+    "tag": { "name": "cuisine=taiwanese", "isA": "cuisine=asian",
+        "similarTo": { "name": "cuisine=chinese", "weight": 0.7 }  },
+
+    "tag": { "name": "cuisine=thai", "isA": "cuisine=asian",
+        "similarTo": { "name": "cuisine=malaysian", "weight": 0.8 }  },
+
+    "tag": { "name": "cuisine=vietnamese", "isA": "cuisine=asian" },
+
+    "tag": { "name": "cuisine=japanese", "isA": "cuisine=asian" },
+
+    "tag": { "name": "cuisine=sushi", "isA": "cuisine=japanese" },
+
+    "tag": { "name": "cuisine=teriyaki", "isA": "cuisine=japanese" },
+
+    "tag": { "name": "cuisine=okinawa_ryori", "isA": "cuisine=japanese" },
+
+    "tag": { "name": "cuisine=yakiniku", "isA": "cuisine=japanese" },
+
+    "tag": { "name": "cuisine=yakitori", "isA": "cuisine=japanese" },
+
+    "tag": { "name": "cuisine=savory_pancakes", "isA": "cuisine=japanese" },
+
+    "tag": { "name": "cuisine=kyo_ryouri", "isA": "cuisine=japanese" },
+
+    "tag": { "name": "cuisine=ramen", "isA": "cuisine=japanese",
+        "aliases": ["cuisine=ラーメン"],
+        "similarTo": { "name": "cuisine=noodle", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=soba", "isA": "cuisine=japanese",
+        "similarTo": { "name": "cuisine=noodle", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=udon", "isA": "cuisine=japanese",
+        "similarTo": { "name": "cuisine=noodle", "weight": 0.9 } },
+
+
+    "#" : "Oceania",
+    "tag": { "name": "cuisine=australian", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=british", "weight": 0.8 },
+        "similarTo": { "name": "cuisine=asian", "weight": 0.4 } },
+
+
+    "#" : "South & Central Asia",
+    "tag": { "name": "cuisine=afghan", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=middle_eastern", "weight": 0.7 },
+        "similarTo": { "name": "cuisine=indian", "weight": 0.7 }   },
+
+    "tag": { "name": "cuisine=bangladeshi", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=indian", "weight": 0.7 } },
+
+    "tag": { "name": "cuisine=indian", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=curry", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=indian", "weight": 0.8 },
+        "similarTo": { "name": "cuisine=asian", "weight": 0.3 } },
+
+    "tag": { "name": "cuisine=pakistani", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=indian", "weight": 0.7 } },
+
+    "tag": { "name": "cuisine=nepalese", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=indian", "weight": 0.7 } },
+
+    "tag": { "name": "cuisine=uzbek", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=afghan", "weight": 0.8 }  },
+
+
+    "#" : "Food And Other",
+    "tag": { "name": "cuisine=noodle", "isA": "cuisine",
+        "aliases" : ["cuisine=noodles"],
+        "similarTo": { "name": "cuisine=asian", "weight": 0.4 } },
+
+    "tag": { "name": "cuisine=bakery", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=cake", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=bakery", "weight": 0.9 },
+        "similarTo": { "name": "cuisine=coffee_shop", "weight": 0.4 } },
+
+    "tag": { "name": "cuisine=pie", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=bakery", "weight": 0.9 },
+        "similarTo": { "name": "cuisine=coffee_shop", "weight": 0.4 },
+        "similarTo": { "name": "cuisine=diner", "weight": 0.4 } },
+
+    "tag": { "name": "cuisine=bowl", "isA": "cuisine",
+        "aliases": ["cuisine=beef_bowl"] },
+
+    "tag": { "name": "cuisine=bistro", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=diner", "weight": 0.7 } },
+
+    "tag": { "name": "cuisine=buffet", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=bistro", "weight": 0.7 },
+        "similarTo": { "name": "cuisine=cafetaria", "weight": 0.8 } },
+
+    "tag": { "name": "cuisine=cafe", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=coffee_shop", "weight": 0.8 } },
+
+    "tag": { "name": "cuisine=diner", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=cafe/diner", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=cafe", "weight": 0.9 },
+        "similarTo": { "name": "cuisine=diner", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=cafetaria", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=canteen", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=cafetaria", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=coffee_shop", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=coffee", "isA": "cuisine=coffee_shop",
+        "similarTo": { "name": "cuisine=diner", "weight": 0.4 } },
+
+    "tag": { "name": "cuisine=snackbar", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=cafetaria", "weight": 0.6 },
+        "similarTo": { "name": "cuisine=coffee_shop", "weight": 0.6 } },
+
+    "tag": { "name": "cuisine=snack", "isA": "cuisine=snackbar" },
+
+    "tag": { "name": "cuisine=burger", "isA": "cuisine",
+        "aliases" : ["cuisine=hamburger", "cuisine=hamburgers"],
+        "similarTo": { "name": "cuisine=fast_food", "weight": 0.9 },
+        "similarTo": { "name": "cuisine=american", "weight": 0.4 } },
+
+    "tag": { "name": "cuisine=casserole", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=deli", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=cafe", "weight": 0.7 } },
+
+    "tag": { "name": "cuisine=bagel", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=deli", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=donut", "isA": "cuisine",
+        "aliases": ["cuisine=doughnut", "cuisine=doughnuts", "cuisine=donuts"],
+        "similarTo": { "name": "cuisine=coffee_shop", "weight": 0.4 } },
+
+    "tag": { "name": "cuisine=fast_food", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=fine_dining", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=traditional", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=international", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=regional", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=local", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=western", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=breakfast", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=organic", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=vegetarian", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=vegan", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=vegetarian", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=potato", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=salad", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=seafood", "isA": "cuisine",
+        "aliases" : ["cuisine=sea_food", "cuisine=fish"] },
+
+    "tag": { "name": "cuisine=fish_and_chips", "isA": "cuisine=seafood",
+        "similarTo": { "name": "cuisine=fast_food", "weight": 0.5 } },
+
+    "tag": { "name": "cuisine=fried_food", "isA": "cuisine",
+        "aliases": ["cuisine=friterie", "friture"],
+        "similarTo": { "name": "cuisine=fast_food", "weight": 0.7 } },
+
+    "tag": { "name": "cuisine=fried_chicken", "isA": "cuisine=fried_food" },
+
+    "tag": { "name": "cuisine=grill", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=steak_house", "isA": "cuisine",
+        "aliases" : ["cuisine=steakhouse"],
+        "similarTo": { "name": "cuisine=grill", "weight": 0.8 } },
+
+    "tag": { "name": "cuisine=steak", "isA": "cuisine=steak_house",
+        "similarTo": { "name": "cuisine=meat", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=meat", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=chicken", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=fried_chicken", "weight": 0.5 } },
+
+    "tag": { "name": "cuisine=sausage", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=meat", "weight": 0.6 } },
+
+    "tag": { "name": "cuisine=hotdog", "isA": "cuisine",
+        "aliases" : ["cuisine=hot_dogs", "cuisine=hot_dog"],
+        "similarTo": { "name": "cuisine=fast_food", "weight": 0.8 },
+        "similarTo": { "name": "cuisine=american", "weight": 0.5 } },
+
+    "tag": { "name": "cuisine=other", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=pub", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=wine", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=pub", "weight": 0.8 } },
+
+    "tag": { "name": "cuisine=wings", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=pub", "weight": 0.8 },
+        "similarTo": { "name": "cuisine=fast_food", "weight": 0.8 } },
+
+    "tag": { "name": "cuisine=sandwich", "isA": "cuisine",
+        "aliases" : ["cuisine=sub", "cuisine=subs"],
+        "similarTo": { "name": "cuisine=deli", "weight": 0.7 },
+        "similarTo": { "name": "cuisine=coffee_shop", "weight": 0.4 } },
+
+    "tag": { "name": "cuisine=dessert", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=ice_cream", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=dessert", "weight": 0.7 } },
+
+    "tag": { "name": "cuisine=frozen_yogurt", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=ice_cream", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=chocolate", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=dessert", "weight": 0.4 } },
+
+    "tag": { "name": "cuisine=waffle", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=diner", "weight": 0.4 } },
+
+    "tag": { "name": "cuisine=pancake", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=crepe", "weight": 0.9 },
+        "similarTo": { "name": "cuisine=waffle", "weight": 0.7 } },
+
+    "tag": { "name": "cuisine=crepe", "isA": "cuisine",
+        "aliases": ["cuisine=crepes"] },
+
+    "tag": { "name": "cuisine=juice", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=yogurt", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=smoothie", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=soup", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=tea", "isA": "cuisine" },
+
+    "tag": { "name": "cuisine=teahouse", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=tea", "weight": 0.9 } },
+
+    "tag": { "name": "cuisine=tea_shop", "isA": "cuisine",
+        "similarTo": { "name": "cuisine=tea", "weight": 0.9 },
+        "similarTo": { "name": "cuisine=coffee_shop", "weight": 0.6 } },
+
+    "tag": { "name": "cuisine=bubble_tea", "isA": "cuisine" },
+
     "#" : "end"
 }

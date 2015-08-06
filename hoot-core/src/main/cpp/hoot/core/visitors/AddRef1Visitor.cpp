@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AddRef1Visitor.h"
 
@@ -45,14 +45,14 @@ AddRef1Visitor::AddRef1Visitor()
   setConfiguration(conf());
 }
 
-void AddRef1Visitor::visit(ElementType type, long id)
+void AddRef1Visitor::visit(const ConstElementPtr& e)
 {
-  shared_ptr<Element> e = _map->getElement(type, id);
+  shared_ptr<Element> ee = _map->getElement(e->getElementId());
 
-  if (e->getTags().getNonDebugCount() > 0)
+  if (ee->getTags().getNonDebugCount() > 0)
   {
-    //e->getTags()["REF1"] = QUuid::createUuid().toString();
-    e->getTags()["REF1"] = _prefix + QString("%1").arg(_count++, 6, 16, QChar('0'));
+    //ee->getTags()["REF1"] = QUuid::createUuid().toString();
+    ee->getTags()["REF1"] = _prefix + QString("%1").arg(_count++, 6, 16, QChar('0'));
   }
 }
 

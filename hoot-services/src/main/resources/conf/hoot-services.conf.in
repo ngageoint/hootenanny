@@ -32,6 +32,13 @@ testJobStatusPollerTimeout=2000
 # causes the tests to not be able to insert maps properly.
 servicesTestClearEntireDb=false
 
+# determines whether the system automatically scans for changes to the log4j props file
+autoScanForLogPropsChanges=true
+
+# amount of time in minutes (integer) that the system checks the log verbosity level for changes 
+# in the log4j properties file
+logPropsDynamicChangeScanInterval=1
+
 # OSM SERVICES
 
 # OSM header info
@@ -166,6 +173,9 @@ JobQueryInterval=3000
 # Default translations config file
 defaultTranslationsConfig=$(homeFolder)/conf/DefaultTranslations.json
 
+# Default FOUO translations config file
+defaultFOUOTranslationsConfig=$(homeFolder)/translations-local/DefaultTranslationsFOUO.json
+
 # Main document name
 documentName=Hootenanny - User Interface Guide.pdf
 
@@ -237,6 +247,12 @@ P2PServerScript=P2PServer.js
 
 # default setting for overwriting existing review data
 reviewPrepareOverwriteExistingDataDefault=false
+# If true, temp UUID database records will be cleaned up after review records are prepared.  Since
+# this sometimes causes problems with some datasets, making it optional as a temporary solution.
+reviewPrepareCleanup=true
+
+# review item lock time in millisec
+reviewLockTime=300000
 
 # review stats
 

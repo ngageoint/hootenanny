@@ -14,25 +14,47 @@
  */
 
 /**
- * The candidateDistanceSigma is a number that defines how far out potential 
+ * If the searchRadius is not specified then the candidateDistanceSigma value
+ * will be used to determine if two features are candidates for merging.
+ *
+ * The candidateDistanceSigma is a number that defines how far out potential
  * candidates will be accepted. For efficiency you may get some feature slightly
  * farther than the specified distance so you will have to filter further in the
  * matchScore method if you want to set a firm distance threshold.
  *
  * The default value is 1.0 and can generally be used unchanged.
+ *
+ * Please see the Calculating Search Radius section for details.
  */
 var candidateDistanceSigma = 1.0;
 exports['candidateDistanceSigma'] = candidateDistanceSigma;
 
 /**
- * An exact search radius can be specified for use during match creation by populating this variable.
- * If the variable is left with its default value, it will not be used during match creation.
+ * An exact search radius can be specified for use during match creation by
+ * populating this variable.  If the variable is left with its default value,
+ * it will not be used during match creation.
+ *
+ * Two features are considered candidates for matching if the maximum of the
+ * two search radii is greater than or equal to the distance between the
+ * features.
+ *
+ * Please see the Calculating Search Radius section for details.
  */
 var searchRadius = -1.0;
 exports['searchRadius'] = searchRadius;
 
 /**
- * Runs before match creation occurs and provides an opportunity to perform custom initialization.
+ * If implemented the user can override all search radius calculations on a
+ * feature by returning a search radius appropriate to the feature.
+ *
+ * Please see the Calculating Search Radius section for details.
+ */
+function getSearchRadius(element) {}
+exports['getSearchRadius'] = getSearchRadius;
+
+/**
+ * Runs before match creation occurs and provides an opportunity to perform
+ * custom initialization.
  */
 function init(map) {}
 exports['init'] = init;

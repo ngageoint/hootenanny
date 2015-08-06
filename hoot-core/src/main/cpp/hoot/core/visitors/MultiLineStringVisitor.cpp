@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiLineStringVisitor.h"
 
@@ -59,11 +59,12 @@ MultiLineString* MultiLineStringVisitor::createMultiLineString()
   }
 }
 
-void MultiLineStringVisitor::visit(ElementType type, long id)
+void MultiLineStringVisitor::visit(const ConstElementPtr& e)
 {
-  if (type == ElementType::Way)
+  if (e->getElementType() == ElementType::Way)
   {
-    shared_ptr<const Way> w = _provider->getWay(id);
+   // shared_ptr<const Way> w = _provider->getWay(e->getId());
+    shared_ptr<const Way> w = dynamic_pointer_cast<const Way>(e);
     visit(w);
   }
 }

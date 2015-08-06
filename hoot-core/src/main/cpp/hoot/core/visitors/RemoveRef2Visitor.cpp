@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveRef2Visitor.h"
 
@@ -53,10 +53,8 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    shared_ptr<const Element> e = _map->getElement(type, id);
-
     if (e->getTags().contains("REF1"))
     {
       QString ref1 = e->getTags().get("REF1");
@@ -167,22 +165,24 @@ void RemoveRef2Visitor::setOsmMap(OsmMap* map)
   _ref1ToEid = v.getRef1ToEid();
 }
 
-void RemoveRef2Visitor::visit(ElementType type, long id)
+void RemoveRef2Visitor::visit(const ConstElementPtr& e)
 {
   if (!_criterion)
   {
     throw IllegalArgumentException("You must specify a criterion before calling "
                                    "RemoveRef2Visitor.");
   }
-  ElementPtr e = _map->getElement(ElementId(type, id));
+  ElementType type = e->getElementType();
+  long id = e->getId();
+  ElementPtr ee = _map->getElement(ElementId(type, id));
 
   // if e has a REF2 and meets the criterion
-  if (_hasRef2Tag(e) && _criterion->isSatisfied(e))
+  if (_hasRef2Tag(ee) && _criterion->isSatisfied(ee))
   {
     // go through each REF2 and evaluate for deletion
     for (int i = 0; i < _ref2Keys.size(); i++)
     {
-      _checkAndDeleteRef2(e, _ref2Keys[i]);
+      _checkAndDeleteRef2(ee, _ref2Keys[i]);
     }
   }
 }

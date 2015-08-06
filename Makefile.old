@@ -11,7 +11,7 @@ SHELL=/bin/bash
 # If you're adding another schema file be sure and update the archive target
 # too.
 #SCHEMA_FILES=plugins/script/tds40/schema/__init__.js plugins/script/tds61/schema/__init__.js plugins/script/mgcp/schema/__init__.js plugins/script/etds/rules/__init__.js plugins/script/etds61/rules/__init__.js plugins/script/etds61_osm/rules/__init__.js
-SCHEMA_FILES=plugins/tds40_schema.js plugins/tds61_schema.js plugins/mgcp_schema.js plugins/etds_rules.js plugins/etds61_rules.js plugins/etds61_osm_rules.js
+SCHEMA_FILES=plugins/tds40_schema.js plugins/tds61_schema.js plugins/mgcp_schema.js plugins/etds_rules.js plugins/etds61_rules.js plugins/etds61_osm_rules.js plugins/tds61_full_schema.js
 
 -include Makefile.inc
 
@@ -20,7 +20,8 @@ default: build
 all: build
 always:
 
-build: js-make qt-make pp-build services-build model-build conf/words.sqlite
+build: js-make qt-make pp-build services-build model-build conf/words.sqlite \
+	conf/WordsAbridged.sqlite
 
 clean: Makefile.qmake services-clean
 	$(MAKE) -f Makefile.qmake clean
@@ -161,6 +162,12 @@ plugins/tds61_schema.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv.gz 
 	mkdir -p $(@D)
 	$< $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
+# TDSv61 full schema is built from the TDSv60 spec with NGA's extensions. 
+# This one has all of the Text Enumerations
+plugins/tds61_full_schema.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv.gz conf/nfdd/TDS_NGAv01.csv.gz
+	mkdir -p $(@D)
+	$< --fullschema $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+
 # Build the TDS61 "To English" rules
 plugins/etds61_rules.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv.gz conf/nfdd/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
@@ -250,6 +257,7 @@ archive: default docs
 	mkdir -p $(HOOT_TARNAME)/plugins/
 	cp plugins/tds40_schema.js $(HOOT_TARNAME)/plugins/tds40_schema.js
 	cp plugins/tds61_schema.js $(HOOT_TARNAME)/plugins/tds61_schema.js
+	cp plugins/tds61_full_schema.js $(HOOT_TARNAME)/plugins/tds61_full_schema.js
 	cp plugins/mgcp_schema.js $(HOOT_TARNAME)/plugins/mgcp_schema.js
 	cp plugins/etds_rules.js $(HOOT_TARNAME)/plugins/etds_rules.js
 	cp plugins/etds61_rules.js $(HOOT_TARNAME)/plugins/etds61_rules.js
@@ -296,14 +304,17 @@ tmp/coverage/tbs/index.html:
 
 coverage: services-coverage tmp/coverage/core/index.html  tmp/coverage/hadoop/index.html tmp/coverage/tbs/index.html
 
+conf/WordsAbridged.sqlite: conf/WordsAbridged.sqlite.gz
+	gunzip -c $^ > $@
+
 conf/words.sqlite: conf/words1.sqlite
 	rm -f conf/words.sqlite
-	ln -s words1.sqlite conf/words.sqlite
+	[ -e $^ ] && ln -s words1.sqlite conf/words.sqlite
 
 # If you create a new words.sqlite please just increment the number rather than
 # replacing the old file. This way we can maintain the history.
 conf/words1.sqlite:
-	wget -N -P conf/ https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/words1.sqlite
+	wget -N -P conf/ https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/words1.sqlite || echo "Failure downloading words1.sqlite. Build will continue, but conflation accuracy may suffer."
 
 bin/HootEnv.sh: scripts/HootEnv.sh
 	mkdir -p bin

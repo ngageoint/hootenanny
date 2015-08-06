@@ -5,7 +5,9 @@
 HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor
 HOOT_OPTS+= -D services.db.writer.overwrite.map=true -D services.db.writer.create.user=true
 HOOT_OPTS+= -D services.db.writer.email=test@test.com -D services.db.reader.email=test@test.com
+
 #DB_URL=postgresql://hoot:hoottest@localhost:5432/hoot
+
 
 GDAL2TILES=gdal2tiles.py
 TMP_DIR=$(HOOT_HOME)/tmp

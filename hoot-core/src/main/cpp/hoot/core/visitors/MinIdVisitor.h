@@ -56,9 +56,9 @@ public:
 
   double getStat() const { return _minId; }
 
-  virtual void visit(ElementType /*type*/, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    _minId = std::min(id, _minId);
+    _minId = std::min(e->getId(), _minId);
   }
 
 private:

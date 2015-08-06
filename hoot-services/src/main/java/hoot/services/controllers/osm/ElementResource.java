@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -564,7 +564,7 @@ public class ElementResource
     {
       log.debug("Initializing database connection...");
       
-      elementDoc = getElementsXml(mapId, elemIds, elementTypeVal, false, false, conn);
+      elementDoc = getElementsXml(mapId, elemIds, elementTypeVal, false, true, conn);
     }
     finally
     {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTILINESTRINGVISITOR_H
 #define MULTILINESTRINGVISITOR_H
@@ -69,7 +69,7 @@ public:
    */
   MultiLineString* createMultiLineString();
 
-  virtual void visit(ElementType type, long id);
+  virtual void visit(const ConstElementPtr& e);
 
   virtual void visit(const shared_ptr<const Way>& w);
 

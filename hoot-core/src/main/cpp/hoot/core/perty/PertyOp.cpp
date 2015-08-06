@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyOp.h"
 
@@ -61,11 +61,11 @@ public:
   {
   }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    if (type == ElementType::Node)
+    if (e->getElementType() == ElementType::Node)
     {
-      NodePtr n = _map->getNode(id);
+      NodePtr n = _map->getNode(e->getId());
       Coordinate p = n->toCoordinate();
       Vec2d shift = _interpolateShift(p);
 

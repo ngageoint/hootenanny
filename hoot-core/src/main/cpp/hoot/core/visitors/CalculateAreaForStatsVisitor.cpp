@@ -47,12 +47,10 @@ Meters CalculateAreaForStatsVisitor::getArea(const OsmMapPtr& map, ElementPtr e)
   return v.getArea();
 }
 
-void CalculateAreaForStatsVisitor::visit(ElementType type, long id)
+void CalculateAreaForStatsVisitor::visit(const ConstElementPtr& e)
 {
-  const shared_ptr<const Element> e = _map->getElement(type, id);
   shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e, true);
   _total += g->getArea();
-  //cout << "CAFS: geo id=" << e->getId() << ", area=" << g->getArea() << ", total area=" << _total << endl;
 }
 
 }

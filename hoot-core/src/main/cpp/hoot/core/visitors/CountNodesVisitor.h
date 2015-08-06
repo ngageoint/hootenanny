@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COUNT_NODES_VISITOR_H
 #define COUNT_NODES_VISITOR_H
@@ -48,7 +48,8 @@ public:
 
   int getCount() const { return _count; }
 
-  virtual void visit(ElementType type, long /*id*/) { if (type == ElementType::Node) _count++; }
+  virtual void visit(const ConstElementPtr& e) { if (e->getElementType() == ElementType::Node) _count++; }
+  //virtual void visit(ElementType type, long /*id*/) { if (type == ElementType::Node) _count++; }
 
 private:
   int _count;

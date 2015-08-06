@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CalculateAreaVisitor.h"
 
@@ -47,12 +47,10 @@ Meters CalculateAreaVisitor::getArea(const OsmMapPtr& map, ElementPtr e)
   return v.getArea();
 }
 
-void CalculateAreaVisitor::visit(ElementType type, long id)
+void CalculateAreaVisitor::visit(const ConstElementPtr& e)
 {
-  const shared_ptr<const Element> e = _map->getElement(type, id);
   shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e);
   _total += g->getArea();
-  //cout << "geo id=" << e->getId() << ", area=" << g->getArea() << ", total area=" << _total << endl;
 }
 
 }

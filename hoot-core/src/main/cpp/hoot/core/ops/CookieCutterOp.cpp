@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CookieCutterOp.h"
 
@@ -35,10 +35,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
-
-// Qt
-#include <QUuid>
-#include <QFile>
 
 namespace hoot
 {
@@ -61,60 +57,36 @@ void CookieCutterOp::setConfiguration(const Settings& conf)
 
 void CookieCutterOp::apply(shared_ptr<OsmMap>& map)
 {
-  //filter unknown1 out of the input map into another map
+  //remove unknown2 out of the input map and create a new map, which will be our ref map
   OsmMapPtr refMap(new OsmMap(map));
-  RemoveElementsVisitor unknown1Visitor(ElementCriterionPtr(new StatusCriterion(Status::Unknown1)));
-  unknown1Visitor.setRecursive(true);
-  refMap->visitRw(unknown1Visitor);
+  RemoveElementsVisitor unknown2Remover(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)));
+  unknown2Remover.setRecursive(true);
+  refMap->visitRw(unknown2Remover);
   LOG_VARD(refMap->getNodeMap().size());
     
-  //create an alpha shape based on the filtered unknown1 map
+  //create an alpha shape based on the ref map (unknown1)
   OsmMapPtr cutShapeMap = AlphaShapeGenerator(_alpha, _alphaShapeBuffer).generate(refMap);
   LOG_VARD(cutShapeMap->getNodeMap().size());
     
-  //filter unknown2 out of the input map into another map
+  //remove unknown1 out of the input and create a new map, which will be our source map (unknown2)
   OsmMapPtr doughMap(new OsmMap(map));
-  RemoveElementsVisitor unknown2Visitor(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)));
-  unknown2Visitor.setRecursive(true);
-  doughMap->visitRw(unknown2Visitor);
+  RemoveElementsVisitor unknown1Remover(ElementCriterionPtr(new StatusCriterion(Status::Unknown1)));
+  unknown1Remover.setRecursive(true);
+  doughMap->visitRw(unknown1Remover);
   LOG_VARD(doughMap->getNodeMap().size());
   
-  //cookie cut the alpha shape from the unknown2 map
+  //cookie cut the alpha shape obtained from the ref map out of the source map
   CookieCutter(_crop, _outputBuffer).cut(cutShapeMap, doughMap);
   OsmMapPtr cookieCutMap = doughMap;
   LOG_VARD(cookieCutMap->getNodeMap().size());
     
-  //combine the unknown1 map with the cookie cut unknown2 map back into the input map
-  //TODO: not confident yet if the append operation is wise or solid, so leaving the code in here
-  //for now that has the extra round of I/O
-  const bool combineInMemory = true;
-  if (combineInMemory)
-  {
-    refMap->append(cookieCutMap);
-    OsmMapPtr result = refMap;
-    map.reset(new OsmMap(result));
-  }
-  else
-  {
-    //TODO: since there isn't any easy way to do this in memory yet, writing out to file and reading
-    //back in, for now
-    MapReprojector::reprojectToWgs84(refMap);
-    const QString refMapPath = "tmp/ref-map-" + QUuid::createUuid().toString() + ".osm";
-    OsmUtils::saveMap(refMap, refMapPath);
-    MapReprojector::reprojectToWgs84(cookieCutMap);
-    const QString cookieCutMapPath = "tmp/cookie-cut-map-" + QUuid::createUuid().toString() + ".osm";
-    OsmUtils::saveMap(cookieCutMap, cookieCutMapPath);
-
-    OsmMapPtr result(new OsmMap());
-    OsmUtils::loadMap(result, refMapPath, true, Status::Unknown1);
-    LOG_VARD(result->getNodeMap().size());
-    QFile::remove(refMapPath);
-    OsmUtils::loadMap(result, cookieCutMapPath, true, Status::Unknown2);
-    LOG_VARD(result->getNodeMap().size());
-    QFile::remove(cookieCutMapPath);
-    map.reset(new OsmMap(result));
-    LOG_VARD(map->getNodeMap().size());
-  }
+  //combine the ref map back with the source map; Effectively, we've replaced all of the data in the
+  //source map whose AOI coincides with the ref map with the ref map's data.
+  refMap->setProjection(cookieCutMap->getProjection());
+  refMap->append(cookieCutMap);
+  OsmMapPtr result = refMap;
+  LOG_VARD(result->getNodeMap().size());
+  map.reset(new OsmMap(result));
 }
 
 }

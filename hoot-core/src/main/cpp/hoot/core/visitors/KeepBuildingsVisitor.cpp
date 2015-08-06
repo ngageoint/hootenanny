@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "KeepBuildingsVisitor.h"
 
@@ -39,13 +39,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, KeepBuildingsVisitor)
 
-void KeepBuildingsVisitor::visit(ElementType type, long id)
+void KeepBuildingsVisitor::visit(const ConstElementPtr& e)
 {
+  ElementType type = e->getElementType();
+  long id = e->getId();
+
   if (type != ElementType::Node)
   {
-    shared_ptr<Element> e = _map->getElement(type, id);
+    shared_ptr<Element> ee = _map->getElement(type, id);
 
-    if (OsmSchema::getInstance().isBuilding(e->getTags(), type) == false)
+    if (OsmSchema::getInstance().isBuilding(ee->getTags(), type) == false)
     {
       // @todo This could do bad things if the element is in use.
       _map->removeElementNoCheck(type, id);

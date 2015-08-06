@@ -50,7 +50,7 @@ It is recommended that you validate your instance to confirm that it was install
 
 --------------------------------------
 cd hoot
-source ./SetEnv.sh
+source ./SetupEnv.sh
 make test
 --------------------------------------
 
@@ -78,7 +78,7 @@ Vagrant allows you to ssh into the instance using `vagrant ssh`.  You'll want to
 --------------------------------------
 vagrant ssh
     cd hoot
-    source ./SetEnv.sh
+    source ./SetupEnv.sh
     scripts/ezClean.sh
     scripts/ezBuildAll.sh
     sudo -u tomcat6 scripts/vagrantDeployTomcat.sh

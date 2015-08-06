@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OgrWriter.h"
 
@@ -108,7 +108,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<G
   for (QVariantMap::const_iterator it = vm.constBegin(); it != vm.constEnd(); ++it)
   {
     const QVariant& v = it.value();
-    QByteArray ba = it.key().toAscii();
+    QByteArray ba = it.key().toUtf8();
 
     // If the field DOESN'T exist in the output layer, skip it.
     if (poFeature->GetFieldIndex(ba.constData()) == -1)
@@ -129,7 +129,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<G
       break;
     case QVariant::String:
     {
-      QByteArray vba = v.toString().toAscii();
+      QByteArray vba = v.toString().toUtf8();
       poFeature->SetField(ba.constData(), vba.constData());
       break;
     }
@@ -569,7 +569,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Way>& newWay)
    * Make sure this way has any hope of working (i.e., are there enough spots in the cache
    * for all its nodes?
    */
-  if ( newWay->getNodeCount() > _currElementCacheCapacity )
+  if ((long)newWay->getNodeCount() > _currElementCacheCapacity )
   {
     LOG_FATAL("Cannot do partial write of Way ID " << newWay->getId() <<
       " as it contains " << newWay->getNodeCount() << " nodes but our cache can only hold " <<
