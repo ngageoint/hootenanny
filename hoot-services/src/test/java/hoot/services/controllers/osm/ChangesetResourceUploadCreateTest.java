@@ -511,9 +511,9 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
         nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[2]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((long)(originalBounds.getMinLat() - .001)), nodeRecord.getLatitude());
+          new Double((double)(originalBounds.getMinLat() - .001)), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((long)(originalBounds.getMinLon() - .001)), nodeRecord.getLongitude());
+          new Double((double)(originalBounds.getMinLon() - .001)), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
