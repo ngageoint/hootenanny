@@ -43,7 +43,6 @@ ServicesDbReader::ServicesDbReader() :
 _status(Status::Invalid),
 _useDataSourceIds(true),
 _open(false),
-_mapId(-1),
 _osmElemId(-1),
 _osmElemType(ElementType::Unknown)
 {
@@ -109,7 +108,7 @@ Envelope ServicesDbReader::calculateEnvelope() const
 {
   assert(_mapId > 0);
   assert(_open);
-  Envelope result = _database.calculateEnvelope(_mapId);
+  Envelope result = _database.calculateEnvelope();
   return result;
 }
 
@@ -134,7 +133,7 @@ void ServicesDbReader::open(QString urlStr)
   bool ok2;
   QString mapName;
   _database.open(url);
-  _mapId = pList[pList.size() - 1].toLong(&ok);
+  long requestedMapId = pList[pList.size() - 1].toLong(&ok);
   if(osmElemId.length() > 0 && osmElemType.length() > 0)
   {
     _osmElemId = osmElemId.toLong(&ok2);
@@ -158,14 +157,17 @@ void ServicesDbReader::open(QString urlStr)
           .arg(mapIds.size());
       throw HootException(str);
     }
-    _mapId = *mapIds.begin();
+
+    requestedMapId = *mapIds.begin();
   }
 
-  if (!_database.mapExists(_mapId))
+  if (!_database.mapExists(requestedMapId))
   {
     _database.close();
-    throw HootException("No map exists with ID: " + QString::number(_mapId));
+    throw HootException("No map exists with ID: " + QString::number(requestedMapId));
   }
+
+  _database.setMapId(requestedMapId);
 
   //using a transaction seems to make sense here, b/c we don't want to read a map being modified
   //in the middle of its modification caused by a changeset upload, which could cause the map to
@@ -179,9 +181,9 @@ bool ServicesDbReader::hasMoreElements()
   if (!_firstPartialReadCompleted)
   {
     //get the total element counts before beginning results parsing
-    _totalNumMapNodes = _database.numElements(_mapId, ElementType::Node);
-    _totalNumMapWays = _database.numElements(_mapId, ElementType::Way);
-    _totalNumMapRelations = _database.numElements(_mapId, ElementType::Relation);
+    _totalNumMapNodes = _database.numElements(ElementType::Node);
+    _totalNumMapWays = _database.numElements(ElementType::Way);
+    _totalNumMapRelations = _database.numElements(ElementType::Relation);
 
     _firstPartialReadCompleted = true;
   }
@@ -231,14 +233,14 @@ void ServicesDbReader::read(shared_ptr<OsmMap> map)
 
 void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementType)
 {
-  shared_ptr<QSqlQuery> elementResultsIterator = _database.selectAllElements(_mapId, _osmElemId, elementType);
+  shared_ptr<QSqlQuery> elementResultsIterator = _database.selectAllElements(_osmElemId, elementType);
   //need to check isActive, rather than next() here b/c resultToElement actually calls next() and
   //it will always return an extra null node at the end, unfortunately (see comments in
   //ServicesDb::resultToElement)
   while (elementResultsIterator->isActive())
   {
     shared_ptr<Element> element =
-      _resultToElement(*elementResultsIterator, elementType, *map, _mapId);
+      _resultToElement(*elementResultsIterator, elementType, *map );
     //this check is necessary due to an inefficiency in ServicesDb::resultToElement
     if (element.get())
     {
@@ -256,7 +258,7 @@ shared_ptr<Element> ServicesDbReader::readNextElement()
   if (!hasMoreElements())
   {
     throw HootException(
-      "No more elements available to read map with ID: " + QString::number(_mapId));
+      "No more elements available to read from map");
   }
 
   ElementType selectElementType = _getCurrentSelectElementType();
@@ -266,12 +268,12 @@ shared_ptr<Element> ServicesDbReader::readNextElement()
     //no results available, so request some more results
     _elementResultIterator =
       _database.selectElements(
-        _mapId, -1, selectElementType, _maxElementsPerMap, _getCurrentElementOffset(selectElementType));
+        -1, selectElementType, _maxElementsPerMap, _getCurrentElementOffset(selectElementType));
   }
 
   //results still available, so keep parsing through them
   shared_ptr<Element> element = _resultToElement(*_elementResultIterator, selectElementType,
-    *_partialMap, _mapId);
+    *_partialMap);
   if (!element.get())
   {
     //exceptional case to deal with having to call QSqlQuery::next() inside of
@@ -300,7 +302,6 @@ void ServicesDbReader::finalizePartial()
     _database.close();
     _open = false;
   }
-  _mapId = -1;
 }
 
 void ServicesDbReader::close()
@@ -430,7 +431,7 @@ ElementId ServicesDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
 }
 
 shared_ptr<Element> ServicesDbReader::_resultToElement(QSqlQuery& resultIterator,
-  const ElementType& elementType, OsmMap& map, long mapId)
+  const ElementType& elementType, OsmMap& map)
 {
   assert(resultIterator.isActive());
   //It makes much more sense to have callers call next on the iterator before passing it into this
@@ -453,13 +454,13 @@ shared_ptr<Element> ServicesDbReader::_resultToElement(QSqlQuery& resultIterator
 
       case ElementType::Way:
         {
-          element = _resultToWay(resultIterator, map, mapId);
+          element = _resultToWay(resultIterator, map);
         }
         break;
 
       case ElementType::Relation:
         {
-          element = _resultToRelation(resultIterator, map, mapId);
+          element = _resultToRelation(resultIterator, map);
         }
         break;
 
@@ -499,7 +500,7 @@ shared_ptr<Node> ServicesDbReader::_resultToNode(const QSqlQuery& resultIterator
   return result;
 }
 
-shared_ptr<Way> ServicesDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map, long mapId)
+shared_ptr<Way> ServicesDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map)
 {
   const long wayId = resultIterator.value(0).toLongLong();
   const long newWayId = _mapElementId(map, ElementId::way(wayId)).getId();
@@ -513,7 +514,7 @@ shared_ptr<Way> ServicesDbReader::_resultToWay(const QSqlQuery& resultIterator, 
   _addTagsToElement(way);
 
   //TODO: read these out in batch at the same time the element results are read
-  vector<long> nodeIds = _database.selectNodeIdsForWay(mapId, wayId);
+  vector<long> nodeIds = _database.selectNodeIdsForWay(wayId);
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
     nodeIds[i] = _mapElementId(map, ElementId::node(nodeIds[i])).getId();
@@ -524,7 +525,7 @@ shared_ptr<Way> ServicesDbReader::_resultToWay(const QSqlQuery& resultIterator, 
 }
 
 shared_ptr<Relation> ServicesDbReader::_resultToRelation(const QSqlQuery& resultIterator,
-  const OsmMap& map, long mapId)
+  const OsmMap& map)
 {
   const long relationId = resultIterator.value(0).toLongLong();
   const long newRelationId = _mapElementId(map, ElementId::relation(relationId)).getId();
@@ -540,7 +541,7 @@ shared_ptr<Relation> ServicesDbReader::_resultToRelation(const QSqlQuery& result
   _addTagsToElement(relation);
 
   //TODO: read these out in batch at the same time the element results are read
-  vector<RelationData::Entry> members = _database.selectMembersForRelation(mapId, relationId);
+  vector<RelationData::Entry> members = _database.selectMembersForRelation(relationId);
   for (size_t i = 0; i < members.size(); ++i)
   {
     members[i].setElementId(_mapElementId(map, members[i].getElementId()));

@@ -55,7 +55,7 @@ public:
 
   virtual void finalizePartial();
 
-  long getMapId() const { return _mapId; }
+  long getMapId() const { return _sdb.getMapId(); }
 
   virtual bool isSupported(QString urlStr);
 
@@ -91,7 +91,7 @@ private:
   bool _overwriteMap;
   QString _userEmail;
   ServicesDb _sdb;
-  long _mapId;
+  //long _mapId;
   int _numChangeSetChanges;
   //long _userId;
   long _changeSetId;

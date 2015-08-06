@@ -104,7 +104,7 @@ public:
    * Called after open. This will read the bounds of the specified layer in a relatively efficient
    * manner. (e.g. SELECT min(x)...)
    */
-  virtual Envelope calculateEnvelope(long mapId) const;
+  virtual Envelope calculateEnvelope() const;
 
   void close();
 
@@ -144,38 +144,38 @@ public:
    * Returns the number of OSM elements of a given type for a particular map in the services
    * database
    */
-  long numElements(const long mapId, const ElementType& elementType);
+  long numElements(const ElementType& elementType);
 
   /**
    * Returns a results iterator to all OSM elements for a given map and element type in the services
    * database
    */
-  shared_ptr<QSqlQuery> selectAllElements(const long mapId, const ElementType& elementType);
+  shared_ptr<QSqlQuery> selectAllElements(const ElementType& elementType);
 
 
-  shared_ptr<QSqlQuery> selectAllElements(const long mapId, const long elementId, const ElementType& elementType);
+  shared_ptr<QSqlQuery> selectAllElements(const long elementId, const ElementType& elementType);
 
   /**
    * Returns a results iterator to all OSM elements for a given map and element type in the services
    * database.  If limit = 0, no limit will be placed on the number of elements returned.  If offset
    * = 0, no records will be skipped in the returned result set.
    */
-  shared_ptr<QSqlQuery> selectElements(const long mapId, const long elementId, const ElementType& elementType,
+  shared_ptr<QSqlQuery> selectElements(const long elementId, const ElementType& elementType,
                                        const long limit, const long offset);
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
    */
-  vector<long> selectNodeIdsForWay(long mapId, long wayId);
+  vector<long> selectNodeIdsForWay(long wayId);
 
   /**
    * Returns a vector with all the relation members for a given relation
    */
-  vector<RelationData::Entry> selectMembersForRelation(long mapId, long relationId);
+  vector<RelationData::Entry> selectMembersForRelation(long relationId);
 
   //writing
 
-  void closeChangeSet(long mapId, long changeSetId, Envelope env, int numChanges);
+  void closeChangeSet(long changeSetId, Envelope env, int numChanges);
 
   /**
    * Creates necessary indexes and constraints on all maps that don't have indexes/constraints
@@ -197,14 +197,25 @@ public:
   void setUserId(const long sessionUserId);
 
   /**
+   * Set the Map ID for this session
+   * @param sessionMapId The ID to set for the current map
+   */
+  void setMapId(const long sessionMapId);
+
+  /**
+   * Obtain current map ID for database
+   * @return value of current map ID
+   */
+  long getMapId() const { return _currMapId; }
+
+  /**
    * Deletes a map and all of it's dependencies.
    */
   void deleteMap(long mapId);
 
   void deleteUser(long userId);
 
-  long insertChangeSet(long mapId, const Tags& tags = Tags(),
-    Envelope env = Envelope());
+  long insertChangeSet(const Tags& tags = Tags(), Envelope env = Envelope());
 
   /**
    * @brief Insert a map into the database. This does not create the constraints and indexes.
@@ -218,23 +229,23 @@ public:
    */
   long insertMap(QString mapName, bool publicVisibility = true);
 
-  long insertNode(long mapId, long id, double lat, double lon, long changeSetId,
+  long insertNode(long id, double lat, double lon, long changeSetId,
     const Tags &tags, bool createNewId = false);
 
-  long insertRelation(long mapId, long relationId, long changeSetId, const Tags& tags,
+  long insertRelation(long relationId, long changeSetId, const Tags& tags,
     bool createNewId = false);
 
-  void insertRelationMembers(long mapId, long relationId, ElementType type, long elementId,
+  void insertRelationMembers(long relationId, ElementType type, long elementId,
     QString role, int sequenceId);
 
-  void insertRelationTag(long mapId, long relationId, const QString& k, const QString& v);
+  void insertRelationTag(long relationId, const QString& k, const QString& v);
 
   long insertUser(QString email, QString displayName);
 
-  long insertWay(long mapId, long wayId, long changeSetId, const Tags& tags,
+  long insertWay(long wayId, long changeSetId, const Tags& tags,
                  /*const vector<long>& nids,*/ bool createNewId = false);
 
-  void insertWayNodes(long mapId, long wayId, const vector<long>& nodeIds);
+  void insertWayNodes(long wayId, const vector<long>& nodeIds);
 
   /**
    * Rollback the current transaction.
@@ -248,11 +259,11 @@ public:
    */
   static Tags unescapeTags(const QVariant& v);
 
-  void updateNode(long mapId, long id, double lat, double lon, long changeSetId, const Tags& tags);
+  void updateNode(long id, double lat, double lon, long changeSetId, const Tags& tags);
 
-  void updateRelation(long mapId, long id, long changeSetId, const Tags& tags);
+  void updateRelation(long id, long changeSetId, const Tags& tags);
 
-  void updateWay(long mapId, long id, long changeSetId, const Tags& tags);
+  void updateWay(long id, long changeSetId, const Tags& tags);
 
 private:
 
@@ -303,6 +314,7 @@ private:
   long _lastMapId;
 
   long _currUserId;
+  long _currMapId;
 
   /**
    * This is here to improve query caching. In most cases users open a single ServiceDb and then

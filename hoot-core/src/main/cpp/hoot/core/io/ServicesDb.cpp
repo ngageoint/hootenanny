@@ -69,8 +69,9 @@ ServicesDb::~ServicesDb()
   close();
 }
 
-Envelope ServicesDb::calculateEnvelope(long mapId) const
+Envelope ServicesDb::calculateEnvelope() const
 {
+  const long mapId = _currMapId;
   Envelope result;
 
   // if you're having performance issues read this:
@@ -129,8 +130,10 @@ void ServicesDb::close()
   _db.close();
 }
 
-void ServicesDb::closeChangeSet(long mapId, long changeSetId, Envelope env, int numChanges)
+void ServicesDb::closeChangeSet(long changeSetId, Envelope env, int numChanges)
 {
+  const long mapId = _currMapId;
+
   if (!changesetExists(mapId, changeSetId))
   {
     throw HootException("No changeset exists with ID: " + changeSetId);
@@ -295,7 +298,7 @@ QSqlQuery ServicesDb::_exec(QString sql, QVariant v1, QVariant v2, QVariant v3) 
 {
   QSqlQuery q(_db);
 
-  LOG_VARD(sql);
+ // LOG_VARD(sql);
 
   if (q.prepare(sql) == false)
   {
@@ -331,7 +334,7 @@ QSqlQuery ServicesDb::_execNoPrepare(QString sql) const
   // names.
   QSqlQuery q(_db);
 
-  LOG_VARD(sql);
+  //LOG_VARD(sql);
 
   if (q.exec(sql) == false)
   {
@@ -514,11 +517,13 @@ void ServicesDb::_init()
   _relationsPerBulkInsert = recordsPerBulkInsert;
 
   _currUserId = -1;
+  _currMapId = -1;
 }
 
-long ServicesDb::insertChangeSet(long mapId, const Tags& tags,
+long ServicesDb::insertChangeSet(const Tags& tags,
   geos::geom::Envelope env)
 {
+  const long mapId = _currMapId;
   const long userId = _currUserId;
 
   _checkLastMapId(mapId);
@@ -595,9 +600,10 @@ long ServicesDb::insertMap(QString displayName, bool publicVisibility)
   return mapId;
 }
 
-long ServicesDb::insertNode(long mapId, long id, double lat, double lon, long changeSetId,
+long ServicesDb::insertNode(long id, double lat, double lon, long changeSetId,
   const Tags& tags, bool createNewId)
 {
+  const long mapId = _currMapId;
   double start = Tgs::Time::getTime();
 
   _checkLastMapId(mapId);
@@ -639,9 +645,10 @@ long ServicesDb::insertNode(long mapId, long id, double lat, double lon, long ch
   return id;
 }
 
-long ServicesDb::insertRelation(long mapId, long relationId, long changeSetId, const Tags &tags,
+long ServicesDb::insertRelation(long relationId, long changeSetId, const Tags &tags,
   bool createNewId)
 {
+  const long mapId = _currMapId;
   _checkLastMapId(mapId);
 
   if (_relationBulkInsert == 0)
@@ -672,9 +679,10 @@ long ServicesDb::insertRelation(long mapId, long relationId, long changeSetId, c
   return relationId;
 }
 
-void ServicesDb::insertRelationMembers(long mapId, long relationId, ElementType type,
+void ServicesDb::insertRelationMembers(long relationId, ElementType type,
   long elementId, QString role, int sequenceId)
 {
+  const long mapId = _currMapId;
   _checkLastMapId(mapId);
 
   if (_insertRelationMembers == 0)
@@ -756,9 +764,11 @@ long ServicesDb::insertUser(QString email, QString displayName)
   return id;
 }
 
-long ServicesDb::insertWay(long mapId, long wayId, long changeSetId, const Tags& tags,
+long ServicesDb::insertWay(long wayId, long changeSetId, const Tags& tags,
                            /*const vector<long>& nids,*/ bool createNewId)
 {
+  const long mapId = _currMapId;
+
   double start = Tgs::Time::getTime();
 
   _checkLastMapId(mapId);
@@ -794,8 +804,9 @@ long ServicesDb::insertWay(long mapId, long wayId, long changeSetId, const Tags&
   return wayId;
 }
 
-void ServicesDb::insertWayNodes(long mapId, long wayId, const vector<long>& nodeIds)
+void ServicesDb::insertWayNodes(long wayId, const vector<long>& nodeIds)
 {
+  const long mapId = _currMapId;
   double start = Tgs::Time::getTime();
 
   _checkLastMapId(mapId);
@@ -843,6 +854,14 @@ void ServicesDb::setUserId(const long sessionUserId)
 
   LOG_INFO("User ID updated to " + QString::number(_currUserId));
 }
+
+void ServicesDb::setMapId(const long sessionMapId)
+{
+  _currMapId = sessionMapId;
+
+  LOG_INFO("Map ID updated to " + QString::number(_currUserId));
+}
+
 
 
 long ServicesDb::getUserId(QString email, bool throwWhenMissing)
@@ -1213,8 +1232,10 @@ bool ServicesDb::changesetExists(long mapId, const long id)
   return _changesetExists->next();
 }
 
-long ServicesDb::numElements(const long mapId, const ElementType& elementType)
+long ServicesDb::numElements(const ElementType& elementType)
 {
+  const long mapId = _currMapId;
+
   _numTypeElementsForMap.reset(new QSqlQuery(_db));
   _numTypeElementsForMap->prepare(
     "SELECT COUNT(*) FROM " + _elementTypeToElementTableName(mapId, elementType));
@@ -1239,21 +1260,22 @@ long ServicesDb::numElements(const long mapId, const ElementType& elementType)
   return result;
 }
 
-shared_ptr<QSqlQuery> ServicesDb::selectAllElements(const long mapId, const long elementId, const ElementType& elementType)
+shared_ptr<QSqlQuery> ServicesDb::selectAllElements(const long elementId, const ElementType& elementType)
 {
-  return selectElements(mapId, elementId, elementType, -1, 0);
+  return selectElements(elementId, elementType, -1, 0);
 }
 
-shared_ptr<QSqlQuery> ServicesDb::selectAllElements(const long mapId, const ElementType& elementType)
+shared_ptr<QSqlQuery> ServicesDb::selectAllElements(const ElementType& elementType)
 {
-  return selectElements(mapId, -1, elementType, -1, 0);
+  return selectElements(-1, elementType, -1, 0);
 }
 
 
 
-shared_ptr<QSqlQuery> ServicesDb::selectElements(const long mapId, const long elementId,
+shared_ptr<QSqlQuery> ServicesDb::selectElements(const long elementId,
   const ElementType& elementType, const long limit, const long offset)
 {
+  const long mapId = _currMapId;
   _selectElementsForMap.reset(new QSqlQuery(_db));
   _selectElementsForMap->setForwardOnly(true);
   QString limitStr;
@@ -1290,8 +1312,10 @@ shared_ptr<QSqlQuery> ServicesDb::selectElements(const long mapId, const long el
   return _selectElementsForMap;
 }
 
-vector<long> ServicesDb::selectNodeIdsForWay(long mapId, long wayId)
+vector<long> ServicesDb::selectNodeIdsForWay(long wayId)
 {
+  const long mapId = _currMapId;
+
   vector<long> result;
 
   _checkLastMapId(mapId);
@@ -1327,8 +1351,10 @@ vector<long> ServicesDb::selectNodeIdsForWay(long mapId, long wayId)
   return result;
 }
 
-vector<RelationData::Entry> ServicesDb::selectMembersForRelation(long mapId, long relationId)
+vector<RelationData::Entry> ServicesDb::selectMembersForRelation(long relationId)
 {
+  const long mapId = _currMapId;
+
   vector<RelationData::Entry> result;
 
   if (!_selectMembersForRelation)
@@ -1407,9 +1433,10 @@ Tags ServicesDb::unescapeTags(const QVariant &v)
   return result;
 }
 
-void ServicesDb::updateNode(long mapId, long id, double lat, double lon, long changeSetId,
+void ServicesDb::updateNode(long id, double lat, double lon, long changeSetId,
                             const Tags& tags)
 {
+  const long mapId = _currMapId;
   _flushBulkInserts();
 
   _checkLastMapId(mapId);
@@ -1442,8 +1469,9 @@ void ServicesDb::updateNode(long mapId, long id, double lat, double lon, long ch
   _updateNode->finish();
 }
 
-void ServicesDb::updateRelation(long mapId, long id, long changeSetId, const Tags& tags)
+void ServicesDb::updateRelation(long id, long changeSetId, const Tags& tags)
 {
+  const long mapId = _currMapId;
   _flushBulkInserts();
   _checkLastMapId(mapId);
 
@@ -1471,8 +1499,9 @@ void ServicesDb::updateRelation(long mapId, long id, long changeSetId, const Tag
   _updateRelation->finish();
 }
 
-void ServicesDb::updateWay(long mapId, long id, long changeSetId, const Tags& tags)
+void ServicesDb::updateWay(long id, long changeSetId, const Tags& tags)
 {
+  const long mapId = _currMapId;
   _flushBulkInserts();
   _checkLastMapId(mapId);
 
