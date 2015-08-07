@@ -39,8 +39,10 @@ To install Hootenanny on CentOS/RHEL:
 
 HOOT_VERSION=X.Y.Z
 
+cd ~
 wget https://github.com/ngageoint/hootenanny/releases/download/v$HOOT_VERSION/hootenanny-$HOOT_VERSION.tar.gz
 tar -xzf hootenanny-$HOOT_VERSION.tar.gz
+cp hootenanny-$HOOT_VERSION.tar.gz/scripts/InstallHoot-CentOS-RHEL.sh .
 
 # Follow the instructions to configure the installation script at 
 # hootenanny-$HOOT_VERSION/scripts/InstallHoot-CentOS-RHEL.sh.  You may configure the script to 
