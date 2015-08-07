@@ -467,7 +467,7 @@ geonames.rules = {
         'PPLQ':{'abandoned:place':'populated'}, //  abandoned populated place:
         'PPLR':{'place':'religious_community'}, //  religious populated place: a populated place whose population is largely engaged in religious occupations
         'PPLS':{'place':'populated'}, //  populated places: cities, towns, villages, or other agglomerations of buildings where people live and work
-        'PPLW':{'distroyed:place':'populated'}, //  destroyed populated place: a village, town or city destroyed by a natural disaster, or by war
+        'PPLW':{'destroyed:place':'populated'}, //  destroyed populated place: a village, town or city destroyed by a natural disaster, or by war
         'PPLX':{'place':'neighbourhood'}, //  section of populated place: 
         'PPQ':{'abandoned:amenity':'police'}, //  abandoned police post: 
         'PRKGT':{'barrier':'gate'}, //  park gate: a controlled access to a park

@@ -2,10 +2,7 @@
     "#" : "Places tags from OSM Taginfo and from the GeoNames translation script",
     "#" : "http://taginfo.openstreetmap.org/api/4/key/values?key=place&filter=all&lang=en&sortname=count&sortorder=desc&page=1&rp=35&qtype=value&format=json_pretty",
 
-    "tag": {
-        "name": "place",
-        "isA": "poi=yes"
-    },
+    "tag": { "name": "place", "isA": "poi=yes" },
 
     "#" : "The catch all",
     "tag": { "name": "place=*", "isA": "poi" },
@@ -18,50 +15,65 @@
     "tag": { "name": "place=ocean", "isA": "place" },
 
     "tag": { "name": "place=sea", "isA": "place",
-        "similarTo": { "name": "place=ocean", "weight": 0.8 } },
+        "similarTo": { "name": "place=ocean", "weight": 0.8 }
+    },
 
     "tag": { "name": "place=archipelago", "isA": "place" },
 
     "tag": { "name": "place=island", "isA": "place",
-        "similarTo": { "name": "place=archipelago", "weight": 0.7  },
+        "similarTo": { "name": "place=archipelago", "weight": 0.7  }
+    },
 
     "tag": { "name": "place=atol", "isA": "place",
-        "similarTo": { "name": "place=island", "weight": 0.7  },
+        "similarTo": { "name": "place=island", "weight": 0.7  }
+    },
 
     "tag": { "name": "place=islet", "isA": "place",
-        "similarTo": { "name": "place=island", "weight": 0.7 } },
+        "similarTo": { "name": "place=island", "weight": 0.7 }
+    },
 
 
     "#" : "Big Land Areas",
     "tag": { "name": "place=continent", "isA": "place" },
 
-    "tag": { "name": "place=country", "isA": "place",
-        "similarTo": { "name": "place=political_entity", "weight": 0.9 }
-    },
-
     "tag": { "name": "place=political_entity", "isA": "place" },
+
+    "tag": { "name": "place=country", "isA": "place=political_entity" },
+
     "tag": { "name": "place=historical_political_entity", "isA": "place=political_entity" },
     "tag": { "name": "place=independent_political_entity", "isA": "place=political_entity" },
     "tag": { "name": "place=section_of_independent_political_entity", "isA": "place=political_entity" },
     "tag": { "name": "place=semi-independent_political_entity", "isA": "place=political_entity" },
 
-    "tag": { "name": "place=state", "isA": "place" },
+    "tag": { "name": "place=state", "isA": "place=political_entity",
+        "similarTo": { "name": "place=province", "weight": 0.8 },
+        "similarTo": { "name": "place=region", "weight": 0.8 },
+        "similarTo": { "name": "place=territory", "weight": 0.8 }
+    },
+
     "tag": { "name": "place=province", "isA": "place" },
     "tag": { "name": "place=region", "isA": "place" },
     "tag": { "name": "place=territory", "isA": "place" },
 
-    "tag": { "name": "place=county", "isA": "place" },
+    "tag": { "name": "place=county", "isA": "place",
+        "similarTo": { "name": "place=state", "weight": 0.8 },
+        "similarTo": { "name": "place=district", "weight": 0.8 },
+        "similarTo": { "name": "place=borough", "weight": 0.8 },
+        "similarTo": { "name": "place=municipality", "weight": 0.8 },
+        "similarTo": { "name": "place=parish", "weight": 0.8 }
+    },
+
     "tag": { "name": "place=district", "isA": "place" },
     "tag": { "name": "place=borough", "isA": "place" },
     "tag": { "name": "place=municipality", "isA": "place" },
     "tag": { "name": "place=parish", "isA": "place" },
 
-    "tag": { "name": "place=subdistrict", "isA": "place" },
+    "tag": { "name": "place=subdistrict", "isA": "place",
+        "similarTo": { "name": "place=district", "weight": 0.8 }
+    },
 
 
-    "tag": {
-        "name": "place=administrative",
-        "isA": "place",
+    "tag": { "name": "place=administrative", "isA": "place",
         "similarTo": { "name": "place=built_up_area", "weight": 0.8 },
         "similarTo": { "name": "place=neighbourhood", "weight": 0.8 },
         "similarTo": { "name": "place=suburb", "weight": 0.8 },
@@ -80,25 +92,22 @@
 
 
     "#" : "Smaller Land Areas",
-    "tag": {
-        "name": "place=city",
-        "isA": "place",
+    "tag": { "name": "place=city", "isA": "place",
         "similarTo": { "name": "place=town", "weight": 0.8 },
         "similarTo": { "name": "place=village", "weight": 0.8 }
     },
 
     "tag": {
-        "name": "place=hamlet",
-        "isA": "place",
+        "name": "place=hamlet", "isA": "place",
         "similarTo": { "name": "place=isolated_dwelling", "weight": 0.8 },
         "similarTo": { "name": "place=village", "weight": 0.8 }
     },
 
-    "tag": { "name": "place=isolated_dwelling", "isA": "place" },
+    "tag": { "name": "place=isolated_dwelling", "isA": "place"
+    },
 
     "tag": {
-        "name": "place=neighbourhood",
-        "isA": "place",
+        "name": "place=neighbourhood", "isA": "place",
         "aliases":["place=neighborhood","place=official_neighborhood"],
         "similarTo": { "name": "place=built_up_area", "weight": 0.8 },
         "similarTo": { "name": "place=populated", "weight": 0.8 },
@@ -108,9 +117,7 @@
         "similarTo": { "name": "place=village", "weight": 0.8 }
     },
 
-    "tag": {
-        "name": "place=suburb",
-        "isA": "place",
+    "tag": { "name": "place=suburb", "isA": "place",
         "similarTo": { "name": "place=built_up_area", "weight": 0.8 },
         "similarTo": { "name": "place=populated", "weight": 0.8 },
         "similarTo": { "name": "place=town", "weight": 0.8 }
@@ -120,14 +127,12 @@
 
     "tag": { "name": "place=township", "isA": "place",
         "similarTo": { "name": "place=town", "weight": 0.8 },
-        "similarTo": { "name": "place=village", "weight": 0.8 },
+        "similarTo": { "name": "place=village", "weight": 0.8 }
     },
 
     "tag": { "name": "place=tribal_area", "isA": "place" },
 
-    "tag": {
-        "name": "place=village",
-        "isA": "place",
+    "tag": { "name": "place=village", "isA": "place",
         "similarTo": { "name": "place=populated", "weight": 0.8 },
         "similarTo": { "name": "place=hamlet", "weight": 0.8 },
         "similarTo": { "name": "place=croft", "weight": 0.8 },
@@ -141,20 +146,27 @@
     "tag": { "name": "place=croft", "isA": "place" },
     "tag": { "name": "place=settlement", "isA": "place" },
     "tag": { "name": "place=shanty_town", "isA": "place" },
-    "tag": { "name": "place=isolated_dwelling", "isA": "place" },
     "tag": { "name": "place=religious_community", "isA": "place" },
 
 
     "#" : "The bottom of the place hierachy",
     "tag": { "name": "place=city_block", "isA": "place",
         "aliases":["place=block"],
+        "similarTo": { "name": "place=neighbourhood", "weight": 0.7 }
     },
 
     "tag": { "name": "place=plot", "isA": "place" },
 
     "tag": { "name": "place=populated", "isA": "place" },
-    "tag": { "name": "abandoned:place=populated", "isA": "place=populated" },
-    "tag": { "name": "distroyed:place=populated", "isA": "place=populated" },
+
+    "tag": { "name": "abandoned:place=populated", "isA": "place",
+        "similarTo": { "name": "place=populated", "weight": 0.4 }
+    },
+
+    "tag": { "name": "destroyed:place=populated", "isA": "place",
+         "similarTo": { "name": "place=populated", "weight": 0.4 },
+         "similarTo": { "name": "historic=ruins", "weight": 0.8 }
+    },
 
 
 
@@ -162,14 +174,16 @@
     "tag": { "name": "place=farm", "isA": "place" },
 
     "tag": { "name": "abandoned:place=farm", "isA": "place",
-        "similarTo": { "name": "place=farm", "weight": 0.8 } },
+        "similarTo": { "name": "place=farm", "weight": 0.8 }
+    },
 
     "tag": { "name": "place=marine_farm", "isA": "place",
         "aliases":["place=maritime_farm"],
-        "similarTo": { "name": "place=farm", "weight": 0.9 } },
+        "similarTo": { "name": "place=farm", "weight": 0.9 }
+    },
 
     "tag": { "name": "place=allotments", "isA": "place",
-        "similarTo": { "name": "place=farm", "weight": 0.6 } },
+        "similarTo": { "name": "place=farm", "weight": 0.6 }
     },
 
 
