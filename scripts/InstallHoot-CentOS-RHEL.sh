@@ -68,28 +68,31 @@ UPDATE_DATABASE=true
 UPDATE_CORE=true
 UPDATE_SERVICES=true
 UPDATE_UI=true
+SILENT_INSTALL=false
 
-if [ "$INSTALL_DEPENDENCIES" == "false" ]; then
+if [ "$SILENT_INSTALL" == "false" ]; then
+  if [ "$INSTALL_DEPENDENCIES" == "false" ]; then
+    if [ "$INSTALL_HOOT_APPLICATION" == "true" ]; then
+      echo "This script has not been configured.  Select either dependency installation, application installation, or both.  Installation canceled."
+      exit -1;
+    fi
+  fi
+  
+  if [ "$INSTALL_DEPENDENCIES" == "true" ]; then
+    echo "You're installing Hootenanny dependencies."
+  fi
   if [ "$INSTALL_HOOT_APPLICATION" == "true" ]; then
-    echo "This script has not been configured.  Installation canceled."
-    exit -1;
+    echo "You're installing the Hootenanny application."
+  fi
+  if [ "$INSTALL_HOOT_APPLICATION" == "true" ]; then
+    echo "You're installing the Hootenanny application version $HOOT_VERSION."
+  fi
+  echo "Is the above information correct?  y/n?"
+  read clear
+  if [ "$clear" == "n" ]; then
+    exit -1
   fi
 fi
-
-#if [ "$INSTALL_DEPENDENCIES" == "true" ]; then
-#  echo "You're installing Hootenanny dependencies."
-#fi
-#if [ "$INSTALL_HOOT_APPLICATION" == "true" ]; then
-#  echo "You're installing the Hootenanny application."
-#fi
-#if [ "$INSTALL_HOOT_APPLICATION" == "true" ]; then
-#  echo "You're installing the Hootenanny application version $HOOT_VERSION."
-#fi
-#echo "Is the above information correct?  y/n?"
-#read clear
-#if [ "$clear" == "n" ]; then
-#  exit -1
-#fi
 
 cd $INSTALL_SOURCE_DIR
 

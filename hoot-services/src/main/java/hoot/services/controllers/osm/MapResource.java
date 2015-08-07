@@ -90,11 +90,8 @@ import com.mysema.query.sql.SQLSubQuery;
 import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
-import com.mysema.query.support.Expressions;
-import com.mysema.query.types.Expression;
 import com.mysema.query.types.expr.NumberExpression;
 import com.mysema.query.types.template.NumberTemplate;
-import com.sun.org.apache.bcel.internal.generic.Select;
 
 /**
  * Service endpoint for maps containing OSM data

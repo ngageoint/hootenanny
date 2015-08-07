@@ -83,7 +83,8 @@
     "tag": {
         "name": "place=city",
         "isA": "place",
-        "similarTo": { "name": "place=town", "weight": 0.8 }
+        "similarTo": { "name": "place=town", "weight": 0.8 },
+        "similarTo": { "name": "place=village", "weight": 0.8 }
     },
 
     "tag": {
