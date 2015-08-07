@@ -216,17 +216,29 @@ public class ReviewItemsMarker
   }
   
   protected final SQLUpdateClause _getLastAccessUpdateClause(final String reviewItemId, 
-  		final Timestamp newLastAccessTime) throws Exception
+  		final Timestamp newLastAccessTime, final String reviewAgainst) throws Exception
   {
   	QReviewItems rm = QReviewItems.reviewItems;
-  	return new SQLUpdateClause(conn, DbUtils.getConfiguration(), rm)
+  	
+  	SQLUpdateClause q = new SQLUpdateClause(conn, DbUtils.getConfiguration(), rm)
     .set(rm.lastAccessed, newLastAccessTime)
     .where(rm.mapId.eq(mapId).and(rm.reviewableItemId.eq(reviewItemId)));
+  	
+  	if(reviewAgainst != null)
+  	{
+  		 q = new SQLUpdateClause(conn, DbUtils.getConfiguration(), rm)
+  	    .set(rm.lastAccessed, newLastAccessTime)
+  	    .where(rm.mapId.eq(mapId).and(rm.reviewableItemId.eq(reviewItemId))
+  	    		.and(rm.reviewAgainstItemId.eq(reviewAgainst)));
+  	}
+  	
+  	return q;
   }
   // Update Review LastAccess column
-  public void updateReviewLastAccessTime(final String reviewItemId, final Timestamp newLastAccessTime) throws Exception
+  public void updateReviewLastAccessTime(final String reviewItemId, final Timestamp newLastAccessTime,
+  		final String reviewAgainst) throws Exception
   {
-  	_getLastAccessUpdateClause(reviewItemId, newLastAccessTime)
+  	_getLastAccessUpdateClause(reviewItemId, newLastAccessTime, reviewAgainst)
     	.execute(); 
   }
   
@@ -320,16 +332,28 @@ public class ReviewItemsMarker
   }
 
   protected final SQLUpdateClause _updateLastAccessWithSubSelect(final Timestamp now, 
-  		final Timestamp compareTime, final String avItem) throws Exception
+  		final Timestamp compareTime, final String reviewItem, final String reviewAgainstItem) throws Exception
   {
   	QReviewItems rm = QReviewItems.reviewItems;
-  	return new SQLUpdateClause(conn, DbUtils.getConfiguration(), rm)
+  	
+  	SQLUpdateClause q = new SQLUpdateClause(conn, DbUtils.getConfiguration(), rm)
     .set(rm.lastAccessed, now)
-    .where(rm.mapId.eq(mapId).and(rm.reviewableItemId.in(new SQLSubQuery().from(rm).
-    		where(rm.mapId.eq(mapId).and(rm.reviewableItemId.eq(avItem).and(rm.reviewStatus.ne(DbUtils.review_status_enum.reviewed)
-    				.and(rm.lastAccessed.lt(compareTime).or(rm.lastAccessed.isNull()))))).list(rm.reviewableItemId))));
+    .where(rm.mapId.eq(mapId).and(rm.reviewId.in(new SQLSubQuery().from(rm).
+    		where(rm.mapId.eq(mapId).and(rm.reviewableItemId.eq(reviewItem).and(rm.reviewStatus.ne(DbUtils.review_status_enum.reviewed)
+    				.and(rm.lastAccessed.lt(compareTime).or(rm.lastAccessed.isNull()))))).list(rm.reviewId))));
+  	if(reviewAgainstItem != null)
+  	{
+  		q = new SQLUpdateClause(conn, DbUtils.getConfiguration(), rm)
+      .set(rm.lastAccessed, now)
+      .where(rm.mapId.eq(mapId).and(rm.reviewId.in(new SQLSubQuery().from(rm).
+      		where(rm.mapId.eq(mapId).and(rm.reviewableItemId.eq(reviewItem).and(rm.reviewAgainstItemId.eq(reviewAgainstItem))
+      				.and(rm.reviewStatus.ne(DbUtils.review_status_enum.reviewed)
+      				.and(rm.lastAccessed.lt(compareTime).or(rm.lastAccessed.isNull()))))).list(rm.reviewId))));
+  	}
+  	return q;
   }
-  public JSONObject getAvaiableReviewItem(int offset, final boolean isForward, final String offsetId) throws Exception
+  public JSONObject getAvaiableReviewItem(int offset, final boolean isForward, 
+  		final String offsetId, final String offsetAgainstId) throws Exception
   {
   	JSONObject nextItem = new JSONObject();
   	QReviewItems rm = QReviewItems.reviewItems;
@@ -346,26 +370,37 @@ public class ReviewItemsMarker
   		q = _getAvailableReviewWithOffsetQuery(compareTime, offsetId)
     	.limit(offset+10);
   	}
+  	
+  	
  
   	//investigate queryDSL for cursor fetching..
   	// But for now we use internal loop
-  	List<String> avList = q.list(rm.reviewableItemId);
+  	//List<String> avList = q.list(rm.reviewableItemId);
+  	
+  	List<Tuple> avList = q.list(rm.reviewableItemId, rm.reviewAgainstItemId);
   	
 		if(offset > -1)
 		{
-
+			// get last occurrence
 			for(int i=0; i<avList.size(); i++)
 			{
-				if(avList.get(i).toString().equals(offsetId))
+				Tuple val = avList.get(i);
+				final String rId = val.get(rm.reviewableItemId);
+				final String raId = val.get(rm.reviewAgainstItemId);
+				boolean isMatchAgainst = true;
+				if(offsetAgainstId != null && raId != null)
+				{
+					isMatchAgainst = offsetAgainstId.equals(raId);
+				}
+				if(rId.equals(offsetId) && isMatchAgainst)
 				{
 					offset = i;
-					break;
 				}
 			}
 		}
   	
   	
-  	String avItem = null;
+  	Tuple avItem = null;
   	if(avList.size() > 0)
   	{
 	  	if(isForward)
@@ -402,13 +437,16 @@ public class ReviewItemsMarker
   	nextItem.put("status", "failed");
   	if(avItem != null)
   	{  	
+  		final String reviewedItemId = avItem.get(rm.reviewableItemId);
+  		final String revAgainstItemId = avItem.get(rm.reviewAgainstItemId);
   		// lock the item if still available
-  		long rowsEffected =  _updateLastAccessWithSubSelect(now, compareTime, avItem)
+  		long rowsEffected =  _updateLastAccessWithSubSelect(now, compareTime, reviewedItemId, revAgainstItemId)
       .execute(); 
   		
   		if(rowsEffected > 0)
   		{
-  			nextItem.put("nextitemid", avItem);
+  			nextItem.put("nextitemid", reviewedItemId);
+  			nextItem.put("nextagainstitemid", revAgainstItemId);
   			nextItem.put("status", "success");
   		}
   	}

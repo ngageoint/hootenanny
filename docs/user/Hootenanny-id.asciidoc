@@ -105,10 +105,12 @@ NOTE: This capability will likely evolve over time to support copy/pasting of fe
 
 The Hootenanny map portion of the interface mirrors the Open Street Map iD editor link:$$https://www.openstreetmap.org/edit?editor=id$$[OpenStreetMap-iD] with additional customization to support conflation workflows. Map navigation options appear in the upper right portion of the map viewer noted by B in figure <<HootiD-UILayout>>. To view a maptip and/or <<Hoot-iD_Shortcuts,shortcut>>, hover the cursor over each button and information concerning the functionality of a particular feature will appear. 
 
-It is also possible to display a line length or polygon area by clicking the 'i' key when a feature has been selected.  Display units can be toggled between feet (imperial) and meters (metric) by clicking on either option.  To measure the distance between any two points, select line or hit the 2 shortcut and click from the starting to ending point with the feature info displayed.  This will give you a measurement between two locations.  Note that you will need to delete any feature created once you have recording this measurement.
+It is also possible to display a line length or polygon area by clicking the 'i' key when a feature has been selected.  Display units can be toggled between feet (imperial) and meters (metric) by clicking on either option.  To measure the distance between any two points, select line or hit the 2 shortcut and click from the starting to ending point with the feature info displayed.  This will give you a measurement between two locations.  
 
 .Display length of feature on map.  DC POI data from Geonames.org with DigitalGlobe Basemap imagery.
 image::user/images/id/hoot_measure.png[scaledwidth="50%"]
+
+NOTE: When creating a line between two POIs to measure a distance value, use the undo buttons to remove the line rather than the delete palette tool.  This is because the linear feature replaces the original POIs with a new start and end node and deleting the feature removes both the original POIs and the newly created line.
 
 ==== Map Navigation
 
