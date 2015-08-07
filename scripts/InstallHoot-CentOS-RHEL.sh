@@ -1,7 +1,23 @@
 #!/bin/bash
 
-# See the instructions in the CentOS/RHEL section of Hootenanny Installation Instructions.pdf for
-# an example of how this script should be executed.
+# Execute this script something like this:
+#
+## HOOT_VERSION is of the form X.Y.Z and corresponds to a release available at 
+## http://github.com/ngageoint/hootenanny.
+#
+#HOOT_VERSION=X.Y.Z
+#
+#cd ~
+#wget https://github.com/ngageoint/hootenanny/releases/download/v$HOOT_VERSION/hootenanny-$HOOT_VERSION.tar.gz
+#tar -xzf hootenanny-$HOOT_VERSION.tar.gz
+#cp hootenanny-$HOOT_VERSION.tar.gz/scripts/InstallHoot-CentOS-RHEL.sh .
+
+## Follow the instructions to configure the installation script.  You may configure the script to 
+## install all Hootenanny dependencies, as well as the application or have it just install the 
+## Hootenanny application.  SET HOOT VERSION INSIDE THIS SCRIPT The dependencies must be installed 
+# at least once to the target environment.  Then:
+#
+#./InstallHoot-CentOS-RHEL.sh
 #
 # This script: 
 # - applies to the production CentOS 6.x environment only (tested on CentOS 6.6)
