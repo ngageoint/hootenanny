@@ -14,10 +14,10 @@ To quickly run Hootenanny on Ubuntu, refer to the Vagrant (VM container) set up 
 VAGRANT.md.  For additional notes on configuring a Hootenanny development environment, see the
 Hootenanny - Developers Guide document.
 
-To run Hootenanny on CentOS, follow the Hootenanny - CentOS Installation Instructions document.  
+To run Hootenanny on CentOS, follow the Hootenanny - Installation Instructions document.  
 There is currently no Vagrant set up for CentOS/RHEL, but there may be one in the future.  Following 
-CentOS/RHEL installation instructions is more complicated than running with Vagrant on Ubuntu and 
-requires a relatively high level of Linux expertise.
+CentOS/RHEL installation instructions is significantly more complicated than launching a Vagrant 
+instance and requires a higher level of Linux expertise.
 
 # Redistribution
 

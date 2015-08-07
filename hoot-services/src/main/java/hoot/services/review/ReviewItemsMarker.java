@@ -27,9 +27,17 @@
 package hoot.services.review;
 
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.List;
 
+import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
+import hoot.services.db.DbUtils.review_status_enum;
+import hoot.services.db2.QChangesets;
 import hoot.services.db2.QMaps;
+import hoot.services.db2.QReviewItems;
+import hoot.services.db2.QUsers;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.review.MarkItemsReviewedRequest;
 import hoot.services.models.review.MarkItemsReviewedResponse;
@@ -40,11 +48,16 @@ import hoot.services.writers.osm.ChangesetDbWriter;
 import hoot.services.writers.review.ReviewedItemsWriter;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
+import com.mysema.query.Tuple;
 import com.mysema.query.sql.SQLQuery;
+import com.mysema.query.sql.SQLSubQuery;
+import com.mysema.query.sql.dml.SQLUpdateClause;
+import com.mysema.query.types.query.ListSubQuery;
 
 /**
  * Marks reviewable items as reviewed;  This is a wrapper around the process of auto
@@ -57,6 +70,8 @@ public class ReviewItemsMarker
   private long mapId;
   private long userId;
   private Connection conn;
+  // 5 min
+  public static long LOCK_TIME = 300000;
 
   public ReviewItemsMarker(final Connection conn, final String mapId) throws Exception
   {
@@ -64,10 +79,12 @@ public class ReviewItemsMarker
     //Check to see if the map exists in the maps table. (404); input mapId may be a map ID or a
     //map name; this will throw if it doesn't find the map
     log.debug("Checking maps table for map with ID: " + mapId + " ...");
-    this.mapId = (new ReviewMapValidator(conn)).verifyMapPrepared(mapId);
+    this.mapId = _verifyMap(mapId);
     //now make sure the user associated with the map exists;
     try
     {
+    	//reviewLockTime
+    	LOCK_TIME = Long.parseLong(HootProperties.getProperty("reviewLockTime").toString());
       assert(this.mapId != -1);
       log.debug(
         "Retrieving user ID associated with map having ID: " + String.valueOf(this.mapId) + " ...");
@@ -76,9 +93,7 @@ public class ReviewItemsMarker
       //SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
 
       userId =
-      		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(maps)
-      .where(maps.id.eq(this.mapId))
-      .singleResult(maps.userId);
+      		_getUserIdFromMapId();
 
       log.debug("Retrieved user ID: " + userId);
     }
@@ -86,6 +101,44 @@ public class ReviewItemsMarker
     {
       throw new Exception("Error locating user associated with map with ID: " + this.mapId);
     }
+  }
+  
+  
+  protected final long _verifyMap(final String mapId) throws Exception
+  {
+  	return (new ReviewMapValidator(conn)).verifyMapPrepared(mapId);
+  }
+  
+  protected final long _getUserIdFromMapId() throws Exception
+  {
+  	QMaps maps = QMaps.maps;
+    //SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
+
+    return
+    		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(maps)
+    .where(maps.id.eq(this.mapId))
+    .singleResult(maps.userId);
+  }
+  
+  public ReviewItemsMarker()
+  {
+  	
+  }
+  
+  public void setUserId(final long userid) throws Exception
+  {
+  	this.userId = userid;
+  }
+  
+  
+  public void setMapId(final String mapId) throws Exception
+  {
+  	this.mapId = _verifyMap(mapId);
+  }
+  
+  public void setMapId(final long mapId) throws Exception
+  {
+  	this.mapId = mapId;
   }
 
   /**
@@ -161,4 +214,250 @@ public class ReviewItemsMarker
     markItemsReviewedResponse.setNumItemsMarkedReviewed(numItemsMarkedReviewed);
     return markItemsReviewedResponse;
   }
+  
+  protected final SQLUpdateClause _getLastAccessUpdateClause(final String reviewItemId, 
+  		final Timestamp newLastAccessTime, final String reviewAgainst) throws Exception
+  {
+  	QReviewItems rm = QReviewItems.reviewItems;
+  	
+  	SQLUpdateClause q = new SQLUpdateClause(conn, DbUtils.getConfiguration(), rm)
+    .set(rm.lastAccessed, newLastAccessTime)
+    .where(rm.mapId.eq(mapId).and(rm.reviewableItemId.eq(reviewItemId)));
+  	
+  	if(reviewAgainst != null)
+  	{
+  		 q = new SQLUpdateClause(conn, DbUtils.getConfiguration(), rm)
+  	    .set(rm.lastAccessed, newLastAccessTime)
+  	    .where(rm.mapId.eq(mapId).and(rm.reviewableItemId.eq(reviewItemId))
+  	    		.and(rm.reviewAgainstItemId.eq(reviewAgainst)));
+  	}
+  	
+  	return q;
+  }
+  // Update Review LastAccess column
+  public void updateReviewLastAccessTime(final String reviewItemId, final Timestamp newLastAccessTime,
+  		final String reviewAgainst) throws Exception
+  {
+  	_getLastAccessUpdateClause(reviewItemId, newLastAccessTime, reviewAgainst)
+    	.execute(); 
+  }
+  
+ /* 
+  
+  public JSONObject getReviewAvailability(final String reviewItemId) throws Exception
+  {
+  	// select review_status, last_accesstime from
+  	QReviewItems rm = QReviewItems.reviewItems;
+  	List<Tuple> res = new SQLQuery(conn, DbUtils.getConfiguration())
+  		.from(rm)
+  		.where(rm.mapId.eq(mapId).and(rm.reviewableItemId.eq(reviewItemId)))
+  		.limit(1)
+  		.list(rm.reviewStatus,rm.lastAccessed);
+  	
+  	JSONObject ret = new JSONObject();
+  	
+  	if(res.size() > 0)
+  	{
+  		Tuple tup = res.get(0);
+  		DbUtils.review_status_enum stat = (review_status_enum) tup.get(rm.reviewStatus);
+  		Timestamp dt = (Timestamp)tup.get(rm.lastAccessed);
+  		
+  		if(dt != null) {
+  			long lastAccess = dt.getTime();
+  			java.util.Date d = new java.util.Date();
+    		long now = d.getTime();
+    		
+    		boolean isLocked = ((now-lastAccess) < LOCK_TIME);
+    		ret.put("islocked", "" + isLocked);
+    		ret.put("evaltime", "" + now);
+    		ret.put("lastaccesstime", "" + lastAccess);
+  		}
+  		else
+  		{
+  			ret.put("islocked", "" + false);
+    		ret.put("evaltime", null);
+    		ret.put("lastaccesstime", null);
+  		}
+  		
+  		
+  		
+  		
+  		
+  		ret.put("status", "" + stat);
+  		
+  	}
+  	return ret;
+  }
+ */
+  protected final SQLQuery _getAvailableReviewQuery(final Timestamp compareTime) throws Exception
+  {
+  	QReviewItems rm = QReviewItems.reviewItems;
+  	
+  	return new SQLQuery(conn, DbUtils.getConfiguration())
+  	.from(rm)
+  	.where(rm.mapId.eq(mapId).and(rm.reviewStatus.eq(DbUtils.review_status_enum.unreviewed)
+  			.and(rm.lastAccessed.lt(compareTime).or(rm.lastAccessed.isNull()))))
+  	.orderBy(rm.reviewScore.desc(), rm.reviewId.asc());
+  }
+  
+  // returns total available review count
+  public long getAvailableReviewCnt() throws Exception
+  {
+  	long nRet = 0;
+  	
+
+  	QReviewItems rm = QReviewItems.reviewItems;
+  	java.util.Date date= new java.util.Date();
+  	
+  	long waittime = date.getTime() - LOCK_TIME;
+  	Timestamp compareTime = new Timestamp(waittime);
+  	
+  	SQLQuery q = _getAvailableReviewQuery(compareTime);
+  	
+  	nRet = q.count();
+  	
+  	return nRet;
+  }
+  
+  protected final SQLQuery _getAvailableReviewWithOffsetQuery(final Timestamp compareTime
+  		, final String offsetId) throws Exception
+  {
+  	QReviewItems rm = QReviewItems.reviewItems;
+  	
+  	return new SQLQuery(conn, DbUtils.getConfiguration())
+  	.from(rm)
+  	.where(rm.mapId.eq(mapId).and(rm.reviewStatus.eq(DbUtils.review_status_enum.unreviewed)
+  			.and(rm.lastAccessed.lt(compareTime).or(rm.lastAccessed.isNull())).or(rm.reviewableItemId.eq(offsetId))))
+  	.orderBy(rm.reviewScore.desc(), rm.reviewId.asc());
+  }
+
+  protected final SQLUpdateClause _updateLastAccessWithSubSelect(final Timestamp now, 
+  		final Timestamp compareTime, final String reviewItem, final String reviewAgainstItem) throws Exception
+  {
+  	QReviewItems rm = QReviewItems.reviewItems;
+  	
+  	SQLUpdateClause q = new SQLUpdateClause(conn, DbUtils.getConfiguration(), rm)
+    .set(rm.lastAccessed, now)
+    .where(rm.mapId.eq(mapId).and(rm.reviewId.in(new SQLSubQuery().from(rm).
+    		where(rm.mapId.eq(mapId).and(rm.reviewableItemId.eq(reviewItem).and(rm.reviewStatus.ne(DbUtils.review_status_enum.reviewed)
+    				.and(rm.lastAccessed.lt(compareTime).or(rm.lastAccessed.isNull()))))).list(rm.reviewId))));
+  	if(reviewAgainstItem != null)
+  	{
+  		q = new SQLUpdateClause(conn, DbUtils.getConfiguration(), rm)
+      .set(rm.lastAccessed, now)
+      .where(rm.mapId.eq(mapId).and(rm.reviewId.in(new SQLSubQuery().from(rm).
+      		where(rm.mapId.eq(mapId).and(rm.reviewableItemId.eq(reviewItem).and(rm.reviewAgainstItemId.eq(reviewAgainstItem))
+      				.and(rm.reviewStatus.ne(DbUtils.review_status_enum.reviewed)
+      				.and(rm.lastAccessed.lt(compareTime).or(rm.lastAccessed.isNull()))))).list(rm.reviewId))));
+  	}
+  	return q;
+  }
+  public JSONObject getAvaiableReviewItem(int offset, final boolean isForward, 
+  		final String offsetId, final String offsetAgainstId) throws Exception
+  {
+  	JSONObject nextItem = new JSONObject();
+  	QReviewItems rm = QReviewItems.reviewItems;
+  	java.util.Date date= new java.util.Date();
+  	Timestamp now = new Timestamp(date.getTime());
+  	
+  	long waittime = date.getTime() - LOCK_TIME;
+  	Timestamp compareTime = new Timestamp(waittime);
+  	
+  	SQLQuery q = _getAvailableReviewQuery(compareTime).limit(offset+10);
+  	
+  	if(offsetId != null)
+  	{
+  		q = _getAvailableReviewWithOffsetQuery(compareTime, offsetId)
+    	.limit(offset+10);
+  	}
+  	
+  	
+ 
+  	//investigate queryDSL for cursor fetching..
+  	// But for now we use internal loop
+  	//List<String> avList = q.list(rm.reviewableItemId);
+  	
+  	List<Tuple> avList = q.list(rm.reviewableItemId, rm.reviewAgainstItemId);
+  	
+		if(offset > -1)
+		{
+			// get last occurrence
+			for(int i=0; i<avList.size(); i++)
+			{
+				Tuple val = avList.get(i);
+				final String rId = val.get(rm.reviewableItemId);
+				final String raId = val.get(rm.reviewAgainstItemId);
+				boolean isMatchAgainst = true;
+				if(offsetAgainstId != null && raId != null)
+				{
+					isMatchAgainst = offsetAgainstId.equals(raId);
+				}
+				if(rId.equals(offsetId) && isMatchAgainst)
+				{
+					offset = i;
+				}
+			}
+		}
+  	
+  	
+  	Tuple avItem = null;
+  	if(avList.size() > 0)
+  	{
+	  	if(isForward)
+	  	{
+	  		if(avList.size() > offset+1)
+	  		{
+	  			// next available item
+	  			avItem = avList.get(offset+1);
+	  		} 	
+	  		else
+	  		{
+	  			// goto first
+	  			avItem = avList.get(0);
+	  		}
+
+	  	}
+	  	else // backward
+	  	{
+	  		if(avList.size() >= offset+1)
+	  		{
+	  			if(offset-1 < 0) {
+	  				avItem = avList.get(avList.size()-1);
+	  			} else {
+	  			// get previous item
+		  			avItem = avList.get(offset-1);
+	  			}
+	  			
+	  		}
+	  		
+	  	}
+  	}
+  	
+  	
+  	nextItem.put("status", "failed");
+  	if(avItem != null)
+  	{  	
+  		final String reviewedItemId = avItem.get(rm.reviewableItemId);
+  		final String revAgainstItemId = avItem.get(rm.reviewAgainstItemId);
+  		// lock the item if still available
+  		long rowsEffected =  _updateLastAccessWithSubSelect(now, compareTime, reviewedItemId, revAgainstItemId)
+      .execute(); 
+  		
+  		if(rowsEffected > 0)
+  		{
+  			nextItem.put("nextitemid", reviewedItemId);
+  			nextItem.put("nextagainstitemid", revAgainstItemId);
+  			nextItem.put("status", "success");
+  		}
+  	}
+  	else
+  	{
+  		nextItem.put("status", "noneavailable");
+  	}
+  	
+  	return nextItem;
+  	
+  }
+  
+
 }

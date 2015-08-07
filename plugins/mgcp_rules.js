@@ -39,7 +39,7 @@ mgcp.rules = {
         ['F_CODE','AQ064','man_made','causeway'], // Causeway - NFDD AQ063
         ['F_CODE','AT080','tower:type','communication'], // Communications Tower - NFDD AL241
         ['F_CODE','BB008','landuse','harbour'], // Harbour Waters - NFDD BB005
-        ['F_CODE','GA035','aeroway','navigation_aid'], // Aeronautical NAVAID - FCODE Retired
+        ['F_CODE','GA035','aeroway','navigationaid'], // Aeronautical NAVAID - FCODE Retired
         ['F_CODE','GB010','man_made','beacon'], // Airport Navigation Lights - FCODE Retired
         ], // End fcodeOne2oneInV3
 
@@ -51,7 +51,7 @@ mgcp.rules = {
         ['F_CODE','AC000','facility','yes'], // Processing Facility - NFDD AN010
         ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
         ['F_CODE','AJ010','farm:irrigation','centre_pivot'], // Circular Irrigation System - FCODE Retired
-        ['F_CODE','AK190','man_made','recreation_pier'], // Recreational Pier - NFDD BB081
+        ['F_CODE','AK190','man_made','recreational_pier'], // Recreational Pier - NFDD BB081
         ['F_CODE','AL015',undefined,undefined], // General Building - NFDD AL013 - to stop warnings
         ['F_CODE','AL210','route:protection','yes'], // Protection Shed - NFDD AL211
         ['F_CODE','AT030','power','line'], // Power Line - NFDD AT005
@@ -158,7 +158,7 @@ mgcp.rules = {
         'MOH':'raw:MOH',  // Maximum Obstacle Height
         'MVC':'max_clearance', // Maximum Vertical Clearance
         'NOS':'bridge:span_count', // Span Count
-        'NPL':'cable_count',  // Parallel Line Count
+        'NPL':'cables',  // Parallel Line Count
         'OHB':'height', // Overall Bridge Height
         'PFH':'height:predominant', // Predominant Feature Height
         'RBV':'waterway:bank1:cover', // Right Bank Vegetation Cover
@@ -302,8 +302,8 @@ mgcp.rules = {
 
         // COD - Delineation Known 
         // ['COD','1000','raw:COD','limits_and_information_unknown'], // Limits and Information Unknown 
-        ['COD','1000',undefined,undefined], // Limits and Information Unknown 
-        ['COD','1001','raw:COD','limits_and_information_known'], // Limits and Information Known 
+        ['COD','1000','deliniation','unknown'], // Limits and Information Unknown
+        ['COD','1001','deliniation','known'], // Limits and Information Known
 
         //CON - Road Width Constriction Type
         ['CON','-999999',undefined,undefined], // In data, not in spec
@@ -633,42 +633,42 @@ mgcp.rules = {
 
         // NST - Navigation System Type
         ['NST','-32768',undefined,undefined],  // Null
-        // ['NST','0','navigation_aid','unknown'],
+        // ['NST','0','navigationaid','unknown'],
         ['NST','0',undefined,undefined],
-        ['NST','2','navigation_aid','consol'],
-        ['NST','3','navigation_aid','decca'],
-        ['NST','7','navigation_aid','long_range_air_navigation_system'],
-        ['NST','8','navigation_aid','omega'],
-        ['NST','11','navigation_aid','radar'],
-        ['NST','12','navigation_aid','radio'],
-        ['NST','13','navigation_aid','radio_telephone'],
-        ['NST','15','navigation_aid','television'],
-        ['NST','16','navigation_aid','microwave'],
-        ['NST','17','navigation_aid','non-directional_radio_beacon'],
-        ['NST','18','navigation_aid','non-directional_radio_beacon/distance_measuring_equipment'],
-        ['NST','20','navigation_aid','vhf_omni_directional_radio_range'],
-        ['NST','21','navigation_aid','vhf_omni_directional_radio_range/distance_measuring_equipment'],
-        ['NST','22','navigation_aid','vhf_omni_directional_radio_range_and_tacan'],
-        ['NST','23','navigation_aid','tactical_air_navigation_equipment_tacan'],
-        ['NST','24','navigation_aid','instrument_landing_system'],
-        ['NST','25','navigation_aid','instrument_landing_system/distance_measuring_equipment'],
-        ['NST','26','navigation_aid','localizer'],
-        ['NST','27','navigation_aid','localizer/distance_measuring_equipment'],
-        ['NST','30','navigation_aid','microwave_landing_system'],
-        ['NST','33','navigation_aid','radio_telegraph'],
-        ['NST','35','navigation_aid','radar_antenna'],
-        ['NST','37','navigation_aid','precision_approach_radar'],
-        ['NST','38','navigation_aid','aeronautical_radio'],
-        ['NST','58','navigation_aid','distance_measuring_equipment'],
-        ['NST','74','navigation_aid','ils_back_course'],
-        ['NST','75','navigation_aid','loc_back_course'],
-        ['NST','76','navigation_aid','marker'],
-        ['NST','78','navigation_aid','outer_marker'],
-        ['NST','79','navigation_aid','middle_marker'],
-        ['NST','80','navigation_aid','locator_outer_marker'],
-        ['NST','81','navigation_aid','locator_middle_marker'],
-        ['NST','82','navigation_aid','rotating_beacon_light'],
-        ['NST','999','navigation_aid','other'],
+        ['NST','2','navigationaid','consol'],
+        ['NST','3','navigationaid','decca'],
+        ['NST','7','navigationaid','loran'], // long_range_air_navigation_system
+        ['NST','8','navigationaid','omega'],
+        ['NST','11','navigationaid','radar'],
+        ['NST','12','navigationaid','radio'],
+        ['NST','13','navigationaid','radio_telephone'],
+        ['NST','15','navigationaid','television'],
+        ['NST','16','navigationaid','microwave'],
+        ['NST','17','navigationaid','ndb'], // non-directional_radio_beacon
+        ['NST','18','navigationaid','non-directional_radio_beacon/distance_measuring_equipment'],
+        ['NST','20','navigationaid','vor'], // vhf_omni_directional_radio_range
+        ['NST','21','navigationaid','vor-dme'], // vhf_omni_directional_radio_range/distance_measuring_equipment
+        ['NST','22','navigationaid','vortac'], // vhf_omni_directional_radio_range_and_tacan
+        ['NST','23','navigationaid','tacan'], // tactical_air_navigation_equipment tacan
+        ['NST','24','navigationaid','ils'], // instrument_landing_system
+        ['NST','25','navigationaid','ils-dme'], // instrument_landing_system/distance_measuring_equipment
+        ['NST','26','navigationaid','localizer'],
+        ['NST','27','navigationaid','localizer/distance_measuring_equipment'],
+        ['NST','30','navigationaid','microwave_landing_system'],
+        ['NST','33','navigationaid','radio_telegraph'],
+        ['NST','35','navigationaid','radar_antenna'],
+        ['NST','37','navigationaid','precision_approach_radar'],
+        ['NST','38','navigationaid','aeronautical_radio'],
+        ['NST','58','navigationaid','dme'], // distance_measuring_equipment
+        ['NST','74','navigationaid','ils_back_course'],
+        ['NST','75','navigationaid','loc_back_course'],
+        ['NST','76','navigationaid','marker'],
+        ['NST','78','navigationaid','outer_marker'],
+        ['NST','79','navigationaid','middle_marker'],
+        ['NST','80','navigationaid','locator_outer_marker'],
+        ['NST','81','navigationaid','locator_middle_marker'],
+        ['NST','82','navigationaid','rotating_beacon_light'],
+        ['NST','999','navigationaid','other'],
 
         // OPC - Offshore Platform Type 
         // ['OPC','0','raw:OPC','unknown'], // Unknown 
