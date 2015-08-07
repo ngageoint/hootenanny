@@ -1,7 +1,7 @@
 
 == Troubleshooting
 
-This is similar, but not identical to, the troubleshooting section in the Hootenanny Installation Instructions, which is tailored to a CentOS/RHEL 6.5.
+This is similar, but not identical to, the troubleshooting section in the Hootenanny Installation Instructions, which is tailored to a CentOS/RHEL 6.x.
 
 === Core
 
@@ -14,7 +14,7 @@ This is similar, but not identical to, the troubleshooting section in the Hooten
 * *Problems reading/writing from the database when using hoot?* --> Verify the database credentials in:
 	**  +/usr/local/hootenanny-X.Y.Z/conf/DatabaseConfig.sh+ 
 
-* *"PostgreSQL" and "FileGDB" formats do not show when running ogrinfo --formats* --> Possibly you have compiled GDAL incorrectly. Re-compile with the steps listed in scripts/InstallHootDependences-CentOS-RHEL-Partial.txt that were run during the hoot core installation.
+* *"PostgreSQL" and "FileGDB" formats do not show when running ogrinfo --formats* --> Possibly you have compiled GDAL incorrectly. Re-compile with the steps listed in scripts/InstallHoot-CentOS-RHEL.sh that were run during the hoot core installation.
 
 * *Problems with the GDAL Python module?* --> Make sure you compiled GDAL with the +--with-python+ switch.
 

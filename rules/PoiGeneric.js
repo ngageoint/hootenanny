@@ -31,13 +31,17 @@ var weightedWordDistance = new hoot.NameExtractor(
 
 var distances = [
     {k:'historic',                      match:100,      review:200},
-    {k:'place',     v:'neighborhood',   match:1000,     review:2000},
-    {k:'place',     v:'village',        match:2000,     review:3000},
-    {k:'place',     v:'populated',      match:2000,     review:3000},
+    {k:'place',                         match:500,      review:1000},
+    {k:'place',     v:'built_up_area',  match:1000,     review:2000},
+    {k:'place',     v:'city',           match:2500,     review:5000},
     {k:'place',     v:'locality',       match:2000,     review:3000},
+    {k:'place',     v:'neighborhood',   match:1000,     review:2000},
+    {k:'place',     v:'populated',      match:2000,     review:3000},
+    {k:'place',     v:'suburb',         match:1000,     review:2000},
+    {k:'place',     v:'village',        match:2000,     review:3000},
     {k:'waterway',                      match:1000,     review:2000},
     {k:'amenity',                       match:100,      review:200},
-    {k:'landuse',                       match:200,      review:500},
+    {k:'landuse',                       match:200,      review:600},
     {k:'leisure',                       match:100,      review:200},
     {k:'tourism',                       match:100,      review:200},
     {k:'shop',                          match:100,      review:200},
@@ -77,6 +81,7 @@ exports.getSearchRadius = function(e) {
             radius = Math.max(distances[i].review);
         }
     }
+
     return radius;
 }
 
@@ -156,7 +161,7 @@ function additiveScore(map, e1, e2) {
     var nameMultiplier = 1;
     // if there is no type information to compare the name becomes more 
     // important
-    var oneGeneric = hasTypeTag(e1) == false || hasTypeTag(e2) == false
+    var oneGeneric = hasTypeTag(e1) == false || hasTypeTag(e2) == false;
     if (oneGeneric) {
         nameMultiplier = 2;
     }
@@ -169,10 +174,13 @@ function additiveScore(map, e1, e2) {
     var weightedPlusMean = mean + weightedWordDistanceScore;
     var placeScore = getTagCategoryDistance("place", e1, e2);
     var poiScore = getTagCategoryDistance("poi", e1, e2);
+    var artworkTypeDistance = getTagDistance("artwork_type", e1, e2);
     var cuisineDistance = getTagDistance("cuisine", e1, e2);
     var sportDistance = getTagDistance("sport", e1, e2);
+    hoot.debug(poiScore);
 
     var score = 0;
+
     if (weightedPlusMean > 0.987403 && weightedPlusMean < 1.2) {
         score += 0.5 * nameMultiplier;
         reason.push("similar names");
@@ -220,6 +228,10 @@ function additiveScore(map, e1, e2) {
         reason.push("similar POI type");
     }
 
+    if (artworkTypeDistance <= 0.3) {
+        score += 1;
+        reason.push("similar artwork type");
+    }
     if (cuisineDistance <= 0.3) {
         score += 1;
         reason.push("similar cuisine");
@@ -243,8 +255,8 @@ function additiveScore(map, e1, e2) {
 
     result.score = score;
     result.reasons = reason;
-    hoot.debug(score);
     hoot.debug(reason);
+    hoot.debug(score);
 
     return result;
 }

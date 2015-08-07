@@ -1,289 +1,63 @@
+== Overview
+
+This document describes how to install Hootenanny.
+
+=== Environment
+
+* Hardware specs may vary. Hootenanny has been successfully installed on VMs. Some suggested specifications:
+	** At least 8GB of RAM, but you can certainly run small datasets on far less.	
+	** Quad core or greater Intel x86 64bit compatible processor
+* An installation of CentOS/RHEL 6.x 64bit with a working yum repository or access to downloadable installable RPM's.
+* A client machine with the Chrome (or Chromium) browser installed. Hootenanny is only supported in Chrome.
+
+== Ubuntu Install Instructions
+
+Installation of Hootenanny on Ubuntu is done with Vagrant.  Follow the instructions to set up a 
+Hootenanny Vagrant instance in the README.md file.  To set up a Hootenanny development environment 
+on Ubuntu, see the Developer Guide.
 
 [[fullinstall]]
-== Full Install
+== CentOS/ RHEL Install Instructions
 
-This document describes the steps for installing Hootenanny manually from scratch, including all of its dependencies.  It has been tested on CentOS 6.5.
+This section describes the steps for installing Hootenanny on a CentOS/RHEL 6.x system.  Setting
+up a Hootenanny development environment is not recommended on CentOS/RHEL and Ubuntu should be used
+for that purpose instead. 
+ 
+Any modifications to the versions and package dependencies listed in the installation script 
+are not recommended, as parts of Hootenanny are very sensitive to its software dependency versions.
+If a package has already been installed but does not match the expected version, your install will 
+likely be unsupported. In such situations, the behavior of Hootenanny may range from inability to 
+compile code, to unexpected or severe runtime results that result in a failed install.  These 
+instructions have been tested on CentOS 6.5/6.6.  
 
-=== JDK
-
---------------------------------------
-sudo yum install java-1.7.0-openjdk-devel
---------------------------------------
-
-=== Python
-
-Hootenanny uses Python for build automation scripting and some translation functionality.
-
-. requests module:
-+
---------------------------------------
-sudo yum install python-requests
---------------------------------------
-
-=== Postgres
-
-Hootenanny uses Postgres to allow queryable access to OSM data.
-
-*This must be done before compiling _QT_, since it references some of Postgres's header files.*
-
-. Install dependencies
-+
---------------------------------------
-sudo wget http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-sudo rpm -ivh epel-release-6-8.noarch.rpm
-sudo yum -y install unixODBC-devel.x86_64
---------------------------------------
-
-. Install Postgres
-+
---------------------------------------
-wget http://mirror.its.sfu.ca/mirror/CentOS-Third-Party/pgrpm/pgrpm-91/redhat/rhel-6.5-x86_64/postgresql91-libs-9.1.11-1PGDG.rhel6.x86_64.rpm
-wget http://mirror.its.sfu.ca/mirror/CentOS-Third-Party/pgrpm/pgrpm-91/redhat/rhel-6.5-x86_64/postgresql91-9.1.11-1PGDG.rhel6.x86_64.rpm
-wget http://mirror.its.sfu.ca/mirror/CentOS-Third-Party/pgrpm/pgrpm-91/redhat/rhel-6.5-x86_64/postgresql91-server-9.1.11-1PGDG.rhel6.x86_64.rpm
-wget http://mirror.its.sfu.ca/mirror/CentOS-Third-Party/pgrpm/pgrpm-91/redhat/rhel-6.5-x86_64/postgresql91-contrib-9.1.11-1PGDG.rhel6.x86_64.rpm
-wget http://mirror.its.sfu.ca/mirror/CentOS-Third-Party/pgrpm/pgrpm-91/redhat/rhel-6.5-x86_64/postgresql91-devel-9.1.11-1PGDG.rhel6.x86_64.rpm
-rpm -ivh postgresql91-libs-9.1.11-1PGDG.rhel6.x86_64.rpm
-rpm -ivh postgresql91-9.1.11-1PGDG.rhel6.x86_64.rpm
-rpm -ivh postgresql91-server-9.1.11-1PGDG.rhel6.x86_64.rpm
-yum -y install uuid.x86_64
-rpm -ivh postgresql91-contrib-9.1.11-1PGDG.rhel6.x86_64.rpm
-rpm -ivh postgresql91-devel-9.1.11-1PGDG.rhel6.x86_64.rpm
-service postgresql-9.1 initdb
-service postgresql-9.1 start
---------------------------------------
-
-. Put Postgres on the path in +/etc/profile+:
-+
---------------------------------------
-export PSQL_HOME=/usr/pgsql-9.1
-
-PATH=$PATH:$PSQL_HOME/bin
-export PATH
---------------------------------------
-
-. Make the following changes in +/var/lib/pgsql/9.1/data/postgresql.conf+:
-
-* max_connections = 1000
-* shared_buffers = 1024MB
-* max_files_per_process = 1000
-* work_mem=16MB
-* maintenance_work_mem=256MB
-* checkpoint_segments=20
-* autovacuum=off
-
-. Check shmmax/shmall:
-+
---------------------------------------
-sysctl -e kernel.shmmax
-sysctl -e kernel.shmall
---------------------------------------
-
-. Change the settings, if necessary:
-+
---------------------------------------
-sysctl -w kernel.shmmax=1173741824
-sysctl -w kernel.shmall=2097152
---------------------------------------
-
-. To make the settings permanent, add to the top of +/etc/sysctl.conf+:
-* kernel.shmmax=1173741824
-* kernel.shmall=2097152
-
-. Restart the service:
-+
---------------------------------------
-sudo service postgresql-9.1 restart
---------------------------------------
-
-. If Postgres fails to restart, try a larger value for your kernel.shmmax setting.
-
-. Set Postgres service to autostart:
-+
---------------------------------------
-sudo /sbin/chkconfig --add postgresql-9.1
-sudo /sbin/chkconfig postgresql-9.1 on
-# verify its in the startup list (some of the numbers should have "on" beside them):
-sudo /sbin/chkconfig --list postgresql-9.1
-# to test, reboot...and then:
-sudo service postgresql-9.1 status # should show "started"
---------------------------------------
+To install Hootenanny on CentOS/RHEL follow the instruction in 
+hootenanny-$HOOT_VERSION/scripts/InstallHoot-CentOS-RHEL.sh.
 
 For additional details on configuring the database connection pool, see <<HootDBConnectionPool>>.
 
-=== Qt
+== Hootenanny Package Descriptions
 
-The Hootenanny Core code relies on the Qt library.
+The following instructions assumed you have used the Hootenanny build process to already have generated the following files:
 
-*Do this step after installing Postgres, since Qt needs to be compiled with its headers.* The correct version of Qt (4.8.6) for Hoot has not yet been approved in the production environment, so compile it from source.  Alternatively, if this version of Qt is already available as a package in your environment, you may install it from the package rather than by compiling from source.
+* The Hootenanny core and UI source archive (hootenanny-X.Y.Z.tar.gz)
+** The hoot core code is written in C++ and is to be packaged in a source archive (tar.gz) on a build machine during the release process. The source archive will be then compiled on the target installation machine.
+** The hoot UI code is in Javascript and is packaged inside of the same source archive that the hoot core code is packaged in a directory named "hoot-id". The directory is to be manually copied to the web server on the target installation machine.
+* The Hootenanny services web archive (hootenanny-services-X.Y.Z.war) files
+** The hoot services code is in Java and is compiled on a build machine and packaged into a web archive (.war) file as a result of the release process. The war file is then deployed to the web server on the target installation machine.
+* The FOUO translations archive (hootenanny-translations.tar.gz), which are only available through official channels.
 
-. Install Dependencies
-+
---------------------------------------
-yum -y install gcc gcc-c++ libX11-devel fontconfig-devel libXcursor-devel libXext-devel libXfixes libXft-devel \
-libXi-devel libXrandr-devel libXrender-devel
---------------------------------------
+== Helpful Hints
 
-. Compile and install Qt
-+
---------------------------------------
-su
-yum -y remove qt*
-# when onsite replace these URL's with valid ones
-wget http://download.qt-project.org/official_releases/qt/4.8/4.8.6/qt-everywhere-opensource-src-4.8.6.tar.gz
-tar -xzvf qt-everywhere-opensource-src-4.8.6.tar.gz
-mv qt-everywhere-opensource-src-4.8.6 /usr/local
-cd /usr/local/qt-everywhere-opensource-src-4.8.6
-./configure -opensource -prefix /usr/lib64/qt4 -no-opengl -no-xvideo -no-xinput -no-xkb -no-cups -no-webkit -no-qt3support \
--fast -plugin-sql-psql -I/usr/pgsql-9.1/include -L/usr/pgsql-9.1/lib -nomake demos -nomake examples
+. You can also add a custom base map quickly to the Hootenanny UI, without having to edit Javascript code if that is more convenient, but the base map will not be retained in the base maps list between browser refreshes (a bug). To add a custom basemap:
 
-make -j8
-make install
---------------------------------------
+.. From the right hand menu in iD, click "Custom".
+.. Add the URL for the basemap you wish to use.
 
-. Put Qt on the path in +/etc/profile+:
-+
---------------------------------------
-export QT_HOME=/usr/local/qt-everywhere-opensource-src-4.8.6
+. If you want to define a starting AOI for your maps, so you begin in the same location every time you open the browser, modify the "hoot.center" variable in +/var/lib/tomcat6/webapps/WEB-INF/hootenanny-id/hoot/js/custom/hoot.js+.
 
-PATH=$PATH:$QT_HOME/bin
-export PATH
---------------------------------------
+. You can quickly zoom to an AOI by modifying the end of the browser URL. The parts you modify are of the form /[zoom]/[longitude]/[latitude].
 
-
-_Note: qmake will be relinked during the hoot core install, so no need to do it at this point._
-
-=== Hoot Database
-
-. Type the following SQL commands:
-+
---------------------------------------
-sudo -u postgres createuser --superuser hoot
-sudo -u postgres psql
-postgres=# \password hoot (enter password for hoot user)
-sudo -u postgres createdb hoot --owner=hoot
-sudo -u postgres createdb wfsstoredb --owner=hoot
---------------------------------------
-
-. Install the hstore extension. Again, from the command prompt:
-+
---------------------------------------
-sudo su - postgres
-psql hoot -c 'create extension hstore;' hoot
---------------------------------------
-
-. Modify user authentication to accept passwords:
-
-* Edit +/var/lib/pgsql/9.1/data/pg_hba.conf+
-* Modify the last several lines to look like this (note the method after this will be md5):
-+
---------------------------------------
-# TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
-
-# "local" is for Unix domain socket connections only
-local   all         all                               md5
-# IPv4 local connections:
-host    all         all         127.0.0.1/32          md5
-# IPv6 local connections:
-host    all         all         ::1/128               md5
---------------------------------------
-
-. Restart postgres:
-+
---------------------------------------
-sudo service postgresql-9.1 restart
---------------------------------------
-
-=== Postgis
-
-Hootenanny uses Postgis for exposing a OGC WFS.
-
-*This step must be completed after adding the hoot database schema and completing the hoot core install, since the scripts/InstallHootDependences-CentOS-RHEL-Partial.txt script ($HOOT_HOME/scripts/InstallHootDependences-CentOS-RHEL-Partial.txt) referenced installs some of the PostGIS dependencies.*
-
-. Install Postgis
-+
---------------------------------------
-# when onsite replace these URL's with valid ones
-wget http://mirror.its.sfu.ca/mirror/CentOS-Third-Party/pgrpm/pgrpm-91/redhat/rhel-6.5-x86_64/postgis2_91-2.0.4-1.rhel6.x86_64.rpm
-yum -y localinstall postgis2_91-2.0.4-1.rhel6.x86_64.rpm
---------------------------------------
-
-. Change back +/var/lib/pgsql/9.1/data/pg_hba.conf+ authentication to "ident" (reverse of what was done in previous steps)
-. Add the Postgis extension to the wfsstoredb databases:
-+
---------------------------------------
-sudo service postgresql-9.1 restart
-sudo su - postgres
-psql -d wfsstoredb -c "create extension postgis;"
---------------------------------------
-
-. Change back +/var/lib/pgsql/9.1/data/pg_hba.conf+ authentication back to "md5" again (restoring original changes).
-
-. Restart service:
-+
---------------------------------------
-sudo service postgresql-9.1 restart
---------------------------------------
-
-. Check to see if following table exists in +wfsstoredb: spatial_ref_sys+
-
-=== liquibase
-
-Hootenanny uses liquibase for relational database update versioning.
-
-. Install liquibase:
-+
---------------------------------------
-cd \~
-# when onsite replace these URL's with valid ones
-wget ftp://ftp.univie.ac.at/systems/linux/fedora/epel/6/i386/liquibase-3.1.0-1.el6.noarch.rpm
-sudo rpm -ivh liquibase-3.1.0-1.el6.noarch.rpm
---------------------------------------
-
-=== Tomcat
-
-Hootenanny uses Tomcat as a web server to host both its web services and user interface web application.
-
-. Install Tomcat:
-+
---------------------------------------
-sudo yum -y install tomcat6 tomcat6-webapps tomcat6-admin-webapps
-
-sudo service tomcat6 start
-sudo service tomcat6 status # Should report that tomcat6 is running
---------------------------------------
-
-. Verify default homepage from browser: http://localhost
-
-. Set Tomcat service to autostart:
-+
---------------------------------------
-sudo /sbin/chkconfig --add tomcat6
-sudo /sbin/chkconfig tomcat6 on
-# verify its in the startup list (some of the numbers should have "on" beside them):
-sudo /sbin/chkconfig --list tomcat6
-# to test, reboot...and then:
-sudo service tomcat6 status # should show "started"
---------------------------------------
-
-=== Firewall
-
-. Add rules to iptables so external clients can access ports 80 and 8080. Port 80 is forwarded to Tomcat's 8080.
-+
---------------------------------------
-sudo iptables -A INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT
-sudo iptables -A INPUT -p tcp -m state --state NEW -m tcp --dport 8080 -j ACCEPT
-sudo iptables -A PREROUTING -t nat -p tcp --dport 80 -j REDIRECT --to-ports 8080
-sudo iptables -A OUTPUT -t nat -s 0/0 -d 127/8 -p tcp --dport 80 -j REDIRECT --to-ports 8080
---------------------------------------
-
-. Verify that you can access Tomcat from both a local and external client. Save the iptables config and restart:
-+
---------------------------------------
-sudo service iptables save
-sudo service iptables restart
---------------------------------------
-
-. Verify that you can still access Tomcat after a restart.
+== Advanced Tasks
 
 === Test Bandwidth (optional)
 
@@ -297,93 +71,6 @@ sudo chmod 777 dum.txt
 
 Then try downloading the file created e.g. http://myhost/dum.txt
 
-=== Hootenanny Core Dependencies
-
-NOTE: The following steps must be completed after the Tomcat install so the tomcat user can take ownership of the hoot install directory.
-
-. Download any necessary <<hoot-centos-deps,dependencies >> (note that the full download is ~373 MB).
-.. download the patched GEOS from https://github.com/ngageoint/hootenanny/releases/download/v0.2.15/geos-3.3.8-patched.tgz
-.. copy the patched GEOS from geos-3.3.8-patched.tgz to +/usr/local+  *-MAKE SURE YOU USE THE PATCHED VERSION PROVIDED!!*
-.. copy the FileGDB_API_1_3-64.tar.gz to +/usr/local+ or download from the ESRI link:$$http://www.esri.com/apps/products/download/$$[website]
-.. copy opencv-2.4.5.tar.gz to +/usr/local+.
-
-. Copy over hoot core (if not done during the Hoot database schema loading instructions)
-+
-
-. Install dependencies from scripts/InstallHootDependences-CentOS-RHEL-Partial.txt script ($HOOT_HOME/scripts/InstallHootDependences-CentOS-RHEL-Partial.txt) using the bash script command shown below replacing hootenanny-X.Y.Z with the correct hootenanny version number.  Note that this script will remove any existing compiled dependencies in +/usr/local+ and recompile them. To compile a subset of the dependencies from the complete list, edit the script accordingly.
-+
---------------------------------------
-cd /usr/local
-sudo bash hootenanny-X.Y.Z/scripts/InstallHootDependences-CentOS-RHEL-Partial.txt
---------------------------------------
-
-. Ensure that both "FileGDB" and "PostgreSQL" formats are supported by GDAL by running the +ogrinfo+ command.  Both must appear in order for Hootenanny to function properly. See the section <<HootInstallTroubleshooting>> to troubleshoot if necessary.
-
---------------------------------------
-ogrinfo --formats
---------------------------------------
-
-=== Configure Tomcat
-
-. Edit +/usr/sbin/tomcat6+ and add this towards the top:
-+
---------------------------------------
-export HOOT_HOME=/usr/local/hoot
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/hoot/lib:/usr/local/hoot/pretty-pipes/lib/
-export GDAL_DATA=/usr/local/gdal-1.10.1/data
-export GDAL_LIB_DIR=/usr/local/lib
-export HOOT_WORKING_NAME=hoot
-export PATH=/usr/local/hoot/bin/:$PATH
---------------------------------------
-
-. To serve up the Density Raster tile images, the Tomcat server has to be configured with a static image directory. In +/etc/tomcat6/server.xml+, under _Host_ section add the following section where where docBase is the path specified in "tileServerPath" in +/var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf+
-+
---------------------------------------
-<Context docBase="/usr/local/hoot/ingest/processed" path="/static" />
---------------------------------------
-
-. The Hootenanny UI uses symbolic links to serve up the icon images.  To allow Tomcat to recognize the symbolic link, the "allowLinking" attribute has to be set to "true" in the base level "Context" tag in +/etc/tomcat6/context.xml+:
-+
---------------------------------------
-<Context allowLinking="true">
-...
-</Context>
---------------------------------------
-
-
-. Restart the service:
-+
---------------------------------------
-sudo service tomcat6 restart
---------------------------------------
-
-=== Install Hootenanny
-
-UpdateHoot-CentOS6.sh ($HOOT_HOME/scripts) installs a new or updated instance of Hootenanny to an
-environment automatically assuming all of the Hootenanny dependencies have previously been installed.
-The script applies to the production CentOS 6/5 environment only.
-
-. Run the install script:
---------------------------------------
-# set java home
-export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.65.x86_64 # Your JAVA_HOME may differ.
-
-# copy files to be installed to home dir
-cd ~
-cp hootenanny-X.Y.Z.tar.gz ~
-cp hootenanny-services-X.Y.Z.war ~
-cp hootenanny-translations-X.Y.Z.tar.gz ~ # optional; required if UPDATE_FOUO_TRANSLATIONS in UpdateHoot-CentOS6.sh is set to true
-tar -xzvf hootenanny-X.Y.Z.tar.gz
-
-# Verify the settings in this script before running it.  If for some reason a part of the script
-# fails, sections of the script may be run separately by enabling/disabling certain install settings
-# (see the script comments for more details).
-nano hootenanny-X.Y.Z/scripts/UpdateHoot-CentOS6.sh
-
-# run the script
-hootenanny-X.Y.Z/scripts/UpdateHoot-CentOS6.sh
---------------------------------------
-
 . Completely clear your browser history.
 
 . Browse to http://localhost/hootenanny-id (replace localhost with the Hootenanny server name) to verify the web application is available and the base map is visible.
@@ -394,7 +81,7 @@ NOTE: If client-side debugging becomes necessary, the "Developer Tools" in Chrom
 
 . You may need to build up a tile cache for your AOI by zooming to the desired area and pausing for awhile to wait for the tiles to load before attempting to conflate with Hootenanny to avoid overtaxing your web browser with open tile requests.
 
-== Ingest Data (optional)
+=== Ingest Data (optional)
 
 If you have a small amount of data to ingest, you can easily do it from within the Hootenanny UI using the "Add Dataset" feature. If you have a large number of files you would like to script for ingest at one time, you may do it with repeated call something like the following:
 
@@ -404,7 +91,7 @@ hoot convert -D services.db.write.email='test@test.com' /myData.osm postgresql:/
 
 --------------------------------------
 
-== Configure the Base Map List
+=== Configure the Base Map List
 
 To manually configure the available base maps shown in the iD editor:
 
@@ -415,13 +102,3 @@ To manually configure the available base maps shown in the iD editor:
 .. specify a min and max scale extent for the base map that defines at what zoom level range it will be visible in the "scaleExtent" attribute
 .. specify whether the base map should be selected by default by setting the "default" attribute to "true" or "false
 
-== Helpful Hints
-
-. You can also add a custom base map quickly to the Hootenanny UI, without having to edit Javascript code if that is more convenient, but the base map will not be retained in the base maps list between browser refreshes (a bug). To add a custom basemap:
-
-.. From the right hand menu in iD, click "Custom".
-.. Add the URL for the basemap you wish to use.
-
-. If you want to define a starting AOI for your maps, so you begin in the same location every time you open the browser, modify the "hoot.center" variable in +/var/lib/tomcat6/webapps/WEB-INF/hootenanny-id/hoot/js/custom/hoot.js+.
-
-. You can quickly zoom to an AOI by modifying the end of the browser URL. The parts you modify are of the form /[zoom]/[longitude]/[latitude].
