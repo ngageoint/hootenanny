@@ -17,8 +17,8 @@
 # VARS IN THIS SECTION NEED TO BE CUSTOMIZED FOR EACH INSTALL
 
 # Dependencies install needs to be set to true the first time you install Hootenanny *only*.
-INSTALL_DEPENDENCIES=false
-INSTALL_HOOT_APPLICATION=false
+INSTALL_DEPENDENCIES=true
+INSTALL_HOOT_APPLICATION=true
 # name of the version you're deploying; version format is X.Y.Z; this should match the version of
 # the archive files being deployed
 HOOT_VERSION=0.2.17
@@ -70,6 +70,15 @@ UPDATE_SERVICES=true
 UPDATE_UI=true
 SILENT_INSTALL=false
 
+if [ "$INSTALL_DEPENDENCIES" == "" ]; then
+  echo "Please enter the choice for INSTALL_DEPENDENCIES."
+  exit -1
+fi
+if [ "$INSTALL_HOOT_APPLICATION" == "" ]; then
+  echo "Please enter the choice for INSTALL_HOOT_APPLICATION."
+  exit -1
+fi
+
 if [ "$SILENT_INSTALL" == "false" ]; then
   if [ "$INSTALL_DEPENDENCIES" == "false" ]; then
     if [ "$INSTALL_HOOT_APPLICATION" == "true" ]; then
@@ -77,12 +86,8 @@ if [ "$SILENT_INSTALL" == "false" ]; then
       exit -1;
     fi
   fi
-  
   if [ "$INSTALL_DEPENDENCIES" == "true" ]; then
     echo "You're installing Hootenanny dependencies."
-  fi
-  if [ "$INSTALL_HOOT_APPLICATION" == "true" ]; then
-    echo "You're installing the Hootenanny application."
   fi
   if [ "$INSTALL_HOOT_APPLICATION" == "true" ]; then
     echo "You're installing the Hootenanny application version $HOOT_VERSION."
