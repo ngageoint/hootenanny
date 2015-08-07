@@ -325,7 +325,7 @@ if [ "$INSTALL_DEPENDENCIES" == "true" ]; then
   test -f matplotlib-1.3.1.tar.gz || wget http://sourceforge.net/projects/matplotlib/files/matplotlib/matplotlib-1.3.1/matplotlib-1.3.1.tar.gz/download -O matplotlib-1.3.1.tar.gz
   tar -xzf matplotlib-1.3.1.tar.gz
   cd matplotlib-1.3.1
-  sudo python ./setup.py install
+  python ./setup.py build && sudo python ./setup.py install
   cd ..
 
   echo "Installing database packages and configuring database..."
