@@ -9,7 +9,7 @@
         <tag k="operator" v="Deutsche Post"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:uuid" v="{eff02ebc-5aa8-56c7-9601-9f9f2e5f1320}"/>
-        <tag k="hoot:review:note" v="Close - similar poi type"/>
+        <tag k="hoot:review:note" v="Somewhat similar - similar POI type"/>
         <tag k="hoot:wrong" v="1"/>
         <tag k="source" v="survey"/>
         <tag k="uuid" v="{801c0abc-9e5d-585e-87c4-21a99d3d3e40}"/>
@@ -25,7 +25,7 @@
         <tag k="addr:housenumber" v="5"/>
         <tag k="name" v="POST, JÄGER-VON-FALL-STRASSE"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Close - similar poi type"/>
+        <tag k="hoot:review:note" v="Somewhat similar - similar POI type"/>
         <tag k="hoot:review:uuid" v="{801c0abc-9e5d-585e-87c4-21a99d3d3e40}"/>
         <tag k="hoot:wrong" v="1"/>
         <tag k="amenity" v="post_office"/>
