@@ -44,6 +44,7 @@ namespace hoot
 class ServicesDbTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ServicesDbTest);
+  CPPUNIT_TEST(runOpenServicesTest);
   CPPUNIT_TEST(runDbVersionTest);
   CPPUNIT_TEST(runDropMapTest);
   CPPUNIT_TEST(runInsertTest);
@@ -56,6 +57,7 @@ class ServicesDbTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runSelectNodeIdsForWayTest);
   CPPUNIT_TEST(runSelectMembersForRelationTest);
   CPPUNIT_TEST(runUpdateNodeTest);
+  CPPUNIT_TEST(runOpenOsmApiTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -83,6 +85,41 @@ public:
   {
     return ServicesDbTestUtils::getDbModifyUrl();
   }
+
+  QUrl getOsmApiDbUrl()
+  {
+    LOG_DEBUG(QString("Got URL for OSM API DB: ") + ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    return ServicesDbTestUtils::getOsmApiDbUrl();
+  }
+
+  void runOpenServicesTest()
+  {
+    ServicesDb db;
+    CPPUNIT_ASSERT_EQUAL(ServicesDb::DBTYPE_UNSUPPORTED, db.getDatabaseType());
+    db.open(getDbUrl());
+    CPPUNIT_ASSERT_EQUAL(ServicesDb::DBTYPE_SERVICES, db.getDatabaseType());
+    db.close();
+    CPPUNIT_ASSERT_EQUAL(ServicesDb::DBTYPE_UNSUPPORTED, db.getDatabaseType());
+  }
+
+  void runOpenOsmApiTest()
+  {
+    Settings s = conf();
+
+    // Note: this will likely be different for each developer
+    s.set(ConfigOptions(s).getServicesDbTestUrlOsmapiKey(), "postgresql://postgres@10.194.70.78:5432/terrytest");
+
+    ServicesDb db;
+    CPPUNIT_ASSERT_EQUAL(ServicesDb::DBTYPE_UNSUPPORTED, db.getDatabaseType());
+    db.open(QUrl(ConfigOptions(s).getServicesDbTestUrlOsmapi()));
+    CPPUNIT_ASSERT_EQUAL(ServicesDb::DBTYPE_OSMAPI, db.getDatabaseType());
+    db.close();
+    CPPUNIT_ASSERT_EQUAL(ServicesDb::DBTYPE_UNSUPPORTED, db.getDatabaseType());
+
+    // Reset this back to default value
+    s.set(ConfigOptions(s).getServicesDbTestUrlOsmapiKey(), ConfigOptions(s).getServicesDbTestUrlOsmapiDefaultValue());
+  }
+
 
   void runDbVersionTest()
   {

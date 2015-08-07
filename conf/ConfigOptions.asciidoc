@@ -1159,6 +1159,14 @@ waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 
 Contains the DB URL for unit testing. This is typically only used by developers.
 
+=== services.db.test.url.osmapi
+
+* Data Type: string
+* Default Value: ``
+
+Contains the DB URL for an OpenStreetMaps (OSM) API database for unit testing. This is
+typically only used by developers.
+
 === services.db.writer.create.user
 
 * Data Type: bool

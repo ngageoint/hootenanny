@@ -114,6 +114,12 @@ QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId, const long elemId, cons
   return url;
 }
 
+QUrl ServicesDbTestUtils::getOsmApiDbUrl()
+{
+  Settings s = conf();
+  return QUrl(ConfigOptions(s).getServicesDbTestUrlOsmapi());
+}
+
 void ServicesDbTestUtils::deleteUser(QString email)
 {
   ServicesDb database;

@@ -76,6 +76,19 @@ class ServicesDb
 {
 public:
 
+  /**
+   * Describes what type of Postgres the object is connected to
+   *
+   * @note The type is set automatically in ::open by determining by
+   *    what tables are present in the schema
+   */
+  enum DbType
+  {
+    DBTYPE_UNSUPPORTED = 0,
+    DBTYPE_SERVICES,
+    DBTYPE_OSMAPI
+  };
+
   static const int COORDINATE_SCALE = 1e7;
   // below are the column indexes when calling select*Elements()
   // Not all parts of the code use these consts. Please convert "magic numbers" when you find
@@ -265,6 +278,8 @@ public:
 
   void updateWay(long id, long changeSetId, const Tags& tags);
 
+  DbType getDatabaseType() const { return _connectionType; }
+
 private:
 
   QSqlDatabase _db;
@@ -315,6 +330,7 @@ private:
 
   long _currUserId;
   long _currMapId;
+  DbType _connectionType;
 
   /**
    * This is here to improve query caching. In most cases users open a single ServiceDb and then
@@ -430,6 +446,14 @@ private:
   long _round(double x, int precision);
 
   static void _unescapeString(QString& s);
+
+  /**
+   * Examine the schema to find out by what tables exist what the supported DB type
+   *    is, if any.
+   *
+   * @return One of the supported database types or DBTYPE_UNSUPPORTED
+   */
+  DbType _determineDbType();
 };
 
 }

@@ -128,6 +128,8 @@ void ServicesDb::close()
   // Seeing this? "Unable to free statement: connection pointer is NULL"
   // Make sure all queries are listed in _resetQueries.
   _db.close();
+
+  _connectionType = DBTYPE_UNSUPPORTED;
 }
 
 void ServicesDb::closeChangeSet(long changeSetId, Envelope env, int numChanges)
@@ -518,6 +520,7 @@ void ServicesDb::_init()
 
   _currUserId = -1;
   _currMapId = -1;
+  _connectionType = DBTYPE_UNSUPPORTED;
 }
 
 long ServicesDb::insertChangeSet(const Tags& tags,
@@ -941,21 +944,40 @@ bool ServicesDb::isSupported(QUrl url)
     QString path = url.path();
     QStringList plist = path.split("/");
 
-    if (plist.size() != 3 || (plist.size() == 4 && plist[3] == ""))
+    // Valid OSM API URL: postgresql://postgres@10.194.70.78:5432/terrytest
+    // Valid Services DB: postgresql://myhost:5432/mydb/mylayer
+
+    LOG_DEBUG("Path: " << path);
+    LOG_DEBUG("Plist size: " << plist.size() );
+
+    LOG_DEBUG( QString::number(plist.size() != 3));
+    LOG_DEBUG(QString::number(plist.size() == 4 && plist[3] == ""));
+
+    // OSM API will have plist.size of 2.
+    if ( plist.size() == 2 )
+    {
+      ;
+    }
+    // 3 can be valid
+    if ( plist.size() == 3 )
+    {
+
+      if (plist[1] == "")
+      {
+        LOG_WARN("Looks like a DB path, but a DB name was expected. E.g. "
+                 "postgresql://myhost:5432/mydb/mylayer");
+        valid = false;
+      }
+      else if (plist[2] == "")
+      {
+        LOG_WARN("Looks like a DB path, but a layer name was expected. E.g. "
+                 "postgresql://myhost:5432/mydb/mylayer");
+        valid = false;
+      }
+    }
+    else if ( (plist.size() == 4) && (plist[3] == "") )
     {
       LOG_WARN("Looks like a DB path, but a DB name and layer was expected. E.g. "
-               "postgresql://myhost:5432/mydb/mylayer");
-      valid = false;
-    }
-    else if (plist[1] == "")
-    {
-      LOG_WARN("Looks like a DB path, but a DB name was expected. E.g. "
-               "postgresql://myhost:5432/mydb/mylayer");
-      valid = false;
-    }
-    else if (plist[2] == "")
-    {
-      LOG_WARN("Looks like a DB path, but a layer name was expected. E.g. "
                "postgresql://myhost:5432/mydb/mylayer");
       valid = false;
     }
@@ -995,7 +1017,7 @@ void ServicesDb::open(QUrl url)
 {
   if (!isSupported(url))
   {
-    throw HootException("An unsupported URL was passed in.");
+    throw HootException("An unsupported URL was passed in: " + url.toString());
   }
 
   QStringList pList = url.path().split("/");
@@ -1037,6 +1059,9 @@ void ServicesDb::open(QUrl url)
     throw HootException("Attempting to open database " + url.toString() +
                         " but found zero tables. Does the DB exist? Has it been populated?");
   }
+
+  // What kind of database is it
+  _connectionType = _determineDbType();
 
   _resetQueries();
 
@@ -1529,6 +1554,34 @@ void ServicesDb::updateWay(long id, long changeSetId, const Tags& tags)
   }
 
   _updateWay->finish();
+}
+
+ServicesDb::DbType ServicesDb::_determineDbType()
+{
+  DbType retVal = DBTYPE_UNSUPPORTED;
+
+  // OSM API has both nodes and current_nodes
+  if ( (_hasTable("nodes") == true) && (_hasTable("current_nodes") == true ) )
+  {
+    retVal = DBTYPE_OSMAPI;
+    LOG_INFO("Connection type set to OSM API DB");
+  }
+
+  // Services DB will always have tables for maps and review_items
+  else if ( ( _hasTable("maps") == true ) && ( _hasTable("maps") == true ) )
+  {
+    retVal = DBTYPE_SERVICES;
+    LOG_INFO("Connection type set to Services DB");
+  }
+
+  else
+  {
+    const QString err("Could not determine database type");
+    LOG_ERROR(err);
+    throw HootException(err);
+  }
+
+  return retVal;
 }
 
 }
