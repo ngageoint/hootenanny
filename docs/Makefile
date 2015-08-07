@@ -25,7 +25,7 @@ endef
 all: \
 	Hootenanny\ -\ User\ Guide.pdf \
 	Hootenanny\ -\ User\ Interface\ Guide.pdf \
-	Hootenanny\ -\ CentOS-RHEL\ Installation\ Instructions.pdf \
+	Hootenanny\ -\ Installation\ Instructions.pdf \
 	Hootenanny\ -\ Developer\ Guide.pdf \
   Hootenanny\ -\ Algorithms.pdf \
 
@@ -133,7 +133,7 @@ Hootenanny\ -\ Web\ Architecture\ Guide.pdf: \
 	$$HOOT_HOME/scripts/makeRestDocs.sh $(A2X_QUIET)
 	$(call buildAsciidoc)
 
-Hootenanny\ -\ CentOS-RHEL\ Installation\ Instructions.pdf: \
+Hootenanny\ -\ Installation\ Instructions.pdf: \
 	HootenannyInstallDocs.asciidoc \
 	tmp/asciidoc-config \
 	../HOOT_VERSION_FILE \

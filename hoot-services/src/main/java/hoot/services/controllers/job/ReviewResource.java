@@ -768,10 +768,12 @@ public class ReviewResource
     try
     {
     	String reviewId = markItemsReviewedRequest.get("reviewid").toString();
+    	Object oAgainst = markItemsReviewedRequest.get("reviewagainstid");
+    	String reviewAgainst = (oAgainst == null)? null : oAgainst.toString();
 
     	java.util.Date date= new java.util.Date();
     	Timestamp now = new Timestamp(date.getTime());
-    	(new ReviewItemsMarker(conn, mapId)).updateReviewLastAccessTime(reviewId, now);
+    	(new ReviewItemsMarker(conn, mapId)).updateReviewLastAccessTime(reviewId, now, reviewAgainst);
 
     }
     catch (Exception e)
@@ -813,10 +815,13 @@ public class ReviewResource
     try
     {
     	String reviewId = markItemsReviewedRequest.get("reviewid").toString();
+    	
+    	Object oAgainst = markItemsReviewedRequest.get("reviewagainstid");
+    	String reviewAgainst = (oAgainst == null)? null : oAgainst.toString();
 
     	java.util.Date date= new java.util.Date();
     	Timestamp past = new Timestamp(date.getTime() - ReviewItemsMarker.LOCK_TIME);
-    	(new ReviewItemsMarker(conn, mapId)).updateReviewLastAccessTime(reviewId, past);
+    	(new ReviewItemsMarker(conn, mapId)).updateReviewLastAccessTime(reviewId, past, reviewAgainst);
 
     }
     catch (Exception e)
@@ -887,9 +892,12 @@ public class ReviewResource
     	Object oOffsetid = nextReviewItemRequest.get("offsetid");
     	String offsetId = (oOffsetid == null)? null : oOffsetid.toString();
     	
+    	Object oAgainst = nextReviewItemRequest.get("offsetreviewagainstid");
+    	String reviewAgainst = (oAgainst == null)? null : oAgainst.toString();
+    	
     	ReviewItemsMarker marker = new ReviewItemsMarker(conn, mapId);
 
-    	nextReviewableResponse = marker.getAvaiableReviewItem(offset, isForward, offsetId);
+    	nextReviewableResponse = marker.getAvaiableReviewItem(offset, isForward, offsetId, reviewAgainst);
     	
     
     }
