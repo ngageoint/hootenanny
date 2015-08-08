@@ -91,9 +91,8 @@ private:
   bool _overwriteMap;
   QString _userEmail;
   ServicesDb _sdb;
-  int _numChangeSetChanges;
-  long _changeSetId;
-  geos::geom::Envelope _env;
+  //int _numChangeSetChanges;
+  //geos::geom::Envelope _env;
   bool _open;
   IdRemap _nodeRemap;
   IdRemap _relationRemap;

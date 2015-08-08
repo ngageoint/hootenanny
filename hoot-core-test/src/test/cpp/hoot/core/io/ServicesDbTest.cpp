@@ -178,17 +178,19 @@ public:
 
     database.setMapId(mapId);
 
-    long changeSetId = database.insertChangeSet(Tags());
-    ids.append(changeSetId);
+    database.beginChangeset(Tags());
+    ids.append(database.getChangesetId());
 
     Tags t;
     t["foo"] = "bar";
-    long nodeId = database.insertNode(-1, 38, -104, changeSetId, t, true);
+    long nodeId;
+    database.insertNode(38, -104, t, nodeId);
     ids.append(nodeId);
 
     Tags t2;
     t2["highway"] = "primary";
-    long wayId = database.insertWay(-1, changeSetId, t2, true);
+    long wayId;
+    database.insertWay(t2, wayId);
     ids.append(wayId);
     vector<long> nodeIds;
     nodeIds.push_back(nodeId);
@@ -196,7 +198,8 @@ public:
 
     Tags rt;
     rt["type"] = "multistuff";
-    long relationId = database.insertRelation(-1, changeSetId, rt, true);
+    long relationId;
+    database.insertRelation(rt, relationId);
     ids.append(relationId);
     database.insertRelationMembers(relationId, ElementType::Way, wayId, "wayrole", 0);
     database.insertRelationMembers(relationId, ElementType::Node, nodeId, "noderole", 1);
@@ -215,41 +218,44 @@ public:
     long mapId = database.insertMap("foo", true);
     ids.append(mapId);
     database.setMapId(mapId);
-    long changeSetId = database.insertChangeSet();
+    database.beginChangeset();
 
     Tags t;
-    long nodeId = database.insertNode(-1, 38.0, -104, changeSetId, t, true);
+    long nodeId;
+    database.insertNode(38.0, -104, t, nodeId);
     ids.append(nodeId);
     t["foo"] = "bar";
-    nodeId = database.insertNode(-1, 37.9, -105, changeSetId, t, true);
+    database.insertNode(37.9, -105, t, nodeId);
     ids.append(nodeId);
     t.clear();
     t["foo2"] = "bar2";
-    nodeId = database.insertNode(-1, 38.1, -106, changeSetId, t, true);
+    database.insertNode(38.1, -106, t, nodeId);
     ids.append(nodeId);
 
     Tags wt;
     wt["highway"] = "primary";
-    long wayId = database.insertWay(-1, changeSetId, wt, true);
+    long wayId;
+    database.insertWay(wt, wayId);
     ids.append(wayId);
     vector<long> nodeIds;
     nodeIds.push_back(nodeId);
     database.insertWayNodes(wayId, nodeIds);
     wt.clear();
     wt["highway2"] = "primary2";
-    wayId = database.insertWay(-1, changeSetId, wt, true);
+    database.insertWay(wt, wayId);
     ids.append(wayId);
     database.insertWayNodes(wayId, nodeIds);
 
     t.clear();
     t["type"] = "multistuff";
-    long relationId = database.insertRelation(-1, changeSetId, t, true);
+    long relationId;
+    database.insertRelation(t, relationId);
     ids.append(relationId);
     database.insertRelationMembers(relationId, ElementType::Way, wayId, "wayrole", 0);
     database.insertRelationMembers(relationId, ElementType::Node, nodeId, "noderole", 1);
     t.clear();
     t["type2"] = "multistuff2";
-    relationId = database.insertRelation(-1, changeSetId, t, true);
+    database.insertRelation(t, relationId);
     ids.append(relationId);
     database.insertRelationMembers(relationId, ElementType::Way, wayId, "wayrole", 0);
     database.insertRelationMembers(relationId, ElementType::Node, nodeId, "noderole", 1);
@@ -267,21 +273,22 @@ public:
     long mapId = database.insertMap("foo", true);
     ids.append(mapId);
     database.setMapId(mapId);
-    long changeSetId = database.insertChangeSet();
+    database.beginChangeset();
 
     Tags t;
     t["hoot:status"] = "Unknown1";
     t["accuracy"] = "20.0";
-    long nodeId = database.insertNode(-1, 38, -104, changeSetId, t, true);
+    long nodeId;
+    database.insertNode(38, -104, t, nodeId);
     ids.append(nodeId);
 
     t.clear();
     t["error:circular"] = "20.0";
-    nodeId = database.insertNode(-1, 38, -105, changeSetId, t, true);
+    database.insertNode(38, -105, t, nodeId);
     ids.append(nodeId);
 
     t.clear();
-    nodeId = database.insertNode(-1, 38, -106, changeSetId, t, true);
+    database.insertNode(38, -106, t, nodeId);
     ids.append(nodeId);
 
     database.commit();
@@ -556,8 +563,8 @@ public:
 
 
     database.setUserId(database.getOrCreateUser(userEmail(), "ServicesDbTest"));
-    long changeSetId = database.insertChangeSet();
-    database.updateNode(nodeId, 3.1415, 2.71828, changeSetId, Tags());
+    database.beginChangeset();
+    database.updateNode(nodeId, 3.1415, 2.71828, Tags());
 
     ServicesDbTestUtils::compareRecords(
           "SELECT latitude, longitude, visible, tile, version FROM " +
@@ -567,6 +574,40 @@ public:
           "31415000;27182800;true;3222453693;1",
           (qlonglong)nodeId);
   }
+
+  void runInsertNodeOsmApiTest()
+  {
+     LOG_DEBUG("Starting Insert OSM test");
+     ServicesDb database;
+     database.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
+
+     database.transaction();
+
+     // Create or get user, set our userId
+     database.setUserId(database.getOrCreateUser("OsmApiInsert@hoot.local", "Hootenanny Inserter"));
+
+     database.beginChangeset();
+
+     // Insert single node
+     Tags simpleTags;
+     simpleTags.appendValue("highway", "road");
+     simpleTags.appendValue("accuracy", "5");
+
+     long assignedNodeId;
+     CPPUNIT_ASSERT( database.insertNode(38.4, -106.5, simpleTags, assignedNodeId ) == true );
+     // Close the changeset
+     database.endChangeset();
+
+     database.commit();
+
+     database.close();
+
+     LOG_DEBUG("Services DB closed");
+
+     // TODO: confirm inserted data matches what we wanted to insert
+  }
+
+
 
   void setUp()
   {

@@ -43,7 +43,6 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, ServicesDbWriter)
 
 ServicesDbWriter::ServicesDbWriter()
 {
-  _numChangeSetChanges = 0;
   _open = false;
   _remapIds = true;
   setConfiguration(conf());
@@ -70,22 +69,14 @@ void ServicesDbWriter::close()
 
 void ServicesDbWriter::_countChange()
 {
-  _numChangeSetChanges++;
-
-  if (_numChangeSetChanges >= ServicesDb::maximumChangeSetEdits())
-  {
-    _startNewChangeSet();
-  }
+  _sdb.incrementChangesetChangeCount();
 }
 
 void ServicesDbWriter::finalizePartial()
 {
   if (_open)
   {
-    if (_numChangeSetChanges > 0)
-    {
-      _sdb.closeChangeSet(_changeSetId, _env, _numChangeSetChanges);
-    }
+    _sdb.endChangeset();
     _sdb.commit();
     _sdb.close();
     _open = false;
@@ -135,8 +126,6 @@ QString ServicesDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
   QStringList pList = url.path().split("/");
   QString mapName = pList[2];
 
-  _numChangeSetChanges = 0;
-  _env.init();
   _sdb.open(url);
   _open = true;
 
@@ -191,7 +180,8 @@ ElementId ServicesDbWriter::_remapOrCreateElementId(ElementId eid, const Tags& t
       {
         return ElementId::node(_nodeRemap.at(eid.getId()));
       }
-      long newId = _sdb.insertNode(eid.getId(), 0, 0, _changeSetId, tags, true);
+      long newId;
+      _sdb.insertNode(0, 0, tags, newId);
       _countChange();
       _nodeRemap[eid.getId()] = newId;
       return ElementId::node(newId);
@@ -202,7 +192,8 @@ ElementId ServicesDbWriter::_remapOrCreateElementId(ElementId eid, const Tags& t
       {
         return ElementId::way(_wayRemap.at(eid.getId()));
       }
-      long newId = _sdb.insertWay(eid.getId(), _changeSetId, tags, true);
+      long newId;
+      _sdb.insertWay(tags, newId);
       _countChange();
       _wayRemap[eid.getId()] = newId;
       return ElementId::way(newId);
@@ -213,7 +204,8 @@ ElementId ServicesDbWriter::_remapOrCreateElementId(ElementId eid, const Tags& t
       {
         return ElementId::relation(_relationRemap.at(eid.getId()));
       }
-      long newId = _sdb.insertRelation(eid.getId(), _changeSetId, tags, true);
+      long newId;
+      _sdb.insertRelation(tags, newId);
       _countChange();
       _relationRemap[eid.getId()] = newId;
       return ElementId::relation(newId);
@@ -252,16 +244,11 @@ void ServicesDbWriter::setConfiguration(const Settings &conf)
 
 void ServicesDbWriter::_startNewChangeSet()
 {
-  if (_numChangeSetChanges > 0)
-  {
-    _sdb.closeChangeSet(_changeSetId, _env, _numChangeSetChanges);
-  }
-  _env.init();
-  _numChangeSetChanges = 0;
+  _sdb.endChangeset();
   Tags tags;
   tags["bot"] = "yes";
   tags["created_by"] = "hootenanny";
-  _changeSetId = _sdb.insertChangeSet(tags);
+  _sdb.beginChangeset(tags);
 }
 
 void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)
@@ -280,20 +267,22 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)
   else if (_remapIds && _nodeRemap.count(n->getId()) != 0)
   {
     newId = _nodeRemap.at(n->getId());
-    _sdb.updateNode(n->getId(), n->getY(), n->getX(), _changeSetId, t);
+    _sdb.updateNode(n->getId(), n->getY(), n->getX(), t);
     countChange = false;
   }
   else
   {
-    newId = _sdb.insertNode(n->getId(), n->getY(), n->getX(), _changeSetId, t,
-                            _remapIds);
-    if (_remapIds)
+    if ( _remapIds == true )
     {
+      _sdb.insertNode(n->getY(), n->getX(), t, newId);
       _nodeRemap[n->getId()] = newId;
     }
-  }
+    else
+    {
+      _sdb.insertNode(newId, n->getY(), n->getX(), t);
+    }
 
-  _env.expandToInclude(n->getX(), n->getY());
+  }
 
   if (countChange)
   {
@@ -314,7 +303,7 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Way>& w)
     wayId = _remapOrCreateElementId(w->getElementId(), tags).getId();
     if (alreadyThere)
     {
-      _sdb.updateWay(wayId, _changeSetId, tags);
+      _sdb.updateWay(wayId, tags);
     }
   }
   else if (w->getId() < 1)
@@ -323,7 +312,7 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Way>& w)
   }
   else
   {
-    wayId = _sdb.insertWay(w->getId(), _changeSetId, tags, false);
+    wayId = _sdb.insertWay(w->getId(), tags);
   }
 
   _sdb.insertWayNodes(wayId, _remapNodes(w->getNodeIds()));
@@ -344,11 +333,11 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
 
   if (_remapIds)
   {
-    bool alreadyThere = _wayRemap.count(r->getId()) != 0;
+    bool alreadyThere = _relationRemap.count(r->getId()) != 0;
     relationId = _remapOrCreateElementId(r->getElementId(), tags).getId();
     if (alreadyThere)
     {
-      _sdb.updateRelation(relationId, _changeSetId, tags);
+      _sdb.updateRelation(relationId, tags);
     }
   }
   else if (r->getId() < 1)
@@ -357,7 +346,7 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
   }
   else
   {
-    relationId = _sdb.insertRelation(r->getId(), _changeSetId, tags, false);
+    relationId = _sdb.insertRelation(r->getId(), tags);
   }
 
   Tags empty;

@@ -104,7 +104,7 @@ public:
    * This value should be updated after the DB is upgraded and all tests run successfully.
    */
   static QString expectedDbVersion() { return "13:josh.sisskind"; }
-  static int maximumChangeSetEdits() { return 50000; }
+  //static int maximumChangeSetEdits() { return 50000; }
 
   static const Status DEFAULT_ELEMENT_STATUS;
   static const Meters DEFAULT_ELEMENT_CIRCULAR_ERROR = 0.0;
@@ -190,7 +190,7 @@ public:
 
   //writing
 
-  void closeChangeSet(long changeSetId, Envelope env, int numChanges);
+  void endChangeset();
 
   /**
    * Creates necessary indexes and constraints on all maps that don't have indexes/constraints
@@ -230,7 +230,21 @@ public:
 
   void deleteUser(long userId);
 
-  long insertChangeSet(const Tags& tags = Tags(), Envelope env = Envelope());
+  /**
+   * Start a new changeset
+   *
+   * @note The changeset will not have any tags associated with it
+   */
+  void beginChangeset();
+
+
+  /**
+   * Starts a new changeset
+   * @param tags Tags for the new changeset
+   *
+   * @note to Obtain the current changeset Id, call getChangesetId
+   */
+  void beginChangeset(const Tags& tags);
 
   /**
    * @brief Insert a map into the database. This does not create the constraints and indexes.
@@ -244,11 +258,19 @@ public:
    */
   long insertMap(QString mapName, bool publicVisibility = true);
 
-  long insertNode(long id, double lat, double lon, long changeSetId,
-    const Tags &tags, bool createNewId = false);
+  bool insertNode(const double lat, const double lon, const Tags &tags, long& assignedId);
 
-  long insertRelation(long relationId, long changeSetId, const Tags& tags,
-    bool createNewId = false);
+  bool insertNode(const long id, const double lat, const double lon, const Tags &tags);
+
+  bool insertWay(const Tags& tags, long& assignedId);
+
+  bool insertWay( const long wayId, const Tags& tags);
+
+  void insertWayNodes(long wayId, const vector<long>& nodeIds);
+
+  bool insertRelation(const Tags& tags, long& assignedId);
+
+  bool insertRelation(const long relationId, const Tags& tags);
 
   void insertRelationMembers(long relationId, ElementType type, long elementId,
     QString role, int sequenceId);
@@ -257,10 +279,6 @@ public:
 
   long insertUser(QString email, QString displayName);
 
-  long insertWay(long wayId, long changeSetId, const Tags& tags,
-                 /*const vector<long>& nids,*/ bool createNewId = false);
-
-  void insertWayNodes(long wayId, const vector<long>& nodeIds);
 
   /**
    * Rollback the current transaction.
@@ -274,15 +292,21 @@ public:
    */
   static Tags unescapeTags(const QVariant& v);
 
-  void updateNode(long id, double lat, double lon, long changeSetId, const Tags& tags);
+  void updateNode(const long id, const double lat, const double lon, const Tags& tags);
 
-  void updateRelation(long id, long changeSetId, const Tags& tags);
+  void updateRelation(const long id, const Tags& tags);
 
-  void updateWay(long id, long changeSetId, const Tags& tags);
+  void updateWay(const long id, const Tags& tags);
 
   DbType getDatabaseType() const { return _connectionType; }
 
+  long getChangesetId() const { return _currChangesetId; }
+
+  void incrementChangesetChangeCount();
+
 private:
+
+  static const int _maximumChangeSetEdits = 50000;    ///< Maximum edits per one OSM changeset
 
   QSqlDatabase _db;
   bool _inTransaction;
@@ -333,6 +357,9 @@ private:
   long _currUserId;
   long _currMapId;
   DbType _connectionType;
+  long _currChangesetId;
+  Envelope _changesetEnvelope;
+  long _changesetChangeCount;
 
   /**
    * This is here to improve query caching. In most cases users open a single ServiceDb and then
@@ -456,6 +483,24 @@ private:
    * @return One of the supported database types or DBTYPE_UNSUPPORTED
    */
   DbType _determineDbType();
+
+  void _beginChangeset_Services(const Tags& tags);
+
+  void _endChangeset_Services(long changeSetId, Envelope env, int numChanges);
+
+  void _insertNode_Services(const long id, const double lat, const double lon,
+    const Tags& tags);
+
+  void _insertWay_Services(long wayId, long changeSetId, const Tags& tags);
+
+  void _insertRelation_Services(long relationId, long changeSetId, const Tags& tags );
+
+  void _updateNode_Services(long id, double lat, double lon, long changeSetId, const Tags& tags);
+
+  void _updateRelation_Services(long id, long changeSetId, const Tags& tags);
+
+  void _updateWay_Services(long id, long changeSetId, const Tags& tags);
+
 };
 
 }

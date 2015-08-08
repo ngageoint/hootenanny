@@ -132,7 +132,32 @@ void ServicesDb::close()
   _connectionType = DBTYPE_UNSUPPORTED;
 }
 
-void ServicesDb::closeChangeSet(long changeSetId, Envelope env, int numChanges)
+void ServicesDb::endChangeset()
+{
+  // If we're already closed, nothing to do
+  if ( _currChangesetId == -1 )
+  {
+    LOG_DEBUG("Tried to end a changeset but there isn't an active changeset currently");
+    return;
+  }
+
+  switch ( _connectionType )
+  {
+  case DBTYPE_SERVICES:
+    _endChangeset_Services(_currChangesetId, _changesetEnvelope, _changesetChangeCount);
+    break;
+
+  default:
+    throw HootException("endChangeset for unsupported DB type");
+    break;
+  }
+
+  _currChangesetId = -1;
+  _changesetEnvelope.init();
+  _changesetChangeCount = 0;
+}
+
+void ServicesDb::_endChangeset_Services(long changeSetId, Envelope env, int numChanges)
 {
   const long mapId = _currMapId;
 
@@ -521,10 +546,35 @@ void ServicesDb::_init()
   _currUserId = -1;
   _currMapId = -1;
   _connectionType = DBTYPE_UNSUPPORTED;
+  _currChangesetId = -1;
+  _changesetEnvelope.init();
+  _changesetChangeCount = 0;
 }
 
-long ServicesDb::insertChangeSet(const Tags& tags,
-  geos::geom::Envelope env)
+void ServicesDb::beginChangeset()
+{
+  Tags emptyTags;
+  beginChangeset(emptyTags);
+}
+
+void ServicesDb::beginChangeset(const Tags& tags)
+{
+  _changesetEnvelope.init();
+  _changesetChangeCount = 0;
+
+  switch ( _connectionType )
+  {
+  case DBTYPE_SERVICES:
+    _beginChangeset_Services(tags);
+    break;
+
+  default:
+    throw HootException("Begin changeset called for unsupported database type");
+    break;
+  }
+}
+
+void ServicesDb::_beginChangeset_Services(const Tags& tags)
 {
   const long mapId = _currMapId;
   const long userId = _currUserId;
@@ -541,13 +591,13 @@ long ServicesDb::insertChangeSet(const Tags& tags,
         .arg(_getChangesetsTableName(mapId)));
   }
   _insertChangeSet->bindValue(":user_id", (qlonglong)userId);
-  _insertChangeSet->bindValue(":min_lat", env.getMinY());
-  _insertChangeSet->bindValue(":max_lat", env.getMaxY());
-  _insertChangeSet->bindValue(":min_lon", env.getMinX());
-  _insertChangeSet->bindValue(":max_lon", env.getMaxX());
+  _insertChangeSet->bindValue(":min_lat", _changesetEnvelope.getMinY());
+  _insertChangeSet->bindValue(":max_lat", _changesetEnvelope.getMaxY());
+  _insertChangeSet->bindValue(":min_lon", _changesetEnvelope.getMinX());
+  _insertChangeSet->bindValue(":max_lon", _changesetEnvelope.getMaxX());
   _insertChangeSet->bindValue(":tags", _escapeTags(tags));
 
-  return _insertRecord(*_insertChangeSet);
+  _currChangesetId = _insertRecord(*_insertChangeSet);
 }
 
 long ServicesDb::insertMap(QString displayName, bool publicVisibility)
@@ -603,8 +653,36 @@ long ServicesDb::insertMap(QString displayName, bool publicVisibility)
   return mapId;
 }
 
-long ServicesDb::insertNode(long id, double lat, double lon, long changeSetId,
-  const Tags& tags, bool createNewId)
+bool ServicesDb::insertNode(const double lat, const double lon,
+  const Tags& tags, long& assignedId)
+{
+  assignedId = _getNextNodeId(_currMapId);
+
+  return insertNode(assignedId, lat, lon, tags);
+}
+
+bool ServicesDb::insertNode(const long id, const double lat, const double lon, const Tags &tags)
+{
+  bool retVal = false;
+
+  switch ( _connectionType )
+  {
+  case DBTYPE_SERVICES:
+    _insertNode_Services(id, lat, lon, tags);
+    retVal = true;
+    break;
+
+  default:
+    throw HootException("InsertNode on unsupported database type");
+    break;
+  }
+
+  return retVal;
+}
+
+
+void ServicesDb::_insertNode_Services(const long id, const double lat, const double lon,
+  const Tags& tags)
 {
   const long mapId = _currMapId;
   double start = Tgs::Time::getTime();
@@ -620,16 +698,11 @@ long ServicesDb::insertNode(long id, double lat, double lon, long changeSetId,
     _nodeBulkInsert.reset(new SqlBulkInsert(_db, _getNodesTableName(mapId), columns));
   }
 
-  if (createNewId)
-  {
-    id = _getNextNodeId(mapId);
-  }
-
   QList<QVariant> v;
   v.append((qlonglong)id);
   v.append((qlonglong)_round(lat * COORDINATE_SCALE, 7));
   v.append((qlonglong)_round(lon * COORDINATE_SCALE, 7));
-  v.append((qlonglong)changeSetId);
+  v.append((qlonglong)_currChangesetId);
   v.append(_tileForPoint(lat, lon));
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
   // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
@@ -644,42 +717,31 @@ long ServicesDb::insertNode(long id, double lat, double lon, long changeSetId,
   {
     _nodeBulkInsert->flush();
   }
-
-  return id;
 }
 
-long ServicesDb::insertRelation(long relationId, long changeSetId, const Tags &tags,
-  bool createNewId)
+bool ServicesDb::insertRelation(const Tags &tags, long& assignedId)
 {
-  const long mapId = _currMapId;
-  _checkLastMapId(mapId);
+  assignedId = _getNextRelationId(_currMapId);
 
-  if (_relationBulkInsert == 0)
+  return insertRelation(assignedId, tags);
+}
+
+bool ServicesDb::insertRelation(const long relationId, const Tags &tags)
+{
+  bool retVal = false;
+
+  switch ( _connectionType )
   {
-    QStringList columns;
-    columns << "id" << "changeset_id" << "tags";
-
-    _relationBulkInsert.reset(new SqlBulkInsert(_db, _getRelationsTableName(mapId), columns));
+  case DBTYPE_SERVICES:
+    _insertRelation_Services(relationId, _currChangesetId, tags);
+    retVal = true;
+    break;
+  default:
+    throw HootException("insertRelation on unsupported database type");
+    break;
   }
 
-  if (createNewId)
-  {
-    relationId = _getNextRelationId(mapId);
-  }
-
-  QList<QVariant> v;
-  v.append((qlonglong)relationId);
-  v.append((qlonglong)changeSetId);
-  // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
-  // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
-  // error.
-  v.append(_escapeTags(tags));
-
-  _relationBulkInsert->insert(v);
-
-  _lazyFlushBulkInsert();
-
-  return relationId;
+  return retVal;
 }
 
 void ServicesDb::insertRelationMembers(long relationId, ElementType type,
@@ -767,77 +829,6 @@ long ServicesDb::insertUser(QString email, QString displayName)
   return id;
 }
 
-long ServicesDb::insertWay(long wayId, long changeSetId, const Tags& tags,
-                           /*const vector<long>& nids,*/ bool createNewId)
-{
-  const long mapId = _currMapId;
-
-  double start = Tgs::Time::getTime();
-
-  _checkLastMapId(mapId);
-
-  if (_wayBulkInsert == 0)
-  {
-    QStringList columns;
-    columns << "id" << "changeset_id" << "tags";
-
-    _wayBulkInsert.reset(new SqlBulkInsert(_db, _getWaysTableName(mapId), columns));
-  }
-
-  if (createNewId)
-  {
-    wayId = _getNextWayId(mapId);
-  }
-
-  QList<QVariant> v;
-  v.append((qlonglong)wayId);
-  v.append((qlonglong)changeSetId);
-  // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
-  // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
-  // error.
-  v.append(_escapeTags(tags));
-  //v.append(_escapeIds(nids));
-
-  _wayBulkInsert->insert(v);
-
-  _wayNodesInsertElapsed += Tgs::Time::getTime() - start;
-
-  _lazyFlushBulkInsert();
-
-  return wayId;
-}
-
-void ServicesDb::insertWayNodes(long wayId, const vector<long>& nodeIds)
-{
-  const long mapId = _currMapId;
-  double start = Tgs::Time::getTime();
-
-  _checkLastMapId(mapId);
-
-  if (_wayNodeBulkInsert == 0)
-  {
-    QStringList columns;
-    columns << "way_id" << "node_id" << "sequence_id";
-
-    _wayNodeBulkInsert.reset(new SqlBulkInsert(_db, _getWayNodesTableName(mapId), columns));
-  }
-
-  QList<QVariant> v;
-  v.append((qlonglong)wayId);
-  v.append((qlonglong)0);
-  v.append((qlonglong)0);
-
-  for (size_t i = 0; i < nodeIds.size(); ++i)
-  {
-    v[1] = (qlonglong)nodeIds[i];
-    v[2] = (qlonglong)i;
-    _wayNodeBulkInsert->insert(v);
-  }
-
-  _wayNodesInsertElapsed += Tgs::Time::getTime() - start;
-
-  _lazyFlushBulkInsert();
-}
 
 long ServicesDb::getOrCreateUser(QString email, QString displayName)
 {
@@ -1526,7 +1517,188 @@ Tags ServicesDb::unescapeTags(const QVariant &v)
   return result;
 }
 
-void ServicesDb::updateNode(long id, double lat, double lon, long changeSetId,
+void ServicesDb::updateNode(const long id, const double lat, const double lon, const Tags& tags)
+{
+  switch ( _connectionType )
+  {
+  case DBTYPE_SERVICES:
+    _updateNode_Services(id, lat, lon, _currChangesetId, tags);
+    break;
+  default:
+    throw HootException("UpdateNode on unsupported database type");
+  }
+}
+
+void ServicesDb::updateRelation(const long id, const Tags& tags)
+{
+  switch ( _connectionType )
+  {
+  case DBTYPE_SERVICES:
+    _updateRelation_Services(id, _currChangesetId, tags);
+    break;
+  default:
+    throw HootException("UpdateRelation on unsupported database type");
+  }
+}
+
+void ServicesDb::updateWay(const long id, const Tags& tags)
+{
+  switch ( _connectionType )
+  {
+  case DBTYPE_SERVICES:
+    _updateWay_Services(id, _currChangesetId, tags);
+    break;
+  default:
+    throw HootException("UpdateWay on unsupported database type");
+  }
+
+}
+
+ServicesDb::DbType ServicesDb::_determineDbType()
+{
+  DbType retVal = DBTYPE_UNSUPPORTED;
+
+  // OSM API has both nodes and current_nodes
+  if ( (_hasTable("nodes") == true) && (_hasTable("current_nodes") == true ) )
+  {
+    retVal = DBTYPE_OSMAPI;
+    LOG_INFO("Connection type set to OSM API DB");
+  }
+
+  // Services DB will always have tables for maps and review_items
+  else if ( ( _hasTable("maps") == true ) && ( _hasTable("maps") == true ) )
+  {
+    retVal = DBTYPE_SERVICES;
+    LOG_INFO("Connection type set to Services DB");
+  }
+
+  else
+  {
+    const QString err("Could not determine database type");
+    LOG_ERROR(err);
+    throw HootException(err);
+  }
+
+  return retVal;
+}
+
+bool ServicesDb::insertWay(const Tags &tags, long &assignedId)
+{
+  assignedId = _getNextWayId(_currMapId);
+
+  return insertWay(assignedId, tags);
+}
+
+bool ServicesDb::insertWay(const long wayId, const Tags &tags)
+{
+  bool retVal = false;
+
+  switch (_connectionType)
+  {
+  case DBTYPE_SERVICES:
+    _insertWay_Services(wayId, _currChangesetId, tags);
+    break;
+
+  default:
+    throw HootException("insertWay called on unsupported DB type");
+    break;
+  }
+
+  return retVal;
+}
+
+void ServicesDb::_insertWay_Services(long wayId, long changeSetId, const Tags& tags)
+{
+  const long mapId = _currMapId;
+
+  double start = Tgs::Time::getTime();
+
+  _checkLastMapId(mapId);
+
+  if (_wayBulkInsert == 0)
+  {
+    QStringList columns;
+    columns << "id" << "changeset_id" << "tags";
+
+    _wayBulkInsert.reset(new SqlBulkInsert(_db, _getWaysTableName(mapId), columns));
+  }
+
+  QList<QVariant> v;
+  v.append((qlonglong)wayId);
+  v.append((qlonglong)changeSetId);
+  // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
+  // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
+  // error.
+  v.append(_escapeTags(tags));
+  //v.append(_escapeIds(nids));
+
+  _wayBulkInsert->insert(v);
+
+  _wayNodesInsertElapsed += Tgs::Time::getTime() - start;
+
+  _lazyFlushBulkInsert();
+}
+
+void ServicesDb::insertWayNodes(long wayId, const vector<long>& nodeIds)
+{
+  const long mapId = _currMapId;
+  double start = Tgs::Time::getTime();
+
+  _checkLastMapId(mapId);
+
+  if (_wayNodeBulkInsert == 0)
+  {
+    QStringList columns;
+    columns << "way_id" << "node_id" << "sequence_id";
+
+    _wayNodeBulkInsert.reset(new SqlBulkInsert(_db, _getWayNodesTableName(mapId), columns));
+  }
+
+  QList<QVariant> v;
+  v.append((qlonglong)wayId);
+  v.append((qlonglong)0);
+  v.append((qlonglong)0);
+
+  for (size_t i = 0; i < nodeIds.size(); ++i)
+  {
+    v[1] = (qlonglong)nodeIds[i];
+    v[2] = (qlonglong)i;
+    _wayNodeBulkInsert->insert(v);
+  }
+
+  _wayNodesInsertElapsed += Tgs::Time::getTime() - start;
+
+  _lazyFlushBulkInsert();
+}
+
+void ServicesDb::_insertRelation_Services(long relationId, long changeSetId, const Tags &tags)
+{
+  const long mapId = _currMapId;
+  _checkLastMapId(mapId);
+
+  if (_relationBulkInsert == 0)
+  {
+    QStringList columns;
+    columns << "id" << "changeset_id" << "tags";
+
+    _relationBulkInsert.reset(new SqlBulkInsert(_db, _getRelationsTableName(mapId), columns));
+  }
+
+  QList<QVariant> v;
+  v.append((qlonglong)relationId);
+  v.append((qlonglong)changeSetId);
+  // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
+  // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
+  // error.
+  v.append(_escapeTags(tags));
+
+  _relationBulkInsert->insert(v);
+
+  _lazyFlushBulkInsert();
+}
+
+
+void ServicesDb::_updateNode_Services(long id, double lat, double lon, long changeSetId,
                             const Tags& tags)
 {
   const long mapId = _currMapId;
@@ -1562,7 +1734,7 @@ void ServicesDb::updateNode(long id, double lat, double lon, long changeSetId,
   _updateNode->finish();
 }
 
-void ServicesDb::updateRelation(long id, long changeSetId, const Tags& tags)
+void ServicesDb::_updateRelation_Services(long id, long changeSetId, const Tags& tags)
 {
   const long mapId = _currMapId;
   _flushBulkInserts();
@@ -1592,7 +1764,7 @@ void ServicesDb::updateRelation(long id, long changeSetId, const Tags& tags)
   _updateRelation->finish();
 }
 
-void ServicesDb::updateWay(long id, long changeSetId, const Tags& tags)
+void ServicesDb::_updateWay_Services(long id, long changeSetId, const Tags& tags)
 {
   const long mapId = _currMapId;
   _flushBulkInserts();
@@ -1622,33 +1794,18 @@ void ServicesDb::updateWay(long id, long changeSetId, const Tags& tags)
   _updateWay->finish();
 }
 
-ServicesDb::DbType ServicesDb::_determineDbType()
+void ServicesDb::incrementChangesetChangeCount()
 {
-  DbType retVal = DBTYPE_UNSUPPORTED;
+  _changesetChangeCount++;
 
-  // OSM API has both nodes and current_nodes
-  if ( (_hasTable("nodes") == true) && (_hasTable("current_nodes") == true ) )
+  // If we've hit maximum count of changes for a changeset, close this one out and start a new one
+  if ( _changesetChangeCount >= _maximumChangeSetEdits)
   {
-    retVal = DBTYPE_OSMAPI;
-    LOG_INFO("Connection type set to OSM API DB");
+    endChangeset();
+    beginChangeset();
   }
-
-  // Services DB will always have tables for maps and review_items
-  else if ( ( _hasTable("maps") == true ) && ( _hasTable("maps") == true ) )
-  {
-    retVal = DBTYPE_SERVICES;
-    LOG_INFO("Connection type set to Services DB");
-  }
-
-  else
-  {
-    const QString err("Could not determine database type");
-    LOG_ERROR(err);
-    throw HootException(err);
-  }
-
-  return retVal;
 }
+
 
 }
 
