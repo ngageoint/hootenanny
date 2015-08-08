@@ -1131,7 +1131,7 @@ void ServicesDb::open(QUrl url)
 
   _resetQueries();
 
-  if (!isCorrectDbVersion())
+  if ( (_connectionType == DBTYPE_SERVICES) && (isCorrectDbVersion() == false) )
   {
     LOG_WARN("Running against an unexpected DB version.");
     LOG_WARN("Expected: " << expectedDbVersion());
