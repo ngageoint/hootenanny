@@ -22,6 +22,11 @@
         "similarTo": { "name": "barrier=toll_booth", "weight": 0.7 }
     },
 
+    "tag": {
+        "name": "building=shrine",
+        "isA": "building",
+        "similarTo": { "name": "historic=memorial", "weight": 0.7 }
+    },
     "tag": { "name": "building=fort", "isA": "building", "categories": ["poi"] },
     "tag": { "name": "building=hospital", "isA": "building", "categories": ["poi"] },
     "tag": { "name": "building=school", "isA": "building", "categories": ["poi"] },

@@ -430,7 +430,8 @@
         "name": "bridge=yes",
         "isA": "bridge_tunnel=unknown",
         "similarTo": { "name": "bridge=no", "weight": 0.5 },
-        "similarTo": { "name": "tunnel=yes", "weight": 0.01 }
+        "similarTo": { "name": "tunnel=yes", "weight": 0.01 },
+        "categories": ["poi"]
     },
 
     "tag": {

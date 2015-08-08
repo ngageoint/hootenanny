@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-6700016' visible='true' lat='38.8812188' lon='-76.9796914'>
+    <tag k='REF1' v='003ac5' />
+    <tag k='cemetery' v='grave' />
+    <tag k='error:circular' v='15' />
+    <tag k='historic' v='tomb' />
+    <tag k='name' v='John Philip Sousa' />
+    <tag k='source' v='survey' />
+    <tag k='tourism' v='attraction' />
+    <tag k='wikipedia' v='en:John Philip Sousa' />
+  </node>
+</osm>
