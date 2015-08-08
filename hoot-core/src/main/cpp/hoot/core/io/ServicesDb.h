@@ -131,6 +131,8 @@ public:
 
   bool isSupported(QUrl url);
 
+  bool isSupported(const QUrl& url, const DbType dbType);
+
   void open(QUrl url);
 
   void transaction();

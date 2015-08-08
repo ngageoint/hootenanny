@@ -947,19 +947,13 @@ bool ServicesDb::isSupported(QUrl url)
     // Valid OSM API URL: postgresql://postgres@10.194.70.78:5432/terrytest
     // Valid Services DB: postgresql://myhost:5432/mydb/mylayer
 
-    LOG_DEBUG("Path: " << path);
-    LOG_DEBUG("Plist size: " << plist.size() );
-
-    LOG_DEBUG( QString::number(plist.size() != 3));
-    LOG_DEBUG(QString::number(plist.size() == 4 && plist[3] == ""));
-
     // OSM API will have plist.size of 2.
     if ( plist.size() == 2 )
     {
       ;
     }
     // 3 can be valid
-    if ( plist.size() == 3 )
+    else if ( plist.size() == 3 )
     {
 
       if (plist[1] == "")
@@ -975,11 +969,77 @@ bool ServicesDb::isSupported(QUrl url)
         valid = false;
       }
     }
-    else if ( (plist.size() == 4) && (plist[3] == "") )
+    else if ( (plist.size() == 4) && ((plist[1] == "") || (plist[2 ] == "") || (plist[3] == "")) )
     {
-      LOG_WARN("Looks like a DB path, but a DB name and layer was expected. E.g. "
-               "postgresql://myhost:5432/mydb/mylayer");
+      LOG_WARN("Looks like a DB path, but a valid DB name, layer, and element was expected. E.g. "
+               "postgresql://myhost:5432/mydb/mylayer/1");
       valid = false;
+    }
+  }
+
+  return valid;
+}
+
+bool ServicesDb::isSupported(const QUrl& url, const DbType dbType)
+{
+  bool valid = url.isValid();
+  valid = valid && url.scheme() == "postgresql";
+
+  if (valid)
+  {
+    QString path = url.path();
+    QStringList plist = path.split("/");
+
+    // Valid OSM API URL: postgresql://postgres@10.194.70.78:5432/terrytest
+    // Valid Services DB: postgresql://myhost:5432/mydb/mylayer
+
+    // OSM API will have plist.size of 2.
+    switch ( dbType )
+    {
+      case DBTYPE_OSMAPI:
+        if ( plist.size() != 2 )
+        {
+          valid = false;
+        }
+        break;
+
+      case DBTYPE_SERVICES:
+        //LOG_DEBUG("Checking services URL: " << url.toString());
+
+        // 3 can be valid
+        if ( plist.size() == 3 )
+        {
+          if (plist[1] == "")
+          {
+            LOG_WARN("Looks like a DB path, but a DB name was expected. E.g. "
+                     "postgresql://myhost:5432/mydb/mylayer");
+            valid = false;
+          }
+          else if (plist[2] == "")
+          {
+            LOG_WARN("Looks like a DB path, but a layer name was expected. E.g. "
+                     "postgresql://myhost:5432/mydb/mylayer");
+            valid = false;
+          }
+        }
+        else if ( (plist.size() == 4) && ((plist[1] == "") || (plist[2 ] == "") || (plist[3] == "")) )
+        {
+          LOG_WARN("Looks like a DB path, but a valid DB name, layer, and element was expected. E.g. "
+                   "postgresql://myhost:5432/mydb/mylayer/1");
+          valid = false;
+        }
+        else
+        {
+          // NO other list sizes are valid
+          LOG_WARN("Looks like a DB path, but a DB name and layer name was expected. E.g. "
+                   "postgresql://myhost:5432/mydb/mylayer");
+          valid = false;
+        }
+        break;
+
+      default:
+        LOG_WARN("Invalid DB path");
+        break;
     }
   }
 
@@ -1017,7 +1077,7 @@ void ServicesDb::open(QUrl url)
 {
   if (!isSupported(url))
   {
-    throw HootException("An unsupported URL was passed in: " + url.toString());
+    throw HootException("An unsupported URL was passed in.");
   }
 
   QStringList pList = url.path().split("/");
@@ -1062,6 +1122,12 @@ void ServicesDb::open(QUrl url)
 
   // What kind of database is it
   _connectionType = _determineDbType();
+
+  // Make sure URL still matches format we want once we've determined db type
+  if ( isSupported(url, _connectionType ) == false )
+  {
+    throw HootException("An unsupported URL was passed in.");
+  }
 
   _resetQueries();
 

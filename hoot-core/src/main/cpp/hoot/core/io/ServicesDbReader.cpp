@@ -120,6 +120,7 @@ bool ServicesDbReader::isSupported(QString urlStr)
 
 void ServicesDbReader::open(QString urlStr)
 {
+  LOG_DEBUG("ServicesDbReader opening " << urlStr);
   if (!isSupported(urlStr))
   {
     throw HootException("An unsupported URL was passed in.");
