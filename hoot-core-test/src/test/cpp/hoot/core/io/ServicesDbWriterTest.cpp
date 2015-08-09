@@ -169,8 +169,6 @@ public:
 
     writer.write(map);
 
-    return;
-
     long mapId = writer.getMapId();
 
     compareRecords("SELECT email, display_name FROM users "
@@ -326,7 +324,7 @@ public:
 
   void tearDown()
   {
-    //ServicesDbTestUtils::deleteUser(userEmail());
+    ServicesDbTestUtils::deleteUser(userEmail());
   }
 
 };
