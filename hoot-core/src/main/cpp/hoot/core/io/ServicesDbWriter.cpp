@@ -326,7 +326,8 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Way>& w)
   }
   else
   {
-    wayId = _sdb.insertWay(w->getId(), tags);
+    wayId = w->getId();
+    _sdb.insertWay(w->getId(), tags);
   }
 
   _sdb.insertWayNodes(wayId, _remapNodes(w->getNodeIds()));
