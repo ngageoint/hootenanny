@@ -1654,6 +1654,8 @@ void ServicesDb::_insertWay_Services(long wayId, long changeSetId, const Tags& t
   _wayNodesInsertElapsed += Tgs::Time::getTime() - start;
 
   _lazyFlushBulkInsert();
+
+  LOG_DEBUG("Inserted way " << QString::number(wayId));
 }
 
 void ServicesDb::insertWayNodes(long wayId, const vector<long>& nodeIds)
