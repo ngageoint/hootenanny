@@ -137,7 +137,7 @@ void ServicesDb::endChangeset()
   // If we're already closed, nothing to do
   if ( _currChangesetId == -1 )
   {
-    LOG_DEBUG("Tried to end a changeset but there isn't an active changeset currently");
+    //LOG_DEBUG("Tried to end a changeset but there isn't an active changeset currently");
     return;
   }
 
@@ -151,6 +151,8 @@ void ServicesDb::endChangeset()
     throw HootException("endChangeset for unsupported DB type");
     break;
   }
+
+  LOG_INFO("Successfully closed out changeset " << QString::number(_currChangesetId));
 
   _currChangesetId = -1;
   _changesetEnvelope.init();
@@ -195,9 +197,13 @@ void ServicesDb::_endChangeset_Services(long changeSetId, Envelope env, int numC
 
 void ServicesDb::commit()
 {
+  //LOG_DEBUG("Creating map indexes");
   createPendingMapIndexes();
+  //LOG_DEBUG("Flushing bulk inserts");
   _flushBulkInserts();
+  //LOG_DEBUG("Resetting queries");
   _resetQueries();
+  //G_DEBUG("Starting DB commit");
   if (!_db.commit())
   {
     LOG_WARN("Error committing transaction.");
@@ -214,7 +220,7 @@ void ServicesDb::_copyTableStructure(QString from, QString to)
       "INCLUDING INDEXES)").arg(to).arg(from);
   QSqlQuery q(_db);
 
-  LOG_VARD(sql);
+  //LOG_VARD(sql);
 
   if (q.exec(sql) == false)
   {
@@ -309,9 +315,9 @@ void ServicesDb::_dropTable(QString tableName)
 
 void ServicesDb::deleteUser(long userId)
 {
-  QSqlQuery maps = _exec("SELECT id FROM maps WHERE user_id=:user_id", (qlonglong)userId);
+  LOG_DEBUG("Deleting all maps for userid " << QString::number(userId));
 
-  // delete all the maps owned by this user
+  QSqlQuery maps = _exec("SELECT id FROM maps WHERE user_id=:user_id", (qlonglong)userId);
   while (maps.next())
   {
     long mapId = maps.value(0).toLongLong();
@@ -437,20 +443,26 @@ void ServicesDb::_flushBulkInserts()
 {
   if (_nodeBulkInsert != 0)
   {
+    //LOG_DEBUG("Flushing nodes");
     _nodeBulkInsert->flush();
   }
   if (_wayBulkInsert != 0)
   {
+    //LOG_DEBUG("Flushing ways");
     _wayBulkInsert->flush();
   }
   if (_wayNodeBulkInsert != 0)
   {
+    //LOG_DEBUG("Flushing waynodes");
     _wayNodeBulkInsert->flush();
   }
   if (_relationBulkInsert != 0)
   {
+    //LOG_DEBUG("Flushing relations");
     _relationBulkInsert->flush();
   }
+
+  //LOG_DEBUG("Leaving flush bulk");
 }
 
 QString ServicesDb::getDbVersion()
@@ -572,6 +584,8 @@ void ServicesDb::beginChangeset(const Tags& tags)
     throw HootException("Begin changeset called for unsupported database type");
     break;
   }
+
+  LOG_INFO("Started new changeset " << QString::number(_currChangesetId));
 }
 
 void ServicesDb::_beginChangeset_Services(const Tags& tags)
@@ -658,6 +672,8 @@ bool ServicesDb::insertNode(const double lat, const double lon,
 {
   assignedId = _getNextNodeId(_currMapId);
 
+  LOG_DEBUG("Got ID " << QString::number(assignedId) << " for new node in map " << QString::number(_currMapId));
+
   return insertNode(assignedId, lat, lon, tags);
 }
 
@@ -710,6 +726,7 @@ void ServicesDb::_insertNode_Services(const long id, const double lat, const dou
   v.append(_escapeTags(tags));
 
   _nodeBulkInsert->insert(v);
+  //LOG_DEBUG("Inserted node into node bulk inserter");
 
   _nodesInsertElapsed += Tgs::Time::getTime() - start;
 
@@ -853,10 +870,8 @@ void ServicesDb::setMapId(const long sessionMapId)
 {
   _currMapId = sessionMapId;
 
-  LOG_INFO("Map ID updated to " + QString::number(_currUserId));
+  LOG_INFO("Map ID updated to " + QString::number(_currMapId));
 }
-
-
 
 long ServicesDb::getUserId(QString email, bool throwWhenMissing)
 {
@@ -1135,6 +1150,8 @@ void ServicesDb::open(QUrl url)
   {
     LOG_WARN("Error disabling Postgresql INFO messages.");
   }
+
+  LOG_INFO("Successfully opened database: " << url.toString());
 }
 
 void ServicesDb::_resetQueries()
@@ -1643,6 +1660,8 @@ void ServicesDb::insertWayNodes(long wayId, const vector<long>& nodeIds)
 {
   const long mapId = _currMapId;
   double start = Tgs::Time::getTime();
+
+  LOG_DEBUG("Inserting nodes into way " << QString::number(wayId));
 
   _checkLastMapId(mapId);
 

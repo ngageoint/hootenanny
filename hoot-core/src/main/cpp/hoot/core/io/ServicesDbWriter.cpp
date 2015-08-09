@@ -74,13 +74,19 @@ void ServicesDbWriter::_countChange()
 
 void ServicesDbWriter::finalizePartial()
 {
+  //LOG_DEBUG("Inside finalize partial");
   if (_open)
   {
+    //LOG_DEBUG("Ending changeset");
     _sdb.endChangeset();
+    //LOG_DEBUG("Calling commit");
     _sdb.commit();
+    //LOG_DEBUG("Calling close");
     _sdb.close();
     _open = false;
   }
+
+  //LOG_DEBUG("Leaving finalize partial");
 }
 
 bool ServicesDbWriter::isSupported(QString urlStr)
@@ -256,14 +262,20 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)
   long newId;
   bool countChange = true;
 
+  //LOG_DEBUG("Inside writePartial for Node");
+
   Tags t = n->getTags();
   _addElementTags(n, t);
+
+  //LOG_DEBUG("Incoming node ID: " << n->getId());
 
   if (n->getId() < 1 && _remapIds == false)
   {
     throw HootException("Writing non-positive IDs without remap is not supported by "
                         "ServicesDbWriter.");
   }
+
+  // If we remapping IDs but this node is already known, update the existing node
   else if (_remapIds && _nodeRemap.count(n->getId()) != 0)
   {
     newId = _nodeRemap.at(n->getId());
@@ -279,7 +291,7 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)
     }
     else
     {
-      _sdb.insertNode(newId, n->getY(), n->getX(), t);
+      _sdb.insertNode(n->getId(), n->getY(), n->getX(), t);
     }
 
   }
@@ -293,6 +305,8 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)
 void ServicesDbWriter::writePartial(const shared_ptr<const Way>& w)
 {
   long wayId;
+
+  LOG_DEBUG("Inside writePartial for Way " << QString::number(w->getId()));
 
   Tags tags = w->getTags();
   _addElementTags(w, tags);
@@ -323,6 +337,8 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Way>& w)
 void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
 {
   long relationId;
+
+  //LOG_DEBUG("Inside writePartial for Relation");
 
   Tags tags = r->getTags();
   _addElementTags(r, tags);
@@ -358,6 +374,8 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
   }
 
   _countChange();
+
+  //LOG_DEBUG("Leaving relation write cleanly");
 }
 
 }
