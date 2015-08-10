@@ -1,6 +1,9 @@
 #!/bin/bash
 # script to make the REST services Asciidoc using the intermediate WADL output 
 
+#test for HOOT_HOME defined
+if [ -z $HOOT_HOME ]; then cd ..; source SetupEnv.sh; cd scripts; fi
+
 cd $HOOT_HOME/docs
 mkdir -p restDocs 
 
