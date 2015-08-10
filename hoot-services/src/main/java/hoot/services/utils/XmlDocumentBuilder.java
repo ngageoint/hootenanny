@@ -33,13 +33,15 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 
-
-//import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
@@ -47,6 +49,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -156,6 +160,23 @@ public class XmlDocumentBuilder
     write(document, writer);
     return writer.toString();
   }
+  
+  /**
+   * 
+   * 
+   * @param node
+   * @return
+   * @throws TransformerFactoryConfigurationError 
+   * @throws TransformerException 
+   */
+  public static String nodeToString(final Node node) throws TransformerFactoryConfigurationError, 
+    TransformerException
+  {
+    StringWriter writer = new StringWriter();
+    Transformer transformer = TransformerFactory.newInstance().newTransformer();
+    transformer.transform(new DOMSource(node), new StreamResult(writer));
+    return writer.toString();
+  }
 
   /**
    * Writes an XML DOM to a writer
@@ -176,20 +197,26 @@ public class XmlDocumentBuilder
   }
   
   /**
-   * 
-   * 
-   * @return
-   * @throws TransformerConfigurationException
+   * Walks the document and removes all nodes of the specified type and specified name. 
+   * If name is null, then the node is removed if the type matches.
+   *
+   * @param node starting node
+   * @param nodeType type of nodes to remove
+   * @param name name of nodes to remove
    */
-  public static TransformerFactory getSecureTransformerFactory() 
-    throws TransformerConfigurationException
+  public static void removeAll(Node node, final short nodeType, final String name) 
   {
-  	TransformerFactory transformerFactory = TransformerFactory.newInstance();
-  	transformerFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
-  	transformerFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-  	transformerFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-  	//This is part of JAXP 1.5 and is only available on JDK 7u40 and higher.
-  	//transformerFactory.setFeature(XMLConstants.ACCESS_EXTERNAL_DTD, false);
-  	return transformerFactory;
+    if (node.getNodeType() == nodeType && (name == null || node.getNodeName().equals(name))) 
+    {
+      node.getParentNode().removeChild(node);
+    } 
+    else 
+    {
+      NodeList list = node.getChildNodes();
+      for (int i=0; i<list.getLength(); i++) 
+      {
+        removeAll(list.item(i), nodeType, name);
+      }
+    }
   }
 }

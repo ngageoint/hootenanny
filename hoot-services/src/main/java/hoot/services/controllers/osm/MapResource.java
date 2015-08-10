@@ -45,7 +45,6 @@ import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.nativeInterfaces.JobExecutionManager;
 import hoot.services.utils.ResourceErrorHandler;
-import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.writers.osm.MapQueryResponseWriter;
 
 import java.io.StringWriter;
@@ -459,7 +458,7 @@ return linkRecords;
 
     osmElem.appendChild(wayElem);
 
-    Transformer tf = XmlDocumentBuilder.getSecureTransformerFactory().newTransformer();
+    Transformer tf = TransformerFactory.newInstance().newTransformer();
     tf.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
     tf.setOutputProperty(OutputKeys.INDENT, "yes");
     Writer out = new StringWriter();
