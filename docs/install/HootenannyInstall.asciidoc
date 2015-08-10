@@ -27,28 +27,11 @@ Any modifications to the versions and package dependencies listed in the install
 are not recommended, as parts of Hootenanny are very sensitive to its software dependency versions.
 If a package has already been installed but does not match the expected version, your install will 
 likely be unsupported. In such situations, the behavior of Hootenanny may range from inability to 
-compile code, to unexpected or severe runtime results that result in a failed install.  
+compile code, to unexpected or severe runtime results that result in a failed install.  These 
+instructions have been tested on CentOS 6.5/6.6.  
 
-These instructions have been tested on CentOS 6.5/6.6.  
-
-To install Hootenanny on CentOS/RHEL:
-
-------------------------------
-# HOOT_VERSION is of the form X.Y.Z and corresponds to a release available at 
-# http://github.com/ngageoint/hootenanny.
-
-HOOT_VERSION=X.Y.Z
-
-wget https://github.com/ngageoint/hootenanny/releases/download/v$HOOT_VERSION/hootenanny-$HOOT_VERSION.tar.gz
-tar -xzf hootenanny-$HOOT_VERSION.tar.gz
-
-# Follow the instructions to configure the installation script at 
-# hootenanny-$HOOT_VERSION/scripts/InstallHoot-CentOS-RHEL.sh.  You may configure the script to 
-# install all Hootenanny dependencies, as well as the application or have it just install the 
-# Hootenanny application.  The dependencies must be installed at least once to the target environment.
-
-./InstallHoot-CentOS-RHEL.sh
-------------------------------
+To install Hootenanny on CentOS/RHEL follow the instruction in 
+hootenanny-$HOOT_VERSION/scripts/InstallHoot-CentOS-RHEL.sh.
 
 For additional details on configuring the database connection pool, see <<HootDBConnectionPool>>.
 

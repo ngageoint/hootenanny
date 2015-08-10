@@ -1,8 +1,27 @@
 #!/bin/bash
 
+# Execute this script something like this:
+#
+## HOOT_VERSION is of the form X.Y.Z and corresponds to a release available at 
+## http://github.com/ngageoint/hootenanny.
+#
+#HOOT_VERSION=X.Y.Z
+#
+#cd ~
+#wget https://github.com/ngageoint/hootenanny/releases/download/v$HOOT_VERSION/hootenanny-$HOOT_VERSION.tar.gz
+#tar -xzf hootenanny-$HOOT_VERSION.tar.gz
+#cp hootenanny-$HOOT_VERSION.tar.gz/scripts/InstallHoot-CentOS-RHEL.sh .
+
+## Follow the instructions to configure the installation script.  You may configure the script to 
+## install all Hootenanny dependencies, as well as the application or have it just install the 
+## Hootenanny application.  SET HOOT VERSION INSIDE THIS SCRIPT The dependencies must be installed 
+# at least once to the target environment.  Then:
+#
+#./InstallHoot-CentOS-RHEL.sh
+#
 # This script: 
-# - should be extracted to INSTALL_SOURCE_DIR from the hoot release
 # - applies to the production CentOS 6.x environment only (tested on CentOS 6.6)
+# - retains all existing hoot settings (basemaps, translations, etc.)
 # - *does not* back out of the entire installation process in all cases if errors occur during the 
 # installation
 # - is not bulletproof and is meant as a placeholder until a Hootenanny CentOS Vagrant installation
@@ -11,36 +30,33 @@
 # WARNING: Spend time to reading the comments to understand what this script is doing before 
 # attempting to execute it.  USE THIS SCRIPT AT YOUR OWN RISK.
 
-# VARS IN THIS SECTION ARE ENVIRONMENT DEPENDENT AND NEED TO BE CUSTOMIZED
+# VARS IN THIS SECTION NEED TO BE CUSTOMIZED FOR EACH INSTALL
 
-# This needs to be set to true the first time you install Hootenanny *only*.
-INSTALL_DEPENDENCIES=false
-INSTALL_HOOT_APPLICATION=false
+# Dependencies install needs to be set to true the first time you install Hootenanny *only*.
+INSTALL_DEPENDENCIES=true
+INSTALL_HOOT_APPLICATION=true
 # name of the version you're deploying; version format is X.Y.Z; this should match the version of
 # the archive files being deployed
-HOOT_VERSION=
-# The directory where you execute the installation from.  It will contain all the downloaded
-# dependencies and the hoot application.
-INSTALL_SOURCE_DIR=~
-
-# VARS IN THIS SECTION DON'T NORMALLY NEED TO BE CHANGED
-
+HOOT_VERSION=0.2.17
 # the user group used when installing hoot core; needed for compiling hoot core only; The user 
 # executing this script must be a member of this group, and the group must have the correct 
 # privileges to install files to HOOT_CORE_INSTALL_DIR.
 CORE_INSTALL_USER_GROUP=root
-# Where the Hootenanny core application is installed to; usually: /usr/local
-HOOT_CORE_INSTALL_DIR=/usr/local
+# Only enable this if your environment is configured to use the FOUO translations.
+UPDATE_FOUO_TRANSLATIONS=false
 # This has to do with some silliness, where despite setting a virtualbox shared folder not to be
 # read-only, the dependencies install still has problems writing to some files it needs to in
 # the source install dir...a permissions issue that needs sorting out...so setting this to true
 # is a workaround.
-INSTALLING_FROM_VIRTUALBOX_SHARED_FOLDER=true
+INSTALLING_FROM_VIRTUALBOX_SHARED_FOLDER=false
+
+# VARS IN THIS SECTION DON'T NORMALLY NEED TO BE CHANGED
+
+# Where the Hootenanny core application is installed to; usually: /usr/local
+HOOT_CORE_INSTALL_DIR=/usr/local
 # Be SUPER CERTAIN about enabling this one...all your data in the hoot database will be cleared; 
 # won't run unless UPDATE_DATABASE is also enabled
 CLEAR_DATABASE=false
-# Only enable this if your environment is configured to use the FOUO translations.
-UPDATE_FOUO_TRANSLATIONS=true
 # CORE_RUNTIME_USER and CORE_RUNTIME_USER_GROUP are the group permissions used for hoot at 
 # runtime, which may differ from what was used at install time.  Do not change this unless you are
 # not installing the web services or web application parts of hoot.
@@ -70,6 +86,15 @@ UPDATE_SERVICES=true
 UPDATE_UI=true
 SILENT_INSTALL=false
 
+if [ "$INSTALL_DEPENDENCIES" == "" ]; then
+  echo "Please enter the choice for INSTALL_DEPENDENCIES."
+  exit -1
+fi
+if [ "$INSTALL_HOOT_APPLICATION" == "" ]; then
+  echo "Please enter the choice for INSTALL_HOOT_APPLICATION."
+  exit -1
+fi
+
 if [ "$SILENT_INSTALL" == "false" ]; then
   if [ "$INSTALL_DEPENDENCIES" == "false" ]; then
     if [ "$INSTALL_HOOT_APPLICATION" == "true" ]; then
@@ -77,12 +102,8 @@ if [ "$SILENT_INSTALL" == "false" ]; then
       exit -1;
     fi
   fi
-  
   if [ "$INSTALL_DEPENDENCIES" == "true" ]; then
     echo "You're installing Hootenanny dependencies."
-  fi
-  if [ "$INSTALL_HOOT_APPLICATION" == "true" ]; then
-    echo "You're installing the Hootenanny application."
   fi
   if [ "$INSTALL_HOOT_APPLICATION" == "true" ]; then
     echo "You're installing the Hootenanny application version $HOOT_VERSION."
@@ -94,15 +115,19 @@ if [ "$SILENT_INSTALL" == "false" ]; then
   fi
 fi
 
-cd $INSTALL_SOURCE_DIR
+INSTALL_SOURCE_DIR=DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 if [ "$INSTALL_DEPENDENCIES" == "true" ]; then
 
-  # Hootenanny on CentOS is fairly picky about which package version will work with the software correctly, hence the more complicated dependency installation found in this section.
+  # Hootenanny on CentOS is fairly picky about which package versions will work with the software 
+  # correctly, hence the more complicated dependency instructions found in this section.
+
+  # remove old gnuplot
+  sudo yum erase gnuplot gnuplot-latex gnuplot-common
   
   # Install everything from the yum repo where hoot is ok with using the latest version.
   echo "Installing packages from yum..."
-  sudo yum -y install gcc gcc-c++ libicu-devel boost-devel python-devel gdb cmake python-numeric swig glpk glpk-devel python-argparse apr-devel apr-util-devel nodejs-devel nodejs v8-devel libX11-devel fontconfig-devel libXcursor-devel libXext-devel libXfixes libXft-devel libXi-devel libXrandr-devel libXrender-devel java-1.7.0-openjdk-devel unixODBC-devel.x86_64 uuid.x86_64 tomcat6 tomcat6-webapps tomcat6-admin-webapps freetype-devel   wget autoconf libxslt poppler kpathsea xdvipdfmx dvipdfm dvipng teckit perl-PDF-Reuse ruby tex-preview python-requests geos hdf5 json-c proj gdal npm unzip doxygen nano
+  sudo yum -y install gcc gcc-c++ libicu-devel boost-devel python-devel gdb cmake python-numeric swig glpk glpk-devel python-argparse apr-devel apr-util-devel nodejs-devel nodejs v8-devel libX11-devel fontconfig-devel libXcursor-devel libXext-devel libXfixes libXft-devel libXi-devel libXrandr-devel libXrender-devel java-1.7.0-openjdk-devel unixODBC-devel.x86_64 uuid.x86_64 tomcat6 tomcat6-webapps tomcat6-admin-webapps freetype-devel   wget autoconf libxslt poppler kpathsea xdvipdfmx dvipdfm dvipng teckit perl-PDF-Reuse ruby tex-preview python-requests geos hdf5 json-c proj gdal npm unzip doxygen nano gd-devel libX11-devel libXau-devel libXpm-devel libjpeg-turbo-devel libxcb-devel xorg-x11-proto-devel
   sudo yum -y install python-argparse || export ARGPARSE_FAILED=1
   if [ "$ARGPARSE_FAILED" == "1" ]; then
     sudo yum -y install python-setuptools
@@ -190,6 +215,13 @@ if [ "$INSTALL_DEPENDENCIES" == "true" ]; then
 
   echo "Installing reporting packages..."
 
+  test -f blas-3.2.1-4.el6.x86_64.rpm || wget http://www.my-guides.net/en/images/stories/fedora12/msttcore-fonts-2.0-3.noarch.rpm
+  sudo rpm -Uvh msttcore-fonts-2.0-3.noarch.rpm
+  if ! grep --quiet QT_HOME /etc/profile; then
+    echo 'export GDFONTPATH=/usr/share/fonts/msttcore' >> /etc/profile
+    source /etc/profile
+  fi
+
   test -f blas-3.2.1-4.el6.x86_64.rpm || wget ftp://rpmfind.net/linux/centos/6.6/os/x86_64/Packages/blas-3.2.1-4.el6.x86_64.rpm
   test -f lapack-3.2.1-4.el6.x86_64.rpm || wget ftp://rpmfind.net/linux/centos/6.6/os/x86_64/Packages/lapack-3.2.1-4.el6.x86_64.rpm
   sudo rpm -ivh blas-3.2.1-4.el6.x86_64.rpm
@@ -201,6 +233,11 @@ if [ "$INSTALL_DEPENDENCIES" == "true" ]; then
   sudo rpm -ivh gnuplot-common-4.2.6-2.el6.x86_64.rpm
   sudo rpm -ivh gnuplot-4.2.6-2.el6.x86_64.rpm
   sudo rpm -ivh gnuplot-latex-4.2.6-2.el6.noarch.rpm
+
+  test -f gnuplot-4.6.4.tar.gz || wget http://sourceforge.net/projects/gnuplot/files/gnuplot/4.6.4/gnuplot-4.6.4.tar.gz/download -O gnuplot-4.6.4.tar.gz
+  tar -zxf gnuplot-4.6.4.tar.gz
+  cd gnuplot-4.6.4
+  ./configure --prefix=/usr/local && make && sudo make install
 
   test -f libpng-1.2.49-1.el6_2.x86_64.rpm || wget http://mirror.centos.org/centos/6/os/x86_64/Packages/libpng-1.2.49-1.el6_2.x86_64.rpm
   test -f libpng-devel-1.2.49-1.el6_2.x86_64.rpm || wget http://mirror.centos.org/centos/6/os/x86_64/Packages/libpng-devel-1.2.49-1.el6_2.x86_64.rpm
@@ -282,13 +319,13 @@ if [ "$INSTALL_DEPENDENCIES" == "true" ]; then
   sudo rpm -ivh python-numpy-1.6.1-17.1.x86_64.rpm 
   sudo rpm -ivh python-numpy-devel-1.6.1-17.1.x86_64.rpm
 
-  #TODO: this doesn't work
+  #TODO: this section doesn't work yet
   export PYTHONPATH=$INSTALL_SOURCE_DIR/matplotlib-1.3.1
   rm -rf matplotlib-1.3.1
   test -f matplotlib-1.3.1.tar.gz || wget http://sourceforge.net/projects/matplotlib/files/matplotlib/matplotlib-1.3.1/matplotlib-1.3.1.tar.gz/download -O matplotlib-1.3.1.tar.gz
   tar -xzf matplotlib-1.3.1.tar.gz
   cd matplotlib-1.3.1
-  python setup.py build && sudo python setup.py install #--prefix=$HOOT_CORE_INSTALL_DIR
+  python ./setup.py build && sudo python ./setup.py install
   cd ..
 
   echo "Installing database packages and configuring database..."
@@ -455,7 +492,7 @@ EOT
     source /etc/profile
   fi
   if ! grep --quiet 'export PATH=' /etc/profile; then
-    echo 'export PATH=/usr/local/lib:/usr/local/bin:$PATH:$QT_HOME/bin:$PSQL_HOME/bin' >> /etc/profile
+    echo 'export PATH=/usr/local/lib:/usr/local/bin:$PATH:$QT_HOME/bin:$PSQL_HOME/bin:' >> /etc/profile
     source /etc/profile
   fi
 
