@@ -510,4 +510,78 @@ bool ElementCacheLRU::containsRelation(long id) const
   return ( _relations.find(id) != _relations.end() );
 }
 
+unsigned long ElementCacheLRU::typeCount(const ElementType::Type typeToCount) const
+{
+  unsigned long retVal = 0;
+
+  switch ( typeToCount )
+  {
+  case ElementType::Node:
+    retVal = _nodes.size();
+    break;
+
+  case ElementType::Way:
+    retVal = _ways.size();
+    break;
+
+  case ElementType::Relation:
+    retVal = _relations.size();
+    break;
+
+  default:
+    throw HootException("Invalid type passed");
+    break;
+  }
+
+  return retVal;
+}
+
+void ElementCacheLRU::removeElement(const ElementId &eid)
+{
+  switch ( eid.getType().getEnum() )
+  {
+  case ElementType::Node:
+    _nodes.erase(_nodes.find(eid.getId()));
+    break;
+
+  case ElementType::Way:
+    _ways.erase(_ways.find(eid.getId()));
+    break;
+
+  case ElementType::Relation:
+    _relations.erase(_relations.find(eid.getId()));
+    break;
+
+  default:
+    throw HootException("Invalid type passed");
+    break;
+  }
+
+  resetElementIterators();
+}
+
+void ElementCacheLRU::removeElements(const ElementType::Type type)
+{
+  switch ( type )
+  {
+  case ElementType::Node:
+    _nodes.erase(_nodes.begin(), _nodes.end());
+    break;
+  case ElementType::Way:
+    _ways.erase(_ways.begin(), _ways.end());
+    break;
+
+  case ElementType::Relation:
+    _relations.erase(_relations.begin(), _relations.end());
+    break;
+
+  default:
+    throw HootException("Invalid type passed");
+    break;
+  }
+
+    resetElementIterators();
+}
+
+
 }

@@ -34,6 +34,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/io/ElementCacheLRU.h>
 
 // qt
 #include <QStringList>
@@ -148,7 +149,7 @@ void ServicesDb::endChangeset()
     break;
 
   default:
-    throw HootException("endChangeset for unsupported DB type");
+    _endChangeset_OsmApi();
     break;
   }
 
@@ -492,14 +493,44 @@ QString ServicesDb::getDbVersion()
   return result;
 }
 
-long ServicesDb::_getNextNodeId(long mapId)
+long ServicesDb::_getNextNodeId()
+{
+  long retVal = -1;
+  switch ( _connectionType)
+  {
+  case DBTYPE_SERVICES:
+    retVal = _getNextNodeId_Services(_currMapId);
+    break;
+  case DBTYPE_OSMAPI:
+    retVal = _getNextNodeId_OsmApi();
+    break;
+  default:
+    throw HootException("Get Next Node ID for unsupported database type");
+    break;
+  }
+
+  return retVal;
+}
+
+long ServicesDb::_getNextNodeId_Services(long mapId)
 {
   _checkLastMapId(mapId);
   if (_nodeIdReserver == 0)
   {
     _nodeIdReserver.reset(new InternalIdReserver(_db, _getNodeSequenceName(mapId)));
   }
+
   return _nodeIdReserver->getNextId();
+}
+
+long ServicesDb::_getNextNodeId_OsmApi()
+{
+  if (_osmApiNodeIdReserver == 0)
+  {
+    _osmApiNodeIdReserver.reset(new SequenceIdReserver(_db, "current_nodes_id_seq"));
+  }
+
+  return _osmApiNodeIdReserver->getNextId();
 }
 
 long ServicesDb::_getNextRelationId(long mapId)
@@ -561,6 +592,10 @@ void ServicesDb::_init()
   _currChangesetId = -1;
   _changesetEnvelope.init();
   _changesetChangeCount = 0;
+
+  // Value selected due to code comment: "500 found experimentally on my desktop [-initials]"
+  _elementCacheCapacity = 500;
+  _elementCache.reset(new ElementCacheLRU(_elementCacheCapacity));
 }
 
 void ServicesDb::beginChangeset()
@@ -581,9 +616,12 @@ void ServicesDb::beginChangeset(const Tags& tags)
     break;
 
   default:
-    throw HootException("Begin changeset called for unsupported database type");
+    //throw HootException("Begin changeset called for unsupported database type");
+    _beginChangeset_OsmApi();
     break;
   }
+
+  _changesetChangeCount = 0;
 
   LOG_DEBUG("Started new changeset " << QString::number(_currChangesetId));
 }
@@ -670,9 +708,9 @@ long ServicesDb::insertMap(QString displayName, bool publicVisibility)
 bool ServicesDb::insertNode(const double lat, const double lon,
   const Tags& tags, long& assignedId)
 {
-  assignedId = _getNextNodeId(_currMapId);
+  assignedId = _getNextNodeId();
 
-  LOG_DEBUG("Got ID " << QString::number(assignedId) << " for new node in map " << QString::number(_currMapId));
+  LOG_DEBUG("Got ID " << QString::number(assignedId) << " for new node");
 
   return insertNode(assignedId, lat, lon, tags);
 }
@@ -689,9 +727,13 @@ bool ServicesDb::insertNode(const long id, const double lat, const double lon, c
     break;
 
   default:
-    throw HootException("InsertNode on unsupported database type");
+    _insertNode_OsmApi(id, lat, lon, tags);
+    retVal = true;
     break;
   }
+
+  ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
+  _updateChangesetEnvelope(envelopeNode);
 
   if ( retVal == true )
   {
@@ -1177,6 +1219,22 @@ void ServicesDb::open(QUrl url)
 
 void ServicesDb::_resetQueries()
 {
+  switch (_connectionType)
+  {
+  case DBTYPE_SERVICES:
+    _resetQueries_Services();
+    break;
+  case DBTYPE_OSMAPI:
+    _resetQueries_OsmApi();
+    break;
+  default:
+    throw HootException("Reset Queries called on unsupported database type");
+    break;
+  }
+}
+
+void ServicesDb::_resetQueries_Services()
+{
   _closeChangeSet.reset();
   _insertChangeSet.reset();
   _insertChangeSetTag.reset();
@@ -1206,6 +1264,11 @@ void ServicesDb::_resetQueries()
   _wayNodeBulkInsert.reset();
   _wayBulkInsert.reset();
   _wayIdReserver.reset();
+}
+
+void ServicesDb::_resetQueries_OsmApi()
+{
+  _osmApiNodeIdReserver.reset();
 }
 
 void ServicesDb::rollback()
@@ -1848,6 +1911,383 @@ void ServicesDb::incrementChangesetChangeCount()
   }
 }
 
+void ServicesDb::_beginChangeset_OsmApi()
+{
+  // Insert the data we know now, have to fill in gaps when we close changeset
+  QString changesetInsert("INSERT INTO changesets ( user_id, created_at, closed_at ) VALUES ( ");
 
+  changesetInsert += QString::number(_currUserId) + ", now(), now() );";
+
+  _execNoPrepare(changesetInsert);
+
+  QSqlQuery getChangesetId(_db);
+  getChangesetId.exec("SELECT currval('changesets_id_seq');");
+
+  if (getChangesetId.next())
+  {
+    _currChangesetId = getChangesetId.value(0).toInt();
+  }
 }
 
+void ServicesDb::_insertNode_OsmApi(const long id, const double lat, const double lon, const Tags &tags)
+{
+  /**
+   * When inserting a new node into the OSM API DB, we need to add rows to the following
+   * tables
+   *    - nodes (full list of all nodes, including historical versions)
+   *    - node_tags (tags associated with the new node)
+   *    - current_nodes (subset of the nodes table, includes current version of all nodes)
+   *    - current_nodes_tags (tags associated with current version of each node)
+   */
+
+  //LOG_DEBUG("Entering OSM node insert");
+
+  double start = Tgs::Time::getTime();
+
+  // Add to element cache
+  ElementPtr newNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
+  newNode->setTags(tags);
+  ConstElementPtr constNode(newNode);
+  _elementCache->addElement(constNode);
+
+  // See if node portion of cache is full and needs to be flushed
+  if ( _elementCache->typeCount(ElementType::Node) == _elementCacheCapacity )
+  {
+    _flushElementCacheOsmApiNodes();
+  }
+
+  // Snag end time, update insert time
+  _nodesInsertElapsed += Tgs::Time::getTime() - start;
+
+  //LOG_DEBUG("Exiting OSM insert node with ID " << nodeId );
+}
+
+void ServicesDb::_flushElementCacheToDb()
+{
+  _flushElementCacheToDb(ElementType::Node);
+  _flushElementCacheToDb(ElementType::Way);
+  _flushElementCacheToDb(ElementType::Relation);
+}
+
+void ServicesDb::_flushElementCacheToDb(const ElementType::Type flushType )
+{
+  switch ( _connectionType )
+  {
+  case DBTYPE_OSMAPI:
+    switch ( flushType )
+    {
+    case ElementType::Node:
+      _flushElementCacheOsmApiNodes();
+      break;
+    case ElementType::Way:
+      _flushElementCacheOsmApiWays();
+      _flushElementCacheOsmApiWayNodes();
+      break;
+    case ElementType::Relation:
+      _flushElementCacheOsmApiRelations();
+      _flushElementCacheOsmApiRelationMembers();
+      break;
+    default:
+      throw HootException("Invalid type passed to flush");
+      break;
+    }
+
+    break;
+
+  default:
+    throw HootException("Unsupported DB type");
+  }
+}
+
+void ServicesDb::_flushElementCacheOsmApiNodes()
+{
+
+  if ( _elementCache->typeCount(ElementType::Node) == 0 )
+  {
+     return;
+  }
+
+  //LOG_DEBUG("Starting flush of node cache")
+
+  // already in transaction, no need to start new one
+
+  try
+  {
+    // Start building string for command
+
+    // Set up INSERT command for current_nodes.
+    QString currentNodesInsertCmd = "INSERT INTO current_nodes ( id, latitude, longitude, changeset_id, visible, timestamp, tile, version ) VALUES ";
+
+    // INSERT command for nodes
+    QString nodesInsertCmd =        "INSERT INTO nodes         ( node_id, latitude, longitude, changeset_id, visible, timestamp, tile, version ) VALUES ";
+
+    // INSERT command for current_node_tags
+    QString currentNodeTagsInsertCmd = "INSERT INTO current_node_tags ( node_id, k, v ) VALUES ";
+
+    // INSERT command for node_tags
+    QString nodeTagsInsertCmd = "INSERT INTO node_tags ( node_id, version, k, v ) VALUES ";
+
+    // Assume the insert tag commands don't need to be run until we see otherwise
+    bool needInsertTags = false;
+
+    // Iterate over all nodes in the cache, adding data to the current_nodes COPY command
+    _elementCache->resetElementIterators();
+    ConstNodePtr currNode = _elementCache->getNextNode();
+
+    // Testing a smart pointer against zero is equivalent to checking against null
+    while ( currNode != 0 )
+    {
+      // Populate variables to make string build a little bit cleaner
+      const QString nodeIDString(QString::number(currNode->getId()));
+      const QString latitudeString(QString::number(_round(currNode->getY() * COORDINATE_SCALE, 7)));
+      const QString longitudeString(QString::number(_round(currNode->getX() * COORDINATE_SCALE, 7)));
+      const QString changesetIDString(QString::number(_currChangesetId));
+      const QString tileNumberString(QString::number(_tileForPoint(currNode->getY(), currNode->getX())));
+
+      // nodes and current_nodes (identical data)
+      QString nodesCurrentNodesRow =
+
+        // Open paren
+        "(" +
+
+        // id
+        nodeIDString + "," +
+
+        // latitude
+        latitudeString + "," +
+
+        // longitude
+        longitudeString + "," +
+
+        // changeset_id
+        changesetIDString + "," +
+
+        // visible
+        "'true'," +
+
+        // timestamp
+        "now()," +
+
+        // tile
+        tileNumberString + "," +
+
+        // version
+        "1" +
+
+          // Closing paren
+          ")";
+
+        // current_node_tags and node_tags
+        const Tags nodeTags = currNode->getTags();
+        if ( nodeTags.size() > 0 )
+        {
+          // Mark that we've had to insert at least one tag
+          needInsertTags = true;
+
+          for ( Tags::const_iterator it = nodeTags.constBegin(); it != nodeTags.constEnd(); ++it )
+          {
+            // Do we need to prepend with comma?
+            if ( currentNodeTagsInsertCmd.endsWith( ")" ) == true )
+            {
+              currentNodeTagsInsertCmd  += ", ";
+              nodeTagsInsertCmd += ", ";
+            }
+
+            // String values containing single quotes need to be escaped (postgres uses double-single-quotes)
+            QString escapedKey = it.key();
+            QString escapedValue = it.value();
+            escapedKey.replace("'", "''");
+            escapedValue.replace("'", "''" );
+
+            currentNodeTagsInsertCmd  +=
+              // Opening paren
+              "(" +
+
+              // Id
+              nodeIDString + "," +
+
+              // Key (make sure to escape single quotes with double single quotes
+              "'" + escapedKey + "'," +
+
+              // Value
+              "'" + escapedValue + "'" +
+
+              // Closing paren
+              ")";
+
+            nodeTagsInsertCmd +=
+              // Opening paren
+              "(" +
+
+              // Id
+              nodeIDString + "," +
+
+              // Version
+              "1," +
+
+              // Key (make sure to escape single quotes with double single quotes
+              "'" + escapedKey + "'," +
+
+              // Value
+              "'" + escapedValue + "'" +
+
+              // Closing paren
+              ")";
+          }
+        }
+
+        // If there are more nodes to include, add a comma to the node row statements
+        currNode = _elementCache->getNextNode();
+        if ( currNode != 0 )
+        {
+          nodesCurrentNodesRow += ", ";
+        }
+
+        // Both node tables get same chunk of parenthesized data
+        currentNodesInsertCmd   += nodesCurrentNodesRow;
+        nodesInsertCmd          += nodesCurrentNodesRow;
+      }
+
+      // Add final semicolons
+      currentNodesInsertCmd   += ";";
+      nodesInsertCmd          += ";";
+
+      // Always execute inserts for both nodes tables
+      //LOG_DEBUG("Current_nodes:\n\t" + currentNodesInsertCmd);
+      _execNoPrepare(currentNodesInsertCmd);
+      //LOG_DEBUG("nodes:\n\t" + nodesInsertCmd);
+      _execNoPrepare(nodesInsertCmd);
+
+      // Does node have tags?
+      if ( needInsertTags == true )
+      {
+        // Do final semicolons
+        currentNodeTagsInsertCmd += ";";
+        nodeTagsInsertCmd += ";";
+
+        //LOG_DEBUG("current_node_tags: \n\t" + currentNodeTagsInsertCmd);
+        _execNoPrepare(currentNodeTagsInsertCmd);
+        //LOG_DEBUG("node_tags: \n\t" + nodeTagsInsertCmd);
+        _execNoPrepare(nodeTagsInsertCmd);
+      }
+
+    }
+    catch ( ... )
+    {
+      throw HootException("Database error when inserting nodes");
+    }
+
+    // Remove all nodes now that they've been flushed
+    _elementCache->removeElements(ElementType::Node);
+  }
+
+void ServicesDb::_updateChangesetEnvelope(const ConstNodePtr node)
+{
+  const double nodeX = node->getX();
+  const double nodeY = node->getY();
+
+  _changesetEnvelope.expandToInclude(nodeX, nodeY);
+  //LOG_DEBUG("Changeset bounding box updated to include X=" + QString::number(nodeX) + ", Y=" + QString::number(nodeY));
+}
+
+void ServicesDb::_endChangeset_OsmApi()
+{
+  // Set lat/lon envelope and closing time for changset
+  QSqlQuery closeChangeset(_db);
+
+  closeChangeset.prepare(
+    QString("UPDATE changesets SET min_lat=:min_lat, max_lat=:max_lat, min_lon=:min_lon, "
+          "max_lon=:max_lon, closed_at=NOW(), num_changes=:num_changes WHERE id=:id;") );
+
+  closeChangeset.bindValue(":min_lat", static_cast<qlonglong>(_round(_changesetEnvelope.getMinY() * COORDINATE_SCALE, 7)));
+  closeChangeset.bindValue(":max_lat", static_cast<qlonglong>(_round(_changesetEnvelope.getMaxY() * COORDINATE_SCALE, 7)));
+  closeChangeset.bindValue(":min_lon", static_cast<qlonglong>(_round(_changesetEnvelope.getMinX() * COORDINATE_SCALE, 7)));
+  closeChangeset.bindValue(":max_lon", static_cast<qlonglong>(_round(_changesetEnvelope.getMaxX() * COORDINATE_SCALE, 7)));
+  closeChangeset.bindValue(":num_changes", static_cast<qlonglong>(_changesetChangeCount) );
+  closeChangeset.bindValue(":id", static_cast<qlonglong>(_currChangesetId));
+
+  if (closeChangeset.exec() == false)
+  {
+    LOG_ERROR("query bound values: ");
+    LOG_ERROR(closeChangeset.boundValues());
+    LOG_ERROR("\n");
+    throw HootException("Error executing close changeset: " + closeChangeset.lastError().text() +
+                        " (SQL: " + closeChangeset.executedQuery() + ")");
+  }
+  else
+  {
+    LOG_INFO("Successful changeset update with bound values: ");
+    LOG_VARI(closeChangeset.boundValues());
+  }
+
+
+  // Add tags to the changeset
+  QSqlQuery addChangesetTags(_db);
+  addChangesetTags.prepare(
+    QString("INSERT INTO changeset_tags VALUES ( :changeset_id_1, 'created_by', 'Hootenanny' ), "
+            "( :changeset_id_2, 'comment', 'Hootenanny data ingest' ), "
+            "( :changeset_id_3, 'bot', 'yes' );") );
+
+  addChangesetTags.bindValue(":changeset_id_1", static_cast<qlonglong>(_currChangesetId));
+  addChangesetTags.bindValue(":changeset_id_2", static_cast<qlonglong>(_currChangesetId));
+  addChangesetTags.bindValue(":changeset_id_3", static_cast<qlonglong>(_currChangesetId));
+
+  if (addChangesetTags.exec() == false)
+  {
+    LOG_ERROR("query bound values: ");
+    LOG_ERROR(addChangesetTags.boundValues());
+    LOG_ERROR("\n");
+    throw HootException("Error executing add changeset tags: " + addChangesetTags.lastError().text() +
+                        " (SQL: " + addChangesetTags.executedQuery() + ")");
+  }
+
+  // Update users table as the number of changesets for this user has been incremented
+  QSqlQuery getUserChangesetsCount(_db);
+  getUserChangesetsCount.prepare(QString("SELECT changesets_count FROM users WHERE id=:id;"));
+  getUserChangesetsCount.bindValue(":id", static_cast<qlonglong>(_currUserId));
+  if ( getUserChangesetsCount.exec() == false )
+  {
+    LOG_ERROR("Could not get changesets_count from users");
+    throw HootException("Could not get changesets_count");
+  }
+
+  int changesetsCount;
+  if (getUserChangesetsCount.next())
+  {
+    changesetsCount = getUserChangesetsCount.value(0).toInt();
+  }
+  else
+  {
+    LOG_ERROR("Could not get changeset count data from result")
+    throw HootException("Could not get changesets count data from result");
+  }
+
+  // Increment value of changesets_count and update database
+   changesetsCount++;
+   QSqlQuery updateUserChangesetsCount(_db);
+   updateUserChangesetsCount.prepare(QString("UPDATE users SET changesets_count=:changeset_count WHERE id=:id;"));
+   updateUserChangesetsCount.bindValue(":changeset_count", changesetsCount);
+   updateUserChangesetsCount.bindValue(":id", static_cast<qlonglong>(_currUserId));
+   if ( updateUserChangesetsCount.exec() == false )
+   {
+     LOG_ERROR("Could not update changesets_count for user");
+     throw HootException("Could not get update changeset_counts for user");
+   }
+
+   // Add the user as a subscriber to the changeset they just added
+   QSqlQuery addChangesetSubscriber(_db);
+   addChangesetSubscriber.prepare(QString("INSERT INTO changesets_subscribers VALUES (:subscriber_id, :changeset_id);"));
+   addChangesetSubscriber.bindValue(":subscriber_id", static_cast<qlonglong>(_currUserId));
+   addChangesetSubscriber.bindValue(":changeset_id", static_cast<qlonglong>(_currChangesetId));
+   if ( addChangesetSubscriber.exec() == false )
+   {
+     LOG_ERROR("Could not update changesets_count for user");
+     throw HootException("Could not get update changeset_counts for user");
+   }
+
+   LOG_DEBUG("Successfully closed changeset");
+}
+
+
+
+}

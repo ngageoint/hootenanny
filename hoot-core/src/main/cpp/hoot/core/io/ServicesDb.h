@@ -33,6 +33,9 @@
 // hoot
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/io/ElementCache.h>
+#include <hoot/core/io/db/SequenceIdReserver.h>
 
 // Qt
 #include <QUrl>
@@ -360,6 +363,10 @@ private:
   long _currChangesetId;
   Envelope _changesetEnvelope;
   long _changesetChangeCount;
+  ElementCachePtr _elementCache;
+  unsigned long _elementCacheCapacity;
+
+  boost::shared_ptr<SequenceIdReserver> _osmApiNodeIdReserver;
 
   /**
    * This is here to improve query caching. In most cases users open a single ServiceDb and then
@@ -445,7 +452,7 @@ private:
    */
   static QString _getMapIdString(long id) { return QString("_%1").arg(id); }
 
-  long _getNextNodeId(long mapId);
+  long _getNextNodeId();
   long _getNextRelationId(long mapId);
   long _getNextWayId(long mapId);
 
@@ -488,6 +495,8 @@ private:
 
   void _endChangeset_Services(long changeSetId, Envelope env, int numChanges);
 
+  void _endChangeset_OsmApi();
+
   void _insertNode_Services(const long id, const double lat, const double lon,
     const Tags& tags);
 
@@ -501,6 +510,35 @@ private:
 
   void _updateWay_Services(long id, long changeSetId, const Tags& tags);
 
+  void _beginChangeset_OsmApi();
+
+  void _insertNode_OsmApi(const long id, const double lat, const double lon,
+    const Tags& tags);
+
+  // Flushes all elements
+  void _flushElementCacheToDb();
+
+  // Only flushes specified type
+  void _flushElementCacheToDb(const ElementType::Type type);
+
+  void _flushElementCacheOsmApiNodes();
+
+  void _flushElementCacheOsmApiWays();
+  void _flushElementCacheOsmApiWayNodes();
+
+  void _flushElementCacheOsmApiRelations();
+
+  void _flushElementCacheOsmApiRelationMembers();
+
+  void _updateChangesetEnvelope( const ConstNodePtr node );
+
+  long _getNextNodeId_Services(long mapId);
+
+  long _getNextNodeId_OsmApi();
+
+  void _resetQueries_Services();
+
+  void _resetQueries_OsmApi();
 };
 
 }

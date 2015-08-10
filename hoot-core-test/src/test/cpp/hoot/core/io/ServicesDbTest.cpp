@@ -58,6 +58,7 @@ class ServicesDbTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runSelectMembersForRelationTest);
   CPPUNIT_TEST(runUpdateNodeTest);
   CPPUNIT_TEST(runOpenOsmApiTest);
+  CPPUNIT_TEST(runInsertNodeOsmApiTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

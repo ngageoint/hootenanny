@@ -293,7 +293,6 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)
     {
       _sdb.insertNode(n->getId(), n->getY(), n->getX(), t);
     }
-
   }
 
   if (countChange)
