@@ -8,7 +8,7 @@
         <tag k="hoot:review:score" v="1"/>
         <tag k="cemetery" v="grave"/>
         <tag k="hoot:review:uuid" v="GeoNames.org:4139243"/>
-        <tag k="hoot:review:note" v="Close - very similar names"/>
+        <tag k="hoot:review:note" v="Somewhat similar - very similar names"/>
         <tag k="source" v="survey"/>
         <tag k="uuid" v="{b18057ff-736d-5d20-b873-837f0c172e33}"/>
         <tag k="name" v="John Philip Sousa"/>
@@ -23,7 +23,7 @@
         <tag k="bridge" v="yes"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:uuid" v="{b18057ff-736d-5d20-b873-837f0c172e33}"/>
-        <tag k="hoot:review:note" v="Close - very similar names"/>
+        <tag k="hoot:review:note" v="Somewhat similar - very similar names"/>
         <tag k="uuid" v="GeoNames.org:4139243"/>
         <tag k="name" v="John Phillip Sousa Bridge"/>
         <tag k="error:circular" v="1000"/>
