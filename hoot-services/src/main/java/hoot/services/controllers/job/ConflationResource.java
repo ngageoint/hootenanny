@@ -214,7 +214,7 @@ public class ConflationResource extends JobControllerBase {
 			rasterTilesparam.put("isprimitivetype", "false");
 			rasterTilesArgs.add(rasterTilesparam);
 			
-			if(userEmail != null)
+			//if(userEmail != null)
 			{
 				rasterTilesparam = new JSONObject();
 				rasterTilesparam.put("value", userEmail);
