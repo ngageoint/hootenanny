@@ -160,23 +160,6 @@ public class XmlDocumentBuilder
     write(document, writer);
     return writer.toString();
   }
-  
-  /**
-   * 
-   * 
-   * @param node
-   * @return
-   * @throws TransformerFactoryConfigurationError 
-   * @throws TransformerException 
-   */
-  public static String nodeToString(final Node node) throws TransformerFactoryConfigurationError, 
-    TransformerException
-  {
-    StringWriter writer = new StringWriter();
-    Transformer transformer = TransformerFactory.newInstance().newTransformer();
-    transformer.transform(new DOMSource(node), new StreamResult(writer));
-    return writer.toString();
-  }
 
   /**
    * Writes an XML DOM to a writer
@@ -194,29 +177,5 @@ public class XmlDocumentBuilder
     format.setIndent(2);
     XMLSerializer serializer = new XMLSerializer(out, format);
     serializer.serialize(document);
-  }
-  
-  /**
-   * Walks the document and removes all nodes of the specified type and specified name. 
-   * If name is null, then the node is removed if the type matches.
-   *
-   * @param node starting node
-   * @param nodeType type of nodes to remove
-   * @param name name of nodes to remove
-   */
-  public static void removeAll(Node node, final short nodeType, final String name) 
-  {
-    if (node.getNodeType() == nodeType && (name == null || node.getNodeName().equals(name))) 
-    {
-      node.getParentNode().removeChild(node);
-    } 
-    else 
-    {
-      NodeList list = node.getChildNodes();
-      for (int i=0; i<list.getLength(); i++) 
-      {
-        removeAll(list.item(i), nodeType, name);
-      }
-    }
   }
 }
