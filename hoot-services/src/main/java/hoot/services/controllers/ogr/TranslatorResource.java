@@ -295,8 +295,6 @@ public class TranslatorResource extends ServerControllerBase{
 		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
   }
   
-  
-  
   /**
 	 * <NAME>Translation Service Node Server status</NAME>
 	 * <DESCRIPTION>
@@ -340,7 +338,4 @@ public class TranslatorResource extends ServerControllerBase{
 		res.put("port", currentPort);
 		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
   }
-
-
- 
 }
