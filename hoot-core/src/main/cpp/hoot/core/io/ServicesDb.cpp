@@ -152,7 +152,7 @@ void ServicesDb::endChangeset()
     break;
   }
 
-  LOG_INFO("Successfully closed out changeset " << QString::number(_currChangesetId));
+  LOG_DEBUG("Successfully closed changeset " << QString::number(_currChangesetId));
 
   _currChangesetId = -1;
   _changesetEnvelope.init();
@@ -585,7 +585,7 @@ void ServicesDb::beginChangeset(const Tags& tags)
     break;
   }
 
-  LOG_INFO("Started new changeset " << QString::number(_currChangesetId));
+  LOG_DEBUG("Started new changeset " << QString::number(_currChangesetId));
 }
 
 void ServicesDb::_beginChangeset_Services(const Tags& tags)
@@ -693,6 +693,11 @@ bool ServicesDb::insertNode(const long id, const double lat, const double lon, c
     break;
   }
 
+  if ( retVal == true )
+  {
+    LOG_DEBUG("Inserted node " << QString::number(id));
+  }
+
   return retVal;
 }
 
@@ -758,6 +763,10 @@ bool ServicesDb::insertRelation(const long relationId, const Tags &tags)
     break;
   }
 
+  if ( retVal == true )
+  {
+    LOG_DEBUG("Inserted relation " << QString::number(relationId));
+  }
   return retVal;
 }
 
@@ -765,28 +774,40 @@ void ServicesDb::insertRelationMembers(long relationId, ElementType type,
   long elementId, QString role, int sequenceId)
 {
   const long mapId = _currMapId;
-  _checkLastMapId(mapId);
 
-  if (_insertRelationMembers == 0)
+  switch ( _connectionType )
   {
-    _insertRelationMembers.reset(new QSqlQuery(_db));
-    _insertRelationMembers->prepare(
-      "INSERT INTO " + _getRelationMembersTableName(mapId) +
-        " (relation_id, member_type, member_id, member_role, sequence_id) "
-      "VALUES (:relation_id, :member_type, :member_id, :member_role, :sequence_id)");
+  case DBTYPE_SERVICES:
+    _checkLastMapId(mapId);
+
+    if (_insertRelationMembers == 0)
+    {
+      _insertRelationMembers.reset(new QSqlQuery(_db));
+      _insertRelationMembers->prepare(
+        "INSERT INTO " + _getRelationMembersTableName(mapId) +
+          " (relation_id, member_type, member_id, member_role, sequence_id) "
+        "VALUES (:relation_id, :member_type, :member_id, :member_role, :sequence_id)");
+    }
+
+    _insertRelationMembers->bindValue(":relation_id", (qlonglong)relationId);
+    _insertRelationMembers->bindValue(":member_type", type.toString().toLower());
+    _insertRelationMembers->bindValue(":member_id", (qlonglong)elementId);
+    _insertRelationMembers->bindValue(":member_role", role);
+    _insertRelationMembers->bindValue(":sequence_id", sequenceId);
+
+    if (!_insertRelationMembers->exec())
+    {
+      throw HootException("Error inserting relation memeber: " +
+        _insertRelationMembers->lastError().text());
+    }
+
+    break;
+  default:
+    throw HootException("InsertRelationMembers called on unsupported database type");
+    break;
   }
 
-  _insertRelationMembers->bindValue(":relation_id", (qlonglong)relationId);
-  _insertRelationMembers->bindValue(":member_type", type.toString().toLower());
-  _insertRelationMembers->bindValue(":member_id", (qlonglong)elementId);
-  _insertRelationMembers->bindValue(":member_role", role);
-  _insertRelationMembers->bindValue(":sequence_id", sequenceId);
-
-  if (!_insertRelationMembers->exec())
-  {
-    throw HootException("Error inserting relation memeber: " +
-      _insertRelationMembers->lastError().text());
-  }
+  LOG_DEBUG("Members added to relation " << QString::number(relationId));
 }
 
 long ServicesDb::insertUser(QString email, QString displayName)
@@ -863,14 +884,14 @@ void ServicesDb::setUserId(const long sessionUserId)
 {
   _currUserId = sessionUserId;
 
-  LOG_INFO("User ID updated to " + QString::number(_currUserId));
+  LOG_DEBUG("User ID updated to " + QString::number(_currUserId));
 }
 
 void ServicesDb::setMapId(const long sessionMapId)
 {
   _currMapId = sessionMapId;
 
-  LOG_INFO("Map ID updated to " + QString::number(_currMapId));
+  LOG_DEBUG("Map ID updated to " + QString::number(_currMapId));
 }
 
 long ServicesDb::getUserId(QString email, bool throwWhenMissing)
@@ -1151,7 +1172,7 @@ void ServicesDb::open(QUrl url)
     LOG_WARN("Error disabling Postgresql INFO messages.");
   }
 
-  LOG_INFO("Successfully opened database: " << url.toString());
+  LOG_DEBUG("Successfully opened database: " << url.toString());
 }
 
 void ServicesDb::_resetQueries()
@@ -1579,14 +1600,14 @@ ServicesDb::DbType ServicesDb::_determineDbType()
   if ( (_hasTable("nodes") == true) && (_hasTable("current_nodes") == true ) )
   {
     retVal = DBTYPE_OSMAPI;
-    LOG_INFO("Connection type set to OSM API DB");
+    LOG_DEBUG("Connection type set to OSM API DB");
   }
 
   // Services DB will always have tables for maps and review_items
   else if ( ( _hasTable("maps") == true ) && ( _hasTable("maps") == true ) )
   {
     retVal = DBTYPE_SERVICES;
-    LOG_INFO("Connection type set to Services DB");
+    LOG_DEBUG("Connection type set to Services DB");
   }
 
   else

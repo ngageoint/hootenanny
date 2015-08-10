@@ -306,7 +306,7 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Way>& w)
 {
   long wayId;
 
-  LOG_DEBUG("Inside writePartial for Way " << QString::number(w->getId()));
+  //LOG_DEBUG("Inside writePartial for Way " << QString::number(w->getId()));
 
   Tags tags = w->getTags();
   _addElementTags(w, tags);
@@ -363,7 +363,8 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
   }
   else
   {
-    relationId = _sdb.insertRelation(r->getId(), tags);
+    _sdb.insertRelation(r->getId(), tags);
+    relationId = r->getId();
   }
 
   Tags empty;
