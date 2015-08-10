@@ -36,3 +36,10 @@ hoot --osm2ogr -D ogr.writer.pre.layer.name=bar_ test-files/io/SampleTranslation
 hoot --osm2ogr -D ogr.writer.pre.layer.name=foo_ -D ogr.writer.create.all.layers=true test-files/io/SampleTranslation.js test-files/io/SampleTranslation.osm $OUTPUT/options.shp
 printLayerInfo $OUTPUT/options/
 
+echo "#### Test to make sure all layers are read from a data source. ####"
+rm -rf test-output/cmd/slow/delaware-tds test-output/cmd/slow/delaware-tds.shp
+mkdir -p test-output/cmd/slow
+hoot osm2ogr test-files/io/O2sTranslation.js test-files/cmd/slow/delaware.shp test-output/cmd/slow/delaware-tds.shp
+mv test-output/cmd/slow/delaware-tds test-output/cmd/slow/delaware-tds.shp
+hoot stats --quick test-output/cmd/slow/delaware-tds.shp
+
