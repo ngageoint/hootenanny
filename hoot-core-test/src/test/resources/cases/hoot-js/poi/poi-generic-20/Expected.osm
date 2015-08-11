@@ -9,7 +9,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="name" v="خربة ماسوح"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Close - very similar names, very close together"/>
+        <tag k="hoot:review:note" v="Somewhat similar - very similar names, very close together"/>
         <tag k="hoot:review:uuid" v="{33e41748-afd1-5a87-bcf2-120630cae28d}"/>
         <tag k="hoot:wrong" v="1"/>
         <tag k="REF1" v="000263"/>
@@ -30,7 +30,7 @@
         <tag k="hoot:review:score" v="1"/>
         <tag k="alt_name" v="Khirbat Masuh;Khirbat Māsūḩ;Masuh;Māsūḩ;maswh;ماسوح"/>
         <tag k="hoot:review:uuid" v="{501aee30-3fac-558b-8985-8c78bdcd7464}"/>
-        <tag k="hoot:review:note" v="Close - very similar names, very close together"/>
+        <tag k="hoot:review:note" v="Somewhat similar - very similar names, very close together"/>
         <tag k="hoot:wrong" v="1"/>
         <tag k="uuid" v="{33e41748-afd1-5a87-bcf2-120630cae28d}"/>
         <tag k="name" v="Māsūḩ"/>

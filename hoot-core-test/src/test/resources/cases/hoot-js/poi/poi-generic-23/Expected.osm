@@ -10,7 +10,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="name" v="سيدي عسكر"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Close - similar poi type"/>
+        <tag k="hoot:review:note" v="Somewhat similar - similar POI type"/>
         <tag k="alt_name" v="سيدي عسكر"/>
         <tag k="hoot:review:uuid" v="{a1b7812d-6a20-58ef-bc87-2b1f24a7da56}"/>
         <tag k="hoot:wrong" v="1"/>
@@ -32,7 +32,7 @@
         <tag k="source:date_time" v="2007-04-29"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="source:vertical_source_category" v="no_elevations"/>
-        <tag k="hoot:review:note" v="Close - similar poi type"/>
+        <tag k="hoot:review:note" v="Somewhat similar - similar POI type"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:abs_horiz_accuracy" v="25"/>
         <tag k="source:copyright" v="Copyright 2013 by the Bundeswehr GeoInformation Office. All rights reserved."/>

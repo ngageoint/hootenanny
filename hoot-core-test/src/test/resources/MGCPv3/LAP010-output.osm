@@ -10,10 +10,9 @@
         <nd ref="-7"/>
         <nd ref="-8"/>
         <nd ref="-8"/>
-        <tag k="source:ingest:datetime" v="2015-02-26T06:02:03.318Z"/>
+        <tag k="source:ingest:datetime" v="2015-08-05T21:55:35.636Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:vertical_source:type" v="no_elevations"/>
         <tag k="width:minimum_traveled_way" v="3"/>
         <tag k="seasonal" v="fair"/>
         <tag k="source" v="mgcp"/>
@@ -28,10 +27,9 @@
         <nd ref="-4"/>
         <nd ref="-5"/>
         <nd ref="-5"/>
-        <tag k="source:ingest:datetime" v="2015-02-26T06:02:03.318Z"/>
+        <tag k="source:ingest:datetime" v="2015-08-05T21:55:35.636Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:vertical_source:type" v="no_elevations"/>
         <tag k="width:minimum_traveled_way" v="4"/>
         <tag k="seasonal" v="no"/>
         <tag k="source" v="mgcp"/>
@@ -46,10 +44,9 @@
         <nd ref="-1"/>
         <nd ref="-2"/>
         <nd ref="-2"/>
-        <tag k="source:ingest:datetime" v="2015-02-26T06:02:03.318Z"/>
+        <tag k="source:ingest:datetime" v="2015-08-05T21:55:35.636Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:vertical_source:type" v="no_elevations"/>
         <tag k="width:minimum_traveled_way" v="2.5"/>
         <tag k="source" v="mgcp"/>
         <tag k="uuid" v="{1c362077-a802-41f3-97e5-193db7df1a0b}"/>

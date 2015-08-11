@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-6700013' visible='true' lat='38.87678' lon='-76.97775'>
+    <tag k='REF2' v='none' />
+    <tag k='bridge' v='yes' />
+    <tag k='error:circular' v='1000' />
+    <tag k='name' v='John Phillip Sousa Bridge' />
+    <tag k='uuid' v='GeoNames.org:4139243' />
+  </node>
+</osm>
