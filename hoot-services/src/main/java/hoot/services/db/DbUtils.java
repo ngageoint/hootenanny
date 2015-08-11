@@ -36,11 +36,13 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import hoot.services.HootProperties;
+import hoot.services.db.postgres.PostgresUtils;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelations;
 import hoot.services.db2.CurrentWays;
@@ -1160,7 +1162,66 @@ public class DbUtils
     }
 
 
+  public static long updateMapsTableTags(final Map<String, String> tags, 
+  		final long mapId, final Connection conn) throws SQLException
+  {
 
+  	long execResult = -1;
+		PreparedStatement ps = null;
+    try
+    {
+    	String sql = null;
+      
+
+    	sql = "update maps set tags=? " +
+					"where id=?";
+    	ps = conn.prepareStatement(sql);
+    	String hstoreStr = "";
+			Iterator it = tags.entrySet().iterator();
+	    while (it.hasNext()) {
+	        Map.Entry pairs = (Map.Entry)it.next();
+	        if(hstoreStr.length() > 0)
+	        {
+	        	hstoreStr += ",";
+	        }
+	        hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + pairs.getValue() + "\"";
+	    }
+			ps.setObject(1, hstoreStr, Types.OTHER);
+			ps.setLong(2, mapId);
+		
+			execResult = ps.executeUpdate();
+    }
+    finally
+    {
+    	if(ps != null)
+    	{
+    		ps.close();
+    	}
+
+    }
+    return execResult;
+  }
+  
+  
+  public static Map<String, String> getMapsTableTags(final long mapId, final Connection conn) throws Exception
+  {
+  	Map<String, String> tags = new HashMap<String, String>();
+  	QMaps  mp = QMaps.maps;
+  	
+  	List<Object> res = new SQLQuery(conn,DbUtils.getConfiguration(mapId))
+  	.from(mp)
+  	.where(mp.id.eq(mapId))
+  	.list(mp.tags);
+  	
+  	if(res.size() > 0)
+  	{
+  		Object oTag = res.get(0);
+  		tags = 
+					PostgresUtils.postgresObjToHStore((org.postgresql.util.PGobject)oTag);
+  	}
+  	
+  	return tags;
+  }
 
   public static void batchRecordsDirectNodes(final long mapId, final List<?> records,
       final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception

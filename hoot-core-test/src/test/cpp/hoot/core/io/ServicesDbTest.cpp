@@ -328,10 +328,8 @@ public:
     while (nodeResultIterator->next())
     {
       HOOT_STR_EQUALS(nodeId, nodeResultIterator->value(0).toLongLong());
-      HOOT_STR_EQUALS(38.0, nodeResultIterator->value(1).toLongLong() /
-        (double)COORDINATE_SCALE);
-      HOOT_STR_EQUALS(-104.0, nodeResultIterator->value(2).toLongLong() /
-        (double)COORDINATE_SCALE);
+      HOOT_STR_EQUALS(38.0, nodeResultIterator->value(1).toDouble());
+      HOOT_STR_EQUALS(-104.0, nodeResultIterator->value(2).toDouble());
       HOOT_STR_EQUALS("foo = bar\n", ServicesDb::unescapeTags(nodeResultIterator->value(8)));
 
       ctr++;
@@ -392,10 +390,8 @@ public:
         case 0:
         {
           HOOT_STR_EQUALS(nodeId1, nodeResultIterator->value(0).toLongLong());
-          HOOT_STR_EQUALS(37.9, nodeResultIterator->value(1).toLongLong() /
-            (double)COORDINATE_SCALE);
-          HOOT_STR_EQUALS(-105.0, nodeResultIterator->value(2).toLongLong() /
-            (double)COORDINATE_SCALE);
+          HOOT_STR_EQUALS(37.9, nodeResultIterator->value(1).toDouble());
+          HOOT_STR_EQUALS(-105.0, nodeResultIterator->value(2).toDouble());
           HOOT_STR_EQUALS("foo = bar\n", ServicesDb::unescapeTags(nodeResultIterator->value(8)));
         }
         break;
@@ -403,10 +399,8 @@ public:
         case 1:
         {
           HOOT_STR_EQUALS(nodeId2, nodeResultIterator->value(0).toLongLong());
-          HOOT_STR_EQUALS(38.1, nodeResultIterator->value(1).toLongLong() /
-            (double)COORDINATE_SCALE);
-          HOOT_STR_EQUALS(-106.0, nodeResultIterator->value(2).toLongLong() /
-            (double)COORDINATE_SCALE);
+          HOOT_STR_EQUALS(38.1, nodeResultIterator->value(1).toDouble());
+          HOOT_STR_EQUALS(-106.0, nodeResultIterator->value(2).toDouble());
           HOOT_STR_EQUALS("foo2 = bar2\n", ServicesDb::unescapeTags(nodeResultIterator->value(8)));
         }
         break;
@@ -444,10 +438,8 @@ public:
         case 0:
         {
           HOOT_STR_EQUALS(nodeId1, nodeResultIterator->value(0).toLongLong());
-          HOOT_STR_EQUALS(38.0, nodeResultIterator->value(ServicesDb::NODES_LATITUDE).toLongLong() /
-            (double)COORDINATE_SCALE);
-          HOOT_STR_EQUALS(-104.0, nodeResultIterator->value(
-            ServicesDb::NODES_LONGITUDE).toLongLong() / (double)COORDINATE_SCALE);
+          HOOT_STR_EQUALS(38.0, nodeResultIterator->value(ServicesDb::NODES_LATITUDE).toDouble());
+          HOOT_STR_EQUALS(-104.0, nodeResultIterator->value(ServicesDb::NODES_LONGITUDE).toDouble());
           HOOT_STR_EQUALS("accuracy = 20.0\n"
                           "hoot:status = Unknown1\n",
                           ServicesDb::unescapeTags(nodeResultIterator->value(8)));
@@ -457,10 +449,8 @@ public:
         case 1:
         {
           HOOT_STR_EQUALS(nodeId2, nodeResultIterator->value(0).toLongLong());
-          HOOT_STR_EQUALS(38.0, nodeResultIterator->value(ServicesDb::NODES_LATITUDE).toLongLong() /
-            (double)COORDINATE_SCALE);
-          HOOT_STR_EQUALS(-105.0, nodeResultIterator->value(
-            ServicesDb::NODES_LONGITUDE).toLongLong() / (double)COORDINATE_SCALE);
+          HOOT_STR_EQUALS(38.0, nodeResultIterator->value(ServicesDb::NODES_LATITUDE).toDouble());
+          HOOT_STR_EQUALS(-105.0, nodeResultIterator->value(ServicesDb::NODES_LONGITUDE).toDouble());
           HOOT_STR_EQUALS("error:circular = 20.0\n",
                           ServicesDb::unescapeTags(nodeResultIterator->value(8)));
         }
@@ -469,10 +459,8 @@ public:
         case 2:
         {
           HOOT_STR_EQUALS(nodeId3, nodeResultIterator->value(0).toLongLong());
-          HOOT_STR_EQUALS(38.0, nodeResultIterator->value(ServicesDb::NODES_LATITUDE).toLongLong() /
-            (double)COORDINATE_SCALE);
-          HOOT_STR_EQUALS(-106.0, nodeResultIterator->value(
-            ServicesDb::NODES_LONGITUDE).toLongLong() / (double)COORDINATE_SCALE);
+          HOOT_STR_EQUALS(38.0, nodeResultIterator->value(ServicesDb::NODES_LATITUDE).toDouble());
+          HOOT_STR_EQUALS(-106.0, nodeResultIterator->value(ServicesDb::NODES_LONGITUDE).toDouble());
           HOOT_STR_EQUALS("",
                           ServicesDb::unescapeTags(nodeResultIterator->value(8)));
         }
@@ -504,7 +492,7 @@ public:
           ServicesDb::_getNodesTableName(mapId) +
           " WHERE id=:id "
           "ORDER BY longitude",
-          "3800000000000;-10400000000000;true;1329332431;1",
+          "38;-104;true;1329332431;1",
           (qlonglong)nodeId);
 
 
@@ -517,7 +505,7 @@ public:
           ServicesDb::_getNodesTableName(mapId) +
           " WHERE id=:id "
           "ORDER BY longitude",
-          "314150000000;271828000000;true;3222453693;1",
+          "3.1415;2.71828;true;3222453693;1",
           (qlonglong)nodeId);
   }
 
