@@ -198,13 +198,9 @@ void ServicesDb::_endChangeset_Services(long changeSetId, Envelope env, int numC
 
 void ServicesDb::commit()
 {
-  //LOG_DEBUG("Creating map indexes");
   createPendingMapIndexes();
-  //LOG_DEBUG("Flushing bulk inserts");
   _flushBulkInserts();
-  //LOG_DEBUG("Resetting queries");
   _resetQueries();
-  //G_DEBUG("Starting DB commit");
   if (!_db.commit())
   {
     LOG_WARN("Error committing transaction.");
@@ -1219,22 +1215,6 @@ void ServicesDb::open(QUrl url)
 
 void ServicesDb::_resetQueries()
 {
-  switch (_connectionType)
-  {
-  case DBTYPE_SERVICES:
-    _resetQueries_Services();
-    break;
-  case DBTYPE_OSMAPI:
-    _resetQueries_OsmApi();
-    break;
-  default:
-    throw HootException("Reset Queries called on unsupported database type");
-    break;
-  }
-}
-
-void ServicesDb::_resetQueries_Services()
-{
   _closeChangeSet.reset();
   _insertChangeSet.reset();
   _insertChangeSetTag.reset();
@@ -1264,12 +1244,12 @@ void ServicesDb::_resetQueries_Services()
   _wayNodeBulkInsert.reset();
   _wayBulkInsert.reset();
   _wayIdReserver.reset();
-}
 
-void ServicesDb::_resetQueries_OsmApi()
-{
+
+  // OSM API
   _osmApiNodeIdReserver.reset();
 }
+
 
 void ServicesDb::rollback()
 {
@@ -2493,8 +2473,8 @@ void ServicesDb::_endChangeset_OsmApi()
   }
   else
   {
-    LOG_INFO("Successful changeset update with bound values: ");
-    LOG_VARI(closeChangeset.boundValues());
+    //LOG_INFO("Successful changeset update with bound values: ");
+    //LOG_VARI(closeChangeset.boundValues());
   }
 
 

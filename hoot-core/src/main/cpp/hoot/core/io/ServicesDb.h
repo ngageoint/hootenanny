@@ -559,9 +559,6 @@ private:
 
   long _getNextNodeId_OsmApi();
 
-  void _resetQueries_Services();
-
-  void _resetQueries_OsmApi();
 };
 
 }
