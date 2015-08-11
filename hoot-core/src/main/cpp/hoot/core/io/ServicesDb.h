@@ -45,6 +45,7 @@
 
 // Standard
 #include <vector>
+#include <map>
 
 // Tgs
 #include <tgs/SharedPtr.h>
@@ -364,9 +365,21 @@ private:
   Envelope _changesetEnvelope;
   long _changesetChangeCount;
   ElementCachePtr _elementCache;
+  std::map< long, std::vector<long> > _wayNodesCache;
+
   unsigned long _elementCacheCapacity;
 
   boost::shared_ptr<SequenceIdReserver> _osmApiNodeIdReserver;
+
+  struct RelationMemberCacheEntry
+  {
+    ElementId elementId;
+    QString role;
+    int sequenceId;
+  };
+
+  std::multimap<long, RelationMemberCacheEntry> _relationMembersCache;
+
 
   /**
    * This is here to improve query caching. In most cases users open a single ServiceDb and then
@@ -531,6 +544,16 @@ private:
   void _flushElementCacheOsmApiRelationMembers();
 
   void _updateChangesetEnvelope( const ConstNodePtr node );
+
+  void _updateChangesetEnvelope(const ConstWayPtr way);
+
+  void _updateChangesetEnvelopeWayIds(const std::vector<long>& wayIds);
+
+  void _updateChangesetEnvelopeRelationIds(const std::vector<long>& relationIds);
+
+  void _updateChangesetEnvelopeRelationNodes(const std::vector<long>& relationIds);
+
+  void _updateChangesetEnvelopeRelationWays(const std::vector<long>& relationIds);
 
   long _getNextNodeId_Services(long mapId);
 

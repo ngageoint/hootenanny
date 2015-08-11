@@ -2171,15 +2171,290 @@ void ServicesDb::_flushElementCacheOsmApiNodes()
         _execNoPrepare(nodeTagsInsertCmd);
       }
 
-    }
-    catch ( ... )
+  }
+  catch ( ... )
+  {
+    throw HootException("Database error when inserting nodes");
+  }
+
+  // Remove all nodes now that they've been flushed
+  _elementCache->removeElements(ElementType::Node);
+}
+
+void ServicesDb::_flushElementCacheOsmApiWays()
+{
+  if ( _elementCache->typeCount(ElementType::Way) == 0 )
+  {
+    //LOG_DEBUG("Bailing from flush of cached ways; nothing in cache!")
+    return;
+  }
+
+  // First step is to flush any nodes to make sure we don't violate any foreign keys when inserting way
+  _flushElementCacheOsmApiNodes();
+
+  //LOG_DEBUG("Starting flush of way cache")
+
+  // already in transaction, no need to start new one
+
+  try
+  {
+    // Set up INSERT command for current_ways.
+    QString currentWaysInsertCmd = "INSERT INTO current_ways ( id, changeset_id, timestamp, visible, version ) VALUES ";
+
+    // INSERT command for ways
+    QString waysInsertCmd =        "INSERT INTO ways         ( way_id, changeset_id, timestamp, visible, version ) VALUES ";
+
+    // INSERT command for current_ways_tags
+    QString currentWayTagsInsertCmd = "INSERT INTO current_way_tags ( way_id, k, v ) VALUES ";
+
+    // INSERT command for way_tags
+    QString wayTagsInsertCmd = "INSERT INTO way_tags ( way_id, version, k, v ) VALUES ";
+
+    // Assume the insert tag commands don't need to be run until we see otherwise
+    bool needInsertTags = false;
+
+    // Iterate over all ways in the cache, adding data to the current_nodes INSERT command
+    _elementCache->resetElementIterators();
+    ConstWayPtr currWay = _elementCache->getNextWay();
+
+    // Testing a smart pointer against zero is equivalent to checking against null
+    while ( currWay != 0 )
     {
-      throw HootException("Database error when inserting nodes");
+      // Populate variables to make string build a little bit cleaner
+      const QString wayIDString(QString::number(currWay->getId()));
+      const QString changesetIDString(QString::number(_currChangesetId));
+
+      // waysand current_ways (identical data)
+      QString waysCurrentWaysRow =
+
+        // Open paren
+        "(" +
+
+        // id
+        wayIDString + "," +
+
+        // changeset_id
+        changesetIDString + "," +
+
+        // timestamp
+        "now()," +
+
+        // visible
+        "'true'," +
+
+        // version
+        "1" +
+
+        // Closing paren
+        ")";
+
+      // current_way_tags and way_tags
+      const Tags wayTags = currWay->getTags();
+      if ( wayTags.size() > 0 )
+      {
+        // Mark that we've had to insert at least one tag
+        needInsertTags = true;
+        for ( Tags::const_iterator it = wayTags.constBegin(); it != wayTags.constEnd(); ++it )
+        {
+          // Do we need to prepend with comma?
+          if ( currentWayTagsInsertCmd.endsWith( ")" ) == true )
+          {
+            currentWayTagsInsertCmd  += ", ";
+            wayTagsInsertCmd += ", ";
+          }
+
+          // String values containing single quotes need to be escaped (postgres uses double-single-quotes)
+          QString escapedKey = it.key();
+          QString escapedValue = it.value();
+          escapedKey.replace("'", "''");
+          escapedValue.replace("'", "''" );
+
+          currentWayTagsInsertCmd  +=
+            // Opening paren
+            "(" +
+
+            // Id
+            wayIDString + "," +
+
+            // Key (make sure to escape single quotes with double single quotes
+            "'" + escapedKey + "'," +
+
+            // Value
+            "'" + escapedValue + "'" +
+
+            // Closing paren
+            ")";
+
+          wayTagsInsertCmd +=
+            // Opening paren
+            "(" +
+
+            // Id
+            wayIDString + "," +
+
+            // Version
+            "1," +
+
+            // Key (make sure to escape single quotes with double single quotes
+            "'" + escapedKey + "'," +
+
+            // Value
+            "'" + escapedValue + "'" +
+
+            // Closing paren
+            ")";
+        }
+      }
+
+      // If there are more ways to include, add a comma to the way row statements
+      currWay = _elementCache->getNextWay();
+
+      if ( currWay != 0 )
+      {
+        waysCurrentWaysRow += ", ";
+      }
+
+      // Both node tables get same chunk of parenthesized data
+      currentWaysInsertCmd  += waysCurrentWaysRow;
+      waysInsertCmd         += waysCurrentWaysRow;
     }
 
-    // Remove all nodes now that they've been flushed
-    _elementCache->removeElements(ElementType::Node);
+    // Add final semicolons
+    currentWaysInsertCmd      += ";";
+    waysInsertCmd             += ";";
+
+    // Always execute inserts for all way and way node tables
+    //LOG_DEBUG("Current_ways:\n\t" + currentWaysInsertCmd);
+    _execNoPrepare(currentWaysInsertCmd);
+    //LOG_DEBUG("ways:\n\t" + waysInsertCmd);
+    _execNoPrepare(waysInsertCmd);
+
+    // Does way have tags?
+    if ( needInsertTags == true )
+    {
+      // Do final semicolons
+      currentWayTagsInsertCmd += ";";
+      wayTagsInsertCmd += ";";
+
+      //LOG_DEBUG("current_node_tags: \n\t" + currentWayTagsInsertCmd);
+      _execNoPrepare(currentWayTagsInsertCmd);
+      //LOG_DEBUG("node_tags: \n\t" + wayTagsInsertCmd);
+      _execNoPrepare(wayTagsInsertCmd);
+    }
+
   }
+  catch ( ... )
+  {
+    throw HootException("Database error when inserting ways");
+  }
+
+  // Remove all ways from cache as they've been written
+  _elementCache->removeElements(ElementType::Way);
+}
+
+void ServicesDb::_flushElementCacheOsmApiWayNodes()
+{
+  if ( _wayNodesCache.size() == 0 )
+  {
+    //LOG_DEBUG("Bailing from flush of cached way nodes; nothing in cache!")
+    return;
+  }
+
+  // First step is to flush any ways (which in turn flushes nodes) to make sure we don't violate any foreign keys when inserting way
+  _flushElementCacheOsmApiWays();
+
+  //LOG_DEBUG("Starting flush of way node cache");
+
+  std::vector<long> wayIds;
+  try
+  {
+    QString currentWayNodesInsertCmd = "INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES ";
+    QString wayNodesInsertCmd = "INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES ";
+
+    for ( std::map< long, std::vector<long> >::const_iterator wayNodeIter = _wayNodesCache.begin();
+              wayNodeIter != _wayNodesCache.end(); ++wayNodeIter )
+    {
+
+      // Add way ID to list of way IDs (used for updating changeset envelope later on in function)
+      wayIds.push_back(wayNodeIter->first);
+
+      // Populate variables to make string build a little bit cleaner
+      const QString wayIDString(QString::number(wayNodeIter->first));
+
+      //LOG_DEBUG("Getting Node IDs");
+      // way_nodes and current_way_nodes
+      std::vector<long> wayNodeIds = wayNodeIter->second;
+
+      //LOG_DEBUG("Got " + QString::number(wayNodeIds.size()) + " node IDs");
+
+      unsigned int sequenceNumber = 1;
+      for ( std::vector<long>::const_iterator nodeIter = wayNodeIds.begin(); nodeIter != wayNodeIds.end(); ++nodeIter, ++sequenceNumber)
+      {
+        // Do we need to prepend with comma?
+        if ( currentWayNodesInsertCmd.endsWith( ")" ) == true )
+        {
+          currentWayNodesInsertCmd  += ", ";
+          wayNodesInsertCmd += ", ";
+        }
+
+        currentWayNodesInsertCmd +=
+            // Opening paren
+            "(" +
+
+            // Way Id
+            wayIDString + ", " +
+
+            // Node_Id
+            QString::number(*nodeIter) + ", " +
+
+            // Sequence ID
+            QString::number(sequenceNumber) +
+
+            // Closing paren
+            ")";
+
+        wayNodesInsertCmd +=
+            // Opening paren
+            "(" +
+
+            // Way Id
+            wayIDString + ", " +
+
+            // Node_Id
+            QString::number(*nodeIter) + ", " +
+
+            // Version
+            QString::number(1) +", " +
+
+            // Sequence ID
+            QString::number(sequenceNumber) +
+
+            // Closing paren
+            ")";
+      }
+
+    }
+
+    // Add final semicolons
+    currentWayNodesInsertCmd  += ";";
+    wayNodesInsertCmd         += ";";
+
+    _execNoPrepare(currentWayNodesInsertCmd);
+    _execNoPrepare(wayNodesInsertCmd);
+
+    _updateChangesetEnvelopeWayIds(wayIds);
+  }
+  catch ( ... )
+  {
+    throw HootException("Database error when inserting ways");
+  }
+
+  // Remove all way nodes from cache as they've been written
+  _wayNodesCache.clear();
+}
+
+
+
 
 void ServicesDb::_updateChangesetEnvelope(const ConstNodePtr node)
 {
@@ -2189,6 +2464,8 @@ void ServicesDb::_updateChangesetEnvelope(const ConstNodePtr node)
   _changesetEnvelope.expandToInclude(nodeX, nodeY);
   //LOG_DEBUG("Changeset bounding box updated to include X=" + QString::number(nodeX) + ", Y=" + QString::number(nodeY));
 }
+
+
 
 void ServicesDb::_endChangeset_OsmApi()
 {
@@ -2286,6 +2563,354 @@ void ServicesDb::_endChangeset_OsmApi()
    }
 
    LOG_DEBUG("Successfully closed changeset");
+}
+
+void ServicesDb::_updateChangesetEnvelopeWayIds(const std::vector<long>& wayIds)
+{
+  QString idListString;
+
+  std::vector<long>::const_iterator idIter;
+
+  for ( idIter = wayIds.begin(); idIter != wayIds.end(); ++idIter )
+  {
+    idListString += QString::number(*idIter) + ",";
+  }
+
+  // Remove last comma
+  idListString.chop(1);
+
+  // Get envelope for way from database, then update changeset envelope as needed
+  QSqlQuery getWayEnvelopeCmd = _exec(QString(
+        "SELECT way_id, MIN(latitude),MAX(latitude),MIN(longitude),MAX(longitude) "
+        "FROM current_way_nodes JOIN current_nodes ON node_id = id "
+        "WHERE way_id IN (%1) GROUP BY way_id;").arg(idListString));
+
+  // NOTE: the result will return one row per way found in the list -- have to iterate until done!
+  while (getWayEnvelopeCmd.next())
+  {
+    double minY = (double)getWayEnvelopeCmd.value(1).toLongLong() / (double)COORDINATE_SCALE;
+    double maxY = (double)getWayEnvelopeCmd.value(2).toLongLong() / (double)COORDINATE_SCALE;
+    double minX = (double)getWayEnvelopeCmd.value(3).toLongLong() / (double)COORDINATE_SCALE;
+    double maxX = (double)getWayEnvelopeCmd.value(4).toLongLong() / (double)COORDINATE_SCALE;
+
+    _changesetEnvelope.expandToInclude(minX, minY);
+    _changesetEnvelope.expandToInclude(maxX, maxY);
+  }
+}
+
+void ServicesDb::_flushElementCacheOsmApiRelations()
+{
+  if ( _elementCache->typeCount(ElementType::Relation) == 0 )
+  {
+    //LOG_DEBUG("Bailing from flush of cached relations; nothing in cache!")
+    return;
+  }
+
+  // First step is to flush any ways and way nodes to make sure we don't violate foreign key integrity
+  _flushElementCacheOsmApiWays();
+  _flushElementCacheOsmApiWayNodes();
+
+  //LOG_DEBUG("Starting flush of relation cache")
+
+  // already in transaction, no need to start new one
+
+  // Have to keep list of relation IDs we insert, so we can come back update changeset envelope
+  std::vector<long> relationIds;
+
+  try
+  {
+    // INSERT command for current_relations.
+    QString currentRelationsInsertCmd( "INSERT INTO current_relations ( id, changeset_id, timestamp, visible, version ) VALUES " );
+
+    // INSERT command for relations
+    QString relationsInsertCmd(        "INSERT INTO relations         ( relation_id, changeset_id, timestamp, visible, version ) VALUES " );
+
+    // INSERT command for current_relations_tags
+    QString currentRelationTagsInsertCmd( "INSERT INTO current_relation_tags ( relation_id, k, v ) VALUES " );
+
+    // INSERT command for relation_tags
+    QString relationTagsInsertCmd( "INSERT INTO relation_tags ( relation_id, version, k, v ) VALUES " );
+
+    // Assume the insert tag commands don't need to be run until we see otherwise
+    bool needInsertTags = false;
+
+    // Iterate over all ways in the cache, adding data to the current_nodes INSERT command
+    _elementCache->resetElementIterators();
+    ConstRelationPtr currRelation = _elementCache->getNextRelation();
+
+    const QString changesetIDString(QString::number(_currChangesetId));
+
+    // Testing a smart pointer against zero is equivalent to checking against null
+    while ( currRelation != 0 )
+    {
+      // add to list of relation IDs that are being inserted, used later for changeset envelope update
+      relationIds.push_back(currRelation->getId());
+
+      // Populate variables to make string build a little bit cleaner
+      const QString relationIDString(QString::number(currRelation->getId()));
+
+      // relations and current_relations (identical data)
+      QString relationsCurrentRelationsRow =
+
+        // Open paren
+        "(" +
+
+        // id
+        relationIDString + "," +
+
+        // changeset_id
+        changesetIDString + "," +
+
+        // timestamp
+        "now()," +
+
+        // visible
+        "'true'," +
+
+        // version
+        "1" +
+
+        // Closing paren
+        ")";
+
+      // current_relation_tags and relation_tags
+      const Tags relationTags = currRelation->getTags();
+      if ( relationTags.size() > 0 )
+      {
+        // Mark that we've had to insert at least one tag
+        needInsertTags = true;
+
+        for ( Tags::const_iterator it = relationTags.constBegin(); it != relationTags.constEnd(); ++it )
+        {
+          // Do we need to prepend with comma?
+          if ( currentRelationTagsInsertCmd.endsWith( ")" ) == true )
+          {
+            currentRelationTagsInsertCmd  += ", ";
+            relationTagsInsertCmd += ", ";
+          }
+
+          // String values containing single quotes need to be escaped (postgres uses double-single-quotes)
+          QString escapedKey = it.key();
+          QString escapedValue = it.value();
+          escapedKey.replace("'", "''");
+          escapedValue.replace("'", "''" );
+
+          currentRelationTagsInsertCmd  +=
+            // Opening paren
+            "(" +
+
+            // Id
+            relationIDString + "," +
+
+            // Key (make sure to escape single quotes with double single quotes
+            "'" + escapedKey + "'," +
+
+            // Value
+            "'" + escapedValue + "'" +
+
+            // Closing paren
+            ")";
+
+          relationTagsInsertCmd +=
+            // Opening paren
+            "(" +
+
+            // Id
+            relationIDString + "," +
+
+            // Version
+            "1," +
+
+            // Key (make sure to escape single quotes with double single quotes
+            "'" + escapedKey + "'," +
+
+            // Value
+            "'" + escapedValue + "'" +
+
+            // Closing paren
+            ")";
+        }
+      }
+
+      // Do we need to prepend comma?
+      if ( currentRelationsInsertCmd.endsWith(")") == true )
+      {
+        currentRelationsInsertCmd  += ",";
+        relationsInsertCmd        += ",";
+      }
+
+
+      // Both node tables get same chunk of parenthesized data
+      currentRelationsInsertCmd += relationsCurrentRelationsRow;
+      relationsInsertCmd        += relationsCurrentRelationsRow;
+
+      currRelation = _elementCache->getNextRelation();
+    }
+
+    // Add final semicolons
+    currentRelationsInsertCmd      += ";";
+    relationsInsertCmd             += ";";
+
+    // Always execute inserts for all way and way node tables
+    //LOG_DEBUG("Current_ways:\n\t" + currentWaysInsertCmd);
+    _execNoPrepare(currentRelationsInsertCmd);
+    //LOG_DEBUG("ways:\n\t" + waysInsertCmd);
+    _execNoPrepare(relationsInsertCmd);
+
+    // Does way have tags?
+    if ( needInsertTags == true )
+    {
+      // Do final semicolons
+      currentRelationTagsInsertCmd += ";";
+      relationTagsInsertCmd += ";";
+
+      //LOG_DEBUG("current_node_tags: \n\t" + currentWayTagsInsertCmd);
+      _execNoPrepare(currentRelationTagsInsertCmd);
+      //LOG_DEBUG("node_tags: \n\t" + wayTagsInsertCmd);
+      _execNoPrepare(relationTagsInsertCmd);
+    }
+  }
+  catch ( ... )
+  {
+    throw HootException("Database error when inserting relations");
+  }
+
+  // Remove all relations from cache as they've been written
+  _elementCache->removeElements(ElementType::Relation);
+}
+
+void ServicesDb::_flushElementCacheOsmApiRelationMembers()
+{
+  if ( _relationMembersCache.size() == 0 )
+  {
+    //LOG_DEBUG("Bailing from flush of relation members; nothing in cache!")
+    return;
+  }
+
+  // First step is to flush any relations to make sure we don't violate any foreign keys when inserting relation member
+  _flushElementCacheOsmApiRelations();
+
+  //LOG_DEBUG("Starting flush of relation member cache");
+
+  std::vector<long> relationIds;
+  try
+  {
+    QString currentRelationMembersInsertCmd = "INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role,          sequence_id) VALUES ";
+    QString relationMembersInsertCmd =        "INSERT INTO         relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES ";
+
+    for ( std::map< long, RelationMemberCacheEntry >::const_iterator relationMemberIter = _relationMembersCache.begin();
+              relationMemberIter != _relationMembersCache.end(); ++relationMemberIter )
+    {
+      // Add relation ID to list of relation IDs (used for updating changeset envelope later on in function)
+      relationIds.push_back(relationMemberIter->first);
+
+      // Populate variables to make string build a little bit cleaner
+      const QString relationIDString(QString::number(relationMemberIter->first));
+
+      QString nwrType;
+      switch ( relationMemberIter->second.elementId.getType().getEnum() )
+      {
+      case ElementType::Node:
+        nwrType = "'Node'";
+        break;
+      case ElementType::Way:
+        nwrType = "'Way'";
+        break;
+
+      case ElementType::Relation:
+        nwrType = "'Relation'";
+        break;
+
+
+      default:
+        LOG_DEBUG("Found unsupported member relation type");
+        throw HootException("Unsupported relation member type");
+
+        break;
+      }
+
+      RelationMemberCacheEntry currMember = relationMemberIter->second;
+      QString sqlMemberRole = currMember.role;
+
+      // Escape any single quotes
+      sqlMemberRole.replace("'", "''");
+
+      // Do we need to prepend with comma?
+      if ( currentRelationMembersInsertCmd.endsWith( ")" ) == true )
+      {
+        currentRelationMembersInsertCmd  += ", ";
+        relationMembersInsertCmd += ", ";
+      }
+
+      currentRelationMembersInsertCmd +=
+          // Opening paren
+          "(" +
+
+          // Relation ID
+          relationIDString + ", " +
+
+          // Member type
+          nwrType + ", " +
+
+          // Member ID
+          QString::number(currMember.elementId.getId()) + ", " +
+
+          // Role
+          "'" + sqlMemberRole + "', " +
+
+          // Sequence ID
+          QString::number(currMember.sequenceId) +
+
+          // Closing paren
+          ")";
+
+      relationMembersInsertCmd +=
+          // Opening paren
+          "(" +
+
+          // Relation ID
+          relationIDString + ", " +
+
+          // Member type
+          nwrType + ", " +
+
+          // Member ID
+          QString::number(currMember.elementId.getId()) + ", " +
+
+          // Role
+          "'" + sqlMemberRole + "', " +
+
+          // Version
+          "1, " +
+
+          // Sequence ID
+          QString::number(currMember.sequenceId) +
+
+          // Closing paren
+          ")";
+    }
+
+    // Add final semicolons
+    currentRelationMembersInsertCmd  += ";";
+    relationMembersInsertCmd         += ";";
+
+    /*
+    _execNoPrepare(currentRelationMembersInsertCmd);
+    _execNoPrepare(relationMembersInsertCmd);
+    */
+    //LOG_VARD(currentRelationMembersInsertCmd);
+    //LOG_VARD(relationMembersInsertCmd);
+
+    // TODO: Iterate over all the relations for the members we just inserted, updating changeset envelope
+    //_updateChangesetEnvelopeRelationIds(relationIds);
+  }
+  catch ( ... )
+  {
+    throw HootException("Database error when inserting relation members");
+  }
+
+  // Remove all relation members from cache as they've been written
+  _relationMembersCache.clear();
 }
 
 
