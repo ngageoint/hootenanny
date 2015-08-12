@@ -15,6 +15,33 @@
     
     <modifyDataType tableName="current_nodes" columnName="latitude" newDataType="double" />
     <modifyDataType tableName="current_nodes" columnName="longitude" newDataType="double" />
+    
+    <!-- The above only updates the base schema and doesn't update any existing data...so, convert all 
+    existing coordinate values from nanodegrees to degrees. -->
+    <sql splitStatements="false">
+    DO $$
+          DECLARE
+            node_tables CURSOR FOR SELECT tablename FROM pg_tables WHERE schemaname='public' and tablename LIKE 'current_nodes_%';
+            changeset_tables CURSOR FOR SELECT tablename FROM pg_tables WHERE schemaname='public' and tablename LIKE 'changesets_%';
+          BEGIN
+            FOR node_table_record IN node_tables LOOP
+              EXECUTE 'ALTER TABLE ' || node_table_record.tablename || ' ALTER COLUMN latitude TYPE double precision';
+              EXECUTE 'ALTER TABLE ' || node_table_record.tablename || ' ALTER COLUMN longitude TYPE double precision';
+              EXECUTE 'UPDATE ' || node_table_record.tablename || ' SET latitude = latitude / 10000000';
+              EXECUTE 'UPDATE ' || node_table_record.tablename || ' SET longitude = longitude / 10000000';
+            END LOOP;
+            FOR changeset_table_record IN changeset_tables LOOP
+              EXECUTE 'ALTER TABLE ' || changeset_table_record.tablename || ' ALTER COLUMN min_lat TYPE double precision';
+              EXECUTE 'ALTER TABLE ' || changeset_table_record.tablename || ' ALTER COLUMN max_lat TYPE double precision';
+              EXECUTE 'ALTER TABLE ' || changeset_table_record.tablename || ' ALTER COLUMN min_lon TYPE double precision';
+              EXECUTE 'ALTER TABLE ' || changeset_table_record.tablename || ' ALTER COLUMN max_lon TYPE double precision';
+              EXECUTE 'UPDATE ' || changeset_table_record.tablename || ' SET min_lat = min_lat / 10000000';
+              EXECUTE 'UPDATE ' || changeset_table_record.tablename || ' SET max_lat = max_lat / 10000000';
+              EXECUTE 'UPDATE ' || changeset_table_record.tablename || ' SET min_lon = min_lon / 10000000';
+              EXECUTE 'UPDATE ' || changeset_table_record.tablename || ' SET max_lon = max_lon / 10000000';
+            END LOOP;
+          END$$;
+    </sql>
       
 	</changeSet>
 </databaseChangeLog>
