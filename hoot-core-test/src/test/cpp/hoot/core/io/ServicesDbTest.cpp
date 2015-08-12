@@ -121,13 +121,18 @@ public:
     s.set(ConfigOptions(s).getServicesDbTestUrlOsmapiKey(), ConfigOptions(s).getServicesDbTestUrlOsmapiDefaultValue());
   }
 
-
+  /***********************************************************************************************
+   * Purpose: Print the current Services DB version
+   * To see the version from this test, type the following:
+   *   bin/HootTest --info --single hoot::ServicesDbTest::runDbVersionTest
+   * *********************************************************************************************
+   */
   void runDbVersionTest()
   {
     ServicesDb db;
     db.open(getDbUrl());
     QString version = db.getDbVersion();
-
+    LOG_INFO("The version = " << version << ".");
     CPPUNIT_ASSERT_EQUAL(ServicesDb::expectedDbVersion().toStdString(), version.toStdString());
   }
 
