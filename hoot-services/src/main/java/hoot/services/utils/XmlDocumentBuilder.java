@@ -37,13 +37,8 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
@@ -51,8 +46,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -122,7 +115,7 @@ public class XmlDocumentBuilder
   public static Document parse(String xml, boolean namespaceAware) throws SAXException, 
     IOException, ParserConfigurationException
   {
-    DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+    DocumentBuilderFactory domFactory = getSecureDocBuilderFactory();
     domFactory.setNamespaceAware(namespaceAware); // never forget this!
     DocumentBuilder builder;
     builder = domFactory.newDocumentBuilder();
@@ -130,6 +123,7 @@ public class XmlDocumentBuilder
     InputSource is = new InputSource();
     is.setCharacterStream(new StringReader(xml));
     
+    //#6760: formerly line 132
     return builder.parse(is);
   }
   
@@ -181,19 +175,35 @@ public class XmlDocumentBuilder
   }
   
   /**
-   * TODO: don't remove...to be used by #6760
+   * Returns a secure TransformerFactory, as identified by HP Fortify
    * 
-   * @return
+   * @return a TransformerFactory
    * @throws TransformerConfigurationException
+   * @todo could not get this code to run in JDK 1.7
    */
   public static TransformerFactory getSecureTransformerFactory() 
     throws TransformerConfigurationException
   {
   	TransformerFactory transformerFactory = TransformerFactory.newInstance();
-  	transformerFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
-    transformerFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-    transformerFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+  	transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
   	transformerFactory.setFeature(XMLConstants.ACCESS_EXTERNAL_DTD, false);
   	return transformerFactory;
+  }
+  
+  /**
+   * Returns a secure DocumentBuilderFactory, as identified by HP Fortify
+   * 
+   * @return a DocumentBuilderFactory
+   * @throws ParserConfigurationException
+   */
+  public static DocumentBuilderFactory getSecureDocBuilderFactory() 
+    throws ParserConfigurationException
+  {
+  	DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+  	docBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+  	docBuilderFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+  	docBuilderFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+  	docBuilderFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+    return docBuilderFactory;
   }
 }
