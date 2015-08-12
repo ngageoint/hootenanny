@@ -64,6 +64,8 @@ import javax.ws.rs.core.MediaType;
 
 
 
+
+
 import org.json.simple.JSONObject;
 //import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -137,7 +139,6 @@ public class ReviewResource
   * @param overwriteExistingData if true, will overwrite any existing review data for the given map
   * @return a job ID for tracking the prepare job
   * @throws Exception
-  * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflated_Data_Review_Service_2#Prepare-Items-for-Review
   */
   @POST
   @Consumes(MediaType.TEXT_PLAIN)
@@ -243,7 +244,6 @@ public class ReviewResource
    * statistics, the geospatial bounding box the items should reside in
    * @return a set of reviewable item statistics
    * @throws Exception
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflated_Data_Review_Service_2#Retrieve-Statistics-for-Reviewable-Items
    */
   @GET
   @Path("/statistics")
@@ -309,6 +309,8 @@ public class ReviewResource
     	{
     		stats.setNumReviewableItems(0);
     	}
+    	
+  		
     }
     catch (Exception e)
     {
@@ -433,7 +435,6 @@ public class ReviewResource
    * items should reside in
    * @return a set of reviewable items
    * @throws Exception
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflated_Data_Review_Service_2#Retrieve-Items-to-Review
    */
   @GET
   @Consumes(MediaType.TEXT_PLAIN)
@@ -657,7 +658,6 @@ public class ReviewResource
    * @param mapId ID of the map for which items are being marked as reviewed
    * @return the number of items marked as reviewed
    * @throws Exception
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflated_Data_Review_Service_2#Mark-Items-as-Reviewed
    */
   @PUT
   @Consumes(MediaType.APPLICATION_JSON)
