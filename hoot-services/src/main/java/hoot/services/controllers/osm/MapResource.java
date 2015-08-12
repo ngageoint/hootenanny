@@ -150,9 +150,6 @@ public class MapResource
    *
    * @return a JSON object containing a list of map layers
    * @throws Exception
-   * @see https
-   *      ://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_
-   *      -_OsmMapService#List-Layers
    */
   @GET
   @Path("/layers")
@@ -503,9 +500,6 @@ return linkRecords;
 	 *	</INPUT>
 	 * <OUTPUT>
 	 * OSM XML
-	 * see https
-   *      ://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_
-   *      -_OsmMapService#Query
 	 * </OUTPUT>
 	 * </EXAMPLE>
    * Service method endpoint for retrieving OSM entity data for a given map
@@ -521,9 +515,6 @@ return linkRecords;
    *          defaults to false
    * @return response containing the data of the requested elements
    * @throws Exception
-   * @see https
-   *      ://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_
-   *      -_OsmMapService#Query
    */
   @GET
   @Consumes(MediaType.TEXT_PLAIN)

@@ -70,14 +70,12 @@ public class CapabilitiesResource
 	 *	</INPUT>
 	 * <OUTPUT>
 	 * Capability OSM XML
-	 * see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmCapabilitiesService
 	 * </OUTPUT>
 	 * </EXAMPLE>
    *
    * Service method endpoint for retrieving OSM capabilities
    *
    * @return Response containing requested capabilities data
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmCapabilitiesService
    */
   @GET
   @Consumes(MediaType.TEXT_PLAIN)

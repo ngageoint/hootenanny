@@ -140,9 +140,9 @@ public class ConflationResource extends JobControllerBase {
 	 * <EXAMPLE>
 	 * 	<URL>http://localhost:8080/hoot-services/ogc</URL>
 	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * 	<INPUT>see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflate_Service
+	 * 	<INPUT>
 	 *	</INPUT>
-	 * <OUTPUT>see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflate_Service
+	 * <OUTPUT>
          * </OUTPUT>
 	 * </EXAMPLE>
 	 * @param params

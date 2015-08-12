@@ -91,7 +91,6 @@ public class UserResource
 	 *	</INPUT>
 	 * <OUTPUT>
 	 * information about the currently logged in user in XML format
-	 * see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmUserService#User
 	 * </OUTPUT>
 	 * </EXAMPLE>
 	 *
@@ -100,7 +99,6 @@ public class UserResource
    * @param userId ID of the user to retrieve information for
    * @return Response with the requested user's information
    * @throws Exception
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmUserService#User
    */
   @GET
   @Consumes(MediaType.TEXT_PLAIN)
