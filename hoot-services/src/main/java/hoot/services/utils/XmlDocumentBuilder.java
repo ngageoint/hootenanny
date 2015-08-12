@@ -33,10 +33,12 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
@@ -53,7 +55,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
 
 /**
  * General XML utilities
@@ -177,5 +178,22 @@ public class XmlDocumentBuilder
     format.setIndent(2);
     XMLSerializer serializer = new XMLSerializer(out, format);
     serializer.serialize(document);
+  }
+  
+  /**
+   * TODO: don't remove...to be used by #6760
+   * 
+   * @return
+   * @throws TransformerConfigurationException
+   */
+  public static TransformerFactory getSecureTransformerFactory() 
+    throws TransformerConfigurationException
+  {
+  	TransformerFactory transformerFactory = TransformerFactory.newInstance();
+  	transformerFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+    transformerFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+    transformerFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+  	transformerFactory.setFeature(XMLConstants.ACCESS_EXTERNAL_DTD, false);
+  	return transformerFactory;
   }
 }
