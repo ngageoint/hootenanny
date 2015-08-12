@@ -539,7 +539,27 @@ long ServicesDb::_getNextRelationId(long mapId)
   return _relationIdReserver->getNextId();
 }
 
-long ServicesDb::_getNextWayId(long mapId)
+long ServicesDb::_getNextWayId()
+{
+  long retVal = -1;
+  switch ( _connectionType)
+  {
+  case DBTYPE_SERVICES:
+    retVal = _getNextWayId_Services(_currMapId);
+    break;
+  case DBTYPE_OSMAPI:
+    retVal = _getNextWayId_OsmApi();
+    break;
+  default:
+    throw HootException("Get Next Node ID for unsupported database type");
+    break;
+  }
+
+  return retVal;
+
+}
+
+long ServicesDb::_getNextWayId_Services(const long mapId)
 {
   _checkLastMapId(mapId);
   if (_wayIdReserver == 0)
@@ -1248,6 +1268,7 @@ void ServicesDb::_resetQueries()
 
   // OSM API
   _osmApiNodeIdReserver.reset();
+  _osmApiWayIdReserver.reset();
 }
 
 
@@ -1665,7 +1686,7 @@ ServicesDb::DbType ServicesDb::_determineDbType()
 
 bool ServicesDb::insertWay(const Tags &tags, long &assignedId)
 {
-  assignedId = _getNextWayId(_currMapId);
+  assignedId = _getNextWayId();
 
   return insertWay(assignedId, tags);
 }
@@ -1678,6 +1699,12 @@ bool ServicesDb::insertWay(const long wayId, const Tags &tags)
   {
   case DBTYPE_SERVICES:
     _insertWay_Services(wayId, _currChangesetId, tags);
+    retVal = true;
+    break;
+
+  case DBTYPE_OSMAPI:
+    _insertWay_OsmApi(wayId, tags);
+    retVal = true;
     break;
 
   default:
@@ -1723,6 +1750,22 @@ void ServicesDb::_insertWay_Services(long wayId, long changeSetId, const Tags& t
 }
 
 void ServicesDb::insertWayNodes(long wayId, const vector<long>& nodeIds)
+{
+  switch ( _connectionType )
+  {
+  case DBTYPE_SERVICES:
+    _insertWayNodes_Services(wayId, nodeIds);
+    break;
+  case DBTYPE_OSMAPI:
+    _insertWayNodes_OsmApi(wayId, nodeIds);
+    break;
+  default:
+    throw HootException("InsertWayNodes called on unsupported database");
+    break;
+  }
+}
+
+void ServicesDb::_insertWayNodes_Services(long wayId, const vector<long>& nodeIds)
 {
   const long mapId = _currMapId;
   double start = Tgs::Time::getTime();
@@ -2891,6 +2934,55 @@ void ServicesDb::_flushElementCacheOsmApiRelationMembers()
 
   // Remove all relation members from cache as they've been written
   _relationMembersCache.clear();
+}
+
+void ServicesDb::_insertWay_OsmApi(const long wayId, const Tags &tags)
+{
+  double start = Tgs::Time::getTime();
+
+  // Add to element cache
+  WayPtr newWay( new Way(Status::Unknown1, wayId, 0.0) );
+  newWay->setTags(tags);
+  ConstElementPtr constWay(newWay);
+  _elementCache->addElement(constWay);
+
+  // See if way portion of cache is full and needs to be flushed
+  if ( _elementCache->typeCount(ElementType::Node) == _elementCacheCapacity )
+  {
+    _flushElementCacheOsmApiWays();
+  }
+
+  // Snag end time, update insert time
+  _wayInsertElapsed += Tgs::Time::getTime() - start;
+
+  // Note: changeset bounding box update is handled in flush, as it requires data to be in database
+}
+
+long ServicesDb::_getNextWayId_OsmApi()
+{
+  if ( _osmApiWayIdReserver == 0 )
+  {
+    _osmApiWayIdReserver.reset(new SequenceIdReserver(_db, "current_ways_id_seq"));
+  }
+
+  return _osmApiWayIdReserver->getNextId();
+}
+
+void ServicesDb::_insertWayNodes_OsmApi(const long wayId, const std::vector<long>& nodeIds)
+{
+  double start = Tgs::Time::getTime();
+
+  // Add to cache of nodes for ways
+  _wayNodesCache.insert( std::pair<long, std::vector<long> >(wayId, nodeIds) );
+
+  // is way-node portion of cache full?
+  if ( _wayNodesCache.size() == _elementCacheCapacity )
+  {
+    _flushElementCacheOsmApiWayNodes();
+  }
+
+  // Snag end time, update insert time
+  _wayNodesInsertElapsed += Tgs::Time::getTime() - start;
 }
 
 

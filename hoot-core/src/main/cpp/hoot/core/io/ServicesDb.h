@@ -344,6 +344,7 @@ private:
   long _waysPerBulkInsert;
   double _wayInsertElapsed;
   shared_ptr<InternalIdReserver> _wayIdReserver;
+  shared_ptr<SequenceIdReserver> _osmApiWayIdReserver;
 
   shared_ptr<BulkInsert> _wayNodeBulkInsert;
   long _wayNodesPerBulkInsert;
@@ -467,7 +468,7 @@ private:
 
   long _getNextNodeId();
   long _getNextRelationId(long mapId);
-  long _getNextWayId(long mapId);
+  long _getNextWayId();
 
   bool _hasTable(QString tableName);
 
@@ -515,6 +516,8 @@ private:
 
   void _insertWay_Services(long wayId, long changeSetId, const Tags& tags);
 
+  void _insertWay_OsmApi(const long wayId, const Tags& tags);
+
   void _insertRelation_Services(long relationId, long changeSetId, const Tags& tags );
 
   void _updateNode_Services(long id, double lat, double lon, long changeSetId, const Tags& tags);
@@ -559,9 +562,19 @@ private:
 
   long _getNextNodeId_OsmApi();
 
+  long _getNextWayId_Services(const long mapId);
+
+  long _getNextWayId_OsmApi();
+
+  void _insertWayNodes_Services(long wayId, const vector<long>& nodeIds);
+
+  void _insertWayNodes_OsmApi(long wayId, const vector<long>& nodeIds);
+
 };
 
 }
 
 #endif // SERVICESDB_H
+
+
 

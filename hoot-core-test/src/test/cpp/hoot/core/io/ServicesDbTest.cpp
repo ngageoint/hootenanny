@@ -59,6 +59,7 @@ class ServicesDbTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runUpdateNodeTest);
   CPPUNIT_TEST(runOpenOsmApiTest);
   CPPUNIT_TEST(runInsertNodeOsmApiTest);
+  CPPUNIT_TEST(runInsertWayOsmApiTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -613,6 +614,48 @@ public:
      // TODO: confirm inserted data matches what we wanted to insert
   }
 
+  void runInsertWayOsmApiTest()
+  {
+     ServicesDb database;
+     database.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
+
+     database.transaction();
+
+     // Create or get user, set our userId
+     database.setUserId(database.getOrCreateUser("OsmApiInsert@hoot.local", "Hootenanny Inserter"));
+
+     database.beginChangeset();
+
+     // Insert two nodes (any way has minimum of two nodes)
+     Tags simpleTags;
+     simpleTags.appendValue("highway", "road");
+     simpleTags.appendValue("accuracy", "5");
+
+     long assignedNodeIds[2];
+     CPPUNIT_ASSERT( database.insertNode(38.9, -109.9, simpleTags, assignedNodeIds[0]) == true );
+     CPPUNIT_ASSERT( database.insertNode(38.91, -109.91, simpleTags, assignedNodeIds[1]) == true );
+
+     // Add a new way
+     long assignedWayId;
+     CPPUNIT_ASSERT( database.insertWay(simpleTags, assignedWayId) == true );
+
+     // Add the nodes into the way
+     std::vector<long> nodesInWay;
+     nodesInWay.push_back(assignedNodeIds[0]);
+     nodesInWay.push_back(assignedNodeIds[1]);
+     database.insertWayNodes(assignedWayId, nodesInWay);
+
+     // Close the changeset
+     database.endChangeset();
+
+     database.commit();
+
+     database.close();
+
+     LOG_DEBUG("Services DB closed");
+
+    // TODO: confirm inserted data matches what we wanted to insert
+  }
 
 
   void setUp()
