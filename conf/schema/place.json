@@ -44,6 +44,7 @@
     "tag": { "name": "place=independent_political_entity", "isA": "place=political_entity" },
     "tag": { "name": "place=section_of_independent_political_entity", "isA": "place=political_entity" },
     "tag": { "name": "place=semi-independent_political_entity", "isA": "place=political_entity" },
+    "tag": { "name": "place=dependent_political_entity", "isA": "place=political_entity" },
 
     "tag": { "name": "place=state", "isA": "place=political_entity",
         "similarTo": { "name": "place=province", "weight": 0.8 },
