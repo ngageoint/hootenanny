@@ -1307,7 +1307,9 @@ return linkRecords;
   			List<Long> mapIds = DbUtils.getMapIdsByName( conn,   mapName);
   			if(mapIds.size() > 0)
   			{
-  				long mapId = mapIds.get(0);
+  				// we are expecting the last one of duplicate name to be the one resulted from the conflation
+  				// This can be wrong if there is race condition. REMOVE THIS once core implement map Id return
+  				long mapId = mapIds.get(mapIds.size() - 1);
   				jobStatusManager = new JobStatusManager(conn);
     			jobStatusManager.addJob(jobId);
     			
