@@ -32,6 +32,8 @@ import hoot.services.utils.ResourceErrorHandler;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -160,6 +162,8 @@ public class ConflationResource extends JobControllerBase {
 			JSONObject oParams = (JSONObject)pars.parse(params);
 			oParams.put("IS_BIG", "false");
 			String confOutputName = oParams.get("OUTPUT_NAME").toString();
+			String input1Name = oParams.get("INPUT1").toString();
+			String input2Name = oParams.get("INPUT2").toString();
 
 			Object oTunn = oParams.get("AUTO_TUNNING");
 			if(oTunn != null)
@@ -183,12 +187,37 @@ public class ConflationResource extends JobControllerBase {
 
 				}
 			}
+			
+			
+			
+			
 
 			JSONArray commandArgs = parseParams(oParams.toJSONString());
 			JSONObject conflationCommand = _createMakeScriptJobReq(commandArgs);
+			
+			// add map tags
+			// WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
+			Map<String, String> tags = new HashMap<String, String>();
+			tags.put("input1", input1Name);
+			tags.put("input2", input2Name);
+			JSONArray mapTagsArgs = new JSONArray();
+			JSONObject param = new JSONObject();
+			param.put("value", tags);
+			param.put("paramtype", Map.class.getName());
+			param.put("isprimitivetype", "false");
+			mapTagsArgs.add(param);
+
+			param = new JSONObject();
+			param.put("value", confOutputName);
+			param.put("paramtype", String.class.getName());
+			param.put("isprimitivetype", "false");
+			mapTagsArgs.add(param);
+
+			JSONObject updateMapsTagsCommand = _createReflectionJobReq(mapTagsArgs, "hoot.services.controllers.osm.MapResource",
+					"updateTagsDirect");
 
 			JSONArray reviewArgs = new JSONArray();
-			JSONObject param = new JSONObject();
+			param = new JSONObject();
 			param.put("value", confOutputName);
 			param.put("paramtype", String.class.getName());
 			param.put("isprimitivetype", "false");
@@ -214,14 +243,11 @@ public class ConflationResource extends JobControllerBase {
 			rasterTilesparam.put("isprimitivetype", "false");
 			rasterTilesArgs.add(rasterTilesparam);
 			
-			if(userEmail != null)
-			{
-				rasterTilesparam = new JSONObject();
-				rasterTilesparam.put("value", userEmail);
-				rasterTilesparam.put("paramtype", String.class.getName());
-				rasterTilesparam.put("isprimitivetype", "false");
-				rasterTilesArgs.add(rasterTilesparam);
-			}
+			rasterTilesparam = new JSONObject();
+			rasterTilesparam.put("value", userEmail);
+			rasterTilesparam.put("paramtype", String.class.getName());
+			rasterTilesparam.put("isprimitivetype", "false");
+			rasterTilesArgs.add(rasterTilesparam);
 
 
 
@@ -232,6 +258,7 @@ public class ConflationResource extends JobControllerBase {
 
 			JSONArray jobArgs = new JSONArray();
 			jobArgs.add(conflationCommand);
+			jobArgs.add(updateMapsTagsCommand);
 			jobArgs.add(prepareItemsForReviewCommand);
 			jobArgs.add(ingestOSMResource);
 

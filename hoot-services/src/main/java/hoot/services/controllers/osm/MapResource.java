@@ -36,12 +36,14 @@ import hoot.services.db2.QFolders;
 import hoot.services.db2.QMaps;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobExecutioner;
+import hoot.services.job.JobStatusManager;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.FolderRecords;
 import hoot.services.models.osm.LinkRecords;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.ModelDaoUtils;
+import hoot.services.nativeInterfaces.JobExecutionManager;
 import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.writers.osm.MapQueryResponseWriter;
 
@@ -49,10 +51,12 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.SocketException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -1283,6 +1287,115 @@ return linkRecords;
   	  JSONObject res = new JSONObject();
   	  res.put("success",true);
   	  return Response.ok(res.toJSONString(),MediaType.APPLICATION_JSON).build();
+    }
+    
+    public String updateTagsDirect(final java.util.Map<String, String> tags, 
+    		final String mapName) throws Exception
+    {
+    //_zoomLevels
+  		Connection conn = DbUtils.createConnection();
+
+  		String jobId = UUID.randomUUID().toString();
+
+  		JobStatusManager jobStatusManager = null;
+  		try
+  		{
+  			// Currently we do not have any way to get map id directly from hoot core command when it runs
+  			// so for now we need get the all the map ids matching name and pick first one..
+  			// THIS WILL NEED TO CHANGE when we implement handle map by Id instead of name..
+  			
+  			List<Long> mapIds = DbUtils.getMapIdsByName( conn,   mapName);
+  			if(mapIds.size() > 0)
+  			{
+  				long mapId = mapIds.get(0);
+  				jobStatusManager = new JobStatusManager(conn);
+    			jobStatusManager.addJob(jobId);
+    			
+    			DbUtils.updateMapsTableTags( tags,  mapId, conn);
+    			jobStatusManager.setComplete(jobId);
+  			}
+  			
+  			
+  		}
+  		catch (SQLException sqlEx)
+  		{
+  			jobStatusManager.setFailed(jobId, sqlEx.getMessage());
+  		  ResourceErrorHandler.handleError(
+  			"Failure update map tags resource " + sqlEx.getMessage() + " SQLState: " + sqlEx.getSQLState(),
+  		    Status.INTERNAL_SERVER_ERROR,
+  			log);
+  		}
+  		catch (Exception ex)
+  		{
+  			jobStatusManager.setFailed(jobId, ex.getMessage());
+  		  ResourceErrorHandler.handleError(
+  			"Failure update map tags resource" + ex.getMessage(),
+  		    Status.INTERNAL_SERVER_ERROR,
+  			log);
+  		}
+  		finally
+      {
+      	DbUtils.closeConnection(conn);
+      }  
+  		return jobId;
+    }
+    
+    
+    
+    @GET
+    @Path("/tags")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMapTags(@QueryParam("mapid") final String mapId) throws Exception
+    {
+      Connection conn = DbUtils.createConnection();
+      JSONObject ret = new JSONObject();
+      try
+      {
+        log.info("Retrieving map tags for map with ID: " + mapId + " ...");
+
+        log.debug("Initializing database connection...");
+
+        QMaps maps = QMaps.maps;
+        long mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id,
+            maps.displayName);
+        assert (mapIdNum != -1);
+
+        try
+        {
+        	java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapIdNum, conn);
+        	ret.putAll(tags);
+        	Object oInput1 = ret.get("input1");
+        	if(oInput1 != null)
+        	{
+        		String dispName = DbUtils.getDisplayNameById(conn, new Long(oInput1.toString()));
+        		ret.put("input1Name", dispName);
+        	}
+        	
+        	Object oInput2 = ret.get("input2");
+        	if(oInput2 != null)
+        	{
+        		String dispName = DbUtils.getDisplayNameById(conn, new Long(oInput2.toString()));
+        		ret.put("input2Name", dispName);
+        	}
+        }
+        catch (Exception e)
+        {
+          throw new Exception("Error getting map tags. :" + e.getMessage());
+        }
+
+ 
+      }
+      catch (Exception e)
+      {
+        handleError(e, mapId, "");
+      }
+      finally
+      {
+        DbUtils.closeConnection(conn);
+      }
+
+      return Response.ok(ret.toString(), MediaType.APPLICATION_JSON).build();
     }
 }
 
