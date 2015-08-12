@@ -344,6 +344,17 @@ public class DbUtils
 
     return mapIds;
   }
+  
+  
+  public static String getDisplayNameById(final Connection conn, final long mapId) throws Exception
+  {
+  	QMaps maps = QMaps.maps;
+    SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
+    
+    String displayName = query.from(maps).where(maps.id.eq(mapId)).uniqueResult(maps.displayName);
+    
+    return displayName;
+  }
 
   /**
    * Get current_nodes record count by map name
