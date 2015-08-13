@@ -570,6 +570,10 @@ private:
 
   void _insertWayNodes_OsmApi(long wayId, const vector<long>& nodeIds);
 
+  long _insertUser_Services(QString email, QString displayName);
+
+  long _insertUser_OsmApi(const QString& email);
+
 };
 
 }

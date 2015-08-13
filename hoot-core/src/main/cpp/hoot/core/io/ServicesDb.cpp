@@ -155,8 +155,9 @@ void ServicesDb::endChangeset()
 
   LOG_DEBUG("Successfully closed changeset " << QString::number(_currChangesetId));
 
-  _currChangesetId = -1;
-  _changesetEnvelope.init();
+
+  // NOTE: do *not* alter _currChangesetId or _changesetEnvelope yet.  We haven't written data to database yet!
+  //    they will be refreshed upon opening a new database, so leave them alone!
   _changesetChangeCount = 0;
 }
 
@@ -198,13 +199,49 @@ void ServicesDb::_endChangeset_Services(long changeSetId, Envelope env, int numC
 
 void ServicesDb::commit()
 {
-  createPendingMapIndexes();
-  _flushBulkInserts();
-  _resetQueries();
-  if (!_db.commit())
+  if ( _db.isOpen() == false )
   {
-    LOG_WARN("Error committing transaction.");
-    throw HootException("Error committing transaction: " + _db.lastError().text());
+    throw HootException("Tried to commit a transaction on a closed database");
+  }
+
+  if ( _inTransaction == false )
+  {
+    throw HootException("Tried to commit but weren't in a transaction");
+  }
+
+
+  switch ( _connectionType )
+  {
+  case DBTYPE_SERVICES:
+    createPendingMapIndexes();
+    _flushBulkInserts();
+    _resetQueries();
+    if (!_db.commit())
+    {
+      LOG_WARN("Error committing transaction.");
+      throw HootException("Error committing transaction: " + _db.lastError().text());
+    }
+    break;
+  case DBTYPE_OSMAPI:
+    LOG_DEBUG("Starting commit for OSM API");
+
+    // If there are elements in the OSM cache, flush them
+    _flushElementCacheToDb();
+
+    _resetQueries();
+
+    if ( _db.commit() == false )
+    {
+      LOG_WARN("Error committing transaction");
+      throw HootException("Error committing transaction");
+    }
+    LOG_DEBUG("Commit was successful");
+
+    break;
+
+  default:
+    throw HootException("Commit for unsupported database type");
+    break;
   }
   _inTransaction = false;
 }
@@ -631,9 +668,13 @@ void ServicesDb::beginChangeset(const Tags& tags)
     _beginChangeset_Services(tags);
     break;
 
-  default:
-    //throw HootException("Begin changeset called for unsupported database type");
+  case DBTYPE_OSMAPI:
     _beginChangeset_OsmApi();
+    break;
+
+  default:
+    throw HootException("Begin changeset called for unsupported database type");
+
     break;
   }
 
@@ -742,17 +783,20 @@ bool ServicesDb::insertNode(const long id, const double lat, const double lon, c
     retVal = true;
     break;
 
-  default:
+  case DBTYPE_OSMAPI:
     _insertNode_OsmApi(id, lat, lon, tags);
     retVal = true;
     break;
+  default:
+    throw HootException("Insert node on unsupported database type");
+    break;
   }
-
-  ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
-  _updateChangesetEnvelope(envelopeNode);
 
   if ( retVal == true )
   {
+    ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
+    _updateChangesetEnvelope(envelopeNode);
+
     LOG_DEBUG("Inserted node " << QString::number(id));
   }
 
@@ -870,6 +914,29 @@ void ServicesDb::insertRelationMembers(long relationId, ElementType type,
 
 long ServicesDb::insertUser(QString email, QString displayName)
 {
+  long retVal = -1;
+
+  switch ( _connectionType )
+  {
+  case DBTYPE_SERVICES:
+    retVal = _insertUser_Services(email, displayName);
+    break;
+  case DBTYPE_OSMAPI:
+    retVal = _insertUser_OsmApi(email);
+    break;
+  default:
+    throw HootException("insertUser called with unsupported database");
+    break;
+  }
+
+  return retVal;
+}
+
+long ServicesDb::_insertUser_Services(QString email, QString displayName)
+{
+  long id = -1;
+
+  LOG_DEBUG("Inside insert user");
   if (_insertUser == 0)
   {
     _insertUser.reset(new QSqlQuery(_db));
@@ -880,7 +947,6 @@ long ServicesDb::insertUser(QString email, QString displayName)
   _insertUser->bindValue(":email", email);
   _insertUser->bindValue(":display_name", displayName);
 
-  long id = -1;
   // if we failed to execute the query the first time
   if (_insertUser->exec() == false)
   {
@@ -922,12 +988,65 @@ long ServicesDb::insertUser(QString email, QString displayName)
     _insertUser->finish();
   }
 
+  LOG_DEBUG("Leaving insert user");
+
   return id;
 }
 
+long ServicesDb::_insertUser_OsmApi(const QString& email)
+{
+  long id = -1;
+  QSqlQuery insertUserStmt(_db);
+
+  insertUserStmt.prepare(
+    "INSERT INTO users (email, pass_crypt, creation_time) VALUES (:email, 'abcdefg', now()) RETURNING id;");
+  insertUserStmt.bindValue(":email", email);
+
+  // if we failed to execute the query the first time
+  if (insertUserStmt.exec() == false)
+  {
+    // it may be that another process beat us to it and the user was already inserted. This can
+    // happen if a bunch of converts are run in parallel. See #3588
+    id = getUserId(email, false);
+
+    // nope, there is something else wrong. Report an error.
+    if (id == -1)
+    {
+      QString err = QString("Error executing query: %1 (%2)").arg(insertUserStmt.executedQuery()).
+          arg(insertUserStmt.lastError().text());
+      LOG_WARN(err)
+      throw HootException(err);
+    }
+    else
+    {
+      LOG_DEBUG("Did not insert user, queried a previously created user.")
+    }
+  }
+  // if the insert succeeded
+  else
+  {
+    bool ok = false;
+    if (insertUserStmt.next())
+    {
+      id = insertUserStmt.value(0).toLongLong(&ok);
+    }
+
+    if (!ok || id == -1)
+    {
+      LOG_ERROR("query bound values: ");
+      LOG_ERROR(insertUserStmt.boundValues());
+      LOG_ERROR("\n");
+      throw HootException("Error retrieving new ID " + insertUserStmt.lastError().text() + " Query: " +
+        insertUserStmt.executedQuery());
+    }
+  }
+
+  return id;
+}
 
 long ServicesDb::getOrCreateUser(QString email, QString displayName)
 {
+  //LOG_DEBUG("Inside get or create user");
   long result = getUserId(email, false);
 
   if (result == -1)
@@ -954,6 +1073,7 @@ void ServicesDb::setMapId(const long sessionMapId)
 
 long ServicesDb::getUserId(QString email, bool throwWhenMissing)
 {
+  //LOG_DEBUG("Inside get user id");
   if (_selectUserByEmail == 0)
   {
     _selectUserByEmail.reset(new QSqlQuery(_db));
@@ -2585,7 +2705,7 @@ void ServicesDb::_endChangeset_OsmApi()
      throw HootException("Could not get update changeset_counts for user");
    }
 
-   LOG_DEBUG("Successfully closed changeset");
+   //LOG_DEBUG("Successfully closed changeset");
 }
 
 void ServicesDb::_updateChangesetEnvelopeWayIds(const std::vector<long>& wayIds)

@@ -584,40 +584,38 @@ public:
 
   void runInsertNodeOsmApiTest()
   {
-     LOG_DEBUG("Starting Insert OSM test");
-     ServicesDb database;
-     database.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
+    LOG_DEBUG("Starting Insert node OSM test");
+    ServicesDb database;
+    database.open(QUrl("postgresql://openstreetmap@10.194.71.84:5432/terrytest"));
 
-     database.transaction();
+    database.transaction();
 
-     // Create or get user, set our userId
-     database.setUserId(database.getOrCreateUser("OsmApiInsert@hoot.local", "Hootenanny Inserter"));
+    // Create or get user, set our userId
+    database.setUserId(database.getOrCreateUser("OsmApiInsert@hoot.local", "Hootenanny Inserter"));
 
-     database.beginChangeset();
+    database.beginChangeset();
 
-     // Insert single node
-     Tags simpleTags;
-     simpleTags.appendValue("highway", "road");
-     simpleTags.appendValue("accuracy", "5");
+    // Insert single node
+    Tags simpleTags;
+    simpleTags.appendValue("highway", "road");
+    simpleTags.appendValue("accuracy", "5");
 
-     long assignedNodeId;
-     //CPPUNIT_ASSERT( database.insertNode(38.4, -106.5, simpleTags, assignedNodeId ) == true );
-     // Close the changeset
-     database.endChangeset();
+    long assignedNodeId;
+    CPPUNIT_ASSERT( database.insertNode(38.4, -106.5, simpleTags, assignedNodeId ) == true );
 
-     database.commit();
+    database.endChangeset();
+    database.commit();
+    database.close();
 
-     database.close();
-
-     LOG_DEBUG("Services DB closed");
-
-     // TODO: confirm inserted data matches what we wanted to insert
+    // TODO: confirm inserted data matches what we wanted to insert
   }
 
   void runInsertWayOsmApiTest()
   {
      ServicesDb database;
-     database.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
+     database.open(QUrl("postgresql://openstreetmap@10.194.71.84:5432/terrytest"));
+
+     LOG_DEBUG("Back from open, starting transactions")
 
      database.transaction();
 
