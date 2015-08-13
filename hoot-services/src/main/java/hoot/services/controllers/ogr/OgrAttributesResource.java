@@ -141,47 +141,56 @@ public class OgrAttributesResource extends JobControllerBase {
 	  			JSONObject param = new JSONObject();
 	  			// If it is zip file then we crack open to see if it contains FGDB.
 	  			// If so then we add the folder location and desired output name which is fgdb name in the zip
-	  			if(ext.equalsIgnoreCase("ZIP")){
+	  			if(ext.equalsIgnoreCase("ZIP"))
+	  			{
 	  				zipList.add(fName);
 	  				String zipFilePath = homeFolder + "/upload/" + jobId + "/" + inputFileName;
-	  				ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFilePath));
-	  				ZipEntry ze = zis.getNextEntry();
+	  				ZipInputStream zis = null;
+	  				try
+	  				{
+	  					zis = new ZipInputStream(new FileInputStream(zipFilePath));
+		  				ZipEntry ze = zis.getNextEntry();
 
-	  	    	while(ze!=null){
-	  	    		
-	  	    		String zipName = ze.getName();
-	  	    		if(ze.isDirectory())
-	  	    		{
-	  	    			
-	  	    			if(zipName.toLowerCase().endsWith(".gdb/") || zipName.toLowerCase().endsWith(".gdb"))
-	  	    			{
-	  	    				String fgdbZipName = zipName;
-	  	    				if(zipName.toLowerCase().endsWith(".gdb/"))
-	  	    				{
-	  	    					fgdbZipName = zipName.substring(0, zipName.length() - 1);
-	  	    				}
-	  	    				filesList.add("\"" + fName + "/" + fgdbZipName + "\"");
-	  	    			}
-	  	    		}
-	  	    		else
-	  	    		{
-	  	    			if(zipName.toLowerCase().endsWith(".shp"))
-	  	    			{	  	    				
-	  	    				filesList.add("\"" + fName + "/" + zipName + "\"");
-	  	    			}
+		  	    	while(ze!=null){
+		  	    		
+		  	    		String zipName = ze.getName();
+		  	    		if(ze.isDirectory())
+		  	    		{
+		  	    			
+		  	    			if(zipName.toLowerCase().endsWith(".gdb/") || zipName.toLowerCase().endsWith(".gdb"))
+		  	    			{
+		  	    				String fgdbZipName = zipName;
+		  	    				if(zipName.toLowerCase().endsWith(".gdb/"))
+		  	    				{
+		  	    					fgdbZipName = zipName.substring(0, zipName.length() - 1);
+		  	    				}
+		  	    				filesList.add("\"" + fName + "/" + fgdbZipName + "\"");
+		  	    			}
+		  	    		}
+		  	    		else
+		  	    		{
+		  	    			if(zipName.toLowerCase().endsWith(".shp"))
+		  	    			{	  	    				
+		  	    				filesList.add("\"" + fName + "/" + zipName + "\"");
+		  	    			}
 
-	  	    		}
-	  	    		ze = zis.getNextEntry();
-	  	    	}
-
-	  	    	zis.closeEntry();
-	  	    	zis.close();
+		  	    		}
+		  	    		ze = zis.getNextEntry();
+		  	    	}
+	  				}
+	  				finally
+	  				{
+	  					if (zis != null)
+	  					{
+	  						zis.closeEntry();
+			  	    	zis.close();
+	  					}
+	  				}
 	  			}
 	  			else
 	  			{
 	  				filesList.add("\"" + inputFileName + "\"");
 	  			}
-
 	    }
 	    
 	    String mergeFilesList = StringUtils.join(filesList.toArray(), ' ');

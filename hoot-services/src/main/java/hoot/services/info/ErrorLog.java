@@ -71,29 +71,31 @@ public class ErrorLog {
 
 	public String getErrorlog(long maxLength) throws Exception
 	{
-
-		File file = new File(_errLogPath);
-		RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
-    int lines = 0;
-    StringBuilder builder = new StringBuilder();
-    long length = file.length();
-    //length--;
-
-    long startOffset = 0;
-    if(length > maxLength)
+		RandomAccessFile randomAccessFile = null;
+    try
     {
-    	startOffset = length - maxLength;
+    	File file = new File(_errLogPath);
+  		randomAccessFile = new RandomAccessFile(file, "r");
+      StringBuilder builder = new StringBuilder();
+      long length = file.length();
+
+      long startOffset = 0;
+      if(length > maxLength)
+      {
+      	startOffset = length - maxLength;
+      }
+      for(long seek = startOffset; seek < length; seek++)
+      {
+      	randomAccessFile.seek(seek);
+      	char c = (char)randomAccessFile.read();
+        builder.append(c);
+      }
+      return builder.toString();
     }
-    for(long seek = startOffset; seek < length; seek++)
+    finally
     {
-    	randomAccessFile.seek(seek);
-    	char c = (char)randomAccessFile.read();
-      builder.append(c);
+    	randomAccessFile.close();
     }
-
-    randomAccessFile.close();
-
-		return builder.toString();
 	}
 
 	public String generateExportLog() throws Exception
@@ -145,9 +147,16 @@ public class ErrorLog {
 
 		String logStr = getErrorlog(maxSize);
 
-		RandomAccessFile raf = new RandomAccessFile(outputPath, "rw");
-		raf.writeBytes(data + "\n" + logStr);
-		raf.close();
-		return outputPath;
+		RandomAccessFile raf = null;
+		try
+		{
+		  raf = new RandomAccessFile(outputPath, "rw");
+			raf.writeBytes(data + "\n" + logStr);
+			return outputPath;
+		}
+		finally
+		{
+			raf.close();
+		}
 	}
 }
