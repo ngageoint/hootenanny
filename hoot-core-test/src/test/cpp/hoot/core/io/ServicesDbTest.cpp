@@ -104,12 +104,19 @@ public:
     CPPUNIT_ASSERT_EQUAL(ServicesDb::DBTYPE_UNSUPPORTED, db.getDatabaseType());
   }
 
+  /***********************************************************************************************
+   * Purpose: Quick test to open the Osm ApiDb database
+   * To see the output from this test, type the following:
+   *   bin/HootTest --debug --single hoot::ServicesDbTest::runOpenOsmApiTest
+   * *********************************************************************************************
+   */
   void runOpenOsmApiTest()
   {
     Settings s = conf();
 
     // Note: this will likely be different for each developer
     s.set(ConfigOptions(s).getServicesDbTestUrlOsmapiKey(), "postgresql://postgres@10.194.70.78:5432/terrytest");
+    //s.set(ConfigOptions(s).getServicesDbTestUrlOsmapiKey(), "postgresql://vagrant:vagrant@localhost:15432/openstreetmap");
 
     ServicesDb db;
     CPPUNIT_ASSERT_EQUAL(ServicesDb::DBTYPE_UNSUPPORTED, db.getDatabaseType());
@@ -125,7 +132,7 @@ public:
   /***********************************************************************************************
    * Purpose: Print the current Services DB version
    * To see the version from this test, type the following:
-   *   bin/HootTest --info --single hoot::ServicesDbTest::runDbVersionTest
+   *   bin/HootTest --debug --single hoot::ServicesDbTest::runDbVersionTest
    * *********************************************************************************************
    */
   void runDbVersionTest()
@@ -133,7 +140,7 @@ public:
     ServicesDb db;
     db.open(getDbUrl());
     QString version = db.getDbVersion();
-    LOG_INFO("The version = " << version << ".");
+    LOG_DEBUG("The version = " << version << ".");
     CPPUNIT_ASSERT_EQUAL(ServicesDb::expectedDbVersion().toStdString(), version.toStdString());
   }
 
@@ -587,6 +594,7 @@ public:
     LOG_DEBUG("Starting Insert node OSM test");
     ServicesDb database;
     database.open(QUrl("postgresql://openstreetmap@10.194.71.84:5432/terrytest"));
+// database.open(QUrl("postgresql://vagrant:vagrant@localhost:15432/openstreetmap"));
 
     database.transaction();
 
