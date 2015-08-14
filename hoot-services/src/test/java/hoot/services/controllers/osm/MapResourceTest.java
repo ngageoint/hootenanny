@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -192,7 +192,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
         multiLayerUniqueElementIdsStr.toLowerCase().equals("true");
       try
       {
-        Assert.assertEquals(6, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
+        Assert.assertEquals(15, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
         if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter)
         {
           OsmTestUtils.verifyNode(
@@ -244,7 +244,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
       try
       {
         Assert.assertEquals(
-          4,
+          11,
           XPathAPI.selectNodeList(responseData, "//osm/node/tag").getLength());
 
         Assert.assertEquals(
@@ -823,7 +823,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
 
       try
       {
-        Assert.assertEquals(6, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
+        Assert.assertEquals(15, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
         OsmTestUtils.verifyNode(
           responseData, 1, String.valueOf(nodeIdsArr[0]), changesetId, originalBounds.getMinLat(),
           originalBounds.getMinLon(), false);
@@ -851,7 +851,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
       try
       {
         Assert.assertEquals(
-          4,
+          11,
           XPathAPI.selectNodeList(responseData, "//osm/node/tag").getLength());
 
         Assert.assertEquals(
@@ -1177,7 +1177,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
       OsmTestUtils.verifyOsmHeader(responseData);
       OsmTestUtils.verifyBounds(responseData, queryBounds);
 
-      Assert.assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
+      Assert.assertEquals(8, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
       OsmTestUtils.verifyNode(
         responseData, 1, String.valueOf(nodeIdsArr[0]), changesetId, originalBounds.getMinLat(),
         originalBounds.getMinLon(), false);
@@ -1195,7 +1195,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
       try
       {
         Assert.assertEquals(
-          3,
+          5,
           XPathAPI.selectNodeList(responseData, "//osm/node/tag").getLength());
 
         Assert.assertEquals(

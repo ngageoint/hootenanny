@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OgrReader.h"
@@ -43,6 +43,7 @@ using namespace geos::geom;
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/Factory.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -56,6 +57,8 @@ using namespace geos::geom;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(OsmMapReader, OgrReader)
 
 /**
  * I've put this in the C++ to avoid too much header nastiness for the classes that use the
@@ -366,16 +369,7 @@ void OgrReader::finalizePartial()
 
 bool OgrReader::isSupported(QString url)
 {
-  QFileInfo fileInfo(url);
-  if (fileInfo.isDir())
-  {
-    throw HootException("Can't handle dirs with partial read yet.");
-  }
-
-  QFile input(url);
-
-  // Just need to know the file exists, we don't restrict file extensions
-  return input.exists();
+  return isReasonablePath(url);
 }
 
 void OgrReader::setUseDataSourceIds(bool useDataSourceIds)
@@ -721,6 +715,35 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
   if (_layer == NULL)
   {
     throw HootException("Failed to identify source layer from data source.");
+  }
+
+  QString bboxStr = ConfigOptions().getOgrReaderBoundingBox();
+  if (bboxStr.isEmpty() == false)
+  {
+    QStringList bbox = bboxStr.split(",");
+
+    if (bbox.size() != 4)
+    {
+      LOG_INFO(ConfigOptions().getOgrReaderBoundingBoxDescription());
+      throw HootException("Error parsing " + ConfigOptions().getOgrReaderBoundingBoxKey() + " " +
+        bboxStr);
+    }
+
+    bool ok;
+    vector<double> bboxValues(4);
+    for (size_t i = 0; i < 4; i++)
+    {
+      bboxValues[i] = bbox[i].toDouble(&ok);
+      if (!ok)
+      {
+        LOG_INFO(ConfigOptions().getOgrReaderBoundingBoxDescription());
+        throw HootException("Error parsing " + ConfigOptions().getOgrReaderBoundingBoxKey() + " " +
+          bboxStr);
+      }
+    }
+
+    _layer->SetSpatialFilterRect(bboxValues[0], bboxValues[1], bboxValues[2], bboxValues[3]);
+    LOG_DEBUG("Setting spatial filter on " << layer << " to: " << bboxValues);
   }
 
   OGRSpatialReference *sourceSrs = _layer->GetSpatialRef();

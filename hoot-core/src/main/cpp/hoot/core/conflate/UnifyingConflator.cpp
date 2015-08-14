@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "UnifyingConflator.h"
 
@@ -131,7 +131,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
     LOG_DEBUG("Writing debug map.");
     OsmMapPtr debug(new OsmMap(map));
     MapReprojector::reprojectToWgs84(debug);
-    OsmMapWriterFactory::write(debug, "tmp/debug.osm");
+    OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
 
     _stats.append(SingleStat("Write Debug Map Time (sec)", timer.getElapsedAndRestart()));
   }

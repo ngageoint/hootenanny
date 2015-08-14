@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
 
@@ -31,6 +31,7 @@ import hoot.services.nativeInterfaces.NativeInterfaceException;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,11 +121,10 @@ public class ExportProcesslet  implements Processlet {
 	 */
 	@Override
 	public void process(ProcessletInputs in, ProcessletOutputs out, ProcessletExecutionInfo info)
-			throws ProcessletException {
-		String jobIdStr = java.util.UUID.randomUUID().toString();
-	  Map<String, String> args = parseRequestParams(in);
+	  throws ProcessletException 
+	{
+		Map<String, String> args = parseRequestParams(in);
 		
-		File fOut = null;
 		try
 		{
 			String workingFolder = tempOutputPath + "/" + args.get("id") ;
@@ -135,26 +135,41 @@ public class ExportProcesslet  implements Processlet {
 				delPath = tempOutputPath + "/" + args.get("id") ;
 			}
 			
-			fOut = new File(outputFilePath);
+			File fOut = new File(outputFilePath);
 	    if(!fOut.exists())
 	    {
 	    	throw new NativeInterfaceException("Missing output file",
 	          NativeInterfaceException.HttpCode.SERVER_ERROR);
 	    }
-	    FileInputStream fIn = new FileInputStream(fOut);
-	    
-	    org.apache.commons.io.IOUtils.copy(fIn,
-	    		((ComplexOutput)out.getParameter("BinaryOutput")).getBinaryOutputStream());
-	    
+			FileInputStream fIn = null;
+	    try
+	    {
+	    	fIn = new FileInputStream(fOut);
+		    
+		    org.apache.commons.io.IOUtils.copy(fIn,
+		    		((ComplexOutput)out.getParameter("BinaryOutput")).getBinaryOutputStream());
+	    }
+	    finally
+	    {
+	    	try
+	      {
+	    		if (fIn != null)
+	    		{
+	    			fIn.close();
+	    		}
+	      }
+	      catch (IOException e)
+	      {
+		      log.error(e.getMessage());
+	      }
+	    }
 		}
 		catch (Exception ex)
 		{
 			log.error(ex.getMessage());
 		}
-		
 	}
 	
-	@SuppressWarnings("unchecked")
   protected Map<String, String> parseRequestParams(ProcessletInputs in)
   {
     Map<String, String> commandArgs = new HashMap<String,String>();

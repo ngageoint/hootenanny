@@ -1,0 +1,439 @@
+
+== Generic Line Conflation
+
+Hootenanny supports "highway" conflation as defined by OpenStreetMap (OSM). In
+OSM jargon a "highway" refers to paths, roads, cart tracks and possibly bridges
+and tunnels. All these linear features are supported during conflation using
+an existing statistical model tuned for highways.
+
+However, in some cases it isn't desirable to use a predefined model to match and
+merge linear features. For instance you may have one of the following data types
+without any appropriate training data for the model:
+
+* Rivers & Streams
+* Walls
+* Shorelines
+
+The following sections discuss an approach to conflating lines in the general
+case. This approach is currently being investigated and will likely generate
+more discussion and refinement.
+
+=== Background
+
+Hootenanny currently supports generic conflation of data sets through the
+JavaScript (<<JS,JS>>) Application Programmers Interface (API). See the
+_JavaScript Conflation Reference_ <<hootuser>> for details. Using this interface
+pairwise matching and merging is supported, as well as the merging of complex
+linear situations such as partial matches, one to many matches, and many to many
+matches.
+
+[[conflation-flow]]
+.Conflation Flow
+[graphviz]
+---------------------------------------------------------------------
+digraph G
+{
+  rankdir = LR;
+  node [shape=record,width=2,height=1,style=filled,fillcolor="#e7e7f3"];
+  split [label = "Split Data Based\non Subgraphs",shape=diamond,height=1.5];
+  optimize [label = "Optimize Set\nof Matches"];
+  graphBased [label = "Create Graph\nBased Merges"];
+  apply [label = "Apply Merges"];
+  "Ingest & Clean" ->
+  "Estimate Pairwise\nRelationships" ->
+  split ->
+  optimize ->
+  apply ->
+  "Export";
+  split -> graphBased -> apply;
+}
+---------------------------------------------------------------------
+
+<<conflation-flow>> depicts the typical flow of data through a Hootenanny
+conflation process. The steps are summarized below:
+
+* Ingest & Clean - Read the files off of disk and perform any necessary cleaning
+  operations (e.g. remove duplicate line strings).
+* Estimate Pairwise Relationships - This process estimates whether or not two
+  features represent the same entity. The exact approach is feature type
+  dependent.
+* Split Data Based on Subgraphs - If the conflation requires consistency (e.g.
+  groups of buildings/POIs), then it goes into the graph based Matches,
+  otherwise matches are sent to the optimize step.
+* Optimize Set of Matches - Select the best set of consistent matches.
+  Inconsistent or conflicting matches will be dropped.
+* Create Graph Based Merges - Keep all subgraphs of matches. If they are
+  inconsistent or conflicting then mark them all as needing review. Otherwise,
+  merge them all together.
+* Apply Merges - Given a set of matches, merge all the features into a single
+  feature or set of features.
+* Export - Export the data out to persistent storage.
+
+The approach discussed below addresses customizations of three of the above
+steps:
+
+* Estimate Pairwise Relationships
+* Split Data Based on Subgraphs
+* Apply Merges
+
+The following sections discuss these customizations in more detail.
+
+See also:
+
+* <<UnifyingConflation,Unifying Conflation>>
+* <<RoadConflation,Road Conflation>>
+
+==== Example Data Sets
+
+[[coastlines]]
+.Coastlines
+image::algorithms/Coastlines.png[Coastlines at two scales,scalewidth="50%"]
+
+In <<coastlines>> is an example of two coastlines extracted at two different
+scales. While there are obvious similarities there are also significant
+differences. Especially with regard to the angular differences. Using a standard
+road conflation routine with coastlines would likely produce sub-optimal
+results, but conflating with a user derived set of rules could perform quite
+well. 
+
+=== Approach
+
+For the next phase of development we propose creating a new JavaScript API for
+conflating linear data. This new approach will support some of the more complex
+linear conflation situations such as one to many, many to many and partial
+matches. In the following sections we will present an approach that provides the 
+mechanisms for defining the following functionality:
+
+* Designate line candidate bounds
+* Designate an element as a candidate for conflation
+* Estimate subline relationships
+* Determine line conflicts
+* Merge lines
+
+This generic approach to conflation rules will allow the user to define a number
+of different conflation algorithms without getting into the details of the
+geometry manipulations.
+
+==== Designate Line Candidate Bounds
+
+Before any match relationships are established a pair of lines or sublines must
+be designated as a potential match. This is generally comparable to the maximum
+distance provided in point matching, but rather than matching based solely on
+minimum distance we look at the distance between point pairs along the string.
+
+Hootenanny supports a fast subline matching routine (maximal nearest subline)
+and a more exhaustive maximal subline algorithm. They each have trade-offs with
+regards to performance versus computational complexity. These algorithms also
+take parameters to determine the maximum distance allowable when calculating
+matching sublines as well as the maximum difference in angle when calculating
+sublines.
+
+Hootenanny exposes the following parameters for determining subline match
+bounds:
+
+* Maximum distance (Provided as a multiple of the Circular Error)
+* Maximum angular difference
+* Maximal subline routine
+
+==== Designate an Element as a Candidate for Conflation
+
+For optimization purposes we don't want to evaluate all element pairs for
+conflation if we know in advance that we can filter based on very coarse
+criteria. For example, if we're conflating rivers then there is no need to look
+at roads, power-lines or walls. Failing to implement this method will not likely
+impact the final result, but will dramatically reduce performance.
+
+The exposed method is named +isCandidate+ and takes a single element as input.
+If the element is a candidate for conflation the rest of the routines will be
+evaluated. Otherwise, the element will be ignored for the purposes of this
+specific line conflation routine.
+
+Routines are exposed to JavaScript for determining if the element is a candidate
+as needed. For example +isBuilding+, +isArea+, +isLinear+, etc.
+
+See _Modifying Hootenanny with JavaScript_ <<hootuser>> for details.
+
+==== Estimate Subline Relationships
+
+Given a pair of line segments, assign a score to the relationship. This score is
+in the form of 3 numbers that represent the probability of match, miss and
+review (sums to one). For many expert systems this will simply return 1 for the
+relationship that is most likely, but the closer values are to true
+probabilities the better the optimization step will perform.
+
+The relationship estimates are used by Hootenanny as described in the following
+section to determine the best set of matches to merge or mark as needing review.
+
+See _Modifying Hootenanny with JavaScript_ <<hootuser>> for the interface.
+
+==== Merge Lines
+
+Finally, the JavaScript routines must designate how the lines are to be merged.
+This falls into two broad categories.
+
+1. Optimize - The best (or near best) set of matches should be selected for
+   merging.
+2. Whole Group - The features being merged are treated as a whole group
+   together. They should only be merged if the answer is unambiguous. If the
+   answer is ambiguous or conflicting then flag the whole set of features as
+   needing review.
+
+The JavaScript code designates the conflation as either of the merge approaches
+above. Using that information the Hootenanny core decides how to handle complex
+match situations and creates a set of final matches that must be turned into
+merge operations.
+
+The JavaScript code defines how a merge operation is executed. At a minimum the
+user must define how the following operations are performed:
+
+1. Merge Tags - The JS code must either define a custom tag merging strategy or
+   rely on the default Hootenanny tag merge operation.
+2. Merge Geometries - The JS code must call one of the existing Hootenanny
+   geometry merging techniques to merge the geometries.
+
+A simple `snapWays` method is exposed to the user for snapping one way to
+another. This is the most common linear use case. As the needs evolve more merge
+methods will be exposed.
+
+See also:
+
+* `snapWays` in <<hootuser>>
+
+=== Exposed Hootenanny APIs
+
+As the effort evolves we will surely determine additional points to expose
+appropriate functionality from Hootenanny code to the JS interface. At that
+point some of the interfaces described below may become irrelevant and many more
+will become necessary. Below are a number of examples to give an idea of the
+interfaces that may be exposed.
+
+* Calculate mean distance - Calculate the mean distance between two line strings.
+* Calculate maximum angular difference - Calculate the maximum angular
+  difference between two line strings.
+* Snap line string - Snap one line string to another.
+* Average line strings - Average two line strings together.
+
+Example uses of these methods can be found in the hoot source code under
+`rules/LineStringGeneric.js`.
+
+=== Generic Line Conflation Test
+
+The various test configuration are described in the sections below. All of these
+tests compare a generic line conflation technique against the tuned Random
+Forest Model. The generic technique is in the hoot distributable as
+`rules/LineStringGeneric.js`.
+
+NOTE: A compromise was struck on these tests between time spent and
+thoroughness. These tests give a general impression of the performance
+characteristics, but more time could be spent to provide better explanations and
+more diverse scenarios. See <<GenericLineConflationFutureWork>> for details.
+
+==== DC Tiger Perty
+
+This test configuration uses Tiger data over the DC region to determine
+performance. The `perty-test` command is used with the following configuration:
+
+-----
+{
+  "match.creators" : "hoot::ScriptMatchCreator,LineStringGeneric.js",
+  "merger.creators" : "hoot::ScriptMergerCreator",
+  "uuid.helper.repeatable": "true",
+  "perty.seed" : 0,
+  "perty.test.num.runs": 1,
+  "perty.test.num.simulations": 5
+}
+-----
+
+During each test run the `perty.systematic.error.x` and 
+`perty.systematic.error.y` values are modified to vary the amount of error in
+the tests.
+
+==== Jakarta Easy Test
+
+This test scenario uses two manually conflated data in a simple region of
+Jakarta as a baseline for evaluation. The methods described in the 
+<<Evaluation,Evaluation>> section are used for comparison. A higher value means
+closer agreement with the manually conflated data.
+
+==== Jakarta Spaghetti Test
+
+Similar to above, this test scenario uses two manually conflated data sets, but
+in a more complex interchange region of Jakarta. The methods described in the
+<<Evaluation,Evaluation>> section are used for comparison. A higher value means
+closer agreement with the manually conflated data. Maintaining proper network
+topology is much more complicated in this scenario due to multiple overpasses,
+one way streets and tunnels.
+
+==== Manually Matched
+
+This data set contains test data over the regions described in _Classify the
+Match_ section. This is likely the most comprehensive of the tests for match
+results as it uses data over several regions extracted using several different
+methods. However, this test does very little for evaluating how well features
+are merged.
+
+==== Test Results
+
+[[GenericConflationQuality]]
+.Conflation Quality
+[gnuplot, algorithms/GenericLineTestGraph.png]
+------
+set title "Random Forest vs. Generic Line Road Conflation Performance\nHigher is Better"
+set auto x
+set yrange [.5:1.1]
+set style data histogram
+set style histogram cluster errorbars gap 1
+set style fill solid 0.5 border -1
+set boxwidth 0.9
+set xtic rotate by -70 scale 0 font "arial,10"
+set ylabel "Score"
+set bmargin 7
+#plot "-" using 2:xticlabels(1) title columnheader(2)
+plot "algorithms/GenericLineTest.dat" using 2:3:4:xticlabels(1) title columnheader(2), \
+    '' using 5:6:7 fill solid 0.5 title columnheader(5)
+------
+
+In <<GenericConflationQuality>> 90% confidence interval error bars are presented
+when relevant.  For some tests no confidence intervals are generated and have
+been omitted (e.g. raster comparison and calculating the number of correct
+matches). In the case of DC Perty 20m the error bars are omitted due to a
+known limitation.
+
+You can see that the scores are generally comparable. The more complex spaghetti
+example has slightly higher scores. The manually matched data has dramatically
+higher scores for the trained model versus the generic rules. The exact reason
+for this requires more investigation.
+
+[[Conflation Speed]]
+.Conflation Speed
+[gnuplot, algorithms/GenericLineTestTimingGraph.png]
+------
+set title "Random Forest vs. Generic Line Road Conflation Timing\nLower is Better"
+set auto x
+set yrange [0:400]
+set style data histogram
+set style histogram cluster gap 1
+set style fill pattern 2 border -1
+set boxwidth 0.9
+set xtic rotate by -70 scale 0 font "arial,10"
+set ylabel "Time Elapsed in Seconds"
+set bmargin 7
+#plot "-" using 2:xticlabels(1) title columnheader(2)
+# The sed silliness limits to only use the rows that contain timing data
+plot "<(sed -n '1,5p;9p;13,1000p' algorithms/GenericLineTest.dat)" \
+  using 8:xticlabels(1) title columnheader(8), \
+  '' using 9 fill pattern 2 title columnheader(9)
+------
+
+The image above shows the conflation speed for some of the test runs discussed
+above. The Perty test runs include the entire perty operation (perturbing,
+conflating and scoring the data). Re-running those experiments without the
+testing times included will likely reduce the overall runtime, but the times
+will likely still be very similar as most of the compute time was spent
+conflating. The Easy and Spaghetti tests show a much more dramatic difference in
+time demonstrating that the runtime difference will be data set specific.
+Further work is required if we want to quantify when to expect those
+differences.
+
+=== River Conflation
+
+==== Overview
+
+A variant of generic line conflation specific to conflating rivers (linear waterways) is available within 
+Hootenanny.  A river conflation model was developed based on test scenarios using manually matched data
+in the regions of Haiti and San Diego, USA as a baseline for evaluation.
+
+==== Approach
+
+The goal for the initial conflation of rivers was that the number of correctly conflated features plus 
+the number of features marked for manual review would equal at least 80% of the overall conflated 
+features in each test dataset.  It is very likely that over time a higher accuracy than 80% could be
+achieved with Hootenanny, however, this seemed a realistic goal for the initial implementation of generic river 
+conflation.  An attempt was made to have a as close to a minimum of 200 manually matched features as possible in each dataset, 
+while keeping datasets small enough that a single test against them could be run in roughly ten minutes or 
+less.  One dataset at a time was tested against until the conflation performance goal was reached before moving 
+onto testing against additional datasets.  After all datasets were tested against, a final model 
+was constructed that performed acceptably against all tested datasets.  
+
+The original plan was to test against three datasets.  It was later found that the third acquired dataset, rivers in 
+Mexico, contained longer rivers with higher node counts such that the subline matching routine took
+unreasonable amounts of time to complete.  Optimizing the subline matching to address this issue requires work outside of
+the scope of this initial river conflation task (see "Future Work" section), therefore, 
+the third dataset was not tested against.
+
+During testing, an optimal search radius (controlled by the "error:circular" attribute) was first determined empirically for each 
+river dataset.  After testing, the capability to automatically calculate this value was added, so 
+manually determining it is no longer necessary but is allowed in the case the auto-calculation does
+not provide an acceptable value.
+
+Initially, during testing reference rubbersheeting was then used to bring the OSM river data towards the dataset it was being
+conflated with.  This helped increase the conflation accuracy.  Later during testing, the addition 
+of the automatically calculated search radius used without rubber sheeting provided even better results. 
+Using the automatically calculated search radius precludes rubber sheeting of the input data since 
+tie points from the rubber sheeting algorithm are used to calculate the search radius.
+
+Several features were extracted from the river data tested against to help determine which ones
+could be used to most accurately conflate the data.  Weka (<<hall2009>>) was used to build models
+based on extracted features.  After running many tests, the two most influential features were found 
+to be weighted shape distance and a sampled angle histogram value.  Those features were used to 
+derive a model for conflating the river data.  
+
+Weighted shape distance is similar to Shape Distance as described in <<savary2005>>.  
+
+Angle histogram extraction works by calculating the angle of each line segment in a line string 
+and adding that angle to a histogram where the weight is the length of the line segment.  
+A histogram is built up in this way for both input lines, then normalized, and the difference calculated.  
+To conflate rivers, a sampled angle histogram value was derived, which allows for specifying a configurable 
+distance along each line segment to sample the angle value.  The distance from the sampled location to 
+calculate the directional heading along the way is also configurable.
+
+Two additional approaches were attempted that did not increase performance of the river conflation model 
+against the datasets tested, but are worth mentioning: increasing the unnecessary reviewable feature 
+count to aid in decreasing the incorrectly conflated feature count and weighting matches between
+extracted sublines closer in distance higher than those that were further apart.
+
+See the User Guide section on river conflation for details on configuration options.
+
+==== Results
+
+.*Generic River Conflation Test Results*
+[width="100%"]
+|======
+| *AOI* | *Manually Matched Feature Count* | *Percentage Correctly Conflated* | *Percentage Marked for Unecessary Review* | *Percentage Combined Correct and Reviewable* | *Percentage Incorrectly Conflated* | *Time Elapsed (HH:MM:SS)*
+| Haiti  | 490 | 85.5 | 0.4 | 85.9 | 14.1 | 00:12:07
+| San Diego | 784 | 55.3 | 17.0 | 72.3 | 27.7 | 02:19:22
+|======
+
+The goal of 80% combined correct and reviewable was met with the Haiti river data, but was not met
+with the San Diego river data.  Future work listed in a following section should help to increase
+the conflation accuracy further.
+
+==== Future Work
+
+There are opportunities for improving river conflation using Hootenanny:
+
+1. Adding a heuristic to subline matching that effectively handles river data
+with larger amounts of nodes and overlapping sublines will improve the performance of river conflation.
+2. Using Frechet distance could possibly improve Hootenanny river conflation.
+
+[[GenericLineConflationFutureWork]]
+=== Future Work
+
+To investigate this approach and it's performance on known data we will likely
+follow the steps listed below. These steps may change with
+changing requirements or new knowledge of the problem set and use cases.
+
+1. Identify additional candidates for generic line conflation such as walls or
+   railways.
+2. Implement routines that give reasonable results based on subjective review.
+3. Apply the generic line conflation routines to road training/testing data to
+   observe quantitative results.
+4. Report findings.
+
+Some areas where the generic line tests above can be improved:
+
+1. Re-run all tests with a single version of the software
+2. Address the known Perty limitation bug and re-run the Perty 20m test.
+3. Investigate the discrepancy in the manually conflated data sets
+4. Extend to include other data types
+

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "LogJs.h"
 
@@ -109,7 +109,7 @@ Handle<Value> LogJs::log(const Arguments& args, Log::WarningLevel level) {
     rMessage << args[i];
   }
 
-  QString message = QString::fromStdString(rMessage.str());
+  QString message = QString::fromUtf8(rMessage.str().data());
 
   int logLimit = ConfigOptions().getOgrLogLimit();
   int messageCount = getLogCount(message);

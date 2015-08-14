@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PbfElementIterator.h"
 
@@ -35,12 +35,25 @@ namespace hoot
 PbfElementIterator::PbfElementIterator(QString path)
 {
   fstream* fp = new fstream();
-  fp->open(path.toUtf8().data(), ios::in | ios::binary);
-  if (fp->is_open() == false)
+  try
   {
-    throw HootException("Error opening " + path + " for writing.");
+    fp->open(path.toUtf8().data(), ios::in | ios::binary);
+    if (fp->is_open() == false)
+    {
+      throw HootException("Error opening " + path + " for writing.");
+    }
+    _init(fp);
   }
-  _init(fp);
+  catch (const HootException& e)
+  {
+    delete fp;
+    throw e;
+  }
+  catch (const std::exception& e)
+  {
+    delete fp;
+    throw e;
+  }
 }
 
 PbfElementIterator::PbfElementIterator(istream* in)

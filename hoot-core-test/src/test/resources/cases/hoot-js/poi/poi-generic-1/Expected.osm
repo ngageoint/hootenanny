@@ -1,45 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.4805559883799972" lon="31.5266669999999998">
+        <tag k="REF1" v="000dd8"/>
+        <tag k="REF2" v="000dd8"/>
+        <tag k="place" v="village"/>
+        <tag k="name:ar" v="عزبة السبعين"/>
         <tag k="is_in" v="Egypt, جمهورية مصر العربية"/>
-        <tag k="hoot:review:source" v="1"/>
+        <tag k="name:fr" v="Izbat al Sabin"/>
+        <tag k="name:ar1" v="عزبة السبعين"/>
         <tag k="name:de" v="Izbat al Sabin"/>
         <tag k="int_name" v="‘Izbat as Sab‘īn, Izbat al Sabin"/>
-        <tag k="name:ar1" v="عزبة السبعين"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="name" v="عزبة السبعين"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Close, but not close enough"/>
         <tag k="alt_name" v="`Izbat as Sab`in;‘Izbat as Sab‘īn"/>
-        <tag k="hoot:review:uuid" v="GeoNames.org:415705"/>
-        <tag k="REF1" v="000dd8"/>
-        <tag k="name:fr" v="Izbat al Sabin"/>
-        <tag k="REF2" v="000dd8"/>
-        <tag k="place" v="populated"/>
+        <tag k="uuid" v="GeoNames.org:415707"/>
+        <tag k="name" v="عزبة السبعين"/>
         <tag k="name:en" v="Izbat al Sabin"/>
-        <tag k="uuid" v="{b18057ff-736d-5d20-b873-837f0c172e33};GeoNames.org:415707"/>
-        <tag k="name:ar" v="عزبة السبعين"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.4727779883799954" lon="31.5324999999999953">
+        <tag k="REF1" v="000de8"/>
+        <tag k="REF2" v="000de8"/>
+        <tag k="place" v="village"/>
+        <tag k="name:ar" v="عزبة حوض الندى"/>
         <tag k="is_in" v="Egypt, جمهورية مصر العربية"/>
-        <tag k="hoot:review:source" v="1"/>
+        <tag k="name:fr" v="Izbat Hawd an Nada"/>
+        <tag k="name:ar1" v="عزبة حوض الندى"/>
         <tag k="name:de" v="Izbat Hawd an Nada"/>
         <tag k="int_name" v="‘Izbat Ḩawḑ an Nadá, Izbat Hawd an Nada"/>
-        <tag k="name:ar1" v="عزبة حوض الندى"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="name" v="عزبة حوض الندى"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Close, but not close enough"/>
         <tag k="alt_name" v="`Izbat Hawd an Nada;‘Izbat Ḩawḑ an Nadá"/>
-        <tag k="hoot:review:uuid" v="GeoNames.org:415707"/>
-        <tag k="REF1" v="000de8"/>
-        <tag k="name:fr" v="Izbat Hawd an Nada"/>
-        <tag k="REF2" v="000de8"/>
-        <tag k="place" v="populated"/>
+        <tag k="uuid" v="GeoNames.org:415705"/>
+        <tag k="name" v="عزبة حوض الندى"/>
         <tag k="name:en" v="Izbat Hawd an Nada"/>
-        <tag k="uuid" v="{1c3e97f5-7430-5a1f-b030-9ce1e7038682};GeoNames.org:415705"/>
-        <tag k="name:ar" v="عزبة حوض الندى"/>
         <tag k="error:circular" v="15"/>
     </node>
 </osm>

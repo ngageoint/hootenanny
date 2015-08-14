@@ -218,7 +218,7 @@ mgcp = {
         // The swap list. These are the same attr, just named differently
         // These may get converted back on output.
         var swapList = {
-                'CPYRT_NOTE':'CNN',
+                'CPYRT_NOTE':'CCN',
                 'SRC_INFO':'SDP',
                 'SRC_DATE':'SDV',
                 'SMC':'MCC'
@@ -322,7 +322,7 @@ mgcp = {
                 ['AM060', ['am060']], // Surface Bunker
                 ['AM070', ['am070']], // Storage Tank
                 ['AM070', ['am080']], // Water Tower
-                ['AN010', ['an010']], // Railway
+                ['AN010', ['an010','railroad_l']], // Railway
                 ['AN050', ['an050']], // Railway Sidetrack
                 ['AN060', ['an060']], // Railway Yard
                 ['AN075', ['an075']], // Railway Turntable
@@ -347,7 +347,7 @@ mgcp = {
                 ['BH020', ['bh020']], // Canal
                 ['BH030', ['bh030']], // Ditch 
                 ['BH070', ['bh070']], // Ford 
-                ['BH140', ['bh140', 'river_stream_l']], // River
+                ['BH140', ['bh140','river_stream_l']], // River
                 ['BH145', ['bh145']], // Vanishing Point
                 ['BH170', ['bh170']], // Natural Pool
                 ['BI010', ['bi010']], // Cistern
@@ -371,7 +371,11 @@ mgcp = {
             {
                 for (var val in fCodeMap[row][1])
                 {
-                    if (llayerName.match(fCodeMap[row][1][val])) attrs.F_CODE = fCodeMap[row][0];
+                    if (llayerName == fCodeMap[row][1][val])
+                    {
+                        attrs.F_CODE = fCodeMap[row][0];
+                        break;
+                    }
                 }
             }
         } // End of Find an FCode
@@ -735,6 +739,9 @@ mgcp = {
             }
         }
 
+        // The FCODE for Buildings changed...
+        if (attrs.F_CODE == 'AL013') attrs.F_CODE = 'AL015';
+
     }, // End applyToMgcpPreProcessing
 
 
@@ -920,18 +927,27 @@ mgcp = {
             for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
         }
 
+        // Set up the fcode translation rules
+        if (mgcp.fcodeLookup == undefined)
+        {
+            // Order is important:
+            // First the MGCPv3 & 4 FCODES, then the common ones. This ensures that the common ones don't
+            // stomp on the other ones.
+            mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,mgcp.rules.fcodeOne2oneInV3);
+            mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,fcodeCommon.one2one);
+
+            mgcp.fcodeLookup = translate.createLookup(mgcp.rules.fcodeOne2oneV4);
+
+            // Debug:
+            // translate.dumpOne2OneLookup(mgcp.fcodeLookup);
+        }
+
         if (mgcp.lookup == undefined)
         {
             // Setup lookup tables to make translation easier.
     
             // Add the MGCPv3.0 specific attributes to the v4.0/common attribute table
             mgcp.rules.one2one.push.apply(mgcp.rules.one2one,mgcp.rules.one2oneIn);
-
-            // Add the FCODE import rules
-            // We add these since they don't conflict with the MGCP one2one rules
-            mgcp.rules.one2one.push.apply(mgcp.rules.one2one,fcodeCommon.one2one);
-            mgcp.rules.one2one.push.apply(mgcp.rules.one2one,mgcp.rules.fcodeOne2oneInV3);
-            mgcp.rules.one2one.push.apply(mgcp.rules.one2one,mgcp.rules.fcodeOne2oneV4);
 
             mgcp.lookup = translate.createLookup(mgcp.rules.one2one);
             
@@ -945,6 +961,15 @@ mgcp = {
 
         // pre processing
         mgcp.applyToOsmPreProcessing(attrs, layerName);
+
+        // Use the FCODE to add some tags.
+        if (attrs.F_CODE)
+        {
+            var ftag = mgcp.fcodeLookup['F_CODE'][attrs.F_CODE];
+            tags[ftag[0]] = ftag[1];
+            // Debug: Dump out the tags from the FCODE
+            // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+        }
 
         // one 2 one
         translate.applyOne2One(attrs, tags, mgcp.lookup, {'k':'v'}, mgcp.ignoreList);
@@ -1020,6 +1045,7 @@ mgcp = {
             mgcp.ignoreList['note:extra'] = '';
             mgcp.ignoreList['hoot:status'] = '';
             mgcp.ignoreList['error:circular'] = '';
+            mgcp.ignoreList['source:ingest:datetime'] = '';
         }
 
         // pre processing

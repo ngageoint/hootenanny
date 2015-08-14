@@ -6,16 +6,19 @@ If you have any support questions please contact Hootenanny.Help@DigitalGlobe.co
 
 # Installing Hootenanny 
 
-Hootenanny has been tested on both CentOS/RHEL 6.5 and Ubuntu 14.04. Ubuntu
-14.04 receives more active development and more streamlined installation
-instructions. Please see [Hootenanny - Developers
-Guide.pdf](https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/Hootenanny.-.Developer.Guide.pdf) for detailed instructions on Ubuntu 14.04. Both sets of instructions are tailored to an audience that is deeply familiar with scripting and install procedures on Linux.
+Hootenanny has been tested on both CentOS/RHEL 6.x and Ubuntu 14.04.  Ubuntu receives more 
+active development, has more streamlined installation instructions, and is the recommended operating
+system to run Hootenanny on. 
 
-System Administrators who would like to install on CentOS/RHEL 6.5 should follow
-the [Hootenanny - Installation
-Instructions.pdf](https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/Hootenanny.-.Installation.Instructions.pdf).
+To quickly run Hootenanny on Ubuntu, refer to the Vagrant (VM container) set up instructions in
+VAGRANT.md.  For additional notes on configuring a Hootenanny development environment on Ubuntu, 
+see the Hootenanny - Developers Guide document.
 
-For those Ubuntu 14.04 users who wish to follow a more streamed-lined set of instructions, please refer to the Vagrant (VM container) set up instructions in the Developers Guide.  There is currently no Vagrant set up for CentOS/RHEL 6.5 so if you wish to use that environment please contact us at Hootenanny.Help@DigitalGlobe.com.
+To run Hootenanny on CentOS/RHEL, follow the Hootenanny - Installation Instructions document.  
+There is currently no Vagrant set up available for CentOS/RHEL, but there may be one in the future.  
+Following the CentOS/RHEL installation instructions is currently more complicated installing 
+Hootenanny on Ubuntu and requires a higher level of Linux expertise.  Setting up a Hootenanny 
+development environment on CentOS/RHEL is neither advised nor supported.
 
 # Redistribution
 

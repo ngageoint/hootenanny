@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
@@ -44,21 +44,36 @@ public class FileUtils
   {
     Scanner fileScanner = new Scanner(file);
     fileScanner.nextLine();
-    FileWriter fileStream = new FileWriter(file.getAbsolutePath());
-    BufferedWriter out = new BufferedWriter(fileStream);
-    while (fileScanner.hasNextLine())
+    FileWriter fileStream = null;
+    BufferedWriter out = null;
+    try
     {
-      String next = fileScanner.nextLine();
-      if (next.equals("\n"))
+    	fileStream = new FileWriter(file.getAbsolutePath());
+      out = new BufferedWriter(fileStream);
+      while (fileScanner.hasNextLine())
       {
-        out.newLine();
+        String next = fileScanner.nextLine();
+        if (next.equals("\n"))
+        {
+          out.newLine();
+        }
+        else out.write(next);
+        {
+          out.newLine();
+        }
       }
-      else out.write(next);
-      {
-        out.newLine();
-      }
+      
     }
-    out.close();
-    fileStream.close();
+    finally
+    {
+    	if (out != null)
+    	{
+    		out.close();
+    	}
+    	if (fileStream != null)
+    	{
+    		fileStream.close();
+    	}
+    }
   }
 }

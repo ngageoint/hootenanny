@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COUNTVISITOR_H
 #define COUNTVISITOR_H
@@ -52,7 +52,7 @@ public:
 
   double getStat() const { return _count; }
 
-  virtual void visit(ElementType /*type*/, long /*id*/) { _count++; }
+  virtual void visit(const ConstElementPtr& /*e*/) { _count++; }
 
 private:
   int _count;

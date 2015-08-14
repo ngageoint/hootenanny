@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COOKIECUTTEROP_H
 #define COOKIECUTTEROP_H
@@ -37,7 +37,7 @@ namespace hoot
 
 /**
  * Splits the map into ref/source (unknown1/unknown2), cuts the ref's shape out of the source, then
- * combines the maps back together
+ * combines the the entire ref map back with the source map with the hole cut in it.
  */
 class CookieCutterOp : public OsmMapOperation, public Configurable
 {

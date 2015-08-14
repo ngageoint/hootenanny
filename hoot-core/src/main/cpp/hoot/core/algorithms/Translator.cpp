@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Translator.h"
@@ -160,6 +160,7 @@ Translator::Translator()
   assert(sizeof(UChar) == sizeof(QChar));
   _transliterator = 0;
   _titler = 0;
+  _whiteSpace.setPattern("\\W+");
 }
 
 Translator::~Translator()
@@ -217,7 +218,7 @@ QString Translator::toEnglish(const QString& input)
 
 QStringList Translator::toEnglishAll(const QString& input)
 {
-  QStringList l = input.split(QRegExp("\\W+"), QString::SkipEmptyParts);
+  QStringList l = input.split(_whiteSpace, QString::SkipEmptyParts);
   return toEnglishAll(l);
 }
 
@@ -357,7 +358,15 @@ QString Translator::transliterateToLatin(const QString& input)
     }
   }
 
-  return _transform(_transliterator, input);
+  // cache incoming requests -- we sometimes get a lot of duplicates.
+  QString result;
+  if (!_cache.get(input, result))
+  {
+    result = _transform(_transliterator, input);
+    _cache.insert(input, result);
+  }
+
+  return result;
 }
 
 QString Translator::_transform(Transliterator* t, const QString& input)

@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-7184' action='modify' visible='true' lat='31.15275958431' lon='29.8502609592'>
+    <tag k='amenity' v='pub' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:id' v='-108' />
+    <tag k='name' v='Al Maks' />
+    <tag k='source' v='geonames' />
+    <tag k='uuid' v='{33d3977e-0451-5e0f-a8ad-687038806b1c};GeoNames.org:7931938' />
+  </node>
+</osm>

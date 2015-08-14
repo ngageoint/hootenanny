@@ -1,7 +1,7 @@
 {
     "tag": {
         "name": "man_made",
-        "isA": "poi",
+        "isA": "poi=yes",
         "influence": 1.0,
         "type": "enumeration",
         "geometries": ["node", "area"]
@@ -9,13 +9,37 @@
 
     "#" : " The catch all",
     "tag": { "name": "man_made=*", "isA": "man_made" },
-    "tag": { "name": "man_made=tower",
-        "isA": "man_made",
-        "similarTo": { "name": "man_made=gantry", "weight": 0.8 }
+    "tag": { "name": "man_made=tower", "isA": "man_made",
+        "similarTo": { "name": "man_made=gantry", "weight": 0.8 },
+        "similarTo": { "name": "man_made=mast", "weight": 0.8 }
     },
     "tag": { "name": "man_made=gantry", "isA": "man_made" },
+    "tag": { "name": "man_made=mast", "isA": "man_made" },
+
     "tag": { "name": "man_made=storage_tank", "isA": "man_made", "categories": ["poi", "building"] },
+
+    "#" : "Lines",
+    "tag": { "name": "man_made=basin_gate", "isA": "man_made", "categories": [], "geometries": ["node","linestring"]},
+    "tag": { "name": "man_made=breakwater", "isA": "man_made", "categories": [], "geometries": ["linestring","area"]},
+    "tag": { "name": "man_made=groyne", "isA": "man_made", "categories": [], "geometries": ["linestring","area"]},
+    "tag": { "name": "man_made=jetty", "isA": "man_made", "categories": [], "geometries": ["linestring"]},
+    "tag": { "name": "man_made=marine_revetment", "isA": "man_made", "categories": [], "geometries": ["linestring"]},
+    "tag": { "name": "man_made=pier", "isA": "man_made", "categories": [], "geometries": ["linestring"]},
+    "tag": { "name": "man_made=promenade", "isA": "man_made", "categories": [], "geometries": ["linestring"]},
+    "tag": { "name": "man_made=quay", "isA": "man_made", "categories": [], "geometries": ["linestring"]},
+    "tag": { "name": "man_made=recreational_pier", "isA": "man_made", "categories": [], "geometries": ["linestring"]},
+
+    "tag": { "name": "man_made=causeway", "isA": "man_made", "categories": [], "geometries": ["linestring"]},
+    "tag": { "name": "man_made=embankment", "isA": "man_made", "categories": [], "geometries": ["linestring"]},
+    "tag": { "name": "man_made=goods_conveyor", "isA": "man_made", "categories": [], "geometries": ["linestring"]},
+    "tag": { "name": "man_made=grain_elevator", "isA": "man_made", "categories": [], "geometries": ["linestring"]},
+    "tag": { "name": "man_made=outdoor_theatre_screen", "isA": "man_made", "categories": [], "geometries": ["node","linestring"]},
     "tag": { "name": "man_made=pipeline", "isA": "man_made", "categories": [], "geometries": ["linestring"]},
+    "tag": { "name": "man_made=rock_and_snow_fence", "isA": "man_made", "categories": [], "geometries": ["linestring"]},
+    "tag": { "name": "man_made=scoreboard", "isA": "man_made", "categories": [], "geometries": ["linestring"]},
+    "tag": { "name": "man_made=ski_jump", "isA": "man_made", "categories": [], "geometries": ["node","linestring"]},
+    "tag": { "name": "man_made=snow_fence", "isA": "man_made", "categories": [], "geometries": ["linestring"]},
+
 
     "#" : "end"
 }

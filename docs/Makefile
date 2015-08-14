@@ -27,8 +27,8 @@ all: \
 	Hootenanny\ -\ User\ Interface\ Guide.pdf \
 	Hootenanny\ -\ Installation\ Instructions.pdf \
 	Hootenanny\ -\ Developer\ Guide.pdf \
-
-requirements: ICE\ Phase\ II\ -\ Requirements\ Status.pdf  
+    Hootenanny\ -\ Algorithms.pdf \
+	Hootenanny\ -\ Web\ Architecture\ Guide.pdf \
 
 # A generic dep for all asciidoc documents. Make sure the environment is setup
 # properly.
@@ -67,10 +67,6 @@ tmp/RulesLib.asciidoc: tmp/rules-lib-doxygen DoxygenToAsciiDoc.xslt
 tmp/RulesTemplate.asciidoc: tmp/rules-template-doxygen DoxygenToAsciiDoc.xslt
 	xsltproc tmp/rules-template-doxygen/xml/combine.xslt tmp/rules-template-doxygen/xml/index.xml > tmp/rules-template-doxygen/xml/combined.xml
 	xsltproc DoxygenToAsciiDoc.xslt tmp/rules-template-doxygen/xml/combined.xml > $@
-
-tmp/IcePhaseIiRequirementsStatus.asciidoc:
-	mkdir -p tmp
-	node ParseAtom.js > $@ || rm -f $@
 
 Hootenanny\ -\ Algorithms.pdf: \
 	HootenannyAlgorithms.asciidoc \
@@ -147,10 +143,4 @@ Hootenanny\ -\ Installation\ Instructions.pdf: \
 	styles/*
 	$(call buildAsciidoc)
 
-ICE\ Phase\ II\ -\ Requirements\ Status.pdf: \
-	tmp/IcePhaseIiRequirementsStatus.asciidoc \
-	styles/*
-	a2x --dblatex-opts "-P latex.output.revhistory=0 -s styles/nga.sty --param doc.publisher.show=0" $(A2X_QUIET) -a authorinitials=DG -a revdate="`date \"+%B %e, %Y %X %Z\"`" -f pdf $<
-	@mv $(patsubst %.asciidoc,%.pdf,$<) "$@"
-	mv $< $<.bak
 

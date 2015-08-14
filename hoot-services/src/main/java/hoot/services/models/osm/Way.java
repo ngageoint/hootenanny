@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
@@ -41,13 +41,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.xpath.XPathAPI;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
+import com.mysema.query.Tuple;
 import com.mysema.query.sql.RelationalPathBase;
 import com.mysema.query.sql.SQLExpressions;
 import com.mysema.query.sql.SQLQuery;
@@ -59,7 +59,6 @@ import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
 import hoot.services.db.DbUtils.RecordBatchType;
-
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentWayNodes;
 import hoot.services.db2.CurrentWays;
@@ -449,6 +448,7 @@ public class Way extends Element
     if (addChildren)
     {
       final List<Long> nodeIds = getNodeIds();
+      Set<Long> elementIds = new HashSet<Long>();
       // way nodes are output in sequence order; list should already be sorted
       // by the query
       for (long nodeId : nodeIds)
@@ -456,6 +456,23 @@ public class Way extends Element
         org.w3c.dom.Element nodeElement = doc.createElement("nd");
         nodeElement.setAttribute("ref", String.valueOf(nodeId));
         element.appendChild(nodeElement);
+        elementIds.add(nodeId);
+      }
+   
+      final List<Tuple> elementRecords = 
+          (List<Tuple>) Element.getElementRecordsWithUserInfo(getMapId(), ElementType.Node, elementIds, conn);
+      for(int i=0; i<elementRecords.size(); i++)
+      {
+      	final Element nodeFullElement = 
+            ElementFactory.getInstance().create(ElementType.Node, elementRecords.get(i), conn, getMapId());
+        org.w3c.dom.Element nodeXml = 
+        		nodeFullElement.toXml(
+          	parentXml,
+          	modifyingUserId, 
+          	modifyingUserDisplayName,
+            false,
+            false);
+        parentXml.appendChild(nodeXml);
       }
     }
 

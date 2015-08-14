@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef GETTAGVALUESVISITOR_H
 #define GETTAGVALUESVISITOR_H
@@ -59,9 +59,8 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    ConstElementPtr e = _map->getElement(type, id);
     Tags::const_iterator it = e->getTags().find(_key);
     if (it != e->getTags().end())
     {

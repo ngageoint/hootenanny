@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptMergerCreator.h"
 
@@ -87,6 +87,10 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches,
       mergers.push_back(sm);
       result = true;
     }
+    else
+    {
+      delete sm;
+    }
   }
   else
   {
@@ -100,6 +104,10 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches,
       delete sm;
       mergers.push_back(new MarkForReviewMerger(eids, "Overlapping matches", 1.0));
       result = true;
+    }
+    else
+    {
+      delete sm;
     }
   }
 

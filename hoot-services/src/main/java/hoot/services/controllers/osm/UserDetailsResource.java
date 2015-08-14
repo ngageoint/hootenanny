@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -79,7 +79,6 @@ public class UserDetailsResource
 	 *	</INPUT>
 	 * <OUTPUT>
 	 * 	XML representation of the user
-	 * see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmUserService#User-Details
 	 * </OUTPUT>
 	 * </EXAMPLE>
 	 *
@@ -89,7 +88,6 @@ public class UserDetailsResource
    * @return Response with user detail information
    * @throws Exception
    * @todo update to get actual logged in user once OAuth is implemented
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmUserService#User-Details
    */
   @GET
   @Consumes(MediaType.TEXT_PLAIN)

@@ -4,6 +4,7 @@
     "import": "artworkType.json",
     "import": "barrier.json",
     "import": "building.json",
+    "import": "historic.json",
     "import": "landuse.json",
     "import": "leisure.json",
     "import": "man_made.json",
@@ -18,7 +19,9 @@
     "import": "railway.json",
     "import": "shop.json",
     "import": "sport.json",
+    "import": "religion.json",
     "import": "transport.json",
+
 
     "###": "",
     "###": "Highway related tags.",
@@ -427,7 +430,8 @@
         "name": "bridge=yes",
         "isA": "bridge_tunnel=unknown",
         "similarTo": { "name": "bridge=no", "weight": 0.5 },
-        "similarTo": { "name": "tunnel=yes", "weight": 0.01 }
+        "similarTo": { "name": "tunnel=yes", "weight": 0.01 },
+        "categories": ["poi"]
     },
 
     "tag": {

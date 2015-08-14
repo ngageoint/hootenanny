@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <ogr_spatialref.h>
@@ -286,7 +286,15 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
         if (r->isMultiPolygon() || OsmSchema::getInstance().isArea(r->getTags(), ElementType::Relation))
           return GEOS_MULTIPOLYGON;
         else if (OsmSchema::getInstance().isLinear(*r))
+        {
           return GEOS_MULTILINESTRING;
+        }
+        else if (r->getMembers().size() == 0 ||
+                 OsmSchema::getInstance().isCollection(*r))
+        {
+          // an empty geometry, pass back a collection
+          return GEOS_GEOMETRYCOLLECTION;
+        }
       }
 
       break;

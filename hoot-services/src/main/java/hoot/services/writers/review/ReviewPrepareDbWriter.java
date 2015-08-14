@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.writers.review;
 
@@ -42,6 +42,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.json.simple.JSONObject;
 import org.postgresql.util.PGobject;
+import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.TransactionDefinition;
@@ -214,61 +215,113 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 				//two passes through the data have to be made; one to create the mappings from the 
 				//unique id's to the osm element id's and then a second to parse the review tags; 
 				//there might be a way to do this in one pass...
-
-				getPreviouslyReviewedRecords();
-				totalParseableRecords = getTotalParseableRecords(mapId);
-				totalReviewableRecords = getTotalReviewableRecords(mapId);
-				final boolean uuidsExist = parseElementUniqueIdTags(mapId);
+				
+				//The logic here got a little redundant...but no point in cleaning up now, since this class 
+				//will soon be gone.
 
 				boolean reviewableItemsExist = false;
 				final String noRecordsParsedMessage = 
 					"No records available for review for map with ID: " + mapId;
-				if (!uuidsExist)
+				
+				totalReviewableRecords = getTotalReviewableRecords(mapId);
+				if (totalReviewableRecords > 0)
 				{
-					log.warn("Parsing unique element ID's: " + noRecordsParsedMessage);
-				}
-				else
-				{
-					// read the review tags from the OSM elements and write their data to
-					// services db review
-					// tables
-					reviewableItemsExist = parseElementReviewTags(mapId);
-					if (!reviewableItemsExist)
+					totalParseableRecords = getTotalParseableRecords(mapId);
+					getPreviouslyReviewedRecords();
+					final boolean uuidsExist = parseElementUniqueIdTags(mapId);
+					if (!uuidsExist)
 					{
-						log.warn("Parsing review tags: " + noRecordsParsedMessage);
+						log.info("Parsing unique element ID's: " + noRecordsParsedMessage);
+					}
+					else
+					{
+						// read the review tags from the OSM elements and write their data to services db review
+						// tables
+						reviewableItemsExist = parseElementReviewTags(mapId);
+						if (!reviewableItemsExist)
+						{
+							log.info("Parsing review tags: " + noRecordsParsedMessage);
+						}
+					}
+					if (!uuidsExist || !reviewableItemsExist)
+					{
+						finalStatusDetail = noRecordsParsedMessage;
+					}
+					else
+					{
+						finalStatusDetail = "Reviewable records successfully prepared.";
 					}
 				}
-				if (!uuidsExist || !reviewableItemsExist)
+				else
 				{
 					finalStatusDetail = noRecordsParsedMessage;
 				}
-				else
-				{
-					finalStatusDetail = "Reviewable records successfully prepared.";
-				}
-
-				// There may be element id's written as a result of
-				// parseElementUniqueIdTags that don't
-				// have associated review item records, because of the two pass write
-				// operation. They
-				// aren't currently hurting anything by existing and will be ignored,
-				// but its a good idea
-				// to clean them out.
-				removeUnusedElementIdMappings();
 			}
 			catch (Exception e)
 			{
+				log.error("Error preparing review items: " + e.getMessage());
 				log.debug("Rolling back transaction for ReviewDbPreparer...");
-				// transactionManager.rollback(transactionStatus);
 				transactionManager.rollback(transactionStatus);
 				conn.rollback();
 				throw e;
 			}
 
 			log.debug("Committing ReviewDbPreparer database transaction...");
-			// transactionManager.commit(transactionStatus);
-			transactionManager.commit(transactionStatus);
-			conn.commit();
+			try
+			{
+				transactionManager.commit(transactionStatus);
+				conn.commit();
+				log.info("Review item preparation complete.");
+			}
+			catch (Exception e)
+			{
+				log.error("Error committing transaction: " + e.getMessage());
+				if (e instanceof PSQLException)
+				{
+					log.error("SQL error: " + ((PSQLException)e).getServerErrorMessage().getDetail());
+				}
+				throw e;
+			}
+			
+			if (totalReviewableRecords > 0 && 
+					Boolean.parseBoolean(
+            HootProperties.getInstance().getProperty(
+  	          "reviewPrepareCleanup", HootProperties.getDefault("reviewPrepareCleanup"))))
+			{
+				try
+				{
+					log.debug("Intializing ReviewDbPreparer cleanup transaction...");
+					transactionStatus = 
+						transactionManager.getTransaction(
+							new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
+					conn.setAutoCommit(false);
+					
+				  // There may be element id's written as a result of parseElementUniqueIdTags that don't
+					// have associated review item records, because of the two pass write operation. They
+					// aren't currently hurting anything by existing and will be ignored, but its a good idea
+					// to clean them out.
+					removeUnusedElementIdMappings();
+					
+					log.debug("Committing ReviewDbPreparer database cleanup transaction...");
+					transactionManager.commit(transactionStatus);
+					conn.commit();
+					log.info("Review item cleanup complete.");
+				}
+			  //It's not the end of the world if these don't get cleaned out, but you should eventually 
+				//try to figure out why they couldn't be cleaned if an error occurs.
+				catch (Exception e)
+				{
+					log.error("Error cleaning out unused element ID mappings: " + e.getMessage());
+					if (e instanceof PSQLException)
+					{
+						log.error("SQL error: " + ((PSQLException)e).getServerErrorMessage().getDetail());
+					}
+				}
+			}
+			else
+			{
+				log.debug("Review record UUID's not cleaned up.");
+			}
 		}
 		finally
 		{
@@ -607,7 +660,9 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 						String uniqueElementId = StringUtils.trimToNull(tags.get("uuid"));
 						if (uniqueElementId == null)
 						{
-							log.warn(
+						  //this should probably be a warn, but is happening a lot and cluttering up the logs...
+            	//not worrying about it for now, since new implementation is on the way
+							log.debug(
 								"Invalid UUID: " + uniqueElementId + " for map with ID: " + mapId + 
 								".  Skipping adding unique ID record...");
 						}
@@ -618,7 +673,9 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 						             .and(elementIdMappings.elementId.eq(uniqueElementId)))
 						           .count() > 0)
 						{
-							log.warn(
+						  //this should probably be a warn, but is happening a lot and cluttering up the logs...
+            	//not worrying about it for now, since new implementation is on the way
+							log.debug(
 								"UUID: " + uniqueElementId + " for map with ID: " + mapId + " already exists.  " +
 							  "Skipping adding unique ID record...");
 						}
@@ -635,7 +692,9 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 							}
 							else
 							{
-								log.warn(
+						  	//this should probably be a warn, but is happening a lot and cluttering up the logs...
+	            	//not worrying about it for now, since new implementation is on the way
+								log.debug(
 								  "Duplicate element ID: " + uniqueElementId.toString() + " for map with ID: " + 
 								  mapId + ".  Skipping adding unique ID record...");
 							}
@@ -740,7 +799,9 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 						String reviewableItemId = StringUtils.trimToNull(tags.get("uuid"));
 						if (StringUtils.isEmpty(reviewableItemId))
 						{
-							log.warn(
+						  //this should probably be a warn, but is happening a lot and cluttering up the logs...
+            	//not worrying about it for now, since new implementation is on the way
+							log.debug(
 								"Invalid UUID: " + tags.get("uuid") + " for map with ID: " + mapId + 
                 " Skipping adding review record...");
 						}
@@ -800,7 +861,9 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 									          .and(elementIdMappings.elementId.eq(reviewAgainstItemId)))
 									       .count() == 0)
 									{
-										log.warn(
+									  //this should probably be a warn, but is happening a lot and cluttering up the logs...
+			            	//not worrying about it for now, since new implementation is on the way
+										log.debug(
 											"No element ID mapping exists for review against item with ID: " + 
 										  reviewAgainstItemId + " for map with ID: " + mapId + 
 										  ".  Skipping adding " + "review record...");
@@ -970,6 +1033,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 
 		// get all unique reviewable item ids in review_items
 		// TODO: these need to be buffered queries
+		log.debug("Getting reviewable item ID's...");
 		final Set<String> reviewableItemIds = 
 			new HashSet<String>(
 			  new SQLQuery(conn, DbUtils.getConfiguration(mapId))
@@ -977,6 +1041,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		      .where(reviewItems.mapId.eq(mapId))
 		      .list(reviewItems.reviewableItemId));
 
+		log.debug("Getting review against item ID's...");
 		final Set<String> reviewAgainstItemIds = 
 		  new HashSet<String>(
 		    new SQLQuery(conn, DbUtils.getConfiguration(mapId))
@@ -984,6 +1049,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		      .where(reviewItems.mapId.eq(mapId))
 		      .list(reviewItems.reviewAgainstItemId));
 
+		log.debug("Getting element unique ID's...");
 		final Set<String> elementUniqueIds = 
 			new HashSet<String>(
 		    new SQLQuery(conn, DbUtils.getConfiguration(mapId))
@@ -994,11 +1060,14 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		// anything in elementUniqueIds that's not in reviewableItemIds or reviewAgainstItemIds, 
 		// regardless of what map it belongs to, must be a unique id not being used and should be
 		// deleted
+		log.debug("Determining unused element ID's...");
 		Set<String> uniqueIdsNotInReviewItems = new HashSet<String>(elementUniqueIds);
 		uniqueIdsNotInReviewItems.removeAll(reviewableItemIds);
 		uniqueIdsNotInReviewItems.removeAll(reviewAgainstItemIds);
+		log.debug("Unused element ID's determined.");
 		if (uniqueIdsNotInReviewItems.size() > 0)
 		{
+			log.debug("Retrieving unique ID's not in review items...");
 			final long result =
 			  new SQLDeleteClause(conn, DbUtils.getConfiguration(mapId), elementIdMappings)
 			    .where(elementIdMappings.elementId
@@ -1007,11 +1076,14 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 			    .execute();
 			if (result != uniqueIdsNotInReviewItems.size())
 			{
-				throw new Exception(
-				  "Error deleting redundant existing data from element ID mappings table during " + 
-				  "review prepare job.");
+				log.warn("The number of unique ID's not in review items calculated does not " +
+				  "match the number deleted from the database.");
 			}
 			log.debug(result + " redundant element ID mappings deleted.");
+		}
+		else
+		{
+			log.debug("No redundant element ID mappings found.");
 		}
 	}
 }

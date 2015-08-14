@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEREF2VISITOR_H
 #define REMOVEREF2VISITOR_H
@@ -66,7 +66,7 @@ public:
   virtual void setOsmMap(OsmMap* map);
   virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
-  virtual void visit(ElementType type, long id);
+  virtual void visit(const ConstElementPtr& e);
 
 private:
   OsmMap* _map;

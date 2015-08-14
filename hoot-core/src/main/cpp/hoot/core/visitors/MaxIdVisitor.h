@@ -56,9 +56,9 @@ public:
 
   double getStat() const { return _maxId; }
 
-  virtual void visit(ElementType /*type*/, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    _maxId = std::max(id, _maxId);
+    _maxId = std::max(e->getId(), _maxId);
   }
 
 private:

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ElementOsmMapVisitor.h"
@@ -33,10 +33,10 @@
 namespace hoot
 {
 
-void ElementOsmMapVisitor::visit(ElementType type, long id)
+void ElementOsmMapVisitor::visit(const ConstElementPtr& e)
 {
-  shared_ptr<Element> e = _map->getElement(type, id);
-  visit(e);
+  shared_ptr<Element> ee = _map->getElement(e->getElementId());
+  visit(ee);
 }
 
 }

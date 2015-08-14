@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 1998, 1999 Eibe Frank, Leonard Trigg, Mark Hall
- * @copyright Copyright (C) 2012, 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LOGISTICREGRESSION_H

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -70,14 +70,12 @@ public class CapabilitiesResource
 	 *	</INPUT>
 	 * <OUTPUT>
 	 * Capability OSM XML
-	 * see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmCapabilitiesService
 	 * </OUTPUT>
 	 * </EXAMPLE>
    *
    * Service method endpoint for retrieving OSM capabilities
    *
    * @return Response containing requested capabilities data
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmCapabilitiesService
    */
   @GET
   @Consumes(MediaType.TEXT_PLAIN)
