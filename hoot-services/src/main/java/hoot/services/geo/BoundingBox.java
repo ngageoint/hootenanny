@@ -29,7 +29,6 @@ package hoot.services.geo;
 import java.util.ArrayList;
 import java.util.List;
 
-import hoot.services.db.DbUtils;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.geo.zindex.Box;
 

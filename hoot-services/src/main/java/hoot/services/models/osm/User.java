@@ -26,35 +26,26 @@
  */
 package hoot.services.models.osm;
 
-
-import hoot.services.db.DbUtils;
 import hoot.services.db2.QChangesets;
 import hoot.services.db2.QMaps;
 import hoot.services.db2.Users;
-import hoot.services.writers.osm.UserResponseWriter;
 
 import java.sql.Connection;
-import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import com.mysema.query.sql.SQLQuery;
 
 /**
  * Represents the model for an OSM user
  */
 public class User extends Users
 {
-	private static final Logger log = LoggerFactory.getLogger(User.class);
-	
 	@SuppressWarnings("unused")
   private static final long serialVersionUID = 4395123526768281005L;
   protected static final QChangesets changesets = QChangesets.changesets;
   protected static final QMaps maps = QMaps.maps;
 
+  @SuppressWarnings("unused")
   private Connection conn;
 
   public User(final Users user, Connection conn)

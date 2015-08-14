@@ -48,7 +48,8 @@ import org.slf4j.LoggerFactory;
 @Path("/cleandata")
 public class CleanDataResource  extends JobControllerBase {
 	private static final Logger log = LoggerFactory.getLogger(CleanDataResource.class);
-	private String homeFolder = null;
+	@SuppressWarnings("unused")
+  private String homeFolder = null;
 	public CleanDataResource()
 	{
 		try

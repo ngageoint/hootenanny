@@ -69,7 +69,6 @@ import hoot.services.db2.QCurrentRelations;
 import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.db2.QCurrentWays;
 import hoot.services.geo.BoundingBox;
-import hoot.services.geo.GeoUtils;
 import hoot.services.geo.QuadTileCalculator;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
@@ -143,12 +142,12 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 
 		// close the changeset
 		OsmTestUtils.closeChangeset(mapId, changesetId);
-		QChangesets changesets = QChangesets.changesets;
-		hoot.services.db2.Changesets changeset = new SQLQuery(conn,
+		//QChangesets changesets = QChangesets.changesets;
+		/*hoot.services.db2.Changesets changeset = new SQLQuery(conn,
 		    DbUtils.getConfiguration(mapId)).from(changesets)
 		    .where(changesets.id.eq(changesetId)).singleResult(changesets);
 		final Timestamp now = new Timestamp(Calendar.getInstance()
-		    .getTimeInMillis());
+		    .getTimeInMillis());*/
 		// TODO: this check causes intermittent test failures
 		// Thread.sleep(1000);
 		// Assert.assertTrue(changeset.getClosedAt().before(now));

@@ -475,7 +475,8 @@ public class ProcessStreamInterface implements INativeInterface {
 				Iterator iter = param.entrySet().iterator();
 
 				String arg = "";
-				String key = "";
+				@SuppressWarnings("unused")
+        String key = "";
 				while (iter.hasNext()) {
 					Map.Entry mEntry = (Map.Entry) iter.next();
 					key = (String)mEntry.getKey();

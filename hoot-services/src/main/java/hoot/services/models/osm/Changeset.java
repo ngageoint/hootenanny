@@ -74,6 +74,7 @@ public class Changeset extends Changesets
 
   private static final Logger log = LoggerFactory.getLogger(Changeset.class);
   protected static final QChangesets changesets  = QChangesets.changesets;
+  @SuppressWarnings("unused")
   private int maxRecordBatchSize = -1;
   private Connection conn;
   private long _mapId = -1;

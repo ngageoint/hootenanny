@@ -26,18 +26,11 @@
  */
 package hoot.services.geo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import hoot.services.HootProperties;
-
 /**
  * Various geospatial utilities for hoot services
  */
 public class GeoUtils
 {
-	private static final Logger log = LoggerFactory.getLogger(GeoUtils.class);
-	
 	public static final double DEFAULT_COORD_VALUE = -181.0;
   
   /**

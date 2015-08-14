@@ -405,7 +405,7 @@ public class Relation extends Element
 	{
 		final List<Long> nodeIds = (List<Long>) new SQLQuery(conn,
 				DbUtils.getConfiguration(getMapId()))
-		.from(this.currentRelationMembers)
+		.from(Relation.currentRelationMembers)
 		.where(
 				currentRelationMembers.relationId.eq(getId()).and(
 						currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node)))
@@ -413,7 +413,7 @@ public class Relation extends Element
 
 		final List<Long> wayIds = (List<Long>) new SQLQuery(conn,
 				DbUtils.getConfiguration(getMapId()))
-		.from(this.currentRelationMembers)
+		.from(Relation.currentRelationMembers)
 		.where(
 				currentRelationMembers.relationId.eq(getId()).and(
 						currentRelationMembers.memberType.eq(DbUtils.nwr_enum.way)))

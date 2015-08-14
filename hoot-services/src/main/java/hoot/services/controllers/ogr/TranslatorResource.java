@@ -66,7 +66,8 @@ public class TranslatorResource extends ServerControllerBase{
 
   private static MultiThreadedHttpConnectionManager connectionManager = 
   		new MultiThreadedHttpConnectionManager();
-	private static org.apache.commons.httpclient.HttpClient mclient = new org.apache.commons.httpclient.HttpClient(connectionManager);;
+	@SuppressWarnings("unused")
+  private static org.apache.commons.httpclient.HttpClient mclient = new org.apache.commons.httpclient.HttpClient(connectionManager);;
 	
 	
   public TranslatorResource()

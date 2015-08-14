@@ -65,7 +65,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class TunningService  implements Executable {
 	
 	private static final Logger log = LoggerFactory.getLogger(TunningService.class);
-	private ClassPathXmlApplicationContext appContext;
+	@SuppressWarnings("unused")
+  private ClassPathXmlApplicationContext appContext;
 	private String finalStatusDetail;
 	private Double totalSize = null;
 	private String tempPath = null;

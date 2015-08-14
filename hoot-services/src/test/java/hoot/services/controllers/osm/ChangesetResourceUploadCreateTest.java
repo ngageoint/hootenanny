@@ -62,7 +62,6 @@ import hoot.services.db2.QCurrentRelations;
 import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.db2.QCurrentWays;
 import hoot.services.geo.BoundingBox;
-import hoot.services.geo.GeoUtils;
 import hoot.services.geo.QuadTileCalculator;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element;

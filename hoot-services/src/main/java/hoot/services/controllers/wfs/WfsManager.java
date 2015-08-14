@@ -37,6 +37,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -71,7 +72,8 @@ import org.w3c.dom.Element;
 
 public class WfsManager {
 	private static final Logger log = LoggerFactory.getLogger(WfsManager.class);
-	private String coreJobServerUrl = null;
+	@SuppressWarnings("unused")
+  private String coreJobServerUrl = null;
 	private String wfsStoreConnName = null;
 	private String wfsStoreDb = null;
 	public WfsManager()

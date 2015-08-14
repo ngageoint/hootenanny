@@ -80,6 +80,7 @@ public class JobResource
   private static final Logger log = LoggerFactory.getLogger(JobResource.class);
 
   private ClassPathXmlApplicationContext appContext = null;
+  @SuppressWarnings("unused")
   private ClassPathXmlApplicationContext dbAppContext = null;
   private JSONObject jobInfo = new JSONObject();
   private JSONArray childrenInfo = new JSONArray();
