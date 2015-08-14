@@ -108,8 +108,8 @@ public class UserResourceTest extends OsmResourceTestAbstract
         Assert.assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
         Assert.assertEquals(
           "user-with-id-" + userId, xpath.evaluate("//osm/user/@display_name", responseData));
-        //Assert.assertEquals(
-          //0, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+        Assert.assertEquals(
+          -1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
       }
       catch (Exception e)
       {
@@ -164,8 +164,13 @@ public class UserResourceTest extends OsmResourceTestAbstract
         Assert.assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
         Assert.assertEquals(
           "user-with-id-" + userId, xpath.evaluate("//osm/user/@display_name", responseData));
+<<<<<<< HEAD
         //Assert.assertEquals(
           //0, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+=======
+        Assert.assertEquals(
+          -1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+>>>>>>> origin/develop
       }
       catch (Exception e)
       {
@@ -252,8 +257,13 @@ public class UserResourceTest extends OsmResourceTestAbstract
         Assert.assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
         Assert.assertEquals(
           "user-with-id-" + userId, xpath.evaluate("//osm/user/@display_name", responseData));
+<<<<<<< HEAD
         //Assert.assertEquals(
           //2, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+=======
+        Assert.assertEquals(
+          -1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+>>>>>>> origin/develop
       }
       catch (Exception e)
       {

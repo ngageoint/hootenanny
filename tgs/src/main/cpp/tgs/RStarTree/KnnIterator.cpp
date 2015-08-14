@@ -142,36 +142,39 @@ void KnnIterator::_calculateNextNn()
 
     _knnSearchQueue.pop();
     
-    if(currNode->isLeafNode())
+    if (currNode != NULL)
     {
-      for(int i=0; i<currNode->getChildCount(); i++)
+      if(currNode->isLeafNode())
       {
-        const BoxInternalData& b = currNode->getChildEnvelope(i);
-        tmpId = currNode->getChildUserId(i);
-        if (_knnReturnedFids.find(tmpId) == _knnReturnedFids.end())
+        for(int i=0; i<currNode->getChildCount(); i++)
         {
+          const BoxInternalData& b = currNode->getChildEnvelope(i);
+          tmpId = currNode->getChildUserId(i);
+          if (_knnReturnedFids.find(tmpId) == _knnReturnedFids.end())
+          {
+            if (_knnBounds.isValid() == false || _knnBounds.calculateOverlap(b) > 0)
+            {
+              tmpDistance = _calculateDistance(b, tmpId);
+              _knnLeafHeap.push(LeafDistance(tmpDistance, tmpId));
+            }
+          }
+        }
+      }
+      else
+      {
+        for(int i=0; i<currNode->getChildCount(); i++)
+        {
+          const BoxInternalData& b = currNode->getChildEnvelope(i);
+          tmpDistance = _calculateDistance(b);
+          tmpId = currNode->getChildNodeId(i);
           if (_knnBounds.isValid() == false || _knnBounds.calculateOverlap(b) > 0)
           {
-            tmpDistance = _calculateDistance(b, tmpId);
-            _knnLeafHeap.push(LeafDistance(tmpDistance, tmpId)); 
+            _knnSearchQueue.push(_createNodeDistance(tmpDistance, tmpId));
           }
         }
       }
     }
-    else
-    {
-      for(int i=0; i<currNode->getChildCount(); i++)
-      {
-        const BoxInternalData& b = currNode->getChildEnvelope(i);
-        tmpDistance = _calculateDistance(b);
-        tmpId = currNode->getChildNodeId(i);
-        if (_knnBounds.isValid() == false || _knnBounds.calculateOverlap(b) > 0)
-        {
-          _knnSearchQueue.push(_createNodeDistance(tmpDistance, tmpId));
-        }      
-      }
-    }
-    
+
     _releaseNodeDistance(nd);
   }
 
