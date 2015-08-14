@@ -162,9 +162,11 @@ void OgrWriter::_addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<G
 
       // reset the FID to -1 so that it will get a new FID when created.
       poFeature->SetFID(-1);
-      if (layer->CreateFeature(poFeature) != OGRERR_NONE)
+      int err = layer->CreateFeature(poFeature);
+//      if (layer->CreateFeature(poFeature) != OGRERR_NONE)
+      if (err != OGRERR_NONE)
       {
-        throw HootException(QString("Error creating feature"));
+        throw HootException(QString("Error creating feature (OGR Error Code %1)").arg(err));
       }
     }
   }
@@ -183,9 +185,11 @@ void OgrWriter::_addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<G
       throw HootException(QString("Error setting geometry"));
     }
 
-    if (layer->CreateFeature(poFeature) != OGRERR_NONE)
+    int err = layer->CreateFeature(poFeature);
+//      if (layer->CreateFeature(poFeature) != OGRERR_NONE)
+    if (err != OGRERR_NONE)
     {
-      throw HootException(QString("Error creating feature"));
+      throw HootException(QString("Error creating single feature (OGR Error Code %1)").arg(err));
     }
   }
 
@@ -271,7 +275,7 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
 
       if (poFDefn->GetFieldIndex(f->getName().toAscii()) == -1)
       {
-        //        throw HootException(QString("Error: Unable to find output field: %1 in layer %2.").arg(f->getName()).arg(layerName));
+        // throw HootException(QString("Error: Unable to find output field: %1 in layer %2.").arg(f->getName()).arg(layerName));
         LOG_WARN("Unable to find field: " << QString(f->getName()) << " in layer " << layerName);
       }
     }
