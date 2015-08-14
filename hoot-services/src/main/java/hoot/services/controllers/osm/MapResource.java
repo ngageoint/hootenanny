@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.osm;
 
-import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.FolderMapMappings;
 import hoot.services.db2.Folders;
@@ -43,7 +42,6 @@ import hoot.services.models.osm.LinkRecords;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.ModelDaoUtils;
-import hoot.services.nativeInterfaces.JobExecutionManager;
 import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.writers.osm.MapQueryResponseWriter;
@@ -57,7 +55,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -759,13 +756,13 @@ return linkRecords;
       final JSONObject anode = currMap.retrieveANode(queryBounds);
       long nodeCnt = currMap.getNodesCount(queryBounds);
 
-      double dMinLon = DbUtils.fromDbCoordValue((Integer) extents.get("minlon"));
-      double dMaxLon = DbUtils.fromDbCoordValue((Integer) extents.get("maxlon"));
-      double dMinLat = DbUtils.fromDbCoordValue((Integer) extents.get("minlat"));
-      double dMaxLat = DbUtils.fromDbCoordValue((Integer) extents.get("maxlat"));
+      double dMinLon = (Double)extents.get("minlon");
+      double dMaxLon = (Double) extents.get("maxlon");
+      double dMinLat = (Double) extents.get("minlat");
+      double dMaxLat = (Double) extents.get("maxlat");
 
-      double dFirstLon = DbUtils.fromDbCoordValue((Integer) anode.get("lon"));
-      double dFirstLat = DbUtils.fromDbCoordValue((Integer) anode.get("lat"));
+      double dFirstLon = (Double)anode.get("lon");
+      double dFirstLat = (Double)anode.get("lat");
 
       ret.put("minlon", dMinLon);
       ret.put("maxlon", dMaxLon);
@@ -1160,7 +1157,7 @@ return linkRecords;
 
   	  QFolders folders = QFolders.folders;
   	  Configuration configuration = DbUtils.getConfiguration();
-  	  SQLQuery query = new SQLQuery(conn, configuration);
+  	  new SQLQuery(conn, configuration);
   	    	  
   	  try {
   		  new SQLUpdateClause(conn, configuration, folders)
@@ -1229,7 +1226,7 @@ return linkRecords;
   	  QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
   	  Configuration configuration = DbUtils.getConfiguration();
   	  SQLQuery query = new SQLQuery(conn, configuration);
-  	  QMaps maps = QMaps.maps;
+  	  
     	  
   	 /* long _mapId = 0;
   	  

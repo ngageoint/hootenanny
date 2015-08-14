@@ -35,7 +35,6 @@ import java.util.LinkedList;
 import hoot.services.UnitTest;
 import hoot.services.wps.WpsUtils;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.message.BasicStatusLine;
@@ -62,7 +61,7 @@ public class CustomScriptDeleteScriptProcessletTest {
 	{
 		CustomScriptDeleteScriptProcesslet processlet = Mockito.spy(new CustomScriptDeleteScriptProcesslet());
 
-		HttpResponse mockResp = new BasicHttpResponse(
+		new BasicHttpResponse(
         new BasicStatusLine(new ProtocolVersion("HTTP", 1, 1), 200, "OK"));
 
 		doReturn("[{\"NAME\":\"testName\",\"DESCRIPTION\":\"my description\"}]").when(processlet).getRequest(anyString());

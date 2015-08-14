@@ -154,3 +154,5 @@ test-files/DcTigerRoadsHighwayExactMatchInputs.osm
 data/
 .vagrant/
 inputFeatures.png
+docs/developer/restDocs/
+docs/developer/wpsDocs/

@@ -184,7 +184,7 @@ public class ExportJobResource extends JobControllerBase {
 				arg.put("outputname", jobId);
 				commandArgs.add(arg);
 
-				String dbname = HootProperties.getProperty("dbName");
+				HootProperties.getProperty("dbName");
 				String userid = HootProperties.getProperty("dbUserId");
 				String pwd = HootProperties.getProperty("dbPassword");
 				String host = HootProperties.getProperty("dbHost");
@@ -300,20 +300,26 @@ public class ExportJobResource extends JobControllerBase {
 		File out = null;
 		try
 		{
-			String workingFolder = tempOutputPath + "/" + id ;
-			String outputFilePath = workingFolder + "/" + outputname + ".zip";
+			String workingFolder = null ;
 
-			if(remove.equalsIgnoreCase("true"))
+			File folder = hoot.services.utils.FileUtils.getSubFolderFromFolder(tempOutputPath, id);
+			if(folder != null)
 			{
-				delPath = tempOutputPath + "/" + id ;
-			}
+				workingFolder = tempOutputPath + "/" + id ;
+				
+				if(remove.equalsIgnoreCase("true"))
+				{
+					delPath = workingFolder ;
+				}
 
-	    out = new File(outputFilePath);
-	    if(!out.exists())
-	    {
-	    	throw new NativeInterfaceException("Missing output file",
-	          NativeInterfaceException.HttpCode.SERVER_ERROR);
-	    }
+		    out = hoot.services.utils.FileUtils.getFileFromFolder(workingFolder, outputname , "zip"); 
+		    if(out == null  || !out.exists())
+		    {
+		    	throw new NativeInterfaceException("Missing output file",
+		          NativeInterfaceException.HttpCode.SERVER_ERROR);
+		    }
+
+			}
 
 		}
 		catch (NativeInterfaceException ne)

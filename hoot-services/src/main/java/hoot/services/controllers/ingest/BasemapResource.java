@@ -203,7 +203,7 @@ public class BasemapResource extends JobControllerBase {
 	    		String jobId = UUID.randomUUID().toString();
 	        Map.Entry pairs = (Map.Entry)it.next();
 	        String fName = pairs.getKey().toString();
-	        String ext = pairs.getValue().toString();
+	        pairs.getValue().toString();
 
 	        log.debug("Preparing Basemap Ingest for :" + fName);
 	        String inputFileName = "";
@@ -212,7 +212,7 @@ public class BasemapResource extends JobControllerBase {
 
 	        if(bmName != null && bmName.length() > 0 )
 	        {
-	        	bmName = bmName;
+	        	//bmName = bmName;
 	        }
 	        else
 	  			{
@@ -379,31 +379,32 @@ public class BasemapResource extends JobControllerBase {
 
 	protected void _toggleBaseMap(String bmName, boolean enable) throws Exception
 	{
-		String fileName = _ingestStagingPath + "/BASEMAP/" + bmName;
-		String targetName = _ingestStagingPath + "/BASEMAP/" + bmName;;
+		// See ticket#6760
+		// for file path manipulation
+		String fileExt = "enabled";
+		String targetExt = ".disabled";
 		if(enable)
 		{
-			fileName += ".disabled";
-			targetName += ".enabled";
+			fileExt = "disabled";
+			targetExt = ".enabled";
 		}
-		else
+
+		
+		// We first verify that file exits in the folder first and then try to get the source file
+		File sourceFile = hoot.services.utils.FileUtils.getFileFromFolder(_ingestStagingPath + "/BASEMAP/", bmName , fileExt); 
+		
+		if(sourceFile != null && sourceFile.exists())
 		{
-			fileName += ".enabled";
-			targetName += ".disabled";
-		}
-		File sourceFile = new File(fileName);
-		File destFile = new File(targetName);
-		if(sourceFile.exists())
-		{
-			boolean res = sourceFile.renameTo(destFile);
+			// if the source file exist then just swap the extension
+			boolean res = sourceFile.renameTo(new File(_ingestStagingPath + "/BASEMAP/", bmName + targetExt));
 			if(res == false)
 			{
-				throw new Exception("Failed to rename file:" + fileName + " to " + targetName );
+				throw new Exception("Failed to rename file:" + bmName + fileExt + " to " + bmName + targetExt );
 			}
 		}
 		else
 		{
-			throw new Exception("Can not enable file:" + fileName + ". It does not exist.");
+			throw new Exception("Can not enable file:" + bmName + targetExt + ". It does not exist.");
 		}
 	}
 
@@ -468,10 +469,9 @@ public class BasemapResource extends JobControllerBase {
 	{
 		//List<String> delList = new ArrayList<String>();
 		String controlFolder = _ingestStagingPath + "/BASEMAP/";
-		String tileDirectoryPath = _tileServerPath + "/BASEMAP/" + bmName;
 
-		File tileDir = new File(tileDirectoryPath);
-		if(tileDir.exists())
+		File tileDir = hoot.services.utils.FileUtils.getSubFolderFromFolder(_tileServerPath + "/BASEMAP/", bmName);
+		if(tileDir != null && tileDir.exists())
 		{
 			FileUtils.forceDelete(tileDir);
 		}

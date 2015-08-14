@@ -113,7 +113,7 @@ public class CustomScriptSaveProcesslet  extends BaseProcesslet {
 			
 			HttpEntity entity = resp.getEntity();
 			if (entity != null) {
-			    long len = entity.getContentLength();
+			    entity.getContentLength();
 			    ret = EntityUtils.toString(entity);
 			}
 			

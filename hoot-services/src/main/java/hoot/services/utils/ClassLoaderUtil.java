@@ -63,9 +63,9 @@ public class ClassLoaderUtil
     try
     {
       // this seems to populate more jars. Odd.
-      getChildResources("META-INF/services");
-      getChildResources("");
-      getChildResources("/");
+    	_getChildResources("META-INF/services");
+    	_getChildResources("");
+    	_getChildResources("/");
 
     }
     catch (Exception e1)
@@ -104,7 +104,7 @@ public class ClassLoaderUtil
     return result;
   }
 
-  public static List<URL> getChildResources(String path) throws IOException, ClassNotFoundException
+  private static List<URL> _getChildResources(String path) throws IOException, ClassNotFoundException
   {
     List<URL> result = new LinkedList<URL>();
 
@@ -120,7 +120,7 @@ public class ClassLoaderUtil
       }
       else if (resource.getProtocol().equalsIgnoreCase("JAR"))
       {
-        result.addAll(loadJar(path, resource));
+        result.addAll(_loadJar(path, resource));
       }
       else if (resource.getProtocol().equalsIgnoreCase("VFS"))
       {
@@ -158,7 +158,7 @@ public class ClassLoaderUtil
   // return result;
   // }
 
-  public static List<URL> loadJar(String path, URL resource) throws IOException
+  private static List<URL> _loadJar(String path, URL resource) throws IOException
   {
     JarURLConnection conn = (JarURLConnection) resource.openConnection();
     JarFile jarFile = conn.getJarFile();

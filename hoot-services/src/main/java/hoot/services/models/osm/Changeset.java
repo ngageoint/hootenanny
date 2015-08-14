@@ -31,9 +31,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.ParserConfigurationException;
@@ -41,7 +39,6 @@ import javax.xml.transform.TransformerException;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
-import hoot.services.db.DbUtils.RecordBatchType;
 import hoot.services.db2.Changesets;
 import hoot.services.db2.QChangesets;
 import hoot.services.geo.BoundingBox;
@@ -77,6 +74,7 @@ public class Changeset extends Changesets
 
   private static final Logger log = LoggerFactory.getLogger(Changeset.class);
   protected static final QChangesets changesets  = QChangesets.changesets;
+  @SuppressWarnings("unused")
   private int maxRecordBatchSize = -1;
   private Connection conn;
   private long _mapId = -1;
@@ -381,10 +379,10 @@ public class Changeset extends Changesets
     if(
     		new SQLUpdateClause(conn, DbUtils.getConfiguration(_mapId), changesets)
     			.where(changesets.id.eq(getId()))
-    			.set(changesets.maxLat, bounds.getMaxLatDb())
-    			.set(changesets.maxLon, bounds.getMaxLonDb())
-    			.set(changesets.minLat, bounds.getMinLatDb())
-    			.set(changesets.minLon, bounds.getMinLonDb())
+    			.set(changesets.maxLat, bounds.getMaxLat())
+    			.set(changesets.maxLon, bounds.getMaxLon())
+    			.set(changesets.minLat, bounds.getMinLat())
+    			.set(changesets.minLon, bounds.getMinLon())
     			.execute() != 1)
     {
     	throw new Exception("Error updating changeset bounds.");
@@ -407,10 +405,10 @@ public class Changeset extends Changesets
   		.singleResult(changesets);
 
     //TODO: I don't like doing this...
-    double minLon = DbUtils.fromDbCoordValue(changeset.getMinLon());
-    double minLat = DbUtils.fromDbCoordValue(changeset.getMinLat());
-    double maxLon = DbUtils.fromDbCoordValue(changeset.getMaxLon());
-    double maxLat = DbUtils.fromDbCoordValue(changeset.getMaxLat());
+    double minLon = changeset.getMinLon();
+    double minLat = changeset.getMinLat();
+    double maxLon = changeset.getMaxLon();
+    double maxLat = changeset.getMaxLat();
     if (minLon == GeoUtils.DEFAULT_COORD_VALUE || minLat == GeoUtils.DEFAULT_COORD_VALUE ||
         maxLon == GeoUtils.DEFAULT_COORD_VALUE || maxLat == GeoUtils.DEFAULT_COORD_VALUE)
     {
@@ -464,14 +462,15 @@ public class Changeset extends Changesets
 
 
     return
-    new SQLInsertClause(dbConn, DbUtils.getConfiguration("" + mapId), changesets)
-    .columns(changesets.closedAt, changesets.createdAt, changesets.maxLat, changesets.maxLon
-    		, changesets.minLat, changesets.minLon, changesets.userId)
-    .values(closedAt, new Timestamp(now.getMillis()),
-    		DbUtils.toDbCoordValue(GeoUtils.DEFAULT_COORD_VALUE),
-    		DbUtils.toDbCoordValue(GeoUtils.DEFAULT_COORD_VALUE),
-        DbUtils.toDbCoordValue(GeoUtils.DEFAULT_COORD_VALUE),
-        DbUtils.toDbCoordValue(GeoUtils.DEFAULT_COORD_VALUE), userId).executeWithKey(changesets.id);
+      new SQLInsertClause(dbConn, DbUtils.getConfiguration("" + mapId), changesets)
+        .columns(changesets.closedAt, changesets.createdAt, changesets.maxLat, changesets.maxLon
+    	  	, changesets.minLat, changesets.minLon, changesets.userId)
+        .values(closedAt, new Timestamp(now.getMillis()),
+    		  GeoUtils.DEFAULT_COORD_VALUE,
+    		  GeoUtils.DEFAULT_COORD_VALUE,
+          GeoUtils.DEFAULT_COORD_VALUE,
+          GeoUtils.DEFAULT_COORD_VALUE, userId)
+        .executeWithKey(changesets.id);
   }
 
   /**
