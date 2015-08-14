@@ -106,7 +106,6 @@ void ServicesDbReader::_addTagsToElement(shared_ptr<Element> element)
 
 Envelope ServicesDbReader::calculateEnvelope() const
 {
-  assert(_mapId > 0);
   assert(_open);
   Envelope result = _database.calculateEnvelope();
   return result;
@@ -203,7 +202,7 @@ void  ServicesDbReader::initializePartial()
 
   _elementResultIterator.reset();
   _firstPartialReadCompleted = false;
-  assert(_mapId > 0);
+
   _elementsRead = 0;
 
   _nodeIndex = 0;

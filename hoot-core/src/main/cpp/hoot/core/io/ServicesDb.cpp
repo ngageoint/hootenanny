@@ -1067,6 +1067,7 @@ void ServicesDb::setUserId(const long sessionUserId)
 void ServicesDb::setMapId(const long sessionMapId)
 {
   _currMapId = sessionMapId;
+  assert(_currMapId > 0);
 
   LOG_DEBUG("Map ID updated to " + QString::number(_currMapId));
 }
