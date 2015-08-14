@@ -41,7 +41,7 @@ ufd.rules = {
         ['F_CODE','AC000','facility','yes'], // Processing/Treatment Plant - NFDD AL010
         ['F_CODE','AE010','facility','yes'], // Assembly Plant - NFDD AL010
         ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
-        ['F_CODE','AK190','man_made','recreation_pier'], // Fishing Pier/Promenade Pier - NFDD BB081
+        ['F_CODE','AK190','man_made','recreational_pier'], // Fishing Pier/Promenade Pier - NFDD BB081
         ['F_CODE','AL015',undefined,undefined], // Building - NFDD AL013 - To Stop Warnings
         ['F_CODE','AL045','facility','yes'], // Complex Outline - No FCODE, moving to AL010 Facility
         ['F_CODE','AL100','building','hut'], // Hut - NFDD AL099
@@ -141,11 +141,11 @@ ufd.rules = {
         'LTN':'lanes', // Track or Lane Count
         'MVC':'max_clearance', // Maximum Vertical Clearance
         'MWG':'divider:width', // Median Width with greater than 1 meter resolution
-        'NPL':'cable_count', // Number of Parallel Lines
+        'NPL':'cables', // Number of Parallel Lines
         'OHB':'height', // Overall Height of Bridge
         'OHC':'max_clearance', // Overhead Clearance Category
         'PFG':'height:predominant', // Predominant Feature Height
-        'PHT':'raw:PHT', // Predominant Height
+        'PHT':'height', // Predominant Height
         'SCALE':'source:scale', // Feature Scale (e.g., 50000, 100000)
         'SDO':'raw:SDO', // Sand Dune Orientation
         'SGC':'raw:SGC', // Gradient/Slope
@@ -464,7 +464,8 @@ ufd.rules = {
         ['BUD','3','undergrowth:density','medium'], // Medium (>15%<=50%) 
         ['BUD','4','undergrowth:density','dense'], // Dense (>50%) 
         ['BUD','997','undergrowth:density','unpopulated'], // Unpopulated 
-        ['BUD','998','undergrowth:density','not_applicable'], // Not Applicable 
+        // ['BUD','998','undergrowth:density','not_applicable'], // Not Applicable
+        ['BUD','998',undefined,undefined], // Not Applicable
 
         // CAB - Cable Classification 
         // ['CAB','0','cable:type','unknown'], // Unknown 
@@ -973,20 +974,20 @@ ufd.rules = {
         ['MST','999','missile','other'], // Other 
 
         // NST - Navigation System Types 
-        // ['NST','0','navigation_aid','unknown'], // Unknown
+        // ['NST','0','navigationaid','unknown'], // Unknown
         ['NST','0',undefined,undefined], // Unknown 
-        ['NST','2','navigation_aid','consol'], // CONSOL
-        ['NST','3','navigation_aid','decca'], // DECCA
-        ['NST','7','navigation_aid','long_range_air_navigation_system'], // Long Range Air Navigation System (LORAN)
-        ['NST','8','navigation_aid','omega'], // OMEGA
-        ['NST','11','navigation_aid','radar'], // Radar
-        ['NST','12','navigation_aid','radio'], // Radio
-        ['NST','13','navigation_aid','radio_telephone'], // Radio Telephone
-        ['NST','15','navigation_aid','television'], // TV
-        ['NST','16','navigation_aid','microwave'], // Microwave
-        ['NST','33','navigation_aid','radio_telegraph'], // Radio Telegraph
-        ['NST','997','navigation_aid','unpopulated'], // Unpopulated
-        ['NST','999','navigation_aid','other'], // Other
+        ['NST','2','navigationaid','consol'], // CONSOL
+        ['NST','3','navigationaid','decca'], // DECCA
+        ['NST','7','navigationaid','loran'], // Long Range Air Navigation System (LORAN)
+        ['NST','8','navigationaid','omega'], // OMEGA
+        ['NST','11','navigationaid','radar'], // Radar
+        ['NST','12','navigationaid','radio'], // Radio
+        ['NST','13','navigationaid','radio_telephone'], // Radio Telephone
+        ['NST','15','navigationaid','television'], // TV
+        ['NST','16','navigationaid','microwave'], // Microwave
+        ['NST','33','navigationaid','radio_telegraph'], // Radio Telegraph
+        ['NST','997','navigationaid','unpopulated'], // Unpopulated
+        ['NST','999','navigationaid','other'], // Other
 
         // OCC - Overhead Clearance Category Code 
         // ['OCC','0','raw:OCC','unknown'], // Unknown 
@@ -1100,7 +1101,8 @@ ufd.rules = {
         ['PPC','9','generator:source','substation'], // Substation 
         ['PPC','10','generator:source','transformer_yard'], // Transformer Yard 
         ['PPC','997','generator:source','unpopulated'], // Unpopulated 
-        ['PPC','998','generator:source','not_applicable'], // Not Applicable 
+        // ['PPC','998','generator:source','not_applicable'], // Not Applicable
+        ['PPC','998',undefined,undefined], // Not Applicable
         ['PPC','999','generator:source','other'], // Other 
 
         // PPT - Populated Place Type 
@@ -1626,7 +1628,8 @@ ufd.rules = {
         ['TST','1','cable:shape','symmetric_catenary'], // Normal Suspension 
         ['TST','2','cable:shape','mountain_catenary'], // Catenary (Over Mountains) 
         ['TST','3','cable:shape','overwater_catenary'], // Catenary (Over Water) 
-        ['TST','998','cable:shape','not_applicable'], // Not Applicable 
+        // ['TST','998','cable:shape','not_applicable'], // Not Applicable
+        ['TST','998',undefined,undefined], // Not Applicable
         ['TST','999','cable:shape','other'], // Other 
 
         // TTC - Tower Type Category 
@@ -1876,7 +1879,8 @@ ufd.rules = {
         ['VDC','28','source:datum:sounding','highest_high_water'], // Highest High Water
         ['VDC','30','source:datum:sounding','indian_spring_high_water!'], // Indian Spring High Water!
         ['VDC','90','source:datum:sounding','lowest_low_water'], // Lowest Low Water
-        ['VDC','998','source:datum:sounding','not_applicable'], // Not Applicable
+        // ['VDC','998','source:datum:sounding','not_applicable'], // Not Applicable
+        ['VDC','998',undefined,undefined], // Not Applicable
         ['VDC','999','source:datum:sounding','other'], // Other
 
         // VEG - Vegetation Characteristics 
@@ -1922,7 +1926,8 @@ ufd.rules = {
         ['VH3','4','vegetation:height','>20_and_<=40'], // >20 and <=40 
         ['VH3','5','vegetation:height','>40'], // >40 
         ['VH3','997','vegetation:height','unpopulated'], // Unpopulated 
-        ['VH3','998','vegetation:height','not_applicable'], // Not Applicable 
+        // ['VH3','998','vegetation:height','not_applicable'], // Not Applicable
+        ['VH3','998',undefined,undefined], // Not Applicable
 
         // VOL - Volume 
         ['VOL','1','raw:VOL','empty'], // Empty 
@@ -1973,7 +1978,8 @@ ufd.rules = {
         ['YSU','4','military:service','marines'], // Marines 
         ['YSU','5','military:service','navy'], // Navy 
         ['YSU','7','military:service','joint'], // Joint 
-        ['YSU','998','military:service','not_applicable'], // Not Applicable 
+        // ['YSU','998','military:service','not_applicable'], // Not Applicable
+        ['YSU','998',undefined,undefined], // Not Applicable
         ['YSU','999','military:service','other'], // Other
 
         // Z_VALUE_TYPE - Z-Coordinate Type 
