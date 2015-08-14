@@ -148,42 +148,8 @@ public class TranslatorResource extends ServerControllerBase{
   }
 
 
-  /**
-	 * <NAME>Translation Service Node Server Start</NAME>
-	 * <DESCRIPTION>
-	 * This rest end point start translation node js server. It first searches for process with "TranslationServer.js"
-	 * and kills them to clean out previously running processes. It also combines stdout and stderr from node server output
-	 * and then prints out to service stdout. 
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <port>
-	 * 	The port node server should be listening. If none supplied then it will use default port specified in hoot-services.conf
-	 * 	translationServerPort variable.
-	 * </port>
-	 * <threadcount>
-	 * 	The number of processes used by translation server. If 0 then it will use numbers of CPU. If none specified then the default
-	 * 	value in hoot-services.conf translationServerThreadCount gets used.
-	 * </threadcount>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON containing port and threadcount
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/ogr/translationserver/start?port=8094&threadcount=0</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>{"port":"8094", "threadcount","0"}</OUTPUT>
-	 * </EXAMPLE>
-   * @param port
-   * @param nThread
-   * @return
-   */
-  @GET
-  @Path("/translationserver/start")
-  @Produces(MediaType.TEXT_PLAIN)
-  public Response startTranslationService(@QueryParam("port") final String port, 
-  		@QueryParam("threadcount") final String nThread) {
+
+  public void startTranslationService() {
 
   	// set default default port and threadcount
   	String currPort = translationServerPort;
@@ -193,36 +159,7 @@ public class TranslatorResource extends ServerControllerBase{
 			// Make sure to wipe out previosuly running servers.
 			stopServer(homeFolder + "/scripts/" + translationServerScript);
 			
-			// override with user specified values if available
-			if(port != null)
-			{
-				try
-				{
-					Integer.parseInt(port);
-					currPort = port;
-				}
-				catch (Exception pe)
-				{
-					log.warn("Supplied port number is invalid. Using " + currPort);
-				}
-				
-			}
-			
-		// override with user specified values if available
-			if(nThread != null)
-			{
-				try
-				{
-					Integer.parseInt(nThread);
-					currThreadCnt = nThread;
-				}
-				catch (Exception pe)
-				{
-					log.warn("Supplied thread count is invalid. Using " + currThreadCnt);
-				}
-				
-			}
-			
+	
 			// Probably an overkill but just in-case using synch lock
 			synchronized(portLock)
 			{
@@ -243,39 +180,13 @@ public class TranslatorResource extends ServerControllerBase{
 			log);
 		}
   	
-  	JSONObject res = new JSONObject();
-		res.put("port", currPort);
-		res.put("threadcount", currThreadCnt);
-		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
   }
 
  
   
   
-  
-  /**
-	 * <NAME>Translation Service Node Server Stop</NAME>
-	 * <DESCRIPTION>
-	 *  Destroys all translation server process where it effectively shutting them down.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON containing state
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/ogr/translationserver/stop</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>{"isRunning":"false"}</OUTPUT>
-	 * </EXAMPLE>
-   * @return
-   */
-  @GET
-  @Path("/translationserver/stop")
-  @Produces(MediaType.TEXT_PLAIN)
-  public Response stopTranslationService() {
+ 
+  public void stopTranslationService() {
   	// This also gets called automatically from HootServletContext when service exits but
   	// should not be reliable since there are many path where it will not be invoked.
 		try
@@ -289,10 +200,7 @@ public class TranslatorResource extends ServerControllerBase{
 		    Status.INTERNAL_SERVER_ERROR,
 			log);
 		}
-  	
-  	JSONObject res = new JSONObject();
-		res.put("isRunning", "false");
-		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+  
   }
   
   /**

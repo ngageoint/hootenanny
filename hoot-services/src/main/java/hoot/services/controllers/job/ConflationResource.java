@@ -278,7 +278,7 @@ public class ConflationResource extends JobControllerBase {
 		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
 	}
 
-	
+	/*
 	@GET
   @Path("/advancedoptions")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -398,6 +398,6 @@ public class ConflationResource extends JobControllerBase {
     	}
     }
     return retVal;
-	}
+	}*/
 	
 }

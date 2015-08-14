@@ -26,7 +26,9 @@
  */
 package hoot.services.controllers.info;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 import javax.ws.rs.core.MediaType;
@@ -38,6 +40,10 @@ import hoot.services.info.CoreDetail;
 import hoot.services.info.ServicesDetail;
 import hoot.services.info.VersionInfo;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.apache.commons.io.filefilter.NotFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
