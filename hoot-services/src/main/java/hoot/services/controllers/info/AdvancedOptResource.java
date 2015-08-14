@@ -348,7 +348,8 @@ public class AdvancedOptResource {
 		}
   	return "";
   }
-	protected void _generateRule(JSONArray a, JSONObject p) throws Exception
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+  protected void _generateRule(JSONArray a, JSONObject p) throws Exception
 	{
 		
 		// for each options in template apply the value
@@ -423,7 +424,8 @@ public class AdvancedOptResource {
 							JSONObject override = (JSONObject)oAttrib;
 
 							Iterator it = override.entrySet().iterator();
-							boolean hasNext = true;
+							@SuppressWarnings("unused")
+              boolean hasNext = true;
 							while (it.hasNext()) {
 								Map.Entry pair = (Map.Entry)it.next();
 								curOpt.put(pair.getKey(), pair.getValue());

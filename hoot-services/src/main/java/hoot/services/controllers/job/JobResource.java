@@ -259,7 +259,7 @@ public class JobResource
 
   	JSONArray paramsList = (JSONArray)job.get("params");
 
-  	Class[] paramTypes = new Class[paramsList.size()];
+  	Class<?>[] paramTypes = new Class[paramsList.size()];
   	Object[] parameters = new Object[paramsList.size()];
   	for(int i=0; i<paramsList.size(); i++)
   	{
@@ -268,8 +268,8 @@ public class JobResource
   		Object oIsPrim = param.get("isprimitivetype");
   		if(oIsPrim != null && oIsPrim.toString().equalsIgnoreCase("true"))
   		{
-  			Class classWrapper = Class.forName(paramType);
-  			paramTypes[i] = (Class) classWrapper.getField("TYPE").get(null);
+  			Class<?> classWrapper = Class.forName(paramType);
+  			paramTypes[i] = (Class<?>) classWrapper.getField("TYPE").get(null);
   		}
   		else
   		{
@@ -280,7 +280,7 @@ public class JobResource
   	}
 
 
-		Class c = Class.forName(className);
+		Class<?> c = Class.forName(className);
   	Object instance = c.newInstance();
 
 
@@ -305,7 +305,7 @@ public class JobResource
 			newParams[parameters.length] = internalJobId;
 
 
-			Class[] newParamTypes = new Class[paramsList.size() + 1];
+			Class<?>[] newParamTypes = new Class[paramsList.size() + 1];
 			for(int jj=0; jj<paramsList.size(); jj++)
 			{
 				newParamTypes[jj] = paramTypes[jj];

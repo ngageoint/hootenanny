@@ -519,6 +519,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
    * @throws IllegalAccessException
    * @throws InstantiationException
    */
+  @SuppressWarnings("rawtypes")
   public static List<?> getElementRecords(final long mapId, final ElementType elementType,
     final Set<Long> elementIds, Connection dbConn) throws InstantiationException,
     IllegalAccessException, ClassNotFoundException, NoSuchMethodException,
@@ -553,6 +554,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
    * @throws IllegalAccessException
    * @throws InstantiationException
    */
+  @SuppressWarnings("rawtypes")
   public static List<?> getElementRecordsWithUserInfo(final long mapId,
     final ElementType elementType, final Set<Long> elementIds, Connection dbConn)
     throws InstantiationException, IllegalAccessException, ClassNotFoundException,

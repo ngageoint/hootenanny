@@ -36,7 +36,6 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;

@@ -27,17 +27,13 @@
 package hoot.services.review;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
-import hoot.services.db.DbUtils.review_status_enum;
-import hoot.services.db2.QChangesets;
 import hoot.services.db2.QMaps;
 import hoot.services.db2.QReviewItems;
-import hoot.services.db2.QUsers;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.review.MarkItemsReviewedRequest;
 import hoot.services.models.review.MarkItemsReviewedResponse;

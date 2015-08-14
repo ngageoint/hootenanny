@@ -71,7 +71,7 @@ public class ProcessStreamInterfaceTest {
 
 		ProcessStreamInterface ps = new ProcessStreamInterface();
 
-		Class[] cArg = new Class[1];
+		Class<?>[] cArg = new Class[1];
 		cArg[0] = JSONObject.class;
 		Method method = ProcessStreamInterface.class.getDeclaredMethod("createCmdArray", cArg);
 		method.setAccessible(true);
@@ -83,8 +83,8 @@ public class ProcessStreamInterfaceTest {
 
 	}
 
-
-	@Test
+	@SuppressWarnings("unchecked")
+  @Test
 	@Category(UnitTest.class)
 	public void testcreateScriptCmd() throws Exception
 	{
@@ -96,7 +96,7 @@ public class ProcessStreamInterfaceTest {
 
 		ProcessStreamInterface ps = new ProcessStreamInterface();
 
-		Class[] cArg = new Class[1];
+		Class<?>[] cArg = new Class[1];
 		cArg[0] = JSONObject.class;
 		Method method = ProcessStreamInterface.class.getDeclaredMethod("createScriptCmdArray", cArg);
 		method.setAccessible(true);

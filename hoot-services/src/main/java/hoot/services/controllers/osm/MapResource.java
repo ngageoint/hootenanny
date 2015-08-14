@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.osm;
 
-import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.FolderMapMappings;
 import hoot.services.db2.Folders;
@@ -43,7 +42,6 @@ import hoot.services.models.osm.LinkRecords;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.ModelDaoUtils;
-import hoot.services.nativeInterfaces.JobExecutionManager;
 import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.writers.osm.MapQueryResponseWriter;
@@ -57,7 +55,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 

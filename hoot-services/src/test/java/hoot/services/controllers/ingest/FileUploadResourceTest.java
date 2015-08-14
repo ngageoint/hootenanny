@@ -29,9 +29,7 @@ package hoot.services.controllers.ingest;
 import java.io.File;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;
@@ -44,11 +42,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.junit.rules.ExpectedException;
-import org.mockito.Mockito;
 
 public class FileUploadResourceTest {
 	private static String homeFolder = null;
