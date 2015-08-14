@@ -184,7 +184,7 @@ public class ExportJobResource extends JobControllerBase {
 				arg.put("outputname", jobId);
 				commandArgs.add(arg);
 
-				String dbname = HootProperties.getProperty("dbName");
+				HootProperties.getProperty("dbName");
 				String userid = HootProperties.getProperty("dbUserId");
 				String pwd = HootProperties.getProperty("dbPassword");
 				String host = HootProperties.getProperty("dbHost");

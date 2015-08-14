@@ -58,7 +58,6 @@ import hoot.services.db2.CurrentWayNodes;
 import hoot.services.db2.CurrentWays;
 import hoot.services.db2.QChangesets;
 import hoot.services.db2.QCurrentNodes;
-import hoot.services.db2.QCurrentRelationMembers;
 import hoot.services.db2.QCurrentRelations;
 import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.db2.QCurrentWays;
@@ -90,8 +89,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   private QCurrentWays currentWaysTbl = QCurrentWays.currentWays;
   private QCurrentWayNodes currentWayNodesTbl = QCurrentWayNodes.currentWayNodes;
   private QCurrentRelations  currentRelationsTbl = QCurrentRelations.currentRelations;
-  private QCurrentRelationMembers currentRelationMembersTbl = QCurrentRelationMembers.currentRelationMembers;
-
   public ChangesetResourceUploadCreateTest() throws NumberFormatException, IOException
   {
     super("hoot.services.controllers.osm");
@@ -1181,8 +1178,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
     final long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-    final Set<Long> nodeIds =
-      OsmTestUtils.createTestNodes(changesetId, originalBounds);
+    OsmTestUtils.createTestNodes(changesetId, originalBounds);
 
     //Try to create two nodes with the same ID.  A failure should occur and no data in the system
     //should be modified.

@@ -682,10 +682,6 @@ public class JobResource
     {
       JSONObject status = getJobStatusObj(jobId);
 
-      double dXX = 50.0;
-			double dYY = 60.0;
-			int dZZ = (int)(dXX * (dYY/100));
-
       try
       {
 	      String detail = status.get("statusDetail").toString();

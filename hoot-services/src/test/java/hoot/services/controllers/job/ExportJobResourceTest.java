@@ -134,7 +134,7 @@ public class ExportJobResourceTest {
 		{
 			transExtPath = translationExtPath;
 		}
-		JSONArray srvList = new JSONArray();
+		new JSONArray();
 		try
 		{
 			String expected = "";

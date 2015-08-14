@@ -203,7 +203,7 @@ public class BasemapResource extends JobControllerBase {
 	    		String jobId = UUID.randomUUID().toString();
 	        Map.Entry pairs = (Map.Entry)it.next();
 	        String fName = pairs.getKey().toString();
-	        String ext = pairs.getValue().toString();
+	        pairs.getValue().toString();
 
 	        log.debug("Preparing Basemap Ingest for :" + fName);
 	        String inputFileName = "";
@@ -212,7 +212,7 @@ public class BasemapResource extends JobControllerBase {
 
 	        if(bmName != null && bmName.length() > 0 )
 	        {
-	        	bmName = bmName;
+	        	//bmName = bmName;
 	        }
 	        else
 	  			{

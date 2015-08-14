@@ -995,9 +995,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
         expandedBounds.expand(updatedBounds, boundsExpansionFactor);
         hoot.services.models.osm.Changeset hootChangeset =
           new hoot.services.models.osm.Changeset(mapId,changesetId, conn);
-        BoundingBox changesetBounds = hootChangeset.getBounds();
-        //TODO: fix
-        //Assert.assertTrue(changesetBounds.equals(expandedBounds));
+        hootChangeset.getBounds();
       }
       catch (Exception e)
       {

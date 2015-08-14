@@ -227,7 +227,7 @@ public class MultipartSerializer {
 	
 	
 			List<FileItem> fileItemsList = uploader.parseRequest(request);
-			Iterator<FileItem> fileItemsIterator = fileItemsList.iterator();
+			fileItemsList.iterator();
 	
 			// If user request type is DIR then treat it as FGDB folder
 			if(inputType.equalsIgnoreCase("DIR"))

@@ -242,8 +242,6 @@ public class RasterToTilesService extends JobControllerBase {
 
 	protected JSONObject _createCommandObj(String name, String zoomList, int rasterSize, String userEmail) throws Exception
 	{
-		String argStr = null;
-
 		JSONArray commandArgs = new JSONArray();
 		JSONObject arg = new JSONObject();
 		arg.put("RASTER_OUTPUT_DIR", _tileServerPath);

@@ -1030,7 +1030,6 @@ public class DbUtils
     {
       try
       {
-        long execResult = -1;
         Configuration configuration = getConfiguration(mapId);
         //conn.setAutoCommit(false);
 
@@ -1060,7 +1059,7 @@ public class DbUtils
 
           	if(nBatch > 0)
           	{
-          		execResult = insert.execute();
+          		insert.execute();
           	}
 
             break;
@@ -1100,7 +1099,7 @@ public class DbUtils
 
           	if(nBatchUpdate > 0)
           	{
-          		execResult = update.execute();
+          		update.execute();
           	}
 
             break;
@@ -1111,7 +1110,7 @@ public class DbUtils
           	long nBatchDel = 0;
           	for(int i=0; i<records.size(); i++)
           	{
-          		Object oRec = records.get(i);
+          		records.get(i);
 
           		List<BooleanExpression> predicates = predicateslist.get(i);
 
@@ -1139,7 +1138,7 @@ public class DbUtils
 
           	if(nBatchDel > 0)
           	{
-          		execResult = delete.execute();
+          		delete.execute();
           	}
 
             break;
@@ -1241,7 +1240,6 @@ public class DbUtils
       try
       {
       	String sql = null;
-        long execResult = -1;
         //conn.setAutoCommit(false);
         int count = 0;
 
@@ -1269,7 +1267,8 @@ public class DbUtils
 	      			ps.setLong(7, node.getTile());
 	      			ps.setLong(8, node.getVersion());
 
-	      			Map<String, String> tags = (Map<String, String>)node.getTags();
+	      			@SuppressWarnings("unchecked")
+              Map<String, String> tags = (Map<String, String>)node.getTags();
 
 	      			String hstoreStr = "";
 	      			Iterator it = tags.entrySet().iterator();
@@ -1315,7 +1314,8 @@ public class DbUtils
 	      			ps.setLong(6, node.getTile());
 	      			ps.setLong(7, node.getVersion());
 
-	      			Map<String, String> tags = (Map<String, String>)node.getTags();
+	      			@SuppressWarnings("unchecked")
+              Map<String, String> tags = (Map<String, String>)node.getTags();
 
 	      			String hstoreStr = "";
 	      			Iterator it = tags.entrySet().iterator();
@@ -1404,7 +1404,6 @@ public class DbUtils
       try
       {
       	String sql = null;
-        long execResult = -1;
         //conn.setAutoCommit(false);
         int count = 0;
 
@@ -1428,7 +1427,8 @@ public class DbUtils
 	      			ps.setBoolean(4, way.getVisible());
 	      			ps.setLong(5, way.getVersion());
 
-	      			Map<String, String> tags = (Map<String, String>)way.getTags();
+	      			@SuppressWarnings("unchecked")
+              Map<String, String> tags = (Map<String, String>)way.getTags();
 
 	      			String hstoreStr = "";
 	      			Iterator it = tags.entrySet().iterator();
@@ -1469,7 +1469,8 @@ public class DbUtils
 	      			ps.setTimestamp(3, way.getTimestamp());
 	      			ps.setLong(4, way.getVersion());
 
-	      			Map<String, String> tags = (Map<String, String>)way.getTags();
+	      			@SuppressWarnings("unchecked")
+              Map<String, String> tags = (Map<String, String>)way.getTags();
 
 	      			String hstoreStr = "";
 	      			Iterator it = tags.entrySet().iterator();
@@ -1559,7 +1560,6 @@ public class DbUtils
       try
       {
       	String sql = null;
-        long execResult = -1;
         //conn.setAutoCommit(false);
         int count = 0;
 
@@ -1583,7 +1583,8 @@ public class DbUtils
 	      			ps.setBoolean(4, rel.getVisible());
 	      			ps.setLong(5, rel.getVersion());
 
-	      			Map<String, String> tags = (Map<String, String>)rel.getTags();
+	      			@SuppressWarnings("unchecked")
+              Map<String, String> tags = (Map<String, String>)rel.getTags();
 
 	      			String hstoreStr = "";
 	      			Iterator it = tags.entrySet().iterator();
@@ -1624,7 +1625,8 @@ public class DbUtils
 	      			ps.setTimestamp(3, rel.getTimestamp());
 	      			ps.setLong(4, rel.getVersion());
 
-	      			Map<String, String> tags = (Map<String, String>)rel.getTags();
+	      			@SuppressWarnings("unchecked")
+              Map<String, String> tags = (Map<String, String>)rel.getTags();
 
 	      			String hstoreStr = "";
 	      			Iterator it = tags.entrySet().iterator();

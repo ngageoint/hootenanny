@@ -234,6 +234,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
    * @return a string map with tag key/value pairs
    * @throws Exception
    */
+  @SuppressWarnings("unchecked")
   public Map<String, String> getTags() throws Exception
   {
     //this is a little risky, but I'm assuming the field probably won't ever change in name

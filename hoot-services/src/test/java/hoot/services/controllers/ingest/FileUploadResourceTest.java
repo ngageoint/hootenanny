@@ -898,7 +898,7 @@ public class FileUploadResourceTest {
 	@Category(UnitTest.class)
 	public void TestserializeFGDB() throws Exception
 	{
-		FileUploadResource res = new FileUploadResource();
+		new FileUploadResource();
 
 		//homeFolder + "/upload/" + jobId + "/" + relPath;
 		// Create dummy FGDB
@@ -959,7 +959,7 @@ public class FileUploadResourceTest {
 	@Category(UnitTest.class)
 	public void TestserializeUploadedFiles() throws Exception
 	{
-		FileUploadResource res = new FileUploadResource();
+		new FileUploadResource();
 
 		//homeFolder + "/upload/" + jobId + "/" + relPath;
 		// Create dummy FGDB

@@ -370,7 +370,6 @@ public class AdvancedOptResource {
 					{
 						JSONObject jDocKey = (JSONObject)oDocKey;
 						
-						String sElemType = "";
 						Object oAttrib = jDocKey.get("Data Type");
 						if(oAttrib != null)
 						{
@@ -383,7 +382,6 @@ public class AdvancedOptResource {
 								{
 									// bool type is checkbox
 									curOpt.put("elem_type", "checkbox");
-									sElemType = "checkbox";
 								}
 							}
 						}
@@ -527,7 +525,6 @@ public class AdvancedOptResource {
 							JSONObject override = (JSONObject)oAttrib;
 
 							Iterator it = override.entrySet().iterator();
-							boolean hasNext = true;
 							while (it.hasNext()) {
 								Map.Entry pair = (Map.Entry)it.next();
 								curOpt.put(pair.getKey(), pair.getValue());

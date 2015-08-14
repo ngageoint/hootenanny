@@ -135,7 +135,7 @@ public class OgrAttributesResource extends JobControllerBase {
 
 	  			
 
-	  			JSONObject param = new JSONObject();
+	  			new JSONObject();
 	  			// If it is zip file then we crack open to see if it contains FGDB.
 	  			// If so then we add the folder location and desired output name which is fgdb name in the zip
 	  			if(ext.equalsIgnoreCase("ZIP"))

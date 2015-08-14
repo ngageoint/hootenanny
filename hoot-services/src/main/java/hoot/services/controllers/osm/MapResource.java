@@ -1157,7 +1157,7 @@ return linkRecords;
 
   	  QFolders folders = QFolders.folders;
   	  Configuration configuration = DbUtils.getConfiguration();
-  	  SQLQuery query = new SQLQuery(conn, configuration);
+  	  new SQLQuery(conn, configuration);
   	    	  
   	  try {
   		  new SQLUpdateClause(conn, configuration, folders)
@@ -1226,7 +1226,7 @@ return linkRecords;
   	  QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
   	  Configuration configuration = DbUtils.getConfiguration();
   	  SQLQuery query = new SQLQuery(conn, configuration);
-  	  QMaps maps = QMaps.maps;
+  	  
     	  
   	 /* long _mapId = 0;
   	  

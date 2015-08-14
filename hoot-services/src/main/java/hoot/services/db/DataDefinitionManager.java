@@ -69,8 +69,6 @@ public class DataDefinitionManager {
 		{
 			Class.forName(POSTGRESQL_DRIVER);
 			conn = DriverManager.getConnection(DB_URL + db_name, userid, pwd);
-			int nRows = 0;
-
 			stmt = conn.createStatement();
 			String sql = "SELECT 1 FROM pg_database WHERE datname = '" + dbname + "'";
 			ResultSet rs = stmt.executeQuery(sql);

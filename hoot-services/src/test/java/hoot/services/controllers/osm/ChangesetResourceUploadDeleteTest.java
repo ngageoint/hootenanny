@@ -2848,7 +2848,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
     }
   }
 
-  @SuppressWarnings("unchecked")
   @Test
   @Category(UnitTest.class)
   public void testUploadDeleteMissingNodeTagValue() throws Exception
@@ -3154,7 +3153,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
     }
   }
 
-  @SuppressWarnings("unchecked")
   @Test
   @Category(UnitTest.class)
   public void testUploadDeleteMissingRelationTagValue() throws Exception
@@ -3505,7 +3503,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
     }
   }
 
-  @SuppressWarnings("unchecked")
   @Category(UnitTest.class)
   public void testUploadDeleteNodeStillBelongsToWayWithIfUnused() throws Exception
   {
@@ -4710,7 +4707,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       Assert.assertTrue(r.getEntity(String.class).contains("is still used by relation"));
 
       QChangesets changesets = QChangesets.changesets;
-      hoot.services.db2.Changesets changeset =
       new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
       .where(changesets.id.eq(changesetId)).singleResult(changesets);
       OsmTestUtils.verifyTestChangesetUnmodified(changesetId, originalBounds);

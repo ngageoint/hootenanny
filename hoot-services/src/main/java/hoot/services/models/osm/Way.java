@@ -459,6 +459,7 @@ public class Way extends Element
         elementIds.add(nodeId);
       }
    
+      @SuppressWarnings("unchecked")
       final List<Tuple> elementRecords = 
           (List<Tuple>) Element.getElementRecordsWithUserInfo(getMapId(), ElementType.Node, elementIds, conn);
       for(int i=0; i<elementRecords.size(); i++)

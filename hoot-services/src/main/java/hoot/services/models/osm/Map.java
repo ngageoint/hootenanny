@@ -82,8 +82,6 @@ import com.mysema.query.types.expr.BooleanExpression;
  */
 public class Map extends Maps
 {
-  private static final long serialVersionUID = -4908255640612804470L;
-
   private static final Logger log = LoggerFactory.getLogger(Map.class);
 
   private Connection conn;
@@ -238,8 +236,7 @@ public class Map extends Maps
   	JSONObject ret = new JSONObject();
     //get the intersecting tile ranges for the nodes
     final Vector<Range> tileIdRanges = getTileRanges(bounds);
-    java.util.Map<ElementType, java.util.Map<Long, Tuple>> elementIdsToRecordsByType =
-      new HashMap<ElementType, java.util.Map<Long, Tuple>>();
+    new HashMap<ElementType, java.util.Map<Long, Tuple>>();
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
@@ -285,8 +282,7 @@ public class Map extends Maps
   	long ret = 0;
     //get the intersecting tile ranges for the nodes
     final Vector<Range> tileIdRanges = getTileRanges(bounds);
-    java.util.Map<ElementType, java.util.Map<Long, Tuple>> elementIdsToRecordsByType =
-      new HashMap<ElementType, java.util.Map<Long, Tuple>>();
+    new HashMap<ElementType, java.util.Map<Long, Tuple>>();
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
@@ -324,8 +320,7 @@ public class Map extends Maps
   	JSONObject ret = new JSONObject();
     //get the intersecting tile ranges for the nodes
     final Vector<Range> tileIdRanges = getTileRanges(bounds);
-    java.util.Map<ElementType, java.util.Map<Long, Tuple>> elementIdsToRecordsByType =
-      new HashMap<ElementType, java.util.Map<Long, Tuple>>();
+    new HashMap<ElementType, java.util.Map<Long, Tuple>>();
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
@@ -451,7 +446,7 @@ public class Map extends Maps
       	}
       	catch (Exception ex)
       	{
-      		String err = ex.getMessage();
+      		ex.getMessage();
       	}
       }
 
@@ -532,7 +527,7 @@ public class Map extends Maps
         	}
         	catch (Exception ex)
         	{
-        		String err = ex.getMessage();
+        		ex.getMessage();
         	}
 
         }
@@ -579,7 +574,7 @@ public class Map extends Maps
         	}
         	catch (Exception ex)
         	{
-        		String err = ex.getMessage();
+        		ex.getMessage();
         	}
 
         }
@@ -684,7 +679,7 @@ public class Map extends Maps
           	}
           	catch (Exception ex)
           	{
-          		String err = ex.getMessage();
+          		ex.getMessage();
           	}
           }
 
@@ -767,7 +762,7 @@ public class Map extends Maps
         	}
         	catch (Exception ex)
         	{
-        		String err = ex.getMessage();
+        		ex.getMessage();
         	}
         }
 
@@ -817,7 +812,7 @@ public class Map extends Maps
         	}
         	catch (Exception ex)
         	{
-        		String err = ex.getMessage();
+        		ex.getMessage();
         	}
         }
 
@@ -906,7 +901,7 @@ public class Map extends Maps
         	}
         	catch (Exception ex)
         	{
-        		String err = ex.getMessage();
+        		ex.getMessage();
         	}
         }
 

@@ -47,7 +47,7 @@ public class ProcessStreamInterfaceTest {
 	@Category(UnitTest.class)
 	public void testcreateCmd() throws Exception
 	{
-		String jobIdStr = java.util.UUID.randomUUID().toString();
+		java.util.UUID.randomUUID().toString();
 		JSONArray args = new JSONArray();
 		JSONObject translation = new JSONObject();
 		translation.put("translation", "/test/loc/translation.js");
@@ -109,7 +109,7 @@ public class ProcessStreamInterfaceTest {
 		try {
 	    	String coreScriptPath = HootProperties.getProperty("coreScriptPath");
 
-	    	String coreOutputPath = HootProperties.getProperty("coreScriptOutputPath");
+	    	HootProperties.getProperty("coreScriptOutputPath");
 
 	    	String ETLMakefile = HootProperties.getInstance().getProperty("ETLMakefile",
 			          HootProperties.getDefault("ETLMakefile"));

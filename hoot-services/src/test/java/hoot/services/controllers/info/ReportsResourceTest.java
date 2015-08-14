@@ -44,15 +44,15 @@ public class ReportsResourceTest {
 	@BeforeClass
   public static void oneTimeSetup() {
 		_rps = new ReportsResource();
-		assertNotNull(_rps._homeFolder);
-		assertNotNull(_rps._rptStorePath);
+		assertNotNull(ReportsResource._homeFolder);
+		assertNotNull(ReportsResource._rptStorePath);
 	}
 
 	@Test
   @Category(UnitTest.class)
   public void testGetMetaData() throws Exception
   {
-		String storePath = _rps._homeFolder + "/" + _rps._rptStorePath;
+		String storePath = ReportsResource._homeFolder + "/" + ReportsResource._rptStorePath;
 		File f = new File(storePath);
 		File fWks = new File(storePath + "/123_test");
 		if(fWks.exists()) {
@@ -88,7 +88,7 @@ public class ReportsResourceTest {
   @Category(UnitTest.class)
   public void testGetReportsList() throws Exception
   {
-		String storePath = _rps._homeFolder + "/" + _rps._rptStorePath;
+		String storePath = ReportsResource._homeFolder + "/" + ReportsResource._rptStorePath;
 		File f = new File(storePath);
 		File fWks1 = new File(storePath + "/123_test1");
 		if(fWks1.exists()) {
@@ -177,7 +177,7 @@ public class ReportsResourceTest {
   @Category(UnitTest.class)
   public void testGetReportFile() throws Exception
   {
-		String storePath = _rps._homeFolder + "/" + _rps._rptStorePath;
+		String storePath = ReportsResource._homeFolder + "/" + ReportsResource._rptStorePath;
 		File f = new File(storePath);
 		File fWks = new File(storePath + "/123_test_file");
 		if(fWks.exists()) {
@@ -191,7 +191,7 @@ public class ReportsResourceTest {
 	  metaData.put("name", "Test Report1");
 	  metaData.put("description", "This is test report 1");
 	  metaData.put("created", currTime);
-	  metaData.put("reportpath", _rps._homeFolder + "/test-files/test_report1.pdf");
+	  metaData.put("reportpath", ReportsResource._homeFolder + "/test-files/test_report1.pdf");
 	  File meta = new File(storePath + "/123_test_file/meta.data");
 	  FileUtils.write(meta, metaData.toJSONString());
 		
@@ -210,7 +210,7 @@ public class ReportsResourceTest {
   @Category(UnitTest.class)
   public void testDeleteReport() throws Exception
   {
-		String storePath = _rps._homeFolder + "/" + _rps._rptStorePath;
+		String storePath = ReportsResource._homeFolder + "/" + ReportsResource._rptStorePath;
 		File f = new File(storePath);
 		File fWks = new File(storePath + "/123_test_del");
 		if(fWks.exists()) {
@@ -224,7 +224,7 @@ public class ReportsResourceTest {
 	  metaData.put("name", "Test Report1");
 	  metaData.put("description", "This is test report 1");
 	  metaData.put("created", currTime);
-	  metaData.put("reportpath", _rps._homeFolder + "/test-files/test_report1.pdf");
+	  metaData.put("reportpath", ReportsResource._homeFolder + "/test-files/test_report1.pdf");
 	  File meta = new File(storePath + "/123_test_del/meta.data");
 	  FileUtils.write(meta, metaData.toJSONString());
 		

@@ -49,12 +49,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-
-import javax.ws.rs.WebApplicationException;
 
 /*
  * For the save/delete multiple tests, was unable to use the Jersey test container due to
@@ -598,23 +595,7 @@ public class CustomScriptResourceTest
   		assertTrue(fScript.exists());
 
   		String sScript = FileUtils.readFileToString(fScript);
-			boolean canExport = res.validateExport(sScript);
-			// This may be no longer valid assumption.
-/*
-  		if(jsTrans.get("CANEXPORT") != null)
-  		{
-  			Boolean bCanExport = (Boolean)jsTrans.get("CANEXPORT") ;
-  			if(bCanExport)
-  			{
-					assertTrue(canExport);
-  			}
-  			else
-  			{
-  				assertFalse(canExport);
-  			}
-  		}
-*/
-  		// check for FOUO
+			res.validateExport(sScript);
 
   		if(jsTrans.get("FOUO_PATH") != null)
   		{
