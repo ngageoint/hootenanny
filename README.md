@@ -6,18 +6,19 @@ If you have any support questions please contact Hootenanny.Help@DigitalGlobe.co
 
 # Installing Hootenanny 
 
-Hootenanny has been tested on both CentOS/RHEL 6.x and Ubuntu 14.04. Ubuntu receives more 
+Hootenanny has been tested on both CentOS/RHEL 6.x and Ubuntu 14.04.  Ubuntu receives more 
 active development, has more streamlined installation instructions, and is the recommended operating
 system to run Hootenanny on. 
 
 To quickly run Hootenanny on Ubuntu, refer to the Vagrant (VM container) set up instructions in
-VAGRANT.md.  For additional notes on configuring a Hootenanny development environment, see the
-Hootenanny - Developers Guide document.
+VAGRANT.md.  For additional notes on configuring a Hootenanny development environment on Ubuntu, 
+see the Hootenanny - Developers Guide document.
 
-To run Hootenanny on CentOS, follow the Hootenanny - Installation Instructions document.  
-There is currently no Vagrant set up for CentOS/RHEL, but there may be one in the future.  Following 
-CentOS/RHEL installation instructions is significantly more complicated than launching a Vagrant 
-instance and requires a higher level of Linux expertise.
+To run Hootenanny on CentOS/RHEL, follow the Hootenanny - Installation Instructions document.  
+There is currently no Vagrant set up available for CentOS/RHEL, but there may be one in the future.  
+Following the CentOS/RHEL installation instructions is currently more complicated installing 
+Hootenanny on Ubuntu and requires a higher level of Linux expertise.  Setting up a Hootenanny 
+development environment on CentOS/RHEL is neither advised nor supported.
 
 # Redistribution
 
