@@ -65,7 +65,7 @@ public class UserResponseWriter
       
       Element osmElement = OsmResponseHeaderGenerator.getOsmHeader(responseDoc);
       
-      Element userElement = user.toXml(osmElement, user.numChangesetsModified());
+      Element userElement = user.toXml(osmElement, /*user.numChangesetsModified()*/-1);
       osmElement.appendChild(userElement);
       
       responseDoc.appendChild(osmElement);

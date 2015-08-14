@@ -282,11 +282,12 @@ int main(int argc, char *argv[])
     bool printDiff = args.contains("--diff");
 
     CppUnit::TestFactoryRegistry &registry = CppUnit::TestFactoryRegistry::getRegistry();
+    CppUnit::TestSuite *searchSuite = new CppUnit::TestSuite( "Search Tests" );
     if (args.contains("--all-names"))
     {
-      CppUnit::TestSuite *searchSuite = new CppUnit::TestSuite( "Search Tests" );
       populateAllTests(searchSuite, printDiff);
       printNames(searchSuite);
+      delete searchSuite;
       return 0;
     }
     else if (args.contains("--single"))
@@ -396,6 +397,8 @@ int main(int argc, char *argv[])
 
     result.addListener(listener);
     runner.run(result);
+    delete searchSuite;
+    delete listener;
     return result.failures().size() > 0 ? -1 : 0;
   }
 }
