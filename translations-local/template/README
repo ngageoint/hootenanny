@@ -1,0 +1,14 @@
+These template FGDB have been taken from the ESRI Defence Mapping extension for ArcGIS 10.2.
+
+Paths:
+C:\Program Files (x86)\ArcGIS\EsriDefenseMapping\Desktop10.2\Tds\Tds\Schema\Gdb\TDS_6_1.zip
+C:\Program Files (x86)\ArcGIS\EsriDefenseMapping\Desktop10.2\Tds\Local\Schema\Gdb\LTDS_4_0.zip
+
+
+The tar archives in this directory are the contents of the unzipped FGDB's.
+
+To recreate the template FGDB, do something like this:
+
+mkdir TDS_6_1.gdb
+tar -zxf tds61.tgz -C TDS_6_1.gdb
+
