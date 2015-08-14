@@ -157,7 +157,7 @@ public class DataDefinitionManager {
 				try
 				{
 					stmt = conn.prepareStatement(sql);
-					stmt.executeQuery();
+					stmt.execute();
 				}
 				catch (Exception e)
 				{

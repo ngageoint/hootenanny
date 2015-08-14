@@ -71,42 +71,8 @@ public class P2PResource extends ServerControllerBase {
   	}
   }
   
-  /**
-	 * <NAME>POI to POI Service Node Server Start</NAME>
-	 * <DESCRIPTION>
-	 * This rest end point start P2P node js server. It first searches for process with "P2PServer.js"
-	 * and kills them to clean out previously running processes. It also combines stdout and stderr from node server output
-	 * and then prints out to service stdout. 
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <port>
-	 * 	The port node server should be listening. If none supplied then it will use default port specified in hoot-services.conf
-	 * 	P2PServerPort variable.
-	 * </port>
-	 * <threadcount>
-	 * 	The number of processes used by P2P server. If 0 then it will use numbers of CPU. If none specified then the default
-	 * 	value in hoot-services.conf P2PServerThreadCount gets used.
-	 * </threadcount>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON containing port and threadcount
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/services/p2pserver/start?port=8096&threadcount=0</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>{"port":"8096", "threadcount","0"}</OUTPUT>
-	 * </EXAMPLE>
-   * @param port
-   * @param nThread
-   * @return
-   */
-  @GET
-  @Path("/p2pserver/start")
-  @Produces(MediaType.TEXT_PLAIN)
-  public Response startP2PService(@QueryParam("port") final String port, 
-  		@QueryParam("threadcount") final String nThread) {
+
+  public void startP2PService() {
 
   	// set default default port and threadcount
   	String currPort = P2PServerPort;
@@ -116,35 +82,7 @@ public class P2PResource extends ServerControllerBase {
 			// Make sure to wipe out previosuly running servers.
 			stopServer(homeFolder + "/scripts/" + P2PServerScript);
 			
-			// override with user specified values if available
-			if(port != null)
-			{
-				try
-				{
-					Integer.parseInt(port);
-					currPort = port;
-				}
-				catch (Exception pe)
-				{
-					log.warn("Supplied port number is invalid. Using " + currPort);
-				}
-				
-			}
-			
-		// override with user specified values if available
-			if(nThread != null)
-			{
-				try
-				{
-					Integer.parseInt(nThread);
-					currThreadCnt = nThread;
-				}
-				catch (Exception pe)
-				{
-					log.warn("Supplied thread count is invalid. Using " + currThreadCnt);
-				}
-				
-			}
+		
 			
 			// Probably an overkill but just in-case using synch lock
 			synchronized(portLock)
@@ -165,11 +103,7 @@ public class P2PResource extends ServerControllerBase {
 		    Status.INTERNAL_SERVER_ERROR,
 			log);
 		}
-  	
-  	JSONObject res = new JSONObject();
-		res.put("port", currPort);
-		res.put("threadcount", currThreadCnt);
-		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+ 
   }
 
  

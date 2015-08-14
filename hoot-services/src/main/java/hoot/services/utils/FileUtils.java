@@ -28,9 +28,16 @@ package hoot.services.utils;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
+
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.apache.commons.io.filefilter.NotFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 public class FileUtils
 {
@@ -75,5 +82,45 @@ public class FileUtils
     		fileStream.close();
     	}
     }
+  }
+  
+  public static File getSubFolderFromFolder(final String targetFolder, final String subFolderName) throws Exception
+  {
+  	File ret = null;
+  	
+  	File f = new File(targetFolder);
+  	List<File> files = (List<File>)org.apache.commons.io.FileUtils.listFilesAndDirs(f, 
+  			new NotFileFilter(TrueFileFilter.INSTANCE), DirectoryFileFilter.DIRECTORY);
+  	for(File ff : files)
+  	{
+  		if(ff.getName().equals(subFolderName))
+  		{
+  			ret = ff;
+  			break;
+  		}
+  	}
+
+  	return ret;
+  }
+  
+  public static File getFileFromFolder(final String targetFolder, final String fileName, final String ext) throws Exception
+  {
+  	File ret = null;
+  	String[] extension = {ext}; 
+  	File dir = new File(targetFolder);
+  	if(dir != null && dir.isDirectory())
+  	{
+  		List<File> files = (List<File>)org.apache.commons.io.FileUtils.listFiles(dir, extension, false);
+  		for(File f : files)
+  		{
+  			if(f.getName().equals(fileName + "." + ext))
+  			{
+  				ret = f;
+  				break;
+  			}
+  		}
+  	}
+
+  	return ret;
   }
 }
