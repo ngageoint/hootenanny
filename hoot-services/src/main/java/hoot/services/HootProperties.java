@@ -55,8 +55,17 @@ public class HootProperties
     if (properties == null)
     {
       properties = new Properties();
-      properties.load(
-        HootProperties.class.getClassLoader().getResourceAsStream("conf/hoot-services.conf"));
+      InputStream propsStrm = null;
+      try
+      {
+      	propsStrm = 
+      	  HootProperties.class.getClassLoader().getResourceAsStream("conf/hoot-services.conf");
+        properties.load(propsStrm);
+      }
+      finally
+      {
+      	propsStrm.close();
+      }
     }
 
     // This block of code checks for the local.conf and if there is one then it overrides the
@@ -64,17 +73,28 @@ public class HootProperties
     if (localProperties == null)
     {
     	localProperties = new Properties();
-    	InputStream inRes = HootProperties.class.getClassLoader().getResourceAsStream("conf/local.conf");
-    	if (inRes != null)
+    	InputStream inRes = null;
+    	try
     	{
-	    	localProperties.load(inRes);
+    		inRes = HootProperties.class.getClassLoader().getResourceAsStream("conf/local.conf");
+      	if (inRes != null)
+      	{
+  	    	localProperties.load(inRes);
 
-	    	Enumeration<?> enumeration = localProperties.propertyNames();
-	      while (enumeration.hasMoreElements()) {
-	          String key = (String) enumeration.nextElement();
-	          String value = localProperties.getProperty(key);
-	          properties.setProperty(key, value);
-	      }
+  	    	Enumeration<?> enumeration = localProperties.propertyNames();
+  	      while (enumeration.hasMoreElements()) {
+  	          String key = (String) enumeration.nextElement();
+  	          String value = localProperties.getProperty(key);
+  	          properties.setProperty(key, value);
+  	      }
+      	}
+    	}
+    	finally
+    	{
+    		if (inRes != null)
+    		{
+    			inRes.close();
+    		}
     	}
     }
     return properties;

@@ -348,7 +348,7 @@ public class DbUtils
   	QMaps maps = QMaps.maps;
     SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
 
-    final List<Long> mapIds = query.from(maps).where(maps.displayName.eq(mapName)).list(maps.id);
+    final List<Long> mapIds = query.from(maps).where(maps.displayName.eq(mapName)).orderBy(maps.id.asc()).list(maps.id);
 
     return mapIds;
   }

@@ -15,8 +15,8 @@
   <EXAMPLE>
   <URL>http://localhost:8080/hoot-services/ogc</URL>
   <REQUEST_TYPE>POST</REQUEST_TYPE>
-  <INPUT>Please refer to the wiki page: https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Export_Service</INPUT>
-   <OUTPUT>Please refer to the wiki page: https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Export_Service</OUTPUT>
+  <INPUT></INPUT>
+   <OUTPUT></OUTPUT>
    </EXAMPLE>
   ]]></Abstract>
 	<!-- deegree doesn't honor optional input parameters for HTTP GET requests (only POSTs), so 

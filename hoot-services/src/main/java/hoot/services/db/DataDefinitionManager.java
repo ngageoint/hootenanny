@@ -140,39 +140,50 @@ public class DataDefinitionManager {
       }//end finally try
    }//end try
 	}
-
+  
 	public void deleteTables(List<String> tables, String dbname) throws Exception
 	{
 		Connection conn = null;
-	  Statement stmt = null;
 		try
 		{
 			Class.forName(POSTGRESQL_DRIVER);
 			conn = DriverManager.getConnection(DB_URL + dbname, userid, pwd);
-			stmt = conn.createStatement();
-
 			for(int i=0; i<tables.size(); i++)
 			{
 				String tblName = tables.get(i);
 
 				String sql = "DROP TABLE \"" + tblName + "\"";
-				stmt.executeUpdate(sql);
+				PreparedStatement stmt = null;
+				try
+				{
+					stmt = conn.prepareStatement(sql);
+					stmt.executeQuery();
+				}
+				catch (Exception e)
+				{
+					log.error(e.getMessage());
+				}
+				finally
+				{
+					try
+					{
+		         if (stmt!=null)
+		         {
+		        	 stmt.close();
+		         }  
+		      }
+					catch(SQLException se2)
+					{
+		      	log.equals(se2.getMessage());
+		      }
+				}
 			}
-
 		}
 		catch (Exception e)
 		{
 			log.error(e.getMessage());
-
 		}
 		finally{
-      //finally block used to close resources
-      try{
-         if(stmt!=null)
-            stmt.close();
-      }catch(SQLException se2){
-      	log.equals(se2.getMessage());
-      }// nothing we can do
       try{
          if(conn!=null)
             conn.close();
@@ -181,7 +192,6 @@ public class DataDefinitionManager {
       }//end finally try
 		}//end try
 	}
-
 
 	public void deleteDb(String dbname, boolean force) throws Exception
 	{

@@ -217,7 +217,7 @@ if [ "$INSTALL_DEPENDENCIES" == "true" ]; then
 
   test -f blas-3.2.1-4.el6.x86_64.rpm || wget http://www.my-guides.net/en/images/stories/fedora12/msttcore-fonts-2.0-3.noarch.rpm
   sudo rpm -Uvh msttcore-fonts-2.0-3.noarch.rpm
-  if ! grep --quiet QT_HOME /etc/profile; then
+  if ! grep --quiet GDFONTPATH /etc/profile; then
     echo 'export GDFONTPATH=/usr/share/fonts/msttcore' >> /etc/profile
     source /etc/profile
   fi

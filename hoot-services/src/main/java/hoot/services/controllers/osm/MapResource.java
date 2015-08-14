@@ -45,6 +45,7 @@ import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.nativeInterfaces.JobExecutionManager;
 import hoot.services.utils.ResourceErrorHandler;
+import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.writers.osm.MapQueryResponseWriter;
 
 import java.io.StringWriter;
@@ -150,9 +151,6 @@ public class MapResource
    *
    * @return a JSON object containing a list of map layers
    * @throws Exception
-   * @see https
-   *      ://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_
-   *      -_OsmMapService#List-Layers
    */
   @GET
   @Path("/layers")
@@ -370,7 +368,7 @@ return linkRecords;
     Date now = new Date();
     String strDate = sdfDate.format(now);
 
-    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    DocumentBuilderFactory dbf = XmlDocumentBuilder.getSecureDocBuilderFactory();
     dbf.setValidating(false);
     DocumentBuilder db = dbf.newDocumentBuilder();
     Document doc = db.newDocument();
@@ -462,6 +460,8 @@ return linkRecords;
     osmElem.appendChild(wayElem);
 
     Transformer tf = TransformerFactory.newInstance().newTransformer();
+    //TODO: Fortify may require this instead but it doesn't work.
+    //TransformerFactory transformerFactory = XmlDocumentBuilder.getSecureTransformerFactory();
     tf.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
     tf.setOutputProperty(OutputKeys.INDENT, "yes");
     Writer out = new StringWriter();
@@ -503,9 +503,6 @@ return linkRecords;
 	 *	</INPUT>
 	 * <OUTPUT>
 	 * OSM XML
-	 * see https
-   *      ://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_
-   *      -_OsmMapService#Query
 	 * </OUTPUT>
 	 * </EXAMPLE>
    * Service method endpoint for retrieving OSM entity data for a given map
@@ -521,9 +518,6 @@ return linkRecords;
    *          defaults to false
    * @return response containing the data of the requested elements
    * @throws Exception
-   * @see https
-   *      ://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_
-   *      -_OsmMapService#Query
    */
   @GET
   @Consumes(MediaType.TEXT_PLAIN)
@@ -1307,7 +1301,9 @@ return linkRecords;
   			List<Long> mapIds = DbUtils.getMapIdsByName( conn,   mapName);
   			if(mapIds.size() > 0)
   			{
-  				long mapId = mapIds.get(0);
+  				// we are expecting the last one of duplicate name to be the one resulted from the conflation
+  				// This can be wrong if there is race condition. REMOVE THIS once core implement map Id return
+  				long mapId = mapIds.get(mapIds.size() - 1);
   				jobStatusManager = new JobStatusManager(conn);
     			jobStatusManager.addJob(jobId);
     			
