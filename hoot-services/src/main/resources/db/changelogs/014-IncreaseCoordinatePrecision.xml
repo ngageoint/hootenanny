@@ -15,6 +15,53 @@
     
     <modifyDataType tableName="current_nodes" columnName="latitude" newDataType="double" />
     <modifyDataType tableName="current_nodes" columnName="longitude" newDataType="double" />
+    
+    <!-- The above commands onl update the base schema and con't update any existing data...so, 
+    convert all existing coordinate values from nanodegrees to degrees.  The reason the changeset 
+    bounds coords are checked before being updated is that before this upgrade, the C++ services 
+    db writer wrote changeset coords as degrees using double precision instead of writing them 
+    as nanodegrees with integers, and the Java services changeset writer was writing them as 
+    nanodegrees with integers.  So, even though the changeset bounds written as double precision 
+    accidentally lost some precision before, the check prevents them from having their values 
+    divided unecessarily as any coord value less than ABS(180) would have had to been written as 
+    double precision in the originally. -->
+    <sql splitStatements="false">
+    DO $$
+          DECLARE
+            node_tables CURSOR FOR SELECT tablename FROM pg_tables WHERE schemaname='public' and tablename LIKE 'current_nodes_%';
+            changeset_tables CURSOR FOR SELECT tablename FROM pg_tables WHERE schemaname='public' and tablename LIKE 'changesets_%';
+            coordValue bigint;
+          BEGIN
+            FOR node_table_record IN node_tables LOOP
+              EXECUTE 'ALTER TABLE ' || node_table_record.tablename || ' ALTER COLUMN latitude TYPE double precision';
+              EXECUTE 'ALTER TABLE ' || node_table_record.tablename || ' ALTER COLUMN longitude TYPE double precision';
+              EXECUTE 'UPDATE ' || node_table_record.tablename || ' SET latitude = latitude / 10000000';
+              EXECUTE 'UPDATE ' || node_table_record.tablename || ' SET longitude = longitude / 10000000';
+            END LOOP;
+            FOR changeset_table_record IN changeset_tables LOOP
+              EXECUTE 'ALTER TABLE ' || changeset_table_record.tablename || ' ALTER COLUMN min_lat TYPE double precision';
+              EXECUTE 'ALTER TABLE ' || changeset_table_record.tablename || ' ALTER COLUMN max_lat TYPE double precision';
+              EXECUTE 'ALTER TABLE ' || changeset_table_record.tablename || ' ALTER COLUMN min_lon TYPE double precision';
+              EXECUTE 'ALTER TABLE ' || changeset_table_record.tablename || ' ALTER COLUMN max_lon TYPE double precision';
+              EXECUTE 'SELECT min_lat FROM ' || changeset_table_record.tablename INTO coordValue;
+              IF (ABS(coordValue) > 180) THEN
+                EXECUTE 'UPDATE ' || changeset_table_record.tablename || ' SET min_lat = min_lat / 10000000';
+              END IF;
+              EXECUTE 'SELECT max_lat FROM ' || changeset_table_record.tablename INTO coordValue;
+              IF (ABS(coordValue) > 180) THEN
+                EXECUTE 'UPDATE ' || changeset_table_record.tablename || ' SET max_lat = max_lat / 10000000';
+              END IF;
+              EXECUTE 'SELECT min_lon FROM ' || changeset_table_record.tablename INTO coordValue;
+              IF (ABS(coordValue) > 180) THEN
+                EXECUTE 'UPDATE ' || changeset_table_record.tablename || ' SET min_lon = min_lon / 10000000';
+              END IF;
+              EXECUTE 'SELECT max_lon FROM ' || changeset_table_record.tablename INTO coordValue;
+              IF (ABS(coordValue) > 180) THEN
+                EXECUTE 'UPDATE ' || changeset_table_record.tablename || ' SET max_lon = max_lon / 10000000';
+              END IF; 
+            END LOOP;
+          END$$;
+    </sql>
       
 	</changeSet>
 </databaseChangeLog>

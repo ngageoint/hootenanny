@@ -1368,17 +1368,15 @@ return linkRecords;
         	Object oInput1 = ret.get("input1");
         	if(oInput1 != null)
         	{
-        		long input1Id = ModelDaoUtils.getRecordIdForInputString(oInput1.toString(), conn, maps, maps.id,
-                maps.displayName);
-        		ret.put("input1id", input1Id);
+        		String dispName = DbUtils.getDisplayNameById(conn, new Long(oInput1.toString()));
+        		ret.put("input1Name", dispName);
         	}
         	
         	Object oInput2 = ret.get("input2");
         	if(oInput2 != null)
         	{
-        		long input2Id = ModelDaoUtils.getRecordIdForInputString(oInput2.toString(), conn, maps, maps.id,
-                maps.displayName);
-        		ret.put("input2id", input2Id);
+        		String dispName = DbUtils.getDisplayNameById(conn, new Long(oInput2.toString()));
+        		ret.put("input2Name", dispName);
         	}
         }
         catch (Exception e)

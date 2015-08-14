@@ -9,7 +9,7 @@ sheeting data together are considered outside of the scope of this current effor
 
 === Sources of Small Geometry Changes
 
-There are two primary sources of unintentional geometry errors. Firstly, all
+There are three primary sources of unintentional geometry errors. Firstly, all
 the numerical operations within Hootenanny use floating point double precision
 numbers, namely 64bit IEEE 754 on Intel processors. Floating point numbers have
 a significant limitation in that not all mathematical properties are honored.
@@ -20,6 +20,12 @@ geographic to a planar projection and back again results in small errors in the
 result. The tables at the end of the document quantify those errors. See
 <<SelectingAProjection>> for more details into how projections are used and
 quantifying angle/distance errors.
+
+The second source of unintentional geometry errors is serializing to persistent
+storage. Text representations of doubles are frequently rounded to a reasonable
+number of digits. This rounding can create small differences between the data
+that was written and the data that we read. Depending on file format this may
+extend into other forms of rounding to reduce file size.
 
 The last source of unintentional geometry errors relates to operations performed
 within the user interface. A section at the end is reserved specifically for the
