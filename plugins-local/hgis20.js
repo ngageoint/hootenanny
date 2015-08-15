@@ -346,8 +346,10 @@ hgis20 = {
             attrs.XtableName = 'Recreation_POI';
             if (!attrs.TYPE)
             {
-            attrs.TYPE = 'Other';
-            attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'Type:' + attrs.tourism,';');
+                attrs.TYPE = 'Other';
+                print('RecPOI: Tourism:' + tags.tourism + ' Comment:' + attrs.COMMENTS);
+
+                attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'Type:' + tags.tourism,';');
             }
         }
 
@@ -450,6 +452,10 @@ hgis20 = {
             hgis20.ignoreList.area = '';
             hgis20.ignoreList['note:extra'] = '';
             hgis20.ignoreList['hoot:status'] = '';
+            hgis20.ignoreList['hoot:score:match'] = '';
+            hgis20.ignoreList['hoot:score:miss'] = '';
+            hgis20.ignoreList['hoot:score:review'] = '';
+            hgis20.ignoreList['hoot:score:uuid'] = '';
             hgis20.ignoreList['error:circular'] = '';
 
             translate.dumpLookup(hgis20.ignoreList);

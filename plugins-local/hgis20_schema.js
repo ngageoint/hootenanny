@@ -50,158 +50,158 @@ getDbSchema: function()
           desc:"Agricultural POI",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",length:"100",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE1",desc:"TYPE1",length:"30",type:"String",defValue:""}, // End of TYPE1
-                   { name:"TYPE2",desc:"TYPE2",length:"30",type:"String",defValue:""}, // End of TYPE2
-                   { name:"CITY",desc:"CITY",length:"50",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
+                   { name:"TYPE1",desc:"TYPE1",type:"String",defValue:""}, // End of TYPE1
+                   { name:"TYPE2",desc:"TYPE2",type:"String",defValue:""}, // End of TYPE2
+                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
+                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Agriculture_POI
         { name:"Airfields",
           desc:"Airfields",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",length:"100",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE",desc:"TYPE",length:"30",type:"String",defValue:""}, // End of TYPE
-                   { name:"ICAO",desc:"ICAO",length:"6",type:"String",defValue:""}, // End of ICAO
-                   { name:"IATA",desc:"IATA",length:"10",type:"String",defValue:""}, // End of IATA
-                   { name:"RUNWAY",desc:"RUNWAY",length:"10",type:"String",defValue:""}, // End of RUNWAY
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
+                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
+                   { name:"ICAO",desc:"ICAO",type:"String",defValue:""}, // End of ICAO
+                   { name:"IATA",desc:"IATA",type:"String",defValue:""}, // End of IATA
+                   { name:"RUNWAY",desc:"RUNWAY",type:"String",defValue:""}, // End of RUNWAY
                    { name:"N_RUNWAYS",desc:"N_RUNWAYS",type:"Real",defValue:"0"}, // End of N_RUNWAYS
-                   { name:"R1_SURFACE",desc:"R1_SURFACE",length:"15",type:"String",defValue:""}, // End of R1_SURFACE
-                   { name:"R2_SURFACE",desc:"R2_SURFACE",length:"15",type:"String",defValue:""}, // End of R2_SURFACE
+                   { name:"R1_SURFACE",desc:"R1_SURFACE",type:"String",defValue:""}, // End of R1_SURFACE
+                   { name:"R2_SURFACE",desc:"R2_SURFACE",type:"String",defValue:""}, // End of R2_SURFACE
                    { name:"R_LENGTH",desc:"R_LENGTH",type:"Real",defValue:"0"}, // End of R_LENGTH
                    { name:"R_WIDTH",desc:"R_WIDTH",type:"Real",defValue:"0"}, // End of R_WIDTH
-                   { name:"USE",desc:"USE",length:"13",type:"String",defValue:""}, // End of USE
-                   { name:"CUSTOMS",desc:"CUSTOMS",length:"6",type:"String",defValue:""}, // End of CUSTOMS
-                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"USE",desc:"USE",type:"String",defValue:""}, // End of USE
+                   { name:"CUSTOMS",desc:"CUSTOMS",type:"String",defValue:""}, // End of CUSTOMS
+                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Airfields
         { name:"Border_Crossings",
           desc:"Border Crossings",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",length:"100",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE1",desc:"TYPE1",length:"30",type:"String",defValue:""}, // End of TYPE1
-                   { name:"TYPE2",desc:"TYPE2",length:"30",type:"String",defValue:""}, // End of TYPE2
-                   { name:"COUNTRY",desc:"COUNTRY",length:"50",type:"String",defValue:""}, // End of COUNTRY
-                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
+                   { name:"TYPE1",desc:"TYPE1",type:"String",defValue:""}, // End of TYPE1
+                   { name:"TYPE2",desc:"TYPE2",type:"String",defValue:""}, // End of TYPE2
+                   { name:"COUNTRY",desc:"COUNTRY",type:"String",defValue:""}, // End of COUNTRY
+                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Border_Crossings
         { name:"Bridges_Tunnels",
           desc:"Bridges and Tunnels",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",length:"50",type:"String",defValue:""}, // End of NAME
-                   { name:"CITY",desc:"CITY",length:"75",type:"String",defValue:""}, // End of CITY
-                   { name:"TYPE1",desc:"TYPE1",length:"15",type:"String",defValue:""}, // End of TYPE1
-                   { name:"TYPE2",desc:"TYPE2",length:"25",type:"String",defValue:""}, // End of TYPE2
-                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
+                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
+                   { name:"TYPE1",desc:"TYPE1",type:"String",defValue:""}, // End of TYPE1
+                   { name:"TYPE2",desc:"TYPE2",type:"String",defValue:""}, // End of TYPE2
+                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Bridges_Tunnels
         { name:"Commercial_POI",
           desc:"Commercial POI",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",length:"100",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE1",desc:"TYPE1",length:"30",type:"String",defValue:""}, // End of TYPE1
-                   { name:"TYPE2",desc:"TYPE2",length:"25",type:"String",defValue:""}, // End of TYPE2
-                   { name:"CITY",desc:"CITY",length:"50",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
+                   { name:"TYPE1",desc:"TYPE1",type:"String",defValue:""}, // End of TYPE1
+                   { name:"TYPE2",desc:"TYPE2",type:"String",defValue:""}, // End of TYPE2
+                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
+                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Commercial_POI
         { name:"Conflict_Points",
           desc:"Conflict Points",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"LOCATION",desc:"LOCATION",length:"100",type:"String",defValue:""}, // End of LOCATION
-                   { name:"ACTOR1",desc:"ACTOR1",length:"50",type:"String",defValue:""}, // End of ACTOR1
-                   { name:"ACTOR2",desc:"ACTOR2",length:"50",type:"String",defValue:""}, // End of ACTOR2
-                   { name:"EVENT_TYPE",desc:"EVENT_TYPE",length:"75",type:"String",defValue:""}, // End of EVENT_TYPE
-                   { name:"DATE",desc:"DATE",length:"20",type:"String",defValue:""}, // End of DATE
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"LOCATION",desc:"LOCATION",type:"String",defValue:""}, // End of LOCATION
+                   { name:"ACTOR1",desc:"ACTOR1",type:"String",defValue:""}, // End of ACTOR1
+                   { name:"ACTOR2",desc:"ACTOR2",type:"String",defValue:""}, // End of ACTOR2
+                   { name:"EVENT_TYPE",desc:"EVENT_TYPE",type:"String",defValue:""}, // End of EVENT_TYPE
+                   { name:"DATE",desc:"DATE",type:"String",defValue:""}, // End of DATE
                    { name:"YEAR",desc:"YEAR",type:"REAL",defValue:"0"}, // End of YEAR
-                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"ORG_SOURCE",desc:"ORG_SOURCE",length:"50",type:"String",defValue:""}, // End of ORG_SOURCE
+                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"ORG_SOURCE",desc:"ORG_SOURCE",type:"String",defValue:""}, // End of ORG_SOURCE
                    { name:"NUM_DTH",desc:"NUM_DTH",type:"REAL",defValue:"0"}, // End of NUM_DTH
                    { name:"NUM_INJ",desc:"NUM_INJ",type:"REAL",defValue:"0"}, // End of NUM_INJ
-                   { name:"YEAR",desc:"YEAR",length:"50",type:"REAL"}, // End of YEAR
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"YEAR",desc:"YEAR",type:"REAL"}, // End of YEAR
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Conflict_Points
 
@@ -209,24 +209,24 @@ getDbSchema: function()
           desc:"Crime Data",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"ACTOR",desc:"ACTOR",length:"100",type:"String",defValue:""}, // End of ACTOR
-                   { name:"TYPE",desc:"TYPE",length:"50",type:"String",defValue:""}, // End of TYPE
-                   { name:"CITY",desc:"CITY",length:"100",type:"String",defValue:""}, // End of CITY
-                   { name:"DATE",desc:"DATE",length:"20",type:"String",defValue:""}, // End of DATE
-                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"ACTOR",desc:"ACTOR",type:"String",defValue:""}, // End of ACTOR
+                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
+                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
+                   { name:"DATE",desc:"DATE",type:"String",defValue:""}, // End of DATE
+                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Crime_Data
 
@@ -234,23 +234,23 @@ getDbSchema: function()
           desc:"Cultural Points of Interest",
           geom:"Point",
           columns:[ 
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",length:"100",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE",desc:"TYPE",length:"30",type:"String",defValue:""}, // End of TYPE
-                   { name:"CITY",desc:"CITY",length:"50",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
+                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
+                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
+                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Cultural_POI
 
@@ -258,26 +258,26 @@ getDbSchema: function()
           desc:"Embassies",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",length:"50",type:"String",defValue:""}, // End of NAME
-                   { name:"ADDRESS",desc:"ADDRESS",length:"150",type:"String",defValue:""}, // End of ADDRESS
-                   { name:"CITY",desc:"CITY",length:"100",type:"String",defValue:""}, // End of CITY
-                   { name:"TYPE",desc:"TYPE",length:"30",type:"String",defValue:""}, // End of TYPE
-                   { name:"TELEPHONE",desc:"TELEPHONE",length:"30",type:"String",defValue:""}, // End of TELEPHONE
-                   { name:"WEBSITE",desc:"WEBSITE",length:"175",type:"String",defValue:""}, // End of WEBSITE
-                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
+                   { name:"ADDRESS",desc:"ADDRESS",type:"String",defValue:""}, // End of ADDRESS
+                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
+                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
+                   { name:"TELEPHONE",desc:"TELEPHONE",type:"String",defValue:""}, // End of TELEPHONE
+                   { name:"WEBSITE",desc:"WEBSITE",type:"String",defValue:""}, // End of WEBSITE
+                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Embassies
 
@@ -285,21 +285,21 @@ getDbSchema: function()
           desc:"Geonames",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"FC",desc:"FC",length:"2",type:"String",defValue:""}, // End of FC
-                   { name:"DSG",desc:"DSG",length:"5",type:"String",defValue:""}, // End of DSG
-                   { name:"SORT_NAME",desc:"SORT_NAME",length:"150",type:"String",defValue:""}, // End of SORT_NAME
-                   { name:"FULL_NAME",desc:"FULL_NAME",length:"150",type:"String",defValue:""}, // End of FULL_NAME
-                   { name:"ALT_NAME",desc:"ALT_NAME",length:"254",type:"String",defValue:""}, // End of ALT_NAME
-                   { name:"MODIFY_DT",desc:"MODIFY_DT",length:"20",type:"String",defValue:"" }, // End of MODIFY_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"FC",desc:"FC",type:"String",defValue:""}, // End of FC
+                   { name:"DSG",desc:"DSG",type:"String",defValue:""}, // End of DSG
+                   { name:"SORT_NAME",desc:"SORT_NAME",type:"String",defValue:""}, // End of SORT_NAME
+                   { name:"FULL_NAME",desc:"FULL_NAME",type:"String",defValue:""}, // End of FULL_NAME
+                   { name:"ALT_NAME",desc:"ALT_NAME",type:"String",defValue:""}, // End of ALT_NAME
+                   { name:"MODIFY_DT",desc:"MODIFY_DT",type:"String",defValue:"" }, // End of MODIFY_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
                   ] // End of Columns
         }, // End of feature Geonames
 
@@ -307,21 +307,21 @@ getDbSchema: function()
           desc:"HADR",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"AREA_AFF",desc:"AREA_AFF",length:"150",type:"String",defValue:""}, // End of AREA_AFF
-                   { name:"TYPE1",desc:"TYPE1",length:"30",type:"String",defValue:""}, // End of TYPE1
-                   { name:"TYPE2",desc:"TYPE2",length:"30",type:"String",defValue:""}, // End of TYPE2
-                   { name:"DISEASE",desc:"DISEASE",length:"50",type:"String",defValue:""}, // End of DISEASE
-                   { name:"START_DT",desc:"START_DT",length:"20",type:"String",defValue:""}, // End of START_DT
-                   { name:"END_DT",desc:"END_DT",length:"20",type:"String",defValue:""}, // End of END_DT
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"AREA_AFF",desc:"AREA_AFF",type:"String",defValue:""}, // End of AREA_AFF
+                   { name:"TYPE1",desc:"TYPE1",type:"String",defValue:""}, // End of TYPE1
+                   { name:"TYPE2",desc:"TYPE2",type:"String",defValue:""}, // End of TYPE2
+                   { name:"DISEASE",desc:"DISEASE",type:"String",defValue:""}, // End of DISEASE
+                   { name:"START_DT",desc:"START_DT",type:"String",defValue:""}, // End of START_DT
+                   { name:"END_DT",desc:"END_DT",type:"String",defValue:""}, // End of END_DT
                    { name:"TL_AFFECT",desc:"TL_AFFECT",type:"Integer",defValue:"0"}, // End of TL_AFFECT
                    { name:"FATALITY",desc:"FATALITY",type:"Integer",defValue:"0"}, // End of FATALITY
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature HADR
 
@@ -329,20 +329,20 @@ getDbSchema: function()
           desc:"Health Events",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"AREA_AFF",desc:"AREA_AFF",length:"150",type:"String",defValue:""}, // End of AREA_AFF
-                   { name:"TYPE",desc:"TYPE",length:"50",type:"String",defValue:""}, // End of TYPE
-                   { name:"DISEASE",desc:"DISEASE",length:"50",type:"String",defValue:""}, // End of DISEASE
-                   { name:"START_DT",desc:"START_DT",length:"20",type:"String",defValue:""}, // End of START_DT
-                   { name:"END_DT",desc:"END_DT",length:"20",type:"String",defValue:""}, // End of END_DT
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"AREA_AFF",desc:"AREA_AFF",type:"String",defValue:""}, // End of AREA_AFF
+                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
+                   { name:"DISEASE",desc:"DISEASE",type:"String",defValue:""}, // End of DISEASE
+                   { name:"START_DT",desc:"START_DT",type:"String",defValue:""}, // End of START_DT
+                   { name:"END_DT",desc:"END_DT",type:"String",defValue:""}, // End of END_DT
                    { name:"TL_AFFECT",desc:"TL_AFFECT",type:"Integer",defValue:"0"}, // End of TL_AFFECT
                    { name:"FATALITY",desc:"FATALITY",type:"Integer",defValue:"0"}, // End of FATALITY
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Health_Events
 
@@ -352,22 +352,22 @@ getDbSchema: function()
           desc:"Internet Cafes",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",length:"100",type:"String",defValue:""}, // End of NAME
-                   { name:"CITY",desc:"CITY",length:"50",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
+                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
+                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Internet_Cafes
 
@@ -375,22 +375,22 @@ getDbSchema: function()
           desc:"Libraries",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",length:"100",type:"String",defValue:""}, // End of NAME
-                   { name:"CITY",desc:"CITY",length:"50",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
+                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
+                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Libraries
 
@@ -399,24 +399,24 @@ getDbSchema: function()
           desc:"Medical Facilities",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",length:"100",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE1",desc:"TYPE1",length:"30",type:"String",defValue:""}, // End of TYPE
-                   { name:"TYPE2",desc:"TYPE2",length:"30",type:"String",defValue:""}, // End of TYPE
-                   { name:"CITY",desc:"CITY",length:"50",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
+                   { name:"TYPE1",desc:"TYPE1",type:"String",defValue:""}, // End of TYPE
+                   { name:"TYPE2",desc:"TYPE2",type:"String",defValue:""}, // End of TYPE
+                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
+                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Medical_Facilities
 
@@ -425,17 +425,17 @@ getDbSchema: function()
           desc:"Natural POI",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"NAME",desc:"NAME",length:"100",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE",desc:"TYPE",length:"30",type:"String",defValue:""}, // End of TYPE
-                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
+                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
+                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Natural_POI
 
@@ -443,27 +443,27 @@ getDbSchema: function()
           desc:"Power Plants",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",length:"100",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE",desc:"TYPE",length:"35",type:"String",defValue:""}, // End of TYPE
-                   { name:"CITY",desc:"CITY",length:"50",type:"String",defValue:""}, // End of CITY
-                   { name:"NUM_GEN",desc:"NUM_GEN",length:"10",type:"String",defValue:""}, // End of NUM_GEN
-                   { name:"TOT_CAP_MW",desc:"TOT_CAP_MW",length:"12",type:"String",defValue:""}, // End of TOT_CAP_MW
-                   { name:"OP_STATUS",desc:"OP_STATUS",length:"25",type:"String",defValue:""}, // End of OP_STATUS
-                   { name:"OP_CON",desc:"OP_CON",length:"25",type:"String",defValue:""}, // End of OP_CON
-                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
+                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
+                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
+                   { name:"NUM_GEN",desc:"NUM_GEN",type:"String",defValue:""}, // End of NUM_GEN
+                   { name:"TOT_CAP_MW",desc:"TOT_CAP_MW",type:"String",defValue:""}, // End of TOT_CAP_MW
+                   { name:"OP_STATUS",desc:"OP_STATUS",type:"String",defValue:""}, // End of OP_STATUS
+                   { name:"OP_CON",desc:"OP_CON",type:"String",defValue:""}, // End of OP_CON
+                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Power_Plants
 
@@ -471,24 +471,24 @@ getDbSchema: function()
           desc:"Prisons",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",length:"100",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE",desc:"TYPE",length:"30",type:"String",defValue:""}, // End of TYPE
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
+                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
                    { name:"EST_PRIS",desc:"EST_PRIS",type:"REAL",defValue:"0"}, // End of EST_PRIS
-                   { name:"CITY",desc:"CITY",length:"50",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
+                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Prisons
 
@@ -498,23 +498,24 @@ getDbSchema: function()
           desc:"Recreation POI",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",length:"100",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE",desc:"TYPE",length:"30",type:"String",defValue:""}, // End of TYPE
-                   { name:"CITY",desc:"CITY",length:"50",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
+                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
+                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
+                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+//                    { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Recreation_POI
 
@@ -523,18 +524,18 @@ getDbSchema: function()
           desc:"Religious Institutions",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"NAME",desc:"NAME",length:"50",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE",desc:"TYPE",length:"30",type:"String",defValue:""}, // End of TYPE
-                   { name:"CITY",desc:"CITY",length:"50",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
+                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
+                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
+                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Religious_Institutions
 
@@ -543,23 +544,23 @@ getDbSchema: function()
           desc:"Tourist Attractions",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",length:"3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",length:"50",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",length:"50",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",length:"50",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",length:"50",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",length:"50",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",length:"50",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",length:"100",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE",desc:"TYPE",length:"35",type:"String",defValue:""}, // End of TYPE
-                   { name:"CITY",desc:"CITY",length:"50",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",length:"8",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",length:"12",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",length:"150",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",length:"125",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",length:"20",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",length:"125",type:"String",defValue:"" }, // End of SOURCE2
+                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
+                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
+                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
+                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
+                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
+                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
+                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
+                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
+                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
+                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
+                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
+                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
+                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
+                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
+                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
+                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
                   ] // End of Columns
         }, // End of feature Tourist_Locations_POI
 
