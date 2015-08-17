@@ -156,3 +156,4 @@ data/
 inputFeatures.png
 docs/developer/restDocs/
 docs/developer/wpsDocs/
+log4j.xml
