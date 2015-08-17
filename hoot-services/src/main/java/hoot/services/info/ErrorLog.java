@@ -27,19 +27,10 @@
 package hoot.services.info;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
-import java.io.Reader;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
 import java.util.UUID;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang3.StringUtils;
 
 import hoot.services.HootProperties;
@@ -71,29 +62,31 @@ public class ErrorLog {
 
 	public String getErrorlog(long maxLength) throws Exception
 	{
-
-		File file = new File(_errLogPath);
-		RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
-    int lines = 0;
-    StringBuilder builder = new StringBuilder();
-    long length = file.length();
-    //length--;
-
-    long startOffset = 0;
-    if(length > maxLength)
+		RandomAccessFile randomAccessFile = null;
+    try
     {
-    	startOffset = length - maxLength;
+    	File file = new File(_errLogPath);
+  		randomAccessFile = new RandomAccessFile(file, "r");
+      StringBuilder builder = new StringBuilder();
+      long length = file.length();
+
+      long startOffset = 0;
+      if(length > maxLength)
+      {
+      	startOffset = length - maxLength;
+      }
+      for(long seek = startOffset; seek < length; seek++)
+      {
+      	randomAccessFile.seek(seek);
+      	char c = (char)randomAccessFile.read();
+        builder.append(c);
+      }
+      return builder.toString();
     }
-    for(long seek = startOffset; seek < length; seek++)
+    finally
     {
-    	randomAccessFile.seek(seek);
-    	char c = (char)randomAccessFile.read();
-      builder.append(c);
+    	randomAccessFile.close();
     }
-
-    randomAccessFile.close();
-
-		return builder.toString();
 	}
 
 	public String generateExportLog() throws Exception
@@ -145,9 +138,16 @@ public class ErrorLog {
 
 		String logStr = getErrorlog(maxSize);
 
-		RandomAccessFile raf = new RandomAccessFile(outputPath, "rw");
-		raf.writeBytes(data + "\n" + logStr);
-		raf.close();
-		return outputPath;
+		RandomAccessFile raf = null;
+		try
+		{
+		  raf = new RandomAccessFile(outputPath, "rw");
+			raf.writeBytes(data + "\n" + logStr);
+			return outputPath;
+		}
+		finally
+		{
+			raf.close();
+		}
 	}
 }

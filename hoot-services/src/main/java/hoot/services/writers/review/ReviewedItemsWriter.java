@@ -94,9 +94,6 @@ public class ReviewedItemsWriter
    * Updates the review tables in the services database with the reviewed item details associated
    * with the specified map layer
    *
-   * See this for more details:
-   *
-   * https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflated_Data_Review_Service_2#Mark-Items-as-Reviewed
    *
    * @param reviewedItems the reviewed items
    * @returns the number of items marked as reviewed

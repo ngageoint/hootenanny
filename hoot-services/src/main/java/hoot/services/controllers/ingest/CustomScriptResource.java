@@ -61,6 +61,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 
 @Path("/customscript")
@@ -891,7 +892,7 @@ public class CustomScriptResource
     }
     finally
     {
-    	context.exit();
+    	Context.exit();
     }
     return canExport;
   }

@@ -28,7 +28,6 @@ package hoot.services.controllers.info;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
-import hoot.services.info.ErrorLog;
 import hoot.services.utils.ResourceErrorHandler;
 
 import javax.ws.rs.GET;

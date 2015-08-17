@@ -26,14 +26,12 @@
  */
 package hoot.services.controllers.job;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import javax.ws.rs.core.Response;
 
 import hoot.services.UnitTest;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.Test;
@@ -50,15 +48,21 @@ public class ConflationResourceTest {
 		String params = "{\"INPUT1_TYPE\":\"DB\",\"INPUT1\":\"DcGisRoads\",\"INPUT2_TYPE\":\"DB\",\"INPUT2\":\"DcTigerRoads\",";
 		params += "\"OUTPUT_NAME\":\"Merged_Roads_e0d\",\"CONFLATION_TYPE\":\"Reference\",\"MATCH_THRESHOLD\":\"0.6\",\"MISS_THRESHOLD\":\"0.6\",\"USER_EMAIL\":\"test@test.com\"}";
 
-		String jobArgs = "\"exec\":\"makeconflate\",\"params\":[{\"USER_EMAIL\":\"test@test.com\"},{\"CONFLATION_TYPE\":\"Reference\"}," +
-				"{\"MATCH_THRESHOLD\":\"0.6\"},{\"INPUT1_TYPE\":\"DB\"},{\"MISS_THRESHOLD\":\"0.6\"}," +
-				"{\"INPUT2_TYPE\":\"DB\"},{\"INPUT2\":\"DcTigerRoads\"},{\"INPUT1\":\"DcGisRoads\"}," +
-				"{\"OUTPUT_NAME\":\"Merged_Roads_e0d\"},{\"IS_BIG\":\"false\"}],\"exectype\":\"make\"}," +
-				"{\"class\":\"hoot.services.controllers.job.ReviewResource\",\"method\":\"prepareItemsForReview\",\"params\":" +
-				"[{\"isprimitivetype\":\"false\",\"value\":\"Merged_Roads_e0d\",\"paramtype\":\"java.lang.String\"}," +
-				"{\"isprimitivetype\":\"true\",\"value\":false,\"paramtype\":\"java.lang.Boolean\"}],\"exectype\":\"reflection\"}," +
-				"{\"class\":\"hoot.services.controllers.ingest.RasterToTilesService\",\"method\":\"ingestOSMResourceDirect\",\"params\":" +
-				"[{\"isprimitivetype\":\"false\",\"value\":\"Merged_Roads_e0d\",\"paramtype\":\"java.lang.String\"},{\"isprimitivetype\":\"false\",\"value\":\"test@test.com\",\"paramtype\":\"java.lang.String\"}],\"exectype\":\"reflection\"}]";
+		String jobArgs = "\"exec\":\"makeconflate\",\"params\":[{\"USER_EMAIL\":\"test@test.com\"},{\"CONFLATION_TYPE\":\"Reference\"},"
+				+ "{\"MATCH_THRESHOLD\":\"0.6\"},{\"INPUT1_TYPE\":\"DB\"},{\"MISS_THRESHOLD\":\"0.6\"},{\"INPUT2_TYPE\":\"DB\"},"
+				+ "{\"INPUT2\":\"DcTigerRoads\"},{\"INPUT1\":\"DcGisRoads\"},{\"OUTPUT_NAME\":\"Merged_Roads_e0d\"},"
+				+ "{\"IS_BIG\":\"false\"}],\"exectype\":\"make\"},"
+				+ "{\"class\":\"hoot.services.controllers.osm.MapResource\",\"method\":\"updateTagsDirect\",\"params\":"
+				+ "[{\"isprimitivetype\":\"false\",\"value\":{\"input2\":\"DcTigerRoads\",\"input1\":\"DcGisRoads\"}"
+				+ ",\"paramtype\":\"java.util.Map\"},{\"isprimitivetype\":\"false\",\"value\":\"Merged_Roads_e0d\""
+				+ ",\"paramtype\":\"java.lang.String\"}],\"exectype\":\"reflection\"},"
+				+ "{\"class\":\"hoot.services.controllers.job.ReviewResource\",\"method\":\"prepareItemsForReview\",\"params\":"
+				+ "[{\"isprimitivetype\":\"false\",\"value\":\"Merged_Roads_e0d\",\"paramtype\":\"java.lang.String\"},"
+				+ "{\"isprimitivetype\":\"true\",\"value\":false,\"paramtype\":\"java.lang.Boolean\"}],\"exectype\":\"reflection\"},"
+				+ "{\"class\":\"hoot.services.controllers.ingest.RasterToTilesService\",\"method\":\"ingestOSMResourceDirect\",\"params\":"
+				+ "[{\"isprimitivetype\":\"false\",\"value\":\"Merged_Roads_e0d\",\"paramtype\":\"java.lang.String\"},"
+				+ "{\"isprimitivetype\":\"false\",\"value\":\"test@test.com\",\"paramtype\":\"java.lang.String\"}]"
+				+ ",\"exectype\":\"reflection\"}]";
 		ConflationResource spy = Mockito.spy(new ConflationResource());
 		Mockito.doNothing().when((JobControllerBase)spy).postChainJobRquest(anyString(), anyString());
 		Response resp = spy.process(params);

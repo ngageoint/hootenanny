@@ -48,7 +48,6 @@ import hoot.services.validators.review.ReviewMapValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysema.query.sql.ColumnMetadata;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.types.expr.BooleanExpression;
 

@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.osm;
 
-import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.FolderMapMappings;
 import hoot.services.db2.Folders;
@@ -36,6 +35,7 @@ import hoot.services.db2.QFolders;
 import hoot.services.db2.QMaps;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobExecutioner;
+import hoot.services.job.JobStatusManager;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.FolderRecords;
 import hoot.services.models.osm.LinkRecords;
@@ -43,12 +43,14 @@ import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.utils.ResourceErrorHandler;
+import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.writers.osm.MapQueryResponseWriter;
 
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.SocketException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -146,9 +148,6 @@ public class MapResource
    *
    * @return a JSON object containing a list of map layers
    * @throws Exception
-   * @see https
-   *      ://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_
-   *      -_OsmMapService#List-Layers
    */
   @GET
   @Path("/layers")
@@ -366,7 +365,7 @@ return linkRecords;
     Date now = new Date();
     String strDate = sdfDate.format(now);
 
-    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    DocumentBuilderFactory dbf = XmlDocumentBuilder.getSecureDocBuilderFactory();
     dbf.setValidating(false);
     DocumentBuilder db = dbf.newDocumentBuilder();
     Document doc = db.newDocument();
@@ -458,6 +457,8 @@ return linkRecords;
     osmElem.appendChild(wayElem);
 
     Transformer tf = TransformerFactory.newInstance().newTransformer();
+    //TODO: Fortify may require this instead but it doesn't work.
+    //TransformerFactory transformerFactory = XmlDocumentBuilder.getSecureTransformerFactory();
     tf.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
     tf.setOutputProperty(OutputKeys.INDENT, "yes");
     Writer out = new StringWriter();
@@ -499,9 +500,6 @@ return linkRecords;
 	 *	</INPUT>
 	 * <OUTPUT>
 	 * OSM XML
-	 * see https
-   *      ://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_
-   *      -_OsmMapService#Query
 	 * </OUTPUT>
 	 * </EXAMPLE>
    * Service method endpoint for retrieving OSM entity data for a given map
@@ -517,9 +515,6 @@ return linkRecords;
    *          defaults to false
    * @return response containing the data of the requested elements
    * @throws Exception
-   * @see https
-   *      ://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_
-   *      -_OsmMapService#Query
    */
   @GET
   @Consumes(MediaType.TEXT_PLAIN)
@@ -761,13 +756,13 @@ return linkRecords;
       final JSONObject anode = currMap.retrieveANode(queryBounds);
       long nodeCnt = currMap.getNodesCount(queryBounds);
 
-      double dMinLon = DbUtils.fromDbCoordValue((Integer) extents.get("minlon"));
-      double dMaxLon = DbUtils.fromDbCoordValue((Integer) extents.get("maxlon"));
-      double dMinLat = DbUtils.fromDbCoordValue((Integer) extents.get("minlat"));
-      double dMaxLat = DbUtils.fromDbCoordValue((Integer) extents.get("maxlat"));
+      double dMinLon = (Double)extents.get("minlon");
+      double dMaxLon = (Double) extents.get("maxlon");
+      double dMinLat = (Double) extents.get("minlat");
+      double dMaxLat = (Double) extents.get("maxlat");
 
-      double dFirstLon = DbUtils.fromDbCoordValue((Integer) anode.get("lon"));
-      double dFirstLat = DbUtils.fromDbCoordValue((Integer) anode.get("lat"));
+      double dFirstLon = (Double)anode.get("lon");
+      double dFirstLat = (Double)anode.get("lat");
 
       ret.put("minlon", dMinLon);
       ret.put("maxlon", dMaxLon);
@@ -1162,7 +1157,7 @@ return linkRecords;
 
   	  QFolders folders = QFolders.folders;
   	  Configuration configuration = DbUtils.getConfiguration();
-  	  SQLQuery query = new SQLQuery(conn, configuration);
+  	  new SQLQuery(conn, configuration);
   	    	  
   	  try {
   		  new SQLUpdateClause(conn, configuration, folders)
@@ -1231,7 +1226,7 @@ return linkRecords;
   	  QFolderMapMappings folderMapMappings = QFolderMapMappings.folderMapMappings;
   	  Configuration configuration = DbUtils.getConfiguration();
   	  SQLQuery query = new SQLQuery(conn, configuration);
-  	  QMaps maps = QMaps.maps;
+  	  
     	  
   	 /* long _mapId = 0;
   	  
@@ -1283,6 +1278,117 @@ return linkRecords;
   	  JSONObject res = new JSONObject();
   	  res.put("success",true);
   	  return Response.ok(res.toJSONString(),MediaType.APPLICATION_JSON).build();
+    }
+    
+    public String updateTagsDirect(final java.util.Map<String, String> tags, 
+    		final String mapName) throws Exception
+    {
+    //_zoomLevels
+  		Connection conn = DbUtils.createConnection();
+
+  		String jobId = UUID.randomUUID().toString();
+
+  		JobStatusManager jobStatusManager = null;
+  		try
+  		{
+  			// Currently we do not have any way to get map id directly from hoot core command when it runs
+  			// so for now we need get the all the map ids matching name and pick first one..
+  			// THIS WILL NEED TO CHANGE when we implement handle map by Id instead of name..
+  			
+  			List<Long> mapIds = DbUtils.getMapIdsByName( conn,   mapName);
+  			if(mapIds.size() > 0)
+  			{
+  				// we are expecting the last one of duplicate name to be the one resulted from the conflation
+  				// This can be wrong if there is race condition. REMOVE THIS once core implement map Id return
+  				long mapId = mapIds.get(mapIds.size() - 1);
+  				jobStatusManager = new JobStatusManager(conn);
+    			jobStatusManager.addJob(jobId);
+    			
+    			DbUtils.updateMapsTableTags( tags,  mapId, conn);
+    			jobStatusManager.setComplete(jobId);
+  			}
+  			
+  			
+  		}
+  		catch (SQLException sqlEx)
+  		{
+  			jobStatusManager.setFailed(jobId, sqlEx.getMessage());
+  		  ResourceErrorHandler.handleError(
+  			"Failure update map tags resource " + sqlEx.getMessage() + " SQLState: " + sqlEx.getSQLState(),
+  		    Status.INTERNAL_SERVER_ERROR,
+  			log);
+  		}
+  		catch (Exception ex)
+  		{
+  			jobStatusManager.setFailed(jobId, ex.getMessage());
+  		  ResourceErrorHandler.handleError(
+  			"Failure update map tags resource" + ex.getMessage(),
+  		    Status.INTERNAL_SERVER_ERROR,
+  			log);
+  		}
+  		finally
+      {
+      	DbUtils.closeConnection(conn);
+      }  
+  		return jobId;
+    }
+    
+    
+    
+    @GET
+    @Path("/tags")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMapTags(@QueryParam("mapid") final String mapId) throws Exception
+    {
+      Connection conn = DbUtils.createConnection();
+      JSONObject ret = new JSONObject();
+      try
+      {
+        log.info("Retrieving map tags for map with ID: " + mapId + " ...");
+
+        log.debug("Initializing database connection...");
+
+        QMaps maps = QMaps.maps;
+        long mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id,
+            maps.displayName);
+        assert (mapIdNum != -1);
+
+        try
+        {
+        	java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapIdNum, conn);
+        	ret.putAll(tags);
+        	Object oInput1 = ret.get("input1");
+        	if(oInput1 != null)
+        	{
+        		String dispName = DbUtils.getDisplayNameById(conn, new Long(oInput1.toString()));
+        		ret.put("input1Name", dispName);
+        	}
+        	
+        	Object oInput2 = ret.get("input2");
+        	if(oInput2 != null)
+        	{
+        		String dispName = DbUtils.getDisplayNameById(conn, new Long(oInput2.toString()));
+        		ret.put("input2Name", dispName);
+        	}
+        }
+        catch (Exception e)
+        {
+          throw new Exception("Error getting map tags. :" + e.getMessage());
+        }
+
+ 
+      }
+      catch (Exception e)
+      {
+        handleError(e, mapId, "");
+      }
+      finally
+      {
+        DbUtils.closeConnection(conn);
+      }
+
+      return Response.ok(ret.toString(), MediaType.APPLICATION_JSON).build();
     }
 }
 

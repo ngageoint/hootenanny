@@ -63,13 +63,13 @@ mgcp.rules = {
         ['F_CODE','BB190','waterway','dock'], // Berthing Structure - NFDD BB081
         ['F_CODE','BB230','wall','seawall'], // Seawall - NFDD BB081
         ['F_CODE','BB240','leisure','slipway'], // Slipway - NFDD BB082
-        ['F_CODE','BD110','raw:fcode','BD110'], // Offshore Platform - NFDD BD115
+        ['F_CODE','BD110','man_made','offshore_construction'], // Offshore Platform - NFDD BD115
         ['F_CODE','BH050','place','marine_farm'], // Mariculture Site - NFDD BH051
         ['F_CODE','BH060','water:race','flume'], // Flume - NFDD BH065
         ['F_CODE','BH080','water','lake'], // Lake - NFDD BH082
         ['F_CODE','BH130','water','reservoir'], // Reservoir - NFDD BH082
-        ['F_CODE','BI041','raw:fcode','BI041'], // Water Gate - NFDD BI045
-        ['F_CODE','DB200','raw:fcode','DB200'], // Gully - FCODE Retired
+        ['F_CODE','BI041','man_made','basin_gate'], // Water Gate - NFDD BI045
+        ['F_CODE','DB200','natural','gully'], // Gully - FCODE Retired
         ['F_CODE','EC030','landuse','forest'], // Wood - NFDD EC015
         ['F_CODE','ED030','wetland','mangrove'], // Mangrove Swamp - NFDD ED020
         ['F_CODE','FA090','raw:fcode','FA090'], // Geophysical Prospecting Grid - No replacement code
@@ -139,10 +139,10 @@ mgcp.rules = {
         'ARA':'feature_area', // Area
         'BRF':'navigation_aid:broadcast_freq', // Broadcast Frequency
         'CTL':'railway:track:length', // Cumulative Track Length
-        'DMB':'raw:DMB',  // Undergrowth Density
-        'DMF':'raw:DMF',  // Feature Count
+        'DMB':'undergrowth:density',  // Undergrowth Density
+        'DMF':'feature_count',  // Feature Count
         'DMT':'canopy_cover',  // Canopy Cover
-        'FCL':'raw:FCL',  // Ferry Crossing Distance
+        'FCL':'ferry:crossing_distance',  // Ferry Crossing Distance
         'GAW':'gauge',  // Railway Gauge
         'HCA':'bridge:horizontal_clearance', // Horizontal Clearance
         'HGT':'height',  // Height Above Surface Level
@@ -155,14 +155,14 @@ mgcp.rules = {
         'LEN':'length', // Length or Diameter
         'LNU':'length:interior_useable',  // Usable Length
         'LTN':'lanes', // Track or Lane Count
-        'MOH':'raw:MOH',  // Maximum Obstacle Height
+        'MOH':'obstacle:height:max',  // Maximum Obstacle Height
         'MVC':'max_clearance', // Maximum Vertical Clearance
         'NOS':'bridge:span_count', // Span Count
         'NPL':'cables',  // Parallel Line Count
         'OHB':'height', // Overall Bridge Height
         'PFH':'height:predominant', // Predominant Feature Height
         'RBV':'waterway:bank1:cover', // Right Bank Vegetation Cover
-        'SDO':'raw:SDO',  // Sand Dune Orientation
+        'SDO':'dune:orientation',  // Sand Dune Orientation
         'WD1':'width:minimum_traveled_way', // Route Minimum Travelled Way
         'WID':'width', // Width
         'ZVA':'ele', // Aerodrome Elevation
@@ -854,11 +854,11 @@ mgcp.rules = {
         ['RIR','1001','railway:in_road','yes'],
 
         // RKF - Rock Formation Structure 
-        //['RKF','0','raw:RKF','unknown'], // Unknown 
+        //['RKF','0','rock_formation','unknown'], // Unknown
         ['RKF','0',undefined,undefined], // Unknown 
-        ['RKF','1','raw:RKF','columnar'], // Columnar 
-        ['RKF','3','raw:RKF','pinnacle'], // Pinnacle 
-        ['RKF','999','raw:RKF','other'], // Other 
+        ['RKF','1','rock_formation','columnar'], // Columnar
+        ['RKF','3','rock_formation','pinnacle'], // Pinnacle
+        ['RKF','999','rock_formation','other'], // Other
 
         // RRA - Railway Power Method
         ['RRA','-999999',undefined,undefined], // In data, not in spec

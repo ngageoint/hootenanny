@@ -175,8 +175,8 @@ public class ReviewResourceGetStatsTest extends OsmResourceTestAbstract
     }
     catch (UniformInterfaceException e)
     {
-    	int statcode1 = Status.PRECONDITION_FAILED.getStatusCode();
-    	int statcode2 = e.getResponse().getStatus();
+    	Status.PRECONDITION_FAILED.getStatusCode();
+    	e.getResponse().getStatus();
       Assert.assertEquals(Status.PRECONDITION_FAILED.getStatusCode(), e.getResponse().getStatus());
       Assert.assertTrue(
         e.getResponse().getEntity(String.class).contains(

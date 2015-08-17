@@ -13,8 +13,8 @@
   <EXAMPLE>
   <URL>http://localhost:8080/hoot-services/ogc/GetReviewableItems?mapId=1&numItems=2&highestReviewScoreFirst=true&reviewScoreThresholdMinimum=0.8&geospatialBounds=-77.09655761718749,38.89958342598271,-77.09106445312499,38.90385833966776&displayBoundsZoomAdjust=-0.0015&boundsDisplayMethod=reviewableAndReviewAgainstItemCombined</URL>
   <REQUEST_TYPE>GET</REQUEST_TYPE>
-  <INPUT>Please refer to the wiki page: https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflated_Data_Review_Service_2</INPUT>
-   <OUTPUT>Please refer to the wiki page: https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflated_Data_Review_Service_2</OUTPUT>
+  <INPUT></INPUT>
+   <OUTPUT></OUTPUT>
    </EXAMPLE>
   ]]></Abstract>
 	<!-- Any changes to these default parameters must also be reflected in 

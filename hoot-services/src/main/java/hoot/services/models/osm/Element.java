@@ -234,6 +234,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
    * @return a string map with tag key/value pairs
    * @throws Exception
    */
+  @SuppressWarnings("unchecked")
   public Map<String, String> getTags() throws Exception
   {
     //this is a little risky, but I'm assuming the field probably won't ever change in name
@@ -519,6 +520,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
    * @throws IllegalAccessException
    * @throws InstantiationException
    */
+  @SuppressWarnings("rawtypes")
   public static List<?> getElementRecords(final long mapId, final ElementType elementType,
     final Set<Long> elementIds, Connection dbConn) throws InstantiationException,
     IllegalAccessException, ClassNotFoundException, NoSuchMethodException,
@@ -553,6 +555,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
    * @throws IllegalAccessException
    * @throws InstantiationException
    */
+  @SuppressWarnings("rawtypes")
   public static List<?> getElementRecordsWithUserInfo(final long mapId,
     final ElementType elementType, final Set<Long> elementIds, Connection dbConn)
     throws InstantiationException, IllegalAccessException, ClassNotFoundException,

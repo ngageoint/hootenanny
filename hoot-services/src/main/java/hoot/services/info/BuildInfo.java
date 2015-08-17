@@ -27,6 +27,7 @@
 package hoot.services.info;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -48,11 +49,23 @@ public class BuildInfo
    */
   public synchronized static Properties getInstance() throws IOException
   {
-    if (info == null || info.size() == 0)
+  	if (info == null || info.size() == 0)
     {
-	  info = new Properties();
-      info.load(BuildInfo.class.getClassLoader().getResourceAsStream("build.info"));
+	    info = new Properties();
+	    InputStream buildInfoStrm = null;
+	    try
+	    {
+	    	buildInfoStrm = BuildInfo.class.getClassLoader().getResourceAsStream("build.info");
+        info.load(BuildInfo.class.getClassLoader().getResourceAsStream("build.info"));
+	    }
+	    finally
+	    {
+	    	if (buildInfoStrm != null)
+	    	{
+	    		buildInfoStrm.close();
+	    	}
+	    }
     }
-    return info;
+  	return info;
   }
 }

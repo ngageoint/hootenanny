@@ -27,17 +27,13 @@
 package hoot.services.review;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
-import hoot.services.db.DbUtils.review_status_enum;
-import hoot.services.db2.QChangesets;
 import hoot.services.db2.QMaps;
 import hoot.services.db2.QReviewItems;
-import hoot.services.db2.QUsers;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.review.MarkItemsReviewedRequest;
 import hoot.services.models.review.MarkItemsReviewedResponse;
@@ -57,7 +53,6 @@ import com.mysema.query.Tuple;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.SQLSubQuery;
 import com.mysema.query.sql.dml.SQLUpdateClause;
-import com.mysema.query.types.query.ListSubQuery;
 
 /**
  * Marks reviewable items as reviewed;  This is a wrapper around the process of auto
@@ -88,9 +83,6 @@ public class ReviewItemsMarker
       assert(this.mapId != -1);
       log.debug(
         "Retrieving user ID associated with map having ID: " + String.valueOf(this.mapId) + " ...");
-
-      QMaps maps = QMaps.maps;
-      //SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
 
       userId =
       		_getUserIdFromMapId();
@@ -306,7 +298,6 @@ public class ReviewItemsMarker
   	long nRet = 0;
   	
 
-  	QReviewItems rm = QReviewItems.reviewItems;
   	java.util.Date date= new java.util.Date();
   	
   	long waittime = date.getTime() - LOCK_TIME;
