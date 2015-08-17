@@ -28,9 +28,11 @@ package hoot.services.models.osm;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.Calendar;
 
 import javax.ws.rs.core.Response.Status;
@@ -560,8 +562,7 @@ public class Changeset extends Changesets
   */
   public void insertTags(final long mapId, final NodeList xml, Connection conn) throws Exception
   {
-  	String POSTGRESQL_DRIVER = "org.postgresql.Driver";
-    Statement stmt = null;
+  	PreparedStatement ps = null;
     try
     {
       log.debug("Inserting tags for changeset with ID: " + getId());
@@ -582,18 +583,19 @@ public class Changeset extends Changesets
         strKv += key + "=>" + val;
 
       }
-      String strTags = "'";
+      String strTags = "";
       strTags += strKv;
-      strTags += "'";
 
-
-      Class.forName(POSTGRESQL_DRIVER);
-
-      stmt = conn.createStatement();
-
-      String sql = "UPDATE changesets_" + mapId + " SET tags = " + strTags + " WHERE id=" + getId();
-
-      stmt.executeUpdate(sql);
+      String sql = "UPDATE changesets_" + mapId + " SET tags=? WHERE id=?";
+      ps = conn.prepareStatement(sql);
+      ps.setObject(1, strTags, Types.OTHER);
+			ps.setLong(2, getId());
+			
+			long execResult = ps.executeUpdate();
+			if(execResult < 1)
+			{
+				throw new Exception("No tags were changed for changeset_" + mapId);
+			}
     }
     catch (Exception e)
     {
@@ -604,15 +606,11 @@ public class Changeset extends Changesets
     finally
     {
       // finally block used to close resources
-      try
-      {
-        if (stmt != null)
-          stmt.close();
-      }
-      catch (SQLException se2)
-      {
-
-      }// nothing we can do
+    	
+    	if(ps != null)
+    	{
+    		ps.close();
+    	}
 
     }// end try
 
