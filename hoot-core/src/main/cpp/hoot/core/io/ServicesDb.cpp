@@ -817,8 +817,10 @@ void ServicesDb::_insertNode_Services(const long id, const double lat, const dou
 
   QList<QVariant> v;
   v.append((qlonglong)id);
-  v.append((qlonglong)_round(lat * COORDINATE_SCALE, 7));
-  v.append((qlonglong)_round(lon * COORDINATE_SCALE, 7));
+//  v.append((qlonglong)_round(lat * COORDINATE_SCALE, 7));
+  v.append(lat);
+//  v.append((qlonglong)_round(lon * COORDINATE_SCALE, 7));
+  v.append(lon);
   v.append((qlonglong)_currChangesetId);
   v.append(_tileForPoint(lat, lon));
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
@@ -1954,8 +1956,10 @@ void ServicesDb::_updateNode_Services(long id, double lat, double lon, long chan
   }
 
   _updateNode->bindValue(":id", (qlonglong)id);
-  _updateNode->bindValue(":latitude", (qlonglong)_round(lat * COORDINATE_SCALE, 7));
-  _updateNode->bindValue(":longitude", (qlonglong)_round(lon * COORDINATE_SCALE, 7));
+  //_updateNode->bindValue(":latitude", (qlonglong)_round(lat * COORDINATE_SCALE, 7));
+  _updateNode->bindValue(":latitude", lat);
+  //_updateNode->bindValue(":longitude", (qlonglong)_round(lon * COORDINATE_SCALE, 7));
+  _updateNode->bindValue(":longitude", lon);
   _updateNode->bindValue(":changeset_id", (qlonglong)changeSetId);
   _updateNode->bindValue(":tile", (qlonglong)_tileForPoint(lat, lon));
   _updateNode->bindValue(":tags", _escapeTags(tags));
