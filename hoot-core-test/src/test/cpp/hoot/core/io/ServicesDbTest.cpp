@@ -38,14 +38,20 @@
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
+// special define:
+//   Greg's workspace set true; Terry's set false
+#define GREGSWORKSPACE false
+
 namespace hoot
 {
 
 class ServicesDbTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ServicesDbTest);
-  CPPUNIT_TEST(runOpenServicesTest);
+
+  // standard hoot services tests
   CPPUNIT_TEST(runDbVersionTest);
+  CPPUNIT_TEST(runOpenServicesTest);
   CPPUNIT_TEST(runDropMapTest);
   CPPUNIT_TEST(runInsertTest);
   CPPUNIT_TEST(runMapExistsTest);
@@ -57,9 +63,13 @@ class ServicesDbTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runSelectNodeIdsForWayTest);
   CPPUNIT_TEST(runSelectMembersForRelationTest);
   CPPUNIT_TEST(runUpdateNodeTest);
+
+  // osm apidb tests
   CPPUNIT_TEST(runOpenOsmApiTest);
   CPPUNIT_TEST(runInsertNodeOsmApiTest);
   CPPUNIT_TEST(runInsertWayOsmApiTest);
+  CPPUNIT_TEST(runSelectAllElementsOsmApiTest);
+
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -116,9 +126,10 @@ public:
   {
     Settings s = conf();
 
-    // Note: this will likely be different for each developer
-    s.set(ConfigOptions(s).getServicesDbTestUrlOsmapiKey(), "postgresql://postgres@10.194.70.78:5432/terrytest");
-    //s.set(ConfigOptions(s).getServicesDbTestUrlOsmapiKey(), "postgresql://vagrant:vagrant@localhost:15432/openstreetmap");
+    if(GREGSWORKSPACE)
+      s.set(ConfigOptions(s).getServicesDbTestUrlOsmapiKey(), "postgresql://vagrant:vagrant@localhost:15432/openstreetmap");
+    else
+      s.set(ConfigOptions(s).getServicesDbTestUrlOsmapiKey(), "postgresql://postgres@10.194.70.78:5432/terrytest");
 
     ServicesDb db;
     CPPUNIT_ASSERT_EQUAL(ServicesDb::DBTYPE_UNSUPPORTED, db.getDatabaseType());
@@ -437,6 +448,100 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, ctr);
   }
 
+  void runSelectAllElementsOsmApiTest()
+  {
+    ServicesDb database;
+
+    if(GREGSWORKSPACE)
+      database.open(QUrl("postgresql://vagrant:vagrant@localhost:15432/openstreetmap"));
+    else
+      database.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
+
+    /////////////////////////////////////
+    // INSERT NODES
+    /////////////////////////////////////
+
+    database.transaction();
+
+    // Create or get user, set our userId
+    database.setUserId(database.getOrCreateUser("OsmApiInsert@hoot.local", "Hootenanny Inserter"));
+    database.beginChangeset();
+
+    // list of insertions
+    QList<long> ids;
+    QList<QString> keys = QList<QString>() << "highway" << "foo";
+    QList<QString> values = QList<QString>() << "road" << "bar";
+    QList<float> lats = QList<float>() << 38.4 << 38;
+    QList<float> lons = QList<float>() << -106.5 << -104;
+
+    // insert into db
+    for(int i=0;i<2;i++)
+    {
+      Tags t;
+      t[keys[i].toStdString().c_str()] = values[i].toStdString().c_str();
+      long nodeId;
+      database.insertNode(lats[i], lons[i], t, nodeId);
+      ids.append(nodeId);
+    }
+
+    database.endChangeset();
+    database.commit();
+
+    /////////////////////////////////////
+    // SELECT THE NODES USING SELECT_ALL
+    /////////////////////////////////////
+
+    shared_ptr<QSqlQuery> nodeResultIterator = database.selectAllElements(ElementType::Node);
+    int ctr = 0;
+    for(int i=ids.size()-1; i>=0; i--)
+    {
+      nodeResultIterator->next();
+
+      // verify the values written to the DB upon their read-back
+      for(int j=0;j<8;j++) { LOG_DEBUG("VALUE = "+nodeResultIterator->value(j).toString()); }
+      HOOT_STR_EQUALS(ids[i], nodeResultIterator->value(0).toLongLong());
+      HOOT_STR_EQUALS(lats[i], nodeResultIterator->value(1).toLongLong() /
+        (double)ServicesDb::COORDINATE_SCALE);
+      HOOT_STR_EQUALS(lons[i], nodeResultIterator->value(2).toLongLong() /
+        (double)ServicesDb::COORDINATE_SCALE);
+      //HOOT_STR_EQUALS(QString(keys[i]+" = "+values[i]+"\n").toStdString().c_str(),
+      //  ServicesDb::unescapeTags(nodeResultIterator->value(8)));
+      LOG_DEBUG(QString("Passed iteration ")+QString::number(i));
+    }
+/*
+    shared_ptr<QSqlQuery> wayResultIterator = database.selectAllElements(ElementType::Way);
+    ctr = 0;
+    while (wayResultIterator->next())
+    {
+      HOOT_STR_EQUALS(wayId, wayResultIterator->value(0).toLongLong());
+      vector<long> v = database.selectNodeIdsForWay(wayId);
+      HOOT_STR_EQUALS(1, v.size());
+      CPPUNIT_ASSERT_EQUAL(nodeId, v[0]);
+
+      HOOT_STR_EQUALS("highway = primary\n", ServicesDb::unescapeTags(wayResultIterator->value(5)));
+      ctr++;
+    }
+    CPPUNIT_ASSERT_EQUAL(1, ctr);
+
+    shared_ptr<QSqlQuery> relationResultIterator =
+      database.selectAllElements(ElementType::Relation);
+    ctr = 0;
+    while (relationResultIterator->next())
+    {
+      HOOT_STR_EQUALS(relationId, relationResultIterator->value(0).toLongLong());
+      vector<RelationData::Entry> members = database.selectMembersForRelation(relationId);
+      HOOT_STR_EQUALS("[2]{Entry: role: wayrole, eid: Way:1, Entry: role: noderole, eid: Node:1}",
+                      members);
+      HOOT_STR_EQUALS("type = multistuff\n",
+                      ServicesDb::unescapeTags(relationResultIterator->value(5)));
+      ctr++;
+    }
+
+    CPPUNIT_ASSERT_EQUAL(1, ctr);
+    */
+  }
+
+
   void runSelectElementsTest()
   {
     ServicesDb database;
@@ -583,8 +688,11 @@ public:
   {
     LOG_DEBUG("Starting Insert node OSM test");
     ServicesDb database;
-    database.open(QUrl("postgresql://openstreetmap@10.194.71.84:5432/terrytest"));
-// database.open(QUrl("postgresql://vagrant:vagrant@localhost:15432/openstreetmap"));
+
+    if(GREGSWORKSPACE)
+      database.open(QUrl("postgresql://vagrant:vagrant@localhost:15432/openstreetmap"));
+    else
+      database.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
 
     database.transaction();
 
@@ -611,7 +719,11 @@ public:
   void runInsertWayOsmApiTest()
   {
      ServicesDb database;
-     database.open(QUrl("postgresql://openstreetmap@10.194.71.84:5432/terrytest"));
+
+     if(GREGSWORKSPACE)
+       database.open(QUrl("postgresql://vagrant:vagrant@localhost:15432/openstreetmap"));
+     else
+       database.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
 
      LOG_DEBUG("Back from open, starting transactions")
 

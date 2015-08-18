@@ -182,6 +182,14 @@ public:
                                        const long limit, const long offset);
 
   /**
+   * Returns a results iterator to all OSM elements for a given map and element type in the osm api
+   * database.  If limit = 0, no limit will be placed on the number of elements returned.  If offset
+   * = 0, no records will be skipped in the returned result set.
+   */
+  shared_ptr<QSqlQuery> selectElements_OsmApi(const long elementId,
+    const ElementType& elementType, const long limit, const long offset);
+
+  /**
    * Returns a vector with all the OSM node ID's for a given way
    */
   vector<long> selectNodeIdsForWay(long wayId);

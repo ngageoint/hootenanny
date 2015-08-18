@@ -1564,10 +1564,63 @@ shared_ptr<QSqlQuery> ServicesDb::selectAllElements(const long elementId, const 
 
 shared_ptr<QSqlQuery> ServicesDb::selectAllElements(const ElementType& elementType)
 {
-  return selectElements(-1, elementType, -1, 0);
+  switch ( _connectionType )
+  {
+    case DBTYPE_SERVICES:
+      return selectElements(-1, elementType, -1, 0);
+      break;
+
+    case DBTYPE_OSMAPI:
+      return selectElements_OsmApi(-1, elementType, -1, 0);
+      break;
+
+    default:
+      throw HootException("SelectAllElements cannot operate on unsupported database type");
+      break;
+  }
 }
 
+shared_ptr<QSqlQuery> ServicesDb::selectElements_OsmApi(const long elementId,
+  const ElementType& elementType, const long limit, const long offset)
+{
+  LOG_DEBUG("Inside selectElement_OsmApi");
 
+  const long mapId = _currMapId;
+  _selectElementsForMap.reset(new QSqlQuery(_db));
+  _selectElementsForMap->setForwardOnly(true);
+  QString limitStr;
+  if (limit == -1)
+  {
+    limitStr = "ALL";
+  }
+  else
+  {
+    limitStr = QString::number(limit);
+  }
+
+  QString sql =  "SELECT * FROM current_nodes";  // + _elementTypeToElementTableName(mapId, elementType);
+
+  if(elementId > -1)
+  {
+    sql += " WHERE id = :elementId ";
+  }
+  sql += " ORDER BY id DESC LIMIT " + limitStr + " OFFSET " + QString::number(offset);
+  _selectElementsForMap->prepare(sql);
+  _selectElementsForMap->bindValue(":mapId", (qlonglong)mapId);
+  if(elementId > -1)
+  {
+    _selectElementsForMap->bindValue(":elementId", (qlonglong)elementId);
+  }
+
+  if (_selectElementsForMap->exec() == false)
+  {
+    QString err = _selectElementsForMap->lastError().text();
+    LOG_WARN(sql);
+    throw HootException("Error selecting elements of type: " + elementType.toString() +
+      " for map ID: " + QString::number(mapId) + " Error: " + err);
+  }
+  return _selectElementsForMap;
+}
 
 shared_ptr<QSqlQuery> ServicesDb::selectElements(const long elementId,
   const ElementType& elementType, const long limit, const long offset)
