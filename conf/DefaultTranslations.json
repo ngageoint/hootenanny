@@ -43,6 +43,13 @@
 		"PATH" : "translations-local/HGISv20.js",
 		"FOUO_PATH" : "plugins-local"
 	},
+        {
+                "NAME" : "HotelsBase",
+                "DESCRIPTION" : "HotelsBase",
+                "CANEXPORT" : true,
+                "PATH" : "translations-local/HotelsBase.js",
+                "FOUO_PATH" : "plugins-local"
+        },
 	{
 		"NAME" : "UFD",
 		"DESCRIPTION" : "Urban Feature Data (UFD) Levels 1-3",

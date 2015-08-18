@@ -318,6 +318,7 @@ hgis20 = {
 
         // Recreation POI
         if (tags.amenity == 'swimming_pool') attrs.XtableName = 'Recreation_POI';
+        
         if (tags.leisure || tags.sport)
         {
             // Water park is a Tourist Location POI

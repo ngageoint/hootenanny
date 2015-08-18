@@ -624,7 +624,7 @@ hgis20.rules = {
      ['ISO3','DZA','is_in:country_code','DZ'], // Peoples Democratic Republic of Algeria
      ['ISO3','ASM','is_in:country_code','AS'], // Territory of American Samoa
      ['ISO3','AND','is_in:country_code','AD'], // Principality of Andorra
-     ['ISO3','AGO','is_in:country_code','AO'], // Republic of Angola
+     ['ISO3','AGO','is_in:country_code','AO'], // RepublicFstate of Angola
      ['ISO3','AIA','is_in:country_code','AI'], // Anguilla
      ['ISO3','ATA','is_in:country_code','AQ'], // Antarctica
      ['ISO3','ATG','is_in:country_code','AG'], // Antigua and Barbuda
