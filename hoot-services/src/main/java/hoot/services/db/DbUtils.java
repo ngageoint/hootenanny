@@ -59,12 +59,8 @@ import hoot.services.db2.QMaps;
 import hoot.services.db2.QReviewItems;
 import hoot.services.db2.QReviewMap;
 import hoot.services.db2.QUsers;
-import hoot.services.geo.GeoUtils;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.apache.commons.lang3.reflect.MethodUtils;
-import org.apache.commons.math.util.MathUtils;
-import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -93,7 +89,6 @@ public class DbUtils
   public static final String TIMESTAMP_DATE_FORMAT = "YYYY-MM-dd HH:mm:ss";
 
   protected static SQLTemplates templates = null;
-  //protected static Configuration configuration = null;
 
   protected static org.apache.commons.dbcp.BasicDataSource dbcp_datasource = null;
   private static ClassPathXmlApplicationContext appContext = null;
@@ -120,14 +115,11 @@ public class DbUtils
     DELETE
   }
 
-
-
 	public enum nwr_enum {
 		 node,
 		 way,
 		 relation
 	}
-
 
 	public enum review_status_enum
 	{
@@ -763,10 +755,11 @@ public class DbUtils
   }
 
 
+  //TODO: this code needs to be changed to dynamically read in the data types from querydsl.  If
+  //I make a change to the schema in liquibase, it will never be picked up unless this static code
+  //is also changed.  See #
   public static void createMap(final long mapId) throws Exception
   {
-
-
   	try {
 			String dbname = HootProperties.getProperty("dbName");
 
@@ -777,10 +770,10 @@ public class DbUtils
 	    "(id bigserial NOT NULL, " +
 	    " user_id bigint NOT NULL, " +
 	    " created_at timestamp without time zone NOT NULL, " +
-	    " min_lat integer NOT NULL, " +
-	    " max_lat integer NOT NULL, " +
-	    " min_lon integer NOT NULL, " +
-	    " max_lon integer NOT NULL, " +
+	    " min_lat double precision NOT NULL, " +
+	    " max_lat double precision NOT NULL, " +
+	    " min_lon double precision NOT NULL, " +
+	    " max_lon double precision NOT NULL, " +
 	    " closed_at timestamp without time zone NOT NULL, " +
 	    " num_changes integer NOT NULL DEFAULT 0, " +
 	    " tags hstore, " +
@@ -795,8 +788,8 @@ public class DbUtils
 	  	// current_nodes
 	  	createTblSql = "CREATE TABLE current_nodes_" + mapId +
 	    "(id bigserial NOT NULL, " +
-	    " latitude integer NOT NULL, " +
-	    " longitude integer NOT NULL, " +
+	    " latitude double precision NOT NULL, " +
+	    " longitude double precision NOT NULL, " +
 	    " changeset_id bigint NOT NULL, " +
 	    " visible boolean NOT NULL DEFAULT true, " +
 	    " \"timestamp\" timestamp without time zone NOT NULL DEFAULT now(), " +
@@ -1037,7 +1030,6 @@ public class DbUtils
     {
       try
       {
-        long execResult = -1;
         Configuration configuration = getConfiguration(mapId);
         //conn.setAutoCommit(false);
 
@@ -1067,7 +1059,7 @@ public class DbUtils
 
           	if(nBatch > 0)
           	{
-          		execResult = insert.execute();
+          		insert.execute();
           	}
 
             break;
@@ -1107,7 +1099,7 @@ public class DbUtils
 
           	if(nBatchUpdate > 0)
           	{
-          		execResult = update.execute();
+          		update.execute();
           	}
 
             break;
@@ -1118,7 +1110,7 @@ public class DbUtils
           	long nBatchDel = 0;
           	for(int i=0; i<records.size(); i++)
           	{
-          		Object oRec = records.get(i);
+          		records.get(i);
 
           		List<BooleanExpression> predicates = predicateslist.get(i);
 
@@ -1146,7 +1138,7 @@ public class DbUtils
 
           	if(nBatchDel > 0)
           	{
-          		execResult = delete.execute();
+          		delete.execute();
           	}
 
             break;
@@ -1248,7 +1240,6 @@ public class DbUtils
       try
       {
       	String sql = null;
-        long execResult = -1;
         //conn.setAutoCommit(false);
         int count = 0;
 
@@ -1268,15 +1259,16 @@ public class DbUtils
 
 
 	      			ps.setLong(1, node.getId());
-	      			ps.setInt(2, node.getLatitude());
-	      			ps.setInt(3, node.getLongitude());
+	      			ps.setDouble(2, node.getLatitude());
+	      			ps.setDouble(3, node.getLongitude());
 	      			ps.setLong(4, node.getChangesetId());
 	      			ps.setBoolean(5, node.getVisible());
 	      			ps.setTimestamp(6, node.getTimestamp());
 	      			ps.setLong(7, node.getTile());
 	      			ps.setLong(8, node.getVersion());
 
-	      			Map<String, String> tags = (Map<String, String>)node.getTags();
+	      			@SuppressWarnings("unchecked")
+              Map<String, String> tags = (Map<String, String>)node.getTags();
 
 	      			String hstoreStr = "";
 	      			Iterator it = tags.entrySet().iterator();
@@ -1314,15 +1306,16 @@ public class DbUtils
           	{
           		CurrentNodes node  = (CurrentNodes)o;
 
-	      			ps.setInt(1, node.getLatitude());
-	      			ps.setInt(2, node.getLongitude());
+	      			ps.setDouble(1, node.getLatitude());
+	      			ps.setDouble(2, node.getLongitude());
 	      			ps.setLong(3, node.getChangesetId());
 	      			ps.setBoolean(4, node.getVisible());
 	      			ps.setTimestamp(5, node.getTimestamp());
 	      			ps.setLong(6, node.getTile());
 	      			ps.setLong(7, node.getVersion());
 
-	      			Map<String, String> tags = (Map<String, String>)node.getTags();
+	      			@SuppressWarnings("unchecked")
+              Map<String, String> tags = (Map<String, String>)node.getTags();
 
 	      			String hstoreStr = "";
 	      			Iterator it = tags.entrySet().iterator();
@@ -1411,7 +1404,6 @@ public class DbUtils
       try
       {
       	String sql = null;
-        long execResult = -1;
         //conn.setAutoCommit(false);
         int count = 0;
 
@@ -1435,7 +1427,8 @@ public class DbUtils
 	      			ps.setBoolean(4, way.getVisible());
 	      			ps.setLong(5, way.getVersion());
 
-	      			Map<String, String> tags = (Map<String, String>)way.getTags();
+	      			@SuppressWarnings("unchecked")
+              Map<String, String> tags = (Map<String, String>)way.getTags();
 
 	      			String hstoreStr = "";
 	      			Iterator it = tags.entrySet().iterator();
@@ -1476,7 +1469,8 @@ public class DbUtils
 	      			ps.setTimestamp(3, way.getTimestamp());
 	      			ps.setLong(4, way.getVersion());
 
-	      			Map<String, String> tags = (Map<String, String>)way.getTags();
+	      			@SuppressWarnings("unchecked")
+              Map<String, String> tags = (Map<String, String>)way.getTags();
 
 	      			String hstoreStr = "";
 	      			Iterator it = tags.entrySet().iterator();
@@ -1566,7 +1560,6 @@ public class DbUtils
       try
       {
       	String sql = null;
-        long execResult = -1;
         //conn.setAutoCommit(false);
         int count = 0;
 
@@ -1590,7 +1583,8 @@ public class DbUtils
 	      			ps.setBoolean(4, rel.getVisible());
 	      			ps.setLong(5, rel.getVersion());
 
-	      			Map<String, String> tags = (Map<String, String>)rel.getTags();
+	      			@SuppressWarnings("unchecked")
+              Map<String, String> tags = (Map<String, String>)rel.getTags();
 
 	      			String hstoreStr = "";
 	      			Iterator it = tags.entrySet().iterator();
@@ -1631,7 +1625,8 @@ public class DbUtils
 	      			ps.setTimestamp(3, rel.getTimestamp());
 	      			ps.setLong(4, rel.getVersion());
 
-	      			Map<String, String> tags = (Map<String, String>)rel.getTags();
+	      			@SuppressWarnings("unchecked")
+              Map<String, String> tags = (Map<String, String>)rel.getTags();
 
 	      			String hstoreStr = "";
 	      			Iterator it = tags.entrySet().iterator();
@@ -1758,44 +1753,4 @@ public class DbUtils
 		
 		return ret;
 	}
-
-  
-  /**
-   * Converts a geo-coordinate value to the database storage format
-   *
-   * @param coordVal
-   *          coordinate value to convert
-   * @return a converted coordinate value
-   */
-  public static int toDbCoordValue(double coordVal)
-  {
-    return (int)(toDbCoordPrecision(coordVal) * GeoUtils.GEO_RECORD_SCALE);
-  }
-
-  /**
-   * Converts a geo-coordinate value from the database storage format
-   *
-   * @param coordVal
-   *          coordinate value to convert
-   * @return a converted coordinate value
-   */
-  public static double fromDbCoordValue(int coordVal)
-  {
-    return coordVal / (double) GeoUtils.GEO_RECORD_SCALE;
-  }
-
-  /**
-   * Sets a geo-coordinate value to the decimal precision expected by the
-   * services database
-   *
-   * @param coordVal
-   *          a coordinate value
-   * @return input coordinate value with the correct number of decimal places
-   */
-  public static double toDbCoordPrecision(double coordVal)
-  {
-    return MathUtils.round(coordVal, 7);
-  }
-
-
 }

@@ -48,7 +48,8 @@ import org.slf4j.LoggerFactory;
 @Path("/etl")
 public class ETLResource  extends JobControllerBase {
 	private static final Logger log = LoggerFactory.getLogger(ETLResource.class);
-	private String homeFolder = null;
+	@SuppressWarnings("unused")
+  private String homeFolder = null;
 	public ETLResource()
 	{
 		try

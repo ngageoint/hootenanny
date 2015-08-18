@@ -1,7 +1,11 @@
 This file is the NGA additions to the TDSv60 specification to make TDSv61.
 
-The NGA addtiions include a "SUR" attribute. This attribute has not been added to features in the NGA TDSv61 Sample FGDB. 
-To make output agree with the NGA sample dataset, the "SUR" attribute has been removed from the working copy of the NGA additions.
+The NGA additions include attributes and changes that are not included in the ESRI TDSv61 template FGDB.
+
+Attributes that have been removed are:
+
+* "SUR" - Survey Coverage Category
+* "ZI002_UFI" - Restriction Information : Unique Entity Identifier
 
 Files:
 * TDS_NGAv01_orig.csv - The raw file from NGA: 

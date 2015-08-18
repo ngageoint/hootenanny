@@ -26,8 +26,6 @@
  */
 package hoot.services.models.osm;
 
-
-import hoot.services.db.DbUtils;
 import hoot.services.db2.QChangesets;
 import hoot.services.db2.QMaps;
 import hoot.services.db2.Users;
@@ -37,18 +35,17 @@ import java.sql.Connection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.mysema.query.sql.SQLQuery;
-
 /**
  * Represents the model for an OSM user
  */
 public class User extends Users
 {
-  @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
   private static final long serialVersionUID = 4395123526768281005L;
   protected static final QChangesets changesets = QChangesets.changesets;
   protected static final QMaps maps = QMaps.maps;
 
+  @SuppressWarnings("unused")
   private Connection conn;
 
   public User(final Users user, Connection conn)
@@ -110,10 +107,13 @@ public class User extends Users
    * Returns the number of changesets modified by this user
    *
    * @return number of changesets
+   * @todo This functionaliy was broken during the changes to the services tests which prevented 
+   * them from cleaning out the entire database with each run.  Somehow it wasn't triggering errors
+   * until now.  Not sure exactly how to make it work yet with the table per map database 
+   * refactoring.  We don't really support individual user accounts, so low priority for now.
    */
-  public long numChangesetsModified()
+  /*public long numChangesetsModified()
   {
-
   	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
   	Long mapid = query.from(maps).where(maps.userId.eq(getId())).singleResult(maps.id);
   	if (mapid == null || mapid < 0)
@@ -124,7 +124,7 @@ public class User extends Users
   	query = new SQLQuery(conn, DbUtils.getConfiguration(mapid));
   	return
   	    query.from(changesets)
-  			.where( changesets.userId.eq(getId()))
+  			.where(changesets.userId.eq(getId()))
   			.count();
-  }
+  }*/
 }

@@ -83,10 +83,10 @@ Envelope ServicesDb::calculateEnvelope() const
 
   if (boundsQuery.next())
   {
-    double minY = (double)boundsQuery.value(0).toLongLong() / (double)COORDINATE_SCALE;
-    double maxY = (double)boundsQuery.value(1).toLongLong() / (double)COORDINATE_SCALE;
-    double minX = (double)boundsQuery.value(2).toLongLong() / (double)COORDINATE_SCALE;
-    double maxX = (double)boundsQuery.value(3).toLongLong() / (double)COORDINATE_SCALE;
+    double minY = boundsQuery.value(0).toDouble();
+    double maxY = boundsQuery.value(1).toDouble();
+    double minX = boundsQuery.value(2).toDouble();
+    double maxX = boundsQuery.value(3).toDouble();
     result = Envelope(minX, maxX, minY, maxY);
   }
   else
@@ -349,9 +349,9 @@ void ServicesDb::_dropTable(QString tableName)
 
 void ServicesDb::deleteUser(long userId)
 {
-  LOG_DEBUG("Deleting all maps for userid " << QString::number(userId));
-
   QSqlQuery maps = _exec("SELECT id FROM maps WHERE user_id=:user_id", (qlonglong)userId);
+
+  // delete all the maps owned by this user
   while (maps.next())
   {
     long mapId = maps.value(0).toLongLong();
@@ -477,26 +477,20 @@ void ServicesDb::_flushBulkInserts()
 {
   if (_nodeBulkInsert != 0)
   {
-    //LOG_DEBUG("Flushing nodes");
     _nodeBulkInsert->flush();
   }
   if (_wayBulkInsert != 0)
   {
-    //LOG_DEBUG("Flushing ways");
     _wayBulkInsert->flush();
   }
   if (_wayNodeBulkInsert != 0)
   {
-    //LOG_DEBUG("Flushing waynodes");
     _wayNodeBulkInsert->flush();
   }
   if (_relationBulkInsert != 0)
   {
-    //LOG_DEBUG("Flushing relations");
     _relationBulkInsert->flush();
   }
-
-  //LOG_DEBUG("Leaving flush bulk");
 }
 
 QString ServicesDb::getDbVersion()
@@ -833,7 +827,6 @@ void ServicesDb::_insertNode_Services(const long id, const double lat, const dou
   v.append(_escapeTags(tags));
 
   _nodeBulkInsert->insert(v);
-  //LOG_DEBUG("Inserted node into node bulk inserter");
 
   _nodesInsertElapsed += Tgs::Time::getTime() - start;
 
@@ -988,8 +981,6 @@ long ServicesDb::_insertUser_Services(QString email, QString displayName)
     _insertUser->finish();
   }
 
-  LOG_DEBUG("Leaving insert user");
-
   return id;
 }
 
@@ -1046,7 +1037,6 @@ long ServicesDb::_insertUser_OsmApi(const QString& email)
 
 long ServicesDb::getOrCreateUser(QString email, QString displayName)
 {
-  //LOG_DEBUG("Inside get or create user");
   long result = getUserId(email, false);
 
   if (result == -1)
@@ -1074,7 +1064,6 @@ void ServicesDb::setMapId(const long sessionMapId)
 
 long ServicesDb::getUserId(QString email, bool throwWhenMissing)
 {
-  //LOG_DEBUG("Inside get user id");
   if (_selectUserByEmail == 0)
   {
     _selectUserByEmail.reset(new QSqlQuery(_db));
@@ -1391,7 +1380,6 @@ void ServicesDb::_resetQueries()
   _osmApiNodeIdReserver.reset();
   _osmApiWayIdReserver.reset();
 }
-
 
 void ServicesDb::rollback()
 {

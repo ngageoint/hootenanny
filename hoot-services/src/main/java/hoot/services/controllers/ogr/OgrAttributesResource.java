@@ -47,7 +47,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.FileUtils;
@@ -59,9 +58,7 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
-import hoot.services.controllers.ingest.FileUploadResource;
 import hoot.services.ingest.MultipartSerializer;
-import hoot.services.nativeInterfaces.NativeInterfaceException;
 import hoot.services.utils.ResourceErrorHandler;
 
 @Path("/info")
@@ -138,7 +135,7 @@ public class OgrAttributesResource extends JobControllerBase {
 
 	  			
 
-	  			JSONObject param = new JSONObject();
+	  			new JSONObject();
 	  			// If it is zip file then we crack open to see if it contains FGDB.
 	  			// If so then we add the folder location and desired output name which is fgdb name in the zip
 	  			if(ext.equalsIgnoreCase("ZIP"))

@@ -1,6 +1,5 @@
 package hoot.services.review;
 
-import java.sql.Connection;
 import java.sql.Timestamp;
 
 import org.junit.Assert;
@@ -22,7 +21,7 @@ public class ReviewItemsMarkerTest {
 	@Category(UnitTest.class)
 	public void testGetLastAccessUpdateClause() throws Exception
 	{
-		Connection conn = DbUtils.createConnection();
+		DbUtils.createConnection();
 		
 		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
 		spy.setMapId(1);
@@ -53,7 +52,7 @@ public class ReviewItemsMarkerTest {
 	@Category(UnitTest.class)
 	public void testGetAvailableReviewQuery() throws Exception
 	{
-		Connection conn = DbUtils.createConnection();
+		DbUtils.createConnection();
 		
 		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
 		spy.setMapId(1);
@@ -73,7 +72,7 @@ public class ReviewItemsMarkerTest {
 	@Category(UnitTest.class)
 	public void testGetAvailableReviewWithOffsetQuery() throws Exception
 	{
-		Connection conn = DbUtils.createConnection();
+		DbUtils.createConnection();
 		
 		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
 		spy.setMapId(1);
@@ -96,7 +95,7 @@ public class ReviewItemsMarkerTest {
 	@Category(UnitTest.class)
 	public void testUpdateLastAccessWithSubSelect() throws Exception
 	{
-		Connection conn = DbUtils.createConnection();
+		DbUtils.createConnection();
 		
 		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
 		spy.setMapId(1);

@@ -82,8 +82,6 @@ import com.mysema.query.types.expr.BooleanExpression;
  */
 public class Map extends Maps
 {
-  private static final long serialVersionUID = -4908255640612804470L;
-
   private static final Logger log = LoggerFactory.getLogger(Map.class);
 
   private Connection conn;
@@ -169,10 +167,10 @@ public class Map extends Maps
   {
   	QCurrentNodes nodes = QCurrentNodes.currentNodes;
 
-  	return nodes.longitude.goe(bounds.getMinLonDb())
-  			.and(nodes.latitude.goe(bounds.getMinLatDb()))
-  			.and(nodes.longitude.loe(bounds.getMaxLonDb()))
-  			.and(nodes.latitude.loe(bounds.getMaxLatDb()));
+  	return nodes.longitude.goe(bounds.getMinLon())
+  			.and(nodes.latitude.goe(bounds.getMinLat()))
+  			.and(nodes.longitude.loe(bounds.getMaxLon()))
+  			.and(nodes.latitude.loe(bounds.getMaxLat()));
   		/*
     return
       Tables.CURRENT_NODES.LONGITUDE.greaterOrEqual(bounds.getMinLonDb())
@@ -238,8 +236,7 @@ public class Map extends Maps
   	JSONObject ret = new JSONObject();
     //get the intersecting tile ranges for the nodes
     final Vector<Range> tileIdRanges = getTileRanges(bounds);
-    java.util.Map<ElementType, java.util.Map<Long, Tuple>> elementIdsToRecordsByType =
-      new HashMap<ElementType, java.util.Map<Long, Tuple>>();
+    new HashMap<ElementType, java.util.Map<Long, Tuple>>();
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
@@ -266,10 +263,10 @@ public class Map extends Maps
     				.list(currentnodes.longitude.max(), currentnodes.longitude.min(),
     						currentnodes.latitude.max(), currentnodes.latitude.min() );
 
-      Integer maxLon = geospatialQueryNodeResults.get(0).get(0, Integer.class);
-      Integer minLon = geospatialQueryNodeResults.get(0).get(1, Integer.class);
-      Integer maxLat = geospatialQueryNodeResults.get(0).get(2, Integer.class);
-      Integer minLat = geospatialQueryNodeResults.get(0).get(3, Integer.class);
+      Double maxLon = geospatialQueryNodeResults.get(0).get(0, Double.class);
+      Double minLon = geospatialQueryNodeResults.get(0).get(1, Double.class);
+      Double maxLat = geospatialQueryNodeResults.get(0).get(2, Double.class);
+      Double minLat = geospatialQueryNodeResults.get(0).get(3, Double.class);
       ret.put("maxlon", maxLon);
       ret.put("minlon", minLon);
       ret.put("maxlat", maxLat);
@@ -285,8 +282,7 @@ public class Map extends Maps
   	long ret = 0;
     //get the intersecting tile ranges for the nodes
     final Vector<Range> tileIdRanges = getTileRanges(bounds);
-    java.util.Map<ElementType, java.util.Map<Long, Tuple>> elementIdsToRecordsByType =
-      new HashMap<ElementType, java.util.Map<Long, Tuple>>();
+    new HashMap<ElementType, java.util.Map<Long, Tuple>>();
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
@@ -324,8 +320,7 @@ public class Map extends Maps
   	JSONObject ret = new JSONObject();
     //get the intersecting tile ranges for the nodes
     final Vector<Range> tileIdRanges = getTileRanges(bounds);
-    java.util.Map<ElementType, java.util.Map<Long, Tuple>> elementIdsToRecordsByType =
-      new HashMap<ElementType, java.util.Map<Long, Tuple>>();
+    new HashMap<ElementType, java.util.Map<Long, Tuple>>();
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
@@ -351,8 +346,8 @@ public class Map extends Maps
     				.limit(1)
     				.list(currentnodes.longitude, currentnodes.latitude);
 
-      Integer lon = geospatialQueryNodeResults.get(0).get(0, Integer.class);
-      Integer lat = geospatialQueryNodeResults.get(0).get(1, Integer.class);
+      Double lon = geospatialQueryNodeResults.get(0).get(0, Double.class);
+      Double lat = geospatialQueryNodeResults.get(0).get(1, Double.class);
 
       ret.put("lon", lon);
       ret.put("lat", lat);
@@ -451,7 +446,7 @@ public class Map extends Maps
       	}
       	catch (Exception ex)
       	{
-      		String err = ex.getMessage();
+      		ex.getMessage();
       	}
       }
 
@@ -532,7 +527,7 @@ public class Map extends Maps
         	}
         	catch (Exception ex)
         	{
-        		String err = ex.getMessage();
+        		ex.getMessage();
         	}
 
         }
@@ -579,7 +574,7 @@ public class Map extends Maps
         	}
         	catch (Exception ex)
         	{
-        		String err = ex.getMessage();
+        		ex.getMessage();
         	}
 
         }
@@ -684,7 +679,7 @@ public class Map extends Maps
           	}
           	catch (Exception ex)
           	{
-          		String err = ex.getMessage();
+          		ex.getMessage();
           	}
           }
 
@@ -767,7 +762,7 @@ public class Map extends Maps
         	}
         	catch (Exception ex)
         	{
-        		String err = ex.getMessage();
+        		ex.getMessage();
         	}
         }
 
@@ -817,7 +812,7 @@ public class Map extends Maps
         	}
         	catch (Exception ex)
         	{
-        		String err = ex.getMessage();
+        		ex.getMessage();
         	}
         }
 
@@ -906,7 +901,7 @@ public class Map extends Maps
         	}
         	catch (Exception ex)
         	{
-        		String err = ex.getMessage();
+        		ex.getMessage();
         	}
         }
 

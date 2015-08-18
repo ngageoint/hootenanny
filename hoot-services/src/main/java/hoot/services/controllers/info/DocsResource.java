@@ -30,10 +30,6 @@ import hoot.services.HootProperties;
 import hoot.services.utils.ResourceErrorHandler;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

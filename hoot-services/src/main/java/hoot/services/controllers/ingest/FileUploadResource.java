@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.ingest;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,11 +50,6 @@ import hoot.services.HootProperties;
 import hoot.services.ingest.MultipartSerializer;
 import hoot.services.utils.ResourceErrorHandler;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
