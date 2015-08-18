@@ -266,7 +266,7 @@ public class GetReviewableItemsProcessletTest extends OsmResourceTestAbstract
     Assert.assertEquals("{81d2aff0-88e5-480e-95cb-c502d120f51f}", reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.05624761184207,38.90108419133191,-77.05149999999999,38.90408419133191", 
+      "-77.05480599999999,38.90108419133191,-77.05149999999999,38.90408499999998", 
       reviewableItem.getDisplayBounds());
     itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
@@ -367,7 +367,7 @@ public class GetReviewableItemsProcessletTest extends OsmResourceTestAbstract
     Assert.assertEquals("{81d2aff0-88e5-480e-95cb-c502d120f51f}", reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.05624761184207,38.90108419133191,-77.05149999999999,38.90408419133191", 
+      "-77.05480599999999,38.90108419133191,-77.05149999999999,38.90408499999998", 
       reviewableItem.getDisplayBounds());
     itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
@@ -433,7 +433,7 @@ public class GetReviewableItemsProcessletTest extends OsmResourceTestAbstract
       reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.05624761184207,38.90108419133191,-77.05149999999999,38.90408419133191", 
+      "-77.05625099999997,38.90098210148849,-77.05149999999999,38.9045", 
       reviewableItem.getDisplayBounds());
     itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
@@ -452,7 +452,7 @@ public class GetReviewableItemsProcessletTest extends OsmResourceTestAbstract
       reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.05624761184207,38.90108419133191,-77.05149999999999,38.90408419133191", 
+      "-77.05625099999997,38.90098210148849,-77.05149999999999,38.9045", 
       reviewableItem.getDisplayBounds());
     itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
@@ -471,7 +471,7 @@ public class GetReviewableItemsProcessletTest extends OsmResourceTestAbstract
       reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.05624761184207,38.90108419133191,-77.05149999999999,38.90408419133191", 
+      "-77.05624199999997,38.90098210148849,-77.05149999999999,38.90408499999998", 
       reviewableItem.getDisplayBounds());
     itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
@@ -490,7 +490,7 @@ public class GetReviewableItemsProcessletTest extends OsmResourceTestAbstract
       reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.05624761184207,38.90108419133191,-77.05149999999999,38.90408419133191", 
+      "-77.05624199999997,38.90098210148849,-77.05149999999999,38.90408499999998", 
       reviewableItem.getDisplayBounds());
     itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
@@ -507,7 +507,7 @@ public class GetReviewableItemsProcessletTest extends OsmResourceTestAbstract
     Assert.assertEquals("{51cd8890-a312-11e3-a5e2-0800200c9a66}", reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.05624761184207,38.90108419133191,-77.05149999999999,38.90408419133191", 
+      "-77.05625068804537,38.900067689146454,-77.05149999999999,38.904499999999985", 
       reviewableItem.getDisplayBounds());
     itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
