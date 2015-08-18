@@ -277,6 +277,7 @@ public class WfsManager {
 		catch (Exception ex)
 		{
 			log.error(ex.getMessage());
+			throw ex;
 		}
 		
 	}
@@ -305,6 +306,7 @@ public class WfsManager {
 		catch(Exception ex)
 		{
 			log.error(ex.getMessage());
+			throw ex;
 		}
 	}
 	
