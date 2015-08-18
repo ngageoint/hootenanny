@@ -16,7 +16,7 @@ see the Hootenanny - Developers Guide document.
 
 To run Hootenanny on CentOS/RHEL, follow the Hootenanny - Installation Instructions document.  
 There is currently no Vagrant set up available for CentOS/RHEL, but there may be one in the future.  
-Following the CentOS/RHEL installation instructions is currently more complicated installing 
+Following the CentOS/RHEL installation instructions is currently more complicated than installing 
 Hootenanny on Ubuntu and requires a higher level of Linux expertise.  Setting up a Hootenanny 
 development environment on CentOS/RHEL is neither advised nor supported.
 
