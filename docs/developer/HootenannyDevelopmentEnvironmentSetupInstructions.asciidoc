@@ -401,6 +401,28 @@ Estimated value of Pi is 3.12000000000000000000
 tott@tott-VirtualBox:/usr/local/hadoop$ 
 ----
 
+==== Hadoop Configuration After Upgrading from Java 6 to 7
+
+If for some reason you had Java 6 previously installed and upgraded to Java 7 as a result of these 
+instructions, you may have to perform the following steps.
+
+. Update JAVA_HOME in ~/.profile: export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+. Update JAVA_HOME in $HADOOP_HOME/conf/hadoop-env.sh: export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+. Run the following:
+----
+cd /lib
+sudo ln -s /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/libjvm.so libjvm.so
+cd /lib64
+sudo ln -s /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/libjvm.so libjvm.so
+cd /x86_64-linux-gnu
+sudo ln -s /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/libjvm.so libjvm.so
+sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-1.7.0-openjdk-amd64/bin/java 1
+sudo update-alternatives --config java
+sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/java-1.7.0-openjdk-amd64/bin/javac" 1
+sudo update-alternatives --config javac
+$HADOOP_HOME/bin/stop-all.sh && $HADOOP_HOME/bin/start-all.sh
+----
+
 ==== Node.js modules
 
 . `sudo npm config set registry http://registry.npmjs.org/`

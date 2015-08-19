@@ -922,28 +922,26 @@ public class ReviewResource
     return nextReviewableResponse;
   
   }
- /* 
+  
   @GET
-  @Path("/availability")
+  @Path("/lockcount")
   @Consumes(MediaType.TEXT_PLAIN)
   @Produces(MediaType.APPLICATION_JSON)
-  public JSONObject getReviewAvailability(
+  public JSONObject getReviewLockCount(
     @QueryParam("mapId")
-    String mapId,
-    @QueryParam("reviewItemId")
-    String reviewItemId
+    String mapId
   )
     throws Exception
   {
 
     Connection conn = DbUtils.createConnection();
-    final String errorMessageStart = "getting review item availability";
+    final String errorMessageStart = "getting review lock count";
     JSONObject ret = new JSONObject();
-
+    long lockcnt = 0;
     try
     {    	
     	ReviewItemsMarker marker = new ReviewItemsMarker(conn, mapId);
-    	ret = marker.getReviewAvailability(reviewItemId);
+    	lockcnt = marker.getLockedReviewCnt();
     }
     catch (Exception e)
     {
@@ -962,9 +960,9 @@ public class ReviewResource
       }
     }
     
-   
+    ret.put("count", lockcnt);
     return ret;
   
-  }*/
+  }
 
 }

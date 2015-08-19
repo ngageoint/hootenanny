@@ -80,12 +80,12 @@ public class ReviewItemsMarkerTest {
 		
 		java.util.Date date= new java.util.Date();
   	Timestamp compareTime = new Timestamp(date.getTime());
-		SQLQuery q = spy._getAvailableReviewWithOffsetQuery(compareTime, "{123456789}");
+		SQLQuery q = spy._getAvailableReviewWithOffsetQuery(compareTime, "{123456789}", "{a-123456789}");
 		
 		Assert.assertEquals("from \"review_items\" \"review_items\"\n" + 
 				"where \"review_items\".\"map_id\" = ? and (\"review_items\".\"review_status\" = ? and"
 				+ " (\"review_items\".\"last_accessed\" < ? or \"review_items\".\"last_accessed\" is null) "
-				+ "or \"review_items\".\"reviewable_item_id\" = ?)\n" + 
+				+ "or \"review_items\".\"reviewable_item_id\" = ? and \"review_items\".\"review_against_item_id\" = ?)\n" + 
 				"order by \"review_items\".\"review_score\" desc, \"review_items\".\"review_id\" asc", q.toString());
 	}
 	
