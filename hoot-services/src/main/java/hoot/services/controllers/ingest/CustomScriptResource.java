@@ -829,8 +829,9 @@ public class CustomScriptResource
     return oHeader;
   }
 
-  // This function checks to see if the script has both getDbSchema and translateToOgr which indicates if it can export
-  protected boolean validateExport(String script)
+  // This function checks to see if the script has both getDbSchema and translateToOgr which 
+  // indicates if it can export
+  protected boolean validateExport(String script) throws Exception
   {
 
   	boolean canExport = false;
@@ -889,6 +890,7 @@ public class CustomScriptResource
     catch(Exception ex)
     {
     	log.error(ex.getMessage());
+    	throw ex;
     }
     finally
     {

@@ -292,6 +292,7 @@ shared_ptr<Node> PertyWaySplitVisitor::_getNodeAddedBySplit(const QList<long>& n
   LOG_VARD(firstNodeIdInLastWay);
   assert(lastNodeIdInFirstWay == firstNodeIdInLastWay);
   assert(!nodeIdsBeforeSplit.contains(lastNodeIdInFirstWay));
+  LOG_VARD(nodeIdsBeforeSplit);
   return _map->getNode(firstNodeIdInLastWay);
 }
 

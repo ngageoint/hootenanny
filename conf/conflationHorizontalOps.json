@@ -86,14 +86,6 @@
 						"defaultvalue": "hoot::BuildingMergerCreator"
 					}
       },
-			{
-				"id": "hoot_poi_options_list",
-				"elem_type": "list",
-				"description": "A list of poi options",
-				"name": "POI Options",
-				"defaultvalue":"Places",
-				"hoot_key":"hoot.poi.options.list"
-			},
       {
         "id": "horizontal_override_osm_writer_include_debug",
         "elem_type": "bool",

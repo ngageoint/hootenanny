@@ -26,6 +26,7 @@
 # installation
 # - is not bulletproof and is meant as a placeholder until a Hootenanny CentOS Vagrant installation
 # is available
+# - *does not* currently install Hadoop
 #
 # WARNING: Spend time to reading the comments to understand what this script is doing before 
 # attempting to execute it.  USE THIS SCRIPT AT YOUR OWN RISK.
@@ -115,7 +116,7 @@ if [ "$SILENT_INSTALL" == "false" ]; then
   fi
 fi
 
-INSTALL_SOURCE_DIR=DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+INSTALL_SOURCE_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 if [ "$INSTALL_DEPENDENCIES" == "true" ]; then
 
