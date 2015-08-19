@@ -62,6 +62,7 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Function;
 
 @Path("/customscript")
@@ -890,7 +891,10 @@ public class CustomScriptResource
     catch(Exception ex)
     {
     	log.error(ex.getMessage());
-    	throw ex;
+    	if (ex instanceof EvaluatorException)
+    	{
+    		throw ex;
+    	}
     }
     finally
     {

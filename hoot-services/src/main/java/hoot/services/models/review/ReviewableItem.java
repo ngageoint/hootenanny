@@ -53,7 +53,9 @@ public class ReviewableItem
   
   private String displayBounds = null;
   public String getDisplayBounds() { return displayBounds; }
-  public void setDisplayBounds(String displayBounds) { this.displayBounds = displayBounds; }
+  public void setDisplayBounds(String displayBounds) { 
+  	this.displayBounds = displayBounds; 
+  	}
   
   private ReviewAgainstItem itemToReviewAgainst = null;
   public ReviewAgainstItem getItemToReviewAgainst() { return itemToReviewAgainst; }
