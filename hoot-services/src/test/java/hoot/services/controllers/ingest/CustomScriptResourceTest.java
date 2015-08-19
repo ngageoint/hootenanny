@@ -35,7 +35,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;
@@ -49,9 +51,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+
+import com.sun.jersey.api.client.UniformInterfaceException;
 
 /*
  * For the save/delete multiple tests, was unable to use the Jersey test container due to
@@ -123,6 +128,22 @@ public class CustomScriptResourceTest
         + "test";
     String content = FileUtils.readFileToString(f, "UTF-8");
     assertTrue(content.equals(resStr));
+  }
+  
+  @Test
+  @Category(UnitTest.class)
+  public void testSaveBadSyntax() throws Exception
+  {
+  	try
+  	{
+  		res.processSave("{ test", "testName", "Test Description");
+  	}
+  	catch (WebApplicationException e)
+    {
+      Response res = e.getResponse();
+			Assert.assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), res.getStatus());
+			Assert.assertTrue(res.getEntity().toString().contains("missing } in compound statement"));
+    }
   }
 
   @Test
