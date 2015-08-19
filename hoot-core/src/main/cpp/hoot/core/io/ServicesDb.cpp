@@ -560,8 +560,39 @@ long ServicesDb::_getNextNodeId_OsmApi()
   return _osmApiNodeIdReserver->getNextId();
 }
 
-long ServicesDb::_getNextRelationId(long mapId)
+long ServicesDb::_getNextRelationId()
 {
+  long retVal = -1;
+
+  switch ( _connectionType)
+  {
+  case DBTYPE_SERVICES:
+    retVal = _getNextRelationId_Services();
+    break;
+  case DBTYPE_OSMAPI:
+    retVal = _getNextRelationId_OsmApi();
+    break;
+  default:
+    throw HootException("GetNextRelation called on unsupported database type");
+    break;
+  }
+
+  return retVal;
+}
+
+long ServicesDb::_getNextRelationId_OsmApi()
+{
+  if (_osmApiRelationIdReserver == 0)
+  {
+    _osmApiRelationIdReserver.reset(new SequenceIdReserver(_db, "current_relations_id_seq"));
+  }
+
+  return _osmApiRelationIdReserver->getNextId();
+}
+
+long ServicesDb::_getNextRelationId_Services()
+{
+  const long mapId = _currMapId;
   _checkLastMapId(mapId);
   if (_relationIdReserver == 0)
   {
@@ -840,7 +871,7 @@ void ServicesDb::_insertNode_Services(const long id, const double lat, const dou
 
 bool ServicesDb::insertRelation(const Tags &tags, long& assignedId)
 {
-  assignedId = _getNextRelationId(_currMapId);
+  assignedId = _getNextRelationId();
 
   return insertRelation(assignedId, tags);
 }
@@ -856,7 +887,8 @@ bool ServicesDb::insertRelation(const long relationId, const Tags &tags)
     retVal = true;
     break;
   default:
-    throw HootException("insertRelation on unsupported database type");
+    _insertRelation_OsmApi( tags, relationId );
+    retVal = true;
     break;
   }
 
@@ -867,37 +899,17 @@ bool ServicesDb::insertRelation(const long relationId, const Tags &tags)
   return retVal;
 }
 
-void ServicesDb::insertRelationMembers(long relationId, ElementType type,
-  long elementId, QString role, int sequenceId)
-{
-  const long mapId = _currMapId;
+bool ServicesDb::insertRelationMember(const long relationId, const ElementType& type,
+  const long elementId, const QString& role, const int sequenceId)
 
+{
   switch ( _connectionType )
   {
   case DBTYPE_SERVICES:
-    _checkLastMapId(mapId);
-
-    if (_insertRelationMembers == 0)
-    {
-      _insertRelationMembers.reset(new QSqlQuery(_db));
-      _insertRelationMembers->prepare(
-        "INSERT INTO " + _getRelationMembersTableName(mapId) +
-          " (relation_id, member_type, member_id, member_role, sequence_id) "
-        "VALUES (:relation_id, :member_type, :member_id, :member_role, :sequence_id)");
-    }
-
-    _insertRelationMembers->bindValue(":relation_id", (qlonglong)relationId);
-    _insertRelationMembers->bindValue(":member_type", type.toString().toLower());
-    _insertRelationMembers->bindValue(":member_id", (qlonglong)elementId);
-    _insertRelationMembers->bindValue(":member_role", role);
-    _insertRelationMembers->bindValue(":sequence_id", sequenceId);
-
-    if (!_insertRelationMembers->exec())
-    {
-      throw HootException("Error inserting relation memeber: " +
-        _insertRelationMembers->lastError().text());
-    }
-
+    _insertRelationMember_Services(relationId, type, elementId, role, sequenceId);
+    break;
+  case DBTYPE_OSMAPI:
+    _insertRelationMember_OsmApi(relationId, type, elementId, role, sequenceId);
     break;
   default:
     throw HootException("InsertRelationMembers called on unsupported database type");
@@ -905,7 +917,39 @@ void ServicesDb::insertRelationMembers(long relationId, ElementType type,
   }
 
   LOG_DEBUG("Members added to relation " << QString::number(relationId));
+
+  return true;
 }
+
+void ServicesDb::_insertRelationMember_Services(long relationId, ElementType type,
+  long elementId, QString role, int sequenceId)
+{
+  const long mapId = _currMapId;
+  _checkLastMapId(mapId);
+
+  if (_insertRelationMembers == 0)
+  {
+    _insertRelationMembers.reset(new QSqlQuery(_db));
+    _insertRelationMembers->prepare(
+      "INSERT INTO " + _getRelationMembersTableName(mapId) +
+        " (relation_id, member_type, member_id, member_role, sequence_id) "
+      "VALUES (:relation_id, :member_type, :member_id, :member_role, :sequence_id)");
+  }
+
+  _insertRelationMembers->bindValue(":relation_id", (qlonglong)relationId);
+  _insertRelationMembers->bindValue(":member_type", type.toString().toLower());
+  _insertRelationMembers->bindValue(":member_id", (qlonglong)elementId);
+  _insertRelationMembers->bindValue(":member_role", role);
+  _insertRelationMembers->bindValue(":sequence_id", sequenceId);
+
+  if (!_insertRelationMembers->exec())
+  {
+    throw HootException("Error inserting relation memeber: " +
+      _insertRelationMembers->lastError().text());
+  }
+
+}
+
 
 long ServicesDb::insertUser(QString email, QString displayName)
 {
@@ -1381,6 +1425,7 @@ void ServicesDb::_resetQueries()
   // OSM API
   _osmApiNodeIdReserver.reset();
   _osmApiWayIdReserver.reset();
+  _osmApiRelationIdReserver.reset();
 }
 
 void ServicesDb::rollback()
@@ -3151,6 +3196,70 @@ void ServicesDb::_insertWayNodes_OsmApi(const long wayId, const std::vector<long
   _wayNodesInsertElapsed += Tgs::Time::getTime() - start;
 }
 
+void ServicesDb::_insertRelation_OsmApi(const Tags &tags, const long assignedId)
+{
+  //LOG_DEBUG("Entering OSM relation insert");
+
+  // Add to element cache
+  RelationPtr newRelation( new Relation(Status::Unknown1, assignedId, 0.0) );
+  newRelation->setTags(tags);
+  ConstElementPtr constRelation(newRelation);
+  _elementCache->addElement(constRelation);
+
+  // See if relation portion of cache is full and needs to be flushed
+  if ( _elementCache->typeCount(ElementType::Relation) == _elementCacheCapacity)
+  {
+    _flushElementCacheOsmApiRelations();
+  }
+
+  // Note: changeset bounding box update is handled in flush, as it requires data to be in database
+
+  // Increment changes in the changeset
+  _changesetChangeCount++;
+
+  //LOG_DEBUG("Exiting OSM insert relation with ID " << relationId );
+}
+
+
+bool ServicesDb::_insertRelationMember_OsmApi(const long relationId, const ElementType& type,
+    const long elementId, const QString& role, const int sequenceId)
+{
+  // Create RelationMemberCacheEntry
+  ElementId eid;
+
+
+  switch ( type.getEnum() )
+  {
+  case ElementType::Node:
+    eid = ElementId::node(elementId);
+    break;
+  case ElementType::Way:
+    eid = ElementId::way(elementId);
+    break;
+
+  case ElementType::Relation:
+    eid = ElementId::relation(elementId);
+    break;
+  default:
+    throw HootException("Adding relation member of unknown type");
+    break;
+  }
+  RelationMemberCacheEntry cacheEntry;
+  cacheEntry.elementId = eid;
+  cacheEntry.role = role;
+  cacheEntry.sequenceId = sequenceId;
+
+  // Add to cache of members for relations
+  _relationMembersCache.insert( std::pair<long, RelationMemberCacheEntry>(relationId, cacheEntry));
+
+  // is relation-member portion of cache full?
+  if ( _relationMembersCache.size() == _elementCacheCapacity)
+  {
+    _flushElementCacheOsmApiRelationMembers();
+  }
+
+  return true;
+}
 
 
 }

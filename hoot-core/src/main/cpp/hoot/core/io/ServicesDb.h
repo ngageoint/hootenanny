@@ -283,8 +283,17 @@ public:
 
   bool insertRelation(const long relationId, const Tags& tags);
 
-  void insertRelationMembers(long relationId, ElementType type, long elementId,
-    QString role, int sequenceId);
+  /**
+   * Insert a new member into an existing relation
+   * @param relationId Which relation we're adding a member to
+   * @param type The type of element being added
+   * @param elementId The ID for the element being added
+   * @param role Role for the relation
+   * @param sequenceId Sequence for the relation
+   * @return True if success, else false
+   */
+  bool insertRelationMember(const long relationId, const ElementType& type,
+    const long elementId, const QString& role, const int sequenceId);
 
   void insertRelationTag(long relationId, const QString& k, const QString& v);
 
@@ -360,6 +369,7 @@ private:
   shared_ptr<BulkInsert> _relationBulkInsert;
   long _relationsPerBulkInsert;
   shared_ptr<InternalIdReserver> _relationIdReserver;
+  shared_ptr<SequenceIdReserver> _osmApiRelationIdReserver;
 
   /// A vector of map ids that are pending index creation
   QVector<long> _pendingMapIndexes;
@@ -474,7 +484,7 @@ private:
   static QString _getMapIdString(long id) { return QString("_%1").arg(id); }
 
   long _getNextNodeId();
-  long _getNextRelationId(long mapId);
+  long _getNextRelationId();
   long _getNextWayId();
 
   bool _hasTable(QString tableName);
@@ -580,6 +590,27 @@ private:
   long _insertUser_Services(QString email, QString displayName);
 
   long _insertUser_OsmApi(const QString& email);
+
+  void _insertRelationMember_Services(long relationId, ElementType type,
+    long elementId, QString role, int sequenceId);
+
+  void _insertRelation_OsmApi(const Tags &tags, const long assignedId);
+
+  /**
+   * Insert a member into an OSM API database relation
+   * @param relationId The relation receiving a new member
+   * @param type Type of the new member
+   * @param elementId ID value for the new member
+   * @param role String describing new role of the relation
+   * @param sequenceId one-based sequence ID
+   * @return True if success, else false
+   */
+  bool _insertRelationMember_OsmApi(const long relationId, const ElementType& type,
+      const long elementId, const QString& role, const int sequenceId);
+
+  long _getNextRelationId_Services();
+  long _getNextRelationId_OsmApi();
+
 
 };
 

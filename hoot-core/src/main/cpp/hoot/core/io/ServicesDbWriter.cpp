@@ -371,7 +371,7 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
   {
     RelationData::Entry e = r->getMembers()[i];
     ElementId eid = _remapOrCreateElementId(e.getElementId(), empty);
-    _sdb.insertRelationMembers(relationId, eid.getType(), eid.getId(), e.role, i);
+    _sdb.insertRelationMember(relationId, eid.getType(), eid.getId(), e.role, i);
   }
 
   _countChange();
