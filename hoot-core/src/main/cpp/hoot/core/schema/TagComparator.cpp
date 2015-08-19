@@ -32,6 +32,7 @@
 #include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Standard
 #include <assert.h>
@@ -55,8 +56,10 @@ struct Entry
   }
 };
 
-TagComparator::TagComparator()
+TagComparator::TagComparator() :
+_caseSensitive(true)
 {
+  setCaseSensitive(ConfigOptions().getDuplicateNameCaseSensitive());
 }
 
 void TagComparator::_addAsDefault(Tags& t, const QString& key, const QString& value)

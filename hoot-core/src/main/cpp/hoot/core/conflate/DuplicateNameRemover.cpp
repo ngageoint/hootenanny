@@ -51,7 +51,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, DuplicateNameRemover)
 DuplicateNameRemover::DuplicateNameRemover() :
 _caseSensitive(true)
 {
-  setCaseSensitive(ConfigOptions().getDuplicateNameRemoverCaseSensitive());
+  setCaseSensitive(ConfigOptions().getDuplicateNameCaseSensitive());
 }
 
 void DuplicateNameRemover::apply(shared_ptr<OsmMap>& map)

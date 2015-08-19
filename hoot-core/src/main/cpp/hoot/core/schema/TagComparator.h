@@ -40,6 +40,7 @@ namespace hoot
 class TagComparator
 {
 public:
+
   TagComparator();
 
   /**
@@ -87,6 +88,8 @@ public:
    */
   Tags overwriteMerge(Tags t1, Tags t2);
 
+  void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
+
 private:
 
   static TagComparator* _theInstance;
@@ -130,6 +133,8 @@ private:
   void _promoteToCommonAncestor(Tags& t1, Tags& t2, Tags& result);
 
   QSet<QString> _toSet(const Tags& t, const QString& k);
+
+  bool _caseSensitive;
 };
 
 }

@@ -289,12 +289,13 @@ By default how much space should be put between two divided roads when they're d
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
-=== duplicate.name.remover.case.sensitive
+=== duplicate.name.case.sensitive
 
 * Data Type: bool
 * Default Value: `true`
 
-If true the duplicate name remover will only remove duplicate names when their case also matches; ignore case when removing otherwise.
+If true, all cleaning and conflation merge operations will only remove duplicate names when their
+case also matches; ignore case when removing otherwise.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
