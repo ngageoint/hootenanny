@@ -20,9 +20,9 @@ Following the CentOS/RHEL installation instructions is currently more complicate
 Hootenanny on Ubuntu and requires a higher level of Linux expertise.  Setting up a Hootenanny 
 development environment on CentOS/RHEL is neither advised nor supported.
 
-Neither the Ubuntu nor CentOS/RHEL installation documents currently include instructions for 
-installing Hadoop.  Running Hootenanny with Hadoop is optional.  Hootenanny is tested on Hadoop 
-0.20.2.
+Running Hootenanny with Hadoop is optional.  Hootenanny has been tested on Hadoop 0.20.2.  Neither 
+the Ubuntu nor CentOS/RHEL installation documents currently include instructions for installing 
+Hadoop, but the Developer's Guide has instructions for setting up a pseudo-distributed test cluster.
 
 # Redistribution
 
