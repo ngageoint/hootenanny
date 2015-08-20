@@ -4,10 +4,12 @@
 
 HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor -D reporting=json
 HOOT_OPTS+= -D services.db.writer.overwrite.map=true -D services.db.writer.create.user=true
-HOOT_OPTS+= -D services.db.writer.email=$(USER_EMAIL) -D services.db.reader.email=$(USER_EMAIL)
+HOOT_OPTS+= -D services.db.writer.email=test@test.com -D services.db.reader.email=test@test.com
+
 OP_INPUT=$(INPUT)
 OP_TRANSLATION=$(HOOT_HOME)/$(TRANSLATION)
 OP_INPUT_PATH=$(HOOT_HOME)/$(INPUT_PATH)
+
 
 # This replaces semicolon with vsizip and path 
 ifeq "$(INPUT_TYPE)" "ZIP" 

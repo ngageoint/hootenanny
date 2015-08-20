@@ -11,7 +11,7 @@ SHELL=/bin/bash
 # If you're adding another schema file be sure and update the archive target
 # too.
 #SCHEMA_FILES=plugins/script/tds40/schema/__init__.js plugins/script/tds61/schema/__init__.js plugins/script/mgcp/schema/__init__.js plugins/script/etds/rules/__init__.js plugins/script/etds61/rules/__init__.js plugins/script/etds61_osm/rules/__init__.js
-SCHEMA_FILES=plugins/tds40_schema.js plugins/tds61_schema.js plugins/mgcp_schema.js plugins/etds_rules.js plugins/etds61_rules.js plugins/etds61_osm_rules.js
+SCHEMA_FILES=plugins/tds40_schema.js plugins/tds61_schema.js plugins/mgcp_schema.js plugins/etds_rules.js plugins/etds61_rules.js plugins/etds61_osm_rules.js plugins/tds61_full_schema.js
 
 -include Makefile.inc
 
@@ -162,6 +162,12 @@ plugins/tds61_schema.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv.gz 
 	mkdir -p $(@D)
 	$< $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
+# TDSv61 full schema is built from the TDSv60 spec with NGA's extensions. 
+# This one has all of the Text Enumerations
+plugins/tds61_full_schema.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv.gz conf/nfdd/TDS_NGAv01.csv.gz
+	mkdir -p $(@D)
+	$< --fullschema $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+
 # Build the TDS61 "To English" rules
 plugins/etds61_rules.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv.gz conf/nfdd/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
@@ -251,6 +257,7 @@ archive: default docs
 	mkdir -p $(HOOT_TARNAME)/plugins/
 	cp plugins/tds40_schema.js $(HOOT_TARNAME)/plugins/tds40_schema.js
 	cp plugins/tds61_schema.js $(HOOT_TARNAME)/plugins/tds61_schema.js
+	cp plugins/tds61_full_schema.js $(HOOT_TARNAME)/plugins/tds61_full_schema.js
 	cp plugins/mgcp_schema.js $(HOOT_TARNAME)/plugins/mgcp_schema.js
 	cp plugins/etds_rules.js $(HOOT_TARNAME)/plugins/etds_rules.js
 	cp plugins/etds61_rules.js $(HOOT_TARNAME)/plugins/etds61_rules.js
@@ -271,7 +278,7 @@ tmp/schema.dot: qt-make
 	HootTest --single hoot::OsmSchemaTest
 
 tmp/schema.png: tmp/schema.dot
-	neato -Tpng -Gsize=50,50\! -GK=3 -Gratio=.5 -Gmindist=1 -Gmclimit=10 -Gnodesep=4 -Granksep=4 -Gsplines=true -Glen=0.5 -Gconcentrate=true -Gdpi=50 -Elen=3 -o tmp/schema.png tmp/schema.dot
+	neato -Tpng -Gsize=50,50\! -GK=3 -Gratio=.5 -Gmindist=1 -Gmclimit=10 -Gnodesep=4 -Granksep=4 -Gsplines=true -Glen=0.5 -Gconcentrate=true -Gdpi=50 -Goverlap=false -Elen=3 -o tmp/schema.png tmp/schema.dot
 
 # Code Coverage
 

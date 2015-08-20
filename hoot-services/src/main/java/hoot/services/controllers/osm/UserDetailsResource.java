@@ -79,7 +79,6 @@ public class UserDetailsResource
 	 *	</INPUT>
 	 * <OUTPUT>
 	 * 	XML representation of the user
-	 * see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmUserService#User-Details
 	 * </OUTPUT>
 	 * </EXAMPLE>
 	 *
@@ -89,7 +88,6 @@ public class UserDetailsResource
    * @return Response with user detail information
    * @throws Exception
    * @todo update to get actual logged in user once OAuth is implemented
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmUserService#User-Details
    */
   @GET
   @Consumes(MediaType.TEXT_PLAIN)

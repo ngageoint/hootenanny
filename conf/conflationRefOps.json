@@ -76,14 +76,6 @@
         "defaultvalue": "hoot::BuildingMergerCreator",
         "hoot_key": "merger.creators"
       },
-			{
-				"id": "hoot_poi_options_list",
-				"elem_type": "list",
-				"description": "A list of poi options",
-				"name": "POI Options",
-				"defaultvalue":"Places",
-				"hoot_key":"hoot.poi.options.list"
-			},
     
 	  {
         "id": "reference_override_small_way_merger_threshold",

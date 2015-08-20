@@ -46,7 +46,7 @@ Similar to editing data in link:$$http://wiki.openstreetmap.org/wiki/Editing$$[O
 
 [[Filter-by-Type]]
 .Changing the displayed tag schema in Hootenanny. The left image shows the selected feature displayed in OSM while right side shows the identical feature in TDSv61. Note the differences in the _All Tags_ (e.g. TDS uses F_CODE). Haiti OSM highway data displayed with DigitalGlobeBasemap (GBM) as background imagery. 
-image::user/images/id/hoot_OSMvTDS.png[scaledwidth="50%"]
+image::user/images/id/hoot_OSMvTDS.png[scaledwidth="75%"]
 
 NOTE: Users can view any element's attributes by simply hovering the mouse over a feature but in order to edit, scroll to display all tags, or switch to the TDS 6.x/4.x tag schema(s), a single feature must be selected.  
 
@@ -83,32 +83,41 @@ It is also possible to create new features for a given layer in Hootenanny iD bu
 To add a new point, click on the Point button appearing in the Map Viewer or use the '1' shortcut key. Points can be used to represent features such as shops, restaurants, parks and monuments, etc. They mark a specific location and describe the feature based on the OSM/TDS tag relationship. Once a new point is added to the map, a panel will appear on the map prompting you to select an appropriate feature type (park, cafe, etc) and any associated tags. Note that even though OSM values are presented, the data is stored on the database using the TDS tag equivalent. The next time it is edited within Hootenanny it will display the values using the english translated LTDS schema.
 
 .Adding a new point in Hootenanny. A cafe POI was generated with name = 'Starbucks' and other associated attribution. Washington, D.C.; OSM vector data; DigitalGlobe GlobalBasemap (GBM).
-image::user/images/id/hoot_adddata.png[scaledwidth="75%"] 
+image::user/images/id/hoot_adddata.png[scaledwidth="50%"] 
 
 To add a new linear feature, click on the Line button or use the '2' shortcut key and begin digitizing on the map. A pop-up message will appear if you would like to snap to an existing linear feature. Click on a single location to begin the linear feature and then continue clicking until feature has been completed. Double-click to complete the process and edit any attribution as needed. Repeat process for a new Area feature. Click Save to save all edits or step back/forward using the undo/redo buttons as needed.
 
 ==== Copying Features/Tags
 
-There maybe some use cases where it is necessary to copy/paste features and tags when editing in Hootenanny.  For example, if users would like to create duplicate features within the same map layer that are of the same feature type (e.g. foot path, bridge, secondary road, etc.) and share common attribution or they would like to copy the tags from one feature in the reference layer to another similar feature in the secondary layer, they would use the following  supported work flows.  The following section describes the currently supported capabilities for copy/paste within Hootenanny.
+In certain circumstances it may be useful to utilize copy/paste functionality when editing layers and addressing conflict reviews within Hootenanny.  For example, if users need to create multiple copies of a selected feature (or set of features) within the same map layer (e.g. foot path, bridge, secondary road, POI, etc...) or they would like to copy attributes from a feature (or multiple selected features) in the reference layer to similar feature in the secondary layer when reviewing conflicts, they could use the following currently supported work flows.  
 
-===== Copying Features/Tags Within a Layer 
+===== Copying Features/Tags Within a Single Layer 
 
-To create multiple copies of a selected feature within a single layer, hit ctrl-c for a selected feature and then simply place the copied feature to a desired location using your mouse. Note that this works only with a single selected feature at a time and for all non-unique tags (everything except name, uuid, etc. where only one value can be maintained for a given layer).  
+To copy a feature(s) within a single layer, select the feature or set of features that you wish to copy using the left-mouse button or by clicking on the red/blue conflict review table field.  Note that you can select multiple features by pressing the _shift_ key as you select each feature.  When multiple features are selected they will appear listed on the left under the _Selected_ items. Type `ctrl-c` to copy the selected feature(s) and then `ctrl+v` to display the copied feature(s) on the map.  Once the copied feature(s) appear on the map they can be placed in the desired location.
+
+.Copying Feature Geometry/Tags within a Layer.  The selected item, a Monument named Major General Rochambeau is copied and pasted.  Note that the `name` tag is not copied to the newly created feature.
+image::user/images/id/hoot_copy_feature.png[scaledwidth="75%"]
+
+To copy tags within a single layer from one feature to another (or multiple selected features), select the feature to copy and type `ctrl+c`, then select the target feature(s) to paste and use `shift+ctrl+v`.  This will replace all of the selected feature tags (except name and those listed in the note below) with the copied source tags.     
+
+NOTE: Hootenanny does not currently support copying feature geometry between multiple layers and excludes certain tags such as the feature name, uuid, etc. due to inherited OSM iD functionality.  If a user attempts to paste a set of copied features into a secondary layer the application session will likely be disrupted.
 
 ===== Copying Tags Between Two Layers
 
-The following use case is supported if users need to copy tags associated with features in one layer (i.e. reference) and paste into a features in another layer (i.e. secondary).  Select the feature in the source layer that you wish to copy the tags and type _ctrl-c_.  Be sure to turn off the source layer by unchecking it from the background settings (shortcut key = b) list of displayed layers at bottom (if the layer is not turned off a pop-up message will appear indicating that an error occurred due to two active layer being present).  Select a target feature to copy the tags from the selected feature in the source layer and hit _shift-ctrl-v_.  If you have all tags displayed you will notice that in addition to the pre-existing tags all copied tags from the source feature will appear listed.  
+When reviewing conflicts or performing any manual editing with two layers, it maybe useful to copy tags from a selected feature(s) in the Reference layer to a feature(s) in a Secondary layer.  For example, if during conflation a set of features has been identified as needing review, a user can use the copy/paste tag functionality to ensure that a set of attributes are included in the merged output.  Click on any field in either the blue/red conflict review table (selecting either the blue/red field will depend on which represents the reference or secondary layer) to select a feature to copy from (or by clicking on the feature geometry) and hit `ctrl+c` to copy the tags.  Then select to target feature(s) to paste to by clicking on target field and hit `shift+ctrl+v`.  This will copy all of the tags to the selected feature(s).  You may see a pop-up message indicating that an error occurred due to two active layer being present.  If that is the case you can turn off the source layer by unchecking it from the background settings (shortcut key = b) temporarily before pasting.  If you have all tags displayed you will notice that in addition to the pre-existing tags all copied tags from the source feature will appear listed.  
 
-NOTE: This capability will likely evolve over time to support copy/pasting of features and their attribution when reviewing conflation conflicts but currently it is only possible to cut/paste geometry within a single layer and selected tags between layers.  
+NOTE: Any duplicate tags in the target feature will be overwritten during copy/paste.
 
 === Hootenanny Map Tools
 
 The Hootenanny map portion of the interface mirrors the Open Street Map iD editor link:$$https://www.openstreetmap.org/edit?editor=id$$[OpenStreetMap-iD] with additional customization to support conflation workflows. Map navigation options appear in the upper right portion of the map viewer noted by B in figure <<HootiD-UILayout>>. To view a maptip and/or <<Hoot-iD_Shortcuts,shortcut>>, hover the cursor over each button and information concerning the functionality of a particular feature will appear. 
 
-It is also possible to display a line length or polygon area by clicking the 'i' key when a feature has been selected.  Display units can be toggled between feet (imperial) and meters (metric) by clicking on either option.  To measure the distance between any two points, select line or hit the 2 shortcut and click from the starting to ending point with the feature info displayed.  This will give you a measurement between two locations.  Note that you will need to delete any feature created once you have recording this measurement.
+It is also possible to display a line length or polygon area by clicking the 'i' key when a feature has been selected.  Display units can be toggled between feet (imperial) and meters (metric) by clicking on either option.  To measure the distance between any two points, select line or hit the 2 shortcut and click from the starting to ending point with the feature info displayed.  This will give you a measurement between two locations.  
 
 .Display length of feature on map.  DC POI data from Geonames.org with DigitalGlobe Basemap imagery.
 image::user/images/id/hoot_measure.png[scaledwidth="50%"]
+
+NOTE: When creating a line between two POIs to measure a distance value, use the undo buttons to remove the line rather than the delete palette tool.  This is because the linear feature replaces the original POIs with a new start and end node and deleting the feature removes both the original POIs and the newly created line.
 
 ==== Map Navigation
 
@@ -173,8 +182,10 @@ The following table provides all of the available shortcut keys for accessing Ho
 | ctrl + y | Redo
 | ctrl + s | Save
 | ctrl + c | Copies feature geometry/tags
+| ctrl + v | Pastes selected feature geometry/tags
 | ctrl + backspace | Deletes object permanently
 | shift + ctrl + v | Pastes copied source layer tags into selected target layer tags
+| shift + left mouse click | selects multiple features geometry/tags within layer
 | alt + b | Switches b/w layers during post-conflation conflict review
 | alt + n | Toggles layer visibility on/off
 | + | Zoom in 1 level
@@ -287,11 +298,12 @@ Once the two data sets have been loaded to the map, click the conflate button to
 .Hootenanny reference conflation parameters. Note that Type is set to reference and the Attribute Reference Layer is DcGisRoads (attributes from the DcGisRoads layer will be used as the reference attribution during conflation).
 image::user/images/id/hoot_conflate.png[scaledwidth="25%"] 
 
+[[ConflictReview]]
 ===== Reviewing Conflicts
 
 When conflating data it is inevitable that conflicts may arise due to the lack of a clear solution as a result of ambiguous relationships between matched features. When this occurs, reviewable items are flagged and presented to the user for further evaluation. In <<ConflictReview>> we can see that conflating DCGIS Roads against Tiger data resulted in 4 conflicts requiring user validation.  For each conflict a review note is displayed (shown in the red box in <<ConflictReview>>) in addition to the total number of conflicts (1 of 4) and the status of each review (Unreviewed).  Features under review will appear as highlighted in either Red and Blue along with a matching attribute table with a subset of values shown.  Clicking the cursor in any red/blue highlighted field will select the feature and the associated attribute in the left tag panel.  Note that it is also possible to toggle the displayed table on/off by clicking on the Hide/Show Table button located conflict review bar at the bottom.    
 
-[[ConflictReview]]
+[[ReferenceConflictReview]]
 .Reviewing Conflicts in Hootenanny. Washington, D.C.; Conflated DCRoads and OSM data; DigitalGlobe GlobalBasemap (GBM).
 image::user/images/id/hoot_reviewconflict_dc.png[] 
 
@@ -346,6 +358,7 @@ image::user/images/id/hoot_advanced_POI.png[scaledwidth="50%"]
 
 The review process for POIs is slightly different from the previous Reference conflation example because of the added ability to merge POIs during review.  Merge combines the two POIs attribution into a single POI with the reference geometry and a combination of non-reference/reference attribution. When determining an appropriate review action, a user must consider whether the points represent two separate POIs (click _Resolved_ with data unmodified), a single POI (click _Merge_ button to combine attributes into Reference layer POI), or an invalid POI in which case the user might move or delete the POI(s) in question.  
 
+[[POI2POIConflictReview]]
 .Reviewing POI conflicts in Hootenanny Hootenanny. In this example, the POIs flagged for review represent a school and an arts center and were identified due to their close geographic proximity (Review note:close).    
 image::user/images/id/hoot_advanced_POI_review.png[]
  

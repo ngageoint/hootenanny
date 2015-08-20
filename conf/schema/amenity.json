@@ -119,7 +119,7 @@
 
     "tag": { "name": "amenity=post_office", "isA": "amenity" },
     "tag": { "name": "amenity=post_box", "isA": "amenity",
-        "similarTo": { "name": "amenity=post_office", "weight": 0.3 } },
+        "similarTo": { "name": "amenity=post_office", "weight": 0.6 } },
     "tag": { "name": "amenity=post_depot", "isA": "amenity",
         "similarTo": { "name": "amenity=post_office", "weight": 0.8 } },
 
@@ -297,9 +297,15 @@
     "tag": { "name": "amenity=crematorium", "isA": "amenity",
         "aliases": ["amenity=cremation"] },
 
-    "tag": { "name": "amenity=cemetery", "isA": "amenity" },
+    "tag": {
+        "name": "amenity=cemetery",
+        "isA": "amenity",
+        "aliases": ["amenity=cemetary"]
+    },
+
     "tag": { "name": "amenity=grave_yard", "isA": "amenity",
-        "similarTo": { "name": "amenity=cemetery", "weight": 0.6 } },
+        "similarTo": { "name": "amenity=cemetery", "weight": 0.6 },
+        "similarTo": { "name": "landuse=cemetery", "weight": 0.6 } },
     "tag": { "name": "amenity=tomb", "isA": "amenity",
         "similarTo": { "name": "amenity=grave_yard", "weight": 0.5 } },
     "tag": { "name": "amenity=storage_of_human_remains", "isA": "amenity",

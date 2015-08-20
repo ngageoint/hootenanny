@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<changeSet author="jong.choi" id="11" context="default" runInTransaction="false">
+		<comment>
+			Alter review_status_enum to include reviewing type
+		</comment>
+
+    	<sql>ALTER TYPE review_status_enum ADD VALUE 'reviewing'</sql>
+
+		<addColumn tableName="review_items">
+            <column name="last_accessed" type="timestamp" />
+        </addColumn>
+
+		<!-- There isn't an obvious way to specify without time zone in liquibase -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+		</modifySql>
+
+		
+	</changeSet>
+</databaseChangeLog>

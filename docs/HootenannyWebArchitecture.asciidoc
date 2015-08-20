@@ -4,27 +4,8 @@ DigitalGlobe, Inc.
 :Email: hootenanny.help@digitalglobe.com
 
 include::developer/HootenannyWebArchitecture_Intro.asciidoc[]
-:leveloffset: 1
-include::restDocs/HootenannyRestReference_ingest.asciidoc[]
-include::wpsDocs/CustomScriptSaveProcesslet.asciidoc[]
-include::wpsDocs/CustomScriptGetListProcesslet.asciidoc[]
-include::wpsDocs/CustomScriptGetScriptProcesslet.asciidoc[]
-include::wpsDocs/CustomScriptDeleteScriptProcesslet.asciidoc[]
-include::restDocs/HootenannyRestReference_job.asciidoc[]
-include::wpsDocs/CleanDataProcesslet.asciidoc[]
-include::wpsDocs/CleanMapProcesslet.asciidoc[]
-include::wpsDocs/ConflateProcesslet.asciidoc[]
-include::wpsDocs/CookieCutterProcesslet.asciidoc[]
-include::wpsDocs/ETLProcesslet.asciidoc[]
-include::wpsDocs/ExportProcesslet.asciidoc[]
-include::wpsDocs/ExportJobProcesslet.asciidoc[]
-include::wpsDocs/GetReviewableItemsProcesslet.asciidoc[]
-include::wpsDocs/JobStatusProcesslet.asciidoc[]
-include::wpsDocs/MarkItemsReviewedProcesslet.asciidoc[]
-include::wpsDocs/PrepareItemsForReviewProcesslet.asciidoc[]
-include::wpsDocs/ReviewableItemsStatisticsProcesslet.asciidoc[]
-include::restDocs/HootenannyRestReference_ogr.asciidoc[]
-include::wpsDocs/OSM2OgrProcesslet.asciidoc[]
-include::wpsDocs/LTDSTranslateProcesslet.asciidoc[]
-include::restDocs/HootenannyRestReference_osm.asciidoc[]
+
+
+
+
 

@@ -26,7 +26,6 @@ configure
 Configure.pri
 DbSchema.sql
 .deps/
-docs/docbook-xsl.css
 docs/*.epub
 docs/*.pdf
 docs/*-docinfo.xml
@@ -35,8 +34,11 @@ docs/.*
 docs/*.html
 docs/*.xml
 docs/*.text
-docs/Exploratory Funds Presentation.ppt
 docs/~*.docx
+docs/algorithms/GenericLineTestGraph.png
+docs/algorithms/GenericLineTestTimingGraph.png
+docs/Exploratory Funds Presentation.ppt
+docs/docbook-xsl.css
 docs/ref
 docs/UserDocumentation.html
 docs/output
@@ -152,3 +154,6 @@ test-files/DcTigerRoadsHighwayExactMatchInputs.osm
 data/
 .vagrant/
 inputFeatures.png
+docs/developer/restDocs/
+docs/developer/wpsDocs/
+log4j.xml

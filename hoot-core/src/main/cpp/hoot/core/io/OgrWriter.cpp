@@ -108,7 +108,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<G
   for (QVariantMap::const_iterator it = vm.constBegin(); it != vm.constEnd(); ++it)
   {
     const QVariant& v = it.value();
-    QByteArray ba = it.key().toAscii();
+    QByteArray ba = it.key().toUtf8();
 
     // If the field DOESN'T exist in the output layer, skip it.
     if (poFeature->GetFieldIndex(ba.constData()) == -1)
@@ -129,7 +129,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<G
       break;
     case QVariant::String:
     {
-      QByteArray vba = v.toString().toAscii();
+      QByteArray vba = v.toString().toUtf8();
       poFeature->SetField(ba.constData(), vba.constData());
       break;
     }
@@ -146,50 +146,43 @@ void OgrWriter::_addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<G
     for (size_t i = 0; i < gc->getNumGeometries(); i++)
     {
       const Geometry* child = gc->getGeometryN(i);
-
-      std::string wkt = child->toString();
-      char* t = (char*)wkt.data();
-      OGRGeometry* geom;
-      if (OGRGeometryFactory::createFromWkt(&t, layer->GetSpatialRef(), &geom) != OGRERR_NONE)
-      {
-        throw HootException(QString("Error parsing WKT (%1)").arg(QString::fromStdString(wkt)));
-      }
-
-      if (poFeature->SetGeometryDirectly(geom) != OGRERR_NONE)
-      {
-        throw HootException(QString("Error setting geometry"));
-      }
-
-      // reset the FID to -1 so that it will get a new FID when created.
-      poFeature->SetFID(-1);
-      if (layer->CreateFeature(poFeature) != OGRERR_NONE)
-      {
-        throw HootException(QString("Error creating feature"));
-      }
+      _addFeatureToLayer(layer, f, child, poFeature);
     }
   }
   else
   {
-    std::string wkt = g->toString();
-    char* t = (char*)wkt.data();
-    OGRGeometry* geom;
-    if (OGRGeometryFactory::createFromWkt(&t, layer->GetSpatialRef(), &geom) != OGRERR_NONE)
-    {
-      throw HootException(QString("Error parsing WKT (%1)").arg(QString::fromStdString(wkt)));
-    }
-
-    if (poFeature->SetGeometryDirectly(geom) != OGRERR_NONE)
-    {
-      throw HootException(QString("Error setting geometry"));
-    }
-
-    if (layer->CreateFeature(poFeature) != OGRERR_NONE)
-    {
-      throw HootException(QString("Error creating feature"));
-    }
+    _addFeatureToLayer(layer, f, g.get(), poFeature);
   }
 
   OGRFeature::DestroyFeature(poFeature);
+}
+
+void OgrWriter::_addFeatureToLayer(OGRLayer* layer, shared_ptr<Feature> f, const Geometry* g,
+                                   OGRFeature* poFeature)
+{
+  std::string wkt = g->toString();
+  char* t = (char*)wkt.data();
+  OGRGeometry* geom;
+  int errCode = OGRGeometryFactory::createFromWkt(&t, layer->GetSpatialRef(), &geom) ;
+  if (errCode != OGRERR_NONE)
+  {
+    throw HootException(
+      QString("Error parsing WKT (%1).  OGR Error Code: (%2)").arg(QString::fromStdString(wkt)).arg(QString::number(errCode)));
+  }
+
+  errCode = poFeature->SetGeometryDirectly(geom);
+  if (errCode != OGRERR_NONE)
+  {
+    throw HootException(
+      QString("Error setting geometry - OGR Error Code: (%1)  Geometry: (%2)").arg(QString::number(errCode)).arg(QString::fromStdString(g->toString())));
+  }
+
+  errCode = layer->CreateFeature(poFeature);
+  if (errCode != OGRERR_NONE)
+  {
+    throw HootException(
+      QString("Error creating feature - OGR Error Code: (%1) \nFeature causing error: (%2)").arg(QString::number(errCode)).arg(f->toString()));
+  }
 }
 
 void OgrWriter::close()
@@ -298,9 +291,11 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
         oField.SetWidth(f->getWidth());
       }
 
-      if( poLayer->CreateField( &oField ) != OGRERR_NONE )
+      int errCode = poLayer->CreateField(&oField);
+      if (errCode != OGRERR_NONE)
       {
-        throw HootException(QString("Error creating field (%1).").arg(f->getName()));
+        throw HootException(
+          QString("Error creating field (%1)  OGR Error Code: (%2).").arg(f->getName()).arg(QString::number(errCode)));
       }
     }
   } // End layer does not exist

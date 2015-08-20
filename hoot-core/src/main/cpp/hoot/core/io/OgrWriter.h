@@ -151,6 +151,9 @@ protected:
 
   void _addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<Geometry> g);
 
+  void _addFeatureToLayer(OGRLayer* layer, shared_ptr<Feature> f, const Geometry* g,
+                          OGRFeature* poFeature);
+
   void _createLayer(shared_ptr<const Layer> layer);
 
   OGRLayer* _getLayer(const QString layerName);

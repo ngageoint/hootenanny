@@ -163,4 +163,16 @@ public class MultipartSerializerTest {
 
 		FileUtils.forceDelete(workingDir);
 	}
+	
+	@Test
+	@Category(UnitTest.class)
+	public void TestValidatePath() throws Exception
+	{
+		boolean isValid = _ms._validatePath("/projects/hoot/upload/123456", "/projects/hoot/upload/123456/DcGisRoads.gdb");
+		org.junit.Assert.assertTrue(isValid);
+		isValid = _ms._validatePath("/projects/hoot/upload/123456", "/projects/hoot/upload/123456/../DcGisRoads.gdb");
+		org.junit.Assert.assertFalse(isValid);
+		isValid = _ms._validatePath("/projects/hoot/upload/123456", "\0//DcGisRoads.gdb");
+		org.junit.Assert.assertFalse(isValid);
+	}
 }

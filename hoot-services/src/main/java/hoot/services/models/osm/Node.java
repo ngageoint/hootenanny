@@ -134,9 +134,8 @@ public class Node extends Element
           .singleResult(currentNodes);
 
     }
-    return new BoundingBox(DbUtils.fromDbCoordValue(nodeRecord.getLongitude()),
-        DbUtils.fromDbCoordValue(nodeRecord.getLatitude()), DbUtils.fromDbCoordValue(nodeRecord
-            .getLongitude()), DbUtils.fromDbCoordValue(nodeRecord.getLatitude()));
+    return new BoundingBox(nodeRecord.getLongitude(), nodeRecord.getLatitude(), 
+      nodeRecord.getLongitude(), nodeRecord.getLatitude());
   }
 
   /**
@@ -261,15 +260,15 @@ public class Node extends Element
       // existence of record has already been checked
       // TODO: inefficient
       assert (existingRecord != null);
-      latitude = DbUtils.fromDbCoordValue(existingRecord.getLatitude());
-      longitude = DbUtils.fromDbCoordValue(existingRecord.getLongitude());
+      latitude = existingRecord.getLatitude();
+      longitude = existingRecord.getLongitude();
     }
     // If the node is being deleted, we still need to make sure that the coords
     // passed in match
     // what's on the server, since we'll be relying on them to compute the
     // changeset bounds.
-    nodeRecord.setLatitude(DbUtils.toDbCoordValue(latitude));
-    nodeRecord.setLongitude(DbUtils.toDbCoordValue(longitude));
+    nodeRecord.setLatitude(latitude);
+    nodeRecord.setLongitude(longitude);
     // no point in updating the tile if we're not deleting
     if (!entityChangeType.equals(EntityChangeType.DELETE))
     {
@@ -312,10 +311,8 @@ public class Node extends Element
     CurrentNodes nodeRecord = (CurrentNodes) record;
     if (nodeRecord.getVisible())
     {
-      element.setAttribute("lat",
-          String.valueOf(DbUtils.fromDbCoordValue(nodeRecord.getLatitude())));
-      element.setAttribute("lon",
-          String.valueOf(DbUtils.fromDbCoordValue(nodeRecord.getLongitude())));
+      element.setAttribute("lat", String.valueOf(nodeRecord.getLatitude()));
+      element.setAttribute("lon", String.valueOf(nodeRecord.getLongitude()));
     }
 
     org.w3c.dom.Element elementWithTags = addTagsXml(element);
@@ -526,8 +523,8 @@ public class Node extends Element
 
       String sql = "INSERT INTO current_nodes_" + mapId + "(\n"
           + "            id, latitude, longitude, changeset_id,  visible, \"timestamp\", tile, version, tags)\n"
-          + " VALUES(" + nodeId + "," + DbUtils.toDbCoordValue(latitude) + ","
-          + DbUtils.toDbCoordValue(longitude) + "," + changesetId + "," + "true" + ","
+          + " VALUES(" + nodeId + "," + latitude + ","
+          + longitude + "," + changesetId + "," + "true" + ","
           + "CURRENT_TIMESTAMP" + "," + QuadTileCalculator.tileForPoint(latitude, longitude) + ","
           + "1" + "," + strTags +
 

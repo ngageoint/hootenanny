@@ -23,7 +23,7 @@ This description is for quick overview of conflation advanced option meta data r
 	b. read conf/conflateAdvOps.json
 	c. for each key in conf/conflateAdvOps.json, find from conf/configOptions.asciidoc and replace description,elem_type and defaultvalue values in conf/conflateAdvOps.json with  decription, Data type and default value of corresponding object in  conf/configOptions.asciidoc
 	d. if it sees override in field object in conf/conflateAdvOps.json, replace the key value if the override object with the matching key value in parent object.
-	f. remove override object so it does not get passed to rest enpoint caller.
+	e. remove override object so it does not get passed to rest enpoint caller.
 5. Service rest endpoint http://localhost:8080/hoot-services/info/advancedopts/getoptions?conftype=reference exposes modified conf/conflationRefOps.json where it performs same operations as item #4 before returning output.
 6. Service rest endpoint http://localhost:8080/hoot-services/info/advancedopts/getoptions?conftype=average exposes modified conf/conflationAverageOps.json where it performs same operations as item #4 before returning output.
 7. Service rest endpoint http://localhost:8080/hoot-services/info/advancedopts/getoptions?conftype=horizontal exposes modified conf/conflationHorizontalOps.json where it performs same operations as item #4 before returning output.

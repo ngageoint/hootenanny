@@ -41,13 +41,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.xpath.XPathAPI;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
+import com.mysema.query.Tuple;
 import com.mysema.query.sql.RelationalPathBase;
 import com.mysema.query.sql.SQLExpressions;
 import com.mysema.query.sql.SQLQuery;
@@ -59,7 +59,6 @@ import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
 import hoot.services.db.DbUtils.RecordBatchType;
-
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentWayNodes;
 import hoot.services.db2.CurrentWays;
@@ -315,8 +314,8 @@ public class Way extends Element
     for (Object record : nodeRecords)
     {
       final CurrentNodes nodeRecord = (CurrentNodes) record;
-      final double lat = DbUtils.fromDbCoordValue(nodeRecord.getLatitude());
-      final double lon = DbUtils.fromDbCoordValue(nodeRecord.getLongitude());
+      final double lat = nodeRecord.getLatitude();
+      final double lon = nodeRecord.getLongitude();
       if (lat < minLat)
       {
         minLat = lat;
@@ -449,6 +448,7 @@ public class Way extends Element
     if (addChildren)
     {
       final List<Long> nodeIds = getNodeIds();
+      Set<Long> elementIds = new HashSet<Long>();
       // way nodes are output in sequence order; list should already be sorted
       // by the query
       for (long nodeId : nodeIds)
@@ -456,6 +456,24 @@ public class Way extends Element
         org.w3c.dom.Element nodeElement = doc.createElement("nd");
         nodeElement.setAttribute("ref", String.valueOf(nodeId));
         element.appendChild(nodeElement);
+        elementIds.add(nodeId);
+      }
+   
+      @SuppressWarnings("unchecked")
+      final List<Tuple> elementRecords = 
+          (List<Tuple>) Element.getElementRecordsWithUserInfo(getMapId(), ElementType.Node, elementIds, conn);
+      for(int i=0; i<elementRecords.size(); i++)
+      {
+      	final Element nodeFullElement = 
+            ElementFactory.getInstance().create(ElementType.Node, elementRecords.get(i), conn, getMapId());
+        org.w3c.dom.Element nodeXml = 
+        		nodeFullElement.toXml(
+          	parentXml,
+          	modifyingUserId, 
+          	modifyingUserDisplayName,
+            false,
+            false);
+        parentXml.appendChild(nodeXml);
       }
     }
 
@@ -532,8 +550,8 @@ public class Way extends Element
       Node node = (Node) parsedElementIdsToElementsByType.get(ElementType.Node).get(parsedNodeId);
       CurrentNodes nodeRecord = (CurrentNodes) node.getRecord();
       actualNodeId = nodeRecord.getId();
-      nodeCoords.lat = DbUtils.fromDbCoordValue(nodeRecord.getLatitude());
-      nodeCoords.lon = DbUtils.fromDbCoordValue(nodeRecord.getLongitude());
+      nodeCoords.lat = nodeRecord.getLatitude();
+      nodeCoords.lon = nodeRecord.getLongitude();
     }
     // element not referenced in this request, so should already exist in the db
     // and its info up
@@ -557,8 +575,8 @@ public class Way extends Element
       {
         throw new Exception("Node with ID: " + actualNodeId + " is not visible for way.");
       }
-      nodeCoords.lat = DbUtils.fromDbCoordValue(existingNodeRecord.getLatitude());
-      nodeCoords.lon = DbUtils.fromDbCoordValue(existingNodeRecord.getLongitude());
+      nodeCoords.lat = existingNodeRecord.getLatitude();
+      nodeCoords.lon = existingNodeRecord.getLongitude();
     }
     assert (actualNodeId > 0);
     nodeCoordsCollection.put(actualNodeId, nodeCoords);

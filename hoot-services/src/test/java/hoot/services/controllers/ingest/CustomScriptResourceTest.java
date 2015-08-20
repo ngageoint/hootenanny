@@ -35,6 +35,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -55,7 +56,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import javax.ws.rs.WebApplicationException;
+import com.sun.jersey.api.client.UniformInterfaceException;
 
 /*
  * For the save/delete multiple tests, was unable to use the Jersey test container due to
@@ -127,6 +128,22 @@ public class CustomScriptResourceTest
         + "test";
     String content = FileUtils.readFileToString(f, "UTF-8");
     assertTrue(content.equals(resStr));
+  }
+  
+  @Test
+  @Category(UnitTest.class)
+  public void testSaveBadSyntax() throws Exception
+  {
+  	try
+  	{
+  		res.processSave("{ test", "testName", "Test Description");
+  	}
+  	catch (WebApplicationException e)
+    {
+      Response res = e.getResponse();
+			Assert.assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), res.getStatus());
+			Assert.assertTrue(res.getEntity().toString().contains("missing } in compound statement"));
+    }
   }
 
   @Test
@@ -599,23 +616,7 @@ public class CustomScriptResourceTest
   		assertTrue(fScript.exists());
 
   		String sScript = FileUtils.readFileToString(fScript);
-			boolean canExport = res.validateExport(sScript);
-			// This may be no longer valid assumption.
-/*
-  		if(jsTrans.get("CANEXPORT") != null)
-  		{
-  			Boolean bCanExport = (Boolean)jsTrans.get("CANEXPORT") ;
-  			if(bCanExport)
-  			{
-					assertTrue(canExport);
-  			}
-  			else
-  			{
-  				assertFalse(canExport);
-  			}
-  		}
-*/
-  		// check for FOUO
+			res.validateExport(sScript);
 
   		if(jsTrans.get("FOUO_PATH") != null)
   		{

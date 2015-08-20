@@ -97,7 +97,7 @@ geonames.rules = {
         'BNKU':{'geological':'undersea_bank'}, //  bank: an elevation, typically located on a shelf, over which the depth of water is relatively shallow but sufficient for safe surface navigation
         'BNKX':{'geological':'bank'}, //  section of bank: 
         'BOG':{'wetland':'bog'}, //  bog(s): a wetland characterized by peat forming sphagnum moss, sedge, and other acid-water plants
-        'BP':{'poi':'boundary_marker'}, //  boundary marker: a fixture marking a point along a boundary
+        'BP':{'historic':'boundary_stone'}, //  boundary marker: a fixture marking a point along a boundary
         'BRKS':{'millitary':'barracks'}, //  barracks: a building for lodging military personnel
         'BRKW':{'man_made':'breakwater'}, //  breakwater: a structure erected to break the force of waves at the entrance to a harbor or port
         'BSND':{'landuse':'basin', 'basin':'detention'}, //  drainage basin: an area drained by a stream
@@ -112,7 +112,7 @@ geonames.rules = {
         'BUSTP':{'highway':'bus_stop'}, //  bus stop: a place lacking station facilities
         'BUTE':{'geological':'butte'}, //  butte(s): a small, isolated, usually flat-topped hill with steep sides
         'CAPE':{'natural':'cape'}, //  cape: a land area, more prominent than a point, projecting into the sea and marking a notable change in coastal direction
-        'CAPG':{'gacier:type':'icecap'}, //  icecap: a dome-shaped mass of glacial ice covering an area of mountain summits or other high lands; smaller than an ice sheet
+        'CAPG':{'natural':'glacier','gacier:type':'icecap'}, //  icecap: a dome-shaped mass of glacial ice covering an area of mountain summits or other high lands; smaller than an ice sheet
         'CARN':{'man_made':'cairn'}, //  cairn: a heap of stones erected as a landmark or for other purposes
         'CAVE':{'natural':'cave_entrance'}, //  cave(s): an underground passageway or chamber, or cavity on the side of a cliff
         'CDAU':{'geological':'undersea_cordillera'}, //  cordillera: an entire mountain system including the subordinate ranges, interior plateaus, and basins
@@ -124,7 +124,7 @@ geonames.rules = {
         'CH':{'building':'church'}, //  church: a building for public Christian worship
         'CLDA':{'natural':'volcano'}, //  caldera: a depression measuring kilometers across formed by the collapse of a volcanic mountain
         'CLF':{'natural':'cliff'}, //  cliff(s): a high, steep to perpendicular slope overlooking a waterbody or lower area
-        'CLG':{'poi':'clearing'}, //  clearing: an area in a forest with trees removed
+        'CLG':{'natural':'forest_clearing'}, //  clearing: an area in a forest with trees removed
         'CMN':{'leisure':'common'}, //  common: a park or pasture for community use
         'CMPLA':{'camp':'yes', 'camp:type':'labor'}, //  labor camp: a camp used by migrant or temporary laborers
         'CMPL':{'camp':'yes', 'camp:type':'logging'}, //  logging camp: a camp used by loggers
@@ -153,8 +153,8 @@ geonames.rules = {
         'CONE':{'geological':'cone'}, //  cone(s): a conical landform composed of mud or volcanic material
         'CONT':{'place':'continent'}, //  continent: continent: Europe, Africa, Asia, North America, South America, Oceania, Antarctica
         'COVE':{'natural':'bay'}, //  cove(s): a small coastal indentation, smaller than a bay
-        'CRDR':{'poi':'corridor'}, //  corridor: a strip or area of land having significance as an access way
-        'CRKT':{'poi':'tidal_creek'}, //  tidal creek(s): a meandering channel in a coastal wetland subject to bi-directional tidal currents
+        'CRDR':{'natural':'corridor'}, //  corridor: a strip or area of land having significance as an access way
+        'CRKT':{'waterway':'stream','tidal':'yes'}, //  tidal creek(s): a meandering channel in a coastal wetland subject to bi-directional tidal currents
         'CRNT':{'poi':'current'}, //  current: a horizontal flow of water in a given direction with uniform velocity
         'CRQ':{'natural':'glacier','glacier:type':'cirque'}, //  cirque: a bowl-like hollow partially surrounded by cliffs or steep slopes at the head of a glaciated valley
         'CRQS':{'natural':'glacier','glacier:type':'cirque'}, //  cirques: bowl-like hollows partially surrounded by cliffs or steep slopes at the head of a glaciated valley
@@ -175,7 +175,7 @@ geonames.rules = {
         'CTRR':{'amenity':'religious_activities'}, //  religious center: a facility where more than one religious activity is carried out, e.g., retreat, school, monastery, worship
         'CTRS':{'amenity':'space_centre'}, //  space center: a facility for launching, tracking, or controlling satellites and space vehicles
         'CUET':{'geological':'cuesta'}, //  cuesta(s): an asymmetric ridge formed on tilted strata
-        'CULT':{'poi':'cultivated_area'}, //  cultivated area: an area under cultivation
+        'CULT':{'cultivated':'yes'}, //  cultivated area: an area under cultivation
         'CUTF':{'poi':'cutoff'}, //  cutoff: a channel formed as a result of a stream cutting through a meander neck
         'CVNT':{'building':'convent'}, //  convent: a building where a community of nuns lives in seclusion
         'DAM':{'waterway':'dam'}, //  dam: a barrier constructed across a stream to impound water
@@ -201,16 +201,16 @@ geonames.rules = {
         'DTCHM':{'poi':'ditch_mouth'}, //  ditch mouth(s): an area where a drainage ditch enters a lagoon, lake or bay
         'DTCH':{'waterway':'ditch'}, //  ditch: a small artificial watercourse dug for draining or irrigating the land
         'DUNE':{'natural':'dune'}, //  dune(s): a wave form, ridge or star shape feature composed of sand
-        'DVD':{'poi':'divide'}, //  divide: a line separating adjacent drainage basins
+        'DVD':{'natural':'divide'}, //  divide: a line separating adjacent drainage basins
         'EDGU':{'geological':'undersea_shelf_edge'}, //  shelf edge: a line along which there is a marked increase of slope at the outer margin of a continental shelf or island shelf
         'ERG':{'natural':'desert', 'desert':'erg'}, //  sandy desert: an extensive tract of shifting sand and sand dunes
         'ESCU':{'geological':'undersea_escarpment'}, //  escarpment (or scarp): an elongated and comparatively steep slope separating flat or gently sloping areas
         'ESTO':{'landuse':'orchard','trees':'oil_palms'}, //  oil palm plantation: an estate specializing in the cultivation of oil palm trees
-        'EST':{'poi':'estate'}, //  estate(s): a large commercialized agricultural landholding with associated buildings and other facilities
+        'EST':{'landuse':'estate'}, //  estate(s): a large commercialized agricultural landholding with associated buildings and other facilities
         'ESTR':{'landuse':'orchard','trees':'rubber_trees'}, //  rubber plantation: an estate which specializes in growing and tapping rubber trees
         'ESTSG':{'crop':'sugar'}, //  sugar plantation: an estate that specializes in growing sugar cane
         'ESTT':{'landuse':'orchard','trees':'tea_plants'}, //  tea plantation: an estate which specializes in growing tea bushes
-        'ESTX':{'poi':'section_of_estate'}, //  section of estate:
+        'ESTX':{'landuse':'section_of_estate'}, //  section of estate:
         'ESTY':{'estuary':'yes'}, //  estuary: a funnel-shaped stream mouth or embayment where fresh water mixes with sea water under tidal influences
         'FAN':{'geological':'fan'}, //  fan(s): a fan-shaped wedge of coarse alluvium with apex merging with a mountain stream bed and the fan spreading out at a low angle slope onto an adjacent plain
         'FANU':{'geological':'undersea_fan'}, //  fan: a relatively smooth feature normally sloping away from the lower termination of a canyon or canyon system
@@ -231,19 +231,19 @@ geonames.rules = {
         'FRMQ':{'abandoned:place':'farm'}, //  abandoned farm: 
         'FRMS':{'place':'farm'}, //  farms: tracts of land with associated buildings devoted to agriculture
         'FRMT':{'building':'farm'}, //  farmstead: the buildings and adjacent service areas of a farm
-        'FRSTF':{'poi':'fossilized_forest'}, //  fossilized forest: a forest fossilized by geologic processes and now exposed at the earth's surface
+        'FRSTF':{'natural':'fossilized_forest'}, //  fossilized forest: a forest fossilized by geologic processes and now exposed at the earth's surface
         'FRST':{'landuse':'forest'}, //  forest(s): an area dominated by tree vegetation
         'FRZU':{'geological':'undersea_fracture_zone'}, //  fracture zone: an extensive linear zone of irregular topography of the sea floor, characterized by steep-sided or asymmetrical ridges, troughs, or escarpments
         'FSR':{'natural':'volcano'}, //  fissure: a crack associated with volcanism
         'FT':{'building':'fort'}, //  fort: a defensive structure or earthworks
         'FURU':{'geological':'undersea_furrow'}, //  furrow: a closed, linear, narrow, shallow depression
         'FY':{'amenity':'ferry_terminal'}, //  ferry: a boat or other floating conveyance and terminal facilities regularly used to transport people and vehicles across a waterbody
-        'GAP':{'poi':'gap'}, //  gap: a low place in a ridge, not used for transportation
+        'GAP':{'natural':'gap'}, //  gap: a low place in a ridge, not used for transportation
         'GAPU':{'geological':'undersea_gap'}, //  gap: a narrow break in a ridge or rise
         'GASF':{'geological':'gasfield'}, //  gasfield: an area containing a subterranean store of natural gas of economic value
         'GATE':{'barrier':'gate'}, //  gate: a controlled access entrance or exit
         'GDN':{'leisure':'garden'}, //  garden(s): an enclosure for displaying selected plant or animal life
-        'GHAT':{'poi':'ghat'}, //  ghat: a set of steps leading to a river, which are of religious significance, and at their base is usually a platform for bathing
+        'GHAT':{'man_made':'ghat'}, //  ghat: a set of steps leading to a river, which are of religious significance, and at their base is usually a platform for bathing
         'GHSE':{'tourism':'guest_house'}, //  guest house: a house used to provide lodging for paying guests
         'GLCR':{'natural':'glacier'}, //  glacier(s): a mass of ice, usually at high latitudes or high elevations, with sufficient thickness to flow away from the source area in lobes, tongues, or masses
         'GLYU':{'natural':'undersea_gully'}, //  gully: a small valley-like feature
@@ -269,7 +269,7 @@ geonames.rules = {
         'HLLU':{'natural':'undersea_hill'}, //  hill: an elevation rising generally less than 500 meters
         'HLSU':{'natural':'undersea_hill'}, //  hills: elevations rising generally less than 500 meters
         'HLT':{'poi':'halting_place'}, //  halting place: a place where caravans stop for rest
-        'HMCK':{'poi':'hammock'}, //  hammock(s): a patch of ground, distinct from and slightly above the surrounding plain or wetland. Often occurs in groups
+        'HMCK':{'natural':'hammock'}, //  hammock(s): a patch of ground, distinct from and slightly above the surrounding plain or wetland. Often occurs in groups
         'HMDA':{'natural':'desert', 'desert':'rock'}, //  rock desert: a relatively sand-free, high bedrock plateau in a hot desert, with or without a gravel veneer
         'HMSD':{'building':'farm'}, //  homestead: a residence, owner's or manager's, on a sheep or cattle station, woolshed, outcamp, or Aboriginal outstation, specific to Australia and New Zealand 
         'HOLU':{'geological':'undersea_hole'}, //  hole: a small depression of the sea floor
@@ -296,15 +296,15 @@ geonames.rules = {
         'ISLS':{'natural':'island'}, //  islands: tracts of land, smaller than a continent, surrounded by water at high water
         'ISLT':{'natural':'land-tied_island'}, //  land-tied island: a coastal island connected to the mainland by barrier beaches, levees or dikes
         'ISLX':{'natural':'island'}, //  section of island: 
-        'ISTH':{'poi':'isthmus'}, //  isthmus: a narrow strip of land connecting two larger land masses and bordered by water
+        'ISTH':{'natural':'isthmus'}, //  isthmus: a narrow strip of land connecting two larger land masses and bordered by water
         'ITTR':{'building':'research'}, //  research institute: a facility where research is carried out
         'JTY':{'man_made':'jetty'}, //  jetty: a structure built out into the water at a river mouth or harbor entrance to regulate currents and silting
         'KNLU':{'geological':'undersea_knoll'}, //  knoll: an elevation rising generally more than 500 meters and less than 1,000 meters and of limited extent across the summit
         'KNSU':{'geological':'undersea_knoll'}, //  knolls: elevations rising generally more than 500 meters and less than 1,000 meters and of limited extent across the summits
         'KRST':{'waterway':'karst'}, //  karst area: a distinctive landscape developed on soluble rock such as limestone characterized by sinkholes, caves, disappearing streams, and underground drainage
-        'LAND':{'poi':'arctic_land'}, //  arctic land: a tract of land in the Arctic
+        'LAND':{'natural':'arctic_land'}, //  arctic land: a tract of land in the Arctic
         'LAVA':{'natural':'lava'}, //  lava area: an area of solidified lava
-        'LBED':{'poi':'lake_bed'}, //  lake bed(s): a dried up or drained area of a former lake
+        'LBED':{'natural':'lake_bed'}, //  lake bed(s): a dried up or drained area of a former lake
         'LCTY':{'place':'locality'}, //  locality: a minor area or place of unspecified or mixed character and indefinite boundaries
         'LDGU':{'geological':'undersea_ledge'}, //  ledge: a rocky projection or outcrop, commonly linear and near shore
         'LDNG':{'man_made':'pier'}, //  landing: a place where boats receive or discharge passengers and freight, but lacking most port facilities
@@ -336,7 +336,7 @@ geonames.rules = {
         'MALL':{'shop':'mall'}, //  mall: A large, often enclosed shopping complex containing various stores, businesses, and restaurants usually accessible by common passageways.
         'MAR':{'leisure':'marina'}, //  marina: a harbor facility for small boats, yachts, etc.
         'MDW':{'natural':'meadow'}, //  meadow: a small, poorly drained area dominated by grassy vegetation
-        'MESA':{'poi':'mesa'}, //  mesa(s): a flat-topped, isolated elevation with steep slopes on all sides, less extensive than a plateau
+        'MESA':{'geological':'mesa'}, //  mesa(s): a flat-topped, isolated elevation with steep slopes on all sides, less extensive than a plateau
         'MESU':{'geological':'undersea_mesa'}, //  mesa: an isolated, extensive, flat-topped elevation on the shelf, with relatively steep sides
         'MFGB':{'building':'brewery'}, //  brewery: one or more buildings where beer is brewed
         'MFGC':{'building':'industrial', 'use':'cannery'}, //  cannery: a building where food items are canned
@@ -364,7 +364,7 @@ geonames.rules = {
         'MNC':{'landuse':'mineral_mining', 'resource':'coal'}, //  coal mine(s): a mine where coal is extracted
         'MNCR':{'landuse':'mineral_mining', 'resource':'chrome'}, //  chrome mine(s): a mine where chrome ore is extracted
         'MNCU':{'landuse':'mineral_mining', 'resource':'copper'}, //  copper mine(s): a mine where copper ore is extracted
-        'MND':{'poi':'mound'}, //  mound(s): a low, isolated, rounded hill
+        'MND':{'natural':'mound'}, //  mound(s): a low, isolated, rounded hill
         'MNDU':{'geological':'undersea_mound'}, //  mound: a low, isolated, rounded hill
         'MNFE':{'landuse':'mineral_mining', 'resource':'iron'}, //  iron mine(s): a mine where iron ore is extracted
         'MNMT':{'historic':'monument'}, //  monument: a commemorative structure or statue
@@ -392,8 +392,8 @@ geonames.rules = {
         'NOV':{'amenity':'place_of_worship', 'building':'novitiate'}, //  novitiate: a religious house or school where novices are trained
         'NRWS':{'narrow':'yes'}, //  narrows: a navigable narrow part of a bay, strait, river, etc.
         'NSY':{'landuse':'plant_nursery'}, //  nursery(-ies): a place where plants are propagated for transplanting or grafting
-        'NTK':{'poi':'nunatak'}, //  nunatak: a rock or mountain peak protruding through glacial ice
-        'NTKS':{'poi':'nunatak'}, //  nunataks: rocks or mountain peaks protruding through glacial ice
+        'NTK':{'geological':'nunatak'}, //  nunatak: a rock or mountain peak protruding through glacial ice
+        'NTKS':{'geological':'nunatak'}, //  nunataks: rocks or mountain peaks protruding through glacial ice
         'NVB':{'military':'naval_base'}, //  naval base: an area used to store supplies, provide barracks for troops and naval personnel, a port for naval vessels, and from which operations are initiated
         'OAS':{'natural':'oasis'}, //  oasis(-es): an area in a desert made productive by the availability of water
         'OBPT':{'tourism':'view_point'}, //  observation point: a wildlife or scenic observation point
@@ -411,10 +411,10 @@ geonames.rules = {
         'OPRA':{'amenity':'theatre', 'theatre:genre':'opera'}, //  opera house: A theater designed chiefly for the performance of operas.
         'OVF':{'poi':'overfalls'}, //  overfalls: an area of breaking waves caused by the meeting of currents or by waves moving against the current
         'PAL':{'building':'palace'}, //  palace: a large stately house, often a royal or presidential residence
-        'PAN':{'poi':'pan'}, //  pan: a near-level shallow, natural depression or basin, usually containing an intermittent lake, pond, or pool
-        'PANS':{'poi':'pan'}, //  pans: a near-level shallow, natural depression or basin, usually containing an intermittent lake, pond, or pool
+        'PAN':{'natural':'pan'}, //  pan: a near-level shallow, natural depression or basin, usually containing an intermittent lake, pond, or pool
+        'PANS':{'natural':'pan'}, //  pans: a near-level shallow, natural depression or basin, usually containing an intermittent lake, pond, or pool
         'PASS':{'mountain_pass':'yes'}, //  pass: a break in a mountain range or other high obstruction, used for transportation from one side to the other [See also gap]
-        'PCLD':{'poi':'dependent_political_entity'}, //  dependent political entity:
+        'PCLD':{'place':'dependent_political_entity'}, //  dependent political entity:
         'PCLF':{'place':'state'}, //  freely associated state: 
         'PCLH':{'place':'historical_political_entity'}, //  historical political entity: a former political entity
         'PCLI':{'place':'independent_political_entity'}, //  independent political entity: 
@@ -434,22 +434,22 @@ geonames.rules = {
         'PLAT':{'natural':'plateau'}, //  plateau: an elevated plain with steep slopes on one or more sides, and often with incised streams
         'PLATX':{'poi':'section_of_plateau'}, //  section of plateau:
         'PLDR':{'natural':'polder'}, //  polder: an area reclaimed from the sea by diking and draining
-        'PLN':{'naturan':'plain'}, //  plain(s): an extensive area of comparatively level to gently undulating land, lacking surface irregularities, and usually adjacent to a higher area
+        'PLN':{'natural':'plain'}, //  plain(s): an extensive area of comparatively level to gently undulating land, lacking surface irregularities, and usually adjacent to a higher area
         'PLNU':{'natural':'undersea_plain'}, //  plain: a flat, gently sloping or nearly level region
         'PLNX':{'natural':'section_of_plain'}, //  section of plain:
         'PLTU':{'natural':'undersea_plateau'}, //  plateau: a comparatively flat-topped feature of considerable extent, dropping off abruptly on one or more sides
         'PMPO':{'man_made':'pumping_station', 'product':'oil'}, //  oil pumping station: a facility for pumping oil through a pipeline
         'PMPW':{'man_made':'pumping_station', 'product':'water'}, //  water pumping station: a facility for pumping water from a major well or through a pipeline
         'PNDI':{'water':'pond', 'intermittent':'yes'}, //  intermittent pond: 
-        'PNDNI':{'poi':'intermittent_salt_pond(s)'}, //  intermittent salt pond(s):
-        'PNDN':{'poi':'salt_pond'}, //  salt pond: a small standing body of salt water often in a marsh or swamp, usually along a seacoast
+        'PNDNI':{'natural':'salt_pond','intermittent':'yes'}, //  intermittent salt pond(s):
+        'PNDN':{'natural':'salt_pond'}, //  salt pond: a small standing body of salt water often in a marsh or swamp, usually along a seacoast
         'PND':{'natural':'water', 'water':'pond'}, //  pond: a small standing waterbody
         'PNDSF':{'natural':'water', 'water':'pond', 'use':'aquaculture'}, //  fishponds: ponds or enclosures in which fish are kept or raised
         'PNDSI':{'natural':'water', 'water':'pond', 'intermittent':'yes'}, //  intermittent ponds: 
         'PNDSN':{'landuse':'salt_ponds'}, //  salt ponds: small standing bodies of salt water often in a marsh or swamp, usually along a seacoast
         'PNDS':{'natural':'water', 'water':'pond'}, //  ponds: small standing waterbodies
         'PNLU':{'geological':'undersea_rock_pinnacle'}, //  pinnacle: a high tower or spire-shaped pillar of rock or coral, alone or cresting a summit
-        'POOLI':{'poi':'intermittent_pool'}, //  intermittent pool:
+        'POOLI':{'natural':'water', 'water':'pool','intermittent':'yes'}, //  intermittent pool:
         'POOL':{'natural':'water', 'water':'pool'}, //  pool(s): a small and comparatively still, deep part of a larger body of water such as a stream or harbor; or a small body of standing water
         'PO':{'amenity':'post_office'}, //  post office: a public building in which mail is received, sorted and distributed
         'PP':{'amenity':'police'}, //  police post: a building in which police are stationed
@@ -467,17 +467,17 @@ geonames.rules = {
         'PPLQ':{'abandoned:place':'populated'}, //  abandoned populated place:
         'PPLR':{'place':'religious_community'}, //  religious populated place: a populated place whose population is largely engaged in religious occupations
         'PPLS':{'place':'populated'}, //  populated places: cities, towns, villages, or other agglomerations of buildings where people live and work
-        'PPLW':{'distroyed:place':'populated'}, //  destroyed populated place: a village, town or city destroyed by a natural disaster, or by war
+        'PPLW':{'destroyed:place':'populated'}, //  destroyed populated place: a village, town or city destroyed by a natural disaster, or by war
         'PPLX':{'place':'neighbourhood'}, //  section of populated place: 
         'PPQ':{'abandoned:amenity':'police'}, //  abandoned police post: 
         'PRKGT':{'barrier':'gate'}, //  park gate: a controlled access to a park
         'PRKHQ':{'building':'park_headquarters'}, //  park headquarters: a park administrative facility
         'PRK':{'leisure':'park'}, //  park: an area, often of forested land, maintained as a place of beauty, or for recreation
-        'PRMN':{'poi':'promenade'}, //  promenade: a place for public walking, usually along a beach front
+        'PRMN':{'man_made':'promenade'}, //  promenade: a place for public walking, usually along a beach front
         'PRN':{'amenity':'prison'}, //  prison: a facility for confining prisoners
         'PRNJ':{'amenity':'reformatory'}, //  reformatory: a facility for confining, training, and reforming young law offenders
         'PRNQ':{'abandoned:amenity':'prison'}, //  abandoned prison: 
-        'PROM':{'poi':'promontory'}, //  promontory(-ies): a bluff or prominent hill overlooking or projecting into a lowland
+        'PROM':{'natural':'promontory'}, //  promontory(-ies): a bluff or prominent hill overlooking or projecting into a lowland
         'PRSH':{'place':'parish'}, //  parish: an ecclesiastical district
         'PRT':{'landuse':'port'}, //  port: a place provided with terminal and transfer facilities for loading and discharging waterborne cargo or passengers, usually located in a harbor
         'PRVU':{'place':'undersea_province'}, //  province: a region identifiable by a group of similar physiographic features whose characteristics are markedly in contrast with surrounding areas
@@ -487,8 +487,8 @@ geonames.rules = {
         'PSTC':{'amenity':'customs'}, //  customs post: a building at an international boundary where customs and duties are paid on goods
         'PSTP':{'amenity':'patrol_post'}, //  patrol post: a post from which patrols are sent out
         'PTGE':{'whitewater':'portage_way'}, //  portage: a place where boats, goods, etc., are carried overland between navigable waters
-        'PT':{'poi':'point'}, //  point: a tapering piece of land projecting into a body of water, less prominent than a cape
-        'PTS':{'poi':'point'}, //  points: tapering pieces of land projecting into a body of water, less prominent than a cape
+        'PT':{'natural':'point'}, //  point: a tapering piece of land projecting into a body of water, less prominent than a cape
+        'PTS':{'natural':'point'}, //  points: tapering pieces of land projecting into a body of water, less prominent than a cape
         'PYR':{'tomb':'pyramid'}, //  pyramid: an ancient massive structure of square ground plan with four triangular faces meeting at a point and used for enclosing tombs
         'PYRS':{'tomb':'pyramid'}, //  pyramids: ancient massive structures of square ground plan with four triangular faces meeting at a point and used for enclosing tombs
         'QCKS':{'surface':'quicksand'}, //  quicksand: an area where loose sand with water moving through it may become unstable when heavy objects are placed at the surface, causing them to sink
@@ -511,7 +511,7 @@ geonames.rules = {
         'REG':{'natural':'desert', 'desert':'stony'}, //  stony desert: a desert plain characterized by a surface veneer of gravel and stones
         'RESA':{'landuse':'agricultural_reserve'}, //  agricultural reserve: a tract of land reserved for agricultural reclamation and/or development
         'RESF':{'landuse':'forest_reserve'}, //  forest reserve: a forested area set aside for preservation or controlled use
-        'RESH':{'landuse':'hunting_reserve'}, //  hunting reserve: a tract of land used primarily for hunting
+        'RESH':{'landuse':'game_reserve'}, //  hunting reserve: a tract of land used primarily for hunting
         'RESN':{'leisure':'nature_reserve'}, //  nature reserve: an area reserved for the maintenance of a natural habitat
         'RES':{'landuse':'reserve'}, //  reserve: a tract of public land reserved for future use or restricted as to use
         'RESP':{'landuse':'palm_tree_reserve'}, //  palm tree reserve: an area of palm trees where use is controlled
@@ -531,7 +531,7 @@ geonames.rules = {
         'RHSE':{'tourism':'resthouse'}, //  resthouse: a structure maintained for the rest and shelter of travelers
         'RISU':{'geological':'undersea_rise'}, //  rise: a broad elevation that rises gently, and generally smoothly, from the sea floor
         'RJCT':{'railway':'rail', 'junction':'yes'}, //  railroad junction: a place where two or more railroad tracks join
-        'RKFL':{'poi':'rockfall'}, //  rockfall: an irregular mass of fallen rock at the base of a cliff or steep slope
+        'RKFL':{'natural':'rockfall'}, //  rockfall: an irregular mass of fallen rock at the base of a cliff or steep slope
         'RK':{'natural':'rock'}, //  rock: a conspicuous, isolated rocky mass
         'RKRY':{'natural':'rookery'}, //  rookery: a breeding place of a colony of birds or seals
         'RKS':{'natural':'rock'}, //  rocks: conspicuous, isolated rocky masses
@@ -548,7 +548,7 @@ geonames.rules = {
         'RSTN':{'railway':'station'}, //  railroad station: a facility comprising ticket office, platforms, etc. for loading and unloading train passengers and freight
         'RSTNQ':{'disused:railway':'station'}, //  abandoned railroad station: 
         'RSTP':{'railway':'halt'}, //  railroad stop: a place lacking station facilities where trains stop to pick up and unload passengers and freight
-        'RSTPQ':{'poi':'abandoned_railroad_stop'}, //  abandoned railroad stop:
+        'RSTPQ':{'abandoned:railway':'halt'}, //  abandoned railroad stop:
         'RSVI':{'natural':'water', 'water':'reservoir', 'intermittent':'yes'}, //  intermittent reservoir: 
         'RSV':{'natural':'water', 'water':'reservoir'}, //  reservoir(s): an artificial pond or lake
         'RSVT':{'man_made':'storage_tank', 'content':'water'}, //  water tank: a contained pool or tank of water at, below, or above ground level
@@ -556,7 +556,7 @@ geonames.rules = {
         'RUIN':{'ruins':'yes'}, //  ruin(s): a destroyed or decayed structure which is no longer functional
         'RVN':{'waterway':'ravine'}, //  ravine(s): a small, narrow, deep, steep-sided stream channel, smaller than a gorge
         'RYD':{'railway':'rail', 'service':'yard'}, //  railroad yard: a system of tracks used for the making up of trains, and switching and storing freight cars
-        'SALT':{'poi':'salt_area'}, //  salt area: a shallow basin or flat where salt accumulates after periodic inundation
+        'SALT':{'natural':'salt_area'}, //  salt area: a shallow basin or flat where salt accumulates after periodic inundation
         'SAND':{'natural':'sand'}, //  sand area: a tract of land covered with sand
         'SBED':{'poi':'dry_stream_bed'}, //  dry stream bed: a channel formerly containing the water of a stream
         'SBKH':{'natural':'sabkha'}, //  sabkha(s): a salt flat or salt encrusted plain subject to periodic inundation from flooding or high tides
@@ -569,7 +569,7 @@ geonames.rules = {
         'SCHT':{'amenity':'school', 'school:type':'technical'}, //  technical school: post-secondary school with a specifically technical or vocational curriculum
         'SCNU':{'geological':'seachannel'}, //  seachannel: a continuously sloping, elongated depression commonly found in fans or plains and customarily bordered by levees on one or two sides
         'SCRB':{'natural':'scrub'}, //  scrubland: an area of low trees, bushes, and shrubs stunted by some environmental limitation
-        'SCRP':{'poi':'escarpment'}, //  escarpment: a long line of cliffs or steep slopes separating level surfaces above and below
+        'SCRP':{'geological':'escarpment'}, //  escarpment: a long line of cliffs or steep slopes separating level surfaces above and below
         'SCSU':{'geological':'seachannel'}, //  seachannels: continuously sloping, elongated depressions commonly found in fans or plains and customarily bordered by levees on one or two sides
         'SDL':{'natural':'saddle'}, //  saddle: a broad, open pass crossing a ridge or between hills or mountains
         'SDLU':{'natural':'undersea_saddle'}, //  saddle: a low part, resembling in shape a saddle, in a ridge or between contiguous seamounts
@@ -580,7 +580,7 @@ geonames.rules = {
         'SHLU':{'natural':'shoal'}, //  shoal: a surface-navigation hazard composed of unconsolidated material
         'SHOL':{'natural':'shoal'}, //  shoal(s): a surface-navigation hazard composed of unconsolidated material
         'SHOR':{'tidal':'yes'}, //  shore: a narrow zone bordering a waterbody which covers and uncovers at high and low water, respectively
-        'SHPF':{'poi':'sheepfold'}, //  sheepfold: a fence or wall enclosure for sheep and other small herd animals
+        'SHPF':{'man_made':'sheepfold'}, //  sheepfold: a fence or wall enclosure for sheep and other small herd animals
         'SHRN':{'amenity':'place_of_worship', 'shrine':'yes'}, //  shrine: a structure or place memorializing a person or religious concept
         'SHSE':{'building':'warehouse'}, //  storehouse: a building for storing goods, especially provisions
         'SHSU':{'natural':'undersea_shoal'}, //  shoals: hazards to surface navigation composed of unconsolidated material
@@ -589,7 +589,7 @@ geonames.rules = {
         'SILU':{'natural':'undersea_sill'}, //  sill: the low part of a gap or saddle separating basins
         'SINK':{'natural':'sinkhole'}, //  sinkhole: a small crater-shape depression in a karst area
         'SLCE':{'waterway':'flow_control'}, //  sluice: a conduit or passage for carrying off surplus water from a waterbody, usually regulated by means of a sluice gate
-        'SLID':{'poi':'slide'}, //  slide: a mound of earth material, at the base of a slope and the associated scoured area
+        'SLID':{'natural':'slide'}, //  slide: a mound of earth material, at the base of a slope and the associated scoured area
         'SLP':{'slope':'yes'}, //  slope(s): a surface with a relatively uniform slope angle
         'SLPU':{'undersea_slope':'yes'}, //  slope: the slope seaward from the shelf edge to the beginning of a continental rise or the point where there is a general reduction in slope
         'SMSU':{'geological':'seamount'}, //  seamounts: elevations rising generally more than 1,000 meters and of limited extent across the summit

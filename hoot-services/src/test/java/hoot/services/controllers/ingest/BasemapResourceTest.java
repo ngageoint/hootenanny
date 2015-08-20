@@ -40,13 +40,12 @@ import org.junit.experimental.categories.Category;
 public class BasemapResourceTest {
 	@BeforeClass
   public static void oneTimeSetup() {
-      // one-time setup code
-		BasemapResource mapRes = new BasemapResource();
-		org.junit.Assert.assertNotNull(mapRes._tileServerPath);
-		org.junit.Assert.assertTrue(mapRes._tileServerPath.length() > 0);
+      new BasemapResource();
+		org.junit.Assert.assertNotNull(BasemapResource._tileServerPath);
+		org.junit.Assert.assertTrue(BasemapResource._tileServerPath.length() > 0);
 		
-		org.junit.Assert.assertNotNull(mapRes._ingestStagingPath);
-		org.junit.Assert.assertTrue(mapRes._ingestStagingPath.length() > 0);
+		org.junit.Assert.assertNotNull(BasemapResource._ingestStagingPath);
+		org.junit.Assert.assertTrue(BasemapResource._ingestStagingPath.length() > 0);
   }
 	
 	@Test
@@ -54,20 +53,20 @@ public class BasemapResourceTest {
 	public void TestgetBasemapList() throws Exception
 	{
 		BasemapResource mapRes = new BasemapResource();		
-		File f = new File(mapRes._tileServerPath + "/BASEMAP/TestMap");
+		File f = new File(BasemapResource._tileServerPath + "/BASEMAP/TestMap");
 		FileUtils.forceMkdir(f);
 		
 		JSONObject cont = new JSONObject();
 		cont.put("jobid", "123-456-789");
 		cont.put("path", "/projects/hoot/ingest/processed/BASEMAP/TestMap");
 		
-		File file = new File(mapRes._ingestStagingPath + "/BASEMAP/TestMap.enabled");
+		File file = new File(BasemapResource._ingestStagingPath + "/BASEMAP/TestMap.enabled");
 		FileUtils.writeStringToFile(file, cont.toJSONString());
 		
-		File f2 = new File(mapRes._tileServerPath + "/BASEMAP/TestMap2");
+		File f2 = new File(BasemapResource._tileServerPath + "/BASEMAP/TestMap2");
 		FileUtils.forceMkdir(f2);
 		
-		File file2 = new File(mapRes._ingestStagingPath + "/BASEMAP/TestMap2.enabled");
+		File file2 = new File(BasemapResource._ingestStagingPath + "/BASEMAP/TestMap2.enabled");
 		FileUtils.writeStringToFile(file2, cont.toJSONString());
 		
 		JSONArray res = mapRes._getBasemapList();
@@ -90,15 +89,15 @@ public class BasemapResourceTest {
 	public void TestToggleBasemap() throws Exception
 	{
 		BasemapResource mapRes = new BasemapResource();	
-		File f = new File(mapRes._ingestStagingPath + "/BASEMAP/controltest.enabled");
+		File f = new File(BasemapResource._ingestStagingPath + "/BASEMAP/controltest.enabled");
 		FileUtils.touch(f);
 		mapRes._toggleBaseMap("controltest", false);
-		f = new File(mapRes._ingestStagingPath + "/BASEMAP/controltest.disabled");
+		f = new File(BasemapResource._ingestStagingPath + "/BASEMAP/controltest.disabled");
 		org.junit.Assert.assertTrue(f.exists());
 		
 		mapRes._toggleBaseMap("controltest", true);
 		
-		f = new File(mapRes._ingestStagingPath + "/BASEMAP/controltest.enabled");
+		f = new File(BasemapResource._ingestStagingPath + "/BASEMAP/controltest.enabled");
 		org.junit.Assert.assertTrue(f.exists());
 		
 		FileUtils.forceDelete(f);
@@ -112,12 +111,12 @@ public class BasemapResourceTest {
 		String testMapName = "testmap";
 		
 		BasemapResource mapRes = new BasemapResource();	
-		File dir = new File(mapRes._tileServerPath + "/BASEMAP/" + testMapName);
+		File dir = new File(BasemapResource._tileServerPath + "/BASEMAP/" + testMapName);
 		FileUtils.forceMkdir(dir);
 		
 		org.junit.Assert.assertTrue(dir.exists());
 		
-		File controlFile = new File(mapRes._ingestStagingPath + "/BASEMAP/" + testMapName + ".enabled");
+		File controlFile = new File(BasemapResource._ingestStagingPath + "/BASEMAP/" + testMapName + ".enabled");
 		FileUtils.touch(controlFile);
 		org.junit.Assert.assertTrue(controlFile.exists());
 		

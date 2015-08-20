@@ -117,23 +117,35 @@ Download the ISO image for the latest 64-bit LTS release of 64-bit Ubuntu (14.04
 
 ==== Items from apt repo
 
+---------------
+sudo apt-get purge automake
+sudo apt-get remove qt5-default octave postgresql-9.3
+sudo apt-get autoremove
+--------------
+
 . `sudo` `apt-get` `install` `texinfo` `g++` `libicu-dev` `libqt4-dev`
   `git-core` `libboost-dev` `libcppunit-dev` `libcv-dev` `libopencv-dev`
+  `libopencv-core-dev` `libopencv-imgproc-dev`
   `libgdal-dev` `liblog4cxx10-dev` `libnewmat10-dev` `libproj-dev` `python-dev`
-  `libjson-spirit-dev` `automake1.11` `protobuf-compiler` `libprotobuf-dev`
-  `libqt4-sql-psql` `libgeos++-dev` `swig` `lcov` `tomcat6` `openjdk-6-jdk`
-  `openjdk-6-dbg` `maven` `libstxxl-dev` `nodejs-dev` `doxygen` `xsltproc`
-  `asciidoc` `pgadmin3` `curl` `npm` `libxerces-c28` `libglpk-dev`
-  `libboost-all-dev` `source-highlight` `texlive-lang-all` `graphviz` `w3m`
-  `python-setuptools` `python` `python-pip` `git` `postgresql-contrib-9.1`
+  `libjson-spirit-dev` `automake1.11` `protobuf-compiler` `libprotobuf-dev` `make` `gdb`
+  `libqt4-sql-psql` `libgeos-dev` `libgeos++-dev` `swig` `lcov` `tomcat6` `openjdk-7-jdk`
+  `openjdk-7-dbg` `maven` `libstxxl-dev` `zip` `nodejs-dev` `doxygen` `xsltproc`
+  `asciidoc` `pgadmin3` `curl` `npm` `postgresql-9.1-postgis` `libxerces-c-dev` `libxerces-c28` `libglpk-dev`
+  `libboost-all-dev` `source-highlight` `texlive-lang-all` `graphviz` `w3m``libhdf5-dev` `libgif-dev`
+  `gfortran` `python-setuptools` `python` `python-pip` `git` `postgresql-contrib-9.1`
   `ccache` `libogdi3.2-dev` `gnuplot` `python-matplotlib`
 +
+
+-------------
+sudo apt-get autoremove
+--------------
+
 NOTE: In some cases, the package `libqt4-dev` may not install properly due to unmet dependencies. If an error message appears when attempting to compile Hoot core, it may be useful to remove all of the unmet dependencies listed when executing `sudo apt-get install libqt4-dev`, then remove `libqt4-dev` (`sudo apt-get remove libqt4-dev`) and reinstall without the unmet dependencies present.  Typically these will get installed by the dependent package.
 +
 . Modify `~/.profile` and append the following to the bottom of the file: 
 +
 ----
-export JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64
+export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
 ----
 +
 . Run `source ~/.profile`
@@ -387,6 +399,28 @@ Starting Job
 Job Finished in 23.716 seconds
 Estimated value of Pi is 3.12000000000000000000
 tott@tott-VirtualBox:/usr/local/hadoop$ 
+----
+
+==== Hadoop Configuration After Upgrading from Java 6 to 7
+
+If for some reason you had Java 6 previously installed and upgraded to Java 7 as a result of these 
+instructions, you may have to perform the following steps.
+
+. Update JAVA_HOME in ~/.profile: export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+. Update JAVA_HOME in $HADOOP_HOME/conf/hadoop-env.sh: export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+. Run the following:
+----
+cd /lib
+sudo ln -s /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/libjvm.so libjvm.so
+cd /lib64
+sudo ln -s /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/libjvm.so libjvm.so
+cd /x86_64-linux-gnu
+sudo ln -s /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/libjvm.so libjvm.so
+sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-1.7.0-openjdk-amd64/bin/java 1
+sudo update-alternatives --config java
+sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/java-1.7.0-openjdk-amd64/bin/javac" 1
+sudo update-alternatives --config javac
+$HADOOP_HOME/bin/stop-all.sh && $HADOOP_HOME/bin/start-all.sh
 ----
 
 ==== Node.js modules

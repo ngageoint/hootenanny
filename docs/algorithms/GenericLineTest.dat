@@ -1,0 +1,15 @@
+"Test Name"	"Random Forests"	"RF Error Low"	"RF	Error High"	"Generic"	"Random Forests Time (sec)"	"Generic Time (sec)"
+"DC Perty 10m"	.823	.816	.829	.828	.818	.838	292	289
+"DC Perty 15m"	.830	.818	.841	.824	.815	.833	303	302
+"DC Perty 20m"	.76	.76	.76	.76	.76	.76	289	285
+"DC Perty 30m"	.559	.543	.574	.559	.543	.574	298	297
+"Easy Attribute"	.988	.984	.992	.988	.984	.992
+"Easy Raster"	.990	.990	.990	.985	.985	.985
+"Easy Graph"	.964	.960	.968	.960	.955	.965
+"Easy Overall"	.980	.978	.982	.977	.974	.980	4.25	30.3
+"Spaghetti Attribute"	.904	.889	.919	.902	.886	.918
+"Spaghetti Raster"	.952	.952	.952	.937	.937	.937
+"Spaghetti Graph"	.880	.870	.890	.781	.768	.794
+"Spaghetti Overall"	.912	.904	.920	.873	.864	.882	55.376	100.75
+"Manually Matched 1"	.835	.835	.835	.694	.694	.694
+"Manually Matched 2"	.873	.873	.873	.692	.692	.692

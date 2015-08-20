@@ -38,7 +38,8 @@ import java.util.Vector;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
-
+import hoot.services.db2.FolderMapMappings;
+import hoot.services.db2.Folders;
 import hoot.services.db2.Maps;
 import hoot.services.db2.QChangesets;
 import hoot.services.db2.QCurrentNodes;
@@ -52,7 +53,6 @@ import hoot.services.geo.zindex.Range;
 import hoot.services.geo.zindex.ZCurveRanger;
 import hoot.services.geo.zindex.ZValue;
 import hoot.services.models.osm.Element.ElementType;
-
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -82,8 +82,6 @@ import com.mysema.query.types.expr.BooleanExpression;
  */
 public class Map extends Maps
 {
-  private static final long serialVersionUID = -4908255640612804470L;
-
   private static final Logger log = LoggerFactory.getLogger(Map.class);
 
   private Connection conn;
@@ -169,10 +167,10 @@ public class Map extends Maps
   {
   	QCurrentNodes nodes = QCurrentNodes.currentNodes;
 
-  	return nodes.longitude.goe(bounds.getMinLonDb())
-  			.and(nodes.latitude.goe(bounds.getMinLatDb()))
-  			.and(nodes.longitude.loe(bounds.getMaxLonDb()))
-  			.and(nodes.latitude.loe(bounds.getMaxLatDb()));
+  	return nodes.longitude.goe(bounds.getMinLon())
+  			.and(nodes.latitude.goe(bounds.getMinLat()))
+  			.and(nodes.longitude.loe(bounds.getMaxLon()))
+  			.and(nodes.latitude.loe(bounds.getMaxLat()));
   		/*
     return
       Tables.CURRENT_NODES.LONGITUDE.greaterOrEqual(bounds.getMinLonDb())
@@ -238,8 +236,7 @@ public class Map extends Maps
   	JSONObject ret = new JSONObject();
     //get the intersecting tile ranges for the nodes
     final Vector<Range> tileIdRanges = getTileRanges(bounds);
-    java.util.Map<ElementType, java.util.Map<Long, Tuple>> elementIdsToRecordsByType =
-      new HashMap<ElementType, java.util.Map<Long, Tuple>>();
+    new HashMap<ElementType, java.util.Map<Long, Tuple>>();
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
@@ -266,10 +263,10 @@ public class Map extends Maps
     				.list(currentnodes.longitude.max(), currentnodes.longitude.min(),
     						currentnodes.latitude.max(), currentnodes.latitude.min() );
 
-      Integer maxLon = geospatialQueryNodeResults.get(0).get(0, Integer.class);
-      Integer minLon = geospatialQueryNodeResults.get(0).get(1, Integer.class);
-      Integer maxLat = geospatialQueryNodeResults.get(0).get(2, Integer.class);
-      Integer minLat = geospatialQueryNodeResults.get(0).get(3, Integer.class);
+      Double maxLon = geospatialQueryNodeResults.get(0).get(0, Double.class);
+      Double minLon = geospatialQueryNodeResults.get(0).get(1, Double.class);
+      Double maxLat = geospatialQueryNodeResults.get(0).get(2, Double.class);
+      Double minLat = geospatialQueryNodeResults.get(0).get(3, Double.class);
       ret.put("maxlon", maxLon);
       ret.put("minlon", minLon);
       ret.put("maxlat", maxLat);
@@ -285,8 +282,7 @@ public class Map extends Maps
   	long ret = 0;
     //get the intersecting tile ranges for the nodes
     final Vector<Range> tileIdRanges = getTileRanges(bounds);
-    java.util.Map<ElementType, java.util.Map<Long, Tuple>> elementIdsToRecordsByType =
-      new HashMap<ElementType, java.util.Map<Long, Tuple>>();
+    new HashMap<ElementType, java.util.Map<Long, Tuple>>();
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
@@ -324,8 +320,7 @@ public class Map extends Maps
   	JSONObject ret = new JSONObject();
     //get the intersecting tile ranges for the nodes
     final Vector<Range> tileIdRanges = getTileRanges(bounds);
-    java.util.Map<ElementType, java.util.Map<Long, Tuple>> elementIdsToRecordsByType =
-      new HashMap<ElementType, java.util.Map<Long, Tuple>>();
+    new HashMap<ElementType, java.util.Map<Long, Tuple>>();
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
@@ -351,8 +346,8 @@ public class Map extends Maps
     				.limit(1)
     				.list(currentnodes.longitude, currentnodes.latitude);
 
-      Integer lon = geospatialQueryNodeResults.get(0).get(0, Integer.class);
-      Integer lat = geospatialQueryNodeResults.get(0).get(1, Integer.class);
+      Double lon = geospatialQueryNodeResults.get(0).get(0, Double.class);
+      Double lat = geospatialQueryNodeResults.get(0).get(1, Double.class);
 
       ret.put("lon", lon);
       ret.put("lat", lat);
@@ -451,7 +446,7 @@ public class Map extends Maps
       	}
       	catch (Exception ex)
       	{
-      		String err = ex.getMessage();
+      		ex.getMessage();
       	}
       }
 
@@ -532,7 +527,7 @@ public class Map extends Maps
         	}
         	catch (Exception ex)
         	{
-        		String err = ex.getMessage();
+        		ex.getMessage();
         	}
 
         }
@@ -579,7 +574,7 @@ public class Map extends Maps
         	}
         	catch (Exception ex)
         	{
-        		String err = ex.getMessage();
+        		ex.getMessage();
         	}
 
         }
@@ -684,7 +679,7 @@ public class Map extends Maps
           	}
           	catch (Exception ex)
           	{
-          		String err = ex.getMessage();
+          		ex.getMessage();
           	}
           }
 
@@ -767,7 +762,7 @@ public class Map extends Maps
         	}
         	catch (Exception ex)
         	{
-        		String err = ex.getMessage();
+        		ex.getMessage();
         	}
         }
 
@@ -817,7 +812,7 @@ public class Map extends Maps
         	}
         	catch (Exception ex)
         	{
-        		String err = ex.getMessage();
+        		ex.getMessage();
         	}
         }
 
@@ -906,7 +901,7 @@ public class Map extends Maps
         	}
         	catch (Exception ex)
         	{
-        		String err = ex.getMessage();
+        		ex.getMessage();
         	}
         }
 
@@ -1102,5 +1097,49 @@ public class Map extends Maps
     }
     mapLayers.setLayers(mapLayerList.toArray(new MapLayer[]{}));
     return mapLayers;
+  }
+  
+  /**
+   * Converts a set of folder database records into an object returnable by a web service
+   *
+   * @param folderRecordSet set of map layer records
+   * @return folders web service object
+   */
+  public static FolderRecords mapFolderRecordsToFolders(List<Folders> folderRecordSet)
+  {
+    FolderRecords folderRecords = new FolderRecords();
+    List<FolderRecord> folderRecordList = new ArrayList<FolderRecord>();
+    for (Folders folderRecord : folderRecordSet)
+    {
+      FolderRecord folder = new FolderRecord();
+      folder.setId(folderRecord.getId());
+      folder.setName(folderRecord.getDisplayName());
+      folder.setParentId(folderRecord.getParentId());
+      folderRecordList.add(folder);
+    }
+    folderRecords.setFolders(folderRecordList.toArray(new FolderRecord[]{}));
+    return folderRecords;
+  }
+  
+  /**
+   * Converts a set of database records into an object returnable by a web service
+   *
+   * @param folderRecordSet set of map layer records
+   * @return folders web service object
+   */
+  public static LinkRecords mapLinkRecordsToLinks(List<FolderMapMappings> linkRecordSet)
+  {
+	LinkRecords linkRecords = new LinkRecords();
+    List<LinkRecord> linkRecordList = new ArrayList<LinkRecord>();
+    for (FolderMapMappings linkRecord : linkRecordSet)
+    {
+     LinkRecord link = new LinkRecord();
+     link.setId(linkRecord.getId());
+     link.setFolderId(linkRecord.getFolderId());
+     link.setMapId(linkRecord.getMapId());
+     linkRecordList.add(link);
+    }
+    linkRecords.setLinks(linkRecordList.toArray(new LinkRecord[]{}));
+    return linkRecords;
   }
 }

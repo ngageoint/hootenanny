@@ -525,6 +525,14 @@
         </executions>
 
       <dependencies>
+      
+        <!-- powermock needs this to run in Java 1.7 (deegree also uses this).  javassist behavior
+        in 1.7 is kind of erratic, so upgrade with caution. -->
+        <dependency>
+          <groupId>org.javassist</groupId>
+          <artifactId>javassist</artifactId>
+          <version>3.18.2-GA</version>
+        </dependency>
 
         <!-- Apache commons -->
         <dependency>
@@ -547,7 +555,6 @@
           <artifactId>commons-codec</artifactId>
           <version>1.7</version>
         </dependency>
-
         <dependency>
           <groupId>commons-fileupload</groupId>
           <artifactId>commons-fileupload</artifactId>
@@ -901,6 +908,10 @@
        <exclusion>
         <groupId>commons-logging</groupId>
         <artifactId>commons-logging</artifactId>
+       </exclusion>
+       <exclusion>
+        <groupId>javassist</groupId>
+        <artifactId>javassist</artifactId>
        </exclusion>
       </exclusions>
     </dependency>

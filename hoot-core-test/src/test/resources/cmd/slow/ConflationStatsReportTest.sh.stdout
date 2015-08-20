@@ -1,4 +1,8 @@
-07:56:33.247 WARN  ...core/scoring/MapComparator.cpp( 206) Number of elements does not match.
+16:16:27.969 WARN  ...core/scoring/MapComparator.cpp( 233) Number of elements does not match.
+447c447
+<         <tag k="place" v="town"/>
+---
+>         <tag k="place" v="city"/>
 575,576c575,576
 <     <node visible="true" id="-296" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543116509978290" lon="-104.8997171368439325">
 <         <tag k="hoot:id" v="-296"/>
