@@ -7,9 +7,11 @@ HOOT_OPTS+= -D services.db.writer.overwrite.map=true -D services.db.writer.creat
 HOOT_OPTS+= -D services.db.writer.email=test@test.com -D services.db.reader.email=test@test.com
 
 # Add the option to append
+ifeq "$(append)" "true"
 HOOT_OPTS+= -D ogr.append.data=true
+endif
 
-#DB_URL=postgresql://hoot:hoottest@localhost:5432/hootYou
+#DB_URL=postgresql://hoot:hoottest@localhost:5432/hoot
 OP_PG_URL=PG:"$(PG_URL)"
 
 
@@ -24,8 +26,8 @@ OP_ZIP=cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
 
 # Hardcoded. There should be a better location for these
 TEMPLATE_PATH=$(HOOT_HOME)/translations-local/template
-TDS61_TEMPLATE=$(TEMPLATE_PATH)/TDS_6_1.gdb
-TDS40_TEMPLATE=$(TEMPLATE_PATH)/TDS_4_0.gdb
+TDS61_TEMPLATE=$(TEMPLATE_PATH)/tds61.tgz
+TDS40_TEMPLATE=$(TEMPLATE_PATH)/tds40.tgz
 
 
 ifeq "$(outputtype)" "shp"
@@ -52,17 +54,21 @@ else ifeq ("$(outputtype)","osm")
 	cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
 else
 	mkdir -p "$(outputfolder)"
-
+ifeq "$(append)" "true"
+ifeq "$(translation)" "translations/TDSv61.js"
 ifneq ("$(wildcard $(TDS61_TEMPLATE))","")
-ifeq "$(translation)" "TDSv61.js"
-	cp -r $(TDS61_TEMPLATE) $(OP_OUTPUT)
+	mkdir -p $(OP_OUTPUT)
+	tar -zxf $(TDS61_TEMPLATE) -C $(OP_OUTPUT)
+endif # Template Path
 else
-ifeq "$(translation)" "TDSv40.js"
-	cp -r $(TDS40_TEMPLATE) $(OP_OUTPUT)
-endif
-endif # Else TDSv40
-
-endif # Template
+ifeq "$(translation)" "translations/TDSv40.js"
+ifneq ("$(wildcard $(TDS40_TEMPLATE))","")
+	mkdir -p $(OP_OUTPUT)
+	tar -zxf $(TDS40_TEMPLATE) -C $(OP_OUTPUT)
+endif # Template Path
+endif # Translations TDSv40
+endif # Else
+endif # Append
 
 	hoot osm2ogr $(REMOVE_REVIEW) $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" "$(OP_OUTPUT)"
 	$(OP_ZIP)
