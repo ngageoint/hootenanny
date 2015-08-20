@@ -2,16 +2,6 @@
 #  Export Make file
 #
 
-#####
-# Debug Vars
-# outputfolder=tmp/Dork
-# outputname=smurf
-# outputtype=fgdb
-translation=TDSv40.js
-# translation=mgcp.js
-
-#####
-
 HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor
 HOOT_OPTS+= -D services.db.writer.overwrite.map=true -D services.db.writer.create.user=true
 HOOT_OPTS+= -D services.db.writer.email=test@test.com -D services.db.reader.email=test@test.com
@@ -19,8 +9,7 @@ HOOT_OPTS+= -D services.db.writer.email=test@test.com -D services.db.reader.emai
 # Add the option to append
 HOOT_OPTS+= -D ogr.append.data=true
 
-
-#DB_URL=postgresql://hoot:hoottest@localhost:5432/hoot
+#DB_URL=postgresql://hoot:hoottest@localhost:5432/hootYou
 OP_PG_URL=PG:"$(PG_URL)"
 
 
