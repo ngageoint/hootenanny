@@ -117,18 +117,19 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
             {
               //In the case of the fuzzy match conflict example, this ID may be made up of multiple
               //parts.  Treat each ID part separately.  
-            	// TODO: add test for this case
+            	// TODO: change for fuzzy matches was invalid, so backing it out; fix and add test 
+            	// for this case
               String[] uniqueElementIds = null;
-              if (uniqueElementIdStr.contains(";"))
+              /*if (uniqueElementIdStr.contains(";"))
               {
                 log.debug("Multiple part UUID...");
                 uniqueElementIds = uniqueElementIdStr.split(";");
               }
               else
-              {
+              {*/
                 uniqueElementIds = new String[1];
                 uniqueElementIds[0] = uniqueElementIdStr;
-              }
+              //}
                 
               for (String uniqueElementId : uniqueElementIds)
               {
@@ -234,18 +235,20 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
             else
             {
             	//In the case of the fuzzy match conflict example, this ID may be made up of multiple
-              //parts.  Treat each ID part separately.  TODO: add test for this case
+              //parts.  Treat each ID part separately.  
+              // TODO: change for fuzzy matches was invalid, so backing it out; fix and add test 
+            	// for this case
               String[] reviewableItemIds = null;
-              if (reviewableItemIdStr.contains(";"))
+              /*if (reviewableItemIdStr.contains(";"))
               {
                 log.debug("Multiple part reviewable item ID...");
                 reviewableItemIds = reviewableItemIdStr.split(";");
               }
               else
-              {
+              {*/
             	  reviewableItemIds = new String[1];
             	  reviewableItemIds[0] = reviewableItemIdStr;
-              }
+              //}
               
               for (String reviewableItemId : reviewableItemIds)
               {
