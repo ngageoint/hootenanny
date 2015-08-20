@@ -916,7 +916,7 @@ bool ServicesDb::insertRelationMember(const long relationId, const ElementType& 
     break;
   }
 
-  LOG_DEBUG("Members added to relation " << QString::number(relationId));
+  LOG_DEBUG("Member added to relation " << QString::number(relationId));
 
   return true;
 }
@@ -3015,16 +3015,18 @@ void ServicesDb::_flushElementCacheOsmApiRelations()
 
 void ServicesDb::_flushElementCacheOsmApiRelationMembers()
 {
+
+  LOG_DEBUG("Flushing OSM API relation members");
   if ( _relationMembersCache.size() == 0 )
   {
-    //LOG_DEBUG("Bailing from flush of relation members; nothing in cache!")
+    LOG_DEBUG("Bailing from flush of relation members; nothing in cache!")
     return;
   }
 
   // First step is to flush any relations to make sure we don't violate any foreign keys when inserting relation member
   _flushElementCacheOsmApiRelations();
 
-  //LOG_DEBUG("Starting flush of relation member cache");
+  LOG_DEBUG("Starting flush of relation member cache");
 
   std::vector<long> relationIds;
   try
@@ -3128,12 +3130,12 @@ void ServicesDb::_flushElementCacheOsmApiRelationMembers()
     currentRelationMembersInsertCmd  += ";";
     relationMembersInsertCmd         += ";";
 
-    /*
+
     _execNoPrepare(currentRelationMembersInsertCmd);
     _execNoPrepare(relationMembersInsertCmd);
-    */
-    //LOG_VARD(currentRelationMembersInsertCmd);
-    //LOG_VARD(relationMembersInsertCmd);
+
+    LOG_VARD(currentRelationMembersInsertCmd);
+    LOG_VARD(relationMembersInsertCmd);
 
     // TODO: Iterate over all the relations for the members we just inserted, updating changeset envelope
     //_updateChangesetEnvelopeRelationIds(relationIds);
@@ -3166,7 +3168,7 @@ void ServicesDb::_insertWay_OsmApi(const long wayId, const Tags &tags)
   // Snag end time, update insert time
   _wayInsertElapsed += Tgs::Time::getTime() - start;
 
-  // Note: changeset bounding box update is handled in flush, as it requires data to be in database
+    // Note: changeset bounding box update is handled in flush, as it requires data to be in database
 }
 
 long ServicesDb::_getNextWayId_OsmApi()

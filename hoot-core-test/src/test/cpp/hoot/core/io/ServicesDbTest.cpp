@@ -68,6 +68,7 @@ class ServicesDbTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runOpenOsmApiTest);
   CPPUNIT_TEST(runInsertNodeOsmApiTest);
   CPPUNIT_TEST(runInsertWayOsmApiTest);
+  CPPUNIT_TEST(runInsertRelationOsmApiTest);
   CPPUNIT_TEST(runSelectAllElementsOsmApiTest);
 
   CPPUNIT_TEST_SUITE_END();
@@ -768,7 +769,7 @@ public:
   void runInsertRelationOsmApiTest()
   {
     ServicesDb database;
-    database.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
+    database.open(QUrl("postgresql://postgres@10.194.71.84:5432/terrytest"));
 
     database.transaction();
 
