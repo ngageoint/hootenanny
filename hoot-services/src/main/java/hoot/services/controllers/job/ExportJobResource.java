@@ -133,6 +133,9 @@ public class ExportJobResource extends JobControllerBase {
 	 * <USER_EMAIL>
 	 * Email address of the user requesting the job.
 	 * </USER_EMAIL>
+	 * <append>
+	 * Denotes if export should append to FGDB template
+	 * </append>
 	 * </PARAMETERS>
 	 * <OUTPUT>
 	 * 	Job ID
