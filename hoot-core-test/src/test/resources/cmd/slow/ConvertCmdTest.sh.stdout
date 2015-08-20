@@ -1,3 +1,4 @@
+15:32:41.197 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  47) _namedOps: [0]{}
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549320999999992" lon="-104.8979050000000086"/>
@@ -97,6 +98,11 @@
         <tag k="error:circular" v="15"/>
     </way>
 </osm>
+15:32:41.301 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  47) _namedOps: [0]{}
+15:32:42.525 INFO  ...ot/core/io/ShapefileWriter.cpp( 109) 4 note
+15:32:42.525 INFO  ...ot/core/io/ShapefileWriter.cpp( 109) 4 highway
+15:32:42.526 INFO  ...ot/core/io/ShapefileWriter.cpp( 109) 4 note
+15:32:42.526 INFO  ...ot/core/io/ShapefileWriter.cpp( 109) 4 highway
 Lines.dbf
 Lines.prj
 Lines.shp
@@ -110,11 +116,10 @@ Polygons.prj
 Polygons.shp
 Polygons.shx
 Check for invalid characters. You should see 3 sets of warnings.
-15:24:08.124 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  89) Found an invalid character in string: 'foo '
-15:24:08.124 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  90)   UCS-4 version of the string: [5]{102, 111, 111, 32, 17}
-15:24:08.124 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  89) Found an invalid character in string: '3 '
-15:24:08.124 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  90)   UCS-4 version of the string: [3]{51, 32, 1}
-15:24:08.124 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  89) Found an invalid character in string: ''
-15:24:08.124 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  90)   UCS-4 version of the string: [8]{0, 104, 105, 103, 104, 119, 97, 121}
-Loading test-files/jakarta_raya_coastline.shp  0 / 6   
-test-output/cmd/ConvertCmdTest/jakarta_raya_coastline.osm
+15:32:42.718 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  47) _namedOps: [0]{}
+15:32:42.719 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  88) Found an invalid character in string: 'foo '
+15:32:42.719 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  89)   UCS-4 version of the string: [5]{102, 111, 111, 32, 17}
+15:32:42.719 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  88) Found an invalid character in string: '3 '
+15:32:42.719 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  89)   UCS-4 version of the string: [3]{51, 32, 1}
+15:32:42.719 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  88) Found an invalid character in string: ''
+15:32:42.719 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  89)   UCS-4 version of the string: [8]{0, 104, 105, 103, 104, 119, 97, 121}
