@@ -27,6 +27,7 @@
 package hoot.services.writers.review;
 
 import java.sql.Connection;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,7 +37,6 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-
 import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +50,6 @@ import hoot.services.db.DbUtils.RecordBatchType;
 import hoot.services.db.postgres.PostgresUtils;
 import hoot.services.db2.QReviewItems;
 import hoot.services.db2.ReviewItems;
-
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
@@ -282,6 +281,8 @@ public class ReviewedItemsWriter
     {
       reviewedItemPojo.setReviewStatus(DbUtils.review_status_enum.reviewed);
       reviewedItemPojo.setChangesetId(changesetId);
+      Timestamp st = new Timestamp(0);
+      reviewedItemPojo.setLastAccessed(st);
       reviewRecordsToUpdate.add(reviewedItemPojo);
     }
   }

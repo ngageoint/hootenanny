@@ -180,7 +180,7 @@ public class JobFieldsValidator {
 		fReader.close();
 	}
 
-	private String _getFieldValueStr(JSONObject field, String name, String defaultVal)
+	/*private String _getFieldValueStr(JSONObject field, String name, String defaultVal)
 	{
 		String ret = defaultVal;
 		Object o = field.get(name);
@@ -191,9 +191,9 @@ public class JobFieldsValidator {
 
 
 		return ret;
-	}
+	}*/
 
-	private boolean _validateDoubleStr(String rangeValStr, String fieldValStr, String comparator)
+	/*private boolean _validateDoubleStr(String rangeValStr, String fieldValStr, String comparator)
 	{
 		boolean ret = true;
 
@@ -249,10 +249,10 @@ public class JobFieldsValidator {
 		}
 
 		return ret;
-	}
+	}*/
 
 
-	private boolean _validateIntStr(String rangeValStr, String fieldValStr, String comparator)
+	/*private boolean _validateIntStr(String rangeValStr, String fieldValStr, String comparator)
 	{
 		boolean ret = true;
 
@@ -300,7 +300,7 @@ public class JobFieldsValidator {
 		}
 
 		return ret;
-	}
+	}*/
 
 	public boolean validateRequiredExists(Map<String,String> fields, List<String>missingList)
 	{

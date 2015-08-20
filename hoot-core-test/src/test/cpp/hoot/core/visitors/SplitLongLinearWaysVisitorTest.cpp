@@ -349,7 +349,8 @@ private:
     startNode += numNodes;
   }
 
-  void _sanityCheckSplit(SplitLongLinearWaysVisitor& splitVisitor, const int startNode, const int numNodes, const int numWays)
+  void _sanityCheckSplit(SplitLongLinearWaysVisitor& /*splitVisitor*/, const int startNode,
+                         const int numNodes, const int numWays)
   {
     // Pull out ways
     WayMap ways = _map->getWays();

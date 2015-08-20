@@ -44,6 +44,7 @@ public class JobExecutioner extends Thread
   
   private ClassPathXmlApplicationContext appContext = 
     new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
+  @SuppressWarnings("unused")
   private ClassPathXmlApplicationContext dbAppContext = 
     new ClassPathXmlApplicationContext("db/spring-database.xml");
   

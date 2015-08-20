@@ -26,14 +26,12 @@
  */
 package hoot.services.controllers.job;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import javax.ws.rs.core.Response;
 
 import hoot.services.UnitTest;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.Test;

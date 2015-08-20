@@ -37,7 +37,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Future;
 
 import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.DocumentBuilder;
@@ -48,7 +47,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
@@ -74,7 +72,8 @@ import org.w3c.dom.Element;
 
 public class WfsManager {
 	private static final Logger log = LoggerFactory.getLogger(WfsManager.class);
-	private String coreJobServerUrl = null;
+	@SuppressWarnings("unused")
+  private String coreJobServerUrl = null;
 	private String wfsStoreConnName = null;
 	private String wfsStoreDb = null;
 	public WfsManager()
@@ -139,7 +138,7 @@ public class WfsManager {
 			
 			HttpEntity entity = response.getEntity();
 			if (entity != null) {
-			    long len = entity.getContentLength();
+			    entity.getContentLength();
 			    ret = EntityUtils.toString(entity);
 
 			}
@@ -161,7 +160,7 @@ public class WfsManager {
 	    final HttpPut request1 = new HttpPut(url);
 	    StringEntity se = new StringEntity( content);  
 	    request1.setEntity(se);
-	    Future<HttpResponse> future = httpclient.execute(request1, null);
+	    httpclient.execute(request1, null);
 			
 		} catch (Exception ee){
 			//log.error(ee.getMessage());
@@ -278,6 +277,7 @@ public class WfsManager {
 		catch (Exception ex)
 		{
 			log.error(ex.getMessage());
+			throw ex;
 		}
 		
 	}
@@ -306,6 +306,7 @@ public class WfsManager {
 		catch(Exception ex)
 		{
 			log.error(ex.getMessage());
+			throw ex;
 		}
 	}
 	

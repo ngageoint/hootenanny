@@ -26,6 +26,7 @@
 # installation
 # - is not bulletproof and is meant as a placeholder until a Hootenanny CentOS Vagrant installation
 # is available
+# - *does not* currently install Hadoop
 #
 # WARNING: Spend time to reading the comments to understand what this script is doing before 
 # attempting to execute it.  USE THIS SCRIPT AT YOUR OWN RISK.
@@ -33,8 +34,8 @@
 # VARS IN THIS SECTION NEED TO BE CUSTOMIZED FOR EACH INSTALL
 
 # Dependencies install needs to be set to true the first time you install Hootenanny *only*.
-INSTALL_DEPENDENCIES=true
-INSTALL_HOOT_APPLICATION=true
+INSTALL_DEPENDENCIES=false
+INSTALL_HOOT_APPLICATION=false
 # name of the version you're deploying; version format is X.Y.Z; this should match the version of
 # the archive files being deployed
 HOOT_VERSION=0.2.17
@@ -115,7 +116,7 @@ if [ "$SILENT_INSTALL" == "false" ]; then
   fi
 fi
 
-INSTALL_SOURCE_DIR=DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+INSTALL_SOURCE_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 if [ "$INSTALL_DEPENDENCIES" == "true" ]; then
 
@@ -320,12 +321,12 @@ if [ "$INSTALL_DEPENDENCIES" == "true" ]; then
   sudo rpm -ivh python-numpy-devel-1.6.1-17.1.x86_64.rpm
 
   #TODO: this section doesn't work yet
-  export PYTHONPATH=$INSTALL_SOURCE_DIR/matplotlib-1.3.1
+  export PYTHONPATH=$HOOT_CORE_INSTALL_DIR/lib64/python-2.6/site-packages
   rm -rf matplotlib-1.3.1
   test -f matplotlib-1.3.1.tar.gz || wget http://sourceforge.net/projects/matplotlib/files/matplotlib/matplotlib-1.3.1/matplotlib-1.3.1.tar.gz/download -O matplotlib-1.3.1.tar.gz
   tar -xzf matplotlib-1.3.1.tar.gz
   cd matplotlib-1.3.1
-  python ./setup.py build && sudo python ./setup.py install
+  python ./setup.py clean && python ./setup.py build && sudo python ./setup.py install --prefix=$HOOT_CORE_INSTALL_DIR
   cd ..
 
   echo "Installing database packages and configuring database..."
