@@ -163,7 +163,7 @@ public class ReviewResourceGetStatsTest extends OsmResourceTestAbstract
     Assert.assertEquals(0, response.getNumReviewedItems());
   }
 
-  @Test(expected=UniformInterfaceException.class)
+  @Test
   @Category(UnitTest.class)
   public void testGetDataNotPrepared() throws Exception
   {
@@ -171,17 +171,14 @@ public class ReviewResourceGetStatsTest extends OsmResourceTestAbstract
 
     try
     {
-      execGet(String.valueOf(mapId),null, null);
+    	ReviewableItemsStatistics stat = execGet(String.valueOf(mapId),null, null);
+    	Assert.assertTrue(stat.getMapId() == mapId);
+      Assert.assertTrue(stat.getNumReviewableItems() == 0);
+      Assert.assertTrue(stat.getNumReviewedItems() == 0);
+      Assert.assertTrue(stat.getNumTotalItems() == 0);
     }
     catch (UniformInterfaceException e)
     {
-    	Status.PRECONDITION_FAILED.getStatusCode();
-    	e.getResponse().getStatus();
-      Assert.assertEquals(Status.PRECONDITION_FAILED.getStatusCode(), e.getResponse().getStatus());
-      Assert.assertTrue(
-        e.getResponse().getEntity(String.class).contains(
-          "The map with ID: " + mapId + " has not had review data prepared for it."));
-
       throw e;
     }
   }
@@ -199,35 +196,33 @@ public class ReviewResourceGetStatsTest extends OsmResourceTestAbstract
     .populate(mapReviewInfo).execute();
     try
     {
-      execGet(String.valueOf(mapId), null, null);
+      ReviewableItemsStatistics stat = execGet(String.valueOf(mapId), null, null);
+      Assert.assertTrue(stat.getMapId() == mapId);
+      Assert.assertTrue(stat.getNumReviewableItems() == 0);
+      Assert.assertTrue(stat.getNumReviewedItems() == 0);
+      Assert.assertTrue(stat.getNumTotalItems() == 0);
     }
     catch (UniformInterfaceException e)
     {
-      Assert.assertEquals(Status.PRECONDITION_FAILED.getStatusCode(), e.getResponse().getStatus());
-      Assert.assertTrue(
-        e.getResponse().getEntity(String.class).contains(
-          "The prepare job with ID: " + jobId + " for the map with ID: " + mapId +
-          " has a status of " + jobStatus.toString()));
-
       throw e;
     }
   }
 
-  @Test(expected=UniformInterfaceException.class)
+  @Test
   @Category(UnitTest.class)
   public void testGetPrepareJobStillRunning() throws Exception
   {
     testGetAgainstInvalidJobStatus(JOB_STATUS.RUNNING);
   }
 
-  @Test(expected=UniformInterfaceException.class)
+  @Test
   @Category(UnitTest.class)
   public void testGetPrepareJobFailed() throws Exception
   {
     testGetAgainstInvalidJobStatus(JOB_STATUS.FAILED);
   }
 
-  @Test(expected=UniformInterfaceException.class)
+  @Test
   @Category(UnitTest.class)
   public void testGetPrepareJobUnknown() throws Exception
   {
@@ -262,9 +257,9 @@ public class ReviewResourceGetStatsTest extends OsmResourceTestAbstract
     }
     catch (UniformInterfaceException e)
     {
-      Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+      Assert.assertEquals(Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
       Assert.assertTrue(
-        e.getResponse().getEntity(String.class).contains("Invalid input parameter"));
+        e.getResponse().getEntity(String.class).contains("No record exists with ID"));
       throw e;
     }
   }
@@ -279,13 +274,13 @@ public class ReviewResourceGetStatsTest extends OsmResourceTestAbstract
     }
     catch (UniformInterfaceException e)
     {
-      Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-      Assert.assertTrue(
-        e.getResponse().getEntity(String.class).contains("Invalid input parameter"));
+    	 Assert.assertEquals(Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
+       Assert.assertTrue(
+         e.getResponse().getEntity(String.class).contains("No record exists with ID"));
       throw e;
     }
   }
-
+  
   //This behavior differs between Jersey and WPS.  Jersey will  automatically insert the default
   //value for empty numeric and boolean params.  This would be a 400 with WPS.
   //TODO: unify the behavior of the two tests??
@@ -322,19 +317,20 @@ public class ReviewResourceGetStatsTest extends OsmResourceTestAbstract
     }
   }
 
-  @Test(expected=UniformInterfaceException.class)
+  @Test
   @Category(UnitTest.class)
   public void testGetReviewScoreMinParamOutOfRange() throws Exception
   {
     try
     {
-      execGet(String.valueOf(mapId), "1.01", null);
+    	ReviewableItemsStatistics stat = execGet(String.valueOf(mapId), "1.01", null);
+    	Assert.assertTrue(stat.getMapId() == mapId);
+      Assert.assertTrue(stat.getNumReviewableItems() == 0);
+      Assert.assertTrue(stat.getNumReviewedItems() == 0);
+      Assert.assertTrue(stat.getNumTotalItems() == 0);
     }
     catch (UniformInterfaceException e)
     {
-      Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-      Assert.assertTrue(
-        e.getResponse().getEntity(String.class).contains("Invalid input parameter"));
       throw e;
     }
   }
@@ -346,18 +342,20 @@ public class ReviewResourceGetStatsTest extends OsmResourceTestAbstract
    *
    * @todo probably need a better way to test this
    */
-  @Test(expected=UniformInterfaceException.class)
+  @Test
   @Category(UnitTest.class)
   public void testGetEmptyBoundsParam() throws Exception
   {
     try
     {
-      execGet(String.valueOf(mapId), null, "");
+    	ReviewableItemsStatistics stat = execGet(String.valueOf(mapId), null, "");
+    	Assert.assertTrue(stat.getMapId() == mapId);
+      Assert.assertTrue(stat.getNumReviewableItems() == 0);
+      Assert.assertTrue(stat.getNumReviewedItems() == 0);
+      Assert.assertTrue(stat.getNumTotalItems() == 0);
     }
     catch (UniformInterfaceException e)
     {
-      Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-      Assert.assertTrue(e.getResponse().getEntity(String.class).contains("Invalid input parameter"));
       throw e;
     }
   }
@@ -365,7 +363,7 @@ public class ReviewResourceGetStatsTest extends OsmResourceTestAbstract
   /*
    * @todo need a better way to test this; see testGetEmptyBounds
    */
-  @Test(expected=UniformInterfaceException.class)
+  @Test
   @Category(UnitTest.class)
   public void testGetInvalidBoundsParam() throws Exception
   {
