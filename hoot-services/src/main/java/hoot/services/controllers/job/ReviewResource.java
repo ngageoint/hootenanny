@@ -34,7 +34,9 @@ import java.util.Map;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
+import hoot.services.db2.QMaps;
 import hoot.services.geo.BoundingBox;
+import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.MarkItemsReviewedRequest;
 import hoot.services.models.review.MarkItemsReviewedResponse;
 import hoot.services.models.review.ReviewableItem;
@@ -58,6 +60,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+
 
 
 
@@ -314,7 +317,24 @@ public class ReviewResource
     }
     catch (Exception e)
     {
-      ReviewUtils.handleError(e, errorMessageStart, false);
+      //ReviewUtils.handleError(e, errorMessageStart, false);
+    	try
+    	{
+	    	// Instead of throwing error we will just return empty stat
+	    	QMaps maps = QMaps.maps;
+	      final long mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn,
+	      		maps, maps.id, maps.displayName);
+	      
+	    	stats = new ReviewableItemsStatistics();
+	    	stats.setMapId(mapIdNum);
+	    	stats.setNumReviewableItems(0);
+	    	stats.setNumReviewedItems(0);
+	    	stats.setNumTotalItems(0);
+    	}
+    	catch (Exception ee)
+    	{
+    		ReviewUtils.handleError(ee, errorMessageStart, false);
+    	}
     }
     finally
     {
