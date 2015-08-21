@@ -1,0 +1,60 @@
+#!/usr/bin/perl -w
+
+use strict;
+require XML::Simple;
+
+use XML::Simple qw(:strict);
+use Data::Dumper;
+
+sub parseOsmXmlNodes($);
+sub validateOsmXmlNodes($$);
+
+# Globals for data
+my %nodesOsm;
+my %nodesPgsql;
+
+sub parseOsmXmlNodes($)
+{
+  my $xmlString = shift(@_);
+  my $xs = XML::Simple->new();
+  my $domRef = $xs->XMLin($xmlString, KeyAttr => { node=> 'id' }, ForceArray => [ 'node', 'tag' ] );
+
+  return $domRef;
+}
+
+sub validateOsmXmlNodes($$)
+{
+  my $osmXmlNodesRef = shift(@_);
+  my $dumpLinesRef = shift(@);
+  my @dumpLines = @{$dumpLinesRef};
+
+
+
+}
+
+if ( scalar(@ARGV) != 2 ) 
+{
+  print( "Usage: compareOsmXmlToPgsqlDump <OSM XML file> <PostgreSQL pg_dump output file>\n\n");
+  exit;
+}
+
+my $osmXmlFile = $ARGV[0];
+my $pgsqlDumpFile = $ARGV[1];
+
+open(XMLFILE, "< $osmXmlFile");
+my @xmlLines = <XMLFILE>;
+close(XMLFILE);
+
+open(PGDUMPFILE, "< $pgsqlDumpfile" );
+my @dumpLines = <PGDUMPFILE>;
+close(PGDUMPFILE);
+
+# Concat the XML contents into one string for parsing
+my $concatOsmXml = join('', @xmlLines);
+
+print( "OSM XML file:\t\t$osmXmlFile\nPostgreSQL dump file:\t$pgsqlDumpFile\n\n");
+
+my $nodesDomRef = parseOsmXmlNodes($concatOsmXml);
+
+validateOsmXmlNodes($nodesDomRef, \@dumpLines );
+
