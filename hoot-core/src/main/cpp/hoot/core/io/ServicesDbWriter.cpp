@@ -99,23 +99,30 @@ bool ServicesDbWriter::isSupported(QString urlStr)
 
 void ServicesDbWriter::open(QString urlStr)
 {
+  /*
   QString mapName = _openDb(urlStr, _overwriteMap);
 
   _sdb.setMapId(_sdb.insertMap(mapName));
 
   _startNewChangeSet();
+  */
+
+  _openDb(urlStr, _overwriteMap);
+
+  _startNewChangeSet();
+
 }
 
 void ServicesDbWriter::deleteMap(QString urlStr)
 {
-  QString mapName = _openDb(urlStr, true); // "True" forces the map delete
+  _openDb(urlStr, true); // "True" forces the map delete
 
   _sdb.commit();
   _sdb.close();
   _open = false;
 }
 
-QString ServicesDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
+void ServicesDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
 {
   if (!isSupported(urlStr))
   {
@@ -129,11 +136,10 @@ QString ServicesDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
 
   QUrl url(urlStr);
 
-  QStringList pList = url.path().split("/");
-  QString mapName = pList[2];
-
   _sdb.open(url);
   _open = true;
+
+  LOG_DEBUG("DB opened");
 
   // create the user before we have a transaction so we can make sure the user gets added.
   if (_createUserIfNotFound)
@@ -145,30 +151,35 @@ QString ServicesDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
     _sdb.setUserId(_sdb.getUserId(_userEmail, true));
   }
 
+  LOG_DEBUG("DB user set");
+
   // start the transaction. We'll close it when finalizePartial is called.
   _sdb.transaction();
 
-  set<long> mapIds = _sdb.selectMapIds(mapName);
+  if ( _sdb.getDatabaseType() == ServicesDb::DBTYPE_SERVICES)
+  {\
+    QStringList pList = url.path().split("/");
+    QString mapName = pList[2];
+    set<long> mapIds = _sdb.selectMapIds(mapName);
 
-  if (mapIds.size() > 0)
-  {
-    if (deleteMapFlag) // deleteMapFlag is either True or _overwriteMap
+    if (mapIds.size() > 0)
     {
-      for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
+      if (deleteMapFlag) // deleteMapFlag is either True or _overwriteMap
       {
-        LOG_INFO("Removing map with ID: " << *it);
-        _sdb.deleteMap(*it);
-        LOG_INFO("Finished removing map with ID: " << *it);
+        for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
+        {
+          LOG_INFO("Removing map with ID: " << *it);
+          _sdb.deleteMap(*it);
+          LOG_INFO("Finished removing map with ID: " << *it);
+        }
+      }
+      else
+      {
+        LOG_INFO("There are one or more maps with this name. Consider using "
+                 "'services.db.writer.overwrite.map'. Map IDs: " << mapIds);
       }
     }
-    else
-    {
-      LOG_INFO("There are one or more maps with this name. Consider using "
-               "'services.db.writer.overwrite.map'. Map IDs: " << mapIds);
-    }
   }
-
-  return mapName;
 }
 
 ElementId ServicesDbWriter::_remapOrCreateElementId(ElementId eid, const Tags& tags)
@@ -373,6 +384,8 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
     ElementId eid = _remapOrCreateElementId(e.getElementId(), empty);
     _sdb.insertRelationMember(relationId, eid.getType(), eid.getId(), e.role, i);
   }
+
+  //LOG_DEBUG("All members added to relation " << QString::number(relationId));
 
   _countChange();
 

@@ -99,7 +99,7 @@ private:
   IdRemap _wayRemap;
   bool _remapIds;
 
-  QString _openDb(QString& urlStr, bool deleteMapFlag);
+  void _openDb(QString& urlStr, bool deleteMapFlag);
 
   void _addElementTags(const shared_ptr<const Element>& e, Tags& t);
 

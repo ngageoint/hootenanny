@@ -617,6 +617,8 @@ long ServicesDb::_getNextWayId()
     break;
   }
 
+  LOG_DEBUG("Generated new way ID " << QString::number(retVal));
+
   return retVal;
 
 }
@@ -792,7 +794,7 @@ bool ServicesDb::insertNode(const double lat, const double lon,
 {
   assignedId = _getNextNodeId();
 
-  LOG_DEBUG("Got ID " << QString::number(assignedId) << " for new node");
+  //LOG_DEBUG("Got ID " << QString::number(assignedId) << " for new node");
 
   return insertNode(assignedId, lat, lon, tags);
 }
@@ -822,7 +824,7 @@ bool ServicesDb::insertNode(const long id, const double lat, const double lon, c
     ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
     _updateChangesetEnvelope(envelopeNode);
 
-    LOG_DEBUG("Inserted node " << QString::number(id));
+    //LOG_DEBUG("Inserted node " << QString::number(id));
   }
 
   return retVal;
@@ -894,7 +896,7 @@ bool ServicesDb::insertRelation(const long relationId, const Tags &tags)
 
   if ( retVal == true )
   {
-    LOG_DEBUG("Inserted relation " << QString::number(relationId));
+    //LOG_DEBUG("Inserted relation " << QString::number(relationId));
   }
   return retVal;
 }
@@ -916,7 +918,7 @@ bool ServicesDb::insertRelationMember(const long relationId, const ElementType& 
     break;
   }
 
-  LOG_DEBUG("Member added to relation " << QString::number(relationId));
+  //LOG_DEBUG("Member added to relation " << QString::number(relationId));
 
   return true;
 }
@@ -1847,8 +1849,13 @@ void ServicesDb::updateRelation(const long id, const Tags& tags)
   case DBTYPE_SERVICES:
     _updateRelation_Services(id, _currChangesetId, tags);
     break;
+  case DBTYPE_OSMAPI:
+    LOG_DEBUG("Ignoring call to update relation " << QString::number(id) << " with changeset " << QString::number(_currChangesetId)
+            << " since that's done when we close the changeset");
+    break;
   default:
     throw HootException("UpdateRelation on unsupported database type");
+    break;
   }
 }
 
@@ -2241,7 +2248,7 @@ void ServicesDb::_flushElementCacheOsmApiNodes()
      return;
   }
 
-  //LOG_DEBUG("Starting flush of node cache")
+  LOG_DEBUG("Starting flush of node cache")
 
   // already in transaction, no need to start new one
 
@@ -2417,16 +2424,17 @@ void ServicesDb::_flushElementCacheOsmApiNodes()
 
 void ServicesDb::_flushElementCacheOsmApiWays()
 {
+  LOG_DEBUG("Flushing OSM API ways");
   if ( _elementCache->typeCount(ElementType::Way) == 0 )
   {
-    //LOG_DEBUG("Bailing from flush of cached ways; nothing in cache!")
+    LOG_DEBUG("Bailing from flush of cached ways; nothing in cache!")
     return;
   }
 
   // First step is to flush any nodes to make sure we don't violate any foreign keys when inserting way
   _flushElementCacheOsmApiNodes();
 
-  //LOG_DEBUG("Starting flush of way cache")
+  LOG_DEBUG("Starting flush of way cache")
 
   // already in transaction, no need to start new one
 
@@ -2551,6 +2559,8 @@ void ServicesDb::_flushElementCacheOsmApiWays()
       // Both node tables get same chunk of parenthesized data
       currentWaysInsertCmd  += waysCurrentWaysRow;
       waysInsertCmd         += waysCurrentWaysRow;
+
+      LOG_DEBUG("Way " << wayIDString << " added to flush string");
     }
 
     // Add final semicolons
@@ -2597,7 +2607,7 @@ void ServicesDb::_flushElementCacheOsmApiWayNodes()
   // First step is to flush any ways (which in turn flushes nodes) to make sure we don't violate any foreign keys when inserting way
   _flushElementCacheOsmApiWays();
 
-  //LOG_DEBUG("Starting flush of way node cache");
+  LOG_DEBUG("Starting flush of way node cache");
 
   std::vector<long> wayIds;
   try
@@ -2834,6 +2844,7 @@ void ServicesDb::_updateChangesetEnvelopeWayIds(const std::vector<long>& wayIds)
 
 void ServicesDb::_flushElementCacheOsmApiRelations()
 {
+  LOG_DEBUG("Flushing OSM API relations");
   if ( _elementCache->typeCount(ElementType::Relation) == 0 )
   {
     //LOG_DEBUG("Bailing from flush of cached relations; nothing in cache!")
@@ -3158,9 +3169,10 @@ void ServicesDb::_insertWay_OsmApi(const long wayId, const Tags &tags)
   newWay->setTags(tags);
   ConstElementPtr constWay(newWay);
   _elementCache->addElement(constWay);
+  LOG_DEBUG("Way " << QString::number(wayId) << " added to cache");
 
   // See if way portion of cache is full and needs to be flushed
-  if ( _elementCache->typeCount(ElementType::Node) == _elementCacheCapacity )
+  if ( _elementCache->typeCount(ElementType::Way) == _elementCacheCapacity )
   {
     _flushElementCacheOsmApiWays();
   }
