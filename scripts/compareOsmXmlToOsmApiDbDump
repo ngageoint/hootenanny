@@ -1,5 +1,14 @@
 #!/usr/bin/perl -w
 
+# Compare the contents of an OSM XML file to a database dump (created with pg_dump) 
+# of an OSM API database after that OSM XML file has been uploaded to it
+#
+# NOTE: this script requires the Perl module "XML::Simple" to be installed
+#
+# On Ubuntu 14.04, this can be installed using the following:
+#
+#     sudo apt-get install libxml-simple-perl
+
 use strict;
 require XML::Simple;
 
@@ -8,10 +17,18 @@ use Data::Dumper;
 
 sub parseOsmXmlNodes($);
 sub validateOsmXmlNodes($$);
+sub convertNanodegreesStringToDegrees($);
 
 # Globals for data
 my %nodesOsm;
 my %nodesPgsql;
+
+sub convertNanodegreesStringToDegrees($)
+{
+  my $nanodegreesString = shift(@_);
+
+  return ( $nanodegreesString / 10000000.0 );
+}
 
 sub parseOsmXmlNodes($)
 {
@@ -25,9 +42,52 @@ sub parseOsmXmlNodes($)
 sub validateOsmXmlNodes($$)
 {
   my $osmXmlNodesRef = shift(@_);
-  my $dumpLinesRef = shift(@);
+  my $dumpLinesRef = shift(@_);
   my @dumpLines = @{$dumpLinesRef};
 
+  my $currLine;
+
+  # Checking table: current_nodes
+  my $foundStart = 0;
+  foreach $currLine (@dumpLines)
+  {
+    chomp($currLine);
+
+    # Find out where current_nodes starts
+    if ( $foundStart == 0 ) 
+    {
+      if ($currLine =~ /^COPY current_nodes .+ FROM stdin;/ )
+      {
+        $foundStart = 1;
+      }
+
+      # Either way, can't do any more processing
+      next;
+    }
+
+    # Are we at end of data?
+    if ( $currLine =~ /^\\./ )
+    {
+      last;
+    }
+
+    # Have a valid node
+    my %currentNodesData;
+
+    # Break into tokens based on whitespace delimiter
+    # Schema: id, latitude, longitude, changeset_id, visible, "timestamp", tile, version
+    my @tokens = split( /\s+/, $currLine);
+
+    print( "Found node, ID = $tokens[0]\n");
+  
+    $currentNodesData{'latitude'} = convertNanodegreesStringToDegrees($tokens[1]);
+    print( "\tLatitude: $currentNodesData{'latitude'}\n");
+    last;
+
+  }
+    
+
+  # Checking table: nodes
 
 
 }
@@ -45,7 +105,7 @@ open(XMLFILE, "< $osmXmlFile");
 my @xmlLines = <XMLFILE>;
 close(XMLFILE);
 
-open(PGDUMPFILE, "< $pgsqlDumpfile" );
+open(PGDUMPFILE, "< $pgsqlDumpFile" );
 my @dumpLines = <PGDUMPFILE>;
 close(PGDUMPFILE);
 
