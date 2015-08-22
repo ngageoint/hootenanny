@@ -103,13 +103,63 @@ sub validateOsmXmlNodes($$)
 
   print( 'Found ' . scalar(keys(%currentNodesData)) . " entries in current_nodes\n" );
 
+  # Read current_node_tags
 
-    
+  $foundStart = 0;
+  foreach $currLine (@dumpLines)
+  {
+    chomp($currLine);
 
-  # Checking table: nodes
+    # Find out where table data starts
+    if ( $foundStart == 0 )
+    {
+      if ($currLine =~ /^COPY current_node_tags .+ FROM stdin;/ )
+      {
+        $foundStart = 1;
+      }
 
+      # Either way, can't do any more processing
+      next;
+    }
 
+    # Are we at end of data?
+    if ( $currLine =~ /^\\./ )
+    {
+      last;
+    }
+
+    print( "Current_node_tags entry: $currLine\n" );
+
+    # Have a valid node
+    my %currentNodeTagsEntry;
+
+    # Break into tokens based on whitespace delimiter
+    # Schema: node_id, key, value
+    my @tokens = split( /\s+/, $currLine);
+
+    #print( "Found node tag\n");
+
+    $currentNodeTagsEntry{$tokens[1]} = $tokens[2];
+    print( "\tID: $tokens[0]\n\tKey: $tokens[1]\n\tValue: $tokens[2]\n");
+
+    # Store the entry in hash of current_nodes
+    if ( exists($currentNodesData{ $tokens[0 ] }->{'tags'} ) )
+    {
+      $currentNodesData{ $tokens[0] }->{'tags'}->{$tokens[1]} = $tokens[2];
+
+      #my $key;
+      #foreach $key ( keys( $currentNodesData{ $tokens[0] }->{'tags'}) )
+      #{
+      # print( "\tFound tags key: $key\n" );
+      #}
+    }
+    else
+    {
+      $currentNodesData{ $tokens[0] }->{'tags'} = { $tokens[1] => $tokens[2] };
+    }
+  }
 }
+
 
 if ( scalar(@ARGV) != 2 ) 
 {
