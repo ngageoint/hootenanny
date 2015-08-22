@@ -45,6 +45,8 @@ sub validateOsmXmlNodes($$)
   my $dumpLinesRef = shift(@_);
   my @dumpLines = @{$dumpLinesRef};
 
+  my %currentNodesData;
+
   my $currLine;
 
   # Checking table: current_nodes
@@ -71,20 +73,37 @@ sub validateOsmXmlNodes($$)
       last;
     }
 
+    #print( "Current_nodes entry: $currLine\n" );
+
     # Have a valid node
-    my %currentNodesData;
+    my %currentNodesEntry;
 
     # Break into tokens based on whitespace delimiter
     # Schema: id, latitude, longitude, changeset_id, visible, "timestamp", tile, version
     my @tokens = split( /\s+/, $currLine);
 
-    print( "Found node, ID = $tokens[0]\n");
+    #print( "Found node, ID = $tokens[0]\n");
   
-    $currentNodesData{'latitude'} = convertNanodegreesStringToDegrees($tokens[1]);
-    print( "\tLatitude: $currentNodesData{'latitude'}\n");
-    last;
+    $currentNodesEntry{'lat'} = convertNanodegreesStringToDegrees($tokens[1]);
+    #print( "\tLatitude: $currentNodesEntry{'lat'}\n");
 
+    $currentNodesEntry{'lon'} = convertNanodegreesStringToDegrees($tokens[2]);
+    #print( "\tLongitude: $currentNodesEntry{'lon'}\n");
+
+    $currentNodesEntry{'tile_num'} = $tokens[7];
+    $currentNodesEntry{'version'} = $tokens[8];
+
+    #print( "\tCoords (lat/lon): $currentNodesEntry{'lat'}, $currentNodesEntry{'lon'}\n");
+    #print( "\tTile: $currentNodesEntry{'tile_num'}\n");
+    #print( "\tVersion: $currentNodesEntry{'version'}\n");
+
+    # Store the entry in hash of current_nodes
+    $currentNodesData{$tokens[0]} = \%currentNodesEntry;
   }
+
+  print( 'Found ' . scalar(keys(%currentNodesData)) . " entries in current_nodes\n" );
+
+
     
 
   # Checking table: nodes
