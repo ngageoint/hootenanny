@@ -11,9 +11,11 @@
 
 use strict;
 require XML::Simple;
+require bigint;     
 
 use XML::Simple qw(:strict);
 use Data::Dumper;
+use bigint;   # Ensures all integers are 64-bit native
 
 sub createOsmDom($$);
 sub validateOsmXmlNodes($$);
@@ -22,12 +24,15 @@ sub convertNanodegreesStringToDegrees($);
 # Globals for data
 my %nodesOsm;
 my %nodesPgsql;
+my %nodeIdMappingsXmlToDb;
 
 sub convertNanodegreesStringToDegrees($)
 {
   my $nanodegreesString = shift(@_);
 
-  return ( $nanodegreesString / 10000000.0 );
+  my $nanoDegrees = ( $nanodegreesString / 10000000.0 );
+  print( "\tComputed nanodegrees: $nanoDegrees\n");
+  return $nanoDegrees;
 }
 
 sub createOsmDom($$)
@@ -51,6 +56,7 @@ sub validateOsmXmlNodes($$)
   my $currLine;
 
   # Checking table: current_nodes
+  print( "Table: current_nodes\n");
   my $foundStart = 0;
   foreach $currLine (@dumpLines)
   {
@@ -86,7 +92,8 @@ sub validateOsmXmlNodes($$)
     #print( "Found node, ID = $tokens[0]\n");
   
     $currentNodesEntry{'lat'} = convertNanodegreesStringToDegrees($tokens[1]);
-    #print( "\tLatitude: $currentNodesEntry{'lat'}\n");
+    print( "\tSource string: $tokens[1]\n");
+    print( "\tConverted latitude: $currentNodesEntry{'lat'}\n");
 
     $currentNodesEntry{'lon'} = convertNanodegreesStringToDegrees($tokens[2]);
     #print( "\tLongitude: $currentNodesEntry{'lon'}\n");
@@ -102,7 +109,7 @@ sub validateOsmXmlNodes($$)
     $currentNodesData{$tokens[0]} = \%currentNodesEntry;
   }
 
-  print( 'Found ' . scalar(keys(%currentNodesData)) . " entries in current_nodes\n" );
+  #print( 'Found ' . scalar(keys(%currentNodesData)) . " entries in current_nodes\n" );
 
   # Read current_node_tags
 
@@ -170,14 +177,41 @@ sub validateOsmXmlNodes($$)
     exit;
   }
   
-  print( 'Number OSM XML nodes == entries in OSM API DB "current_nodes" table (' . 
+  print( "\tNumber OSM XML nodes == \"current_node\" entries (" . 
     scalar(keys(%currentNodesData)) . ")\n");
 
-  # Read nodes/node_tags and make sure all data lines up
+  # Now let's create mapping for Postgres Node ID -> OSM node ID.  the OSM XML node IDs were added in 
+  #   ascending node ID order, so if we iterate over OSM API node IDs in ascending, we have a guaranteed mapping
 
+  my @sortedDbNodeIds = sort( {$a <=> $b} keys(%currentNodesData));
+  my $currXmlNodeId;
+  my $i = 0;
+  foreach $currXmlNodeId ( sort( {$a <=> $b} keys(%$osmXmlNodesRef)) )
+  {
+    $nodeIdMappingsXmlToDb{$currXmlNodeId} = $sortedDbNodeIds[$i];
 
-  # Now let's create mapping for Postgres Node ID -> OSM node ID.  the OSM node IDs were added in 
-  #   ascending node ID order, so if we iterate over our node IDs in ascending, we have a guaranteed mapping
+    #print("XML node ID $currXmlNodeId maps to DB node ID $sortedDbNodeIds[$i]\n");
+
+    $i++;
+  }
+
+  # Now that we have mapping, go back and compare each XML node to corresponding entry in current_nodes
+  foreach $currXmlNodeId ( sort( {$a <=> $b} keys(%$osmXmlNodesRef)) )
+  {
+    my %currXmlNode = %{ $osmXmlNodesRef->{$currXmlNodeId} };
+
+    # Compare lat, lon, version, tags
+
+    if ( $currXmlNode{'lat'} != $currentNodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lat'} )
+    {
+      print( "ERROR: XML node $currXmlNodeId latitude $currXmlNode{'lat'} != " .
+        "DB node $nodeIdMappingsXmlToDb{$currXmlNodeId} lat " . 
+        $currentNodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lat'} . "\n\n" );
+      exit;
+    }
+
+  }
+  
 }
 
 
