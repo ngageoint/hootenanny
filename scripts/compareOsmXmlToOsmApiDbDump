@@ -15,7 +15,7 @@ require XML::Simple;
 use XML::Simple qw(:strict);
 use Data::Dumper;
 
-sub parseOsmXmlNodes($);
+sub createOsmDom($$);
 sub validateOsmXmlNodes($$);
 sub convertNanodegreesStringToDegrees($);
 
@@ -30,10 +30,11 @@ sub convertNanodegreesStringToDegrees($)
   return ( $nanodegreesString / 10000000.0 );
 }
 
-sub parseOsmXmlNodes($)
+sub createOsmDom($$)
 {
+  my $xs = shift(@_);
   my $xmlString = shift(@_);
-  my $xs = XML::Simple->new();
+
   my $domRef = $xs->XMLin($xmlString, KeyAttr => { node=> 'id' }, ForceArray => [ 'node', 'tag' ] );
 
   return $domRef;
@@ -128,7 +129,7 @@ sub validateOsmXmlNodes($$)
       last;
     }
 
-    print( "Current_node_tags entry: $currLine\n" );
+    #print( "Current_node_tags entry: $currLine\n" );
 
     # Have a valid node
     my %currentNodeTagsEntry;
@@ -140,7 +141,7 @@ sub validateOsmXmlNodes($$)
     #print( "Found node tag\n");
 
     $currentNodeTagsEntry{$tokens[1]} = $tokens[2];
-    print( "\tID: $tokens[0]\n\tKey: $tokens[1]\n\tValue: $tokens[2]\n");
+    #print( "\tID: $tokens[0]\n\tKey: $tokens[1]\n\tValue: $tokens[2]\n");
 
     # Store the entry in hash of current_nodes
     if ( exists($currentNodesData{ $tokens[0 ] }->{'tags'} ) )
@@ -158,6 +159,25 @@ sub validateOsmXmlNodes($$)
       $currentNodesData{ $tokens[0] }->{'tags'} = { $tokens[1] => $tokens[2] };
     }
   }
+
+  # First sanity check: make sure # of OSM current_nodes exactly matches # of OSM API DB current_nodes
+  #print( "Number of OSM nodes: " . scalar(keys(%$osmXmlNodesRef)) . "\n" );
+  if ( scalar(keys(%$osmXmlNodesRef)) != scalar(keys(%currentNodesData)) )
+  {
+    print('ERROR: OSM XML nodes: ' . scalar(keys(%$osmXmlNodesRef)) .
+      ' != OSM API DB nodes: ' . scalar(keys(%currentNodesData)) . "\n\n" );
+
+    exit;
+  }
+  
+  print( 'Number OSM XML nodes == entries in OSM API DB "current_nodes" table (' . 
+    scalar(keys(%currentNodesData)) . ")\n");
+
+  # Read nodes/node_tags and make sure all data lines up
+
+
+  # Now let's create mapping for Postgres Node ID -> OSM node ID.  the OSM node IDs were added in 
+  #   ascending node ID order, so if we iterate over our node IDs in ascending, we have a guaranteed mapping
 }
 
 
@@ -183,7 +203,9 @@ my $concatOsmXml = join('', @xmlLines);
 
 print( "OSM XML file:\t\t$osmXmlFile\nPostgreSQL dump file:\t$pgsqlDumpFile\n\n");
 
-my $nodesDomRef = parseOsmXmlNodes($concatOsmXml);
+# Create XML parser
+my $xs = XML::Simple->new();
 
-validateOsmXmlNodes($nodesDomRef, \@dumpLines );
+my $domRef = createOsmDom($xs, $concatOsmXml);
+validateOsmXmlNodes($domRef->{node}, \@dumpLines );
 
