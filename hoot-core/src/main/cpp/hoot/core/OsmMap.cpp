@@ -134,7 +134,7 @@ void OsmMap::append(ConstOsmMapPtr appendFromMap)
     ++it;
   }
 
-  QHash<long, shared_ptr<Node> >::const_iterator itn = appendFromMap->_nodes.constBegin();
+  NodeMap::const_iterator itn = appendFromMap->_nodes.constBegin();
   while (itn != appendFromMap->_nodes.constEnd())
   {
     NodePtr node = itn.value();
@@ -178,6 +178,17 @@ void OsmMap::addNode(const boost::shared_ptr<Node>& n)
   _nodes.insert(n->getId(), n);
   _index->addNode(n);
   //_nodeCounter = std::min(n->getId() - 1, _nodeCounter);
+
+  //LOG_DEBUG("Inserted node with key " << QString::number(n->getId()));
+
+  /*
+  LOG_DEBUG("Node keys, hopefully in order:")
+  const QList<long> nodeIds = _nodes.keys();
+  for ( QList<long>::const_iterator it = nodeIds.constBegin(); it != nodeIds.constEnd(); ++it)
+  {
+    LOG_DEBUG(QString::number(*it));
+  }
+  */
 }
 
 void OsmMap::addRelation(const shared_ptr<Relation>& r)
@@ -320,7 +331,7 @@ void OsmMap::_copy(boost::shared_ptr<const OsmMap> from)
     ++it;
   }
 
-  QHash<long, shared_ptr<Node> >::const_iterator itn = from->_nodes.constBegin();
+  NodeMap::const_iterator itn = from->_nodes.constBegin();
   while (itn != from->_nodes.constEnd())
   {
     _nodes.insert(itn.key(), shared_ptr<Node>(new Node(*itn.value())));

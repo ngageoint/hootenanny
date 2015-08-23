@@ -46,20 +46,24 @@ void PartialOsmMapWriter::write(boost::shared_ptr<const OsmMap> map)
 void PartialOsmMapWriter::writePartial(const shared_ptr<const OsmMap>& map)
 {
   const OsmMap::NodeMap& nm = map->getNodeMap();
+  LOG_DEBUG("About to iterate through nodes");
   for (OsmMap::NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
+    LOG_DEBUG("Writing out node with map key " << QString::number(it.key()));
     writePartial(it.value());
   }
 
   const WayMap& wm = map->getWays();
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
+    //LOG_DEBUG("Writing out way with map key " << QString::number(it->first));
     writePartial(it->second);
   }
 
   const RelationMap& rm = map->getRelationMap();
   for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
   {
+    //LOG_DEBUG("Writing out relation with map key " << QString::number(it->first));
     writePartial(it->second);
   }
 }

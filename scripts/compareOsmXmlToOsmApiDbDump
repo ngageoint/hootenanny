@@ -11,11 +11,9 @@
 
 use strict;
 require XML::Simple;
-require bigint;     
 
 use XML::Simple qw(:strict);
 use Data::Dumper;
-use bigint;   # Ensures all integers are 64-bit native
 
 sub createOsmDom($$);
 sub validateOsmXmlNodes($$);
@@ -28,11 +26,16 @@ my %nodeIdMappingsXmlToDb;
 
 sub convertNanodegreesStringToDegrees($)
 {
-  my $nanodegreesString = shift(@_);
+  #my $nanodegreesString = shift(@_);
+  #print( "\tInput nanodegree string: $nanodegreesString\n");
 
-  my $nanoDegrees = ( $nanodegreesString / 10000000.0 );
-  print( "\tComputed nanodegrees: $nanoDegrees\n");
-  return $nanoDegrees;
+  #my $nanodegrees = ($nanodegreesString * 1.0);
+
+  #my $degrees = ( $nanodegrees / 10000000.0 );
+  #print( "\tComputed degrees: $degrees\n\n");
+  #return $degrees;
+
+  return ( shift(@_) / 10000000.0 );
 }
 
 sub createOsmDom($$)
@@ -92,8 +95,8 @@ sub validateOsmXmlNodes($$)
     #print( "Found node, ID = $tokens[0]\n");
   
     $currentNodesEntry{'lat'} = convertNanodegreesStringToDegrees($tokens[1]);
-    print( "\tSource string: $tokens[1]\n");
-    print( "\tConverted latitude: $currentNodesEntry{'lat'}\n");
+    #print( "\tSource string: $tokens[1]\n");
+    #print( "\tConverted latitude: $currentNodesEntry{'lat'}\n");
 
     $currentNodesEntry{'lon'} = convertNanodegreesStringToDegrees($tokens[2]);
     #print( "\tLongitude: $currentNodesEntry{'lon'}\n");
@@ -202,14 +205,21 @@ sub validateOsmXmlNodes($$)
 
     # Compare lat, lon, version, tags
 
-    if ( $currXmlNode{'lat'} != $currentNodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lat'} )
+    if ( $currXmlNode{'lat'} ne $currentNodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lat'} )
     {
       print( "ERROR: XML node $currXmlNodeId latitude $currXmlNode{'lat'} != " .
         "DB node $nodeIdMappingsXmlToDb{$currXmlNodeId} lat " . 
         $currentNodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lat'} . "\n\n" );
       exit;
     }
-
+  
+    if ( $currXmlNode{'lon'} ne $currentNodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lon'} )
+    {
+      print( "ERROR: XML node $currXmlNodeId longitude $currXmlNode{'lon'} != " .
+        "DB node $nodeIdMappingsXmlToDb{$currXmlNodeId} lon " .
+        $currentNodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lon'} . "\n\n" );
+      exit;
+    }
   }
   
 }
