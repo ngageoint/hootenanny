@@ -246,8 +246,21 @@ sub validateCurrentNodes($$)
     # Tags
     if ( exists($currXmlNode{'tag'}) )
     {
-      print( "XML Tags: " . Dumper($currXmlNode{'tag'}) . "\n");
-      print( "DB tags: " . Dumper($currentNodesData{$databaseNodeId}->{'tags'}) . "\n");
+      #print( "XML Tags: " . Dumper($currXmlNode{'tag'}) . "\n");
+      #print( "DB tags: " . Dumper($currentNodesData{$databaseNodeId}->{'tags'}) . "\n");
+
+      my $xmlTagsArrayRef = $currXmlNode{'tag'};
+
+      my $currTag;
+
+      foreach $currTag ( @{$xmlTagsArrayRef} )
+      {
+        my %tagEntry = %{ $currTag };
+        #print( "Key   : $tagEntry{'k'}\n");
+        #print( "Value : $tagEntry{'v'}\n");
+
+
+      }
 
     }
   }
