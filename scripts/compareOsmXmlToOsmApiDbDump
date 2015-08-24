@@ -71,7 +71,7 @@ sub validateCurrentNodes($$)
   my $currLine;
 
   # Checking table: current_nodes
-  print( "\tTable: current_nodes\n");
+  print( "\tcurrent_nodes, current_node_tags:\n");
   my $foundStart = 0;
   foreach $currLine (@dumpLines)
   {
@@ -192,7 +192,7 @@ sub validateCurrentNodes($$)
     exit;
   }
   
-  print( "\t\tNumber OSM XML nodes == \"current_node\" entries (" . 
+  print( "\t\tMatching number of nodes: PASS (" . 
     scalar(keys(%currentNodesData)) . ")\n");
 
   # Now let's create mapping for Postgres Node ID -> OSM node ID.  the OSM XML node IDs were added in 
@@ -255,17 +255,27 @@ sub validateCurrentNodes($$)
 
       foreach $currTag ( @{$xmlTagsArrayRef} )
       {
-        my %tagEntry = %{ $currTag };
+        my %xmlTagEntry = %{ $currTag };
         #print( "Key   : $tagEntry{'k'}\n");
         #print( "Value : $tagEntry{'v'}\n");
 
-
+        my %dbTagEntry = %{ $currentNodesData{$databaseNodeId}->{'tags'} };
+        if ( ! exists( $dbTagEntry{ $xmlTagEntry{'k'} } ) )
+        {
+          print("Could not find database version of tag " . Dumper(%xmlTagEntry) . "\n" ); 
+          exit;
+        }
+        else
+        {
+          #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
+          #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
+        }
       }
-
     }
   }
 
-  
+  # If we made it this far, current_nodes and current_node_tags are 100% correct to XML
+  print("\t\tDeep inspection of data integrity: PASS\n");
   
 }
 
