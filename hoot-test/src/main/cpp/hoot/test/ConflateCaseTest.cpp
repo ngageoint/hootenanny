@@ -92,7 +92,7 @@ void ConflateCaseTest::runTest()
   args << in1.absoluteFilePath();
   args << in2.absoluteFilePath();
   args << testOutput;
-  int result;
+  int result = -1;
   try
   {
     result = cmd.runSimple(args);

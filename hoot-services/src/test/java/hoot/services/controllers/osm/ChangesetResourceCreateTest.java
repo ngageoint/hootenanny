@@ -29,7 +29,6 @@ package hoot.services.controllers.osm;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 

@@ -278,7 +278,7 @@ public class ReviewableItemRetriever
 	          					 unreviewedJoinedRecordsForElementTypeGroupedByUniqueId.keySet()
 	          					)
 	          			)
-
+	          	.orderBy(fields)
 	          	.transform(groupBy(reviewItemsTbl.reviewableItemId).as(list(new QTuple(prototype2.getElementTable(), reviewItemsTbl
 	          			,elementIdMappings
 	          			))));

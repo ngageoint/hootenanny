@@ -120,7 +120,6 @@ public class ChangesetResource
 	 * 	<REQUEST_TYPE>PUT</REQUEST_TYPE>
 	 * 	<INPUT>
 	 * Changeset OSM XML
-	 * See https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmChangesetService#Changeset-Create
 	 *	</INPUT>
 	 * <OUTPUT>
 	 * 1
@@ -137,7 +136,6 @@ public class ChangesetResource
    * @todo update for parsing multiple changesets in one request (#2894): duplicated changeset tag 
      keys are allowed but later changeset tag keys overwrite earlier ones; isn't that contradictory
      with the rest of the logic in this method?
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmChangesetService#Changeset-Create
    */
   @PUT
   @Path("/create")

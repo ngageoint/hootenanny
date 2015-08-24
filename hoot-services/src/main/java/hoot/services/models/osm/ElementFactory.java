@@ -125,7 +125,8 @@ public class ElementFactory
   		}
   	}
     Long oMapId = new Long(mapId);
-    String className = ClassUtils.getPackageName(ElementFactory.class) + "." + elementType.toString();
+    ClassUtils.getPackageName(ElementFactory.class);
+		elementType.toString();
     return
       (Element)ConstructorUtils.invokeConstructor(
         Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType.toString()),

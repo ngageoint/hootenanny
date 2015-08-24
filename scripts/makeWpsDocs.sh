@@ -4,21 +4,21 @@
 #test for HOOT_HOME defined
 if [ -z $HOOT_HOME ]; then cd ..; source SetupEnv.sh; cd scripts; fi
 
-cd $HOOT_HOME/docs
+cd $HOOT_HOME/docs/developer
 mkdir -p wpsDocs 
 
 # get list of the WPS xml files to convert
 pushd . > /dev/null
-cd ../hoot-services/src/main/webapp/WEB-INF/workspace/processes
+cd $HOOT_HOME/hoot-services/src/main/webapp/WEB-INF/workspace/processes
 FILES=`ls *.xml`
 popd > /dev/null
 
-cd ./wpsDocs
+cd $HOOT_HOME/docs/developer/wpsDocs
 for f in $FILES
 do
   # generate the asciidoc using the XSLT Style Sheet
   FILE=${f:0:(-4)}
-  xsltproc ../WpsToAsciiDoc.xslt ../../hoot-services/src/main/webapp/WEB-INF/workspace/processes/$f > $FILE.asciidoc
+  xsltproc $HOOT_HOME/docs/WpsToAsciiDoc.xslt $HOOT_HOME/hoot-services/src/main/webapp/WEB-INF/workspace/processes/$f > $FILE.asciidoc
 
   # Create the HTML and PDF reference manuals
   #asciidoc -a data-uri -a icons $FILE.asciidoc

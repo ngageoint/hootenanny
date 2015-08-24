@@ -83,7 +83,7 @@ public class CookieCutterProcessletTest {
 			  
 			JSONArray arr = processlet.parseRequestParams(in);
 			    
-			Class[] cArg = new Class[1];
+			Class<?>[] cArg = new Class[1];
 			cArg[0] = JSONArray.class;
 			Method method = JobProcesslet.class.getDeclaredMethod("createPostBody", cArg);
 			method.setAccessible(true);

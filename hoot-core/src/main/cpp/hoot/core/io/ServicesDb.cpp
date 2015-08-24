@@ -81,10 +81,10 @@ Envelope ServicesDb::calculateEnvelope(long mapId) const
 
   if (boundsQuery.next())
   {
-    double minY = (double)boundsQuery.value(0).toLongLong() / (double)COORDINATE_SCALE;
-    double maxY = (double)boundsQuery.value(1).toLongLong() / (double)COORDINATE_SCALE;
-    double minX = (double)boundsQuery.value(2).toLongLong() / (double)COORDINATE_SCALE;
-    double maxX = (double)boundsQuery.value(3).toLongLong() / (double)COORDINATE_SCALE;
+    double minY = boundsQuery.value(0).toDouble();
+    double maxY = boundsQuery.value(1).toDouble();
+    double minX = boundsQuery.value(2).toDouble();
+    double maxX = boundsQuery.value(3).toDouble();
     result = Envelope(minX, maxX, minY, maxY);
   }
   else
@@ -612,8 +612,8 @@ long ServicesDb::insertNode(long mapId, long id, double lat, double lon, long ch
 
   QList<QVariant> v;
   v.append((qlonglong)id);
-  v.append((qlonglong)_round(lat * COORDINATE_SCALE, 7));
-  v.append((qlonglong)_round(lon * COORDINATE_SCALE, 7));
+  v.append(lat);
+  v.append(lon);
   v.append((qlonglong)changeSetId);
   v.append(_tileForPoint(lat, lon));
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
@@ -1409,8 +1409,8 @@ void ServicesDb::updateNode(long mapId, long id, double lat, double lon, long ch
   }
 
   _updateNode->bindValue(":id", (qlonglong)id);
-  _updateNode->bindValue(":latitude", (qlonglong)_round(lat * COORDINATE_SCALE, 7));
-  _updateNode->bindValue(":longitude", (qlonglong)_round(lon * COORDINATE_SCALE, 7));
+  _updateNode->bindValue(":latitude", lat);
+  _updateNode->bindValue(":longitude", lon);
   _updateNode->bindValue(":changeset_id", (qlonglong)changeSetId);
   _updateNode->bindValue(":tile", (qlonglong)_tileForPoint(lat, lon));
   _updateNode->bindValue(":tags", _escapeTags(tags));

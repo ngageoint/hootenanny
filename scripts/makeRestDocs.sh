@@ -4,7 +4,7 @@
 #test for HOOT_HOME defined
 if [ -z $HOOT_HOME ]; then cd ..; source SetupEnv.sh; cd scripts; fi
 
-cd $HOOT_HOME/docs
+cd $HOOT_HOME/docs/developer
 mkdir -p restDocs 
 
 for serviceGroup in "info" "ingest" "job" "ogr" "osm"; do 
@@ -12,9 +12,9 @@ for serviceGroup in "info" "ingest" "job" "ogr" "osm"; do
   [ "$1" == "-v" ] && echo "Generating report for REST service group: "$serviceGroup
 
   # generate the asciidoc using the XSLT Style Sheet
-  xsltproc WadlToAsciiDoc.xslt ../hoot-services/target/classes/hootenanny_rest_doc_${serviceGroup}.wadl > ./restDocs/HootenannyRestReference_${serviceGroup}.asciidoc
+  xsltproc $HOOT_HOME/docs/WadlToAsciiDoc.xslt $HOOT_HOME/hoot-services/target/classes/hootenanny_rest_doc_${serviceGroup}.wadl > $HOOT_HOME/docs/developer/restDocs/HootenannyRestReference_${serviceGroup}.asciidoc
 
-  cd ./restDocs
+  cd $HOOT_HOME/docs/developer/restDocs
 
   # Create the HTML and PDF reference manuals
   #asciidoc -a data-uri -a icons HootenannyRestReference_${serviceGroup}.asciidoc

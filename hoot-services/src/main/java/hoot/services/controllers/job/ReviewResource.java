@@ -34,7 +34,9 @@ import java.util.Map;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
+import hoot.services.db2.QMaps;
 import hoot.services.geo.BoundingBox;
+import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.MarkItemsReviewedRequest;
 import hoot.services.models.review.MarkItemsReviewedResponse;
 import hoot.services.models.review.ReviewableItem;
@@ -58,6 +60,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+
+
+
 
 
 
@@ -137,7 +142,6 @@ public class ReviewResource
   * @param overwriteExistingData if true, will overwrite any existing review data for the given map
   * @return a job ID for tracking the prepare job
   * @throws Exception
-  * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflated_Data_Review_Service_2#Prepare-Items-for-Review
   */
   @POST
   @Consumes(MediaType.TEXT_PLAIN)
@@ -243,7 +247,6 @@ public class ReviewResource
    * statistics, the geospatial bounding box the items should reside in
    * @return a set of reviewable item statistics
    * @throws Exception
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflated_Data_Review_Service_2#Retrieve-Statistics-for-Reviewable-Items
    */
   @GET
   @Path("/statistics")
@@ -309,10 +312,29 @@ public class ReviewResource
     	{
     		stats.setNumReviewableItems(0);
     	}
+    	
+  		
     }
     catch (Exception e)
     {
-      ReviewUtils.handleError(e, errorMessageStart, false);
+      //ReviewUtils.handleError(e, errorMessageStart, false);
+    	try
+    	{
+	    	// Instead of throwing error we will just return empty stat
+	    	QMaps maps = QMaps.maps;
+	      final long mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn,
+	      		maps, maps.id, maps.displayName);
+	      
+	    	stats = new ReviewableItemsStatistics();
+	    	stats.setMapId(mapIdNum);
+	    	stats.setNumReviewableItems(0);
+	    	stats.setNumReviewedItems(0);
+	    	stats.setNumTotalItems(0);
+    	}
+    	catch (Exception ee)
+    	{
+    		ReviewUtils.handleError(ee, errorMessageStart, false);
+    	}
     }
     finally
     {
@@ -433,7 +455,6 @@ public class ReviewResource
    * items should reside in
    * @return a set of reviewable items
    * @throws Exception
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflated_Data_Review_Service_2#Retrieve-Items-to-Review
    */
   @GET
   @Consumes(MediaType.TEXT_PLAIN)
@@ -657,7 +678,6 @@ public class ReviewResource
    * @param mapId ID of the map for which items are being marked as reviewed
    * @return the number of items marked as reviewed
    * @throws Exception
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflated_Data_Review_Service_2#Mark-Items-as-Reviewed
    */
   @PUT
   @Consumes(MediaType.APPLICATION_JSON)
@@ -922,28 +942,26 @@ public class ReviewResource
     return nextReviewableResponse;
   
   }
- /* 
+  
   @GET
-  @Path("/availability")
+  @Path("/lockcount")
   @Consumes(MediaType.TEXT_PLAIN)
   @Produces(MediaType.APPLICATION_JSON)
-  public JSONObject getReviewAvailability(
+  public JSONObject getReviewLockCount(
     @QueryParam("mapId")
-    String mapId,
-    @QueryParam("reviewItemId")
-    String reviewItemId
+    String mapId
   )
     throws Exception
   {
 
     Connection conn = DbUtils.createConnection();
-    final String errorMessageStart = "getting review item availability";
+    final String errorMessageStart = "getting review lock count";
     JSONObject ret = new JSONObject();
-
+    long lockcnt = 0;
     try
     {    	
     	ReviewItemsMarker marker = new ReviewItemsMarker(conn, mapId);
-    	ret = marker.getReviewAvailability(reviewItemId);
+    	lockcnt = marker.getLockedReviewCnt();
     }
     catch (Exception e)
     {
@@ -962,9 +980,9 @@ public class ReviewResource
       }
     }
     
-   
+    ret.put("count", lockcnt);
     return ret;
   
-  }*/
+  }
 
 }

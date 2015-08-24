@@ -44,7 +44,6 @@ import javax.xml.xpath.XPathExpressionException;
 import org.junit.Assert;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
-
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.postgresql.util.PGobject;
@@ -69,7 +68,6 @@ import hoot.services.db2.QCurrentRelations;
 import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.db2.QCurrentWays;
 import hoot.services.geo.BoundingBox;
-import hoot.services.geo.GeoUtils;
 import hoot.services.geo.QuadTileCalculator;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.Node;
@@ -286,18 +284,16 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
         CurrentNodes nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision(updatedBounds.getMinLat()) *
-            GeoUtils.GEO_RECORD_SCALE)),
+          new Double((double)updatedBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision(updatedBounds.getMinLon()) *
-            GeoUtils.GEO_RECORD_SCALE)),
+          new Double((double)updatedBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
-            DbUtils.fromDbCoordValue(nodeRecord.getLatitude()),
-            DbUtils.fromDbCoordValue(nodeRecord.getLongitude()))),
+            nodeRecord.getLatitude(),
+            nodeRecord.getLongitude())),
           nodeRecord.getTile());
         Assert.assertTrue(nodeRecord.getTimestamp().before(now));
         Assert.assertEquals(new Long(2), nodeRecord.getVersion());
@@ -311,18 +307,16 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
         nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision(updatedBounds.getMinLat()) *
-            GeoUtils.GEO_RECORD_SCALE)),
+          new Double((double)updatedBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision(originalBounds.getMaxLon()) *
-            GeoUtils.GEO_RECORD_SCALE)),
+          new Double((double)originalBounds.getMaxLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
-            DbUtils.fromDbCoordValue(nodeRecord.getLatitude()),
-            DbUtils.fromDbCoordValue(nodeRecord.getLongitude()))),
+            nodeRecord.getLatitude(),
+            nodeRecord.getLongitude())),
           nodeRecord.getTile());
         Assert.assertTrue(nodeRecord.getTimestamp().before(now));
         Assert.assertEquals(new Long(2), nodeRecord.getVersion());
@@ -1137,19 +1131,17 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
         CurrentNodes nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision(updatedBounds.getMinLat()) *
-            GeoUtils.GEO_RECORD_SCALE)),
+          new Double((double)updatedBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision(updatedBounds.getMinLon()) *
-            GeoUtils.GEO_RECORD_SCALE)),
+          new Double((double)updatedBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
 
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
-            DbUtils.fromDbCoordValue(nodeRecord.getLatitude()),
-            DbUtils.fromDbCoordValue(nodeRecord.getLongitude()))),
+            nodeRecord.getLatitude(),
+            nodeRecord.getLongitude())),
           nodeRecord.getTile());
         Assert.assertTrue(nodeRecord.getTimestamp().before(now));
         Assert.assertEquals(new Long(2), nodeRecord.getVersion());
@@ -1161,18 +1153,16 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
         nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision(updatedBounds.getMinLat()) *
-            GeoUtils.GEO_RECORD_SCALE)),
+          new Double((double)updatedBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision(originalBounds.getMaxLon()) *
-            GeoUtils.GEO_RECORD_SCALE)),
+          new Double((double)originalBounds.getMaxLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
-            DbUtils.fromDbCoordValue(nodeRecord.getLatitude()),
-            DbUtils.fromDbCoordValue(nodeRecord.getLongitude()))),
+            nodeRecord.getLatitude(),
+            nodeRecord.getLongitude())),
           nodeRecord.getTile());
         Assert.assertTrue(nodeRecord.getTimestamp().before(now));
         Assert.assertEquals(new Long(2), nodeRecord.getVersion());
@@ -1184,18 +1174,16 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
         nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[2]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision(originalBounds.getMinLat()) *
-            GeoUtils.GEO_RECORD_SCALE)),
+          new Double((double)originalBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision(originalBounds.getMinLon()) *
-            GeoUtils.GEO_RECORD_SCALE)),
+          new Double((double)originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
-            DbUtils.fromDbCoordValue(nodeRecord.getLatitude()),
-            DbUtils.fromDbCoordValue(nodeRecord.getLongitude()))),
+            nodeRecord.getLatitude(),
+            nodeRecord.getLongitude())),
           nodeRecord.getTile());
         Assert.assertTrue(nodeRecord.getTimestamp().before(now));
         Assert.assertEquals(new Long(1), nodeRecord.getVersion());
@@ -2152,19 +2140,17 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
         CurrentNodes nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision(updateBounds.getMinLat()) *
-            GeoUtils.GEO_RECORD_SCALE)),
+          new Double((double)updateBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision(originalBounds.getMaxLon()) *
-            GeoUtils.GEO_RECORD_SCALE)),
+          new Double((double)originalBounds.getMaxLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(new Long(negativeNodeId), nodeRecord.getId());
 
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
-            DbUtils.fromDbCoordValue(nodeRecord.getLatitude()),
-            DbUtils.fromDbCoordValue(nodeRecord.getLongitude()))),
+            nodeRecord.getLatitude(),
+            nodeRecord.getLongitude())),
           nodeRecord.getTile());
         Assert.assertTrue(nodeRecord.getTimestamp().before(now));
         Assert.assertEquals(new Long(2), nodeRecord.getVersion());
@@ -2178,18 +2164,16 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
         nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision(updateBounds.getMinLat()) *
-            GeoUtils.GEO_RECORD_SCALE)),
+          new Double((double)updateBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision(updateBounds.getMinLon()) *
-            GeoUtils.GEO_RECORD_SCALE)),
+          new Double((double)updateBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
-            DbUtils.fromDbCoordValue(nodeRecord.getLatitude()),
-            DbUtils.fromDbCoordValue(nodeRecord.getLongitude()))),
+            nodeRecord.getLatitude(),
+            nodeRecord.getLongitude())),
           nodeRecord.getTile());
         Assert.assertTrue(nodeRecord.getTimestamp().before(now));
         Assert.assertEquals(new Long(2), nodeRecord.getVersion());

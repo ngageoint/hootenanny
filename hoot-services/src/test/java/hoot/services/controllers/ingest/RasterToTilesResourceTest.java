@@ -46,8 +46,8 @@ public class RasterToTilesResourceTest {
 
 		RasterToTilesService  rts = new RasterToTilesService();
 
-		org.junit.Assert.assertNotNull(rts._tileServerPath);
-		org.junit.Assert.assertTrue(rts._tileServerPath.length() > 0);
+		org.junit.Assert.assertNotNull(RasterToTilesService._tileServerPath);
+		org.junit.Assert.assertTrue(RasterToTilesService._tileServerPath.length() > 0);
 
 		JSONObject oExpected = new JSONObject();
 		oExpected.put("caller", "RasterToTilesService");
@@ -55,7 +55,7 @@ public class RasterToTilesResourceTest {
 
 		JSONArray params = new JSONArray();
 		JSONObject param = new JSONObject();
-		param.put("RASTER_OUTPUT_DIR", rts._tileServerPath);
+		param.put("RASTER_OUTPUT_DIR", RasterToTilesService._tileServerPath);
 		params.add(param);
 
 		param = new JSONObject();
