@@ -871,7 +871,6 @@ public class ReviewTestUtils
       Assert.assertTrue(changeset.getCreatedAt().before(now));
       Assert.assertTrue(changeset.getClosedAt().before(now));
       Assert.assertTrue(changeset.getClosedAt().after(changeset.getCreatedAt()));
-
     }
 
     //verify tags on all reviewed data
@@ -887,7 +886,7 @@ public class ReviewTestUtils
       ElementFactory.getInstance().create(mapId, ElementType.Node, nodeIds.get((long)-64), conn);
     Assert.assertFalse(element.hasTagsStartingWithText("hoot:review"));
     Assert.assertEquals(
-      "{25e1aa70-a30f-11e3-a5e2-0800200c9a66};{5c131c00-a30f-11e3-a5e2-0800200c9a66}",
+      "{25e1aa70-a30f-11e3-a5e2-0800200c9a66}",
       element.getTags().get("uuid"));
     element =
       ElementFactory.getInstance().create(
@@ -925,7 +924,7 @@ public class ReviewTestUtils
        ElementFactory.getInstance().create(mapId, ElementType.Node, nodeIds.get((long)-71), conn);
      Assert.assertFalse(element.hasTagsStartingWithText("hoot:review"));
      Assert.assertEquals(
-       "{99b917d0-8c23-4469-b028-b749a38a8841};{25e1aa70-a30f-11e3-a5e2-0800200c9a66}",
+       "{99b917d0-8c23-4469-b028-b749a38a8841}",
        element.getTags().get("uuid"));
     }
 
@@ -941,7 +940,7 @@ public class ReviewTestUtils
       ElementFactory.getInstance().create(mapId, ElementType.Way, wayIds.get((long)-43), conn);
     Assert.assertTrue(element.hasTagsStartingWithText("hoot:review"));
     Assert.assertEquals(
-      "{46d98769-dee2-489e-8fd6-ff265842ed55};{28fe6088-cb30-45a2-88dd-1146092dcd0e};{f5639540-aaf4-47ac-8c5e-82ad05abc29f}",
+      "{46d98769-dee2-489e-8fd6-ff265842ed55};{28fe6088-cb30-45a2-88dd-1146092dcd0e}",
       element.getTags().get("uuid"));
     element =
       ElementFactory.getInstance().create(mapId, ElementType.Way, wayIds.get((long)-20), conn);
@@ -986,7 +985,7 @@ public class ReviewTestUtils
          ElementFactory.getInstance().create(mapId, ElementType.Way, wayIds.get((long)-42), conn);
        Assert.assertTrue(element.hasTagsStartingWithText("hoot:review"));
        Assert.assertEquals(
-         "{46d98769-dee2-489e-8fd6-ff265842ed55};{f917b7e1-412b-4294-acdc-37bd0fb13b4c};{2258bbcc-b474-41fe-aa81-76ffc6e2be42}",
+         "{46d98769-dee2-489e-8fd6-ff265842ed55};{f917b7e1-412b-4294-acdc-37bd0fb13b4c}",
          element.getTags().get("uuid"));
        element =
          ElementFactory.getInstance().create(mapId, ElementType.Way, wayIds.get((long)-18), conn);

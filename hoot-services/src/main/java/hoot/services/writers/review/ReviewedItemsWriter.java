@@ -171,7 +171,6 @@ public class ReviewedItemsWriter
       		predicatelist.add(predicates);
       	}
 
-
         DbUtils.batchRecords(mapId, reviewRecordsToUpdate, reviewItems, predicatelist, RecordBatchType.UPDATE, conn, maxRecordBatchSize);
         log.debug(reviewRecordsToUpdate.size() + " review records updated.");
       }
@@ -245,7 +244,6 @@ public class ReviewedItemsWriter
 
           	//DbUtils.batchRecords(elems, t, predicatelist, RecordBatchType.UPDATE, conn, maxRecordBatchSize);
 
-
             numOsmRecordsUpdated += osmRecordsToUpdate.get(elementType).size();
           	/*
             DbUtils.batchRecords(
@@ -307,8 +305,8 @@ public class ReviewedItemsWriter
         PostgresUtils.postgresObjToHStore(
           (PGobject)MethodUtils.invokeMethod(reviewedElementRecord, "getTags", new Object[]{}));
 
-
-      if (tags.containsKey("uuid"))
+      //let the osm changeset handle this
+      /*if (tags.containsKey("uuid"))
       {
         String uuid = tags.get("uuid");
         if (!isDuplicate && !uuid.contains(reviewedAgainstItemUniqueId))
@@ -324,7 +322,7 @@ public class ReviewedItemsWriter
         log.warn(
           "uuid tag removed from reviewed element with ID: " + reviewedItemOsmId +
           " and type: " + reviewedItemOsmType);
-      }
+      }*/
 
       if (tags.containsKey("uuid"))
       {
