@@ -18,6 +18,11 @@ use Data::Dumper;
 sub createOsmDom($$);
 sub validateOsmXmlNodes($$);
 sub validateCurrentNodes($$);
+sub validateNodes($$);
+sub validateOsmXmlWays($$);
+sub validateCurrentWays($$);
+sub validateWays($$);
+
 sub convertNanodegreesStringToDegrees($);
 
 # Globals for data
@@ -44,7 +49,9 @@ sub createOsmDom($$)
   my $xs = shift(@_);
   my $xmlString = shift(@_);
 
-  my $domRef = $xs->XMLin($xmlString, KeyAttr => { node=> 'id' }, ForceArray => [ 'node', 'tag' ] );
+  my $domRef = $xs->XMLin($xmlString, 
+    KeyAttr => { node => 'id', way => 'id' }, 
+    ForceArray => [ 'node', 'tag', 'way' ] );
 
   return $domRef;
 }
@@ -238,7 +245,7 @@ sub validateCurrentNodes($$)
     # Version -- as this is a new ingest, must be v1 in database
     if ( $currentNodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'version'} != 1 )
     {
-      print ("XML node $currXmlNodeId with database node ID " .
+      print("XML node $currXmlNodeId with database node ID " .
           $nodeIdMappingsXmlToDb{$currXmlNodeId} . " is not version 1 which it should be after " .
           "being newly-inserted into a fresh database\n" );
       exit;
@@ -459,7 +466,7 @@ sub validateNodes($$)
     # Version -- as this is a new ingest, must be v1 in database
     if ( $nodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'version'} != 1 )
     {
-      print ("XML node $currXmlNodeId with database node ID " .
+      print("XML node $currXmlNodeId with database node ID " .
           $nodeIdMappingsXmlToDb{$currXmlNodeId} . " is not version 1 which it should be after " .
           "being newly-inserted into a fresh database\n" );
       exit;
@@ -498,7 +505,95 @@ sub validateNodes($$)
 
   # If we made it this far, nodes and node_tags are 100% correct to XML
   print("\t\tDeep inspection of data integrity: PASS\n");
+}
 
+sub validateOsmXmlWays($$)
+{
+  my $osmXmlWaysRef = shift(@_);
+  my $dumpLinesRef = shift(@_);
+
+  print("\nValidating data: ways\n");
+
+  validateCurrentWays($osmXmlWaysRef, $dumpLinesRef);
+  validateWays($osmXmlWaysRef, $dumpLinesRef);
+}
+
+sub validateCurrentWays($$)
+{
+  my $osmXmlWaysRef = shift(@_);
+  my $dumpLinesRef = shift(@_);
+
+  my @dumpLines = @{$dumpLinesRef};
+
+  my %currentWaysData;
+
+  my $currLine;
+
+  # Checking table: current_ways
+  print( "\tcurrent_ways, current_way_tags, current_way_nodes:\n");
+  my $foundStart = 0;
+  foreach $currLine (@dumpLines)
+  {
+    chomp($currLine);
+
+    # Find out where current_ways starts
+    if ( $foundStart == 0 )
+    {
+      if ($currLine =~ /^COPY current_ways \(.+\) FROM stdin;/ )
+      {
+        $foundStart = 1;
+      }
+
+      # Either way, can't do any more processing
+      next;
+    }
+
+    # Are we at end of data?
+    if ( $currLine =~ /^\\./ )
+    {
+      last;
+    }
+
+    #print( "Current_ways entry: $currLine\n" );
+
+    # Have a valid way
+    my %currentWaysEntry;
+
+    # Break into tokens based on tab delimiter
+    # Schema: id, changeset_id, "timestamp", visible, version
+    my @tokens = split( /\s+/, $currLine);
+
+    #print( "Found way, ID = $tokens[0]\n");
+
+    $currentWaysEntry{'version'} = $tokens[5];
+
+    # Store the entry in hash of current_ways_
+    $currentWaysData{$tokens[0]} = \%currentWaysEntry;
+  }
+
+  #print( 'Found ' . scalar(keys(%currentWaysData)) . " entries in current_ways\n" );
+
+  # First sanity check: make sure # of OSM ways exactly matches # of OSM API DB ways
+  #print( "Number of OSM ways: " . scalar(keys(%$osmXmlWaysRef)) . "\n" );
+  if ( scalar(keys(%$osmXmlWaysRef)) != scalar(keys(%currentWaysData)) )
+  {
+    print('ERROR: OSM XML ways: ' . scalar(keys(%$osmXmlWaysRef)) .
+      ' != OSM API DB ways: ' . scalar(keys(%currentWaysData)) . "\n\n" );
+
+    exit;
+  }
+
+  print( "\t\tMatching number of ways: PASS (" .
+    scalar(keys(%currentWaysData)) . ")\n" );
+
+
+  # Read current_way_tags
+
+}
+
+sub validateWays($$)
+{
+  ;
 }
 
 
@@ -531,4 +626,5 @@ my $xs = XML::Simple->new();
 
 my $domRef = createOsmDom($xs, $concatOsmXml);
 validateOsmXmlNodes($domRef->{node}, \@dumpLines );
+validateOsmXmlWays($domRef->{way}, \@dumpLines );
 
