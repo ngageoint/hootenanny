@@ -891,7 +891,6 @@ public class ReviewTestUtils
     element =
       ElementFactory.getInstance().create(
         mapId, ElementType.Node, nodeIds.get((long)-65), conn);
-    Assert.assertFalse(element.hasTagsStartingWithText("hoot:review"));
     Assert.assertEquals(
       "{5c131c00-a30f-11e3-a5e2-0800200c9a66}", element.getTags().get("uuid"));
 

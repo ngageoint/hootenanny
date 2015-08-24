@@ -146,12 +146,14 @@ public class ReviewedItemsWriter
             Element.elementTypeFromString(reviewedItem.getType().toLowerCase()),
             reviewedAgainstItemUniqueId,
             false);
+          //TODO: what does "duplicted review pairs" mean?  Disabling this for now, until I figure
+          //it out 
           //this second call will handle any duplicated review pairs
-          addUpdatedOsmRecord(
+          /*addUpdatedOsmRecord(
             reviewedItem.getReviewedAgainstId(),
             Element.elementTypeFromString(reviewedItem.getReviewedAgainstType().toLowerCase()),
             reviewedItemUniqueId,
-            true);
+            true);*/
         }
         catch (Exception e)
         {
@@ -190,54 +192,19 @@ public class ReviewedItemsWriter
           	//List<List<BooleanExpression>> predicatelist = new ArrayList<List<BooleanExpression>>();
           	//com.mysema.query.sql.RelationalPathBase<?> t = null;
           	List<?> elems = osmRecordsToUpdate.get(elementType);
+          	//TODO: make this generic again as before the jooq --> querydsl conversion
           	if(elementType == ElementType.Node)
           	{
-          		/*QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-          		t = currentNodes;
-
-          		for(int i=0; i<elems.size(); i++)
-          		{
-          			List<BooleanExpression> predicates = new ArrayList<BooleanExpression>();
-          			CurrentNodes node = (CurrentNodes)elems.get(i);
-
-          			predicates.add(currentNodes.id.eq(node.getId()));
-          			predicates.add(currentNodes.mapId.eq(node.getMapId()));
-          			predicatelist.add(predicates);
-          		}    */
           		DbUtils.batchRecordsDirectNodes(mapId, elems,
           				RecordBatchType.UPDATE, conn, maxRecordBatchSize);
           	}
           	else if(elementType == ElementType.Way)
           	{
-          		/*QCurrentWays currentWays = QCurrentWays.currentWays;
-          		t = currentWays;
-
-          		for(int i=0; i<elems.size(); i++)
-          		{
-          			List<BooleanExpression> predicates = new ArrayList<BooleanExpression>();
-          			CurrentWays way = (CurrentWays)elems.get(i);
-
-          			predicates.add(currentWays.id.eq(way.getId()));
-          			predicates.add(currentWays.mapId.eq(way.getMapId()));
-          			predicatelist.add(predicates);
-          		}  */
           		DbUtils.batchRecordsDirectWays(mapId, elems,
           				RecordBatchType.UPDATE, conn, maxRecordBatchSize);
           	}
           	else if(elementType == ElementType.Relation)
           	{
-          		/*QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
-          		t = currentRelations;
-
-          		for(int i=0; i<elems.size(); i++)
-          		{
-          			List<BooleanExpression> predicates = new ArrayList<BooleanExpression>();
-          			CurrentRelations rel = (CurrentRelations)elems.get(i);
-
-          			predicates.add(currentRelations.id.eq(rel.getId()));
-          			predicates.add(currentRelations.mapId.eq(rel.getMapId()));
-          			predicatelist.add(predicates);
-          		}    */
           		DbUtils.batchRecordsDirectRelations(mapId, elems,
           				RecordBatchType.UPDATE, conn, maxRecordBatchSize);
           	}
