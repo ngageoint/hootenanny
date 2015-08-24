@@ -276,7 +276,11 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)
   //LOG_DEBUG("Inside writePartial for Node");
 
   Tags t = n->getTags();
-  _addElementTags(n, t);
+  // Only add tags for servicesDB, not good for OSM API
+  if ( _sdb.getDatabaseType() == ServicesDb::DBTYPE_SERVICES)
+  {
+    _addElementTags(n, t);
+  }
 
   //LOG_DEBUG("Incoming node ID: " << n->getId());
 
@@ -320,7 +324,11 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Way>& w)
   //LOG_DEBUG("Inside writePartial for Way " << QString::number(w->getId()));
 
   Tags tags = w->getTags();
-  _addElementTags(w, tags);
+
+  if ( _sdb.getDatabaseType() == ServicesDb::DBTYPE_SERVICES)
+  {
+    _addElementTags(w, tags);
+  }
 
   if (_remapIds)
   {
@@ -353,7 +361,11 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
   //LOG_DEBUG("Inside writePartial for Relation");
 
   Tags tags = r->getTags();
-  _addElementTags(r, tags);
+  if ( _sdb.getDatabaseType() == ServicesDb::DBTYPE_SERVICES)
+  {
+    _addElementTags(r, tags);
+  }
+
   if (!r->getType().isEmpty())
   {
     tags["type"] = r->getType();

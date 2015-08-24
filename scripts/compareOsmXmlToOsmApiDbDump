@@ -17,6 +17,7 @@ use Data::Dumper;
 
 sub createOsmDom($$);
 sub validateOsmXmlNodes($$);
+sub validateCurrentNodes($$);
 sub convertNanodegreesStringToDegrees($);
 
 # Globals for data
@@ -52,6 +53,17 @@ sub validateOsmXmlNodes($$)
 {
   my $osmXmlNodesRef = shift(@_);
   my $dumpLinesRef = shift(@_);
+
+  print("Validating data: nodes\n");
+
+  validateCurrentNodes($osmXmlNodesRef, $dumpLinesRef);
+}
+
+sub validateCurrentNodes($$)
+{
+  my $osmXmlNodesRef = shift(@_);
+  my $dumpLinesRef = shift(@_);
+
   my @dumpLines = @{$dumpLinesRef};
 
   my %currentNodesData;
@@ -59,7 +71,7 @@ sub validateOsmXmlNodes($$)
   my $currLine;
 
   # Checking table: current_nodes
-  print( "Table: current_nodes\n");
+  print( "\tTable: current_nodes\n");
   my $foundStart = 0;
   foreach $currLine (@dumpLines)
   {
@@ -144,9 +156,9 @@ sub validateOsmXmlNodes($$)
     # Have a valid node
     my %currentNodeTagsEntry;
 
-    # Break into tokens based on whitespace delimiter
+    # Break into tokens based on tab delimiter
     # Schema: node_id, key, value
-    my @tokens = split( /\s+/, $currLine);
+    my @tokens = split( /\t+/, $currLine);
 
     #print( "Found node tag\n");
 
@@ -154,7 +166,7 @@ sub validateOsmXmlNodes($$)
     #print( "\tID: $tokens[0]\n\tKey: $tokens[1]\n\tValue: $tokens[2]\n");
 
     # Store the entry in hash of current_nodes
-    if ( exists($currentNodesData{ $tokens[0 ] }->{'tags'} ) )
+    if ( exists($currentNodesData{ $tokens[0] }->{'tags'} ) )
     {
       $currentNodesData{ $tokens[0] }->{'tags'}->{$tokens[1]} = $tokens[2];
 
@@ -180,7 +192,7 @@ sub validateOsmXmlNodes($$)
     exit;
   }
   
-  print( "\tNumber OSM XML nodes == \"current_node\" entries (" . 
+  print( "\t\tNumber OSM XML nodes == \"current_node\" entries (" . 
     scalar(keys(%currentNodesData)) . ")\n");
 
   # Now let's create mapping for Postgres Node ID -> OSM node ID.  the OSM XML node IDs were added in 
@@ -202,6 +214,7 @@ sub validateOsmXmlNodes($$)
   foreach $currXmlNodeId ( sort( {$a <=> $b} keys(%$osmXmlNodesRef)) )
   {
     my %currXmlNode = %{ $osmXmlNodesRef->{$currXmlNodeId} };
+    my $databaseNodeId = $nodeIdMappingsXmlToDb{$currXmlNodeId};
 
     # Compare lat, lon, version, tags
 
@@ -220,7 +233,26 @@ sub validateOsmXmlNodes($$)
         $currentNodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lon'} . "\n\n" );
       exit;
     }
+
+    # Version -- as this is a new ingest, must be v1 in database
+    if ( $currentNodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'version'} != 1 )
+    {
+      print ("XML node $currXmlNodeId with database node ID " .
+          $nodeIdMappingsXmlToDb{$currXmlNodeId} . " is not version 1 which it should be after " .
+          "being newly-inserted into a fresh database\n" );
+      exit;
+    }
+
+    # Tags
+    if ( exists($currXmlNode{'tag'}) )
+    {
+      print( "XML Tags: " . Dumper($currXmlNode{'tag'}) . "\n");
+      print( "DB tags: " . Dumper($currentNodesData{$databaseNodeId}->{'tags'}) . "\n");
+
+    }
   }
+
+  
   
 }
 
