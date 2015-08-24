@@ -57,6 +57,7 @@ sub validateOsmXmlNodes($$)
   print("Validating data: nodes\n");
 
   validateCurrentNodes($osmXmlNodesRef, $dumpLinesRef);
+  validateNodes($osmXmlNodesRef, $dumpLinesRef);
 }
 
 sub validateCurrentNodes($$)
@@ -100,7 +101,7 @@ sub validateCurrentNodes($$)
     # Have a valid node
     my %currentNodesEntry;
 
-    # Break into tokens based on whitespace delimiter
+    # Break into tokens based on tab delimiter
     # Schema: id, latitude, longitude, changeset_id, visible, "timestamp", tile, version
     my @tokens = split( /\s+/, $currLine);
 
@@ -278,6 +279,229 @@ sub validateCurrentNodes($$)
   print("\t\tDeep inspection of data integrity: PASS\n");
   
 }
+
+sub validateNodes($$)
+{
+  my $osmXmlNodesRef = shift(@_);
+  my $dumpLinesRef = shift(@_);
+
+  my @dumpLines = @{$dumpLinesRef};
+
+  my %nodesData;
+
+  my $currLine;
+
+  # Checking table: nodes
+  print( "\tnodes, node_tags:\n");
+  my $foundStart = 0;
+  foreach $currLine (@dumpLines)
+  {
+    chomp($currLine);
+
+    # Find out where nodes starts
+    if ( $foundStart == 0 )
+    {
+      if ($currLine =~ /^COPY nodes \(.+\) FROM stdin;/ )
+      {
+        $foundStart = 1;
+      }
+
+      # Either way, can't do any more processing
+      next;
+    }
+
+    # Are we at end of data?
+    if ( $currLine =~ /^\\./ )
+    {
+      last;
+    }
+
+    #print( "Current_nodes entry: $currLine\n" );
+
+    # Have a valid node
+    my %nodesEntry;
+
+    # Break into tokens based on tab delimiter
+    # Schema: id, latitude, longitude, changeset_id, visible, "timestamp", tile, version
+    my @tokens = split( /\s+/, $currLine);
+
+    #print( "Found node, ID = $tokens[0]\n");
+
+    $nodesEntry{'lat'} = convertNanodegreesStringToDegrees($tokens[1]);
+    #print( "\tSource string: $tokens[1]\n");
+    #print( "\tConverted latitude: $nodesEntry{'lat'}\n");
+
+    $nodesEntry{'lon'} = convertNanodegreesStringToDegrees($tokens[2]);
+    #print( "\tLongitude: $nodesEntry{'lon'}\n");
+
+    $nodesEntry{'tile_num'} = $tokens[7];
+    $nodesEntry{'version'} = $tokens[8];
+
+    #print( "\tCoords (lat/lon): $nodesEntry{'lat'}, $nodesEntry{'lon'}\n");
+    #print( "\tTile: $nodesEntry{'tile_num'}\n");
+    #print( "\tVersion: $nodesEntry{'version'}\n");
+
+    # Store the entry in hash of nodes
+    $nodesData{$tokens[0]} = \%nodesEntry;
+  }
+
+  #print( 'Found ' . scalar(keys(%nodesData)) . " entries in nodes\n" );
+
+  # Read node_tags
+
+  $foundStart = 0;
+  foreach $currLine (@dumpLines)
+  {
+    chomp($currLine);
+
+    # Find out where table data starts
+    if ( $foundStart == 0 )
+    {
+      if ($currLine =~ /^COPY node_tags \(.+\) FROM stdin;/ )
+      {
+        $foundStart = 1;
+      }
+
+      # Either way, can't do any more processing
+      next;
+    }
+
+    # Are we at end of data?
+    if ( $currLine =~ /^\\./ )
+    {
+      last;
+    }
+
+    #print( "node_tags entry: $currLine\n" );
+
+    # Have a valid node
+    my %nodeTagsEntry;
+
+    # Break into tokens based on tab delimiter
+    # Schema: node_id, version, key, value
+    my @tokens = split( /\t+/, $currLine);
+
+    #print( "Found node tag\n");
+
+    $nodeTagsEntry{$tokens[2]} = $tokens[3];
+    #print( "\tID: $tokens[0]\n\tKey: $tokens[2]\n\tValue: $tokens[3]\n");
+
+    # Store the entry in hash of nodes
+    if ( exists($nodesData{ $tokens[0] }->{'tags'} ) )
+    {
+      $nodesData{ $tokens[0] }->{'tags'}->{$tokens[2]} = $tokens[3];
+
+      #my $key;
+      #foreach $key ( keys( $nodesData{ $tokens[0] }->{'tags'}) )
+      #{
+      # print( "\tFound tags key: $key\n" );
+      #}
+    }
+    else
+    {
+      $nodesData{ $tokens[0] }->{'tags'} = { $tokens[2] => $tokens[3] };
+    }
+  }
+
+  # First sanity check: make sure # of OSM nodes exactly matches # of OSM API DB nodes
+  #print( "Number of OSM nodes: " . scalar(keys(%$osmXmlNodesRef)) . "\n" );
+  if ( scalar(keys(%$osmXmlNodesRef)) != scalar(keys(%nodesData)) )
+  {
+    print('ERROR: OSM XML nodes: ' . scalar(keys(%$osmXmlNodesRef)) .
+      ' != OSM API DB nodes: ' . scalar(keys(%nodesData)) . "\n\n" );
+
+    exit;
+  }
+
+  print( "\t\tMatching number of nodes: PASS (" .
+    scalar(keys(%nodesData)) . ")\n");
+
+  # Now let's create mapping for Postgres Node ID -> OSM node ID.  the OSM XML node IDs were added in 
+  #   ascending node ID order, so if we iterate over OSM API node IDs in ascending, we have a guaranteed
+  #   mapping
+
+  my @sortedDbNodeIds = sort( {$a <=> $b} keys(%nodesData));
+  my $currXmlNodeId;
+  my $i = 0;
+  foreach $currXmlNodeId ( sort( {$a <=> $b} keys(%$osmXmlNodesRef)) )
+  {
+    $nodeIdMappingsXmlToDb{$currXmlNodeId} = $sortedDbNodeIds[$i];
+
+    #print("XML node ID $currXmlNodeId maps to DB node ID $sortedDbNodeIds[$i]\n");
+
+    $i++;
+  }
+
+  # Now that we have mapping, go back and compare each XML node to corresponding entry in nodes
+  foreach $currXmlNodeId ( sort( {$a <=> $b} keys(%$osmXmlNodesRef)) )
+  {
+    my %currXmlNode = %{ $osmXmlNodesRef->{$currXmlNodeId} };
+    my $databaseNodeId = $nodeIdMappingsXmlToDb{$currXmlNodeId};
+
+    # Compare lat, lon, version, tags
+
+    if ( $currXmlNode{'lat'} ne $nodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lat'} )
+    {
+      print( "ERROR: XML node $currXmlNodeId latitude $currXmlNode{'lat'} != " .
+        "DB node $nodeIdMappingsXmlToDb{$currXmlNodeId} lat " .
+        $nodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lat'} . "\n\n" );
+      exit;
+    }
+
+    if ( $currXmlNode{'lon'} ne $nodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lon'} )
+    {
+      print( "ERROR: XML node $currXmlNodeId longitude $currXmlNode{'lon'} != " .
+        "DB node $nodeIdMappingsXmlToDb{$currXmlNodeId} lon " .
+        $nodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lon'} . "\n\n" );
+      exit;
+    }
+
+    # Version -- as this is a new ingest, must be v1 in database
+    if ( $nodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'version'} != 1 )
+    {
+      print ("XML node $currXmlNodeId with database node ID " .
+          $nodeIdMappingsXmlToDb{$currXmlNodeId} . " is not version 1 which it should be after " .
+          "being newly-inserted into a fresh database\n" );
+      exit;
+    }
+
+    # Tags
+    if ( exists($currXmlNode{'tag'}) )
+    {
+      #print( "XML Tags: " . Dumper($currXmlNode{'tag'}) . "\n");
+      #print( "DB tags: " . Dumper($nodesData{$databaseNodeId}->{'tags'}) . "\n");
+
+      my $xmlTagsArrayRef = $currXmlNode{'tag'};
+
+      my $currTag;
+
+      foreach $currTag ( @{$xmlTagsArrayRef} )
+      {
+        my %xmlTagEntry = %{ $currTag };
+        #print( "Key   : $tagEntry{'k'}\n");
+        #print( "Value : $tagEntry{'v'}\n");
+
+        my %dbTagEntry = %{ $nodesData{$databaseNodeId}->{'tags'} };
+        if ( ! exists( $dbTagEntry{ $xmlTagEntry{'k'} } ) )
+        {
+          print("Could not find database version of tag " . Dumper(%xmlTagEntry) . "\n" );
+          exit;
+        }
+        else
+        {
+          #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
+          #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
+        }
+      }
+    }
+  }
+
+  # If we made it this far, nodes and node_tags are 100% correct to XML
+  print("\t\tDeep inspection of data integrity: PASS\n");
+
+}
+
+
 
 
 if ( scalar(@ARGV) != 2 ) 
