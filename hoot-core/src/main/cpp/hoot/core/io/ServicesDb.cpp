@@ -1538,7 +1538,51 @@ QString ServicesDb::_elementTypeToElementTableName(long mapId, const ElementType
   }
 }
 
+/**************************************************************
+ * Purpose: support method for OsmApi selects returns a query
+ *   string
+ **************************************************************/
+QString ServicesDb::_elementTypeToElementTableName_OsmApi(const ElementType& elementType) const
+{
+  if (elementType == ElementType::Node)
+  {
+    return _getNodesTableName_OsmApi();
+  }
+  /* UNDER CONSTRUCTION
+   * else if (elementType == ElementType::Way)
+  {
+    return _getWaysTableName();
+  }
+  else if (elementType == ElementType::Relation)
+  {
+    return _getRelationsTableName();
+  }*/
+  else
+  {
+    throw HootException("Unsupported element type.");
+  }
+}
 //TODO: consolidate these exists queries into a single method
+
+/**************************************************************
+ * Purpose: support method for OsmApi returns the table fields
+ *   needed by the element type.  * doesn't work here since we
+ *   are trying to reduce some of the redundant fields.  Fields
+ *   refer to the columns in the DB.
+ **************************************************************/
+QString ServicesDb::_getElementTableFields_OsmApi(const ElementType& elementType) const
+{
+  if (elementType == ElementType::Node)
+  {
+    return _getNodesTableFields_OsmApi();
+  }
+  // setup the tests for the ways and relations
+  else
+  {
+    throw HootException("Unsupported element type.");
+  }
+}
+
 
 bool ServicesDb::mapExists(const long id)
 {
@@ -1606,19 +1650,14 @@ long ServicesDb::numElements(const ElementType& elementType)
 
 shared_ptr<QSqlQuery> ServicesDb::selectAllElements(const long elementId, const ElementType& elementType)
 {
-  return selectElements(elementId, elementType, -1, 0);
-}
-
-shared_ptr<QSqlQuery> ServicesDb::selectAllElements(const ElementType& elementType)
-{
   switch ( _connectionType )
   {
     case DBTYPE_SERVICES:
-      return selectElements(-1, elementType, -1, 0);
+      return selectElements(elementId, elementType, -1, 0);
       break;
 
     case DBTYPE_OSMAPI:
-      return selectElements_OsmApi(-1, elementType, -1, 0);
+      return selectElements_OsmApi(elementId, elementType, -1, 0);
       break;
 
     default:
@@ -1627,45 +1666,51 @@ shared_ptr<QSqlQuery> ServicesDb::selectAllElements(const ElementType& elementTy
   }
 }
 
+shared_ptr<QSqlQuery> ServicesDb::selectAllElements(const ElementType& elementType)
+{
+  return selectAllElements(-1, elementType);
+}
+
 shared_ptr<QSqlQuery> ServicesDb::selectElements_OsmApi(const long elementId,
   const ElementType& elementType, const long limit, const long offset)
 {
   LOG_DEBUG("Inside selectElement_OsmApi");
 
-  const long mapId = _currMapId;
   _selectElementsForMap.reset(new QSqlQuery(_db));
   _selectElementsForMap->setForwardOnly(true);
+
+  // set the maximum number elements returned
   QString limitStr;
-  if (limit == -1)
-  {
-    limitStr = "ALL";
-  }
-  else
-  {
-    limitStr = QString::number(limit);
-  }
+  if (limit == -1) { limitStr = "ALL"; }
+  else { limitStr = QString::number(limit); }
 
-  QString sql =  "SELECT * FROM current_nodes";  // + _elementTypeToElementTableName(mapId, elementType);
+  // setup base sql query string
+  QString sql =  "SELECT " + _getElementTableFields_OsmApi(elementType) +
+    " FROM " +_elementTypeToElementTableName_OsmApi(elementType);
 
-  if(elementId > -1)
-  {
-    sql += " WHERE id = :elementId ";
-  }
+  // if requesting a specific id then append this string
+  if(elementId > -1) { sql += " WHERE id = :elementId "; }
+
+  // sort them in descending order, set limit and offset
   sql += " ORDER BY id DESC LIMIT " + limitStr + " OFFSET " + QString::number(offset);
-  _selectElementsForMap->prepare(sql);
-  _selectElementsForMap->bindValue(":mapId", (qlonglong)mapId);
-  if(elementId > -1)
-  {
-    _selectElementsForMap->bindValue(":elementId", (qlonglong)elementId);
-  }
 
+  // let's see what that sql query string looks like
+  LOG_DEBUG(QString("The sql query= "+sql));
+
+  _selectElementsForMap->prepare(sql);
+
+  // add the element id value if needed by inserting where the marker was placed
+  if(elementId > -1) { _selectElementsForMap->bindValue(":elementId", (qlonglong)elementId); }
+
+  // execute the query on the DB and get the results back
   if (_selectElementsForMap->exec() == false)
   {
     QString err = _selectElementsForMap->lastError().text();
     LOG_WARN(sql);
     throw HootException("Error selecting elements of type: " + elementType.toString() +
-      " for map ID: " + QString::number(mapId) + " Error: " + err);
+      " Error: " + err);
   }
+
   return _selectElementsForMap;
 }
 
@@ -1686,6 +1731,7 @@ shared_ptr<QSqlQuery> ServicesDb::selectElements(const long elementId,
   }
 
   QString sql =  "SELECT * FROM " + _elementTypeToElementTableName(mapId, elementType);
+  LOG_DEBUG(QString("SERVICES: Result sql query= "+sql));
 
   if(elementId > -1)
   {
@@ -3275,5 +3321,19 @@ bool ServicesDb::_insertRelationMember_OsmApi(const long relationId, const Eleme
   return true;
 }
 
+/************************************************************************
+ * Purpose: to extract tags from the extra lines returned in the
+ *   selectAll for OsmApi data
+ * Input: apidb row in form with row[8]=k, row[9]=v
+ * Output: "k"=>"v"
+ * Note: this gets the tags in a form that is the same as how selectAll
+ *       returns them for Services DB
+ * **********************************************************************
+ */
+QString ServicesDb::extractTagFromRow(shared_ptr<QSqlQuery> row)
+{
+  QString tag = "\""+row->value(8).toString()+"\"=>\""+row->value(9).toString()+"\"";
+  return tag;
+}
 
 }

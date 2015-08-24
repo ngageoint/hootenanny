@@ -75,6 +75,11 @@ public:
    * Delete the user with the specified email from the services database
    */
   static void deleteUser(QString email);
+
+  /**
+   * Find a match in the test key list and return the index
+   */
+  static int findIndex(const QList<QString>& keys, const QString& key);
 };
 
 }

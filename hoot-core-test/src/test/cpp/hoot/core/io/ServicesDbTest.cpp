@@ -40,7 +40,7 @@
 
 // special define:
 //   Greg's workspace set true; Terry's set false
-#define GREGSWORKSPACE false
+#define GREGSWORKSPACE true
 
 namespace hoot
 {
@@ -409,9 +409,14 @@ public:
     int ctr = 0;
     while (nodeResultIterator->next())
     {
+      for(int j=0;j<10;j++) { LOG_DEBUG("VALUE = "+nodeResultIterator->value(j).toString()); }
+
       HOOT_STR_EQUALS(nodeId, nodeResultIterator->value(0).toLongLong());
       HOOT_STR_EQUALS(38.0, nodeResultIterator->value(1).toDouble());
       HOOT_STR_EQUALS(-104.0, nodeResultIterator->value(2).toDouble());
+      stringstream s;
+      s << ServicesDb::unescapeTags(nodeResultIterator->value(8));
+      LOG_DEBUG("unescapeTag :"+s.str());
       HOOT_STR_EQUALS("foo = bar\n", ServicesDb::unescapeTags(nodeResultIterator->value(8)));
 
       ctr++;
@@ -470,8 +475,8 @@ public:
 
     // list of insertions
     QList<long> ids;
-    QList<QString> keys = QList<QString>() << "highway" << "foo";
-    QList<QString> values = QList<QString>() << "road" << "bar";
+    QList<QString> keys = QList<QString>() << "highway" << "accuracy" << "foo";
+    QList<QString> values = QList<QString>() << "road" << "5" << "bar";
     QList<float> lats = QList<float>() << 38.4 << 38;
     QList<float> lons = QList<float>() << -106.5 << -104;
 
@@ -479,7 +484,12 @@ public:
     for(int i=0;i<2;i++)
     {
       Tags t;
-      t[keys[i].toStdString().c_str()] = values[i].toStdString().c_str();
+      if(i==0) {
+        t[keys[0].toStdString().c_str()] = values[0].toStdString().c_str();
+        t[keys[1].toStdString().c_str()] = values[1].toStdString().c_str();
+      } else {
+        t[keys[2].toStdString().c_str()] = values[2].toStdString().c_str();
+      }
       long nodeId;
       database.insertNode(lats[i], lons[i], t, nodeId);
       ids.append(nodeId);
@@ -490,25 +500,69 @@ public:
 
     /////////////////////////////////////
     // SELECT THE NODES USING SELECT_ALL
+    // Need to get the data in the format exactly like the return of the Services Db now so we don't need to
+    // change the front-end reader code
+    //
+    // Current format returned from apidb is in multiple rows with a new row for each tag.  Not great, but opened
+    // a ticket for that to be optimized later when we can figure it out.
+    // THe format:
+    // row 1: id, latitude, longitude, changeset_id, visible, timestamp, tile, version, k{1}, v{1}
+    // row 2: "     "         "              "          "         "        "      "     k{2}, v{2}
+    // etc.
+    //
+    // Goal with these processing steps is to get this in the proper return format of the Services DB selectElements
+    // The proper format:
+    // id, latitude, longitude, changeset_id, visible, timestamp, tile, version, "k{1}"=>"v{1}", "k{2}"=>"v{2}", etc.
+    //
+    // Note: Again, ideally this gets done in the DB, faster there and less data to pass overhead.
+    // Note2: I think this is important to do this processing here, so the front-end code that calls upon selectAll
+    //   doesn't have to change, so it works for both ServicesDb and ApiDb without change.
     /////////////////////////////////////
 
     shared_ptr<QSqlQuery> nodeResultIterator = database.selectAllElements(ElementType::Node);
-    int ctr = 0;
-    for(int i=ids.size()-1; i>=0; i--)
+
+    LOG_DEBUG("num rows affected="+QString::number(nodeResultIterator->numRowsAffected()));
+
+    // check if db active or not
+    assert(nodeResultIterator.isActive());
+
+    const int numFields = 10;
+    long long lastId = LLONG_MIN;
+
+    // read through the elements until the number inserted for this test is reached
+    // - the number inserted is determined by ids.size()
+    int elementCtr = ids.size()-1;
+    int tagIndx = -1;
+    while( nodeResultIterator->next() )
     {
-      nodeResultIterator->next();
+      long long id = nodeResultIterator->value(0).toLongLong();
+      if( lastId != id )
+      {
+        if(elementCtr < 0) break;
+
+        // perform the comparison tests
+        LOG_DEBUG(QString("Processing element ")+QString::number(elementCtr+1));
+        // test the first line's data which is the current_nodes (main data): id, lat, lon, tag1
+        HOOT_STR_EQUALS(ids[elementCtr], id);
+        HOOT_STR_EQUALS(lats[elementCtr], nodeResultIterator->value(1).toLongLong() /
+          (double)ServicesDb::COORDINATE_SCALE);
+        HOOT_STR_EQUALS(lons[elementCtr], nodeResultIterator->value(2).toLongLong() /
+          (double)ServicesDb::COORDINATE_SCALE);
+        lastId = id;
+        elementCtr--;
+      }
 
       // verify the values written to the DB upon their read-back
-      for(int j=0;j<8;j++) { LOG_DEBUG("VALUE = "+nodeResultIterator->value(j).toString()); }
-      HOOT_STR_EQUALS(ids[i], nodeResultIterator->value(0).toLongLong());
-      HOOT_STR_EQUALS(lats[i], nodeResultIterator->value(1).toLongLong() /
-        (double)ServicesDb::COORDINATE_SCALE);
-      HOOT_STR_EQUALS(lons[i], nodeResultIterator->value(2).toLongLong() /
-        (double)ServicesDb::COORDINATE_SCALE);
-      //HOOT_STR_EQUALS(QString(keys[i]+" = "+values[i]+"\n").toStdString().c_str(),
-      //  ServicesDb::unescapeTags(nodeResultIterator->value(8)));
-      LOG_DEBUG(QString("Passed iteration ")+QString::number(i));
+      for(int j=0;j<numFields;j++) { LOG_DEBUG("VALUE = "+nodeResultIterator->value(j).toString()); }
+
+      // read the tag for as many rows as there are tags
+      QString key = nodeResultIterator->value(8).toString();
+      LOG_DEBUG(QString("Processing tag ")+key);
+      tagIndx = ServicesDbTestUtils::findIndex(keys, key);
+      HOOT_STR_EQUALS(QString(keys[tagIndx]+" = "+values[tagIndx]+"\n").toStdString().c_str(),
+        ServicesDb::unescapeTags(database.extractTagFromRow(nodeResultIterator)));
     }
+
 /*
     shared_ptr<QSqlQuery> wayResultIterator = database.selectAllElements(ElementType::Way);
     ctr = 0;

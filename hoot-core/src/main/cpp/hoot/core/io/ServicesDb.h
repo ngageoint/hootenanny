@@ -324,6 +324,8 @@ public:
 
   void incrementChangesetChangeCount();
 
+  QString extractTagFromRow(shared_ptr<QSqlQuery> row);
+
 private:
 
   static const int _maximumChangeSetEdits = 50000;    ///< Maximum edits per one OSM changeset
@@ -431,6 +433,8 @@ private:
 
   QString _elementTypeToElementTableName(long mapId, const ElementType& elementType) const;
 
+  QString _elementTypeToElementTableName_OsmApi(const ElementType& elementType) const;
+
   friend class ServicesDbTest;
   friend class ServicesDbTestUtils;
   friend class ServicesDbReaderTest;
@@ -458,6 +462,8 @@ private:
 
   void _flushBulkInserts();
 
+  // Services DB table strings
+
   static QString _getNodeSequenceName(long mapId)
   { return "current_nodes" + _getMapIdString(mapId) + "_id_seq"; }
   static QString _getRelationSequenceName(long mapId)
@@ -477,6 +483,18 @@ private:
   { return "current_way_nodes" + _getMapIdString(mapId); }
   static QString _getWaysTableName(long mapId)
   { return "current_ways" + _getMapIdString(mapId); }
+
+  // Osm Api DB table strings
+
+  static QString _getNodesTableName_OsmApi()
+  { return "current_nodes join current_node_tags on current_nodes.id=current_node_tags.node_id"; }
+
+
+  // Osm Api DB table field strings
+  QString _getElementTableFields_OsmApi(const ElementType& elementType) const;
+
+  static QString _getNodesTableFields_OsmApi()
+  { return "id, latitude, longitude, changeset_id, visible, timestamp, tile, version, k, v"; }
 
   /**
    * Returns a map ID string suitable for using in table names. E.g. _1
