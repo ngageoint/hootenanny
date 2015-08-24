@@ -29,6 +29,7 @@ sub convertNanodegreesStringToDegrees($);
 my %nodesOsm;
 my %nodesPgsql;
 my %nodeIdMappingsXmlToDb;
+my %wayIdMappingsXmlToDb;
 
 sub convertNanodegreesStringToDegrees($)
 {
@@ -586,8 +587,80 @@ sub validateCurrentWays($$)
   print( "\t\tMatching number of ways: PASS (" .
     scalar(keys(%currentWaysData)) . ")\n" );
 
-
   # Read current_way_tags
+
+  $foundStart = 0;
+  foreach $currLine (@dumpLines)
+  {
+    chomp($currLine);
+
+    # Find out where table data starts
+    if ( $foundStart == 0 )
+    {
+      if ($currLine =~ /^COPY current_way_tags \(.+\) FROM stdin;/ )
+      {
+        $foundStart = 1;
+      }
+
+      # Either way, can't do any more processing
+      next;
+    }
+
+    # Are we at end of data?
+    if ( $currLine =~ /^\\./ )
+    {
+      last;
+    }
+
+    #print( "Current_way_tags entry: $currLine\n" );
+
+    # Have a valid way
+    my %currentWayTagsEntry;
+
+    # Break into tokens based on tab delimiter
+    # Schema: way_id, key, value
+    my @tokens = split( /\t+/, $currLine);
+
+    #print( "Found way tag\n");
+
+    $currentWayTagsEntry{$tokens[1]} = $tokens[2];
+    #print( "\tID: $tokens[0]\n\tKey: $tokens[1]\n\tValue: $tokens[2]\n");
+
+    # Store the entry in hash of current_ways
+    if ( exists($currentWaysData{ $tokens[0] }->{'tags'} ) )
+    {
+      $currentWaysData{ $tokens[0] }->{'tags'}->{$tokens[1]} = $tokens[2];
+
+      #my $key;
+      #foreach $key ( keys( $currentNodesData{ $tokens[0] }->{'tags'}) )
+      #{
+      # print( "\tFound tags key: $key\n" );
+      #}
+    }
+    else
+    {
+      $currentWaysData{ $tokens[0] }->{'tags'} = { $tokens[1] => $tokens[2] };
+    }
+  }
+
+  # Now let's create mapping for Postgres way ID -> OSM way ID.  the OSM XML way IDs were added in 
+  #   ascending way ID order, so if we iterate over OSM API way IDs in ascending, we have a guaranteed
+  #   mapping
+
+  my @sortedDbWayIds = sort( {$a <=> $b} keys(%currentWaysData));
+  my $currXmlWayId;
+  my $i = 0;
+  foreach $currXmlWayId ( sort( {$a <=> $b} keys(%$osmXmlWaysRef)) )
+  {
+    $wayIdMappingsXmlToDb{$currXmlWayId} = $sortedDbWayIds[$i];
+
+    print("XML way ID $currXmlWayId maps to DB way ID $sortedDbWayIds[$i]\n");
+
+    $i++;
+  }
+
+
+  
 
 }
 
