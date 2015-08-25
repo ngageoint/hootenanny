@@ -240,6 +240,7 @@ public:
       LOG_WARN("This platform does not support 128bit float so the Haversine calculation on "
                "this platform is only good to about 9cm.");
     }
+
     {
       OGREnvelope env;
       env.MinX = 30.0;
@@ -276,7 +277,7 @@ public:
       shared_ptr<OGRSpatialReference> srs = MapReprojector::getInstance().
         createPlanarProjection(env);
       CPPUNIT_ASSERT_EQUAL(true,
-        (bool)MapReprojector::toWkt(srs).contains("Transverse_Mercator"));
+        (bool)MapReprojector::toWkt(srs).contains("Polyconic"));
     }
 
     {
@@ -290,6 +291,21 @@ public:
         createPlanarProjection(env);
       CPPUNIT_ASSERT_EQUAL(true,
         (bool)MapReprojector::toWkt(srs).contains("Orthographic"));
+    }
+
+    // This relates to an error we're seeing in #6898. I was trying to get a cleaner projection.
+    {
+      DisableLog dl(Log::Error);
+      OGREnvelope env;
+      env.MinX = -74;
+      env.MinY = -35;
+      env.MaxX = -30;
+      env.MaxY = 6;
+
+      shared_ptr<OGRSpatialReference> srs = MapReprojector::getInstance().
+        createPlanarProjection(env, toRadians(45), 10.0);
+      CPPUNIT_ASSERT_EQUAL(true,
+        (bool)MapReprojector::toWkt(srs).contains("Lambert_Azimuthal_Equal_Area"));
     }
   }
 

@@ -148,6 +148,8 @@ vector< shared_ptr<OGRSpatialReference> > MapReprojector::createAllPlanarProject
 
   double centerLat = (env.MaxY + env.MinY) / 2.0;
   double centerLon = (env.MaxX + env.MinX) / 2.0;
+  double stdP1 = env.MinY + (env.MaxY - env.MinY) * .25;
+  double stdP2 = env.MinY + (env.MaxY - env.MinY) * .75;
 
   try { result.push_back(createOrthographic(env)); } catch (HootException& e) { }
   try { result.push_back(createAeacProjection(env)); } catch (HootException& e) { }
@@ -207,6 +209,34 @@ vector< shared_ptr<OGRSpatialReference> > MapReprojector::createAllPlanarProject
   if (customTm->SetTM(centerLat, centerLon, 1.0, 0.0, 0.0) == OGRERR_NONE)
   {
     result.push_back(customTm);
+  }
+
+  // Polyconic
+  shared_ptr<OGRSpatialReference> customPolyconic(new OGRSpatialReference());
+  if (customPolyconic->SetPolyconic(centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
+  {
+    result.push_back(customPolyconic);
+  }
+
+  // Two Point Equidistant
+  shared_ptr<OGRSpatialReference> customTped(new OGRSpatialReference());
+  if (customTped->SetTPED(stdP1, centerLon, stdP2, centerLon, 0.0, 0.0) == OGRERR_NONE)
+  {
+    result.push_back(customTped);
+  }
+
+  // Equidistant Conic
+  shared_ptr<OGRSpatialReference> customEc(new OGRSpatialReference());
+  if (customEc->SetEC(stdP1, stdP2, centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
+  {
+    result.push_back(customEc);
+  }
+
+  // Azimuthal Equidistant
+  shared_ptr<OGRSpatialReference> customAe(new OGRSpatialReference());
+  if (customAe->SetAE(centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
+  {
+    result.push_back(customAe);
   }
 
   return result;
