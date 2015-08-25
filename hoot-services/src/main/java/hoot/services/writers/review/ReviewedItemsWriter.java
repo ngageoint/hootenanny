@@ -141,11 +141,12 @@ public class ReviewedItemsWriter
         //now update the review and uuid tags on the corresponding osm elements
         try
         {
-          addUpdatedOsmRecord(
+        	//now trying to do this client side instead...
+          /*addUpdatedOsmRecord(
             reviewedItem.getId(),
             Element.elementTypeFromString(reviewedItem.getType().toLowerCase()),
             reviewedAgainstItemUniqueId,
-            false);
+            false);*/
           //TODO: what does "duplicted review pairs" mean?  Disabling this for now, until I figure
           //it out 
           //this second call will handle any duplicated review pairs
@@ -252,6 +253,7 @@ public class ReviewedItemsWriter
     }
   }
 
+  @SuppressWarnings("unused")
   private void addUpdatedOsmRecord(final long reviewedItemOsmId,
     final ElementType reviewedItemOsmType, final String reviewedAgainstItemUniqueId,
     final boolean isDuplicate) throws Exception
@@ -272,7 +274,7 @@ public class ReviewedItemsWriter
         PostgresUtils.postgresObjToHStore(
           (PGobject)MethodUtils.invokeMethod(reviewedElementRecord, "getTags", new Object[]{}));
 
-      //let the osm changeset handle this
+      //let the osm changeset save from the client handle this instead
       /*if (tags.containsKey("uuid"))
       {
         String uuid = tags.get("uuid");

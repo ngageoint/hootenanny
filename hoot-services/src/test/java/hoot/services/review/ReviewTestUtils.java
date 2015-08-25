@@ -884,7 +884,7 @@ public class ReviewTestUtils
     */
     Element element =
       ElementFactory.getInstance().create(mapId, ElementType.Node, nodeIds.get((long)-64), conn);
-    Assert.assertFalse(element.hasTagsStartingWithText("hoot:review"));
+    //Assert.assertFalse(element.hasTagsStartingWithText("hoot:review"));
     Assert.assertEquals(
       "{25e1aa70-a30f-11e3-a5e2-0800200c9a66}",
       element.getTags().get("uuid"));
@@ -921,7 +921,7 @@ public class ReviewTestUtils
      */
      element =
        ElementFactory.getInstance().create(mapId, ElementType.Node, nodeIds.get((long)-71), conn);
-     Assert.assertFalse(element.hasTagsStartingWithText("hoot:review"));
+     //Assert.assertFalse(element.hasTagsStartingWithText("hoot:review"));
      Assert.assertEquals(
        "{99b917d0-8c23-4469-b028-b749a38a8841}",
        element.getTags().get("uuid"));
