@@ -142,12 +142,12 @@ public class ReviewedItemsWriter
         try
         {
         	//now trying to do this client side instead...
-          /*addUpdatedOsmRecord(
+          addUpdatedOsmRecord(
             reviewedItem.getId(),
             Element.elementTypeFromString(reviewedItem.getType().toLowerCase()),
             reviewedAgainstItemUniqueId,
-            false);*/
-          //TODO: what does "duplicted review pairs" mean?  Disabling this for now, until I figure
+            false);
+          //TODO: what does "duplicated review pairs" mean?  Disabling this for now, until I figure
           //it out 
           //this second call will handle any duplicated review pairs
           /*addUpdatedOsmRecord(
