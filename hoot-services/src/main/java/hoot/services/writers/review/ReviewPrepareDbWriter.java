@@ -321,11 +321,11 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 			//try to figure out why they couldn't be cleaned if an error occurs.
 			catch (Exception e)
 			{
-				log.error("Caught error while cleaning out unused element ID mappings.  " +
+				log.warn("Caught error while cleaning out unused element ID mappings.  " +
 			    "Skipping temp record cleanup.  Error: " + e.getMessage());
 				if (e instanceof PSQLException)
 				{
-					log.error("SQL error: " + ((PSQLException)e).getServerErrorMessage().getDetail());
+					log.warn("SQL error: " + ((PSQLException)e).getServerErrorMessage().getDetail());
 				}
 				errorDeletingTempRecords = true;
 			}
