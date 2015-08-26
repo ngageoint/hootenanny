@@ -6,7 +6,7 @@
   <Title>Clean Map Data Service</Title>
   <Abstract><![CDATA[
   <DESCRIPTION>
-  Clean map data service provides the ability to remove map associated record. It removes from CURRENT_WAY_NODES,CURRENT_RELATION_MEMBERS,CURRENT_NODES,CURRENT_WAYS, CURRENT_RELATIONS, CHANGESET_TAGS,CHANGESETS,MAPS,REVIEW_ITEMS,ELEMENT_ID_MAPPINGS and REVIEW_MAP.
+  Clean map data service provides the ability to remove map associated record. It removes from CURRENT_WAY_NODES, CURRENT_RELATION_MEMBERS, CURRENT_NODES,CURRENT_WAYS, CURRENT_RELATIONS, CHANGESET_TAGS, CHANGESETS, MAPS, REVIEW_ITEMS, ELEMENT_ID_MAPPINGS and REVIEW_MAP.
   </DESCRIPTION>
   <EXAMPLE>
   <URL>http://localhost:8080/hoot-services/ogc</URL>

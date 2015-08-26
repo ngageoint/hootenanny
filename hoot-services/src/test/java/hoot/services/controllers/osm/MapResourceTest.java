@@ -1492,7 +1492,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
 
     try
     {
-      //try to query nodes from a map name that is linked to multiple map ID's
+      //try to query nodes from a map name that is linked to multiple map IDs
       resource()
         .path("api/0.6/map")
         .queryParam("mapId", duplicatedMapName)
