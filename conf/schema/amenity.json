@@ -45,12 +45,35 @@
 
     "tag": { "name": "amenity=community_centre", "isA": "amenity",
         "aliases": ["amenity=community_center"] },
-    "tag": { "name": "amenity=community_hall", "isA": "amenity",
-        "aliases": ["amenity=hall", "amenity=village_hall", "amenity=public_hall",
-                    "amenity=parish_hall", "amenity=church_hall", "amenity=municipal_hall"],
-        "similarTo": { "name": "amenity=community_centre", "weight": 0.6 } },
 
-    "tag": { "name": "amenity=townhall", "isA": "amenity",
+    "tag": {
+        "name": "amenity=hall",
+        "isA": "amenity",
+        "similarTo": { "name": "amenity=community_centre", "weight": 0.6 }
+    },
+    "tag": {
+        "name": "amenity=community_hall",
+        "isA": "amenity=hall",
+        "similarTo": { "name": "amenity=public_hall", "weight": 0.8 },
+        "similarTo": { "name": "amenity=church_hall", "weight": 0.8 }
+    },
+    "tag": {
+        "name": "amenity=public_hall",
+        "isA": "amenity=hall"
+    },
+    "tag": {
+        "name": "amenity=church_hall",
+        "isA": "amenity=hall",
+        "similarTo": { "name": "amenity=church", "weight": 0.8 },
+        "similarTo": { "name": "building=church", "weight": 0.8 }
+    },
+    "tag": {
+        "name": "amenity=municipal_hall",
+        "isA": "amenity=hall",
+        "similarTo": { "name": "amenity=townhall", "weight": 0.8 }
+    },
+
+    "tag": { "name": "amenity=townhall", "isA": "amenity=hall",
         "similarTo": { "name": "amenity=community_hall", "weight": 0.7 } },
     "tag": { "name": "amenity=government", "isA": "amenity",
         "aliases": ["amenity=government_administration_building", "amenity=register_office",
@@ -242,13 +265,46 @@
 
 
     "#" : "Religious",
-    "tag": { "name": "amenity=place_of_worship", "isA": "amenity",
-        "aliases": ["amenity=religion", "amenity=religious_activities", "amenity=chapel",
-                    "amenity=church"] },
-    "tag": { "name": "amenity=monastery", "isA": "amenity" },
-    "tag": { "name": "amenity=mission", "isA": "amenity",
-        "similarTo": { "name": "amenity=monastery", "weight": 0.7 } },
+    "tag": {
+        "name": "amenity=place_of_worship",
+        "isA": "amenity",
+        "aliases": ["amenity=religion", "amenity=religious_activities"]
+    },
 
+    "#" : "This isn't actually a legit tag and should be avoided.",
+    "tag": {
+        "name": "amenity=church",
+        "isA": "amenity=place_of_worship",
+        "similarTo": { "name": "amenity=chapel", "weight": 0.8 },
+        "similarTo": { "name": "amenity=monastery", "weight": 0.8 },
+        "similarTo": { "name": "religion=christian", "weight": 0.9 },
+        "similarTo": { "name": "building=church", "weight": 0.9 }
+    },
+    "#" : "This isn't actually a legit tag and should be avoided.",
+    "tag": {
+        "name": "amenity=chapel",
+        "isA": "amenity=place_of_worship",
+        "similarTo": { "name": "amenity=monastery", "weight": 0.8 },
+        "similarTo": { "name": "religion=christian", "weight": 0.9 },
+        "similarTo": { "name": "building=chapel", "weight": 0.9 }
+    },
+
+    "tag": {
+        "name": "amenity=monastery",
+        "isA": "amenity=place_of_worship",
+        "similarTo": { "name": "amenity=mission", "weight": 0.8 },
+        "similarTo": { "name": "religion=christian", "weight": 0.9 },
+        "similarTo": { "name": "building=church", "weight": 0.8 },
+        "similarTo": { "name": "building=chapel", "weight": 0.8 }
+    },
+
+    "tag": {
+        "name": "amenity=mission",
+        "isA": "amenity=place_of_worship",
+        "similarTo": { "name": "religion=christian", "weight": 0.9 },
+        "similarTo": { "name": "building=church", "weight": 0.8 },
+        "similarTo": { "name": "building=chapel", "weight": 0.8 }
+    },
 
     "#" : "Medical",
     "tag": { "name": "amenity=hospital", "isA": "amenity",
@@ -261,9 +317,24 @@
     "tag": { "name": "amenity=clinic", "isA": "amenity",
         "similarTo": { "name": "amenity=hospital", "weight": 0.6 } },
 
-    "tag": { "name": "amenity=nursing_home", "isA": "amenity",
-        "aliases": ["amenity=care_home", "amenity=retirement_home", "amenity=social_facility",
-                    "amenity=church"] },
+    "tag": {
+        "name": "amenity=social_facility",
+        "isA": "amenity"
+    },
+    "tag": {
+        "name": "amenity=care_home",
+        "isA": "amenity=social_facility",
+        "similarTo": { "name": "amenity=care_home", "weight": 0.8 }
+    },
+    "tag": {
+        "name": "amenity=nursing_home",
+        "isA": "amenity=social_facility",
+        "similarTo": { "name": "amenity=retirement_home", "weight": 0.8 }
+    },
+    "tag": {
+        "name": "amenity=retirement_home",
+        "isA": "amenity"
+    },
 
     "tag": { "name": "amenity=hospice", "isA": "amenity",
         "similarTo": { "name": "amenity=hospital", "weight": 0.6 },
