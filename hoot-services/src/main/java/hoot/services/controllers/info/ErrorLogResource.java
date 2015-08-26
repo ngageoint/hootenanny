@@ -86,6 +86,7 @@ public class ErrorLogResource {
 	 * <EXAMPLE>
 	 * 	<URL>http://localhost:8080/hoot-services/info/logging/debuglog</URL>
 	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * <INPUT>None</INPUT>
    * <OUTPUT>
  	 * {
    * "log": " Reprojecting 2000 / 22601 Reprojecting 3000 / 22601 ..."
@@ -129,6 +130,7 @@ public class ErrorLogResource {
 	 * <EXAMPLE>
 	 * 	<URL>http://localhost:8080/hoot-services/info/logging/export</URL>
 	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * <INPUT>None</INPUT>
   * <OUTPUT>
 	* 	Binary octet stream
   * </OUTPUT>

@@ -92,11 +92,11 @@ public class ReviewTestUtils
   public static long userId = -1;
   public static long changesetId = -1;
   public static long secondChangesetId = -1;
-  //TODO: the handling of job ID's by this class is a little confusing and inconsistent
+  //TODO: the handling of job IDs by this class is a little confusing and inconsistent
   public static String jobId;
   public static String secondJobId;
 
-  //maps old element ID's (ID's from creation request) to new element ID's
+  //maps old element IDs (IDs from creation request) to new element IDs
   public static Map<Long, Long> nodeIds = new HashMap<Long, Long>();
   public static Map<Long, Long> wayIds = new HashMap<Long, Long>();
   public static Map<Long, Long> relationIds = new HashMap<Long, Long>();
@@ -144,7 +144,7 @@ public class ReviewTestUtils
     //we're not testing the changeset service here, so no actual validation of the response is being
     //done
 
-    //collect only the written new element ID's that had review tags
+    //collect only the written new element IDs that had review tags
     populateOsmIdMappings(response, ElementType.Node, nodeIds, 76);
     populateOsmIdMappings(response, ElementType.Way, wayIds, 44);
     populateOsmIdMappings(response, ElementType.Relation, relationIds, 3);

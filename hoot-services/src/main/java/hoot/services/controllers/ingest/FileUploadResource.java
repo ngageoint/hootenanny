@@ -83,7 +83,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 	 * <NAME>FileUpload Service</NAME>
 	 * <DESCRIPTION>
 	 * Purpose of this service is to provide ingest service for uploading shape and osm file and performing ETL operation on the uploaded file(s).
-   * This service is multipart post service which accepts sigle or multiple files sent by multipart client.
+   * This service is multipart post service which accepts single or multiple files sent by multipart client.
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * 	<TRANSLATION>

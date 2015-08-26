@@ -498,7 +498,7 @@ public class MarkItemsReviewedProcessletTest extends OsmResourceTestAbstract
       execMark(String.valueOf(mapId), String.valueOf(false), markItemsReviewedRequest);
 
     Assert.assertNotNull(responseData);
-    //not going to verify all the tags and items, since its being done in many other methods
+    //not going to verify all the tags and items, since it's being done in many other methods
     //ReviewTestUtils.verifyDataMarkedAsReviewed(false);
     QReviewItems reviewItems = QReviewItems.reviewItems;
     Assert.assertEquals(
@@ -543,7 +543,7 @@ public class MarkItemsReviewedProcessletTest extends OsmResourceTestAbstract
       execMark(String.valueOf(mapId), String.valueOf(false), markItemsReviewedRequest);
 
     Assert.assertNotNull(responseData);
-    //not going to verify all the tags and items, since its being done in many other methods
+    //not going to verify all the tags and items, since it's being done in many other methods
     //ReviewTestUtils.verifyDataMarkedAsReviewed(false);
     Assert.assertEquals(
       5,
@@ -588,7 +588,7 @@ public class MarkItemsReviewedProcessletTest extends OsmResourceTestAbstract
       execMark(String.valueOf(mapId), String.valueOf(false), markItemsReviewedRequest);
 
     Assert.assertNotNull(responseData);
-    //not going to verify all the tags and items, since its being done in many other methods
+    //not going to verify all the tags and items, since it's being done in many other methods
     //ReviewTestUtils.verifyDataMarkedAsReviewed(false);
     Assert.assertEquals(
       5,
@@ -633,7 +633,7 @@ public class MarkItemsReviewedProcessletTest extends OsmResourceTestAbstract
       execMark(String.valueOf(mapId), String.valueOf(false), markItemsReviewedRequest);
 
     Assert.assertNotNull(responseData);
-    //not going to verify all the tags and items, since its being done in many other methods
+    //not going to verify all the tags and items, since it's being done in many other methods
     //ReviewTestUtils.verifyDataMarkedAsReviewed(false);
     Assert.assertEquals(
       5,
@@ -650,7 +650,7 @@ public class MarkItemsReviewedProcessletTest extends OsmResourceTestAbstract
     //don't fail.  A warning is logged only.
     ReviewTestUtils.createPreparedData(resource());
 
-    //add an additional reviewed item that is invalid b/c its not actually reviewable
+    //add an additional reviewed item that is invalid b/c it's not actually reviewable
     ReviewedItems reviewedItems = ReviewTestUtils.createReviewedItems();
     ReviewedItem[] reviewedItemsArr = reviewedItems.getReviewedItems();
     List<ReviewedItem> reviewedItemsList = new ArrayList<ReviewedItem>(Arrays.asList(reviewedItemsArr));
@@ -708,7 +708,7 @@ public class MarkItemsReviewedProcessletTest extends OsmResourceTestAbstract
     //in the services database, we don't fail.  A warning is logged only.
     ReviewTestUtils.createPreparedData(resource());
 
-    //add an additional reviewed item that is invalid b/c its review against item is incorrect
+    //add an additional reviewed item that is invalid b/c it's review against item is incorrect
     ReviewedItems reviewedItems = ReviewTestUtils.createReviewedItems();
     ReviewedItem[] reviewedItemsArr = reviewedItems.getReviewedItems();
     List<ReviewedItem> reviewedItemsList =
