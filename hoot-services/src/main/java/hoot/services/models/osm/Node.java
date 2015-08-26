@@ -139,12 +139,12 @@ public class Node extends Element
   }
 
   /**
-   * Returns the nodes specified in the collection of nodes ID's
+   * Returns the nodes specified in the collection of nodes IDs
    *
    * @param mapId
    *          ID of the map the nodes belong to
    * @param nodeIds
-   *          a collection of node ID's
+   *          a collection of node IDs
    * @param dbConn
    *          JDBC Connection
    * @return a collection of node records
@@ -169,12 +169,12 @@ public class Node extends Element
       }
 
   /**
-   * Returns the ID's of all ways which own this node
+   * Returns the IDs of all ways which own this node
    *
    * The ordering of returned records by ID and the use of TreeSet to keep them
    * sorted is only for error reporting readability purposes only.
    *
-   * @return a sorted list of way ID's
+   * @return a sorted list of way IDs
    * @throws DataAccessException
    * @throws Exception
    */
@@ -233,7 +233,7 @@ public class Node extends Element
       nodeRecord.setVisible(true);
       // Lat/lon are required here on a delete request as well, b/c it keeps
       // from having to do a round
-      // trip to the db to get the node lat/long before its deleted, so that can
+      // trip to the db to get the node lat/long before it is deleted, so that can
       // be used to update
       // the changeset bounds (rails port does it this way).
       latitude = Double.parseDouble(xmlAttributes.getNamedItem("lat").getNodeValue());
@@ -294,7 +294,7 @@ public class Node extends Element
    * @param modifyingUserDisplayName
    *          user display name of the user which created this element
    ** @param multiLayerUniqueElementIds
-   *          if true, ID's are prepended with <map id>_<first letter of the
+   *          if true, IDs are prepended with <map id>_<first letter of the
    *          element type>_; this setting activated is not compatible with
    *          standard OSM clients (specific to Hootenanny iD)
    * @param addChildren

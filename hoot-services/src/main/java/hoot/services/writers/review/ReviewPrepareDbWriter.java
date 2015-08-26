@@ -213,7 +213,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 				}
 
 				//two passes through the data have to be made; one to create the mappings from the 
-				//unique id's to the osm element id's and then a second to parse the review tags; 
+				//unique IDs to the osm element IDs and then a second to parse the review tags; 
 				//there might be a way to do this in one pass...
 				
 				//The logic here got a little redundant...but no point in cleaning up now, since this class 
@@ -231,7 +231,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 					final boolean uuidsExist = parseElementUniqueIdTags(mapId);
 					if (!uuidsExist)
 					{
-						log.info("Parsing unique element ID's: " + noRecordsParsedMessage);
+						log.info("Parsing unique element IDs: " + noRecordsParsedMessage);
 					}
 					else
 					{
@@ -296,9 +296,9 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 							new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 					conn.setAutoCommit(false);
 					
-				  // There may be element id's written as a result of parseElementUniqueIdTags that don't
+				  // There may be element IDs written as a result of parseElementUniqueIdTags that don't
 					// have associated review item records, because of the two pass write operation. They
-					// aren't currently hurting anything by existing and will be ignored, but its a good idea
+					// aren't currently hurting anything by existing and will be ignored, but it is a good idea
 					// to clean them out.
 					removeUnusedElementIdMappings();
 					
@@ -320,7 +320,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 			}
 			else
 			{
-				log.debug("Review record UUID's not cleaned up.");
+				log.debug("Review record UUIDs not cleaned up.");
 			}
 		}
 		finally
@@ -621,7 +621,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 	}
 
 	/*
-	 * logging records with invalid uuid's and skipping; if errors should be
+	 * logging records with invalid uuIDs and skipping; if errors should be
 	 * thrown, then the unit tests will have to reworked
 	 */
 	protected boolean parseElementUniqueIdTags(final long mapId) throws Exception
@@ -634,7 +634,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		idMappingRecordWritten = false;
 		List<ElementIdMappings> elementIdMappingRecordsToInsert = new ArrayList<ElementIdMappings>();
 		// create this outside of the batch read loop, since we need to maintain a
-		// list of unique ID's parsed over the entire map's set of reviewable records
+		// list of unique IDs parsed over the entire map's set of reviewable records
 		Set<String> elementIds = new HashSet<String>();
 		for (ElementType elementType : ElementType.values())
 		{
@@ -770,7 +770,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		reviewRecordWritten = false;
 		List<ReviewItems> reviewRecordsToInsert = new ArrayList<ReviewItems>();
 		// create this outside of the batch read loop, since we need to maintain a list of unique 
-		// ID's parsed over the entire map's set of reviewable records
+		// IDs parsed over the entire map's set of reviewable records
 		reviewableItemIdToReviewAgainstItemIds = ArrayListMultimap.create();
 		reviewableItemIdToReviewAgainstItemIds.putAll(previouslyReviewedItemIdToReviewAgainstItemIds);
 
@@ -1033,7 +1033,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 
 		// get all unique reviewable item ids in review_items
 		// TODO: these need to be buffered queries
-		log.debug("Getting reviewable item ID's...");
+		log.debug("Getting reviewable item IDs...");
 		final Set<String> reviewableItemIds = 
 			new HashSet<String>(
 			  new SQLQuery(conn, DbUtils.getConfiguration(mapId))
@@ -1041,7 +1041,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		      .where(reviewItems.mapId.eq(mapId))
 		      .list(reviewItems.reviewableItemId));
 
-		log.debug("Getting review against item ID's...");
+		log.debug("Getting review against item IDs...");
 		final Set<String> reviewAgainstItemIds = 
 		  new HashSet<String>(
 		    new SQLQuery(conn, DbUtils.getConfiguration(mapId))
@@ -1049,7 +1049,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		      .where(reviewItems.mapId.eq(mapId))
 		      .list(reviewItems.reviewAgainstItemId));
 
-		log.debug("Getting element unique ID's...");
+		log.debug("Getting element unique IDs...");
 		final Set<String> elementUniqueIds = 
 			new HashSet<String>(
 		    new SQLQuery(conn, DbUtils.getConfiguration(mapId))
@@ -1060,14 +1060,14 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		// anything in elementUniqueIds that's not in reviewableItemIds or reviewAgainstItemIds, 
 		// regardless of what map it belongs to, must be a unique id not being used and should be
 		// deleted
-		log.debug("Determining unused element ID's...");
+		log.debug("Determining unused element IDs...");
 		Set<String> uniqueIdsNotInReviewItems = new HashSet<String>(elementUniqueIds);
 		uniqueIdsNotInReviewItems.removeAll(reviewableItemIds);
 		uniqueIdsNotInReviewItems.removeAll(reviewAgainstItemIds);
-		log.debug("Unused element ID's determined.");
+		log.debug("Unused element IDs determined.");
 		if (uniqueIdsNotInReviewItems.size() > 0)
 		{
-			log.debug("Retrieving unique ID's not in review items...");
+			log.debug("Retrieving unique IDs not in review items...");
 			final long result =
 			  new SQLDeleteClause(conn, DbUtils.getConfiguration(mapId), elementIdMappings)
 			    .where(elementIdMappings.elementId
@@ -1076,7 +1076,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 			    .execute();
 			if (result != uniqueIdsNotInReviewItems.size())
 			{
-				log.warn("The number of unique ID's not in review items calculated does not " +
+				log.warn("The number of unique IDs not in review items calculated does not " +
 				  "match the number deleted from the database.");
 			}
 			log.debug(result + " redundant element ID mappings deleted.");

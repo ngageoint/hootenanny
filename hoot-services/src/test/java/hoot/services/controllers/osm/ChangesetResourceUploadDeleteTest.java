@@ -139,7 +139,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
         Assert.assertEquals(1, returnedNodes.getLength());
 
-        //check that the returned id's are correct and the correct attributes were returned
+        //check that the returned IDs are correct and the correct attributes were returned
         Assert.assertEquals(
           (long)nodeIdsArr[3],
           Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id",
@@ -634,7 +634,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
         Assert.assertEquals(1, returnedNodes.getLength());
 
-        //check that the returned id's are correct and the correct attributes were returned
+        //check that the returned IDs are correct and the correct attributes were returned
         Assert.assertEquals(
           (long)nodeIdsArr[4],
           Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id",
@@ -1070,7 +1070,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
         Assert.assertEquals(1, returnedNodes.getLength());
 
-        //check that the returned id's are correct and the correct attributes were returned
+        //check that the returned IDs are correct and the correct attributes were returned
         Assert.assertEquals(
           (long)nodeIdsArr[3],
           Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id",
@@ -1529,7 +1529,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
         Assert.assertEquals(1, returnedNodes.getLength());
 
-        //check that the returned id's are correct and the correct attributes were returned
+        //check that the returned IDs are correct and the correct attributes were returned
         Assert.assertEquals(
           (long)nodeIdsArr[3],
           Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id",
@@ -2698,7 +2698,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
         Assert.assertEquals(2, returnedNodes.getLength());
 
-        //TODO: should the response have the ID's ordered, or should the output ordering match the
+        //TODO: should the response have the IDs ordered, or should the output ordering match the
         //input ordering?; right now, output ordering matches input ordering
 
         Assert.assertEquals(
