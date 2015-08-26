@@ -282,51 +282,65 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 				}
 				throw e;
 			}
-			
-			if (totalReviewableRecords > 0 && 
-					Boolean.parseBoolean(
-            HootProperties.getInstance().getProperty(
-  	          "reviewPrepareCleanup", HootProperties.getDefault("reviewPrepareCleanup"))))
-			{
-				try
-				{
-					log.debug("Intializing ReviewDbPreparer cleanup transaction...");
-					transactionStatus = 
-						transactionManager.getTransaction(
-							new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
-					conn.setAutoCommit(false);
-					
-				  // There may be element id's written as a result of parseElementUniqueIdTags that don't
-					// have associated review item records, because of the two pass write operation. They
-					// aren't currently hurting anything by existing and will be ignored, but its a good idea
-					// to clean them out.
-					removeUnusedElementIdMappings();
-					
-					log.debug("Committing ReviewDbPreparer database cleanup transaction...");
-					transactionManager.commit(transactionStatus);
-					conn.commit();
-					log.info("Review item cleanup complete.");
-				}
-			  //It's not the end of the world if these don't get cleaned out, but you should eventually 
-				//try to figure out why they couldn't be cleaned if an error occurs.
-				catch (Exception e)
-				{
-					log.error("Error cleaning out unused element ID mappings: " + e.getMessage());
-					if (e instanceof PSQLException)
-					{
-						log.error("SQL error: " + ((PSQLException)e).getServerErrorMessage().getDetail());
-					}
-				}
-			}
-			else
-			{
-				log.debug("Review record UUID's not cleaned up.");
-			}
 		}
 		finally
 		{
 			conn.setAutoCommit(true);
 			DbUtils.closeConnection(conn);
+		}
+		
+		boolean errorDeletingTempRecords = false;
+		if (totalReviewableRecords > 0 && 
+				Boolean.parseBoolean(
+          HootProperties.getInstance().getProperty(
+	          "reviewPrepareCleanup", HootProperties.getDefault("reviewPrepareCleanup"))))
+		{
+			try
+			{
+				log.debug("Initializing database driver...");
+				conn = DbUtils.createConnection();
+
+				log.debug("Intializing ReviewDbPreparer cleanup transaction...");
+				TransactionStatus transactionStatus = 
+					transactionManager.getTransaction(
+						new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
+				conn.setAutoCommit(false);
+				
+			  // There may be element id's written as a result of parseElementUniqueIdTags that don't
+				// have associated review item records, because of the two pass write operation. They
+				// aren't currently hurting anything by existing and will be ignored, but its a good idea
+				// to clean them out.
+				removeUnusedElementIdMappings();
+				
+				log.debug("Committing ReviewDbPreparer database cleanup transaction...");
+				transactionManager.commit(transactionStatus);
+				conn.commit();
+				log.info("Review element ID temp record cleanup complete.");
+			}
+		  //It's not the end of the world if these don't get cleaned out, but you should eventually 
+			//try to figure out why they couldn't be cleaned if an error occurs.
+			catch (Exception e)
+			{
+				log.warn("Caught error while cleaning out unused element ID mappings.  " +
+			    "Skipping temp record cleanup.  Error: " + e.getMessage());
+				if (e instanceof PSQLException)
+				{
+					log.warn("SQL error: " + ((PSQLException)e).getServerErrorMessage().getDetail());
+				}
+				errorDeletingTempRecords = true;
+			}
+			finally
+			{
+				if (!errorDeletingTempRecords)
+				{
+					conn.setAutoCommit(true);
+				}
+				DbUtils.closeConnection(conn);
+			}
+		}
+		else
+		{
+			log.debug("Review record UUID's not cleaned up.");
 		}
 	}
 
