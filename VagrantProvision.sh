@@ -185,6 +185,13 @@ if grep -i --quiet 'gdal/1.10' /etc/default/tomcat6; then
     sudo sed -i.bak s@^GDAL_DATA=.*@GDAL_DATA=\/usr\/local\/share\/gdal@ /etc/default/tomcat6
 fi
 
+# Remove gdal libs installed by libgdal-dev that interfere with
+# mapedit-export-server using gdal libs compiled from source (fgdb support)
+if [ -f /usr/lib/libgdal.* ]; then
+    echo "Removing GDAL libs installed by libgdal-dev"
+    sudo rm /usr/lib/libgdal.*
+fi
+
 # Create Tomcat context path for tile images
 if ! grep -i --quiet 'ingest/processed' /etc/tomcat6/server.xml; then
     echo "Adding Tomcat context path for tile images"

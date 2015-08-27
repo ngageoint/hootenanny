@@ -205,6 +205,10 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			{
 				throw new Exception("Can not mix osm and ogr type.");
 			}
+			if(osmZipCnt > 0){
+				//#6027
+				throw new Exception("Hootennany does not support zip files containing .osm data.");
+			}
 
 			
 			String batchJobReqStatus = "success";
