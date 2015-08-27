@@ -13,8 +13,6 @@
     "tag": { "name": "poi=yes", "isA": "poi" },
     "tag": { "name": "aeroway=*", "isA": "poi=yes" },
 
-    "tag": { "name": "highway=rest_area", "isA": "poi=yes" },
-    "tag": { "name": "highway=services", "isA": "poi=yes" },
     "tag": { "name": "industrial=*", "isA": "poi=yes" },
     "tag": { "name": "mountain_pass=*", "isA": "poi=yes" },
     "tag": { "name": "office=*", "isA": "poi=yes" },

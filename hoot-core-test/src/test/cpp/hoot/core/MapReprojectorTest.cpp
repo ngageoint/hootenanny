@@ -47,6 +47,8 @@ using namespace hoot;
 // Tbs
 #include <tbs/stats/SampleStats.h>
 
+#include "TestUtils.h"
+
 namespace hoot
 {
 
@@ -61,6 +63,19 @@ public:
 
   boost::minstd_rand rng;
   ofstream fs;
+
+  void setUp()
+  {
+    TestUtils::resetEnvironment();
+    // we are testing the map reprojector so we don't want to force to a single projection.
+    conf().set(ConfigOptions::getTestForceOrthographicProjectionKey(), false);
+  }
+
+  void tearDown()
+  {
+    TestUtils::resetEnvironment();
+  }
+
 
   Radians calculateAngle(Coordinate p1, Coordinate p2, Coordinate p3)
   {
@@ -251,7 +266,7 @@ public:
       shared_ptr<OGRSpatialReference> srs = MapReprojector::getInstance().
           createPlanarProjection(env, toRadians(2), 61);
       CPPUNIT_ASSERT_EQUAL(true,
-        (bool)MapReprojector::toWkt(srs).contains("Lambert_Conformal_Conic_1SP"));
+        (bool)MapReprojector::toWkt(srs).contains("Lambert_Conformal_Conic"));
     }
 
     {
