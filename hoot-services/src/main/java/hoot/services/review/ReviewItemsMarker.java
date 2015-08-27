@@ -327,12 +327,11 @@ public class ReviewItemsMarker
   	long waittime = date.getTime() - LOCK_TIME;
   	Timestamp compareTime = new Timestamp(waittime);
   	
-  	SQLQuery q = _getAvailableReviewQuery(compareTime).limit(offset+10);
+  	SQLQuery q = _getAvailableReviewQuery(compareTime);
   	
   	if(offsetId != null)
   	{
-  		q = _getAvailableReviewWithOffsetQuery(compareTime, offsetId, offsetAgainstId)
-    	.limit(offset+10);
+  		q = _getAvailableReviewWithOffsetQuery(compareTime, offsetId, offsetAgainstId);
   	}
   	
   	

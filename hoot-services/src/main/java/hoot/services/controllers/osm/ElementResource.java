@@ -167,12 +167,12 @@ public class ElementResource
   }
   
   /**
-	 * <NAME>Element Service - Get Element By IDGet Element By Unique ID </NAME>
+	 * <NAME>Element Service - Get Element By ID Get Element By Unique ID </NAME>
 	 * <DESCRIPTION>
 	 * 	Convenience method which allows for retrieving a node, way, or relation by an OSM unique element ID.
 	 * Child element of ways and relations are not added to the output (use the "full" method for that functionality). The ID of
 	 * the map owning the element does not need to be specified in the query string because the information already exists in the
-	 * element ID. This method is not part of the OSM API
+	 * element ID. This method is not part of the OSM API.
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 *  <elementId>
@@ -333,7 +333,7 @@ public class ElementResource
 	 * 	Convenience method which allows for retrieving a way or relation and all of its child
 	 * elements (way nodes or relation members) by an OSM unique element ID. The ID of the map owning
 	 * the element does not need to be specified in the query string because the information already exists
-	 * in the element ID. This method is not part of the OSM API
+	 * in the element ID. This method is not part of the OSM API.
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 *  <elementId>

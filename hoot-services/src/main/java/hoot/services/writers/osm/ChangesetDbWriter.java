@@ -94,7 +94,7 @@ public class ChangesetDbWriter
   private long requestChangesetMapId = -1;
 
   /*
-   * A mapping of element ID's parsed from the request XML (key) to their
+   * A mapping of element IDs parsed from the request XML (key) to their
    * element object that contains their ID in the database, grouped by type
    * (effectively, a mapping of request specified (old) element ID to actual
    * element ID mapping); Elements being created don't have a permanent ID
@@ -108,7 +108,7 @@ public class ChangesetDbWriter
   // a collection of element records to be modified within the database
   private List<Object> recordsToModify = new ArrayList<Object>();
 
-  // ID's of the elements parsed from the request
+  // IDs of the elements parsed from the request
   private Set<Long> parsedElementIds = new LinkedHashSet<Long>();
 
   /*
@@ -164,7 +164,7 @@ public class ChangesetDbWriter
       final DbUtils.EntityChangeType entityChangeType, List<Long> oldElementIds) throws Exception
   {
     long oldElementId = Long.parseLong(nodeAttributes.getNamedItem("id").getNodeValue());
-    // make sure request has no duplicate ID's for new elements
+    // make sure request has no duplicate IDs for new elements
     // This catches a duplicate create/delete error earlier. Technically,
     // updating the same
     // node twice could be allowed (not sure if rails port does), but I'm going
@@ -177,7 +177,7 @@ public class ChangesetDbWriter
     }
     if (entityChangeType.equals(EntityChangeType.CREATE))
     {
-      // by convention, new element ID's should have a negative value
+      // by convention, new element IDs should have a negative value
       if (oldElementId >= 0)
       {
         throw new Exception("Invalid OSM element ID for create: " + oldElementId + " for "
@@ -193,14 +193,14 @@ public class ChangesetDbWriter
             HootProperties.getDefault("hootCoreServicesDatabaseWriterCompatibility"))))
         {
           // The hoot command line services database writer will write nodes
-          // with negative ID's to
+          // with negative IDs to
           // the database, which isn't allowed in regular OSM. Created a
           // compatibility mode to
           // allow for it, so that the hoot --convert functionality can be used
           // as a source of
           // test data for the services.
           throw new Exception("Invalid OSM element ID: " + oldElementId
-              + ".  Existing OSM elements cannot have " + "negative ID's.");
+              + ".  Existing OSM elements cannot have " + "negative IDs.");
         }
       }
     }
@@ -245,7 +245,7 @@ public class ChangesetDbWriter
     element.setEntityChangeType(entityChangeType);
 
     // We pass the mappings for the previously parsed related element (child
-    // element) ID's here
+    // element) IDs here
     // (e.g. nodes for ways, relation members (nodes and ways) for relations).
     // Some elements have
     // no related element type (e.g. Node), signified by a null response from
@@ -325,10 +325,10 @@ public class ChangesetDbWriter
     }
 
     // TODO: this is a bigtime hack put in place b/c I was getting dupe
-    // ID's...really needs to be
-    // fixed; I need to generate the ID's myself, rather than letting the db do
+    // IDs...really needs to be
+    // fixed; I need to generate the IDs myself, rather than letting the db do
     // it automatically,
-    // so I have the new ID's to send back in the changeset upload
+    // so I have the new IDs to send back in the changeset upload
     // response...there might be a way
     // to let the db auto-gen them and then return those, but I'm not sure how
     // that would work yet.
@@ -403,9 +403,9 @@ public class ChangesetDbWriter
       org.w3c.dom.Node xmlElement = xml.item(i);
       NamedNodeMap xmlAttributes = xmlElement.getAttributes();
 
-      log.debug("Calculating element ID's for OSM element type: " + elementType.toString()
+      log.debug("Calculating element IDs for OSM element type: " + elementType.toString()
           + ", entity change type: " + entityChangeType.toString() + "...");
-      // calculate the previous and new ID's for the element
+      // calculate the previous and new IDs for the element
       final long oldElementId = getOldElementId(xmlAttributes, entityChangeType, oldElementIds);
       final long newElementId = getNewElementId(oldElementId, nextElementId, entityChangeType, i);
 

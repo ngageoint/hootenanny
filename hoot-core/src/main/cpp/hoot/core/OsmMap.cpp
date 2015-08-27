@@ -262,6 +262,7 @@ void OsmMap::clear()
 
   _nodes.clear();
   _ways.clear();
+  _relations.clear();
 
   _index->reset();
   _listeners.clear();

@@ -80,7 +80,7 @@ public class MapInfoResource {
 	
 	/**
   * <NAME>Map Physical Size Information Service</NAME>
-  * <DESCRIPTION>Service method endpoint for retrieving the physical size of a map record</DESCRIPTION>
+  * <DESCRIPTION>Service method endpoint for retrieving the physical size of a map record.</DESCRIPTION>
   * <PARAMETERS></PARAMETERS>
 	* <OUTPUT>
 	* 	JSON containing size information
@@ -88,6 +88,7 @@ public class MapInfoResource {
 	* <EXAMPLE>
 	* 	<URL>http://localhost:8080/hoot-services/info/map/size?mapid=4</URL>
 	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	* <INPUT>None</INPUT>
   * <OUTPUT>
 	* {
   * 	"mapid": "4","size_byte": 172032
@@ -138,7 +139,7 @@ public class MapInfoResource {
 	
 	/**
   * <NAME>Maximum Data Size Information Service</NAME>
-  * <DESCRIPTION>Maximum data size for export conflate and ingest </DESCRIPTION>
+  * <DESCRIPTION>Maximum data size for export conflate and ingest. </DESCRIPTION>
   * <PARAMETERS></PARAMETERS>
 	* <OUTPUT>
 	* 	JSON containing threshold information
@@ -146,6 +147,7 @@ public class MapInfoResource {
 	* <EXAMPLE>
 	* 	<URL>http://localhost:8080/hoot-services/info/map/thresholds</URL>
 	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	* <INPUT>None</INPUT>
   * <OUTPUT>
 	* {
   * 	"export_threshold": 400000000, "conflate_threshold": 200000000, "ingest_threshold": 200000000

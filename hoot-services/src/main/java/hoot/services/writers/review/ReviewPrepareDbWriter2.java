@@ -66,7 +66,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
   }
 
   /*
-   * logging records with invalid uuid's and skipping; if errors should be thrown, then the
+   * logging records with invalid uuids and skipping; if errors should be thrown, then the
    * unit tests will have to reworked
    */
   @Override
@@ -80,7 +80,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
     idMappingRecordWritten = false;
     List<ElementIdMappings> elementIdMappingRecordsToInsert = new ArrayList<ElementIdMappings>();
     //create this outside of the batch read loop, since we need to maintain a list of unique
-    //ID's parsed over the entire map's set of reviewable records
+    //IDs parsed over the entire map's set of reviewable records
     Set<String> elementIds = new HashSet<String>();
 
     for (ElementType elementType : ElementType.values())
@@ -199,7 +199,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
     reviewRecordWritten = false;
     List<ReviewItems> reviewRecordsToInsert = new ArrayList<ReviewItems>();
     //create this outside of the batch read loop, since we need to maintain a list of unique
-    //ID's parsed over the entire map's set of reviewable records
+    //IDs parsed over the entire map's set of reviewable records
     reviewableItemIdToReviewAgainstItemIds = ArrayListMultimap.create();
     reviewableItemIdToReviewAgainstItemIds.putAll(previouslyReviewedItemIdToReviewAgainstItemIds);
 

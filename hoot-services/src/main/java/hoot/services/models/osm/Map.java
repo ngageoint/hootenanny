@@ -66,7 +66,7 @@ import com.mysema.query.types.expr.BooleanExpression;
 /**
  * Represents the model for an Hootenanny OSM map
  *
- * When modifying the node query by bounds, make sure its using the index on the tile id.
+ * When modifying the node query by bounds, make sure it is using the index on the tile id.
    The index scan only seems to trigger if the number of rows returned by the query is <= 1%
    of the total rows.  The execution plan can be checked in postgres with EXPLAIN ANALYZE.
    Possibly, after query changes you may have to force it to use the tile index by doing
@@ -398,9 +398,9 @@ public class Map extends Maps
     List<Long> wayIds = new ArrayList<Long>();
     if (geospatialQueryNodeResults.size() > 0)
     {
-      //get all ways which have way nodes with ID's in the previously queried node results, are
+      //get all ways which have way nodes with IDs in the previously queried node results, are
       //visible, and belong to this map; join in user info
-      log.debug("Retrieving way ID's within the query bounds...");
+      log.debug("Retrieving way IDs within the query bounds...");
       QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
       //query = new SQLQuery(conn, DbUtils.getConfiguration());
 
@@ -535,7 +535,7 @@ public class Map extends Maps
         elementIdsToRecordsByType.put(ElementType.Way, wayResults);
 
         //retrieve all way nodes for the previously retrieved ways
-        log.debug("Retrieving additional way nodes ID's within the query bounds...");
+        log.debug("Retrieving additional way nodes IDs within the query bounds...");
         Set<Long> wayNodeIds = new HashSet<Long>();
         for(int i=0; i <= wayPageCnt; i++)
         {
@@ -583,7 +583,7 @@ public class Map extends Maps
         final long numWayNodes = wayNodeIds.size();
         log.debug("Found " + numWayNodes + " way nodes.");
 
-        //retrieve all corresponding nodes to the ID's in the wayNodeIds collection that don't
+        //retrieve all corresponding nodes to the IDs in the wayNodeIds collection that don't
         //fall within the query bounds (all the way nodes referenced by all the ways minus the
         //nodes falling within the query bounds that have already been added); join in user info;
         //add the resulting nodes to the nodes collection
@@ -697,7 +697,7 @@ public class Map extends Maps
       /*
        * retrieve all relations that reference the nodes or ways previously retrieved
        */
-      log.debug("Retrieving relations ID's within the query bounds...");
+      log.debug("Retrieving relations IDs within the query bounds...");
 
       QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
       //query = new SQLQuery(conn, DbUtils.getConfiguration());
@@ -926,7 +926,7 @@ public class Map extends Maps
     themselves reference...only the ones in the query bounds).
    *
    * @param bounds geospatial bounds the returned nodes should fall within
-   * @return a collection of elements mapped to their ID's, grouped by element type
+   * @return a collection of elements mapped to their IDs, grouped by element type
    * @throws Exception if the number of nodes requested is larger than the maximum number allowed
    * @todo get the readonly transaction working; see
    * MapResourceTest::testReadTransactionWithoutFailure
@@ -961,7 +961,7 @@ public class Map extends Maps
 
     //if the limit hasn't been exceeded, query out all nodes which fall within the geospatial
     //bounds, are visible, and belong to this map
-    log.debug("Retrieving ID's of nodes within the query bounds...");
+    log.debug("Retrieving IDs of nodes within the query bounds...");
 
     QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
 
@@ -983,7 +983,7 @@ public class Map extends Maps
     {
       //get all ways which have way nodes that belong to the previously queried node results, are
       //visible, and belong to this map; join in user info
-      log.debug("Retrieving ID's of ways within the query bounds...");
+      log.debug("Retrieving IDs of ways within the query bounds...");
       //query = new SQLQuery(conn, DbUtils.getConfiguration());
       QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
 
@@ -1002,7 +1002,7 @@ public class Map extends Maps
       /*
        * retrieve all relations that reference the nodes or ways previously retrieved
        */
-      log.debug("Retrieving relations ID's within the query bounds...");
+      log.debug("Retrieving relations IDs within the query bounds...");
 
       //query = new SQLQuery(conn, DbUtils.getConfiguration());
       QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
@@ -1041,7 +1041,7 @@ public class Map extends Maps
   }
 
   /**
-   * Executes a geospatial query for element ID's against the services database
+   * Executes a geospatial query for element IDs against the services database
    *
    * Bounds calculation: see query
    *
@@ -1054,7 +1054,7 @@ public class Map extends Maps
     themselves reference...only the ones in the query bounds).
    *
    * @param bounds geospatial bounds the returned nodes should fall within
-   * @return a collection of element ID's, grouped by element type
+   * @return a collection of element IDs, grouped by element type
    * @throws Exception if the number of nodes requested is larger than the maximum number allowed
    * @todo see query
    */
