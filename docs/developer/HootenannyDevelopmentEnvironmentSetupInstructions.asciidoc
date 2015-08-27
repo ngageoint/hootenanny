@@ -317,7 +317,7 @@ Run `sudo iptables -L -n` and confirm that all three chains have a policy set to
 to read
 +
 ----
-export JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64
+export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
 ----
 +
 . Add the following lines to `~/.profile`

@@ -203,7 +203,7 @@ public class Changeset extends Changesets
   }
 
   /**
-   * Updates the expiration of this changeset in the database by modifying its closed at time
+   * Updates the expiration of this changeset in the database by modifying it is closed at time
    *
    * This logic is pulled directly from the Rails port, and is meant to be executed
    * at the end of each upload process involving this changeset.  This effectively extends the

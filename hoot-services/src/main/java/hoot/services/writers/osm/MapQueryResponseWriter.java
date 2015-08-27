@@ -68,9 +68,9 @@ public class MapQueryResponseWriter
   /**
    * Writes the query response to an XML document
    *
-   * @param results query results; a mapping of element ID's to records, grouped by element type
+   * @param results query results; a mapping of element IDs to records, grouped by element type
    * @param queryBounds bounds of the query
-   * @param multiLayerUniqueElementIds if true, ID's are prepended with
+   * @param multiLayerUniqueElementIds if true, IDs are prepended with
    * <map id>_<first letter of the element type>_; this setting activated is not compatible with
    * standard OSM clients (specific to Hootenanny iD)
    * @return an XML document
