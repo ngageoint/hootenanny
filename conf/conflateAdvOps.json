@@ -252,6 +252,14 @@
     "name": "Road Options",
     "members": [
       {
+        "id": "hoot_enable_road_options",
+        "elem_type": "checkbox",
+        "description": "Enable road options",
+        "name": "Enabled",
+        "defaultvalue": "true",
+        "onchange": "var e = d3.select('#hoot_enable_road_options').property('checked');d3.select('#hoot_road_options_group').selectAll('input').property('disabled',!e);d3.select('#hoot_enable_road_options').property('disabled',false);"
+			},
+      {
         "id": "hoot_road_opt_engine",
         "elem_type": "list",
         "description": "A list of road engines",
@@ -337,11 +345,6 @@
 								"hoot_key": "way.merger.min.split.size"
 							}
 						]
-          },
-          {
-            "id": "hoot_road_opt_engine_disabled",
-            "description": "Disabled options",
-            "name": "Disabled"
           },
           {
             "id": "hoot_road_opt_engine_greedy",
@@ -500,36 +503,9 @@
 									"hoot_key": "merger.creators"
 							  }
 						]
-					},
-					{
-						"id": "hoot_poi_opt_disabled",
-						"description": "Disabled options",
-						"name": "Disabled"
-					}				 
+					}			 
 				]
-			},
-      {
-        "id": "poi_polygon_match_name_threshold",
-        "minvalue": "0",
-        "elem_type": "double",
-        "description": "If the name similarity score is greater than this then the names are considered a match. Scores are 0 to 1 for similarity and -1 if there are no names present (null).",
-        "maxvalue": "1",
-        "name": "POI Polygon Match Name Threshold",
-        "defaultvalue": "0.8",
-        "hoot_key": "poi.polygon.match.name.threshold",
-				"required":"true"
-      },
-      {
-        "id": "poi_polygon_match_review_distance",
-        "minvalue": "0",
-        "elem_type": "double",
-        "description": "How far away from a polygon should name matches be considered reviews. This is a fixed value in meters that is added to the CE calculation.",
-        "maxvalue": "",
-        "name": "POI Polygon Match Review Distance",
-        "defaultvalue": "0",
-        "hoot_key": "poi.polygon.match.review.distance",
-				"required":"true"
-      }
+			}
     ]
   },
   {
