@@ -237,11 +237,14 @@ public class DbUtils
 
   public static boolean closeConnection(Connection conn) throws Exception
   {
+  	if (conn.isClosed())
+  	{
+  		return true;
+  	}
   	try
   	{
-	  	if(conn != null)
+	  	if (conn != null)
 	  	{
-
 	  		conn.close();
 	  		return true;
 	  	}
@@ -250,7 +253,6 @@ public class DbUtils
   	{
   		throw e;
   	}
-
   	return false;
   }
 

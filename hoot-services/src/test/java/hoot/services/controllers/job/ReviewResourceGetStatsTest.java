@@ -132,7 +132,7 @@ public class ReviewResourceGetStatsTest extends OsmResourceTestAbstract
 
     Assert.assertEquals(mapId, response.getMapId());
     Assert.assertEquals(54, response.getNumTotalItems());
-    //TODO: fix - this should be returning 7 instead; I believe its ignoring way -44, whose review
+    //TODO: fix - this should be returning 7 instead; I believe it's ignoring way -44, whose review
     //against item is a relation with a node inside the query bounds; oddly enough the review get
     //resource test performs this query correctly, and they use nearly the same query code
     Assert.assertEquals(6, response.getNumReviewableItems());

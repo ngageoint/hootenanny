@@ -124,7 +124,7 @@ public class ReviewableItemsStatisticsCalculator
     java.util.Map<ElementType, Set<Long>> elementIdsWithinBoundsByType = null;
     if (!geospatialBounds.equals(BoundingBox.worldBounds()))
     {
-      // retrieve the ID's of all elements by type from the map that fall within
+      // retrieve the IDs of all elements by type from the map that fall within
       // the requested
       // geospatial bounds
       elementIdsWithinBoundsByType = (new Map(mapId, conn)).queryForElementIds(geospatialBounds);

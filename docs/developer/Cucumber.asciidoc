@@ -39,3 +39,4 @@ cd /fouo/hoot-tests/services.child/cucumber.child
 make test
 -----
 * If the test runs successfully you'll see no output. If there is a failure check the log file in `tmp/*.log`.
+

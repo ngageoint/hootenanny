@@ -135,11 +135,11 @@ public class ReviewUtils
   }
 
   /**
-   * Returns the ID's of all items that are currently marked as being reviewable
+   * Returns the IDs of all items that are currently marked as being reviewable
    *
    * @param mapId ID of the map owning the reviewable items
    * @param conn JDBC Connection
-   * @return reviewable element ID's grouped by element type
+   * @return reviewable element IDs grouped by element type
    */
   public static Map<ElementType, Set<Long>> getReviewableElementIds(final long mapId,
     Connection conn)
