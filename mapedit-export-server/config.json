@@ -10,7 +10,7 @@
       "File Geodatabase": ".gdb"
   },
   "schemas": {
-      "OSM": "",
+      "OSM": "translations/RenderDb_to_ESRI.js",
       "TDSv40": "translations/TDSv40.js",
       "TDSv61": "translations/TDSv61.js",
       "MGCP": "translations/MGCP_TRD4.js"
