@@ -66,7 +66,7 @@ maximumWayNodes=2000
 # amount to auto-expand changeset by after an update
 changesetBoundsExpansionFactorDeegrees=0.1
 
-# maximum amount of time that may pass without a changeset being updated before its closed
+# maximum amount of time that may pass without a changeset being updated before it is closed
 changesetIdleTimeoutMinutes=60
 
 # maximum amount of time a changeset can remain open
@@ -75,7 +75,7 @@ changesetMaxOpenTimeHours=24
 # allows for faster testing of changeset auto closing
 testChangesetAutoClose=false
 
-# allows nodes to have negative ID's to be compatible with hoot-core command line
+# allows nodes to have negative IDs to be compatible with hoot-core command line
 hootCoreServicesDatabaseWriterCompatibility=false
 
 # ETL SERVICE

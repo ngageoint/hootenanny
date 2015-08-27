@@ -223,7 +223,7 @@
     <!-- In all cases, for now, the code should ignore these and log an error.  If errors should 
     actually be thrown, then separate unit tests will have to  be added for each error case. - 
     doing these with nodes only, for now -->
-    <!-- duplicate unique id's (this duplicates the uuid of an above item); 
+    <!-- duplicate unique ids (this duplicates the uuid of an above item); 
     generates 0 element ID mappings; generates 0 reviews -->
     <node visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="0" changeset="" lat="38.9025841913319113" lon="-77.0529999999999831">
      <tag k="hoot:review:score" v="0.750459"/>

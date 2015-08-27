@@ -115,7 +115,7 @@ public class MapResource
 
 	/**
 	 * <NAME>Map Service - List Layers </NAME> <DESCRIPTION> Returns a list of all
-	 * map layers in the services database </DESCRIPTION> <PARAMETERS>
+	 * map layers in the services database. </DESCRIPTION> <PARAMETERS>
 	 * </PARAMETERS> <OUTPUT> a JSON object containing a list of map layers
 	 * </OUTPUT> <EXAMPLE>
 	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map/layers</URL>
@@ -169,7 +169,7 @@ public class MapResource
 
 	/**
 	 * <NAME>Map Service - List Folders </NAME> <DESCRIPTION> Returns a list of
-	 * all folders in the services database </DESCRIPTION> <PARAMETERS>
+	 * all folders in the services database. </DESCRIPTION> <PARAMETERS>
 	 * </PARAMETERS> <OUTPUT> a JSON object containing a list of folders </OUTPUT>
 	 * <EXAMPLE>
 	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map/folders</URL>
@@ -224,7 +224,7 @@ public class MapResource
 
 	/**
 	 * <NAME>Map Service - List Links </NAME> <DESCRIPTION> Returns a list of all
-	 * folder-map links </DESCRIPTION> <PARAMETERS> </PARAMETERS> <OUTPUT> a JSON
+	 * folder-map links. </DESCRIPTION> <PARAMETERS> </PARAMETERS> <OUTPUT> a JSON
 	 * object containing a list of folders </OUTPUT> <EXAMPLE>
 	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map/links</URL>
 	 * <REQUEST_TYPE>GET</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT> { "links": [ {
@@ -424,7 +424,7 @@ public class MapResource
 	 * </mapId> <bbox> string; geographic bounding box to restrict the map query
 	 * to of the form: minimum longitude, minimum latitude, maximum longitude,
 	 * maximum latitude; in WGS84 degrees </bbox> <multiLayerUniqueElementIds>
-	 * boolean; if true, returned element ID's are prepended with [map id]_[first
+	 * boolean; if true, returned element IDs are prepended with [map id]_[first
 	 * letter of the element type]_ </multiLayerUniqueElementIds> </PARAMETERS>
 	 * <OUTPUT> XML representation of each element which satisfied the map query
 	 * </OUTPUT> <EXAMPLE>
@@ -441,7 +441,7 @@ public class MapResource
 	 * @param bbox
 	 *          geographic bounding box the requested entities should reside in
 	 * @param multiLayerUniqueElementIds
-	 *          if true, returned element ID's are prepended with <map id>_<first
+	 *          if true, returned element IDs are prepended with <map id>_<first
 	 *          letter of the element type>_; this setting activated is not
 	 *          compatible with standard OSM clients (specific to Hootenanny iD);
 	 *          defaults to false
@@ -778,10 +778,10 @@ public class MapResource
 
 	/**
 	 * <NAME>Clean Map Data Service</NAME> <DESCRIPTION> Clean map data service
-	 * provides the ability to remove map associated record. It removes from
-	 * CURRENT_WAY_NODES,CURRENT_RELATION_MEMBERS,CURRENT_NODES,CURRENT_WAYS,
-	 * CURRENT_RELATIONS,
-	 * CHANGESET_TAGS,CHANGESETS,MAPS,REVIEW_ITEMS,ELEMENT_ID_MAPPINGS and
+	 * provides the ability to remove an associated map record. It removes from
+	 * CURRENT_WAY_NODES, CURRENT_RELATION_MEMBERS, CURRENT_NODES, CURRENT_WAYS, 
+	 * CURRENT_RELATIONS, 
+	 * CHANGESET_TAGS, CHANGESETS,MAPS, REVIEW_ITEMS, ELEMENT_ID_MAPPINGS, and
 	 * REVIEW_MAP. </DESCRIPTION> <PARAMETERS> <mapId> ID of map record to be
 	 * deleted
 	 * http://localhost:8080/hoot-services/osm/api/0.6/map/delete?mapId={Map ID}
@@ -817,7 +817,7 @@ public class MapResource
 
 	/**
 	 * <NAME>Modify Dataset or Folder Name</NAME> <DESCRIPTION> Modify Dataset or
-	 * Folder Name provides the ability to change the name of a dataset or Folder
+	 * Folder Name provides the ability to change the name of a dataset or Folder.
 	 * </DESCRIPTION> <PARAMETERS> <mapId> ID of map record or folder to be
 	 * modified </mapId> <modName> The new name for the dataset </modName>
 	 * <inputType> Flag for either dataset or folder </inputType> </PARAMETERS>
@@ -887,10 +887,10 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Add Folder </NAME> <DESCRIPTION> Adds new folder </DESCRIPTION>
+	 * <NAME>Add Folder </NAME> <DESCRIPTION> Adds new folder. </DESCRIPTION>
 	 * <PARAMETERS> <folderName> Display name of folder </folderName> <parentId>
 	 * The parent folder of the new folder. If at root level, is equal to 0.
-	 * </parentId> <OUTPUT> jobId Success = True/False </OUTPUT> <EXAMPLE>
+	 * </parentId> </PARAMETERS> <OUTPUT> jobId Success = True/False </OUTPUT> <EXAMPLE>
 	 * <URL>http
 	 * ://localhost:8080/hoot-services/osm/api/0.6/map/addfolder?folderName
 	 * ={foldername}&parentId={parentId}</URL> <REQUEST_TYPE>POST</REQUEST_TYPE>
@@ -953,8 +953,11 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Delete Folder </NAME> <DESCRIPTION> Deletes folder </DESCRIPTION>
-	 * <PARAMETERS> <folderId> Folder Id </folderName> <OUTPUT> jobId </OUTPUT>
+	 * <NAME>Delete Folder </NAME> <DESCRIPTION> Deletes folder. </DESCRIPTION>
+	 * <PARAMETERS> 
+	 * <folderId> Folder Id </folderId> 
+	 * </PARAMETERS>
+	 * <OUTPUT> jobId </OUTPUT>
 	 * <EXAMPLE>
 	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map/deletefolder
 	 * ?folderId={folderId}</URL> <REQUEST_TYPE>POST</REQUEST_TYPE> <INPUT>
@@ -1022,12 +1025,15 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Update Parent ID </NAME> <DESCRIPTION> Modifies the parent ID of a
-	 * folder </DESCRIPTION> <PARAMETERS> <folderId> ID of folder </folderId>
-	 * <parentId> ID of parent folder </mapId> <OUTPUT> jobId Success = True/False
-	 * </OUTPUT> <EXAMPLE>
+	 * <NAME>Update Parent ID </NAME> 
+	 * <DESCRIPTION> Modifies the parent ID of a folder. </DESCRIPTION> 
+	 * <PARAMETERS> 
+	 * <folderId> ID of folder </folderId>
+	 * </PARAMETERS>
+	 * <OUTPUT> jobId Success = True/False </OUTPUT> 
+	 * <EXAMPLE>
 	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map
-	 * /updateParentId?folderId={folderId}&parentId={parentId}</URL>
+	 * /updateParentId?folderId={folderId}</URL>
 	 * <REQUEST_TYPE>POST</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT>{"jobId":
 	 * "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT> </EXAMPLE>
 	 * 
@@ -1072,11 +1078,16 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Link Map and Folder </NAME> <DESCRIPTION> Adds or modifies record in
-	 * folder_map_mappings if layer is created or modified </DESCRIPTION>
-	 * <PARAMETERS> <folderId> ID of folder </folderName> <mapId> name of map.
-	 * Need to get Id from Map table. </mapId> <updateType> new: creates new link
-	 * update: updates link delete: deletes link </updateType> <OUTPUT> jobId
+	 * <NAME>Link Map and Folder </NAME> 
+	 * <DESCRIPTION> Adds or modifies record in
+	 * folder_map_mappings if layer is created or modified. </DESCRIPTION>
+	 * <PARAMETERS> 
+	 * <folderId> ID of folder </folderId> 
+	 * <mapId> ID of map. </mapId> 
+	 * <updateType> new: creates new link;
+	 * update: updates link delete: deletes link </updateType>
+	 * </PARAMETERS>
+	 * <OUTPUT> jobId
 	 * Success = True/False </OUTPUT> <EXAMPLE>
 	 * <URL>http://localhost:8080/hoot-services
 	 * /osm/api/0.6/map/addfolder?folderName

@@ -269,7 +269,6 @@ public class ExportJobResource extends JobControllerBase {
 	 * <NAME>Export Service Get Job Output</NAME>
 	 * <DESCRIPTION>
 	 * To retrieve the output from job make Get request.
-	 *  `http://localhost:8080/hoot-services/job/export/[job id from export job]?outputname=[user defined name]&removecache=[true | false]`
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * <outputname>
@@ -283,7 +282,7 @@ public class ExportJobResource extends JobControllerBase {
 	 * 	Octet stream
 	 * </OUTPUT>
 	 * <EXAMPLE>
-	 * 	<URL>"http://localhost:8080/hoot-services/job/export/8ee87f24-3333-44c5-870a-2b046d7fa26f?outputname=myoutput&removecache=true"</URL>
+	 * 	<URL>"http://localhost:8080/hoot-services/job/export/[job id from export job]?outputname=[user defined name]&removecache=[true | false]"</URL>
 	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
 	 * 	<INPUT>
 	 *	</INPUT>
@@ -354,8 +353,7 @@ public class ExportJobResource extends JobControllerBase {
 	/**
 	 * <NAME>Export Service Remove WFS</NAME>
 	 * <DESCRIPTION>
-	 * Removes specified WFS resource
-	 * `http://localhost:8080/hoot-services/job/export/wfs/remove/{resource id}`
+	 * Removes specified WFS resource.
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * </PARAMETERS>
@@ -403,7 +401,7 @@ public class ExportJobResource extends JobControllerBase {
 	/**
 	 * <NAME>Export Service Get WFS List</NAME>
 	 * <DESCRIPTION>
-	 * 	Lists all wfs resources
+	 * 	Lists all wfs resources.
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * </PARAMETERS>
@@ -452,7 +450,7 @@ public class ExportJobResource extends JobControllerBase {
 
 
 	/**
-	 * <NAME>Export Service Get Translation Scripts List For Export</NAME>
+	 * <NAME>Export Service Get List of Translation Scripts For Export</NAME>
 	 * <DESCRIPTION>
 	 * 	Based on the existence of translation script extension, it will send the list of available translations script for export.
 	 * </DESCRIPTION>

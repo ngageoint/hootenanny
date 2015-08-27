@@ -10,7 +10,7 @@
   <Title>Export Service</Title>
   <Abstract><![CDATA[
   <DESCRIPTION>
-  Export service provide 2 ways to export, job based asynch request for large export and synchronous request.
+  Export service provides 2 ways to export: job based asynchronous request for large export and synchronous request.
   </DESCRIPTION>
   <EXAMPLE>
   <URL>http://localhost:8080/hoot-services/ogc</URL>
