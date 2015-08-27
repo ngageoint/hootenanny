@@ -414,7 +414,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
       //existence of all nodes and validates their versions in a batch query.  The downside to
       //this, however, would be parsing the XML node data more than once.
 
-
     	Object existingRecord =
     			new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).from(getElementTable()).where(getElementIdField().eq(new Long(oldId)))
     			.singleResult(getElementTable());
@@ -430,9 +429,9 @@ public abstract class Element implements XmlSerializable, DbSerializable
         (Long)MethodUtils.invokeMethod(existingRecord, "getVersion", new Object[]{});
       if (version != existingVersion)
       {
-        throw new Exception("Invalid version: " + version + " for " + toString() + " with ID: " +
-          getId() + " and version " + existingVersion + " in changeset with ID: " +
-          MethodUtils.invokeMethod(record, "getChangesetId", new Object[]{}));
+        throw new Exception("Invalid version: " + version + " specified for " + toString() + 
+        	" with ID: " + getId() + " and expected version " + existingVersion + " in changeset " +
+          " with ID: " + MethodUtils.invokeMethod(record, "getChangesetId", new Object[]{}));
       }
       version++;
     }
@@ -444,10 +443,9 @@ public abstract class Element implements XmlSerializable, DbSerializable
         Long.parseLong(xmlAttributes.getNamedItem("version").getNodeValue());
       if (parsedVersion != 0)
       {
-        throw new Exception("Invalid version: " + version + " for element to be created: " +
-          toString() + " with ID: " + getId() + " and version " + parsedVersion +
-          " in changeset with ID: " +
-          MethodUtils.invokeMethod(record, "getChangesetId", new Object[]{}));
+        throw new Exception("Invalid version: " + parsedVersion + " specified for " + toString() + 
+          " with ID: " + getId() + " and expected version " + version + " in changeset " +
+          " with ID: " + MethodUtils.invokeMethod(record, "getChangesetId", new Object[]{}));
       }
     }
     return version;
