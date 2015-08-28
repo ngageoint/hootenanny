@@ -18,10 +18,10 @@ wait
 # reproduce it reliably, but I would like to fix it if I can get more info. -JRS
 # I think this is fixed by #3588, but can't really prove a negative. -JRS
 ##
-hoot --convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesA.osm "$DB_URL/AllDataTypesA" &
-hoot --convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesB.osm "$DB_URL/AllDataTypesB" &
-wait
-hoot --conflate $HOOT_OPTS "$DB_URL/AllDataTypesA" "$DB_URL/AllDataTypesB" test-output/cmd/ServiceDbTest/output.osm
+hoot --convert --debug $HOOT_OPTS test-files/conflate/unified/AllDataTypesA.osm "$DB_URL/AllDataTypesA" #&
+#hoot --convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesB.osm "$DB_URL/AllDataTypesB" &
+#wait
+#hoot --conflate $HOOT_OPTS "$DB_URL/AllDataTypesA" "$DB_URL/AllDataTypesB" test-output/cmd/ServiceDbTest/output.osm
 # Do a very course comparison check.
-hoot --stats -D stats.precision=12 -D stats.translate.script=$HOOT_HOME/translations/HootTest.js test-output/cmd/ServiceDbTest/output.osm
+#hoot --stats -D stats.precision=12 -D stats.translate.script=$HOOT_HOME/translations/HootTest.js test-output/cmd/ServiceDbTest/output.osm
 

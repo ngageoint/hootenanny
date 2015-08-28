@@ -99,14 +99,6 @@ bool ServicesDbWriter::isSupported(QString urlStr)
 
 void ServicesDbWriter::open(QString urlStr)
 {
-  /*
-  QString mapName = _openDb(urlStr, _overwriteMap);
-
-  _sdb.setMapId(_sdb.insertMap(mapName));
-
-  _startNewChangeSet();
-  */
-
   _openDb(urlStr, _overwriteMap);
 
   _startNewChangeSet();
@@ -172,12 +164,20 @@ void ServicesDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
           _sdb.deleteMap(*it);
           LOG_INFO("Finished removing map with ID: " << *it);
         }
+
+        _sdb.setMapId(_sdb.insertMap(mapName, true));
+
       }
       else
       {
         LOG_INFO("There are one or more maps with this name. Consider using "
                  "'services.db.writer.overwrite.map'. Map IDs: " << mapIds);
       }
+    }
+    else if ( mapIds.size() == 0 )
+    {
+      LOG_DEBUG("Map " << mapName << " was not found, must insert");
+      _sdb.setMapId(_sdb.insertMap(mapName, true));
     }
   }
 }
