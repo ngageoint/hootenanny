@@ -149,9 +149,13 @@ private:
   shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
     const ElementType& elementType, OsmMap& map);
 
+  // Services data assignment methods
   shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
   shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
   shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
+
+  // Osm Api data assignment methods
+  shared_ptr<Node> _resultToNode_OsmApi(const QSqlQuery& resultIterator, OsmMap& map);
 
 };
 

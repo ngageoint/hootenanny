@@ -40,7 +40,7 @@
 
 // special define:
 //   Greg's workspace set true; Terry's set false
-#define GREGSWORKSPACE false
+#define GREGSWORKSPACE true
 
 namespace hoot
 {
@@ -464,7 +464,7 @@ public:
       database.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
 
     /////////////////////////////////////
-    // INSERT NODES
+    // INSERT NODES INTO DB
     /////////////////////////////////////
 
     database.transaction();
@@ -480,7 +480,7 @@ public:
     QList<float> lats = QList<float>() << 38.4 << 38;
     QList<float> lons = QList<float>() << -106.5 << -104;
 
-    // insert into db
+    // insert node into db
     for(int i=0;i<2;i++)
     {
       Tags t;
@@ -521,12 +521,10 @@ public:
 
     shared_ptr<QSqlQuery> nodeResultIterator = database.selectAllElements(ElementType::Node);
 
-    LOG_DEBUG("num rows affected="+QString::number(nodeResultIterator->numRowsAffected()));
-
     // check if db active or not
     assert(nodeResultIterator.isActive());
 
-    const int numFields = 10;
+    const int numNodeFields = 10;
     long long lastId = LLONG_MIN;
 
     // read through the elements until the number inserted for this test is reached
@@ -553,31 +551,95 @@ public:
       }
 
       // verify the values written to the DB upon their read-back
-      for(int j=0;j<numFields;j++) { LOG_DEBUG("VALUE = "+nodeResultIterator->value(j).toString()); }
+      for(int j=0;j<numNodeFields;j++) { LOG_DEBUG("VALUE = "+nodeResultIterator->value(j).toString()); }
 
       // read the tag for as many rows as there are tags
       QString key = nodeResultIterator->value(8).toString();
       LOG_DEBUG(QString("Processing tag ")+key);
       tagIndx = ServicesDbTestUtils::findIndex(keys, key);
       HOOT_STR_EQUALS(QString(keys[tagIndx]+" = "+values[tagIndx]+"\n").toStdString().c_str(),
-        ServicesDb::unescapeTags(database.extractTagFromRow(nodeResultIterator)));
+        ServicesDb::unescapeTags(database.extractTagFromRow_OsmApi(nodeResultIterator, ServicesDb::NODES_TAGS)));
     }
 
-/*
+    ///////////////////////////////////////////////
+    /// Insert a way into the Osm Api DB
+    ///////////////////////////////////////////////
+
+    database.transaction();
+
+    // Create or get user, set our userId
+    database.setUserId(database.getOrCreateUser("OsmApiInsert@hoot.local", "Hootenanny Inserter"));
+    database.beginChangeset();
+
+    const long nodeId1 = ids.at(0);
+    const long nodeId2 = ids.at(1);
+    ids.clear();
+    Tags t2;
+    t2["highway"] = "primary";
+    long insertedWayId;
+    database.insertWay(t2, insertedWayId);
+    ids.append(insertedWayId);
+    vector<long> nodeIds;
+    nodeIds.push_back(nodeId1);
+    nodeIds.push_back(nodeId2);
+    database.insertWayNodes(insertedWayId, nodeIds);
+
+    database.endChangeset();
+    database.commit();
+
+    ///////////////////////////////////////////////
+    /// Reads the ways from the Osm Api DB
+    ///////////////////////////////////////////////
+
     shared_ptr<QSqlQuery> wayResultIterator = database.selectAllElements(ElementType::Way);
-    ctr = 0;
-    while (wayResultIterator->next())
+
+    // check again if db active or not
+    assert(wayResultIterator.isActive());
+
+    const int numWayFields = 7;
+    lastId = LLONG_MIN;
+
+    // read through the elements until the number inserted for this test is reached
+    // - the number inserted is determined by ids.size()
+    elementCtr = ids.size()-1;
+    tagIndx = -1;
+    while( wayResultIterator->next() )
     {
-      HOOT_STR_EQUALS(wayId, wayResultIterator->value(0).toLongLong());
-      vector<long> v = database.selectNodeIdsForWay(wayId);
-      HOOT_STR_EQUALS(1, v.size());
-      CPPUNIT_ASSERT_EQUAL(nodeId, v[0]);
+      long long wayId = wayResultIterator->value(0).toLongLong();
+      if( lastId != wayId )
+      {
+        if(elementCtr < 0) break;
 
-      HOOT_STR_EQUALS("highway = primary\n", ServicesDb::unescapeTags(wayResultIterator->value(5)));
-      ctr++;
+        // perform the comparison tests
+        LOG_DEBUG(QString("Processing element ")+QString::number(elementCtr+1));
+        // test the first line's data which is the current_nodes (main data): id, lat, lon, tag1
+        LOG_DEBUG("ids = "+QString::number(ids[elementCtr]));
+        LOG_DEBUG("wayId = "+QString::number(wayId));
+
+        HOOT_STR_EQUALS(ids[elementCtr], wayId);
+
+        // get the way nodes and do some minimal testing
+        vector<long> v = database.selectNodeIdsForWay(wayId);
+        HOOT_STR_EQUALS(2, v.size());
+        CPPUNIT_ASSERT_EQUAL(nodeId2, v[1]);
+        CPPUNIT_ASSERT_EQUAL(nodeId1, v[0]);
+
+        // mark this way id processed
+        lastId = wayId;
+        elementCtr--;
+      }
+
+      // verify the values written to the DB upon their read-back
+      for(int j=0;j<numWayFields;j++) { LOG_DEBUG("VALUE = "+wayResultIterator->value(j).toString()); }
+
+      // read the tag for as many rows as there are tags
+      QString key = wayResultIterator->value(ServicesDb::WAYS_TAGS).toString();
+      LOG_DEBUG(QString("Processing tag ")+key);
+      HOOT_STR_EQUALS("highway = primary\n", ServicesDb::unescapeTags(
+        database.extractTagFromRow_OsmApi(wayResultIterator, ServicesDb::WAYS_TAGS)));
     }
-    CPPUNIT_ASSERT_EQUAL(1, ctr);
 
+    /*
     shared_ptr<QSqlQuery> relationResultIterator =
       database.selectAllElements(ElementType::Relation);
     ctr = 0;
