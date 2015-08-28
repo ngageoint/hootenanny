@@ -303,7 +303,6 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)
     {
       _sdb.insertNode(n->getY(), n->getX(), t, newId);
       _nodeRemap[n->getId()] = newId;
-      LOG_DEBUG("Node " << QString::number(n->getId()) << " being inserted into DB as " << QString::number(newId));
     }
     else
     {

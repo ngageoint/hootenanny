@@ -94,10 +94,7 @@ public:
 
   static string className() { return "hoot::OsmMap"; }
 
-  //typedef QHash<long, boost::shared_ptr<Node> > NodeMap;
-
-  // Converted to QMap to guarantee ordering of iteration for testing repeatability
-  typedef QMap<long, boost::shared_ptr<Node> > NodeMap;
+  typedef QHash<long, boost::shared_ptr<Node> > NodeMap;
 
   OsmMap();
 

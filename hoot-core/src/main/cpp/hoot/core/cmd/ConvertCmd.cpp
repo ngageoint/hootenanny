@@ -103,8 +103,6 @@ public:
 
       MapReprojector::reprojectToWgs84(map);
 
-      LOG_DEBUG("Calling savemap due to no streaming ability");
-
       saveMap(map, args[1]);
     }
 
