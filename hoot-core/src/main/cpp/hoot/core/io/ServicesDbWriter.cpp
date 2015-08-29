@@ -143,7 +143,7 @@ void ServicesDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
     _sdb.setUserId(_sdb.getUserId(_userEmail, true));
   }
 
-  LOG_DEBUG("DB user set");
+  //LOG_DEBUG("DB user set");
 
   // start the transaction. We'll close it when finalizePartial is called.
   _sdb.transaction();
