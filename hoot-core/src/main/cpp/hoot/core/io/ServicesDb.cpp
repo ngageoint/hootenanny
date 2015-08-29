@@ -130,6 +130,12 @@ void ServicesDb::close()
   // Make sure all queries are listed in _resetQueries.
   _db.close();
 
+  if ( _nodesFlushedFromCache > 0 )
+  {
+    LOG_DEBUG("At close, we've added " << QString::number(_nodesAddedToCache) << " nodes");
+    LOG_DEBUG("At close, we've flushed " << QString::number(_nodesFlushedFromCache) << " nodes");
+  }
+
   _connectionType = DBTYPE_UNSUPPORTED;
 }
 
@@ -676,6 +682,9 @@ void ServicesDb::_init()
   // Value selected due to code comment: "500 found experimentally on my desktop [-initials]"
   _elementCacheCapacity = 500;
   _elementCache.reset(new ElementCacheLRU(_elementCacheCapacity));
+
+  _nodesAddedToCache = 0;
+  _nodesFlushedFromCache = 0;
 }
 
 void ServicesDb::beginChangeset()
@@ -2239,6 +2248,7 @@ void ServicesDb::_insertNode_OsmApi(const long id, const double lat, const doubl
   newNode->setTags(tags);
   ConstElementPtr constNode(newNode);
   _elementCache->addElement(constNode);
+  _nodesAddedToCache++;
 
   // See if node portion of cache is full and needs to be flushed
   if ( _elementCache->typeCount(ElementType::Node) == _elementCacheCapacity )
@@ -2690,6 +2700,12 @@ void ServicesDb::_flushElementCacheOsmApiWayNodes()
           wayNodesInsertCmd += ", ";
         }
 
+        if ( *nodeIter == 0 )
+        {
+          LOG_ERROR("Way " << wayIDString << " has node with ID 0");
+          throw HootException("Bail");
+        }
+
         currentWayNodesInsertCmd +=
             // Opening paren
             "(" +
@@ -2741,6 +2757,8 @@ void ServicesDb::_flushElementCacheOsmApiWayNodes()
   {
     throw HootException("Database error when inserting ways");
   }
+
+  _nodesFlushedFromCache += _wayNodesCache.size();
 
   // Remove all way nodes from cache as they've been written
   _wayNodesCache.clear();

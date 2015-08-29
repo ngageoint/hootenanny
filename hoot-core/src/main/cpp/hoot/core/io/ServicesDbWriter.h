@@ -99,6 +99,10 @@ private:
   IdRemap _wayRemap;
   bool _remapIds;
 
+  unsigned long _nodesWritten;
+  unsigned long _waysWritten;
+  unsigned long _relationsWritten;
+
   void _openDb(QString& urlStr, bool deleteMapFlag);
 
   void _addElementTags(const shared_ptr<const Element>& e, Tags& t);

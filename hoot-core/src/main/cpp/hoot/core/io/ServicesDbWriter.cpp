@@ -45,6 +45,10 @@ ServicesDbWriter::ServicesDbWriter()
 {
   _open = false;
   _remapIds = true;
+  _nodesWritten = 0;
+  _waysWritten = 0;
+  _relationsWritten = 0;
+
   setConfiguration(conf());
 }
 
@@ -65,6 +69,13 @@ void ServicesDbWriter::_addElementTags(const shared_ptr<const Element> &e, Tags&
 void ServicesDbWriter::close()
 {
   finalizePartial();
+  if ( (_nodesWritten > 0) || (_waysWritten > 0) || (_relationsWritten > 0) )
+  {
+    LOG_DEBUG("Write stats:");
+    LOG_DEBUG("\t    Nodes: " << QString::number(_nodesWritten));
+    LOG_DEBUG("\t     Ways: " << QString::number(_waysWritten));
+    LOG_DEBUG("\tRelations: " << QString::number(_relationsWritten));
+  }
 }
 
 void ServicesDbWriter::_countChange()
@@ -234,18 +245,23 @@ ElementId ServicesDbWriter::_remapOrCreateElementId(ElementId eid, const Tags& t
 
 vector<long> ServicesDbWriter::_remapNodes(const vector<long>& nids)
 {
-  vector<long> result(nids.size());
+  vector<long> result(nids.size()); // Creates the vector and fills nids.size number of zeroes
 
   Tags empty;
+
   for (size_t i = 0; i < nids.size(); i++)
   {
-    if (_remapIds)
+    // This is only called when adding nodes for a way.  If a way has a node we
+    //    did not successfully create a mapping for when importing nodes,
+    //    we can't continue
+    if ( _nodeRemap.count(nids[i]) == 1 )
     {
-      result[i] = _remapOrCreateElementId(ElementId::node(nids[i]), empty).getId();
+      result[i] = _nodeRemap.at(nids[i]);
     }
     else
     {
-      result[i] = nids[i];
+      throw HootException(QString("Requested ID remap for node " +  QString::number(nids[i])
+        + QString(" but it did not exist in mapping table")));
     }
   }
 
@@ -290,29 +306,34 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)
                         "ServicesDbWriter.");
   }
 
-  // If we remapping IDs but this node is already known, update the existing node
-  else if (_remapIds && _nodeRemap.count(n->getId()) != 0)
+  if (_remapIds)
   {
-    newId = _nodeRemap.at(n->getId());
-    _sdb.updateNode(n->getId(), n->getY(), n->getX(), t);
-    countChange = false;
-  }
-  else
-  {
-    if ( _remapIds == true )
+    bool alreadyThere = _nodeRemap.count(n->getId()) != 0;
+    if ( alreadyThere == false )
     {
       _sdb.insertNode(n->getY(), n->getX(), t, newId);
       _nodeRemap[n->getId()] = newId;
     }
     else
     {
-      _sdb.insertNode(n->getId(), n->getY(), n->getX(), t);
+      _sdb.updateNode(_nodeRemap.at(n->getId()), n->getY(), n->getX(), n->getTags());
+      LOG_DEBUG("Updated node " << QString::number(n->getId()) << ", mapped to "
+                << QString::number(newId) );
+
+      countChange = false;
+
     }
+  }
+  else
+  {
+    //LOG_DEBUG("Inserted node " << QString::number(n->getId()) << ", no remapping" );
+    _sdb.insertNode(n->getId(), n->getY(), n->getX(), t);
   }
 
   if (countChange)
   {
     _countChange();
+    _nodesWritten++;
   }
 }
 
@@ -348,9 +369,18 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Way>& w)
     _sdb.insertWay(w->getId(), tags);
   }
 
-  _sdb.insertWayNodes(wayId, _remapNodes(w->getNodeIds()));
+  if ( _remapIds == true )
+  {
+    _sdb.insertWayNodes(wayId, _remapNodes(w->getNodeIds()));
+  }
+  else
+  {
+    _sdb.insertWayNodes(wayId, w->getNodeIds());
+  }
 
   _countChange();
+
+  _waysWritten++;
 }
 
 void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
@@ -402,6 +432,8 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
   _countChange();
 
   //LOG_DEBUG("Leaving relation write cleanly");
+
+  _relationsWritten++;
 }
 
 }

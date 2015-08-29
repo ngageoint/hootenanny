@@ -400,6 +400,8 @@ private:
 
   std::multimap<long, RelationMemberCacheEntry> _relationMembersCache;
 
+  unsigned long _nodesAddedToCache;
+  unsigned long _nodesFlushedFromCache;
 
   /**
    * This is here to improve query caching. In most cases users open a single ServiceDb and then
