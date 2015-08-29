@@ -130,11 +130,8 @@ void ServicesDb::close()
   // Make sure all queries are listed in _resetQueries.
   _db.close();
 
-  if ( _nodesFlushedFromCache > 0 )
-  {
-    LOG_DEBUG("At close, we've added " << QString::number(_nodesAddedToCache) << " nodes");
-    LOG_DEBUG("At close, we've flushed " << QString::number(_nodesFlushedFromCache) << " nodes");
-  }
+  //LOG_DEBUG("At close, we've added " << QString::number(_nodesAddedToCache) << " nodes");
+  //LOG_DEBUG("At close, we've flushed " << QString::number(_nodesFlushedFromCache) << " nodes");
 
   _connectionType = DBTYPE_UNSUPPORTED;
 }

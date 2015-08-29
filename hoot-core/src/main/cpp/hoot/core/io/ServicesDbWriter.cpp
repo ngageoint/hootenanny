@@ -203,6 +203,7 @@ ElementId ServicesDbWriter::_remapOrCreateElementId(ElementId eid, const Tags& t
   switch(eid.getType().getEnum())
   {
   case ElementType::Node:
+    /*
     {
       if (_nodeRemap.count(eid.getId()) == 1)
       {
@@ -214,6 +215,9 @@ ElementId ServicesDbWriter::_remapOrCreateElementId(ElementId eid, const Tags& t
       _nodeRemap[eid.getId()] = newId;
       return ElementId::node(newId);
     }
+    */
+    throw HootException("Cannot call remap or create on nodes");
+    break;
   case ElementType::Way:
     {
       if (_wayRemap.count(eid.getId()) == 1)
@@ -419,12 +423,73 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
     relationId = r->getId();
   }
 
-  Tags empty;
+  Tags emptyTags;
   for (size_t i = 0; i < r->getMembers().size(); ++i)
   {
     RelationData::Entry e = r->getMembers()[i];
-    ElementId eid = _remapOrCreateElementId(e.getElementId(), empty);
-    _sdb.insertRelationMember(relationId, eid.getType(), eid.getId(), e.role, i);
+
+    // All nodes and ways are already inserted in the database. May need to
+    //    find mappings for those.  Only need to create new ID mappings
+    //    for relations we've not yet seen
+    ElementId relationMemberElementId = e.getElementId();
+
+    switch ( relationMemberElementId.getType().getEnum() )
+    {
+    case ElementType::Node:
+      if ( _remapIds == true )
+      {
+        if ( _nodeRemap.count(relationMemberElementId.getId()) == 1 )
+        {
+          relationMemberElementId = ElementId(relationMemberElementId.getType(),
+            _nodeRemap[relationMemberElementId.getId()]);
+        }
+        else
+        {
+          /*
+          LOG_WARN("Could not find node ID mapping for node " <<
+            QString::number(relationMemberElementId.getId()) <<
+            ", member of relation " <<
+            QString::number(r->getId()));
+          */
+          continue;
+        }
+      }
+      break;
+    case ElementType::Way:
+      if ( _remapIds == true )
+      {
+        if ( _wayRemap.count(relationMemberElementId.getId()) == 1 )
+        {
+          relationMemberElementId = ElementId(relationMemberElementId.getType(),
+            _wayRemap[relationMemberElementId.getId()]);
+        }
+        else
+        {
+          /*
+          LOG_WARN("Could not find way ID mapping for way " <<
+            QString::number(relationMemberElementId.getId()) <<
+            ", member of relation " <<
+            QString::number(r->getId()));
+          */
+          continue;
+        }
+      }
+
+      break;
+    case ElementType::Relation:
+      if ( _remapIds == true )
+      {
+        relationMemberElementId = _remapOrCreateElementId(relationMemberElementId, emptyTags);
+      }
+      break;
+
+    default:
+      throw HootException("Element relation with unknown type");
+      break;
+    }
+
+    _sdb.insertRelationMember(relationId, relationMemberElementId.getType(),
+                              relationMemberElementId.getId(), e.role, i);
   }
 
   //LOG_DEBUG("All members added to relation " << QString::number(relationId));
