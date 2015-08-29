@@ -52,7 +52,7 @@ sub createOsmDom($$)
 
   my $domRef = $xs->XMLin($xmlString, 
     KeyAttr => { node => 'id', way => 'id' }, 
-    ForceArray => [ 'node', 'tag', 'way' ] );
+    ForceArray => [ 'node', 'tag', 'way', 'nd' ] );
 
   return $domRef;
 }
@@ -260,6 +260,15 @@ sub validateCurrentNodes($$)
 
       my $xmlTagsArrayRef = $currXmlNode{'tag'};
 
+      # Make sure number of tags are equal
+      if ( scalar( @{$xmlTagsArrayRef} ) != 
+          scalar( keys(%{ $currentNodesData{$databaseNodeId}->{'tags'} })) )
+      {
+        print("ERROR: number of tags in XML for node $currXmlNodeId " .
+          "does not match database node $nodeIdMappingsXmlToDb{$currXmlNodeId}\n");
+        exit;
+      }
+
       my $currTag;
 
       foreach $currTag ( @{$xmlTagsArrayRef} )
@@ -279,6 +288,16 @@ sub validateCurrentNodes($$)
           #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
           #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
         }
+      }
+    }
+    else
+    {
+      # Confirm database does not have tags either
+      if ( exists($currentNodesData{$databaseNodeId}->{'tags'}) )     
+      {
+        print( "XML did not have tags for node $currXmlNodeId, but matching " .
+          "database node $databaseNodeId did!\n" );
+        exit;
       }
     }
   }
@@ -481,6 +500,16 @@ sub validateNodes($$)
 
       my $xmlTagsArrayRef = $currXmlNode{'tag'};
 
+      # Make sure number of tags are equal
+      if ( scalar( @{$xmlTagsArrayRef} ) !=
+          scalar( keys(%{ $nodesData{$databaseNodeId}->{'tags'} })) )
+      {
+        print("ERROR: number of tags in XML for node $currXmlNodeId " .
+          "does not match database node $nodeIdMappingsXmlToDb{$currXmlNodeId}\n");
+        exit;
+      }
+
+
       my $currTag;
 
       foreach $currTag ( @{$xmlTagsArrayRef} )
@@ -502,6 +531,17 @@ sub validateNodes($$)
         }
       }
     }
+    else
+    {
+      # Confirm database does not have tags either
+      if ( exists($nodesData{$databaseNodeId}->{'tags'}) )     
+      {
+        print( "XML did not have tags for node $currXmlNodeId, but matching " .
+          "database node $databaseNodeId did!\n" );
+        exit;
+      }
+    }
+
   }
 
   # If we made it this far, nodes and node_tags are 100% correct to XML
@@ -643,6 +683,62 @@ sub validateCurrentWays($$)
     }
   }
 
+  # Read current_way_nodes
+  $foundStart = 0;
+  foreach $currLine (@dumpLines)
+  {
+    chomp($currLine);
+
+    # Find out where table data starts
+    if ( $foundStart == 0 )
+    {
+      if ($currLine =~ /^COPY current_way_nodes \(.+\) FROM stdin;/ )
+      {
+        $foundStart = 1;
+      }
+
+      # Either way, can't do any more processing
+      next;
+    }
+
+    # Are we at end of data?
+    if ( $currLine =~ /^\\./ )
+    {
+      last;
+    }
+
+    #print( "Current_way_nodes entry: $currLine\n" );
+
+    # Have valid way nodes
+    my %currentWayNodeEntry;
+
+    # Break into tokens based on tab delimiter
+    # Schema: way_id, node_id, sequence_id
+    my @tokens = split( /\t+/, $currLine);
+
+    #print( "Found current_way_node\n");
+
+    #print( "\tID: $tokens[0]\n\tKey: $tokens[1]\n\tValue: $tokens[2]\n");
+
+    # Store the entry in hash of nodes in this way
+    if ( exists($currentWaysData{ $tokens[0] }->{'way_nodes'} ) )
+    {
+      $currentWaysData{ $tokens[0] }->{'way_nodes'}->{$tokens[2]} = $tokens[1];
+
+      my $way_node;
+      foreach $way_node ( sort( {$a <=> $b} keys( %{ $currentWaysData{ $tokens[0] }->{'way_nodes'}})) )
+      {
+        print( "\tFound node for way $tokens[0]: seq $way_node = node " .
+          $currentWaysData{ $tokens[0] }->{'way_nodes'}->{$way_node} . "\n");
+      }
+    }
+    else
+    {
+      $currentWaysData{ $tokens[0] }->{'way_nodes'} = { $tokens[2] => $tokens[1] };
+    }
+  }
+
+
   # Now let's create mapping for Postgres way ID -> OSM way ID.  the OSM XML way IDs were added in 
   #   ascending way ID order, so if we iterate over OSM API way IDs in ascending, we have a guaranteed
   #   mapping
@@ -679,34 +775,67 @@ sub validateCurrentWays($$)
     # Tags
     if ( exists($currXmlWay{'tag'}) )
     {
-      print( "XML Tags: " . Dumper($currXmlWay{'tag'}) . "\n");
-      print( "DB tags: " . Dumper($currentWaysData{$databaseWayId}->{'tags'}) . "\n");
+      #print( "XML Tags: " . Dumper($currXmlWay{'tag'}) . "\n");
+      #print( "DB tags: " . Dumper($currentWaysData{$databaseWayId}->{'tags'}) . "\n");
 
-      #my $xmlTagsArrayRef = $currXmlNode{'tag'};
+      my $xmlTagsArrayRef = $currXmlWay{'tag'};
 
-      #my $currTag;
+      # Make sure number of tags are equal
+      if ( scalar( @{$xmlTagsArrayRef} ) !=
+          scalar( keys(%{ $currentWaysData{$databaseWayId}->{'tags'} })) )
+      {
+        print("ERROR: number of tags in XML for way $currXmlWayId " .
+          "does not match database way $wayIdMappingsXmlToDb{$currXmlWayId}\n");
+        exit;
+      }
 
-      #foreach $currTag ( @{$xmlTagsArrayRef} )
-      #{
-        #my %xmlTagEntry = %{ $currTag };
+      my $currTag;
+
+      foreach $currTag ( @{$xmlTagsArrayRef} )
+      {
+        my %xmlTagEntry = %{ $currTag };
         #print( "Key   : $tagEntry{'k'}\n");
         #print( "Value : $tagEntry{'v'}\n");
 
-        #my %dbTagEntry = %{ $currentNodesData{$databaseNodeId}->{'tags'} };
-        #if ( ! exists( $dbTagEntry{ $xmlTagEntry{'k'} } ) )
-        #{
-        #  print("Could not find database version of tag " . Dumper(%xmlTagEntry) . "\n" );
-        #  exit;
-        #}
-        #else
-        #{
+        my %dbTagEntry = %{ $currentWaysData{$databaseWayId}->{'tags'} };
+        if ( ! exists( $dbTagEntry{ $xmlTagEntry{'k'} } ) )
+        {
+          print("Could not find database version of tag " . Dumper(%xmlTagEntry) . "\n" );
+          exit;
+        }
+        else
+        {
           #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
           #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
-        #}
-      #}
+        }
+      }
+    }
+    else
+    {
+      # Confirm database does not have tags either
+      if ( exists($currentWaysData{$databaseWayId}->{'tags'}) )     
+      {
+        print( "XML did not have tags for way $currXmlWayId, but matching " .
+          "database way $databaseWayId did!\n" );
+        exit;
+      }
     }
 
     # way_nodes 
+    if ( exists($currXmlWay{'nd'}) )
+    {
+      
+    }
+    else
+    {
+      #print("Found an XML way with no nodes: $currXmlWayId\n");
+
+      # Confirm database does not have nodes for this way either
+      if ( exists( $currentWaysData{$databaseWayId}->{'nd'}) )
+      {
+        
+      }
+    }
   }
 
   # If we made it this far, current_ways and current_way_tags are 100% correct to XML
