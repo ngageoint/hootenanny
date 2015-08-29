@@ -654,15 +654,69 @@ sub validateCurrentWays($$)
   {
     $wayIdMappingsXmlToDb{$currXmlWayId} = $sortedDbWayIds[$i];
 
-    print("XML way ID $currXmlWayId maps to DB way ID $sortedDbWayIds[$i]\n");
+    #print("XML way ID $currXmlWayId maps to DB way ID $sortedDbWayIds[$i]\n");
 
     $i++;
   }
 
+  # Now that we have mapping, go back and compare each XML way to corresponding entry in current_ways
+  foreach $currXmlWayId ( sort( {$a <=> $b} keys(%$osmXmlWaysRef)) )
+  {
+    my %currXmlWay = %{ $osmXmlWaysRef->{$currXmlWayId} };
+    my $databaseWayId = $wayIdMappingsXmlToDb{$currXmlWayId};
+
+    # Check version, tags
+
+    # Version -- as this is a new ingest, must be v1 in database
+    if ( $currentWaysData{$wayIdMappingsXmlToDb{$currXmlWayId}}->{'version'} != 1 )
+    {
+      print("XML way $currXmlWayId with database way ID " .
+          $wayIdMappingsXmlToDb{$currXmlWayId} . " is not version 1 which it should be after " .
+          "being newly-inserted into a fresh database\n" );
+      exit;
+    }
+
+    # Tags
+    if ( exists($currXmlWay{'tag'}) )
+    {
+      print( "XML Tags: " . Dumper($currXmlWay{'tag'}) . "\n");
+      print( "DB tags: " . Dumper($currentWaysData{$databaseWayId}->{'tags'}) . "\n");
+
+      #my $xmlTagsArrayRef = $currXmlNode{'tag'};
+
+      #my $currTag;
+
+      #foreach $currTag ( @{$xmlTagsArrayRef} )
+      #{
+        #my %xmlTagEntry = %{ $currTag };
+        #print( "Key   : $tagEntry{'k'}\n");
+        #print( "Value : $tagEntry{'v'}\n");
+
+        #my %dbTagEntry = %{ $currentNodesData{$databaseNodeId}->{'tags'} };
+        #if ( ! exists( $dbTagEntry{ $xmlTagEntry{'k'} } ) )
+        #{
+        #  print("Could not find database version of tag " . Dumper(%xmlTagEntry) . "\n" );
+        #  exit;
+        #}
+        #else
+        #{
+          #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
+          #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
+        #}
+      #}
+    }
+
+    # way_nodes 
+  }
+
+  # If we made it this far, current_ways and current_way_tags are 100% correct to XML
+  print("\t\tDeep inspection of data integrity: PASS\n");
+
+}
+
 
   
 
-}
 
 sub validateWays($$)
 {
