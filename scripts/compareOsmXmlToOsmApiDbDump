@@ -842,7 +842,7 @@ sub validateCurrentWays($$)
       #       of nodes in the XML
       #   - Any nodes missing from the way are ALSO missing from the 
       #       nodes section of the database 
-      #   - There are no nodes in the way that are NOT listed in the
+      #   - There are no nodes in the database way that are NOT listed in the
       #       XML
 
       # Make sure number of nodes in the XML is GREATER OR EQUAL TO nodes in DB way
@@ -905,20 +905,6 @@ sub validateCurrentWays($$)
             ", node ID = $currXmlWayNodeId at invalid index $dbNodeSearchIndex " .
             "in database way $databaseWayId\n");
         }
-
-        #print( Dumper( $currentWaysData{$databaseWayId}->{'way_nodes'}->{($i + 1)} ) . "\n" );
-
-        #last;
-
-        #if ( exists( %{ $currentWaysData{$databaseWayId}->{'way_nodes'} }) )
-        #{
-
-        #}
-        #else
-        #{
-          # Deal with a way node missing from the database version -- need to make sure there's
-          #   a reason for the problem
-        #}
       }
     }
     else
@@ -936,9 +922,9 @@ sub validateCurrentWays($$)
     }
   }
 
-  # If we made it this far, current_ways and current_way_tags are 100% correct to XML
+  # If we made it this far, current_ways, current_way_tags, and current_way_nodes
+  #     line up 100% with XML
   print("\t\tDeep inspection of data integrity: PASS\n");
-
 }
 
 
