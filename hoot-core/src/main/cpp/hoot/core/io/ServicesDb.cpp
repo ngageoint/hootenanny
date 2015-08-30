@@ -3063,6 +3063,9 @@ void ServicesDb::_flushElementCacheOsmApiRelations()
       //    still queued up
       _relationIdsWrittenToDb.insert(currRelation->getId());
 
+      LOG_DEBUG("Flushed relation ID " <<
+                QString::number(currRelation->getId()));
+
       currRelation = _elementCache->getNextRelation();
     }
 
@@ -3076,7 +3079,7 @@ void ServicesDb::_flushElementCacheOsmApiRelations()
     //LOG_DEBUG("ways:\n\t" + waysInsertCmd);
     _execNoPrepare(relationsInsertCmd);
 
-    // Does way have tags?
+    // Does relation have tags?
     if ( needInsertTags == true )
     {
       // Do final semicolons
@@ -3102,9 +3105,6 @@ void ServicesDb::_flushElementCacheOsmApiRelations()
   for ( std::vector<long>::const_iterator flushedRelationIdIter = relationIds.begin();
         flushedRelationIdIter != relationIds.end(); ++flushedRelationIdIter )
   {
-    LOG_DEBUG("Flushed relation ID " <<
-              QString::number(*flushedRelationIdIter));
-
     // Can we resolve any pending references that were pointing to this relation?
     if ( _unresolvedRelationReferences.count(*flushedRelationIdIter) > 0 )
     {
@@ -3112,7 +3112,35 @@ void ServicesDb::_flushElementCacheOsmApiRelations()
           QString::number(*flushedRelationIdIter) << " which was just flushed. " <<
           "Moving relation members back to queue to be flushed" );
 
-      LOG_DEBUG("TODO: need to actually move them!!!!");
+      //LOG_DEBUG("TODO: need to actually move them!!!!");
+
+      // Find range of matching values in the map -- it's a multimap, may be more than one
+      std::pair<
+          std::multimap<long, std::pair<long, RelationMemberCacheEntry > >::iterator,
+          std::multimap<long, std::pair<long, RelationMemberCacheEntry > >::iterator > searchResults;
+
+      searchResults = _unresolvedRelationReferences.equal_range(*flushedRelationIdIter);
+
+      for (std::multimap<long, std::pair<long, RelationMemberCacheEntry > >::iterator resultIter =
+           searchResults.first; resultIter != searchResults.second; ++resultIter )
+      {
+        // Add to cache of members for relations
+        _relationMembersCache.insert( std::pair<long, RelationMemberCacheEntry>(
+            resultIter->second.first, resultIter->second.second) );
+
+        LOG_DEBUG("Restored member of relation " << QString::number(resultIter->second.first) <<
+            " to relation member cache as it's eligible for write now that it's target relation "
+            << QString::number(*flushedRelationIdIter) << " has been written");
+
+        // is relation-member portion of cache full?
+        if ( _relationMembersCache.size() == _elementCacheCapacity)
+        {
+          _flushElementCacheOsmApiRelationMembers();
+        }
+      }
+
+      // Remove the entries from the deferred queue now that they are back in the pending queue
+      _unresolvedRelationReferences.erase(searchResults.first, searchResults.second);
     }
   }
 
@@ -3149,6 +3177,22 @@ void ServicesDb::_flushElementCacheOsmApiRelationMembers()
         LOG_DEBUG("Deferring write for relation member that points at unresolved relation ID "
                   << QString::number(relationMemberIter->second.elementId.getId()));
 
+        // Add to unresolved list.
+        std::pair<long, RelationMemberCacheEntry> unresolvedListData;
+        // SOURCE relation
+        unresolvedListData.first = relationMemberIter->first;
+        // Destination data (type, EID, role, etc)
+        unresolvedListData.second = relationMemberIter->second;
+
+        // Insert into unresolved list.  Key for the map is DESTINATION relation ID
+        _unresolvedRelationReferences.insert(
+              std::pair<long, std::pair<long, RelationMemberCacheEntry> >(relationMemberIter->second.elementId.getId(),
+                unresolvedListData) );
+
+        // NOTE: do NOT remove from this list -- the list will be cleared at the end of this function
+        //  but as it's on deferred list, it won't be lost
+
+
         continue;
       }
 
@@ -3182,11 +3226,12 @@ void ServicesDb::_flushElementCacheOsmApiRelationMembers()
 
       RelationMemberCacheEntry currMember = relationMemberIter->second;
 
+      /*
       LOG_DEBUG("Flushing relation member, source relation = " <<
                 QString::number(relationMemberIter->first) <<
                 ", target type = " << nwrType <<
                 ", target ID = " << currMember.elementId );
-
+      */
 
       QString sqlMemberRole = currMember.role;
 
@@ -3351,7 +3396,6 @@ bool ServicesDb::_insertRelationMember_OsmApi(const long relationId, const Eleme
 {
   // Create RelationMemberCacheEntry
   ElementId eid;
-
 
   switch ( type.getEnum() )
   {

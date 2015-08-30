@@ -416,7 +416,11 @@ private:
   /// If a relation member is ready to be written out to the database, but the relation it references has not yet been flushed to the
   ///     database, it is stored here until the target relation is written to disk OR we finish processing, at which time
   ///     it's an unresolveable reference and we discard it
-  std::multimap<long, RelationMemberCacheEntry> _unresolvedRelationReferences;
+  ///
+  ///     Format:
+  ///         multimap key: DESTINATION relation (unresolved reference)
+  ///         std::pair<source relationID, destination relation info>
+  std::multimap<long, std::pair<long, RelationMemberCacheEntry > > _unresolvedRelationReferences;
 
   unsigned long _nodesAddedToCache;
   unsigned long _nodesFlushedFromCache;
