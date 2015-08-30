@@ -933,9 +933,300 @@ sub validateCurrentWays($$)
 
 sub validateWays($$)
 {
-  ;
-}
+  my $osmXmlWaysRef = shift(@_);
+  my $dumpLinesRef = shift(@_);
 
+  my @dumpLines = @{$dumpLinesRef};
+
+  my %waysData;
+
+  my $currLine;
+
+  # Checking table: ways
+  print( "\tways, way_tags, way_nodes:\n");
+  my $foundStart = 0;
+  foreach $currLine (@dumpLines)
+  {
+    chomp($currLine);
+
+    # Find out where ways starts
+    if ( $foundStart == 0 )
+    {
+      if ($currLine =~ /^COPY ways \(.+\) FROM stdin;/ )
+      {
+        $foundStart = 1;
+      }
+
+      # Either way, can't do any more processing
+      next;
+    }
+
+    # Are we at end of data?
+    if ( $currLine =~ /^\\./ )
+    {
+      last;
+    }
+
+    #print( "ways entry: $currLine\n" );
+
+    # Have a valid way
+    my %waysEntry;
+
+    # Break into tokens based on tab delimiter
+    # Schema: way_id, changeset_id, timestamp, version, visible, redaction_id
+    my @tokens = split( /\t+/, $currLine);
+
+    #print( "Found way, ID = $tokens[0]\n");
+
+    $waysEntry{'version'} = $tokens[3];
+
+    # Store the entry in hash of ways
+    $waysData{$tokens[0]} = \%waysEntry;
+  }
+
+  print( 'Found ' . scalar(keys(%waysData)) . " entries in ways\n" );
+
+  # First sanity check: make sure # of OSM ways exactly matches # of OSM API DB ways
+  print( "Number of OSM ways: " . scalar(keys(%$osmXmlWaysRef)) . "\n" );
+  if ( scalar(keys(%$osmXmlWaysRef)) != scalar(keys(%waysData)) )
+  {
+    print('ERROR: OSM XML ways: ' . scalar(keys(%$osmXmlWaysRef)) .
+      ' != OSM API DB ways: ' . scalar(keys(%waysData)) . "\n\n" );
+
+    exit;
+  }
+
+  print( "\t\tMatching number of ways: PASS (" .
+    scalar(keys(%waysData)) . ")\n" );
+
+  # Read way_nodes
+  $foundStart = 0;
+  foreach $currLine (@dumpLines)
+  {
+    chomp($currLine);
+
+    # Find out where table data starts
+    if ( $foundStart == 0 )
+    {
+      if ($currLine =~ /^COPY way_nodes \(.+\) FROM stdin;/ )
+      {
+        $foundStart = 1;
+      }
+
+      # Either way, can't do any more processing
+      next;
+    }
+
+    # Are we at end of data?
+    if ( $currLine =~ /^\\./ )
+    {
+      last;
+    }
+
+    #print( "way_nodes entry: $currLine\n" );
+
+    # Have valid way nodes
+    my %wayNodeEntry;
+
+    # Break into tokens based on tab delimiter
+    # Schema: way_id, node_id, sequence_id
+    my @tokens = split( /\t+/, $currLine);
+
+    #print( "Found way_node\n");
+
+    #print( "\tID: $tokens[0]\n\tSequence: $tokens[3], node ID = $tokens[1]\n");
+
+    # Store the entry in hash of nodes in this way
+    if ( exists($waysData{ $tokens[0] }->{'way_nodes'} ) )
+    {
+      $waysData{ $tokens[0] }->{'way_nodes'}->{$tokens[3]} = $tokens[1];
+
+      #my $way_node;
+      #foreach $way_node ( sort( {$a <=> $b} keys( %{ $currentWaysData{ $tokens[0] }->{'way_nodes'}})) )
+      #{
+      #  print( "\tFound node for way $tokens[0]: seq $way_node = node " .
+      #    $waysData{ $tokens[0] }->{'way_nodes'}->{$way_node} . "\n");
+      #}
+    }
+    else
+    {
+      $waysData{ $tokens[0] }->{'way_nodes'} = { $tokens[3] => $tokens[1] };
+    }
+  }
+
+  # No need for way mapping, it's done
+
+  # Compare each XML way to corresponding entry in ways
+  my $xmlWayId;
+  foreach $xmlWayId ( sort( {$a <=> $b} keys(%$osmXmlWaysRef)) )
+  {
+    my %xmlWay = %{ $osmXmlWaysRef->{$xmlWayId} };
+    my $databaseWayId = $wayIdMappingsXmlToDb{$xmlWayId};
+
+    # Check version, tags
+
+    # Version -- as this is a new ingest, must be v1 in database
+    if ( $waysData{$wayIdMappingsXmlToDb{$xmlWayId}}->{'version'} != 1 )
+    {
+      print("XML way $xmlWayId with database way ID " .
+          $wayIdMappingsXmlToDb{$xmlWayId} . " is not version 1 which it should be after " .
+          "being newly-inserted into a fresh database\n" );
+      exit;
+    }
+
+    # Tags
+    if ( exists($xmlWay{'tag'}) )
+    {
+      #print( "XML Tags: " . Dumper($xmlWay{'tag'}) . "\n");
+      #print( "DB tags: " . Dumper($waysData{$databaseWayId}->{'tags'}) . "\n");
+
+      my $xmlTagsArrayRef = $xmlWay{'tag'};
+
+      # Make sure number of tags are equal
+      if ( scalar( @{$xmlTagsArrayRef} ) !=
+          scalar( keys(%{ $waysData{$databaseWayId}->{'tags'} })) )
+      {
+        print("ERROR: number of tags in XML for way $xmlWayId " .
+          "does not match database way $wayIdMappingsXmlToDb{$xmlWayId}\n");
+        exit;
+      }
+
+      my $currTag;
+
+      foreach $currTag ( @{$xmlTagsArrayRef} )
+      {
+        my %xmlTagEntry = %{ $currTag };
+        #print( "Key   : $tagEntry{'k'}\n");
+        #print( "Value : $tagEntry{'v'}\n");
+
+        my %dbTagEntry = %{ $waysData{$databaseWayId}->{'tags'} };
+        if ( ! exists( $dbTagEntry{ $xmlTagEntry{'k'} } ) )
+        {
+          print("Could not find database version of tag " . Dumper(%xmlTagEntry) . "\n" );
+          exit;
+        }
+        else
+        {
+          #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
+          #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
+        }
+      }
+    }
+    else
+    {
+      # Confirm database does not have tags either
+      if ( exists($waysData{$databaseWayId}->{'tags'}) )
+      {
+        print( "XML did not have tags for way $xmlWayId, but matching " .
+          "database way $databaseWayId did!\n" );
+        exit;
+      }
+    }
+
+    # way_nodes 
+    if ( exists($xmlWay{'nd'}) )
+    {
+      my $xmlWayNodesArrayRef = $xmlWay{'nd'};
+
+      # NOTE: the database may have less nodes in the way than the XML!!!
+      #
+      # If the XML was not internally consistent (i.e., there is a way
+      #   in the XML that contains a node reference node ID 192837, 
+      #   <nd ref="192837"/>, but there is no entry for node ID 
+      #   192837 inside that XML file), we will omit that node from its
+      #   respective way. We need to make sure that the list of nodes
+      #   in the way:
+      #
+      #   - Is no LONGER than the list of nodes in the XML
+      #   - Every node listed in the database matches the relative order
+      #       of nodes in the XML
+      #   - Any nodes missing from the way are ALSO missing from the 
+      #       nodes section of the database 
+      #   - There are no nodes in the database way that are NOT listed in the
+      #       XML
+
+      # Make sure number of nodes in the XML is GREATER OR EQUAL TO nodes in DB way
+      my $numXmlWayNodes = scalar(@{$xmlWayNodesArrayRef});
+      my $numDatabaseWayNodes = scalar(keys(%{ $waysData{$databaseWayId}->{'way_nodes'}}));
+      #print( "\nNumber of nodes for way $xmlWayId in XML: $numXmlWayNodes\n" .
+      #  "Number of nodes in database version of way with ID $databaseWayId: " .
+      #  $numDatabaseWayNodes . "\n" );
+      if ( $numXmlWayNodes < $numDatabaseWayNodes )
+      {
+        print( "ERROR: database way $databaseWayId has MORE way nodes in it than its " .
+          "XML counterpart way $xmlWayId: ($numDatabaseWayNodes > $numXmlWayNodes)\n" );
+        exit;
+      }
+      # Iterate through the list, if any are missing in database version, make sure they're
+      #     missing because they were missing in nodes section of database as well
+      if ( $numDatabaseWayNodes < $numXmlWayNodes )
+      {
+        print( "INFO: XML way $xmlWayId has more nodes than its database version $databaseWayId\n");
+      }
+
+      my $databaseWayNodeEntryIndex = 1;
+      my $i;
+      for ( $i = 0; $i < $numXmlWayNodes; ++$i )
+      {
+        my $xmlWayNodeId = $xmlWayNodesArrayRef->[$i];
+        #print( "Way $xmlWayId way node sequence " . ($i + 1) . ": $xmlWayNodeId\n" );
+
+        # Find corresponding node entry in list of database nodes
+        my $dbNodeSearchIndex;
+        my $foundMatch = 0;
+        for ( $dbNodeSearchIndex = $databaseWayNodeEntryIndex;
+            $dbNodeSearchIndex <= $numDatabaseWayNodes;
+            ++$dbNodeSearchIndex )
+        {
+          my $currDbWayNodeEntry =
+            $waysData{$databaseWayId}->{'way_nodes'}->{$dbNodeSearchIndex};
+          if ( $nodeIdMappingsXmlToDb{$xmlWayNodeId} == $currDbWayNodeEntry )
+          {
+            #print( "XML waynode entry " . ($i + 1) . ", node id = $xmlWayNodeId maps to " .
+            #  "database waynode entry $dbNodeSearchIndex, node id = $currDbWayNodeEntry\n" );
+
+            $foundMatch = 1;
+            $databaseWayNodeEntryIndex = ($i + 1);
+            last;
+          }
+        }
+
+        if ( $foundMatch == 0 )
+        {
+          print( "Could not find XML way $xmlWayNodeId, index = " . ($i + 1) .
+            ", node ID = $xmlWayNodeId in database way $databaseWayId\n");
+          exit;
+        }
+
+        # Confirm DB match was not at a HIGHER index than XML
+        if ( $dbNodeSearchIndex > ($i + 1) )
+        {
+          print( "XML way $xmlWayNodeId, node index = " . ($i + 1) .
+            ", node ID = $xmlWayNodeId at invalid index $dbNodeSearchIndex " .
+            "in database way $databaseWayId\n");
+        }
+      }
+    }
+
+    else
+    {
+      #print("Found an XML way with no nodes: $xmlWayId\n");
+
+      # Confirm database does not have nodes for this way either
+      if ( exists( $waysData{$databaseWayId}->{'nd'}) )
+      {
+        print( "XML for way $xmlWayId did not have nodes, but database way " .
+          "$databaseWayId did!\n");
+
+        exit;
+      }
+    }
+  }
+
+  # If we made it this far, ways, way_tags, and way_nodes
+  #     line up 100% with XML
+  print("\t\tDeep inspection of data integrity: PASS\n");
+}
 
 
 
