@@ -894,9 +894,12 @@ bool ServicesDb::insertRelation(const long relationId, const Tags &tags)
     _insertRelation_Services(relationId, _currChangesetId, tags);
     retVal = true;
     break;
-  default:
+  case DBTYPE_OSMAPI:
     _insertRelation_OsmApi( tags, relationId );
     retVal = true;
+    break;
+  default:
+    throw HootException("insertRelation called on unsupproted dtabase type");
     break;
   }
 
@@ -911,6 +914,7 @@ bool ServicesDb::insertRelationMember(const long relationId, const ElementType& 
   const long elementId, const QString& role, const int sequenceId)
 
 {
+
   switch ( _connectionType )
   {
   case DBTYPE_SERVICES:
@@ -3138,6 +3142,16 @@ void ServicesDb::_flushElementCacheOsmApiRelationMembers()
     for ( std::multimap< long, RelationMemberCacheEntry >::const_iterator relationMemberIter = _relationMembersCache.begin();
               relationMemberIter != _relationMembersCache.end(); ++relationMemberIter )
     {
+      // Find out if we have to defer this member as it points to a relation that's still unresolved
+      if ( (relationMemberIter->second.elementId.getType().getEnum() == ElementType::Relation) &&
+           (_relationIdsWrittenToDb.count(relationMemberIter->second.elementId.getId()) == 0) )
+      {
+        LOG_DEBUG("Deferring write for relation member that points at unresolved relation ID "
+                  << QString::number(relationMemberIter->second.elementId.getId()));
+
+        continue;
+      }
+
       // Add relation ID to list of relation IDs (used for updating changeset envelope later on in function)
       relationIds.push_back(relationMemberIter->first);
 
@@ -3158,7 +3172,6 @@ void ServicesDb::_flushElementCacheOsmApiRelationMembers()
         nwrType = "'Relation'";
         break;
 
-
       default:
         LOG_DEBUG("Found unsupported member relation type");
         throw HootException("Unsupported relation member type");
@@ -3166,7 +3179,15 @@ void ServicesDb::_flushElementCacheOsmApiRelationMembers()
         break;
       }
 
+
       RelationMemberCacheEntry currMember = relationMemberIter->second;
+
+      LOG_DEBUG("Flushing relation member, source relation = " <<
+                QString::number(relationMemberIter->first) <<
+                ", target type = " << nwrType <<
+                ", target ID = " << currMember.elementId );
+
+
       QString sqlMemberRole = currMember.role;
 
       // Escape any single quotes

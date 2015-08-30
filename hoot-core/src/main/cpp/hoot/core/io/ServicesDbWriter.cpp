@@ -234,18 +234,22 @@ long ServicesDbWriter::_getRemappedElementId(const ElementId& eid)
     if (_relationRemap.count(eid.getId()) == 1)
     {
       retVal = _relationRemap.at(eid.getId());
+      /*
       LOG_DEBUG("Returning established relation ID mapping, source ID = " <<
         QString::number(eid.getId()) << ", database ID = " <<
         QString::number(_relationRemap.at(eid.getId())) );
+      */
     }
     else
     {
       retVal = _sdb.reserveElementId(ElementType::Relation);
       _relationRemap[eid.getId()] = retVal;
 
+      /*
       LOG_DEBUG("Established NEW relation ID mapping, source ID = " <<
         QString::number(eid.getId()) << ", database ID = " <<
         QString::number(_relationRemap.at(eid.getId())) );
+      */
     }
 
     break;
@@ -420,14 +424,12 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
   {
     bool alreadyThere = _relationRemap.count(r->getId()) != 0;
     relationId = _getRemappedElementId(r->getElementId());
-    if (alreadyThere)
-    {
-      _sdb.updateRelation(relationId, tags);
-    }
-    else
-    {
+
+    LOG_DEBUG("Inserting relation with source ID = " <<
+              QString::number(r->getId()) << " which maps to DB ID = " <<
+              QString::number(relationId) );
+
       _sdb.insertRelation(relationId, tags);
-    }
   }
   else
   {
