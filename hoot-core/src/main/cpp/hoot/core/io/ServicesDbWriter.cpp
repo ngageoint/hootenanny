@@ -193,58 +193,71 @@ void ServicesDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
   }
 }
 
-ElementId ServicesDbWriter::_remapOrCreateElementId(ElementId eid, const Tags& tags)
+long ServicesDbWriter::_getRemappedElementId(const ElementId& eid)
 {
   if (_remapIds == false)
   {
-    return eid;
+    return eid.getId();
   }
+
+  long retVal = -1;
 
   switch(eid.getType().getEnum())
   {
   case ElementType::Node:
-    /*
+    if (_nodeRemap.count(eid.getId()) == 1)
     {
-      if (_nodeRemap.count(eid.getId()) == 1)
-      {
-        return ElementId::node(_nodeRemap.at(eid.getId()));
-      }
-      long newId;
-      _sdb.insertNode(0, 0, tags, newId);
-      _countChange();
-      _nodeRemap[eid.getId()] = newId;
-      return ElementId::node(newId);
+      retVal = _nodeRemap.at(eid.getId());
     }
-    */
-    throw HootException("Cannot call remap or create on nodes");
+    else
+    {
+      retVal = _sdb.reserveElementId(ElementType::Node);
+      _nodeRemap[eid.getId()] = retVal;
+    }
+
     break;
+
   case ElementType::Way:
+    if (_wayRemap.count(eid.getId()) == 1)
     {
-      if (_wayRemap.count(eid.getId()) == 1)
-      {
-        return ElementId::way(_wayRemap.at(eid.getId()));
-      }
-      long newId;
-      _sdb.insertWay(tags, newId);
-      _countChange();
-      _wayRemap[eid.getId()] = newId;
-      return ElementId::way(newId);
+      retVal = _wayRemap.at(eid.getId());
     }
+    else
+    {
+      retVal = _sdb.reserveElementId(ElementType::Way);
+      _wayRemap[eid.getId()] = retVal;
+    }
+
+    break;
+
   case ElementType::Relation:
+    if (_relationRemap.count(eid.getId()) == 1)
     {
-      if (_relationRemap.count(eid.getId()) == 1)
-      {
-        return ElementId::relation(_relationRemap.at(eid.getId()));
-      }
-      long newId;
-      _sdb.insertRelation(tags, newId);
-      _countChange();
-      _relationRemap[eid.getId()] = newId;
-      return ElementId::relation(newId);
+      retVal = _relationRemap.at(eid.getId());
+      LOG_DEBUG("Returning established relation ID mapping, source ID = " <<
+        QString::number(eid.getId()) << ", database ID = " <<
+        QString::number(_relationRemap.at(eid.getId())) );
     }
+    else
+    {
+      retVal = _sdb.reserveElementId(ElementType::Relation);
+      _relationRemap[eid.getId()] = retVal;
+
+      LOG_DEBUG("Established NEW relation ID mapping, source ID = " <<
+        QString::number(eid.getId()) << ", database ID = " <<
+        QString::number(_relationRemap.at(eid.getId())) );
+    }
+
+    break;
+
   default:
+    LOG_ERROR("Tried to create or remap ID for invalid type");
     throw NotImplementedException();
+
+    break;
   }
+
+  return retVal;
 }
 
 vector<long> ServicesDbWriter::_remapNodes(const vector<long>& nids)
@@ -290,7 +303,6 @@ void ServicesDbWriter::_startNewChangeSet()
 
 void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)
 {
-  long newId;
   bool countChange = true;
 
   //LOG_DEBUG("Inside writePartial for Node");
@@ -304,32 +316,28 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)
 
   //LOG_DEBUG("Incoming node ID: " << n->getId());
 
-  if (n->getId() < 1 && _remapIds == false)
-  {
-    throw HootException("Writing non-positive IDs without remap is not supported by "
-                        "ServicesDbWriter.");
-  }
 
   if (_remapIds)
   {
     bool alreadyThere = _nodeRemap.count(n->getId()) != 0;
-    if ( alreadyThere == false )
+    long nodeId = _getRemappedElementId(n->getElementId());
+    if (alreadyThere)
     {
-      _sdb.insertNode(n->getY(), n->getX(), t, newId);
-      _nodeRemap[n->getId()] = newId;
+      _sdb.updateWay(nodeId, t);
     }
     else
     {
-      _sdb.updateNode(_nodeRemap.at(n->getId()), n->getY(), n->getX(), n->getTags());
-      LOG_DEBUG("Updated node " << QString::number(n->getId()) << ", mapped to "
-                << QString::number(newId) );
-
-      countChange = false;
-
+      _sdb.insertNode(nodeId, n->getY(), n->getX(), t);
     }
   }
   else
   {
+    if ( n->getId() < 1 )
+    {
+      throw HootException("Writing non-positive IDs without remap is not supported by "
+                          "ServicesDbWriter.");
+    }
+
     //LOG_DEBUG("Inserted node " << QString::number(n->getId()) << ", no remapping" );
     _sdb.insertNode(n->getId(), n->getY(), n->getX(), t);
   }
@@ -357,10 +365,14 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Way>& w)
   if (_remapIds)
   {
     bool alreadyThere = _wayRemap.count(w->getId()) != 0;
-    wayId = _remapOrCreateElementId(w->getElementId(), tags).getId();
+    wayId = _getRemappedElementId(w->getElementId());
     if (alreadyThere)
     {
       _sdb.updateWay(wayId, tags);
+    }
+    else
+    {
+      _sdb.insertWay(wayId, tags);
     }
   }
   else if (w->getId() < 1)
@@ -407,18 +419,23 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
   if (_remapIds)
   {
     bool alreadyThere = _relationRemap.count(r->getId()) != 0;
-    relationId = _remapOrCreateElementId(r->getElementId(), tags).getId();
+    relationId = _getRemappedElementId(r->getElementId());
     if (alreadyThere)
     {
       _sdb.updateRelation(relationId, tags);
     }
-  }
-  else if (r->getId() < 1)
-  {
-    throw HootException("Non-positive IDs are not supported by ServicesDbWriter.");
+    else
+    {
+      _sdb.insertRelation(relationId, tags);
+    }
   }
   else
   {
+    if (r->getId() < 1)
+    {
+      throw HootException("Non-positive IDs are not supported by ServicesDbWriter without remapping");
+    }
+
     _sdb.insertRelation(r->getId(), tags);
     relationId = r->getId();
   }
@@ -429,63 +446,14 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
     RelationData::Entry e = r->getMembers()[i];
 
     // All nodes and ways are already inserted in the database. May need to
-    //    find mappings for those.  Only need to create new ID mappings
-    //    for relations we've not yet seen
+    //    find mappings for those.  May need to create new ID mappings
+    //    for relations if we've not yet seen them
     ElementId relationMemberElementId = e.getElementId();
 
-    switch ( relationMemberElementId.getType().getEnum() )
+    if ( _remapIds == true )
     {
-    case ElementType::Node:
-      if ( _remapIds == true )
-      {
-        if ( _nodeRemap.count(relationMemberElementId.getId()) == 1 )
-        {
-          relationMemberElementId = ElementId(relationMemberElementId.getType(),
-            _nodeRemap[relationMemberElementId.getId()]);
-        }
-        else
-        {
-          /*
-          LOG_WARN("Could not find node ID mapping for node " <<
-            QString::number(relationMemberElementId.getId()) <<
-            ", member of relation " <<
-            QString::number(r->getId()));
-          */
-          continue;
-        }
-      }
-      break;
-    case ElementType::Way:
-      if ( _remapIds == true )
-      {
-        if ( _wayRemap.count(relationMemberElementId.getId()) == 1 )
-        {
-          relationMemberElementId = ElementId(relationMemberElementId.getType(),
-            _wayRemap[relationMemberElementId.getId()]);
-        }
-        else
-        {
-          /*
-          LOG_WARN("Could not find way ID mapping for way " <<
-            QString::number(relationMemberElementId.getId()) <<
-            ", member of relation " <<
-            QString::number(r->getId()));
-          */
-          continue;
-        }
-      }
-
-      break;
-    case ElementType::Relation:
-      if ( _remapIds == true )
-      {
-        relationMemberElementId = _remapOrCreateElementId(relationMemberElementId, emptyTags);
-      }
-      break;
-
-    default:
-      throw HootException("Element relation with unknown type");
-      break;
+      relationMemberElementId = ElementId(relationMemberElementId.getType(),
+        _getRemappedElementId(relationMemberElementId));
     }
 
     _sdb.insertRelationMember(relationId, relationMemberElementId.getType(),

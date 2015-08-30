@@ -46,6 +46,7 @@
 // Standard
 #include <vector>
 #include <map>
+#include <set>
 
 // Tgs
 #include <tgs/SharedPtr.h>
@@ -326,6 +327,16 @@ public:
 
   QString extractTagFromRow(shared_ptr<QSqlQuery> row);
 
+  /**
+   * Reserve a unique indentifier for an element of the specified type
+   * @param type The type of element that a unique ID is being requested for
+   * @return the ID that was reserved for the element
+   *
+   * @note The returned ID is guaranteed to be unique for the specified type
+   *  and will never be reused
+   */
+  long reserveElementId(const ElementType::Type type);
+
 private:
 
   static const int _maximumChangeSetEdits = 50000;    ///< Maximum edits per one OSM changeset
@@ -391,6 +402,8 @@ private:
 
   boost::shared_ptr<SequenceIdReserver> _osmApiNodeIdReserver;
 
+  std::set<long> _relationIdsWrittenToDb;     ///< Stores IDs for all relations that have been flushed to the DB
+
   struct RelationMemberCacheEntry
   {
     ElementId elementId;
@@ -398,7 +411,12 @@ private:
     int sequenceId;
   };
 
-  std::multimap<long, RelationMemberCacheEntry> _relationMembersCache;
+  std::multimap<long, RelationMemberCacheEntry> _relationMembersCache;    ///< Current cache of relation members waiting to be flushed
+
+  /// If a relation member is ready to be written out to the database, but the relation it references has not yet been flushed to the
+  ///     database, it is stored here until the target relation is written to disk OR we finish processing, at which time
+  ///     it's an unresolveable reference and we discard it
+  std::multimap<long, RelationMemberCacheEntry> _unresolvedRelationReferences;
 
   unsigned long _nodesAddedToCache;
   unsigned long _nodesFlushedFromCache;

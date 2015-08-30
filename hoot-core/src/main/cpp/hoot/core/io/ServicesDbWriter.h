@@ -112,7 +112,15 @@ private:
    */
   void _countChange();
 
-  ElementId _remapOrCreateElementId(ElementId eid, const Tags& t);
+  /**
+   * Return the remapped ID for the specified element if it exists
+   * @param eid The ID for the ID from the source data
+   * @return unique ID of the element in the database namespace
+   *
+   * @note If there is no mapping for the requested element ID in the
+   *  database, a new one is created which is guaranteed to be unique
+   */
+  long _getRemappedElementId(const ElementId& eid);
 
   vector<long> _remapNodes(const vector<long>& nids);
 

@@ -22,6 +22,9 @@ sub validateNodes($$);
 sub validateOsmXmlWays($$);
 sub validateCurrentWays($$);
 sub validateWays($$);
+sub validateOsmXmlRelations($$);
+sub validateCurrentRelations($$);
+sub validateRelations($$);
 
 sub convertNanodegreesStringToDegrees($);
 
@@ -51,8 +54,8 @@ sub createOsmDom($$)
   my $xmlString = shift(@_);
 
   my $domRef = $xs->XMLin($xmlString, 
-    KeyAttr => { node => 'id', way => 'id' }, 
-    ForceArray => [ 'node', 'tag', 'way', 'nd' ],
+    KeyAttr => { node => 'id', way => 'id', relation=> 'id' }, 
+    ForceArray => [ 'node', 'tag', 'way', 'nd', 'relation' ],
     ValueAttr => ['ref'] 
   );
 
@@ -984,10 +987,10 @@ sub validateWays($$)
     $waysData{$tokens[0]} = \%waysEntry;
   }
 
-  print( 'Found ' . scalar(keys(%waysData)) . " entries in ways\n" );
+  #print( 'Found ' . scalar(keys(%waysData)) . " entries in ways\n" );
 
   # First sanity check: make sure # of OSM ways exactly matches # of OSM API DB ways
-  print( "Number of OSM ways: " . scalar(keys(%$osmXmlWaysRef)) . "\n" );
+  #print( "Number of OSM ways: " . scalar(keys(%$osmXmlWaysRef)) . "\n" );
   if ( scalar(keys(%$osmXmlWaysRef)) != scalar(keys(%waysData)) )
   {
     print('ERROR: OSM XML ways: ' . scalar(keys(%$osmXmlWaysRef)) .
@@ -1285,6 +1288,98 @@ sub validateWays($$)
   print("\t\tDeep inspection of data integrity: PASS\n");
 }
 
+sub validateCurrentRelations($$)
+{
+  my $osmXmlRelationsRef = shift(@_);
+  my $dumpLinesRef = shift(@_);
+
+  my @dumpLines = @{$dumpLinesRef};
+
+  my %currentRelationsData;
+
+  my $currLine;
+
+  # Checking table: current_relations
+  print( "\tcurrent_relations, current_relation_tags, current_relation_nodes:\n");
+  my $foundStart = 0;
+  foreach $currLine (@dumpLines)
+  {
+    chomp($currLine);
+
+    # Find out where current_relations starts
+    if ( $foundStart == 0 )
+    {
+      if ($currLine =~ /^COPY current_relations \(.+\) FROM stdin;/ )
+      {
+        $foundStart = 1;
+      }
+
+      # Either way, can't do any more processing
+      next;
+    }
+
+    # Are we at end of data?
+    if ( $currLine =~ /^\\./ )
+    {
+      last;
+    }
+
+    #print( "Current_relations entry: $currLine\n" );
+
+    # Have a valid relation
+    my %currentRelationsEntry;
+
+    # Break into tokens based on tab delimiter
+    # Schema: id, changeset_id, "timestamp", visible, version
+    my @tokens = split( /\s+/, $currLine);
+
+    #print( "Found relation, ID = $tokens[0]\n");
+
+    $currentRelationsEntry{'version'} = $tokens[5];
+
+    # Store the entry in hash of current_relations
+    $currentRelationsData{$tokens[0]} = \%currentRelationsEntry;
+  }
+
+  #print( 'Found ' . scalar(keys(%currentRelationsData)) . " entries in current_relations\n" );
+
+  # First sanity check: make sure # of OSM relations exactly matches # of OSM API DB relations
+  print( "Number of OSM relations: " . scalar(keys(%$osmXmlRelationsRef)) . "\n" );
+  if ( scalar(keys(%$osmXmlRelationsRef)) != scalar(keys(%currentRelationsData)) )
+  {
+    print('ERROR: OSM XML relations: ' . scalar(keys(%$osmXmlRelationsRef)) .
+      ' != OSM API DB relations: ' . scalar(keys(%currentRelationsData)) . "\n\n" );
+
+    print( "OSM relations IDs: " . Dumper( 
+      sort( { $a <=> $b} keys(%$osmXmlRelationsRef))) . "\n" );
+    print( "Database relation IDs: " . Dumper( 
+      sort( { $a <=> $b} keys(%currentRelationsData))) . "\n" );
+
+    exit;
+  }
+
+  print( "\t\tMatching number of relations: PASS (" .
+    scalar(keys(%currentRelationsData)) . ")\n" );
+
+}
+
+sub validateRelations($$)
+{
+  ;
+}
+
+sub validateOsmXmlRelations($$)
+{
+  my $osmXmlRelationsRef = shift(@_);
+  my $dumpLinesRef = shift(@_);
+
+  print("\nValidating relations: ways\n");
+
+  validateCurrentRelations($osmXmlRelationsRef, $dumpLinesRef);
+  validateRelations($osmXmlRelationsRef, $dumpLinesRef);
+}
+
+
 
 
 if ( scalar(@ARGV) != 2 ) 
@@ -1315,4 +1410,4 @@ my $xs = XML::Simple->new();
 my $domRef = createOsmDom($xs, $concatOsmXml);
 validateOsmXmlNodes($domRef->{node}, \@dumpLines );
 validateOsmXmlWays($domRef->{way}, \@dumpLines );
-
+validateOsmXmlRelations($domRef->{relation}, \@dumpLines);

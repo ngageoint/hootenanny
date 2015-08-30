@@ -1206,7 +1206,7 @@ shared_ptr<Element> PbfReader::readNextElement()
       // Return a copy of the node from our list
       element.reset( new Relation( *nextRelation.get()) );
 
-      //LOG_DEBUG("Returning relation ID " << QString::number(*_relationIdsOrderedItr) << " from stream read");
+      LOG_DEBUG("Returning relation ID " << QString::number(nextOrderedId) << " from stream read");
       _relationIdsOrderedItr++;
     }
     else

@@ -2915,6 +2915,9 @@ void ServicesDb::_flushElementCacheOsmApiRelations()
     return;
   }
 
+  LOG_DEBUG("Flushing " << QString::number(_elementCache->typeCount(ElementType::Relation)) <<
+    " relations");
+
   // First step is to flush any ways and way nodes to make sure we don't violate foreign key integrity
   _flushElementCacheOsmApiWays();
   _flushElementCacheOsmApiWayNodes();
@@ -3048,10 +3051,13 @@ void ServicesDb::_flushElementCacheOsmApiRelations()
         relationsInsertCmd        += ",";
       }
 
-
       // Both node tables get same chunk of parenthesized data
       currentRelationsInsertCmd += relationsCurrentRelationsRow;
       relationsInsertCmd        += relationsCurrentRelationsRow;
+
+      // Now that we've flushed this relation, add it to list so we can check unresolved relation references
+      //    still queued up
+      _relationIdsWrittenToDb.insert(currRelation->getId());
 
       currRelation = _elementCache->getNextRelation();
     }
@@ -3086,6 +3092,26 @@ void ServicesDb::_flushElementCacheOsmApiRelations()
 
   // Remove all relations from cache as they've been written
   _elementCache->removeElements(ElementType::Relation);
+
+  // Iterate over the list of relations just flushed to the DB to find out if
+  //    we can now resolve any unresolved relation references that were queued
+  for ( std::vector<long>::const_iterator flushedRelationIdIter = relationIds.begin();
+        flushedRelationIdIter != relationIds.end(); ++flushedRelationIdIter )
+  {
+    LOG_DEBUG("Flushed relation ID " <<
+              QString::number(*flushedRelationIdIter));
+
+    // Can we resolve any pending references that were pointing to this relation?
+    if ( _unresolvedRelationReferences.count(*flushedRelationIdIter) > 0 )
+    {
+      LOG_DEBUG("There are queued relation members that reference relation " <<
+          QString::number(*flushedRelationIdIter) << " which was just flushed. " <<
+          "Moving relation members back to queue to be flushed" );
+
+      LOG_DEBUG("TODO: need to actually move them!!!!");
+    }
+  }
+
 }
 
 void ServicesDb::_flushElementCacheOsmApiRelationMembers()
@@ -3101,7 +3127,7 @@ void ServicesDb::_flushElementCacheOsmApiRelationMembers()
   // First step is to flush any relations to make sure we don't violate any foreign keys when inserting relation member
   _flushElementCacheOsmApiRelations();
 
-  //LOG_DEBUG("Starting flush of relation member cache");
+  LOG_DEBUG("Starting flush of relation member cache");
 
   std::vector<long> relationIds;
   try
@@ -3109,7 +3135,7 @@ void ServicesDb::_flushElementCacheOsmApiRelationMembers()
     QString currentRelationMembersInsertCmd = "INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role,          sequence_id) VALUES ";
     QString relationMembersInsertCmd =        "INSERT INTO         relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES ";
 
-    for ( std::map< long, RelationMemberCacheEntry >::const_iterator relationMemberIter = _relationMembersCache.begin();
+    for ( std::multimap< long, RelationMemberCacheEntry >::const_iterator relationMemberIter = _relationMembersCache.begin();
               relationMemberIter != _relationMembersCache.end(); ++relationMemberIter )
     {
       // Add relation ID to list of relation IDs (used for updating changeset envelope later on in function)
@@ -3278,7 +3304,7 @@ void ServicesDb::_insertRelation_OsmApi(const Tags &tags, const long assignedId)
 {
   //LOG_DEBUG("Entering OSM relation insert");
 
-  // Add to element cache
+  // Add to element cache -- make sure to insert with mapped ID if appliable
   RelationPtr newRelation( new Relation(Status::Unknown1, assignedId, 0.0) );
   newRelation->setTags(tags);
   ConstElementPtr constRelation(newRelation);
@@ -3337,6 +3363,33 @@ bool ServicesDb::_insertRelationMember_OsmApi(const long relationId, const Eleme
   }
 
   return true;
+}
+
+long ServicesDb::reserveElementId(const ElementType::Type type)
+{
+  long retVal = -1;
+
+  switch ( type )
+  {
+  case ElementType::Node:
+    retVal = _getNextNodeId();
+    break;
+
+  case ElementType::Way:
+    retVal = _getNextWayId();
+    break;
+
+  case ElementType::Relation:
+    retVal = _getNextRelationId();
+    break;
+
+  default:
+    LOG_ERROR("Requested element ID for unknown element type");
+    throw HootException("reserveElementId called with unknown type");
+    break;
+  }
+
+  return retVal;
 }
 
 /************************************************************************
