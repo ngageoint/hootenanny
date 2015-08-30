@@ -133,6 +133,29 @@ void ServicesDb::close()
   //LOG_DEBUG("At close, we've added " << QString::number(_nodesAddedToCache) << " nodes");
   //LOG_DEBUG("At close, we've flushed " << QString::number(_nodesFlushedFromCache) << " nodes");
 
+  // Display unresolved relation members for debug
+  if ( _unresolvedRelationReferences.size() > 0 )
+  {
+    LOG_DEBUG("Unresolved target relations at time of database close:");
+
+    long lastTargetRelation = -1;
+    for ( std::multimap<long, std::pair<long, RelationMemberCacheEntry > >::const_iterator
+          unresolvedRelationMembersIter = _unresolvedRelationReferences.begin();
+          unresolvedRelationMembersIter != _unresolvedRelationReferences.end();
+          ++unresolvedRelationMembersIter )
+    {
+      if ( lastTargetRelation != unresolvedRelationMembersIter->first )
+      {
+        LOG_DEBUG(
+          "\tDatabase ID: " << QString::number(unresolvedRelationMembersIter->first) );
+
+        lastTargetRelation = unresolvedRelationMembersIter->first;
+      }
+    }
+
+    _unresolvedRelationReferences.erase(_unresolvedRelationReferences.begin(), _unresolvedRelationReferences.end());
+  }
+
   _connectionType = DBTYPE_UNSUPPORTED;
 }
 
@@ -3143,7 +3166,6 @@ void ServicesDb::_flushElementCacheOsmApiRelations()
       _unresolvedRelationReferences.erase(searchResults.first, searchResults.second);
     }
   }
-
 }
 
 void ServicesDb::_flushElementCacheOsmApiRelationMembers()
