@@ -999,6 +999,63 @@ sub validateWays($$)
   print( "\t\tMatching number of ways: PASS (" .
     scalar(keys(%waysData)) . ")\n" );
 
+  # Read way_tags
+
+  $foundStart = 0;
+  foreach $currLine (@dumpLines)
+  {
+    chomp($currLine);
+
+    # Find out where table data starts
+    if ( $foundStart == 0 )
+    {
+      if ($currLine =~ /^COPY way_tags \(.+\) FROM stdin;/ )
+      {
+        $foundStart = 1;
+      }
+
+      # Either way, can't do any more processing
+      next;
+    }
+
+    # Are we at end of data?
+    if ( $currLine =~ /^\\./ )
+    {
+      last;
+    }
+
+    #print( "way_tags entry: $currLine\n" );
+
+    # Have a valid way
+    my %wayTagsEntry;
+
+    # Break into tokens based on tab delimiter
+    # Schema: way_id, key, value, version
+    my @tokens = split( /\t+/, $currLine);
+
+    #print( "Found way tag\n");
+
+    $wayTagsEntry{$tokens[1]} = $tokens[2];
+    #print( "\tID: $tokens[0]\n\tKey: $tokens[1]\n\tValue: $tokens[2]\n");
+
+    # Store the entry in hash of ways
+    if ( exists($waysData{ $tokens[0] }->{'tags'} ) )
+    {
+      $waysData{ $tokens[0] }->{'tags'}->{$tokens[1]} = $tokens[2];
+
+      #my $key;
+      #foreach $key ( keys( $waysData{ $tokens[0] }->{'tags'}) )
+      #{
+      # print( "\tFound tags key: $key\n" );
+      #}
+    }
+    else
+    {
+      $waysData{ $tokens[0] }->{'tags'} = { $tokens[1] => $tokens[2] };
+    }
+  }
+
+
   # Read way_nodes
   $foundStart = 0;
   foreach $currLine (@dumpLines)
