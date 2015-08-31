@@ -151,6 +151,7 @@ public class ReviewItemsMarker
     throws Exception
   {
     MarkItemsReviewedResponse markItemsReviewedResponse = new MarkItemsReviewedResponse();
+    markItemsReviewedResponse.setMapId(mapId);
 
     Document changesetUploadResponse = null;
     long changesetId = -1;

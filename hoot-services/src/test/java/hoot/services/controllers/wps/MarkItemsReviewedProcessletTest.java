@@ -131,6 +131,7 @@ public class MarkItemsReviewedProcessletTest extends OsmResourceTestAbstract
     allOutputs.add(WpsUtils.createLiteralOutput("changesetUploadResponse"));
     allOutputs.add(WpsUtils.createLiteralOutput("numItemsMarkedReviewed"));
     allOutputs.add(WpsUtils.createLiteralOutput("changesetId"));
+    allOutputs.add(WpsUtils.createLiteralOutput("mapId"));
 
     final ProcessletOutputs out = new ProcessletOutputs(def, allOutputs);
 
@@ -139,6 +140,8 @@ public class MarkItemsReviewedProcessletTest extends OsmResourceTestAbstract
     MarkItemsReviewedResponse response = new MarkItemsReviewedResponse();
     response.setChangesetId(
       Long.parseLong(((LiteralOutputImpl)out.getParameter("changesetId")).getValue()));
+    response.setMapId(
+      Long.parseLong(((LiteralOutputImpl)out.getParameter("mapId")).getValue()));
     response.setChangesetUploadResponse(
       ((LiteralOutputImpl)out.getParameter("changesetUploadResponse")).getValue());
     response.setNumItemsMarkedReviewed(

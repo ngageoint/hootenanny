@@ -71,7 +71,13 @@
     <LiteralOutput>
       <Identifier>changesetId</Identifier>
       <Title>Changeset ID</Title>
-      <Abstract></Abstract>
+      <Abstract>ID of the changeset used to upload the changes</Abstract>
+      <DataType reference="http://www.w3.org/TR/xmlschema-2/#integer">integer</DataType>
+    </LiteralOutput>
+    <LiteralOutput>
+      <Identifier>mapId</Identifier>
+      <Title>Map ID</Title>
+      <Abstract>ID of the map the changes were uploaded to</Abstract>
       <DataType reference="http://www.w3.org/TR/xmlschema-2/#integer">integer</DataType>
     </LiteralOutput>
 	</OutputParameters>

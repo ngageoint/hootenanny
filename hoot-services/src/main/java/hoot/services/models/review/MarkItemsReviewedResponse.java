@@ -68,6 +68,16 @@ public class MarkItemsReviewedResponse
     this.changesetId = changesetId;
   }
   
+  private long mapId;
+  public long getMapId()
+  {
+    return mapId;
+  }
+  public void setMapId(long mapId)
+  {
+    this.mapId = mapId;
+  }
+  
   public MarkItemsReviewedResponse()
   {
     
