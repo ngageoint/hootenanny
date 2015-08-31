@@ -436,6 +436,7 @@ To merge names from two features into one new set of names, we treat the names a
  +
  +
  +
+[[CalculatingEnumeratedScore]]
 *_Calculating the Enumerated Score_*
 
 Enumerated tags are tags with predefined nominal values. This includes +surface=dirt+ , +surface=paved+ and +highway=primary+ . These tags have relationships that must be manually defined (<<HighwayTagRelate>>).
