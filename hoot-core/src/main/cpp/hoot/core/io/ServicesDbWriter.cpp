@@ -26,6 +26,9 @@
  */
 #include "ServicesDbWriter.h"
 
+#include <iostream>
+#include <fstream>
+
 // hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/NotImplementedException.h>
@@ -75,6 +78,12 @@ void ServicesDbWriter::close()
     LOG_DEBUG("\t    Nodes: " << QString::number(_nodesWritten));
     LOG_DEBUG("\t     Ways: " << QString::number(_waysWritten));
     LOG_DEBUG("\tRelations: " << QString::number(_relationsWritten));
+  }
+
+  // Did user set configuration to dump the ID source->dest mappings to an output file?
+  if ( _outputMappingFile.length() > 0 )
+  {
+    _outputIdMappings();
   }
 }
 
@@ -213,6 +222,10 @@ long ServicesDbWriter::_getRemappedElementId(const ElementId& eid)
     {
       retVal = _sdb.reserveElementId(ElementType::Node);
       _nodeRemap[eid.getId()] = retVal;
+      if ( _outputMappingFile.length() > 0 )
+      {
+        _sourceNodeIds.insert(eid.getId());
+      }
     }
 
     break;
@@ -226,6 +239,10 @@ long ServicesDbWriter::_getRemappedElementId(const ElementId& eid)
     {
       retVal = _sdb.reserveElementId(ElementType::Way);
       _wayRemap[eid.getId()] = retVal;
+      if ( _outputMappingFile.length() > 0 )
+      {
+        _sourceWayIds.insert(eid.getId());
+      }
     }
 
     break;
@@ -244,6 +261,10 @@ long ServicesDbWriter::_getRemappedElementId(const ElementId& eid)
     {
       retVal = _sdb.reserveElementId(ElementType::Relation);
       _relationRemap[eid.getId()] = retVal;
+      if ( _outputMappingFile.length() > 0 )
+      {
+        _sourceRelationIds.insert(eid.getId());
+      }
 
       LOG_DEBUG("Established new relation ID mapping, source ID = " <<
         QString::number(eid.getId()) << ", database ID = " <<
@@ -292,6 +313,7 @@ void ServicesDbWriter::setConfiguration(const Settings &conf)
   setUserEmail(conf.getString(emailKey(), ""));
   setCreateUser(ConfigOptions(conf).getServicesDbWriterCreateUser());
   setOverwriteMap(conf.getBool(overwriteMapKey(), false));
+  _setOutputMappingFile(ConfigOptions(conf).getServicesDbWriterOutputIdMappings());
 }
 
 void ServicesDbWriter::_startNewChangeSet()
@@ -467,6 +489,69 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
   //LOG_DEBUG("Leaving relation write cleanly");
 
   _relationsWritten++;
+}
+
+void ServicesDbWriter::_setOutputMappingFile(const QString& filename)
+{
+  if ( filename.length() > 0 )
+  {
+    _outputMappingFile = filename;
+    LOG_DEBUG("Configuration set to output ID mappings into file " <<
+        _outputMappingFile);
+  }
+}
+
+void ServicesDbWriter::_outputIdMappings()
+{
+  if ( (_sourceNodeIds.size() == 0) && (_sourceWayIds.size() == 0) &&
+       (_sourceRelationIds.size() == 0) )
+  {
+    // No mapping data was generated
+    return;
+  }
+
+  // If we can't open output file, just warn and bail -- this is testing purposes only
+  try
+  {
+    std::ofstream outputFile(_outputMappingFile.toStdString().c_str());
+
+    outputFile << "<id_mappings>" << std::endl;
+
+    for ( std::set<long>::const_iterator idIter = _sourceNodeIds.begin();
+          idIter != _sourceNodeIds.end(); ++idIter )
+    {
+      outputFile <<
+        "\t<id_mapping element_type=\"node\" source_id=\"" <<
+        *idIter << "\" database_id=\"" << _nodeRemap.at(*idIter) <<
+        "\" />" << std::endl;
+    }
+
+    for ( std::set<long>::const_iterator idIter = _sourceWayIds.begin();
+          idIter != _sourceWayIds.end(); ++idIter )
+    {
+      outputFile <<
+        "\t<id_mapping element_type=\"way\" source_id=\"" <<
+        *idIter << "\" database_id=\"" << _wayRemap.at(*idIter) <<
+        "\" />" << std::endl;
+    }
+
+    for ( std::set<long>::const_iterator idIter = _sourceRelationIds.begin();
+          idIter != _sourceRelationIds.end(); ++idIter )
+    {
+      outputFile <<
+        "\t<id_mapping element_type=\"relation\" source_id=\"" <<
+        *idIter << "\" database_id=\"" << _relationRemap.at(*idIter) <<
+        "\" />" << std::endl;
+    }
+
+    outputFile << "</id_mappings>" << std::endl;
+
+    outputFile.close();
+  }
+  catch ( ... )
+  {
+    LOG_WARN("Error creating output map file " << _outputMappingFile);
+  }
 }
 
 }

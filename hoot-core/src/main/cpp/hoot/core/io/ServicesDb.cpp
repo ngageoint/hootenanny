@@ -2988,7 +2988,7 @@ void ServicesDb::_flushElementCacheOsmApiRelations()
       // Populate variables to make string build a little bit cleaner
       const QString relationIDString(QString::number(currRelation->getId()));
 
-      LOG_DEBUG("Flushing relation " << relationIDString);
+      //LOG_DEBUG("Flushing relation " << relationIDString);
 
       // relations and current_relations (identical data)
       QString relationsCurrentRelationsRow =
@@ -3111,7 +3111,7 @@ void ServicesDb::_flushElementCacheOsmApiRelations()
       currentRelationTagsInsertCmd += ";";
       relationTagsInsertCmd += ";";
 
-      LOG_DEBUG("current_node_tags: \n\t" + currentRelationTagsInsertCmd);
+      //LOG_DEBUG("current_node_tags: \n\t" + currentRelationTagsInsertCmd);
       _execNoPrepare(currentRelationTagsInsertCmd);
       //LOG_DEBUG("node_tags: \n\t" + wayTagsInsertCmd);
       _execNoPrepare(relationTagsInsertCmd);

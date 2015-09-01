@@ -1184,6 +1184,15 @@ typically only used by developers.
 Should the services DB writer automatically create the specified user if it doesn't exist. This
 is most useful when debugging and testing.
 
+=== services.db.writer.output.id.mappings
+
+* Data Type: string
+* Default Value: ``
+
+If this value is set to a non-empty string, the system will attempt to open a file with the specified name
+and output all the ID mappings (source to destination) used for nodes, ways, and relations that were
+written to the database.
+
 === set.circular.error.visitor.value
 
 * Data Type: double

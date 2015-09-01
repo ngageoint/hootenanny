@@ -103,6 +103,11 @@ private:
   unsigned long _waysWritten;
   unsigned long _relationsWritten;
 
+  QString _outputMappingFile;
+  std::set<long> _sourceNodeIds;
+  std::set<long> _sourceWayIds;
+  std::set<long> _sourceRelationIds;
+
   void _openDb(QString& urlStr, bool deleteMapFlag);
 
   void _addElementTags(const shared_ptr<const Element>& e, Tags& t);
@@ -128,6 +133,10 @@ private:
    * Close the current changeset and start a new one.
    */
   void _startNewChangeSet();
+
+  void _setOutputMappingFile(const QString& filename);
+
+  void _outputIdMappings();
 };
 
 }
