@@ -73,7 +73,7 @@ public class ReviewItemsMarkerTest {
 				+ "and \"review_items\".\"review_against_item_id\" = ?", actual);
 	}
 	
-	
+	/*
 	@Test
 	@Category(UnitTest.class)
 	public void testGetAvailableReviewQuery() throws Exception
@@ -150,6 +150,6 @@ public class ReviewItemsMarkerTest {
 				+ "and (\"review_items\".\"last_accessed\" < ? or \"review_items\".\"last_accessed\" is null))", q.toString());
 	}
 	
-	
+	*/
 	
 }

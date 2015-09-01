@@ -31,6 +31,8 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
@@ -877,50 +879,61 @@ public class ReviewResource
       String mapId) throws Exception
   {
 
+
+
     Connection conn = DbUtils.createConnection();
     final String errorMessageStart = "marking items as reviewed";
     JSONObject nextReviewableResponse = new JSONObject();
     nextReviewableResponse.put("status", "none");
     try
     {
-    	int offset = -1;
-    	Object oReqOffset = nextReviewItemRequest.get("offset");
-    	
-    	if(oReqOffset != null)
-    	{
-    		offset = Integer.parseInt(oReqOffset.toString());
-    	}
-    	else
-    	{
-    		throw new Exception("Invalid offset argument.");
-    	}
-    	
-    	Object oDirection = nextReviewItemRequest.get("direction");
-    	
-    	boolean isForward = false;
-    	if(oDirection != null)
-    	{
-    		String direction = oDirection.toString();
-    		if(direction.equals("forward"))
-    		{
-    			isForward = true;
-    		}
-    	}
-    	else
-    	{
-    		throw new Exception("Invalid direction argument.");
-    	}
+      int offset = -1;
+      Object oReqOffset = nextReviewItemRequest.get("offset");
+      
+      if(oReqOffset != null)
+      {
+        offset = Integer.parseInt(oReqOffset.toString());
+      }
+    
+      
+      Object oDirection = nextReviewItemRequest.get("direction");
+      
+      boolean isForward = true;
+      if(oDirection != null)
+      {
+        String direction = oDirection.toString();
+        if(!direction.equals("forward"))
+        {
+          isForward = false;
+        }
+        
+      }
+    
+      
+      
 
-    	Object oOffsetid = nextReviewItemRequest.get("offsetid");
-    	String offsetId = (oOffsetid == null)? null : oOffsetid.toString();
-    	
-    	Object oAgainst = nextReviewItemRequest.get("offsetreviewagainstid");
-    	String reviewAgainst = (oAgainst == null)? null : oAgainst.toString();
-    	
-    	ReviewItemsMarker marker = new ReviewItemsMarker(conn, mapId);
+      
+      
+      ReviewItemsMarker marker = new ReviewItemsMarker(conn, mapId);
+      nextReviewableResponse = marker.getAvaiableReviewItem(offset, isForward);
+      nextReviewableResponse.put("locktime", ReviewItemsMarker.LOCK_TIME);
+      long totalReviewableCnt = marker.getTotalReviewCnt();
+      nextReviewableResponse.put("total", totalReviewableCnt);
+      long reviewedCnt = marker.getReviewedReviewCnt();
+      nextReviewableResponse.put("reviewedcnt", reviewedCnt);
+      long lockedCnt = marker.getLockedReviewCnt();
+      nextReviewableResponse.put("lockedcnt", lockedCnt);
+/*
+      Object oOffsetid = nextReviewItemRequest.get("offsetid");
+      String offsetId = (oOffsetid == null)? null : oOffsetid.toString();
+      
+      Object oAgainst = nextReviewItemRequest.get("offsetreviewagainstid");
+      String reviewAgainst = (oAgainst == null)? null : oAgainst.toString();
+      
+      ReviewItemsMarker marker = new ReviewItemsMarker(conn, mapId);
 
-    	nextReviewableResponse = marker.getAvaiableReviewItem(offset, isForward, offsetId, reviewAgainst);
-    	
+      nextReviewableResponse = marker.getAvaiableReviewItem(offset, isForward, offsetId, reviewAgainst);*/
+      
     
     }
     catch (Exception e)
@@ -929,9 +942,9 @@ public class ReviewResource
     }
     finally
     {
-    	try
+      try
       {
-    		conn.setAutoCommit(true);
+        conn.setAutoCommit(true);
         DbUtils.closeConnection(conn);
       }
       catch (Exception e)
@@ -942,6 +955,8 @@ public class ReviewResource
     
    
     return nextReviewableResponse;
+  
+  
   
   }
   
