@@ -1344,7 +1344,7 @@ sub validateCurrentRelations($$)
   #print( 'Found ' . scalar(keys(%currentRelationsData)) . " entries in current_relations\n" );
 
   # First sanity check: make sure # of OSM relations exactly matches # of OSM API DB relations
-  print( "Number of OSM relations: " . scalar(keys(%$osmXmlRelationsRef)) . "\n" );
+  #print( "Number of OSM relations: " . scalar(keys(%$osmXmlRelationsRef)) . "\n" );
   if ( scalar(keys(%$osmXmlRelationsRef)) != scalar(keys(%currentRelationsData)) )
   {
     print('ERROR: OSM XML relations: ' . scalar(keys(%$osmXmlRelationsRef)) .
@@ -1360,6 +1360,142 @@ sub validateCurrentRelations($$)
 
   print( "\t\tMatching number of relations: PASS (" .
     scalar(keys(%currentRelationsData)) . ")\n" );
+
+  # Read current_relation_tags
+
+  $foundStart = 0;
+  foreach $currLine (@dumpLines)
+  {
+    chomp($currLine);
+
+    # Find out where table data starts
+    if ( $foundStart == 0 )
+    {
+      if ($currLine =~ /^COPY current_relation_tags \(.+\) FROM stdin;/ )
+      {
+        $foundStart = 1;
+      }
+
+      # Either way, can't do any more processing
+      next;
+    }
+
+    # Are we at end of data?
+    if ( $currLine =~ /^\\./ )
+    {
+      last;
+    }
+
+    #print( "Current_relation_tags entry: $currLine\n" );
+
+    # Have a valid relation tag entry
+    my %currentRelationTagsEntry;
+
+    # Break into tokens based on tab delimiter
+    # Schema: way_id, key, value
+    my @tokens = split( /\t+/, $currLine);
+
+    #print( "Found relation tag\n");
+
+    $currentRelationTagsEntry{$tokens[1]} = $tokens[2];
+    #print( "\tID: $tokens[0]\n\tKey: $tokens[1]\n\tValue: $tokens[2]\n");
+
+    # Store the entry in hash of current_relations
+    if ( exists($currentRelationsData{ $tokens[0] }->{'tags'} ) )
+    {
+      $currentRelationsData{ $tokens[0] }->{'tags'}->{$tokens[1]} = $tokens[2];
+
+      #my $key;
+      #foreach $key ( keys( $currentNodesData{ $tokens[0] }->{'tags'}) )
+      #{
+      # print( "\tFound tags key: $key\n" );
+      #}
+    }
+    else
+    {
+      $currentRelationsData{ $tokens[0] }->{'tags'} = { $tokens[1] => $tokens[2] };
+    }
+  }
+
+  # Read current_relation_members
+  $foundStart = 0;
+  foreach $currLine (@dumpLines)
+  {
+    chomp($currLine);
+
+    # Find out where table data starts
+    if ( $foundStart == 0 )
+    {
+      if ($currLine =~ /^COPY current_relation_members \(.+\) FROM stdin;/ )
+      {
+        $foundStart = 1;
+      }
+
+      # Either way, can't do any more processing
+      next;
+    }
+
+    # Are we at end of data?
+    if ( $currLine =~ /^\\./ )
+    {
+      last;
+    }
+
+    #print( "Current_relation_members entry: $currLine\n" );
+
+    # Have valid relation members
+    my %currentRelationMemberEntry;
+
+    # Break into tokens based on tab delimiter
+    # Schema: relation_id, member_type, member_id, member_role, sequence_id
+    my @tokens = split( /\t+/, $currLine);
+
+    if ( scalar(@tokens) != 5 )
+    {
+
+      # Only way this could really happen is if the "role" field was blank,
+      # as it's only optional one.  Shift our 4th token to the right, and fill in 4th
+      # with a blank
+      if ( scalar(@tokens) == 4 )
+      {
+        $tokens[4] = $tokens[3];
+        $tokens[3] = '';
+      } 
+      else
+      {
+        print("Did not parse to correct number of tokens: $currLine");
+        exit;
+      }
+
+      #print( "$currLine\ntokenized and then cleaned up to:\n" . Dumper(@tokens) );
+    }
+
+    
+
+    #print( "Found current_relation_member\n");
+
+    # Store the entry in hash of members in this relation
+    my $relationMemberHashRef = {
+      'member_type' => $tokens[1],
+      'member_id' => $tokens[2],
+      'member_role' => $tokens[3] };
+    if ( exists($currentRelationsData{ $tokens[0] }->{'relation_members'}) )
+    {
+      $currentRelationsData{ $tokens[0] }->{'relation_members'}->{$tokens[4]} = 
+        $relationMemberHashRef;
+    } 
+    else
+    {
+      $currentRelationsData{ $tokens[0] }->{'relation_members'} = 
+        { $tokens[4] => $relationMemberHashRef };
+
+      print( Dumper( $currentRelationsData{ $tokens[0] }->{'relation_members'}) );
+
+    }
+  }
+
+  #print( Dumper( $currentRelationsData{ 500 }->{'relation_members'}) );
+
 
 }
 
