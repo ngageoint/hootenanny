@@ -63,6 +63,7 @@ class OsmSchemaTest : public CppUnit::TestFixture
   CPPUNIT_TEST(isAncestorTest);
   CPPUNIT_TEST(isAreaTest);
   CPPUNIT_TEST(isMetaDataTest);
+  CPPUNIT_TEST(religionTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -370,6 +371,24 @@ public:
     CPPUNIT_ASSERT_EQUAL(true, OsmSchema::getInstance().isAncestor("highway=secondary",
       "highway=road"));
   }
+
+  void religionTest()
+  {
+    OsmSchema uut;
+    uut.loadDefault();
+
+    double d;
+    // These should have a high score. The exact value isn't important.
+    d = uut.score("building=mosque", "amenity=place_of_worship");
+    CPPUNIT_ASSERT(d >= 0.8);
+    // These shouldn't have a high score. The exact score isn't important.
+    d = uut.score("building=mosque", "amenity=church");
+    CPPUNIT_ASSERT(d <= 0.3);
+    // These should have a high score. The exact value isn't important.
+    d = uut.score("building=abbey", "amenity=church");
+    CPPUNIT_ASSERT(d >= 0.8);
+  }
+
 
 
 };

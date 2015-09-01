@@ -185,7 +185,7 @@ public class Relation extends Element
 	 * @param modifyingUserDisplayName
 	 *          user display name of the user which created this element
 	 * @param multiLayerUniqueElementIds
-	 *          if true, ID's are prepended with <map id>_<first letter of the
+	 *          if true, IDs are prepended with <map id>_<first letter of the
 	 *          element type>_; this setting activated is not compatible with
 	 *          standard OSM clients (specific to Hootenanny iD)
 	 * @param addChildren
@@ -375,7 +375,7 @@ public class Relation extends Element
 	}
 
 	/*
-	 * Retrieves geo info for the nodes/ways associated with the input ID's and
+	 * Retrieves geo info for the nodes/ways associated with the input IDs and
 	 * then computes the combined bounds for all the elements
 	 */
 	private BoundingBox getBoundsForNodesAndWays(final Set<Long> dbNodeIds,

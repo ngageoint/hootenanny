@@ -675,11 +675,11 @@ public:
         QString trgStr = QString("v%1").arg(trg);
         if (_graph[*ei].type == IsA)
         {
-          result += QString("%1 -> %2 [arrowhead=normal,weight=10,label=\"%3\"];\n").arg(srcStr, trgStr).arg(_graph[*ei].similarToWeight);
+          result += QString("%1 -> %2 [arrowhead=normal,color=blue2,weight=2,label=\"%3\"];\n").arg(srcStr, trgStr).arg(_graph[*ei].similarToWeight);
         }
         else if (_graph[*ei].type == SimilarTo && _graph[*ei].show)
         {
-          result += QString("%1 -> %2 [arrowhead=odot,arrowtail=odot,label=\"%3\"];\n").
+          result += QString("%1 -> %2 [arrowhead=odot,color=chartreuse3,weight=1,arrowtail=odot,label=\"%3\"];\n").
               arg(srcStr, trgStr).arg(_graph[*ei].similarToWeight);
           used.insert(p);
         }

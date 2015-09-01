@@ -10,7 +10,7 @@
   <Title>LTDS Translate Service</Title>
   <Abstract><![CDATA[
   <DESCRIPTION>
-  To translate osm element into OGR/LTDS format 2 services are available. Standard rest endpoint and WPS end point. Both are access by post.
+  To translate an OSM element into OGR/LTDS format, there are 2 services are available: Standard REST endpoint and WPS endpoint. Both of these are accessed by POST.
   </DESCRIPTION>
   <EXAMPLE>
   <URL>http://localhost:8080/hoot-services/ogc</URL>

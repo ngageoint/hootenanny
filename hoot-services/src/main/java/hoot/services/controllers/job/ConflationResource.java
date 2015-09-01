@@ -86,7 +86,7 @@ public class ConflationResource extends JobControllerBase {
 	}
 	/**
 	 * <NAME>Conflate Service</NAME>
-	 * <DESCRIPTION>Conflate service operates like standard ETL service. The conflate service specifies the input files, conflation type, match threshold, miss threshold, and output file name. The conflation type can be specified as the average of the two input datasets or based on a single input file that is intended to be the reference dataset. It has two fronts, WPS and standard rest end point.</DESCRIPTION>
+	 * <DESCRIPTION>Conflate service operates like a standard ETL service. The conflate service specifies the input files, conflation type, match threshold, miss threshold, and output file name. The conflation type can be specified as the average of the two input datasets or based on a single input file that is intended to be the reference dataset. It has two fronts, WPS and standard rest end point.</DESCRIPTION>
 	 * <PARAMETERS>
 	 * <INPUT1_TYPE>
 	 * 	Conflation input type [OSM] | [OGR] | [DB]

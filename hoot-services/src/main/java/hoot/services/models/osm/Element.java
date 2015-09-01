@@ -162,7 +162,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
   public Collection<Object> getRelatedRecords() { return relatedRecords; }
 
   /**
-   * ID's of records associated with the contained services database record
+   * IDs of records associated with the contained services database record
    */
   protected Collection<Long> relatedRecordIds;
 
@@ -343,7 +343,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
    * @param parentXml XML node this element should be attached under
    * @param modifyingUserId ID of the user which created this element
    * @param modifyingUserDisplayName user display name of the user which created this element
-   * @param multiLayerUniqueElementIds if true, ID's are prepended with
+   * @param multiLayerUniqueElementIds if true, IDs are prepended with
    * <map id>_<first letter of the element type>_; this setting activated is not compatible with
    * standard OSM clients (specific to Hootenanny iD)
    * @param addChildren if true, element children are added to the element xml (way nodes for ways
@@ -409,11 +409,10 @@ public abstract class Element implements XmlSerializable, DbSerializable
     //version passed in the request can be ignored if it is a create request
     if (!entityChangeType.equals(EntityChangeType.CREATE))
     {
-      //if its ever determined that doing this fetch when this method is called in a loop hinders
+      //if it is ever determined that doing this fetch when this method is called in a loop hinders
       //performance (#2951), replace this query with a query outside the loop that checks for the
       //existence of all nodes and validates their versions in a batch query.  The downside to
       //this, however, would be parsing the XML node data more than once.
-
 
     	Object existingRecord =
     			new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).from(getElementTable()).where(getElementIdField().eq(new Long(oldId)))
@@ -430,9 +429,9 @@ public abstract class Element implements XmlSerializable, DbSerializable
         (Long)MethodUtils.invokeMethod(existingRecord, "getVersion", new Object[]{});
       if (version != existingVersion)
       {
-        throw new Exception("Invalid version: " + version + " for " + toString() + " with ID: " +
-          getId() + " and version " + existingVersion + " in changeset with ID: " +
-          MethodUtils.invokeMethod(record, "getChangesetId", new Object[]{}));
+        throw new Exception("Invalid version: " + version + " specified for " + toString() + 
+        	" with ID: " + getId() + " and expected version " + existingVersion + " in changeset " +
+          " with ID: " + MethodUtils.invokeMethod(record, "getChangesetId", new Object[]{}));
       }
       version++;
     }
@@ -444,10 +443,9 @@ public abstract class Element implements XmlSerializable, DbSerializable
         Long.parseLong(xmlAttributes.getNamedItem("version").getNodeValue());
       if (parsedVersion != 0)
       {
-        throw new Exception("Invalid version: " + version + " for element to be created: " +
-          toString() + " with ID: " + getId() + " and version " + parsedVersion +
-          " in changeset with ID: " +
-          MethodUtils.invokeMethod(record, "getChangesetId", new Object[]{}));
+        throw new Exception("Invalid version: " + parsedVersion + " specified for " + toString() + 
+          " with ID: " + getId() + " and expected version " + version + " in changeset " +
+          " with ID: " + MethodUtils.invokeMethod(record, "getChangesetId", new Object[]{}));
       }
     }
     return version;
@@ -511,7 +509,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
    *
    * @param mapId ID of the map owning the records
    * @param elementType type of elements to be returned
-   * @param elementIds ID's of the elements to be returned
+   * @param elementIds IDs of the elements to be returned
    * @param dbConn JDBC Connection
    * @return a set of element records
    * @throws InvocationTargetException
@@ -546,7 +544,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
    *
    * @param mapId ID of the map owning the records
    * @param elementType type of elements to be returned
-   * @param elementIds ID's of the elements to be returned
+   * @param elementIds IDs of the elements to be returned
    * @param dbConn JDBC Connection
    * @return a set of  element records
    * @throws InvocationTargetException
@@ -587,7 +585,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
    *
    * @param mapId ID of the map owning the elements
    * @param elementType type of elements to be deleted
-   * @param elementIds ID's of the elements to be deleted
+   * @param elementIds IDs of the elements to be deleted
    * @param dbConn JDBC Connection
    * @throws Exception
    */
@@ -610,7 +608,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
 
     if (numElementsToDelete != (long)elementIds.size())
     {
-      throw new Exception("Not all element ID's specified for deletion are valid for element " +
+      throw new Exception("Not all element IDs specified for deletion are valid for element " +
         "type: " + prototype.toString());
     }
     if (numElementsToDelete > 0)
@@ -632,21 +630,21 @@ public abstract class Element implements XmlSerializable, DbSerializable
     }
     else
     {
-      log.warn("No elements exist with the specified set of ID's for element type: " +
+      log.warn("No elements exist with the specified set of IDs for element type: " +
         prototype.toString());
     }
   }
 
   /**
    * Removes all records related (e.g. way nodes for ways, relation members for relations, etc.)
-   * to all of the elements with the passed in ID's
+   * to all of the elements with the passed in IDs
    *
    * @param mapId ID of the map owning the elements
    * @param mapIdField services database table map ID field for the join table
    * @param relatedRecordTable services database table for the related record type
    * @param joinField services database table field which joins the related record to the parent
    * record
-   * @param elementIds ID's of the elements for which related records are to be deleted
+   * @param elementIds IDs of the elements for which related records are to be deleted
    * @param warnOnNothingRemoved if true, a warning will be logged if no related records were
    * removed
    * @param dbConn JDBC Connection
@@ -897,12 +895,12 @@ public abstract class Element implements XmlSerializable, DbSerializable
   }
 
   /**
-   * Returns the ID's of all relations which own this element
+   * Returns the IDs of all relations which own this element
    *
    * The ordering of returned records by ID and the use of TreeSet to keep them sorted is only
    * for error reporting readability purposes only.
    *
-   * @return sorted list of relation ID's
+   * @return sorted list of relation IDs
    * @throws DataAccessException
    * @throws Exception
    */

@@ -206,7 +206,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
     //no data in system should be modified.
     try
     {
-      //try to create a changeset from a map name that is linked to multiple map ID's
+      //try to create a changeset from a map name that is linked to multiple map IDs
       mapName = "map-with-id-" + String.valueOf(mapId);
       resource()
         .path("api/0.6/changeset/create")

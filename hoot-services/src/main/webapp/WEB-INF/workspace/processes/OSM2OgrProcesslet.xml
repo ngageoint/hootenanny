@@ -8,7 +8,17 @@
 	<Identifier>OSM2Ogr</Identifier>
 	<JavaClass>hoot.services.controllers.wps.OSM2OgrProcesslet</JavaClass>
 	<Title>Hello World</Title>
-	<Abstract>Hello world test</Abstract>
+	 <Abstract><![CDATA[
+  <DESCRIPTION>
+  Hello World Test
+  </DESCRIPTION>
+  <EXAMPLE>
+  <URL></URL>
+  <REQUEST_TYPE></REQUEST_TYPE>
+  <INPUT></INPUT>
+   <OUTPUT></OUTPUT>
+   </EXAMPLE>
+  ]]></Abstract>
 	<!-- deegree doesn't honor optional input parameters for HTTP GET requests (only POSTs), so 
     don't make any of them optional; by default input params are required -->
 	<InputParameters>
