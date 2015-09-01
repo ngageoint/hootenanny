@@ -732,7 +732,9 @@ public class ReviewResource
       }
       catch (Exception e)
       {
-        log.debug("Rolling back database transaction for ReviewResource::markItemsAsReviewed...");
+        log.error(
+          "Rolling back database transaction for ReviewResource::markItemsAsReviewed" + 
+          e.getMessage());
         transactionManager.rollback(transactionStatus);
         conn.rollback();
         throw e;

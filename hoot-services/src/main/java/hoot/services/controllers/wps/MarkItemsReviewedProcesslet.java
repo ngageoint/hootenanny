@@ -156,6 +156,9 @@ public class MarkItemsReviewedProcesslet extends BaseProcesslet
       log.debug("Returning changeset ID: " + markItemsReviewedResponse.getChangesetId() + " ...");
       ((LiteralOutput)outputParams.getParameter("changesetId")).setValue(
         String.valueOf(markItemsReviewedResponse.getChangesetId()));
+      log.debug("Setting map ID: " + markItemsReviewedResponse.getMapId() + " ...");
+      ((LiteralOutput)outputParams.getParameter("mapId")).setValue(
+        String.valueOf(markItemsReviewedResponse.getMapId()));
     }
     catch (Exception e)
     {

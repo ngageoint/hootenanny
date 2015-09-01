@@ -151,6 +151,7 @@ public class ReviewItemsMarker
     throws Exception
   {
     MarkItemsReviewedResponse markItemsReviewedResponse = new MarkItemsReviewedResponse();
+    markItemsReviewedResponse.setMapId(mapId);
 
     Document changesetUploadResponse = null;
     long changesetId = -1;
@@ -175,7 +176,9 @@ public class ReviewItemsMarker
         markItemsReviewedRequest.setReviewedItemsChangeset(
           markItemsReviewedRequest.getReviewedItemsChangeset()
             .replaceAll("changeset=\"\"", "changeset=\"" + changesetId + "\"")
-            .replaceAll("changeset=\"\\d+\"", "changeset=\"" + changesetId + "\""));
+            .replaceAll("changeset=\"-*\\d+\"", "changeset=\"" + changesetId + "\""));
+        //log.debug(markItemsReviewedRequest.getReviewedItemsChangeset());
+        
         //the changeset upload process will catch any elements in the changeset xml which are out
         //of sync with the element versions in the OSM element tables, by design
         changesetUploadResponse =
