@@ -11,6 +11,7 @@
     "import": "leisure.json",
     "import": "man_made.json",
     "import": "place.json",
+    "import": "parking.json",
     "import": "address.json",
     "import": "metadata.json",
     "import": "waterway.json",
