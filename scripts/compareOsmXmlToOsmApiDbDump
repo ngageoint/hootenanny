@@ -33,6 +33,7 @@ my %nodesOsm;
 my %nodesPgsql;
 my %nodeIdMappingsXmlToDb;
 my %wayIdMappingsXmlToDb;
+my %relationIdMappingsXmlToDb;
 
 sub convertNanodegreesStringToDegrees($)
 {
@@ -1488,13 +1489,101 @@ sub validateCurrentRelations($$)
     {
       $currentRelationsData{ $tokens[0] }->{'relation_members'} = 
         { $tokens[4] => $relationMemberHashRef };
-
-      print( Dumper( $currentRelationsData{ $tokens[0] }->{'relation_members'}) );
-
     }
+
+    #print( Dumper( $currentRelationsData{ $tokens[0] }->{'relation_members'}) );
   }
 
-  #print( Dumper( $currentRelationsData{ 500 }->{'relation_members'}) );
+  # Now let's create mapping for Postgres relation ID -> OSM relation ID.  The OSM XML 
+  #   relation IDs were added in ascending relation ID order, so if we iterate over 
+  #   OSM API relation IDs in ascending, we have a guaranteed 1:1 mapping
+
+  my @sortedDbRelationIds = sort( {$a <=> $b} keys(%currentRelationsData));
+  my $currXmlRelationId;
+  my $i = 0;
+  foreach $currXmlRelationId ( sort( {$a <=> $b} keys(%$osmXmlRelationsRef)) )
+  {
+    $relationIdMappingsXmlToDb{$currXmlRelationId} = $sortedDbRelationIds[$i];
+
+    #print("XML relation ID $currXmlRelationId maps to DB relation ID " .
+    #  "$sortedDbRelationIds[$i]\n");
+
+    $i++;
+  }
+
+  # Now that we have mapping, go back and compare each XML relation to corresponding entry in 
+  #   current_relations
+  foreach $currXmlRelationId ( sort( {$a <=> $b} keys(%$osmXmlRelationsRef)) )
+  {
+    my %currXmlRelation = %{ $osmXmlRelationsRef->{$currXmlRelationId} };
+    my $databaseRelationId = $relationIdMappingsXmlToDb{$currXmlRelationId};
+
+    # Check version, tags
+
+    # Version -- as this is a new ingest, must be v1 in database
+    if ( $currentRelationsData{$relationIdMappingsXmlToDb{$currXmlRelationId}}->{'version'} != 1 )
+    {
+      print("XML relation $currXmlRelationId with database relation ID " .
+          $relationIdMappingsXmlToDb{$currXmlRelationId} . " is not version 1 which it should be after " .
+          "being newly-inserted into a fresh database\n" );
+      exit;
+    }
+
+    # Tags
+    if ( exists($currXmlRelation{'tag'}) )
+    {
+      #print( "XML Tags: " . Dumper($currXmlRelation{'tag'}) . "\n");
+      #print( "DB tags: " . Dumper($currentRelationsData{$databaseRelationId}->{'tags'}) . "\n");
+
+      my $xmlTagsArrayRef = $currXmlRelation{'tag'};
+
+      # Make sure number of tags are equal
+      if ( scalar( @{$xmlTagsArrayRef} ) !=
+          scalar( keys(%{ $currentRelationsData{$databaseRelationId}->{'tags'} })) )
+      {
+        print("ERROR: number of tags in XML for relation $currXmlRelationId " .
+          "does not match database relation $databaseRelationId\n");
+
+        print( "Tags for XML relation $currXmlRelationId:\n" . Dumper($xmlTagsArrayRef) . 
+          "\nTags for database relation $databaseRelationId:\n" .
+          Dumper($currentRelationsData{$databaseRelationId}->{'tags'}) );
+        exit;
+      }
+
+      my $currTag;
+
+      foreach $currTag ( @{$xmlTagsArrayRef} )
+      {
+        my %xmlTagEntry = %{ $currTag };
+        #print( "Key   : $tagEntry{'k'}\n");
+        #print( "Value : $tagEntry{'v'}\n");
+
+        my %dbTagEntry = %{ $currentRelationsData{$databaseRelationId}->{'tags'} };
+        if ( ! exists( $dbTagEntry{ $xmlTagEntry{'k'} } ) )
+        {
+          print("Could not find database version of tag " . Dumper(%xmlTagEntry) . "\n" );
+          exit;
+        }
+        else
+        {
+          #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
+          #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
+        }
+      }
+    }
+    else
+    {
+      # Confirm database does not have tags either
+      if ( exists($currentRelationsData{$databaseRelationId}->{'tags'}) )
+      {
+        print( "XML did not have tags for relation $currXmlRelationId, but matching " .
+          "database relation $databaseRelationId did!\n" );
+        exit;
+      }
+    }
+
+    # TODO: need to validate relation_members
+  } 
 
 
 }

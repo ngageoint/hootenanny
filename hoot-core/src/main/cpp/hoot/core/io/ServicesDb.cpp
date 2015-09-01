@@ -2973,7 +2973,7 @@ void ServicesDb::_flushElementCacheOsmApiRelations()
     // Assume the insert tag commands don't need to be run until we see otherwise
     bool needInsertTags = false;
 
-    // Iterate over all ways in the cache, adding data to the current_nodes INSERT command
+    // Iterate over all ways in the cache, adding data to the current_relations INSERT command
     _elementCache->resetElementIterators();
     ConstRelationPtr currRelation = _elementCache->getNextRelation();
 
@@ -2987,6 +2987,8 @@ void ServicesDb::_flushElementCacheOsmApiRelations()
 
       // Populate variables to make string build a little bit cleaner
       const QString relationIDString(QString::number(currRelation->getId()));
+
+      LOG_DEBUG("Flushing relation " << relationIDString);
 
       // relations and current_relations (identical data)
       QString relationsCurrentRelationsRow =
@@ -3109,7 +3111,7 @@ void ServicesDb::_flushElementCacheOsmApiRelations()
       currentRelationTagsInsertCmd += ";";
       relationTagsInsertCmd += ";";
 
-      //LOG_DEBUG("current_node_tags: \n\t" + currentWayTagsInsertCmd);
+      LOG_DEBUG("current_node_tags: \n\t" + currentRelationTagsInsertCmd);
       _execNoPrepare(currentRelationTagsInsertCmd);
       //LOG_DEBUG("node_tags: \n\t" + wayTagsInsertCmd);
       _execNoPrepare(relationTagsInsertCmd);
