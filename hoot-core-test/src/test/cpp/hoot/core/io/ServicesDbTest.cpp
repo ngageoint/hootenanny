@@ -40,7 +40,7 @@
 
 // special define:
 //   Greg's workspace set true; Terry's set false
-#define GREGSWORKSPACE true
+#define GREGSWORKSPACE false
 
 namespace hoot
 {

@@ -480,7 +480,7 @@ private:
   static QString _getRelationsTableName(long mapId)
   { return "current_relations" + _getMapIdString(mapId); }
   static QString _getWayNodesTableName(long mapId)
-  { std::cout << "in blatabing..." << std::endl; return "current_way_nodes" + _getMapIdString(mapId); }
+  { return "current_way_nodes" + _getMapIdString(mapId); }
   static QString _getWaysTableName(long mapId)
   { return "current_ways" + _getMapIdString(mapId); }
 
