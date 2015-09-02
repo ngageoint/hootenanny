@@ -373,7 +373,7 @@ public class ReviewItemsMarker
       .where(rm.mapId.eq(mapId).and(rm.reviewStatus.eq(DbUtils.review_status_enum.unreviewed)
           .and(rm.lastAccessed.lt(compareTime).or(rm.lastAccessed.isNull()))
           .and(rm.reviewId.loe(offsetId))))
-      .orderBy(rm.reviewId.asc());
+      .orderBy(rm.reviewId.desc());
     }
     
     return q;
