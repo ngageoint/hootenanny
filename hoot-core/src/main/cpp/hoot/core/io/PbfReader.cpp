@@ -187,7 +187,7 @@ double PbfReader::_convertLat(long lat)
   return .000000001 * (_latOffset + (_granularity * lat));
 }
 
-ElementId PbfReader::_convertToElementId(int id, int memberType)
+ElementId PbfReader::_convertToElementId(long id, int memberType)
 {
   ElementType t;
   switch (memberType)

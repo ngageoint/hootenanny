@@ -347,7 +347,7 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)
     long nodeId = _getRemappedElementId(n->getElementId());
     if (alreadyThere)
     {
-      _sdb.updateWay(nodeId, t);
+      _sdb.updateNode(nodeId, n->getY(), n->getX(), t);
     }
     else
     {
@@ -467,9 +467,7 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
   {
     RelationData::Entry e = r->getMembers()[i];
 
-    // All nodes and ways are already inserted in the database. May need to
-    //    find mappings for those.  May need to create new ID mappings
-    //    for relations if we've not yet seen them
+    // May need to create new ID mappings for items we've not yet seen
     ElementId relationMemberElementId = e.getElementId();
 
     if ( _remapIds == true )
