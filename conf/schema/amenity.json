@@ -34,7 +34,9 @@
 
     "tag": { "name": "amenity=auditorium", "isA": "amenity" },
     "tag": { "name": "amenity=concert_hall", "isA": "amenity",
-        "similarTo": { "name": "amenity=concert_hall", "weight": 0.8 } },
+        "similarTo": { "name": "amenity=arts_centre", "weight": 0.8 },
+        "similarTo": { "name": "amenity=music_venue", "weight": 0.8 }
+    },
 
     "tag": { "name": "amenity=building", "isA": "amenity",
         "aliases": ["amenity=bulding"] },
@@ -114,7 +116,7 @@
     "tag": { "name": "amenity=hunting_stand", "isA": "amenity",
         "similarTo": { "name": "amenity=hunting", "weight": 0.9 }  },
     "tag": { "name": "amenity=game_feeding", "isA": "amenity",
-        "similarTo": { "name": "amenity=hunting", "weight": 0.5 }  },
+        "similarTo": { "name": "amenity=hunting", "weight": 0.4 }  },
 
 
     "#" : "Government",
@@ -167,8 +169,12 @@
     "tag": { "name": "amenity=check_cashing", "isA": "amenity",
         "similarTo": { "name": "amenity=bank", "weight": 0.5 } },
     "tag": { "name": "amenity=atm", "isA": "amenity",
-        "aliases": ["amenity=payment_terminal"],
-        "similarTo": { "name": "amenity=bank", "weight": 0.5 } },
+        "aliases": ["amenity=payment_terminal", "atm=yes"],
+        "similarTo": { "name": "amenity=bank", "weight": 0.5 }
+    },
+    "tag": { "name": "amenity=payment_terminal", "isA": "amenity",
+        "similarTo": { "name": "amenity=atm", "weight": 0.5 }
+    },
 
     "tag": { "name": "amenity=business_service", "isA": "amenity" },
     "tag": { "name": "amenity=industry", "isA": "amenity" },
@@ -241,8 +247,11 @@
     "tag": { "name": "amenity=motor_vehicle_station", "isA": "amenity",
         "similarTo": { "name": "amenity=fuel", "weight": 0.8 } },
 
+    "#": "amenity=garage[s] isn't a sanctioned tag, but it does appear > 1000 times in tag info.",
     "tag": { "name": "amenity=garage", "isA": "amenity",
-        "aliases": ["amenity=garages"]  },
+        "aliases": ["amenity=garages"],
+        "similarTo": { "name": "building=garage", "weight": 0.9 },
+        "similarTo": { "name": "parking=garage", "weight": 0.9 } },
     "tag": { "name": "amenity=grit_bin", "isA": "amenity" },
 
     "tag": { "name": "amenity=motorcycle_parking", "isA": "amenity",
@@ -394,7 +403,9 @@
     "tag": { "name": "amenity=personal_service", "isA": "amenity" },
     "tag": { "name": "amenity=coworking_space", "isA": "amenity" },
     "tag": { "name": "amenity=internet_cafe", "isA": "amenity" },
-    "tag": { "name": "amenity=wifi", "isA": "amenity" },
+    "tag": { "name": "amenity=wifi", "isA": "amenity",
+        "similarTo": { "name": "amenity=internet_cafe", "weight": 0.4 }
+    },
     "tag": { "name": "amenity=telephone", "isA": "amenity",
         "aliases": ["amenity=emergency_phone"]  },
     "tag": { "name": "amenity=spa", "isA": "amenity" },
@@ -444,12 +455,15 @@
     "tag": { "name": "amenity=dojo", "isA": "amenity" },
     "tag": { "name": "amenity=planetarium", "isA": "amenity" },
 
-    "tag": { "name": "amenity=sports", "isA": "amenity" },
+    "tag": { "name": "amenity=sports", "isA": "amenity",
+        "similarTo": { "name": "amenity=dojo", "weight": 0.4 }
+    },
     "tag": { "name": "amenity=sport_camp", "isA": "amenity",
         "similarTo": { "name": "amenity=sports", "weight": 0.6 } },
     "tag": { "name": "amenity=stables", "isA": "amenity" },
     "tag": { "name": "amenity=swimming_pool", "isA": "amenity",
         "similarTo": { "name": "amenity=sports", "weight": 0.6 },
+        "similarTo": { "name": "amenity=dive_centre", "weight": 0.6 },
         "similarTo": { "name": "amenity=fitness_centre", "weight": 0.4 } },
     "tag": { "name": "amenity=social_centre", "isA": "amenity" },
     "tag": { "name": "amenity=social_club", "isA": "amenity",
@@ -551,7 +565,10 @@
     "tag": { "name": "amenity=training", "isA": "amenity" },
     "tag": { "name": "amenity=vacuum_cleaner", "isA": "amenity" },
     "tag": { "name": "amenity=vending_machine", "isA": "amenity" },
-    "tag": { "name": "amenity=vivarium", "isA": "amenity" },
+    "tag": { "name": "amenity=vivarium", "isA": "amenity",
+        "similarTo": { "name": "amenity=farm", "weight": 0.8 },
+        "similarTo": { "name": "amenity=greenhouse", "weight": 0.8 }
+    },
     "tag": { "name": "amenity=whirlpool", "isA": "amenity" },
 
     "#" : "end"

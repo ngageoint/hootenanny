@@ -78,6 +78,7 @@
         "isA": "abstract_building_place_of_worship",
         "similarTo": { "name": "religion=christian", "weight": 1.0 } },
 
+    "tag": { "name": "building=garage", "isA": "building", "categories": ["poi"] },
     "tag": { "name": "building=transportation", "isA": "building", "categories": ["poi"] },
     "tag": { "name": "building=train_station", 
         "isA": "building", 
