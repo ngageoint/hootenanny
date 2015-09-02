@@ -1761,26 +1761,27 @@ shared_ptr<QSqlQuery> ServicesDb::selectElements(const long elementId,
 
 vector<long> ServicesDb::selectNodeIdsForWay(long wayId)
 {
+  const long mapId = _currMapId;
   vector<long> result;
 
   if (!_selectNodeIdsForWay)
   {
-    _selectNodeIdsForWay.reset(new QSqlQuery(_db));
-    _selectNodeIdsForWay->setForwardOnly(true);
-
     switch ( _connectionType )
     {
       case DBTYPE_SERVICES:
         {
-        const long mapId = _currMapId;
-        _checkLastMapId(mapId);
-        _selectNodeIdsForWay->prepare(
+          _checkLastMapId(mapId);
+          _selectNodeIdsForWay.reset(new QSqlQuery(_db));
+          _selectNodeIdsForWay->setForwardOnly(true);
+          _selectNodeIdsForWay->prepare(
           "SELECT node_id FROM " + _getWayNodesTableName(mapId) +
               " WHERE way_id = :wayId ORDER BY sequence_id");
         }
         break;
 
       case DBTYPE_OSMAPI:
+        _selectNodeIdsForWay.reset(new QSqlQuery(_db));
+        _selectNodeIdsForWay->setForwardOnly(true);
         _selectNodeIdsForWay->prepare(
           "SELECT node_id FROM " + _getWayNodesTableName_OsmApi() +
               " WHERE way_id = :wayId ORDER BY sequence_id");
