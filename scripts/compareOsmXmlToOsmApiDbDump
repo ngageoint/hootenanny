@@ -10,6 +10,7 @@
 #     sudo apt-get install libxml-simple-perl
 
 use strict;
+use Encode;
 require XML::Simple;
 
 use XML::Simple qw(:strict);
@@ -280,6 +281,25 @@ sub validateCurrentNodes($$)
         {
           #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
           #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
+
+          # Make sure values match -- do compare of UTF8 strings as they may not be in a     
+          #     western charset
+          my $xmlUtf8 = decode_utf8( $xmlTagEntry{'v'});
+          my $dbUtf8 = decode_utf8( $dbTagEntry{ $xmlTagEntry{'k'}} );
+          if ( $xmlUtf8 ne $xmlUtf8 )
+          {
+            print( "Tag values do not match for node XML $currXmlNodeId, " .
+              "database node $databaseNodeId, key = $xmlTagEntry{'k'}, " .
+              "XML = " . $xmlTagEntry{'v'} . ", DB = " .
+              $dbTagEntry{ $xmlTagEntry{'k'} } . "\n");
+
+            #exit;
+          }
+          else
+          {
+            #print( "Data match on key $xmlTagEntry{'k'}\n");
+            #print( "\tXML (UTF8): $xmlUtf8\n\tDB (UTF8): $dbUtf8\n");
+          }
         }
       }
     }
@@ -506,6 +526,27 @@ sub validateNodes($$)
         {
           #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
           #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
+
+          # Make sure values match -- do compare of UTF8 strings as they may not be in a     
+          #     western charset
+          my $xmlUtf8 = decode_utf8( $xmlTagEntry{'v'});
+          my $dbUtf8 = decode_utf8( $dbTagEntry{ $xmlTagEntry{'k'}} );
+          if ( $xmlUtf8 ne $xmlUtf8 )
+          {
+            print( "Tag values do not match for node XML $currXmlNodeId, " .
+              "database relation $databaseNodeId, key = $xmlTagEntry{'k'}, " .
+              "XML = " . $xmlTagEntry{'v'} . ", DB = " .
+              $dbTagEntry{ $xmlTagEntry{'k'} } . "\n");
+
+            #exit;
+          }
+          else
+          {
+            #print( "Data match on key $xmlTagEntry{'k'}\n");
+            #print( "\tXML (UTF8): $xmlUtf8\n\tDB (UTF8): $dbUtf8\n");
+
+          }
+
         }
       }
     }
@@ -770,6 +811,27 @@ sub validateCurrentWays($$)
         {
           #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
           #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
+
+          # Make sure values match -- do compare of UTF8 strings as they may not be in a     
+          #     western charset
+          my $xmlUtf8 = decode_utf8( $xmlTagEntry{'v'});
+          my $dbUtf8 = decode_utf8( $dbTagEntry{ $xmlTagEntry{'k'}} );
+          if ( $xmlUtf8 ne $xmlUtf8 )
+          {
+            print( "Tag values do not match for way XML $currXmlWayId, " .
+              "database way $databaseWayId, key = $xmlTagEntry{'k'}, " .
+              "XML = " . $xmlTagEntry{'v'} . ", DB = " .
+              $dbTagEntry{ $xmlTagEntry{'k'} } . "\n");
+
+            #exit;
+          }
+          else
+          {
+            #print( "Data match on key $xmlTagEntry{'k'}\n");
+            #print( "\tXML (UTF8): $xmlUtf8\n\tDB (UTF8): $dbUtf8\n");
+
+          }
+
         }
       }
     }
@@ -1127,6 +1189,27 @@ sub validateWays($$)
         {
           #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
           #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
+
+          # Make sure values match -- do compare of UTF8 strings as they may not be in a     
+          #     western charset
+          my $xmlUtf8 = decode_utf8( $xmlTagEntry{'v'});
+          my $dbUtf8 = decode_utf8( $dbTagEntry{ $xmlTagEntry{'k'}} );
+          if ( $xmlUtf8 ne $xmlUtf8 )
+          {
+            print( "Tag values do not match for way XML $xmlWayId, " .
+              "database way $databaseWayId, key = $xmlTagEntry{'k'}, " .
+              "XML = " . $xmlTagEntry{'v'} . ", DB = " .
+              $dbTagEntry{ $xmlTagEntry{'k'} } . "\n");
+
+            #exit;
+          }
+          else
+          {
+            #print( "Data match on key $xmlTagEntry{'k'}\n");
+            #print( "\tXML (UTF8): $xmlUtf8\n\tDB (UTF8): $dbUtf8\n");
+
+          }
+
         }
       }
     }
@@ -1487,37 +1570,9 @@ sub validateCurrentRelations($$)
           "(" . scalar( @{$xmlTagsArrayRef}) . " != " .
           scalar( keys(%{ $currentRelationsData{$databaseRelationId}->{'tags'} })) . "\n");
 
-
-        #print( "Tags for XML relation $currXmlRelationId:\n" . Dumper($xmlTagsArrayRef) . 
-        #  "\nTags for database relation $databaseRelationId:\n" .
-        #  Dumper($currentRelationsData{$databaseRelationId}->{'tags'}) );
-
-        my $currDbTag;
-        foreach $currDbTag ( keys(%{$currentRelationsData{$databaseRelationId}->{'tags'}}) )
-        {
-          print( "DB tag entry: $currDbTag => " .
-            "$currentRelationsData{$databaseRelationId}->{'tags'}->{$currDbTag}\n");
-          my $foundKey = 0;
-
-          my $xmlTag;
-          foreach $xmlTag ( @{$xmlTagsArrayRef} )
-          {
-            if ( $xmlTag->{'k'} eq $currDbTag )
-            {
-              $foundKey = 1;
-              last;
-            }
-          }
-
-          if ( $foundKey == 0 ) 
-          {
-            print( "Did not find tag key $currDbTag in XML\n" );
-            exit;
-          }
-        }
-
         exit;
       }
+
 
       my $currTag;
 
@@ -1537,6 +1592,26 @@ sub validateCurrentRelations($$)
         {
           #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
           #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
+
+          # Make sure values match -- do compare of UTF8 strings as they may not be in a     
+          #     western charset
+          my $xmlUtf8 = decode_utf8( $xmlTagEntry{'v'});
+          my $dbUtf8 = decode_utf8( $dbTagEntry{ $xmlTagEntry{'k'}} );
+          if ( $xmlUtf8 ne $xmlUtf8 )
+          {
+            print( "Tag values do not match for relation XML $currXmlRelationId, " .
+              "database relation $databaseRelationId, key = $xmlTagEntry{'k'}, " .
+              "XML = " . $xmlTagEntry{'v'} . ", DB = " . 
+              $dbTagEntry{ $xmlTagEntry{'k'} } . "\n");
+
+            #exit;
+          }
+          else
+          {
+            #print( "Data match on key $xmlTagEntry{'k'}\n");
+            #print( "\tXML (UTF8): $xmlUtf8\n\tDB (UTF8): $dbUtf8\n");
+
+          }
         }
       }
     }
