@@ -65,11 +65,14 @@ OsmReader::OsmReader()
   _circularError = 15.0;
   _useFileStatus = ConfigOptions().getReaderUseFileStatus();
   _useDataSourceId = false;
+  _addSourceDateTime = ConfigOptions().getReaderAddSourceDatetime();
 }
 
 void OsmReader::_parseTimeStamp(const QXmlAttributes &attributes)
 {
-  if (attributes.value("timestamp") != "" && attributes.value("timestamp") != "1970-01-01T00:00:00Z" )
+  if ( (attributes.value("timestamp") != "") &&
+       (attributes.value("timestamp") != "1970-01-01T00:00:00Z") &&
+       (_addSourceDateTime == true) )
   {
     _element->setTag("source:datetime",attributes.value("timestamp"));
   }

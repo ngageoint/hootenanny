@@ -16,6 +16,7 @@ use XML::Simple qw(:strict);
 use Data::Dumper;
 
 sub createOsmDom($$);
+sub readXmlToDbIdMappings($$);
 sub validateOsmXmlNodes($$);
 sub validateCurrentNodes($$);
 sub validateNodes($$);
@@ -210,22 +211,8 @@ sub validateCurrentNodes($$)
   print( "\t\tMatching number of nodes: PASS (" . 
     scalar(keys(%currentNodesData)) . ")\n");
 
-  # Now let's create mapping for Postgres Node ID -> OSM node ID.  the OSM XML node IDs were added in 
-  #   ascending node ID order, so if we iterate over OSM API node IDs in ascending, we have a guaranteed mapping
-
-  my @sortedDbNodeIds = sort( {$a <=> $b} keys(%currentNodesData));
-  my $currXmlNodeId;
-  my $i = 0;
-  foreach $currXmlNodeId ( sort( {$a <=> $b} keys(%$osmXmlNodesRef)) )
-  {
-    $nodeIdMappingsXmlToDb{$currXmlNodeId} = $sortedDbNodeIds[$i];
-
-    #print("XML node ID $currXmlNodeId maps to DB node ID $sortedDbNodeIds[$i]\n");
-
-    $i++;
-  }
-
   # Now that we have mapping, go back and compare each XML node to corresponding entry in current_nodes
+  my $currXmlNodeId;
   foreach $currXmlNodeId ( sort( {$a <=> $b} keys(%$osmXmlNodesRef)) )
   {
     my %currXmlNode = %{ $osmXmlNodesRef->{$currXmlNodeId} };
@@ -449,23 +436,8 @@ sub validateNodes($$)
   print( "\t\tMatching number of nodes: PASS (" .
     scalar(keys(%nodesData)) . ")\n");
 
-  # Now let's create mapping for Postgres Node ID -> OSM node ID.  the OSM XML node IDs were added in 
-  #   ascending node ID order, so if we iterate over OSM API node IDs in ascending, we have a guaranteed
-  #   mapping
-
-  my @sortedDbNodeIds = sort( {$a <=> $b} keys(%nodesData));
-  my $currXmlNodeId;
-  my $i = 0;
-  foreach $currXmlNodeId ( sort( {$a <=> $b} keys(%$osmXmlNodesRef)) )
-  {
-    $nodeIdMappingsXmlToDb{$currXmlNodeId} = $sortedDbNodeIds[$i];
-
-    #print("XML node ID $currXmlNodeId maps to DB node ID $sortedDbNodeIds[$i]\n");
-
-    $i++;
-  }
-
   # Now that we have mapping, go back and compare each XML node to corresponding entry in nodes
+  my $currXmlNodeId;
   foreach $currXmlNodeId ( sort( {$a <=> $b} keys(%$osmXmlNodesRef)) )
   {
     my %currXmlNode = %{ $osmXmlNodesRef->{$currXmlNodeId} };
@@ -745,23 +717,8 @@ sub validateCurrentWays($$)
   }
 
 
-  # Now let's create mapping for Postgres way ID -> OSM way ID.  the OSM XML way IDs were added in 
-  #   ascending way ID order, so if we iterate over OSM API way IDs in ascending, we have a guaranteed
-  #   mapping
-
-  my @sortedDbWayIds = sort( {$a <=> $b} keys(%currentWaysData));
-  my $currXmlWayId;
-  my $i = 0;
-  foreach $currXmlWayId ( sort( {$a <=> $b} keys(%$osmXmlWaysRef)) )
-  {
-    $wayIdMappingsXmlToDb{$currXmlWayId} = $sortedDbWayIds[$i];
-
-    #print("XML way ID $currXmlWayId maps to DB way ID $sortedDbWayIds[$i]\n");
-
-    $i++;
-  }
-
   # Now that we have mapping, go back and compare each XML way to corresponding entry in current_ways
+  my $currXmlWayId;
   foreach $currXmlWayId ( sort( {$a <=> $b} keys(%$osmXmlWaysRef)) )
   {
     my %currXmlWay = %{ $osmXmlWaysRef->{$currXmlWayId} };
@@ -1494,25 +1451,9 @@ sub validateCurrentRelations($$)
     #print( Dumper( $currentRelationsData{ $tokens[0] }->{'relation_members'}) );
   }
 
-  # Now let's create mapping for Postgres relation ID -> OSM relation ID.  The OSM XML 
-  #   relation IDs were added in ascending relation ID order, so if we iterate over 
-  #   OSM API relation IDs in ascending, we have a guaranteed 1:1 mapping
-
-  my @sortedDbRelationIds = sort( {$a <=> $b} keys(%currentRelationsData));
-  my $currXmlRelationId;
-  my $i = 0;
-  foreach $currXmlRelationId ( sort( {$a <=> $b} keys(%$osmXmlRelationsRef)) )
-  {
-    $relationIdMappingsXmlToDb{$currXmlRelationId} = $sortedDbRelationIds[$i];
-
-    #print("XML relation ID $currXmlRelationId maps to DB relation ID " .
-    #  "$sortedDbRelationIds[$i]\n");
-
-    $i++;
-  }
-
   # Now that we have mapping, go back and compare each XML relation to corresponding entry in 
   #   current_relations
+  my $currXmlRelationId;
   foreach $currXmlRelationId ( sort( {$a <=> $b} keys(%$osmXmlRelationsRef)) )
   {
     my %currXmlRelation = %{ $osmXmlRelationsRef->{$currXmlRelationId} };
@@ -1542,11 +1483,39 @@ sub validateCurrentRelations($$)
           scalar( keys(%{ $currentRelationsData{$databaseRelationId}->{'tags'} })) )
       {
         print("ERROR: number of tags in XML for relation $currXmlRelationId " .
-          "does not match database relation $databaseRelationId\n");
+          "does not match database relation $databaseRelationId " .
+          "(" . scalar( @{$xmlTagsArrayRef}) . " != " .
+          scalar( keys(%{ $currentRelationsData{$databaseRelationId}->{'tags'} })) . "\n");
 
-        print( "Tags for XML relation $currXmlRelationId:\n" . Dumper($xmlTagsArrayRef) . 
-          "\nTags for database relation $databaseRelationId:\n" .
-          Dumper($currentRelationsData{$databaseRelationId}->{'tags'}) );
+
+        #print( "Tags for XML relation $currXmlRelationId:\n" . Dumper($xmlTagsArrayRef) . 
+        #  "\nTags for database relation $databaseRelationId:\n" .
+        #  Dumper($currentRelationsData{$databaseRelationId}->{'tags'}) );
+
+        my $currDbTag;
+        foreach $currDbTag ( keys(%{$currentRelationsData{$databaseRelationId}->{'tags'}}) )
+        {
+          print( "DB tag entry: $currDbTag => " .
+            "$currentRelationsData{$databaseRelationId}->{'tags'}->{$currDbTag}\n");
+          my $foundKey = 0;
+
+          my $xmlTag;
+          foreach $xmlTag ( @{$xmlTagsArrayRef} )
+          {
+            if ( $xmlTag->{'k'} eq $currDbTag )
+            {
+              $foundKey = 1;
+              last;
+            }
+          }
+
+          if ( $foundKey == 0 ) 
+          {
+            print( "Did not find tag key $currDbTag in XML\n" );
+            exit;
+          }
+        }
+
         exit;
       }
 
@@ -1604,17 +1573,67 @@ sub validateOsmXmlRelations($$)
   validateRelations($osmXmlRelationsRef, $dumpLinesRef);
 }
 
-
-
-
-if ( scalar(@ARGV) != 2 ) 
+sub readXmlToDbIdMappings($$)
 {
-  print( "Usage: compareOsmXmlToPgsqlDump <OSM XML file> <PostgreSQL pg_dump output file>\n\n");
+  my $xs = shift(@_);
+  my $xmlToDbIdMappingFile = shift(@_);
+
+  my $domRef = $xs->XMLin($xmlToDbIdMappingFile,
+    KeyAttr => [ ],
+    ForceArray => [ 'id_mapping' ]
+  );
+
+  #print Dumper( $domRef );
+
+  my $mappingArrayRef = $domRef->{'id_mapping'};
+
+  my @mappingArray = @{$mappingArrayRef};
+
+  #print( 'Found ' . scalar(@mappingArray) . " ID mapping entries\n");
+
+  my $currIdMappingEntry;
+  foreach $currIdMappingEntry ( @mappingArray )
+  {
+    if ( lc($currIdMappingEntry->{element_type}) eq 'node' )
+    {
+      #print("Found mapping for node $currIdMappingEntry->{source_id} to " .
+      #  "$currIdMappingEntry->{database_id}\n" );
+
+      $nodeIdMappingsXmlToDb{$currIdMappingEntry->{source_id}} = 
+        $currIdMappingEntry->{database_id};
+    }
+    elsif ( lc($currIdMappingEntry->{element_type}) eq 'way' )
+    {
+      $wayIdMappingsXmlToDb{$currIdMappingEntry->{source_id}} = 
+        $currIdMappingEntry->{database_id};
+    }
+    elsif( lc($currIdMappingEntry->{element_type}) eq 'relation' )
+    {
+      $relationIdMappingsXmlToDb{$currIdMappingEntry->{source_id}} = 
+        $currIdMappingEntry->{database_id};
+    }
+    else
+    {
+      print( "Could not parse mapping entry: " . Dumper($currIdMappingEntry) . "\n" );
+    }
+  }
+}
+
+
+
+
+if ( scalar(@ARGV) != 3 ) 
+{
+  print( "Usage: compareOsmXmlToPgsqlDump <OSM XML file> <ID mapping XML file> <PostgreSQL pg_dump output file>\n\n");
+
+  print("ID XML mapping file is generated by setting following run-time config in Hootenanny:\n" .
+    "-D services.db.writer.output.id.mappings=<xml filename to create>\n");
   exit;
 }
 
 my $osmXmlFile = $ARGV[0];
-my $pgsqlDumpFile = $ARGV[1];
+my $xmlDbIdMappingFile = $ARGV[1];
+my $pgsqlDumpFile = $ARGV[2];
 
 open(XMLFILE, "< $osmXmlFile");
 my @xmlLines = <XMLFILE>;
@@ -1631,6 +1650,8 @@ print( "OSM XML file:\t\t$osmXmlFile\nPostgreSQL dump file:\t$pgsqlDumpFile\n\n"
 
 # Create XML parser
 my $xs = XML::Simple->new();
+
+readXmlToDbIdMappings($xs, $xmlDbIdMappingFile);
 
 my $domRef = createOsmDom($xs, $concatOsmXml);
 validateOsmXmlNodes($domRef->{node}, \@dumpLines );
