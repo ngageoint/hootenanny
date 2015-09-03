@@ -169,7 +169,7 @@
     "tag": { "name": "amenity=check_cashing", "isA": "amenity",
         "similarTo": { "name": "amenity=bank", "weight": 0.5 } },
     "tag": { "name": "amenity=atm", "isA": "amenity",
-        "aliases": ["amenity=payment_terminal", "atm=yes"],
+        "aliases": ["atm=yes"],
         "similarTo": { "name": "amenity=bank", "weight": 0.5 }
     },
     "tag": { "name": "amenity=payment_terminal", "isA": "amenity",
