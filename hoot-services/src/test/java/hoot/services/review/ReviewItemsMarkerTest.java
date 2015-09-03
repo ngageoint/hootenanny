@@ -47,8 +47,6 @@ public class ReviewItemsMarkerTest {
 	@Category(UnitTest.class)
 	public void testGetLastAccessUpdateClause() throws Exception
 	{
-		DbUtils.createConnection();
-		
 		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
 		spy.setMapId(1);
 		spy.setUserId(1);
@@ -73,25 +71,115 @@ public class ReviewItemsMarkerTest {
 				+ "and \"review_items\".\"review_against_item_id\" = ?", actual);
 	}
 	
-	/*
+	
 	@Test
 	@Category(UnitTest.class)
 	public void testGetAvailableReviewQuery() throws Exception
 	{
-		DbUtils.createConnection();
-		
 		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
 		spy.setMapId(1);
 		spy.setUserId(1);
 		
 		java.util.Date date= new java.util.Date();
   	Timestamp compareTime = new Timestamp(date.getTime());
-		SQLQuery q = spy._getAvailableReviewQuery(compareTime);
+		SQLQuery q = spy._getAvailableReviewQuery(compareTime, 1, true);
 		
 		Assert.assertEquals("from \"review_items\" \"review_items\"\n" + 
-				"where \"review_items\".\"map_id\" = ? and \"review_items\".\"review_status\" = ? and (\"review_items\".\"last_accessed\" < ? or \"review_items\".\"last_accessed\" is null)\n" + 
-				"order by \"review_items\".\"review_score\" desc, \"review_items\".\"review_id\" asc", q.toString());
+				"where \"review_items\".\"map_id\" = ? and \"review_items\".\"review_status\" = ? and "
+				+ "(\"review_items\".\"last_accessed\" < ? or \"review_items\".\"last_accessed\" is null) "
+				+ "or \"review_items\".\"review_id\" = ?\n" + 
+				"order by \"review_items\".\"review_id\" asc", q.toString());
+		
+		
+		q = spy._getAvailableReviewQuery(compareTime, 1, false);
+		
+		Assert.assertEquals("from \"review_items\" \"review_items\"\n" + 
+				"where \"review_items\".\"map_id\" = ? and \"review_items\".\"review_status\" = ? and "
+				+ "(\"review_items\".\"last_accessed\" < ? or \"review_items\".\"last_accessed\" is null) "
+				+ "or \"review_items\".\"review_id\" = ?\n" + 
+				"order by \"review_items\".\"review_id\" desc", q.toString());
 	}
+	
+	
+	//testGetAvailableReviewCntQuery
+	@Test
+	@Category(UnitTest.class)
+	public void testGetAvailableReviewCntQuery() throws Exception
+	{
+		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		spy.setMapId(1);
+		spy.setUserId(1);
+		
+		SQLQuery q = spy.getAvailableReviewCntQuery();
+		
+		Assert.assertEquals("from \"review_items\" \"review_items\"\n" + 
+				"where \"review_items\".\"map_id\" = ? and \"review_items\".\"review_status\" = ? and (\"review_items\".\"last_accessed\" < ? or \"review_items\".\"last_accessed\" is null) or \"review_items\".\"review_id\" = ?\n" + 
+				"order by \"review_items\".\"review_id\" asc", q.toString());
+	}
+	
+	//getLockedReviewCntQuery()
+	@Test
+	@Category(UnitTest.class)
+	public void testGetLockedReviewCntQuery() throws Exception
+	{
+		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		spy.setMapId(1);
+		spy.setUserId(1);
+		
+		SQLQuery q = spy.getLockedReviewCntQuery();
+		
+		Assert.assertEquals("from \"review_items\" \"review_items\"\n" + 
+				"where \"review_items\".\"map_id\" = ? and \"review_items\".\"review_status\" = ? "
+				+ "and \"review_items\".\"last_accessed\" >= ?", q.toString());
+	}
+	//getTotalReviewCntQuery()
+	@Test
+	@Category(UnitTest.class)
+	public void testGetTotalReviewCntQuery() throws Exception
+	{
+		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		spy.setMapId(1);
+		spy.setUserId(1);
+		
+		SQLQuery q = spy.getTotalReviewCntQuery();
+		
+		Assert.assertEquals("from \"review_items\" \"review_items\"\n" + 
+				"where \"review_items\".\"map_id\" = ?", q.toString());
+	}
+	
+	
+	//_getReviewAgainstForReviewable
+	@Test
+	@Category(UnitTest.class)
+	public void testGetReviewAgainstForReviewable() throws Exception
+	{
+		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		spy.setMapId(1);
+		spy.setUserId(1);
+		
+		SQLQuery q = spy._getReviewAgainstForReviewable("{123456789}");
+		
+		Assert.assertEquals("from \"review_items\" \"review_items\"\n" + 
+				"where \"review_items\".\"map_id\" = ? and \"review_items\".\"reviewable_item_id\" = ? "
+				+ "and \"review_items\".\"review_status\" = ?\n" + 
+				"order by \"review_items\".\"review_id\" asc", q.toString());
+	}
+	
+	//_getElementMappingForReviewable
+	@Test
+	@Category(UnitTest.class)
+	public void testGetElementMappingForReviewable() throws Exception
+	{
+		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		spy.setMapId(1);
+		spy.setUserId(1);
+		
+		SQLQuery q = spy._getElementMappingForReviewable("{123456789}");
+		
+		Assert.assertEquals("from \"element_id_mappings\" \"element_id_mappings\"\n" + 
+				"where \"element_id_mappings\".\"map_id\" = ? and \"element_id_mappings\".\"element_id\" = ?", q.toString());
+	}
+	
 	
 	//_getAvailableReviewWithOffsetQuery
 	@Test
@@ -106,13 +194,13 @@ public class ReviewItemsMarkerTest {
 		
 		java.util.Date date= new java.util.Date();
   	Timestamp compareTime = new Timestamp(date.getTime());
-		SQLQuery q = spy._getAvailableReviewWithOffsetQuery(compareTime, "{123456789}", "{a-123456789}");
+		SQLQuery q = spy._getAvailableReviewWithOffsetQuery(compareTime, 123, true);
 		
 		Assert.assertEquals("from \"review_items\" \"review_items\"\n" + 
-				"where \"review_items\".\"map_id\" = ? and (\"review_items\".\"review_status\" = ? and"
-				+ " (\"review_items\".\"last_accessed\" < ? or \"review_items\".\"last_accessed\" is null) "
-				+ "or \"review_items\".\"reviewable_item_id\" = ? and \"review_items\".\"review_against_item_id\" = ?)\n" + 
-				"order by \"review_items\".\"review_score\" desc, \"review_items\".\"review_id\" asc", q.toString());
+				"where \"review_items\".\"map_id\" = ? and \"review_items\".\"review_status\" = ? "
+				+ "and (\"review_items\".\"last_accessed\" < ? or \"review_items\".\"last_accessed\" is null)"
+				+ " and \"review_items\".\"review_id\" >= ?\n" + 
+				"order by \"review_items\".\"review_id\" asc", q.toString());
 	}
 	
 	
@@ -129,27 +217,77 @@ public class ReviewItemsMarkerTest {
 		
 		java.util.Date date= new java.util.Date();
   	Timestamp now = new Timestamp(date.getTime());
-  	Timestamp compareTime = new Timestamp(date.getTime() - ReviewItemsMarker.LOCK_TIME);
-  	SQLUpdateClause q = spy._updateLastAccessWithSubSelect(now, compareTime, "{123456789}", null);
+
+  	SQLUpdateClause q = spy._updateLastAccessWithSubSelect(now, 1234);
 		
 		Assert.assertEquals("update \"review_items\"\n" + 
 				"set \"last_accessed\" = ?\n" + 
-				"where \"review_items\".\"map_id\" = ? and \"review_items\".\"review_id\" in (select \"review_items\".\"review_id\"\n" + 
-				"from \"review_items\" \"review_items\"\n" + 
-				"where \"review_items\".\"map_id\" = ? and \"review_items\".\"reviewable_item_id\" = ? and \"review_items\".\"review_status\" != ? "
-				+ "and (\"review_items\".\"last_accessed\" < ? or \"review_items\".\"last_accessed\" is null))", q.toString());
+				"where \"review_items\".\"map_id\" = ? and \"review_items\".\"review_id\" = ?", q.toString());
 		
-		q = spy._updateLastAccessWithSubSelect(now, compareTime, "{123456789}", "{321654987}");
-		
-		Assert.assertEquals("update \"review_items\"\n" + 
-				"set \"last_accessed\" = ?\n" + 
-				"where \"review_items\".\"map_id\" = ? and \"review_items\".\"review_id\" in (select \"review_items\".\"review_id\"\n" + 
-				"from \"review_items\" \"review_items\"\n" + 
-				"where \"review_items\".\"map_id\" = ? and \"review_items\".\"reviewable_item_id\" = ? "
-				+ "and \"review_items\".\"review_against_item_id\" = ? and \"review_items\".\"review_status\" != ? "
-				+ "and (\"review_items\".\"last_accessed\" < ? or \"review_items\".\"last_accessed\" is null))", q.toString());
 	}
 	
-	*/
+	//_getRelationBboxQuery
 	
+	@Test
+	@Category(UnitTest.class)
+	public void testGetRelationBboxQuery() throws Exception
+	{
+		DbUtils.createConnection();
+		
+		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		spy.setMapId(1);
+		spy.setUserId(1);
+		
+  	SQLQuery q = spy._getRelationBboxQuery(1234);
+		
+		Assert.assertEquals("from \"current_nodes_1\" \"current_nodes\"\n" + 
+				"where \"current_nodes\".\"id\" in (select \"current_way_nodes\".\"node_id\"\n" + 
+				"from \"current_way_nodes_1\" \"current_way_nodes\"\n" + 
+				"where \"current_way_nodes\".\"way_id\" in (select \"current_relation_members\".\"member_id\"\n" + 
+				"from \"current_relation_members_1\" \"current_relation_members\"\n" + 
+				"where \"current_relation_members\".\"relation_id\" = ? and \"current_relation_members\".\"member_type\" = ?)) "
+				+ "or \"current_nodes\".\"id\" in (select \"current_relation_members\".\"member_id\"\n" + 
+				"from \"current_relation_members_1\" \"current_relation_members\"\n" + 
+				"where \"current_relation_members\".\"relation_id\" = ? and \"current_relation_members\".\"member_type\" = ?)", q.toString());
+		
+	}
+	
+	
+	//_getWayBboxQuery
+	@Test
+	@Category(UnitTest.class)
+	public void testGetWayBboxQuery() throws Exception
+	{
+		DbUtils.createConnection();
+		
+		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		spy.setMapId(1);
+		spy.setUserId(1);
+		
+  	SQLQuery q = spy._getWayBboxQuery(1234);
+		
+		Assert.assertEquals("from \"current_nodes_1\" \"current_nodes\"\n" + 
+				"where \"current_nodes\".\"id\" in (select \"current_way_nodes\".\"node_id\"\n" + 
+				"from \"current_way_nodes_1\" \"current_way_nodes\"\n" + 
+				"where \"current_way_nodes\".\"way_id\" = ?)", q.toString());
+		
+	}
+	
+	//_getNodeCoordQuery
+	@Test
+	@Category(UnitTest.class)
+	public void testGetNodeCoordQuery() throws Exception
+	{
+		DbUtils.createConnection();
+		
+		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		spy.setMapId(1);
+		spy.setUserId(1);
+		
+  	SQLQuery q = spy._getNodeCoordQuery(1234);
+		
+		Assert.assertEquals("from \"current_nodes_1\" \"current_nodes\"\n" + 
+				"where \"current_nodes\".\"id\" = ?", q.toString());
+		
+	}
 }

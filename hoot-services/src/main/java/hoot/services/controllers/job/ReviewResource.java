@@ -308,7 +308,7 @@ public class ReviewResource
       
       ReviewItemsMarker marker = new ReviewItemsMarker(conn, mapId);
 
-    	long cnt = marker.getAvailableReviewCnt();
+    	long cnt = marker.getAvailableReviewCntQuery().count();
     	//nextItem.put("status", "noneavailable");
     	if(cnt == 0)
     	{
@@ -909,31 +909,17 @@ public class ReviewResource
         
       }
     
-      
-      
-
-      
-      
+     
       ReviewItemsMarker marker = new ReviewItemsMarker(conn, mapId);
       nextReviewableResponse = marker.getAvaiableReviewItem(offset, isForward);
       nextReviewableResponse.put("locktime", ReviewItemsMarker.LOCK_TIME);
-      long totalReviewableCnt = marker.getTotalReviewCnt();
+      long totalReviewableCnt = marker.getTotalReviewCntQuery().count();
       nextReviewableResponse.put("total", totalReviewableCnt);
       long reviewedCnt = marker.getReviewedReviewCnt();
       nextReviewableResponse.put("reviewedcnt", reviewedCnt);
-      long lockedCnt = marker.getLockedReviewCnt();
+      long lockedCnt = marker.getLockedReviewCntQuery().count();
       nextReviewableResponse.put("lockedcnt", lockedCnt);
-/*
-      Object oOffsetid = nextReviewItemRequest.get("offsetid");
-      String offsetId = (oOffsetid == null)? null : oOffsetid.toString();
-      
-      Object oAgainst = nextReviewItemRequest.get("offsetreviewagainstid");
-      String reviewAgainst = (oAgainst == null)? null : oAgainst.toString();
-      
-      ReviewItemsMarker marker = new ReviewItemsMarker(conn, mapId);
 
-      nextReviewableResponse = marker.getAvaiableReviewItem(offset, isForward, offsetId, reviewAgainst);*/
-      
     
     }
     catch (Exception e)
@@ -978,7 +964,7 @@ public class ReviewResource
     try
     {    	
     	ReviewItemsMarker marker = new ReviewItemsMarker(conn, mapId);
-    	lockcnt = marker.getLockedReviewCnt();
+    	lockcnt = marker.getLockedReviewCntQuery().count();
     }
     catch (Exception e)
     {
