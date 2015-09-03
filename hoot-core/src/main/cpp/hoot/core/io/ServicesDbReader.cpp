@@ -233,23 +233,92 @@ void ServicesDbReader::read(shared_ptr<OsmMap> map)
 
 void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementType)
 {
+  long long lastId = LLONG_MIN;
+  shared_ptr<Element> element;
+  QStringList tags;
+  bool firstElement = true;
+
+  // determine is Services or Osm Api DB
+  ServicesDb::DbType connectionType = _database.getDatabaseType();
+
+  // contact the DB and select all
   shared_ptr<QSqlQuery> elementResultsIterator = _database.selectAllElements(_osmElemId, elementType);
-  //need to check isActive, rather than next() here b/c resultToElement actually calls next() and
-  //it will always return an extra null node at the end, unfortunately (see comments in
-  //ServicesDb::resultToElement)
-  while (elementResultsIterator->isActive())
+
+  // split the reading of Services and Osm Api DB upfront to avoid extra inefficiency of if-else calls
+  //   inside the isActive loop
+  switch ( connectionType )
   {
-    shared_ptr<Element> element =
-      _resultToElement(*elementResultsIterator, elementType, *map );
-    //this check is necessary due to an inefficiency in ServicesDb::resultToElement
-    if (element.get())
-    {
-      if (_status != Status::Invalid)
+    case ServicesDb::DBTYPE_SERVICES:
+      //need to check isActive, rather than next() here b/c resultToElement actually calls next() and
+      //it will always return an extra null node at the end, unfortunately (see comments in
+      //ServicesDb::resultToElement)
+      while (elementResultsIterator->isActive())
       {
-        element->setStatus(_status);
+        shared_ptr<Element> element =
+          _resultToElement(*elementResultsIterator, elementType, *map );
+        //this check is necessary due to an inefficiency in ServicesDb::resultToElement
+        if (element.get())
+        {
+          if (_status != Status::Invalid) { element->setStatus(_status); }
+          map->addElement(element);
+        }
       }
-      map->addElement(element);
-    }
+      break;
+
+    case ServicesDb::DBTYPE_OSMAPI:
+      // check if db active or not
+      assert(elementResultsIterator.isActive());
+
+      while( elementResultsIterator->next() )
+      {
+        long long id = elementResultsIterator->value(0).toLongLong();
+        if( lastId != id )
+        {
+          // process the complete element only after the first element created
+          if(!firstElement)
+          {
+            LOG_DEBUG("tags joined = "+tags.join(", "));
+            element->setTags( ServicesDb::unescapeTags(tags.join(", ")) );
+            _addTagsToElement( element );
+            if (_status != Status::Invalid) { element->setStatus(_status); }
+            map->addElement(element);
+          }
+
+          // extract the node contents except for the tags
+          switch (elementType.getEnum())
+          {
+            case ElementType::Node:
+              element = _resultToNode_OsmApi(*elementResultsIterator, *map);
+              break;
+
+            // todo : add the cases for ways and relations
+
+            default:
+              throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
+          }
+          lastId = id;
+          firstElement = false;
+        }
+
+        // read the tag for as many rows as there are tags
+        // need to get into form "key1"=>"val1", "key2"=>"val2", ...
+        tags << _database.extractTagFromRow_OsmApi(elementResultsIterator, ServicesDb::NODES_TAGS);
+      }
+
+      // process the last complete element only if an element has been created
+      if(!firstElement)
+      {
+        LOG_DEBUG("last tag: tags joined = "+tags.join(", "));
+        element->setTags( ServicesDb::unescapeTags(tags.join(", ")) );
+        _addTagsToElement( element );
+        if (_status != Status::Invalid) { element->setStatus(_status); }
+        map->addElement(element);
+      }
+      break;
+
+    default:
+      throw HootException("_read cannot operate on unsupported database type");
+      break;
   }
 }
 
@@ -464,14 +533,13 @@ shared_ptr<Element> ServicesDbReader::_resultToElement(QSqlQuery& resultIterator
         }
         break;
 
-        default:
+      default:
+        throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
+    }
 
-          throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
-      }
+    _addTagsToElement(element);
 
-      _addTagsToElement(element);
-
-      return element;
+    return element;
   }
   else
   {
@@ -497,6 +565,21 @@ shared_ptr<Node> ServicesDbReader::_resultToNode(const QSqlQuery& resultIterator
 
   return result;
 }
+
+shared_ptr<Node> ServicesDbReader::_resultToNode_OsmApi(const QSqlQuery& resultIterator, OsmMap& map)
+{
+  long nodeId = _mapElementId(map, ElementId::node(resultIterator.value(0).toLongLong())).getId();
+  shared_ptr<Node> result(
+    new Node(
+      _status,
+      nodeId,
+      resultIterator.value(ServicesDb::NODES_LONGITUDE).toDouble(),
+      resultIterator.value(ServicesDb::NODES_LATITUDE).toDouble(),
+      ServicesDb::DEFAULT_ELEMENT_CIRCULAR_ERROR));
+
+  return result;
+}
+
 
 shared_ptr<Way> ServicesDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map)
 {

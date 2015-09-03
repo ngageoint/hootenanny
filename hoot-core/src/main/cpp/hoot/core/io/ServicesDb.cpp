@@ -1582,11 +1582,11 @@ QString ServicesDb::_elementTypeToElementTableName_OsmApi(const ElementType& ele
   {
     return _getNodesTableName_OsmApi();
   }
-  /* UNDER CONSTRUCTION
-   * else if (elementType == ElementType::Way)
+  else if (elementType == ElementType::Way)
   {
-    return _getWaysTableName();
+    return _getWaysTableName_OsmApi();
   }
+  /*
   else if (elementType == ElementType::Relation)
   {
     return _getRelationsTableName();
@@ -1609,6 +1609,10 @@ QString ServicesDb::_getElementTableFields_OsmApi(const ElementType& elementType
   if (elementType == ElementType::Node)
   {
     return _getNodesTableFields_OsmApi();
+  }
+  else if (elementType == ElementType::Way)
+  {
+    return _getWaysTableFields_OsmApi();
   }
   // setup the tests for the ways and relations
   else
@@ -1792,19 +1796,37 @@ shared_ptr<QSqlQuery> ServicesDb::selectElements(const long elementId,
 vector<long> ServicesDb::selectNodeIdsForWay(long wayId)
 {
   const long mapId = _currMapId;
-
   vector<long> result;
-
-  _checkLastMapId(mapId);
 
   if (!_selectNodeIdsForWay)
   {
-    _selectNodeIdsForWay.reset(new QSqlQuery(_db));
-    _selectNodeIdsForWay->setForwardOnly(true);
-    _selectNodeIdsForWay->prepare(
-      "SELECT node_id FROM " + _getWayNodesTableName(mapId) +
-          " WHERE way_id = :wayId ORDER BY sequence_id");
+    switch ( _connectionType )
+    {
+      case DBTYPE_SERVICES:
+        {
+          _checkLastMapId(mapId);
+          _selectNodeIdsForWay.reset(new QSqlQuery(_db));
+          _selectNodeIdsForWay->setForwardOnly(true);
+          _selectNodeIdsForWay->prepare(
+          "SELECT node_id FROM " + _getWayNodesTableName(mapId) +
+              " WHERE way_id = :wayId ORDER BY sequence_id");
+        }
+        break;
+
+      case DBTYPE_OSMAPI:
+        _selectNodeIdsForWay.reset(new QSqlQuery(_db));
+        _selectNodeIdsForWay->setForwardOnly(true);
+        _selectNodeIdsForWay->prepare(
+          "SELECT node_id FROM " + _getWayNodesTableName_OsmApi() +
+              " WHERE way_id = :wayId ORDER BY sequence_id");
+        break;
+
+      default:
+        throw HootException("selectNodeIdsForWay cannot operate on unsupported database type");
+        break;
+    }
   }
+
   _selectNodeIdsForWay->bindValue(":wayId", (qlonglong)wayId);
   if (_selectNodeIdsForWay->exec() == false)
   {
@@ -3490,9 +3512,10 @@ long ServicesDb::reserveElementId(const ElementType::Type type)
  *       returns them for Services DB
  * **********************************************************************
  */
-QString ServicesDb::extractTagFromRow(shared_ptr<QSqlQuery> row)
+QString ServicesDb::extractTagFromRow_OsmApi(shared_ptr<QSqlQuery> row, const int pos)
 {
-  QString tag = "\""+row->value(8).toString()+"\"=>\""+row->value(9).toString()+"\"";
+  QString tag = "\""+row->value(pos).toString()+"\"=>\""+
+    row->value(pos+1).toString()+"\"";
   return tag;
 }
 
