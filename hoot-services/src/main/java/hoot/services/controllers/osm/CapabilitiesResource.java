@@ -56,7 +56,7 @@ public class CapabilitiesResource
 	 * <DESCRIPTION>
 	 * The Hootenanny Capabilities Service implements the OSM
 	 * Capabilities Service v0.6 with some differences. The Hootenanny API does not support the following
-	 * capabilities properties: tracepoints
+	 * capabilities properties: tracepoints.
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * </PARAMETERS>

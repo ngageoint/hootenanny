@@ -51,19 +51,7 @@ BaseCommand::BaseCommand()
 void BaseCommand::loadMap(shared_ptr<OsmMap> map, QString path, bool useFileId,
                           Status defaultStatus)
 {
-  QStringList pathLayer = path.split(";");
-  QString justPath = pathLayer[0];
-  if (OgrReader::isReasonablePath(justPath))
-  {
-    OgrReader reader;
-    Progress progress(getName());
-    reader.setDefaultStatus(defaultStatus);
-    reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map, progress);
-  }
-  else
-  {
-    OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
-  }
+  OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
 }
 
 Envelope BaseCommand::parseEnvelope(QString envStr) const

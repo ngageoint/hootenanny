@@ -1,12 +1,12 @@
 
 [[PoiConflation]]
-== POI Conflation
+== PLACES POI Conflation
 
 The following sections describe the attempt to emulated PLACES point conflation
 and provides some simple examples of data processing.
 
 NOTE: This implementation is based on PLACES as of 3/11/2014. Regular updates
-are not being made to the PLACES algorithm within Hootenanny.
+are not being made to the PLACES algorithm within Hootenanny. Unifying POI Conflation is now the default in Hootenanny and is recommended in most situations.
 
 Hootenanny now provides a simple function for performing point-based conflation.
 This only provides point to point conflation (no point to polygon) and uses

@@ -40,56 +40,56 @@ tds61 = {
         nfddAttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
         
         // Warning: This is <GLOBAL> so we can get access to it from other functions
-        rawSchema = tds61.schema.getDbSchema();
+        tds61.rawSchema = tds61.schema.getDbSchema();
 
         // Add the Very ESRI specific FCSubtype attribute
-        if (config.getOgrTdsAddFcsubtype() == 'true') rawSchema = translate.addFCSubtype(rawSchema);
+        if (config.getOgrTdsAddFcsubtype() == 'true') tds61.rawSchema = translate.addFCSubtype(tds61.rawSchema);
 
      /* 
         // This has been removed since we no longer have text enumerations in the schema
 
         // Go go through the Schema and fix/add attributes
-        for (var i=0, slen = rawSchema.length; i < slen; i++)
+        for (var i=0, slen = tds61.rawSchema.length; i < slen; i++)
         {
             // Cycle throught he columns and "edit" the attribute fields with Text Enumerations
             // We convert these to plain String types and avoid having to handle String enumerations
-            for (var j=0, clen = rawSchema[i].columns.length; j < clen; j++)
+            for (var j=0, clen = tds61.rawSchema[i].columns.length; j < clen; j++)
             {
                 // exploit the Object and avoid a Switch :-)
-                if (rawSchema[i].columns[j].name in {'ZI004_RCG':1,'ZSAX_RS0':1,'ZI020_IC2':1})
+                if (tds61.rawSchema[i].columns[j].name in {'ZI004_RCG':1,'ZSAX_RS0':1,'ZI020_IC2':1})
                 {
-                    rawSchema[i].columns[j].type = "String";
-                    delete rawSchema[i].columns[j].enumerations;
+                    tds61.rawSchema[i].columns[j].type = "String";
+                    delete tds61.rawSchema[i].columns[j].enumerations;
                 }
-            } // End For rawSchema.columns.length
-        } // End For rawSchema.length
+            } // End For tds61.rawSchema.columns.length
+        } // End For tds61.rawSchema.length
      */
 
         // Build the NFDD fcode/attrs lookup table. Note: This is <GLOBAL>
-        nfddAttrLookup = translate.makeAttrLookup(rawSchema);
+        nfddAttrLookup = translate.makeAttrLookup(tds61.rawSchema);
 
         // Debug:
         // print("nfddAttrLookup");
         // translate.dumpLookup(nfddAttrLookup);
 
         // Decide if we are going to use TDS structure or 1 FCODE / File
-        // if we DON't want the new structure, just return the rawSchema
+        // if we DON't want the new structure, just return the tds61.rawSchema
         if (config.getOgrTdsStructure() == 'false')
         {
             // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
-            layerNameLookup = translate.makeLayerNameLookup(rawSchema);
+            layerNameLookup = translate.makeLayerNameLookup(tds61.rawSchema);
 
-            // Now add an o2s[A,L,P] feature to the rawSchema
+            // Now add an o2s[A,L,P] feature to the tds61.rawSchema
             // We can drop features but this is a nice way to see what we would drop
-            rawSchema = translate.addEmptyFeature(rawSchema);
+            tds61.rawSchema = translate.addEmptyFeature(tds61.rawSchema);
 
             // Add the empty Review layers
-            rawSchema = translate.addReviewFeature(rawSchema);
+            tds61.rawSchema = translate.addReviewFeature(tds61.rawSchema);
 
             // Debugging:
-            // translate.dumpSchema(rawSchema);
+            // translate.dumpSchema(tds61.rawSchema);
 
-            return rawSchema;
+            return tds61.rawSchema;
         }
 
         // OK, now we build a new schema
@@ -130,7 +130,7 @@ tds61 = {
 
         // Loop through the old schema and populate the new one
         var newSchemaLen = newSchema.length; // cached as we use this a lot
-        for (var os = 0, osLen = rawSchema.length; os < osLen; os++)
+        for (var os = 0, osLen = tds61.rawSchema.length; os < osLen; os++)
         {
             // The table looks like:
             // 'PGB230':'AeronauticPnt', // AircraftHangar
@@ -139,7 +139,7 @@ tds61 = {
             // .... 
             // So we add the geometry to the FCODE
 
-            fCode = rawSchema[os].geom.charAt(0) + rawSchema[os].fcode;
+            fCode = tds61.rawSchema[os].geom.charAt(0) + tds61.rawSchema[os].fcode;
             layerName = tds61.rules.thematicGroupList[fCode];
 
             // Loop through the new schema and find the right layer
@@ -151,28 +151,28 @@ tds61 = {
                     // now start adding attrs from the raw schema. This Is Not Pretty
 
                     // Loop through the columns in the OLD schema
-                    for (var cos = 0, cosLen = rawSchema[os].columns.length; cos < cosLen; cos++)
+                    for (var cos = 0, cosLen = tds61.rawSchema[os].columns.length; cos < cosLen; cos++)
                     {
                         var same = false;
                         // Loop through the columns in the NEW schema
                         for (var cns = 0, cnsLen = newSchema[ns].columns.length; cns < cnsLen; cns++)
                         {
                             // If the attribute names match then we can ignore it, unless it is enumerated
-                            if (rawSchema[os].columns[cos].name == newSchema[ns].columns[cns].name)
+                            if (tds61.rawSchema[os].columns[cos].name == newSchema[ns].columns[cns].name)
                             {
                                 same = true;
-                                if (rawSchema[os].columns[cos].type !== 'enumeration' ) break;
+                                if (tds61.rawSchema[os].columns[cos].type !== 'enumeration' ) break;
 
                                 // Now for some more uglyness....
                                 // loop through the enumerated values  in the OLD schema
-                                for (var oen = 0, oenlen = rawSchema[os].columns[cos].enumerations.length; oen < oenlen; oen++)
+                                for (var oen = 0, oenlen = tds61.rawSchema[os].columns[cos].enumerations.length; oen < oenlen; oen++)
                                 {
                                     var esame = false;
                                     // Loop through the enumerated values in the NEW schema
                                     for (var nen = 0, nenlen = newSchema[ns].columns[cns].enumerations.length; nen < nenlen; nen++)
                                     {
                                         // If the names match, ignore it
-                                        if (rawSchema[os].columns[cos].enumerations[oen].name == newSchema[ns].columns[cns].enumerations[nen].name)
+                                        if (tds61.rawSchema[os].columns[cos].enumerations[oen].name == newSchema[ns].columns[cns].enumerations[nen].name)
                                         {
                                             esame = true;
                                             break;
@@ -181,7 +181,7 @@ tds61 = {
                                     // if the enumerated value isn't in the new list, add it
                                     if (!esame) 
                                     {
-                                        newSchema[ns].columns[cns].enumerations.push(rawSchema[os].columns[cos].enumerations[oen]);
+                                        newSchema[ns].columns[cns].enumerations.push(tds61.rawSchema[os].columns[cos].enumerations[oen]);
                                     }
                                 } // End oen loop
                             } // End if enumeration
@@ -191,15 +191,15 @@ tds61 = {
                         if (!same) 
                         {
                             // Remove the Default Value so we get all Null values on export
-                            // delete rawSchema[os].columns[cos].defValue;
-                            //rawSchema[os].columns[cos].defValue = undefined;
+                            // delete tds61.rawSchema[os].columns[cos].defValue;
+                            //tds61.rawSchema[os].columns[cos].defValue = undefined;
 
-                            newSchema[ns].columns.push(rawSchema[os].columns[cos]);
+                            newSchema[ns].columns.push(tds61.rawSchema[os].columns[cos]);
                         }
                     } // End osc loop
                 } // End if layerName
             } // End newSchema loop
-        } // end rawSchema loop
+        } // end tds61.rawSchema loop
         
         // Create a lookup table of TDS structures attributes. Note this is <GLOBAL>
         tdsAttrLookup = translate.makeTdsAttrLookup(newSchema);
@@ -212,7 +212,7 @@ tds61 = {
         //  newSchema = translate.addFdName(newSchema,'TDS');
         if (config.getOgrTdsFdname() !== "") newSchema = translate.addFdName(newSchema,config.getOgrTdsFdname());
 
-        // Now add the o2s feature to the rawSchema
+        // Now add the o2s feature to the tds61.rawSchema
         // We can drop features but this is a nice way to see what we would drop
         // NOTE: We add these feature AFTER adding the ESRI Feature Dataset so that they
         // DON'T get put under the Feature Dataset in the output.
@@ -299,11 +299,11 @@ tds61 = {
         // No quick and easy way to do this unless we build yet another lookup table
         var feature = {};
 
-        for (var i=0, sLen = rawSchema.length; i < sLen; i++)
+        for (var i=0, sLen = tds61.rawSchema.length; i < sLen; i++)
         {
-            if (rawSchema[i].fcode == attrs.F_CODE && rawSchema[i].geom == geometryType)
+            if (tds61.rawSchema[i].fcode == attrs.F_CODE && tds61.rawSchema[i].geom == geometryType)
             {
-                feature = rawSchema[i];
+                feature = tds61.rawSchema[i];
                 break;
             }
         }
@@ -1446,7 +1446,13 @@ tds61 = {
         var attrs2 = {}; // The second feature - will populate if appropriate
 
         attrs.F_CODE = ''; // Initial setup
-                
+
+        // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
+        if (tds61.rawSchema == undefined)
+        {
+            var tmp_schema = tds61.getDbSchema();
+        }
+
         // Start processing here
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')

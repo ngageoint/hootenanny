@@ -133,6 +133,7 @@ public class BasemapResource extends JobControllerBase {
 	 * <EXAMPLE>
 	 * 	<URL>http://localhost:8080/hoot-services/ingest/basemap/upload?INPUT_NAME=MyBasemap</URL>
 	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
+	 * <INPUT>None</INPUT>
 	 * <OUTPUT>[{"name":"MyBasemap","jobid":"1234567"}]</OUTPUT>
 	 * </EXAMPLE>
 	 * @param inputName
@@ -288,7 +289,7 @@ public class BasemapResource extends JobControllerBase {
 
 	/**
   * <NAME>Get Basemaps List Service</NAME>
-  * <DESCRIPTION>Service method endpoint for retrieving the uploaded basemaps list</DESCRIPTION>
+  * <DESCRIPTION>Service method endpoint for retrieving the uploaded basemaps list.</DESCRIPTION>
   * <PARAMETERS></PARAMETERS>
 	* <OUTPUT>
 	* 	JSON Array containing basemap information
@@ -296,6 +297,7 @@ public class BasemapResource extends JobControllerBase {
 	* <EXAMPLE>
 	* 	<URL>http://localhost:8093/hoot-services/ingest/basemap/getlist</URL>
 	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	* <INPUT>None</INPUT>
   * <OUTPUT>
 	* [{"status":"enabled","name":"TestMap","jobid":"123-456-789"},{"status":"enabled","name":"TestMap2","jobid":"123-456-789"}]
 	* </OUTPUT>
@@ -425,6 +427,7 @@ public class BasemapResource extends JobControllerBase {
 	* <EXAMPLE>
 	* 	<URL>http://localhost:8093/hoot-services/ingest/basemap/enable?NAME=abc&ENABLE=true</URL>
 	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	* <INPUT>{"name":"abc","isenabled":"true"}</INPUT>
   * <OUTPUT>
 	* {"name":"abc","isenabled":"true"}
 	* </OUTPUT>
@@ -501,6 +504,9 @@ public class BasemapResource extends JobControllerBase {
 	* <EXAMPLE>
 	* 	<URL>http://localhost:8093/hoot-services/ingest/basemap/delete?NAME=abc</URL>
 	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	* <INPUT>
+	* {"name":"abc"}
+	* </INPUT>
   * <OUTPUT>
 	* {"name":"abc"}
 	* </OUTPUT>

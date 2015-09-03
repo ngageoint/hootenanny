@@ -113,7 +113,7 @@ public class ReviewResource
 	/**
 	 * <NAME>Conflated Data Review Service Prepare Items for Review</NAME>
 	 * <DESCRIPTION>
-	 * Prepares conflated data for review for the specified map ID
+	 * Prepares conflated data for review for the specified map ID.
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * 	<mapId>
@@ -206,7 +206,7 @@ public class ReviewResource
 	/**
 	 * <NAME>Conflated Data Review Service Retrieve Statistics for Reviewable Items</NAME>
 	 * <DESCRIPTION>
-	 * 	Retrieves statistics about the reviewable data for a given map
+	 * 	Retrieves statistics about the reviewable data for a given map.
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * 	<mapId>
@@ -357,11 +357,11 @@ public class ReviewResource
 	 * 	Once the conflated data has been prepared for review, clients may call this to get one or more items to present to the user for reviewing.
 	 *  In many cases, clients might only request a single item for review with each call (default setting), but the option to retrieve more than one at
 	 *  a time is being made available, in case it ends up being necessary. The response returns a set of reviewable items containing
-	 *  an OSM element ID and type, as well as a suggested geospatial bounds for each item its to be reviewed against
-	 *  (smallest bounds that encompasses the reviewable item and the item its reviewed against, plus some small buffer).
+	 *  an OSM element ID and type, as well as a suggested geospatial bounds for each item it is to be reviewed against
+	 *  (smallest bounds that encompasses the reviewable item and the item it is reviewed against, plus some small buffer).
 	 *  The response returns OSM data in XML format inside the JSON response, since the iD editor already knows how to parse OSM XML for display.
-	 *  The ID's of the response items correspond to the OSM ID's of the elements returned by a Hootenanny map query request against the services database.
-	 *  Its not intended that element unique ID's be shown to end users, however, the client will be responsible for updating the unique ID contained in
+	 *  The IDs of the response items correspond to the OSM IDs of the elements returned by a Hootenanny map query request against the services database.
+	 *  it is not intended that element unique IDs be shown to end users, however, the client will be responsible for updating the unique ID contained in
 	 *  the OSM review tags for elements split into new elements during the review process, since this operation is not feasible to perform in the server.
 	 *  IMPORTANT: If an reviewable item has its associated OSM element deleted from the services database,
 	 *  that item will not be returned in this query, despite the fact it was never reviewed. For now, it is the responsibility of
@@ -610,8 +610,8 @@ public class ReviewResource
 	 * <NAME>Conflated Data Review Service Mark Items as Reviewed</NAME>
 	 * <DESCRIPTION>
 	 * 	After editing reviewable items, this method is called to mark the items as having been reviewed.
-	 * The inputs to the service method are either a JSON structure which describes the status of the review for
-	 * each reviewed item, or when setting a boolean true to mark all items as reviewed the structure is not required.
+	 * The inputs to the service method are either a JSON structure - which describes the status of the review for
+	 * each reviewed item - or when setting a boolean true to mark all items as reviewed the structure is not required.
 	 * Also optionally for convenience sake, a OSM XML changeset may be included in the request to upload a
 	 * changeset in the same call which marks data as reviewed. If a changeset is uploaded, the service
 	 * automatically creates and closes the changeset that stores the uploaded data. The response from the server contains
@@ -619,12 +619,12 @@ public class ReviewResource
 	 * of submitted items that were actually marked as reviewed. Clients can compare this number to the number of
 	 *  items sent for review, and if they are not equal, further troubleshooting should occur.
 	 *  For each item in the reviewed items JSON, the service will:
-	 *  mark the reviewable item as reviewed, so that it will not be returned for review again
-	 *  append the UUID of the item the reviewed item was reviewed against to its "uuid" OSM tag
-	 *   remove the UUID of the item reviewed against from the "hoot:review:uuid" OSM tag of the reviewed item
-	 *   remove all OSM review tags from the reviewed item, if it no longer contains items to be reviewed against
+	 *  (1) mark the reviewable item as reviewed, so that it will not be returned for review again;
+	 *  (2) append the UUID of the item the reviewed item was reviewed against to its "uuid" OSM tag;
+	 *   (3) remove the UUID of the item reviewed against from the "hoot:review:uuid" OSM tag of the reviewed item; and,
+	 *   (4) remove all OSM review tags from the reviewed item, if it no longer contains items to be reviewed against.
 	 *   The caller is responsible for doing the following things, as the service will not automatically do them:
-	 *   Adding the "changeset" XML attribute to the elements in the XML changeset being uploaded, as is required by
+	 *   (1) Adding the "changeset" XML attribute to the elements in the XML changeset being uploaded, as is required by
 	 *    the standard OSM changeset upload service. The changeset ID attribute value may either be blank or populated with a number,
 	 *     however, the changeset ID will be overwritten with the ID of the changeset created by the service method execution.
 	 * </DESCRIPTION>
@@ -732,7 +732,9 @@ public class ReviewResource
       }
       catch (Exception e)
       {
-        log.debug("Rolling back database transaction for ReviewResource::markItemsAsReviewed...");
+        log.error(
+          "Rolling back database transaction for ReviewResource::markItemsAsReviewed" + 
+          e.getMessage());
         transactionManager.rollback(transactionStatus);
         conn.rollback();
         throw e;

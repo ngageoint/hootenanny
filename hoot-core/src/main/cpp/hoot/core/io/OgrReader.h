@@ -85,6 +85,15 @@ public:
 
   QStringList getFilteredLayerNames(QString path);
 
+  /**
+   * Read all geometry data from the specified path.
+   *
+   * @param path
+   * @param layer Read only from this layer. If no layer is specified then read from all geometry
+   *  layers.
+   * @param map Put what we read in this map.
+   * @param progress Report progress to this object.
+   */
   void read(QString path, QString layer, shared_ptr<OsmMap> map, Progress progress);
 
   void setDefaultCircularError(Meters circularError);
@@ -108,10 +117,6 @@ public:
   virtual void close();
 
   virtual bool isSupported(QString url);
-
-  void setLayerName(QString layerName);
-
-  QString getLayerName();
 
   virtual void open(QString url);
 
