@@ -404,7 +404,12 @@ void Settings::loadEnvironment()
 
   if (!env.isEmpty())
   {
-    parseCommonArguments(env.split(" ", QString::SkipEmptyParts));
+    QStringList args = env.split(" ", QString::SkipEmptyParts);
+    parseCommonArguments(args);
+    if (args.size() != 0)
+    {
+      LOG_WARN("Error parsing all arguments in HOOT_OPTIONS: " << args);
+    }
   }
 }
 
@@ -437,7 +442,7 @@ void Settings::loadJson(QString path)
   l.load(ConfPath::search(path));
 }
 
-void Settings::parseCommonArguments(QStringList args)
+void Settings::parseCommonArguments(QStringList& args)
 {
   bool foundOne = true;
 
