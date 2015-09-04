@@ -86,7 +86,7 @@ public:
                       "{\"type\":\"node\",\"id\":-3,\"lat\":20,\"lon\":20},\n"
                       "{\"type\":\"node\",\"id\":-4,\"lat\":20,\"lon\":0},\n"
                       "{\"type\":\"node\",\"id\":-5,\"lat\":0,\"lon\":0},\n"
-                      "{\"type\":\"way\",\"id\":-1,\"nodes\":[-1,-2,-3,-4,-5],\"tags\":{\"note\":\"w1\",\"alt_name\":\"bar\",\"name\":\"foo\",\"area\":\"yes\",\"amenity\":\"bar\",\"error:circular\":\"5\"}]\n"
+                      "{\"type\":\"way\",\"id\":-1,\"nodes\":[-1,-2,-3,-4,-5],\"tags\":{\"note\":\"w1\",\"alt_name\":\"bar\",\"name\":\"foo\",\"area\":\"yes\",\"amenity\":\"restaurant\",\"error:circular\":\"5\"}]\n"
                       "}\n"
                       "", OsmJsonWriter().toString(map2));
       //LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter().toString(map)));
@@ -108,7 +108,7 @@ public:
                       "{\"type\":\"node\",\"id\":-3,\"lat\":20,\"lon\":20},\n"
                       "{\"type\":\"node\",\"id\":-4,\"lat\":20,\"lon\":0},\n"
                       "{\"type\":\"node\",\"id\":-5,\"lat\":0,\"lon\":0},\n"
-                      "{\"type\":\"way\",\"id\":-1,\"nodes\":[-1,-2,-3,-4,-5],\"tags\":{\"note\":\"w1\",\"alt_name\":\"foo\",\"name\":\"bar\",\"area\":\"yes\",\"amenity\":\"cafe\",\"error:circular\":\"5\"}]\n"
+                      "{\"type\":\"way\",\"id\":-1,\"nodes\":[-1,-2,-3,-4,-5],\"tags\":{\"note\":\"w1\",\"alt_name\":\"foo\",\"name\":\"bar\",\"area\":\"yes\",\"amenity\":\"restaurant\",\"error:circular\":\"5\"}]\n"
                       "}\n"
                       "", OsmJsonWriter().toString(map2));
     }

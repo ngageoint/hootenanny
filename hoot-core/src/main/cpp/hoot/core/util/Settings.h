@@ -136,6 +136,11 @@ public:
 
   bool hasKey(const QString& key) const { return _settings.contains(key); }
 
+  /**
+   * Parses common arguments (e.g. "-D foo=bar --debug")
+   */
+  static void parseCommonArguments(QStringList args);
+
   void set(const QString& key, const char* value) { set(key, QString(value)); }
 
   void set(const QString& key, const string& value) { set(key, QString::fromStdString(value)); }

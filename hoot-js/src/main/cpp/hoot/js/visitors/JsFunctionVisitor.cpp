@@ -28,6 +28,7 @@
 
 // hoot
 #include <hoot/core/Factory.h>
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
@@ -50,7 +51,14 @@ void JsFunctionVisitor::visit(const ConstElementPtr& e)
     throw IllegalArgumentException("JsFunctionVisitor must have a valid function.");
   }
 
-  Handle<Object> elementObj = ElementJs::New(e);
+  Handle<Object> elementObj;
+  if (_map)
+  {
+    ElementPtr nonConst = _map->getElement(e->getElementId());
+    elementObj = ElementJs::New(nonConst);
+  } else {
+    elementObj = ElementJs::New(e);
+  }
 
   int argc = 0;
   jsArgs[argc++] = elementObj;
