@@ -266,9 +266,11 @@ long ServicesDbWriter::_getRemappedElementId(const ElementId& eid)
         _sourceRelationIds.insert(eid.getId());
       }
 
+      /*
       LOG_DEBUG("Established new relation ID mapping, source ID = " <<
         QString::number(eid.getId()) << ", database ID = " <<
         QString::number(_relationRemap.at(eid.getId())) );
+      */
     }
 
     break;

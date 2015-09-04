@@ -1390,18 +1390,18 @@ sub validateCurrentRelations($$$)
   if ( scalar(keys(%$osmXmlRelationsRef)) != scalar(keys(%currentRelationsData)) )
   {
     print('ERROR: OSM XML relations: ' . scalar(keys(%$osmXmlRelationsRef)) .
-      ' != OSM API DB relations: ' . scalar(keys(%currentRelationsData)) . "\n\n" );
+        ' != OSM API DB relations: ' . scalar(keys(%currentRelationsData)) . "\n\n" );
 
     print( "OSM relations IDs: " . Dumper( 
-      sort( { $a <=> $b} keys(%$osmXmlRelationsRef))) . "\n" );
+          sort( { $a <=> $b} keys(%$osmXmlRelationsRef))) . "\n" );
     print( "Database relation IDs: " . Dumper( 
-      sort( { $a <=> $b} keys(%currentRelationsData))) . "\n" );
+          sort( { $a <=> $b} keys(%currentRelationsData))) . "\n" );
 
     exit;
   }
 
   print( "\t\tMatching number of relations: PASS (" .
-    scalar(keys(%currentRelationsData)) . ")\n" );
+      scalar(keys(%currentRelationsData)) . ")\n" );
 
   # Read current_relation_tags
 
@@ -1512,7 +1512,7 @@ sub validateCurrentRelations($$$)
       #print( "$currLine\ntokenized and then cleaned up to:\n" . Dumper(@tokens) );
     }
 
-    
+
 
     #print( "Found current_relation_member\n");
 
@@ -1529,7 +1529,7 @@ sub validateCurrentRelations($$$)
     else
     {
       $currentRelationsData{ $tokens[0] }->{'relation_members'} = 
-        { $tokens[4] => $relationMemberHashRef };
+      { $tokens[4] => $relationMemberHashRef };
     }
 
     #print( Dumper( $currentRelationsData{ $tokens[0] }->{'relation_members'}) );
@@ -1567,9 +1567,9 @@ sub validateCurrentRelations($$$)
           scalar( keys(%{ $currentRelationsData{$databaseRelationId}->{'tags'} })) )
       {
         print("ERROR: number of tags in XML for relation $currXmlRelationId " .
-          "does not match database relation $databaseRelationId " .
-          "(" . scalar( @{$xmlTagsArrayRef}) . " != " .
-          scalar( keys(%{ $currentRelationsData{$databaseRelationId}->{'tags'} })) . "\n");
+            "does not match database relation $databaseRelationId " .
+            "(" . scalar( @{$xmlTagsArrayRef}) . " != " .
+            scalar( keys(%{ $currentRelationsData{$databaseRelationId}->{'tags'} })) . "\n");
 
         exit;
       }
@@ -1601,9 +1601,9 @@ sub validateCurrentRelations($$$)
           if ( $xmlUtf8 ne $xmlUtf8 )
           {
             print( "Tag values do not match for relation XML $currXmlRelationId, " .
-              "database relation $databaseRelationId, key = $xmlTagEntry{'k'}, " .
-              "XML = " . $xmlTagEntry{'v'} . ", DB = " . 
-              $dbTagEntry{ $xmlTagEntry{'k'} } . "\n");
+                "database relation $databaseRelationId, key = $xmlTagEntry{'k'}, " .
+                "XML = " . $xmlTagEntry{'v'} . ", DB = " . 
+                $dbTagEntry{ $xmlTagEntry{'k'} } . "\n");
 
             #exit;
           }
@@ -1622,7 +1622,7 @@ sub validateCurrentRelations($$$)
       if ( exists($currentRelationsData{$databaseRelationId}->{'tags'}) )
       {
         print( "XML did not have tags for relation $currXmlRelationId, but matching " .
-          "database relation $databaseRelationId did!\n" );
+            "database relation $databaseRelationId did!\n" );
         exit;
       }
     }
@@ -1633,81 +1633,201 @@ sub validateCurrentRelations($$$)
 
     # Make sure number of members matches
     if ( scalar( @{$xmlMembersArrayRef} ) == 
-      scalar( keys( %{ $dbMembersHashRef } ) ) )
+        scalar( keys( %{ $dbMembersHashRef } ) ) )
     {
       print( "Number of relation members matched for relation XML ID $currXmlRelationId/" .
-        "database ID $databaseRelationId\n" );
+          "database ID $databaseRelationId\n" );
     }
     else
     {
       print( "\nDid not match number of members, relation XML ID $currXmlRelationId/" .
-              "database ID $databaseRelationId (" . scalar(@{$xmlMembersArrayRef}) . 
-              " != " . scalar(keys(%{$dbMembersHashRef})) . ")\n" );
+          "database ID $databaseRelationId (" . scalar(@{$xmlMembersArrayRef}) . 
+          " != " . scalar(keys(%{$dbMembersHashRef})) . ")\n" );
+    }
 
-      my $xmlMemberNum;
-      for ( $xmlMemberNum = 0; $xmlMemberNum < scalar( @{ $xmlMembersArrayRef } ); 
-          ++$xmlMemberNum )
+    #print( Dumper($dbMembersHashRef) );
+
+    my $xmlMemberNum;
+    my $dbSequenceNumber = 0;
+    for ( $xmlMemberNum = 0; $xmlMemberNum < scalar( @{ $xmlMembersArrayRef } ); 
+        ++$xmlMemberNum )
+    {
+      print( "Looking to see if database has match for XML seq num $xmlMemberNum\n");
+
+      my $foundMatch = 0;
+
+      my $currXmlMemberRef = $xmlMembersArrayRef->[$xmlMemberNum];
+
+      print("XML data that needs DB match: " . Dumper($currXmlMemberRef) );
+
+      my $i; 
+      for ( $i = $dbSequenceNumber; $i < scalar( keys(%{$dbMembersHashRef}) ); 
+          ++$i)
       {
-        if ( exists($dbMembersHashRef->{$xmlMemberNum}) )
+        my @dbHashRefKeys = sort( { $a <=> $b} keys(%{$dbMembersHashRef}) );
+        print( "Searching at DB seq num $dbHashRefKeys[$i]\n" );
+
+        if ( ! exists($dbMembersHashRef->{$dbHashRefKeys[$i]}) )
         {
-          ;
+          print("ERROR: DB hash did not have entry $dbHashRefKeys[$i]:\n" . Dumper($dbMembersHashRef));
+          exit;
+        }
+
+        my $currDbMemberHashRef = $dbMembersHashRef->{$dbHashRefKeys[$i]};
+
+        print( "DB data: " . Dumper($currDbMemberHashRef) );
+
+        # If they're not even the same type, move along
+        if ( lc($currXmlMemberRef->{'type'}) ne 
+            lc($currDbMemberHashRef->{'member_type'}) )
+        {
+          print("DB seq $dbHashRefKeys[$i] is wrong type, ignoring\n");
+          next;
+        }
+
+        print("Type match!\n");
+
+        if ( $currXmlMemberRef->{'type'} eq lc('node') )
+        {
+          # If there's no ID mapping, there's nothing we can compare against
+          if ( ! exists($nodeIdMappingsXmlToDb{$currXmlMemberRef->{'ref'}}) )
+          {
+            print("No DB ID mapping for node $currXmlMemberRef->{'ref'}, " .
+                "have to skip DB check\n");
+            last;
+          }
+
+          print("Checking to see if we have ID and role match on " .
+              "XML node $currXmlMemberRef->{ref}, DB node " .
+              "$nodeIdMappingsXmlToDb{$currXmlMemberRef->{ref}}\n" );
+
+          if ( ($nodeIdMappingsXmlToDb{$currXmlMemberRef->{ref}} ==
+                $currDbMemberHashRef->{'member_id'}) &&
+              lc(decode_utf8($currXmlMemberRef->{role})) eq
+              lc(decode_utf8($currDbMemberHashRef->{'member_role'})) )
+          {
+            print("FOUND MATCH!\n");
+            $foundMatch = 1;
+            $dbSequenceNumber = $i; 
+            last;
+          }
+        }
+        elsif ( $currXmlMemberRef->{'type'} eq lc('way') )
+        {
+          # If there's no ID mapping, there's nothing we can compare against
+          if ( ! exists($wayIdMappingsXmlToDb{$currXmlMemberRef->{'ref'}}) )
+          {
+            print("No DB ID mapping for way $currXmlMemberRef->{'ref'}, " .
+                "have to skip DB check\n");
+            last;
+          }
+          print("Checking to see if we have ID and role match on " .
+              "XML way $currXmlMemberRef->{'ref'}, DB way " .
+              "$wayIdMappingsXmlToDb{$currXmlMemberRef->{'ref'}}\n" );
+
+          if ( ($wayIdMappingsXmlToDb{$currXmlMemberRef->{ref}} ==
+                $currDbMemberHashRef->{'member_id'}) &&
+              lc(decode_utf8($currXmlMemberRef->{role})) eq
+              lc(decode_utf8($currDbMemberHashRef->{'member_role'})) )
+          {
+            print("FOUND MATCH!\n");
+            $foundMatch = 1;
+            $dbSequenceNumber = $i;
+            last;
+          }
+        }
+        elsif ( $currXmlMemberRef->{'type'} eq lc('relation') )
+        {
+          # If there's no ID mapping, there's nothing we can compare against
+          if ( ! exists($relationIdMappingsXmlToDb{$currXmlMemberRef->{'ref'}}) )
+          {
+            print("No DB ID mapping for relation $currXmlMemberRef->{'ref'}, " .
+                "have to skip DB check\n");
+            last;
+          }
+          print("Checking to see if we have ID and role match on " .
+              "XML relation $currXmlMemberRef->{'ref'}, DB relation " .
+              "$relationIdMappingsXmlToDb{$currXmlMemberRef->{'ref'}}\n" );
+
+          if ( ($relationIdMappingsXmlToDb{$currXmlMemberRef->{ref}} ==
+                $currDbMemberHashRef->{'member_id'}) &&
+              lc(decode_utf8($currXmlMemberRef->{role})) eq
+              lc(decode_utf8($currDbMemberHashRef->{'member_role'})) )
+          {
+            print("FOUND MATCH!\n");
+            $foundMatch = 1;
+            $dbSequenceNumber = $i;
+            last;
+          }
+
         }
         else
         {
-          my $currXmlMemberRef = $xmlMembersArrayRef->[$xmlMemberNum];
-          print( "\n\tCould not find XML seq num $xmlMemberNum in DB members\n" );
-          #print ( Dumper( $currXmlMemberRef ) );
+          print( "ERROR: unknown relation member type $currXmlMemberRef->{'type'}\n");
+          exit;
+        }
+      }
 
-          my $checkId;
-          # Confirm it's missing due to an unresolved reference in input data
-          if ( $currXmlMemberRef->{'type'} eq lc('node') )
-          {
-            print( "Need to check possible unresolved relation member node\n");
-            exit;
-          } 
-          elsif ( $currXmlMemberRef->{'type'} eq lc('way') )
-          {
-            if ( ! exists($wayIdMappingsXmlToDb{$currXmlMemberRef->{'ref'}}) )
-            {
-              print( "\tThere is NO trace of $currXmlMemberRef->{'ref'} in " .
-                " the system, so unresolved reference is confirmed\n");
-              next;
-            }
-            my $checkId = $wayIdMappingsXmlToDb{$currXmlMemberRef->{'ref'}};
-            print( "\tChecking if XML way $currXmlMemberRef->{'ref'}" .
-              "/DB way $checkId exists\n" );  
+      if ( $foundMatch == 0 )
+      {
+        print( "DB does not contain relation member, " .
+            "checking for unresolved reference\n" ); 
 
+        if ( lc($currXmlMemberRef->{'type'}) eq 'node' )
+        {
+          print( "Checking for unresolved node ref\n");
 
-            if ( exists($domRef->{way}->{$currXmlMemberRef->{'ref'}}) )
-            {
-              print( "ERROR: missing database relation member\n");
-              exit;
-            }
-            else
-            {
-              print( "\tXML way $currXmlMemberRef->{'ref'} does NOT exist, " .
-                "unresolved references SHOULD be missing from database\n");
-            }
-          }
-          elsif ( $currXmlMemberRef->{'type'} eq lc('relation') )
+          if ( ! exists($domRef->{node}->{$currXmlMemberRef->{ref}}) )
           {
-            print( "need to check possible unresolved relation member relation\n");
-            exit;
+            print( "XML does not contain the target node ID " .
+                "$currXmlMemberRef->{ref}, confirmed OK unresolved reference\n");
           }
           else
           {
-            print( "ERROR: unknown relation member type $currXmlMemberRef->{'type'}\n");
+            print( "ERROR: not unresolved reference, just an error");
             exit;
           }
+        }
+        elsif( lc($currXmlMemberRef->{'type'}) eq 'way' )
+        {
+          print("Checking for unresolved way ref\n");
+
+          if ( ! exists($domRef->{way}->{$currXmlMemberRef->{ref}}) )
+          {
+            print( "XML does not contain the target way ID " .
+                "$currXmlMemberRef->{ref}, confirmed OK unresolved reference\n");
+          }
+          else
+          {
+            print( "ERROR: not unresolved reference, just an error");
+            exit;
+          }
+
+        }
+        elsif( lc($currXmlMemberRef->{'type'}) eq 'relation' )
+        {
+          print("Checking for unresolved relation ref\n");
+
+          if ( ! exists($domRef->{relation}->{$currXmlMemberRef->{ref}}) )
+          {
+            print( "XML does not contain the target relation ID " .
+                "$currXmlMemberRef->{ref}, confirmed OK unresolved reference\n");
+          }
+          else
+          {
+            print( "ERROR: not unresolved reference, just an error");
+            exit;
+          }
+        }
+        else
+        {
+          print("ERROR: Unknown relation member type $currXmlMemberRef->{'type'}\n");
           exit;
         }
       }
     }
-
-
-  } 
-
-
+    print( "Done with validation for $currXmlRelationId\n");
+  }
 }
 
 sub validateRelations($$$)
