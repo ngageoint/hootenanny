@@ -1588,11 +1588,10 @@ QString ServicesDb::_elementTypeToElementTableName_OsmApi(const ElementType& ele
   {
     return _getWaysTableName_OsmApi();
   }
-  /*
   else if (elementType == ElementType::Relation)
   {
-    return _getRelationsTableName();
-  }*/
+    return _getRelationsTableName_OsmApi();
+  }
   else
   {
     throw HootException("Unsupported element type.");
@@ -1616,7 +1615,10 @@ QString ServicesDb::_getElementTableFields_OsmApi(const ElementType& elementType
   {
     return _getWaysTableFields_OsmApi();
   }
-  // setup the tests for the ways and relations
+  else if (elementType == ElementType::Relation)
+  {
+    return _getRelationsTableFields_OsmApi();
+  }
   else
   {
     throw HootException("Unsupported element type.");
@@ -1855,20 +1857,40 @@ vector<long> ServicesDb::selectNodeIdsForWay(long wayId)
 vector<RelationData::Entry> ServicesDb::selectMembersForRelation(long relationId)
 {
   const long mapId = _currMapId;
-
   vector<RelationData::Entry> result;
 
   if (!_selectMembersForRelation)
   {
-    _selectMembersForRelation.reset(new QSqlQuery(_db));
-    _selectMembersForRelation->setForwardOnly(true);
-#warning fix me.
-    _selectMembersForRelation->prepare(
-      "SELECT member_type, member_id, member_role FROM " + _getRelationMembersTableName(mapId) +
-      " WHERE relation_id = :relationId ORDER BY sequence_id");
+    switch ( _connectionType )
+    {
+      case DBTYPE_SERVICES:
+        {
+          _selectMembersForRelation.reset(new QSqlQuery(_db));
+          _selectMembersForRelation->setForwardOnly(true);
+          _selectMembersForRelation->prepare(
+            "SELECT member_type, member_id, member_role FROM " + _getRelationMembersTableName(mapId) +
+            " WHERE relation_id = :relationId ORDER BY sequence_id");
+          _selectMembersForRelation->bindValue(":mapId", (qlonglong)mapId);
+        }
+        break;
+
+        case DBTYPE_OSMAPI:
+          {
+            _selectMembersForRelation.reset(new QSqlQuery(_db));
+            _selectMembersForRelation->setForwardOnly(true);
+            _selectMembersForRelation->prepare(
+              "SELECT member_type, member_id, member_role FROM " + _getRelationMembersTableName_OsmApi() +
+              " WHERE relation_id = :relationId ORDER BY sequence_id");
+          }
+          break;
+
+        default:
+          throw HootException("selectNodeIdsForWay cannot operate on unsupported database type");
+          break;
+    }
   }
 
-  _selectMembersForRelation->bindValue(":mapId", (qlonglong)mapId);
+
   _selectMembersForRelation->bindValue(":relationId", (qlonglong)relationId);
   if (_selectMembersForRelation->exec() == false)
   {
@@ -1881,11 +1903,11 @@ vector<RelationData::Entry> ServicesDb::selectMembersForRelation(long relationId
     const QString memberType = _selectMembersForRelation->value(0).toString();
     if (ElementType::isValidTypeString(memberType))
     {
-        result.push_back(
-          RelationData::Entry(
-            _selectMembersForRelation->value(2).toString(),
-            ElementId(ElementType::fromString(memberType),
-              _selectMembersForRelation->value(1).toLongLong())));
+      result.push_back(
+        RelationData::Entry(
+          _selectMembersForRelation->value(2).toString(),
+          ElementId(ElementType::fromString(memberType),
+          _selectMembersForRelation->value(1).toLongLong())));
     }
     else
     {
