@@ -94,6 +94,9 @@ sub validateCurrentNodes($$)
   {
     chomp($currLine);
 
+    # UTF8 decoding for non-western character sets
+    $currLine = decode_utf8($currLine);
+
     # Find out where current_nodes starts
     if ( $foundStart == 0 ) 
     {
@@ -149,6 +152,9 @@ sub validateCurrentNodes($$)
   foreach $currLine (@dumpLines)
   {
     chomp($currLine);
+
+    # UTF8 decoding for non-western character sets
+    $currLine = decode_utf8($currLine);
 
     # Find out where table data starts
     if ( $foundStart == 0 )
@@ -272,6 +278,7 @@ sub validateCurrentNodes($$)
         #print( "Value : $tagEntry{'v'}\n");
 
         my %dbTagEntry = %{ $currentNodesData{$databaseNodeId}->{'tags'} };
+        
         if ( ! exists( $dbTagEntry{ $xmlTagEntry{'k'} } ) )
         {
           print("Could not find database version of tag " . Dumper(%xmlTagEntry) . "\n" ); 
@@ -282,11 +289,7 @@ sub validateCurrentNodes($$)
           #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
           #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
 
-          # Make sure values match -- do compare of UTF8 strings as they may not be in a     
-          #     western charset
-          my $xmlUtf8 = decode_utf8( $xmlTagEntry{'v'});
-          my $dbUtf8 = decode_utf8( $dbTagEntry{ $xmlTagEntry{'k'}} );
-          if ( $xmlUtf8 ne $xmlUtf8 )
+          if ( $xmlTagEntry{'v'} ne $dbTagEntry{ $xmlTagEntry{'k'}} )
           {
             print( "Tag values do not match for node XML $currXmlNodeId, " .
               "database node $databaseNodeId, key = $xmlTagEntry{'k'}, " .
@@ -337,6 +340,9 @@ sub validateNodes($$)
   foreach $currLine (@dumpLines)
   {
     chomp($currLine);
+
+    # UTF8 decoding for non-western character sets
+    $currLine = decode_utf8($currLine);
 
     # Find out where nodes starts
     if ( $foundStart == 0 )
@@ -393,6 +399,9 @@ sub validateNodes($$)
   foreach $currLine (@dumpLines)
   {
     chomp($currLine);
+
+    # UTF8 decoding for non-western character sets
+    $currLine = decode_utf8($currLine);
 
     # Find out where table data starts
     if ( $foundStart == 0 )
@@ -527,11 +536,7 @@ sub validateNodes($$)
           #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
           #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
 
-          # Make sure values match -- do compare of UTF8 strings as they may not be in a     
-          #     western charset
-          my $xmlUtf8 = decode_utf8( $xmlTagEntry{'v'});
-          my $dbUtf8 = decode_utf8( $dbTagEntry{ $xmlTagEntry{'k'}} );
-          if ( $xmlUtf8 ne $xmlUtf8 )
+          if ( $xmlTagEntry{'v'} ne $dbTagEntry{ $xmlTagEntry{'k'}} )
           {
             print( "Tag values do not match for node XML $currXmlNodeId, " .
               "database relation $databaseNodeId, key = $xmlTagEntry{'k'}, " .
@@ -596,6 +601,9 @@ sub validateCurrentWays($$)
   {
     chomp($currLine);
 
+    # UTF8 decoding for non-western character sets
+    $currLine = decode_utf8($currLine);
+
     # Find out where current_ways starts
     if ( $foundStart == 0 )
     {
@@ -653,6 +661,9 @@ sub validateCurrentWays($$)
   {
     chomp($currLine);
 
+    # UTF8 decoding for non-western character sets
+    $currLine = decode_utf8($currLine);
+
     # Find out where table data starts
     if ( $foundStart == 0 )
     {
@@ -707,6 +718,9 @@ sub validateCurrentWays($$)
   foreach $currLine (@dumpLines)
   {
     chomp($currLine);
+
+    # UTF8 decoding for non-western character sets
+    $currLine = decode_utf8($currLine);
 
     # Find out where table data starts
     if ( $foundStart == 0 )
@@ -812,11 +826,7 @@ sub validateCurrentWays($$)
           #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
           #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
 
-          # Make sure values match -- do compare of UTF8 strings as they may not be in a     
-          #     western charset
-          my $xmlUtf8 = decode_utf8( $xmlTagEntry{'v'});
-          my $dbUtf8 = decode_utf8( $dbTagEntry{ $xmlTagEntry{'k'}} );
-          if ( $xmlUtf8 ne $xmlUtf8 )
+          if ( $xmlTagEntry{'v'} ne $dbTagEntry{ $xmlTagEntry{'k'}} )
           {
             print( "Tag values do not match for way XML $currXmlWayId, " .
               "database way $databaseWayId, key = $xmlTagEntry{'k'}, " .
@@ -972,6 +982,9 @@ sub validateWays($$)
   {
     chomp($currLine);
 
+    # UTF8 decoding for non-western character sets
+    $currLine = decode_utf8($currLine);
+
     # Find out where ways starts
     if ( $foundStart == 0 )
     {
@@ -1029,6 +1042,9 @@ sub validateWays($$)
   {
     chomp($currLine);
 
+    # UTF8 decoding for non-western character sets
+    $currLine = decode_utf8($currLine);
+
     # Find out where table data starts
     if ( $foundStart == 0 )
     {
@@ -1084,6 +1100,9 @@ sub validateWays($$)
   foreach $currLine (@dumpLines)
   {
     chomp($currLine);
+
+    # UTF8 decoding for non-western character sets
+    $currLine = decode_utf8($currLine);
 
     # Find out where table data starts
     if ( $foundStart == 0 )
@@ -1190,11 +1209,7 @@ sub validateWays($$)
           #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
           #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
 
-          # Make sure values match -- do compare of UTF8 strings as they may not be in a     
-          #     western charset
-          my $xmlUtf8 = decode_utf8( $xmlTagEntry{'v'});
-          my $dbUtf8 = decode_utf8( $dbTagEntry{ $xmlTagEntry{'k'}} );
-          if ( $xmlUtf8 ne $xmlUtf8 )
+          if ( $xmlTagEntry{'v'} ne $dbTagEntry{ $xmlTagEntry{'k'}} )
           {
             print( "Tag values do not match for way XML $xmlWayId, " .
               "database way $databaseWayId, key = $xmlTagEntry{'k'}, " .
@@ -1348,6 +1363,9 @@ sub validateCurrentRelations($$$)
   {
     chomp($currLine);
 
+    # UTF8 decoding for non-western character sets
+    $currLine = decode_utf8($currLine);
+
     # Find out where current_relations starts
     if ( $foundStart == 0 )
     {
@@ -1365,6 +1383,9 @@ sub validateCurrentRelations($$$)
     {
       last;
     }
+
+    # Run string through UTF-8 decoding before processing
+    $currLine = decode_utf8($currLine);
 
     #print( "Current_relations entry: $currLine\n" );
 
@@ -1409,6 +1430,9 @@ sub validateCurrentRelations($$$)
   foreach $currLine (@dumpLines)
   {
     chomp($currLine);
+
+    # UTF8 decoding for non-western character sets
+    $currLine = decode_utf8($currLine);
 
     # Find out where table data starts
     if ( $foundStart == 0 )
@@ -1464,6 +1488,9 @@ sub validateCurrentRelations($$$)
   foreach $currLine (@dumpLines)
   {
     chomp($currLine);
+
+    # UTF8 decoding for non-western character sets
+    $currLine = decode_utf8($currLine);
 
     # Find out where table data starts
     if ( $foundStart == 0 )
@@ -1586,7 +1613,9 @@ sub validateCurrentRelations($$$)
         my %dbTagEntry = %{ $currentRelationsData{$databaseRelationId}->{'tags'} };
         if ( ! exists( $dbTagEntry{ $xmlTagEntry{'k'} } ) )
         {
-          print("ERROR: Could not find database version of tag " . Dumper(%xmlTagEntry) . "\n" );
+          print("ERROR: Could not find database version of tag. XML:\n" . 
+            Dumper(%xmlTagEntry) . "DB: " . 
+            Dumper($currentRelationsData{$databaseRelationId}->{'tags'}) );
           exit;
         }
         else
@@ -1594,11 +1623,7 @@ sub validateCurrentRelations($$$)
           #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
           #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
 
-          # Make sure values match -- do compare of UTF8 strings as they may not be in a     
-          #     western charset
-          my $xmlUtf8 = decode_utf8( $xmlTagEntry{'v'});
-          my $dbUtf8 = decode_utf8( $dbTagEntry{ $xmlTagEntry{'k'}} );
-          if ( $xmlUtf8 ne $dbUtf8 )
+          if ( $xmlTagEntry{'v'} ne $dbTagEntry{ $xmlTagEntry{'k'}} )
           {
             print( "Tag values do not match for relation XML $currXmlRelationId, " .
                 "database relation $databaseRelationId, key = $xmlTagEntry{'k'}, " .
@@ -1702,8 +1727,8 @@ sub validateCurrentRelations($$$)
 
           if ( ($nodeIdMappingsXmlToDb{$currXmlMemberRef->{ref}} ==
                 $currDbMemberHashRef->{'member_id'}) &&
-              lc(decode_utf8($currXmlMemberRef->{role})) eq
-              lc(decode_utf8($currDbMemberHashRef->{'member_role'})) )
+              lc($currXmlMemberRef->{role}) eq
+              lc($currDbMemberHashRef->{'member_role'}) )
           {
             #print("FOUND MATCH!\n");
             $foundMatch = 1;
@@ -1726,8 +1751,8 @@ sub validateCurrentRelations($$$)
 
           if ( ($wayIdMappingsXmlToDb{$currXmlMemberRef->{ref}} ==
                 $currDbMemberHashRef->{'member_id'}) &&
-              lc(decode_utf8($currXmlMemberRef->{role})) eq
-              lc(decode_utf8($currDbMemberHashRef->{'member_role'})) )
+              lc($currXmlMemberRef->{role}) eq
+              lc($currDbMemberHashRef->{'member_role'}) )
           {
             #print("FOUND MATCH!\n");
             $foundMatch = 1;
@@ -1750,8 +1775,8 @@ sub validateCurrentRelations($$$)
 
           if ( ($relationIdMappingsXmlToDb{$currXmlMemberRef->{ref}} ==
                 $currDbMemberHashRef->{'member_id'}) &&
-              lc(decode_utf8($currXmlMemberRef->{role})) eq
-              lc(decode_utf8($currDbMemberHashRef->{'member_role'})) )
+              lc($currXmlMemberRef->{role}) eq
+              lc($currDbMemberHashRef->{'member_role'}) )
           {
             #print("FOUND MATCH!\n");
             $foundMatch = 1;
@@ -1852,6 +1877,9 @@ sub validateRelations($$$)
   {
     chomp($currLine);
 
+    # UTF8 decoding for non-western character sets
+    $currLine = decode_utf8($currLine);
+
     # Find out where relations starts
     if ( $foundStart == 0 )
     {
@@ -1921,6 +1949,9 @@ sub validateRelations($$$)
   {
     chomp($currLine);
 
+    # UTF8 decoding for non-western character sets
+    $currLine = decode_utf8($currLine);
+
     # Find out where table data starts
     if ( $foundStart == 0 )
     {
@@ -1982,6 +2013,9 @@ sub validateRelations($$$)
   foreach $currLine (@dumpLines)
   {
     chomp($currLine);
+
+    # UTF8 decoding for non-western character sets
+    $currLine = decode_utf8($currLine);
 
     # Find out where table data starts
     if ( $foundStart == 0 )
@@ -2094,11 +2128,7 @@ sub validateRelations($$$)
           #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
           #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
 
-          # Make sure values match -- do compare of UTF8 strings as they may not be in a     
-          #     western charset
-          my $xmlUtf8 = decode_utf8( $xmlTagEntry{'v'});
-          my $dbUtf8 = decode_utf8( $dbTagEntry{ $xmlTagEntry{'k'}} );
-          if ( $xmlUtf8 ne $dbUtf8 )
+          if ( $xmlTagEntry{'v'} ne $dbTagEntry{ $xmlTagEntry{'k'}} )
           {
             print( "Tag values do not match for relation XML $currXmlRelationId, " .
                 "database relation $databaseRelationId, key = $xmlTagEntry{'k'}, " .
@@ -2202,8 +2232,8 @@ sub validateRelations($$$)
 
           if ( ($nodeIdMappingsXmlToDb{$currXmlMemberRef->{ref}} ==
                 $currDbMemberHashRef->{'member_id'}) &&
-              lc(decode_utf8($currXmlMemberRef->{role})) eq
-              lc(decode_utf8($currDbMemberHashRef->{'member_role'})) )
+              lc($currXmlMemberRef->{role}) eq
+              lc($currDbMemberHashRef->{'member_role'}) )
           {
             #print("FOUND MATCH!\n");
             $foundMatch = 1;
@@ -2227,8 +2257,8 @@ sub validateRelations($$$)
 
           if ( ($wayIdMappingsXmlToDb{$currXmlMemberRef->{ref}} ==
                 $currDbMemberHashRef->{'member_id'}) &&
-              lc(decode_utf8($currXmlMemberRef->{role})) eq
-              lc(decode_utf8($currDbMemberHashRef->{'member_role'})) )
+              lc($currXmlMemberRef->{role}) eq
+              lc($currDbMemberHashRef->{'member_role'}) )
           {
             #print("FOUND MATCH!\n");
             $foundMatch = 1;
@@ -2251,8 +2281,8 @@ sub validateRelations($$$)
 
           if ( ($relationIdMappingsXmlToDb{$currXmlMemberRef->{ref}} ==
                 $currDbMemberHashRef->{'member_id'}) &&
-              lc(decode_utf8($currXmlMemberRef->{role})) eq
-              lc(decode_utf8($currDbMemberHashRef->{'member_role'})) )
+              lc($currXmlMemberRef->{role}) eq
+              lc($currDbMemberHashRef->{'member_role'}) )
           {
             #print("FOUND MATCH!\n");
             $foundMatch = 1;
