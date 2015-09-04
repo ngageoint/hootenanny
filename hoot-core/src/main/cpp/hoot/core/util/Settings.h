@@ -138,8 +138,9 @@ public:
 
   /**
    * Parses common arguments (e.g. "-D foo=bar --debug")
+   * Any arguments parsed are removed from args.
    */
-  static void parseCommonArguments(QStringList args);
+  static void parseCommonArguments(QStringList &args);
 
   void set(const QString& key, const char* value) { set(key, QString(value)); }
 
