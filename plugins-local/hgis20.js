@@ -177,21 +177,18 @@ hgis20 = {
         // This is a handy loop. We use it to:
         // 1) Remove all of the "No Information" and -999999 fields
         // 2) Convert all of the Attrs to uppercase - if needed
-       for (var col in attrs)
+
+        // List of data values to drop/ignore
+        var ignoreList = { '-999999.0':1, '-999999':1, '999999':1 };
+
+        for (var col in attrs)
         {
-            // slightly ugly but we would like to account for: 'No Information', 'noInformation' etc
-            // First, push to lowercase
-            var attrValue = attrs[col].toString().toLowerCase();
-
-            // Get rid of the spaces in the text
-            attrValue = attrValue.replace(/\s/g, '');
-
-//             // Wipe out the useless values
-//             if (attrs[col] == '' || attrValue in ignoreList || attrs[col] in ignoreList)
-//             {
-//                 delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
-//                 continue;
-//             }
+            // Wipe out the useless values
+            if (attrs[col] == '' || attrs[col] in ignoreList)
+            {
+                delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
+                continue;
+            }
 
             // Push the attribute to upper case - if needed
             var c = col.toUpperCase();
@@ -237,6 +234,7 @@ hgis20 = {
         // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
         tags.source = 'hgisv20';
         tags.uuid = '{' + attrs['UFI'].toString().toLowerCase() + '}';
+
 
     }, // End of applyToOsmPostProcessing
   
@@ -376,7 +374,7 @@ hgis20 = {
             
             // Support Import Only attributes
             hgis20.rules.one2one.push.apply(hgis20.rules.one2one,hgis20.rules.one2oneIn);
-            
+
             hgis20.lookup = translate.createLookup(hgis20.rules.one2one);
 
             // Build an Object with both the SimpleText & SimpleNum lists
@@ -385,6 +383,8 @@ hgis20 = {
             // Add features to ignore
             hgis20.ignoreList.FCSUBTYPE = '';
             hgis20.ignoreList.UFI = '';
+            hgis20.ignoreList.SHAPE_Length = '';
+            hgis20.ignoreList.SHAPE_Area = '';
         }
 
         // pre processing
@@ -392,7 +392,6 @@ hgis20 = {
 
         // one 2 one
         translate.applyOne2One(attrs, tags, hgis20.lookup, {'k':'v'}, hgis20.ignoreList);
-
         
         // apply the simple number and text biased rules
         translate.applySimpleNumBiased(attrs, tags, hgis20.rules.numBiased, 'forward');
@@ -443,7 +442,10 @@ hgis20 = {
 
             hgis20.lookup = translate.createBackwardsLookup(hgis20.rules.one2one);
             // translate.dumpOne2OneLookup(hgis20.lookup);
-            
+
+            hgis20.layerLookup = translate.createBackwardsLookup(hgis20.rules.layerOut);
+            // translate.dumpOne2OneLookup(hgis20.layerLookup);
+
             // Build a list of things to ignore and flip is backwards
             hgis20.ignoreList = translate.flipList(translate.joinList(hgis20.rules.numBiased, hgis20.rules.txtBiased));
             
@@ -459,7 +461,7 @@ hgis20 = {
             hgis20.ignoreList['hoot:score:uuid'] = '';
             hgis20.ignoreList['error:circular'] = '';
 
-            translate.dumpLookup(hgis20.ignoreList);
+            // translate.dumpLookup(hgis20.ignoreList);
 
             // List of layers & short versions
             hgis20.layerList = translate.flipList(hgis20.rules.layerNames);
@@ -488,13 +490,18 @@ hgis20 = {
             tableName = attrs.XtableName;
             delete attrs.XtableName;
 
+            if (hgis20.rules.thematicGroup[tableName])
+            {
+                tableName = hgis20.rules.thematicGroup[tableName];
+            }
+            else
+            {
+                logError('Tablename not in Thematic Group List: ' + tableName);
+
+            }
             // Validate attrs: remove all that are not supposed to be part of a feature
             hgis20.validateAttrs(geometryType,tableName,attrs);
 
-            // Now set the FCSubtype.
-            // NOTE: If we export to shapefile, GAIT _will_ complain about this
-            // if (config.getOgrTdsAddFcsubtype() == 'true') attrs.FCSUBTYPE = hgis20.rules.subtypeList[attrs.F_CODE];
-            // tableName = layerNameLookup[gFcode.toUpperCase()];
         } // End We have a feature
         else
         {

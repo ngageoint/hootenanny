@@ -41,528 +41,1935 @@ hgis20.schema = {
 //  Schema built from conf/nfdd/TDSv60.csv.gz and conf/nfdd/TDS_NGAv01.csv.gz
 getDbSchema: function()
 {
-
-//           geom:"Area",
-//           geom:"Line",
+    // Set up the common attributes
+    var ADM0_NAME = { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:"999999"};
+    var ADM1_NAME = { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:"999999"};
+    var ADM2_NAME = { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:"999999"};
+    var ADM3_NAME = { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:"999999"};
+    var ADM4_NAME = { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:"999999"};
+    var ADM5_NAME = { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:"999999"};
+    var CITY = { name:"CITY",desc:"CITY",type:"String",defValue:"999999"};
+    var CONF_IMAGE = { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:"999999"};
+    var COMMENTS = { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:"999999"};
+    var ENGTYPE0 = { name:"ENGTYPE0",desc:"ENGTYPE0",type:"String",defValue:"999999"};
+    var ENGTYPE1 = { name:"ENGTYPE1",desc:"ENGTYPE1",type:"String",defValue:"999999"};
+    var ENGTYPE2 = { name:"ENGTYPE2",desc:"ENGTYPE2",type:"String",defValue:"999999"};
+    var ISO3 = { name:"ISO3",desc:"ISO3",type:"String",defValue:"999999" };
+    var LFPR = { name:"LFPR",desc:"LFPR",type:"Real",defValue:"-999999.0"};
+    var NAME = { name:"NAME",desc:"NAME",type:"String",defValue:"999999"};
+    var SOURCE = { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"999999" };
+    var SOURCE_DT = { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"999999" };
+    var SOURCE2 = { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"999999" };
+    var SOURCE2_DT = { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"999999" };
+    var SPA_ACC = { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}; // Hmmmmmm
+    var TYPE = { name:"TYPE",desc:"TYPE",type:"String",defValue:"999999"};
+    var TYPE1 = { name:"TYPE1",desc:"TYPE1",type:"String",defValue:"999999"};
+    var TYPE2 = { name:"TYPE2",desc:"TYPE2",type:"String",defValue:"999999"};
 
     var schema = [
-        { name:"Agricultural_POI",
-          desc:"Agricultural POI",
+        { name:"Internet_Cafes",
+          desc:"Internet_Cafes",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE1",desc:"TYPE1",type:"String",defValue:""}, // End of TYPE1
-                   { name:"TYPE2",desc:"TYPE2",type:"String",defValue:""}, // End of TYPE2
-                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
                   ] // End of Columns
-        }, // End of feature Agriculture_POI
+        }, // End of feature
+
+        { name:"Media_Outlets",
+          desc:"Media_Outlets",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                   { name:"OWNERTYPE",desc:"OWNERTYPE",type:"String",defValue:"999999"},
+                    CITY,
+                   { name:"LANGUAGE",desc:"LANGUAGE",type:"String",defValue:"999999"},
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin0_Access_To_Services",
+          desc:"Admin0_Access_To_Services",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                   { name:"ACC_ELEC",desc:"ACC_ELEC",type:"Real",defValue:"-999999.0"},
+                   { name:"ACC_H2O",desc:"ACC_H2O",type:"Real",defValue:"-999999.0"},
+                   { name:"ACC_SEW",desc:"ACC_SEW",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin1_Access_To_Services",
+          desc:"Admin1_Access_To_Services",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                   { name:"ACC_ELEC",desc:"ACC_ELEC",type:"Real",defValue:"-999999.0"},
+                   { name:"ACC_H2O",desc:"ACC_H2O",type:"Real",defValue:"-999999.0"},
+                   { name:"ACC_SEW",desc:"ACC_SEW",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin0_Education",
+          desc:"Admin0_Education",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                   { name:"LIT_RT_T",desc:"LIT_RT_T",type:"Real",defValue:"-999999.0"},
+                   { name:"LIT_RT_M",desc:"LIT_RT_M",type:"Real",defValue:"-999999.0"},
+                   { name:"LIT_RT_F",desc:"LIT_RT_F",type:"Real",defValue:"-999999.0"},
+                   { name:"PRI_ENROL",desc:"PRI_ENROL",type:"Real",defValue:"-999999.0"},
+                   { name:"PRI_COMPL",desc:"PRI_COMPL",type:"Real",defValue:"-999999.0"},
+                   { name:"SEC_ENROL",desc:"SEC_ENROL",type:"Real",defValue:"-999999.0"},
+                   { name:"SEC_COMPL",desc:"SEC_COMPL",type:"Real",defValue:"-999999.0"},
+                   { name:"TER_ENROL",desc:"TER_ENROL",type:"Real",defValue:"-999999.0"},
+                   { name:"TER_COMPL",desc:"TER_COMPL",type:"Real",defValue:"-999999.0"},
+                   { name:"UNEDUCATED",desc:"UNEDUCATED",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin1_Education",
+          desc:"Admin1_Education",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                   { name:"LIT_RT_T",desc:"LIT_RT_T",type:"Real",defValue:"-999999.0"},
+                   { name:"LIT_RT_M",desc:"LIT_RT_M",type:"Real",defValue:"-999999.0"},
+                   { name:"LIT_RT_F",desc:"LIT_RT_F",type:"Real",defValue:"-999999.0"},
+                   { name:"PRI_ENROL",desc:"PRI_ENROL",type:"Real",defValue:"-999999.0"},
+                   { name:"PRI_COMPL",desc:"PRI_COMPL",type:"Real",defValue:"-999999.0"},
+                   { name:"SEC_ENROL",desc:"SEC_ENROL",type:"Real",defValue:"-999999.0"},
+                   { name:"SEC_COMPL",desc:"SEC_COMPL",type:"Real",defValue:"-999999.0"},
+                   { name:"TER_ENROL",desc:"TER_ENROL",type:"Real",defValue:"-999999.0"},
+                   { name:"TER_COMPL",desc:"TER_COMPL",type:"Real",defValue:"-999999.0"},
+                   { name:"UNEDUCATED",desc:"UNEDUCATED",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin0_Household_Goods",
+          desc:"Admin0_Household_Goods",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                   { name:"ACC_INT",desc:"ACC_INT",type:"Real",defValue:"-999999.0"},
+                   { name:"ACC_TV",desc:"ACC_TV",type:"Real",defValue:"-999999.0"},
+                   { name:"ACC_RAD",desc:"ACC_RAD",type:"Real",defValue:"-999999.0"},
+                   { name:"ACC_PHOM",desc:"ACC_PHOM",type:"Real",defValue:"-999999.0"},
+                   { name:"ACC_PHOL",desc:"ACC_PHOL",type:"Real",defValue:"-999999.0"},
+                   { name:"HH_AST",desc:"HH_AST",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin1_Household_Goods",
+          desc:"Admin1_Household_Goods",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                   { name:"ACC_INT",desc:"ACC_INT",type:"Real",defValue:"-999999.0"},
+                   { name:"ACC_TV",desc:"ACC_TV",type:"Real",defValue:"-999999.0"},
+                   { name:"ACC_RAD",desc:"ACC_RAD",type:"Real",defValue:"-999999.0"},
+                   { name:"ACC_PHOM",desc:"ACC_PHOM",type:"Real",defValue:"-999999.0"},
+                   { name:"ACC_PHOL",desc:"ACC_PHOL",type:"Real",defValue:"-999999.0"},
+                   { name:"HH_AST",desc:"HH_AST",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin0_Mortality",
+          desc:"Admin0_Mortality",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                   { name:"CBR",desc:"CBR",type:"Real",defValue:"-999999.0"},
+                   { name:"CDR",desc:"CDR",type:"Real",defValue:"-999999.0"},
+                   { name:"IMR",desc:"IMR",type:"Real",defValue:"-999999.0"},
+                   { name:"UN5_MR",desc:"UN5_MR",type:"Real",defValue:"-999999.0"},
+                   { name:"MAT_MR",desc:"MAT_MR",type:"Real",defValue:"-999999.0"},
+                   { name:"TFR",desc:"TFR",type:"Real",defValue:"-999999.0"},
+                   { name:"LF_EXP",desc:"LF_EXP",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin1_Mortality",
+          desc:"Admin1_Mortality",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                   { name:"CBR",desc:"CBR",type:"Real",defValue:"-999999.0"},
+                   { name:"CDR",desc:"CDR",type:"Real",defValue:"-999999.0"},
+                   { name:"IMR",desc:"IMR",type:"Real",defValue:"-999999.0"},
+                   { name:"UN5_MR",desc:"UN5_MR",type:"Real",defValue:"-999999.0"},
+                   { name:"MAT_MR",desc:"MAT_MR",type:"Real",defValue:"-999999.0"},
+                   { name:"TFR",desc:"TFR",type:"Real",defValue:"-999999.0"},
+                   { name:"LF_EXP",desc:"LF_EXP",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin0_Population",
+          desc:"Admin0_Population",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                   { name:"POP_T",desc:"POP_T",type:"Real",defValue:"-999999.0"},
+                   { name:"PER_POP_M",desc:"PER_POP_M",type:"Real",defValue:"-999999.0"},
+                   { name:"PER_POP_F",desc:"PER_POP_F",type:"Real",defValue:"-999999.0"},
+                   { name:"HOUSEHOLDS",desc:"HOUSEHOLDS",type:"Real",defValue:"-999999.0"},
+                   { name:"AGE_UNDR15",desc:"AGE_UNDR15",type:"Real",defValue:"-999999.0"},
+                   { name:"AGE_15_65",desc:"AGE_15_65",type:"Real",defValue:"-999999.0"},
+                   { name:"AGE_65OVR",desc:"AGE_65OVR",type:"Real",defValue:"-999999.0"},
+                   { name:"PER_URB",desc:"PER_URB",type:"Real",defValue:"-999999.0"},
+                   { name:"PER_RUL",desc:"PER_RUL",type:"Real",defValue:"-999999.0"},
+                   { name:"POP_DEN",desc:"POP_DEN",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin1_Population",
+          desc:"Admin1_Population",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                   { name:"POP_T",desc:"POP_T",type:"Real",defValue:"-999999.0"},
+                   { name:"PER_POP_M",desc:"PER_POP_M",type:"Real",defValue:"-999999.0"},
+                   { name:"PER_POP_F",desc:"PER_POP_F",type:"Real",defValue:"-999999.0"},
+                   { name:"HOUSEHOLDS",desc:"HOUSEHOLDS",type:"Real",defValue:"-999999.0"},
+                   { name:"AGE_UNDR15",desc:"AGE_UNDR15",type:"Real",defValue:"-999999.0"},
+                   { name:"AGE_15_65",desc:"AGE_15_65",type:"Real",defValue:"-999999.0"},
+                   { name:"AGE_65OVR",desc:"AGE_65OVR",type:"Real",defValue:"-999999.0"},
+                   { name:"PER_URB",desc:"PER_URB",type:"Real",defValue:"-999999.0"},
+                   { name:"PER_RUL",desc:"PER_RUL",type:"Real",defValue:"-999999.0"},
+                   { name:"POP_DEN",desc:"POP_DEN",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin2_Population",
+          desc:"Admin2_Population",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                   { name:"POP_T",desc:"POP_T",type:"Real",defValue:"-999999.0"},
+                   { name:"PER_POP_M",desc:"PER_POP_M",type:"Real",defValue:"-999999.0"},
+                   { name:"PER_POP_F",desc:"PER_POP_F",type:"Real",defValue:"-999999.0"},
+                   { name:"HOUSEHOLDS",desc:"HOUSEHOLDS",type:"Real",defValue:"-999999.0"},
+                   { name:"AGE_UNDR15",desc:"AGE_UNDR15",type:"Real",defValue:"-999999.0"},
+                   { name:"AGE_15_65",desc:"AGE_15_65",type:"Real",defValue:"-999999.0"},
+                   { name:"AGE_65OVR",desc:"AGE_65OVR",type:"Real",defValue:"-999999.0"},
+                   { name:"PER_URB",desc:"PER_URB",type:"Real",defValue:"-999999.0"},
+                   { name:"PER_RUL",desc:"PER_RUL",type:"Real",defValue:"-999999.0"},
+                   { name:"POP_DEN",desc:"POP_DEN",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin0_Poverty",
+          desc:"Admin0_Poverty",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                   { name:"DGMDPI",desc:"DGMDPI",type:"Real",defValue:"-999999.0"},
+                   { name:"GINI",desc:"GINI",type:"Real",defValue:"-999999.0"},
+                   { name:"CORRUPT",desc:"CORRUPT",type:"Real",defValue:"-999999.0"},
+                   { name:"HR",desc:"HR",type:"Real",defValue:"-999999.0"},
+                   { name:"ELECTRIC",desc:"ELECTRIC",type:"Real",defValue:"-999999.0"},
+                   { name:"ASSETS",desc:"ASSETS",type:"Real",defValue:"-999999.0"},
+                   { name:"UE",desc:"UE",type:"Real",defValue:"-999999.0"},
+                    LFPR,
+                   { name:"U5_MR",desc:"U5_MR",type:"Real",defValue:"-999999.0"},
+                   { name:"PREV_DIS",desc:"PREV_DIS",type:"Real",defValue:"-999999.0"},
+                   { name:"HIV",desc:"HIV",type:"Real",defValue:"-999999.0"},
+                   { name:"WATER",desc:"WATER",type:"Real",defValue:"-999999.0"},
+                   { name:"LIT_RATE",desc:"LIT_RATE",type:"Real",defValue:"-999999.0"},
+                   { name:"PRIM_ED",desc:"PRIM_ED",type:"Real",defValue:"-999999.0"},
+                   { name:"TERT_ED",desc:"TERT_ED",type:"Real",defValue:"-999999.0"},
+                   { name:"CONFLICT",desc:"CONFLICT",type:"Real",defValue:"-999999.0"},
+                   { name:"TERROR",desc:"TERROR",type:"Real",defValue:"-999999.0"},
+                   { name:"NAT_FAC",desc:"NAT_FAC",type:"Real",defValue:"-999999.0"},
+                   { name:"MAT_FAC",desc:"MAT_FAC",type:"Real",defValue:"-999999.0"},
+                   { name:"HEALTH_FAC",desc:"HEALTH_FAC",type:"Real",defValue:"-999999.0"},
+                   { name:"EDU_FAC",desc:"EDU_FAC",type:"Real",defValue:"-999999.0"},
+                   { name:"HUMSEC_FAC",desc:"HUMSEC_FAC",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin1_Poverty",
+          desc:"Admin1_Poverty",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                   { name:"DGMDPI",desc:"DGMDPI",type:"Real",defValue:"-999999.0"},
+                   { name:"GINI",desc:"GINI",type:"Real",defValue:"-999999.0"},
+                   { name:"CORRUPT",desc:"CORRUPT",type:"Real",defValue:"-999999.0"},
+                   { name:"HR",desc:"HR",type:"Real",defValue:"-999999.0"},
+                   { name:"ELECTRIC",desc:"ELECTRIC",type:"Real",defValue:"-999999.0"},
+                   { name:"ASSETS",desc:"ASSETS",type:"Real",defValue:"-999999.0"},
+                   { name:"UE",desc:"UE",type:"Real",defValue:"-999999.0"},
+                    LFPR,
+                   { name:"U5_MR",desc:"U5_MR",type:"Real",defValue:"-999999.0"},
+                   { name:"PREV_DIS",desc:"PREV_DIS",type:"Real",defValue:"-999999.0"},
+                   { name:"HIV",desc:"HIV",type:"Real",defValue:"-999999.0"},
+                   { name:"WATER",desc:"WATER",type:"Real",defValue:"-999999.0"},
+                   { name:"LIT_RATE",desc:"LIT_RATE",type:"Real",defValue:"-999999.0"},
+                   { name:"PRIM_ED",desc:"PRIM_ED",type:"Real",defValue:"-999999.0"},
+                   { name:"TERT_ED",desc:"TERT_ED",type:"Real",defValue:"-999999.0"},
+                   { name:"CONFLICT",desc:"CONFLICT",type:"Real",defValue:"-999999.0"},
+                   { name:"TERROR",desc:"TERROR",type:"Real",defValue:"-999999.0"},
+                   { name:"NAT_FAC",desc:"NAT_FAC",type:"Real",defValue:"-999999.0"},
+                   { name:"MAT_FAC",desc:"MAT_FAC",type:"Real",defValue:"-999999.0"},
+                   { name:"HEALTH_FAC",desc:"HEALTH_FAC",type:"Real",defValue:"-999999.0"},
+                   { name:"EDU_FAC",desc:"EDU_FAC",type:"Real",defValue:"-999999.0"},
+                   { name:"HUMSEC_FAC",desc:"HUMSEC_FAC",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin0_Employment",
+          desc:"Admin0_Employment",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    LFPR,
+                   { name:"ECO_ACT_T",desc:"ECO_ACT_T",type:"Real",defValue:"-999999.0"},
+                   { name:"ECO_ACT_M",desc:"ECO_ACT_M",type:"Real",defValue:"-999999.0"},
+                   { name:"ECO_ACT_F",desc:"ECO_ACT_F",type:"Real",defValue:"-999999.0"},
+                   { name:"AGR_SEC",desc:"AGR_SEC",type:"Real",defValue:"-999999.0"},
+                   { name:"RES_SEC",desc:"RES_SEC",type:"Real",defValue:"-999999.0"},
+                   { name:"MAN_SEC",desc:"MAN_SEC",type:"Real",defValue:"-999999.0"},
+                   { name:"SEV_SEC",desc:"SEV_SEC",type:"Real",defValue:"-999999.0"},
+                   { name:"PUB_SEC",desc:"PUB_SEC",type:"Real",defValue:"-999999.0"},
+                   { name:"UNEMP_T",desc:"UNEMP_T",type:"Real",defValue:"-999999.0"},
+                   { name:"UNEMP_M",desc:"UNEMP_M",type:"Real",defValue:"-999999.0"},
+                   { name:"UNEMP_F",desc:"UNEMP_F",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin1_Employment",
+          desc:"Admin1_Employment",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    LFPR,
+                   { name:"ECO_ACT_T",desc:"ECO_ACT_T",type:"Real",defValue:"-999999.0"},
+                   { name:"ECO_ACT_M",desc:"ECO_ACT_M",type:"Real",defValue:"-999999.0"},
+                   { name:"ECO_ACT_F",desc:"ECO_ACT_F",type:"Real",defValue:"-999999.0"},
+                   { name:"AGR_SEC",desc:"AGR_SEC",type:"Real",defValue:"-999999.0"},
+                   { name:"RES_SEC",desc:"RES_SEC",type:"Real",defValue:"-999999.0"},
+                   { name:"MAN_SEC",desc:"MAN_SEC",type:"Real",defValue:"-999999.0"},
+                   { name:"SEV_SEC",desc:"SEV_SEC",type:"Real",defValue:"-999999.0"},
+                   { name:"PUB_SEC",desc:"PUB_SEC",type:"Real",defValue:"-999999.0"},
+                   { name:"UNEMP_T",desc:"UNEMP_T",type:"Real",defValue:"-999999.0"},
+                   { name:"UNEMP_M",desc:"UNEMP_M",type:"Real",defValue:"-999999.0"},
+                   { name:"UNEMP_F",desc:"UNEMP_F",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin2_Access_To_Services",
+          desc:"Admin2_Access_To_Services",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                   { name:"ACC_ELEC",desc:"ACC_ELEC",type:"Real",defValue:"-999999.0"},
+                   { name:"ACC_H2O",desc:"ACC_H2O",type:"Real",defValue:"-999999.0"},
+                   { name:"ACC_SEW",desc:"ACC_SEW",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin2_Education",
+          desc:"Admin2_Education",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                   { name:"LIT_RT_T",desc:"LIT_RT_T",type:"Real",defValue:"-999999.0"},
+                   { name:"LIT_RT_M",desc:"LIT_RT_M",type:"Real",defValue:"-999999.0"},
+                   { name:"LIT_RT_F",desc:"LIT_RT_F",type:"Real",defValue:"-999999.0"},
+                   { name:"PRI_ENROL",desc:"PRI_ENROL",type:"Real",defValue:"-999999.0"},
+                   { name:"PRI_COMPL",desc:"PRI_COMPL",type:"Real",defValue:"-999999.0"},
+                   { name:"SEC_ENROL",desc:"SEC_ENROL",type:"Real",defValue:"-999999.0"},
+                   { name:"SEC_COMPL",desc:"SEC_COMPL",type:"Real",defValue:"-999999.0"},
+                   { name:"TER_ENROL",desc:"TER_ENROL",type:"Real",defValue:"-999999.0"},
+                   { name:"TER_COMPL",desc:"TER_COMPL",type:"Real",defValue:"-999999.0"},
+                   { name:"UNEDUCATED",desc:"UNEDUCATED",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin2_Employment",
+          desc:"Admin2_Employment",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    LFPR,
+                   { name:"ECO_ACT_T",desc:"ECO_ACT_T",type:"Real",defValue:"-999999.0"},
+                   { name:"ECO_ACT_M",desc:"ECO_ACT_M",type:"Real",defValue:"-999999.0"},
+                   { name:"ECO_ACT_F",desc:"ECO_ACT_F",type:"Real",defValue:"-999999.0"},
+                   { name:"AGR_SEC",desc:"AGR_SEC",type:"Real",defValue:"-999999.0"},
+                   { name:"RES_SEC",desc:"RES_SEC",type:"Real",defValue:"-999999.0"},
+                   { name:"MAN_SEC",desc:"MAN_SEC",type:"Real",defValue:"-999999.0"},
+                   { name:"SEV_SEC",desc:"SEV_SEC",type:"Real",defValue:"-999999.0"},
+                   { name:"PUB_SEC",desc:"PUB_SEC",type:"Real",defValue:"-999999.0"},
+                   { name:"UNEMP_T",desc:"UNEMP_T",type:"Real",defValue:"-999999.0"},
+                   { name:"UNEMP_M",desc:"UNEMP_M",type:"Real",defValue:"-999999.0"},
+                   { name:"UNEMP_F",desc:"UNEMP_F",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin2_Mortality",
+          desc:"Admin2_Mortality",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                   { name:"CBR",desc:"CBR",type:"Real",defValue:"-999999.0"},
+                   { name:"CDR",desc:"CDR",type:"Real",defValue:"-999999.0"},
+                   { name:"IMR",desc:"IMR",type:"Real",defValue:"-999999.0"},
+                   { name:"UN5_MR",desc:"UN5_MR",type:"Real",defValue:"-999999.0"},
+                   { name:"MAT_MR",desc:"MAT_MR",type:"Real",defValue:"-999999.0"},
+                   { name:"TFR",desc:"TFR",type:"Real",defValue:"-999999.0"},
+                   { name:"LF_EXP",desc:"LF_EXP",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin2_Household_Goods",
+          desc:"Admin2_Household_Goods",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                   { name:"ACC_INT",desc:"ACC_INT",type:"Real",defValue:"-999999.0"},
+                   { name:"ACC_TV",desc:"ACC_TV",type:"Real",defValue:"-999999.0"},
+                   { name:"ACC_RAD",desc:"ACC_RAD",type:"Real",defValue:"-999999.0"},
+                   { name:"ACC_PHOM",desc:"ACC_PHOM",type:"Real",defValue:"-999999.0"},
+                   { name:"ACC_PHOL",desc:"ACC_PHOL",type:"Real",defValue:"-999999.0"},
+                   { name:"HH_AST",desc:"HH_AST",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Admin2_Poverty",
+          desc:"Admin2_Poverty",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                   { name:"DGMDPI",desc:"DGMDPI",type:"Real",defValue:"-999999.0"},
+                   { name:"GINI",desc:"GINI",type:"Real",defValue:"-999999.0"},
+                   { name:"CORRUPT",desc:"CORRUPT",type:"Real",defValue:"-999999.0"},
+                   { name:"HR",desc:"HR",type:"Real",defValue:"-999999.0"},
+                   { name:"ELECTRIC",desc:"ELECTRIC",type:"Real",defValue:"-999999.0"},
+                   { name:"ASSETS",desc:"ASSETS",type:"Real",defValue:"-999999.0"},
+                   { name:"UE",desc:"UE",type:"Real",defValue:"-999999.0"},
+                    LFPR,
+                   { name:"U5_MR",desc:"U5_MR",type:"Real",defValue:"-999999.0"},
+                   { name:"PREV_DIS",desc:"PREV_DIS",type:"Real",defValue:"-999999.0"},
+                   { name:"HIV",desc:"HIV",type:"Real",defValue:"-999999.0"},
+                   { name:"WATER",desc:"WATER",type:"Real",defValue:"-999999.0"},
+                   { name:"LIT_RATE",desc:"LIT_RATE",type:"Real",defValue:"-999999.0"},
+                   { name:"PRIM_ED",desc:"PRIM_ED",type:"Real",defValue:"-999999.0"},
+                   { name:"TERT_ED",desc:"TERT_ED",type:"Real",defValue:"-999999.0"},
+                   { name:"CONFLICT",desc:"CONFLICT",type:"Real",defValue:"-999999.0"},
+                   { name:"TERROR",desc:"TERROR",type:"Real",defValue:"-999999.0"},
+                   { name:"NAT_FAC",desc:"NAT_FAC",type:"Real",defValue:"-999999.0"},
+                   { name:"MAT_FAC",desc:"MAT_FAC",type:"Real",defValue:"-999999.0"},
+                   { name:"HEALTH_FAC",desc:"HEALTH_FAC",type:"Real",defValue:"-999999.0"},
+                   { name:"EDU_FAC",desc:"EDU_FAC",type:"Real",defValue:"-999999.0"},
+                   { name:"HUMSEC_FAC",desc:"HUMSEC_FAC",type:"Real",defValue:"-999999.0"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Roads",
+          desc:"Roads",
+          geom:"Line",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    NAME,
+                    TYPE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Railways",
+          desc:"Railways",
+          geom:"Line",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    NAME,
+                    TYPE1,
+                    TYPE2,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
         { name:"Airfields",
           desc:"Airfields",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
-                   { name:"ICAO",desc:"ICAO",type:"String",defValue:""}, // End of ICAO
-                   { name:"IATA",desc:"IATA",type:"String",defValue:""}, // End of IATA
-                   { name:"RUNWAY",desc:"RUNWAY",type:"String",defValue:""}, // End of RUNWAY
-                   { name:"N_RUNWAYS",desc:"N_RUNWAYS",type:"Real",defValue:"0"}, // End of N_RUNWAYS
-                   { name:"R1_SURFACE",desc:"R1_SURFACE",type:"String",defValue:""}, // End of R1_SURFACE
-                   { name:"R2_SURFACE",desc:"R2_SURFACE",type:"String",defValue:""}, // End of R2_SURFACE
-                   { name:"R_LENGTH",desc:"R_LENGTH",type:"Real",defValue:"0"}, // End of R_LENGTH
-                   { name:"R_WIDTH",desc:"R_WIDTH",type:"Real",defValue:"0"}, // End of R_WIDTH
-                   { name:"USE",desc:"USE",type:"String",defValue:""}, // End of USE
-                   { name:"CUSTOMS",desc:"CUSTOMS",type:"String",defValue:""}, // End of CUSTOMS
-                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                   { name:"ICAO",desc:"ICAO",type:"String",defValue:"999999"},
+                   { name:"IATA",desc:"IATA",type:"String",defValue:"999999"},
+                   { name:"RUNWAY",desc:"RUNWAY",type:"String",defValue:"999999"},
+                   { name:"N_RUNWAYS",desc:"N_RUNWAYS",type:"Real",defValue:"-999999.0"},
+                   { name:"R1_SURFACE",desc:"R1_SURFACE",type:"String",defValue:"999999"},
+                   { name:"R2_SURFACE",desc:"R2_SURFACE",type:"String",defValue:"999999"},
+                   { name:"R_LENGTH",desc:"R_LENGTH",type:"Real",defValue:"-999999.0"},
+                   { name:"R_WIDTH",desc:"R_WIDTH",type:"Real",defValue:"-999999.0"},
+                   { name:"USE",desc:"USE",type:"String",defValue:"999999"},
+                   { name:"CUSTOMS",desc:"CUSTOMS",type:"String",defValue:"999999"},
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
                   ] // End of Columns
-        }, // End of feature Airfields
-        { name:"Border_Crossings",
-          desc:"Border Crossings",
-          geom:"Point",
-          columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE1",desc:"TYPE1",type:"String",defValue:""}, // End of TYPE1
-                   { name:"TYPE2",desc:"TYPE2",type:"String",defValue:""}, // End of TYPE2
-                   { name:"COUNTRY",desc:"COUNTRY",type:"String",defValue:""}, // End of COUNTRY
-                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
-                  ] // End of Columns
-        }, // End of feature Border_Crossings
+        }, // End of feature
+
         { name:"Bridges_Tunnels",
-          desc:"Bridges and Tunnels",
+          desc:"Bridges_Tunnels",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
-                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
-                   { name:"TYPE1",desc:"TYPE1",type:"String",defValue:""}, // End of TYPE1
-                   { name:"TYPE2",desc:"TYPE2",type:"String",defValue:""}, // End of TYPE2
-                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    CITY,
+                    TYPE,
+                    TYPE2,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
                   ] // End of Columns
-        }, // End of feature Bridges_Tunnels
+        }, // End of feature
+
+        { name:"Dams",
+          desc:"Dams",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                    CITY,
+                   { name:"RIVER",desc:"RIVER",type:"String",defValue:"999999"},
+                   { name:"YR_OPER",desc:"YR_OPER",type:"String",defValue:"999999"},
+                   { name:"HEIGHT",desc:"HEIGHT",type:"String",defValue:"999999"},
+                   { name:"CAPACITY",desc:"CAPACITY",type:"String",defValue:"999999"},
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Electrical_POI",
+          desc:"Electrical_POI",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Marine_POI",
+          desc:"Marine_POI",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Ports",
+          desc:"Ports",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                   { name:"PORT_NAME",desc:"PORT_NAME",type:"String",defValue:"999999"},
+                    CITY,
+                   { name:"HARBORSIZE",desc:"HARBORSIZE",type:"String",defValue:"999999"},
+                   { name:"HARBORTYPE",desc:"HARBORTYPE",type:"String",defValue:"999999"},
+                   { name:"SHELTER",desc:"SHELTER",type:"String",defValue:"999999"},
+                   { name:"ENTRY_TIDE",desc:"ENTRY_TIDE",type:"String",defValue:"999999"},
+                   { name:"ENTRYSWELL",desc:"ENTRYSWELL",type:"String",defValue:"999999"},
+                   { name:"ENTRY_ICE",desc:"ENTRY_ICE",type:"String",defValue:"999999"},
+                   { name:"ENTRYOTHER",desc:"ENTRYOTHER",type:"String",defValue:"999999"},
+                   { name:"OVERHD_LIM",desc:"OVERHD_LIM",type:"String",defValue:"999999"},
+                   { name:"CHAN_DEPTH",desc:"CHAN_DEPTH",type:"String",defValue:"999999"},
+                   { name:"ANCH_DEPTH",desc:"ANCH_DEPTH",type:"String",defValue:"999999"},
+                   { name:"CARGODEPTH",desc:"CARGODEPTH",type:"String",defValue:"999999"},
+                   { name:"OIL_DEPTH",desc:"OIL_DEPTH",type:"String",defValue:"999999"},
+                   { name:"TIDE_RANGE",desc:"TIDE_RANGE",type:"Real",defValue:"-999999.0"},
+                   { name:"MAX_VESSEL",desc:"MAX_VESSEL",type:"String",defValue:"999999"},
+                   { name:"HOLDGROUND",desc:"HOLDGROUND",type:"String",defValue:"999999"},
+                   { name:"TURN_BASIN",desc:"TURN_BASIN",type:"String",defValue:"999999"},
+                   { name:"PORTOFENTR",desc:"PORTOFENTR",type:"String",defValue:"999999"},
+                   { name:"US_REP",desc:"US_REP",type:"String",defValue:"999999"},
+                   { name:"ETAMESSAGE",desc:"ETAMESSAGE",type:"String",defValue:"999999"},
+                   { name:"PILOT_REQD",desc:"PILOT_REQD",type:"String",defValue:"999999"},
+                   { name:"PILOTAVAIL",desc:"PILOTAVAIL",type:"String",defValue:"999999"},
+                   { name:"LOC_ASSIST",desc:"LOC_ASSIST",type:"String",defValue:"999999"},
+                   { name:"PILOTADVSD",desc:"PILOTADVSD",type:"String",defValue:"999999"},
+                   { name:"TUGSALVAGE",desc:"TUGSALVAGE",type:"String",defValue:"999999"},
+                   { name:"TUG_ASSIST",desc:"TUG_ASSIST",type:"String",defValue:"999999"},
+                   { name:"PRATIQUE",desc:"PRATIQUE",type:"String",defValue:"999999"},
+                   { name:"SSCC_CERT",desc:"SSCC_CERT",type:"String",defValue:"999999"},
+                   { name:"QUAR_OTHER",desc:"QUAR_OTHER",type:"String",defValue:"999999"},
+                   { name:"COMM_PHONE",desc:"COMM_PHONE",type:"String",defValue:"999999"},
+                   { name:"COMM_FAX",desc:"COMM_FAX",type:"String",defValue:"999999"},
+                   { name:"COMM_RADIO",desc:"COMM_RADIO",type:"String",defValue:"999999"},
+                   { name:"COMM_VHF",desc:"COMM_VHF",type:"String",defValue:"999999"},
+                   { name:"COMM_AIR",desc:"COMM_AIR",type:"String",defValue:"999999"},
+                   { name:"COMM_RAIL",desc:"COMM_RAIL",type:"String",defValue:"999999"},
+                   { name:"CARGOWHARF",desc:"CARGOWHARF",type:"String",defValue:"999999"},
+                   { name:"CARGO_ANCH",desc:"CARGO_ANCH",type:"String",defValue:"999999"},
+                   { name:"CARGMDMOOR",desc:"CARGMDMOOR",type:"String",defValue:"999999"},
+                   { name:"CARBCHMOOR",desc:"CARBCHMOOR",type:"String",defValue:"999999"},
+                   { name:"CARICEMOOR",desc:"CARICEMOOR",type:"String",defValue:"999999"},
+                   { name:"MED_FACIL",desc:"MED_FACIL",type:"String",defValue:"999999"},
+                   { name:"GARBAGE",desc:"GARBAGE",type:"String",defValue:"999999"},
+                   { name:"DEGAUSS",desc:"DEGAUSS",type:"String",defValue:"999999"},
+                   { name:"DRTYBALLST",desc:"DRTYBALLST",type:"String",defValue:"999999"},
+                   { name:"CRANEFIXED",desc:"CRANEFIXED",type:"String",defValue:"999999"},
+                   { name:"CRANEMOBIL",desc:"CRANEMOBIL",type:"String",defValue:"999999"},
+                   { name:"CRANEFLOAT",desc:"CRANEFLOAT",type:"String",defValue:"999999"},
+                   { name:"LIFT_100_O",desc:"LIFT_100_O",type:"String",defValue:"999999"},
+                   { name:"LIFT50_100",desc:"LIFT50_100",type:"String",defValue:"999999"},
+                   { name:"LIFT_25_49",desc:"LIFT_25_49",type:"String",defValue:"999999"},
+                   { name:"LIFT_0_24",desc:"LIFT_0_24",type:"String",defValue:"999999"},
+                   { name:"LONGSHORE",desc:"LONGSHORE",type:"String",defValue:"999999"},
+                   { name:"ELECTRICAL",desc:"ELECTRICAL",type:"String",defValue:"999999"},
+                   { name:"SERV_STEAM",desc:"SERV_STEAM",type:"String",defValue:"999999"},
+                   { name:"NAV_EQUIP",desc:"NAV_EQUIP",type:"String",defValue:"999999"},
+                   { name:"ELECREPAIR",desc:"ELECREPAIR",type:"String",defValue:"999999"},
+                   { name:"PROVISIONS",desc:"PROVISIONS",type:"String",defValue:"999999"},
+                   { name:"WATER",desc:"WATER",type:"String",defValue:"999999"},
+                   { name:"FUEL_OIL",desc:"FUEL_OIL",type:"String",defValue:"999999"},
+                   { name:"DIESEL",desc:"DIESEL",type:"String",defValue:"999999"},
+                   { name:"DECKSUPPLY",desc:"DECKSUPPLY",type:"String",defValue:"999999"},
+                   { name:"ENG_SUPPLY",desc:"ENG_SUPPLY",type:"String",defValue:"999999"},
+                   { name:"REPAIRCODE",desc:"REPAIRCODE",type:"String",defValue:"999999"},
+                   { name:"DRYDOCK",desc:"DRYDOCK",type:"String",defValue:"999999"},
+                   { name:"RAILWAY",desc:"RAILWAY",type:"String",defValue:"999999"},
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Public_Transportation_POI",
+          desc:"Public_Transportation_POI",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE1,
+                    TYPE2,
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Railways_POI",
+          desc:"Railways_POI",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE1,
+                    TYPE2,
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Power_Plants",
+          desc:"Power_Plants",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                    CITY,
+                   { name:"NUM_GEN",desc:"NUM_GEN",type:"String",defValue:"999999"},
+                   { name:"TOT_CAP_MW",desc:"TOT_CAP_MW",type:"String",defValue:"999999"},
+                   { name:"OP_STATUS",desc:"OP_STATUS",type:"String",defValue:"999999"},
+                   { name:"OP_CON",desc:"OP_CON",type:"String",defValue:"999999"},
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Hydrology_POI",
+          desc:"Hydrology_POI",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Free_Trade_Zones_Polygons",
+          desc:"Free_Trade_Zones_Polygons",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    NAME,
+                   { name:"STATUS",desc:"STATUS",type:"String",defValue:"999999"},
+                   { name:"OWNERTYPE",desc:"OWNERTYPE",type:"String",defValue:"999999"},
+                   { name:"LOCATION",desc:"LOCATION",type:"String",defValue:"999999"},
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Agricultural_POI",
+          desc:"Agricultural_POI",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE1,
+                    TYPE2,
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
         { name:"Commercial_POI",
-          desc:"Commercial POI",
+          desc:"Commercial_POI",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE1",desc:"TYPE1",type:"String",defValue:""}, // End of TYPE1
-                   { name:"TYPE2",desc:"TYPE2",type:"String",defValue:""}, // End of TYPE2
-                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE1,
+                    TYPE2,
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
                   ] // End of Columns
-        }, // End of feature Commercial_POI
-        { name:"Conflict_Points",
-          desc:"Conflict Points",
-          geom:"Point",
-          columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"LOCATION",desc:"LOCATION",type:"String",defValue:""}, // End of LOCATION
-                   { name:"ACTOR1",desc:"ACTOR1",type:"String",defValue:""}, // End of ACTOR1
-                   { name:"ACTOR2",desc:"ACTOR2",type:"String",defValue:""}, // End of ACTOR2
-                   { name:"EVENT_TYPE",desc:"EVENT_TYPE",type:"String",defValue:""}, // End of EVENT_TYPE
-                   { name:"DATE",desc:"DATE",type:"String",defValue:""}, // End of DATE
-                   { name:"YEAR",desc:"YEAR",type:"REAL",defValue:"0"}, // End of YEAR
-                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"ORG_SOURCE",desc:"ORG_SOURCE",type:"String",defValue:""}, // End of ORG_SOURCE
-                   { name:"NUM_DTH",desc:"NUM_DTH",type:"REAL",defValue:"0"}, // End of NUM_DTH
-                   { name:"NUM_INJ",desc:"NUM_INJ",type:"REAL",defValue:"0"}, // End of NUM_INJ
-                   { name:"YEAR",desc:"YEAR",type:"REAL"}, // End of YEAR
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
-                  ] // End of Columns
-        }, // End of feature Conflict_Points
+        }, // End of feature
 
-        { name:"Crime_Data",
-          desc:"Crime Data",
+        { name:"Free_Trade_Zones",
+          desc:"Free_Trade_Zones",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"ACTOR",desc:"ACTOR",type:"String",defValue:""}, // End of ACTOR
-                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
-                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
-                   { name:"DATE",desc:"DATE",type:"String",defValue:""}, // End of DATE
-                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                   { name:"STATUS",desc:"STATUS",type:"String",defValue:"999999"},
+                   { name:"OWNERSHIP",desc:"OWNERSHIP",type:"String",defValue:"999999"},
+                    CITY,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
                   ] // End of Columns
-        }, // End of feature Crime_Data
+        }, // End of feature
 
-        { name:"Cultural_POI",
-          desc:"Cultural Points of Interest",
-          geom:"Point",
-          columns:[ 
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
-                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
-                  ] // End of Columns
-        }, // End of feature Cultural_POI
-
-        { name:"Embassies",
-          desc:"Embassies",
+        { name:"Lodging_POI",
+          desc:"Lodging_POI",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
-                   { name:"ADDRESS",desc:"ADDRESS",type:"String",defValue:""}, // End of ADDRESS
-                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
-                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
-                   { name:"TELEPHONE",desc:"TELEPHONE",type:"String",defValue:""}, // End of TELEPHONE
-                   { name:"WEBSITE",desc:"WEBSITE",type:"String",defValue:""}, // End of WEBSITE
-                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE1,
+                    TYPE2,
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
                   ] // End of Columns
-        }, // End of feature Embassies
+        }, // End of feature
 
-        { name:"Geonames",
-          desc:"Geonames",
+        { name:"Recreation_POI",
+          desc:"Recreation_POI",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"FC",desc:"FC",type:"String",defValue:""}, // End of FC
-                   { name:"DSG",desc:"DSG",type:"String",defValue:""}, // End of DSG
-                   { name:"SORT_NAME",desc:"SORT_NAME",type:"String",defValue:""}, // End of SORT_NAME
-                   { name:"FULL_NAME",desc:"FULL_NAME",type:"String",defValue:""}, // End of FULL_NAME
-                   { name:"ALT_NAME",desc:"ALT_NAME",type:"String",defValue:""}, // End of ALT_NAME
-                   { name:"MODIFY_DT",desc:"MODIFY_DT",type:"String",defValue:"" }, // End of MODIFY_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
                   ] // End of Columns
-        }, // End of feature Geonames
+        }, // End of feature
+
+        { name:"Tourist_Locations_POI",
+          desc:"Tourist_Locations_POI",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Foreign_Investment_Projects",
+          desc:"Foreign_Investment_Projects",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                   { name:"SECTOR",desc:"SECTOR",type:"String",defValue:"999999"},
+                   { name:"DESCRIP",desc:"DESCRIP",type:"String",defValue:"999999"},
+                   { name:"LEND_INSTR",desc:"LEND_INSTR",type:"String",defValue:"999999"},
+                    CITY,
+                   { name:"VALUE",desc:"VALUE",type:"Real",defValue:"-999999.0"},
+                   { name:"APP_DATE",desc:"APP_DATE",type:"String",defValue:"999999"},
+                   { name:"APP_YEAR",desc:"APP_YEAR",type:"Real",defValue:"-999999.0"},
+                   { name:"FI_STATUS",desc:"FI_STATUS",type:"String",defValue:"999999"},
+                    SPA_ACC,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
 
         { name:"HADR",
           desc:"HADR",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                   { name:"AREA_AFF",desc:"AREA_AFF",type:"String",defValue:"999999"},
+                    TYPE1,
+                    TYPE2,
+                   { name:"START_DT",desc:"START_DT",type:"String",defValue:"999999"},
+                   { name:"END_DT",desc:"END_DT",type:"String",defValue:"999999"},
+                   { name:"TL_AFFECT",desc:"TL_AFFECT",type:"Real",defValue:"-999999.0"},
+                   { name:"FATALITY",desc:"FATALITY",type:"Real",defValue:"-999999.0"},
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                   { name:"SHAPE_Leng",desc:"SHAPE_Leng",type:"Real",defValue:"-999999.0"},
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Conflict_Points",
+          desc:"Conflict_Points",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"AREA_AFF",desc:"AREA_AFF",type:"String",defValue:""}, // End of AREA_AFF
-                   { name:"TYPE1",desc:"TYPE1",type:"String",defValue:""}, // End of TYPE1
-                   { name:"TYPE2",desc:"TYPE2",type:"String",defValue:""}, // End of TYPE2
-                   { name:"DISEASE",desc:"DISEASE",type:"String",defValue:""}, // End of DISEASE
-                   { name:"START_DT",desc:"START_DT",type:"String",defValue:""}, // End of START_DT
-                   { name:"END_DT",desc:"END_DT",type:"String",defValue:""}, // End of END_DT
-                   { name:"TL_AFFECT",desc:"TL_AFFECT",type:"Integer",defValue:"0"}, // End of TL_AFFECT
-                   { name:"FATALITY",desc:"FATALITY",type:"Integer",defValue:"0"}, // End of FATALITY
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                   { name:"LOCATION",desc:"LOCATION",type:"String",defValue:"999999"},
+                   { name:"ACTOR1",desc:"ACTOR1",type:"String",defValue:"999999"},
+                   { name:"ACTOR2",desc:"ACTOR2",type:"String",defValue:"999999"},
+                   { name:"EVENT_TYPE",desc:"EVENT_TYPE",type:"String",defValue:"999999"},
+                   { name:"DATE",desc:"DATE",type:"String",defValue:"999999"},
+                   { name:"YEAR",desc:"YEAR",type:"Real",defValue:"-999999.0"},
+                    SPA_ACC,
+                   { name:"ORG_SOURCE",desc:"ORG_SOURCE",type:"String",defValue:"999999"},
+                   { name:"NUM_DTH",desc:"NUM_DTH",type:"Real",defValue:"-999999.0"},
+                   { name:"NUM_INJ",desc:"NUM_INJ",type:"Real",defValue:"-999999.0"},
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
                   ] // End of Columns
-        }, // End of feature HADR
+        }, // End of feature
 
-        { name:"Health_Events",
-          desc:"Health Events",
+        { name:"Educational_Institutions",
+          desc:"Educational_Institutions",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"AREA_AFF",desc:"AREA_AFF",type:"String",defValue:""}, // End of AREA_AFF
-                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
-                   { name:"DISEASE",desc:"DISEASE",type:"String",defValue:""}, // End of DISEASE
-                   { name:"START_DT",desc:"START_DT",type:"String",defValue:""}, // End of START_DT
-                   { name:"END_DT",desc:"END_DT",type:"String",defValue:""}, // End of END_DT
-                   { name:"TL_AFFECT",desc:"TL_AFFECT",type:"Integer",defValue:"0"}, // End of TL_AFFECT
-                   { name:"FATALITY",desc:"FATALITY",type:"Integer",defValue:"0"}, // End of FATALITY
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                   { name:"ADDRESS",desc:"ADDRESS",type:"String",defValue:"999999"},
+                    CITY,
+                    TYPE1,
+                    TYPE2,
+                   { name:"TOT_BOYS",desc:"TOT_BOYS",type:"Real",defValue:"-999999.0"},
+                   { name:"TOT_GIRLS",desc:"TOT_GIRLS",type:"Real",defValue:"-999999.0"},
+                   { name:"TOT_M_TEAC",desc:"TOT_M_TEAC",type:"Real",defValue:"-999999.0"},
+                   { name:"TOT_F_TEAC",desc:"TOT_F_TEAC",type:"Real",defValue:"-999999.0"},
+                   { name:"TOT_CLASS",desc:"TOT_CLASS",type:"Real",defValue:"-999999.0"},
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
                   ] // End of Columns
-        }, // End of feature Health_Events
-
-
-
-        { name:"Internet_Cafes",
-          desc:"Internet Cafes",
-          geom:"Point",
-          columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
-                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
-                  ] // End of Columns
-        }, // End of feature Internet_Cafes
+        }, // End of feature
 
         { name:"Libraries",
           desc:"Libraries",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
-                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
                   ] // End of Columns
-        }, // End of feature Libraries
+        }, // End of feature
 
+        { name:"Religion",
+          desc:"Religion",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    TYPE1,
+                    TYPE2,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Religious_Institutions",
+          desc:"Religious_Institutions",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Ethnicity",
+          desc:"Ethnicity",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                   { name:"PEOPLEGP_1",desc:"PEOPLEGP_1",type:"String",defValue:"999999"},
+                   { name:"PEOPLEGP_2",desc:"PEOPLEGP_2",type:"String",defValue:"999999"},
+                   { name:"PEOPLEGP_3",desc:"PEOPLEGP_3",type:"String",defValue:"999999"},
+                   { name:"PEOPLEGP_4",desc:"PEOPLEGP_4",type:"String",defValue:"999999"},
+                   { name:"PEOPLEGP_5",desc:"PEOPLEGP_5",type:"String",defValue:"999999"},
+                   { name:"ALT_NAMES",desc:"ALT_NAMES",type:"String",defValue:"999999"},
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Languages",
+          desc:"Languages",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                   { name:"LANG_FAM",desc:"LANG_FAM",type:"String",defValue:"999999"},
+                   { name:"LANG_SUBGR",desc:"LANG_SUBGR",type:"String",defValue:"999999"},
+                   { name:"ALT_NAMES",desc:"ALT_NAMES",type:"String",defValue:"999999"},
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Cultural_POI",
+          desc:"Cultural_POI",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
 
         { name:"Medical_Facilities",
-          desc:"Medical Facilities",
+          desc:"Medical_Facilities",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE1",desc:"TYPE1",type:"String",defValue:""}, // End of TYPE
-                   { name:"TYPE2",desc:"TYPE2",type:"String",defValue:""}, // End of TYPE
-                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE1,
+                    TYPE2,
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
                   ] // End of Columns
-        }, // End of feature Medical_Facilities
+        }, // End of feature
 
+        { name:"Health_Events",
+          desc:"Health_Events",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                   { name:"AREA_AFF",desc:"AREA_AFF",type:"String",defValue:"999999"},
+                    TYPE,
+                   { name:"DISEASE",desc:"DISEASE",type:"String",defValue:"999999"},
+                   { name:"START_DT",desc:"START_DT",type:"String",defValue:"999999"},
+                   { name:"END_DT",desc:"END_DT",type:"String",defValue:"999999"},
+                   { name:"TL_AFFECT",desc:"TL_AFFECT",type:"Integer",defValue:"-999999"},
+                   { name:"FATALITY",desc:"FATALITY",type:"Integer",defValue:"-999999"},
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Soils",
+          desc:"Soils",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                   { name:"FAOSOIL",desc:"FAOSOIL",type:"String",defValue:"999999"},
+                   { name:"DOMSOI",desc:"DOMSOI",type:"String",defValue:"999999"},
+                   { name:"PHASE1",desc:"PHASE1",type:"String",defValue:"999999"},
+                   { name:"PHASE2",desc:"PHASE2",type:"String",defValue:"999999"},
+                   { name:"MISCLU1",desc:"MISCLU1",type:"String",defValue:"999999"},
+                   { name:"PERMAFROST",desc:"PERMAFROST",type:"String",defValue:"999999"},
+                    SOURCE_DT,
+                    SOURCE,
+                  ] // End of Columns
+        }, // End of feature
 
         { name:"Natural_POI",
-          desc:"Natural POI",
+          desc:"Natural_POI",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
-                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
                   ] // End of Columns
-        }, // End of feature Natural_POI
+        }, // End of feature
 
-        { name:"Power_Plants",
-          desc:"Power Plants",
+        { name:"Natural_Resources",
+          desc:"Natural_Resources",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
-                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
-                   { name:"NUM_GEN",desc:"NUM_GEN",type:"String",defValue:""}, // End of NUM_GEN
-                   { name:"TOT_CAP_MW",desc:"TOT_CAP_MW",type:"String",defValue:""}, // End of TOT_CAP_MW
-                   { name:"OP_STATUS",desc:"OP_STATUS",type:"String",defValue:""}, // End of OP_STATUS
-                   { name:"OP_CON",desc:"OP_CON",type:"String",defValue:""}, // End of OP_CON
-                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                   { name:"OPER_TYPE",desc:"OPER_TYPE",type:"String",defValue:"999999"},
+                   { name:"DEV_STAT",desc:"DEV_STAT",type:"String",defValue:"999999"},
+                   { name:"PRI_COM",desc:"PRI_COM",type:"String",defValue:"999999"},
+                   { name:"COM_TYPE",desc:"COM_TYPE",type:"String",defValue:"999999"},
+                   { name:"ALL_COM",desc:"ALL_COM",type:"String",defValue:"999999"},
+                   { name:"CAPACITY",desc:"CAPACITY",type:"String",defValue:"999999"},
+                   { name:"UNITS",desc:"UNITS",type:"String",defValue:"999999"},
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
                   ] // End of Columns
-        }, // End of feature Power_Plants
+        }, // End of feature
+
+        { name:"Hydrology_Polygons",
+          desc:"Hydrology_Polygons",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    NAME,
+                    TYPE,
+                   { name:"HYDRO_DESC",desc:"HYDRO_DESC",type:"String",defValue:"999999"},
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                   { name:"SHAPE_Leng",desc:"SHAPE_Leng",type:"Real",defValue:"-999999.0"},
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Hydrology_Polylines",
+          desc:"Hydrology_Polylines",
+          geom:"Line",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                   { name:"MAJ_NAME",desc:"MAJ_NAME",type:"String",defValue:"999999"},
+                   { name:"SUB_NAME",desc:"SUB_NAME",type:"String",defValue:"999999"},
+                    TYPE,
+                   { name:"HYDRO_DESC",desc:"HYDRO_DESC",type:"String",defValue:"999999"},
+                   { name:"STRAHLER",desc:"STRAHLER",type:"Real",defValue:"-999999.0"},
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"ADMIN0",
+          desc:"ADMIN0",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                   { name:"NAME_ISO",desc:"NAME_ISO",type:"String",defValue:"999999"},
+                   { name:"NAME_FAO",desc:"NAME_FAO",type:"String",defValue:"999999"},
+                   { name:"NAME_LOCAL",desc:"NAME_LOCAL",type:"String",defValue:"999999"},
+                   { name:"NAME_VARIA",desc:"NAME_VARIA",type:"String",defValue:"999999"},
+                   { name:"VALIDFR",desc:"VALIDFR",type:"String",defValue:"999999"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"ADMIN1",
+          desc:"ADMIN1",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ENGTYPE0,
+                    ADM1_NAME,
+                    TYPE1,
+                    ENGTYPE1,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"ADMIN2",
+          desc:"ADMIN2",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ENGTYPE0,
+                    ADM1_NAME,
+                    TYPE1,
+                    ENGTYPE1,
+                    ADM2_NAME,
+                    TYPE2,
+                    ENGTYPE2,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"ADMIN3",
+          desc:"ADMIN3",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ENGTYPE0,
+                    ADM1_NAME,
+                    TYPE1,
+                    ENGTYPE1,
+                    ADM2_NAME,
+                    TYPE2,
+                    ENGTYPE2,
+                    ADM3_NAME,
+                   { name:"TYPE3",desc:"TYPE3",type:"String",defValue:"999999"},
+                   { name:"ENGTYPE3",desc:"ENGTYPE3",type:"String",defValue:"999999"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"ADMIN4",
+          desc:"ADMIN4",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ENGTYPE0,
+                    ADM1_NAME,
+                    TYPE1,
+                    ENGTYPE1,
+                    ADM2_NAME,
+                    TYPE2,
+                    ENGTYPE2,
+                    ADM3_NAME,
+                   { name:"TYPE3",desc:"TYPE3",type:"String",defValue:"999999"},
+                   { name:"ENGTYPE3",desc:"ENGTYPE3",type:"String",defValue:"999999"},
+                    ADM4_NAME,
+                   { name:"TYPE4",desc:"TYPE4",type:"String",defValue:"999999"},
+                   { name:"ENGTYPE4",desc:"ENGTYPE4",type:"String",defValue:"999999"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"ADMIN5",
+          desc:"ADMIN5",
+          geom:"Area",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ENGTYPE0,
+                    ADM1_NAME,
+                    TYPE1,
+                    ENGTYPE1,
+                    ADM2_NAME,
+                    TYPE2,
+                    ENGTYPE2,
+                    ADM3_NAME,
+                   { name:"TYPE3",desc:"TYPE3",type:"String",defValue:"999999"},
+                   { name:"ENGTYPE3",desc:"ENGTYPE3",type:"String",defValue:"999999"},
+                    ADM4_NAME,
+                   { name:"TYPE4",desc:"TYPE4",type:"String",defValue:"999999"},
+                   { name:"ENGTYPE4",desc:"ENGTYPE4",type:"String",defValue:"999999"},
+                    ADM5_NAME,
+                   { name:"TYPE5",desc:"TYPE5",type:"String",defValue:"999999"},
+                   { name:"ENGTYPE5",desc:"ENGTYPE5",type:"String",defValue:"999999"},
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Geonames",
+          desc:"Geonames",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                   { name:"FC",desc:"FC",type:"String",defValue:"999999"},
+                   { name:"DSG",desc:"DSG",type:"String",defValue:"999999"},
+                   { name:"SORT_NAME",desc:"SORT_NAME",type:"String",defValue:"999999"},
+                   { name:"FULL_NAME",desc:"FULL_NAME",type:"String",defValue:"999999"},
+                   { name:"ALT_NAME",desc:"ALT_NAME",type:"String",defValue:"999999"},
+                   { name:"MODIFY_DAT",desc:"MODIFY_DAT",type:"String",defValue:"999999"},
+                    SOURCE_DT,
+                    SOURCE,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"GNDB",
+          desc:"GNDB",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                   { name:"FC",desc:"FC",type:"String",defValue:"999999"},
+                   { name:"DSG",desc:"DSG",type:"String",defValue:"999999"},
+                   { name:"NT",desc:"NT",type:"String",defValue:"999999"},
+                   { name:"SORT_NAME",desc:"SORT_NAME",type:"String",defValue:"999999"},
+                   { name:"FULL_NAME",desc:"FULL_NAME",type:"String",defValue:"999999"},
+                   { name:"ALT_NAME",desc:"ALT_NAME",type:"String",defValue:"999999"},
+                   { name:"MODIFY_DT",desc:"MODIFY_DT",type:"String",defValue:"999999"},
+                    SOURCE_DT,
+                    SOURCE,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Border_Crossings",
+          desc:"Border_Crossings",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE1,
+                    TYPE2,
+                   { name:"COUNTRY",desc:"COUNTRY",type:"String",defValue:"999999"},
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Embassies",
+          desc:"Embassies",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                   { name:"ADDRESS",desc:"ADDRESS",type:"String",defValue:"999999"},
+                    CITY,
+                    TYPE,
+                   { name:"TELEPHONE",desc:"TELEPHONE",type:"String",defValue:"999999"},
+                   { name:"WEBSITE",desc:"WEBSITE",type:"String",defValue:"999999"},
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Government_POI",
+          desc:"Government_POI",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE1,
+                    TYPE2,
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Military_Installations",
+          desc:"Military_Installations",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                   { name:"MIL_TYPE",desc:"MIL_TYPE",type:"String",defValue:"999999"},
+                   { name:"UNIT",desc:"UNIT",type:"String",defValue:"999999"},
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Refugee_Camps",
+          desc:"Refugee_Camps",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                   { name:"POPULATION",desc:"POPULATION",type:"Integer",defValue:"-999999"},
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Smuggling_Routes_Polyline",
+          desc:"Smuggling_Routes_Polyline",
+          geom:"Line",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    NAME,
+                    TYPE,
+                   { name:"ROUTES",desc:"ROUTES",type:"String",defValue:"999999"},
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Smuggling_Routes",
+          desc:"Smuggling_Routes",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    CITY,
+                    TYPE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Crime_Data",
+          desc:"Crime_Data",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                   { name:"ACTOR",desc:"ACTOR",type:"String",defValue:"999999"},
+                    TYPE,
+                    CITY,
+                   { name:"DATE",desc:"DATE",type:"String",defValue:"999999"},
+                    SPA_ACC,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Public_Security_POI",
+          desc:"Public_Security_POI",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
 
         { name:"Prisons",
           desc:"Prisons",
           geom:"Point",
           columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
-                   { name:"EST_PRIS",desc:"EST_PRIS",type:"REAL",defValue:"0"}, // End of EST_PRIS
-                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                   { name:"EST_PRIS",desc:"EST_PRIS",type:"Real",defValue:"-999999.0"},
+                    CITY,
+                    SPA_ACC,
+                    CONF_IMAGE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
                   ] // End of Columns
-        }, // End of feature Prisons
+        }, // End of feature
 
-
-
-        { name:"Recreation_POI",
-          desc:"Recreation POI",
-          geom:"Point",
+        { name:"Protected_Areas",
+          desc:"Protected_Areas",
+          geom:"Area",
           columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
-                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-//                    { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
+                    ISO3,
+                    ADM0_NAME,
+                    NAME,
+                   { name:"DESIG",desc:"DESIG",type:"String",defValue:"999999"},
+                   { name:"DESIG_TYPE",desc:"DESIG_TYPE",type:"String",defValue:"999999"},
+                   { name:"IUCN_CAT",desc:"IUCN_CAT",type:"String",defValue:"999999"},
+                   { name:"TYPE_AREA",desc:"TYPE_AREA",type:"String",defValue:"999999"},
+                   { name:"REP_M",desc:"REP_M",type:"Integer",defValue:"-999999"},
+                   { name:"REP_AREA",desc:"REP_AREA",type:"Integer",defValue:"-999999"},
+                   { name:"STATUS",desc:"STATUS",type:"String",defValue:"999999"},
+                   { name:"STATUS_YR",desc:"STATUS_YR",type:"Integer",defValue:"-999999"},
+                   { name:"GOV_TYPE",desc:"GOV_TYPE",type:"String",defValue:"999999"},
+                   { name:"MANAG_AUTH",desc:"MANAG_AUTH",type:"String",defValue:"999999"},
+                   { name:"NO_TK_AREA",desc:"NO_TK_AREA",type:"Integer",defValue:"-999999"},
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
                   ] // End of Columns
-        }, // End of feature Recreation_POI
-
-
-        { name:"Religious_Institutions",
-          desc:"Religious Institutions",
-          geom:"Point",
-          columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
-                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
-                  ] // End of Columns
-        }, // End of feature Religious_Institutions
-
-
-        { name:"Tourist_Locations_POI",
-          desc:"Tourist Attractions",
-          geom:"Point",
-          columns:[
-                   { name:"ISO3",desc:"ISO3",type:"String",defValue:"" }, // End of ISO3
-                   { name:"ADM0_NAME",desc:"ADM0_NAME",type:"String",defValue:""}, // End of ADM0_NAME
-                   { name:"ADM1_NAME",desc:"ADM1_NAME",type:"String",defValue:""}, // End of ADM1_NAME
-                   { name:"ADM2_NAME",desc:"ADM2_NAME",type:"String",defValue:""}, // End of ADM2_NAME
-                   { name:"ADM3_NAME",desc:"ADM3_NAME",type:"String",defValue:""}, // End of ADM3_NAME
-                   { name:"ADM4_NAME",desc:"ADM4_NAME",type:"String",defValue:""}, // End of ADM4_NAME
-                   { name:"ADM5_NAME",desc:"ADM5_NAME",type:"String",defValue:""}, // End of ADM5_NAME
-                   { name:"NAME",desc:"NAME",type:"String",defValue:""}, // End of NAME
-                   { name:"TYPE",desc:"TYPE",type:"String",defValue:""}, // End of TYPE
-                   { name:"CITY",desc:"CITY",type:"String",defValue:""}, // End of CITY
-                   { name:"SPA_ACC",desc:"SPA_ACC",type:"String",defValue:""}, // End of SPA_ACC
-                   { name:"CONF_IMAGE",desc:"CONF_IMAGE",type:"String",defValue:""}, // End of CONF_IMAGE
-                   { name:"COMMENTS",desc:"COMMENTS",type:"String",defValue:""}, // End of COMMENTS
-                   { name:"SOURCE_DT",desc:"SOURCE_DT",type:"String",defValue:"" }, // End of SOURCE_DT
-                   { name:"SOURCE",desc:"SOURCE",type:"String",defValue:"" }, // End of SOURCE
-                   { name:"SOURCE2_DT",desc:"SOURCE2_DT",type:"String",defValue:"" }, // End of SOURCE2_DT
-                   { name:"SOURCE2",desc:"SOURCE2",type:"String",defValue:"" }, // End of SOURCE2
-                  ] // End of Columns
-        }, // End of feature Tourist_Locations_POI
+        } // End of feature
 
 
     ]; // End of schema

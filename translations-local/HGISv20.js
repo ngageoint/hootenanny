@@ -40,7 +40,7 @@ hoot.require('fcode_common');
 function layerNameFilter()
 {
     // Drop all of the "SRC_*" and "o2s_*" layers
-    return "^(?!SRC_|o2s_)";
+    return "^(?!_ATTACH)";
 }
 
 

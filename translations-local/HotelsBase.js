@@ -41,6 +41,9 @@ function translateAttributes(attrs, layerName)
         if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
 
         tags.tourism = 'hotel';
+
+        // Default accuracy value
+        tags['source:accuracy'] = '3';
         
         var txtBiased = {
             'address':'addr:full', // Address
