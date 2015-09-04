@@ -284,6 +284,9 @@ QStringList OgrReader::getLayerNames(QString path)
     l->Dereference();
   }
 
+  // make the results consitent
+  result.sort();
+
   return result;
 }
 
@@ -302,6 +305,9 @@ QStringList OgrReader::getFilteredLayerNames(QString path)
         result.append(allLayers[i]);
     }
   }
+
+  // make the results consistent
+  result.sort();
 
   return result;
 }
@@ -434,6 +440,9 @@ QStringList OgrReaderInternal::getLayersWithGeometry(QString path) const
     }
     l->Dereference();
   }
+
+  // make the result consistent.
+  result.sort();
 
   return result;
 }
@@ -984,14 +993,6 @@ bool OgrReaderInternal::hasMoreElements()
   // Do a read if the element maps are empty
   populateElementMap();
 
-  bool dum = false;
-  if (dum)
-  {
-  // Is there data to iterate over?
-  LOG_VAR((_nodesItr != _map->getNodeMap().end()));
-  LOG_VAR((_waysItr != _map->getWays().end()));
-  LOG_VAR((_relationsItr != _map->getRelationMap().end()));
-  }
   bool result = ( (_nodesItr != _map->getNodeMap().end()) || (_waysItr != _map->getWays().end())
       || (_relationsItr != _map->getRelationMap().end()) );
 
@@ -1005,15 +1006,6 @@ ElementPtr OgrReaderInternal::readNextElement()
   if ( (_nodesItr == _map->getNodeMap().end()) && (_waysItr == _map->getWays().end())
       && (_relationsItr == _map->getRelationMap().end()) )
   {
-  bool dum = false;
-    if (dum)
-  {
-  // Is there data to iterate over?
-  LOG_VAR((_nodesItr != _map->getNodeMap().end()));
-  LOG_VAR((_waysItr != _map->getWays().end()));
-  LOG_VAR((_relationsItr != _map->getRelationMap().end()));
-  }
-
     // Load the next OGR feature, with 1..N elemenents per feature, into the map of the various
     //    element types
     populateElementMap();
