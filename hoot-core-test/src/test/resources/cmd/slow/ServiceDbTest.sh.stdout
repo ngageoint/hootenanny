@@ -1,12 +1,12 @@
 Reprojecting 0 / 135         
-11:02:45.491 INFO  .../core/ops/CalculateStatsOp.cpp(  92) Calculating map statistics...
-11:02:57.598 INFO  ...lygon/BuildingMatchCreator.cpp( 177) Loading model from: /data/hoot/conf/BuildingModel.rf
-11:02:58.088 INFO  ...ighway/HighwayRfClassifier.cpp(  74) Loading highway model from: /data/hoot/conf/HighwayModel.rf
-11:02:59.293 INFO  ...ighway/HighwayRfClassifier.cpp(  85) factorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
-11:02:59.293 INFO  ...ighway/HighwayRfClassifier.cpp( 104) extractorNames: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
-11:02:59.293 INFO  ...ighway/HighwayRfClassifier.cpp( 105) missingExtractors: [0]{}
-11:02:59.293 INFO  ...ighway/HighwayRfClassifier.cpp( 106) _rfFactorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
-11:02:59.326 INFO  .../core/ops/CalculateStatsOp.cpp( 523) Map statistics calculated.
+16:11:24.080 INFO  .../core/ops/CalculateStatsOp.cpp(  92) Calculating map statistics...
+16:11:25.098 INFO  ...lygon/BuildingMatchCreator.cpp( 177) Loading model from: /fouo/jason.surratt/hoot-release-4/hoot/conf/BuildingModel.rf
+16:11:25.648 INFO  ...ighway/HighwayRfClassifier.cpp(  74) Loading highway model from: /fouo/jason.surratt/hoot-release-4/hoot/conf/HighwayModel.rf
+16:11:27.010 INFO  ...ighway/HighwayRfClassifier.cpp(  85) factorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
+16:11:27.010 INFO  ...ighway/HighwayRfClassifier.cpp( 104) extractorNames: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
+16:11:27.010 INFO  ...ighway/HighwayRfClassifier.cpp( 105) missingExtractors: [0]{}
+16:11:27.010 INFO  ...ighway/HighwayRfClassifier.cpp( 106) _rfFactorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
+16:11:27.035 INFO  .../core/ops/CalculateStatsOp.cpp( 523) Map statistics calculated.
 Stat Name	test-output/cmd/ServiceDbTest/output.osm
 Node Count	135
 Way Count	22
@@ -74,10 +74,10 @@ Percentage of Buildings Conflated	36.3636363636
 Percentage of Buildings Marked for Review	0
 Percentage of Unmatched Buildings	63.6363636364
 Longest Tag	52
-Translated Populated Tag Percent	0.605882352941
-Translated Populated Tag Count	103
-Translated Default Tag Count	67
+Translated Populated Tag Percent	0.611764705882
+Translated Populated Tag Count	104
+Translated Default Tag Count	66
 Translated Null Tag Count	0
-Building Translated Populated Tag Percent	0.5
+Building Translated Populated Tag Percent	0.515151515152
 Highway Translated Populated Tag Percent	0.666666666667
 POI Translated Populated Tag Percent	0.704545454545
