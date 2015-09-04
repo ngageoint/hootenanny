@@ -18,7 +18,10 @@ function countPois(e) {
 // creates a randomly ordered array of indexes
 function createRandomArray(count, subsamplePercent) {
     // create an array of ascending numbers of count size
-    var result = Array.apply(null, {length: count}).map(Number.call, Number)
+    var result = new Array(count);
+    for (i = 0; i < count; i++) {
+        result[i] = i;
+    }
 
     // randomize the array
     for (var i = result.length - 1; i > 0; i--) {
@@ -98,6 +101,14 @@ function addReviewTags(e) {
         }
     }));
 
+    //console.log(JSON.stringify(tags.toDict(), null, 2));
+    //console.log("## hoot:review:choices:1 ##");
+    //console.log(JSON.stringify(JSON.parse(tags.toDict()["hoot:review:choices:1"]), null, 2));
+    //console.log("## hoot:review:choices:2 ##");
+    //console.log(JSON.stringify(JSON.parse(tags.toDict()["hoot:review:choices:2"]), null, 2));
+    //console.log("## hoot:review:choices:3 ##");
+    //console.log(JSON.stringify(JSON.parse(tags.toDict()["hoot:review:choices:3"]), null, 2));
+
     e.setTags(tags);
 }
 
@@ -108,8 +119,11 @@ hoot.loadMap(map, input, false, 1);
 // count the number of POIs in the map
 map.visit(countPois);
 
+hoot.log(poiCount);
 // Create an array of indexes for the random 30% sample
-var randomIndexes = createRandomArray(poiCount, 0.30).sort();
+var randomIndexes = createRandomArray(poiCount, 0.30).sort(function(a,b) { return a - b; });
+hoot.log(randomIndexes.length);
+randomIndexes[randomIndexes.length] = poiCount;
 
 // go through all the elements
 var index = 0;
@@ -121,9 +135,12 @@ map.visit(function(e) {
             i++;
             // add validation review tags.
             addReviewTags(e);
+        } else if (index > randomIndexes[i]) {
+            throw "Logic error: Expected the index to be <= randomIndexes[i]";
         }
         index++;
     }
 });
+hoot.log(i);
 
 hoot.saveMap(map, output);
