@@ -24,9 +24,9 @@ sub validateNodes($$);
 sub validateOsmXmlWays($$);
 sub validateCurrentWays($$);
 sub validateWays($$);
-sub validateOsmXmlRelations($$);
-sub validateCurrentRelations($$);
-sub validateRelations($$);
+sub validateOsmXmlRelations($$$);
+sub validateCurrentRelations($$$);
+sub validateRelations($$$);
 
 sub convertNanodegreesStringToDegrees($);
 
@@ -58,7 +58,7 @@ sub createOsmDom($$)
 
   my $domRef = $xs->XMLin($xmlString, 
     KeyAttr => { node => 'id', way => 'id', relation=> 'id' }, 
-    ForceArray => [ 'node', 'tag', 'way', 'nd', 'relation' ],
+    ForceArray => [ 'node', 'tag', 'way', 'nd', 'relation', 'member' ],
     ValueAttr => ['ref'] 
   );
 
@@ -1329,9 +1329,10 @@ sub validateWays($$)
   print("\t\tDeep inspection of data integrity: PASS\n");
 }
 
-sub validateCurrentRelations($$)
+sub validateCurrentRelations($$$)
 {
   my $osmXmlRelationsRef = shift(@_);
+  my $domRef = shift(@_);
   my $dumpLinesRef = shift(@_);
 
   my @dumpLines = @{$dumpLinesRef};
@@ -1626,26 +1627,104 @@ sub validateCurrentRelations($$)
       }
     }
 
-    # TODO: need to validate relation_members
+    # Confirm relation members
+    my $xmlMembersArrayRef = $currXmlRelation{'member'};
+    my $dbMembersHashRef = $currentRelationsData{$databaseRelationId}->{'relation_members'};
+
+    # Make sure number of members matches
+    if ( scalar( @{$xmlMembersArrayRef} ) == 
+      scalar( keys( %{ $dbMembersHashRef } ) ) )
+    {
+      print( "Number of relation members matched for relation XML ID $currXmlRelationId/" .
+        "database ID $databaseRelationId\n" );
+    }
+    else
+    {
+      print( "\nDid not match number of members, relation XML ID $currXmlRelationId/" .
+              "database ID $databaseRelationId (" . scalar(@{$xmlMembersArrayRef}) . 
+              " != " . scalar(keys(%{$dbMembersHashRef})) . ")\n" );
+
+      my $xmlMemberNum;
+      for ( $xmlMemberNum = 0; $xmlMemberNum < scalar( @{ $xmlMembersArrayRef } ); 
+          ++$xmlMemberNum )
+      {
+        if ( exists($dbMembersHashRef->{$xmlMemberNum}) )
+        {
+          ;
+        }
+        else
+        {
+          my $currXmlMemberRef = $xmlMembersArrayRef->[$xmlMemberNum];
+          print( "\n\tCould not find XML seq num $xmlMemberNum in DB members\n" );
+          #print ( Dumper( $currXmlMemberRef ) );
+
+          my $checkId;
+          # Confirm it's missing due to an unresolved reference in input data
+          if ( $currXmlMemberRef->{'type'} eq lc('node') )
+          {
+            print( "Need to check possible unresolved relation member node\n");
+            exit;
+          } 
+          elsif ( $currXmlMemberRef->{'type'} eq lc('way') )
+          {
+            if ( ! exists($wayIdMappingsXmlToDb{$currXmlMemberRef->{'ref'}}) )
+            {
+              print( "\tThere is NO trace of $currXmlMemberRef->{'ref'} in " .
+                " the system, so unresolved reference is confirmed\n");
+              next;
+            }
+            my $checkId = $wayIdMappingsXmlToDb{$currXmlMemberRef->{'ref'}};
+            print( "\tChecking if XML way $currXmlMemberRef->{'ref'}" .
+              "/DB way $checkId exists\n" );  
+
+
+            if ( exists($domRef->{way}->{$currXmlMemberRef->{'ref'}}) )
+            {
+              print( "ERROR: missing database relation member\n");
+              exit;
+            }
+            else
+            {
+              print( "\tXML way $currXmlMemberRef->{'ref'} does NOT exist, " .
+                "unresolved references SHOULD be missing from database\n");
+            }
+          }
+          elsif ( $currXmlMemberRef->{'type'} eq lc('relation') )
+          {
+            print( "need to check possible unresolved relation member relation\n");
+            exit;
+          }
+          else
+          {
+            print( "ERROR: unknown relation member type $currXmlMemberRef->{'type'}\n");
+            exit;
+          }
+          exit;
+        }
+      }
+    }
+
+
   } 
 
 
 }
 
-sub validateRelations($$)
+sub validateRelations($$$)
 {
   ;
 }
 
-sub validateOsmXmlRelations($$)
+sub validateOsmXmlRelations($$$)
 {
   my $osmXmlRelationsRef = shift(@_);
+  my $domRef = shift(@_);
   my $dumpLinesRef = shift(@_);
 
   print("\nValidating relations: ways\n");
 
-  validateCurrentRelations($osmXmlRelationsRef, $dumpLinesRef);
-  validateRelations($osmXmlRelationsRef, $dumpLinesRef);
+  validateCurrentRelations($osmXmlRelationsRef, $domRef, $dumpLinesRef);
+  validateRelations($osmXmlRelationsRef, $domRef, $dumpLinesRef);
 }
 
 sub readXmlToDbIdMappings($$)
@@ -1731,4 +1810,4 @@ readXmlToDbIdMappings($xs, $xmlDbIdMappingFile);
 my $domRef = createOsmDom($xs, $concatOsmXml);
 validateOsmXmlNodes($domRef->{node}, \@dumpLines );
 validateOsmXmlWays($domRef->{way}, \@dumpLines );
-validateOsmXmlRelations($domRef->{relation}, \@dumpLines);
+validateOsmXmlRelations($domRef->{relation}, $domRef, \@dumpLines);
