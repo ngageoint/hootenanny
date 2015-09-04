@@ -15,9 +15,10 @@
 
     "tag": { "name": "industrial=*", "isA": "poi=yes" },
     "tag": { "name": "mountain_pass=*", "isA": "poi=yes" },
-    "tag": { "name": "office=*", "isA": "poi=yes" },
+    "tag": { "name": "office=*", "isA": "poi=yes",
+        "similarTo": { "name": "amenity", "weight": 0.1 }
+    },
     "tag": { "name": "slope=yes", "isA": "poi=yes" },
-    "tag": { "name": "tourism=*", "isA": "poi=yes" },
     "tag": { "name": "station", "isA": "poi=yes" },
     "tag": { "name": "station=*", "isA": "station" },
     "tag": { "name": "station=subway_entrance", "isA": "station" },

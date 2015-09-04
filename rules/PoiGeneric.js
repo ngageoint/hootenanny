@@ -44,6 +44,8 @@ var distances = [
     {k:'landuse',                       match:200,      review:600},
     {k:'leisure',                       match:100,      review:200},
     {k:'tourism',                       match:100,      review:200},
+    // hotel campuses can be quite large
+    {k:'tourism',   v:'hotel',          match:200,      review:400},
     {k:'shop',                          match:100,      review:200},
     {k:'station',                       match:100,      review:200},
     {k:'transport',                     match:100,      review:200},
@@ -174,10 +176,9 @@ function additiveScore(map, e1, e2) {
     var weightedPlusMean = mean + weightedWordDistanceScore;
     var placeScore = getTagCategoryDistance("place", e1, e2);
     var poiDistance = getTagCategoryDistance("poi", e1, e2);
-    var artworkTypeDistance = getTagDistance("artwork_type", e1, e2);
-    var cuisineDistance = getTagDistance("cuisine", e1, e2);
-    var sportDistance = getTagDistance("sport", e1, e2);
-    hoot.debug(poiDistance);
+    var artworkTypeDistance = getTagAncestorDistance("artwork_type", e1, e2);
+    var cuisineDistance = getTagAncestorDistance("cuisine", e1, e2);
+    var sportDistance = getTagAncestorDistance("sport", e1, e2);
 
     var score = 0;
 

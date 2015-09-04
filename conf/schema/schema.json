@@ -24,6 +24,7 @@
     "import": "shop.json",
     "import": "sport.json",
     "import": "religion.json",
+    "import": "tourism.json",
     "import": "transport.json",
 
 

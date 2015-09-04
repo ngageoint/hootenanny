@@ -72,8 +72,8 @@
         "name": "shop=car",
         "description": "A shop for cars",
         "isA": "shop",
-        "similarTo": { "name": "amenity=car_wash", "weight": 0.5 },
-        "similarTo": { "name": "amenity=car_rental", "weight": 0.5 },
+        "similarTo": { "name": "amenity=car_wash", "weight": 0.3 },
+        "similarTo": { "name": "amenity=car_rental", "weight": 0.3 },
         "#": "Count in tag info is 56675 on 2015-09-01"
     },
     "tag": {

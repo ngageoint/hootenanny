@@ -4,10 +4,10 @@
     "tag": {
         "name": "historic=memorial",
         "isA": "historic",
+        "similarTo": { "name": "leisure=park", "weight": 0.2 },
         "similarTo": { "name": "historic=monument", "weight": 0.8 },
         "similarTo": { "name": "landuse=cemetery", "weight": 0.6 }
     },
-    "tag": { "name": "historic=monument", "isA": "historic" },
     "tag": {
         "name": "historic=castle",
         "isA": "historic",
@@ -17,6 +17,11 @@
         "name": "historic=ruins",
         "isA": "historic",
         "similarTo": { "name": "place=populated", "weight": 0.4 }
+    },
+    "tag": {
+        "name": "historic=monument",
+        "isA": "historic",
+        "similarTo": { "name": "tourism=artwork", "weight": 0.4 }
     },
 
     "#" : "end"

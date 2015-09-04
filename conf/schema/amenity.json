@@ -88,7 +88,9 @@
         "similarTo": { "name": "amenity=conference_centre", "weight": 0.8 } },
 
     "tag": { "name": "amenity=hotel", "isA": "amenity",
-        "similarTo": { "name": "amenity=hostel", "weight": 0.7 } },
+        "similarTo": { "name": "amenity=hostel", "weight": 0.7 },
+        "similarTo": { "name": "tourism=hotel", "weight": 0.9 }
+    },
     "tag": { "name": "amenity=dormitory", "isA": "amenity",
         "similarTo": { "name": "amenity=hotel", "weight": 0.5 } },
 
@@ -99,8 +101,14 @@
     "tag": { "name": "amenity=public_bath", "isA": "amenity" },
     "tag": { "name": "amenity=public_building", "isA": "amenity",
         "aliases": ["amenity=public_facility", "amenity=public_service",
-                    "amenity=public_service_outbuilding"] },
-    "tag": { "name": "amenity=public_records", "isA": "amenity" },
+                    "amenity=public_service_outbuilding"],
+        "similarTo": { "name": "amenity=townhall", "weight": 0.7 }
+    },
+    "tag": {
+        "name": "amenity=public_records",
+        "isA": "amenity",
+        "similarTo": { "name": "amenity=townhall", "weight": 0.4 }
+    },
 
     "tag": { "name": "amenity=residential", "isA": "amenity" },
     "tag": { "name": "amenity=winery", "isA": "amenity" },
@@ -169,7 +177,7 @@
     "tag": { "name": "amenity=check_cashing", "isA": "amenity",
         "similarTo": { "name": "amenity=bank", "weight": 0.5 } },
     "tag": { "name": "amenity=atm", "isA": "amenity",
-        "aliases": ["amenity=payment_terminal", "atm=yes"],
+        "aliases": ["atm=yes"],
         "similarTo": { "name": "amenity=bank", "weight": 0.5 }
     },
     "tag": { "name": "amenity=payment_terminal", "isA": "amenity",
@@ -191,19 +199,39 @@
 
 
     "#" : "Education",
-    "tag": { "name": "amenity=school", "isA": "amenity",
-        "aliases": ["amenity=education"] },
-    "tag": { "name": "amenity=university", "isA": "amenity",
-        "aliases": ["amenity=college"],
-        "similarTo": { "name": "amenity=school", "weight": 0.7 }  },
+    "tag": {
+        "name": "amenity=education",
+        "isA": "amenity"
+    },
+    "tag": {
+        "name": "amenity=school",
+        "isA": "amenity",
+        "similarTo": { "name": "building=school", "weight": 0.7 },
+        "similarTo": { "name": "amenity=education", "weight": 0.7 }
+    },
+    "tag": {
+        "name": "amenity=college",
+        "isA": "amenity",
+        "similarTo": { "name": "amenity=education", "weight": 0.7 }
+    },
+    "tag": {
+        "name": "amenity=university",
+        "isA": "amenity",
+        "similarTo": { "name": "amenity=college", "weight": 0.8 }
+    },
     "tag": { "name": "amenity=prep_school", "isA": "amenity",
         "similarTo": { "name": "amenity=school", "weight": 0.7 }  },
-    "tag": { "name": "amenity=preschool", "isA": "amenity" },
+    "tag": {
+        "name": "amenity=preschool",
+        "isA": "amenity"
+    },
     "tag": { "name": "amenity=kindergarten", "isA": "amenity",
         "similarTo": { "name": "amenity=preschool", "weight": 0.8 },
         "similarTo": { "name": "amenity=school", "weight": 0.6 }  },
     "tag": { "name": "amenity=childcare", "isA": "amenity",
-        "aliases": ["amenity=creche", "amenity=day_care", "amenity=nursery"] },
+        "similarTo": { "name": "amenity=preschool", "weight": 0.8 },
+        "aliases": ["amenity=creche", "amenity=day_care", "amenity=nursery"]
+    },
 
     "tag": { "name": "amenity=dancing_school", "isA": "amenity",
         "similarTo": { "name": "amenity=school", "weight": 0.3 } },
@@ -319,7 +347,9 @@
 
     "#" : "Medical",
     "tag": { "name": "amenity=hospital", "isA": "amenity",
-        "aliases": ["amenity=medical_centre"] },
+        "aliases": ["amenity=medical_centre"],
+        "similarTo": { "name": "building=hospital", "weight": 0.8 }
+    },
 
     "tag": { "name": "amenity=doctors", "isA": "amenity",
         "aliases": ["amenity=medical"],
@@ -524,7 +554,9 @@
     "tag": { "name": "amenity=brothel", "isA": "amenity" },
     "tag": { "name": "amenity=love_hotel", "isA": "amenity" },
 
-    "tag": { "name": "amenity=music_venue", "isA": "amenity" },
+    "tag": { "name": "amenity=music_venue", "isA": "amenity",
+        "similarTo": { "name": "amenity=night_club", "weight": 0.6 }
+    },
     "tag": { "name": "amenity=membership_organization", "isA": "amenity" },
 
 
