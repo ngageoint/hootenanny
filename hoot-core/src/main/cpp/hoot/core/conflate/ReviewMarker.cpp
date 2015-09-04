@@ -50,7 +50,6 @@ bool ReviewMarker::isNeedsReview(ConstElementPtr e1, ConstElementPtr e2)
 void ReviewMarker::mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, const QString& note,
   double score)
 {
-  LOG_WARN("Marking for review");
   RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, "review"));
   r->getTags().set(reviewNeedsKey(), true);
   if (note.isEmpty())
@@ -66,7 +65,6 @@ void ReviewMarker::mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, co
 
 void ReviewMarker::mark(const OsmMapPtr& map, ElementPtr& e, const QString& note, double score)
 {
-  LOG_WARN("Marking for review");
   RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, "review"));
   r->getTags().set(reviewNeedsKey(), true);
   if (note.isEmpty())
