@@ -265,10 +265,30 @@ hgis20 = {
             }
         }
 
+
     }, // End applyToHgisPreProcessing
 
     applyToHgisPostProcessing : function (tags, attrs, geometryType)
     {
+        // Now use the lookup table to find layerName. This is here to stop clashes with the
+        // standard one2one rules
+        if (!(attrs.XtableName) && hgis20.layerLookup)
+        {
+            for (var col in tags)
+            {
+                var value = tags[col];
+                if (col in hgis20.layerLookup)
+                {
+                    if (value in hgis20.layerLookup[col])
+                    {
+                        var row = hgis20.layerLookup[col][value];
+                        attrs.XtableName = row[1];
+                        // print('layerName: Got ' + attrs.F_CODE);
+                    }
+                }
+            }
+        } // End find layerName
+
         // Start looking for a Table Name
         // Next step is to make this a list: we might get more than one match...
         for (var val in attrs)
@@ -489,16 +509,7 @@ hgis20 = {
         {
             tableName = attrs.XtableName;
             delete attrs.XtableName;
-
-            if (hgis20.rules.thematicGroup[tableName])
-            {
-                tableName = hgis20.rules.thematicGroup[tableName];
-            }
-            else
-            {
-                logError('Tablename not in Thematic Group List: ' + tableName);
-
-            }
+            
             // Validate attrs: remove all that are not supposed to be part of a feature
             hgis20.validateAttrs(geometryType,tableName,attrs);
 

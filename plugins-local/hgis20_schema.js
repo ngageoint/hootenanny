@@ -69,6 +69,7 @@ getDbSchema: function()
     var schema = [
         { name:"Internet_Cafes",
           desc:"Internet_Cafes",
+          fdname:"Communication",
           geom:"Point",
           columns:[
                     ISO3,
@@ -92,6 +93,7 @@ getDbSchema: function()
 
         { name:"Media_Outlets",
           desc:"Media_Outlets",
+          fdname:"Communication",
           geom:"Point",
           columns:[
                     ISO3,
@@ -103,9 +105,9 @@ getDbSchema: function()
                     ADM5_NAME,
                     NAME,
                     TYPE,
-                   { name:"OWNERTYPE",desc:"OWNERTYPE",type:"String",defValue:"999999"},
+                   { name:"OWNERTYPE",desc:"OWNERTYPE",type:"String",defValue:"-999999"},
                     CITY,
-                   { name:"LANGUAGE",desc:"LANGUAGE",type:"String",defValue:"999999"},
+                   { name:"LANGUAGE",desc:"LANGUAGE",type:"String",defValue:"-999999"},
                     SPA_ACC,
                     CONF_IMAGE,
                     COMMENTS,
@@ -118,6 +120,7 @@ getDbSchema: function()
 
         { name:"Admin0_Access_To_Services",
           desc:"Admin0_Access_To_Services",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
@@ -134,6 +137,7 @@ getDbSchema: function()
 
         { name:"Admin1_Access_To_Services",
           desc:"Admin1_Access_To_Services",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
@@ -151,6 +155,7 @@ getDbSchema: function()
 
         { name:"Admin0_Education",
           desc:"Admin0_Education",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
@@ -174,6 +179,7 @@ getDbSchema: function()
 
         { name:"Admin1_Education",
           desc:"Admin1_Education",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
@@ -198,6 +204,7 @@ getDbSchema: function()
 
         { name:"Admin0_Household_Goods",
           desc:"Admin0_Household_Goods",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
@@ -217,6 +224,7 @@ getDbSchema: function()
 
         { name:"Admin1_Household_Goods",
           desc:"Admin1_Household_Goods",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
@@ -237,6 +245,7 @@ getDbSchema: function()
 
         { name:"Admin0_Mortality",
           desc:"Admin0_Mortality",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
@@ -257,6 +266,7 @@ getDbSchema: function()
 
         { name:"Admin1_Mortality",
           desc:"Admin1_Mortality",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
@@ -278,6 +288,7 @@ getDbSchema: function()
 
         { name:"Admin0_Population",
           desc:"Admin0_Population",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
@@ -301,6 +312,7 @@ getDbSchema: function()
 
         { name:"Admin1_Population",
           desc:"Admin1_Population",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
@@ -325,6 +337,7 @@ getDbSchema: function()
 
         { name:"Admin2_Population",
           desc:"Admin2_Population",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
@@ -350,6 +363,7 @@ getDbSchema: function()
 
         { name:"Admin0_Poverty",
           desc:"Admin0_Poverty",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
@@ -361,7 +375,7 @@ getDbSchema: function()
                    { name:"ELECTRIC",desc:"ELECTRIC",type:"Real",defValue:"-999999.0"},
                    { name:"ASSETS",desc:"ASSETS",type:"Real",defValue:"-999999.0"},
                    { name:"UE",desc:"UE",type:"Real",defValue:"-999999.0"},
-                    LFPR,
+                   { name:"LFPR",desc:"LFPR",type:"Real",defValue:"-999999.0"},
                    { name:"U5_MR",desc:"U5_MR",type:"Real",defValue:"-999999.0"},
                    { name:"PREV_DIS",desc:"PREV_DIS",type:"Real",defValue:"-999999.0"},
                    { name:"HIV",desc:"HIV",type:"Real",defValue:"-999999.0"},
@@ -385,6 +399,7 @@ getDbSchema: function()
 
         { name:"Admin1_Poverty",
           desc:"Admin1_Poverty",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
@@ -397,7 +412,7 @@ getDbSchema: function()
                    { name:"ELECTRIC",desc:"ELECTRIC",type:"Real",defValue:"-999999.0"},
                    { name:"ASSETS",desc:"ASSETS",type:"Real",defValue:"-999999.0"},
                    { name:"UE",desc:"UE",type:"Real",defValue:"-999999.0"},
-                    LFPR,
+                   { name:"LFPR",desc:"LFPR",type:"Real",defValue:"-999999.0"},
                    { name:"U5_MR",desc:"U5_MR",type:"Real",defValue:"-999999.0"},
                    { name:"PREV_DIS",desc:"PREV_DIS",type:"Real",defValue:"-999999.0"},
                    { name:"HIV",desc:"HIV",type:"Real",defValue:"-999999.0"},
@@ -421,11 +436,12 @@ getDbSchema: function()
 
         { name:"Admin0_Employment",
           desc:"Admin0_Employment",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
                     ADM0_NAME,
-                    LFPR,
+                   { name:"LFPR",desc:"LFPR",type:"Real",defValue:"-999999.0"},
                    { name:"ECO_ACT_T",desc:"ECO_ACT_T",type:"Real",defValue:"-999999.0"},
                    { name:"ECO_ACT_M",desc:"ECO_ACT_M",type:"Real",defValue:"-999999.0"},
                    { name:"ECO_ACT_F",desc:"ECO_ACT_F",type:"Real",defValue:"-999999.0"},
@@ -446,12 +462,13 @@ getDbSchema: function()
 
         { name:"Admin1_Employment",
           desc:"Admin1_Employment",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
                     ADM0_NAME,
                     ADM1_NAME,
-                    LFPR,
+                   { name:"LFPR",desc:"LFPR",type:"Real",defValue:"-999999.0"},
                    { name:"ECO_ACT_T",desc:"ECO_ACT_T",type:"Real",defValue:"-999999.0"},
                    { name:"ECO_ACT_M",desc:"ECO_ACT_M",type:"Real",defValue:"-999999.0"},
                    { name:"ECO_ACT_F",desc:"ECO_ACT_F",type:"Real",defValue:"-999999.0"},
@@ -472,6 +489,7 @@ getDbSchema: function()
 
         { name:"Admin2_Access_To_Services",
           desc:"Admin2_Access_To_Services",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
@@ -490,6 +508,7 @@ getDbSchema: function()
 
         { name:"Admin2_Education",
           desc:"Admin2_Education",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
@@ -515,13 +534,14 @@ getDbSchema: function()
 
         { name:"Admin2_Employment",
           desc:"Admin2_Employment",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
                     ADM0_NAME,
                     ADM1_NAME,
                     ADM2_NAME,
-                    LFPR,
+                   { name:"LFPR",desc:"LFPR",type:"Real",defValue:"-999999.0"},
                    { name:"ECO_ACT_T",desc:"ECO_ACT_T",type:"Real",defValue:"-999999.0"},
                    { name:"ECO_ACT_M",desc:"ECO_ACT_M",type:"Real",defValue:"-999999.0"},
                    { name:"ECO_ACT_F",desc:"ECO_ACT_F",type:"Real",defValue:"-999999.0"},
@@ -542,6 +562,7 @@ getDbSchema: function()
 
         { name:"Admin2_Mortality",
           desc:"Admin2_Mortality",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
@@ -564,6 +585,7 @@ getDbSchema: function()
 
         { name:"Admin2_Household_Goods",
           desc:"Admin2_Household_Goods",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
@@ -585,6 +607,7 @@ getDbSchema: function()
 
         { name:"Admin2_Poverty",
           desc:"Admin2_Poverty",
+          fdname:"Demographics",
           geom:"Area",
           columns:[
                     ISO3,
@@ -598,7 +621,7 @@ getDbSchema: function()
                    { name:"ELECTRIC",desc:"ELECTRIC",type:"Real",defValue:"-999999.0"},
                    { name:"ASSETS",desc:"ASSETS",type:"Real",defValue:"-999999.0"},
                    { name:"UE",desc:"UE",type:"Real",defValue:"-999999.0"},
-                    LFPR,
+                   { name:"LFPR",desc:"LFPR",type:"Real",defValue:"-999999.0"},
                    { name:"U5_MR",desc:"U5_MR",type:"Real",defValue:"-999999.0"},
                    { name:"PREV_DIS",desc:"PREV_DIS",type:"Real",defValue:"-999999.0"},
                    { name:"HIV",desc:"HIV",type:"Real",defValue:"-999999.0"},
@@ -622,6 +645,7 @@ getDbSchema: function()
 
         { name:"Roads",
           desc:"Roads",
+          fdname:"Critical_Infrastructure",
           geom:"Line",
           columns:[
                     ISO3,
@@ -638,6 +662,7 @@ getDbSchema: function()
 
         { name:"Railways",
           desc:"Railways",
+          fdname:"Critical_Infrastructure",
           geom:"Line",
           columns:[
                     ISO3,
@@ -655,6 +680,7 @@ getDbSchema: function()
 
         { name:"Airfields",
           desc:"Airfields",
+          fdname:"Critical_Infrastructure",
           geom:"Point",
           columns:[
                     ISO3,
@@ -666,16 +692,16 @@ getDbSchema: function()
                     ADM5_NAME,
                     NAME,
                     TYPE,
-                   { name:"ICAO",desc:"ICAO",type:"String",defValue:"999999"},
-                   { name:"IATA",desc:"IATA",type:"String",defValue:"999999"},
-                   { name:"RUNWAY",desc:"RUNWAY",type:"String",defValue:"999999"},
+                   { name:"ICAO",desc:"ICAO",type:"String",defValue:"-999999"},
+                   { name:"IATA",desc:"IATA",type:"String",defValue:"-999999"},
+                   { name:"RUNWAY",desc:"RUNWAY",type:"String",defValue:"-999999"},
                    { name:"N_RUNWAYS",desc:"N_RUNWAYS",type:"Real",defValue:"-999999.0"},
-                   { name:"R1_SURFACE",desc:"R1_SURFACE",type:"String",defValue:"999999"},
-                   { name:"R2_SURFACE",desc:"R2_SURFACE",type:"String",defValue:"999999"},
+                   { name:"R1_SURFACE",desc:"R1_SURFACE",type:"String",defValue:"-999999"},
+                   { name:"R2_SURFACE",desc:"R2_SURFACE",type:"String",defValue:"-999999"},
                    { name:"R_LENGTH",desc:"R_LENGTH",type:"Real",defValue:"-999999.0"},
                    { name:"R_WIDTH",desc:"R_WIDTH",type:"Real",defValue:"-999999.0"},
-                   { name:"USE",desc:"USE",type:"String",defValue:"999999"},
-                   { name:"CUSTOMS",desc:"CUSTOMS",type:"String",defValue:"999999"},
+                   { name:"USE",desc:"USE",type:"String",defValue:"-999999"},
+                   { name:"CUSTOMS",desc:"CUSTOMS",type:"String",defValue:"-999999"},
                     SPA_ACC,
                     CONF_IMAGE,
                     COMMENTS,
@@ -688,6 +714,7 @@ getDbSchema: function()
 
         { name:"Bridges_Tunnels",
           desc:"Bridges_Tunnels",
+          fdname:"Critical_Infrastructure",
           geom:"Point",
           columns:[
                     ISO3,
@@ -713,6 +740,7 @@ getDbSchema: function()
 
         { name:"Dams",
           desc:"Dams",
+          fdname:"Critical_Infrastructure",
           geom:"Point",
           columns:[
                     ISO3,
@@ -725,10 +753,10 @@ getDbSchema: function()
                     NAME,
                     TYPE,
                     CITY,
-                   { name:"RIVER",desc:"RIVER",type:"String",defValue:"999999"},
-                   { name:"YR_OPER",desc:"YR_OPER",type:"String",defValue:"999999"},
-                   { name:"HEIGHT",desc:"HEIGHT",type:"String",defValue:"999999"},
-                   { name:"CAPACITY",desc:"CAPACITY",type:"String",defValue:"999999"},
+                   { name:"RIVER",desc:"RIVER",type:"String",defValue:"-999999"},
+                   { name:"YR_OPER",desc:"YR_OPER",type:"String",defValue:"-999999"},
+                   { name:"HEIGHT",desc:"HEIGHT",type:"String",defValue:"-999999"},
+                   { name:"CAPACITY",desc:"CAPACITY",type:"String",defValue:"-999999"},
                     SPA_ACC,
                     CONF_IMAGE,
                     COMMENTS,
@@ -741,6 +769,7 @@ getDbSchema: function()
 
         { name:"Electrical_POI",
           desc:"Electrical_POI",
+          fdname:"Critical_Infrastructure",
           geom:"Point",
           columns:[
                     ISO3,
@@ -765,6 +794,7 @@ getDbSchema: function()
 
         { name:"Marine_POI",
           desc:"Marine_POI",
+          fdname:"Critical_Infrastructure",
           geom:"Point",
           columns:[
                     ISO3,
@@ -789,6 +819,7 @@ getDbSchema: function()
 
         { name:"Ports",
           desc:"Ports",
+          fdname:"Critical_Infrastructure",
           geom:"Point",
           columns:[
                     ISO3,
@@ -798,72 +829,72 @@ getDbSchema: function()
                     ADM3_NAME,
                     ADM4_NAME,
                     ADM5_NAME,
-                   { name:"PORT_NAME",desc:"PORT_NAME",type:"String",defValue:"999999"},
+                   { name:"PORT_NAME",desc:"PORT_NAME",type:"String",defValue:"-999999"},
                     CITY,
-                   { name:"HARBORSIZE",desc:"HARBORSIZE",type:"String",defValue:"999999"},
-                   { name:"HARBORTYPE",desc:"HARBORTYPE",type:"String",defValue:"999999"},
-                   { name:"SHELTER",desc:"SHELTER",type:"String",defValue:"999999"},
-                   { name:"ENTRY_TIDE",desc:"ENTRY_TIDE",type:"String",defValue:"999999"},
-                   { name:"ENTRYSWELL",desc:"ENTRYSWELL",type:"String",defValue:"999999"},
-                   { name:"ENTRY_ICE",desc:"ENTRY_ICE",type:"String",defValue:"999999"},
-                   { name:"ENTRYOTHER",desc:"ENTRYOTHER",type:"String",defValue:"999999"},
-                   { name:"OVERHD_LIM",desc:"OVERHD_LIM",type:"String",defValue:"999999"},
-                   { name:"CHAN_DEPTH",desc:"CHAN_DEPTH",type:"String",defValue:"999999"},
-                   { name:"ANCH_DEPTH",desc:"ANCH_DEPTH",type:"String",defValue:"999999"},
-                   { name:"CARGODEPTH",desc:"CARGODEPTH",type:"String",defValue:"999999"},
-                   { name:"OIL_DEPTH",desc:"OIL_DEPTH",type:"String",defValue:"999999"},
+                   { name:"HARBORSIZE",desc:"HARBORSIZE",type:"String",defValue:"-999999"},
+                   { name:"HARBORTYPE",desc:"HARBORTYPE",type:"String",defValue:"-999999"},
+                   { name:"SHELTER",desc:"SHELTER",type:"String",defValue:"-999999"},
+                   { name:"ENTRY_TIDE",desc:"ENTRY_TIDE",type:"String",defValue:"-999999"},
+                   { name:"ENTRYSWELL",desc:"ENTRYSWELL",type:"String",defValue:"-999999"},
+                   { name:"ENTRY_ICE",desc:"ENTRY_ICE",type:"String",defValue:"-999999"},
+                   { name:"ENTRYOTHER",desc:"ENTRYOTHER",type:"String",defValue:"-999999"},
+                   { name:"OVERHD_LIM",desc:"OVERHD_LIM",type:"String",defValue:"-999999"},
+                   { name:"CHAN_DEPTH",desc:"CHAN_DEPTH",type:"String",defValue:"-999999"},
+                   { name:"ANCH_DEPTH",desc:"ANCH_DEPTH",type:"String",defValue:"-999999"},
+                   { name:"CARGODEPTH",desc:"CARGODEPTH",type:"String",defValue:"-999999"},
+                   { name:"OIL_DEPTH",desc:"OIL_DEPTH",type:"String",defValue:"-999999"},
                    { name:"TIDE_RANGE",desc:"TIDE_RANGE",type:"Real",defValue:"-999999.0"},
-                   { name:"MAX_VESSEL",desc:"MAX_VESSEL",type:"String",defValue:"999999"},
-                   { name:"HOLDGROUND",desc:"HOLDGROUND",type:"String",defValue:"999999"},
-                   { name:"TURN_BASIN",desc:"TURN_BASIN",type:"String",defValue:"999999"},
-                   { name:"PORTOFENTR",desc:"PORTOFENTR",type:"String",defValue:"999999"},
-                   { name:"US_REP",desc:"US_REP",type:"String",defValue:"999999"},
-                   { name:"ETAMESSAGE",desc:"ETAMESSAGE",type:"String",defValue:"999999"},
-                   { name:"PILOT_REQD",desc:"PILOT_REQD",type:"String",defValue:"999999"},
-                   { name:"PILOTAVAIL",desc:"PILOTAVAIL",type:"String",defValue:"999999"},
-                   { name:"LOC_ASSIST",desc:"LOC_ASSIST",type:"String",defValue:"999999"},
-                   { name:"PILOTADVSD",desc:"PILOTADVSD",type:"String",defValue:"999999"},
-                   { name:"TUGSALVAGE",desc:"TUGSALVAGE",type:"String",defValue:"999999"},
-                   { name:"TUG_ASSIST",desc:"TUG_ASSIST",type:"String",defValue:"999999"},
-                   { name:"PRATIQUE",desc:"PRATIQUE",type:"String",defValue:"999999"},
-                   { name:"SSCC_CERT",desc:"SSCC_CERT",type:"String",defValue:"999999"},
-                   { name:"QUAR_OTHER",desc:"QUAR_OTHER",type:"String",defValue:"999999"},
-                   { name:"COMM_PHONE",desc:"COMM_PHONE",type:"String",defValue:"999999"},
-                   { name:"COMM_FAX",desc:"COMM_FAX",type:"String",defValue:"999999"},
-                   { name:"COMM_RADIO",desc:"COMM_RADIO",type:"String",defValue:"999999"},
-                   { name:"COMM_VHF",desc:"COMM_VHF",type:"String",defValue:"999999"},
-                   { name:"COMM_AIR",desc:"COMM_AIR",type:"String",defValue:"999999"},
-                   { name:"COMM_RAIL",desc:"COMM_RAIL",type:"String",defValue:"999999"},
-                   { name:"CARGOWHARF",desc:"CARGOWHARF",type:"String",defValue:"999999"},
-                   { name:"CARGO_ANCH",desc:"CARGO_ANCH",type:"String",defValue:"999999"},
-                   { name:"CARGMDMOOR",desc:"CARGMDMOOR",type:"String",defValue:"999999"},
-                   { name:"CARBCHMOOR",desc:"CARBCHMOOR",type:"String",defValue:"999999"},
-                   { name:"CARICEMOOR",desc:"CARICEMOOR",type:"String",defValue:"999999"},
-                   { name:"MED_FACIL",desc:"MED_FACIL",type:"String",defValue:"999999"},
-                   { name:"GARBAGE",desc:"GARBAGE",type:"String",defValue:"999999"},
-                   { name:"DEGAUSS",desc:"DEGAUSS",type:"String",defValue:"999999"},
-                   { name:"DRTYBALLST",desc:"DRTYBALLST",type:"String",defValue:"999999"},
-                   { name:"CRANEFIXED",desc:"CRANEFIXED",type:"String",defValue:"999999"},
-                   { name:"CRANEMOBIL",desc:"CRANEMOBIL",type:"String",defValue:"999999"},
-                   { name:"CRANEFLOAT",desc:"CRANEFLOAT",type:"String",defValue:"999999"},
-                   { name:"LIFT_100_O",desc:"LIFT_100_O",type:"String",defValue:"999999"},
-                   { name:"LIFT50_100",desc:"LIFT50_100",type:"String",defValue:"999999"},
-                   { name:"LIFT_25_49",desc:"LIFT_25_49",type:"String",defValue:"999999"},
-                   { name:"LIFT_0_24",desc:"LIFT_0_24",type:"String",defValue:"999999"},
-                   { name:"LONGSHORE",desc:"LONGSHORE",type:"String",defValue:"999999"},
-                   { name:"ELECTRICAL",desc:"ELECTRICAL",type:"String",defValue:"999999"},
-                   { name:"SERV_STEAM",desc:"SERV_STEAM",type:"String",defValue:"999999"},
-                   { name:"NAV_EQUIP",desc:"NAV_EQUIP",type:"String",defValue:"999999"},
-                   { name:"ELECREPAIR",desc:"ELECREPAIR",type:"String",defValue:"999999"},
-                   { name:"PROVISIONS",desc:"PROVISIONS",type:"String",defValue:"999999"},
-                   { name:"WATER",desc:"WATER",type:"String",defValue:"999999"},
-                   { name:"FUEL_OIL",desc:"FUEL_OIL",type:"String",defValue:"999999"},
-                   { name:"DIESEL",desc:"DIESEL",type:"String",defValue:"999999"},
-                   { name:"DECKSUPPLY",desc:"DECKSUPPLY",type:"String",defValue:"999999"},
-                   { name:"ENG_SUPPLY",desc:"ENG_SUPPLY",type:"String",defValue:"999999"},
-                   { name:"REPAIRCODE",desc:"REPAIRCODE",type:"String",defValue:"999999"},
-                   { name:"DRYDOCK",desc:"DRYDOCK",type:"String",defValue:"999999"},
-                   { name:"RAILWAY",desc:"RAILWAY",type:"String",defValue:"999999"},
+                   { name:"MAX_VESSEL",desc:"MAX_VESSEL",type:"String",defValue:"-999999"},
+                   { name:"HOLDGROUND",desc:"HOLDGROUND",type:"String",defValue:"-999999"},
+                   { name:"TURN_BASIN",desc:"TURN_BASIN",type:"String",defValue:"-999999"},
+                   { name:"PORTOFENTR",desc:"PORTOFENTR",type:"String",defValue:"-999999"},
+                   { name:"US_REP",desc:"US_REP",type:"String",defValue:"-999999"},
+                   { name:"ETAMESSAGE",desc:"ETAMESSAGE",type:"String",defValue:"-999999"},
+                   { name:"PILOT_REQD",desc:"PILOT_REQD",type:"String",defValue:"-999999"},
+                   { name:"PILOTAVAIL",desc:"PILOTAVAIL",type:"String",defValue:"-999999"},
+                   { name:"LOC_ASSIST",desc:"LOC_ASSIST",type:"String",defValue:"-999999"},
+                   { name:"PILOTADVSD",desc:"PILOTADVSD",type:"String",defValue:"-999999"},
+                   { name:"TUGSALVAGE",desc:"TUGSALVAGE",type:"String",defValue:"-999999"},
+                   { name:"TUG_ASSIST",desc:"TUG_ASSIST",type:"String",defValue:"-999999"},
+                   { name:"PRATIQUE",desc:"PRATIQUE",type:"String",defValue:"-999999"},
+                   { name:"SSCC_CERT",desc:"SSCC_CERT",type:"String",defValue:"-999999"},
+                   { name:"QUAR_OTHER",desc:"QUAR_OTHER",type:"String",defValue:"-999999"},
+                   { name:"COMM_PHONE",desc:"COMM_PHONE",type:"String",defValue:"-999999"},
+                   { name:"COMM_FAX",desc:"COMM_FAX",type:"String",defValue:"-999999"},
+                   { name:"COMM_RADIO",desc:"COMM_RADIO",type:"String",defValue:"-999999"},
+                   { name:"COMM_VHF",desc:"COMM_VHF",type:"String",defValue:"-999999"},
+                   { name:"COMM_AIR",desc:"COMM_AIR",type:"String",defValue:"-999999"},
+                   { name:"COMM_RAIL",desc:"COMM_RAIL",type:"String",defValue:"-999999"},
+                   { name:"CARGOWHARF",desc:"CARGOWHARF",type:"String",defValue:"-999999"},
+                   { name:"CARGO_ANCH",desc:"CARGO_ANCH",type:"String",defValue:"-999999"},
+                   { name:"CARGMDMOOR",desc:"CARGMDMOOR",type:"String",defValue:"-999999"},
+                   { name:"CARBCHMOOR",desc:"CARBCHMOOR",type:"String",defValue:"-999999"},
+                   { name:"CARICEMOOR",desc:"CARICEMOOR",type:"String",defValue:"-999999"},
+                   { name:"MED_FACIL",desc:"MED_FACIL",type:"String",defValue:"-999999"},
+                   { name:"GARBAGE",desc:"GARBAGE",type:"String",defValue:"-999999"},
+                   { name:"DEGAUSS",desc:"DEGAUSS",type:"String",defValue:"-999999"},
+                   { name:"DRTYBALLST",desc:"DRTYBALLST",type:"String",defValue:"-999999"},
+                   { name:"CRANEFIXED",desc:"CRANEFIXED",type:"String",defValue:"-999999"},
+                   { name:"CRANEMOBIL",desc:"CRANEMOBIL",type:"String",defValue:"-999999"},
+                   { name:"CRANEFLOAT",desc:"CRANEFLOAT",type:"String",defValue:"-999999"},
+                   { name:"LIFT_100_O",desc:"LIFT_100_O",type:"String",defValue:"-999999"},
+                   { name:"LIFT50_100",desc:"LIFT50_100",type:"String",defValue:"-999999"},
+                   { name:"LIFT_25_49",desc:"LIFT_25_49",type:"String",defValue:"-999999"},
+                   { name:"LIFT_0_24",desc:"LIFT_0_24",type:"String",defValue:"-999999"},
+                   { name:"LONGSHORE",desc:"LONGSHORE",type:"String",defValue:"-999999"},
+                   { name:"ELECTRICAL",desc:"ELECTRICAL",type:"String",defValue:"-999999"},
+                   { name:"SERV_STEAM",desc:"SERV_STEAM",type:"String",defValue:"-999999"},
+                   { name:"NAV_EQUIP",desc:"NAV_EQUIP",type:"String",defValue:"-999999"},
+                   { name:"ELECREPAIR",desc:"ELECREPAIR",type:"String",defValue:"-999999"},
+                   { name:"PROVISIONS",desc:"PROVISIONS",type:"String",defValue:"-999999"},
+                   { name:"WATER",desc:"WATER",type:"String",defValue:"-999999"},
+                   { name:"FUEL_OIL",desc:"FUEL_OIL",type:"String",defValue:"-999999"},
+                   { name:"DIESEL",desc:"DIESEL",type:"String",defValue:"-999999"},
+                   { name:"DECKSUPPLY",desc:"DECKSUPPLY",type:"String",defValue:"-999999"},
+                   { name:"ENG_SUPPLY",desc:"ENG_SUPPLY",type:"String",defValue:"-999999"},
+                   { name:"REPAIRCODE",desc:"REPAIRCODE",type:"String",defValue:"-999999"},
+                   { name:"DRYDOCK",desc:"DRYDOCK",type:"String",defValue:"-999999"},
+                   { name:"RAILWAY",desc:"RAILWAY",type:"String",defValue:"-999999"},
                     SPA_ACC,
                     CONF_IMAGE,
                     COMMENTS,
@@ -876,6 +907,7 @@ getDbSchema: function()
 
         { name:"Public_Transportation_POI",
           desc:"Public_Transportation_POI",
+          fdname:"Critical_Infrastructure",
           geom:"Point",
           columns:[
                     ISO3,
@@ -901,6 +933,7 @@ getDbSchema: function()
 
         { name:"Railways_POI",
           desc:"Railways_POI",
+          fdname:"Critical_Infrastructure",
           geom:"Point",
           columns:[
                     ISO3,
@@ -926,6 +959,7 @@ getDbSchema: function()
 
         { name:"Power_Plants",
           desc:"Power_Plants",
+          fdname:"Critical_Infrastructure",
           geom:"Point",
           columns:[
                     ISO3,
@@ -938,10 +972,10 @@ getDbSchema: function()
                     NAME,
                     TYPE,
                     CITY,
-                   { name:"NUM_GEN",desc:"NUM_GEN",type:"String",defValue:"999999"},
-                   { name:"TOT_CAP_MW",desc:"TOT_CAP_MW",type:"String",defValue:"999999"},
-                   { name:"OP_STATUS",desc:"OP_STATUS",type:"String",defValue:"999999"},
-                   { name:"OP_CON",desc:"OP_CON",type:"String",defValue:"999999"},
+                   { name:"NUM_GEN",desc:"NUM_GEN",type:"String",defValue:"-999999"},
+                   { name:"TOT_CAP_MW",desc:"TOT_CAP_MW",type:"String",defValue:"-999999"},
+                   { name:"OP_STATUS",desc:"OP_STATUS",type:"String",defValue:"-999999"},
+                   { name:"OP_CON",desc:"OP_CON",type:"String",defValue:"-999999"},
                     SPA_ACC,
                     CONF_IMAGE,
                     COMMENTS,
@@ -954,6 +988,7 @@ getDbSchema: function()
 
         { name:"Hydrology_POI",
           desc:"Hydrology_POI",
+          fdname:"Critical_Infrastructure",
           geom:"Point",
           columns:[
                     ISO3,
@@ -978,14 +1013,15 @@ getDbSchema: function()
 
         { name:"Free_Trade_Zones_Polygons",
           desc:"Free_Trade_Zones_Polygons",
+          fdname:"Economy",
           geom:"Area",
           columns:[
                     ISO3,
                     ADM0_NAME,
                     NAME,
-                   { name:"STATUS",desc:"STATUS",type:"String",defValue:"999999"},
-                   { name:"OWNERTYPE",desc:"OWNERTYPE",type:"String",defValue:"999999"},
-                   { name:"LOCATION",desc:"LOCATION",type:"String",defValue:"999999"},
+                   { name:"STATUS",desc:"STATUS",type:"String",defValue:"-999999"},
+                   { name:"OWNERTYPE",desc:"OWNERTYPE",type:"String",defValue:"-999999"},
+                   { name:"LOCATION",desc:"LOCATION",type:"String",defValue:"-999999"},
                     COMMENTS,
                     SOURCE_DT,
                     SOURCE,
@@ -996,6 +1032,7 @@ getDbSchema: function()
 
         { name:"Agricultural_POI",
           desc:"Agricultural_POI",
+          fdname:"Economy",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1021,6 +1058,7 @@ getDbSchema: function()
 
         { name:"Commercial_POI",
           desc:"Commercial_POI",
+          fdname:"Economy",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1046,6 +1084,7 @@ getDbSchema: function()
 
         { name:"Free_Trade_Zones",
           desc:"Free_Trade_Zones",
+          fdname:"Economy",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1056,8 +1095,8 @@ getDbSchema: function()
                     ADM4_NAME,
                     ADM5_NAME,
                     NAME,
-                   { name:"STATUS",desc:"STATUS",type:"String",defValue:"999999"},
-                   { name:"OWNERSHIP",desc:"OWNERSHIP",type:"String",defValue:"999999"},
+                   { name:"STATUS",desc:"STATUS",type:"String",defValue:"-999999"},
+                   { name:"OWNERSHIP",desc:"OWNERSHIP",type:"String",defValue:"-999999"},
                     CITY,
                     COMMENTS,
                     SOURCE_DT,
@@ -1069,6 +1108,7 @@ getDbSchema: function()
 
         { name:"Lodging_POI",
           desc:"Lodging_POI",
+          fdname:"Economy",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1094,6 +1134,7 @@ getDbSchema: function()
 
         { name:"Recreation_POI",
           desc:"Recreation_POI",
+          fdname:"Economy",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1118,6 +1159,7 @@ getDbSchema: function()
 
         { name:"Tourist_Locations_POI",
           desc:"Tourist_Locations_POI",
+          fdname:"Economy",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1142,6 +1184,7 @@ getDbSchema: function()
 
         { name:"Foreign_Investment_Projects",
           desc:"Foreign_Investment_Projects",
+          fdname:"Economy",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1152,14 +1195,14 @@ getDbSchema: function()
                     ADM4_NAME,
                     ADM5_NAME,
                     NAME,
-                   { name:"SECTOR",desc:"SECTOR",type:"String",defValue:"999999"},
-                   { name:"DESCRIP",desc:"DESCRIP",type:"String",defValue:"999999"},
-                   { name:"LEND_INSTR",desc:"LEND_INSTR",type:"String",defValue:"999999"},
+                   { name:"SECTOR",desc:"SECTOR",type:"String",defValue:"-999999"},
+                   { name:"DESCRIP",desc:"DESCRIP",type:"String",defValue:"-999999"},
+                   { name:"LEND_INSTR",desc:"LEND_INSTR",type:"String",defValue:"-999999"},
                     CITY,
                    { name:"VALUE",desc:"VALUE",type:"Real",defValue:"-999999.0"},
-                   { name:"APP_DATE",desc:"APP_DATE",type:"String",defValue:"999999"},
+                   { name:"APP_DATE",desc:"APP_DATE",type:"String",defValue:"-999999"},
                    { name:"APP_YEAR",desc:"APP_YEAR",type:"Real",defValue:"-999999.0"},
-                   { name:"FI_STATUS",desc:"FI_STATUS",type:"String",defValue:"999999"},
+                   { name:"FI_STATUS",desc:"FI_STATUS",type:"String",defValue:"-999999"},
                     SPA_ACC,
                     COMMENTS,
                     SOURCE_DT,
@@ -1171,15 +1214,16 @@ getDbSchema: function()
 
         { name:"HADR",
           desc:"HADR",
+          fdname:"Significant_Events",
           geom:"Area",
           columns:[
                     ISO3,
                     ADM0_NAME,
-                   { name:"AREA_AFF",desc:"AREA_AFF",type:"String",defValue:"999999"},
+                   { name:"AREA_AFF",desc:"AREA_AFF",type:"String",defValue:"-999999"},
                     TYPE1,
                     TYPE2,
-                   { name:"START_DT",desc:"START_DT",type:"String",defValue:"999999"},
-                   { name:"END_DT",desc:"END_DT",type:"String",defValue:"999999"},
+                   { name:"START_DT",desc:"START_DT",type:"String",defValue:"-999999"},
+                   { name:"END_DT",desc:"END_DT",type:"String",defValue:"-999999"},
                    { name:"TL_AFFECT",desc:"TL_AFFECT",type:"Real",defValue:"-999999.0"},
                    { name:"FATALITY",desc:"FATALITY",type:"Real",defValue:"-999999.0"},
                     COMMENTS,
@@ -1193,6 +1237,7 @@ getDbSchema: function()
 
         { name:"Conflict_Points",
           desc:"Conflict_Points",
+          fdname:"Significant_Events",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1202,14 +1247,14 @@ getDbSchema: function()
                     ADM3_NAME,
                     ADM4_NAME,
                     ADM5_NAME,
-                   { name:"LOCATION",desc:"LOCATION",type:"String",defValue:"999999"},
-                   { name:"ACTOR1",desc:"ACTOR1",type:"String",defValue:"999999"},
-                   { name:"ACTOR2",desc:"ACTOR2",type:"String",defValue:"999999"},
-                   { name:"EVENT_TYPE",desc:"EVENT_TYPE",type:"String",defValue:"999999"},
-                   { name:"DATE",desc:"DATE",type:"String",defValue:"999999"},
+                   { name:"LOCATION",desc:"LOCATION",type:"String",defValue:"-999999"},
+                   { name:"ACTOR1",desc:"ACTOR1",type:"String",defValue:"-999999"},
+                   { name:"ACTOR2",desc:"ACTOR2",type:"String",defValue:"-999999"},
+                   { name:"EVENT_TYPE",desc:"EVENT_TYPE",type:"String",defValue:"-999999"},
+                   { name:"DATE",desc:"DATE",type:"String",defValue:"-999999"},
                    { name:"YEAR",desc:"YEAR",type:"Real",defValue:"-999999.0"},
                     SPA_ACC,
-                   { name:"ORG_SOURCE",desc:"ORG_SOURCE",type:"String",defValue:"999999"},
+                   { name:"ORG_SOURCE",desc:"ORG_SOURCE",type:"String",defValue:"-999999"},
                    { name:"NUM_DTH",desc:"NUM_DTH",type:"Real",defValue:"-999999.0"},
                    { name:"NUM_INJ",desc:"NUM_INJ",type:"Real",defValue:"-999999.0"},
                     COMMENTS,
@@ -1222,6 +1267,7 @@ getDbSchema: function()
 
         { name:"Educational_Institutions",
           desc:"Educational_Institutions",
+          fdname:"Education",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1232,7 +1278,7 @@ getDbSchema: function()
                     ADM4_NAME,
                     ADM5_NAME,
                     NAME,
-                   { name:"ADDRESS",desc:"ADDRESS",type:"String",defValue:"999999"},
+                   { name:"ADDRESS",desc:"ADDRESS",type:"String",defValue:"-999999"},
                     CITY,
                     TYPE1,
                     TYPE2,
@@ -1253,6 +1299,7 @@ getDbSchema: function()
 
         { name:"Libraries",
           desc:"Libraries",
+          fdname:"Education",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1276,6 +1323,7 @@ getDbSchema: function()
 
         { name:"Religion",
           desc:"Religion",
+          fdname:"Religion",
           geom:"Area",
           columns:[
                     ISO3,
@@ -1292,6 +1340,7 @@ getDbSchema: function()
 
         { name:"Religious_Institutions",
           desc:"Religious_Institutions",
+          fdname:"Religion",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1316,16 +1365,17 @@ getDbSchema: function()
 
         { name:"Ethnicity",
           desc:"Ethnicity",
+          fdname:"Culture_Ethnicity",
           geom:"Area",
           columns:[
                     ISO3,
                     ADM0_NAME,
-                   { name:"PEOPLEGP_1",desc:"PEOPLEGP_1",type:"String",defValue:"999999"},
-                   { name:"PEOPLEGP_2",desc:"PEOPLEGP_2",type:"String",defValue:"999999"},
-                   { name:"PEOPLEGP_3",desc:"PEOPLEGP_3",type:"String",defValue:"999999"},
-                   { name:"PEOPLEGP_4",desc:"PEOPLEGP_4",type:"String",defValue:"999999"},
-                   { name:"PEOPLEGP_5",desc:"PEOPLEGP_5",type:"String",defValue:"999999"},
-                   { name:"ALT_NAMES",desc:"ALT_NAMES",type:"String",defValue:"999999"},
+                   { name:"PEOPLEGP_1",desc:"PEOPLEGP_1",type:"String",defValue:"-999999"},
+                   { name:"PEOPLEGP_2",desc:"PEOPLEGP_2",type:"String",defValue:"-999999"},
+                   { name:"PEOPLEGP_3",desc:"PEOPLEGP_3",type:"String",defValue:"-999999"},
+                   { name:"PEOPLEGP_4",desc:"PEOPLEGP_4",type:"String",defValue:"-999999"},
+                   { name:"PEOPLEGP_5",desc:"PEOPLEGP_5",type:"String",defValue:"-999999"},
+                   { name:"ALT_NAMES",desc:"ALT_NAMES",type:"String",defValue:"-999999"},
                     COMMENTS,
                     SOURCE_DT,
                     SOURCE,
@@ -1336,13 +1386,14 @@ getDbSchema: function()
 
         { name:"Languages",
           desc:"Languages",
+          fdname:"Culture_Ethnicity",
           geom:"Area",
           columns:[
                     ISO3,
                     ADM0_NAME,
-                   { name:"LANG_FAM",desc:"LANG_FAM",type:"String",defValue:"999999"},
-                   { name:"LANG_SUBGR",desc:"LANG_SUBGR",type:"String",defValue:"999999"},
-                   { name:"ALT_NAMES",desc:"ALT_NAMES",type:"String",defValue:"999999"},
+                   { name:"LANG_FAM",desc:"LANG_FAM",type:"String",defValue:"-999999"},
+                   { name:"LANG_SUBGR",desc:"LANG_SUBGR",type:"String",defValue:"-999999"},
+                   { name:"ALT_NAMES",desc:"ALT_NAMES",type:"String",defValue:"-999999"},
                     COMMENTS,
                     SOURCE_DT,
                     SOURCE,
@@ -1353,6 +1404,7 @@ getDbSchema: function()
 
         { name:"Cultural_POI",
           desc:"Cultural_POI",
+          fdname:"Culture_Ethnicity",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1377,6 +1429,7 @@ getDbSchema: function()
 
         { name:"Medical_Facilities",
           desc:"Medical_Facilities",
+          fdname:"Medical_Health",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1402,15 +1455,16 @@ getDbSchema: function()
 
         { name:"Health_Events",
           desc:"Health_Events",
+          fdname:"Medical_Health",
           geom:"Area",
           columns:[
                     ISO3,
                     ADM0_NAME,
-                   { name:"AREA_AFF",desc:"AREA_AFF",type:"String",defValue:"999999"},
+                   { name:"AREA_AFF",desc:"AREA_AFF",type:"String",defValue:"-999999"},
                     TYPE,
-                   { name:"DISEASE",desc:"DISEASE",type:"String",defValue:"999999"},
-                   { name:"START_DT",desc:"START_DT",type:"String",defValue:"999999"},
-                   { name:"END_DT",desc:"END_DT",type:"String",defValue:"999999"},
+                   { name:"DISEASE",desc:"DISEASE",type:"String",defValue:"-999999"},
+                   { name:"START_DT",desc:"START_DT",type:"String",defValue:"-999999"},
+                   { name:"END_DT",desc:"END_DT",type:"String",defValue:"-999999"},
                    { name:"TL_AFFECT",desc:"TL_AFFECT",type:"Integer",defValue:"-999999"},
                    { name:"FATALITY",desc:"FATALITY",type:"Integer",defValue:"-999999"},
                     COMMENTS,
@@ -1423,16 +1477,17 @@ getDbSchema: function()
 
         { name:"Soils",
           desc:"Soils",
+          fdname:"Natural_Features",
           geom:"Area",
           columns:[
                     ISO3,
                     ADM0_NAME,
-                   { name:"FAOSOIL",desc:"FAOSOIL",type:"String",defValue:"999999"},
-                   { name:"DOMSOI",desc:"DOMSOI",type:"String",defValue:"999999"},
-                   { name:"PHASE1",desc:"PHASE1",type:"String",defValue:"999999"},
-                   { name:"PHASE2",desc:"PHASE2",type:"String",defValue:"999999"},
-                   { name:"MISCLU1",desc:"MISCLU1",type:"String",defValue:"999999"},
-                   { name:"PERMAFROST",desc:"PERMAFROST",type:"String",defValue:"999999"},
+                   { name:"FAOSOIL",desc:"FAOSOIL",type:"String",defValue:"-999999"},
+                   { name:"DOMSOI",desc:"DOMSOI",type:"String",defValue:"-999999"},
+                   { name:"PHASE1",desc:"PHASE1",type:"String",defValue:"-999999"},
+                   { name:"PHASE2",desc:"PHASE2",type:"String",defValue:"-999999"},
+                   { name:"MISCLU1",desc:"MISCLU1",type:"String",defValue:"-999999"},
+                   { name:"PERMAFROST",desc:"PERMAFROST",type:"String",defValue:"-999999"},
                     SOURCE_DT,
                     SOURCE,
                   ] // End of Columns
@@ -1440,6 +1495,7 @@ getDbSchema: function()
 
         { name:"Natural_POI",
           desc:"Natural_POI",
+          fdname:"Natural_Features",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1463,6 +1519,7 @@ getDbSchema: function()
 
         { name:"Natural_Resources",
           desc:"Natural_Resources",
+          fdname:"Natural_Features",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1473,13 +1530,13 @@ getDbSchema: function()
                     ADM4_NAME,
                     ADM5_NAME,
                     NAME,
-                   { name:"OPER_TYPE",desc:"OPER_TYPE",type:"String",defValue:"999999"},
-                   { name:"DEV_STAT",desc:"DEV_STAT",type:"String",defValue:"999999"},
-                   { name:"PRI_COM",desc:"PRI_COM",type:"String",defValue:"999999"},
-                   { name:"COM_TYPE",desc:"COM_TYPE",type:"String",defValue:"999999"},
-                   { name:"ALL_COM",desc:"ALL_COM",type:"String",defValue:"999999"},
-                   { name:"CAPACITY",desc:"CAPACITY",type:"String",defValue:"999999"},
-                   { name:"UNITS",desc:"UNITS",type:"String",defValue:"999999"},
+                   { name:"OPER_TYPE",desc:"OPER_TYPE",type:"String",defValue:"-999999"},
+                   { name:"DEV_STAT",desc:"DEV_STAT",type:"String",defValue:"-999999"},
+                   { name:"PRI_COM",desc:"PRI_COM",type:"String",defValue:"-999999"},
+                   { name:"COM_TYPE",desc:"COM_TYPE",type:"String",defValue:"-999999"},
+                   { name:"ALL_COM",desc:"ALL_COM",type:"String",defValue:"-999999"},
+                   { name:"CAPACITY",desc:"CAPACITY",type:"String",defValue:"-999999"},
+                   { name:"UNITS",desc:"UNITS",type:"String",defValue:"-999999"},
                     SPA_ACC,
                     CONF_IMAGE,
                     COMMENTS,
@@ -1492,13 +1549,14 @@ getDbSchema: function()
 
         { name:"Hydrology_Polygons",
           desc:"Hydrology_Polygons",
+          fdname:"Hydrology",
           geom:"Area",
           columns:[
                     ISO3,
                     ADM0_NAME,
                     NAME,
                     TYPE,
-                   { name:"HYDRO_DESC",desc:"HYDRO_DESC",type:"String",defValue:"999999"},
+                   { name:"HYDRO_DESC",desc:"HYDRO_DESC",type:"String",defValue:"-999999"},
                     COMMENTS,
                     SOURCE_DT,
                     SOURCE,
@@ -1510,14 +1568,15 @@ getDbSchema: function()
 
         { name:"Hydrology_Polylines",
           desc:"Hydrology_Polylines",
+          fdname:"Hydrology",
           geom:"Line",
           columns:[
                     ISO3,
                     ADM0_NAME,
-                   { name:"MAJ_NAME",desc:"MAJ_NAME",type:"String",defValue:"999999"},
-                   { name:"SUB_NAME",desc:"SUB_NAME",type:"String",defValue:"999999"},
+                   { name:"MAJ_NAME",desc:"MAJ_NAME",type:"String",defValue:"-999999"},
+                   { name:"SUB_NAME",desc:"SUB_NAME",type:"String",defValue:"-999999"},
                     TYPE,
-                   { name:"HYDRO_DESC",desc:"HYDRO_DESC",type:"String",defValue:"999999"},
+                   { name:"HYDRO_DESC",desc:"HYDRO_DESC",type:"String",defValue:"-999999"},
                    { name:"STRAHLER",desc:"STRAHLER",type:"Real",defValue:"-999999.0"},
                     COMMENTS,
                     SOURCE_DT,
@@ -1529,15 +1588,16 @@ getDbSchema: function()
 
         { name:"ADMIN0",
           desc:"ADMIN0",
+          fdname:"Administrative",
           geom:"Area",
           columns:[
                     ISO3,
                     ADM0_NAME,
-                   { name:"NAME_ISO",desc:"NAME_ISO",type:"String",defValue:"999999"},
-                   { name:"NAME_FAO",desc:"NAME_FAO",type:"String",defValue:"999999"},
-                   { name:"NAME_LOCAL",desc:"NAME_LOCAL",type:"String",defValue:"999999"},
-                   { name:"NAME_VARIA",desc:"NAME_VARIA",type:"String",defValue:"999999"},
-                   { name:"VALIDFR",desc:"VALIDFR",type:"String",defValue:"999999"},
+                   { name:"NAME_ISO",desc:"NAME_ISO",type:"String",defValue:"-999999"},
+                   { name:"NAME_FAO",desc:"NAME_FAO",type:"String",defValue:"-999999"},
+                   { name:"NAME_LOCAL",desc:"NAME_LOCAL",type:"String",defValue:"-999999"},
+                   { name:"NAME_VARIA",desc:"NAME_VARIA",type:"String",defValue:"-999999"},
+                   { name:"VALIDFR",desc:"VALIDFR",type:"String",defValue:"-999999"},
                     SOURCE_DT,
                     SOURCE,
                     SOURCE2_DT,
@@ -1547,6 +1607,7 @@ getDbSchema: function()
 
         { name:"ADMIN1",
           desc:"ADMIN1",
+          fdname:"Administrative",
           geom:"Area",
           columns:[
                     ISO3,
@@ -1564,6 +1625,7 @@ getDbSchema: function()
 
         { name:"ADMIN2",
           desc:"ADMIN2",
+          fdname:"Administrative",
           geom:"Area",
           columns:[
                     ISO3,
@@ -1584,6 +1646,7 @@ getDbSchema: function()
 
         { name:"ADMIN3",
           desc:"ADMIN3",
+          fdname:"Administrative",
           geom:"Area",
           columns:[
                     ISO3,
@@ -1596,8 +1659,8 @@ getDbSchema: function()
                     TYPE2,
                     ENGTYPE2,
                     ADM3_NAME,
-                   { name:"TYPE3",desc:"TYPE3",type:"String",defValue:"999999"},
-                   { name:"ENGTYPE3",desc:"ENGTYPE3",type:"String",defValue:"999999"},
+                   { name:"TYPE3",desc:"TYPE3",type:"String",defValue:"-999999"},
+                   { name:"ENGTYPE3",desc:"ENGTYPE3",type:"String",defValue:"-999999"},
                     SOURCE_DT,
                     SOURCE,
                     SOURCE2_DT,
@@ -1607,6 +1670,7 @@ getDbSchema: function()
 
         { name:"ADMIN4",
           desc:"ADMIN4",
+          fdname:"Administrative",
           geom:"Area",
           columns:[
                     ISO3,
@@ -1619,11 +1683,11 @@ getDbSchema: function()
                     TYPE2,
                     ENGTYPE2,
                     ADM3_NAME,
-                   { name:"TYPE3",desc:"TYPE3",type:"String",defValue:"999999"},
-                   { name:"ENGTYPE3",desc:"ENGTYPE3",type:"String",defValue:"999999"},
+                   { name:"TYPE3",desc:"TYPE3",type:"String",defValue:"-999999"},
+                   { name:"ENGTYPE3",desc:"ENGTYPE3",type:"String",defValue:"-999999"},
                     ADM4_NAME,
-                   { name:"TYPE4",desc:"TYPE4",type:"String",defValue:"999999"},
-                   { name:"ENGTYPE4",desc:"ENGTYPE4",type:"String",defValue:"999999"},
+                   { name:"TYPE4",desc:"TYPE4",type:"String",defValue:"-999999"},
+                   { name:"ENGTYPE4",desc:"ENGTYPE4",type:"String",defValue:"-999999"},
                     SOURCE_DT,
                     SOURCE,
                     SOURCE2_DT,
@@ -1633,6 +1697,7 @@ getDbSchema: function()
 
         { name:"ADMIN5",
           desc:"ADMIN5",
+          fdname:"Administrative",
           geom:"Area",
           columns:[
                     ISO3,
@@ -1645,14 +1710,14 @@ getDbSchema: function()
                     TYPE2,
                     ENGTYPE2,
                     ADM3_NAME,
-                   { name:"TYPE3",desc:"TYPE3",type:"String",defValue:"999999"},
-                   { name:"ENGTYPE3",desc:"ENGTYPE3",type:"String",defValue:"999999"},
+                   { name:"TYPE3",desc:"TYPE3",type:"String",defValue:"-999999"},
+                   { name:"ENGTYPE3",desc:"ENGTYPE3",type:"String",defValue:"-999999"},
                     ADM4_NAME,
-                   { name:"TYPE4",desc:"TYPE4",type:"String",defValue:"999999"},
-                   { name:"ENGTYPE4",desc:"ENGTYPE4",type:"String",defValue:"999999"},
+                   { name:"TYPE4",desc:"TYPE4",type:"String",defValue:"-999999"},
+                   { name:"ENGTYPE4",desc:"ENGTYPE4",type:"String",defValue:"-999999"},
                     ADM5_NAME,
-                   { name:"TYPE5",desc:"TYPE5",type:"String",defValue:"999999"},
-                   { name:"ENGTYPE5",desc:"ENGTYPE5",type:"String",defValue:"999999"},
+                   { name:"TYPE5",desc:"TYPE5",type:"String",defValue:"-999999"},
+                   { name:"ENGTYPE5",desc:"ENGTYPE5",type:"String",defValue:"-999999"},
                     SOURCE_DT,
                     SOURCE,
                     SOURCE2_DT,
@@ -1662,6 +1727,7 @@ getDbSchema: function()
 
         { name:"Geonames",
           desc:"Geonames",
+          fdname:"Administrative",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1671,12 +1737,12 @@ getDbSchema: function()
                     ADM3_NAME,
                     ADM4_NAME,
                     ADM5_NAME,
-                   { name:"FC",desc:"FC",type:"String",defValue:"999999"},
-                   { name:"DSG",desc:"DSG",type:"String",defValue:"999999"},
-                   { name:"SORT_NAME",desc:"SORT_NAME",type:"String",defValue:"999999"},
-                   { name:"FULL_NAME",desc:"FULL_NAME",type:"String",defValue:"999999"},
-                   { name:"ALT_NAME",desc:"ALT_NAME",type:"String",defValue:"999999"},
-                   { name:"MODIFY_DAT",desc:"MODIFY_DAT",type:"String",defValue:"999999"},
+                   { name:"FC",desc:"FC",type:"String",defValue:"-999999"},
+                   { name:"DSG",desc:"DSG",type:"String",defValue:"-999999"},
+                   { name:"SORT_NAME",desc:"SORT_NAME",type:"String",defValue:"-999999"},
+                   { name:"FULL_NAME",desc:"FULL_NAME",type:"String",defValue:"-999999"},
+                   { name:"ALT_NAME",desc:"ALT_NAME",type:"String",defValue:"-999999"},
+                   { name:"MODIFY_DAT",desc:"MODIFY_DAT",type:"String",defValue:"-999999"},
                     SOURCE_DT,
                     SOURCE,
                   ] // End of Columns
@@ -1684,6 +1750,7 @@ getDbSchema: function()
 
         { name:"GNDB",
           desc:"GNDB",
+          fdname:"Administrative",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1693,13 +1760,13 @@ getDbSchema: function()
                     ADM3_NAME,
                     ADM4_NAME,
                     ADM5_NAME,
-                   { name:"FC",desc:"FC",type:"String",defValue:"999999"},
-                   { name:"DSG",desc:"DSG",type:"String",defValue:"999999"},
-                   { name:"NT",desc:"NT",type:"String",defValue:"999999"},
-                   { name:"SORT_NAME",desc:"SORT_NAME",type:"String",defValue:"999999"},
-                   { name:"FULL_NAME",desc:"FULL_NAME",type:"String",defValue:"999999"},
-                   { name:"ALT_NAME",desc:"ALT_NAME",type:"String",defValue:"999999"},
-                   { name:"MODIFY_DT",desc:"MODIFY_DT",type:"String",defValue:"999999"},
+                   { name:"FC",desc:"FC",type:"String",defValue:"-999999"},
+                   { name:"DSG",desc:"DSG",type:"String",defValue:"-999999"},
+                   { name:"NT",desc:"NT",type:"String",defValue:"-999999"},
+                   { name:"SORT_NAME",desc:"SORT_NAME",type:"String",defValue:"-999999"},
+                   { name:"FULL_NAME",desc:"FULL_NAME",type:"String",defValue:"-999999"},
+                   { name:"ALT_NAME",desc:"ALT_NAME",type:"String",defValue:"-999999"},
+                   { name:"MODIFY_DT",desc:"MODIFY_DT",type:"String",defValue:"-999999"},
                     SOURCE_DT,
                     SOURCE,
                   ] // End of Columns
@@ -1707,6 +1774,7 @@ getDbSchema: function()
 
         { name:"Border_Crossings",
           desc:"Border_Crossings",
+          fdname:"Government_Municipal",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1719,7 +1787,7 @@ getDbSchema: function()
                     NAME,
                     TYPE1,
                     TYPE2,
-                   { name:"COUNTRY",desc:"COUNTRY",type:"String",defValue:"999999"},
+                   { name:"COUNTRY",desc:"COUNTRY",type:"String",defValue:"-999999"},
                     SPA_ACC,
                     CONF_IMAGE,
                     COMMENTS,
@@ -1732,6 +1800,7 @@ getDbSchema: function()
 
         { name:"Embassies",
           desc:"Embassies",
+          fdname:"Government_Municipal",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1742,11 +1811,11 @@ getDbSchema: function()
                     ADM4_NAME,
                     ADM5_NAME,
                     NAME,
-                   { name:"ADDRESS",desc:"ADDRESS",type:"String",defValue:"999999"},
+                   { name:"ADDRESS",desc:"ADDRESS",type:"String",defValue:"-999999"},
                     CITY,
                     TYPE,
-                   { name:"TELEPHONE",desc:"TELEPHONE",type:"String",defValue:"999999"},
-                   { name:"WEBSITE",desc:"WEBSITE",type:"String",defValue:"999999"},
+                   { name:"TELEPHONE",desc:"TELEPHONE",type:"String",defValue:"-999999"},
+                   { name:"WEBSITE",desc:"WEBSITE",type:"String",defValue:"-999999"},
                     SPA_ACC,
                     CONF_IMAGE,
                     COMMENTS,
@@ -1759,6 +1828,7 @@ getDbSchema: function()
 
         { name:"Government_POI",
           desc:"Government_POI",
+          fdname:"Government_Municipal",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1784,6 +1854,7 @@ getDbSchema: function()
 
         { name:"Military_Installations",
           desc:"Military_Installations",
+          fdname:"Government_Municipal",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1795,8 +1866,8 @@ getDbSchema: function()
                     ADM5_NAME,
                     NAME,
                     TYPE,
-                   { name:"MIL_TYPE",desc:"MIL_TYPE",type:"String",defValue:"999999"},
-                   { name:"UNIT",desc:"UNIT",type:"String",defValue:"999999"},
+                   { name:"MIL_TYPE",desc:"MIL_TYPE",type:"String",defValue:"-999999"},
+                   { name:"UNIT",desc:"UNIT",type:"String",defValue:"-999999"},
                     CITY,
                     SPA_ACC,
                     CONF_IMAGE,
@@ -1810,6 +1881,7 @@ getDbSchema: function()
 
         { name:"Refugee_Camps",
           desc:"Refugee_Camps",
+          fdname:"Government_Municipal",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1835,13 +1907,14 @@ getDbSchema: function()
 
         { name:"Smuggling_Routes_Polyline",
           desc:"Smuggling_Routes_Polyline",
+          fdname:"Crime_Public_Security",
           geom:"Line",
           columns:[
                     ISO3,
                     ADM0_NAME,
                     NAME,
                     TYPE,
-                   { name:"ROUTES",desc:"ROUTES",type:"String",defValue:"999999"},
+                   { name:"ROUTES",desc:"ROUTES",type:"String",defValue:"-999999"},
                     COMMENTS,
                     SOURCE_DT,
                     SOURCE,
@@ -1852,6 +1925,7 @@ getDbSchema: function()
 
         { name:"Smuggling_Routes",
           desc:"Smuggling_Routes",
+          fdname:"Crime_Public_Security",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1874,6 +1948,7 @@ getDbSchema: function()
 
         { name:"Crime_Data",
           desc:"Crime_Data",
+          fdname:"Crime_Public_Security",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1883,10 +1958,10 @@ getDbSchema: function()
                     ADM3_NAME,
                     ADM4_NAME,
                     ADM5_NAME,
-                   { name:"ACTOR",desc:"ACTOR",type:"String",defValue:"999999"},
+                   { name:"ACTOR",desc:"ACTOR",type:"String",defValue:"-999999"},
                     TYPE,
                     CITY,
-                   { name:"DATE",desc:"DATE",type:"String",defValue:"999999"},
+                   { name:"DATE",desc:"DATE",type:"String",defValue:"-999999"},
                     SPA_ACC,
                     COMMENTS,
                     SOURCE_DT,
@@ -1898,6 +1973,7 @@ getDbSchema: function()
 
         { name:"Public_Security_POI",
           desc:"Public_Security_POI",
+          fdname:"Crime_Public_Security",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1922,6 +1998,7 @@ getDbSchema: function()
 
         { name:"Prisons",
           desc:"Prisons",
+          fdname:"Crime_Public_Security",
           geom:"Point",
           columns:[
                     ISO3,
@@ -1947,21 +2024,22 @@ getDbSchema: function()
 
         { name:"Protected_Areas",
           desc:"Protected_Areas",
+          fdname:"Environmental_Regulatory",
           geom:"Area",
           columns:[
                     ISO3,
                     ADM0_NAME,
                     NAME,
-                   { name:"DESIG",desc:"DESIG",type:"String",defValue:"999999"},
-                   { name:"DESIG_TYPE",desc:"DESIG_TYPE",type:"String",defValue:"999999"},
-                   { name:"IUCN_CAT",desc:"IUCN_CAT",type:"String",defValue:"999999"},
-                   { name:"TYPE_AREA",desc:"TYPE_AREA",type:"String",defValue:"999999"},
+                   { name:"DESIG",desc:"DESIG",type:"String",defValue:"-999999"},
+                   { name:"DESIG_TYPE",desc:"DESIG_TYPE",type:"String",defValue:"-999999"},
+                   { name:"IUCN_CAT",desc:"IUCN_CAT",type:"String",defValue:"-999999"},
+                   { name:"TYPE_AREA",desc:"TYPE_AREA",type:"String",defValue:"-999999"},
                    { name:"REP_M",desc:"REP_M",type:"Integer",defValue:"-999999"},
                    { name:"REP_AREA",desc:"REP_AREA",type:"Integer",defValue:"-999999"},
-                   { name:"STATUS",desc:"STATUS",type:"String",defValue:"999999"},
+                   { name:"STATUS",desc:"STATUS",type:"String",defValue:"-999999"},
                    { name:"STATUS_YR",desc:"STATUS_YR",type:"Integer",defValue:"-999999"},
-                   { name:"GOV_TYPE",desc:"GOV_TYPE",type:"String",defValue:"999999"},
-                   { name:"MANAG_AUTH",desc:"MANAG_AUTH",type:"String",defValue:"999999"},
+                   { name:"GOV_TYPE",desc:"GOV_TYPE",type:"String",defValue:"-999999"},
+                   { name:"MANAG_AUTH",desc:"MANAG_AUTH",type:"String",defValue:"-999999"},
                    { name:"NO_TK_AREA",desc:"NO_TK_AREA",type:"Integer",defValue:"-999999"},
                     COMMENTS,
                     SOURCE_DT,
@@ -1970,8 +2048,6 @@ getDbSchema: function()
                     SOURCE2,
                   ] // End of Columns
         } // End of feature
-
-
     ]; // End of schema
 
     return schema;
