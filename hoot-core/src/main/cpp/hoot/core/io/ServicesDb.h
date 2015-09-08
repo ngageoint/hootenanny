@@ -518,6 +518,10 @@ private:
   { return "current_ways join current_way_tags on current_ways.id=current_way_tags.way_id"; }
   static QString _getWayNodesTableName_OsmApi()
   { return "current_way_nodes"; }
+  static QString _getRelationsTableName_OsmApi()
+  { return "current_relations join current_relation_tags on current_relations.id=current_relation_tags.relation_id"; }
+  static QString _getRelationMembersTableName_OsmApi()
+  { return "current_relation_members"; }
 
   // Osm Api DB table field strings
   QString _getElementTableFields_OsmApi(const ElementType& elementType) const;
@@ -525,6 +529,8 @@ private:
   static QString _getNodesTableFields_OsmApi()
   { return "id, latitude, longitude, changeset_id, visible, timestamp, tile, version, k, v"; }
   static QString _getWaysTableFields_OsmApi()
+  { return "id, changeset_id, timestamp, visible, version, k, v"; }
+  static QString _getRelationsTableFields_OsmApi()
   { return "id, changeset_id, timestamp, visible, version, k, v"; }
 
   /**

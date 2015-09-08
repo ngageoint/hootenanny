@@ -40,7 +40,7 @@
 
 // special define:
 //   Greg's workspace set true; Terry's set false
-#define GREGSWORKSPACE false
+#define GREGSWORKSPACE true
 
 namespace hoot
 {
@@ -612,7 +612,7 @@ public:
 
         // perform the comparison tests
         LOG_DEBUG(QString("Processing element ")+QString::number(elementCtr+1));
-        // test the first line's data which is the current_nodes (main data): id, lat, lon, tag1
+        // test the first line's data which is the current_ways (main data): id
         LOG_DEBUG("ids = "+QString::number(ids[elementCtr]));
         LOG_DEBUG("wayId = "+QString::number(wayId));
 
@@ -639,23 +639,83 @@ public:
         database.extractTagFromRow_OsmApi(wayResultIterator, ServicesDb::WAYS_TAGS)));
     }
 
-    /*
+    ///////////////////////////////////////////////
+    /// Insert a relation into the Osm Api DB
+    ///////////////////////////////////////////////
+
+    database.transaction();
+
+    // Create or get user, set our userId
+    database.setUserId(database.getOrCreateUser("OsmApiInsert@hoot.local", "Hootenanny Inserter"));
+    database.beginChangeset();
+
+    const long nodeId3 = nodeIds.at(0);
+    const long wayId1 = ids.at(0);
+    ids.clear();
+    Tags rt;
+    rt["type"] = "multistuff";
+    long relationId;
+    database.insertRelation(rt, relationId);
+    ids.append(relationId);
+    database.insertRelationMember(relationId, ElementType::Way, wayId1, "wayrole", 0);
+    database.insertRelationMember(relationId, ElementType::Node, nodeId3, "noderole", 1);
+
+    database.endChangeset();
+    database.commit();
+
+    ///////////////////////////////////////////////
+    /// Reads the relations from the Osm Api DB
+    ///////////////////////////////////////////////
+
     shared_ptr<QSqlQuery> relationResultIterator =
       database.selectAllElements(ElementType::Relation);
-    ctr = 0;
-    while (relationResultIterator->next())
+
+    // check again if db active or not
+    assert(relationResultIterator.isActive());
+
+    const int numRelationFields = 7;
+    lastId = LLONG_MIN;
+
+    // read through the elements until the number inserted for this test is reached
+    // - the number inserted is determined by ids.size()
+    elementCtr = ids.size()-1;
+    tagIndx = -1;
+    while ( relationResultIterator->next() )
     {
-      HOOT_STR_EQUALS(relationId, relationResultIterator->value(0).toLongLong());
-      vector<RelationData::Entry> members = database.selectMembersForRelation(relationId);
-      HOOT_STR_EQUALS("[2]{Entry: role: wayrole, eid: Way:1, Entry: role: noderole, eid: Node:1}",
-                      members);
-      HOOT_STR_EQUALS("type = multistuff\n",
-                      ServicesDb::unescapeTags(relationResultIterator->value(5)));
-      ctr++;
+      long long relId = relationResultIterator->value(0).toLongLong();
+      if( lastId != relId )
+      {
+        if(elementCtr < 0) break;
+
+        // perform the comparison tests
+        LOG_DEBUG(QString("Processing element ")+QString::number(elementCtr+1));
+        // test the first line's data which is the current_nodes (main data): id
+        LOG_DEBUG("ids = "+QString::number(ids[elementCtr]));
+        LOG_DEBUG("relId = "+QString::number(relId));
+        HOOT_STR_EQUALS(ids[elementCtr], relId);
+
+        // get the relation nodes and do some minimal testing
+        vector<RelationData::Entry> members = database.selectMembersForRelation(relId);
+        HOOT_STR_EQUALS(2, members.size());
+        QString expected = "[2]{Entry: role: wayrole, eid: Way:"+QString::number(wayId1)+
+                ", Entry: role: noderole, eid: Node:"+QString::number(nodeId3)+"}";
+        HOOT_STR_EQUALS(expected, members);
+
+        // mark this way id processed
+        lastId = relId;
+        elementCtr--;
+      }
+
+      // verify the values written to the DB upon their read-back
+      for(int j=0;j<numRelationFields;j++) { LOG_DEBUG("VALUE = "+relationResultIterator->value(j).toString()); }
+
+      // read the tag for as many rows as there are tags
+      QString key = relationResultIterator->value(ServicesDb::WAYS_TAGS).toString();
+      LOG_DEBUG(QString("Processing tag ")+key);
+      HOOT_STR_EQUALS("type = multistuff\n", ServicesDb::unescapeTags(
+        database.extractTagFromRow_OsmApi(relationResultIterator, ServicesDb::RELATIONS_TAGS)));
     }
 
-    CPPUNIT_ASSERT_EQUAL(1, ctr);
-    */
   }
 
 
