@@ -1,0 +1,78 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Fcntl;
+
+sub generatePgDumpfileFromOsm($$);
+sub readNodes($$$);
+
+sub generatePgDumpfileFromOsm($$)
+{
+  my $osmFilename = shift(@_);
+  my $sqlFilename = shift(@_);
+  my %knownIds;
+  my $osmFilehandle;
+  my $sqlFilehandle;
+
+  open( $osmFilehandle, "< $osmFilename") or die( "Could not open OSM file: $osmFilename\n\n" );
+  open( $sqlFilehandle, "> $sqlFilename") or die(" Could not open SQL file: $sqlFilename\n\n" );
+
+  readNodes($osmFilehandle, $sqlFilehandle, \%knownIds );
+
+  print( "Testline: " . <$osmFilehandle> );
+
+  close( $osmFilehandle );
+  close( $sqlFilehandle );
+}
+
+sub readNodes($$$)
+{
+  my $osmFilehandle = shift(@_);
+  my $sqlFilehandle = shift(@_);
+  my $knownIdsRef   = shift(@_);
+
+  my %knownIds = %{ $knownIdsRef };
+
+
+  # Read until we get something of interest (node, way, relation, or close OSM tag
+  my $previousLinePosition = tell($osmFilehandle );
+  my $currLine = <$osmFilehandle>;
+  while ( ! eof($osmFilehandle) )
+  {
+    #print( "Read line: $currLine" );
+
+    # If it's something past nodes, bail out
+    if ( $currLine =~ /<(?:(?:way|relation) id=\"-?\d+\"|\/osm>)/ )
+    {
+      last;
+    }
+
+    # If it's a node, deal with it
+    if ( $currLine =~ /<node\s+id=\"-?\d+\"/ )
+    {
+      #print( "Processing node" );
+    }
+
+    $previousLinePosition = tell($osmFilehandle );
+    $currLine = <$osmFilehandle>;
+  }
+
+  print( "Stopped looking for nodes at $currLine" ); 
+
+  # Reset filehandle back one line so we can start processing next section
+  $osmFilehandle = seek( $osmFilehandle, $previousLinePosition, Fcntl::SEEK_SET );
+}
+
+
+if ( scalar(@ARGV) != 2 ) 
+{
+  print( "Usage: convertOsmXmlToPgsqlDump <.osm input file> <.sql output file>\n\n" );
+  exit;
+}
+
+my $osmFilename = $ARGV[0];
+my $sqlFilename = $ARGV[1];
+
+print( "OSM file: $osmFilename\n" );
+print( "SQL file: $sqlFilename\n" );
+generatePgDumpfileFromOsm( $osmFilename, $sqlFilename );
