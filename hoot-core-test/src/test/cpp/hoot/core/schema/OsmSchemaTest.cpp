@@ -259,7 +259,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(avg.toStdString(), std::string("surface=unknown"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(.1, score, 0.001);
 
-    Log::getInstance().setLevel(Log::Warn);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.score("parking=surface", "amenity=parking"), 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0, uut.score("parking=surface", "parking=covered"), 0.001);
   }
 
   /**

@@ -1305,6 +1305,16 @@ The key to be replaced by the TagRenameKeyVisitor.
 
 The key to replace with by the TagRenameKeyVisitor.
 
+=== test.force.orthographic.projection
+
+* Data Type: bool
+* Default Value: `false`
+
+Always force the orthographic projection when determining a proper planar projection. In typical
+usage this will never be used (the automatically selected projection should always be at least as
+good). This is most useful if you want to get consistent results even if the list of potential
+projections change over time. Very handy in unit tests.
+
 === token.separator
 
 * Data Type: string

@@ -39,6 +39,7 @@
 #include <hoot/js/elements/WayJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
+#include <hoot/js/util/HootExceptionJs.h>
 
 // Qt
 #include <QStringList>
@@ -194,8 +195,13 @@ Handle<Value> ElementJs::setTags(const Arguments& args)
 
   ElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getElement();
 
-  Tags& tags = ObjectWrap::Unwrap<TagsJs>(args[0]->ToObject())->getTags();
+  if (!e)
+  {
+    return v8::ThrowException(HootExceptionJs::create(IllegalArgumentException(
+      "Unable to set tags on a const Element.")));
+  }
 
+  Tags& tags = ObjectWrap::Unwrap<TagsJs>(args[0]->ToObject())->getTags();
   e->setTags(tags);
 
   return scope.Close(Undefined());

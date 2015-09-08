@@ -7,7 +7,7 @@
         <tag k="artwork" v="statue"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:uuid" v="mgcp:eb2555cf-c470-11e2-b9a8-002481c154f7"/>
-        <tag k="hoot:review:note" v="Somewhat similar - very close together, similar artwork type"/>
+        <tag k="hoot:review:note" v="Somewhat similar - very close together, similar POI type"/>
         <tag k="uuid" v="{b18057ff-736d-5d20-b873-837f0c172e33}"/>
         <tag k="name" v="ابراهيم باشا"/>
         <tag k="tourism" v="artwork"/>
@@ -23,7 +23,7 @@
         <tag k="hoot:review:score" v="1"/>
         <tag k="source:vertical_source_category" v="no_elevations"/>
         <tag k="shape" v="unknown"/>
-        <tag k="hoot:review:note" v="Somewhat similar - very close together, similar artwork type"/>
+        <tag k="hoot:review:note" v="Somewhat similar - very close together, similar POI type"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:abs_horiz_accuracy" v="25"/>
         <tag k="source:copyright" v="Copyright 2013 by the Bundeswehr GeoInformation Office. All rights reserved."/>

@@ -17,6 +17,11 @@
     },
 
     "tag": {
+        "name": "railway=stop",
+        "isA": "railway",
+        "similarTo": { "name": "railway=halt", "weight": 0.7 }
+    },
+    "tag": {
         "name": "railway=halt",
         "isA": "railway",
         "similarTo": { "name": "railway=station", "weight": 0.8 },

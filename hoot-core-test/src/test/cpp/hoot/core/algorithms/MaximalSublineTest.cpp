@@ -80,6 +80,11 @@ class MaximalSublineTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::resetEnvironment();
+  }
+
   void addEndNode(shared_ptr<OsmMap> map, Coordinate c, QString note)
   {
     shared_ptr<Node> n(new Node(Status::Unknown1, map->createNextNodeId(), c, 10));
@@ -249,8 +254,8 @@ public:
     double bestScore;
     vector<WaySublineMatch> m = uut.findAllMatches(map, w52, w812, bestScore);
     HOOT_STR_EQUALS(
-      "[1]{subline 1: start: way: -17 index: 2 fraction: 0.440972029007195 end: way: -17 index: 2 fraction: 0.553077810038132\n"
-      "subline 2: start: way: -18 index: 2 fraction: 0 end: way: -18 index: 3 fraction: 0}",
+      "[1]{subline 1: start: way: -1 index: 2 fraction: 0.440972029007195 end: way: -1 index: 2 fraction: 0.553077810038132\n"
+      "subline 2: start: way: -2 index: 2 fraction: 0 end: way: -2 index: 3 fraction: 0}",
       m);
   }
 
