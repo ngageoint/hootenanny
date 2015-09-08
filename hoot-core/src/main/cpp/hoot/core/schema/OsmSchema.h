@@ -73,13 +73,16 @@ struct OsmSchemaCategory {
     Use = 8,
     Name = 16,
     PseudoName = 32,
-    All = Poi | Building | Transportation | Use | Name
+    // Human Geography POI. See ticket #6853 for a definition of a "HGIS POI"
+    HgPoi = 64,
+    All = Poi | Building | Transportation | Use | Name | HgPoi
   } Type;
 
   OsmSchemaCategory() : _type(Empty) {}
   OsmSchemaCategory(OsmSchemaCategory::Type t) : _type(t) {}
 
   static OsmSchemaCategory building() { return OsmSchemaCategory(Building); }
+  static OsmSchemaCategory hgisPoi() { return OsmSchemaCategory(Poi); }
   static OsmSchemaCategory poi() { return OsmSchemaCategory(Poi); }
   static OsmSchemaCategory transportation() { return OsmSchemaCategory(Transportation); }
   static OsmSchemaCategory use() { return OsmSchemaCategory(Use); }
@@ -116,6 +119,10 @@ struct OsmSchemaCategory {
     else if (s == "pseudoname")
     {
       return PseudoName;
+    }
+    else if (s == "hgpoi")
+    {
+      return HgPoi;
     }
     else if (s == "")
     {
@@ -176,6 +183,10 @@ struct OsmSchemaCategory {
     if (_type & PseudoName)
     {
       result << "pseudoname";
+    }
+    if (_type & HgPoi)
+    {
+      result << "hgpoi";
     }
 
     return result;
@@ -383,6 +394,11 @@ public:
    * Returns true if this is a geometry collection.
    */
   bool isCollection(const Element& e) const;
+
+  /**
+   * Returns true if this is a POI as defined by the Tampa DG group.
+   */
+  bool isHgPoi(const Element& e);
 
   /**
    * Returns true if the element is a highway type (e.g. road, primary, path, etc.)

@@ -29,7 +29,9 @@
 
 // node.js
 // #include <nodejs/node.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/util/DataConvertJs.h>
 
 namespace hoot
 {
@@ -46,6 +48,7 @@ private:
   ~OsmSchemaJs();
 
   static v8::Handle<v8::Value> getCategories(const v8::Arguments& args);
+  static v8::Handle<v8::Value> getTagByCategory(const v8::Arguments& args);
   static v8::Handle<v8::Value> isAncestor(const v8::Arguments& args);
   static v8::Handle<v8::Value> isArea(const v8::Arguments& args);
   static v8::Handle<v8::Value> isBuilding(const v8::Arguments& args);
@@ -57,6 +60,25 @@ private:
 
 };
 
+inline v8::Handle<v8::Value> toV8(const TagVertex& tv)
+{
+  v8::Handle<v8::Object> result = v8::Object::New();
+
+  result->Set(toV8("name"), toV8(tv.name), None);
+  result->Set(toV8("description"), toV8(tv.description), None);
+  result->Set(toV8("key"), toV8(tv.key), None);
+  result->Set(toV8("value"), toV8(tv.value), None);
+  result->Set(toV8("influence"), toV8(tv.influence), None);
+  result->Set(toV8("childWeight"), toV8(tv.childWeight), None);
+  result->Set(toV8("mismatchScore"), toV8(tv.mismatchScore), None);
+  // need to create a string conversion for this if we want to use it. Unused for now.
+  //result->Set(toV8("valueType"), toV8(tv.valueType), None);
+  result->Set(toV8("aliases"), toV8(tv.aliases), None);
+  result->Set(toV8("categories"), toV8(tv.categories), None);
+  result->Set(toV8("geometries"), toV8(tv.geometries), None);
+
+  return result;
+}
 
 }
 

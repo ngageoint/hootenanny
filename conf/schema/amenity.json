@@ -1,9 +1,10 @@
 {
     "tag": {
         "name": "amenity",
-        "isA": "poi=yes",
+        "isA": "hgpoi",
         "influence": 1.0,
         "type": "enumeration",
+        "mismatchScore": 0.1,
         "geometries": ["node","area"]
     },
 

@@ -27,7 +27,6 @@
 #include "OsmSchemaJs.h"
 
 // hoot
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/DataConvertJs.h>
@@ -48,6 +47,8 @@ void OsmSchemaJs::Init(Handle<Object> exports)
   Handle<Object> schema = Object::New();
   exports->Set(String::NewSymbol("OsmSchema"), schema);
   schema->Set(String::NewSymbol("getCategories"), FunctionTemplate::New(getCategories)->GetFunction());
+  schema->Set(String::NewSymbol("getTagByCategory"),
+    FunctionTemplate::New(getTagByCategory)->GetFunction());
   schema->Set(String::NewSymbol("isAncestor"), FunctionTemplate::New(isAncestor)->GetFunction());
   schema->Set(String::NewSymbol("isArea"), FunctionTemplate::New(isArea)->GetFunction());
   schema->Set(String::NewSymbol("isBuilding"), FunctionTemplate::New(isBuilding)->GetFunction());
@@ -64,6 +65,15 @@ Handle<Value> OsmSchemaJs::getCategories(const Arguments& args) {
   QString kvp = toCpp<QString>(args[0]);
 
   return scope.Close(toV8(OsmSchema::getInstance().getCategories(kvp).toStringList()));
+}
+
+Handle<Value> OsmSchemaJs::getTagByCategory(const Arguments& args) {
+  HandleScope scope;
+
+  QString category = toCpp<QString>(args[0]);
+  OsmSchemaCategory c = OsmSchemaCategory::fromString(category);
+
+  return scope.Close(toV8(OsmSchema::getInstance().getTagByCategory(c)));
 }
 
 Handle<Value> OsmSchemaJs::isAncestor(const Arguments& args) {

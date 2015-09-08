@@ -1,7 +1,7 @@
 {
     "tag": {
         "name": "public_transport",
-        "isA": "poi=yes",
+        "isA": "hgpoi",
         "influence": 1.0,
         "type": "enumeration",
         "geometries": ["node", "area", "way", "relation"]

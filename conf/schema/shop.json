@@ -1,7 +1,7 @@
 {
     "tag": {
         "name": "shop",
-        "isA": "poi=yes",
+        "isA": "hgpoi",
         "influence": 1.0,
         "type": "enumeration",
         "geometries": ["node", "area"]
@@ -1046,7 +1046,6 @@
     "tag": {
         "name": "shop=other",
         "isA": "shop",
-        "similarTo": { "name": "shop", "weight": 0.1 },
         "#": "Count in tag info is 213 on 2015-09-01"
     },
     "tag": {
@@ -1065,7 +1064,6 @@
     "tag": {
         "name": "shop=disused",
         "isA": "shop",
-        "similarTo": { "name": "shop", "weight": 0.1 },
         "similarTo": { "name": "shop=vacant", "weight": 0.8 },
         "#": "Count in tag info is 186 on 2015-09-01"
     },
@@ -1128,7 +1126,6 @@
     "tag": {
         "name": "shop=fixme",
         "isA": "shop",
-        "similarTo": { "name": "shop", "weight": 0.1 },
         "#": "Count in tag info is 160 on 2015-09-01"
     },
     "tag": {
@@ -1285,7 +1282,6 @@
     "tag": {
         "name": "shop=unknown",
         "isA": "shop",
-        "similarTo": { "name": "shop", "weight": 0.1 },
         "#": "Count in tag info is 125 on 2015-09-01"
     },
     "tag": {

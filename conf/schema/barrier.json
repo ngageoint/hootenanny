@@ -12,7 +12,7 @@
     "tag": {
         "name": "barrier=toll_booth",
         "isA": "barrier",
-        "categories": ["poi"],
+        "categories": ["poi", "hgpoi"],
         "geometries": ["node"],
         "similarTo": { "name": "building=transportation", "weight": 0.8 }
     },

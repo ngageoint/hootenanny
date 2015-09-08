@@ -7,19 +7,27 @@
         "categories": ["poi"]
     },
 
-    "#" : "For water POI's, see WaterwaySchema.json.",
-
     "#" : "Generic POI made up to handle poor data.",
     "tag": { "name": "poi=yes", "isA": "poi" },
-    "tag": { "name": "aeroway=*", "isA": "poi=yes" },
 
-    "tag": { "name": "industrial=*", "isA": "poi=yes" },
-    "tag": { "name": "mountain_pass=*", "isA": "poi=yes" },
-    "tag": { "name": "office=*", "isA": "poi=yes",
+    "#" : "A hgpoi is a human geography POI. See ticket #6853",
+    "tag": {
+        "name": "hgpoi",
+        "isA": "poi=yes",
+        "categories": ["hgpoi"]
+    },
+
+    "#" : "For water POI's, see WaterwaySchema.json.",
+
+    "tag": { "name": "aeroway=*", "isA": "hgpoi" },
+
+    "tag": { "name": "industrial=*", "isA": "hgpoi" },
+    "tag": { "name": "mountain_pass=*", "isA": "hgpoi" },
+    "tag": { "name": "office=*", "isA": "hgpoi",
         "similarTo": { "name": "amenity", "weight": 0.1 }
     },
     "tag": { "name": "slope=yes", "isA": "poi=yes" },
-    "tag": { "name": "station", "isA": "poi=yes" },
+    "tag": { "name": "station", "isA": "hgpoi" },
     "tag": { "name": "station=*", "isA": "station" },
     "tag": { "name": "station=subway_entrance", "isA": "station" },
     "tag": { "name": "station=light_rail", "isA": "station" },

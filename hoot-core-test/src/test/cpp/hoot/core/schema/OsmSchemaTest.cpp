@@ -261,6 +261,12 @@ public:
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.score("parking=surface", "amenity=parking"), 0.001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0, uut.score("parking=surface", "parking=covered"), 0.001);
+
+    // check wildcard mismatchScore for seamark:type.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.1, uut.score("seamark:type=foo", "seamark:type=bar"), 0.001);
+    // Check to see if mismatchScore works within amenity types. This doesn't work now, but it'd
+    // be good to implement this in the near future.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.score("amenity=auditorium", "amenity=embassy"), 0.001);
   }
 
   /**
