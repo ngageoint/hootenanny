@@ -1,7 +1,7 @@
 {
     "tag": {
         "name": "natural",
-        "isA": "hgpoi",
+        "isA": "hgispoi",
         "influence": 1.0,
         "type": "enumeration",
         "geometries": ["area"],

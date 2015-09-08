@@ -2,7 +2,7 @@
 /**
  * Prints all the tags that are in a given category.
  * E.g.
- *    scripts/DisplayCategory.js hgpoi --small
+ *    scripts/DisplayCategory.js hgispoi --small
  *
  * If --small is specified then any tag with a wildcard in that category will
  * cause all other tags in that category to be surpressed. This may be a bit

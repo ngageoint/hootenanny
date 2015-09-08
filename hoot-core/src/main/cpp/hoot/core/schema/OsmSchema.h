@@ -74,8 +74,8 @@ struct OsmSchemaCategory {
     Name = 16,
     PseudoName = 32,
     // Human Geography POI. See ticket #6853 for a definition of a "HGIS POI"
-    HgPoi = 64,
-    All = Poi | Building | Transportation | Use | Name | HgPoi
+    HgisPoi = 64,
+    All = Poi | Building | Transportation | Use | Name | HgisPoi
   } Type;
 
   OsmSchemaCategory() : _type(Empty) {}
@@ -120,9 +120,9 @@ struct OsmSchemaCategory {
     {
       return PseudoName;
     }
-    else if (s == "hgpoi")
+    else if (s == "hgispoi")
     {
-      return HgPoi;
+      return HgisPoi;
     }
     else if (s == "")
     {
@@ -184,9 +184,9 @@ struct OsmSchemaCategory {
     {
       result << "pseudoname";
     }
-    if (_type & HgPoi)
+    if (_type & HgisPoi)
     {
-      result << "hgpoi";
+      result << "hgispoi";
     }
 
     return result;
@@ -398,7 +398,7 @@ public:
   /**
    * Returns true if this is a POI as defined by the Tampa DG group.
    */
-  bool isHgPoi(const Element& e);
+  bool isHgisPoi(const Element& e);
 
   /**
    * Returns true if the element is a highway type (e.g. road, primary, path, etc.)

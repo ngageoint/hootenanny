@@ -284,7 +284,7 @@
         "isA": "bridge_tunnel=unknown",
         "similarTo": { "name": "bridge=no", "weight": 0.5 },
         "similarTo": { "name": "tunnel=yes", "weight": 0.01 },
-        "categories": ["poi", "hgpoi"]
+        "categories": ["poi", "hgispoi"]
     },
 
     "tag": {
@@ -296,7 +296,7 @@
         "name": "tunnel=yes",
         "isA": "bridge_tunnel=unknown",
         "similarTo": { "name": "tunnel=no", "weight": 0.5 },
-        "categories": ["poi", "hgpoi"]
+        "categories": ["poi", "hgispoi"]
     },
 
     "tag": {

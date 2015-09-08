@@ -9,12 +9,12 @@
     "tag": {
         "name": "waterway=dock",
         "isA": "waterway",
-        "categories": ["poi", "hgpoi"]
+        "categories": ["poi", "hgispoi"]
     },
     "tag": {
         "name": "waterway=boatyard",
         "isA": "waterway",
-        "categories": ["poi", "hgpoi"]
+        "categories": ["poi", "hgispoi"]
     },
     "tag": { "name": "waterway=watercourse",  "isA": "waterway", "categories": ["poi"] },
     "tag": { "name": "waterway=river", "isA": "waterway=watercourse", "categories": ["poi"] },
@@ -24,7 +24,7 @@
     "tag": {
         "name": "waterway=canal",
         "isA": "waterway",
-        "categories": ["poi", "hgpoi"]
+        "categories": ["poi", "hgispoi"]
     },
     "tag": { "name": "river_flow=*", "isA": "waterway" },
     "tag": { "name": "river_type=*", "isA": "waterway" },
@@ -32,13 +32,13 @@
     "tag": {
         "name": "waterway=dam",
         "isA": "waterway",
-        "categories": ["poi", "hgpoi"]
+        "categories": ["poi", "hgispoi"]
     },
     "tag": { "name": "waterway=ditch", "isA": "waterway" },
     "tag": { "name": "waterway=wadi", "isA": "waterway" },
     "tag": {
         "name": "bridge=aqueduct", "isA": "waterway",
-        "categories": ["poi", "hgpoi"]
+        "categories": ["poi", "hgispoi"]
     },
 
     "tag": { "name": "type=stream", "isA": "waterway" },

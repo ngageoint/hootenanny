@@ -5,7 +5,7 @@
         "type": "enumeration",
         "geometries": ["node","area"],
         "mismatchScore": .1,
-        "isA": "hgpoi"
+        "isA": "hgispoi"
     },
 
     "#" : " The catch all",

@@ -1,6 +1,6 @@
 {
     "tag": {
-        "name": "historic", "isA": "hgpoi"
+        "name": "historic", "isA": "hgispoi"
     },
     "tag": { "name": "historic=*", "isA": "historic" },
     "tag": {

@@ -1330,14 +1330,14 @@ bool OsmSchema::isCollection(const Element& e) const
   return result;
 }
 
-bool OsmSchema::isHgPoi(const Element& e)
+bool OsmSchema::isHgisPoi(const Element& e)
 {
   bool result = false;
 
   // See ticket #6853 for a definition of a "HGIS POI"
   if (e.getElementType() == ElementType::Node)
   {
-    result = hasCategory(e.getTags(), "hgpoi");
+    result = hasCategory(e.getTags(), OsmSchemaCategory::hgisPoi().toString());
   }
 
   return result;
