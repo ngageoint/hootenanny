@@ -248,6 +248,23 @@ void Way::_makeWritable()
   }
 }
 
+void Way::removeNode(long id)
+{
+  std::vector<long>& nodes = _wayData->getNodeIds();
+  size_t newCount = 0;
+
+  // copy the array in place and remove the unwanted nodes.
+  for (size_t i = 0; i < nodes.size(); i++)
+  {
+    if (nodes[i] != id) {
+      nodes[newCount] = nodes[i];
+      newCount++;
+    }
+  }
+
+  nodes.resize(newCount);
+}
+
 void Way::replaceNode(long oldId, long newId)
 {
   const vector<long>& ids = getNodeIds();

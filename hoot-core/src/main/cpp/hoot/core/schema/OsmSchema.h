@@ -82,7 +82,7 @@ struct OsmSchemaCategory {
   OsmSchemaCategory(OsmSchemaCategory::Type t) : _type(t) {}
 
   static OsmSchemaCategory building() { return OsmSchemaCategory(Building); }
-  static OsmSchemaCategory hgisPoi() { return OsmSchemaCategory(Poi); }
+  static OsmSchemaCategory hgisPoi() { return OsmSchemaCategory(HgisPoi); }
   static OsmSchemaCategory poi() { return OsmSchemaCategory(Poi); }
   static OsmSchemaCategory transportation() { return OsmSchemaCategory(Transportation); }
   static OsmSchemaCategory use() { return OsmSchemaCategory(Use); }
