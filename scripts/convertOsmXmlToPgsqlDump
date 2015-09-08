@@ -3,43 +3,69 @@
 use strict;
 use Fcntl;
 
+sub covertDecimalDegreesToNanodegrees($);
 sub generatePgDumpfileFromOsm($$);
-sub readNodes($$$);
+sub readNodes($$$$$);
+
+sub convertDecimalDegreesToNanodegrees($)
+{
+  my $decimalDegrees = shift(@_);
+  #print("Input degrees: $decimalDegrees\n");
+
+  my $nanoDegrees = sprintf("%10d", ($decimalDegrees * 10000000.0));
+  #print( "In nanodegrees: $nanoDegrees\n" );
+
+  return $nanoDegrees;
+}
 
 sub generatePgDumpfileFromOsm($$)
 {
   my $osmFilename = shift(@_);
   my $sqlFilename = shift(@_);
-  my %knownIds;
+  my %idMappings;
   my $osmFilehandle;
   my $sqlFilehandle;
 
   open( $osmFilehandle, "< $osmFilename") or die( "Could not open OSM file: $osmFilename\n\n" );
   open( $sqlFilehandle, "> $sqlFilename") or die(" Could not open SQL file: $sqlFilename\n\n" );
 
-  readNodes($osmFilehandle, $sqlFilehandle, \%knownIds );
+  my $changesetId     = 1;
+  my $startingNodeId  = 1;
 
-  print( "Testline: " . <$osmFilehandle> );
+  readNodes($osmFilehandle, $sqlFilehandle, \$changesetId, $startingNodeId, \%idMappings );
+
+  print( "\nShould be first way line:\n\t" . <$osmFilehandle> );
 
   close( $osmFilehandle );
   close( $sqlFilehandle );
 }
 
-sub readNodes($$$)
+sub readNodes($$$$$)
 {
-  my $osmFilehandle = shift(@_);
-  my $sqlFilehandle = shift(@_);
-  my $knownIdsRef   = shift(@_);
+  my $osmFilehandle       = shift(@_);
+  my $sqlFilehandle       = shift(@_);
+  my $changesetIdRef      = shift(@_);
+  my $startingNodeId      = shift(@_);
+  my $idMappings          = shift(@_);
 
-  my %knownIds = %{ $knownIdsRef };
+  print( "- Processing nodes: ");
+
+  print( $sqlFilehandle 
+    'COPY current_nodes (id, latitude, longitude, changeset_id, ' .
+    "visible, \"timestamp\", tile, version) FROM stdin;\n" );
+
+  my $changesInChangeset = 0;
 
 
   # Read until we get something of interest (node, way, relation, or close OSM tag
   my $previousLinePosition = tell($osmFilehandle );
   my $currLine = <$osmFilehandle>;
+  my $numNodes = 0;
+  my $dbNodeId = $startingNodeId;
   while ( ! eof($osmFilehandle) )
   {
-    #print( "Read line: $currLine" );
+    chomp( $currLine );
+    #print( "Read line: $currLine\n" );
 
     # If it's something past nodes, bail out
     if ( $currLine =~ /<(?:(?:way|relation) id=\"-?\d+\"|\/osm>)/ )
@@ -50,16 +76,63 @@ sub readNodes($$$)
     # If it's a node, deal with it
     if ( $currLine =~ /<node\s+id=\"-?\d+\"/ )
     {
-      #print( "Processing node" );
+      #print( "Processing node in line $currLine" );
+      $numNodes++;
+
+      # Parse node line
+      if ( $currLine !~ 
+        /<node\s+id=\"(.+?)\"\s+lat=\"(.+?)\"\s+lon=\"(.+?)\"\s+/ )
+      {
+        print( "\nERROR: invalid node line $currLine, bailing\n\n");
+        exit;
+      }
+
+      my $nodeId  = $1;
+      my $nodeLat = $2;
+      my $nodeLon = $3;
+
+      # Establish node ID mapping
+      if ( exists($idMappings->{'node'}->{$nodeId}) )
+      {
+        print("ERROR: node ID $nodeId not unique in input data!\n\n" );
+        exit;
+      }
+
+      $idMappings->{'node'}->{$nodeId} = $dbNodeId;
+      #print("Established node mapping, $nodeId -> $idMappings->{'node'}->{$nodeId}\n" );
+
+      print( $sqlFilehandle
+        sprintf("%d\t%10d\t%10d\t%d\tt\t%s\t123456789\t1\n",
+          $idMappings->{'node'}->{$nodeId},
+          convertDecimalDegreesToNanodegrees($nodeLat),
+          convertDecimalDegreesToNanodegrees($nodeLon),
+          $$changesetIdRef,
+          localtime(time())));
+
+      $dbNodeId++;
+
+      $changesInChangeset++;
+      if ( $changesInChangeset == 50000 )
+      {
+        $$changesetIdRef++;
+        $changesInChangeset = 0;
+      }
     }
 
     $previousLinePosition = tell($osmFilehandle );
     $currLine = <$osmFilehandle>;
   }
 
-  print( "Stopped looking for nodes at $currLine" ); 
+  # Output marker for end of table
+  print( $sqlFilehandle "\\.\n\n\n" );
 
-  # Reset filehandle back one line so we can start processing next section
+  print ("complete ($numNodes)\n");
+
+  print( "Sanity check: idMappings has " . scalar(keys(%{$idMappings->{'node'}})) . " entries\n" );
+
+  #print( "Stopped looking for nodes at $currLine" ); 
+
+  # Reset filehandle back one line so the next processing section starts at correct point
   $osmFilehandle = seek( $osmFilehandle, $previousLinePosition, Fcntl::SEEK_SET );
 }
 
@@ -75,4 +148,6 @@ my $sqlFilename = $ARGV[1];
 
 print( "OSM file: $osmFilename\n" );
 print( "SQL file: $sqlFilename\n" );
+
+print("\n");
 generatePgDumpfileFromOsm( $osmFilename, $sqlFilename );
