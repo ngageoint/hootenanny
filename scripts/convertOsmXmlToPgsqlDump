@@ -2,10 +2,16 @@
 
 use strict;
 use Fcntl;
+use Math::Trig; # For tile number calculations
+use POSIX qw(strftime);
 
 sub covertDecimalDegreesToNanodegrees($);
 sub generatePgDumpfileFromOsm($$);
 sub readNodes($$$$$);
+sub lon2x($);
+sub lat2y($);
+sub convertLatLonToTileNumber($$);
+sub generateISO8601Time($);
 
 sub convertDecimalDegreesToNanodegrees($)
 {
@@ -17,6 +23,51 @@ sub convertDecimalDegreesToNanodegrees($)
 
   return $nanoDegrees;
 }
+
+sub lon2x($)
+{
+  my $lon = shift(@_);
+
+  # Note perl does not have a rounding function, so stackoverflow says
+  #     stealing from printf is about as close as you can come
+  return int(sprintf("%.0f", (($lon + 180.0) * 65535.0 / 360.0)))
+}
+
+sub lat2y($)
+{
+  my $lat = shift(@_);
+
+  return int(sprintf("%.0f", (($lat + 90.0) * 65535.0 / 180.0)));
+}
+
+sub convertLatLonToTileNumber($$)
+{
+  my $lat = shift(@_);
+  my $lon = shift(@_);
+
+  my $y = lat2y($lat);
+  my $x = lon2x($lon);
+
+  my $tile = 0;
+
+  for ( my $i = 15; $i >= 0; $i-- )
+  {
+    $tile = ($tile << 1) | (($x >> $i) & 1);
+    $tile = ($tile << 1) | (($y >> $i) & 1);
+  }
+
+  #print( "Tile calc for x=$lon, y=$lat: $tile\n");
+
+  #exit;
+
+  return $tile;
+}
+
+sub generateISO8601Time()
+{
+  return strftime("%F %T", gmtime(time()));
+}
+
 
 sub generatePgDumpfileFromOsm($$)
 {
@@ -30,7 +81,7 @@ sub generatePgDumpfileFromOsm($$)
   open( $sqlFilehandle, "> $sqlFilename") or die(" Could not open SQL file: $sqlFilename\n\n" );
 
   my $changesetId     = 1;
-  my $startingNodeId  = 1;
+  my $startingNodeId  = 500;
 
   readNodes($osmFilehandle, $sqlFilehandle, \$changesetId, $startingNodeId, \%idMappings );
 
@@ -56,6 +107,8 @@ sub readNodes($$$$$)
 
   my $changesInChangeset = 0;
 
+  # Timestamp that will be used for all nodes
+  my $timestamp = generateISO8601Time();
 
   # Read until we get something of interest (node, way, relation, or close OSM tag
   my $previousLinePosition = tell($osmFilehandle );
@@ -90,6 +143,7 @@ sub readNodes($$$$$)
       my $nodeId  = $1;
       my $nodeLat = $2;
       my $nodeLon = $3;
+      my $tileNumber = convertLatLonToTileNumber($nodeLat, $nodeLon);
 
       # Establish node ID mapping
       if ( exists($idMappings->{'node'}->{$nodeId}) )
@@ -101,13 +155,19 @@ sub readNodes($$$$$)
       $idMappings->{'node'}->{$nodeId} = $dbNodeId;
       #print("Established node mapping, $nodeId -> $idMappings->{'node'}->{$nodeId}\n" );
 
+
+      #print( "Tile number: " . convertLatLonToTileNumber($nodeLat, $nodeLon) . "\n" );
+      
       print( $sqlFilehandle
-        sprintf("%d\t%10d\t%10d\t%d\tt\t%s\t123456789\t1\n",
+        sprintf("%d\t%10d\t%10d\t%d\tt\t%s\t%u\t1\n",
           $idMappings->{'node'}->{$nodeId},
           convertDecimalDegreesToNanodegrees($nodeLat),
           convertDecimalDegreesToNanodegrees($nodeLon),
           $$changesetIdRef,
-          localtime(time())));
+          $timestamp,
+          $tileNumber));
+
+      #print( "Tile number: $tileNumber\n" );
 
       $dbNodeId++;
 
