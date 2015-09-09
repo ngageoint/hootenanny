@@ -59,6 +59,8 @@ import hoot.services.review.ReviewUtils;
 
 /**
  * Writer for reviewed items
+ * 
+ * @deprecated since 0.2.19
  */
 public class ReviewedItemsWriter
 {
@@ -83,16 +85,15 @@ public class ReviewedItemsWriter
     this.changesetId = changesetId;
 
     maxRecordBatchSize =
-        Integer.parseInt(
-          HootProperties.getInstance()
-            .getProperty(
-              "maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
+      Integer.parseInt(
+        HootProperties.getInstance()
+          .getProperty(
+            "maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
   }
 
   /**
    * Updates the review tables in the services database with the reviewed item details associated
    * with the specified map layer
-   *
    *
    * @param reviewedItems the reviewed items
    * @returns the number of items marked as reviewed
@@ -166,15 +167,15 @@ public class ReviewedItemsWriter
       if (reviewRecordsToUpdate.size() > 0)
       {
       	List<List<BooleanExpression>> predicatelist = new ArrayList<List<BooleanExpression>>();
-
       	for (int i=0; i<reviewRecordsToUpdate.size(); i++)
       	{
       		List<BooleanExpression> predicates = new ArrayList<BooleanExpression>();
       		predicates.add(reviewItems.reviewId.eq(reviewRecordsToUpdate.get(i).getReviewId()));
       		predicatelist.add(predicates);
       	}
-
-        DbUtils.batchRecords(mapId, reviewRecordsToUpdate, reviewItems, predicatelist, RecordBatchType.UPDATE, conn, maxRecordBatchSize);
+        DbUtils.batchRecords(
+        	mapId, reviewRecordsToUpdate, reviewItems, predicatelist, RecordBatchType.UPDATE, conn, 
+        	maxRecordBatchSize);
         log.debug(reviewRecordsToUpdate.size() + " review records updated.");
       }
       else

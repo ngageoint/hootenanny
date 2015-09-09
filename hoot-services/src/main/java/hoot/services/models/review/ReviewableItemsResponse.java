@@ -87,6 +87,5 @@ public class ReviewableItemsResponse
   
   public ReviewableItemsResponse()
   {
-    
   }
 }

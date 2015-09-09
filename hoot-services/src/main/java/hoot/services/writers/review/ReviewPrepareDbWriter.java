@@ -75,6 +75,7 @@ import hoot.services.job.Executable;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Element.ElementType;
+import hoot.services.review.ReviewUtils;
 
 /**
  * Writes review data to the services database
@@ -700,7 +701,8 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 								log.debug("Adding UUID: " + uniqueElementId);
 								elementIdMappingRecordsToInsert
 								  .add(
-								    createElementIdMappingRecord(uniqueElementId, osmElementId, elementType, mapId));
+								  	ReviewUtils.createElementIdMappingRecord(
+								  		uniqueElementId, osmElementId, elementType, mapId));
 								flushIdMappingRecords(
 								  elementIdMappingRecordsToInsert, maxRecordBatchSize, logMsgStart);
 							}
@@ -724,18 +726,6 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		log.debug("Wrote " + elementIds.size() + " ID mappings.");
 
 		return idMappingRecordWritten;
-	}
-
-	protected ElementIdMappings createElementIdMappingRecord(final String uniqueElementId, 
-		final long osmElementId, final ElementType elementType, final long mapId)
-	{
-		ElementIdMappings elementIdMappingRecord = new ElementIdMappings();
-		elementIdMappingRecord.setElementId(uniqueElementId);
-		elementIdMappingRecord.setMapId(mapId);
-		elementIdMappingRecord.setOsmElementId(osmElementId);
-		elementIdMappingRecord.setOsmElementType(Element
-		    .elementEnumForElementType(elementType));
-		return elementIdMappingRecord;
 	}
 
 	protected void flushIdMappingRecords(List<ElementIdMappings> elementIdMappingRecordsToInsert,
@@ -890,7 +880,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 												"Adding review item with reviewable item ID: " + reviewableItemId + " and " + 
 											  "review against item ID: " + reviewAgainstItemId);
 											reviewRecordsToInsert.add(
-												createReviewItemRecord(
+												ReviewUtils.createReviewItemRecord(
 													reviewableItemId, reviewScore, reviewAgainstItemId, mapId));
 											reviewableItemIdToReviewAgainstItemIds.put(reviewableItemId, reviewAgainstItemId);
 											flushReviewRecords(reviewRecordsToInsert, maxRecordBatchSize, logMsgStart);
@@ -908,7 +898,8 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 										"Adding review item with reviewable item ID: " + reviewableItemId + 
 										" and " + "review against item ID: " + reviewableItemId);
 									reviewRecordsToInsert.add(
-										createReviewItemRecord(reviewableItemId, reviewScore, reviewableItemId, mapId));
+										ReviewUtils.createReviewItemRecord(reviewableItemId, reviewScore, 
+											reviewableItemId, mapId));
 									reviewableItemIdToReviewAgainstItemIds.put(reviewableItemId, reviewableItemId);
 									flushReviewRecords(reviewRecordsToInsert, maxRecordBatchSize, logMsgStart);
 									numReviewItemsAdded++;
@@ -974,21 +965,6 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 				    + "% complete.");
 			}
 		}
-	}
-
-	protected ReviewItems createReviewItemRecord(final String reviewableItemId,
-	  final double reviewScore, final String reviewAgainstItemId, final long mapId)
-	{
-		ReviewItems reviewItemRecord = new ReviewItems();
-		reviewItemRecord.setMapId(mapId);
-		reviewItemRecord.setReviewableItemId(reviewableItemId);
-		reviewItemRecord.setReviewScore(reviewScore);
-		if (reviewAgainstItemId != null)
-		{
-			reviewItemRecord.setReviewAgainstItemId(reviewAgainstItemId);
-		}
-		reviewItemRecord.setReviewStatus(DbUtils.review_status_enum.unreviewed);
-		return reviewItemRecord;
 	}
 
 	private void writeIdMappingRecords(List<ElementIdMappings> elementIdMappingRecordsToInsert) 

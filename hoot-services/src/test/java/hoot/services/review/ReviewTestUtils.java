@@ -70,7 +70,6 @@ import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Element.ElementType;
-import hoot.services.models.review.MarkItemsReviewedRequest;
 import hoot.services.models.review.ReviewedItem;
 import hoot.services.models.review.ReviewedItems;
 import hoot.services.utils.XmlDocumentBuilder;
@@ -542,17 +541,6 @@ public class ReviewTestUtils
       bounds,
       Double.parseDouble(HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees")));
     return expandedBounds;
-  }
-
-  public static MarkItemsReviewedRequest createMarkItemsReviewedRequest() throws IOException,
-    Exception
-  {
-    MarkItemsReviewedRequest markItemsReviewedRequest = new MarkItemsReviewedRequest();
-    markItemsReviewedRequest.setReviewedItems(createReviewedItems());
-    markItemsReviewedRequest.setReviewedItemsChangeset(
-      XmlDocumentBuilder.toString(createReviewedItemsChangeset()));
-    //System.out.println(markItemsReviewedRequest.getReviewedItemsChangeset());
-    return markItemsReviewedRequest;
   }
 
   public static Document createReviewedItemsChangeset() throws Exception

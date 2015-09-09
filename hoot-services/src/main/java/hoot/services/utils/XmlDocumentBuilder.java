@@ -83,8 +83,7 @@ public class XmlDocumentBuilder
    */
   public static XPath createXPath()
   {
-    XPathFactory factory = XPathFactory.newInstance();
-    return factory.newXPath();
+    return XPathFactory.newInstance().newXPath();
   }
 
   /**

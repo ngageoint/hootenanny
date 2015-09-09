@@ -29,8 +29,6 @@ package hoot.services.models.osm;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Calendar;
@@ -641,5 +639,21 @@ public class Changeset extends Changesets
         "</changeset>" +
       "</osm>";
     return XmlDocumentBuilder.parse(changesetDocStr);
+  }
+  
+  /**
+   * Determines whether changeset contains any items involved in a review
+   * 
+   * @param changesetDoc changeset to examine
+   * @return true if any items in the changeset are involved in a review
+   * @throws TransformerException 
+   */
+  public static boolean changesetContainsFeatureInvolvedInReview(final Document changesetDoc) 
+  	throws TransformerException
+  {
+  	return 
+  		XPathAPI.selectNodeList(
+  	    changesetDoc, "//create|modify|delete/node|way|relation/tag[contains(@k, 'hoot:review')]")
+  			.getLength() > 1;
   }
 }

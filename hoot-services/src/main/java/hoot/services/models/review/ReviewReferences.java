@@ -26,52 +26,48 @@
  */
 package hoot.services.models.review;
 
+import hoot.services.utils.StringsWebWrapper;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
- * A request to mark items as reviewed
+ * A response for review references to a set of UUID's
  */
 @XmlRootElement
-public class MarkItemsReviewedRequest
+public class ReviewReferences
 {
-  private String reviewedItemsChangeset;
-  public String getReviewedItemsChangeset() { return reviewedItemsChangeset; }
-  public void setReviewedItemsChangeset(String reviewedItemsChangeset) 
-  { this.reviewedItemsChangeset = reviewedItemsChangeset; }
+	//all review items that the specified set of UUID's still need to be reviewed against
+	private StringsWebWrapper reviewAgainstItemUuids;
+  public StringsWebWrapper getReviewAgainstItemUuids() { return reviewAgainstItemUuids; }
+  public void setReviewAgainstItemUuids(StringsWebWrapper reviewAgainstItemUuids) 
+  { 
+    this.reviewAgainstItemUuids = reviewAgainstItemUuids;
+  }
   
-  private ReviewedItems reviewedItems;
-  public ReviewedItems getReviewedItems() { return reviewedItems; }
-  public void setReviewedItems(ReviewedItems reviewedItems) { this.reviewedItems = reviewedItems; }
+  //all reviewable items that reference the specified UUID's; uuid's populated only
+  private StringsWebWrapper reviewableItemUuids;
+  public StringsWebWrapper getReviewableItemUuids() { return reviewableItemUuids; }
+  public void setReviewableItemUuids(StringsWebWrapper reviewableItemUuids) 
+  { 
+    this.reviewableItemUuids = reviewableItemUuids;
+  }
   
-  public MarkItemsReviewedRequest()
+  public ReviewReferences()
   {
-    
   }
   
   @Override
   public String toString()
   {
-    String str = "";
-    if (StringUtils.trimToNull(reviewedItemsChangeset) != null)
+    String str = "Review against item UUID's: ";
+    for (String uuid : reviewAgainstItemUuids.getValues())
     {
-      str += "reviewedItemsChangeset:\n";
-      str += reviewedItemsChangeset;
-      str += "\n\n";
+    	str += uuid + ";";
     }
-    if (reviewedItems != null && reviewedItems.getReviewedItems() != null)
+    str += "\nReviewableItem UUID's: ";
+    for (String uuid : reviewableItemUuids.getValues())
     {
-      str += "reviewedItems:\n";
-      for (ReviewedItem reviewedItem : reviewedItems.getReviewedItems())
-      {
-        str += reviewedItem.toString() + "\n";  
-      }
-    }
-    if (StringUtils.trimToNull(reviewedItemsChangeset) == null && 
-      (reviewedItems == null || reviewedItems.getReviewedItems() == null))
-    {
-      return "empty object";
+    	str += uuid + ";";
     }
     return str;
   }

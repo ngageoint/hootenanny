@@ -55,7 +55,6 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -491,33 +490,21 @@ public class ChangesetDbWriter
    *
    * @param changesetId
    *          ID of the changeset being uploaded to
-   * @param reviewedItemsChangeset
+   * @param changesetDoc
    *          changeset contents
    * @return changeset upload response
    * @throws Exception
    */
   @SuppressWarnings("unchecked")
-  public Document write(final long mapId, final long changesetId, final String reviewedItemsChangeset)
-      throws Exception
+  public Document write(final long mapId, final long changesetId, final Document changesetDoc) 
+  	throws Exception
   {
     log.debug("Uploading data for changeset with ID: " + changesetId + " ...");
-
-    Document reviewedItemsChangesetDoc = null;
-    try
-    {
-      reviewedItemsChangesetDoc = (new ChangesetUploadXmlValidator())
-          .parseAndValidate(reviewedItemsChangeset);
-    }
-    catch (Exception e)
-    {
-      throw new Exception("Error parsing changeset diff data: "
-          + StringUtils.abbreviate(reviewedItemsChangeset, 100) + " (" + e.getMessage() + ")");
-    }
 
     changeset = new Changeset(mapId, changesetId, conn);
     this.requestChangesetId = changeset.getId();
     changeset.verifyAvailability();
-    if (changeset.requestChangesExceedMaxElementThreshold(reviewedItemsChangesetDoc))
+    if (changeset.requestChangesExceedMaxElementThreshold(changesetDoc))
     {
       throw new Exception("Changeset maximum element threshold exceeded.");
     }
@@ -525,10 +512,48 @@ public class ChangesetDbWriter
     requestChangesetMapId = mapId;
 
     Collection<XmlSerializable> changesetDiffElements = new ArrayList<XmlSerializable>();
-    changesetDiffElements.addAll(write(reviewedItemsChangesetDoc));
+    changesetDiffElements.addAll(write(changesetDoc));
 
     return (new ChangesetUploadResponseWriter()).writeResponse(changesetId,
         (List<XmlSerializable>) (List<?>) changesetDiffElements);
+  }
+  
+  /**
+   * Performs the OSM element database update portion for a changeset upload
+   * request and returns the elements modified
+   *
+   * Unlike OSM, we don't keep track of multiple versions of the same element.
+   *
+   * OSM element udpate process
+   *
+   * create = insert new modify = update existing + insert new
+   *
+   * hoot element update process
+   *
+   * create = insert new modify = update existing
+   *
+   * @param changesetId
+   *          ID of the changeset being uploaded to
+   * @param changeset
+   *          changeset contents
+   * @return changeset upload response
+   * @throws Exception
+   */
+  public Document write(final long mapId, final long changesetId, final String changeset) 
+  	throws Exception
+  {
+  	Document changesetDoc = null;
+    try
+    {
+    	changesetDoc = (new ChangesetUploadXmlValidator()).parseAndValidate(changeset);
+    }
+    catch (Exception e)
+    {
+      throw new Exception("Error parsing changeset diff data: "
+        + StringUtils.abbreviate(changeset, 100) + " (" + e.getMessage() + ")");
+    }
+
+    return write(mapId, changesetId, changesetDoc);
   }
 
   private List<Element> write(final Document changesetDoc) throws Exception

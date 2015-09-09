@@ -26,56 +26,35 @@
  */
 package hoot.services.models.review;
 
+import hoot.services.utils.StringsWebWrapper;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Represents statistics for a group of reviewable conflated data items associated with a particular
- * map ID.
+ * A request for review references for a set of UUID's
  */
 @XmlRootElement
-public class ReviewableItemsStatistics
+public class ReviewReferencesRequest
 {
-  private long mapId;
-  public long getMapId()
-  {
-    return mapId;
-  }
-  public void setMapId(long mapId)
-  {
-    this.mapId = mapId;
+	private StringsWebWrapper featureUniqueIds;
+  public StringsWebWrapper getFeatureUniqueIds() { return featureUniqueIds; }
+  public void setFeatureUniqueIds(StringsWebWrapper featureUniqueIds) 
+  { 
+    this.featureUniqueIds = featureUniqueIds;
   }
   
-  private long numTotalItems;
-  public long getNumTotalItems()
+  public ReviewReferencesRequest()
   {
-    return numTotalItems;
-  }
-  public void setNumTotalItems(long numTotalItems)
-  {
-    this.numTotalItems = numTotalItems;
   }
   
-  private int numReviewableItems;
-  public int getNumReviewableItems()
+  @Override
+  public String toString()
   {
-    return numReviewableItems;
-  }
-  public void setNumReviewableItems(int numReviewableItems)
-  {
-    this.numReviewableItems = numReviewableItems;
-  }
-  
-  private int numReviewedItems;
-  public int getNumReviewedItems()
-  {
-    return numReviewedItems;
-  }
-  public void setNumReviewedItems(int numReviewedItems)
-  {
-    this.numReviewedItems = numReviewedItems;
-  }
-  
-  public ReviewableItemsStatistics()
-  {
+    String str = "Feature UUID's: ";
+    for (String uuid : featureUniqueIds.getValues())
+    {
+    	str += uuid + ";";
+    }
+    return str;
   }
 }

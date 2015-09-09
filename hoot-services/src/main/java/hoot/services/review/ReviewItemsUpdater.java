@@ -31,54 +31,65 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.ArrayList;
 
+import javax.xml.transform.TransformerException;
+
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
+import hoot.services.db.DbUtils.RecordBatchType;
+import hoot.services.db2.ElementIdMappings;
 import hoot.services.db2.QCurrentNodes;
 import hoot.services.db2.QCurrentRelationMembers;
 import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.db2.QElementIdMappings;
 import hoot.services.db2.QMaps;
 import hoot.services.db2.QReviewItems;
+import hoot.services.db2.ReviewItems;
 import hoot.services.geo.BoundingBox;
-import hoot.services.models.osm.Changeset;
-import hoot.services.models.review.MarkItemsReviewedRequest;
-import hoot.services.models.review.MarkItemsReviewedResponse;
+import hoot.services.models.osm.Element;
 import hoot.services.models.review.ReviewAgainstItem;
 import hoot.services.models.review.ReviewableItem;
-import hoot.services.utils.XmlDocumentBuilder;
-import hoot.services.validators.osm.ChangesetUploadXmlValidator;
 import hoot.services.validators.review.ReviewMapValidator;
-import hoot.services.writers.osm.ChangesetDbWriter;
-import hoot.services.writers.review.ReviewedItemsWriter;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.simple.JSONArray;
+import org.apache.xpath.XPathAPI;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
 import com.mysema.query.Tuple;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.SQLSubQuery;
 import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
+import com.mysema.query.types.expr.BooleanExpression;
 
 /**
  * Marks reviewable items as reviewed;  This is a wrapper around the process of auto
  * creating/closing a changeset and marking items as reviewed.
  */
-public class ReviewItemsMarker
+public class ReviewItemsUpdater
 {
-  private static final Logger log = LoggerFactory.getLogger(ReviewItemsMarker.class);
+  private static final Logger log = LoggerFactory.getLogger(ReviewItemsUpdater.class);
+  
+  private static final QReviewItems reviewItems = QReviewItems.reviewItems;
+  private static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
 
   private long mapId;
   private long userId;
   private Connection conn;
   // 5 min
   public static long LOCK_TIME = 300000;
+  protected int maxRecordBatchSize;
+  
+  //for tests only
+  protected ReviewItemsUpdater()
+  {	
+  }
 
-  public ReviewItemsMarker(final Connection conn, final String mapId) throws Exception
+  public ReviewItemsUpdater(final Connection conn, final String mapId) throws Exception
   {
     this.conn = conn;
     //Check to see if the map exists in the maps table. (404); input mapId may be a map ID or a
@@ -103,8 +114,202 @@ public class ReviewItemsMarker
     {
       throw new Exception("Error locating user associated with map with ID: " + this.mapId);
     }
+    maxRecordBatchSize = 
+  		Integer.parseInt(HootProperties.getInstance()
+  		   .getProperty("maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
   }
   
+  private String[] reviewAgainstUuidsFromChangesetElement(final org.w3c.dom.Node elementXml) 
+  	throws DOMException, TransformerException
+  {
+  	String[] reviewAgainstUuids = null;
+  	final String reviewAgainstUuidStr = 
+    	XPathAPI.selectSingleNode(elementXml, "//tag[@k = 'hoot:review:uuid']").getNodeValue();
+  	if (StringUtils.trimToNull(reviewAgainstUuidStr) != null)
+  	{
+  		if (reviewAgainstUuidStr.contains(";"))
+  		{
+  			reviewAgainstUuids = reviewAgainstUuidStr.split(";");
+  		}
+  		else
+  		{
+  			reviewAgainstUuids = new String[1];
+  			reviewAgainstUuids[0] = reviewAgainstUuidStr;
+  		}
+  	}
+  	return reviewAgainstUuids;
+  }
+  
+  private int updateCreatedReviewItems(final Document changesetDoc) throws Exception
+  {
+  	int numReviewItemsUpdated = 0;
+  	
+    //check create changeset for any newly created reviewable items
+  	final NodeList createdReviewItems = 
+  	  XPathAPI.selectNodeList(
+  	    changesetDoc, "//osmChange/create/node|way|relation/tag[@k='hoot:review:needs and @v='yes']");
+  	List<ElementIdMappings> elementIdMappingRecordsToInsert = new ArrayList<ElementIdMappings>();
+  	List<ReviewItems> reviewItemRecordsToInsert = new ArrayList<ReviewItems>();
+  	for (int i = 0; i < createdReviewItems.getLength(); i++)
+  	{
+  		//add the associated review data; not checking to see if the element already exists in the
+  		//review data, b/c it shouldn't
+  		final org.w3c.dom.Node elementXml = createdReviewItems.item(i);
+  		final String uuid = 
+  			XPathAPI.selectSingleNode(elementXml, "//tag[@k = 'uuid']").getNodeValue();
+  		elementIdMappingRecordsToInsert.add(
+  			ReviewUtils.createElementIdMappingRecord(
+  				uuid, 
+  				Long.parseLong(elementXml.getAttributes().getNamedItem("id").getNodeValue()), 
+  				Element.elementTypeFromString(elementXml.getNodeName()), 
+  				mapId));
+  		final String[] reviewAgainstUuids = reviewAgainstUuidsFromChangesetElement(elementXml);
+  		if (reviewAgainstUuids != null)
+  		{
+    		for (int j = 0; j < reviewAgainstUuids.length; j++)
+    		{
+    			//assuming that an element id mapping already exists for each of the review against items
+    			reviewItemRecordsToInsert.add(
+    	  		ReviewUtils.createReviewItemRecord(
+    	  			uuid, 
+    	  		  //TODO: the way to retrieve the correct score would be to trace back the elements 
+    	  			//that made up this (presumably) merged element...although you could argue that the 
+    	  			//score is inaccurate after a merge; this is possibly complicated, so holding off on 
+    	  			//doing it for now
+    	  			1.0,
+    	  			reviewAgainstUuids[j], 
+    	  			mapId));
+    		}
+  		}
+  		else
+  		{
+  			//adding the item here as reviewed if it has no review against id's left for bookkeeping 
+  			//purposes
+  			ReviewItems reviewItemRecord = 
+  				ReviewUtils.createReviewItemRecord(
+	  			  uuid, 
+	  			  1.0, //TODO: see explanation above
+	  			  null, 
+	  			  mapId);
+  			reviewItemRecord.setReviewStatus(DbUtils.review_status_enum.reviewed);
+  			reviewItemRecordsToInsert.add(reviewItemRecord);
+  		}
+  	}
+  	DbUtils.batchRecords(
+    	mapId, elementIdMappingRecordsToInsert, elementIdMappings, null, RecordBatchType.INSERT, conn, 
+    	maxRecordBatchSize);
+  	DbUtils.batchRecords(
+    	mapId, reviewItemRecordsToInsert, reviewItems, null, RecordBatchType.INSERT, conn, 
+    	maxRecordBatchSize);
+  	numReviewItemsUpdated += reviewItemRecordsToInsert.size();
+  	
+  	return numReviewItemsUpdated;
+  }
+  
+  private int updateModifiedReviewItems(final Document changesetDoc) throws Exception
+  {
+    int numReviewItemsUpdated = 0;
+    
+    //check modify changeset for any modified items that have a review record entry
+    final NodeList modifiedReviewItems = 
+  	  XPathAPI.selectNodeList(
+  	    changesetDoc, "//osmChange/modify/node|way|relation/tag[contains(@k, 'hoot:review')]");
+    List<ReviewItems> reviewItemRecordsToUpdate = new ArrayList<ReviewItems>();
+  	for (int i = 0; i < modifiedReviewItems.getLength(); i++)
+  	{
+  		//update the associated review records; only the hoot:review:uuid tag should have changed 
+  		//client side, so we only update that one
+  		final org.w3c.dom.Node elementXml = modifiedReviewItems.item(i);
+  		final String uuid = 
+    		XPathAPI.selectSingleNode(elementXml, "//tag[@k = 'uuid']").getNodeValue();
+  		final String[] reviewAgainstUuids = reviewAgainstUuidsFromChangesetElement(elementXml);
+  		if (reviewAgainstUuids != null)
+  		{
+  			for (int j = 0; j < reviewAgainstUuids.length; j++)
+  			{
+  				reviewItemRecordsToUpdate.add(
+			  		ReviewUtils.createReviewItemRecord(
+			  			uuid, 
+			  			1.0, //TODO: see comment in updateCreatedReviewItems
+			  			reviewAgainstUuids[j], 
+			  			mapId));
+  			}
+  		}
+  		else
+  		{
+  			//record has nothing left to review against it, so set it to reviewed
+  			ReviewItems reviewItemRecord = 
+  				ReviewUtils.createReviewItemRecord(
+	  			  uuid, 
+	  			  1.0, //TODO: see comment in updateCreatedReviewItems
+	  			  null, 
+	  			  mapId);
+  			reviewItemRecord.setReviewStatus(DbUtils.review_status_enum.reviewed);
+  			reviewItemRecordsToUpdate.add(reviewItemRecord);
+  		}
+  	}
+		List<List<BooleanExpression>> predicatelist = new ArrayList<List<BooleanExpression>>();
+  	for (int i = 0; i < reviewItemRecordsToUpdate.size(); i++)
+  	{
+  		List<BooleanExpression> predicates = new ArrayList<BooleanExpression>();
+  		predicates.add(reviewItems.reviewId.eq(reviewItemRecordsToUpdate.get(i).getReviewId()));
+  		predicatelist.add(predicates);
+  	}
+    DbUtils.batchRecords(
+    	mapId, reviewItemRecordsToUpdate, reviewItems, predicatelist, RecordBatchType.UPDATE, conn, 
+    	maxRecordBatchSize);
+    numReviewItemsUpdated += reviewItemRecordsToUpdate.size();
+    	
+  	return numReviewItemsUpdated;
+  }
+  
+  private int updateDeletedReviewItems(final Document changesetDoc) throws TransformerException
+  {
+    int numReviewItemsUpdated = 0;
+    
+    //check delete changeset for any deleted items that have a review record entry and delete the 
+  	//records from the review data
+  	final NodeList deletedItems = 
+  	  XPathAPI.selectNodeList(changesetDoc, "//osmChange/delete/node|way|relation/tag/@uuid");
+  	List<String> deletedItemUuids = new ArrayList<String>();
+  	for (int i = 0; i < deletedItems.getLength(); i++)
+  	{
+  		deletedItemUuids.add(deletedItems.item(i).getNodeValue());
+  	}
+  	final String[] existingReviewItemUuids = 
+  		new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+	      .from(reviewItems)
+		    .where(reviewItems.reviewableItemId.in(deletedItemUuids.toArray(new String[]{})))
+		    .list(reviewItems.reviewableItemId)
+		    .toArray(new String[]{});
+  	numReviewItemsUpdated += 
+  		new SQLDeleteClause(conn, DbUtils.getConfiguration(mapId), reviewItems)
+  	    .where(reviewItems.reviewableItemId.in(existingReviewItemUuids))
+			  .execute();
+  	numReviewItemsUpdated += 
+  		new SQLDeleteClause(
+  			conn, DbUtils.getConfiguration(mapId), elementIdMappings)
+	      .where(elementIdMappings.elementId.in(existingReviewItemUuids))
+		    .execute();
+  	
+  	return numReviewItemsUpdated;
+  }
+  
+  /**
+   * Synchronizes review table data based on OSM changeset input
+   * 
+   * @param changesetDoc OSM changeset
+   * @return the number of review records updated
+   * @throws Exception 
+   */
+  public int updateReviewItems(final Document changesetDoc) throws Exception
+  {
+  	int numReviewItemsUpdated = 0;
+  	numReviewItemsUpdated += updateCreatedReviewItems(changesetDoc);
+  	numReviewItemsUpdated += updateModifiedReviewItems(changesetDoc);
+  	numReviewItemsUpdated += updateDeletedReviewItems(changesetDoc);
+  	return numReviewItemsUpdated;
+  }
   
   protected final long _verifyMap(final String mapId) throws Exception
   {
@@ -114,24 +319,16 @@ public class ReviewItemsMarker
   protected final long _getUserIdFromMapId() throws Exception
   {
   	QMaps maps = QMaps.maps;
-    //SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
 
-    return
-    		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(maps)
+    return new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(maps)
     .where(maps.id.eq(this.mapId))
     .singleResult(maps.userId);
-  }
-  
-  public ReviewItemsMarker()
-  {
-  	
   }
   
   public void setUserId(final long userid) throws Exception
   {
   	this.userId = userid;
   }
-  
   
   public void setMapId(final String mapId) throws Exception
   {
@@ -143,86 +340,8 @@ public class ReviewItemsMarker
   	this.mapId = mapId;
   }
 
-  /**
-   * Uploads an OSM changeset with items marked as reviewed to the services database and then parses
-   * the contents of the changeset, marking items as reviewed based on custom hoot review tags it
-   * contains
-   *
-   * @param markItemsReviewedRequest a request to mark items as reviewed which contains an
-   * object describing the items to be reviewed, as well as an optional OSM xml changeset; the two
-   * sets of data are not cross validated with each other in any way
-   * @param markAll an option to mark all data for the map layer as reviewed; when true, the
-   * reviewed items object is no needed and ignored if populated
-   * @return an mark items as reviewed response
-   * @throws Exception
-   */
-  public MarkItemsReviewedResponse markItemsReviewed(
-    final MarkItemsReviewedRequest markItemsReviewedRequest, final boolean markAll)
-    throws Exception
-  {
-    MarkItemsReviewedResponse markItemsReviewedResponse = new MarkItemsReviewedResponse();
-    markItemsReviewedResponse.setMapId(mapId);
-
-    Document changesetUploadResponse = null;
-    long changesetId = -1;
-    if (StringUtils.trimToNull(markItemsReviewedRequest.getReviewedItemsChangeset()) != null)
-    {
-      boolean changesetHasElements = false;
-      final Document changesetDiffDoc =
-        XmlDocumentBuilder.parse(markItemsReviewedRequest.getReviewedItemsChangeset());
-      changesetHasElements = ChangesetUploadXmlValidator.changesetHasElements(changesetDiffDoc);
-      if (changesetHasElements)
-      {
-        changesetId =
-          Changeset.createChangeset(
-            Changeset.getChangesetCreateDoc("marking items reviewed for map ID: " + mapId),
-            mapId,
-            userId,
-            conn);
-        //TODO: There really needs to also be a check in here that makes sure every element tag
-        //already has a changeset attribute (or iterate through the element tag DOM attributes.
-        //For now, just assuming that iD has already added the changeset attributes.  Whether the
-        //value is empty or not doesn't matter, since it will be overwritten here.
-        markItemsReviewedRequest.setReviewedItemsChangeset(
-          markItemsReviewedRequest.getReviewedItemsChangeset()
-            .replaceAll("changeset=\"\"", "changeset=\"" + changesetId + "\"")
-            .replaceAll("changeset=\"-*\\d+\"", "changeset=\"" + changesetId + "\""));
-        //log.debug(markItemsReviewedRequest.getReviewedItemsChangeset());
-        
-        //the changeset upload process will catch any elements in the changeset xml which are out
-        //of sync with the element versions in the OSM element tables, by design
-        changesetUploadResponse =
-          (new ChangesetDbWriter(conn)).write(mapId,
-            changesetId, markItemsReviewedRequest.getReviewedItemsChangeset());
-        Changeset.closeChangeset(mapId, changesetId, conn);
-
-        markItemsReviewedResponse.setChangesetUploadResponse(
-          XmlDocumentBuilder.toString(changesetUploadResponse));
-      }
-    }
-
-    //mark all items as reviewed in review_items; record the changeset ID and other review
-    //details
-    if (markAll)
-    {
-      markItemsReviewedRequest.setReviewedItems(
-        ReviewUtils.getReviewedItemsCollectionForAllRecords(mapId, conn));
-    }
-    final int numItemsMarkedReviewed =
-      (new ReviewedItemsWriter(conn, mapId, changesetId)).writeReviewedItems(
-        markItemsReviewedRequest.getReviewedItems());
-
-    //this will still be = -1 at this point if nothing was in the changeset input parameter or it
-    //was invalid
-    markItemsReviewedResponse.setChangesetId(changesetId);
-    //this will null at this point if nothing was in the changeset input parameter or it was invalid
-    markItemsReviewedResponse.setNumItemsMarkedReviewed(numItemsMarkedReviewed);
-    return markItemsReviewedResponse;
-  }
-  
-  
   protected final SQLUpdateClause _getLastAccessUpdateClause(final String reviewItemId, 
-      final Timestamp newLastAccessTime, final String reviewAgainst) throws Exception
+    final Timestamp newLastAccessTime, final String reviewAgainst) throws Exception
   {
     QReviewItems rm = QReviewItems.reviewItems;
     
@@ -497,7 +616,7 @@ public class ReviewItemsMarker
     java.util.Date date= new java.util.Date();
     final long curTimeMili = date.getTime();
     Timestamp now = new Timestamp(curTimeMili);
-    Timestamp past = new Timestamp(curTimeMili - ReviewItemsMarker.LOCK_TIME);
+    Timestamp past = new Timestamp(curTimeMili - ReviewItemsUpdater.LOCK_TIME);
     
     long waittime = curTimeMili - LOCK_TIME;
     Timestamp compareTime = new Timestamp(waittime);

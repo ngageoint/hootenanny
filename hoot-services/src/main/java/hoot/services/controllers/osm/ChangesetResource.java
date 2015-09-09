@@ -32,11 +32,14 @@ import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.ModelDaoUtils;
+import hoot.services.review.ReviewItemsUpdater;
 import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.validators.osm.ChangesetUploadXmlValidator;
 import hoot.services.writers.osm.ChangesetDbWriter;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -315,6 +318,12 @@ public class ChangesetResource
    * 
    * @param changeset OSM changeset diff data
    * @param changesetId ID of the changeset being uploaded; changeset with the ID must already exist
+   * @param mapId ID of the map owning the changeset being uploaded
+   * @param allowChangesToUnreviewedFeatures determines whether the uploaded changeset was edited 
+   * inside of a Hootenanny review session; if true data involved in a review is allowed to be 
+   * updated; otherwise, an error is thrown.  This prevents users not in a review session from 
+   * modifying data that still needs to be reviewed.  A more robust solution would involve 
+   * replacing this with a user id which could be identified as being in a review session.
    * @return response acknowledging the result of the update operation with updated entity ID 
    * information
    * @throws Exception
@@ -331,7 +340,10 @@ public class ChangesetResource
     @PathParam("changesetId") 
     final long changesetId,
     @QueryParam("mapId")
-    final String mapId)
+    final String mapId,
+    @DefaultValue("false")
+    @QueryParam("allowChangesToUnreviewedFeatures")
+    final boolean allowChangesToUnreviewedFeatures)
     throws Exception
   {
     Connection conn = DbUtils.createConnection();
@@ -339,7 +351,6 @@ public class ChangesetResource
     try
     {
       log.debug("Intializing database connection...");
-
       
       log.debug("Intializing changeset upload transaction...");
       TransactionStatus transactionStatus = 
@@ -349,12 +360,44 @@ public class ChangesetResource
       
       try
       { 
-      	if(mapId == null) {
+      	if (mapId == null) 
+      	{
       		throw new Exception("Invalid map id.");
       	}
       	long mapid = Long.parseLong(mapId);
+      	Document changesetDoc = null;
+        try
+        {
+        	changesetDoc = (new ChangesetUploadXmlValidator()).parseAndValidate(changeset);
+        }
+        catch (Exception e)
+        {
+          throw new Exception("Error parsing changeset diff data: "
+            + StringUtils.abbreviate(changeset, 100) + " (" + e.getMessage() + ")");
+        }
         changesetUploadResponse = 
-          (new ChangesetDbWriter(conn)).write(mapid, changesetId, changeset);
+          (new ChangesetDbWriter(conn)).write(mapid, changesetId, changesetDoc);
+        
+        final boolean changesetContainsFeaturesInvolvedInReview = 
+          Changeset.changesetContainsFeatureInvolvedInReview(changesetDoc);
+        if (changesetContainsFeaturesInvolvedInReview)
+        {
+        	if (!allowChangesToUnreviewedFeatures)
+          {
+          	throw new Exception(
+          	  "One or more features in the changeset are involved in an unresolved review.  " +
+          	  "Resolve the associated review(s) during a review process before editing the " +
+          	  "feature(s) outside of a review process.");
+          }
+          else
+          {
+          	final int numReviewItemsUpdated = 
+          		(new ReviewItemsUpdater(conn, mapId)).updateReviewItems(changesetDoc);
+          	log.debug(
+          		String.valueOf(numReviewItemsUpdated) + " review records were updated as a " +
+          		"result of the changeset save.");
+          }
+        } 
       }
       catch (Exception e)
       {
@@ -459,7 +502,9 @@ public class ChangesetResource
       //TODO: should the visibility exception be changed from a 400 to a 409?
       else if (e.getMessage().contains("exist specified for") ||
                e.getMessage().contains("exist for") ||
-               e.getMessage().contains("is still used by"))
+               e.getMessage().contains("is still used by") ||
+               e.getMessage().contains(
+                 "One or more features in the changeset are involved in an unresolved review"))
       {
         ResourceErrorHandler.handleError(e.getMessage(), Status.PRECONDITION_FAILED, log); //412
       }

@@ -40,14 +40,14 @@ import org.mockito.Mockito;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 
-public class ReviewItemsMarkerTest {
+public class ReviewItemsUpdaterTest {
 	
 	
 	@Test
 	@Category(UnitTest.class)
 	public void testGetLastAccessUpdateClause() throws Exception
 	{
-		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		ReviewItemsUpdater spy = Mockito.spy(new ReviewItemsUpdater());
 		spy.setMapId(1);
 		spy.setUserId(1);
 
@@ -76,7 +76,7 @@ public class ReviewItemsMarkerTest {
 	@Category(UnitTest.class)
 	public void testGetAvailableReviewQuery() throws Exception
 	{
-		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		ReviewItemsUpdater spy = Mockito.spy(new ReviewItemsUpdater());
 		spy.setMapId(1);
 		spy.setUserId(1);
 		
@@ -106,7 +106,7 @@ public class ReviewItemsMarkerTest {
 	@Category(UnitTest.class)
 	public void testGetAvailableReviewCntQuery() throws Exception
 	{
-		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		ReviewItemsUpdater spy = Mockito.spy(new ReviewItemsUpdater());
 		spy.setMapId(1);
 		spy.setUserId(1);
 		
@@ -122,7 +122,7 @@ public class ReviewItemsMarkerTest {
 	@Category(UnitTest.class)
 	public void testGetLockedReviewCntQuery() throws Exception
 	{
-		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		ReviewItemsUpdater spy = Mockito.spy(new ReviewItemsUpdater());
 		spy.setMapId(1);
 		spy.setUserId(1);
 		
@@ -137,7 +137,7 @@ public class ReviewItemsMarkerTest {
 	@Category(UnitTest.class)
 	public void testGetTotalReviewCntQuery() throws Exception
 	{
-		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		ReviewItemsUpdater spy = Mockito.spy(new ReviewItemsUpdater());
 		spy.setMapId(1);
 		spy.setUserId(1);
 		
@@ -153,7 +153,7 @@ public class ReviewItemsMarkerTest {
 	@Category(UnitTest.class)
 	public void testGetReviewAgainstForReviewable() throws Exception
 	{
-		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		ReviewItemsUpdater spy = Mockito.spy(new ReviewItemsUpdater());
 		spy.setMapId(1);
 		spy.setUserId(1);
 		
@@ -170,7 +170,7 @@ public class ReviewItemsMarkerTest {
 	@Category(UnitTest.class)
 	public void testGetElementMappingForReviewable() throws Exception
 	{
-		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		ReviewItemsUpdater spy = Mockito.spy(new ReviewItemsUpdater());
 		spy.setMapId(1);
 		spy.setUserId(1);
 		
@@ -188,7 +188,7 @@ public class ReviewItemsMarkerTest {
 	{
 		DbUtils.createConnection();
 		
-		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		ReviewItemsUpdater spy = Mockito.spy(new ReviewItemsUpdater());
 		spy.setMapId(1);
 		spy.setUserId(1);
 		
@@ -211,7 +211,7 @@ public class ReviewItemsMarkerTest {
 	{
 		DbUtils.createConnection();
 		
-		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		ReviewItemsUpdater spy = Mockito.spy(new ReviewItemsUpdater());
 		spy.setMapId(1);
 		spy.setUserId(1);
 		
@@ -234,7 +234,7 @@ public class ReviewItemsMarkerTest {
 	{
 		DbUtils.createConnection();
 		
-		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		ReviewItemsUpdater spy = Mockito.spy(new ReviewItemsUpdater());
 		spy.setMapId(1);
 		spy.setUserId(1);
 		
@@ -260,7 +260,7 @@ public class ReviewItemsMarkerTest {
 	{
 		DbUtils.createConnection();
 		
-		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		ReviewItemsUpdater spy = Mockito.spy(new ReviewItemsUpdater());
 		spy.setMapId(1);
 		spy.setUserId(1);
 		
@@ -280,7 +280,7 @@ public class ReviewItemsMarkerTest {
 	{
 		DbUtils.createConnection();
 		
-		ReviewItemsMarker spy = Mockito.spy(new ReviewItemsMarker());
+		ReviewItemsUpdater spy = Mockito.spy(new ReviewItemsUpdater());
 		spy.setMapId(1);
 		spy.setUserId(1);
 		

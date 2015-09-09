@@ -39,12 +39,10 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.lang3.StringUtils;
 import org.deegree.commons.ows.exception.OWSException;
 import org.deegree.services.wps.ProcessletException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mysema.query.sql.SQLQuery;
-
 
 import hoot.services.db.DbUtils;
 import hoot.services.db2.ElementIdMappings;
@@ -344,4 +342,49 @@ public class ReviewUtils
       ResourceErrorHandler.handleError(message, status, log);
     }
   }
+  
+  /**
+   * 
+   * 
+   * @param uniqueElementId
+   * @param osmElementId
+   * @param elementType
+   * @param mapId
+   * @return
+   */
+  public static ElementIdMappings createElementIdMappingRecord(final String uniqueElementId, 
+		final long osmElementId, final ElementType elementType, final long mapId)
+	{
+		ElementIdMappings elementIdMappingRecord = new ElementIdMappings();
+		elementIdMappingRecord.setElementId(uniqueElementId);
+		elementIdMappingRecord.setMapId(mapId);
+		elementIdMappingRecord.setOsmElementId(osmElementId);
+		elementIdMappingRecord.setOsmElementType(Element
+		    .elementEnumForElementType(elementType));
+		return elementIdMappingRecord;
+	}
+  
+  /**
+   * 
+   * 
+   * @param reviewableItemId
+   * @param reviewScore
+   * @param reviewAgainstItemId
+   * @param mapId
+   * @return
+   */
+  public static ReviewItems createReviewItemRecord(final String reviewableItemId,
+	  final double reviewScore, final String reviewAgainstItemId, final long mapId)
+	{
+		ReviewItems reviewItemRecord = new ReviewItems();
+		reviewItemRecord.setMapId(mapId);
+		reviewItemRecord.setReviewableItemId(reviewableItemId);
+		reviewItemRecord.setReviewScore(reviewScore);
+		if (reviewAgainstItemId != null)
+		{
+			reviewItemRecord.setReviewAgainstItemId(reviewAgainstItemId);
+		}
+		reviewItemRecord.setReviewStatus(DbUtils.review_status_enum.unreviewed);
+		return reviewItemRecord;
+	}
 }
