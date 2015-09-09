@@ -272,6 +272,7 @@ struct TagVertex
   }
 
   QString name;
+  QString description;
   QString key;
   QString value;
   double influence;

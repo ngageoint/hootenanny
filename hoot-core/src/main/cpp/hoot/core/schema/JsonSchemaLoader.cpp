@@ -173,6 +173,10 @@ private:
         {
           _loadSimilarTo(tv.name, obj[i].value_);
         }
+        else if (obj[i].name_ == "description")
+        {
+          tv.description = toString(obj[i].value_);
+        }
         else if (obj[i].name_ == "influence")
         {
           tv.influence = obj[i].value_.get_value<double>();

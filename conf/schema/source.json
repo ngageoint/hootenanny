@@ -1,0 +1,42 @@
+{
+    "#": "The metadata concept contains metadata about the feature. Who created it, where it came from, etc. This doesn't contain actual information about the feature.",
+
+    "tag": { "name": "source", "isA": "metadata" },
+    "tag": { "name": "regex?source:.*", "isA": "source" },
+    "tag": {
+        "name": "source:geometry",
+        "isA": "source",
+        "description": "Use the source:geometry=* tag to indicate the source of the geometry of an object added to OpenStreetMap."
+    },
+    "tag": {
+        "name": "source:geometry:sensor",
+        "isA": "source",
+        "type": "enumeration",
+        "description": "The sensor used to collect the source imagery."
+    },
+    "tag": {
+        "name": "source:geometry:sensor=*",
+        "isA": "source:geometry:sensor",
+        "description": "Catch all sensor match"
+    },
+    "tag": {
+        "name": "source:geometry:sensor=WV01",
+        "isA": "source:geometry:sensor",
+        "description": "DigitalGlobe WorldView 1"
+    },
+    "tag": {
+        "name": "source:geometry:sensor=WV02",
+        "isA": "source:geometry:sensor",
+        "description": "DigitalGlobe WorldView 2"
+    },
+
+    "tag": {
+        "name": "source:geometry:date",
+        "isA": "source",
+        "type": "text",
+        "description": "The date the source material was collected. Preferrably as ISO 8601."
+    },
+
+
+    "#" : "end"
+}

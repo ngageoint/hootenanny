@@ -31,6 +31,12 @@
     "tag": { "name": "building=hospital", "isA": "building", "categories": ["poi"] },
     "tag": { "name": "building=school", "isA": "building", "categories": ["poi"] },
 
+    "tag": {
+        "name": "building=hotel",
+        "isA": "building",
+        "similarTo": { "name": "tourism=hotel", "weight": 0.9 },
+        "similarTo": { "name": "amenity=hotel", "weight": 0.9 }
+    },
 
     "tag": {
         "name": "abstract_building_place_of_worship",
@@ -78,6 +84,7 @@
         "isA": "abstract_building_place_of_worship",
         "similarTo": { "name": "religion=christian", "weight": 1.0 } },
 
+    "tag": { "name": "building=garage", "isA": "building", "categories": ["poi"] },
     "tag": { "name": "building=transportation", "isA": "building", "categories": ["poi"] },
     "tag": { "name": "building=train_station", 
         "isA": "building", 

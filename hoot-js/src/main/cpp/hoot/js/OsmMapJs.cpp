@@ -34,6 +34,7 @@
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
+#include <hoot/js/visitors/JsFunctionVisitor.h>
 #include "JsRegistrar.h"
 
 using namespace v8;
@@ -149,10 +150,22 @@ Handle<Value> OsmMapJs::visit(const Arguments& args)
 
   OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
-  shared_ptr<ElementVisitor> v =
-      ObjectWrap::Unwrap<ElementVisitorJs>(args[0]->ToObject())->getVisitor();
+  if (args[0]->IsFunction())
+  {
+    Persistent<Function> func = Persistent<Function>::New(Handle<Function>::Cast(args[0]));
 
-  map->getMap()->visitRw(*v);
+    JsFunctionVisitor v;
+    v.addFunction(func);
+
+    map->getMap()->visitRw(v);
+  }
+  else
+  {
+    shared_ptr<ElementVisitor> v =
+        ObjectWrap::Unwrap<ElementVisitorJs>(args[0]->ToObject())->getVisitor();
+
+    map->getMap()->visitRw(*v);
+  }
 
   return scope.Close(Undefined());
 }

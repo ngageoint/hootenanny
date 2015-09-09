@@ -53,6 +53,7 @@ void OsmSchemaJs::Init(Handle<Object> exports)
   schema->Set(String::NewSymbol("isBuilding"), FunctionTemplate::New(isBuilding)->GetFunction());
   schema->Set(String::NewSymbol("isLinear"), FunctionTemplate::New(isLinear)->GetFunction());
   schema->Set(String::NewSymbol("isLinearWaterway"), FunctionTemplate::New(isLinearWaterway)->GetFunction());
+  schema->Set(String::NewSymbol("isMetaData"), FunctionTemplate::New(isMetaData)->GetFunction());
   schema->Set(String::NewSymbol("isPoi"), FunctionTemplate::New(isPoi)->GetFunction());
   schema->Set(String::NewSymbol("score"), FunctionTemplate::New(score)->GetFunction());
 }
@@ -104,6 +105,15 @@ Handle<Value> OsmSchemaJs::isLinearWaterway(const Arguments& args) {
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
   return scope.Close(Boolean::New(OsmSchema::getInstance().isLinearWaterway(*e)));
+}
+
+Handle<Value> OsmSchemaJs::isMetaData(const Arguments& args) {
+  HandleScope scope;
+
+  QString key = toCpp<QString>(args[0]);
+  QString value = toCpp<QString>(args[1]);
+
+  return scope.Close(Boolean::New(OsmSchema::getInstance().isMetaData(key, value)));
 }
 
 Handle<Value> OsmSchemaJs::isPoi(const Arguments& args) {
