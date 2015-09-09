@@ -480,9 +480,11 @@ hgis20.rules = {
      ['DISEASE','acute neurological syndrome','disease','acute_neurological_syndrome'],
      ['DISEASE','acute respiratory syndrome','disease','acute_respiratory_syndrome'],
      ['DISEASE','acute watery diarrhoeal syndrome','disease','acute_watery_diarrhoeal_syndrome'],
+     ['DISEASE','bubonic plague','disease','bubonic_plague'],
      ['DISEASE','cerebro spinal','disease','cerebro_spinal'],
      ['DISEASE','chikungunya','disease','chikungunya'],
      ['DISEASE','cholera','disease','cholera'],
+     ['DISEASE','cutaneous leishmaniasis','disease','cutaneous_leishmaniasis'],
      ['DISEASE','dengue','disease','dengue'],
      ['DISEASE','ebola','disease','ebola'],
      ['DISEASE','equine encephalitis','disease','equine_encephalitis'],
@@ -1052,12 +1054,13 @@ hgis20.rules = {
      ['border$TYPE2','Trail','border:type','trail'],
      ['border$TYPE2','Village','border:type','village'],
 
-     ['bridge$TYPE1','Bridge','bridge','yes'],
-     ['bridge$TYPE1','Tunnel','tunnel','yes'],
+     ['bridge$TYPE','Bridge','bridge','yes'],
+     ['bridge$TYPE','Tunnel','tunnel','yes'],
 
      ['bridge$TYPE2','Road','transport:type','road'],
      ['bridge$TYPE2','Rail','transport:type','railway'],
      ['bridge$TYPE2','Pedestrian','transport:type','pedestrian'],
+     ['bridge$TYPE2','Water','bridge:type','water'], /// What is this???
 
      ['commercial$TYPE1','Service','raw:commercialTYPE1','service'],
      ['commercial$TYPE1','Retail','raw:commercialTYPE1','retail'],
@@ -1066,7 +1069,7 @@ hgis20.rules = {
      ['commercial$TYPE1','Industrial','raw:commercialTYPE1','industrial'],
      ['commercial$TYPE1','Financial','raw:commercialTYPE1','financial'],
      ['commercial$TYPE1','Automotive','raw:commercialTYPE1','automotive'],
-     ['commercial$TYPE2','Telecommunications','raw:commercialTYPE1','telecommunications'],
+     ['commercial$TYPE1','Telecommunications','raw:commercialTYPE1','telecommunications'],
 
      ['commercial$TYPE2','Airline','shop','travel_agency'],
      ['commercial$TYPE2','ATM','amenity','atm'],
@@ -1194,9 +1197,12 @@ hgis20.rules = {
      ['hadr$TYPE2','Collapse','hadr:type','collapse'],
      ['hadr$TYPE2','Cyclone','hadr:type','cyclone'],
      ['hadr$TYPE2','Drought','hadr:type','drought'],
+     ['hadr$TYPE2','Earthquake','hadr:type','earthquake'],
      ['hadr$TYPE2','Explosion','hadr:type','explosion'],
      ['hadr$TYPE2','Fire','hadr:type','fire'],
+     ['hadr$TYPE2','Flood','hadr:type','flood'],
      ['hadr$TYPE2','Flash Flood','hadr:type','flash_flood'],
+     ['hadr$TYPE2','General Flood','hadr:type','general_flood'],
      ['hadr$TYPE2','Forest Fire','hadr:type','forest_fire'],
      ['hadr$TYPE2','General Flood','hadr:type','general_flood'],
      ['hadr$TYPE2','Landslide','hadr:type','landslide'],
@@ -1281,10 +1287,12 @@ hgis20.rules = {
      ['medical$TYPE2','Dental','raw:medicalTYPE2','dental'],
      ['medical$TYPE2','Emergency','raw:medicalTYPE2','emergency'],
      ['medical$TYPE2','Headquarters','raw:medicalTYPE2','headquarters'],
+     ['medical$TYPE2','Health Center','raw:medicalTYPE2','Health Complex'],
      ['medical$TYPE2','Health Complex','raw:medicalTYPE2','Health Complex'],
      ['medical$TYPE2','Hot Spring','raw:medicalTYPE2','Hot Spring'],
      ['medical$TYPE2','Other','raw:medicalTYPE2','other'],
      ['medical$TYPE2','Pharmaceutical','raw:medicalTYPE2','pharmaceutical'],
+     ['medical$TYPE2','Rehabilitation','raw:medicalTYPE2','Rehabilitation'],
      ['medical$TYPE2','Spa','raw:medicalTYPE2','spa'],
 
      ['military$TYPE','Air Force','military:service','air_force'],
@@ -1355,6 +1363,7 @@ hgis20.rules = {
 
      ['public$TYPE','Administrative Facility','ofice','public_administration'],
      ['public$TYPE','Customs','amenity','customs'],
+     ['public$TYPE','Check Point','amenity','check_point'],
      ['public$TYPE','Fire Station','amenity','fire_station'],
      ['public$TYPE','Police Station','amenity','police'],
      ['public$TYPE','Security Station','use','security_services'], // TDSv61
@@ -1505,6 +1514,7 @@ hgis20.rules = {
      ['tourist$TYPE','Museum','raw:touristTYPE','museum'],
      ['tourist$TYPE','National Park','raw:touristTYPE','national park'],
      ['tourist$TYPE','Other','raw:touristTYPE','other'],
+     ['tourist$TYPE','Outdoor','tourism','outdoor'],
      ['tourist$TYPE','Outdoor/Adventure','tourism','outdoor_adventure'],
      ['tourist$TYPE','Spa','amenity','spa'],
      ['tourist$TYPE','Theater','raw:touristTYPE','theater'],
@@ -1549,6 +1559,8 @@ hgis20.rules = {
      ['hydrol$TYPE','Lake','water','lake'],
      ['hydrol$TYPE','Land Subject to Inundation','water','intermittent'],
      ['hydrol$TYPE','River/Stream','waterway','river'],
+     ['marine$TYPE','Lighthouse & Beacons','raw:marineTYPE','lighthouses & beacons'],
+     ['lodging$TYPE2','Condominiums','raw:lodgingTYPE2','condominium'],
 
     ], // End one2oneIn
 
@@ -1556,7 +1568,6 @@ hgis20.rules = {
     // This is for Export only. The values are swapped before use
     one2oneOut : [
      [undefined,undefined,'natural','water'], // to get rid of errors
-     ['marine$TYPE','Lighthouse & Beacons','raw:marineTYPE','lighthouses & beacons'],
    ], // End one2oneOut
 
     // ##### End of One2One Rules #####

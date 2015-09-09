@@ -201,10 +201,24 @@ hgis20 = {
 
         } // End in attrs loop
 
-        // Slam some of the attributes to lower case to amke matching easier
-        if (attrs.CONF_IMAGE) attrs.CONF_IMAGE = attrs['CONF_IMAGE'].toString().toLowerCase();
-        if (attrs.EVENT_TYPE) attrs.EVENT_TYPE = attrs['EVENT_TYPE'].toString().toLowerCase();
-        if (attrs.DISEASE) attrs.DISEASE = attrs['DISEASE'].toString().toLowerCase();
+        // Slam some of the attributes to lower case to amke matching easier. Yes, this is Ugly
+        if (attrs.CONF_IMAGE)
+        {
+            var tmp = attrs.CONF_IMAGE;
+            attrs.CONF_IMAGE = tmp.toLowerCase();
+        }
+
+        if (attrs.EVENT_TYPE)
+        {
+            var tmp = attrs.EVENT_TYPE;
+            attrs.EVENT_TYPE = tmp.toLowerCase();
+        }
+
+        if (attrs.DISEASE)
+        {
+            var tmp = attrs.DISEASE;
+            attrs.DISEASE = tmp.toLowerCase();
+        }
 
 
         // Sort out uglyness. We have seen: '1', 'High', '1 - High', 'high' etc
@@ -551,8 +565,8 @@ hgis20 = {
             // Add features to ignore
             hgis20.ignoreList.FCSUBTYPE = '';
             hgis20.ignoreList.UFI = '';
-            hgis20.ignoreList.SHAPE_Length = '';
-            hgis20.ignoreList.SHAPE_Area = '';
+            hgis20.ignoreList.SHAPE_LENGTH = '';
+            hgis20.ignoreList.SHAPE_AREA = '';
             hgis20.ignoreList.IMGNAME = '';
 
             // Drop GEONAMES stuff
@@ -645,6 +659,7 @@ hgis20 = {
             hgis20.ignoreList['hoot:score:review'] = '';
             hgis20.ignoreList['hoot:score:uuid'] = '';
             hgis20.ignoreList['error:circular'] = '';
+            hgis20.ignoreList['source:ingest:datetime'] = '';
 
             // translate.dumpLookup(hgis20.ignoreList);
 
