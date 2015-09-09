@@ -54,7 +54,7 @@ hgis20 = {
         for (var i=0, slen = rawSchema.length; i < slen; i++)
         {
             // Build a layername lookup list to validate against
-            hgis20.layersInSchema[rawSchema[i].name] = 1;
+            hgis20.layersInSchema[rawSchema[i].name + ':' + rawSchema[i].geom] = 1;
 
             // Build a lookup table of attributes for validation
             var attrArray = [];
@@ -201,6 +201,30 @@ hgis20 = {
 
         } // End in attrs loop
 
+        // Slam some of the attributes to lower case to amke matching easier
+        if (attrs.CONF_IMAGE) attrs.CONF_IMAGE = attrs['CONF_IMAGE'].toString().toLowerCase();
+        if (attrs.EVENT_TYPE) attrs.EVENT_TYPE = attrs['EVENT_TYPE'].toString().toLowerCase();
+        if (attrs.DISEASE) attrs.DISEASE = attrs['DISEASE'].toString().toLowerCase();
+
+
+        // Sort out uglyness. We have seen: '1', 'High', '1 - High', 'high' etc
+        if (attrs.SPA_ACC)
+        {
+            var acc_val = attrs.SPA_ACC;
+            if (acc_val.indexOf('1' > -1 || acc_val.indexOf('igh') > -1)) // High
+            {
+                attrs.SPA_ACC = '1 - High';
+            }
+            else if (acc_val.indexOf('2' > -1 || acc_val.indexOf('edium') > -1)) // Medium
+            {
+                attrs.SPA_ACC = '2 - Medium';
+            }
+            else if (acc_val.indexOf('3' > -1 || acc_val.indexOf('ow') > -1)) // Low
+            {
+                attrs.SPA_ACC = '3 - Low';
+            }
+      } // End SPA_ACC
+
         //Sort out TYPE, TYPE1 & TYPE2. This is to make life easier in the one2one rules
         if (hgis20.rules.layerNames[layerName] !== undefined)
         {
@@ -211,11 +235,15 @@ hgis20 = {
                 attrs[tName + '$TYPE'] = attrs.TYPE;
                 delete attrs.TYPE;
             }
-            else if (attrs.TYPE1)
+
+            if (attrs.TYPE1)
             {
                 attrs[tName + '$TYPE1'] = attrs.TYPE1;
                 delete attrs.TYPE1;
+            }
 
+            if (attrs.TYPE2)
+            {
                 attrs[tName + '$TYPE2'] = attrs.TYPE2;
                 delete attrs.TYPE2;
             }
@@ -230,10 +258,28 @@ hgis20 = {
 
     applyToOsmPostProcessing : function (attrs, tags, layerName)
     {
-
         // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
         tags.source = 'hgisv20';
-        tags.uuid = '{' + attrs['UFI'].toString().toLowerCase() + '}';
+        tags.uuid = createUuid();
+
+        // Fix up bridges and tunnels
+        if (tags['transport:type'])
+        {
+            switch(tags['transport:type'])
+            {
+                case 'road':
+                    tags.highway = 'road';
+                    break;
+
+                case 'railway':
+                    tags.railway = 'rail';
+                    break;
+
+                case 'pedestrian':
+                    tags.highway = 'footway';
+                    break;
+            }
+        }
 
 
     }, // End of applyToOsmPostProcessing
@@ -266,6 +312,78 @@ hgis20 = {
         }
 
 
+        if (hgis20.hgisPreRules == undefined)
+        {
+        // See TDSv61 ToOsmPostProcessing for more details about rulesList.
+            var rulesList = [
+//             ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] == 'bus'"],
+//             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
+            ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
+//             ["t.control_tower && t.man_made == 'tower'","delete t.man_made"],
+//             ["t.crossing == 'tank' && t.highway == 'crossing'","delete t.highway"],
+//             ["t.dock && t.waterway == 'dock'","delete t.waterway"],
+//             ["t.golf == 'driving_range' && t.leisure == 'golf_course'","delete t.leisure"],
+//             ["t.highway == 'bus_stop'","t['transport:type'] = 'bus'"],
+//             ["t.highway == 'crossing'","t['transport:type'] = 'road';a.F_CODE = 'AQ062'; delete t.highway"],
+//             ["t.highway == 'mini_roundabout'","t.junction = 'roundabout'"],
+//             ["t.historic == 'castle' && t.building","delete t.building"],
+//             ["t.historic == 'castle' && t.ruins == 'yes'","t.condition = 'destroyed'; delete t.ruins"],
+//             ["t.landcover == 'snowfield' || t.landcover == 'ice-field'","a.F_CODE = 'BJ100'"],
+//             ["t.landuse == 'allotments'","t.landuse = 'farmland'"],
+//             ["t.landuse == 'brownfield'","t.landuse = 'built_up_area'; t.condition = 'destroyed'"],
+//             ["t.landuse == 'construction'","t.landuse = 'built_up_area'; t.condition = 'construction'"],
+//             ["t.landuse == 'farm'","t.landuse = 'farmland'"],
+//             ["t.landuse == 'farmland' && t.crop == 'fruit_tree'","t.landuse = 'orchard'"],
+//             ["t.landuse == 'farmyard'","t.facility = 'yes'; t.use = 'agriculture'; delete t.landuse"],
+//             ["t.landuse == 'grass'","t.natural = 'grassland'; t['grassland:type'] = 'grassland';"],
+//             ["t.landuse == 'meadow'","t.natural = 'grassland'; t['grassland:type'] = 'meadow';"],
+//             ["t.landuse == 'military'","t.military = 'installation'; delete t.landuse"],
+//             ["t.leisure == 'recreation_ground'","t.landuse = 'recreation_ground'; delete t.leisure"],
+//             ["t.landuse == 'reservoir'","t.water = 'reservoir'; delete t.landuse"],
+//             ["t.landuse == 'retail'","t.landuse = 'built_up_area'; t.use = 'commercial'"],
+//             ["t.landuse == 'scrub'","t.natural = 'scrub'; delete t.landuse"],
+//             ["t.landuse == 'grass'","a.F_CODE = 'EB010'; t['grassland:type'] = 'grassland';"],
+//             ["t.landuse == 'meadow'","a.F_CODE = 'EB010'; t['grassland:type'] = 'meadow';"],
+//             ["t.leisure == 'sports_centre'","t.facility = 'yes'; t.use = 'recreation'; delete t.leisure"],
+//             ["t.leisure == 'stadium' && t.building","delete t.building"],
+//             ["t.median == 'yes'","t.divider = 'yes'"],
+//             ["t.natural == 'desert' && t.surface","t.desert_surface = t.surface; delete t.surface"],
+//             ["t.natural == 'wood'","t.landuse = 'forest'; delete t.natural"],
+//             ["t.power == 'pole'","t['cable:type'] = 'power'; t['tower:shape'] = 'pole'"],
+//             ["t.power == 'tower'","t['cable:type'] = 'power'"],
+//             ["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
+//             ["t.power == 'generator'","t.use = 'power_generation'; a.F_CODE = 'AL013'"],
+            ["t.rapids == 'yes'","t.waterway = 'rapids'; delete t.rapids"],
+//             ["t.railway == 'station'","t.public_transport = 'station';  t['transport:type'] = 'railway'"],
+//             ["t.railway == 'level_crossing'","t['transport:type'] = 'railway';t['transport:type2'] = 'road'; a.F_CODE = 'AQ062'; delete t.railway"],
+//             ["t.railway == 'crossing'","t['transport:type'] = 'railway'; a.F_CODE = 'AQ062'; delete t.railway"],
+//             ["t.resource","t.raw_material = t.resource; delete t.resource"],
+            ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
+//             ["(t.shop || t.office) &&  !(t.building)","a.F_CODE = 'AL013'"],
+//             ["t.social_facility == 'shelter'","t.social_facility = t['social_facility:for']; delete t.amenity; delete t['social_facility:for']"],
+            ["!(t.water) && t.natural == 'water'","t.water = 'lake'"],
+//             ["t.use == 'islamic_prayer_hall' && t.amenity == 'place_of_worship'","delete t.amenity"],
+//             ["t.wetland && t.natural == 'wetland'","delete t.natural"],
+            ["t.water == 'river'","t.waterway = 'river'"],
+            ["t.waterway == 'riverbank'","t.waterway = 'river'"]
+            ];
+
+            hgis20.hgisPreRules = translate.buildComplexRules(rulesList);
+        }
+
+        // Apply the rulesList.
+        // translate.applyComplexRules(tags,attrs,rulesList);
+        translate.applyComplexRules(tags,attrs,hgis20.hgisPreRules);
+
+        // Cleanup wetlands
+        if (tags.wetland && tags.natural == 'wetland')
+        {
+            attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,tags.wetland,';');
+            delete tags.wetland;
+        }
+
+
     }, // End applyToHgisPreProcessing
 
     applyToHgisPostProcessing : function (tags, attrs, geometryType)
@@ -289,6 +407,9 @@ hgis20 = {
             }
         } // End find layerName
 
+        // Debug
+        print('Post: XtableName: ' + attrs.XtableName);
+
         // Start looking for a Table Name
         // Next step is to make this a list: we might get more than one match...
         for (var val in attrs)
@@ -298,10 +419,33 @@ hgis20 = {
             {
                var tList = val.split('$');
                attrs.XtableName = hgis20.layerList[tList[0]];
+
+               // Debug
+               print('Post: Loop XtableName: ' + attrs.XtableName);
+
                attrs[tList[1]] = attrs[val];
                delete attrs[val];
             }
         }
+
+        // Fix up Hydro Lines vs Areas. Just for what is in the spec, everything else should throw an error
+        if (attrs.XtableName == 'Hydrology_Polygons' && geometryType == 'Line')
+        {
+            switch (attrs.TYPE)
+            {
+                case 'Lake':
+                case 'Inland Water':
+                case 'Land Subject to Inundation':
+                    attrs.XtableName = 'Hydrology_Polylines';
+                    break;
+
+                case 'River':
+                    attrs.TYPE = 'River/Stream';
+                    attrs.XtableName = 'Hydrology_Polylines';
+                    break;
+            } // End Switch
+        } // End Hydrology_Polygons
+
 
         // ######################
         // Hardcoded Layer selection. Yes, this is ugly
@@ -397,6 +541,10 @@ hgis20 = {
 
             hgis20.lookup = translate.createLookup(hgis20.rules.one2one);
 
+            // Build the lookup table for the additional tags to add based on the table name
+            hgis20.layerLookup = translate.createLookup(hgis20.rules.layerIn);
+            // translate.dumpOne2OneLookup(hgis20.layerLookup);
+
             // Build an Object with both the SimpleText & SimpleNum lists
             hgis20.ignoreList = translate.joinList(hgis20.rules.numBiased, hgis20.rules.txtBiased);
             
@@ -405,10 +553,25 @@ hgis20 = {
             hgis20.ignoreList.UFI = '';
             hgis20.ignoreList.SHAPE_Length = '';
             hgis20.ignoreList.SHAPE_Area = '';
+            hgis20.ignoreList.IMGNAME = '';
+
+            // Drop GEONAMES stuff
+            hgis20.ignoreList.DSG = '';
         }
 
         // pre processing
         hgis20.applyToOsmPreProcessing(attrs, layerName);
+
+        // Use the layerName to add some tags.
+        var ftag = hgis20.layerLookup['XtableName'][layerName];
+        if (ftag)
+        {
+            tags[ftag[0]] = ftag[1];
+        }
+        else
+        {
+            hoot.logWarn('Default Translation for ' + layerName + ' not found');
+        }
 
         // one 2 one
         translate.applyOne2One(attrs, tags, hgis20.lookup, {'k':'v'}, hgis20.ignoreList);
@@ -463,7 +626,9 @@ hgis20 = {
             hgis20.lookup = translate.createBackwardsLookup(hgis20.rules.one2one);
             // translate.dumpOne2OneLookup(hgis20.lookup);
 
-            hgis20.layerLookup = translate.createBackwardsLookup(hgis20.rules.layerOut);
+            // Build the TableName lookup list
+            hgis20.rules.one2one.push.apply(hgis20.rules.layerIn,hgis20.rules.layerOut);
+            hgis20.layerLookup = translate.createBackwardsLookup(hgis20.rules.layerIn);
             // translate.dumpOne2OneLookup(hgis20.layerLookup);
 
             // Build a list of things to ignore and flip is backwards
@@ -505,11 +670,11 @@ hgis20 = {
         // Now check for invalid feature geometry
         // E.g. If the spec says a runway is a polygon and we have a line, throw error and 
         // push the feature to o2s layer
-        if (attrs.XtableName && hgis20.layersInSchema[attrs.XtableName])
+        if (attrs.XtableName && hgis20.layersInSchema[attrs.XtableName + ':' + geometryType])
         {
             tableName = attrs.XtableName;
             delete attrs.XtableName;
-            
+
             // Validate attrs: remove all that are not supposed to be part of a feature
             hgis20.validateAttrs(geometryType,tableName,attrs);
 
