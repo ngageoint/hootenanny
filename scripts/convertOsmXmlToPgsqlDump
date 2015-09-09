@@ -4,14 +4,15 @@ use strict;
 use Fcntl;
 use Math::Trig; # For tile number calculations
 use POSIX qw(strftime);
+use File::Temp qw(tempfile);
 
 sub covertDecimalDegreesToNanodegrees($);
 sub generatePgDumpfileFromOsm($$);
-sub readNodes($$$$$);
+sub readNodes($$$$$$);
 sub lon2x($);
 sub lat2y($);
 sub convertLatLonToTileNumber($$);
-sub generateISO8601Time($);
+sub generateISO8601Time();
 
 sub convertDecimalDegreesToNanodegrees($)
 {
@@ -75,35 +76,62 @@ sub generatePgDumpfileFromOsm($$)
   my $sqlFilename = shift(@_);
   my %idMappings;
   my $osmFilehandle;
-  my $sqlFilehandle;
 
   open( $osmFilehandle, "< $osmFilename") or die( "Could not open OSM file: $osmFilename\n\n" );
-  open( $sqlFilehandle, "> $sqlFilename") or die(" Could not open SQL file: $sqlFilename\n\n" );
+
+  # Open multiple temp output SQL files and do ONE pass over each kind of data, dropping data
+  #   into the appropriate file:
+  #
+  #   - User/changeset data
+  #   - Current node/way/relation data
+  #   - Historical node/way/relation data
+  #
+  #   At the end we'll do an OS filesystem concat of the three files to get the correct ordering of 
+  #   sections which will be way faster than multiple passes over the exact same data
+
+  my $currentSqlFilehandle = File::Temp->new();
+
+  my $historicalSqlFilehandle = File::Temp->new();
+   
 
   my $changesetId     = 1;
   my $startingNodeId  = 500;
 
-  readNodes($osmFilehandle, $sqlFilehandle, \$changesetId, $startingNodeId, \%idMappings );
+  readNodes($osmFilehandle, $currentSqlFilehandle, $historicalSqlFilehandle, \$changesetId, 
+    $startingNodeId, \%idMappings );
 
   print( "\nShould be first way line:\n\t" . <$osmFilehandle> );
 
   close( $osmFilehandle );
-  close( $sqlFilehandle );
+  #close( $sqlFilehandle );
+
+  # concat temp file contents, delete temp files
+  print( "Temp current SQL file: $currentSqlFilehandle\n");
+  print( "Temp historical SQL file: $historicalSqlFilehandle\n");
+
+  `cat $currentSqlFilehandle > $sqlFilename`;
+  `cat $historicalSqlFilehandle >> $sqlFilename`;
+
 }
 
-sub readNodes($$$$$)
+sub readNodes($$$$$$)
 {
-  my $osmFilehandle       = shift(@_);
-  my $sqlFilehandle       = shift(@_);
-  my $changesetIdRef      = shift(@_);
-  my $startingNodeId      = shift(@_);
-  my $idMappings          = shift(@_);
+  my $osmFilehandle             = shift(@_);
+  my $currentSqlFilehandle      = shift(@_);
+  my $historicalSqlFilehandle   = shift(@_);
+  my $changesetIdRef            = shift(@_);
+  my $startingNodeId            = shift(@_);
+  my $idMappings                = shift(@_);
 
   print( "- Processing nodes: ");
 
-  print( $sqlFilehandle 
+  print( $currentSqlFilehandle 
     'COPY current_nodes (id, latitude, longitude, changeset_id, ' .
     "visible, \"timestamp\", tile, version) FROM stdin;\n" );
+ 
+  print( $historicalSqlFilehandle
+    'COPY nodes (node_id, latitude, longitude, changeset_id, visible, ' .
+    '"timestamp", tile, version, redaction_id) FROM stdin;' . "\n" );
 
   my $changesInChangeset = 0;
 
@@ -158,7 +186,9 @@ sub readNodes($$$$$)
 
       #print( "Tile number: " . convertLatLonToTileNumber($nodeLat, $nodeLon) . "\n" );
       
-      print( $sqlFilehandle
+
+      # Print current version of data
+      print( $currentSqlFilehandle
         sprintf("%d\t%10d\t%10d\t%d\tt\t%s\t%u\t1\n",
           $idMappings->{'node'}->{$nodeId},
           convertDecimalDegreesToNanodegrees($nodeLat),
@@ -166,6 +196,18 @@ sub readNodes($$$$$)
           $$changesetIdRef,
           $timestamp,
           $tileNumber));
+
+
+      # Print historical version of data
+      print( $historicalSqlFilehandle
+        sprintf( "%d\t%10d\t%10d\t%d\tt\t%s\t%u\t1\t\\N\n",
+          $idMappings->{'node'}->{$nodeId},
+          convertDecimalDegreesToNanodegrees($nodeLat),
+          convertDecimalDegreesToNanodegrees($nodeLon),
+          $$changesetIdRef,
+          $timestamp,
+          $tileNumber));
+
 
       #print( "Tile number: $tileNumber\n" );
 
@@ -183,8 +225,9 @@ sub readNodes($$$$$)
     $currLine = <$osmFilehandle>;
   }
 
-  # Output marker for end of table
-  print( $sqlFilehandle "\\.\n\n\n" );
+  # Output marker for end of tables
+  print( $currentSqlFilehandle "\\.\n\n\n" );
+  print( $historicalSqlFilehandle "\\.\n\n\n" );
 
   print ("complete ($numNodes)\n");
 
