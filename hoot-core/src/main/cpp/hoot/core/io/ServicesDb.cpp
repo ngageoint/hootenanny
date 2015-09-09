@@ -1148,6 +1148,9 @@ void ServicesDb::setMapId(const long sessionMapId)
 
 long ServicesDb::getUserId(QString email, bool throwWhenMissing)
 {
+    LOG_DEBUG("debug email = "+email);
+    LOG_DEBUG("debug throwwhenmissing = "+QString::number(throwWhenMissing));
+
   if (_selectUserByEmail == 0)
   {
     _selectUserByEmail.reset(new QSqlQuery(_db));
@@ -1493,21 +1496,24 @@ long ServicesDb::_round(double x, int precision)
 set<long> ServicesDb::selectMapIds(QString name)
 {
   const long userId = _currUserId;
-
+LOG_DEBUG("selectMapIds name = "+name);
+LOG_DEBUG("userId = "+QString::number(userId));
   if (_selectMapIds == 0)
   {
+      LOG_DEBUG("inside first test inside selectMapIds");
     _selectMapIds.reset(new QSqlQuery(_db));
     _selectMapIds->prepare("SELECT id FROM maps WHERE display_name LIKE :name AND user_id=:userId");
   }
-
+LOG_DEBUG("CHECK A1");
   _selectMapIds->bindValue(":name", name);
   _selectMapIds->bindValue(":user_id", (qlonglong)userId);
+  LOG_DEBUG("CHECK A2");
 
   if (_selectMapIds->exec() == false)
   {
     throw HootException(_selectMapIds->lastError().text());
   }
-
+LOG_DEBUG("CHECK A3");
   set<long> result;
   while (_selectMapIds->next())
   {
@@ -1519,7 +1525,7 @@ set<long> ServicesDb::selectMapIds(QString name)
     }
     result.insert(id);
   }
-
+LOG_DEBUG("CHECK A4");
   return result;
 }
 
@@ -1716,7 +1722,7 @@ shared_ptr<QSqlQuery> ServicesDb::selectAllElements(const ElementType& elementTy
 shared_ptr<QSqlQuery> ServicesDb::selectElements_OsmApi(const long elementId,
   const ElementType& elementType, const long limit, const long offset)
 {
-  LOG_DEBUG("Inside selectElement_OsmApi");
+  LOG_DEBUG("IN selectElement_OsmApi");
 
   _selectElementsForMap.reset(new QSqlQuery(_db));
   _selectElementsForMap->setForwardOnly(true);
@@ -1753,6 +1759,7 @@ shared_ptr<QSqlQuery> ServicesDb::selectElements_OsmApi(const long elementId,
       " Error: " + err);
   }
 
+  LOG_DEBUG("LEAVING ServicesDb::selectElements_OsmApi...");
   return _selectElementsForMap;
 }
 
@@ -3543,8 +3550,15 @@ long ServicesDb::reserveElementId(const ElementType::Type type)
  *       returns them for Services DB
  * **********************************************************************
  */
-QString ServicesDb::extractTagFromRow_OsmApi(shared_ptr<QSqlQuery> row, const int pos)
+QString ServicesDb::extractTagFromRow_OsmApi(shared_ptr<QSqlQuery> row, const ElementType::Type type)
 {
+  int pos = -1;
+
+  if(type==ElementType::Node) pos=ServicesDb::NODES_TAGS;
+  else if(type==ElementType::Way) pos=ServicesDb::WAYS_TAGS;
+  else if(type==ElementType::Relation) pos=ServicesDb::RELATIONS_TAGS;
+  else throw HootException("extractTagFromRow_OsmApi called with unknown Type");
+
   QString tag = "\""+row->value(pos).toString()+"\"=>\""+
     row->value(pos+1).toString()+"\"";
   return tag;

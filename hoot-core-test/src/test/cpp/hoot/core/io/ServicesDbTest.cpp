@@ -558,7 +558,7 @@ public:
       LOG_DEBUG(QString("Processing tag ")+key);
       tagIndx = ServicesDbTestUtils::findIndex(keys, key);
       HOOT_STR_EQUALS(QString(keys[tagIndx]+" = "+values[tagIndx]+"\n").toStdString().c_str(),
-        ServicesDb::unescapeTags(database.extractTagFromRow_OsmApi(nodeResultIterator, ServicesDb::NODES_TAGS)));
+        ServicesDb::unescapeTags(database.extractTagFromRow_OsmApi(nodeResultIterator, ElementType::Node)));
     }
 
     ///////////////////////////////////////////////
@@ -636,7 +636,7 @@ public:
       QString key = wayResultIterator->value(ServicesDb::WAYS_TAGS).toString();
       LOG_DEBUG(QString("Processing tag ")+key);
       HOOT_STR_EQUALS("highway = primary\n", ServicesDb::unescapeTags(
-        database.extractTagFromRow_OsmApi(wayResultIterator, ServicesDb::WAYS_TAGS)));
+        database.extractTagFromRow_OsmApi(wayResultIterator, ElementType::Way)));
     }
 
     ///////////////////////////////////////////////
@@ -713,7 +713,7 @@ public:
       QString key = relationResultIterator->value(ServicesDb::WAYS_TAGS).toString();
       LOG_DEBUG(QString("Processing tag ")+key);
       HOOT_STR_EQUALS("type = multistuff\n", ServicesDb::unescapeTags(
-        database.extractTagFromRow_OsmApi(relationResultIterator, ServicesDb::RELATIONS_TAGS)));
+        database.extractTagFromRow_OsmApi(relationResultIterator, ElementType::Relation)));
     }
 
   }

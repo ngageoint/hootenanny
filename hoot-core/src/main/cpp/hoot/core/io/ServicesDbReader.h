@@ -156,7 +156,8 @@ private:
 
   // Osm Api data assignment methods
   shared_ptr<Node> _resultToNode_OsmApi(const QSqlQuery& resultIterator, OsmMap& map);
-
+  shared_ptr<Way> _resultToWay_OsmApi(const QSqlQuery& resultIterator, OsmMap& map);
+  shared_ptr<Relation> _resultToRelation_OsmApi(const QSqlQuery& resultIterator, const OsmMap& map);
 };
 
 }

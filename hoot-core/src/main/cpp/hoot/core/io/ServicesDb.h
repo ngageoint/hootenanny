@@ -325,7 +325,7 @@ public:
 
   void incrementChangesetChangeCount();
 
-  QString extractTagFromRow_OsmApi(shared_ptr<QSqlQuery> row, const int pos);
+  QString extractTagFromRow_OsmApi(shared_ptr<QSqlQuery> row, const ElementType::Type Type);
 
   /**
    * Reserve a unique indentifier for an element of the specified type

@@ -119,61 +119,76 @@ bool ServicesDbReader::isSupported(QString urlStr)
 
 void ServicesDbReader::open(QString urlStr)
 {
-  LOG_DEBUG("ServicesDbReader opening " << urlStr);
+  LOG_DEBUG("IN ServicesDbReader open " << urlStr);
   if (!isSupported(urlStr))
   {
     throw HootException("An unsupported URL was passed in.");
   }
+LOG_DEBUG("email = "+_email);
 
   QUrl url(urlStr);
   QString osmElemId = url.queryItemValue("osm-element-id");
   QString osmElemType = url.queryItemValue("osm-element-type");
   QStringList pList = url.path().split("/");
+  LOG_DEBUG("url path = "+url.path());
   bool ok;
   bool ok2;
   QString mapName;
   _database.open(url);
+LOG_DEBUG("plist size - 1 = "+pList[1]);
+LOG_DEBUG("AFTER OPEN...plist size = "+QString::number(pList.size()));
   long requestedMapId = pList[pList.size() - 1].toLong(&ok);
+LOG_DEBUG("requestedMapId = "+QString::number(requestedMapId));
+
   if(osmElemId.length() > 0 && osmElemType.length() > 0)
   {
+    LOG_DEBUG("CHECK0");
     _osmElemId = osmElemId.toLong(&ok2);
     _osmElemType = ElementType::fromString(osmElemType);
 
   }
-
-  if (!ok)
+LOG_DEBUG("CHECK1");
+  if (!ok && _database.getDatabaseType() != ServicesDb::DBTYPE_OSMAPI)
   {
     if (_email == "")
     {
       throw HootException("If a map name is specified then the user email must also be specified "
                           "via: " + emailKey());
     }
+
     mapName = pList[pList.size() - 1];
     _database.setUserId(_database.getUserId(_email));
+LOG_DEBUG("CHECK 5 -- mapName = "+mapName);
     set<long> mapIds = _database.selectMapIds(mapName);
+LOG_DEBUG("CHECK 6 -- After selectMapIds");
     if (mapIds.size() != 1)
     {
       QString str = QString("Expected 1 map with the name '%1' but found %2 maps.").arg(mapName)
           .arg(mapIds.size());
       throw HootException(str);
     }
-
+      LOG_DEBUG("CHECK7");
     requestedMapId = *mapIds.begin();
   }
 
-  if (!_database.mapExists(requestedMapId))
-  {
-    _database.close();
-    throw HootException("No map exists with ID: " + QString::number(requestedMapId));
-  }
+  LOG_DEBUG("CHECK3");
 
-  _database.setMapId(requestedMapId);
+  if( _database.getDatabaseType() != ServicesDb::DBTYPE_OSMAPI )
+  {
+    if (!_database.mapExists(requestedMapId))
+    {
+      _database.close();
+      throw HootException("No map exists with ID: " + QString::number(requestedMapId));
+    }
+    _database.setMapId(requestedMapId);
+  }
 
   //using a transaction seems to make sense here, b/c we don't want to read a map being modified
   //in the middle of its modification caused by a changeset upload, which could cause the map to
   //be invalid as a whole
   _database.transaction();
   _open = true;
+  LOG_DEBUG("Leaving servicesdbreader open method");
 }
 
 bool ServicesDbReader::hasMoreElements()
@@ -217,6 +232,8 @@ void  ServicesDbReader::initializePartial()
 
 void ServicesDbReader::read(shared_ptr<OsmMap> map)
 {
+  LOG_DEBUG("IN ServicesDbReader::read()...");
+
   if(_osmElemId > -1 && _osmElemType != ElementType::Unknown)
   {
     _read(map, _osmElemType);
@@ -233,6 +250,7 @@ void ServicesDbReader::read(shared_ptr<OsmMap> map)
 
 void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementType)
 {
+  LOG_DEBUG("IN ServicesDbReader::read(,)...");
   long long lastId = LLONG_MIN;
   shared_ptr<Element> element;
   QStringList tags;
@@ -266,6 +284,8 @@ void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementT
       break;
 
     case ServicesDb::DBTYPE_OSMAPI:
+      LOG_DEBUG("IN ServicesDbReader::_read's case OSMAPI...");
+
       // check if db active or not
       assert(elementResultsIterator.isActive());
 
@@ -277,7 +297,6 @@ void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementT
           // process the complete element only after the first element created
           if(!firstElement)
           {
-            LOG_DEBUG("tags joined = "+tags.join(", "));
             element->setTags( ServicesDb::unescapeTags(tags.join(", ")) );
             _addTagsToElement( element );
             if (_status != Status::Invalid) { element->setStatus(_status); }
@@ -288,12 +307,22 @@ void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementT
           switch (elementType.getEnum())
           {
             case ElementType::Node:
+              LOG_DEBUG("CHECK NODE");
               element = _resultToNode_OsmApi(*elementResultsIterator, *map);
               break;
 
-            // todo : add the cases for ways and relations
+            case ElementType::Way:
+              LOG_DEBUG("CHECK WAY");
+              element = _resultToWay_OsmApi(*elementResultsIterator, *map);
+              break;
+
+            case ElementType::Relation:
+              LOG_DEBUG("CHECK RELATION");
+              element = _resultToRelation_OsmApi(*elementResultsIterator, *map);
+              break;
 
             default:
+              LOG_DEBUG("CHECK B6");
               throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
           }
           lastId = id;
@@ -302,13 +331,12 @@ void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementT
 
         // read the tag for as many rows as there are tags
         // need to get into form "key1"=>"val1", "key2"=>"val2", ...
-        tags << _database.extractTagFromRow_OsmApi(elementResultsIterator, ServicesDb::NODES_TAGS);
+        tags << _database.extractTagFromRow_OsmApi(elementResultsIterator, elementType.getEnum());
       }
 
       // process the last complete element only if an element has been created
       if(!firstElement)
       {
-        LOG_DEBUG("last tag: tags joined = "+tags.join(", "));
         element->setTags( ServicesDb::unescapeTags(tags.join(", ")) );
         _addTagsToElement( element );
         if (_status != Status::Invalid) { element->setStatus(_status); }
@@ -320,6 +348,7 @@ void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementT
       throw HootException("_read cannot operate on unsupported database type");
       break;
   }
+  LOG_DEBUG("LEAVING ServicesDbReader::_read...");
 }
 
 shared_ptr<Element> ServicesDbReader::readNextElement()
@@ -605,6 +634,27 @@ shared_ptr<Way> ServicesDbReader::_resultToWay(const QSqlQuery& resultIterator, 
   return way;
 }
 
+shared_ptr<Way> ServicesDbReader::_resultToWay_OsmApi(const QSqlQuery& resultIterator, OsmMap& map)
+{
+  const long wayId = resultIterator.value(0).toLongLong();
+  const long newWayId = _mapElementId(map, ElementId::way(wayId)).getId();
+  shared_ptr<Way> way(
+    new Way(
+      _status,
+      newWayId,
+      ServicesDb::DEFAULT_ELEMENT_CIRCULAR_ERROR));
+
+  //TODO: read these out in batch at the same time the element results are read
+  vector<long> nodeIds = _database.selectNodeIdsForWay(wayId);
+  for (size_t i = 0; i < nodeIds.size(); i++)
+  {
+    nodeIds[i] = _mapElementId(map, ElementId::node(nodeIds[i])).getId();
+  }
+  way->addNodes(nodeIds);
+
+  return way;
+}
+
 shared_ptr<Relation> ServicesDbReader::_resultToRelation(const QSqlQuery& resultIterator,
   const OsmMap& map)
 {
@@ -620,6 +670,30 @@ shared_ptr<Relation> ServicesDbReader::_resultToRelation(const QSqlQuery& result
 
   relation->setTags(ServicesDb::unescapeTags(resultIterator.value(ServicesDb::RELATIONS_TAGS)));
   _addTagsToElement(relation);
+
+  //TODO: read these out in batch at the same time the element results are read
+  vector<RelationData::Entry> members = _database.selectMembersForRelation(relationId);
+  for (size_t i = 0; i < members.size(); ++i)
+  {
+    members[i].setElementId(_mapElementId(map, members[i].getElementId()));
+  }
+  relation->setMembers(members);
+
+  return relation;
+}
+
+shared_ptr<Relation> ServicesDbReader::_resultToRelation_OsmApi(const QSqlQuery& resultIterator,
+  const OsmMap& map)
+{
+  const long relationId = resultIterator.value(0).toLongLong();
+  const long newRelationId = _mapElementId(map, ElementId::relation(relationId)).getId();
+
+  shared_ptr<Relation> relation(
+    new Relation(
+      _status,
+      newRelationId,
+      ServicesDb::DEFAULT_ELEMENT_CIRCULAR_ERROR/*,
+      "collection"*/));  //TODO: services db doesn't support relation "type" yet
 
   //TODO: read these out in batch at the same time the element results are read
   vector<RelationData::Entry> members = _database.selectMembersForRelation(relationId);
