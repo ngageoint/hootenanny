@@ -260,8 +260,6 @@ function additiveScore(map, e1, e2) {
 
     result.score = score;
     result.reasons = reason;
-    hoot.log(poiDistance);
-    hoot.log(artworkTypeDistance);
 
     hoot.debug(reason);
     hoot.debug(score);
