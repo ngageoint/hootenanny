@@ -8,11 +8,30 @@ use File::Temp qw(tempfile);
 
 sub covertDecimalDegreesToNanodegrees($);
 sub generatePgDumpfileFromOsm($$);
-sub readNodes($$$$$);
+sub readNodes($$$$);
 sub lon2x($);
 sub lat2y($);
 sub convertLatLonToTileNumber($$);
 sub generateISO8601Time();
+sub addChangeToChangeset();
+sub updateHeaderTables($$);
+sub generateUsersTable($);
+sub generateChangesetsTable($);
+
+# A handful of globals to make life easier
+my $changesetId = 1;
+my %changesetChangeCount;
+$changesetChangeCount{ $changesetId } = 0;
+
+sub addChangeToChangeset()
+{
+  $changesetChangeCount{ $changesetId } += 1;
+  if ( $changesetChangeCount{ $changesetId } == 50000 )
+  {
+    $changesetId++;
+    $changesetChangeCount{ $changesetId } = 0; 
+  }
+}
 
 sub convertDecimalDegreesToNanodegrees($)
 {
@@ -97,10 +116,9 @@ sub generatePgDumpfileFromOsm($$)
   $tableFilehandles{ 'node_tags' } = File::Temp->new();
   #$tableFilehandles{ 'current_ways' } = File::Temp->new();
 
-  my $changesetId     = 1;
   my $startingNodeId  = 500;
 
-  readNodes($osmFilehandle, \%tableFilehandles, \$changesetId, $startingNodeId, \%idMappings );
+  readNodes($osmFilehandle, \%tableFilehandles, $startingNodeId, \%idMappings );
 
   print( "\nShould be first way line:\n\t" . <$osmFilehandle> );
 
@@ -110,6 +128,9 @@ sub generatePgDumpfileFromOsm($$)
 
   close( $osmFilehandle );
   #close( $sqlFilehandle );
+
+  # Populate data for header tables
+  updateHeaderTables(\%tableFilehandles, $startingNodeId);
 
 
   my @tableFlushSequence = (   
@@ -128,14 +149,12 @@ sub generatePgDumpfileFromOsm($$)
   {
     `cat $tableFilehandles{ $currTable } >> $sqlFilename`;
   }
-
 }
 
-sub readNodes($$$$$)
+sub readNodes($$$$)
 {
   my $osmFilehandle             = shift(@_);
   my $tableFilehandlesRef       = shift(@_);
-  my $changesetIdRef            = shift(@_);
   my $startingNodeId            = shift(@_);
   my $idMappings                = shift(@_);
 
@@ -160,8 +179,6 @@ sub readNodes($$$$$)
   my $nodeTagsHandle = $tableFilehandlesRef->{'node_tags'};
 
   print ( $nodeTagsHandle "COPY node_tags (node_id, version, k, v) FROM stdin;\n" );
-
-  my $changesInChangeset = 0;
 
   # Timestamp that will be used for all nodes
   my $timestamp = generateISO8601Time();
@@ -235,7 +252,7 @@ sub readNodes($$$$$)
           $idMappings->{'node'}->{$nodeId},
           convertDecimalDegreesToNanodegrees($nodeLat),
           convertDecimalDegreesToNanodegrees($nodeLon),
-          $$changesetIdRef,
+          $changesetId,
           $timestamp,
           $tileNumber));
 
@@ -245,7 +262,7 @@ sub readNodes($$$$$)
           $idMappings->{'node'}->{$nodeId},
           convertDecimalDegreesToNanodegrees($nodeLat),
           convertDecimalDegreesToNanodegrees($nodeLon),
-          $$changesetIdRef,
+          $changesetId,
           $timestamp,
           $tileNumber));
 
@@ -253,18 +270,14 @@ sub readNodes($$$$$)
 
       $dbNodeId++;
 
-      $changesInChangeset++;
-      if ( $changesInChangeset == 50000 )
-      {
-        $$changesetIdRef++;
-        $changesInChangeset = 0;
-      }
+      # Add the change to the changeset -- allows for maintaining changeset ID
+      addChangeToChangeset();
 
       # Identify if this is a node without tags, should we say we're leaving this node?
       if ( $currLine =~ /<node.+?\suser=\".+\"\s*\/>/ )
       {
         $insideNode = 0;
-        $nodeId -999999;
+        $nodeId = -999999;
       }
     }
     elsif ( $currLine =~ /<tag\s+k=\"(.*?)\"\s+v=\"(.*?)\"\s*\/>/ )
@@ -321,6 +334,50 @@ sub readNodes($$$$$)
 
   # Reset filehandle back one line so the next processing section starts at correct point
   $osmFilehandle = seek( $osmFilehandle, $previousLinePosition, Fcntl::SEEK_SET );
+}
+
+sub updateHeaderTables($$)
+{
+  my $tableFilehandlesRef = shift(@_);
+  my $startingNodeId = shift(@_);
+
+  generateUsersTable($tableFilehandlesRef);
+  generateChangesetsTable($tableFilehandlesRef);
+}
+
+sub generateUsersTable($)
+{
+  my $tableFilehandlesRef = shift(@_);
+  my $usersTable = $tableFilehandlesRef->{ 'users' };
+  my $currentTimestamp = generateISO8601Time();
+
+  print( $usersTable
+    "COPY users (email, id, pass_crypt, creation_time ) FROM stdin;\n" .
+    "mapedit_ingest\@digitalglobe.com\t1\tabcdefg\t$currentTimestamp\n" .
+    "\\.\n\n\n"
+  );
+}
+
+sub generateChangesetsTable($)
+{
+  my $tableFilehandlesRef = shift(@_);
+  my $changesetsTable = $tableFilehandlesRef->{'changesets' };
+  my $currentTimestamp = generateISO8601Time();
+
+  print( $changesetsTable 
+    "COPY changesets (id, user_id, created_at, closed_at, num_changes) FROM stdin;\n"
+  );
+
+  for ( my $i = 1; $i <= $changesetId; ++$i )
+  {
+    print( $changesetsTable
+      sprintf( "%d\t1\t%s\t%s\t%d\n", $i, $currentTimestamp, $currentTimestamp, 
+        $changesetChangeCount{ $i } )
+    );
+  }
+
+  print( $changesetsTable "\\.\n\n\n" );
+
 }
 
 
