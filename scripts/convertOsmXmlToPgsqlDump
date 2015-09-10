@@ -13,24 +13,49 @@ sub lon2x($);
 sub lat2y($);
 sub convertLatLonToTileNumber($$);
 sub generateISO8601Time();
-sub addChangeToChangeset();
+sub addChangeToChangeset($);
 sub updateHeaderTables($$);
 sub generateUsersTable($);
-sub generateChangesetsTable($);
+sub closeChangesetsTable($);
+sub writeChangesetEntry($);
 
 # A handful of globals to make life easier
 my $changesetId = 1;
 my %changesetChangeCount;
 $changesetChangeCount{ $changesetId } = 0;
 
-sub addChangeToChangeset()
+sub addChangeToChangeset($)
 {
+  my $tableFilehandlesRef = shift(@_);
+
   $changesetChangeCount{ $changesetId } += 1;
+
   if ( $changesetChangeCount{ $changesetId } == 50000 )
   {
+    writeChangesetEntry($tableFilehandlesRef);
     $changesetId++;
-    $changesetChangeCount{ $changesetId } = 0; 
+    $changesetChangeCount{ $changesetId } = 0;
   }
+}
+
+sub writeChangesetEntry($)
+{
+  my $tableFilehandlesRef = shift(@_);
+  my $changesetsTable = $tableFilehandlesRef->{'changesets' };
+  my $currentTimestamp = generateISO8601Time();
+
+  # Is this first time we've been called?
+  if ( $changesetId == 1 )
+  {
+    print( $changesetsTable
+      "COPY changesets (id, user_id, created_at, closed_at, num_changes) FROM stdin;\n"
+    );
+  }
+
+  print( $changesetsTable 
+    sprintf( "%d\t1\t%s\t%s\t%d\n", $changesetId, $currentTimestamp, $currentTimestamp,
+      $changesetChangeCount{ $changesetId } )
+  );
 }
 
 sub convertDecimalDegreesToNanodegrees($)
@@ -128,6 +153,9 @@ sub generatePgDumpfileFromOsm($$)
 
   close( $osmFilehandle );
   #close( $sqlFilehandle );
+
+  # Close out tables
+  closeChangesetsTable(\%tableFilehandles);
 
   # Populate data for header tables
   updateHeaderTables(\%tableFilehandles, $startingNodeId);
@@ -271,7 +299,7 @@ sub readNodes($$$$)
       $dbNodeId++;
 
       # Add the change to the changeset -- allows for maintaining changeset ID
-      addChangeToChangeset();
+      addChangeToChangeset($tableFilehandlesRef);
 
       # Identify if this is a node without tags, should we say we're leaving this node?
       if ( $currLine =~ /<node.+?\suser=\".+\"\s*\/>/ )
@@ -342,7 +370,6 @@ sub updateHeaderTables($$)
   my $startingNodeId = shift(@_);
 
   generateUsersTable($tableFilehandlesRef);
-  generateChangesetsTable($tableFilehandlesRef);
 }
 
 sub generateUsersTable($)
@@ -358,26 +385,18 @@ sub generateUsersTable($)
   );
 }
 
-sub generateChangesetsTable($)
+sub closeChangesetsTable($)
 {
   my $tableFilehandlesRef = shift(@_);
   my $changesetsTable = $tableFilehandlesRef->{'changesets' };
-  my $currentTimestamp = generateISO8601Time();
 
-  print( $changesetsTable 
-    "COPY changesets (id, user_id, created_at, closed_at, num_changes) FROM stdin;\n"
-  );
-
-  for ( my $i = 1; $i <= $changesetId; ++$i )
+  # If we haven't yet written the current entry, time to do it now
+  if ( $changesetChangeCount{ $changesetId } != 0 )
   {
-    print( $changesetsTable
-      sprintf( "%d\t1\t%s\t%s\t%d\n", $i, $currentTimestamp, $currentTimestamp, 
-        $changesetChangeCount{ $i } )
-    );
+    writeChangesetEntry($tableFilehandlesRef);
   }
 
   print( $changesetsTable "\\.\n\n\n" );
-
 }
 
 
