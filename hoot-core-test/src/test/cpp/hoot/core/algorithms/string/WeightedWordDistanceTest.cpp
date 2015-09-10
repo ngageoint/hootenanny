@@ -94,7 +94,7 @@ public:
     HOOT_STR_EQUALS(0.539453, uut.compare("Kafr Ibrahim al Aydi", "Kafr Ayyub"));
     HOOT_STR_EQUALS(1, uut.compare("Kafr Ayyub", "Kafr Ayyub"));
 
-    HOOT_STR_EQUALS(1, uut.compare("Food & More", "Cheap & Good"));
+    HOOT_STR_EQUALS(0.359162, uut.compare("Food & More", "Cheap & Good"));
   }
 
   void runRealWorldTest()
