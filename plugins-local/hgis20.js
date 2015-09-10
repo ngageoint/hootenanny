@@ -294,6 +294,9 @@ hgis20 = {
         tags.source = 'hgisv20';
         tags.uuid = createUuid();
 
+        // Refugee Camps
+        if (tags.idp == 'yes' || tags.refugee == 'yes') tags.tourism = 'camp_site';
+
     }, // End of applyToOsmPostProcessing
   
     // ##### End of the xxToOsmxx Block #####
@@ -413,7 +416,7 @@ hgis20 = {
                     {
                         var row = hgis20.layerLookup[col][value];
                         attrs.XtableName = row[1];
-                        // print('layerName: Got ' + attrs.F_CODE);
+                        print('layerName: Got ' + attrs.XtableName);
                     }
                 }
             }
@@ -663,7 +666,7 @@ hgis20 = {
 
             // Build the TableName lookup list
             hgis20.rules.one2one.push.apply(hgis20.rules.layerOut,hgis20.rules.layerCommon);
-            hgis20.layerLookup = translate.createBackwardsLookup(hgis20.rules.layerIn);
+            hgis20.layerLookup = translate.createBackwardsLookup(hgis20.rules.layerOut);
             // translate.dumpOne2OneLookup(hgis20.layerLookup);
 
             // Build a list of things to ignore and flip is backwards
