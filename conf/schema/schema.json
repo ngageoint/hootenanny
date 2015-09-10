@@ -7,6 +7,7 @@
     "import": "capital.json",
     "import": "historic.json",
     "import": "highway.json",
+    "import": "junction.json",
     "import": "landuse.json",
     "import": "leisure.json",
     "import": "man_made.json",

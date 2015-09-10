@@ -445,8 +445,15 @@
     "tag": { "name": "amenity=shower", "isA": "amenity" },
     "tag": { "name": "amenity=lavoir", "isA": "amenity",
         "aliases": ["amenity=wash_center", "amenity=washing_place"]  },
-    "tag": { "name": "amenity=toilets", "isA": "amenity",
-        "aliases": ["amenity=private_toilets"] },
+    "tag": {
+        "name": "amenity=toilets",
+        "isA": "amenity"
+    },
+    "tag": {
+        "name": "amenity=private_toilets",
+        "isA": "amenity",
+        "similarTo": { "name": "amenity=toilets", "weight": 0.8 } }
+    },
 
     "tag": { "name": "amenity=recycling", "isA": "amenity",
         "similarTo": { "name": "amenity=waste_basket", "weight": 0.6 } },
