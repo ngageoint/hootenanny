@@ -83,6 +83,7 @@ void ReviewMarker::mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, co
   r->getTags().set(reviewScoreKey(), score);
   r->addElement(revieweeKey(), e1->getElementId());
   r->addElement(revieweeKey(), e2->getElementId());
+  r->setCircularError(-1);
   map->addElement(r);
 }
 
@@ -97,6 +98,7 @@ void ReviewMarker::mark(const OsmMapPtr& map, ElementPtr& e, const QString& note
   r->getTags().appendValueIfUnique(reviewNoteKey(), note);
   r->getTags().set(reviewScoreKey(), score);
   r->addElement(revieweeKey(), e->getElementId());
+  r->setCircularError(-1);
   map->addElement(r);
 }
 

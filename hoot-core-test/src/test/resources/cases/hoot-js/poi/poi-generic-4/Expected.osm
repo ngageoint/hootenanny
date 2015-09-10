@@ -45,6 +45,5 @@
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Close, but not close enough"/>
         <tag k="type" v="review"/>
-        <tag k="error:circular" v="0"/>
     </relation>
 </osm>

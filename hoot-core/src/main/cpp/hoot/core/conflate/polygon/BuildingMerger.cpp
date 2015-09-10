@@ -30,6 +30,7 @@
 #include <hoot/core/filters/BaseFilter.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/schema/OverwriteTagMerger.h>
@@ -205,8 +206,7 @@ shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const se
     // likely create a filter that only matches buildings and building parts and pass that to the
     for (size_t i = 0; i < toRemove.size(); i++)
     {
-      ReplaceElement(toRemove[i], result).apply(map);
-      RecursiveElementRemover(toRemove[i], &filter).apply(map);
+      ReplaceElementOp(toRemove[i], result->getElementId()).apply(map);
     }
 
     return result;
