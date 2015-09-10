@@ -147,11 +147,19 @@ sub readNodes($$$$$)
     'COPY current_nodes (id, latitude, longitude, changeset_id, ' .
     "visible, \"timestamp\", tile, version) FROM stdin;\n" );
 
+  my $currentNodeTagsHandle = $tableFilehandlesRef->{'current_node_tags'};
+
+  print( $currentNodeTagsHandle "COPY current_node_tags (node_id, k, v) FROM stdin;\n" );
+
   my $nodesHandle = $tableFilehandlesRef->{'nodes'};
  
   print( $nodesHandle
     'COPY nodes (node_id, latitude, longitude, changeset_id, visible, ' .
     '"timestamp", tile, version, redaction_id) FROM stdin;' . "\n" );
+
+  my $nodeTagsHandle = $tableFilehandlesRef->{'node_tags'};
+
+  print ( $nodeTagsHandle "COPY node_tags (node_id, version, k, v) FROM stdin;\n" );
 
   my $changesInChangeset = 0;
 
@@ -219,9 +227,7 @@ sub readNodes($$$$$)
       $idMappings->{'node'}->{$nodeId} = $dbNodeId;
       #print("Established node mapping, $nodeId -> $idMappings->{'node'}->{$nodeId}\n" );
 
-
       #print( "Tile number: " . convertLatLonToTileNumber($nodeLat, $nodeLon) . "\n" );
-      
 
       # Print current version of data
       print( $currentNodesHandle
@@ -233,7 +239,6 @@ sub readNodes($$$$$)
           $timestamp,
           $tileNumber));
 
-
       # Print historical version of data
       print( $nodesHandle
         sprintf( "%d\t%10d\t%10d\t%d\tt\t%s\t%u\t1\t\\N\n",
@@ -243,7 +248,6 @@ sub readNodes($$$$$)
           $$changesetIdRef,
           $timestamp,
           $tileNumber));
-
 
       #print( "Tile number: $tileNumber\n" );
 
@@ -271,6 +275,16 @@ sub readNodes($$$$$)
         print( "Encountered an unexpected node tag\n\n");
         exit;
       }
+
+      my $dbNodeId = $idMappings->{'node'}->{$nodeId};
+      my $tagKey = $1;
+      my $tagValue = $2;
+
+      # Print to the two tag tables
+      print( $currentNodeTagsHandle 
+        sprintf("%d\t%s\t%s\n", $dbNodeId, $tagKey, $tagValue) );
+      print( $nodeTagsHandle
+        sprintf("%d\t1\t%s\t%s\n", $dbNodeId, $tagKey, $tagValue) );
     }
     elsif ( $currLine =~ /<\/node>/ )
     {
@@ -293,8 +307,11 @@ sub readNodes($$$$$)
   }
 
   # Output marker for end of tables
-  print( $currentNodesHandle "\\.\n\n\n" );
-  print( $nodesHandle "\\.\n\n\n" );
+  my $endOfTableTag = "\\.\n\n\n";
+  print( $currentNodesHandle    $endOfTableTag );
+  print( $currentNodeTagsHandle $endOfTableTag );
+  print( $nodesHandle           $endOfTableTag );
+  print( $nodeTagsHandle        $endOfTableTag );
 
   print ("complete ($numNodes)\n");
 
