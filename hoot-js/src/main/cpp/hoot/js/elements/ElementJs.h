@@ -91,6 +91,16 @@ inline void toCpp(v8::Handle<v8::Value> v, ConstElementPtr& e)
   e = node::ObjectWrap::Unwrap<ElementJs>(obj)->getConstElement();
 }
 
+inline v8::Handle<v8::Value> toV8(const ConstElementPtr& e)
+{
+  return ElementJs::New(e);
+}
+
+inline v8::Handle<v8::Value> toV8(const ElementPtr& e)
+{
+  return ElementJs::New(e);
+}
+
 }
 
 #endif // ELEMENTJS_H

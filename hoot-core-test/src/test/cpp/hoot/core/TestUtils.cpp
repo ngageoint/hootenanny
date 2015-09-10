@@ -34,6 +34,7 @@
 #include <hoot/core/filters/TagCriterion.h>
 #include <hoot/core/scoring/MapComparator.h>
 #include <hoot/core/io/OsmReader.h>
+#include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -190,6 +191,7 @@ void TestUtils::resetEnvironment()
   // these factories cache the creators. Flush them so they get any config changes.
   MatchFactory::getInstance().reset();
   MergerFactory::getInstance().reset();
+  TagMergerFactory::getInstance().resetDefault();
 
   // make sure the UUIDs are repeatable
   UuidHelper::resetRepeatableKey();

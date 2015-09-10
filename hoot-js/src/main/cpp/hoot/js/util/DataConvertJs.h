@@ -46,6 +46,8 @@ namespace hoot
 template<typename T>
 T toCpp(v8::Handle<v8::Value> v);
 
+v8::Handle<v8::Value> toV8(const QVariant& v);
+
 inline void toCpp(v8::Handle<v8::Value> v, bool& o)
 {
   if (v->IsTrue())
@@ -105,6 +107,33 @@ void toCpp(v8::Handle<v8::Value> v, pair<T, U>& o)
 
   toCpp(arr->Get(0), o.first);
   toCpp(arr->Get(1), o.second);
+}
+
+/**
+ * The string conversion routine is a bit arbitrary. We support converting primitive types into
+ * strings (e.g. number, string, bool), but not object types. This is simply because strings
+ * may be automagically converted to primitive types. E.g. '1' may be turned into a number.
+ */
+inline void toCpp(v8::Handle<v8::Value> v, string& s)
+{
+  if (v.IsEmpty())
+  {
+    throw IllegalArgumentException("Expected a string. Got an empty value.");
+  }
+  Handle<String> str;
+  if (v->IsString() || v->IsNumber() || v->IsBoolean())
+  {
+    str = v->ToString();
+  }
+  else
+  {
+    throw IllegalArgumentException("Expected a string. Got: (" + toJson(v) + ")");
+  }
+
+  size_t utf8Length = str->Utf8Length() + 1;
+  std::auto_ptr<char> buffer(new char[utf8Length]);
+  str->WriteUtf8(buffer.get(), utf8Length);
+  s.copy(buffer.get(), utf8Length);
 }
 
 /**
@@ -271,6 +300,11 @@ inline v8::Handle<v8::Value> toV8(int i)
   return v8::Integer::New(i);
 }
 
+inline v8::Handle<v8::Value> toV8(long i)
+{
+  return v8::Number::New(i);
+}
+
 inline v8::Handle<v8::Value> toV8(double v)
 {
   return v8::Number::New(v);
@@ -342,6 +376,40 @@ inline v8::Handle<v8::Value> toV8(const QStringList& v)
   return result;
 }
 
+inline v8::Handle<v8::Value> toV8(const QVariantList& l)
+{
+  v8::Handle<v8::Array> result = v8::Array::New(l.size());
+  for (int i = 0; i < l.size(); i++)
+  {
+    result->Set(i, toV8(l[i]));
+  }
+  return result;
+}
+
+inline v8::Handle<v8::Value> toV8(const QVariantHash& m)
+{
+  v8::Handle<v8::Object> result = v8::Object::New();
+
+  for (QVariantHash::const_iterator i = m.begin(); i != m.end(); i++)
+  {
+    result->Set(toV8(i.key()),toV8(i.value()),None);
+  }
+
+  return result;
+}
+
+inline v8::Handle<v8::Value> toV8(const QVariantMap& m)
+{
+  v8::Handle<v8::Object> result = v8::Object::New();
+
+  for (QVariantMap::const_iterator i = m.begin(); i != m.end(); i++)
+  {
+    result->Set(toV8(i.key()),toV8(i.value()),None);
+  }
+
+  return result;
+}
+
 inline v8::Handle<v8::Value> toV8(const QVariant& v)
 {
   switch (v.type())
@@ -359,39 +427,11 @@ inline v8::Handle<v8::Value> toV8(const QVariant& v)
   case QVariant::StringList:
     return toV8(v.toStringList());
   case QVariant::List:
-    {
-      QVariantList l = v.toList();
-      v8::Handle<v8::Array> result = v8::Array::New(l.size());
-      for (int i = 0; i < l.size(); i++)
-      {
-        result->Set(i, toV8(l[i]));
-      }
-      return result;
-    }
+    return toV8(v.toList());
   case QVariant::Hash:
-  {
-    v8::Handle<v8::Object> result = v8::Object::New();
-    QVariantHash m = v.toHash();
-
-    for (QVariantHash::const_iterator i = m.begin(); i != m.end(); i++)
-    {
-      result->Set(toV8(i.key()),toV8(i.value()),None);
-    }
-
-    return result;
-  }
+    return toV8(v.toHash());
   case QVariant::Map:
-  {
-    v8::Handle<v8::Object> result = v8::Object::New();
-    QVariantMap m = v.toMap();
-
-    for (QVariantMap::const_iterator i = m.begin(); i != m.end(); i++)
-    {
-      result->Set(toV8(i.key()),toV8(i.value()),None);
-    }
-
-    return result;
-  }
+    return toV8(v.toMap());
   default:
     throw IllegalArgumentException("Received unexpected data type: " + v.toString() + "(" +
                                    v.typeName() + ")");
@@ -410,6 +450,14 @@ inline v8::Handle<v8::Value> toV8(const QHash<T, U>& m)
   }
 
   return result;
+}
+
+// A catch all method to prevent implicit type conversion to the methods above.
+template<typename T>
+v8::Handle<v8::Value> toV8(const T& o)
+{
+  throw HootException("No toV8 implementation for this data type. " +
+    QString::fromUtf8(typeid(T).name()));
 }
 
 }

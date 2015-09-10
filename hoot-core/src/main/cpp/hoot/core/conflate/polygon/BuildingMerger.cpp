@@ -205,6 +205,7 @@ shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const se
     // likely create a filter that only matches buildings and building parts and pass that to the
     for (size_t i = 0; i < toRemove.size(); i++)
     {
+      ReplaceElement(toRemove[i], result).apply(map);
       RecursiveElementRemover(toRemove[i], &filter).apply(map);
     }
 

@@ -43,8 +43,6 @@ class ReviewMarker
 public:
   ReviewMarker();
 
-  bool isNeedsReview(const Tags& tags);
-
   /**
    * Determines whether a pair of elements should be returned for review
    *
@@ -52,7 +50,7 @@ public:
    * @param e2 the second element in the element pair being examined
    * @return true if the pair should be reviewed against each other; false otherwise
    */
-  bool isNeedsReview(ConstElementPtr e1, ConstElementPtr e2);
+  bool isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1, ConstElementPtr e2);
 
   /**
    * Marks e1 and e2 as needing review and sets them to reference each other. If the score is
@@ -73,6 +71,8 @@ private:
   static QString reviewScoreKey() { return "hoot:review:score"; }
   static QString reviewNeedsKey() { return "hoot:review:needs"; }
   static QString reviewNoteKey() { return "hoot:review:note"; }
+
+  set<ElementId> _getReviewRelations(const ConstOsmMapPtr &map, ElementId eid) const;
 
   void _updateScore(Tags& t, double score);
 };

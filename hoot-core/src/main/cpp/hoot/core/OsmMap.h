@@ -239,6 +239,8 @@ public:
 
   const NodeMap& getNodeMap() const { return _nodes; }
 
+  set<ElementId> getParents(ElementId eid) const;
+
   /**
    * Returns the SRS for this map. The SRS should never be changed and defaults to WGS84.
    */

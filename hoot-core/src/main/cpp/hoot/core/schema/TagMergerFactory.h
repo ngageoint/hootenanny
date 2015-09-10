@@ -56,6 +56,8 @@ public:
    */
   static Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et);
 
+  void resetDefault() { _default = 0; }
+
 private:
   QHash<QString, const TagMerger*> _mergers;
   const TagMerger* _default;

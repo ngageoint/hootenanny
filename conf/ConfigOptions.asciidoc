@@ -38,7 +38,7 @@
 // asciidoc just make sure you don't start any lines with "=== ".
 // http://www.methods.co.nz/asciidoc/
 //
-// Please keep the configuration options in alphabetical order.
+// Again, please keep the configuration options in alphabetical order.
 //
 === add.ref1.visitor.prefix
 

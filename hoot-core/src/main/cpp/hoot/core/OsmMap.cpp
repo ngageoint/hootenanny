@@ -553,6 +553,11 @@ const boost::shared_ptr<const Node> OsmMap::getNode(long id) const
   return _nodes[id];
 }
 
+set<ElementId> OsmMap::getParents(ElementId eid) const
+{
+  return getIndex().getParents(eid);
+}
+
 boost::shared_ptr<OGRSpatialReference> OsmMap::getWgs84()
 {
   if (_wgs84 == 0)

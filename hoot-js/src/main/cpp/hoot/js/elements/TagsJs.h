@@ -31,6 +31,7 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/js/elements/ElementJs.h>
+#include <hoot/js/util/DataConvertJs.h>
 
 // node.js
 // #include <nodejs/node.h>
@@ -81,6 +82,13 @@ private:
 
   void _setTags(const Tags& t) { _tags = t; }
 };
+
+inline v8::Handle<v8::Value> toV8(const Tags& t)
+{
+  return toV8((dynamic_cast<const QHash<QString, QString>&>(t)));
+}
+
+
 
 }
 #endif // TAGS_JS_H

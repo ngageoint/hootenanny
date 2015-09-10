@@ -35,22 +35,45 @@ ReviewMarker::ReviewMarker()
 {
 }
 
-bool ReviewMarker::isNeedsReview(const Tags& tags)
+set<ElementId> ReviewMarker::_getReviewRelations(const ConstOsmMapPtr &map, ElementId eid) const
 {
-  return tags.isTrue(reviewNeedsKey());
+  set<ElementId> result = map->getParents(eid);
+
+  for (set<ElementId>::iterator it = result.begin(); it != result.end();)
+  {
+    set<ElementId>::iterator current = it++;
+    ElementId p = *current;
+    if (p.getType() != ElementType::Relation ||
+        map->getRelation(p.getId())->getType() != Relation::REVIEW)
+    {
+      result.erase(current);
+    }
+  }
+
+  return result;
 }
 
-bool ReviewMarker::isNeedsReview(ConstElementPtr e1, ConstElementPtr e2)
+
+bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1, ConstElementPtr e2)
 {
-  return isNeedsReview(e1->getTags()) && isNeedsReview(e2->getTags()) &&
-    (e1->getTags().get(reviewUuidKey()).contains(e2->getTags().get("uuid")) ||
-     e2->getTags().get(reviewUuidKey()).contains(e1->getTags().get("uuid")));
+  // get all the review relations for e1
+  set<ElementId> review1 = _getReviewRelations(map, e1->getElementId());
+  // get all the review relations for e2
+  set<ElementId> review2 = _getReviewRelations(map, e2->getElementId());
+
+  // intersect the relations
+  set<ElementId> intersection;
+  set_intersection(review1.begin(), review1.end(), review2.begin(), review2.end(),
+    std::inserter(intersection, intersection.begin()));
+
+  // if there are more than one relations in the intersection, return true.
+  return intersection.size() >= 1;
 }
 
 void ReviewMarker::mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, const QString& note,
   double score)
 {
-  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, "review"));
+  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
   r->getTags().set(reviewNeedsKey(), true);
   if (note.isEmpty())
   {
@@ -65,7 +88,7 @@ void ReviewMarker::mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, co
 
 void ReviewMarker::mark(const OsmMapPtr& map, ElementPtr& e, const QString& note, double score)
 {
-  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, "review"));
+  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
   r->getTags().set(reviewNeedsKey(), true);
   if (note.isEmpty())
   {

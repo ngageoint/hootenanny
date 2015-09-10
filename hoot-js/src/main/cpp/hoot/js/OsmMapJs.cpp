@@ -31,8 +31,11 @@
 #include "OsmMapJs.h"
 
 // hoot
+#include <hoot/core/io/OsmJsonWriter.h>
+#include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
+#include <hoot/js/elements/ElementIdJs.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
 #include "JsRegistrar.h"
 
@@ -63,8 +66,12 @@ void OsmMapJs::Init(Handle<Object> target) {
   tpl->SetClassName(String::NewSymbol("OsmMap"));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("getElement"),
+      FunctionTemplate::New(getElement)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("getElementCount"),
       FunctionTemplate::New(getElementCount)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("getParents"),
+      FunctionTemplate::New(getParents)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("clone"),
       FunctionTemplate::New(clone)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("visit"),
@@ -135,12 +142,55 @@ OsmMapPtr& OsmMapJs::getMap()
   return _map;
 }
 
+Handle<Value> OsmMapJs::getElement(const Arguments& args)
+{
+  HandleScope scope;
+
+  try
+  {
+    OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
+
+    LOG_VAR(args[0]->ToObject());
+    ElementId eid = toCpp<ElementId>(args[0]);
+
+    if (obj->isConst())
+    {
+      return scope.Close(toV8(obj->getConstMap()->getElement(eid)));
+    }
+    else
+    {
+      return scope.Close(toV8(obj->getMap()->getElement(eid)));
+    }
+  }
+  catch (const HootException& e)
+  {
+    return v8::ThrowException(HootExceptionJs::create(e));
+  }
+}
+
 Handle<Value> OsmMapJs::getElementCount(const Arguments& args) {
   HandleScope scope;
 
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
   return scope.Close(Number::New(obj->getConstMap()->getElementCount()));
+}
+
+Handle<Value> OsmMapJs::getParents(const Arguments& args) {
+  HandleScope scope;
+
+  try
+  {
+    OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
+
+    ElementId eid = toCpp<ElementId>(args[0]->ToObject());
+
+    return scope.Close(toV8(obj->getConstMap()->getParents(eid)));
+  }
+  catch (const HootException& e)
+  {
+    return v8::ThrowException(HootExceptionJs::create(e));
+  }
 }
 
 Handle<Value> OsmMapJs::visit(const Arguments& args)

@@ -179,6 +179,45 @@ function calculatePercentOverlap(map, e1, e2)
 }
 
 /**
+ * This will merge elements 1 and 2. The geometry of 1 will be kept and 2
+ * discarded. If element 2 is part of another element (e.g. in a way or
+ * relation) element 1 will take its place in that element.
+ */
+function mergeElements(map, e1, e2) {
+    hoot.log(e2);
+    var e2Parents = map.getParents(e2.getElementId());
+    hoot.log(e2Parents);
+    // if e2 has one or more parents
+    for (var i in e2Parents) {
+        var pid = e2Parents[i];
+        // replace e2 with e1
+        if (pid.getType() == "Relation") {
+            var p = map.getElement(pid);
+            map.getElement(pid).replaceElement(e2, e1);
+        } else if (pid.getType() == "Way") {
+            // if e1 is a node, then replace it, if not, then we will just clear
+            // the tags out of e2 later on.
+            if (e1.getType() == "Node") {
+                var p = map.getElement(pid);
+                p.replaceNode(e2.getId(), e1.getId());
+            }
+        } else {
+            throw Error("Unexpected element type: " + pid.getType());
+        }
+    }
+
+    // merge tags from e2 into e1 using default tag merging
+    var newTags = mergeTags(e1, e2);
+    e1.setTags(newTags);
+
+    // clear the tags before removing e2 just in case it wasn't moved out of
+    // all parents
+    e2.setTags(new hoot.Tags());
+    // remove e2 if we can
+    new hoot.RecursiveElementRemover(e2).apply(map);
+}
+
+/**
  * Remove a specified element and all unused child elements of the element.
  * For example, if you remove a way then the way and all nodes that make up
  * the way and are not being used by another element are removed.

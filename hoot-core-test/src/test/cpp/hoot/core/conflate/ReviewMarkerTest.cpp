@@ -40,14 +40,47 @@ namespace hoot
 class ReviewMarkerTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ReviewMarkerTest);
+  CPPUNIT_TEST(runNeedsReviewTest);
   CPPUNIT_TEST(runSimpleTest);
   CPPUNIT_TEST(runMultipleScoresTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
+  void runNeedsReviewTest()
+  {
+    TestUtils::resetEnvironment();
+
+    OsmMapPtr map(new OsmMap());
+    ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
+    ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
+    ElementPtr n3(new Node(Status::Unknown2, 3, 0, 0, 0));
+
+    // set the uuids so they don't change with each test
+    n1->getTags().set("uuid", "n1");
+    n2->getTags().set("uuid", "n2");
+    n3->getTags().set("uuid", "n2");
+    map->addElement(n1);
+    map->addElement(n2);
+    map->addElement(n3);
+
+    ReviewMarker uut;
+
+    uut.mark(map, n1, n2, "a note");
+    LOG_VAR(uut.isNeedsReview(map, n1, n2));
+    LOG_VAR(uut.isNeedsReview(map, n2, n3));
+    LOG_VAR(uut.isNeedsReview(map, n3, n1));
+
+    HOOT_STR_EQUALS(true, uut.isNeedsReview(map, n1, n2));
+    HOOT_STR_EQUALS(true, uut.isNeedsReview(map, n2, n1));
+    HOOT_STR_EQUALS(false, uut.isNeedsReview(map, n2, n3));
+    HOOT_STR_EQUALS(false, uut.isNeedsReview(map, n3, n1));
+  }
+
   void runSimpleTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmMapPtr map(new OsmMap());
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
     ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
@@ -77,6 +110,8 @@ public:
    */
   void runMultipleScoresTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmMapPtr map(new OsmMap());
     DisableLog dl;
 
@@ -99,10 +134,10 @@ public:
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
       "{\"type\":\"node\",\"id\":2,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n2\"}},\n"
       "{\"type\":\"node\",\"id\":1,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n1\"}},\n"
-      "{\"type\":\"relation\",\"id\":-3,\"members\":[\n"
+      "{\"type\":\"relation\",\"id\":-2,\"members\":[\n"
       "{\"type\":\"node\",\"ref\":1,\"role\":\"reviewee\"},\n"
       "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:needs\":\"yes\",\"hoot:review:score\":\"0.5\",\"hoot:review:note\":\"a note 2\",\"error:circular\":\"0\"},\n"
-      "{\"type\":\"relation\",\"id\":-2,\"members\":[\n"
+      "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
       "{\"type\":\"node\",\"ref\":1,\"role\":\"reviewee\"},\n"
       "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:needs\":\"yes\",\"hoot:review:score\":\"0.15\",\"hoot:review:note\":\"a note\",\"error:circular\":\"0\"}]\n"
       "}\n",

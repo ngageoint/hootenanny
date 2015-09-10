@@ -33,6 +33,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
 
@@ -69,6 +70,8 @@ void RelationJs::Init(Handle<Object> target)
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   ElementJs::_addBaseFunctions(tpl);
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("replaceElement"),
+      FunctionTemplate::New(replaceElement)->GetFunction());
 
   _constructor = Persistent<Function>::New(tpl->GetFunction());
   target->Set(String::NewSymbol("Relation"), _constructor);
@@ -104,6 +107,27 @@ Handle<Value> RelationJs::New(const Arguments& args)
   obj->Wrap(args.This());
 
   return args.This();
+}
+
+v8::Handle<v8::Value> RelationJs::replaceElement(const v8::Arguments& args)
+{
+  HandleScope scope;
+
+  try
+  {
+    RelationJs* obj = ObjectWrap::Unwrap<RelationJs>(args.This());
+
+    ConstElementPtr e1 = toCpp<ConstElementPtr>(args[0]->ToObject());
+    ConstElementPtr e2 = toCpp<ConstElementPtr>(args[1]->ToObject());
+
+    obj->getRelation()->replaceElement(e1, e2);
+
+    return scope.Close(Undefined());
+  }
+  catch (const HootException& e)
+  {
+    return v8::ThrowException(HootExceptionJs::create(e));
+  }
 }
 
 }
