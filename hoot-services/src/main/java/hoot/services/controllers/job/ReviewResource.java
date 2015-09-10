@@ -29,6 +29,7 @@ package hoot.services.controllers.job;
 import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import hoot.services.HootProperties;
@@ -39,13 +40,18 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.ReviewReferences;
 import hoot.services.models.review.ReviewReferencesRequest;
+import hoot.services.models.review.ReviewableItem;
+import hoot.services.models.review.ReviewableItemsResponse;
 import hoot.services.models.review.ReviewableItemsStatistics;
+import hoot.services.readers.review.ReviewableItemRetriever;
 import hoot.services.readers.review.ReviewableItemsStatisticsCalculator;
+import hoot.services.review.DisplayBoundsCalculator;
 import hoot.services.review.ReviewItemsUpdater;
 import hoot.services.review.ReviewItemsPreparer;
 import hoot.services.review.ReviewUtils;
 import hoot.services.utils.StringsWebWrapper;
 import hoot.services.validators.review.ReviewInputParamsValidator;
+import hoot.services.writers.review.ReviewableItemsResponseWriter;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -440,8 +446,9 @@ public class ReviewResource
    * items should reside in
    * @return a set of reviewable items
    * @throws Exception
+   * @deprecated since 0.2.19
    */
-  /*@GET
+  @GET
   @Consumes(MediaType.TEXT_PLAIN)
   @Produces(MediaType.APPLICATION_JSON)
   public ReviewableItemsResponse getReviewableItems(
@@ -589,7 +596,7 @@ public class ReviewResource
     }
 
     return reviewableItemsResponse;
-  }*/
+  }
   
   @PUT
   @Path("/updatestatus")
@@ -811,7 +818,9 @@ public class ReviewResource
   	ReviewReferences response = new ReviewReferences();
   	try
   	{
-  		//get all review against item id's that are referenced by the input reviewable uuid's
+  		//get all review against item id's that are referenced by the input reviewable uuid's; since
+  		//the review table data breaks up one to many reviewable uuid to review against uuid
+  		//relationships, we don't have to break up the review against uuid's and use SQL 'like' here
       response.setReviewAgainstItemUuids(
         new StringsWebWrapper(
         	new SQLQuery(conn, DbUtils.getConfiguration(mapId))

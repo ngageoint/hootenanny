@@ -237,7 +237,8 @@ public class ReviewItemsUpdater
   		}
   		else
   		{
-  			//record has nothing left to review against it, so set it to reviewed
+  			//record has nothing left to review against it, so set it to reviewed; the client is
+  			//expected to have dropped all the review tags from the feature
   			ReviewItems reviewItemRecord = 
   				ReviewUtils.createReviewItemRecord(
 	  			  uuid, 
