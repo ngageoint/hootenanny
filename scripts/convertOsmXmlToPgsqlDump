@@ -8,7 +8,7 @@ use File::Temp qw(tempfile);
 
 sub covertDecimalDegreesToNanodegrees($);
 sub generatePgDumpfileFromOsm($$);
-sub readNodes($$$$$$);
+sub readNodes($$$$$);
 sub lon2x($);
 sub lat2y($);
 sub convertLatLonToTileNumber($$);
@@ -79,57 +79,77 @@ sub generatePgDumpfileFromOsm($$)
 
   open( $osmFilehandle, "< $osmFilename") or die( "Could not open OSM file: $osmFilename\n\n" );
 
-  # Open multiple temp output SQL files and do ONE pass over each kind of data, dropping data
+  # Open multiple temp output SQL files, one per table. 
+  #
+  # Having one file per table frees us up to do ONE pass over each kind of data, nodes/ways/relations,
   #   into the appropriate file:
   #
-  #   - User/changeset data
-  #   - Current node/way/relation data
-  #   - Historical node/way/relation data
-  #
-  #   At the end we'll do an OS filesystem concat of the three files to get the correct ordering of 
-  #   sections which will be way faster than multiple passes over the exact same data
+  #   At the end we'll do an OS filesystem concat of the various files to get the correct ordering of 
+  #   tables in the final output. Saves huge time
 
-  my $currentSqlFilehandle = File::Temp->new();
-
-  my $historicalSqlFilehandle = File::Temp->new();
-   
+  my %tableFilehandles;
+  $tableFilehandles{ 'users' } = File::Temp->new();
+  $tableFilehandles{ 'changesets' } = File::Temp->new();
+  $tableFilehandles{ 'sequence_updates' } = File::Temp->new();
+  $tableFilehandles{ 'current_nodes' } = File::Temp->new();
+  $tableFilehandles{ 'current_node_tags' } = File::Temp->new();
+  $tableFilehandles{ 'nodes' } = File::Temp->new();
+  $tableFilehandles{ 'node_tags' } = File::Temp->new();
+  #$tableFilehandles{ 'current_ways' } = File::Temp->new();
 
   my $changesetId     = 1;
   my $startingNodeId  = 500;
 
-  readNodes($osmFilehandle, $currentSqlFilehandle, $historicalSqlFilehandle, \$changesetId, 
-    $startingNodeId, \%idMappings );
+  readNodes($osmFilehandle, \%tableFilehandles, \$changesetId, $startingNodeId, \%idMappings );
 
   print( "\nShould be first way line:\n\t" . <$osmFilehandle> );
+
+  # Process ways
+
+  # Process relations
 
   close( $osmFilehandle );
   #close( $sqlFilehandle );
 
-  # concat temp file contents, delete temp files
-  print( "Temp current SQL file: $currentSqlFilehandle\n");
-  print( "Temp historical SQL file: $historicalSqlFilehandle\n");
 
-  `cat $currentSqlFilehandle > $sqlFilename`;
-  `cat $historicalSqlFilehandle >> $sqlFilename`;
+  my @tableFlushSequence = (   
+    'sequence_updates', 
+    'users', 'changesets', 
+    'current_nodes', 'current_node_tags',
+    'nodes', 'node_tags' 
+  );
+
+  if ( -f $sqlFilename )
+  {
+    unlink($sqlFilename);
+  }
+
+  foreach my $currTable ( @tableFlushSequence )
+  {
+    `cat $tableFilehandles{ $currTable } >> $sqlFilename`;
+  }
 
 }
 
-sub readNodes($$$$$$)
+sub readNodes($$$$$)
 {
   my $osmFilehandle             = shift(@_);
-  my $currentSqlFilehandle      = shift(@_);
-  my $historicalSqlFilehandle   = shift(@_);
+  my $tableFilehandlesRef       = shift(@_);
   my $changesetIdRef            = shift(@_);
   my $startingNodeId            = shift(@_);
   my $idMappings                = shift(@_);
 
   print( "- Processing nodes: ");
 
-  print( $currentSqlFilehandle 
+  my $currentNodesHandle = $tableFilehandlesRef->{'current_nodes'};
+
+  print( $currentNodesHandle
     'COPY current_nodes (id, latitude, longitude, changeset_id, ' .
     "visible, \"timestamp\", tile, version) FROM stdin;\n" );
+
+  my $nodesHandle = $tableFilehandlesRef->{'nodes'};
  
-  print( $historicalSqlFilehandle
+  print( $nodesHandle
     'COPY nodes (node_id, latitude, longitude, changeset_id, visible, ' .
     '"timestamp", tile, version, redaction_id) FROM stdin;' . "\n" );
 
@@ -143,6 +163,11 @@ sub readNodes($$$$$$)
   my $currLine = <$osmFilehandle>;
   my $numNodes = 0;
   my $dbNodeId = $startingNodeId;
+
+  my $nodeId;   # Have to track this outside loop as tags will refer back to 
+                # last node we encountered
+  my $insideNode = 0;
+
   while ( ! eof($osmFilehandle) )
   {
     chomp( $currLine );
@@ -157,6 +182,17 @@ sub readNodes($$$$$$)
     # If it's a node, deal with it
     if ( $currLine =~ /<node\s+id=\"-?\d+\"/ )
     {
+
+      # Make sure we're not already inside a node
+      if ( $insideNode == 1 )
+      {
+        print( "Hit node start when we were already in one\n\n");
+        exit;
+      }
+
+      # Mark that we're inside a node
+      $insideNode = 1;
+
       #print( "Processing node in line $currLine" );
       $numNodes++;
 
@@ -168,7 +204,7 @@ sub readNodes($$$$$$)
         exit;
       }
 
-      my $nodeId  = $1;
+      $nodeId  = $1;
       my $nodeLat = $2;
       my $nodeLon = $3;
       my $tileNumber = convertLatLonToTileNumber($nodeLat, $nodeLon);
@@ -188,7 +224,7 @@ sub readNodes($$$$$$)
       
 
       # Print current version of data
-      print( $currentSqlFilehandle
+      print( $currentNodesHandle
         sprintf("%d\t%10d\t%10d\t%d\tt\t%s\t%u\t1\n",
           $idMappings->{'node'}->{$nodeId},
           convertDecimalDegreesToNanodegrees($nodeLat),
@@ -199,7 +235,7 @@ sub readNodes($$$$$$)
 
 
       # Print historical version of data
-      print( $historicalSqlFilehandle
+      print( $nodesHandle
         sprintf( "%d\t%10d\t%10d\t%d\tt\t%s\t%u\t1\t\\N\n",
           $idMappings->{'node'}->{$nodeId},
           convertDecimalDegreesToNanodegrees($nodeLat),
@@ -219,6 +255,37 @@ sub readNodes($$$$$$)
         $$changesetIdRef++;
         $changesInChangeset = 0;
       }
+
+      # Identify if this is a node without tags, should we say we're leaving this node?
+      if ( $currLine =~ /<node.+?\suser=\".+\"\s*\/>/ )
+      {
+        $insideNode = 0;
+        $nodeId -999999;
+      }
+    }
+    elsif ( $currLine =~ /<tag\s+k=\"(.*?)\"\s+v=\"(.*?)\"\s*\/>/ )
+    {
+      # Are we inside a node?
+      if ( $insideNode == 0 )
+      {
+        print( "Encountered an unexpected node tag\n\n");
+        exit;
+      }
+    }
+    elsif ( $currLine =~ /<\/node>/ )
+    {
+      # We've left a node
+      $insideNode = 0;
+      $nodeId = -999999;
+    }
+    else
+    {
+      # Ignore anything before first node, otherwise error
+      if ( scalar(keys(%{ $idMappings->{'node'} })) > 0 )
+      {
+        print( "Invalid line: $currLine\n\n");
+        exit;
+      }
     }
 
     $previousLinePosition = tell($osmFilehandle );
@@ -226,8 +293,8 @@ sub readNodes($$$$$$)
   }
 
   # Output marker for end of tables
-  print( $currentSqlFilehandle "\\.\n\n\n" );
-  print( $historicalSqlFilehandle "\\.\n\n\n" );
+  print( $currentNodesHandle "\\.\n\n\n" );
+  print( $nodesHandle "\\.\n\n\n" );
 
   print ("complete ($numNodes)\n");
 
