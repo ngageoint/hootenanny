@@ -45,8 +45,8 @@ MaxWordSetDistance::MaxWordSetDistance(StringDistance* d)
 
 double MaxWordSetDistance::compare(const QString& s1, const QString& s2) const
 {
-  QStringList sl1 = s1.split(" ");
-  QStringList sl2 = s2.split(" ");
+  QStringList sl1 = _tokenizer.tokenize(s1);
+  QStringList sl2 = _tokenizer.tokenize(s2);
 
   ScoreMatrix m(sl1.size(), sl2.size());
 

@@ -280,3 +280,6 @@ reviewDisplayBoundsZoomAdjustDefault=-0.0015
 # method by which the display bounds is calculated for review item pairs; valid values are:
 # reviewableItemOnly, reviewAgainstItemOnly, reviewableAndReviewAgainstItemCombined
 reviewDisplayBoundsMethod=reviewableAndReviewAgainstItemCombined
+
+# HGIS review prepare for validation script name
+hgisPrepareForValidationScript=custom/HGIS/PrepareForValidation.sh

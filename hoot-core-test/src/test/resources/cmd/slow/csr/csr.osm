@@ -444,7 +444,7 @@
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-119" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8578321389392443" lon="-104.9125488383814826">
-        <tag k="place" v="town"/>
+        <tag k="place" v="city"/>
         <tag k="poi" v="yes"/>
         <tag k="name" v="Manitou Springs"/>
         <tag k="error:circular" v="1000"/>
@@ -912,7 +912,7 @@
         <tag k="REF2" v="Cheddar's"/>
         <tag k="hoot:building:match" v="true"/>
         <tag k="alt_name" v="Cheddars"/>
-        <tag k="building" v="restaurant"/>
+        <tag k="building" v="yes"/>
         <tag k="name" v="Cheddar's Casual Cafe"/>
         <tag k="amenity" v="restaurant"/>
         <tag k="error:circular" v="15"/>
