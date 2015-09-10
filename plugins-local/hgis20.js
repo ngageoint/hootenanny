@@ -77,7 +77,7 @@ hgis20 = {
 
 
     // validateAttrs: Clean up the supplied attr list by dropping anything that should not be part of the
-    //                feature and checking enumerated values.
+    //                feature.
     validateAttrs: function(geometryType,tableName,attrs) {
 
         // First, use the lookup table to quickly drop all attributes that are not part of the feature.
@@ -122,54 +122,72 @@ hgis20 = {
                 break;
             }
         }
-
-        // Now validate the Enumerated values
-        for (var i=0, cLen = feature['columns'].length; i < cLen; i++)
-        {
-            // Skip non enumeratied attributes
-            if (feature.columns[i].type !== 'enumeration') continue;
-
-            var enumName = feature.columns[i].name;
-
-            // Skip stuff that is missing and will end up as a default value
-            if (!(attrs[enumName])) continue;
-
-            var attrValue = attrs[enumName];
-            var enumList = feature.columns[i].enumerations;
-            var enumValueList = [];
-
-            // Pull all of the values out of the enumerated list to make life easier
-            for (var j=0, elen = enumList.length; j < elen; j++) enumValueList.push(enumList[j].value);
-
-            // If we DONT have the value in the list, Set it to "other" and jam it into the COMMENTS field.
-            // Note: From the spec, if we have an enumerated value, we have a COMMENTS field as well.
-            if (enumValueList.indexOf(attrValue) == -1)
-            {
-                var othVal = enumName + ':' + attrValue;
-
-                // No "Other" value. Push to the Memo field
-                if (enumValueList.indexOf('999999') == -1)
-                {
-                    // Set the offending enumerated value to the default value
-                    attrs[enumName] = feature.columns[i].defValue;
-                    logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + '. Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
-                }
-                else // We have an "other" value
-                {
-                    // Set the offending enumerated value to the "other" value
-                    attrs[enumName] = '999999';
-                    logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + '. Setting ' + enumName + ' to Other (999999)');
-                }
-
-                // Add the value to the COMMENTS field
-                attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,othVal,';');
-
-            } // End attrValue in enumList
-
-        } // End Validate Enumerations
-
     }, // End validateAttrs
 
+    // Sort out if we need to return two features or one.
+    // This is generally for Roads/Railways & bridges but can also be for other features.
+    twoFeatures: function(geometryType, layerName, tags, attrs)
+    {
+        var newAttrs = {};
+
+        // Sort out Roads, Railways and Bridges.
+        if (geometryType == 'Line' && tags.bridge && (tags.highway || tags.railway))
+        {
+            if (layerName !== 'Bridges_Tunnels') // Not a Bridge
+            {
+                newAttrs.XtableName = 'Bridges_Tunnels';
+
+                if (tags.highway)
+                {
+                    newAttrs.TYPE2 = 'Road'; // Road
+                }
+                else if (tags.railway)
+                {
+                    newAttrs.TYPE2 = 'Rail'; // Railway
+                }
+            }
+            else // A Bridge
+            {
+                if (tags.railway)
+                {
+                    newAttrs.XtableName = 'Railways'; // Railway
+                }
+                else
+                {
+                    newAttrs.XtableName = 'Roads';
+                    // Put in switch statement on the highway tag
+                }
+            }
+
+            // Remove the uuid from the tag list so we get a new one for the second feature
+            delete tags.uuid;
+        } // End sort out Road, Railway & Bridge
+
+        // If we are making a second feature, process it.
+        if (newAttrs.XtableName)
+        {
+            // Now go make a second feature
+            // pre processing
+            hgis20.applyToNfddPreProcessing(tags, newAttrs, geometryType);
+
+            // one 2 one - we call the version that knows about OTH fields
+            translate.applyOne2One(tags, newAttrs, hgis20.lookup, hgis20.layerLookup, hgis20.ignoreList);
+
+            // apply the simple number and text biased rules
+            // Note: These are BACKWARD, not forward!
+            translate.applySimpleNumBiased(newAttrs, tags, hgis20.rules.numBiased, 'backward');
+            translate.applySimpleTxtBiased(newAttrs, tags, hgis20.rules.txtBiased, 'backward');
+
+            // post processing
+            hgis20.applyToHgisPostProcessing(tags, newAttrs, geometryType);
+        }
+
+        // Debug:
+        // for (var i in newAttrs) print('twoFeatures: New Attrs:' + i + ': :' + newAttrs[i] + ':');
+
+        // Return the new attributes
+        return newAttrs;
+    }, // End twoFeatures
 
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName) 
@@ -275,26 +293,6 @@ hgis20 = {
         // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
         tags.source = 'hgisv20';
         tags.uuid = createUuid();
-
-        // Fix up bridges and tunnels
-        if (tags['transport:type'])
-        {
-            switch(tags['transport:type'])
-            {
-                case 'road':
-                    tags.highway = 'road';
-                    break;
-
-                case 'railway':
-                    tags.railway = 'rail';
-                    break;
-
-                case 'pedestrian':
-                    tags.highway = 'footway';
-                    break;
-            }
-        }
-
 
     }, // End of applyToOsmPostProcessing
   
@@ -460,75 +458,97 @@ hgis20 = {
             } // End Switch
         } // End Hydrology_Polygons
 
+        // Fix Railway POI vs lines
+        if (attrs.XtableName == 'Railways' || attrs.XtableName == 'Railways_POI')
+        {
+            if (geometryType == 'Line')
+            {
+                attrs.XtableName = 'Railways';
+                if (attrs.TYPEX)
+                {
+                    attrs.TYPE2 = attrs.TYPEX;
+                    delete attrs.TYPEX;
+                }
+            }
+            if (geometryType == 'Point')
+            {
+                attrs.XtableName = 'Railways_POI';
+                if (attrs.TYPEX)
+                {
+                    attrs.TYPE1 = attrs.TYPEX;
+                    delete attrs.TYPEX;
+                }
+            }
+        }
 
         // ######################
         // Hardcoded Layer selection. Yes, this is ugly
         // Will move this to a custom rules function - soon
 
-        // Educational_Institutions
-        if (tags.amenity == 'school' || tags.building == 'school') attrs.XtableName = 'Educational_Institutions';
-
-        // Geonames
-        if (attrs.DSG || (attrs.place && attrs.place !== 'farm'))
-        {
-            attrs.XtableName = 'Geonames';
-            if (attrs.NAME)
-            {
-                attrs.FULL_NAME = attrs.NAME;
-                attrs.SORT_NAME = attrs.NAME;
-                delete attrs.NAME;
-            }
-        }
-
-        // Internet_Cafes
-        if (tags.amenity == 'internet_cafe') attrs.XtableName = 'Internet_Cafes';
-
-        // Libraries
-        if (tags.amenity == 'library') attrs.XtableName = 'Libraries';
-
-        // Power Plants
-        if (tags.power == 'plant') attrs.XtableName = 'Power_Plants';
-
-        // Prisons
-        if (tags.amenity == 'prison') attrs.XtableName = 'Prisons';
-
-        // Recreation POI
-        if (tags.amenity == 'swimming_pool') attrs.XtableName = 'Recreation_POI';
-        
-        if (tags.leisure || tags.sport)
-        {
-            // Water park is a Tourist Location POI
-            if (!attrs.leisure == 'water_park')
-            {
-                attrs.XtableName = 'Recreation_POI';
-                if (!attrs.TYPE)
-                {
-                    attrs.TYPE = 'Other';
-
-                    var othVal = 'Type:';
-                    (tags.leisure) ? othVal += tags.leisure : othVal += tags.sport ;
-
-                    attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,othVal,';');
-                }
-            }
-        }
-
-
-        // Religious Institutions
-        if (tags.amenity == 'place_of_worship' && geometryType == 'Point') attrs.XtableName = 'Religious_Institutions';
-
-        // Tourist Locations POI
-        if (tags.tourism && tags.tourism !== 'information')
-        {
-            attrs.XtableName = 'Recreation_POI';
-            if (!attrs.TYPE)
-            {
-                attrs.TYPE = 'Other';
-                print('RecPOI: Tourism:' + tags.tourism + ' Comment:' + attrs.COMMENTS);
-
-                attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'Type:' + tags.tourism,';');
-            }
-        }
+//         // Educational_Institutions
+//         if (tags.amenity == 'school' || tags.building == 'school') attrs.XtableName = 'Educational_Institutions';
+//
+//         // Geonames
+//         if (attrs.DSG || (attrs.place && attrs.place !== 'farm'))
+//         {
+//             attrs.XtableName = 'Geonames';
+//             if (attrs.NAME)
+//             {
+//                 attrs.FULL_NAME = attrs.NAME;
+//                 attrs.SORT_NAME = attrs.NAME;
+//                 delete attrs.NAME;
+//             }
+//         }
+//
+//         // Internet_Cafes
+//         if (tags.amenity == 'internet_cafe') attrs.XtableName = 'Internet_Cafes';
+//
+//         // Libraries
+//         if (tags.amenity == 'library') attrs.XtableName = 'Libraries';
+//
+//         // Power Plants
+//         if (tags.power == 'plant') attrs.XtableName = 'Power_Plants';
+//
+//         // Prisons
+//         if (tags.amenity == 'prison') attrs.XtableName = 'Prisons';
+//
+//         // Recreation POI
+//         if (tags.amenity == 'swimming_pool') attrs.XtableName = 'Recreation_POI';
+//
+//         if (tags.leisure || tags.sport)
+//         {
+//             // Water park is a Tourist Location POI
+//             if (!attrs.leisure == 'water_park')
+//             {
+//                 attrs.XtableName = 'Recreation_POI';
+//                 if (!attrs.TYPE)
+//                 {
+//                     attrs.TYPE = 'Other';
+//
+//                     var othVal = 'Type:';
+//                     (tags.leisure) ? othVal += tags.leisure : othVal += tags.sport ;
+//
+//                     attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,othVal,';');
+//                 }
+//             }
+//         }
+//
+//
+//         // Religious Institutions
+//         if (tags.amenity == 'place_of_worship' && geometryType == 'Point') attrs.XtableName = 'Religious_Institutions';
+//
+//         // Tourist Locations POI
+//         if (tags.tourism && tags.tourism !== 'information')
+//         {
+//             attrs.XtableName = 'Recreation_POI';
+//             if (!attrs.TYPE)
+//             {
+//                 attrs.TYPE = 'Other';
+//                 print('RecPOI: Tourism:' + tags.tourism + ' Comment:' + attrs.COMMENTS);
+//
+//                 attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'Type:' + tags.tourism,';');
+//             }
+//         }
 
 
 
@@ -556,6 +576,7 @@ hgis20 = {
             hgis20.lookup = translate.createLookup(hgis20.rules.one2one);
 
             // Build the lookup table for the additional tags to add based on the table name
+            hgis20.rules.one2one.push.apply(hgis20.rules.layerIn,hgis20.rules.layerCommon);
             hgis20.layerLookup = translate.createLookup(hgis20.rules.layerIn);
             // translate.dumpOne2OneLookup(hgis20.layerLookup);
 
@@ -641,7 +662,7 @@ hgis20 = {
             // translate.dumpOne2OneLookup(hgis20.lookup);
 
             // Build the TableName lookup list
-            hgis20.rules.one2one.push.apply(hgis20.rules.layerIn,hgis20.rules.layerOut);
+            hgis20.rules.one2one.push.apply(hgis20.rules.layerOut,hgis20.rules.layerCommon);
             hgis20.layerLookup = translate.createBackwardsLookup(hgis20.rules.layerIn);
             // translate.dumpOne2OneLookup(hgis20.layerLookup);
 
@@ -670,8 +691,8 @@ hgis20 = {
         // pre processing
         hgis20.applyToHgisPreProcessing(tags, attrs, geometryType);
 
-        // one 2 one - we call the version that knows about OTH fields
-        translate.applyOne2One(tags, attrs, hgis20.lookup, {'k':'v'}, hgis20.ignoreList);
+        // one 2 one Rules
+        translate.applyOne2One(tags, attrs, hgis20.lookup,hgis20.layerLookup, hgis20.ignoreList);
 
         // apply the simple number and text biased rules
         // Note: These are BACKWARD, not forward!
@@ -690,11 +711,23 @@ hgis20 = {
             tableName = attrs.XtableName;
             delete attrs.XtableName;
 
+            // Check if we need to make two features
+            attrs2 = hgis20.twoFeatures(geometryType,tableName,tags,attrs);
+
+            if (attrs2.XtableName)
+            {
+                tableName2 = attrs2.XtableName;
+                delete attrs2.XtableName;
+
+                hgis20.validateAttrs(geometryType,tableName2,attrs2);
+
+            } // End two features
+
             // Validate attrs: remove all that are not supposed to be part of a feature
             hgis20.validateAttrs(geometryType,tableName,attrs);
 
         } // End We have a feature
-        else
+        else // Start o2s
         {
             logError('Layer and Geometry: ' + tableName + ' is not in the schema');
 
@@ -739,24 +772,23 @@ hgis20 = {
                          tag3:str.substring(506,759),
                          tag4:str.substring(759,1012)};
             }
-        }
-
-
-        // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true' || config.getOgrDebugDumptags() == 'true')
-        {
-            print('TableName: ' + tableName + '  Geom: ' + geometryType);
-        }
+        } // End o2s
 
         // Debug:
         if (config.getOgrDebugDumpattrs() == 'true')
         {
+            print('TableName: ' + tableName + '  Geom: ' + geometryType);
             for (var i in attrs) print('Out Attrs:' + i + ': :' + attrs[i] + ':');
+            if (tableName2 !== '') for (var i in attrs2) print('2Out Attrs:' + i + ': :' + attrs2[i] + ':');
             print('');
         }
 
         var returnData = [{attrs:attrs, tableName: tableName}];
 
+        if (tableName2 !== '')
+        {
+            returnData.push({attrs: attrs2, tableName: tableName2});
+        }
 
         // Look for Review tags and push them to a review layer if found
         if (tags['hoot:review:needs'] == 'yes')

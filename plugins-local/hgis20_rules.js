@@ -31,9 +31,91 @@
 
 hgis20.rules = {
     // Tags/Attributes for individual layers
-    // These lookup tables are for setting tags on input and for finding the correct layer on output
-    // The common list is used in both.
+    // layerIn = Rules for Import ONLY
+    // layerCommon = Rules for Import and Export
+    // layerOut = Rules for Export ONLY. NOTE: These get swapped around before use
     layerIn : [
+//      ['XtableName','ADMIN0','XXX','XXX'],
+//      ['XtableName','Admin0_Access_To_Services','XXX','XXX'],
+//      ['XtableName','Admin0_Education','XXX','XXX'],
+//      ['XtableName','Admin0_Employment','XXX','XXX'],
+//      ['XtableName','Admin0_Household_Goods','XXX','XXX'],
+//      ['XtableName','Admin0_Mortality','XXX','XXX'],
+//      ['XtableName','Admin0_Population','XXX','XXX'],
+//      ['XtableName','Admin0_Poverty','XXX','XXX'],
+//      ['XtableName','ADMIN1','XXX','XXX'],
+//      ['XtableName','Admin1_Access_To_Services','XXX','XXX'],
+//      ['XtableName','Admin1_Education','XXX','XXX'],
+//      ['XtableName','Admin1_Employment','XXX','XXX'],
+//      ['XtableName','Admin1_Household_Goods','XXX','XXX'],
+//      ['XtableName','Admin1_Mortality','XXX','XXX'],
+//      ['XtableName','Admin1_Population','XXX','XXX'],
+//      ['XtableName','Admin1_Poverty','XXX','XXX'],
+//      ['XtableName','ADMIN2','XXX','XXX'],
+//      ['XtableName','Admin2_Access_To_Services','XXX','XXX'],
+//      ['XtableName','Admin2_Education','XXX','XXX'],
+//      ['XtableName','Admin2_Employment','XXX','XXX'],
+//      ['XtableName','Admin2_Household_Goods','XXX','XXX'],
+//      ['XtableName','Admin2_Mortality','XXX','XXX'],
+//      ['XtableName','Admin2_Population','XXX','XXX'],
+//      ['XtableName','Admin2_Poverty','XXX','XXX'],
+//      ['XtableName','ADMIN3','XXX','XXX'],
+//      ['XtableName','ADMIN4','XXX','XXX'],
+//      ['XtableName','ADMIN5','XXX','XXX'],
+//      ['XtableName','Agricultural_POI','XXX','XXX'],
+//      ['XtableName','Airfields','aeroway','aerodrome'],
+//      ['XtableName','Border_Crossings','barrier','border_control'],
+//      ['XtableName','Bridges_Tunnels','XXX','XXX'],
+//      ['XtableName','Commercial_POI','XXX','XXX'],
+//      ['XtableName','Conflict_Points','hgis:conflict_point','yes'],
+//      ['XtableName','Crime_Data','hgis:crime_point','yes'],
+//      ['XtableName','Cultural_POI','XXX','XXX'],
+//      ['XtableName','Dams','waterway','dam'],
+     ['XtableName','Educational_Institutions','amenity','school'],
+//      ['XtableName','Electrical_POI','XXX','XXX'],
+//      ['XtableName','Embassies','XXX','XXX'],
+//      ['XtableName','Ethnicity','ethnicity_data','yes'],
+//      ['XtableName','Foreign_Investment_Projects','XXX','XXX'],
+//      ['XtableName','Free_Trade_Zones','free_trade_zone','yes'],
+//      ['XtableName','Free_Trade_Zones_Polygons','free','XXX'],
+//      ['XtableName','Geonames','XXX','XXX'],
+//      ['XtableName','GNDB','XXX','XXX'],
+//      ['XtableName','Government_POI','XXX','XXX'],
+//      ['XtableName','HADR','hgis:hdar','yes'],
+//      ['XtableName','Health_Events','hgis:health_point','yes'],
+//      ['XtableName','Hydrology_POI','XXX','XXX'],
+//      ['XtableName','Hydrology_Polygons','XXX','XXX'],
+//      ['XtableName','Hydrology_Polylines','XXX','XXX'],
+//      ['XtableName','Internet_Cafes','amenity','internet_cafe'],
+//      ['XtableName','Languages','language_data','yes'],
+//      ['XtableName','Libraries','amenity','library'],
+//      ['XtableName','Lodging_POI','XXX','XXX'],
+//      ['XtableName','Marine_POI','XXX','XXX'],
+//      ['XtableName','Media_Outlets','XXX','XXX'],
+//      ['XtableName','Medical_Facilities','XXX','XXX'],
+//      ['XtableName','Military_Installations','military','installation'],
+//      ['XtableName','Natural_POI','XXX','XXX'],
+//      ['XtableName','Natural_Resources','XXX','XXX'],
+//      ['XtableName','Ports','landuse','port'],
+//      ['XtableName','Power_Plants','power','plant'],
+//      ['XtableName','Prisons','amenity','prison'],
+//      ['XtableName','Protected_Areas','protected_area','yes'],
+//      ['XtableName','Public_Security_POI','XXX','XXX'],
+//      ['XtableName','Public_Transportation_POI','XXX','XXX'],
+//      ['XtableName','Railways','railway','rail'],
+//      ['XtableName','Railways_POI','XXX','XXX'],
+//      ['XtableName','Recreation_POI','XXX','XXX'],
+//      ['XtableName','Refugee_Camps','XXX','XXX'],
+//      ['XtableName','Religion','XXX','XXX'],
+     ['XtableName','Religious_Institutions','amenity','place_of_worship'],
+//      ['XtableName','Roads','highway','road'],
+//      ['XtableName','Smuggling_Routes','smuggling_route','yes'],
+//      ['XtableName','Smuggling_Routes_Polyline','XXX','XXX'],
+//      ['XtableName','Soils','geological','soil_surface_region'], // Link to TDSv61
+//      ['XtableName','Tourist_Locations_POI','XXX','XXX'],
+    ], // End layerIn
+
+    layerCommon : [
 //      ['XtableName','ADMIN0','XXX','XXX'],
 //      ['XtableName','Admin0_Access_To_Services','XXX','XXX'],
 //      ['XtableName','Admin0_Education','XXX','XXX'],
@@ -98,21 +180,21 @@ hgis20.rules = {
      ['XtableName','Ports','landuse','port'],
      ['XtableName','Power_Plants','power','plant'],
      ['XtableName','Prisons','amenity','prison'],
-//      ['XtableName','Protected_Areas','XXX','XXX'],
+     ['XtableName','Protected_Areas','protected_area','yes'],
 //      ['XtableName','Public_Security_POI','XXX','XXX'],
 //      ['XtableName','Public_Transportation_POI','XXX','XXX'],
-//      ['XtableName','Railways','XXX','XXX'],
+     ['XtableName','Railways','railway','rail'],
 //      ['XtableName','Railways_POI','XXX','XXX'],
 //      ['XtableName','Recreation_POI','XXX','XXX'],
 //      ['XtableName','Refugee_Camps','XXX','XXX'],
 //      ['XtableName','Religion','XXX','XXX'],
 //      ['XtableName','Religious_Institutions','XXX','XXX'],
-//      ['XtableName','Roads','XXX','XXX'],
+     ['XtableName','Roads','highway','road'],
      ['XtableName','Smuggling_Routes','smuggling_route','yes'],
 //      ['XtableName','Smuggling_Routes_Polyline','XXX','XXX'],
      ['XtableName','Soils','geological','soil_surface_region'], // Link to TDSv61
 //      ['XtableName','Tourist_Locations_POI','XXX','XXX'],
-    ], // End layerIn
+    ], // End layerCommon
 
     layerOut : [
 //      ['XtableName','ADMIN0','XXX','XXX'],
@@ -232,7 +314,7 @@ hgis20.rules = {
      'COMM_RADIO':'raw:COMM_RADIO',
      'COMM_RAIL':'raw:COMM_RAIL',
      'COMM_VHF':'raw:COMM_VHF',
-     'COUNTRY':'is_in:country', // Country Name
+     'COUNTRY':'crossing_to_country',
      'CRANEFIXED':'raw:CRANEFIXED',
      'CRANEFLOAT':'raw:CRANEFLOAT',
      'CRANEMOBIL':'raw:CRANEMOBIL',
@@ -1202,7 +1284,6 @@ hgis20.rules = {
      ['hadr$TYPE2','Fire','hadr:type','fire'],
      ['hadr$TYPE2','Flood','hadr:type','flood'],
      ['hadr$TYPE2','Flash Flood','hadr:type','flash_flood'],
-     ['hadr$TYPE2','General Flood','hadr:type','general_flood'],
      ['hadr$TYPE2','Forest Fire','hadr:type','forest_fire'],
      ['hadr$TYPE2','General Flood','hadr:type','general_flood'],
      ['hadr$TYPE2','Landslide','hadr:type','landslide'],
@@ -1374,23 +1455,26 @@ hgis20.rules = {
      ['prison$TYPE','Regional','prison:type','regional'],
      ['prison$TYPE','Solitary','prison:type','solitary'],
 
-     ['railwayl$TYPE1','National','raw:railwayltTYPE1','national'],
-     ['railwayl$TYPE1','Regional','raw:railwayltTYPE1','regional'],
-     ['railwayp$TYPE1','Elite','raw:railwayptTYPE1','elite'],
-     ['railwayp$TYPE1','Freight & Passenger','raw:railwayptTYPE1','freight & passenger'],
-     ['railwayp$TYPE1','Freight','raw:railwayptTYPE1','freight'],
-     ['railwayp$TYPE1','Passenger','raw:railwayptTYPE1','passenger'],
-     ['railwayp$TYPE1','Tram Subway','raw:railwayptTYPE1','tram_subway'],
+     ['railwayl$TYPE1','National','railway:level','national'],
+     ['railwayl$TYPE1','Regional','railway:level','regional'],
 
-     ['railwayl$TYPE2','Freight & Passenger','raw:railwaylTYPE2','freight_passenger'],
-     ['railwayl$TYPE2','Freight','raw:railwaylTYPE2','freight'],
-     ['railwayl$TYPE2','Passenger','raw:railwaylTYPE2','passenger'],
-     ['railwayl$TYPE2','Subway','raw:railwaylTYPE2','subway'],
-     ['railwayl$TYPE2','Tram','raw:railwaylTYPE2','tram'],
+     // Moved to input only. Output via custom rules
+//      ['railwayl$TYPE2','Freight & Passenger','railway:type','freight_and_passenger'],
+//      ['railwayl$TYPE2','Freight','railway:type','freight'],
+//      ['railwayl$TYPE2','Passenger','railway:type','passenger'],
+     ['railwayl$TYPE2','Subway','railway','subway'],
+     ['railwayl$TYPE2','Tram','railway','tram'],
+
+     ['railwayp$TYPE1','Elite','railway:type','elite'],
+//      ['railwayp$TYPE1','Freight & Passenger','railway:type','freight_and_passenger'],
+//      ['railwayp$TYPE1','Freight','railway:type','freight'],
+//      ['railwayp$TYPE1','Passenger','railway:type','passenger'],
+     ['railwayp$TYPE1','Tram Subway','railway','tram_subway'],
+
      ['railwayp$TYPE2','Depot','raw:railwaypTYPE2','depot'],
-     ['railwayp$TYPE2','Station','raw:railwaypTYPE2','station'],
-     ['railwayp$TYPE2','Stop','raw:railwaypTYPE2','stop'],
-     ['railwayp$TYPE2','Yard','raw:railwaypTYPE2','yard'],
+     ['railwayp$TYPE2','Station','railway','station'],
+     ['railwayp$TYPE2','Stop','railway','stop'],
+     ['railwayp$TYPE2','Yard','service','yard'],
 
      ['recreation$TYPE','Other','leisure','other'],
      ['recreation$TYPE','Park','leisure','park'],
@@ -1562,12 +1646,24 @@ hgis20.rules = {
      ['marine$TYPE','Lighthouse & Beacons','raw:marineTYPE','lighthouses & beacons'],
      ['lodging$TYPE2','Condominiums','raw:lodgingTYPE2','condominium'],
 
+     // This Is Ugly
+     ['railwayp$TYPE1','Freight & Passenger','railway:type','freight_and_passenger'],
+     ['railwayp$TYPE1','Freight','railway:type','freight'],
+     ['railwayp$TYPE1','Passenger','railway:type','passenger'],
+     ['railwayl$TYPE2','Freight & Passenger','railway:type','freight_and_passenger'],
+     ['railwayl$TYPE2','Freight','railway:type','freight'],
+     ['railwayl$TYPE2','Passenger','railway:type','passenger'],
+
     ], // End one2oneIn
 
     // One2one translation table for converting "Other" OSM attributes
     // This is for Export only. The values are swapped before use
     one2oneOut : [
      [undefined,undefined,'natural','water'], // to get rid of errors
+
+     ['railwayp$TYPEX','Freight & Passenger','railway:type','freight_and_passenger'],
+     ['railwayp$TYPEX','Freight','railway:type','freight'],
+     ['railwayp$TYPEX','Passenger','railway:type','passenger'],
    ], // End one2oneOut
 
     // ##### End of One2One Rules #####
