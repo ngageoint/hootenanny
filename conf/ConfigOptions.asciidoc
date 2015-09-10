@@ -1263,7 +1263,7 @@ A key value pair to use in the tag criterion by default. E.g. 'highway,road'
 === tag.merger.default
 
 * Data Type: string
-* Default Value: `hoot::AverageTagMerger`
+* Default Value: `hoot::OverwriteTag2Merger`
 
 Specifies the default way of merging tags. This is used by most merge routines, but may be overriden
 depending on the specifics of the merger.
