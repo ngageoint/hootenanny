@@ -13,7 +13,7 @@ The MapEdit export server is built with Node.js.  Node and the node package mana
 To start the service run
 
     npm start
-The service uses a json configuration file, `config.json`.  Any valid Hootenanny input source string (*i.e.* OGR datasource) can be configured as an export datasource.  Most commonly this will be a PostGIS Render Db generated with `osm2pgsql` or `ogr2ogr`.
+The service uses a json configuration file, `config.json`.  Any valid Hootenanny input source string (*i.e.* OGR datasource) can be configured as an export datasource.  Most commonly this will be a PostGIS Render Db generated with `osm2pgsql`.  *Note: this is the only datasource that will export with the schema/format combination of OSM/Shapefile and OSM/FileGeodatabase.*
 ```
 {
   "datasources": {
@@ -40,7 +40,7 @@ The service uses a json configuration file, `config.json`.  Any valid Hootenanny
 
 The formats and schemas available are dependent on the version of Hootenanny installed (*and should only be edited by Hoot developers*), but are current as of Hootenanny release 0.2.19.
 
-This is the table of supported schema/format combinations:
+This is the table of supported schema/format combinations for the `osm2pgsql` PostGIS render database:
 
 |      | Shapefile | File Geodatabase | OSM XML |
 | ---- |:---------:|:----------------:|:-------:|
