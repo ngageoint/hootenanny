@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.job;
 
+import static com.mysema.query.group.GroupBy.groupBy;
+import static com.mysema.query.group.GroupBy.list;
+
 import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -39,7 +42,6 @@ import hoot.services.db2.QMaps;
 import hoot.services.db2.QReviewItems;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Element;
-import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.ReviewableItem;
 import hoot.services.models.review.ReviewableItemsResponse;
@@ -72,6 +74,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.mysema.query.sql.SQLQuery;
+import com.mysema.query.types.QTuple;
 
 /**
  * Non-WPS service endpoint for the conflated data review process
@@ -603,6 +606,7 @@ public class ReviewResource
     return reviewableItemsResponse;
   }
   
+  @SuppressWarnings("unchecked")
   @PUT
   @Path("/updatestatus")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -693,6 +697,7 @@ public class ReviewResource
     return markItemsReviewedResponse;
   }*/
   
+  @SuppressWarnings("unchecked")
   @PUT
   @Path("/next")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -759,6 +764,7 @@ public class ReviewResource
     return nextReviewableResponse;
   }
   
+  @SuppressWarnings("unchecked")
   @GET
   @Path("/lockcount")
   @Consumes(MediaType.TEXT_PLAIN)
@@ -837,13 +843,24 @@ public class ReviewResource
 		      .where(
 		    	  elementIdMappings.mapId.eq(mapId)
 		    	  .and(elementIdMappings.osmElementId.eq(elementId))
-		    	  .and(elementIdMappings.osmElementType.eq(Element.elementTypeFromString(elementType))))
+		    	  .and(elementIdMappings.osmElementType.eq(Element.elementEnumForString(elementType))))
 		      .singleResult(elementIdMappings.elementId);
   		log.debug("elementUniqueId: " + elementUniqueId);
   		
   		//get all review against items that are referenced by the input elements; since
   		//the review table data breaks up one to many reviewable uuid to review against uuid
   		//relationships, we don't have to break up the review against uuid's here
+  		
+  		/*final List<?> reviewAgainstItems =
+        new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+  		    .from(reviewItems)
+  		    .join(elementIdMappings)
+  		    //this should be the only join condition needed since the element id is globally unique
+  		    //for each element
+  		    .on(reviewItems.reviewableItemId.eq(elementIdMappings.elementId))
+    		  .where(reviewItems.reviewableItemId.eq(elementUniqueId))
+    		  .list(reviewItems, elementIdMappings);*/
+  		
   		final List<String> reviewAgainstItemIds =
         new SQLQuery(conn, DbUtils.getConfiguration(mapId))
   		    .from(reviewItems)
@@ -852,9 +869,10 @@ public class ReviewResource
   		JSONArray reviewAgainstItemIdsArr = new JSONArray();
   		for (String id : reviewAgainstItemIds)
   		{
-  			JSONObject responseItem = new JSONObject();
-  			responseItem.put("uuid", id);
-  			reviewAgainstItemIdsArr.add(responseItem);
+  			//JSONObject responseItem = new JSONObject();
+  			//responseItem.put("uuid", id);
+  			//reviewAgainstItemIdsArr.add(responseItem);
+  			reviewAgainstItemIdsArr.add(id);
   		}
   		response.put("reviewAgainstItemIds", reviewAgainstItemIdsArr);
   		
@@ -867,15 +885,23 @@ public class ReviewResource
   		JSONArray reviewableItemIdsArr = new JSONArray();
   		for (String id : reviewableItemIds)
   		{
-  			JSONObject responseItem = new JSONObject();
-  			responseItem.put("uuid", id);
-  			reviewableItemIdsArr.add(responseItem);
+  			//JSONObject responseItem = new JSONObject();
+  			//responseItem.put("uuid", id);
+  			//reviewableItemIdsArr.add(responseItem);
+  			reviewableItemIdsArr.add(id);
   		}
   		response.put("reviewableItemIds", reviewableItemIdsArr);
   	}
   	catch (Exception e)
     {
-      ReviewUtils.handleError(e, "Unable to retrieve review references.", false);
+  		log.debug("mapId: " + mapId);
+  		log.debug("elementId: " + elementId);
+  		log.debug("elementType: " + elementType);
+      ReviewUtils.handleError(
+      	e, 
+      	"Unable to retrieve review references for input: " + "mapId: " + mapId + 
+      	  ",elementId: " + elementId + ", elementType: " + elementType, 
+      	false);
     }
     finally
     {

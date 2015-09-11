@@ -561,20 +561,21 @@ public abstract class Element implements XmlSerializable, DbSerializable
   {
     final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
 
-    //SQLQuery query = new SQLQuery(dbConn, DbUtils.getConfiguration());
     QChangesets changesets = QChangesets.changesets;
     QUsers users = QUsers.users;
 
-    if(elementIds.size() > 0)
+    if (elementIds.size() > 0)
     {
-  	return
-  			new SQLQuery(dbConn, DbUtils.getConfiguration("" + mapId)).from(prototype.getElementTable()).join(QChangesets.changesets).
-  			on(prototype.getChangesetIdField().eq(changesets.id))
-  			.join(users)
-  			.on(changesets.userId.eq(users.id))
-  			.where(prototype.getElementIdField().in(elementIds))
-  			.orderBy(prototype.getElementIdField().asc()).
-  			list(prototype.getElementTable(), users, changesets);
+  	  return
+  	    new SQLQuery(dbConn, DbUtils.getConfiguration("" + mapId))
+  	      .from(prototype.getElementTable())
+  	      .join(QChangesets.changesets)
+  	      .on(prototype.getChangesetIdField().eq(changesets.id))
+  			  .join(users)
+  			  .on(changesets.userId.eq(users.id))
+  			  .where(prototype.getElementIdField().in(elementIds))
+  			  .orderBy(prototype.getElementIdField().asc())
+  			  .list(prototype.getElementTable(), users, changesets);
     }
 
     return new ArrayList();

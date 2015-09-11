@@ -237,7 +237,6 @@ public class ReviewableItemRetriever
         			,elementIdMappings
         			))));
 
-
         //get the items to be reviewed against; This needs to be done for all element types since
         //there can be cross-matching between reviewable element types and what they are reviewed
         //against.
