@@ -40,14 +40,15 @@ The service uses a json configuration file, `config.json`.  Any valid Hootenanny
 
 The formats and schemas available are dependent on the version of Hootenanny installed (*and should only be edited by Hoot developers*), but are current as of Hootenanny release 0.2.19.
 
-This is the table of supported schema/format combinations for the `osm2pgsql` PostGIS render database:
+This is the table of supported schema/format combinations:
 
 |      | Shapefile | File Geodatabase | OSM XML |
 | ---- |:---------:|:----------------:|:-------:|
-| **OSM**| &#x2713;| &#x2713;| &#x2713;|
+| **OSM**| &#x2713;*| &#x2713;*| &#x2713;|
 | **TDSv40**| &#x2713;| &#x2713;| &#x2713;|
 | **TDSv61**| &#x2713;| &#x2713;| &#x2713;|
 | **MGCP**| &#x2713;| &#x2713;| &#x2713;|
+*`osm2pgsql` PostGIS render database only
 
 The remaining setting, `cleanupDelay`, is how long the exported files should remain on the server after initial download.  The default is 30 seconds, but can be configured to be longer, say if the same url is sent to someone else so they can download the export too.
 
