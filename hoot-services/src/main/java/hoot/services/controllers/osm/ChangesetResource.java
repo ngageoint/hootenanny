@@ -346,12 +346,11 @@ public class ChangesetResource
     final boolean allowChangesToUnreviewedFeatures)
     throws Exception
   {
+  	log.debug("Intializing database connection...");
     Connection conn = DbUtils.createConnection();
     Document changesetUploadResponse = null;
     try
     {
-      log.debug("Intializing database connection...");
-      
       log.debug("Intializing changeset upload transaction...");
       TransactionStatus transactionStatus = 
         transactionManager.getTransaction(
@@ -380,8 +379,12 @@ public class ChangesetResource
         
         final boolean changesetContainsFeaturesInvolvedInReview = 
           Changeset.changesetContainsFeatureInvolvedInReview(changesetDoc);
+        log.debug(
+        	"changesetContainsFeaturesInvolvedInReview: " + changesetContainsFeaturesInvolvedInReview);
         if (changesetContainsFeaturesInvolvedInReview)
         {
+        	log.debug(
+            "allowChangesToUnreviewedFeatures: " + allowChangesToUnreviewedFeatures);
         	if (!allowChangesToUnreviewedFeatures)
           {
           	throw new Exception(

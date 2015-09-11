@@ -34,12 +34,13 @@ import java.util.Map;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
+import hoot.services.db2.QElementIdMappings;
 import hoot.services.db2.QMaps;
 import hoot.services.db2.QReviewItems;
 import hoot.services.geo.BoundingBox;
+import hoot.services.models.osm.Element;
+import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ModelDaoUtils;
-import hoot.services.models.review.ReviewReferences;
-import hoot.services.models.review.ReviewReferencesRequest;
 import hoot.services.models.review.ReviewableItem;
 import hoot.services.models.review.ReviewableItemsResponse;
 import hoot.services.models.review.ReviewableItemsStatistics;
@@ -49,7 +50,6 @@ import hoot.services.review.DisplayBoundsCalculator;
 import hoot.services.review.ReviewItemsUpdater;
 import hoot.services.review.ReviewItemsPreparer;
 import hoot.services.review.ReviewUtils;
-import hoot.services.utils.StringsWebWrapper;
 import hoot.services.validators.review.ReviewInputParamsValidator;
 import hoot.services.writers.review.ReviewableItemsResponseWriter;
 
@@ -62,7 +62,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,6 +85,9 @@ import com.mysema.query.sql.SQLQuery;
 public class ReviewResource
 {
   private static final Logger log = LoggerFactory.getLogger(ReviewResource.class);
+  
+  private static final QReviewItems reviewItems = QReviewItems.reviewItems;
+  private static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
 
   //These parameters are passed in by the unit tests only.  With better unit test coverage,
   //these params could probably go away.
@@ -794,50 +799,79 @@ public class ReviewResource
   }
 
   /**
-   * Returns any review record references to the UUID's passed in including all references to any 
-   * item the specified UUID still needs to be reviewed against, as well as any other item that 
-   * needs to use the specified UUID to review against it.
+   * Returns any review record references to the elements passed in including all references to any 
+   * item the specified element still needs to be reviewed against, as well as any other item that 
+   * needs to use the specified element to review against it.
    * 
    * @param mapId map owning the features whose ID's are passed in featureUniqueIds
-   * @param featureUniqueIds UUID's corresponding to features for which to return references to
+   * @param reviewReferencesRequest request containing elements for which to return references to
    * review related items
    * @return see ReviewReferencesResponse
    * @throws Exception
    */
+  @SuppressWarnings("unchecked")
   @GET
   @Path("/refs")
-  @Consumes(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.TEXT_PLAIN)
   @Produces(MediaType.APPLICATION_JSON)
-  public ReviewReferences getReviewReferences(
-  	ReviewReferencesRequest reviewReferencesRequest,
+  public Response getReviewReferences(
     @QueryParam("mapId")
-    String mapId)
+    final long mapId,
+    @QueryParam("elementId")
+    final long elementId,
+    @QueryParam("elementType")
+    final String elementType)
     throws Exception
   {
   	Connection conn = DbUtils.createConnection();
-  	ReviewReferences response = new ReviewReferences();
+  	JSONObject response = new JSONObject();
   	try
   	{
-  		//get all review against item id's that are referenced by the input reviewable uuid's; since
+  		log.debug("mapId: " + mapId);
+  		log.debug("elementId: " + elementId);
+  		log.debug("elementType: " + elementType);
+  		
+  		final String elementUniqueId = 
+  			new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+	        .from(elementIdMappings)
+		      .where(
+		    	  elementIdMappings.mapId.eq(mapId)
+		    	  .and(elementIdMappings.osmElementId.eq(elementId))
+		    	  .and(elementIdMappings.osmElementType.eq(Element.elementTypeFromString(elementType))))
+		      .singleResult(elementIdMappings.elementId);
+  		log.debug("elementUniqueId: " + elementUniqueId);
+  		
+  		//get all review against items that are referenced by the input elements; since
   		//the review table data breaks up one to many reviewable uuid to review against uuid
-  		//relationships, we don't have to break up the review against uuid's and use SQL 'like' here
-      response.setReviewAgainstItemUuids(
-        new StringsWebWrapper(
-        	new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-  		      .from(QReviewItems.reviewItems)
-    		    .where(QReviewItems.reviewItems.reviewableItemId.in(
-    		    	reviewReferencesRequest.getFeatureUniqueIds().getValues()))
-    		    .list(QReviewItems.reviewItems.reviewAgainstItemId)
-    		    .toArray(new String[]{})));
-      //add the uuid's of all items which reference the input uuid's as a review against item
-      response.setReviewableItemUuids(
-      	new StringsWebWrapper(
-          new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-    		    .from(QReviewItems.reviewItems)
-      		  .where(QReviewItems.reviewItems.reviewAgainstItemId.in(
-      		  	reviewReferencesRequest.getFeatureUniqueIds().getValues()))
-      		  .list(QReviewItems.reviewItems.reviewableItemId)
-      		  .toArray(new String[]{})));
+  		//relationships, we don't have to break up the review against uuid's here
+  		final List<String> reviewAgainstItemIds =
+        new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+  		    .from(reviewItems)
+    		  .where(reviewItems.reviewableItemId.eq(elementUniqueId))
+    		  .list(reviewItems.reviewAgainstItemId);
+  		JSONArray reviewAgainstItemIdsArr = new JSONArray();
+  		for (String id : reviewAgainstItemIds)
+  		{
+  			JSONObject responseItem = new JSONObject();
+  			responseItem.put("uuid", id);
+  			reviewAgainstItemIdsArr.add(responseItem);
+  		}
+  		response.put("reviewAgainstItemIds", reviewAgainstItemIdsArr);
+  		
+      //add all items which reference the input features as a review against item
+  		final List<String> reviewableItemIds =
+        new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+  		    .from(reviewItems)
+    		  .where(reviewItems.reviewAgainstItemId.eq(elementUniqueId))
+    		  .list(reviewItems.reviewableItemId);
+  		JSONArray reviewableItemIdsArr = new JSONArray();
+  		for (String id : reviewableItemIds)
+  		{
+  			JSONObject responseItem = new JSONObject();
+  			responseItem.put("uuid", id);
+  			reviewableItemIdsArr.add(responseItem);
+  		}
+  		response.put("reviewableItemIds", reviewableItemIdsArr);
   	}
   	catch (Exception e)
     {
@@ -847,6 +881,8 @@ public class ReviewResource
     {
       DbUtils.closeConnection(conn);
     }
-    return response;
+  	
+  	log.debug("response : " + response.toString());
+  	return Response.ok(response.toJSONString(), MediaType.APPLICATION_JSON).build();
   }
 }

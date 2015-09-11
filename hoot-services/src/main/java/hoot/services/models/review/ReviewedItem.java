@@ -30,6 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Represents a conflated data item that has been reviewed
+ * 
+ * @deprecated since 0.2.19
  */
 @XmlRootElement
 public class ReviewedItem

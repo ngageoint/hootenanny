@@ -31,6 +31,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * Represents the response to a request for reviewable conflated data items owned by a particular
  * map ID.
+ * 
+ * @deprecated since 0.2.19
  */
 @XmlRootElement
 public class ReviewableItemsResponse

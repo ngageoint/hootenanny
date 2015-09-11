@@ -64,7 +64,7 @@ public class ReviewUtils
 
   protected static final QReviewItems reviewItemsTbl = QReviewItems.reviewItems;
   protected static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
-
+  
   /**
    * Constructs a ReviewedItems object for all items associated with the map layer
    *
@@ -344,44 +344,52 @@ public class ReviewUtils
   }
   
   /**
+   * Creates a record to represent the mapping of an element unique ID to an osm element ID
    * 
-   * 
-   * @param uniqueElementId
-   * @param osmElementId
-   * @param elementType
-   * @param mapId
-   * @return
+   * @param uniqueElementId element unique ID
+   * @param osmElementId element OSM ID
+   * @param elementType element's type
+   * @param mapId ID of map owning element
+   * @return an element ID mapping database record
    */
   public static ElementIdMappings createElementIdMappingRecord(final String uniqueElementId, 
 		final long osmElementId, final ElementType elementType, final long mapId)
 	{
 		ElementIdMappings elementIdMappingRecord = new ElementIdMappings();
+		log.debug("uniqueElementId: " + uniqueElementId);
 		elementIdMappingRecord.setElementId(uniqueElementId);
+		log.debug("mapId: " + mapId);
 		elementIdMappingRecord.setMapId(mapId);
+		log.debug("osmElementId: " + osmElementId);
 		elementIdMappingRecord.setOsmElementId(osmElementId);
+		log.debug("elementType: " + elementType.toString());
 		elementIdMappingRecord.setOsmElementType(Element
 		    .elementEnumForElementType(elementType));
 		return elementIdMappingRecord;
 	}
   
   /**
+   * Creates a record to represent the mapping of an element unique ID to an osm element ID
    * 
-   * 
-   * @param reviewableItemId
-   * @param reviewScore
-   * @param reviewAgainstItemId
-   * @param mapId
-   * @return
+   * @param reviewableItemId the unique ID of the item being reviewed
+   * @param reviewScore the importance score of the associated review
+   * @param reviewAgainstItemId the unique ID of the item the reviewable item is being reviewed
+   * against
+   * @param mapId ID of map owning the review elements
+   * @return a review item database record
    */
   public static ReviewItems createReviewItemRecord(final String reviewableItemId,
 	  final double reviewScore, final String reviewAgainstItemId, final long mapId)
 	{
 		ReviewItems reviewItemRecord = new ReviewItems();
+		log.debug("mapId: " + mapId);
 		reviewItemRecord.setMapId(mapId);
+		log.debug("reviewableItemId: " + reviewableItemId);
 		reviewItemRecord.setReviewableItemId(reviewableItemId);
 		reviewItemRecord.setReviewScore(reviewScore);
 		if (reviewAgainstItemId != null)
 		{
+			log.debug("reviewAgainstItemId: " + reviewAgainstItemId);
 			reviewItemRecord.setReviewAgainstItemId(reviewAgainstItemId);
 		}
 		reviewItemRecord.setReviewStatus(DbUtils.review_status_enum.unreviewed);

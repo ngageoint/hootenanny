@@ -142,6 +142,8 @@ public class ReviewItemsUpdater
   
   private int updateCreatedReviewItems(final Document changesetDoc) throws Exception
   {
+  	log.debug("updateCreatedReviewItems");
+  	
   	int numReviewItemsUpdated = 0;
   	
     //check create changeset for any newly created reviewable items
@@ -208,7 +210,9 @@ public class ReviewItemsUpdater
   
   private int updateModifiedReviewItems(final Document changesetDoc) throws Exception
   {
-    int numReviewItemsUpdated = 0;
+    log.debug("updateModifiedReviewItems");
+  	
+  	int numReviewItemsUpdated = 0;
     
     //check modify changeset for any modified items that have a review record entry
     final NodeList modifiedReviewItems = 
@@ -266,7 +270,9 @@ public class ReviewItemsUpdater
   
   private int updateDeletedReviewItems(final Document changesetDoc) throws TransformerException
   {
-    int numReviewItemsUpdated = 0;
+  	log.debug("updateDeletedReviewItems");
+  	
+  	int numReviewItemsUpdated = 0;
     
     //check delete changeset for any deleted items that have a review record entry and delete the 
   	//records from the review data
@@ -277,6 +283,7 @@ public class ReviewItemsUpdater
   	{
   		deletedItemUuids.add(deletedItems.item(i).getNodeValue());
   	}
+  	log.debug("deletedItemUuids: " + deletedItemUuids.toString());
   	final String[] existingReviewItemUuids = 
   		new SQLQuery(conn, DbUtils.getConfiguration(mapId))
 	      .from(reviewItems)

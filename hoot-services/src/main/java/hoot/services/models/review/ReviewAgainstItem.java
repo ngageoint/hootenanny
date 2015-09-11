@@ -47,7 +47,6 @@ public class ReviewAgainstItem
   public String getType() { return type; }
   public void setType(String type) { this.type = type; }
   
-
   private String displayBounds = null;
   public String getDisplayBounds() { return displayBounds; }
   public void setDisplayBounds(String displayBounds) { 

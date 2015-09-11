@@ -253,8 +253,7 @@ public class ReviewedItemsWriter
       reviewRecordsToUpdate.add(reviewedItemPojo);
     }
   }
-
-  @SuppressWarnings("unused")
+  
   private void addUpdatedOsmRecord(final long reviewedItemOsmId,
     final ElementType reviewedItemOsmType, final String reviewedAgainstItemUniqueId,
     final boolean isDuplicate) throws Exception
@@ -274,25 +273,6 @@ public class ReviewedItemsWriter
       Map<String, String> tags =
         PostgresUtils.postgresObjToHStore(
           (PGobject)MethodUtils.invokeMethod(reviewedElementRecord, "getTags", new Object[]{}));
-
-      //let the osm changeset save from the client handle this instead
-      /*if (tags.containsKey("uuid"))
-      {
-        String uuid = tags.get("uuid");
-        if (!isDuplicate && !uuid.contains(reviewedAgainstItemUniqueId))
-        {
-          //update the reviewed item's osm element's uuid tag; append
-          uuid += ";" + reviewedAgainstItemUniqueId;
-          tags.put("uuid", uuid);
-          tagChanged = true;
-        }
-      }
-      else
-      {
-        log.warn(
-          "uuid tag removed from reviewed element with ID: " + reviewedItemOsmId +
-          " and type: " + reviewedItemOsmType);
-      }*/
 
       if (tags.containsKey("uuid"))
       {
