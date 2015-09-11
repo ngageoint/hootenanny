@@ -23,7 +23,7 @@
         <tag k="divider" v="no"/>
         <tag k="security:classification" v="U;unclassified"/>
         <tag k="median:interval:closure" v="closed_interval"/>
-        <tag k="highway" v="tertiary"/>
+        <tag k="highway" v="secondary"/>
         <tag k="length" v="165.74065410260101"/>
         <tag k="uuid" v="{877fe7a8-7a12-4bcc-b2e0-f18802af3495};{2c5fb14a-730a-4a96-b809-ef1e93f516ec}"/>
         <tag k="on_bridge" v="no"/>
