@@ -168,7 +168,7 @@ hgis20 = {
         {
             // Now go make a second feature
             // pre processing
-            hgis20.applyToNfddPreProcessing(tags, newAttrs, geometryType);
+            hgis20.applyToHgisPreProcessing(tags, newAttrs, geometryType);
 
             // one 2 one - we call the version that knows about OTH fields
             translate.applyOne2One(tags, newAttrs, hgis20.lookup, hgis20.layerLookup, hgis20.ignoreList);
@@ -661,6 +661,7 @@ hgis20 = {
 
         // Start processing here
         // Debug:
+        print('Element: ' + elementType + '  Geom: ' + geometryType);
         if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
 
         // The Nuke Option: If we have a relation, drop the feature and carry on
