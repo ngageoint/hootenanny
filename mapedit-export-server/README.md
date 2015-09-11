@@ -13,7 +13,7 @@ The MapEdit export server is built with Node.js.  Node and the node package mana
 To start the service run
 
     npm start
-The service uses a json configuration file, `config.json`.  Any valid Hootenanny input source string (*i.e.* OGR datasource) can be configured as an export datasource.  Most commonly this will be a PostGIS Render Db generated with `osm2pgsql` or `ogr2ogr`.
+The service uses a json configuration file, `config.json`.  Any valid Hootenanny input source string (*i.e.* OGR datasource) can be configured as an export datasource.  Most commonly this will be a PostGIS Render Db generated with `osm2pgsql`.  *Note: this is the only datasource that will export with the schema/format combination of OSM/Shapefile and OSM/FileGeodatabase.*
 ```
 {
   "datasources": {
@@ -44,10 +44,11 @@ This is the table of supported schema/format combinations:
 
 |      | Shapefile | File Geodatabase | OSM XML |
 | ---- |:---------:|:----------------:|:-------:|
-| **OSM**| &#x2713;| &#x2713;| &#x2713;|
+| **OSM**| &#x2713;*| &#x2713;*| &#x2713;|
 | **TDSv40**| &#x2713;| &#x2713;| &#x2713;|
 | **TDSv61**| &#x2713;| &#x2713;| &#x2713;|
 | **MGCP**| &#x2713;| &#x2713;| &#x2713;|
+*`osm2pgsql` PostGIS render database only
 
 The remaining setting, `cleanupDelay`, is how long the exported files should remain on the server after initial download.  The default is 30 seconds, but can be configured to be longer, say if the same url is sent to someone else so they can download the export too.
 
