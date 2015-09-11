@@ -1866,6 +1866,7 @@ getDbSchema: function()
                     ADM5_NAME,
                     NAME,
                     TYPE,
+                    TYPE2,
                    { name:"MIL_TYPE",desc:"MIL_TYPE",type:"String",defValue:"-999999"},
                    { name:"UNIT",desc:"UNIT",type:"String",defValue:"-999999"},
                     CITY,

@@ -291,7 +291,7 @@ hgis20 = {
     applyToOsmPostProcessing : function (attrs, tags, layerName)
     {
         // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
-        tags.source = 'hgisv20';
+        if (!(tags.source)) tags.source = 'hgisv20';
         tags.uuid = createUuid();
 
         // Refugee Camps
@@ -484,6 +484,13 @@ hgis20 = {
             }
         }
 
+        // Sort out STATUS vs OP_STATUS
+        if (attrs.XtableName == 'Power_Plants' && attrs.STATUS)
+        {
+            attrs.OP_STATUS = attrs.STATUS;
+            delete attrs.STATUS;
+        }
+
         // ######################
         // Hardcoded Layer selection. Yes, this is ugly
         // Will move this to a custom rules function - soon
@@ -568,20 +575,23 @@ hgis20 = {
         // Debug:
         if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
 
+        if (hgis20.layerLookup == undefined)
+        {
+            // Build the lookup table for the additional tags to add based on the table name
+            hgis20.rules.layerIn.push.apply(hgis20.rules.layerIn,hgis20.rules.layerCommon);
+            hgis20.layerLookup = translate.createLookup(hgis20.rules.layerIn);
+            // translate.dumpOne2OneLookup(hgis20.layerLookup);
+        }
+
         if (hgis20.lookup == undefined)
         {
-            // Setup lookup tables to make translation easier. I'm assumeing that since this is not set, the 
+            // Setup lookup tables to make translation easier. I'm assumeing that since this is not set, the
             // other tables are not set either.
-            
+
             // Support Import Only attributes
             hgis20.rules.one2one.push.apply(hgis20.rules.one2one,hgis20.rules.one2oneIn);
 
             hgis20.lookup = translate.createLookup(hgis20.rules.one2one);
-
-            // Build the lookup table for the additional tags to add based on the table name
-            hgis20.rules.one2one.push.apply(hgis20.rules.layerIn,hgis20.rules.layerCommon);
-            hgis20.layerLookup = translate.createLookup(hgis20.rules.layerIn);
-            // translate.dumpOne2OneLookup(hgis20.layerLookup);
 
             // Build an Object with both the SimpleText & SimpleNum lists
             hgis20.ignoreList = translate.joinList(hgis20.rules.numBiased, hgis20.rules.txtBiased);
@@ -643,6 +653,12 @@ hgis20 = {
         var tableName2 = ''; // The second table name - will populate if appropriate
         var attrs2 = {}; // The second feature - will populate if appropriate
 
+        // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
+        if (hgis20.rawSchema == undefined)
+        {
+            var tmp_schema = hgis20.getDbSchema();
+        }
+
         // Start processing here
         // Debug:
         if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
@@ -654,6 +670,16 @@ hgis20 = {
         // There is no way we can translate these to a single feature.
         if (geometryType == 'Collection') return null;
 
+        // Set up the tableName translation rules. We need this due to clashes between the one2one and
+        // the tableName one2one rules
+        if (hgis20.layerLookup == undefined)
+        {
+            // Build the TableName lookup list
+            hgis20.rules.layerOut.push.apply(hgis20.rules.layerOut,hgis20.rules.layerCommon);
+            hgis20.layerLookup = translate.createBackwardsLookup(hgis20.rules.layerOut);
+            // translate.dumpOne2OneLookup(hgis20.layerLookup);
+        }
+
 
         // We assume that if one table is undefined, the rest are.
         if (hgis20.lookup == undefined)
@@ -663,11 +689,6 @@ hgis20 = {
 
             hgis20.lookup = translate.createBackwardsLookup(hgis20.rules.one2one);
             // translate.dumpOne2OneLookup(hgis20.lookup);
-
-            // Build the TableName lookup list
-            hgis20.rules.one2one.push.apply(hgis20.rules.layerOut,hgis20.rules.layerCommon);
-            hgis20.layerLookup = translate.createBackwardsLookup(hgis20.rules.layerOut);
-            // translate.dumpOne2OneLookup(hgis20.layerLookup);
 
             // Build a list of things to ignore and flip is backwards
             hgis20.ignoreList = translate.flipList(translate.joinList(hgis20.rules.numBiased, hgis20.rules.txtBiased));
