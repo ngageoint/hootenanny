@@ -189,6 +189,11 @@ function mergeElements(map, e1, e2) {
     e1.setTags(newTags);
 
     new hoot.ReplaceElementOp(e2, e1).apply(map);
+    // remove the tags on e2 just in case we can't delete it.
+    e2.setTags(new hoot.Tags());
+    // try to delete e2. This may silently fail if it is still part of another
+    // element. Failure in this case isn't necessarily bad.
+    new hoot.RecursiveElementRemover(e2).apply(map);
 }
 
 /**

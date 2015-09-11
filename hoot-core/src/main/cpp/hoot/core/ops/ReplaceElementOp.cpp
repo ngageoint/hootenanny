@@ -113,12 +113,6 @@ void ReplaceElementOp::apply(const shared_ptr<OsmMap> &map)
       throw InternalErrorException("Internal Error: Unexpected element reported as a parent.");
     }
   }
-
-  // remove any tags, just in case we can't remove the element.
-  from->getTags().clear();
-
-  // try to remove the element.
-  RecursiveElementRemover(_from).apply(map);
 }
 
 }

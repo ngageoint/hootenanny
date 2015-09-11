@@ -17,13 +17,17 @@ namespace hoot
 using namespace std;
 
 /**
- * Replaces all instances of one element with another element. After the element has been replaced
- * all tags are removed and then an attempt is made to remove the element. No error is thrown
- * if the element isn't removed for some reason.
+ * Replaces all instances of one element with another element. In some cases we may not be able
+ * to replace all instances of the "from" element. E.g. if "from" is a node and "to" is a way. If
+ * "from" is part of a way, then we can't do the replacement. In this case it won't be replaced and
+ * will still be part of the parent way.
  *
- * An element may not be removed for instance if the "from" is a node and the "to" is a non-node.
- * If "from" is part of a way you can't replace it with "to". So rather than delete "from" we
- * simply remove its tags.
+ * In many cases you may want to follow this call by clearing tags and then attempting to remove
+ * "from". E.g.
+ *
+ *    ReplaceElementOp(from, to).apply(map);
+ *    from->getTags().clear();
+ *    RecursiveElementRemover(from->getElementId()).apply(map);
  */
 class ReplaceElementOp : public ConstOsmMapOperation, public ConstElementConsumer
 {

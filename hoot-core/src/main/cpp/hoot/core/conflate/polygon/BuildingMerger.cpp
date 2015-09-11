@@ -73,6 +73,7 @@ BuildingMerger::BuildingMerger(const set< pair<ElementId, ElementId> >& pairs) :
 void BuildingMerger::apply(const OsmMapPtr& map,
   vector< pair<ElementId, ElementId> >& replaced) const
 {
+  LOG_VAR(_pairs);
   // use node count as a surrogate for complexity of the geometry.
   CountNodesVisitor count1;
   shared_ptr<Element> e1 = _buildBuilding1(map);
@@ -124,7 +125,9 @@ void BuildingMerger::apply(const OsmMapPtr& map,
 
   // remove the duplicate element.
   DeletableBuildingPart filter;
+  ReplaceElementOp(scrap->getElementId(), keeper->getElementId()).apply(map);
   RecursiveElementRemover(scrap->getElementId(), &filter).apply(map);
+  scrap->getTags().clear();
 
   // if we created a relation, we now need to make sure the building part information is added
   // properly
@@ -206,7 +209,12 @@ shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const se
     // likely create a filter that only matches buildings and building parts and pass that to the
     for (size_t i = 0; i < toRemove.size(); i++)
     {
-      ReplaceElementOp(toRemove[i], result->getElementId()).apply(map);
+      if (map->containsElement(toRemove[i]))
+      {
+        ReplaceElementOp(toRemove[i], result->getElementId()).apply(map);
+        RecursiveElementRemover(toRemove[i], &filter).apply(map);
+        map->getElement(toRemove[i])->getTags().clear();
+      }
     }
 
     return result;
