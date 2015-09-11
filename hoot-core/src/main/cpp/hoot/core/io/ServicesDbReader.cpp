@@ -322,7 +322,6 @@ void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementT
               break;
 
             default:
-              LOG_DEBUG("CHECK B6");
               throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
           }
           lastId = id;

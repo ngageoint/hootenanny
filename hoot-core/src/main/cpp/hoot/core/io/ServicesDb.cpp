@@ -1583,20 +1583,34 @@ QString ServicesDb::_elementTypeToElementTableName(long mapId, const ElementType
 /**************************************************************
  * Purpose: support method for OsmApi selects returns a query
  *   string
+ * Note: The sql queries in here are getting large to the point where
+ *   they might not be as efficient as initially planned and it may be
+ *   more efficient to read the element table and by id call the tags
+ *   tables to extract the table.  Hard to compare without testing.
+ *   Save that for a future exercise.
  **************************************************************/
 QString ServicesDb::_elementTypeToElementTableName_OsmApi(const ElementType& elementType) const
 {
   if (elementType == ElementType::Node)
   {
-    return _getNodesTableName_OsmApi();
+    return QString("id, latitude, longitude, changeset_id, visible, timestamp, tile, version, '' as k, '' as v ")+
+      QString("from current_nodes where id not in ( select distinct node_id from current_node_tags ) ")+
+      QString("union select id, latitude, longitude, changeset_id, visible, timestamp, tile, version, k, v ")+
+      QString("from current_nodes join current_node_tags on current_nodes.id=current_node_tags.node_id");
   }
   else if (elementType == ElementType::Way)
   {
-    return _getWaysTableName_OsmApi();
+    return QString("id, changeset_id, timestamp, visible, version, '' as k, '' as v ")+
+      QString("from current_ways where id not in ( select distinct way_id from current_way_tags ) ")+
+      QString("union select id, changeset_id, timestamp, visible, version, k, v ")+
+      QString("from current_ways join current_way_tags on current_ways.id=current_way_tags.way_id");
   }
   else if (elementType == ElementType::Relation)
   {
-    return _getRelationsTableName_OsmApi();
+    return QString("id, changeset_id, timestamp, visible, version, '' as k, '' as v ")+
+      QString("from current_relations where id not in ( select distinct relation_id from current_relation_tags ) ")+
+      QString("union select id, changeset_id, timestamp, visible, version, k, v ")+
+      QString("from current_relations join current_relation_tags on current_relations.id=current_relation_tags.relation_id");
   }
   else
   {
@@ -1604,33 +1618,6 @@ QString ServicesDb::_elementTypeToElementTableName_OsmApi(const ElementType& ele
   }
 }
 //TODO: consolidate these exists queries into a single method
-
-/**************************************************************
- * Purpose: support method for OsmApi returns the table fields
- *   needed by the element type.  * doesn't work here since we
- *   are trying to reduce some of the redundant fields.  Fields
- *   refer to the columns in the DB.
- **************************************************************/
-QString ServicesDb::_getElementTableFields_OsmApi(const ElementType& elementType) const
-{
-  if (elementType == ElementType::Node)
-  {
-    return _getNodesTableFields_OsmApi();
-  }
-  else if (elementType == ElementType::Way)
-  {
-    return _getWaysTableFields_OsmApi();
-  }
-  else if (elementType == ElementType::Relation)
-  {
-    return _getRelationsTableFields_OsmApi();
-  }
-  else
-  {
-    throw HootException("Unsupported element type.");
-  }
-}
-
 
 bool ServicesDb::mapExists(const long id)
 {
@@ -1733,8 +1720,7 @@ shared_ptr<QSqlQuery> ServicesDb::selectElements_OsmApi(const long elementId,
   else { limitStr = QString::number(limit); }
 
   // setup base sql query string
-  QString sql =  "SELECT " + _getElementTableFields_OsmApi(elementType) +
-    " FROM " +_elementTypeToElementTableName_OsmApi(elementType);
+  QString sql =  "SELECT " +_elementTypeToElementTableName_OsmApi(elementType);
 
   // if requesting a specific id then append this string
   if(elementId > -1) { sql += " WHERE id = :elementId "; }
