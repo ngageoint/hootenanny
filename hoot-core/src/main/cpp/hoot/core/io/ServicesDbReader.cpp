@@ -292,6 +292,7 @@ void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementT
       while( elementResultsIterator->next() )
       {
         long long id = elementResultsIterator->value(0).toLongLong();
+
         if( lastId != id )
         {
           // process the complete element only after the first element created
@@ -307,17 +308,17 @@ void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementT
           switch (elementType.getEnum())
           {
             case ElementType::Node:
-              LOG_DEBUG("CHECK NODE");
+              //LOG_DEBUG("CHECK NODE");
               element = _resultToNode_OsmApi(*elementResultsIterator, *map);
               break;
 
             case ElementType::Way:
-              LOG_DEBUG("CHECK WAY");
+              //LOG_DEBUG("CHECK WAY");
               element = _resultToWay_OsmApi(*elementResultsIterator, *map);
               break;
 
             case ElementType::Relation:
-              LOG_DEBUG("CHECK RELATION");
+              //LOG_DEBUG("CHECK RELATION");
               element = _resultToRelation_OsmApi(*elementResultsIterator, *map);
               break;
 

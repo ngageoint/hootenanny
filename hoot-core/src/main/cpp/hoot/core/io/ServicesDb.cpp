@@ -1593,24 +1593,34 @@ QString ServicesDb::_elementTypeToElementTableName_OsmApi(const ElementType& ele
 {
   if (elementType == ElementType::Node)
   {
-    return QString("id, latitude, longitude, changeset_id, visible, timestamp, tile, version, '' as k, '' as v ")+
+    return QString("id, latitude, longitude, changeset_id, visible, timestamp, tile, version, k, v ")+
+      QString("from current_nodes left outer join current_node_tags on current_nodes.id=current_node_tags.node_id");
+
+    /*return QString("id, latitude, longitude, changeset_id, visible, timestamp, tile, version, '' as k, '' as v ")+
       QString("from current_nodes where id not in ( select distinct node_id from current_node_tags ) ")+
       QString("union select id, latitude, longitude, changeset_id, visible, timestamp, tile, version, k, v ")+
-      QString("from current_nodes join current_node_tags on current_nodes.id=current_node_tags.node_id");
+      QString("from current_nodes join current_node_tags on current_nodes.id=current_node_tags.node_id");*/
   }
   else if (elementType == ElementType::Way)
   {
-    return QString("id, changeset_id, timestamp, visible, version, '' as k, '' as v ")+
+    return QString("id, changeset_id, timestamp, visible, version, k, v ")+
+      QString("from current_ways left outer join current_way_tags on current_ways.id=current_way_tags.way_id");
+
+    /*return QString("id, changeset_id, timestamp, visible, version, '' as k, '' as v ")+
       QString("from current_ways where id not in ( select distinct way_id from current_way_tags ) ")+
       QString("union select id, changeset_id, timestamp, visible, version, k, v ")+
-      QString("from current_ways join current_way_tags on current_ways.id=current_way_tags.way_id");
+      QString("from current_ways join current_way_tags on current_ways.id=current_way_tags.way_id");*/
   }
   else if (elementType == ElementType::Relation)
   {
-    return QString("id, changeset_id, timestamp, visible, version, '' as k, '' as v ")+
+    return QString("id, changeset_id, timestamp, visible, version, k, v ")+
+      QString("from current_relations left outer join current_relation_tags on current_relations.id=current_relation_tags.relation_id");
+
+    /*return QString("id, changeset_id, timestamp, visible, version, '' as k, '' as v ")+
       QString("from current_relations where id not in ( select distinct relation_id from current_relation_tags ) ")+
       QString("union select id, changeset_id, timestamp, visible, version, k, v ")+
       QString("from current_relations join current_relation_tags on current_relations.id=current_relation_tags.relation_id");
+    */
   }
   else
   {
@@ -3539,7 +3549,6 @@ long ServicesDb::reserveElementId(const ElementType::Type type)
 QString ServicesDb::extractTagFromRow_OsmApi(shared_ptr<QSqlQuery> row, const ElementType::Type type)
 {
   int pos = -1;
-
   if(type==ElementType::Node) pos=ServicesDb::NODES_TAGS;
   else if(type==ElementType::Way) pos=ServicesDb::WAYS_TAGS;
   else if(type==ElementType::Relation) pos=ServicesDb::RELATIONS_TAGS;
@@ -3547,6 +3556,7 @@ QString ServicesDb::extractTagFromRow_OsmApi(shared_ptr<QSqlQuery> row, const El
 
   QString tag = "\""+row->value(pos).toString()+"\"=>\""+
     row->value(pos+1).toString()+"\"";
+
   return tag;
 }
 
