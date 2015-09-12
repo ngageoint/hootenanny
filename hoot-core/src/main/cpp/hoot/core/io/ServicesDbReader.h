@@ -117,7 +117,6 @@ private:
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
 
-  long _mapId;
   long _osmElemId;
   ElementType _osmElemType;
 
@@ -148,12 +147,15 @@ private:
    * Converts a query result to an OSM element
    */
   shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
-    const ElementType& elementType, OsmMap& map, long mapId);
+    const ElementType& elementType, OsmMap& map);
 
+  // Services data assignment methods
   shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
-  shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map, long mapId);
-  shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map,
-    long mapId);
+  shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
+  shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
+
+  // Osm Api data assignment methods
+  shared_ptr<Node> _resultToNode_OsmApi(const QSqlQuery& resultIterator, OsmMap& map);
 
 };
 

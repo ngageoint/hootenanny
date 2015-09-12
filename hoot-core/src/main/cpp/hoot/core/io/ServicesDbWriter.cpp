@@ -26,6 +26,9 @@
  */
 #include "ServicesDbWriter.h"
 
+#include <iostream>
+#include <fstream>
+
 // hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/NotImplementedException.h>
@@ -43,10 +46,12 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, ServicesDbWriter)
 
 ServicesDbWriter::ServicesDbWriter()
 {
-  _mapId = -1;
-  _numChangeSetChanges = 0;
   _open = false;
   _remapIds = true;
+  _nodesWritten = 0;
+  _waysWritten = 0;
+  _relationsWritten = 0;
+
   setConfiguration(conf());
 }
 
@@ -67,30 +72,41 @@ void ServicesDbWriter::_addElementTags(const shared_ptr<const Element> &e, Tags&
 void ServicesDbWriter::close()
 {
   finalizePartial();
+  if ( (_nodesWritten > 0) || (_waysWritten > 0) || (_relationsWritten > 0) )
+  {
+    LOG_DEBUG("Write stats:");
+    LOG_DEBUG("\t    Nodes: " << QString::number(_nodesWritten));
+    LOG_DEBUG("\t     Ways: " << QString::number(_waysWritten));
+    LOG_DEBUG("\tRelations: " << QString::number(_relationsWritten));
+  }
+
+  // Did user set configuration to dump the ID source->dest mappings to an output file?
+  if ( _outputMappingFile.length() > 0 )
+  {
+    _outputIdMappings();
+  }
 }
 
 void ServicesDbWriter::_countChange()
 {
-  _numChangeSetChanges++;
-
-  if (_numChangeSetChanges >= ServicesDb::maximumChangeSetEdits())
-  {
-    _startNewChangeSet();
-  }
+  _sdb.incrementChangesetChangeCount();
 }
 
 void ServicesDbWriter::finalizePartial()
 {
+  //LOG_DEBUG("Inside finalize partial");
   if (_open)
   {
-    if (_numChangeSetChanges > 0)
-    {
-      _sdb.closeChangeSet(_mapId, _changeSetId, _env, _numChangeSetChanges);
-    }
+    //LOG_DEBUG("Ending changeset");
+    _sdb.endChangeset();
+    //LOG_DEBUG("Calling commit");
     _sdb.commit();
+    //LOG_DEBUG("Calling close");
     _sdb.close();
     _open = false;
   }
+
+  //LOG_DEBUG("Leaving finalize partial");
 }
 
 bool ServicesDbWriter::isSupported(QString urlStr)
@@ -103,23 +119,22 @@ bool ServicesDbWriter::isSupported(QString urlStr)
 
 void ServicesDbWriter::open(QString urlStr)
 {
-  QString mapName = _openDb(urlStr, _overwriteMap);
-
-  _mapId = _sdb.insertMap(mapName, _userId);
+  _openDb(urlStr, _overwriteMap);
 
   _startNewChangeSet();
+
 }
 
 void ServicesDbWriter::deleteMap(QString urlStr)
 {
-  QString mapName = _openDb(urlStr, true); // "True" forces the map delete
+  _openDb(urlStr, true); // "True" forces the map delete
 
   _sdb.commit();
   _sdb.close();
   _open = false;
 }
 
-QString ServicesDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
+void ServicesDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
 {
   if (!isSupported(urlStr))
   {
@@ -133,108 +148,162 @@ QString ServicesDbWriter::_openDb(QString& urlStr, bool deleteMapFlag)
 
   QUrl url(urlStr);
 
-  QStringList pList = url.path().split("/");
-  QString mapName = pList[2];
-
-  _numChangeSetChanges = 0;
-  _env.init();
   _sdb.open(url);
   _open = true;
+
+  LOG_DEBUG("DB opened");
 
   // create the user before we have a transaction so we can make sure the user gets added.
   if (_createUserIfNotFound)
   {
-    _userId = _sdb.getOrCreateUser(_userEmail, _userEmail);
+    _sdb.setUserId(_sdb.getOrCreateUser(_userEmail, _userEmail));
   }
+  else
+  {
+    _sdb.setUserId(_sdb.getUserId(_userEmail, true));
+  }
+
+  //LOG_DEBUG("DB user set");
 
   // start the transaction. We'll close it when finalizePartial is called.
   _sdb.transaction();
-  _userId = _sdb.getUserId(_userEmail, true);
 
-  set<long> mapIds = _sdb.selectMapIds(mapName, _userId);
+  if ( _sdb.getDatabaseType() == ServicesDb::DBTYPE_SERVICES)
+  {\
+    QStringList pList = url.path().split("/");
+    QString mapName = pList[2];
+    set<long> mapIds = _sdb.selectMapIds(mapName);
 
-  if (mapIds.size() > 0)
-  {
-    if (deleteMapFlag) // deleteMapFlag is either True or _overwriteMap
+    if (mapIds.size() > 0)
     {
-      for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
+      if (deleteMapFlag) // deleteMapFlag is either True or _overwriteMap
       {
-        LOG_INFO("Removing map with ID: " << *it);
-        _sdb.deleteMap(*it);
-        LOG_INFO("Finished removing map with ID: " << *it);
+        for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
+        {
+          LOG_INFO("Removing map with ID: " << *it);
+          _sdb.deleteMap(*it);
+          LOG_INFO("Finished removing map with ID: " << *it);
+        }
+
+        _sdb.setMapId(_sdb.insertMap(mapName, true));
+
+      }
+      else
+      {
+        LOG_INFO("There are one or more maps with this name. Consider using "
+                 "'services.db.writer.overwrite.map'. Map IDs: " << mapIds);
       }
     }
-    else
+    else if ( mapIds.size() == 0 )
     {
-      LOG_INFO("There are one or more maps with this name. Consider using "
-               "'services.db.writer.overwrite.map'. Map IDs: " << mapIds);
+      LOG_DEBUG("Map " << mapName << " was not found, must insert");
+      _sdb.setMapId(_sdb.insertMap(mapName, true));
     }
   }
-
-  return mapName;
 }
 
-ElementId ServicesDbWriter::_remapOrCreateElementId(ElementId eid, const Tags& tags)
+long ServicesDbWriter::_getRemappedElementId(const ElementId& eid)
 {
   if (_remapIds == false)
   {
-    return eid;
+    return eid.getId();
   }
+
+  long retVal = -1;
 
   switch(eid.getType().getEnum())
   {
   case ElementType::Node:
+    if (_nodeRemap.count(eid.getId()) == 1)
     {
-      if (_nodeRemap.count(eid.getId()) == 1)
-      {
-        return ElementId::node(_nodeRemap.at(eid.getId()));
-      }
-      long newId = _sdb.insertNode(_mapId, eid.getId(), 0, 0, _changeSetId, tags, true);
-      _countChange();
-      _nodeRemap[eid.getId()] = newId;
-      return ElementId::node(newId);
+      retVal = _nodeRemap.at(eid.getId());
     }
+    else
+    {
+      retVal = _sdb.reserveElementId(ElementType::Node);
+      _nodeRemap[eid.getId()] = retVal;
+      if ( _outputMappingFile.length() > 0 )
+      {
+        _sourceNodeIds.insert(eid.getId());
+      }
+    }
+
+    break;
+
   case ElementType::Way:
+    if (_wayRemap.count(eid.getId()) == 1)
     {
-      if (_wayRemap.count(eid.getId()) == 1)
-      {
-        return ElementId::way(_wayRemap.at(eid.getId()));
-      }
-      long newId = _sdb.insertWay(_mapId, eid.getId(), _changeSetId, tags, true);
-      _countChange();
-      _wayRemap[eid.getId()] = newId;
-      return ElementId::way(newId);
+      retVal = _wayRemap.at(eid.getId());
     }
+    else
+    {
+      retVal = _sdb.reserveElementId(ElementType::Way);
+      _wayRemap[eid.getId()] = retVal;
+      if ( _outputMappingFile.length() > 0 )
+      {
+        _sourceWayIds.insert(eid.getId());
+      }
+    }
+
+    break;
+
   case ElementType::Relation:
+    if (_relationRemap.count(eid.getId()) == 1)
     {
-      if (_relationRemap.count(eid.getId()) == 1)
-      {
-        return ElementId::relation(_relationRemap.at(eid.getId()));
-      }
-      long newId = _sdb.insertRelation(_mapId, eid.getId(), _changeSetId, tags, true);
-      _countChange();
-      _relationRemap[eid.getId()] = newId;
-      return ElementId::relation(newId);
+      retVal = _relationRemap.at(eid.getId());
+      /*
+      LOG_DEBUG("Returning established relation ID mapping, source ID = " <<
+        QString::number(eid.getId()) << ", database ID = " <<
+        QString::number(_relationRemap.at(eid.getId())) );
+      */
     }
+    else
+    {
+      retVal = _sdb.reserveElementId(ElementType::Relation);
+      _relationRemap[eid.getId()] = retVal;
+      if ( _outputMappingFile.length() > 0 )
+      {
+        _sourceRelationIds.insert(eid.getId());
+      }
+
+      /*
+      LOG_DEBUG("Established new relation ID mapping, source ID = " <<
+        QString::number(eid.getId()) << ", database ID = " <<
+        QString::number(_relationRemap.at(eid.getId())) );
+      */
+    }
+
+    break;
+
   default:
+    LOG_ERROR("Tried to create or remap ID for invalid type");
     throw NotImplementedException();
+
+    break;
   }
+
+  return retVal;
 }
 
 vector<long> ServicesDbWriter::_remapNodes(const vector<long>& nids)
 {
-  vector<long> result(nids.size());
+  vector<long> result(nids.size()); // Creates the vector and fills nids.size number of zeroes
 
   Tags empty;
+
   for (size_t i = 0; i < nids.size(); i++)
   {
-    if (_remapIds)
+    // This is only called when adding nodes for a way.  If a way has a node we
+    //    did not successfully create a mapping for when importing nodes,
+    //    we can't continue
+    if ( _nodeRemap.count(nids[i]) == 1 )
     {
-      result[i] = _remapOrCreateElementId(ElementId::node(nids[i]), empty).getId();
+      result[i] = _nodeRemap.at(nids[i]);
     }
     else
     {
-      result[i] = nids[i];
+      throw HootException(QString("Requested ID remap for node " +  QString::number(nids[i])
+        + QString(" but it did not exist in mapping table")));
     }
   }
 
@@ -246,56 +315,63 @@ void ServicesDbWriter::setConfiguration(const Settings &conf)
   setUserEmail(conf.getString(emailKey(), ""));
   setCreateUser(ConfigOptions(conf).getServicesDbWriterCreateUser());
   setOverwriteMap(conf.getBool(overwriteMapKey(), false));
+  _setOutputMappingFile(ConfigOptions(conf).getServicesDbWriterOutputIdMappings());
 }
 
 void ServicesDbWriter::_startNewChangeSet()
 {
-  if (_numChangeSetChanges > 0)
-  {
-    _sdb.closeChangeSet(_mapId, _changeSetId, _env, _numChangeSetChanges);
-  }
-  _env.init();
-  _numChangeSetChanges = 0;
+  _sdb.endChangeset();
   Tags tags;
   tags["bot"] = "yes";
   tags["created_by"] = "hootenanny";
-  _changeSetId = _sdb.insertChangeSet(_mapId, _userId, tags);
+  _sdb.beginChangeset(tags);
 }
 
 void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)
 {
-  long newId;
   bool countChange = true;
 
-  Tags t = n->getTags();
-  _addElementTags(n, t);
+  //LOG_DEBUG("Inside writePartial for Node");
 
-  if (n->getId() < 1 && _remapIds == false)
+  Tags t = n->getTags();
+  // Only add tags for servicesDB, not good for OSM API
+  if ( _sdb.getDatabaseType() == ServicesDb::DBTYPE_SERVICES)
   {
-    throw HootException("Writing non-positive IDs without remap is not supported by "
-                        "ServicesDbWriter.");
+    _addElementTags(n, t);
   }
-  else if (_remapIds && _nodeRemap.count(n->getId()) != 0)
+
+  //LOG_DEBUG("Incoming node ID: " << n->getId());
+
+
+  if (_remapIds)
   {
-    newId = _nodeRemap.at(n->getId());
-    _sdb.updateNode(_mapId, n->getId(), n->getY(), n->getX(), _changeSetId, t);
-    countChange = false;
+    bool alreadyThere = _nodeRemap.count(n->getId()) != 0;
+    long nodeId = _getRemappedElementId(n->getElementId());
+    if (alreadyThere)
+    {
+      _sdb.updateNode(nodeId, n->getY(), n->getX(), t);
+    }
+    else
+    {
+      _sdb.insertNode(nodeId, n->getY(), n->getX(), t);
+    }
   }
   else
   {
-    newId = _sdb.insertNode(_mapId, n->getId(), n->getY(), n->getX(), _changeSetId, t,
-                            _remapIds);
-    if (_remapIds)
+    if ( n->getId() < 1 )
     {
-      _nodeRemap[n->getId()] = newId;
+      throw HootException("Writing non-positive IDs without remap is not supported by "
+                          "ServicesDbWriter.");
     }
-  }
 
-  _env.expandToInclude(n->getX(), n->getY());
+    //LOG_DEBUG("Inserted node " << QString::number(n->getId()) << ", no remapping" );
+    _sdb.insertNode(n->getId(), n->getY(), n->getX(), t);
+  }
 
   if (countChange)
   {
     _countChange();
+    _nodesWritten++;
   }
 }
 
@@ -303,16 +379,26 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Way>& w)
 {
   long wayId;
 
+  //LOG_DEBUG("Inside writePartial for Way " << QString::number(w->getId()));
+
   Tags tags = w->getTags();
-  _addElementTags(w, tags);
+
+  if ( _sdb.getDatabaseType() == ServicesDb::DBTYPE_SERVICES)
+  {
+    _addElementTags(w, tags);
+  }
 
   if (_remapIds)
   {
     bool alreadyThere = _wayRemap.count(w->getId()) != 0;
-    wayId = _remapOrCreateElementId(w->getElementId(), tags).getId();
+    wayId = _getRemappedElementId(w->getElementId());
     if (alreadyThere)
     {
-      _sdb.updateWay(_mapId, wayId, _changeSetId, tags);
+      _sdb.updateWay(wayId, tags);
+    }
+    else
+    {
+      _sdb.insertWay(wayId, tags);
     }
   }
   else if (w->getId() < 1)
@@ -321,20 +407,36 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Way>& w)
   }
   else
   {
-    wayId = _sdb.insertWay(_mapId, w->getId(), _changeSetId, tags, false);
+    wayId = w->getId();
+    _sdb.insertWay(w->getId(), tags);
   }
 
-  _sdb.insertWayNodes(_mapId, wayId, _remapNodes(w->getNodeIds()));
+  if ( _remapIds == true )
+  {
+    _sdb.insertWayNodes(wayId, _remapNodes(w->getNodeIds()));
+  }
+  else
+  {
+    _sdb.insertWayNodes(wayId, w->getNodeIds());
+  }
 
   _countChange();
+
+  _waysWritten++;
 }
 
 void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
 {
   long relationId;
 
+  //LOG_DEBUG("Inside writePartial for Relation");
+
   Tags tags = r->getTags();
-  _addElementTags(r, tags);
+  if ( _sdb.getDatabaseType() == ServicesDb::DBTYPE_SERVICES)
+  {
+    _addElementTags(r, tags);
+  }
+
   if (!r->getType().isEmpty())
   {
     tags["type"] = r->getType();
@@ -342,31 +444,114 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
 
   if (_remapIds)
   {
-    bool alreadyThere = _wayRemap.count(r->getId()) != 0;
-    relationId = _remapOrCreateElementId(r->getElementId(), tags).getId();
-    if (alreadyThere)
-    {
-      _sdb.updateRelation(_mapId, relationId, _changeSetId, tags);
-    }
-  }
-  else if (r->getId() < 1)
-  {
-    throw HootException("Non-positive IDs are not supported by ServicesDbWriter.");
+    bool alreadyThere = _relationRemap.count(r->getId()) != 0;
+    relationId = _getRemappedElementId(r->getElementId());
+
+    LOG_DEBUG("Inserting relation with source ID = " <<
+              QString::number(r->getId()) << " which maps to DB ID = " <<
+              QString::number(relationId) );
+
+      _sdb.insertRelation(relationId, tags);
   }
   else
   {
-    relationId = _sdb.insertRelation(_mapId, r->getId(), _changeSetId, tags, false);
+    if (r->getId() < 1)
+    {
+      throw HootException("Non-positive IDs are not supported by ServicesDbWriter without remapping");
+    }
+
+    _sdb.insertRelation(r->getId(), tags);
+    relationId = r->getId();
   }
 
-  Tags empty;
+  Tags emptyTags;
   for (size_t i = 0; i < r->getMembers().size(); ++i)
   {
     RelationData::Entry e = r->getMembers()[i];
-    ElementId eid = _remapOrCreateElementId(e.getElementId(), empty);
-    _sdb.insertRelationMembers(_mapId, relationId, eid.getType(), eid.getId(), e.role, i);
+
+    // May need to create new ID mappings for items we've not yet seen
+    ElementId relationMemberElementId = e.getElementId();
+
+    if ( _remapIds == true )
+    {
+      relationMemberElementId = ElementId(relationMemberElementId.getType(),
+        _getRemappedElementId(relationMemberElementId));
+    }
+
+    _sdb.insertRelationMember(relationId, relationMemberElementId.getType(),
+                              relationMemberElementId.getId(), e.role, i);
   }
 
+  //LOG_DEBUG("All members added to relation " << QString::number(relationId));
+
   _countChange();
+
+  //LOG_DEBUG("Leaving relation write cleanly");
+
+  _relationsWritten++;
+}
+
+void ServicesDbWriter::_setOutputMappingFile(const QString& filename)
+{
+  if ( filename.length() > 0 )
+  {
+    _outputMappingFile = filename;
+    LOG_DEBUG("Configuration set to output ID mappings into file " <<
+        _outputMappingFile);
+  }
+}
+
+void ServicesDbWriter::_outputIdMappings()
+{
+  if ( (_sourceNodeIds.size() == 0) && (_sourceWayIds.size() == 0) &&
+       (_sourceRelationIds.size() == 0) )
+  {
+    // No mapping data was generated
+    return;
+  }
+
+  // If we can't open output file, just warn and bail -- this is testing purposes only
+  try
+  {
+    std::ofstream outputFile(_outputMappingFile.toStdString().c_str());
+
+    outputFile << "<id_mappings>" << std::endl;
+
+    for ( std::set<long>::const_iterator idIter = _sourceNodeIds.begin();
+          idIter != _sourceNodeIds.end(); ++idIter )
+    {
+      outputFile <<
+        "\t<id_mapping element_type=\"node\" source_id=\"" <<
+        *idIter << "\" database_id=\"" << _nodeRemap.at(*idIter) <<
+        "\" />" << std::endl;
+    }
+
+    for ( std::set<long>::const_iterator idIter = _sourceWayIds.begin();
+          idIter != _sourceWayIds.end(); ++idIter )
+    {
+      outputFile <<
+        "\t<id_mapping element_type=\"way\" source_id=\"" <<
+        *idIter << "\" database_id=\"" << _wayRemap.at(*idIter) <<
+        "\" />" << std::endl;
+    }
+
+    for ( std::set<long>::const_iterator idIter = _sourceRelationIds.begin();
+          idIter != _sourceRelationIds.end(); ++idIter )
+    {
+      outputFile <<
+        "\t<id_mapping element_type=\"relation\" source_id=\"" <<
+        *idIter << "\" database_id=\"" << _relationRemap.at(*idIter) <<
+        "\" />" << std::endl;
+    }
+
+    outputFile << "</id_mappings>" << std::endl;
+
+    outputFile.close();
+  }
+  catch ( ... )
+  {
+    LOG_WARN("Error creating output map file " << _outputMappingFile);
+  }
 }
 
 }

@@ -227,6 +227,15 @@ private:
   WayMap::const_iterator _waysItr;
   RelationMap::const_iterator _relationsItr;
 
+  // Ordered partial read
+  bool _idOrderConfigSet;
+  QList<long> _partialNodesOrderedKeys;
+  QList<long>::const_iterator _nodeIdsOrderedItr;
+  QList<long> _partialWaysOrderedKeys;
+  QList<long>::const_iterator _wayIdsOrderedItr;
+  QList<long> _partialRelationsOrderedKeys;
+  QList<long>::const_iterator _relationIdsOrderedItr;
+
   //partial read elements read counters
   //TODO: consolidate these into a single collection
   long _partialNodesRead;
@@ -244,7 +253,7 @@ private:
 
   double _convertLat(long lat);
 
-  ElementId _convertToElementId(int id, int memberType);
+  ElementId _convertToElementId(long id, int memberType);
 
   long _createRelationId(long fromFile);
 

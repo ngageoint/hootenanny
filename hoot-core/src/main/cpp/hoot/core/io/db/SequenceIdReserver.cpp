@@ -68,8 +68,8 @@ long SequenceIdReserver::_reserveIds()
     // This query contains a race condition. It is possible that one process could call SETVAL
     // between the call to CURRVAL and SETVAL. This can result in a smaller value than expected
     // and duplicate IDs. See #3607 for details.
-    ///
-    LOG_WARN("This query contains a race condition and may not do what you want.");
+    //
+    //LOG_WARN("This query contains a race condition and may not do what you want.");
     _query->prepare(
       QString("SELECT NEXTVAL('%1'), "
               "SETVAL('%1', CURRVAL('%1') + :count)").arg(_sequenceName));

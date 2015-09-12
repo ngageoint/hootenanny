@@ -33,7 +33,9 @@
 // hoot
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/io/ElementCache.h>
+#include <hoot/core/io/db/SequenceIdReserver.h>
 
 // Qt
 #include <QUrl>
@@ -43,6 +45,8 @@
 
 // Standard
 #include <vector>
+#include <map>
+#include <set>
 
 // Tgs
 #include <tgs/SharedPtr.h>
@@ -77,6 +81,20 @@ class ServicesDb
 {
 public:
 
+  /**
+   * Describes what type of Postgres the object is connected to
+   *
+   * @note The type is set automatically in ::open by determining by
+   *    what tables are present in the schema
+   */
+  enum DbType
+  {
+    DBTYPE_UNSUPPORTED = 0,
+    DBTYPE_SERVICES,
+    DBTYPE_OSMAPI
+  };
+
+  static const int COORDINATE_SCALE = 1e7;
   // below are the column indexes when calling select*Elements()
   // Not all parts of the code use these consts. Please convert "magic numbers" when you find
   // them.
@@ -86,11 +104,11 @@ public:
   static const int RELATIONS_TAGS = 5;
   static const int WAYS_TAGS = 5;
 
+
   /**
    * This value should be updated after the DB is upgraded and all tests run successfully.
    */
   static QString expectedDbVersion() { return "14:brandon.witham"; }
-  static int maximumChangeSetEdits() { return 50000; }
 
   static const Status DEFAULT_ELEMENT_STATUS;
   static const Meters DEFAULT_ELEMENT_CIRCULAR_ERROR = 0.0;
@@ -103,7 +121,7 @@ public:
    * Called after open. This will read the bounds of the specified layer in a relatively efficient
    * manner. (e.g. SELECT min(x)...)
    */
-  virtual Envelope calculateEnvelope(long mapId) const;
+  virtual Envelope calculateEnvelope() const;
 
   void close();
 
@@ -116,6 +134,8 @@ public:
   bool isCorrectDbVersion() { return getDbVersion() == expectedDbVersion(); }
 
   bool isSupported(QUrl url);
+
+  bool isSupported(const QUrl& url, const DbType dbType);
 
   void open(QUrl url);
 
@@ -137,44 +157,52 @@ public:
   /**
    * Returns true if the changeset with the specified ID exists in the services database
    */
-  bool changesetExists(long mapId, const long id);
+  bool changesetExists(const long id);
 
   /**
    * Returns the number of OSM elements of a given type for a particular map in the services
    * database
    */
-  long numElements(const long mapId, const ElementType& elementType);
+  long numElements(const ElementType& elementType);
 
   /**
    * Returns a results iterator to all OSM elements for a given map and element type in the services
    * database
    */
-  shared_ptr<QSqlQuery> selectAllElements(const long mapId, const ElementType& elementType);
+  shared_ptr<QSqlQuery> selectAllElements(const ElementType& elementType);
 
 
-  shared_ptr<QSqlQuery> selectAllElements(const long mapId, const long elementId, const ElementType& elementType);
+  shared_ptr<QSqlQuery> selectAllElements(const long elementId, const ElementType& elementType);
 
   /**
    * Returns a results iterator to all OSM elements for a given map and element type in the services
    * database.  If limit = 0, no limit will be placed on the number of elements returned.  If offset
    * = 0, no records will be skipped in the returned result set.
    */
-  shared_ptr<QSqlQuery> selectElements(const long mapId, const long elementId, const ElementType& elementType,
+  shared_ptr<QSqlQuery> selectElements(const long elementId, const ElementType& elementType,
                                        const long limit, const long offset);
+
+  /**
+   * Returns a results iterator to all OSM elements for a given map and element type in the osm api
+   * database.  If limit = 0, no limit will be placed on the number of elements returned.  If offset
+   * = 0, no records will be skipped in the returned result set.
+   */
+  shared_ptr<QSqlQuery> selectElements_OsmApi(const long elementId,
+    const ElementType& elementType, const long limit, const long offset);
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
    */
-  vector<long> selectNodeIdsForWay(long mapId, long wayId);
+  vector<long> selectNodeIdsForWay(long wayId);
 
   /**
    * Returns a vector with all the relation members for a given relation
    */
-  vector<RelationData::Entry> selectMembersForRelation(long mapId, long relationId);
+  vector<RelationData::Entry> selectMembersForRelation(long relationId);
 
   //writing
 
-  void closeChangeSet(long mapId, long changeSetId, Envelope env, int numChanges);
+  void endChangeset();
 
   /**
    * Creates necessary indexes and constraints on all maps that don't have indexes/constraints
@@ -189,14 +217,46 @@ public:
   long getOrCreateUser(QString email, QString displayName);
 
   /**
+   * Set user ID for current session, will be passed to DB in all places user ID is required
+   *
+   * @param sessionUserId The user ID to establish for this session
+   */
+  void setUserId(const long sessionUserId);
+
+  /**
+   * Set the Map ID for this session
+   * @param sessionMapId The ID to set for the current map
+   */
+  void setMapId(const long sessionMapId);
+
+  /**
+   * Obtain current map ID for database
+   * @return value of current map ID
+   */
+  long getMapId() const { return _currMapId; }
+
+  /**
    * Deletes a map and all of it's dependencies.
    */
   void deleteMap(long mapId);
 
   void deleteUser(long userId);
 
-  long insertChangeSet(long mapId, long userId, const Tags& tags = Tags(),
-    Envelope env = Envelope());
+  /**
+   * Start a new changeset
+   *
+   * @note The changeset will not have any tags associated with it
+   */
+  void beginChangeset();
+
+
+  /**
+   * Starts a new changeset
+   * @param tags Tags for the new changeset
+   *
+   * @note to Obtain the current changeset Id, call getChangesetId
+   */
+  void beginChangeset(const Tags& tags);
 
   /**
    * @brief Insert a map into the database. This does not create the constraints and indexes.
@@ -208,45 +268,78 @@ public:
    * @param publicVisibility Is the map publicly visible?
    * @return
    */
-  long insertMap(QString mapName, int userId, bool publicVisibility = true);
+  long insertMap(QString mapName, bool publicVisibility = true);
 
-  long insertNode(long mapId, long id, double lat, double lon, long changeSetId,
-    const Tags &tags, bool createNewId = false);
+  bool insertNode(const double lat, const double lon, const Tags &tags, long& assignedId);
 
-  long insertRelation(long mapId, long relationId, long changeSetId, const Tags& tags,
-    bool createNewId = false);
+  bool insertNode(const long id, const double lat, const double lon, const Tags &tags);
 
-  void insertRelationMembers(long mapId, long relationId, ElementType type, long elementId,
-    QString role, int sequenceId);
+  bool insertWay(const Tags& tags, long& assignedId);
 
-  void insertRelationTag(long mapId, long relationId, const QString& k, const QString& v);
+  bool insertWay( const long wayId, const Tags& tags);
+
+  void insertWayNodes(long wayId, const vector<long>& nodeIds);
+
+  bool insertRelation(const Tags& tags, long& assignedId);
+
+  bool insertRelation(const long relationId, const Tags& tags);
+
+  /**
+   * Insert a new member into an existing relation
+   * @param relationId Which relation we're adding a member to
+   * @param type The type of element being added
+   * @param elementId The ID for the element being added
+   * @param role Role for the relation
+   * @param sequenceId Sequence for the relation
+   * @return True if success, else false
+   */
+  bool insertRelationMember(const long relationId, const ElementType& type,
+    const long elementId, const QString& role, const int sequenceId);
+
+  void insertRelationTag(long relationId, const QString& k, const QString& v);
 
   long insertUser(QString email, QString displayName);
 
-  long insertWay(long mapId, long wayId, long changeSetId, const Tags& tags,
-                 /*const vector<long>& nids,*/ bool createNewId = false);
-
-  void insertWayNodes(long mapId, long wayId, const vector<long>& nodeIds);
 
   /**
    * Rollback the current transaction.
    */
   void rollback();
 
-  set<long> selectMapIds(QString name, long userId);
+  set<long> selectMapIds(QString name);
 
   /**
    * Given a QVariant (string), unscape the tags into a full tag map.
    */
   static Tags unescapeTags(const QVariant& v);
 
-  void updateNode(long mapId, long id, double lat, double lon, long changeSetId, const Tags& tags);
+  void updateNode(const long id, const double lat, const double lon, const Tags& tags);
 
-  void updateRelation(long mapId, long id, long changeSetId, const Tags& tags);
+  void updateRelation(const long id, const Tags& tags);
 
-  void updateWay(long mapId, long id, long changeSetId, const Tags& tags);
+  void updateWay(const long id, const Tags& tags);
+
+  DbType getDatabaseType() const { return _connectionType; }
+
+  long getChangesetId() const { return _currChangesetId; }
+
+  void incrementChangesetChangeCount();
+
+  QString extractTagFromRow_OsmApi(shared_ptr<QSqlQuery> row, const int pos);
+
+  /**
+   * Reserve a unique indentifier for an element of the specified type
+   * @param type The type of element that a unique ID is being requested for
+   * @return the ID that was reserved for the element
+   *
+   * @note The returned ID is guaranteed to be unique for the specified type
+   *  and will never be reused
+   */
+  long reserveElementId(const ElementType::Type type);
 
 private:
+
+  static const int _maximumChangeSetEdits = 50000;    ///< Maximum edits per one OSM changeset
 
   QSqlDatabase _db;
   bool _inTransaction;
@@ -280,6 +373,7 @@ private:
   long _waysPerBulkInsert;
   double _wayInsertElapsed;
   shared_ptr<InternalIdReserver> _wayIdReserver;
+  shared_ptr<SequenceIdReserver> _osmApiWayIdReserver;
 
   shared_ptr<BulkInsert> _wayNodeBulkInsert;
   long _wayNodesPerBulkInsert;
@@ -288,11 +382,50 @@ private:
   shared_ptr<BulkInsert> _relationBulkInsert;
   long _relationsPerBulkInsert;
   shared_ptr<InternalIdReserver> _relationIdReserver;
+  shared_ptr<SequenceIdReserver> _osmApiRelationIdReserver;
 
   /// A vector of map ids that are pending index creation
   QVector<long> _pendingMapIndexes;
 
   long _lastMapId;
+
+  long _currUserId;
+  long _currMapId;
+  DbType _connectionType;
+  long _currChangesetId;
+  Envelope _changesetEnvelope;
+  long _changesetChangeCount;
+  ElementCachePtr _elementCache;
+  std::map< long, std::vector<long> > _wayNodesCache;
+
+  unsigned long _elementCacheCapacity;
+
+  boost::shared_ptr<SequenceIdReserver> _osmApiNodeIdReserver;
+
+  std::set<long> _relationIdsWrittenToDb;     ///< Stores IDs for all relations that have been flushed to the DB
+
+  struct RelationMemberCacheEntry
+  {
+    ElementId elementId;
+    QString role;
+    int sequenceId;
+  };
+
+  std::multimap<long, RelationMemberCacheEntry> _relationMembersCache;    ///< Current cache of relation members waiting to be flushed
+
+  /**
+   * If a relation member is ready to be written out to the database, but the relation it references has not yet been flushed to the
+   *     database, it is stored here until the target relation is written to disk OR we finish processing, at which time
+   *     it's an unresolveable reference and we discard it
+   *
+   *     Format:
+   *         multimap key: DESTINATION relation (unresolved reference)
+   *         std::pair<source relationID, destination relation info>
+   */
+  std::multimap<long, std::pair<long, RelationMemberCacheEntry > > _unresolvedRelationReferences;
+
+  unsigned long _nodesAddedToCache;
+  unsigned long _nodesFlushedFromCache;
 
   /**
    * This is here to improve query caching. In most cases users open a single ServiceDb and then
@@ -326,6 +459,8 @@ private:
 
   QString _elementTypeToElementTableName(long mapId, const ElementType& elementType) const;
 
+  QString _elementTypeToElementTableName_OsmApi(const ElementType& elementType) const;
+
   friend class ServicesDbTest;
   friend class ServicesDbTestUtils;
   friend class ServicesDbReaderTest;
@@ -353,6 +488,8 @@ private:
 
   void _flushBulkInserts();
 
+  // Services DB table strings
+
   static QString _getNodeSequenceName(long mapId)
   { return "current_nodes" + _getMapIdString(mapId) + "_id_seq"; }
   static QString _getRelationSequenceName(long mapId)
@@ -373,14 +510,37 @@ private:
   static QString _getWaysTableName(long mapId)
   { return "current_ways" + _getMapIdString(mapId); }
 
+  // Osm Api DB table strings
+
+  static QString _getNodesTableName_OsmApi()
+  { return "current_nodes join current_node_tags on current_nodes.id=current_node_tags.node_id"; }
+  static QString _getWaysTableName_OsmApi()
+  { return "current_ways join current_way_tags on current_ways.id=current_way_tags.way_id"; }
+  static QString _getWayNodesTableName_OsmApi()
+  { return "current_way_nodes"; }
+  static QString _getRelationsTableName_OsmApi()
+  { return "current_relations join current_relation_tags on current_relations.id=current_relation_tags.relation_id"; }
+  static QString _getRelationMembersTableName_OsmApi()
+  { return "current_relation_members"; }
+
+  // Osm Api DB table field strings
+  QString _getElementTableFields_OsmApi(const ElementType& elementType) const;
+
+  static QString _getNodesTableFields_OsmApi()
+  { return "id, latitude, longitude, changeset_id, visible, timestamp, tile, version, k, v"; }
+  static QString _getWaysTableFields_OsmApi()
+  { return "id, changeset_id, timestamp, visible, version, k, v"; }
+  static QString _getRelationsTableFields_OsmApi()
+  { return "id, changeset_id, timestamp, visible, version, k, v"; }
+
   /**
    * Returns a map ID string suitable for using in table names. E.g. _1
    */
   static QString _getMapIdString(long id) { return QString("_%1").arg(id); }
 
-  long _getNextNodeId(long mapId);
-  long _getNextRelationId(long mapId);
-  long _getNextWayId(long mapId);
+  long _getNextNodeId();
+  long _getNextRelationId();
+  long _getNextWayId();
 
   bool _hasTable(QString tableName);
 
@@ -408,9 +568,110 @@ private:
   long _round(double x, int precision);
 
   static void _unescapeString(QString& s);
+
+  /**
+   * Examine the schema to find out by what tables exist what the supported DB type
+   *    is, if any.
+   *
+   * @return One of the supported database types or DBTYPE_UNSUPPORTED
+   */
+  DbType _determineDbType();
+
+  void _beginChangeset_Services(const Tags& tags);
+
+  void _endChangeset_Services(long changeSetId, Envelope env, int numChanges);
+
+  void _endChangeset_OsmApi();
+
+  void _insertNode_Services(const long id, const double lat, const double lon,
+    const Tags& tags);
+
+  void _insertWay_Services(long wayId, long changeSetId, const Tags& tags);
+
+  void _insertWay_OsmApi(const long wayId, const Tags& tags);
+
+  void _insertRelation_Services(long relationId, long changeSetId, const Tags& tags );
+
+  void _updateNode_Services(long id, double lat, double lon, long changeSetId, const Tags& tags);
+
+  void _updateRelation_Services(long id, long changeSetId, const Tags& tags);
+
+  void _updateWay_Services(long id, long changeSetId, const Tags& tags);
+
+  void _beginChangeset_OsmApi();
+
+  void _insertNode_OsmApi(const long id, const double lat, const double lon,
+    const Tags& tags);
+
+  // Flushes all elements
+  void _flushElementCacheToDb();
+
+  // Only flushes specified type
+  void _flushElementCacheToDb(const ElementType::Type type);
+
+  void _flushElementCacheOsmApiNodes();
+
+  void _flushElementCacheOsmApiWays();
+  void _flushElementCacheOsmApiWayNodes();
+
+  void _flushElementCacheOsmApiRelations();
+
+  void _flushElementCacheOsmApiRelationMembers();
+
+  void _updateChangesetEnvelope( const ConstNodePtr node );
+
+  void _updateChangesetEnvelope(const ConstWayPtr way);
+
+  void _updateChangesetEnvelopeWayIds(const std::vector<long>& wayIds);
+
+  void _updateChangesetEnvelopeRelationIds(const std::vector<long>& relationIds);
+
+  void _updateChangesetEnvelopeRelationNodes(const std::vector<long>& relationIds);
+
+  void _updateChangesetEnvelopeRelationWays(const std::vector<long>& relationIds);
+
+  long _getNextNodeId_Services(long mapId);
+
+  long _getNextNodeId_OsmApi();
+
+  long _getNextWayId_Services(const long mapId);
+
+  long _getNextWayId_OsmApi();
+
+  void _insertWayNodes_Services(long wayId, const vector<long>& nodeIds);
+
+  void _insertWayNodes_OsmApi(long wayId, const vector<long>& nodeIds);
+
+  long _insertUser_Services(QString email, QString displayName);
+
+  long _insertUser_OsmApi(const QString& email);
+
+  void _insertRelationMember_Services(long relationId, ElementType type,
+    long elementId, QString role, int sequenceId);
+
+  void _insertRelation_OsmApi(const Tags &tags, const long assignedId);
+
+  /**
+   * Insert a member into an OSM API database relation
+   * @param relationId The relation receiving a new member
+   * @param type Type of the new member
+   * @param elementId ID value for the new member
+   * @param role String describing new role of the relation
+   * @param sequenceId one-based sequence ID
+   * @return True if success, else false
+   */
+  bool _insertRelationMember_OsmApi(const long relationId, const ElementType& type,
+      const long elementId, const QString& role, const int sequenceId);
+
+  long _getNextRelationId_Services();
+  long _getNextRelationId_OsmApi();
+
+
 };
 
 }
 
 #endif // SERVICESDB_H
+
+
 

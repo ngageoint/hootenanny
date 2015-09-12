@@ -44,13 +44,13 @@ OsmMapWriterFactory::OsmMapWriterFactory()
 
 shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
 {
+  LOG_DEBUG("Creating OsmMapWriter for " << url);
   QString writerOverride = ConfigOptions().getOsmMapWriterFactoryWriter();
 
   shared_ptr<OsmMapWriter> writer;
   if (writerOverride != "")
   {
     writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(writerOverride));
-    LOG_DEBUG("Using writer: " << writerOverride);
   }
 
   vector<std::string> names =
@@ -83,6 +83,7 @@ bool OsmMapWriterFactory::hasElementOutputStream(QString url)
   shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
   if (streamWriter)
   {
+    LOG_DEBUG("Streaming: writer support!");
     result = true;
   }
 

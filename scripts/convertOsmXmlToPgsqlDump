@@ -1,0 +1,416 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Fcntl;
+use Math::Trig; # For tile number calculations
+use POSIX qw(strftime);
+use File::Temp qw(tempfile);
+
+sub covertDecimalDegreesToNanodegrees($);
+sub generatePgDumpfileFromOsm($$);
+sub readNodes($$$$);
+sub lon2x($);
+sub lat2y($);
+sub convertLatLonToTileNumber($$);
+sub generateISO8601Time();
+sub addChangeToChangeset($);
+sub updateHeaderTables($$);
+sub generateUsersTable($);
+sub closeChangesetsTable($);
+sub writeChangesetEntry($);
+
+# A handful of globals to make life easier
+my $changesetId = 1;
+my %changesetChangeCount;
+$changesetChangeCount{ $changesetId } = 0;
+
+sub addChangeToChangeset($)
+{
+  my $tableFilehandlesRef = shift(@_);
+
+  $changesetChangeCount{ $changesetId } += 1;
+
+  if ( $changesetChangeCount{ $changesetId } == 50000 )
+  {
+    writeChangesetEntry($tableFilehandlesRef);
+    $changesetId++;
+    $changesetChangeCount{ $changesetId } = 0;
+  }
+}
+
+sub writeChangesetEntry($)
+{
+  my $tableFilehandlesRef = shift(@_);
+  my $changesetsTable = $tableFilehandlesRef->{'changesets' };
+  my $currentTimestamp = generateISO8601Time();
+
+  # Is this first time we've been called?
+  if ( $changesetId == 1 )
+  {
+    print( $changesetsTable
+      "COPY changesets (id, user_id, created_at, closed_at, num_changes) FROM stdin;\n"
+    );
+  }
+
+  print( $changesetsTable 
+    sprintf( "%d\t1\t%s\t%s\t%d\n", $changesetId, $currentTimestamp, $currentTimestamp,
+      $changesetChangeCount{ $changesetId } )
+  );
+}
+
+sub convertDecimalDegreesToNanodegrees($)
+{
+  my $decimalDegrees = shift(@_);
+  #print("Input degrees: $decimalDegrees\n");
+
+  my $nanoDegrees = sprintf("%10d", ($decimalDegrees * 10000000.0));
+  #print( "In nanodegrees: $nanoDegrees\n" );
+
+  return $nanoDegrees;
+}
+
+sub lon2x($)
+{
+  my $lon = shift(@_);
+
+  # Note perl does not have a rounding function, so stackoverflow says
+  #     stealing from printf is about as close as you can come
+  return int(sprintf("%.0f", (($lon + 180.0) * 65535.0 / 360.0)))
+}
+
+sub lat2y($)
+{
+  my $lat = shift(@_);
+
+  return int(sprintf("%.0f", (($lat + 90.0) * 65535.0 / 180.0)));
+}
+
+sub convertLatLonToTileNumber($$)
+{
+  my $lat = shift(@_);
+  my $lon = shift(@_);
+
+  my $y = lat2y($lat);
+  my $x = lon2x($lon);
+
+  my $tile = 0;
+
+  for ( my $i = 15; $i >= 0; $i-- )
+  {
+    $tile = ($tile << 1) | (($x >> $i) & 1);
+    $tile = ($tile << 1) | (($y >> $i) & 1);
+  }
+
+  #print( "Tile calc for x=$lon, y=$lat: $tile\n");
+
+  #exit;
+
+  return $tile;
+}
+
+sub generateISO8601Time()
+{
+  return strftime("%F %T", gmtime(time()));
+}
+
+
+sub generatePgDumpfileFromOsm($$)
+{
+  my $osmFilename = shift(@_);
+  my $sqlFilename = shift(@_);
+  my %idMappings;
+  my $osmFilehandle;
+
+  open( $osmFilehandle, "< $osmFilename") or die( "Could not open OSM file: $osmFilename\n\n" );
+
+  # Open multiple temp output SQL files, one per table. 
+  #
+  # Having one file per table frees us up to do ONE pass over each kind of data, nodes/ways/relations,
+  #   into the appropriate file:
+  #
+  #   At the end we'll do an OS filesystem concat of the various files to get the correct ordering of 
+  #   tables in the final output. Saves huge time
+
+  my %tableFilehandles;
+  $tableFilehandles{ 'users' } = File::Temp->new();
+  $tableFilehandles{ 'changesets' } = File::Temp->new();
+  $tableFilehandles{ 'sequence_updates' } = File::Temp->new();
+  $tableFilehandles{ 'current_nodes' } = File::Temp->new();
+  $tableFilehandles{ 'current_node_tags' } = File::Temp->new();
+  $tableFilehandles{ 'nodes' } = File::Temp->new();
+  $tableFilehandles{ 'node_tags' } = File::Temp->new();
+  #$tableFilehandles{ 'current_ways' } = File::Temp->new();
+
+  my $startingNodeId  = 500;
+
+  readNodes($osmFilehandle, \%tableFilehandles, $startingNodeId, \%idMappings );
+
+  print( "\nShould be first way line:\n\t" . <$osmFilehandle> );
+
+  # Process ways
+
+  # Process relations
+
+  close( $osmFilehandle );
+  #close( $sqlFilehandle );
+
+  # Close out tables
+  closeChangesetsTable(\%tableFilehandles);
+
+  # Populate data for header tables
+  updateHeaderTables(\%tableFilehandles, $startingNodeId);
+
+
+  my @tableFlushSequence = (   
+    'sequence_updates', 
+    'users', 'changesets', 
+    'current_nodes', 'current_node_tags',
+    'nodes', 'node_tags' 
+  );
+
+  if ( -f $sqlFilename )
+  {
+    unlink($sqlFilename);
+  }
+
+  foreach my $currTable ( @tableFlushSequence )
+  {
+    `cat $tableFilehandles{ $currTable } >> $sqlFilename`;
+  }
+}
+
+sub readNodes($$$$)
+{
+  my $osmFilehandle             = shift(@_);
+  my $tableFilehandlesRef       = shift(@_);
+  my $startingNodeId            = shift(@_);
+  my $idMappings                = shift(@_);
+
+  print( "- Processing nodes: ");
+
+  my $currentNodesHandle = $tableFilehandlesRef->{'current_nodes'};
+
+  print( $currentNodesHandle
+    'COPY current_nodes (id, latitude, longitude, changeset_id, ' .
+    "visible, \"timestamp\", tile, version) FROM stdin;\n" );
+
+  my $currentNodeTagsHandle = $tableFilehandlesRef->{'current_node_tags'};
+
+  print( $currentNodeTagsHandle "COPY current_node_tags (node_id, k, v) FROM stdin;\n" );
+
+  my $nodesHandle = $tableFilehandlesRef->{'nodes'};
+ 
+  print( $nodesHandle
+    'COPY nodes (node_id, latitude, longitude, changeset_id, visible, ' .
+    '"timestamp", tile, version, redaction_id) FROM stdin;' . "\n" );
+
+  my $nodeTagsHandle = $tableFilehandlesRef->{'node_tags'};
+
+  print ( $nodeTagsHandle "COPY node_tags (node_id, version, k, v) FROM stdin;\n" );
+
+  # Timestamp that will be used for all nodes
+  my $timestamp = generateISO8601Time();
+
+  # Read until we get something of interest (node, way, relation, or close OSM tag
+  my $previousLinePosition = tell($osmFilehandle );
+  my $currLine = <$osmFilehandle>;
+  my $numNodes = 0;
+  my $dbNodeId = $startingNodeId;
+
+  my $nodeId;   # Have to track this outside loop as tags will refer back to 
+                # last node we encountered
+  my $insideNode = 0;
+
+  while ( ! eof($osmFilehandle) )
+  {
+    chomp( $currLine );
+    #print( "Read line: $currLine\n" );
+
+    # If it's something past nodes, bail out
+    if ( $currLine =~ /<(?:(?:way|relation) id=\"-?\d+\"|\/osm>)/ )
+    {
+      last;
+    }
+
+    # If it's a node, deal with it
+    if ( $currLine =~ /<node\s+id=\"-?\d+\"/ )
+    {
+
+      # Make sure we're not already inside a node
+      if ( $insideNode == 1 )
+      {
+        print( "Hit node start when we were already in one\n\n");
+        exit;
+      }
+
+      # Mark that we're inside a node
+      $insideNode = 1;
+
+      #print( "Processing node in line $currLine" );
+      $numNodes++;
+
+      # Parse node line
+      if ( $currLine !~ 
+        /<node\s+id=\"(.+?)\"\s+lat=\"(.+?)\"\s+lon=\"(.+?)\"\s+/ )
+      {
+        print( "\nERROR: invalid node line $currLine, bailing\n\n");
+        exit;
+      }
+
+      $nodeId  = $1;
+      my $nodeLat = $2;
+      my $nodeLon = $3;
+      my $tileNumber = convertLatLonToTileNumber($nodeLat, $nodeLon);
+
+      # Establish node ID mapping
+      if ( exists($idMappings->{'node'}->{$nodeId}) )
+      {
+        print("ERROR: node ID $nodeId not unique in input data!\n\n" );
+        exit;
+      }
+
+      $idMappings->{'node'}->{$nodeId} = $dbNodeId;
+      #print("Established node mapping, $nodeId -> $idMappings->{'node'}->{$nodeId}\n" );
+
+      #print( "Tile number: " . convertLatLonToTileNumber($nodeLat, $nodeLon) . "\n" );
+
+      # Print current version of data
+      print( $currentNodesHandle
+        sprintf("%d\t%10d\t%10d\t%d\tt\t%s\t%u\t1\n",
+          $idMappings->{'node'}->{$nodeId},
+          convertDecimalDegreesToNanodegrees($nodeLat),
+          convertDecimalDegreesToNanodegrees($nodeLon),
+          $changesetId,
+          $timestamp,
+          $tileNumber));
+
+      # Print historical version of data
+      print( $nodesHandle
+        sprintf( "%d\t%10d\t%10d\t%d\tt\t%s\t%u\t1\t\\N\n",
+          $idMappings->{'node'}->{$nodeId},
+          convertDecimalDegreesToNanodegrees($nodeLat),
+          convertDecimalDegreesToNanodegrees($nodeLon),
+          $changesetId,
+          $timestamp,
+          $tileNumber));
+
+      #print( "Tile number: $tileNumber\n" );
+
+      $dbNodeId++;
+
+      # Add the change to the changeset -- allows for maintaining changeset ID
+      addChangeToChangeset($tableFilehandlesRef);
+
+      # Identify if this is a node without tags, should we say we're leaving this node?
+      if ( $currLine =~ /<node.+?\suser=\".+\"\s*\/>/ )
+      {
+        $insideNode = 0;
+        $nodeId = -999999;
+      }
+    }
+    elsif ( $currLine =~ /<tag\s+k=\"(.*?)\"\s+v=\"(.*?)\"\s*\/>/ )
+    {
+      # Are we inside a node?
+      if ( $insideNode == 0 )
+      {
+        print( "Encountered an unexpected node tag\n\n");
+        exit;
+      }
+
+      my $dbNodeId = $idMappings->{'node'}->{$nodeId};
+      my $tagKey = $1;
+      my $tagValue = $2;
+
+      # Print to the two tag tables
+      print( $currentNodeTagsHandle 
+        sprintf("%d\t%s\t%s\n", $dbNodeId, $tagKey, $tagValue) );
+      print( $nodeTagsHandle
+        sprintf("%d\t1\t%s\t%s\n", $dbNodeId, $tagKey, $tagValue) );
+    }
+    elsif ( $currLine =~ /<\/node>/ )
+    {
+      # We've left a node
+      $insideNode = 0;
+      $nodeId = -999999;
+    }
+    else
+    {
+      # Ignore anything before first node, otherwise error
+      if ( scalar(keys(%{ $idMappings->{'node'} })) > 0 )
+      {
+        print( "Invalid line: $currLine\n\n");
+        exit;
+      }
+    }
+
+    $previousLinePosition = tell($osmFilehandle );
+    $currLine = <$osmFilehandle>;
+  }
+
+  # Output marker for end of tables
+  my $endOfTableTag = "\\.\n\n\n";
+  print( $currentNodesHandle    $endOfTableTag );
+  print( $currentNodeTagsHandle $endOfTableTag );
+  print( $nodesHandle           $endOfTableTag );
+  print( $nodeTagsHandle        $endOfTableTag );
+
+  print ("complete ($numNodes)\n");
+
+  print( "Sanity check: idMappings has " . scalar(keys(%{$idMappings->{'node'}})) . " entries\n" );
+
+  #print( "Stopped looking for nodes at $currLine" ); 
+
+  # Reset filehandle back one line so the next processing section starts at correct point
+  $osmFilehandle = seek( $osmFilehandle, $previousLinePosition, Fcntl::SEEK_SET );
+}
+
+sub updateHeaderTables($$)
+{
+  my $tableFilehandlesRef = shift(@_);
+  my $startingNodeId = shift(@_);
+
+  generateUsersTable($tableFilehandlesRef);
+}
+
+sub generateUsersTable($)
+{
+  my $tableFilehandlesRef = shift(@_);
+  my $usersTable = $tableFilehandlesRef->{ 'users' };
+  my $currentTimestamp = generateISO8601Time();
+
+  print( $usersTable
+    "COPY users (email, id, pass_crypt, creation_time ) FROM stdin;\n" .
+    "mapedit_ingest\@digitalglobe.com\t1\tabcdefg\t$currentTimestamp\n" .
+    "\\.\n\n\n"
+  );
+}
+
+sub closeChangesetsTable($)
+{
+  my $tableFilehandlesRef = shift(@_);
+  my $changesetsTable = $tableFilehandlesRef->{'changesets' };
+
+  # If we haven't yet written the current entry, time to do it now
+  if ( $changesetChangeCount{ $changesetId } != 0 )
+  {
+    writeChangesetEntry($tableFilehandlesRef);
+  }
+
+  print( $changesetsTable "\\.\n\n\n" );
+}
+
+
+if ( scalar(@ARGV) != 2 ) 
+{
+  print( "Usage: convertOsmXmlToPgsqlDump <.osm input file> <.sql output file>\n\n" );
+  exit;
+}
+
+my $osmFilename = $ARGV[0];
+my $sqlFilename = $ARGV[1];
+
+print( "OSM file: $osmFilename\n" );
+print( "SQL file: $sqlFilename\n" );
+
+print("\n");
+generatePgDumpfileFromOsm( $osmFilename, $sqlFilename );

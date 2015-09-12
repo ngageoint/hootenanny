@@ -65,6 +65,7 @@ bool OsmMapReaderFactory::hasElementInputStream(QString url)
   shared_ptr<ElementInputStream> eis = dynamic_pointer_cast<ElementInputStream>(reader);
   if (eis)
   {
+    LOG_DEBUG("Streaming: reader support!");
     result = true;
   }
 
