@@ -26,13 +26,13 @@ $changesetChangeCount{ $changesetId } = 0;
 
 sub addChangeToChangeset($)
 {
-  my $tableFilehandlesRef = shift(@_);
+  my $sectionFilehandlesRef = shift(@_);
 
   $changesetChangeCount{ $changesetId } += 1;
 
   if ( $changesetChangeCount{ $changesetId } == 50000 )
   {
-    writeChangesetEntry($tableFilehandlesRef);
+    writeChangesetEntry($sectionFilehandlesRef);
     $changesetId++;
     $changesetChangeCount{ $changesetId } = 0;
   }
@@ -40,8 +40,8 @@ sub addChangeToChangeset($)
 
 sub writeChangesetEntry($)
 {
-  my $tableFilehandlesRef = shift(@_);
-  my $changesetsTable = $tableFilehandlesRef->{'changesets' };
+  my $sectionFilehandlesRef = shift(@_);
+  my $changesetsTable = $sectionFilehandlesRef->{'changesets' };
   my $currentTimestamp = generateISO8601Time();
 
   # Is this first time we've been called?
@@ -125,29 +125,50 @@ sub generatePgDumpfileFromOsm($$)
 
   # Open multiple temp output SQL files, one per table. 
   #
-  # Having one file per table frees us up to do ONE pass over each kind of data, nodes/ways/relations,
+  # Having one file per table/section frees us up to do ONE pass over each kind of data, nodes/ways/relations,
   #   into the appropriate file:
   #
   #   At the end we'll do an OS filesystem concat of the various files to get the correct ordering of 
   #   tables in the final output. Saves huge time
 
-  my %tableFilehandles;
-  $tableFilehandles{ 'users' } = File::Temp->new();
-  $tableFilehandles{ 'changesets' } = File::Temp->new();
-  $tableFilehandles{ 'sequence_updates' } = File::Temp->new();
-  $tableFilehandles{ 'current_nodes' } = File::Temp->new();
-  $tableFilehandles{ 'current_node_tags' } = File::Temp->new();
-  $tableFilehandles{ 'nodes' } = File::Temp->new();
-  $tableFilehandles{ 'node_tags' } = File::Temp->new();
-  #$tableFilehandles{ 'current_ways' } = File::Temp->new();
+  my @fileSections = (
+    'sequence_updates',
+    'users',
+    'changesets',
+    'current_nodes',
+    'current_node_tags',
+    'nodes',
+    'node_tags',
+    'current_ways',
+    'current_way_nodes',
+    'current_way_tags',
+    'ways',
+    'way_nodes',
+    'way_tags',
+    'current_relations',
+    'current_relation_members',
+    'current_relation_tags',
+    'relations',
+    'relation_members',
+    'relation_tags'
+  );
+
+  my %sectionFilehandles;
+
+  foreach my $currSection ( @fileSections )
+  {
+    $sectionFilehandles{ $currSection } = File::Temp->new();
+  }
 
   my $startingNodeId  = 500;
 
-  readNodes($osmFilehandle, \%tableFilehandles, $startingNodeId, \%idMappings );
+  readNodes($osmFilehandle, \%sectionFilehandles, $startingNodeId, \%idMappings );
 
-  print( "\nShould be first way line:\n\t" . <$osmFilehandle> );
+  #print( "\nShould be first way line:\n\t" . <$osmFilehandle> );
 
   # Process ways
+  my $startingWayId   = 500;
+  readWays($osmFilehandle, \%sectionFilehandles, $startingWayId, \%idMappings );
 
   # Process relations
 
@@ -155,56 +176,48 @@ sub generatePgDumpfileFromOsm($$)
   #close( $sqlFilehandle );
 
   # Close out tables
-  closeChangesetsTable(\%tableFilehandles);
+  closeChangesetsTable(\%sectionFilehandles);
 
   # Populate data for header tables
-  updateHeaderTables(\%tableFilehandles, $startingNodeId);
-
-
-  my @tableFlushSequence = (   
-    'sequence_updates', 
-    'users', 'changesets', 
-    'current_nodes', 'current_node_tags',
-    'nodes', 'node_tags' 
-  );
+  updateHeaderTables(\%sectionFilehandles, $startingNodeId);
 
   if ( -f $sqlFilename )
   {
     unlink($sqlFilename);
   }
 
-  foreach my $currTable ( @tableFlushSequence )
+  foreach my $currSection ( @fileSections )
   {
-    `cat $tableFilehandles{ $currTable } >> $sqlFilename`;
+    `cat $sectionFilehandles{ $currSection } >> $sqlFilename`;
   }
 }
 
 sub readNodes($$$$)
 {
   my $osmFilehandle             = shift(@_);
-  my $tableFilehandlesRef       = shift(@_);
+  my $sectionFilehandlesRef       = shift(@_);
   my $startingNodeId            = shift(@_);
   my $idMappings                = shift(@_);
 
   print( "- Processing nodes: ");
 
-  my $currentNodesHandle = $tableFilehandlesRef->{'current_nodes'};
+  my $currentNodesHandle = $sectionFilehandlesRef->{'current_nodes'};
 
   print( $currentNodesHandle
     'COPY current_nodes (id, latitude, longitude, changeset_id, ' .
     "visible, \"timestamp\", tile, version) FROM stdin;\n" );
 
-  my $currentNodeTagsHandle = $tableFilehandlesRef->{'current_node_tags'};
+  my $currentNodeTagsHandle = $sectionFilehandlesRef->{'current_node_tags'};
 
   print( $currentNodeTagsHandle "COPY current_node_tags (node_id, k, v) FROM stdin;\n" );
 
-  my $nodesHandle = $tableFilehandlesRef->{'nodes'};
+  my $nodesHandle = $sectionFilehandlesRef->{'nodes'};
  
   print( $nodesHandle
     'COPY nodes (node_id, latitude, longitude, changeset_id, visible, ' .
     '"timestamp", tile, version, redaction_id) FROM stdin;' . "\n" );
 
-  my $nodeTagsHandle = $tableFilehandlesRef->{'node_tags'};
+  my $nodeTagsHandle = $sectionFilehandlesRef->{'node_tags'};
 
   print ( $nodeTagsHandle "COPY node_tags (node_id, version, k, v) FROM stdin;\n" );
 
@@ -239,7 +252,7 @@ sub readNodes($$$$)
       # Make sure we're not already inside a node
       if ( $insideNode == 1 )
       {
-        print( "Hit node start when we were already in one\n\n");
+        print( "Hit node start when we were already in one $currLine\n\n");
         exit;
       }
 
@@ -299,10 +312,10 @@ sub readNodes($$$$)
       $dbNodeId++;
 
       # Add the change to the changeset -- allows for maintaining changeset ID
-      addChangeToChangeset($tableFilehandlesRef);
+      addChangeToChangeset($sectionFilehandlesRef);
 
       # Identify if this is a node without tags, should we say we're leaving this node?
-      if ( $currLine =~ /<node.+?\suser=\".+\"\s*\/>/ )
+      if ( $currLine =~ /<node.+?\/>\s*$/ )
       {
         $insideNode = 0;
         $nodeId = -999999;
@@ -356,7 +369,7 @@ sub readNodes($$$$)
 
   print ("complete ($numNodes)\n");
 
-  print( "Sanity check: idMappings has " . scalar(keys(%{$idMappings->{'node'}})) . " entries\n" );
+  #print( "Sanity check: idMappings has " . scalar(keys(%{$idMappings->{'node'}})) . " entries\n" );
 
   #print( "Stopped looking for nodes at $currLine" ); 
 
@@ -364,18 +377,220 @@ sub readNodes($$$$)
   $osmFilehandle = seek( $osmFilehandle, $previousLinePosition, Fcntl::SEEK_SET );
 }
 
+sub readWays($$$$)
+{
+  my $osmFilehandle           = shift(@_);
+  my $sectionFilehandlesRef   = shift(@_);
+  my $startingWayId           = shift(@_);
+  my $idMappings              = shift(@_);
+
+  print( "- Processing ways: ");
+
+  my $currentWaysHandle = $sectionFilehandlesRef->{'current_ways'};
+  print( $currentWaysHandle
+    "COPY current_ways (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n" );
+
+  my $currentWayTagsHandle = $sectionFilehandlesRef->{'current_way_tags'};
+  print( $currentWayTagsHandle "COPY current_way_tags (way_id, k, v) FROM stdin;\n" );
+
+  my $currentWayNodesHandle = $sectionFilehandlesRef->{'current_way_nodes'};
+  print( $currentWayNodesHandle "COPY current_way_nodes (way_id, node_id, sequence_id) FROM stdin;\n" );
+
+  my $waysHandle = $sectionFilehandlesRef->{'ways'};
+  print( $waysHandle
+    "COPY ways (way_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n" );
+
+  my $wayTagsHandle = $sectionFilehandlesRef->{'way_tags'};
+  print ( $wayTagsHandle "COPY way_tags (way_id, k, v, version) FROM stdin;\n" );
+
+  my $wayNodesHandle = $sectionFilehandlesRef->{'way_nodes'};
+  print( $wayNodesHandle "COPY way_nodes (way_id, node_id, version, sequence_id) FROM stdin;\n" );
+
+  # Timestamp that will be used for all nodes
+  my $timestamp = generateISO8601Time();
+
+  # Read until we get something of interest (way, relation, or close OSM tag
+  my $previousLinePosition = tell($osmFilehandle );
+  my $currLine = <$osmFilehandle>;
+  my $numWays = 0;
+  my $dbWayId = $startingWayId;
+
+  my $wayId;   # Have to track this outside loop as tags will refer back to
+                # last way we encountered
+  my $insideWay = 0;
+  my $nodeSequence = -99999;
+
+  while ( ! eof($osmFilehandle) )
+  {
+    chomp( $currLine );
+    #print( "Read line: $currLine\n" );
+
+    # If it's something past ways, bail out
+    if ( $currLine =~ /<(?:(relation id=\"-?\d+\"|\/osm>))/ )
+    {
+      last;
+    }
+
+    # If it's a way, deal with it
+    if ( $currLine =~ /<way\s+id=\"-?\d+\"/ )
+    {
+
+      # Make sure we're not already inside a way
+      if ( $insideWay == 1 )
+      {
+        print( "Hit way start when we were already in one: $currLine\n\n");
+        exit;
+      }
+
+      # Mark that we're inside a way, start its node sequence over
+      $insideWay = 1;
+      $nodeSequence = 1;
+
+      #print( "Processing way in line $currLine" );
+      $numWays++;
+
+      # Parse way line
+      if ( $currLine !~
+        /<way\s+id=\"(.+?)\"/ )
+      {
+        print( "\nERROR: invalid way line $currLine, bailing\n\n");
+        exit;
+      }
+
+      $wayId  = $1;
+
+      # Establish way ID mapping
+      if ( exists($idMappings->{'way'}->{$wayId}) )
+      {
+        print("ERROR: way ID $wayId not unique in input data!\n\n" );
+        exit;
+      }
+
+      $idMappings->{'way'}->{$wayId} = $dbWayId;
+      #print("Established way mapping, $wayId -> $idMappings->{'way'}->{$wayId}\n" );
+
+      # Print current version of data
+      print( $currentWaysHandle
+        sprintf("%d\t%d\t%s\tt\t1\n",
+          $idMappings->{'way'}->{$wayId},
+          $changesetId,
+          $timestamp ) );
+
+      # Print historical version of data
+      print( $waysHandle
+        sprintf( "%d\t%d\t%s\t1\tt\t\\N\n",
+          $idMappings->{'way'}->{$wayId},
+          $changesetId,
+          $timestamp ) );
+
+
+      $dbWayId++;
+
+      # Add the change to the changeset -- allows for maintaining changeset ID
+      addChangeToChangeset($sectionFilehandlesRef);
+
+      # Identify if this is a way without tags, should we say we're leaving this way?
+      if ( $currLine =~ /<way.+?\/>\s*$/ )
+      {
+        $insideWay = 0;
+        $wayId = -999999;
+        $nodeSequence = -999999;
+      }
+    }
+
+    elsif ( $currLine =~ /<tag\s+k=\"(.*?)\"\s+v=\"(.*?)\"\s*\/>/ )
+    {
+      # Are we inside a way?
+      if ( $insideWay == 0 )
+      {
+        print( "Encountered an unexpected way tag\n\n");
+        exit;
+      }
+
+      my $dbWayId = $idMappings->{'way'}->{$wayId};
+      my $tagKey = $1;
+      my $tagValue = $2;
+
+      # Print to the two tag tables
+      print( $currentWayTagsHandle
+        sprintf("%d\t%s\t%s\n", $dbWayId, $tagKey, $tagValue) );
+      print( $wayTagsHandle
+        sprintf("%d\t%s\t%s\t1\n", $dbWayId, $tagKey, $tagValue) );
+    }
+    elsif ( $currLine =~ /<nd\s+ref=\"(.+)\"\s*\/>/ )
+    {
+      if ( $insideWay == 0 )
+      {
+        print( "Encountered unexpected node ref: $currLine\n\n" );
+        exit;
+      }
+
+      my $nodeRefId = $1;
+
+      # Is it a known node ref?
+      if ( ! exists($idMappings->{'node'}->{$nodeRefId}) )
+      {
+        print( "Ignoring unresolved node ref $nodeRefId in way $wayId\n");
+      }
+
+      #print ( "Found valid node ref $nodeRefId for way $wayId\n" );
+
+      my $dbWayId = $idMappings->{'way'}->{$wayId};
+      my $dbNodeRefId = $idMappings->{'node'}->{$nodeRefId};
+
+      print( $currentWayNodesHandle
+        sprintf("%d\t%d\t%u\n", $dbWayId, $dbNodeRefId, $nodeSequence) );
+
+      print( $wayNodesHandle
+        sprintf("%d\t%d\t1\t%d\n", $dbWayId, $dbNodeRefId, $nodeSequence) );
+
+      # Increment node sequence value
+      $nodeSequence++;
+    }
+    elsif ( $currLine =~ /<\/way>/ )
+    {
+      # We've left a way
+      $insideWay = 0;
+      $wayId = -999999;
+      $nodeSequence = -999999;
+    }
+    else
+    {
+      print( "Invalid line: $currLine\n\n");
+      exit;
+    }
+
+    $previousLinePosition = tell($osmFilehandle );
+    $currLine = <$osmFilehandle>;
+  }
+
+  # Output marker for end of tables
+  my $endOfTableTag = "\\.\n\n\n";
+  print( $currentWaysHandle    $endOfTableTag );
+  print( $currentWayTagsHandle $endOfTableTag );
+  print( $waysHandle           $endOfTableTag );
+  print( $wayTagsHandle        $endOfTableTag );
+
+  print ("complete ($numWays)\n");
+
+  #print( "Stopped looking for nodes at $currLine" );
+
+  # Reset filehandle back one line so the next processing section starts at correct point
+  $osmFilehandle = seek( $osmFilehandle, $previousLinePosition, Fcntl::SEEK_SET );
+}
+
 sub updateHeaderTables($$)
 {
-  my $tableFilehandlesRef = shift(@_);
+  my $sectionFilehandlesRef = shift(@_);
   my $startingNodeId = shift(@_);
 
-  generateUsersTable($tableFilehandlesRef);
+  generateUsersTable($sectionFilehandlesRef);
 }
 
 sub generateUsersTable($)
 {
-  my $tableFilehandlesRef = shift(@_);
-  my $usersTable = $tableFilehandlesRef->{ 'users' };
+  my $sectionFilehandlesRef = shift(@_);
+  my $usersTable = $sectionFilehandlesRef->{ 'users' };
   my $currentTimestamp = generateISO8601Time();
 
   print( $usersTable
@@ -387,13 +602,13 @@ sub generateUsersTable($)
 
 sub closeChangesetsTable($)
 {
-  my $tableFilehandlesRef = shift(@_);
-  my $changesetsTable = $tableFilehandlesRef->{'changesets' };
+  my $sectionFilehandlesRef = shift(@_);
+  my $changesetsTable = $sectionFilehandlesRef->{'changesets' };
 
   # If we haven't yet written the current entry, time to do it now
   if ( $changesetChangeCount{ $changesetId } != 0 )
   {
-    writeChangesetEntry($tableFilehandlesRef);
+    writeChangesetEntry($sectionFilehandlesRef);
   }
 
   print( $changesetsTable "\\.\n\n\n" );
