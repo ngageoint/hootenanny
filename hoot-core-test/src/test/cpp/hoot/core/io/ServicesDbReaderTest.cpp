@@ -416,12 +416,15 @@ public:
 
     ServicesDbReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
+    LOG_DEBUG("before OPEN...");
     reader.open(ConfigOptions(s).getServicesDbTestUrlOsmapi());
+    LOG_DEBUG("after OPEN, before READ...");
     reader.read(map);
+    LOG_DEBUG("after READ...");
     verifyFullReadOutput(map);
     reader.close();
   }
-  */
+*/
 
   void runReadWithElemTest()
   {
