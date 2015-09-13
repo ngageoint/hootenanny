@@ -9,6 +9,8 @@ use File::Temp qw(tempfile);
 sub covertDecimalDegreesToNanodegrees($);
 sub generatePgDumpfileFromOsm($$);
 sub readNodes($$$$);
+sub readWays($$$$);
+sub readRelations($$$$);
 sub lon2x($);
 sub lat2y($);
 sub convertLatLonToTileNumber($$);
@@ -171,6 +173,8 @@ sub generatePgDumpfileFromOsm($$)
   readWays($osmFilehandle, \%sectionFilehandles, $startingWayId, \%idMappings );
 
   # Process relations
+  my $startingRelationId = 500;
+  readRelations( $osmFilehandle, \%sectionFilehandles, $startingRelationId, \%idMappings );
 
   close( $osmFilehandle );
   #close( $sqlFilehandle );
@@ -413,6 +417,7 @@ sub readWays($$$$)
   my $previousLinePosition = tell($osmFilehandle );
   my $currLine = <$osmFilehandle>;
   my $numWays = 0;
+  my $numWayNodes = 0;
   my $dbWayId = $startingWayId;
 
   my $wayId;   # Have to track this outside loop as tags will refer back to
@@ -546,6 +551,9 @@ sub readWays($$$$)
 
       # Increment node sequence value
       $nodeSequence++;
+
+      # Increment total count of waynodes
+      $numWayNodes++;
     }
     elsif ( $currLine =~ /<\/way>/ )
     {
@@ -566,18 +574,244 @@ sub readWays($$$$)
 
   # Output marker for end of tables
   my $endOfTableTag = "\\.\n\n\n";
-  print( $currentWaysHandle    $endOfTableTag );
-  print( $currentWayTagsHandle $endOfTableTag );
-  print( $waysHandle           $endOfTableTag );
-  print( $wayTagsHandle        $endOfTableTag );
+  print( $currentWaysHandle     $endOfTableTag );
+  print( $currentWayNodesHandle $endOfTableTag );
+  print( $currentWayTagsHandle  $endOfTableTag );
+  print( $waysHandle            $endOfTableTag );
+  print( $wayNodesHandle        $endOfTableTag );
+  print( $wayTagsHandle         $endOfTableTag );
 
-  print ("complete ($numWays)\n");
+  print ("complete ($numWays ways containing $numWayNodes waynodes)\n");
 
   #print( "Stopped looking for nodes at $currLine" );
 
   # Reset filehandle back one line so the next processing section starts at correct point
   $osmFilehandle = seek( $osmFilehandle, $previousLinePosition, Fcntl::SEEK_SET );
 }
+
+sub readRelations($$$$)
+{
+  my $osmFilehandle           = shift(@_);
+  my $sectionFilehandlesRef   = shift(@_);
+  my $startingRelationId           = shift(@_);
+  my $idMappings              = shift(@_);
+
+  print( "- Processing relations: ");
+
+  my $currentRelationsHandle = $sectionFilehandlesRef->{'current_relations'};
+  print( $currentRelationsHandle
+    "COPY current_relations (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n" );
+
+  my $currentRelationTagsHandle = $sectionFilehandlesRef->{'current_relation_tags'};
+  print( $currentRelationTagsHandle "COPY current_relation_tags (relation_id, k, v) FROM stdin;\n" );
+
+  my $currentRelationMembersHandle = $sectionFilehandlesRef->{'current_relation_members'};
+  print( $currentRelationMembersHandle 
+    "COPY current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;\n" );
+
+  my $relationsHandle = $sectionFilehandlesRef->{'relations'};
+  print( $relationsHandle
+    "COPY relations (relation_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n" );
+
+  my $relationTagsHandle = $sectionFilehandlesRef->{'relation_tags'};
+  print ( $relationTagsHandle "COPY relation_tags (relation_id, k, v, version) FROM stdin;\n" );
+
+  my $relationMembersHandle = $sectionFilehandlesRef->{'relation_members'};
+  print( $relationMembersHandle "COPY relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) FROM stdin;\n" );
+
+  # Timestamp that will be used for all nodes
+  my $timestamp = generateISO8601Time();
+
+  # Read until we get something of interest (way, relation, or close OSM tag
+  my $previousLinePosition = tell($osmFilehandle );
+  my $currLine = <$osmFilehandle>;
+  my $numRelations = 0;
+  my $dbRelationId = $startingRelationId;
+
+  my $relationId;   # Have to track this outside loop as tags will refer back to
+                # last relation we encountered
+  my $insideRelation = 0;
+  my $memberSequence = -99999;
+  my $numRelationMembers = 0;
+
+  while ( ! eof($osmFilehandle) )
+  {
+    chomp( $currLine );
+    #print( "Read line: $currLine\n" );
+
+    # If it's something past relation, bail out
+    if ( $currLine =~ /<\/osm>/ )
+    {
+      last;
+    }
+
+    # If it's a relation, deal with it
+    if ( $currLine =~ /<relation\s+id=\"-?\d+\"/ )
+    {
+
+      # Make sure we're not already inside a relation 
+      if ( $insideRelation == 1 )
+      {
+        print( "Hit relation start when we were already in one: $currLine\n\n");
+        exit;
+      }
+
+      # Mark that we're inside a relation, start its member sequence over
+      $insideRelation = 1;
+      $memberSequence = 1;
+
+      #print( "Processing way in line $currLine" );
+      $numRelations++;
+
+      # Parse relation line
+      if ( $currLine !~
+        /<relation\s+id=\"(.+?)\"/ )
+      {
+        print( "\nERROR: invalid relation line $currLine, bailing\n\n");
+        exit;
+      }
+
+      $relationId  = $1;
+
+      # Establish relation ID mapping
+      if ( exists($idMappings->{'relation'}->{$relationId}) )
+      {
+        print("ERROR: relation ID $relationId not unique in input data!\n\n" );
+        exit;
+      }
+
+      $idMappings->{'relation'}->{$relationId} = $dbRelationId;
+      #print("Established relation mapping, $relationId -> $idMappings->{'relation'}->{$relationId}\n" );
+
+      # Print current version of data
+      print( $currentRelationsHandle
+        sprintf("%d\t%d\t%s\tt\t1\n",
+          $idMappings->{'relation'}->{$relationId},
+          $changesetId,
+          $timestamp ) );
+
+      # Print historical version of data
+      print( $relationsHandle
+        sprintf( "%d\t%d\t%s\t1\tt\t\\N\n",
+          $idMappings->{'relation'}->{$relationId},
+          $changesetId,
+          $timestamp ) );
+
+
+      $dbRelationId++;
+
+      # Add the change to the changeset -- allows for maintaining changeset ID
+      addChangeToChangeset($sectionFilehandlesRef);
+
+      # Identify if this is a relation without members, should we say we're leaving this way?
+      if ( $currLine =~ /<relation.+?\/>\s*$/ )
+      {
+        $insideRelation = 0;
+        $relationId = -999999;
+        $memberSequence = -999999;
+      }
+    }
+
+    elsif ( $currLine =~ /<tag\s+k=\"(.*?)\"\s+v=\"(.*?)\"\s*\/>/ )
+    {
+      # Are we inside a relation?
+      if ( $insideRelation == 0 )
+      {
+        print( "Encountered an unexpected relation tag\n\n");
+        exit;
+      }
+
+      my $dbRelationId = $idMappings->{'relation'}->{$relationId};
+      my $tagKey = $1;
+      my $tagValue = $2;
+
+      # Print to the two tag tables
+      print( $currentRelationTagsHandle
+        sprintf("%d\t%s\t%s\n", $dbRelationId, $tagKey, $tagValue) );
+      print( $relationTagsHandle
+        sprintf("%d\t%s\t%s\t1\n", $dbRelationId, $tagKey, $tagValue) );
+    }
+
+    elsif ( $currLine =~ /<member\s+type=\"(.+?)\"\s+ref=\"(.+?)\"\s+role=\"(.*?)\"\s*\/>/ )
+    {
+      if ( $insideRelation == 0 )
+      {
+        print( "Encountered unexpected relation member: $currLine\n\n" );
+        exit;
+      }
+
+      $numRelationMembers++;
+
+      my $memberType = $1;
+      my $memberRefId = $2;
+      my $memberRole = $3;
+
+      # Confirm sane member type
+      if ($memberType !~ /^(?:node|way|relation)$/ )
+      {
+        print( "Unknown member type in $currLine\n\n" );
+        exit;
+      }
+
+      # Is it a known ref?
+      if ( ! exists($idMappings->{$memberType}->{$memberRefId}) )
+      {
+        print( "Ignoring unresolved member ref to $memberType $memberRefId in relation $relationId\n");
+
+        # TODO: add unresolved relation refs to deferred list here, check deferrred list as new relations written
+      }
+      else
+      {
+        #print( "Found valid member ref to $memberType $memberRefId in relation $relationId\n" );
+
+        my $dbRelationId = $idMappings->{'relation'}->{$relationId};
+        my $dbMemberRefId = $idMappings->{$memberType}->{$memberRefId};
+
+        print( $currentRelationMembersHandle
+          sprintf("%d\t%s\t%d\t%s\t%u\n", $dbRelationId, ucfirst($memberType), $dbMemberRefId, lc($memberRole), $memberSequence) );
+
+        print( $relationMembersHandle
+          sprintf("%d\t%s\t%d\t%s\t1\t%u\n", $dbRelationId, ucfirst($memberType), $dbMemberRefId, lc($memberRole), $memberSequence) );
+
+        # Increment member sequence value
+        $memberSequence++;
+      }
+    }
+    elsif ( $currLine =~ /<\/relation>/ )
+    {
+      # We've left relation
+      $insideRelation = 0;
+      $relationId = -999999;
+      $memberSequence = -999999;
+    }
+    else
+    {
+      print( "Invalid line: $currLine\n\n");
+      exit;
+    }
+
+    $previousLinePosition = tell($osmFilehandle );
+    $currLine = <$osmFilehandle>;
+  }
+
+  # Output marker for end of tables
+  my $endOfTableTag = "\\.\n\n\n";
+  print( $currentRelationsHandle        $endOfTableTag );
+  print( $currentRelationTagsHandle     $endOfTableTag );
+  print( $currentRelationMembersHandle  $endOfTableTag );
+  print( $relationsHandle               $endOfTableTag );
+  print( $relationTagsHandle            $endOfTableTag );
+  print( $relationMembersHandle         $endOfTableTag );
+
+  print ("complete ($numRelations relations containing $numRelationMembers members)\n");
+
+  #print( "Stopped looking for nodes at $currLine" );
+
+  # Reset filehandle back one line so the next processing section starts at correct point
+  $osmFilehandle = seek( $osmFilehandle, $previousLinePosition, Fcntl::SEEK_SET );
+}
+
+
 
 sub updateHeaderTables($$)
 {
