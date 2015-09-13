@@ -5,6 +5,7 @@ use Fcntl;
 use Math::Trig; # For tile number calculations
 use POSIX qw(strftime);
 use File::Temp qw(tempfile);
+use Data::Dumper;
 
 sub covertDecimalDegreesToNanodegrees($);
 sub generatePgDumpfileFromOsm($$);
@@ -633,6 +634,7 @@ sub readRelations($$$$)
   my $insideRelation = 0;
   my $memberSequence = -99999;
   my $numRelationMembers = 0;
+  my %unresolvedRelationMembers;
 
   while ( ! eof($osmFilehandle) )
   {
@@ -697,6 +699,33 @@ sub readRelations($$$$)
           $changesetId,
           $timestamp ) );
 
+      # Check for previously-unresolved relation members that pointed to this relation that we can now resolve
+      if ( exists($unresolvedRelationMembers{$relationId}) )
+      {
+        print("Deferred writes waiting on just-written relation $relationId, DB id = $dbRelationId!\n");
+        #print( Dumper($unresolvedRelationMembers{$relationId}) );
+
+        foreach my $deferredWrite ( @{ $unresolvedRelationMembers{$relationId} } )
+        {
+          my $dbRelationId = $idMappings->{'relation'}->{$deferredWrite->{'relation_id'}};
+          my $dbMemberRefId = $idMappings->{'relation'}->{$relationId};
+
+          print( $currentRelationMembersHandle
+            sprintf("%d\t%s\t%d\t%s\t%u\n", $dbRelationId, ucfirst($deferredWrite->{'member_type'}), $dbMemberRefId, 
+              lc($deferredWrite->{'member_role'}), $deferredWrite->{'member_sequence'}) );
+
+          print( $relationMembersHandle
+            sprintf("%d\t%s\t%d\t%s\t%u\n", $dbRelationId, ucfirst($deferredWrite->{'member_type'}), $dbMemberRefId,
+              lc($deferredWrite->{'member_role'}), $deferredWrite->{'member_sequence'}) );
+
+           # As it actually got written out, update number of relation members
+           $numRelationMembers++;
+        }
+
+        # Remove entry from unresolved list
+        delete( $unresolvedRelationMembers{$relationId} );
+      }
+
 
       $dbRelationId++;
 
@@ -740,8 +769,6 @@ sub readRelations($$$$)
         exit;
       }
 
-      $numRelationMembers++;
-
       my $memberType = $1;
       my $memberRefId = $2;
       my $memberRole = $3;
@@ -756,9 +783,22 @@ sub readRelations($$$$)
       # Is it a known ref?
       if ( ! exists($idMappings->{$memberType}->{$memberRefId}) )
       {
-        print( "Ignoring unresolved member ref to $memberType $memberRefId in relation $relationId\n");
+        if ( $memberType ne 'relation' )
+        {
+          #print( "Ignoring unresolved member ref to $memberType $memberRefId in relation $relationId\n");
+        }
+        else
+        {
+          #print("Adding member ref to relation $memberRefId to unresolved list for possible later addition\n");
+          # Add unresolved member refs to relations to deferred list, check deferrred list as new relations written
+          if ( ! exists($unresolvedRelationMembers{ $memberRefId }) )
+          {
+            $unresolvedRelationMembers{ $memberRefId } = [ ];
+          }
 
-        # TODO: add unresolved relation refs to deferred list here, check deferrred list as new relations written
+          push( @{ $unresolvedRelationMembers{$memberRefId} }, { 'relation_id' => $relationId, 'member_type' => $memberType,
+            'member_role' => $memberRole, 'member_sequence' => $memberSequence } );
+        }
       }
       else
       {
@@ -772,6 +812,9 @@ sub readRelations($$$$)
 
         print( $relationMembersHandle
           sprintf("%d\t%s\t%d\t%s\t1\t%u\n", $dbRelationId, ucfirst($memberType), $dbMemberRefId, lc($memberRole), $memberSequence) );
+
+        # As it actually got written out, update number of relation members
+        $numRelationMembers++;
 
         # Increment member sequence value
         $memberSequence++;
