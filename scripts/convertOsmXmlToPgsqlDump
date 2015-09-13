@@ -160,7 +160,7 @@ sub generatePgDumpfileFromOsm($$)
 
   foreach my $currSection ( @fileSections )
   {
-    $sectionFilehandles{ $currSection } = File::Temp->new();
+    $sectionFilehandles{ $currSection } = File::Temp->new(DIR=>'.');
   }
 
   my $startingNodeId  = 500;
@@ -716,7 +716,7 @@ sub readRelations($$$$)
               lc($deferredWrite->{'member_role'}), $deferredWrite->{'member_sequence'}) );
 
           print( $relationMembersHandle
-            sprintf("%d\t%s\t%d\t%s\t%u\n", $dbSourceRelationId, ucfirst($deferredWrite->{'member_type'}), $dbMemberRefId,
+            sprintf("%d\t%s\t%d\t%s\t1\t%u\n", $dbSourceRelationId, ucfirst($deferredWrite->{'member_type'}), $dbMemberRefId,
               lc($deferredWrite->{'member_role'}), $deferredWrite->{'member_sequence'}) );
 
            # As it actually got written out, update number of relation members
