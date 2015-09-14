@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-3886601' visible='true' lat='48.0432704' lon='11.5177994'>
+    <tag k='REF1' v='004166' />
+    <tag k='error:circular' v='15' />
+    <tag k='historic' v='memorial' />
+    <tag k='name' v='St. Nepomuk' />
+  </node>
+</osm>

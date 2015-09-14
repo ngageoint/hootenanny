@@ -44,6 +44,8 @@ var distances = [
     {k:'landuse',                       match:200,      review:600},
     {k:'leisure',                       match:100,      review:200},
     {k:'tourism',                       match:100,      review:200},
+    // hotel campuses can be quite large
+    {k:'tourism',   v:'hotel',          match:200,      review:400},
     {k:'shop',                          match:100,      review:200},
     {k:'station',                       match:100,      review:200},
     {k:'transport',                     match:100,      review:200},
@@ -173,11 +175,10 @@ function additiveScore(map, e1, e2) {
     var weightedWordDistanceScore = weightedWordDistance.extract(map, e1, e2);
     var weightedPlusMean = mean + weightedWordDistanceScore;
     var placeScore = getTagCategoryDistance("place", e1, e2);
-    var poiScore = getTagCategoryDistance("poi", e1, e2);
-    var artworkTypeDistance = getTagDistance("artwork_type", e1, e2);
-    var cuisineDistance = getTagDistance("cuisine", e1, e2);
-    var sportDistance = getTagDistance("sport", e1, e2);
-    hoot.debug(poiScore);
+    var poiDistance = getTagCategoryDistance("poi", e1, e2);
+    var artworkTypeDistance = getTagAncestorDistance("artwork_type", e1, e2);
+    var cuisineDistance = getTagAncestorDistance("cuisine", e1, e2);
+    var sportDistance = getTagAncestorDistance("sport", e1, e2);
 
     var score = 0;
 
@@ -214,7 +215,7 @@ function additiveScore(map, e1, e2) {
             reason.push('poor place match');
         // else if the places match, only increase score if the names match too.
         } else if (weightedPlusMean > 0.987403) {
-            if (poiScore <= 0.5) {
+            if (poiDistance <= 0.5) {
                 score += 1;
                 reason.push("similar name and place type");
             }
@@ -223,9 +224,13 @@ function additiveScore(map, e1, e2) {
     } else if (placeCount > 0 && oneGeneric) {
         score = Math.min(0.6, score);
         reason.push('generic type to place match');
-    } else if (poiScore <= 0.5) {
+    } else if (poiDistance <= 0.5) {
         score += 1;
         reason.push("similar POI type");
+    // if the poi distance is very high, then they shouldn't be considered
+    // for match based solely on name and proximity. See #6998
+    } else if (poiDistance >= 0.99) {
+        score = 0;
     }
 
     if (artworkTypeDistance <= 0.3) {
@@ -255,6 +260,7 @@ function additiveScore(map, e1, e2) {
 
     result.score = score;
     result.reasons = reason;
+
     hoot.debug(reason);
     hoot.debug(score);
 

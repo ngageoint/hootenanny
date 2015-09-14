@@ -78,6 +78,8 @@ void TagsJs::Init(Handle<Object> target)
       FunctionTemplate::New(contains)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("get"),
       FunctionTemplate::New(get)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("set"),
+      FunctionTemplate::New(set)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("toDict"),
       FunctionTemplate::New(toDict)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("toString"),
@@ -124,6 +126,19 @@ Handle<Value> TagsJs::get(const Arguments& args)
   {
     return scope.Close(Undefined());
   }
+}
+
+Handle<Value> TagsJs::set(const Arguments& args)
+{
+  HandleScope scope;
+
+  Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
+
+  QString key = toCpp<QString>(args[0]);
+  QString value = toCpp<QString>(args[1]);
+  t.set(key, value);
+
+  return scope.Close(Undefined());
 }
 
 Handle<Value> TagsJs::toDict(const Arguments& args)

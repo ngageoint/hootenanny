@@ -3,11 +3,16 @@
         "name": "railway",
         "influence": 1.0,
         "type": "enumeration",
-        "geometries": ["node","area"],
-        "isA": "poi=yes"
+        "geometries": ["node","way","relation"],
+        "isA": "hgispoi"
     },
 
     "#" : " The catch all",
+    "tag": {
+        "name": "railway=*",
+        "description": "The railway tag is used to tag the ways for many kinds of railways including including light rail, mainline railways, metros, monorails and Trams. Besides the actual rails, it is also used for tagging railway infrastructure.",
+        "isA": "railway"
+    },
 
     "tag": { "name": "railway=subway_entrance",
         "isA": "railway",
@@ -16,6 +21,11 @@
         "similarTo": { "name": "transport=station", "weight": 0.8 }
     },
 
+    "tag": {
+        "name": "railway=stop",
+        "isA": "railway",
+        "similarTo": { "name": "railway=halt", "weight": 0.7 }
+    },
     "tag": {
         "name": "railway=halt",
         "isA": "railway",

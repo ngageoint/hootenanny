@@ -29,6 +29,9 @@
 
 #include "StringDistanceConsumer.h"
 
+// hoot
+#include <hoot/core/algorithms/string/StringTokenizer.h>
+
 // Tgs
 #include <tgs/SharedPtr.h>
 
@@ -55,6 +58,7 @@ public:
 
 private:
   StringDistancePtr _d;
+  StringTokenizer _tokenizer;
 };
 
 }

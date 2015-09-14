@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-3956421' visible='true' lat='48.1069059' lon='11.6689581'>
+    <tag k='REF1' v='01358a' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='Food &amp; More' />
+    <tag k='tourism' v='hotel' />
+  </node>
+</osm>

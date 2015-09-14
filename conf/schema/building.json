@@ -18,24 +18,32 @@
     "tag": {
         "name": "building=guardhouse",
         "isA": "building",
-        "categories": ["poi"],
+        "categories": ["poi", "hgispoi"],
         "similarTo": { "name": "barrier=toll_booth", "weight": 0.7 }
     },
 
     "tag": {
         "name": "building=shrine",
         "isA": "building",
+        "categories": ["poi", "hgispoi"],
         "similarTo": { "name": "historic=memorial", "weight": 0.7 }
     },
-    "tag": { "name": "building=fort", "isA": "building", "categories": ["poi"] },
-    "tag": { "name": "building=hospital", "isA": "building", "categories": ["poi"] },
-    "tag": { "name": "building=school", "isA": "building", "categories": ["poi"] },
+    "tag": { "name": "building=fort", "isA": "building", "categories": ["poi", "hgispoi"] },
+    "tag": { "name": "building=hospital", "isA": "building", "categories": ["poi", "hgispoi"] },
+    "tag": { "name": "building=school", "isA": "building", "categories": ["poi", "hgispoi"] },
 
+    "tag": {
+        "name": "building=hotel",
+        "isA": "building",
+        "categories": ["poi", "hgispoi"],
+        "similarTo": { "name": "tourism=hotel", "weight": 0.9 },
+        "similarTo": { "name": "amenity=hotel", "weight": 0.9 }
+    },
 
     "tag": {
         "name": "abstract_building_place_of_worship",
         "isA": "building",
-        "categories": ["poi"],
+        "categories": ["poi", "hgispoi"],
         "similarTo": { "name": "amenity=place_of_worship", "weight": 0.9 }
     },
 
@@ -44,6 +52,7 @@
     "tag": {
         "name": "building=mosque",
         "isA": "abstract_building_place_of_worship",
+        "categories": ["poi", "hgispoi"],
         "similarTo": { "name": "religion=muslim", "weight": 0.9 }
     },
 
@@ -78,10 +87,11 @@
         "isA": "abstract_building_place_of_worship",
         "similarTo": { "name": "religion=christian", "weight": 1.0 } },
 
-    "tag": { "name": "building=transportation", "isA": "building", "categories": ["poi"] },
+    "tag": { "name": "building=garage", "isA": "building", "categories": ["poi", "hgispoi"] },
+    "tag": { "name": "building=transportation", "isA": "building", "categories": ["poi", "hgispoi"] },
     "tag": { "name": "building=train_station", 
         "isA": "building", 
-        "categories": ["poi"],
+        "categories": ["poi", "hgispoi"],
         "similarTo": { "name": "building=transportation", "weight": 0.9 },
         "similarTo": { "name": "railway=station", "weight": 0.9 },
         "similarTo": { "name": "transport=station", "weight": 0.8 }

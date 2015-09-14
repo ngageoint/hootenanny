@@ -1,0 +1,47 @@
+{
+    "tag": {
+        "name": "parking",
+        "isA": "amenity=parking",
+        "influence": 1.0,
+        "type": "enumeration",
+        "geometries": ["node","area"]
+    },
+
+    "#" : "Tags taken from the Taginfo parking= tags w/ more than ~100 values.",
+    "#" : "http://taginfo.openstreetmap.org/keys/parking#values",
+
+    "tag": { "name": "parking=yes", "isA": "parking" },
+    "tag": { "name": "parking=no", "isA": "parking" },
+
+    "#" : "The catch all",
+    "tag": { "name": "parking=*", "isA": "parking=yes" },
+
+    "tag": { "name": "parking=surface", "isA": "parking=yes" },
+    "tag": { "name": "parking=underground", "isA": "parking=yes",
+        "similarTo": { "name": "parking=covered", "weight": 0.8 } },
+    "tag": { "name": "parking=multi-storey", "isA": "parking=yes",
+        "similarTo": { "name": "parking=covered", "weight": 0.8 } },
+    "tag": { "name": "parking=garage_boxes", "isA": "parking=yes",
+        "similarTo": { "name": "parking=covered", "weight": 0.8 } },
+    "tag": { "name": "parking=lane", "isA": "parking=yes" },
+    "tag": { "name": "parking=garage", "isA": "parking=yes",
+        "similarTo": { "name": "parking=multi-storey", "weight": 0.8 },
+        "similarTo": { "name": "parking=covered", "weight": 0.8 } },
+    "tag": { "name": "parking=park_and_ride", "isA": "parking=yes",
+        "similarTo": { "name": "parking=surface", "weight": 0.8 } },
+    "tag": { "name": "parking=carports", "isA": "parking=yes",
+        "similarTo": { "name": "parking=covered", "weight": 0.8 } },
+    "tag": { "name": "parking=rooftop", "isA": "parking=yes" },
+    "tag": { "name": "parking=layby", "isA": "parking=yes" },
+    "tag": { "name": "parking=sheds", "isA": "parking=yes",
+        "similarTo": { "name": "parking=garage", "weight": 0.8 },
+        "similarTo": { "name": "parking=covered", "weight": 0.8 } },
+    "tag": { "name": "parking=garages", "isA": "parking=yes",
+        "similarTo": { "name": "parking=covered", "weight": 0.8 } },
+    "tag": { "name": "parking=off_street_covered", "isA": "parking=yes",
+        "similarTo": { "name": "parking=covered", "weight": 0.9 } },
+    "tag": { "name": "parking=disabled", "isA": "parking=yes" },
+    "tag": { "name": "parking=covered", "isA": "parking=yes" },
+
+    "#" : "end"
+}

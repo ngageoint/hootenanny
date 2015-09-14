@@ -1,21 +1,1356 @@
 {
     "tag": {
         "name": "shop",
-        "isA": "poi=yes",
+        "isA": "hgispoi",
         "influence": 1.0,
         "type": "enumeration",
         "geometries": ["node", "area"]
     },
 
     "#" : " The catch all",
-    "tag": { "name": "shop=*", "isA": "shop" },
-    "tag": { "name": "shop=car",
+
+    "tag": {
+        "name": "shop=yes",
+        "description": "An shop of unspecified type.",
         "isA": "shop",
-        "similarTo": { "name": "shop=car_repair", "weight": 0.8 }
+        "#": "Count in tag info is 40873 on 2015-09-01"
     },
-    "tag": { "name": "shop=car_repair", 
+    "tag": {
+        "name": "shop=*",
         "isA": "shop",
-        "similarTo": { "name": "amenity=motor_vehicle_station", "weight": 0.8 }
+        "#": "Count in tag info is 517 on 2015-09-01"
+    },
+
+    "tag": {
+        "name": "shop=convenience",
+        "description": "A convenience store. A small local shop carrying a small subset of the items you would find in a supermarket",
+        "isA": "shop",
+        "similarTo": { "name": "shop=supermarket", "weight": 0.6 },
+        "similarTo": { "name": "shop=kiosk", "weight": 0.6 },
+        "similarTo": { "name": "shop=alcoholic", "weight": 0.8 },
+        "#": "Count in tag info is 233103 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=supermarket",
+        "description": "A large store for groceries and other goods.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=marketplace", "weight": 0.7 },
+        "#": "Count in tag info is 220938 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=clothes",
+        "description": "A shop to get clothes",
+        "isA": "shop",
+        "#": "Count in tag info is 106199 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=bakery",
+        "description": "A shop selling bread.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=supermarket", "weight": 0.6 },
+        "#": "Count in tag info is 89471 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=hairdresser",
+        "description": "A hairdressers shop where you can get your hair cut",
+        "isA": "shop",
+        "similarTo": { "name": "shop=beauty", "weight": 0.8 },
+        "#": "Count in tag info is 88572 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=car_repair",
+        "description": "Business where cars are repaired.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=car", "weight": 0.8 },
+        "similarTo": { "name": "amenity=motor_vehicle_station", "weight": 0.8 },
+        "similarTo": { "name": "amenity=vehicle_inspection", "weight": 0.7 },
+        "similarTo": { "name": "amenity=road_assistance", "weight": 0.7 },
+        "similarTo": { "name": "amenity=car_repair", "weight": 0.9 },
+        "#": "Count in tag info is 74084 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=car",
+        "description": "A shop for cars",
+        "isA": "shop",
+        "similarTo": { "name": "amenity=car_wash", "weight": 0.3 },
+        "similarTo": { "name": "amenity=car_rental", "weight": 0.3 },
+        "#": "Count in tag info is 56675 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=kiosk",
+        "description": "A small shop on the pavement that sells magazines, tobacco, newspapers, sweets and stamps.",
+        "isA": "shop",
+        "#": "Count in tag info is 48545 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=doityourself",
+        "description": "A ''Do-it-Yourself''-store offers supplies for doing things yourself - household repairs and improvements, making things from wood and other materials.",
+        "isA": "shop",
+        "#": "Count in tag info is 36202 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=butcher",
+        "description": "Used to mark a butcher.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=supermarket", "weight": 0.7 },
+        "#": "Count in tag info is 33666 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=florist",
+        "description": "Shop selling bouquets of flowers",
+        "isA": "shop",
+        "similarTo": { "name": "amenity=florist", "weight": 0.9 },
+        "#": "Count in tag info is 32462 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=mall",
+        "description": "A group of stores, typically associated with a single building structure.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=marketplace", "weight": 0.7 },
+        "#": "Count in tag info is 30943 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=furniture",
+        "description": "Shop selling furniture.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=homegoods", "weight": 0.7 },
+        "#": "Count in tag info is 25383 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=bicycle",
+        "description": "A store where you can buy and/or repair your bike and buy accessories.",
+        "isA": "shop",
+        "similarTo": { "name": "amenity=bicycle_repair_station", "weight": 0.3 },
+        "#": "Count in tag info is 24272 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=alcohol",
+        "description": "Shop selling alcoholic drinks",
+        "isA": "shop",
+        "similarTo": { "name": "shop=wine", "weight": 0.7 },
+        "similarTo": { "name": "amenity=pub", "weight": 0.7 },
+        "#": "Count in tag info is 23165 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=shoes",
+        "description": "Shop selling shoes.",
+        "isA": "shop",
+        "#": "Count in tag info is 22610 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=books",
+        "description": "A shop selling books",
+        "isA": "shop",
+        "#": "Count in tag info is 21999 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=electronics",
+        "description": "Shop selling consumer electronics (TV, radio, fridge)",
+        "isA": "shop",
+        "#": "Count in tag info is 21765 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=hardware",
+        "description": "A shop which sells timber, tools and other building products",
+        "isA": "shop",
+        "similarTo": { "name": "shop=doityourself", "weight": 0.8 },
+        "#": "Count in tag info is 20177 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=department_store",
+        "description": "A large store with multiple '''clothing''' and other general merchandise departments.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=shoes", "weight": 0.7 },
+        "similarTo": { "name": "shop=mall", "weight": 0.7 },
+        "similarTo": { "name": "shop=clothes", "weight": 0.7 },
+        "similarTo": { "name": "shop=electronics", "weight": 0.7 },
+        "similarTo": { "name": "shop=jewelry", "weight": 0.7 },
+        "similarTo": { "name": "shop=chemist", "weight": 0.7 },
+        "similarTo": { "name": "shop=sports", "weight": 0.7 },
+        "#": "Count in tag info is 19446 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=beauty",
+        "description": "A non-hairdresser beauty shop, spa, nail salon, etc.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=salon", "weight": 0.8 },
+        "#": "Count in tag info is 18634 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=jewelry",
+        "description": "Shop that sells rings, necklaces, earrings, watches, etc.",
+        "isA": "shop",
+        "aliases": ["shop=jewellery"],
+        "#": "Count in tag info is 18046 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=mobile_phone",
+        "description": "A shop that primarily sells mobile phones and accessories.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=electronics", "weight": 0.6 },
+        "#": "Count in tag info is 17356 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=optician",
+        "description": "A shop that sells, fits, and repairs prescription eyeglasses and contact lenses.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=chemist", "weight": 0.6 },
+        "#": "Count in tag info is 17100 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=gift",
+        "description": "Shop selling gifts, greeting cards, or tourist gifts (souvenirs).",
+        "isA": "shop",
+        "#": "Count in tag info is 16498 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=greengrocer",
+        "description": "A shop which sells fruits and vegetables",
+        "isA": "shop",
+        "similarTo": { "name": "shop=supermarket", "weight": 0.7 },
+        "#": "Count in tag info is 15061 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=chemist",
+        "description": "A shop selling articles of personal hygiene, cosmetics, and household cleaning products.",
+        "isA": "shop",
+        "similarTo": { "name": "amenity=pharmacy", "weight": 0.9 },
+        "#": "Count in tag info is 14487 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=garden_centre",
+        "description": "Shop selling potted flowers, maybe even trees.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=doityourself", "weight": 0.7 },
+        "similarTo": { "name": "amenity=landscaping_service", "weight": 0.7 },
+        "similarTo": { "name": "amenity=garden", "weight": 0.3 },
+        "#": "Count in tag info is 12339 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=car_parts",
+        "description": "A place selling auto parts, auto accessories, motor oil, car chemicals, etc.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=doityourself", "weight": 0.6 },
+        "similarTo": { "name": "shop=car", "weight": 0.7 },
+        "aliases": ["shop=auto_parts"],
+        "#": "Count in tag info is 11802 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=sports",
+        "description": "A shop selling sports equipment and clothing.",
+        "isA": "shop",
+        "similarTo": { "name": "amenity=exercise_point", "weight": 0.5 },
+        "#": "Count in tag info is 11705 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=variety_store",
+        "description": "A en=variety store or price-point retailer is a retail store that sells inexpensive items",
+        "isA": "shop",
+        "#": "Count in tag info is 11572 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=computer",
+        "description": "A shop selling computers, peripherals, software, ...",
+        "isA": "shop",
+        "similarTo": { "name": "shop=electronics", "weight": 0.8 },
+        "#": "Count in tag info is 11487 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=travel_agency",
+        "description": "A shop selling travel related products and services",
+        "isA": "shop",
+        "#": "Count in tag info is 10923 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=confectionery",
+        "description": "A shop selling sweets and pastry. Also known as a confectionery.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=bakery", "weight": 0.8 },
+        "#": "Count in tag info is 10806 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=laundry",
+        "description": "A shop to get your normal clothes washed.",
+        "isA": "shop",
+        "#": "Count in tag info is 10657 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=stationery",
+        "description": "A shop selling office supplies",
+        "isA": "shop",
+        "similarTo": { "name": "shop=department_store", "weight": 0.8 },
+        "#": "Count in tag info is 10637 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=beverages",
+        "description": "Shop focused on selling alcoholic and non-alcoholic beverages.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=alcoholic", "weight": 0.8 },
+        "#": "Count in tag info is 10104 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=newsagent",
+        "description": "Shop selling newspapers, cigarettes, other goods",
+        "isA": "shop",
+        "similarTo": { "name": "shop=convenience", "weight": 0.8 },
+        "#": "Count in tag info is 9715 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=toys",
+        "description": "A toy store.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=department_store", "weight": 0.7 },
+        "#": "Count in tag info is 9478 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=pet",
+        "description": "A shop selling pets",
+        "isA": "shop",
+        "similarTo": { "name": "amenity=animal_boarding", "weight": 0.7 },
+        "similarTo": { "name": "amenity=animal_shelter", "weight": 0.8 },
+        "similarTo": { "name": "amenity=veterinary", "weight": 0.4 },
+        "#": "Count in tag info is 8473 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=dry_cleaning",
+        "description": "A shop or kiosk offering a clothes dry cleaning service.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=laundry", "weight": 0.8 },
+        "#": "Count in tag info is 8349 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=vacant",
+        "description": "Shop that is currently not being used.",
+        "isA": "shop",
+        "#": "Count in tag info is 8165 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=motorcycle",
+        "description": "A shop that sells motorcycles and/or related accessories and services",
+        "isA": "shop",
+        "similarTo": { "name": "shop=car", "weight": 0.7 },
+        "similarTo": { "name": "shop=car_parts", "weight": 0.8 },
+        "#": "Count in tag info is 8034 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=boutique",
+        "description": "a small shopping outlet, especially one that specializes in elite and fashionable items",
+        "isA": "shop",
+        "similarTo": { "name": "shop=department_store", "weight": 0.7 },
+        "#": "Count in tag info is 7033 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=deli",
+        "description": "Used to mark a delicatessen store.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=department_store", "weight": 0.7 },
+        "#": "Count in tag info is 5987 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=tyres",
+        "description": "A shop selling tyres.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=car", "weight": 0.7 },
+        "similarTo": { "name": "shop=car_parts", "weight": 0.8 },
+        "#": "Count in tag info is 5924 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=hifi",
+        "description": "Shop selling high fidelity audio components (music players, amplifiers, speakers, cables)",
+        "isA": "shop",
+        "similarTo": { "name": "shop=electronics", "weight": 0.7 },
+        "#": "Count in tag info is 5916 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=outdoor",
+        "description": "Shop selling trekking, climbing, camping equipment (and GPSes).",
+        "isA": "shop",
+        "similarTo": { "name": "shop=sports", "weight": 0.7 },
+        "#": "Count in tag info is 4967 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=copyshop",
+        "description": "A shop that offers photocopying and printing services.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=stationary", "weight": 0.7 },
+        "#": "Count in tag info is 4925 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=funeral_directors",
+        "description": "Providing services related to funeral arrangements, may also be known as a 'funeral parlour' or 'undertakers'.",
+        "isA": "shop",
+        "similarTo": { "name": "amenity=mortuary", "weight": 0.8 },
+        "similarTo": { "name": "amenity=crematorium", "weight": 0.7 },
+        "similarTo": { "name": "amenity=cemetary", "weight": 0.5 },
+        "#": "Count in tag info is 4689 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=art",
+        "description": "A shop which sells works of art.",
+        "isA": "shop",
+        "similarTo": { "name": "amenity=studio", "weight": 0.7 },
+        "#": "Count in tag info is 4432 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=farm",
+        "description": "A shop at a farm, selling farm produce.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=supermarket", "weight": 0.7 },
+        "similarTo": { "name": "amenity=farm", "weight": 0.7 },
+        "#": "Count in tag info is 4109 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=tobacco",
+        "description": "A shop selling tobacco, and possibly other convenience items",
+        "isA": "shop",
+        "similarTo": { "name": "shop=convenience", "weight": 0.7 },
+        "similarTo": { "name": "shop=alcohol", "weight": 0.7 },
+        "#": "Count in tag info is 3752 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=interior_decoration",
+        "isA": "shop",
+        "similarTo": { "name": "shop=boutique", "weight": 0.7 },
+        "similarTo": { "name": "shop=homegoods", "weight": 0.8 },
+        "#": "Count in tag info is 3716 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=tailor",
+        "description": "A place where clothing is made, repaired, or altered professionally, especially suits and men's clothing.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=clothes", "weight": 0.7 },
+        "#": "Count in tag info is 3560 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=estate_agent",
+        "description": "A shop which sells and/or rents property",
+        "isA": "shop",
+        "#": "Count in tag info is 3524 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=video",
+        "description": "A shop that sells or rents out videos/DVDs",
+        "isA": "shop",
+        "similarTo": { "name": "amenity=cinema", "weight": 0.3 },
+        "#": "Count in tag info is 3499 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=fabric",
+        "description": "A shop that sell fabric",
+        "isA": "shop",
+        "similarTo": { "name": "shop=clothes", "weight": 0.7 },
+        "#": "Count in tag info is 3419 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=seafood",
+        "description": "A shop selling fish/seafood.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=butcher", "weight": 0.8 },
+        "similarTo": { "name": "shop=supermarket", "weight": 0.8 },
+        "#": "Count in tag info is 3291 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=photo",
+        "description": "A shop dealing with photos or video in any way.",
+        "isA": "shop",
+        "similarTo": { "name": "amenity=photo_booth", "weight": 0.4 },
+        "similarTo": { "name": "shop=video", "weight": 0.6 },
+        "#": "Count in tag info is 3271 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=kitchen",
+        "description": "A shop where you can plan and buy your kitchen.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=builder", "weight": 0.8 },
+        "similarTo": { "name": "shop=doityourself", "weight": 0.7 },
+        "#": "Count in tag info is 3187 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=second_hand",
+        "description": "A shop selling second hand goods",
+        "isA": "shop",
+        "similarTo": { "name": "shop=clothes", "weight": 0.7 },
+        "#": "Count in tag info is 3129 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=music",
+        "description": "A store that primarily sells recorded music (vinyl/CDs)",
+        "isA": "shop",
+        "similarTo": { "name": "shop=art", "weight": 0.7 },
+        "similarTo": { "name": "shop=music_venue", "weight": 0.3 },
+        "#": "Count in tag info is 3099 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=massage",
+        "description": "Massage shop",
+        "isA": "shop",
+        "similarTo": { "name": "shop=erotic", "weight": 0.5 },
+        "#": "Count in tag info is 3057 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=paint",
+        "description": "A shop where you can buy paints.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=art", "weight": 0.7 },
+        "similarTo": { "name": "shop=doityourself", "weight": 0.7 },
+        "#": "Count in tag info is 2679 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=trade",
+        "isA": "shop",
+        "#": "Count in tag info is 2539 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=charity",
+        "description": "Shop operated by a charity",
+        "isA": "shop",
+        "similarTo": { "name": "shop=second_hand", "weight": 0.7 },
+        "#": "Count in tag info is 2493 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=no",
+        "isA": "shop",
+        "#": "Count in tag info is 2491 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=wine",
+        "description": "Shop selling wine",
+        "isA": "shop",
+        "similarTo": { "name": "amenity=bar", "weight": 0.7 },
+        "similarTo": { "name": "amenity=restaurant", "weight": 0.4 },
+        "similarTo": { "name": "amenity=winery", "weight": 0.7 },
+        "#": "Count in tag info is 2480 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=musical_instrument",
+        "description": "Shop selling musical instruments, lyrics, scores.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=music", "weight": 0.7 },
+        "#": "Count in tag info is 2417 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=ticket",
+        "description": "A shop selling tickets for concerts, events, public transport, ...",
+        "isA": "shop",
+        "similarTo": { "name": "amenity=concert_hall", "weight": 0.4 },
+        "similarTo": { "name": "amenity=ticket_validator", "weight": 0.3 },
+        "#": "Count in tag info is 2406 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=antiques",
+        "description": "A shop, where you can buy antiques",
+        "isA": "shop",
+        "similarTo": { "name": "shop=second_hand", "weight": 0.7 },
+        "#": "Count in tag info is 2345 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=general",
+        "description": "A general store. Selling various things.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=convenience", "weight": 0.8 },
+        "similarTo": { "name": "shop=department_store", "weight": 0.7 },
+        "#": "Count in tag info is 2321 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=fishmonger",
+        "description": "DISCOURAGED - Use shop=seafood instead",
+        "isA": "shop",
+        "similarTo": { "name": "shop=seafood", "weight": 0.9 },
+        "#": "Count in tag info is 2130 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=bookmaker",
+        "description": "A shop that takes bets on sporting and other events at agreed upon odds.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=books", "weight": 0.9 },
+        "#": "Count in tag info is 2118 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=pawnbroker",
+        "description": "A business that offers secured loans against items of personal property as collateral.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=second_hand", "weight": 0.9 },
+        "#": "Count in tag info is 2071 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=tattoo",
+        "description": "A place where people can get permanent tattoos",
+        "isA": "shop",
+        "#": "Count in tag info is 1983 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=bed",
+        "description": "A shop that specalises in selling mattresses and other bedding products.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=houseware", "weight": 0.9 },
+        "#": "Count in tag info is 1959 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=cosmetics",
+        "isA": "shop",
+        "similarTo": { "name": "shop=chemist", "weight": 0.8 },
+        "#": "Count in tag info is 1608 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=hearing_aids",
+        "description": "A shop specialized in selling hearing aids devices",
+        "isA": "shop",
+        "similarTo": { "name": "shop=chemist", "weight": 0.7 },
+        "similarTo": { "name": "shop=electronics", "weight": 0.7 },
+        "#": "Count in tag info is 1568 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=lottery",
+        "description": "A shop of which the main or only purpose is the sale of lottery tickets.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=convenience", "weight": 0.7 },
+        "#": "Count in tag info is 1472 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=baby_goods",
+        "description": "A shop where you can buy objects for babies, like clothes, prams, cots or baby's baths",
+        "isA": "shop",
+        "similarTo": { "name": "shop=chemist", "weight": 0.7 },
+        "similarTo": { "name": "shop=homegoods", "weight": 0.7 },
+        "similarTo": { "name": "shop=clothes", "weight": 0.7 },
+        "#": "Count in tag info is 1419 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=erotic",
+        "description": "a sex shop.",
+        "isA": "shop",
+        "similarTo": { "name": "amenity=brothel", "weight": 0.6 },
+        "similarTo": { "name": "amenity=stripclub", "weight": 0.6 },
+        "#": "Count in tag info is 1407 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=carpet",
+        "description": "A shop selling carpet.",
+        "isA": "shop",
+        "#": "Count in tag info is 1357 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=craft",
+        "isA": "shop",
+        "similarTo": { "name": "shop=art", "weight": 0.7 },
+        "#": "Count in tag info is 1349 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=curtain",
+        "description": "Shop that specialises in selling curtains or drapes",
+        "isA": "shop",
+        "similarTo": { "name": "shop=houseware", "weight": 0.7 },
+        "#": "Count in tag info is 1267 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=houseware",
+        "description": "Shop selling small household items",
+        "isA": "shop",
+        "#": "Count in tag info is 1263 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=medical_supply",
+        "description": "A store where you can buy medical equipment for private persons.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=chemist", "weight": 0.8 },
+        "#": "Count in tag info is 1245 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=frame",
+        "description": "A shop where you can buy frames.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=art", "weight": 0.7 },
+        "#": "Count in tag info is 1242 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=bag",
+        "description": "Shop selling bags.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=department_store", "weight": 0.7 },
+        "#": "Count in tag info is 1178 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=food",
+        "description": "A shop selling food",
+        "isA": "shop",
+        "similarTo": { "name": "shop=supermarket", "weight": 0.7 },
+        "#": "Count in tag info is 1162 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=tea",
+        "description": "Shop selling tea",
+        "isA": "shop",
+        "similarTo": { "name": "shop=supermarket", "weight": 0.7 },
+        "similarTo": { "name": "shop=beverage", "weight": 0.7 },
+        "#": "Count in tag info is 1101 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=energy",
+        "isA": "shop",
+        "#": "Count in tag info is 1073 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=fashion",
+        "description": "Fashion shop",
+        "isA": "shop",
+        "similarTo": { "name": "shop=clothes", "weight": 0.7 },
+        "similarTo": { "name": "shop=boutique", "weight": 0.7 },
+        "#": "Count in tag info is 1064 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=ice_cream",
+        "description": "A place that sells ice cream and frozen yoghurt over the counter.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=convenience", "weight": 0.7 },
+        "#": "Count in tag info is 1045 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=video_games",
+        "description": "Shop selling video games.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=electronics", "weight": 0.7 },
+        "similarTo": { "name": "shop=department_store", "weight": 0.7 },
+        "#": "Count in tag info is 1010 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=organic",
+        "description": "DISCOURAGED - Use organic in combination with a general shop key instead",
+        "isA": "shop",
+        "similarTo": { "name": "shop=supermarket", "weight": 0.7 },
+        "#": "Count in tag info is 993 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=locksmith",
+        "description": "A shop where you can get keys cut",
+        "isA": "shop",
+        "similarTo": { "name": "shop=doityourself", "weight": 0.8 },
+        "#": "Count in tag info is 901 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=bathroom_furnishing",
+        "description": "A shop selling bathroom furnishings.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=houseware", "weight": 0.8 },
+        "#": "Count in tag info is 846 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=coffee",
+        "description": "Shop selling coffee",
+        "isA": "shop",
+        "similarTo": { "name": "shop=tea", "weight": 0.8 },
+        "similarTo": { "name": "shop=beverage", "weight": 0.7 },
+        "similarTo": { "name": "amenity=cafe", "weight": 0.7 },
+        "#": "Count in tag info is 815 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=glaziery",
+        "description": "Selling and installing glazing for windows and doors",
+        "isA": "shop",
+        "similarTo": { "name": "shop=doityourself", "weight": 0.7 },
+        "#": "Count in tag info is 758 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=grocery",
+        "isA": "shop",
+        "similarTo": { "name": "shop=supermarket", "weight": 0.8 },
+        "similarTo": { "name": "shop=food", "weight": 0.8 },
+        "#": "Count in tag info is 719 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=cheese",
+        "description": "Shop mainly selling cheese.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=supermarket", "weight": 0.8 },
+        "#": "Count in tag info is 712 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=money_lender",
+        "isA": "shop",
+        "similarTo": { "name": "shop=pawnbroker", "weight": 0.7 },
+        "#": "Count in tag info is 702 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=fishing",
+        "description": "Store where you can buy fishing equipment .",
+        "isA": "shop",
+        "similarTo": { "name": "shop=sports", "weight": 0.7 },
+        "#": "Count in tag info is 637 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=herbalist",
+        "description": "Shop focused on selling herbs, often for medical purposes",
+        "isA": "shop",
+        "similarTo": { "name": "shop=chemist", "weight": 0.7 },
+        "#": "Count in tag info is 622 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=photo_studio",
+        "description": "Place where you can walk in and have your photo taken",
+        "isA": "shop",
+        "similarTo": { "name": "shop=photo", "weight": 0.7 },
+        "#": "Count in tag info is 587 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=radiotechnics",
+        "isA": "shop",
+        "similarTo": { "name": "shop=electronics", "weight": 0.7 },
+        "#": "Count in tag info is 574 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=insurance",
+        "isA": "shop",
+        "#": "Count in tag info is 559 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=chocolate",
+        "isA": "shop",
+        "similarTo": { "name": "shop=food", "weight": 0.7 },
+        "similarTo": { "name": "shop=confectionary", "weight": 0.8 },
+        "similarTo": { "name": "shop=candy", "weight": 0.8 },
+        "#": "Count in tag info is 522 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=dairy",
+        "description": "A shop selling dairy products.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=farm", "weight": 0.7 },
+        "similarTo": { "name": "shop=supermarket", "weight": 0.7 },
+        "#": "Count in tag info is 490 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=pastry",
+        "description": "a shop where sweet bakery products are produced and sold",
+        "isA": "shop",
+        "similarTo": { "name": "shop=bakery", "weight": 0.8 },
+        "#": "Count in tag info is 487 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=winery",
+        "isA": "shop",
+        "similarTo": { "name": "shop=wine", "weight": 0.9 },
+        "#": "Count in tag info is 485 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=shoe_repair",
+        "isA": "shop",
+        "similarTo": { "name": "shop=shoes", "weight": 0.9 },
+        "#": "Count in tag info is 441 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=perfumery",
+        "description": "A shop selling perfumes.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=chemist", "weight": 0.8 },
+        "#": "Count in tag info is 423 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=hunting",
+        "description": "Shop where you can buy gun and hunting equipment.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=sports", "weight": 0.8 },
+        "#": "Count in tag info is 421 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=gas",
+        "description": "A shop selling and/or refilling bottled gas.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=convenience", "weight": 0.8 },
+        "similarTo": { "name": "amenity=charging_station", "weight": 0.8 },
+        "similarTo": { "name": "shop=car", "weight": 0.3 },
+        "#": "Count in tag info is 421 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=fish",
+        "description": "DISCOURAGED - Use shop=seafood instead",
+        "isA": "shop",
+        "similarTo": { "name": "shop=seafood", "weight": 0.9 },
+        "#": "Count in tag info is 378 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=scuba_diving",
+        "description": "A shop that sells eqipment for scuba_diving and/or related accessories and services",
+        "isA": "shop",
+        "similarTo": { "name": "shop=sports", "weight": 0.8 },
+        "#": "Count in tag info is 361 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=wholesale",
+        "description": "A store that sells items in bulk.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=supermarket", "weight": 0.7 },
+        "#": "Count in tag info is 358 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=watches",
+        "isA": "shop",
+        "similarTo": { "name": "shop=electronics", "weight": 0.7 },
+        "#": "Count in tag info is 353 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=solarium",
+        "isA": "shop",
+        "similarTo": { "name": "amenity=greenhouse", "weight": 0.7 },
+        "#": "Count in tag info is 347 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=street_vendor",
+        "isA": "shop",
+        "similarTo": { "name": "shop=kiosk", "weight": 0.7 },
+        "#": "Count in tag info is 347 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=e-cigarette",
+        "description": "A shop selling electronic cigarettes",
+        "isA": "shop",
+        "similarTo": { "name": "shop=tobacco", "weight": 0.8 },
+        "#": "Count in tag info is 338 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=household",
+        "isA": "shop",
+        "similarTo": { "name": "shop=houseware", "weight": 0.8 },
+        "#": "Count in tag info is 337 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=furnace",
+        "description": "A shop selling central heating units",
+        "isA": "shop",
+        "similarTo": { "name": "shop=doityourself", "weight": 0.8 },
+        "#": "Count in tag info is 325 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=leather",
+        "description": "Shop for products made out of leather",
+        "isA": "shop",
+        "similarTo": { "name": "shop=clothes", "weight": 0.4 },
+        "#": "Count in tag info is 320 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=frozen_food",
+        "description": "Shop that mainly selling frozen food",
+        "isA": "shop",
+        "similarTo": { "name": "shop=food", "weight": 0.8 },
+        "#": "Count in tag info is 317 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=vacuum_cleaner",
+        "isA": "shop",
+        "similarTo": { "name": "shop=department_store", "weight": 0.7 },
+        "similarTo": { "name": "shop=electronics", "weight": 0.7 },
+        "similarTo": { "name": "amenity=vacuum_cleaner", "weight": 0.5 },
+        "#": "Count in tag info is 301 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=religion",
+        "description": "A shop selling merchandise related to religion",
+        "isA": "shop",
+        "similarTo": { "name": "shop=books", "weight": 0.7 },
+        "#": "Count in tag info is 282 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=appliance",
+        "isA": "shop",
+        "similarTo": { "name": "shop=vacuum_cleaner", "weight": 0.7 },
+        "similarTo": { "name": "shop=doityourself", "weight": 0.7 },
+        "#": "Count in tag info is 274 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=lighting",
+        "description": "A shop selling lighting fixtures.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=doityourself", "weight": 0.7 },
+        "#": "Count in tag info is 266 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=discount",
+        "isA": "shop",
+        "similarTo": { "name": "shop=wholesale", "weight": 0.7 },
+        "similarTo": { "name": "shop=second_hand", "weight": 0.7 },
+        "similarTo": { "name": "amenity=variety_store", "weight": 0.8 },
+        "#": "Count in tag info is 260 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=betting",
+        "description": "DISCOURAGED, use shop=bookmaker , shop=lottery , amenity=casino , leisure=amusement_arcade , or amenity=gambling instead.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=bookmaker", "weight": 0.7 },
+        "similarTo": { "name": "shop=lottery", "weight": 0.7 },
+        "similarTo": { "name": "amenity=casino", "weight": 0.7 },
+        "similarTo": { "name": "leisure=amusement_arcade", "weight": 0.7 },
+        "similarTo": { "name": "amenity=gambling", "weight": 0.7 },
+        "#": "Count in tag info is 251 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=electrical",
+        "description": "Shop selling electrical supplies and devices",
+        "isA": "shop",
+        "similarTo": { "name": "shop=electronics", "weight": 0.9 },
+        "#": "Count in tag info is 249 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=accessories",
+        "isA": "shop",
+        "similarTo": { "name": "shop=department_store", "weight": 0.9 },
+        "#": "Count in tag info is 238 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=marketplace",
+        "isA": "shop",
+        "#": "Count in tag info is 237 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=market",
+        "isA": "shop",
+        "similarTo": { "name": "shop=supermarket", "weight": 0.7 },
+        "#": "Count in tag info is 233 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=souvenir",
+        "isA": "shop",
+        "similarTo": { "name": "shop=gift", "weight": 0.7 },
+        "#": "Count in tag info is 223 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=motorcycle_repair",
+        "description": "A place where you can get your motorcycles repaired",
+        "isA": "shop",
+        "similarTo": { "name": "shop=car_repair", "weight": 0.7 },
+        "#": "Count in tag info is 222 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=hobby",
+        "isA": "shop",
+        "similarTo": { "name": "shop=craft", "weight": 0.8 },
+        "#": "Count in tag info is 220 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=pharmacy",
+        "isA": "shop",
+        "similarTo": { "name": "shop=chemist", "weight": 0.8 },
+        "#": "Count in tag info is 215 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=shopping_centre",
+        "description": "For shopping centres",
+        "isA": "shop",
+        "similarTo": { "name": "shop=supermarket", "weight": 0.8 },
+        "#": "Count in tag info is 215 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=weapons",
+        "description": "A store that sells firearms and accessories",
+        "isA": "shop",
+        "similarTo": { "name": "shop=sports", "weight": 0.7 },
+        "#": "Count in tag info is 214 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=other",
+        "isA": "shop",
+        "#": "Count in tag info is 213 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=office_supplies",
+        "description": "A shop selling office supplies",
+        "isA": "shop",
+        "similarTo": { "name": "shop=stationery", "weight": 0.9 },
+        "#": "Count in tag info is 208 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=communication",
+        "isA": "shop",
+        "similarTo": { "name": "shop=stationery", "weight": 0.7 },
+        "#": "Count in tag info is 200 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=disused",
+        "isA": "shop",
+        "similarTo": { "name": "shop=vacant", "weight": 0.8 },
+        "#": "Count in tag info is 186 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=sewing",
+        "isA": "shop",
+        "similarTo": { "name": "shop=craft", "weight": 0.7 },
+        "#": "Count in tag info is 181 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=window_blind",
+        "description": "A shop that sells window blinds.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=homegoods", "weight": 0.7 },
+        "similarTo": { "name": "shop=glaziery", "weight": 0.8 },
+        "#": "Count in tag info is 180 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=printing",
+        "description": "Place for printing documents",
+        "isA": "shop",
+        "similarTo": { "name": "shop=stationery", "weight": 0.7 },
+        "#": "Count in tag info is 178 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=windows",
+        "description": "Selling windows and doors",
+        "isA": "shop",
+        "similarTo": { "name": "shop=window_blind", "weight": 0.7 },
+        "similarTo": { "name": "shop=doityourself", "weight": 0.7 },
+        "similarTo": { "name": "shop=glaziery", "weight": 0.8 },
+        "#": "Count in tag info is 172 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=perfume",
+        "isA": "shop",
+        "similarTo": { "name": "shop=boutique", "weight": 0.8 },
+        "#": "Count in tag info is 171 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=flooring",
+        "isA": "shop",
+        "similarTo": { "name": "shop=doityourself", "weight": 0.7 },
+        "similarTo": { "name": "shop=carpet", "weight": 0.8 },
+        "#": "Count in tag info is 168 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=rental",
+        "isA": "shop",
+        "similarTo": { "name": "amenity=car_sharing", "weight": 0.8 },
+        "similarTo": { "name": "amenity=bicycle_rental", "weight": 0.5 },
+        "#": "Count in tag info is 166 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=gallery",
+        "isA": "shop",
+        "similarTo": { "name": "shop=art", "weight": 0.8 },
+        "#": "Count in tag info is 164 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=fixme",
+        "isA": "shop",
+        "#": "Count in tag info is 160 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=gambling",
+        "description": "DISCOURAGED, use shop=bookmaker , shop=lottery , amenity=casino , leisure=amusement_arcade , or amenity=gambling instead.",
+        "isA": "shop",
+        "similarTo": { "name": "shop=bookmaker", "weight": 0.7 },
+        "similarTo": { "name": "shop=lottery", "weight": 0.7 },
+        "similarTo": { "name": "amenity=casino", "weight": 0.7 },
+        "similarTo": { "name": "leisure=amusement_arcade", "weight": 0.7 },
+        "similarTo": { "name": "amenity=gambling", "weight": 0.7 },
+        "#": "Count in tag info is 156 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=boat",
+        "isA": "shop",
+        "similarTo": { "name": "shop=sports", "weight": 0.8 },
+        "similarTo": { "name": "shop=car", "weight": 0.4 },
+        "#": "Count in tag info is 155 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=water",
+        "isA": "shop",
+        "similarTo": { "name": "amenity=drinking_water", "weight": 0.4 },
+        "#": "Count in tag info is 153 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=health",
+        "isA": "shop",
+        "similarTo": { "name": "shop=chemist", "weight": 0.8 },
+        "#": "Count in tag info is 153 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=party",
+        "isA": "shop",
+        "similarTo": { "name": "shop=department_store", "weight": 0.7 },
+        "#": "Count in tag info is 151 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=builder",
+        "isA": "shop",
+        "similarTo": { "name": "shop=doityourself", "weight": 0.7 },
+        "similarTo": { "name": "amenity=construction", "weight": 0.8 },
+        "#": "Count in tag info is 151 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=pottery",
+        "isA": "shop",
+        "similarTo": { "name": "shop=homegoods", "weight": 0.7 },
+        "#": "Count in tag info is 150 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=games",
+        "isA": "shop",
+        "similarTo": { "name": "shop=hobby", "weight": 0.7 },
+        "#": "Count in tag info is 143 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=health_food",
+        "isA": "shop",
+        "similarTo": { "name": "shop=supermarket", "weight": 0.7 },
+        "#": "Count in tag info is 141 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=haberdashery",
+        "isA": "shop",
+        "similarTo": { "name": "shop=clothes", "weight": 0.8 },
+        "#": "Count in tag info is 139 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=tiles",
+        "isA": "shop",
+        "similarTo": { "name": "shop=flooring", "weight": 0.8 },
+        "similarTo": { "name": "shop=doityourself", "weight": 0.8 },
+        "#": "Count in tag info is 138 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=building_materials",
+        "isA": "shop",
+        "similarTo": { "name": "shop=doityourself", "weight": 0.8 },
+        "similarTo": { "name": "shop=builder", "weight": 0.8 },
+        "#": "Count in tag info is 138 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=camera",
+        "description": "A shop mainly selling cameras and lenses",
+        "isA": "shop",
+        "similarTo": { "name": "shop=photo", "weight": 0.8 },
+        "#": "Count in tag info is 137 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=photography",
+        "isA": "shop",
+        "similarTo": { "name": "shop=photo", "weight": 0.8 },
+        "#": "Count in tag info is 137 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=catalogue",
+        "isA": "shop",
+        "similarTo": { "name": "shop=books", "weight": 0.8 },
+        "#": "Count in tag info is 136 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=watch",
+        "isA": "shop",
+        "similarTo": { "name": "shop=jewelry", "weight": 0.8 },
+        "similarTo": { "name": "shop=electronics", "weight": 0.8 },
+        "#": "Count in tag info is 136 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=salon",
+        "isA": "shop",
+        "similarTo": { "name": "shop=hairdresser", "weight": 0.8 },
+        "#": "Count in tag info is 135 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=medical",
+        "description": "medical store / medical house",
+        "isA": "shop",
+        "similarTo": { "name": "shop=medical_supply", "weight": 0.8 },
+        "similarTo": { "name": "shop=herbalist", "weight": 0.7 },
+        "similarTo": { "name": "shop=chemist", "weight": 0.7 },
+        "similarTo": { "name": "amenity=dentist", "weight": 0.6 },
+        "similarTo": { "name": "amenity=doctor", "weight": 0.6 },
+        "similarTo": { "name": "amenity=clinic", "weight": 0.6 },
+        "#": "Count in tag info is 135 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=tanning",
+        "isA": "shop",
+        "similarTo": { "name": "shop=salon", "weight": 0.8 },
+        "#": "Count in tag info is 134 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=provisions",
+        "isA": "shop",
+        "similarTo": { "name": "shop=sports", "weight": 0.8 },
+        "#": "Count in tag info is 133 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=anime",
+        "description": "A shop anime stuff",
+        "isA": "shop",
+        "similarTo": { "name": "shop=hobby", "weight": 0.8 },
+        "#": "Count in tag info is 132 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=car_service",
+        "isA": "shop",
+        "similarTo": { "name": "shop=car_repair", "weight": 0.9 },
+        "similarTo": { "name": "shop=car", "weight": 0.7 },
+        "#": "Count in tag info is 130 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=unknown",
+        "isA": "shop",
+        "#": "Count in tag info is 125 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=candy",
+        "isA": "shop",
+        "similarTo": { "name": "shop=supermarket", "weight": 0.6 },
+        "similarTo": { "name": "shop=gift", "weight": 0.6 },
+        "similarTo": { "name": "shop=confectionary", "weight": 0.8 },
+        "#": "Count in tag info is 115 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=plumber",
+        "isA": "shop",
+        "similarTo": { "name": "shop=doityourself", "weight": 0.8 },
+        "similarTo": { "name": "shop=builder", "weight": 0.7 },
+        "#": "Count in tag info is 115 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=cafe",
+        "isA": "shop",
+        "similarTo": { "name": "amenity=cafe", "weight": 0.8 },
+        "similarTo": { "name": "shop=coffee", "weight": 0.8 },
+        "#": "Count in tag info is 114 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=delicatessen",
+        "isA": "shop",
+        "similarTo": { "name": "shop=deli", "weight": 0.8 },
+        "similarTo": { "name": "shop=restaurant", "weight": 0.8 },
+        "similarTo": { "name": "cuisine=sandwich", "weight": 0.8 },
+        "similarTo": { "name": "cuisine=sub", "weight": 0.8 },
+        "#": "Count in tag info is 112 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=antique",
+        "isA": "shop",
+        "similarTo": { "name": "shop=antiques", "weight": 0.7 },
+        "#": "Count in tag info is 112 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=wood",
+        "isA": "shop",
+        "similarTo": { "name": "shop=doityourself", "weight": 0.7 },
+        "#": "Count in tag info is 110 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=bathroom",
+        "isA": "shop",
+        "similarTo": { "name": "shop=doityourself", "weight": 0.7 },
+        "similarTo": { "name": "shop=homegoods", "weight": 0.7 },
+        "#": "Count in tag info is 109 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=storage_units",
+        "isA": "shop",
+        "similarTo": { "name": "amenity=storage", "weight": 0.8 },
+        "#": "Count in tag info is 106 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=wedding",
+        "isA": "shop",
+        "similarTo": { "name": "shop=boutique", "weight": 0.5 },
+        "#": "Count in tag info is 104 on 2015-09-01"
+    },
+    "tag": {
+        "name": "shop=glass",
+        "isA": "shop",
+        "similarTo": { "name": "shop=windows", "weight": 0.8 },
+        "#": "Count in tag info is 102 on 2015-09-01"
     },
 
     "#" : "end"
