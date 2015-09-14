@@ -59,6 +59,7 @@ class OsmSchemaTest : public CppUnit::TestFixture
   CPPUNIT_TEST(commonAncestorTest);
   CPPUNIT_TEST(distanceTest);
   CPPUNIT_TEST(getChildTagsTest);
+  CPPUNIT_TEST(getSimilarTagsTest);
   CPPUNIT_TEST(getTagTest);
   CPPUNIT_TEST(isAncestorTest);
   CPPUNIT_TEST(isAreaTest);
@@ -213,6 +214,30 @@ public:
     vector<TagVertex> gravel = uut.getChildTags("surface=gravel");
 
     CPPUNIT_ASSERT_EQUAL(2, (int)gravel.size());
+  }
+
+  QStringList tagsToNames(const vector<TagVertex>& v)
+  {
+    QStringList l;
+    for (size_t i = 0; i < v.size(); i++)
+    {
+      l << v[i].name;
+    }
+
+    return l;
+  }
+
+  void getSimilarTagsTest()
+  {
+    OsmSchema uut;
+    uut.createTestingGraph();
+
+    HOOT_STR_EQUALS("[3]{highway=road, highway=primary, highway=secondary}",
+      tagsToNames(uut.getSimilarTags("highway=primary", 0.8)));
+    HOOT_STR_EQUALS("[4]{highway=road, highway=primary, highway=secondary, highway=residential}",
+      tagsToNames(uut.getSimilarTags("highway=primary", 0.5)));
+    HOOT_STR_EQUALS("[1]{highway=road}",
+      tagsToNames(uut.getSimilarTags("highway=road", 0.1)));
   }
 
   /**

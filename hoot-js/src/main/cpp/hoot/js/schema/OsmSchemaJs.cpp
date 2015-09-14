@@ -46,9 +46,15 @@ void OsmSchemaJs::Init(Handle<Object> exports)
 {
   Handle<Object> schema = Object::New();
   exports->Set(String::NewSymbol("OsmSchema"), schema);
+  schema->Set(String::NewSymbol("getAllTags"), FunctionTemplate::New(getAllTags)->GetFunction());
   schema->Set(String::NewSymbol("getCategories"), FunctionTemplate::New(getCategories)->GetFunction());
+  schema->Set(String::NewSymbol("getChildTags"), FunctionTemplate::New(getChildTags)->GetFunction());
+  schema->Set(String::NewSymbol("getSimilarTags"),
+    FunctionTemplate::New(getSimilarTags)->GetFunction());
   schema->Set(String::NewSymbol("getTagByCategory"),
     FunctionTemplate::New(getTagByCategory)->GetFunction());
+  schema->Set(String::NewSymbol("getTagVertex"),
+    FunctionTemplate::New(getTagVertex)->GetFunction());
   schema->Set(String::NewSymbol("isAncestor"), FunctionTemplate::New(isAncestor)->GetFunction());
   schema->Set(String::NewSymbol("isArea"), FunctionTemplate::New(isArea)->GetFunction());
   schema->Set(String::NewSymbol("isBuilding"), FunctionTemplate::New(isBuilding)->GetFunction());
@@ -60,12 +66,35 @@ void OsmSchemaJs::Init(Handle<Object> exports)
   schema->Set(String::NewSymbol("score"), FunctionTemplate::New(score)->GetFunction());
 }
 
+Handle<Value> OsmSchemaJs::getAllTags(const Arguments& /*args*/) {
+  HandleScope scope;
+
+  return scope.Close(toV8(OsmSchema::getInstance().getAllTags()));
+}
+
 Handle<Value> OsmSchemaJs::getCategories(const Arguments& args) {
   HandleScope scope;
 
   QString kvp = toCpp<QString>(args[0]);
 
   return scope.Close(toV8(OsmSchema::getInstance().getCategories(kvp).toStringList()));
+}
+
+Handle<Value> OsmSchemaJs::getChildTags(const Arguments& args) {
+  HandleScope scope;
+
+  QString kvp = toCpp<QString>(args[0]);
+
+  return scope.Close(toV8(OsmSchema::getInstance().getChildTags(kvp)));
+}
+
+Handle<Value> OsmSchemaJs::getSimilarTags(const Arguments& args) {
+  HandleScope scope;
+
+  QString kvp = toCpp<QString>(args[0]);
+  double minimumScore = toCpp<double>(args[1]);
+
+  return scope.Close(toV8(OsmSchema::getInstance().getSimilarTags(kvp, minimumScore)));
 }
 
 Handle<Value> OsmSchemaJs::getTagByCategory(const Arguments& args) {
@@ -75,6 +104,14 @@ Handle<Value> OsmSchemaJs::getTagByCategory(const Arguments& args) {
   OsmSchemaCategory c = OsmSchemaCategory::fromString(category);
 
   return scope.Close(toV8(OsmSchema::getInstance().getTagByCategory(c)));
+}
+
+Handle<Value> OsmSchemaJs::getTagVertex(const Arguments& args) {
+  HandleScope scope;
+
+  QString kvp = toCpp<QString>(args[0]);
+
+  return scope.Close(toV8(OsmSchema::getInstance().getTagVertex(kvp)));
 }
 
 Handle<Value> OsmSchemaJs::isAncestor(const Arguments& args) {

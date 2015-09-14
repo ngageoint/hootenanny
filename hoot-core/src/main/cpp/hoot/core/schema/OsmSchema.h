@@ -353,11 +353,20 @@ public:
   OsmSchemaCategory getCategories(const QString& k, const QString& v) const;
   OsmSchemaCategory getCategories(const QString& kvp) const;
 
+  vector<TagVertex> getAllTags();
+
   vector<TagVertex> getChildTags(QString name);
 
   static OsmSchema& getInstance();
 
   double getIsACost() const;
+
+  /**
+   * Returns all tags that have a similar score >= minimumScore.
+   *
+   * minimumScore must be > 0.
+   */
+  vector<TagVertex> getSimilarTags(QString name, double minimumScore);
 
   vector<TagVertex> getTagByCategory(OsmSchemaCategory c) const;
 
