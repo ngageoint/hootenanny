@@ -39,6 +39,8 @@ function addReviewTags(e) {
     // this creates a copy of the tags so we have to set it when we're done
     var tags = e.getTags();
 
+    // make sure there is a UUID
+    tags.getCreateUuid();
     tags.set("hoot:review:needs", "yes");
     tags.set("hoot:review:note", "Flagged for imagery validation");
     tags.set("hoot:review:choices:1", JSON.stringify({

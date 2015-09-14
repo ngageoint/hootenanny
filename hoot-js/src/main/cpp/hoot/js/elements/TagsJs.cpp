@@ -78,6 +78,8 @@ void TagsJs::Init(Handle<Object> target)
       FunctionTemplate::New(contains)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("get"),
       FunctionTemplate::New(get)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("getCreateUuid"),
+      FunctionTemplate::New(get)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("set"),
       FunctionTemplate::New(set)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("toDict"),
@@ -126,6 +128,15 @@ Handle<Value> TagsJs::get(const Arguments& args)
   {
     return scope.Close(Undefined());
   }
+}
+
+Handle<Value> TagsJs::getCreateUuid(const Arguments& args)
+{
+  HandleScope scope;
+
+  Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
+
+  return scope.Close(toV8(t.getCreateUuid()));
 }
 
 Handle<Value> TagsJs::set(const Arguments& args)
