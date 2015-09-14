@@ -39,7 +39,6 @@ import hoot.services.validators.osm.ChangesetUploadXmlValidator;
 import hoot.services.writers.osm.ChangesetDbWriter;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -319,11 +318,6 @@ public class ChangesetResource
    * @param changeset OSM changeset diff data
    * @param changesetId ID of the changeset being uploaded; changeset with the ID must already exist
    * @param mapId ID of the map owning the changeset being uploaded
-   * @param allowChangesToUnreviewedFeatures determines whether the uploaded changeset was edited 
-   * inside of a Hootenanny review session; if true data involved in a review is allowed to be 
-   * updated; otherwise, an error is thrown.  This prevents users not in a review session from 
-   * modifying data that still needs to be reviewed.  A more robust solution would involve 
-   * replacing this with a user id which could be identified as being in a review session.
    * @return response acknowledging the result of the update operation with updated entity ID 
    * information
    * @throws Exception
@@ -340,10 +334,7 @@ public class ChangesetResource
     @PathParam("changesetId") 
     final long changesetId,
     @QueryParam("mapId")
-    final String mapId,
-    @DefaultValue("false")
-    @QueryParam("allowChangesToUnreviewedFeatures")
-    final boolean allowChangesToUnreviewedFeatures)
+    final String mapId)
     throws Exception
   {
   	log.debug("Intializing database connection...");
@@ -383,23 +374,11 @@ public class ChangesetResource
         	"changesetContainsFeaturesInvolvedInReview: " + changesetContainsFeaturesInvolvedInReview);
         if (changesetContainsFeaturesInvolvedInReview)
         {
+        	final int numReviewItemsUpdated = 
+        		(new ReviewItemsUpdater(conn, mapId)).updateReviewItems(changesetDoc);
         	log.debug(
-            "allowChangesToUnreviewedFeatures: " + allowChangesToUnreviewedFeatures);
-        	if (!allowChangesToUnreviewedFeatures)
-          {
-          	throw new Exception(
-          	  "One or more features in the changeset are involved in an unresolved review.  " +
-          	  "Resolve the associated review(s) during a review process before editing the " +
-          	  "feature(s) outside of a review process.");
-          }
-          else
-          {
-          	final int numReviewItemsUpdated = 
-          		(new ReviewItemsUpdater(conn, mapId)).updateReviewItems(changesetDoc);
-          	log.debug(
-          		String.valueOf(numReviewItemsUpdated) + " review records were updated as a " +
-          		"result of the changeset save.");
-          }
+        		String.valueOf(numReviewItemsUpdated) + " review records were updated as a " +
+        		"result of the changeset save.");
         } 
       }
       catch (Exception e)

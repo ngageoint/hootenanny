@@ -61,9 +61,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -555,7 +553,6 @@ public class ReviewResource
    * @throws Exception
    * @todo write unit test
    */
-  @SuppressWarnings("unchecked")
   @GET
   @Path("/refs")
   @Consumes(MediaType.TEXT_PLAIN)
