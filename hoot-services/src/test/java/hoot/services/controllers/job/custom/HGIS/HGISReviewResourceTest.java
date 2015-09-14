@@ -1,9 +1,11 @@
 package hoot.services.controllers.job.custom.HGIS;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
+import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.models.review.custom.HGIS.PrepareForValidationRequest;
 import hoot.services.models.review.custom.HGIS.PrepareForValidationResponse;
@@ -23,6 +25,8 @@ public class HGISReviewResourceTest {
 	@Category(UnitTest.class)
 	public void TestPrepareItemsForValidationReview() throws Exception
 	{
+		
+		
 		HGISReviewResource real = new HGISReviewResource();
 		HGISReviewResource spy = Mockito.spy(real);
 		
@@ -45,8 +49,10 @@ public class HGISReviewResourceTest {
 		Assert.assertEquals(result.get("exectype"), "bash");
 		Assert.assertNotNull(result.get("params"));
 		JSONArray arr = (JSONArray)result.get("params");
-		Assert.assertEquals(((JSONObject)arr.get(0)).get("SOURCE"), "postgresql://hoot:hoottest@localhost:5432/hoot/testSrc1");
-		Assert.assertEquals(((JSONObject)arr.get(1)).get("OUTPUT"), "postgresql://hoot:hoottest@localhost:5432/hoot/out1");
+		String connStr = spy._generateDbMapParam("testSrc1");
+		Assert.assertEquals(((JSONObject)arr.get(0)).get("SOURCE"), connStr);
+		connStr = spy._generateDbMapParam("out1");
+		Assert.assertEquals(((JSONObject)arr.get(1)).get("OUTPUT"), connStr);
 	}
 	
 
