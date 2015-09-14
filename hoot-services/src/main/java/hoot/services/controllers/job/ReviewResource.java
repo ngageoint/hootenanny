@@ -26,34 +26,31 @@
  */
 package hoot.services.controllers.job;
 
-import static com.mysema.query.group.GroupBy.groupBy;
-import static com.mysema.query.group.GroupBy.list;
-
 import java.sql.Connection;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
+import hoot.services.db2.ElementIdMappings;
 import hoot.services.db2.QElementIdMappings;
 import hoot.services.db2.QMaps;
 import hoot.services.db2.QReviewItems;
+import hoot.services.db2.ReviewItems;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.ModelDaoUtils;
-import hoot.services.models.review.ReviewableItem;
-import hoot.services.models.review.ReviewableItemsResponse;
+import hoot.services.models.review.ReviewAgainstItem;
+import hoot.services.models.review.ReviewReferences;
 import hoot.services.models.review.ReviewableItemsStatistics;
-import hoot.services.readers.review.ReviewableItemRetriever;
 import hoot.services.readers.review.ReviewableItemsStatisticsCalculator;
-import hoot.services.review.DisplayBoundsCalculator;
 import hoot.services.review.ReviewItemsUpdater;
 import hoot.services.review.ReviewItemsPreparer;
 import hoot.services.review.ReviewUtils;
 import hoot.services.validators.review.ReviewInputParamsValidator;
-import hoot.services.writers.review.ReviewableItemsResponseWriter;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -73,8 +70,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.mysema.query.Tuple;
 import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.types.QTuple;
 
 /**
  * Non-WPS service endpoint for the conflated data review process
@@ -311,8 +308,6 @@ public class ReviewResource
     	{
     		stats.setNumReviewableItems(0);
     	}
-    	
-  		
     }
     catch (Exception e)
     {
@@ -348,262 +343,6 @@ public class ReviewResource
     }
 
     return stats;
-  }
-
-	/**
-	 * <NAME>Conflated Data Review Service Retrieve Items to Review</NAME>
-	 * <DESCRIPTION>
-	 * 	Once the conflated data has been prepared for review, clients may call this to get one or more items to present to the user for reviewing.
-	 *  In many cases, clients might only request a single item for review with each call (default setting), but the option to retrieve more than one at
-	 *  a time is being made available, in case it ends up being necessary. The response returns a set of reviewable items containing
-	 *  an OSM element ID and type, as well as a suggested geospatial bounds for each item it is to be reviewed against
-	 *  (smallest bounds that encompasses the reviewable item and the item it is reviewed against, plus some small buffer).
-	 *  The response returns OSM data in XML format inside the JSON response, since the iD editor already knows how to parse OSM XML for display.
-	 *  The IDs of the response items correspond to the OSM IDs of the elements returned by a Hootenanny map query request against the services database.
-	 *  it is not intended that element unique IDs be shown to end users, however, the client will be responsible for updating the unique ID contained in
-	 *  the OSM review tags for elements split into new elements during the review process, since this operation is not feasible to perform in the server.
-	 *  IMPORTANT: If an reviewable item has its associated OSM element deleted from the services database,
-	 *  that item will not be returned in this query, despite the fact it was never reviewed. For now, it is the responsibility of
-	 *  clients to not delete reviewable elements until they have been reviewed.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * 	<mapId>
-	 * 	string; required; ID string or unique name of the map associated with the reviewable conflated data
-	 * 	</mapId>
-	 *  <numItems>
-	 *  integer; optional; number of review items to retrieve; optional; defaults to 1; max = 5000 (configurable)
-	 *  </numItems>
-	 *  <highestReviewScoreFirst>
-	 *   boolean; optional; when specified as true, from the available review items returns the ones with the highest score first;
-	 *    optional; default = true
-	 *  </highestReviewScoreFirst>
-	 *  <reviewScoreThresholdMinimum>
-	 *  double; optional; items with a review score lower than this threshold will not be returned; defaults to 0.5
-	 *  </reviewScoreThresholdMinimum>
-	 *  <geospatialBounds>
-	 *   string (WPS GET, Jersey); OWS BoundingBox (WPS POST); optional; OSM geospatial bounds
-	 *   to search for reviewable data within; the format is minLon,minLat,maxLon,maxLat; optional; default bounds =
-	 *   world; only coordinate system EPSG:4326 will be supported initially
-	 *  </geospatialBounds>
-	 *  <displayBoundsZoomAdjust>
-	 *   double; optional; a constant amount in degrees by which the display bounds
-	 *    returned for each review item pair will be adjusted; negative values will zoom the display bounds out by a constant
-	 *    amount for all review item pairs; positive values will zoom it in; valid range: -1.0 to 1.0; defaults to -0.0015
-	 *  </displayBoundsZoomAdjust>
-	 *  <boundsDisplayMethod>
-	 *  string; optional; Specifies the method by which the display bounds for each review item pair is calculated.
-	 *  Valid values are: reviewableItemOnly, reviewAgainstItemOnly, and     reviewableAndReviewAgainstItemCombined; defaults
-	 *  to reviewableAndReviewAgainstItemCombined; This can be useful for debugging purposes.
-	 *  </boundsDisplayMethod>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	a set of reviewable items
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review?mapId=1&numItems=2&highestReviewScoreFirst=true&
-	 * reviewScoreThresholdMinimum=0.8&geospatialBounds=-77.09655761718749,38.89958342598271,-77.09106445312499,
-	 * 38.90385833966776&displayBoundsZoomAdjust=-0.0015&boundsDisplayMethod=reviewableAndReviewAgainstItemCombined</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * {
-	 *   "mapId": 1,
-	 *   "numItemsRequested": 2,
-	 *   "numItemsReturned": 2,
-	 *   "reviewScoreThresholdMinimum": 0.8,
-	 *   "highestReviewScoreFirst": "true",
-	 *   "geospatialBounds": "-77.09655761718749,38.89958342598271,-77.09106445312499,38.90385833966776",
-	 *   "coordSys": "EPSG:4326",
-	 *   "reviewableItems":
-	 *   [
-	 *     {
-	 *       "id": 2402,
-	 *       "type": "way",
-	 *       "displayBounds": "-77.09655761718749,38.89958342598271,-77.09106445312499,38.90385833966776",
-	 *       "itemToReviewAgainst":
-	 *       {
-	 *         "id": 2403,
-	 *         "type": "way"
-	 *       }
-	 *     },
-	 *     {
-	 *       "id": 2405,
-	 *       "type": "way",
-	 *       "displayBounds": "-77.09655761718749,38.89958342598271,-77.09106445312499,38.90385833966776",
-	 *       "itemToReviewAgainst":
-	 *       {
-	 *         "id": 2406,
-	 *         "type": "way"
-	 *       }
-	 *     }
-	 *   ]
-	 * }
-	 * </OUTPUT>
-	 * </EXAMPLE>
-   *
-   * Retrieves reviewable items for the given map
-   *
-   * @param mapId ID of the map for which reviewable items should be retrieved
-   * @param numItems the number of reviewable items that should be returned
-   * @param highestReviewScoreFirst if true; items will be returned sorted by descending review
-   * score
-   * @param reviewScoreThresholdMinimum for the reviewable items returned, the minimum review
-   * score the items should have
-   * @param geospatialBounds for the reviewable items returned, the geospatial bounding box the
-   * items should reside in
-   * @return a set of reviewable items
-   * @throws Exception
-   * @deprecated since 0.2.19
-   */
-  @GET
-  @Consumes(MediaType.TEXT_PLAIN)
-  @Produces(MediaType.APPLICATION_JSON)
-  public ReviewableItemsResponse getReviewableItems(
-    @QueryParam("mapId")
-    String mapId,
-    @DefaultValue("1")
-    @QueryParam("numItems")
-    int numItems,
-    @DefaultValue("true")
-    @QueryParam("highestReviewScoreFirst")
-    boolean highestReviewScoreFirst,
-    @DefaultValue("0.5")
-    @QueryParam("reviewScoreThresholdMinimum")
-    double reviewScoreThresholdMinimum,
-    @DefaultValue("-180,-90,180,90")
-    @QueryParam("geospatialBounds")
-    String geospatialBounds,
-    @DefaultValue("-0.0015")
-    @QueryParam("displayBoundsZoomAdjust")
-    double displayBoundsZoomAdjust,
-    @DefaultValue("reviewableAndReviewAgainstItemCombined")
-    @QueryParam("boundsDisplayMethod")
-    String boundsDisplayMethod)
-    throws Exception
-  {
-  	Connection conn = DbUtils.createConnection();
-    final String errorMessageStart = "retrieving reviewable items";
-    ReviewableItemsResponse reviewableItemsResponse = null;
-    try
-    {
-      Map<String, Object> inputParams = new HashMap<String, Object>();
-      inputParams.put("mapId", mapId);
-      inputParams.put("numItems", numItems);
-      inputParams.put("highestReviewScoreFirst", highestReviewScoreFirst);
-      inputParams.put("reviewScoreThresholdMinimum", reviewScoreThresholdMinimum);
-      inputParams.put("geospatialBounds", geospatialBounds);
-      inputParams.put("displayBoundsZoomAdjust", displayBoundsZoomAdjust);
-      inputParams.put("boundsDisplayMethod", boundsDisplayMethod);
-      ReviewInputParamsValidator inputParamsValidator = new ReviewInputParamsValidator(inputParams);
-      mapId =
-        (String)inputParamsValidator.validateAndParseInputParam("mapId", "", null, null, false, null);
-      numItems =
-        (Integer)inputParamsValidator.validateAndParseInputParam(
-          "numItems",
-          new Integer(0),
-          new Integer(1),
-          Integer.parseInt(
-            HootProperties.getInstance().getProperty(
-              "reviewGetMaxReviewSize", HootProperties.getDefault("reviewGetMaxReviewSize"))),
-          true,
-          Integer.parseInt(
-            HootProperties.getInstance().getProperty(
-              "reviewGetNumItemsDefault", HootProperties.getDefault("reviewGetNumItemsDefault"))));
-      highestReviewScoreFirst =
-        (Boolean)inputParamsValidator.validateAndParseInputParam(
-          "highestReviewScoreFirst",
-          false,
-          null,
-          null,
-          true,
-          Boolean.parseBoolean(
-            HootProperties.getInstance().getProperty(
-              "reviewGetHighestReviewScoreFirstDefault",
-              HootProperties.getDefault("reviewGetHighestReviewScoreFirstDefault"))));
-      reviewScoreThresholdMinimum =
-        (Double)inputParamsValidator.validateAndParseInputParam(
-          "reviewScoreThresholdMinimum",
-          new Double(0.0),
-          new Double(0.0),
-          new Double(1.0),
-          true,
-          Double.parseDouble(
-            HootProperties.getInstance().getProperty(
-              "reviewGetReviewScoreThresholdMinimumDefault",
-              HootProperties.getDefault("reviewGetReviewScoreThresholdMinimumDefault"))));
-      final BoundingBox geospatialBoundsObj =
-        (BoundingBox)inputParamsValidator.validateAndParseInputParam(
-          "geospatialBounds",
-          "",
-          null,
-          null,
-          true,
-          HootProperties.getInstance().getProperty(
-            "reviewGetGeospatialBoundsDefault",
-            HootProperties.getDefault("reviewGetGeospatialBoundsDefault")));
-      displayBoundsZoomAdjust =
-        (Double)inputParamsValidator.validateAndParseInputParam(
-          "displayBoundsZoomAdjust",
-          new Double(0.0),
-          //arbitrarily limiting it to 1 degree
-          new Double(-1.0),
-          new Double(1.0),
-          true,
-          Double.parseDouble(
-            HootProperties.getInstance().getProperty(
-              "reviewDisplayBoundsZoomAdjustDefault",
-              HootProperties.getDefault("reviewDisplayBoundsZoomAdjustDefault"))));
-      //TODO: this isn't validating the validity of the actual enum value yet; need better error
-      //checking here
-      boundsDisplayMethod =
-        (String)inputParamsValidator.validateAndParseInputParam(
-          "boundsDisplayMethod",
-          "",
-          null,
-          null,
-          true,
-          HootProperties.getInstance().getProperty(
-            "reviewDisplayBoundsMethod",
-            HootProperties.getDefault("reviewDisplayBoundsMethod")));
-      final DisplayBoundsCalculator.DisplayMethod boundsDisplayMethodEnumVal =
-        DisplayBoundsCalculator.DisplayMethod.valueOf(boundsDisplayMethod);
-
-      log.debug("Initializing database connection...");
-
-      //query for review items
-      ReviewableItemRetriever itemRetriever = new ReviewableItemRetriever(conn, mapId);
-      final List<ReviewableItem> reviewItems =
-        itemRetriever.getReviewItems(
-          numItems, highestReviewScoreFirst, reviewScoreThresholdMinimum, geospatialBoundsObj,
-          displayBoundsZoomAdjust, boundsDisplayMethodEnumVal);
-      assert(reviewItems.size() <= numItems);
-
-      //write the items out to the response
-      //besides string output, deegree only supports XML and binary types, so not returning as
-      //application/json
-      reviewableItemsResponse =
-        (new ReviewableItemsResponseWriter()).writeResponse(
-          reviewItems, itemRetriever.getMapId(), numItems, highestReviewScoreFirst,
-          reviewScoreThresholdMinimum,  geospatialBoundsObj);
-    }
-    catch (Exception e)
-    {
-      ReviewUtils.handleError(e, errorMessageStart, false);
-    }
-    finally
-    {
-    	try
-      {
-        DbUtils.closeConnection(conn);
-      }
-      catch (Exception e)
-      {
-        ReviewUtils.handleError(e, errorMessageStart, false);
-      }
-    }
-
-    return reviewableItemsResponse;
   }
   
   @SuppressWarnings("unchecked")
@@ -810,17 +549,18 @@ public class ReviewResource
    * needs to use the specified element to review against it.
    * 
    * @param mapId map owning the features whose ID's are passed in featureUniqueIds
-   * @param reviewReferencesRequest request containing elements for which to return references to
-   * review related items
-   * @return see ReviewReferencesResponse
+   * @param elementId OSM ID of the element to be retrieved
+   * @param elementType OSM type of the element to be retrieved
+   * @return an array of review records
    * @throws Exception
+   * @todo write unit test
    */
   @SuppressWarnings("unchecked")
   @GET
   @Path("/refs")
   @Consumes(MediaType.TEXT_PLAIN)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getReviewReferences(
+  public ReviewReferences getReviewReferences(
     @QueryParam("mapId")
     final long mapId,
     @QueryParam("elementId")
@@ -830,7 +570,7 @@ public class ReviewResource
     throws Exception
   {
   	Connection conn = DbUtils.createConnection();
-  	JSONObject response = new JSONObject();
+  	ReviewReferences response = new ReviewReferences();
   	try
   	{
   		log.debug("mapId: " + mapId);
@@ -850,47 +590,56 @@ public class ReviewResource
   		//get all review against items that are referenced by the input elements; since
   		//the review table data breaks up one to many reviewable uuid to review against uuid
   		//relationships, we don't have to break up the review against uuid's here
-  		
-  		/*final List<?> reviewAgainstItems =
+  		final List<Tuple> reviewAgainstItemRecords =
         new SQLQuery(conn, DbUtils.getConfiguration(mapId))
   		    .from(reviewItems)
   		    .join(elementIdMappings)
   		    //this should be the only join condition needed since the element id is globally unique
   		    //for each element
-  		    .on(reviewItems.reviewableItemId.eq(elementIdMappings.elementId))
+  		      .on(reviewItems.reviewableItemId.eq(elementIdMappings.elementId))
     		  .where(reviewItems.reviewableItemId.eq(elementUniqueId))
-    		  .list(reviewItems, elementIdMappings);*/
-  		
-  		final List<String> reviewAgainstItemIds =
-        new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-  		    .from(reviewItems)
-    		  .where(reviewItems.reviewableItemId.eq(elementUniqueId))
-    		  .list(reviewItems.reviewAgainstItemId);
-  		JSONArray reviewAgainstItemIdsArr = new JSONArray();
-  		for (String id : reviewAgainstItemIds)
+    		  .list(reviewItems, elementIdMappings);
+  		//tried returning the tuple records here for simplicity but the client couldn't parse the
+  		//response objects
+  	  List<ReviewAgainstItem> reviewAgainstItems = new ArrayList<ReviewAgainstItem>();
+  		for (Tuple itemRecord : reviewAgainstItemRecords)
   		{
-  			//JSONObject responseItem = new JSONObject();
-  			//responseItem.put("uuid", id);
-  			//reviewAgainstItemIdsArr.add(responseItem);
-  			reviewAgainstItemIdsArr.add(id);
+  			ReviewItems reviewItem = itemRecord.get(reviewItems);
+  			ElementIdMappings idMappings = itemRecord.get(elementIdMappings);
+  			ReviewAgainstItem item = new ReviewAgainstItem();
+  			item.setId(idMappings.getOsmElementId());
+  			item.setType(idMappings.getOsmElementType().toString().toLowerCase());
+  			item.setUuid(reviewItem.getReviewAgainstItemId());
+  			reviewAgainstItems.add(item);
   		}
-  		response.put("reviewAgainstItemIds", reviewAgainstItemIdsArr);
+  		response.setReviewAgainstItems(reviewAgainstItems.toArray(new ReviewAgainstItem[]{}));
   		
       //add all items which reference the input features as a review against item
-  		final List<String> reviewableItemIds =
+  		final List<Tuple> reviewableItemRecords =
         new SQLQuery(conn, DbUtils.getConfiguration(mapId))
   		    .from(reviewItems)
+  		    .join(elementIdMappings)
+  		    //this should be the only join condition needed since the element id is globally unique
+  		    //for each element
+  		      .on(reviewItems.reviewAgainstItemId.eq(elementIdMappings.elementId))
     		  .where(reviewItems.reviewAgainstItemId.eq(elementUniqueId))
-    		  .list(reviewItems.reviewableItemId);
-  		JSONArray reviewableItemIdsArr = new JSONArray();
-  		for (String id : reviewableItemIds)
+    		  .list(reviewItems, elementIdMappings);
+  		List<ReviewAgainstItem> reviewableItems = new ArrayList<ReviewAgainstItem>();
+  		for (Tuple itemRecord : reviewableItemRecords)
   		{
-  			//JSONObject responseItem = new JSONObject();
-  			//responseItem.put("uuid", id);
-  			//reviewableItemIdsArr.add(responseItem);
-  			reviewableItemIdsArr.add(id);
+  			//returning a review against item here, instead of a reviewable, b/c that object has
+  			//all of the info that's needed to return the references, whereas ReviewableItem has 
+  			//a lot of extra unneeded info...client won't know the difference between the two anyway
+  			//in this circumstance
+  			ReviewItems reviewItem = itemRecord.get(reviewItems);
+  			ElementIdMappings idMappings = itemRecord.get(elementIdMappings);
+  			ReviewAgainstItem item = new ReviewAgainstItem();
+  			item.setId(idMappings.getOsmElementId());
+  			item.setType(idMappings.getOsmElementType().toString().toLowerCase());
+  			item.setUuid(reviewItem.getReviewableItemId());
+  			reviewableItems.add(item);
   		}
-  		response.put("reviewableItemIds", reviewableItemIdsArr);
+  		response.setReviewableItems(reviewableItems.toArray(new ReviewAgainstItem[]{}));
   	}
   	catch (Exception e)
     {
@@ -909,6 +658,6 @@ public class ReviewResource
     }
   	
   	log.debug("response : " + response.toString());
-  	return Response.ok(response.toJSONString(), MediaType.APPLICATION_JSON).build();
+  	return response;
   }
 }

@@ -647,6 +647,7 @@ public class Changeset extends Changesets
    * @param changesetDoc changeset to examine
    * @return true if any items in the changeset are involved in a review
    * @throws TransformerException 
+   * @todo write unit test
    */
   public static boolean changesetContainsFeatureInvolvedInReview(final Document changesetDoc) 
   	throws TransformerException

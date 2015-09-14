@@ -329,7 +329,7 @@ public class ChangesetResource
    * @throws Exception
    * @see http://wiki.openstreetmap.org/wiki/API_0.6 and 
    * http://wiki.openstreetmap.org/wiki/OsmChange
-   * @todo why can't I pass in changesetDiff as an XML doc instead of a string?
+   * @todo update unit test
    */
   @POST
   @Path("/{changesetId}/upload")

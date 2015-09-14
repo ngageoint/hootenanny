@@ -27,7 +27,6 @@
 package hoot.services.review;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -70,8 +69,6 @@ import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Element.ElementType;
-import hoot.services.models.review.ReviewedItem;
-import hoot.services.models.review.ReviewedItems;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.writers.osm.ChangesetDbWriter;
 
@@ -620,50 +617,6 @@ public class ReviewTestUtils
         .replaceAll(
           "way id=\"-18\"",
           "way id=\"" + String.valueOf(wayIds.get((long)-18)) + "\""));
-  }
-
-  public static ReviewedItems createReviewedItems()
-  {
-    ReviewedItems reviewedItems = new ReviewedItems();
-    ReviewedItem[] reviewedItemsArr = new ReviewedItem[5];
-
-    ReviewedItem reviewedItem = new ReviewedItem();
-    reviewedItem.setId(nodeIds.get((long)-64));
-    reviewedItem.setType(Element.ElementType.Node.toString().toLowerCase());
-    reviewedItem.setReviewedAgainstId(nodeIds.get((long)-65));
-    reviewedItem.setReviewedAgainstType(Element.ElementType.Node.toString());
-    reviewedItemsArr[0] = reviewedItem;
-
-    reviewedItem = new ReviewedItem();
-    reviewedItem.setId(nodeIds.get((long)-71));
-    reviewedItem.setType(Element.ElementType.Node.toString().toLowerCase());
-    reviewedItem.setReviewedAgainstId(nodeIds.get((long)-64));
-    reviewedItem.setReviewedAgainstType(Element.ElementType.Node.toString());
-    reviewedItemsArr[1] = reviewedItem;
-
-    reviewedItem = new ReviewedItem();
-    reviewedItem.setId(wayIds.get((long)-43));
-    reviewedItem.setType(Element.ElementType.Way.toString().toLowerCase());
-    reviewedItem.setReviewedAgainstId(wayIds.get((long)-20));
-    reviewedItem.setReviewedAgainstType(Element.ElementType.Way.toString());
-    reviewedItemsArr[2] = reviewedItem;
-
-    reviewedItem = new ReviewedItem();
-    reviewedItem.setId(wayIds.get((long)-42));
-    reviewedItem.setType(Element.ElementType.Way.toString().toLowerCase());
-    reviewedItem.setReviewedAgainstId(wayIds.get((long)-18));
-    reviewedItem.setReviewedAgainstType(Element.ElementType.Way.toString());
-    reviewedItemsArr[3] = reviewedItem;
-
-    reviewedItem = new ReviewedItem();
-    reviewedItem.setId(relationIds.get((long)-3));
-    reviewedItem.setType(Element.ElementType.Relation.toString().toLowerCase());
-    reviewedItem.setReviewedAgainstId(nodeIds.get((long)-67));
-    reviewedItem.setReviewedAgainstType(Element.ElementType.Node.toString());
-    reviewedItemsArr[4] = reviewedItem;
-
-    reviewedItems.setReviewedItems(reviewedItemsArr);
-    return reviewedItems;
   }
 
   private static void verifyReviewStatuses(final DbUtils.review_status_enum[] expectedReviewStatuses)

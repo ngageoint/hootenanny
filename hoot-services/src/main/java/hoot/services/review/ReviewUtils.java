@@ -27,10 +27,8 @@
 package hoot.services.review;
 
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -51,8 +49,6 @@ import hoot.services.db2.QReviewItems;
 import hoot.services.db2.ReviewItems;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
-import hoot.services.models.review.ReviewedItem;
-import hoot.services.models.review.ReviewedItems;
 import hoot.services.utils.ResourceErrorHandler;
 
 /**
@@ -64,48 +60,6 @@ public class ReviewUtils
 
   protected static final QReviewItems reviewItemsTbl = QReviewItems.reviewItems;
   protected static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
-  
-  /**
-   * Constructs a ReviewedItems object for all items associated with the map layer
-   *
-   * @param mapId
-   * @return a ReviewedItems object
-   */
-  public static ReviewedItems getReviewedItemsCollectionForAllRecords(final long mapId,
-    Connection conn)
-  {
-    ReviewedItems reviewedItems = new ReviewedItems();
-    List<ReviewedItem> reviewedItemsList = new ArrayList<ReviewedItem>();
-
-    SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration(mapId));
-
-    List<ReviewItems> reviewItems =
-  	query	.from(reviewItemsTbl)
-		.where(
-				reviewItemsTbl.mapId.eq(mapId)
-		)
-		.list(reviewItemsTbl);
-
-    for (ReviewItems reviewItem : reviewItems)
-    {
-      ReviewedItem reviewedItem = new ReviewedItem();
-      log.debug("reviewableItemId: " + reviewItem.getReviewableItemId());
-      log.debug("reviewAgainstItemId: " + reviewItem.getReviewAgainstItemId());
-      //TODO: there is a much more efficient way to do this...but this will have to do for now
-      reviewedItem.setId(getElementId(reviewItem.getReviewableItemId(), mapId, conn));
-      reviewedItem.setType(
-        getElementType(
-          reviewItem.getReviewableItemId(), mapId, conn).toString().toLowerCase());
-      reviewedItem.setReviewedAgainstId(
-        getElementId(reviewItem.getReviewAgainstItemId(), mapId, conn));
-      reviewedItem.setReviewedAgainstType(
-        getElementType(
-          reviewItem.getReviewAgainstItemId(), mapId, conn).toString().toLowerCase());
-      reviewedItemsList.add(reviewedItem);
-    }
-    reviewedItems.setReviewedItems(reviewedItemsList.toArray(new ReviewedItem[]{}));
-    return reviewedItems;
-  }
 
   /**
    * toString() implementation for the ElementIdMappings

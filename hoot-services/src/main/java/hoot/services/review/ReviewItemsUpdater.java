@@ -629,7 +629,6 @@ public class ReviewItemsUpdater
     long waittime = curTimeMili - LOCK_TIME;
     Timestamp compareTime = new Timestamp(waittime);
     
-    
     List<Tuple> firstReviewables = _getAvailableReviewQuery(compareTime, offsetReviewId, true).limit(1)
         .list(rm.reviewId, rm.reviewableItemId, rm.reviewAgainstItemId, rm.reviewStatus);
     
