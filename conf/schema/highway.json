@@ -159,7 +159,7 @@
         "isA": "highway",
         "similarTo": { "name": "amenity=bus_station", "weight": 0.8 },
         "geometries": ["node"],
-        "categories": ["poi"]
+        "categories": ["poi", "hgispoi"]
     },
 
     "tag": {
@@ -167,7 +167,7 @@
         "isA": "highway",
         "similarTo": { "name": "amenity=parking", "weight": 0.7 },
         "geometries": ["node"],
-        "categories": ["poi"]
+        "categories": ["poi", "hgispoi"]
     },
 
     "tag": {
@@ -176,7 +176,7 @@
         "similarTo": { "name": "amenity=restaurant", "weight": 0.8 },
         "similarTo": { "name": "amenity=fuel", "weight": 0.8 },
         "geometries": ["node"],
-        "categories": ["poi"]
+        "categories": ["poi", "hgispoi"]
     },
 
     "#end" : ""

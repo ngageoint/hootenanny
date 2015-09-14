@@ -1,5 +1,7 @@
 {
-    "tag": { "name": "historic", "isA": "poi=yes" },
+    "tag": {
+        "name": "historic", "isA": "hgispoi"
+    },
     "tag": { "name": "historic=*", "isA": "historic" },
     "tag": {
         "name": "historic=memorial",

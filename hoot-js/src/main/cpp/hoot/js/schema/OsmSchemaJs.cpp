@@ -27,7 +27,6 @@
 #include "OsmSchemaJs.h"
 
 // hoot
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/DataConvertJs.h>
@@ -48,9 +47,12 @@ void OsmSchemaJs::Init(Handle<Object> exports)
   Handle<Object> schema = Object::New();
   exports->Set(String::NewSymbol("OsmSchema"), schema);
   schema->Set(String::NewSymbol("getCategories"), FunctionTemplate::New(getCategories)->GetFunction());
+  schema->Set(String::NewSymbol("getTagByCategory"),
+    FunctionTemplate::New(getTagByCategory)->GetFunction());
   schema->Set(String::NewSymbol("isAncestor"), FunctionTemplate::New(isAncestor)->GetFunction());
   schema->Set(String::NewSymbol("isArea"), FunctionTemplate::New(isArea)->GetFunction());
   schema->Set(String::NewSymbol("isBuilding"), FunctionTemplate::New(isBuilding)->GetFunction());
+  schema->Set(String::NewSymbol("isHgisPoi"), FunctionTemplate::New(isHgisPoi)->GetFunction());
   schema->Set(String::NewSymbol("isLinear"), FunctionTemplate::New(isLinear)->GetFunction());
   schema->Set(String::NewSymbol("isLinearWaterway"), FunctionTemplate::New(isLinearWaterway)->GetFunction());
   schema->Set(String::NewSymbol("isMetaData"), FunctionTemplate::New(isMetaData)->GetFunction());
@@ -64,6 +66,15 @@ Handle<Value> OsmSchemaJs::getCategories(const Arguments& args) {
   QString kvp = toCpp<QString>(args[0]);
 
   return scope.Close(toV8(OsmSchema::getInstance().getCategories(kvp).toStringList()));
+}
+
+Handle<Value> OsmSchemaJs::getTagByCategory(const Arguments& args) {
+  HandleScope scope;
+
+  QString category = toCpp<QString>(args[0]);
+  OsmSchemaCategory c = OsmSchemaCategory::fromString(category);
+
+  return scope.Close(toV8(OsmSchema::getInstance().getTagByCategory(c)));
 }
 
 Handle<Value> OsmSchemaJs::isAncestor(const Arguments& args) {
@@ -97,6 +108,14 @@ Handle<Value> OsmSchemaJs::isBuilding(const Arguments& args) {
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
   return scope.Close(Boolean::New(OsmSchema::getInstance().isBuilding(e)));
+}
+
+Handle<Value> OsmSchemaJs::isHgisPoi(const Arguments& args) {
+  HandleScope scope;
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  return scope.Close(Boolean::New(OsmSchema::getInstance().isHgisPoi(*e)));
 }
 
 Handle<Value> OsmSchemaJs::isLinearWaterway(const Arguments& args) {

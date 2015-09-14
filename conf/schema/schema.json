@@ -10,6 +10,7 @@
     "import": "landuse.json",
     "import": "leisure.json",
     "import": "man_made.json",
+    "import": "military.json",
     "import": "place.json",
     "import": "parking.json",
     "import": "address.json",
@@ -22,6 +23,7 @@
     "import": "power.json",
     "import": "public_transport.json",
     "import": "railway.json",
+    "import": "seamark_type.json",
     "import": "shop.json",
     "import": "source.json",
     "import": "sport.json",
@@ -282,7 +284,7 @@
         "isA": "bridge_tunnel=unknown",
         "similarTo": { "name": "bridge=no", "weight": 0.5 },
         "similarTo": { "name": "tunnel=yes", "weight": 0.01 },
-        "categories": ["poi"]
+        "categories": ["poi", "hgispoi"]
     },
 
     "tag": {
@@ -293,7 +295,8 @@
     "tag": {
         "name": "tunnel=yes",
         "isA": "bridge_tunnel=unknown",
-        "similarTo": { "name": "tunnel=no", "weight": 0.5 }
+        "similarTo": { "name": "tunnel=no", "weight": 0.5 },
+        "categories": ["poi", "hgispoi"]
     },
 
     "tag": {

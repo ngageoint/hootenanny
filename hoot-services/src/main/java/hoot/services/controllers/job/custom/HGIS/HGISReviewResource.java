@@ -182,7 +182,7 @@ public class HGISReviewResource extends JobControllerBase {
   }
   
 //postgresql://hoot:hoottest@localhost:5432/hoot1/BrazilOsmPois
-  private final String _generateDbMapParam(final String mapName)
+  protected final String _generateDbMapParam(final String mapName)
   {
   	return "postgresql://" + _dbUserId + ":" + _dbPassword + "@" + _dbHost + "/" + _dbName + "/" + mapName;
   }

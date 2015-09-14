@@ -3,17 +3,23 @@
         "name": "power",
         "influence": 1.0,
         "type": "enumeration",
+        "categories": ["poi"],
         "geometries": ["node", "linestring"]
     },
 
     "#" : " The catch all",
 
-    "tag": { "name": "power=*", "isA": "power" },
-    "tag": { "name": "power=pole", "isA": "power" },
+    "tag": {
+        "name": "power=*",
+        "isA": "power"
+    },
+    "tag": {
+        "name": "power=pole",
+        "isA": "power"
+    },
     "tag": {
         "name": "power=tower",
         "isA": "power",
-        "categories": ["poi"],
         "geometries": ["node"],
         "similarTo": { "name": "power=pole", "weight": 0.7 }
     },
