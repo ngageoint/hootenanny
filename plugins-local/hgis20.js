@@ -480,7 +480,7 @@ hgis20 = {
                 attrs.XtableName = hgis20.layerList[tList[0]];
 
                 // Debug
-                print('Post: Loop XtableName: ' + attrs.XtableName);
+                // print('Post: Loop XtableName: ' + attrs.XtableName);
 
                 attrs[tList[1]] = attrs[val];
                 delete attrs[val];
@@ -503,14 +503,14 @@ hgis20 = {
                     {
                         var row = hgis20.layerLookup[col][value];
                         attrs.XtableName = row[1];
-                        print('layerName: Got ' + attrs.XtableName);
+                        // print('layerName: Got ' + attrs.XtableName);
                     }
                 }
             }
         } // End find layerName
 
         // Debug
-        print('Post: XtableName: ' + attrs.XtableName);
+        // print('Post: XtableName: ' + attrs.XtableName);
 
 
         // Fix up Hydro Lines vs Areas. Just for what is in the spec, everything else should throw an error
@@ -770,8 +770,11 @@ hgis20 = {
 
         // Start processing here
         // Debug:
-        print('Element: ' + elementType + '  Geom: ' + geometryType);
-        if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            print('Element: ' + elementType + '  Geom: ' + geometryType);
+            for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
+        }
 
         // The Nuke Option: If we have a relation, drop the feature and carry on
         if (tags['building:part']) return null;
