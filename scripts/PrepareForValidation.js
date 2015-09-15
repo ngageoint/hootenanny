@@ -121,10 +121,8 @@ hoot.loadMap(map, input, false, 1);
 // count the number of POIs in the map
 map.visit(countPois);
 
-hoot.log(poiCount);
 // Create an array of indexes for the random 30% sample
 var randomIndexes = createRandomArray(poiCount, 0.30).sort(function(a,b) { return a - b; });
-hoot.log(randomIndexes.length);
 randomIndexes[randomIndexes.length] = poiCount;
 
 // go through all the elements
@@ -143,6 +141,5 @@ map.visit(function(e) {
         index++;
     }
 });
-hoot.log(i);
 
 hoot.saveMap(map, output);
