@@ -58,6 +58,7 @@ void ServicesDbReader::_addTagsToElement(shared_ptr<Element> element)
 {
   bool ok;
   Tags& tags = element->getTags();
+
   if (tags.contains("hoot:status"))
   {
     QString statusStr = tags.get("hoot:status");
@@ -75,6 +76,7 @@ void ServicesDbReader::_addTagsToElement(shared_ptr<Element> element)
     }
     tags.remove("hoot:status");
   }
+
   if (tags.contains("type"))
   {
     Relation* r = dynamic_cast<Relation*>(element.get());
@@ -84,6 +86,7 @@ void ServicesDbReader::_addTagsToElement(shared_ptr<Element> element)
       tags.remove("type");
     }
   }
+
   if (tags.contains("error:circular"))
   {
     element->setCircularError(tags.get("error:circular").toDouble(&ok));
@@ -95,7 +98,8 @@ void ServicesDbReader::_addTagsToElement(shared_ptr<Element> element)
   }
   else if (tags.contains("accuracy"))
   {
-    element->setCircularError(tags.get("accuracy").toDouble());
+    element->setCircularError(tags.get("accuracy").toDouble(&ok));
+
     if (!ok)
     {
       LOG_WARN("Error parsing accuracy.");
@@ -292,16 +296,20 @@ void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementT
       while( elementResultsIterator->next() )
       {
         long long id = elementResultsIterator->value(0).toLongLong();
-
         if( lastId != id )
         {
           // process the complete element only after the first element created
           if(!firstElement)
           {
-            element->setTags( ServicesDb::unescapeTags(tags.join(", ")) );
-            _addTagsToElement( element );
+            if(tags.size()>0)
+            {
+              element->setTags( ServicesDb::unescapeTags(tags.join(", ")) );
+              _addTagsToElement( element );
+            }
+
             if (_status != Status::Invalid) { element->setStatus(_status); }
             map->addElement(element);
+            tags.clear();
           }
 
           // extract the node contents except for the tags
@@ -323,6 +331,7 @@ void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementT
               break;
 
             default:
+              //LOG_DEBUG("BAD ELEMENT");
               throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
           }
           lastId = id;
@@ -331,16 +340,22 @@ void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementT
 
         // read the tag for as many rows as there are tags
         // need to get into form "key1"=>"val1", "key2"=>"val2", ...
-        tags << _database.extractTagFromRow_OsmApi(elementResultsIterator, elementType.getEnum());
+
+        QString result = _database.extractTagFromRow_OsmApi(elementResultsIterator, elementType.getEnum());
+        if(result != "") tags << result;
       }
 
       // process the last complete element only if an element has been created
       if(!firstElement)
       {
-        element->setTags( ServicesDb::unescapeTags(tags.join(", ")) );
-        _addTagsToElement( element );
+        if(tags.size()>0)
+        {
+          element->setTags( ServicesDb::unescapeTags(tags.join(", ")) );
+          _addTagsToElement( element );
+        }
         if (_status != Status::Invalid) { element->setStatus(_status); }
         map->addElement(element);
+        tags.clear();
       }
       break;
 

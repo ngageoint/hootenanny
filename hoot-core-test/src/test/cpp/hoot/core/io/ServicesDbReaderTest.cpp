@@ -44,7 +44,7 @@
 
 // special define:
 //   Greg's workspace set true; Terry's set false
-#define GREGSWORKSPACE false
+#define GREGSWORKSPACE true
 
 namespace hoot
 {
@@ -62,7 +62,7 @@ class ServicesDbReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runFactoryReadTest);
 
   // Osm Api tests
-//  CPPUNIT_TEST(runReadOsmApiTest);
+  CPPUNIT_TEST(runReadOsmApiTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -227,6 +227,20 @@ public:
     }
     CPPUNIT_ASSERT_EQUAL(
       QString("No map exists with ID: " + QString::number(invalidMapId)).toStdString(), exceptionMsg.toStdString());
+  }
+
+  void verifyFullReadOutput_OsmApi(shared_ptr<OsmMap> map)
+  {
+    //nodes
+
+    //CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodeMap().size());
+    shared_ptr<Node> node = map->getNode(500);
+    CPPUNIT_ASSERT_EQUAL((long)500, node->getId());
+    CPPUNIT_ASSERT_EQUAL(38.4, node->getY()/10000000);
+    CPPUNIT_ASSERT_EQUAL(-106.5, node->getX()/10000000);
+    CPPUNIT_ASSERT_EQUAL(3.0, node->getCircularError());
+    CPPUNIT_ASSERT_EQUAL(1, node->getTags().size());
+    QString tagValue = node->getTags().get("hoot:status");
   }
 
   void verifyFullReadOutput(shared_ptr<OsmMap> map)
@@ -404,7 +418,7 @@ public:
     verifyFullReadOutput(map);
     reader.close();
   }
-/*
+
   void runReadOsmApiTest()
   {
     Settings s = conf();
@@ -416,15 +430,49 @@ public:
 
     ServicesDbReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
+
+    ////////////////////////////////////////
+    // insert simple test data
+    ////////////////////////////////////////
+
+    ServicesDb database;
+
+    if(GREGSWORKSPACE)
+      database.open(QUrl("postgresql://vagrant:vagrant@localhost:15432/openstreetmap"));
+    else
+      database.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
+
+    database.transaction();
+
+    // Create or get user, set our userId
+    database.setUserId(database.getOrCreateUser("OsmApiInsert@hoot.local", "Hootenanny Inserter"));
+
+    database.beginChangeset();
+
+    // Insert single node
+    Tags simpleTags;
+    simpleTags.appendValue("body_of_water", "haitis river");
+    simpleTags.appendValue("accuracy", "3");
+
+    long assignedNodeId;
+    CPPUNIT_ASSERT( database.insertNode(38.4, -106.5, simpleTags, assignedNodeId ) == true );
+
+    database.endChangeset();
+    database.commit();
+    database.close();
+
+    ///////////////////////////////////////
+    // test the reader
+    ///////////////////////////////////////
+
     LOG_DEBUG("before OPEN...");
     reader.open(ConfigOptions(s).getServicesDbTestUrlOsmapi());
     LOG_DEBUG("after OPEN, before READ...");
     reader.read(map);
     LOG_DEBUG("after READ...");
-    verifyFullReadOutput(map);
+    verifyFullReadOutput_OsmApi(map);
     reader.close();
   }
-*/
 
   void runReadWithElemTest()
   {
