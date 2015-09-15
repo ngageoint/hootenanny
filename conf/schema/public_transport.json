@@ -1,0 +1,34 @@
+{
+    "tag": {
+        "name": "public_transport",
+        "isA": "hgispoi",
+        "influence": 1.0,
+        "type": "enumeration",
+        "geometries": ["node", "area", "way", "relation"]
+    },
+
+    "#" : " The catch all",
+    "tag": { "name": "public_transport=*", "isA": "public_transport" },
+    "tag": { "name": "public_transport=stop_position", "isA": "public_transport",
+        "geometries": ["node"],
+        "similarTo": { "name": "railway=halt", "weight": 0.8 },
+        "similarTo": { "name": "highway=bus_stop", "weight": 0.8 },
+        "similarTo": { "name": "public_transport=platform", "weight": 0.8 },
+        "similarTo": { "name": "public_transport=station", "weight": 0.7 }
+    },
+    "tag": { "name": "public_transport=station", "isA": "public_transport",
+        "geometries": ["node"],
+        "similarTo": { "name": "transport=station", "weight": 0.9 },
+        "similarTo": { "name": "railway=station", "weight": 0.8 },
+        "similarTo": { "name": "building=train_station", "weight": 0.8 },
+        "similarTo": { "name": "amenity=bus_station", "weight": 0.8 },
+        "similarTo": { "name": "station=light_rail", "weight": 0.8 }
+    },
+    "tag": { "name": "public_transport=platform", "isA": "public_transport",
+        "similarTo": { "name": "transport=station", "weight": 0.8 },
+        "similarTo": { "name": "railway=halt", "weight": 0.8 }
+    },
+
+
+    "#" : "end"
+}

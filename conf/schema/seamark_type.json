@@ -1,0 +1,19 @@
+{
+    "tag": {
+        "name": "seamark:type",
+        "influence": 1.0,
+        "type": "enumeration",
+        "geometries": ["node","area"],
+        "mismatchScore": .1,
+        "isA": "hgispoi"
+    },
+
+    "#" : " The catch all",
+    "tag": {
+        "name": "seamark:type=*",
+        "description": "Defines the type of seamarks and other navigation aids for marine charts.",
+        "isA": "seamark:type"
+    },
+
+    "#" : "end"
+}

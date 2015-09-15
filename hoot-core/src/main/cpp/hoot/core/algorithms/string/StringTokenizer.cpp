@@ -42,14 +42,48 @@ StringTokenizer::StringTokenizer(QString sepRegex) : _sep(sepRegex)
 {
 }
 
+bool StringTokenizer::_isNonWord(const QString& s) const
+{
+  for (int i = 0; i < s.size(); i++)
+  {
+    if (s.at(i).isLetterOrNumber())
+    {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 void StringTokenizer::setConfiguration(const Settings& conf)
 {
-  _sep.setPattern(ConfigOptions(conf).getTokenSeparator());
+  ConfigOptions co(conf);
+  _sep.setPattern(co.getTokenSeparator());
+  _keepNonWords = co.getTokenKeepNonWords();
+  _minSize = co.getTokenMinSize();
 }
 
 QStringList StringTokenizer::tokenize(QString s) const
 {
-  return s.split(_sep, QString::SkipEmptyParts);
+  QStringList l = s.split(_sep, QString::SkipEmptyParts);
+
+  for (int i = 0; i < l.size();)
+  {
+    if (_keepNonWords == false && _isNonWord(l[i]))
+    {
+      l.removeAt(i);
+    }
+    else if (l[i].size() < _minSize)
+    {
+      l.removeAt(i);
+    }
+    else
+    {
+      i++;
+    }
+  }
+
+  return l;
 }
 
 }

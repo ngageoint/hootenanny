@@ -76,6 +76,8 @@ private:
 
   static Handle<Value> contains(const Arguments& args);
   static Handle<Value> get(const Arguments& args);
+  static Handle<Value> getCreateUuid(const Arguments& args);
+  static Handle<Value> set(const Arguments& args);
   static Handle<Value> toDict(const Arguments& args);
   static Handle<Value> toString(const Arguments& args);
 

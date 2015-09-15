@@ -5,23 +5,42 @@
         "type": "enumeration",
         "geometries": ["node","linestring","area"]
     },
-    
-    "tag": { "name": "waterway=dock", "isA": "waterway", "categories": ["poi"] },
-    "tag": { "name": "waterway=boatyard", "isA": "waterway", "categories": ["poi"] },
+
+    "tag": {
+        "name": "waterway=dock",
+        "isA": "waterway",
+        "categories": ["poi", "hgispoi"]
+    },
+    "tag": {
+        "name": "waterway=boatyard",
+        "isA": "waterway",
+        "categories": ["poi", "hgispoi"]
+    },
     "tag": { "name": "waterway=watercourse",  "isA": "waterway", "categories": ["poi"] },
     "tag": { "name": "waterway=river", "isA": "waterway=watercourse", "categories": ["poi"] },
     "tag": { "name": "waterway=stream", "isA": "waterway=watercourse", "categories": ["poi"] },
     "tag": { "name": "waterway=anabranch", "isA": "waterway=watercourse", "categories": ["poi"] },
-    
-    "tag": { "name": "waterway=canal", "isA": "waterway" },
+
+    "tag": {
+        "name": "waterway=canal",
+        "isA": "waterway",
+        "categories": ["poi", "hgispoi"]
+    },
     "tag": { "name": "river_flow=*", "isA": "waterway" },
     "tag": { "name": "river_type=*", "isA": "waterway" },
     "tag": { "name": "waterway=riverbank", "isA": "waterway" },
-    "tag": { "name": "waterway=dam", "isA": "waterway" },
+    "tag": {
+        "name": "waterway=dam",
+        "isA": "waterway",
+        "categories": ["poi", "hgispoi"]
+    },
     "tag": { "name": "waterway=ditch", "isA": "waterway" },
     "tag": { "name": "waterway=wadi", "isA": "waterway" },
-    "tag": { "name": "bridge=aqueduct", "isA": "waterway" },
-    
+    "tag": {
+        "name": "bridge=aqueduct", "isA": "waterway",
+        "categories": ["poi", "hgispoi"]
+    },
+
     "tag": { "name": "type=stream", "isA": "waterway" },
     "tag": { "name": "type=river", "isA": "waterway" },
     "tag": { "name": "FlowDir=*", "isA": "waterway" },
