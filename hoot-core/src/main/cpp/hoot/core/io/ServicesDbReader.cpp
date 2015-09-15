@@ -288,8 +288,6 @@ void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementT
       break;
 
     case ServicesDb::DBTYPE_OSMAPI:
-      LOG_DEBUG("IN ServicesDbReader::_read's case OSMAPI...");
-
       // check if db active or not
       assert(elementResultsIterator.isActive());
 
@@ -316,22 +314,18 @@ void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementT
           switch (elementType.getEnum())
           {
             case ElementType::Node:
-              //LOG_DEBUG("CHECK NODE");
               element = _resultToNode_OsmApi(*elementResultsIterator, *map);
               break;
 
             case ElementType::Way:
-              //LOG_DEBUG("CHECK WAY");
               element = _resultToWay_OsmApi(*elementResultsIterator, *map);
               break;
 
             case ElementType::Relation:
-              //LOG_DEBUG("CHECK RELATION");
               element = _resultToRelation_OsmApi(*elementResultsIterator, *map);
               break;
 
             default:
-              //LOG_DEBUG("BAD ELEMENT");
               throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
           }
           lastId = id;
@@ -613,12 +607,14 @@ shared_ptr<Node> ServicesDbReader::_resultToNode(const QSqlQuery& resultIterator
 shared_ptr<Node> ServicesDbReader::_resultToNode_OsmApi(const QSqlQuery& resultIterator, OsmMap& map)
 {
   long nodeId = _mapElementId(map, ElementId::node(resultIterator.value(0).toLongLong())).getId();
+  double lat = resultIterator.value(ServicesDb::NODES_LATITUDE).toLongLong()/(double)ServicesDb::COORDINATE_SCALE;
+  double lon = resultIterator.value(ServicesDb::NODES_LONGITUDE).toLongLong()/(double)ServicesDb::COORDINATE_SCALE;
   shared_ptr<Node> result(
     new Node(
       _status,
       nodeId,
-      resultIterator.value(ServicesDb::NODES_LONGITUDE).toDouble(),
-      resultIterator.value(ServicesDb::NODES_LATITUDE).toDouble(),
+      lon,
+      lat,
       ServicesDb::DEFAULT_ELEMENT_CIRCULAR_ERROR));
 
   return result;

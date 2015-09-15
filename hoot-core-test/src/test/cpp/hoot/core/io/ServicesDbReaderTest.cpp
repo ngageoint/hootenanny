@@ -236,8 +236,8 @@ public:
     //CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodeMap().size());
     shared_ptr<Node> node = map->getNode(500);
     CPPUNIT_ASSERT_EQUAL((long)500, node->getId());
-    CPPUNIT_ASSERT_EQUAL(38.4, node->getY()/10000000);
-    CPPUNIT_ASSERT_EQUAL(-106.5, node->getX()/10000000);
+    CPPUNIT_ASSERT_EQUAL(38.4, node->getY());
+    CPPUNIT_ASSERT_EQUAL(-106.5, node->getX());
     CPPUNIT_ASSERT_EQUAL(3.0, node->getCircularError());
     CPPUNIT_ASSERT_EQUAL(1, node->getTags().size());
     QString tagValue = node->getTags().get("hoot:status");
