@@ -1522,7 +1522,7 @@ hgis20.rules = {
      ['natural$TYPE','Volcano','natural','volcano'],
      ['natural$TYPE','Wadi','waterway','wadi'],
      ['natural$TYPE','Waterfall','waterway','waterfall'],
-//      ['natural$TYPE','Wetland','raw:naturalType','wetland'], // ARRRGH
+     ['natural$TYPE','Wetland','nwetland','yes'], // ARRRGH
 
      ['pplant$TYPE','Coal','generator:source','coal'],
      ['pplant$TYPE','Combustion','generator:source','combustion'], // ????
@@ -1743,6 +1743,7 @@ hgis20.rules = {
      ['hydrol$TYPE','River/Stream','waterway','river'],
 
      ['natural$TYPE','Beach','natural','beach'],
+     ['natural$TYPE','Lagoon','water','lagoon'],
      ['natural$TYPE','Wetland','natural','wetland'],
 
      ['tourist$TYPE','Memorial','historic','memorial'],

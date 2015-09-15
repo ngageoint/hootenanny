@@ -163,6 +163,10 @@ hgis20 = {
 //             delete tags.uuid;
 //         } // End sort out Road, Railway & Bridge
 
+
+        // Add features to a second layer.
+        // Note: The geometry MUST be the same
+
         if (layerName == 'Marine_POI' && attrs.TYPE == 'Beach')
         {
             newAttrs.XtableName = 'Natural_POI';
@@ -463,6 +467,15 @@ hgis20 = {
             delete tags.water;
         }
 
+        // Sort out Wetlands.
+        // * Point = Natural_POI
+        // * Area = Hydrology_Polygons
+        if (tags.natural == 'wetland' && geometryType == 'Point')
+        {
+            tags.nwetland = 'yes';
+            delete tags.natural;
+        }
+
     }, // End applyToHgisPreProcessing
 
     applyToHgisPostProcessing : function (tags, attrs, geometryType)
@@ -480,7 +493,7 @@ hgis20 = {
                 attrs.XtableName = hgis20.layerList[tList[0]];
 
                 // Debug
-                // print('Post: Loop XtableName: ' + attrs.XtableName);
+                print('Post: Loop XtableName: ' + attrs.XtableName);
 
                 attrs[tList[1]] = attrs[val];
                 delete attrs[val];
@@ -503,32 +516,39 @@ hgis20 = {
                     {
                         var row = hgis20.layerLookup[col][value];
                         attrs.XtableName = row[1];
-                        // print('layerName: Got ' + attrs.XtableName);
+
+                        // Debug
+                        print('layerName: Got ' + attrs.XtableName);
                     }
                 }
             }
         } // End find layerName
 
         // Debug
-        // print('Post: XtableName: ' + attrs.XtableName);
+        print('Post: XtableName: ' + attrs.XtableName);
 
+        // Check Military
+        if (!(attrs.XtableName) && attrs.MIL_TYPE) attrs.XtableName = 'Military_Installations';
 
         // Fix up Hydro Lines vs Areas. Just for what is in the spec, everything else should throw an error
-        if (attrs.XtableName == 'Hydrology_Polygons' && geometryType == 'Line')
+        if (attrs.XtableName == 'Hydrology_Polygons')
         {
-            switch (attrs.TYPE)
+            if (geometryType == 'Line')
             {
-                case 'Lake':
-                case 'Inland Water':
-                case 'Land Subject to Inundation':
-                    attrs.XtableName = 'Hydrology_Polylines';
-                    break;
+                switch (attrs.TYPE)
+                {
+                    case 'Lake':
+                    case 'Inland Water':
+                    case 'Land Subject to Inundation':
+                        attrs.XtableName = 'Hydrology_Polylines';
+                        break;
 
-                case 'River':
-                    attrs.TYPE = 'River/Stream';
-                    attrs.XtableName = 'Hydrology_Polylines';
-                    break;
-            } // End Switch
+                    case 'River':
+                        attrs.TYPE = 'River/Stream';
+                        attrs.XtableName = 'Hydrology_Polylines';
+                        break;
+                } // End Switch
+            }
         } // End Hydrology_Polygons
 
         // Fix Railway POI vs lines
