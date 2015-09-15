@@ -640,9 +640,6 @@ public class ReviewResource
   	}
   	catch (Exception e)
     {
-  		log.debug("mapId: " + mapId);
-  		log.debug("elementId: " + elementId);
-  		log.debug("elementType: " + elementType);
       ReviewUtils.handleError(
       	e, 
       	"Unable to retrieve review references for input: " + "mapId: " + mapId + 

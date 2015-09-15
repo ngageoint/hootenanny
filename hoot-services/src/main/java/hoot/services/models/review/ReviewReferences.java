@@ -22,4 +22,20 @@ public class ReviewReferences
   public ReviewReferences()
   {
   }
+  
+  @Override
+  public String toString()
+  {
+  	String str = "Review against items:\n";
+  	for (int i = 0; i < reviewAgainstItems.length; i++)
+  	{
+  		str += reviewAgainstItems[i].toString() + "\n";
+  	}
+  	str += "Reviewable items:\n";
+  	for (int i = 0; i < reviewableItems.length; i++)
+  	{
+  		str += reviewableItems[i].toString() + "\n";
+  	}
+  	return str;
+  }
 }
