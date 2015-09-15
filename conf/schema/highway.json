@@ -173,8 +173,8 @@
     "tag": {
         "name": "highway=services",
         "isA": "highway",
-        "similarTo": { "name": "amenity=restaurant", "weight": 0.8 },
-        "similarTo": { "name": "amenity=fuel", "weight": 0.8 },
+        "similarTo": { "name": "amenity=restaurant", "weight": 0.6 },
+        "similarTo": { "name": "amenity=fuel", "weight": 0.6 },
         "geometries": ["node"],
         "categories": ["poi", "hgispoi"]
     },

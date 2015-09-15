@@ -462,6 +462,12 @@ public:
   double score(const QString& kvp1, const QString& kvp2);
 
   /**
+   * @brief scoreOneWay Returns a oneway score. E.g. highway=primary is similar to highway=road,
+   *  but a highway=road isn't necessarily similar to a highway=primary (so it gets a low score).
+   */
+  double scoreOneWay(const QString& kvp1, const QString& kvp2);
+
+  /**
    * Sets the cost when traversing up the tree to a parent node. This is useful for strict score
    * checking rather than equivalent tags.
    */

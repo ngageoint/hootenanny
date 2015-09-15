@@ -64,6 +64,7 @@ void OsmSchemaJs::Init(Handle<Object> exports)
   schema->Set(String::NewSymbol("isMetaData"), FunctionTemplate::New(isMetaData)->GetFunction());
   schema->Set(String::NewSymbol("isPoi"), FunctionTemplate::New(isPoi)->GetFunction());
   schema->Set(String::NewSymbol("score"), FunctionTemplate::New(score)->GetFunction());
+  schema->Set(String::NewSymbol("scoreOneWay"), FunctionTemplate::New(scoreOneWay)->GetFunction());
 }
 
 Handle<Value> OsmSchemaJs::getAllTags(const Arguments& /*args*/) {
@@ -187,6 +188,15 @@ Handle<Value> OsmSchemaJs::score(const Arguments& args) {
   QString kvp2 = toCpp<QString>(args[1]);
 
   return scope.Close(Number::New(OsmSchema::getInstance().score(kvp1, kvp2)));
+}
+
+Handle<Value> OsmSchemaJs::scoreOneWay(const Arguments& args) {
+  HandleScope scope;
+
+  QString kvp1 = toCpp<QString>(args[0]);
+  QString kvp2 = toCpp<QString>(args[1]);
+
+  return scope.Close(Number::New(OsmSchema::getInstance().scoreOneWay(kvp1, kvp2)));
 }
 
 }

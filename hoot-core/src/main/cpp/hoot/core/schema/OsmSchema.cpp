@@ -652,11 +652,19 @@ public:
         result = 0.0;
       }
 
-      // if this is a enumerated wild card match, but the values are different then use the
-      // mismatch score. E.g. addr:housenumber=12 vs. addr:housenumber=56
       if (id1 == id2 && kvp1 != kvp2)
       {
-        result = getTagVertex(kvpn1).mismatchScore;
+        // if this is a enumerated wild card match, but the values are different then use the
+        // mismatch score. E.g. addr:housenumber=12 vs. addr:housenumber=56
+        if (kvpn1.endsWith("=*"))
+        {
+          result = getTagVertex(kvpn1).mismatchScore;
+        }
+        // if this is an alias match
+        else
+        {
+          result = 1.0;
+        }
       }
     }
 
@@ -1540,6 +1548,11 @@ double OsmSchema::score(const QString& kvp1, const QString& kvp2)
 {
   // I tried using a LruCache here to speed up scoring, but it had a negative impact. :(
   return std::max(d->score(kvp1, kvp2), d->score(kvp2, kvp1));
+}
+
+double OsmSchema::scoreOneWay(const QString& kvp1, const QString& kvp2)
+{
+  return d->score(kvp1, kvp2);
 }
 
 void OsmSchema::setIsACost(double cost)

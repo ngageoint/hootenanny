@@ -37,11 +37,20 @@ var wildcard = schemaTools.wildcard;
 // each of these operations assigns a score to a tag and its associated outcome. Only the highest
 // scoring tag is maintained in the output table.
 var one2one = [
-    ["TYP", 50, wildcard('highway=.*_link', 'highway=road', 1)],
-    ["TYP", 1, simple('highway=road', 2)],
-    ["TYP", 1, isA('highway=road', 0.001)],
-    ["TYP", 41, isSimilar('highway=motorway', 0.7, 0.5)],
-    ["TYP", 33, isSimilar('highway=unclassified', 0.7, 0.5)],
+    ["TYP", 50, 'highway=road', wildcard('highway=.*_link', 1)],
+    ["TYP", 1, simple('highway=road', 2), isA('highway=road', 0.001)],
+    ["TYP", 41, isSimilar('highway=motorway', 0.7, 0.1, 0.5)],
+    ["TYP", 33, isSimilar('highway=unclassified', 0.7, 0.1, 0.5)],
+    ["FFN", 464, isSimilar('shop=car', 0.7, 0.1, 0.5)],
+    ["FFN", 572, isSimilar('amenity=restaurant', 0.7, 0.1, 0.5)],
+    ["FFN", 573, isSimilar('amenity=bar', 0.8, 0.1, 0.5)],
+    ["FFN", 574, isSimilar('amenity=dining_hall', 0.7, 0.1, 0.5)],
+    ["FFN", 578, isSimilar('amenity=banquet_hall', 0.7, 0.1, 0.5)],
+    ["FFN", 579, isSimilar('amenity=convention_centre', 0.7, 0.1, 0.5)],
+    ["FFN", 594, isSimilar('amenity=cinema', 0.7, 0.1, 0.5)],
+    ["FFN", 643, isSimilar('amenity=bank', 0.7, 0.1, 0.5)],
+    ["FFN", 752, isSimilar('shop=photo', 0.7, 0.1, 0.5)],
+    ["FFN", 775, isSimilar('shop=travel_agency', 0.7, 0.1, 0.5)]
 ];
 
 var toOsmTable;
@@ -51,13 +60,12 @@ function getToOgrTable()
 {
     if (!toOgrTable)
     {
-        print("Export:");
         var t = schemaTools.generateToOgrTable(one2one);
         toOgrTable = t;
 
         for (var k1 in t) {
             for (var v1 in t[k1]) {
-                print(JSON.stringify([k1, v1, t[k1][v1][0], t[k1][v1][1]]));
+                print(JSON.stringify([k1, v1, t[k1][v1][0], t[k1][v1][1], t[k1][v1][2]]));
             }
         }
     }
@@ -117,8 +125,6 @@ function translateToOgr(tags, elementType, geometryType)
 
     translate.applyOne2One(tags, attrs, getToOgrTable(), [], []);
 
-    hoot.log(attrs);
-
     return { attrs: attrs, tableName: "LAP030" };
 }
 
@@ -153,12 +159,31 @@ function getDbSchema()
                   type:"enumeration",
                   enumerations:[
                      { name:"Unknown", value:"0" }, 
-                     { name:"Road", value:"1" }, 
+                     { name:"Road", value:"1" },
                      { name:"Street", value:"33" },
                      { name:"Motorway", value:"41" },
                      { name:"Link", value:"50" }
                   ] // End of Enumerations
-                 } // End of TYP
+                 }, // End of TYP
+                 { name:"FFN",
+                   desc:"Feature Function" ,
+                   optional:"R" ,
+                   type:"enumeration",
+                   defValue:"-999999",
+                   enumerations:[
+                       { name:"No Information", value:"-999999" },
+                       { name:"", value:"572" },
+                       { name:"", value:"573" },
+                       { name:"", value:"574" },
+                       { name:"", value:"578" },
+                       { name:"", value:"579" },
+                       { name:"", value:"594" },
+                       { name:"", value:"643" },
+                       { name:"", value:"752" },
+                       { name:"", value:"775" },
+                       { name:"Other", value:"999" },
+                    ] // End of Enumerations·
+                 } // End of FFN
             ]
         }
     ]
