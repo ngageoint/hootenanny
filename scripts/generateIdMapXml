@@ -1,0 +1,103 @@
+#!/usr/bin/perl -w
+
+use strict;
+use threads;
+use threads::shared;
+use Thread::Queue;
+
+sub readXml($$);
+sub createMappings($$);
+sub writeMappings($$);
+
+if ( scalar(@ARGV) !=2 )
+{
+  print( "Usage: generateIdMapXml <input .osm file> <output .xml file>\n\n");
+  exit();
+}
+
+my $inputOsmFile = $ARGV[0];
+my $outputXmlFile = $ARGV[1];
+
+# Shared queues for producers/consumers
+my $inputOsmQueue   = Thread::Queue->new();
+my $outputXmlQueue  = Thread::Queue->new();
+
+# Create threads to read XML, create mapping lines, and write output lines
+my $readXmlThread         = threads->create( \&readXml, $inputOsmFile, $inputOsmQueue );
+my $createMappingsThread  = threads->create( \&createMappings, $inputOsmQueue, $outputXmlQueue );
+my $writeMappingsThread   = threads->create( \&writeMappings, $outputXmlFile, $outputXmlQueue );
+
+# Wait for all threads to come home
+$readXmlThread->join();
+$createMappingsThread->join();
+$writeMappingsThread->join();
+
+print( "All threads returned, exiting\n");
+
+sub readXml($$)
+{
+  my $inputOsmFile = shift(@_);
+  my $inputOsmQueue = shift(@_);
+
+  open( my $inputOsmHandle, "< $inputOsmFile" ) or die( "Could not open file $inputOsmFile\n\n" );
+
+  my $inputQueueMax = 1000000;    # max of a million lines in the input queue
+
+  while ( defined( my $currLine = <$inputOsmHandle> ) )
+  {
+    # If it isn't something of interest, don't bother queue
+    if ( $currLine !~ /<(?:node|way|relation)\s+id=\".+?\"/ )
+    {
+      next;
+    }
+
+    while ( $inputOsmQueue->pending() >= $inputQueueMax ) 
+    {
+      #print( "Reader found queue at 16K entries, sleeping\n" );
+      sleep(1);
+    }
+    $inputOsmQueue->enqueue($currLine);
+  }
+
+  $inputOsmQueue->end();
+
+  close( $inputOsmHandle );
+}
+
+sub createMappings($$)
+{
+  my $inputOsmQueue = shift(@_);
+  my $outputXmlQueue = shift(@_);
+
+  my $startingId = 500;
+
+  my %idMappings = ( 'node' => $startingId, 'way' => $startingId, 'relation' => $startingId );
+  while ( defined(my $currLine = $inputOsmQueue->dequeue()) )
+  {
+    if ( $currLine =~ /<(node|way|relation) id="(.+?)"/ )
+    {
+      $outputXmlQueue->enqueue("<id_mapping element_type=\"$1\" source_id=\"$2\" database_id=\"$idMappings{$1}\" />" ); 
+      $idMappings{$1}++;
+    }
+  }
+
+  $outputXmlQueue->end();
+}
+
+sub writeMappings($$)
+{
+  my $outputXmlFile  = shift(@_);
+  my $outputXmlQueue = shift(@_);
+
+  open( my $outputXmlHandle, "> $outputXmlFile" ) or die( "Could not open output file \"$outputXmlFile\"\n\n" );
+
+  print( $outputXmlHandle "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<id_mappings>\n" );
+
+  while ( defined(my $currOutputLine = $outputXmlQueue->dequeue()) )
+  {
+    print( $outputXmlHandle "\t$currOutputLine\n" );
+  }
+
+  print( $outputXmlHandle "</id_mappings>\n" );
+  close( $outputXmlHandle );
+}
