@@ -39,7 +39,6 @@ import hoot.services.db2.ElementIdMappings;
 import hoot.services.db2.QElementIdMappings;
 import hoot.services.db2.QMaps;
 import hoot.services.db2.QReviewItems;
-import hoot.services.db2.ReviewItems;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.ModelDaoUtils;
@@ -68,7 +67,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.mysema.query.Tuple;
 import com.mysema.query.sql.SQLQuery;
 
 /**
@@ -584,57 +582,72 @@ public class ReviewResource
 		      .singleResult(elementIdMappings.elementId);
   		log.debug("elementUniqueId: " + elementUniqueId);
   		
+  		List<ReviewAgainstItem> reviewAgainstItems = new ArrayList<ReviewAgainstItem>();
   		//get all review against items that are referenced by the input elements; since
   		//the review table data breaks up one to many reviewable uuid to review against uuid
-  		//relationships, we don't have to break up the review against uuid's here
-  		final List<Tuple> reviewAgainstItemRecords =
+  		//relationships, we don't have to break up the review against uuid's list here
+  		final List<String> reviewAgainstItemUniqueIds =
         new SQLQuery(conn, DbUtils.getConfiguration(mapId))
   		    .from(reviewItems)
-  		    .join(elementIdMappings)
-  		    //this should be the only join condition needed since the element id is globally unique
-  		    //for each element
-  		      .on(reviewItems.reviewableItemId.eq(elementIdMappings.elementId))
-    		  .where(reviewItems.reviewableItemId.eq(elementUniqueId))
-    		  .list(reviewItems, elementIdMappings);
-  		//tried returning the tuple records here for simplicity but the client couldn't parse the
-  		//response objects
-  	  List<ReviewAgainstItem> reviewAgainstItems = new ArrayList<ReviewAgainstItem>();
-  		for (Tuple itemRecord : reviewAgainstItemRecords)
+    		  .where(
+    		  	reviewItems.reviewableItemId.eq(elementUniqueId)
+    		  	  .and(reviewItems.mapId.eq(mapId)))
+    		  //.distinct()
+    		  .list(reviewItems.reviewAgainstItemId);
+  		if (reviewAgainstItemUniqueIds.size() > 0)
   		{
-  			ReviewItems reviewItem = itemRecord.get(reviewItems);
-  			ElementIdMappings idMappings = itemRecord.get(elementIdMappings);
-  			ReviewAgainstItem item = new ReviewAgainstItem();
-  			item.setId(idMappings.getOsmElementId());
-  			item.setType(idMappings.getOsmElementType().toString().toLowerCase());
-  			item.setUuid(reviewItem.getReviewAgainstItemId());
-  			reviewAgainstItems.add(item);
+  			final List<ElementIdMappings> reviewAgainstItemRecords =
+	        new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+	    		  .from(elementIdMappings)
+	      		.where(
+	      			elementIdMappings.elementId.in(reviewAgainstItemUniqueIds)
+	      			  .and(elementIdMappings.mapId.eq(mapId)))
+	      		//.distinct()
+	      		.list(elementIdMappings);
+	  		//tried returning the tuple records here for simplicity but the client couldn't parse the
+	  		//response objects
+	  		for (ElementIdMappings itemRecord : reviewAgainstItemRecords)
+	  		{
+	  			ReviewAgainstItem item = new ReviewAgainstItem();
+	  			item.setId(itemRecord.getOsmElementId());
+	  			item.setType(itemRecord.getOsmElementType().toString().toLowerCase());
+	  			item.setUuid(itemRecord.getElementId());
+	  			reviewAgainstItems.add(item);
+	  		}
   		}
   		response.setReviewAgainstItems(reviewAgainstItems.toArray(new ReviewAgainstItem[]{}));
   		
+  		List<ReviewAgainstItem> reviewableItems = new ArrayList<ReviewAgainstItem>();
       //add all items which reference the input features as a review against item
-  		final List<Tuple> reviewableItemRecords =
+  		final List<String> reviewableItemUniqueIds =
         new SQLQuery(conn, DbUtils.getConfiguration(mapId))
   		    .from(reviewItems)
-  		    .join(elementIdMappings)
-  		    //this should be the only join condition needed since the element id is globally unique
-  		    //for each element
-  		      .on(reviewItems.reviewAgainstItemId.eq(elementIdMappings.elementId))
-    		  .where(reviewItems.reviewAgainstItemId.eq(elementUniqueId))
-    		  .list(reviewItems, elementIdMappings);
-  		List<ReviewAgainstItem> reviewableItems = new ArrayList<ReviewAgainstItem>();
-  		for (Tuple itemRecord : reviewableItemRecords)
+    		  .where(
+    		  	reviewItems.reviewAgainstItemId.eq(elementUniqueId)
+    		  	  .and(reviewItems.mapId.eq(mapId)))
+    		  //.distinct()
+    		  .list(reviewItems.reviewableItemId);
+  		if (reviewableItemUniqueIds.size() > 0)
   		{
-  			//returning a review against item here, instead of a reviewable, b/c that object has
-  			//all of the info that's needed to return the references, whereas ReviewableItem has 
-  			//a lot of extra unneeded info...client won't know the difference between the two anyway
-  			//in this circumstance
-  			ReviewItems reviewItem = itemRecord.get(reviewItems);
-  			ElementIdMappings idMappings = itemRecord.get(elementIdMappings);
-  			ReviewAgainstItem item = new ReviewAgainstItem();
-  			item.setId(idMappings.getOsmElementId());
-  			item.setType(idMappings.getOsmElementType().toString().toLowerCase());
-  			item.setUuid(reviewItem.getReviewableItemId());
-  			reviewableItems.add(item);
+  			final List<ElementIdMappings> reviewableItemRecords =
+	        new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+	    		  .from(elementIdMappings)
+	      		.where(
+	      			elementIdMappings.elementId.in(reviewableItemUniqueIds)
+	      			  .and(elementIdMappings.mapId.eq(mapId)))
+	      		//.distinct()
+	      		.list(elementIdMappings);
+	  		for (ElementIdMappings itemRecord : reviewableItemRecords)
+	  		{
+	  			//returning a review against item here, instead of a reviewable item, b/c the review against
+	  			//item has all of the info that's needed to return the references, whereas ReviewableItem
+	  			//has a lot of extra unneeded info...client won't know the different between the two anyway
+	  			ReviewAgainstItem item = new ReviewAgainstItem();
+	  			item.setId(itemRecord.getOsmElementId());
+	  			item.setType(itemRecord.getOsmElementType().toString().toLowerCase());
+	  			item.setUuid(itemRecord.getElementId());
+	  			reviewableItems.add(item);
+	  		}
   		}
   		response.setReviewableItems(reviewableItems.toArray(new ReviewAgainstItem[]{}));
   	}
