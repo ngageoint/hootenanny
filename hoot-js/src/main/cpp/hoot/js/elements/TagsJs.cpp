@@ -79,7 +79,7 @@ void TagsJs::Init(Handle<Object> target)
   tpl->PrototypeTemplate()->Set(String::NewSymbol("get"),
       FunctionTemplate::New(get)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("getCreateUuid"),
-      FunctionTemplate::New(get)->GetFunction());
+      FunctionTemplate::New(getCreateUuid)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("set"),
       FunctionTemplate::New(set)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("toDict"),
