@@ -52,6 +52,7 @@ private:
   static v8::Handle<v8::Value> isAncestor(const v8::Arguments& args);
   static v8::Handle<v8::Value> isArea(const v8::Arguments& args);
   static v8::Handle<v8::Value> isBuilding(const v8::Arguments& args);
+  static v8::Handle<v8::Value> isHgisPoi(const v8::Arguments& args);
   static v8::Handle<v8::Value> isLinear(const v8::Arguments& args);
   static v8::Handle<v8::Value> isLinearWaterway(const v8::Arguments& args);
   static v8::Handle<v8::Value> isMetaData(const v8::Arguments& args);

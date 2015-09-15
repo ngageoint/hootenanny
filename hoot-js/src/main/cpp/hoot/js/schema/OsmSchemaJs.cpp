@@ -52,6 +52,7 @@ void OsmSchemaJs::Init(Handle<Object> exports)
   schema->Set(String::NewSymbol("isAncestor"), FunctionTemplate::New(isAncestor)->GetFunction());
   schema->Set(String::NewSymbol("isArea"), FunctionTemplate::New(isArea)->GetFunction());
   schema->Set(String::NewSymbol("isBuilding"), FunctionTemplate::New(isBuilding)->GetFunction());
+  schema->Set(String::NewSymbol("isHgisPoi"), FunctionTemplate::New(isHgisPoi)->GetFunction());
   schema->Set(String::NewSymbol("isLinear"), FunctionTemplate::New(isLinear)->GetFunction());
   schema->Set(String::NewSymbol("isLinearWaterway"), FunctionTemplate::New(isLinearWaterway)->GetFunction());
   schema->Set(String::NewSymbol("isMetaData"), FunctionTemplate::New(isMetaData)->GetFunction());
@@ -107,6 +108,14 @@ Handle<Value> OsmSchemaJs::isBuilding(const Arguments& args) {
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
   return scope.Close(Boolean::New(OsmSchema::getInstance().isBuilding(e)));
+}
+
+Handle<Value> OsmSchemaJs::isHgisPoi(const Arguments& args) {
+  HandleScope scope;
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  return scope.Close(Boolean::New(OsmSchema::getInstance().isHgisPoi(*e)));
 }
 
 Handle<Value> OsmSchemaJs::isLinearWaterway(const Arguments& args) {

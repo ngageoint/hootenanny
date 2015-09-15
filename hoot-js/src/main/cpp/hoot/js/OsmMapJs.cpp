@@ -31,6 +31,7 @@
 #include "OsmMapJs.h"
 
 // hoot
+#include <hoot/js/elements/ElementIdJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
@@ -64,10 +65,14 @@ void OsmMapJs::Init(Handle<Object> target) {
   tpl->SetClassName(String::NewSymbol("OsmMap"));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getElementCount"),
-      FunctionTemplate::New(getElementCount)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("clone"),
       FunctionTemplate::New(clone)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("getElementCount"),
+      FunctionTemplate::New(getElementCount)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("getParents"),
+      FunctionTemplate::New(getParents)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("removeElement"),
+      FunctionTemplate::New(removeElement)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("visit"),
       FunctionTemplate::New(visit)->GetFunction());
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
@@ -142,6 +147,28 @@ Handle<Value> OsmMapJs::getElementCount(const Arguments& args) {
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
   return scope.Close(Number::New(obj->getConstMap()->getElementCount()));
+}
+
+Handle<Value> OsmMapJs::getParents(const Arguments& args) {
+  HandleScope scope;
+
+  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
+
+  ElementId eid = toCpp<ElementId>(args[0]);
+
+  return scope.Close(toV8(obj->getConstMap()->getParents(eid)));
+}
+
+Handle<Value> OsmMapJs::removeElement(const Arguments& args) {
+  HandleScope scope;
+
+  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
+
+  ElementId eid = toCpp<ElementId>(args[0]);
+
+  obj->getMap()->removeElement(eid);
+
+  return scope.Close(Undefined());
 }
 
 Handle<Value> OsmMapJs::visit(const Arguments& args)
