@@ -283,3 +283,6 @@ reviewDisplayBoundsMethod=reviewableAndReviewAgainstItemCombined
 
 # HGIS review prepare for validation script name
 hgisPrepareForValidationScript=custom/HGIS/PrepareForValidation.sh
+
+# HGIS filter script name
+hgisFilterScript=custom/HGIS/RemoveNonHgisPois.sh
