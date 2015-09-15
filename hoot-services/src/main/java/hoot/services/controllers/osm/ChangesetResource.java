@@ -368,18 +368,8 @@ public class ChangesetResource
         changesetUploadResponse = 
           (new ChangesetDbWriter(conn)).write(mapid, changesetId, changesetDoc);
         
-        final boolean changesetContainsFeaturesInvolvedInReview = 
-          Changeset.changesetContainsFeatureInvolvedInReview(changesetDoc);
-        log.debug(
-        	"changesetContainsFeaturesInvolvedInReview: " + changesetContainsFeaturesInvolvedInReview);
-        if (changesetContainsFeaturesInvolvedInReview)
-        {
-        	final int numReviewItemsUpdated = 
-        		(new ReviewItemsUpdater(conn, mapId)).updateReviewItems(changesetDoc);
-        	log.debug(
-        		String.valueOf(numReviewItemsUpdated) + " review records were updated as a " +
-        		"result of the changeset save.");
-        } 
+        /*final int numReviewItemsUpdated =*/ 
+        (new ReviewItemsUpdater(conn, mapId)).updateReviewItems(changesetDoc);
       }
       catch (Exception e)
       {

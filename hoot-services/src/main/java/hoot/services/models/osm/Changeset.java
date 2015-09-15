@@ -614,7 +614,6 @@ public class Changeset extends Changesets
 
   }
 
-
   /**
    * Creates a simple OSM changeset create XML document
    *
@@ -639,22 +638,5 @@ public class Changeset extends Changesets
         "</changeset>" +
       "</osm>";
     return XmlDocumentBuilder.parse(changesetDocStr);
-  }
-  
-  /**
-   * Determines whether changeset contains any items involved in a review
-   * 
-   * @param changesetDoc changeset to examine
-   * @return true if any items in the changeset are involved in a review
-   * @throws TransformerException 
-   * @todo write unit test
-   */
-  public static boolean changesetContainsFeatureInvolvedInReview(final Document changesetDoc) 
-  	throws TransformerException
-  {
-  	return 
-  		XPathAPI.selectNodeList(
-  	    changesetDoc, "//create|modify|delete/node|way|relation/tag[contains(@k, 'hoot:review')]")
-  			.getLength() > 1;
   }
 }

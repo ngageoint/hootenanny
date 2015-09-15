@@ -28,8 +28,10 @@ package hoot.services.review;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.xml.transform.TransformerException;
 
@@ -214,29 +216,44 @@ public class ReviewItemsUpdater
   	
   	int numReviewItemsUpdated = 0;
     
-    //check modify changeset for any modified items that have a review record entry
-    final NodeList modifiedReviewItems = 
-  	  XPathAPI.selectNodeList(
-  	    changesetDoc, "//osmChange/modify/node|way|relation/tag[contains(@k, 'hoot:review')]");
-    List<ReviewItems> reviewItemRecordsToUpdate = new ArrayList<ReviewItems>();
-  	for (int i = 0; i < modifiedReviewItems.getLength(); i++)
+  	//map modified elements by unique id
+    final NodeList modifiedItems = 
+  	  XPathAPI.selectNodeList(changesetDoc, "//osmChange/modify/node|way|relation]");
+    Map<String, org.w3c.dom.Node> uuidsToXml = new HashMap<String, org.w3c.dom.Node>();
+  	for (int i = 0; i < modifiedItems.getLength(); i++)
   	{
-  		//update the associated review records; only the hoot:review:uuid tag should have changed 
-  		//client side, so we only update that one
-  		final org.w3c.dom.Node elementXml = modifiedReviewItems.item(i);
+  		final org.w3c.dom.Node elementXml = modifiedItems.item(i);
   		final String uuid = 
     		XPathAPI.selectSingleNode(elementXml, "//tag[@k = 'uuid']").getNodeValue();
-  		final String[] reviewAgainstUuids = reviewAgainstUuidsFromChangesetElement(elementXml);
+  		uuidsToXml.put(uuid, elementXml);
+  	}
+  	
+  	//determine all modified items that actually have a review record
+  	final List<String> modifiedUniqueIds =
+      new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+    		.from(elementIdMappings)
+        .where(
+      	  elementIdMappings.elementId.in(uuidsToXml.keySet())
+      		  .and(elementIdMappings.mapId.eq(mapId)))
+      	.list(elementIdMappings.elementId);
+  	
+  	//for each id, create an update record with the updated hoot:review:uuid tag contents; only 
+  	//the hoot:review:uuid tag should have changed client side, so we only update that one
+  	List<ReviewItems> reviewItemRecordsToUpdate = new ArrayList<ReviewItems>();
+  	for (String uuid : modifiedUniqueIds)
+  	{
+  		final org.w3c.dom.Node elementXml = uuidsToXml.get(uuid);
+    	final String[] reviewAgainstUuids = reviewAgainstUuidsFromChangesetElement(elementXml);
   		if (reviewAgainstUuids != null)
   		{
   			for (int j = 0; j < reviewAgainstUuids.length; j++)
   			{
   				reviewItemRecordsToUpdate.add(
-			  		ReviewUtils.createReviewItemRecord(
-			  			uuid, 
-			  			1.0, //TODO: see comment in updateCreatedReviewItems
-			  			reviewAgainstUuids[j], 
-			  			mapId));
+  		  		ReviewUtils.createReviewItemRecord(
+  		  			uuid, 
+  		  			1.0, //TODO: see comment in updateCreatedReviewItems
+  		  			reviewAgainstUuids[j], 
+  		  			mapId));
   			}
   		}
   		else
@@ -245,10 +262,10 @@ public class ReviewItemsUpdater
   			//expected to have dropped all the review tags from the feature
   			ReviewItems reviewItemRecord = 
   				ReviewUtils.createReviewItemRecord(
-	  			  uuid, 
-	  			  1.0, //TODO: see comment in updateCreatedReviewItems
-	  			  null, 
-	  			  mapId);
+    			  uuid, 
+    			  1.0, //TODO: see comment in updateCreatedReviewItems
+    			  null, 
+    			  mapId);
   			reviewItemRecord.setReviewStatus(DbUtils.review_status_enum.reviewed);
   			reviewItemRecordsToUpdate.add(reviewItemRecord);
   		}
@@ -260,6 +277,7 @@ public class ReviewItemsUpdater
   		predicates.add(reviewItems.reviewId.eq(reviewItemRecordsToUpdate.get(i).getReviewId()));
   		predicatelist.add(predicates);
   	}
+  	
     DbUtils.batchRecords(
     	mapId, reviewItemRecordsToUpdate, reviewItems, predicatelist, RecordBatchType.UPDATE, conn, 
     	maxRecordBatchSize);
@@ -313,9 +331,13 @@ public class ReviewItemsUpdater
   public int updateReviewItems(final Document changesetDoc) throws Exception
   {
   	int numReviewItemsUpdated = 0;
+    log.debug("Updating review items for changeset...");
   	numReviewItemsUpdated += updateCreatedReviewItems(changesetDoc);
   	numReviewItemsUpdated += updateModifiedReviewItems(changesetDoc);
   	numReviewItemsUpdated += updateDeletedReviewItems(changesetDoc);
+  	log.debug(
+      String.valueOf(numReviewItemsUpdated) + " review records were updated as a " +
+      "result of the changeset save.");
   	return numReviewItemsUpdated;
   }
   

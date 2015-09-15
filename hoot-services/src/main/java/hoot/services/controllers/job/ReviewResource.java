@@ -592,7 +592,6 @@ public class ReviewResource
     		  .where(
     		  	reviewItems.reviewableItemId.eq(elementUniqueId)
     		  	  .and(reviewItems.mapId.eq(mapId)))
-    		  //.distinct()
     		  .list(reviewItems.reviewAgainstItemId);
   		if (reviewAgainstItemUniqueIds.size() > 0)
   		{
@@ -602,10 +601,7 @@ public class ReviewResource
 	      		.where(
 	      			elementIdMappings.elementId.in(reviewAgainstItemUniqueIds)
 	      			  .and(elementIdMappings.mapId.eq(mapId)))
-	      		//.distinct()
 	      		.list(elementIdMappings);
-	  		//tried returning the tuple records here for simplicity but the client couldn't parse the
-	  		//response objects
 	  		for (ElementIdMappings itemRecord : reviewAgainstItemRecords)
 	  		{
 	  			ReviewAgainstItem item = new ReviewAgainstItem();
@@ -625,7 +621,6 @@ public class ReviewResource
     		  .where(
     		  	reviewItems.reviewAgainstItemId.eq(elementUniqueId)
     		  	  .and(reviewItems.mapId.eq(mapId)))
-    		  //.distinct()
     		  .list(reviewItems.reviewableItemId);
   		if (reviewableItemUniqueIds.size() > 0)
   		{
@@ -635,7 +630,6 @@ public class ReviewResource
 	      		.where(
 	      			elementIdMappings.elementId.in(reviewableItemUniqueIds)
 	      			  .and(elementIdMappings.mapId.eq(mapId)))
-	      		//.distinct()
 	      		.list(elementIdMappings);
 	  		for (ElementIdMappings itemRecord : reviewableItemRecords)
 	  		{
