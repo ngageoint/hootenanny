@@ -130,38 +130,71 @@ hgis20 = {
     {
         var newAttrs = {};
 
-        // Sort out Roads, Railways and Bridges.
-        if (geometryType == 'Line' && tags.bridge && (tags.highway || tags.railway))
+//         // Sort out Roads, Railways and Bridges.
+//         if (geometryType == 'Line' && tags.bridge && (tags.highway || tags.railway))
+//         {
+//             if (layerName !== 'Bridges_Tunnels') // Not a Bridge
+//             {
+//                 newAttrs.XtableName = 'Bridges_Tunnels';
+//
+//                 if (tags.highway)
+//                 {
+//                     newAttrs.TYPE2 = 'Road'; // Road
+//                 }
+//                 else if (tags.railway)
+//                 {
+//                     newAttrs.TYPE2 = 'Rail'; // Railway
+//                 }
+//             }
+//             else // A Bridge
+//             {
+//                 if (tags.railway)
+//                 {
+//                     newAttrs.XtableName = 'Railways'; // Railway
+//                 }
+//                 else
+//                 {
+//                     newAttrs.XtableName = 'Roads';
+//                     // Put in switch statement on the highway tag
+//                 }
+//             }
+//
+//             // Remove the uuid from the tag list so we get a new one for the second feature
+//             delete tags.uuid;
+//         } // End sort out Road, Railway & Bridge
+
+        if (layerName == 'Marine_POI' && attrs.TYPE == 'Beach')
         {
-            if (layerName !== 'Bridges_Tunnels') // Not a Bridge
-            {
-                newAttrs.XtableName = 'Bridges_Tunnels';
+            newAttrs.XtableName = 'Natural_POI';
+            newAttrs.TYPE = attrs.TYPE;
+            newAttrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'Duplicate from Marine_POI',';');
+        }
 
-                if (tags.highway)
-                {
-                    newAttrs.TYPE2 = 'Road'; // Road
-                }
-                else if (tags.railway)
-                {
-                    newAttrs.TYPE2 = 'Rail'; // Railway
-                }
-            }
-            else // A Bridge
+        if (layerName == 'Cultural_POI')
+        {
+            if (attrs.TYPE == 'Memorial' || attrs.TYPE == 'Monument' || attrs.TYPE == 'Museum' || attrs.TYPE == 'Theatre')
             {
-                if (tags.railway)
-                {
-                    newAttrs.XtableName = 'Railways'; // Railway
-                }
-                else
-                {
-                    newAttrs.XtableName = 'Roads';
-                    // Put in switch statement on the highway tag
-                }
+                newAttrs.XtableName = 'Tourist_Locations_POI';
+                newAttrs.TYPE = attrs.TYPE;
+                newAttrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'Duplicate from Cultural_POI',';');
             }
+        }
 
-            // Remove the uuid from the tag list so we get a new one for the second feature
-            delete tags.uuid;
-        } // End sort out Road, Railway & Bridge
+        if (layerName == 'Medical_Facilities' && attrs.TYPE2 == 'Spa')
+        {
+            newAttrs.XtableName = 'Tourist_Locations_POI';
+            newAttrs.TYPE = 'Spa';
+            newAttrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'Duplicate from Medical_Facilities',';');
+        }
+
+        if (layerName == 'Natural_Resources' && attrs.OPER_TYPE == 'Well')
+        {
+            newAttrs.XtableName = 'Hydrology_POI';
+            newAttrs.TYPE = 'Well';
+            newAttrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'Duplicate from Natural Resources',';');
+        }
+
+
 
         // If we are making a second feature, process it.
         if (newAttrs.XtableName)
@@ -297,6 +330,13 @@ hgis20 = {
         // Refugee Camps
         if (tags.idp == 'yes' || tags.refugee == 'yes') tags.tourism = 'camp_site';
 
+        // Ford can be in Roads and in Natural POI
+        if (tags.nford)
+        {
+            tags.ford = 'yes';
+            delete tags.nford;
+        }
+
     }, // End of applyToOsmPostProcessing
   
     // ##### End of the xxToOsmxx Block #####
@@ -394,18 +434,65 @@ hgis20 = {
         // Cleanup wetlands
         if (tags.wetland && tags.natural == 'wetland')
         {
-            attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,tags.wetland,';');
-            delete tags.wetland;
+            if (tags.wetland == 'tidal_flat')
+            {
+                delete tags.natural;
+            }
+            else
+            {
+                attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,tags.wetland,';');
+                delete tags.wetland;
+            }
         }
 
+        // Sort out Fords.
+        // * Point = Natural_POI
+        // * Line = Roads
+        if (tags.ford == 'yes' && geometryType == 'Point')
+        {
+            tags.nford = 'yes';
+            delete tags.ford;
+        }
+
+        // Sort out Lagoons.
+        // * Point = Natural_POI
+        // * Area = Hydrology_Polygons
+        if (tags.water == 'lagoon' && geometryType == 'Point')
+        {
+            tags.nlagoon = 'yes';
+            delete tags.water;
+        }
 
     }, // End applyToHgisPreProcessing
 
     applyToHgisPostProcessing : function (tags, attrs, geometryType)
     {
-        // Now use the lookup table to find layerName. This is here to stop clashes with the
-        // standard one2one rules
-        if (!(attrs.XtableName) && hgis20.layerLookup)
+        // Start looking for a Table Name
+        // Next step is to make this a list: we might get more than one match...
+        if (!(attrs.XtableName))
+        {
+            for (var val in attrs)
+            {
+            // Unsplit the layer and the type
+                if (val.indexOf('$') !== -1)
+                {
+                var tList = val.split('$');
+                attrs.XtableName = hgis20.layerList[tList[0]];
+
+                // Debug
+                print('Post: Loop XtableName: ' + attrs.XtableName);
+
+                attrs[tList[1]] = attrs[val];
+                delete attrs[val];
+                }
+            }
+        }
+
+        // Now run through the list of layer specific tags. This is after the one2one list so we can correct some of the
+        // previous rules
+        // E.g. Religion vs Religious_Institutions
+//         if (!(attrs.XtableName) && hgis20.layerLookup)
+        if (hgis20.layerLookup)
         {
             for (var col in tags)
             {
@@ -425,23 +512,6 @@ hgis20 = {
         // Debug
         print('Post: XtableName: ' + attrs.XtableName);
 
-        // Start looking for a Table Name
-        // Next step is to make this a list: we might get more than one match...
-        for (var val in attrs)
-        {
-           // Unsplit the layer and the type
-            if (val.indexOf('$') !== -1)
-            {
-               var tList = val.split('$');
-               attrs.XtableName = hgis20.layerList[tList[0]];
-
-               // Debug
-               print('Post: Loop XtableName: ' + attrs.XtableName);
-
-               attrs[tList[1]] = attrs[val];
-               delete attrs[val];
-            }
-        }
 
         // Fix up Hydro Lines vs Areas. Just for what is in the spec, everything else should throw an error
         if (attrs.XtableName == 'Hydrology_Polygons' && geometryType == 'Line')
@@ -484,6 +554,9 @@ hgis20 = {
             }
         }
 
+        // Free Trade Zones
+        if (attrs.XtableName == 'Free_Trade_Zones' && geometryType == 'Area') attrs.XtableName == 'Free_Trade_Zones_Polygons';
+
         // Sort out STATUS vs OP_STATUS
         if (attrs.XtableName == 'Power_Plants' && attrs.STATUS)
         {
@@ -491,76 +564,112 @@ hgis20 = {
             delete attrs.STATUS;
         }
 
-        // ######################
-        // Hardcoded Layer selection. Yes, this is ugly
-        // Will move this to a custom rules function - soon
+        // Assign a default Spatial Accuracy if we don't have one
+        if (!(attrs.SPA_ACC) && tags.source)
+        {
+            if (tags['source'].indexOf('osm') > -1)
+            {
+                attrs.SPA_ACC = '1 - High';
+            }
+            else if (tags['source'].indexOf('wikimapia') > -1)
+            {
+                attrs.SPA_ACC = '1 - High';
+            }
+            else if (tags['source'].indexOf('hoteldb') > -1)
+            {
+                attrs.SPA_ACC = '3 - Low';
+            }
+            else if (tags['source'].indexOf('geonames') > -1)
+            {
+                attrs.SPA_ACC = '3 - Low';
+            }
+        } // End SPA_ACC
 
-//         // Educational_Institutions
-//         if (tags.amenity == 'school' || tags.building == 'school') attrs.XtableName = 'Educational_Institutions';
-//
-//         // Geonames
-//         if (attrs.DSG || (attrs.place && attrs.place !== 'farm'))
-//         {
-//             attrs.XtableName = 'Geonames';
-//             if (attrs.NAME)
-//             {
-//                 attrs.FULL_NAME = attrs.NAME;
-//                 attrs.SORT_NAME = attrs.NAME;
-//                 delete attrs.NAME;
-//             }
-//         }
-//
-//         // Internet_Cafes
-//         if (tags.amenity == 'internet_cafe') attrs.XtableName = 'Internet_Cafes';
-//
-//         // Libraries
-//         if (tags.amenity == 'library') attrs.XtableName = 'Libraries';
-//
-//         // Power Plants
-//         if (tags.power == 'plant') attrs.XtableName = 'Power_Plants';
-//
-//         // Prisons
-//         if (tags.amenity == 'prison') attrs.XtableName = 'Prisons';
-//
-//         // Recreation POI
-//         if (tags.amenity == 'swimming_pool') attrs.XtableName = 'Recreation_POI';
-//
-//         if (tags.leisure || tags.sport)
-//         {
-//             // Water park is a Tourist Location POI
-//             if (!attrs.leisure == 'water_park')
-//             {
-//                 attrs.XtableName = 'Recreation_POI';
-//                 if (!attrs.TYPE)
-//                 {
-//                     attrs.TYPE = 'Other';
-//
-//                     var othVal = 'Type:';
-//                     (tags.leisure) ? othVal += tags.leisure : othVal += tags.sport ;
-//
-//                     attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,othVal,';');
-//                 }
-//             }
-//         }
-//
-//
-//         // Religious Institutions
-//         if (tags.amenity == 'place_of_worship' && geometryType == 'Point') attrs.XtableName = 'Religious_Institutions';
-//
-//         // Tourist Locations POI
-//         if (tags.tourism && tags.tourism !== 'information')
-//         {
-//             attrs.XtableName = 'Recreation_POI';
-//             if (!attrs.TYPE)
-//             {
-//                 attrs.TYPE = 'Other';
-//                 print('RecPOI: Tourism:' + tags.tourism + ' Comment:' + attrs.COMMENTS);
-//
-//                 attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'Type:' + tags.tourism,';');
-//             }
-//         }
+        // Jam shops into Commercial_POI if they haven't been categorised
+        if (!(attrs.XtableName) && tags.shop)
+        {
+            attrs.XtableName = 'Commercial_POI';
+            attrs.TYPE1 = 'Retail';
+            attrs.TYPE2 = 'Other';
+            attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'shop:' + tags.shop,';');
+        }
 
+        if (!(attrs.XtableName) && tags.office)
+        {
+            attrs.XtableName = 'Commercial_POI';
+            attrs.TYPE1 = 'Service';
+            attrs.TYPE2 = 'Office';
+            attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'office:' + tags.office,';');
+        }
 
+        // Post process the Commercial POI into TYPE1 & TYPE2
+        if (attrs.XtableName == 'Commercial_POI' && !(attrs.TYPE1))
+        {
+            var comTypeList = {
+                'Airline':'Service',
+                'ATM':'Financial',
+                'Auto Repair':'Automotive',
+                'Bakery':'Retail',
+                'Bank':'Financial',
+                'Bar':'Retail',
+                'Beauty Salon':'Retail',
+                'Brewery':'Manufacturing',
+                'Butcher':'Retail',
+                'Car Dealership':'Automotive',
+                'Car Rental':'Automotive',
+                'Car Wash':'Automotive',
+                'Computer':'Retail',
+                'Construction':'Industrial',
+                'Day Care':'Service',
+                'Delicatessen':'Retail',
+                'Electronics':'Retail',
+                'Entertainment':'Service',
+                'Factory':'Industrial',
+                'Film':'Service',
+                'Freight - Shipping':'Service',
+                'Funeral Home':'Service',
+                'Fuel':'Retail',
+                'Gas':'Retail',
+                'Grocery':'Retail',
+                'Heavy Machinery':'Industrial',
+                'Legal':'Service',
+                'Market':'Retail',
+                'Medical':'Service',
+                'Mining':'Industrial',
+                'Nursery':'Retail',
+                'Office':'Service',
+                'Other':'Other',
+                'Research':'Service',
+                'Restaurant':'Retail',
+                'Shipping':'Service',
+                'Store':'Retail',
+                'Telecommunications':'Telecommunications',
+                'Television':'Telecommunications',
+                'Tourist':'Service',
+                'Tower':'Telecommunications',
+                'Veterinarian':'Service',
+            }; // End comTypeList
+
+            if (attrs.TYPE2 in comTypeList)
+            {
+                attrs.TYPE1 = comTypeList[attrs.TYPE2];
+            }
+            else
+            {
+                attrs.TYPE1 = 'Other';
+            }
+        } // End post process Commercial POI
+
+        // Clean up the Religion polygon layer
+        // * This layer is for religious demographics, not buildings, cemetery's etc
+        if (attrs.XtableName == 'Religion')
+        {
+            if (tags.building || tags.landuse || tags.amenity || tags.historic)
+            {
+                delete attrs.XtableName;
+            }
+
+        }
 
     }, // End applyToHgisPostProcessing
 
@@ -696,7 +805,7 @@ hgis20 = {
             
             // Add some more features to ignore
             hgis20.ignoreList.uuid = '';
-            hgis20.ignoreList.source = '';
+            // hgis20.ignoreList.source = '';
             hgis20.ignoreList.area = '';
             hgis20.ignoreList['note:extra'] = '';
             hgis20.ignoreList['hoot:status'] = '';
@@ -754,9 +863,16 @@ hgis20 = {
         } // End We have a feature
         else // Start o2s
         {
-            logError('Layer and Geometry: ' + tableName + ' is not in the schema');
-
             tableName = 'o2s_' + geometryType.toString().charAt(0);
+
+            if (attrs.XtableName)
+            {
+                logError('Layer: ' + attrs.XtableName + ' with Geometry: ' + geometryType + ' is not in the schema');
+            }
+            else
+            {
+                logError('Unable to determine an appropriate layer for output. Adding to ' + tableName + ' layer');
+            }
 
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
