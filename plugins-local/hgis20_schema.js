@@ -67,6 +67,94 @@ getDbSchema: function()
     var TYPE2 = { name:"TYPE2",desc:"TYPE2",type:"String",defValue:"999999"};
 
     var schema = [
+        { name:"Roads_POI",
+          desc:"Road POI",
+          fdname:"Critical_Infrastructure",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Airfield_POI",
+          desc:"Airfield POI",
+          fdname:"Critical_Infrastructure",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Public_POI",
+          desc:"Public POI",
+          fdname:"Economy",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
+        { name:"Places_POI",
+          desc:"Places POI",
+          fdname:"Administrative",
+          geom:"Point",
+          columns:[
+                    ISO3,
+                    ADM0_NAME,
+                    ADM1_NAME,
+                    ADM2_NAME,
+                    ADM3_NAME,
+                    ADM4_NAME,
+                    ADM5_NAME,
+                    NAME,
+                    TYPE,
+                    COMMENTS,
+                    SOURCE_DT,
+                    SOURCE,
+                    SOURCE2_DT,
+                    SOURCE2,
+                  ] // End of Columns
+        }, // End of feature
+
         { name:"Internet_Cafes",
           desc:"Internet_Cafes",
           fdname:"Communication",

@@ -63,6 +63,7 @@ hgis20.rules = {
 //      ['XtableName','ADMIN4','XXX','XXX'],
 //      ['XtableName','ADMIN5','XXX','XXX'],
 //      ['XtableName','Agricultural_POI','XXX','XXX'],
+//      ['XtableName','Airfield_POI','XXX','XXX'],
 //      ['XtableName','Airfields','aeroway','aerodrome'],
 //      ['XtableName','Border_Crossings','barrier','border_control'],
 //      ['XtableName','Bridges_Tunnels','XXX','XXX'],
@@ -96,10 +97,12 @@ hgis20.rules = {
 //      ['XtableName','Military_Installations','military','installation'],
 //      ['XtableName','Natural_POI','XXX','XXX'],
 //      ['XtableName','Natural_Resources','XXX','XXX'],
+//      ['XtableName','Places_POI','XXX','XXX'],
 //      ['XtableName','Ports','landuse','port'],
 //      ['XtableName','Power_Plants','power','plant'],
 //      ['XtableName','Prisons','amenity','prison'],
 //      ['XtableName','Protected_Areas','protected_area','yes'],
+//      ['XtableName','Public_POI','XXX','XXX'],
 //      ['XtableName','Public_Security_POI','XXX','XXX'],
 //      ['XtableName','Public_Transportation_POI','XXX','XXX'],
 //      ['XtableName','Railways','railway','rail'],
@@ -108,6 +111,7 @@ hgis20.rules = {
 //      ['XtableName','Refugee_Camps','XXX','XXX'],
 //      ['XtableName','Religion','XXX','XXX'],
 //      ['XtableName','Religious_Institutions','amenity','place_of_worship'],
+//      ['XtableName','Road_POI','XXX','XXX'],
 //      ['XtableName','Roads','highway','road'],
 //      ['XtableName','Smuggling_Routes','smuggling_route','yes'],
 //      ['XtableName','Smuggling_Routes_Polyline','XXX','XXX'],
@@ -144,6 +148,7 @@ hgis20.rules = {
 //      ['XtableName','ADMIN4','XXX','XXX'],
 //      ['XtableName','ADMIN5','XXX','XXX'],
 //      ['XtableName','Agricultural_POI','XXX','XXX'],
+//      ['XtableName','Airfield_POI','XXX','XXX'],
      ['XtableName','Airfields','aeroway','aerodrome'],
      ['XtableName','Border_Crossings','barrier','border_control'],
 //      ['XtableName','Bridges_Tunnels','XXX','XXX'],
@@ -177,10 +182,12 @@ hgis20.rules = {
      ['XtableName','Military_Installations','military','installation'],
 //      ['XtableName','Natural_POI','XXX','XXX'],
 //      ['XtableName','Natural_Resources','XXX','XXX'],
+//      ['XtableName','Places_POI','XXX','XXX'],
      ['XtableName','Ports','landuse','port'],
      ['XtableName','Power_Plants','power','plant'],
      ['XtableName','Prisons','amenity','prison'],
      ['XtableName','Protected_Areas','protected_area','yes'],
+//      ['XtableName','Public_POI','XXX','XXX'],
 //      ['XtableName','Public_Security_POI','XXX','XXX'],
 //      ['XtableName','Public_Transportation_POI','XXX','XXX'],
      ['XtableName','Railways','railway','rail'],
@@ -189,6 +196,7 @@ hgis20.rules = {
      ['XtableName','Refugee_Camps','refugee','yes'],
      ['XtableName','Religion','demographic','religion'],
      ['XtableName','Religious_Institutions','amenity','place_of_worship'],
+//      ['XtableName','Road_POI','XXX','XXX'],
      ['XtableName','Roads','highway','road'],
      ['XtableName','Smuggling_Routes','smuggling_route','yes'],
 //      ['XtableName','Smuggling_Routes_Polyline','XXX','XXX'],
@@ -225,6 +233,7 @@ hgis20.rules = {
 //      ['XtableName','ADMIN4','XXX','XXX'],
 //      ['XtableName','ADMIN5','XXX','XXX'],
 //      ['XtableName','Agricultural_POI','XXX','XXX'],
+//      ['XtableName','Airfield_POI','XXX','XXX'],
 //      ['XtableName','Airfields','aeroway','aerodrome'],
 //      ['XtableName','Border_Crossings','barrier','border_control'],
      ['XtableName','Bridges_Tunnels','bridge','yes'],
@@ -259,10 +268,12 @@ hgis20.rules = {
 //      ['XtableName','Military_Installations','military','installation'],
 //      ['XtableName','Natural_POI','XXX','XXX'],
 //      ['XtableName','Natural_Resources','XXX','XXX'],
+//      ['XtableName','Places_POI','XXX','XXX'],
 //      ['XtableName','Ports','landuse','port'],
 //      ['XtableName','Power_Plants','power','plant'],
 //      ['XtableName','Prisons','amenity','prison'],
 //      ['XtableName','Protected_Areas','XXX','XXX'],
+//      ['XtableName','Public_POI','XXX','XXX'],
 //      ['XtableName','Public_Security_POI','XXX','XXX'],
 //      ['XtableName','Public_Transportation_POI','XXX','XXX'],
 //      ['XtableName','Railways','XXX','XXX'],
@@ -271,6 +282,7 @@ hgis20.rules = {
 //      ['XtableName','Refugee_Camps','XXX','XXX'],
 //      ['XtableName','Religion','XXX','XXX'],
 //      ['XtableName','Religious_Institutions','amenity','place_of_worship'],
+//      ['XtableName','Road_POI','XXX','XXX'],
 //      ['XtableName','Roads','XXX','XXX'],
 //      ['XtableName','Smuggling_Routes','XXX','XXX'],
 //      ['XtableName','Smuggling_Routes_Polyline','XXX','XXX'],
@@ -550,8 +562,8 @@ hgis20.rules = {
      ['CONF_IMAGE','unconfirmed','hgis:imagery_confirmed','unconfirmed'],
 
      // CUSTOMS - At Airport
-     ['CUSTOMS','Yes','hgis:customs','yes'], // Fix in custom rules
-     ['CUSTOMS','No','hgis:customs','no'],
+     ['airfield$CUSTOMS','Yes','hgis:customs','yes'], // Fix in custom rules
+     ['airfield$CUSTOMS','No','hgis:customs','no'],
 
      // DEV_STAT - Natural Resources
      ['DEV_STAT','Occurrence','development_status','Occurrence'],
@@ -1100,7 +1112,6 @@ hgis20.rules = {
      ['PHASE2','Stony','soil:phase2','Stony'],
 
      // PRI_COM - Primary Commodities
-
      ['PRI_COM','Aluminum','product','aluminum'],
      ['PRI_COM','Antimony','product','antimony'],
      ['PRI_COM','Arsenic','product','arsenic'],
@@ -1188,10 +1199,10 @@ hgis20.rules = {
      ['STATUS','Declaration','operational_status','planned'],
 
      // TYPE_AREA - Type of protected area
-     ['protected$TYPE1','Terrestrial','protected_area','terrestrial'],
-     ['protected$TYPE1','Marine','protected_area','marine'],
-     ['protected$TYPE1','Terrestrial/Marine','protected_area','terrestrial_or_marine'],
-     ['protected$TYPE1','Not Reported','protected_area','not_reported'],
+     ['TYPE_AREA','Terrestrial','protected_area','terrestrial'],
+     ['TYPE_AREA','Marine','protected_area','marine'],
+     ['TYPE_AREA','Terrestrial/Marine','protected_area','terrestrial_or_marine'],
+     ['TYPE_AREA','Not Reported','protected_area','not_reported'],
 
      // TYPE, TYPE1 and TYPE2 are shared by a lot of features
      // This is ugly
@@ -1217,6 +1228,12 @@ hgis20.rules = {
      ['agriculture$TYPE2','Rabbit','livestock','rabbit'],
      ['agriculture$TYPE2','Rice Field','crop','rice'],
      ['agriculture$TYPE2','Salt','crop','salt'], // Need To Fix
+
+     ['airfieldp$TYPE','Hangars','building','hangar'],
+     ['airfieldp$TYPE','Aprons','aeroway','apron'],
+     ['airfieldp$TYPE','Jetway','aeroway','aerobridge'],
+     ['airfieldp$TYPE','Radar','man_made','radar_station'],
+     ['airfieldp$TYPE','Tower','control_tower','yes'],
 
      ['airfield$TYPE','Commercial','controlling_authority','civilian'],
      ['airfield$TYPE','Military','controlling_authority','military'],
@@ -1497,7 +1514,7 @@ hgis20.rules = {
      ['natural$TYPE','Hammock','natural','hammock'],
      ['natural$TYPE','Hill','natural','hill'],
      ['natural$TYPE','Island','natural','island'],
-     ['natural$TYPE','Lagoon','nlagoon','yes'], // ARRRGGH!
+//      ['natural$TYPE','Lagoon','nlagoon','yes'], // ARRRGGH!
      ['natural$TYPE','Landmark','landmark','yes'],
      ['natural$TYPE','Mesa','geological','mesa'],
      ['natural$TYPE','Mountain','natural','mountain'],
@@ -1522,7 +1539,16 @@ hgis20.rules = {
      ['natural$TYPE','Volcano','natural','volcano'],
      ['natural$TYPE','Wadi','waterway','wadi'],
      ['natural$TYPE','Waterfall','waterway','waterfall'],
-     ['natural$TYPE','Wetland','nwetland','yes'], // ARRRGH
+//      ['natural$TYPE','Wetland','nwetland','yes'], // ARRRGH
+
+     ['places$TYPE','Neighborhood','place','neighbourhood'],
+
+     ['publicp$TYPE','Toilets','amenity','toilets'],
+     ['publicp$TYPE','Shower','amenity','shower'],
+     ['publicp$TYPE','Phone','amenity','telephone'],
+     ['publicp$TYPE','Drinking Fountain','amenity','drinking_water'],
+     ['publicp$TYPE','Bench','amenity','bench'],
+     ['publicp$TYPE','Bathroom','amenity','bathroom'],
 
      ['pplant$TYPE','Coal','generator:source','coal'],
      ['pplant$TYPE','Combustion','generator:source','combustion'], // ????
@@ -1636,6 +1662,16 @@ hgis20.rules = {
      ['religioni$TYPE','Shrine','building','shrine'],
      ['religioni$TYPE','Synagogue','building','synagogue'],
      ['religioni$TYPE','Monastery','amenity','monastery'],
+
+     ['roadp$TYPE','Tolls','toll','yes'],
+     ['roadp$TYPE','Circular','circular','yes'], // No real idea but this tag s on the wiki
+     ['roadp$TYPE','Highway Interchange','interchange','yes'], // Deconflict with AP020
+     ['roadp$TYPE','exit','highway','exit'],
+     ['roadp$TYPE','Toll Gate','barrier','toll_booth'],
+     ['roadp$TYPE','Roundabout','junction','roundabout'],
+     ['roadp$TYPE','Crosswalk','highway','crossing'],
+     ['roadp$TYPE','Junction','junction','yes'],
+     ['roadp$TYPE','Traffic Light','highway','traffic_signals'],
 
      ['road$TYPE','Bridleway','highway','bridleway'],
      ['road$TYPE','Bus Guideway','highway','bus_guideway'],
@@ -1775,11 +1811,46 @@ hgis20.rules = {
      ['railwayp$TYPEX','Freight','railway:type','freight'],
      ['railwayp$TYPEX','Passenger','railway:type','passenger'],
 
+     // dual features
+     ['natural$TYPE','Wetland','nwetland','yes'], // ARRRGH
+     ['natural$TYPE','Lagoon','nlagoon','yes'], // ARRRGGH!
+
      // From OSM
 
     ], // End one2oneOut
 
     // ##### End of One2One Rules #####
+
+    // List of unique attributes for each layer
+    uniqList : {
+      'NAME_ISO':'ADMIN0','NAME_FAO':'ADMIN0','NAME_LOCAL':'ADMIN0','NAME_VARIA':'ADMIN0','VALIDFR':'ADMIN0',
+      'ICAO':'Airfields','IATA':'Airfields','N_RUNWAYS':'Airfields','R_LENGTH':'Airfields','USE':'Airfields','R_WIDTH':'Airfields',
+      'COUNTRY':'Border_Crossings',
+      'ACTOR1':'Conflict_Points','ACTOR2':'Conflict_Points','NUM_DTH':'Conflict_Points','NUM_INJ':'Conflict_Points',
+      'ACTOR1':'Conflict_Points','ORG_SOURCE':'Conflict_Points',
+      'ACTOR':'Crime_Data',
+      'RIVER':'Dams','YR_OPER':'Dams','HEIGHT':'Dams',
+      'TOT_BOYS':'Educational_Institutions','TOT_CLASS':'Educational_Institutions','TOT_F_TEAC':'Educational_Institutions',
+      'TOT_GIRLS':'Educational_Institutions','TOT_M_TEAC':'Educational_Institutions',
+      'WEBSITE':'Embassies',
+      'PEOPLEGP_1':'Ethnicity','PEOPLEGP_2':'Ethnicity','PEOPLEGP_3':'Ethnicity','PEOPLEGP_4':'Ethnicity','PEOPLEGP_5':'Ethnicity',
+      'SECTOR':'Foreign_Investment_Projects','VALUE':'Foreign_Investment_Projects','LEND_INSTR':'Foreign_Investment_Projects',
+      'DESCRIP':'Foreign_Investment_Projects','APP_DATE':'Foreign_Investment_Projects','APP_YEAR':'Foreign_Investment_Projects',
+      'MAJ_NAME':'Hydrology_Polylines','SUB_NAME':'Hydrology_Polylines','STRAHLER':'Hydrology_Polylines',
+      'LANG_FAM':'Languages','LANG_SUBGR':'Languages',
+      'LANGUAGE':'Media_Outlets',
+      'MIL_TYPE':'Military_Installations',
+      'ALL_COM':'Natural_Resources',
+      // Need to do Ports
+      'NUM_GEN':'Power_Plants','TOT_CAP_MW':'Power_Plants',
+      'DESIG':'Protected_Areas','DESIG_TYPE':'Protected_Areas','IUCN_CAT':'Protected_Areas','REP_M':'Protected_Areas',
+      'REP_AREA':'Protected_Areas','STATUS_YR':'Protected_Areas','GOV_TYPE':'Protected_Areas','MANAG_AUTH':'Protected_Areas',
+      'NO_TK_AREA':'Protected_Areas',
+      'EST_PRIS':'Prisons',
+      'POPULATION':'Refugee_Camps',
+      'FAOSOIL':'Soils','DOMSOI':'Soils'
+      },
+
 
    // Lookup table for layernames.
    // We use this for assigning a short name and validation
@@ -1812,6 +1883,7 @@ hgis20.rules = {
      'ADMIN4':'admin4',
      'ADMIN5':'admin5',
      'Agricultural_POI':'agriculture',
+     'Airfield_POI':'airfieldp',
      'Airfields':'airfield',
      'Border_Crossings':'border',
      'Bridges_Tunnels':'bridge',
@@ -1845,10 +1917,12 @@ hgis20.rules = {
      'Military_Installations':'military',
      'Natural_POI':'natural',
      'Natural_Resources':'resources',
+     'Places_POI':'places',
      'Ports':'ports',
      'Power_Plants':'pplant',
      'Prisons':'prison',
      'Protected_Areas':'protected',
+     'Public_POI':'publicp',
      'Public_Security_POI':'public',
      'Public_Transportation_POI':'transport',
      'Railways':'railwayl',
@@ -1857,6 +1931,7 @@ hgis20.rules = {
      'Refugee_Camps':'refugee',
      'Religion':'religion',
      'Religious_Institutions':'religioni',
+     'Road_POI':'roadp',
      'Roads':'road',
      'Smuggling_Routes':'Smuggle',
      'Smuggling_Routes_Polyline':'Smugglel',

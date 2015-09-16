@@ -482,24 +482,24 @@ hgis20 = {
     {
         // Start looking for a Table Name
         // Next step is to make this a list: we might get more than one match...
-        if (!(attrs.XtableName))
+//         if (!(attrs.XtableName))
+//         {
+        for (var val in attrs)
         {
-            for (var val in attrs)
+        // Unsplit the layer and the type
+            if (val.indexOf('$') !== -1)
             {
-            // Unsplit the layer and the type
-                if (val.indexOf('$') !== -1)
-                {
                 var tList = val.split('$');
                 attrs.XtableName = hgis20.layerList[tList[0]];
 
                 // Debug
-                print('Post: Loop XtableName: ' + attrs.XtableName);
+                // print('Post: Loop XtableName: ' + attrs.XtableName);
 
                 attrs[tList[1]] = attrs[val];
                 delete attrs[val];
-                }
             }
         }
+//         }
 
         // Now run through the list of layer specific tags. This is after the one2one list so we can correct some of the
         // previous rules
@@ -518,17 +518,32 @@ hgis20 = {
                         attrs.XtableName = row[1];
 
                         // Debug
-                        print('layerName: Got ' + attrs.XtableName);
+                        // print('Post: layerName: Got ' + attrs.XtableName);
                     }
                 }
             }
         } // End find layerName
 
         // Debug
-        print('Post: XtableName: ' + attrs.XtableName);
+        // print('Post: XtableName: ' + attrs.XtableName);
 
-        // Check Military
-        if (!(attrs.XtableName) && attrs.MIL_TYPE) attrs.XtableName = 'Military_Installations';
+        // If we still don't have a tablename, try looking for unique attributes
+        if (!(attrs.XtableName) && hgis20.rules.uniqList)
+        {
+            for (var val in attrs)
+            {
+                if (val in hgis20.rules.uniqList)
+                {
+                    attrs.XtableName = hgis20.rules.uniqList[val];
+
+                    // Debug
+                    print('Unique: ' + attrs.XtableName);
+
+                    break;
+                }
+            } // End attrs loop
+        } // End find XtableName
+
 
         // Fix up Hydro Lines vs Areas. Just for what is in the spec, everything else should throw an error
         if (attrs.XtableName == 'Hydrology_Polygons')
@@ -575,7 +590,10 @@ hgis20 = {
         }
 
         // Free Trade Zones
-        if (attrs.XtableName == 'Free_Trade_Zones' && geometryType == 'Area') attrs.XtableName == 'Free_Trade_Zones_Polygons';
+        if (attrs.XtableName == 'Free_Trade_Zones' && geometryType == 'Area')
+        {
+            attrs.XtableName == 'Free_Trade_Zones_Polygons';
+        }
 
         // Sort out STATUS vs OP_STATUS
         if (attrs.XtableName == 'Power_Plants' && attrs.STATUS)
@@ -605,6 +623,7 @@ hgis20 = {
             }
         } // End SPA_ACC
 
+        // Easy Stuff:
         // Jam shops into Commercial_POI if they haven't been categorised
         if (!(attrs.XtableName) && tags.shop)
         {
@@ -614,6 +633,7 @@ hgis20 = {
             attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'shop:' + tags.shop,';');
         }
 
+        // Do the same with Offices
         if (!(attrs.XtableName) && tags.office)
         {
             attrs.XtableName = 'Commercial_POI';
@@ -729,6 +749,7 @@ hgis20 = {
             hgis20.ignoreList.FCSUBTYPE = '';
             hgis20.ignoreList.UFI = '';
             hgis20.ignoreList.SHAPE_LENGTH = '';
+            hgis20.ignoreList.SHAPE_LENG = '';
             hgis20.ignoreList.SHAPE_AREA = '';
             hgis20.ignoreList.IMGNAME = '';
 
