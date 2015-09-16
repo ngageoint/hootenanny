@@ -46,7 +46,7 @@ import hoot.services.models.review.ReviewAgainstItem;
 import hoot.services.models.review.ReviewReferences;
 import hoot.services.models.review.ReviewableItemsStatistics;
 import hoot.services.readers.review.ReviewableItemsStatisticsCalculator;
-import hoot.services.review.ReviewItemsUpdater;
+import hoot.services.review.ReviewItemsRetriever;
 import hoot.services.review.ReviewItemsPreparer;
 import hoot.services.review.ReviewUtils;
 import hoot.services.validators.review.ReviewInputParamsValidator;
@@ -296,7 +296,7 @@ public class ReviewResource
         (new ReviewableItemsStatisticsCalculator(conn, mapId, true)).getStatistics(
           reviewScoreThresholdMinimum, geospatialBoundsObj);
       
-      ReviewItemsUpdater marker = new ReviewItemsUpdater(conn, mapId);
+      ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
 
     	long cnt = marker.getAvailableReviewCntQuery().count();
     	//nextItem.put("status", "noneavailable");
@@ -362,7 +362,7 @@ public class ReviewResource
 
     	java.util.Date date= new java.util.Date();
     	Timestamp now = new Timestamp(date.getTime());
-    	(new ReviewItemsUpdater(conn, mapId)).updateReviewLastAccessTime(reviewId, now, reviewAgainst);
+    	(new ReviewItemsRetriever(conn, mapId)).updateReviewLastAccessTime(reviewId, now, reviewAgainst);
     }
     catch (Exception e)
     {
@@ -382,7 +382,7 @@ public class ReviewResource
     }
     JSONObject updateReviewStatusResponse = new JSONObject();
     updateReviewStatusResponse.put("status", "ok");
-    updateReviewStatusResponse.put("locktime", "" + ReviewItemsUpdater.LOCK_TIME);
+    updateReviewStatusResponse.put("locktime", "" + ReviewItemsRetriever.LOCK_TIME);
     return updateReviewStatusResponse;
   }
   
@@ -466,12 +466,11 @@ public class ReviewResource
         {
           isForward = false;
         }
-        
       }
     
-      ReviewItemsUpdater marker = new ReviewItemsUpdater(conn, mapId);
+      ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
       nextReviewableResponse = marker.getAvaiableReviewItem(offset, isForward);
-      nextReviewableResponse.put("locktime", ReviewItemsUpdater.LOCK_TIME);
+      nextReviewableResponse.put("locktime", ReviewItemsRetriever.LOCK_TIME);
       long totalReviewableCnt = marker.getTotalReviewCntQuery().count();
       nextReviewableResponse.put("total", totalReviewableCnt);
       long reviewedCnt = marker.getReviewedReviewCnt();
@@ -515,7 +514,7 @@ public class ReviewResource
     long lockcnt = 0;
     try
     {    	
-    	ReviewItemsUpdater marker = new ReviewItemsUpdater(conn, mapId);
+    	ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
     	lockcnt = marker.getLockedReviewCntQuery().count();
     }
     catch (Exception e)

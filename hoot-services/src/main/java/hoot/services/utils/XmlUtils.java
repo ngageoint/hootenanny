@@ -39,10 +39,14 @@ public class XmlUtils
   public static String nodeListToString(final NodeList nodeList) 
   	throws TransformerFactoryConfigurationError, TransformerException
   {
-  	/* Create a sub xml starts with given tag name soaphead*/
-  	StringWriter sw = new StringWriter();
-  	Transformer serializer = TransformerFactory.newInstance().newTransformer();
-  	serializer.transform(new DOMSource(nodeList.item(0)), new StreamResult(sw));
-  	return sw.toString(); 
+  	String result = "";
+  	for (int i = 0; i < nodeList.getLength(); i++)
+  	{
+  		StringWriter sw = new StringWriter();
+    	Transformer serializer = TransformerFactory.newInstance().newTransformer();
+    	serializer.transform(new DOMSource(nodeList.item(i)), new StreamResult(sw));
+    	result += sw.toString(); 
+  	}
+  	return result;
   }
 }

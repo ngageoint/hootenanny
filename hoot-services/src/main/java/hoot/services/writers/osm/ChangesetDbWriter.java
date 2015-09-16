@@ -83,8 +83,7 @@ public class ChangesetDbWriter
   protected static final QChangesets changesets = QChangesets.changesets;
   private int maxRecordBatchSize = -1;
 
-  private BoundingBox diffBounds; // bounds calculated from the diff request
-                                  // data
+  private BoundingBox diffBounds; // bounds calculated from the diff request data
 
   private Connection conn;
 
@@ -93,16 +92,17 @@ public class ChangesetDbWriter
   private long requestChangesetMapId = -1;
 
   /*
-   * A mapping of element IDs parsed from the request XML (key) to their
-   * element object that contains their ID in the database, grouped by type
-   * (effectively, a mapping of request specified (old) element ID to actual
-   * element ID mapping); Elements being created don't have a permanent ID
-   * (they're assigned a temporary negative ID by convention), so this allows
-   * this element to know the ID of its related elements after they have been
-   * processed earlier in the changeset upload parsing process. For existing
-   * elements, both the key/value will always be the same.
+   * A mapping of element IDs parsed from the request XML (key) to their element object that 
+   * contains their ID in the database, grouped by type (effectively, a mapping of request 
+   * specified (old) element ID to actual element ID mapping); Elements being created don't have a 
+   * permanent ID (they're assigned a temporary negative ID by convention), so this allows this 
+   * element to know the ID of its related elements after they have been processed earlier in the 
+   * changeset upload parsing process. For existing elements, both the key/value will always be the 
+   * same.
    */
   private Map<ElementType, HashMap<Long, Element>> parsedElementIdsToElementsByType;
+  public Map<ElementType, HashMap<Long, Element>> getParsedElementIdsToElementsByType()
+  { return parsedElementIdsToElementsByType; }
 
   // a collection of element records to be modified within the database
   private List<Object> recordsToModify = new ArrayList<Object>();
