@@ -33,7 +33,7 @@ public class HGISReviewResourceTest {
 
 		ArgumentCaptor<String> argCaptor = ArgumentCaptor.forClass(String.class);
 
-		Mockito.doNothing().when(spy).postJobRquest(org.mockito.Matchers.anyString(), argCaptor.capture());
+		Mockito.doNothing().when(spy).postChainJobRquest(org.mockito.Matchers.anyString(), argCaptor.capture());
 		PrepareForValidationRequest request = new PrepareForValidationRequest();
 		request.setSourceMap("testSrc1");
 		request.setOutputMap("out1");
@@ -42,15 +42,41 @@ public class HGISReviewResourceTest {
 		List<String> args = argCaptor.getAllValues();
 		String  param = args.get(0);
 		JSONParser parser = new JSONParser();
-		JSONObject result = (JSONObject)parser.parse(param);
-		Assert.assertEquals(result.get("exec"), "custom/HGIS/PrepareForValidation.sh");
-		Assert.assertEquals(result.get("exectype"), "bash");
-		Assert.assertNotNull(result.get("params"));
-		JSONArray arr = (JSONArray)result.get("params");
+		JSONArray result = (JSONArray)parser.parse(param);
+		
+		JSONObject command = (JSONObject)result.get(0);
+		
+		Assert.assertEquals(command.get("exec"), "custom/HGIS/PrepareForValidation.sh");
+		Assert.assertEquals(command.get("exectype"), "bash");
+		Assert.assertNotNull(command.get("params"));
+		JSONArray arr = (JSONArray)command.get("params");
 		String connStr = spy._generateDbMapParam("testSrc1");
 		Assert.assertEquals(((JSONObject)arr.get(0)).get("SOURCE"), connStr);
 		connStr = spy._generateDbMapParam("out1");
 		Assert.assertEquals(((JSONObject)arr.get(1)).get("OUTPUT"), connStr);
+		
+		command = (JSONObject)result.get(1);
+		
+		Assert.assertEquals(command.get("class"), "hoot.services.controllers.job.ReviewResource");
+		Assert.assertEquals(command.get("method"), "prepareItemsForReview");
+		Assert.assertEquals(command.get("exectype"), "reflection");
+		Assert.assertNotNull(command.get("params"));
+		arr = (JSONArray)command.get("params");
+
+		Assert.assertEquals(((JSONObject)arr.get(0)).get("value"), "out1");
+		Assert.assertEquals(((JSONObject)arr.get(1)).get("value"), false);
+		
+		
+		command = (JSONObject)result.get(2);
+		
+		Assert.assertEquals(command.get("class"), "hoot.services.controllers.job.custom.HGIS.HGISReviewResource");
+		Assert.assertEquals(command.get("method"), "updateMapsTag");
+		Assert.assertEquals(command.get("exectype"), "reflection");
+		Assert.assertNotNull(command.get("params"));
+		arr = (JSONArray)command.get("params");
+
+		Assert.assertEquals(((JSONObject)arr.get(0)).get("value"), "out1");
+
 	}
 	
 
