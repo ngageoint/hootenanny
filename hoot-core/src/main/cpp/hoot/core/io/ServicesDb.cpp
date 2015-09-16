@@ -343,6 +343,44 @@ void ServicesDb::createPendingMapIndexes()
   _pendingMapIndexes.clear();
 }
 
+void ServicesDb::deleteData_OsmApi()
+{
+  // delete ways data first
+  _execNoPrepare("DELETE FROM current_relation_members CASCADE");
+  _execNoPrepare("DELETE FROM current_relation_tags CASCADE");
+  _execNoPrepare("DELETE FROM current_relations CASCADE");
+  _execNoPrepare("ALTER SEQUENCE current_relations_id_seq RESTART WITH 1");
+  _execNoPrepare("DELETE FROM relation_members CASCADE");
+  _execNoPrepare("DELETE FROM relation_tags CASCADE");
+  _execNoPrepare("DELETE FROM relations CASCADE");
+
+  // delete relations data 2nd
+  _execNoPrepare("DELETE FROM current_way_nodes CASCADE");
+  _execNoPrepare("DELETE FROM current_way_tags CASCADE");
+  _execNoPrepare("DELETE FROM current_ways CASCADE");
+  _execNoPrepare("ALTER SEQUENCE current_ways_id_seq RESTART WITH 1");
+  _execNoPrepare("DELETE FROM way_nodes CASCADE");
+  _execNoPrepare("DELETE FROM way_tags CASCADE");
+  _execNoPrepare("DELETE FROM ways CASCADE");
+
+  // delete nodes data 3rd
+  _execNoPrepare("DELETE FROM current_node_tags CASCADE");
+  _execNoPrepare("DELETE FROM current_nodes CASCADE");
+  _execNoPrepare("ALTER SEQUENCE current_nodes_id_seq RESTART WITH 1");
+  _execNoPrepare("DELETE FROM node_tags CASCADE");
+  _execNoPrepare("DELETE FROM nodes CASCADE");
+
+  // delete changesets
+  _execNoPrepare("DELETE FROM changesets_subscribers CASCADE");
+  _execNoPrepare("DELETE FROM changeset_tags CASCADE");
+  _execNoPrepare("DELETE FROM changesets CASCADE");
+  _execNoPrepare("ALTER SEQUENCE changesets_id_seq RESTART WITH 1");
+
+  // delete users
+  _execNoPrepare("DELETE FROM users CASCADE");
+  _execNoPrepare("ALTER SEQUENCE users_id_seq RESTART WITH 1");
+}
+
 void ServicesDb::deleteMap(long mapId)
 {
   _dropTable(_getRelationMembersTableName(mapId));

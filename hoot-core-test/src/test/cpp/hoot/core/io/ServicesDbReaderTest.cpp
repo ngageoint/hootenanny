@@ -88,12 +88,22 @@ public:
 
   void tearDown()
   {
+    // Services DB
     ServicesDbTestUtils::deleteUser(userEmail());
 
     ServicesDb database;
     database.open(ServicesDbTestUtils::getDbModifyUrl());
     database.deleteMap(mapId);
     database.close();
+
+    // Osm Api DB
+    ServicesDb database2;
+    if(GREGSWORKSPACE)
+      database2.open(QUrl("postgresql://vagrant:vagrant@localhost:15432/openstreetmap"));
+    else
+      database2.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
+    database2.deleteData_OsmApi();
+    database2.close();
   }
 
   long populateMap()

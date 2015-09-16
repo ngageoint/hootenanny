@@ -1030,16 +1030,27 @@ public:
   {
     deleteUser(userEmail());
 
+    // tear down the ServicesDB
+    ServicesDb database;
     if (mapId > 0)
     {
-      ServicesDb database;
       database.open(getDbUrl());
       if (database.mapExists(mapId))
       {
         database.deleteMap(mapId);
       }
+      database.close();
     }
     mapId = -1;
+
+    // tear down the osm api db
+    if(GREGSWORKSPACE)
+      database.open(QUrl("postgresql://vagrant:vagrant@localhost:15432/openstreetmap"));
+    else
+      database.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
+
+    database.deleteData_OsmApi();
+    database.close();
   }
 
 };
