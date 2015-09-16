@@ -6,6 +6,7 @@ use Math::Trig; # For tile number calculations
 use POSIX qw(strftime);
 use File::Temp qw(tempfile);
 use Data::Dumper;
+use Tie::LevelDB;
 
 sub covertDecimalDegreesToNanodegrees($);
 sub generatePgDumpfileFromOsm($$);
@@ -121,7 +122,7 @@ sub generatePgDumpfileFromOsm($$)
 {
   my $osmFilename = shift(@_);
   my $sqlFilename = shift(@_);
-  my %idMappings;
+  my $idMappings  = new Tie::LevelDB::DB("idmaps.db");
   my $osmFilehandle;
 
   open( $osmFilehandle, "< $osmFilename") or die( "Could not open OSM file: $osmFilename\n\n" );
@@ -165,17 +166,17 @@ sub generatePgDumpfileFromOsm($$)
 
   my $startingNodeId  = 500;
 
-  readNodes($osmFilehandle, \%sectionFilehandles, $startingNodeId, \%idMappings );
+  readNodes($osmFilehandle, \%sectionFilehandles, $startingNodeId, $idMappings );
 
   #print( "\nShould be first way line:\n\t" . <$osmFilehandle> );
 
   # Process ways
   my $startingWayId   = 500;
-  readWays($osmFilehandle, \%sectionFilehandles, $startingWayId, \%idMappings );
+  readWays($osmFilehandle, \%sectionFilehandles, $startingWayId, $idMappings );
 
   # Process relations
   my $startingRelationId = 500;
-  readRelations( $osmFilehandle, \%sectionFilehandles, $startingRelationId, \%idMappings );
+  readRelations( $osmFilehandle, \%sectionFilehandles, $startingRelationId, $idMappings );
 
   close( $osmFilehandle );
   #close( $sqlFilehandle );
@@ -199,10 +200,10 @@ sub generatePgDumpfileFromOsm($$)
 
 sub readNodes($$$$)
 {
-  my $osmFilehandle             = shift(@_);
-  my $sectionFilehandlesRef       = shift(@_);
-  my $startingNodeId            = shift(@_);
-  my $idMappings                = shift(@_);
+  my $osmFilehandle           = shift(@_);
+  my $sectionFilehandlesRef   = shift(@_);
+  my $startingNodeId          = shift(@_);
+  my $idMappings              = shift(@_);
 
   print( "- Processing nodes: ");
 
@@ -237,7 +238,13 @@ sub readNodes($$$$)
 
   my $nodeId;   # Have to track this outside loop as tags will refer back to 
                 # last node we encountered
+
   my $insideNode = 0;
+
+  my $nodesInBatch = 0;
+  my $maxNodesPerBatch = 10000000;
+
+  my $nodeBatch = new Tie::LevelDB::WriteBatch();
 
   while ( ! eof($osmFilehandle) )
   {
@@ -281,21 +288,22 @@ sub readNodes($$$$)
       my $tileNumber = convertLatLonToTileNumber($nodeLat, $nodeLon);
 
       # Establish node ID mapping
-      if ( exists($idMappings->{'node'}->{$nodeId}) )
+      $nodeBatch->Put( "node:$nodeId", $dbNodeId );
+      $nodesInBatch++;
+      if ( $nodesInBatch == $maxNodesPerBatch )
       {
-        print("ERROR: node ID $nodeId not unique in input data!\n\n" );
-        exit;
+        $idMappings->Write($nodeBatch);
+        $nodesInBatch = 0;
       }
 
-      $idMappings->{'node'}->{$nodeId} = $dbNodeId;
-      #print("Established node mapping, $nodeId -> $idMappings->{'node'}->{$nodeId}\n" );
+      #print("Established node mapping, $nodeId -> $dbNodeId\n" );
 
       #print( "Tile number: " . convertLatLonToTileNumber($nodeLat, $nodeLon) . "\n" );
 
       # Print current version of data
       print( $currentNodesHandle
         sprintf("%d\t%10d\t%10d\t%d\tt\t%s\t%u\t1\n",
-          $idMappings->{'node'}->{$nodeId},
+          $dbNodeId,
           convertDecimalDegreesToNanodegrees($nodeLat),
           convertDecimalDegreesToNanodegrees($nodeLon),
           $changesetId,
@@ -305,7 +313,7 @@ sub readNodes($$$$)
       # Print historical version of data
       print( $nodesHandle
         sprintf( "%d\t%10d\t%10d\t%d\tt\t%s\t%u\t1\t\\N\n",
-          $idMappings->{'node'}->{$nodeId},
+          $dbNodeId,
           convertDecimalDegreesToNanodegrees($nodeLat),
           convertDecimalDegreesToNanodegrees($nodeLon),
           $changesetId,
@@ -335,7 +343,6 @@ sub readNodes($$$$)
         exit;
       }
 
-      my $dbNodeId = $idMappings->{'node'}->{$nodeId};
       my $tagKey = $1;
       my $tagValue = $2;
 
@@ -354,7 +361,7 @@ sub readNodes($$$$)
     else
     {
       # Ignore anything before first node, otherwise error
-      if ( scalar(keys(%{ $idMappings->{'node'} })) > 0 )
+      if ( $numNodes > 0 )
       {
         print( "Invalid line: $currLine\n\n");
         exit;
@@ -365,6 +372,13 @@ sub readNodes($$$$)
     $currLine = <$osmFilehandle>;
   }
 
+  # Do last node ID mapping batch flush if necessary
+  if ( $nodesInBatch > 0 )
+  {
+    $idMappings->Write($nodeBatch);
+    $nodesInBatch = 0;
+  }
+
   # Output marker for end of tables
   my $endOfTableTag = "\\.\n\n\n";
   print( $currentNodesHandle    $endOfTableTag );
@@ -373,8 +387,6 @@ sub readNodes($$$$)
   print( $nodeTagsHandle        $endOfTableTag );
 
   print ("complete ($numNodes)\n");
-
-  #print( "Sanity check: idMappings has " . scalar(keys(%{$idMappings->{'node'}})) . " entries\n" );
 
   #print( "Stopped looking for nodes at $currLine" ); 
 
@@ -425,6 +437,10 @@ sub readWays($$$$)
                 # last way we encountered
   my $insideWay = 0;
   my $nodeSequence = -99999;
+  my $waysInBatch = 0;
+  my $maxWaysPerBatch = 10000000;
+
+  my $waysBatch = new Tie::LevelDB::WriteBatch();
 
   while ( ! eof($osmFilehandle) )
   {
@@ -466,29 +482,29 @@ sub readWays($$$$)
       $wayId  = $1;
 
       # Establish way ID mapping
-      if ( exists($idMappings->{'way'}->{$wayId}) )
+      $waysBatch->Put( "way:$wayId", $dbWayId );
+      $waysInBatch++;
+      if ( $waysInBatch == $maxWaysPerBatch )
       {
-        print("ERROR: way ID $wayId not unique in input data!\n\n" );
-        exit;
+        $idMappings->Write($waysBatch);
+        $waysInBatch = 0;
       }
 
-      $idMappings->{'way'}->{$wayId} = $dbWayId;
-      #print("Established way mapping, $wayId -> $idMappings->{'way'}->{$wayId}\n" );
+      #print("Established way mapping, $wayId -> $dbWayId\n" );
 
       # Print current version of data
       print( $currentWaysHandle
         sprintf("%d\t%d\t%s\tt\t1\n",
-          $idMappings->{'way'}->{$wayId},
+          $dbWayId,
           $changesetId,
           $timestamp ) );
 
       # Print historical version of data
       print( $waysHandle
         sprintf( "%d\t%d\t%s\t1\tt\t\\N\n",
-          $idMappings->{'way'}->{$wayId},
+          $dbWayId,
           $changesetId,
           $timestamp ) );
-
 
       $dbWayId++;
 
@@ -513,7 +529,6 @@ sub readWays($$$$)
         exit;
       }
 
-      my $dbWayId = $idMappings->{'way'}->{$wayId};
       my $tagKey = $1;
       my $tagValue = $2;
 
@@ -534,15 +549,14 @@ sub readWays($$$$)
       my $nodeRefId = $1;
 
       # Is it a known node ref?
-      if ( ! exists($idMappings->{'node'}->{$nodeRefId}) )
+      my $dbNodeRefId = $idMappings->Get( "node:$nodeRefId" );
+      if ( ! defined($dbNodeRefId) )
       {
         print( "Ignoring unresolved node ref $nodeRefId in way $wayId\n");
       }
 
-      #print ( "Found valid node ref $nodeRefId for way $wayId\n" );
-
-      my $dbWayId = $idMappings->{'way'}->{$wayId};
-      my $dbNodeRefId = $idMappings->{'node'}->{$nodeRefId};
+      #print ( "Found valid node ref $nodeRefId, DB ID $dbNodeRefId for way $wayId\n" );
+      #exit;
 
       print( $currentWayNodesHandle
         sprintf("%d\t%d\t%u\n", $dbWayId, $dbNodeRefId, $nodeSequence) );
@@ -573,6 +587,12 @@ sub readWays($$$$)
     $currLine = <$osmFilehandle>;
   }
 
+  if ( $waysInBatch > 0 ) 
+  {
+    $idMappings->Write( $waysBatch );
+    $waysInBatch = 0;
+  }
+
   # Output marker for end of tables
   my $endOfTableTag = "\\.\n\n\n";
   print( $currentWaysHandle     $endOfTableTag );
@@ -594,7 +614,7 @@ sub readRelations($$$$)
 {
   my $osmFilehandle           = shift(@_);
   my $sectionFilehandlesRef   = shift(@_);
-  my $startingRelationId           = shift(@_);
+  my $startingRelationId      = shift(@_);
   my $idMappings              = shift(@_);
 
   print( "- Processing relations: ");
@@ -677,26 +697,21 @@ sub readRelations($$$$)
       $relationId  = $1;
 
       # Establish relation ID mapping
-      if ( exists($idMappings->{'relation'}->{$relationId}) )
-      {
-        print("ERROR: relation ID $relationId not unique in input data!\n\n" );
-        exit;
-      }
+      $idMappings->Put("relation:$relationId", $dbRelationId);
 
-      $idMappings->{'relation'}->{$relationId} = $dbRelationId;
-      #print("Established relation mapping, $relationId -> $idMappings->{'relation'}->{$relationId}\n" );
+      #print("Established relation mapping, $relationId -> $dbRelationId\n");
 
       # Print current version of data
       print( $currentRelationsHandle
         sprintf("%d\t%d\t%s\tt\t1\n",
-          $idMappings->{'relation'}->{$relationId},
+          $dbRelationId,
           $changesetId,
           $timestamp ) );
 
       # Print historical version of data
       print( $relationsHandle
         sprintf( "%d\t%d\t%s\t1\tt\t\\N\n",
-          $idMappings->{'relation'}->{$relationId},
+          $dbRelationId,
           $changesetId,
           $timestamp ) );
 
@@ -708,15 +723,16 @@ sub readRelations($$$$)
 
         foreach my $deferredWrite ( @{ $unresolvedRelationMembers{$relationId} } )
         {
-          my $dbSourceRelationId = $idMappings->{'relation'}->{$deferredWrite->{'relation_id'}};
-          my $dbMemberRefId = $idMappings->{'relation'}->{$relationId};
+          my $dbSourceRelationId = $idMappings->Get("relation:$deferredWrite->{'relation_id'}");
 
           print( $currentRelationMembersHandle
-            sprintf("%d\t%s\t%d\t%s\t%u\n", $dbSourceRelationId, ucfirst($deferredWrite->{'member_type'}), $dbMemberRefId, 
+            sprintf("%d\t%s\t%d\t%s\t%u\n", $dbSourceRelationId, ucfirst($deferredWrite->{'member_type'}), 
+              $dbRelationId,
               lc($deferredWrite->{'member_role'}), $deferredWrite->{'member_sequence'}) );
 
           print( $relationMembersHandle
-            sprintf("%d\t%s\t%d\t%s\t1\t%u\n", $dbSourceRelationId, ucfirst($deferredWrite->{'member_type'}), $dbMemberRefId,
+            sprintf("%d\t%s\t%d\t%s\t1\t%u\n", $dbSourceRelationId, 
+              ucfirst($deferredWrite->{'member_type'}), $dbRelationId,
               lc($deferredWrite->{'member_role'}), $deferredWrite->{'member_sequence'}) );
 
            # As it actually got written out, update number of relation members
@@ -727,7 +743,6 @@ sub readRelations($$$$)
         # Remove entry from unresolved list
         delete( $unresolvedRelationMembers{$relationId} );
       }
-
 
       $dbRelationId++;
 
@@ -752,7 +767,6 @@ sub readRelations($$$$)
         exit;
       }
 
-      my $dbRelationId = $idMappings->{'relation'}->{$relationId};
       my $tagKey = $1;
       my $tagValue = $2;
 
@@ -783,7 +797,9 @@ sub readRelations($$$$)
       }
 
       # Is it a known ref?
-      if ( ! exists($idMappings->{$memberType}->{$memberRefId}) )
+      my $dbMemberRefId = $idMappings->Get( "$memberType:$memberRefId" );
+
+      if ( ! defined($dbMemberRefId) )
       {
         $numUnresolvedRelationMembers++;
         if ( $memberType ne 'relation' )
@@ -807,14 +823,13 @@ sub readRelations($$$$)
       {
         #print( "Found valid member ref to $memberType $memberRefId in relation $relationId\n" );
 
-        my $dbRelationId = $idMappings->{'relation'}->{$relationId};
-        my $dbMemberRefId = $idMappings->{$memberType}->{$memberRefId};
-
         print( $currentRelationMembersHandle
-          sprintf("%d\t%s\t%d\t%s\t%u\n", $dbRelationId, ucfirst($memberType), $dbMemberRefId, lc($memberRole), $memberSequence) );
+          sprintf("%d\t%s\t%d\t%s\t%u\n", $dbRelationId, ucfirst($memberType), 
+          $dbMemberRefId, lc($memberRole), $memberSequence) );
 
         print( $relationMembersHandle
-          sprintf("%d\t%s\t%d\t%s\t1\t%u\n", $dbRelationId, ucfirst($memberType), $dbMemberRefId, lc($memberRole), $memberSequence) );
+          sprintf("%d\t%s\t%d\t%s\t1\t%u\n", $dbRelationId, ucfirst($memberType), 
+          $dbMemberRefId, lc($memberRole), $memberSequence) );
 
         # As it actually got written out, update number of relation members
         $numResolvedRelationMembers++;
