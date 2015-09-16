@@ -386,52 +386,6 @@ public class ReviewResource
     return updateReviewStatusResponse;
   }
   
-  /*@PUT
-  @Path("/resetstatus")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public JSONObject resetStatus(
-  	JSONObject markItemsReviewedRequest,
-    @QueryParam("mapId")
-    String mapId)
-    throws Exception
-  {
-    Connection conn = DbUtils.createConnection();
-    final String errorMessageStart = "marking items as reviewed";
-    
-    try
-    {
-    	String reviewId = markItemsReviewedRequest.get("reviewid").toString();
-    	
-    	Object oAgainst = markItemsReviewedRequest.get("reviewagainstid");
-    	String reviewAgainst = (oAgainst == null)? null : oAgainst.toString();
-
-    	java.util.Date date= new java.util.Date();
-    	Timestamp past = new Timestamp(date.getTime() - ReviewItemsUpdater.LOCK_TIME);
-    	(new ReviewItemsUpdater(conn, mapId)).updateReviewLastAccessTime(reviewId, past, reviewAgainst);
-
-    }
-    catch (Exception e)
-    {
-      ReviewUtils.handleError(e, errorMessageStart, false);
-    }
-    finally
-    {
-    	try
-      {
-    		conn.setAutoCommit(true);
-        DbUtils.closeConnection(conn);
-      }
-      catch (Exception e)
-      {
-        ReviewUtils.handleError(e, errorMessageStart, false);
-      }
-    }
-    JSONObject markItemsReviewedResponse = new JSONObject();
-    markItemsReviewedResponse.put("status", "ok");
-    return markItemsReviewedResponse;
-  }*/
-  
   @SuppressWarnings("unchecked")
   @PUT
   @Path("/next")
