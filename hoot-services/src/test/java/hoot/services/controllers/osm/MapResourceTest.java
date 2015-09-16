@@ -57,7 +57,6 @@ import hoot.services.db2.QCurrentNodes;
 import hoot.services.db2.QCurrentRelations;
 import hoot.services.db2.QCurrentWays;
 import hoot.services.db2.QMaps;
-
 import hoot.services.geo.BoundingBox;
 //import hoot.services.job.JobStatusWebPoller;
 //import hoot.services.models.osm.Map;
@@ -71,7 +70,7 @@ import hoot.services.models.osm.Element.ElementType;
 //import hoot.services.osm.MapWriterThread;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
-import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 
 import com.mysema.query.sql.SQLExpressions;
 import com.mysema.query.sql.SQLQuery;
@@ -186,7 +185,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
       OsmTestUtils.verifyOsmHeader(responseData);
       OsmTestUtils.verifyBounds(responseData, queryBounds);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       final boolean multiLayerUniqueElementIds =
         multiLayerUniqueElementIdsStr.toLowerCase().equals("true");
@@ -632,7 +631,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
       OsmTestUtils.verifyOsmHeader(responseData);
       OsmTestUtils.verifyBounds(responseData, queryBounds);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       try
       {
@@ -819,7 +818,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
       OsmTestUtils.verifyOsmHeader(responseData);
       OsmTestUtils.verifyBounds(responseData, queryBounds);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       try
       {
@@ -995,7 +994,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
       OsmTestUtils.verifyOsmHeader(responseData);
       OsmTestUtils.verifyBounds(responseData, queryBounds);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       try
       {
@@ -1191,7 +1190,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
         responseData, 4, String.valueOf(nodeIdsArr[4]), changesetId, originalBounds.getMinLat(),
         originalBounds.getMinLon(), false);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       try
       {
         Assert.assertEquals(

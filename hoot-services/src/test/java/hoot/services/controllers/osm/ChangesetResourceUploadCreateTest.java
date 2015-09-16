@@ -68,7 +68,7 @@ import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
-import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLUpdateClause;
@@ -185,7 +185,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       Set<Long> nodeIds = new LinkedHashSet<Long>();
       Set<Long> wayIds = new LinkedHashSet<Long>();
       Set<Long> relationIds = new LinkedHashSet<Long>();
@@ -401,7 +401,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       List<Long> nodeIds = new ArrayList<Long>();
       Set<Long> wayIds = new LinkedHashSet<Long>();
       try
@@ -679,7 +679,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       Set<Long> nodeIds = new LinkedHashSet<Long>();
       Set<Long> wayIds = new LinkedHashSet<Long>();
       Set<Long> relationIds = new LinkedHashSet<Long>();

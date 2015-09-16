@@ -26,50 +26,11 @@
  */
 package hoot.services.controllers.wps;
 
-import java.io.File;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.util.LinkedList;
-import java.util.UUID;
-
-import javax.ws.rs.core.Response.Status;
-
-import org.apache.commons.io.FileUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.deegree.process.jaxb.java.BoundingBoxInputDefinition;
-import org.deegree.process.jaxb.java.LiteralInputDefinition;
-import org.deegree.process.jaxb.java.ProcessDefinition;
-import org.deegree.process.jaxb.java.ProcessDefinition.OutputParameters;
-import org.deegree.services.wps.ProcessExecution;
-import org.deegree.services.wps.ProcessletException;
-import org.deegree.services.wps.ProcessletInputs;
-import org.deegree.services.wps.ProcessletOutputs;
-import org.deegree.services.wps.input.ProcessletInput;
-import org.deegree.services.wps.output.LiteralOutputImpl;
-import org.deegree.services.wps.output.ProcessletOutput;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysema.query.sql.dml.SQLInsertClause;
-import com.mysema.query.sql.dml.SQLUpdateClause;
-
-import hoot.services.HootProperties;
-import hoot.services.IntegrationTest;
-import hoot.services.db.DbUtils;
-import hoot.services.db2.QReviewItems;
-import hoot.services.db2.QReviewMap;
-import hoot.services.db2.ReviewMap;
-import hoot.services.geo.BoundingBox;
-import hoot.services.job.JobStatusManager.JOB_STATUS;
-import hoot.services.models.osm.Changeset;
-import hoot.services.models.osm.Element.ElementType;
 import hoot.services.osm.OsmResourceTestAbstract;
-import hoot.services.review.ReviewTestUtils;
-import hoot.services.wps.WpsUtils;
-import hoot.services.writers.osm.ChangesetDbWriter;
 
 //TODO: test needs to be rewritten
 public class GetReviewableItemsProcessletTest extends OsmResourceTestAbstract

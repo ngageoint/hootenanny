@@ -149,9 +149,11 @@ public class ReviewItemsUpdater
   	int numReviewItemsUpdated = 0;
   	
     //check create changeset for any newly created reviewable items
+  	//TODO: fix
   	final NodeList createdReviewItems = 
   	  XPathAPI.selectNodeList(
-  	    changesetDoc, "//osmChange/create/node|way|relation/tag[@k='hoot:review:needs and @v='yes']");
+  	    changesetDoc, 
+  	    "//osmChange/create/node|way|relation/tag[@k='hoot:review:needs' and @v='yes']");
   	List<ElementIdMappings> elementIdMappingRecordsToInsert = new ArrayList<ElementIdMappings>();
   	List<ReviewItems> reviewItemRecordsToInsert = new ArrayList<ReviewItems>();
   	for (int i = 0; i < createdReviewItems.getLength(); i++)
@@ -173,6 +175,7 @@ public class ReviewItemsUpdater
     		for (int j = 0; j < reviewAgainstUuids.length; j++)
     		{
     			//assuming that an element id mapping already exists for each of the review against items
+    			//TODO: is this assumption ok?
     			reviewItemRecordsToInsert.add(
     	  		ReviewUtils.createReviewItemRecord(
     	  			uuid, 
@@ -243,6 +246,9 @@ public class ReviewItemsUpdater
   	for (String uuid : modifiedUniqueIds)
   	{
   		final org.w3c.dom.Node elementXml = uuidsToXml.get(uuid);
+  		assert(
+  		XPathAPI.selectSingleNode(
+  		  elementXml, "//tag[@k = 'hoot:review:needs' and @v = 'yes']").getNodeValue() != null);
     	final String[] reviewAgainstUuids = reviewAgainstUuidsFromChangesetElement(elementXml);
   		if (reviewAgainstUuids != null)
   		{
@@ -269,6 +275,7 @@ public class ReviewItemsUpdater
   			reviewItemRecord.setReviewStatus(DbUtils.review_status_enum.reviewed);
   			reviewItemRecordsToUpdate.add(reviewItemRecord);
   		}
+  		uuidsToXml.remove(uuid);
   	}
 		List<List<BooleanExpression>> predicatelist = new ArrayList<List<BooleanExpression>>();
   	for (int i = 0; i < reviewItemRecordsToUpdate.size(); i++)
@@ -277,11 +284,13 @@ public class ReviewItemsUpdater
   		predicates.add(reviewItems.reviewId.eq(reviewItemRecordsToUpdate.get(i).getReviewId()));
   		predicatelist.add(predicates);
   	}
-  	
     DbUtils.batchRecords(
     	mapId, reviewItemRecordsToUpdate, reviewItems, predicatelist, RecordBatchType.UPDATE, conn, 
     	maxRecordBatchSize);
     numReviewItemsUpdated += reviewItemRecordsToUpdate.size();
+    
+    //anything left in uuidsToXml must be a new review record
+    //TODO: finish
     	
   	return numReviewItemsUpdated;
   }

@@ -40,7 +40,6 @@ import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +69,7 @@ import hoot.services.models.osm.Element;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 import hoot.services.writers.osm.ChangesetDbWriter;
 
 /*
@@ -101,7 +101,7 @@ public class ReviewTestUtils
     final ElementType elementType, Map<Long, Long> mappings, final int size)
     throws XPathExpressionException
   {
-    XPath xpath = XmlDocumentBuilder.createXPath();
+    XPath xpath = XmlUtils.createXPath();
     mappings.clear();
 
     //there aren't more than 100 elements of any type in the source file

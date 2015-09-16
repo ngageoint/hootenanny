@@ -39,9 +39,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathFactory;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
@@ -74,16 +71,6 @@ public class XmlDocumentBuilder
       throw new IOException("Error creating document builder. (" + e.getMessage() + ")");
     }
     return builder.newDocument();
-  }
-
-  /**
-   * Creates an XPATH instance for querying with
-   * 
-   * @return an XPATH instance
-   */
-  public static XPath createXPath()
-  {
-    return XPathFactory.newInstance().newXPath();
   }
 
   /**

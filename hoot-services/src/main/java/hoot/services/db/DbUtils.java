@@ -235,6 +235,7 @@ public class DbUtils
   	return null;
   }
 
+  @SuppressWarnings("unused")
   public static boolean closeConnection(Connection conn) throws Exception
   {
   	if (conn.isClosed())
@@ -255,9 +256,6 @@ public class DbUtils
   	}
   	return false;
   }
-
-
-
 
   public static void clearTable(com.mysema.query.sql.RelationalPathBase<?> t, Connection conn) throws Exception
   {

@@ -27,34 +27,10 @@
 package hoot.services.controllers.job;
 
 import java.io.IOException;
-import java.util.UUID;
-
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response.Status;
-
-import hoot.services.HootProperties;
-import hoot.services.UnitTest;
-import hoot.services.db.DbUtils;
 import hoot.services.db2.QReviewItems;
-import hoot.services.db2.QReviewMap;
-import hoot.services.db2.ReviewMap;
-
-import hoot.services.geo.BoundingBox;
-import hoot.services.job.JobStatusManager.JOB_STATUS;
-import hoot.services.models.osm.Element.ElementType;
 import hoot.services.osm.OsmResourceTestAbstract;
-import hoot.services.review.ReviewTestUtils;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.mysema.query.sql.dml.SQLInsertClause;
-import com.mysema.query.sql.dml.SQLUpdateClause;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
 
 /*
  * @todo Most of these tests could be converted to integration tests and after a refactoring,

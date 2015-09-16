@@ -71,7 +71,6 @@ public class ReviewItemsUpdaterTest {
 				+ "and \"review_items\".\"review_against_item_id\" = ?", actual);
 	}
 	
-	
 	@Test
 	@Category(UnitTest.class)
 	public void testGetAvailableReviewQuery() throws Exception
@@ -99,7 +98,6 @@ public class ReviewItemsUpdaterTest {
 				+ "or \"review_items\".\"review_id\" = ?\n" + 
 				"order by \"review_items\".\"review_id\" desc", q.toString());
 	}
-	
 	
 	//testGetAvailableReviewCntQuery
 	@Test
@@ -132,6 +130,7 @@ public class ReviewItemsUpdaterTest {
 				"where \"review_items\".\"map_id\" = ? and \"review_items\".\"review_status\" = ? "
 				+ "and \"review_items\".\"last_accessed\" >= ?", q.toString());
 	}
+	
 	//getTotalReviewCntQuery()
 	@Test
 	@Category(UnitTest.class)
@@ -146,7 +145,6 @@ public class ReviewItemsUpdaterTest {
 		Assert.assertEquals("from \"review_items\" \"review_items\"\n" + 
 				"where \"review_items\".\"map_id\" = ?", q.toString());
 	}
-	
 	
 	//_getReviewAgainstForReviewable
 	@Test
@@ -180,7 +178,6 @@ public class ReviewItemsUpdaterTest {
 				"where \"element_id_mappings\".\"map_id\" = ? and \"element_id_mappings\".\"element_id\" = ?", q.toString());
 	}
 	
-	
 	//_getAvailableReviewWithOffsetQuery
 	@Test
 	@Category(UnitTest.class)
@@ -203,7 +200,6 @@ public class ReviewItemsUpdaterTest {
 				"order by \"review_items\".\"review_id\" asc", q.toString());
 	}
 	
-	
 	//_updateLastAccessWithSubSelect
 	@Test
 	@Category(UnitTest.class)
@@ -223,11 +219,9 @@ public class ReviewItemsUpdaterTest {
 		Assert.assertEquals("update \"review_items\"\n" + 
 				"set \"last_accessed\" = ?\n" + 
 				"where \"review_items\".\"map_id\" = ? and \"review_items\".\"review_id\" = ?", q.toString());
-		
 	}
 	
 	//_getRelationBboxQuery
-	
 	@Test
 	@Category(UnitTest.class)
 	public void testGetRelationBboxQuery() throws Exception
@@ -249,9 +243,7 @@ public class ReviewItemsUpdaterTest {
 				+ "or \"current_nodes\".\"id\" in (select \"current_relation_members\".\"member_id\"\n" + 
 				"from \"current_relation_members_1\" \"current_relation_members\"\n" + 
 				"where \"current_relation_members\".\"relation_id\" = ? and \"current_relation_members\".\"member_type\" = ?)", q.toString());
-		
 	}
-	
 	
 	//_getWayBboxQuery
 	@Test
@@ -270,7 +262,6 @@ public class ReviewItemsUpdaterTest {
 				"where \"current_nodes\".\"id\" in (select \"current_way_nodes\".\"node_id\"\n" + 
 				"from \"current_way_nodes_1\" \"current_way_nodes\"\n" + 
 				"where \"current_way_nodes\".\"way_id\" = ?)", q.toString());
-		
 	}
 	
 	//_getNodeCoordQuery
@@ -288,6 +279,5 @@ public class ReviewItemsUpdaterTest {
 		
 		Assert.assertEquals("from \"current_nodes_1\" \"current_nodes\"\n" + 
 				"where \"current_nodes\".\"id\" = ?", q.toString());
-		
 	}
 }

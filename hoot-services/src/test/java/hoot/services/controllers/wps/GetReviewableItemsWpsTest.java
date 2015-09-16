@@ -28,25 +28,9 @@ package hoot.services.controllers.wps;
 
 import java.io.IOException;
 
-import javax.ws.rs.core.Response.Status;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathExpressionException;
-
-import org.apache.xpath.XPathAPI;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-
-import hoot.services.IntegrationTest;
 import hoot.services.geo.BoundingBox;
-import hoot.services.review.ReviewTestUtils;
-import hoot.services.utils.XmlDocumentBuilder;
-import hoot.services.wps.WpsTestAbstract;
 
 //TODO: test needs to be rewritten
 public class GetReviewableItemsWpsTest //extends WpsTestAbstract
@@ -136,7 +120,7 @@ public class GetReviewableItemsWpsTest //extends WpsTestAbstract
 //    Assert.assertNotNull(responseData);
 //    //System.out.println(XmlDocumentBuilder.toString(responseData));
 //    
-//    XPath xpath = XmlDocumentBuilder.createXPath();    
+//    XPath xpath = XmlUtils.createXPath();    
 //    try
 //    {
 //      Assert.assertEquals(

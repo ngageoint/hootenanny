@@ -1,11 +1,9 @@
 package hoot.services.controllers.job.custom.HGIS;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.models.review.custom.HGIS.PrepareForValidationRequest;
 import hoot.services.models.review.custom.HGIS.PrepareForValidationResponse;
