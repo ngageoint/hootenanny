@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
@@ -77,9 +77,10 @@ public class CookieCutterResource extends JobControllerBase {
 	/**
 	 * <NAME>Cookie Cutter Service</NAME>
 	 * <DESCRIPTION>
-	 *  Cookie cutter service contains 2 end points, WPS and rest. Both uses post request to execute job.
+	 * DEPRICATED
+	 *  Cookie cutter service contains 2 end points, WPS and rest. Both use post request to execute job.
 	 *  When successfully executed, the service willreturn Job Id where it is used to track the progress of job and result.
-	 *  For valid parameters following are accepted.
+	 *  For valid parameters, the following are accepted.
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * 	<INPUT_TYPE>

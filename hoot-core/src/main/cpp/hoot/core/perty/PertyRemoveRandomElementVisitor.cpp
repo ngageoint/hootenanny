@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyRemoveRandomElementVisitor.h"
 
@@ -70,12 +70,12 @@ void PertyRemoveRandomElementVisitor::setConfiguration(const Settings& conf)
   }
 }
 
-void PertyRemoveRandomElementVisitor::visit(ElementType type, long id)
+void PertyRemoveRandomElementVisitor::visit(const ConstElementPtr& e)
 {
   boost::uniform_real<> uni(0.0, 1.0);
   if (uni(*_rng) <= _p)
   {
-    RecursiveElementRemover(ElementId(type, id)).apply(_map->shared_from_this());
+    RecursiveElementRemover(ElementId(e->getElementType(), e->getId())).apply(_map->shared_from_this());
   }
 }
 

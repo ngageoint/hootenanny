@@ -39,10 +39,10 @@ public class HootServletContext implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent arg0) 
 	{
 		_transRes = new TranslatorResource();
-		_transRes.startTranslationService(null, null);
+		_transRes.startTranslationService();
 		
 		_P2PRes = new P2PResource();
-		_P2PRes.startP2PService(null, null);
+		_P2PRes.startP2PService();
 	}
 	
 	public void contextDestroyed(ServletContextEvent arg0) 

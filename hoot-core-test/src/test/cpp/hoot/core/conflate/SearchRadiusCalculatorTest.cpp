@@ -55,6 +55,7 @@ class SearchRadiusCalculatorTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runCalcResultTest);
   CPPUNIT_TEST(runBadPreOpTest);
   CPPUNIT_TEST(runNotEnoughTiePointsTest);
+  CPPUNIT_TEST(runPreviouslyConflatedDataTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -123,6 +124,35 @@ public:
     //default search radius
     CPPUNIT_ASSERT_EQUAL(
       ConfigOptions().getSetCircularErrorVisitorValue(), searchRadiusCalculator._result);
+  }
+
+  void runPreviouslyConflatedDataTest()
+  {
+    OsmReader reader;
+    OsmMap::resetCounters();
+    shared_ptr<OsmMap> map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(
+      "test-files/conflate/SearchRadiusCalculatorTest/Haiti_CNIGS_Rivers_REF1-cropped-2.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read(
+      "test-files/conflate/SearchRadiusCalculatorTest/Haiti_osm_waterway_ss_REF2-cropped-2.osm", map);
+
+    MapCleaner().apply(map);
+
+    //If any data in the dataset has already been conflated (or is invalid), the operation
+    //shouldn't fail.  The data should just be skipped.
+    map->getWay(map->findWays("REF1", "001952")[0])->setStatus(Status::Conflated);
+    map->getWay(map->findWays("REF2", "001f4b")[0])->setStatus(Status::Invalid);
+
+    Settings testSettings = conf();
+    testSettings.set("rubber.sheet.ref", "true");
+    testSettings.set("rubber.sheet.minimum.ties", "5");
+    SearchRadiusCalculator searchRadiusCalculator;
+    searchRadiusCalculator.setConfiguration(testSettings);
+
+    searchRadiusCalculator.apply(map);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(32.675054, any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
   }
 
 };

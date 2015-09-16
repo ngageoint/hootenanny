@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "FilteredVisitor.h"
 
@@ -95,10 +95,8 @@ void FilteredVisitor::setOsmMap(const OsmMap* map)
   }
   _map = map;
 }
-
-void FilteredVisitor::visit(ElementType type, long id)
+void FilteredVisitor::visit(const ConstElementPtr& e)
 {
-  shared_ptr<const Element> e = _map->getElement(type, id);
   if (_criterion->isSatisfied(e))
   {
     _visitor->visit(e);

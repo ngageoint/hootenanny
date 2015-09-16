@@ -18,6 +18,7 @@ conf/DatabaseConfig.sh
 conf/LocalHoot.json
 conf/*.rf
 conf/words*.sqlite
+conf/WordsAbridged.sqlite
 config.h.in
 config.h
 config.status
@@ -25,7 +26,6 @@ configure
 Configure.pri
 DbSchema.sql
 .deps/
-docs/docbook-xsl.css
 docs/*.epub
 docs/*.pdf
 docs/*-docinfo.xml
@@ -34,8 +34,11 @@ docs/.*
 docs/*.html
 docs/*.xml
 docs/*.text
-docs/Exploratory Funds Presentation.ppt
 docs/~*.docx
+docs/algorithms/GenericLineTestGraph.png
+docs/algorithms/GenericLineTestTimingGraph.png
+docs/Exploratory Funds Presentation.ppt
+docs/docbook-xsl.css
 docs/ref
 docs/UserDocumentation.html
 docs/output
@@ -48,6 +51,9 @@ dum*
 fouo
 gdb
 go
+hoot-cmd/Makefile
+hoot-core-test/Makefile
+hoot-core/Makefile
 hoot-core/src/main/cpp/hoot/core/VersionDefines.h
 hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h
 hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h
@@ -99,6 +105,8 @@ src/proto/*.pb.cc
 src/proto/*.pb.h
 stamp-h1
 **/target/
+tbs/Makefile
+tgs/Makefile
 test-files/*.db
 test-output/**
 **/test-output/*
@@ -150,3 +158,8 @@ hoot-core-test/src/test/resources/cmd/current
 test-files/DcTigerRoadsHighwayExactMatchInputs.osm
 data/
 .vagrant/
+inputFeatures.png
+docs/developer/restDocs/
+docs/developer/wpsDocs/
+log4j.xml
+mapedit-export-server/node_modules

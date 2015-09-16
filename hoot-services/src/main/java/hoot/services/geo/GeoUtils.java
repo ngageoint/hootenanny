@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.geo;
 
@@ -31,13 +31,7 @@ package hoot.services.geo;
  */
 public class GeoUtils
 {
-  public static final double DEFAULT_COORD_VALUE = -181.0;
-  
-  /**
-   * coordinates are stored in the databse as integers and this factor is used for converting them 
-   * to and from decimals
-   */
-  public static final int GEO_RECORD_SCALE = 10000000;
+	public static final double DEFAULT_COORD_VALUE = -181.0;
   
   /**
    * Determines if a pair of coordinates lie within world boundaries

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.osm;
 
@@ -43,11 +43,9 @@ import org.slf4j.LoggerFactory;
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
-import hoot.services.db2.QUsers;
 import hoot.services.review.ReviewTestUtils;
 
 import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.sun.jersey.api.client.AsyncWebResource;
 import com.sun.jersey.test.framework.JerseyTest;
 

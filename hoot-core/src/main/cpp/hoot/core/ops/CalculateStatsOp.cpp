@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CalculateStatsOp.h"
 
@@ -231,6 +231,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
       SingleStat("Total Features Processed By Conflation", featuresProcessedDuringConflationCount));
 
     _stats.append(SingleStat("Number of Match Creators", matchCreators.size()));
+    LOG_VARD(matchCreators.size());
     double conflatablePoiCount = 0.0;
     double conflatableHighwayCount = 0.0;
     double conflatableBuildingCount = 0.0;
@@ -247,12 +248,14 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
       {
         const QString matchCreatorName =
           QString::fromStdString(matchCreatorDescriptions.at(i).className);
+        LOG_VARD(matchCreatorName);
         double conflatableFeatureCountForFeatureType = 0.0;
         if (!_inputIsConflatedMapOutput)
         {
           QMap<QString, long> matchCandidateCountsByMatchCreator =
             any_cast<QMap<QString, long> >(visitorData);
           conflatableFeatureCountForFeatureType = matchCandidateCountsByMatchCreator[matchCreatorName];
+          LOG_VARD(conflatableFeatureCountForFeatureType);
         }
         _stats.append(
           SingleStat(

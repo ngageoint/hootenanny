@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -115,6 +115,32 @@ public class BasemapResource extends JobControllerBase {
 
 
 
+	/**
+	 * <NAME>Basemap Upload Service</NAME>
+	 * <DESCRIPTION>Upload file and create TMS tiles.</DESCRIPTION>
+	 * <PARAMETERS>
+	 * <INPUT_NAME>
+	 * 	Name of basemap;
+	 * </INPUT_NAME>
+	 * <PROJECTION>
+	 * 	Projection to apply. defaults to EPSG:4326
+	 * </PROJECTION>
+	 * </PARAMETERS>
+	 * <INPUT>multipart data</INPUT>
+	 * <OUTPUT>
+	 * 	JSON Array containing JSON of job id
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/ingest/basemap/upload?INPUT_NAME=MyBasemap</URL>
+	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
+	 * <INPUT>None</INPUT>
+	 * <OUTPUT>[{"name":"MyBasemap","jobid":"1234567"}]</OUTPUT>
+	 * </EXAMPLE>
+	 * @param inputName
+	 * @param projection
+	 * @param request
+	 * @return
+	 */
 	@POST
 	@Path("/upload")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -178,7 +204,7 @@ public class BasemapResource extends JobControllerBase {
 	    		String jobId = UUID.randomUUID().toString();
 	        Map.Entry pairs = (Map.Entry)it.next();
 	        String fName = pairs.getKey().toString();
-	        String ext = pairs.getValue().toString();
+	        pairs.getValue().toString();
 
 	        log.debug("Preparing Basemap Ingest for :" + fName);
 	        String inputFileName = "";
@@ -187,7 +213,7 @@ public class BasemapResource extends JobControllerBase {
 
 	        if(bmName != null && bmName.length() > 0 )
 	        {
-	        	bmName = bmName;
+	        	//bmName = bmName;
 	        }
 	        else
 	  			{
@@ -261,7 +287,23 @@ public class BasemapResource extends JobControllerBase {
 		return Response.ok(jobsArr.toJSONString(), MediaType.APPLICATION_JSON).build();
 	}
 
-
+	/**
+  * <NAME>Get Basemaps List Service</NAME>
+  * <DESCRIPTION>Service method endpoint for retrieving the uploaded basemaps list.</DESCRIPTION>
+  * <PARAMETERS></PARAMETERS>
+	* <OUTPUT>
+	* 	JSON Array containing basemap information
+	* </OUTPUT>
+	* <EXAMPLE>
+	* 	<URL>http://localhost:8093/hoot-services/ingest/basemap/getlist</URL>
+	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	* <INPUT>None</INPUT>
+  * <OUTPUT>
+	* [{"status":"enabled","name":"TestMap","jobid":"123-456-789"},{"status":"enabled","name":"TestMap2","jobid":"123-456-789"}]
+	* </OUTPUT>
+  * </EXAMPLE>
+  * 
+  */
 	@GET
 	@Path("/getlist")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -339,35 +381,59 @@ public class BasemapResource extends JobControllerBase {
 
 	protected void _toggleBaseMap(String bmName, boolean enable) throws Exception
 	{
-		String fileName = _ingestStagingPath + "/BASEMAP/" + bmName;
-		String targetName = _ingestStagingPath + "/BASEMAP/" + bmName;;
+		// See ticket#6760
+		// for file path manipulation
+		String fileExt = "enabled";
+		String targetExt = ".disabled";
 		if(enable)
 		{
-			fileName += ".disabled";
-			targetName += ".enabled";
+			fileExt = "disabled";
+			targetExt = ".enabled";
 		}
-		else
+
+		
+		// We first verify that file exits in the folder first and then try to get the source file
+		File sourceFile = hoot.services.utils.FileUtils.getFileFromFolder(_ingestStagingPath + "/BASEMAP/", bmName , fileExt); 
+		
+		if(sourceFile != null && sourceFile.exists())
 		{
-			fileName += ".enabled";
-			targetName += ".disabled";
-		}
-		File sourceFile = new File(fileName);
-		File destFile = new File(targetName);
-		if(sourceFile.exists())
-		{
-			boolean res = sourceFile.renameTo(destFile);
+			// if the source file exist then just swap the extension
+			boolean res = sourceFile.renameTo(new File(_ingestStagingPath + "/BASEMAP/", bmName + targetExt));
 			if(res == false)
 			{
-				throw new Exception("Failed to rename file:" + fileName + " to " + targetName );
+				throw new Exception("Failed to rename file:" + bmName + fileExt + " to " + bmName + targetExt );
 			}
 		}
 		else
 		{
-			throw new Exception("Can not enable file:" + fileName + ". It does not exist.");
+			throw new Exception("Can not enable file:" + bmName + targetExt + ". It does not exist.");
 		}
 	}
 
-
+	/**
+  * <NAME>Enable Basemap Service</NAME>
+  * <DESCRIPTION>Service method endpoint for enabling a basemap.</DESCRIPTION>
+  * <PARAMETERS>
+  * <NAME>
+  * Name of a basemap
+  * </NAME>
+  * <ENABLE>
+  * true/false
+  * </ENABLE>
+  * </PARAMETERS>
+	* <OUTPUT>
+	* 	JSON containing enable state
+	* </OUTPUT>
+	* <EXAMPLE>
+	* 	<URL>http://localhost:8093/hoot-services/ingest/basemap/enable?NAME=abc&ENABLE=true</URL>
+	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	* <INPUT>{"name":"abc","isenabled":"true"}</INPUT>
+  * <OUTPUT>
+	* {"name":"abc","isenabled":"true"}
+	* </OUTPUT>
+  * </EXAMPLE>
+  * 
+  */
 	@GET
 	@Path("/enable")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -406,10 +472,9 @@ public class BasemapResource extends JobControllerBase {
 	{
 		//List<String> delList = new ArrayList<String>();
 		String controlFolder = _ingestStagingPath + "/BASEMAP/";
-		String tileDirectoryPath = _tileServerPath + "/BASEMAP/" + bmName;
 
-		File tileDir = new File(tileDirectoryPath);
-		if(tileDir.exists())
+		File tileDir = hoot.services.utils.FileUtils.getSubFolderFromFolder(_tileServerPath + "/BASEMAP/", bmName);
+		if(tileDir != null && tileDir.exists())
 		{
 			FileUtils.forceDelete(tileDir);
 		}
@@ -425,6 +490,29 @@ public class BasemapResource extends JobControllerBase {
 
 	}
 
+	/**
+  * <NAME>Delete Basemap Service</NAME>
+  * <DESCRIPTION>Service method endpoint for deleting a basemap.</DESCRIPTION>
+  * <PARAMETERS>
+  * <NAME>
+  * Name of a basemap
+  * </NAME>
+  * </PARAMETERS>
+	* <OUTPUT>
+	* 	JSON containing enable state
+	* </OUTPUT>
+	* <EXAMPLE>
+	* 	<URL>http://localhost:8093/hoot-services/ingest/basemap/delete?NAME=abc</URL>
+	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	* <INPUT>
+	* {"name":"abc"}
+	* </INPUT>
+  * <OUTPUT>
+	* {"name":"abc"}
+	* </OUTPUT>
+  * </EXAMPLE>
+  * 
+  */
 	@GET
 	@Path("/delete")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -448,13 +536,6 @@ public class BasemapResource extends JobControllerBase {
 
 		return Response.ok(resp.toString(), MediaType.TEXT_PLAIN).build();
 	}
-
-
-
-
-
-
-
 
 
 }

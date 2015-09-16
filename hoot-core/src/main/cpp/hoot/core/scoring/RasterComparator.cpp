@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RasterComparator.h"
@@ -122,9 +122,9 @@ public:
   PaintVisitor(OsmMapPtr map, GeometryPainter& gp, QPainter& pt, QMatrix& m) :
     _map(map), _gp(gp), _pt(pt), _m(m) { }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    vector<ConstWayPtr> ways = ExtractWaysVisitor::extractWays(_map, _map->getElement(type, id));
+    vector<ConstWayPtr> ways = ExtractWaysVisitor::extractWays(_map, e);
 
     for (size_t i = 0; i < ways.size(); i++)
     {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagCountVisitor.h"
 
@@ -37,9 +37,8 @@ TagCountVisitor::TagCountVisitor() :
 
 }
 
-void TagCountVisitor::visit(ElementType type, long id)
+void TagCountVisitor::visit(const ConstElementPtr& e)
 {
-  shared_ptr<const Element> e = _map->getElement(type, id);
   _totalCount += e->getTags().getNonDebugCount();
   _informationCount += e->getTags().getInformationCount();
 }

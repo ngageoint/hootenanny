@@ -28,7 +28,6 @@ package hoot.services.controllers.info;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
-import hoot.services.info.ErrorLog;
 import hoot.services.utils.ResourceErrorHandler;
 
 import javax.ws.rs.GET;
@@ -78,7 +77,26 @@ public class MapInfoResource {
 			log.error("Failed obtain map info config: " + ex.getMessage());
 		}
 	}
-	//http://localhost:8080/hoot-services/info/map/size?mapid=365
+	
+	/**
+  * <NAME>Map Physical Size Information Service</NAME>
+  * <DESCRIPTION>Service method endpoint for retrieving the physical size of a map record.</DESCRIPTION>
+  * <PARAMETERS></PARAMETERS>
+	* <OUTPUT>
+	* 	JSON containing size information
+	* </OUTPUT>
+	* <EXAMPLE>
+	* 	<URL>http://localhost:8080/hoot-services/info/map/size?mapid=4</URL>
+	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	* <INPUT>None</INPUT>
+  * <OUTPUT>
+	* {
+  * 	"mapid": "4","size_byte": 172032
+  * } 
+  * </OUTPUT>
+  * </EXAMPLE>
+  * 
+  */
 	@GET
   @Path("/size")
   @Produces(MediaType.TEXT_PLAIN)
@@ -119,7 +137,25 @@ public class MapInfoResource {
 	}
 	
 	
-	
+	/**
+  * <NAME>Maximum Data Size Information Service</NAME>
+  * <DESCRIPTION>Maximum data size for export conflate and ingest. </DESCRIPTION>
+  * <PARAMETERS></PARAMETERS>
+	* <OUTPUT>
+	* 	JSON containing threshold information
+	* </OUTPUT>
+	* <EXAMPLE>
+	* 	<URL>http://localhost:8080/hoot-services/info/map/thresholds</URL>
+	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	* <INPUT>None</INPUT>
+  * <OUTPUT>
+	* {
+  * 	"export_threshold": 400000000, "conflate_threshold": 200000000, "ingest_threshold": 200000000
+  * } 
+  * </OUTPUT>
+  * </EXAMPLE>
+  * 
+  */	
 	@GET
   @Path("/thresholds")
   @Produces(MediaType.TEXT_PLAIN)

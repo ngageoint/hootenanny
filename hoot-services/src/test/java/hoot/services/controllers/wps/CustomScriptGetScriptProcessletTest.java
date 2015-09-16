@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
 
@@ -34,7 +34,6 @@ import java.util.LinkedList;
 import hoot.services.UnitTest;
 import hoot.services.wps.WpsUtils;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.message.BasicStatusLine;
@@ -60,7 +59,7 @@ public class CustomScriptGetScriptProcessletTest {
 	{
 		CustomScriptGetScriptProcesslet processlet = Mockito.spy(new CustomScriptGetScriptProcesslet());
 
-		HttpResponse mockResp = new BasicHttpResponse(
+		new BasicHttpResponse(
         new BasicStatusLine(new ProtocolVersion("HTTP", 1, 1), 200, "OK"));
 
 		doReturn("Test Script Content").when(processlet).getRequest(anyString());

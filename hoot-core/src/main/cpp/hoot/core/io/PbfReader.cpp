@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "PbfReader.h"
@@ -977,16 +977,29 @@ bool PbfReader::isSupported(QString urlStr)
 void PbfReader::open(QString urlStr)
 {
   fstream* fp = new fstream();
-  fp->open(urlStr.toUtf8().data(), ios::in | ios::binary);
-  if (fp->is_open() == false)
+  try
   {
-    throw HootException("Error opening " + urlStr + " for reading.");
-  }
-  _in = fp;
-  _needToCloseInput = true;
+    fp->open(urlStr.toUtf8().data(), ios::in | ios::binary);
+    if (fp->is_open() == false)
+    {
+      throw HootException("Error opening " + urlStr + " for reading.");
+    }
+    _in = fp;
+    _needToCloseInput = true;
 
-  // Have to call initial partial to ensure stream functions work
-  initializePartial();
+    // Have to call initial partial to ensure stream functions work
+    initializePartial();
+  }
+  catch (const HootException& e)
+  {
+    delete fp;
+    throw e;
+  }
+  catch (const std::exception& e)
+  {
+    delete fp;
+    throw e;
+  }
 }
 
 void PbfReader::initializePartial()

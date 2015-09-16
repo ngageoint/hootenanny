@@ -22,15 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.Future;
-
-import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
@@ -111,7 +108,7 @@ public class JobProcesslet extends BaseProcesslet {
 		    final HttpPost request1 = new HttpPost(coreJobServerUrl + "/hoot-services/job/" + jobId);
 		    StringEntity se = new StringEntity( requestParams);  
 		    request1.setEntity(se);
-		    Future<HttpResponse> future = httpclient.execute(request1, null);
+		    httpclient.execute(request1, null);
 		} catch (Exception ee){
 			log.error(ee.getMessage());
 		}
@@ -127,7 +124,7 @@ public class JobProcesslet extends BaseProcesslet {
 	    final HttpPost request1 = new HttpPost(coreJobServerUrl + "/hoot-services/job/chain/" + jobId);
 	    StringEntity se = new StringEntity( requestParams);  
 	    request1.setEntity(se);
-	    Future<HttpResponse> future = httpclient.execute(request1, null);
+	    httpclient.execute(request1, null);
 			
 		} catch (Exception ee){
 			log.error(ee.getMessage());
@@ -196,7 +193,7 @@ public class JobProcesslet extends BaseProcesslet {
 	
 	protected JSONObject _createReflectionJobReq(JSONArray args, String className, String methodName)
 	{
-		String resourceName = this.getClass().getSimpleName();
+		this.getClass().getSimpleName();
 		
 		JSONObject command = new JSONObject();
 		command.put("exectype", "reflection");
@@ -209,7 +206,7 @@ public class JobProcesslet extends BaseProcesslet {
 
 	protected JSONObject _createReflectionSycJobReq(JSONArray args, String className, String methodName)
 	{
-		String resourceName = this.getClass().getSimpleName();
+		this.getClass().getSimpleName();
 		
 		JSONObject command = new JSONObject();
 		command.put("exectype", "reflection_sync");

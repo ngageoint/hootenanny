@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MeanWordSetDistance.h"
 
@@ -64,7 +64,14 @@ double MeanWordSetDistance::compare(const QString& s1, const QString& s2) const
     }
   }
 
-  return m.meanScore(_p);
+  double score = 0;
+
+  if (sl1.size() > 0 && sl2.size() > 0)
+  {
+    score = m.meanScore(_p);
+  }
+
+  return score;
 }
 
 }

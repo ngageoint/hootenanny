@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef GETELEMENTSVISITOR_H
 #define GETELEMENTSVISITOR_H
@@ -46,7 +46,7 @@ public:
 
   virtual ~GetElementIdsVisitor() {}
 
-  virtual void visit(ElementType type, long id) { _bag.insert(ElementId(type, id)); }
+  virtual void visit(const ConstElementPtr& e) { _bag.insert(ElementId(e->getElementType(), e->getId())); }
 
 private:
   set<ElementId>& _bag;

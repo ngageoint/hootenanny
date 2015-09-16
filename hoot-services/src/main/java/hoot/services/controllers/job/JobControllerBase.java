@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
@@ -182,7 +182,7 @@ public class JobControllerBase {
 
 	protected JSONObject _createReflectionJobReq(JSONArray args, String className, String methodName)
 	{
-		String resourceName = this.getClass().getSimpleName();
+		this.getClass().getSimpleName();
 
 		JSONObject command = new JSONObject();
 		command.put("exectype", "reflection");
@@ -195,7 +195,7 @@ public class JobControllerBase {
 
 	protected JSONObject _createReflectionJobReq(JSONArray args, String className, String methodName, String internalJobId)
 	{
-		String resourceName = this.getClass().getSimpleName();
+		this.getClass().getSimpleName();
 
 		JSONObject command = new JSONObject();
 		command.put("exectype", "reflection");
@@ -209,7 +209,7 @@ public class JobControllerBase {
 
 	protected JSONObject _createReflectionSycJobReq(JSONArray args, String className, String methodName)
 	{
-		String resourceName = this.getClass().getSimpleName();
+		this.getClass().getSimpleName();
 
 		JSONObject command = new JSONObject();
 		command.put("exectype", "reflection_sync");

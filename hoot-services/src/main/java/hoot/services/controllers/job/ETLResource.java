@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
@@ -48,7 +48,8 @@ import org.slf4j.LoggerFactory;
 @Path("/etl")
 public class ETLResource  extends JobControllerBase {
 	private static final Logger log = LoggerFactory.getLogger(ETLResource.class);
-	private String homeFolder = null;
+	@SuppressWarnings("unused")
+  private String homeFolder = null;
 	public ETLResource()
 	{
 		try
@@ -70,9 +71,9 @@ public class ETLResource  extends JobControllerBase {
 	 * <NAME>ETL Service</NAME>
 	 * <DESCRIPTION>
 	 * THIS REST END POINT IS DEPRECATED.
-	 * 	For ETL service there are 2 types of services are available. Standard rest endpoint and WPS end point. Both are access by post.
-	 *	Both ETL services ends up at hoot command shell and it uses makeetl make file. makeetl make file handles 2 types of ETL formats and they
-	 *	are OGR and OSM. For OGR, it translates the INPUT shapefile into hoot db using provided translation file. Also for OGR Input type, multiple inputs can be listed uing semi colon as separator.
+	 * 	For ETL service, there are 2 types of services are available: Standard REST endpoint and WPS endpoint. Both are accessed by POST.
+	 *	Both ETL services ends up at hoot command shell and use makeetl make file. makeetl make file handles 2 types of ETL formats: OGR and OSM. 
+	 *	For OGR, it translates the INPUT shapefile into hoot db using provided translation file. Also, multiple inputs can be listed using semicolon as a separator.
 	 * For OSM, it directly converts
 	 * the INPUT osm file into hoot db. makeetl file assumes that the specified translation file and INPUT files resides in an common parent directory
 	 * where current default is at HOOT_HOME.

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ServicesDbReader.h"
 
@@ -487,10 +487,8 @@ shared_ptr<Node> ServicesDbReader::_resultToNode(const QSqlQuery& resultIterator
     new Node(
       _status,
       nodeId,
-      resultIterator.value(ServicesDb::NODES_LONGITUDE).toLongLong() /
-          (double)ServicesDb::COORDINATE_SCALE,
-      resultIterator.value(ServicesDb::NODES_LATITUDE).toLongLong() /
-          (double)ServicesDb::COORDINATE_SCALE,
+      resultIterator.value(ServicesDb::NODES_LONGITUDE).toDouble(),
+      resultIterator.value(ServicesDb::NODES_LATITUDE).toDouble(),
       ServicesDb::DEFAULT_ELEMENT_CIRCULAR_ERROR));
 
   result->setTags(ServicesDb::unescapeTags(resultIterator.value(ServicesDb::NODES_TAGS)));

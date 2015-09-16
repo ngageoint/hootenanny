@@ -1,0 +1,233 @@
+
+== Sources of Processing Error
+
+This document explores some of the sources of errors while processing geospatial 
+data in Hootenanny and quantifies those errors in specific test cases. Any large 
+and intentional changes that may occur as a result of destructive operations, such 
+as snapping nodes together to create  intersections, averaging ways, or rubber 
+sheeting data together are considered outside of the scope of this current effort.
+
+=== Sources of Small Geometry Changes
+
+There are three primary sources of unintentional geometry errors. Firstly, all
+the numerical operations within Hootenanny use floating point double precision
+numbers, namely 64bit IEEE 754 on Intel processors. Floating point numbers have
+a significant limitation in that not all mathematical properties are honored.
+For instance 0.1^2^ is equivalent to 0.01 mathematically, but performing the
+operation pow(0.1, 2.0) results in a value of 0.010000000000000002 which is not
+equivalent to 0.01. In the context of projecting vector data projecting from
+geographic to a planar projection and back again results in small errors in the
+result. The tables at the end of the document quantify those errors. See
+<<SelectingAProjection>> for more details into how projections are used and
+quantifying angle/distance errors.
+
+The second source of unintentional geometry errors is serializing to persistent
+storage. Text representations of doubles are frequently rounded to a reasonable
+number of digits. This rounding can create small differences between the data
+that was written and the data that we read. Depending on file format this may
+extend into other forms of rounding to reduce file size.
+
+The last source of unintentional geometry errors relates to operations performed
+within the user interface. A section at the end is reserved specifically for the
+user interface manipulations that occur and how they might impact geometry
+values.
+
+=== Copy Errors
+
+==== Test Setup
+
+To test error a set of 1000 random points were generated over a bounding box
+approximately the size of the continental United States. The points were then
+transformed in some manor (reading and writing to a file, or projecting) and
+then compared to the source data set for differences. Three different metrics
+were recorded:
+
+* Number of points moved. The point was considered moved if the binary
+  representation of the double changed in any way.
+* Number of point pairs diverged. Every point was given a companion point at the
+  same location. To test for consistency each pair was checked to make sure the
+  error was applied in the same way to both points. No point pairs diverged in
+  this way during testing.
+* Distance moved. This calculates the average distance a point moved in degrees
+  along with the maximum distance moved and the standard deviation of the
+  movement.
+
+Distance moved is presented as both nanodegrees calculated as the Euclidean
+distance in geographic space. Initially the calculation was performed using
+Haversine’s formula, but the manipulation of double values and multiple trig
+functions introduced dramatically more error than the initial transformation.
+The distance values are also reported as approximately micrometers where a
+degree is roughly equated to 110km. Distortions near the poles make this an
+unreliable figure, but it puts the values into a relatable frame of reference.
+
+==== Test Transformations
+
+The following transformations were tested:
+
+* Null Transform – Perform no operation and compare the data to itself. As
+  expected this revealed no errors.
+* Memory Copy – Copy all the data in memory and compare the two data sets.
+  Again, as expected this revealed no errors.
+* Project – Project the data to a custom Albers Conic Equal Area (ACEA)
+  projection and then project back into WGS84.
+* Different Projections – Project one data set into an ACEA projection optimized
+  for the northeast quadrant of the US and another optimized for the southwest
+  quadrant. Then project back to WGS84 and compare. This test is designed to
+  determine if two data sets projected in different ways will still match at the
+  seams.
+* Save to .osm – Save the file to .osm and reload it.
+* Save to .osm.pbf (100) – Save the file to .osm.pbf and reload it using a
+  granularity of 100. The default granularity of 100 refers to the granularity
+  that the data will be saved at in units of nanodegrees. This is a facility to
+  improve the compression of the .osm.pbf file.
+* Save to .osm.pbf (1) – Save the file to .osm.pbf and reload it using a
+  granularity of 1.
+* Save to .shp – Save the file to .shp and reload it.
+* Save to .gml – Save the file to .gml and reload it. This is using the default
+  OGR implementation of GML. It is likely that other implementation will show
+  differing results. There may also be settings in OGR’s GML implementation that
+  reduce error, but they were not obvious in the documentation.
+
+==== Results
+
+The graph and tables below show a number of operations that can impact
+processing error in Hootenanny. 
+
+[[processingerrorgraph]]
+.Graph of mean and max distance errors in log scale.
+image::algorithms/ProcessingErrorGraph.png[Graph of mean and max distance errors in log scale,scalewidth="50%"]
+
+.Table of movement errors and distance errors in nanodegrees.
+[options="header"]
+|======
+| |Number of Points Moved|Number of Pairs Separated|Mean Error (nanodegrees)|Max Error (nanodegrees)|Standard Devation of Error (nanodegrees)
+|null transform|0|0|0.0000000|0.0000000|0.0000000
+|Memory Copy|0|0|0.0000000|0.0000000|0.0000000
+|Project|937|0|0.0000219|0.0000853|0.0000147
+|Different Projections|742|0|0.0000143|0.0000586|0.0000125
+|Save to .osm|0|0|0.0000000|0.0000000|0.0000000
+|Save to .osm.pbf (100)|1000|0|76.0418000|138.6560000|27.9645000
+|Save to .osm.pbf (1)|1000|0|0.7522420|1.3996700|0.2968790
+|Save to .shp|0|0|0.0000000|0.0000000|0.0000000
+|Save to .gml|553|0|0.0000069|0.0000293|0.0000074
+|======
+
+.Table of movement errors and distance errors in micrometers. With the exception of units this table is similar to the one above.
+[options="header"]
+|======
+| |Number of Points Moved|Number of Pairs Separated|Mean Error (~um)|Max Error (~um)|Standard Devation of Error (~um)
+|null transform|0|0|0.00000|0.00000|0.00000
+|Memory Copy|0|0|0.00000|0.00000|0.00000
+|Project|937|0|0.00244|0.00948|0.00164
+|Different Projections|742|0|0.00159|0.00652|0.00139
+|Save to .osm|0|0|0.00000|0.00000|0.00000
+|Save to .osm.pbf (100)|1000|0|8455.48000|15417.90000|3109.51000
+|Save to .osm.pbf (1)|1000|0|83.64560|155.63700|33.01140
+|Save to .shp|0|0|0.00000|0.00000|0.00000
+|Save to .gml|553|0|0.00076|0.00326|0.00082
+|======
+
+Over the course of testing the largest error found was approximately 15mm. 
+While compared to the other errors introduced this is large, but it is quite 
+small in the context of 15m accuracy road data. This error was also easy to 
+reduce to 155um by simply changing the default setting in the file format.
+
+Outside of the .osm.pbf file format the errors are down in the nanometer range, 
+although there are still unintentional changes occurring in the data. 
+
+==== Conclusions
+
+Interactions with users will have to be done to determine if the very small
+changes observed are relevant to their data sets. There are a number of things
+that can be done within Hootenanny to prevent the projection issues, but there
+will be both a labor and computation time cost to implementing them. It is
+likely that errors are introduced during other aspects of the user work flow
+such as ingesting data into databases that may go unrealized.
+
+Another thing of note is that the two Shapefiles projected using different
+projections have errors in 74% of the nodes. This means that two data sets that
+are independently conflated will likely have nanometer differences were the
+seams join. This may require either a post processing step to restitch the seams
+or a mechanism to lock the seams before the cleaning takes place. The
+distributed tile conflation within Hootenanny is not impacted by this
+phenomenon.
+
+=== Sources of Error in the User Interface
+
+Below is a small diagram describing critical pieces of the web services, core
+database and user interface portions of Hootenanny. For the sake of clarity some
+details have been omitted.
+
+All references to WGS84 refer to EPSG:4326, World Geodetic System 1984. All
+reference to Web Mercator refer to EPSG:3857, a projection commonly used by web
+services such as Google and Bing.
+
+[[ui-interactions]]
+.User Interface Interactions
+[graphviz, tmp/UiInteractions.png, fdp]
+---------------------------------------------------------------------
+digraph G
+{
+dpi=96;
+sep="+25,25";
+splines=true;
+rankdir = LR;
+overlap_shrink=true;
+nodesep=1.75;
+node [shape=record,width=1.5,height=.75,style=filled,fillcolor="#e7e7f3",fontsize=10];
+edge [arrowhead=none, arrowtail=none,fontsize=9];
+db [label="PostgreSQL\nDatabase\n(WGS84 100 nanodegrees)",shape=record,width=2,height=1,style=filled,fillcolor="#e7e7f3"];
+ui [shape=record,label="Web\nBrowser|{Data\nStructures\n(WGS84 IEEE
+754)|Visualize\n(Web Mercator\nIEEE 754)}"];
+services [label="Web\nServices\n(WGS84 IEEE 754)"];
+core [label="Hoot\nCore\n(IEEE 754)"];
+core -> db;
+services -> db;
+ui -> services [label="RESTful XML\n(WGS84 as Text)"];
+}
+---------------------------------------------------------------------
+
+In the above you can see that the _Hoot Core_ (where all algorithmic code
+resides) communicates directly with the database for reading and writing of
+data. All commands are spawned via the command line from the services.
+
+The _Web Services_ communicate directly with the database for serving data out
+via web service calls. The _Web Browser_ (Hootenanny User Interface) communicates with the _Web
+Services_ over HTTP to request data and post changes.
+
+The latitude/longitude data is stored in the database as 64 bit double precision floating point 
+values. All values are stored in the Database in the WGS84/EPSG:4326 projection.
+
+When _Hoot Core_ writes data to the DB, no significant error should be introduced.  This has not 
+been tested experimentally, but some informal testing with Washington, D.C. streets data has 
+revealed no measurable error in QGIS between data imported into the database and then exported and 
+data read straight from an OSM file.  Please see <<SelectingAProjection>> for more details on 
+how projections are utilized within the core.
+
+To serve data out over web services the services read the data from the
+database, perform a conversion into double precision values and then write the
+double precision values out as text in XML. While it has not been tested
+experimentally the number of significant digits are maintained such that no
+additional error is introduced during this process. (See the Java method
+Double.toString() for details)
+
+When the JavaScript interface receives the data as XML it is stored internally
+as WGS84/EPSG:4326 decimal degrees and no additional errors should be
+introduced.  When the time comes to display the data, the data is projected on
+the fly into Web Mercator/EPSG:3857 for display. All vector data and raster base
+maps are displayed in Web Mercator/EPSG:3857. When a user moves a point or
+creates a new feature in iD that point is moved on the screen in Web
+Mercator/EPSG:3857, iD then computes the associated point in WGS84/EPSG:4326 and
+stores the new value internally in decimal degrees.  When it comes time to
+upload the data, it is converted from the internal representation into a XML
+changeset that is posted to the web services. The XML changeset has not been
+exhaustively explored, but the initial indication is that enough significant
+digits are represented to prevent additional error from being introduced during
+the process of posting changesets.
+
+The posted changeset is processed by the web services and the values are stored as 64 bit double 
+precision floating point values in the database as WGS84/EPSG:4326. The changeset is already in 
+WGS84/EPSG:4326 so no addition change in projection is necessary.
+
+
+

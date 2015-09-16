@@ -30,12 +30,11 @@
 // hoot
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/util/DataProducer.h>
+#include <hoot/core/conflate/MatchCreator.h>
 #include "SingleStatistic.h"
 
 namespace hoot
 {
-
-class MatchCreator;
 
 /**
  * Calculates a count of all elements that are candidates for matches given the provided set
@@ -62,6 +61,9 @@ private:
   QStringList _matchCreatorDescriptions;
   long _candidateCount;
   QMap<QString, long> _matchCandidateCountsByMatchCreator;
+
+  static bool _matchDescriptorCompare(const MatchCreator::Description& m1,
+                                      const MatchCreator::Description& m2);
 
 };
 

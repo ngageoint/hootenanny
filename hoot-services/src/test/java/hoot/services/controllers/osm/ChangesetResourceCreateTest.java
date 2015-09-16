@@ -22,14 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
@@ -207,7 +206,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
     //no data in system should be modified.
     try
     {
-      //try to create a changeset from a map name that is linked to multiple map ID's
+      //try to create a changeset from a map name that is linked to multiple map IDs
       mapName = "map-with-id-" + String.valueOf(mapId);
       resource()
         .path("api/0.6/changeset/create")

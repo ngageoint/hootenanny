@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
@@ -48,7 +48,8 @@ import org.slf4j.LoggerFactory;
 @Path("/cleandata")
 public class CleanDataResource  extends JobControllerBase {
 	private static final Logger log = LoggerFactory.getLogger(CleanDataResource.class);
-	private String homeFolder = null;
+	@SuppressWarnings("unused")
+  private String homeFolder = null;
 	public CleanDataResource()
 	{
 		try
@@ -68,8 +69,8 @@ public class CleanDataResource  extends JobControllerBase {
 
 	/**
 	 * <NAME>Data Cleaning Service</NAME>
-	 * <DESCRIPTION>Clean Data service represents Rest and WPS end point for hoot --cleanup which is defined as
-	 * --cleanup (input) (output)
+	 * <DESCRIPTION>Clean Data service represents REST and WPS end points for hoot --cleanup which is defined as
+	 * --cleanup (input) (output).
 	 * Removes common erroneous data scenarios from input and writes to output. * input - Input (e.g. .osm file).
 	 * output - Output file (e.g. .osm file).
 	 * </DESCRIPTION>
@@ -90,8 +91,9 @@ public class CleanDataResource  extends JobControllerBase {
 	 * <OUTPUT>
 	 * Job Id
 	 * </OUTPUT>
+	 * <URL>http://localhost:8080/hoot-services/job/cleandata/execute</URL>
 	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/cleandata/execute</URL>
+	 * 	
 	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
 	 * 	<INPUT>{
    * "INPUT_TYPE":"DB",

@@ -22,14 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.geo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import hoot.services.db.DbUtils;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.geo.zindex.Box;
 
@@ -54,34 +53,26 @@ public class BoundingBox
 {
   public static final double LON_LIMIT = 180.0;
   public static final double LAT_LIMIT = 90.0;
-  public static final double SCALED_LON_LIMIT = LON_LIMIT * GeoUtils.GEO_RECORD_SCALE;
-  public static final double SCALED_LAT_LIMIT = LAT_LIMIT * GeoUtils.GEO_RECORD_SCALE;
   
   //coords in degrees
   
   private double minLon = GeoUtils.DEFAULT_COORD_VALUE;
   public double getMinLon() { return minLon; }
-  public int getMinLonDb() { return (int)(minLon * GeoUtils.GEO_RECORD_SCALE); }
   
   private double minLat = GeoUtils.DEFAULT_COORD_VALUE;
   public double getMinLat() { return minLat; }
-  public int getMinLatDb() { return (int)(minLat * GeoUtils.GEO_RECORD_SCALE); }
   
   private double maxLon = GeoUtils.DEFAULT_COORD_VALUE;
   public double getMaxLon() { return maxLon; }
-  public int getMaxLonDb() { return (int)(maxLon * GeoUtils.GEO_RECORD_SCALE); }
   
   private double maxLat = GeoUtils.DEFAULT_COORD_VALUE;
   public double getMaxLat() { return maxLat; }
-  public int getMaxLatDb() { return (int)(maxLat * GeoUtils.GEO_RECORD_SCALE); }
   
   @Override
   public String toString()
   {
     return 
-      "minLon: " + minLon + ", minLat: " + minLat + ", maxLon: " + maxLon + ", maxLat: " + maxLat + 
-      "; minLonDb: " + getMinLonDb() + ", minLatDb: " + getMinLatDb() + ", maxLonDb: " + 
-      getMaxLonDb() + ", maxLatDb: " + getMaxLatDb();
+      "minLon: " + minLon + ", minLat: " + minLat + ", maxLon: " + maxLon + ", maxLat: " + maxLat;
   }
   
   /**
@@ -211,8 +202,8 @@ public class BoundingBox
     
     for (CurrentNodes node : nodes)
     {
-      final double lat = DbUtils.fromDbCoordValue(node.getLatitude());
-      final double lon = DbUtils.fromDbCoordValue(node.getLongitude());
+      final double lat = node.getLatitude();
+      final double lon = node.getLongitude();
       if (lat < minLat)
       {
         minLat = lat;
@@ -255,25 +246,25 @@ public class BoundingBox
     {
       throw new Exception("Invalid coordinate.  Invalid minimum longitude value: " + minLon);
     }
-    this.minLon = DbUtils.toDbCoordPrecision(minLon);
+    this.minLon = minLon;
     
     if (minLat < (-1 * LAT_LIMIT) || minLat > LAT_LIMIT)
     {
       throw new Exception("Invalid coordinate.  Invalid minimum latitude value: " + minLat);
     }
-    this.minLat = DbUtils.toDbCoordPrecision(minLat);
+    this.minLat = minLat;
     
     if (maxLon < (-1 * LON_LIMIT) || maxLon > LON_LIMIT)
     {
       throw new Exception("Invalid maximum longitude value: " + maxLon);
     }
-    this.maxLon = DbUtils.toDbCoordPrecision(maxLon);
+    this.maxLon = maxLon;
     
     if (maxLat < (-1 * LAT_LIMIT) || maxLat > LAT_LIMIT)
     {
       throw new Exception("Invalid maximum latitude value: " + maxLat);
     }
-    this.maxLat = DbUtils.toDbCoordPrecision(maxLat);
+    this.maxLat = maxLat;
   }
   
   /**
@@ -382,20 +373,20 @@ public class BoundingBox
       if (bounds.getMinLon() < minLon)
       {
         minLon = 
-          Math.max((-1 * SCALED_LON_LIMIT), (bounds.getMinLon() + margin * (minLon - maxLon)));
+          Math.max((-1 * LON_LIMIT), (bounds.getMinLon() + margin * (minLon - maxLon)));
       }
       if (bounds.getMinLat() < minLat)
       {
         minLat = 
-          Math.max((-1 * SCALED_LAT_LIMIT), (bounds.getMinLat() + margin * (minLat - maxLat)));
+          Math.max((-1 * LAT_LIMIT), (bounds.getMinLat() + margin * (minLat - maxLat)));
       }
       if (bounds.getMaxLon() > maxLon)
       {
-        maxLon = Math.min(SCALED_LON_LIMIT, (bounds.getMaxLon() + margin * (maxLon - minLon)));
+        maxLon = Math.min(LON_LIMIT, (bounds.getMaxLon() + margin * (maxLon - minLon)));
       }
       if (bounds.getMaxLat() > maxLat)
       {
-        maxLat = Math.min(SCALED_LAT_LIMIT, (bounds.getMaxLat() + margin * (maxLat - minLat)));
+        maxLat = Math.min(LAT_LIMIT, (bounds.getMaxLat() + margin * (maxLat - minLat)));
       }
     }
   }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
 
@@ -83,7 +83,7 @@ public class CookieCutterProcessletTest {
 			  
 			JSONArray arr = processlet.parseRequestParams(in);
 			    
-			Class[] cArg = new Class[1];
+			Class<?>[] cArg = new Class[1];
 			cArg[0] = JSONArray.class;
 			Method method = JobProcesslet.class.getDeclaredMethod("createPostBody", cArg);
 			method.setAccessible(true);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -109,7 +109,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
         Assert.assertEquals(
           "user-with-id-" + userId, xpath.evaluate("//osm/user/@display_name", responseData));
         Assert.assertEquals(
-          0, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+          -1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
       }
       catch (Exception e)
       {
@@ -165,7 +165,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
         Assert.assertEquals(
           "user-with-id-" + userId, xpath.evaluate("//osm/user/@display_name", responseData));
         Assert.assertEquals(
-          0, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+          -1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
       }
       catch (Exception e)
       {
@@ -253,7 +253,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
         Assert.assertEquals(
           "user-with-id-" + userId, xpath.evaluate("//osm/user/@display_name", responseData));
         Assert.assertEquals(
-          2, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+          -1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
       }
       catch (Exception e)
       {

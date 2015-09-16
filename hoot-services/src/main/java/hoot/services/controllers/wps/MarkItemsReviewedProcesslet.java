@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
 
@@ -156,6 +156,9 @@ public class MarkItemsReviewedProcesslet extends BaseProcesslet
       log.debug("Returning changeset ID: " + markItemsReviewedResponse.getChangesetId() + " ...");
       ((LiteralOutput)outputParams.getParameter("changesetId")).setValue(
         String.valueOf(markItemsReviewedResponse.getChangesetId()));
+      log.debug("Setting map ID: " + markItemsReviewedResponse.getMapId() + " ...");
+      ((LiteralOutput)outputParams.getParameter("mapId")).setValue(
+        String.valueOf(markItemsReviewedResponse.getMapId()));
     }
     catch (Exception e)
     {

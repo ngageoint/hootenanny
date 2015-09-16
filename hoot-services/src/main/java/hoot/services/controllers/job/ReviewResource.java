@@ -22,11 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
 import java.sql.Connection;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +35,10 @@ import java.util.UUID;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
+import hoot.services.db2.QMaps;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobStatusManager;
+import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.MarkItemsReviewedRequest;
 import hoot.services.models.review.MarkItemsReviewedResponse;
 import hoot.services.models.review.ReviewableItem;
@@ -62,9 +65,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-
-
-
+import org.json.simple.JSONObject;
 //import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,7 +113,7 @@ public class ReviewResource
 	 * 
 	 * <NAME>Conflated Data Review Service Prepare Items for Review</NAME>
 	 * <DESCRIPTION>
-	 * Prepares conflated data for review for the specified map ID
+	 * Prepares conflated data for review for the specified map ID.
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * 	<mapId>
@@ -141,7 +142,6 @@ public class ReviewResource
   * @param overwriteExistingData if true, will overwrite any existing review data for the given map
   * @return a job ID for tracking the prepare job
   * @throws Exception
-  * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflated_Data_Review_Service_2#Prepare-Items-for-Review
   */
   @POST
   @Consumes(MediaType.TEXT_PLAIN)
@@ -253,7 +253,7 @@ public class ReviewResource
 	/**
 	 * <NAME>Conflated Data Review Service Retrieve Statistics for Reviewable Items</NAME>
 	 * <DESCRIPTION>
-	 * 	Retrieves statistics about the reviewable data for a given map
+	 * 	Retrieves statistics about the reviewable data for a given map.
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * 	<mapId>
@@ -294,7 +294,6 @@ public class ReviewResource
    * statistics, the geospatial bounding box the items should reside in
    * @return a set of reviewable item statistics
    * @throws Exception
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflated_Data_Review_Service_2#Retrieve-Statistics-for-Reviewable-Items
    */
   @GET
   @Path("/statistics")
@@ -351,10 +350,38 @@ public class ReviewResource
       stats =
         (new ReviewableItemsStatisticsCalculator(conn, mapId, true)).getStatistics(
           reviewScoreThresholdMinimum, geospatialBoundsObj);
+      
+      ReviewItemsMarker marker = new ReviewItemsMarker(conn, mapId);
+
+    	long cnt = marker.getAvailableReviewCnt();
+    	//nextItem.put("status", "noneavailable");
+    	if(cnt == 0)
+    	{
+    		stats.setNumReviewableItems(0);
+    	}
+    	
+  		
     }
     catch (Exception e)
     {
-      ReviewUtils.handleError(e, errorMessageStart, false);
+      //ReviewUtils.handleError(e, errorMessageStart, false);
+    	try
+    	{
+	    	// Instead of throwing error we will just return empty stat
+	    	QMaps maps = QMaps.maps;
+	      final long mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn,
+	      		maps, maps.id, maps.displayName);
+	      
+	    	stats = new ReviewableItemsStatistics();
+	    	stats.setMapId(mapIdNum);
+	    	stats.setNumReviewableItems(0);
+	    	stats.setNumReviewedItems(0);
+	    	stats.setNumTotalItems(0);
+    	}
+    	catch (Exception ee)
+    	{
+    		ReviewUtils.handleError(ee, errorMessageStart, false);
+    	}
     }
     finally
     {
@@ -377,11 +404,11 @@ public class ReviewResource
 	 * 	Once the conflated data has been prepared for review, clients may call this to get one or more items to present to the user for reviewing.
 	 *  In many cases, clients might only request a single item for review with each call (default setting), but the option to retrieve more than one at
 	 *  a time is being made available, in case it ends up being necessary. The response returns a set of reviewable items containing
-	 *  an OSM element ID and type, as well as a suggested geospatial bounds for each item its to be reviewed against
-	 *  (smallest bounds that encompasses the reviewable item and the item its reviewed against, plus some small buffer).
+	 *  an OSM element ID and type, as well as a suggested geospatial bounds for each item it is to be reviewed against
+	 *  (smallest bounds that encompasses the reviewable item and the item it is reviewed against, plus some small buffer).
 	 *  The response returns OSM data in XML format inside the JSON response, since the iD editor already knows how to parse OSM XML for display.
-	 *  The ID's of the response items correspond to the OSM ID's of the elements returned by a Hootenanny map query request against the services database.
-	 *  Its not intended that element unique ID's be shown to end users, however, the client will be responsible for updating the unique ID contained in
+	 *  The IDs of the response items correspond to the OSM IDs of the elements returned by a Hootenanny map query request against the services database.
+	 *  it is not intended that element unique IDs be shown to end users, however, the client will be responsible for updating the unique ID contained in
 	 *  the OSM review tags for elements split into new elements during the review process, since this operation is not feasible to perform in the server.
 	 *  IMPORTANT: If an reviewable item has its associated OSM element deleted from the services database,
 	 *  that item will not be returned in this query, despite the fact it was never reviewed. For now, it is the responsibility of
@@ -475,7 +502,6 @@ public class ReviewResource
    * items should reside in
    * @return a set of reviewable items
    * @throws Exception
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflated_Data_Review_Service_2#Retrieve-Items-to-Review
    */
   @GET
   @Consumes(MediaType.TEXT_PLAIN)
@@ -635,8 +661,8 @@ public class ReviewResource
 	 * <NAME>Conflated Data Review Service Mark Items as Reviewed</NAME>
 	 * <DESCRIPTION>
 	 * 	After editing reviewable items, this method is called to mark the items as having been reviewed.
-	 * The inputs to the service method are either a JSON structure which describes the status of the review for
-	 * each reviewed item, or when setting a boolean true to mark all items as reviewed the structure is not required.
+	 * The inputs to the service method are either a JSON structure - which describes the status of the review for
+	 * each reviewed item - or when setting a boolean true to mark all items as reviewed the structure is not required.
 	 * Also optionally for convenience sake, a OSM XML changeset may be included in the request to upload a
 	 * changeset in the same call which marks data as reviewed. If a changeset is uploaded, the service
 	 * automatically creates and closes the changeset that stores the uploaded data. The response from the server contains
@@ -644,12 +670,12 @@ public class ReviewResource
 	 * of submitted items that were actually marked as reviewed. Clients can compare this number to the number of
 	 *  items sent for review, and if they are not equal, further troubleshooting should occur.
 	 *  For each item in the reviewed items JSON, the service will:
-	 *  mark the reviewable item as reviewed, so that it will not be returned for review again
-	 *  append the UUID of the item the reviewed item was reviewed against to its "uuid" OSM tag
-	 *   remove the UUID of the item reviewed against from the "hoot:review:uuid" OSM tag of the reviewed item
-	 *   remove all OSM review tags from the reviewed item, if it no longer contains items to be reviewed against
+	 *  (1) mark the reviewable item as reviewed, so that it will not be returned for review again;
+	 *  (2) append the UUID of the item the reviewed item was reviewed against to its "uuid" OSM tag;
+	 *   (3) remove the UUID of the item reviewed against from the "hoot:review:uuid" OSM tag of the reviewed item; and,
+	 *   (4) remove all OSM review tags from the reviewed item, if it no longer contains items to be reviewed against.
 	 *   The caller is responsible for doing the following things, as the service will not automatically do them:
-	 *   Adding the "changeset" XML attribute to the elements in the XML changeset being uploaded, as is required by
+	 *   (1) Adding the "changeset" XML attribute to the elements in the XML changeset being uploaded, as is required by
 	 *    the standard OSM changeset upload service. The changeset ID attribute value may either be blank or populated with a number,
 	 *     however, the changeset ID will be overwritten with the ID of the changeset created by the service method execution.
 	 * </DESCRIPTION>
@@ -703,7 +729,6 @@ public class ReviewResource
    * @param mapId ID of the map for which items are being marked as reviewed
    * @return the number of items marked as reviewed
    * @throws Exception
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflated_Data_Review_Service_2#Mark-Items-as-Reviewed
    */
   @PUT
   @Consumes(MediaType.APPLICATION_JSON)
@@ -758,7 +783,9 @@ public class ReviewResource
       }
       catch (Exception e)
       {
-        log.debug("Rolling back database transaction for ReviewResource::markItemsAsReviewed...");
+        log.error(
+          "Rolling back database transaction for ReviewResource::markItemsAsReviewed" + 
+          e.getMessage());
         transactionManager.rollback(transactionStatus);
         conn.rollback();
         throw e;
@@ -794,4 +821,221 @@ public class ReviewResource
 
     return markItemsReviewedResponse;
   }
+  
+  
+
+  
+  @PUT
+  @Path("/updatestatus")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public JSONObject updateStatus(
+  	JSONObject markItemsReviewedRequest,
+    @QueryParam("mapId")
+    String mapId)
+    throws Exception
+  {
+    Connection conn = DbUtils.createConnection();
+    final String errorMessageStart = "marking items as reviewed";
+    
+    try
+    {
+    	String reviewId = markItemsReviewedRequest.get("reviewid").toString();
+    	Object oAgainst = markItemsReviewedRequest.get("reviewagainstid");
+    	String reviewAgainst = (oAgainst == null)? null : oAgainst.toString();
+
+    	java.util.Date date= new java.util.Date();
+    	Timestamp now = new Timestamp(date.getTime());
+    	(new ReviewItemsMarker(conn, mapId)).updateReviewLastAccessTime(reviewId, now, reviewAgainst);
+
+    }
+    catch (Exception e)
+    {
+      ReviewUtils.handleError(e, errorMessageStart, false);
+    }
+    finally
+    {
+    	try
+      {
+    		conn.setAutoCommit(true);
+        DbUtils.closeConnection(conn);
+      }
+      catch (Exception e)
+      {
+        ReviewUtils.handleError(e, errorMessageStart, false);
+      }
+    }
+    JSONObject markItemsReviewedResponse = new JSONObject();
+    markItemsReviewedResponse.put("status", "ok");
+    markItemsReviewedResponse.put("locktime", "" + ReviewItemsMarker.LOCK_TIME);
+    return markItemsReviewedResponse;
+  }
+  
+  
+  @PUT
+  @Path("/resetstatus")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public JSONObject resetStatus(
+  	JSONObject markItemsReviewedRequest,
+    @QueryParam("mapId")
+    String mapId)
+    throws Exception
+  {
+    Connection conn = DbUtils.createConnection();
+    final String errorMessageStart = "marking items as reviewed";
+    
+    try
+    {
+    	String reviewId = markItemsReviewedRequest.get("reviewid").toString();
+    	
+    	Object oAgainst = markItemsReviewedRequest.get("reviewagainstid");
+    	String reviewAgainst = (oAgainst == null)? null : oAgainst.toString();
+
+    	java.util.Date date= new java.util.Date();
+    	Timestamp past = new Timestamp(date.getTime() - ReviewItemsMarker.LOCK_TIME);
+    	(new ReviewItemsMarker(conn, mapId)).updateReviewLastAccessTime(reviewId, past, reviewAgainst);
+
+    }
+    catch (Exception e)
+    {
+      ReviewUtils.handleError(e, errorMessageStart, false);
+    }
+    finally
+    {
+    	try
+      {
+    		conn.setAutoCommit(true);
+        DbUtils.closeConnection(conn);
+      }
+      catch (Exception e)
+      {
+        ReviewUtils.handleError(e, errorMessageStart, false);
+      }
+    }
+    JSONObject markItemsReviewedResponse = new JSONObject();
+    markItemsReviewedResponse.put("status", "ok");
+    return markItemsReviewedResponse;
+  }
+  
+  @PUT
+  @Path("/next")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public JSONObject getNextAvailableReviewAndLock(
+    	JSONObject nextReviewItemRequest,
+      @QueryParam("mapId")
+      String mapId) throws Exception
+  {
+
+    Connection conn = DbUtils.createConnection();
+    final String errorMessageStart = "marking items as reviewed";
+    JSONObject nextReviewableResponse = new JSONObject();
+    nextReviewableResponse.put("status", "none");
+    try
+    {
+    	int offset = -1;
+    	Object oReqOffset = nextReviewItemRequest.get("offset");
+    	
+    	if(oReqOffset != null)
+    	{
+    		offset = Integer.parseInt(oReqOffset.toString());
+    	}
+    	else
+    	{
+    		throw new Exception("Invalid offset argument.");
+    	}
+    	
+    	Object oDirection = nextReviewItemRequest.get("direction");
+    	
+    	boolean isForward = false;
+    	if(oDirection != null)
+    	{
+    		String direction = oDirection.toString();
+    		if(direction.equals("forward"))
+    		{
+    			isForward = true;
+    		}
+    	}
+    	else
+    	{
+    		throw new Exception("Invalid direction argument.");
+    	}
+
+    	Object oOffsetid = nextReviewItemRequest.get("offsetid");
+    	String offsetId = (oOffsetid == null)? null : oOffsetid.toString();
+    	
+    	Object oAgainst = nextReviewItemRequest.get("offsetreviewagainstid");
+    	String reviewAgainst = (oAgainst == null)? null : oAgainst.toString();
+    	
+    	ReviewItemsMarker marker = new ReviewItemsMarker(conn, mapId);
+
+    	nextReviewableResponse = marker.getAvaiableReviewItem(offset, isForward, offsetId, reviewAgainst);
+    	
+    
+    }
+    catch (Exception e)
+    {
+      ReviewUtils.handleError(e, errorMessageStart, false);
+    }
+    finally
+    {
+    	try
+      {
+    		conn.setAutoCommit(true);
+        DbUtils.closeConnection(conn);
+      }
+      catch (Exception e)
+      {
+        ReviewUtils.handleError(e, errorMessageStart, false);
+      }
+    }
+    
+   
+    return nextReviewableResponse;
+  
+  }
+  
+  @GET
+  @Path("/lockcount")
+  @Consumes(MediaType.TEXT_PLAIN)
+  @Produces(MediaType.APPLICATION_JSON)
+  public JSONObject getReviewLockCount(
+    @QueryParam("mapId")
+    String mapId
+  )
+    throws Exception
+  {
+
+    Connection conn = DbUtils.createConnection();
+    final String errorMessageStart = "getting review lock count";
+    JSONObject ret = new JSONObject();
+    long lockcnt = 0;
+    try
+    {    	
+    	ReviewItemsMarker marker = new ReviewItemsMarker(conn, mapId);
+    	lockcnt = marker.getLockedReviewCnt();
+    }
+    catch (Exception e)
+    {
+      ReviewUtils.handleError(e, errorMessageStart, false);
+    }
+    finally
+    {
+    	try
+      {
+    		conn.setAutoCommit(true);
+        DbUtils.closeConnection(conn);
+      }
+      catch (Exception e)
+      {
+        ReviewUtils.handleError(e, errorMessageStart, false);
+      }
+    }
+    
+    ret.put("count", lockcnt);
+    return ret;
+  
+  }
+
 }

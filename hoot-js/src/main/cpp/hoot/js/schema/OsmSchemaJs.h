@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMSCHEMA_JS_H
 #define OSMSCHEMA_JS_H
@@ -46,6 +46,7 @@ private:
   ~OsmSchemaJs();
 
   static v8::Handle<v8::Value> getCategories(const v8::Arguments& args);
+  static v8::Handle<v8::Value> isAncestor(const v8::Arguments& args);
   static v8::Handle<v8::Value> isArea(const v8::Arguments& args);
   static v8::Handle<v8::Value> isBuilding(const v8::Arguments& args);
   static v8::Handle<v8::Value> isLinear(const v8::Arguments& args);

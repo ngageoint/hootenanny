@@ -20,8 +20,8 @@
   <EXAMPLE>
   <URL>http://localhost:8080/hoot-services/ogc/MarkItemsReviewed</URL>
   <REQUEST_TYPE>POST</REQUEST_TYPE>
-  <INPUT>Please refer to the wiki page: https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflated_Data_Review_Service_2</INPUT>
-   <OUTPUT>Please refer to the wiki page: https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflated_Data_Review_Service_2</OUTPUT>
+  <INPUT></INPUT>
+   <OUTPUT></OUTPUT>
    </EXAMPLE>
   ]]></Abstract>
 	<InputParameters>
@@ -71,7 +71,13 @@
     <LiteralOutput>
       <Identifier>changesetId</Identifier>
       <Title>Changeset ID</Title>
-      <Abstract></Abstract>
+      <Abstract>ID of the changeset used to upload the changes</Abstract>
+      <DataType reference="http://www.w3.org/TR/xmlschema-2/#integer">integer</DataType>
+    </LiteralOutput>
+    <LiteralOutput>
+      <Identifier>mapId</Identifier>
+      <Title>Map ID</Title>
+      <Abstract>ID of the map the changes were uploaded to</Abstract>
       <DataType reference="http://www.w3.org/TR/xmlschema-2/#integer">integer</DataType>
     </LiteralOutput>
 	</OutputParameters>

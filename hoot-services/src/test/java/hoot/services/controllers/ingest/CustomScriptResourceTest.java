@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -35,6 +35,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -55,7 +56,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import javax.ws.rs.WebApplicationException;
+import com.sun.jersey.api.client.UniformInterfaceException;
 
 /*
  * For the save/delete multiple tests, was unable to use the Jersey test container due to
@@ -127,6 +128,22 @@ public class CustomScriptResourceTest
         + "test";
     String content = FileUtils.readFileToString(f, "UTF-8");
     assertTrue(content.equals(resStr));
+  }
+  
+  @Test
+  @Category(UnitTest.class)
+  public void testSaveBadSyntax() throws Exception
+  {
+  	try
+  	{
+  		res.processSave("{ test", "testName", "Test Description");
+  	}
+  	catch (WebApplicationException e)
+    {
+      Response res = e.getResponse();
+			Assert.assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), res.getStatus());
+			Assert.assertTrue(res.getEntity().toString().contains("missing } in compound statement"));
+    }
   }
 
   @Test
@@ -576,11 +593,12 @@ public class CustomScriptResourceTest
   @Category(UnitTest.class)
   public void testGetDefaultList() throws Exception
   {
-
   	// Try to test current DefaultTranslations.json setup and the mechanism.
   	// The value in DefaultTranslations.json should be valid at build time..
 
-  	JSONArray trans = res._getDefaultList();
+  	List<String> configFiles = new ArrayList<String>();
+  	configFiles.add(HootProperties.getProperty("defaultTranslationsConfig"));
+  	JSONArray trans = res._getDefaultList(configFiles);
   	for(Object o : trans)
   	{
   		JSONObject jsTrans = (JSONObject)o;
@@ -598,23 +616,7 @@ public class CustomScriptResourceTest
   		assertTrue(fScript.exists());
 
   		String sScript = FileUtils.readFileToString(fScript);
-			boolean canExport = res.validateExport(sScript);
-			// This may be no longer valid assumption.
-/*
-  		if(jsTrans.get("CANEXPORT") != null)
-  		{
-  			Boolean bCanExport = (Boolean)jsTrans.get("CANEXPORT") ;
-  			if(bCanExport)
-  			{
-					assertTrue(canExport);
-  			}
-  			else
-  			{
-  				assertFalse(canExport);
-  			}
-  		}
-*/
-  		// check for FOUO
+			res.validateExport(sScript);
 
   		if(jsTrans.get("FOUO_PATH") != null)
   		{

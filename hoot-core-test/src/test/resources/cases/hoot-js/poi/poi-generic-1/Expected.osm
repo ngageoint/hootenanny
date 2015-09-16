@@ -32,20 +32,4 @@
         <tag k="name:en" v="Izbat Hawd an Nada"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-2" role="reviewee"/>
-        <member type="node" ref="-1" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Close, but not close enough"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-1" role="reviewee"/>
-        <member type="node" ref="-2" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Close, but not close enough"/>
-        <tag k="type" v="review"/>
-    </relation>
 </osm>

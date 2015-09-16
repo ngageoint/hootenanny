@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "FindIntersectionsVisitor.h"
 
@@ -35,9 +35,10 @@
 namespace hoot
 {
 
-void FindIntersectionsVisitor::visit(ElementType /*type*/, long id)
+void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
 {
   shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
+  long id = e->getId();
 
   const set<long>& wids = n2w->getWaysByNode(id);
 

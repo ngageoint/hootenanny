@@ -22,16 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
 import java.io.File;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;
@@ -44,11 +42,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.junit.rules.ExpectedException;
-import org.mockito.Mockito;
 
 public class FileUploadResourceTest {
 	private static String homeFolder = null;
@@ -199,7 +194,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"fgdb_ogr", inputsList);
+				"fgdb_ogr", inputsList, "test@test.com");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -318,7 +313,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"fgdb_ogr", inputsList);
+				"fgdb_ogr", inputsList, "test@test.com");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -436,7 +431,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"osm", inputsList);
+				"osm", inputsList, "test@test.com");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -557,7 +552,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"ogr", inputsList);
+				"ogr", inputsList, "test@test.com");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -666,7 +661,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"ogr", inputsList);
+				"ogr", inputsList, "test@test.com");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -774,7 +769,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"osm", inputsList);
+				"osm", inputsList, "test@test.com");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -863,7 +858,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"fgdb", inputsList);
+				"fgdb", inputsList, "test@test.com");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -903,7 +898,7 @@ public class FileUploadResourceTest {
 	@Category(UnitTest.class)
 	public void TestserializeFGDB() throws Exception
 	{
-		FileUploadResource res = new FileUploadResource();
+		new FileUploadResource();
 
 		//homeFolder + "/upload/" + jobId + "/" + relPath;
 		// Create dummy FGDB
@@ -964,7 +959,7 @@ public class FileUploadResourceTest {
 	@Category(UnitTest.class)
 	public void TestserializeUploadedFiles() throws Exception
 	{
-		FileUploadResource res = new FileUploadResource();
+		new FileUploadResource();
 
 		//homeFolder + "/upload/" + jobId + "/" + relPath;
 		// Create dummy FGDB

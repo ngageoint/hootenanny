@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-376473' visible='true' lat='31.5' lon='35.78333'>
+    <tag k='REF2' v='000612' />
+    <tag k='alt_name' v='`Arab Bani Hamida;`Arab Bani Hamidah;‘Arab Banī Hamīda;‘Arab Banī Ḩamīdah' />
+    <tag k='error:circular' v='1000' />
+    <tag k='name' v='‘Arab Banī Ḩamīdah' />
+    <tag k='place' v='tribal_area' />
+    <tag k='uuid' v='GeoNames.org:250376' />
+  </node>
+</osm>

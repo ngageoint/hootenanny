@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchComparator.h"
 
@@ -63,10 +63,8 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    shared_ptr<const Element> e = _map->getElement(type, id);
-
     QStringList refs;
     if (e->getTags().contains(_ref))
     {
@@ -119,17 +117,14 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    shared_ptr<const Element> e = _map->getElement(type, id);
-
     QString uuid;
     if (e->getTags().contains("uuid"))
     {
       uuid = e->getTags().get("uuid");
     }
 
-    ElementId eid = ElementId(type, id);
     if (!uuid.isEmpty())
     {
       //For more information on the need for this assertion, see
@@ -138,7 +133,7 @@ public:
       //across multiple elements.  Ticket 5496 will address this.
 #warning Address this issue with ticket 5496.
       //assert(_uuidToEid.count(uuid) == 0);
-      _uuidToEid[uuid] = eid;
+      _uuidToEid[uuid] = e->getElementId();
     }
   }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
@@ -41,13 +41,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.xpath.XPathAPI;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
+import com.mysema.query.Tuple;
 import com.mysema.query.sql.RelationalPathBase;
 import com.mysema.query.sql.SQLExpressions;
 import com.mysema.query.sql.SQLQuery;
@@ -59,7 +59,6 @@ import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
 import hoot.services.db.DbUtils.RecordBatchType;
-
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentWayNodes;
 import hoot.services.db2.CurrentWays;
@@ -140,7 +139,7 @@ public class Way extends Element
    * @param mapId
    *          ID of the map owning the ways
    * @param wayIds
-   *          a collection of way ID's for which to retrieve node records
+   *          a collection of way IDs for which to retrieve node records
    * @param dbConn
    *          JDBC Connection
    * @return a list of node records
@@ -176,14 +175,14 @@ public class Way extends Element
   }
 
   /*
-   * Returns the ID's of the nodes associated with this way
+   * Returns the IDs of the nodes associated with this way
    *
    * This is a List, rather than a Set, since the same node ID can be used for
    * the first and last node ID in the way nodes sequence for closed polygons.
    */
   private List<Long> getNodeIds() throws Exception
   {
-    // TODO: return data from way nodes cache if its present?
+    // TODO: return data from way nodes cache if it is present?
     return new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).from(currentWayNodes)
         .where(currentWayNodes.wayId.eq(getId()))
         .orderBy(currentWayNodes.sequenceId.asc()).list(currentWayNodes.nodeId);
@@ -202,7 +201,7 @@ public class Way extends Element
   /*
    * Adds node refs to the way nodes services database table
    *
-   * @param nodeIds a list of node ref ID's; This is a List, rather than a Set,
+   * @param nodeIds a list of node ref IDs; This is a List, rather than a Set,
    * since the same node ID can be used for the first and last node ID in the
    * way nodes sequence for closed polygons.
    *
@@ -307,7 +306,7 @@ public class Way extends Element
 
     // any way nodes not mentioned in the created/modified in the changeset XML
     // represented by
-    // the remainder of the ID's in relatedRecordIds, request must now be
+    // the remainder of the IDs in relatedRecordIds, request must now be
     // retrieved from the
     // database
     final List<?> nodeRecords = Element.getElementRecords(getMapId(), ElementType.Node,
@@ -315,8 +314,8 @@ public class Way extends Element
     for (Object record : nodeRecords)
     {
       final CurrentNodes nodeRecord = (CurrentNodes) record;
-      final double lat = DbUtils.fromDbCoordValue(nodeRecord.getLatitude());
-      final double lon = DbUtils.fromDbCoordValue(nodeRecord.getLongitude());
+      final double lat = nodeRecord.getLatitude();
+      final double lon = nodeRecord.getLongitude();
       if (lat < minLat)
       {
         minLat = lat;
@@ -359,7 +358,7 @@ public class Way extends Element
     // here, use it
     // because the way nodes will not have been written to the database yet, so
     // use the cached
-    // way node ID's and node coordinate info to construct the bounds
+    // way node IDs and node coordinate info to construct the bounds
     if (relatedRecordIds != null && relatedRecordIds.size() > 0)
     {
       return getBoundsFromRequestDataAndRemainderFromDatabase();
@@ -430,7 +429,7 @@ public class Way extends Element
    * @param modifyingUserDisplayName
    *          user display name of the user which created this element
    * @param multiLayerUniqueElementIds
-   *          if true, ID's are prepended with <map id>_<first letter of the
+   *          if true, IDs are prepended with <map id>_<first letter of the
    *          element type>_; this setting activated is not compatible with
    *          standard OSM clients (specific to Hootenanny iD)
    * @param addChildren
@@ -449,6 +448,7 @@ public class Way extends Element
     if (addChildren)
     {
       final List<Long> nodeIds = getNodeIds();
+      Set<Long> elementIds = new HashSet<Long>();
       // way nodes are output in sequence order; list should already be sorted
       // by the query
       for (long nodeId : nodeIds)
@@ -456,6 +456,24 @@ public class Way extends Element
         org.w3c.dom.Element nodeElement = doc.createElement("nd");
         nodeElement.setAttribute("ref", String.valueOf(nodeId));
         element.appendChild(nodeElement);
+        elementIds.add(nodeId);
+      }
+   
+      @SuppressWarnings("unchecked")
+      final List<Tuple> elementRecords = 
+          (List<Tuple>) Element.getElementRecordsWithUserInfo(getMapId(), ElementType.Node, elementIds, conn);
+      for(int i=0; i<elementRecords.size(); i++)
+      {
+      	final Element nodeFullElement = 
+            ElementFactory.getInstance().create(ElementType.Node, elementRecords.get(i), conn, getMapId());
+        org.w3c.dom.Element nodeXml = 
+        		nodeFullElement.toXml(
+          	parentXml,
+          	modifyingUserId, 
+          	modifyingUserDisplayName,
+            false,
+            false);
+        parentXml.appendChild(nodeXml);
       }
     }
 
@@ -532,8 +550,8 @@ public class Way extends Element
       Node node = (Node) parsedElementIdsToElementsByType.get(ElementType.Node).get(parsedNodeId);
       CurrentNodes nodeRecord = (CurrentNodes) node.getRecord();
       actualNodeId = nodeRecord.getId();
-      nodeCoords.lat = DbUtils.fromDbCoordValue(nodeRecord.getLatitude());
-      nodeCoords.lon = DbUtils.fromDbCoordValue(nodeRecord.getLongitude());
+      nodeCoords.lat = nodeRecord.getLatitude();
+      nodeCoords.lon = nodeRecord.getLongitude();
     }
     // element not referenced in this request, so should already exist in the db
     // and its info up
@@ -557,8 +575,8 @@ public class Way extends Element
       {
         throw new Exception("Node with ID: " + actualNodeId + " is not visible for way.");
       }
-      nodeCoords.lat = DbUtils.fromDbCoordValue(existingNodeRecord.getLatitude());
-      nodeCoords.lon = DbUtils.fromDbCoordValue(existingNodeRecord.getLongitude());
+      nodeCoords.lat = existingNodeRecord.getLatitude();
+      nodeCoords.lon = existingNodeRecord.getLongitude();
     }
     assert (actualNodeId > 0);
     nodeCoordsCollection.put(actualNodeId, nodeCoords);
@@ -710,7 +728,7 @@ public class Way extends Element
    * @param mapId
    *          corresponding map ID for the way to be inserted
    * @param nodeIds
-   *          ID's for the collection of nodes to be associated with this way
+   *          IDs for the collection of nodes to be associated with this way
    * @param tags
    *          element tags
    * @param dbConn

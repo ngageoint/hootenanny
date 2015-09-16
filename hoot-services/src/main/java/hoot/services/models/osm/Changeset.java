@@ -22,18 +22,18 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.ArrayList;
+import java.sql.Types;
 import java.util.Calendar;
-import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.ParserConfigurationException;
@@ -41,7 +41,6 @@ import javax.xml.transform.TransformerException;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
-import hoot.services.db.DbUtils.RecordBatchType;
 import hoot.services.db2.Changesets;
 import hoot.services.db2.QChangesets;
 import hoot.services.geo.BoundingBox;
@@ -77,6 +76,7 @@ public class Changeset extends Changesets
 
   private static final Logger log = LoggerFactory.getLogger(Changeset.class);
   protected static final QChangesets changesets  = QChangesets.changesets;
+  @SuppressWarnings("unused")
   private int maxRecordBatchSize = -1;
   private Connection conn;
   private long _mapId = -1;
@@ -203,7 +203,7 @@ public class Changeset extends Changesets
   }
 
   /**
-   * Updates the expiration of this changeset in the database by modifying its closed at time
+   * Updates the expiration of this changeset in the database by modifying it is closed at time
    *
    * This logic is pulled directly from the Rails port, and is meant to be executed
    * at the end of each upload process involving this changeset.  This effectively extends the
@@ -381,10 +381,10 @@ public class Changeset extends Changesets
     if(
     		new SQLUpdateClause(conn, DbUtils.getConfiguration(_mapId), changesets)
     			.where(changesets.id.eq(getId()))
-    			.set(changesets.maxLat, bounds.getMaxLatDb())
-    			.set(changesets.maxLon, bounds.getMaxLonDb())
-    			.set(changesets.minLat, bounds.getMinLatDb())
-    			.set(changesets.minLon, bounds.getMinLonDb())
+    			.set(changesets.maxLat, bounds.getMaxLat())
+    			.set(changesets.maxLon, bounds.getMaxLon())
+    			.set(changesets.minLat, bounds.getMinLat())
+    			.set(changesets.minLon, bounds.getMinLon())
     			.execute() != 1)
     {
     	throw new Exception("Error updating changeset bounds.");
@@ -407,10 +407,10 @@ public class Changeset extends Changesets
   		.singleResult(changesets);
 
     //TODO: I don't like doing this...
-    double minLon = DbUtils.fromDbCoordValue(changeset.getMinLon());
-    double minLat = DbUtils.fromDbCoordValue(changeset.getMinLat());
-    double maxLon = DbUtils.fromDbCoordValue(changeset.getMaxLon());
-    double maxLat = DbUtils.fromDbCoordValue(changeset.getMaxLat());
+    double minLon = changeset.getMinLon();
+    double minLat = changeset.getMinLat();
+    double maxLon = changeset.getMaxLon();
+    double maxLat = changeset.getMaxLat();
     if (minLon == GeoUtils.DEFAULT_COORD_VALUE || minLat == GeoUtils.DEFAULT_COORD_VALUE ||
         maxLon == GeoUtils.DEFAULT_COORD_VALUE || maxLat == GeoUtils.DEFAULT_COORD_VALUE)
     {
@@ -464,14 +464,15 @@ public class Changeset extends Changesets
 
 
     return
-    new SQLInsertClause(dbConn, DbUtils.getConfiguration("" + mapId), changesets)
-    .columns(changesets.closedAt, changesets.createdAt, changesets.maxLat, changesets.maxLon
-    		, changesets.minLat, changesets.minLon, changesets.userId)
-    .values(closedAt, new Timestamp(now.getMillis()),
-    		DbUtils.toDbCoordValue(GeoUtils.DEFAULT_COORD_VALUE),
-    		DbUtils.toDbCoordValue(GeoUtils.DEFAULT_COORD_VALUE),
-        DbUtils.toDbCoordValue(GeoUtils.DEFAULT_COORD_VALUE),
-        DbUtils.toDbCoordValue(GeoUtils.DEFAULT_COORD_VALUE), userId).executeWithKey(changesets.id);
+      new SQLInsertClause(dbConn, DbUtils.getConfiguration("" + mapId), changesets)
+        .columns(changesets.closedAt, changesets.createdAt, changesets.maxLat, changesets.maxLon
+    	  	, changesets.minLat, changesets.minLon, changesets.userId)
+        .values(closedAt, new Timestamp(now.getMillis()),
+    		  GeoUtils.DEFAULT_COORD_VALUE,
+    		  GeoUtils.DEFAULT_COORD_VALUE,
+          GeoUtils.DEFAULT_COORD_VALUE,
+          GeoUtils.DEFAULT_COORD_VALUE, userId)
+        .executeWithKey(changesets.id);
   }
 
   /**
@@ -561,8 +562,7 @@ public class Changeset extends Changesets
   */
   public void insertTags(final long mapId, final NodeList xml, Connection conn) throws Exception
   {
-  	String POSTGRESQL_DRIVER = "org.postgresql.Driver";
-    Statement stmt = null;
+  	PreparedStatement ps = null;
     try
     {
       log.debug("Inserting tags for changeset with ID: " + getId());
@@ -583,18 +583,19 @@ public class Changeset extends Changesets
         strKv += key + "=>" + val;
 
       }
-      String strTags = "'";
+      String strTags = "";
       strTags += strKv;
-      strTags += "'";
 
-
-      Class.forName(POSTGRESQL_DRIVER);
-
-      stmt = conn.createStatement();
-
-      String sql = "UPDATE changesets_" + mapId + " SET tags = " + strTags + " WHERE id=" + getId();
-
-      stmt.executeUpdate(sql);
+      String sql = "UPDATE changesets_" + mapId + " SET tags=? WHERE id=?";
+      ps = conn.prepareStatement(sql);
+      ps.setObject(1, strTags, Types.OTHER);
+			ps.setLong(2, getId());
+			
+			long execResult = ps.executeUpdate();
+			if(execResult < 1)
+			{
+				throw new Exception("No tags were changed for changeset_" + mapId);
+			}
     }
     catch (Exception e)
     {
@@ -605,15 +606,11 @@ public class Changeset extends Changesets
     finally
     {
       // finally block used to close resources
-      try
-      {
-        if (stmt != null)
-          stmt.close();
-      }
-      catch (SQLException se2)
-      {
-
-      }// nothing we can do
+    	
+    	if(ps != null)
+    	{
+    		ps.close();
+    	}
 
     }// end try
 

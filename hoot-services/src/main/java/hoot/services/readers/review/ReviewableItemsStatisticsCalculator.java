@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.readers.review;
 
@@ -48,7 +48,6 @@ import hoot.services.validators.review.ReviewMapValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysema.query.sql.ColumnMetadata;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.types.expr.BooleanExpression;
 

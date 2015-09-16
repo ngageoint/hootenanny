@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmReader.h"
@@ -238,9 +238,9 @@ void OsmReader::read(shared_ptr<OsmMap> map)
     int retVal;
     if ( (retVal = std::system(cmd.c_str())) != 0 )
     {
-      LOG_FATAL("Error " << boost::lexical_cast<std::string>(retVal)  <<
-                " returned from uncompress command: " << cmd);
-      return;
+      QString error = QString("Error %1 returned from uncompress command: %2").arg(retVal).
+        arg(QString::fromStdString(cmd));
+      throw HootException(error);
     }
 
     LOG_DEBUG("Uncompress succeeded!");
@@ -259,9 +259,9 @@ void OsmReader::read(shared_ptr<OsmMap> map)
     int retVal;
     if ( (retVal = std::system(cmd.c_str())) != 0 )
     {
-      LOG_FATAL("Error " << boost::lexical_cast<std::string>(retVal)  <<
-                " returned from uncompress command: " << cmd);
-      return;
+      QString error = QString("Error %1 returned from uncompress command: %2").arg(retVal).
+        arg(QString::fromStdString(cmd));
+      throw HootException(error);
     }
 
     LOG_DEBUG("Uncompress succeeded!");

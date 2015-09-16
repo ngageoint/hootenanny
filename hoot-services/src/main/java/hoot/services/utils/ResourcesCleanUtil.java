@@ -22,12 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
+import java.util.List;
 
+import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.job.Executable;
 
@@ -38,9 +43,23 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class ResourcesCleanUtil implements Executable {
 
-	// remove data
+	private static String _ingestPath = null;
+	//remove data
 	// remove file store
 	private static final Logger log = LoggerFactory.getLogger(ResourcesCleanUtil.class);
+	
+	static
+	{
+		try
+		{
+			_ingestPath = HootProperties.getProperty("tileServerPath");
+		}
+		catch(Exception ex)
+		{
+			log.error("failed get hoot home value:" + ex.getMessage());
+		}
+	}
+	
   @SuppressWarnings("unused")
   private ClassPathXmlApplicationContext appContext;
 	
@@ -66,7 +85,12 @@ public class ResourcesCleanUtil implements Executable {
 	  {     
 	    log.debug("Initializing database connection...");
 	    
+	    List<Long> ids = DbUtils.getMapIdsByName( conn, mapId);
+	    int nMapCnt = ids.size();
+	    
 	    DbUtils.deleteOSMRecordByName(conn, mapId);
+	    // Modify when core implements broad casting map id when conflation completes
+	    _deleteIngestResource(mapId, nMapCnt);
 	  }
 	  catch (Exception e)
 	  {
@@ -79,6 +103,67 @@ public class ResourcesCleanUtil implements Executable {
 	  }
 	  
 		return res;
+	}
+	
+	// TODO; Change mapName to mapId
+	protected void _deleteIngestResource(final String mapName, final int nMapCnt) 
+			throws NullPointerException, FileNotFoundException, IOException, Exception
+	{
+
+	  Connection conn = DbUtils.createConnection();
+	  try
+	  {     
+	    log.debug("Initializing database connection...");
+	    
+	    // we will not delete resource for layer with duplicate names
+	    if(nMapCnt == 1)
+	    {
+	    	// This block is to check if we have file path manipulation by validating 
+	    	// the new path is within container path
+	    	final String basePath = _ingestPath;
+	    	final String newPath = _ingestPath + "/" + mapName;
+	    	
+	    	boolean isValidated = false;
+	    	File fDel = new File(newPath);
+				String potentialPath = fDel.getCanonicalPath();
+				
+				File fBase = new File(basePath);
+				String containerPath = fBase.getCanonicalPath();
+				
+				// verify that newPath is within basePath
+				if(potentialPath.indexOf(containerPath) == 0)
+				{
+					isValidated = true;
+				}
+				
+				// If it is safe to delete then delete
+				if(isValidated)
+				{
+					org.apache.commons.io.FileUtils.forceDelete(fDel);
+				}
+				
+	    }
+	  }
+	  catch (NullPointerException npe)
+	  {
+	  	log.error(npe.getMessage());
+			throw npe;
+	  }
+	  catch (FileNotFoundException fne)
+	  {
+	  	log.error(fne.getMessage());
+			throw fne;
+	  }
+	  catch (IOException ioe)
+	  {
+	  	log.error(ioe.getMessage());
+			throw ioe;
+	  }
+	  finally
+	  {
+	    DbUtils.closeConnection(conn);
+	  }
+	  
 	}
 	
 	/**

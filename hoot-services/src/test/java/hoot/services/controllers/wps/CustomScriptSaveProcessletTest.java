@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
 
@@ -30,14 +30,13 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
-
 import java.util.LinkedList;
+
 
 
 
 import hoot.services.UnitTest;
 import hoot.services.wps.WpsUtils;
-
 
 import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolVersion;
@@ -53,8 +52,6 @@ import org.deegree.services.wps.input.ProcessletInput;
 import org.deegree.services.wps.output.LiteralOutputImpl;
 import org.deegree.services.wps.output.ProcessletOutput;
 import org.json.simple.parser.JSONParser;
-
-
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.Matchers;
@@ -62,7 +59,8 @@ import org.mockito.Mockito;
 
 public class CustomScriptSaveProcessletTest {
 
-	private JSONParser _parser = new JSONParser();
+	@SuppressWarnings("unused")
+  private JSONParser _parser = new JSONParser();
   
 	@Test
 	@Category(UnitTest.class)

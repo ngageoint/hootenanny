@@ -66,7 +66,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
   }
 
   /*
-   * logging records with invalid uuid's and skipping; if errors should be thrown, then the
+   * logging records with invalid uuids and skipping; if errors should be thrown, then the
    * unit tests will have to reworked
    */
   @Override
@@ -80,7 +80,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
     idMappingRecordWritten = false;
     List<ElementIdMappings> elementIdMappingRecordsToInsert = new ArrayList<ElementIdMappings>();
     //create this outside of the batch read loop, since we need to maintain a list of unique
-    //ID's parsed over the entire map's set of reviewable records
+    //IDs parsed over the entire map's set of reviewable records
     Set<String> elementIds = new HashSet<String>();
 
     for (ElementType elementType : ElementType.values())
@@ -107,7 +107,9 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
             final String uniqueElementIdStr = StringUtils.trimToNull(tags.get("uuid"));
             if (uniqueElementIdStr == null)
             {
-              log.warn(
+              //this should probably be a warn, but is happening a lot and cluttering up the logs...
+            	//not worrying about it for now, since new implementation is on the way
+              log.debug(
                 "Invalid UUID: " + uniqueElementIdStr + " for map with ID: " + mapId +
                 ".  Skipping adding unique ID record...");
             }
@@ -115,18 +117,19 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
             {
               //In the case of the fuzzy match conflict example, this ID may be made up of multiple
               //parts.  Treat each ID part separately.  
-            	// TODO: add test for this case
+            	// TODO: change for fuzzy matches was invalid, so backing it out; fix and add test 
+            	// for this case
               String[] uniqueElementIds = null;
-              if (uniqueElementIdStr.contains(";"))
+              /*if (uniqueElementIdStr.contains(";"))
               {
                 log.debug("Multiple part UUID...");
                 uniqueElementIds = uniqueElementIdStr.split(";");
               }
               else
-              {
+              {*/
                 uniqueElementIds = new String[1];
                 uniqueElementIds[0] = uniqueElementIdStr;
-              }
+              //}
                 
               for (String uniqueElementId : uniqueElementIds)
               {
@@ -136,7 +139,9 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                 	  .where(elementIdMappings.mapId.eq(mapId)
                   		.and(elementIdMappings.elementId.eq(uniqueElementId))).count() > 0)
                 {
-                  log.warn(
+                  //this should probably be a warn, but is happening a lot and cluttering up the logs...
+                	//not worrying about it for now, since new implementation is on the way
+                  log.debug(
                     "UUID: " + uniqueElementId + " for map with ID: " + mapId + " already exists.  " +
                     "Skipping adding unique ID record...");
                 }
@@ -152,7 +157,9 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                   }
                   else
                   {
-                    log.warn(
+                    //this should probably be a warn, but is happening a lot and cluttering up the logs...
+                  	//not worrying about it for now, since new implementation is on the way
+                    log.debug(
                       "Duplicate element ID: " + uniqueElementId.toString() + " for map with ID: " +
                       mapId + ".  Skipping adding unique ID record...");
                   }
@@ -192,7 +199,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
     reviewRecordWritten = false;
     List<ReviewItems> reviewRecordsToInsert = new ArrayList<ReviewItems>();
     //create this outside of the batch read loop, since we need to maintain a list of unique
-    //ID's parsed over the entire map's set of reviewable records
+    //IDs parsed over the entire map's set of reviewable records
     reviewableItemIdToReviewAgainstItemIds = ArrayListMultimap.create();
     reviewableItemIdToReviewAgainstItemIds.putAll(previouslyReviewedItemIdToReviewAgainstItemIds);
 
@@ -219,25 +226,29 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
             final String reviewableItemIdStr = StringUtils.trimToNull(tags.get("uuid"));
             if (StringUtils.isEmpty(reviewableItemIdStr))
             {
-              log.warn(
+            	//this should probably be a warn, but is happening a lot and cluttering up the logs...
+            	//not worrying about it for now, since new implementation is on the way
+              log.debug(
                 "Invalid UUID: " + reviewableItemIdStr + " for map with ID: " + mapId +
                 " Skipping adding review record...");
             }
             else
             {
             	//In the case of the fuzzy match conflict example, this ID may be made up of multiple
-              //parts.  Treat each ID part separately.  TODO: add test for this case
+              //parts.  Treat each ID part separately.  
+              // TODO: change for fuzzy matches was invalid, so backing it out; fix and add test 
+            	// for this case
               String[] reviewableItemIds = null;
-              if (reviewableItemIdStr.contains(";"))
+              /*if (reviewableItemIdStr.contains(";"))
               {
                 log.debug("Multiple part reviewable item ID...");
                 reviewableItemIds = reviewableItemIdStr.split(";");
               }
               else
-              {
+              {*/
             	  reviewableItemIds = new String[1];
             	  reviewableItemIds[0] = reviewableItemIdStr;
-              }
+              //}
               
               for (String reviewableItemId : reviewableItemIds)
               {
@@ -297,7 +308,9 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                       		  .and(elementIdMappings.elementId.eq(reviewAgainstItemId)))
                       		.count() == 0)
                     {
-                      log.warn(
+                      //this should probably be a warn, but is happening a lot and cluttering up the logs...
+                    	//not worrying about it for now, since new implementation is on the way
+                      log.debug(
                         "No element ID mapping exists for review against item with ID: " +
                         reviewAgainstItemId + " for map with ID: " + mapId + ".  Skipping adding " +
                         "review record...");

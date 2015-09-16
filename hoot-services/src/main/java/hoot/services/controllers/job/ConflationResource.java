@@ -22,27 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
 import hoot.services.HootProperties;
 import hoot.services.utils.ResourceErrorHandler;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
 import org.json.simple.JSONArray;
@@ -50,9 +46,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-
-
 
 @Path("/conflation")
 public class ConflationResource extends JobControllerBase {
@@ -93,7 +86,7 @@ public class ConflationResource extends JobControllerBase {
 	}
 	/**
 	 * <NAME>Conflate Service</NAME>
-	 * <DESCRIPTION>Conflate service operates like standard ETL service. The conflate service specifies the input files, conflation type, match threshold, miss threshold, and output file name. The conflation type can be specified as the average of the two input datasets or based on a single input file that is intended to be the reference dataset. It has two fronts, WPS and standard rest end point.</DESCRIPTION>
+	 * <DESCRIPTION>Conflate service operates like a standard ETL service. The conflate service specifies the input files, conflation type, match threshold, miss threshold, and output file name. The conflation type can be specified as the average of the two input datasets or based on a single input file that is intended to be the reference dataset. It has two fronts, WPS and standard rest end point.</DESCRIPTION>
 	 * <PARAMETERS>
 	 * <INPUT1_TYPE>
 	 * 	Conflation input type [OSM] | [OGR] | [DB]
@@ -113,15 +106,24 @@ public class ConflationResource extends JobControllerBase {
 	 * <CONFLATION_TYPE>
 	 * 	 [average] | [reference]
 	 * </CONFLATION_TYPE>
-	 * <MATCH_THRESHOLD>
-	 * 	The threshold for calling a relationship a match. Defaults to 0.6. The higher the value the lower the TPR, but likely also the lower the FPR.
-	 * </MATCH_THRESHOLD>
-	 * <MISS_THRESHOLD>
-	 * 	The threshold for calling a relationship a miss. Defaults to 0.6. The higher the value the lower the TNR, but likely also the lower the FNR.
-	 * </MISS_THRESHOLD>
 	 * <REFERENCE_LAYER>
 	 * 	The reference layer which will be dominant tags. Default is 1 and if 2 selected, layer 2 tags will be dominant with layer 1 as geometry snap layer.
 	 * </REFERENCE_LAYER>
+	 * <AUTO_TUNNING>
+	 * 	Not used. Always false
+	 * </AUTO_TUNNING>
+	 * <GENERATE_REPORT>
+	 * 	true to generate conflation report
+	 * </GENERATE_REPORT>
+	 * <TIME_STAMP>
+	 * 	Time stamp used in generated report if GENERATE_REPORT is true
+	 * </TIME_STAMP>
+	 * <USER_EMAIL>
+	 * 	Email address of the user requesting the conflation job. 
+	 * </USER_EMAIL>
+	 * <ADV_OPTIONS>
+	 * Advanced options list for hoot-core command
+	 * </ADV_OPTIONS>
 	 * </PARAMETERS>
 	 * <OUTPUT>
 	 * 	Job ID
@@ -129,9 +131,9 @@ public class ConflationResource extends JobControllerBase {
 	 * <EXAMPLE>
 	 * 	<URL>http://localhost:8080/hoot-services/ogc</URL>
 	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * 	<INPUT>see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflate_Service
+	 * 	<INPUT>
 	 *	</INPUT>
-	 * <OUTPUT>see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflate_Service
+	 * <OUTPUT>
          * </OUTPUT>
 	 * </EXAMPLE>
 	 * @param params
@@ -151,6 +153,8 @@ public class ConflationResource extends JobControllerBase {
 			JSONObject oParams = (JSONObject)pars.parse(params);
 			oParams.put("IS_BIG", "false");
 			String confOutputName = oParams.get("OUTPUT_NAME").toString();
+			String input1Name = oParams.get("INPUT1").toString();
+			String input2Name = oParams.get("INPUT2").toString();
 
 			Object oTunn = oParams.get("AUTO_TUNNING");
 			if(oTunn != null)
@@ -174,12 +178,37 @@ public class ConflationResource extends JobControllerBase {
 
 				}
 			}
+			
+			
+			
+			
 
 			JSONArray commandArgs = parseParams(oParams.toJSONString());
 			JSONObject conflationCommand = _createMakeScriptJobReq(commandArgs);
+			
+			// add map tags
+			// WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
+			Map<String, String> tags = new HashMap<String, String>();
+			tags.put("input1", input1Name);
+			tags.put("input2", input2Name);
+			JSONArray mapTagsArgs = new JSONArray();
+			JSONObject param = new JSONObject();
+			param.put("value", tags);
+			param.put("paramtype", Map.class.getName());
+			param.put("isprimitivetype", "false");
+			mapTagsArgs.add(param);
+
+			param = new JSONObject();
+			param.put("value", confOutputName);
+			param.put("paramtype", String.class.getName());
+			param.put("isprimitivetype", "false");
+			mapTagsArgs.add(param);
+
+			JSONObject updateMapsTagsCommand = _createReflectionJobReq(mapTagsArgs, "hoot.services.controllers.osm.MapResource",
+					"updateTagsDirect");
 
 			JSONArray reviewArgs = new JSONArray();
-			JSONObject param = new JSONObject();
+			param = new JSONObject();
 			param.put("value", confOutputName);
 			param.put("paramtype", String.class.getName());
 			param.put("isprimitivetype", "false");
@@ -195,10 +224,18 @@ public class ConflationResource extends JobControllerBase {
 					"prepareItemsForReviewDirect");
 			//String argStr = createPostBody(commandArgs);
 
+			Object oUserEmail = oParams.get("USER_EMAIL");
+			String userEmail = (oUserEmail ==  null)? null : oUserEmail.toString();
 //	  Density Raster
 			JSONArray rasterTilesArgs = new JSONArray();
 			JSONObject rasterTilesparam = new JSONObject();
 			rasterTilesparam.put("value", confOutputName);
+			rasterTilesparam.put("paramtype", String.class.getName());
+			rasterTilesparam.put("isprimitivetype", "false");
+			rasterTilesArgs.add(rasterTilesparam);
+			
+			rasterTilesparam = new JSONObject();
+			rasterTilesparam.put("value", userEmail);
 			rasterTilesparam.put("paramtype", String.class.getName());
 			rasterTilesparam.put("isprimitivetype", "false");
 			rasterTilesArgs.add(rasterTilesparam);
@@ -212,6 +249,7 @@ public class ConflationResource extends JobControllerBase {
 
 			JSONArray jobArgs = new JSONArray();
 			jobArgs.add(conflationCommand);
+			jobArgs.add(updateMapsTagsCommand);
 			jobArgs.add(prepareItemsForReviewCommand);
 			jobArgs.add(ingestOSMResource);
 
@@ -231,7 +269,7 @@ public class ConflationResource extends JobControllerBase {
 		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
 	}
 
-	
+	/*
 	@GET
   @Path("/advancedoptions")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -351,6 +389,6 @@ public class ConflationResource extends JobControllerBase {
     	}
     }
     return retVal;
-	}
+	}*/
 	
 }

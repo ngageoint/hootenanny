@@ -48,6 +48,103 @@ function getHootConfig(e)
 }
 
 /**
+ * Returns all the kvps that are related to a specified kvp (even a little).
+ */
+function getRelatedTags(relateToKvp, d) {
+    var result = [];
+    for (var k in d) {
+        var kvp = k + '=' + d[k];
+        if (kvp != "poi=yes" && kvp != "place=locality") {
+            if (hoot.OsmSchema.score(relateToKvp, kvp) > 0) {
+                result.push(kvp);
+            }
+        }
+    }
+    return result;
+}
+
+/**
+ * Returns all the kvps that share a common ancestor
+ */
+function getTagsByAncestor(ancestorKvp, d) {
+    var result = [];
+    for (var k in d) {
+        var kvp = k + '=' + d[k];
+        if (hoot.OsmSchema.isAncestor(kvp, ancestorKvp)) {
+            result.push(kvp);
+        }
+    }
+    return result;
+}
+
+/**
+ * Returns all the kvps that are in a category.
+ */
+function getTagsByCategory(category, d) {
+    var result = [];
+    for (var k in d) {
+        var kvp = k + '=' + d[k];
+        // if it is not a generic POI type
+        if (kvp != "poi=yes" && kvp != "place=locality") {
+            if (hoot.OsmSchema.getCategories(kvp).indexOf(category) >= 0) {
+                result.push(kvp);
+            }
+        }
+    }
+    return result;
+}
+
+/**
+ * Given a common kvp, find the distance between the tags in e1 and e2 where common exists
+ * between them.
+ */
+function getTagCategoryDistance(category, e1, e2) {
+    var result = 1;
+    var t1 = e1.getTags().toDict();
+    var t2 = e2.getTags().toDict();
+    var c1 = getTagsByCategory(category, t1);
+    var c2 = getTagsByCategory(category, t2);
+
+    if (c1.length == 0 || c2.length == 0) {
+        return undefined;
+    }
+
+    // find the best match between the two types
+    for (var i in c1) {
+        for (var j in c2) {
+            result = Math.min(1 - hoot.OsmSchema.score(c1[i], c2[j]), result);
+        }
+    }
+
+    return result;
+}
+
+/**
+ * Given a common kvp, find the distance between e1 and e2 where common exists
+ * between them.
+ */
+function getTagDistance(commonKvp, e1, e2) {
+    var result = 1;
+    var t1 = e1.getTags().toDict();
+    var t2 = e2.getTags().toDict();
+    var c1 = getRelatedTags(commonKvp, t1);
+    var c2 = getRelatedTags(commonKvp, t2);
+
+    if (c1.length == 0 || c2.length == 0) {
+        return undefined;
+    }
+
+    // find the best match between the two tag types
+    for (var i in c1) {
+        for (var j in c2) {
+            result = Math.min(1 - hoot.OsmSchema.score(c1[i], c2[j]), result);
+        }
+    }
+
+    return result;
+}
+
+/**
  * Wrapper for logWarn for backward compatibility.
  */
 function logWarn(e)

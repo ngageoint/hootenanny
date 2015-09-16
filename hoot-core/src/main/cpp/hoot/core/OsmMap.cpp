@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmMap.h"
@@ -89,27 +89,33 @@ OsmMap::~OsmMap()
 {
 }
 
-//TODO: If this method stays, make sure error checking is adequate and update associated unit tests.
 void OsmMap::append(ConstOsmMapPtr appendFromMap)
 {
   if (this == appendFromMap.get())
   {
     throw HootException("Can't append to the same map.");
   }
-  if (getProjection() != appendFromMap->getProjection())
+  if (!getProjection()->IsSame(appendFromMap->getProjection().get()))
   {
-    throw HootException("Incompatible maps.");
+    char* wkt1 = 0;
+    getProjection()->exportToPrettyWkt(&wkt1);
+    QString proj1 = QString::fromAscii(wkt1);
+    char* wkt2 = 0;
+    appendFromMap->getProjection()->exportToPrettyWkt(&wkt2);
+    QString proj2 = QString::fromAscii(wkt2);
+    throw HootException(
+      "Incompatible maps.  Map being appended to has projection:\n" + proj1 +
+      "\nMap being appended from has projection:\n" + proj2);
   }
   _srs = appendFromMap->getProjection();
 
-  //wish there was a way to do this more generically, but I don't know how at this point...
   const RelationMap& allRelations = appendFromMap->getRelationMap();
   for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
   {
     RelationPtr relation = it->second;
     if (containsElement(ElementId(relation->getElementId())))
     {
-      throw HootException("Map already contains this element.");
+      throw HootException("Map already contains this relation: " + relation->toString());
     }
     shared_ptr<Relation> r = shared_ptr<Relation>(new Relation(*relation));
     addRelation(r);
@@ -121,7 +127,7 @@ void OsmMap::append(ConstOsmMapPtr appendFromMap)
     WayPtr way = it->second;
     if (containsElement(ElementId(way->getElementId())))
     {
-      throw HootException("Map already contains this element.");
+      throw HootException("Map already contains this way: " + way->toString());
     }
     shared_ptr<Way> w = shared_ptr<Way>(new Way(*way));
     addWay(w);
@@ -134,7 +140,7 @@ void OsmMap::append(ConstOsmMapPtr appendFromMap)
     NodePtr node = itn.value();
     if (containsElement(ElementId(node->getElementId())))
     {
-      throw HootException("Map already contains this element.");
+      throw HootException("Map already contains this node: " + node->toString());
     }
     NodePtr n = NodePtr(new Node(*node));
     addNode(n);
@@ -256,6 +262,7 @@ void OsmMap::clear()
 
   _nodes.clear();
   _ways.clear();
+  _relations.clear();
 
   _index->reset();
   _listeners.clear();

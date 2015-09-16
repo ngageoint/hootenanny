@@ -130,15 +130,11 @@ public:
   public:
     RemoveMissVisitor(OsmMapPtr map, QString ref) : _map(map), _ref(ref) {}
 
-    virtual void visit(ElementType type, long id)
+    virtual void visit(const ConstElementPtr& e)
     {
-      ElementId eid(type, id);
-
-      ElementPtr e = _map->getElement(eid);
-
       if (e->getTags().get("REF1") != _ref && e->getTags().get("REF2") != _ref)
       {
-        RecursiveElementRemover(eid).apply(_map);
+        RecursiveElementRemover(e->getElementId()).apply(_map);
       }
     }
 

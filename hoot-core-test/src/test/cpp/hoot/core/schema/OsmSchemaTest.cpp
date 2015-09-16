@@ -63,6 +63,7 @@ class OsmSchemaTest : public CppUnit::TestFixture
   CPPUNIT_TEST(isAncestorTest);
   CPPUNIT_TEST(isAreaTest);
   CPPUNIT_TEST(isMetaDataTest);
+  CPPUNIT_TEST(religionTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -79,6 +80,10 @@ public:
     double score;
     QString avg;
     avg = uut.average("highway=primary", "highway=residential", score);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.64, score, 0.001);
+    CPPUNIT_ASSERT_EQUAL(avg.toStdString(), std::string("highway=secondary"));
+
+    avg = uut.average("highway=Primary", "Highway=residential", score);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.64, score, 0.001);
     CPPUNIT_ASSERT_EQUAL(avg.toStdString(), std::string("highway=secondary"));
 
@@ -101,6 +106,20 @@ public:
     avg = uut.average("highway=primary", 5, "highway=service", 1, score);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.4096, score, 0.001);
     CPPUNIT_ASSERT_EQUAL(avg.toStdString(), std::string("highway=primary"));
+
+    avg = uut.average("amenity=bar", 5, "amenity=cafe", 1, score);
+    HOOT_STR_EQUALS("amenity=bar", avg.toStdString());
+
+    // when averaging a non-specific tag w/ a tag we know about always return the tag we know.
+    avg = uut.average("leisure=badvalue", 5, "leisure=track", 1, score);
+    HOOT_STR_EQUALS("leisure=track", avg.toStdString());
+
+    avg = uut.average("leisure=track", 5, "leisure=badvalue", 1, score);
+    HOOT_STR_EQUALS("leisure=track", avg.toStdString());
+
+    // when averaging two non-specific tags return the first tag.
+    avg = uut.average("leisure=badvalue1", 5, "leisure=badvalue2", 1, score);
+    HOOT_STR_EQUALS("leisure=badvalue1", avg.toStdString());
   }
 
   /**
@@ -205,6 +224,7 @@ public:
 
     OsmSchema uut;
 //    JsonSchemaLoader::load(uut, hootHome + "/conf/schema.json");
+//    JsonSchemaLoader::load(uut, hootHome + "/conf/schema/schema.json");
     JsonSchemaLoader::load(uut, ConfPath::search("schema.json"));
 
     QFile fp("tmp/schema.dot");
@@ -255,7 +275,11 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, d, 0.001);
     d = uut.score("highway=primary", "highway=bad_value");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, d, 0.001);
+    d = uut.score("Highway=primary", "highway=Bad_value");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, d, 0.001);
     d = uut.score("highway=secondary", "highway=residential");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.64, d, 0.001);
+    d = uut.score("HIGHWAY=Secondary", "hiGHway=ResidenTial");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.64, d, 0.001);
     d = uut.score("highway=primary", "highway=residential");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.512, d, 0.001);
@@ -346,6 +370,24 @@ public:
     CPPUNIT_ASSERT_EQUAL(true, OsmSchema::getInstance().isAncestor("highway=secondary",
       "highway=road"));
   }
+
+  void religionTest()
+  {
+    OsmSchema uut;
+    uut.loadDefault();
+
+    double d;
+    // These should have a high score. The exact value isn't important.
+    d = uut.score("building=mosque", "amenity=place_of_worship");
+    CPPUNIT_ASSERT(d >= 0.8);
+    // These shouldn't have a high score. The exact score isn't important.
+    d = uut.score("building=mosque", "amenity=church");
+    CPPUNIT_ASSERT(d <= 0.3);
+    // These should have a high score. The exact value isn't important.
+    d = uut.score("building=abbey", "amenity=church");
+    CPPUNIT_ASSERT(d >= 0.8);
+  }
+
 
 
 };

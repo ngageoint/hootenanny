@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagMergerFactory.h"
 
@@ -42,14 +42,7 @@ TagMergerFactory::TagMergerFactory()
 
 TagMergerFactory::~TagMergerFactory()
 {
-  for (QHash<QString, const TagMerger*>::const_iterator it = _mergers.begin(); it != _mergers.end();
-       ++it)
-  {
-    delete it.value();
-  }
-
-  _mergers.clear();
-  _default = 0;
+  reset();
 }
 
 const TagMerger& TagMergerFactory::getDefault()
@@ -66,11 +59,11 @@ const TagMerger& TagMergerFactory::getDefault()
 
 const TagMerger& TagMergerFactory::getMerger(const QString& name)
 {
-  const TagMerger* result = 0;
-  QHash<QString, const TagMerger*>::const_iterator it = _mergers.find(name);
+  shared_ptr<const TagMerger> result;
+  QHash<QString, shared_ptr<const TagMerger> >::const_iterator it = _mergers.find(name);
   if (it == _mergers.end())
   {
-    result = Factory::getInstance().constructObject<TagMerger>(name.toStdString());
+    result.reset(Factory::getInstance().constructObject<TagMerger>(name.toStdString()));
     _mergers.insert(name, result);
   }
   else
@@ -84,6 +77,12 @@ const TagMerger& TagMergerFactory::getMerger(const QString& name)
 Tags TagMergerFactory::mergeTags(const Tags& t1, const Tags& t2, ElementType et)
 {
   return getInstance().getDefault().mergeTags(t1, t2, et);
+}
+
+void TagMergerFactory::reset()
+{
+  _default = 0;
+  _mergers.clear();
 }
 
 }

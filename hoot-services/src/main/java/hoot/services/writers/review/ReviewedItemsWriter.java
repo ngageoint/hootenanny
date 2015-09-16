@@ -22,11 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.writers.review;
 
 import java.sql.Connection;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,7 +37,6 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-
 import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +50,6 @@ import hoot.services.db.DbUtils.RecordBatchType;
 import hoot.services.db.postgres.PostgresUtils;
 import hoot.services.db2.QReviewItems;
 import hoot.services.db2.ReviewItems;
-
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
@@ -94,9 +93,6 @@ public class ReviewedItemsWriter
    * Updates the review tables in the services database with the reviewed item details associated
    * with the specified map layer
    *
-   * See this for more details:
-   *
-   * https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_Conflated_Data_Review_Service_2#Mark-Items-as-Reviewed
    *
    * @param reviewedItems the reviewed items
    * @returns the number of items marked as reviewed
@@ -145,17 +141,20 @@ public class ReviewedItemsWriter
         //now update the review and uuid tags on the corresponding osm elements
         try
         {
+        	//now trying to do this client side instead...
           addUpdatedOsmRecord(
             reviewedItem.getId(),
             Element.elementTypeFromString(reviewedItem.getType().toLowerCase()),
             reviewedAgainstItemUniqueId,
             false);
+          //TODO: what does "duplicated review pairs" mean?  Disabling this for now, until I figure
+          //it out 
           //this second call will handle any duplicated review pairs
-          addUpdatedOsmRecord(
+          /*addUpdatedOsmRecord(
             reviewedItem.getReviewedAgainstId(),
             Element.elementTypeFromString(reviewedItem.getReviewedAgainstType().toLowerCase()),
             reviewedItemUniqueId,
-            true);
+            true);*/
         }
         catch (Exception e)
         {
@@ -174,7 +173,6 @@ public class ReviewedItemsWriter
       		predicates.add(reviewItems.reviewId.eq(reviewRecordsToUpdate.get(i).getReviewId()));
       		predicatelist.add(predicates);
       	}
-
 
         DbUtils.batchRecords(mapId, reviewRecordsToUpdate, reviewItems, predicatelist, RecordBatchType.UPDATE, conn, maxRecordBatchSize);
         log.debug(reviewRecordsToUpdate.size() + " review records updated.");
@@ -195,60 +193,24 @@ public class ReviewedItemsWriter
           	//List<List<BooleanExpression>> predicatelist = new ArrayList<List<BooleanExpression>>();
           	//com.mysema.query.sql.RelationalPathBase<?> t = null;
           	List<?> elems = osmRecordsToUpdate.get(elementType);
+          	//TODO: make this generic again as before the jooq --> querydsl conversion
           	if(elementType == ElementType.Node)
           	{
-          		/*QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-          		t = currentNodes;
-
-          		for(int i=0; i<elems.size(); i++)
-          		{
-          			List<BooleanExpression> predicates = new ArrayList<BooleanExpression>();
-          			CurrentNodes node = (CurrentNodes)elems.get(i);
-
-          			predicates.add(currentNodes.id.eq(node.getId()));
-          			predicates.add(currentNodes.mapId.eq(node.getMapId()));
-          			predicatelist.add(predicates);
-          		}    */
           		DbUtils.batchRecordsDirectNodes(mapId, elems,
           				RecordBatchType.UPDATE, conn, maxRecordBatchSize);
           	}
           	else if(elementType == ElementType.Way)
           	{
-          		/*QCurrentWays currentWays = QCurrentWays.currentWays;
-          		t = currentWays;
-
-          		for(int i=0; i<elems.size(); i++)
-          		{
-          			List<BooleanExpression> predicates = new ArrayList<BooleanExpression>();
-          			CurrentWays way = (CurrentWays)elems.get(i);
-
-          			predicates.add(currentWays.id.eq(way.getId()));
-          			predicates.add(currentWays.mapId.eq(way.getMapId()));
-          			predicatelist.add(predicates);
-          		}  */
           		DbUtils.batchRecordsDirectWays(mapId, elems,
           				RecordBatchType.UPDATE, conn, maxRecordBatchSize);
           	}
           	else if(elementType == ElementType.Relation)
           	{
-          		/*QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
-          		t = currentRelations;
-
-          		for(int i=0; i<elems.size(); i++)
-          		{
-          			List<BooleanExpression> predicates = new ArrayList<BooleanExpression>();
-          			CurrentRelations rel = (CurrentRelations)elems.get(i);
-
-          			predicates.add(currentRelations.id.eq(rel.getId()));
-          			predicates.add(currentRelations.mapId.eq(rel.getMapId()));
-          			predicatelist.add(predicates);
-          		}    */
           		DbUtils.batchRecordsDirectRelations(mapId, elems,
           				RecordBatchType.UPDATE, conn, maxRecordBatchSize);
           	}
 
           	//DbUtils.batchRecords(elems, t, predicatelist, RecordBatchType.UPDATE, conn, maxRecordBatchSize);
-
 
             numOsmRecordsUpdated += osmRecordsToUpdate.get(elementType).size();
           	/*
@@ -285,10 +247,13 @@ public class ReviewedItemsWriter
     {
       reviewedItemPojo.setReviewStatus(DbUtils.review_status_enum.reviewed);
       reviewedItemPojo.setChangesetId(changesetId);
+      Timestamp st = new Timestamp(0);
+      reviewedItemPojo.setLastAccessed(st);
       reviewRecordsToUpdate.add(reviewedItemPojo);
     }
   }
 
+  @SuppressWarnings("unused")
   private void addUpdatedOsmRecord(final long reviewedItemOsmId,
     final ElementType reviewedItemOsmType, final String reviewedAgainstItemUniqueId,
     final boolean isDuplicate) throws Exception
@@ -309,8 +274,8 @@ public class ReviewedItemsWriter
         PostgresUtils.postgresObjToHStore(
           (PGobject)MethodUtils.invokeMethod(reviewedElementRecord, "getTags", new Object[]{}));
 
-
-      if (tags.containsKey("uuid"))
+      //let the osm changeset save from the client handle this instead
+      /*if (tags.containsKey("uuid"))
       {
         String uuid = tags.get("uuid");
         if (!isDuplicate && !uuid.contains(reviewedAgainstItemUniqueId))
@@ -326,7 +291,7 @@ public class ReviewedItemsWriter
         log.warn(
           "uuid tag removed from reviewed element with ID: " + reviewedItemOsmId +
           " and type: " + reviewedItemOsmType);
-      }
+      }*/
 
       if (tags.containsKey("uuid"))
       {

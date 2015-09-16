@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wfs;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DataDefinitionManager;
 import hoot.services.utils.ResourceErrorHandler;
+import hoot.services.utils.XmlDocumentBuilder;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -36,7 +37,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Future;
 
 import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.DocumentBuilder;
@@ -47,7 +47,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
@@ -73,7 +72,8 @@ import org.w3c.dom.Element;
 
 public class WfsManager {
 	private static final Logger log = LoggerFactory.getLogger(WfsManager.class);
-	private String coreJobServerUrl = null;
+	@SuppressWarnings("unused")
+  private String coreJobServerUrl = null;
 	private String wfsStoreConnName = null;
 	private String wfsStoreDb = null;
 	public WfsManager()
@@ -138,7 +138,7 @@ public class WfsManager {
 			
 			HttpEntity entity = response.getEntity();
 			if (entity != null) {
-			    long len = entity.getContentLength();
+			    entity.getContentLength();
 			    ret = EntityUtils.toString(entity);
 
 			}
@@ -160,7 +160,7 @@ public class WfsManager {
 	    final HttpPut request1 = new HttpPut(url);
 	    StringEntity se = new StringEntity( content);  
 	    request1.setEntity(se);
-	    Future<HttpResponse> future = httpclient.execute(request1, null);
+	    httpclient.execute(request1, null);
 			
 		} catch (Exception ee){
 			//log.error(ee.getMessage());
@@ -234,12 +234,10 @@ public class WfsManager {
 	/*	URL url = ETLProcesslet.class.getClassLoader().getResource("../../WEB-INF/workspace/datasources/feature");
     String wfsFeaturePath = url.getPath();
     */
-    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+    DocumentBuilderFactory dbFactory = XmlDocumentBuilder.getSecureDocBuilderFactory();
     DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
     Document doc = dBuilder.newDocument();
     
-
-
     Element root = doc.createElement("SQLFeatureStore");
     doc.appendChild(root);
     root.setAttribute("configVersion", "3.2.0");
@@ -247,8 +245,6 @@ public class WfsManager {
     root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
     root.setAttribute("xsi:schemaLocation", "http://www.deegree.org/datasource/feature/sql" + 
     		"  http://schemas.deegree.org/datasource/feature/sql/3.2.0/sql.xsd");
-    
-    
     
     Element elem = doc.createElement("JDBCConnId");
     elem.appendChild(doc.createTextNode(connectionName));
@@ -262,8 +258,9 @@ public class WfsManager {
       root.appendChild(elem);
     }
 
-    
     TransformerFactory transformerFactory = TransformerFactory.newInstance();
+    //TODO: Fortify may require this instead but it doesn't work.
+    //TransformerFactory transformerFactory = XmlDocumentBuilder.getSecureTransformerFactory();
 		Transformer transformer = transformerFactory.newTransformer();
 		//transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 		StringWriter writer = new StringWriter();
@@ -280,6 +277,7 @@ public class WfsManager {
 		catch (Exception ex)
 		{
 			log.error(ex.getMessage());
+			throw ex;
 		}
 		
 	}
@@ -308,6 +306,7 @@ public class WfsManager {
 		catch(Exception ex)
 		{
 			log.error(ex.getMessage());
+			throw ex;
 		}
 	}
 	

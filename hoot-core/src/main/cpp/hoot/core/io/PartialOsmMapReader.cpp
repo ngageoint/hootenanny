@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PartialOsmMapReader.h"
 
@@ -33,6 +33,7 @@ namespace hoot
 PartialOsmMapReader::PartialOsmMapReader()
 {
   setMaxElementsPerMap(ConfigOptions().getMaxElementsPerPartialMap());
+  _elementsRead = 0;
 }
 
 void PartialOsmMapReader::read(shared_ptr<OsmMap> map)

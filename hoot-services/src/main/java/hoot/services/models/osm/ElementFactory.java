@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
@@ -125,7 +125,8 @@ public class ElementFactory
   		}
   	}
     Long oMapId = new Long(mapId);
-    String className = ClassUtils.getPackageName(ElementFactory.class) + "." + elementType.toString();
+    ClassUtils.getPackageName(ElementFactory.class);
+		elementType.toString();
     return
       (Element)ConstructorUtils.invokeConstructor(
         Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType.toString()),

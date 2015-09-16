@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
@@ -134,18 +134,17 @@ public class Node extends Element
           .singleResult(currentNodes);
 
     }
-    return new BoundingBox(DbUtils.fromDbCoordValue(nodeRecord.getLongitude()),
-        DbUtils.fromDbCoordValue(nodeRecord.getLatitude()), DbUtils.fromDbCoordValue(nodeRecord
-            .getLongitude()), DbUtils.fromDbCoordValue(nodeRecord.getLatitude()));
+    return new BoundingBox(nodeRecord.getLongitude(), nodeRecord.getLatitude(), 
+      nodeRecord.getLongitude(), nodeRecord.getLatitude());
   }
 
   /**
-   * Returns the nodes specified in the collection of nodes ID's
+   * Returns the nodes specified in the collection of nodes IDs
    *
    * @param mapId
    *          ID of the map the nodes belong to
    * @param nodeIds
-   *          a collection of node ID's
+   *          a collection of node IDs
    * @param dbConn
    *          JDBC Connection
    * @return a collection of node records
@@ -170,12 +169,12 @@ public class Node extends Element
       }
 
   /**
-   * Returns the ID's of all ways which own this node
+   * Returns the IDs of all ways which own this node
    *
    * The ordering of returned records by ID and the use of TreeSet to keep them
    * sorted is only for error reporting readability purposes only.
    *
-   * @return a sorted list of way ID's
+   * @return a sorted list of way IDs
    * @throws DataAccessException
    * @throws Exception
    */
@@ -234,7 +233,7 @@ public class Node extends Element
       nodeRecord.setVisible(true);
       // Lat/lon are required here on a delete request as well, b/c it keeps
       // from having to do a round
-      // trip to the db to get the node lat/long before its deleted, so that can
+      // trip to the db to get the node lat/long before it is deleted, so that can
       // be used to update
       // the changeset bounds (rails port does it this way).
       latitude = Double.parseDouble(xmlAttributes.getNamedItem("lat").getNodeValue());
@@ -261,15 +260,15 @@ public class Node extends Element
       // existence of record has already been checked
       // TODO: inefficient
       assert (existingRecord != null);
-      latitude = DbUtils.fromDbCoordValue(existingRecord.getLatitude());
-      longitude = DbUtils.fromDbCoordValue(existingRecord.getLongitude());
+      latitude = existingRecord.getLatitude();
+      longitude = existingRecord.getLongitude();
     }
     // If the node is being deleted, we still need to make sure that the coords
     // passed in match
     // what's on the server, since we'll be relying on them to compute the
     // changeset bounds.
-    nodeRecord.setLatitude(DbUtils.toDbCoordValue(latitude));
-    nodeRecord.setLongitude(DbUtils.toDbCoordValue(longitude));
+    nodeRecord.setLatitude(latitude);
+    nodeRecord.setLongitude(longitude);
     // no point in updating the tile if we're not deleting
     if (!entityChangeType.equals(EntityChangeType.DELETE))
     {
@@ -295,7 +294,7 @@ public class Node extends Element
    * @param modifyingUserDisplayName
    *          user display name of the user which created this element
    ** @param multiLayerUniqueElementIds
-   *          if true, ID's are prepended with <map id>_<first letter of the
+   *          if true, IDs are prepended with <map id>_<first letter of the
    *          element type>_; this setting activated is not compatible with
    *          standard OSM clients (specific to Hootenanny iD)
    * @param addChildren
@@ -312,10 +311,8 @@ public class Node extends Element
     CurrentNodes nodeRecord = (CurrentNodes) record;
     if (nodeRecord.getVisible())
     {
-      element.setAttribute("lat",
-          String.valueOf(DbUtils.fromDbCoordValue(nodeRecord.getLatitude())));
-      element.setAttribute("lon",
-          String.valueOf(DbUtils.fromDbCoordValue(nodeRecord.getLongitude())));
+      element.setAttribute("lat", String.valueOf(nodeRecord.getLatitude()));
+      element.setAttribute("lon", String.valueOf(nodeRecord.getLongitude()));
     }
 
     org.w3c.dom.Element elementWithTags = addTagsXml(element);
@@ -526,8 +523,8 @@ public class Node extends Element
 
       String sql = "INSERT INTO current_nodes_" + mapId + "(\n"
           + "            id, latitude, longitude, changeset_id,  visible, \"timestamp\", tile, version, tags)\n"
-          + " VALUES(" + nodeId + "," + DbUtils.toDbCoordValue(latitude) + ","
-          + DbUtils.toDbCoordValue(longitude) + "," + changesetId + "," + "true" + ","
+          + " VALUES(" + nodeId + "," + latitude + ","
+          + longitude + "," + changesetId + "," + "true" + ","
           + "CURRENT_TIMESTAMP" + "," + QuadTileCalculator.tileForPoint(latitude, longitude) + ","
           + "1" + "," + strTags +
 

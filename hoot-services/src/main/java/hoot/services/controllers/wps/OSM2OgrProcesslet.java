@@ -22,11 +22,9 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
-
-import java.util.concurrent.Future;
 
 import org.deegree.services.wps.ProcessletException;
 import org.deegree.services.wps.ProcessletExecutionInfo;
@@ -37,7 +35,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
@@ -106,7 +103,7 @@ public class OSM2OgrProcesslet extends BaseProcesslet {
 			    final HttpPost request1 = new HttpPost(coreJobServerUrl + "/hoot-services/job/" + jobIdStr);
 			    StringEntity se = new StringEntity( commandStr);  
 			    request1.setEntity(se);
-			    Future<HttpResponse> future = httpclient.execute(request1, null);
+			    httpclient.execute(request1, null);
 				
 			} catch (Exception ee){
 				

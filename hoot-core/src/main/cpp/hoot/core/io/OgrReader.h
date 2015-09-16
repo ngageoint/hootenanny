@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __OGR_READER_H__
@@ -63,6 +63,8 @@ class OgrReader : public PartialOsmMapReader
 {
 public:
 
+  static string className() { return "hoot::OgrReader"; }
+
   /**
    * Returns true if this appears to be a reasonable path without actually attempting to open the
    * data source.
@@ -83,6 +85,15 @@ public:
 
   QStringList getFilteredLayerNames(QString path);
 
+  /**
+   * Read all geometry data from the specified path.
+   *
+   * @param path
+   * @param layer Read only from this layer. If no layer is specified then read from all geometry
+   *  layers.
+   * @param map Put what we read in this map.
+   * @param progress Report progress to this object.
+   */
   void read(QString path, QString layer, shared_ptr<OsmMap> map, Progress progress);
 
   void setDefaultCircularError(Meters circularError);
@@ -106,10 +117,6 @@ public:
   virtual void close();
 
   virtual bool isSupported(QString url);
-
-  void setLayerName(QString layerName);
-
-  QString getLayerName();
 
   virtual void open(QString url);
 

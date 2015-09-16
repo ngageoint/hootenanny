@@ -10,13 +10,13 @@
   <Title>LTDS Translate Service</Title>
   <Abstract><![CDATA[
   <DESCRIPTION>
-  To translate osm element into OGR/LTDS format 2 services are available. Standard rest endpoint and WPS end point. Both are access by post.
+  To translate an OSM element into OGR/LTDS format, there are 2 services are available: Standard REST endpoint and WPS endpoint. Both of these are accessed by POST.
   </DESCRIPTION>
   <EXAMPLE>
   <URL>http://localhost:8080/hoot-services/ogc</URL>
   <REQUEST_TYPE>POST</REQUEST_TYPE>
-  <INPUT>Please refer to the wiki page: https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OGR-LTDS_Translation_Service</INPUT>
-   <OUTPUT>Please refer to the wiki page: https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OGR-LTDS_Translation_Service</OUTPUT>
+  <INPUT></INPUT>
+   <OUTPUT></OUTPUT>
    </EXAMPLE>
   ]]></Abstract>
 	<!-- deegree doesn't honor optional input parameters for HTTP GET requests (only POSTs), so 

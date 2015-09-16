@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -112,7 +112,6 @@ public class ElementResource
 	 *	</INPUT>
 	 * <OUTPUT>
 	 *  OSM XML
-	 *  see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmElementService#Get-Element-By-ID
 	 * </OUTPUT>
 	 * </EXAMPLE>
    *
@@ -124,7 +123,6 @@ public class ElementResource
    * or relation
    * @return element XML document
    * @throws Exception
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmElementService#Get-Element-By-ID
    */
   @GET
   @Path("{elementType: node|way|relation}/{elementId}")
@@ -169,12 +167,12 @@ public class ElementResource
   }
   
   /**
-	 * <NAME>Element Service - Get Element By IDGet Element By Unique ID </NAME>
+	 * <NAME>Element Service - Get Element By ID Get Element By Unique ID </NAME>
 	 * <DESCRIPTION>
 	 * 	Convenience method which allows for retrieving a node, way, or relation by an OSM unique element ID.
 	 * Child element of ways and relations are not added to the output (use the "full" method for that functionality). The ID of
 	 * the map owning the element does not need to be specified in the query string because the information already exists in the
-	 * element ID. This method is not part of the OSM API
+	 * element ID. This method is not part of the OSM API.
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 *  <elementId>
@@ -191,7 +189,6 @@ public class ElementResource
 	 *	</INPUT>
 	 * <OUTPUT>
 	 *  OSM XML
-	 *  see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmElementService#Get-Element-By-Unique-ID
 	 * </OUTPUT>
 	 * </EXAMPLE>
    *
@@ -202,7 +199,6 @@ public class ElementResource
    * way, or relation
    * @return element XML document
    * @throws Exception
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmElementService#Get-Element-By-Unique-ID
    */
   @GET
   @Path("/element/{elementId}")
@@ -277,7 +273,6 @@ public class ElementResource
 	 *	</INPUT>
 	 * <OUTPUT>
 	 *  OSM XML
-	 *  see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmElementService#Get-Full-Element-By-ID
 	 * </OUTPUT>
 	 * </EXAMPLE>
    *
@@ -289,7 +284,6 @@ public class ElementResource
    * or relation
    * @return element XML document
    * @throws Exception
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmElementService#Get-Full-Element-By-ID
    */
   @GET
   @Path("/{elementType: way|relation}/{elementId}/full")
@@ -339,7 +333,7 @@ public class ElementResource
 	 * 	Convenience method which allows for retrieving a way or relation and all of its child
 	 * elements (way nodes or relation members) by an OSM unique element ID. The ID of the map owning
 	 * the element does not need to be specified in the query string because the information already exists
-	 * in the element ID. This method is not part of the OSM API
+	 * in the element ID. This method is not part of the OSM API.
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 *  <elementId>
@@ -358,7 +352,6 @@ public class ElementResource
 	 *	</INPUT>
 	 * <OUTPUT>
 	 *  OSM XML
-	 *  see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmElementService#Get-Full-Element-By-Unique-ID
 	 * </OUTPUT>
 	 * </EXAMPLE>
    *
@@ -369,7 +362,6 @@ public class ElementResource
    * way or relation
    * @return element XML document
    * @throws Exception
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmElementService#Get-Full-Element-By-Unique-ID
    */
   @GET
   @Path("/element/{elementId}/full")
@@ -521,7 +513,6 @@ public class ElementResource
 	 *	</INPUT>
 	 * <OUTPUT>
 	 *  OSM XML
-	 *  see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmElementService#Get-Element-By-ID
 	 * </OUTPUT>
 	 * </EXAMPLE>
    *
@@ -533,7 +524,6 @@ public class ElementResource
    * or relation
    * @return element XML document
    * @throws Exception
-   * @see https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/User_-_OsmElementService#Get-Element-By-ID
    */
   @GET
   @Path("{elementType: nodes|ways|relations}")
@@ -564,7 +554,7 @@ public class ElementResource
     {
       log.debug("Initializing database connection...");
       
-      elementDoc = getElementsXml(mapId, elemIds, elementTypeVal, false, false, conn);
+      elementDoc = getElementsXml(mapId, elemIds, elementTypeVal, false, true, conn);
     }
     finally
     {

@@ -32,7 +32,7 @@
         <member type="node" ref="-2" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Close, but not close enough"/>
+        <tag k="hoot:review:note" v="Somewhat similar - similar POI type"/>
         <tag k="type" v="review"/>
     </relation>
 </osm>

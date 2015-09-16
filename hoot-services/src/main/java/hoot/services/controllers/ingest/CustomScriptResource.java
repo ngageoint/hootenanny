@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -32,8 +32,6 @@ import java.io.IOException;
 import java.io.FileReader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -63,6 +61,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Function;
 
 @Path("/customscript")
@@ -73,6 +73,8 @@ public class CustomScriptResource
   protected String homeFolder = null;
   protected String jsHeaderScriptPath = null;
   protected String defaultTranslationsConfig = null;
+  protected String defaultFOUOTranslationsConfig = null;
+  private boolean fouoTranslationsExist = false;
   private static final String headerStart = "/*<<<";
   private static final String headerEnd = ">>>*/\n";
 
@@ -100,6 +102,16 @@ public class CustomScriptResource
       String homeFolder = HootProperties.getProperty("homeFolder");
       scriptFolder = homeFolder + "/" + HootProperties.getProperty("customScriptPath");
       defaultTranslationsConfig = HootProperties.getProperty("defaultTranslationsConfig");
+      defaultFOUOTranslationsConfig = HootProperties.getProperty("defaultFOUOTranslationsConfig");
+      if ((new File(defaultFOUOTranslationsConfig)).exists())
+      {
+      	fouoTranslationsExist = true;
+      	log.info("FOUO translations are present.");
+      }
+      else
+      {
+      	log.info("FOUO translations are not present.");
+      }
     }
     catch (Exception ex)
     {
@@ -168,6 +180,7 @@ public class CustomScriptResource
    * @param scriptDescription
    * @return
    */
+  @SuppressWarnings("unchecked")
   @POST
   @Path("/save")
   @Consumes(MediaType.TEXT_PLAIN)
@@ -235,6 +248,7 @@ public class CustomScriptResource
 	 * </EXAMPLE>
    * @return
    */
+  @SuppressWarnings("unchecked")
   @GET
   @Path("/getlist")
   @Produces(MediaType.TEXT_PLAIN)
@@ -272,7 +286,13 @@ public class CustomScriptResource
           }
         }
       }
-      filesList.addAll(_getDefaultList());
+      List<String> configFiles = new ArrayList<String>();
+      configFiles.add(defaultTranslationsConfig);
+      if (fouoTranslationsExist)
+      {
+      	configFiles.add(defaultFOUOTranslationsConfig);
+      }
+      filesList.addAll(_getDefaultList(configFiles));
 
       // sort the list
       for (Object o : filesList)
@@ -293,7 +313,7 @@ public class CustomScriptResource
 
     return Response.ok(retList.toString(), MediaType.TEXT_PLAIN).build();
   }
-
+  
   /**
    * _getDefaultList reads the DefaultTranslations.json and passes default translations list.
    * The list is used by UI to distinguish between custom and default translations.
@@ -301,75 +321,75 @@ public class CustomScriptResource
    * @return JSONArray of translation objects
    * @throws Exception
    */
-  protected JSONArray _getDefaultList() throws Exception
+  @SuppressWarnings("unchecked")
+  protected JSONArray _getDefaultList(final List<String> configFiles) throws Exception
   {
   	JSONArray filesList = new JSONArray();
 
-  	//defaultTranslationsConfig
-
-  	File f = new File(defaultTranslationsConfig);
-  	if(f.exists())
+  	for (String configFile : configFiles)
   	{
-  		FileReader reader = new FileReader(defaultTranslationsConfig);
-  		JSONParser jsonParser = new JSONParser();
-  		JSONArray defTranslations = (JSONArray)jsonParser.parse(reader);
-  		for(int i=0; i < defTranslations.size(); i++)
-  		{
-  			JSONObject oTrans = (JSONObject)defTranslations.get(i);
-  			oTrans.put("DEFAULT", true);
-  			String desc = oTrans.get("DESCRIPTION").toString();
-  			if(desc.length() == 0)
-  			{
-  				desc = oTrans.get("NAME").toString();
-  			}
-  			desc += " (Hootenanny Default)";
-  			oTrans.put("DESCRIPTION", desc);
+  		File f = new File(configFile);
+    	if(f.exists())
+    	{
+    		FileReader reader = new FileReader(configFile);
+    		JSONParser jsonParser = new JSONParser();
+    		JSONArray defTranslations = (JSONArray)jsonParser.parse(reader);
+    		for(int i=0; i < defTranslations.size(); i++)
+    		{
+    			JSONObject oTrans = (JSONObject)defTranslations.get(i);
+    			oTrans.put("DEFAULT", true);
+    			String desc = oTrans.get("DESCRIPTION").toString();
+    			if(desc.length() == 0)
+    			{
+    				desc = oTrans.get("NAME").toString();
+    			}
+    			desc += " (Hootenanny Default)";
+    			oTrans.put("DESCRIPTION", desc);
 
-  			Object oCanExport = oTrans.get("CANEXPORT");
+    			Object oCanExport = oTrans.get("CANEXPORT");
 
-  			// If the CANEXPORT is not available then try to determine
-  			if(oCanExport == null)
-  			{
-  				// Get the script
-  				if(oTrans.get("PATH") != null)
-  				{
-  					File fScript = new File(homeFolder + "/" + oTrans.get("PATH").toString());
-  					if(fScript.exists())
-  					{
-  						String sScript = FileUtils.readFileToString(fScript);
-  						boolean canExport = validateExport(sScript);
-  						oTrans.put("CANEXPORT", canExport);
-  					}
+    			// If the CANEXPORT is not available then try to determine
+    			if(oCanExport == null)
+    			{
+    				// Get the script
+    				if(oTrans.get("PATH") != null)
+    				{
+    					File fScript = new File(homeFolder + "/" + oTrans.get("PATH").toString());
+    					if(fScript.exists())
+    					{
+    						String sScript = FileUtils.readFileToString(fScript);
+    						boolean canExport = validateExport(sScript);
+    						oTrans.put("CANEXPORT", canExport);
+    					}
+    				}
+    			}
+    		}
 
-  				}
-  			}
-
-  		}
-
-  		// validate FOUO support
-  		if(defTranslations.size() > 0)
-  		{
-  			for(Object oTrans : defTranslations)
-  			{
-  				JSONObject jsTrans = (JSONObject) oTrans;
-  				if(jsTrans.get("FOUO_PATH") != null)
-  				{
-  					// See if FOUO folder exists
-  					File fouoPath = new File(homeFolder + "/" + jsTrans.get("FOUO_PATH").toString());
-  					if(fouoPath.exists())
-  					{
-  						filesList.add(jsTrans);
-  					}
-  				}
-  				else
-  				{
-  					// If there is no FOUO_PATH then assume it is not FOUO translation
-  					filesList.add(jsTrans);
-  				}
-  			}
-
-  		}
+    		// validate FOUO support
+    		if(defTranslations.size() > 0)
+    		{
+    			for(Object oTrans : defTranslations)
+    			{
+    				JSONObject jsTrans = (JSONObject) oTrans;
+    				if(jsTrans.get("FOUO_PATH") != null)
+    				{
+    					// See if FOUO folder exists
+    					File fouoPath = new File(homeFolder + "/" + jsTrans.get("FOUO_PATH").toString());
+    					if(fouoPath.exists())
+    					{
+    						filesList.add(jsTrans);
+    					}
+    				}
+    				else
+    				{
+    					// If there is no FOUO_PATH then assume it is not FOUO translation
+    					filesList.add(jsTrans);
+    				}
+    			}
+    		}
+    	}
   	}
+  	
   	return filesList;
   }
 
@@ -480,8 +500,6 @@ public class CustomScriptResource
     return Response.ok(script, MediaType.TEXT_PLAIN).build();
   }
 
-
-
 	/**
 	 * <NAME>Custom Script Service Get Default Script</NAME>
 	 * <DESCRIPTION>Returns the default script.</DESCRIPTION>
@@ -549,7 +567,14 @@ public class CustomScriptResource
     {
     	// See Bug #6483 Read vulnerability in services script API
     	boolean bPathValidated = false;
-    	JSONArray defList = _getDefaultList();
+    	List<String> configFiles = new ArrayList<String>();
+    	configFiles.add(defaultTranslationsConfig);
+    	if (fouoTranslationsExist)
+    	{
+    		configFiles.add(defaultFOUOTranslationsConfig);
+    	}
+    	JSONArray defList = _getDefaultList(configFiles);
+    	
     	for(int i=0; i<defList.size(); i++) {
     		JSONObject item = (JSONObject)defList.get(i);
     		
@@ -613,6 +638,7 @@ public class CustomScriptResource
    * @param scriptName
    * @return
    */
+  @SuppressWarnings("unchecked")
   @GET
   @Path("/deletescript")
   @Produces(MediaType.TEXT_PLAIN)
@@ -721,6 +747,7 @@ public class CustomScriptResource
     return response;
   }
 
+  @SuppressWarnings("unchecked")
   protected JSONObject getScriptObject(String content) throws Exception
   {
     JSONObject script = new JSONObject();
@@ -760,6 +787,7 @@ public class CustomScriptResource
     return (List<File>)FileUtils.listFiles(scriptsDir, exts, false);
   }
 
+  @SuppressWarnings("unchecked")
   private JSONObject saveScript(final String name, final String description, final String content)
     throws Exception
   {
@@ -802,8 +830,9 @@ public class CustomScriptResource
     return oHeader;
   }
 
-  // This function checks to see if the script has both getDbSchema and translateToOgr which indicates if it can export
-  protected boolean validateExport(String script)
+  // This function checks to see if the script has both getDbSchema and translateToOgr which 
+  // indicates if it can export
+  protected boolean validateExport(String script) throws Exception
   {
 
   	boolean canExport = false;
@@ -862,10 +891,14 @@ public class CustomScriptResource
     catch(Exception ex)
     {
     	log.error(ex.getMessage());
+    	if (ex instanceof EvaluatorException)
+    	{
+    		throw ex;
+    	}
     }
     finally
     {
-    	context.exit();
+    	Context.exit();
     }
     return canExport;
   }

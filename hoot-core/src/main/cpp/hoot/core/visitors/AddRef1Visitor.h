@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDREF1VISITOR_H
 #define ADDREF1VISITOR_H
@@ -63,7 +63,7 @@ public:
    * greater than zero then the element is tagged with a REF1. The unique string is simply a counter
    * so it isn't going to be unique across multiple runs.
    */
-  virtual void visit(ElementType type, long id);
+  virtual void visit(const ConstElementPtr& e);
 
 private:
   OsmMap* _map;

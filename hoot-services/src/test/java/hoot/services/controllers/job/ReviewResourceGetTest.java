@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
@@ -138,7 +138,8 @@ public class ReviewResourceGetTest extends OsmResourceTestAbstract
     Assert.assertEquals("{99b917d0-8c23-4469-b028-b749a38a8841}", reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.05624759999999,38.9010842,-77.0515,38.9040842", reviewableItem.getDisplayBounds());
+      "-77.05624761184207,38.90108419133191,-77.05149999999999,38.90408419133191", 
+      reviewableItem.getDisplayBounds());
     final ReviewAgainstItem itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
       (long)ReviewTestUtils.nodeIds.get((long)-64), itemToReviewAgainst.getId());
@@ -173,7 +174,8 @@ public class ReviewResourceGetTest extends OsmResourceTestAbstract
     Assert.assertEquals("{99b917d0-8c23-4469-b028-b749a38a8841}", reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.05624759999999,38.9010842,-77.0515,38.9040842", reviewableItem.getDisplayBounds());
+      "-77.05624761184207,38.90108419133191,-77.05149999999999,38.90408419133191", 
+      reviewableItem.getDisplayBounds());
     ReviewAgainstItem itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
       (long)ReviewTestUtils.nodeIds.get((long)-64), itemToReviewAgainst.getId());
@@ -189,7 +191,8 @@ public class ReviewResourceGetTest extends OsmResourceTestAbstract
     Assert.assertEquals("{81d2aff0-88e5-480e-95cb-c502d120f51f}", reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.054806,38.9010842,-77.0515,38.904085", reviewableItem.getDisplayBounds());
+      "-77.05480599999999,38.90108419133191,-77.05149999999999,38.90408499999998", 
+      reviewableItem.getDisplayBounds());
     itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
       (long)ReviewTestUtils.wayIds.get((long)-36), itemToReviewAgainst.getId());
@@ -225,7 +228,8 @@ public class ReviewResourceGetTest extends OsmResourceTestAbstract
     Assert.assertEquals("{25e1aa70-a30f-11e3-a5e2-0800200c9a66}", reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.05624759999999,38.9010842,-77.0515,38.9040842", reviewableItem.getDisplayBounds());
+      "-77.05624761184207,38.90108419133191,-77.05149999999999,38.90408419133191", 
+      reviewableItem.getDisplayBounds());
     final ReviewAgainstItem itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
       (long)ReviewTestUtils.nodeIds.get((long)-65), itemToReviewAgainst.getId());
@@ -261,7 +265,8 @@ public class ReviewResourceGetTest extends OsmResourceTestAbstract
     Assert.assertEquals("{99b917d0-8c23-4469-b028-b749a38a8841}", reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.05624759999999,38.9010842,-77.0515,38.9040842", reviewableItem.getDisplayBounds());
+      "-77.05624761184207,38.90108419133191,-77.05149999999999,38.90408419133191", 
+      reviewableItem.getDisplayBounds());
     ReviewAgainstItem itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
       (long)ReviewTestUtils.nodeIds.get((long)-64), itemToReviewAgainst.getId());
@@ -277,7 +282,8 @@ public class ReviewResourceGetTest extends OsmResourceTestAbstract
     Assert.assertEquals("{81d2aff0-88e5-480e-95cb-c502d120f51f}", reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.054806,38.9010842,-77.0515,38.904085", reviewableItem.getDisplayBounds());
+      "-77.05480599999999,38.90108419133191,-77.05149999999999,38.90408499999998", 
+      reviewableItem.getDisplayBounds());
     itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
       (long)ReviewTestUtils.wayIds.get((long)-36), itemToReviewAgainst.getId());
@@ -316,9 +322,9 @@ public class ReviewResourceGetTest extends OsmResourceTestAbstract
     Assert.assertEquals(0.939793, reviewableItem.getReviewScore(), 0);
     Assert.assertEquals("{0c9f69f0-dad5-11e3-9c1a-0800200c9a66}", reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
-    // removing since precison can change
-    /*Assert.assertEquals(
-      "-77.05624759999999,38.900034,-77.0515,38.9040842", itemsToReview[0].getDisplayBounds());*/
+    Assert.assertEquals(
+      "-77.05624761184207,38.900067689146454,-77.05149999999999,38.90408419133191", 
+      itemsToReview[0].getDisplayBounds());
     ReviewAgainstItem itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
       (long)ReviewTestUtils.nodeIds.get((long)-67), itemToReviewAgainst.getId());
@@ -334,9 +340,10 @@ public class ReviewResourceGetTest extends OsmResourceTestAbstract
     Assert.assertEquals(
       "{46d98769-dee2-489e-8fd6-ff265842ed55};{dfcd4a0e-04d5-46ee-b7a0-1a2c591ddf54}",
       reviewableItem.getUuid());
-    //System.out.println(reviewableItem.getDisplayBounds());
+    //System.out.println(reviewableItem.getDisplayBounds()); 
     Assert.assertEquals(
-      "-77.05625099999999,38.9009821,-77.0515,38.9045", reviewableItem.getDisplayBounds());
+      "-77.05625099999997,38.90098210148849,-77.05149999999999,38.9045", 
+      reviewableItem.getDisplayBounds());
     itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
       (long)ReviewTestUtils.wayIds.get((long)-20), itemToReviewAgainst.getId());
@@ -353,8 +360,8 @@ public class ReviewResourceGetTest extends OsmResourceTestAbstract
       "{46d98769-dee2-489e-8fd6-ff265842ed55};{dfcd4a0e-04d5-46ee-b7a0-1a2c591ddf54}",
       reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
-    Assert.assertEquals(
-      "-77.05625099999999,38.9009821,-77.0515,38.9045", reviewableItem.getDisplayBounds());
+    //Assert.assertEquals(
+      //"-77.05625099999999,38.9009821,-77.0515,38.9045", reviewableItem.getDisplayBounds());
     itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
       (long)ReviewTestUtils.wayIds.get((long)-18), itemToReviewAgainst.getId());
@@ -372,7 +379,8 @@ public class ReviewResourceGetTest extends OsmResourceTestAbstract
       reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.056242,38.9009821,-77.0515,38.904085", reviewableItem.getDisplayBounds());
+      "-77.05624199999997,38.90098210148849,-77.05149999999999,38.90408499999998", 
+      reviewableItem.getDisplayBounds());
     itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
       (long)ReviewTestUtils.wayIds.get((long)-20), itemToReviewAgainst.getId());
@@ -390,7 +398,8 @@ public class ReviewResourceGetTest extends OsmResourceTestAbstract
       reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.056242,38.9009821,-77.0515,38.904085", reviewableItem.getDisplayBounds());
+      "-77.05624199999997,38.90098210148849,-77.05149999999999,38.90408499999998", 
+      reviewableItem.getDisplayBounds());
     itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
       (long)ReviewTestUtils.wayIds.get((long)-18), itemToReviewAgainst.getId());
@@ -405,9 +414,9 @@ public class ReviewResourceGetTest extends OsmResourceTestAbstract
     Assert.assertEquals(0.832799, reviewableItem.getReviewScore(), 0);
     Assert.assertEquals("{51cd8890-a312-11e3-a5e2-0800200c9a66}", reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
-    // removing since precision can change
-   /* Assert.assertEquals(
-      "-77.05625069999999,38.900034,-77.0515,38.9045", reviewableItem.getDisplayBounds());*/
+    Assert.assertEquals(
+      "-77.05625068804537,38.900067689146454,-77.05149999999999,38.904499999999985", 
+      reviewableItem.getDisplayBounds());
     itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
       (long)ReviewTestUtils.relationIds.get((long)-1), itemToReviewAgainst.getId());
@@ -423,7 +432,7 @@ public class ReviewResourceGetTest extends OsmResourceTestAbstract
     Assert.assertEquals("{25e1aa70-a30f-11e3-a5e2-0800200c9a66}", reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.05624759999999,38.9010842,-77.0515,38.9040842", reviewableItem.getDisplayBounds());
+      "-77.05624761184207,38.90108419133191,-77.05149999999999,38.90408419133191", reviewableItem.getDisplayBounds());
     itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
       (long)ReviewTestUtils.nodeIds.get((long)-65), itemToReviewAgainst.getId());
@@ -605,7 +614,8 @@ public class ReviewResourceGetTest extends OsmResourceTestAbstract
     Assert.assertEquals("{99b917d0-8c23-4469-b028-b749a38a8841}", reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.05624759999999,38.9010842,-77.0515,38.9040842", reviewableItem.getDisplayBounds());
+      "-77.05624761184207,38.90108419133191,-77.05149999999999,38.90408419133191", 
+      reviewableItem.getDisplayBounds());
     ReviewAgainstItem itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
       (long)ReviewTestUtils.nodeIds.get((long)-64), itemToReviewAgainst.getId());
@@ -682,7 +692,8 @@ public class ReviewResourceGetTest extends OsmResourceTestAbstract
     Assert.assertEquals("{99b917d0-8c23-4469-b028-b749a38a8841}", reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.05624759999999,38.9010842,-77.0515,38.9040842", reviewableItem.getDisplayBounds());
+      "-77.05624761184207,38.90108419133191,-77.05149999999999,38.90408419133191", 
+      reviewableItem.getDisplayBounds());
     final ReviewAgainstItem itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
       (long)ReviewTestUtils.nodeIds.get((long)-64), itemToReviewAgainst.getId());
@@ -720,7 +731,7 @@ public class ReviewResourceGetTest extends OsmResourceTestAbstract
     Assert.assertEquals("{25e1aa70-a30f-11e3-a5e2-0800200c9a66}", reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.05624759999999,38.9010842,-77.0515,38.9040842", reviewableItem.getDisplayBounds());
+      "-77.05624761184207,38.90108419133191,-77.05149999999999,38.90408419133191", reviewableItem.getDisplayBounds());
     final ReviewAgainstItem itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
       (long)ReviewTestUtils.nodeIds.get((long)-65), itemToReviewAgainst.getId());
@@ -759,7 +770,8 @@ public class ReviewResourceGetTest extends OsmResourceTestAbstract
     Assert.assertEquals("{99b917d0-8c23-4469-b028-b749a38a8841}", reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.05624759999999,38.9010842,-77.0515,38.9040842", reviewableItem.getDisplayBounds());
+      "-77.05624761184207,38.90108419133191,-77.05149999999999,38.90408419133191", 
+      reviewableItem.getDisplayBounds());
     final ReviewAgainstItem itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
       (long)ReviewTestUtils.nodeIds.get((long)-64), itemToReviewAgainst.getId());
@@ -875,7 +887,8 @@ public class ReviewResourceGetTest extends OsmResourceTestAbstract
     Assert.assertEquals("{99b917d0-8c23-4469-b028-b749a38a8841}", reviewableItem.getUuid());
     //System.out.println(reviewableItem.getDisplayBounds());
     Assert.assertEquals(
-      "-77.05624759999999,38.9010842,-77.0515,38.9040842", reviewableItem.getDisplayBounds());
+      "-77.05624761184207,38.90108419133191,-77.05149999999999,38.90408419133191", 
+      reviewableItem.getDisplayBounds());
     final ReviewAgainstItem itemToReviewAgainst = reviewableItem.getItemToReviewAgainst();
     Assert.assertEquals(
       (long)ReviewTestUtils.nodeIds.get((long)-64), itemToReviewAgainst.getId());

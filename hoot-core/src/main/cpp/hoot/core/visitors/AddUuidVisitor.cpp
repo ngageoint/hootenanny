@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AddUuidVisitor.h"
 
@@ -41,11 +41,11 @@ AddUuidVisitor::AddUuidVisitor(QString key) : _key(key)
 {
 }
 
-void AddUuidVisitor::visit(ElementType type, long id)
+void AddUuidVisitor::visit(const ConstElementPtr& e)
 {
-  shared_ptr<Element> e = _map->getElement(type, id);
+  shared_ptr<Element> ee = _map->getElement(e->getElementId());
 
-  e->getTags()[_key] = UuidHelper::createUuid().toString();
+  ee->getTags()[_key] = UuidHelper::createUuid().toString();
 }
 
 }

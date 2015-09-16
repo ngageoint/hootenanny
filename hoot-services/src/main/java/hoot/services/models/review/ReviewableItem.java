@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.review;
 
@@ -53,7 +53,9 @@ public class ReviewableItem
   
   private String displayBounds = null;
   public String getDisplayBounds() { return displayBounds; }
-  public void setDisplayBounds(String displayBounds) { this.displayBounds = displayBounds; }
+  public void setDisplayBounds(String displayBounds) { 
+  	this.displayBounds = displayBounds; 
+  	}
   
   private ReviewAgainstItem itemToReviewAgainst = null;
   public ReviewAgainstItem getItemToReviewAgainst() { return itemToReviewAgainst; }

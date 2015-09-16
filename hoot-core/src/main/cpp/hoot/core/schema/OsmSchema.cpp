@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <hoot/core/HootConfig.h>
@@ -251,24 +251,35 @@ public:
   }
 
 
-  QString average(const QString& kvp1, double w1, const QString& kvp2, double w2, double& score)
+  QString average(QString kvp1, double w1, QString kvp2, double w2, double& score)
   {
-    if (_kvp2Vertex.contains(kvp1) == false || _kvp2Vertex.contains(kvp2) == false)
+    QString result;
+    QString kvpNormalized1 = normalizeEnumeratedKvp(kvp1);
+    QString kvpNormalized2 = normalizeEnumeratedKvp(kvp2);
+    if (kvpNormalized1.isEmpty() || kvpNormalized2.isEmpty())
     {
       score = 0.0;
-      return kvp1;
+      result = kvp1;
+    }
+    else if (kvpNormalized2.endsWith("*"))
+    {
+      result = kvp1;
+    }
+    else if (kvpNormalized1.endsWith("*"))
+    {
+      result = kvp2;
     }
     else
     {
-      VertexId vid1 = _kvp2Vertex[kvp1];
-      VertexId vid2 = _kvp2Vertex[kvp2];
+      VertexId vid1 = _kvp2Vertex[kvpNormalized1];
+      VertexId vid2 = _kvp2Vertex[kvpNormalized2];
 
       AverageKey key(vid1, w1, vid2, w2);
       HashMap<AverageKey, AverageResult>::iterator it = _cachedAverages.find(key);
       if (it != _cachedAverages.end())
       {
         score = it->second.score;
-        return _graph[it->second.vid].name;
+        result = _graph[it->second.vid].name;
       }
       else
       {
@@ -276,9 +287,11 @@ public:
 
         _cachedAverages[key] = AverageResult(avgVid, score);
 
-        return _graph[avgVid].name;
+        result = _graph[avgVid].name;
       }
     }
+
+    return result;
   }
 
   void createTestingGraph()
@@ -465,7 +478,19 @@ public:
 
   QString getKey(const QString& kvp) const
   {
-    return kvp.split("=")[0];
+    // this is faster than using split and it gets called a lot.
+    QString result;
+    int index = kvp.indexOf('=');
+    if (index == -1)
+    {
+      result = kvp;
+    }
+    else
+    {
+      result = kvp.left(index);
+    }
+
+    return result;
   }
 
   vector<TagVertex> getTagByCategory(OsmSchemaCategory c)
@@ -532,63 +557,24 @@ public:
    */
   QString normalizeEnumeratedKvp(const QString& kvp)
   {
-    if (_kvp2Vertex.contains(kvp))
+    QString result = _normalizeEnumeratedKvp(kvp);
+    if (result.isEmpty())
     {
-      return kvp;
+      result = _normalizeEnumeratedKvp(kvp.toLower());
     }
-    else
-    {
-      QString newKvp = getKey(kvp) + "=*";
-      if (_kvp2Vertex.contains(newKvp))
-      {
-        return newKvp;
-      }
-      else
-      {
-        return QString();
-      }
-    }
+
+    return result;
   }
 
   QString normalizeKvp(const QString& kvp) const
   {
-    QString key = getKey(kvp);
-    if (_kvp2Vertex.contains(kvp))
+    QString result = _normalizeKvp(kvp);
+    if (result.isEmpty())
     {
-      return kvp;
+      result = _normalizeKvp(kvp.toLower());
     }
-    else if (_kvp2Vertex.contains(key + "=*"))
-    {
-      return getKey(kvp) + "=*";
-    }
-    else if (_kvp2Vertex.contains(key))
-    {
-      const TagVertex& v = _graph[_kvp2Vertex[key]];
-      if (v.valueType == Text || v.valueType == Int)
-      {
-        return key;
-      }
-      else
-      {
-        return QString();
-      }
-    }
-    else
-    {
-      // check to see if any of the regular expressions match
-      for (QList< pair<QRegExp, VertexId> >::const_iterator it = _regexKeys.begin();
-           it != _regexKeys.end(); ++it)
-      {
-        const QRegExp& re = it->first;
-        if (re.exactMatch(key))
-        {
-          VertexId vid = it->second;
-          return _graph[vid].key;
-        }
-      }
 
-      return QString();
-    }
+    return result;
   }
 
   double score(const QString& kvp1, const QString& kvp2)
@@ -689,11 +675,11 @@ public:
         QString trgStr = QString("v%1").arg(trg);
         if (_graph[*ei].type == IsA)
         {
-          result += QString("%1 -> %2 [arrowhead=normal,weight=10,label=\"%3\"];\n").arg(srcStr, trgStr).arg(_graph[*ei].similarToWeight);
+          result += QString("%1 -> %2 [arrowhead=normal,color=blue2,weight=2,label=\"%3\"];\n").arg(srcStr, trgStr).arg(_graph[*ei].similarToWeight);
         }
         else if (_graph[*ei].type == SimilarTo && _graph[*ei].show)
         {
-          result += QString("%1 -> %2 [arrowhead=odot,arrowtail=odot,label=\"%3\"];\n").
+          result += QString("%1 -> %2 [arrowhead=odot,color=chartreuse3,weight=1,arrowtail=odot,label=\"%3\"];\n").
               arg(srcStr, trgStr).arg(_graph[*ei].similarToWeight);
           used.insert(p);
         }
@@ -914,6 +900,68 @@ private:
   bool _isValid(VertexId vid)
   {
     return vid != numeric_limits<VertexId>::max();
+  }
+
+  QString _normalizeEnumeratedKvp(const QString& kvp)
+  {
+    static QString equalStar = "=*";
+    if (_kvp2Vertex.contains(kvp))
+    {
+      return kvp;
+    }
+    else
+    {
+      QString newKvp = getKey(kvp) + equalStar;
+      if (_kvp2Vertex.contains(newKvp))
+      {
+        return newKvp;
+      }
+      else
+      {
+        return QString();
+      }
+    }
+  }
+
+  QString _normalizeKvp(const QString& kvp) const
+  {
+    QString key = getKey(kvp);
+    if (_kvp2Vertex.contains(kvp))
+    {
+      return kvp;
+    }
+    else if (_kvp2Vertex.contains(key + "=*"))
+    {
+      return getKey(kvp) + "=*";
+    }
+    else if (_kvp2Vertex.contains(key))
+    {
+      const TagVertex& v = _graph[_kvp2Vertex[key]];
+      if (v.valueType == Text || v.valueType == Int)
+      {
+        return key;
+      }
+      else
+      {
+        return QString();
+      }
+    }
+    else
+    {
+      // check to see if any of the regular expressions match
+      for (QList< pair<QRegExp, VertexId> >::const_iterator it = _regexKeys.begin();
+           it != _regexKeys.end(); ++it)
+      {
+        const QRegExp& re = it->first;
+        if (re.exactMatch(key))
+        {
+          VertexId vid = it->second;
+          return _graph[vid].key;
+        }
+      }
+
+      return QString();
+    }
   }
 
   void _percolateInheritance()
@@ -1263,6 +1311,25 @@ bool OsmSchema::isBuildingPart(const Tags& t, ElementType type) const
   return result;
 }
 
+bool OsmSchema::isCollection(const Element& e) const
+{
+  bool result = false;
+
+  if (e.getElementType() == ElementType::Relation)
+  {
+    const Relation& r = dynamic_cast<const Relation&>(e);
+    if (r.getType() == "waterway" ||
+        r.getType() == "network" ||
+        r.getType() == "route_master" ||
+        r.getType() == "route")
+    {
+      result = true;
+    }
+  }
+
+  return result;
+}
+
 bool OsmSchema::isLinearHighway(const Tags& t, ElementType type)
 {
   bool result = false;
@@ -1389,6 +1456,7 @@ void OsmSchema::loadDefault()
 
 double OsmSchema::score(const QString& kvp1, const QString& kvp2)
 {
+  // I tried using a LruCache here to speed up scoring, but it had a negative impact. :(
   return std::max(d->score(kvp1, kvp2), d->score(kvp2, kvp1));
 }
 

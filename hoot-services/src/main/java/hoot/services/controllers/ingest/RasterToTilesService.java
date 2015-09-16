@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -82,10 +82,10 @@ public class RasterToTilesService extends JobControllerBase {
 		}
 	}
 
-	public String ingestOSMResourceDirect(String name) throws Exception
+	public String ingestOSMResourceDirect(String name, String userEmail) throws Exception
 	{
 		String jobId = UUID.randomUUID().toString();
-		return ingestOSMResourceDirect(name,  jobId);
+		return ingestOSMResourceDirect(name, userEmail, jobId);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class RasterToTilesService extends JobControllerBase {
 	 * @return
 	 * @throws Exception
 	 */
-	public String ingestOSMResourceDirect(String name, String jobId) throws Exception
+	public String ingestOSMResourceDirect(String name, String userEmail, String jobId) throws Exception
 	{
 		//_zoomLevels
 		Connection conn = DbUtils.createConnection();
@@ -127,14 +127,12 @@ public class RasterToTilesService extends JobControllerBase {
       }
 
       hoot.services.models.osm.Map currMap = new hoot.services.models.osm.Map(mapIdNum, conn);
-      final JSONObject extents =
-      	currMap.retrieveNodesMBR(queryBounds);
+      final JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
 
-
-			double dMinLon = DbUtils.fromDbCoordValue((Integer)extents.get("minlon"));
-			double dMaxLon = DbUtils.fromDbCoordValue((Integer)extents.get("maxlon"));
-			double dMinLat = DbUtils.fromDbCoordValue((Integer)extents.get("minlat"));
-			double dMaxLat = DbUtils.fromDbCoordValue((Integer)extents.get("maxlat"));
+			double dMinLon = (Double)extents.get("minlon");
+			double dMaxLon = (Double)extents.get("maxlon");
+			double dMinLat = (Double)extents.get("minlat");
+			double dMaxLat = (Double)extents.get("maxlat");
 
 			double deltaLon = dMaxLon - dMinLon;
 			double deltaLat = dMaxLat - dMinLat;
@@ -149,10 +147,12 @@ public class RasterToTilesService extends JobControllerBase {
 			String zoomList = zoomInfo.get("zoomlist").toString();
 			int rasterSize = (Integer)zoomInfo.get("rastersize");
 
-			JSONObject argStr =  _createCommandObj(name, zoomList, rasterSize);
+			JSONObject argStr =  _createCommandObj(name, zoomList, rasterSize, userEmail);
 			argStr.put("jobId", jobId);
+
 			//postJobRquest( jobId,  argStr);
-			JobExecutionManager jobExecManager = (JobExecutionManager)appContext.getBean("jobExecutionManagerNative");
+			JobExecutionManager jobExecManager = 
+				(JobExecutionManager)appContext.getBean("jobExecutionManagerNative");
 			jobExecManager.exec(argStr);
 			jobStatusManager.setComplete(jobId);
 		}
@@ -205,10 +205,10 @@ public class RasterToTilesService extends JobControllerBase {
       	currMap.retrieveNodesMBR(queryBounds);
 
 
-			double dMinLon = DbUtils.fromDbCoordValue((Integer)extents.get("minlon"));
-			double dMaxLon = DbUtils.fromDbCoordValue((Integer)extents.get("maxlon"));
-			double dMinLat = DbUtils.fromDbCoordValue((Integer)extents.get("minlat"));
-			double dMaxLat = DbUtils.fromDbCoordValue((Integer)extents.get("maxlat"));
+			double dMinLon = (Double)extents.get("minlon");
+			double dMaxLon = (Double)extents.get("maxlon");
+			double dMinLat = (Double)extents.get("minlat");
+			double dMaxLat = (Double)extents.get("maxlat");
 
 			double deltaLon = dMaxLon - dMinLon;
 			double deltaLat = dMaxLat - dMinLat;
@@ -240,10 +240,8 @@ public class RasterToTilesService extends JobControllerBase {
 		return jobId;
 	}
 
-	protected JSONObject _createCommandObj(String name, String zoomList, int rasterSize) throws Exception
+	protected JSONObject _createCommandObj(String name, String zoomList, int rasterSize, String userEmail) throws Exception
 	{
-		String argStr = null;
-
 		JSONArray commandArgs = new JSONArray();
 		JSONObject arg = new JSONObject();
 		arg.put("RASTER_OUTPUT_DIR", _tileServerPath);
@@ -261,6 +259,13 @@ public class RasterToTilesService extends JobControllerBase {
 		arg = new JSONObject();
 		arg.put("RASTER_SIZE", "" + rasterSize);
 		commandArgs.add(arg);
+		
+		if(userEmail != null)
+		{
+			arg = new JSONObject();
+			arg.put("USER_EMAIL", "" + userEmail);
+			commandArgs.add(arg);
+		}
 
 		JSONObject jsonArgs = _createPostBody(commandArgs);
 		jsonArgs.put("throwerror", "false");
@@ -271,7 +276,7 @@ public class RasterToTilesService extends JobControllerBase {
 
 	protected String _createCommand(String name, String zoomList, int rasterSize) throws Exception
 	{
-		return _createCommandObj( name,  zoomList,  rasterSize).toJSONString();
+		return _createCommandObj( name,  zoomList,  rasterSize, null).toJSONString();
 	}
 
 	protected JSONObject _getZoomInfo(double maxDelta) throws Exception

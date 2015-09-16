@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.readers.review;
 
@@ -172,7 +172,7 @@ public class ReviewableItemRetriever
     java.util.Map<ElementType, Set<Long>> elementIdsWithinBoundsByType = null;
     if (geospatialBounds != null && !geospatialBounds.equals(BoundingBox.worldBounds()))
     {
-      //retrieve the ID's of all elements by type from the map that fall within the requested
+      //retrieve the IDs of all elements by type from the map that fall within the requested
       //geospatial bounds
       elementIdsWithinBoundsByType =
         (new Map(mapId, conn)).queryForElementIds(geospatialBounds);
@@ -181,7 +181,7 @@ public class ReviewableItemRetriever
     /*
      * I don't like this, but doing a query of numItems size for each element type so that we make
        sure to get see all the available items and get the sorting correct.  Queries which join in
-       element records have to be done separately for each element type, since element ID's aren't
+       element records have to be done separately for each element type, since element IDs aren't
        unique across element types for a given map.  At the end of the querying I'll sort by score
        and truncate down the items being returned down to the requested number of items.
 
@@ -252,7 +252,7 @@ public class ReviewableItemRetriever
           if (!elementType2.equals(ElementType.Changeset))
           {
             final Element prototype2 = ElementFactory.getInstance().create(mapId, elementType2, conn);
-            //using the unique element id's obtained previously, get all review against item records
+            //using the unique element IDs obtained previously, get all review against item records
             //for the specified map, of the specified element type, joined with element info,
             //grouped by element id
 
@@ -278,7 +278,7 @@ public class ReviewableItemRetriever
 	          					 unreviewedJoinedRecordsForElementTypeGroupedByUniqueId.keySet()
 	          					)
 	          			)
-
+	          	.orderBy(fields)
 	          	.transform(groupBy(reviewItemsTbl.reviewableItemId).as(list(new QTuple(prototype2.getElementTable(), reviewItemsTbl
 	          			,elementIdMappings
 	          			))));
@@ -303,7 +303,7 @@ public class ReviewableItemRetriever
       }
     }
 
-    //Its possible by this point that we have more review items than were requested since we
+    //It's possible by this point that we have more review items than were requested since we
     //performed the queries to get the elements separate for each element type.  So, reduce the
     //set down to the correct amount.  If sorting was requested, perform the sorting on the list
     //and then filter.

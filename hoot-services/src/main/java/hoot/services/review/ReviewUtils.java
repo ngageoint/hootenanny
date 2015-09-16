@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.review;
 
@@ -135,11 +135,11 @@ public class ReviewUtils
   }
 
   /**
-   * Returns the ID's of all items that are currently marked as being reviewable
+   * Returns the IDs of all items that are currently marked as being reviewable
    *
    * @param mapId ID of the map owning the reviewable items
    * @param conn JDBC Connection
-   * @return reviewable element ID's grouped by element type
+   * @return reviewable element IDs grouped by element type
    */
   public static Map<ElementType, Set<Long>> getReviewableElementIds(final long mapId,
     Connection conn)
