@@ -10,17 +10,6 @@
          <tag k="name" v="Manitou Springs" />
          <tag k="error:circular" v="1500" />
       </node>
-      <node id="-2" lon="-104.907037158172" lat="38.8571566428667" version="0" changeset="71">
-         <tag k="place" v="town" />
-         <tag k="poi" v="yes" />
-         <tag k="hoot:status" v="3" />
-         <tag k="hoot:review:needs" v="yes" />
-         <tag k="hoot:review:uuid" v="{abec823c-8d14-3a6c-c938-d62285f7550b};{d1012bc9-92bc-5931-aac2-aa5702f42b8b}" />
-         <tag k="uuid" v="{d1012bc9-92bc-5931-aac2-aa5702f42b8b}" />
-         <tag k="hoot" v="Merged_AllDataTypes_963" />
-         <tag k="name" v="Manitou Springs" />
-         <tag k="error:circular" v="1500" />
-      </node>
    </create>
    <modify>
       <node id="109" lon="-104.919758616214" lat="38.8593025332215" version="1" changeset="71">

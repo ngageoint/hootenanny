@@ -105,21 +105,28 @@ public class ReviewItemsUpdater
   		final org.w3c.dom.Node elementXml = createdReviewItems.item(i);
   		final String uuid = 
   			XPathAPI.selectSingleNode(elementXml, "tag[@k = 'uuid']/@v").getNodeValue();
-  		//TODO: the osm id's for the created elements are going to be wrong here...need to get them 
-  		//from the database??  slow...
+  		final long changesetOsmElementId = 
+  			Long.parseLong(elementXml.getAttributes().getNamedItem("id").getNodeValue());
+  		final ElementType elementType = Element.elementTypeFromString(elementXml.getNodeName());
+  		final long actualOsmElementId = 
+  			parsedElementIdsToElementsByType.get(elementType).get(changesetOsmElementId).getId();
+  		
   		elementIdMappingRecordsToInsertFromChangeset.add(
   			ReviewUtils.createElementIdMappingRecord(
   				uuid, 
-  				Long.parseLong(elementXml.getAttributes().getNamedItem("id").getNodeValue()), 
-  				Element.elementTypeFromString(elementXml.getNodeName()), 
+  				actualOsmElementId, 
+  				elementType, 
   				mapId));
   		final String[] reviewAgainstUuids = reviewAgainstUuidsFromChangesetElement(elementXml);
   		if (reviewAgainstUuids != null)
   		{
+  			//TODO: Its possible that the review against items already have an element id mapping record
+  			//created for them.  So, only create records for the ones who don't have one.
+  			
+  			
     		for (int j = 0; j < reviewAgainstUuids.length; j++)
     		{
-    			//assuming that an element id mapping already exists for each of the review against items
-    			//TODO: This assumption is not ok!
+    			
     			reviewItemRecordsToInsertFromChangeset.add(
     	  		ReviewUtils.createReviewItemRecord(
     	  			uuid, 
@@ -217,7 +224,7 @@ public class ReviewItemsUpdater
     /*for (Map.Entry<String, String> tagEntry : tags.entrySet())
     {
       if (tagEntry.getKey().startsWith(startsWithText))*/
-    
+    int test = 1;
   }
   
   private List<String> getDeleteUniqueIdsFromChangeset(final Document changesetDoc) 
