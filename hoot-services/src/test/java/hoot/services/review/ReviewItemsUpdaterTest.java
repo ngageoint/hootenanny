@@ -19,13 +19,13 @@ public class ReviewItemsUpdaterTest
 	@BeforeClass
   public static void beforeClass() throws Exception
   {
-		changesetDoc = 
+		/*changesetDoc = 
 			XmlDocumentBuilder.parse(
         FileUtils.readFileToString(
           new File(
             Thread.currentThread().getContextClassLoader().getResource(
               "hoot/services/review/ReviewItemsUpdater-testUpdateReviewItems.osm")
-            .getPath())));
+            .getPath())));*/
   }
 	
 	@Ignore
