@@ -53,6 +53,20 @@ set<ElementId> ReviewMarker::_getReviewRelations(const ConstOsmMapPtr &map, Elem
   return result;
 }
 
+set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr &map,
+  ConstElementPtr e1) const
+{
+  return _getReviewRelations(map, e1->getElementId());
+}
+
+bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1)
+{
+  // get all the review relations for e1
+  set<ElementId> review1 = _getReviewRelations(map, e1->getElementId());
+
+  // if there are more than one relations in the intersection, return true.
+  return review1.size() >= 1;
+}
 
 bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1, ConstElementPtr e2)
 {

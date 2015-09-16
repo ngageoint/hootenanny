@@ -34,6 +34,7 @@
 #include <hoot/core/filters/ElementTypeCriterion.h>
 #include <hoot/core/filters/HighwayFilter.h>
 #include <hoot/core/filters/LinearFilter.h>
+#include <hoot/core/filters/NeedsReviewCriterion.h>
 #include <hoot/core/filters/NotCriterion.h>
 #include <hoot/core/filters/PoiCriterion.h>
 #include <hoot/core/filters/StatsAreaFilter.h>
@@ -42,6 +43,7 @@
 #include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/visitors/CalculateAreaVisitor.h>
 #include <hoot/core/visitors/CalculateAreaForStatsVisitor.h>
+#include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 #include <hoot/core/visitors/CountVisitor.h>
 #include <hoot/core/visitors/FeatureCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -182,7 +184,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
           FilteredVisitor(
             ChainCriterion(
               new NotCriterion(new StatusCriterion(Status::Conflated)),
-              new NotCriterion(new TagCriterion("hoot:review:needs", "yes"))),
+              new NotCriterion(new NeedsReviewCriterion(constMap))),
             new MatchCandidateCountVisitor(matchCreators)),
           visitorData);
     }
@@ -201,15 +203,11 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     const double numFeaturesMarkedForReview =
       _applyVisitor(
         constMap,
-        FilteredVisitor(new TagCriterion("hoot:review:needs", "yes"), new FeatureCountVisitor()));
-    const double numReviewsToBeMade =
-      _applyVisitor(
-        constMap,
-         FilteredVisitor(
-          ChainCriterion(
-            new TagCriterion("hoot:review:needs", "yes"),
-            new NotCriterion(new TagCriterion("hoot:review:source", "2"))),
-          new FeatureCountVisitor()));
+        FilteredVisitor(new NeedsReviewCriterion(constMap), new FeatureCountVisitor()));
+
+    CountUniqueReviewsVisitor curv;
+    constMap->visitRo(curv);
+    const double numReviewsToBeMade = curv.getStat();
     const double conflatedFeatureCount =
       fmax(featuresProcessedDuringConflationCount - numFeaturesMarkedForReview, 0);
     long unconflatableFeatureCount = -1.0;
@@ -293,7 +291,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
         FilteredVisitor(
           ChainCriterion(
             new NotCriterion(new StatusCriterion(Status::Conflated)),
-            new NotCriterion(new TagCriterion("hoot:review:needs", "yes"))),
+            new NotCriterion(new NeedsReviewCriterion(constMap))),
           new FeatureCountVisitor()));
     _stats.append(SingleStat("Total Unmatched Features", unconflatedFeatureCount));
     _stats.append(
@@ -314,7 +312,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
         ChainCriterion(new StatusCriterion(Status::Conflated), new PoiCriterion()), new FeatureCountVisitor()));
     const double poisMarkedForReview =
       _applyVisitor(constMap, FilteredVisitor(
-        ChainCriterion(new TagCriterion("hoot:review:needs", "yes"), new PoiCriterion()), new FeatureCountVisitor()));
+        ChainCriterion(new NeedsReviewCriterion(constMap), new PoiCriterion()), new FeatureCountVisitor()));
     const double conflatedPoiCount = fmax(poisProcessedByConflation - poisMarkedForReview, 0);
     _stats.append(SingleStat("Conflated POIs", conflatedPoiCount));
     _stats.append(SingleStat("POIs Marked for Review", poisMarkedForReview));
@@ -322,11 +320,8 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
       _applyVisitor(
         constMap,
          FilteredVisitor(
-          ChainCriterion(
-            new TagCriterion("hoot:review:needs", "yes"),
-            new NotCriterion(new TagCriterion("hoot:review:source", "2")),
-            new PoiCriterion()),
-          new FeatureCountVisitor()));
+          PoiCriterion(),
+          new CountUniqueReviewsVisitor()));
     _stats.append(SingleStat("Number of POI Reviews to be Made", numPoiReviewsToBeMade));
     const double unconflatedPoiCount =
       _applyVisitor(
@@ -334,7 +329,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
         FilteredVisitor(
           ChainCriterion(
             new NotCriterion(new StatusCriterion(Status::Conflated)),
-            new NotCriterion(new TagCriterion("hoot:review:needs", "yes")),
+            new NotCriterion(new NeedsReviewCriterion(constMap)),
             new PoiCriterion()),
           new FeatureCountVisitor()));
     _stats.append(SingleStat("Unmatched POIs", unconflatedPoiCount));
@@ -369,7 +364,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
         ChainCriterion(new StatusCriterion(Status::Conflated), new HighwayFilter(keep)), new FeatureCountVisitor()));
     const double highwaysMarkedForReview =
       _applyVisitor(constMap, FilteredVisitor(
-        ChainCriterion(new TagCriterion("hoot:review:needs", "yes"), new HighwayFilter(keep)), new FeatureCountVisitor()));
+        ChainCriterion(new NeedsReviewCriterion(constMap), new HighwayFilter(keep)), new FeatureCountVisitor()));
     const double conflatedHighwayCount = fmax(highwaysProcessedByConflation - highwaysMarkedForReview, 0);
     _stats.append(SingleStat("Conflated Highways", conflatedHighwayCount));
     _stats.append(SingleStat("Highways Marked for Review", highwaysMarkedForReview));
@@ -377,11 +372,8 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
       _applyVisitor(
         constMap,
          FilteredVisitor(
-          ChainCriterion(
-            new TagCriterion("hoot:review:needs", "yes"),
-            new NotCriterion(new TagCriterion("hoot:review:source", "2")),
-            new HighwayFilter(keep)),
-          new FeatureCountVisitor()));
+          HighwayFilter(keep),
+          new CountUniqueReviewsVisitor()));
     _stats.append(SingleStat("Number of Highway Reviews to be Made", numHighwayReviewsToBeMade));
     const double unconflatedHighwayCount =
       _applyVisitor(
@@ -389,7 +381,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
         FilteredVisitor(
           ChainCriterion(
             new NotCriterion(new StatusCriterion(Status::Conflated)),
-            new NotCriterion(new TagCriterion("hoot:review:needs", "yes")),
+            new NotCriterion(new NeedsReviewCriterion(constMap)),
             new HighwayFilter(keep)),
           new FeatureCountVisitor()));
     _stats.append(SingleStat("Unmatched Highways", unconflatedHighwayCount));
@@ -429,7 +421,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
         ChainCriterion(new StatusCriterion(Status::Conflated), new BuildingCriterion(map)), new FeatureCountVisitor()));
     const double buildingsMarkedForReview =
       _applyVisitor(constMap, FilteredVisitor(
-        ChainCriterion(new TagCriterion("hoot:review:needs", "yes"), new BuildingCriterion(map)), new FeatureCountVisitor()));
+        ChainCriterion(new NeedsReviewCriterion(constMap), new BuildingCriterion(map)), new FeatureCountVisitor()));
     const double conflatedBuildingCount = fmax(buildingsProcessedByConflation - buildingsMarkedForReview, 0);
     _stats.append(SingleStat("Conflated Buildings", conflatedBuildingCount));
     _stats.append(SingleStat("Buildings Marked for Review", buildingsMarkedForReview));
@@ -437,11 +429,8 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
       _applyVisitor(
         constMap,
          FilteredVisitor(
-          ChainCriterion(
-            new TagCriterion("hoot:review:needs", "yes"),
-            new NotCriterion(new TagCriterion("hoot:review:source", "2")),
-            new BuildingCriterion(map)),
-          new FeatureCountVisitor()));
+            new BuildingCriterion(map),
+            new CountUniqueReviewsVisitor()));
     _stats.append(SingleStat("Number of Building Reviews to be Made", numBuildingReviewsToBeMade));
     const double unconflatedBuildingCount =
       _applyVisitor(
@@ -449,7 +438,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
         FilteredVisitor(
           ChainCriterion(
             new NotCriterion(new StatusCriterion(Status::Conflated)),
-            new NotCriterion(new TagCriterion("hoot:review:needs", "yes")),
+            new NotCriterion(new NeedsReviewCriterion(constMap)),
             new BuildingCriterion(map)),
           new FeatureCountVisitor()));
     _stats.append(SingleStat("Unmatched Buildings", unconflatedBuildingCount));

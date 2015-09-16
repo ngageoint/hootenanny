@@ -480,7 +480,9 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.cpp \
     src/main/cpp/hoot/core/conflate/CookieCutter.cpp \
     src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.cpp \
-    src/main/cpp/hoot/core/ops/ReplaceElementOp.cpp
+    src/main/cpp/hoot/core/ops/ReplaceElementOp.cpp \
+    src/main/cpp/hoot/core/filters/NeedsReviewCriterion.cpp \
+    src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -948,5 +950,7 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.h \
     src/main/cpp/hoot/core/conflate/CookieCutter.h \
     src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.h \
-    src/main/cpp/hoot/core/ops/ReplaceElementOp.h
+    src/main/cpp/hoot/core/ops/ReplaceElementOp.h \
+    src/main/cpp/hoot/core/filters/NeedsReviewCriterion.h \
+    src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.h
 

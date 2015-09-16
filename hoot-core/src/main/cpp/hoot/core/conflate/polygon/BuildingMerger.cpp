@@ -168,7 +168,7 @@ shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const se
     {
       shared_ptr<Element> e = map->getElement(*it);
       bool isBuilding = false;
-      if (e->getElementType() == ElementType::Relation)
+      if (e && e->getElementType() == ElementType::Relation)
       {
         shared_ptr<Relation> r = dynamic_pointer_cast<Relation>(e);
         if (r->getType() == "building")
@@ -211,9 +211,11 @@ shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const se
     {
       if (map->containsElement(toRemove[i]))
       {
+        ElementPtr willRemove = map->getElement(toRemove[i]);
         ReplaceElementOp(toRemove[i], result->getElementId()).apply(map);
         RecursiveElementRemover(toRemove[i], &filter).apply(map);
-        map->getElement(toRemove[i])->getTags().clear();
+        // just in case it wasn't removed (e.g. part of another relation)
+        willRemove->getTags().clear();
       }
     }
 

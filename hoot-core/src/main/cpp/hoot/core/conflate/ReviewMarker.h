@@ -41,7 +41,17 @@ namespace hoot
 class ReviewMarker
 {
 public:
+  /// This definition may change over time.
+  typedef ElementId ReviewUid;
+
   ReviewMarker();
+
+  set<ReviewUid> getReviewUids(const ConstOsmMapPtr &map, ConstElementPtr e1) const;
+
+  /**
+   * Returns true if the element is in at least one review.
+   */
+  bool isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1);
 
   /**
    * Determines whether a pair of elements should be returned for review

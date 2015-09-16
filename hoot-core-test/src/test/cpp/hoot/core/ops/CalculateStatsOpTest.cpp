@@ -199,14 +199,14 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(201.0, calcStatsOp->getSingleStat("Node Count"));
     CPPUNIT_ASSERT_EQUAL(21.0, calcStatsOp->getSingleStat("Way Count"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Relation Count"));
+    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Relation Count"));
 
-    CPPUNIT_ASSERT_EQUAL(-427.0, calcStatsOp->getSingleStat("Minimum Node ID"));
-    CPPUNIT_ASSERT_EQUAL(-1.0, calcStatsOp->getSingleStat("Maximum Node ID"));
-    CPPUNIT_ASSERT_EQUAL(-272.0, calcStatsOp->getSingleStat("Minimum Way ID"));
-    CPPUNIT_ASSERT_EQUAL(-1.0, calcStatsOp->getSingleStat("Maximum Way ID"));
-    CPPUNIT_ASSERT_EQUAL(9.2233720368547758e+18, calcStatsOp->getSingleStat("Minimum Relation ID"));
-    CPPUNIT_ASSERT_EQUAL(-9.2233720368547758e+18,
+    CPPUNIT_ASSERT_EQUAL(-3961929.0, calcStatsOp->getSingleStat("Minimum Node ID"));
+    CPPUNIT_ASSERT_EQUAL(-3961529.0, calcStatsOp->getSingleStat("Maximum Node ID"));
+    CPPUNIT_ASSERT_EQUAL(-3961971.0, calcStatsOp->getSingleStat("Minimum Way ID"));
+    CPPUNIT_ASSERT_EQUAL(-3961931.0, calcStatsOp->getSingleStat("Maximum Way ID"));
+    CPPUNIT_ASSERT_EQUAL(-3961988.0, calcStatsOp->getSingleStat("Minimum Relation ID"));
+    CPPUNIT_ASSERT_EQUAL(-3961981.0,
       calcStatsOp->getSingleStat("Maximum Relation ID"));
 
     CPPUNIT_ASSERT_EQUAL(89.0, calcStatsOp->getSingleStat("Total Feature Tags"));
@@ -229,20 +229,20 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Conflatable Features"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Unconflatable Features"));
     CPPUNIT_ASSERT_EQUAL(11.0, calcStatsOp->getSingleStat("Total Features Processed By Conflation"));
-    CPPUNIT_ASSERT_EQUAL(9.0, calcStatsOp->getSingleStat("Total Conflated Features"));
-    CPPUNIT_ASSERT_EQUAL(17.0, calcStatsOp->getSingleStat("Total Unmatched Features"));
-    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Total Features Marked for Review"));
-    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Total Number of Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(4.0, calcStatsOp->getSingleStat("Total Features Marked for Review"));
+    CPPUNIT_ASSERT_EQUAL(7.0, calcStatsOp->getSingleStat("Total Conflated Features"));
+    CPPUNIT_ASSERT_EQUAL(15.0, calcStatsOp->getSingleStat("Total Unmatched Features"));
+    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Total Number of Reviews to be Made"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Percentage of Total Features Conflatable"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Percentage of Total Features Unconflatable"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      31.03, calcStatsOp->getSingleStat("Percentage of Total Features Conflated"), 1e-1);
+      24.14, calcStatsOp->getSingleStat("Percentage of Total Features Conflated"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      6.90, calcStatsOp->getSingleStat("Percentage of Total Features Marked for Review"), 1e-1);
+      13.8, calcStatsOp->getSingleStat("Percentage of Total Features Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      58.62, calcStatsOp->getSingleStat("Percentage of Total Features Unmatched"), 1e-1);
+      51.7, calcStatsOp->getSingleStat("Percentage of Total Features Unmatched"), 1e-1);
 
     CPPUNIT_ASSERT_EQUAL(3.0, calcStatsOp->getSingleStat("Number of Match Creators"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features Conflatable by: hoot::BuildingMatchCreator"));
@@ -250,12 +250,12 @@ public:
     CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("POI Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable POIs"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated POIs"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("POIs Marked for Review"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of POI Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Unmatched POIs"));
+    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("POIs Marked for Review"));
+    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Number of POI Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Unmatched POIs"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of POIs Conflated"), 1e-1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of POIs Marked for Review"), 1e-1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, calcStatsOp->getSingleStat("Percentage of Unmatched POIs"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(25.0, calcStatsOp->getSingleStat("Percentage of POIs Marked for Review"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(75.0, calcStatsOp->getSingleStat("Percentage of Unmatched POIs"), 1e-1);
 
     CPPUNIT_ASSERT_EQUAL(9.0, calcStatsOp->getSingleStat("Highway Count"));
     //see comment in corresponding section of code in runStatsTest
@@ -283,7 +283,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(16.67, calcStatsOp->getSingleStat("Percentage of Buildings Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(58.33, calcStatsOp->getSingleStat("Percentage of Unmatched Buildings"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(69.0, calcStatsOp->getSingleStat("Longest Tag"));
+    CPPUNIT_ASSERT_EQUAL(52.0, calcStatsOp->getSingleStat("Longest Tag"));
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.6058823, calcStatsOp->getSingleStat("Translated Populated Tag Percent"), 1e-1);
