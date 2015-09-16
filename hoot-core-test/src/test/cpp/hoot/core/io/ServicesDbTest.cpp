@@ -38,10 +38,6 @@
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
-// special define:
-//   Greg's workspace set true; Terry's set false
-#define GREGSWORKSPACE true
-
 namespace hoot
 {
 
@@ -126,12 +122,6 @@ public:
   void runOpenOsmApiTest()
   {
     Settings s = conf();
-
-    if(GREGSWORKSPACE)
-      s.set(ConfigOptions(s).getServicesDbTestUrlOsmapiKey(), "postgresql://vagrant:vagrant@localhost:15432/openstreetmap");
-    else
-      s.set(ConfigOptions(s).getServicesDbTestUrlOsmapiKey(), "postgresql://postgres@10.194.70.78:5432/terrytest");
-
     ServicesDb db;
     CPPUNIT_ASSERT_EQUAL(ServicesDb::DBTYPE_UNSUPPORTED, db.getDatabaseType());
     db.open(QUrl(ConfigOptions(s).getServicesDbTestUrlOsmapi()));
@@ -457,11 +447,7 @@ public:
   void runSelectAllElementsOsmApiTest()
   {
     ServicesDb database;
-
-    if(GREGSWORKSPACE)
-      database.open(QUrl("postgresql://vagrant:vagrant@localhost:15432/openstreetmap"));
-    else
-      database.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
 
     /////////////////////////////////////
     // INSERT NODES INTO DB
@@ -866,10 +852,7 @@ public:
     LOG_DEBUG("Starting Insert node OSM test");
     ServicesDb database;
 
-    if(GREGSWORKSPACE)
-      database.open(QUrl("postgresql://vagrant:vagrant@localhost:15432/openstreetmap"));
-    else
-      database.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
 
     database.transaction();
 
@@ -897,12 +880,7 @@ public:
   {
      ServicesDb database;
 
-     if(GREGSWORKSPACE)
-       database.open(QUrl("postgresql://vagrant:vagrant@localhost:15432/openstreetmap"));
-     else
-       database.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
-
-     LOG_DEBUG("Back from open, starting transactions")
+     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
 
      database.transaction();
 
@@ -1044,11 +1022,7 @@ public:
     mapId = -1;
 
     // tear down the osm api db
-    if(GREGSWORKSPACE)
-      database.open(QUrl("postgresql://vagrant:vagrant@localhost:15432/openstreetmap"));
-    else
-      database.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
-
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData_OsmApi();
     database.close();
   }

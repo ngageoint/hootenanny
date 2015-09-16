@@ -123,12 +123,10 @@ bool ServicesDbReader::isSupported(QString urlStr)
 
 void ServicesDbReader::open(QString urlStr)
 {
-  LOG_DEBUG("IN ServicesDbReader open " << urlStr);
   if (!isSupported(urlStr))
   {
     throw HootException("An unsupported URL was passed in.");
   }
-LOG_DEBUG("email = "+_email);
 
   QUrl url(urlStr);
   QString osmElemId = url.queryItemValue("osm-element-id");
@@ -139,19 +137,16 @@ LOG_DEBUG("email = "+_email);
   bool ok2;
   QString mapName;
   _database.open(url);
-LOG_DEBUG("plist size - 1 = "+pList[1]);
-LOG_DEBUG("AFTER OPEN...plist size = "+QString::number(pList.size()));
+
   long requestedMapId = pList[pList.size() - 1].toLong(&ok);
-LOG_DEBUG("requestedMapId = "+QString::number(requestedMapId));
 
   if(osmElemId.length() > 0 && osmElemType.length() > 0)
   {
-    LOG_DEBUG("CHECK0");
     _osmElemId = osmElemId.toLong(&ok2);
     _osmElemType = ElementType::fromString(osmElemType);
 
   }
-LOG_DEBUG("CHECK1");
+
   if (!ok && _database.getDatabaseType() != ServicesDb::DBTYPE_OSMAPI)
   {
     if (_email == "")
@@ -162,20 +157,15 @@ LOG_DEBUG("CHECK1");
 
     mapName = pList[pList.size() - 1];
     _database.setUserId(_database.getUserId(_email));
-LOG_DEBUG("CHECK 5 -- mapName = "+mapName);
     set<long> mapIds = _database.selectMapIds(mapName);
-LOG_DEBUG("CHECK 6 -- After selectMapIds");
     if (mapIds.size() != 1)
     {
       QString str = QString("Expected 1 map with the name '%1' but found %2 maps.").arg(mapName)
           .arg(mapIds.size());
       throw HootException(str);
     }
-      LOG_DEBUG("CHECK7");
     requestedMapId = *mapIds.begin();
   }
-
-  LOG_DEBUG("CHECK3");
 
   if( _database.getDatabaseType() != ServicesDb::DBTYPE_OSMAPI )
   {
@@ -192,7 +182,6 @@ LOG_DEBUG("CHECK 6 -- After selectMapIds");
   //be invalid as a whole
   _database.transaction();
   _open = true;
-  LOG_DEBUG("Leaving servicesdbreader open method");
 }
 
 bool ServicesDbReader::hasMoreElements()

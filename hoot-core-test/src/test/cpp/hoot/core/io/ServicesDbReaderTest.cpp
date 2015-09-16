@@ -42,9 +42,6 @@
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
-// special define:
-//   Greg's workspace set true; Terry's set false
-#define GREGSWORKSPACE true
 
 namespace hoot
 {
@@ -98,10 +95,7 @@ public:
 
     // Osm Api DB
     ServicesDb database2;
-    if(GREGSWORKSPACE)
-      database2.open(QUrl("postgresql://vagrant:vagrant@localhost:15432/openstreetmap"));
-    else
-      database2.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
+    database2.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database2.deleteData_OsmApi();
     database2.close();
   }
@@ -431,13 +425,6 @@ public:
 
   void runReadOsmApiTest()
   {
-    Settings s = conf();
-
-    if(GREGSWORKSPACE)
-      s.set(ConfigOptions(s).getServicesDbTestUrlOsmapiKey(), "postgresql://vagrant:vagrant@localhost:15432/openstreetmap");
-    else
-      s.set(ConfigOptions(s).getServicesDbTestUrlOsmapiKey(), "postgresql://postgres@10.194.70.78:5432/terrytest");
-
     ServicesDbReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
 
@@ -446,11 +433,7 @@ public:
     ////////////////////////////////////////
 
     ServicesDb database;
-
-    if(GREGSWORKSPACE)
-      database.open(QUrl("postgresql://vagrant:vagrant@localhost:15432/openstreetmap"));
-    else
-      database.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
 
     database.transaction();
 
@@ -475,11 +458,9 @@ public:
     // test the reader
     ///////////////////////////////////////
 
-    LOG_DEBUG("before OPEN...");
+    Settings s = conf();
     reader.open(ConfigOptions(s).getServicesDbTestUrlOsmapi());
-    LOG_DEBUG("after OPEN, before READ...");
     reader.read(map);
-    LOG_DEBUG("after READ...");
     verifyFullReadOutput_OsmApi(map);
     reader.close();
   }
