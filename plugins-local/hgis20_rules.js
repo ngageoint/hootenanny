@@ -160,7 +160,7 @@ hgis20.rules = {
 //      ['XtableName','Educational_Institutions','XXX','XXX'],
      ['XtableName','Electrical_POI','power','generator'],
 //      ['XtableName','Embassies','XXX','XXX'],
-     ['XtableName','Ethnicity','ethnicity_data','yes'],
+//      ['XtableName','Ethnicity','ethnicity_data','yes'],
      ['XtableName','Foreign_Investment_Projects','foreign_investment','yes'],
      ['XtableName','Free_Trade_Zones','place','free_trade_zone'],
 //      ['XtableName','Free_Trade_Zones_Polygons','free','XXX'],

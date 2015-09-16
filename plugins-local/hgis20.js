@@ -537,7 +537,7 @@ hgis20 = {
                     attrs.XtableName = hgis20.rules.uniqList[val];
 
                     // Debug
-                    print('Unique: ' + attrs.XtableName);
+                    // print('Unique: ' + attrs.XtableName);
 
                     break;
                 }
@@ -575,7 +575,7 @@ hgis20 = {
                 if (attrs.TYPEX)
                 {
                     attrs.TYPE2 = attrs.TYPEX;
-                    delete attrs.TYPEX;
+//                     delete attrs.TYPEX;
                 }
             }
             if (geometryType == 'Point')
@@ -766,10 +766,10 @@ hgis20 = {
         {
             tags[ftag[0]] = ftag[1];
         }
-        else
-        {
-            hoot.logWarn('Default Translation for ' + layerName + ' not found');
-        }
+//         else
+//         {
+//             hoot.logWarn('Default Translation for ' + layerName + ' not found');
+//         }
 
         // one 2 one
         translate.applyOne2One(attrs, tags, hgis20.lookup, {'k':'v'}, hgis20.ignoreList);
