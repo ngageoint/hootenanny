@@ -55,8 +55,7 @@ import com.mysema.query.sql.SQLSubQuery;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 
 /**
- * Marks reviewable items as reviewed;  This is a wrapper around the process of auto
- * creating/closing a changeset and marking items as reviewed.
+ * Responsible for serving reviewable items to the client
  */
 public class ReviewItemsRetriever
 {

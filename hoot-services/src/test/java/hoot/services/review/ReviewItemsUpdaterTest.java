@@ -14,9 +14,9 @@ import org.w3c.dom.Document;
 
 public class ReviewItemsUpdaterTest
 {
-  private static Document changesetDoc;
+  //private static Document changesetDoc;
 	
-	@BeforeClass
+	/*@BeforeClass
   public static void beforeClass() throws Exception
   {
 		changesetDoc = 
@@ -26,41 +26,16 @@ public class ReviewItemsUpdaterTest
             Thread.currentThread().getContextClassLoader().getResource(
               "hoot/services/review/ReviewItemsUpdater-testUpdateReviewItems.osm")
             .getPath())));
-  }
+  }*/
 	
 	@Ignore
 	@Test
 	@Category(UnitTest.class)
-	public void testCreateReviewRecordsFromCreateChangeset() throws Exception
-	{
-		
-	}
-	
-	@Ignore
-	@Test
-	@Category(UnitTest.class)
-	public void testCreateReviewRecordsFromModifyChangeset() throws Exception
-	{
-		
-	}
-	
-	@Ignore
-	@Test
-	@Category(UnitTest.class)
-	public void testGetDeleteUniqueIdsFromChangeset() throws Exception
-	{
-		//ReviewItemsRetriever reviewItemsUpdater = Mockito.spy(new ReviewItemsRetriever());
-		//reviewItemsUpdater.setMapId(1);
-		//reviewItemsUpdater.setUserId(1);
-		//reviewItemsUpdater.ge
-	}
-	
-	/*
-	@Ignore
-	@Test
-	@Category(IntegrationTest.class)
 	public void testUpdateReviewItems() throws Exception
 	{
-		
-	}*/
+	  //ReviewItemsRetriever reviewItemsUpdater = Mockito.spy(new ReviewItemsRetriever());
+	  //reviewItemsUpdater.setMapId(1);
+	  //reviewItemsUpdater.setUserId(1);
+		//reviewItemsUpdater.ge
+	}
 }

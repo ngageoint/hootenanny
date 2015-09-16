@@ -34,7 +34,7 @@ import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.types.expr.BooleanExpression;
 
 /**
- * 
+ * Responsible for maintaining review SQL data consistency based on saved OSM changesets
  */
 public class ReviewItemsUpdater
 {
@@ -91,7 +91,34 @@ public class ReviewItemsUpdater
   {
   	log.debug("updateCreatedReviewItems");
   	
-    //check create changeset for any newly created reviewable items
+    //Create element id mappings for every record, regardless if its involved in a review.  This
+  	//will result in unused records, but makes the code simpler overall.  We're making a big 
+  	//assumption here that any review against items already have an element id mapping record entry...
+  	//which should be the case.
+  	final NodeList createdElements = XPathAPI.selectNodeList(changesetDoc, "//osmChange/create/*");
+  	log.debug(String.valueOf(createdElements.getLength()));
+  	log.debug(XmlUtils.nodeListToString(createdElements));
+  	for (int i = 0; i < createdElements.getLength(); i++)
+  	{
+  		final org.w3c.dom.Node elementXml = createdElements.item(i);
+  		final String uuid = 
+  			XPathAPI.selectSingleNode(elementXml, "tag[@k = 'uuid']/@v").getNodeValue();
+  		final long changesetOsmElementId = 
+  			Long.parseLong(elementXml.getAttributes().getNamedItem("id").getNodeValue());
+  		final ElementType elementType = Element.elementTypeFromString(elementXml.getNodeName());
+  		//final Element element = 
+  		  //parsedElementIdsToElementsByType.get(elementType).get(changesetOsmElementId);
+  		final long actualOsmElementId = 
+  			parsedElementIdsToElementsByType.get(elementType).get(changesetOsmElementId).getId();
+  		elementIdMappingRecordsToInsertFromChangeset.add(
+  			ReviewUtils.createElementIdMappingRecord(
+  				uuid, 
+  				actualOsmElementId, 
+  				elementType, 
+  				mapId));
+  	}
+  	
+  	//check create changeset for any newly created reviewable items
   	final NodeList createdReviewItems = 
   	  XPathAPI.selectNodeList(
   	    changesetDoc, 
@@ -105,28 +132,12 @@ public class ReviewItemsUpdater
   		final org.w3c.dom.Node elementXml = createdReviewItems.item(i);
   		final String uuid = 
   			XPathAPI.selectSingleNode(elementXml, "tag[@k = 'uuid']/@v").getNodeValue();
-  		final long changesetOsmElementId = 
-  			Long.parseLong(elementXml.getAttributes().getNamedItem("id").getNodeValue());
-  		final ElementType elementType = Element.elementTypeFromString(elementXml.getNodeName());
-  		final long actualOsmElementId = 
-  			parsedElementIdsToElementsByType.get(elementType).get(changesetOsmElementId).getId();
-  		
-  		elementIdMappingRecordsToInsertFromChangeset.add(
-  			ReviewUtils.createElementIdMappingRecord(
-  				uuid, 
-  				actualOsmElementId, 
-  				elementType, 
-  				mapId));
   		final String[] reviewAgainstUuids = reviewAgainstUuidsFromChangesetElement(elementXml);
   		if (reviewAgainstUuids != null)
   		{
-  			//TODO: Its possible that the review against items already have an element id mapping record
-  			//created for them.  So, only create records for the ones who don't have one.
-  			
-  			
     		for (int j = 0; j < reviewAgainstUuids.length; j++)
     		{
-    			
+    			final String reviewAgainstUuid = reviewAgainstUuids[j];
     			reviewItemRecordsToInsertFromChangeset.add(
     	  		ReviewUtils.createReviewItemRecord(
     	  			uuid, 
@@ -135,7 +146,7 @@ public class ReviewItemsUpdater
     	  			//old score is obsolete after a merge; this is possibly complicated, so holding off on 
     	  			//doing fixing this for now
     	  			1.0,
-    	  			reviewAgainstUuids[j], 
+    	  			reviewAgainstUuid, 
     	  			mapId));
     		}
   		}
@@ -159,15 +170,18 @@ public class ReviewItemsUpdater
   {
     log.debug("createReviewRecordsFromModifyChangeset");
     
+    //We're making a big assumption here that any records being simply modified to be reviewable 
+    //already have an element id mapping record entry.
+    
   	//map modified elements by unique id
     final NodeList modifiedItems = 
-  	  XPathAPI.selectNodeList(changesetDoc, "//osmChange/modify/*]");
+  	  XPathAPI.selectNodeList(changesetDoc, "//osmChange/modify/*");
     Map<String, org.w3c.dom.Node> uuidsToXml = new HashMap<String, org.w3c.dom.Node>();
   	for (int i = 0; i < modifiedItems.getLength(); i++)
   	{
   		final org.w3c.dom.Node elementXml = modifiedItems.item(i);
   		final String uuid = 
-    		XPathAPI.selectSingleNode(elementXml, "tag[@k = 'uuid']").getNodeValue();
+    		XPathAPI.selectSingleNode(elementXml, "tag[@k = 'uuid']/@v").getNodeValue();
   		uuidsToXml.put(uuid, elementXml);
   	}
   	
@@ -220,11 +234,44 @@ public class ReviewItemsUpdater
     
     //anything left in uuidsToXml must be associated with a new review, so create the new 
     //associated review records
-    //TODO: finish
-    /*for (Map.Entry<String, String> tagEntry : tags.entrySet())
+    for (Map.Entry<String, org.w3c.dom.Node> nodeEntry : uuidsToXml.entrySet())
     {
-      if (tagEntry.getKey().startsWith(startsWithText))*/
-    int test = 1;
+    	final org.w3c.dom.Node elementXml = nodeEntry.getValue();
+  		assert(
+  		  XPathAPI.selectSingleNode(
+  		    elementXml, "tag[@k = 'hoot:review:needs' and @v = 'yes']")/*.getNodeValue()*/ != null);
+  		final String uuid = nodeEntry.getKey();
+    	final String[] reviewAgainstUuids = reviewAgainstUuidsFromChangesetElement(elementXml);
+  		if (reviewAgainstUuids != null)
+  		{
+  			for (int j = 0; j < reviewAgainstUuids.length; j++)
+  			{
+  				reviewItemRecordsToInsertFromChangeset.add(
+  		  		ReviewUtils.createReviewItemRecord(
+  		  				uuid, 
+  		  			1.0, //TODO: see comment in updateCreatedReviewItems
+  		  			reviewAgainstUuids[j], 
+  		  			mapId));
+  			}
+  		}
+  		else
+  		{
+  			//record has nothing left to review against it, so set it to reviewed; the client is
+  			//expected to have dropped all the review tags from the feature
+  			ReviewItems reviewItemRecord = 
+  				ReviewUtils.createReviewItemRecord(
+    			  uuid, 
+    			  1.0, //TODO: see comment in updateCreatedReviewItems
+    			  null, 
+    			  mapId);
+  			reviewItemRecord.setReviewStatus(DbUtils.review_status_enum.reviewed);
+  			reviewItemRecordsToInsertFromChangeset.add(reviewItemRecord);
+  		}
+    }
+    
+    //Technically, we also go through and clean element ID mappings records that are no longer
+    //in use b/c they aren't involved in reviews, but that seems difficult and they aren't hurting
+    //anything by being in the database and not being used...
   }
   
   private List<String> getDeleteUniqueIdsFromChangeset(final Document changesetDoc) 
@@ -256,6 +303,7 @@ public class ReviewItemsUpdater
     final Map<ElementType, HashMap<Long, Element>> parsedElementIdsToElementsByType) 
     throws Exception
   {
+  	int numElementIdsUpdated = 0;
   	int numReviewItemsUpdated = 0;
     log.debug("Updating review items for changeset...");
     
@@ -272,6 +320,7 @@ public class ReviewItemsUpdater
   	DbUtils.batchRecords(
     	mapId, elementIdMappingRecordsToInsertFromChangeset, elementIdMappings, null, 
     	RecordBatchType.INSERT, conn, maxRecordBatchSize);
+  	numElementIdsUpdated += elementIdMappingRecordsToInsertFromChangeset.size();
   	DbUtils.batchRecords(
     	mapId, reviewItemRecordsToInsertFromChangeset, reviewItems, null, RecordBatchType.INSERT, conn, 
     	maxRecordBatchSize);
@@ -281,8 +330,13 @@ public class ReviewItemsUpdater
   	for (int i = 0; i < reviewItemRecordsToUpdateFromChangeset.size(); i++)
   	{
   		List<BooleanExpression> predicates = new ArrayList<BooleanExpression>();
+  		predicates.add(reviewItems.mapId.eq(mapId));
   		predicates.add(
-  			reviewItems.reviewId.eq(reviewItemRecordsToUpdateFromChangeset.get(i).getReviewId()));
+  			reviewItems.reviewableItemId.eq(
+  				reviewItemRecordsToUpdateFromChangeset.get(i).getReviewableItemId()));
+  		predicates.add(
+    		reviewItems.reviewAgainstItemId.eq(
+    			reviewItemRecordsToUpdateFromChangeset.get(i).getReviewAgainstItemId()));
   		predicatelist.add(predicates);
   	}
   	DbUtils.batchRecords(
@@ -298,18 +352,21 @@ public class ReviewItemsUpdater
 		    	deletedItemUuidsFromDeleteChangeset.toArray(new String[]{})))
 		    .list(reviewItems.reviewableItemId)
 		    .toArray(new String[]{});
-  	/*numReviewItemsUpdated +=*/ 
+  	numReviewItemsUpdated +=
   		new SQLDeleteClause(conn, DbUtils.getConfiguration(mapId), reviewItems)
-  	    .where(reviewItems.reviewableItemId.in(existingReviewItemUuids))
+  	    .where(
+  	    	reviewItems.reviewableItemId.in(existingReviewItemUuids)
+  	    	  .or(reviewItems.reviewAgainstItemId.in(existingReviewItemUuids)))
 			  .execute();
-  	numReviewItemsUpdated += 
+  	numElementIdsUpdated +=
   		new SQLDeleteClause(
-  			conn, DbUtils.getConfiguration(mapId), elementIdMappings)
-	      .where(elementIdMappings.elementId.in(existingReviewItemUuids))
-		    .execute();
+			  conn, DbUtils.getConfiguration(mapId), elementIdMappings)
+        .where(elementIdMappings.elementId.in(existingReviewItemUuids))
+	      .execute();
   	
   	log.debug(
-      String.valueOf(numReviewItemsUpdated) + " review records were updated as a " +
-      "result of the changeset save.");
+      String.valueOf(numReviewItemsUpdated) + " review records and " + 
+  	  String.valueOf(numElementIdsUpdated) + " element ID records were updated as a result of " +
+      "the changeset save.");
   }
 }

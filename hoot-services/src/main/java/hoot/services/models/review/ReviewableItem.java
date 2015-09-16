@@ -64,11 +64,9 @@ public class ReviewableItem
     this.itemToReviewAgainst = itemToReviewAgainst;
   }
   
-
   private long reviewId = -1;
   public long getReviewId() { return reviewId;}
   public void setReviewId(final long rid) {reviewId = rid;}
-  
   
   private String againstList = null;
   public String getAgainstList() {return againstList;}
