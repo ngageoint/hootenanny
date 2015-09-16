@@ -67,7 +67,7 @@ getDbSchema: function()
     var TYPE2 = { name:"TYPE2",desc:"TYPE2",type:"String",defValue:"999999"};
 
     var schema = [
-        { name:"Roads_POI",
+        { name:"Road_POI",
           desc:"Road POI",
           fdname:"Critical_Infrastructure",
           geom:"Point",
