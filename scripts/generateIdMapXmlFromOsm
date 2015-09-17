@@ -19,25 +19,17 @@ open( my $inputOsmHandle, "< $inputOsmFile" ) or die( "Could not open file $inpu
 open( my $outputXmlHandle, "> $outputXmlFile" ) or 
   die( "Could not open output file \"$outputXmlFile\"\n\n" );
 
-my $startingId = 500;
-
-my %idMappings = ( 'node' => $startingId, 'way' => $startingId, 'relation' => $startingId );
-
 print( $outputXmlHandle "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<id_mappings>\n" );
 
 while ( defined( my $currLine = <$inputOsmHandle> ) )
 {
   chomp( $currLine );
 
-  if ( $currLine =~ /<(node|way|relation)\s+id=\"(.+?)\"/ )
+  if ( $currLine =~ /<(node|way|relation)\s+.*id=\"(.+?)\"/ )
   {
     #print( "Matching line: $currLine\n" );
     print( $outputXmlHandle 
       "  <id_mapping element_type=\"$1\" source_id=\"$2\" database_id=\"$2\"/>\n" );
-
-    $idMappings{$1}++;
-    
-    #last;
   }
 }
 
