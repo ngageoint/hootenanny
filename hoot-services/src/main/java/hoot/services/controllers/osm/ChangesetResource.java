@@ -367,9 +367,9 @@ public class ChangesetResource
         }
         ChangesetDbWriter changesetDbWriter = new ChangesetDbWriter(conn);
         changesetUploadResponse = changesetDbWriter.write(mapid, changesetId, changesetDoc);
-        
+        	
         (new ReviewItemsSynchronizer(conn, mapId)).updateReviewItems(
-        	changesetDoc, changesetDbWriter.getParsedElementIdsToElementsByType());
+          changesetDoc, changesetDbWriter.getParsedElementIdsToElementsByType());
       }
       catch (Exception e)
       {

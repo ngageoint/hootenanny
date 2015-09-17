@@ -58,7 +58,6 @@ public class ReviewItemsSynchronizer
     //Check to see if the map exists in the maps table. (404); input mapId may be a map ID or a
     //map name; this will throw if it doesn't find the map
     log.debug("Checking maps table for map with ID: " + mapId + " ...");
-    (new ReviewMapValidator(conn)).verifyMapPrepared(mapId);
     this.mapId = Long.parseLong(mapId);
     maxRecordBatchSize = 
   		Integer.parseInt(HootProperties.getInstance()
@@ -117,8 +116,6 @@ public class ReviewItemsSynchronizer
     		final long changesetOsmElementId = 
     			Long.parseLong(elementXml.getAttributes().getNamedItem("id").getNodeValue());
     		final ElementType elementType = Element.elementTypeFromString(elementXml.getNodeName());
-    		//final Element element = 
-    		  //parsedElementIdsToElementsByType.get(elementType).get(changesetOsmElementId);
     		final long actualOsmElementId = 
     			parsedElementIdsToElementsByType.get(elementType).get(changesetOsmElementId).getId();
     		elementIdMappingRecordsToInsert.add(
@@ -417,19 +414,28 @@ public class ReviewItemsSynchronizer
     final Map<ElementType, HashMap<Long, Element>> parsedElementIdsToElementsByType) 
     throws Exception
   { 
-  	int numReviewItemsUpdated = 0;
-    log.debug("Updating review items for changeset...");
-    
-    //Items in the create changeset are passed in with temporary id's that the server replaces.  So,
-    //we need to pass the id mapping data structure to this method so it has the correct ID's 
-    //without having to do extra database queries for them.
-  	numReviewItemsUpdated += 
-  		updateReviewRecordsFromCreateChangeset(changesetDoc, parsedElementIdsToElementsByType);
-  	numReviewItemsUpdated += updateReviewRecordsFromModifyChangeset(changesetDoc);
-  	numReviewItemsUpdated += updateReviewRecordsFromDeleteChangeset(changesetDoc);
-  	
-  	log.debug(
-      String.valueOf(numReviewItemsUpdated) + " review records were updated as a result of " +
-      "the changeset save.");
+  	if ((new ReviewMapValidator(conn)).mapIsPrepared(String.valueOf(mapId)))
+  	{
+  		int numReviewItemsUpdated = 0;
+      log.debug("Updating review items for changeset...");
+      
+      //Items in the create changeset are passed in with temporary id's that the server replaces.  So,
+      //we need to pass the id mapping data structure to this method so it has the correct ID's 
+      //without having to do extra database queries for them.
+    	numReviewItemsUpdated += 
+    		updateReviewRecordsFromCreateChangeset(changesetDoc, parsedElementIdsToElementsByType);
+    	numReviewItemsUpdated += updateReviewRecordsFromModifyChangeset(changesetDoc);
+    	numReviewItemsUpdated += updateReviewRecordsFromDeleteChangeset(changesetDoc);
+    	
+    	log.debug(
+        String.valueOf(numReviewItemsUpdated) + " review records were updated as a result of " +
+        "the changeset save.");
+  	}
+  	else
+  	{
+  		log.debug(
+  		  "No review data prepared for map with ID: " + String.valueOf(mapId) + ".  Skipping " +
+  		  "review record synchronization.");
+  	}
   }
 }
