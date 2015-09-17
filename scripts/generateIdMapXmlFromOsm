@@ -33,7 +33,7 @@ while ( defined( my $currLine = <$inputOsmHandle> ) )
   {
     #print( "Matching line: $currLine\n" );
     print( $outputXmlHandle 
-      "  <id_mapping element_type=\"$1\" source_id=\"$2\" database_id=\"$idMappings{$1}\"/>\n" );
+      "  <id_mapping element_type=\"$1\" source_id=\"$2\" database_id=\"$2\"/>\n" );
 
     $idMappings{$1}++;
     
