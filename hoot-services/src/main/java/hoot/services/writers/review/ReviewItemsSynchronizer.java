@@ -16,6 +16,7 @@ import hoot.services.validators.review.ReviewMapValidator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -475,6 +476,7 @@ public class ReviewItemsSynchronizer
   	//drop all review tags from all elements in the osm table
   	//TODO: This is *very* inefficient.
   	long count = 0;
+  	//PreparedStatement stmt = null;
 		for (ElementType elementType : ElementType.values())
 		{
 			if (!elementType.equals(ElementType.Changeset))
@@ -482,26 +484,27 @@ public class ReviewItemsSynchronizer
 				for (int i = 0; i < reviewTags.length; i++)
 				{
 					final Element prototype = ElementFactory.getInstance().create(mapId, elementType, conn);
-					final String tableName = prototype.getElementTable().getTableName();
+					final String tableName = prototype.getElementTable().getTableName() + "_" + mapId;
 					Statement stmt = null;
 					try
 					{
 						final String reviewTag = reviewTags[i];
-						//TODO: can these review tags be deleted by wildcard?
 						Class.forName("org.postgresql.Driver");
 						stmt = conn.createStatement();
-						String sql = 
-							"update" + tableName + "_" + mapId + 
+						final String sql = 
+							"update " + tableName + 
 							" set tags = delete(tags, '" + reviewTag + "')" +
-							" where " + "EXIST(tags, '" + reviewTag +"') = TRUE";
+							" where " + "EXIST(tags, '" + reviewTag + "') = TRUE";
 						stmt = conn.createStatement();
-						ResultSet rs = stmt.executeQuery(sql);
-						rs.next();
-						count += rs.getInt(1);
-						rs.close();
+						count += stmt.executeUpdate(sql);
 						stmt.close();
 						
 						log.debug("count: " + count);
+					}
+					catch (Exception e)
+					{
+						log.error("Error setting review tags reviewed: " + e.getMessage());
+						throw e;
 					}
 					finally
 					{
