@@ -284,7 +284,7 @@ reviewDisplayBoundsMethod=reviewableAndReviewAgainstItemCombined
 # review update
 
 # semi-colon delimited list of review tags used by hoot core
-reviewTags=hoot:review:uuid;hoot:review:score;hoot:review:note;hoot:review:needs
+reviewTags=hoot:review:uuid;hoot:review:score;hoot:review:note;hoot:review:needs;hoot:review:source
 
 # HGIS review prepare for validation script name
 hgisPrepareForValidationScript=custom/HGIS/PrepareForValidation.sh
