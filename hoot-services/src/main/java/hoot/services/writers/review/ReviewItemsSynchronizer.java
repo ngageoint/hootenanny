@@ -18,6 +18,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -472,35 +473,49 @@ public class ReviewItemsSynchronizer
       .execute();
   	
   	//drop all review tags from all elements in the osm table
-  	long numUpdated = 0;
+  	long numReviewTagsDropped = 0;
+  	long numElementVersionIncrements = 0;
 		for (ElementType elementType : ElementType.values())
 		{
 			if (!elementType.equals(ElementType.Changeset))
 			{
 				final Element prototype = ElementFactory.getInstance().create(mapId, elementType, conn);
 				final String tableName = prototype.getElementTable().getTableName() + "_" + mapId;
-				final String sql = 
+				
+			  //The element version update sql makes the assumption that all elements have the same set
+				//of review keys, which should always be true.
+				final String elementVersionIncrementSql = 
+					"update " + tableName + 
+					" set version = version + 1" +
+					" where " + "EXIST(tags, 'hoot:review:needs') = TRUE";
+				final String reviewTagDropSql = 
 					"update " + tableName + 
 					" set tags = delete(tags, (?))" +
 					" where " + "EXIST(tags, (?)) = TRUE";
-				PreparedStatement stmt = null;
+				Statement elementVersionIncrementStatement = null;
+				PreparedStatement reviewTagDropStatement = null;
 				try
 				{
-					stmt = conn.prepareStatement(sql);
+					elementVersionIncrementStatement = conn.createStatement();
+					numElementVersionIncrements += 
+						elementVersionIncrementStatement.executeUpdate(elementVersionIncrementSql);
+					log.debug("numElementVersionIncrements: " + numElementVersionIncrements);
+					
+					reviewTagDropStatement = conn.prepareStatement(reviewTagDropSql);
 					for (int i = 0; i < reviewTags.length; i++)
 					{
 						final String reviewTag = reviewTags[i];
 						Class.forName("org.postgresql.Driver");
-						stmt.setString(1, reviewTag);
-						stmt.setString(2, reviewTag);
-						stmt.addBatch();
+						reviewTagDropStatement.setString(1, reviewTag);
+						reviewTagDropStatement.setString(2, reviewTag);
+						reviewTagDropStatement.addBatch();
 					}
-					int[] resultCounts = stmt.executeBatch();
+					final int[] resultCounts = reviewTagDropStatement.executeBatch();
 					for (int i = 0; i < resultCounts.length; i++)
 					{
-						int resultCount = resultCounts[i];
-						log.debug("count: " + resultCount);
-						numUpdated += resultCount;
+						final int resultCount = resultCounts[i];
+						log.debug("numReviewTagsDropped: " + resultCount);
+						numReviewTagsDropped += resultCount;
 					}
 				}
 				catch (Exception e)
@@ -512,7 +527,8 @@ public class ReviewItemsSynchronizer
 				{
 					try
 					{
-						if (stmt != null) stmt.close();
+						if (reviewTagDropStatement != null) reviewTagDropStatement.close();
+						if (elementVersionIncrementStatement != null) elementVersionIncrementStatement.close();
 					}
 					catch (SQLException se2)
 					{
@@ -522,6 +538,7 @@ public class ReviewItemsSynchronizer
 			}
 		}
 		
-		log.debug("numUpdated: " + numUpdated);
+		log.debug("total numReviewTagsDropped: " + numReviewTagsDropped);
+		log.debug("total numElementVersionIncrements: " + numElementVersionIncrements);
   }
 }
