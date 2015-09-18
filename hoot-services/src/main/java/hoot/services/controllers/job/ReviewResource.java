@@ -497,7 +497,6 @@ public class ReviewResource
    * @param elementType OSM type of the element to be retrieved
    * @return an array of review records
    * @throws Exception
-   * @todo write unit test
    */
   @GET
   @Path("/refs")
@@ -538,6 +537,13 @@ public class ReviewResource
   	return response;
   }
   
+  /**
+   * Sets all reviewable features in the dataset to reviewed
+   * 
+   * @param mapId the map owning the elements to be set reviewed
+   * @return HTTP response
+   * @throws Exception
+   */
   @PUT
   @Path("/setallreviewed")
   @Consumes(MediaType.TEXT_PLAIN)
@@ -559,9 +565,7 @@ public class ReviewResource
   		
   		log.debug("Committing set all items reviewed transaction...");
       transactionManager.commit(transactionStatus);
-      conn.commit();
-    	
-    	return Response.ok().build();
+      conn.commit();	
   	}
   	catch (Exception e)
     {
@@ -578,6 +582,6 @@ public class ReviewResource
       DbUtils.closeConnection(conn);
     }
   	
-  	return null;
+  	return Response.ok().build();
   }
 }
