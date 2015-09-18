@@ -114,15 +114,18 @@ public class ReviewItemsSynchronizer
   	List<ElementIdMappings> elementIdMappingRecordsToInsert = new ArrayList<ElementIdMappings>();
     List<ReviewItems> reviewItemRecordsToInsert = new ArrayList<ReviewItems>();
   	
-    //Create element id mappings for every record, regardless if its involved in a review.  This
-  	//will result in unused records, but makes the code simpler overall.  We're making a big 
-  	//assumption here that any review against items already have an element id mapping record entry...
-  	//which should be the case.
-  	final NodeList createdElements = XPathAPI.selectNodeList(changesetDoc, "//osmChange/create/*");
+    //We're only concerned with elements having a uuid tag.  If they don't have that tag they aren't
+    //involved in a review.
+  	final NodeList createdElements = 
+  		XPathAPI.selectNodeList(changesetDoc, "//osmChange/create/*/tag[@k = 'uuid']/..");
   	log.debug(String.valueOf(createdElements.getLength()));
   	if (createdElements.getLength() > 0)
   	{
   		log.debug(XmlUtils.nodeListToString(createdElements));
+  	  //Create element id mappings for every record, regardless if its involved in a review.  This
+    	//will result in unused records, but makes the code simpler overall.  We're making a big 
+    	//assumption here that any review against items already have an element id mapping record entry...
+    	//which should be the case.
     	for (int i = 0; i < createdElements.getLength(); i++)
     	{
     		final org.w3c.dom.Node elementXml = createdElements.item(i);
@@ -207,9 +210,10 @@ public class ReviewItemsSynchronizer
     int numReviewItemsUpdated = 0;
     
     //get a list of all the uuid's in the modify changeset (both types: reviewable and review 
-    //against)
+    //against); We're only concerned with elements having a uuid tag.  If they don't have that tag 
+    //they were never involved in a review at any time.
     final NodeList modifiedItems =
-      XPathAPI.selectNodeList(changesetDoc, "//osmChange/modify/*");
+      XPathAPI.selectNodeList(changesetDoc, "//osmChange/modify/*/tag[@k = 'uuid']/..");
     if (modifiedItems.getLength() > 0)
     {
     	List<ElementIdMappings> elementIdMappingRecordsToInsert = new ArrayList<ElementIdMappings>();
