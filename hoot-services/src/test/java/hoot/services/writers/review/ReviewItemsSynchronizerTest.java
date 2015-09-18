@@ -1,4 +1,4 @@
-package hoot.services.review.writers;
+package hoot.services.writers.review;
 
 import hoot.services.UnitTest;
 import hoot.services.utils.XmlDocumentBuilder;
@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.w3c.dom.Document;
 
+//TODO: finish
 public class ReviewItemsSynchronizerTest
 {
   //private static Document changesetDoc;

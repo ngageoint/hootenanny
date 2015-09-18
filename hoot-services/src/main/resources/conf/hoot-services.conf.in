@@ -281,6 +281,11 @@ reviewDisplayBoundsZoomAdjustDefault=-0.0015
 # reviewableItemOnly, reviewAgainstItemOnly, reviewableAndReviewAgainstItemCombined
 reviewDisplayBoundsMethod=reviewableAndReviewAgainstItemCombined
 
+# review update
+
+# semi-colon delimited list of review tags used by hoot core
+reviewTags=hoot:review:uuid;hoot:review:score;hoot:review:note;hoot:review:needs
+
 # HGIS review prepare for validation script name
 hgisPrepareForValidationScript=custom/HGIS/PrepareForValidation.sh
 

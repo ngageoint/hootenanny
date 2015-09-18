@@ -8,12 +8,17 @@ import hoot.services.db2.QElementIdMappings;
 import hoot.services.db2.QReviewItems;
 import hoot.services.db2.ReviewItems;
 import hoot.services.models.osm.Element;
+import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.review.ReviewUtils;
 import hoot.services.utils.XmlUtils;
 import hoot.services.validators.review.ReviewMapValidator;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -50,18 +55,28 @@ public class ReviewItemsSynchronizer
   
   private long mapId;
   private Connection conn;
-  protected int maxRecordBatchSize;
+  private int maxRecordBatchSize;
+  private String[] reviewTags;
 	
   public ReviewItemsSynchronizer(final Connection conn, final String mapId) throws Exception
   {
     this.conn = conn;
-    //Check to see if the map exists in the maps table. (404); input mapId may be a map ID or a
-    //map name; this will throw if it doesn't find the map
-    log.debug("Checking maps table for map with ID: " + mapId + " ...");
     this.mapId = Long.parseLong(mapId);
     maxRecordBatchSize = 
   		Integer.parseInt(HootProperties.getInstance()
   		  .getProperty("maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
+    String reviewTagsStr = 
+  		HootProperties.getInstance()
+  		  .getProperty("reviewTags", HootProperties.getDefault("reviewTags"));
+    if (reviewTagsStr.contains(";"))
+    {
+    	reviewTags = reviewTagsStr.split(";");
+    }
+    else
+    {
+    	reviewTags = new String[1];
+    	reviewTags[0] = reviewTagsStr;
+    }
   }
   
   private String[] reviewAgainstUuidsFromChangesetElement(final org.w3c.dom.Node elementXml) 
@@ -191,8 +206,8 @@ public class ReviewItemsSynchronizer
     
     int numReviewItemsUpdated = 0;
     
-    //get a list of all the uuid's in the modify changeset (both types: reviewable and review against)
-    //also map the uuid's to the xml for later use
+    //get a list of all the uuid's in the modify changeset (both types: reviewable and review 
+    //against)
     final NodeList modifiedItems =
       XPathAPI.selectNodeList(changesetDoc, "//osmChange/modify/*");
     if (modifiedItems.getLength() > 0)
@@ -221,9 +236,9 @@ public class ReviewItemsSynchronizer
         }
       }
       
-      //query out all review records corresponding to the changeset elements; store in map
-      //inefficient, yes, but there doesn't seem to be any other way to do this and avoid expensive 
-      //per element queries in a loop
+      //query out all review records corresponding to the changeset elements; store in a map
+      //not inefficient, b/c we're only retrieving the info for records in the modify
+      //changeset, which should typically not be too large
       List<ReviewItems> allExistingReviewRecordsFromChangeset = new ArrayList<ReviewItems>();
       if (changesetReviewableUuidsToXml.size() > 0)
       {
@@ -245,8 +260,8 @@ public class ReviewItemsSynchronizer
       		reviewItem.getReviewableItemId(), reviewItem.getReviewAgainstItemId());
       }
       
-      //inefficient, yes, but we need this to know whether a new element id mapping record needs to 
-      //be created or not
+      //we need this to know whether a new element id mapping record needs to be created or not; 
+      //not inefficient for the reasons listed above regarding allExistingReviewRecordsFromChangeset
       final List<String> allExistingElementIdMappingUuidsFromChangeset =
         new SQLQuery(conn, DbUtils.getConfiguration(mapId))
           .from(elementIdMappings)
@@ -437,5 +452,70 @@ public class ReviewItemsSynchronizer
   		  "No review data prepared for map with ID: " + String.valueOf(mapId) + ".  Skipping " +
   		  "review record synchronization.");
   	}
+  }
+  
+  /**
+   * Updates all features for the given map as reviewed
+   * 
+   * @throws SQLException
+   * @throws InstantiationException
+   * @throws IllegalAccessException
+   * @throws ClassNotFoundException
+   * @throws NoSuchMethodException
+   * @throws InvocationTargetException
+   */
+  public void setAllItemsReviewed() throws SQLException, InstantiationException, 
+    IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException
+  {
+    //set all review records for this map ID to reviewed
+  	new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), reviewItems)
+      .set(reviewItems.reviewStatus, DbUtils.review_status_enum.reviewed)
+      .execute();
+  	
+  	//drop all review tags from all elements in the osm table
+  	//TODO: This is *very* inefficient.
+  	long count = 0;
+		for (ElementType elementType : ElementType.values())
+		{
+			if (!elementType.equals(ElementType.Changeset))
+			{
+				for (int i = 0; i < reviewTags.length; i++)
+				{
+					final Element prototype = ElementFactory.getInstance().create(mapId, elementType, conn);
+					final String tableName = prototype.getElementTable().getTableName();
+					Statement stmt = null;
+					try
+					{
+						final String reviewTag = reviewTags[i];
+						//TODO: can these review tags be deleted by wildcard?
+						Class.forName("org.postgresql.Driver");
+						stmt = conn.createStatement();
+						String sql = 
+							"update" + tableName + "_" + mapId + 
+							" set tags = delete(tags, '" + reviewTag + "')" +
+							" where " + "EXIST(tags, '" + reviewTag +"') = TRUE";
+						stmt = conn.createStatement();
+						ResultSet rs = stmt.executeQuery(sql);
+						rs.next();
+						count += rs.getInt(1);
+						rs.close();
+						stmt.close();
+						
+						log.debug("count: " + count);
+					}
+					finally
+					{
+						try
+						{
+							if (stmt != null) stmt.close();
+						}
+						catch (SQLException se2)
+						{
+							log.error(se2.getMessage());
+						}
+					}
+				}
+			}
+		}
   }
 }

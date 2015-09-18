@@ -28,28 +28,25 @@ package hoot.services.controllers.job;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
-import hoot.services.db2.ElementIdMappings;
-import hoot.services.db2.QElementIdMappings;
 import hoot.services.db2.QMaps;
-import hoot.services.db2.QReviewItems;
 import hoot.services.geo.BoundingBox;
-import hoot.services.models.osm.Element;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.ReviewAgainstItem;
 import hoot.services.models.review.ReviewReferences;
 import hoot.services.models.review.ReviewableItemsStatistics;
+import hoot.services.readers.review.ReviewReferencesRetriever;
 import hoot.services.readers.review.ReviewableItemsStatisticsCalculator;
 import hoot.services.review.ReviewItemsRetriever;
 import hoot.services.review.ReviewItemsPreparer;
 import hoot.services.review.ReviewUtils;
 import hoot.services.validators.review.ReviewInputParamsValidator;
+import hoot.services.writers.review.ReviewItemsSynchronizer;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -60,14 +57,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
-
-import com.mysema.query.sql.SQLQuery;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 /**
  * Non-WPS service endpoint for the conflated data review process
@@ -81,9 +80,6 @@ import com.mysema.query.sql.SQLQuery;
 public class ReviewResource
 {
   private static final Logger log = LoggerFactory.getLogger(ReviewResource.class);
-  
-  private static final QReviewItems reviewItems = QReviewItems.reviewItems;
-  private static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
 
   //These parameters are passed in by the unit tests only.  With better unit test coverage,
   //these params could probably go away.
@@ -93,7 +89,6 @@ public class ReviewResource
   public static String reviewRecordWriter = "reviewPrepareDbWriter2";
 
   private ClassPathXmlApplicationContext appContext;
-  @SuppressWarnings("unused")
   private PlatformTransactionManager transactionManager;
 
   public ReviewResource() throws Exception
@@ -497,7 +492,7 @@ public class ReviewResource
    * item the specified element still needs to be reviewed against, as well as any other item that 
    * needs to use the specified element to review against it.
    * 
-   * @param mapId map owning the features whose ID's are passed in featureUniqueIds
+   * @param mapId map owning the feature passed in
    * @param elementId OSM ID of the element to be retrieved
    * @param elementType OSM type of the element to be retrieved
    * @return an array of review records
@@ -521,82 +516,10 @@ public class ReviewResource
   	ReviewReferences response = new ReviewReferences();
   	try
   	{
-  		log.debug("mapId: " + mapId);
-  		log.debug("elementId: " + elementId);
-  		log.debug("elementType: " + elementType);
-  		
-  		final String elementUniqueId = 
-  			new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-	        .from(elementIdMappings)
-		      .where(
-		    	  elementIdMappings.mapId.eq(mapId)
-		    	  .and(elementIdMappings.osmElementId.eq(elementId))
-		    	  .and(elementIdMappings.osmElementType.eq(Element.elementEnumForString(elementType))))
-		      .singleResult(elementIdMappings.elementId);
-  		log.debug("elementUniqueId: " + elementUniqueId);
-  		
-  		List<ReviewAgainstItem> reviewAgainstItems = new ArrayList<ReviewAgainstItem>();
-  		//get all review against items that are referenced by the input elements; since
-  		//the review table data breaks up one to many reviewable uuid to review against uuid
-  		//relationships, we don't have to break up the review against uuid's list here
-  		final List<String> reviewAgainstItemUniqueIds =
-        new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-  		    .from(reviewItems)
-    		  .where(
-    		  	reviewItems.reviewableItemId.eq(elementUniqueId)
-    		  	  .and(reviewItems.mapId.eq(mapId)))
-    		  .list(reviewItems.reviewAgainstItemId);
-  		if (reviewAgainstItemUniqueIds.size() > 0)
-  		{
-  			final List<ElementIdMappings> reviewAgainstItemRecords =
-	        new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-	    		  .from(elementIdMappings)
-	      		.where(
-	      			elementIdMappings.elementId.in(reviewAgainstItemUniqueIds)
-	      			  .and(elementIdMappings.mapId.eq(mapId)))
-	      		.list(elementIdMappings);
-	  		for (ElementIdMappings itemRecord : reviewAgainstItemRecords)
-	  		{
-	  			ReviewAgainstItem item = new ReviewAgainstItem();
-	  			item.setId(itemRecord.getOsmElementId());
-	  			item.setType(itemRecord.getOsmElementType().toString().toLowerCase());
-	  			item.setUuid(itemRecord.getElementId());
-	  			reviewAgainstItems.add(item);
-	  		}
-  		}
-  		response.setReviewAgainstItems(reviewAgainstItems.toArray(new ReviewAgainstItem[]{}));
-  		
-  		List<ReviewAgainstItem> reviewableItems = new ArrayList<ReviewAgainstItem>();
-      //add all items which reference the input features as a review against item
-  		final List<String> reviewableItemUniqueIds =
-        new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-  		    .from(reviewItems)
-    		  .where(
-    		  	reviewItems.reviewAgainstItemId.eq(elementUniqueId)
-    		  	  .and(reviewItems.mapId.eq(mapId)))
-    		  .list(reviewItems.reviewableItemId);
-  		if (reviewableItemUniqueIds.size() > 0)
-  		{
-  			final List<ElementIdMappings> reviewableItemRecords =
-	        new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-	    		  .from(elementIdMappings)
-	      		.where(
-	      			elementIdMappings.elementId.in(reviewableItemUniqueIds)
-	      			  .and(elementIdMappings.mapId.eq(mapId)))
-	      		.list(elementIdMappings);
-	  		for (ElementIdMappings itemRecord : reviewableItemRecords)
-	  		{
-	  			//returning a review against item here, instead of a reviewable item, b/c the review against
-	  			//item has all of the info that's needed to return the references, whereas ReviewableItem
-	  			//has a lot of extra unneeded info...client won't know the different between the two anyway
-	  			ReviewAgainstItem item = new ReviewAgainstItem();
-	  			item.setId(itemRecord.getOsmElementId());
-	  			item.setType(itemRecord.getOsmElementType().toString().toLowerCase());
-	  			item.setUuid(itemRecord.getElementId());
-	  			reviewableItems.add(item);
-	  		}
-  		}
-  		response.setReviewableItems(reviewableItems.toArray(new ReviewAgainstItem[]{}));
+  		List<List<ReviewAgainstItem>> references = 
+  			(new ReviewReferencesRetriever(conn).getReferences(mapId, elementId, elementType));
+  		response.setReviewAgainstItems(references.get(0).toArray(new ReviewAgainstItem[]{}));
+  		response.setReviewableItems(references.get(1).toArray(new ReviewAgainstItem[]{}));
   	}
   	catch (Exception e)
     {
@@ -613,5 +536,48 @@ public class ReviewResource
   	
   	log.debug("response : " + response.toString());
   	return response;
+  }
+  
+  @PUT
+  @Path("/setallreviewed")
+  @Consumes(MediaType.TEXT_PLAIN)
+  @Produces(MediaType.TEXT_PLAIN)
+  public Response setAllItemsReviewed(
+    @QueryParam("mapId")
+    final long mapId) 
+    throws Exception
+  {
+  	Connection conn = DbUtils.createConnection();
+  	log.debug("Intializing changeset upload transaction...");
+    TransactionStatus transactionStatus = 
+      transactionManager.getTransaction(
+        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
+    conn.setAutoCommit(false);
+  	try
+  	{
+  	  (new ReviewItemsSynchronizer(conn, String.valueOf(mapId))).setAllItemsReviewed();
+  		
+  		log.debug("Committing set all items reviewed transaction...");
+      transactionManager.commit(transactionStatus);
+      conn.commit();
+    	
+    	return Response.ok().build();
+  	}
+  	catch (Exception e)
+    {
+      transactionManager.rollback(transactionStatus);
+      conn.rollback();
+      ReviewUtils.handleError(
+      	e, 
+      	"Error setting all records to reviewed for map ID: " + mapId, 
+      	false);
+    }
+    finally
+    {
+    	conn.setAutoCommit(true);
+      DbUtils.closeConnection(conn);
+    }
+  	
+  	return null;
   }
 }

@@ -334,6 +334,10 @@ public class HootProperties
     {
       return "true";
     }
+    else if (key.equals("reviewTags"))
+    {
+      return "hoot:review:uuid;hoot:review:score;hoot:review:note;hoot:review:needs";
+    }
     return null;
   }
 }
