@@ -17,9 +17,7 @@ import hoot.services.validators.review.ReviewMapValidator;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -474,51 +472,56 @@ public class ReviewItemsSynchronizer
       .execute();
   	
   	//drop all review tags from all elements in the osm table
-  	//TODO: This is *very* inefficient.
-  	long count = 0;
-  	//PreparedStatement stmt = null;
+  	long numUpdated = 0;
 		for (ElementType elementType : ElementType.values())
 		{
 			if (!elementType.equals(ElementType.Changeset))
 			{
-				for (int i = 0; i < reviewTags.length; i++)
+				final Element prototype = ElementFactory.getInstance().create(mapId, elementType, conn);
+				final String tableName = prototype.getElementTable().getTableName() + "_" + mapId;
+				final String sql = 
+					"update " + tableName + 
+					" set tags = delete(tags, (?))" +
+					" where " + "EXIST(tags, (?)) = TRUE";
+				PreparedStatement stmt = null;
+				try
 				{
-					final Element prototype = ElementFactory.getInstance().create(mapId, elementType, conn);
-					final String tableName = prototype.getElementTable().getTableName() + "_" + mapId;
-					Statement stmt = null;
-					try
+					stmt = conn.prepareStatement(sql);
+					for (int i = 0; i < reviewTags.length; i++)
 					{
 						final String reviewTag = reviewTags[i];
 						Class.forName("org.postgresql.Driver");
-						stmt = conn.createStatement();
-						final String sql = 
-							"update " + tableName + 
-							" set tags = delete(tags, '" + reviewTag + "')" +
-							" where " + "EXIST(tags, '" + reviewTag + "') = TRUE";
-						stmt = conn.createStatement();
-						count += stmt.executeUpdate(sql);
-						stmt.close();
-						
-						log.debug("count: " + count);
+						stmt.setString(1, reviewTag);
+						stmt.setString(2, reviewTag);
+						stmt.addBatch();
 					}
-					catch (Exception e)
+					int[] resultCounts = stmt.executeBatch();
+					for (int i = 0; i < resultCounts.length; i++)
 					{
-						log.error("Error setting review tags reviewed: " + e.getMessage());
-						throw e;
+						int resultCount = resultCounts[i];
+						log.debug("count: " + resultCount);
+						numUpdated += resultCount;
 					}
-					finally
+				}
+				catch (Exception e)
+				{
+					log.error("Error setting review tags reviewed: " + e.getMessage());
+					throw e;
+				}
+				finally
+				{
+					try
 					{
-						try
-						{
-							if (stmt != null) stmt.close();
-						}
-						catch (SQLException se2)
-						{
-							log.error(se2.getMessage());
-						}
+						if (stmt != null) stmt.close();
+					}
+					catch (SQLException se2)
+					{
+						log.error(se2.getMessage());
 					}
 				}
 			}
 		}
+		
+		log.debug("numUpdated: " + numUpdated);
   }
 }
