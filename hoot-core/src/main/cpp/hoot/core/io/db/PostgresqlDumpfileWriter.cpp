@@ -30,6 +30,8 @@
 #include <boost/shared_ptr.hpp>
 
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/LogLog4Cxx.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/Node.h>
@@ -41,19 +43,52 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, PostgresqlDumpfileWriter)
 
-PostgresqlDumpfileWriter::PostgresqlDumpfileWriter()
+PostgresqlDumpfileWriter::PostgresqlDumpfileWriter():
+
+  _sectionTempFiles(),
+  _sectionNames(_createSectionNameList()),
+  _outputFilename(),
+  _writeStats()
 {
   setConfiguration(conf());
+
+  boost::shared_ptr<QTemporaryFile> nullPtr;
+
+  for ( std::list<QString>::const_iterator it = _sectionNames.begin();
+        it != _sectionNames.end(); ++it )
+  {
+    _sectionTempFiles.insert(std::pair<QString, boost::shared_ptr<QTemporaryFile> >(*it, nullPtr));
+  }
+
+  _writeStats.nodesWritten = 0;
+  _writeStats.nodeTagsWritten = 0;
+  _writeStats.waysWritten = 0;
+  _writeStats.wayNodesWritten = 0;
+  _writeStats.wayTagsWritten = 0;
+  _writeStats.relationsWritten = 0;
+  _writeStats.relationMembersWritten = 0;
+  _writeStats.relationTagsWritten = 0;
 }
 
 bool PostgresqlDumpfileWriter::isSupported(QString url)
 {
-  return false;
+  return ( url.endsWith(".sql") );
 }
 
 void PostgresqlDumpfileWriter::open(QString url)
 {
-  ;
+  // Make sure we're not already open and the URL is valid
+  if ( _outputFilename.length() > 0)
+  {
+    throw HootException( QString("Tried to open writer when already open") );
+  }
+  else if ( isSupported(url) == false )
+  {
+    throw HootException( QString("Could not open URL ") + url);
+  }
+
+  _outputFilename = url;
+  LOG_INFO( QString("Output filename set to ") + _outputFilename);
 }
 
 void PostgresqlDumpfileWriter::close()
@@ -63,7 +98,7 @@ void PostgresqlDumpfileWriter::close()
 
 void PostgresqlDumpfileWriter::finalizePartial()
 {
-  ;
+  LOG_INFO( QString("Finalize called, time to create ") + _outputFilename);
 }
 
 void PostgresqlDumpfileWriter::writePartial(const boost::shared_ptr<const hoot::Node>& n)
@@ -87,5 +122,31 @@ void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
 }
 
 
+std::list<QString> PostgresqlDumpfileWriter::_createSectionNameList()
+{
+  std::list<QString> sections;
+
+  sections.push_back(QString("sequence_updates"));
+  sections.push_back(QString("users"));
+  sections.push_back(QString("changesets"));
+  sections.push_back(QString("current_nodes"));
+  sections.push_back(QString("current_node_tags"));
+  sections.push_back(QString("nodes"));
+  sections.push_back(QString("node_tags"));
+  sections.push_back(QString("current_ways"));
+  sections.push_back(QString("current_way_nodes"));
+  sections.push_back(QString("current_way_tags"));
+  sections.push_back(QString("ways"));
+  sections.push_back(QString("way_nodes"));
+  sections.push_back(QString("way_tags"));
+  sections.push_back(QString("current_relations"));
+  sections.push_back(QString("current_relation_members"));
+  sections.push_back(QString("current_relation_tags"));
+  sections.push_back(QString("relations"));
+  sections.push_back(QString("relation_members"));
+  sections.push_back(QString("relation_tags"));
+
+  return sections;
+}
 
 }

@@ -23,10 +23,15 @@
  */
 
 #include <string>
+#include <iostream>
+#include <fstream>
+#include <map>
+#include <list>
 
 #include <boost/shared_ptr.hpp>
 
 #include <Qt/qstring.h>
+#include <Qt/qtemporaryfile.h>
 
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/OsmMapWriter.h>
@@ -64,6 +69,34 @@ public:
 protected:
 
   virtual void setConfiguration(const hoot::Settings &conf);
+
+  std::map<QString, boost::shared_ptr<QTemporaryFile> > _sectionTempFiles;
+
+  std::list<QString> _sectionNames;
+
+  QString _outputFilename;
+
+  struct _ElementWriteStats
+  {
+    unsigned long nodesWritten;
+    unsigned long nodeTagsWritten;
+    unsigned long waysWritten;
+    unsigned long wayNodesWritten;
+    unsigned long wayTagsWritten;
+    unsigned long relationsWritten;
+    unsigned long relationMembersWritten;
+    unsigned long relationTagsWritten;
+  };
+
+  _ElementWriteStats _writeStats;
+
+  std::list<QString> _createSectionNameList();
+
+  void _closeSectionTempFilesAndConcat();
+
+
+
+
 
 };
 
