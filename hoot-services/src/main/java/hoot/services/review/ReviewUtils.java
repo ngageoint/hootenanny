@@ -27,10 +27,8 @@
 package hoot.services.review;
 
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,12 +37,10 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.lang3.StringUtils;
 import org.deegree.commons.ows.exception.OWSException;
 import org.deegree.services.wps.ProcessletException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mysema.query.sql.SQLQuery;
-
 
 import hoot.services.db.DbUtils;
 import hoot.services.db2.ElementIdMappings;
@@ -53,8 +49,6 @@ import hoot.services.db2.QReviewItems;
 import hoot.services.db2.ReviewItems;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
-import hoot.services.models.review.ReviewedItem;
-import hoot.services.models.review.ReviewedItems;
 import hoot.services.utils.ResourceErrorHandler;
 
 /**
@@ -66,48 +60,6 @@ public class ReviewUtils
 
   protected static final QReviewItems reviewItemsTbl = QReviewItems.reviewItems;
   protected static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
-
-  /**
-   * Constructs a ReviewedItems object for all items associated with the map layer
-   *
-   * @param mapId
-   * @return a ReviewedItems object
-   */
-  public static ReviewedItems getReviewedItemsCollectionForAllRecords(final long mapId,
-    Connection conn)
-  {
-    ReviewedItems reviewedItems = new ReviewedItems();
-    List<ReviewedItem> reviewedItemsList = new ArrayList<ReviewedItem>();
-
-    SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration(mapId));
-
-    List<ReviewItems> reviewItems =
-  	query	.from(reviewItemsTbl)
-		.where(
-				reviewItemsTbl.mapId.eq(mapId)
-		)
-		.list(reviewItemsTbl);
-
-    for (ReviewItems reviewItem : reviewItems)
-    {
-      ReviewedItem reviewedItem = new ReviewedItem();
-      log.debug("reviewableItemId: " + reviewItem.getReviewableItemId());
-      log.debug("reviewAgainstItemId: " + reviewItem.getReviewAgainstItemId());
-      //TODO: there is a much more efficient way to do this...but this will have to do for now
-      reviewedItem.setId(getElementId(reviewItem.getReviewableItemId(), mapId, conn));
-      reviewedItem.setType(
-        getElementType(
-          reviewItem.getReviewableItemId(), mapId, conn).toString().toLowerCase());
-      reviewedItem.setReviewedAgainstId(
-        getElementId(reviewItem.getReviewAgainstItemId(), mapId, conn));
-      reviewedItem.setReviewedAgainstType(
-        getElementType(
-          reviewItem.getReviewAgainstItemId(), mapId, conn).toString().toLowerCase());
-      reviewedItemsList.add(reviewedItem);
-    }
-    reviewedItems.setReviewedItems(reviewedItemsList.toArray(new ReviewedItem[]{}));
-    return reviewedItems;
-  }
 
   /**
    * toString() implementation for the ElementIdMappings
@@ -344,4 +296,57 @@ public class ReviewUtils
       ResourceErrorHandler.handleError(message, status, log);
     }
   }
+  
+  /**
+   * Creates a record to represent the mapping of an element unique ID to an osm element ID
+   * 
+   * @param uniqueElementId element unique ID
+   * @param osmElementId element OSM ID
+   * @param elementType element's type
+   * @param mapId ID of map owning element
+   * @return an element ID mapping database record
+   */
+  public static ElementIdMappings createElementIdMappingRecord(final String uniqueElementId, 
+		final long osmElementId, final ElementType elementType, final long mapId)
+	{
+		ElementIdMappings elementIdMappingRecord = new ElementIdMappings();
+		log.debug("uniqueElementId: " + uniqueElementId);
+		elementIdMappingRecord.setElementId(uniqueElementId);
+		log.debug("mapId: " + mapId);
+		elementIdMappingRecord.setMapId(mapId);
+		log.debug("osmElementId: " + osmElementId);
+		elementIdMappingRecord.setOsmElementId(osmElementId);
+		log.debug("elementType: " + elementType.toString());
+		elementIdMappingRecord.setOsmElementType(Element
+		    .elementEnumForElementType(elementType));
+		return elementIdMappingRecord;
+	}
+  
+  /**
+   * Creates a record to represent the mapping of an element unique ID to an osm element ID
+   * 
+   * @param reviewableItemId the unique ID of the item being reviewed
+   * @param reviewScore the importance score of the associated review
+   * @param reviewAgainstItemId the unique ID of the item the reviewable item is being reviewed
+   * against
+   * @param mapId ID of map owning the review elements
+   * @return a review item database record
+   */
+  public static ReviewItems createReviewItemRecord(final String reviewableItemId,
+	  final double reviewScore, final String reviewAgainstItemId, final long mapId)
+	{
+		ReviewItems reviewItemRecord = new ReviewItems();
+		log.debug("mapId: " + mapId);
+		reviewItemRecord.setMapId(mapId);
+		log.debug("reviewableItemId: " + reviewableItemId);
+		reviewItemRecord.setReviewableItemId(reviewableItemId);
+		reviewItemRecord.setReviewScore(reviewScore);
+		if (reviewAgainstItemId != null)
+		{
+			log.debug("reviewAgainstItemId: " + reviewAgainstItemId);
+			reviewItemRecord.setReviewAgainstItemId(reviewAgainstItemId);
+		}
+		reviewItemRecord.setReviewStatus(DbUtils.review_status_enum.unreviewed);
+		return reviewItemRecord;
+	}
 }

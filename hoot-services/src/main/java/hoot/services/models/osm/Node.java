@@ -206,9 +206,8 @@ public class Node extends Element
     assert (record != null);
     CurrentNodes nodeRecord = (CurrentNodes) record;
 
-    // set these props at the very beginning, b/c they will be needed regardless
-    // of whether following
-    // checks fail
+    // set these props at the very beginning, b/c they will be needed regardless of whether 
+    // following checks fail
     nodeRecord.setChangesetId(parseChangesetId(xmlAttributes));
     nodeRecord.setVersion(parseVersion(xmlAttributes));
 

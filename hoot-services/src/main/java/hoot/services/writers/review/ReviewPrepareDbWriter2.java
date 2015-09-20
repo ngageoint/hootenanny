@@ -46,6 +46,7 @@ import hoot.services.db.postgres.PostgresUtils;
 import hoot.services.db2.ElementIdMappings;
 import hoot.services.db2.ReviewItems;
 import hoot.services.models.osm.Element.ElementType;
+import hoot.services.review.ReviewUtils;
 
 /**
  * Writes review data to the services database
@@ -151,7 +152,8 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                   {
                     log.debug("Adding UUID: " + uniqueElementId);
                     elementIdMappingRecordsToInsert.add(
-                      createElementIdMappingRecord(uniqueElementId, osmElementId, elementType, mapId));
+                      ReviewUtils.createElementIdMappingRecord(
+                      	uniqueElementId, osmElementId, elementType, mapId));
                     flushIdMappingRecords(
                       elementIdMappingRecordsToInsert, maxRecordBatchSize, logMsgStart);
                   }
@@ -329,7 +331,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                             ", review against item ID: " + reviewableItemId + ", and source: " + 
                             source);
                           reviewRecordsToInsert.add(
-                            createReviewItemRecord(
+                            ReviewUtils.createReviewItemRecord(
                             	reviewAgainstItemId, reviewScore, reviewableItemId, mapId));
                           reviewableItemIdToReviewAgainstItemIds.put(
                           	reviewAgainstItemId, reviewableItemId);
@@ -341,7 +343,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                             ", review against item ID: " + reviewAgainstItemId + ", and source: " + 
                             source);
                           reviewRecordsToInsert.add(
-                            createReviewItemRecord(
+                          	ReviewUtils.createReviewItemRecord(
                             	reviewableItemId, reviewScore, reviewAgainstItemId, mapId));
                           reviewableItemIdToReviewAgainstItemIds.put(
                           	reviewableItemId, reviewAgainstItemId);
@@ -366,7 +368,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                       "Adding review item with reviewable item ID: " +  reviewableItemId + " and " +
                       "review against item ID: " + reviewableItemId);
                     reviewRecordsToInsert.add(
-                      createReviewItemRecord(
+                    	ReviewUtils.createReviewItemRecord(
                         reviewableItemId, reviewScore, reviewableItemId, mapId));
                     reviewableItemIdToReviewAgainstItemIds.put(reviewableItemId, reviewableItemId);
                     flushReviewRecords(reviewRecordsToInsert, maxRecordBatchSize, logMsgStart);

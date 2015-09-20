@@ -39,6 +39,8 @@ function addReviewTags(e) {
     // this creates a copy of the tags so we have to set it when we're done
     var tags = e.getTags();
 
+    // make sure there is a UUID
+    tags.getCreateUuid();
     tags.set("hoot:review:needs", "yes");
     tags.set("hoot:review:note", "Flagged for imagery validation");
     tags.set("hoot:review:choices:1", JSON.stringify({
@@ -119,10 +121,8 @@ hoot.loadMap(map, input, false, 1);
 // count the number of POIs in the map
 map.visit(countPois);
 
-hoot.log(poiCount);
 // Create an array of indexes for the random 30% sample
 var randomIndexes = createRandomArray(poiCount, 0.30).sort(function(a,b) { return a - b; });
-hoot.log(randomIndexes.length);
 randomIndexes[randomIndexes.length] = poiCount;
 
 // go through all the elements
@@ -141,6 +141,5 @@ map.visit(function(e) {
         index++;
     }
 });
-hoot.log(i);
 
 hoot.saveMap(map, output);

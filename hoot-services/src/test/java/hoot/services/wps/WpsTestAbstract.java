@@ -42,6 +42,7 @@ import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.utils.MockServletInputStream;
 import hoot.services.utils.MockServletOutputStream;
 import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 
 import org.deegree.services.controller.OGCFrontController;
 import org.junit.AfterClass;
@@ -179,7 +180,7 @@ public abstract class WpsTestAbstract extends OsmResourceTestAbstract
     Assert.assertNotNull(responseData);
     //System.out.println(XmlDocumentBuilder.toString(responseData));
     
-    XPath xpath = XmlDocumentBuilder.createXPath();    
+    XPath xpath = XmlUtils.createXPath();    
     try
     {
       Assert.assertEquals(
