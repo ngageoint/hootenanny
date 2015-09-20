@@ -52,6 +52,8 @@ public:
   static std::string className() { return "hoot::PostgresqlDumpfileWriter"; }
   PostgresqlDumpfileWriter();
 
+  ~PostgresqlDumpfileWriter();
+
   virtual bool isSupported(QString url);
 
   virtual void open(QString url);

@@ -70,6 +70,11 @@ PostgresqlDumpfileWriter::PostgresqlDumpfileWriter():
   _writeStats.relationTagsWritten = 0;
 }
 
+PostgresqlDumpfileWriter::~PostgresqlDumpfileWriter()
+{
+  close();
+}
+
 bool PostgresqlDumpfileWriter::isSupported(QString url)
 {
   return ( url.endsWith(".sql") );
@@ -93,7 +98,7 @@ void PostgresqlDumpfileWriter::open(QString url)
 
 void PostgresqlDumpfileWriter::close()
 {
-  ;
+  finalizePartial();
 }
 
 void PostgresqlDumpfileWriter::finalizePartial()
