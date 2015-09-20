@@ -479,7 +479,8 @@ SOURCES += \
     src/main/cpp/hoot/core/ops/CookieCutterOp.cpp \
     src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.cpp \
     src/main/cpp/hoot/core/conflate/CookieCutter.cpp \
-    src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.cpp
+    src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.cpp \
+    src/main/cpp/hoot/core/io/db/PostgresqlDumpfileWriter.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -946,5 +947,6 @@ HEADERS += \
     src/main/cpp/hoot/core/ops/CookieCutterOp.h \
     src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.h \
     src/main/cpp/hoot/core/conflate/CookieCutter.h \
-    src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.h
+    src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.h \
+    src/main/cpp/hoot/core/io/db/PostgresqlDumpfileWriter.h
 
