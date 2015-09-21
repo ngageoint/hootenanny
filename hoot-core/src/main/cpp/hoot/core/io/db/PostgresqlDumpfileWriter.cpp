@@ -27,6 +27,9 @@
 
 #include "PostgresqlDumpfileWriter.h"
 
+#include <cstdlib>  // for std::system
+#include <cstdio>   // for std::remove
+
 #include <utility>
 #include <boost/shared_ptr.hpp>
 
@@ -121,6 +124,13 @@ void PostgresqlDumpfileWriter::close()
 void PostgresqlDumpfileWriter::finalizePartial()
 {
   LOG_INFO( QString("Finalize called, time to create ") + _outputFilename);
+
+  for ( std::list<QString>::const_iterator it = _sectionNames.begin();
+        it != _sectionNames.end(); ++it )
+  {
+    std::remove(it->toStdString().c_str());
+  }
+
 }
 
 void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
