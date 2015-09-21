@@ -138,6 +138,14 @@ As a result of the tests Hootenanny now runs an experiment at runtime to determi
 * Lambert Conformal Conic Projection – Centered at the center of the bounding box.
 * Robinson – The longitude centered at the center of the bounding box.
 * Custom Transverse Mercator - Centered at the center of the bounding box.
+* Polyconic - Centered at the center of the bounding box.
+* Two Point Equidistant - The two points are centered in the bounding box in
+  longitude and one is 1/4 of the way down from the top of the bounding box, the
+  other is 1/4 of the way up from the bottom of the bounding box.
+* Equidistant Conic - Centered at the center of the bounding box. The standard
+  parallels are 1/4 of the way down from the top of the bounding box and 1/4 of
+  the way up from the bottom.
+* Azimuth Equidistant - Centered at the center of the bounding box.
 
 To determine the projection for a given area an experiment is run for each of the projections where the star pattern is generated for each of the projections and tested in a similar fashion to what is described above. A threshold has been set to allow any projection with a maximum 10m distance error (~1%) or 2° angle error. The following equation is used to score each projection:
 

@@ -1263,7 +1263,7 @@ A key value pair to use in the tag criterion by default. E.g. 'highway,road'
 === tag.merger.default
 
 * Data Type: string
-* Default Value: `hoot::AverageTagMerger`
+* Default Value: `hoot::OverwriteTag2Merger`
 
 Specifies the default way of merging tags. This is used by most merge routines, but may be overriden
 depending on the specifics of the merger.
@@ -1305,6 +1305,16 @@ The key to be replaced by the TagRenameKeyVisitor.
 
 The key to replace with by the TagRenameKeyVisitor.
 
+=== test.force.orthographic.projection
+
+* Data Type: bool
+* Default Value: `false`
+
+Always force the orthographic projection when determining a proper planar projection. In typical
+usage this will never be used (the automatically selected projection should always be at least as
+good). This is most useful if you want to get consistent results even if the list of potential
+projections change over time. Very handy in unit tests.
+
 === token.separator
 
 * Data Type: string
@@ -1316,6 +1326,35 @@ names. The default value matches multiple whitespace charactors.
 Another useful option is `[\s-,';]+`. This will split on white space, or several forms of
 punctuation. See http://doc.qt.io/qt-4.8/QRegExp.html for a useful list of regular expression
 options.
+
+=== token.min.size
+
+* Data Type: double
+* Default Value: `3`
+
+This is the minimum string size that the string tokenizer should accept as a token. If the string
+length is less than this value, then it will not be accepted. Set the value to 0 if you want to
+accept all strings.
+
+This setting primarily applies to string comparison functions and will eliminate comparing very
+short strings such as "of" or "&".
+
+=== token.keep.non.words
+
+* Data Type: bool
+* Default Value: `false`
+
+This does a rudimentary check to see if the string contains any letters/numbers. If the string
+doesn't contain any letters or numbers then it will be dropped. Examples that would be dropped
+if the value is `true` include:
+
+* `&`
+* `--`
+
+Examples that will be kept if the value is `true` include:
+
+* `1&2`
+* `Joe's`
 
 === translate.string.distance.tokenize
 

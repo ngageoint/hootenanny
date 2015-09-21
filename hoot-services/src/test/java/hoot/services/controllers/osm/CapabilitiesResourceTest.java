@@ -44,7 +44,7 @@ import org.w3c.dom.Document;
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.osm.OsmResourceTestAbstract;
-import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
@@ -84,7 +84,7 @@ public class CapabilitiesResourceTest extends OsmResourceTestAbstract
     }
     
     Assert.assertNotNull(responseData);
-    XPath xpath = XmlDocumentBuilder.createXPath();
+    XPath xpath = XmlUtils.createXPath();
     try
     {
       Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());

@@ -2,15 +2,9 @@
 <osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8812187999999992" lon="-76.9796913999999930">
         <tag k="REF1" v="003ac5"/>
-        <tag k="hoot:review:needs" v="yes"/>
         <tag k="historic" v="tomb"/>
-        <tag k="hoot:review:source" v="1"/>
-        <tag k="hoot:review:score" v="1"/>
         <tag k="cemetery" v="grave"/>
-        <tag k="hoot:review:uuid" v="GeoNames.org:4139243"/>
-        <tag k="hoot:review:note" v="Somewhat similar - very similar names"/>
         <tag k="source" v="survey"/>
-        <tag k="uuid" v="{b18057ff-736d-5d20-b873-837f0c172e33}"/>
         <tag k="name" v="John Philip Sousa"/>
         <tag k="wikipedia" v="en:John Philip Sousa"/>
         <tag k="tourism" v="attraction"/>
@@ -18,12 +12,7 @@
     </node>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8767799999999824" lon="-76.9777500000000003">
         <tag k="REF2" v="none"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:source" v="2"/>
         <tag k="bridge" v="yes"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:uuid" v="{b18057ff-736d-5d20-b873-837f0c172e33}"/>
-        <tag k="hoot:review:note" v="Somewhat similar - very similar names"/>
         <tag k="uuid" v="GeoNames.org:4139243"/>
         <tag k="name" v="John Phillip Sousa Bridge"/>
         <tag k="error:circular" v="1000"/>
