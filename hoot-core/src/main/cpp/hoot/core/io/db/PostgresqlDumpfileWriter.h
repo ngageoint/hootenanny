@@ -23,15 +23,16 @@
  */
 
 #include <string>
-#include <iostream>
-#include <fstream>
 #include <map>
 #include <list>
+#include <utility>
 
 #include <boost/shared_ptr.hpp>
 
-#include <Qt/qstring.h>
-#include <Qt/qtemporaryfile.h>
+#include <QtCore/QString>
+#include <QtCore/QTemporaryFile>
+#include <QtCore/QTextStream>
+
 
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/OsmMapWriter.h>
@@ -48,8 +49,11 @@ namespace hoot
 
 class PostgresqlDumpfileWriter : public hoot::PartialOsmMapWriter, public hoot::Configurable
 {
+
 public:
+
   static std::string className() { return "hoot::PostgresqlDumpfileWriter"; }
+
   PostgresqlDumpfileWriter();
 
   ~PostgresqlDumpfileWriter();
@@ -62,17 +66,18 @@ public:
 
   virtual void finalizePartial();
 
-  virtual void writePartial(const boost::shared_ptr<const hoot::Node>& n);
+  virtual void writePartial(const ConstNodePtr& n);
 
-  virtual void writePartial(const boost::shared_ptr<const hoot::Way>& w);
+  virtual void writePartial(const ConstWayPtr& w);
 
-  virtual void writePartial(const boost::shared_ptr<const hoot::Relation>& r);
+  virtual void writePartial(const ConstRelationPtr& r);
 
 protected:
 
-  virtual void setConfiguration(const hoot::Settings &conf);
+  virtual void setConfiguration(const hoot::Settings& conf);
 
-  std::map<QString, boost::shared_ptr<QTemporaryFile> > _sectionTempFiles;
+  std::map<QString,
+    std::pair<boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> > > _outputSections;
 
   std::list<QString> _sectionNames;
 
@@ -96,10 +101,7 @@ protected:
 
   void _closeSectionTempFilesAndConcat();
 
-
-
-
-
+  void _createNodeTables();
 };
 
 }

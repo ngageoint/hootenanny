@@ -27,7 +27,12 @@
 
 #include "PostgresqlDumpfileWriter.h"
 
+#include <utility>
 #include <boost/shared_ptr.hpp>
+
+#include <QtCore/QString>
+#include <QtCore/QTemporaryFile>
+#include <QtCore/QTextStream>
 
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/HootException.h>
@@ -45,7 +50,7 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, PostgresqlDumpfileWriter)
 
 PostgresqlDumpfileWriter::PostgresqlDumpfileWriter():
 
-  _sectionTempFiles(),
+  _outputSections(),
   _sectionNames(_createSectionNameList()),
   _outputFilename(),
   _writeStats()
@@ -54,11 +59,14 @@ PostgresqlDumpfileWriter::PostgresqlDumpfileWriter():
 
   boost::shared_ptr<QTemporaryFile> nullPtr;
 
+  /*
   for ( std::list<QString>::const_iterator it = _sectionNames.begin();
         it != _sectionNames.end(); ++it )
   {
-    _sectionTempFiles.insert(std::pair<QString, boost::shared_ptr<QTemporaryFile> >(*it, nullPtr));
+    QTemporaryFile tempFile;
+    //_outputSections.insert( std::make_pair(*it, std::make_pair(tempFile, &tempFile)) );
   }
+  */
 
   _writeStats.nodesWritten = 0;
   _writeStats.nodeTagsWritten = 0;
@@ -99,6 +107,15 @@ void PostgresqlDumpfileWriter::open(QString url)
 void PostgresqlDumpfileWriter::close()
 {
   finalizePartial();
+
+  if ( (_writeStats.nodesWritten > 0) || (_writeStats.waysWritten > 0) || (_writeStats.relationsWritten > 0) )
+  {
+    LOG_DEBUG("Write stats:");
+    LOG_DEBUG("\t    Nodes written: " + QString::number(_writeStats.nodesWritten) );
+    LOG_DEBUG("\t     Ways written: " + QString::number(_writeStats.waysWritten) );
+    LOG_DEBUG("\tRelations written: " + QString::number(_writeStats.relationsWritten) );
+
+  }
 }
 
 void PostgresqlDumpfileWriter::finalizePartial()
@@ -106,26 +123,29 @@ void PostgresqlDumpfileWriter::finalizePartial()
   LOG_INFO( QString("Finalize called, time to create ") + _outputFilename);
 }
 
-void PostgresqlDumpfileWriter::writePartial(const boost::shared_ptr<const hoot::Node>& n)
+void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 {
-  ;
+  if ( _writeStats.nodesWritten == 0 )
+  {
+    _createNodeTables();
+  }
+  _writeStats.nodesWritten++;
 }
 
-void PostgresqlDumpfileWriter::writePartial(const boost::shared_ptr<const hoot::Way>& w)
+void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 {
-  ;
+  _writeStats.waysWritten++;
 }
 
-void PostgresqlDumpfileWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& r)
+void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
 {
-  ;
+  _writeStats.relationsWritten++;
 }
 
 void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
 {
   ;
 }
-
 
 std::list<QString> PostgresqlDumpfileWriter::_createSectionNameList()
 {
@@ -152,6 +172,62 @@ std::list<QString> PostgresqlDumpfileWriter::_createSectionNameList()
   sections.push_back(QString("relation_tags"));
 
   return sections;
+}
+
+void PostgresqlDumpfileWriter::_createNodeTables()
+{
+  boost::shared_ptr<QTemporaryFile> tempfile;
+  QString tableName;
+
+
+  tableName = "current_nodes";
+  tempfile = boost::shared_ptr<QTemporaryFile>( new QTemporaryFile() );
+
+  _outputSections[tableName] =
+      std::pair< boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> >(
+        tempfile, boost::shared_ptr<QTextStream>(new QTextStream(tempfile.get())) );
+
+  *(_outputSections[tableName].second) <<
+    "COPY current_nodes (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) FROM stdin;\n";
+
+
+  tableName = "current_node_tags";
+  tempfile = boost::shared_ptr<QTemporaryFile>( new QTemporaryFile() );
+
+  _outputSections[tableName] =
+      std::pair< boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> >(
+        tempfile, boost::shared_ptr<QTextStream>(new QTextStream(tempfile.get())) );
+
+  *(_outputSections[tableName].second) << "COPY current_node_tags (node_id, k, v) FROM stdin;\n";
+
+
+  tableName = "nodes";
+  tempfile = boost::shared_ptr<QTemporaryFile>( new QTemporaryFile() );
+
+  _outputSections[tableName] =
+      std::pair< boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> >(
+        tempfile, boost::shared_ptr<QTextStream>(new QTextStream(tempfile.get())) );
+
+  *(_outputSections[tableName].second) <<
+    "COPY nodes (node_id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version, redaction_id) FROM stdin;\n";
+
+
+  tableName = "node_tags";
+  tempfile = boost::shared_ptr<QTemporaryFile>( new QTemporaryFile() );
+
+  _outputSections[tableName] =
+      std::pair< boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> >(
+        tempfile, boost::shared_ptr<QTextStream>(new QTextStream(tempfile.get())) );
+
+  *(_outputSections[tableName].second) << "COPY node_tags (node_id, version, k, v) FROM stdin;\n";
+
+
+  /*
+  _sectionTempFiles["current_node_tags"] = boost::shared_ptr<QTemporaryFile>(new QTemporaryFile());
+  _sectionTempFiles["nodes"] = boost::shared_ptr<QTemporaryFile>(new QTemporaryFile());
+  _sectionTempFiles["node_tags"] = boost::shared_ptr<QTemporaryFile>(new QTemporaryFile());
+  */
+
 }
 
 }
