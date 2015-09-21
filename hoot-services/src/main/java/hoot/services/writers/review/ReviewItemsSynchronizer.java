@@ -398,6 +398,8 @@ public class ReviewItemsSynchronizer
   	return numReviewItemsUpdated;
   }
   
+  //This code is heavily tailored for the POI merge use case and has only been tested against that
+  //so far.  Not sure what affect this code would have on other types of reviews yet...
   private int updateReviewRecordsFromDeleteChangeset(final Document changesetDoc) throws Exception
   {
   	int numReviewItemsUpdated = 0;
@@ -411,22 +413,34 @@ public class ReviewItemsSynchronizer
   	}
   	log.debug("deletedItemUuids: " + deletedItemUuids.toString());
 
-  	//These records must be deleted, or the total number of review records (reviewed + unreviewed)
-  	//will increase, which is counter-intuitive.
   	if (deletedItemUuids.size() > 0)
   	{
+  	  //If a record is made up entirely of deleted items (reviewable and review against)...like 
+  		//when two are deleted as the result of a merge...then mark the record as reviewed.  
+  		numReviewItemsUpdated += 
+  			new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), reviewItems)
+		      .where(
+		      	reviewItems.mapId.eq(mapId)
+		      	  .and(reviewItems.reviewableItemId.in(deletedItemUuids)
+		  	        .and(reviewItems.reviewAgainstItemId.in(deletedItemUuids))))
+		  	  .set(reviewItems.reviewStatus, DbUtils.review_status_enum.reviewed)
+		      .execute();
+  	  //Otherwise, delete the review record, b/c the client should have handled fixing the 
+  		//orphaned record links already.  In other words, the review never happened due to it being
+  		//OBE by the poi merge, record links were updated to reflect that with new review records,
+  		//and these records should then be deleted.  Here we're deleting all records where one of the 
+  		//uuid's is in the reviewableItemId or the reviewAgainstItemId, but not both.
+  		//TODO: not sure whether this one should be counted in the updated total or not
   		numReviewItemsUpdated += 
   			new SQLDeleteClause(conn, DbUtils.getConfiguration(mapId), reviewItems)
 		      .where(
 		      	reviewItems.mapId.eq(mapId)
 		      	  .and(reviewItems.reviewableItemId.in(deletedItemUuids)
-		  	        .or(reviewItems.reviewAgainstItemId.in(deletedItemUuids))))
+		  	        .and(reviewItems.reviewAgainstItemId.notIn(deletedItemUuids)))
+		  	      .or(
+		  	      	reviewItems.reviewAgainstItemId.in(deletedItemUuids)
+		  	      	  .and(reviewItems.reviewableItemId.notIn(deletedItemUuids))))
 		      .execute();
-  		new SQLDeleteClause(conn, DbUtils.getConfiguration(mapId), elementIdMappings)
-        .where(
-      	  elementIdMappings.mapId.eq(mapId)
-      	    .and(elementIdMappings.elementId.in(deletedItemUuids)))
-      	.execute();
   	}  	
   	
   	log.debug(numReviewItemsUpdated + " records updated as a result of the delete changeset.");
