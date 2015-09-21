@@ -122,23 +122,16 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
             	// TODO: change for fuzzy matches was invalid, so backing it out; fix and add test 
             	// for this case
             	List<String> uniqueElementIds = new ArrayList<String>();
-            	try
-            	{
-            		uniqueElementIds.add(uniqueElementIdStr);
-                if (uniqueElementIdStr.contains(";"))
+          		uniqueElementIds.add(uniqueElementIdStr);
+              if (uniqueElementIdStr.contains(";"))
+              {
+                //log.debug("Multiple part UUID...");
+                String[] uniqueElementIdsArr = uniqueElementIdStr.split(";");
+                for (String id : uniqueElementIdsArr)
                 {
-                  //log.debug("Multiple part UUID...");
-                  String[] uniqueElementIdsArr = uniqueElementIdStr.split(";");
-                  for (String id : uniqueElementIdsArr)
-                  {
-                  	uniqueElementIds.add(id);
-                  }
+                	uniqueElementIds.add(id);
                 }
-            	}
-            	catch (Exception e)
-            	{
-            		int test = 1;
-            	}
+              }
                 
               for (String uniqueElementId : uniqueElementIds)
               {
