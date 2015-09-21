@@ -32,6 +32,7 @@
 #include <QtCore/QString>
 #include <QtCore/QTemporaryFile>
 #include <QtCore/QTextStream>
+#include <QtCore/Q_INT64>
 
 
 #include <hoot/core/io/PartialOsmMapWriter.h>
@@ -43,6 +44,8 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
+
+#include <tgs/BigContainers/BigMap.h>
 
 namespace hoot
 {
@@ -97,11 +100,53 @@ protected:
 
   _ElementWriteStats _writeStats;
 
+  // A lot of the Hootenanny code assumes we are on 64-bit platforms and declares ID type as "long."
+  // Ensuring this code works on any platform that Qt is supported on
+  typedef qint64 ElementIdDatatype;
+
+  struct ConfigData
+  {
+    qint64            startingChangesetId;
+    ElementIdDatatype startingNodeId;
+    ElementIdDatatype startingWayId;
+    ElementIdDatatype startingRelationId;
+  };
+
+  ConfigData _configData;
+
+  struct _IdMappings
+  {
+    ElementIdDatatype nextNodeId;
+    boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> > nodeIdMap;
+
+    ElementIdDatatype nextWayId;
+    boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> > wayIdMap;
+
+    ElementIdDatatype nextRelationId;
+    boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> > relationIdMap;
+  };
+
+  _IdMappings _idMappings;
+
+  struct _ChangesetData
+  {
+    qint64        changesetId;
+    unsigned int  changesInChangeset();
+  };
+
+  _ChangesetData _changesetData;
+
+  qint64 _getChangesetId() const { return _changesetData.changesetId; }
+
   std::list<QString> _createSectionNameList();
 
   void _closeSectionTempFilesAndConcat();
 
   void _createNodeTables();
+
+  void _zeroWriteStats();
+
+  ElementIdDatatype _establishNewIdMapping(const ElementId& sourceId);
 };
 
 }

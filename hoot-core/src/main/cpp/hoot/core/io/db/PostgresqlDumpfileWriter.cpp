@@ -45,6 +45,8 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/elements/ElementType.h>
 
 namespace hoot
 {
@@ -56,29 +58,14 @@ PostgresqlDumpfileWriter::PostgresqlDumpfileWriter():
   _outputSections(),
   _sectionNames(_createSectionNameList()),
   _outputFilename(),
-  _writeStats()
+  _writeStats(),
+  _configData(),
+  _idMappings(),
+  _changesetData()
 {
   setConfiguration(conf());
 
-  boost::shared_ptr<QTemporaryFile> nullPtr;
-
-  /*
-  for ( std::list<QString>::const_iterator it = _sectionNames.begin();
-        it != _sectionNames.end(); ++it )
-  {
-    QTemporaryFile tempFile;
-    //_outputSections.insert( std::make_pair(*it, std::make_pair(tempFile, &tempFile)) );
-  }
-  */
-
-  _writeStats.nodesWritten = 0;
-  _writeStats.nodeTagsWritten = 0;
-  _writeStats.waysWritten = 0;
-  _writeStats.wayNodesWritten = 0;
-  _writeStats.wayTagsWritten = 0;
-  _writeStats.relationsWritten = 0;
-  _writeStats.relationMembersWritten = 0;
-  _writeStats.relationTagsWritten = 0;
+  _zeroWriteStats();
 }
 
 PostgresqlDumpfileWriter::~PostgresqlDumpfileWriter()
@@ -105,6 +92,19 @@ void PostgresqlDumpfileWriter::open(QString url)
 
   _outputFilename = url;
   LOG_INFO( QString("Output filename set to ") + _outputFilename);
+
+  _zeroWriteStats();
+
+  _changesetData.changesetId  = _configData.startingChangesetId;
+
+  _idMappings.nextNodeId      = _configData.startingNodeId;
+  _idMappings.nodeIdMap.reset();
+
+  _idMappings.nextWayId       = _configData.startingWayId;
+  _idMappings.wayIdMap.reset();
+
+  _idMappings.nextRelationId  = _configData.startingRelationId;
+  _idMappings.relationIdMap.reset();
 }
 
 void PostgresqlDumpfileWriter::close()
@@ -117,18 +117,48 @@ void PostgresqlDumpfileWriter::close()
     LOG_DEBUG("\t    Nodes written: " + QString::number(_writeStats.nodesWritten) );
     LOG_DEBUG("\t     Ways written: " + QString::number(_writeStats.waysWritten) );
     LOG_DEBUG("\tRelations written: " + QString::number(_writeStats.relationsWritten) );
-
   }
+
+  _zeroWriteStats();
+  _outputFilename = "";
+  _outputSections.clear();
+  _sectionNames.erase(_sectionNames.begin(), _sectionNames.end());
+  _idMappings.nodeIdMap.reset();
+  _idMappings.wayIdMap.reset();
+  _idMappings.relationIdMap.reset();
 }
 
 void PostgresqlDumpfileWriter::finalizePartial()
 {
   LOG_INFO( QString("Finalize called, time to create ") + _outputFilename);
 
+  // Remove file if it used to be there;
+  std::remove(_outputFilename.toStdString().c_str());
+
   for ( std::list<QString>::const_iterator it = _sectionNames.begin();
         it != _sectionNames.end(); ++it )
   {
-    std::remove(it->toStdString().c_str());
+    if ( _outputSections.find(*it) == _outputSections.end() )
+    {
+      LOG_DEBUG("No data for table " + *it);
+      continue;
+    }
+
+    // Flush any residual content from text stream/file
+    (_outputSections[*it].second)->flush();
+    if ( (_outputSections[*it].first)->flush() == false )
+    {
+      throw HootException("Could not flush tempfile for table " + *it);
+    }
+
+    // Append contents of file to output file
+    QString cmdToExec(
+      QString("/bin/cat ") + (_outputSections[*it].first)->fileName() +
+      QString(" >> ") + _outputFilename );
+
+    const int systemRetval = std::system( cmdToExec.toStdString().c_str() );
+    LOG_DEBUG("Command: \"" + cmdToExec + "\", retval: " +
+              QString::number(systemRetval) );
   }
 
 }
@@ -138,23 +168,97 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
   if ( _writeStats.nodesWritten == 0 )
   {
     _createNodeTables();
+    _idMappings.nodeIdMap = boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> >(
+          new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>());
   }
+
+  ElementIdDatatype nodeDbId;
+
+  // Do we already know about this node?
+  if ( _idMappings.nodeIdMap->contains(n->getId()) == true )
+  {
+    throw hoot::NotImplementedException("Writer class does not support update operations");
+  }
+
+  // Have to establish new mapping
+  nodeDbId = _establishNewIdMapping(n->getElementId());
+
+  /*
+  LOG_DEBUG("Writing node ID = " + QString::number(n->getId()) +
+      ", db ID = " + QString::number(nodeDbId) );
+  */
+
+  const QString outputLine = QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n")
+      .arg(nodeDbId)
+      .arg(n->getY())
+      .arg(n->getX())
+      .arg(_getChangesetId())
+      .arg(QString("2015-09-10 12:34:56.00000"))
+      .arg(QString::number(13247));
+
+  *(_outputSections["current_nodes"].second) << outputLine;
+
   _writeStats.nodesWritten++;
 }
 
 void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 {
+  if ( _writeStats.waysWritten == 0 )
+  {
+    // Create way tables
+    ;
+
+    _idMappings.wayIdMap = boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> >(
+          new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>());
+  }
+
+  ElementIdDatatype wayDbId;
+
+  // Do we already know about this way?
+  if ( _idMappings.wayIdMap->contains(w->getId()) == true )
+  {
+    throw hoot::NotImplementedException("Writer class does not support update operations");
+  }
+
+  // Have to establish new mapping
+  wayDbId = _establishNewIdMapping(w->getElementId());
+
   _writeStats.waysWritten++;
 }
 
 void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
 {
+  if ( _writeStats.relationsWritten == 0 )
+  {
+    // Create relation tables
+    ;
+
+    _idMappings.relationIdMap = boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> >(
+          new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>());
+  }
+
+  ElementIdDatatype relationDbId;
+
+  // Do we already know about this node?
+  if ( _idMappings.relationIdMap->contains(r->getId()) == true )
+  {
+    throw hoot::NotImplementedException("Writer class does not support update operations");
+  }
+
+  // Have to establish new mapping
+  relationDbId = _establishNewIdMapping(r->getElementId());
+
+
   _writeStats.relationsWritten++;
 }
 
 void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
 {
-  ;
+  // TODO: pull these from config values
+  _configData.startingChangesetId = 1;
+  _configData.startingNodeId      = 1;
+  _configData.startingWayId       = 1;
+  _configData.startingRelationId  = 1;
 }
 
 std::list<QString> PostgresqlDumpfileWriter::_createSectionNameList()
@@ -192,6 +296,10 @@ void PostgresqlDumpfileWriter::_createNodeTables()
 
   tableName = "current_nodes";
   tempfile = boost::shared_ptr<QTemporaryFile>( new QTemporaryFile() );
+  if ( tempfile->open() == false )
+  {
+    throw HootException("Could not open temp file for contents of table " + tableName);
+  }
 
   _outputSections[tableName] =
       std::pair< boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> >(
@@ -203,6 +311,10 @@ void PostgresqlDumpfileWriter::_createNodeTables()
 
   tableName = "current_node_tags";
   tempfile = boost::shared_ptr<QTemporaryFile>( new QTemporaryFile() );
+  if ( tempfile->open() == false )
+  {
+    throw HootException("Could not open temp file for contents of table " + tableName);
+  }
 
   _outputSections[tableName] =
       std::pair< boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> >(
@@ -213,6 +325,10 @@ void PostgresqlDumpfileWriter::_createNodeTables()
 
   tableName = "nodes";
   tempfile = boost::shared_ptr<QTemporaryFile>( new QTemporaryFile() );
+  if ( tempfile->open() == false )
+  {
+    throw HootException("Could not open temp file for contents of table " + tableName);
+  }
 
   _outputSections[tableName] =
       std::pair< boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> >(
@@ -224,6 +340,10 @@ void PostgresqlDumpfileWriter::_createNodeTables()
 
   tableName = "node_tags";
   tempfile = boost::shared_ptr<QTemporaryFile>( new QTemporaryFile() );
+  if ( tempfile->open() == false )
+  {
+    throw HootException("Could not open temp file for contents of table " + tableName);
+  }
 
   _outputSections[tableName] =
       std::pair< boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> >(
@@ -231,13 +351,49 @@ void PostgresqlDumpfileWriter::_createNodeTables()
 
   *(_outputSections[tableName].second) << "COPY node_tags (node_id, version, k, v) FROM stdin;\n";
 
+}
 
-  /*
-  _sectionTempFiles["current_node_tags"] = boost::shared_ptr<QTemporaryFile>(new QTemporaryFile());
-  _sectionTempFiles["nodes"] = boost::shared_ptr<QTemporaryFile>(new QTemporaryFile());
-  _sectionTempFiles["node_tags"] = boost::shared_ptr<QTemporaryFile>(new QTemporaryFile());
-  */
+void PostgresqlDumpfileWriter::_zeroWriteStats()
+{
+  _writeStats.nodesWritten = 0;
+  _writeStats.nodeTagsWritten = 0;
+  _writeStats.waysWritten = 0;
+  _writeStats.wayNodesWritten = 0;
+  _writeStats.wayTagsWritten = 0;
+  _writeStats.relationsWritten = 0;
+  _writeStats.relationMembersWritten = 0;
+  _writeStats.relationTagsWritten = 0;
+}
 
+PostgresqlDumpfileWriter::ElementIdDatatype PostgresqlDumpfileWriter::_establishNewIdMapping(
+    const ElementId& sourceId)
+{
+  ElementIdDatatype dbIdentifier;
+
+  switch( sourceId.getType().getEnum() )
+  {
+  case ElementType::Node:
+    dbIdentifier = _idMappings.nextNodeId;
+    _idMappings.nodeIdMap->insert(sourceId.getId(), dbIdentifier);
+    _idMappings.nextNodeId++;
+    break;
+
+  case ElementType::Way:
+    dbIdentifier = _idMappings.nextWayId;
+    _idMappings.wayIdMap->insert(sourceId.getId(), dbIdentifier);
+    _idMappings.nextWayId++;
+    break;
+  case ElementType::Relation:
+    dbIdentifier = _idMappings.nextRelationId;
+    _idMappings.relationIdMap->insert(sourceId.getId(), dbIdentifier);
+    _idMappings.nextRelationId++;
+    break;
+  default:
+    throw NotImplementedException("Unsupported element type");
+    break;
+  }
+
+  return dbIdentifier;
 }
 
 }
