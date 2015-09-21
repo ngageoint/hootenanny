@@ -40,6 +40,7 @@ import org.w3c.dom.NodeList;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.mysema.query.sql.SQLQuery;
+import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 import com.mysema.query.types.expr.BooleanExpression;
 
@@ -199,6 +200,8 @@ public class ReviewItemsSynchronizer
       	  mapId, reviewItemRecordsToInsert, reviewItems, null, RecordBatchType.INSERT, conn, 
       	  maxRecordBatchSize);
   	}
+  	
+  	log.debug(numReviewItemsUpdated + " records updated as a result of the create changeset.");
   	
   	return numReviewItemsUpdated;
   }
@@ -389,6 +392,8 @@ public class ReviewItemsSynchronizer
       	  mapId, reviewRecordsToUpdate, reviewItems, predicatelist, RecordBatchType.UPDATE, 
       	  conn, maxRecordBatchSize);
     }
+    
+    log.debug(numReviewItemsUpdated + " records updated as a result of the modify changeset.");
   	
   	return numReviewItemsUpdated;
   }
@@ -406,16 +411,25 @@ public class ReviewItemsSynchronizer
   	}
   	log.debug("deletedItemUuids: " + deletedItemUuids.toString());
 
-  	//rather than deleting the records, just update any review record involving the deleted items
+  	//These records must be deleted, or the total number of review records (reviewed + unreviewed)
+  	//will increase, which is counter-intuitive.
   	if (deletedItemUuids.size() > 0)
   	{
-  		new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), reviewItems)
-		    .where(
-		  	  reviewItems.reviewableItemId.in(deletedItemUuids)
-		  	    .or(reviewItems.reviewAgainstItemId.in(deletedItemUuids)))
-		    .set(reviewItems.reviewStatus, DbUtils.review_status_enum.reviewed)
-		    .execute();
+  		numReviewItemsUpdated += 
+  			new SQLDeleteClause(conn, DbUtils.getConfiguration(mapId), reviewItems)
+		      .where(
+		      	reviewItems.mapId.eq(mapId)
+		      	  .and(reviewItems.reviewableItemId.in(deletedItemUuids)
+		  	        .or(reviewItems.reviewAgainstItemId.in(deletedItemUuids))))
+		      .execute();
+  		new SQLDeleteClause(conn, DbUtils.getConfiguration(mapId), elementIdMappings)
+        .where(
+      	  elementIdMappings.mapId.eq(mapId)
+      	    .and(elementIdMappings.elementId.in(deletedItemUuids)))
+      	.execute();
   	}  	
+  	
+  	log.debug(numReviewItemsUpdated + " records updated as a result of the delete changeset.");
   	
   	return numReviewItemsUpdated;
   }
@@ -447,7 +461,7 @@ public class ReviewItemsSynchronizer
     	numReviewItemsUpdated += updateReviewRecordsFromDeleteChangeset(changesetDoc);
     	
     	log.debug(
-        String.valueOf(numReviewItemsUpdated) + " review records were updated as a result of " +
+        String.valueOf(numReviewItemsUpdated) + " review records total were updated as a result of " +
         "the changeset save.");
   	}
   	else
