@@ -106,6 +106,8 @@ public:
     return _c;
   }
 
+  virtual QString getMatchName() const { return "Fake Match"; }
+
   virtual double getProbability() const { return _p; }
 
   virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& /*map*/) const

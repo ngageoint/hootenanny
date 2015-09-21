@@ -32,8 +32,9 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/FindNodesInWayFactory.h>
 

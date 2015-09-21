@@ -38,9 +38,12 @@
 #include <hoot/core/algorithms/MultiLineStringSplitter.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/RemoveReviewsByEidOp.h>
+#include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Validate.h>
@@ -172,7 +175,7 @@ bool HighwaySnapMerger::_doesWayConnect(long node1, long node2, const ConstWayPt
 }
 
 void HighwaySnapMerger::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1, ElementPtr e2,
-  QString note) const
+  QString reviewType, QString note) const
 {
   if (!e1 && !e2)
   {
@@ -181,15 +184,15 @@ void HighwaySnapMerger::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1, El
 
   if (e1 && e2)
   {
-    ReviewMarker().mark(map, e1, e2, note);
+    ReviewMarker().mark(map, e1, e2, note, reviewType);
   }
   else if (e1)
   {
-    ReviewMarker().mark(map, e1, note);
+    ReviewMarker().mark(map, e1, note, reviewType);
   }
   else if (e2)
   {
-    ReviewMarker().mark(map, e2, note);
+    ReviewMarker().mark(map, e2, note, reviewType);
   }
 }
 
@@ -212,7 +215,7 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   // this in the conflict code at this time, so we'll ignore the merge.
   if (!e1 || !e2)
   {
-    _markNeedsReview(result, e1, e2, "Missing match pair");
+    _markNeedsReview(result, e1, e2, "Missing match pair", HighwayMatch::getHighwayMatchName());
     return;
   }
 
@@ -231,13 +234,14 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   }
   catch (NeedsReviewException& e)
   {
-    _markNeedsReview(result, e1, e2, e.getWhat());
+    _markNeedsReview(result, e1, e2, e.getWhat(), HighwayMatch::getHighwayMatchName());
     return;
   }
 
   if (!match.isValid())
   {
-    _markNeedsReview(result, e1, e2, "Complex conflict causes an empty match");
+    _markNeedsReview(result, e1, e2, "Complex conflict causes an empty match",
+      HighwayMatch::getHighwayMatchName());
     return;
   }
 
@@ -260,12 +264,28 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   e1Match->setStatus(Status::Conflated);
 
   // remove the old way that was split and snapped
-  if (e1 != e1Match)
+  if (e1 != e1Match && scraps1)
   {
-    RecursiveElementRemover(eid1).apply(result);
+    ReplaceElementOp(eid1, scraps1->getElementId(), true).apply(result);
   }
-  RecursiveElementRemover(e2Match->getElementId()).apply(result);
-  RecursiveElementRemover(eid2).apply(result);
+  else
+  {
+    // remove any reviews that contain this element.
+    RemoveReviewsByEidOp(eid1, true).apply(result);
+  }
+
+  // if there is something left to review against
+  if (scraps2)
+  {
+    ReplaceElementOp(e2Match->getElementId(), scraps2->getElementId(), true).apply(result);
+    ReplaceElementOp(eid2, scraps2->getElementId(), true).apply(result);
+  }
+  // if there is nothing to review against, drop the reviews.
+  else
+  {
+    RemoveReviewsByEidOp(e2Match->getElementId(), true).apply(result);
+    RemoveReviewsByEidOp(eid2, true).apply(result);
+  }
 }
 
 void HighwaySnapMerger::_removeSpans(shared_ptr<OsmMap> map, const ElementPtr& e1,

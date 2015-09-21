@@ -37,9 +37,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, ReplaceElementOp)
 
-ReplaceElementOp::ReplaceElementOp(ElementId from, ElementId to) :
+ReplaceElementOp::ReplaceElementOp(ElementId from, ElementId to, bool clearAndRemove) :
   _from(from),
-  _to(to)
+  _to(to),
+  _clearAndRemove(clearAndRemove)
 {
 }
 
@@ -112,6 +113,13 @@ void ReplaceElementOp::apply(const shared_ptr<OsmMap> &map)
       LOG_VARE(pid);
       throw InternalErrorException("Internal Error: Unexpected element reported as a parent.");
     }
+  }
+
+  if (_clearAndRemove)
+  {
+    // just in case it is still part of an element (e.g. part of another relation)
+    from->getTags().clear();
+    RecursiveElementRemover(_from).apply(map);
   }
 }
 

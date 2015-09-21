@@ -89,6 +89,7 @@ void OsmMapIndex::addRelation(const shared_ptr<const Relation>& r)
   if (_elementToRelationMap != 0)
   {
     _elementToRelationMap->addRelation(_map, r);
+    VALIDATE(validate());
   }
 }
 
@@ -433,6 +434,7 @@ const shared_ptr<ElementToRelationMap> &OsmMapIndex::getElementToRelationMap() c
     {
       _elementToRelationMap->addRelation(_map, it->second);
     }
+    VALIDATE(validate());
   }
   return _elementToRelationMap;
 }
@@ -663,7 +665,7 @@ void OsmMapIndex::reset()
   _nodeTree.reset();
 }
 
-bool OsmMapIndex::validate()
+bool OsmMapIndex::validate() const
 {
   bool result = true;
   if (_nodeToWayMap != 0)

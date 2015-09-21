@@ -74,7 +74,7 @@ void WayMergeManipulation::addBogusReviewTags(const OsmMapPtr& map) const
   ElementPtr right = map->getWay(_right);
 
   QString note("The review scores on this way are bogus. See #3242.");
-  ReviewMarker().mark(map, left, right, note, getBogusReviewScore());
+  ReviewMarker().mark(map, left, right, note, "Bogus", getBogusReviewScore());
 }
 
 void WayMergeManipulation::applyManipulation(shared_ptr<OsmMap> map,

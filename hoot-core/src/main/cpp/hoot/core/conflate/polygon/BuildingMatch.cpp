@@ -59,6 +59,8 @@
 namespace hoot
 {
 
+QString BuildingMatch::_matchName = "Building";
+
 BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map, shared_ptr<const BuildingRfClassifier> rf,
   const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt) :
   Match(mt),

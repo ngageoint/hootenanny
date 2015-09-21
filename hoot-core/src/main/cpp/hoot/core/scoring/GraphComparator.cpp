@@ -84,6 +84,11 @@ cv::Mat GraphComparator::_calculateCostDistance(shared_ptr<OsmMap> map, Coordina
   WayLocation wl = LocationOfPoint::locate(map, w, c);
   vector< shared_ptr<Way> > v = WaySplitter::split(map, w, wl);
   wl = LocationOfPoint::locate(map, v[0], c);
+  if (wl.isNode() == false)
+  {
+    // I haven't been able to recreate the case when this happens.
+    LOG_WARN("Internal Error: Expected wl to be on a node, but it was this: " << wl);
+  }
   assert(wl.isNode() == true);
 
   // populate graph

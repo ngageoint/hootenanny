@@ -66,7 +66,7 @@ public:
 
     ReviewMarker uut;
 
-    uut.mark(map, n1, n2, "a note");
+    uut.mark(map, n1, n2, "a note", "test");
     LOG_VAR(uut.isNeedsReview(map, n1, n2));
     LOG_VAR(uut.isNeedsReview(map, n2, n3));
     LOG_VAR(uut.isNeedsReview(map, n3, n1));
@@ -93,7 +93,7 @@ public:
 
     ReviewMarker uut;
 
-    uut.mark(map, n1, n2, "a note");
+    uut.mark(map, n1, n2, "a note", "test");
 
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
       "{\"type\":\"node\",\"id\":2,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n2\"}},\n"
@@ -126,8 +126,8 @@ public:
 
     ReviewMarker uut;
 
-    uut.mark(map, n1, n2, "a note", 0.15);
-    uut.mark(map, n1, n2, "a note 2", 0.5);
+    uut.mark(map, n1, n2, "a note", "test", 0.15);
+    uut.mark(map, n1, n2, "a note 2", "test", 0.5);
 
     //LOG_VARW(TestUtils::toQuotedString(OsmJsonWriter().toString(map)));
 

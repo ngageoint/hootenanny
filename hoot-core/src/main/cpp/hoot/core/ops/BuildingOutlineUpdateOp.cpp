@@ -171,7 +171,8 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
               ReviewMarker().mark(
                 _map,
                 elem,
-                "Element with uncleanable topology.  Error occurred during union operation.");
+                "Element with uncleanable topology.  Error occurred during union operation.",
+                ReviewMarker::getBadGeometryType());
               LOG_WARN(
                 "Element with uncleanable topology.  Error occurred during union operation: " +
                 QString(e.what()))

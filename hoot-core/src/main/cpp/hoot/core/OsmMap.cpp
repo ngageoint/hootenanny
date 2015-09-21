@@ -44,6 +44,7 @@ using namespace boost;
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/SignalCatcher.h>
 #include <hoot/core/util/Validate.h>
 using namespace hoot::elements;
 
@@ -182,6 +183,7 @@ void OsmMap::addNode(const boost::shared_ptr<Node>& n)
 
 void OsmMap::addRelation(const shared_ptr<Relation>& r)
 {
+  VALIDATE(validate());
   _idGen->ensureRelationBounds(r->getId());
   _relations[r->getId()] = r;
   r->registerListener(_index.get());
