@@ -452,7 +452,7 @@
     "tag": {
         "name": "amenity=private_toilets",
         "isA": "amenity",
-        "similarTo": { "name": "amenity=toilets", "weight": 0.8 } }
+        "similarTo": { "name": "amenity=toilets", "weight": 0.8 }
     },
 
     "tag": { "name": "amenity=recycling", "isA": "amenity",
@@ -531,8 +531,11 @@
         "similarTo": { "name": "amenity=pub", "weight": 0.8 } },
     "tag": { "name": "amenity=fast_food", "isA": "amenity",
         "similarTo": { "name": "amenity=restaurant", "weight": 0.9 } },
-    "tag": { "name": "amenity=cafe", "isA": "amenity",
-        "similarTo": { "name": "amenity=restaurant", "weight": 0.7 } },
+    "tag": {
+        "name": "amenity=cafe",
+        "isA": "amenity",
+        "similarTo": { "name": "amenity=restaurant", "weight": 0.7 }
+    },
     "tag": { "name": "amenity=food_court", "isA": "amenity",
         "similarTo": { "name": "amenity=fast_food", "weight": 0.8 } },
     "tag": { "name": "amenity=kitchen", "isA": "amenity",
