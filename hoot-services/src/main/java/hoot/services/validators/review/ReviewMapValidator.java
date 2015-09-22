@@ -59,7 +59,27 @@ public class ReviewMapValidator
   }
 
   /**
-   * Determines whether a maps data has been prepared for review
+   * Determines whether a map has been prepared for review
+   * 
+   * @param mapIdStr map ID; may be a map ID or unique map name
+   * @return true if the map has been prepared; false otherwise
+   */
+  public boolean mapIsPrepared(final String mapIdStr)
+  {
+  	boolean prepared = false;
+  	try
+  	{
+  		verifyMapPrepared(mapIdStr);
+  		prepared = true;
+  	}
+  	catch (Exception e)
+  	{
+  	}
+  	return prepared;
+  }
+  
+  /**
+   * Determines whether a maps data has been prepared for review; throws when false
    *
    * @param mapIdStr map ID; may be a map ID or unique map name
    * @return the map's numeric ID
@@ -79,46 +99,26 @@ public class ReviewMapValidator
 
     QReviewMap reviewMap = QReviewMap.reviewMap;
 
-
-    //SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-
     final ReviewMap mapReviewInfo =
     		new SQLQuery(conn, DbUtils.getConfiguration(mapIdStr)).from(reviewMap)
     .where(reviewMap.mapId.eq(mapIdNum))
     .singleResult(reviewMap);
-
     if (mapReviewInfo == null)
     {
       throw new Exception("The map with ID: " + String.valueOf(mapIdNum) + " has not had " +
         "review data prepared for it.");
     }
 
-    /*
-    final ReviewMap mapReviewInfo = (new ReviewMapDao(dslConfig)).fetchOneByMapId(mapIdNum);
-    if (mapReviewInfo == null)
-    {
-      throw new Exception("The map with ID: " + String.valueOf(mapIdNum) + " has not had " +
-        "review data prepared for it.");
-    }
-    */
     //Check to see if the map has been prepared for review by checking to see that the prepare job
     //associated with it has completed (412).
     log.debug("Map with ID: " + String.valueOf(mapIdNum) + " exists in map review table ...");
 
     QJobStatus jobStatusTbl = QJobStatus.jobStatus;
-
-
     assert(!StringUtils.isEmpty(mapReviewInfo.getReviewPrepareJobId()));
-   /* final JobStatus jobStatusObj =
-      (new JobStatusDao(dslConfig)).fetchOneByJobId(mapReviewInfo.getReviewPrepareJobId());*/
-
-    //query = new SQLQuery(conn, DbUtils.getConfiguration());
-
     final JobStatus jobStatusObj =
-    		new SQLQuery(conn, DbUtils.getConfiguration(mapIdStr)).from(jobStatusTbl)
-    .where(jobStatusTbl.jobId.eq(mapReviewInfo.getReviewPrepareJobId()))
-    .singleResult(jobStatusTbl);
-
+    	new SQLQuery(conn, DbUtils.getConfiguration(mapIdStr)).from(jobStatusTbl)
+       .where(jobStatusTbl.jobId.eq(mapReviewInfo.getReviewPrepareJobId()))
+       .singleResult(jobStatusTbl);
     final JOB_STATUS prepareJobStatus = JOB_STATUS.fromInteger(jobStatusObj.getStatus());
     if (!prepareJobStatus.equals(JOB_STATUS.COMPLETE))
     {

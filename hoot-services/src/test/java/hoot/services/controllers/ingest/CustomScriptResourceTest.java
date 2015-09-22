@@ -56,8 +56,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import com.sun.jersey.api.client.UniformInterfaceException;
-
 /*
  * For the save/delete multiple tests, was unable to use the Jersey test container due to
  * BaseMapResource and FileUploadResource use of HttpServletRequest in their Jersey methods.  There

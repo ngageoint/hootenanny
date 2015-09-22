@@ -156,18 +156,15 @@ public class DbUtils
     }
   }
 
-
   public static Configuration getConfiguration()
   {
   	return getConfiguration("");
   }
 
-
   public static Configuration getConfiguration(final long mapId)
   {
   	return getConfiguration("" + mapId);
   }
-
 
   public static Configuration getConfiguration(String mapId)
   {
@@ -187,9 +184,6 @@ public class DbUtils
   	{
   		overrideTable(mapId, configuration);
   	}
-
-
-
   	return configuration;
   }
 
@@ -235,6 +229,7 @@ public class DbUtils
   	return null;
   }
 
+  @SuppressWarnings("unused")
   public static boolean closeConnection(Connection conn) throws Exception
   {
   	if (conn.isClosed())
@@ -255,9 +250,6 @@ public class DbUtils
   	}
   	return false;
   }
-
-
-
 
   public static void clearTable(com.mysema.query.sql.RelationalPathBase<?> t, Connection conn) throws Exception
   {
@@ -1023,12 +1015,11 @@ public class DbUtils
     jobStatus.setStatus(dbJobStatus.getStatus());
     return jobStatus;
   }
-
-
-
-  public static void batchRecords(final long mapId, final List<?> records, com.mysema.query.sql.RelationalPathBase<?> t,
-  		List<List<BooleanExpression>> predicateslist,
-      final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
+  
+  public static long batchRecords(final long mapId, final List<?> records, 
+    com.mysema.query.sql.RelationalPathBase<?> t,
+    List<List<BooleanExpression>> predicateslist, final RecordBatchType recordBatchType, 
+  	Connection conn, int maxRecordBatchSize) throws Exception
     {
       try
       {
@@ -1038,6 +1029,7 @@ public class DbUtils
         switch (recordBatchType)
         {
           case INSERT:
+          	
           	SQLInsertClause insert = new SQLInsertClause(conn, configuration, t);
           	long nBatch = 0;
           	for(int i=0; i<records.size(); i++)
@@ -1045,7 +1037,6 @@ public class DbUtils
           		Object oRec = records.get(i);
           		insert.populate(oRec).addBatch();
           		nBatch++;
-
 
           		if(maxRecordBatchSize > -1 && i > 0)
           		{
@@ -1056,15 +1047,13 @@ public class DbUtils
 		              nBatch = 0;
 		      			}
           		}
-
           	}
 
-          	if(nBatch > 0)
+          	if (nBatch > 0)
           	{
-          		insert.execute();
+          		return insert.execute();
           	}
-
-            break;
+          	return 0;
 
           case UPDATE:
 
@@ -1087,7 +1076,7 @@ public class DbUtils
           		update.populate(oRec).where(params).addBatch();
           		nBatchUpdate++;
 
-          		if(maxRecordBatchSize > -1 && i > 0)
+          		if (maxRecordBatchSize > -1 && i > 0)
           		{
 	          		if(i % maxRecordBatchSize == 0) {
 	          			update.execute();
@@ -1096,21 +1085,19 @@ public class DbUtils
 		              nBatchUpdate = 0;
 		      			}
           		}
-
           	}
 
-          	if(nBatchUpdate > 0)
+          	if (nBatchUpdate > 0)
           	{
-          		update.execute();
+          		return update.execute();
           	}
-
-            break;
+          	return 0;
 
           case DELETE:
 
           	SQLDeleteClause delete = new SQLDeleteClause(conn, configuration, t);
           	long nBatchDel = 0;
-          	for(int i=0; i<records.size(); i++)
+          	for (int i=0; i<records.size(); i++)
           	{
           		records.get(i);
 
@@ -1140,10 +1127,9 @@ public class DbUtils
 
           	if(nBatchDel > 0)
           	{
-          		delete.execute();
+          		return delete.execute();
           	}
-
-            break;
+          	return 0;
 
           default:
             throw new Exception("");
@@ -1552,9 +1538,7 @@ public class DbUtils
       	//conn.setAutoCommit(true);
       }
     }
-
-
-
+  
   public static void batchRecordsDirectRelations(final long mapId, final List<?> records,
       final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
     {

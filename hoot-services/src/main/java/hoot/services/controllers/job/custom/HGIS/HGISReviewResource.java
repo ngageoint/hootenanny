@@ -1,7 +1,7 @@
 package hoot.services.controllers.job.custom.HGIS;
 
-import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -17,46 +17,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
-import hoot.services.controllers.job.JobControllerBase;
-import hoot.services.controllers.job.JobResource;
 import hoot.services.db.DbUtils;
 import hoot.services.exceptions.osm.InvalidResourceParamException;
+import hoot.services.exceptions.review.custom.HGIS.ReviewMapTagUpdateException;
+import hoot.services.job.JobStatusManager;
 import hoot.services.models.review.custom.HGIS.PrepareForValidationRequest;
 import hoot.services.models.review.custom.HGIS.PrepareForValidationResponse;
+import hoot.services.review.custom.HGIS.HGISValidationMarker;
 import hoot.services.utils.ResourceErrorHandler;
-import hoot.services.validators.osm.MapValidator;
 
 @Path("/review/custom/HGIS")
-public class HGISReviewResource extends JobControllerBase {
-	static private final String _dbName;
-	static private final String _dbUserId;
-	static private final String _dbPassword;
-	static private final String _dbHost;
-	
-	private static final Logger log = LoggerFactory.getLogger(JobResource.class);
+public class HGISReviewResource extends HGISResource {
 
-	// Load just once during class load
-	static
-	{
-		String dbName = null;
-		String dbUserId = null;
-		String dbPassword = null;
-		String dbHost = null;
-		try {
-			dbName = HootProperties.getProperty("dbName");
-			dbUserId = HootProperties.getProperty("dbName");
-			dbPassword = HootProperties.getProperty("dbPassword");
-			dbHost = HootProperties.getProperty("dbHost");
-    } catch (IOException e) {
-    	log.error("failed to retrieve parameter:" + e.getMessage());
-    }
-		
-		_dbName = dbName;
-		_dbUserId = dbUserId;
-		_dbPassword = dbPassword;
-		_dbHost = dbHost;
-	}
-	
+	private static final Logger log = LoggerFactory.getLogger(HGISReviewResource.class);
 	public HGISReviewResource() throws Exception
 	{
 		try
@@ -129,24 +102,24 @@ public class HGISReviewResource extends JobControllerBase {
   		{
   			throw new InvalidResourceParamException("sourceMap does not exist.");
   		}
-  		
-  		
-  		
-
-			JSONArray commandArgs = new JSONArray();
-			JSONObject arg = new JSONObject();
-			arg.put("SOURCE", _generateDbMapParam(src));
-			commandArgs.add(arg);
-
-
-			arg = new JSONObject();
-			arg.put("OUTPUT", _generateDbMapParam(output));
-			commandArgs.add(arg);
+  					
 
 			String jobId = UUID.randomUUID().toString();
-			String argStr = createBashPostBody(commandArgs);
-			postJobRquest( jobId,  argStr);
+			JSONObject validationCommand = _createBashPostBody(_createParamObj(src, output));
+			//postJobRquest( jobId,  argStr);		
+		
+			JSONObject prepareItemsForReviewCommand = _createPrepareReviewCommand(output); 
+					
+			JSONObject updateMapTagCommand = _createUpdateMapTagCommand(output);
+			
+			JSONArray jobArgs = new JSONArray();
+			jobArgs.add(validationCommand);
+			jobArgs.add(prepareItemsForReviewCommand);
+			jobArgs.add(updateMapTagCommand);
 
+
+
+			postChainJobRquest( jobId,  jobArgs.toJSONString());
 			
 			res.setJobId(jobId);
   		
@@ -162,28 +135,65 @@ public class HGISReviewResource extends JobControllerBase {
   	return res;
   }
   
-  
-  protected boolean _mapExists(final String mapName) throws Exception
+  private JSONObject _createPrepareReviewCommand(final String mapName) throws Exception
   {
-  	boolean exists = false;
+		JSONArray reviewArgs = new JSONArray();
+		JSONObject param = new JSONObject();
+		param.put("value", mapName);
+		param.put("paramtype", String.class.getName());
+		param.put("isprimitivetype", "false");
+		reviewArgs.add(param);
+
+		param = new JSONObject();
+		param.put("value", false);
+		param.put("paramtype", Boolean.class.getName());
+		param.put("isprimitivetype", "true");
+		reviewArgs.add(param);
+
+		return _createReflectionJobReq(reviewArgs, "hoot.services.controllers.job.ReviewResource",
+				"prepareItemsForReview");
+  }
+  private JSONObject _createUpdateMapTagCommand(final String mapName) throws Exception
+  {
+  	JSONArray reviewArgs = new JSONArray();
+		JSONObject param = new JSONObject();
+		param.put("value", mapName);
+		param.put("paramtype", String.class.getName());
+		param.put("isprimitivetype", "false");
+		reviewArgs.add(param);
+
+		return _createReflectionJobReq(reviewArgs, "hoot.services.controllers.job.custom.HGIS.HGISReviewResource",
+				"updateMapsTag");
+		
+  }
+  public String updateMapsTag(final String mapName) throws SQLException, ReviewMapTagUpdateException, Exception
+  {
+  	String jobId = UUID.randomUUID().toString();
+  	JobStatusManager jobStatusManager = null;
   	try(Connection conn = DbUtils.createConnection())
   	{
-  		MapValidator validator = new MapValidator(conn);
-  		exists = (validator.verifyMapExists(mapName) > -1);
-  		
+  		jobStatusManager = new JobStatusManager(conn);
+			jobStatusManager.addJob(jobId);
+			
+  		HGISValidationMarker marker = new HGISValidationMarker(conn, mapName);
+  		marker.updateValidationMapTag();
+  		jobStatusManager.setComplete(jobId);
   	}
-  	catch(Exception ex)
+  	catch(SQLException | ReviewMapTagUpdateException se)
   	{
-  		throw ex;
+  		jobStatusManager.setFailed(jobId);
+  		log.error(se.getMessage());
+  		throw se;
+  	}
+  	catch(Exception e)
+  	{
+  		jobStatusManager.setFailed(jobId);
+  		log.error(e.getMessage());
+  		throw e;
   	}
   	
+  	return jobId;
   	
-  	return exists;
   }
-  
-//postgresql://hoot:hoottest@localhost:5432/hoot1/BrazilOsmPois
-  protected final String _generateDbMapParam(final String mapName)
-  {
-  	return "postgresql://" + _dbUserId + ":" + _dbPassword + "@" + _dbHost + "/" + _dbName + "/" + mapName;
-  }
+
 }

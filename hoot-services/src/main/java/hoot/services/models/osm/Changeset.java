@@ -29,8 +29,6 @@ package hoot.services.models.osm;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Calendar;
@@ -615,7 +613,6 @@ public class Changeset extends Changesets
     }// end try
 
   }
-
 
   /**
    * Creates a simple OSM changeset create XML document
