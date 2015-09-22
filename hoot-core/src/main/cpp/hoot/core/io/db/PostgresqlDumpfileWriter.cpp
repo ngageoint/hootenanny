@@ -29,6 +29,7 @@
 
 #include <cstdlib>  // for std::system
 #include <cstdio>   // for std::remove
+#include <math.h>   // for ::round (cmath header is C++11 only)
 
 #include <utility>
 #include <boost/shared_ptr.hpp>
@@ -36,6 +37,7 @@
 #include <QtCore/QString>
 #include <QtCore/QTemporaryFile>
 #include <QtCore/QTextStream>
+#include <QtCore/QDateTime>
 
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/HootException.h>
@@ -144,6 +146,9 @@ void PostgresqlDumpfileWriter::finalizePartial()
       continue;
     }
 
+    // Write close marker for table
+    *(_outputSections[*it].second) << QString("\\.\n\n\n");
+
     // Flush any residual content from text stream/file
     (_outputSections[*it].second)->flush();
     if ( (_outputSections[*it].first)->flush() == false )
@@ -183,20 +188,11 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
   // Have to establish new mapping
   nodeDbId = _establishNewIdMapping(n->getElementId());
 
-  /*
-  LOG_DEBUG("Writing node ID = " + QString::number(n->getId()) +
-      ", db ID = " + QString::number(nodeDbId) );
-  */
+  _writeNodeToTables(n, nodeDbId);
 
-  const QString outputLine = QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n")
-      .arg(nodeDbId)
-      .arg(n->getY())
-      .arg(n->getX())
-      .arg(_getChangesetId())
-      .arg(QString("2015-09-10 12:34:56.00000"))
-      .arg(QString::number(13247));
-
-  *(_outputSections["current_nodes"].second) << outputLine;
+  _writeTagsToTables( n->getTags(), nodeDbId,
+    _outputSections["current_node_tags"].second, "%1\t%2\t%3\n",
+    _outputSections["node_tags"].second, "%1\t1\t%2\t%3\n");
 
   _writeStats.nodesWritten++;
 }
@@ -205,8 +201,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 {
   if ( _writeStats.waysWritten == 0 )
   {
-    // Create way tables
-    ;
+    _createWayTables();
 
     _idMappings.wayIdMap = boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> >(
           new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>());
@@ -223,6 +218,12 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
   // Have to establish new mapping
   wayDbId = _establishNewIdMapping(w->getElementId());
 
+  _writeWayToTables( wayDbId );
+
+  _writeTagsToTables( w->getTags(), wayDbId,
+    _outputSections["current_way_tags"].second, "%1\t%2\t%3\n",
+    _outputSections["way_tags"].second, "%1\t1\t%2\t%3\n");
+
   _writeStats.waysWritten++;
 }
 
@@ -230,8 +231,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
 {
   if ( _writeStats.relationsWritten == 0 )
   {
-    // Create relation tables
-    ;
+    _createRelationTables();
 
     _idMappings.relationIdMap = boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> >(
           new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>());
@@ -247,6 +247,12 @@ void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
 
   // Have to establish new mapping
   relationDbId = _establishNewIdMapping(r->getElementId());
+
+  _writeRelationToTables( relationDbId );
+
+  _writeTagsToTables( r->getTags(), relationDbId,
+    _outputSections["current_relation_tags"].second, "%1\t%2\t%3\n",
+    _outputSections["relation_tags"].second, "%1\t1\t%2\t%3\n");
 
 
   _writeStats.relationsWritten++;
@@ -290,67 +296,15 @@ std::list<QString> PostgresqlDumpfileWriter::_createSectionNameList()
 
 void PostgresqlDumpfileWriter::_createNodeTables()
 {
-  boost::shared_ptr<QTemporaryFile> tempfile;
-  QString tableName;
+  _createTable( "current_nodes",
+                "COPY current_nodes (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) FROM stdin;\n" );
+  _createTable( "current_node_tags",
+                "COPY current_node_tags (node_id, k, v) FROM stdin;\n" );
 
-
-  tableName = "current_nodes";
-  tempfile = boost::shared_ptr<QTemporaryFile>( new QTemporaryFile() );
-  if ( tempfile->open() == false )
-  {
-    throw HootException("Could not open temp file for contents of table " + tableName);
-  }
-
-  _outputSections[tableName] =
-      std::pair< boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> >(
-        tempfile, boost::shared_ptr<QTextStream>(new QTextStream(tempfile.get())) );
-
-  *(_outputSections[tableName].second) <<
-    "COPY current_nodes (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) FROM stdin;\n";
-
-
-  tableName = "current_node_tags";
-  tempfile = boost::shared_ptr<QTemporaryFile>( new QTemporaryFile() );
-  if ( tempfile->open() == false )
-  {
-    throw HootException("Could not open temp file for contents of table " + tableName);
-  }
-
-  _outputSections[tableName] =
-      std::pair< boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> >(
-        tempfile, boost::shared_ptr<QTextStream>(new QTextStream(tempfile.get())) );
-
-  *(_outputSections[tableName].second) << "COPY current_node_tags (node_id, k, v) FROM stdin;\n";
-
-
-  tableName = "nodes";
-  tempfile = boost::shared_ptr<QTemporaryFile>( new QTemporaryFile() );
-  if ( tempfile->open() == false )
-  {
-    throw HootException("Could not open temp file for contents of table " + tableName);
-  }
-
-  _outputSections[tableName] =
-      std::pair< boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> >(
-        tempfile, boost::shared_ptr<QTextStream>(new QTextStream(tempfile.get())) );
-
-  *(_outputSections[tableName].second) <<
-    "COPY nodes (node_id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version, redaction_id) FROM stdin;\n";
-
-
-  tableName = "node_tags";
-  tempfile = boost::shared_ptr<QTemporaryFile>( new QTemporaryFile() );
-  if ( tempfile->open() == false )
-  {
-    throw HootException("Could not open temp file for contents of table " + tableName);
-  }
-
-  _outputSections[tableName] =
-      std::pair< boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> >(
-        tempfile, boost::shared_ptr<QTextStream>(new QTextStream(tempfile.get())) );
-
-  *(_outputSections[tableName].second) << "COPY node_tags (node_id, version, k, v) FROM stdin;\n";
-
+  _createTable( "nodes",
+                "COPY nodes (node_id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version, redaction_id) FROM stdin;\n" );
+  _createTable( "node_tags",
+                "COPY node_tags (node_id, version, k, v) FROM stdin;\n" );
 }
 
 void PostgresqlDumpfileWriter::_zeroWriteStats()
@@ -394,6 +348,158 @@ PostgresqlDumpfileWriter::ElementIdDatatype PostgresqlDumpfileWriter::_establish
   }
 
   return dbIdentifier;
+}
+
+unsigned int PostgresqlDumpfileWriter::_tileForPoint(const double lat, const double lon) const
+{
+  const int lonInt = round((lon + 180.0) * 65535.0 / 360.0);
+  const int latInt = round((lat + 90.0) * 65535.0 / 180.0);
+
+  unsigned int tile = 0;
+
+  for (int i = 15; i >= 0; i--)
+  {
+    tile = (tile << 1) | ((lonInt >> i) & 1);
+    tile = (tile << 1) | ((latInt >> i) & 1);
+  }
+
+  return tile;
+}
+
+unsigned int PostgresqlDumpfileWriter::_convertDegreesToNanodegrees(const double degrees) const
+{
+  return ( round(degrees * 10000000.0) );
+}
+
+void PostgresqlDumpfileWriter::_writeNodeToTables(
+  const ConstNodePtr& node,
+  const ElementIdDatatype nodeDbId )
+{
+  const double nodeY = node->getY();
+  const double nodeX = node->getX();
+  const unsigned int nodeYNanodegrees = _convertDegreesToNanodegrees(nodeY);
+  const unsigned int nodeXNanodegrees = _convertDegreesToNanodegrees(nodeX);
+  const int changesetId = _getChangesetId();
+  const QString datestring = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss.zzz");
+  const QString tileNumberString(QString::number(_tileForPoint(nodeY, nodeX)));
+
+  QString outputLine = QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n")
+      .arg(nodeDbId)
+      .arg(nodeYNanodegrees)
+      .arg(nodeXNanodegrees)
+      .arg(changesetId)
+      .arg(datestring)
+      .arg(tileNumberString);
+
+  *(_outputSections["current_nodes"].second) << outputLine;
+
+  outputLine = QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n")
+      .arg(nodeDbId)
+      .arg(nodeYNanodegrees)
+      .arg(nodeXNanodegrees)
+      .arg(changesetId)
+      .arg(datestring)
+      .arg(tileNumberString);
+
+  *(_outputSections["nodes"].second) << outputLine;
+}
+
+void PostgresqlDumpfileWriter::_writeTagsToTables(
+  const Tags& tags,
+  const ElementIdDatatype nodeDbId,
+  boost::shared_ptr<QTextStream>& currentTable,
+  const QString& currentTableFormatString,
+  boost::shared_ptr<QTextStream>& historicalTable,
+  const QString& historicalTableFormatString )
+{
+  const QString nodeDbIdString( QString::number(nodeDbId) );
+
+  for ( Tags::const_iterator it = tags.begin(); it != tags.end(); ++it )
+  {
+    const QString key = it.key();
+    const QString value = it.value();
+
+    *currentTable << currentTableFormatString.arg(nodeDbIdString, key, value );
+    *historicalTable << historicalTableFormatString.arg(nodeDbIdString, key, value );
+  }
+}
+
+void PostgresqlDumpfileWriter::_createWayTables()
+{
+  _createTable( "current_ways",       "COPY current_ways (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) FROM stdin;\n" );
+  _createTable( "current_way_tags",   "COPY current_way_tags (way_id, k, v) FROM stdin;\n" );
+  _createTable( "current_way_nodes",  "COPY current_way_nodes (way_id, node_id, sequence_id) FROM stdin;\n" );
+
+  _createTable( "ways",               "COPY ways (way_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n" );
+  _createTable( "way_tags",           "COPY way_tags (way_id, k, v, version) FROM stdin;\n" );
+  _createTable( "way_nodes",          "COPY way_nodes (way_id, node_id, version, sequence_id) FROM stdin;\n" );
+}
+
+void PostgresqlDumpfileWriter::_writeWayToTables(const ElementIdDatatype wayDbId )
+{
+  const int changesetId = _getChangesetId();
+  const QString datestring = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss.zzz");
+
+  QString outputLine = QString("%1\t%2\t%3\tt\t1\n")
+      .arg(wayDbId)
+      .arg(changesetId)
+      .arg(datestring);
+
+  *(_outputSections["current_ways"].second) << outputLine;
+
+  outputLine = QString("%1\t%2\t%3\tt\t1\t\\N\n")
+      .arg(wayDbId)
+      .arg(changesetId)
+      .arg(datestring);
+
+  *(_outputSections["ways"].second) << outputLine;
+}
+
+void PostgresqlDumpfileWriter::_createRelationTables()
+{
+  _createTable( "current_relations",        "COPY current_relations (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n" );
+  _createTable( "current_relation_tags",    "COPY current_relation_tags (relation_id, k, v) FROM stdin;\n" );
+  _createTable( "current_relation_members", "COPY current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;\n" );
+
+  _createTable( "relations",                "COPY relations (relation_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n" );
+  _createTable( "relation_tags",            "COPY relation_tags (relation_id, k, v, version) FROM stdin;\n" );
+  _createTable( "relation_members",         "COPY relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) FROM stdin;\n" );
+}
+
+void PostgresqlDumpfileWriter::_writeRelationToTables(const ElementIdDatatype relationDbId )
+{
+  const int changesetId = _getChangesetId();
+  const QString datestring = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss.zzz");
+
+  QString outputLine = QString("%1\t%2\t%3\tt\t1\n")
+      .arg(relationDbId)
+      .arg(changesetId)
+      .arg(datestring);
+
+  *(_outputSections["current_relations"].second) << outputLine;
+
+  outputLine = QString("%1\t%2\t%3\tt\t1\t\\N\n")
+      .arg(relationDbId)
+      .arg(changesetId)
+      .arg(datestring);
+
+  *(_outputSections["relations"].second) << outputLine;
+}
+
+
+void PostgresqlDumpfileWriter::_createTable( const QString& tableName, const QString& tableHeader )
+{
+  boost::shared_ptr<QTemporaryFile> tempfile( new QTemporaryFile() );
+  if ( tempfile->open() == false )
+  {
+    throw HootException("Could not open temp file for contents of table " + tableName);
+  }
+
+  _outputSections[tableName] =
+      std::pair< boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> >(
+        tempfile, boost::shared_ptr<QTextStream>(new QTextStream(tempfile.get())) );
+
+  *(_outputSections[tableName].second) << tableHeader;
 }
 
 }

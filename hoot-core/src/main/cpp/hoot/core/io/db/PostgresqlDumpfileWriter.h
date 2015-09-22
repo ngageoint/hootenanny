@@ -44,6 +44,7 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/Tags.h>
 
 #include <tgs/BigContainers/BigMap.h>
 
@@ -147,6 +148,30 @@ protected:
   void _zeroWriteStats();
 
   ElementIdDatatype _establishNewIdMapping(const ElementId& sourceId);
+
+  unsigned int _tileForPoint(const double lat, const double lon) const;
+
+  unsigned int _convertDegreesToNanodegrees(const double degrees) const;
+
+  void _writeNodeToTables(const ConstNodePtr& node, const ElementIdDatatype nodeDbId);
+
+  void _writeTagsToTables(
+    const Tags& tags,
+    const ElementIdDatatype nodeDbId,
+    boost::shared_ptr<QTextStream>& currentTable,
+    const QString& currentTableFormatString,
+    boost::shared_ptr<QTextStream>& historicalTable,
+    const QString& historicalTableFormatString );
+
+  void _createWayTables();
+
+  void _writeWayToTables(const ElementIdDatatype wayDbId );
+
+  void _createRelationTables();
+
+  void _writeRelationToTables(const ElementIdDatatype relationDbId );
+
+  void _createTable( const QString& tableName, const QString& tableHeader );
 };
 
 }
