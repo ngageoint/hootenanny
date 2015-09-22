@@ -551,11 +551,10 @@ public class ReviewResource
    */
   @PUT
   @Path("/setallreviewed")
-  @Consumes(MediaType.TEXT_PLAIN)
+  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.TEXT_PLAIN)
   public Response setAllItemsReviewed(
-    @QueryParam("mapId")
-    final long mapId) 
+  	JSONObject request) 
     throws Exception
   {
   	Connection conn = DbUtils.createConnection();
@@ -564,9 +563,11 @@ public class ReviewResource
       transactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
     conn.setAutoCommit(false);
+    String mapId = null;
   	try
   	{
-  	  (new ReviewItemsSynchronizer(conn, String.valueOf(mapId))).setAllItemsReviewed();
+  		mapId = request.get("mapId").toString();
+  	  (new ReviewItemsSynchronizer(conn, mapId)).setAllItemsReviewed();
   		
   		log.debug("Committing set all items reviewed transaction...");
       transactionManager.commit(transactionStatus);

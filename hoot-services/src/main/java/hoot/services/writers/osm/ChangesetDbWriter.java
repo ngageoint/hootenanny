@@ -183,7 +183,7 @@ public class ChangesetDbWriter
     }
     else
     {
-      if (oldElementId < 1)
+      if (oldElementId < 0)
       {
         if (!Boolean.parseBoolean(HootProperties.getInstance().getProperty(
             "hootCoreServicesDatabaseWriterCompatibility",
