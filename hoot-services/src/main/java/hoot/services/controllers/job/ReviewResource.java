@@ -59,6 +59,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -511,13 +512,17 @@ public class ReviewResource
     final String elementType)
     throws Exception
   {
+  	log.debug("Returning review references...");
+  	
   	Connection conn = DbUtils.createConnection();
   	ReviewReferences response = new ReviewReferences();
   	try
   	{
   		List<List<ReviewAgainstItem>> references = 
   			(new ReviewReferencesRetriever(conn).getReferences(mapId, elementId, elementType));
+  		log.debug("Returning " + references.get(0).size() + " review against items.");
   		response.setReviewAgainstItems(references.get(0).toArray(new ReviewAgainstItem[]{}));
+  		log.debug("Returning " + references.get(1).size() + " reviewable items.");
   		response.setReviewableItems(references.get(1).toArray(new ReviewAgainstItem[]{}));
   	}
   	catch (Exception e)
@@ -533,7 +538,7 @@ public class ReviewResource
       DbUtils.closeConnection(conn);
     }
   	
-  	log.debug("response : " + response.toString());
+  	log.debug("response : " + StringUtils.abbreviate(response.toString(), 1000));
   	return response;
   }
   

@@ -27,6 +27,7 @@
 package hoot.services.writers.review;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -120,17 +121,17 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
               //parts.  Treat each ID part separately.  
             	// TODO: change for fuzzy matches was invalid, so backing it out; fix and add test 
             	// for this case
-              String[] uniqueElementIds = null;
-              /*if (uniqueElementIdStr.contains(";"))
+            	List<String> uniqueElementIds = new ArrayList<String>();
+          		uniqueElementIds.add(uniqueElementIdStr);
+              if (uniqueElementIdStr.contains(";"))
               {
-                log.debug("Multiple part UUID...");
-                uniqueElementIds = uniqueElementIdStr.split(";");
+                //log.debug("Multiple part UUID...");
+                String[] uniqueElementIdsArr = uniqueElementIdStr.split(";");
+                for (String id : uniqueElementIdsArr)
+                {
+                	uniqueElementIds.add(id);
+                }
               }
-              else
-              {*/
-                uniqueElementIds = new String[1];
-                uniqueElementIds[0] = uniqueElementIdStr;
-              //}
                 
               for (String uniqueElementId : uniqueElementIds)
               {
