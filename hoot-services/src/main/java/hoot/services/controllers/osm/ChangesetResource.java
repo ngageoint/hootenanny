@@ -34,7 +34,9 @@ import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.validators.osm.ChangesetUploadXmlValidator;
 import hoot.services.writers.osm.ChangesetDbWriter;
+import hoot.services.writers.review.ReviewItemsSynchronizer;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.OPTIONS;
@@ -315,12 +317,13 @@ public class ChangesetResource
    * 
    * @param changeset OSM changeset diff data
    * @param changesetId ID of the changeset being uploaded; changeset with the ID must already exist
+   * @param mapId ID of the map owning the changeset being uploaded
    * @return response acknowledging the result of the update operation with updated entity ID 
    * information
    * @throws Exception
    * @see http://wiki.openstreetmap.org/wiki/API_0.6 and 
    * http://wiki.openstreetmap.org/wiki/OsmChange
-   * @todo why can't I pass in changesetDiff as an XML doc instead of a string?
+   * @todo update unit test
    */
   @POST
   @Path("/{changesetId}/upload")
@@ -334,13 +337,11 @@ public class ChangesetResource
     final String mapId)
     throws Exception
   {
+  	log.debug("Intializing database connection...");
     Connection conn = DbUtils.createConnection();
     Document changesetUploadResponse = null;
     try
     {
-      log.debug("Intializing database connection...");
-
-      
       log.debug("Intializing changeset upload transaction...");
       TransactionStatus transactionStatus = 
         transactionManager.getTransaction(
@@ -349,12 +350,26 @@ public class ChangesetResource
       
       try
       { 
-      	if(mapId == null) {
+      	if (mapId == null) 
+      	{
       		throw new Exception("Invalid map id.");
       	}
       	long mapid = Long.parseLong(mapId);
-        changesetUploadResponse = 
-          (new ChangesetDbWriter(conn)).write(mapid, changesetId, changeset);
+      	Document changesetDoc = null;
+        try
+        {
+        	changesetDoc = (new ChangesetUploadXmlValidator()).parseAndValidate(changeset);
+        }
+        catch (Exception e)
+        {
+          throw new Exception("Error parsing changeset diff data: "
+            + StringUtils.abbreviate(changeset, 100) + " (" + e.getMessage() + ")");
+        }
+        ChangesetDbWriter changesetDbWriter = new ChangesetDbWriter(conn);
+        changesetUploadResponse = changesetDbWriter.write(mapid, changesetId, changesetDoc);
+        	
+        (new ReviewItemsSynchronizer(conn, mapId)).updateReviewItems(
+          changesetDoc, changesetDbWriter.getParsedElementIdsToElementsByType());
       }
       catch (Exception e)
       {
@@ -459,7 +474,9 @@ public class ChangesetResource
       //TODO: should the visibility exception be changed from a 400 to a 409?
       else if (e.getMessage().contains("exist specified for") ||
                e.getMessage().contains("exist for") ||
-               e.getMessage().contains("is still used by"))
+               e.getMessage().contains("is still used by") ||
+               e.getMessage().contains(
+                 "One or more features in the changeset are involved in an unresolved review"))
       {
         ResourceErrorHandler.handleError(e.getMessage(), Status.PRECONDITION_FAILED, log); //412
       }

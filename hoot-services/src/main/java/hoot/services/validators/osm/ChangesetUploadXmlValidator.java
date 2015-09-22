@@ -28,6 +28,7 @@ package hoot.services.validators.osm;
 
 import hoot.services.utils.XmlDocumentBuilder;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,7 @@ public class ChangesetUploadXmlValidator
     Document changesetDiffDoc = null;
     try
     {
-      log.debug("Parsing changeset diff XML...");
+      log.debug("Parsing changeset diff XML: " + StringUtils.abbreviate(changesetXml, 1000));
       changesetDiffDoc = XmlDocumentBuilder.parse(changesetXml);
     }
     catch (Exception e)

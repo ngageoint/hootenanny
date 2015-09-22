@@ -47,7 +47,7 @@ import hoot.services.db2.QChangesets;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Changeset;
 import hoot.services.osm.OsmResourceTestAbstract;
-import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 
 import com.mysema.query.sql.SQLQuery;
 import com.sun.jersey.api.client.ClientResponse;
@@ -89,7 +89,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       try
       {
@@ -145,7 +145,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       try
       {
@@ -233,7 +233,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       try
       {
@@ -355,7 +355,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       try
       {
