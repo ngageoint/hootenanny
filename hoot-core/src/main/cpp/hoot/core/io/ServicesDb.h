@@ -243,6 +243,11 @@ public:
   void deleteUser(long userId);
 
   /**
+    * Deletes data in the Osm Api db
+    */
+  void deleteData_OsmApi();
+
+  /**
    * Start a new changeset
    *
    * @note The changeset will not have any tags associated with it

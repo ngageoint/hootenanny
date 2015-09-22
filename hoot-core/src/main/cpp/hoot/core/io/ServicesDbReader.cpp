@@ -58,6 +58,7 @@ void ServicesDbReader::_addTagsToElement(shared_ptr<Element> element)
 {
   bool ok;
   Tags& tags = element->getTags();
+
   if (tags.contains("hoot:status"))
   {
     QString statusStr = tags.get("hoot:status");
@@ -75,6 +76,7 @@ void ServicesDbReader::_addTagsToElement(shared_ptr<Element> element)
     }
     tags.remove("hoot:status");
   }
+
   if (tags.contains("type"))
   {
     Relation* r = dynamic_cast<Relation*>(element.get());
@@ -84,6 +86,7 @@ void ServicesDbReader::_addTagsToElement(shared_ptr<Element> element)
       tags.remove("type");
     }
   }
+
   if (tags.contains("error:circular"))
   {
     element->setCircularError(tags.get("error:circular").toDouble(&ok));
@@ -95,7 +98,8 @@ void ServicesDbReader::_addTagsToElement(shared_ptr<Element> element)
   }
   else if (tags.contains("accuracy"))
   {
-    element->setCircularError(tags.get("accuracy").toDouble());
+    element->setCircularError(tags.get("accuracy").toDouble(&ok));
+
     if (!ok)
     {
       LOG_WARN("Error parsing accuracy.");
@@ -119,12 +123,10 @@ bool ServicesDbReader::isSupported(QString urlStr)
 
 void ServicesDbReader::open(QString urlStr)
 {
-  LOG_DEBUG("IN ServicesDbReader open " << urlStr);
   if (!isSupported(urlStr))
   {
     throw HootException("An unsupported URL was passed in.");
   }
-LOG_DEBUG("email = "+_email);
 
   QUrl url(urlStr);
   QString osmElemId = url.queryItemValue("osm-element-id");
@@ -135,19 +137,16 @@ LOG_DEBUG("email = "+_email);
   bool ok2;
   QString mapName;
   _database.open(url);
-LOG_DEBUG("plist size - 1 = "+pList[1]);
-LOG_DEBUG("AFTER OPEN...plist size = "+QString::number(pList.size()));
+
   long requestedMapId = pList[pList.size() - 1].toLong(&ok);
-LOG_DEBUG("requestedMapId = "+QString::number(requestedMapId));
 
   if(osmElemId.length() > 0 && osmElemType.length() > 0)
   {
-    LOG_DEBUG("CHECK0");
     _osmElemId = osmElemId.toLong(&ok2);
     _osmElemType = ElementType::fromString(osmElemType);
 
   }
-LOG_DEBUG("CHECK1");
+
   if (!ok && _database.getDatabaseType() != ServicesDb::DBTYPE_OSMAPI)
   {
     if (_email == "")
@@ -158,20 +157,15 @@ LOG_DEBUG("CHECK1");
 
     mapName = pList[pList.size() - 1];
     _database.setUserId(_database.getUserId(_email));
-LOG_DEBUG("CHECK 5 -- mapName = "+mapName);
     set<long> mapIds = _database.selectMapIds(mapName);
-LOG_DEBUG("CHECK 6 -- After selectMapIds");
     if (mapIds.size() != 1)
     {
       QString str = QString("Expected 1 map with the name '%1' but found %2 maps.").arg(mapName)
           .arg(mapIds.size());
       throw HootException(str);
     }
-      LOG_DEBUG("CHECK7");
     requestedMapId = *mapIds.begin();
   }
-
-  LOG_DEBUG("CHECK3");
 
   if( _database.getDatabaseType() != ServicesDb::DBTYPE_OSMAPI )
   {
@@ -188,7 +182,6 @@ LOG_DEBUG("CHECK 6 -- After selectMapIds");
   //be invalid as a whole
   _database.transaction();
   _open = true;
-  LOG_DEBUG("Leaving servicesdbreader open method");
 }
 
 bool ServicesDbReader::hasMoreElements()
@@ -284,41 +277,40 @@ void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementT
       break;
 
     case ServicesDb::DBTYPE_OSMAPI:
-      LOG_DEBUG("IN ServicesDbReader::_read's case OSMAPI...");
-
       // check if db active or not
       assert(elementResultsIterator.isActive());
 
       while( elementResultsIterator->next() )
       {
         long long id = elementResultsIterator->value(0).toLongLong();
-
         if( lastId != id )
         {
           // process the complete element only after the first element created
           if(!firstElement)
           {
-            element->setTags( ServicesDb::unescapeTags(tags.join(", ")) );
-            _addTagsToElement( element );
+            if(tags.size()>0)
+            {
+              element->setTags( ServicesDb::unescapeTags(tags.join(", ")) );
+              _addTagsToElement( element );
+            }
+
             if (_status != Status::Invalid) { element->setStatus(_status); }
             map->addElement(element);
+            tags.clear();
           }
 
           // extract the node contents except for the tags
           switch (elementType.getEnum())
           {
             case ElementType::Node:
-              //LOG_DEBUG("CHECK NODE");
               element = _resultToNode_OsmApi(*elementResultsIterator, *map);
               break;
 
             case ElementType::Way:
-              //LOG_DEBUG("CHECK WAY");
               element = _resultToWay_OsmApi(*elementResultsIterator, *map);
               break;
 
             case ElementType::Relation:
-              //LOG_DEBUG("CHECK RELATION");
               element = _resultToRelation_OsmApi(*elementResultsIterator, *map);
               break;
 
@@ -331,16 +323,22 @@ void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementT
 
         // read the tag for as many rows as there are tags
         // need to get into form "key1"=>"val1", "key2"=>"val2", ...
-        tags << _database.extractTagFromRow_OsmApi(elementResultsIterator, elementType.getEnum());
+
+        QString result = _database.extractTagFromRow_OsmApi(elementResultsIterator, elementType.getEnum());
+        if(result != "") tags << result;
       }
 
       // process the last complete element only if an element has been created
       if(!firstElement)
       {
-        element->setTags( ServicesDb::unescapeTags(tags.join(", ")) );
-        _addTagsToElement( element );
+        if(tags.size()>0)
+        {
+          element->setTags( ServicesDb::unescapeTags(tags.join(", ")) );
+          _addTagsToElement( element );
+        }
         if (_status != Status::Invalid) { element->setStatus(_status); }
         map->addElement(element);
+        tags.clear();
       }
       break;
 
@@ -598,12 +596,14 @@ shared_ptr<Node> ServicesDbReader::_resultToNode(const QSqlQuery& resultIterator
 shared_ptr<Node> ServicesDbReader::_resultToNode_OsmApi(const QSqlQuery& resultIterator, OsmMap& map)
 {
   long nodeId = _mapElementId(map, ElementId::node(resultIterator.value(0).toLongLong())).getId();
+  double lat = resultIterator.value(ServicesDb::NODES_LATITUDE).toLongLong()/(double)ServicesDb::COORDINATE_SCALE;
+  double lon = resultIterator.value(ServicesDb::NODES_LONGITUDE).toLongLong()/(double)ServicesDb::COORDINATE_SCALE;
   shared_ptr<Node> result(
     new Node(
       _status,
       nodeId,
-      resultIterator.value(ServicesDb::NODES_LONGITUDE).toDouble(),
-      resultIterator.value(ServicesDb::NODES_LATITUDE).toDouble(),
+      lon,
+      lat,
       ServicesDb::DEFAULT_ELEMENT_CIRCULAR_ERROR));
 
   return result;

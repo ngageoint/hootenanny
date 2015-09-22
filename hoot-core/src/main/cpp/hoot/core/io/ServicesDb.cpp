@@ -343,6 +343,44 @@ void ServicesDb::createPendingMapIndexes()
   _pendingMapIndexes.clear();
 }
 
+void ServicesDb::deleteData_OsmApi()
+{
+  // delete ways data first
+  _execNoPrepare("DELETE FROM current_relation_members CASCADE");
+  _execNoPrepare("DELETE FROM current_relation_tags CASCADE");
+  _execNoPrepare("DELETE FROM current_relations CASCADE");
+  _execNoPrepare("ALTER SEQUENCE current_relations_id_seq RESTART WITH 1");
+  _execNoPrepare("DELETE FROM relation_members CASCADE");
+  _execNoPrepare("DELETE FROM relation_tags CASCADE");
+  _execNoPrepare("DELETE FROM relations CASCADE");
+
+  // delete relations data 2nd
+  _execNoPrepare("DELETE FROM current_way_nodes CASCADE");
+  _execNoPrepare("DELETE FROM current_way_tags CASCADE");
+  _execNoPrepare("DELETE FROM current_ways CASCADE");
+  _execNoPrepare("ALTER SEQUENCE current_ways_id_seq RESTART WITH 1");
+  _execNoPrepare("DELETE FROM way_nodes CASCADE");
+  _execNoPrepare("DELETE FROM way_tags CASCADE");
+  _execNoPrepare("DELETE FROM ways CASCADE");
+
+  // delete nodes data 3rd
+  _execNoPrepare("DELETE FROM current_node_tags CASCADE");
+  _execNoPrepare("DELETE FROM current_nodes CASCADE");
+  _execNoPrepare("ALTER SEQUENCE current_nodes_id_seq RESTART WITH 1");
+  _execNoPrepare("DELETE FROM node_tags CASCADE");
+  _execNoPrepare("DELETE FROM nodes CASCADE");
+
+  // delete changesets
+  _execNoPrepare("DELETE FROM changesets_subscribers CASCADE");
+  _execNoPrepare("DELETE FROM changeset_tags CASCADE");
+  _execNoPrepare("DELETE FROM changesets CASCADE");
+  _execNoPrepare("ALTER SEQUENCE changesets_id_seq RESTART WITH 1");
+
+  // delete users
+  _execNoPrepare("DELETE FROM users CASCADE");
+  _execNoPrepare("ALTER SEQUENCE users_id_seq RESTART WITH 1");
+}
+
 void ServicesDb::deleteMap(long mapId)
 {
   _dropTable(_getRelationMembersTableName(mapId));
@@ -1504,16 +1542,15 @@ LOG_DEBUG("userId = "+QString::number(userId));
     _selectMapIds.reset(new QSqlQuery(_db));
     _selectMapIds->prepare("SELECT id FROM maps WHERE display_name LIKE :name AND user_id=:userId");
   }
-LOG_DEBUG("CHECK A1");
+
   _selectMapIds->bindValue(":name", name);
   _selectMapIds->bindValue(":user_id", (qlonglong)userId);
-  LOG_DEBUG("CHECK A2");
 
   if (_selectMapIds->exec() == false)
   {
     throw HootException(_selectMapIds->lastError().text());
   }
-LOG_DEBUG("CHECK A3");
+
   set<long> result;
   while (_selectMapIds->next())
   {
@@ -1525,7 +1562,7 @@ LOG_DEBUG("CHECK A3");
     }
     result.insert(id);
   }
-LOG_DEBUG("CHECK A4");
+
   return result;
 }
 
@@ -3548,14 +3585,17 @@ long ServicesDb::reserveElementId(const ElementType::Type type)
  */
 QString ServicesDb::extractTagFromRow_OsmApi(shared_ptr<QSqlQuery> row, const ElementType::Type type)
 {
+  QString tag = "";
   int pos = -1;
   if(type==ElementType::Node) pos=ServicesDb::NODES_TAGS;
   else if(type==ElementType::Way) pos=ServicesDb::WAYS_TAGS;
   else if(type==ElementType::Relation) pos=ServicesDb::RELATIONS_TAGS;
   else throw HootException("extractTagFromRow_OsmApi called with unknown Type");
 
-  QString tag = "\""+row->value(pos).toString()+"\"=>\""+
-    row->value(pos+1).toString()+"\"";
+  // test for blank tag
+  QString val1 = row->value(pos).toString();
+  QString val2 = row->value(pos+1).toString();
+  if(val1!="" || val2!="") tag = "\""+val1+"\"=>\""+val2+"\"";
 
   return tag;
 }

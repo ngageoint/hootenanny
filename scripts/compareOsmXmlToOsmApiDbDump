@@ -227,7 +227,7 @@ sub validateCurrentNodes($$)
 
     # Compare lat, lon, version, tags
 
-    if ( $currXmlNode{'lat'} ne $currentNodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lat'} )
+    if ( abs($currXmlNode{'lat'} - $currentNodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lat'}) > 0.00001 )
     {
       print( "ERROR: XML node $currXmlNodeId latitude $currXmlNode{'lat'} != " .
         "DB node $nodeIdMappingsXmlToDb{$currXmlNodeId} lat " . 
@@ -235,7 +235,7 @@ sub validateCurrentNodes($$)
       exit;
     }
   
-    if ( $currXmlNode{'lon'} ne $currentNodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lon'} )
+    if ( abs($currXmlNode{'lon'} - $currentNodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lon'}) > 0.00001 )
     {
       print( "ERROR: XML node $currXmlNodeId longitude $currXmlNode{'lon'} != " .
         "DB node $nodeIdMappingsXmlToDb{$currXmlNodeId} lon " .
@@ -474,7 +474,7 @@ sub validateNodes($$)
 
     # Compare lat, lon, version, tags
 
-    if ( $currXmlNode{'lat'} ne $nodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lat'} )
+    if ( abs($currXmlNode{'lat'} - $nodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lat'}) > 0.00001 )
     {
       print( "ERROR: XML node $currXmlNodeId latitude $currXmlNode{'lat'} != " .
         "DB node $nodeIdMappingsXmlToDb{$currXmlNodeId} lat " .
@@ -482,7 +482,7 @@ sub validateNodes($$)
       exit;
     }
 
-    if ( $currXmlNode{'lon'} ne $nodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lon'} )
+    if ( abs($currXmlNode{'lon'} - $nodesData{$nodeIdMappingsXmlToDb{$currXmlNodeId}}->{'lon'}) > 0.00001 )
     {
       print( "ERROR: XML node $currXmlNodeId longitude $currXmlNode{'lon'} != " .
         "DB node $nodeIdMappingsXmlToDb{$currXmlNodeId} lon " .
