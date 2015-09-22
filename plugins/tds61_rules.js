@@ -1428,7 +1428,7 @@ tds61.rules = {
      ['FFN','551','tourism','hotel'], // Hotel
      ['FFN','552','tourism','resort_hotel'], // Resort Hotel
      ['FFN','553','tourism','motel'], // Motel
-     ['FFN','554','tourism','guest-house'], // Guest-house
+     ['FFN','554','tourism','guest_house'], // Guest-house
      ['FFN','555','tourism','hostel'], // Hostel
      ['FFN','556','use','dormitory'], // Dormitory
      ['FFN','557','use','vacation_cottage'], // Vacation Cottage
@@ -1551,7 +1551,7 @@ tds61.rules = {
      ['FFN','885','amenity','child_care'], // Day Care
      ['FFN','887','use','social_work'], // Social Work
      ['FFN','888','use','emergency_relief_services'], // Emergency Relief Services
-     ['FFN','890','amenity','arts_centre'], // Cultural, Arts and Entertainment
+     ['FFN','890','amenity','cultural_centre'], // Cultural, Arts and Entertainment
      ['FFN','891','amenity','theatre'], // Theatre
      ['FFN','892','amenity','auditorium'], // Auditorium
      ['FFN','893','amenity','community_centre'], // Community Centre

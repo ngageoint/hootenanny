@@ -68,22 +68,22 @@ public class AboutResourceTest extends JerseyTest
   
   private void mockBuildInfo() throws IOException
   {
-	//mock the existence of the build info properties
-	Properties buildInfoProps = new Properties();
-	buildInfoProps.setProperty("name", "Hootenanny Web Services");
-	buildInfoProps.setProperty("version", "0.0.1");
-	buildInfoProps.setProperty("user", "testuser");
-	PowerMockito.mockStatic(BuildInfo.class);
-	PowerMockito.when(BuildInfo.getInstance()).thenReturn(buildInfoProps);
+	  //mock the existence of the build info properties
+	  Properties buildInfoProps = new Properties();
+	  buildInfoProps.setProperty("name", "Hootenanny Web Services");
+	  buildInfoProps.setProperty("version", "0.0.1");
+	  buildInfoProps.setProperty("user", "testuser");
+	  PowerMockito.mockStatic(BuildInfo.class);
+	  PowerMockito.when(BuildInfo.getInstance()).thenReturn(buildInfoProps);
   }
   
   @Test
   @Category(UnitTest.class)
   public void getServicesVersionInfo() throws IOException
   { 
-	mockBuildInfo();
+	  mockBuildInfo();
 	  
-	VersionInfo responseData = null;
+	  VersionInfo responseData = null;
     try
     {
       responseData = 
@@ -107,14 +107,14 @@ public class AboutResourceTest extends JerseyTest
   @Category(UnitTest.class)
   public void getServicesVersionDetail() throws IOException
   {
-	Properties hootProps = HootProperties.getInstance();
-	hootProps.clear();
-	hootProps.setProperty("testProp1", "testVal1");
-	HootProperties.setProperties(hootProps);
+	  Properties hootProps = HootProperties.getInstance();
+	  hootProps.clear();
+	  hootProps.setProperty("testProp1", "testVal1");
+	  HootProperties.setProperties(hootProps);
 	
-	mockBuildInfo();
+	  mockBuildInfo();
 	  
-	ServicesDetail responseData = null;
+	  ServicesDetail responseData = null;
     try
     {
       responseData = 
@@ -141,9 +141,9 @@ public class AboutResourceTest extends JerseyTest
   @Category(UnitTest.class)
   public void getCoreVersionInfo() throws IOException
   {
-	mockBuildInfo();
+	  mockBuildInfo();
 	  
-	VersionInfo responseData = null;
+	  VersionInfo responseData = null;
     try
     {
       responseData = 
@@ -168,9 +168,9 @@ public class AboutResourceTest extends JerseyTest
   @Category(UnitTest.class)
   public void getCoreVersionDetail() throws IOException
   {
-	mockBuildInfo();
+	  mockBuildInfo();
 	  
-	CoreDetail responseData = null;
+	  CoreDetail responseData = null;
     try
     {
       responseData = 
@@ -196,12 +196,12 @@ public class AboutResourceTest extends JerseyTest
   @Category(UnitTest.class)
   public void getServicesVersionNoBuildFile() throws Exception
   {
-	//Use PowerMock here so we can mock a static method.
-	PowerMockito.mockStatic(BuildInfo.class);
-	//simulate the build.info file not existing
-	PowerMockito.when(BuildInfo.getInstance()).thenThrow(IOException.class);
+	  //Use PowerMock here so we can mock a static method.
+	  PowerMockito.mockStatic(BuildInfo.class);
+	  //simulate the build.info file not existing
+	  PowerMockito.when(BuildInfo.getInstance()).thenThrow(IOException.class);
 	
-	VersionInfo responseData = null;
+	  VersionInfo responseData = null;
     try
     {
       responseData = 
