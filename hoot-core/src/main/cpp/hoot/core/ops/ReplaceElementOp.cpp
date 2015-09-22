@@ -76,6 +76,8 @@ void ReplaceElementOp::apply(const shared_ptr<OsmMap> &map)
 
   const ElementPtr& from = map->getElement(_from);
   const ConstElementPtr& to = map->getElement(_to);
+  assert(from);
+  assert(to);
 
   set<ElementId> parents = map->getParents(_from);
 

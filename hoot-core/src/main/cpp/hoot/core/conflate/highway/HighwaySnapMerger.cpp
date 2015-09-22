@@ -277,6 +277,7 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   // if there is something left to review against
   if (scraps2)
   {
+    map->addElement(scraps2);
     ReplaceElementOp(e2Match->getElementId(), scraps2->getElementId(), true).apply(result);
     ReplaceElementOp(eid2, scraps2->getElementId(), true).apply(result);
   }

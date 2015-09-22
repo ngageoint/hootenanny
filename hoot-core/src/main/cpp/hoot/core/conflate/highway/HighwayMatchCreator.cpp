@@ -185,6 +185,11 @@ HighwayMatchCreator::HighwayMatchCreator()
   _sublineMatcher->setConfiguration(settings);
 }
 
+Match* HighwayMatchCreator::createMatch(const ConstOsmMapPtr&, ElementId eid1, ElementId eid2)
+{
+  #warning implement me.
+}
+
 void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match *> &matches,
   ConstMatchThresholdPtr threshold)
 {

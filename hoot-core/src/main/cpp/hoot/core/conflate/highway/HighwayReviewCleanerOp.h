@@ -3,6 +3,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
@@ -27,7 +28,7 @@ public:
 
 private:
 
-  bool _isBadHighwayReview(shared_ptr<OsmMap>& map, ElementId review);
+  bool _isBadHighwayReview(shared_ptr<OsmMap>& map, hoot::ReviewMarker::ReviewUid review);
 };
 
 }

@@ -52,14 +52,16 @@ public:
 
   static QString getBadGeometryType() { return _complexGeometryType; }
 
-  set<ReviewUid> getReviewUids(const ConstOsmMapPtr &map, ConstElementPtr e1) const;
+  static set<ElementId> getReviewElements(const ConstOsmMapPtr &map, ReviewUid uid);
 
-  QString getReviewType(const ConstOsmMapPtr &map, ReviewUid uid);
+  static set<ReviewUid> getReviewUids(const ConstOsmMapPtr &map, ConstElementPtr e1);
+
+  static QString getReviewType(const ConstOsmMapPtr &map, ReviewUid uid);
 
   /**
    * Returns true if the element is in at least one review.
    */
-  bool isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1);
+  static bool isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1);
 
   /**
    * Determines whether a pair of elements should be returned for review
@@ -68,12 +70,12 @@ public:
    * @param e2 the second element in the element pair being examined
    * @return true if the pair should be reviewed against each other; false otherwise
    */
-  bool isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1, ConstElementPtr e2);
+  static bool isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1, ConstElementPtr e2);
 
   /**
    * Returns true if the specified UID is a review tag.
    */
-  bool isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid);
+  static bool isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid);
 
   /**
    * Marks e1 and e2 as needing review and sets them to reference each other. If the score is
@@ -83,14 +85,14 @@ public:
    * @param reviewType A human readable review type. Typically this is a one word description of
    *  the feature being reviewed. E.g. "Highway" or "Building".
    */
-  void mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, const QString& note,
+  static void mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, const QString& note,
     const QString& reviewType, double score = -1);
 
   /**
    * Marks a single element as needing review.
    */
-  void mark(const OsmMapPtr &map, ElementPtr& e, const QString& note, const QString& reviewType,
-    double score = -1);
+  static void mark(const OsmMapPtr &map, ElementPtr& e, const QString& note,
+    const QString& reviewType, double score = -1);
 
 private:
   // don't use these keys directly, instead call the helper functions above.
@@ -102,7 +104,7 @@ private:
   static QString _reviewNoteKey;
   static QString _reviewTypeKey;
 
-  set<ElementId> _getReviewRelations(const ConstOsmMapPtr &map, ElementId eid) const;
+  static set<ElementId> _getReviewRelations(const ConstOsmMapPtr &map, ElementId eid);
 
   void _updateScore(Tags& t, double score);
 };

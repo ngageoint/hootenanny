@@ -303,18 +303,18 @@
     <relation visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="relation" ref="-2" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="Bad Geometry"/>
         <tag k="hoot:review:score" v="-1"/>
         <tag k="hoot:review:note" v="Element with uncleanable topology.  Error occurred during union operation."/>
         <tag k="type" v="review"/>
-        <tag k="error:circular" v="0"/>
     </relation>
     <relation visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="relation" ref="-2" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="Bad Geometry"/>
         <tag k="hoot:review:score" v="-1"/>
         <tag k="hoot:review:note" v="Element with uncleanable topology.  Error occurred during union operation."/>
         <tag k="type" v="review"/>
-        <tag k="error:circular" v="0"/>
     </relation>
     <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-2" role="part"/>

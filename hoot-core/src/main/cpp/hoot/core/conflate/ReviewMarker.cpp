@@ -44,7 +44,23 @@ ReviewMarker::ReviewMarker()
 {
 }
 
-set<ElementId> ReviewMarker::_getReviewRelations(const ConstOsmMapPtr &map, ElementId eid) const
+set<ElementId> ReviewMarker::getReviewElements(const ConstOsmMapPtr &map, ReviewUid uid)
+{
+  set<ElementId> result;
+
+  ConstRelationPtr r = map->getRelation(uid.getId());
+
+  const vector<RelationData::Entry>& entries = r->getMembers();
+
+  for (size_t i = 0; i < entries.size(); i++)
+  {
+    result.insert(entries[i].getElementId());
+  }
+
+  return result;
+}
+
+set<ElementId> ReviewMarker::_getReviewRelations(const ConstOsmMapPtr &map, ElementId eid)
 {
   set<ElementId> result = map->getParents(eid);
 
@@ -72,7 +88,7 @@ QString ReviewMarker::getReviewType(const ConstOsmMapPtr &map, ReviewUid uid)
 }
 
 set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr &map,
-  ConstElementPtr e1) const
+  ConstElementPtr e1)
 {
   return _getReviewRelations(map, e1->getElementId());
 }
@@ -129,8 +145,7 @@ void ReviewMarker::mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, co
     throw IllegalArgumentException("You must specify a review note.");
   }
   r->getTags().appendValueIfUnique(_reviewNoteKey, note);
-  #warning uncomment me
-  //r->getTags().appendValueIfUnique(_reviewTypeKey, reviewType);
+  r->getTags().appendValueIfUnique(_reviewTypeKey, reviewType);
   r->getTags().set(_reviewScoreKey, score);
   r->addElement(_revieweeKey, e1->getElementId());
   r->addElement(_revieweeKey, e2->getElementId());
@@ -148,8 +163,7 @@ void ReviewMarker::mark(const OsmMapPtr& map, ElementPtr& e, const QString& note
     throw IllegalArgumentException("You must specify a review note.");
   }
   r->getTags().appendValueIfUnique(_reviewNoteKey, note);
-  #warning uncomment me
-  //r->getTags().appendValueIfUnique(_reviewTypeKey, reviewType);
+  r->getTags().appendValueIfUnique(_reviewTypeKey, reviewType);
   r->getTags().set(_reviewScoreKey, score);
   r->addElement(_revieweeKey, e->getElementId());
   r->setCircularError(-1);

@@ -200,11 +200,9 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
         first->getElementType());
       first->setTags(tags);
 
-      #warning delete removeWay and uncomment below that.
-      _map->removeWay(next->getId());
-//      // just in case we can't delete it, clear the tags.
-//      next->getTags().clear();
-//      RecursiveElementRemover(next->getElementId()).apply(_map);
+      // just in case we can't delete it, clear the tags.
+      next->getTags().clear();
+      RecursiveElementRemover(next->getElementId()).apply(_map);
     }
   }
 }
