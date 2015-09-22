@@ -132,6 +132,7 @@ public class ReviewItemsSynchronizer
     		final org.w3c.dom.Node elementXml = createdElements.item(i);
     		final String uuid = 
     			XPathAPI.selectSingleNode(elementXml, "tag[@k = 'uuid']/@v").getNodeValue();
+    		assert(StringUtils.trimToNull(uuid) != null);
     		final long changesetOsmElementId = 
     			Long.parseLong(elementXml.getAttributes().getNamedItem("id").getNodeValue());
     		final ElementType elementType = Element.elementTypeFromString(elementXml.getNodeName());
@@ -159,22 +160,26 @@ public class ReviewItemsSynchronizer
     		final org.w3c.dom.Node elementXml = createdReviewItems.item(i);
     		final String uuid = 
     			XPathAPI.selectSingleNode(elementXml, "tag[@k = 'uuid']/@v").getNodeValue();
+    		assert(StringUtils.trimToNull(uuid) != null);
     		final String[] reviewAgainstUuids = reviewAgainstUuidsFromChangesetElement(elementXml);
     		if (reviewAgainstUuids != null)
     		{
       		for (int j = 0; j < reviewAgainstUuids.length; j++)
       		{
       			final String reviewAgainstUuid = reviewAgainstUuids[j];
-      			reviewItemRecordsToInsert.add(
-      	  		ReviewUtils.createReviewItemRecord(
-      	  			uuid, 
-      	  		  //TODO: the way to retrieve the correct score would be to trace back the elements 
-      	  			//that made up this (presumably) merged element...although you could argue that the 
-      	  			//old score is obsolete after a merge; this is possibly complicated, so holding off on 
-      	  			//doing fixing this for now
-      	  			1.0,
-      	  			reviewAgainstUuid, 
-      	  			mapId));
+      			if (StringUtils.trimToNull(reviewAgainstUuid) != null)
+      			{
+      				reviewItemRecordsToInsert.add(
+        	  		ReviewUtils.createReviewItemRecord(
+        	  			uuid, 
+        	  		  //TODO: the way to retrieve the correct score would be to trace back the elements 
+        	  			//that made up this (presumably) merged element...although you could argue that the 
+        	  			//old score is obsolete after a merge; this is possibly complicated, so holding off on 
+        	  			//doing fixing this for now
+        	  			1.0,
+        	  			reviewAgainstUuid, 
+        	  			mapId));
+      			}
       		}
     		}
     		else
@@ -231,6 +236,7 @@ public class ReviewItemsSynchronizer
         final org.w3c.dom.Node elementXml = modifiedItems.item(i);
         final String uuid =
           XPathAPI.selectSingleNode(elementXml, "tag[@k = 'uuid']/@v").getNodeValue();
+        assert(StringUtils.trimToNull(uuid) != null);
         changesetReviewableUuidsToXml.put(uuid, elementXml);
         allChangesetUniqueIds.add(uuid);
         final String[] reviewAgainstUuids = reviewAgainstUuidsFromChangesetElement(elementXml);
@@ -238,7 +244,11 @@ public class ReviewItemsSynchronizer
         {
           for (int j = 0; j < reviewAgainstUuids.length; j++)
           {
-          	allChangesetUniqueIds.add(reviewAgainstUuids[j]);
+          	final String reviewAgainstUuid = reviewAgainstUuids[j];
+          	if (StringUtils.trimToNull(reviewAgainstUuid) != null)
+          	{
+          		allChangesetUniqueIds.add(reviewAgainstUuid);
+          	}
           }
         }
       }
@@ -261,10 +271,14 @@ public class ReviewItemsSynchronizer
       ListMultimap<String, String> dbReviewableUuidsToReviewAgainstUuids = ArrayListMultimap.create();
       for (ReviewItems reviewItem : allExistingReviewRecordsFromChangeset)
       {
-      	dbReviewableUuidsToReviewRecords.put(
-      		reviewItem.getReviewableItemId() + ";" + reviewItem.getReviewAgainstItemId(), reviewItem);
-      	dbReviewableUuidsToReviewAgainstUuids.put(
-      		reviewItem.getReviewableItemId(), reviewItem.getReviewAgainstItemId());
+      	if (StringUtils.trimToNull(reviewItem.getReviewableItemId()) != null &&
+      			StringUtils.trimToNull(reviewItem.getReviewAgainstItemId()) != null)
+      	{
+      		dbReviewableUuidsToReviewRecords.put(
+        		reviewItem.getReviewableItemId() + ";" + reviewItem.getReviewAgainstItemId(), reviewItem);
+        	dbReviewableUuidsToReviewAgainstUuids.put(
+        		reviewItem.getReviewableItemId(), reviewItem.getReviewAgainstItemId());
+      	}
       }
       
       //we need this to know whether a new element id mapping record needs to be created or not; 
@@ -283,6 +297,7 @@ public class ReviewItemsSynchronizer
       	final org.w3c.dom.Node elementXml = nodeEntry.getValue();
       	final String uuid =
           XPathAPI.selectSingleNode(elementXml, "tag[@k = 'uuid']/@v").getNodeValue();
+      	assert(StringUtils.trimToNull(uuid) != null);
       	
       	//create element id mapping for reviewable in case it doesn't already exist (possible if it
       	//was created by a post conflate db dump and wasn't involved in a review at that time)
@@ -305,7 +320,8 @@ public class ReviewItemsSynchronizer
           	final String reviewAgainstUuid = reviewAgainstUuids[j];
           	//if a corresponding record for the reviewable/review against doesn't exist; if it does 
           	//exist, do nothing (leave existing record unreviewed)
-          	if (!dbReviewableUuidsToReviewRecords.containsKey(uuid + ";" + reviewAgainstUuid))
+          	if (StringUtils.trimToNull(reviewAgainstUuid) != null && 
+          			!dbReviewableUuidsToReviewRecords.containsKey(uuid + ";" + reviewAgainstUuid))
           	{
           		//create an insert record
           		reviewRecordsToInsert.add(
@@ -409,7 +425,11 @@ public class ReviewItemsSynchronizer
   	List<String> deletedItemUuids = new ArrayList<String>();
   	for (int i = 0; i < deletedItems.getLength(); i++)
   	{
-  		deletedItemUuids.add(deletedItems.item(i).getNodeValue());
+  		final String deletedItemUuid = deletedItems.item(i).getNodeValue();
+  		if (StringUtils.trimToNull(deletedItemUuid) != null)
+  		{
+  			deletedItemUuids.add(deletedItems.item(i).getNodeValue());
+  		}
   	}
   	log.debug("deletedItemUuids: " + deletedItemUuids.toString());
 
