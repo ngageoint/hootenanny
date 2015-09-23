@@ -504,32 +504,42 @@ public class ReviewItemsRetriever
     }
     else
     {
-      // get next item
-      List<Tuple> reviewables = _getAvailableReviewWithOffsetQuery(compareTime
-          ,offsetReviewId, true).limit(2).list(rm.reviewId, rm.reviewableItemId, rm.reviewAgainstItemId);
-      
-      if(reviewables.size() > 0)
-      {
-        Tuple firstPotential = reviewables.get(0);
-        if(firstPotential.get(rm.reviewId) == offsetReviewId)
-        {
-          // We have next
-          if(reviewables.size() > 1)
-          {
-            nextAvailableReviewItem = reviewables.get(1);
-          }
-          else // we do not have next so send not found
-          {
-            nextAvailableReviewItem = null;
-          }
-        }
-        else
-        {
-          // Something happened to offset review we will just return whatever left
-          // This should not happen...
-          nextAvailableReviewItem = firstPotential;
-        }
-      }
+    	SQLQuery q = _getAvailableReviewWithOffsetQuery(compareTime
+          ,offsetReviewId, true);
+    	
+    	try
+    	{
+	      // get next item
+	      List<Tuple> reviewables = q.limit(2).list(rm.reviewId, rm.reviewableItemId, rm.reviewAgainstItemId);
+	      
+	      if(reviewables.size() > 0)
+	      {
+	        Tuple firstPotential = reviewables.get(0);
+	        if(firstPotential.get(rm.reviewId) == offsetReviewId)
+	        {
+	          // We have next
+	          if(reviewables.size() > 1)
+	          {
+	            nextAvailableReviewItem = reviewables.get(1);
+	          }
+	          else // we do not have next so send not found
+	          {
+	            nextAvailableReviewItem = null;
+	          }
+	        }
+	        else
+	        {
+	          // Something happened to offset review we will just return whatever left
+	          // This should not happen...
+	          nextAvailableReviewItem = firstPotential;
+	        }
+	      }
+    	}
+    	catch(Exception ex) 
+    	{
+    		log.error("Failed to get next:(" + q.toString() + ") REASON: " + ex.getMessage());
+    		throw ex;
+    	}
     }
     return nextAvailableReviewItem;
   }
@@ -551,50 +561,48 @@ public class ReviewItemsRetriever
       
       if(offsetReviewId > -1)
       {
-        // free previous lock
-        
-        long freedRowsCnt = _updateLastAccessWithSubSelect(past, offsetReviewId)
-        .execute(); 
-        
-        if(freedRowsCnt > 0)
-        {
-          doLock = true;
-        }
-      }
-      else
-      {
-        doLock = true;
+	      long freedRowsCnt = _updateLastAccessWithSubSelect(past, offsetReviewId)
+	          .execute(); 
+	          
+	      if(freedRowsCnt == 0)
+	      {
+	        log.warn("Failed to unlock:" + offsetReviewId + " May be it was part of POI merge and deleted?");
+	      }
+	      
       }
       
-      if(doLock)
+
+      // lock the item if still available
+      SQLUpdateClause uc = _updateLastAccessWithSubSelect(now, nextReviewId);
+      
+      try
       {
-        // lock the item if still available
-        long rowsEffected =  _updateLastAccessWithSubSelect(now, nextReviewId)
-        .execute(); 
-        
-        if(rowsEffected > 0)
-        {
-          QElementIdMappings em = QElementIdMappings.elementIdMappings;
-          if(reviewItemUUID != null)
-          {
-            List<Tuple> reviewElemMappings = _getElementMappingForReviewable(reviewItemUUID)
-                .list(em.elementId, em.osmElementId, em.osmElementType);
-            List<Tuple> reviewAgainstElemMappings = _getElementMappingForReviewable(reviewAgainstUUID)
-                .list(em.elementId, em.osmElementId, em.osmElementType);
-            if(reviewElemMappings.size() > 0)
-            {
-            	// Create reviewableItem object
-            	ReviewableItem nextReviewablItem = _createReviewItem(reviewElemMappings, reviewAgainstElemMappings, 
-              		nextReviewId, reviewItemUUID);
-              nextItem.put("status", "success");
-              nextItem.put("reviewItem", nextReviewablItem);
-            }
-          }
-        }
+	      long rowsEffected =  uc.execute(); 
+	      
+	      if(rowsEffected > 0)
+	      {
+	        QElementIdMappings em = QElementIdMappings.elementIdMappings;
+	        if(reviewItemUUID != null)
+	        {
+	          List<Tuple> reviewElemMappings = _getElementMappingForReviewable(reviewItemUUID)
+	              .list(em.elementId, em.osmElementId, em.osmElementType);
+	          List<Tuple> reviewAgainstElemMappings = _getElementMappingForReviewable(reviewAgainstUUID)
+	              .list(em.elementId, em.osmElementId, em.osmElementType);
+	          if(reviewElemMappings.size() > 0)
+	          {
+	          	// Create reviewableItem object
+	          	ReviewableItem nextReviewablItem = _createReviewItem(reviewElemMappings, reviewAgainstElemMappings, 
+	            		nextReviewId, reviewItemUUID);
+	            nextItem.put("status", "success");
+	            nextItem.put("reviewItem", nextReviewablItem);
+	          }
+	        }
+	      }
       }
-      else
+      catch (Exception ex)
       {
-        nextItem.put("status", "noneavailable");
+      	log.error("createNextReviewableResponse failed:(" + uc.toString() + ") REASON: " + ex.getMessage());
+      	throw ex;
       }
     }
     return nextItem;
