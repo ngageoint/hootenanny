@@ -119,7 +119,7 @@ public class ReviewItemsSynchronizer
     //involved in a review.
   	final NodeList createdElements = 
   		XPathAPI.selectNodeList(changesetDoc, "//osmChange/create/*/tag[@k = 'uuid']/..");
-  	log.debug(String.valueOf(createdElements.getLength()));
+  	log.debug("createdElements: " + createdElements.getLength());
   	if (createdElements.getLength() > 0)
   	{
   		log.debug(XmlUtils.nodeListToString(createdElements));
@@ -151,7 +151,7 @@ public class ReviewItemsSynchronizer
     	  XPathAPI.selectNodeList(
     	    changesetDoc, 
           "//osmChange/create/*/tag[@k = 'hoot:review:needs' and @v = 'yes']/..");
-    	log.debug(String.valueOf(createdReviewItems.getLength()));
+    	log.debug("created review items: " + String.valueOf(createdReviewItems.getLength()));
     	log.debug(XmlUtils.nodeListToString(createdReviewItems));
     	for (int i = 0; i < createdReviewItems.getLength(); i++)
     	{
@@ -206,7 +206,7 @@ public class ReviewItemsSynchronizer
       	  maxRecordBatchSize);
   	}
   	
-  	log.debug(numReviewItemsUpdated + " records updated as a result of the create changeset.");
+  	log.debug(numReviewItemsUpdated + " review records updated as a result of the create changeset.");
   	
   	return numReviewItemsUpdated;
   }
@@ -215,6 +215,7 @@ public class ReviewItemsSynchronizer
   {
     log.debug("updateReviewRecordsFromModifyChangeset");
     
+    int numReviewItemsInserted = 0;
     int numReviewItemsUpdated = 0;
     
     //get a list of all the uuid's in the modify changeset (both types: reviewable and review 
@@ -222,6 +223,7 @@ public class ReviewItemsSynchronizer
     //they were never involved in a review at any time.
     final NodeList modifiedItems =
       XPathAPI.selectNodeList(changesetDoc, "//osmChange/modify/*/tag[@k = 'uuid']/..");
+    log.debug("modifiedItems: " + modifiedItems.getLength());
     if (modifiedItems.getLength() > 0)
     {
     	List<ElementIdMappings> elementIdMappingRecordsToInsert = new ArrayList<ElementIdMappings>();
@@ -276,8 +278,14 @@ public class ReviewItemsSynchronizer
       	{
       		dbReviewableUuidsToReviewRecords.put(
         		reviewItem.getReviewableItemId() + ";" + reviewItem.getReviewAgainstItemId(), reviewItem);
+      	  //Need to make entries in both directions here, since the tags are store reflexively 
+      		//(specifies both "review A against B" and "review B against A", while the database
+      		//records are not reflexive.  The client may be passing in multiple tag updates for the
+      		//same review, and we don't want that to cause a new redundant review record to be added.
         	dbReviewableUuidsToReviewAgainstUuids.put(
         		reviewItem.getReviewableItemId(), reviewItem.getReviewAgainstItemId());
+        	//dbReviewableUuidsToReviewAgainstUuids.put(
+          	//reviewItem.getReviewAgainstItemId(), reviewItem.getReviewableItemId());
       	}
       }
       
@@ -318,8 +326,8 @@ public class ReviewItemsSynchronizer
           for (int j = 0; j < reviewAgainstUuids.length; j++)
           {
           	final String reviewAgainstUuid = reviewAgainstUuids[j];
-          	//if a corresponding record for the reviewable/review against doesn't exist; if it does 
-          	//exist, do nothing (leave existing record unreviewed)
+          	//if a corresponding record for the reviewable/review against doesn't exist, create it; 
+          	//if it does exist, do nothing (leave existing record unreviewed)
           	if (StringUtils.trimToNull(reviewAgainstUuid) != null && 
           			!dbReviewableUuidsToReviewRecords.containsKey(uuid + ";" + reviewAgainstUuid))
           	{
@@ -385,7 +393,7 @@ public class ReviewItemsSynchronizer
       //in use b/c they aren't involved in reviews, but that seems difficult and they aren't hurting
       //anything by being in the database and not being used...
       
-      numReviewItemsUpdated += 
+      numReviewItemsInserted += 
     	  DbUtils.batchRecords(
       	  mapId, reviewRecordsToInsert, reviewItems, null, RecordBatchType.INSERT, 
       	  conn, maxRecordBatchSize);
@@ -409,7 +417,10 @@ public class ReviewItemsSynchronizer
       	  conn, maxRecordBatchSize);
     }
     
-    log.debug(numReviewItemsUpdated + " records updated as a result of the modify changeset.");
+    log.debug(
+    	numReviewItemsInserted + " review records inserted as a result of the modify changeset.");
+    log.debug(
+    	numReviewItemsUpdated + " review records updated as a result of the modify changeset.");
   	
   	return numReviewItemsUpdated;
   }
@@ -431,7 +442,6 @@ public class ReviewItemsSynchronizer
   			deletedItemUuids.add(deletedItems.item(i).getNodeValue());
   		}
   	}
-  	log.debug("deletedItemUuids: " + deletedItemUuids.toString());
 
   	if (deletedItemUuids.size() > 0)
   	{
@@ -455,15 +465,16 @@ public class ReviewItemsSynchronizer
   			new SQLDeleteClause(conn, DbUtils.getConfiguration(mapId), reviewItems)
 		      .where(
 		      	reviewItems.mapId.eq(mapId)
-		      	  .and(reviewItems.reviewableItemId.in(deletedItemUuids)
-		  	        .and(reviewItems.reviewAgainstItemId.notIn(deletedItemUuids)))
-		  	      .or(
-		  	      	reviewItems.reviewAgainstItemId.in(deletedItemUuids)
-		  	      	  .and(reviewItems.reviewableItemId.notIn(deletedItemUuids))))
+		      	  .and(
+		      	  	reviewItems.reviewableItemId.in(deletedItemUuids)
+		  	          .and(reviewItems.reviewAgainstItemId.notIn(deletedItemUuids))
+		  	        .or(
+		  	      	  reviewItems.reviewAgainstItemId.in(deletedItemUuids)
+		  	      	    .and(reviewItems.reviewableItemId.notIn(deletedItemUuids)))))
 		      .execute();
   	}  	
   	
-  	log.debug(numReviewItemsUpdated + " records updated as a result of the delete changeset.");
+  	log.debug(numReviewItemsUpdated + " review records updated as a result of the delete changeset.");
   	
   	return numReviewItemsUpdated;
   }
@@ -495,8 +506,8 @@ public class ReviewItemsSynchronizer
     	numReviewItemsUpdated += updateReviewRecordsFromDeleteChangeset(changesetDoc);
     	
     	log.debug(
-        String.valueOf(numReviewItemsUpdated) + " review records total were updated as a result of " +
-        "the changeset save.");
+        String.valueOf(numReviewItemsUpdated) + " review records total were inserted/updated " +
+        "as a result of the changeset save.");
   	}
   	else
   	{

@@ -335,6 +335,7 @@ public class ReviewUtils
   public static ReviewItems createReviewItemRecord(final String reviewableItemId,
 	  final double reviewScore, final String reviewAgainstItemId, final long mapId)
 	{
+  	log.debug("Creating review item record: ");
 		ReviewItems reviewItemRecord = new ReviewItems();
 		log.debug("mapId: " + mapId);
 		reviewItemRecord.setMapId(mapId);
