@@ -50,7 +50,7 @@ public class HGISFilterResource extends HGISResource {
 	 * 	Job ID
 	 * </OUTPUT>
 	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/custom/HGIS/filternonhgispois</URL>
+	 * 	<URL>http://localhost:8080/hoot-services/job/filter/custom/HGIS/filternonhgispois</URL>
 	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
 	 * 	<INPUT>
 	 * {
