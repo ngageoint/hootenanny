@@ -261,16 +261,25 @@ public class ReviewItemsSynchronizer
       List<ReviewItems> allExistingReviewRecordsFromChangeset = new ArrayList<ReviewItems>();
       if (changesetReviewableUuidsToXml.size() > 0)
       {
+        //Need to make queries in both directions here (reviewable/review against), since the review
+      	//tags are store reflexively (tags specify both "review A against B" and "review B against 
+      	//A", while the database records are not reflexive to avoid showing duplicate reviews to
+      	//users.  The client may be passing in multiple tag updates for the
+    		//same review (reviewable and review against item review tags), and we don't want that to 
+      	//cause a new redundant review record to be added.
       	allExistingReviewRecordsFromChangeset = 
       		new SQLQuery(conn, DbUtils.getConfiguration(mapId))
             .from(reviewItems)
             .where(
-        	    reviewItems.reviewableItemId.in(changesetReviewableUuidsToXml.keySet())
-                .and(reviewItems.mapId.eq(mapId)))
+            	reviewItems.mapId.eq(mapId)
+            	.and(
+        	      reviewItems.reviewableItemId.in(changesetReviewableUuidsToXml.keySet())
+        	        .or(reviewItems.reviewAgainstItemId.in(changesetReviewableUuidsToXml.keySet()))))
             .list(reviewItems);
       }
       Map<String, ReviewItems> dbReviewableUuidsToReviewRecords = new HashMap<String, ReviewItems>();
       ListMultimap<String, String> dbReviewableUuidsToReviewAgainstUuids = ArrayListMultimap.create();
+      Map<String, String> dbReviewAgainstUuidsToReviewableUuids = new HashMap<String, String>();
       for (ReviewItems reviewItem : allExistingReviewRecordsFromChangeset)
       {
       	if (StringUtils.trimToNull(reviewItem.getReviewableItemId()) != null &&
@@ -278,14 +287,12 @@ public class ReviewItemsSynchronizer
       	{
       		dbReviewableUuidsToReviewRecords.put(
         		reviewItem.getReviewableItemId() + ";" + reviewItem.getReviewAgainstItemId(), reviewItem);
-      	  //Need to make entries in both directions here, since the tags are store reflexively 
-      		//(specifies both "review A against B" and "review B against A", while the database
-      		//records are not reflexive.  The client may be passing in multiple tag updates for the
-      		//same review, and we don't want that to cause a new redundant review record to be added.
+      	  //see note above for why a map is kept both reviewable id --> review against --> id
+      		//and vice versa
         	dbReviewableUuidsToReviewAgainstUuids.put(
         		reviewItem.getReviewableItemId(), reviewItem.getReviewAgainstItemId());
-        	//dbReviewableUuidsToReviewAgainstUuids.put(
-          	//reviewItem.getReviewAgainstItemId(), reviewItem.getReviewableItemId());
+        	dbReviewAgainstUuidsToReviewableUuids.put(
+          	reviewItem.getReviewAgainstItemId(), reviewItem.getReviewableItemId());
       	}
       }
       
@@ -326,10 +333,12 @@ public class ReviewItemsSynchronizer
           for (int j = 0; j < reviewAgainstUuids.length; j++)
           {
           	final String reviewAgainstUuid = reviewAgainstUuids[j];
-          	//if a corresponding record for the reviewable/review against doesn't exist, create it; 
-          	//if it does exist, do nothing (leave existing record unreviewed)
+          	//if a corresponding record for the reviewable/review against doesn't exist AND its 
+          	//inverse record doesn't exist, create a new record; if either exists, do nothing 
+          	//(leave existing records unreviewed)
           	if (StringUtils.trimToNull(reviewAgainstUuid) != null && 
-          			!dbReviewableUuidsToReviewRecords.containsKey(uuid + ";" + reviewAgainstUuid))
+          			!dbReviewableUuidsToReviewRecords.containsKey(uuid + ";" + reviewAgainstUuid) &&
+          			!dbReviewableUuidsToReviewRecords.containsKey(reviewAgainstUuid + ";" + uuid))
           	{
           		//create an insert record
           		reviewRecordsToInsert.add(
@@ -351,15 +360,18 @@ public class ReviewItemsSynchronizer
           	}
           }
           
-          //for each record where the record has a review against uuid that isn't in the set of 
-          //parsed review against id's from the changeset, create an update record for it marked as 
-          //reviewed
+          //for each record where the record has an existing db review against uuid that isn't in 
+          //the set of parsed review against id's from the changeset, create an update record for 
+          //it marked as reviewed
           List<String> existingReviewAgainstIds = dbReviewableUuidsToReviewAgainstUuids.get(uuid);
           List<String> reviewAgainstUuidsList = Arrays.asList(reviewAgainstUuids);
           for (String id : existingReviewAgainstIds)
           {
-          	if (!reviewAgainstUuidsList.contains(id))
+          	if (!reviewAgainstUuidsList.contains(id) && 
+          			//If the record doesn't already exist the we can't update it here.
+          			dbReviewableUuidsToReviewRecords.containsKey(uuid + ";" + id))
           	{
+
           		ReviewItems reviewRecord = 
             		ReviewUtils.createReviewItemRecord(
                   uuid,
@@ -377,14 +389,18 @@ public class ReviewItemsSynchronizer
         	List<String> existingReviewAgainstIds = dbReviewableUuidsToReviewAgainstUuids.get(uuid);
           for (String id : existingReviewAgainstIds)
           {
-        		ReviewItems reviewRecord = 
-          		ReviewUtils.createReviewItemRecord(
-                uuid,
-                1.0, //TODO: see comment in updateCreatedReviewItems
-                id,
-                mapId);
-          	reviewRecord.setReviewStatus(DbUtils.review_status_enum.reviewed);
-          	reviewRecordsToUpdate.add(reviewRecord);
+            //If the record doesn't already exist the we can't update it here.
+      			if (dbReviewableUuidsToReviewRecords.containsKey(uuid + ";" + id))
+          	{
+          		ReviewItems reviewRecord = 
+            		ReviewUtils.createReviewItemRecord(
+                  uuid,
+                  1.0, //TODO: see comment in updateCreatedReviewItems
+                  id,
+                  mapId);
+            	reviewRecord.setReviewStatus(DbUtils.review_status_enum.reviewed);
+            	reviewRecordsToUpdate.add(reviewRecord);
+          	}
           }
         }
       }
