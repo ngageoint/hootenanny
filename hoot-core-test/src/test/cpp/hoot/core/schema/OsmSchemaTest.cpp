@@ -292,6 +292,7 @@ public:
     // Check to see if mismatchScore works within amenity types. This doesn't work now, but it'd
     // be good to implement this in the near future.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.score("amenity=auditorium", "amenity=embassy"), 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.score("amenity=restaurant", "amenity=restaurant"), 0.001);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8,
       uut.score("amenity=exhibition_hall", "amenity=convention_centre"), 0.001);
