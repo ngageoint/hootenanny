@@ -30,8 +30,9 @@
 #include <cstdlib>  // for std::system
 #include <cstdio>   // for std::remove
 #include <math.h>   // for ::round (cmath header is C++11 only)
+#include <utility>  // For std::pair
+#include <vector>
 
-#include <utility>
 #include <boost/shared_ptr.hpp>
 
 #include <QtCore/QString>
@@ -63,7 +64,8 @@ PostgresqlDumpfileWriter::PostgresqlDumpfileWriter():
   _writeStats(),
   _configData(),
   _idMappings(),
-  _changesetData()
+  _changesetData(),
+  _unresolvedRefs()
 {
   setConfiguration(conf());
 
@@ -107,6 +109,8 @@ void PostgresqlDumpfileWriter::open(QString url)
 
   _idMappings.nextRelationId  = _configData.startingRelationId;
   _idMappings.relationIdMap.reset();
+
+  _unresolvedRefs.unresolvedWaynodes.reset();
 }
 
 void PostgresqlDumpfileWriter::close()
@@ -128,6 +132,8 @@ void PostgresqlDumpfileWriter::close()
   _idMappings.nodeIdMap.reset();
   _idMappings.wayIdMap.reset();
   _idMappings.relationIdMap.reset();
+
+  _unresolvedRefs.unresolvedWaynodes.reset();
 }
 
 void PostgresqlDumpfileWriter::finalizePartial()
@@ -162,10 +168,15 @@ void PostgresqlDumpfileWriter::finalizePartial()
       QString(" >> ") + _outputFilename );
 
     const int systemRetval = std::system( cmdToExec.toStdString().c_str() );
-    LOG_DEBUG("Command: \"" + cmdToExec + "\", retval: " +
-              QString::number(systemRetval) );
-  }
+    if ( systemRetval != 0 )
+    {
+      LOG_ERROR("Flush for section " + *it + " had error, retval = " +
+                QString::number(systemRetval));
+      throw HootException("Error generating output file " + _outputFilename);
+    }
 
+    LOG_DEBUG( "Wrote contents of section " + *it );
+  }
 }
 
 void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
@@ -219,6 +230,8 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
   wayDbId = _establishNewIdMapping(w->getElementId());
 
   _writeWayToTables( wayDbId );
+
+  _writeWaynodesToTables( _idMappings.wayIdMap->at( w->getId() ), w->getNodeIds() );
 
   _writeTagsToTables( w->getTags(), wayDbId,
     _outputSections["current_way_tags"].second, "%1\t%2\t%3\n",
@@ -453,6 +466,37 @@ void PostgresqlDumpfileWriter::_writeWayToTables(const ElementIdDatatype wayDbId
       .arg(datestring);
 
   *(_outputSections["ways"].second) << outputLine;
+}
+
+void PostgresqlDumpfileWriter::_writeWaynodesToTables( const ElementIdDatatype dbWayId,
+  const std::vector<long>& waynodeIds )
+{
+  unsigned int nodeIndex = 1;
+
+  boost::shared_ptr<QTextStream> currentWayNodesStream  = _outputSections["current_way_nodes"].second;
+  boost::shared_ptr<QTextStream> wayNodesStream         = _outputSections["way_nodes"].second;
+  const QString currentWaynodesFormat("%1\t%2\t%3\n");
+  const QString waynodesFormat("%1\t%2\t1\t%3\n");
+  const QString dbWayIdString( QString::number(dbWayId));
+
+  for ( std::vector<long>::const_iterator it = waynodeIds.begin();
+      it != waynodeIds.end(); ++it )
+  {
+    if ( _idMappings.nodeIdMap->contains(*it) == true )
+    {
+      const QString dbNodeIdString = QString::number( _idMappings.nodeIdMap->at(*it) );
+      const QString nodeIndexString( QString::number(nodeIndex) );
+      *currentWayNodesStream << currentWaynodesFormat.arg(dbWayIdString, dbNodeIdString, nodeIndexString);
+      *wayNodesStream << waynodesFormat.arg(dbWayIdString, dbNodeIdString, nodeIndexString);
+    }
+    else
+    {
+      LOG_WARN( QString("Way %1 has reference to unknown node ID %2").arg(dbWayId, *it) );
+      throw NotImplementedException("Unresolved waynodes are not supported");
+    }
+
+    ++nodeIndex;
+  }
 }
 
 void PostgresqlDumpfileWriter::_createRelationTables()

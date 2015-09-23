@@ -25,6 +25,7 @@
 #include <string>
 #include <map>
 #include <list>
+#include <vector>
 #include <utility>
 
 #include <boost/shared_ptr.hpp>
@@ -77,8 +78,6 @@ public:
   virtual void writePartial(const ConstRelationPtr& r);
 
 protected:
-
-  virtual void setConfiguration(const hoot::Settings& conf);
 
   std::map<QString,
     std::pair<boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> > > _outputSections;
@@ -137,6 +136,16 @@ protected:
 
   _ChangesetData _changesetData;
 
+  struct _UnresolvedReferences
+  {
+    // Schema: node ID -> vector of entries w/ type: pair(way ID for waynode, 1-based sequence order for waynode)
+    boost::shared_ptr< Tgs::BigMap<ElementIdDatatype, std::vector< std::pair<ElementIdDatatype, unsigned long> > > > unresolvedWaynodes;
+  };
+
+  _UnresolvedReferences _unresolvedRefs;
+
+  virtual void setConfiguration(const hoot::Settings& conf);
+
   qint64 _getChangesetId() const { return _changesetData.changesetId; }
 
   std::list<QString> _createSectionNameList();
@@ -166,6 +175,9 @@ protected:
   void _createWayTables();
 
   void _writeWayToTables(const ElementIdDatatype wayDbId );
+
+  void _writeWaynodesToTables( const ElementIdDatatype wayId,
+    const std::vector<long>& waynodeIds );
 
   void _createRelationTables();
 
