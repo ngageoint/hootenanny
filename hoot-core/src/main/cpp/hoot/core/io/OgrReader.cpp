@@ -778,7 +778,25 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
     LOG_DEBUG("Setting spatial filter on " << layer << " to: " << bboxValues);
   }
 
-  OGRSpatialReference *sourceSrs = _layer->GetSpatialRef();
+  auto_ptr<OGRSpatialReference> tmpSourceSrs;
+  OGRSpatialReference* sourceSrs;
+
+  int epsgOverride = ConfigOptions().getOgrReaderEpsgOverride();
+  if (epsgOverride >= 0)
+  {
+    tmpSourceSrs.reset(new OGRSpatialReference());
+    sourceSrs = tmpSourceSrs.get();
+
+    if (sourceSrs->importFromEPSG(epsgOverride) != OGRERR_NONE)
+    {
+      throw HootException(QString("Error creating EPSG:%1 projection.").arg(epsgOverride));
+    }
+  }
+  else
+  {
+    sourceSrs = _layer->GetSpatialRef();
+  }
+
   if (sourceSrs != 0 && sourceSrs->IsProjected())
   {
     _wgs84.reset(new OGRSpatialReference());
