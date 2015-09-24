@@ -39,10 +39,12 @@ import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.db2.QElementIdMappings;
 import hoot.services.db2.QMaps;
 import hoot.services.db2.QReviewItems;
+import hoot.services.exceptions.writer.review.ReviewItemsWriterException;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.review.ReviewAgainstItem;
 import hoot.services.models.review.ReviewableItem;
 import hoot.services.validators.review.ReviewMapValidator;
+import hoot.services.writers.review.ReviewItemsRetrieverWriter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
@@ -52,7 +54,6 @@ import org.slf4j.LoggerFactory;
 import com.mysema.query.Tuple;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.SQLSubQuery;
-import com.mysema.query.sql.dml.SQLUpdateClause;
 
 /**
  * Responsible for serving reviewable items to the client
@@ -66,6 +67,8 @@ public class ReviewItemsRetriever
   private Connection conn;
   // 5 min
   public static long LOCK_TIME = 300000;
+  
+  private ReviewItemsRetrieverWriter _writer;
   
   //for tests only
   protected ReviewItemsRetriever()
@@ -96,6 +99,8 @@ public class ReviewItemsRetriever
     {
       throw new Exception("Error locating user associated with map with ID: " + this.mapId);
     }
+    
+    _writer = new ReviewItemsRetrieverWriter(this.conn, this.mapId);
   }
   
   protected final long _verifyMap(final String mapId) throws Exception
@@ -127,32 +132,11 @@ public class ReviewItemsRetriever
   	this.mapId = mapId;
   }
 
-  protected final SQLUpdateClause _getLastAccessUpdateClause(final String reviewItemId, 
-    final Timestamp newLastAccessTime, final String reviewAgainst) throws Exception
-  {
-    QReviewItems rm = QReviewItems.reviewItems;
-    
-    SQLUpdateClause q = new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), rm)
-    .set(rm.lastAccessed, newLastAccessTime)
-    .where(rm.mapId.eq(mapId).and(rm.reviewableItemId.eq(reviewItemId)));
-    
-    if(reviewAgainst != null)
-    {
-       q = new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), rm)
-        .set(rm.lastAccessed, newLastAccessTime)
-        .where(rm.mapId.eq(mapId).and(rm.reviewableItemId.eq(reviewItemId))
-            .and(rm.reviewAgainstItemId.eq(reviewAgainst)));
-    }
-    
-    return q;
-  }
-  
   // Update Review LastAccess column
   public void updateReviewLastAccessTime(final String reviewItemId, final Timestamp newLastAccessTime,
-      final String reviewAgainst) throws Exception
+      final String reviewAgainst) throws ReviewItemsWriterException, Exception
   {
-    _getLastAccessUpdateClause(reviewItemId, newLastAccessTime, reviewAgainst)
-      .execute(); 
+  	_writer.updateReviewLastAccessTime(reviewItemId, newLastAccessTime, reviewAgainst);
   }
   
   protected final SQLQuery _getAvailableReviewQuery(final Timestamp compareTime, final long offsetId, 
@@ -276,19 +260,7 @@ public class ReviewItemsRetriever
     
     return q;
   }
-  
-  protected final SQLUpdateClause _updateLastAccessWithSubSelect(final Timestamp now, 
-      final long reviewId) throws Exception
-  {
-    QReviewItems rm = QReviewItems.reviewItems;
-    
-    SQLUpdateClause q = new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), rm)
-    .set(rm.lastAccessed, now)
-    .where(rm.mapId.eq(mapId).and(rm.reviewId.eq(reviewId)));
-    
-    return q;
-  }  
-  
+ 
   protected SQLQuery _getRelationBboxQuery(final long id) throws Exception
   {
   	 QCurrentNodes cn = QCurrentNodes.currentNodes;
@@ -383,7 +355,8 @@ public class ReviewItemsRetriever
     return bbox;
   }
   
-  public JSONObject getAvaiableReviewItem(final long offsetReviewId, final boolean isForward) throws Exception
+  public JSONObject getAvaiableReviewItem(final long offsetReviewId, final boolean isForward) 
+  		throws ReviewItemsWriterException, Exception
   {
   	String strStatus = "failed";
     
@@ -541,7 +514,7 @@ public class ReviewItemsRetriever
   }
  
   protected JSONObject _createNextReviewableResponse(final String status, final Tuple nextAvailableReviewItem,
-  		final long offsetReviewId, final Timestamp past, final Timestamp now) throws Exception
+  		final long offsetReviewId, final Timestamp past, final Timestamp now) throws ReviewItemsWriterException, Exception
   {
   	QReviewItems rm = QReviewItems.reviewItems;
   	JSONObject nextItem = new JSONObject();
@@ -552,10 +525,11 @@ public class ReviewItemsRetriever
       final String reviewItemUUID = nextAvailableReviewItem.get(rm.reviewableItemId);
       final String reviewAgainstUUID = nextAvailableReviewItem.get(rm.reviewAgainstItemId);
       
+      
+      
       if(offsetReviewId > -1)
       {
-	      long freedRowsCnt = _updateLastAccessWithSubSelect(past, offsetReviewId)
-	          .execute(); 
+	      long freedRowsCnt = _writer.updateReviewLastAccessTimeWithReviewId(past, offsetReviewId); 
 	          
 	      if(freedRowsCnt == 0)
 	      {
@@ -563,13 +537,10 @@ public class ReviewItemsRetriever
 	      }
 	      
       }
-      
-      // lock the item if still available
-      SQLUpdateClause uc = _updateLastAccessWithSubSelect(now, nextReviewId);
-      
+
       try
       {
-	      long rowsEffected =  uc.execute(); 
+	      long rowsEffected =  _writer.updateReviewLastAccessTimeWithReviewId(now, nextReviewId);
 	      
 	      if(rowsEffected > 0)
 	      {
@@ -593,7 +564,7 @@ public class ReviewItemsRetriever
       }
       catch (Exception ex)
       {
-      	log.error("createNextReviewableResponse failed:(" + uc.toString() + ") REASON: " + ex.getMessage());
+      	log.error("createNextReviewableResponse failed:" + ex.getMessage());
       	throw ex;
       }
     }

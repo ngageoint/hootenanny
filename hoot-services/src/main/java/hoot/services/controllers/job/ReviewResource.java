@@ -35,6 +35,7 @@ import java.util.Map;
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
+import hoot.services.exceptions.writer.review.ReviewItemsWriterException;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.ReviewAgainstItem;
@@ -360,6 +361,10 @@ public class ReviewResource
     	Timestamp now = new Timestamp(date.getTime());
     	(new ReviewItemsRetriever(conn, mapId)).updateReviewLastAccessTime(reviewId, now, reviewAgainst);
     }
+    catch (ReviewItemsWriterException re)
+    {
+    	ReviewUtils.handleError(re, errorMessageStart + " (" + re.getSql() + ")", false);
+    }
     catch (Exception e)
     {
       ReviewUtils.handleError(e, errorMessageStart, false);
@@ -427,6 +432,10 @@ public class ReviewResource
       nextReviewableResponse.put("reviewedcnt", reviewedCnt);
       long lockedCnt = marker.getLockedReviewCntQuery().count();
       nextReviewableResponse.put("lockedcnt", lockedCnt);
+    }
+    catch (ReviewItemsWriterException re)
+    {
+    	ReviewUtils.handleError(re, errorMessageStart + " (" + re.getSql() + ")", false);
     }
     catch (Exception e)
     {
