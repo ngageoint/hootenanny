@@ -45,6 +45,7 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/RelationData.h>
 #include <hoot/core/elements/Tags.h>
 
 #include <tgs/BigContainers/BigMap.h>
@@ -131,7 +132,7 @@ protected:
   struct _ChangesetData
   {
     qint64        changesetId;
-    unsigned int  changesInChangeset();
+    unsigned int  changesInChangeset;
   };
 
   _ChangesetData _changesetData;
@@ -149,6 +150,8 @@ protected:
   qint64 _getChangesetId() const { return _changesetData.changesetId; }
 
   std::list<QString> _createSectionNameList();
+
+  const static unsigned int  _maxChangesInChangeset  = 50000;     /// Max changes in one changeset
 
   void _closeSectionTempFilesAndConcat();
 
@@ -183,7 +186,11 @@ protected:
 
   void _writeRelationToTables(const ElementIdDatatype relationDbId );
 
+  void _writeRelationMembersToTables( const ConstRelationPtr& relation );
+
   void _createTable( const QString& tableName, const QString& tableHeader );
+
+  void _incrementChangesInChangeset();
 };
 
 }

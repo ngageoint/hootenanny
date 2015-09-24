@@ -48,6 +48,7 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/RelationData.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementType.h>
 
@@ -69,6 +70,8 @@ PostgresqlDumpfileWriter::PostgresqlDumpfileWriter():
 {
   setConfiguration(conf());
 
+  _changesetData.changesetId = 1;
+  _changesetData.changesInChangeset = 0;
   _zeroWriteStats();
 }
 
@@ -100,6 +103,7 @@ void PostgresqlDumpfileWriter::open(QString url)
   _zeroWriteStats();
 
   _changesetData.changesetId  = _configData.startingChangesetId;
+  _changesetData.changesInChangeset = 0;
 
   _idMappings.nextNodeId      = _configData.startingNodeId;
   _idMappings.nodeIdMap.reset();
@@ -129,6 +133,8 @@ void PostgresqlDumpfileWriter::close()
   _outputFilename = "";
   _outputSections.clear();
   _sectionNames.erase(_sectionNames.begin(), _sectionNames.end());
+  _changesetData.changesetId  = _configData.startingChangesetId;
+  _changesetData.changesInChangeset = 0;
   _idMappings.nodeIdMap.reset();
   _idMappings.wayIdMap.reset();
   _idMappings.relationIdMap.reset();
@@ -206,6 +212,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
     _outputSections["node_tags"].second, "%1\t1\t%2\t%3\n");
 
   _writeStats.nodesWritten++;
+  _incrementChangesInChangeset();
 }
 
 void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
@@ -238,6 +245,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
     _outputSections["way_tags"].second, "%1\t1\t%2\t%3\n");
 
   _writeStats.waysWritten++;
+  _incrementChangesInChangeset();
 }
 
 void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
@@ -263,12 +271,14 @@ void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
 
   _writeRelationToTables( relationDbId );
 
+  _writeRelationMembersToTables( r );
+
   _writeTagsToTables( r->getTags(), relationDbId,
     _outputSections["current_relation_tags"].second, "%1\t%2\t%3\n",
     _outputSections["relation_tags"].second, "%1\t1\t%2\t%3\n");
 
-
   _writeStats.relationsWritten++;
+  _incrementChangesInChangeset();
 }
 
 void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
@@ -530,6 +540,65 @@ void PostgresqlDumpfileWriter::_writeRelationToTables(const ElementIdDatatype re
   *(_outputSections["relations"].second) << outputLine;
 }
 
+void PostgresqlDumpfileWriter::_writeRelationMembersToTables( const ConstRelationPtr& relation )
+{
+  unsigned int memberSequenceIndex = 1;
+
+  boost::shared_ptr<QTextStream> currentRelationMembersStream  = _outputSections["current_relation_members"].second;
+  boost::shared_ptr<QTextStream> relationMembersStream         = _outputSections["relation_members"].second;
+  const QString currentRelationMemberFormat("%1\t%2\t%3\t%4\t%5\n");
+  const QString relationMembersFormat("%1\t%2\t%3\t%4\t1\t%5\n");
+  const QString dbRelationIdString( QString::number(_idMappings.relationIdMap->at(relation->getId())) );
+  const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
+
+  boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> > knownElementMap;
+  QString memberType;
+
+  for ( vector<RelationData::Entry>::const_iterator it = relationMembers.begin();
+      it != relationMembers.end(); ++it )
+  {
+    const ElementId memberElementId = it->getElementId();
+    switch ( memberElementId.getType().getEnum() )
+    {
+    case ElementType::Node:
+      knownElementMap = _idMappings.nodeIdMap;
+      memberType = "Node";
+      break;
+    case ElementType::Way:
+      knownElementMap = _idMappings.wayIdMap;
+      memberType = "Way";
+      break;
+    case ElementType::Relation:
+      knownElementMap = _idMappings.relationIdMap;
+      memberType = "Relation";
+      break;
+    default:
+      throw HootException("Unsupported element member type");
+      break;
+    }
+
+    if ( knownElementMap->contains(memberElementId.getId()) == true )
+    {
+      const QString memberRefIdString = QString::number( knownElementMap->at(memberElementId.getId()) );
+      const QString memberSequenceString( QString::number(memberSequenceIndex) );
+      const QString memberRole = it->getRole();
+
+      *currentRelationMembersStream << currentRelationMemberFormat.arg(
+        dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString);
+      *relationMembersStream        << relationMembersFormat.arg(
+        dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString);
+    }
+    else
+    {
+      //LOG_WARN( QString("Relation has reference to unknown member") );
+      //throw NotImplementedException("Unresolved relation members are not supported");
+    }
+
+    ++memberSequenceIndex;
+  }
+}
+
+
 
 void PostgresqlDumpfileWriter::_createTable( const QString& tableName, const QString& tableHeader )
 {
@@ -545,5 +614,17 @@ void PostgresqlDumpfileWriter::_createTable( const QString& tableName, const QSt
 
   *(_outputSections[tableName].second) << tableHeader;
 }
+
+void PostgresqlDumpfileWriter::_incrementChangesInChangeset()
+{
+  _changesetData.changesInChangeset++;
+  if ( _changesetData.changesInChangeset == _maxChangesInChangeset )
+  {
+    _changesetData.changesetId++;
+    _changesetData.changesInChangeset = 0;
+  }
+}
+
+
 
 }
