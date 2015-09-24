@@ -416,7 +416,7 @@ Sets that maximum angle that is still considered a highway match. Units in degre
 === highway.miss.threshold
 
 * Data Type: double
-* Default Value: `1.1`
+* Default Value: `0.999`
 
 The threshold at which a miss is called a miss for roads.
 

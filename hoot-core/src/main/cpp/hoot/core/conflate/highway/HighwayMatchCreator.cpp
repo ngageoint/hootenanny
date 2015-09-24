@@ -105,28 +105,46 @@ public:
       {
         const shared_ptr<const Element>& n = _map->getElement(*it);
 
-        if (n->getStatus() != e->getStatus() && n->isUnknown() &&
-            OsmSchema::getInstance().isLinearHighway(n->getTags(), n->getElementType()))
-        {
-          // score each candidate and push it on the result vector
-          HighwayMatch* m = new HighwayMatch(_c, _sublineMatcher, _map, from, *it, _threshold);
+        // score each candidate and push it on the result vector
+        HighwayMatch* m = createMatch(_map, _c, _sublineMatcher, _threshold, e, n);
 
-          // if we're confident this is a miss
-          if (m->getType() == MatchType::Miss)
-          {
-            delete m;
-          }
-          else
-          {
-            _result.push_back(m);
-            neighborCount++;
-          }
+        if (m)
+        {
+          _result.push_back(m);
+          neighborCount++;
         }
       }
     }
 
     _neighborCountSum += neighborCount;
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
+  }
+
+  static HighwayMatch* createMatch(const ConstOsmMapPtr& map,
+    shared_ptr<HighwayClassifier> classifier,
+    shared_ptr<SublineStringMatcher> sublineMatcher,
+    ConstMatchThresholdPtr threshold, ConstElementPtr e1, ConstElementPtr e2)
+  {
+    HighwayMatch* result = 0;
+
+    if (e1 && e2 &&
+        e1->getStatus() != e2->getStatus() && e2->isUnknown() &&
+        OsmSchema::getInstance().isLinearHighway(e1->getTags(), e1->getElementType()) &&
+        OsmSchema::getInstance().isLinearHighway(e2->getTags(), e2->getElementType()))
+    {
+      // score each candidate and push it on the result vector
+      result = new HighwayMatch(classifier, sublineMatcher, map, e1->getElementId(),
+        e2->getElementId(), threshold);
+
+      // if we're confident this is a miss
+      if (result->getType() == MatchType::Miss)
+      {
+        delete result;
+        result = 0;
+      }
+    }
+
+    return result;
   }
 
   Meters getSearchRadius(const shared_ptr<const Element>& e) const
@@ -185,9 +203,10 @@ HighwayMatchCreator::HighwayMatchCreator()
   _sublineMatcher->setConfiguration(settings);
 }
 
-Match* HighwayMatchCreator::createMatch(const ConstOsmMapPtr&, ElementId eid1, ElementId eid2)
+Match* HighwayMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
-  #warning implement me.
+  return HighwayMatchVisitor::createMatch(map, _classifier, _sublineMatcher, getMatchThreshold(),
+    map->getElement(eid1), map->getElement(eid2));
 }
 
 void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match *> &matches,
