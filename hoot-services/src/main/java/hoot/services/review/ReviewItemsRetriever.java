@@ -66,7 +66,6 @@ public class ReviewItemsRetriever
   private Connection conn;
   // 5 min
   public static long LOCK_TIME = 300000;
-  protected int maxRecordBatchSize;
   
   //for tests only
   protected ReviewItemsRetriever()
@@ -97,9 +96,6 @@ public class ReviewItemsRetriever
     {
       throw new Exception("Error locating user associated with map with ID: " + this.mapId);
     }
-    maxRecordBatchSize = 
-  		Integer.parseInt(HootProperties.getInstance()
-  		   .getProperty("maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
   }
   
   protected final long _verifyMap(final String mapId) throws Exception
@@ -556,9 +552,6 @@ public class ReviewItemsRetriever
       final String reviewItemUUID = nextAvailableReviewItem.get(rm.reviewableItemId);
       final String reviewAgainstUUID = nextAvailableReviewItem.get(rm.reviewAgainstItemId);
       
-      boolean doLock = false;
-      
-      
       if(offsetReviewId > -1)
       {
 	      long freedRowsCnt = _updateLastAccessWithSubSelect(past, offsetReviewId)
@@ -571,7 +564,6 @@ public class ReviewItemsRetriever
 	      
       }
       
-
       // lock the item if still available
       SQLUpdateClause uc = _updateLastAccessWithSubSelect(now, nextReviewId);
       

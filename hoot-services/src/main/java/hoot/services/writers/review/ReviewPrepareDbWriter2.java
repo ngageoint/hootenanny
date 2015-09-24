@@ -116,11 +116,16 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                 ".  Skipping adding unique ID record...");
             }
             else
-            {
-              //In the case of the fuzzy match conflict example, this ID may be made up of multiple
-              //parts.  Treat each ID part separately.  
+            { 
             	// TODO: change for fuzzy matches was invalid, so backing it out; fix and add test 
             	// for this case
+            	//There actually can be more than one unique element ID for the same element, which is
+          		//counter-intuitive.  This is b/c we store element ID's by both breaking up 
+            	//concatenated uuid's and storing them whole.  This may not be the best way to handle 
+            	//storing the unique element ID's, but was necessary to avoid the client sending ID's 
+            	//from reviews that the server knew nothing about.  This shouldn't, however, result 
+            	//in any duplicated review records, since we don't break up ID's in the same way when
+            	//writing them.  
             	List<String> uniqueElementIds = new ArrayList<String>();
           		uniqueElementIds.add(uniqueElementIdStr);
               if (uniqueElementIdStr.contains(";"))
