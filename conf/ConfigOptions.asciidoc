@@ -724,6 +724,21 @@ Example Usage:
 hoot ogr2osm -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/Identity.js output.osm test-files/jakarta_raya_coastline.shp
 ----
 
+=== ogr.reader.epsg.override
+
+* Data Type: int
+* Default Value: `-1`
+
+If specified the OGR reader will override the reported projection with the specified EPSG code. If
+the value is < 0 then the projection reported by the source data set will be used. In most cases
+the default value is fine.
+
+This can sometimes be necessary when reading from a DB created with osm2pgsql. E.g.
+
+----
+hoot convert -D ogr.reader.epsg.override=900913 PG:"dbname='gis' host='localhost' port='5432' user='hoot' password='blahblah'" tmp/output.shp
+----
+
 === ogr.split.o2s
 
 * Data Type: bool
