@@ -64,7 +64,9 @@ docs: always HOOT_VERSION_FILE
 test-quick: build services-test pp-test
 	bin/HootTest $(HOOT_TEST_DIFF) --quick
 
-test-all: build services-test-all pp-test plugins-test
+test-all-no-core: build services-test-all pp-test plugins-test
+
+test-all: test-all-no-core
 	bin/HootTest $(HOOT_TEST_DIFF) --glacial
 
 licenses:
