@@ -57,7 +57,7 @@ public class ReviewReferencesRetriever
 		    .from(reviewItems)
 		    .join(elementIdMappings)
 		    .on(
-		    		reviewItems.reviewableItemId.eq(elementIdMappings.elementId)
+		    		reviewItems.reviewAgainstItemId.eq(elementIdMappings.elementId)
       			.and(elementIdMappings.mapId.eq(mapId)))
   		  .where(
   		  	reviewItems.reviewableItemId.eq(elementUniqueId)
@@ -81,7 +81,7 @@ public class ReviewReferencesRetriever
 		    .from(reviewItems)
 		    .join(elementIdMappings)
 		    .on(
-		    		reviewItems.reviewAgainstItemId.eq(elementIdMappings.elementId)
+		    		reviewItems.reviewableItemId.eq(elementIdMappings.elementId)
       			.and(elementIdMappings.mapId.eq(mapId)))
   		  .where(
   		  	reviewItems.reviewAgainstItemId.eq(elementUniqueId)
