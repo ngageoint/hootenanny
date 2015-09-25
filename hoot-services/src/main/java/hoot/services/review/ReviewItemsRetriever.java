@@ -230,6 +230,20 @@ public class ReviewItemsRetriever
     return q;
   }
   
+  
+  protected final long _getAllReviewAgainstCount(final String uuid) throws Exception
+  {
+    QReviewItems rm = QReviewItems.reviewItems;
+    
+    SQLQuery q = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                  .from(rm)
+                  .where(rm.mapId.eq(mapId).and(rm.reviewableItemId.eq(uuid)))
+                  .orderBy(rm.reviewId.asc());
+    
+    return q.count();
+  }
+  
+  
   protected final SQLQuery _getElementMappingForReviewable(final String uuid) throws Exception
   {
     QElementIdMappings em = QElementIdMappings.elementIdMappings;
@@ -657,6 +671,10 @@ public class ReviewItemsRetriever
     String availAgList = StringUtils.join(agList,";");
     ri.setAgainstList(availAgList);
 
+    
+    long allAgainstCnt = _getAllReviewAgainstCount(reviewItemUUID);
+    ri.setAllReviewAgainstCnt(allAgainstCnt);
+    
     return ri;
   }
 
