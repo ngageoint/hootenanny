@@ -105,13 +105,14 @@ public class ReviewItemsSynchronizer
   	return reviewAgainstUuids;
   }
   
-  private int updateReviewRecordsFromCreateChangeset(final Document changesetDoc,
+  private void updateReviewRecordsFromCreateChangeset(final Document changesetDoc,
     final Map<ElementType, HashMap<Long, Element>> parsedElementIdsToElementsByType) 
     throws Exception
   {
   	log.debug("updateReviewRecordsFromCreateChangeset");
   	
   	int numReviewItemsUpdated = 0;
+  	long numElementIdMappingRecordsInserted = 0;
   	List<ElementIdMappings> elementIdMappingRecordsToInsert = new ArrayList<ElementIdMappings>();
     List<ReviewItems> reviewItemRecordsToInsert = new ArrayList<ReviewItems>();
   	
@@ -152,7 +153,7 @@ public class ReviewItemsSynchronizer
     	    changesetDoc, 
           "//osmChange/create/*/tag[@k = 'hoot:review:needs' and @v = 'yes']/..");
     	log.debug("created review items: " + String.valueOf(createdReviewItems.getLength()));
-    	log.debug(XmlUtils.nodeListToString(createdReviewItems));
+    	log.debug(StringUtils.abbreviate(XmlUtils.nodeListToString(createdReviewItems), 1000));
     	for (int i = 0; i < createdReviewItems.getLength(); i++)
     	{
     		//add the associated review data; not checking to see if the element already exists in the
@@ -197,21 +198,22 @@ public class ReviewItemsSynchronizer
     		}
     	}
     	
-      DbUtils.batchRecords(
-      	mapId, elementIdMappingRecordsToInsert, elementIdMappings, null, RecordBatchType.INSERT, 
-      	conn, maxRecordBatchSize);
+    	numElementIdMappingRecordsInserted =
+    		DbUtils.batchRecords(
+      	  mapId, elementIdMappingRecordsToInsert, elementIdMappings, null, RecordBatchType.INSERT, 
+      	  conn, maxRecordBatchSize);
     	numReviewItemsUpdated += 
     	  DbUtils.batchRecords(
       	  mapId, reviewItemRecordsToInsert, reviewItems, null, RecordBatchType.INSERT, conn, 
       	  maxRecordBatchSize);
   	}
   	
-  	log.debug(numReviewItemsUpdated + " review records updated as a result of the create changeset.");
-  	
-  	return numReviewItemsUpdated;
+  	log.debug(numElementIdMappingRecordsInserted + 
+  		" element id mappings records inserted as a result of the create changeset.");
+  	log.debug(numReviewItemsUpdated + " review records inserted as a result of the create changeset.");
   }
   
-  private int updateReviewRecordsFromModifyChangeset(final Document changesetDoc) throws Exception
+  private void updateReviewRecordsFromModifyChangeset(final Document changesetDoc) throws Exception
   {
     log.debug("updateReviewRecordsFromModifyChangeset");
     
@@ -437,15 +439,14 @@ public class ReviewItemsSynchronizer
     	numReviewItemsInserted + " review records inserted as a result of the modify changeset.");
     log.debug(
     	numReviewItemsUpdated + " review records updated as a result of the modify changeset.");
-  	
-  	return numReviewItemsUpdated;
   }
   
   //This code is heavily tailored for the POI merge use case and has only been tested against that
   //so far.  Not sure what affect this code would have on other types of reviews yet...
-  private int updateReviewRecordsFromDeleteChangeset(final Document changesetDoc) throws Exception
+  private void updateReviewRecordsFromDeleteChangeset(final Document changesetDoc) throws Exception
   {
   	int numReviewItemsUpdated = 0;
+  	int numReviewItemsDeleted = 0;
   	
   	final NodeList deletedItems = 
   	  XPathAPI.selectNodeList(changesetDoc, "//osmChange/delete/*/tag[@k = 'uuid']/@v");
@@ -462,7 +463,10 @@ public class ReviewItemsSynchronizer
   	if (deletedItemUuids.size() > 0)
   	{
   	  //If a record is made up entirely of deleted items (reviewable and review against)...like 
-  		//when two are deleted as the result of a merge...then mark the record as reviewed.  
+  		//when two are deleted as the result of a merge...then mark the record as reviewed.  This is 
+  		//kind of a really big assumption.  Just b/c two features that were part of the same review 
+  		//were deleted doesn't mean they were ever actually reviewed, but there doesn't seem to be 
+  		//any better way to handle this.
   		numReviewItemsUpdated += 
   			new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), reviewItems)
 		      .where(
@@ -475,9 +479,9 @@ public class ReviewItemsSynchronizer
   		//orphaned record links already.  In other words, the review never happened due to it being
   		//OBE by the poi merge, record links were updated to reflect that with new review records,
   		//and these records should then be deleted.  Here we're deleting all records where one of the 
-  		//uuid's is in the reviewableItemId or the reviewAgainstItemId, but not both.
-  		//TODO: not sure whether this one should be counted in the updated total or not
-  		numReviewItemsUpdated += 
+  		//uuid's is in the reviewableItemId or the reviewAgainstItemId, but not both.  This is also
+  		//a fairly big assumption, but once again, not sure of a better way to handle it right now.
+  		numReviewItemsDeleted += 
   			new SQLDeleteClause(conn, DbUtils.getConfiguration(mapId), reviewItems)
 		      .where(
 		      	reviewItems.mapId.eq(mapId)
@@ -491,8 +495,7 @@ public class ReviewItemsSynchronizer
   	}  	
   	
   	log.debug(numReviewItemsUpdated + " review records updated as a result of the delete changeset.");
-  	
-  	return numReviewItemsUpdated;
+  	log.debug(numReviewItemsDeleted + " review records deleted as a result of the delete changeset.");
   }
    
   /**
@@ -510,20 +513,14 @@ public class ReviewItemsSynchronizer
   { 
   	if ((new ReviewMapValidator(conn)).mapIsPrepared(String.valueOf(mapId)))
   	{
-  		int numReviewItemsUpdated = 0;
       log.debug("Updating review items for changeset...");
       
-      //Items in the create changeset are passed in with temporary id's that the server replaces.  So,
-      //we need to pass the id mapping data structure to this method so it has the correct ID's 
+      //Items in the create changeset are passed in with temporary id's that the server replaces.  
+      //So, we need to pass the id mapping data structure to this method so it has the correct ID's 
       //without having to do extra database queries for them.
-    	numReviewItemsUpdated += 
-    		updateReviewRecordsFromCreateChangeset(changesetDoc, parsedElementIdsToElementsByType);
-    	numReviewItemsUpdated += updateReviewRecordsFromModifyChangeset(changesetDoc);
-    	numReviewItemsUpdated += updateReviewRecordsFromDeleteChangeset(changesetDoc);
-    	
-    	log.debug(
-        String.valueOf(numReviewItemsUpdated) + " review records total were inserted/updated " +
-        "as a result of the changeset save.");
+    	updateReviewRecordsFromCreateChangeset(changesetDoc, parsedElementIdsToElementsByType);
+    	updateReviewRecordsFromModifyChangeset(changesetDoc);
+    	updateReviewRecordsFromDeleteChangeset(changesetDoc);
   	}
   	else
   	{
