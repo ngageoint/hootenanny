@@ -189,6 +189,8 @@ protected:
   virtual void _translate(Tags&);
 
   void populateElementMap();
+
+  QString _toWkt(OGRSpatialReference* srs);
 };
 
 class OgrElementIterator : public ElementIterator
@@ -795,7 +797,30 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
   else
   {
     sourceSrs = _layer->GetSpatialRef();
+
+    // proj4 requires some extra parameters to handle Google map style projections. Check for this
+    // situation for known EPSGs and warn/fix the issue.
+    tmpSourceSrs.reset(new OGRSpatialReference());
+    tmpSourceSrs->importFromEPSG(3785);
+    if (tmpSourceSrs->IsSame(sourceSrs) && _toWkt(tmpSourceSrs.get()) != _toWkt(sourceSrs))
+    {
+      LOG_WARN("Overriding input projection with proj4 compatible EPSG:3785. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
+      sourceSrs = tmpSourceSrs.get();
+    }
+    else
+    {
+      tmpSourceSrs->importFromEPSG(900913);
+      if (tmpSourceSrs->IsSame(sourceSrs) && _toWkt(tmpSourceSrs.get()) != _toWkt(sourceSrs))
+      {
+        LOG_WARN("Overriding input projection with proj4 compatible EPSG:900913. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
+        sourceSrs = tmpSourceSrs.get();
+      }
+    }
   }
+  char* buffer;
+  sourceSrs->exportToWkt(&buffer);
+  LOG_DEBUG("Input SRS: " << buffer);
+  delete buffer;
 
   if (sourceSrs != 0 && sourceSrs->IsProjected())
   {
@@ -1084,5 +1109,15 @@ Progress OgrReaderInternal::streamGetProgress() const
 
   return streamProgress;
 }
+
+QString OgrReaderInternal::_toWkt(OGRSpatialReference* srs)
+{
+  char* buffer;
+  srs->exportToWkt(&buffer);
+  QString result = QString::fromUtf8(buffer);
+  delete buffer;
+  return result;
+}
+
 
 }
