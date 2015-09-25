@@ -20,6 +20,8 @@
         <tag k="uuid" v="{31c4a84b-5604-55da-8266-07af71bb3740};{5c7b69a5-dc0f-5bc2-80fb-c2503e83d9b7}"/>
         <tag k="addr:language" v="GER"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-1"/>
+        <tag k="hoot:status" v="3"/>
     </node>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.1766834999999887" lon="11.5285066000000000">
         <tag k="REF1" v="0045a8"/>
@@ -33,5 +35,7 @@
         <tag k="uuid" v="{40822740-275a-5758-bb90-4e25b9d30d49}"/>
         <tag k="railway" v="subway_entrance"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-2"/>
+        <tag k="hoot:status" v="1"/>
     </node>
 </osm>
