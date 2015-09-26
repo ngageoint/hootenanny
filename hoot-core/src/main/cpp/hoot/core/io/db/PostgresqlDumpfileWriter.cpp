@@ -120,7 +120,10 @@ void PostgresqlDumpfileWriter::open(QString url)
 
 void PostgresqlDumpfileWriter::close()
 {
-  // Anything unresolved at this point ain't gonna get resolved
+  // Not writing any new data, can drop ID mappings
+  _idMappings.nodeIdMap.reset();
+  _idMappings.wayIdMap.reset();
+  _idMappings.relationIdMap.reset();
   _unresolvedRefs.unresolvedWaynodeRefs.reset();
   _unresolvedRefs.unresolvedRelationRefs.reset();
 
@@ -142,12 +145,6 @@ void PostgresqlDumpfileWriter::close()
   _sectionNames.erase(_sectionNames.begin(), _sectionNames.end());
   _changesetData.changesetId  = _configData.startingChangesetId;
   _changesetData.changesInChangeset = 0;
-  _idMappings.nodeIdMap.reset();
-  _idMappings.wayIdMap.reset();
-  _idMappings.relationIdMap.reset();
-
-  _unresolvedRefs.unresolvedWaynodeRefs.reset();
-  _unresolvedRefs.unresolvedRelationRefs.reset();
 }
 
 void PostgresqlDumpfileWriter::finalizePartial()
