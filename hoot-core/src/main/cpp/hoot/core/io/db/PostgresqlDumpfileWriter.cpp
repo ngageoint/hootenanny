@@ -114,19 +114,26 @@ void PostgresqlDumpfileWriter::open(QString url)
   _idMappings.nextRelationId  = _configData.startingRelationId;
   _idMappings.relationIdMap.reset();
 
-  _unresolvedRefs.unresolvedWaynodes.reset();
+  _unresolvedRefs.unresolvedWaynodeRefs.reset();
+  _unresolvedRefs.unresolvedRelationRefs.reset();
 }
 
 void PostgresqlDumpfileWriter::close()
 {
+  // Anything unresolved at this point ain't gonna get resolved
+  _unresolvedRefs.unresolvedWaynodeRefs.reset();
+  _unresolvedRefs.unresolvedRelationRefs.reset();
+
   finalizePartial();
 
   if ( (_writeStats.nodesWritten > 0) || (_writeStats.waysWritten > 0) || (_writeStats.relationsWritten > 0) )
   {
     LOG_DEBUG("Write stats:");
-    LOG_DEBUG("\t    Nodes written: " + QString::number(_writeStats.nodesWritten) );
-    LOG_DEBUG("\t     Ways written: " + QString::number(_writeStats.waysWritten) );
-    LOG_DEBUG("\tRelations written: " + QString::number(_writeStats.relationsWritten) );
+    LOG_DEBUG("\t              Nodes written: " + QString::number(_writeStats.nodesWritten) );
+    LOG_DEBUG("\t               Ways written: " + QString::number(_writeStats.waysWritten) );
+    LOG_DEBUG("\t          Relations written: " + QString::number(_writeStats.relationsWritten) );
+    LOG_DEBUG("\t   Relation members written:" + QString::number(_writeStats.relationMembersWritten));
+    LOG_DEBUG("\tUnresolved relation members:" + QString::number(_writeStats.relationMembersWritten));
   }
 
   _zeroWriteStats();
@@ -139,7 +146,8 @@ void PostgresqlDumpfileWriter::close()
   _idMappings.wayIdMap.reset();
   _idMappings.relationIdMap.reset();
 
-  _unresolvedRefs.unresolvedWaynodes.reset();
+  _unresolvedRefs.unresolvedWaynodeRefs.reset();
+  _unresolvedRefs.unresolvedRelationRefs.reset();
 }
 
 void PostgresqlDumpfileWriter::finalizePartial()
@@ -159,7 +167,7 @@ void PostgresqlDumpfileWriter::finalizePartial()
     }
 
     // Write close marker for table
-    *(_outputSections[*it].second) << QString("\\.\n\n\n");
+    *(_outputSections[*it].second) << QString("\\.\n\n\n").toUtf8();
 
     // Flush any residual content from text stream/file
     (_outputSections[*it].second)->flush();
@@ -191,7 +199,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
   {
     _createNodeTables();
     _idMappings.nodeIdMap = boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> >(
-          new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>());
+          new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>(_configData.maxMapElements));
   }
 
   ElementIdDatatype nodeDbId;
@@ -222,7 +230,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
     _createWayTables();
 
     _idMappings.wayIdMap = boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> >(
-          new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>());
+          new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>(_configData.maxMapElements));
   }
 
   ElementIdDatatype wayDbId;
@@ -255,7 +263,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
     _createRelationTables();
 
     _idMappings.relationIdMap = boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> >(
-          new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>());
+          new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>(_configData.maxMapElements));
   }
 
   ElementIdDatatype relationDbId;
@@ -279,6 +287,8 @@ void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
 
   _writeStats.relationsWritten++;
   _incrementChangesInChangeset();
+
+  _checkUnresolvedReferences( r, relationDbId );
 }
 
 void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
@@ -288,6 +298,7 @@ void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
   _configData.startingNodeId      = 1;
   _configData.startingWayId       = 1;
   _configData.startingRelationId  = 1;
+  _configData.maxMapElements      = 1000000000;
 }
 
 std::list<QString> PostgresqlDumpfileWriter::_createSectionNameList()
@@ -339,6 +350,7 @@ void PostgresqlDumpfileWriter::_zeroWriteStats()
   _writeStats.wayTagsWritten = 0;
   _writeStats.relationsWritten = 0;
   _writeStats.relationMembersWritten = 0;
+  _writeStats.relationMembersUnresolved = 0;
   _writeStats.relationTagsWritten = 0;
 }
 
@@ -406,6 +418,15 @@ void PostgresqlDumpfileWriter::_writeNodeToTables(
   const QString datestring = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss.zzz");
   const QString tileNumberString(QString::number(_tileForPoint(nodeY, nodeX)));
 
+  if ( (nodeYNanodegrees < -900000000) || (nodeYNanodegrees > 900000000) )
+  {
+    throw HootException(QString("Invalid latitude conversion, Y = %1 to %2").arg(nodeY, nodeYNanodegrees));
+  }
+  if ( (nodeXNanodegrees < -1800000000) || (nodeXNanodegrees > 1800000000) )
+  {
+    throw HootException(QString("Invalid longitude conversion, X = %1 to %2").arg(nodeX, nodeXNanodegrees));
+  }
+
   QString outputLine = QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n")
       .arg(nodeDbId)
       .arg(nodeYNanodegrees)
@@ -414,7 +435,7 @@ void PostgresqlDumpfileWriter::_writeNodeToTables(
       .arg(datestring)
       .arg(tileNumberString);
 
-  *(_outputSections["current_nodes"].second) << outputLine;
+  *(_outputSections["current_nodes"].second) << outputLine.toUtf8();
 
   outputLine = QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n")
       .arg(nodeDbId)
@@ -424,7 +445,7 @@ void PostgresqlDumpfileWriter::_writeNodeToTables(
       .arg(datestring)
       .arg(tileNumberString);
 
-  *(_outputSections["nodes"].second) << outputLine;
+  *(_outputSections["nodes"].second) << outputLine.toUtf8();
 }
 
 void PostgresqlDumpfileWriter::_writeTagsToTables(
@@ -439,11 +460,26 @@ void PostgresqlDumpfileWriter::_writeTagsToTables(
 
   for ( Tags::const_iterator it = tags.begin(); it != tags.end(); ++it )
   {
-    const QString key = it.key();
-    const QString value = it.value();
+    QString key = it.key();
+    QString value = it.value();
 
-    *currentTable << currentTableFormatString.arg(nodeDbIdString, key, value );
-    *historicalTable << historicalTableFormatString.arg(nodeDbIdString, key, value );
+    // Escape any special characters as required by
+    //    http://www.postgresql.org/docs/9.2/static/sql-copy.html
+    key.replace(QChar(8), QString("\\b"));
+    value.replace(QChar(8), QString("\\b"));
+    key.replace(QChar(9), QString("\\t"));
+    value.replace(QChar(9), QString("\\t"));
+    key.replace(QChar(10), QString("\\n"));
+    value.replace(QChar(10), QString("\\n"));
+    key.replace(QChar(11), QString("\\v"));
+    value.replace(QChar(11), QString("\\v"));
+    key.replace(QChar(12), QString("\\f"));
+    value.replace(QChar(12), QString("\\f"));
+    key.replace(QChar(13), QString("\\r"));
+    value.replace(QChar(13), QString("\\r"));
+
+    *currentTable << currentTableFormatString.arg(nodeDbIdString, key, value ).toUtf8();
+    *historicalTable << historicalTableFormatString.arg(nodeDbIdString, key, value ).toUtf8();
   }
 }
 
@@ -468,14 +504,14 @@ void PostgresqlDumpfileWriter::_writeWayToTables(const ElementIdDatatype wayDbId
       .arg(changesetId)
       .arg(datestring);
 
-  *(_outputSections["current_ways"].second) << outputLine;
+  *(_outputSections["current_ways"].second) << outputLine.toUtf8();
 
   outputLine = QString("%1\t%2\t%3\tt\t1\t\\N\n")
       .arg(wayDbId)
       .arg(changesetId)
       .arg(datestring);
 
-  *(_outputSections["ways"].second) << outputLine;
+  *(_outputSections["ways"].second) << outputLine.toUtf8();
 }
 
 void PostgresqlDumpfileWriter::_writeWaynodesToTables( const ElementIdDatatype dbWayId,
@@ -496,8 +532,8 @@ void PostgresqlDumpfileWriter::_writeWaynodesToTables( const ElementIdDatatype d
     {
       const QString dbNodeIdString = QString::number( _idMappings.nodeIdMap->at(*it) );
       const QString nodeIndexString( QString::number(nodeIndex) );
-      *currentWayNodesStream << currentWaynodesFormat.arg(dbWayIdString, dbNodeIdString, nodeIndexString);
-      *wayNodesStream << waynodesFormat.arg(dbWayIdString, dbNodeIdString, nodeIndexString);
+      *currentWayNodesStream << currentWaynodesFormat.arg(dbWayIdString, dbNodeIdString, nodeIndexString).toUtf8();
+      *wayNodesStream << waynodesFormat.arg(dbWayIdString, dbNodeIdString, nodeIndexString).toUtf8();
     }
     else
     {
@@ -530,75 +566,108 @@ void PostgresqlDumpfileWriter::_writeRelationToTables(const ElementIdDatatype re
       .arg(changesetId)
       .arg(datestring);
 
-  *(_outputSections["current_relations"].second) << outputLine;
+  *(_outputSections["current_relations"].second) << outputLine.toUtf8();
 
   outputLine = QString("%1\t%2\t%3\tt\t1\t\\N\n")
       .arg(relationDbId)
       .arg(changesetId)
       .arg(datestring);
 
-  *(_outputSections["relations"].second) << outputLine;
+  *(_outputSections["relations"].second) << outputLine.toUtf8();
 }
 
 void PostgresqlDumpfileWriter::_writeRelationMembersToTables( const ConstRelationPtr& relation )
 {
   unsigned int memberSequenceIndex = 1;
-
-  boost::shared_ptr<QTextStream> currentRelationMembersStream  = _outputSections["current_relation_members"].second;
-  boost::shared_ptr<QTextStream> relationMembersStream         = _outputSections["relation_members"].second;
-  const QString currentRelationMemberFormat("%1\t%2\t%3\t%4\t%5\n");
-  const QString relationMembersFormat("%1\t%2\t%3\t%4\t1\t%5\n");
-  const QString dbRelationIdString( QString::number(_idMappings.relationIdMap->at(relation->getId())) );
+  const ElementIdDatatype relationId = relation->getId();
+  const ElementIdDatatype dbRelationId = _idMappings.relationIdMap->at(relationId);
   const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
-
   boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> > knownElementMap;
-  QString memberType;
 
   for ( vector<RelationData::Entry>::const_iterator it = relationMembers.begin();
       it != relationMembers.end(); ++it )
   {
     const ElementId memberElementId = it->getElementId();
+
     switch ( memberElementId.getType().getEnum() )
     {
     case ElementType::Node:
       knownElementMap = _idMappings.nodeIdMap;
-      memberType = "Node";
       break;
     case ElementType::Way:
       knownElementMap = _idMappings.wayIdMap;
-      memberType = "Way";
       break;
     case ElementType::Relation:
       knownElementMap = _idMappings.relationIdMap;
-      memberType = "Relation";
       break;
     default:
       throw HootException("Unsupported element member type");
       break;
     }
 
-    if ( knownElementMap->contains(memberElementId.getId()) == true )
+    if ( (knownElementMap != boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> >())
+          && (knownElementMap->contains(memberElementId.getId()) == true) )
     {
-      const QString memberRefIdString = QString::number( knownElementMap->at(memberElementId.getId()) );
-      const QString memberSequenceString( QString::number(memberSequenceIndex) );
-      const QString memberRole = it->getRole();
-
-      *currentRelationMembersStream << currentRelationMemberFormat.arg(
-        dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString);
-      *relationMembersStream        << relationMembersFormat.arg(
-        dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString);
+      _writeRelationMember(relationId, *it, knownElementMap->at(memberElementId.getId()), memberSequenceIndex);
     }
     else
     {
-      //LOG_WARN( QString("Relation has reference to unknown member") );
-      //throw NotImplementedException("Unresolved relation members are not supported");
+      if ( _unresolvedRefs.unresolvedRelationRefs ==
+          boost::shared_ptr< std::map<ElementId, _UnresolvedRelationReference > >() )
+      {
+        _unresolvedRefs.unresolvedRelationRefs =
+          boost::shared_ptr< std::map<ElementId, _UnresolvedRelationReference > >( new
+          std::map<ElementId, _UnresolvedRelationReference>() );
+      }
+
+      const _UnresolvedRelationReference relationRef = { relationId, dbRelationId, *it, memberSequenceIndex };
+
+      _unresolvedRefs.unresolvedRelationRefs->insert(std::pair<ElementId,
+        _UnresolvedRelationReference>(memberElementId, relationRef) );
     }
 
     ++memberSequenceIndex;
   }
 }
 
+void PostgresqlDumpfileWriter::_writeRelationMember( const ElementIdDatatype sourceRelationDbId,
+  const RelationData::Entry& memberEntry, const ElementIdDatatype memberDbId, const unsigned int memberSequenceIndex )
+{
+  QString memberType;
+  const ElementId memberElementId = memberEntry.getElementId();
 
+  switch ( memberElementId.getType().getEnum() )
+  {
+  case ElementType::Node:
+    memberType = "Node";
+    break;
+  case ElementType::Way:
+    memberType = "Way";
+    break;
+  case ElementType::Relation:
+    memberType = "Relation";
+    break;
+  default:
+    throw HootException("Unsupported element member type");
+    break;
+  }
+
+  const QString dbRelationIdString( QString::number(sourceRelationDbId));
+  const QString memberRefIdString( QString::number(memberDbId) );
+  const QString memberSequenceString( QString::number(memberSequenceIndex) );
+  const QString memberRole = memberEntry.getRole();
+  boost::shared_ptr<QTextStream> currentRelationMembersStream  = _outputSections["current_relation_members"].second;
+  boost::shared_ptr<QTextStream> relationMembersStream         = _outputSections["relation_members"].second;
+  const QString currentRelationMemberFormat("%1\t%2\t%3\t%4\t%5\n");
+  const QString relationMembersFormat("%1\t%2\t%3\t%4\t1\t%5\n");
+
+  *currentRelationMembersStream << currentRelationMemberFormat.arg(
+    dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString).toUtf8();
+  *relationMembersStream        << relationMembersFormat.arg(
+    dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString).toUtf8();
+
+  _writeStats.relationMembersWritten++;
+}
 
 void PostgresqlDumpfileWriter::_createTable( const QString& tableName, const QString& tableHeader )
 {
@@ -612,7 +681,10 @@ void PostgresqlDumpfileWriter::_createTable( const QString& tableName, const QSt
       std::pair< boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> >(
         tempfile, boost::shared_ptr<QTextStream>(new QTextStream(tempfile.get())) );
 
-  *(_outputSections[tableName].second) << tableHeader;
+  // QString is UTF16, but database is encoded in UTF-8
+  _outputSections[tableName].second->setCodec("UTF-8");
+
+  *(_outputSections[tableName].second) << tableHeader.toUtf8();
 }
 
 void PostgresqlDumpfileWriter::_incrementChangesInChangeset()
@@ -625,6 +697,45 @@ void PostgresqlDumpfileWriter::_incrementChangesInChangeset()
   }
 }
 
+void PostgresqlDumpfileWriter::_checkUnresolvedReferences(const ConstElementPtr& element,
+  const ElementIdDatatype elementDbId )
+{
+  // Regardless of type, may be referenced in relation
+  if ( _unresolvedRefs.unresolvedRelationRefs !=
+      boost::shared_ptr< std::map<ElementId, _UnresolvedRelationReference > >() )
+  {
+    std::map<ElementId, _UnresolvedRelationReference >::iterator relationRef =
+      _unresolvedRefs.unresolvedRelationRefs->find( element->getElementId() );
+
+    if ( relationRef != _unresolvedRefs.unresolvedRelationRefs->end() )
+    {
+      LOG_DEBUG("Found unresolved relation member ref!");
+      LOG_DEBUG( QString( "Relation ID ") + QString::number(relationRef->second.sourceRelationId) +
+        QString(" (DB ID=") + QString::number(relationRef->second.sourceRelationDbId) +
+        QString(") has ref to ") + relationRef->second.relationMemberData.toString() );
+
+      _writeRelationMember(relationRef->second.sourceRelationId, relationRef->second.relationMemberData,
+        elementDbId, relationRef->second.relationMemberSequenceId );
+
+      // Remove entry from unresolved list
+      _unresolvedRefs.unresolvedRelationRefs->erase(relationRef);
+    }
+  }
+
+  // If newly-written element is a node, check noderefs as well
+  if ( element->getElementType().getEnum() == ElementType::Node )
+  {
+    if ( (_unresolvedRefs.unresolvedWaynodeRefs !=
+        boost::shared_ptr<
+        Tgs::BigMap<ElementIdDatatype, std::vector<
+        std::pair<ElementIdDatatype, unsigned long> > > >()) &&
+        ( _unresolvedRefs.unresolvedWaynodeRefs->contains(element->getId()) == true) )
+    {
+      LOG_DEBUG("Found unresolved waynode ref!");
+      throw NotImplementedException("Need to insert waynode ref that is now resolved");
+    }
+  }
+}
 
 
 }

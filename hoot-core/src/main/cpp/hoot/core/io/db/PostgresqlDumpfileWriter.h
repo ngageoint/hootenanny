@@ -96,6 +96,7 @@ protected:
     unsigned long wayTagsWritten;
     unsigned long relationsWritten;
     unsigned long relationMembersWritten;
+    unsigned long relationMembersUnresolved;
     unsigned long relationTagsWritten;
   };
 
@@ -111,6 +112,7 @@ protected:
     ElementIdDatatype startingNodeId;
     ElementIdDatatype startingWayId;
     ElementIdDatatype startingRelationId;
+    unsigned long     maxMapElements;
   };
 
   ConfigData _configData;
@@ -137,10 +139,20 @@ protected:
 
   _ChangesetData _changesetData;
 
+  struct _UnresolvedRelationReference
+  {
+    ElementIdDatatype     sourceRelationId;
+    ElementIdDatatype     sourceRelationDbId;
+    RelationData::Entry   relationMemberData;
+    unsigned int          relationMemberSequenceId;
+  };
+
   struct _UnresolvedReferences
   {
     // Schema: node ID -> vector of entries w/ type: pair(way ID for waynode, 1-based sequence order for waynode)
-    boost::shared_ptr< Tgs::BigMap<ElementIdDatatype, std::vector< std::pair<ElementIdDatatype, unsigned long> > > > unresolvedWaynodes;
+    boost::shared_ptr< Tgs::BigMap<ElementIdDatatype, std::vector< std::pair<ElementIdDatatype, unsigned long> > > > unresolvedWaynodeRefs;
+
+    boost::shared_ptr< std::map<ElementId, _UnresolvedRelationReference > > unresolvedRelationRefs;
   };
 
   _UnresolvedReferences _unresolvedRefs;
@@ -188,9 +200,16 @@ protected:
 
   void _writeRelationMembersToTables( const ConstRelationPtr& relation );
 
+  void _writeRelationMember( const ElementIdDatatype sourceRelation,
+    const RelationData::Entry& memberEntry, const ElementIdDatatype memberDbId,
+    const unsigned int memberSequenceIndex );
+
   void _createTable( const QString& tableName, const QString& tableHeader );
 
   void _incrementChangesInChangeset();
+
+  void _checkUnresolvedReferences( const ConstElementPtr& element,
+    const ElementIdDatatype elementDbId );
 };
 
 }
