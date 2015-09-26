@@ -642,7 +642,7 @@ void PostgresqlDumpfileWriter::_writeRelationMember( const ElementIdDatatype sou
   const QString dbRelationIdString( QString::number(sourceRelationDbId));
   const QString memberRefIdString( QString::number(memberDbId) );
   const QString memberSequenceString( QString::number(memberSequenceIndex) );
-  const QString memberRole = memberEntry.getRole();
+  const QString memberRole = _escapeCopyToData( memberEntry.getRole() );
   boost::shared_ptr<QTextStream> currentRelationMembersStream  = _outputSections["current_relation_members"].second;
   boost::shared_ptr<QTextStream> relationMembersStream         = _outputSections["relation_members"].second;
   const QString currentRelationMemberFormat("%1\t%2\t%3\t%4\t%5\n");
