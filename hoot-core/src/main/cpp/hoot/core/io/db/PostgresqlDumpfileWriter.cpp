@@ -412,19 +412,21 @@ void PostgresqlDumpfileWriter::_writeNodeToTables(
 {
   const double nodeY = node->getY();
   const double nodeX = node->getX();
-  const unsigned int nodeYNanodegrees = _convertDegreesToNanodegrees(nodeY);
-  const unsigned int nodeXNanodegrees = _convertDegreesToNanodegrees(nodeX);
+  const int nodeYNanodegrees = _convertDegreesToNanodegrees(nodeY);
+  const int nodeXNanodegrees = _convertDegreesToNanodegrees(nodeX);
   const int changesetId = _getChangesetId();
   const QString datestring = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss.zzz");
   const QString tileNumberString(QString::number(_tileForPoint(nodeY, nodeX)));
 
   if ( (nodeYNanodegrees < -900000000) || (nodeYNanodegrees > 900000000) )
   {
-    throw HootException(QString("Invalid latitude conversion, Y = %1 to %2").arg(nodeY, nodeYNanodegrees));
+    throw HootException(QString("Invalid latitude conversion, Y = %1 to %2").arg(
+      QString::number(nodeY), QString::number(nodeYNanodegrees)));
   }
   if ( (nodeXNanodegrees < -1800000000) || (nodeXNanodegrees > 1800000000) )
   {
-    throw HootException(QString("Invalid longitude conversion, X = %1 to %2").arg(nodeX, nodeXNanodegrees));
+    throw HootException(QString("Invalid longitude conversion, X = %1 to %2").arg(
+      QString::number(nodeX), QString::number(nodeXNanodegrees)));
   }
 
   QString outputLine = QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n")
