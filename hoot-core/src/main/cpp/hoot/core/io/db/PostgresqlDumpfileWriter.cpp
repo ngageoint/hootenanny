@@ -462,23 +462,8 @@ void PostgresqlDumpfileWriter::_writeTagsToTables(
 
   for ( Tags::const_iterator it = tags.begin(); it != tags.end(); ++it )
   {
-    QString key = it.key();
-    QString value = it.value();
-
-    // Escape any special characters as required by
-    //    http://www.postgresql.org/docs/9.2/static/sql-copy.html
-    key.replace(QChar(8), QString("\\b"));
-    value.replace(QChar(8), QString("\\b"));
-    key.replace(QChar(9), QString("\\t"));
-    value.replace(QChar(9), QString("\\t"));
-    key.replace(QChar(10), QString("\\n"));
-    value.replace(QChar(10), QString("\\n"));
-    key.replace(QChar(11), QString("\\v"));
-    value.replace(QChar(11), QString("\\v"));
-    key.replace(QChar(12), QString("\\f"));
-    value.replace(QChar(12), QString("\\f"));
-    key.replace(QChar(13), QString("\\r"));
-    value.replace(QChar(13), QString("\\r"));
+    const QString key = _escapeCopyToData( it.key() );
+    const QString value = _escapeCopyToData( it.value() );
 
     *currentTable << currentTableFormatString.arg(nodeDbIdString, key, value ).toUtf8();
     *historicalTable << historicalTableFormatString.arg(nodeDbIdString, key, value ).toUtf8();
@@ -739,5 +724,21 @@ void PostgresqlDumpfileWriter::_checkUnresolvedReferences(const ConstElementPtr&
   }
 }
 
+QString PostgresqlDumpfileWriter::_escapeCopyToData(const QString& stringToOutput) const
+{
+  QString escapedString(stringToOutput);
+
+  // Escape any special characters as required by
+  //    http://www.postgresql.org/docs/9.2/static/sql-copy.html
+  escapedString.replace(QChar(92), QString("\\\\"));  // Escape single backslashes first
+  escapedString.replace(QChar(8), QString("\\b"));
+  escapedString.replace(QChar(9), QString("\\t"));
+  escapedString.replace(QChar(10), QString("\\n"));
+  escapedString.replace(QChar(11), QString("\\v"));
+  escapedString.replace(QChar(12), QString("\\f"));
+  escapedString.replace(QChar(13), QString("\\r"));
+
+  return escapedString;
+}
 
 }

@@ -210,6 +210,8 @@ protected:
 
   void _checkUnresolvedReferences( const ConstElementPtr& element,
     const ElementIdDatatype elementDbId );
+
+  QString _escapeCopyToData( const QString& stringToOutput) const;
 };
 
 }
