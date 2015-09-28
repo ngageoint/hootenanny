@@ -27,6 +27,7 @@
 package hoot.services.review;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -284,6 +285,22 @@ public class ReviewUtils
     else
     {
       message += e.getMessage();
+    }
+    if (e instanceof SQLException)
+    {
+    	SQLException sqlException = (SQLException)e;
+    	if (sqlException.getNextException() != null)
+    	{
+    		message += "  " + sqlException.getNextException().getMessage();
+    	}
+    }
+    if (e.getCause() instanceof SQLException)
+    {
+    	SQLException sqlException = (SQLException)e.getCause();
+    	if (sqlException.getNextException() != null)
+    	{
+    		message += "  " + sqlException.getNextException().getMessage();
+    	}
     }
     final String exceptionCode = status.getStatusCode() + ": " + status.getReasonPhrase();
     log.error(exceptionCode + " " + message);

@@ -245,17 +245,8 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
             }
             else
             {
-              String[] reviewableItemIds = null;
-              /*if (reviewableItemIdStr.contains(";"))
-              {
-                log.debug("Multiple part reviewable item ID...");
-                reviewableItemIds = reviewableItemIdStr.split(";");
-              }
-              else
-              {*/
-            	  reviewableItemIds = new String[1];
-            	  reviewableItemIds[0] = reviewableItemIdStr;
-              //}
+              String[] reviewableItemIds = new String[1];
+            	reviewableItemIds[0] = reviewableItemIdStr;
               
               for (String reviewableItemId : reviewableItemIds)
               {
@@ -306,8 +297,9 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                   for (int i = 0; i < reviewAgainstItemIds.length; i++)
                   {
                     final String reviewAgainstItemId = reviewAgainstItemIds[i];
-                    //TODO: get rid of this check after enough datasets have been tested to prove
-                  	//its not needed
+                    //TODO: This check is expensive, but unfortunately, it is needed with some
+                    //datasets (checkForElementIdMappingPerReviewRecordWrite should always be set 
+                    //to true).  It would be nice to be able to get rid of this check completely.
                     if (checkForElementIdMappingPerReviewRecordWrite &&
                     		new SQLQuery(conn, DbUtils.getConfiguration(mapId))
                           .from(elementIdMappings)
