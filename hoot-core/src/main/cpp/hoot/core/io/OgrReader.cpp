@@ -802,7 +802,8 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
     // situation for known EPSGs and warn/fix the issue.
     tmpSourceSrs.reset(new OGRSpatialReference());
     tmpSourceSrs->importFromEPSG(3785);
-    if (tmpSourceSrs->IsSame(sourceSrs) && _toWkt(tmpSourceSrs.get()) != _toWkt(sourceSrs))
+    if (sourceSrs && tmpSourceSrs->IsSame(sourceSrs) &&
+      _toWkt(tmpSourceSrs.get()) != _toWkt(sourceSrs))
     {
       LOG_WARN("Overriding input projection with proj4 compatible EPSG:3785. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
       sourceSrs = tmpSourceSrs.get();
@@ -810,20 +811,18 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
     else
     {
       tmpSourceSrs->importFromEPSG(900913);
-      if (tmpSourceSrs->IsSame(sourceSrs) && _toWkt(tmpSourceSrs.get()) != _toWkt(sourceSrs))
+      if (sourceSrs && tmpSourceSrs->IsSame(sourceSrs) &&
+        _toWkt(tmpSourceSrs.get()) != _toWkt(sourceSrs))
       {
         LOG_WARN("Overriding input projection with proj4 compatible EPSG:900913. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
         sourceSrs = tmpSourceSrs.get();
       }
     }
   }
-  char* buffer;
-  sourceSrs->exportToWkt(&buffer);
-  LOG_DEBUG("Input SRS: " << buffer);
-  delete buffer;
 
   if (sourceSrs != 0 && sourceSrs->IsProjected())
   {
+    LOG_DEBUG("Input SRS: " << _toWkt(sourceSrs));
     _wgs84.reset(new OGRSpatialReference());
     if (_wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
     {
