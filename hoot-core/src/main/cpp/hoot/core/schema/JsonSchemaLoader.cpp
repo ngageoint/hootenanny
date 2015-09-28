@@ -294,7 +294,9 @@ private:
       const Object& obj = value.get_obj();
 
       QString toName;
-      double weight = -1;
+      double weight1 = -1;
+      double weight2 = -1;
+      bool oneway = false;
 
       for (size_t i = 0; i < obj.size(); i++)
       {
@@ -308,7 +310,26 @@ private:
         }
         else if (obj[i].name_ == "weight")
         {
-          weight = obj[i].value_.get_value<double>();
+          if (obj[i].value_.type() == array_type)
+          {
+            const Array& arr = obj[i].value_.get_array();
+
+            if (arr.size() != 2)
+            {
+              throw HootException("Expected either an array of size 2, or a single double as the "
+                "weight.");
+            }
+            weight1 = arr[0].get_value<double>();
+            weight2 = arr[1].get_value<double>();
+          }
+          else
+          {
+            weight1 = obj[i].value_.get_value<double>();
+          }
+        }
+        else if (obj[i].name_ == "oneway")
+        {
+          oneway = obj[i].value_.get_value<bool>();
         }
         else
         {
@@ -316,7 +337,22 @@ private:
                               obj[i].name_);
         }
       }
-      _schema.addSimilarTo(fromName, toName, weight);
+
+      if (weight1 >= 0 && weight2 >= 0)
+      {
+        if (oneway)
+        {
+          throw HootException("Expected only oneway and a single weight, or two weights. "
+            "Got both.");
+        }
+
+        _schema.addSimilarTo(fromName, toName, weight1, true);
+        _schema.addSimilarTo(toName, fromName, weight2, true);
+      }
+      else
+      {
+        _schema.addSimilarTo(fromName, toName, weight1, oneway);
+      }
     }
   }
 

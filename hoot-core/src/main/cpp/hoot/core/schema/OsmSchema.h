@@ -330,7 +330,7 @@ public:
 
   void addIsA(QString name1, QString name2);
 
-  void addSimilarTo(QString name1, QString name2, double weight);
+  void addSimilarTo(QString name1, QString name2, double weight, bool oneway = false);
 
   QString average(const QString& kvp1, double w1, const QString& kvp2, double w2, double& best);
 

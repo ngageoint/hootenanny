@@ -18,7 +18,7 @@
         "isA": "railway",
         "similarTo": { "name": "station=subway_entrance", "weight": 0.8 },
         "similarTo": { "name": "station=light_rail", "weight": 0.8 },
-        "similarTo": { "name": "transport=station", "weight": 0.8 }
+        "similarTo": { "name": "transport=station", "weight": [0.8, 0.3] }
     },
 
     "tag": {
@@ -29,22 +29,24 @@
     "tag": {
         "name": "railway=halt",
         "isA": "railway",
+        "similarTo": { "name": "public_transport=platform", "weight": [0.8, 0.3] },
+        "similarTo": { "name": "public_transport=stop_position", "weight": [0.8, 0.3] },
         "similarTo": { "name": "railway=station", "weight": 0.8 },
         "similarTo": { "name": "railway=subway_entrance", "weight": 0.8 },
         "similarTo": { "name": "station=subway_entrance", "weight": 0.8 },
         "similarTo": { "name": "station=light_rail", "weight": 0.8 },
-        "similarTo": { "name": "transport=station", "weight": 0.8 }
+        "similarTo": { "name": "transport=station", "weight": [0.8, 0.3] }
     },
     "tag": {
         "name": "railway=station",
         "isA": "railway",
         "similarTo": { "name": "building=train_station", "weight": 0.8 },
         "similarTo": { "name": "railway=halt", "weight": 0.8 },
-        "similarTo": { "name": "railway=station", "weight": 0.8 },
         "similarTo": { "name": "railway=subway_entrance", "weight": 0.8 },
+        "similarTo": { "name": "station=station", "weight": [0.8, 0.5] },
         "similarTo": { "name": "station=subway_entrance", "weight": 0.8 },
         "similarTo": { "name": "station=light_rail", "weight": 0.8 },
-        "similarTo": { "name": "transport=station", "weight": 0.8 }
+        "similarTo": { "name": "transport=station", "weight": [0.8, 0.5] }
     },
 
 

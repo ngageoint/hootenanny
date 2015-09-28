@@ -30,7 +30,10 @@
     "tag": { "name": "station", "isA": "hgispoi" },
     "tag": { "name": "station=*", "isA": "station" },
     "tag": { "name": "station=subway_entrance", "isA": "station" },
-    "tag": { "name": "station=light_rail", "isA": "station" },
+    "tag": { "name": "station=light_rail", "isA": "station",
+        "similarTo": { "name": "public_transport=station", "weight": [0.8, 0.4] },
+        "similarTo": { "name": "transport=station", "weight": [0.8, 0.4] }
+    },
 
     "tag": {
         "name": "use",

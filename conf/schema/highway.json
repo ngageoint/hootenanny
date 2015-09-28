@@ -158,6 +158,7 @@
         "name": "highway=bus_stop",
         "isA": "highway",
         "similarTo": { "name": "amenity=bus_station", "weight": 0.8 },
+        "similarTo": { "name": "public_transport=stop_position", "weight": [0.8, 0.4] },
         "geometries": ["node"],
         "categories": ["poi", "hgispoi"]
     },

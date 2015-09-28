@@ -222,7 +222,8 @@ public:
     return result;
   }
 
-  pair<EdgeId, EdgeId> addSimilarTo(QString name1, QString name2, double weight)
+  pair<EdgeId, EdgeId> addSimilarTo(QString name1, QString name2, double weight,
+    bool oneway = false)
   {
     TagEdge similarTo;
     similarTo.similarToWeight = weight;
@@ -232,7 +233,11 @@ public:
     VertexId vid1 = createOrGetVertex(name1);
     VertexId vid2 = createOrGetVertex(name2);
     EdgeId e1 = add_edge(vid1, vid2, similarTo, _graph).first;
-    EdgeId e2 = add_edge(vid2, vid1, similarTo, _graph).first;
+    EdgeId e2;
+    if (oneway == false)
+    {
+      e2 = add_edge(vid2, vid1, similarTo, _graph).first;
+    }
     return pair<EdgeId, EdgeId>(e1, e2);
   }
 
@@ -727,14 +732,17 @@ public:
       {
         QString srcStr = QString("v%1").arg(src);
         QString trgStr = QString("v%1").arg(trg);
-        if (_graph[*ei].type == IsA)
+        // only show is a relationships for legit tags. No need w/ things like "amenity" or "poi",
+        // it just clutters the graph.
+        if (_graph[*ei].type == IsA &&
+          (_graph[src].name.contains("=") && _graph[trg].name.contains("=")))
         {
-          result += QString("%1 -> %2 [arrowhead=normal,color=blue2,weight=2,label=\"%3\"];\n").arg(srcStr, trgStr).arg(_graph[*ei].similarToWeight);
+          result += QString("%1 -> %2 [arrowhead=normal,color=blue2,weight=1,label=\"%3\"];\n").arg(srcStr, trgStr).arg(_graph[*ei].similarToWeight);
         }
         else if (_graph[*ei].type == SimilarTo && _graph[*ei].show)
         {
-          result += QString("%1 -> %2 [arrowhead=odot,color=chartreuse3,weight=1,arrowtail=odot,label=\"%3\"];\n").
-              arg(srcStr, trgStr).arg(_graph[*ei].similarToWeight);
+          result += QString("%1 -> %2 [arrowhead=odot,color=chartreuse3,weight=%3,arrowtail=odot,label=\"%4\"];\n").
+              arg(srcStr, trgStr).arg(_graph[*ei].similarToWeight).arg(_graph[*ei].similarToWeight);
           used.insert(p);
         }
       }
@@ -1130,9 +1138,9 @@ void OsmSchema::addIsA(QString name1, QString name2)
   d->addIsA(name1, name2);
 }
 
-void OsmSchema::addSimilarTo(QString name1, QString name2, double weight)
+void OsmSchema::addSimilarTo(QString name1, QString name2, double weight, bool oneway)
 {
-  d->addSimilarTo(name1, name2, weight);
+  d->addSimilarTo(name1, name2, weight, oneway);
 }
 
 QString OsmSchema::average(const QString& kvp1, const QString& kvp2, double& score)
