@@ -218,6 +218,8 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 
   _writeStats.nodesWritten++;
   _incrementChangesInChangeset();
+
+  _checkUnresolvedReferences( n, nodeDbId );
 }
 
 void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
@@ -251,6 +253,8 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 
   _writeStats.waysWritten++;
   _incrementChangesInChangeset();
+
+  _checkUnresolvedReferences( w, wayDbId );
 }
 
 void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
@@ -469,7 +473,7 @@ void PostgresqlDumpfileWriter::_writeTagsToTables(
 
 void PostgresqlDumpfileWriter::_createWayTables()
 {
-  _createTable( "current_ways",       "COPY current_ways (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) FROM stdin;\n" );
+  _createTable( "current_ways",       "COPY current_ways (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n" );
   _createTable( "current_way_tags",   "COPY current_way_tags (way_id, k, v) FROM stdin;\n" );
   _createTable( "current_way_nodes",  "COPY current_way_nodes (way_id, node_id, sequence_id) FROM stdin;\n" );
 
