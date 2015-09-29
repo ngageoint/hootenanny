@@ -161,7 +161,7 @@ void PostgresqlDumpfileWriter::finalizePartial()
   std::remove(_outputFilename.toStdString().c_str());
 
   // Create our user data WITH byte order mark as it's first table written
-  _createTable( "users", "COPY users (email, id, pass_crypt, creation_time) FROM stdin;\n", true);
+  _createTable( "users", "COPY users (email, id, pass_crypt, creation_time) FROM stdin;\n");
 
   *(_outputSections["users"].second) <<
     QString("%1\t1\t''\tNOW()\n").arg(
@@ -681,7 +681,7 @@ void PostgresqlDumpfileWriter::_writeRelationMember( const ElementIdDatatype sou
 
 void PostgresqlDumpfileWriter::_createTable(const QString &tableName, const QString &tableHeader)
 {
-  _createTable(tableName, tableHeader, false);
+  _createTable(tableName, tableHeader, true);
 }
 
 void PostgresqlDumpfileWriter::_createTable( const QString& tableName, const QString& tableHeader,
