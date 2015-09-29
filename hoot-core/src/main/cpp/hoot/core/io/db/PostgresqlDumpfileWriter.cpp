@@ -149,10 +149,29 @@ void PostgresqlDumpfileWriter::close()
 
 void PostgresqlDumpfileWriter::finalizePartial()
 {
+  if ( (_writeStats.nodesWritten == 0) && (_writeStats.waysWritten == 0) &&
+       (_writeStats.relationsWritten == 0) )
+  {
+    return;
+  }
+
   LOG_INFO( QString("Finalize called, time to create ") + _outputFilename);
 
   // Remove file if it used to be there;
   std::remove(_outputFilename.toStdString().c_str());
+
+  // Create our user data WITH byte order mark as it's first table written
+  _createTable( "users", "COPY users (email, id, pass_crypt, creation_time) FROM stdin;\n", true);
+
+  *(_outputSections["users"].second) <<
+    QString("%1\t1\t''\tNOW()\n").arg(
+      QString("hootenannyingest@digitalglobe.com"));
+
+  // Do we have an unfinished changeset that needs flushing?
+  if ( _changesetData.changesInChangeset >  0 )
+  {
+    _writeChangesetToTable();
+  }
 
   for ( std::list<QString>::const_iterator it = _sectionNames.begin();
         it != _sectionNames.end(); ++it )
@@ -178,7 +197,10 @@ void PostgresqlDumpfileWriter::finalizePartial()
       QString("/bin/cat ") + (_outputSections[*it].first)->fileName() +
       QString(" >> ") + _outputFilename );
 
+    LOG_DEBUG("Flush cmd: " + cmdToExec );
+
     const int systemRetval = std::system( cmdToExec.toStdString().c_str() );
+
     if ( systemRetval != 0 )
     {
       LOG_ERROR("Flush for section " + *it + " had error, retval = " +
@@ -596,7 +618,7 @@ void PostgresqlDumpfileWriter::_writeRelationMembersToTables( const ConstRelatio
     if ( (knownElementMap != boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> >())
           && (knownElementMap->contains(memberElementId.getId()) == true) )
     {
-      _writeRelationMember(relationId, *it, knownElementMap->at(memberElementId.getId()), memberSequenceIndex);
+      _writeRelationMember(dbRelationId, *it, knownElementMap->at(memberElementId.getId()), memberSequenceIndex);
     }
     else
     {
@@ -657,7 +679,13 @@ void PostgresqlDumpfileWriter::_writeRelationMember( const ElementIdDatatype sou
   _writeStats.relationMembersWritten++;
 }
 
-void PostgresqlDumpfileWriter::_createTable( const QString& tableName, const QString& tableHeader )
+void PostgresqlDumpfileWriter::_createTable(const QString &tableName, const QString &tableHeader)
+{
+  _createTable(tableName, tableHeader, false);
+}
+
+void PostgresqlDumpfileWriter::_createTable( const QString& tableName, const QString& tableHeader,
+  const bool addByteOrderMark )
 {
   boost::shared_ptr<QTemporaryFile> tempfile( new QTemporaryFile() );
   if ( tempfile->open() == false )
@@ -669,8 +697,15 @@ void PostgresqlDumpfileWriter::_createTable( const QString& tableName, const QSt
       std::pair< boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> >(
         tempfile, boost::shared_ptr<QTextStream>(new QTextStream(tempfile.get())) );
 
-  // QString is UTF16, but database is encoded in UTF-8
+  // Database is encoded in UTF-8, so force encoding as otherwise file is in local
+  //    Western encoding which goes poorly for a lot of countries
   _outputSections[tableName].second->setCodec("UTF-8");
+
+  // First table written out should have byte order mark to help identifify content as UTF-8
+  if ( addByteOrderMark == true )
+  {
+    _outputSections[tableName].second->setGenerateByteOrderMark(true);
+  }
 
   *(_outputSections[tableName].second) << tableHeader.toUtf8();
 }
@@ -680,6 +715,7 @@ void PostgresqlDumpfileWriter::_incrementChangesInChangeset()
   _changesetData.changesInChangeset++;
   if ( _changesetData.changesInChangeset == _maxChangesInChangeset )
   {
+    _writeChangesetToTable();
     _changesetData.changesetId++;
     _changesetData.changesInChangeset = 0;
   }
@@ -699,10 +735,10 @@ void PostgresqlDumpfileWriter::_checkUnresolvedReferences(const ConstElementPtr&
     {
       LOG_DEBUG("Found unresolved relation member ref!");
       LOG_DEBUG( QString( "Relation ID ") + QString::number(relationRef->second.sourceRelationId) +
-        QString(" (DB ID=") + QString::number(relationRef->second.sourceRelationDbId) +
+        QString(" (DB ID=") + QString::number(relationRef->second.sourceDbRelationId) +
         QString(") has ref to ") + relationRef->second.relationMemberData.toString() );
 
-      _writeRelationMember(relationRef->second.sourceRelationId, relationRef->second.relationMemberData,
+      _writeRelationMember(relationRef->second.sourceDbRelationId, relationRef->second.relationMemberData,
         elementDbId, relationRef->second.relationMemberSequenceId );
 
       // Remove entry from unresolved list
@@ -740,6 +776,24 @@ QString PostgresqlDumpfileWriter::_escapeCopyToData(const QString& stringToOutpu
   escapedString.replace(QChar(13), QString("\\r"));
 
   return escapedString;
+}
+
+void PostgresqlDumpfileWriter::_writeChangesetToTable()
+{
+  if ( _changesetData.changesetId == 1 )
+  {
+    _createTable( "changesets", "COPY changesets (id, user_id, created_at, closed_at, num_changes) FROM stdin;\n" );
+  }
+
+  boost::shared_ptr<QTextStream> changesetsStream  = _outputSections["changesets"].second;
+  const QString datestring = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss.zzz");
+  const QString changesetFormat("%1\t1\t%2\t%2\t%3\n");
+
+  *changesetsStream << changesetFormat.arg(
+    QString::number(_changesetData.changesetId),
+    datestring,
+    QString::number(_changesetData.changesInChangeset) ).toUtf8();
+
 }
 
 }

@@ -142,7 +142,7 @@ protected:
   struct _UnresolvedRelationReference
   {
     ElementIdDatatype     sourceRelationId;
-    ElementIdDatatype     sourceRelationDbId;
+    ElementIdDatatype     sourceDbRelationId;
     RelationData::Entry   relationMemberData;
     unsigned int          relationMemberSequenceId;
   };
@@ -206,12 +206,16 @@ protected:
 
   void _createTable( const QString& tableName, const QString& tableHeader );
 
+  void _createTable( const QString& tableName, const QString& tableHeader, const bool addByteOrderMarker );
+
   void _incrementChangesInChangeset();
 
   void _checkUnresolvedReferences( const ConstElementPtr& element,
     const ElementIdDatatype elementDbId );
 
   QString _escapeCopyToData( const QString& stringToOutput) const;
+
+  void _writeChangesetToTable();
 };
 
 }
