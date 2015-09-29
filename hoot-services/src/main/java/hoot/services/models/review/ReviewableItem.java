@@ -72,6 +72,10 @@ public class ReviewableItem
   public String getAgainstList() {return againstList;}
   public void setAgainstList(final String agList) {againstList = agList;}
   
+  private long allReviewAgainstCnt = 0;
+  public long getAllReviewAgainstCnt() {return allReviewAgainstCnt;}
+  public void setAllReviewAgainstCnt(final long cnt) {this.allReviewAgainstCnt = cnt;}
+  
   public ReviewableItem()
   {
     

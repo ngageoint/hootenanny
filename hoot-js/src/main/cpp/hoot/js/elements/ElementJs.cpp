@@ -74,6 +74,8 @@ void ElementJs::_addBaseFunctions(Local<FunctionTemplate> tpl)
       FunctionTemplate::New(getStatusString)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("getTags"),
       FunctionTemplate::New(getTags)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("setStatusString"),
+      FunctionTemplate::New(setStatusString)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("setTags"),
       FunctionTemplate::New(setTags)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("toJSON"),
@@ -187,6 +189,28 @@ Handle<Object> ElementJs::New(ElementPtr e)
   }
 
   return scope.Close(result);
+}
+
+Handle<Value> ElementJs::setStatusString(const Arguments& args)
+{
+  HandleScope scope;
+
+  try
+  {
+    QString statusStr = toCpp<QString>(args[0]);
+
+    Status s = Status::fromString(statusStr);
+
+    ElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getElement();
+
+    e->setStatus(s);
+  }
+  catch ( const HootException& e )
+  {
+    return v8::ThrowException(HootExceptionJs::create(e));
+  }
+
+  return scope.Close(Undefined());
 }
 
 Handle<Value> ElementJs::setTags(const Arguments& args)

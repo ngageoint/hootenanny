@@ -638,59 +638,45 @@ public class DbUtils
   }
 
 
-//remove this. replace by calling hoot core layer delete native command
+  //remove this. replace by calling hoot core layer delete native command
   public static void deleteOSMRecordByName(Connection conn, String  mapName) throws Exception
   {
-    try
-    {
-			Configuration configuration = getConfiguration();
+		Configuration configuration = getConfiguration();
 
-			QMaps maps = QMaps.maps;
-    	List<Long> mapIds = new SQLQuery(conn, configuration).from(maps)
+		QMaps maps = QMaps.maps;
+  	List<Long> mapIds = new SQLQuery(conn, configuration).from(maps)
+		.where(maps.displayName.equalsIgnoreCase(mapName)).list(maps.id);
+
+  	if(mapIds.size() > 0)
+  	{
+    	Long mapId = mapIds.get(0);
+			deleteMapRelatedTablesByMapId(mapId);
+
+    	conn.setAutoCommit(false);
+
+			ListSubQuery<Long> res = new SQLSubQuery().from(maps)
 			.where(maps.displayName.equalsIgnoreCase(mapName)).list(maps.id);
 
-    	if(mapIds.size() > 0)
-    	{
-	    	Long mapId = mapIds.get(0);
-				deleteMapRelatedTablesByMapId(mapId);
+  	  new SQLDeleteClause(conn, configuration, maps)
+  	  .where(maps.displayName.eq(mapName))
+  	  .execute();
 
-	    	conn.setAutoCommit(false);
+  	  QReviewItems reviewItems = QReviewItems.reviewItems;
+  	  new SQLDeleteClause(conn, configuration, reviewItems)
+  	  .where(reviewItems.mapId.in(res))
+  	  .execute();
 
-				ListSubQuery<Long> res = new SQLSubQuery().from(maps)
-				.where(maps.displayName.equalsIgnoreCase(mapName)).list(maps.id);
+  	  QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
+  	  new SQLDeleteClause(conn, configuration, elementIdMappings)
+  	  .where(elementIdMappings.mapId.in(res))
+  	  .execute();
 
+  	  QReviewMap reviewMap = QReviewMap.reviewMap;
+  	  new SQLDeleteClause(conn, configuration, reviewMap)
+  	  .where(reviewMap.mapId.in(res))
+  	  .execute();
 
-    	new SQLDeleteClause(conn, configuration, maps)
-    	.where(maps.displayName.eq(mapName))
-    	.execute();
-
-    	QReviewItems reviewItems = QReviewItems.reviewItems;
-    	new SQLDeleteClause(conn, configuration, reviewItems)
-    	.where(reviewItems.mapId.in(res))
-    	.execute();
-
-    	QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
-    	new SQLDeleteClause(conn, configuration, elementIdMappings)
-    	.where(elementIdMappings.mapId.in(res))
-    	.execute();
-
-    	QReviewMap reviewMap = QReviewMap.reviewMap;
-    	new SQLDeleteClause(conn, configuration, reviewMap)
-    	.where(reviewMap.mapId.in(res))
-    	.execute();
-
-    	conn.commit();
-    }
-    }
-    catch (Exception e)
-    {
-      String msg = "Error deleting OSM record.  ";
-      if (e.getCause() instanceof BatchUpdateException)
-      {
-        BatchUpdateException batchException = (BatchUpdateException) e.getCause();
-        msg += "  " + batchException.getNextException().getMessage();
-      }
-      throw new Exception(msg);
+  	  conn.commit();
     }
   }
 

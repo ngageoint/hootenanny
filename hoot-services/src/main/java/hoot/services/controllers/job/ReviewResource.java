@@ -35,6 +35,7 @@ import java.util.Map;
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
+import hoot.services.exceptions.writer.review.ReviewItemsWriterException;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.ReviewAgainstItem;
@@ -59,6 +60,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -359,6 +361,10 @@ public class ReviewResource
     	Timestamp now = new Timestamp(date.getTime());
     	(new ReviewItemsRetriever(conn, mapId)).updateReviewLastAccessTime(reviewId, now, reviewAgainst);
     }
+    catch (ReviewItemsWriterException re)
+    {
+    	ReviewUtils.handleError(re, errorMessageStart + " (" + re.getSql() + ")", false);
+    }
     catch (Exception e)
     {
       ReviewUtils.handleError(e, errorMessageStart, false);
@@ -427,6 +433,10 @@ public class ReviewResource
       long lockedCnt = marker.getLockedReviewCntQuery().count();
       nextReviewableResponse.put("lockedcnt", lockedCnt);
     }
+    catch (ReviewItemsWriterException re)
+    {
+    	ReviewUtils.handleError(re, errorMessageStart + " (" + re.getSql() + ")", false);
+    }
     catch (Exception e)
     {
       ReviewUtils.handleError(e, errorMessageStart, false);
@@ -492,9 +502,8 @@ public class ReviewResource
    * item the specified element still needs to be reviewed against, as well as any other item that 
    * needs to use the specified element to review against it.
    * 
-   * @param mapId map owning the feature passed in
-   * @param elementId OSM ID of the element to be retrieved
-   * @param elementType OSM type of the element to be retrieved
+   * @param mapId map owning the feature whose review references are to be retrieved
+   * @param elementUniqueId unique ID of the element whose review references are to be retrieved
    * @return an array of review records
    * @throws Exception
    */
@@ -503,29 +512,31 @@ public class ReviewResource
   @Consumes(MediaType.TEXT_PLAIN)
   @Produces(MediaType.APPLICATION_JSON)
   public ReviewReferences getReviewReferences(
-    @QueryParam("mapId")
-    final long mapId,
-    @QueryParam("elementId")
-    final long elementId,
-    @QueryParam("elementType")
-    final String elementType)
+  	@QueryParam("mapId")
+  	final long mapId,
+    @QueryParam("elementUniqueId")
+    final String elementUniqueId)
     throws Exception
   {
+  	log.debug("Returning review references...");
+  	
   	Connection conn = DbUtils.createConnection();
   	ReviewReferences response = new ReviewReferences();
   	try
   	{
   		List<List<ReviewAgainstItem>> references = 
-  			(new ReviewReferencesRetriever(conn).getReferences(mapId, elementId, elementType));
+  			(new ReviewReferencesRetriever(conn).getReferences(mapId, elementUniqueId));
+  		log.debug("Returning " + references.get(0).size() + " review against items.");
   		response.setReviewAgainstItems(references.get(0).toArray(new ReviewAgainstItem[]{}));
+  		log.debug("Returning " + references.get(1).size() + " reviewable items.");
   		response.setReviewableItems(references.get(1).toArray(new ReviewAgainstItem[]{}));
   	}
   	catch (Exception e)
     {
       ReviewUtils.handleError(
       	e, 
-      	"Unable to retrieve review references for input: " + "mapId: " + mapId + 
-      	  ",elementId: " + elementId + ", elementType: " + elementType, 
+      	"Unable to retrieve review references for map ID: " + mapId + " and element unique ID: " + 
+      	  elementUniqueId, 
       	false);
     }
     finally
@@ -533,7 +544,7 @@ public class ReviewResource
       DbUtils.closeConnection(conn);
     }
   	
-  	log.debug("response : " + response.toString());
+  	log.debug("response : " + StringUtils.abbreviate(response.toString(), 1000));
   	return response;
   }
   
@@ -546,11 +557,10 @@ public class ReviewResource
    */
   @PUT
   @Path("/setallreviewed")
-  @Consumes(MediaType.TEXT_PLAIN)
+  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.TEXT_PLAIN)
   public Response setAllItemsReviewed(
-    @QueryParam("mapId")
-    final long mapId) 
+  	JSONObject request) 
     throws Exception
   {
   	Connection conn = DbUtils.createConnection();
@@ -559,9 +569,11 @@ public class ReviewResource
       transactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
     conn.setAutoCommit(false);
+    String mapId = null;
   	try
   	{
-  	  (new ReviewItemsSynchronizer(conn, String.valueOf(mapId))).setAllItemsReviewed();
+  		mapId = request.get("mapId").toString();
+  	  (new ReviewItemsSynchronizer(conn, mapId)).setAllItemsReviewed();
   		
   		log.debug("Committing set all items reviewed transaction...");
       transactionManager.commit(transactionStatus);

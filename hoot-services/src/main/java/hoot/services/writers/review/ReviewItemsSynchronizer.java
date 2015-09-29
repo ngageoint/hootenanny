@@ -40,6 +40,7 @@ import org.w3c.dom.NodeList;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.mysema.query.sql.SQLQuery;
+import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 import com.mysema.query.types.expr.BooleanExpression;
 
@@ -104,13 +105,14 @@ public class ReviewItemsSynchronizer
   	return reviewAgainstUuids;
   }
   
-  private int updateReviewRecordsFromCreateChangeset(final Document changesetDoc,
+  private void updateReviewRecordsFromCreateChangeset(final Document changesetDoc,
     final Map<ElementType, HashMap<Long, Element>> parsedElementIdsToElementsByType) 
     throws Exception
   {
   	log.debug("updateReviewRecordsFromCreateChangeset");
   	
   	int numReviewItemsUpdated = 0;
+  	long numElementIdMappingRecordsInserted = 0;
   	List<ElementIdMappings> elementIdMappingRecordsToInsert = new ArrayList<ElementIdMappings>();
     List<ReviewItems> reviewItemRecordsToInsert = new ArrayList<ReviewItems>();
   	
@@ -118,7 +120,7 @@ public class ReviewItemsSynchronizer
     //involved in a review.
   	final NodeList createdElements = 
   		XPathAPI.selectNodeList(changesetDoc, "//osmChange/create/*/tag[@k = 'uuid']/..");
-  	log.debug(String.valueOf(createdElements.getLength()));
+  	log.debug("createdElements: " + createdElements.getLength());
   	if (createdElements.getLength() > 0)
   	{
   		log.debug(XmlUtils.nodeListToString(createdElements));
@@ -131,6 +133,7 @@ public class ReviewItemsSynchronizer
     		final org.w3c.dom.Node elementXml = createdElements.item(i);
     		final String uuid = 
     			XPathAPI.selectSingleNode(elementXml, "tag[@k = 'uuid']/@v").getNodeValue();
+    		assert(StringUtils.trimToNull(uuid) != null);
     		final long changesetOsmElementId = 
     			Long.parseLong(elementXml.getAttributes().getNamedItem("id").getNodeValue());
     		final ElementType elementType = Element.elementTypeFromString(elementXml.getNodeName());
@@ -149,8 +152,8 @@ public class ReviewItemsSynchronizer
     	  XPathAPI.selectNodeList(
     	    changesetDoc, 
           "//osmChange/create/*/tag[@k = 'hoot:review:needs' and @v = 'yes']/..");
-    	log.debug(String.valueOf(createdReviewItems.getLength()));
-    	log.debug(XmlUtils.nodeListToString(createdReviewItems));
+    	log.debug("created review items: " + String.valueOf(createdReviewItems.getLength()));
+    	log.debug(StringUtils.abbreviate(XmlUtils.nodeListToString(createdReviewItems), 1000));
     	for (int i = 0; i < createdReviewItems.getLength(); i++)
     	{
     		//add the associated review data; not checking to see if the element already exists in the
@@ -158,22 +161,26 @@ public class ReviewItemsSynchronizer
     		final org.w3c.dom.Node elementXml = createdReviewItems.item(i);
     		final String uuid = 
     			XPathAPI.selectSingleNode(elementXml, "tag[@k = 'uuid']/@v").getNodeValue();
+    		assert(StringUtils.trimToNull(uuid) != null);
     		final String[] reviewAgainstUuids = reviewAgainstUuidsFromChangesetElement(elementXml);
     		if (reviewAgainstUuids != null)
     		{
       		for (int j = 0; j < reviewAgainstUuids.length; j++)
       		{
       			final String reviewAgainstUuid = reviewAgainstUuids[j];
-      			reviewItemRecordsToInsert.add(
-      	  		ReviewUtils.createReviewItemRecord(
-      	  			uuid, 
-      	  		  //TODO: the way to retrieve the correct score would be to trace back the elements 
-      	  			//that made up this (presumably) merged element...although you could argue that the 
-      	  			//old score is obsolete after a merge; this is possibly complicated, so holding off on 
-      	  			//doing fixing this for now
-      	  			1.0,
-      	  			reviewAgainstUuid, 
-      	  			mapId));
+      			if (StringUtils.trimToNull(reviewAgainstUuid) != null)
+      			{
+      				reviewItemRecordsToInsert.add(
+        	  		ReviewUtils.createReviewItemRecord(
+        	  			uuid, 
+        	  		  //TODO: the way to retrieve the correct score would be to trace back the elements 
+        	  			//that made up this (presumably) merged element...although you could argue that the 
+        	  			//old score is obsolete after a merge; this is possibly complicated, so holding off on 
+        	  			//doing fixing this for now
+        	  			1.0,
+        	  			reviewAgainstUuid, 
+        	  			mapId));
+      			}
       		}
     		}
     		else
@@ -191,22 +198,26 @@ public class ReviewItemsSynchronizer
     		}
     	}
     	
-      DbUtils.batchRecords(
-      	mapId, elementIdMappingRecordsToInsert, elementIdMappings, null, RecordBatchType.INSERT, 
-      	conn, maxRecordBatchSize);
+    	numElementIdMappingRecordsInserted =
+    		DbUtils.batchRecords(
+      	  mapId, elementIdMappingRecordsToInsert, elementIdMappings, null, RecordBatchType.INSERT, 
+      	  conn, maxRecordBatchSize);
     	numReviewItemsUpdated += 
     	  DbUtils.batchRecords(
       	  mapId, reviewItemRecordsToInsert, reviewItems, null, RecordBatchType.INSERT, conn, 
       	  maxRecordBatchSize);
   	}
   	
-  	return numReviewItemsUpdated;
+  	log.debug(numElementIdMappingRecordsInserted + 
+  		" element id mappings records inserted as a result of the create changeset.");
+  	log.debug(numReviewItemsUpdated + " review records inserted as a result of the create changeset.");
   }
   
-  private int updateReviewRecordsFromModifyChangeset(final Document changesetDoc) throws Exception
+  private void updateReviewRecordsFromModifyChangeset(final Document changesetDoc) throws Exception
   {
     log.debug("updateReviewRecordsFromModifyChangeset");
     
+    int numReviewItemsInserted = 0;
     int numReviewItemsUpdated = 0;
     
     //get a list of all the uuid's in the modify changeset (both types: reviewable and review 
@@ -214,6 +225,7 @@ public class ReviewItemsSynchronizer
     //they were never involved in a review at any time.
     final NodeList modifiedItems =
       XPathAPI.selectNodeList(changesetDoc, "//osmChange/modify/*/tag[@k = 'uuid']/..");
+    log.debug("modifiedItems: " + modifiedItems.getLength());
     if (modifiedItems.getLength() > 0)
     {
     	List<ElementIdMappings> elementIdMappingRecordsToInsert = new ArrayList<ElementIdMappings>();
@@ -228,6 +240,7 @@ public class ReviewItemsSynchronizer
         final org.w3c.dom.Node elementXml = modifiedItems.item(i);
         final String uuid =
           XPathAPI.selectSingleNode(elementXml, "tag[@k = 'uuid']/@v").getNodeValue();
+        assert(StringUtils.trimToNull(uuid) != null);
         changesetReviewableUuidsToXml.put(uuid, elementXml);
         allChangesetUniqueIds.add(uuid);
         final String[] reviewAgainstUuids = reviewAgainstUuidsFromChangesetElement(elementXml);
@@ -235,7 +248,11 @@ public class ReviewItemsSynchronizer
         {
           for (int j = 0; j < reviewAgainstUuids.length; j++)
           {
-          	allChangesetUniqueIds.add(reviewAgainstUuids[j]);
+          	final String reviewAgainstUuid = reviewAgainstUuids[j];
+          	if (StringUtils.trimToNull(reviewAgainstUuid) != null)
+          	{
+          		allChangesetUniqueIds.add(reviewAgainstUuid);
+          	}
           }
         }
       }
@@ -246,22 +263,39 @@ public class ReviewItemsSynchronizer
       List<ReviewItems> allExistingReviewRecordsFromChangeset = new ArrayList<ReviewItems>();
       if (changesetReviewableUuidsToXml.size() > 0)
       {
+        //Need to make queries in both directions here (reviewable/review against), since the review
+      	//tags are store reflexively (tags specify both "review A against B" and "review B against 
+      	//A", while the database records are not reflexive to avoid showing duplicate reviews to
+      	//users.  The client may be passing in multiple tag updates for the
+    		//same review (reviewable and review against item review tags), and we don't want that to 
+      	//cause a new redundant review record to be added.
       	allExistingReviewRecordsFromChangeset = 
       		new SQLQuery(conn, DbUtils.getConfiguration(mapId))
             .from(reviewItems)
             .where(
-        	    reviewItems.reviewableItemId.in(changesetReviewableUuidsToXml.keySet())
-                .and(reviewItems.mapId.eq(mapId)))
+            	reviewItems.mapId.eq(mapId)
+            	.and(
+        	      reviewItems.reviewableItemId.in(changesetReviewableUuidsToXml.keySet())
+        	        .or(reviewItems.reviewAgainstItemId.in(changesetReviewableUuidsToXml.keySet()))))
             .list(reviewItems);
       }
       Map<String, ReviewItems> dbReviewableUuidsToReviewRecords = new HashMap<String, ReviewItems>();
       ListMultimap<String, String> dbReviewableUuidsToReviewAgainstUuids = ArrayListMultimap.create();
+      Map<String, String> dbReviewAgainstUuidsToReviewableUuids = new HashMap<String, String>();
       for (ReviewItems reviewItem : allExistingReviewRecordsFromChangeset)
       {
-      	dbReviewableUuidsToReviewRecords.put(
-      		reviewItem.getReviewableItemId() + ";" + reviewItem.getReviewAgainstItemId(), reviewItem);
-      	dbReviewableUuidsToReviewAgainstUuids.put(
-      		reviewItem.getReviewableItemId(), reviewItem.getReviewAgainstItemId());
+      	if (StringUtils.trimToNull(reviewItem.getReviewableItemId()) != null &&
+      			StringUtils.trimToNull(reviewItem.getReviewAgainstItemId()) != null)
+      	{
+      		dbReviewableUuidsToReviewRecords.put(
+        		reviewItem.getReviewableItemId() + ";" + reviewItem.getReviewAgainstItemId(), reviewItem);
+      	  //see note above for why a map is kept both reviewable id --> review against --> id
+      		//and vice versa
+        	dbReviewableUuidsToReviewAgainstUuids.put(
+        		reviewItem.getReviewableItemId(), reviewItem.getReviewAgainstItemId());
+        	dbReviewAgainstUuidsToReviewableUuids.put(
+          	reviewItem.getReviewAgainstItemId(), reviewItem.getReviewableItemId());
+      	}
       }
       
       //we need this to know whether a new element id mapping record needs to be created or not; 
@@ -280,6 +314,7 @@ public class ReviewItemsSynchronizer
       	final org.w3c.dom.Node elementXml = nodeEntry.getValue();
       	final String uuid =
           XPathAPI.selectSingleNode(elementXml, "tag[@k = 'uuid']/@v").getNodeValue();
+      	assert(StringUtils.trimToNull(uuid) != null);
       	
       	//create element id mapping for reviewable in case it doesn't already exist (possible if it
       	//was created by a post conflate db dump and wasn't involved in a review at that time)
@@ -300,9 +335,12 @@ public class ReviewItemsSynchronizer
           for (int j = 0; j < reviewAgainstUuids.length; j++)
           {
           	final String reviewAgainstUuid = reviewAgainstUuids[j];
-          	//if a corresponding record for the reviewable/review against doesn't exist; if it does 
-          	//exist, do nothing (leave existing record unreviewed)
-          	if (!dbReviewableUuidsToReviewRecords.containsKey(uuid + ";" + reviewAgainstUuid))
+          	//if a corresponding record for the reviewable/review against doesn't exist AND its 
+          	//inverse record doesn't exist, create a new record; if either exists, do nothing 
+          	//(leave existing records unreviewed)
+          	if (StringUtils.trimToNull(reviewAgainstUuid) != null && 
+          			!dbReviewableUuidsToReviewRecords.containsKey(uuid + ";" + reviewAgainstUuid) &&
+          			!dbReviewableUuidsToReviewRecords.containsKey(reviewAgainstUuid + ";" + uuid))
           	{
           		//create an insert record
           		reviewRecordsToInsert.add(
@@ -324,15 +362,18 @@ public class ReviewItemsSynchronizer
           	}
           }
           
-          //for each record where the record has a review against uuid that isn't in the set of 
-          //parsed review against id's from the changeset, create an update record for it marked as 
-          //reviewed
+          //for each record where the record has an existing db review against uuid that isn't in 
+          //the set of parsed review against id's from the changeset, create an update record for 
+          //it marked as reviewed
           List<String> existingReviewAgainstIds = dbReviewableUuidsToReviewAgainstUuids.get(uuid);
           List<String> reviewAgainstUuidsList = Arrays.asList(reviewAgainstUuids);
           for (String id : existingReviewAgainstIds)
           {
-          	if (!reviewAgainstUuidsList.contains(id))
+          	if (!reviewAgainstUuidsList.contains(id) && 
+          			//If the record doesn't already exist the we can't update it here.
+          			dbReviewableUuidsToReviewRecords.containsKey(uuid + ";" + id))
           	{
+
           		ReviewItems reviewRecord = 
             		ReviewUtils.createReviewItemRecord(
                   uuid,
@@ -350,14 +391,18 @@ public class ReviewItemsSynchronizer
         	List<String> existingReviewAgainstIds = dbReviewableUuidsToReviewAgainstUuids.get(uuid);
           for (String id : existingReviewAgainstIds)
           {
-        		ReviewItems reviewRecord = 
-          		ReviewUtils.createReviewItemRecord(
-                uuid,
-                1.0, //TODO: see comment in updateCreatedReviewItems
-                id,
-                mapId);
-          	reviewRecord.setReviewStatus(DbUtils.review_status_enum.reviewed);
-          	reviewRecordsToUpdate.add(reviewRecord);
+            //If the record doesn't already exist the we can't update it here.
+      			if (dbReviewableUuidsToReviewRecords.containsKey(uuid + ";" + id))
+          	{
+          		ReviewItems reviewRecord = 
+            		ReviewUtils.createReviewItemRecord(
+                  uuid,
+                  1.0, //TODO: see comment in updateCreatedReviewItems
+                  id,
+                  mapId);
+            	reviewRecord.setReviewStatus(DbUtils.review_status_enum.reviewed);
+            	reviewRecordsToUpdate.add(reviewRecord);
+          	}
           }
         }
       }
@@ -366,7 +411,7 @@ public class ReviewItemsSynchronizer
       //in use b/c they aren't involved in reviews, but that seems difficult and they aren't hurting
       //anything by being in the database and not being used...
       
-      numReviewItemsUpdated += 
+      numReviewItemsInserted += 
     	  DbUtils.batchRecords(
       	  mapId, reviewRecordsToInsert, reviewItems, null, RecordBatchType.INSERT, 
       	  conn, maxRecordBatchSize);
@@ -389,35 +434,68 @@ public class ReviewItemsSynchronizer
       	  mapId, reviewRecordsToUpdate, reviewItems, predicatelist, RecordBatchType.UPDATE, 
       	  conn, maxRecordBatchSize);
     }
-  	
-  	return numReviewItemsUpdated;
+    
+    log.debug(
+    	numReviewItemsInserted + " review records inserted as a result of the modify changeset.");
+    log.debug(
+    	numReviewItemsUpdated + " review records updated as a result of the modify changeset.");
   }
   
-  private int updateReviewRecordsFromDeleteChangeset(final Document changesetDoc) throws Exception
+  //This code is heavily tailored for the POI merge use case and has only been tested against that
+  //so far.  Not sure what affect this code would have on other types of reviews yet...
+  private void updateReviewRecordsFromDeleteChangeset(final Document changesetDoc) throws Exception
   {
   	int numReviewItemsUpdated = 0;
+  	int numReviewItemsDeleted = 0;
   	
   	final NodeList deletedItems = 
   	  XPathAPI.selectNodeList(changesetDoc, "//osmChange/delete/*/tag[@k = 'uuid']/@v");
   	List<String> deletedItemUuids = new ArrayList<String>();
   	for (int i = 0; i < deletedItems.getLength(); i++)
   	{
-  		deletedItemUuids.add(deletedItems.item(i).getNodeValue());
+  		final String deletedItemUuid = deletedItems.item(i).getNodeValue();
+  		if (StringUtils.trimToNull(deletedItemUuid) != null)
+  		{
+  			deletedItemUuids.add(deletedItems.item(i).getNodeValue());
+  		}
   	}
-  	log.debug("deletedItemUuids: " + deletedItemUuids.toString());
 
-  	//rather than deleting the records, just update any review record involving the deleted items
   	if (deletedItemUuids.size() > 0)
   	{
-  		new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), reviewItems)
-		    .where(
-		  	  reviewItems.reviewableItemId.in(deletedItemUuids)
-		  	    .or(reviewItems.reviewAgainstItemId.in(deletedItemUuids)))
-		    .set(reviewItems.reviewStatus, DbUtils.review_status_enum.reviewed)
-		    .execute();
+  	  //If a record is made up entirely of deleted items (reviewable and review against)...like 
+  		//when two are deleted as the result of a merge...then mark the record as reviewed.  This is 
+  		//kind of a really big assumption.  Just b/c two features that were part of the same review 
+  		//were deleted doesn't mean they were ever actually reviewed, but there doesn't seem to be 
+  		//any better way to handle this.
+  		numReviewItemsUpdated += 
+  			new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), reviewItems)
+		      .where(
+		      	reviewItems.mapId.eq(mapId)
+		      	  .and(reviewItems.reviewableItemId.in(deletedItemUuids)
+		  	        .and(reviewItems.reviewAgainstItemId.in(deletedItemUuids))))
+		  	  .set(reviewItems.reviewStatus, DbUtils.review_status_enum.reviewed)
+		      .execute();
+  	  //Otherwise, delete the review record, b/c the client should have handled fixing the 
+  		//orphaned record links already.  In other words, the review never happened due to it being
+  		//OBE by the poi merge, record links were updated to reflect that with new review records,
+  		//and these records should then be deleted.  Here we're deleting all records where one of the 
+  		//uuid's is in the reviewableItemId or the reviewAgainstItemId, but not both.  This is also
+  		//a fairly big assumption, but once again, not sure of a better way to handle it right now.
+  		numReviewItemsDeleted += 
+  			new SQLDeleteClause(conn, DbUtils.getConfiguration(mapId), reviewItems)
+		      .where(
+		      	reviewItems.mapId.eq(mapId)
+		      	  .and(
+		      	  	reviewItems.reviewableItemId.in(deletedItemUuids)
+		  	          .and(reviewItems.reviewAgainstItemId.notIn(deletedItemUuids))
+		  	        .or(
+		  	      	  reviewItems.reviewAgainstItemId.in(deletedItemUuids)
+		  	      	    .and(reviewItems.reviewableItemId.notIn(deletedItemUuids)))))
+		      .execute();
   	}  	
   	
-  	return numReviewItemsUpdated;
+  	log.debug(numReviewItemsUpdated + " review records updated as a result of the delete changeset.");
+  	log.debug(numReviewItemsDeleted + " review records deleted as a result of the delete changeset.");
   }
    
   /**
@@ -435,20 +513,14 @@ public class ReviewItemsSynchronizer
   { 
   	if ((new ReviewMapValidator(conn)).mapIsPrepared(String.valueOf(mapId)))
   	{
-  		int numReviewItemsUpdated = 0;
       log.debug("Updating review items for changeset...");
       
-      //Items in the create changeset are passed in with temporary id's that the server replaces.  So,
-      //we need to pass the id mapping data structure to this method so it has the correct ID's 
+      //Items in the create changeset are passed in with temporary id's that the server replaces.  
+      //So, we need to pass the id mapping data structure to this method so it has the correct ID's 
       //without having to do extra database queries for them.
-    	numReviewItemsUpdated += 
-    		updateReviewRecordsFromCreateChangeset(changesetDoc, parsedElementIdsToElementsByType);
-    	numReviewItemsUpdated += updateReviewRecordsFromModifyChangeset(changesetDoc);
-    	numReviewItemsUpdated += updateReviewRecordsFromDeleteChangeset(changesetDoc);
-    	
-    	log.debug(
-        String.valueOf(numReviewItemsUpdated) + " review records were updated as a result of " +
-        "the changeset save.");
+    	updateReviewRecordsFromCreateChangeset(changesetDoc, parsedElementIdsToElementsByType);
+    	updateReviewRecordsFromModifyChangeset(changesetDoc);
+    	updateReviewRecordsFromDeleteChangeset(changesetDoc);
   	}
   	else
   	{

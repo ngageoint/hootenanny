@@ -14,7 +14,7 @@
     "tag": {
         "name": "hgispoi",
         "isA": "poi=yes",
-        "categories": ["hgispoi"]
+        "categories": ["poi", "hgispoi"]
     },
 
     "#" : "For water POI's, see WaterwaySchema.json.",
@@ -44,7 +44,3 @@
 
     "#" : "end"
 }
-
-
-
-

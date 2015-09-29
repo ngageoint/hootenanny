@@ -250,6 +250,10 @@ reviewPrepareOverwriteExistingDataDefault=false
 # If true, temp UUID database records will be cleaned up after review records are prepared.  Since
 # this sometimes causes problems with some datasets, making it optional as a temporary solution.
 reviewPrepareCleanup=true
+# Checks to make sure each review record has an element id mapping record present before inserting 
+# it into the database, which is very expensive.  Unfortunately, disabling causes problems with
+# some datasets.
+checkForElementIdMappingPerReviewRecordWrite=true
 
 # review item lock time in millisec
 reviewLockTime=300000

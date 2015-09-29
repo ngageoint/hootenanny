@@ -53,13 +53,13 @@ import hoot.services.review.ReviewUtils;
  * 
  * This is an attempt to resolve the handling of fuzzy matches (see #6269), as well as make paired 
  * review items come from the same data sources consistently (see #6320).
- * 
- * @todo If this code is permanently usable, then the unit tests need to be rewritten for it.  See
- * #6270.
  */
 public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
 {
   private static final Logger log = LoggerFactory.getLogger(ReviewPrepareDbWriter2.class);
+  
+  private static final int MAX_WARN_MESSAGES = 10;
+  private int warnMessagesDisplayed = 0;
 
   public ReviewPrepareDbWriter2() throws Exception
   {
@@ -108,43 +108,53 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
             final String uniqueElementIdStr = StringUtils.trimToNull(tags.get("uuid"));
             if (uniqueElementIdStr == null)
             {
-              //this should probably be a warn, but is happening a lot and cluttering up the logs...
-            	//not worrying about it for now, since new implementation is on the way
-              log.debug(
-                "Invalid UUID: " + uniqueElementIdStr + " for map with ID: " + mapId +
-                ".  Skipping adding unique ID record...");
+            	if (warnMessagesDisplayed <= MAX_WARN_MESSAGES)
+            	{
+            		log.warn(
+                  "Invalid UUID: " + uniqueElementIdStr + " for map with ID: " + mapId +
+                  ".  Skipping adding unique ID record...");
+            		warnMessagesDisplayed++;
+            	}
             }
             else
             {
-              //In the case of the fuzzy match conflict example, this ID may be made up of multiple
-              //parts.  Treat each ID part separately.  
-            	// TODO: change for fuzzy matches was invalid, so backing it out; fix and add test 
-            	// for this case
-              String[] uniqueElementIds = null;
-              /*if (uniqueElementIdStr.contains(";"))
+            	//There actually can be more than one unique element ID for the same element, which is
+          		//counter-intuitive.  This is b/c we store element ID's by both breaking up 
+            	//concatenated uuid's and storing them whole.  This may not be the best way to handle 
+            	//storing the unique element ID's, but was necessary to avoid the client sending ID's 
+            	//from reviews that the server knew nothing about.  This shouldn't, however, result 
+            	//in any duplicated review records, since we don't break up ID's in the same way when
+            	//writing them.  
+            	List<String> uniqueElementIds = new ArrayList<String>();
+          		uniqueElementIds.add(uniqueElementIdStr);
+              if (uniqueElementIdStr.contains(";"))
               {
-                log.debug("Multiple part UUID...");
-                uniqueElementIds = uniqueElementIdStr.split(";");
+                //log.debug("Multiple part UUID...");
+                String[] uniqueElementIdsArr = uniqueElementIdStr.split(";");
+                for (String id : uniqueElementIdsArr)
+                {
+                	uniqueElementIds.add(id);
+                }
               }
-              else
-              {*/
-                uniqueElementIds = new String[1];
-                uniqueElementIds[0] = uniqueElementIdStr;
-              //}
                 
               for (String uniqueElementId : uniqueElementIds)
               {
-              	//TODO: make this a batch query somehow
-                if(
-                  new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(elementIdMappings)
-                	  .where(elementIdMappings.mapId.eq(mapId)
-                  		.and(elementIdMappings.elementId.eq(uniqueElementId))).count() > 0)
+              	//TODO: get rid of this check after enough datasets have been tested to prove
+              	//its not needed
+                if(checkForElementIdMappingPerReviewRecordWrite &&
+                	 new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                     .from(elementIdMappings)
+                	   .where(elementIdMappings.mapId.eq(mapId)
+                  		 .and(elementIdMappings.elementId.eq(uniqueElementId)))
+                  	 .count() > 0)
                 {
-                  //this should probably be a warn, but is happening a lot and cluttering up the logs...
-                	//not worrying about it for now, since new implementation is on the way
-                  log.debug(
-                    "UUID: " + uniqueElementId + " for map with ID: " + mapId + " already exists.  " +
-                    "Skipping adding unique ID record...");
+                	if (warnMessagesDisplayed <= MAX_WARN_MESSAGES)
+                	{
+                		log.warn(
+                      "UUID: " + uniqueElementId + " for map with ID: " + mapId + " already exists.  " +
+                      "Skipping adding unique ID record...");
+                		warnMessagesDisplayed++;
+                	}
                 }
                 else
                 {
@@ -159,8 +169,6 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                   }
                   else
                   {
-                    //this should probably be a warn, but is happening a lot and cluttering up the logs...
-                  	//not worrying about it for now, since new implementation is on the way
                     log.debug(
                       "Duplicate element ID: " + uniqueElementId.toString() + " for map with ID: " +
                       mapId + ".  Skipping adding unique ID record...");
@@ -194,7 +202,6 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
     final String logMsgStart =
       "Parsing element review tags for map with ID: " + mapId + ".  Step 3 of 4.";
     log.info(logMsgStart);
-    //SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
     //parse review tags for all nodes, ways, and relations from the OSM element tables for the given
     //map
     reviewRecordsParsed = 0;
@@ -228,29 +235,18 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
             final String reviewableItemIdStr = StringUtils.trimToNull(tags.get("uuid"));
             if (StringUtils.isEmpty(reviewableItemIdStr))
             {
-            	//this should probably be a warn, but is happening a lot and cluttering up the logs...
-            	//not worrying about it for now, since new implementation is on the way
-              log.debug(
-                "Invalid UUID: " + reviewableItemIdStr + " for map with ID: " + mapId +
-                " Skipping adding review record...");
+            	if (warnMessagesDisplayed <= MAX_WARN_MESSAGES)
+            	{
+            		log.warn(
+                  "Invalid UUID: " + reviewableItemIdStr + " for map with ID: " + mapId +
+                  " Skipping adding review record...");
+            		warnMessagesDisplayed++;
+            	}
             }
             else
             {
-            	//In the case of the fuzzy match conflict example, this ID may be made up of multiple
-              //parts.  Treat each ID part separately.  
-              // TODO: change for fuzzy matches was invalid, so backing it out; fix and add test 
-            	// for this case
-              String[] reviewableItemIds = null;
-              /*if (reviewableItemIdStr.contains(";"))
-              {
-                log.debug("Multiple part reviewable item ID...");
-                reviewableItemIds = reviewableItemIdStr.split(";");
-              }
-              else
-              {*/
-            	  reviewableItemIds = new String[1];
-            	  reviewableItemIds[0] = reviewableItemIdStr;
-              //}
+              String[] reviewableItemIds = new String[1];
+            	reviewableItemIds[0] = reviewableItemIdStr;
               
               for (String reviewableItemId : reviewableItemIds)
               {
@@ -301,21 +297,24 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                   for (int i = 0; i < reviewAgainstItemIds.length; i++)
                   {
                     final String reviewAgainstItemId = reviewAgainstItemIds[i];
-                    //TODO: I believe this check is not correct, but I know of no other way to handle
-                    //this for now...
-                    //TODO: make this a batch query somehow
-                    if (new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                    //TODO: This check is expensive, but unfortunately, it is needed with some
+                    //datasets (checkForElementIdMappingPerReviewRecordWrite should always be set 
+                    //to true).  It would be nice to be able to get rid of this check completely.
+                    if (checkForElementIdMappingPerReviewRecordWrite &&
+                    		new SQLQuery(conn, DbUtils.getConfiguration(mapId))
                           .from(elementIdMappings)
                           .where(elementIdMappings.mapId.eq(mapId)
                       		  .and(elementIdMappings.elementId.eq(reviewAgainstItemId)))
                       		.count() == 0)
                     {
-                      //this should probably be a warn, but is happening a lot and cluttering up the logs...
-                    	//not worrying about it for now, since new implementation is on the way
-                      log.debug(
-                        "No element ID mapping exists for review against item with ID: " +
-                        reviewAgainstItemId + " for map with ID: " + mapId + ".  Skipping adding " +
-                        "review record...");
+                    	if (warnMessagesDisplayed <= MAX_WARN_MESSAGES)
+                    	{
+                    		log.warn(
+                          "No element ID mapping exists for review against item with ID: " +
+                          reviewAgainstItemId + " for map with ID: " + mapId + ".  Skipping adding " +
+                          "review record...");
+                    		warnMessagesDisplayed++;
+                    	}
                     }
                     else
                     {
