@@ -419,6 +419,20 @@ public:
     }
   }
 
+  vector<TagVertex> getAllTags()
+  {
+    vector<TagVertex> result;
+
+    result.reserve(_kvp2Vertex.size());
+    for (QHash<QString, VertexId>::const_iterator it = _kvp2Vertex.begin();
+      it != _kvp2Vertex.end(); ++it)
+    {
+      result.push_back(_graph[it.value()]);
+    }
+
+    return result;
+  }
+
   vector<TagVertex> getAssociatedTags(QString name)
   {
     set<VertexId> vids;
@@ -488,6 +502,38 @@ public:
     else
     {
       result = kvp.left(index);
+    }
+
+    return result;
+  }
+
+  vector<TagVertex> getSimilarTags(QString kvp1, double minimumScore)
+  {
+    vector<TagVertex> result;
+    QString kvpn1 = normalizeEnumeratedKvp(kvp1);
+
+    if (kvpn1.isEmpty() == false)
+    {
+      VertexId id1 = _kvp2Vertex[kvpn1];
+
+      if (_processed.find(id1) == _processed.end())
+      {
+        _calculateScores(id1);
+        _processed.insert(id1);
+      }
+
+      if (_vertexToScoresCache.find(id1) != _vertexToScoresCache.end())
+      {
+        const vector< pair< VertexId, double > >& similars = _vertexToScoresCache[id1];
+
+        for (size_t i = 0; i < similars.size(); i++)
+        {
+          if (similars[i].second >= minimumScore)
+          {
+            result.push_back(_graph[similars[i].first]);
+          }
+        }
+      }
     }
 
     return result;
@@ -606,11 +652,19 @@ public:
         result = 0.0;
       }
 
-      // if this is a enumerated wild card match, but the values are different then use the
-      // mismatch score. E.g. addr:housenumber=12 vs. addr:housenumber=56
       if (id1 == id2 && kvp1 != kvp2)
       {
-        result = getTagVertex(kvpn1).mismatchScore;
+        // if this is a enumerated wild card match, but the values are different then use the
+        // mismatch score. E.g. addr:housenumber=12 vs. addr:housenumber=56
+        if (kvpn1.endsWith("=*"))
+        {
+          result = getTagVertex(kvpn1).mismatchScore;
+        }
+        // if this is an alias match
+        else
+        {
+          result = 1.0;
+        }
       }
     }
 
@@ -718,6 +772,8 @@ private:
   HashMap<AverageKey, AverageResult> _cachedAverages;
   QList< pair<QRegExp, VertexId> > _regexKeys;
   HashMap< pair<VertexId, VertexId>, bool > _isAncestorCache;
+  typedef HashMap< VertexId, vector< pair< VertexId, double > > > VertexToScoreCache;
+  VertexToScoreCache _vertexToScoresCache;
 
   TagGraph _graph;
 
@@ -824,6 +880,13 @@ private:
       pair<VertexId, VertexId> key = pair<VertexId, VertexId>(vd, *vi);
       _cachedScores[key] = d[*vi];
       //LOG_DEBUG("  " << _graph[*vi].name.toStdString() << " : " << d[*vi]);
+
+      // cache the score between vd and vi in another structure that is more efficient for other
+      // query types.
+      if (d[*vi] > 0.0)
+      {
+        _vertexToScoresCache[vd].push_back(pair<VertexId, double>(*vi, d[*vi]));
+      }
     }
   }
 
@@ -1088,6 +1151,11 @@ void OsmSchema::createTestingGraph()
   d->createTestingGraph();
 }
 
+vector<TagVertex> OsmSchema::getAllTags()
+{
+  return d->getAllTags();
+}
+
 vector<TagVertex> OsmSchema::getAssociatedTags(QString name)
 {
   return d->getAssociatedTags(name);
@@ -1152,6 +1220,15 @@ OsmSchema& OsmSchema::getInstance()
 double OsmSchema::getIsACost() const
 {
   return d->getIsACost();
+}
+
+vector<TagVertex> OsmSchema::getSimilarTags(QString name, double minimumScore)
+{
+  if (minimumScore <= 0)
+  {
+    throw IllegalArgumentException("minimumScore must be > 0");
+  }
+  return d->getSimilarTags(name, minimumScore);
 }
 
 vector<TagVertex> OsmSchema::getTagByCategory(OsmSchemaCategory c) const
@@ -1330,6 +1407,19 @@ bool OsmSchema::isCollection(const Element& e) const
   return result;
 }
 
+bool OsmSchema::isHgisPoi(const Element& e)
+{
+  bool result = false;
+
+  // See ticket #6853 for a definition of a "HGIS POI"
+  if (e.getElementType() == ElementType::Node)
+  {
+    result = hasCategory(e.getTags(), OsmSchemaCategory::hgisPoi().toString());
+  }
+
+  return result;
+}
+
 bool OsmSchema::isLinearHighway(const Tags& t, ElementType type)
 {
   bool result = false;
@@ -1458,6 +1548,11 @@ double OsmSchema::score(const QString& kvp1, const QString& kvp2)
 {
   // I tried using a LruCache here to speed up scoring, but it had a negative impact. :(
   return std::max(d->score(kvp1, kvp2), d->score(kvp2, kvp1));
+}
+
+double OsmSchema::scoreOneWay(const QString& kvp1, const QString& kvp2)
+{
+  return d->score(kvp1, kvp2);
 }
 
 void OsmSchema::setIsACost(double cost)

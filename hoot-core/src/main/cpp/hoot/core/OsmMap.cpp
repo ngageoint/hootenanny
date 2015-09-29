@@ -585,7 +585,7 @@ void OsmMap::removeElement(ElementId eid)
   switch (eid.getType().getEnum())
   {
   case ElementType::Node:
-    removeNode(eid.getId());
+    removeNodeFully(eid.getId());
     break;
   case ElementType::Way:
     removeWayFully(eid.getId());
@@ -625,6 +625,30 @@ void OsmMap::removeNode(long nid)
     throw HootException("Removing a node, but it is still part of one or more ways.");
   }
   removeNodeNoCheck(nid);
+}
+
+void OsmMap::removeNodeFully(long nId)
+{
+  // copy the set because we may modify it later.
+  set<long> rid = getIndex().getElementToRelationMap()->
+      getRelationByElement(ElementId::way(nId));
+
+  for (set<long>::const_iterator it = rid.begin(); it != rid.end(); ++it)
+  {
+    getRelation(*it)->removeElement(ElementId::node(nId));
+  }
+
+  const shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
+  const set<long> ways = n2w->getWaysByNode(nId);
+
+  for (set<long>::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  {
+    getWay(*it)->removeNode(nId);
+  }
+
+  removeNodeNoCheck(nId);
+
+  VALIDATE(validate());
 }
 
 void OsmMap::removeNodeNoCheck(long nId)

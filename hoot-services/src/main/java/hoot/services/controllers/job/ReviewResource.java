@@ -36,15 +36,14 @@ import java.util.UUID;
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
+import hoot.services.exceptions.writer.review.ReviewItemsWriterException;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobStatusManager;
 import hoot.services.models.osm.ModelDaoUtils;
-import hoot.services.models.review.MarkItemsReviewedRequest;
-import hoot.services.models.review.MarkItemsReviewedResponse;
-import hoot.services.models.review.ReviewableItem;
-import hoot.services.models.review.ReviewableItemsResponse;
+import hoot.services.models.review.ReviewAgainstItem;
+import hoot.services.models.review.ReviewReferences;
 import hoot.services.models.review.ReviewableItemsStatistics;
-import hoot.services.readers.review.ReviewableItemRetriever;
+import hoot.services.readers.review.ReviewReferencesRetriever;
 import hoot.services.readers.review.ReviewableItemsStatisticsCalculator;
 import hoot.services.readers.review.ReviewableItemsReader;
 import hoot.services.review.DisplayBoundsCalculator;
@@ -64,9 +63,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
-//import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -310,6 +310,7 @@ public class ReviewResource
     String geospatialBounds)
     throws Exception
   {
+  	log.debug("Initializing database connection...");
   	Connection conn = DbUtils.createConnection();
     final String errorMessageStart = "retrieving reviewable items statistics";
     ReviewableItemsStatistics stats = null;
@@ -344,23 +345,18 @@ public class ReviewResource
             "reviewGetGeospatialBoundsDefault",
             HootProperties.getDefault("reviewGetGeospatialBoundsDefault")));
 
-      log.debug("Initializing database connection...");
-
-
       stats =
         (new ReviewableItemsStatisticsCalculator(conn, mapId, true)).getStatistics(
           reviewScoreThresholdMinimum, geospatialBoundsObj);
       
-      ReviewItemsMarker marker = new ReviewItemsMarker(conn, mapId);
+      ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
 
-    	long cnt = marker.getAvailableReviewCnt();
+    	long cnt = marker.getAvailableReviewCntQuery().count();
     	//nextItem.put("status", "noneavailable");
     	if(cnt == 0)
     	{
     		stats.setNumReviewableItems(0);
     	}
-    	
-  		
     }
     catch (Exception e)
     {
@@ -825,29 +821,32 @@ public class ReviewResource
   
 
   
+  @SuppressWarnings("unchecked")
   @PUT
   @Path("/updatestatus")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public JSONObject updateStatus(
-  	JSONObject markItemsReviewedRequest,
+  	JSONObject updateReviewStatusRequest,
     @QueryParam("mapId")
     String mapId)
     throws Exception
   {
     Connection conn = DbUtils.createConnection();
     final String errorMessageStart = "marking items as reviewed";
-    
     try
     {
-    	String reviewId = markItemsReviewedRequest.get("reviewid").toString();
-    	Object oAgainst = markItemsReviewedRequest.get("reviewagainstid");
+    	String reviewId = updateReviewStatusRequest.get("reviewid").toString();
+    	Object oAgainst = updateReviewStatusRequest.get("reviewagainstid");
     	String reviewAgainst = (oAgainst == null)? null : oAgainst.toString();
 
     	java.util.Date date= new java.util.Date();
     	Timestamp now = new Timestamp(date.getTime());
-    	(new ReviewItemsMarker(conn, mapId)).updateReviewLastAccessTime(reviewId, now, reviewAgainst);
-
+    	(new ReviewItemsRetriever(conn, mapId)).updateReviewLastAccessTime(reviewId, now, reviewAgainst);
+    }
+    catch (ReviewItemsWriterException re)
+    {
+    	ReviewUtils.handleError(re, errorMessageStart + " (" + re.getSql() + ")", false);
     }
     catch (Exception e)
     {
@@ -865,59 +864,13 @@ public class ReviewResource
         ReviewUtils.handleError(e, errorMessageStart, false);
       }
     }
-    JSONObject markItemsReviewedResponse = new JSONObject();
-    markItemsReviewedResponse.put("status", "ok");
-    markItemsReviewedResponse.put("locktime", "" + ReviewItemsMarker.LOCK_TIME);
-    return markItemsReviewedResponse;
+    JSONObject updateReviewStatusResponse = new JSONObject();
+    updateReviewStatusResponse.put("status", "ok");
+    updateReviewStatusResponse.put("locktime", "" + ReviewItemsRetriever.LOCK_TIME);
+    return updateReviewStatusResponse;
   }
   
-  
-  @PUT
-  @Path("/resetstatus")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public JSONObject resetStatus(
-  	JSONObject markItemsReviewedRequest,
-    @QueryParam("mapId")
-    String mapId)
-    throws Exception
-  {
-    Connection conn = DbUtils.createConnection();
-    final String errorMessageStart = "marking items as reviewed";
-    
-    try
-    {
-    	String reviewId = markItemsReviewedRequest.get("reviewid").toString();
-    	
-    	Object oAgainst = markItemsReviewedRequest.get("reviewagainstid");
-    	String reviewAgainst = (oAgainst == null)? null : oAgainst.toString();
-
-    	java.util.Date date= new java.util.Date();
-    	Timestamp past = new Timestamp(date.getTime() - ReviewItemsMarker.LOCK_TIME);
-    	(new ReviewItemsMarker(conn, mapId)).updateReviewLastAccessTime(reviewId, past, reviewAgainst);
-
-    }
-    catch (Exception e)
-    {
-      ReviewUtils.handleError(e, errorMessageStart, false);
-    }
-    finally
-    {
-    	try
-      {
-    		conn.setAutoCommit(true);
-        DbUtils.closeConnection(conn);
-      }
-      catch (Exception e)
-      {
-        ReviewUtils.handleError(e, errorMessageStart, false);
-      }
-    }
-    JSONObject markItemsReviewedResponse = new JSONObject();
-    markItemsReviewedResponse.put("status", "ok");
-    return markItemsReviewedResponse;
-  }
-  
+  @SuppressWarnings("unchecked")
   @PUT
   @Path("/next")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -927,52 +880,45 @@ public class ReviewResource
       @QueryParam("mapId")
       String mapId) throws Exception
   {
-
     Connection conn = DbUtils.createConnection();
     final String errorMessageStart = "marking items as reviewed";
     JSONObject nextReviewableResponse = new JSONObject();
     nextReviewableResponse.put("status", "none");
     try
     {
-    	int offset = -1;
-    	Object oReqOffset = nextReviewItemRequest.get("offset");
-    	
-    	if(oReqOffset != null)
-    	{
-    		offset = Integer.parseInt(oReqOffset.toString());
-    	}
-    	else
-    	{
-    		throw new Exception("Invalid offset argument.");
-    	}
-    	
-    	Object oDirection = nextReviewItemRequest.get("direction");
-    	
-    	boolean isForward = false;
-    	if(oDirection != null)
-    	{
-    		String direction = oDirection.toString();
-    		if(direction.equals("forward"))
-    		{
-    			isForward = true;
-    		}
-    	}
-    	else
-    	{
-    		throw new Exception("Invalid direction argument.");
-    	}
-
-    	Object oOffsetid = nextReviewItemRequest.get("offsetid");
-    	String offsetId = (oOffsetid == null)? null : oOffsetid.toString();
-    	
-    	Object oAgainst = nextReviewItemRequest.get("offsetreviewagainstid");
-    	String reviewAgainst = (oAgainst == null)? null : oAgainst.toString();
-    	
-    	ReviewItemsMarker marker = new ReviewItemsMarker(conn, mapId);
-
-    	nextReviewableResponse = marker.getAvaiableReviewItem(offset, isForward, offsetId, reviewAgainst);
-    	
+      int offset = -1;
+      Object oReqOffset = nextReviewItemRequest.get("offset");
+      
+      if(oReqOffset != null)
+      {
+        offset = Integer.parseInt(oReqOffset.toString());
+      }
+      
+      Object oDirection = nextReviewItemRequest.get("direction");
+      
+      boolean isForward = true;
+      if(oDirection != null)
+      {
+        String direction = oDirection.toString();
+        if(!direction.equals("forward"))
+        {
+          isForward = false;
+        }
+      }
     
+      ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
+      nextReviewableResponse = marker.getAvaiableReviewItem(offset, isForward);
+      nextReviewableResponse.put("locktime", ReviewItemsRetriever.LOCK_TIME);
+      long totalReviewableCnt = marker.getTotalReviewCntQuery().count();
+      nextReviewableResponse.put("total", totalReviewableCnt);
+      long reviewedCnt = marker.getReviewedReviewCnt();
+      nextReviewableResponse.put("reviewedcnt", reviewedCnt);
+      long lockedCnt = marker.getLockedReviewCntQuery().count();
+      nextReviewableResponse.put("lockedcnt", lockedCnt);
+    }
+    catch (ReviewItemsWriterException re)
+    {
+    	ReviewUtils.handleError(re, errorMessageStart + " (" + re.getSql() + ")", false);
     }
     catch (Exception e)
     {
@@ -980,9 +926,9 @@ public class ReviewResource
     }
     finally
     {
-    	try
+      try
       {
-    		conn.setAutoCommit(true);
+        conn.setAutoCommit(true);
         DbUtils.closeConnection(conn);
       }
       catch (Exception e)
@@ -991,30 +937,27 @@ public class ReviewResource
       }
     }
     
-   
     return nextReviewableResponse;
-  
   }
   
+  @SuppressWarnings("unchecked")
   @GET
   @Path("/lockcount")
   @Consumes(MediaType.TEXT_PLAIN)
   @Produces(MediaType.APPLICATION_JSON)
   public JSONObject getReviewLockCount(
     @QueryParam("mapId")
-    String mapId
-  )
+    String mapId)
     throws Exception
   {
-
     Connection conn = DbUtils.createConnection();
     final String errorMessageStart = "getting review lock count";
     JSONObject ret = new JSONObject();
     long lockcnt = 0;
     try
     {    	
-    	ReviewItemsMarker marker = new ReviewItemsMarker(conn, mapId);
-    	lockcnt = marker.getLockedReviewCnt();
+    	ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
+    	lockcnt = marker.getLockedReviewCntQuery().count();
     }
     catch (Exception e)
     {
@@ -1035,7 +978,105 @@ public class ReviewResource
     
     ret.put("count", lockcnt);
     return ret;
-  
   }
 
+  /**
+   * Returns any review record references to the elements passed in including all references to any 
+   * item the specified element still needs to be reviewed against, as well as any other item that 
+   * needs to use the specified element to review against it.
+   * 
+   * @param mapId map owning the feature whose review references are to be retrieved
+   * @param elementUniqueId unique ID of the element whose review references are to be retrieved
+   * @return an array of review records
+   * @throws Exception
+   */
+  @GET
+  @Path("/refs")
+  @Consumes(MediaType.TEXT_PLAIN)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ReviewReferences getReviewReferences(
+  	@QueryParam("mapId")
+  	final long mapId,
+    @QueryParam("elementUniqueId")
+    final String elementUniqueId)
+    throws Exception
+  {
+  	log.debug("Returning review references...");
+  	
+  	Connection conn = DbUtils.createConnection();
+  	ReviewReferences response = new ReviewReferences();
+  	try
+  	{
+  		List<List<ReviewAgainstItem>> references = 
+  			(new ReviewReferencesRetriever(conn).getReferences(mapId, elementUniqueId));
+  		log.debug("Returning " + references.get(0).size() + " review against items.");
+  		response.setReviewAgainstItems(references.get(0).toArray(new ReviewAgainstItem[]{}));
+  		log.debug("Returning " + references.get(1).size() + " reviewable items.");
+  		response.setReviewableItems(references.get(1).toArray(new ReviewAgainstItem[]{}));
+  	}
+  	catch (Exception e)
+    {
+      ReviewUtils.handleError(
+      	e, 
+      	"Unable to retrieve review references for map ID: " + mapId + " and element unique ID: " + 
+      	  elementUniqueId, 
+      	false);
+    }
+    finally
+    {
+      DbUtils.closeConnection(conn);
+    }
+  	
+  	log.debug("response : " + StringUtils.abbreviate(response.toString(), 1000));
+  	return response;
+  }
+  
+  /**
+   * Sets all reviewable features in the dataset to reviewed
+   * 
+   * @param mapId the map owning the elements to be set reviewed
+   * @return HTTP response
+   * @throws Exception
+   */
+  @PUT
+  @Path("/setallreviewed")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.TEXT_PLAIN)
+  public Response setAllItemsReviewed(
+  	JSONObject request) 
+    throws Exception
+  {
+  	Connection conn = DbUtils.createConnection();
+  	log.debug("Intializing changeset upload transaction...");
+    TransactionStatus transactionStatus = 
+      transactionManager.getTransaction(
+        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
+    conn.setAutoCommit(false);
+    String mapId = null;
+  	try
+  	{
+  		mapId = request.get("mapId").toString();
+  	  (new ReviewItemsSynchronizer(conn, mapId)).setAllItemsReviewed();
+  		
+  		log.debug("Committing set all items reviewed transaction...");
+      transactionManager.commit(transactionStatus);
+      conn.commit();	
+  	}
+  	catch (Exception e)
+    {
+      transactionManager.rollback(transactionStatus);
+      conn.rollback();
+      ReviewUtils.handleError(
+      	e, 
+      	"Error setting all records to reviewed for map ID: " + mapId, 
+      	false);
+    }
+    finally
+    {
+    	conn.setAutoCommit(true);
+      DbUtils.closeConnection(conn);
+    }
+  	
+  	return Response.ok().build();
+  }
 }

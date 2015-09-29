@@ -77,6 +77,5 @@ public class ReviewableItemsStatistics
   
   public ReviewableItemsStatistics()
   {
-     
   }
 }

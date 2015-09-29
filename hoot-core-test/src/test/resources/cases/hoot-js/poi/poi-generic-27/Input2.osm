@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-3956423' visible='true' lat='48.10652' lon='11.66883'>
+    <tag k='REF2' v='01358a' />
+    <tag k='access' v='yes' />
+    <tag k='addr:housenumber' v='13' />
+    <tag k='addr:language' v='GER' />
+    <tag k='addr:street' v='FRIEDENSPROMENADE' />
+    <tag k='error:circular' v='15' />
+    <tag k='language' v='GER' />
+    <tag k='name' v='FRIEDENSPROMENADE' />
+    <tag k='phone' v='89-4309044' />
+    <tag k='source' v='navteq' />
+    <tag k='tourism' v='hotel' />
+    <tag k='uuid' v='{52813480}' />
+  </node>
+</osm>

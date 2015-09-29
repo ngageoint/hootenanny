@@ -31,6 +31,7 @@
 #include <hoot/core/conflate/LargeWaySplitter.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 using namespace hoot;
 
@@ -57,25 +58,30 @@ class LargeWaySplitterTest : public CppUnit::TestFixture
 
 public:
 
-    void runToyTest()
-    {
-      OsmReader reader;
-      OsmMap::resetCounters();
-      shared_ptr<OsmMap> map(new OsmMap());
-      reader.setDefaultStatus(Status::Unknown1);
-      reader.read("test-files/ToyTestA.osm", map);
+  void setUp()
+  {
+    TestUtils::resetEnvironment();
+  }
 
-      MapReprojector::reprojectToPlanar(map);
-      LargeWaySplitter::splitWays(map, 20.0);
-      MapReprojector::reprojectToWgs84(map);
+  void runToyTest()
+  {
+    OsmReader reader;
+    OsmMap::resetCounters();
+    shared_ptr<OsmMap> map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/ToyTestA.osm", map);
 
-      OsmWriter writer;
-      writer.write(map, "test-output/conflate/LargeWaySplitterOutput1.osm");
+    MapReprojector::reprojectToPlanar(map);
+    LargeWaySplitter::splitWays(map, 20.0);
+    MapReprojector::reprojectToWgs84(map);
 
-      HOOT_FILE_EQUALS("test-files/conflate/LargeWaySplitterOutput1.osm",
-                       "test-output/conflate/LargeWaySplitterOutput1.osm");
+    OsmWriter writer;
+    writer.write(map, "test-output/conflate/LargeWaySplitterOutput1.osm");
 
-    }
+    HOOT_FILE_EQUALS("test-files/conflate/LargeWaySplitterOutput1.osm",
+                     "test-output/conflate/LargeWaySplitterOutput1.osm");
+
+  }
 
 };
 

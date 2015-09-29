@@ -44,7 +44,6 @@ import javax.xml.xpath.XPathExpressionException;
 import org.junit.Assert;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
-
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.postgresql.util.PGobject;
@@ -56,7 +55,6 @@ import org.w3c.dom.NodeList;
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.db.DbUtils;
-
 import hoot.services.db.postgres.PostgresUtils;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelationMembers;
@@ -78,7 +76,7 @@ import hoot.services.models.osm.RelationMember;
 import hoot.services.models.osm.Way;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
-import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 
 import com.mysema.query.sql.SQLQuery;
 import com.sun.jersey.api.client.ClientResponse;
@@ -133,7 +131,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       try
       {
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
@@ -628,7 +626,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       try
       {
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
@@ -1064,7 +1062,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       try
       {
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
@@ -1523,7 +1521,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       try
       {
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
@@ -2692,7 +2690,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       try
       {
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
@@ -2897,7 +2895,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       Assert.assertNotNull(responseData);
 
       final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       try
       {
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
@@ -3053,7 +3051,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       try
       {
         NodeList returnedWays = XPathAPI.selectNodeList(responseData, "//osm/diffResult/way");
@@ -3205,7 +3203,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       try
       {
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
@@ -3553,7 +3551,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       try
       {
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
@@ -3861,7 +3859,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       try
       {
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
@@ -4184,7 +4182,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       try
       {
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
@@ -4401,7 +4399,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       try
       {
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");

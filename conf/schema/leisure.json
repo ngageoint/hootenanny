@@ -1,7 +1,7 @@
 {
     "tag": {
         "name": "leisure",
-        "isA": "poi=yes",
+        "isA": "hgispoi",
         "influence": 1.0,
         "type": "enumeration",
         "geometries": ["node", "linestring"]
@@ -15,7 +15,8 @@
         "isA": "leisure",
         "geometries": ["node", "area"],
         "similarTo": { "name": "leisure=stadium", "weight": 0.8 },
-        "similarTo": { "name": "leisure=recreation_ground", "weight": 0.8 }
+        "similarTo": { "name": "leisure=recreation_ground", "weight": 0.8 },
+        "similarTo": { "name": "amenity=swimming_pool", "weight": 0.8 }
     },
     "tag": { "name": "leisure=stadium",
         "isA": "leisure",
@@ -26,6 +27,17 @@
         "isA": "leisure",
         "geometries": ["node", "area"],
         "similarTo": { "name": "leisure=stadium", "weight": 0.8 }
+    },
+    "tag": { "name": "leisure=park",
+        "isA": "leisure",
+        "similarTo": { "name": "leisure=playground", "weight": 0.8 },
+        "similarTo": { "name": "leisure=recreation_ground", "weight": 0.6 },
+        "similarTo": { "name": "amenity=fountain", "weight": 0.2 },
+        "geometries": ["node", "area"]
+    },
+    "tag": { "name": "leisure=playground",
+        "isA": "leisure",
+        "geometries": ["node", "area"]
     },
 
 

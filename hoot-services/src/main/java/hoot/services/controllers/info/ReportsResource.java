@@ -263,7 +263,7 @@ public class ReportsResource {
 				catch(Exception ee)
 				{
 					// we ignore and continue
-					log.error(ee.getMessage());
+					//log.error(ee.getMessage());
 				}
 			}
 		}

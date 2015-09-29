@@ -189,6 +189,8 @@ protected:
   virtual void _translate(Tags&);
 
   void populateElementMap();
+
+  QString _toWkt(OGRSpatialReference* srs);
 };
 
 class OgrElementIterator : public ElementIterator
@@ -778,9 +780,49 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
     LOG_DEBUG("Setting spatial filter on " << layer << " to: " << bboxValues);
   }
 
-  OGRSpatialReference *sourceSrs = _layer->GetSpatialRef();
+  auto_ptr<OGRSpatialReference> tmpSourceSrs;
+  OGRSpatialReference* sourceSrs;
+
+  int epsgOverride = ConfigOptions().getOgrReaderEpsgOverride();
+  if (epsgOverride >= 0)
+  {
+    tmpSourceSrs.reset(new OGRSpatialReference());
+    sourceSrs = tmpSourceSrs.get();
+
+    if (sourceSrs->importFromEPSG(epsgOverride) != OGRERR_NONE)
+    {
+      throw HootException(QString("Error creating EPSG:%1 projection.").arg(epsgOverride));
+    }
+  }
+  else
+  {
+    sourceSrs = _layer->GetSpatialRef();
+
+    // proj4 requires some extra parameters to handle Google map style projections. Check for this
+    // situation for known EPSGs and warn/fix the issue.
+    tmpSourceSrs.reset(new OGRSpatialReference());
+    tmpSourceSrs->importFromEPSG(3785);
+    if (sourceSrs && tmpSourceSrs->IsSame(sourceSrs) &&
+      _toWkt(tmpSourceSrs.get()) != _toWkt(sourceSrs))
+    {
+      LOG_WARN("Overriding input projection with proj4 compatible EPSG:3785. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
+      sourceSrs = tmpSourceSrs.get();
+    }
+    else
+    {
+      tmpSourceSrs->importFromEPSG(900913);
+      if (sourceSrs && tmpSourceSrs->IsSame(sourceSrs) &&
+        _toWkt(tmpSourceSrs.get()) != _toWkt(sourceSrs))
+      {
+        LOG_WARN("Overriding input projection with proj4 compatible EPSG:900913. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
+        sourceSrs = tmpSourceSrs.get();
+      }
+    }
+  }
+
   if (sourceSrs != 0 && sourceSrs->IsProjected())
   {
+    LOG_DEBUG("Input SRS: " << _toWkt(sourceSrs));
     _wgs84.reset(new OGRSpatialReference());
     if (_wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
     {
@@ -1066,5 +1108,15 @@ Progress OgrReaderInternal::streamGetProgress() const
 
   return streamProgress;
 }
+
+QString OgrReaderInternal::_toWkt(OGRSpatialReference* srs)
+{
+  char* buffer;
+  srs->exportToWkt(&buffer);
+  QString result = QString::fromUtf8(buffer);
+  delete buffer;
+  return result;
+}
+
 
 }

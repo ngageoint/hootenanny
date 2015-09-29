@@ -98,6 +98,31 @@ function getTagsByCategory(category, d) {
  * Given a common kvp, find the distance between the tags in e1 and e2 where common exists
  * between them.
  */
+function getTagAncestorDistance(ancestorKvp, e1, e2) {
+    var result = 1;
+    var t1 = e1.getTags().toDict();
+    var t2 = e2.getTags().toDict();
+    var c1 = getTagsByAncestor(ancestorKvp, t1);
+    var c2 = getTagsByAncestor(ancestorKvp, t2);
+
+    if (c1.length == 0 || c2.length == 0) {
+        return undefined;
+    }
+
+    // find the best match between the two types
+    for (var i in c1) {
+        for (var j in c2) {
+            result = Math.min(1 - hoot.OsmSchema.score(c1[i], c2[j]), result);
+        }
+    }
+
+    return result;
+}
+
+/**
+ * Given a common kvp, find the distance between the tags in e1 and e2 where common exists
+ * between them.
+ */
 function getTagCategoryDistance(category, e1, e2) {
     var result = 1;
     var t1 = e1.getTags().toDict();

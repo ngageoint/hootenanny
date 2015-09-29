@@ -51,7 +51,7 @@ import hoot.services.models.osm.RelationMember;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
-import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
@@ -76,7 +76,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
     final long changesetId, final BoundingBox bounds) throws TransformerException, 
     XPathExpressionException
   {
-    XPath xpath = XmlDocumentBuilder.createXPath();
+    XPath xpath = XmlUtils.createXPath();
     
     OsmTestUtils.verifyOsmHeader(responseData);
     
@@ -99,7 +99,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
     final long changesetId, final Set<Long> wayNodeIds) throws TransformerException, 
     XPathExpressionException
   {
-    XPath xpath = XmlDocumentBuilder.createXPath();
+    XPath xpath = XmlUtils.createXPath();
     
     OsmTestUtils.verifyOsmHeader(responseData);
     
@@ -134,7 +134,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
     final long changesetId, final List<RelationMember> relationMembers) throws TransformerException, 
     XPathExpressionException
   {
-    XPath xpath = XmlDocumentBuilder.createXPath();
+    XPath xpath = XmlUtils.createXPath();
     
     OsmTestUtils.verifyOsmHeader(responseData);
     

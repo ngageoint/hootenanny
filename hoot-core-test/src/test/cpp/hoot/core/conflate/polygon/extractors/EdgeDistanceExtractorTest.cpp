@@ -67,6 +67,11 @@ class EdgeDistanceExtractorTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::resetEnvironment();
+  }
+
   void runBuildingsTest()
   {
     OsmReader reader;
