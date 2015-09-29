@@ -478,7 +478,7 @@ void PostgresqlDumpfileWriter::_createWayTables()
   _createTable( "current_way_nodes",  "COPY current_way_nodes (way_id, node_id, sequence_id) FROM stdin;\n" );
 
   _createTable( "ways",               "COPY ways (way_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n" );
-  _createTable( "way_tags",           "COPY way_tags (way_id, k, v, version) FROM stdin;\n" );
+  _createTable( "way_tags",           "COPY way_tags (way_id, version, k, v) FROM stdin;\n" );
   _createTable( "way_nodes",          "COPY way_nodes (way_id, node_id, version, sequence_id) FROM stdin;\n" );
 }
 
@@ -494,7 +494,7 @@ void PostgresqlDumpfileWriter::_writeWayToTables(const ElementIdDatatype wayDbId
 
   *(_outputSections["current_ways"].second) << outputLine.toUtf8();
 
-  outputLine = QString("%1\t%2\t%3\tt\t1\t\\N\n")
+  outputLine = QString("%1\t%2\t%3\t1\tt\t\\N\n")
       .arg(wayDbId)
       .arg(changesetId)
       .arg(datestring);
@@ -540,7 +540,7 @@ void PostgresqlDumpfileWriter::_createRelationTables()
   _createTable( "current_relation_members", "COPY current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;\n" );
 
   _createTable( "relations",                "COPY relations (relation_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n" );
-  _createTable( "relation_tags",            "COPY relation_tags (relation_id, k, v, version) FROM stdin;\n" );
+  _createTable( "relation_tags",            "COPY relation_tags (relation_id, version, k, v) FROM stdin;\n" );
   _createTable( "relation_members",         "COPY relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) FROM stdin;\n" );
 }
 
@@ -556,7 +556,7 @@ void PostgresqlDumpfileWriter::_writeRelationToTables(const ElementIdDatatype re
 
   *(_outputSections["current_relations"].second) << outputLine.toUtf8();
 
-  outputLine = QString("%1\t%2\t%3\tt\t1\t\\N\n")
+  outputLine = QString("%1\t%2\t%3\t1\tt\t\\N\n")
       .arg(relationDbId)
       .arg(changesetId)
       .arg(datestring);
