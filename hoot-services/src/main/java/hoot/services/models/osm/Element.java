@@ -28,6 +28,9 @@ package hoot.services.models.osm;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,7 +45,10 @@ import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
 import hoot.services.db.postgres.PostgresUtils;
 import hoot.services.db2.QChangesets;
+import hoot.services.db2.QCurrentNodes;
 import hoot.services.db2.QCurrentRelationMembers;
+import hoot.services.db2.QCurrentRelations;
+import hoot.services.db2.QCurrentWays;
 import hoot.services.db2.QUsers;
 import hoot.services.geo.BoundingBox;
 
@@ -71,6 +77,10 @@ import com.mysema.query.types.path.NumberPath;
 public abstract class Element implements XmlSerializable, DbSerializable
 {
   private static final Logger log = LoggerFactory.getLogger(Element.class);
+  
+  protected static final QCurrentWays currentWays = QCurrentWays.currentWays;
+  protected static final QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
+  protected static final QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
 
   //order in the enum here is important, since the request diff writer methods use this to determine
   //the order for creating/updating/deleting elements; i.e. create nodes before referencing them
@@ -525,9 +535,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
     InvocationTargetException
   {
     final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
-
-
-    //SQLQuery query = new SQLQuery(dbConn, DbUtils.getConfiguration());
   	if(elementIds.size() > 0)
   	{
   	return
@@ -1001,5 +1008,119 @@ public abstract class Element implements XmlSerializable, DbSerializable
       }
     }
     return tagCount;
+  }
+  
+  /**
+   * 
+   * 
+   * @param mapId
+   * @param uuids
+   * @param elementType
+   * @param dbConn
+   * @return
+   * @throws InvocationTargetException 
+   * @throws NoSuchMethodException 
+   * @throws ClassNotFoundException 
+   * @throws IllegalAccessException 
+   * @throws InstantiationException 
+   * @throws SQLException 
+   */
+  public static List<String> filterNonExistingUuids(final long mapId, final String[] uuids, 
+  	final ElementType elementType, Connection dbConn) throws InstantiationException, 
+  	IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, 
+  	SQLException
+  {
+  	List<String> filteredUuids = new ArrayList<String>();
+  	final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
+  	String POSTGRESQL_DRIVER = "org.postgresql.Driver";
+		Statement stmt = null;
+		ResultSet rs = null;
+		try
+		{
+			Class.forName(POSTGRESQL_DRIVER);
+			stmt = dbConn.createStatement();
+			final String sql = 
+				"select tags->'uuid' from " + prototype.getElementTable() + "_" + mapId + 
+				" where tags->'uuid' in ('" + StringUtils.join(uuids, "','") + "') ";
+			stmt = dbConn.createStatement();
+			rs = stmt.executeQuery(sql);
+			while (rs.next())
+			{
+				filteredUuids.add(rs.getString(1));
+			}
+			rs.close();
+		}
+		finally
+		{
+			try
+			{
+				if (stmt != null) stmt.close();
+				if (rs != null) rs.close();
+			}
+			catch (SQLException se2)
+			{
+			}
+		}
+		if (filteredUuids.size() > uuids.length)
+		{
+			log.warn("Filtered out " + String.valueOf(uuids.length - filteredUuids.size()) + " uuids.");
+		}
+  	return filteredUuids;
+  }
+  
+  /**
+   * Determines whether any element in the database has a uuid tag as specified
+   *  
+   * @param mapId ID of the map owning the element
+   * @param uuid unique ID to search for
+   * @param elementType type of the element being searched for
+   * @param dbConn database connection
+   * @return true if the element exists; false otherwise
+   * @throws ClassNotFoundException 
+   * @throws SQLException 
+   * @throws InvocationTargetException 
+   * @throws NoSuchMethodException 
+   * @throws IllegalAccessException 
+   * @throws InstantiationException 
+   */
+  public static boolean elementExistsByUuid(final long mapId, final String uuid, 
+  	final ElementType elementType, Connection dbConn) throws ClassNotFoundException, SQLException, 
+  	InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
+  {
+  	final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
+  	String POSTGRESQL_DRIVER = "org.postgresql.Driver";
+		Statement stmt = null;
+		ResultSet rs = null;
+		try
+		{
+			Class.forName(POSTGRESQL_DRIVER);
+			stmt = dbConn.createStatement();
+			final String sql = 
+				"select count(*) as total from " + prototype.getElementTable() + "_" + mapId + 
+				" where tags->'uuid' = '" + uuid + "' ";
+			stmt = dbConn.createStatement();
+			rs = stmt.executeQuery(sql);
+			while (rs.next())
+			{
+				if (rs.getInt("total") > 0)
+				{
+					rs.close();
+					return true;
+				}
+			}
+			rs.close();
+		}
+		finally
+		{
+			try
+			{
+				if (stmt != null) stmt.close();
+				if (rs != null) rs.close();
+			}
+			catch (SQLException se2)
+			{
+			}
+		}
+  	return false;
   }
 }
