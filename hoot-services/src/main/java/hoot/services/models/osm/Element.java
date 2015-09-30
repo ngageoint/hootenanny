@@ -1011,13 +1011,14 @@ public abstract class Element implements XmlSerializable, DbSerializable
   }
   
   /**
+   * Given a list of unique ID's, filters out any which aren't associated with an OSM element in 
+   * the database
    * 
-   * 
-   * @param mapId
-   * @param uuids
-   * @param elementType
-   * @param dbConn
-   * @return
+   * @param mapId ID of the map owning the element
+   * @param uuids unique IDs to search for
+   * @param elementType type of the element being searched for
+   * @param dbConn database connection
+   * @return a filtered list of unique ID's
    * @throws InvocationTargetException 
    * @throws NoSuchMethodException 
    * @throws ClassNotFoundException 
@@ -1025,7 +1026,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
    * @throws InstantiationException 
    * @throws SQLException 
    */
-  public static List<String> filterNonExistingUuids(final long mapId, final String[] uuids, 
+  public static List<String> filterOutNonExistingUuids(final long mapId, final String[] uuids, 
   	final ElementType elementType, Connection dbConn) throws InstantiationException, 
   	IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, 
   	SQLException

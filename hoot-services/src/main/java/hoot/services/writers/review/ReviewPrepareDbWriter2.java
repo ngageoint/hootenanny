@@ -26,6 +26,7 @@
  */
 package hoot.services.writers.review;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -45,6 +46,7 @@ import hoot.services.db.DbUtils;
 import hoot.services.db.postgres.PostgresUtils;
 import hoot.services.db2.ElementIdMappings;
 import hoot.services.db2.ReviewItems;
+import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.review.ReviewUtils;
 
@@ -110,12 +112,17 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
             
             if (uniqueElementIdStr == null)
             {
+            	final String msg = 
+            		"Null or empty UUID for map with ID: " + mapId +
+                 " and OSM record with ID: " + osmElementId + ".  Skipping adding unique ID record...";
             	if (warnMessagesDisplayed <= MAX_WARN_MESSAGES)
             	{
-            		log.warn(
-                  "Invalid UUID: " + uniqueElementIdStr + " for map with ID: " + mapId +
-                  ".  Skipping adding unique ID record...");
+            		log.warn(msg);
             		warnMessagesDisplayed++;
+            	}
+            	else
+            	{
+            		log.debug(msg);
             	}
             }
             else
@@ -150,12 +157,18 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                   		 .and(elementIdMappings.elementId.eq(uniqueElementId)))
                   	 .count() > 0)
                 {
+                	final String msg = 
+                		"UUID: " + uniqueElementId + " for map with ID: " + mapId + 
+                    " and OSM record ID: " + osmElementId + " already exists.  " +
+                    "Skipping adding unique ID record...";
                 	if (warnMessagesDisplayed <= MAX_WARN_MESSAGES)
                 	{
-                		log.warn(
-                      "UUID: " + uniqueElementId + " for map with ID: " + mapId + " already exists.  " +
-                      "Skipping adding unique ID record...");
+                		log.warn(msg);
                 		warnMessagesDisplayed++;
+                	}
+                	else
+                	{
+                		log.debug(msg);
                 	}
                 }
                 else
@@ -189,6 +202,49 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
     log.debug("Wrote " + elementIds.size() + " ID mappings.");
 
     return idMappingRecordWritten;
+  }
+  
+  /*
+   * Returns all uuid's which have no associated feature in the OSM database for a given feature type
+   * 
+   * Unfortunately, there's a lot of duplicated code here from parseElementReviewTags, but there
+   * doesn't seem to be any way around that for now.
+   */
+  private List<String> filterOutUuidsOfMissingFeatures(
+  	final Map<Long, Object> reviewableElementRecords, final ElementType elementType) 
+  	throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, Exception
+  {
+  	List<String> allUuids = new ArrayList<String>();
+  	for (Map.Entry<Long, Object> reviewableElementRecordEntry : reviewableElementRecords.entrySet())
+    {
+      final Object reviewableElementRecord = reviewableElementRecordEntry.getValue();
+      final Map<String, String> tags =
+        PostgresUtils.postgresObjToHStore(
+      	  (PGobject)MethodUtils.invokeMethod(reviewableElementRecord, "getTags", new Object[]{}));
+      final String reviewableItemId = StringUtils.trimToNull(tags.get("uuid"));
+      allUuids.add(reviewableItemId);
+      
+      final String itemsToReviewAgainstStr = StringUtils.trimToNull(tags.get("hoot:review:uuid"));
+    	String[] reviewAgainstItemIds = null;
+      //We are parsing pairwise comparisons and don't want duplicates, so ignore one
+      //to many reviewable item to review against item relationships.  They are always
+      //represented with a duplicated one to one relationship in the data.
+      if (!itemsToReviewAgainstStr.contains(";"))
+      {
+        reviewAgainstItemIds = new String[] { itemsToReviewAgainstStr };
+      }
+      else
+      {
+        reviewAgainstItemIds = itemsToReviewAgainstStr.split(";");
+      }
+      for (int i = 0; i < reviewAgainstItemIds.length; i++)
+      {
+      	allUuids.add(reviewAgainstItemIds[i]);
+      }
+    }
+  	
+  	return 
+  		Element.filterOutNonExistingUuids(mapId, allUuids.toArray(new String[]{}), elementType, conn);
   }
 
   /*
@@ -226,11 +282,15 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
           //get a batch of reviewable elements
           final Map<Long, Object> reviewableElementRecords =
             getReviewableElementRecords(mapId, elementType, maxRecordSelectSize, elementIndex);
+          final List<String> validUuids = 
+          	filterOutUuidsOfMissingFeatures(reviewableElementRecords, elementType);
           numElementsReturned = reviewableElementRecords.size();
           elementIndex += numElementsReturned;
+          
           for (Map.Entry<Long, Object> reviewableElementRecordEntry : 
           	   reviewableElementRecords.entrySet())
           {
+          	final long osmElementId = reviewableElementRecordEntry.getKey();
             final Object reviewableElementRecord = reviewableElementRecordEntry.getValue();
             final Map<String, String> tags =
               PostgresUtils.postgresObjToHStore(
@@ -239,12 +299,32 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
             
             if (StringUtils.isEmpty(reviewableItemId))
             {
+            	final String msg = 
+            		"Invalid UUID: " + reviewableItemId + " for OSM record with ID: " + osmElementId +
+            		" for map with ID: " + mapId + "Skipping adding review record...";
             	if (warnMessagesDisplayed <= MAX_WARN_MESSAGES)
             	{
-            		log.warn(
-                  "Invalid UUID: " + reviewableItemId + " for map with ID: " + mapId +
-                  " Skipping adding review record...");
+            		log.warn(msg);
             		warnMessagesDisplayed++;
+            	}
+            	else
+            	{
+            		log.debug(msg);
+            	}
+            }
+            else if (!validUuids.contains(reviewableItemId))
+            {
+            	final String msg = 
+            		"No feature exists with UUID: " + reviewableItemId + " for OSM record with ID: " + 
+            	  osmElementId + " for map with ID: " + mapId + " Skipping adding review record...";
+            	if (warnMessagesDisplayed <= MAX_WARN_MESSAGES)
+            	{
+            		log.warn(msg);
+            		warnMessagesDisplayed++;
+            	}
+            	else
+            	{
+            		log.debug(msg);
             	}
             }
             else
@@ -295,62 +375,86 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
 
                 for (int i = 0; i < reviewAgainstItemIds.length; i++)
                 {
-                  final String reviewAgainstItemId = reviewAgainstItemIds[i];
-                  //TODO: This check is expensive, but unfortunately, it is needed with some
-                  //datasets (checkForElementIdMappingPerReviewRecordWrite should always be set 
-                  //to true).  It would be nice to be able to get rid of this check completely.
-                  if (checkForElementIdMappingPerReviewRecordWrite &&
-                  		new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(elementIdMappings)
-                        .where(elementIdMappings.mapId.eq(mapId)
-                    		  .and(elementIdMappings.elementId.eq(reviewAgainstItemId)))
-                    		.count() == 0)
+                  final String reviewAgainstItemId = 
+                  	StringUtils.trimToNull(reviewAgainstItemIds[i]);
+                  if (reviewAgainstItemId != null)
                   {
-                  	if (warnMessagesDisplayed <= MAX_WARN_MESSAGES)
-                  	{
-                  		log.warn(
-                        "No element ID mapping exists for review against item with ID: " +
-                        reviewAgainstItemId + " for map with ID: " + mapId + ".  Skipping adding " +
-                        "review record...");
-                  		warnMessagesDisplayed++;
-                  	}
-                  }
-                  else
-                  {
-                    if (!reviewPairAlreadyParsed(reviewableItemId, reviewAgainstItemId))
+                  	if (!validUuids.contains(reviewAgainstItemId))
                     {
-                    	//TODO: Had to take this source check out, b/c it was resulting in bad review
-                    	//data being written.  See #6320
-                    	/*if (source.equals("2"))
+                    	final String msg = "No feature exists with review against UUID: " + 
+                        reviewAgainstItemId + " for reviewable OSM record with ID: " + osmElementId + 
+                        " for map with ID: " + mapId + " Skipping adding review record...";
+                    	if (warnMessagesDisplayed <= MAX_WARN_MESSAGES)
                     	{
-                      	//For paired reviews, we want the reviewableItem to always come from 
-                    		//source 1 and the reviewAgainstItems to always come from source 2.  
-                    		//So, re-ordering here is necessary for some records.
-                    		log.debug(
-                          "Adding review item with reviewable item ID: " + reviewAgainstItemId + 
-                          ", review against item ID: " + reviewableItemId + ", and source: " + 
-                          source);
-                        reviewRecordsToInsert.add(
-                          ReviewUtils.createReviewItemRecord(
-                          	reviewAgainstItemId, reviewScore, reviewableItemId, mapId));
-                        reviewableItemIdToReviewAgainstItemIds.put(
-                        	reviewAgainstItemId, reviewableItemId);
+                    		log.warn(msg);
+                    		warnMessagesDisplayed++;
                     	}
                     	else
-                    	{*/
-                    		log.debug(
-                          "Adding review item with reviewable item ID: " +  reviewableItemId + 
-                          ", review against item ID: " + reviewAgainstItemId + ", and source: " + 
-                          source);
-                        reviewRecordsToInsert.add(
-                        	ReviewUtils.createReviewItemRecord(
-                          	reviewableItemId, reviewScore, reviewAgainstItemId, mapId));
-                        reviewableItemIdToReviewAgainstItemIds.put(
-                        	reviewableItemId, reviewAgainstItemId);
-                    	//}
-                      
-                      flushReviewRecords(reviewRecordsToInsert, maxRecordBatchSize, logMsgStart);
-                      numReviewItemsAdded++;
+                    	{
+                    		log.debug(msg);
+                    	}
+                    }
+                    //TODO: This check is expensive, but unfortunately, it is needed with some
+                    //datasets (checkForElementIdMappingPerReviewRecordWrite should always be set 
+                    //to true).  It would be nice to be able to get rid of this check completely.
+                    else if (checkForElementIdMappingPerReviewRecordWrite &&
+                    		new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                          .from(elementIdMappings)
+                          .where(elementIdMappings.mapId.eq(mapId)
+                      		  .and(elementIdMappings.elementId.eq(reviewAgainstItemId)))
+                      		.count() == 0)
+                    {
+                    	final String msg = 
+                    		"No element ID mapping exists for review against item with ID: " +
+                        reviewAgainstItemId + " for reviewable OSM record with ID: " + osmElementId +
+                        " for map with ID: " + mapId + ".  Skipping adding review record...";
+                    	if (warnMessagesDisplayed <= MAX_WARN_MESSAGES)
+                    	{
+                    		log.warn(msg);
+                    		warnMessagesDisplayed++;
+                    	}
+                    	else
+                    	{
+                    		log.debug(msg);
+                    	}
+                    }
+                    else
+                    {
+                      if (!reviewPairAlreadyParsed(reviewableItemId, reviewAgainstItemId))
+                      {
+                      	//TODO: Had to take this source check out, b/c it was resulting in bad review
+                      	//data being written.  See #6320
+                      	/*if (source.equals("2"))
+                      	{
+                        	//For paired reviews, we want the reviewableItem to always come from 
+                      		//source 1 and the reviewAgainstItems to always come from source 2.  
+                      		//So, re-ordering here is necessary for some records.
+                      		log.debug(
+                            "Adding review item with reviewable item ID: " + reviewAgainstItemId + 
+                            ", review against item ID: " + reviewableItemId + ", and source: " + 
+                            source);
+                          reviewRecordsToInsert.add(
+                            ReviewUtils.createReviewItemRecord(
+                            	reviewAgainstItemId, reviewScore, reviewableItemId, mapId));
+                          reviewableItemIdToReviewAgainstItemIds.put(
+                          	reviewAgainstItemId, reviewableItemId);
+                      	}
+                      	else
+                      	{*/
+                      		log.debug(
+                            "Adding review item with reviewable item ID: " +  reviewableItemId + 
+                            ", review against item ID: " + reviewAgainstItemId + ", and source: " + 
+                            source);
+                          reviewRecordsToInsert.add(
+                          	ReviewUtils.createReviewItemRecord(
+                            	reviewableItemId, reviewScore, reviewAgainstItemId, mapId));
+                          reviewableItemIdToReviewAgainstItemIds.put(
+                          	reviewableItemId, reviewAgainstItemId);
+                      	//}
+                        
+                        flushReviewRecords(reviewRecordsToInsert, maxRecordBatchSize, logMsgStart);
+                        numReviewItemsAdded++;
+                      }
                     }
                   }
                 }
@@ -359,8 +463,9 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
               else if (!tags.containsKey("hoot:review:uuid") ||
                        StringUtils.trimToNull(tags.get("hoot:review:uuid")) == null)
               {
-              	//The one case where the reviewableItem can be from source = 2 is for a single 
-              	//item review, hence the source check done for paired reviews is not done here. 
+              	//TODO: this description invalid given #6320 revert changes made above; The one 
+              	//case where the reviewableItem can be from source = 2 is for a single item review, 
+              	//hence the source check done for paired reviews is not done here. 
               	
               	if (!reviewPairAlreadyParsed(reviewableItemId, reviewableItemId))
                 {

@@ -89,7 +89,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 	protected static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
 	protected Connection conn;
 
-	private long mapId;
+	protected long mapId;
 	protected long uniqueIdsParsed = 0;
 	protected boolean idMappingRecordWritten = false;
 	protected long reviewRecordsParsed = 0;
@@ -358,13 +358,12 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 	{
 		// TODO: make this a batched query
 		SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration(mapId));
-
 		final List<ReviewItems> reviewedItems = query
-		    .from(reviewItems)
-		    .where(
-		      reviewItems.mapId.eq(mapId)
-		        .and(reviewItems.reviewStatus.eq(DbUtils.review_status_enum.reviewed)))
-		    .list(reviewItems);
+	    .from(reviewItems)
+	    .where(
+	      reviewItems.mapId.eq(mapId)
+	        .and(reviewItems.reviewStatus.eq(DbUtils.review_status_enum.reviewed)))
+	    .list(reviewItems);
 
 		previouslyReviewedItemIdToReviewAgainstItemIds = ArrayListMultimap.create();
 		for (ReviewItems reviewedItem : reviewedItems)
@@ -558,7 +557,8 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 
 	protected Map<Long, Object> getReviewableElementRecords(final long mapId,
 	  final ElementType elementType, final int limit, final int offset) throws InstantiationException, 
-	  IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, SQLException
+	  IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, 
+	  SQLException
 	{
 		Map<Long, Object> retMap = new LinkedHashMap<Long, Object>();
 		final Element prototype = 
