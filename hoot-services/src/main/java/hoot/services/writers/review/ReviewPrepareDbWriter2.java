@@ -96,7 +96,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
         {
           //get all reviewable elements
           final Map<Long, Object> reviewableElementRecords =
-            getParseableElementRecords(mapId, elementType, maxRecordSelectSize, elementIndex);
+            getParseableElementRecords(mapId, elementType, maxRecordBatchSize, elementIndex);
           numElementsReturned = reviewableElementRecords.size();
           elementIndex += numElementsReturned;
           for (Map.Entry<Long, Object> reviewableElementRecordEntry :
@@ -281,7 +281,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
         {
           //get a batch of reviewable elements
           final Map<Long, Object> reviewableElementRecords =
-            getReviewableElementRecords(mapId, elementType, maxRecordSelectSize, elementIndex);
+            getReviewableElementRecords(mapId, elementType, maxRecordBatchSize, elementIndex);
           final List<String> validUuids = 
           	filterOutUuidsOfMissingFeatures(reviewableElementRecords, elementType);
           numElementsReturned = reviewableElementRecords.size();

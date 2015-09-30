@@ -266,13 +266,9 @@ public class HootProperties
     {
       return "9998";
     }
-    else if (key.equals("maxRecordSelectSize"))
-    {
-      return "5000";
-    }
     else if (key.equals("maxRecordBatchSize"))
     {
-      return "1000";
+      return "5000";
     }
     else if (key.equals("reviewGetMaxReviewSize"))
     {

@@ -3,13 +3,9 @@
 # Port Jersey tests running on the Grizzy framework uses; only needed by Jersey async calls
 grizzlyPort=9998
 
-# generic setting for max to send to sql limit/offset queries; this setting could be duplicated and
-# made more specific for different types of queries
-maxRecordSelectSize=5000
-
 # generic setting for max size of records when executing batch query; this setting could be
 # duplicated and made more specific for different types of queries
-maxRecordBatchSize=1000
+maxRecordBatchSize=2000
 
 # allows for printing executed sql statement
 debugSql=false

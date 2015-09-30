@@ -96,7 +96,6 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 	protected boolean reviewRecordWritten = false;
 	private long totalParseableRecords = 0;
 	private long totalReviewableRecords = 0;
-	protected int maxRecordSelectSize;
 	protected int maxRecordBatchSize;
 	protected ListMultimap<String, String> previouslyReviewedItemIdToReviewAgainstItemIds;
 	protected ListMultimap<String, String> reviewableItemIdToReviewAgainstItemIds;
@@ -112,10 +111,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 	public ReviewPrepareDbWriter() throws Exception
 	{
 		super();
-		maxRecordSelectSize = 
-			Integer.parseInt(
-				HootProperties.getInstance()
-		      .getProperty("maxRecordSelectSize", HootProperties.getDefault("maxRecordSelectSize")));
+
 		maxRecordBatchSize = 
 			Integer.parseInt(
 				HootProperties.getInstance()
@@ -670,7 +666,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 				{
 					// get all reviewable elements
 					final Map<Long, Object> reviewableElementRecords = 
-						getParseableElementRecords(mapId, elementType, maxRecordSelectSize, elementIndex);
+						getParseableElementRecords(mapId, elementType, maxRecordBatchSize, elementIndex);
 					numElementsReturned = reviewableElementRecords.size();
 					elementIndex += numElementsReturned;
 					for (Map.Entry<Long, Object> reviewableElementRecordEntry : reviewableElementRecords.entrySet())
@@ -792,7 +788,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 				{
 					// get a batch of reviewable elements
 					final Map<Long, Object> reviewableElementRecords = 
-						getReviewableElementRecords(mapId, elementType, maxRecordSelectSize, elementIndex);
+						getReviewableElementRecords(mapId, elementType, maxRecordBatchSize, elementIndex);
 					numElementsReturned = reviewableElementRecords.size();
 					elementIndex += numElementsReturned;
 					for (Map.Entry<Long, Object> reviewableElementRecordEntry : reviewableElementRecords.entrySet())
