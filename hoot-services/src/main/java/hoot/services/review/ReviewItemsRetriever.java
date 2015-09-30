@@ -539,8 +539,6 @@ public class ReviewItemsRetriever
       final String reviewItemUUID = nextAvailableReviewItem.get(rm.reviewableItemId);
       final String reviewAgainstUUID = nextAvailableReviewItem.get(rm.reviewAgainstItemId);
       
-      
-      
       if(offsetReviewId > -1)
       {
 	      long freedRowsCnt = _writer.updateReviewLastAccessTimeWithReviewId(past, offsetReviewId); 
@@ -568,17 +566,21 @@ public class ReviewItemsRetriever
 	          if(reviewElemMappings.size() > 0)
 	          {
 	          	// Create reviewableItem object
-	          	ReviewableItem nextReviewablItem = _createReviewItem(reviewElemMappings, reviewAgainstElemMappings, 
-	            		nextReviewId, reviewItemUUID);
+	          	ReviewableItem nextReviewableItem = 
+	          		_createReviewItem(
+	          			reviewElemMappings, reviewAgainstElemMappings, nextReviewId, reviewItemUUID);
 	            nextItem.put("status", "success");
-	            nextItem.put("reviewItem", nextReviewablItem);
+	            nextItem.put("reviewItem", nextReviewableItem);
 	          }
 	        }
 	      }
       }
       catch (Exception ex)
       {
-      	log.error("createNextReviewableResponse failed:" + ex.getMessage());
+      	log.error(
+      		"createNextReviewableResponse failed for nextReviewId: " + nextReviewId + 
+      		", reviewItemUUID:" + reviewItemUUID + ", reviewAgainstUUID: " + reviewAgainstUUID +
+      		" Error: " + ex.getMessage());
       	throw ex;
       }
     }
