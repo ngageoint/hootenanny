@@ -40,9 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.mysema.query.sql.SQLQuery;
 
-import hoot.services.db.DbUtils;
 import hoot.services.db.postgres.PostgresUtils;
 import hoot.services.db2.ElementIdMappings;
 import hoot.services.db2.ReviewItems;
@@ -53,8 +51,10 @@ import hoot.services.review.ReviewUtils;
 /**
  * Writes review data to the services database
  * 
- * This is an attempt to resolve the handling of fuzzy matches (see #6269), as well as make paired 
- * review items come from the same data sources consistently (see #6320).
+ * This was an attempt to resolve the handling of fuzzy matches (see #6269), as well as make paired 
+ * review items come from the same data sources consistently (see #6320)....but both of those sets
+ * of changes were later reverted.  However, this class still optimizes and correct some 
+ * implementations in ReviewPrepareDbWriter.
  */
 public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
 {
@@ -67,6 +67,55 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
   {
     super();
   }
+  
+  /*
+   * Extract all unique ID's from both reviewable and review against items referenced in the
+   * recordset
+   */
+  private Set<String> parseAllUuidsFromElementRecords(final Map<Long, Object> elementRecords) 
+  	throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, Exception
+	{
+  	Set<String> allUuids = new HashSet<String>();
+  	for (Map.Entry<Long, Object> elementRecordEntry : elementRecords.entrySet())
+    {
+      final Object elementRecord = elementRecordEntry.getValue();
+      final Map<String, String> tags =
+        PostgresUtils.postgresObjToHStore(
+      	  (PGobject)MethodUtils.invokeMethod(elementRecord, "getTags", new Object[]{}));
+      assert(tags != null);
+      final String reviewableItemId = StringUtils.trimToNull(tags.get("uuid"));
+      if (reviewableItemId != null)
+      {
+      	allUuids.add(reviewableItemId);
+      }
+      
+      final String itemsToReviewAgainstStr = StringUtils.trimToNull(tags.get("hoot:review:uuid"));
+      if (itemsToReviewAgainstStr != null)
+      {
+      	String[] reviewAgainstItemIds = null;
+        //We are parsing pairwise comparisons and don't want duplicates, so ignore one
+        //to many reviewable item to review against item relationships.  They are always
+        //represented with a duplicated one to one relationship in the data.
+        if (!itemsToReviewAgainstStr.contains(";"))
+        {
+          reviewAgainstItemIds = new String[] { itemsToReviewAgainstStr };
+        }
+        else
+        {
+          reviewAgainstItemIds = itemsToReviewAgainstStr.split(";");
+        }
+        for (int i = 0; i < reviewAgainstItemIds.length; i++)
+        {
+        	final String id = reviewAgainstItemIds[i];
+        	if (id != null)
+        	{
+        		allUuids.add(id);
+        	}
+        }
+      }
+    }
+  	return allUuids;
+	}
 
   /*
    * logging records with invalid uuids and skipping; if errors should be thrown, then the
@@ -94,16 +143,29 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
         int elementIndex = 0;
         while (numElementsReturned > 0)
         {
-          //get all reviewable elements
-          final Map<Long, Object> reviewableElementRecords =
+          //get all elements with with a uuid tag
+          final Map<Long, Object> parseableElementRecords =
             getParseableElementRecords(mapId, elementType, maxRecordBatchSize, elementIndex);
-          numElementsReturned = reviewableElementRecords.size();
-          elementIndex += numElementsReturned;
-          for (Map.Entry<Long, Object> reviewableElementRecordEntry :
-               reviewableElementRecords.entrySet())
+          
+          final Set<String> allUuids = parseAllUuidsFromElementRecords(parseableElementRecords);
+          Set<String> existingIdMappings = null;
+          if (allUuids.size() > 0)
           {
-            final long osmElementId = reviewableElementRecordEntry.getKey();
-            final Object reviewableElementRecord = reviewableElementRecordEntry.getValue();
+          	log.debug("allUuids length: " + allUuids.size());
+            existingIdMappings =  
+            	Element.filterOutNonExistingElementMappingUniqueIds(
+          			mapId, allUuids.toArray(new String[]{}), elementType, conn);
+            log.debug("existingIdMappings length: " + existingIdMappings.size());
+          }
+          
+          numElementsReturned = parseableElementRecords.size();
+          elementIndex += numElementsReturned;
+          
+          for (Map.Entry<Long, Object> parseableElementRecordEntry :
+          	   parseableElementRecords.entrySet())
+          {
+            final long osmElementId = parseableElementRecordEntry.getKey();
+            final Object reviewableElementRecord = parseableElementRecordEntry.getValue();
             final Map<String, String> tags =
               PostgresUtils.postgresObjToHStore(
               	(PGobject)MethodUtils.invokeMethod(
@@ -114,7 +176,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
             {
             	final String msg = 
             		"Null or empty UUID for map with ID: " + mapId +
-                 " and OSM record with ID: " + osmElementId + ".  Skipping adding unique ID record...";
+                " and OSM record with ID: " + osmElementId + ".  Skipping adding unique ID record...";
             	if (warnMessagesDisplayed <= MAX_WARN_MESSAGES)
             	{
             		log.warn(msg);
@@ -148,14 +210,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                 
               for (String uniqueElementId : uniqueElementIds)
               {
-              	//TODO: get rid of this check after enough datasets have been tested to prove
-              	//its not needed
-                if(checkForElementIdMappingPerReviewRecordWrite &&
-                	 new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                     .from(elementIdMappings)
-                	   .where(elementIdMappings.mapId.eq(mapId)
-                  		 .and(elementIdMappings.elementId.eq(uniqueElementId)))
-                  	 .count() > 0)
+                if (existingIdMappings.contains(uniqueElementId))
                 {
                 	final String msg = 
                 		"UUID: " + uniqueElementId + " for map with ID: " + mapId + 
@@ -203,49 +258,6 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
 
     return idMappingRecordWritten;
   }
-  
-  /*
-   * Returns all uuid's which have no associated feature in the OSM database for a given feature type
-   * 
-   * Unfortunately, there's a lot of duplicated code here from parseElementReviewTags, but there
-   * doesn't seem to be any way around that for now.
-   */
-  private List<String> filterOutUuidsOfMissingFeatures(
-  	final Map<Long, Object> reviewableElementRecords, final ElementType elementType) 
-  	throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, Exception
-  {
-  	List<String> allUuids = new ArrayList<String>();
-  	for (Map.Entry<Long, Object> reviewableElementRecordEntry : reviewableElementRecords.entrySet())
-    {
-      final Object reviewableElementRecord = reviewableElementRecordEntry.getValue();
-      final Map<String, String> tags =
-        PostgresUtils.postgresObjToHStore(
-      	  (PGobject)MethodUtils.invokeMethod(reviewableElementRecord, "getTags", new Object[]{}));
-      final String reviewableItemId = StringUtils.trimToNull(tags.get("uuid"));
-      allUuids.add(reviewableItemId);
-      
-      final String itemsToReviewAgainstStr = StringUtils.trimToNull(tags.get("hoot:review:uuid"));
-    	String[] reviewAgainstItemIds = null;
-      //We are parsing pairwise comparisons and don't want duplicates, so ignore one
-      //to many reviewable item to review against item relationships.  They are always
-      //represented with a duplicated one to one relationship in the data.
-      if (!itemsToReviewAgainstStr.contains(";"))
-      {
-        reviewAgainstItemIds = new String[] { itemsToReviewAgainstStr };
-      }
-      else
-      {
-        reviewAgainstItemIds = itemsToReviewAgainstStr.split(";");
-      }
-      for (int i = 0; i < reviewAgainstItemIds.length; i++)
-      {
-      	allUuids.add(reviewAgainstItemIds[i]);
-      }
-    }
-  	
-  	return 
-  		Element.filterOutNonExistingUuids(mapId, allUuids.toArray(new String[]{}), elementType, conn);
-  }
 
   /*
    * logging records with invalid tag values and skipping; if errors should be thrown, then the
@@ -282,8 +294,23 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
           //get a batch of reviewable elements
           final Map<Long, Object> reviewableElementRecords =
             getReviewableElementRecords(mapId, elementType, maxRecordBatchSize, elementIndex);
-          final List<String> validUuids = 
-          	filterOutUuidsOfMissingFeatures(reviewableElementRecords, elementType);
+          
+          final Set<String> allUuids = parseAllUuidsFromElementRecords(reviewableElementRecords);
+          Set<String> existingIdMappings = null;
+          Set<String> validUuids = null;
+          if (allUuids.size() > 0)
+          {
+          	log.debug("allUuids length: " + allUuids.size());
+            existingIdMappings =  
+          		Element.filterOutNonExistingElementMappingUniqueIds(
+          			mapId, allUuids.toArray(new String[]{}), elementType, conn);
+            log.debug("existingIdMappings length: " + existingIdMappings.size());
+            validUuids =
+              Element.filterOutNonExistingUuids(
+              	mapId, allUuids.toArray(new String[]{}), elementType, conn);
+            log.debug("validUuids length: " + validUuids.size());
+          }
+          
           numElementsReturned = reviewableElementRecords.size();
           elementIndex += numElementsReturned;
           
@@ -394,15 +421,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                     		log.debug(msg);
                     	}
                     }
-                    //TODO: This check is expensive, but unfortunately, it is needed with some
-                    //datasets (checkForElementIdMappingPerReviewRecordWrite should always be set 
-                    //to true).  It would be nice to be able to get rid of this check completely.
-                    else if (checkForElementIdMappingPerReviewRecordWrite &&
-                    		new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                          .from(elementIdMappings)
-                          .where(elementIdMappings.mapId.eq(mapId)
-                      		  .and(elementIdMappings.elementId.eq(reviewAgainstItemId)))
-                      		.count() == 0)
+                    else if (!existingIdMappings.contains(reviewAgainstItemId))
                     {
                     	final String msg = 
                     		"No element ID mapping exists for review against item with ID: " +

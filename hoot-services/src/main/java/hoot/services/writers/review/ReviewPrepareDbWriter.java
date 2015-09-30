@@ -99,7 +99,6 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 	protected int maxRecordBatchSize;
 	protected ListMultimap<String, String> previouslyReviewedItemIdToReviewAgainstItemIds;
 	protected ListMultimap<String, String> reviewableItemIdToReviewAgainstItemIds;
-	protected boolean checkForElementIdMappingPerReviewRecordWrite = false;
 
 	private String finalStatusDetail;
 
@@ -116,12 +115,6 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 			Integer.parseInt(
 				HootProperties.getInstance()
 		      .getProperty("maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
-		checkForElementIdMappingPerReviewRecordWrite = 
-			Boolean.parseBoolean(
-				HootProperties.getInstance()
-		      .getProperty(
-		      	"checkForElementIdMappingPerReviewRecordWrite", 
-		    		HootProperties.getDefault("checkForElementIdMappingPerReviewRecordWrite")));
 	}
 
 	/**
