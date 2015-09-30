@@ -923,7 +923,7 @@ public:
   void runInsertRelationOsmApiTest()
   {
     ServicesDb database;
-    database.open(QUrl("postgresql://postgres@10.194.71.84:5432/terrytest"));
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
 
     database.transaction();
 

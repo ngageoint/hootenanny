@@ -21,7 +21,7 @@ all: build
 always:
 
 build: js-make qt-make pp-build services-build model-build conf/words.sqlite \
-	conf/WordsAbridged.sqlite
+	conf/WordsAbridged.sqlite osmapidb
 
 clean: Makefile.qmake services-clean
 	$(MAKE) -f Makefile.qmake clean
@@ -48,6 +48,7 @@ clean: Makefile.qmake services-clean
 	rm -rf `find test-files/cases -type d -empty`
 	rm -rf `find test-files/cases -type d -empty`
 	cd docs; $(MAKE) clean
+	scripts/CleanOsmApiDB.sh
 
 clean-db: services-clean-db
 
@@ -178,6 +179,9 @@ plugins/etds61_osm_rules.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
+# Build osmapi db
+osmapidb:
+	scripts/SetupOsmApiDB.sh
 
 # Build automatically generated JS files
 js-make: $(SCHEMA_FILES) plugins/config.js

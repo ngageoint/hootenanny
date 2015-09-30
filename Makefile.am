@@ -13,6 +13,9 @@ bin/hoot:
 bin/hoot.bin:
 pretty-pipes/bin/PrettyPipes:
 
+osmapidb:
+	$(MAKE) -f Makefile.old osmapidb
+
 archive:
 	$(MAKE) -f Makefile.old dist
 
