@@ -324,9 +324,17 @@ public class MapResource
 		boundsElem.setAttribute("maxlat", maxlat);
 		boundsElem.setAttribute("maxlon", maxlon);
 		osmElem.appendChild(boundsElem);
+		
+		//The ID's for these fabricated nodes were stepping on the ID's of actual nodes, so their
+		//ID's need to be made negative and large, so they have no chance of stepping on anything.
+		
+		final long node1Id = Long.MIN_VALUE + 3;
+		final long node2Id = Long.MIN_VALUE + 2;
+		final long node3Id = Long.MIN_VALUE + 1;
+		final long node4Id = Long.MIN_VALUE;
 
 		Element nodeElem = doc.createElement("node");
-		nodeElem.setAttribute("id", "0");
+		nodeElem.setAttribute("id", String.valueOf(node1Id));
 		nodeElem.setAttribute("timestamp", strDate);
 		nodeElem.setAttribute("user", "hootenannyuser");
 		nodeElem.setAttribute("visible", "true");
@@ -336,7 +344,7 @@ public class MapResource
 		osmElem.appendChild(nodeElem);
 
 		nodeElem = doc.createElement("node");
-		nodeElem.setAttribute("id", "1");
+		nodeElem.setAttribute("id", String.valueOf(node2Id));
 		nodeElem.setAttribute("timestamp", strDate);
 		nodeElem.setAttribute("user", "hootenannyuser");
 		nodeElem.setAttribute("visible", "true");
@@ -346,7 +354,7 @@ public class MapResource
 		osmElem.appendChild(nodeElem);
 
 		nodeElem = doc.createElement("node");
-		nodeElem.setAttribute("id", "2");
+		nodeElem.setAttribute("id", String.valueOf(node3Id));
 		nodeElem.setAttribute("timestamp", strDate);
 		nodeElem.setAttribute("user", "hootenannyuser");
 		nodeElem.setAttribute("visible", "true");
@@ -356,7 +364,7 @@ public class MapResource
 		osmElem.appendChild(nodeElem);
 
 		nodeElem = doc.createElement("node");
-		nodeElem.setAttribute("id", "3");
+		nodeElem.setAttribute("id", String.valueOf(node4Id));
 		nodeElem.setAttribute("timestamp", strDate);
 		nodeElem.setAttribute("user", "hootenannyuser");
 		nodeElem.setAttribute("visible", "true");
@@ -366,30 +374,30 @@ public class MapResource
 		osmElem.appendChild(nodeElem);
 
 		Element wayElem = doc.createElement("way");
-		wayElem.setAttribute("id", "0");
+		wayElem.setAttribute("id", String.valueOf(Long.MIN_VALUE));
 		wayElem.setAttribute("timestamp", strDate);
 		wayElem.setAttribute("user", "hootenannyuser");
 		wayElem.setAttribute("visible", "true");
 		wayElem.setAttribute("version", "1");
 
 		Element ndElem = doc.createElement("nd");
-		ndElem.setAttribute("ref", "0");
+		ndElem.setAttribute("ref", String.valueOf(node1Id));
 		wayElem.appendChild(ndElem);
 
 		ndElem = doc.createElement("nd");
-		ndElem.setAttribute("ref", "1");
+		ndElem.setAttribute("ref", String.valueOf(node2Id));
 		wayElem.appendChild(ndElem);
 
 		ndElem = doc.createElement("nd");
-		ndElem.setAttribute("ref", "2");
+		ndElem.setAttribute("ref", String.valueOf(node3Id));
 		wayElem.appendChild(ndElem);
 
 		ndElem = doc.createElement("nd");
-		ndElem.setAttribute("ref", "3");
+		ndElem.setAttribute("ref", String.valueOf(node4Id));
 		wayElem.appendChild(ndElem);
 
 		ndElem = doc.createElement("nd");
-		ndElem.setAttribute("ref", "0");
+		ndElem.setAttribute("ref", String.valueOf(node1Id));
 		wayElem.appendChild(ndElem);
 
 		/*
@@ -456,8 +464,9 @@ public class MapResource
 			@QueryParam("bbox") final String BBox,
 			@QueryParam("extent") final String extent,
 			@QueryParam("autoextent") final String auto,
-			@DefaultValue("false") @QueryParam("multiLayerUniqueElementIds") final boolean multiLayerUniqueElementIds)
-					throws Exception
+			@DefaultValue("false") @QueryParam("multiLayerUniqueElementIds") 
+			final boolean multiLayerUniqueElementIds)
+			throws Exception
 	{
 		Connection conn = DbUtils.createConnection();
 		Document responseDoc = null;
@@ -494,7 +503,6 @@ public class MapResource
 				maxY = maxY < -90 ? -90 : maxY;
 
 				bbox = "" + minX + "," + minY + "," + maxX + "," + maxY;
-
 			}
 
 			QMaps maps = QMaps.maps;
@@ -517,7 +525,6 @@ public class MapResource
 			boolean doDefault = true;
 			if (auto != null && extent != null)
 			{
-
 				if (auto.equalsIgnoreCase("manual"))
 				{
 					if (extent.length() > 0)
@@ -544,9 +551,7 @@ public class MapResource
 
 				responseDoc = (new MapQueryResponseWriter(mapIdNum, conn))
 						.writeResponse(results, queryBounds, multiLayerUniqueElementIds);
-
 			}
-
 		}
 		catch (Exception e)
 		{

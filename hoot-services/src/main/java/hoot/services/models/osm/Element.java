@@ -415,10 +415,10 @@ public abstract class Element implements XmlSerializable, DbSerializable
       //this, however, would be parsing the XML node data more than once.
 
     	Object existingRecord =
-    			new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).from(getElementTable()).where(getElementIdField().eq(new Long(oldId)))
+    	  new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+    	    .from(getElementTable())
+    	    .where(getElementIdField().eq(new Long(oldId)))
     			.singleResult(getElementTable());
-
-
       if (existingRecord == null)
       {
         throw new Exception(toString() + " to be updated does not exist with ID: " + oldId);
@@ -444,7 +444,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
       if (parsedVersion != 0)
       {
         throw new Exception("Invalid version: " + parsedVersion + " specified for " + toString() + 
-          " with ID: " + getId() + " and expected version " + version + " in changeset " +
+          " with ID: " + getId() + " and expected version 0 in changeset " +
           " with ID: " + MethodUtils.invokeMethod(record, "getChangesetId", new Object[]{}));
       }
     }
@@ -561,20 +561,21 @@ public abstract class Element implements XmlSerializable, DbSerializable
   {
     final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
 
-    //SQLQuery query = new SQLQuery(dbConn, DbUtils.getConfiguration());
     QChangesets changesets = QChangesets.changesets;
     QUsers users = QUsers.users;
 
-    if(elementIds.size() > 0)
+    if (elementIds.size() > 0)
     {
-  	return
-  			new SQLQuery(dbConn, DbUtils.getConfiguration("" + mapId)).from(prototype.getElementTable()).join(QChangesets.changesets).
-  			on(prototype.getChangesetIdField().eq(changesets.id))
-  			.join(users)
-  			.on(changesets.userId.eq(users.id))
-  			.where(prototype.getElementIdField().in(elementIds))
-  			.orderBy(prototype.getElementIdField().asc()).
-  			list(prototype.getElementTable(), users, changesets);
+  	  return
+  	    new SQLQuery(dbConn, DbUtils.getConfiguration("" + mapId))
+  	      .from(prototype.getElementTable())
+  	      .join(QChangesets.changesets)
+  	      .on(prototype.getChangesetIdField().eq(changesets.id))
+  			  .join(users)
+  			  .on(changesets.userId.eq(users.id))
+  			  .where(prototype.getElementIdField().in(elementIds))
+  			  .orderBy(prototype.getElementIdField().asc())
+  			  .list(prototype.getElementTable(), users, changesets);
     }
 
     return new ArrayList();

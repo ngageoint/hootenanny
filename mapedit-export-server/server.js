@@ -7,7 +7,8 @@ var archiver = require("archiver");
 var exec = require('child_process').exec;
 var config = require('configure');
 var _ = require('lodash');
-var rmdir = require('rimraf')
+var rmdir = require('rimraf');
+var proj4 = require('proj4');
 var done = false;
 var dir;
 var jobs = {};
@@ -34,7 +35,7 @@ app.get('/options', function(req, res) {
     });
 });
 
-exports.validateBbox = function(bbox) {
+exports.validateBbox = function(bbox, epsg) {
     //38.4902,35.7982,38.6193,35.8536
     var regex = /(-?\d+\.?\d*),(-?\d+\.?\d*),(-?\d+\.?\d*),(-?\d+\.?\d*$)/;
     var match = regex.exec(bbox);
@@ -45,6 +46,12 @@ exports.validateBbox = function(bbox) {
             maxy = parseFloat(match[4]);
         if (minx < maxx && miny < maxy) { //passes min/max order
             if (minx >= -180 && miny >= -90 && maxx <= 180 && maxy <= 90) { //passes max bounds
+                if (epsg) { //if has epsg, project bounding box to it
+                    var ll = proj4(proj4.defs('EPSG:4326'), proj4.defs('EPSG:' + epsg), [minx, miny]),
+                        ur = proj4(proj4.defs('EPSG:4326'), proj4.defs('EPSG:' + epsg), [maxx, maxy]);
+                    bbox = ll.join(',') + ',' + ur.join(',');
+                }
+
                 return bbox;
             }
         }
@@ -132,19 +139,28 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
     } else { //if missing, run job
         //create command and run
         var command = 'hoot';
+        var epsg = config.datasources[req.params.datasource].epsg;
         if (isFile) {
             command += ' convert';
-            command += ' -D ogr.reader.bounding.box=' + exports.validateBbox(req.query.bbox)
+            command += ' -D ogr.reader.bounding.box=' + exports.validateBbox(req.query.bbox, epsg)
+            //No need to override epsg after fix in #7175
+            // if (epsg) {
+            //     command += ' -D ogr.reader.epsg.override=' + '900913';
+            // }
             if (config.schemas[req.params.schema] !== '') {
                 command += ' -D convert.ops=hoot::TranslationOp -D translation.script=' + config.schemas[req.params.schema] + ' -D translation.direction=toogr';
             }
         } else {
             command += ' osm2ogr';
-            command += ' -D ogr.reader.bounding.box=' + exports.validateBbox(req.query.bbox)
+            command += ' -D ogr.reader.bounding.box=' + exports.validateBbox(req.query.bbox, epsg)
+            //No need to override epsg after fix in #7175
+            // if (epsg) {
+            //     command += ' -D ogr.reader.epsg.override=' + '900913';
+            // }
             command += ' ' + config.schemas[req.params.schema]
 
         }
-        command += ' "' + config.datasources[req.params.datasource] + '" '
+        command += ' "' + config.datasources[req.params.datasource].conn + '" '
             + outFile
             ;
 

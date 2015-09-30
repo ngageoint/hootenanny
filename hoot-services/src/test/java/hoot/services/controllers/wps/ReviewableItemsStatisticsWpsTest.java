@@ -47,6 +47,7 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.models.review.ReviewableItemsStatistics;
 import hoot.services.review.ReviewTestUtils;
 import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 import hoot.services.wps.WpsTestAbstract;
 
 public class ReviewableItemsStatisticsWpsTest extends WpsTestAbstract
@@ -124,7 +125,7 @@ public class ReviewableItemsStatisticsWpsTest extends WpsTestAbstract
     Assert.assertNotNull(responseData);
     //System.out.println(XmlDocumentBuilder.toString(responseData));
     
-    XPath xpath = XmlDocumentBuilder.createXPath();    
+    XPath xpath = XmlUtils.createXPath();    
     try
     {
       Assert.assertEquals(

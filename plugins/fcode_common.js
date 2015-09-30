@@ -271,8 +271,8 @@ fcodeCommon = {
       ['F_CODE','BH075','amenity','fountain'], // Fountain 
       ['F_CODE','BH077','natural','hummock'], // Hummock
       ['F_CODE','BH082','water','lake'], // Inland Waterbody
-      ['F_CODE','BH090','natural','wetland'], // Land Subject to Inundation
-      ['F_CODE','BH095','wetland','yes'], // Wetland - In NFDD & NAS but not TDS
+      ['F_CODE','BH090','water','intermittent'], // Land Subject to Inundation
+      ['F_CODE','BH095','natural','wetland'], // Wetland - In NFDD & NAS but not TDS
       ['F_CODE','BH100','water','moat'], // Moat
       ['F_CODE','BH110','pipeline:type','penstock'], // Penstock
       ['F_CODE','BH116','natural','aquifer'], // Aquifer
@@ -312,7 +312,7 @@ fcodeCommon = {
       ['F_CODE','CA010','contour','elevation'], // Elevation Contour
       ['F_CODE','CA030','geological','spot_elevation'], // Spot Elevation
       ['F_CODE','DA005','natural','asphalt_lake'], // Asphalt Lake
-      ['F_CODE','DA010','natural','soil_surface_region'], // Soil Surface Region
+      ['F_CODE','DA010','geological','soil_surface_region'], // Soil Surface Region
       ['F_CODE','DB010','natural','cliff'], // Bluff/Cliff/Escarpment, Steep Terrain Face 
       ['F_CODE','DB028','geological','cave_chamber'], // Cave Chamber
       ['F_CODE','DB029','natural','cave_entrance'], // Cave Mouth
