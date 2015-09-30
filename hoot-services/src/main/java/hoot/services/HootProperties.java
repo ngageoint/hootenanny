@@ -334,6 +334,10 @@ public class HootProperties
     {
       return "hoot:review:uuid;hoot:review:score;hoot:review:note;hoot:review:needs";
     }
+    else if (key.equals("maxWarningsDisplayed"))
+    {
+      return "10";
+    }
     return null;
   }
 }

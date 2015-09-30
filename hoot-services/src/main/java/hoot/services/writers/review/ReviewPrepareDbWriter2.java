@@ -60,7 +60,6 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
 {
   private static final Logger log = LoggerFactory.getLogger(ReviewPrepareDbWriter2.class);
   
-  private static final int MAX_WARN_MESSAGES = 10;
   private int warnMessagesDisplayed = 0;
 
   public ReviewPrepareDbWriter2() throws Exception
@@ -177,7 +176,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
             	final String msg = 
             		"Null or empty UUID for map with ID: " + mapId +
                 " and OSM record with ID: " + osmElementId + ".  Skipping adding unique ID record...";
-            	if (warnMessagesDisplayed <= MAX_WARN_MESSAGES)
+            	if (warnMessagesDisplayed <= maxWarningsDisplayed)
             	{
             		log.warn(msg);
             		warnMessagesDisplayed++;
@@ -216,7 +215,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                 		"UUID: " + uniqueElementId + " for map with ID: " + mapId + 
                     " and OSM record ID: " + osmElementId + " already exists.  " +
                     "Skipping adding unique ID record...";
-                	if (warnMessagesDisplayed <= MAX_WARN_MESSAGES)
+                	if (warnMessagesDisplayed <= maxWarningsDisplayed)
                 	{
                 		log.warn(msg);
                 		warnMessagesDisplayed++;
@@ -329,7 +328,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
             	final String msg = 
             		"Invalid UUID: " + reviewableItemId + " for OSM record with ID: " + osmElementId +
             		" for map with ID: " + mapId + "Skipping adding review record...";
-            	if (warnMessagesDisplayed <= MAX_WARN_MESSAGES)
+            	if (warnMessagesDisplayed <= maxWarningsDisplayed)
             	{
             		log.warn(msg);
             		warnMessagesDisplayed++;
@@ -344,7 +343,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
             	final String msg = 
             		"No feature exists with UUID: " + reviewableItemId + " for OSM record with ID: " + 
             	  osmElementId + " for map with ID: " + mapId + " Skipping adding review record...";
-            	if (warnMessagesDisplayed <= MAX_WARN_MESSAGES)
+            	if (warnMessagesDisplayed <= maxWarningsDisplayed)
             	{
             		log.warn(msg);
             		warnMessagesDisplayed++;
@@ -411,7 +410,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                     	final String msg = "No feature exists with review against UUID: " + 
                         reviewAgainstItemId + " for reviewable OSM record with ID: " + osmElementId + 
                         " for map with ID: " + mapId + " Skipping adding review record...";
-                    	if (warnMessagesDisplayed <= MAX_WARN_MESSAGES)
+                    	if (warnMessagesDisplayed <= maxWarningsDisplayed)
                     	{
                     		log.warn(msg);
                     		warnMessagesDisplayed++;
@@ -427,7 +426,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
                     		"No element ID mapping exists for review against item with ID: " +
                         reviewAgainstItemId + " for reviewable OSM record with ID: " + osmElementId +
                         " for map with ID: " + mapId + ".  Skipping adding review record...";
-                    	if (warnMessagesDisplayed <= MAX_WARN_MESSAGES)
+                    	if (warnMessagesDisplayed <= maxWarningsDisplayed)
                     	{
                     		log.warn(msg);
                     		warnMessagesDisplayed++;

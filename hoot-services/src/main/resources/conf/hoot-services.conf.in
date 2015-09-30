@@ -35,6 +35,9 @@ autoScanForLogPropsChanges=true
 # in the log4j properties file
 logPropsDynamicChangeScanInterval=1
 
+# Loosely enforced setting that determines the maximum number of times a class logs a warning
+maxWarningsDisplayed=10
+
 # OSM SERVICES
 
 # OSM header info

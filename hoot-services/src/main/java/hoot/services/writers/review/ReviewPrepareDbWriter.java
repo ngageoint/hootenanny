@@ -89,6 +89,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 	protected static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
 	protected Connection conn;
 
+	protected int maxWarningsDisplayed = 10;
 	protected long mapId;
 	protected long uniqueIdsParsed = 0;
 	protected boolean idMappingRecordWritten = false;
@@ -115,6 +116,10 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 			Integer.parseInt(
 				HootProperties.getInstance()
 		      .getProperty("maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
+		maxWarningsDisplayed = 
+			Integer.parseInt(
+				HootProperties.getInstance()
+		      .getProperty("maxWarningsDisplayed", HootProperties.getDefault("maxWarningsDisplayed")));
 	}
 
 	/**
