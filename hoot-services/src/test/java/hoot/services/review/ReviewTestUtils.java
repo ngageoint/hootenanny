@@ -179,7 +179,7 @@ public class ReviewTestUtils
         .get("{25e1aa70-a30f-11e3-a5e2-0800200c9a66}");
     Assert.assertNotNull(elementIdMapping);
     Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
-    Assert.assertEquals(DbUtils.nwr_enum.node, (DbUtils.nwr_enum)elementIdMapping.getOsmElementType());
+    Assert.assertEquals(DbUtils.nwr_enum.node, elementIdMapping.getOsmElementType());
 
     elementIdMapping =
       idMappings
@@ -187,7 +187,7 @@ public class ReviewTestUtils
     Assert.assertNotNull(elementIdMapping);
     Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
     Assert.assertEquals(nodeIds.get((long)-71), elementIdMapping.getOsmElementId());
-    Assert.assertEquals(DbUtils.nwr_enum.node, (DbUtils.nwr_enum)elementIdMapping.getOsmElementType());
+    Assert.assertEquals(DbUtils.nwr_enum.node, elementIdMapping.getOsmElementType());
 
     elementIdMapping =
       idMappings
@@ -195,7 +195,7 @@ public class ReviewTestUtils
     Assert.assertNotNull(elementIdMapping);
     Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
     Assert.assertEquals(nodeIds.get((long)-65), elementIdMapping.getOsmElementId());
-    Assert.assertEquals(DbUtils.nwr_enum.node, (DbUtils.nwr_enum)elementIdMapping.getOsmElementType());
+    Assert.assertEquals(DbUtils.nwr_enum.node, elementIdMapping.getOsmElementType());
 
     elementIdMapping =
       idMappings
@@ -203,7 +203,7 @@ public class ReviewTestUtils
     Assert.assertNotNull(elementIdMapping);
     Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
     Assert.assertEquals(nodeIds.get((long)-67), elementIdMapping.getOsmElementId());
-    Assert.assertEquals(DbUtils.nwr_enum.node, (DbUtils.nwr_enum)elementIdMapping.getOsmElementType());
+    Assert.assertEquals(DbUtils.nwr_enum.node, elementIdMapping.getOsmElementType());
 
     //ways
 
@@ -213,7 +213,7 @@ public class ReviewTestUtils
     Assert.assertNotNull(elementIdMapping);
     Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
     Assert.assertEquals(wayIds.get((long)-43), elementIdMapping.getOsmElementId());
-    Assert.assertEquals(DbUtils.nwr_enum.way, (DbUtils.nwr_enum)elementIdMapping.getOsmElementType());
+    Assert.assertEquals(DbUtils.nwr_enum.way, elementIdMapping.getOsmElementType());
 
     elementIdMapping =
       idMappings
@@ -221,7 +221,7 @@ public class ReviewTestUtils
     Assert.assertNotNull(elementIdMapping);
     Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
     Assert.assertEquals(wayIds.get((long)-42), elementIdMapping.getOsmElementId());
-    Assert.assertEquals(DbUtils.nwr_enum.way, (DbUtils.nwr_enum)elementIdMapping.getOsmElementType());
+    Assert.assertEquals(DbUtils.nwr_enum.way, elementIdMapping.getOsmElementType());
 
     elementIdMapping =
       idMappings
@@ -229,7 +229,7 @@ public class ReviewTestUtils
     Assert.assertNotNull(elementIdMapping);
     Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
     Assert.assertEquals(wayIds.get((long)-41), elementIdMapping.getOsmElementId());
-    Assert.assertEquals(DbUtils.nwr_enum.way, (DbUtils.nwr_enum)elementIdMapping.getOsmElementType());
+    Assert.assertEquals(DbUtils.nwr_enum.way, elementIdMapping.getOsmElementType());
 
     elementIdMapping =
       idMappings
@@ -237,7 +237,7 @@ public class ReviewTestUtils
     Assert.assertNotNull(elementIdMapping);
     Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
     Assert.assertEquals(wayIds.get((long)-40), elementIdMapping.getOsmElementId());
-    Assert.assertEquals(DbUtils.nwr_enum.way, (DbUtils.nwr_enum)elementIdMapping.getOsmElementType());
+    Assert.assertEquals(DbUtils.nwr_enum.way, elementIdMapping.getOsmElementType());
 
     elementIdMapping =
       idMappings
@@ -245,7 +245,7 @@ public class ReviewTestUtils
     Assert.assertNotNull(elementIdMapping);
     Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
     Assert.assertEquals(wayIds.get((long)-36), elementIdMapping.getOsmElementId());
-    Assert.assertEquals(DbUtils.nwr_enum.way, (DbUtils.nwr_enum)elementIdMapping.getOsmElementType());
+    Assert.assertEquals(DbUtils.nwr_enum.way, elementIdMapping.getOsmElementType());
 
     elementIdMapping =
       idMappings
@@ -253,7 +253,7 @@ public class ReviewTestUtils
     Assert.assertNotNull(elementIdMapping);
     Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
     Assert.assertEquals(wayIds.get((long)-24), elementIdMapping.getOsmElementId());
-    Assert.assertEquals(DbUtils.nwr_enum.way, (DbUtils.nwr_enum)elementIdMapping.getOsmElementType());
+    Assert.assertEquals(DbUtils.nwr_enum.way, elementIdMapping.getOsmElementType());
 
     elementIdMapping =
       idMappings
@@ -261,7 +261,7 @@ public class ReviewTestUtils
     Assert.assertNotNull(elementIdMapping);
     Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
     Assert.assertEquals(wayIds.get((long)-20), elementIdMapping.getOsmElementId());
-    Assert.assertEquals(DbUtils.nwr_enum.way, (DbUtils.nwr_enum)elementIdMapping.getOsmElementType());
+    Assert.assertEquals(DbUtils.nwr_enum.way, elementIdMapping.getOsmElementType());
 
     elementIdMapping =
       idMappings
@@ -269,7 +269,7 @@ public class ReviewTestUtils
     Assert.assertNotNull(elementIdMapping);
     Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
     Assert.assertEquals(wayIds.get((long)-18), elementIdMapping.getOsmElementId());
-    Assert.assertEquals(DbUtils.nwr_enum.way, (DbUtils.nwr_enum)elementIdMapping.getOsmElementType());
+    Assert.assertEquals(DbUtils.nwr_enum.way, elementIdMapping.getOsmElementType());
 
     elementIdMapping =
       idMappings
@@ -277,7 +277,7 @@ public class ReviewTestUtils
     Assert.assertNotNull(elementIdMapping);
     Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
     Assert.assertEquals(wayIds.get((long)-44), elementIdMapping.getOsmElementId());
-    Assert.assertEquals(DbUtils.nwr_enum.way, (DbUtils.nwr_enum)elementIdMapping.getOsmElementType());
+    Assert.assertEquals(DbUtils.nwr_enum.way, elementIdMapping.getOsmElementType());
 
     //relations
 
@@ -287,7 +287,7 @@ public class ReviewTestUtils
     Assert.assertNotNull(elementIdMapping);
     Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
     Assert.assertEquals(relationIds.get((long)-1), elementIdMapping.getOsmElementId());
-    Assert.assertEquals(DbUtils.nwr_enum.relation, (DbUtils.nwr_enum)elementIdMapping.getOsmElementType());
+    Assert.assertEquals(DbUtils.nwr_enum.relation, elementIdMapping.getOsmElementType());
 
     elementIdMapping =
       idMappings
@@ -295,7 +295,7 @@ public class ReviewTestUtils
     Assert.assertNotNull(elementIdMapping);
     Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
     Assert.assertEquals(relationIds.get((long)-3), elementIdMapping.getOsmElementId());
-    Assert.assertEquals(DbUtils.nwr_enum.relation, (DbUtils.nwr_enum)elementIdMapping.getOsmElementType());
+    Assert.assertEquals(DbUtils.nwr_enum.relation, elementIdMapping.getOsmElementType());
   }
 
   public static void verifyDataPrepared(final long mapId) throws Exception
@@ -340,21 +340,21 @@ public class ReviewTestUtils
     Assert.assertEquals(0.750459, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{5c131c00-a30f-11e3-a5e2-0800200c9a66}", reviewItem.getReviewAgainstItemId());
-    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, (DbUtils.review_status_enum)reviewItem.getReviewStatus());
+    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     reviewItem = reviewItems.get(1);
     reviewItem.getReviewableItemId().equals("{de285618-a4df-4536-b218-5009c25f7107}");
     Assert.assertEquals(0.750459, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{de285618-a4df-4536-b218-5009c25f7107}", reviewItem.getReviewAgainstItemId());
-    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, (DbUtils.review_status_enum)reviewItem.getReviewStatus());
+    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     reviewItem = reviewItems.get(2);
     reviewItem.getReviewableItemId().equals("{99b917d0-8c23-4469-b028-b749a38a8841}");
     Assert.assertEquals(1.0, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{25e1aa70-a30f-11e3-a5e2-0800200c9a66}", reviewItem.getReviewAgainstItemId());
-    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, (DbUtils.review_status_enum)reviewItem.getReviewStatus());
+    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     //ways
 
@@ -364,7 +364,7 @@ public class ReviewTestUtils
     Assert.assertEquals(0.750459, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{f5639540-aaf4-47ac-8c5e-82ad05abc29f}", reviewItem.getReviewAgainstItemId());
-    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, (DbUtils.review_status_enum)reviewItem.getReviewStatus());
+    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     reviewItem = reviewItems.get(4);
     reviewItem.getReviewableItemId().equals(
@@ -372,7 +372,7 @@ public class ReviewTestUtils
     Assert.assertEquals(0.750459, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{2258bbcc-b474-41fe-aa81-76ffc6e2be42}", reviewItem.getReviewAgainstItemId());
-    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, (DbUtils.review_status_enum)reviewItem.getReviewStatus());
+    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     reviewItem = reviewItems.get(5);
     reviewItem.getReviewableItemId().equals(
@@ -380,7 +380,7 @@ public class ReviewTestUtils
     Assert.assertEquals(0.800795, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{f5639540-aaf4-47ac-8c5e-82ad05abc29f}", reviewItem.getReviewAgainstItemId());
-    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, (DbUtils.review_status_enum)reviewItem.getReviewStatus());
+    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     reviewItem = reviewItems.get(6);
     reviewItem.getReviewableItemId().equals(
@@ -388,7 +388,7 @@ public class ReviewTestUtils
     Assert.assertEquals(0.800795, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{2258bbcc-b474-41fe-aa81-76ffc6e2be42}", reviewItem.getReviewAgainstItemId());
-    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, (DbUtils.review_status_enum)reviewItem.getReviewStatus());
+    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     reviewItem = reviewItems.get(7);
     reviewItem.getReviewableItemId().equals(
@@ -396,7 +396,7 @@ public class ReviewTestUtils
     Assert.assertEquals(0.832799, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{f5639540-aaf4-47ac-8c5e-82ad05abc29f}", reviewItem.getReviewAgainstItemId());
-    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, (DbUtils.review_status_enum)reviewItem.getReviewStatus());
+    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     reviewItem = reviewItems.get(8);
     reviewItem.getReviewableItemId().equals(
@@ -404,7 +404,7 @@ public class ReviewTestUtils
     Assert.assertEquals(0.832799, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{2258bbcc-b474-41fe-aa81-76ffc6e2be42}", reviewItem.getReviewAgainstItemId());
-    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, (DbUtils.review_status_enum)reviewItem.getReviewStatus());
+    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     reviewItem = reviewItems.get(9);
     reviewItem.getReviewableItemId().equals(
@@ -412,7 +412,7 @@ public class ReviewTestUtils
     Assert.assertEquals(0.832799, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{f5639540-aaf4-47ac-8c5e-82ad05abc29f}", reviewItem.getReviewAgainstItemId());
-    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, (DbUtils.review_status_enum)reviewItem.getReviewStatus());
+    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     reviewItem = reviewItems.get(10);
     reviewItem.getReviewableItemId().equals(
@@ -420,14 +420,14 @@ public class ReviewTestUtils
     Assert.assertEquals(0.832799, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{2258bbcc-b474-41fe-aa81-76ffc6e2be42}", reviewItem.getReviewAgainstItemId());
-    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, (DbUtils.review_status_enum)reviewItem.getReviewStatus());
+    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     reviewItem = reviewItems.get(11);
     reviewItem.getReviewableItemId().equals("{81d2aff0-88e5-480e-95cb-c502d120f51f}");
     Assert.assertEquals(1.0, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{81d2aff0-88e5-480e-95cb-c502d120f51f}", reviewItem.getReviewAgainstItemId());
-    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, (DbUtils.review_status_enum)reviewItem.getReviewStatus());
+    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     reviewItem = reviewItems.get(12);
     reviewItem.getReviewableItemId().equals(
@@ -435,7 +435,7 @@ public class ReviewTestUtils
     Assert.assertEquals(0.928129, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{f5639540-aaf4-47ac-8c5e-82ad05abc29f}", reviewItem.getReviewAgainstItemId());
-    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, (DbUtils.review_status_enum)reviewItem.getReviewStatus());
+    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     reviewItem = reviewItems.get(13);
     reviewItem.getReviewableItemId().equals(
@@ -443,14 +443,14 @@ public class ReviewTestUtils
     Assert.assertEquals(0.928129, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{2258bbcc-b474-41fe-aa81-76ffc6e2be42}", reviewItem.getReviewAgainstItemId());
-    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, (DbUtils.review_status_enum)reviewItem.getReviewStatus());
+    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     reviewItem = reviewItems.get(14);
     reviewItem.getReviewableItemId().equals("{51cd8890-a312-11e3-a5e2-0800200c9a66}");
     Assert.assertEquals(0.832799, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{7ea9ac60-a310-11e3-a5e2-0800200c9a66}", reviewItem.getReviewAgainstItemId());
-    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, (DbUtils.review_status_enum)reviewItem.getReviewStatus());
+    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     //relations
 
@@ -459,7 +459,7 @@ public class ReviewTestUtils
     Assert.assertEquals(0.939793, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{de285618-a4df-4536-b218-5009c25f7107}", reviewItem.getReviewAgainstItemId());
-    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, (DbUtils.review_status_enum)reviewItem.getReviewStatus());
+    Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
   }
 
   public static void createPreparedData(WebResource resource) throws Exception

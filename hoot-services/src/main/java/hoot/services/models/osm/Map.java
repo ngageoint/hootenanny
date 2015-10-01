@@ -240,7 +240,7 @@ public class Map extends Maps
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
-        ((BooleanExpression)getTileWhereCondition(tileIdRanges)).and(getGeospatialWhereCondition(bounds));
+        getTileWhereCondition(tileIdRanges).and(getGeospatialWhereCondition(bounds));
 
       QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
       QChangesets changesets = QChangesets.changesets;
@@ -286,7 +286,7 @@ public class Map extends Maps
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
-        ((BooleanExpression)getTileWhereCondition(tileIdRanges)).and(getGeospatialWhereCondition(bounds));
+        getTileWhereCondition(tileIdRanges).and(getGeospatialWhereCondition(bounds));
 
       QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
       QChangesets changesets = QChangesets.changesets;
@@ -324,7 +324,7 @@ public class Map extends Maps
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
-        ((BooleanExpression)getTileWhereCondition(tileIdRanges)).and(getGeospatialWhereCondition(bounds));
+        getTileWhereCondition(tileIdRanges).and(getGeospatialWhereCondition(bounds));
 
       QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
       QChangesets changesets = QChangesets.changesets;
@@ -943,7 +943,7 @@ public class Map extends Maps
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
-        ((BooleanExpression)getTileWhereCondition(tileIdRanges)).and(getGeospatialWhereCondition(bounds));
+        getTileWhereCondition(tileIdRanges).and(getGeospatialWhereCondition(bounds));
       validateNodeCount(combinedGeospatialCondition);
       elementIdsToRecordsByType = retrieveElements(combinedGeospatialCondition);
     }

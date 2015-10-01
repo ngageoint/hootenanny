@@ -617,7 +617,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
 		.count();
     }
 
-    if (numElementsToDelete != (long)elementIds.size())
+    if (numElementsToDelete != elementIds.size())
     {
       throw new Exception("Not all element IDs specified for deletion are valid for element " +
         "type: " + prototype.toString());

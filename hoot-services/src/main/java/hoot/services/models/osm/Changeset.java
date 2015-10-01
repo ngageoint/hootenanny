@@ -168,7 +168,7 @@ public class Changeset extends Changesets
     //use ChangesetDao anymore.
 
   	final Changesets changesetRecord =
-  	(Changesets)new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
+  	new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
   		.where(changesets.id.eq(getId()))
   		.singleResult(changesets);
 
@@ -218,7 +218,7 @@ public class Changeset extends Changesets
     //SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
 
     Changesets changesetRecord =
-  	(Changesets)new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
+  	new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
   		.where(changesets.id.eq(getId()))
   		.singleResult(changesets);
 
@@ -348,7 +348,7 @@ public class Changeset extends Changesets
 
 
     Changesets changeset =
-  	(Changesets)new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
+  	new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
   		.where(changesets.id.eq(getId()))
   		.singleResult(changesets);
 
@@ -400,7 +400,7 @@ public class Changeset extends Changesets
     log.debug("Retrieving changeset bounds...");
 
     Changesets changeset =
-  	(Changesets)new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
+  	new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
   		.where(changesets.id.eq(getId()))
   		.singleResult(changesets);
 
@@ -488,7 +488,7 @@ public class Changeset extends Changesets
     {
       log.debug("Verifying changeset with ID: " + getId() + " has previously been created ...");
       changesetRecord =
-    	(Changesets)new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
+    	new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
     		.where(changesets.id.eq(getId()))
     		.singleResult(changesets);
       changesetExists = changesetRecord != null;
@@ -515,7 +515,7 @@ public class Changeset extends Changesets
       //this needs to be retrieved again to refresh the data
 
       changesetRecord =
-    	(Changesets)new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
+    	new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
     		.where(changesets.id.eq(getId()))
     		.singleResult(changesets);
       throw new Exception(
@@ -543,7 +543,7 @@ public class Changeset extends Changesets
 
     //SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
     Changesets changeset =
-  	(Changesets)new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
+  	new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
   		.where(changesets.id.eq(getId()))
   		.singleResult(changesets);
      return

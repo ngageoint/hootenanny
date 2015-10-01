@@ -188,12 +188,12 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         		;
         Assert.assertEquals(4, nodes.size());
 
-        CurrentNodes nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[0]);
+        CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()), nodeRecord.getLatitude());
+          new Double(originalBounds.getMinLat()), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()), nodeRecord.getLongitude());
+          new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
@@ -209,12 +209,12 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals("val 1", tags.get("key 1"));
         Assert.assertEquals("val 2", tags.get("key 2"));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[1]);
+        nodeRecord = nodes.get(nodeIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMaxLat()), nodeRecord.getLatitude());
+          new Double(originalBounds.getMaxLat()), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMaxLon()), nodeRecord.getLongitude());
+          new Double(originalBounds.getMaxLon()), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
@@ -228,12 +228,12 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
             nodeRecord.getTags() == null ||
             StringUtils.isEmpty(((PGobject)nodeRecord.getTags()).getValue()));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[2]);
+        nodeRecord = nodes.get(nodeIdsArr[2]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()), nodeRecord.getLatitude());
+          new Double(originalBounds.getMinLat()), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()), nodeRecord.getLongitude());
+          new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
@@ -247,12 +247,12 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
           nodeRecord.getTags() == null ||
           StringUtils.isEmpty(((PGobject)nodeRecord.getTags()).getValue()));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[4]);
+        nodeRecord = nodes.get(nodeIdsArr[4]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()), nodeRecord.getLatitude());
+          new Double(originalBounds.getMinLat()), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()), nodeRecord.getLongitude());
+          new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[4], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
@@ -287,7 +287,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         		;
         Assert.assertEquals(2, ways.size());
 
-        CurrentWays wayRecord = (CurrentWays)ways.get(wayIdsArr[0]);
+        CurrentWays wayRecord = ways.get(wayIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
         Assert.assertEquals(wayIdsArr[0], wayRecord.getId());
         Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -317,7 +317,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals("val 1", tags.get("key 1"));
         Assert.assertEquals("val 2", tags.get("key 2"));
 
-        wayRecord = (CurrentWays)ways.get(wayIdsArr[1]);
+        wayRecord = ways.get(wayIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
         Assert.assertEquals(wayIdsArr[1], wayRecord.getId());
         Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -362,7 +362,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
         //verify the previously existing relations
         CurrentRelations relationRecord =
-          (CurrentRelations)relations.get(relationIdsArr[0]);
+          relations.get(relationIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[0], relationRecord.getId());
         Assert.assertTrue(relationRecord.getTimestamp().before(now));
@@ -416,7 +416,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals(1, tags.size());
         Assert.assertEquals("val 1", tags.get("key 1"));
 
-        relationRecord = (CurrentRelations)relations.get(relationIdsArr[1]);
+        relationRecord = relations.get(relationIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[1], relationRecord.getId());
 
@@ -452,7 +452,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals("val 2", tags.get("key 2"));
         Assert.assertEquals("val 3", tags.get("key 3"));
 
-        relationRecord = (CurrentRelations)relations.get(relationIdsArr[3]);
+        relationRecord = relations.get(relationIdsArr[3]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[3], relationRecord.getId());
 
@@ -660,12 +660,12 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         		;
         Assert.assertEquals(4, nodes.size());
 
-        CurrentNodes nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[0]);
+        CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()), nodeRecord.getLatitude());
+          new Double(originalBounds.getMinLat()), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()),
+          new Double(originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
         Assert.assertEquals(
@@ -682,13 +682,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals("val 1", tags.get("key 1"));
         Assert.assertEquals("val 2", tags.get("key 2"));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[1]);
+        nodeRecord = nodes.get(nodeIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)(originalBounds.getMaxLat())),
+          new Double((originalBounds.getMaxLat())),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)(originalBounds.getMaxLon())),
+          new Double((originalBounds.getMaxLon())),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
         Assert.assertEquals(
@@ -703,13 +703,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
             nodeRecord.getTags() == null ||
             StringUtils.isEmpty(((PGobject)nodeRecord.getTags()).getValue()));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[2]);
+        nodeRecord = nodes.get(nodeIdsArr[2]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()),
+          new Double(originalBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()),
+          new Double(originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
         Assert.assertEquals(
@@ -725,17 +725,17 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
             StringUtils.isEmpty(((PGobject)nodeRecord.getTags()).getValue()));
 
         //TODO: check rest of node records here?
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[2]);
+        nodeRecord = nodes.get(nodeIdsArr[2]);
         Assert.assertTrue(
             nodeRecord.getTags() == null ||
             StringUtils.isEmpty(((PGobject)nodeRecord.getTags()).getValue()));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[3]);
+        nodeRecord = nodes.get(nodeIdsArr[3]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()), nodeRecord.getLatitude());
+          new Double(originalBounds.getMinLat()), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()), nodeRecord.getLongitude());
+          new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[3], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
@@ -769,7 +769,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         		.map(currentWaysTbl.id, currentWaysTbl);
         Assert.assertEquals(2, ways.size());
 
-        CurrentWays wayRecord = (CurrentWays)ways.get(wayIdsArr[1]);
+        CurrentWays wayRecord = ways.get(wayIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
         Assert.assertEquals(wayIdsArr[1], wayRecord.getId());
         Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -793,7 +793,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
             wayRecord.getTags() == null ||
             StringUtils.isEmpty(((PGobject)wayRecord.getTags()).getValue()));
 
-        wayRecord = (CurrentWays)ways.get(wayIdsArr[2]);
+        wayRecord = ways.get(wayIdsArr[2]);
         Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
         Assert.assertEquals(wayIdsArr[2], wayRecord.getId());
         Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -1118,13 +1118,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         		.map(currentNodesTbl.id, currentNodesTbl);
         Assert.assertEquals(4, nodes.size());
 
-        CurrentNodes nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[0]);
+        CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()),
+          new Double(originalBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()),
+          new Double(originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
         Assert.assertEquals(
@@ -1141,13 +1141,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals("val 1", tags.get("key 1"));
         Assert.assertEquals("val 2", tags.get("key 2"));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[1]);
+        nodeRecord = nodes.get(nodeIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMaxLat()),
+          new Double(originalBounds.getMaxLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMaxLon()),
+          new Double(originalBounds.getMaxLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
         Assert.assertEquals(
@@ -1162,13 +1162,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
             nodeRecord.getTags() == null ||
             StringUtils.isEmpty(((PGobject)nodeRecord.getTags()).getValue()));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[2]);
+        nodeRecord = nodes.get(nodeIdsArr[2]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()),
+          new Double(originalBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()),
+          new Double(originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
         Assert.assertEquals(
@@ -1183,13 +1183,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
             nodeRecord.getTags() == null ||
             StringUtils.isEmpty(((PGobject)nodeRecord.getTags()).getValue()));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[4]);
+        nodeRecord = nodes.get(nodeIdsArr[4]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()),
+          new Double(originalBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()),
+          new Double(originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[4], nodeRecord.getId());
         Assert.assertEquals(
@@ -1224,7 +1224,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         		.map(currentWaysTbl.id, currentWaysTbl);
         Assert.assertEquals(2, ways.size());
 
-        CurrentWays wayRecord = (CurrentWays)ways.get(wayIdsArr[0]);
+        CurrentWays wayRecord = ways.get(wayIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
         Assert.assertEquals(wayIdsArr[0], wayRecord.getId());
         Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -1254,7 +1254,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals("val 1", tags.get("key 1"));
         Assert.assertEquals("val 2", tags.get("key 2"));
 
-        wayRecord = (CurrentWays)ways.get(wayIdsArr[1]);
+        wayRecord = ways.get(wayIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
         Assert.assertEquals(wayIdsArr[1], wayRecord.getId());
         Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -1299,7 +1299,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
         //verify the previously existing relations
         CurrentRelations relationRecord =
-          (CurrentRelations)relations.get(relationIdsArr[0]);
+          relations.get(relationIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[0], relationRecord.getId());
         Assert.assertTrue(relationRecord.getTimestamp().before(now));
@@ -1355,7 +1355,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals(1, tags.size());
         Assert.assertEquals("val 1", tags.get("key 1"));
 
-        relationRecord = (CurrentRelations)relations.get(relationIdsArr[2]);
+        relationRecord = relations.get(relationIdsArr[2]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[2], relationRecord.getId());
 
@@ -1383,7 +1383,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals(1, tags.size());
         Assert.assertEquals("val 4", tags.get("key 4"));
 
-        relationRecord = (CurrentRelations)relations.get(relationIdsArr[3]);
+        relationRecord = relations.get(relationIdsArr[3]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[3], relationRecord.getId());
 
@@ -1577,13 +1577,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         		.map(currentNodesTbl.id, currentNodesTbl);
         Assert.assertEquals(4, nodes.size());
 
-        CurrentNodes nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[0]);
+        CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()),
+          new Double(originalBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()),
+          new Double(originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
         Assert.assertEquals(
@@ -1600,13 +1600,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals("val 1", tags.get("key 1"));
         Assert.assertEquals("val 2", tags.get("key 2"));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[1]);
+        nodeRecord = nodes.get(nodeIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMaxLat()),
+          new Double(originalBounds.getMaxLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMaxLon()),
+          new Double(originalBounds.getMaxLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
         Assert.assertEquals(
@@ -1621,13 +1621,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
             nodeRecord.getTags() == null ||
             StringUtils.isEmpty(((PGobject)nodeRecord.getTags()).getValue()));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[2]);
+        nodeRecord = nodes.get(nodeIdsArr[2]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()),
+          new Double(originalBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()),
+          new Double(originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
         Assert.assertEquals(
@@ -1642,13 +1642,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
             nodeRecord.getTags() == null ||
             StringUtils.isEmpty(((PGobject)nodeRecord.getTags()).getValue()));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[4]);
+        nodeRecord = nodes.get(nodeIdsArr[4]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()),
+          new Double(originalBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()),
+          new Double(originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[4], nodeRecord.getId());
         Assert.assertEquals(
@@ -1683,7 +1683,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       			        		.map(currentWaysTbl.id, currentWaysTbl);
         Assert.assertEquals(2, ways.size());
 
-        CurrentWays wayRecord = (CurrentWays)ways.get(wayIdsArr[0]);
+        CurrentWays wayRecord = ways.get(wayIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
         Assert.assertEquals(wayIdsArr[0], wayRecord.getId());
         Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -1713,7 +1713,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals("val 1", tags.get("key 1"));
         Assert.assertEquals("val 2", tags.get("key 2"));
 
-        wayRecord = (CurrentWays)ways.get(wayIdsArr[1]);
+        wayRecord = ways.get(wayIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
         Assert.assertEquals(wayIdsArr[1], wayRecord.getId());
         Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -1760,7 +1760,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
         //verify the previously existing relations
         CurrentRelations relationRecord =
-          (CurrentRelations)relations.get(relationIdsArr[0]);
+          relations.get(relationIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[0], relationRecord.getId());
         Assert.assertTrue(relationRecord.getTimestamp().before(now));
@@ -1815,7 +1815,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals(1, tags.size());
         Assert.assertEquals("val 1", tags.get("key 1"));
 
-        relationRecord = (CurrentRelations)relations.get(relationIdsArr[1]);
+        relationRecord = relations.get(relationIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[1], relationRecord.getId());
 
@@ -1853,7 +1853,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals("val 2", tags.get("key 2"));
         Assert.assertEquals("val 3", tags.get("key 3"));
 
-        relationRecord = (CurrentRelations)relations.get(relationIdsArr[3]);
+        relationRecord = relations.get(relationIdsArr[3]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[3], relationRecord.getId());
 
@@ -2928,25 +2928,25 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals(3, nodes.size());
 
         //TODO: check the rest of the node props here??
-        CurrentNodes nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[0]);
+        CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
         Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject)nodeRecord.getTags());
         Assert.assertNotNull(tags);
         Assert.assertEquals(2, tags.size());
         Assert.assertEquals("val 1", tags.get("key 1"));
         Assert.assertEquals("val 2", tags.get("key 2"));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[1]);
+        nodeRecord = nodes.get(nodeIdsArr[1]);
         Assert.assertTrue(
             nodeRecord.getTags() == null ||
             StringUtils.isEmpty(((PGobject)nodeRecord.getTags()).getValue()));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[2]);
+        nodeRecord = nodes.get(nodeIdsArr[2]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()),
+          new Double(originalBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()),
+          new Double(originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
         Assert.assertEquals(
@@ -3086,7 +3086,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
         Assert.assertNull(ways.get(wayIdsArr[0]));
 
-        CurrentWays wayRecord = (CurrentWays)ways.get(wayIdsArr[1]);
+        CurrentWays wayRecord = ways.get(wayIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
         Assert.assertEquals(wayIdsArr[1], wayRecord.getId());
         Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -3255,7 +3255,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals(2, relations.size());
 
         CurrentRelations relationRecord =
-          (CurrentRelations)relations.get(relationIdsArr[0]);
+          relations.get(relationIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[0], relationRecord.getId());
         Assert.assertEquals(new Long(1), relationRecord.getVersion());
@@ -3307,7 +3307,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals(1, tags.size());
         Assert.assertEquals("val 1", tags.get("key 1"));
 
-        relationRecord = (CurrentRelations)relations.get(relationIdsArr[1]);
+        relationRecord = relations.get(relationIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[1], relationRecord.getId());
         Assert.assertEquals(new Long(1), relationRecord.getVersion());
@@ -3585,13 +3585,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         		.map(currentNodesTbl.id, currentNodesTbl);
         Assert.assertEquals(5, nodes.size());
 
-        CurrentNodes nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[0]);
+        CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()),
+          new Double(originalBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()),
+          new Double(originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
         Assert.assertEquals(
@@ -3608,13 +3608,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals("val 1", tags.get("key 1"));
         Assert.assertEquals("val 2", tags.get("key 2"));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[1]);
+        nodeRecord = nodes.get(nodeIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMaxLat()),
+          new Double(originalBounds.getMaxLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMaxLon()),
+          new Double(originalBounds.getMaxLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
         Assert.assertEquals(
@@ -3629,13 +3629,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
             nodeRecord.getTags() == null ||
             StringUtils.isEmpty(((PGobject)nodeRecord.getTags()).getValue()));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[2]);
+        nodeRecord = nodes.get(nodeIdsArr[2]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()),
+          new Double(originalBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()),
+          new Double(originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
         Assert.assertEquals(
@@ -3650,13 +3650,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
             nodeRecord.getTags() == null ||
             StringUtils.isEmpty(((PGobject)nodeRecord.getTags()).getValue()));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[3]);
+        nodeRecord = nodes.get(nodeIdsArr[3]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()),
+          new Double(originalBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()),
+          new Double(originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[3], nodeRecord.getId());
         Assert.assertEquals(
@@ -3672,13 +3672,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals(1, tags.size());
         Assert.assertEquals("val 3", tags.get("key 3"));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[4]);
+        nodeRecord = nodes.get(nodeIdsArr[4]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()),
+          new Double(originalBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()),
+          new Double(originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[4], nodeRecord.getId());
         Assert.assertEquals(
@@ -3706,7 +3706,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       			        		.map(currentWaysTbl.id, currentWaysTbl);
         Assert.assertEquals(2, ways.size());
 
-        CurrentWays wayRecord = (CurrentWays)ways.get(wayIdsArr[0]);
+        CurrentWays wayRecord = ways.get(wayIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
         Assert.assertEquals(wayIdsArr[0], wayRecord.getId());
         Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -3736,7 +3736,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals("val 1", tags.get("key 1"));
         Assert.assertEquals("val 2", tags.get("key 2"));
 
-        wayRecord = (CurrentWays)ways.get(wayIdsArr[1]);
+        wayRecord = ways.get(wayIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
         Assert.assertEquals(wayIdsArr[1], wayRecord.getId());
         Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -3897,13 +3897,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         		.map(currentNodesTbl.id, currentNodesTbl);
         Assert.assertEquals(4, nodes.size());
 
-        CurrentNodes nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[0]);
+        CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()),
+          new Double(originalBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()),
+          new Double(originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
           Assert.assertEquals(
@@ -3920,13 +3920,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals("val 1", tags.get("key 1"));
         Assert.assertEquals("val 2", tags.get("key 2"));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[1]);
+        nodeRecord = nodes.get(nodeIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMaxLat()),
+          new Double(originalBounds.getMaxLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMaxLon()),
+          new Double(originalBounds.getMaxLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
         Assert.assertEquals(
@@ -3941,13 +3941,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
             nodeRecord.getTags() == null ||
             StringUtils.isEmpty(((PGobject)nodeRecord.getTags()).getValue()));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[2]);
+        nodeRecord = nodes.get(nodeIdsArr[2]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()),
+          new Double(originalBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()),
+          new Double(originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
         Assert.assertEquals(
@@ -3964,13 +3964,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
         Assert.assertNull(nodes.get(nodeIdsArr[3]));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[4]);
+        nodeRecord = nodes.get(nodeIdsArr[4]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()),
+          new Double(originalBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()),
+          new Double(originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[4], nodeRecord.getId());
         Assert.assertEquals(
@@ -3998,7 +3998,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         		.list(currentRelationsTbl);
         Assert.assertEquals(3, relations.size());
 
-        CurrentRelations relationRecord = (CurrentRelations)relations.get(0);
+        CurrentRelations relationRecord = relations.get(0);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[0], relationRecord.getId());
         Assert.assertTrue(relationRecord.getTimestamp().before(now));
@@ -4032,7 +4032,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
         Assert.assertEquals(nodeIdsArr[2], member.getMemberId());
 
-        relationRecord = (CurrentRelations)relations.get(1);
+        relationRecord = relations.get(1);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[1], relationRecord.getId());
 
@@ -4066,7 +4066,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
         Assert.assertEquals(relationIdsArr[0], member.getMemberId());
 
-        relationRecord = (CurrentRelations)relations.get(2);
+        relationRecord = relations.get(2);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[3], relationRecord.getId());
 
@@ -4216,13 +4216,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         		.map(currentNodesTbl.id, currentNodesTbl);
         Assert.assertEquals(4, nodes.size());
 
-        CurrentNodes nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[0]);
+        CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()),
+          new Double(originalBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()),
+          new Double(originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
         Assert.assertEquals(
@@ -4239,13 +4239,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals("val 1", tags.get("key 1"));
         Assert.assertEquals("val 2", tags.get("key 2"));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[1]);
+        nodeRecord = nodes.get(nodeIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMaxLat()),
+          new Double(originalBounds.getMaxLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMaxLon()),
+          new Double(originalBounds.getMaxLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
         Assert.assertEquals(
@@ -4260,13 +4260,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
             nodeRecord.getTags() == null ||
             StringUtils.isEmpty(((PGobject)nodeRecord.getTags()).getValue()));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[2]);
+        nodeRecord = nodes.get(nodeIdsArr[2]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()),
+          new Double(originalBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()),
+          new Double(originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
         Assert.assertEquals(
@@ -4283,13 +4283,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
         Assert.assertNull(nodes.get(nodeIdsArr[3]));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[4]);
+        nodeRecord = nodes.get(nodeIdsArr[4]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()),
+          new Double(originalBounds.getMinLat()),
           nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()),
+          new Double(originalBounds.getMinLon()),
           nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[4], nodeRecord.getId());
         Assert.assertEquals(
@@ -4444,7 +4444,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
         //verify the previously existing relations
         CurrentRelations relationRecord =
-          (CurrentRelations)relations.get(relationIdsArr[0]);
+          relations.get(relationIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[0], relationRecord.getId());
         Assert.assertTrue(relationRecord.getTimestamp().before(now));
@@ -4500,7 +4500,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         Assert.assertEquals(1, tags.size());
         Assert.assertEquals("val 1", tags.get("key 1"));
 
-        relationRecord = (CurrentRelations)relations.get(relationIdsArr[1]);
+        relationRecord = relations.get(relationIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[1], relationRecord.getId());
         Assert.assertTrue(relationRecord.getTimestamp().before(now));
@@ -4540,7 +4540,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
         Assert.assertNull(relations.get(relationIdsArr[2]));
 
-        relationRecord = (CurrentRelations)relations.get(relationIdsArr[3]);
+        relationRecord = relations.get(relationIdsArr[3]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[3], relationRecord.getId());
 
@@ -4718,7 +4718,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         		.list(currentRelationsTbl);
         Assert.assertEquals(3, relations.size());
 
-        CurrentRelations relationRecord = (CurrentRelations)relations.get(0);
+        CurrentRelations relationRecord = relations.get(0);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[0], relationRecord.getId());
         final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
@@ -4752,7 +4752,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
         Assert.assertEquals(nodeIdsArr[2], member.getMemberId());
 
-        relationRecord = (CurrentRelations)relations.get(1);
+        relationRecord = relations.get(1);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[1], relationRecord.getId());
 
@@ -4786,7 +4786,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
         Assert.assertEquals(relationIdsArr[0], member.getMemberId());
 
-        relationRecord = (CurrentRelations)relations.get(2);
+        relationRecord = relations.get(2);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[2], relationRecord.getId());
 
