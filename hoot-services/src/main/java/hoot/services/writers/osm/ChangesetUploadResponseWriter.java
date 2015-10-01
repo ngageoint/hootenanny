@@ -31,7 +31,6 @@ import hoot.services.models.osm.XmlSerializable;
 import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
@@ -95,31 +94,6 @@ public class ChangesetUploadResponseWriter
         Status.BAD_REQUEST, //TODO: change this status to an internal server error?
         log);
     }
-
-    return responseDoc;
-  }
-
-  //temp method
-  public Document writeEmptyResponse() throws IOException
-  {
-    log.debug("Building response...");
-
-    Document responseDoc = XmlDocumentBuilder.create();
-
-    org.w3c.dom.Element osmElement = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
-
-    org.w3c.dom.Element diffResultXmlElement = responseDoc.createElement("diffResult");
-    diffResultXmlElement.setAttribute(
-      "generator",
-      HootProperties.getInstance().getProperty(
-        "generator", HootProperties.getDefault("generator")));
-    diffResultXmlElement.setAttribute(
-      "version",
-      HootProperties.getInstance().getProperty(
-        "osmVersion", HootProperties.getDefault("osmVersion")));
-
-    osmElement.appendChild(diffResultXmlElement);
-    responseDoc.appendChild(osmElement);
 
     return responseDoc;
   }

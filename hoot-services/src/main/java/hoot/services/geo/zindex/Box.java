@@ -35,7 +35,7 @@ import com.vividsolutions.jts.geom.Envelope;
  */
 final public class Box
 {
-  double[] _min, _max;
+  private double[] _min, _max;
 
   public Box(double[] min, double[] max)
   {

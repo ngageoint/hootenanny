@@ -90,7 +90,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 	protected Connection conn;
 
 	protected int maxWarningsDisplayed = 10;
-	protected long mapId;
+	private long mapId;
 	protected long uniqueIdsParsed = 0;
 	protected boolean idMappingRecordWritten = false;
 	protected long reviewRecordsParsed = 0;

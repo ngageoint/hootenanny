@@ -39,11 +39,11 @@ import org.slf4j.LoggerFactory;
 public class DataDefinitionManager {
 	private static final Logger log = LoggerFactory.getLogger(DataDefinitionManager.class);
 	private static final String POSTGRESQL_DRIVER = "org.postgresql.Driver";
-	protected String DB_URL = null;
-	protected String userid = null;
-	protected String pwd = null;
+	private String DB_URL = null;
+	private String userid = null;
+	private String pwd = null;
 
-  protected String db_name = null;
+  private String db_name = null;
 
 	public DataDefinitionManager() throws Exception
 	{

@@ -119,7 +119,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
   protected Connection conn;
   public Connection getDbConnection() { return conn; }
   public void setDbConnection(Connection connection) { conn = connection; }
-  protected static DateTimeFormatter timeFormatter;
+  private static DateTimeFormatter timeFormatter;
   public static DateTimeFormatter getTimeFormatter() { return timeFormatter; }
 
   /**
@@ -216,7 +216,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
   }
 
   //We will keep track of map id internally since we do not have map id column in table any longer
-  protected long _mapId = -1;
+  private long _mapId = -1;
 
   /**
    * Returns the map ID of the element's associated services database record
@@ -592,61 +592,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
   }
 
   /**
-   * Deletes a set of elements from the services database
-   *
-   * @param mapId ID of the map owning the elements
-   * @param elementType type of elements to be deleted
-   * @param elementIds IDs of the elements to be deleted
-   * @param dbConn JDBC Connection
-   * @throws Exception
-   */
-  public static void deleteElements(final long mapId, final ElementType elementType,
-    final Set<Long> elementIds, Connection dbConn) throws Exception
-  {
-    Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
-    RelationalPathBase<?> table = prototype.getElementTable();
-    NumberPath<Long> idField = prototype.getElementIdField();
-
-
-    long numElementsToDelete = 0;
-
-    if(elementIds.size() > 0)
-    {
-    	numElementsToDelete = new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(table).join(QChangesets.changesets)
-		.where(idField.in(elementIds))
-		.count();
-    }
-
-    if (numElementsToDelete != elementIds.size())
-    {
-      throw new Exception("Not all element IDs specified for deletion are valid for element " +
-        "type: " + prototype.toString());
-    }
-    if (numElementsToDelete > 0)
-    {
-    	SQLDeleteClause sqldelete = new SQLDeleteClause(dbConn, DbUtils.getConfiguration(mapId), table);
-
-    	long result = 0;
-
-    	if(elementIds.size() > 0)
-    	{
-    	result = sqldelete.where(idField.in(elementIds))
-            .execute();
-    	}
-
-      if (result != numElementsToDelete)
-      {
-        throw new Exception("Unable to delete elements of type: " + prototype.toString());
-      }
-    }
-    else
-    {
-      log.warn("No elements exist with the specified set of IDs for element type: " +
-        prototype.toString());
-    }
-  }
-
-  /**
    * Removes all records related (e.g. way nodes for ways, relation members for relations, etc.)
    * to all of the elements with the passed in IDs
    *
@@ -879,33 +824,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
   }
 
   /**
-   * Returns the database relation member type given an element type
-   *
-   * @param elementType the element type for which to retrive the database relation member type
-   * @return a database relation member type
-   */
-  public static DbUtils.nwr_enum elementEnumForString(final String elementType)
-  {
-    if (elementType.toLowerCase().equals("node"))
-    {
-      return DbUtils.nwr_enum.node;
-    }
-    else if (elementType.toLowerCase().equals("way"))
-    {
-      return DbUtils.nwr_enum.way;
-    }
-    else if (elementType.toLowerCase().equals("relation"))
-    {
-      return DbUtils.nwr_enum.relation;
-    }
-    else
-    {
-      assert(false);
-      return null;
-    }
-  }
-
-  /**
    * Returns the IDs of all relations which own this element
    *
    * The ordering of returned records by ID and the use of TreeSet to keep them sorted is only
@@ -1090,61 +1008,5 @@ public abstract class Element implements XmlSerializable, DbSerializable
 			log.warn("Filtered out " + String.valueOf(uuids.length - filteredUuids.size()) + " uuids.");
 		}
   	return filteredUuids;
-  }
-  
-  /**
-   * Determines whether any element in the database has a uuid tag as specified
-   *  
-   * @param mapId ID of the map owning the element
-   * @param uuid unique ID to search for
-   * @param elementType type of the element being searched for
-   * @param dbConn database connection
-   * @return true if the element exists; false otherwise
-   * @throws ClassNotFoundException 
-   * @throws SQLException 
-   * @throws InvocationTargetException 
-   * @throws NoSuchMethodException 
-   * @throws IllegalAccessException 
-   * @throws InstantiationException 
-   */
-  public static boolean elementExistsByUuid(final long mapId, final String uuid, 
-  	final ElementType elementType, Connection dbConn) throws ClassNotFoundException, SQLException, 
-  	InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
-  {
-  	final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
-  	String POSTGRESQL_DRIVER = "org.postgresql.Driver";
-		Statement stmt = null;
-		ResultSet rs = null;
-		try
-		{
-			Class.forName(POSTGRESQL_DRIVER);
-			stmt = dbConn.createStatement();
-			final String sql = 
-				"select count(*) as total from " + prototype.getElementTable() + "_" + mapId + 
-				" where tags->'uuid' = '" + uuid + "' ";
-			stmt = dbConn.createStatement();
-			rs = stmt.executeQuery(sql);
-			while (rs.next())
-			{
-				if (rs.getInt("total") > 0)
-				{
-					rs.close();
-					return true;
-				}
-			}
-			rs.close();
-		}
-		finally
-		{
-			try
-			{
-				if (stmt != null) stmt.close();
-				if (rs != null) rs.close();
-			}
-			catch (SQLException se2)
-			{
-			}
-		}
-  	return false;
   }
 }
