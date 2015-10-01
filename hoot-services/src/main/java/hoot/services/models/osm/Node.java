@@ -51,7 +51,6 @@ import com.mysema.query.types.path.SimplePath;
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
 import hoot.services.db2.CurrentNodes;
-import hoot.services.db2.QCurrentNodes;
 import hoot.services.db2.QCurrentWayNodes;
 
 import hoot.services.geo.BoundingBox;
@@ -64,7 +63,6 @@ import hoot.services.geo.QuadTileCalculator;
 public class Node extends Element
 {
   private static final Logger log = LoggerFactory.getLogger(Node.class);
-  protected static final QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
 
   public Node(final Long mapId, Connection dbConnection)
   {

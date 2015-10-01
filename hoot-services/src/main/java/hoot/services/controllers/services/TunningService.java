@@ -117,14 +117,12 @@ public class TunningService  implements Executable {
 						" OUTPUT=" + tempPath +  "/" + input + ".osm";
 				CommandResult result = cmdRunner.exec(commandArr);
 
-				if(res != null){
 					if(result.getExitStatus() == 0){
 						result.getStdout();
 					} else {
 						String err = result.getStderr();
 						throw new Exception(err);
 					}
-				}
 				
 				tempOutputPath = tempPath +  "/" + input + ".osm";      	  
 			}

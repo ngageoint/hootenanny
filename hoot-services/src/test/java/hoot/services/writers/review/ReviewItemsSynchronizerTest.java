@@ -1,16 +1,16 @@
 package hoot.services.writers.review;
 
 import hoot.services.UnitTest;
-import hoot.services.utils.XmlDocumentBuilder;
+//import hoot.services.utils.XmlDocumentBuilder;
 
-import java.io.File;
+//import java.io.File;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.BeforeClass;
+//import org.apache.commons.io.FileUtils;
+//import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.w3c.dom.Document;
+//import org.w3c.dom.Document;
 
 //TODO: finish
 public class ReviewItemsSynchronizerTest

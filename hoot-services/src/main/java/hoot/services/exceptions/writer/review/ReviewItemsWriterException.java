@@ -1,5 +1,6 @@
 package hoot.services.exceptions.writer.review;
 
+@SuppressWarnings("serial")
 public class ReviewItemsWriterException extends Exception {
 
 	private String sql = "";

@@ -71,10 +71,7 @@ public class FileUtils
     }
     finally
     {
-    	if (fileScanner != null)
-    	{
-    		fileScanner.close();
-    	}
+    	fileScanner.close();
     	if (out != null)
     	{
     		out.close();
@@ -110,7 +107,7 @@ public class FileUtils
   	File ret = null;
   	String[] extension = {ext}; 
   	File dir = new File(targetFolder);
-  	if(dir != null && dir.isDirectory())
+  	if (dir.isDirectory())
   	{
   		List<File> files = (List<File>)org.apache.commons.io.FileUtils.listFiles(dir, extension, false);
   		for(File f : files)

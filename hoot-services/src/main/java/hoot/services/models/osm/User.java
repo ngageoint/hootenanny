@@ -26,8 +26,6 @@
  */
 package hoot.services.models.osm;
 
-import hoot.services.db2.QChangesets;
-import hoot.services.db2.QMaps;
 import hoot.services.db2.Users;
 
 import java.sql.Connection;
@@ -42,8 +40,6 @@ public class User extends Users
 {
 	@SuppressWarnings("unused")
   private static final long serialVersionUID = 4395123526768281005L;
-  protected static final QChangesets changesets = QChangesets.changesets;
-  protected static final QMaps maps = QMaps.maps;
 
   @SuppressWarnings("unused")
   private Connection conn;
@@ -66,7 +62,7 @@ public class User extends Users
    * @return an XML node
    * @see http://wiki.openstreetmap.org/wiki/API_0.6
    */
-  public Element detailsToXml(final Element parentXml, final long changesetsCount)
+  private Element detailsToXml(final Element parentXml, final long changesetsCount)
   {
     Document doc = parentXml.getOwnerDocument();
 

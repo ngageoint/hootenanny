@@ -27,7 +27,6 @@
 package hoot.services.nodeJs;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
@@ -118,7 +117,7 @@ public class ServerControllerBase {
 	}
 	
 	
-  private void _closeAllServers(final String processSignature) throws IOException
+  private void _closeAllServers(final String processSignature)
   {
 
   	try

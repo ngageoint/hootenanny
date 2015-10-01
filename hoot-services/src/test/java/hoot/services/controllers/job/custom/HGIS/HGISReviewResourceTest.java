@@ -6,7 +6,7 @@ import javax.ws.rs.core.Response.Status;
 
 import hoot.services.UnitTest;
 import hoot.services.models.review.custom.HGIS.PrepareForValidationRequest;
-import hoot.services.models.review.custom.HGIS.PrepareForValidationResponse;
+//import hoot.services.models.review.custom.HGIS.PrepareForValidationResponse;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -37,7 +37,7 @@ public class HGISReviewResourceTest {
 		PrepareForValidationRequest request = new PrepareForValidationRequest();
 		request.setSourceMap("testSrc1");
 		request.setOutputMap("out1");
-		PrepareForValidationResponse resp = spy.prepareItemsForValidationReview(request);
+		/*PrepareForValidationResponse resp =*/ spy.prepareItemsForValidationReview(request);
 		
 		List<String> args = argCaptor.getAllValues();
 		String  param = args.get(0);
@@ -142,7 +142,7 @@ public class HGISReviewResourceTest {
 			PrepareForValidationRequest request = new PrepareForValidationRequest();
 			request.setSourceMap("testSrc1");
 			request.setOutputMap("out1");
-			PrepareForValidationResponse resp = spy.prepareItemsForValidationReview(request);
+			/*PrepareForValidationResponse resp =*/ spy.prepareItemsForValidationReview(request);
 		}
 		catch(javax.ws.rs.WebApplicationException e)
 		{

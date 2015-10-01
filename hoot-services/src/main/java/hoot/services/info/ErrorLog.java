@@ -38,8 +38,8 @@ import hoot.services.controllers.info.AboutResource;
 
 public class ErrorLog {
 
-	protected static String _errLogPath = null;
-	protected static String _tempOutputPath = null;
+	private static String _errLogPath = null;
+	private static String _tempOutputPath = null;
 	public ErrorLog() {
 		//ErrorLogPath
 		if(_errLogPath == null)
