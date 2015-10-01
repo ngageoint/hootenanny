@@ -26,7 +26,6 @@
  */
 package hoot.services.db;
 
-import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
