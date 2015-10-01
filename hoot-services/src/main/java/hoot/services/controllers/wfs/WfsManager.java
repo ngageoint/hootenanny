@@ -324,7 +324,7 @@ public class WfsManager {
 		}
 		
 		InputStream stream = new ByteArrayInputStream(content.getBytes("UTF-8"));
-		ResourceState resStatus = fsMan.createResource(name, stream);
+		ResourceState<?> resStatus = fsMan.createResource(name, stream);
 		
 		if(resStatus.getType() == StateType.deactivated)
 		{
@@ -439,7 +439,7 @@ public class WfsManager {
 					"  <QueryMaxFeatures>-1</QueryMaxFeatures>\n" + 
 					"</deegreeWFS>";
 			InputStream stream = new ByteArrayInputStream(content.getBytes("UTF-8"));
-			ResourceState resStatus = wsMan.createResource(wfsResourceName, stream);
+			ResourceState<?> resStatus = wsMan.createResource(wfsResourceName, stream);
 			
 			if(resStatus.getType() == StateType.init_error)
 			{

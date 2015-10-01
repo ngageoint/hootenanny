@@ -228,24 +228,23 @@ public class DbUtils
   	return null;
   }
 
-  @SuppressWarnings("unused")
   public static boolean closeConnection(Connection conn) throws Exception
   {
-  	if (conn.isClosed())
+  	if (conn != null)
   	{
-  		return true;
-  	}
-  	try
-  	{
-	  	if (conn != null)
-	  	{
-	  		conn.close();
-	  		return true;
-	  	}
-  	}
-  	catch (Exception e)
-  	{
-  		throw e;
+  		if (conn.isClosed())
+    	{
+    		return true;
+    	}
+    	try
+    	{
+  	  	conn.close();
+  	  	return true;
+    	}
+    	catch (Exception e)
+    	{
+    		throw e;
+    	}
   	}
   	return false;
   }
