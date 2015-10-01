@@ -79,6 +79,9 @@ import hoot.services.review.ReviewUtils;
 
 /**
  * Writes review data to the services database
+ * 
+ * Assumes that data is always prepared once and once only, so doesn't check to see if any existing
+ * reviews are already in the database before parsing new ones.
  */
 public class ReviewPrepareDbWriter extends DbClientAbstract implements Executable
 {
@@ -98,7 +101,6 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 	private long totalParseableRecords = 0;
 	private long totalReviewableRecords = 0;
 	protected int maxRecordBatchSize;
-	protected ListMultimap<String, String> previouslyReviewedItemIdToReviewAgainstItemIds;
 	protected ListMultimap<String, String> reviewableItemIdToReviewAgainstItemIds;
 
 	private String finalStatusDetail;
@@ -125,14 +127,14 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 	/**
 	 * See CoreServiceContext.xml
 	 */
-	public void init()
+	public void init() // NO_UCD (unused code)
 	{
 	}
 
 	/**
 	 * See CoreServiceContext.xml
 	 */
-	public void destroy()
+	public void destroy() // NO_UCD (unused code)
 	{
 	}
 
@@ -231,7 +233,6 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 				if (totalReviewableRecords > 0)
 				{
 					totalParseableRecords = getTotalParseableRecords(mapId);
-					getPreviouslyReviewedRecords();
 					final boolean uuidsExist = parseElementUniqueIdTags(mapId);
 					if (!uuidsExist)
 					{
@@ -345,26 +346,6 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		else
 		{
 			log.debug("Review record UUID's not cleaned up.");
-		}
-	}
-
-	private void getPreviouslyReviewedRecords()
-	{
-		// TODO: make this a batched query
-		SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration(mapId));
-		final List<ReviewItems> reviewedItems = query
-	    .from(reviewItems)
-	    .where(
-	      reviewItems.mapId.eq(mapId)
-	        .and(reviewItems.reviewStatus.eq(DbUtils.review_status_enum.reviewed)))
-	    .list(reviewItems);
-
-		previouslyReviewedItemIdToReviewAgainstItemIds = ArrayListMultimap.create();
-		for (ReviewItems reviewedItem : reviewedItems)
-		{
-			previouslyReviewedItemIdToReviewAgainstItemIds.put(
-			  reviewedItem.getReviewableItemId(),
-			  reviewedItem.getReviewAgainstItemId());
 		}
 	}
 
@@ -773,7 +754,6 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		// create this outside of the batch read loop, since we need to maintain a list of unique 
 		// IDs parsed over the entire map's set of reviewable records
 		reviewableItemIdToReviewAgainstItemIds = ArrayListMultimap.create();
-		reviewableItemIdToReviewAgainstItemIds.putAll(previouslyReviewedItemIdToReviewAgainstItemIds);
 
 		int numReviewItemsAdded = 0;
 		for (ElementType elementType : ElementType.values())

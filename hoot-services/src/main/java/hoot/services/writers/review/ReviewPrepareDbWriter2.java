@@ -92,9 +92,7 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
       if (itemsToReviewAgainstStr != null)
       {
       	String[] reviewAgainstItemIds = null;
-        //We are parsing pairwise comparisons and don't want duplicates, so ignore one
-        //to many reviewable item to review against item relationships.  They are always
-        //represented with a duplicated one to one relationship in the data.
+        //see related note in parseElementReviewTags
         if (!itemsToReviewAgainstStr.contains(";"))
         {
           reviewAgainstItemIds = new String[] { itemsToReviewAgainstStr };
@@ -199,7 +197,6 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
           		uniqueElementIds.add(uniqueElementIdStr);
               if (uniqueElementIdStr.contains(";"))
               {
-                //log.debug("Multiple part UUID...");
                 String[] uniqueElementIdsArr = uniqueElementIdStr.split(";");
                 for (String id : uniqueElementIdsArr)
                 {
@@ -279,7 +276,6 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
     //create this outside of the batch read loop, since we need to maintain a list of unique
     //IDs parsed over the entire map's set of reviewable records
     reviewableItemIdToReviewAgainstItemIds = ArrayListMultimap.create();
-    reviewableItemIdToReviewAgainstItemIds.putAll(previouslyReviewedItemIdToReviewAgainstItemIds);
 
     int numReviewItemsAdded = 0;
     for (ElementType elementType : ElementType.values())
