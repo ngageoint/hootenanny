@@ -133,7 +133,7 @@ sudo apt-get autoremove
   `asciidoc` `pgadmin3` `curl` `npm` `postgresql-9.1-postgis` `libxerces-c-dev` `libxerces-c28` `libglpk-dev`
   `libboost-all-dev` `source-highlight` `texlive-lang-all` `graphviz` `w3m``libhdf5-dev` `libgif-dev`
   `gfortran` `python-setuptools` `python` `python-pip` `git` `postgresql-contrib-9.1`
-  `ccache` `libogdi3.2-dev` `gnuplot` `python-matplotlib`
+  `ccache` `libogdi3.2-dev` `gnuplot` `python-matplotlib` `postgresql-server-dev-9.1`
 +
 
 -------------
