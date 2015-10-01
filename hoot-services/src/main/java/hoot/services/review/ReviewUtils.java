@@ -59,8 +59,8 @@ public class ReviewUtils
 {
   private static final Logger log = LoggerFactory.getLogger(ReviewUtils.class);
 
-  protected static final QReviewItems reviewItemsTbl = QReviewItems.reviewItems;
-  protected static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
+  private static final QReviewItems reviewItemsTbl = QReviewItems.reviewItems;
+  private static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
 
   /**
    * toString() implementation for the ElementIdMappings

@@ -83,7 +83,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
   protected static final QCurrentWays currentWays = QCurrentWays.currentWays;
   protected static final QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
   protected static final QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
-  protected static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
+  private static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
 
   //order in the enum here is important, since the request diff writer methods use this to determine
   //the order for creating/updating/deleting elements; i.e. create nodes before referencing them

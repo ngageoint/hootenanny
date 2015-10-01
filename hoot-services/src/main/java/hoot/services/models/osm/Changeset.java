@@ -73,7 +73,7 @@ public class Changeset extends Changesets
   private static final long serialVersionUID = 4011802505587120104L;
 
   private static final Logger log = LoggerFactory.getLogger(Changeset.class);
-  protected static final QChangesets changesets  = QChangesets.changesets;
+  private static final QChangesets changesets  = QChangesets.changesets;
   @SuppressWarnings("unused")
   private int maxRecordBatchSize = -1;
   private Connection conn;

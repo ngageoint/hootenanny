@@ -84,9 +84,9 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 {
 	private static final Logger log = 
 		LoggerFactory.getLogger(ReviewPrepareDbWriter.class);
-	protected static final QReviewMap reviewMap = QReviewMap.reviewMap;
-	protected static final QReviewItems reviewItems = QReviewItems.reviewItems;
-	protected static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
+	private static final QReviewMap reviewMap = QReviewMap.reviewMap;
+	private static final QReviewItems reviewItems = QReviewItems.reviewItems;
+	private static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
 	protected Connection conn;
 
 	protected int maxWarningsDisplayed = 10;

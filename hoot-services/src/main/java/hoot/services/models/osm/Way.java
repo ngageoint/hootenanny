@@ -80,7 +80,7 @@ public class Way extends Element
     return wayNodeIdsCache;
   }
 
-  protected static final QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
+  private static final QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
 
   // temp collection of way node coordinates used to calculate the way's bounds
   private Map<Long, Coordinates> nodeCoordsCollection;
