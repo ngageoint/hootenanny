@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.review;
+package hoot.services.readers.review;
 
 import java.sql.Timestamp;
 
@@ -32,6 +32,7 @@ import org.junit.Assert;
 
 import hoot.services.UnitTest;
 import hoot.services.db.DbUtils;
+import hoot.services.readers.review.ReviewItemsRetriever;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;

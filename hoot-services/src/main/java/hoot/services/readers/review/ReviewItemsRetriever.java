@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.review;
+package hoot.services.readers.review;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
@@ -71,7 +71,7 @@ public class ReviewItemsRetriever
   private ReviewItemsRetrieverWriter _writer;
   
   //for tests only
-  protected ReviewItemsRetriever()
+  ReviewItemsRetriever()
   {	
   }
 
