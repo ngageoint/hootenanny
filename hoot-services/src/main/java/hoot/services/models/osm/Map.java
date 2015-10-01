@@ -951,8 +951,6 @@ public class Map extends Maps
     return elementIdsToRecordsByType;
   }
 
-
-
   private java.util.Map<ElementType, Set<Long>> retrieveElementIds(
     final BooleanExpression combinedGeospatialCondition)
   {

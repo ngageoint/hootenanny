@@ -889,7 +889,8 @@ public abstract class Element implements XmlSerializable, DbSerializable
     {
       org.w3c.dom.Element tagElement = doc.createElement("tag");
       tagElement.setAttribute("k", tagEntry.getKey());
-      tagElement.setAttribute("v", tagEntry.getValue());
+      tagElement.setAttribute(
+      	"v", hoot.services.utils.StringUtils.encodeURIComponentForJavaScript(tagEntry.getValue()));
       elementXml.appendChild(tagElement);
     }
     return elementXml;
