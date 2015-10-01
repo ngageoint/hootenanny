@@ -495,20 +495,20 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
 
   if (e->getTags().getInformationCount() > 0)
   {
-
     // There is probably a cleaner way of doing this.
     // convertToGeometry calls  getGeometryType which will throw an exception if it gets a relation
     // that it doesn't know about. E.g. "route", "superroute", " turnlanes:turns" etc
 
-    shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+    shared_ptr<Geometry> g;
 
     try
     {
       g = ElementConverter(provider).convertToGeometry(e);
     }
-    catch (std::exception& err)
+    catch (IllegalArgumentException& err)
     {
-      LOG_ERROR("Error converting geometry: " + QString::fromAscii(err.what()));
+      LOG_WARN("Error converting geometry: " << err.getWhat() << " (" << e->toString() << ")");
+      g.reset((GeometryFactory::getDefaultInstance()->createEmptyGeometry()));
     }
 
     /*
