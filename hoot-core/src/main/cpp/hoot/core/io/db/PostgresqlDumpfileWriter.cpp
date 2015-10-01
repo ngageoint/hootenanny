@@ -160,6 +160,9 @@ void PostgresqlDumpfileWriter::finalizePartial()
   // Remove file if it used to be there;
   std::remove(_outputFilename.toStdString().c_str());
 
+  // Start initial section that holds nothing but UTF-8 byte-order mark (BOM)
+  _createTable( "byte_order_mark", "\n", true );
+
   // Create our user data WITH byte order mark as it's first table written
   _createTable( "users", "COPY users (email, id, pass_crypt, creation_time) FROM stdin;\n");
 
@@ -183,7 +186,10 @@ void PostgresqlDumpfileWriter::finalizePartial()
     }
 
     // Write close marker for table
-    *(_outputSections[*it].second) << QString("\\.\n\n\n").toUtf8();
+    if ( *it != "byte_order_mark" )
+    {
+      *(_outputSections[*it].second) << QString("\\.\n\n\n").toUtf8();
+    }
 
     // Flush any residual content from text stream/file
     (_outputSections[*it].second)->flush();
@@ -328,6 +334,7 @@ std::list<QString> PostgresqlDumpfileWriter::_createSectionNameList()
 {
   std::list<QString> sections;
 
+  sections.push_back(QString("byte_order_mark"));
   sections.push_back(QString("sequence_updates"));
   sections.push_back(QString("users"));
   sections.push_back(QString("changesets"));
@@ -681,7 +688,7 @@ void PostgresqlDumpfileWriter::_writeRelationMember( const ElementIdDatatype sou
 
 void PostgresqlDumpfileWriter::_createTable(const QString &tableName, const QString &tableHeader)
 {
-  _createTable(tableName, tableHeader, true);
+  _createTable(tableName, tableHeader, false);
 }
 
 void PostgresqlDumpfileWriter::_createTable( const QString& tableName, const QString& tableHeader,
