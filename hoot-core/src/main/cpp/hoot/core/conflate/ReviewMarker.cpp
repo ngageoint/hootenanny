@@ -50,11 +50,14 @@ set<ElementId> ReviewMarker::getReviewElements(const ConstOsmMapPtr &map, Review
 
   ConstRelationPtr r = map->getRelation(uid.getId());
 
-  const vector<RelationData::Entry>& entries = r->getMembers();
-
-  for (size_t i = 0; i < entries.size(); i++)
+  if (r)
   {
-    result.insert(entries[i].getElementId());
+    const vector<RelationData::Entry>& entries = r->getMembers();
+
+    for (size_t i = 0; i < entries.size(); i++)
+    {
+      result.insert(entries[i].getElementId());
+    }
   }
 
   return result;
@@ -84,7 +87,7 @@ QString ReviewMarker::getReviewType(const ConstOsmMapPtr &map, ReviewUid uid)
 
   ConstRelationPtr r = map->getRelation(uid.getId());
 
-  return r->getTags()[_reviewNoteKey];
+  return r->getTags()[_reviewTypeKey];
 }
 
 set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr &map,

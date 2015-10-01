@@ -62,7 +62,6 @@ void RemoveReviewsByEidOp::apply(const shared_ptr<OsmMap> &map)
   {
     throw IllegalArgumentException("You must specify a valid element ID.");
   }
-  LOG_VAR(_eid);
 
   // if from isn't in the map, there is nothing to do.
   if (map->containsElement(_eid) == false)
