@@ -472,12 +472,12 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
         		.map(currentNodesTbl.id, currentNodesTbl);
         Assert.assertEquals(3, nodes.size());
 
-        CurrentNodes nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[0]);
+        CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()), nodeRecord.getLatitude());
+          new Double(originalBounds.getMinLat()), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()), nodeRecord.getLongitude());
+          new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
@@ -488,12 +488,12 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
         Assert.assertEquals(new Long(1), nodeRecord.getVersion());
         Assert.assertEquals(new Boolean(true), nodeRecord.getVisible());
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[1]);
+        nodeRecord = nodes.get(nodeIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMaxLat()), nodeRecord.getLatitude());
+          new Double(originalBounds.getMaxLat()), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMaxLon()), nodeRecord.getLongitude());
+          new Double(originalBounds.getMaxLon()), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
@@ -504,12 +504,12 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
         Assert.assertEquals(new Long(1), nodeRecord.getVersion());
         Assert.assertEquals(new Boolean(true), nodeRecord.getVisible());
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[2]);
+        nodeRecord = nodes.get(nodeIdsArr[2]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)(originalBounds.getMinLat() - .001)), nodeRecord.getLatitude());
+          new Double(originalBounds.getMinLat() - .001), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)(originalBounds.getMinLon() - .001)), nodeRecord.getLongitude());
+          new Double(originalBounds.getMinLon() - .001), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
@@ -532,7 +532,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
         		.map(currentWaysTbl.id, currentWaysTbl);
         Assert.assertEquals(1, ways.size());
 
-        CurrentWays wayRecord = (CurrentWays)ways.get(wayIdsArr[0]);
+        CurrentWays wayRecord = ways.get(wayIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
         Assert.assertEquals(wayIdsArr[0], wayRecord.getId());
         Assert.assertTrue(wayRecord.getTimestamp().before(now));

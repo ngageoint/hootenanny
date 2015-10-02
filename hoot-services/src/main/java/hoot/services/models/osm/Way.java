@@ -62,9 +62,7 @@ import hoot.services.db.DbUtils.RecordBatchType;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentWayNodes;
 import hoot.services.db2.CurrentWays;
-import hoot.services.db2.QCurrentNodes;
 import hoot.services.db2.QCurrentWayNodes;
-import hoot.services.db2.QCurrentWays;
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.Coordinates;
 
@@ -82,9 +80,7 @@ public class Way extends Element
     return wayNodeIdsCache;
   }
 
-  protected static final QCurrentWays currentWays = QCurrentWays.currentWays;
-  protected static final QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
-  protected static final QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
+  private static final QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
 
   // temp collection of way node coordinates used to calculate the way's bounds
   private Map<Long, Coordinates> nodeCoordsCollection;
@@ -561,7 +557,7 @@ public class Way extends Element
       // TODO: I don't like having to do this in a loop; see
       // Element::parseVersion for more info
 
-      final CurrentNodes existingNodeRecord = (CurrentNodes) new SQLQuery(conn,
+      final CurrentNodes existingNodeRecord = new SQLQuery(conn,
           DbUtils.getConfiguration(getMapId())).from(currentNodes)
           .where(currentNodes.id.eq(new Long(actualNodeId)))
           .singleResult(currentNodes);

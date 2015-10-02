@@ -27,7 +27,6 @@
 
 package hoot.services.utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -37,9 +36,8 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerFactory;
-import org.apache.commons.io.FileUtils;
+//import javax.xml.transform.TransformerConfigurationException;
+//import javax.xml.transform.TransformerFactory;
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
 import org.w3c.dom.Document;
@@ -114,21 +112,6 @@ public class XmlDocumentBuilder
   }
   
   /**
-   * Creates a DOM from file content
-   * 
-   * @param file file to read
-   * @return an XML DOM
-   * @throws ParserConfigurationException 
-   * @throws IOException 
-   * @throws SAXException 
-   */
-  public static Document parse(File file) throws SAXException, IOException, 
-    ParserConfigurationException
-  {
-    return parse(FileUtils.readFileToString(file));
-  }
-  
-  /**
    * Returns a string representation of an XML DOM
    * 
    * @param document an XML DOM
@@ -167,14 +150,14 @@ public class XmlDocumentBuilder
    * @throws TransformerConfigurationException
    * @todo could not get this code to run in JDK 1.7
    */
-  public static TransformerFactory getSecureTransformerFactory() 
+  /*public static TransformerFactory getSecureTransformerFactory() 
     throws TransformerConfigurationException
   {
   	TransformerFactory transformerFactory = TransformerFactory.newInstance();
   	transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
   	transformerFactory.setFeature(XMLConstants.ACCESS_EXTERNAL_DTD, false);
   	return transformerFactory;
-  }
+  }*/
   
   /**
    * Returns a secure DocumentBuilderFactory, as identified by HP Fortify

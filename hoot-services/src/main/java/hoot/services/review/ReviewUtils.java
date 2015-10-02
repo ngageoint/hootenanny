@@ -26,12 +26,7 @@
  */
 package hoot.services.review;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 import javax.ws.rs.core.Response.Status;
 
@@ -41,12 +36,8 @@ import org.deegree.services.wps.ProcessletException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysema.query.sql.SQLQuery;
-
 import hoot.services.db.DbUtils;
 import hoot.services.db2.ElementIdMappings;
-import hoot.services.db2.QElementIdMappings;
-import hoot.services.db2.QReviewItems;
 import hoot.services.db2.ReviewItems;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
@@ -58,168 +49,6 @@ import hoot.services.utils.ResourceErrorHandler;
 public class ReviewUtils
 {
   private static final Logger log = LoggerFactory.getLogger(ReviewUtils.class);
-
-  protected static final QReviewItems reviewItemsTbl = QReviewItems.reviewItems;
-  protected static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
-
-  /**
-   * toString() implementation for the ElementIdMappings
-   *
-   * @param idMappings element ID mappings
-   * @return a readable string
-   */
-  public static String elementIdMappingsDbPojoToString(final ElementIdMappings idMappings)
-  {
-    return "\nElement ID mapping:\nUUID: " + idMappings.getElementId().toString() +
-      "\nElement ID: " + idMappings.getOsmElementId() + "\nElement type: " +
-      idMappings.getOsmElementType().toString();
-  }
-
-  /**
-   * toString() implementation for the ReviewItems
-   *
-   * @param item review item
-   * @return a readable string
-   */
-  public static String reviewItemDbPojoToString(final ReviewItems item)
-  {
-    return "\nReview item:\nUUID: " + item.getReviewableItemId().toString() + "\nReview score: " +
-      item.getReviewScore() + "\nReview status: " + item.getReviewStatus().toString();
-  }
-
-  /**
-   * Returns the IDs of all items that are currently marked as being reviewable
-   *
-   * @param mapId ID of the map owning the reviewable items
-   * @param conn JDBC Connection
-   * @return reviewable element IDs grouped by element type
-   */
-  public static Map<ElementType, Set<Long>> getReviewableElementIds(final long mapId,
-    Connection conn)
-  {
-    Map<ElementType, Set<Long>> reviewableElementIdsByType = new HashMap<ElementType, Set<Long>>();
-    for (ElementType elementType : ElementType.values())
-    {
-      if (!elementType.equals(ElementType.Changeset))
-      {
-      	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration(mapId));
-        final Set<Long> reviewableElementIds =
-          new HashSet<Long>(
-
-            	query	.from(reviewItemsTbl)
-            	.join(elementIdMappings)
-            	.on(
-            			reviewItemsTbl.reviewableItemId.eq(elementIdMappings.elementId)
-            			.and(reviewItemsTbl.mapId.eq(mapId))
-            			.and(elementIdMappings.mapId.eq(mapId))
-            			.and(
-            					elementIdMappings.osmElementType.eq(Element.elementEnumForElementType(elementType))
-            					)
-            			)
-          		.where(
-          				reviewItemsTbl.reviewStatus.eq(DbUtils.review_status_enum.unreviewed)
-          		)
-          		.list(elementIdMappings.osmElementId)
-
-         );
-        reviewableElementIdsByType.put(elementType, reviewableElementIds);
-      }
-    }
-    return reviewableElementIdsByType;
-  }
-
-  /**
-   * Converts a review status string to a review status enum value
-   *
-   * @param reviewStatusStr a review status string
-   * @return review status enum value
-   */
-  public static DbUtils.review_status_enum reviewStatusFromString(final String reviewStatusStr)
-  {
-    if (!StringUtils.isEmpty(reviewStatusStr))
-    {
-      if (reviewStatusStr.toLowerCase().equals("reviewed"))
-      {
-        return DbUtils.review_status_enum.reviewed;
-      }
-      else if (reviewStatusStr.toLowerCase().equals("unreviewed"))
-      {
-        return DbUtils.review_status_enum.unreviewed;
-      }
-    }
-    return null;
-  }
-
-  /**
-   * Returns a unique element ID for a given map/OSM element ID/OSM element type combo
-   *
-   * @param mapId ID of the map owning the element
-   * @param osmElementId the element's OSM ID
-   * @param elementType the element's type
-   * @param conn JDBC Connection
-   * @return the element's unique ID
-   */
-  public static String getUniqueIdForElement(final long mapId, final long osmElementId,
-    final ElementType elementType, Connection conn)
-  {
-
-  	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration(mapId));
-
-    return
-  	query	.from(elementIdMappings)
-		.where(
-				elementIdMappings.mapId.eq(mapId)
-				.and(elementIdMappings.osmElementType.eq(Element.elementEnumForElementType(elementType)))
-				.and(elementIdMappings.osmElementId.eq(osmElementId))
-		)
-		.singleResult(elementIdMappings.elementId);
-
-  }
-
-  /**
-   * Returns the element id for a unique item ID
-   *
-   * @param itemId item unique ID
-   * @param map ID ID of the map the element belongs to
-   * @param conn JDBC Connection
-   * @return an element ID
-   */
-  public static long getElementId(final String itemId, final long mapId, Connection conn)
-  {
-  	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration(mapId));
-
-  	return
-  	query	.from(elementIdMappings)
-		.where(
-				elementIdMappings.elementId.eq(itemId)
-				.and(elementIdMappings.mapId.eq(mapId))
-		)
-		.singleResult(elementIdMappings.osmElementId);
-  }
-
-  /**
-   * Returns the element type for a unique item ID
-   *
-   * @param itemId item unique ID
-   * @param map ID ID of the map the element belongs to
-   * @param conn JDBC Connection
-   * @return an element type
-   */
-  public static ElementType getElementType(final String itemId, final long mapId,
-    Connection conn)
-  {
-  	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration(mapId));
-
-  	return
-  			Element.elementTypeForElementEnum(
-			  	query	.from(elementIdMappings)
-					.where(
-							elementIdMappings.elementId.eq(itemId)
-							.and(elementIdMappings.mapId.eq(mapId))
-					)
-					.singleResult(elementIdMappings.osmElementType)
-		);
-  }
 
   /**
    * Handles all thrown exceptions from both WPS and non-WPS review services

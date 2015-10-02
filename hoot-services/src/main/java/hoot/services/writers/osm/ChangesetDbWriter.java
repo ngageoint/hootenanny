@@ -30,7 +30,6 @@ import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
 import hoot.services.db.DbUtils.RecordBatchType;
-import hoot.services.db2.QChangesets;
 import hoot.services.db2.QCurrentRelationMembers;
 import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.geo.BoundingBox;
@@ -82,7 +81,6 @@ public class ChangesetDbWriter
 {
   private static final Logger log = LoggerFactory.getLogger(ChangesetDbWriter.class);
   
-  protected static final QChangesets changesets = QChangesets.changesets;
   private int maxRecordBatchSize = -1;
 
   private BoundingBox diffBounds; // bounds calculated from the diff request data

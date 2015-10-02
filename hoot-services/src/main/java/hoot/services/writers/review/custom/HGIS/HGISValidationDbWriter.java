@@ -8,12 +8,12 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 
 public class HGISValidationDbWriter {
-	private static final Logger log = LoggerFactory.getLogger(HGISValidationDbWriter.class);
+	//private static final Logger log = LoggerFactory.getLogger(HGISValidationDbWriter.class);
 	
 	private Connection conn;
   private long mapId;

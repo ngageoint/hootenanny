@@ -27,6 +27,8 @@
 package hoot.services.controllers.osm;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -74,7 +76,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   
   private void verifyFirstNodeWasReturned(final Document responseData, final String id, 
     final long changesetId, final BoundingBox bounds) throws TransformerException, 
-    XPathExpressionException
+    XPathExpressionException, UnsupportedEncodingException
   {
     XPath xpath = XmlUtils.createXPath();
     
@@ -90,14 +92,18 @@ public class ElementResourceTest extends OsmResourceTestAbstract
       2, 
       XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
     Assert.assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
-    Assert.assertEquals("val 1", xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData));
+    Assert.assertEquals(
+    	"val 1", 
+    	URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
     Assert.assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
-    Assert.assertEquals("val 2", xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData));
+    Assert.assertEquals(
+    	"val 2", 
+    	URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
   }
   
   private void verifyFirstWayWasReturned(final Document responseData, final String id, 
     final long changesetId, final Set<Long> wayNodeIds) throws TransformerException, 
-    XPathExpressionException
+    XPathExpressionException, UnsupportedEncodingException
   {
     XPath xpath = XmlUtils.createXPath();
     
@@ -112,9 +118,13 @@ public class ElementResourceTest extends OsmResourceTestAbstract
       2, 
       XPathAPI.selectNodeList(responseData, "//osm/way[1]/tag").getLength());
     Assert.assertEquals("key 1", xpath.evaluate("//osm/way[1]/tag[1]/@k", responseData));
-    Assert.assertEquals("val 1", xpath.evaluate("//osm/way[1]/tag[1]/@v", responseData));
+    Assert.assertEquals(
+    	"val 1", 
+    	URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[1]/@v", responseData), "UTF-8"));
     Assert.assertEquals("key 2", xpath.evaluate("//osm/way[1]/tag[2]/@k", responseData));
-    Assert.assertEquals("val 2", xpath.evaluate("//osm/way[1]/tag[2]/@v", responseData));
+    Assert.assertEquals(
+    	"val 2", 
+    	URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[2]/@v", responseData), "UTF-8"));
     if (wayNodeIds != null)
     {
       Assert.assertEquals(
@@ -132,7 +142,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   
   private void verifyFirstRelationWasReturned(final Document responseData, final String id, 
     final long changesetId, final List<RelationMember> relationMembers) throws TransformerException, 
-    XPathExpressionException
+    XPathExpressionException, UnsupportedEncodingException
   {
     XPath xpath = XmlUtils.createXPath();
     
@@ -147,7 +157,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract
       1, 
       XPathAPI.selectNodeList(responseData, "//osm/relation[1]/tag").getLength());
     Assert.assertEquals("key 1", xpath.evaluate("//osm/relation[1]/tag[1]/@k", responseData));
-    Assert.assertEquals("val 1", xpath.evaluate("//osm/relation[1]/tag[1]/@v", responseData));
+    Assert.assertEquals(
+    	"val 1", 
+    	URLDecoder.decode(xpath.evaluate("//osm/relation[1]/tag[1]/@v", responseData), "UTF-8"));
     if (relationMembers != null)
     {
       Assert.assertEquals(

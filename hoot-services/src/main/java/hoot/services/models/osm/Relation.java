@@ -48,7 +48,6 @@ import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelationMembers;
 import hoot.services.db2.CurrentRelations;
 import hoot.services.db2.QCurrentRelationMembers;
-import hoot.services.db2.QCurrentRelations;
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.Coordinates;
 
@@ -77,8 +76,8 @@ public class Relation extends Element
 	private static final Logger log = LoggerFactory.getLogger(Relation.class);
 	private int maxRecordBatchSize = -1;
 	private List<RelationMember> membersCache = new ArrayList<RelationMember>();
-	protected static final QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
-	protected static final QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
+	protected static final QCurrentRelationMembers currentRelationMembers = 
+		QCurrentRelationMembers.currentRelationMembers;
 
 	public Relation(final long mapId, Connection dbConn)
 	{
@@ -403,7 +402,7 @@ public class Relation extends Element
 
 	private BoundingBox getBoundsForNodesAndWays() throws Exception
 	{
-		final List<Long> nodeIds = (List<Long>) new SQLQuery(conn,
+		final List<Long> nodeIds = new SQLQuery(conn,
 				DbUtils.getConfiguration(getMapId()))
 		.from(Relation.currentRelationMembers)
 		.where(
@@ -411,7 +410,7 @@ public class Relation extends Element
 						currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node)))
 						.list(currentRelationMembers.memberId);
 
-		final List<Long> wayIds = (List<Long>) new SQLQuery(conn,
+		final List<Long> wayIds = new SQLQuery(conn,
 				DbUtils.getConfiguration(getMapId()))
 		.from(Relation.currentRelationMembers)
 		.where(

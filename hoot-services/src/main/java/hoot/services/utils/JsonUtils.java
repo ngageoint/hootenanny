@@ -28,7 +28,6 @@ package hoot.services.utils;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Map;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
@@ -47,8 +46,6 @@ public class JsonUtils
   @SuppressWarnings("unused")
   private static final Logger log = LoggerFactory.getLogger(JsonUtils.class);
   
-  public enum DelimitedStringType { FIELDS, VALUES, BOTH }
-  
   /**
    * Converts a POJO to JSON
    * 
@@ -63,39 +60,6 @@ public class JsonUtils
     jsonGenerator.setCodec(new ObjectMapper());
     jsonGenerator.writeObject(obj);
     return writer.toString();
-  }
-  
-  /**
-   * Returns the value of top level property in the specified JSON
-   * 
-   * @param fieldName name of the value to retrieve
-   * @param json JSON to parse
-   * @return POJO
-   * @throws JsonParseException
-   * @throws JsonMappingException
-   * @throws IOException
-   */
-  public static Object getTopLevelValue(final String fieldName, final String json) 
-    throws JsonParseException, JsonMappingException, IOException
-  {
-    return (new ObjectMapper()).readValue(json, Map.class).get(fieldName);
-  }
-  
-  /**
-   * Returns the value of the top level property in the specified JSON with all "'s removed.  Use
-   * this to return non-JSON string values.
-   * 
-   * @param fieldName name of the value to retrieve
-   * @param json JSON to parse
-   * @return string value
-   * @throws JsonParseException
-   * @throws JsonMappingException
-   * @throws IOException
-   */
-  public static String getTopLevelValueAsString(final String fieldName, final String json) 
-    throws JsonParseException, JsonMappingException, IOException
-  {
-    return getTopLevelValueAsString(fieldName, json, false);
   }
   
   /**
@@ -126,29 +90,5 @@ public class JsonUtils
     return null;
   }
   
-  /**
-   * Sets a top level property on a JSON string.  This can be used when ObjectMapper.readValue 
-   * isn't an option because the object being modified isn't a bean.
-   * 
-   * @param json JSON string to modify
-   * @param fieldName name of the field to modify
-   * @param fieldValue value to modify the field with
-   * @return the modified JSON
-   * @throws Exception
-   */
-  public static String setTopLevelValueAsString(final String json, final String fieldName, 
-    final String fieldValue) throws Exception
-  {
-    ObjectMapper jsonObjMapper = new ObjectMapper();
-    @SuppressWarnings("unchecked")
-    Map<String, String> props = jsonObjMapper.readValue(json, Map.class);
-    if (!props.containsKey(fieldName))
-    {
-      throw new Exception("Field " + fieldName + " not contained in JSON: " + json);
-    }
-    props.put(fieldName, fieldValue);
-    StringWriter writer = new StringWriter();
-    jsonObjMapper.writeValue(writer, props);
-    return writer.toString();
-  }
+  
 }

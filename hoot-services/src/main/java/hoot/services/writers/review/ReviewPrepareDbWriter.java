@@ -79,16 +79,20 @@ import hoot.services.review.ReviewUtils;
 
 /**
  * Writes review data to the services database
+ * 
+ * Assumes that data is always prepared once and once only, so doesn't check to see if any existing
+ * reviews are already in the database before parsing new ones.
  */
 public class ReviewPrepareDbWriter extends DbClientAbstract implements Executable
 {
 	private static final Logger log = 
 		LoggerFactory.getLogger(ReviewPrepareDbWriter.class);
-	protected static final QReviewMap reviewMap = QReviewMap.reviewMap;
-	protected static final QReviewItems reviewItems = QReviewItems.reviewItems;
-	protected static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
+	private static final QReviewMap reviewMap = QReviewMap.reviewMap;
+	private static final QReviewItems reviewItems = QReviewItems.reviewItems;
+	private static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
 	protected Connection conn;
 
+	protected int maxWarningsDisplayed = 10;
 	private long mapId;
 	protected long uniqueIdsParsed = 0;
 	protected boolean idMappingRecordWritten = false;
@@ -96,11 +100,8 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 	protected boolean reviewRecordWritten = false;
 	private long totalParseableRecords = 0;
 	private long totalReviewableRecords = 0;
-	protected int maxRecordSelectSize;
 	protected int maxRecordBatchSize;
-	protected ListMultimap<String, String> previouslyReviewedItemIdToReviewAgainstItemIds;
 	protected ListMultimap<String, String> reviewableItemIdToReviewAgainstItemIds;
-	protected boolean checkForElementIdMappingPerReviewRecordWrite = false;
 
 	private String finalStatusDetail;
 
@@ -112,33 +113,28 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 	public ReviewPrepareDbWriter() throws Exception
 	{
 		super();
-		maxRecordSelectSize = 
-			Integer.parseInt(
-				HootProperties.getInstance()
-		      .getProperty("maxRecordSelectSize", HootProperties.getDefault("maxRecordSelectSize")));
+
 		maxRecordBatchSize = 
 			Integer.parseInt(
 				HootProperties.getInstance()
 		      .getProperty("maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
-		checkForElementIdMappingPerReviewRecordWrite = 
-			Boolean.parseBoolean(
+		maxWarningsDisplayed = 
+			Integer.parseInt(
 				HootProperties.getInstance()
-		      .getProperty(
-		      	"checkForElementIdMappingPerReviewRecordWrite", 
-		    		HootProperties.getDefault("checkForElementIdMappingPerReviewRecordWrite")));
+		      .getProperty("maxWarningsDisplayed", HootProperties.getDefault("maxWarningsDisplayed")));
 	}
 
 	/**
 	 * See CoreServiceContext.xml
 	 */
-	public void init()
+	public void init() // NO_UCD (unused code)
 	{
 	}
 
 	/**
 	 * See CoreServiceContext.xml
 	 */
-	public void destroy()
+	public void destroy() // NO_UCD (unused code)
 	{
 	}
 
@@ -237,7 +233,6 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 				if (totalReviewableRecords > 0)
 				{
 					totalParseableRecords = getTotalParseableRecords(mapId);
-					getPreviouslyReviewedRecords();
 					final boolean uuidsExist = parseElementUniqueIdTags(mapId);
 					if (!uuidsExist)
 					{
@@ -351,27 +346,6 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		else
 		{
 			log.debug("Review record UUID's not cleaned up.");
-		}
-	}
-
-	private void getPreviouslyReviewedRecords()
-	{
-		// TODO: make this a batched query
-		SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration(mapId));
-
-		final List<ReviewItems> reviewedItems = query
-		    .from(reviewItems)
-		    .where(
-		      reviewItems.mapId.eq(mapId)
-		        .and(reviewItems.reviewStatus.eq(DbUtils.review_status_enum.reviewed)))
-		    .list(reviewItems);
-
-		previouslyReviewedItemIdToReviewAgainstItemIds = ArrayListMultimap.create();
-		for (ReviewItems reviewedItem : reviewedItems)
-		{
-			previouslyReviewedItemIdToReviewAgainstItemIds.put(
-			  reviewedItem.getReviewableItemId(),
-			  reviewedItem.getReviewAgainstItemId());
 		}
 	}
 
@@ -558,7 +532,8 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 
 	protected Map<Long, Object> getReviewableElementRecords(final long mapId,
 	  final ElementType elementType, final int limit, final int offset) throws InstantiationException, 
-	  IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, SQLException
+	  IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, 
+	  SQLException
 	{
 		Map<Long, Object> retMap = new LinkedHashMap<Long, Object>();
 		final Element prototype = 
@@ -670,7 +645,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 				{
 					// get all reviewable elements
 					final Map<Long, Object> reviewableElementRecords = 
-						getParseableElementRecords(mapId, elementType, maxRecordSelectSize, elementIndex);
+						getParseableElementRecords(mapId, elementType, maxRecordBatchSize, elementIndex);
 					numElementsReturned = reviewableElementRecords.size();
 					elementIndex += numElementsReturned;
 					for (Map.Entry<Long, Object> reviewableElementRecordEntry : reviewableElementRecords.entrySet())
@@ -779,7 +754,6 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		// create this outside of the batch read loop, since we need to maintain a list of unique 
 		// IDs parsed over the entire map's set of reviewable records
 		reviewableItemIdToReviewAgainstItemIds = ArrayListMultimap.create();
-		reviewableItemIdToReviewAgainstItemIds.putAll(previouslyReviewedItemIdToReviewAgainstItemIds);
 
 		int numReviewItemsAdded = 0;
 		for (ElementType elementType : ElementType.values())
@@ -792,7 +766,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 				{
 					// get a batch of reviewable elements
 					final Map<Long, Object> reviewableElementRecords = 
-						getReviewableElementRecords(mapId, elementType, maxRecordSelectSize, elementIndex);
+						getReviewableElementRecords(mapId, elementType, maxRecordBatchSize, elementIndex);
 					numElementsReturned = reviewableElementRecords.size();
 					elementIndex += numElementsReturned;
 					for (Map.Entry<Long, Object> reviewableElementRecordEntry : reviewableElementRecords.entrySet())

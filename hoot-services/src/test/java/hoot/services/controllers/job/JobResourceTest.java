@@ -84,7 +84,7 @@ public class JobResourceTest {
 		JobResource spy = Mockito.spy(real);
 		org.mockito.Mockito.when(spy.getJobStatusObj(org.mockito.Matchers.anyString())).thenReturn(mockRet);
 
-		Mockito.doNothing().when((JobResource)spy)._terminateJob(org.mockito.Matchers.anyString());
+		Mockito.doNothing().when(spy)._terminateJob(org.mockito.Matchers.anyString());
 
 		spy.terminateJob("1234", null);
 
@@ -110,10 +110,10 @@ public class JobResourceTest {
 
 		// Create Mock JobStatusManager Class
 		JobStatusManager mockJobStatusManager = Mockito.mock(JobStatusManager.class);
-		Mockito.doNothing().when((JobStatusManager)mockJobStatusManager).addJob(org.mockito.Matchers.anyString());
-		Mockito.doNothing().when((JobStatusManager)mockJobStatusManager).updateJob(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
-		Mockito.doNothing().when((JobStatusManager)mockJobStatusManager).setComplete(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
-		Mockito.doNothing().when((JobStatusManager)mockJobStatusManager).setFailed(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
+		Mockito.doNothing().when(mockJobStatusManager).addJob(org.mockito.Matchers.anyString());
+		Mockito.doNothing().when(mockJobStatusManager).updateJob(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
+		Mockito.doNothing().when(mockJobStatusManager).setComplete(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
+		Mockito.doNothing().when(mockJobStatusManager).setFailed(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
 
 		// Mock child info
 		JSONObject mockChild = new JSONObject();
@@ -126,7 +126,7 @@ public class JobResourceTest {
 
 
 		org.mockito.Mockito.when(spy._createDbConnection()).thenReturn(null);
-		Mockito.doNothing().when((JobResource)spy)._closeDbConnection(org.mockito.Matchers.any(java.sql.Connection.class));
+		Mockito.doNothing().when(spy)._closeDbConnection(org.mockito.Matchers.any(java.sql.Connection.class));
 		// This one works for void return method only
 		/*Mockito.doNothing().when((JobResource)spy)._processJob(org.mockito.Matchers.anyString(),
 				org.mockito.Matchers.any(JSONObject.class));*/
@@ -249,10 +249,10 @@ public class JobResourceTest {
 
 		// Create Mock JobStatusManager Class
 		JobStatusManager mockJobStatusManager = Mockito.mock(JobStatusManager.class);
-		Mockito.doNothing().when((JobStatusManager)mockJobStatusManager).addJob(org.mockito.Matchers.anyString());
-		Mockito.doNothing().when((JobStatusManager)mockJobStatusManager).updateJob(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
-		Mockito.doNothing().when((JobStatusManager)mockJobStatusManager).setComplete(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
-		Mockito.doNothing().when((JobStatusManager)mockJobStatusManager).setFailed(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
+		Mockito.doNothing().when(mockJobStatusManager).addJob(org.mockito.Matchers.anyString());
+		Mockito.doNothing().when(mockJobStatusManager).updateJob(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
+		Mockito.doNothing().when(mockJobStatusManager).setComplete(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
+		Mockito.doNothing().when(mockJobStatusManager).setFailed(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
 
 		// Mock child info
 		JSONObject mockChild = new JSONObject();
@@ -265,7 +265,7 @@ public class JobResourceTest {
 
 
 		org.mockito.Mockito.when(spy._createDbConnection()).thenReturn(null);
-		Mockito.doNothing().when((JobResource)spy)._closeDbConnection(org.mockito.Matchers.any(java.sql.Connection.class));
+		Mockito.doNothing().when(spy)._closeDbConnection(org.mockito.Matchers.any(java.sql.Connection.class));
 		// This one works for void return method only
 		/*Mockito.doNothing().when((JobResource)spy)._processJob(org.mockito.Matchers.anyString(),
 				org.mockito.Matchers.any(JSONObject.class));*/
