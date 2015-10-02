@@ -1070,6 +1070,34 @@ If the name similarity score is greater than this then the names are considered 
 
 How far away from a polygon should name matches be considered reviews. This is a fixed value in meters that is added to the CE calculation.
 
+=== postgresql.dumpfile.writer.start.id.changeset
+
+* Data Type: int
+* Default Value: `1`
+
+Starting ID value for changesets created in a PostgreSQL dumpfile.
+
+=== postgresql.dumpfile.writer.start.id.node
+
+* Data Type: int
+* Default Value: `1`
+
+Starting ID value for nodes created in a PostgreSQL dumpfile. 
+
+=== postgresql.dumpfile.writer.start.id.relation
+
+* Data Type: int
+* Default Value: `1`
+
+Starting ID value for relations created in a PostgreSQL dumpfile.
+
+=== postgresql.dumpfile.writer.start.id.way
+
+* Data Type: int
+* Default Value: `1`
+
+Starting ID value for ways created in a PostgreSQL dumpfile.
+
 === reader.add.source.datetime
 
 * Data Type: bool

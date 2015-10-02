@@ -322,11 +322,13 @@ void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
 
 void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
 {
+  const ConfigOptions confOptions(conf);
+
   // TODO: pull these from config values
-  _configData.startingChangesetId = 1;
-  _configData.startingNodeId      = 1;
-  _configData.startingWayId       = 1;
-  _configData.startingRelationId  = 1;
+  _configData.startingChangesetId = confOptions.getPostgresqlDumpfileWriterStartIdChangeset();
+  _configData.startingNodeId      = confOptions.getPostgresqlDumpfileWriterStartIdNode();
+  _configData.startingWayId       = confOptions.getPostgresqlDumpfileWriterStartIdWay();
+  _configData.startingRelationId  = confOptions.getPostgresqlDumpfileWriterStartIdRelation();
   _configData.maxMapElements      = 1000000000;
 }
 
