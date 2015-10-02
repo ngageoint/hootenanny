@@ -619,7 +619,6 @@ public class MapResource
 					maxY = maxY < -90 ? -90 : maxY;
 
 					bbox = "" + minX + "," + minY + "," + maxX + "," + maxY;
-
 				}
 
 				QMaps maps = QMaps.maps;
@@ -640,7 +639,6 @@ public class MapResource
 				}
 				Map currMap = new Map(mapIdNum, conn);
 				nodeCnt += currMap.getNodesCount(queryBounds);
-
 			}
 
 			ret.put("nodescount", nodeCnt);

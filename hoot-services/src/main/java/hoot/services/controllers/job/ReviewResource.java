@@ -28,6 +28,7 @@ package hoot.services.controllers.job;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,7 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.ReviewAgainstItem;
 import hoot.services.models.review.ReviewReferences;
+import hoot.services.models.review.ReviewReferencesCollection;
 import hoot.services.models.review.ReviewableItemsStatistics;
 import hoot.services.readers.review.ReviewItemsRetriever;
 import hoot.services.readers.review.ReviewReferencesRetriever;
@@ -491,45 +493,68 @@ public class ReviewResource
   }
 
   /**
-   * Returns any review record references to the elements passed in including all references to any 
-   * item the specified element still needs to be reviewed against, as well as any other item that 
-   * needs to use the specified element to review against it.
+   * Returns any review record references to the elements associated with the ID's passed in 
+   * including all references to any item the specified element still needs to be reviewed against, 
+   * as well as any other item that needs to use the specified element to review against it.
    * 
-   * @param mapId map owning the feature whose review references are to be retrieved
-   * @param elementUniqueId unique ID of the element whose review references are to be retrieved
-   * @return an array of review records
+   * @param mapId contains an array of unique ID's and their associated map ID; all unique ID's
+   * should be associated with features owned by the single map ID
+   * @param elementUniqueIds
+   * @return an array of review references; one set of references for each unique ID passed in
    * @throws Exception
    */
   @GET
   @Path("/refs")
   @Consumes(MediaType.TEXT_PLAIN)
   @Produces(MediaType.APPLICATION_JSON)
-  public ReviewReferences getReviewReferences(
+  public ReviewReferencesCollection getReviewReferences(
   	@QueryParam("mapId")
-  	final long mapId,
-    @QueryParam("elementUniqueId")
-    final String elementUniqueId)
-    throws Exception
+    final long mapId,
+    @QueryParam("elementUniqueIds")
+    final String elementUniqueIds) 
+  	throws Exception
   {
   	log.debug("Returning review references...");
   	
   	Connection conn = DbUtils.createConnection();
-  	ReviewReferences response = new ReviewReferences();
+  	ReviewReferencesCollection response = new ReviewReferencesCollection();
+  	
   	try
   	{
-  		List<List<ReviewAgainstItem>> references = 
-  			(new ReviewReferencesRetriever(conn).getReferences(mapId, elementUniqueId));
-  		log.debug("Returning " + references.get(0).size() + " review against items.");
-  		response.setReviewAgainstItems(references.get(0).toArray(new ReviewAgainstItem[]{}));
-  		log.debug("Returning " + references.get(1).size() + " reviewable items.");
-  		response.setReviewableItems(references.get(1).toArray(new ReviewAgainstItem[]{}));
+  		String[] elementUniqueIdsArr;
+  		if (elementUniqueIds.contains(";"))
+  		{
+  			elementUniqueIdsArr = elementUniqueIds.split(";");
+  		}
+  		else
+  		{
+  			elementUniqueIdsArr = new String[] { elementUniqueIds };
+  		}
+  		
+  		List<ReviewReferences> responseRefsList = new ArrayList<ReviewReferences>();
+  		for (String elementUniqueId : elementUniqueIdsArr)
+  		{
+  			ReviewReferences responseRefs = new ReviewReferences();
+  			List<List<ReviewAgainstItem>> references = 
+	  			(new ReviewReferencesRetriever(conn).getReferences(mapId, elementUniqueId));
+	  		log.debug(
+	  			"Returning " + references.get(0).size() + " review against items for unique ID: " + 
+	  		  elementUniqueId);
+	  		responseRefs.setReviewAgainstItems(references.get(0).toArray(new ReviewAgainstItem[]{}));
+	  		log.debug(
+	  			"Returning " + references.get(1).size() + " reviewable items for unique ID: " + 
+	  		  elementUniqueId);
+	  		responseRefs.setReviewableItems(references.get(1).toArray(new ReviewAgainstItem[]{}));
+	  		responseRefsList.add(responseRefs);
+  		}
+  		response.setReviewReferences(responseRefsList.toArray(new ReviewReferences[]{}));
   	}
   	catch (Exception e)
     {
       ReviewUtils.handleError(
       	e, 
-      	"Unable to retrieve review references for map ID: " + mapId + " and element unique ID: " + 
-      	  elementUniqueId, 
+      	"Unable to retrieve review references for map ID: " + mapId + " and element unique ID's: " + 
+      	  elementUniqueIds, 
       	false);
     }
     finally
@@ -544,7 +569,8 @@ public class ReviewResource
   /**
    * Sets all reviewable features in the dataset to reviewed
    * 
-   * @param mapId the map owning the elements to be set reviewed
+   * @param request contains a 'mapId' parameter associated with the map owning the elements to 
+   * be set reviewed
    * @return HTTP response
    * @throws Exception
    */
@@ -552,9 +578,7 @@ public class ReviewResource
   @Path("/setallreviewed")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.TEXT_PLAIN)
-  public Response setAllItemsReviewed(
-  	JSONObject request) 
-    throws Exception
+  public Response setAllItemsReviewed(final JSONObject request) throws Exception
   {
   	Connection conn = DbUtils.createConnection();
   	log.debug("Intializing changeset upload transaction...");
