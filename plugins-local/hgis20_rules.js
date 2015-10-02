@@ -1664,7 +1664,6 @@ hgis20.rules = {
      ['religioni$TYPE','Monastery','amenity','monastery'],
 
      ['roadp$TYPE','Tolls','toll','yes'],
-     ['roadp$TYPE','Circular','circular','yes'], // No real idea but this tag s on the wiki
      ['roadp$TYPE','Highway Interchange','interchange','yes'], // Deconflict with AP020
      ['roadp$TYPE','exit','highway','exit'],
      ['roadp$TYPE','Toll Gate','barrier','toll_booth'],

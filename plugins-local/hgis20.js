@@ -813,6 +813,7 @@ hgis20 = {
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
+            print('');
             print('Element: ' + elementType + '  Geom: ' + geometryType);
             for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
         }
