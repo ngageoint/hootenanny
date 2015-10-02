@@ -87,11 +87,11 @@ import com.mysema.query.types.expr.BooleanExpression;
 public class Map extends Maps
 {
   private static final Logger log = LoggerFactory.getLogger(Map.class);
+  
+  private static QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
 
   private Connection conn;
 
-  //for testing purposes only
-  public static boolean simulateFailure = false;
   public static long testDelayMilliseconds = -1;
 
   //I want to retrieve nodes, ways, and relations with one query and return a single
@@ -224,10 +224,8 @@ public class Map extends Maps
     }
   }
 
-
   public JSONObject retrieveNodesMBR(final BoundingBox bounds) throws Exception
   {
-
   	JSONObject ret = new JSONObject();
     //get the intersecting tile ranges for the nodes
     final Vector<Range> tileIdRanges = getTileRanges(bounds);
@@ -236,27 +234,14 @@ public class Map extends Maps
     {
       BooleanExpression combinedGeospatialCondition =
         getTileWhereCondition(tileIdRanges).and(getGeospatialWhereCondition(bounds));
-
-      QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
-      QChangesets changesets = QChangesets.changesets;
-      QUsers users = QUsers.users;
-
       List<Tuple> geospatialQueryNodeResults =
-      		new SQLQuery(conn, DbUtils.getConfiguration(getId())).from(currentnodes)
-    				.join(changesets)
-    				.on(
-    						currentnodes.changesetId.eq(changesets.id)
-    						)
-    				.join(users)
-    				.on(
-    						changesets.userId.eq(users.id)
-    						)
-    				.where(
-    						combinedGeospatialCondition
-    						.and(currentnodes.visible.eq(true))
-    						)
-    				.list(currentnodes.longitude.max(), currentnodes.longitude.min(),
-    						currentnodes.latitude.max(), currentnodes.latitude.min() );
+    		new SQLQuery(conn, DbUtils.getConfiguration(getId()))
+          .from(currentnodes)
+  				.where(
+  						combinedGeospatialCondition
+  						.and(currentnodes.visible.eq(true)))
+  				.list(currentnodes.longitude.max(), currentnodes.longitude.min(),
+  					  	currentnodes.latitude.max(), currentnodes.latitude.min() );
 
       Double maxLon = geospatialQueryNodeResults.get(0).get(0, Double.class);
       Double minLon = geospatialQueryNodeResults.get(0).get(1, Double.class);
@@ -269,7 +254,6 @@ public class Map extends Maps
     }
 
     return ret;
-
   }
 
   public long getNodesCount(final BoundingBox bounds) throws Exception
@@ -282,31 +266,15 @@ public class Map extends Maps
     {
       BooleanExpression combinedGeospatialCondition =
         getTileWhereCondition(tileIdRanges).and(getGeospatialWhereCondition(bounds));
-
-      QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
-      QChangesets changesets = QChangesets.changesets;
-      QUsers users = QUsers.users;
-
       ret =
-      		new SQLQuery(conn, DbUtils.getConfiguration(getId())).from(currentnodes)
-    				.join(changesets)
-    				.on(
-    						currentnodes.changesetId.eq(changesets.id)
-    						)
-    				.join(users)
-    				.on(
-    						changesets.userId.eq(users.id)
-    						)
-    				.where(
-    						combinedGeospatialCondition
-    						.and(currentnodes.visible.eq(true))
-    						)
-    				.count();
-
+    		new SQLQuery(conn, DbUtils.getConfiguration(getId()))
+          .from(currentnodes)
+  				.where(
+  						combinedGeospatialCondition.and(currentnodes.visible.eq(true)))
+  				.count();
     }
 
     return ret;
-
   }
 
   public JSONObject retrieveANode(final BoundingBox bounds) throws Exception
@@ -322,19 +290,19 @@ public class Map extends Maps
         getTileWhereCondition(tileIdRanges).and(getGeospatialWhereCondition(bounds));
 
       QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
-      QChangesets changesets = QChangesets.changesets;
-      QUsers users = QUsers.users;
+      //QChangesets changesets = QChangesets.changesets;
+      //QUsers users = QUsers.users;
 
       List<Tuple> geospatialQueryNodeResults =
       		new SQLQuery(conn, DbUtils.getConfiguration(getId())).from(currentnodes)
-    				.join(changesets)
+    				/*.join(changesets)
     				.on(
     						currentnodes.changesetId.eq(changesets.id)
     						)
     				.join(users)
     				.on(
     						changesets.userId.eq(users.id)
-    						)
+    						)*/
     				.where(
     						combinedGeospatialCondition
     						.and(currentnodes.visible.eq(true)))
@@ -350,7 +318,6 @@ public class Map extends Maps
     }
 
     return ret;
-
   }
 
   private java.util.Map<ElementType, java.util.Map<Long, Tuple>> retrieveElements(
@@ -455,8 +422,6 @@ public class Map extends Maps
 
         for(int i=0; i <= wayPageCnt; i++)
         {
-
-
         	try
         	{
           	List<Long> pageList = null;
@@ -530,9 +495,6 @@ public class Map extends Maps
         Set<Long> wayNodeIds = new HashSet<Long>();
         for(int i=0; i <= wayPageCnt; i++)
         {
-
-
-
         	try
         	{
         		List<Long> pageList = null;

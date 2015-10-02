@@ -146,7 +146,8 @@ public class Way extends Element
     if (wayIds.size() > 0)
     {
       return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(currentWayNodes)
-          .join(currentNodes).on(currentWayNodes.nodeId.eq(currentNodes.id))
+          .join(currentNodes)
+          .on(currentWayNodes.nodeId.eq(currentNodes.id))
           .where(currentWayNodes.wayId.in(wayIds))
           .list(currentNodes);
     }
