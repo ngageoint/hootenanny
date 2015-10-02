@@ -109,6 +109,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
     
     OsmTestUtils.verifyOsmHeader(responseData);
     
+    //TODO: needed?
     //Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
     Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
     Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());

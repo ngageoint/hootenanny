@@ -346,7 +346,7 @@ public class ReviewItemsSynchronizer
           		reviewRecordsToInsert.add(
                 ReviewUtils.createReviewItemRecord(
                   uuid,
-                  1.0, //TODO: see comment in updateCreatedReviewItems
+                  1.0, //see comment in updateCreatedReviewItems
                   reviewAgainstUuid,
                   mapId));
           		

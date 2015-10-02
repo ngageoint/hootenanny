@@ -34,7 +34,6 @@ import java.util.UUID;
 import javax.ws.rs.core.Response.Status;
 
 import org.codehaus.jackson.map.ObjectMapper;
-//import org.deegree.process.jaxb.java.AllowedValues;
 import org.deegree.process.jaxb.java.BoundingBoxInputDefinition;
 import org.deegree.process.jaxb.java.LiteralInputDefinition;
 import org.deegree.process.jaxb.java.ProcessDefinition;
@@ -417,8 +416,6 @@ public class ReviewableItemsStatisticsProcessletTest extends OsmResourceTestAbst
    * This is a little strange b/c we're catching this from the method that prepares the exec call.
      This should reflect reality, though, b/c the exec call simulates how the processlet is actually
      called in real operation.
-   *
-   * @todo probably need a better way to test this
    */
   @Test(expected=NumberFormatException.class)
   @Category(IntegrationTest.class)
@@ -438,9 +435,6 @@ public class ReviewableItemsStatisticsProcessletTest extends OsmResourceTestAbst
     }
   }
 
-  /*
-   * @todo need a better way to test this; see testGetEmptyBounds
-   */
   @Test(expected=Exception.class)
   @Category(IntegrationTest.class)
   public void testGetInvalidBoundsParam() throws Exception

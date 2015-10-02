@@ -258,9 +258,6 @@ public class ReviewPrepareDbWriter2 extends ReviewPrepareDbWriter
   /*
    * logging records with invalid tag values and skipping; if errors should be thrown, then the
    * unit tests will have to reworked
-   *
-   * @todo What's a good way to write job completion percentage to the db from here?  This runs in
-   * a transaction, so it won't show up for external job pollers until all the parsing is done.
    */
   @Override
   protected boolean parseElementReviewTags(final long mapId) throws Exception

@@ -78,14 +78,6 @@ import com.sun.jersey.api.client.UniformInterfaceException;
  * @todo Most of these tests could be converted to integration tests and after a refactoring,
  * could be replace with unit tests that test only the internal classes being used by this
  * Jersey resource.
- * @todo I haven't seen these requests occur out of iD yet, but probably the service should
- * handle them:
- *
- * - upload all with ordering of node/way/relation shuffled (e.g. relations, then ways, then nodes)
-   - upload all with ordering of create/modify/delete shuffled (e.g. modify, then create, then
-   delete, etc.); should this even be allowed?
-
-   @todo write test that leaves out one of create/modify/delete tags in the osmChange request
  */
 public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
 {

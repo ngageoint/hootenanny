@@ -370,7 +370,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
 
       try
       {
-      	//TODO: probably need a better check than this
+      	//probably need a better check than this
         Assert.assertTrue(XPathAPI.selectNodeList(responseData, "//osm/user").getLength() >= 1);
         Assert.assertEquals(
         	DbUtils.getTestUserId(conn), 

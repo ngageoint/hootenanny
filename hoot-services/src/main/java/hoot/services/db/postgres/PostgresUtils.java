@@ -49,13 +49,6 @@ public class PostgresUtils
     //type = hstore
     //value = "key 1"=>"val 1", "key 2"=>"val 2"
     
-    //TODO: don't understand why this string doesn't match up
-    //System.out.println(postgresObj.getType());
-    //if (postgresObj.getType().equals("hstore"))
-    //{
-      //throw new Exception("Invalid PGobject type.  Expected: hstore");
-    //}
-    
     Map<String, String> hstore = new HashMap<String, String>();
     if (postgresObj != null && postgresObj.getValue() != null &&
         StringUtils.trimToNull(postgresObj.getValue()) != null)

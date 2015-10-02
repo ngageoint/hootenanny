@@ -44,9 +44,9 @@ import hoot.services.models.review.ReviewableItemsStatistics;
 import hoot.services.readers.review.ReviewItemsRetriever;
 import hoot.services.readers.review.ReviewReferencesRetriever;
 import hoot.services.readers.review.ReviewableItemsStatisticsCalculator;
-import hoot.services.review.ReviewItemsPreparer;
 import hoot.services.review.ReviewUtils;
 import hoot.services.validators.review.ReviewInputParamsValidator;
+import hoot.services.writers.review.ReviewItemsPreparer;
 import hoot.services.writers.review.ReviewItemsSynchronizer;
 
 import javax.ws.rs.Consumes;
@@ -72,11 +72,6 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 /**
  * Non-WPS service endpoint for the conflated data review process
- *
- * @todo Unfortunately, not having these default values as attributes in the methods makes
-  validation impossible, but having them as attributes renders their config values useless.
-  Need to come up with a better way to handle default values.  Is there some way to populate the
-  attribute values directly from a file?
  */
 @Path("/review")
 public class ReviewResource
@@ -296,7 +291,6 @@ public class ReviewResource
       ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
 
     	long cnt = marker.getAvailableReviewCntQuery().count();
-    	//nextItem.put("status", "noneavailable");
     	if(cnt == 0)
     	{
     		stats.setNumReviewableItems(0);
@@ -304,7 +298,6 @@ public class ReviewResource
     }
     catch (Exception e)
     {
-      //ReviewUtils.handleError(e, errorMessageStart, false);
     	try
     	{
 	    	// Instead of throwing error we will just return empty stat

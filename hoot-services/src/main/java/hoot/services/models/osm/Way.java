@@ -143,8 +143,6 @@ public class Way extends Element
   public static List<CurrentNodes> getNodesForWays(final long mapId, final Set<Long> wayIds,
       Connection dbConn)
   {
-
-    // SQLQuery query = new SQLQuery(dbConn, DbUtils.getConfiguration());
     if (wayIds.size() > 0)
     {
       return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(currentWayNodes)
@@ -156,7 +154,6 @@ public class Way extends Element
     {
       return new ArrayList<CurrentNodes>();
     }
-
   }
 
   /*
@@ -178,10 +175,10 @@ public class Way extends Element
    */
   private List<Long> getNodeIds() throws Exception
   {
-    // TODO: return data from way nodes cache if it is present?
-    return new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).from(currentWayNodes)
-        .where(currentWayNodes.wayId.eq(getId()))
-        .orderBy(currentWayNodes.sequenceId.asc()).list(currentWayNodes.nodeId);
+    return new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+      .from(currentWayNodes)
+      .where(currentWayNodes.wayId.eq(getId()))
+      .orderBy(currentWayNodes.sequenceId.asc()).list(currentWayNodes.nodeId);
   }
 
   /*
@@ -243,18 +240,7 @@ public class Way extends Element
     DbUtils.batchRecords(mapId, wayNodeRecords, QCurrentWayNodes.currentWayNodes, null,
         RecordBatchType.INSERT, conn, maxRecordBatchSize);
   }
-
-  // /**
-  // * Clears temporary data that was the result of parsing the XML to create
-  // the element - OPTIONAL
-  // */
-  // public void clearTempData()
-  // {
-  // nodeCoordsCollection = null;
-  // relatedRecords = null;
-  // relatedRecordIds = null;
-  // }
-
+  
   /*
    * First calculates the bounds for all nodes belonging to this way that were
    * referenced explicitly in the changeset upload request. Then calculates the
@@ -502,10 +488,6 @@ public class Way extends Element
     }
   }
 
-  // TODO: if bounds calc as done in Relation::parseMember works, change this
-  // method's logic to be
-  // similar to it by storing bounds instead of node coords; then update
-  // getBounds accordingly
   private long parseWayNode(final org.w3c.dom.Node nodeXml) throws Exception
   {
     final NamedNodeMap nodeXmlAttributes = nodeXml.getAttributes();
@@ -515,10 +497,8 @@ public class Way extends Element
     long actualNodeId;
     Coordinates nodeCoords = new Coordinates();
     final Map<Long, Element> parsedNodes = parsedElementIdsToElementsByType.get(ElementType.Node);
-    // if this is a node created within the same request that is referencing
-    // this way, it won't
-    // exist in the database, but it will be in the element cache created when
-    // parsing the node
+    // if this is a node created within the same request that is referencing this way, it won't
+    // exist in the database, but it will be in the element cache created when parsing the node
     // from the request
     if (parsedNodeId < 0)
     {
@@ -554,9 +534,7 @@ public class Way extends Element
     else
     {
       actualNodeId = parsedNodeId;
-      // TODO: I don't like having to do this in a loop; see
-      // Element::parseVersion for more info
-
+      // I don't like having to do this in a loop; see Element::parseVersion for more info
       final CurrentNodes existingNodeRecord = new SQLQuery(conn,
           DbUtils.getConfiguration(getMapId())).from(currentNodes)
           .where(currentNodes.id.eq(new Long(actualNodeId)))
@@ -665,13 +643,6 @@ public class Way extends Element
   }
 
   /**
-   * Returns the ID sequence type for this element
-   *
-   * @return a sequence type
-   */
-  // public NumberPath<Long> getIdSequenceType() { return null; }
-
-  /**
    * Returns the generated table identifier for records related to this element
    *
    * @return a table
@@ -734,8 +705,6 @@ public class Way extends Element
   public static long insertNew(final long changesetId, final long mapId, final List<Long> nodeIds,
       final Map<String, String> tags, Connection dbConn) throws Exception
   {
-    // SQLQuery query = new SQLQuery(dbConn, DbUtils.getConfiguration());
-
     long nextWayId = new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).uniqueResult(SQLExpressions
         .nextval(Long.class, "current_ways_id_seq"));
     insertNew(nextWayId, changesetId, mapId, nodeIds, tags, dbConn);

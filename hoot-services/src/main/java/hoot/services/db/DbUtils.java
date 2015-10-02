@@ -168,7 +168,6 @@ public class DbUtils
   {
   	if(templates ==  null)
   	{
-  		//templates = new PostgresTemplates();
   		templates = PostgresTemplates.builder()
   				.quote()
   		    .build();
@@ -614,7 +613,6 @@ public class DbUtils
     return query.from(users).singleResult(users.id);
   }
 
-
   public static long insertUser(Connection conn) throws Exception
   {
   	Long newId = (long) -1;
@@ -642,7 +640,7 @@ public class DbUtils
 
   //TODO: this code needs to be changed to dynamically read in the data types from querydsl.  If
   //I make a change to the schema in liquibase, it will never be picked up unless this static code
-  //is also changed.  See #
+  //is also changed.  See #6777
   public static void createMap(final long mapId) throws Exception
   {
   	try {
@@ -857,7 +855,6 @@ public class DbUtils
       {
         stat.setEnd(ts);
       }
-      //statusDao.insert(stat);
       new SQLInsertClause(conn, configuration, jobStatusTbl)
       .populate(stat).execute();
 
@@ -890,7 +887,6 @@ public class DbUtils
       try
       {
         Configuration configuration = getConfiguration(mapId);
-        //conn.setAutoCommit(false);
 
         switch (recordBatchType)
         {
@@ -908,7 +904,6 @@ public class DbUtils
           		{
 	          		if(i % maxRecordBatchSize == 0) {
 	          			insert.execute();
-		              //conn.commit();
 		              insert = new SQLInsertClause(conn, configuration, t);
 		              nBatch = 0;
 		      			}
@@ -946,7 +941,6 @@ public class DbUtils
           		{
 	          		if(i % maxRecordBatchSize == 0) {
 	          			update.execute();
-		              //conn.commit();
 		              update = new SQLUpdateClause(conn, configuration, t);
 		              nBatchUpdate = 0;
 		      			}
@@ -983,7 +977,6 @@ public class DbUtils
         			{
 	        			if(i % maxRecordBatchSize == 0) {
 	          			delete.execute();
-		              //conn.commit();
 		              delete = new SQLDeleteClause(conn, configuration, t);
 		              nBatchDel = 0;
 		      			}
@@ -1001,19 +994,9 @@ public class DbUtils
             throw new Exception("");
         }
 
-
-     /*   if (execResult != records.size())
-        {
-        	String msg = "The number of batch records updates execute: " + execResult + " does not " +
-              "match the number of records sent to be updated: " + records.size();
-          log.warn(msg);
-          throw new Exception(msg);
-        }*/
-        //conn.commit();
       }
       catch (Exception e)
       {
-      	//conn.rollback();
         String msg = "Error executing batch query.";
         msg += "  " + e.getMessage();
         msg += " Cause:" + e.getCause().toString();
@@ -1094,7 +1077,6 @@ public class DbUtils
       try
       {
       	String sql = null;
-        //conn.setAutoCommit(false);
         int count = 0;
 
         switch (recordBatchType)
@@ -1141,7 +1123,6 @@ public class DbUtils
 	      			{
 		      			if(++count % maxRecordBatchSize == 0) {
 		              ps.executeBatch();
-		              //conn.commit();
 
 		      			}
 	      			}
@@ -1191,7 +1172,6 @@ public class DbUtils
 	      			{
 		      			if(++count % maxRecordBatchSize == 0) {
 		              ps.executeBatch();
-		              //conn.commit();
 		              ps.clearBatch();
 		      			}
 	      			}
@@ -1216,7 +1196,6 @@ public class DbUtils
 	      			{
 		      			if(++count % maxRecordBatchSize == 0) {
 		              ps.executeBatch();
-		              //conn.commit();
 		              ps.clearBatch();
 		      			}
 	      			}
@@ -1230,11 +1209,9 @@ public class DbUtils
         }
 
         ps.executeBatch();
-        //conn.commit();
       }
       catch (Exception e)
       {
-      	//conn.rollback();
         String msg = "Error executing batch query.";
         msg += "  " + e.getMessage();
         msg += " Cause:" + e.getCause().toString();
@@ -1246,7 +1223,6 @@ public class DbUtils
       	{
       		ps.close();
       	}
-      	//conn.setAutoCommit(true);
       }
     }
 
@@ -1258,7 +1234,6 @@ public class DbUtils
       try
       {
       	String sql = null;
-        //conn.setAutoCommit(false);
         int count = 0;
 
         switch (recordBatchType)
@@ -1301,7 +1276,6 @@ public class DbUtils
 	      			{
 		      			if(++count % maxRecordBatchSize == 0) {
 		              ps.executeBatch();
-		              //conn.commit();
 		      			}
 	      			}
 
@@ -1346,7 +1320,6 @@ public class DbUtils
 	      			{
 		      			if(++count % maxRecordBatchSize == 0) {
 		              ps.executeBatch();
-		              //conn.commit();
 		      			}
 	      			}
           	}
@@ -1371,7 +1344,6 @@ public class DbUtils
 	      			{
 		      			if(++count % maxRecordBatchSize == 0) {
 		              ps.executeBatch();
-		              //conn.commit();
 		      			}
 	      			}
 
@@ -1385,7 +1357,6 @@ public class DbUtils
         }
 
         ps.executeBatch();
-        //conn.commit();
       }
       catch (Exception e)
       {
@@ -1401,7 +1372,6 @@ public class DbUtils
       	{
       		ps.close();
       	}
-      	//conn.setAutoCommit(true);
       }
     }
   
@@ -1412,7 +1382,6 @@ public class DbUtils
       try
       {
       	String sql = null;
-        //conn.setAutoCommit(false);
         int count = 0;
 
         switch (recordBatchType)
@@ -1455,7 +1424,6 @@ public class DbUtils
 	      			{
 		      			if(++count % maxRecordBatchSize == 0) {
 		              ps.executeBatch();
-		              //conn.commit();
 		      			}
 	      			}
 
@@ -1500,7 +1468,6 @@ public class DbUtils
 	      			{
 		      			if(++count % maxRecordBatchSize == 0) {
 		              ps.executeBatch();
-		              //conn.commit();
 		      			}
 	      			}
           	}
@@ -1525,7 +1492,6 @@ public class DbUtils
 	      			{
 		      			if(++count % maxRecordBatchSize == 0) {
 		              ps.executeBatch();
-		              //conn.commit();
 		      			}
 	      			}
 
@@ -1539,7 +1505,6 @@ public class DbUtils
         }
 
         ps.executeBatch();
-        //conn.commit();
       }
       catch (Exception e)
       {
@@ -1555,7 +1520,6 @@ public class DbUtils
       	{
       		ps.close();
       	}
-      	//conn.setAutoCommit(true);
       }
     }
 

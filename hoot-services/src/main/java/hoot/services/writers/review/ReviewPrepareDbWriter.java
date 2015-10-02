@@ -663,7 +663,6 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 								"Invalid UUID: " + uniqueElementId + " for map with ID: " + mapId + 
 								".  Skipping adding unique ID record...");
 						}
-						// TODO: make this a batch query somehow
 						else if (new SQLQuery(conn, DbUtils.getConfiguration(mapId))
 						           .from(elementIdMappings)
 						           .where(elementIdMappings.mapId.eq(mapId)
@@ -720,12 +719,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 			// job status causes issues
 			if (totalParseableRecords > 0 && uniqueIdsParsed > 0) // sanity check
 			{
-				// TODO: fix this mess - the progress percentage complete message is
-				// incorrect
-				// log.debug("uniqueIdsParsed: " + uniqueIdsParsed);
-				// log.debug("totalParseableRecords: " + totalParseableRecords);
-				// final double percentComplete = (double)((uniqueIdsParsed /
-				// totalParseableRecords) / 100);
+				// the progress percentage complete message is incorrect
 				log.info(logMsgStart + " - "
 				    + String.valueOf((uniqueIdsParsed / totalParseableRecords) * 100)
 				    + "% complete.");
@@ -736,10 +730,6 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 	/*
 	 * logging records with invalid tag values and skipping; if errors should be
 	 * thrown, then the unit tests will have to reworked
-	 * 
-	 * @todo What's a good way to write job completion percentage to the db from
-	 * here? This runs in a transaction, so it won't show up for external job
-	 * pollers until all the parsing is done.
 	 */
 	protected boolean parseElementReviewTags(final long mapId) throws Exception
 	{
@@ -829,10 +819,6 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 								for (int i = 0; i < reviewAgainstItemIds.length; i++)
 								{
 									final String reviewAgainstItemId = reviewAgainstItemIds[i];
-									// TODO: I believe this check is not correct, but I know of no
-									// other way to handle
-									// this for now...
-									// TODO: make this a batch query somehow
 									if (new SQLQuery(conn, DbUtils.getConfiguration(mapId))
 									      .from(elementIdMappings)
 									      .where(
@@ -929,8 +915,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 			// to update the job status causes issues
 			if (totalReviewableRecords > 0 && reviewRecordsParsed > 0) // sanity check
 			{
-				// TODO: fix this mess - the progress percentage complete message is
-				// incorrect
+				// the progress percentage complete message is incorrect
 				log.info(logMsgStart
 				    + " - "
 				    + String

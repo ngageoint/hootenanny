@@ -30,9 +30,9 @@ import java.sql.Connection;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
-import hoot.services.review.ReviewItemsPreparer;
 import hoot.services.review.ReviewUtils;
 import hoot.services.validators.wps.ReviewInputParamsValidator;
+import hoot.services.writers.review.ReviewItemsPreparer;
 
 import org.deegree.services.wps.ProcessletException;
 import org.deegree.services.wps.ProcessletExecutionInfo;

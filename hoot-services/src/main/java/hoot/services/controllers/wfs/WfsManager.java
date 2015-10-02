@@ -77,8 +77,6 @@ public class WfsManager {
 			
 			wfsStoreDb = 
 	        HootProperties.getInstance().getProperty("wfsStoreDb");
-			
-			//
 		}
 		catch (Exception e)
 		{
@@ -95,9 +93,6 @@ public class WfsManager {
 	
 	protected void _createWFSDatasourceFeature(String wfsDatasetName, String connectionName, List<String> features) throws Exception
 	{
-	/*	URL url = ETLProcesslet.class.getClassLoader().getResource("../../WEB-INF/workspace/datasources/feature");
-    String wfsFeaturePath = url.getPath();
-    */
     DocumentBuilderFactory dbFactory = XmlDocumentBuilder.getSecureDocBuilderFactory();
     DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
     Document doc = dBuilder.newDocument();

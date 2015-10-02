@@ -1155,7 +1155,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus())); //TODO: is this correct?
+      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
       Assert.assertTrue(r.getEntity(String.class).contains("Invalid OSM element ID for create"));
 
       //make sure the new nodes weren't created
@@ -1410,8 +1410,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
       throw e;
     }
   }
-
-  //TODO: should we set a limit on members per relation?  i don't think rails port does
 
   @Test(expected=UniformInterfaceException.class)
   @Category(UnitTest.class)
@@ -1679,8 +1677,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     }
   }
 
-  //TODO: test for relation that references the same member more than once...does that even matter?
-
   @Test(expected=UniformInterfaceException.class)
   @Category(UnitTest.class)
   public void testUploadCreateWayWithInvisibleNode() throws Exception
@@ -1702,7 +1698,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     		.where(currentNodesTbl.id.eq(new Long(nodeIdsArr[0])))
     		.singleResult(currentNodesTbl);
     invisibleNode.setVisible(false);
-    int success = //invisibleNode.update();
+    int success = 
     		((int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentNodesTbl)
         .where(currentNodesTbl.id.eq(invisibleNode.getId()))
         .set(currentNodesTbl.visible, false)
@@ -1771,7 +1767,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     		.where(currentNodesTbl.id.eq(new Long(nodeIdsArr[0])))
     		.singleResult(currentNodesTbl);
     invisibleNode.setVisible(false);
-    int success = //invisibleNode.update();
+    int success = 
     		(int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentNodesTbl)
     .where(currentNodesTbl.id.eq(invisibleNode.getId()))
   .set(currentNodesTbl.visible, false)
@@ -1836,14 +1832,13 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     final Set<Long> relationIds =
       OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
-
     //make one of relation way members invisible
     CurrentWays invisibleWay =
     		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWaysTbl)
     		.where(currentWaysTbl.id.eq(wayIdsArr[0]))
     		.singleResult(currentWaysTbl);
     invisibleWay.setVisible(false);
-    int success = //invisibleWay.update();
+    int success = 
     		(int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentWaysTbl)
     .where(currentWaysTbl.id.eq(invisibleWay.getId()))
   .set(currentWaysTbl.visible, false)
@@ -1919,7 +1914,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     invisibleRelation.setVisible(false);
 
 
-    int success = //invisibleRelation.update();
+    int success = 
     		(int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentRelationsTbl)
     .where(currentRelationsTbl.id.eq(invisibleRelation.getId()))
   .set(currentRelationsTbl.visible, false)
@@ -2129,7 +2124,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus())); //TODO: is this correct?
+      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
       Assert.assertTrue(r.getEntity(String.class).contains("Invalid OSM element ID for create"));
 
       OsmTestUtils.verifyTestDataUnmodified(
@@ -2192,7 +2187,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus())); //TODO: is this correct?
+      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
       Assert.assertTrue(r.getEntity(String.class).contains("Invalid OSM element ID for create"));
 
       OsmTestUtils.verifyTestDataUnmodified(

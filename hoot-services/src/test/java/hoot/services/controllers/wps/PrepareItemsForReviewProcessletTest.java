@@ -100,7 +100,7 @@ public class PrepareItemsForReviewProcessletTest extends OsmResourceTestAbstract
     PrepareItemsForReviewProcesslet.reviewRecordWriter = "reviewPrepareDbWriter";
 
     LinkedList<ProcessletInput> allInputs = new LinkedList<ProcessletInput>();
-    //TODO: I don't think not adding the input params when they aren't specified is the correct
+    //I don't think not adding the input params when they aren't specified is the correct
     //behavior here.  I believe that the WPS framework will fill any missing values with defaults
     //for optional params and fail early for missing required params.
     if (mapId != null)
@@ -350,18 +350,18 @@ public class PrepareItemsForReviewProcessletTest extends OsmResourceTestAbstract
       		);
       //go ahead and set the previous job status to complete, so that verifyDataPrepared doesn't
       //fail
-      JobStatus jobStatus = //jobStatusDao.fetchOneByJobId(previousJobId);
+      JobStatus jobStatus = 
       		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
           .where(jobStatusTbl.jobId.eq(previousJobId))
           .singleResult(jobStatusTbl);
       jobStatus.setStatus(JOB_STATUS.COMPLETE.toInt());
-      //jobStatusDao.update(jobStatus);
+
       new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), jobStatusTbl)
       .where(jobStatusTbl.jobId.eq(jobStatus.getJobId()))
       .populate(jobStatus)
       .execute();
 
-      jobStatus = //jobStatusDao.fetchOneByJobId(previousJobId);
+      jobStatus = 
       		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
           .where(jobStatusTbl.jobId.eq(previousJobId))
           .singleResult(jobStatusTbl);
@@ -373,14 +373,14 @@ public class PrepareItemsForReviewProcessletTest extends OsmResourceTestAbstract
     {
       //a new job should have been created
       Assert.assertNotEquals(previousJobId, jobId);
-      //TODO: maybe not the best check here
+      //maybe not the best check here
       Assert.assertTrue(
         new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl).count() >= 2);
       //the old job record should still exist
       Assert.assertNotNull(new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
           .where(jobStatusTbl.jobId.eq(previousJobId))
           .singleResult(jobStatusTbl));
-      JobStatus newJob = //jobStatusDao.findById(jobId);
+      JobStatus newJob = 
       		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
           .where(jobStatusTbl.jobId.eq(jobId))
           .singleResult(jobStatusTbl);
@@ -461,28 +461,26 @@ public class PrepareItemsForReviewProcessletTest extends OsmResourceTestAbstract
 
     testPrepare();
 
-    //TODO: maybe not the best check here
+    //maybe not the best check here
     Assert.assertTrue(
       new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl).count() >= 2);
     List<JobStatus> failedJobs =
     		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
         .where(jobStatusTbl.status.eq(JOB_STATUS.FAILED.toInt()))
         .list(jobStatusTbl);
-    //TODO: probably too lax
+    //probably too lax
     Assert.assertTrue(failedJobs.size() >= 1);
     List<JobStatus> completedJobs =
     		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
         .where(jobStatusTbl.status.eq(JOB_STATUS.COMPLETE.toInt()))
         .list(jobStatusTbl);
-    //TODO: probably too lax
+    //probably too lax
     Assert.assertTrue(completedJobs.size() >= 1);
     Assert.assertNotEquals(failedJobs.get(0).getJobId(), completedJobs.get(0).getJobId());
   }
 
   /*
    * We fail on finding previously run jobs with unknown status.
-   *
-   * TODO: make this behave like job status = failed??
    */
   @Test(expected=ProcessletException.class)
   @Category(IntegrationTest.class)
@@ -636,8 +634,6 @@ public class PrepareItemsForReviewProcessletTest extends OsmResourceTestAbstract
     ReviewTestUtils.verifyDataPrepared(ReviewTestUtils.mapId);
   }
 
-  //TODO: I don't think this test is actually necessary and that the WPS framework will fill
-  //in the missing value with the default.
   @Test(expected=ProcessletException.class)
   @Category(IntegrationTest.class)
   public void testPrepareMissingMapIdParam() throws Exception
@@ -707,8 +703,6 @@ public class PrepareItemsForReviewProcessletTest extends OsmResourceTestAbstract
     }
   }
 
-  //TODO: I don't think this test is actually necessary and that the WPS framework will fill
-  //in the missing value with the default.
   @Test
   @Category(IntegrationTest.class)
   public void testPrepareMissingOverwriteParam() throws Exception
@@ -747,12 +741,4 @@ public class PrepareItemsForReviewProcessletTest extends OsmResourceTestAbstract
       throw e;
     }
   }
-
-//  @Ignore
-//  @Test
-//  @Category(UnitTest.class)
-//  public void testPrepareWhileConcurrentOsmUpdatesAreOccurring()
-//  {
-//
-//  }
 }

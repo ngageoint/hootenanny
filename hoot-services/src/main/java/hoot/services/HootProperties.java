@@ -178,7 +178,6 @@ public class HootProperties
    *
    * @param key property key
    * @return a property value
-   * @todo put these default values in the config file
    */
   public static String getDefault(String key)
   {

@@ -53,8 +53,6 @@ public class ChangesetUploadResponseWriter
    * @param changesetDiffElements Elements that have been modified in the corresponding changeset
    * request
    * @return a changeset upload response XML document
-   * @todo replace this by returning a Jersey object as xml
-   * @todo update copyright, attribution, and license tags
    */
   public Document writeResponse(final long changesetId,
     final List<XmlSerializable> changesetDiffElements)
@@ -91,7 +89,7 @@ public class ChangesetUploadResponseWriter
       ResourceErrorHandler.handleError(
         "Error creating response for changeset with ID: " + changesetId + " - data: (" +
           e.getMessage() + ") ",
-        Status.BAD_REQUEST, //TODO: change this status to an internal server error?
+        Status.BAD_REQUEST,
         log);
     }
 

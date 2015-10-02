@@ -209,16 +209,8 @@ public class BasemapResource extends JobControllerBase {
 	        log.debug("Preparing Basemap Ingest for :" + fName);
 	        String inputFileName = "";
 	        String bmName = inputName;
+	        bmName = fName;
 
-
-	        if(bmName != null && bmName.length() > 0 )
-	        {
-	        	//bmName = bmName;
-	        }
-	        else
-	  			{
-	        	bmName = fName;
-	  			}
 
 	  			inputFileName = uploadedFilesPaths.get(fName);
 
@@ -470,7 +462,6 @@ public class BasemapResource extends JobControllerBase {
 
 	protected void _deleteBaseMap(String bmName) throws Exception
 	{
-		//List<String> delList = new ArrayList<String>();
 		String controlFolder = _ingestStagingPath + "/BASEMAP/";
 
 		File tileDir = hoot.services.utils.FileUtils.getSubFolderFromFolder(_tileServerPath + "/BASEMAP/", bmName);
@@ -485,7 +476,6 @@ public class BasemapResource extends JobControllerBase {
 		for (int i = 0; i < files.length; i++) {
 			File curFile = files[i];
 			FileUtils.forceDelete(curFile);
-			//delList.add(curFile.getPath());
 		}
 
 	}

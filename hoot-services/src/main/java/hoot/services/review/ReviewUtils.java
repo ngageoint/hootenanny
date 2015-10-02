@@ -94,9 +94,7 @@ public class ReviewUtils
                e.getMessage().contains("exist specified for") ||
                e.getMessage().contains("exist for") ||
                e.getMessage().contains("is still used by") ||
-               e.getMessage().contains("Invalid review prepare job status")/*||
-               //TODO: is this one valid?
-               e.getMessage().contains("No records available for review")*/)
+               e.getMessage().contains("Invalid review prepare job status"))
       {
         status = Status.PRECONDITION_FAILED;
       }

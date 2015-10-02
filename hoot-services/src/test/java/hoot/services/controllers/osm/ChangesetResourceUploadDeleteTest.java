@@ -86,12 +86,7 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 /*
  * @todo Most of these tests could be converted to integration tests and after a refactoring,
  * could be replace with unit tests that test only the internal classes being used by this
- * Jersey resource.
- *
- * @todo I haven't seen these requests occur out of iD yet, but probably the service should
- * handle them:
- *
-   - upload delete references an element that was created and/or modified within the same request
+ * Jersey resource.t
  */
 public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 {
@@ -495,7 +490,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
       try
       {
-        //changeset = changesetDao.findById(changesetId);
       	changeset =
             new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
             .where(changesets.id.eq(changesetId)).singleResult(changesets);
@@ -724,7 +718,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
             nodeRecord.getTags() == null ||
             StringUtils.isEmpty(((PGobject)nodeRecord.getTags()).getValue()));
 
-        //TODO: check rest of node records here?
         nodeRecord = nodes.get(nodeIdsArr[2]);
         Assert.assertTrue(
             nodeRecord.getTags() == null ||
@@ -832,7 +825,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
       try
       {
-        //changeset = changesetDao.findById(changesetId);
       	changeset =
             new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
             .where(changesets.id.eq(changesetId)).singleResult(changesets);
@@ -1037,7 +1029,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
                 "<delete if-unused=\"true\">" +
                   "<node id=\"" + nodeIdsArr[3] +"\" lon=\"" + originalBounds.getMinLon() +
                     "\" lat=\"" + originalBounds.getMinLat() + "\" version=\"1\" " +
-                    //TODO: i don't understand why you would ever put these tags here at all
+                    //i don't understand why you would ever put these tags here at all
                     //if you're going to delete the nodes, which will automatically cause the tags
                     //to be deleted too (according to the rails port code)
                     "changeset=\"" + changesetId + "\">" +
@@ -1497,7 +1489,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
                 "<delete if-unused=\"true\">" +
                   "<node id=\"" + nodeIdsArr[3] +"\" lon=\"" + originalBounds.getMinLon() +
                     "\" lat=\"" + originalBounds.getMinLat() + "\" version=\"1\" " +
-                    //TODO: i don't understand why you would ever put these tags here at all
+                    //i don't understand why you would ever put these tags here at all
                     //if you're going to delete the nodes, which will automatically cause the tags
                     //to be deleted too (according to the rails port code)
                     "changeset=\"" + changesetId + "\">" +
@@ -1894,7 +1886,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
       try
       {
-        //changeset = changesetDao.findById(changesetId);
       	changeset =
             new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
             .where(changesets.id.eq(changesetId)).singleResult(changesets);
@@ -2696,8 +2687,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
         Assert.assertEquals(2, returnedNodes.getLength());
 
-        //TODO: should the response have the IDs ordered, or should the output ordering match the
-        //input ordering?; right now, output ordering matches input ordering
+        //ID output ordering matches input ordering
 
         Assert.assertEquals(
           (long)nodeIdsArr[1],
@@ -2927,7 +2917,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       		.map(currentNodesTbl.id, currentNodesTbl);
         Assert.assertEquals(3, nodes.size());
 
-        //TODO: check the rest of the node props here??
         CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
         Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject)nodeRecord.getTags());
         Assert.assertNotNull(tags);
@@ -2972,7 +2961,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
       try
       {
-        //changeset = changesetDao.findById(changesetId);
       	changeset =
             new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
             .where(changesets.id.eq(changesetId)).singleResult(changesets);
@@ -3118,7 +3106,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
       try
       {
-        //changeset = changesetDao.findById(changesetId);
       	changeset =
             new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
             .where(changesets.id.eq(changesetId)).singleResult(changesets);
@@ -3355,7 +3342,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
       try
       {
-        //changeset = changesetDao.findById(changesetId);
       	changeset =
             new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
             .where(changesets.id.eq(changesetId)).singleResult(changesets);
@@ -3777,7 +3763,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
       try
       {
-        //changeset = changesetDao.findById(changesetId);
       	changeset =
             new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
             .where(changesets.id.eq(changesetId)).singleResult(changesets);
@@ -4316,7 +4301,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
       try
       {
-        //changeset = changesetDao.findById(changesetId);
       	changeset =
             new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
             .where(changesets.id.eq(changesetId)).singleResult(changesets);
@@ -4575,7 +4559,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
 
       try
       {
-        //changeset = changesetDao.findById(changesetId);
       	changeset =
             new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
             .where(changesets.id.eq(changesetId)).singleResult(changesets);

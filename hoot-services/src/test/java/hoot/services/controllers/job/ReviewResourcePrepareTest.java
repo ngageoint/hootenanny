@@ -153,7 +153,7 @@ public class ReviewResourcePrepareTest extends OsmResourceTestAbstract
     (new JobStatusWebPoller(resource(), conn)).pollJobStatusUntilCompleteOrFail(jobId, false);
 
     //verify a new job was run
-    final JobStatus newJobStatus = //jobStatusDao.fetchOneByJobId(jobId);
+    final JobStatus newJobStatus = 
     		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
         .where(jobStatusTbl.jobId.eq(jobId))
         .singleResult(jobStatusTbl);
@@ -259,18 +259,17 @@ public class ReviewResourcePrepareTest extends OsmResourceTestAbstract
     if (!previouslyExecutedJobStatus.equals(JOB_STATUS.COMPLETE))
     {
       //change the prepared job status
-      JobStatus jobStatus = //jobStatusDao.fetchOneByJobId(previousJobId);
+      JobStatus jobStatus = 
       		new SQLQuery(conn, DbUtils.getConfiguration()).from(jobStatusTbl)
           .where(jobStatusTbl.jobId.eq(previousJobId))
           .singleResult(jobStatusTbl);
       jobStatus.setStatus(previouslyExecutedJobStatus.toInt());
-      //jobStatusDao.update(jobStatus);
       new SQLUpdateClause(conn, DbUtils.getConfiguration(), jobStatusTbl)
       .where(jobStatusTbl.jobId.eq(jobStatus.getJobId()))
       .populate(jobStatus)
       .execute();
 
-      jobStatus = //jobStatusDao.fetchOneByJobId(previousJobId);
+      jobStatus = 
       		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
           .where(jobStatusTbl.jobId.eq(previousJobId))
           .singleResult(jobStatusTbl);
@@ -282,13 +281,12 @@ public class ReviewResourcePrepareTest extends OsmResourceTestAbstract
     //to create a job record
     Thread.sleep(TEST_JOB_DELAY_MS + 2000);
 
-    //ReviewMapDao reviewMapDao = new ReviewMapDao(conn);
     if (previouslyExecutedJobStatus.equals(JOB_STATUS.RUNNING) ||
         (previouslyExecutedJobStatus.equals(JOB_STATUS.COMPLETE) && !overwrite))
     {
       //no new job should have been created
       Assert.assertEquals(previousJobId, jobId);
-      List<JobStatus> jobStatuses = //jobStatusDao.findAll();
+      List<JobStatus> jobStatuses = 
       		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
           .where(jobStatusTbl.jobId.eq(previousJobId))
           .list(jobStatusTbl);
@@ -298,26 +296,25 @@ public class ReviewResourcePrepareTest extends OsmResourceTestAbstract
         previouslyExecutedJobStatus, JOB_STATUS.fromInteger(jobStatuses.get(0).getStatus()));
       //the review map table should still be have a record for the previous job id
       Assert.assertEquals(
-        previousJobId,/* reviewMapDao.fetchOneByMapId(mapId).getReviewPrepareJobId()*/
+        previousJobId,
       		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(reviewMapTbl)
           .where(reviewMapTbl.mapId.eq(mapId))
           .singleResult(reviewMapTbl.reviewPrepareJobId)
       		);
       //go ahead and set the previous job status to complete, so that verifyDataPrepared doesn't
       //fail
-      JobStatus jobStatus = //jobStatusDao.fetchOneByJobId(previousJobId);
+      JobStatus jobStatus = 
       		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
           .where(jobStatusTbl.jobId.eq(previousJobId))
           .singleResult(jobStatusTbl);
       jobStatus.setStatus(JOB_STATUS.COMPLETE.toInt());
-      //jobStatusDao.update(jobStatus);
 
       new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), jobStatusTbl)
       .where(jobStatusTbl.jobId.eq(jobStatus.getJobId()))
       .populate(jobStatus)
       .execute();
 
-      jobStatus = //jobStatusDao.fetchOneByJobId(previousJobId);
+      jobStatus = 
       		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
           .where(jobStatusTbl.jobId.eq(previousJobId))
           .singleResult(jobStatusTbl);
@@ -327,6 +324,7 @@ public class ReviewResourcePrepareTest extends OsmResourceTestAbstract
     }
     else
     {
+    	//TODO: is this still needed?
     /*  //a new job should have been created
       Assert.assertNotEquals(previousJobId, jobId);
       Assert.assertEquals(2, jobStatusDao.count());
@@ -344,14 +342,14 @@ public class ReviewResourcePrepareTest extends OsmResourceTestAbstract
       ReviewTestUtils.verifyDataPrepared(mapId);*/
     	 //a new job should have been created
       Assert.assertNotEquals(previousJobId, jobId);
-      //TODO: this may be too lax
+      //this may be too lax
       Assert.assertTrue(
         new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl).count() >= 2);
       //the old job record should still exist
       Assert.assertNotNull(new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
           .where(jobStatusTbl.jobId.eq(previousJobId))
           .singleResult(jobStatusTbl));
-      JobStatus newJob = //jobStatusDao.findById(jobId);
+      JobStatus newJob = 
       		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
           .where(jobStatusTbl.jobId.eq(jobId))
           .singleResult(jobStatusTbl);
@@ -432,20 +430,20 @@ public class ReviewResourcePrepareTest extends OsmResourceTestAbstract
 
     testPrepare();
 
-    //TODO: this may be too lax
+    //this may be too lax
     Assert.assertTrue(
       new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl).count() >= 2);
     List<JobStatus> failedJobs =
     		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
         .where(jobStatusTbl.status.eq(JOB_STATUS.FAILED.toInt()))
         .list(jobStatusTbl);
-    //TODO: this may be too lax
+    //this may be too lax
     Assert.assertTrue(failedJobs.size() >= 1);
     List<JobStatus> completedJobs =
     		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
         .where(jobStatusTbl.status.eq(JOB_STATUS.COMPLETE.toInt()))
         .list(jobStatusTbl);
-    //TODO: this may be too lax
+    //this may be too lax
     Assert.assertTrue(completedJobs.size() >= 1);
     Assert.assertNotEquals(failedJobs.get(0).getJobId(), completedJobs.get(0).getJobId());
 
@@ -453,8 +451,6 @@ public class ReviewResourcePrepareTest extends OsmResourceTestAbstract
 
   /*
    * We fail on finding previously run jobs with unknown status.
-   *
-   * TODO: make this behave like job status = failed??
    */
   @Test(expected=UniformInterfaceException.class)
   @Category(UnitTest.class)

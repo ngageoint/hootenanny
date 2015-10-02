@@ -52,8 +52,6 @@ import com.sun.jersey.api.client.ClientResponse.Status;
  * @todo Most of these tests could be converted to integration tests and after a refactoring,
  * could be replace with unit tests that test only the internal classes being used by this
  * Jersey resource.
- *
- * @todo add test for quotes in tag keys/values
  */
 public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract
 {

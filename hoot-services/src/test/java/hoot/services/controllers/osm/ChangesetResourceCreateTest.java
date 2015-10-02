@@ -196,9 +196,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
     final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
     map.setCreatedAt(now);
     map.setDisplayName("map-with-id-" + mapId);
-    //map.setPublic(true);
     map.setUserId(userId);
-    //mapDao.insert(map);
     new SQLInsertClause(conn, DbUtils.getConfiguration(mapId), maps)
     .populate(map).execute();
     String mapName = null;

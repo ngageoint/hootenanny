@@ -283,7 +283,6 @@ public class ReviewResourceGetStatsTest extends OsmResourceTestAbstract
   
   //This behavior differs between Jersey and WPS.  Jersey will  automatically insert the default
   //value for empty numeric and boolean params.  This would be a 400 with WPS.
-  //TODO: unify the behavior of the two tests??
   @Test
   @Category(UnitTest.class)
   public void testGetEmptyReviewScoreMinParam() throws Exception
@@ -339,8 +338,6 @@ public class ReviewResourceGetStatsTest extends OsmResourceTestAbstract
    * This is a little strange b/c we're catching this from the method that prepares the exec call.
      This should reflect reality, though, b/c the exec call simulates how the processlet is actually
      called in real operation.
-   *
-   * @todo probably need a better way to test this
    */
   @Test
   @Category(UnitTest.class)
@@ -360,9 +357,6 @@ public class ReviewResourceGetStatsTest extends OsmResourceTestAbstract
     }
   }
 
-  /*
-   * @todo need a better way to test this; see testGetEmptyBounds
-   */
   @Test
   @Category(UnitTest.class)
   public void testGetInvalidBoundsParam() throws Exception

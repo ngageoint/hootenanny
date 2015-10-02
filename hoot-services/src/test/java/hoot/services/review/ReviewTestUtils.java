@@ -71,6 +71,7 @@ import hoot.services.models.osm.Element.ElementType;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.utils.XmlUtils;
 import hoot.services.writers.osm.ChangesetDbWriter;
+import hoot.services.writers.review.ReviewItemsPreparer;
 
 /*
  * The methods in this class are based off a handpicked test scenario.  The files in
@@ -88,7 +89,6 @@ public class ReviewTestUtils
   public static long userId = -1;
   public static long changesetId = -1;
   public static long secondChangesetId = -1;
-  //TODO: the handling of job IDs by this class is a little confusing and inconsistent
   public static String jobId;
   public static String secondJobId;
 
@@ -122,7 +122,6 @@ public class ReviewTestUtils
 
   public static void createDataToPrepare() throws Exception
   {
-  	//conn = DbUtils.createConnection();
     //write the reviewable data to the OSM tables
     changesetId = Changeset.insertNew(mapId, userId, conn);
     ChangesetDbWriter elementWriter = new ChangesetDbWriter(conn);
@@ -774,8 +773,6 @@ public class ReviewTestUtils
       expectedReviewStatuses[i] = DbUtils.review_status_enum.reviewed;
     }
     verifyReviewStatuses(expectedReviewStatuses);
-
-    //TODO: verify tags on all reviewed data
   }
 
   public static void verifyDataMarkedAsReviewed(final boolean validChangesetUploaded)

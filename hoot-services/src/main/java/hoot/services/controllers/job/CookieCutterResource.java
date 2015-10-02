@@ -189,8 +189,6 @@ public class CookieCutterResource extends JobControllerBase {
 
 			JSONObject prepareItemsForReviewCommand = _createReflectionJobReq(reviewArgs, "hoot.services.controllers.job.ReviewResource",
 					"prepareItemsForReview");
-			//String argStr = createPostBody(commandArgs);
-
 
 
 //	  Density Raster
@@ -206,7 +204,6 @@ public class CookieCutterResource extends JobControllerBase {
 			JSONObject ingestOSMResource = _createReflectionJobReq(rasterTilesArgs,
 					"hoot.services.controllers.ingest.RasterToTilesService",
 					"ingestOSMResourceDirect");
-			////
 
 			JSONArray jobArgs = new JSONArray();
 			jobArgs.add(conflationCommand);
