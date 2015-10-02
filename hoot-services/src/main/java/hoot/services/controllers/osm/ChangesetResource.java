@@ -27,6 +27,7 @@
 package hoot.services.controllers.osm;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
@@ -457,6 +458,24 @@ public class ChangesetResource
   public static void handleError(final Exception e, final long changesetId, 
     final String changesetDiffSnippet)
   {
+  	String message = e.getMessage();
+  	if (e instanceof SQLException)
+    {
+    	SQLException sqlException = (SQLException)e;
+    	if (sqlException.getNextException() != null)
+    	{
+    		message += "  " + sqlException.getNextException().getMessage();
+    	}
+    }
+    if (e.getCause() instanceof SQLException)
+    {
+    	SQLException sqlException = (SQLException)e.getCause();
+    	if (sqlException.getNextException() != null)
+    	{
+    		message += "  " + sqlException.getNextException().getMessage();
+    	}
+    }
+    
     if (!StringUtils.isEmpty(e.getMessage()))
     {
       if (e.getMessage().contains("Invalid changeset ID") || 
@@ -465,11 +484,11 @@ public class ChangesetResource
           e.getMessage().contains("Changeset maximum element threshold exceeded") ||
           e.getMessage().contains("was closed at"))
       {
-        ResourceErrorHandler.handleError(e.getMessage(), Status.CONFLICT, log);  //409
+        ResourceErrorHandler.handleError(message, Status.CONFLICT, log);  //409
       }
       else if (e.getMessage().contains("to be updated does not exist"))
       {
-        ResourceErrorHandler.handleError(e.getMessage(), Status.NOT_FOUND, log); //404
+        ResourceErrorHandler.handleError(message, Status.NOT_FOUND, log); //404
       }
       //TODO: should the visibility exception be changed from a 400 to a 409?
       else if (e.getMessage().contains("exist specified for") ||
@@ -478,14 +497,14 @@ public class ChangesetResource
                e.getMessage().contains(
                  "One or more features in the changeset are involved in an unresolved review"))
       {
-        ResourceErrorHandler.handleError(e.getMessage(), Status.PRECONDITION_FAILED, log); //412
+        ResourceErrorHandler.handleError(message, Status.PRECONDITION_FAILED, log); //412
       }
     }
 
     //400
     ResourceErrorHandler.handleError(
       "Error uploading changeset with ID: " + changesetId + " - data: (" + 
-        e.getMessage() + ") " + changesetDiffSnippet, 
+        message + ") " + changesetDiffSnippet, 
       Status.BAD_REQUEST,
       log);
   }

@@ -26,7 +26,6 @@
  */
 package hoot.services.db;
 
-import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -60,7 +59,6 @@ import hoot.services.db2.QReviewItems;
 import hoot.services.db2.QReviewMap;
 import hoot.services.db2.QUsers;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -88,9 +86,9 @@ public class DbUtils
 
   public static final String TIMESTAMP_DATE_FORMAT = "YYYY-MM-dd HH:mm:ss";
 
-  protected static SQLTemplates templates = null;
+  private static SQLTemplates templates = null;
 
-  protected static org.apache.commons.dbcp.BasicDataSource dbcp_datasource = null;
+  private static org.apache.commons.dbcp.BasicDataSource dbcp_datasource = null;
   private static ClassPathXmlApplicationContext appContext = null;
 
   /**
@@ -200,16 +198,6 @@ public class DbUtils
   	}
   }
 
-  public static BasicDataSource getdbcpdatasource ()
-  {
-  	if(dbcp_datasource == null)
-		{
-			appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
-			dbcp_datasource = appContext.getBean("dataSource", org.apache.commons.dbcp.BasicDataSource.class);
-		}
-
-  	return dbcp_datasource;
-  }
   public static Connection createConnection()
   {
   	try
@@ -229,67 +217,25 @@ public class DbUtils
   	return null;
   }
 
-  @SuppressWarnings("unused")
   public static boolean closeConnection(Connection conn) throws Exception
   {
-  	if (conn.isClosed())
+  	if (conn != null)
   	{
-  		return true;
-  	}
-  	try
-  	{
-	  	if (conn != null)
-	  	{
-	  		conn.close();
-	  		return true;
-	  	}
-  	}
-  	catch (Exception e)
-  	{
-  		throw e;
+  		if (conn.isClosed())
+    	{
+    		return true;
+    	}
+    	try
+    	{
+  	  	conn.close();
+  	  	return true;
+    	}
+    	catch (Exception e)
+    	{
+    		throw e;
+    	}
   	}
   	return false;
-  }
-
-  public static void clearTable(com.mysema.query.sql.RelationalPathBase<?> t, Connection conn) throws Exception
-  {
-
-  	try
-  	{
-			Configuration configuration = getConfiguration();
-
-			new SQLDeleteClause(conn, configuration, t)
-	    	.execute() ;
-  	}
-  	catch(Exception e)
-  	{
-  		log.error(e.getCause().getMessage());
-  	}
-
-  }
-
-  /**
-   * Determines whether records exist in the services database
-   *
-   * @param conn JDBC Connection
-   * @return true if any records exist in the services database; false otherwise
-   * @throws Exception
-   */
-  public static boolean recordsExistInServicesDb(Connection conn) throws Exception
-  {
-    long recordCount = 0;
-
-    QChangesets changesets = QChangesets.changesets;
-    QMaps maps = QMaps.maps;
-    QUsers user = QUsers.users;
-
-  	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-
-  	recordCount += query.from(changesets).count();
-  	recordCount += query.from(maps).count();
-  	recordCount += query.from(user).count();
-
-    return elementDataExistsInServicesDb(conn) || recordCount > 0;
   }
 
   /**
@@ -455,45 +401,6 @@ public class DbUtils
   }
 
   /**
-   * Determines whether any review records exist in the services database
-   *
-   * @param conn JDBC Connection
-   * @return
-   * @throws Exception
-   */
-  public static boolean reviewDataExistsInServicesDb(Connection conn) throws Exception
-  {
-    long recordCount = 0;
-
-    QReviewMap reviewMap = QReviewMap.reviewMap;
-    QReviewItems reviewItems = QReviewItems.reviewItems;
-    QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
-
-
-    SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-
-  	recordCount += query.from(reviewMap).count();
-  	recordCount += query.from(reviewItems).count();
-  	recordCount += query.from(elementIdMappings).count();
-
-    return recordCount > 0;
-  }
-
-  /**
-   * Determines whether any job records exist in the services database
-   *
-   * @param conn JDBC Connection
-   * @return
-   * @throws Exception
-   */
-  public static boolean jobDataExistsInServicesDb(Connection conn) throws Exception
-  {
-  	QJobStatus jobStatus = QJobStatus.jobStatus;
-  	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-    return query.from(jobStatus).count() > 0;
-  }
-
-  /**
    * Clears all data in all resource related tables in the database
    *
    * @param conn JDBC Connection
@@ -501,8 +408,6 @@ public class DbUtils
    *           if any records still exist in the table after the attempted
    *           deletion
    */
-
-
   public static void clearServicesDb(Connection conn) throws Exception
   {
     try
@@ -638,59 +543,45 @@ public class DbUtils
   }
 
 
-//remove this. replace by calling hoot core layer delete native command
+  //remove this. replace by calling hoot core layer delete native command
   public static void deleteOSMRecordByName(Connection conn, String  mapName) throws Exception
   {
-    try
-    {
-			Configuration configuration = getConfiguration();
+		Configuration configuration = getConfiguration();
 
-			QMaps maps = QMaps.maps;
-    	List<Long> mapIds = new SQLQuery(conn, configuration).from(maps)
+		QMaps maps = QMaps.maps;
+  	List<Long> mapIds = new SQLQuery(conn, configuration).from(maps)
+		.where(maps.displayName.equalsIgnoreCase(mapName)).list(maps.id);
+
+  	if(mapIds.size() > 0)
+  	{
+    	Long mapId = mapIds.get(0);
+			deleteMapRelatedTablesByMapId(mapId);
+
+    	conn.setAutoCommit(false);
+
+			ListSubQuery<Long> res = new SQLSubQuery().from(maps)
 			.where(maps.displayName.equalsIgnoreCase(mapName)).list(maps.id);
 
-    	if(mapIds.size() > 0)
-    	{
-	    	Long mapId = mapIds.get(0);
-				deleteMapRelatedTablesByMapId(mapId);
+  	  new SQLDeleteClause(conn, configuration, maps)
+  	  .where(maps.displayName.eq(mapName))
+  	  .execute();
 
-	    	conn.setAutoCommit(false);
+  	  QReviewItems reviewItems = QReviewItems.reviewItems;
+  	  new SQLDeleteClause(conn, configuration, reviewItems)
+  	  .where(reviewItems.mapId.in(res))
+  	  .execute();
 
-				ListSubQuery<Long> res = new SQLSubQuery().from(maps)
-				.where(maps.displayName.equalsIgnoreCase(mapName)).list(maps.id);
+  	  QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
+  	  new SQLDeleteClause(conn, configuration, elementIdMappings)
+  	  .where(elementIdMappings.mapId.in(res))
+  	  .execute();
 
+  	  QReviewMap reviewMap = QReviewMap.reviewMap;
+  	  new SQLDeleteClause(conn, configuration, reviewMap)
+  	  .where(reviewMap.mapId.in(res))
+  	  .execute();
 
-    	new SQLDeleteClause(conn, configuration, maps)
-    	.where(maps.displayName.eq(mapName))
-    	.execute();
-
-    	QReviewItems reviewItems = QReviewItems.reviewItems;
-    	new SQLDeleteClause(conn, configuration, reviewItems)
-    	.where(reviewItems.mapId.in(res))
-    	.execute();
-
-    	QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
-    	new SQLDeleteClause(conn, configuration, elementIdMappings)
-    	.where(elementIdMappings.mapId.in(res))
-    	.execute();
-
-    	QReviewMap reviewMap = QReviewMap.reviewMap;
-    	new SQLDeleteClause(conn, configuration, reviewMap)
-    	.where(reviewMap.mapId.in(res))
-    	.execute();
-
-    	conn.commit();
-    }
-    }
-    catch (Exception e)
-    {
-      String msg = "Error deleting OSM record.  ";
-      if (e.getCause() instanceof BatchUpdateException)
-      {
-        BatchUpdateException batchException = (BatchUpdateException) e.getCause();
-        msg += "  " + batchException.getNextException().getMessage();
-      }
-      throw new Exception(msg);
+  	  conn.commit();
     }
   }
 
@@ -989,31 +880,6 @@ public class DbUtils
   	JobStatus stat = query.from(jobStatusTbl).where(jobStatusTbl.jobId.eq(jobId)).singleResult(jobStatusTbl);
 
     return stat.getStatus();
-  }
-
-  /**
-   * Retrieves a job status as an object
-   *
-   * @param jobId ID of the job
-   * @param conn JDBC Connection
-   * @return a job status object
-   * @throws Exception
-   */
-  public static JobStatus getJobStatusObj(final String jobId, Connection conn)
-    throws Exception
-  {
-  	QJobStatus jobStatusTbl = QJobStatus.jobStatus;
-  	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-  	JobStatus dbJobStatus = query.from(jobStatusTbl).where(jobStatusTbl.jobId.eq(jobId)).singleResult(jobStatusTbl);
-
-    JobStatus jobStatus = new JobStatus();
-    jobStatus.setJobId(dbJobStatus.getJobId());
-    jobStatus.setEnd(dbJobStatus.getEnd());
-    jobStatus.setStart(dbJobStatus.getEnd());
-    jobStatus.setPercentComplete(dbJobStatus.getPercentComplete());
-    jobStatus.setStatusDetail(dbJobStatus.getStatusDetail());
-    jobStatus.setStatus(dbJobStatus.getStatus());
-    return jobStatus;
   }
   
   public static long batchRecords(final long mapId, final List<?> records, 

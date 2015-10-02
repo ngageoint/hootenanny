@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.review;
+package hoot.services.readers.review;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
@@ -39,10 +39,12 @@ import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.db2.QElementIdMappings;
 import hoot.services.db2.QMaps;
 import hoot.services.db2.QReviewItems;
+import hoot.services.exceptions.writer.review.ReviewItemsWriterException;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.review.ReviewAgainstItem;
 import hoot.services.models.review.ReviewableItem;
 import hoot.services.validators.review.ReviewMapValidator;
+import hoot.services.writers.review.ReviewItemsRetrieverWriter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
@@ -52,7 +54,6 @@ import org.slf4j.LoggerFactory;
 import com.mysema.query.Tuple;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.SQLSubQuery;
-import com.mysema.query.sql.dml.SQLUpdateClause;
 
 /**
  * Responsible for serving reviewable items to the client
@@ -66,10 +67,11 @@ public class ReviewItemsRetriever
   private Connection conn;
   // 5 min
   public static long LOCK_TIME = 300000;
-  protected int maxRecordBatchSize;
+  
+  private ReviewItemsRetrieverWriter _writer;
   
   //for tests only
-  protected ReviewItemsRetriever()
+  ReviewItemsRetriever()
   {	
   }
 
@@ -97,17 +99,16 @@ public class ReviewItemsRetriever
     {
       throw new Exception("Error locating user associated with map with ID: " + this.mapId);
     }
-    maxRecordBatchSize = 
-  		Integer.parseInt(HootProperties.getInstance()
-  		   .getProperty("maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
+    
+    _writer = new ReviewItemsRetrieverWriter(this.conn, this.mapId);
   }
   
-  protected final long _verifyMap(final String mapId) throws Exception
+  private final long _verifyMap(final String mapId) throws Exception
   {
   	return (new ReviewMapValidator(conn)).verifyMapPrepared(mapId);
   }
   
-  protected final long _getUserIdFromMapId() throws Exception
+  private final long _getUserIdFromMapId() throws Exception
   {
   	QMaps maps = QMaps.maps;
 
@@ -131,32 +132,11 @@ public class ReviewItemsRetriever
   	this.mapId = mapId;
   }
 
-  protected final SQLUpdateClause _getLastAccessUpdateClause(final String reviewItemId, 
-    final Timestamp newLastAccessTime, final String reviewAgainst) throws Exception
-  {
-    QReviewItems rm = QReviewItems.reviewItems;
-    
-    SQLUpdateClause q = new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), rm)
-    .set(rm.lastAccessed, newLastAccessTime)
-    .where(rm.mapId.eq(mapId).and(rm.reviewableItemId.eq(reviewItemId)));
-    
-    if(reviewAgainst != null)
-    {
-       q = new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), rm)
-        .set(rm.lastAccessed, newLastAccessTime)
-        .where(rm.mapId.eq(mapId).and(rm.reviewableItemId.eq(reviewItemId))
-            .and(rm.reviewAgainstItemId.eq(reviewAgainst)));
-    }
-    
-    return q;
-  }
-  
   // Update Review LastAccess column
   public void updateReviewLastAccessTime(final String reviewItemId, final Timestamp newLastAccessTime,
-      final String reviewAgainst) throws Exception
+      final String reviewAgainst) throws ReviewItemsWriterException, Exception
   {
-    _getLastAccessUpdateClause(reviewItemId, newLastAccessTime, reviewAgainst)
-      .execute(); 
+  	_writer.updateReviewLastAccessTime(reviewItemId, newLastAccessTime, reviewAgainst);
   }
   
   protected final SQLQuery _getAvailableReviewQuery(final Timestamp compareTime, final long offsetId, 
@@ -245,6 +225,20 @@ public class ReviewItemsRetriever
     return q;
   }
   
+  
+  private final long _getAllReviewAgainstCount(final String uuid) throws Exception
+  {
+    QReviewItems rm = QReviewItems.reviewItems;
+    
+    SQLQuery q = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                  .from(rm)
+                  .where(rm.mapId.eq(mapId).and(rm.reviewableItemId.eq(uuid)))
+                  .orderBy(rm.reviewId.asc());
+    
+    return q.count();
+  }
+  
+  
   protected final SQLQuery _getElementMappingForReviewable(final String uuid) throws Exception
   {
     QElementIdMappings em = QElementIdMappings.elementIdMappings;
@@ -280,19 +274,7 @@ public class ReviewItemsRetriever
     
     return q;
   }
-  
-  protected final SQLUpdateClause _updateLastAccessWithSubSelect(final Timestamp now, 
-      final long reviewId) throws Exception
-  {
-    QReviewItems rm = QReviewItems.reviewItems;
-    
-    SQLUpdateClause q = new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), rm)
-    .set(rm.lastAccessed, now)
-    .where(rm.mapId.eq(mapId).and(rm.reviewId.eq(reviewId)));
-    
-    return q;
-  }  
-  
+ 
   protected SQLQuery _getRelationBboxQuery(final long id) throws Exception
   {
   	 QCurrentNodes cn = QCurrentNodes.currentNodes;
@@ -387,7 +369,8 @@ public class ReviewItemsRetriever
     return bbox;
   }
   
-  public JSONObject getAvaiableReviewItem(final long offsetReviewId, final boolean isForward) throws Exception
+  public JSONObject getAvaiableReviewItem(final long offsetReviewId, final boolean isForward) 
+  		throws ReviewItemsWriterException, Exception
   {
   	String strStatus = "failed";
     
@@ -460,7 +443,7 @@ public class ReviewItemsRetriever
     
   }
 
-  protected Tuple _getPreviousItem(final long firstReviewId, final long offsetReviewId, 
+  private Tuple _getPreviousItem(final long firstReviewId, final long offsetReviewId, 
   		final Tuple lastReviewableTuple, final Timestamp compareTime) throws Exception
   {
   	QReviewItems rm = QReviewItems.reviewItems;
@@ -492,7 +475,7 @@ public class ReviewItemsRetriever
     }
     return prevAvailableReviewItem;
   }
-  protected Tuple _getNextItem(final long lastReviewId, final long offsetReviewId, 
+  private Tuple _getNextItem(final long lastReviewId, final long offsetReviewId, 
   		final Tuple firstReviewableTuple, final Timestamp compareTime) throws Exception
   {
   	QReviewItems rm = QReviewItems.reviewItems;
@@ -544,8 +527,8 @@ public class ReviewItemsRetriever
     return nextAvailableReviewItem;
   }
  
-  protected JSONObject _createNextReviewableResponse(final String status, final Tuple nextAvailableReviewItem,
-  		final long offsetReviewId, final Timestamp past, final Timestamp now) throws Exception
+  private JSONObject _createNextReviewableResponse(final String status, final Tuple nextAvailableReviewItem,
+  		final long offsetReviewId, final Timestamp past, final Timestamp now) throws ReviewItemsWriterException, Exception
   {
   	QReviewItems rm = QReviewItems.reviewItems;
   	JSONObject nextItem = new JSONObject();
@@ -556,13 +539,9 @@ public class ReviewItemsRetriever
       final String reviewItemUUID = nextAvailableReviewItem.get(rm.reviewableItemId);
       final String reviewAgainstUUID = nextAvailableReviewItem.get(rm.reviewAgainstItemId);
       
-      boolean doLock = false;
-      
-      
       if(offsetReviewId > -1)
       {
-	      long freedRowsCnt = _updateLastAccessWithSubSelect(past, offsetReviewId)
-	          .execute(); 
+	      long freedRowsCnt = _writer.updateReviewLastAccessTimeWithReviewId(past, offsetReviewId); 
 	          
 	      if(freedRowsCnt == 0)
 	      {
@@ -570,14 +549,10 @@ public class ReviewItemsRetriever
 	      }
 	      
       }
-      
 
-      // lock the item if still available
-      SQLUpdateClause uc = _updateLastAccessWithSubSelect(now, nextReviewId);
-      
       try
       {
-	      long rowsEffected =  uc.execute(); 
+	      long rowsEffected =  _writer.updateReviewLastAccessTimeWithReviewId(now, nextReviewId);
 	      
 	      if(rowsEffected > 0)
 	      {
@@ -591,23 +566,27 @@ public class ReviewItemsRetriever
 	          if(reviewElemMappings.size() > 0)
 	          {
 	          	// Create reviewableItem object
-	          	ReviewableItem nextReviewablItem = _createReviewItem(reviewElemMappings, reviewAgainstElemMappings, 
-	            		nextReviewId, reviewItemUUID);
+	          	ReviewableItem nextReviewableItem = 
+	          		_createReviewItem(
+	          			reviewElemMappings, reviewAgainstElemMappings, nextReviewId, reviewItemUUID);
 	            nextItem.put("status", "success");
-	            nextItem.put("reviewItem", nextReviewablItem);
+	            nextItem.put("reviewItem", nextReviewableItem);
 	          }
 	        }
 	      }
       }
       catch (Exception ex)
       {
-      	log.error("createNextReviewableResponse failed:(" + uc.toString() + ") REASON: " + ex.getMessage());
+      	log.error(
+      		"createNextReviewableResponse failed for nextReviewId: " + nextReviewId + 
+      		", reviewItemUUID:" + reviewItemUUID + ", reviewAgainstUUID: " + reviewAgainstUUID +
+      		" Error: " + ex.getMessage());
       	throw ex;
       }
     }
     return nextItem;
   }
-  protected ReviewableItem _createReviewItem(final List<Tuple> reviewElemMappings, 
+  private ReviewableItem _createReviewItem(final List<Tuple> reviewElemMappings, 
   		final List<Tuple> reviewAgainstElemMappings, 
   		final long nextReviewId, final String reviewItemUUID) throws Exception
   {
@@ -689,6 +668,10 @@ public class ReviewItemsRetriever
     String availAgList = StringUtils.join(agList,";");
     ri.setAgainstList(availAgList);
 
+    
+    long allAgainstCnt = _getAllReviewAgainstCount(reviewItemUUID);
+    ri.setAllReviewAgainstCnt(allAgainstCnt);
+    
     return ri;
   }
 

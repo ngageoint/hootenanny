@@ -524,12 +524,12 @@ public class ReviewResourcePrepareTest extends OsmResourceTestAbstract
     {
       hootProps = HootProperties.getInstance();
       //set this to something lower than the size of the test data to be prepared per element type
-      hootProps.setProperty("maxRecordSelectSize", "2");
+      hootProps.setProperty("maxRecordBatchSize", "2");
       HootProperties.setProperties(hootProps);
-      final long maxRecordSelectSize = 2;
+      final long maxRecordBatchSize = 2;
       Assert.assertEquals(
-        maxRecordSelectSize,
-        Integer.parseInt(HootProperties.getInstance().getProperty("maxRecordSelectSize")));
+      	maxRecordBatchSize,
+        Integer.parseInt(HootProperties.getInstance().getProperty("maxRecordBatchSize")));
 
       testPrepare();
     }
@@ -538,11 +538,11 @@ public class ReviewResourcePrepareTest extends OsmResourceTestAbstract
       //set this back to default now that this test is over
       if (hootProps != null)
       {
-        hootProps.setProperty("maxRecordSelectSize", HootProperties.getDefault("maxRecordSelectSize"));
+        hootProps.setProperty("maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize"));
         HootProperties.setProperties(hootProps);
         Assert.assertEquals(
-          Integer.parseInt(HootProperties.getDefault("maxRecordSelectSize")),
-          Integer.parseInt(hootProps.getProperty("maxRecordSelectSize")));
+          Integer.parseInt(HootProperties.getDefault("maxRecordBatchSize")),
+          Integer.parseInt(hootProps.getProperty("maxRecordBatchSize")));
       }
     }
   }

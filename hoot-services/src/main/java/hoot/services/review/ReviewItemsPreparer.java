@@ -188,8 +188,8 @@ public class ReviewItemsPreparer
   public static String launchPrepareJob(final long mapId, final long testDelayMilliseconds,
     final boolean simulateFailure)
   {
-	//Default to the new writer implementation, and have the tests use the old implementation for 
-	//now.
+	  //Default to the new writer implementation, and have the tests use the old implementation for 
+	  //now.
     return launchPrepareJob(mapId, testDelayMilliseconds, simulateFailure, "reviewPrepareDbWriter2");
   }
 

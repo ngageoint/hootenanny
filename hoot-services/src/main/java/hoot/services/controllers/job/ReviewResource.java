@@ -35,14 +35,15 @@ import java.util.Map;
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
+import hoot.services.exceptions.writer.review.ReviewItemsWriterException;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.ReviewAgainstItem;
 import hoot.services.models.review.ReviewReferences;
 import hoot.services.models.review.ReviewableItemsStatistics;
+import hoot.services.readers.review.ReviewItemsRetriever;
 import hoot.services.readers.review.ReviewReferencesRetriever;
 import hoot.services.readers.review.ReviewableItemsStatisticsCalculator;
-import hoot.services.review.ReviewItemsRetriever;
 import hoot.services.review.ReviewItemsPreparer;
 import hoot.services.review.ReviewUtils;
 import hoot.services.validators.review.ReviewInputParamsValidator;
@@ -360,6 +361,10 @@ public class ReviewResource
     	Timestamp now = new Timestamp(date.getTime());
     	(new ReviewItemsRetriever(conn, mapId)).updateReviewLastAccessTime(reviewId, now, reviewAgainst);
     }
+    catch (ReviewItemsWriterException re)
+    {
+    	ReviewUtils.handleError(re, errorMessageStart + " (" + re.getSql() + ")", false);
+    }
     catch (Exception e)
     {
       ReviewUtils.handleError(e, errorMessageStart, false);
@@ -428,6 +433,10 @@ public class ReviewResource
       long lockedCnt = marker.getLockedReviewCntQuery().count();
       nextReviewableResponse.put("lockedcnt", lockedCnt);
     }
+    catch (ReviewItemsWriterException re)
+    {
+    	ReviewUtils.handleError(re, errorMessageStart + " (" + re.getSql() + ")", false);
+    }
     catch (Exception e)
     {
       ReviewUtils.handleError(e, errorMessageStart, false);
@@ -493,9 +502,8 @@ public class ReviewResource
    * item the specified element still needs to be reviewed against, as well as any other item that 
    * needs to use the specified element to review against it.
    * 
-   * @param mapId map owning the feature passed in
-   * @param elementId OSM ID of the element to be retrieved
-   * @param elementType OSM type of the element to be retrieved
+   * @param mapId map owning the feature whose review references are to be retrieved
+   * @param elementUniqueId unique ID of the element whose review references are to be retrieved
    * @return an array of review records
    * @throws Exception
    */
@@ -504,12 +512,10 @@ public class ReviewResource
   @Consumes(MediaType.TEXT_PLAIN)
   @Produces(MediaType.APPLICATION_JSON)
   public ReviewReferences getReviewReferences(
-    @QueryParam("mapId")
-    final long mapId,
-    @QueryParam("elementId")
-    final long elementId,
-    @QueryParam("elementType")
-    final String elementType)
+  	@QueryParam("mapId")
+  	final long mapId,
+    @QueryParam("elementUniqueId")
+    final String elementUniqueId)
     throws Exception
   {
   	log.debug("Returning review references...");
@@ -519,7 +525,7 @@ public class ReviewResource
   	try
   	{
   		List<List<ReviewAgainstItem>> references = 
-  			(new ReviewReferencesRetriever(conn).getReferences(mapId, elementId, elementType));
+  			(new ReviewReferencesRetriever(conn).getReferences(mapId, elementUniqueId));
   		log.debug("Returning " + references.get(0).size() + " review against items.");
   		response.setReviewAgainstItems(references.get(0).toArray(new ReviewAgainstItem[]{}));
   		log.debug("Returning " + references.get(1).size() + " reviewable items.");
@@ -529,8 +535,8 @@ public class ReviewResource
     {
       ReviewUtils.handleError(
       	e, 
-      	"Unable to retrieve review references for input: " + "mapId: " + mapId + 
-      	  ",elementId: " + elementId + ", elementType: " + elementType, 
+      	"Unable to retrieve review references for map ID: " + mapId + " and element unique ID: " + 
+      	  elementUniqueId, 
       	false);
     }
     finally
