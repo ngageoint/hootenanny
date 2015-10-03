@@ -108,6 +108,9 @@ protected:
 
   struct ConfigData
   {
+    QString           addUserEmail;
+    qint64            addUserId;
+    ElementIdDatatype changesetUserId;
     qint64            startingChangesetId;
     ElementIdDatatype startingNodeId;
     ElementIdDatatype startingWayId;

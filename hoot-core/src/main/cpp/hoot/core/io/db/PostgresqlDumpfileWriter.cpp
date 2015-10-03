@@ -163,12 +163,16 @@ void PostgresqlDumpfileWriter::finalizePartial()
   // Start initial section that holds nothing but UTF-8 byte-order mark (BOM)
   _createTable( "byte_order_mark", "\n", true );
 
-  // Create our user data WITH byte order mark as it's first table written
-  _createTable( "users", "COPY users (email, id, pass_crypt, creation_time) FROM stdin;\n");
+  // Create our user data if the email value is set
+  if ( _configData.addUserEmail.length() > 0 )
+  {
+    _createTable( "users", "COPY users (email, id, pass_crypt, creation_time) FROM stdin;\n");
 
-  *(_outputSections["users"].second) <<
-    QString("%1\t1\t''\tNOW()\n").arg(
-      QString("hootenannyingest@digitalglobe.com"));
+    *(_outputSections["users"].second) <<
+      QString("%1\t%2\t\tNOW()\n").arg(
+        _configData.addUserEmail,
+        QString::number(_configData.addUserId) );
+  }
 
   // Do we have an unfinished changeset that needs flushing?
   if ( _changesetData.changesInChangeset >  0 )
@@ -203,7 +207,7 @@ void PostgresqlDumpfileWriter::finalizePartial()
       QString("/bin/cat ") + (_outputSections[*it].first)->fileName() +
       QString(" >> ") + _outputFilename );
 
-    LOG_DEBUG("Flush cmd: " + cmdToExec );
+    //LOG_DEBUG("Flush cmd: " + cmdToExec );
 
     const int systemRetval = std::system( cmdToExec.toStdString().c_str() );
 
@@ -324,11 +328,15 @@ void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
 {
   const ConfigOptions confOptions(conf);
 
-  // TODO: pull these from config values
+  _configData.addUserEmail        = confOptions.getPostgresqlDumpfileWriterUserEmail();
+  _configData.addUserId           = confOptions.getPostgresqlDumpfileWriterUserId();
   _configData.startingChangesetId = confOptions.getPostgresqlDumpfileWriterStartIdChangeset();
   _configData.startingNodeId      = confOptions.getPostgresqlDumpfileWriterStartIdNode();
   _configData.startingWayId       = confOptions.getPostgresqlDumpfileWriterStartIdWay();
   _configData.startingRelationId  = confOptions.getPostgresqlDumpfileWriterStartIdRelation();
+  _configData.changesetUserId     = confOptions.getPostgresqlDumpfileWriterChangesetUserId();
+
+  // TODO: needs to be a config value
   _configData.maxMapElements      = 1000000000;
 }
 
@@ -724,6 +732,7 @@ void PostgresqlDumpfileWriter::_incrementChangesInChangeset()
   _changesetData.changesInChangeset++;
   if ( _changesetData.changesInChangeset == _maxChangesInChangeset )
   {
+    //LOG_DEBUG("Changeset " + QString::number(_changesetData.changesetId) + " hit max edits" );
     _writeChangesetToTable();
     _changesetData.changesetId++;
     _changesetData.changesInChangeset = 0;
@@ -789,20 +798,21 @@ QString PostgresqlDumpfileWriter::_escapeCopyToData(const QString& stringToOutpu
 
 void PostgresqlDumpfileWriter::_writeChangesetToTable()
 {
-  if ( _changesetData.changesetId == 1 )
+  if ( _changesetData.changesetId == _configData.startingChangesetId )
   {
     _createTable( "changesets", "COPY changesets (id, user_id, created_at, closed_at, num_changes) FROM stdin;\n" );
   }
 
   boost::shared_ptr<QTextStream> changesetsStream  = _outputSections["changesets"].second;
   const QString datestring = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss.zzz");
-  const QString changesetFormat("%1\t1\t%2\t%2\t%3\n");
+  const QString changesetFormat("%1\t%2\t%3\t%4\t%5\n");
 
   *changesetsStream << changesetFormat.arg(
     QString::number(_changesetData.changesetId),
+    QString::number(_configData.changesetUserId),
+    datestring,
     datestring,
     QString::number(_changesetData.changesInChangeset) ).toUtf8();
-
 }
 
 }
