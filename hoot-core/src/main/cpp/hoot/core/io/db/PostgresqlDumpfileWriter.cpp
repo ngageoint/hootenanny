@@ -98,7 +98,7 @@ void PostgresqlDumpfileWriter::open(QString url)
   }
 
   _outputFilename = url;
-  LOG_INFO( QString("Output filename set to ") + _outputFilename);
+  //LOG_INFO( QString("Output filename set to ") + _outputFilename);
 
   _zeroWriteStats();
 
@@ -155,7 +155,7 @@ void PostgresqlDumpfileWriter::finalizePartial()
     return;
   }
 
-  LOG_INFO( QString("Finalize called, time to create ") + _outputFilename);
+  //LOG_INFO( QString("Finalize called, time to create ") + _outputFilename);
 
   // Remove file if it used to be there;
   std::remove(_outputFilename.toStdString().c_str());
@@ -163,8 +163,11 @@ void PostgresqlDumpfileWriter::finalizePartial()
   // Start initial section that holds nothing but UTF-8 byte-order mark (BOM)
   _createTable( "byte_order_mark", "\n", true );
 
+  // Output updates for sequences to ensure database sanity
+  _writeSequenceUpdates();
+
   // Create our user data if the email value is set
-  if ( _configData.addUserEmail.length() > 0 )
+  if ( _configData.addUserEmail.isEmpty() == false )
   {
     _createTable( "users", "COPY users (email, id, pass_crypt, creation_time) FROM stdin;\n");
 
@@ -190,7 +193,7 @@ void PostgresqlDumpfileWriter::finalizePartial()
     }
 
     // Write close marker for table
-    if ( *it != "byte_order_mark" )
+    if ( (*it != "byte_order_mark") && (*it != "sequence_updates") )
     {
       *(_outputSections[*it].second) << QString("\\.\n\n\n").toUtf8();
     }
@@ -813,6 +816,37 @@ void PostgresqlDumpfileWriter::_writeChangesetToTable()
     datestring,
     datestring,
     QString::number(_changesetData.changesInChangeset) ).toUtf8();
+}
+
+void PostgresqlDumpfileWriter::_writeSequenceUpdates()
+{
+  _createTable( "sequence_updates", "" );
+
+  boost::shared_ptr<QTextStream> sequenceUpdatesStream  = _outputSections["sequence_updates"].second;
+  const QString sequenceUpdateFormat("SELECT pg_catalog.setval('%1', %2);\n");
+
+  // Users
+  if ( _configData.addUserEmail.isEmpty() == false )
+  {
+    *sequenceUpdatesStream << sequenceUpdateFormat.arg("'users_id_seq",
+      QString::number(_configData.addUserId + 1) );
+  }
+
+  // Changesets
+  *sequenceUpdatesStream << sequenceUpdateFormat.arg("changesets_id_seq",
+    QString::number(_changesetData.changesetId + 1) );
+
+  // Nodes
+  *sequenceUpdatesStream << sequenceUpdateFormat.arg("current_nodes_id_seq",
+    QString::number(_idMappings.nextNodeId) );
+
+  // Ways
+  *sequenceUpdatesStream << sequenceUpdateFormat.arg("current_ways_id_seq",
+    QString::number(_idMappings.nextWayId) );
+
+  // Relations
+  *sequenceUpdatesStream << sequenceUpdateFormat.arg("current_relations_id_seq",
+    QString::number(_idMappings.nextRelationId) ) << "\n\n";
 }
 
 }

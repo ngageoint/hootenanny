@@ -219,6 +219,8 @@ protected:
   QString _escapeCopyToData( const QString& stringToOutput) const;
 
   void _writeChangesetToTable();
+
+  void _writeSequenceUpdates();
 };
 
 }
