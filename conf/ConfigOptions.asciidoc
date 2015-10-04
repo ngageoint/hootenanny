@@ -1079,28 +1079,28 @@ Value that will be set in the "user_id" field for all changesets added by the in
 
 === postgresql.dumpfile.writer.start.id.changeset
 
-* Data Type: int
+* Data Type: long
 * Default Value: `1`
 
 Starting ID value for changesets created in a PostgreSQL dumpfile.
 
 === postgresql.dumpfile.writer.start.id.node
 
-* Data Type: int
+* Data Type: long
 * Default Value: `1`
 
 Starting ID value for nodes created in a PostgreSQL dumpfile. 
 
 === postgresql.dumpfile.writer.start.id.relation
 
-* Data Type: int
+* Data Type: long
 * Default Value: `1`
 
 Starting ID value for relations created in a PostgreSQL dumpfile.
 
 === postgresql.dumpfile.writer.start.id.way
 
-* Data Type: int
+* Data Type: long
 * Default Value: `1`
 
 Starting ID value for ways created in a PostgreSQL dumpfile.

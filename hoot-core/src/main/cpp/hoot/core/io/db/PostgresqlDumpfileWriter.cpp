@@ -339,6 +339,8 @@ void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
   _configData.startingRelationId  = confOptions.getPostgresqlDumpfileWriterStartIdRelation();
   _configData.changesetUserId     = confOptions.getPostgresqlDumpfileWriterChangesetUserId();
 
+  LOG_DEBUG("Starting node ID: " << QString::number(_configData.startingNodeId));
+
   // TODO: needs to be a config value
   _configData.maxMapElements      = 1000000000;
 }
@@ -472,23 +474,23 @@ void PostgresqlDumpfileWriter::_writeNodeToTables(
       QString::number(nodeX), QString::number(nodeXNanodegrees)));
   }
 
-  QString outputLine = QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n")
-      .arg(nodeDbId)
-      .arg(nodeYNanodegrees)
-      .arg(nodeXNanodegrees)
-      .arg(changesetId)
-      .arg(datestring)
-      .arg(tileNumberString);
+  QString outputLine = QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n").arg(
+    QString::number(nodeDbId), 
+    QString::number(nodeYNanodegrees),
+    QString::number(nodeXNanodegrees),
+    QString::number(changesetId),
+    datestring,
+    tileNumberString );
 
   *(_outputSections["current_nodes"].second) << outputLine.toUtf8();
 
-  outputLine = QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n")
-      .arg(nodeDbId)
-      .arg(nodeYNanodegrees)
-      .arg(nodeXNanodegrees)
-      .arg(changesetId)
-      .arg(datestring)
-      .arg(tileNumberString);
+  outputLine = QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n").arg(
+    QString::number(nodeDbId),
+    QString::number(nodeYNanodegrees),
+    QString::number(nodeXNanodegrees),
+    QString::number(changesetId),
+    datestring,
+    tileNumberString );
 
   *(_outputSections["nodes"].second) << outputLine.toUtf8();
 }

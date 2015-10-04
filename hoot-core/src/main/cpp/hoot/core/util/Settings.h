@@ -117,6 +117,10 @@ public:
 
   int getInt(const QString& key, int defaultValue) const;
   int getInt(const QString& key, int defaultValue, int min, int max) const;
+
+  long getLong(const QString& key) const;
+  long getLong(const QString& key, long defaultValue) const;
+  long getLong(const QString& key, long defaultValue, long min, long max) const;
  
 
   /**
