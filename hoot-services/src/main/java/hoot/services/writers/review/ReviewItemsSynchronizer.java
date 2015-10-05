@@ -62,7 +62,17 @@ public class ReviewItemsSynchronizer
   public ReviewItemsSynchronizer(final Connection conn, final String mapId) throws Exception
   {
     this.conn = conn;
-    this.mapId = Long.parseLong(mapId);
+    try
+    {
+    	this.mapId = (new ReviewMapValidator(conn).verifyMapPrepared(mapId));
+    }
+    catch (NumberFormatException e)
+    {
+    	ReviewUtils.handleError(
+      	new Exception("Invalid input parameter: mapId"), 
+      	"", 
+      	false);
+    }
     maxRecordBatchSize = 
   		Integer.parseInt(HootProperties.getInstance()
   		  .getProperty("maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));

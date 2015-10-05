@@ -588,9 +588,12 @@ public class ReviewResource
    */
   @PUT
   @Path("/setallreviewed")
-  @Consumes(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.TEXT_PLAIN)
   @Produces(MediaType.TEXT_PLAIN)
-  public Response setAllItemsReviewed(final JSONObject request) throws Exception
+  public Response setAllItemsReviewed(
+		@QueryParam("mapId")
+    String mapId) 
+    throws Exception
   {
   	Connection conn = DbUtils.createConnection();
   	log.debug("Intializing changeset upload transaction...");
@@ -598,10 +601,15 @@ public class ReviewResource
       transactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
     conn.setAutoCommit(false);
-    String mapId = null;
+    Map<String, Object> inputParams = new HashMap<String, Object>();
+    inputParams.put("mapId", mapId);
   	try
   	{
-  		mapId = request.get("mapId").toString();
+  		ReviewInputParamsValidator inputParamsValidator = new ReviewInputParamsValidator(inputParams);
+      mapId =
+        (String)inputParamsValidator.validateAndParseInputParam(
+        	"mapId", "", null, null, false, null);
+      
   	  (new ReviewItemsSynchronizer(conn, mapId)).setAllItemsReviewed();
   		
   		log.debug("Committing set all items reviewed transaction...");

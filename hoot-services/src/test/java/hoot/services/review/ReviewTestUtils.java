@@ -27,7 +27,6 @@
 package hoot.services.review;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -54,6 +53,7 @@ import com.sun.jersey.api.client.WebResource;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
+import hoot.services.db.DbUtils.RecordBatchType;
 import hoot.services.db2.Changesets;
 import hoot.services.db2.ElementIdMappings;
 import hoot.services.db2.QChangesets;
@@ -76,7 +76,6 @@ import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.utils.XmlUtils;
 import hoot.services.writers.osm.ChangesetDbWriter;
 import hoot.services.writers.review.ReviewItemsPreparer;
-import hoot.services.writers.review.ReviewItemsSynchronizer;
 
 /*
  * The methods in this class are based off a handpicked test scenario.  The files in
@@ -88,7 +87,9 @@ public class ReviewTestUtils
   private static final Logger log = LoggerFactory.getLogger(ReviewTestUtils.class);
   
   private static final QReviewMap reviewMap = QReviewMap.reviewMap;
-
+	private static final QReviewItems reviewItems = QReviewItems.reviewItems;
+  private static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
+  
   public static Connection conn;
 
   public static long mapId = -1;
@@ -125,33 +126,6 @@ public class ReviewTestUtils
         mappings.put(oldId, newId);
       }
     }
-  }
-  
-  public static void createAllDataTypesConflateOut() throws IOException, Exception
-  {
-    changesetId = Changeset.insertNew(mapId, userId, conn);
-    ChangesetDbWriter changesetWriter = new ChangesetDbWriter(conn);
-    final Document changesetDoc = 
-    		changesetWriter.write(
-    	  mapId,
-        changesetId,
-        FileUtils.readFileToString(
-          new File(
-            Thread.currentThread().getContextClassLoader().getResource(
-              "hoot/services/review/ReviewResourceTest-AllDataTypesConflateOut.osm")
-            .getPath()))
-        .replaceAll("changeset=\"\"", "changeset=\"" + changesetId + "\""));
-    
-    final String fakeJobId = UUID.randomUUID().toString();
-    DbUtils.insertJobStatus(fakeJobId, JobStatusManager.JOB_STATUS.COMPLETE.toInt(), conn);
-    ReviewMap mapReviewInfoRecord = new ReviewMap();
-		mapReviewInfoRecord.setMapId(mapId);
-		mapReviewInfoRecord.setReviewPrepareJobId(fakeJobId);
-		new SQLInsertClause(conn, DbUtils.getConfiguration(mapId), reviewMap)
-		  .populate(mapReviewInfoRecord)
-		  .execute();
-    (new ReviewItemsSynchronizer(conn, String.valueOf(mapId))).updateReviewItems(
-      changesetDoc, changesetWriter.getParsedElementIdsToElementsByType());
   }
 
   public static void createDataToPrepare() throws Exception
@@ -1025,4 +999,97 @@ public class ReviewTestUtils
         "way id=\"-41\"",
         "way id=\"" + wayIds.get((long)-41) + "\""));
   }
+  
+  public static void populateReviewDataForAllDataTypes() throws Exception
+	{
+		final String fakeJobId = UUID.randomUUID().toString();
+    DbUtils.insertJobStatus(fakeJobId, JobStatusManager.JOB_STATUS.COMPLETE.toInt(), conn);
+    ReviewMap mapReviewInfoRecord = new ReviewMap();
+		mapReviewInfoRecord.setMapId(mapId);
+		mapReviewInfoRecord.setReviewPrepareJobId(fakeJobId);
+		new SQLInsertClause(conn, DbUtils.getConfiguration(mapId), reviewMap)
+		  .populate(mapReviewInfoRecord)
+		  .execute();
+		
+		List<ElementIdMappings> elementIdMappingRecordsToInsert = new ArrayList<ElementIdMappings>();
+		elementIdMappingRecordsToInsert.add(
+			ReviewUtils.createElementIdMappingRecord(
+				"{f70c7b9f-a276-5bbc-8149-23c103de2228}", 
+				1, 
+				ElementType.Node, 
+				mapId));
+		elementIdMappingRecordsToInsert.add(
+			ReviewUtils.createElementIdMappingRecord(
+				"{fde621f3-c915-5f50-b521-49cb75c20337}", 
+				2, 
+				ElementType.Node, 
+				mapId));
+		elementIdMappingRecordsToInsert.add(
+			ReviewUtils.createElementIdMappingRecord(
+				"{db8f0c0e-35c2-5657-ac30-811e2c1554de}", 
+				3, 
+				ElementType.Node, 
+				mapId));
+		elementIdMappingRecordsToInsert.add(
+			ReviewUtils.createElementIdMappingRecord(
+				"{d1012bc9-92bc-5931-aac2-aa5702f42b8b}", 
+				4, 
+				ElementType.Node, 
+				mapId));
+		elementIdMappingRecordsToInsert.add(
+			ReviewUtils.createElementIdMappingRecord(
+				"{6117767e-8a0b-5624-a599-fa50f96213a6}", 
+				5, 
+				ElementType.Node, 
+				mapId));
+		elementIdMappingRecordsToInsert.add(
+			ReviewUtils.createElementIdMappingRecord(
+				"{f6224e55-cfa6-5364-bb78-e482e2d6e1c5}", 
+				6, 
+				ElementType.Node, 
+				mapId));
+		elementIdMappingRecordsToInsert.add(
+			ReviewUtils.createElementIdMappingRecord(
+				"{c254d8ab-3f1a-539f-91b7-98b485c5c129}", 
+				7, 
+				ElementType.Node, 
+				mapId));
+		DbUtils.batchRecords(
+  	  mapId, elementIdMappingRecordsToInsert, elementIdMappings, null, RecordBatchType.INSERT, conn, 
+  	  100);
+		
+		List<ReviewItems> reviewItemRecordsToInsert = new ArrayList<ReviewItems>();
+		reviewItemRecordsToInsert.add(
+  		ReviewUtils.createReviewItemRecord(
+  			"{c254d8ab-3f1a-539f-91b7-98b485c5c129}", 
+  			1.0,
+  			"{6117767e-8a0b-5624-a599-fa50f96213a6}", 
+  			mapId));
+		reviewItemRecordsToInsert.add(
+  		ReviewUtils.createReviewItemRecord(
+  			"{f70c7b9f-a276-5bbc-8149-23c103de2228}", 
+  			1.0,
+  			"{fde621f3-c915-5f50-b521-49cb75c20337}", 
+  			mapId));
+		reviewItemRecordsToInsert.add(
+  		ReviewUtils.createReviewItemRecord(
+  			"{f70c7b9f-a276-5bbc-8149-23c103de2228}", 
+  			1.0,
+  			"{db8f0c0e-35c2-5657-ac30-811e2c1554de}", 
+  			mapId));
+		reviewItemRecordsToInsert.add(
+  		ReviewUtils.createReviewItemRecord(
+  			"{d1012bc9-92bc-5931-aac2-aa5702f42b8b}", 
+  			1.0,
+  			"{6117767e-8a0b-5624-a599-fa50f96213a6}", 
+  			mapId));
+		reviewItemRecordsToInsert.add(
+  		ReviewUtils.createReviewItemRecord(
+  			"{f6224e55-cfa6-5364-bb78-e482e2d6e1c5}", 
+  			1.0,
+  			"{fde621f3-c915-5f50-b521-49cb75c20337}", 
+  			mapId));
+  	DbUtils.batchRecords(
+  	  mapId, reviewItemRecordsToInsert, reviewItems, null, RecordBatchType.INSERT, conn, 100);
+	}
 }
