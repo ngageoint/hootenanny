@@ -509,9 +509,9 @@ public class ReviewResource
   @Produces(MediaType.APPLICATION_JSON)
   public ReviewReferencesCollection getReviewReferences(
   	@QueryParam("mapId")
-    final long mapId,
+    String mapId,
     @QueryParam("elementUniqueIds")
-    final String elementUniqueIds) 
+    String elementUniqueIds) 
   	throws Exception
   {
   	log.debug("Returning review references...");
@@ -519,8 +519,19 @@ public class ReviewResource
   	Connection conn = DbUtils.createConnection();
   	ReviewReferencesCollection response = new ReviewReferencesCollection();
   	
+  	Map<String, Object> inputParams = new HashMap<String, Object>();
+    inputParams.put("mapId", mapId);
+    inputParams.put("elementUniqueIds", elementUniqueIds);
+    
   	try
   	{
+  		ReviewInputParamsValidator inputParamsValidator = new ReviewInputParamsValidator(inputParams);
+      mapId =
+        (String)inputParamsValidator.validateAndParseInputParam(
+        	"mapId", "", null, null, false, null);
+      elementUniqueIds =
+        (String)inputParamsValidator.validateAndParseInputParam(
+        	"elementUniqueIds", "", null, null, false, null);
   		String[] elementUniqueIdsArr;
   		if (elementUniqueIds.contains(";"))
   		{
@@ -536,7 +547,7 @@ public class ReviewResource
   		{
   			ReviewReferences responseRefs = new ReviewReferences();
   			List<List<ReviewAgainstItem>> references = 
-	  			(new ReviewReferencesRetriever(conn).getReferences(mapId, elementUniqueId));
+	  			(new ReviewReferencesRetriever(conn, mapId)).getReferences(elementUniqueId);
 	  		log.debug(
 	  			"Returning " + references.get(0).size() + " review against items for unique ID: " + 
 	  		  elementUniqueId);
@@ -545,6 +556,7 @@ public class ReviewResource
 	  			"Returning " + references.get(1).size() + " reviewable items for unique ID: " + 
 	  		  elementUniqueId);
 	  		responseRefs.setReviewableItems(references.get(1).toArray(new ReviewAgainstItem[]{}));
+	  		responseRefs.setUniqueId(elementUniqueId);
 	  		responseRefsList.add(responseRefs);
   		}
   		response.setReviewReferences(responseRefsList.toArray(new ReviewReferences[]{}));

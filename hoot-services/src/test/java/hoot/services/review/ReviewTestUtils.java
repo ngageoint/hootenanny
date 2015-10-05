@@ -27,6 +27,7 @@
 package hoot.services.review;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
@@ -46,6 +48,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import com.mysema.query.sql.SQLQuery;
+import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 import com.sun.jersey.api.client.WebResource;
 
@@ -62,6 +65,7 @@ import hoot.services.db2.QReviewMap;
 import hoot.services.db2.ReviewItems;
 import hoot.services.db2.ReviewMap;
 import hoot.services.geo.BoundingBox;
+import hoot.services.job.JobStatusManager;
 import hoot.services.job.JobStatusWebPoller;
 import hoot.services.job.JobStatusManager.JOB_STATUS;
 import hoot.services.models.osm.Changeset;
@@ -72,6 +76,7 @@ import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.utils.XmlUtils;
 import hoot.services.writers.osm.ChangesetDbWriter;
 import hoot.services.writers.review.ReviewItemsPreparer;
+import hoot.services.writers.review.ReviewItemsSynchronizer;
 
 /*
  * The methods in this class are based off a handpicked test scenario.  The files in
@@ -81,6 +86,8 @@ public class ReviewTestUtils
 {
   @SuppressWarnings("unused")
   private static final Logger log = LoggerFactory.getLogger(ReviewTestUtils.class);
+  
+  private static final QReviewMap reviewMap = QReviewMap.reviewMap;
 
   public static Connection conn;
 
@@ -118,6 +125,33 @@ public class ReviewTestUtils
         mappings.put(oldId, newId);
       }
     }
+  }
+  
+  public static void createAllDataTypesConflateOut() throws IOException, Exception
+  {
+    changesetId = Changeset.insertNew(mapId, userId, conn);
+    ChangesetDbWriter changesetWriter = new ChangesetDbWriter(conn);
+    final Document changesetDoc = 
+    		changesetWriter.write(
+    	  mapId,
+        changesetId,
+        FileUtils.readFileToString(
+          new File(
+            Thread.currentThread().getContextClassLoader().getResource(
+              "hoot/services/review/ReviewResourceTest-AllDataTypesConflateOut.osm")
+            .getPath()))
+        .replaceAll("changeset=\"\"", "changeset=\"" + changesetId + "\""));
+    
+    final String fakeJobId = UUID.randomUUID().toString();
+    DbUtils.insertJobStatus(fakeJobId, JobStatusManager.JOB_STATUS.COMPLETE.toInt(), conn);
+    ReviewMap mapReviewInfoRecord = new ReviewMap();
+		mapReviewInfoRecord.setMapId(mapId);
+		mapReviewInfoRecord.setReviewPrepareJobId(fakeJobId);
+		new SQLInsertClause(conn, DbUtils.getConfiguration(mapId), reviewMap)
+		  .populate(mapReviewInfoRecord)
+		  .execute();
+    (new ReviewItemsSynchronizer(conn, String.valueOf(mapId))).updateReviewItems(
+      changesetDoc, changesetWriter.getParsedElementIdsToElementsByType());
   }
 
   public static void createDataToPrepare() throws Exception
