@@ -830,7 +830,7 @@ void PostgresqlDumpfileWriter::_writeSequenceUpdates()
   // Users
   if ( _configData.addUserEmail.isEmpty() == false )
   {
-    *sequenceUpdatesStream << sequenceUpdateFormat.arg("'users_id_seq",
+    *sequenceUpdatesStream << sequenceUpdateFormat.arg("users_id_seq",
       QString::number(_configData.addUserId + 1) );
   }
 

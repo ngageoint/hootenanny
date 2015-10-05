@@ -43,18 +43,8 @@ sub parseSqlMax($)
 sub calculateNextId($)
 {
   my $maxId = shift(@_);
-  my $adder;
-  $adder = 10**(length($maxId) - 1);
 
-  my $nextId = $maxId + $adder;
-
-  while ( $nextId % $adder != 0 )
-  {
-    $nextId++;
-  }
-
-  return $nextId;
-
+  return $maxId + 100000;
 }
 
 if ( scalar(@ARGV) != 1 ) 
