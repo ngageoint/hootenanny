@@ -360,34 +360,20 @@ public class ReviewItemsSynchronizerTest extends OsmResourceTestAbstract
 		  	"{ca3ae25a-164e-27ca-5aef-77a4597c7c32}", reviewRecord.getReviewAgainstItemId());*/
 	}
 	
-	@Test(expected=Exception.class)
   @Category(UnitTest.class)
   public void testUpdateReviewItemsMapDoesntExist() throws Exception
   {
-    try
-    {
+    ReviewItemsSynchronizer reviewItemsSynchronizer = 
     	new ReviewItemsSynchronizer(conn, String.valueOf(mapId + 1));
-    }
-    catch (Exception e)
-    {
-      Assert.assertTrue(e.getMessage().contains("No record exists"));
-      throw e;
-    }
+    Assert.assertFalse(reviewItemsSynchronizer.updateReviewItems(null, null));
   }
 
-  @Test(expected=Exception.class)
   @Category(UnitTest.class)
   public void testUpdateReviewItemsEmptyMapIdParam() throws Exception
   {
-    try
-    {
-    	new ReviewItemsSynchronizer(conn, String.valueOf(""));
-    }
-    catch (Exception e)
-    {
-    	Assert.assertTrue(e.getMessage().contains("No record exists"));
-      throw e;
-    }
+  	ReviewItemsSynchronizer reviewItemsSynchronizer = 
+    	new ReviewItemsSynchronizer(conn, "");
+    Assert.assertFalse(reviewItemsSynchronizer.updateReviewItems(null, null));
   }
 	
 	@Test

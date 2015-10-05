@@ -64,14 +64,10 @@ public class ReviewItemsSynchronizer
     this.conn = conn;
     try
     {
-    	this.mapId = (new ReviewMapValidator(conn).verifyMapPrepared(mapId));
+    	this.mapId = Long.parseLong(mapId);
     }
     catch (NumberFormatException e)
     {
-    	ReviewUtils.handleError(
-      	new Exception("Invalid input parameter: mapId"), 
-      	"", 
-      	false);
     }
     maxRecordBatchSize = 
   		Integer.parseInt(HootProperties.getInstance()
@@ -514,10 +510,10 @@ public class ReviewItemsSynchronizer
    * @param changesetDoc OSM changeset
    * @param parsedElementIdsToElementsByType mapping of element ID's passed in the changeset to
    * actual element ID's stored in the database
-   * @return the number of review records updated
+   * @return true if any review records were updated; false otherwise
    * @throws Exception 
    */
-  public void updateReviewItems(final Document changesetDoc, 
+  public boolean updateReviewItems(final Document changesetDoc, 
     final Map<ElementType, HashMap<Long, Element>> parsedElementIdsToElementsByType) 
     throws Exception
   { 
@@ -531,28 +527,26 @@ public class ReviewItemsSynchronizer
     	updateReviewRecordsFromCreateChangeset(changesetDoc, parsedElementIdsToElementsByType);
     	updateReviewRecordsFromModifyChangeset(changesetDoc);
     	updateReviewRecordsFromDeleteChangeset(changesetDoc);
+    	return true;
   	}
   	else
   	{
   		log.debug(
   		  "No review data prepared for map with ID: " + String.valueOf(mapId) + ".  Skipping " +
   		  "review record synchronization.");
+  		return false;
   	}
   }
   
   /**
    * Updates all features for the given map as reviewed
    * 
-   * @throws SQLException
-   * @throws InstantiationException
-   * @throws IllegalAccessException
-   * @throws ClassNotFoundException
-   * @throws NoSuchMethodException
-   * @throws InvocationTargetException
+   * @throws Exception 
    */
-  public void setAllItemsReviewed() throws SQLException, InstantiationException, 
-    IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException
+  public void setAllItemsReviewed() throws Exception
   {
+  	 (new ReviewMapValidator(conn)).verifyMapPrepared(String.valueOf(mapId));
+  	
     //set all review records for this map ID to reviewed
   	new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), reviewItems)
       .set(reviewItems.reviewStatus, DbUtils.review_status_enum.reviewed)
