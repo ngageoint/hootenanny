@@ -93,8 +93,6 @@ public class ReviewResourcePrepareTest extends OsmResourceTestAbstract
   {
     ReviewResource.simulateFailure = simulateFailure;
     ReviewResource.testDelayMilliseconds = TEST_JOB_DELAY_MS;
-    //TODO: see #6270
-    ReviewResource.reviewRecordWriter = "reviewPrepareDbWriter";
 
     WebResource resource = resource().path("/review");
     if (mapId != null)

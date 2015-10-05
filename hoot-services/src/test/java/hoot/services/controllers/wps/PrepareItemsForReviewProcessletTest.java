@@ -97,7 +97,7 @@ public class PrepareItemsForReviewProcessletTest extends OsmResourceTestAbstract
     final boolean simulateFailure) throws Exception
   {
     PrepareItemsForReviewProcesslet processlet = new PrepareItemsForReviewProcesslet();
-    PrepareItemsForReviewProcesslet.reviewRecordWriter = "reviewPrepareDbWriter";
+    //PrepareItemsForReviewProcesslet.reviewRecordWriter = "reviewPrepareDbWriter";
 
     LinkedList<ProcessletInput> allInputs = new LinkedList<ProcessletInput>();
     //I don't think not adding the input params when they aren't specified is the correct

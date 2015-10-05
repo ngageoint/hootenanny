@@ -84,8 +84,6 @@ public class ReviewResource
   //these params could probably go away.
   public static long testDelayMilliseconds = 0;
   public static boolean simulateFailure = false;
-  //TODO: see #6270
-  public static String reviewRecordWriter = "reviewPrepareDbWriter2";
 
   private ClassPathXmlApplicationContext appContext;
   private PlatformTransactionManager transactionManager;
@@ -168,8 +166,7 @@ public class ReviewResource
       log.debug("Initializing database connection...");
 
       jobId =
-        (new ReviewItemsPreparer(
-           conn, testDelayMilliseconds, simulateFailure, mapId, reviewRecordWriter))
+        (new ReviewItemsPreparer(conn, testDelayMilliseconds, simulateFailure, mapId))
          .prepare(overwriteExistingData);
     }
     catch (Exception e)

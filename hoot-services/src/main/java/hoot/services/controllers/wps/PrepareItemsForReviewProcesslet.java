@@ -49,9 +49,6 @@ public class PrepareItemsForReviewProcesslet extends BaseProcesslet
 {
   private static final Logger log = LoggerFactory.getLogger(PrepareItemsForReviewProcesslet.class);
   
-  //TODO: see #6270
-  public static String reviewRecordWriter = "reviewPrepareDbWriter2";
-  
   public PrepareItemsForReviewProcesslet() throws Exception
   {
     super();
@@ -100,7 +97,7 @@ public class PrepareItemsForReviewProcesslet extends BaseProcesslet
 
       ((LiteralOutput)outputParams.getParameter("jobId")).setValue(
         (new ReviewItemsPreparer(
-           conn, testDelayMilliseconds, simulateFailure, mapId, reviewRecordWriter))
+           conn, testDelayMilliseconds, simulateFailure, mapId))
          .prepare(overwriteExistingData));
     }
     catch (Exception e)
