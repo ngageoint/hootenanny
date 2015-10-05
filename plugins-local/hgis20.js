@@ -377,15 +377,17 @@ hgis20 = {
             var rulesList = [
 //             ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] == 'bus'"],
 //             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            ["t.building == 'school' && !(t.amenity)","t.amenity = 'school'; delete t.building"],
             ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
 //             ["t.control_tower && t.man_made == 'tower'","delete t.man_made"],
+            ["t.crossing == 'traffic_signals' && t.highway == 'crossing'","delete t.crossing"], // Crosswalk
 //             ["t.crossing == 'tank' && t.highway == 'crossing'","delete t.highway"],
 //             ["t.dock && t.waterway == 'dock'","delete t.waterway"],
 //             ["t.golf == 'driving_range' && t.leisure == 'golf_course'","delete t.leisure"],
 //             ["t.highway == 'bus_stop'","t['transport:type'] = 'bus'"],
 //             ["t.highway == 'crossing'","t['transport:type'] = 'road';a.F_CODE = 'AQ062'; delete t.highway"],
-//             ["t.highway == 'mini_roundabout'","t.junction = 'roundabout'"],
+            ["t.highway == 'mini_roundabout'","t.junction = 'roundabout'"],
 //             ["t.historic == 'castle' && t.building","delete t.building"],
 //             ["t.historic == 'castle' && t.ruins == 'yes'","t.condition = 'destroyed'; delete t.ruins"],
 //             ["t.landcover == 'snowfield' || t.landcover == 'ice-field'","a.F_CODE = 'BJ100'"],
@@ -476,6 +478,100 @@ hgis20 = {
             delete tags.natural;
         }
 
+        // Country, State etc
+        if (tags['addr:country'])
+        {
+            tags['is_in:country_code'] = tags['addr:country'];
+            delete tags['addr:country'];
+        }
+
+        if (tags['is_in:state'])
+        {
+            tags['admin_level1:name'] = tags['is_in:state'];
+            delete tags['is_in:state'];
+        }
+
+        // City - Possibly map to admin level as well???
+        if (tags['addr:city'])
+        {
+            tags['is_in:city'] = tags['addr:city'];
+            delete tags['addr:city'];
+        }
+
+
+        // Transportation features
+        // Bus POI's
+        if (tags.highway == 'bus_stop')
+        {
+            tags.bus = 'yes';
+            tags.public_transport = 'stop_position';
+            delete tags.highway;
+        }
+
+        if (tags.amenity == 'bus_station')
+        {
+            tags.bus = 'yes'
+            tags.public_transport = 'station';
+            delete tags.amenity;
+        }
+
+        // Railway POI's
+        if (tags.railway)
+        {
+            switch (tags.railway)
+            {
+                case 'station':
+                case 'yard':
+                    tags.train = 'yes';
+                    tags.public_transport = tags.railway;
+                    break;
+
+                case 'tram_stop':
+                    tags.tram = 'yes';
+                    tags.public_transport = 'stop_position';
+                    delete tags.railway;
+                    break;
+
+                case 'stop':
+                    tags.train = 'yes';
+                    tags.public_transport = 'stop_position';
+                    break;
+            } // End switch
+        } // End Railway
+
+        if (tags.amenity == 'ferry_terminal')
+        {
+            tags.ferry = 'yes'
+            tags.public_transport = 'terminal';
+            delete tags.amenity;
+        }
+
+        if (tags.tunnel == 'yes')
+        {
+            if (tags.highway)
+            {
+                tags['transport:type2'] = 'tunnel';
+                tags.car = 'yes';
+            }
+            else if (tags.railway == 'subway')
+            {
+                tags['transport:type2'] = 'tunnel';
+                tags.subway = 'yes';
+            }
+            else if (tags.railway == 'tram')
+            {
+                tags['transport:type2'] = 'tunnel';
+                tags.tram = 'yes';
+            }
+            else if (tags.railway)
+            {
+                tags['transport:type2'] = 'tunnel';
+                tags.train = 'yes';
+            }
+        }
+
+        // Houses
+        if (tags.building == 'house') tags.building = 'residential';
     }, // End applyToHgisPreProcessing
 
     applyToHgisPostProcessing : function (tags, attrs, geometryType)
