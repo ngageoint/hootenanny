@@ -11,6 +11,7 @@ import hoot.services.models.review.ReviewReferences;
 import hoot.services.models.review.ReviewReferencesCollection;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.review.ReviewTestUtils;
+import hoot.services.utils.RandomNumberGenerator;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -74,7 +75,9 @@ public class ReviewReferencesRetrieverTest extends OsmResourceTestAbstract
     {
     	resource()
         .path("/review/refs")
-        .queryParam("mapId", String.valueOf(mapId + 1))
+        .queryParam(
+        	"mapId", 
+        	String.valueOf((int)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)))
         .queryParam(
       	  "elementUniqueIds", 
       	  "{c254d8ab-3f1a-539f-91b7-98b485c5c129};{6117767e-8a0b-5624-a599-fa50f96213a6}")
@@ -146,7 +149,9 @@ public class ReviewReferencesRetrieverTest extends OsmResourceTestAbstract
     {
     	resource()
         .path("/review/refs")
-        .queryParam("mapId", String.valueOf(mapId + 1))
+        .queryParam(
+        	"mapId", 
+        	String.valueOf((int)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)))
         .queryParam(
     	    "elementUniqueIds", 
     	    //invalid uuid

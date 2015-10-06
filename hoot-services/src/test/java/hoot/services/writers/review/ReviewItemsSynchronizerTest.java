@@ -15,6 +15,7 @@ import hoot.services.db2.ReviewItems;
 import hoot.services.models.osm.Changeset;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.review.ReviewTestUtils;
+import hoot.services.utils.RandomNumberGenerator;
 import hoot.services.validators.osm.ChangesetUploadXmlValidator;
 import hoot.services.writers.osm.ChangesetDbWriter;
 
@@ -406,7 +407,9 @@ public class ReviewItemsSynchronizerTest extends OsmResourceTestAbstract
     {
     	resource()
         .path("/review/setallreviewed")
-        .queryParam("mapId", String.valueOf(mapId + 1))
+        .queryParam(
+        	"mapId", 
+        	String.valueOf((int)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)))
         .accept(MediaType.TEXT_PLAIN)
         .put(String.class, "");
     }

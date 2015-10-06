@@ -41,6 +41,7 @@ import hoot.services.job.JobStatusManager.JOB_STATUS;
 import hoot.services.models.review.ReviewableItemsStatistics;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.review.ReviewTestUtils;
+import hoot.services.utils.RandomNumberGenerator;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -235,7 +236,10 @@ public class ReviewResourceGetStatsTest extends OsmResourceTestAbstract
   {
     try
     {
-      execGet(String.valueOf(mapId + 1), null, null);
+      execGet(
+      	String.valueOf((int)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)), 
+      	null, 
+      	null);
     }
     catch (UniformInterfaceException e)
     {

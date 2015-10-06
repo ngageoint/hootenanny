@@ -76,6 +76,7 @@ import hoot.services.models.osm.RelationMember;
 import hoot.services.models.osm.Way;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
+import hoot.services.utils.RandomNumberGenerator;
 import hoot.services.utils.XmlUtils;
 
 import com.mysema.query.sql.SQLQuery;
@@ -1598,7 +1599,6 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
     final Set<Long> relationIds =
       OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
-
     final BoundingBox updateBounds =
       OsmTestUtils.createAfterModifiedTestChangesetBounds();
     //Update the changeset with a node that has an ID that doesn't exist.  A failure should occur
@@ -1621,7 +1621,9 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
                 "<tag k=\"key 1\" v=\"val 1\"></tag>" +
                 "<tag k=\"key 2\" v=\"val 2\"></tag>" +
               "</node>" +
-              "<node id=\"" + (nodeIdsArr[0] + 6) + "\" lon=\"" + updateBounds.getMinLon() + "\" " +
+              "<node id=\"" + 
+                ((int)RandomNumberGenerator.nextDouble(nodeIdsArr[0] + 10^4, Integer.MAX_VALUE)) + 
+                "\" lon=\"" + updateBounds.getMinLon() + "\" " +
                 "lat=\"" + updateBounds.getMinLat() + "\" version=\"1\" changeset=\"" +
                 changesetId + "\">" +
                 "<tag k=\"key 3\" v=\"val 3\"></tag>" +
