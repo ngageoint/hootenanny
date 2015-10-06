@@ -130,43 +130,8 @@ hgis20 = {
     {
         var newAttrs = {};
 
-//         // Sort out Roads, Railways and Bridges.
-//         if (geometryType == 'Line' && tags.bridge && (tags.highway || tags.railway))
-//         {
-//             if (layerName !== 'Bridges_Tunnels') // Not a Bridge
-//             {
-//                 newAttrs.XtableName = 'Bridges_Tunnels';
-//
-//                 if (tags.highway)
-//                 {
-//                     newAttrs.TYPE2 = 'Road'; // Road
-//                 }
-//                 else if (tags.railway)
-//                 {
-//                     newAttrs.TYPE2 = 'Rail'; // Railway
-//                 }
-//             }
-//             else // A Bridge
-//             {
-//                 if (tags.railway)
-//                 {
-//                     newAttrs.XtableName = 'Railways'; // Railway
-//                 }
-//                 else
-//                 {
-//                     newAttrs.XtableName = 'Roads';
-//                     // Put in switch statement on the highway tag
-//                 }
-//             }
-//
-//             // Remove the uuid from the tag list so we get a new one for the second feature
-//             delete tags.uuid;
-//         } // End sort out Road, Railway & Bridge
-
-
         // Add features to a second layer.
         // Note: The geometry MUST be the same
-
         if (layerName == 'Marine_POI' && attrs.TYPE == 'Beach')
         {
             newAttrs.XtableName = 'Natural_POI';
@@ -420,7 +385,8 @@ hgis20 = {
 //             ["t.railway == 'level_crossing'","t['transport:type'] = 'railway';t['transport:type2'] = 'road'; a.F_CODE = 'AQ062'; delete t.railway"],
 //             ["t.railway == 'crossing'","t['transport:type'] = 'railway'; a.F_CODE = 'AQ062'; delete t.railway"],
 //             ["t.resource","t.raw_material = t.resource; delete t.resource"],
-            ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
+//             ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
+//             ["t.route == 'subway' && !(t.railway)","t.railway = 'subway'; delete t.route"],
 //             ["(t.shop || t.office) &&  !(t.building)","a.F_CODE = 'AL013'"],
 //             ["t.social_facility == 'shelter'","t.social_facility = t['social_facility:for']; delete t.amenity; delete t['social_facility:for']"],
             ["!(t.water) && t.natural == 'water'","t.water = 'lake'"],
@@ -838,6 +804,66 @@ hgis20 = {
             }
 
         }
+
+        // Sort out Roads, Railways and Bridges.
+        // If bridge or tunnel = "yes", these tend to get dumped into the bridge layer which is dropped
+        // since bridges/tunnels are supposed to be points.
+        if (tags.bridge && tags.bridge !== 'no')
+        {
+            if (geometryType == 'Line' && (tags.highway || tags.railway))
+            {
+                attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'This is also a bridge',';');
+
+                // Move to the correct layer
+                if (tags.railway)
+                {
+                    attrs.XtableName = 'Railways';
+                }
+                else
+                {
+                    attrs.XtableName = 'Roads';
+                }
+            }
+            // We look for "bridge=yes" not viaduct, suspension etc
+            else if (geometryType == 'Point' && !(attrs.XtableName))
+            {
+                attrs.XtableName = 'Bridges_Tunnels';
+                attrs.TYPE1 = 'Bridge';
+                attrs.TYPE2 = '999999';
+                attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'bridge:' + tags.bridge,';');
+            }
+
+
+        } // End bridge
+
+        if (tags.tunnel && tags.tunnel !== 'no')
+        {
+            if (geometryType == 'Line' && (tags.highway || tags.railway))
+            {
+                attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'This is also a tunnel',';');
+
+                // Move to the correct layer
+                if (tags.railway)
+                {
+                    attrs.XtableName = 'Railways';
+                }
+                else
+                {
+                    attrs.XtableName = 'Roads';
+                }
+            }
+            // We look for "tunnel=yes" not culvert, building passage etc
+            else if (geometryType == 'Point' && !(attrs.XtableName))
+            {
+                attrs.XtableName = 'Bridges_Tunnels';
+                attrs.TYPE1 = 'Tunnel';
+                attrs.TYPE2 = '999999';
+                attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'tunnel:' + tags.tunnel,';');
+            }
+
+
+        } // End tunnel
+
 
     }, // End applyToHgisPostProcessing
 
