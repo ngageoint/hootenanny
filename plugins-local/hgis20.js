@@ -838,18 +838,26 @@ hgis20 = {
 
         if (tags.tunnel && tags.tunnel !== 'no')
         {
-            if (geometryType == 'Line' && (tags.highway || tags.railway))
+            if (geometryType == 'Line')
             {
-                attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'This is also a tunnel',';');
-
-                // Move to the correct layer
-                if (tags.railway)
+                if (tags.highway || tags.railway)
                 {
-                    attrs.XtableName = 'Railways';
+                    attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'This is also a tunnel',';');
+                    // Move to the correct layer
+                    if (tags.railway)
+                    {
+                        attrs.XtableName = 'Railways';
+                    }
+                    else
+                    {
+                        attrs.XtableName = 'Roads';
+                    }
                 }
-                else
+                else if (tags.waterway == 'river')
                 {
-                    attrs.XtableName = 'Roads';
+                    attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'This is also a tunnel',';');
+                    attrs.XtableName = 'Hydrology_Polylines';
+                    attrs.TYPE = 'River/Stream';
                 }
             }
             // We look for "tunnel=yes" not culvert, building passage etc
