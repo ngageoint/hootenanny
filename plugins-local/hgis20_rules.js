@@ -1251,18 +1251,18 @@ hgis20.rules = {
      ['bridge$TYPE','Bridge','bridge','yes'],
      ['bridge$TYPE','Tunnel','tunnel','yes'],
 
-     ['bridge$TYPE2','Road','transport:type','road'],
-     ['bridge$TYPE2','Rail','transport:type','railway'],
      ['bridge$TYPE2','Pedestrian','transport:type','pedestrian'],
+     ['bridge$TYPE2','Rail','transport:type','railway'],
+     ['bridge$TYPE2','Road','transport:type','road'],
      ['bridge$TYPE2','Water','bridge:type','water'], /// What is this???
 
-     ['commercial$TYPE1','Service','commercial:category','service'],
-     ['commercial$TYPE1','Retail','commercial:category','retail'],
+     ['commercial$TYPE1','Automotive','commercial:category','automotive'],
+     ['commercial$TYPE1','Financial','commercial:category','financial'],
+     ['commercial$TYPE1','Industrial','commercial:category','industrial'],
      ['commercial$TYPE1','Manufacturing','commercial:category','manufacturing'],
      ['commercial$TYPE1','Other','commercial:category','other'],
-     ['commercial$TYPE1','Industrial','commercial:category','industrial'],
-     ['commercial$TYPE1','Financial','commercial:category','financial'],
-     ['commercial$TYPE1','Automotive','commercial:category','automotive'],
+     ['commercial$TYPE1','Retail','commercial:category','retail'],
+     ['commercial$TYPE1','Service','commercial:category','service'],
      ['commercial$TYPE1','Telecommunications','commercial:category','telecommunications'],
 
      ['commercial$TYPE2','Airline','shop','travel_agency'],
@@ -1287,7 +1287,7 @@ hgis20.rules = {
      ['commercial$TYPE2','Film','amenity','film'],
      ['commercial$TYPE2','Freight - Shipping','amenity','freight_shipping'],
      ['commercial$TYPE2','Funeral Home','shop','funeral_directors'],
-     ['commercial$TYPE2','Fuel','shop','fuel'],
+     ['commercial$TYPE2','Fuel','amenity','fuel'],
      ['commercial$TYPE2','Gas','shop','gas'],
      ['commercial$TYPE2','Grocery','shop','grocery'],
      ['commercial$TYPE2','Heavy Machinery','amenity','heavy_machinery'], // ???
@@ -1678,7 +1678,7 @@ hgis20.rules = {
      ['road$TYPE','Cycleway','highway','cycleway'],
      ['road$TYPE','Footway','highway','footway'],
      ['road$TYPE','Ford','ford','yes'],
-     ['road$TYPE','Living Street','highway','living street'],
+     ['road$TYPE','Living Street','highway','living_street'],
      ['road$TYPE','Motorway Link','highway','motorway_link'],
      ['road$TYPE','Motorway','highway','motorway'],
      ['road$TYPE','Path','highway','path'],

@@ -427,6 +427,7 @@ hgis20 = {
 //             ["t.use == 'islamic_prayer_hall' && t.amenity == 'place_of_worship'","delete t.amenity"],
 //             ["t.wetland && t.natural == 'wetland'","delete t.natural"],
             ["t.water == 'river'","t.waterway = 'river'"],
+            ["t.waterway == 'stream'","t.waterway = 'river'"], // Output is River/Stream
             ["t.waterway == 'riverbank'","t.waterway = 'river'"]
             ];
 
@@ -498,21 +499,37 @@ hgis20 = {
             delete tags['addr:city'];
         }
 
-
         // Transportation features
+        if (tags.tunnel == 'yes')
+        {
+            if (tags.highway)
+            {
+                tags['transport:type2'] = 'tunnel';
+                tags.car = 'yes';
+            }
+            else if (tags.railway == 'subway')
+            {
+                tags['transport:type2'] = 'tunnel';
+                tags.subway = 'yes';
+            }
+            else if (tags.railway == 'tram')
+            {
+                tags['transport:type2'] = 'tunnel';
+                tags.tram = 'yes';
+            }
+            else if (tags.railway)
+            {
+                tags['transport:type2'] = 'tunnel';
+                tags.train = 'yes';
+            }
+        } // End Tunnel
+
         // Bus POI's
         if (tags.highway == 'bus_stop')
         {
             tags.bus = 'yes';
             tags.public_transport = 'stop_position';
             delete tags.highway;
-        }
-
-        if (tags.amenity == 'bus_station')
-        {
-            tags.bus = 'yes'
-            tags.public_transport = 'station';
-            delete tags.amenity;
         }
 
         // Railway POI's
@@ -539,39 +556,54 @@ hgis20 = {
             } // End switch
         } // End Railway
 
-        if (tags.amenity == 'ferry_terminal')
+        // Clean up some amenities.
+        // NOTE: Lots of this will move to the new weighted schema code
+        if (tags.amenity)
         {
-            tags.ferry = 'yes'
-            tags.public_transport = 'terminal';
-            delete tags.amenity;
-        }
+            switch (tags.amenity)
+            {
+                case 'ferry_terminal':
+                    tags.ferry = 'yes'
+                    tags.public_transport = 'terminal';
+                    delete tags.amenity;
+                    break;
 
-        if (tags.tunnel == 'yes')
-        {
-            if (tags.highway)
-            {
-                tags['transport:type2'] = 'tunnel';
-                tags.car = 'yes';
-            }
-            else if (tags.railway == 'subway')
-            {
-                tags['transport:type2'] = 'tunnel';
-                tags.subway = 'yes';
-            }
-            else if (tags.railway == 'tram')
-            {
-                tags['transport:type2'] = 'tunnel';
-                tags.tram = 'yes';
-            }
-            else if (tags.railway)
-            {
-                tags['transport:type2'] = 'tunnel';
-                tags.train = 'yes';
-            }
-        }
+                case 'taxi':
+                    tags.taxi = 'yes'
+//                     tags.public_transport = 'stop'; // Not sure about a taxi station, stop or terminal
+                    delete tags.amenity;
+                    break;
+
+                case 'bus_station':
+                    tags.bus = 'yes'
+                    tags.public_transport = 'station';
+                    delete tags.amenity;
+                    break;
+
+                case 'kindergarten':
+                    tags.amenity = 'school';
+                    tags.note = translate.appendValue(tags.note,'TYPE1:Kindergarten',';');
+                    break;
+
+                case 'pub':
+                case 'nightclub':
+                    tags.note = translate.appendValue(tags.note,'TYPE1:' + tags.amenity,';');
+                    tags.amenity = 'bar';
+                    break;
+
+                case 'fast_food':
+                case 'food_court':
+                case 'cafe':
+                    tags.note = translate.appendValue(tags.note,'TYPE1:' + tags.amenity,';');
+                    tags.amenity = 'restaurant';
+                    break;
+            } // End switch
+        } // End Amenity
 
         // Houses
         if (tags.building == 'house') tags.building = 'residential';
+
+
     }, // End applyToHgisPreProcessing
 
     applyToHgisPostProcessing : function (tags, attrs, geometryType)
