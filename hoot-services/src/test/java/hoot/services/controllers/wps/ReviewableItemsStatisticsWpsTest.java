@@ -145,7 +145,7 @@ public class ReviewableItemsStatisticsWpsTest extends WpsTestAbstract
       
       Assert.assertEquals(mapId, response.getMapId());
       Assert.assertEquals(54, response.getNumTotalItems());
-      Assert.assertEquals(6, response.getNumReviewableItems());
+      Assert.assertEquals(5, response.getNumReviewableItems());
       Assert.assertEquals(3, response.getNumReviewedItems());
     }
     catch (XPathExpressionException e)

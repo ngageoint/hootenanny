@@ -152,7 +152,7 @@ public class ReviewableItemsStatisticsProcessletTest extends OsmResourceTestAbst
 
     Assert.assertEquals(mapId, response.getMapId());
     Assert.assertEquals(54, response.getNumTotalItems());
-    Assert.assertEquals(13, response.getNumReviewableItems());
+    Assert.assertEquals(11, response.getNumReviewableItems());
     Assert.assertEquals(3, response.getNumReviewedItems());
   }
 
@@ -173,7 +173,7 @@ public class ReviewableItemsStatisticsProcessletTest extends OsmResourceTestAbst
 
     Assert.assertEquals(mapId, response.getMapId());
     Assert.assertEquals(54, response.getNumTotalItems());
-    Assert.assertEquals(5, response.getNumReviewableItems());
+    Assert.assertEquals(4, response.getNumReviewableItems());
     Assert.assertEquals(3, response.getNumReviewedItems());
   }
 
@@ -196,7 +196,7 @@ public class ReviewableItemsStatisticsProcessletTest extends OsmResourceTestAbst
 
     Assert.assertEquals(mapId, response.getMapId());
     Assert.assertEquals(54, response.getNumTotalItems());
-    Assert.assertEquals(6, response.getNumReviewableItems());
+    Assert.assertEquals(5, response.getNumReviewableItems());
     Assert.assertEquals(3, response.getNumReviewedItems());
   }
 
