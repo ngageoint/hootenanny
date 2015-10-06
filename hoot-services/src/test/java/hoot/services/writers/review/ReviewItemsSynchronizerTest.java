@@ -13,6 +13,7 @@ import hoot.services.db2.QElementIdMappings;
 import hoot.services.db2.QReviewItems;
 import hoot.services.db2.ReviewItems;
 import hoot.services.models.osm.Changeset;
+import hoot.services.models.review.SetAllItemsReviewedRequest;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.review.ReviewTestUtils;
 import hoot.services.utils.RandomNumberGenerator;
@@ -383,12 +384,14 @@ public class ReviewItemsSynchronizerTest extends OsmResourceTestAbstract
 	{
   	ReviewTestUtils.populateReviewDataForAllDataTypes();
   	
+  	SetAllItemsReviewedRequest request = new SetAllItemsReviewedRequest();
+  	request.setMapId(mapId);
   	/*final String response =*/ 
 	  	resource()
 	      .path("/review/setallreviewed")
-	      .queryParam("mapId", String.valueOf(mapId))
+	      .type(MediaType.APPLICATION_JSON)
 	      .accept(MediaType.TEXT_PLAIN)
-	      .put(String.class, "");
+	      .put(request);
   	Assert.assertEquals(
   		5, 
   		new SQLQuery(conn, DbUtils.getConfiguration(mapId))
@@ -405,13 +408,13 @@ public class ReviewItemsSynchronizerTest extends OsmResourceTestAbstract
   {
     try
     {
-    	resource()
-        .path("/review/setallreviewed")
-        .queryParam(
-        	"mapId", 
-        	String.valueOf((int)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)))
-        .accept(MediaType.TEXT_PLAIN)
-        .put(String.class, "");
+    	SetAllItemsReviewedRequest request = new SetAllItemsReviewedRequest();
+    	request.setMapId((long)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE));
+	  	resource()
+	      .path("/review/setallreviewed")
+	      .type(MediaType.APPLICATION_JSON)
+	      .accept(MediaType.TEXT_PLAIN)
+	      .put(request);
     }
     catch (UniformInterfaceException e)
     {
@@ -429,37 +432,18 @@ public class ReviewItemsSynchronizerTest extends OsmResourceTestAbstract
   {
     try
     {
-    	resource()
-        .path("/review/setallreviewed")
-        .accept(MediaType.TEXT_PLAIN)
-        .put(String.class, "");
+    	SetAllItemsReviewedRequest request = new SetAllItemsReviewedRequest();
+	  	resource()
+	      .path("/review/setallreviewed")
+	      .type(MediaType.APPLICATION_JSON)
+	      .accept(MediaType.TEXT_PLAIN)
+	      .put(request);
     }
     catch (UniformInterfaceException e)
     {
-      Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-      Assert.assertTrue(
-        e.getResponse().getEntity(String.class).contains("Invalid input parameter value"));
-      throw e;
-    }
-  }
-
-  @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
-  public void testSetAllReviewedEmptyMapIdParam() throws Exception
-  {
-    try
-    {
-    	resource()
-        .path("/review/setallreviewed")
-        .queryParam("mapId", "")
-        .accept(MediaType.TEXT_PLAIN)
-        .put(String.class, "");
-    }
-    catch (UniformInterfaceException e)
-    {
-    	Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-      Assert.assertTrue(
-        e.getResponse().getEntity(String.class).contains("Invalid input parameter value"));
+      Assert.assertEquals(Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
+      //Assert.assertTrue(
+        //e.getResponse().getEntity(String.class).contains(""));
       throw e;
     }
   }

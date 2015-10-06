@@ -43,6 +43,7 @@ import hoot.services.models.review.ReviewAgainstItem;
 import hoot.services.models.review.ReviewReferences;
 import hoot.services.models.review.ReviewReferencesCollection;
 import hoot.services.models.review.ReviewableItemsStatistics;
+import hoot.services.models.review.SetAllItemsReviewedRequest;
 import hoot.services.readers.review.ReviewItemsRetriever;
 import hoot.services.readers.review.ReviewReferencesRetriever;
 import hoot.services.readers.review.ReviewableItemsStatisticsCalculator;
@@ -585,12 +586,9 @@ public class ReviewResource
    */
   @PUT
   @Path("/setallreviewed")
-  @Consumes(MediaType.TEXT_PLAIN)
+  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.TEXT_PLAIN)
-  public Response setAllItemsReviewed(
-		@QueryParam("mapId")
-    String mapId) 
-    throws Exception
+  public Response setAllItemsReviewed(final SetAllItemsReviewedRequest request) throws Exception
   {
   	Connection conn = DbUtils.createConnection();
   	log.debug("Intializing changeset upload transaction...");
@@ -598,6 +596,7 @@ public class ReviewResource
       transactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
     conn.setAutoCommit(false);
+    String mapId = String.valueOf(request.getMapId());
     Map<String, Object> inputParams = new HashMap<String, Object>();
     inputParams.put("mapId", mapId);
   	try
