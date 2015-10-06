@@ -100,7 +100,7 @@ public class ReviewResourceGetStatsTest extends OsmResourceTestAbstract
 
     Assert.assertEquals(mapId, response.getMapId());
     Assert.assertEquals(54, response.getNumTotalItems());
-    Assert.assertEquals(13, response.getNumReviewableItems());
+    Assert.assertEquals(11, response.getNumReviewableItems());
     Assert.assertEquals(3, response.getNumReviewedItems());
   }
 
@@ -115,7 +115,7 @@ public class ReviewResourceGetStatsTest extends OsmResourceTestAbstract
 
     Assert.assertEquals(mapId, response.getMapId());
     Assert.assertEquals(54, response.getNumTotalItems());
-    Assert.assertEquals(5, response.getNumReviewableItems());
+    Assert.assertEquals(4, response.getNumReviewableItems());
     Assert.assertEquals(3, response.getNumReviewedItems());
   }
 
@@ -135,7 +135,7 @@ public class ReviewResourceGetStatsTest extends OsmResourceTestAbstract
     //TODO: fix - this should be returning 7 instead; I believe it's ignoring way -44, whose review
     //against item is a relation with a node inside the query bounds; oddly enough the review get
     //resource test performs this query correctly, and they use nearly the same query code
-    Assert.assertEquals(6, response.getNumReviewableItems());
+    Assert.assertEquals(5, response.getNumReviewableItems());
     Assert.assertEquals(3, response.getNumReviewedItems());
   }
 
@@ -294,7 +294,7 @@ public class ReviewResourceGetStatsTest extends OsmResourceTestAbstract
 
     Assert.assertEquals(mapId, response.getMapId());
     Assert.assertEquals(54, response.getNumTotalItems());
-    Assert.assertEquals(16, response.getNumReviewableItems());
+    Assert.assertEquals(14, response.getNumReviewableItems());
     Assert.assertEquals(0, response.getNumReviewedItems());
   }
 

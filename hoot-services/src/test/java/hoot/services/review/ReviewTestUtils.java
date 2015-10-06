@@ -34,6 +34,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
@@ -46,11 +47,13 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import com.mysema.query.sql.SQLQuery;
+import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 import com.sun.jersey.api.client.WebResource;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
+import hoot.services.db.DbUtils.RecordBatchType;
 import hoot.services.db2.Changesets;
 import hoot.services.db2.ElementIdMappings;
 import hoot.services.db2.QChangesets;
@@ -62,6 +65,7 @@ import hoot.services.db2.QReviewMap;
 import hoot.services.db2.ReviewItems;
 import hoot.services.db2.ReviewMap;
 import hoot.services.geo.BoundingBox;
+import hoot.services.job.JobStatusManager;
 import hoot.services.job.JobStatusWebPoller;
 import hoot.services.job.JobStatusManager.JOB_STATUS;
 import hoot.services.models.osm.Changeset;
@@ -81,7 +85,11 @@ public class ReviewTestUtils
 {
   @SuppressWarnings("unused")
   private static final Logger log = LoggerFactory.getLogger(ReviewTestUtils.class);
-
+  
+  private static final QReviewMap reviewMap = QReviewMap.reviewMap;
+	private static final QReviewItems reviewItems = QReviewItems.reviewItems;
+  private static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
+  
   public static Connection conn;
 
   public static long mapId = -1;
@@ -169,7 +177,7 @@ public class ReviewTestUtils
     	.where(elementIdMappings.mapId.eq(mapId))
     	.map(elementIdMappings.elementId, elementIdMappings);
 
-    Assert.assertEquals(15, idMappings.size());
+    Assert.assertEquals(14, idMappings.size());
 
     //nodes
 
@@ -243,7 +251,7 @@ public class ReviewTestUtils
         .get("{81d2aff0-88e5-480e-95cb-c502d120f51f}");
     Assert.assertNotNull(elementIdMapping);
     Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
-    Assert.assertEquals(wayIds.get((long)-36), elementIdMapping.getOsmElementId());
+    Assert.assertEquals(wayIds.get((long)-40), elementIdMapping.getOsmElementId());
     Assert.assertEquals(DbUtils.nwr_enum.way, elementIdMapping.getOsmElementType());
 
     elementIdMapping =
@@ -259,7 +267,7 @@ public class ReviewTestUtils
         .get("{f5639540-aaf4-47ac-8c5e-82ad05abc29f}");
     Assert.assertNotNull(elementIdMapping);
     Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
-    Assert.assertEquals(wayIds.get((long)-20), elementIdMapping.getOsmElementId());
+    Assert.assertEquals(wayIds.get((long)-24), elementIdMapping.getOsmElementId());
     Assert.assertEquals(DbUtils.nwr_enum.way, elementIdMapping.getOsmElementType());
 
     elementIdMapping =
@@ -273,28 +281,28 @@ public class ReviewTestUtils
     elementIdMapping =
       idMappings
         .get("{51cd8890-a312-11e3-a5e2-0800200c9a66}");
-    Assert.assertNotNull(elementIdMapping);
-    Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
-    Assert.assertEquals(wayIds.get((long)-44), elementIdMapping.getOsmElementId());
-    Assert.assertEquals(DbUtils.nwr_enum.way, elementIdMapping.getOsmElementType());
+    Assert.assertNull(elementIdMapping);
+    //Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
+    //Assert.assertEquals(wayIds.get((long)-44), elementIdMapping.getOsmElementId());
+    //Assert.assertEquals(DbUtils.nwr_enum.way, elementIdMapping.getOsmElementType());
 
     //relations
 
     elementIdMapping =
       idMappings
         .get("{7ea9ac60-a310-11e3-a5e2-0800200c9a66}");
-    Assert.assertNotNull(elementIdMapping);
-    Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
-    Assert.assertEquals(relationIds.get((long)-1), elementIdMapping.getOsmElementId());
-    Assert.assertEquals(DbUtils.nwr_enum.relation, elementIdMapping.getOsmElementType());
+    Assert.assertNull(elementIdMapping);
+    //Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
+    //Assert.assertEquals(relationIds.get((long)-1), elementIdMapping.getOsmElementId());
+    //Assert.assertEquals(DbUtils.nwr_enum.relation, elementIdMapping.getOsmElementType());
 
     elementIdMapping =
       idMappings
         .get("{0c9f69f0-dad5-11e3-9c1a-0800200c9a66}");
-    Assert.assertNotNull(elementIdMapping);
-    Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
-    Assert.assertEquals(relationIds.get((long)-3), elementIdMapping.getOsmElementId());
-    Assert.assertEquals(DbUtils.nwr_enum.relation, elementIdMapping.getOsmElementType());
+    Assert.assertNull(elementIdMapping);
+    //Assert.assertEquals((Long)mapId, elementIdMapping.getMapId());
+    //Assert.assertEquals(relationIds.get((long)-3), elementIdMapping.getOsmElementId());
+    //Assert.assertEquals(DbUtils.nwr_enum.relation, elementIdMapping.getOsmElementType());
   }
 
   public static void verifyDataPrepared(final long mapId) throws Exception
@@ -360,23 +368,23 @@ public class ReviewTestUtils
     reviewItem = reviewItems.get(3);
     reviewItem.getReviewableItemId().equals(
       "{46d98769-dee2-489e-8fd6-ff265842ed55};{28fe6088-cb30-45a2-88dd-1146092dcd0e}");
-    Assert.assertEquals(0.750459, reviewItem.getReviewScore(), 0.0);
+    Assert.assertEquals(-1.0, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
-      "{f5639540-aaf4-47ac-8c5e-82ad05abc29f}", reviewItem.getReviewAgainstItemId());
+      "{25e1aa70-a30f-11e3-a5e2-0800200c9a66}", reviewItem.getReviewAgainstItemId());
     Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     reviewItem = reviewItems.get(4);
     reviewItem.getReviewableItemId().equals(
       "{46d98769-dee2-489e-8fd6-ff265842ed55};{28fe6088-cb30-45a2-88dd-1146092dcd0e}");
-    Assert.assertEquals(0.750459, reviewItem.getReviewScore(), 0.0);
+    Assert.assertEquals(-1.0, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
-      "{2258bbcc-b474-41fe-aa81-76ffc6e2be42}", reviewItem.getReviewAgainstItemId());
+      "{25e1aa70-a30f-11e3-a5e2-0800200c9a66}", reviewItem.getReviewAgainstItemId());
     Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     reviewItem = reviewItems.get(5);
     reviewItem.getReviewableItemId().equals(
       "{46d98769-dee2-489e-8fd6-ff265842ed55};{f917b7e1-412b-4294-acdc-37bd0fb13b4c}");
-    Assert.assertEquals(0.800795, reviewItem.getReviewScore(), 0.0);
+    Assert.assertEquals(0.750459, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{f5639540-aaf4-47ac-8c5e-82ad05abc29f}", reviewItem.getReviewAgainstItemId());
     Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
@@ -384,7 +392,7 @@ public class ReviewTestUtils
     reviewItem = reviewItems.get(6);
     reviewItem.getReviewableItemId().equals(
       "{46d98769-dee2-489e-8fd6-ff265842ed55};{f917b7e1-412b-4294-acdc-37bd0fb13b4c}");
-    Assert.assertEquals(0.800795, reviewItem.getReviewScore(), 0.0);
+    Assert.assertEquals(0.750459, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{2258bbcc-b474-41fe-aa81-76ffc6e2be42}", reviewItem.getReviewAgainstItemId());
     Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
@@ -392,7 +400,7 @@ public class ReviewTestUtils
     reviewItem = reviewItems.get(7);
     reviewItem.getReviewableItemId().equals(
       "{46d98769-dee2-489e-8fd6-ff265842ed55};{dfcd4a0e-04d5-46ee-b7a0-1a2c591ddf54}");
-    Assert.assertEquals(0.832799, reviewItem.getReviewScore(), 0.0);
+    Assert.assertEquals(0.800795, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{f5639540-aaf4-47ac-8c5e-82ad05abc29f}", reviewItem.getReviewAgainstItemId());
     Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
@@ -400,7 +408,7 @@ public class ReviewTestUtils
     reviewItem = reviewItems.get(8);
     reviewItem.getReviewableItemId().equals(
       "{46d98769-dee2-489e-8fd6-ff265842ed55};{dfcd4a0e-04d5-46ee-b7a0-1a2c591ddf54}");
-    Assert.assertEquals(0.832799, reviewItem.getReviewScore(), 0.0);
+    Assert.assertEquals(0.800795, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
       "{2258bbcc-b474-41fe-aa81-76ffc6e2be42}", reviewItem.getReviewAgainstItemId());
     Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
@@ -423,41 +431,41 @@ public class ReviewTestUtils
 
     reviewItem = reviewItems.get(11);
     reviewItem.getReviewableItemId().equals("{81d2aff0-88e5-480e-95cb-c502d120f51f}");
-    Assert.assertEquals(1.0, reviewItem.getReviewScore(), 0.0);
+    Assert.assertEquals(0.832799, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
-      "{81d2aff0-88e5-480e-95cb-c502d120f51f}", reviewItem.getReviewAgainstItemId());
+      "{f5639540-aaf4-47ac-8c5e-82ad05abc29f}", reviewItem.getReviewAgainstItemId());
     Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     reviewItem = reviewItems.get(12);
     reviewItem.getReviewableItemId().equals(
       "{46d98769-dee2-489e-8fd6-ff265842ed55};{f5639540-aaf4-47ac-8c5e-82ad05abc29f}");
-    Assert.assertEquals(0.928129, reviewItem.getReviewScore(), 0.0);
+    Assert.assertEquals(0.832799, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
-      "{f5639540-aaf4-47ac-8c5e-82ad05abc29f}", reviewItem.getReviewAgainstItemId());
+      "{2258bbcc-b474-41fe-aa81-76ffc6e2be42}", reviewItem.getReviewAgainstItemId());
     Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     reviewItem = reviewItems.get(13);
     reviewItem.getReviewableItemId().equals(
       "{46d98769-dee2-489e-8fd6-ff265842ed55};{f5639540-aaf4-47ac-8c5e-82ad05abc29f}");
-    Assert.assertEquals(0.928129, reviewItem.getReviewScore(), 0.0);
+    Assert.assertEquals(1.0, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
-      "{2258bbcc-b474-41fe-aa81-76ffc6e2be42}", reviewItem.getReviewAgainstItemId());
+      "{81d2aff0-88e5-480e-95cb-c502d120f51f}", reviewItem.getReviewAgainstItemId());
     Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     reviewItem = reviewItems.get(14);
     reviewItem.getReviewableItemId().equals("{51cd8890-a312-11e3-a5e2-0800200c9a66}");
-    Assert.assertEquals(0.832799, reviewItem.getReviewScore(), 0.0);
+    Assert.assertEquals(0.928129, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
-      "{7ea9ac60-a310-11e3-a5e2-0800200c9a66}", reviewItem.getReviewAgainstItemId());
+      "{f5639540-aaf4-47ac-8c5e-82ad05abc29f}", reviewItem.getReviewAgainstItemId());
     Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
 
     //relations
 
     reviewItem = reviewItems.get(15);
     reviewItem.getReviewableItemId().equals("{0c9f69f0-dad5-11e3-9c1a-0800200c9a66}");
-    Assert.assertEquals(0.939793, reviewItem.getReviewScore(), 0.0);
+    Assert.assertEquals(0.928129, reviewItem.getReviewScore(), 0.0);
     Assert.assertEquals(
-      "{de285618-a4df-4536-b218-5009c25f7107}", reviewItem.getReviewAgainstItemId());
+      "{2258bbcc-b474-41fe-aa81-76ffc6e2be42}", reviewItem.getReviewAgainstItemId());
     Assert.assertEquals(DbUtils.review_status_enum.unreviewed, reviewItem.getReviewStatus());
   }
 
@@ -466,7 +474,6 @@ public class ReviewTestUtils
 
      createDataToPrepare();
 
-    //TODO: probably change these to reviewPrepareDbWriter2; see #6270
     jobId = ReviewItemsPreparer.launchPrepareJob(mapId, 0, false, "reviewPrepareDbWriter");
     (new JobStatusWebPoller(resource, conn)).pollJobStatusUntilCompleteOrFail(jobId, false);
 
@@ -991,4 +998,97 @@ public class ReviewTestUtils
         "way id=\"-41\"",
         "way id=\"" + wayIds.get((long)-41) + "\""));
   }
+  
+  public static void populateReviewDataForAllDataTypes() throws Exception
+	{
+		final String fakeJobId = UUID.randomUUID().toString();
+    DbUtils.insertJobStatus(fakeJobId, JobStatusManager.JOB_STATUS.COMPLETE.toInt(), conn);
+    ReviewMap mapReviewInfoRecord = new ReviewMap();
+		mapReviewInfoRecord.setMapId(mapId);
+		mapReviewInfoRecord.setReviewPrepareJobId(fakeJobId);
+		new SQLInsertClause(conn, DbUtils.getConfiguration(mapId), reviewMap)
+		  .populate(mapReviewInfoRecord)
+		  .execute();
+		
+		List<ElementIdMappings> elementIdMappingRecordsToInsert = new ArrayList<ElementIdMappings>();
+		elementIdMappingRecordsToInsert.add(
+			ReviewUtils.createElementIdMappingRecord(
+				"{f70c7b9f-a276-5bbc-8149-23c103de2228}", 
+				1, 
+				ElementType.Node, 
+				mapId));
+		elementIdMappingRecordsToInsert.add(
+			ReviewUtils.createElementIdMappingRecord(
+				"{fde621f3-c915-5f50-b521-49cb75c20337}", 
+				2, 
+				ElementType.Node, 
+				mapId));
+		elementIdMappingRecordsToInsert.add(
+			ReviewUtils.createElementIdMappingRecord(
+				"{db8f0c0e-35c2-5657-ac30-811e2c1554de}", 
+				3, 
+				ElementType.Node, 
+				mapId));
+		elementIdMappingRecordsToInsert.add(
+			ReviewUtils.createElementIdMappingRecord(
+				"{d1012bc9-92bc-5931-aac2-aa5702f42b8b}", 
+				4, 
+				ElementType.Node, 
+				mapId));
+		elementIdMappingRecordsToInsert.add(
+			ReviewUtils.createElementIdMappingRecord(
+				"{6117767e-8a0b-5624-a599-fa50f96213a6}", 
+				5, 
+				ElementType.Node, 
+				mapId));
+		elementIdMappingRecordsToInsert.add(
+			ReviewUtils.createElementIdMappingRecord(
+				"{f6224e55-cfa6-5364-bb78-e482e2d6e1c5}", 
+				6, 
+				ElementType.Node, 
+				mapId));
+		elementIdMappingRecordsToInsert.add(
+			ReviewUtils.createElementIdMappingRecord(
+				"{c254d8ab-3f1a-539f-91b7-98b485c5c129}", 
+				7, 
+				ElementType.Node, 
+				mapId));
+		DbUtils.batchRecords(
+  	  mapId, elementIdMappingRecordsToInsert, elementIdMappings, null, RecordBatchType.INSERT, conn, 
+  	  100);
+		
+		List<ReviewItems> reviewItemRecordsToInsert = new ArrayList<ReviewItems>();
+		reviewItemRecordsToInsert.add(
+  		ReviewUtils.createReviewItemRecord(
+  			"{c254d8ab-3f1a-539f-91b7-98b485c5c129}", 
+  			1.0,
+  			"{6117767e-8a0b-5624-a599-fa50f96213a6}", 
+  			mapId));
+		reviewItemRecordsToInsert.add(
+  		ReviewUtils.createReviewItemRecord(
+  			"{f70c7b9f-a276-5bbc-8149-23c103de2228}", 
+  			1.0,
+  			"{fde621f3-c915-5f50-b521-49cb75c20337}", 
+  			mapId));
+		reviewItemRecordsToInsert.add(
+  		ReviewUtils.createReviewItemRecord(
+  			"{f70c7b9f-a276-5bbc-8149-23c103de2228}", 
+  			1.0,
+  			"{db8f0c0e-35c2-5657-ac30-811e2c1554de}", 
+  			mapId));
+		reviewItemRecordsToInsert.add(
+  		ReviewUtils.createReviewItemRecord(
+  			"{d1012bc9-92bc-5931-aac2-aa5702f42b8b}", 
+  			1.0,
+  			"{6117767e-8a0b-5624-a599-fa50f96213a6}", 
+  			mapId));
+		reviewItemRecordsToInsert.add(
+  		ReviewUtils.createReviewItemRecord(
+  			"{f6224e55-cfa6-5364-bb78-e482e2d6e1c5}", 
+  			1.0,
+  			"{fde621f3-c915-5f50-b521-49cb75c20337}", 
+  			mapId));
+  	DbUtils.batchRecords(
+  	  mapId, reviewItemRecordsToInsert, reviewItems, null, RecordBatchType.INSERT, conn, 100);
+	}
 }

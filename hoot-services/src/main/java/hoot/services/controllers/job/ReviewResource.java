@@ -84,8 +84,6 @@ public class ReviewResource
   //these params could probably go away.
   public static long testDelayMilliseconds = 0;
   public static boolean simulateFailure = false;
-  //TODO: see #6270
-  public static String reviewRecordWriter = "reviewPrepareDbWriter2";
 
   private ClassPathXmlApplicationContext appContext;
   private PlatformTransactionManager transactionManager;
@@ -168,8 +166,7 @@ public class ReviewResource
       log.debug("Initializing database connection...");
 
       jobId =
-        (new ReviewItemsPreparer(
-           conn, testDelayMilliseconds, simulateFailure, mapId, reviewRecordWriter))
+        (new ReviewItemsPreparer(conn, testDelayMilliseconds, simulateFailure, mapId))
          .prepare(overwriteExistingData);
     }
     catch (Exception e)
@@ -509,9 +506,9 @@ public class ReviewResource
   @Produces(MediaType.APPLICATION_JSON)
   public ReviewReferencesCollection getReviewReferences(
   	@QueryParam("mapId")
-    final long mapId,
+    String mapId,
     @QueryParam("elementUniqueIds")
-    final String elementUniqueIds) 
+    String elementUniqueIds) 
   	throws Exception
   {
   	log.debug("Returning review references...");
@@ -519,8 +516,19 @@ public class ReviewResource
   	Connection conn = DbUtils.createConnection();
   	ReviewReferencesCollection response = new ReviewReferencesCollection();
   	
+  	Map<String, Object> inputParams = new HashMap<String, Object>();
+    inputParams.put("mapId", mapId);
+    inputParams.put("elementUniqueIds", elementUniqueIds);
+    
   	try
   	{
+  		ReviewInputParamsValidator inputParamsValidator = new ReviewInputParamsValidator(inputParams);
+      mapId =
+        (String)inputParamsValidator.validateAndParseInputParam(
+        	"mapId", "", null, null, false, null);
+      elementUniqueIds =
+        (String)inputParamsValidator.validateAndParseInputParam(
+        	"elementUniqueIds", "", null, null, false, null);
   		String[] elementUniqueIdsArr;
   		if (elementUniqueIds.contains(";"))
   		{
@@ -536,7 +544,7 @@ public class ReviewResource
   		{
   			ReviewReferences responseRefs = new ReviewReferences();
   			List<List<ReviewAgainstItem>> references = 
-	  			(new ReviewReferencesRetriever(conn).getReferences(mapId, elementUniqueId));
+	  			(new ReviewReferencesRetriever(conn, mapId)).getReferences(elementUniqueId);
 	  		log.debug(
 	  			"Returning " + references.get(0).size() + " review against items for unique ID: " + 
 	  		  elementUniqueId);
@@ -545,6 +553,7 @@ public class ReviewResource
 	  			"Returning " + references.get(1).size() + " reviewable items for unique ID: " + 
 	  		  elementUniqueId);
 	  		responseRefs.setReviewableItems(references.get(1).toArray(new ReviewAgainstItem[]{}));
+	  		responseRefs.setUniqueId(elementUniqueId);
 	  		responseRefsList.add(responseRefs);
   		}
   		response.setReviewReferences(responseRefsList.toArray(new ReviewReferences[]{}));
@@ -576,9 +585,12 @@ public class ReviewResource
    */
   @PUT
   @Path("/setallreviewed")
-  @Consumes(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.TEXT_PLAIN)
   @Produces(MediaType.TEXT_PLAIN)
-  public Response setAllItemsReviewed(final JSONObject request) throws Exception
+  public Response setAllItemsReviewed(
+		@QueryParam("mapId")
+    String mapId) 
+    throws Exception
   {
   	Connection conn = DbUtils.createConnection();
   	log.debug("Intializing changeset upload transaction...");
@@ -586,10 +598,15 @@ public class ReviewResource
       transactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
     conn.setAutoCommit(false);
-    String mapId = null;
+    Map<String, Object> inputParams = new HashMap<String, Object>();
+    inputParams.put("mapId", mapId);
   	try
   	{
-  		mapId = request.get("mapId").toString();
+  		ReviewInputParamsValidator inputParamsValidator = new ReviewInputParamsValidator(inputParams);
+      mapId =
+        (String)inputParamsValidator.validateAndParseInputParam(
+        	"mapId", "", null, null, false, null);
+      
   	  (new ReviewItemsSynchronizer(conn, mapId)).setAllItemsReviewed();
   		
   		log.debug("Committing set all items reviewed transaction...");
