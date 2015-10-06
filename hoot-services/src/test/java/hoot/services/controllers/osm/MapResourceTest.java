@@ -79,11 +79,6 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.ClientResponse.Status;
 
-/*
- * @todo Most of these tests could be converted to integration tests and after a refactoring,
- * could be replace with unit tests that test only the internal classes being used by this
- * Jersey resource.
- */
 public class MapResourceTest extends OsmResourceTestAbstract
 {
   private static final Logger log = LoggerFactory.getLogger(MapResourceTest.class);

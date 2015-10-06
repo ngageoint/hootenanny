@@ -63,11 +63,6 @@ import com.mysema.query.sql.dml.SQLUpdateClause;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
-/*
- * @todo Most of these tests could be converted to integration tests and after a refactoring,
- * could be replace with unit tests that test only the internal classes being used by this
- * Jersey resource.
- */
 public class ReviewResourcePrepareTest extends OsmResourceTestAbstract
 {
   @SuppressWarnings("unused")
