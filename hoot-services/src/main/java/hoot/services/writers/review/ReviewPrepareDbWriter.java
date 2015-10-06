@@ -920,8 +920,8 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
                 reviewScore = 1.0;
               }
               
-              final String source = StringUtils.trimToNull(tags.get("hoot:review:source"));
-            	assert(source != null);
+              //final String source = StringUtils.trimToNull(tags.get("hoot:review:source"));
+            	//assert(source != null);
               
               //paired item review
               if (tags.containsKey("hoot:review:uuid") && 
@@ -1005,8 +1005,8 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
                       	{*/
                       		log.debug(
                             "Adding review item with reviewable item ID: " +  reviewableItemId + 
-                            ", review against item ID: " + reviewAgainstItemId + ", and source: " + 
-                            source);
+                            ", review against item ID: " + reviewAgainstItemId); //+ ", and source: " + 
+                            //source);
                           reviewRecordsToInsert.add(
                           	ReviewUtils.createReviewItemRecord(
                             	reviewableItemId, reviewScore, reviewAgainstItemId, mapId));
