@@ -344,6 +344,7 @@ hgis20 = {
 //             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
             ["t.building == 'hospital' && !(t.amenity)","t.amenity = 'hospital'; delete t.building"],
             ["t.building == 'school' && !(t.amenity)","t.amenity = 'school'; delete t.building"],
+            ["t.building == 'university' && !(t.amenity)","t.amenity = 'university'; delete t.building"],
             ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
 //             ["t.control_tower && t.man_made == 'tower'","delete t.man_made"],
