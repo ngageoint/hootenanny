@@ -138,34 +138,34 @@ ALTER TYPE public.user_status_enum OWNER TO hoot;
 -- Name: maptile_for_point(bigint, bigint, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION maptile_for_point(bigint, bigint, integer) RETURNS integer
-    LANGUAGE c STRICT
-    AS '/tmp/libpgosm.so', 'maptile_for_point';
+-- CREATE FUNCTION maptile_for_point(bigint, bigint, integer) RETURNS integer
+--    LANGUAGE c STRICT
+--    AS '/tmp/libpgosm.so', 'maptile_for_point';
 
 
-ALTER FUNCTION public.maptile_for_point(bigint, bigint, integer) OWNER TO postgres;
+-- ALTER FUNCTION public.maptile_for_point(bigint, bigint, integer) OWNER TO postgres;
 
 --
 -- Name: tile_for_point(integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION tile_for_point(integer, integer) RETURNS bigint
-    LANGUAGE c STRICT
-    AS '/tmp/libpgosm.so', 'tile_for_point';
+-- CREATE FUNCTION tile_for_point(integer, integer) RETURNS bigint
+--     LANGUAGE c STRICT
+--    AS '/tmp/libpgosm.so', 'tile_for_point';
 
 
-ALTER FUNCTION public.tile_for_point(integer, integer) OWNER TO postgres;
+-- ALTER FUNCTION public.tile_for_point(integer, integer) OWNER TO postgres;
 
 --
 -- Name: xid_to_int4(xid); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION xid_to_int4(xid) RETURNS integer
-    LANGUAGE c STRICT
-    AS '/tmp/libpgosm.so', 'xid_to_int4';
+-- CREATE FUNCTION xid_to_int4(xid) RETURNS integer
+--     LANGUAGE c STRICT
+--    AS '/tmp/libpgosm.so', 'xid_to_int4';
 
 
-ALTER FUNCTION public.xid_to_int4(xid) OWNER TO postgres;
+-- ALTER FUNCTION public.xid_to_int4(xid) OWNER TO postgres;
 
 SET default_tablespace = '';
 
