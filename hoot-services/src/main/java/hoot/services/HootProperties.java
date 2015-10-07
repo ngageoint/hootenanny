@@ -277,14 +277,6 @@ public class HootProperties
     {
       return "false";
     }
-    else if (key.equals("reviewGetReviewScoreThresholdMinimumDefault"))
-    {
-      return "0.5";
-    }
-    else if (key.equals("reviewGetGeospatialBoundsDefault"))
-    {
-      return "-180,-90,180,90";
-    }
     else if (key.equals("testJobStatusPollerTimeout"))
     {
       return "250";

@@ -27,15 +27,12 @@
 package hoot.services.controllers.wps;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.LinkedList;
 import java.util.UUID;
 
 import javax.ws.rs.core.Response.Status;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.deegree.process.jaxb.java.BoundingBoxInputDefinition;
-import org.deegree.process.jaxb.java.LiteralInputDefinition;
 import org.deegree.process.jaxb.java.ProcessDefinition;
 import org.deegree.process.jaxb.java.ProcessDefinition.OutputParameters;
 import org.deegree.services.wps.ProcessExecution;
@@ -57,7 +54,6 @@ import hoot.services.IntegrationTest;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QReviewMap;
 import hoot.services.db2.ReviewMap;
-import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobStatusManager.JOB_STATUS;
 import hoot.services.models.review.ReviewableItemsStatistics;
 import hoot.services.osm.OsmResourceTestAbstract;
@@ -91,33 +87,6 @@ public class ReviewableItemsStatisticsProcessletTest extends OsmResourceTestAbst
     {
       //default data type for a wps input is string, so no extra params needed here for mapId
       allInputs.add(WpsUtils.createLiteralInput("mapId", String.valueOf(mapId)));
-    }
-    if (reviewScoreThresholdMinimum != null)
-    {
-      LiteralInputDefinition inputParamDef = new LiteralInputDefinition();
-      LiteralInputDefinition.DataType dataType = new LiteralInputDefinition.DataType();
-      inputParamDef.setMinOccurs(new BigInteger("0"));
-      inputParamDef.setMaxOccurs(new BigInteger("1"));
-      dataType.setReference("http://www.w3.org/TR/xmlschema-2/#double");
-      inputParamDef.setDataType(dataType);
-      //deegree doesn't have this implemented yet
-      /*AllowedValues allowedValues = new AllowedValues();
-      allowedValues.getValueOrRange().add(0.01);
-      allowedValues.getValueOrRange().add(1.00);
-      inputParamDef.setAllowedValues(allowedValues);*/
-      inputParamDef.setDefaultValue("0.00");
-      allInputs.add(
-        WpsUtils.createLiteralInput(
-          "reviewScoreThresholdMinimum", reviewScoreThresholdMinimum, inputParamDef));
-    }
-    if (geospatialBounds != null)
-    {
-      BoundingBoxInputDefinition inputParamDef = new BoundingBoxInputDefinition();
-      inputParamDef.setMinOccurs(new BigInteger("0"));
-      inputParamDef.setMaxOccurs(new BigInteger("1"));
-      allInputs.add(
-        WpsUtils.createBoundingBoxInput(
-          "geospatialBounds", new BoundingBox(geospatialBounds), inputParamDef));
     }
 
     ProcessletInputs in = new ProcessletInputs(allInputs);
@@ -153,50 +122,6 @@ public class ReviewableItemsStatisticsProcessletTest extends OsmResourceTestAbst
     Assert.assertEquals(mapId, response.getMapId());
     Assert.assertEquals(54, response.getNumTotalItems());
     Assert.assertEquals(11, response.getNumReviewableItems());
-    Assert.assertEquals(3, response.getNumReviewedItems());
-  }
-
-  @Test
-  @Category(IntegrationTest.class)
-  public void testGetWithScoreMin() throws Exception
-  {
-    ReviewTestUtils.createPreparedData(resource());
-    ReviewTestUtils.markSomeItemsReviewed();
-
-    final ProcessletOutputs out = execGet(String.valueOf(mapId), "0.928", null);
-
-    final String responseStr =
-      ((LiteralOutputImpl)out.getParameter("reviewableItemsStatistics")).getValue();
-    Assert.assertNotNull(responseStr);
-    final ReviewableItemsStatistics response =
-      (new ObjectMapper()).readValue(responseStr, ReviewableItemsStatistics.class);
-
-    Assert.assertEquals(mapId, response.getMapId());
-    Assert.assertEquals(54, response.getNumTotalItems());
-    Assert.assertEquals(4, response.getNumReviewableItems());
-    Assert.assertEquals(3, response.getNumReviewedItems());
-  }
-
-  @Test
-  @Category(IntegrationTest.class)
-  public void testGetByBounds() throws Exception
-  {
-    final BoundingBox queryBounds = ReviewTestUtils.createTestQueryBounds();
-    ReviewTestUtils.createPreparedData(resource());
-    ReviewTestUtils.markSomeItemsReviewed();
-
-    final ProcessletOutputs out =
-      execGet(String.valueOf(mapId),null, queryBounds.toServicesString());
-
-    final String responseStr =
-      ((LiteralOutputImpl)out.getParameter("reviewableItemsStatistics")).getValue();
-    Assert.assertNotNull(responseStr);
-    final ReviewableItemsStatistics response =
-      (new ObjectMapper()).readValue(responseStr, ReviewableItemsStatistics.class);
-
-    Assert.assertEquals(mapId, response.getMapId());
-    Assert.assertEquals(54, response.getNumTotalItems());
-    Assert.assertEquals(5, response.getNumReviewableItems());
     Assert.assertEquals(3, response.getNumReviewedItems());
   }
 
@@ -351,102 +276,6 @@ public class ReviewableItemsStatisticsProcessletTest extends OsmResourceTestAbst
     catch (ProcessletException e)
     {
       Assert.assertTrue(e.getOWSException().getMessage().contains("Invalid input parameter"));
-      Assert.assertTrue(
-        e.getOWSException().getExceptionCode().contains(
-          Status.BAD_REQUEST.getStatusCode() + ": " + Status.BAD_REQUEST.getReasonPhrase()));
-      throw e;
-    }
-  }
-
-  @Test(expected=ProcessletException.class)
-  @Category(IntegrationTest.class)
-  public void testGetEmptyReviewScoreMinParam() throws Exception
-  {
-    try
-    {
-      execGet(String.valueOf(mapId), "", null);
-    }
-    catch (ProcessletException e)
-    {
-      Assert.assertTrue(e.getOWSException().getMessage().contains("Invalid input parameter"));
-      Assert.assertTrue(
-        e.getOWSException().getExceptionCode().contains(
-          Status.BAD_REQUEST.getStatusCode() + ": " + Status.BAD_REQUEST.getReasonPhrase()));
-      throw e;
-    }
-  }
-
-  @Test(expected=ProcessletException.class)
-  @Category(IntegrationTest.class)
-  public void testGetInvalidReviewScoreMinParam() throws Exception
-  {
-    try
-    {
-      execGet(String.valueOf(mapId), "abc", null);
-    }
-    catch (ProcessletException e)
-    {
-      Assert.assertTrue(e.getOWSException().getMessage().contains("Invalid input parameter"));
-      Assert.assertTrue(
-        e.getOWSException().getExceptionCode().contains(
-          Status.BAD_REQUEST.getStatusCode() + ": " + Status.BAD_REQUEST.getReasonPhrase()));
-      throw e;
-    }
-  }
-
-  @Test(expected=ProcessletException.class)
-  @Category(IntegrationTest.class)
-  public void testGetReviewScoreMinParamOutOfRange() throws Exception
-  {
-    try
-    {
-      execGet(String.valueOf(mapId), "1.01", null);
-    }
-    catch (ProcessletException e)
-    {
-      Assert.assertTrue(e.getOWSException().getMessage().contains("out of the allowable range"));
-      Assert.assertTrue(
-        e.getOWSException().getExceptionCode().contains(
-          Status.BAD_REQUEST.getStatusCode() + ": " + Status.BAD_REQUEST.getReasonPhrase()));
-      throw e;
-    }
-  }
-
-  /*
-   * This is a little strange b/c we're catching this from the method that prepares the exec call.
-     This should reflect reality, though, b/c the exec call simulates how the processlet is actually
-     called in real operation.
-   */
-  @Test(expected=NumberFormatException.class)
-  @Category(IntegrationTest.class)
-  public void testGetEmptyBoundsParam() throws Exception
-  {
-    try
-    {
-      execGet(String.valueOf(mapId), null, "");
-    }
-    catch (ProcessletException e)
-    {
-      Assert.assertTrue(e.getOWSException().getMessage().contains("Invalid input parameter"));
-      Assert.assertTrue(
-        e.getOWSException().getExceptionCode().contains(
-          Status.BAD_REQUEST.getStatusCode() + ": " + Status.BAD_REQUEST.getReasonPhrase()));
-      throw e;
-    }
-  }
-
-  @Test(expected=Exception.class)
-  @Category(IntegrationTest.class)
-  public void testGetInvalidBoundsParam() throws Exception
-  {
-    try
-    {
-      execGet(
-        String.valueOf(mapId), null, "-181,-90,180,90");
-    }
-    catch (ProcessletException e)
-    {
-      Assert.assertTrue(e.getOWSException().getMessage().contains("Invalid minimum longitude value"));
       Assert.assertTrue(
         e.getOWSException().getExceptionCode().contains(
           Status.BAD_REQUEST.getStatusCode() + ": " + Status.BAD_REQUEST.getReasonPhrase()));

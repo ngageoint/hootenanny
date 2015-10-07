@@ -198,20 +198,12 @@ public class ReviewResource
 	 * 	<mapId>
 	 * 	string; required; ID string or unique name of the map associated with the reviewable conflated data
 	 * 	</mapId>
-	 *  <reviewScoreThresholdMinimum>
-	 *   double; optional; items with a review score lower than this threshold will not be included in the returned statistics; defaults to 0.0
-	 *  </reviewScoreThresholdMinimum>
-	 *  <geospatialBounds>
-	 *  string (WPS GET, Jersey); OWS BoundingBox (WPS POST); optional; OSM geospatial bounds
-	 *  to search for reviewable and reviewed data within; the format is minLon,minLat,maxLon,maxLat;
-	 *  optional; default bounds = world; only coordinate system EPSG:4326 will be supported initially
-	 *  </geospatialBounds>
 	 * </PARAMETERS>
 	 * <OUTPUT>
 	 * 	a set of reviewable item statistics
 	 * </OUTPUT>
 	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/statistics?mapId=1&reviewScoreThresholdMinimum=0.8&geospatialBounds=-77.09655761718749,38.89958342598271,-77.09106445312499,38.90385833966776</URL>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/statistics?mapId=1</URL>
 	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
 	 * 	<INPUT>
 	 *	</INPUT>
@@ -227,10 +219,6 @@ public class ReviewResource
    *
    *
    * @param mapId ID of the map to retrieve review statistics for
-   * @param reviewScoreThresholdMinimum for the reviewable items used to calculate the review
-   * statistics, the minimum review score the items should have
-   * @param geospatialBounds for the reviewable items used to calculate the review
-   * statistics, the geospatial bounding box the items should reside in
    * @return a set of reviewable item statistics
    * @throws Exception
    */
@@ -240,13 +228,7 @@ public class ReviewResource
   @Produces(MediaType.APPLICATION_JSON)
   public ReviewableItemsStatistics getReviewableItemsStatistics(
     @QueryParam("mapId")
-    String mapId,
-    @DefaultValue("0.0")
-    @QueryParam("reviewScoreThresholdMinimum")
-    double reviewScoreThresholdMinimum,
-    @DefaultValue("-180,-90,180,90")
-    @QueryParam("geospatialBounds")
-    String geospatialBounds)
+    String mapId)
     throws Exception
   {
   	log.debug("Initializing database connection...");
@@ -257,36 +239,13 @@ public class ReviewResource
     {
       Map<String, Object> inputParams = new HashMap<String, Object>();
       inputParams.put("mapId", mapId);
-      inputParams.put("reviewScoreThresholdMinimum", reviewScoreThresholdMinimum);
-      inputParams.put("geospatialBounds", geospatialBounds);
       ReviewInputParamsValidator inputParamsValidator = new ReviewInputParamsValidator(inputParams);
       mapId =
         (String)inputParamsValidator.validateAndParseInputParam("mapId", "", null, null, false, null);
-      reviewScoreThresholdMinimum =
-        (Double)inputParamsValidator.validateAndParseInputParam(
-          "reviewScoreThresholdMinimum",
-          new Double(0.0),
-          new Double(0.0),
-          new Double(1.0),
-          true,
-          Double.parseDouble(
-            HootProperties.getInstance().getProperty(
-              "reviewGetReviewScoreThresholdMinimumDefault",
-              HootProperties.getDefault("reviewGetReviewScoreThresholdMinimumDefault"))));
-      final BoundingBox geospatialBoundsObj =
-        (BoundingBox)inputParamsValidator.validateAndParseInputParam(
-          "geospatialBounds",
-          "",
-          null,
-          null,
-          true,
-          HootProperties.getInstance().getProperty(
-            "reviewGetGeospatialBoundsDefault",
-            HootProperties.getDefault("reviewGetGeospatialBoundsDefault")));
-
-      stats =
-        (new ReviewableItemsStatisticsCalculator(conn, mapId, true)).getStatistics(
-          reviewScoreThresholdMinimum, geospatialBoundsObj);
+      
+      stats = 
+      	(new ReviewableItemsStatisticsCalculator(conn, mapId, true)).getStatistics(
+      		0.0, BoundingBox.worldBounds());
       
       ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
 
