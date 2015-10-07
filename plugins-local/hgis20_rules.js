@@ -1654,7 +1654,7 @@ hgis20.rules = {
      ['religion$TYPE2','Sahajdharis','denomination','sahajdharis'],
      ['religion$TYPE2','Keshadharis','denomination','keshadharis'],
 
-     ['religioni$TYPE','Church','church','church'],
+     ['religioni$TYPE','Church','building','church'],
      ['religioni$TYPE','Mosque','building','mosque'],
      ['religioni$TYPE','Mission','building','mission'],
      ['religioni$TYPE','Youth Center','building','youth_center'],

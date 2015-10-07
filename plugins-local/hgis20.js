@@ -342,6 +342,7 @@ hgis20 = {
             var rulesList = [
 //             ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] == 'bus'"],
 //             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            ["t.building == 'hospital' && !(t.amenity)","t.amenity = 'hospital'; delete t.building"],
             ["t.building == 'school' && !(t.amenity)","t.amenity = 'school'; delete t.building"],
             ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
