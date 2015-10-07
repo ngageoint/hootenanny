@@ -211,8 +211,6 @@ include::wpsDocs/ReportsDeleteReportProcesslet.asciidoc[]
 === Hootenanny WPS Services - Review Items
 
 :leveloffset: 2
-include::wpsDocs/GetReviewableItemsProcesslet.asciidoc[]
-include::wpsDocs/MarkItemsReviewedProcesslet.asciidoc[]
 include::wpsDocs/PrepareItemsForReviewProcesslet.asciidoc[]
 include::wpsDocs/ReviewableItemsStatisticsProcesslet.asciidoc[]
 :leveloffset: 0
