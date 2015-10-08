@@ -223,6 +223,8 @@ public:
     VertexId vid2 = createOrGetVertex(name2);
     EdgeId result = add_edge(vid1, vid2, isA, _graph).first;
 
+    _parents[vid1] = vid2;
+
     return result;
   }
 
@@ -322,22 +324,22 @@ public:
     v.name = "highway=primary";
     v.value = "primary";
     VertexId highwayPrimary = _addVertex(v);
-    add_edge(highwayPrimary, highwayRoad, isA, _graph);
+    addIsA("highway=primary", "highway=road");
 
     v.name = "highway=secondary";
     v.value = "secondary";
     VertexId highwaySecondary = _addVertex(v);
-    add_edge(highwaySecondary, highwayRoad, isA, _graph);
+    addIsA("highway=secondary", "highway=road");
 
     v.name = "highway=residential";
     v.value = "residential";
     VertexId highwayResidential = _addVertex(v);
-    add_edge(highwayResidential, highwayRoad, isA, _graph);
+    addIsA("highway=residential", "highway=road");
 
     v.name = "highway=service";
     v.value = "service";
     VertexId highwayService = _addVertex(v);
-    add_edge(highwayService, highwayRoad, isA, _graph);
+    addIsA("highway=service", "highway=road");
 
     TagEdge similarTo;
     similarTo.similarToWeight = 0.8;
@@ -369,7 +371,7 @@ public:
     v.key = "name";
     v.name = "name";
     VertexId name = _addVertex(v);
-    add_edge(name, abstract_name, isA, _graph);
+    addIsA("name", "abstract_name");
 
     ////
     // create a match all type
@@ -386,27 +388,28 @@ public:
     v.name = "poi=yes";
     v.categories = QStringList("poi");
     VertexId poiYes = _addVertex(v);
-    add_edge(poiYes, poi, isA, _graph);
+    addIsA("poi=yes", "poi");
 
     v.key = "leisure";
     v.value = "";
     v.name = "leisure";
     VertexId leisure = _addVertex(v);
     add_edge(leisure, poiYes, isA, _graph);
+    addIsA("leisure", "poi=yes");
 
     v.key = "leisure";
     v.value = "*";
     v.name = "leisure=*";
     v.geometries = OsmGeometries::Node | OsmGeometries::Area;
-    VertexId leisureStar = _addVertex(v);
-    add_edge(leisureStar, poiYes, isA, _graph);
+    _addVertex(v);
+    addIsA("leisure=*", "poi=yes");
 
     v.key = "leisure";
     v.value = "track";
     v.name = "leisure=track";
     v.geometries = OsmGeometries::Node | OsmGeometries::Way;
-    VertexId leisureTrack = _addVertex(v);
-    add_edge(leisureTrack, leisureStar, isA, _graph);
+    _addVertex(v);
+    addIsA("leisure=track", "leisure=*");
   }
 
   VertexId createOrGetVertex(const QString& str)
@@ -814,6 +817,7 @@ private:
   HashSet<VertexId> _processed;
   HashMap< pair<VertexId, VertexId>, double> _cachedScores;
   HashMap<AverageKey, AverageResult> _cachedAverages;
+  HashMap<VertexId, VertexId> _parents;
   QList< pair<QRegExp, VertexId> > _regexKeys;
   HashMap< pair<VertexId, VertexId>, bool > _isAncestorCache;
   typedef HashMap< VertexId, vector< pair< VertexId, double > > > VertexToScoreCache;
@@ -972,19 +976,10 @@ private:
   {
     VertexId result = numeric_limits<VertexId>::max();
 
-    graph_traits < TagGraph >::edge_iterator ei, eend;
-    for (boost::tie(ei, eend) = edges(_graph); ei != eend; ++ei)
+    HashMap<VertexId, VertexId>::const_iterator it = _parents.find(child);
+    if (it != _parents.end())
     {
-      VertexId thisChild = source(*ei, _graph);
-      if (thisChild == child && _graph[*ei].type == IsA)
-      {
-        if (_isValid(result))
-        {
-          throw HootException(QString("Multiple inheritance is not supported. (%1)").
-                              arg(_graph[child].name));
-        }
-        result = target(*ei, _graph);
-      }
+      result = it->second;
     }
 
     return result;

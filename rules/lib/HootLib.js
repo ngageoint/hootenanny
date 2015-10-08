@@ -94,24 +94,42 @@ function getTagsByCategory(category, d) {
     return result;
 }
 
+// maintain a cache of diff classes
+var tagAncestorDiffs = {};
+
 /**
  * Given a common kvp, find the distance between the tags in e1 and e2 where common exists
  * between them.
  */
 function getTagAncestorDistance(ancestorKvp, map, e1, e2) {
-    var differ = new hoot.TagAncestorDifferencer(
-        {"tag.ancestor.differencer.name":ancestorKvp});
+    var differ;
+    if (ancestorKvp in tagAncestorDiffs == false) {
+        differ = new hoot.TagAncestorDifferencer(
+            {"tag.ancestor.differencer.name":ancestorKvp});
+        tagAncestorDiffs[ancestorKvp] = differ;
+    } else {
+        differ = tagAncestorDiffs[ancestorKvp];
+    }
 
     return differ.diff(map, e1, e2);
 }
+
+// maintain a cache of diff classes
+var tagCategoryDiffs = {};
 
 /**
  * Given a common kvp, find the distance between the tags in e1 and e2 where common exists
  * between them.
  */
 function getTagCategoryDistance(category, map, e1, e2) {
-    var differ = new hoot.TagCategoryDifferencer(
-        {"tag.category.differencer.name":category});
+    var differ;
+    if (category in tagCategoryDiffs == false) {
+        differ = new hoot.TagCategoryDifferencer(
+            {"tag.category.differencer.name":category});
+        tagCategoryDiffs[category] = differ;
+    } else {
+        differ = tagCategoryDiffs[category];
+    }
 
     return differ.diff(map, e1, e2);
 }
