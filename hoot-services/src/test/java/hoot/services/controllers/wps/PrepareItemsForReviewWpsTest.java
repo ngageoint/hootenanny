@@ -59,8 +59,6 @@ public class PrepareItemsForReviewWpsTest extends WpsTestAbstract
     super("hoot.services.controllers.job");
     
     processId = "PrepareItemsForReview";
-    //TODO: see #6270
-    PrepareItemsForReviewProcesslet.reviewRecordWriter = "reviewPrepareDbWriter";
   }
   
   //WPS specifies that both GET and POST be supported, even when one or the other doesn't make

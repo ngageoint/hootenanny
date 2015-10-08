@@ -32,6 +32,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -79,28 +81,31 @@ import hoot.services.review.ReviewUtils;
 
 /**
  * Writes review data to the services database
+ * 
+ * Assumes that data is always prepared once and once only, so doesn't check to see if any existing
+ * reviews are already in the database before parsing new ones.
  */
 public class ReviewPrepareDbWriter extends DbClientAbstract implements Executable
 {
-	private static final Logger log = 
-		LoggerFactory.getLogger(ReviewPrepareDbWriter.class);
-	protected static final QReviewMap reviewMap = QReviewMap.reviewMap;
-	protected static final QReviewItems reviewItems = QReviewItems.reviewItems;
-	protected static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
-	protected Connection conn;
+	private static final Logger log = LoggerFactory.getLogger(ReviewPrepareDbWriter.class);
+	private static final QReviewMap reviewMap = QReviewMap.reviewMap;
+	private static final QReviewItems reviewItems = QReviewItems.reviewItems;
+	private static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
+	private Connection conn;
 
+	private int maxWarningsDisplayed = 10;
+	private int warnMessagesDisplayed = 0;
+	
 	private long mapId;
-	protected long uniqueIdsParsed = 0;
-	protected boolean idMappingRecordWritten = false;
-	protected long reviewRecordsParsed = 0;
-	protected boolean reviewRecordWritten = false;
+	private long uniqueIdsParsed = 0;
+	private boolean idMappingRecordWritten = false;
+	private long reviewRecordsParsed = 0;
+	private boolean reviewRecordWritten = false;
 	private long totalParseableRecords = 0;
 	private long totalReviewableRecords = 0;
-	protected int maxRecordSelectSize;
-	protected int maxRecordBatchSize;
-	protected ListMultimap<String, String> previouslyReviewedItemIdToReviewAgainstItemIds;
-	protected ListMultimap<String, String> reviewableItemIdToReviewAgainstItemIds;
-	protected boolean checkForElementIdMappingPerReviewRecordWrite = false;
+	private int maxRecordBatchSize;
+	private boolean cleanReviewTags = true;
+	private ListMultimap<String, String> reviewableItemIdToReviewAgainstItemIds;
 
 	private String finalStatusDetail;
 
@@ -112,33 +117,32 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 	public ReviewPrepareDbWriter() throws Exception
 	{
 		super();
-		maxRecordSelectSize = 
-			Integer.parseInt(
-				HootProperties.getInstance()
-		      .getProperty("maxRecordSelectSize", HootProperties.getDefault("maxRecordSelectSize")));
+
 		maxRecordBatchSize = 
 			Integer.parseInt(
 				HootProperties.getInstance()
 		      .getProperty("maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
-		checkForElementIdMappingPerReviewRecordWrite = 
+		maxWarningsDisplayed = 
+			Integer.parseInt(
+				HootProperties.getInstance()
+		      .getProperty("maxWarningsDisplayed", HootProperties.getDefault("maxWarningsDisplayed")));
+		cleanReviewTags = 
 			Boolean.parseBoolean(
 				HootProperties.getInstance()
-		      .getProperty(
-		      	"checkForElementIdMappingPerReviewRecordWrite", 
-		    		HootProperties.getDefault("checkForElementIdMappingPerReviewRecordWrite")));
+		      .getProperty("cleanReviewTags", HootProperties.getDefault("cleanReviewTags")));
 	}
 
 	/**
 	 * See CoreServiceContext.xml
 	 */
-	public void init()
+	public void init() // NO_UCD (unused code)
 	{
 	}
 
 	/**
 	 * See CoreServiceContext.xml
 	 */
-	public void destroy()
+	public void destroy() // NO_UCD (unused code)
 	{
 	}
 
@@ -237,7 +241,6 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 				if (totalReviewableRecords > 0)
 				{
 					totalParseableRecords = getTotalParseableRecords(mapId);
-					getPreviouslyReviewedRecords();
 					final boolean uuidsExist = parseElementUniqueIdTags(mapId);
 					if (!uuidsExist)
 					{
@@ -354,27 +357,6 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		}
 	}
 
-	private void getPreviouslyReviewedRecords()
-	{
-		// TODO: make this a batched query
-		SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration(mapId));
-
-		final List<ReviewItems> reviewedItems = query
-		    .from(reviewItems)
-		    .where(
-		      reviewItems.mapId.eq(mapId)
-		        .and(reviewItems.reviewStatus.eq(DbUtils.review_status_enum.reviewed)))
-		    .list(reviewItems);
-
-		previouslyReviewedItemIdToReviewAgainstItemIds = ArrayListMultimap.create();
-		for (ReviewItems reviewedItem : reviewedItems)
-		{
-			previouslyReviewedItemIdToReviewAgainstItemIds.put(
-			  reviewedItem.getReviewableItemId(),
-			  reviewedItem.getReviewAgainstItemId());
-		}
-	}
-
 	private long getTotalParseableRecords(final long mapId)
 	  throws InstantiationException, IllegalAccessException, ClassNotFoundException, 
 	  NoSuchMethodException, Exception
@@ -469,7 +451,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		return count;
 	}
 
-	protected Map<Long, Object> getParseableElementRecords(final long mapId,
+	private Map<Long, Object> getParseableElementRecords(final long mapId,
 	  final ElementType elementType, final int limit, final int offset)
 	  throws InstantiationException, IllegalAccessException, ClassNotFoundException, 
 	  NoSuchMethodException, InvocationTargetException, SQLException
@@ -556,9 +538,10 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		return retMap;
 	}
 
-	protected Map<Long, Object> getReviewableElementRecords(final long mapId,
+	private Map<Long, Object> getReviewableElementRecords(final long mapId,
 	  final ElementType elementType, final int limit, final int offset) throws InstantiationException, 
-	  IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, SQLException
+	  IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, 
+	  SQLException
 	{
 		Map<Long, Object> retMap = new LinkedHashMap<Long, Object>();
 		final Element prototype = 
@@ -582,48 +565,11 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 
-		  //TODO: change back to original element generic code
 			while (rs.next())
 			{
-				if (elementType == ElementType.Node)
-				{
-					CurrentNodes nodes = new CurrentNodes();
-					nodes.setId(rs.getLong("id"));
-
-					nodes.setLatitude(rs.getDouble("latitude"));
-					nodes.setLongitude(rs.getDouble("longitude"));
-					nodes.setChangesetId(rs.getLong("changeset_id"));
-					nodes.setVisible(rs.getBoolean("visible"));
-					nodes.setTimestamp(rs.getTimestamp("timestamp"));
-					nodes.setTile(rs.getLong("tile"));
-					nodes.setVersion(rs.getLong("version"));
-					nodes.setTags(rs.getObject("tags"));
-					retMap.put(nodes.getId(), nodes);
-				}
-				else if (elementType == ElementType.Way)
-				{
-					CurrentWays ways = new CurrentWays();
-					ways.setId(rs.getLong("id"));
-
-					ways.setChangesetId(rs.getLong("changeset_id"));
-					ways.setVisible(rs.getBoolean("visible"));
-					ways.setTimestamp(rs.getTimestamp("timestamp"));
-					ways.setVersion(rs.getLong("version"));
-					ways.setTags(rs.getObject("tags"));
-					retMap.put(ways.getId(), ways);
-				}
-				else if (elementType == ElementType.Relation)
-				{
-					CurrentRelations rel = new CurrentRelations();
-					rel.setId(rs.getLong("id"));
-
-					rel.setChangesetId(rs.getLong("changeset_id"));
-					rel.setVisible(rs.getBoolean("visible"));
-					rel.setTimestamp(rs.getTimestamp("timestamp"));
-					rel.setVersion(rs.getLong("version"));
-					rel.setTags(rs.getObject("tags"));
-					retMap.put(rel.getId(), rel);
-				}
+				final Object obj = DbUtils.resultToObj(rs, elementType);
+				final long id = (Long)MethodUtils.invokeMethod(obj, "getId", new Object[]{});
+				retMap.put(id, obj);
 			}
 			rs.close();
 		}
@@ -643,95 +589,605 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 
 		return retMap;
 	}
-
+	
 	/*
-	 * logging records with invalid uuIDs and skipping; if errors should be
-	 * thrown, then the unit tests will have to reworked
-	 */
-	protected boolean parseElementUniqueIdTags(final long mapId) throws Exception
+   * Extract all unique ID's from both reviewable and review against items referenced in the
+   * recordset
+   */
+  private Set<String> parseAllUuidsFromElementRecords(final Map<Long, Object> elementRecords) 
+  	throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, Exception
 	{
-		final String logMsgStart = 
-			"Parsing element unique ID tags for map with ID: " + mapId + ".  Step 2 of 4.";
-		log.info(logMsgStart);
-
-		uniqueIdsParsed = 0;
-		idMappingRecordWritten = false;
-		List<ElementIdMappings> elementIdMappingRecordsToInsert = new ArrayList<ElementIdMappings>();
-		// create this outside of the batch read loop, since we need to maintain a
-		// list of unique IDs parsed over the entire map's set of reviewable records
-		Set<String> elementIds = new HashSet<String>();
-		for (ElementType elementType : ElementType.values())
-		{
-			if (!elementType.equals(ElementType.Changeset))
-			{
-				int numElementsReturned = Integer.MAX_VALUE;
-				int elementIndex = 0;
-				while (numElementsReturned > 0)
-				{
-					// get all reviewable elements
-					final Map<Long, Object> reviewableElementRecords = 
-						getParseableElementRecords(mapId, elementType, maxRecordSelectSize, elementIndex);
-					numElementsReturned = reviewableElementRecords.size();
-					elementIndex += numElementsReturned;
-					for (Map.Entry<Long, Object> reviewableElementRecordEntry : reviewableElementRecords.entrySet())
-					{
-						final long osmElementId = reviewableElementRecordEntry.getKey();
-						final Object reviewableElementRecord = reviewableElementRecordEntry
-						    .getValue();
-						final Map<String, String> tags = 
-							PostgresUtils.postgresObjToHStore(
-							  (PGobject) MethodUtils.invokeMethod(reviewableElementRecord, "getTags", new Object[] {}));
-						String uniqueElementId = StringUtils.trimToNull(tags.get("uuid"));
-						if (uniqueElementId == null)
-						{
-							log.warn(
-								"Invalid UUID: " + uniqueElementId + " for map with ID: " + mapId + 
-								".  Skipping adding unique ID record...");
-						}
-						// TODO: make this a batch query somehow
-						else if (new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-						           .from(elementIdMappings)
-						           .where(elementIdMappings.mapId.eq(mapId)
-						             .and(elementIdMappings.elementId.eq(uniqueElementId)))
-						           .count() > 0)
-						{
-							log.debug(
-								"UUID: " + uniqueElementId + " for map with ID: " + mapId + " already exists.  " +
-							  "Skipping adding unique ID record...");
-						}
-						else
-						{
-							if (elementIds.add(uniqueElementId)) // don't add duplicates
-							{
-								log.debug("Adding UUID: " + uniqueElementId);
-								elementIdMappingRecordsToInsert
-								  .add(
-								  	ReviewUtils.createElementIdMappingRecord(
-								  		uniqueElementId, osmElementId, elementType, mapId));
-								flushIdMappingRecords(
-								  elementIdMappingRecordsToInsert, maxRecordBatchSize, logMsgStart);
-							}
-							else
-							{
-								log.debug(
-								  "Duplicate element ID: " + uniqueElementId.toString() + " for map with ID: " + 
-								  mapId + ".  Skipping adding unique ID record...");
-							}
-						}
-					}
-				}
-			}
-		}
-
-		// final flush
-		flushIdMappingRecords(elementIdMappingRecordsToInsert, 0, logMsgStart);
-
-		log.debug("Wrote " + elementIds.size() + " ID mappings.");
-
-		return idMappingRecordWritten;
+  	Set<String> allUuids = new HashSet<String>();
+  	for (Map.Entry<Long, Object> elementRecordEntry : elementRecords.entrySet())
+    {
+      final Object elementRecord = elementRecordEntry.getValue();
+      final Map<String, String> tags =
+        PostgresUtils.postgresObjToHStore(
+      	  (PGobject)MethodUtils.invokeMethod(elementRecord, "getTags", new Object[]{}));
+      assert(tags != null);
+      final String reviewableItemId = StringUtils.trimToNull(tags.get("uuid"));
+      if (reviewableItemId != null)
+      {
+      	allUuids.add(reviewableItemId);
+      }
+      
+      final String itemsToReviewAgainstStr = StringUtils.trimToNull(tags.get("hoot:review:uuid"));
+      if (itemsToReviewAgainstStr != null)
+      {
+      	String[] reviewAgainstItemIds = null;
+        //see related note in parseElementReviewTags
+        if (!itemsToReviewAgainstStr.contains(";"))
+        {
+          reviewAgainstItemIds = new String[] { itemsToReviewAgainstStr };
+        }
+        else
+        {
+          reviewAgainstItemIds = itemsToReviewAgainstStr.split(";");
+        }
+        for (int i = 0; i < reviewAgainstItemIds.length; i++)
+        {
+        	final String id = reviewAgainstItemIds[i];
+        	if (id != null)
+        	{
+        		allUuids.add(id);
+        	}
+        }
+      }
+    }
+  	return allUuids;
 	}
 
-	protected void flushIdMappingRecords(List<ElementIdMappings> elementIdMappingRecordsToInsert,
+  /*
+   * logging records with invalid uuids and skipping; if errors should be thrown, then the
+   * unit tests will have to reworked
+   */
+  private boolean parseElementUniqueIdTags(final long mapId) throws Exception
+  {
+    final String logMsgStart =
+      "Parsing element unique ID tags for map with ID: " + mapId + ".  Step 2 of 4.";
+    log.info(logMsgStart);
+
+    uniqueIdsParsed = 0;
+    idMappingRecordWritten = false;
+    List<ElementIdMappings> elementIdMappingRecordsToInsert = new ArrayList<ElementIdMappings>();
+    //create this outside of the batch read loop, since we need to maintain a list of unique
+    //IDs parsed over the entire map's set of reviewable records
+    Set<String> elementIds = new HashSet<String>();
+
+    for (ElementType elementType : ElementType.values())
+    {
+      if (!elementType.equals(ElementType.Changeset))
+      {
+        int numElementsReturned = Integer.MAX_VALUE;
+        int elementIndex = 0;
+        while (numElementsReturned > 0)
+        {
+          //get all elements with with a uuid tag
+          final Map<Long, Object> parseableElementRecords =
+            getParseableElementRecords(mapId, elementType, maxRecordBatchSize, elementIndex);
+          
+          final Set<String> allUuids = parseAllUuidsFromElementRecords(parseableElementRecords);
+          Set<String> existingIdMappings = null;
+          if (allUuids.size() > 0)
+          {
+          	log.debug("allUuids length: " + allUuids.size());
+            existingIdMappings =  
+            	Element.filterOutNonExistingElementMappingUniqueIds(
+          			mapId, allUuids.toArray(new String[]{}), elementType, conn);
+            log.debug("existingIdMappings length: " + existingIdMappings.size());
+          }
+          
+          numElementsReturned = parseableElementRecords.size();
+          elementIndex += numElementsReturned;
+          
+          for (Map.Entry<Long, Object> parseableElementRecordEntry :
+          	   parseableElementRecords.entrySet())
+          {
+            final long osmElementId = parseableElementRecordEntry.getKey();
+            final Object reviewableElementRecord = parseableElementRecordEntry.getValue();
+            final Map<String, String> tags =
+              PostgresUtils.postgresObjToHStore(
+              	(PGobject)MethodUtils.invokeMethod(
+              		reviewableElementRecord, "getTags", new Object[]{}));
+            final String uniqueElementIdStr = StringUtils.trimToNull(tags.get("uuid"));
+            
+            if (uniqueElementIdStr == null)
+            {
+            	final String msg = 
+            		"Null or empty UUID for map with ID: " + mapId +
+                " and OSM record with ID: " + osmElementId + ".  Skipping adding unique ID record...";
+            	if (warnMessagesDisplayed <= maxWarningsDisplayed)
+            	{
+            		log.warn(msg);
+            		warnMessagesDisplayed++;
+            	}
+            	else
+            	{
+            		log.debug(msg);
+            	}
+            }
+            else
+            {
+            	//There actually can be more than one unique element ID for the same element, which is
+          		//counter-intuitive.  This is b/c we store element ID's by both breaking up 
+            	//concatenated uuid's and storing them whole.  This may not be the best way to handle 
+            	//storing the unique element ID's, but was necessary to avoid the client sending ID's 
+            	//from reviews that the server knew nothing about.  This shouldn't, however, result 
+            	//in any duplicated review records, since we don't break up ID's in the same way when
+            	//writing them.  
+            	List<String> uniqueElementIds = new ArrayList<String>();
+          		uniqueElementIds.add(uniqueElementIdStr);
+              if (uniqueElementIdStr.contains(";"))
+              {
+                String[] uniqueElementIdsArr = uniqueElementIdStr.split(";");
+                for (String id : uniqueElementIdsArr)
+                {
+                	uniqueElementIds.add(id);
+                }
+              }
+                
+              for (String uniqueElementId : uniqueElementIds)
+              {
+                if (existingIdMappings.contains(uniqueElementId))
+                {
+                	final String msg = 
+                		"UUID: " + uniqueElementId + " for map with ID: " + mapId + 
+                    " and OSM record ID: " + osmElementId + " already exists.  " +
+                    "Skipping adding unique ID record...";
+                	if (warnMessagesDisplayed <= maxWarningsDisplayed)
+                	{
+                		log.warn(msg);
+                		warnMessagesDisplayed++;
+                	}
+                	else
+                	{
+                		log.debug(msg);
+                	}
+                }
+                else
+                {
+                  if (elementIds.add(uniqueElementId))  //don't add duplicates
+                  {
+                    log.debug("Adding UUID: " + uniqueElementId);
+                    elementIdMappingRecordsToInsert.add(
+                      ReviewUtils.createElementIdMappingRecord(
+                      	uniqueElementId, osmElementId, elementType, mapId));
+                    flushIdMappingRecords(
+                      elementIdMappingRecordsToInsert, maxRecordBatchSize, logMsgStart);
+                  }
+                  else
+                  {
+                    log.debug(
+                      "Duplicate element ID: " + uniqueElementId.toString() + " for map with ID: " +
+                      mapId + ".  Skipping adding unique ID record...");
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    //final flush
+    flushIdMappingRecords(elementIdMappingRecordsToInsert, 0, logMsgStart);
+
+    log.debug("Wrote " + elementIds.size() + " ID mappings.");
+
+    return idMappingRecordWritten;
+  }
+  
+  /*
+   * find all elements who have a hoot:review:uuid tag id which doesn't correspond to the uuid
+   * of any existing element and remove that uuid from the tag so that the invalid uuid isn't passed
+   * back in via a changeset at a later time
+   */
+  private void removeInvalidReviewAgainstTagsFromElements(final ElementType elementType, 
+  	final Set<String> invalidUuids) throws Exception
+  {
+  	if (invalidUuids.size() > 0)
+  	{
+  		/*if (invalidUuids.contains("{8f23026f-27c1-5e03-8ae4-0d229d996c9b}"))
+  		{
+  			int test = 1;
+  		}*/
+  		
+  		final Element prototype = ElementFactory.getInstance().create(mapId, elementType, conn);
+  		String tableName = prototype.getElementTable().getTableName();
+
+  		String POSTGRESQL_DRIVER = "org.postgresql.Driver";
+  		Statement stmt = null;
+  		try
+  		{
+  			Class.forName(POSTGRESQL_DRIVER);
+  			stmt = conn.createStatement();
+
+  			String sql = 
+  				"select * from " + tableName + "_" + mapId + " where";
+  			final String[] invalidUuidsArr = invalidUuids.toArray(new String[]{});
+  			for (int i = 0; i < invalidUuidsArr.length; i++)
+  			{
+  				sql += " tags->'hoot:review:uuid' like '%" + invalidUuidsArr[i] + "%'";
+  				if (i < invalidUuidsArr.length - 1)
+  				{
+  					sql += " or";
+  				}
+  			}
+  			stmt = conn.createStatement();
+  			ResultSet rs = stmt.executeQuery(sql);
+  			List<Object> recordsToModify = new ArrayList<Object>();
+  			while (rs.next())
+  			{
+  				final Object obj = DbUtils.resultToObj(rs, elementType);
+  				Map<String, String> tags =
+		        PostgresUtils.postgresObjToHStore(
+		      	  (PGobject)MethodUtils.invokeMethod(obj, "getTags", new Object[]{}));
+  				if (tags.containsKey("hoot:review:uuid"))
+  				{
+  				  final String originalReviewAgainstIdsStr = tags.get("hoot:review:uuid");
+  				  String[] reviewAgainstIdsArr = null;
+  				  if (originalReviewAgainstIdsStr.contains(";"))
+  				  {
+  				  	reviewAgainstIdsArr = originalReviewAgainstIdsStr.split(";");
+  				  }
+  				  else
+  				  {
+  				  	reviewAgainstIdsArr = new String[1];
+  				  	reviewAgainstIdsArr[0] = originalReviewAgainstIdsStr;
+  				  }
+  				  Set<String> reviewAgainstIds = new HashSet(Arrays.asList(reviewAgainstIdsArr));
+  				  
+  				  /*if (reviewAgainstIds.contains("{8f23026f-27c1-5e03-8ae4-0d229d996c9b}"))
+  		  		{
+  		  			int test = 1;
+  		  		}*/
+  				  
+  				  reviewAgainstIds.removeAll(invalidUuids);
+  				  
+  				  /*if (reviewAgainstIds.contains("{8f23026f-27c1-5e03-8ae4-0d229d996c9b}"))
+  		  		{
+  		  			int test = 1;
+  		  		}*/
+  				  
+  				  final String newReviewAgainstIdsStr = StringUtils.join(reviewAgainstIds, ";");
+  				  if (!newReviewAgainstIdsStr.equals(originalReviewAgainstIdsStr))
+  				  {
+  				  	if (StringUtils.trimToNull(newReviewAgainstIdsStr) != null)
+    				  {
+    				  	tags.put("hoot:review:uuid", newReviewAgainstIdsStr);
+    				  } 
+    				  else
+    				  {
+    				  	//no review left, so drop all review tags
+    				  	Map<String, String> tagsCopy = new HashMap(tags);
+    				  	for (Map.Entry<String, String> tagEntry : tags.entrySet())
+    			      {
+    			      	if (tagEntry.getKey().startsWith("hoot:review"))
+    			      	{
+    			      		tagsCopy.remove(tagEntry.getKey());
+    			      	}
+    			      }
+    				  	tags = tagsCopy;
+    				  }
+  				  	MethodUtils.invokeMethod(obj, "setTags", tags);
+  				  	recordsToModify.add(obj);
+  				  }
+  				}
+  			}
+  			rs.close();
+  			
+  		  //TODO: make this element generic
+  			long updateCount = 0;
+  			if (elementType == ElementType.Node)
+        {
+  				updateCount += 
+  					DbUtils.batchRecordsDirectNodes(mapId, recordsToModify, RecordBatchType.UPDATE, conn,
+  						recordsToModify.size());
+        }
+        else if (elementType == ElementType.Way)
+        {
+        	updateCount += 
+            DbUtils.batchRecordsDirectWays(mapId, recordsToModify, RecordBatchType.UPDATE, conn,
+            	recordsToModify.size());
+        }
+        else if (elementType == ElementType.Relation)
+        {
+        	updateCount += 
+            DbUtils.batchRecordsDirectRelations(mapId, recordsToModify, RecordBatchType.UPDATE, conn,
+            	recordsToModify.size());
+        }
+  			log.debug(
+  				updateCount + " element records updated with review against ID's " +
+  				"that don't have corresponding uuid tag entries (" + recordsToModify.size() + 
+  				" records sent in udpate query)");
+  		}
+  		finally
+  		{
+  			try
+  			{
+  				if (stmt != null) stmt.close();
+  			}
+  			catch (SQLException se2)
+  			{
+  			}
+  		}
+  	}
+  }
+
+  /*
+   * logging records with invalid tag values and skipping; if errors should be thrown, then the
+   * unit tests will have to reworked
+   */
+  private boolean parseElementReviewTags(final long mapId) throws Exception
+  {
+    final String logMsgStart =
+      "Parsing element review tags for map with ID: " + mapId + ".  Step 3 of 4.";
+    log.info(logMsgStart);
+    //parse review tags for all nodes, ways, and relations from the OSM element tables for the given
+    //map
+    reviewRecordsParsed = 0;
+    reviewRecordWritten = false;
+    List<ReviewItems> reviewRecordsToInsert = new ArrayList<ReviewItems>();
+    //create this outside of the batch read loop, since we need to maintain a list of unique
+    //IDs parsed over the entire map's set of reviewable records
+    reviewableItemIdToReviewAgainstItemIds = ArrayListMultimap.create();
+
+    int numReviewItemsAdded = 0;
+    for (ElementType elementType : ElementType.values())
+    {
+      if (!elementType.equals(ElementType.Changeset))
+      {
+        int numElementsReturned = Integer.MAX_VALUE;
+        int elementIndex = 0;
+        while (numElementsReturned > 0)
+        {
+          //get a batch of reviewable elements
+          final Map<Long, Object> reviewableElementRecords =
+            getReviewableElementRecords(mapId, elementType, maxRecordBatchSize, elementIndex);
+          
+          final Set<String> allUuids = parseAllUuidsFromElementRecords(reviewableElementRecords);
+          Set<String> existingIdMappings = null;
+          Set<String> validUuids = null;
+          Set<String> invalidUuids = null;
+          if (allUuids.size() > 0)
+          {
+          	/*if (allUuids.contains("{8f23026f-27c1-5e03-8ae4-0d229d996c9b}"))
+          	{
+          		int test = 1;
+          	}*/
+          	
+          	log.debug("allUuids length: " + allUuids.size());
+            existingIdMappings =  
+          		Element.filterOutNonExistingElementMappingUniqueIds(
+          			mapId, allUuids.toArray(new String[]{}), elementType, conn);
+            log.debug("existingIdMappings length: " + existingIdMappings.size());
+            validUuids =
+              Element.filterOutNonExistingUuids(
+              	mapId, allUuids.toArray(new String[]{}), elementType, conn);
+            log.debug("validUuids length: " + validUuids.size());
+            
+            /*if (validUuids.contains("{8f23026f-27c1-5e03-8ae4-0d229d996c9b}"))
+          	{
+          		int test = 1;
+          	}*/
+            
+            invalidUuids = new HashSet<String>(allUuids);
+            invalidUuids.removeAll(validUuids);
+            log.debug("invalidUuids length: " + invalidUuids.size());
+            if (cleanReviewTags)
+            {
+            	removeInvalidReviewAgainstTagsFromElements(elementType, invalidUuids);
+            }
+          } 
+          
+          numElementsReturned = reviewableElementRecords.size();
+          elementIndex += numElementsReturned;
+          
+          for (Map.Entry<Long, Object> reviewableElementRecordEntry : 
+          	   reviewableElementRecords.entrySet())
+          {
+          	final long osmElementId = reviewableElementRecordEntry.getKey();
+            final Object reviewableElementRecord = reviewableElementRecordEntry.getValue();
+            final Map<String, String> tags =
+              PostgresUtils.postgresObjToHStore(
+              	(PGobject)MethodUtils.invokeMethod(reviewableElementRecord, "getTags", new Object[]{}));
+            final String reviewableItemId = StringUtils.trimToNull(tags.get("uuid"));
+            
+            if (StringUtils.isEmpty(reviewableItemId))
+            {
+            	final String msg = 
+            		"Invalid UUID: " + reviewableItemId + " for OSM record with ID: " + osmElementId +
+            		" for map with ID: " + mapId + "Skipping adding review record...";
+            	if (warnMessagesDisplayed <= maxWarningsDisplayed)
+            	{
+            		log.warn(msg);
+            		warnMessagesDisplayed++;
+            	}
+            	else
+            	{
+            		log.debug(msg);
+            	}
+            }
+            else if (!validUuids.contains(reviewableItemId))
+            {
+            	final String msg = 
+            		"No feature exists with UUID: " + reviewableItemId + " for OSM record with ID: " + 
+            	  osmElementId + " for map with ID: " + mapId + " Skipping adding review record...";
+            	if (warnMessagesDisplayed <= maxWarningsDisplayed)
+            	{
+            		log.warn(msg);
+            		warnMessagesDisplayed++;
+            	}
+            	else
+            	{
+            		log.debug(msg);
+            	}
+            }
+            else
+            {
+          	  //some items won't have a review score tag; For now, the way this is being handled
+              //is that items missing a tag get a review score = 1.0; items with an empty string
+              //or invalid string for a review tag get a review score of -1.0, which invalidates
+              //the review pair.  The case could be argued that invalid/empty score strings should
+              //also result in a review score = 1.0.
+              double reviewScore = -1.0;
+              if (tags.containsKey("hoot:review:score"))
+              {
+                try
+                {
+                  reviewScore = Double.parseDouble(tags.get("hoot:review:score"));
+                }
+                catch (NumberFormatException e)
+                {
+                }
+              }
+              else
+              {
+                reviewScore = 1.0;
+              }
+              
+              //final String source = StringUtils.trimToNull(tags.get("hoot:review:source"));
+            	//assert(source != null);
+              
+              //paired item review
+              if (tags.containsKey("hoot:review:uuid") && 
+              		StringUtils.trimToNull(tags.get("hoot:review:uuid")) != null)
+              {
+              	final String itemsToReviewAgainstStr = 
+                  StringUtils.trimToNull(tags.get("hoot:review:uuid"));
+              	assert(itemsToReviewAgainstStr != null);
+              	String[] reviewAgainstItemIds = null;
+                //We are parsing pairwise comparisons and don't want duplicates, so ignore one
+                //to many reviewable item to review against item relationships.  They are always
+                //represented with a duplicated one to one relationship in the data.
+                if (!itemsToReviewAgainstStr.contains(";"))
+                {
+                  reviewAgainstItemIds = new String[] { itemsToReviewAgainstStr };
+                }
+                else
+                {
+                  reviewAgainstItemIds = itemsToReviewAgainstStr.split(";");
+                }
+
+                for (int i = 0; i < reviewAgainstItemIds.length; i++)
+                {
+                  final String reviewAgainstItemId = 
+                  	StringUtils.trimToNull(reviewAgainstItemIds[i]);
+                  if (reviewAgainstItemId != null)
+                  {
+                  	if (!validUuids.contains(reviewAgainstItemId))
+                    {
+                    	final String msg = "No feature exists with review against UUID: " + 
+                        reviewAgainstItemId + " for reviewable OSM record with ID: " + osmElementId + 
+                        " for map with ID: " + mapId + " Skipping adding review record...";
+                    	if (warnMessagesDisplayed <= maxWarningsDisplayed)
+                    	{
+                    		log.warn(msg);
+                    		warnMessagesDisplayed++;
+                    	}
+                    	else
+                    	{
+                    		log.debug(msg);
+                    	}
+                    }
+                    else if (!existingIdMappings.contains(reviewAgainstItemId))
+                    {
+                    	final String msg = 
+                    		"No element ID mapping exists for review against item with ID: " +
+                        reviewAgainstItemId + " for reviewable OSM record with ID: " + osmElementId +
+                        " for map with ID: " + mapId + ".  Skipping adding review record...";
+                    	if (warnMessagesDisplayed <= maxWarningsDisplayed)
+                    	{
+                    		log.warn(msg);
+                    		warnMessagesDisplayed++;
+                    	}
+                    	else
+                    	{
+                    		log.debug(msg);
+                    	}
+                    }
+                    else
+                    {
+                      if (!reviewPairAlreadyParsed(reviewableItemId, reviewAgainstItemId))
+                      {
+                      	//TODO: Had to take this source check out, b/c it was resulting in bad review
+                      	//data being written.  See #6320
+                      	/*if (source.equals("2"))
+                      	{
+                        	//For paired reviews, we want the reviewableItem to always come from 
+                      		//source 1 and the reviewAgainstItems to always come from source 2.  
+                      		//So, re-ordering here is necessary for some records.
+                      		log.debug(
+                            "Adding review item with reviewable item ID: " + reviewAgainstItemId + 
+                            ", review against item ID: " + reviewableItemId + ", and source: " + 
+                            source);
+                          reviewRecordsToInsert.add(
+                            ReviewUtils.createReviewItemRecord(
+                            	reviewAgainstItemId, reviewScore, reviewableItemId, mapId));
+                          reviewableItemIdToReviewAgainstItemIds.put(
+                          	reviewAgainstItemId, reviewableItemId);
+                      	}
+                      	else
+                      	{*/
+                      		log.debug(
+                            "Adding review item with reviewable item ID: " +  reviewableItemId + 
+                            ", review against item ID: " + reviewAgainstItemId); //+ ", and source: " + 
+                            //source);
+                          reviewRecordsToInsert.add(
+                          	ReviewUtils.createReviewItemRecord(
+                            	reviewableItemId, reviewScore, reviewAgainstItemId, mapId));
+                          reviewableItemIdToReviewAgainstItemIds.put(
+                          	reviewableItemId, reviewAgainstItemId);
+                      	//}
+                        
+                        flushReviewRecords(reviewRecordsToInsert, maxRecordBatchSize, logMsgStart);
+                        numReviewItemsAdded++;
+                      }
+                    }
+                  }
+                }
+              }
+              //single item review (non-pair)
+              else if (!tags.containsKey("hoot:review:uuid") ||
+                       StringUtils.trimToNull(tags.get("hoot:review:uuid")) == null)
+              {
+              	//TODO: this description invalid given #6320 revert changes made above; The one 
+              	//case where the reviewableItem can be from source = 2 is for a single item review, 
+              	//hence the source check done for paired reviews is not done here. 
+              	
+              	if (!reviewPairAlreadyParsed(reviewableItemId, reviewableItemId))
+                {
+                  log.debug(
+                    "Adding review item with reviewable item ID: " +  reviewableItemId + " and " +
+                    "review against item ID: " + reviewableItemId);
+                  reviewRecordsToInsert.add(
+                  	ReviewUtils.createReviewItemRecord(
+                      reviewableItemId, reviewScore, reviewableItemId, mapId));
+                  reviewableItemIdToReviewAgainstItemIds.put(reviewableItemId, reviewableItemId);
+                  flushReviewRecords(reviewRecordsToInsert, maxRecordBatchSize, logMsgStart);
+                  numReviewItemsAdded++;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    //final flush
+    flushReviewRecords(reviewRecordsToInsert, 0, logMsgStart);
+
+    log.debug("Wrote " + numReviewItemsAdded + " review items.");
+
+    if (simulateFailure)
+    {
+      throw new Exception("Simulated test review data parse failure.");
+    }
+
+    return reviewRecordWritten;
+  }
+
+  private void flushIdMappingRecords(List<ElementIdMappings> elementIdMappingRecordsToInsert,
 	  final int threshold, final String logMsgStart) throws Exception
 	{
 		if (elementIdMappingRecordsToInsert.size() > 0 && 
@@ -745,12 +1201,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 			// job status causes issues
 			if (totalParseableRecords > 0 && uniqueIdsParsed > 0) // sanity check
 			{
-				// TODO: fix this mess - the progress percentage complete message is
-				// incorrect
-				// log.debug("uniqueIdsParsed: " + uniqueIdsParsed);
-				// log.debug("totalParseableRecords: " + totalParseableRecords);
-				// final double percentComplete = (double)((uniqueIdsParsed /
-				// totalParseableRecords) / 100);
+				// the progress percentage complete message is incorrect
 				log.info(logMsgStart + " - "
 				    + String.valueOf((uniqueIdsParsed / totalParseableRecords) * 100)
 				    + "% complete.");
@@ -758,172 +1209,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		}
 	}
 
-	/*
-	 * logging records with invalid tag values and skipping; if errors should be
-	 * thrown, then the unit tests will have to reworked
-	 * 
-	 * @todo What's a good way to write job completion percentage to the db from
-	 * here? This runs in a transaction, so it won't show up for external job
-	 * pollers until all the parsing is done.
-	 */
-	protected boolean parseElementReviewTags(final long mapId) throws Exception
-	{
-		final String logMsgStart = 
-			"Parsing element review tags for map with ID: " + mapId + ".  Step 3 of 4.";
-		log.info(logMsgStart);
-		// parse review tags for all nodes, ways, and relations from the OSM element tables for the 
-		// given map
-		reviewRecordsParsed = 0;
-		reviewRecordWritten = false;
-		List<ReviewItems> reviewRecordsToInsert = new ArrayList<ReviewItems>();
-		// create this outside of the batch read loop, since we need to maintain a list of unique 
-		// IDs parsed over the entire map's set of reviewable records
-		reviewableItemIdToReviewAgainstItemIds = ArrayListMultimap.create();
-		reviewableItemIdToReviewAgainstItemIds.putAll(previouslyReviewedItemIdToReviewAgainstItemIds);
-
-		int numReviewItemsAdded = 0;
-		for (ElementType elementType : ElementType.values())
-		{
-			if (!elementType.equals(ElementType.Changeset))
-			{
-				int numElementsReturned = Integer.MAX_VALUE;
-				int elementIndex = 0;
-				while (numElementsReturned > 0)
-				{
-					// get a batch of reviewable elements
-					final Map<Long, Object> reviewableElementRecords = 
-						getReviewableElementRecords(mapId, elementType, maxRecordSelectSize, elementIndex);
-					numElementsReturned = reviewableElementRecords.size();
-					elementIndex += numElementsReturned;
-					for (Map.Entry<Long, Object> reviewableElementRecordEntry : reviewableElementRecords.entrySet())
-					{
-						final Object reviewableElementRecord = 
-							reviewableElementRecordEntry.getValue();
-						final Map<String, String> tags = 
-							PostgresUtils
-						    .postgresObjToHStore(
-						    	(PGobject)MethodUtils.invokeMethod(reviewableElementRecord, "getTags", new Object[] {}));
-						String reviewableItemId = StringUtils.trimToNull(tags.get("uuid"));
-						if (StringUtils.isEmpty(reviewableItemId))
-						{
-							log.warn(
-								"Invalid UUID: " + tags.get("uuid") + " for map with ID: " + mapId + 
-                " Skipping adding review record...");
-						}
-						else
-						{
-							// some items won't have a review score tag; For now, the way this is being handled
-							// is that items missing a tag get a review score = 1.0; items with an empty string
-							// or invalid string for a review tag get a review score of -1.0,
-							// which invalidates the review pair. The case could be argued that invalid/empty
-							// score strings should also result in a review score = 1.0.
-							double reviewScore = -1.0;
-							if (tags.containsKey("hoot:review:score"))
-							{
-								try
-								{
-									reviewScore = 
-										Double.parseDouble(tags.get("hoot:review:score"));
-								}
-								catch (NumberFormatException e)
-								{
-								}
-							}
-							else
-							{
-								reviewScore = 1.0;
-							}
-
-							if (reviewScore != -1.0 && tags.containsKey("hoot:review:uuid") && 
-									StringUtils.trimToNull(tags.get("hoot:review:uuid")) != null)
-							{
-								String[] reviewAgainstItemIds = null;
-								final String itemsToReviewAgainstStr = 
-									StringUtils.trimToNull(tags.get("hoot:review:uuid"));
-								// We are parsing pairwise comparisons and don't want duplicates, so ignore one
-								// to many reviewable item to review against item relationships.  They are always
-								// represented with a duplicated one to one relationship in the data.
-								if (!itemsToReviewAgainstStr.contains(";"))
-								{
-									reviewAgainstItemIds = new String[] { itemsToReviewAgainstStr };
-								}
-								else
-								{
-									reviewAgainstItemIds = itemsToReviewAgainstStr.split(";");
-								}
-
-								for (int i = 0; i < reviewAgainstItemIds.length; i++)
-								{
-									final String reviewAgainstItemId = reviewAgainstItemIds[i];
-									// TODO: I believe this check is not correct, but I know of no
-									// other way to handle
-									// this for now...
-									// TODO: make this a batch query somehow
-									if (new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-									      .from(elementIdMappings)
-									      .where(
-									        elementIdMappings.mapId.eq(mapId)
-									          .and(elementIdMappings.elementId.eq(reviewAgainstItemId)))
-									       .count() == 0)
-									{
-										log.warn(
-											"No element ID mapping exists for review against item with ID: " + 
-										  reviewAgainstItemId + " for map with ID: " + mapId + 
-										  ".  Skipping adding " + "review record...");
-									}
-									else
-									{
-										if (!reviewPairAlreadyParsed(reviewableItemId, reviewAgainstItemId))
-										{
-											log.debug(
-												"Adding review item with reviewable item ID: " + reviewableItemId + " and " + 
-											  "review against item ID: " + reviewAgainstItemId);
-											reviewRecordsToInsert.add(
-												ReviewUtils.createReviewItemRecord(
-													reviewableItemId, reviewScore, reviewAgainstItemId, mapId));
-											reviewableItemIdToReviewAgainstItemIds.put(reviewableItemId, reviewAgainstItemId);
-											flushReviewRecords(reviewRecordsToInsert, maxRecordBatchSize, logMsgStart);
-											numReviewItemsAdded++;
-										}
-									}
-								}
-							}
-							else if (!tags.containsKey("hoot:review:uuid") ||
-									     StringUtils.trimToNull(tags.get("hoot:review:uuid")) == null)
-							{
-								if (!reviewPairAlreadyParsed(reviewableItemId, reviewableItemId))
-								{
-									log.debug(
-										"Adding review item with reviewable item ID: " + reviewableItemId + 
-										" and " + "review against item ID: " + reviewableItemId);
-									reviewRecordsToInsert.add(
-										ReviewUtils.createReviewItemRecord(reviewableItemId, reviewScore, 
-											reviewableItemId, mapId));
-									reviewableItemIdToReviewAgainstItemIds.put(reviewableItemId, reviewableItemId);
-									flushReviewRecords(reviewRecordsToInsert, maxRecordBatchSize, logMsgStart);
-									numReviewItemsAdded++;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
-		// final flush
-		flushReviewRecords(reviewRecordsToInsert, 0, logMsgStart);
-
-		log.debug("Wrote " + numReviewItemsAdded + " review items.");
-
-		if (simulateFailure)
-		{
-			throw new Exception("Simulated test review data parse failure.");
-		}
-
-		return reviewRecordWritten;
-	}
-
-	protected boolean reviewPairAlreadyParsed(final String reviewableItemId, 
+  private boolean reviewPairAlreadyParsed(final String reviewableItemId, 
 		final String reviewAgainstItemId)
 	{
 		if (reviewAgainstItemId != null)
@@ -941,7 +1227,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		}
 	}
 
-	protected void flushReviewRecords(List<ReviewItems> reviewRecordsToInsert,
+  private void flushReviewRecords(List<ReviewItems> reviewRecordsToInsert,
 	  final int threshold, final String logMsgStart) throws Exception
 	{
 		if (reviewRecordsToInsert.size() > 0 && reviewRecordsToInsert.size() >= threshold)
@@ -955,8 +1241,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 			// to update the job status causes issues
 			if (totalReviewableRecords > 0 && reviewRecordsParsed > 0) // sanity check
 			{
-				// TODO: fix this mess - the progress percentage complete message is
-				// incorrect
+				// the progress percentage complete message is incorrect
 				log.info(logMsgStart
 				    + " - "
 				    + String

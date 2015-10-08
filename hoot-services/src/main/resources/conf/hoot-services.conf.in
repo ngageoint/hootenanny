@@ -3,13 +3,9 @@
 # Port Jersey tests running on the Grizzy framework uses; only needed by Jersey async calls
 grizzlyPort=9998
 
-# generic setting for max to send to sql limit/offset queries; this setting could be duplicated and
-# made more specific for different types of queries
-maxRecordSelectSize=5000
-
 # generic setting for max size of records when executing batch query; this setting could be
 # duplicated and made more specific for different types of queries
-maxRecordBatchSize=1000
+maxRecordBatchSize=2000
 
 # allows for printing executed sql statement
 debugSql=false
@@ -39,7 +35,10 @@ autoScanForLogPropsChanges=true
 # in the log4j properties file
 logPropsDynamicChangeScanInterval=1
 
-# OSM SERVICES
+# Loosely enforced setting that determines the maximum number of times a class logs a warning
+maxWarningsDisplayed=10
+
+# OSM
 
 # OSM header info
 osmVersion=0.6
@@ -78,7 +77,7 @@ testChangesetAutoClose=false
 # allows nodes to have negative IDs to be compatible with hoot-core command line
 hootCoreServicesDatabaseWriterCompatibility=false
 
-# ETL SERVICE
+# ETL
 
 # the folder location of the make file script for some processlet like ETLProcesslet
 coreScriptPath=$(homeFolder)/scripts
@@ -131,10 +130,8 @@ dbUserId=${DB_USER}
 # Db server user password
 dbPassword=${DB_PASSWORD}
 
-
 # Db server user host
 dbHost=${DB_HOST}:${DB_PORT}
-
 
 # WFS Store Connection Name
 wfsStoreConnName=WFS_Connection
@@ -144,7 +141,6 @@ wfsStoreDb=${WFS_DB_NAME}
 
 # Translation extension install folder
 translationExtPath=$(homeFolder)/plugins-local/script/utp
-
 
 # Ingest service staging folder
 ingestStagingPath=$(homeFolder)/ingest/upload
@@ -227,10 +223,8 @@ advOptRefOverride=conf/conflationRefOps.json
 # Advanced options horizontal override
 advOptHorizontalOverride=conf/conflationHorizontalOps.json
 
-
 # Advanced options horizontal override
 advOptAverageOverride=conf/conflationAverageOps.json
-
 
 # POI to POI Node Server port
 P2PServerPort=8096
@@ -241,7 +235,7 @@ P2PServerThreadCount=0
 # POI to POI Server Script in scripts folder
 P2PServerScript=P2PServer.js
 
-# REVIEW SERVICE
+# REVIEW
 
 # review prepare
 
@@ -250,46 +244,21 @@ reviewPrepareOverwriteExistingDataDefault=false
 # If true, temp UUID database records will be cleaned up after review records are prepared.  Since
 # this sometimes causes problems with some datasets, making it optional as a temporary solution.
 reviewPrepareCleanup=true
-# Temporary setting that checks to make sure each review record has an element id mapping record 
-# present before inserting it into the database, which is very expensive.  Disabling this hasn't
-# seemed to cause any problems so far, but will temporarily leave it configurable until enough
-# datasets have been tested to prove the check is not ever needed.
-checkForElementIdMappingPerReviewRecordWrite=false
-
-# review item lock time in millisec
-reviewLockTime=300000
-
-# review stats
-
-# default lowest review score threshold the stats calculator will recognize when looking at
-# reviewable items
-reviewStatsReviewScoreThresholdMinimumDefault=0.0
-# default geographic bounds restriction on reviewable item stats calculations
-reviewStatsGeospatialBoundsDefault=-180,-90,180,90
+# If true, removes review uuid's from the hoot:review:uuid tag if no element exists with that uuid
+# as its uuid tag.
+cleanReviewTags=true
 
 # review get
 
-# default number of reviewable items returned in a single service call
-reviewGetNumItemsDefault=1
-# default reviewable item sorting parameter; if true, reviewable items are returned with the
-# highest review scored items first
-reviewGetHighestReviewScoreFirstDefault=true
-# default lowest review score threshold a returned reviewable item will have
-reviewGetReviewScoreThresholdMinimumDefault=0.5
-# default geographic bounds restriction on reviewable item requests
-reviewGetGeospatialBoundsDefault=-180,-90,180,90
-# maximum number of review items that can be retrieved at once
-reviewGetMaxGetSize=50000
-# negative values zoom out; positive values zoom in
-reviewDisplayBoundsZoomAdjustDefault=-0.0015
-# method by which the display bounds is calculated for review item pairs; valid values are:
-# reviewableItemOnly, reviewAgainstItemOnly, reviewableAndReviewAgainstItemCombined
-reviewDisplayBoundsMethod=reviewableAndReviewAgainstItemCombined
+# review item lock time in millisec
+reviewLockTime=300000
 
 # review update
 
 # semi-colon delimited list of review tags used by hoot core
 reviewTags=hoot:review:uuid;hoot:review:score;hoot:review:note;hoot:review:needs;hoot:review:source
+
+# HGIS
 
 # HGIS review prepare for validation script name
 hgisPrepareForValidationScript=custom/HGIS/PrepareForValidation.sh

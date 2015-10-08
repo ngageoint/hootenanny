@@ -19,6 +19,10 @@ public class ReviewReferences
   public ReviewAgainstItem[] getReviewableItems() { return reviewableItems; }
   public void setReviewableItems(ReviewAgainstItem[] items) { this.reviewableItems = items; }
   
+  private String uniqueId;
+  public String getUniqueId() { return uniqueId; }
+  public void setUniqueId(String id) { this.uniqueId = id; }
+  
   public ReviewReferences()
   {
   }
@@ -26,7 +30,7 @@ public class ReviewReferences
   @Override
   public String toString()
   {
-  	String str = "Review against items:\n";
+  	String str = "Unique ID: " + uniqueId + "\nReview against items:\n";
   	for (int i = 0; i < reviewAgainstItems.length; i++)
   	{
   		str += reviewAgainstItems[i].toString() + "\n";

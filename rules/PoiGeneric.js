@@ -307,6 +307,7 @@ exports.mergePair = function(map, e1, e2)
 {
     var newTags = mergeTags(e1, e2);
     e1.setTags(newTags);
+    e1.setStatusString("conflated");
 
     removeElement(map, e2);
 

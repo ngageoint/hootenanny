@@ -24,48 +24,21 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.models.osm;
+package hoot.services.models.review;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Model class for the Hootenanny folder record
+ * Represents a reviewable conflated data entity
  */
 @XmlRootElement
-public class LinkRecord
+public class SetAllItemsReviewedRequest
 {
-  private long id;
-  public long getId()
-  {
-    return id;
-  }
-  public void setId(long id)
-  {
-    this.id = id;
-  }
+  private long mapId = -1;
+  public long getMapId() { return mapId; }
+  public void setMapId(long id) { this.mapId = id; }
   
-  private long mapId;
-  public long getMapId()
-  {
-    return mapId;
-  }
-  public void setMapId(long mapId)
-  {
-    this.mapId = mapId;
-  }
-  
-  private long folderId;
-  public long getFolderId()
-  {
-    return folderId;
-  }
-  public void setFolderId(long folderId)
-  {
-    this.folderId = folderId;
-  }
-  
-  
-  public LinkRecord()
+  public SetAllItemsReviewedRequest()
   {
     
   }

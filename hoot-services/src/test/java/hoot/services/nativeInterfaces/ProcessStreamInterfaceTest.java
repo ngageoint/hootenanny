@@ -88,7 +88,6 @@ public class ProcessStreamInterfaceTest {
 	@Category(UnitTest.class)
 	public void testcreateScriptCmd() throws Exception
 	{
-		//private String createScriptCmd(JSONObject cmd)
 		hoot.services.controllers.wps.ETLProcessletTest etlTest = new hoot.services.controllers.wps.ETLProcessletTest();
 		String sParam = etlTest.generateJobParam();
 		JSONParser parser=new JSONParser();

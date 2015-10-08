@@ -495,7 +495,21 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
 
   if (e->getTags().getInformationCount() > 0)
   {
-    shared_ptr<Geometry> g = ElementConverter(provider).convertToGeometry(e);
+    // There is probably a cleaner way of doing this.
+    // convertToGeometry calls  getGeometryType which will throw an exception if it gets a relation
+    // that it doesn't know about. E.g. "route", "superroute", " turnlanes:turns" etc
+
+    shared_ptr<Geometry> g;
+
+    try
+    {
+      g = ElementConverter(provider).convertToGeometry(e);
+    }
+    catch (IllegalArgumentException& err)
+    {
+      LOG_WARN("Error converting geometry: " << err.getWhat() << " (" << e->toString() << ")");
+      g.reset((GeometryFactory::getDefaultInstance()->createEmptyGeometry()));
+    }
 
     /*
     LOG_DEBUG("After conversion to geometry, element is now a " <<

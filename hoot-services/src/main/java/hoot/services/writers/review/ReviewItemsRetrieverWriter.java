@@ -7,13 +7,10 @@ import hoot.services.exceptions.writer.review.ReviewItemsWriterException;
 import java.sql.Connection;
 import java.sql.Timestamp;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mysema.query.sql.dml.SQLUpdateClause;
 
-public class ReviewItemsRetrieverWriter {
-	private static final Logger log = LoggerFactory.getLogger(ReviewItemsRetrieverWriter.class);
+public class ReviewItemsRetrieverWriter 
+{
 	private long _mapId;
   private Connection _conn;
   
@@ -49,7 +46,8 @@ public class ReviewItemsRetrieverWriter {
  public final long updateReviewLastAccessTime(final String reviewItemId, final Timestamp newLastAccessTime,
      final String reviewAgainst) throws ReviewItemsWriterException,Exception
  {
-	 long updated = 0;
+	 @SuppressWarnings("unused")
+  long updated = 0;
 	 SQLUpdateClause cls = _getLastAccessUpdateClause(reviewItemId, newLastAccessTime, reviewAgainst);
 	 try
 	 {

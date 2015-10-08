@@ -117,14 +117,12 @@ public class TunningService  implements Executable {
 						" OUTPUT=" + tempPath +  "/" + input + ".osm";
 				CommandResult result = cmdRunner.exec(commandArr);
 
-				if(res != null){
 					if(result.getExitStatus() == 0){
 						result.getStdout();
 					} else {
 						String err = result.getStderr();
 						throw new Exception(err);
 					}
-				}
 				
 				tempOutputPath = tempPath +  "/" + input + ".osm";      	  
 			}
@@ -149,9 +147,6 @@ public class TunningService  implements Executable {
   				+ " NODES:" + sinkImplementation.getTotalNodes() + " Way:" + sinkImplementation.getTotalWay() + " Relations:" + 
   				sinkImplementation.getTotalRelation());
  
-  		//res.put("Start", starttime);
-  		//res.put("End", endTime);
-  		//res.put("Delta", (endTime-starttime));
   		res.put("EstimatedSize", totalSize * 15);
   		res.put("NodeCount", sinkImplementation.getTotalNodes());
   		res.put("WayCount", sinkImplementation.getTotalWay());

@@ -1561,9 +1561,12 @@ bool OsmSchema::isCollection(const Element& e) const
   if (e.getElementType() == ElementType::Relation)
   {
     const Relation& r = dynamic_cast<const Relation&>(e);
+
+    // This list could get HUGE.
     if (r.getType() == "waterway" ||
         r.getType() == "network" ||
         r.getType() == "route_master" ||
+        r.getType() == "superroute" ||
         r.getType() == "route")
     {
       result = true;

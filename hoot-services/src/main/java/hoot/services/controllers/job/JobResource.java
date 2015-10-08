@@ -145,7 +145,6 @@ public class JobResource
 
 	        jobStatusManager = _createJobStatusMananger(conn);
 
-	  	  	//jobStatusManager.addJob(jobId);
 	  	  	JSONParser parser = new JSONParser();
 	  	  	JSONArray chain = (JSONArray)parser.parse(jobs);
 
@@ -461,7 +460,6 @@ public class JobResource
 	        JSONParser parser = new JSONParser();
 	  	    command = (JSONObject)parser.parse(params);
 
-	        //jobStatusManager.addJob(jobId);
 	        JSONObject result = _processJob(jobId, command);
 
 	        String warnings = null;

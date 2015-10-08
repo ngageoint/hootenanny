@@ -26,7 +26,6 @@
  */
 package hoot.services;
 
-import java.io.IOException;
 import java.net.URL;
 
 import javax.servlet.http.HttpServlet;
@@ -70,8 +69,7 @@ public class DynamicLogPropsChangeScanner extends HttpServlet
     properties
   }
 
-	private void configureLogging(ConfigFileType configFileType) throws NumberFormatException, 
-	  IOException
+	private void configureLogging(ConfigFileType configFileType) throws Exception
 	{
 		log.info(
 		  "Configuring dynamic log properties for file type: " + configFileType.toString() + " ...");
@@ -99,6 +97,10 @@ public class DynamicLogPropsChangeScanner extends HttpServlet
 						PropertyConfigurator.configureAndWatch(configFile.getPath(), scanDelayMillis);
 						
 						break;
+						
+					default:
+						
+						throw new Exception("Invalid file type.");
 				}
 				
 				log.info("Configured dynamic log properties for file type: " + configFileType.toString());
