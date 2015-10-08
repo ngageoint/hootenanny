@@ -2,7 +2,6 @@ package hoot.services.writers.review;
 
 import hoot.services.UnitTest;
 import hoot.services.db.DbUtils;
-import hoot.services.review.ReviewItemsRetriever;
 
 import java.sql.Timestamp;
 

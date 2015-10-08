@@ -1,0 +1,30 @@
+
+== POI Merge Workflow High Level
+
+This describes the current interactions between the user interface and web services that occur when a POI is merged.  All review tag changes are made via a client created changeset and all review related database records are updated by the server based on the contents of such changesets.
+
+. User conflates POI data and begins the review process
+. User advances to a review and merges two POI's which calls the POI merge service
+. POI merge service returns back a merged POI
+. For each of the poi's that were merged, the client (model/Conflicts.js) makes a review record references query (/reviewrefs) to the server which returns:
+.. The id's of all poi's each merged poi were still yet to be reviewed against
+.. The id's of all poi's that expected to be reviewed against each merged poi
+. On the client (model/Conflicts.js): the newly created, combined merged poi sent back by the poi merge service is set to be reviewed against all of the poi's each merged poi were yet to be reviewed against (the hoot:review:uuid tag of the new, merge poi is modified with these id's) this can result in 0 to many poi id's being added
+. On the client (model/Conflicts.js): for each poi that expected to be reviewed against each of the merged poi's, the id's of the merged poi's are removed from those poi's and the id of the newly created, combined merged poi is added in their place (the hoot:review:uuid tag of the new, merge poi is modified with these id's); this can result in 0 to many poi id's being added
+. On the client (model/Conflicts.js): Any POI which was modified with no id's remaining in its hoot:review:uuid tag as a result of the previous steps has all of its review tags removed.
+. User resolves poi review
+. Client (model/Conflicts.js) creates an osm changeset containing:
+.. A delete osm changeset with the two merged POI's
+.. A create changeset with the newly created, combined merged poi
+.. A modify changeset with 0 to n poi's depending upon the modifications made in the hoot:review:uuid tag manipulation steps above
+. Client (control/Conflicts.js) sends changeset to server (ChangesetResource.java)
+. Review tags are updated on the osm nodes in the osm database tables based on the uploaded changeset (ChangesetDbWriter.java)
+. The server (ReviewItemsSynchronizer.java) reads the changeset to make related review table updates:
+.. Any created nodes from the changeset that have id's in their hoot:review:uuid tag get new review and element id mapping records created
+.. Any modified nodes from the changeset either:
+... Have new review/element id mapping records created for them based on the contents of their hoot:review:uuid tag
+... Have existing review records updated based on the contents of their hoot:review:uuid tag
+.. Any deleted nodes from the changeset either:
+... have their review records marked as reviewed if id's corresponding to both halves of a review record (reviewable AND review against) are in the delete changeset
+... OR if the deleted nodes in the delete changeset belong to exactly one half of a review record (reviewable OR review against), those review records are deleted completely, b/c its assumed the client took care of patching up any orphaned review links caused by the merge in the contents of the modify changeset
+

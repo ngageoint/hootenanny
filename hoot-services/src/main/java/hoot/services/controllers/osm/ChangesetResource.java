@@ -135,10 +135,6 @@ public class ChangesetResource
    * @param mapId ID of the map the changeset belongs to
    * @return Response containing the ID assigned to the new changeset
    * @throws Exception 
-   * @todo why can't I get changesetData in as an XML doc?
-   * @todo update for parsing multiple changesets in one request (#2894): duplicated changeset tag 
-     keys are allowed but later changeset tag keys overwrite earlier ones; isn't that contradictory
-     with the rest of the logic in this method?
    */
   @PUT
   @Path("/create")
@@ -324,7 +320,6 @@ public class ChangesetResource
    * @throws Exception
    * @see http://wiki.openstreetmap.org/wiki/API_0.6 and 
    * http://wiki.openstreetmap.org/wiki/OsmChange
-   * @todo update unit test
    */
   @POST
   @Path("/{changesetId}/upload")
@@ -490,7 +485,6 @@ public class ChangesetResource
       {
         ResourceErrorHandler.handleError(message, Status.NOT_FOUND, log); //404
       }
-      //TODO: should the visibility exception be changed from a 400 to a 409?
       else if (e.getMessage().contains("exist specified for") ||
                e.getMessage().contains("exist for") ||
                e.getMessage().contains("is still used by") ||

@@ -757,8 +757,8 @@ public class CustomScriptResource
       if (iHeader > 0)
       {
         String header = content.substring(0, iHeader);
-        header = header.replace((CharSequence) headerStart, (CharSequence) "");
-        header = header.replace((CharSequence) headerEnd, (CharSequence) "");
+        header = header.replace(headerStart, "");
+        header = header.replace(headerEnd, "");
 
         String body = content.substring(iHeader + headerEnd.length());
 

@@ -24,27 +24,48 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.models.osm;
+package hoot.services.models.dataset;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Model class for a set of Hootenanny map layers
+ * Model class for the Hootenanny folder record
  */
 @XmlRootElement
-public class FolderRecords
+public class LinkRecord
 {
-  private FolderRecord[] folders;
-  public FolderRecord[] getFolders()
+  private long id;
+  public long getId()
   {
-    return folders;
+    return id;
   }
-  public void setFolders(FolderRecord[] folders)
+  public void setId(long id)
   {
-    this.folders = folders;
+    this.id = id;
   }
   
-  public FolderRecords()
+  private long mapId;
+  public long getMapId()
+  {
+    return mapId;
+  }
+  public void setMapId(long mapId)
+  {
+    this.mapId = mapId;
+  }
+  
+  private long folderId;
+  public long getFolderId()
+  {
+    return folderId;
+  }
+  public void setFolderId(long folderId)
+  {
+    this.folderId = folderId;
+  }
+  
+  
+  public LinkRecord()
   {
     
   }

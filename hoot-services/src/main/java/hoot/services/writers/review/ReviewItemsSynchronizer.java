@@ -14,7 +14,7 @@ import hoot.services.review.ReviewUtils;
 import hoot.services.utils.XmlUtils;
 import hoot.services.validators.review.ReviewMapValidator;
 
-import java.lang.reflect.InvocationTargetException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -62,7 +62,13 @@ public class ReviewItemsSynchronizer
   public ReviewItemsSynchronizer(final Connection conn, final String mapId) throws Exception
   {
     this.conn = conn;
-    this.mapId = Long.parseLong(mapId);
+    try
+    {
+    	this.mapId = Long.parseLong(mapId);
+    }
+    catch (NumberFormatException e)
+    {
+    }
     maxRecordBatchSize = 
   		Integer.parseInt(HootProperties.getInstance()
   		  .getProperty("maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
@@ -219,6 +225,7 @@ public class ReviewItemsSynchronizer
     
     int numReviewItemsInserted = 0;
     int numReviewItemsUpdated = 0;
+    long numElementIdMappingRecordsInserted = 0;
     
     //get a list of all the uuid's in the modify changeset (both types: reviewable and review 
     //against); We're only concerned with elements having a uuid tag.  If they don't have that tag 
@@ -346,7 +353,7 @@ public class ReviewItemsSynchronizer
           		reviewRecordsToInsert.add(
                 ReviewUtils.createReviewItemRecord(
                   uuid,
-                  1.0, //TODO: see comment in updateCreatedReviewItems
+                  1.0, //see comment in updateCreatedReviewItems
                   reviewAgainstUuid,
                   mapId));
           		
@@ -373,7 +380,6 @@ public class ReviewItemsSynchronizer
           			//If the record doesn't already exist the we can't update it here.
           			dbReviewableUuidsToReviewRecords.containsKey(uuid + ";" + id))
           	{
-
           		ReviewItems reviewRecord = 
             		ReviewUtils.createReviewItemRecord(
                   uuid,
@@ -407,9 +413,14 @@ public class ReviewItemsSynchronizer
         }
       }
       
-      //Technically, we also should go through and clean element ID mappings records that are no longer
-      //in use b/c they aren't involved in reviews, but that seems difficult and they aren't hurting
-      //anything by being in the database and not being used...
+      //Technically, we also should go through and clean element ID mappings records that are no 
+      //longer in use b/c they aren't involved in reviews, but that seems difficult and they aren't 
+      //hurting anything by being in the database and not being used...
+      
+      numElementIdMappingRecordsInserted =
+    		DbUtils.batchRecords(
+      	  mapId, elementIdMappingRecordsToInsert, elementIdMappings, null, RecordBatchType.INSERT, 
+      	  conn, maxRecordBatchSize);
       
       numReviewItemsInserted += 
     	  DbUtils.batchRecords(
@@ -435,6 +446,8 @@ public class ReviewItemsSynchronizer
       	  conn, maxRecordBatchSize);
     }
     
+    log.debug(numElementIdMappingRecordsInserted + 
+    	" element id mappings records inserted as a result of the modify changeset.");
     log.debug(
     	numReviewItemsInserted + " review records inserted as a result of the modify changeset.");
     log.debug(
@@ -504,10 +517,10 @@ public class ReviewItemsSynchronizer
    * @param changesetDoc OSM changeset
    * @param parsedElementIdsToElementsByType mapping of element ID's passed in the changeset to
    * actual element ID's stored in the database
-   * @return the number of review records updated
+   * @return true if any review records were updated; false otherwise
    * @throws Exception 
    */
-  public void updateReviewItems(final Document changesetDoc, 
+  public boolean updateReviewItems(final Document changesetDoc, 
     final Map<ElementType, HashMap<Long, Element>> parsedElementIdsToElementsByType) 
     throws Exception
   { 
@@ -521,28 +534,26 @@ public class ReviewItemsSynchronizer
     	updateReviewRecordsFromCreateChangeset(changesetDoc, parsedElementIdsToElementsByType);
     	updateReviewRecordsFromModifyChangeset(changesetDoc);
     	updateReviewRecordsFromDeleteChangeset(changesetDoc);
+    	return true;
   	}
   	else
   	{
   		log.debug(
   		  "No review data prepared for map with ID: " + String.valueOf(mapId) + ".  Skipping " +
   		  "review record synchronization.");
+  		return false;
   	}
   }
   
   /**
    * Updates all features for the given map as reviewed
    * 
-   * @throws SQLException
-   * @throws InstantiationException
-   * @throws IllegalAccessException
-   * @throws ClassNotFoundException
-   * @throws NoSuchMethodException
-   * @throws InvocationTargetException
+   * @throws Exception 
    */
-  public void setAllItemsReviewed() throws SQLException, InstantiationException, 
-    IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException
+  public void setAllItemsReviewed() throws Exception
   {
+  	 (new ReviewMapValidator(conn)).verifyMapPrepared(String.valueOf(mapId));
+  	
     //set all review records for this map ID to reviewed
   	new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), reviewItems)
       .set(reviewItems.reviewStatus, DbUtils.review_status_enum.reviewed)

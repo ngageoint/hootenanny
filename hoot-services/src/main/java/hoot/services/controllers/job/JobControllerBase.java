@@ -49,9 +49,9 @@ import org.slf4j.LoggerFactory;
 
 public class JobControllerBase {
 	private static final Logger log = LoggerFactory.getLogger(JobControllerBase.class);
-	protected String coreJobServerUrl = null;
+	private String coreJobServerUrl = null;
 	protected String processScriptName = null;
-	protected int jobResConnectionTimeout = 3000;
+	private int jobResConnectionTimeout = 3000;
 
 
 	public JobControllerBase()

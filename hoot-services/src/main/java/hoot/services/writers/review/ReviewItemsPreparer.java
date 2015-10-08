@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.review;
+package hoot.services.writers.review;
 
 import java.sql.Connection;
 import java.util.UUID;
@@ -64,7 +64,7 @@ public class ReviewItemsPreparer
   private String writer;
 
   public ReviewItemsPreparer(final Connection conn, final long testDelayMilliseconds,
-    final boolean simulateFailure, final String mapId, final String writer) throws Exception
+    final boolean simulateFailure, final String mapId) throws Exception
   {
     this.conn = conn;
     this.testDelayMilliseconds = testDelayMilliseconds;
@@ -74,7 +74,7 @@ public class ReviewItemsPreparer
     this.mapId =
       ModelDaoUtils.getRecordIdForInputString(mapId, conn,
       		maps, maps.id, maps.displayName);
-    this.writer = writer;
+    this.writer = "reviewPrepareDbWriter";
   }
 
   /**
@@ -185,13 +185,13 @@ public class ReviewItemsPreparer
    * completes; for testing purposes
    * @return a trackable job ID
    */
-  public static String launchPrepareJob(final long mapId, final long testDelayMilliseconds,
+  /*public static String launchPrepareJob(final long mapId, final long testDelayMilliseconds,
     final boolean simulateFailure)
   {
-	//Default to the new writer implementation, and have the tests use the old implementation for 
-	//now.
+	  //Default to the new writer implementation, and have the tests use the old implementation for 
+	  //now.
     return launchPrepareJob(mapId, testDelayMilliseconds, simulateFailure, "reviewPrepareDbWriter2");
-  }
+  }*/
 
   /**
    * Launches a review prepare job in a separate thread
@@ -211,7 +211,7 @@ public class ReviewItemsPreparer
 
     JSONObject command = new JSONObject();
     command.put("mapId", mapId);
-    command.put("execImpl", writer);
+    command.put("execImpl", "reviewPrepareDbWriter");
     if (testDelayMilliseconds > 0)
     {
       command.put("testDelayMilliseconds", testDelayMilliseconds);
