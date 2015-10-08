@@ -57,23 +57,33 @@ public class PostgresUtils
         StringUtils.trimToNull(postgresObj.getValue()) != null)
     {
     	String tagsStr = postgresObj.getValue();
-    	if(tagsStr != null && tagsStr.length() > 0)
-    	{
-    		Pattern regex = Pattern.compile("(\"[^\"]*\")=>((?:\"[^\"]*\"|[^=,])*)");
-      	Matcher regexMatcher = regex.matcher(tagsStr);
-      	while (regexMatcher.find()) {
-      	    String key = regexMatcher.group(1);
-      	    key = StringUtils.removeStart(key, "\"");
-            key = StringUtils.removeEnd(key, "\"");
-      	    String val = regexMatcher.group(2);
-      	    val = StringUtils.removeStart(val, "\"");
-            val = StringUtils.removeEnd(val, "\"");
-            hstore.put(key, val);
-      	} 
-    	}
+    	hstore = _parseTags(tagsStr);
     }
     return hstore;
   }
+  
+  protected static final Map<String, String> _parseTags(final String tagsStr) throws Exception
+  {
+  	Map<String, String> tagsMap = new HashMap<String, String>();
+  	
+  	if(tagsStr != null && tagsStr.length() > 0)
+  	{
+  		Pattern regex = Pattern.compile("(\"[^\"]*\")=>((?:\"[^\"]*\"|[^=,])*)");
+    	Matcher regexMatcher = regex.matcher(tagsStr);
+    	while (regexMatcher.find()) {
+    	    String key = regexMatcher.group(1);
+    	    key = StringUtils.removeStart(key, "\"");
+          key = StringUtils.removeEnd(key, "\"");
+    	    String val = regexMatcher.group(2);
+    	    val = StringUtils.removeStart(val, "\"");
+          val = StringUtils.removeEnd(val, "\"");
+          tagsMap.put(key, val);
+    	} 
+  	}
+  	
+  	return tagsMap;
+  }
 
 }
+
 
