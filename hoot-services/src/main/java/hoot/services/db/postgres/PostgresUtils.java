@@ -28,8 +28,6 @@ package hoot.services.db.postgres;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.postgresql.util.PGobject;
@@ -52,27 +50,26 @@ public class PostgresUtils
     //value = "key 1"=>"val 1", "key 2"=>"val 2"
     
     Map<String, String> hstore = new HashMap<String, String>();
- 
     if (postgresObj != null && postgresObj.getValue() != null &&
         StringUtils.trimToNull(postgresObj.getValue()) != null)
     {
-    	String tagsStr = postgresObj.getValue();
-    	if(tagsStr != null && tagsStr.length() > 0)
-    	{
-    		Pattern regex = Pattern.compile("(\"[^\"]*\")=>((?:\"[^\"]*\"|[^=,])*)");
-      	Matcher regexMatcher = regex.matcher(tagsStr);
-      	while (regexMatcher.find()) {
-      	    String key = regexMatcher.group(1);
-      	    key = StringUtils.removeStart(key, "\"");
-            key = StringUtils.removeEnd(key, "\"");
-      	    String val = regexMatcher.group(2);
-      	    val = StringUtils.removeStart(val, "\"");
-            val = StringUtils.removeEnd(val, "\"");
-            hstore.put(key, val);
-      	} 
-    	}
+      String[] vals = postgresObj.getValue().split(",");
+      for (int i = 0; i < vals.length; i++)
+      {
+        String[] pair = vals[i].split("=>");
+        if (pair.length == 2)
+        {
+          //remove the quotes at the very beginning and end of the string
+          String key = pair[0].trim();
+          key = StringUtils.removeStart(key, "\"");
+          key = StringUtils.removeEnd(key, "\"");
+          String val = pair[1].trim();
+          val = StringUtils.removeStart(val, "\"");
+          val = StringUtils.removeEnd(val, "\"");
+          hstore.put(key, val);
+        }
+      }
     }
     return hstore;
   }
-
 }
