@@ -14,7 +14,7 @@ import hoot.services.review.ReviewUtils;
 import hoot.services.utils.XmlUtils;
 import hoot.services.validators.review.ReviewMapValidator;
 
-import java.lang.reflect.InvocationTargetException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -225,6 +225,7 @@ public class ReviewItemsSynchronizer
     
     int numReviewItemsInserted = 0;
     int numReviewItemsUpdated = 0;
+    long numElementIdMappingRecordsInserted = 0;
     
     //get a list of all the uuid's in the modify changeset (both types: reviewable and review 
     //against); We're only concerned with elements having a uuid tag.  If they don't have that tag 
@@ -379,7 +380,6 @@ public class ReviewItemsSynchronizer
           			//If the record doesn't already exist the we can't update it here.
           			dbReviewableUuidsToReviewRecords.containsKey(uuid + ";" + id))
           	{
-
           		ReviewItems reviewRecord = 
             		ReviewUtils.createReviewItemRecord(
                   uuid,
@@ -413,9 +413,14 @@ public class ReviewItemsSynchronizer
         }
       }
       
-      //Technically, we also should go through and clean element ID mappings records that are no longer
-      //in use b/c they aren't involved in reviews, but that seems difficult and they aren't hurting
-      //anything by being in the database and not being used...
+      //Technically, we also should go through and clean element ID mappings records that are no 
+      //longer in use b/c they aren't involved in reviews, but that seems difficult and they aren't 
+      //hurting anything by being in the database and not being used...
+      
+      numElementIdMappingRecordsInserted =
+    		DbUtils.batchRecords(
+      	  mapId, elementIdMappingRecordsToInsert, elementIdMappings, null, RecordBatchType.INSERT, 
+      	  conn, maxRecordBatchSize);
       
       numReviewItemsInserted += 
     	  DbUtils.batchRecords(
@@ -441,6 +446,8 @@ public class ReviewItemsSynchronizer
       	  conn, maxRecordBatchSize);
     }
     
+    log.debug(numElementIdMappingRecordsInserted + 
+    	" element id mappings records inserted as a result of the modify changeset.");
     log.debug(
     	numReviewItemsInserted + " review records inserted as a result of the modify changeset.");
     log.debug(

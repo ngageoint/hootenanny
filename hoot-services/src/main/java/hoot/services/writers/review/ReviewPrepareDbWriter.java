@@ -32,6 +32,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -102,6 +104,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 	private long totalParseableRecords = 0;
 	private long totalReviewableRecords = 0;
 	private int maxRecordBatchSize;
+	private boolean cleanReviewTags = true;
 	private ListMultimap<String, String> reviewableItemIdToReviewAgainstItemIds;
 
 	private String finalStatusDetail;
@@ -123,6 +126,10 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 			Integer.parseInt(
 				HootProperties.getInstance()
 		      .getProperty("maxWarningsDisplayed", HootProperties.getDefault("maxWarningsDisplayed")));
+		cleanReviewTags = 
+			Boolean.parseBoolean(
+				HootProperties.getInstance()
+		      .getProperty("cleanReviewTags", HootProperties.getDefault("cleanReviewTags")));
 	}
 
 	/**
@@ -558,48 +565,11 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 
-		  //TODO: change back to original element generic code
 			while (rs.next())
 			{
-				if (elementType == ElementType.Node)
-				{
-					CurrentNodes nodes = new CurrentNodes();
-					nodes.setId(rs.getLong("id"));
-
-					nodes.setLatitude(rs.getDouble("latitude"));
-					nodes.setLongitude(rs.getDouble("longitude"));
-					nodes.setChangesetId(rs.getLong("changeset_id"));
-					nodes.setVisible(rs.getBoolean("visible"));
-					nodes.setTimestamp(rs.getTimestamp("timestamp"));
-					nodes.setTile(rs.getLong("tile"));
-					nodes.setVersion(rs.getLong("version"));
-					nodes.setTags(rs.getObject("tags"));
-					retMap.put(nodes.getId(), nodes);
-				}
-				else if (elementType == ElementType.Way)
-				{
-					CurrentWays ways = new CurrentWays();
-					ways.setId(rs.getLong("id"));
-
-					ways.setChangesetId(rs.getLong("changeset_id"));
-					ways.setVisible(rs.getBoolean("visible"));
-					ways.setTimestamp(rs.getTimestamp("timestamp"));
-					ways.setVersion(rs.getLong("version"));
-					ways.setTags(rs.getObject("tags"));
-					retMap.put(ways.getId(), ways);
-				}
-				else if (elementType == ElementType.Relation)
-				{
-					CurrentRelations rel = new CurrentRelations();
-					rel.setId(rs.getLong("id"));
-
-					rel.setChangesetId(rs.getLong("changeset_id"));
-					rel.setVisible(rs.getBoolean("visible"));
-					rel.setTimestamp(rs.getTimestamp("timestamp"));
-					rel.setVersion(rs.getLong("version"));
-					rel.setTags(rs.getObject("tags"));
-					retMap.put(rel.getId(), rel);
-				}
+				final Object obj = DbUtils.resultToObj(rs, elementType);
+				final long id = (Long)MethodUtils.invokeMethod(obj, "getId", new Object[]{});
+				retMap.put(id, obj);
 			}
 			rs.close();
 		}
@@ -806,6 +776,143 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 
     return idMappingRecordWritten;
   }
+  
+  /*
+   * find all elements who have a hoot:review:uuid tag id which doesn't correspond to the uuid
+   * of any existing element and remove that uuid from the tag so that the invalid uuid isn't passed
+   * back in via a changeset at a later time
+   */
+  private void removeInvalidReviewAgainstTagsFromElements(final ElementType elementType, 
+  	final Set<String> invalidUuids) throws Exception
+  {
+  	if (invalidUuids.size() > 0)
+  	{
+  		/*if (invalidUuids.contains("{8f23026f-27c1-5e03-8ae4-0d229d996c9b}"))
+  		{
+  			int test = 1;
+  		}*/
+  		
+  		final Element prototype = ElementFactory.getInstance().create(mapId, elementType, conn);
+  		String tableName = prototype.getElementTable().getTableName();
+
+  		String POSTGRESQL_DRIVER = "org.postgresql.Driver";
+  		Statement stmt = null;
+  		try
+  		{
+  			Class.forName(POSTGRESQL_DRIVER);
+  			stmt = conn.createStatement();
+
+  			String sql = 
+  				"select * from " + tableName + "_" + mapId + " where";
+  			final String[] invalidUuidsArr = invalidUuids.toArray(new String[]{});
+  			for (int i = 0; i < invalidUuidsArr.length; i++)
+  			{
+  				sql += " tags->'hoot:review:uuid' like '%" + invalidUuidsArr[i] + "%'";
+  				if (i < invalidUuidsArr.length - 1)
+  				{
+  					sql += " or";
+  				}
+  			}
+  			stmt = conn.createStatement();
+  			ResultSet rs = stmt.executeQuery(sql);
+  			List<Object> recordsToModify = new ArrayList<Object>();
+  			while (rs.next())
+  			{
+  				final Object obj = DbUtils.resultToObj(rs, elementType);
+  				Map<String, String> tags =
+		        PostgresUtils.postgresObjToHStore(
+		      	  (PGobject)MethodUtils.invokeMethod(obj, "getTags", new Object[]{}));
+  				if (tags.containsKey("hoot:review:uuid"))
+  				{
+  				  final String originalReviewAgainstIdsStr = tags.get("hoot:review:uuid");
+  				  String[] reviewAgainstIdsArr = null;
+  				  if (originalReviewAgainstIdsStr.contains(";"))
+  				  {
+  				  	reviewAgainstIdsArr = originalReviewAgainstIdsStr.split(";");
+  				  }
+  				  else
+  				  {
+  				  	reviewAgainstIdsArr = new String[1];
+  				  	reviewAgainstIdsArr[0] = originalReviewAgainstIdsStr;
+  				  }
+  				  Set<String> reviewAgainstIds = new HashSet(Arrays.asList(reviewAgainstIdsArr));
+  				  
+  				  /*if (reviewAgainstIds.contains("{8f23026f-27c1-5e03-8ae4-0d229d996c9b}"))
+  		  		{
+  		  			int test = 1;
+  		  		}*/
+  				  
+  				  reviewAgainstIds.removeAll(invalidUuids);
+  				  
+  				  /*if (reviewAgainstIds.contains("{8f23026f-27c1-5e03-8ae4-0d229d996c9b}"))
+  		  		{
+  		  			int test = 1;
+  		  		}*/
+  				  
+  				  final String newReviewAgainstIdsStr = StringUtils.join(reviewAgainstIds, ";");
+  				  if (!newReviewAgainstIdsStr.equals(originalReviewAgainstIdsStr))
+  				  {
+  				  	if (StringUtils.trimToNull(newReviewAgainstIdsStr) != null)
+    				  {
+    				  	tags.put("hoot:review:uuid", newReviewAgainstIdsStr);
+    				  } 
+    				  else
+    				  {
+    				  	//no review left, so drop all review tags
+    				  	Map<String, String> tagsCopy = new HashMap(tags);
+    				  	for (Map.Entry<String, String> tagEntry : tags.entrySet())
+    			      {
+    			      	if (tagEntry.getKey().startsWith("hoot:review"))
+    			      	{
+    			      		tagsCopy.remove(tagEntry.getKey());
+    			      	}
+    			      }
+    				  	tags = tagsCopy;
+    				  }
+  				  	MethodUtils.invokeMethod(obj, "setTags", tags);
+  				  	recordsToModify.add(obj);
+  				  }
+  				}
+  			}
+  			rs.close();
+  			
+  		  //TODO: make this element generic
+  			long updateCount = 0;
+  			if (elementType == ElementType.Node)
+        {
+  				updateCount += 
+  					DbUtils.batchRecordsDirectNodes(mapId, recordsToModify, RecordBatchType.UPDATE, conn,
+  						recordsToModify.size());
+        }
+        else if (elementType == ElementType.Way)
+        {
+        	updateCount += 
+            DbUtils.batchRecordsDirectWays(mapId, recordsToModify, RecordBatchType.UPDATE, conn,
+            	recordsToModify.size());
+        }
+        else if (elementType == ElementType.Relation)
+        {
+        	updateCount += 
+            DbUtils.batchRecordsDirectRelations(mapId, recordsToModify, RecordBatchType.UPDATE, conn,
+            	recordsToModify.size());
+        }
+  			log.debug(
+  				updateCount + " element records updated with review against ID's " +
+  				"that don't have corresponding uuid tag entries (" + recordsToModify.size() + 
+  				" records sent in udpate query)");
+  		}
+  		finally
+  		{
+  			try
+  			{
+  				if (stmt != null) stmt.close();
+  			}
+  			catch (SQLException se2)
+  			{
+  			}
+  		}
+  	}
+  }
 
   /*
    * logging records with invalid tag values and skipping; if errors should be thrown, then the
@@ -841,8 +948,14 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
           final Set<String> allUuids = parseAllUuidsFromElementRecords(reviewableElementRecords);
           Set<String> existingIdMappings = null;
           Set<String> validUuids = null;
+          Set<String> invalidUuids = null;
           if (allUuids.size() > 0)
           {
+          	/*if (allUuids.contains("{8f23026f-27c1-5e03-8ae4-0d229d996c9b}"))
+          	{
+          		int test = 1;
+          	}*/
+          	
           	log.debug("allUuids length: " + allUuids.size());
             existingIdMappings =  
           		Element.filterOutNonExistingElementMappingUniqueIds(
@@ -852,7 +965,20 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
               Element.filterOutNonExistingUuids(
               	mapId, allUuids.toArray(new String[]{}), elementType, conn);
             log.debug("validUuids length: " + validUuids.size());
-          }
+            
+            /*if (validUuids.contains("{8f23026f-27c1-5e03-8ae4-0d229d996c9b}"))
+          	{
+          		int test = 1;
+          	}*/
+            
+            invalidUuids = new HashSet<String>(allUuids);
+            invalidUuids.removeAll(validUuids);
+            log.debug("invalidUuids length: " + invalidUuids.size());
+            if (cleanReviewTags)
+            {
+            	removeInvalidReviewAgainstTagsFromElements(elementType, invalidUuids);
+            }
+          } 
           
           numElementsReturned = reviewableElementRecords.size();
           elementIndex += numElementsReturned;

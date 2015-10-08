@@ -305,6 +305,10 @@ public class HootProperties
     {
       return "10";
     }
+    else if (key.equals("cleanReviewTags"))
+    {
+      return "true";
+    }
     return null;
   }
 }

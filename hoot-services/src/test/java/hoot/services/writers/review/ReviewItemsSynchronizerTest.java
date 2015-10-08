@@ -301,7 +301,7 @@ public class ReviewItemsSynchronizerTest extends OsmResourceTestAbstract
 		  Assert.assertEquals(
 		  	"{ca3ae25a-164e-27ca-5aef-77a4597c7c32}", reviewRecord.getReviewAgainstItemId());
 		  
-		  //TODO: finish once #7226 is fixed
+		  //TODO: fix
 		  
 		  /*changesetId = Changeset.insertNew(mapId, userId, conn);
 		  ReviewTestUtils.changesetId = changesetId;
