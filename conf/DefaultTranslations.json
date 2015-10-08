@@ -23,12 +23,12 @@
 		"CANEXPORT" : false,
 		"PATH" : "translations/OSM_Ingest.js",
 	},
-        {
-        	"NAME" : "GEONAMES",
-        	"DESCRIPTION" : "GeoNames.org",
-        	"CANEXPORT" : false,
-        	"PATH" : "translations/GeoNames.js",
-    	},
+    {
+        "NAME" : "GEONAMES",
+        "DESCRIPTION" : "GeoNames.org",
+        "CANEXPORT" : false,
+        "PATH" : "translations/GeoNames.js",
+   	},
 	{
 		"NAME" : "UTP",
 		"DESCRIPTION" : "Urban Tactical Planner (UTP)",
@@ -36,6 +36,20 @@
 		"PATH" : "translations-local/UTP.js",
 		"FOUO_PATH" : "plugins-local"
 	},
+	{
+		"NAME" : "HGISv20",
+		"DESCRIPTION" : "Human Geography (HGIS) v2.0",
+		"CANEXPORT" : true,
+		"PATH" : "translations-local/HGISv20.js",
+		"FOUO_PATH" : "plugins-local"
+	},
+        {
+                "NAME" : "HotelsBase",
+                "DESCRIPTION" : "HotelsBase",
+                "CANEXPORT" : true,
+                "PATH" : "translations-local/HotelsBase.js",
+                "FOUO_PATH" : "plugins-local"
+        },
 	{
 		"NAME" : "UFD",
 		"DESCRIPTION" : "Urban Feature Data (UFD) Levels 1-3",
