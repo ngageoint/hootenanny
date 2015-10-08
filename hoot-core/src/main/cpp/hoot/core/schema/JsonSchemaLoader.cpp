@@ -28,6 +28,7 @@
 #include "JsonSchemaLoader.h"
 
 // hoot
+#include <hoot/core/schema/KeyValuePair.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 
@@ -140,7 +141,7 @@ private:
     {
       const Object& obj = value.get_obj();
 
-      TagVertex tv;
+      SchemaVertex tv;
 
       for (size_t i = 0; i < obj.size(); i++)
       {
@@ -244,7 +245,92 @@ private:
     }
   }
 
-  void _loadAssociatedWith(TagVertex& tv, const Value& value)
+  void _loadACompound(const Value& value)
+  {
+    if (value.type() != obj_type)
+    {
+      throw HootException("Expected tag to be an object.");
+    }
+    else
+    {
+      const Object& obj = value.get_obj();
+
+      SchemaVertex tv;
+      tv.setType(SchemaVertex::Compound);
+
+      for (size_t i = 0; i < obj.size(); i++)
+      {
+        if (i == 0)
+        {
+          if (obj[i].name_ == "name")
+          {
+            tv.name = toString(obj[i].value_);
+            if (tv.name.contains("="))
+            {
+              throw HootException("A compound name can not contain an equals sign.");
+            }
+          }
+          else
+          {
+            HootException("Name must be specified as the first tag entry in JSON.");
+          }
+        }
+        else if (toString(obj[i].name_).startsWith("#"))
+        {
+          // pass
+        }
+        else if (obj[i].name_ == "associatedWith")
+        {
+          _loadAssociatedWith(tv, obj[i].value_);
+        }
+        else if (obj[i].name_ == "isA")
+        {
+          _schema.addIsA(tv.name, toString(obj[i].value_));
+        }
+        else if (obj[i].name_ == "similarTo")
+        {
+          _loadSimilarTo(tv.name, obj[i].value_);
+        }
+        else if (obj[i].name_ == "description")
+        {
+          tv.description = toString(obj[i].value_);
+        }
+        else if (obj[i].name_ == "influence")
+        {
+          tv.influence = obj[i].value_.get_value<double>();
+        }
+        else if (obj[i].name_ == "childWeight")
+        {
+          tv.childWeight = obj[i].value_.get_value<double>();
+        }
+        else if (obj[i].name_ == "mismatchScore")
+        {
+          tv.mismatchScore = obj[i].value_.get_value<double>();
+        }
+        else if (obj[i].name_ == "categories")
+        {
+          tv.categories = _toStringList(obj[i].value_);
+        }
+        else if (obj[i].name_ == "tags")
+        {
+          _loadCompoundTags(tv, obj[i].value_);
+        }
+        else if (obj[i].name_ == "geometries")
+        {
+          _loadGeometries(tv, obj[i].value_);
+        }
+        else
+        {
+          throw HootException(QString("An unexpected key was found in a tag (%1): %2").
+                              arg(tv.name).arg(QString::fromStdString(obj[i].name_)));
+        }
+      }
+
+      _schema.updateOrCreateVertex(tv);
+    }
+  }
+
+  void _loadAssociatedWith(SchemaVertex& tv, const Value& value)
   {
     if (value.type() != array_type)
     {
@@ -261,7 +347,54 @@ private:
     }
   }
 
-  void _loadGeometries(TagVertex& tv, const Value& value)
+  void _loadCompoundTags(SchemaVertex& tv, const Value& value)
+  {
+    if (value.type() != array_type)
+    {
+      throw HootException("Expected an array for compound tags.");
+    }
+    else
+    {
+      const Array& arr = value.get_array();
+
+      if (arr.size() == 0)
+      {
+        throw HootException("A compound tag must have 1 or more tag entries.");
+      }
+
+      for (size_t i = 0; i < arr.size(); i++)
+      {
+        const Value& v2 = arr[i];
+
+        if (v2.type() != array_type)
+        {
+          throw HootException("A compound tag must have 1 or more sub-arrays.");
+        }
+        const Array& a2 = arr[i].get_array();
+
+        if (a2.size() == 0)
+        {
+          throw HootException("A compound tag entry must have 1 or more KVP entries.");
+        }
+
+        QList<KeyValuePairPtr> rule;
+        for (size_t i = 0; i < a2.size(); i++)
+        {
+          const Value& v3 = a2[i];
+          if (v3.type() != str_type)
+          {
+            throw HootException("A compound tag rule must be an array of strings.");
+          }
+
+          rule.append(KeyValuePairPtr(new KeyValuePair(toString(v3.get_str()))));
+        }
+
+        tv.addCompoundRule(rule);
+      }
+    }
+  }
+
+  void _loadGeometries(SchemaVertex& tv, const Value& value)
   {
     if (value.type() != array_type)
     {
@@ -368,16 +501,21 @@ private:
 
       for (size_t i = 0; i < obj.size(); i++)
       {
-        if (QString::fromStdString(obj[i].name_).startsWith("#"))
+        QString name = QString::fromStdString(obj[i].name_);
+        if (name.startsWith("#"))
         {
           // comment
           continue;
         }
-        else if (obj[i].name_ == "tag")
+        else if (name == "tag")
         {
           _loadATag(obj[i].value_);
         }
-        else if (obj[i].name_ == "import")
+        else if (name == "compound")
+        {
+          _loadACompound(obj[i].value_);
+        }
+        else if (name == "import")
         {
           load(_baseDir.back() + toString(obj[i].value_));
         }

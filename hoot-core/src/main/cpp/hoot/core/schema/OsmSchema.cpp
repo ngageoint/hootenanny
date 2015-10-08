@@ -79,14 +79,14 @@ typedef boost::adjacency_list<
   boost::vecS,
   // Our graph is directed and we don't need to go backwards
   boost::directedS,
-  TagVertex,
+  SchemaVertex,
   TagEdge
 > TagGraph;
 
 typedef graph_traits <TagGraph>::vertex_descriptor VertexId;
 typedef graph_traits <TagGraph>::edge_descriptor EdgeId;
 
-TagVertex empty;
+SchemaVertex empty;
 
 struct AverageKey
 {
@@ -199,6 +199,10 @@ uint16_t OsmGeometries::fromString(const QString& s)
 // a small value.
 const double epsilon = 1e-6;
 
+/**
+ * This class is implemented internally to avoid including the very expensive boost graph code in
+ * the numerous files that use OsmSchema.
+ */
 class OsmSchemaData
 {
 public:
@@ -276,8 +280,8 @@ public:
     }
     else
     {
-      VertexId vid1 = _kvp2Vertex[kvpNormalized1];
-      VertexId vid2 = _kvp2Vertex[kvpNormalized2];
+      VertexId vid1 = _name2Vertex[kvpNormalized1];
+      VertexId vid2 = _name2Vertex[kvpNormalized2];
 
       AverageKey key(vid1, w1, vid2, w2);
       HashMap<AverageKey, AverageResult>::iterator it = _cachedAverages.find(key);
@@ -301,7 +305,7 @@ public:
 
   void createTestingGraph()
   {
-    TagVertex v;
+    SchemaVertex v;
     v.influence = 1;
     v.key = "highway";
     v.name = "highway=road";
@@ -407,13 +411,13 @@ public:
 
   VertexId createOrGetVertex(const QString& str)
   {
-    if (_kvp2Vertex.contains(str))
+    if (_name2Vertex.contains(str))
     {
-      return _kvp2Vertex[str];
+      return _name2Vertex[str];
     }
     else
     {
-      TagVertex v;
+      SchemaVertex v;
       v.influence = -1;
       v.name = str;
       v.valueType = Unknown;
@@ -424,13 +428,13 @@ public:
     }
   }
 
-  vector<TagVertex> getAllTags()
+  vector<SchemaVertex> getAllTags()
   {
-    vector<TagVertex> result;
+    vector<SchemaVertex> result;
 
-    result.reserve(_kvp2Vertex.size());
-    for (QHash<QString, VertexId>::const_iterator it = _kvp2Vertex.begin();
-      it != _kvp2Vertex.end(); ++it)
+    result.reserve(_name2Vertex.size());
+    for (QHash<QString, VertexId>::const_iterator it = _name2Vertex.begin();
+      it != _name2Vertex.end(); ++it)
     {
       result.push_back(_graph[it.value()]);
     }
@@ -438,12 +442,12 @@ public:
     return result;
   }
 
-  vector<TagVertex> getAssociatedTags(QString name)
+  vector<SchemaVertex> getAssociatedTags(QString name)
   {
     set<VertexId> vids;
-    _getAssociatedTags(_kvp2Vertex[name], vids);
+    _getAssociatedTags(_name2Vertex[name], vids);
 
-    vector<TagVertex> result;
+    vector<SchemaVertex> result;
 
     for (set<VertexId>::iterator it = vids.begin(); it != vids.end(); it++)
     {
@@ -453,12 +457,12 @@ public:
     return result;
   }
 
-  vector<TagVertex> getChildTags(QString name)
+  vector<SchemaVertex> getChildTags(QString name)
   {
     set<VertexId> vids;
-    _getChildTags(_kvp2Vertex[name], vids);
+    _getChildTags(_name2Vertex[name], vids);
 
-    vector<TagVertex> result;
+    vector<SchemaVertex> result;
 
     for (set<VertexId>::iterator it = vids.begin(); it != vids.end(); it++)
     {
@@ -468,14 +472,14 @@ public:
     return result;
   }
 
-  const TagVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2)
+  const SchemaVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2)
   {
-    if (!_kvp2Vertex.contains(kvp1) || !_kvp2Vertex.contains(kvp1))
+    if (!_name2Vertex.contains(kvp1) || !_name2Vertex.contains(kvp1))
     {
       return empty;
     }
-    VertexId v1 = _kvp2Vertex[kvp1];
-    VertexId v2 = _kvp2Vertex[kvp2];
+    VertexId v1 = _name2Vertex[kvp1];
+    VertexId v2 = _name2Vertex[kvp2];
     VertexId v1Ancestor = v1;
 
     while (_isValid(v1Ancestor))
@@ -512,14 +516,29 @@ public:
     return result;
   }
 
-  vector<TagVertex> getSimilarTags(QString kvp1, double minimumScore)
+  vector<SchemaVertex> getSchemaVertices(const Tags& tags) const
   {
-    vector<TagVertex> result;
+    vector<SchemaVertex> result;
+
+    vector<VertexId> vids = _getVertexIds(tags);
+
+    // go through each compound vertex found and evaluate it for match against tags.
+    for (size_t i = 0; i < vids.size(); ++i)
+    {
+      result.push_back(_graph[vids[i]]);
+    }
+
+    return result;
+  }
+
+  vector<SchemaVertex> getSimilarTags(QString kvp1, double minimumScore)
+  {
+    vector<SchemaVertex> result;
     QString kvpn1 = normalizeEnumeratedKvp(kvp1);
 
     if (kvpn1.isEmpty() == false)
     {
-      VertexId id1 = _kvp2Vertex[kvpn1];
+      VertexId id1 = _name2Vertex[kvpn1];
 
       if (_processed.find(id1) == _processed.end())
       {
@@ -544,14 +563,14 @@ public:
     return result;
   }
 
-  vector<TagVertex> getTagByCategory(OsmSchemaCategory c)
+  vector<SchemaVertex> getTagByCategory(OsmSchemaCategory c)
   {
-    vector<TagVertex> result;
+    vector<SchemaVertex> result;
 
     graph_traits < TagGraph >::vertex_iterator vi, vend;
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
     {
-      const TagVertex& tv = _graph[*vi];
+      const SchemaVertex& tv = _graph[*vi];
       if (OsmSchemaCategory::fromStringList(tv.categories).contains(c))
       {
         result.push_back(tv);
@@ -561,17 +580,35 @@ public:
     return result;
   }
 
-  const TagVertex& getTagVertex(const QString& kvp) const
+  const SchemaVertex& getTagVertex(const QString& kvp) const
   {
     QString n = normalizeKvp(kvp);
-    if (_kvp2Vertex.contains(n))
+    if (_name2Vertex.contains(n))
     {
-      return _graph[_kvp2Vertex[n]];
+      const SchemaVertex& v = _graph[_name2Vertex[n]];
+      if (v.getType() == SchemaVertex::Tag)
+      {
+        return v;
+      }
     }
-    else
+
+    return empty;
+  }
+
+  vector<SchemaVertex> getUniqueSchemaVertices(const Tags& tags) const
+  {
+    vector<SchemaVertex> result;
+
+    vector<VertexId> vids = _getVertexIds(tags);
+    vids = _removeAncestorVertices(vids);
+
+    // go through each compound vertex found and evaluate it for match against tags.
+    for (size_t i = 0; i < vids.size(); ++i)
     {
-      return empty;
+      result.push_back(_graph[vids[i]]);
     }
+
+    return result;
   }
 
   bool isAncestor(const QString& childKvp, const QString& parentKvp)
@@ -580,16 +617,16 @@ public:
     QString nChildKvp = normalizeKvp(childKvp);
     QString nParentKvp = normalizeKvp(parentKvp);
 
-    if (_kvp2Vertex.contains(nChildKvp) && _kvp2Vertex.contains(nParentKvp))
+    if (_name2Vertex.contains(nChildKvp) && _name2Vertex.contains(nParentKvp))
     {
       // cache the results to speed things up.
-      VertexId childVid = _kvp2Vertex[nChildKvp];
-      VertexId parentVid = _kvp2Vertex[nParentKvp];
+      VertexId childVid = _name2Vertex[nChildKvp];
+      VertexId parentVid = _name2Vertex[nParentKvp];
       pair<VertexId, VertexId> key(childVid, parentVid);
       HashMap< pair<VertexId, VertexId>, bool >::const_iterator it = _isAncestorCache.find(key);
       if (it == _isAncestorCache.end())
       {
-        result = _isAncestor(_kvp2Vertex[nChildKvp], _kvp2Vertex[nParentKvp]);
+        result = _isAncestor(_name2Vertex[nChildKvp], _name2Vertex[nParentKvp]);
         _isAncestorCache[key] = result;
       }
       else
@@ -637,8 +674,8 @@ public:
 
     if (kvpn1.isEmpty() == false && kvpn2.isEmpty() == false)
     {
-      VertexId id1 = _kvp2Vertex[kvpn1];
-      VertexId id2 = _kvp2Vertex[kvpn2];
+      VertexId id1 = _name2Vertex[kvpn1];
+      VertexId id2 = _name2Vertex[kvpn2];
 
       if (_processed.find(id1) == _processed.end())
       {
@@ -753,16 +790,10 @@ public:
     return result;
   }
 
-  void updateOrCreateVertex(const TagVertex& tv)
+  void updateOrCreateVertex(const SchemaVertex& tv)
   {
     VertexId vid = createOrGetVertex(tv.name);
-    _graph[vid] = tv;
-
-    // add in the list of aliases.
-    for (int i = 0; i < tv.aliases.size(); i++)
-    {
-      _kvp2Vertex[tv.aliases[i]] = vid;
-    }
+    _updateVertex(vid, tv);
   }
 
   void update()
@@ -772,7 +803,12 @@ public:
 
 private:
 
-  QHash<QString, VertexId> _kvp2Vertex;
+  QHash<QString, VertexId> _name2Vertex;
+  /**
+   * Maps a single tag that makes up a rule in a compound vertex to that vertex. There will likely
+   * be multiple entries for a single vertex.
+   */
+  QMultiHash<QString, VertexId> _name2CompoundVertex;
 
   double _isACost;
   HashSet<VertexId> _processed;
@@ -785,18 +821,10 @@ private:
 
   TagGraph _graph;
 
-  VertexId _addVertex(const TagVertex& v)
+  VertexId _addVertex(const SchemaVertex& v)
   {
     VertexId vid = add_vertex(v, _graph);
-
-    _kvp2Vertex[v.name] = vid;
-
-    if (v.name.startsWith("regex?"))
-    {
-      QRegExp re(v.name.mid(6));
-      _regexKeys.append(pair<QRegExp, VertexId>(re, vid));
-    }
-
+    _updateVertex(vid, v);
     return vid;
   }
 
@@ -898,6 +926,18 @@ private:
     }
   }
 
+  void _findPotentialCompoundTags(VertexId vid, set<VertexId>& compoundTags) const
+  {
+    const SchemaVertex& sv = _graph[vid];
+
+    QMultiHash<QString, VertexId>::const_iterator it = _name2CompoundVertex.find(sv.name);
+    while (it != _name2CompoundVertex.end() && it.key() == sv.name)
+    {
+      compoundTags.insert(it.value());
+      ++it;
+    }
+  }
+
   void _getAssociatedTags(VertexId from, set<VertexId>& result)
   {
     graph_traits < TagGraph >::edge_iterator ei, eend;
@@ -928,7 +968,7 @@ private:
     }
   }
 
-  VertexId _getParent(VertexId child)
+  VertexId _getParent(VertexId child) const
   {
     VertexId result = numeric_limits<VertexId>::max();
 
@@ -950,7 +990,48 @@ private:
     return result;
   }
 
-  bool _isAncestor(VertexId child, VertexId ancestor)
+  vector<VertexId> _getVertexIds(const Tags& tags) const
+  {
+    vector<VertexId> result;
+
+    set<VertexId> compoundTags;
+
+    // go through each of the tags and look for the tag vertex.
+    for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
+    {
+      QString n = normalizeKvp(OsmSchema::toKvp(it.key(), it.value()));
+
+      // find each compound vertex linked from a tag vertex and put into a set.
+      if (_name2Vertex.contains(n))
+      {
+        VertexId vid = _name2Vertex[n];
+
+        _findPotentialCompoundTags(vid, compoundTags);
+
+        result.push_back(vid);
+      }
+    }
+
+    // go through each compound vertex found and evaluate it for match against tags.
+    for (set<VertexId>::const_iterator it = compoundTags.begin(); it != compoundTags.end(); ++it)
+    {
+      VertexId compoundTagId = *it;
+
+      const SchemaVertex& sv = _graph[compoundTagId];
+
+      if (sv.isCompoundMatch(tags))
+      {
+        result.push_back(compoundTagId);
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Returns true if ancestor is a director or indirect parent of child using the isA tag.
+   */
+  bool _isAncestor(VertexId child, VertexId ancestor) const
   {
     VertexId parent = _getParent(child);
 
@@ -968,7 +1049,7 @@ private:
     }
   }
 
-  bool _isValid(VertexId vid)
+  bool _isValid(VertexId vid) const
   {
     return vid != numeric_limits<VertexId>::max();
   }
@@ -976,14 +1057,14 @@ private:
   QString _normalizeEnumeratedKvp(const QString& kvp)
   {
     static QString equalStar = "=*";
-    if (_kvp2Vertex.contains(kvp))
+    if (_name2Vertex.contains(kvp))
     {
       return kvp;
     }
     else
     {
       QString newKvp = getKey(kvp) + equalStar;
-      if (_kvp2Vertex.contains(newKvp))
+      if (_name2Vertex.contains(newKvp))
       {
         return newKvp;
       }
@@ -997,17 +1078,17 @@ private:
   QString _normalizeKvp(const QString& kvp) const
   {
     QString key = getKey(kvp);
-    if (_kvp2Vertex.contains(kvp))
+    if (_name2Vertex.contains(kvp))
     {
       return kvp;
     }
-    else if (_kvp2Vertex.contains(key + "=*"))
+    else if (_name2Vertex.contains(key + "=*"))
     {
       return getKey(kvp) + "=*";
     }
-    else if (_kvp2Vertex.contains(key))
+    else if (_name2Vertex.contains(key))
     {
-      const TagVertex& v = _graph[_kvp2Vertex[key]];
+      const SchemaVertex& v = _graph[_name2Vertex[key]];
       if (v.valueType == Text || v.valueType == Int)
       {
         return key;
@@ -1065,14 +1146,38 @@ private:
     }
   }
 
+  vector<VertexId> _removeAncestorVertices(const vector<VertexId>& vid) const
+  {
+    vector<VertexId> result;
+
+    for (size_t i = 0; i < vid.size(); ++i)
+    {
+      bool aAncestor = false;
+      for (size_t j = 0; j < vid.size() && aAncestor == false; ++j)
+      {
+        if (i != j && _isAncestor(vid[j], vid[i]))
+        {
+          aAncestor = true;
+        }
+      }
+
+      if (!aAncestor)
+      {
+        result.push_back(vid[i]);
+      }
+    }
+
+    return result;
+  }
+
   void _updateInheritance(VertexId vid)
   {
-    TagVertex& childTv = _graph[vid];
+    SchemaVertex& childTv = _graph[vid];
     VertexId parent = _getParent(vid);
     if (_isValid(parent))
     {
       _updateInheritance(parent);
-      TagVertex& parentTv = _graph[parent];
+      SchemaVertex& parentTv = _graph[parent];
 
       if (childTv.geometries == 0)
       {
@@ -1112,6 +1217,49 @@ private:
         LOG_WARN("Value type for " << childTv.name << " has not been specified.");
       }
     }
+  }
+
+  VertexId _updateVertex(VertexId vid, const SchemaVertex& v)
+  {
+    _name2Vertex[v.name] = vid;
+    _graph[vid] = v;
+
+    if (v.name.startsWith("regex?"))
+    {
+      if (v.getType() == SchemaVertex::Compound)
+      {
+        throw HootException("Compound tags can not have regex names.");
+      }
+      QRegExp re(v.name.mid(6));
+      _regexKeys.append(pair<QRegExp, VertexId>(re, vid));
+    }
+
+    // if this is a compound rule then update the link from tags to compound rules.
+    if (v.getType() == SchemaVertex::Compound)
+    {
+      SchemaVertex::CompoundRuleList rules = v.getCompoundRules();
+      for (int i = 0; i < rules.size(); ++i)
+      {
+        SchemaVertex::CompoundRule r = rules[i];
+        for (int j = 0; j < r.size(); ++j)
+        {
+          KeyValuePairPtr p = r[j];
+          if (_name2CompoundVertex.contains(p->getName(), vid) == false)
+          {
+            _name2CompoundVertex.insert(p->getName(), vid);
+          }
+        }
+      }
+    }
+
+    // add in the list of aliases.
+    for (int i = 0; i < v.aliases.size(); i++)
+    {
+      _name2Vertex[v.aliases[i]] = vid;
+    }
+
+
+    return vid;
   }
 
 };
@@ -1159,12 +1307,12 @@ void OsmSchema::createTestingGraph()
   d->createTestingGraph();
 }
 
-vector<TagVertex> OsmSchema::getAllTags()
+vector<SchemaVertex> OsmSchema::getAllTags()
 {
   return d->getAllTags();
 }
 
-vector<TagVertex> OsmSchema::getAssociatedTags(QString name)
+vector<SchemaVertex> OsmSchema::getAssociatedTags(QString name)
 {
   return d->getAssociatedTags(name);
 }
@@ -1176,7 +1324,7 @@ OsmSchemaCategory OsmSchema::getCategories(const Tags& t) const
   // if at least one tag has the specified category then return true
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
   {
-    const TagVertex& tv = getTagVertex(toKvp(it.key(), it.value()));
+    const SchemaVertex& tv = getTagVertex(toKvp(it.key(), it.value()));
     for (int i = 0; i < tv.categories.size(); i++)
     {
       result = result | OsmSchemaCategory::fromString(tv.categories[i]);
@@ -1195,7 +1343,7 @@ OsmSchemaCategory OsmSchema::getCategories(const QString& kvp) const
 {
   OsmSchemaCategory result;
 
-  const TagVertex& tv = getTagVertex(kvp);
+  const SchemaVertex& tv = getTagVertex(kvp);
   for (int i = 0; i < tv.categories.size(); i++)
   {
     result = result | OsmSchemaCategory::fromString(tv.categories[i]);
@@ -1204,12 +1352,12 @@ OsmSchemaCategory OsmSchema::getCategories(const QString& kvp) const
   return result;
 }
 
-vector<TagVertex> OsmSchema::getChildTags(QString name)
+vector<SchemaVertex> OsmSchema::getChildTags(QString name)
 {
   return d->getChildTags(name);
 }
 
-const TagVertex& OsmSchema::getFirstCommonAncestor(const QString& kvp1, const QString& kvp2)
+const SchemaVertex& OsmSchema::getFirstCommonAncestor(const QString& kvp1, const QString& kvp2)
 {
   return d->getFirstCommonAncestor(kvp1, kvp2);
 }
@@ -1230,7 +1378,12 @@ double OsmSchema::getIsACost() const
   return d->getIsACost();
 }
 
-vector<TagVertex> OsmSchema::getSimilarTags(QString name, double minimumScore)
+vector<SchemaVertex> OsmSchema::getSchemaVertices(const Tags& tags) const
+{
+  return d->getSchemaVertices(tags);
+}
+
+vector<SchemaVertex> OsmSchema::getSimilarTags(QString name, double minimumScore)
 {
   if (minimumScore <= 0)
   {
@@ -1239,14 +1392,19 @@ vector<TagVertex> OsmSchema::getSimilarTags(QString name, double minimumScore)
   return d->getSimilarTags(name, minimumScore);
 }
 
-vector<TagVertex> OsmSchema::getTagByCategory(OsmSchemaCategory c) const
+vector<SchemaVertex> OsmSchema::getTagByCategory(OsmSchemaCategory c) const
 {
   return d->getTagByCategory(c);
 }
 
-const TagVertex& OsmSchema::getTagVertex(const QString& kvp) const
+const SchemaVertex& OsmSchema::getTagVertex(const QString& kvp) const
 {
   return d->getTagVertex(kvp);
+}
+
+vector<SchemaVertex> OsmSchema::getUniqueSchemaVertices(const Tags& tags) const
+{
+  return d->getUniqueSchemaVertices(tags);
 }
 
 bool OsmSchema::hasCategory(const Tags& t, const QString& category) const
@@ -1258,7 +1416,7 @@ bool OsmSchema::hasCategory(const Tags& t, const QString& category) const
     // ignore empty values.
     if (it.value().isEmpty() == false)
     {
-      const TagVertex& tv = getTagVertex(it.key() + "=" + it.value());
+      const SchemaVertex& tv = getTagVertex(it.key() + "=" + it.value());
       if (tv.categories.contains(category))
       {
         result = true;
@@ -1272,7 +1430,7 @@ bool OsmSchema::hasCategory(const Tags& t, const QString& category) const
 
 bool OsmSchema::hasCategory(const QString& kvp, const QString& category) const
 {
-  const TagVertex& tv = getTagVertex(kvp);
+  const SchemaVertex& tv = getTagVertex(kvp);
   return tv.categories.contains(category);
 }
 
@@ -1302,7 +1460,7 @@ bool OsmSchema::isArea(const Tags& t, ElementType type) const
   // this to be an area feature.
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
   {
-    const TagVertex& tv = getTagVertex(it.key() + "=" + it.value());
+    const SchemaVertex& tv = getTagVertex(it.key() + "=" + it.value());
     uint16_t g = tv.geometries;
     if (g & OsmGeometries::Area && !(g & (OsmGeometries::LineString | OsmGeometries::ClosedWay)))
     {
@@ -1348,7 +1506,7 @@ bool OsmSchema::isAreaForStats(const Tags& t, ElementType type) const
   // this to be an area feature.
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
   {
-    const TagVertex& tv = getTagVertex(it.key() + "=" + it.value());
+    const SchemaVertex& tv = getTagVertex(it.key() + "=" + it.value());
     uint16_t g = tv.geometries;
     if (g & OsmGeometries::Area && !(g & (OsmGeometries::LineString | OsmGeometries::ClosedWay)))
     {
@@ -1473,7 +1631,7 @@ bool OsmSchema::isLinear(const Element &e)
 
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
   {
-    const TagVertex& tv = getTagVertex(it.key() + "=" + it.value());
+    const SchemaVertex& tv = getTagVertex(it.key() + "=" + it.value());
     uint16_t g = tv.geometries;
     if (g & (OsmGeometries::LineString | OsmGeometries::ClosedWay) && !(g & OsmGeometries::Area))
     {
@@ -1558,6 +1716,11 @@ double OsmSchema::score(const QString& kvp1, const QString& kvp2)
   return std::max(d->score(kvp1, kvp2), d->score(kvp2, kvp1));
 }
 
+double OsmSchema::score(const SchemaVertex& v1, const SchemaVertex& v2)
+{
+  return score(v1.name, v2.name);
+}
+
 double OsmSchema::scoreOneWay(const QString& kvp1, const QString& kvp2)
 {
   return d->score(kvp1, kvp2);
@@ -1590,7 +1753,7 @@ void OsmSchema::update()
   d->update();
 }
 
-void OsmSchema::updateOrCreateVertex(const TagVertex& tv)
+void OsmSchema::updateOrCreateVertex(const SchemaVertex& tv)
 {
   d->updateOrCreateVertex(tv);
 }

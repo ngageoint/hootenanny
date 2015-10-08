@@ -174,11 +174,10 @@ function additiveScore(map, e1, e2) {
     var mean = translateMeanWordSetLevenshtein_1_5.extract(map, e1, e2);
     var weightedWordDistanceScore = weightedWordDistance.extract(map, e1, e2);
     var weightedPlusMean = mean + weightedWordDistanceScore;
-    var placeScore = getTagCategoryDistance("place", e1, e2);
-    var poiDistance = getTagCategoryDistance("poi", e1, e2);
-    var artworkTypeDistance = getTagAncestorDistance("artwork_type", e1, e2);
-    var cuisineDistance = getTagAncestorDistance("cuisine", e1, e2);
-    var sportDistance = getTagAncestorDistance("sport", e1, e2);
+    var poiDistance = getTagCategoryDistance("poi", map, e1, e2);
+    var artworkTypeDistance = getTagAncestorDistance("artwork_type", map, e1, e2);
+    var cuisineDistance = getTagAncestorDistance("cuisine", map, e1, e2);
+    var sportDistance = getTagAncestorDistance("sport", map, e1, e2);
 
     var score = 0;
 
@@ -194,6 +193,33 @@ function additiveScore(map, e1, e2) {
         score += 0.5;
         reason.push("very close together");
     }
+
+    var typeScore = 0;
+    if (artworkTypeDistance <= 0.3) {
+        typeScore += 1;
+        reason.push("similar artwork type");
+    }
+    if (cuisineDistance <= 0.3) {
+        typeScore += 1;
+        reason.push("similar cuisine");
+    }
+    if (sportDistance <= 0.3) {
+        typeScore += 1;
+        reason.push("similar sport");
+    }
+
+    // we're unlikely to get more evidence than the fact that it is a tower
+    // or pole. If the power tag matches exactly, give it 2 points of evidence
+    // if not, just give it one.
+    var powerDistance = getTagDistance("power", e1, e2);
+    if (powerDistance == 0) {
+        typeScore += 2;
+        reason.push("same power (electrical) type");
+    } else if (powerDistance <= 0.4) {
+        typeScore += 1;
+        reason.push("similar power (electrical) type");
+    }
+
 
     // if at least one feature contains a place
     var placeCount = getTagsByAncestor("place", t1).length + 
@@ -229,34 +255,12 @@ function additiveScore(map, e1, e2) {
         reason.push("similar POI type");
     // if the poi distance is very high, then they shouldn't be considered
     // for match based solely on name and proximity. See #6998
-    } else if (poiDistance >= 0.99) {
+    } else if (poiDistance >= 0.99 && typeScore == 0 && oneGeneric == false) {
         score = 0;
+        reason = ["similar names but no POI match"];
     }
 
-    if (artworkTypeDistance <= 0.3) {
-        score += 1;
-        reason.push("similar artwork type");
-    }
-    if (cuisineDistance <= 0.3) {
-        score += 1;
-        reason.push("similar cuisine");
-    }
-    if (sportDistance <= 0.3) {
-        score += 1;
-        reason.push("similar sport");
-    }
-
-    // we're unlikely to get more evidence than the fact that it is a tower
-    // or pole. If the power tag matches exactly, give it 2 points of evidence
-    // if not, just give it one.
-    var powerDistance = getTagDistance("power", e1, e2);
-    if (powerDistance == 0) {
-        score += 2;
-        reason.push("same power (electrical) type");
-    } else if (powerDistance <= 0.4) {
-        score += 1;
-        reason.push("similar power (electrical) type");
-    }
+    score = score + typeScore;
 
     result.score = score;
     result.reasons = reason;

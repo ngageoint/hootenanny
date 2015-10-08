@@ -187,6 +187,6 @@ public:
 };
 
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyDuplicatePoiOpTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyWaySplitVisitorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyWaySplitVisitorTest, "slow");
 
 }

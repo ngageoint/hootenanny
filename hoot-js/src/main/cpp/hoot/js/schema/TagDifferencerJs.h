@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,47 +24,38 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef HIGHWAYRFCLASSIFIER_H
-#define HIGHWAYRFCLASSIFIER_H
-
-#include "HighwayClassifier.h"
+#ifndef __TAG_DIFFERENCER_JS_H__
+#define __TAG_DIFFERENCER_JS_H__
 
 // hoot
-#include <hoot/core/conflate/extractors/FeatureExtractor.h>
-
-// tgs
-#include <tgs/RandomForest/RandomForest.h>
+#include <hoot/core/schema/TagDifferencer.h>
+#include <hoot/js/SystemNodeJs.h>
 
 namespace hoot
 {
+using namespace std;
+using namespace v8;
 
-class HighwayRfClassifier : public HighwayClassifier
+class TagDifferencer;
+
+class TagDifferencerJs : public node::ObjectWrap
 {
 public:
+  static void Init(v8::Handle<v8::Object> target);
 
-  static std::string className() { return "hoot::HighwayRfClassifier"; }
-
-  HighwayRfClassifier();
-
-  virtual MatchClassification classify(const ConstOsmMapPtr& map,
-    ElementId eid1, ElementId eid2, const WaySublineMatchString& match);
-
-  virtual map<QString, double> getFeatures(const shared_ptr<const OsmMap>& m,
-    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const;
+  TagDifferencer* getDifferencer() { return _td.get(); }
 
 private:
-  mutable shared_ptr<Tgs::RandomForest> _rf;
-  mutable QStringList _rfFactorLabels;
-  mutable vector< shared_ptr<const FeatureExtractor> > _extractors;
+  TagDifferencerJs(TagDifferencer *op);
+  ~TagDifferencerJs();
 
-  void _createAllExtractors() const;
-  void _createTestExtractors() const;
+  static v8::Handle<v8::Value> diff(const v8::Arguments& args);
+  static v8::Handle<v8::Value> New(const v8::Arguments& args);
 
-  const vector< shared_ptr<const FeatureExtractor> >& _getExtractors() const;
-
-  void _init() const;
+  QString _className;
+  auto_ptr<TagDifferencer> _td;
 };
 
 }
 
-#endif // HIGHWAYRFCLASSIFIER_H
+#endif // __TAG_DIFFERENCER_JS_H__

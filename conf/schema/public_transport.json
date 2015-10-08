@@ -22,6 +22,29 @@
         "similarTo": { "name": "transport=station", "weight": 0.8 }
     },
 
+    "compound": {
+        "name": "bus_platform",
+        "isA": "public_transport=platform",
+        "#": "Any one of these tag combos can match, but all the tags in the sub-array must match.",
+        "tags": [
+            ["public_transport=platform", "bus=yes"],
+            ["public_transport=platform", "highway=bus_stop"]
+        ],
+        "similarTo": { "name": "highway=bus_stop", "weight": 1.0 },
+        "categories": ["poi", "hgispoi"]
+    },
+
+    "compound": {
+        "name": "railway_platform",
+        "isA": "public_transport=platform",
+        "#": "Any one of these tag combos can match, but all the tags in the sub-array must match.",
+        "tags": [
+            ["public_transport=platform", "train=yes"]
+        ],
+        "similarTo": { "name": "railway=platform", "weight": 0.9 },
+        "categories": ["poi", "hgispoi"]
+    },
+
 
     "#" : "end"
 }

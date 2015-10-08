@@ -31,6 +31,7 @@
 // hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/Tags.h>
+#include <hoot/core/schema/SchemaVertex.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -45,22 +46,14 @@ namespace hoot
 
   using namespace std;
 
-enum TagValueType
-{
-  Boolean,
-  Text,
-  Enumeration,
-  Int,
-  Unknown
-};
-
 enum EdgeType
 {
   CanHave,
   IsA,
   SimilarTo,
   ParentOf,
-  AssociatedWith
+  AssociatedWith,
+  CompoundComponent,
 };
 
 struct OsmSchemaCategory {
@@ -248,68 +241,6 @@ public:
   double w2;
 };
 
-struct TagVertex
-{
-
-  TagVertex()
-  {
-    influence = -1.0;
-    valueType = Unknown;
-    childWeight = -1.0;
-    mismatchScore = -1.0;
-    geometries = 0;
-  }
-
-  bool isEmpty() const
-  {
-    return name.isEmpty();
-  }
-
-  bool isValid() const { return !isEmpty(); }
-
-  QString toString() const
-  {
-    QString result = QString("name: %1\n").arg(name)
-        + QString("key: %1\n").arg(key)
-        + QString("value: %1\n").arg(value)
-        + QString("influence: %1\n").arg(influence)
-        + QString("childWeight: %1\n").arg(childWeight)
-        + QString("mismatchScore: %1\n").arg(mismatchScore)
-        + QString("valueType: %1\n").arg(valueType)
-        + QString("aliases: %1\n").arg(Tgs::toString(aliases))
-        + QString("geometries: %1\n").arg(geometries)
-        + QString("categories: %1\n").arg(Tgs::toString(categories));
-    return result;
-  }
-
-  QString name;
-  QString description;
-  QString key;
-  QString value;
-  double influence;
-  double childWeight;
-
-  /**
-   * The mismatchScore is used only with wildcard enumerated types. (e.g. addr:housenumber=*).
-   * This score is the score returned when two wildcard enumerated types are compared that have
-   * different values.
-   */
-  double mismatchScore;
-  enum TagValueType valueType;
-  QStringList aliases;
-
-  /**
-   * Each tag can have categories associated with it. This can help when grouping a number of
-   * disparate tags into a category. E.g. building=school, amenity=restaurant and tourism=attraction
-   * are all POIs, but don't fit neatly into a single hierarchy.
-   *
-   * If a category is set on an ancestor then it is also set in the category tag.
-   */
-  QStringList categories;
-  uint16_t geometries;
-};
-
-
 class OsmSchemaData;
 class Relation;
 
@@ -345,17 +276,17 @@ public:
    * Searches for the first common ancestor between two key value pairs. If there is no common
    * ancestor then an empty TagVertex is returned.
    */
-  const TagVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2);
+  const SchemaVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2);
 
-  vector<TagVertex> getAssociatedTags(QString name);
+  vector<SchemaVertex> getAssociatedTags(QString name);
 
   OsmSchemaCategory getCategories(const Tags& t) const;
   OsmSchemaCategory getCategories(const QString& k, const QString& v) const;
   OsmSchemaCategory getCategories(const QString& kvp) const;
 
-  vector<TagVertex> getAllTags();
+  vector<SchemaVertex> getAllTags();
 
-  vector<TagVertex> getChildTags(QString name);
+  vector<SchemaVertex> getChildTags(QString name);
 
   static OsmSchema& getInstance();
 
@@ -366,11 +297,30 @@ public:
    *
    * minimumScore must be > 0.
    */
-  vector<TagVertex> getSimilarTags(QString name, double minimumScore);
+  vector<SchemaVertex> getSimilarTags(QString name, double minimumScore);
 
-  vector<TagVertex> getTagByCategory(OsmSchemaCategory c) const;
+  vector<SchemaVertex> getTagByCategory(OsmSchemaCategory c) const;
 
-  const TagVertex& getTagVertex(const QString& kvp) const;
+  /**
+   * Returns the tag vertex for a given kvp. If the vertex is compound then an empty vertex will
+   * be returned.
+   */
+  const SchemaVertex& getTagVertex(const QString& kvp) const;
+
+  /**
+   * Returns all schema vertices that are represented in the set of tags. This will return both
+   * compound vertices and tag vertices.
+   */
+  vector<SchemaVertex> getSchemaVertices(const Tags& tags) const;
+
+  /**
+   * Returns all the schema vertices in the set of tags that do not also have parent vertices in the
+   * set of tags. E.g. returns railway_platform, but not public_transit=platform.
+   *
+   * "Unique" may not be the best modifier in the method name, but "WithParentTagsRemoved" seemed
+   * a bit verbose. Open to suggestions. -JRS
+   */
+  vector<SchemaVertex> getUniqueSchemaVertices(const Tags& tags) const;
 
   /**
    * Returns true if at least one tag in the set of specified tags is part of the specified
@@ -460,6 +410,7 @@ public:
   void loadDefault();
 
   double score(const QString& kvp1, const QString& kvp2);
+  double score(const SchemaVertex& v1, const SchemaVertex& v2);
 
   /**
    * @brief scoreOneWay Returns a oneway score. E.g. highway=primary is similar to highway=road,
@@ -479,14 +430,14 @@ public:
 
   void update();
 
-  void updateOrCreateVertex(const TagVertex& tv);
+  void updateOrCreateVertex(const SchemaVertex& tv);
 
 private:
   // the templates we're including take a crazy long time to include, so I'm isolating the
   // implementation.
   OsmSchemaData* d;
   static OsmSchema* _theInstance;
-  TagVertex _empty;
+  SchemaVertex _empty;
 };
 
 }
