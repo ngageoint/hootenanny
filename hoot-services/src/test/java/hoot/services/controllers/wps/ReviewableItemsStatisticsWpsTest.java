@@ -43,7 +43,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import hoot.services.IntegrationTest;
-import hoot.services.geo.BoundingBox;
 import hoot.services.models.review.ReviewableItemsStatistics;
 import hoot.services.review.ReviewTestUtils;
 import hoot.services.utils.XmlDocumentBuilder;
@@ -53,9 +52,7 @@ import hoot.services.wps.WpsTestAbstract;
 public class ReviewableItemsStatisticsWpsTest extends WpsTestAbstract
 {
   @SuppressWarnings("unused")
-  private static final Logger log = LoggerFactory.getLogger(ReviewableItemsStatisticsWpsTest.class);
-  
-  private BoundingBox queryBounds;
+  private static final Logger log = LoggerFactory.getLogger(ReviewableItemsStatisticsWpsTest.class);;
   
   public ReviewableItemsStatisticsWpsTest() throws NumberFormatException, IOException
   {
@@ -64,7 +61,7 @@ public class ReviewableItemsStatisticsWpsTest extends WpsTestAbstract
     processId = "ReviewableItemsStatistics";
   }
   
-//WPS specifies that both GET and POST be supported, even when one or the other doesn't make
+  //WPS specifies that both GET and POST be supported, even when one or the other doesn't make
   //sense in context of the request.  It also supports both key/value pair and XML as inputs for
   //both request types.  These tests don't test every possible input parameter combination like 
   //the processlet level tests do.
@@ -87,17 +84,7 @@ public class ReviewableItemsStatisticsWpsTest extends WpsTestAbstract
             "<wps:Data>" + 
               "<wps:LiteralData>" + String.valueOf(mapId) + "</wps:LiteralData>" + 
             "</wps:Data>" + 
-          "</wps:Input>" + 
-          "<wps:Input>" + 
-            "<ows:Identifier>reviewScoreThresholdMinimum</ows:Identifier>" + 
-            "<wps:Data>" + 
-              "<wps:LiteralData>0.0</wps:LiteralData>" + 
-            "</wps:Data>" + 
-          "</wps:Input>" + 
-          "<wps:Input>" + 
-            "<ows:Identifier>geospatialBounds</ows:Identifier>" + 
-            "<wps:Data>\n" + queryBounds.toWpsXml() + "\n</wps:Data>" + 
-          "</wps:Input>" + 
+          "</wps:Input>" +
         "</wps:DataInputs>" + 
         "<wps:ResponseForm>" + 
           "<wps:ResponseDocument storeExecuteResponse=\"false\" status=\"false\">" + 
@@ -114,8 +101,7 @@ public class ReviewableItemsStatisticsWpsTest extends WpsTestAbstract
   {
     return 
       "service=WPS&version=1.0.0&request=Execute&identifier=" + processId + "&" + 
-      "DataInputs=mapId=" + String.valueOf(mapId) + ";reviewScoreThresholdMinimum=0.0;" +
-      "geospatialBounds=" + queryBounds.toServicesString();
+      "DataInputs=mapId=" + String.valueOf(mapId);
   }
   
   @Override
@@ -145,7 +131,7 @@ public class ReviewableItemsStatisticsWpsTest extends WpsTestAbstract
       
       Assert.assertEquals(mapId, response.getMapId());
       Assert.assertEquals(54, response.getNumTotalItems());
-      Assert.assertEquals(5, response.getNumReviewableItems());
+      Assert.assertEquals(11, response.getNumReviewableItems());
       Assert.assertEquals(3, response.getNumReviewedItems());
     }
     catch (XPathExpressionException e)
@@ -160,7 +146,6 @@ public class ReviewableItemsStatisticsWpsTest extends WpsTestAbstract
   @Category(IntegrationTest.class)
   public void testWpsGetKvp() throws Exception
   { 
-    queryBounds = ReviewTestUtils.createTestQueryBounds();
     ReviewTestUtils.createPreparedData(resource());
     ReviewTestUtils.markSomeItemsReviewed();
     
@@ -172,7 +157,6 @@ public class ReviewableItemsStatisticsWpsTest extends WpsTestAbstract
   @Category(IntegrationTest.class)
   public void testWpsPostXml() throws Exception
   {
-    queryBounds = ReviewTestUtils.createTestQueryBounds();
     ReviewTestUtils.createPreparedData(resource());
     ReviewTestUtils.markSomeItemsReviewed();
     
@@ -184,7 +168,6 @@ public class ReviewableItemsStatisticsWpsTest extends WpsTestAbstract
   @Category(IntegrationTest.class)
   public void testWpsError() throws Exception
   {
-    queryBounds = ReviewTestUtils.createTestQueryBounds();
     ReviewTestUtils.createPreparedData(resource());
     ReviewTestUtils.markSomeItemsReviewed();
     
