@@ -79,6 +79,18 @@ public:
       read_stream_or_throw(is, value);
       _loadTags(value);
 
+      size_t current = is.tellg();
+      is.seekg (0, ios::end);
+      size_t end = is.tellg();
+
+      // this is a hack to get around poor parsing. It'd be better to use v8 parser.
+      if (current != end)
+      {
+        throw HootException(QString("Error reading JSON file (%1). Did not read to the end of the "
+          "file. Do you have an extra brace? Extra white space? Parsing stopped at position: %2.").
+          arg(path).arg(current));
+      }
+
       // update implied values via inheritance.
       _schema.update();
       _baseDir.pop_back();
@@ -172,6 +184,10 @@ private:
         else if (obj[i].name_ == "similarTo")
         {
           _loadSimilarTo(tv.name, obj[i].value_);
+        }
+        else if (obj[i].name_ == "description")
+        {
+          tv.description = toString(obj[i].value_);
         }
         else if (obj[i].name_ == "influence")
         {

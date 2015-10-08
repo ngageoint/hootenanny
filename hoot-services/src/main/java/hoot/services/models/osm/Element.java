@@ -28,11 +28,15 @@ package hoot.services.models.osm;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,7 +46,11 @@ import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
 import hoot.services.db.postgres.PostgresUtils;
 import hoot.services.db2.QChangesets;
+import hoot.services.db2.QCurrentNodes;
 import hoot.services.db2.QCurrentRelationMembers;
+import hoot.services.db2.QCurrentRelations;
+import hoot.services.db2.QCurrentWays;
+import hoot.services.db2.QElementIdMappings;
 import hoot.services.db2.QUsers;
 import hoot.services.geo.BoundingBox;
 
@@ -71,6 +79,11 @@ import com.mysema.query.types.path.NumberPath;
 public abstract class Element implements XmlSerializable, DbSerializable
 {
   private static final Logger log = LoggerFactory.getLogger(Element.class);
+  
+  protected static final QCurrentWays currentWays = QCurrentWays.currentWays;
+  protected static final QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
+  protected static final QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
+  protected static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
 
   //order in the enum here is important, since the request diff writer methods use this to determine
   //the order for creating/updating/deleting elements; i.e. create nodes before referencing them
@@ -415,10 +428,10 @@ public abstract class Element implements XmlSerializable, DbSerializable
       //this, however, would be parsing the XML node data more than once.
 
     	Object existingRecord =
-    			new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).from(getElementTable()).where(getElementIdField().eq(new Long(oldId)))
+    	  new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+    	    .from(getElementTable())
+    	    .where(getElementIdField().eq(new Long(oldId)))
     			.singleResult(getElementTable());
-
-
       if (existingRecord == null)
       {
         throw new Exception(toString() + " to be updated does not exist with ID: " + oldId);
@@ -444,7 +457,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
       if (parsedVersion != 0)
       {
         throw new Exception("Invalid version: " + parsedVersion + " specified for " + toString() + 
-          " with ID: " + getId() + " and expected version " + version + " in changeset " +
+          " with ID: " + getId() + " and expected version 0 in changeset " +
           " with ID: " + MethodUtils.invokeMethod(record, "getChangesetId", new Object[]{}));
       }
     }
@@ -525,9 +538,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
     InvocationTargetException
   {
     final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
-
-
-    //SQLQuery query = new SQLQuery(dbConn, DbUtils.getConfiguration());
   	if(elementIds.size() > 0)
   	{
   	return
@@ -561,20 +571,21 @@ public abstract class Element implements XmlSerializable, DbSerializable
   {
     final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
 
-    //SQLQuery query = new SQLQuery(dbConn, DbUtils.getConfiguration());
     QChangesets changesets = QChangesets.changesets;
     QUsers users = QUsers.users;
 
-    if(elementIds.size() > 0)
+    if (elementIds.size() > 0)
     {
-  	return
-  			new SQLQuery(dbConn, DbUtils.getConfiguration("" + mapId)).from(prototype.getElementTable()).join(QChangesets.changesets).
-  			on(prototype.getChangesetIdField().eq(changesets.id))
-  			.join(users)
-  			.on(changesets.userId.eq(users.id))
-  			.where(prototype.getElementIdField().in(elementIds))
-  			.orderBy(prototype.getElementIdField().asc()).
-  			list(prototype.getElementTable(), users, changesets);
+  	  return
+  	    new SQLQuery(dbConn, DbUtils.getConfiguration("" + mapId))
+  	      .from(prototype.getElementTable())
+  	      .join(QChangesets.changesets)
+  	      .on(prototype.getChangesetIdField().eq(changesets.id))
+  			  .join(users)
+  			  .on(changesets.userId.eq(users.id))
+  			  .where(prototype.getElementIdField().in(elementIds))
+  			  .orderBy(prototype.getElementIdField().asc())
+  			  .list(prototype.getElementTable(), users, changesets);
     }
 
     return new ArrayList();
@@ -906,11 +917,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
    */
   protected Set<Long> getOwningRelationIds() throws Exception
   {
-
-
-  	//SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
     QCurrentRelationMembers currRelMem = QCurrentRelationMembers.currentRelationMembers;
-
   	List<Long> res =
   			new SQLQuery(conn, DbUtils.getConfiguration("" + getMapId())).from(currRelMem)
   			.where(
@@ -1000,5 +1007,144 @@ public abstract class Element implements XmlSerializable, DbSerializable
       }
     }
     return tagCount;
+  }
+  
+  /**
+   * Given a list of unique ID's, filters out any which do not have an element ID mapping record
+   * created for them
+   * 
+   * @param mapId ID of the map owning the elements associated with the input uuid's
+   * @param uuids unique IDs to search for
+   * @param elementType type of the elements being searched for
+   * @param dbConn database connection
+   * @return a filtered list of unique ID's
+   */
+  public static Set<String> filterOutNonExistingElementMappingUniqueIds(final long mapId, 
+  	final String[] uuids, final ElementType elementType, Connection dbConn)
+  {
+  	assert(uuids.length > 0);
+  	return 
+  		new HashSet<String>(
+  		  new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
+          .from(elementIdMappings)
+          .where(
+        	  elementIdMappings.mapId.eq(mapId)
+        	  .and(elementIdMappings.elementId.in(uuids)))
+          .list(elementIdMappings.elementId));
+  }
+  
+  /**
+   * Given a list of unique ID's, filters out any which aren't associated with an OSM element in 
+   * the database
+   * 
+   * @param mapId ID of the map owning the elements associated with the input uuid's
+   * @param uuids unique IDs to search for
+   * @param elementType type of the elements being searched for
+   * @param dbConn database connection
+   * @return a filtered list of unique ID's
+   * @throws InvocationTargetException 
+   * @throws NoSuchMethodException 
+   * @throws ClassNotFoundException 
+   * @throws IllegalAccessException 
+   * @throws InstantiationException 
+   * @throws SQLException 
+   */
+  public static Set<String> filterOutNonExistingUuids(final long mapId, final String[] uuids, 
+  	final ElementType elementType, Connection dbConn) throws InstantiationException, 
+  	IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, 
+  	SQLException
+  {
+  	Set<String> filteredUuids = new HashSet<String>();
+  	final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
+  	String POSTGRESQL_DRIVER = "org.postgresql.Driver";
+		Statement stmt = null;
+		ResultSet rs = null;
+		try
+		{
+			Class.forName(POSTGRESQL_DRIVER);
+			stmt = dbConn.createStatement();
+			final String sql = 
+				"select tags->'uuid' from " + prototype.getElementTable() + "_" + mapId + 
+				" where tags->'uuid' in ('" + StringUtils.join(uuids, "','") + "') ";
+			stmt = dbConn.createStatement();
+			rs = stmt.executeQuery(sql);
+			while (rs.next())
+			{
+				filteredUuids.add(rs.getString(1));
+			}
+			rs.close();
+		}
+		finally
+		{
+			try
+			{
+				if (stmt != null) stmt.close();
+				if (rs != null) rs.close();
+			}
+			catch (SQLException se2)
+			{
+			}
+		}
+		if (filteredUuids.size() > uuids.length)
+		{
+			log.warn("Filtered out " + String.valueOf(uuids.length - filteredUuids.size()) + " uuids.");
+		}
+  	return filteredUuids;
+  }
+  
+  /**
+   * Determines whether any element in the database has a uuid tag as specified
+   *  
+   * @param mapId ID of the map owning the element
+   * @param uuid unique ID to search for
+   * @param elementType type of the element being searched for
+   * @param dbConn database connection
+   * @return true if the element exists; false otherwise
+   * @throws ClassNotFoundException 
+   * @throws SQLException 
+   * @throws InvocationTargetException 
+   * @throws NoSuchMethodException 
+   * @throws IllegalAccessException 
+   * @throws InstantiationException 
+   */
+  public static boolean elementExistsByUuid(final long mapId, final String uuid, 
+  	final ElementType elementType, Connection dbConn) throws ClassNotFoundException, SQLException, 
+  	InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
+  {
+  	final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
+  	String POSTGRESQL_DRIVER = "org.postgresql.Driver";
+		Statement stmt = null;
+		ResultSet rs = null;
+		try
+		{
+			Class.forName(POSTGRESQL_DRIVER);
+			stmt = dbConn.createStatement();
+			final String sql = 
+				"select count(*) as total from " + prototype.getElementTable() + "_" + mapId + 
+				" where tags->'uuid' = '" + uuid + "' ";
+			stmt = dbConn.createStatement();
+			rs = stmt.executeQuery(sql);
+			while (rs.next())
+			{
+				if (rs.getInt("total") > 0)
+				{
+					rs.close();
+					return true;
+				}
+			}
+			rs.close();
+		}
+		finally
+		{
+			try
+			{
+				if (stmt != null) stmt.close();
+				if (rs != null) rs.close();
+			}
+			catch (SQLException se2)
+			{
+			}
+		}
+  	return false;
   }
 }

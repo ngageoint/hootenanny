@@ -50,6 +50,10 @@ public:
 
 private:
   QRegExp _sep;
+  bool _keepNonWords;
+  int _minSize;
+
+  bool _isNonWord(const QString& s) const;
 };
 
 }

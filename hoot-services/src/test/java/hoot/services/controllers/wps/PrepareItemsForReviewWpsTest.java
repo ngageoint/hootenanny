@@ -46,6 +46,7 @@ import hoot.services.IntegrationTest;
 import hoot.services.job.JobStatusWebPoller;
 import hoot.services.review.ReviewTestUtils;
 import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 import hoot.services.wps.WpsTestAbstract;
 
 public class PrepareItemsForReviewWpsTest extends WpsTestAbstract
@@ -118,7 +119,7 @@ public class PrepareItemsForReviewWpsTest extends WpsTestAbstract
     Assert.assertNotNull(responseData);
     //System.out.println(XmlDocumentBuilder.toString(responseData));
     
-    XPath xpath = XmlDocumentBuilder.createXPath();    
+    XPath xpath = XmlUtils.createXPath();    
     String jobIdStr = null;
     try
     {

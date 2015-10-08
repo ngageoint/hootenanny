@@ -75,6 +75,7 @@ import hoot.services.job.Executable;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Element.ElementType;
+import hoot.services.review.ReviewUtils;
 
 /**
  * Writes review data to the services database
@@ -88,14 +89,14 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 	protected static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
 	protected Connection conn;
 
+	protected int maxWarningsDisplayed = 10;
 	protected long mapId;
 	protected long uniqueIdsParsed = 0;
 	protected boolean idMappingRecordWritten = false;
 	protected long reviewRecordsParsed = 0;
 	protected boolean reviewRecordWritten = false;
-	protected long totalParseableRecords = 0;
-	protected long totalReviewableRecords = 0;
-	protected int maxRecordSelectSize;
+	private long totalParseableRecords = 0;
+	private long totalReviewableRecords = 0;
 	protected int maxRecordBatchSize;
 	protected ListMultimap<String, String> previouslyReviewedItemIdToReviewAgainstItemIds;
 	protected ListMultimap<String, String> reviewableItemIdToReviewAgainstItemIds;
@@ -110,12 +111,15 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 	public ReviewPrepareDbWriter() throws Exception
 	{
 		super();
-		maxRecordSelectSize = 
-			Integer.parseInt(HootProperties.getInstance()
-		    .getProperty("maxRecordSelectSize", HootProperties.getDefault("maxRecordSelectSize")));
+
 		maxRecordBatchSize = 
-			Integer.parseInt(HootProperties.getInstance()
-		    .getProperty("maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
+			Integer.parseInt(
+				HootProperties.getInstance()
+		      .getProperty("maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
+		maxWarningsDisplayed = 
+			Integer.parseInt(
+				HootProperties.getInstance()
+		      .getProperty("maxWarningsDisplayed", HootProperties.getDefault("maxWarningsDisplayed")));
 	}
 
 	/**
@@ -348,13 +352,12 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 	{
 		// TODO: make this a batched query
 		SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration(mapId));
-
 		final List<ReviewItems> reviewedItems = query
-		    .from(reviewItems)
-		    .where(
-		      reviewItems.mapId.eq(mapId)
-		        .and(reviewItems.reviewStatus.eq(DbUtils.review_status_enum.reviewed)))
-		    .list(reviewItems);
+	    .from(reviewItems)
+	    .where(
+	      reviewItems.mapId.eq(mapId)
+	        .and(reviewItems.reviewStatus.eq(DbUtils.review_status_enum.reviewed)))
+	    .list(reviewItems);
 
 		previouslyReviewedItemIdToReviewAgainstItemIds = ArrayListMultimap.create();
 		for (ReviewItems reviewedItem : reviewedItems)
@@ -548,7 +551,8 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 
 	protected Map<Long, Object> getReviewableElementRecords(final long mapId,
 	  final ElementType elementType, final int limit, final int offset) throws InstantiationException, 
-	  IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, SQLException
+	  IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, 
+	  SQLException
 	{
 		Map<Long, Object> retMap = new LinkedHashMap<Long, Object>();
 		final Element prototype = 
@@ -660,7 +664,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 				{
 					// get all reviewable elements
 					final Map<Long, Object> reviewableElementRecords = 
-						getParseableElementRecords(mapId, elementType, maxRecordSelectSize, elementIndex);
+						getParseableElementRecords(mapId, elementType, maxRecordBatchSize, elementIndex);
 					numElementsReturned = reviewableElementRecords.size();
 					elementIndex += numElementsReturned;
 					for (Map.Entry<Long, Object> reviewableElementRecordEntry : reviewableElementRecords.entrySet())
@@ -674,9 +678,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 						String uniqueElementId = StringUtils.trimToNull(tags.get("uuid"));
 						if (uniqueElementId == null)
 						{
-						  //this should probably be a warn, but is happening a lot and cluttering up the logs...
-            	//not worrying about it for now, since new implementation is on the way
-							log.debug(
+							log.warn(
 								"Invalid UUID: " + uniqueElementId + " for map with ID: " + mapId + 
 								".  Skipping adding unique ID record...");
 						}
@@ -687,8 +689,6 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 						             .and(elementIdMappings.elementId.eq(uniqueElementId)))
 						           .count() > 0)
 						{
-						  //this should probably be a warn, but is happening a lot and cluttering up the logs...
-            	//not worrying about it for now, since new implementation is on the way
 							log.debug(
 								"UUID: " + uniqueElementId + " for map with ID: " + mapId + " already exists.  " +
 							  "Skipping adding unique ID record...");
@@ -700,14 +700,13 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 								log.debug("Adding UUID: " + uniqueElementId);
 								elementIdMappingRecordsToInsert
 								  .add(
-								    createElementIdMappingRecord(uniqueElementId, osmElementId, elementType, mapId));
+								  	ReviewUtils.createElementIdMappingRecord(
+								  		uniqueElementId, osmElementId, elementType, mapId));
 								flushIdMappingRecords(
 								  elementIdMappingRecordsToInsert, maxRecordBatchSize, logMsgStart);
 							}
 							else
 							{
-						  	//this should probably be a warn, but is happening a lot and cluttering up the logs...
-	            	//not worrying about it for now, since new implementation is on the way
 								log.debug(
 								  "Duplicate element ID: " + uniqueElementId.toString() + " for map with ID: " + 
 								  mapId + ".  Skipping adding unique ID record...");
@@ -724,18 +723,6 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		log.debug("Wrote " + elementIds.size() + " ID mappings.");
 
 		return idMappingRecordWritten;
-	}
-
-	protected ElementIdMappings createElementIdMappingRecord(final String uniqueElementId, 
-		final long osmElementId, final ElementType elementType, final long mapId)
-	{
-		ElementIdMappings elementIdMappingRecord = new ElementIdMappings();
-		elementIdMappingRecord.setElementId(uniqueElementId);
-		elementIdMappingRecord.setMapId(mapId);
-		elementIdMappingRecord.setOsmElementId(osmElementId);
-		elementIdMappingRecord.setOsmElementType(Element
-		    .elementEnumForElementType(elementType));
-		return elementIdMappingRecord;
 	}
 
 	protected void flushIdMappingRecords(List<ElementIdMappings> elementIdMappingRecordsToInsert,
@@ -799,7 +786,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 				{
 					// get a batch of reviewable elements
 					final Map<Long, Object> reviewableElementRecords = 
-						getReviewableElementRecords(mapId, elementType, maxRecordSelectSize, elementIndex);
+						getReviewableElementRecords(mapId, elementType, maxRecordBatchSize, elementIndex);
 					numElementsReturned = reviewableElementRecords.size();
 					elementIndex += numElementsReturned;
 					for (Map.Entry<Long, Object> reviewableElementRecordEntry : reviewableElementRecords.entrySet())
@@ -813,9 +800,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 						String reviewableItemId = StringUtils.trimToNull(tags.get("uuid"));
 						if (StringUtils.isEmpty(reviewableItemId))
 						{
-						  //this should probably be a warn, but is happening a lot and cluttering up the logs...
-            	//not worrying about it for now, since new implementation is on the way
-							log.debug(
+							log.warn(
 								"Invalid UUID: " + tags.get("uuid") + " for map with ID: " + mapId + 
                 " Skipping adding review record...");
 						}
@@ -875,9 +860,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 									          .and(elementIdMappings.elementId.eq(reviewAgainstItemId)))
 									       .count() == 0)
 									{
-									  //this should probably be a warn, but is happening a lot and cluttering up the logs...
-			            	//not worrying about it for now, since new implementation is on the way
-										log.debug(
+										log.warn(
 											"No element ID mapping exists for review against item with ID: " + 
 										  reviewAgainstItemId + " for map with ID: " + mapId + 
 										  ".  Skipping adding " + "review record...");
@@ -890,7 +873,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 												"Adding review item with reviewable item ID: " + reviewableItemId + " and " + 
 											  "review against item ID: " + reviewAgainstItemId);
 											reviewRecordsToInsert.add(
-												createReviewItemRecord(
+												ReviewUtils.createReviewItemRecord(
 													reviewableItemId, reviewScore, reviewAgainstItemId, mapId));
 											reviewableItemIdToReviewAgainstItemIds.put(reviewableItemId, reviewAgainstItemId);
 											flushReviewRecords(reviewRecordsToInsert, maxRecordBatchSize, logMsgStart);
@@ -908,7 +891,8 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 										"Adding review item with reviewable item ID: " + reviewableItemId + 
 										" and " + "review against item ID: " + reviewableItemId);
 									reviewRecordsToInsert.add(
-										createReviewItemRecord(reviewableItemId, reviewScore, reviewableItemId, mapId));
+										ReviewUtils.createReviewItemRecord(reviewableItemId, reviewScore, 
+											reviewableItemId, mapId));
 									reviewableItemIdToReviewAgainstItemIds.put(reviewableItemId, reviewableItemId);
 									flushReviewRecords(reviewRecordsToInsert, maxRecordBatchSize, logMsgStart);
 									numReviewItemsAdded++;
@@ -976,25 +960,9 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		}
 	}
 
-	protected ReviewItems createReviewItemRecord(final String reviewableItemId,
-	  final double reviewScore, final String reviewAgainstItemId, final long mapId)
-	{
-		ReviewItems reviewItemRecord = new ReviewItems();
-		reviewItemRecord.setMapId(mapId);
-		reviewItemRecord.setReviewableItemId(reviewableItemId);
-		reviewItemRecord.setReviewScore(reviewScore);
-		if (reviewAgainstItemId != null)
-		{
-			reviewItemRecord.setReviewAgainstItemId(reviewAgainstItemId);
-		}
-		reviewItemRecord.setReviewStatus(DbUtils.review_status_enum.unreviewed);
-		return reviewItemRecord;
-	}
-
 	private void writeIdMappingRecords(List<ElementIdMappings> elementIdMappingRecordsToInsert) 
 	  throws Exception
 	{
-
 		DbUtils.batchRecords(
 			mapId, elementIdMappingRecordsToInsert, elementIdMappings, null, RecordBatchType.INSERT, conn,
 		  maxRecordBatchSize);
@@ -1009,7 +977,7 @@ public class ReviewPrepareDbWriter extends DbClientAbstract implements Executabl
 		reviewRecordsToInsert.clear();
 	}
 
-	protected void deleteExistingUnreviewedItems(final long mapId) throws Exception
+	private void deleteExistingUnreviewedItems(final long mapId) throws Exception
 	{
 		final String logMsgStart = 
 			"Deleting existing unreviewed records for map with ID: " + mapId + ".  Step 1 of 4.";

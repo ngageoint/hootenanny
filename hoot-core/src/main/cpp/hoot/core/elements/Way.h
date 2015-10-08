@@ -156,6 +156,12 @@ public:
   bool isFirstLastNodeIdentical() const;
 
   /**
+   * Remove all instances of the node with the specified id. If the node isn't in this way then
+   * nothing happens.
+   */
+  void removeNode(long id);
+
+  /**
    * Replaces any node instance with oldId with newId. If oldId isn't referenced by this way then
    * no action is taken.
    */

@@ -73,13 +73,16 @@ struct OsmSchemaCategory {
     Use = 8,
     Name = 16,
     PseudoName = 32,
-    All = Poi | Building | Transportation | Use | Name
+    // Human Geography POI. See ticket #6853 for a definition of a "HGIS POI"
+    HgisPoi = 64,
+    All = Poi | Building | Transportation | Use | Name | HgisPoi
   } Type;
 
   OsmSchemaCategory() : _type(Empty) {}
   OsmSchemaCategory(OsmSchemaCategory::Type t) : _type(t) {}
 
   static OsmSchemaCategory building() { return OsmSchemaCategory(Building); }
+  static OsmSchemaCategory hgisPoi() { return OsmSchemaCategory(HgisPoi); }
   static OsmSchemaCategory poi() { return OsmSchemaCategory(Poi); }
   static OsmSchemaCategory transportation() { return OsmSchemaCategory(Transportation); }
   static OsmSchemaCategory use() { return OsmSchemaCategory(Use); }
@@ -116,6 +119,10 @@ struct OsmSchemaCategory {
     else if (s == "pseudoname")
     {
       return PseudoName;
+    }
+    else if (s == "hgispoi")
+    {
+      return HgisPoi;
     }
     else if (s == "")
     {
@@ -176,6 +183,10 @@ struct OsmSchemaCategory {
     if (_type & PseudoName)
     {
       result << "pseudoname";
+    }
+    if (_type & HgisPoi)
+    {
+      result << "hgispoi";
     }
 
     return result;
@@ -272,6 +283,7 @@ struct TagVertex
   }
 
   QString name;
+  QString description;
   QString key;
   QString value;
   double influence;
@@ -341,11 +353,20 @@ public:
   OsmSchemaCategory getCategories(const QString& k, const QString& v) const;
   OsmSchemaCategory getCategories(const QString& kvp) const;
 
+  vector<TagVertex> getAllTags();
+
   vector<TagVertex> getChildTags(QString name);
 
   static OsmSchema& getInstance();
 
   double getIsACost() const;
+
+  /**
+   * Returns all tags that have a similar score >= minimumScore.
+   *
+   * minimumScore must be > 0.
+   */
+  vector<TagVertex> getSimilarTags(QString name, double minimumScore);
 
   vector<TagVertex> getTagByCategory(OsmSchemaCategory c) const;
 
@@ -382,6 +403,11 @@ public:
    * Returns true if this is a geometry collection.
    */
   bool isCollection(const Element& e) const;
+
+  /**
+   * Returns true if this is a POI as defined by the Tampa DG group.
+   */
+  bool isHgisPoi(const Element& e);
 
   /**
    * Returns true if the element is a highway type (e.g. road, primary, path, etc.)
@@ -434,6 +460,12 @@ public:
   void loadDefault();
 
   double score(const QString& kvp1, const QString& kvp2);
+
+  /**
+   * @brief scoreOneWay Returns a oneway score. E.g. highway=primary is similar to highway=road,
+   *  but a highway=road isn't necessarily similar to a highway=primary (so it gets a low score).
+   */
+  double scoreOneWay(const QString& kvp1, const QString& kvp2);
 
   /**
    * Sets the cost when traversing up the tree to a parent node. This is useful for strict score

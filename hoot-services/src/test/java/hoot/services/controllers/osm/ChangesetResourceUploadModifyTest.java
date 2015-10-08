@@ -76,7 +76,7 @@ import hoot.services.models.osm.RelationMember;
 import hoot.services.models.osm.Way;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
-import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLUpdateClause;
@@ -188,7 +188,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       try
       {
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
@@ -658,7 +658,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       try
       {
         NodeList returnedWays = XPathAPI.selectNodeList(responseData, "//osm/diffResult/way");
@@ -1036,7 +1036,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       try
       {
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
@@ -2045,7 +2045,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       try
       {
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");

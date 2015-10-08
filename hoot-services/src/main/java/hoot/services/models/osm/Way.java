@@ -193,7 +193,6 @@ public class Way extends Element
    */
   private long getNodeCount() throws Exception
   {
-
     return new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).from(currentWayNodes)
         .where(currentWayNodes.wayId.eq(getId())).count();
   }

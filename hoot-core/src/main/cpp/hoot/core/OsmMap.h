@@ -306,6 +306,11 @@ public:
   void removeNode(long nid);
 
   /**
+   * Removes the node from all relations, ways and then removes the node from the map.
+   */
+  void removeNodeFully(long wId);
+
+  /**
    * Remove the specified node from this map. No check will be made to remove this node from ways.
    * If the node exists in one or more ways the results are undefined.
    */

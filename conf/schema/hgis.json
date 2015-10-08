@@ -1,0 +1,55 @@
+{
+    "tag": {
+        "name": "hgis:imagery_confirmed", 
+        "isA": "metadata",
+        "description": "If/how the geometry was validated against imagery."
+    },
+    "tag": {
+        "name": "hgis:imagery_confirmed=unconfirmed", 
+        "isA": "hgis:imagery_confirmed",
+        "description": "This feature was not reviewed/validated."
+    },
+    "tag": {
+        "name": "hgis:imagery_confirmed=confirmed", 
+        "isA": "hgis:imagery_confirmed",
+        "description": "You can look at the point and tell what it is (e.g. mosque or airport)"
+    },
+    "tag": {
+        "name": "hgis:imagery_confirmed=reported",
+        "isA": "hgis:imagery_confirmed",
+        "description": "Imagery is pixelated or cloudy -- can not be assessed."
+    },
+    "tag": {
+        "name": "hgis:imagery_confirmed=assessed", 
+        "isA": "hgis:imagery_confirmed",
+        "description": "The point is on a building, but you can't verify its type (e.g. hair salon)."
+    },
+
+    "tag": {
+        "name": "hgis:accuracy", 
+        "isA": "metadata",
+        "description": "The accuracy of a geometry. This has its own tag because it doesn't fit cleanly into any other accuracy definition."
+    },
+    "tag": {
+        "name": "hgis:accuracy=high",
+        "isA": "hgis:accuracy"
+    },
+    "tag": {
+        "name": "hgis:accuracy=medium",
+        "isA": "hgis:accuracy"
+    },
+    "tag": {
+        "name": "hgis:accuracy=low",
+        "isA": "hgis:accuracy"
+    },
+    "tag": {
+        "name": "hgis:accuracy=regional",
+        "isA": "hgis:accuracy"
+    },
+    "tag": {
+        "name": "hgis:accuracy=country",
+        "isA": "hgis:accuracy"
+    },
+
+    "#" : "end"
+}

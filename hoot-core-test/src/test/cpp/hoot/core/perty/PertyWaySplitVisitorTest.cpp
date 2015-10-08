@@ -60,6 +60,11 @@ class PertyWaySplitVisitorTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::resetEnvironment();
+  }
+
   void runWaySplitTest()
   {
     //Log::WarningLevel levelBefore = Log::getInstance().getLevel();

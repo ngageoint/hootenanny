@@ -1,0 +1,208 @@
+{
+    "###": "",
+    "###": "Highway related tags.",
+    "###": "",
+
+    "tag": {
+        "name": "highway",
+        "influence": 1.0,
+        "type": "enumeration",
+        "categories": ["transporation"]
+    },
+
+    "tag": {
+        "name": "highway",
+        "influence": 1.0,
+        "type": "enumeration"
+    },
+
+    "tag": {
+        "name": "highway=road",
+        "isA": "highway",
+        "geometries": ["linestring"]
+    },
+
+    "tag": {
+        "name": "highway=other",
+        "isA": "highway=road"
+    },
+
+    "tag": {
+        "name": "highway=motorway",
+        "isA": "highway=road",
+        "similarTo": { "name": "highway=trunk", "weight": 0.8 },
+        "similarTo": { "name": "highway=motorway_link", "weight": 0.9 }
+    },
+    "tag": { "name": "highway=motorway_link", "isA" : "highway=motorway" },
+
+    "tag": {
+        "name": "highway=trunk",
+        "isA": "highway=road",
+        "similarTo": { "name": "highway=motorway", "weight": 0.8 },
+        "similarTo": { "name": "highway=primary", "weight": 0.8 },
+        "similarTo": { "name": "highway=trunk_link", "weight": 0.9 }
+    },
+    "tag": { "name": "highway=trunk_link", "isA" : "highway=trunk" },
+
+    "tag": {
+        "name": "highway=primary",
+        "isA": "highway=road",
+        "similarTo": { "name": "highway=trunk", "weight": 0.8 },
+        "similarTo": { "name": "highway=secondary", "weight": 0.8 },
+        "similarTo": { "name": "highway=primary_link", "weight": 0.9 }
+    },
+    "tag": { "name": "highway=primary_link", "isA" : "highway=primary" },
+
+    "tag": {
+        "name": "highway=secondary",
+        "isA": "highway=road",
+        "similarTo": { "name": "highway=primary", "weight": 0.8 },
+        "similarTo": { "name": "highway=tertiary", "weight": 0.8 },
+        "similarTo": { "name": "highway=secondary_link", "weight": 0.9 }
+    },
+    "tag": { "name": "highway=secondary_link", "isA" : "highway=secondary" },
+
+    "tag": {
+        "name": "highway=tertiary",
+        "isA": "highway=road",
+        "similarTo": { "name": "highway=secondary", "weight": 0.8 },
+        "similarTo": { "name": "highway=unclassified", "weight": 0.8 },
+        "similarTo": { "name": "highway=residential", "weight": 0.8 },
+        "similarTo": { "name": "highway=tertiary_link", "weight": 0.9 }
+    },
+    "tag": { "name": "highway=tertiary_link", "isA" : "highway=tertiary" },
+
+    "tag": {
+        "name": "highway=residential",
+        "isA": "highway=road",
+        "similarTo": { "name": "highway=unclassified", "weight": 0.9 },
+        "similarTo": { "name": "highway=living_street", "weight": 0.8 },
+        "similarTo": { "name": "highway=tertiary", "weight": 0.8 }
+    },
+
+    "tag": {
+        "name": "highway=living_street",
+        "isA": "highway=road",
+        "similarTo": { "name": "highway=residential", "weight": 0.8 }
+    },
+
+    "tag": {
+        "name": "highway=unclassified",
+        "isA": "highway=road",
+        "similarTo": { "name": "highway=tertiary", "weight": 0.8 },
+        "similarTo": { "name": "highway=residential", "weight": 0.9 },
+        "similarTo": { "name": "highway=service", "weight": 0.8 }
+    },
+
+    "tag": {
+        "name": "highway=service",
+        "isA": "highway=road",
+        "similarTo": { "name": "highway=unclassified", "weight": 0.8 },
+        "similarTo": { "name": "highway=track", "weight": 0.8 }
+    },
+
+    "tag": {
+        "name": "highway=track",
+        "isA": "highway=road",
+        "similarTo": { "name": "highway=service", "weight": 0.8 },
+        "similarTo": { "name": "highway=ford", "weight": 0.8 },
+        "similarTo": { "name": "highway=path", "weight": 0.8 }
+    },
+
+    "tag": {
+        "name": "highway=raceway",
+        "isA": "highway=road",
+        "similarTo": { "name": "highway=unclassified", "weight": 0.5 }
+    },
+
+    "tag": {
+        "name": "highway=ford",
+        "isA": "highway=road",
+        "similarTo": { "name": "highway=track", "weight": 0.8 }
+    },
+
+    "tag": {
+        "name": "highway=path",
+        "isA": "highway",
+        "similarTo": { "name": "highway=track", "weight": 0.8 },
+        "similarTo": { "name": "highway=pedestrian", "weight": 0.8 },
+        "geometries": ["linestring"]
+    },
+
+    "tag": {
+        "name": "highway=footway",
+        "isA": "highway=path",
+        "# preferred": { "highway": "path", "foot": "designated" }
+    },
+
+    "tag": {
+        "name": "highway=steps",
+        "isA": "highway=footway" 
+    },
+
+    "tag": {
+        "name": "highway=pedestrian",
+        "isA": "highway=road",
+        "similarTo": { "name": "highway=path", "weight": 0.8 }
+    },
+
+    "tag": {
+        "name": "highway=construction",
+        "isA": "highway=road",
+        "similarTo": { "name": "highway=tertiary", "weight": 0.8 },
+        "similarTo": { "name": "highway=residential", "weight": 0.9 },
+        "similarTo": { "name": "highway=service", "weight": 0.8 }
+    },
+
+    "tag": {
+        "name": "highway=bus_stop",
+        "isA": "highway",
+        "similarTo": { "name": "amenity=bus_station", "weight": 0.8 },
+        "geometries": ["node"],
+        "categories": ["poi", "hgispoi"]
+    },
+
+    "tag": {
+        "name": "highway=interchange",
+        "description": "This tag isn't used within OSM, but supports other inputs. An interchange point simply signifies that an interchange is in that area.",
+        "isA": "highway",
+        "geometries": ["node"],
+        "categories": ["poi", "hgispoi"]
+    },
+
+    "tag": {
+        "name": "highway=motorway_junction",
+        "description": "Use the highway=motorway_junction tag to identify a point along a highway=* with junction refs or names where it is possible to exit the highway onto another road.",
+        "isA": "highway",
+        "geometries": ["node"],
+        "categories": ["poi", "hgispoi"]
+    },
+
+    "tag": {
+        "name": "highway=rest_area",
+        "isA": "highway",
+        "similarTo": { "name": "amenity=parking", "weight": 0.7 },
+        "geometries": ["node"],
+        "categories": ["poi", "hgispoi"]
+    },
+
+    "tag": {
+        "name": "highway=services",
+        "isA": "highway",
+        "similarTo": { "name": "amenity=restaurant", "weight": 0.6 },
+        "similarTo": { "name": "amenity=fuel", "weight": 0.6 },
+        "geometries": ["node"],
+        "categories": ["poi", "hgispoi"]
+    },
+
+    "tag": {
+        "name": "highway=traffic_signals",
+        "description": "Traffic signals, also known as traffic lights, traffic lamps, signal lights and stop lights are signalling devices positioned at road intersections, pedestrian crossings and other locations to control competing flows of traffic.",
+        "isA": "highway",
+        "similarTo": { "name": "junction", "weight": 0.1 },
+        "geometries": ["node"],
+        "categories": ["poi", "hgispoi"]
+    },
+
+    "#end" : ""
+}

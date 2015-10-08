@@ -48,7 +48,7 @@ import hoot.services.models.osm.Relation;
 import hoot.services.models.osm.RelationMember;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.Way;
-import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
@@ -1097,7 +1097,7 @@ public class OsmTestUtils
   {
     try
     {
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
       Assert.assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
       Assert.assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
@@ -1115,7 +1115,7 @@ public class OsmTestUtils
   {
     try
     {
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/bounds").getLength());
       Assert.assertEquals(
         expectedBounds.getMinLat(),
@@ -1146,7 +1146,7 @@ public class OsmTestUtils
   {
     try
     {
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       if (!multiLayerUniqueElementIds)
       {
         Assert.assertEquals(
@@ -1210,7 +1210,7 @@ public class OsmTestUtils
   {
     try
     {
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       if (!multiLayerUniqueElementIds)
       {
@@ -1282,7 +1282,7 @@ public class OsmTestUtils
   {
     try
     {
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       if (!multiLayerUniqueElementIds)
       {

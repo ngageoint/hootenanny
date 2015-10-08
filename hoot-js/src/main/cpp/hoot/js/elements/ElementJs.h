@@ -73,6 +73,7 @@ protected:
   static v8::Handle<v8::Value> getId(const v8::Arguments& args);
   static v8::Handle<v8::Value> getStatusString(const v8::Arguments& args);
   static v8::Handle<v8::Value> getTags(const v8::Arguments& args);
+  static v8::Handle<v8::Value> setStatusString(const v8::Arguments& args);
   static v8::Handle<v8::Value> setTags(const v8::Arguments& args);
   static v8::Handle<v8::Value> toString(const v8::Arguments& args);
 

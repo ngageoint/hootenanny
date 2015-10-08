@@ -172,26 +172,41 @@
 
 
     "#" : "Other Areas",
-    "tag": { "name": "place=farm", "isA": "place" },
+    "tag": {
+        "name": "place=farm",
+        "isA": "place",
+        "categories": ["hgispoi"]
+    },
 
     "tag": { "name": "abandoned:place=farm", "isA": "place",
+        "categories": ["hgispoi"],
         "similarTo": { "name": "place=farm", "weight": 0.8 }
     },
 
     "tag": { "name": "place=marine_farm", "isA": "place",
         "aliases":["place=maritime_farm"],
+        "categories": ["hgispoi"],
         "similarTo": { "name": "place=farm", "weight": 0.9 }
     },
 
     "tag": { "name": "place=allotments", "isA": "place",
+        "categories": ["hgispoi"],
         "similarTo": { "name": "place=farm", "weight": 0.6 }
     },
 
 
 
     "#" : "Misc features",
-    "tag": { "name": "place=buffer_zone", "isA": "place" },
-    "tag": { "name": "place=free_trade_zone", "isA": "place" },
+    "tag": {
+        "name": "place=buffer_zone",
+        "isA": "place",
+        "categories": ["hgispoi"]
+    },
+    "tag": {
+        "name": "place=free_trade_zone",
+        "isA": "place",
+        "categories": ["hgispoi"]
+    },
     "tag": { "name": "place=unknown", "isA": "place" },
 
     "#" : "end"
