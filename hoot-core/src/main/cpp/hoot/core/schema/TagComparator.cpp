@@ -197,8 +197,7 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
   _addDefaults(t1);
   _addDefaults(t2);
 
-  #warning update me
-  // go through and use the cleaned tag vertices rather than tags directly.
+  /// @todo #7255 go through and use the cleaned tag vertices rather than tags directly.
 
   for (Tags::const_iterator it = t1.begin(); it != t1.end(); it++)
   {
