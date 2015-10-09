@@ -58,8 +58,6 @@ my @sectionNames = (
   '18_relation_tags'
 );
 
-my $numberOfPhases = 4;
-
 if ( -d 'sql_phases' )
 {
   print("Phase subdirectories already exist. Delete and then re-run script\n\n" );
@@ -85,22 +83,20 @@ for ( my $sectionNum = 0; $sectionNum < scalar( @grepLines ); ++$sectionNum )
 
   $sectionEndLines[$sectionNum] = $endLine;
 
-  print( sprintf("Section %27s: %12d - %12d (phase %d)\n", $sectionNames[$sectionNum], $startLine, $sectionEndLines[$sectionNum],
-    $sectionPhases[$sectionNum] ) );        
+  #print( sprintf("Section %27s: %12d - %12d (phase %d)\n", $sectionNames[$sectionNum], $startLine, $sectionEndLines[$sectionNum],
+  #  $sectionPhases[$sectionNum] ) );        
 
-  if ( ! -d "sql_phases/$sectionPhases[$sectionNum]" )
+  if ( ! -d "sql_phases/phase$sectionPhases[$sectionNum]" )
   {
-    mkdir( "sql_phases/$sectionPhases[$sectionNum]" );
+    mkdir( "sql_phases/phase$sectionPhases[$sectionNum]" );
   }
 
   my $sectionLines = $sectionEndLines[$sectionNum] - $startLine + 1;
 
   my $createSectionFileCmd = 
-    "tail -n+$startLine $sqlFile | head -n+$sectionLines > phases/$sectionPhases[$sectionNum]/$sectionNames[$sectionNum]";
+    "tail -n+$startLine $sqlFile | head -n+$sectionLines - > sql_phases/phase$sectionPhases[$sectionNum]/$sectionNames[$sectionNum].sql";
 
- print( "$createSectionFileCmd\n" );
+  #print( "$createSectionFileCmd\n" );
 
+  `$createSectionFileCmd`;
 }
-
-
-

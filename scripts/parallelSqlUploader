@@ -4,7 +4,7 @@ use strict;
 use threads;
 use threads::shared;
 
-sub sqlUploadWorker($);
+sub sqlUploadWorker($$);
 
 my @sqlFiles :shared;
 
