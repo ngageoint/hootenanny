@@ -562,7 +562,7 @@ public class ElementResource
     }
     
     log.debug("Returning response: " + 
-      StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100) + " ...");
+      StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 10000) + " ...");
     return 
       Response
         .ok(new DOMSource(elementDoc), MediaType.APPLICATION_XML)

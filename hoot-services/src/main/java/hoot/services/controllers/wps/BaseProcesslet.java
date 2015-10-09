@@ -52,7 +52,7 @@ public abstract class BaseProcesslet implements Processlet
 
   protected static String coreJobServerUrl = null;
 
-  protected ClassPathXmlApplicationContext appContext;
+  private ClassPathXmlApplicationContext appContext;
 
   /**
    * @throws Exception

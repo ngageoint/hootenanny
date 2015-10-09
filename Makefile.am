@@ -58,6 +58,9 @@ test:
 test-all:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old test-all
 
+test-all-no-core:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old test-all-no-core
+
 test-quick:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old test-quick
 

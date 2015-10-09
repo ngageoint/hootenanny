@@ -59,7 +59,7 @@ public class ErrorLogResource {
 	}
 
 	@PreDestroy
-	public void preDestrory()
+	public void PreDestroy()
 	{
 		try
 		{
@@ -70,7 +70,6 @@ public class ErrorLogResource {
 		}
 		catch (Exception ex)
 		{
-			//TODO: throw exception here?
 			log.error(ex.getMessage());
 		}
 	}

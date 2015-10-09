@@ -24,27 +24,21 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.review;
+package hoot.services.readers.review;
 
-import java.io.File;
 import java.sql.Timestamp;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 
 import hoot.services.UnitTest;
 import hoot.services.db.DbUtils;
-import hoot.services.utils.XmlDocumentBuilder;
-import hoot.services.writers.review.ReviewItemsRetrieverWriter;
+import hoot.services.readers.review.ReviewItemsRetriever;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.Mockito;
-import org.w3c.dom.Document;
 
 import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.dml.SQLUpdateClause;
 
 public class ReviewItemsRetrieverTest
 {

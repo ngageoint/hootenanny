@@ -59,8 +59,8 @@ public class ReviewableItemsStatisticsCalculator
   private static final Logger log = LoggerFactory
       .getLogger(ReviewableItemsStatisticsCalculator.class);
 
-  protected static final QReviewItems remviewItems = QReviewItems.reviewItems;
-  protected static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
+  private static final QReviewItems remviewItems = QReviewItems.reviewItems;
+  private static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
   private long mapId;
 
   private Connection conn;

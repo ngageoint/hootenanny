@@ -221,8 +221,7 @@ public class ConflationResource extends JobControllerBase {
 			reviewArgs.add(param);*/
 
 			JSONObject prepareItemsForReviewCommand = _createReflectionJobReq(reviewArgs, "hoot.services.controllers.job.ReviewResource",
-					"prepareItemsForReviewDirect");
-			//String argStr = createPostBody(commandArgs);
+					"prepareItemsForReview");
 
 			Object oUserEmail = oParams.get("USER_EMAIL");
 			String userEmail = (oUserEmail ==  null)? null : oUserEmail.toString();
@@ -245,7 +244,6 @@ public class ConflationResource extends JobControllerBase {
 			JSONObject ingestOSMResource = _createReflectionJobReq(rasterTilesArgs,
 					"hoot.services.controllers.ingest.RasterToTilesService",
 					"ingestOSMResourceDirect");
-			////
 
 			JSONArray jobArgs = new JSONArray();
 			jobArgs.add(conflationCommand);

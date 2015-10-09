@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.review;
+package hoot.services.readers.review;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
@@ -71,7 +71,7 @@ public class ReviewItemsRetriever
   private ReviewItemsRetrieverWriter _writer;
   
   //for tests only
-  protected ReviewItemsRetriever()
+  ReviewItemsRetriever()
   {	
   }
 
@@ -103,12 +103,12 @@ public class ReviewItemsRetriever
     _writer = new ReviewItemsRetrieverWriter(this.conn, this.mapId);
   }
   
-  protected final long _verifyMap(final String mapId) throws Exception
+  private final long _verifyMap(final String mapId) throws Exception
   {
   	return (new ReviewMapValidator(conn)).verifyMapPrepared(mapId);
   }
   
-  protected final long _getUserIdFromMapId() throws Exception
+  private final long _getUserIdFromMapId() throws Exception
   {
   	QMaps maps = QMaps.maps;
 
@@ -226,7 +226,7 @@ public class ReviewItemsRetriever
   }
   
   
-  protected final long _getAllReviewAgainstCount(final String uuid) throws Exception
+  private final long _getAllReviewAgainstCount(final String uuid) throws Exception
   {
     QReviewItems rm = QReviewItems.reviewItems;
     
@@ -443,7 +443,7 @@ public class ReviewItemsRetriever
     
   }
 
-  protected Tuple _getPreviousItem(final long firstReviewId, final long offsetReviewId, 
+  private Tuple _getPreviousItem(final long firstReviewId, final long offsetReviewId, 
   		final Tuple lastReviewableTuple, final Timestamp compareTime) throws Exception
   {
   	QReviewItems rm = QReviewItems.reviewItems;
@@ -475,7 +475,7 @@ public class ReviewItemsRetriever
     }
     return prevAvailableReviewItem;
   }
-  protected Tuple _getNextItem(final long lastReviewId, final long offsetReviewId, 
+  private Tuple _getNextItem(final long lastReviewId, final long offsetReviewId, 
   		final Tuple firstReviewableTuple, final Timestamp compareTime) throws Exception
   {
   	QReviewItems rm = QReviewItems.reviewItems;
@@ -527,7 +527,7 @@ public class ReviewItemsRetriever
     return nextAvailableReviewItem;
   }
  
-  protected JSONObject _createNextReviewableResponse(final String status, final Tuple nextAvailableReviewItem,
+  private JSONObject _createNextReviewableResponse(final String status, final Tuple nextAvailableReviewItem,
   		final long offsetReviewId, final Timestamp past, final Timestamp now) throws ReviewItemsWriterException, Exception
   {
   	QReviewItems rm = QReviewItems.reviewItems;
@@ -586,7 +586,7 @@ public class ReviewItemsRetriever
     }
     return nextItem;
   }
-  protected ReviewableItem _createReviewItem(final List<Tuple> reviewElemMappings, 
+  private ReviewableItem _createReviewItem(final List<Tuple> reviewElemMappings, 
   		final List<Tuple> reviewAgainstElemMappings, 
   		final long nextReviewId, final String reviewItemUUID) throws Exception
   {
@@ -668,7 +668,6 @@ public class ReviewItemsRetriever
     String availAgList = StringUtils.join(agList,";");
     ri.setAgainstList(availAgList);
 
-    
     long allAgainstCnt = _getAllReviewAgainstCount(reviewItemUUID);
     ri.setAllReviewAgainstCnt(allAgainstCnt);
     

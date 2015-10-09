@@ -234,26 +234,6 @@ public class JobStatusManager
   }
 
   /**
-   * Return current job status.
-   *
-   * @param jobId
-   * @return
-   */
-  public JOB_STATUS getJobStatus(String jobId) throws Exception
-  {
-    try
-    {
-      int nStatus = DbUtils.getJobStatus(jobId, conn);
-      return JOB_STATUS.fromInteger(nStatus);
-    }
-    catch (Exception e)
-    {
-      log.error(jobId + " failed to fetch job status.");
-    }
-    return JOB_STATUS.UNKNOWN;
-  }
-
-  /**
    * Returns a job status record by ID
    *
    * @param jobId ID of the job to retrieve the status for
@@ -270,8 +250,6 @@ public class JobStatusManager
     	    query.from(jobStatusTbl)
     	    .where(jobStatusTbl.jobId.eq(jobId))
     	    .singleResult(jobStatusTbl);
-
-      //return statusDao.fetchOneByJobId(jobId);
     }
     catch (Exception e)
     {

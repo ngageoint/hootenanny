@@ -157,6 +157,12 @@ private:
 
   void _makeWritable();
 
+  void _visitRo(const ElementProvider& map, ElementVisitor& filter,
+    QList<long>& visitedRelations) const;
+
+  void _visitRw(ElementProvider &map, ElementVisitor& filter,
+    QList<long> &visitedRelations);
+
 };
 
 template<typename IT>

@@ -35,7 +35,8 @@ import java.util.LinkedList;
 
 
 
-import hoot.services.UnitTest;
+
+import hoot.services.IntegrationTest;
 import hoot.services.wps.WpsUtils;
 
 import org.apache.http.HttpResponse;
@@ -63,7 +64,7 @@ public class CustomScriptSaveProcessletTest {
   private JSONParser _parser = new JSONParser();
   
 	@Test
-	@Category(UnitTest.class)
+	@Category(IntegrationTest.class)
 	public void testProcess() throws Exception
 	{
 		CustomScriptSaveProcesslet processlet = Mockito.spy(new CustomScriptSaveProcesslet());

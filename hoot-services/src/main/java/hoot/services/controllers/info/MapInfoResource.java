@@ -111,8 +111,6 @@ public class MapInfoResource {
 			String[] mapids = mapIds.split(",");
 			for(String mapId :  mapids)
 			{
-			
-				//getTableSizeInByte(final String tableName)
 				for(String table : maptables)
 				{
 					nsize += DbUtils.getTableSizeInByte(table + "_" +  mapId);

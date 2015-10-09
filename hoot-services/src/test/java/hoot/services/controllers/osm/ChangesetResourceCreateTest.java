@@ -53,11 +53,6 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.ClientResponse.Status;
 
-/*
- * @todo Most of these tests could be converted to integration tests and after a refactoring,
- * could be replace with unit tests that test only the internal classes being used by this
- * Jersey resource.
- */
 public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
 {
   private static final Logger log = LoggerFactory.getLogger(ChangesetResourceCreateTest.class);
@@ -196,9 +191,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
     final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
     map.setCreatedAt(now);
     map.setDisplayName("map-with-id-" + mapId);
-    //map.setPublic(true);
     map.setUserId(userId);
-    //mapDao.insert(map);
     new SQLInsertClause(conn, DbUtils.getConfiguration(mapId), maps)
     .populate(map).execute();
     String mapName = null;

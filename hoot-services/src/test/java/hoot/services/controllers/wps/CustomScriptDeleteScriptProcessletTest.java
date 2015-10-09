@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
 
 import java.util.LinkedList;
 
-import hoot.services.UnitTest;
+import hoot.services.IntegrationTest;
 import hoot.services.wps.WpsUtils;
 
 import org.apache.http.ProtocolVersion;
@@ -46,7 +46,6 @@ import org.deegree.services.wps.ProcessletOutputs;
 import org.deegree.services.wps.input.ProcessletInput;
 import org.deegree.services.wps.output.LiteralOutputImpl;
 import org.deegree.services.wps.output.ProcessletOutput;
-
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.Matchers;
@@ -56,7 +55,7 @@ public class CustomScriptDeleteScriptProcessletTest {
 
   
 	@Test
-	@Category(UnitTest.class)
+	@Category(IntegrationTest.class)
 	public void testProcess() throws Exception
 	{
 		CustomScriptDeleteScriptProcesslet processlet = Mockito.spy(new CustomScriptDeleteScriptProcesslet());

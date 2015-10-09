@@ -178,7 +178,6 @@ public class HootProperties
    *
    * @param key property key
    * @return a property value
-   * @todo put these default values in the config file
    */
   public static String getDefault(String key)
   {
@@ -278,14 +277,6 @@ public class HootProperties
     {
       return "false";
     }
-    else if (key.equals("reviewGetReviewScoreThresholdMinimumDefault"))
-    {
-      return "0.5";
-    }
-    else if (key.equals("reviewGetGeospatialBoundsDefault"))
-    {
-      return "-180,-90,180,90";
-    }
     else if (key.equals("testJobStatusPollerTimeout"))
     {
       return "250";
@@ -313,6 +304,10 @@ public class HootProperties
     else if (key.equals("maxWarningsDisplayed"))
     {
       return "10";
+    }
+    else if (key.equals("cleanReviewTags"))
+    {
+      return "true";
     }
     return null;
   }

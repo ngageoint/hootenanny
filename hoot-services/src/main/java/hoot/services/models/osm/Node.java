@@ -51,7 +51,6 @@ import com.mysema.query.types.path.SimplePath;
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
 import hoot.services.db2.CurrentNodes;
-import hoot.services.db2.QCurrentNodes;
 import hoot.services.db2.QCurrentWayNodes;
 
 import hoot.services.geo.BoundingBox;
@@ -64,7 +63,6 @@ import hoot.services.geo.QuadTileCalculator;
 public class Node extends Element
 {
   private static final Logger log = LoggerFactory.getLogger(Node.class);
-  protected static final QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
 
   public Node(final Long mapId, Connection dbConnection)
   {
@@ -148,14 +146,12 @@ public class Node extends Element
    * @param dbConn
    *          JDBC Connection
    * @return a collection of node records
-   * @todo This seems redundant when compared to Element::getElementRecords
    */
   public static List<CurrentNodes> getNodes(final long mapId, final Set<Long> nodeIds,
       Connection dbConn)
-      {
-
-    // SQLQuery query = new SQLQuery(dbConn, DbUtils.getConfiguration());
-
+  {
+  	//This seems redundant when compared to Element::getElementRecords
+  	
     if (nodeIds.size() > 0)
     {
       return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(currentNodes)
@@ -165,8 +161,7 @@ public class Node extends Element
     {
       return new ArrayList<CurrentNodes>();
     }
-
-      }
+  }
 
   /**
    * Returns the IDs of all ways which own this node
@@ -180,14 +175,13 @@ public class Node extends Element
    */
   private Set<Long> getOwningWayIds() throws Exception
   {
-
-    // SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
     QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
 
-    return new TreeSet<Long>(new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).from(currentWayNodes)
+    return 
+    	new TreeSet<Long>(new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+    	  .from(currentWayNodes)
         .where(currentWayNodes.nodeId.eq(getId()))
         .orderBy(currentWayNodes.nodeId.asc()).list(currentWayNodes.nodeId));
-
   }
 
   /**
@@ -243,12 +237,10 @@ public class Node extends Element
             + " not within world boundary.");
       }
     }
-    // Unlike OSM, we're not requiring lat/lon to be specified in the request
-    // for a delete...b/c
-    // it seems unnecessary to me. However, doing so would prevent the extra
-    // query made here.
-    // TODO: maybe this query for the existing lat/lon could be done later in
-    // batch?
+    // Unlike OSM, we're not requiring lat/lon to be specified in the request for a delete...b/c 
+    // it seems unnecessary to me. However, doing so would prevent the extra query made here.
+    
+    //maybe this query for the existing lat/lon could be done later in batch?
     else
     {
       final CurrentNodes existingRecord = (CurrentNodes) new SQLQuery(conn,
@@ -257,7 +249,8 @@ public class Node extends Element
           .singleResult(getElementTable());
 
       // existence of record has already been checked
-      // TODO: inefficient
+      
+      // inefficient
       assert (existingRecord != null);
       latitude = existingRecord.getLatitude();
       longitude = existingRecord.getLongitude();
@@ -386,13 +379,6 @@ public class Node extends Element
   }
 
   /**
-   * Returns the ID sequence type for this element
-   *
-   * @return a sequence type
-   */
-  // public NumberPath<Long> getIdSequenceType() { return null; }
-
-  /**
    * OSM related element type (e.g. way nodes for ways, relation members for
    * relations)
    *
@@ -453,17 +439,15 @@ public class Node extends Element
    * @throws Exception
    */
   public static long insertNew(final long changesetId, final long mapId, final double latitude,
-      final double longitude, final java.util.Map<String, String> tags, Connection conn)
-          throws Exception
-          {
-
-    // SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-
-    long nextNodeId = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).uniqueResult(SQLExpressions
+    final double longitude, final java.util.Map<String, String> tags, Connection conn)
+    throws Exception
+  {
+    long nextNodeId = 
+    	new SQLQuery(conn, DbUtils.getConfiguration(mapId)).uniqueResult(SQLExpressions
         .nextval(Long.class, "current_nodes_id_seq"));
     insertNew(nextNodeId, changesetId, mapId, latitude, longitude, tags, conn);
     return nextNodeId;
-          }
+   }
 
   /**
    * Inserts a new node into the services database with the specified ID; useful
@@ -528,7 +512,6 @@ public class Node extends Element
           + "1" + "," + strTags +
 
           ")";
-      // "    VALUES (10001, 286, 241, CURRENT_TIMESTAMP, TRUE, 1, '\"key1\"=>\"value1\", \"key2\"=>\"value2\", \"key3\"=>\"value3\"')";
       stmt.executeUpdate(sql);
 
     }

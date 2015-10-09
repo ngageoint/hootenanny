@@ -37,6 +37,7 @@ import java.util.UUID;
 import javax.ws.rs.core.Response.Status;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.apache.commons.lang3.StringUtils;
 import org.deegree.services.wps.ProcessExecution;
 import org.deegree.services.wps.ProcessletException;
@@ -64,7 +65,6 @@ import hoot.services.db2.JobStatus;
 import hoot.services.db2.QJobStatus;
 import hoot.services.db2.QReviewMap;
 import hoot.services.db2.ReviewMap;
-
 import hoot.services.job.JobStatusWebPoller;
 import hoot.services.job.JobStatusManager.JOB_STATUS;
 import hoot.services.osm.OsmResourceTestAbstract;
@@ -97,10 +97,10 @@ public class PrepareItemsForReviewProcessletTest extends OsmResourceTestAbstract
     final boolean simulateFailure) throws Exception
   {
     PrepareItemsForReviewProcesslet processlet = new PrepareItemsForReviewProcesslet();
-    PrepareItemsForReviewProcesslet.reviewRecordWriter = "reviewPrepareDbWriter";
+    //PrepareItemsForReviewProcesslet.reviewRecordWriter = "reviewPrepareDbWriter";
 
     LinkedList<ProcessletInput> allInputs = new LinkedList<ProcessletInput>();
-    //TODO: I don't think not adding the input params when they aren't specified is the correct
+    //I don't think not adding the input params when they aren't specified is the correct
     //behavior here.  I believe that the WPS framework will fill any missing values with defaults
     //for optional params and fail early for missing required params.
     if (mapId != null)
@@ -350,18 +350,18 @@ public class PrepareItemsForReviewProcessletTest extends OsmResourceTestAbstract
       		);
       //go ahead and set the previous job status to complete, so that verifyDataPrepared doesn't
       //fail
-      JobStatus jobStatus = //jobStatusDao.fetchOneByJobId(previousJobId);
+      JobStatus jobStatus = 
       		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
           .where(jobStatusTbl.jobId.eq(previousJobId))
           .singleResult(jobStatusTbl);
       jobStatus.setStatus(JOB_STATUS.COMPLETE.toInt());
-      //jobStatusDao.update(jobStatus);
+
       new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), jobStatusTbl)
       .where(jobStatusTbl.jobId.eq(jobStatus.getJobId()))
       .populate(jobStatus)
       .execute();
 
-      jobStatus = //jobStatusDao.fetchOneByJobId(previousJobId);
+      jobStatus = 
       		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
           .where(jobStatusTbl.jobId.eq(previousJobId))
           .singleResult(jobStatusTbl);
@@ -373,14 +373,14 @@ public class PrepareItemsForReviewProcessletTest extends OsmResourceTestAbstract
     {
       //a new job should have been created
       Assert.assertNotEquals(previousJobId, jobId);
-      //TODO: maybe not the best check here
+      //maybe not the best check here
       Assert.assertTrue(
         new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl).count() >= 2);
       //the old job record should still exist
       Assert.assertNotNull(new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
           .where(jobStatusTbl.jobId.eq(previousJobId))
           .singleResult(jobStatusTbl));
-      JobStatus newJob = //jobStatusDao.findById(jobId);
+      JobStatus newJob = 
       		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
           .where(jobStatusTbl.jobId.eq(jobId))
           .singleResult(jobStatusTbl);
@@ -461,28 +461,26 @@ public class PrepareItemsForReviewProcessletTest extends OsmResourceTestAbstract
 
     testPrepare();
 
-    //TODO: maybe not the best check here
+    //maybe not the best check here
     Assert.assertTrue(
       new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl).count() >= 2);
     List<JobStatus> failedJobs =
     		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
         .where(jobStatusTbl.status.eq(JOB_STATUS.FAILED.toInt()))
         .list(jobStatusTbl);
-    //TODO: probably too lax
+    //probably too lax
     Assert.assertTrue(failedJobs.size() >= 1);
     List<JobStatus> completedJobs =
     		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(jobStatusTbl)
         .where(jobStatusTbl.status.eq(JOB_STATUS.COMPLETE.toInt()))
         .list(jobStatusTbl);
-    //TODO: probably too lax
+    //probably too lax
     Assert.assertTrue(completedJobs.size() >= 1);
     Assert.assertNotEquals(failedJobs.get(0).getJobId(), completedJobs.get(0).getJobId());
   }
 
   /*
    * We fail on finding previously run jobs with unknown status.
-   *
-   * TODO: make this behave like job status = failed??
    */
   @Test(expected=ProcessletException.class)
   @Category(IntegrationTest.class)
@@ -544,6 +542,7 @@ public class PrepareItemsForReviewProcessletTest extends OsmResourceTestAbstract
    * to see if it the prepare job still succeeds when paging logic kicks in.  A class level unit
    * test against ConflatedDataReviewPreparer needs to be written to test this properly.
    */
+  @Ignore
   @Test
   @Category(IntegrationTest.class)
   public void testParseReadPaging() throws Exception
@@ -636,8 +635,6 @@ public class PrepareItemsForReviewProcessletTest extends OsmResourceTestAbstract
     ReviewTestUtils.verifyDataPrepared(ReviewTestUtils.mapId);
   }
 
-  //TODO: I don't think this test is actually necessary and that the WPS framework will fill
-  //in the missing value with the default.
   @Test(expected=ProcessletException.class)
   @Category(IntegrationTest.class)
   public void testPrepareMissingMapIdParam() throws Exception
@@ -707,8 +704,6 @@ public class PrepareItemsForReviewProcessletTest extends OsmResourceTestAbstract
     }
   }
 
-  //TODO: I don't think this test is actually necessary and that the WPS framework will fill
-  //in the missing value with the default.
   @Test
   @Category(IntegrationTest.class)
   public void testPrepareMissingOverwriteParam() throws Exception
@@ -747,12 +742,4 @@ public class PrepareItemsForReviewProcessletTest extends OsmResourceTestAbstract
       throw e;
     }
   }
-
-//  @Ignore
-//  @Test
-//  @Category(UnitTest.class)
-//  public void testPrepareWhileConcurrentOsmUpdatesAreOccurring()
-//  {
-//
-//  }
 }
