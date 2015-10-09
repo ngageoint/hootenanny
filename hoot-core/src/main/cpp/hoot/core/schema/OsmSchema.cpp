@@ -314,7 +314,7 @@ public:
     v.valueType = Enumeration;
     v.value = "road";
     v.categories.append("transportation");
-    VertexId highwayRoad = _addVertex(v);
+    _addVertex(v);
 
     TagEdge isA;
     isA.similarToWeight = 1;
@@ -366,11 +366,11 @@ public:
     v.value.clear();
     v.valueType = Text;
     v.categories = QStringList("name");
-    VertexId abstract_name = _addVertex(v);
+    _addVertex(v);
 
     v.key = "name";
     v.name = "name";
-    VertexId name = _addVertex(v);
+    _addVertex(v);
     addIsA("name", "abstract_name");
 
     ////
@@ -381,7 +381,7 @@ public:
     v.valueType = Enumeration;
     v.geometries = OsmGeometries::Node | OsmGeometries::Area;
     v.categories = QStringList();
-    VertexId poi = _addVertex(v);
+    _addVertex(v);
 
     v.key = "poi";
     v.value = "yes";
