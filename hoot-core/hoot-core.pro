@@ -484,7 +484,8 @@ SOURCES += \
     src/main/cpp/hoot/core/filters/NeedsReviewCriterion.cpp \
     src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.cpp \
     src/main/cpp/hoot/core/ops/RemoveReviewsByEidOp.cpp \
-    src/main/cpp/hoot/core/conflate/highway/HighwayReviewCleanerOp.cpp
+    src/main/cpp/hoot/core/conflate/highway/HighwayReviewCleanerOp.cpp \
+    src/main/cpp/hoot/core/ops/AddHilbertReviewSortOrderOp.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -956,5 +957,6 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/NeedsReviewCriterion.h \
     src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.h \
     src/main/cpp/hoot/core/ops/RemoveReviewsByEidOp.h \
-    src/main/cpp/hoot/core/conflate/highway/HighwayReviewCleanerOp.h
+    src/main/cpp/hoot/core/conflate/highway/HighwayReviewCleanerOp.h \
+    src/main/cpp/hoot/core/ops/AddHilbertReviewSortOrderOp.h
 

@@ -29,6 +29,7 @@
 
 // Standard Includes
 #include <assert.h>
+#include <iostream>
 #include <stdio.h>
 using namespace std;
 
@@ -177,6 +178,8 @@ namespace Tgs
 
   void ConsistencySubsetEvaluator::setDataFrame(const DataFrame& dataFrame, TgsProgress* progress) 
   {
+    // @todo Test Disabled. See #7251 for details.
+    std::cerr << "Test is disabled. Please fix before using." << std::endl;
     _dataFrame = dataFrame;
     DataFrameDiscretizer dfd;
     dfd.discretize(_dataFrame, progress);

@@ -170,4 +170,5 @@ namespace Tgs
 }
 
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Tgs::CfsSubsetEvaluatorTest, PluginFactory::testName());
+// @todo Disabled. See #7251 for details.
+// CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Tgs::CfsSubsetEvaluatorTest, PluginFactory::testName());

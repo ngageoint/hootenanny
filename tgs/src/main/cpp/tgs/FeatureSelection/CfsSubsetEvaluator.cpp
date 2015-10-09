@@ -150,6 +150,9 @@ namespace Tgs
 
   void CfsSubsetEvaluator::setDataFrame(const DataFrame& dataFrame, TgsProgress* progress)
   {
+    // @todo Test Disabled. See #7251 for details.
+    std::cerr << "Test is disabled. Please fix before using.";
+
     TgsProgress* discretizeProgress = NULL;
     TgsProgress* classCorrelationProgress = NULL;
     TgsProgress* correlationMatrixProgress = NULL;

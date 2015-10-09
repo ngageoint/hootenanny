@@ -28,6 +28,9 @@
 
 #include <hoot/core/util/Log.h>
 
+// Tgs
+#include <tgs/RStarTree/HilbertCurve.h>
+
 namespace hoot
 {
 
@@ -35,6 +38,7 @@ QString ReviewMarker::_complexGeometryType = "Bad Geometry";
 QString ReviewMarker::_revieweeKey = "reviewee";
 QString ReviewMarker::_reviewUuidKey = "hoot:review:uuid";
 QString ReviewMarker::_reviewScoreKey = "hoot:review:score";
+QString ReviewMarker::reviewSortOrderKey = "hoot:review:sort_order";
 QString ReviewMarker::_reviewNeedsKey = "hoot:review:needs";
 QString ReviewMarker::_reviewNoteKey = "hoot:review:note";
 QString ReviewMarker::_reviewTypeKey = "hoot:review:type";
@@ -141,12 +145,13 @@ bool ReviewMarker::isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid)
 void ReviewMarker::mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, const QString& note,
   const QString &reviewType, double score)
 {
-  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
-  r->getTags().set(_reviewNeedsKey, true);
   if (note.isEmpty())
   {
     throw IllegalArgumentException("You must specify a review note.");
   }
+
+  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
+  r->getTags().set(_reviewNeedsKey, true);
   r->getTags().appendValueIfUnique(_reviewNoteKey, note);
   r->getTags().appendValueIfUnique(_reviewTypeKey, reviewType);
   r->getTags().set(_reviewScoreKey, score);
@@ -159,12 +164,13 @@ void ReviewMarker::mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, co
 void ReviewMarker::mark(const OsmMapPtr& map, ElementPtr& e, const QString& note,
   const QString &reviewType, double score)
 {
-  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
-  r->getTags().set(_reviewNeedsKey, true);
   if (note.isEmpty())
   {
     throw IllegalArgumentException("You must specify a review note.");
   }
+
+  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
+  r->getTags().set(_reviewNeedsKey, true);
   r->getTags().appendValueIfUnique(_reviewNoteKey, note);
   r->getTags().appendValueIfUnique(_reviewTypeKey, reviewType);
   r->getTags().set(_reviewScoreKey, score);

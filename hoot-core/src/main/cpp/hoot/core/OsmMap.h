@@ -198,12 +198,6 @@ public:
   set<ElementId> findElements(const Envelope& e) const;
 
   /**
-   * Does a very inefficient search for all neighbors within buffer distance. This should be
-   * replaced by an index search at some point.
-   */
-  std::vector<long> findWayNeighbors(shared_ptr<const Way> way, Meters buffer) const;
-
-  /**
    * Does a very inefficient search for all the ways that contain the given node.
    */
   std::vector<long> findWayByNode(long nodeId) const;
