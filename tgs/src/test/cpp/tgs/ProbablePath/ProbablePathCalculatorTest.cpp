@@ -193,9 +193,9 @@ public:
       ProbablePathCalculator uut;
       uut.setFriction(w, h, friction);
       uut.setRandomNoise(0.0);
-      uut.updateCostSurface(cost);
+      Image<float> result = uut.updateCostSurface(cost);
       stringstream strm;
-      strm << cost;
+      strm << result;
       CPPUNIT_ASSERT_EQUAL(tmp, strm.str());
     }
 
@@ -206,9 +206,9 @@ public:
       ProbablePathCalculator uut;
       uut.setFriction(w, h, friction);
       uut.setRandomNoise(0.0);
-      uut.updateCostSurface(cost);
+      Image<float> result = uut.updateCostSurface(cost);
       stringstream strm;
-      strm << cost;
+      strm << result;
     }
   }
 };
