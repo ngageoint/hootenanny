@@ -1070,6 +1070,13 @@ If the name similarity score is greater than this then the names are considered 
 
 How far away from a polygon should name matches be considered reviews. This is a fixed value in meters that is added to the CE calculation.
 
+=== postgresql.dumpfile.writer.cache.size
+
+* Data Type: int
+* Default Value: `10000000`
+
+Maximum number of elements (nodes, ways, and relations) that can be held in memory before the system starts using disk-based storage.  Note that this limit applies to each element type individually, so worst case is that three times this value of elements can be stored in memory at the same time.
+
 === postgresql.dumpfile.writer.changeset.user.id
 
 * Data Type: int

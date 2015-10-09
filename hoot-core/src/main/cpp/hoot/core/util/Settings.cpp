@@ -365,6 +365,8 @@ long Settings::getLong(const QString& key, long defaultValue, long min, long max
   {
     retVal = max;
   }
+
+  return retVal;
 }
 
 

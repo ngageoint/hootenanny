@@ -87,15 +87,21 @@ foreach my $currFile ( @sqlFiles )
 }
 
 my @threadHandles;
+my $workerThreads = $maxThreads;
+
+if ( scalar(@sqlFiles) < $workerThreads )
+{
+  $workerThreads = scalar(@sqlFiles);
+}
 
 my $i;
-for ( $i = 0; $i < $maxThreads; ++$i )
+for ( $i = 0; $i < $workerThreads; ++$i )
 {
   $threadHandles[$i] = threads->create(\&sqlUploadWorker, $dbName, $i + 1);
 }
 
 # Wait for all workers to come home
-for ( $i = 0; $i < $maxThreads; ++$i )
+for ( $i = 0; $i < $workerThreads; ++$i )
 {
   $threadHandles[$i]->join();
   print( 'Thread #' . ($i + 1) . " has completed and rejoined\n" );
