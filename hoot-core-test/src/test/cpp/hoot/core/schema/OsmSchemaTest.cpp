@@ -26,6 +26,7 @@
  */
 
 // Hoot
+#include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/JsonSchemaLoader.h>
 #include <hoot/core/util/ConfPath.h>
@@ -142,7 +143,7 @@ public:
     HOOT_STR_EQUALS(0, uut.hasCategory(tags, "poi"));
     HOOT_STR_EQUALS(1, uut.hasCategory(tags, "transportation"));
 
-    vector<TagVertex> tvs = uut.getTagByCategory(OsmSchemaCategory::transportation());
+    vector<SchemaVertex> tvs = uut.getTagByCategory(OsmSchemaCategory::transportation());
     vector<QString> names;
     for (size_t i = 0; i < tvs.size(); i++)
     {
@@ -157,19 +158,19 @@ public:
     OsmSchema uut;
     uut.createTestingGraph();
 
-    const TagVertex& v1 = uut.getFirstCommonAncestor("highway=primary", "highway=secondary");
+    const SchemaVertex& v1 = uut.getFirstCommonAncestor("highway=primary", "highway=secondary");
     CPPUNIT_ASSERT_EQUAL(string("road"), v1.value.toStdString());
-    const TagVertex& v2 = uut.getFirstCommonAncestor("highway=primary", "highway=primary");
+    const SchemaVertex& v2 = uut.getFirstCommonAncestor("highway=primary", "highway=primary");
     CPPUNIT_ASSERT_EQUAL(string("primary"), v2.value.toStdString());
-    const TagVertex& v3 = uut.getFirstCommonAncestor("highway=road", "highway=primary");
+    const SchemaVertex& v3 = uut.getFirstCommonAncestor("highway=road", "highway=primary");
     CPPUNIT_ASSERT_EQUAL(string("road"), v3.value.toStdString());
-    const TagVertex& v4 = uut.getFirstCommonAncestor("highway=primary", "highway=road");
+    const SchemaVertex& v4 = uut.getFirstCommonAncestor("highway=primary", "highway=road");
     CPPUNIT_ASSERT_EQUAL(string("road"), v4.value.toStdString());
   }
 
   void dumpAsCsv(OsmSchema& schema, QString tag)
   {
-    vector<TagVertex> surfaces = schema.getChildTags(tag);
+    vector<SchemaVertex> surfaces = schema.getChildTags(tag);
     QString csvDistance;
     QString csvAverage;
 
@@ -211,12 +212,12 @@ public:
   {
     OsmSchema& uut = OsmSchema::getInstance();
 
-    vector<TagVertex> gravel = uut.getChildTags("surface=gravel");
+    vector<SchemaVertex> gravel = uut.getChildTags("surface=gravel");
 
     CPPUNIT_ASSERT_EQUAL(2, (int)gravel.size());
   }
 
-  QStringList tagsToNames(const vector<TagVertex>& v)
+  QStringList tagsToNames(const vector<SchemaVertex>& v)
   {
     QStringList l;
     for (size_t i = 0; i < v.size(); i++)
@@ -247,10 +248,7 @@ public:
   {
     QString hootHome(getenv("HOOT_HOME"));
 
-    OsmSchema uut;
-//    JsonSchemaLoader::load(uut, hootHome + "/conf/schema.json");
-//    JsonSchemaLoader::load(uut, hootHome + "/conf/schema/schema.json");
-    JsonSchemaLoader::load(uut, ConfPath::search("schema.json"));
+    OsmSchema& uut = OsmSchema::getInstance();
 
     QFile fp("tmp/schema.dot");
     fp.open(QFile::WriteOnly);
@@ -301,6 +299,47 @@ public:
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0,
       uut.scoreOneWay("poi=yes", "amenity=restaurant"), 0.001);
+
+    Tags t;
+    t["public_transport"] = "platform";
+    t["bus"] = "yes";
+    HOOT_STR_EQUALS("[2]{name: public_transport=platform\n"
+      "key: public_transport\n"
+      "value: platform\n"
+      "influence: 1\n"
+      "childWeight: -1\n"
+      "mismatchScore: -1\n"
+      "valueType: 2\n"
+      "aliases: [0]{}\n"
+      "geometries: 31\n"
+      "categories: [2]{poi, hgispoi}\n"
+      ", name: bus_platform\n"
+      "key: \n"
+      "value: \n"
+      "influence: 1\n"
+      "childWeight: -1\n"
+      "mismatchScore: -1\n"
+      "valueType: 2\n"
+      "aliases: [0]{}\n"
+      "geometries: 31\n"
+      "categories: [2]{poi, hgispoi}\n"
+      "tags: [2]{[2]{public_transport=platform, bus=yes}, [2]{public_transport=platform, highway=bus_stop}}\n"
+      "}", toString(uut.getSchemaVertices(t)));
+
+    HOOT_STR_EQUALS("[1]{name: bus_platform\n"
+      "key: \n"
+      "value: \n"
+      "influence: 1\n"
+      "childWeight: -1\n"
+      "mismatchScore: -1\n"
+      "valueType: 2\n"
+      "aliases: [0]{}\n"
+      "geometries: 31\n"
+      "categories: [2]{poi, hgispoi}\n"
+      "tags: [2]{[2]{public_transport=platform, bus=yes}, [2]{public_transport=platform, highway=bus_stop}}\n"
+      "}", toString(uut.getUniqueSchemaVertices(t)));
+
+    HOOT_STR_EQUALS(1, uut.score("highway=bus_stop", "bus_platform"));
   }
 
   /**
@@ -392,9 +431,7 @@ public:
 
   void isMetaDataTest()
   {
-    OsmSchema uut;
-    //uut.createTestingGraph();
-    uut.loadDefault();
+    OsmSchema& uut = OsmSchema::getInstance();
 
     CPPUNIT_ASSERT_EQUAL(false, uut.isMetaData("name", "foo"));
     CPPUNIT_ASSERT_EQUAL(false, uut.isMetaData("foo", "bar"));
@@ -407,15 +444,11 @@ public:
     CPPUNIT_ASSERT_EQUAL(true, uut.isMetaData("created_by", "baz"));
     CPPUNIT_ASSERT_EQUAL(true, uut.isMetaData("source", "foo"));
     CPPUNIT_ASSERT_EQUAL(true, uut.isMetaData("source", ""));
-
-    CPPUNIT_ASSERT_EQUAL(true, OsmSchema::getInstance().isAncestor("highway=secondary",
-      "highway=road"));
   }
 
   void religionTest()
   {
-    OsmSchema uut;
-    uut.loadDefault();
+    OsmSchema& uut = OsmSchema::getInstance();
 
     double d;
     // These should have a high score. The exact value isn't important.
@@ -434,6 +467,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmSchemaTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmSchemaTest, "current");
 
 }

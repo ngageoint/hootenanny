@@ -67,12 +67,14 @@ HOOT_FACTORY_REGISTER(HighwayClassifier, HighwayRfClassifier)
 
 HighwayRfClassifier::HighwayRfClassifier()
 {
+  // we do a lazy initialization
 }
 
 MatchClassification HighwayRfClassifier::classify(const ConstOsmMapPtr& map,
   ElementId eid1, ElementId eid2, const WaySublineMatchString& match)
 {
   _init();
+
   MatchClassification p;
 
   if (match.isValid() == false)
@@ -219,6 +221,7 @@ map<QString, double> HighwayRfClassifier::getFeatures(const shared_ptr<const Osm
   ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const
 {
   _init();
+
   map<QString, double> result;
 
   // convert match into elements in a new map.

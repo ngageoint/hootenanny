@@ -66,9 +66,10 @@ public class PostgresUtils
   {
   	Map<String, String> tagsMap = new HashMap<String, String>();
   	
+
   	if(tagsStr != null && tagsStr.length() > 0)
   	{
-  		Pattern regex = Pattern.compile("(\"[^\"]*\")=>((?:\"[^\"]*\"|[^=,])*)");
+  		Pattern regex = Pattern.compile("(\"[^\"]*\")=>(\"(?:\\\\.|[^\"\\\\]+)*\"|[^,\"]*)");
     	Matcher regexMatcher = regex.matcher(tagsStr);
     	while (regexMatcher.find()) {
     	    String key = regexMatcher.group(1);

@@ -1298,6 +1298,22 @@ all translation stats are disabled.
 
 The default status to match with a status criterion.
 
+=== tag.ancestor.differencer.name
+
+* Data Type: string
+* Default Value: ``
+
+The default ancestor to use when using the hoot::TagAncestorDifferencer class for comparing tags.
+Primarily this is useful within the node.js interface.
+
+=== tag.category.differencer.name
+
+* Data Type: string
+* Default Value: ``
+
+The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
+Primarily this is useful within the node.js interface.
+
 === tag.criterion.kvp
 
 * Data Type: string

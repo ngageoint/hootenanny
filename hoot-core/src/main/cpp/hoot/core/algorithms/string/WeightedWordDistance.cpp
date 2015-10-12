@@ -117,10 +117,6 @@ double WeightedWordDistance::compare(const QString& s1, const QString& s2) const
   // calculate the relative weight of each word term.
   vector<double> w1 = _calculateWeights(sl1);
   vector<double> w2 = _calculateWeights(sl2);
-  LOG_VARD(sl1);
-  LOG_VARD(w1);
-  LOG_VARD(sl2);
-  LOG_VARD(w2);
 
   ScoreMatrix scores(sl1.size() + 1, sl2.size() + 1);
   ScoreMatrix weightedScores(sl1.size() + 1, sl2.size() + 1);
@@ -132,7 +128,7 @@ double WeightedWordDistance::compare(const QString& s1, const QString& s2) const
     for (int j = 0; j < sl2.size(); j++)
     {
       double distance = 1 - _d->compare(sl1[i], sl2[j]);
-      LOG_DEBUG(sl1[i] << " vs. " << sl2[j] << ": " << distance);
+      //LOG_DEBUG(sl1[i] << " vs. " << sl2[j] << ": " << distance);
       // if we assume they represent the same word this is the weight of that new combined word.
       double w = w1[i] + w2[j];
       scores.set(i + 1, j + 1, distance);
@@ -146,18 +142,18 @@ double WeightedWordDistance::compare(const QString& s1, const QString& s2) const
     weightedScores.set(0, j + 1, w2[j]);
   }
 
-  LOG_VARD(scores.toTableString());
-  LOG_VARD(weightedScores.toTableString());
-  LOG_VARD(scores.minSumMatrix().toTableString());
-  LOG_VARD(scores.minSumMatrix().multiplyCells(weightedScores).toTableString());
+//  LOG_VARD(scores.toTableString());
+//  LOG_VARD(weightedScores.toTableString());
+//  LOG_VARD(scores.minSumMatrix().toTableString());
+//  LOG_VARD(scores.minSumMatrix().multiplyCells(weightedScores).toTableString());
 
   double denominator = tbs::SampleStats(w1).calculateSum() +
     tbs::SampleStats(w2).calculateSum();
-  LOG_VARD(denominator);
+//  LOG_VARD(denominator);
 
   double score = scores.minSumMatrix().multiplyCells(weightedScores).sumCells();
 
-  LOG_VARD(1 - score / denominator);
+//  LOG_VARD(1 - score / denominator);
   return 1 - score / denominator;
 }
 
@@ -165,7 +161,6 @@ void WeightedWordDistance::setConfiguration(const Settings& conf)
 {
   _p = ConfigOptions(conf).getWeightedWordDistanceP();
   _tokenizer.setConfiguration(conf);
-  LOG_VARD(_p);
 }
 
 }

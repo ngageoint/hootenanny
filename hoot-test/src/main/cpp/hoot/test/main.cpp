@@ -46,6 +46,7 @@ using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/Hoot.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
@@ -236,6 +237,9 @@ int main(int argc, char *argv[])
   Log::getInstance().setLevel(Log::Warn);
   CppUnit::TextUi::TestRunner runner;
   CppUnit::TestSuite *rootSuite = new CppUnit::TestSuite( "All tests" );
+
+  // initialize OSM Schema so the time expense doesn't print in other tests.
+  OsmSchema::getInstance();
 
   if (args.contains("--core") == false)
   {
