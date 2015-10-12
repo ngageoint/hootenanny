@@ -7,7 +7,7 @@
         <tag k="hoot:review:source" v="1"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:uuid" v="{52818661}"/>
-        <tag k="hoot:review:note" v="Somewhat similar - similar POI type"/>
+        <tag k="hoot:review:note" v="Somewhat similar (170m) - similar POI type"/>
         <tag k="uuid" v="{b18057ff-736d-5d20-b873-837f0c172e33}"/>
         <tag k="name" v="St. Nepomuk"/>
         <tag k="error:circular" v="15"/>
@@ -22,7 +22,7 @@
         <tag k="hoot:review:source" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:uuid" v="{b18057ff-736d-5d20-b873-837f0c172e33}"/>
-        <tag k="hoot:review:note" v="Somewhat similar - similar POI type"/>
+        <tag k="hoot:review:note" v="Somewhat similar (170m) - similar POI type"/>
         <tag k="language" v="GER"/>
         <tag k="source" v="navteq"/>
         <tag k="uuid" v="{52818661}"/>

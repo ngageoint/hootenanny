@@ -6,7 +6,7 @@
         <tag k="hoot:review:source" v="1"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:uuid" v="{b18057ff-736d-5d20-b873-837f0c172e33}"/>
-        <tag k="hoot:review:note" v="Somewhat similar - very close together, similar POI type"/>
+        <tag k="hoot:review:note" v="Somewhat similar (44m) - very close together, similar POI type"/>
         <tag k="uuid" v="{1c3e97f5-7430-5a1f-b030-9ce1e7038682}"/>
         <tag k="name" v="Food &amp; More"/>
         <tag k="tourism" v="hotel"/>
@@ -17,7 +17,7 @@
         <tag k="hoot:review:source" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:uuid" v="{1c3e97f5-7430-5a1f-b030-9ce1e7038682}"/>
-        <tag k="hoot:review:note" v="Somewhat similar - very close together, similar POI type"/>
+        <tag k="hoot:review:note" v="Somewhat similar (44m) - very close together, similar POI type"/>
         <tag k="uuid" v="{b18057ff-736d-5d20-b873-837f0c172e33}"/>
         <tag k="name" v="Cheap &amp; Good"/>
         <tag k="tourism" v="hotel"/>

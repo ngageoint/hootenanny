@@ -293,13 +293,14 @@ exports.matchScore = function(map, e1, e2) {
     var additiveResult = additiveScore(map, e1, e2);
     var score = additiveResult.score;
     var reasons = additiveResult.reasons;
+    var d = "(" + prettyNumber(distance(e1, e2)) + "m)";
 
     if (score <= 0.5) {
-        return {miss: 1, explain: 'Not much evidence of a match'};
+        return {miss: 1, explain: 'Not much evidence of a match ' + d};
     } else if (score < 1.9) {
-        return {review: 1, explain: "Somewhat similar - " + reasons.join(", ") };
+        return {review: 1, explain: "Somewhat similar " + d + " - " + reasons.join(", ") };
     } else {
-        return {match: 1, explain: "Very similar - " + reasons.join(", ") };
+        return {match: 1, explain: "Very similar " + d + " - " + reasons.join(", ") };
     }
 };
 
@@ -334,4 +335,34 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
 
   return fd;
 };
+
+/**
+ * Given a number return a result that contains no more than 2 significant
+ * digits and no more than 1 digit after the decimal place. For example:
+ *
+ * 123.456 -> 120
+ * 1.234 -> 1.2
+ * 0.123 -> 0.1
+ * 1234567.89 -> 1200000
+ */
+function prettyNumber(n) {
+    var digits = String(Math.round(n)).length;
+    // a number that represents the number of digits we're rounding (e.g. for
+    // 1234567.89 this will be 100000
+    var f = Math.pow(10, digits - 2);
+    // divide n by f, (12.3456789), round (12), then multiple by up, 1200000
+    var r = Math.round(n / f) * f;
+    var result;
+
+    // I don't use the String conversion here b/c it sometimes gives weird
+    // floating point errors.
+
+    // if this is a small number remove the extra decimal places
+    if (r < 10) {
+        result = r.toFixed(1);
+    } else {
+        result = r.toFixed(0);
+    }
+    return result;
+}
 
