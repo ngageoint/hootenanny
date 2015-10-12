@@ -26,8 +26,15 @@
  */
 package hoot.services.controllers.info;
 
+import java.sql.Connection;
+import java.util.List;
+
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
+import hoot.services.db2.Maps;
+import hoot.services.db2.QMaps;
+import hoot.services.models.osm.Map;
+import hoot.services.models.osm.MapLayers;
 import hoot.services.utils.ResourceErrorHandler;
 
 import javax.ws.rs.GET;
@@ -38,9 +45,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.codehaus.jettison.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.mysema.query.sql.SQLQuery;
 
 @Path("/map")
 public class MapInfoResource {
@@ -128,6 +138,67 @@ public class MapInfoResource {
 		JSONObject res = new JSONObject();
 		res.put("mapid", mapIds);
 		res.put("size_byte", nsize);
+		/*res.put("conflate_threshold", conflateThreshold);
+		res.put("ingest_threshold", ingestThreshold);
+		res.put("export_threshold", exportThreshold);*/
+		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+	}
+	
+	/**
+  * <NAME>Individual Map Physical Size Information Service</NAME>
+  * <DESCRIPTION>Service method endpoint for retrieving the physical size of multiple map records.</DESCRIPTION>
+  * <PARAMETERS></PARAMETERS>
+	* <OUTPUT>
+	* 	JSON containing a list of size information for all current maps
+	* </OUTPUT>
+	* <EXAMPLE>
+	* 	<URL>http://localhost:8080/hoot-services/info/map/sizes?mapid=54,62</URL>
+	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	* <INPUT>None</INPUT>
+  * <OUTPUT>
+	{ "layers": [ {
+	 * "mapid": 54, "size": "14582", }, { "mapid": 62, "size": "56818", } ] }
+  * </OUTPUT>
+  * </EXAMPLE>
+	 * @throws Exception 
+  * 
+  */
+	@GET
+  @Path("/sizes")
+  @Produces(MediaType.TEXT_PLAIN)
+  public Response getMapSizes(@QueryParam("mapid") final String mapIds)
+	{
+		String[] maptables = {"changesets","current_nodes","current_relation_members",
+				"current_relations","current_way_nodes","current_ways"};
+
+		JSONArray retval = new JSONArray();
+		
+		try
+		{
+			String[] mapids = mapIds.split(",");
+			for(String mapId :  mapids)
+			{
+				JSONObject jo = new JSONObject();
+				long nsize = 0;
+				for(String table : maptables)
+				{
+					nsize += DbUtils.getTableSizeInByte(table + "_" +  mapId);
+				}
+				jo.put("mapid", mapId);
+				jo.put("size", nsize);
+				retval.put(jo);
+			}
+			
+		}
+		catch (Exception ex)
+		{
+			ResourceErrorHandler.handleError(
+					"Error getting map size: " + ex.toString(),
+				    Status.INTERNAL_SERVER_ERROR,
+					log);
+		}
+		JSONObject res = new JSONObject();
+		res.put("layers", retval);
 		/*res.put("conflate_threshold", conflateThreshold);
 		res.put("ingest_threshold", ingestThreshold);
 		res.put("export_threshold", exportThreshold);*/
