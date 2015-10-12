@@ -345,7 +345,7 @@ ufd.rules = {
         ['BFC','78','building','marine_police'], // Marine Police 
         ['BFC','79','amenity','rescue'], // Rescue 
         ['BFC','82','man_made','lighthouse'], // Lighthouse 
-        ['BFC','83','plant','power'],
+        ['BFC','83','power','plant'],
         ['BFC','84','industrial','filtration_plant'], // Filtration Plant 
         ['BFC','85','amenity','newspaper_plant'],
         ['BFC','Processing/Treatment','industrial','manufacturing'],

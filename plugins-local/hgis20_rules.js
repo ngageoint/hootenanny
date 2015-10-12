@@ -1479,7 +1479,7 @@ hgis20.rules = {
      ['medical$TYPE2','Dental','amenity','dentist'],
      ['medical$TYPE2','Emergency','emergency','yes'],
      ['medical$TYPE2','Headquarters','headquarters','yes'],
-     ['medical$TYPE2','Health Center','amenity','health_center'],
+     ['medical$TYPE2','Health Center','amenity','health_centre'],
      ['medical$TYPE2','Health Complex','amenity','health_complex'],
      ['medical$TYPE2','Hot Spring','natural','hot_spring'],
      ['medical$TYPE2','Other','medical:type','other'],
