@@ -182,10 +182,15 @@ See also:
 
 * Data Type: list
 * Default Value:
-** `hoot::BuildingOutlineUpdateOp`
+** `hoot::BuildingOutlineUpdateOp;hoot::AddHilbertReviewSortOrderOp`
 
-Runs in the conflate command after data is conflated, but before exporting. The default, `hoot::BuildingOutlineUpdateOp` updates any multi-part building outlines that may have
-changed during conflation.
+Runs in the conflate command after data is conflated, but before exporting. The default perform the
+following:
+
+* `hoot::BuildingOutlineUpdateOp` updates any multi-part building outlines that may have
+  changed during conflation.
+* `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews. By processing reviews
+  in sorted order the results are a little more logically ordered.
 
 === conflate.pre.ops
 

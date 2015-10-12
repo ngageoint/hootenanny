@@ -122,8 +122,8 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(const ConstOsmMapPtr
   env->centre(center);
 
   Meters cellSize = 10.0;
-  int xorder = ceil(log(_mapEnvelope->getWidth() / cellSize) / log(2.0));
-  int yorder = ceil(log(_mapEnvelope->getHeight() / cellSize) / log(2.0));
+  int xorder = max(1.0, ceil(log(_mapEnvelope->getWidth() / cellSize) / log(2.0)));
+  int yorder = max(1.0, ceil(log(_mapEnvelope->getHeight() / cellSize) / log(2.0)));
 
   // 31 bits is the most supported for 2 dimensions.
   int order = min(31, max(xorder, yorder));

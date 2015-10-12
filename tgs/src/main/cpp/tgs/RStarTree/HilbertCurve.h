@@ -66,7 +66,14 @@ namespace Tgs
       {
         std::cerr << "dimension * order must be <= " << (sizeof(bitmask_t) * 8 - 1) << "." <<
           std::endl;
+        std::cerr << "got dimension: " << dimensions << " order: " << order << std::endl;
       }
+      if (_order < 1 || _dimensions < 1)
+      {
+        std::cerr << "dimension and order must be >= 1" << std::endl;
+        std::cerr << "got dimension: " << dimensions << " order: " << order << std::endl;
+      }
+
       _point = new bitmask_t[_dimensions];
     }
 
