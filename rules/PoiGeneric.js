@@ -293,13 +293,14 @@ exports.matchScore = function(map, e1, e2) {
     var additiveResult = additiveScore(map, e1, e2);
     var score = additiveResult.score;
     var reasons = additiveResult.reasons;
+    var d = "(" + prettyNumber(distance(e1, e2)) + "m)";
 
     if (score <= 0.5) {
-        return {miss: 1, explain: 'Not much evidence of a match'};
+        return {miss: 1, explain: 'Not much evidence of a match ' + d};
     } else if (score < 1.9) {
-        return {review: 1, explain: "Somewhat similar - " + reasons.join(", ") };
+        return {review: 1, explain: "Somewhat similar " + d + " - " + reasons.join(", ") };
     } else {
-        return {match: 1, explain: "Very similar - " + reasons.join(", ") };
+        return {match: 1, explain: "Very similar " + d + " - " + reasons.join(", ") };
     }
 };
 
@@ -334,4 +335,17 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
 
   return fd;
 };
+
+function prettyNumber(n) {
+    var digits = String(Math.round(n)).length;
+    var f = Math.pow(10, digits - 2);
+    var r = Math.round(n / f) * f;
+    var result;
+    if (r < 10) {
+        result = r.toFixed(1);
+    } else {
+        result = r.toFixed(0);
+    }
+    return result;
+}
 

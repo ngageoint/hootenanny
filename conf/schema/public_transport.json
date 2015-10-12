@@ -23,6 +23,27 @@
     },
 
     "compound": {
+        "name": "bus_station",
+        "isA": "public_transport=station",
+        "tags": [
+            ["public_transport=station", "bus=yes"],
+            ["public_transport=station", "amenity=bus_station"]
+        ],
+        "similarTo": { "name": "amenity=bus_station", "weight": 1.0 },
+        "categories": ["poi", "hgispoi"]
+    },
+
+    "compound": {
+        "name": "railway_station",
+        "isA": "public_transport=station",
+        "tags": [
+            ["public_transport=station", "train=yes"]
+        ],
+        "similarTo": { "name": "railway=station", "weight": 1.0 },
+        "categories": ["poi", "hgispoi"]
+    },
+
+    "compound": {
         "name": "bus_platform",
         "isA": "public_transport=platform",
         "#": "Any one of these tag combos can match, but all the tags in the sub-array must match.",
