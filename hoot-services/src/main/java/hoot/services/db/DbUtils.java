@@ -53,11 +53,8 @@ import hoot.services.db2.QCurrentRelationMembers;
 import hoot.services.db2.QCurrentRelations;
 import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.db2.QCurrentWays;
-import hoot.services.db2.QElementIdMappings;
 import hoot.services.db2.QJobStatus;
 import hoot.services.db2.QMaps;
-import hoot.services.db2.QReviewItems;
-import hoot.services.db2.QReviewMap;
 import hoot.services.db2.QUsers;
 
 import org.apache.commons.dbcp.BasicDataSource;
@@ -454,30 +451,6 @@ public class DbUtils
     return recordCount;
   }
 
-  /**
-   * Determines whether any review records exist in the services database
-   *
-   * @param conn JDBC Connection
-   * @return
-   * @throws Exception
-   */
-  public static boolean reviewDataExistsInServicesDb(Connection conn) throws Exception
-  {
-    long recordCount = 0;
-
-    QReviewMap reviewMap = QReviewMap.reviewMap;
-    QReviewItems reviewItems = QReviewItems.reviewItems;
-    QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
-
-
-    SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-
-  	recordCount += query.from(reviewMap).count();
-  	recordCount += query.from(reviewItems).count();
-  	recordCount += query.from(elementIdMappings).count();
-
-    return recordCount > 0;
-  }
 
   /**
    * Determines whether any job records exist in the services database
@@ -527,12 +500,7 @@ public class DbUtils
     	delete.execute();
     	delete = new SQLDeleteClause(conn, configuration, QUsers.users);
     	delete.execute();
-    	delete = new SQLDeleteClause(conn, configuration, QReviewItems.reviewItems);
-    	delete.execute();
-    	delete = new SQLDeleteClause(conn, configuration, QElementIdMappings.elementIdMappings);
-    	delete.execute();
-    	delete = new SQLDeleteClause(conn, configuration, QReviewMap.reviewMap);
-    	delete.execute();
+    	
     	delete = new SQLDeleteClause(conn, configuration, QJobStatus.jobStatus);
     	delete.execute();
     	conn.commit();
@@ -606,22 +574,6 @@ public class DbUtils
     	.where(maps.id.eq(mapId))
     	.execute();
 
-    	QReviewItems reviewItems = QReviewItems.reviewItems;
-    	new SQLDeleteClause(conn, configuration, reviewItems)
-    	.where(reviewItems.mapId.eq(mapId))
-    	.execute();
-
-    	QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
-    	new SQLDeleteClause(conn, configuration, elementIdMappings)
-    	.where(elementIdMappings.mapId.eq(mapId))
-    	.execute();
-
-    	QReviewMap reviewMap = QReviewMap.reviewMap;
-    	new SQLDeleteClause(conn, configuration, reviewMap)
-    	.where(reviewMap.mapId.eq(mapId))
-    	.execute();
-
-
     	conn.commit();
     }
     catch (Exception e)
@@ -659,21 +611,6 @@ public class DbUtils
 
   	  new SQLDeleteClause(conn, configuration, maps)
   	  .where(maps.displayName.eq(mapName))
-  	  .execute();
-
-  	  QReviewItems reviewItems = QReviewItems.reviewItems;
-  	  new SQLDeleteClause(conn, configuration, reviewItems)
-  	  .where(reviewItems.mapId.in(res))
-  	  .execute();
-
-  	  QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
-  	  new SQLDeleteClause(conn, configuration, elementIdMappings)
-  	  .where(elementIdMappings.mapId.in(res))
-  	  .execute();
-
-  	  QReviewMap reviewMap = QReviewMap.reviewMap;
-  	  new SQLDeleteClause(conn, configuration, reviewMap)
-  	  .where(reviewMap.mapId.in(res))
   	  .execute();
 
   	  conn.commit();

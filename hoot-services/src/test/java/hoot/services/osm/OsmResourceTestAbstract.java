@@ -43,7 +43,6 @@ import org.slf4j.LoggerFactory;
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
-import hoot.services.review.ReviewTestUtils;
 
 import com.mysema.query.sql.SQLQuery;
 import com.sun.jersey.api.client.AsyncWebResource;
@@ -89,7 +88,6 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
     {
       conn = DbUtils.createConnection();
       OsmTestUtils.conn = conn;
-      ReviewTestUtils.conn = conn;
     }
     catch (Exception e)
     {
@@ -121,10 +119,8 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
     	mapId = DbUtils.insertMap(userId, conn);
 
       OsmTestUtils.userId = userId;
-      ReviewTestUtils.userId = userId;
 
       OsmTestUtils.mapId = mapId;
-      ReviewTestUtils.mapId = mapId;
     }
     catch (Exception e)
     {
@@ -145,22 +141,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
     	{
     		DbUtils.deleteOSMRecord(conn, mapId);
         
-        QMaps maps = QMaps.maps;
-        SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-        final List<Long> mapIds = 
-        	query.from(maps).where(maps.id.eq(ReviewTestUtils.secondMapId)).list(maps.id);
-        assert(mapIds.size() == 0 || mapIds.size() == 1);
-        if (mapIds.size() == 1)
-        {
-        	DbUtils.deleteOSMRecord(conn, ReviewTestUtils.secondMapId);
-        }
         
-        /*if (userId != DbUtils.getTestUserId(conn))
-        {
-        	new SQLDeleteClause(conn, DbUtils.getConfiguration(), QUsers.users)
-      	    .where(QUsers.users.id.eq(userId))
-      	    .execute();
-        }*/
     	}
     }
     catch (Exception e)
@@ -176,7 +157,6 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
     try
     {
     	OsmTestUtils.conn = null;
-      ReviewTestUtils.conn = null;
     }
     catch (Exception e)
     {

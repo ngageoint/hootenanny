@@ -50,7 +50,6 @@ import hoot.services.db2.QCurrentNodes;
 import hoot.services.db2.QCurrentRelationMembers;
 import hoot.services.db2.QCurrentRelations;
 import hoot.services.db2.QCurrentWays;
-import hoot.services.db2.QElementIdMappings;
 import hoot.services.db2.QUsers;
 import hoot.services.geo.BoundingBox;
 
@@ -83,7 +82,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
   protected static final QCurrentWays currentWays = QCurrentWays.currentWays;
   protected static final QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
   protected static final QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
-  protected static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
 
   //order in the enum here is important, since the request diff writer methods use this to determine
   //the order for creating/updating/deleting elements; i.e. create nodes before referencing them
@@ -1009,29 +1007,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
     return tagCount;
   }
   
-  /**
-   * Given a list of unique ID's, filters out any which do not have an element ID mapping record
-   * created for them
-   * 
-   * @param mapId ID of the map owning the elements associated with the input uuid's
-   * @param uuids unique IDs to search for
-   * @param elementType type of the elements being searched for
-   * @param dbConn database connection
-   * @return a filtered list of unique ID's
-   */
-  public static Set<String> filterOutNonExistingElementMappingUniqueIds(final long mapId, 
-  	final String[] uuids, final ElementType elementType, Connection dbConn)
-  {
-  	assert(uuids.length > 0);
-  	return 
-  		new HashSet<String>(
-  		  new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
-          .from(elementIdMappings)
-          .where(
-        	  elementIdMappings.mapId.eq(mapId)
-        	  .and(elementIdMappings.elementId.in(uuids)))
-          .list(elementIdMappings.elementId));
-  }
+
   
   /**
    * Given a list of unique ID's, filters out any which aren't associated with an OSM element in 

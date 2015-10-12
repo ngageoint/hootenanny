@@ -37,7 +37,6 @@ import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.validators.osm.ChangesetUploadXmlValidator;
 import hoot.services.writers.osm.ChangesetDbWriter;
-import hoot.services.writers.review.ReviewItemsSynchronizer;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.OPTIONS;
@@ -369,8 +368,6 @@ public class ChangesetResource
         ChangesetDbWriter changesetDbWriter = new ChangesetDbWriter(conn);
         changesetUploadResponse = changesetDbWriter.write(mapid, changesetId, changesetDoc);
         	
-        (new ReviewItemsSynchronizer(conn, mapId)).updateReviewItems(
-          changesetDoc, changesetDbWriter.getParsedElementIdsToElementsByType());
       }
       catch (Exception e)
       {
