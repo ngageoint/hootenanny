@@ -688,7 +688,7 @@ wikimapia.rules = {
         "zebra crossing / pelican crossing":{'highway':'crossing','crossing':'uncontrolled'}, //  Count: 6915
         "crosswalk":{'highway':'crossing'}, //  Count: 6915
         "[military branch]":{'rawWmCategory':'[military_branch]'}, //  Count: 6883
-        "Russian Orthodox Church":{'religion':'christian',:'denomination':'russian_orthodox'}, //  Count: 6881
+        "Russian Orthodox Church":{'religion':'christian','denomination':'russian_orthodox'}, //  Count: 6881
         "shelter":{'amenity':'shelter'}, //  Count: 6794
         "historic landmark":{'historic':'landmark'}, //  Count: 6720
         "department store":{'shop':'department_store'}, //  Count: 6718
@@ -710,7 +710,7 @@ wikimapia.rules = {
         "college of further education / higher education":{'amenity':'school','isced:level':'4'}, //  Count: 6277
         "cegep":{'amenity':'school','isced:level':'4'}, //  Count: 6277
         "post-secondary education":{'amenity':'school','isced:level':'4'}, //  Count: 6277
-        "tertiary education":{'amenity':'school',:'isced:level':'5'}, //  Count: 6277
+        "tertiary education":{'amenity':'school','isced:level':'5'}, //  Count: 6277
         "town district":{'place':'suburb'}, //  Count: 6245
         "city district":{'place':'suburb'}, //  Count: 6245
         "detached house":{'building':'detached'}, //  Count: 6238
