@@ -604,297 +604,297 @@ wikimapia.rules = {
         "1960s construction":{'rawWmCategory':'1960s_construction'}, //  Count: 8743 // ????
         "real estate agency":{'office':'estate_agent'}, //  Count: 8686
         "estate agents":{'office':'estate_agent'}, //  Count: 8686
-        "vocational school":{'rawWmCategory':'vocational_school'}, //  Count: 8684
-        "vocational training":{'rawWmCategory':'vocational_training'}, //  Count: 8684
-        "sciences":{'rawWmCategory':'sciences'}, //  Count: 8611
-        "science":{'rawWmCategory':'science'}, //  Count: 8611
-        "scientist":{'rawWmCategory':'scientist'}, //  Count: 8611
-        "scientific":{'rawWmCategory':'scientific'}, //  Count: 8611
-        "airplane":{'rawWmCategory':'airplane'}, //  Count: 8581
-        "aeroplane":{'rawWmCategory':'aeroplane'}, //  Count: 8581
-        "fishing area":{'rawWmCategory':'fishing_area'}, //  Count: 8569
-        "fishery":{'rawWmCategory':'fishery'}, //  Count: 8569
-        "mansion / manor house / villa":{'rawWmCategory':'mansion_/_manor_house_/_villa'}, //  Count: 8564
-        "stately home":{'rawWmCategory':'stately_home'}, //  Count: 8564
-        "country house":{'rawWmCategory':'country_house'}, //  Count: 8564
-        "highway interchange / exit":{'rawWmCategory':'highway_interchange_/_exit'}, //  Count: 8464
-        "oil/gas well":{'rawWmCategory':'oil/gas_well'}, //  Count: 8456
-        "pumpjack":{'rawWmCategory':'pumpjack'}, //  Count: 8456
-        "aid to navigation - marine":{'rawWmCategory':'aid_to_navigation_-_marine'}, //  Count: 8430
-        "industrial building":{'rawWmCategory':'industrial_building'}, //  Count: 8420
-        "carport":{'rawWmCategory':'carport'}, //  Count: 8420
-        "residential garage":{'rawWmCategory':'residential_garage'}, //  Count: 8420
-        "garage cooperative society":{'rawWmCategory':'garage_cooperative_society'}, //  Count: 8420
+        "vocational school":{'amenity':'school','icsed':'4'}, //  Count: 8684
+        "vocational training":{'amenity':'school','icsed':'4'}, //  Count: 8684
+        "sciences":{'rawWmCategory':'sciences'}, //  Count: 8611 // ????
+        "science":{'rawWmCategory':'science'}, //  Count: 8611 // ????
+        "scientist":{'rawWmCategory':'scientist'}, //  Count: 8611 // ????
+        "scientific":{'rawWmCategory':'scientific'}, //  Count: 8611 // ????
+        "airplane":{'rawWmCategory':'airplane'}, //  Count: 8581 // ????
+        "aeroplane":{'rawWmCategory':'aeroplane'}, //  Count: 8581 // ????
+        "fishing area":{'leisure':'fishing_area'}, //  Count: 8569
+        "fishery":{'shop':'seafood'}, //  Count: 8569
+        "mansion / manor house / villa":{'historic':'castle','castle_type':'manor'}, //  Count: 8564
+        "stately home":{'historic':'castle','castle_type':'stately'}, //  Count: 8564
+        "country house":{'building':'country_house'}, //  Count: 8564
+        "highway interchange / exit":{'junction':'interchange'}, //  Count: 8464
+        "oil/gas well":{'man_made':'petroleum_well'}, //  Count: 8456
+        "pumpjack":{'man_made':'pumpjack'}, //  Count: 8456
+        "aid to navigation - marine":{'seamark:navigation_aid':'yes'}, //  Count: 8430
+        "industrial building":{'building':'industrial'}, //  Count: 8420
+        "carport":{'amenity':'parking','parking':'carport'}, //  Count: 8420
+        "residential garage":{'building':'garage'}, //  Count: 8420
+        "garage cooperative society":{'building':'garage'}, //  Count: 8420
         "factory building":{'rawWmCategory':'factory_building'}, //  Count: 8420
-        "internet cafe":{'rawWmCategory':'internet_cafe'}, //  Count: 8255
-        "cybercafe":{'rawWmCategory':'cybercafe'}, //  Count: 8255
-        "net cafe":{'rawWmCategory':'net_cafe'}, //  Count: 8255
-        "sporting goods store":{'rawWmCategory':'sporting_goods_store'}, //  Count: 8236
-        "sporting/sports equipment":{'rawWmCategory':'sporting/sports_equipment'}, //  Count: 8236
-        "sports store / shop":{'rawWmCategory':'sports_store_/_shop'}, //  Count: 8236
-        "sports retailer":{'rawWmCategory':'sports_retailer'}, //  Count: 8236
-        "embassy":{'rawWmCategory':'embassy'}, //  Count: 8214
-        "high commission (embassy)":{'rawWmCategory':'high_commission_(embassy)'}, //  Count: 8214
-        "conjunto":{'rawWmCategory':'conjunto'}, //  Count: 8184
-        "jewellery":{'rawWmCategory':'jewellery'}, //  Count: 8146
-        "jeweler":{'rawWmCategory':'jeweler'}, //  Count: 8146
-        "jewelry":{'rawWmCategory':'jewelry'}, //  Count: 8146
-        "jeweller":{'rawWmCategory':'jeweller'}, //  Count: 8146
-        "estate (manor / mansion land)":{'rawWmCategory':'estate_(manor_/_mansion_land)'}, //  Count: 8080
-        "manor (land)":{'rawWmCategory':'manor_(land)'}, //  Count: 8080
-        "21st century construction":{'rawWmCategory':'21st_century_construction'}, //  Count: 8052
-        "food - to be replaced":{'rawWmCategory':'food_-_to_be_replaced'}, //  Count: 7948
-        "cellphone shop / store":{'rawWmCategory':'cellphone_shop_/_store'}, //  Count: 7938
-        "mobile phone retailer":{'rawWmCategory':'mobile_phone_retailer'}, //  Count: 7938
-        "palace":{'rawWmCategory':'palace'}, //  Count: 7833
-        "kiosk":{'rawWmCategory':'kiosk'}, //  Count: 7680
-        "storage":{'rawWmCategory':'storage'}, //  Count: 7666
-        "educational building":{'rawWmCategory':'educational_building'}, //  Count: 7643
-        "academic building":{'rawWmCategory':'academic_building'}, //  Count: 7643
-        "community":{'rawWmCategory':'community'}, //  Count: 7618
-        "coffeehouse":{'rawWmCategory':'coffeehouse'}, //  Count: 7616
-        "espresso bar":{'rawWmCategory':'espresso_bar'}, //  Count: 7616
-        "fuel storage tank":{'rawWmCategory':'fuel_storage_tank'}, //  Count: 7612
+        "internet cafe":{'amenity':'internet_cafe'}, //  Count: 8255
+        "cybercafe":{'amenity':'internet_cafe'}, //  Count: 8255
+        "net cafe":{'amenity':'internet_cafe'}, //  Count: 8255
+        "sporting goods store":{'shop':'sports'}, //  Count: 8236
+        "sporting/sports equipment":{'shop':'sports'}, //  Count: 8236
+        "sports store / shop":{'shop':'sports'}, //  Count: 8236
+        "sports retailer":{'shop':'sports'}, //  Count: 8236
+        "embassy":{'amenity':'embassy'}, //  Count: 8214
+        "high commission (embassy)":{'amenity':'embassy'}, //  Count: 8214
+        "conjunto":{'rawWmCategory':'conjunto'}, //  Count: 8184 // ????
+        "jewellery":{'shop':'jewelry'}, //  Count: 8146
+        "jeweler":{'shop':'jewelry'}, //  Count: 8146
+        "jewelry":{'shop':'jewelry'}, //  Count: 8146
+        "jeweller":{'shop':'jewelry'}, //  Count: 8146
+        "estate (manor / mansion land)":{'landuse':'estate'}, //  Count: 8080
+        "manor (land)":{'landuse':'manor'}, //  Count: 8080
+        "21st century construction":{'rawWmCategory':'21st_century_construction'}, //  Count: 8052 // ????
+        "food - to be replaced":{'shop':'food'}, //  Count: 7948
+        "cellphone shop / store":{'shop':'mobile_phone'}, //  Count: 7938
+        "mobile phone retailer":{'shop':'mobile_phone'}, //  Count: 7938
+        "palace":{'building':'palace'}, //  Count: 7833
+        "kiosk":{'shop':'kiosk'}, //  Count: 7680
+        "storage":{'shop':'storage_rental'}, //  Count: 7666
+        "educational building":{'building':'school'}, //  Count: 7643
+        "academic building":{'building':'school'}, //  Count: 7643
+        "community":{'amenity':'community'}, //  Count: 7618
+        "coffeehouse":{'cuisine':'coffee_shop'}, //  Count: 7616
+        "espresso bar":{'cuisine':'coffee_shop'}, //  Count: 7616
+        "fuel storage tank":{'man_made':'storage_tank','content':'fuel'}, //  Count: 7612
         "junction - Do not use this category, the category is under cleanup":{'rawWmCategory':'junction_-_Do_not_use_this_category,_the_category_is_under_cleanup'}, //  Count: 7566
-        "bed and breakfast":{'rawWmCategory':'bed_and_breakfast'}, //  Count: 7562
-        "Grade II Listed (UK)":{'rawWmCategory':'Grade_II_Listed_(UK)'}, //  Count: 7511
+        "bed and breakfast":{'tourism':'guest_housr','guest_houst':'bed_and_breakfast'}, //  Count: 7562
+        "Grade II Listed (UK)":{'rawWmCategory':'Grade_II_Listed_(UK)'}, //  Count: 7511 // ????
         "horse":{'rawWmCategory':'horse'}, //  Count: 7504
-        "children":{'rawWmCategory':'children'}, //  Count: 7423
-        "lighthouse":{'rawWmCategory':'lighthouse'}, //  Count: 7398
-        "grassland":{'rawWmCategory':'grassland'}, //  Count: 7371
-        "natural gas industry":{'rawWmCategory':'natural_gas_industry'}, //  Count: 7357
-        "prehistoric":{'rawWmCategory':'prehistoric'}, //  Count: 7270
-        "public transport terminus":{'rawWmCategory':'public_transport_terminus'}, //  Count: 7192
-        "birds":{'rawWmCategory':'birds'}, //  Count: 7162
-        "allotment (gardening)":{'rawWmCategory':'allotment_(gardening)'}, //  Count: 7147
-        "seaport":{'rawWmCategory':'seaport'}, //  Count: 7136
-        "sea port":{'rawWmCategory':'sea_port'}, //  Count: 7136
-        "port":{'rawWmCategory':'port'}, //  Count: 7136
-        "teleferic":{'rawWmCategory':'teleferic'}, //  Count: 7073
-        "aerial tramway/ ropeway/ gondola lift/ skilift / cable car station (transport in the air)":{'rawWmCategory':'aerial_tramway/_ropeway/_gondola_lift/_skilift_/_cable_car_station_(transport_in_the_air)'}, //  Count: 7073
-        "cableway":{'rawWmCategory':'cableway'}, //  Count: 7073
-        "child care":{'rawWmCategory':'child_care'}, //  Count: 7053
-        "day care":{'rawWmCategory':'day_care'}, //  Count: 7053
-        "creche":{'rawWmCategory':'creche'}, //  Count: 7053
+        "children":{'rawWmCategory':'children'}, //  Count: 7423 // ????
+        "lighthouse":{'man_made':'lighthouse'}, //  Count: 7398
+        "grassland":{'natural':'grassland'}, //  Count: 7371
+        "natural gas industry":{'rawWmCategory':'natural_gas_industry'}, //  Count: 7357 // ???
+        "prehistoric":{'historic:civilization':'prehistoric'}, //  Count: 7270
+        "public transport terminus":{'public_transport':'station'}, //  Count: 7192
+        "birds":{'rawWmCategory':'birds'}, //  Count: 7162 // ????
+        "allotment (gardening)":{'landuse':'allotments'}, //  Count: 7147
+        "seaport":{'harbour:category':'seaport'}, //  Count: 7136
+        "sea port":{'harbour:category':'seaport'}, //  Count: 7136
+        "port":{'landuse':'port'}, //  Count: 7136
+        "teleferic":{'aerialway':'cable_car'}, //  Count: 7073
+        "aerial tramway/ ropeway/ gondola lift/ skilift / cable car station (transport in the air)":{'aerialway':'station'}, //  Count: 7073
+        "cableway":{'aerialway':'cableway'}, //  Count: 7073
+        "child care":{'amenity':'childcare'}, //  Count: 7053
+        "day care":{'amenity':'childcare'}, //  Count: 7053
+        "creche":{'amenity':'childcare'}, //  Count: 7053
         "motorcycle":{'rawWmCategory':'motorcycle'}, //  Count: 7046
-        "flower shop / florist":{'rawWmCategory':'flower_shop_/_florist'}, //  Count: 7045
-        "motel":{'rawWmCategory':'motel'}, //  Count: 7021
-        "insurance company":{'rawWmCategory':'insurance_company'}, //  Count: 7006
-        "culvert":{'rawWmCategory':'culvert'}, //  Count: 6995
-        "society":{'rawWmCategory':'society'}, //  Count: 6988
+        "flower shop / florist":{'shop':'florist'}, //  Count: 7045
+        "motel":{'tourism':'motel'}, //  Count: 7021
+        "insurance company":{'office':'insurance'}, //  Count: 7006
+        "culvert":{'tunnel':'culvert'}, //  Count: 6995
+// // // //         "society":{'rawWmCategory':'society'}, //  Count: 6988 //
         "NRHP - National Register of Historic Places":{'rawWmCategory':'NRHP_-_National_Register_of_Historic_Places'}, //  Count: 6971
-        "inn":{'rawWmCategory':'inn'}, //  Count: 6933
-        "pedestrian crossing":{'rawWmCategory':'pedestrian_crossing'}, //  Count: 6915
-        "zebra crossing / pelican crossing":{'rawWmCategory':'zebra_crossing_/_pelican_crossing'}, //  Count: 6915
-        "crosswalk":{'rawWmCategory':'crosswalk'}, //  Count: 6915
+        "inn":{'amenity':'pub'}, //  Count: 6933
+        "pedestrian crossing":{'highway':'crossing','crossing':'unknown'}, //  Count: 6915
+        "zebra crossing / pelican crossing":{'highway':'crossing','crossing':'uncontrolled'}, //  Count: 6915
+        "crosswalk":{'highway':'crossing'}, //  Count: 6915
         "[military branch]":{'rawWmCategory':'[military_branch]'}, //  Count: 6883
-        "Russian Orthodox Church":{'rawWmCategory':'Russian_Orthodox_Church'}, //  Count: 6881
-        "shelter":{'rawWmCategory':'shelter'}, //  Count: 6794
-        "historic landmark":{'rawWmCategory':'historic_landmark'}, //  Count: 6720
-        "department store":{'rawWmCategory':'department_store'}, //  Count: 6718
-        "memorial plaque":{'rawWmCategory':'memorial_plaque'}, //  Count: 6710
-        "aid to navigation - aviation":{'rawWmCategory':'aid_to_navigation_-_aviation'}, //  Count: 6689
-        "lookout tower":{'rawWmCategory':'lookout_tower'}, //  Count: 6668
+        "Russian Orthodox Church":{'religion':'christian',:'denomination':'russian_orthodox'}, //  Count: 6881
+        "shelter":{'amenity':'shelter'}, //  Count: 6794
+        "historic landmark":{'historic':'landmark'}, //  Count: 6720
+        "department store":{'shop':'department_store'}, //  Count: 6718
+        "memorial plaque":{'historic':'menorial','menorial:type':'plaque'}, //  Count: 6710
+        "aid to navigation - aviation":{'aeroway':'aid_to_navigation'}, //  Count: 6689
+        "lookout tower":{'man_made':'tower','tower':'observation'}, //  Count: 6668
         "1970s construction":{'rawWmCategory':'1970s_construction'}, //  Count: 6661
-        "homestead":{'rawWmCategory':'homestead'}, //  Count: 6567
-        "institute":{'rawWmCategory':'institute'}, //  Count: 6543
-        "railway platform":{'rawWmCategory':'railway_platform'}, //  Count: 6530
-        "sports complex":{'rawWmCategory':'sports_complex'}, //  Count: 6507
-        "sportsplex":{'rawWmCategory':'sportsplex'}, //  Count: 6507
-        "artillery battery":{'rawWmCategory':'artillery_battery'}, //  Count: 6497
+        "homestead":{'landuse':'homestead'}, //  Count: 6567
+        "institute":{'amenity':'institute'}, //  Count: 6543
+        "railway platform":{'public_transport':'platform','railway':'platform','train':'yes'}, //  Count: 6530
+        "sports complex":{'leisure':'sports_complex'}, //  Count: 6507
+        "sportsplex":{'leisure':'sports_complex'}, //  Count: 6507
+        "artillery battery":{'military':'battery'}, //  Count: 6497
         "notable event":{'rawWmCategory':'notable_event'}, //  Count: 6413
         "bicycle / bike":{'rawWmCategory':'bicycle_/_bike'}, //  Count: 6353
-        "falls":{'rawWmCategory':'falls'}, //  Count: 6301
-        "waterfall":{'rawWmCategory':'waterfall'}, //  Count: 6301
-        "entrance":{'rawWmCategory':'entrance'}, //  Count: 6291
-        "college of further education / higher education":{'rawWmCategory':'college_of_further_education_/_higher_education'}, //  Count: 6277
-        "cegep":{'rawWmCategory':'cegep'}, //  Count: 6277
-        "post-secondary education":{'rawWmCategory':'post-secondary_education'}, //  Count: 6277
-        "tertiary education":{'rawWmCategory':'tertiary_education'}, //  Count: 6277
-        "town district":{'rawWmCategory':'town_district'}, //  Count: 6245
-        "city district":{'rawWmCategory':'city_district'}, //  Count: 6245
-        "detached house":{'rawWmCategory':'detached_house'}, //  Count: 6238
-        "cape (geography)":{'rawWmCategory':'cape_(geography)'}, //  Count: 6224
-        "entertainment attraction / ride":{'rawWmCategory':'entertainment_attraction_/_ride'}, //  Count: 6223
+        "falls":{'waterway':'waterfall'}, //  Count: 6301
+        "waterfall":{'waterway':'waterfall'}, //  Count: 6301
+        "entrance":{'entrance':'yes'}, //  Count: 6291
+        "college of further education / higher education":{'amenity':'school','isced:level':'4'}, //  Count: 6277
+        "cegep":{'amenity':'school','isced:level':'4'}, //  Count: 6277
+        "post-secondary education":{'amenity':'school','isced:level':'4'}, //  Count: 6277
+        "tertiary education":{'amenity':'school',:'isced:level':'5'}, //  Count: 6277
+        "town district":{'place':'suburb'}, //  Count: 6245
+        "city district":{'place':'suburb'}, //  Count: 6245
+        "detached house":{'building':'detached'}, //  Count: 6238
+        "cape (geography)":{'natural':'cape'}, //  Count: 6224
+        "entertainment attraction / ride":{'tourism':'attraction'}, //  Count: 6223
         "district heating substation":{'rawWmCategory':'district_heating_substation'}, //  Count: 6200
-        "advertising":{'rawWmCategory':'advertising'}, //  Count: 6190
-        "veterinarian":{'rawWmCategory':'veterinarian'}, //  Count: 6180
-        "veterinary  clinic / surgery":{'rawWmCategory':'veterinary__clinic_/_surgery'}, //  Count: 6180
-        "animal hospital":{'rawWmCategory':'animal_hospital'}, //  Count: 6180
+        "advertising":{'advertising':'yes'}, //  Count: 6190
+        "veterinarian":{'amenity':'veterinary'}, //  Count: 6180
+        "veterinary  clinic / surgery":{'amenity':'veterinary'}, //  Count: 6180
+        "animal hospital":{'amenity':'veterinary'}, //  Count: 6180
         "19th century construction":{'rawWmCategory':'19th_century_construction'}, //  Count: 6178
-        "ice cream parlor":{'rawWmCategory':'ice_cream_parlor'}, //  Count: 6158
-        "frozen yogurt shop":{'rawWmCategory':'frozen_yogurt_shop'}, //  Count: 6158
-        "gelato parlor":{'rawWmCategory':'gelato_parlor'}, //  Count: 6158
-        "housing services":{'rawWmCategory':'housing_services'}, //  Count: 6147
+        "ice cream parlor":{'amenity':'ice_cream'}, //  Count: 6158
+        "frozen yogurt shop":{'amenity':'ice_cream'}, //  Count: 6158
+        "gelato parlor":{'amenity':'ice_cream'}, //  Count: 6158
+        "housing services":{'office':'housing_services'}, //  Count: 6147
         "1950s construction":{'rawWmCategory':'1950s_construction'}, //  Count: 6039
-        "farmhouse":{'rawWmCategory':'farmhouse'}, //  Count: 6003
-        "bunker":{'rawWmCategory':'bunker'}, //  Count: 5992
-        "water well":{'rawWmCategory':'water_well'}, //  Count: 5947
-        "artesian well":{'rawWmCategory':'artesian_well'}, //  Count: 5947
-        "viewpoint":{'rawWmCategory':'viewpoint'}, //  Count: 5939
-        "panoramic view":{'rawWmCategory':'panoramic_view'}, //  Count: 5939
-        "travel plaza":{'rawWmCategory':'travel_plaza'}, //  Count: 5917
-        "service area":{'rawWmCategory':'service_area'}, //  Count: 5917
-        "rest stop":{'rawWmCategory':'rest_stop'}, //  Count: 5917
-        "motorway service area":{'rawWmCategory':'motorway_service_area'}, //  Count: 5917
-        "rest area":{'rawWmCategory':'rest_area'}, //  Count: 5917
+        "farmhouse":{'building':'farm'}, //  Count: 6003
+        "bunker":{'military':'bunker'}, //  Count: 5992
+        "water well":{'man_made':'water_well'}, //  Count: 5947
+        "artesian well":{'man_made':'water_well','well:type':'artesian'}, //  Count: 5947
+        "viewpoint":{'tourism':'viewpoint'}, //  Count: 5939
+        "panoramic view":{'tourism':'viewpoint'}, //  Count: 5939
+        "travel plaza":{'highway':'services'}, //  Count: 5917
+        "service area":{'highway':'services'}, //  Count: 5917
+        "rest stop":{'highway':'rest_area'}, //  Count: 5917
+        "motorway service area":{'highway':'services'}, //  Count: 5917
+        "rest area":{'highway':'rest_area'}, //  Count: 5917
         "computers":{'rawWmCategory':'computers'}, //  Count: 5916
         "computer":{'rawWmCategory':'computer'}, //  Count: 5916
-        "wholesale business":{'rawWmCategory':'wholesale_business'}, //  Count: 5913
-        "wholesalers":{'rawWmCategory':'wholesalers'}, //  Count: 5913
-        "commercial":{'rawWmCategory':'commercial'}, //  Count: 5890
-        "barracks":{'rawWmCategory':'barracks'}, //  Count: 5866
-        "public vehicle depot":{'rawWmCategory':'public_vehicle_depot'}, //  Count: 5840
+        "wholesale business":{'whop':'wholesale'}, //  Count: 5913
+        "wholesalers":{'shop':'wholesale'}, //  Count: 5913
+        "commercial":{'building':'commercial'}, //  Count: 5890
+        "barracks":{'military':'barracks'}, //  Count: 5866
+        "public vehicle depot":{'landuse':'depot'}, //  Count: 5840
         "cars - to be replaced":{'rawWmCategory':'cars_-_to_be_replaced'}, //  Count: 5793
-        "canal":{'rawWmCategory':'canal'}, //  Count: 5779
-        "healthcare":{'rawWmCategory':'healthcare'}, //  Count: 5775
-        "scientific research institute / centre":{'rawWmCategory':'scientific_research_institute_/_centre'}, //  Count: 5743
+        "canal":{'waterway':'canal'}, //  Count: 5779
+        "healthcare":{'amenity':'healthcare'}, //  Count: 5775
+        "scientific research institute / centre":{'amenity':'research_institute'}, //  Count: 5743
         "headquarters":{'rawWmCategory':'headquarters'}, //  Count: 5727
         "head office":{'rawWmCategory':'head_office'}, //  Count: 5727
         "main office":{'rawWmCategory':'main_office'}, //  Count: 5727
-        "grave":{'rawWmCategory':'grave'}, //  Count: 5684
-        "amusement park":{'rawWmCategory':'amusement_park'}, //  Count: 5681
-        "theme park":{'rawWmCategory':'theme_park'}, //  Count: 5681
-        "underground facility":{'rawWmCategory':'underground_facility'}, //  Count: 5651
+        "grave":{'cemetery':'grave'}, //  Count: 5684
+        "amusement park":{'tourism':'theme_park'}, //  Count: 5681
+        "theme park":{'tourism':'theme_park'}, //  Count: 5681
+        "underground facility":{'location':'underground','facility':'yes'}, //  Count: 5651
         "disaster":{'rawWmCategory':'disaster'}, //  Count: 5583
-        "construction site":{'rawWmCategory':'construction_site'}, //  Count: 5580
-        "tomb":{'rawWmCategory':'tomb'}, //  Count: 5579
-        "rocks":{'rawWmCategory':'rocks'}, //  Count: 5578
-        "forest belt":{'rawWmCategory':'forest_belt'}, //  Count: 5496
-        "stairs":{'rawWmCategory':'stairs'}, //  Count: 5486
-        "spa":{'rawWmCategory':'spa'}, //  Count: 5485
-        "radio tower":{'rawWmCategory':'radio_tower'}, //  Count: 5456
-        "Jehovah's Witnesses":{'rawWmCategory':'Jehovahs_Witnesses'}, //  Count: 5442
+        "construction site":{'landuse':'construction'}, //  Count: 5580
+        "tomb":{'historic':'tomb'}, //  Count: 5579
+        "rocks":{'natural':'rocks'}, //  Count: 5578
+        "forest belt":{'natural':'forest_belt'}, //  Count: 5496
+        "stairs":{'highway':'steps'}, //  Count: 5486
+        "spa":{'amenity':'spa'}, //  Count: 5485
+        "radio tower":{'man_made':'tower','communication:radio':'yes'}, //  Count: 5456
+        "Jehovah's Witnesses":{'religion':'christian','denomination':'jehovahs_witness'}, //  Count: 5442
         "war cemetery":{'rawWmCategory':'war_cemetery'}, //  Count: 5425
-        "office":{'rawWmCategory':'office'}, //  Count: 5410
-        "landmark":{'rawWmCategory':'landmark'}, //  Count: 5410
-        "landmarks":{'rawWmCategory':'landmarks'}, //  Count: 5410
-        "water tank":{'rawWmCategory':'water_tank'}, //  Count: 5408
+        "office":{'office':'yes'}, //  Count: 5410
+        "landmark":{'landmark':'yes'}, //  Count: 5410
+        "landmarks":{'landmark':'yes'}, //  Count: 5410
+        "water tank":{'man_made':'water_tank'}, //  Count: 5408
         "1980s construction":{'rawWmCategory':'1980s_construction'}, //  Count: 5304
-        "art museum / art gallery":{'rawWmCategory':'art_museum_/_art_gallery'}, //  Count: 5255
-        "portrait gallery":{'rawWmCategory':'portrait_gallery'}, //  Count: 5255
+        "art museum / art gallery":{'tourism':'gallery'}, //  Count: 5255
+        "portrait gallery":{'tourism':'gallery'}, //  Count: 5255
         "coffee - to be replaced":{'rawWmCategory':'coffee_-_to_be_replaced'}, //  Count: 5238
         "public institution":{'rawWmCategory':'public_institution'}, //  Count: 5232
         "neighbourhood development":{'rawWmCategory':'neighbourhood_development'}, //  Count: 5221
-        "nuraghe":{'rawWmCategory':'nuraghe'}, //  Count: 5191
-        "wedding / marriage garden":{'rawWmCategory':'wedding_/_marriage_garden'}, //  Count: 5188
-        "matrimonial hall / venue":{'rawWmCategory':'matrimonial_hall_/_venue'}, //  Count: 5188
-        "wedding / marriage venue":{'rawWmCategory':'wedding_/_marriage_venue'}, //  Count: 5188
-        "wedding / marriage hall":{'rawWmCategory':'wedding_/_marriage_hall'}, //  Count: 5188
+        "nuraghe":{'historic':'archaeological_site','site_type':'megalith','megalith_type':'nuraghe'}, //  Count: 5191
+        "wedding / marriage garden":{'leisure':'garden','wedding':'yes'}, //  Count: 5188
+        "matrimonial hall / venue":{'amenity':'events_venue'}, //  Count: 5188
+        "wedding / marriage venue":{'amenity':'events_venue'}, //  Count: 5188
+        "wedding / marriage hall":{'amenity':'events_venue'}, //  Count: 5188
         "ship":{'rawWmCategory':'ship'}, //  Count: 5150
         "boat":{'rawWmCategory':'boat'}, //  Count: 5134
-        "open-air swimming pool":{'rawWmCategory':'open-air_swimming_pool'}, //  Count: 5130
-        "outdoor swimming pool":{'rawWmCategory':'outdoor_swimming_pool'}, //  Count: 5130
-        "recycling centre / collection":{'rawWmCategory':'recycling_centre_/_collection'}, //  Count: 5107
-        "branch office of Jehovah's Witnesses":{'rawWmCategory':'branch_office_of_Jehovahs_Witnesses'}, //  Count: 5098
-        "Kingdom Hall of Jehovah's Witnesses":{'rawWmCategory':'Kingdom_Hall_of_Jehovahs_Witnesses'}, //  Count: 5098
-        "assembly hall of Jehovah's Witnesses":{'rawWmCategory':'assembly_hall_of_Jehovahs_Witnesses'}, //  Count: 5098
-        "gift shop":{'rawWmCategory':'gift_shop'}, //  Count: 5080
-        "souvenir shop":{'rawWmCategory':'souvenir_shop'}, //  Count: 5080
+        "open-air swimming pool":{'leisure':'swimming_pool'}, //  Count: 5130
+        "outdoor swimming pool":{'leisure':'swimming_pool'}, //  Count: 5130
+        "recycling centre / collection":{'amenity':'recycling'}, //  Count: 5107
+        "branch office of Jehovah's Witnesses":{'amenity':'place_of_worship','religion':'christian','denomination':'jehovahs_witness'}, //  Count: 5098
+        "Kingdom Hall of Jehovah's Witnesses":{'amenity':'place_of_worship','religion':'christian','denomination':'jehovahs_witness'}, //  Count: 5098
+        "assembly hall of Jehovah's Witnesses":{'amenity':'place_of_worship','religion':'christian','denomination':'jehovahs_witness'}, //  Count: 5098
+        "gift shop":{'shop':'gift'}, //  Count: 5080
+        "souvenir shop":{'shop':'gift'}, //  Count: 5080
         "cottage complex":{'rawWmCategory':'cottage_complex'}, //  Count: 5076
-        "brickworks":{'rawWmCategory':'brickworks'}, //  Count: 5072
-        "brick factory":{'rawWmCategory':'brick_factory'}, //  Count: 5072
-        "brick kiln":{'rawWmCategory':'brick_kiln'}, //  Count: 5072
-        "brickyard":{'rawWmCategory':'brickyard'}, //  Count: 5072
-        "lawyer":{'rawWmCategory':'lawyer'}, //  Count: 5048
-        "attorney":{'rawWmCategory':'attorney'}, //  Count: 5048
-        "attorneys":{'rawWmCategory':'attorneys'}, //  Count: 5048
-        "solicitors":{'rawWmCategory':'solicitors'}, //  Count: 5048
-        "law firm":{'rawWmCategory':'law_firm'}, //  Count: 5048
-        "telephone kiosk":{'rawWmCategory':'telephone_kiosk'}, //  Count: 5019
-        "phone box":{'rawWmCategory':'phone_box'}, //  Count: 5019
-        "public telephone":{'rawWmCategory':'public_telephone'}, //  Count: 5019
-        "payphone":{'rawWmCategory':'payphone'}, //  Count: 5019
-        "phone booth":{'rawWmCategory':'phone_booth'}, //  Count: 5019
+        "brickworks":{'industrial':'brickworks'}, //  Count: 5072
+        "brick factory":{'industrial':'brickworks'}, //  Count: 5072
+        "brick kiln":{'man_made':'kiln'}, //  Count: 5072
+        "brickyard":{'industrial':'brickyard'}, //  Count: 5072
+        "lawyer":{'office':'lawyer'}, //  Count: 5048
+        "attorney":{'office':'lawyer'}, //  Count: 5048
+        "attorneys":{'office':'lawyer'}, //  Count: 5048
+        "solicitors":{'office':'lawyer'}, //  Count: 5048
+        "law firm":{'office':'lawyer'}, //  Count: 5048
+        "telephone kiosk":{'building':'kiosk','amenity':'telephone'}, //  Count: 5019
+        "phone box":{'amenity':'telephone'}, //  Count: 5019
+        "public telephone":{'amenity':'telephone'}, //  Count: 5019
+        "payphone":{'amenity':'telephone'}, //  Count: 5019
+        "phone booth":{'amenity':'telephone'}, //  Count: 5019
         "management":{'rawWmCategory':'management'}, //  Count: 5012
-        "optician":{'rawWmCategory':'optician'}, //  Count: 4996
-        "spectacles":{'rawWmCategory':'spectacles'}, //  Count: 4996
-        "contact lens store":{'rawWmCategory':'contact_lens_store'}, //  Count: 4996
-        "optical retailer":{'rawWmCategory':'optical_retailer'}, //  Count: 4996
-        "eye care shop":{'rawWmCategory':'eye_care_shop'}, //  Count: 4996
-        "border":{'rawWmCategory':'border'}, //  Count: 4977
-        "doctor":{'rawWmCategory':'doctor'}, //  Count: 4976
-        "tourism":{'rawWmCategory':'tourism'}, //  Count: 4969
-        "unincorporated area / community":{'rawWmCategory':'unincorporated_area_/_community'}, //  Count: 4955
+        "optician":{'shop':'optician'}, //  Count: 4996
+        "spectacles":{'shop':'optician'}, //  Count: 4996
+        "contact lens store":{'shop':'optician'}, //  Count: 4996
+        "optical retailer":{'shop':'optician'}, //  Count: 4996
+        "eye care shop":{'shop':'optician'}, //  Count: 4996
+        "border":{'border':'yes'}, //  Count: 4977
+        "doctor":{'amenity':'doctors'}, //  Count: 4976
+        "tourism":{'tourism':'yes'}, //  Count: 4969
+        "unincorporated area / community":{'place':'unincorporated_area'}, //  Count: 4955
         "open 24 hours":{'rawWmCategory':'open_24_hours'}, //  Count: 4951
-        "telephone exchange building":{'rawWmCategory':'telephone_exchange_building'}, //  Count: 4943
-        "charitable organization":{'rawWmCategory':'charitable_organization'}, //  Count: 4914
-        "charitable organisation":{'rawWmCategory':'charitable_organisation'}, //  Count: 4914
-        "social club":{'rawWmCategory':'social_club'}, //  Count: 4907
-        "strip mall":{'rawWmCategory':'strip_mall'}, //  Count: 4902
+        "telephone exchange building":{'man_made':'telephone_exchange'}, //  Count: 4943
+        "charitable organization":{'office':'charity'}, //  Count: 4914
+        "charitable organisation":{'office':'charity'}, //  Count: 4914
+        "social club":{'leisure':'club'}, //  Count: 4907
+        "strip mall":{'shop':'mall'}, //  Count: 4902
         "Électricité de France":{'rawWmCategory':'Électricité_de_France'}, //  Count: 4902
-        "shopping plaza":{'rawWmCategory':'shopping_plaza'}, //  Count: 4902
-        "mini-mall":{'rawWmCategory':'mini-mall'}, //  Count: 4902
-        "gun emplacement":{'rawWmCategory':'gun_emplacement'}, //  Count: 4901
-        "helipad":{'rawWmCategory':'helipad'}, //  Count: 4874
-        "helicopter landing pad":{'rawWmCategory':'helicopter_landing_pad'}, //  Count: 4874
-        "reef":{'rawWmCategory':'reef'}, //  Count: 4866
-        "manufacturing":{'rawWmCategory':'manufacturing'}, //  Count: 4862
-        "manufacturer":{'rawWmCategory':'manufacturer'}, //  Count: 4862
-        "destroyed":{'rawWmCategory':'destroyed'}, //  Count: 4838
-        "Baptist church":{'rawWmCategory':'Baptist_church'}, //  Count: 4810
-        "extreme / adventure sport":{'rawWmCategory':'extreme_/_adventure_sport'}, //  Count: 4810
-        "ranch":{'rawWmCategory':'ranch'}, //  Count: 4775
-        "heliport":{'rawWmCategory':'heliport'}, //  Count: 4774
-        "pillbox":{'rawWmCategory':'pillbox'}, //  Count: 4768
-        "used car dealer / dealership":{'rawWmCategory':'used_car_dealer_/_dealership'}, //  Count: 4753
-        "cricket oval":{'rawWmCategory':'cricket_oval'}, //  Count: 4693
-        "cricket field":{'rawWmCategory':'cricket_field'}, //  Count: 4693
-        "cricket ground":{'rawWmCategory':'cricket_ground'}, //  Count: 4693
+        "shopping plaza":{'landuse':'plaza'}, //  Count: 4902
+        "mini-mall":{'shop':'mall'}, //  Count: 4902
+        "gun emplacement":{'military':'gun_emplacement'}, //  Count: 4901
+        "helipad":{'aeroway':'helipad'}, //  Count: 4874
+        "helicopter landing pad":{'aeroway':'helipad'}, //  Count: 4874
+        "reef":{'natural':'reef'}, //  Count: 4866
+        "manufacturing":{'industrial':'manufacturing'}, //  Count: 4862
+        "manufacturer":{'industrial':'manufacturing'}, //  Count: 4862
+        "destroyed":{'condition':'destroyed'}, //  Count: 4838
+        "Baptist church":{'religion':'christian','denomination':'baptist'}, //  Count: 4810
+        "extreme / adventure sport":{'tourism':'outdoor_adventure'}, //  Count: 4810
+        "ranch":{'landuse':'farm'}, //  Count: 4775
+        "heliport":{'aeroway':'heliport'}, //  Count: 4774
+        "pillbox":{'military':'bunker','bunker_type':'pillbox'}, //  Count: 4768
+        "used car dealer / dealership":{'shop':'car'}, //  Count: 4753
+        "cricket oval":{'leisure':'pitch','sport':'cricket'}, //  Count: 4693
+        "cricket field":{'leisure':'pitch','sport':'cricket'}, //  Count: 4693
+        "cricket ground":{'leisure':'pitch','sport':'cricket'}, //  Count: 4693
         "plot - to be deleted":{'rawWmCategory':'plot_-_to_be_deleted'}, //  Count: 4673
-        "electronic components":{'rawWmCategory':'electronic_components'}, //  Count: 4665
-        "electronics":{'rawWmCategory':'electronics'}, //  Count: 4665
-        "public housing estate":{'rawWmCategory':'public_housing_estate'}, //  Count: 4645
-        "tree":{'rawWmCategory':'tree'}, //  Count: 4624
-        "horseback riding":{'rawWmCategory':'horseback_riding'}, //  Count: 4602
-        "horse riding":{'rawWmCategory':'horse_riding'}, //  Count: 4602
-        "pavilion":{'rawWmCategory':'pavilion'}, //  Count: 4602
-        "equitation":{'rawWmCategory':'equitation'}, //  Count: 4602
-        "equestrianism":{'rawWmCategory':'equestrianism'}, //  Count: 4602
-        "ordnance depot":{'rawWmCategory':'ordnance_depot'}, //  Count: 4584
-        "arsenal / weapon and ammunition storage":{'rawWmCategory':'arsenal_/_weapon_and_ammunition_storage'}, //  Count: 4584
-        "gas distribution station":{'rawWmCategory':'gas_distribution_station'}, //  Count: 4559
+        "electronic components":{'shop':'electronics'}, //  Count: 4665
+        "electronics":{'shop':'electronics'}, //  Count: 4665
+        "public housing estate":{'landuse':'public_housing_estate'}, //  Count: 4645
+        "tree":{'natural':'tree'}, //  Count: 4624
+        "horseback riding":{'leisure':'equestrian'}, //  Count: 4602
+        "horse riding":{'leisure':'equestrian'}, //  Count: 4602
+        "pavilion":{'building':'pavilion'}, //  Count: 4602
+        "equitation":{'leisure':'equestrian'}, //  Count: 4602
+        "equestrianism":{'leisure':'equestrian'}, //  Count: 4602
+        "ordnance depot":{'military':'ordnance_depot'}, //  Count: 4584
+        "arsenal / weapon and ammunition storage":{'military':'ammunition'}, //  Count: 4584
+        "gas distribution station":{'amenity':'gas_distribution_station'}, //  Count: 4559
         "2000s construction":{'rawWmCategory':'2000s_construction'}, //  Count: 4558
-        "township":{'rawWmCategory':'township'}, //  Count: 4553
+        "township":{'place':'township'}, //  Count: 4553
         "unfinished / unbuilt":{'rawWmCategory':'unfinished_/_unbuilt'}, //  Count: 4506
         "underpass":{'rawWmCategory':'underpass'}, //  Count: 4489
-        "marinas":{'rawWmCategory':'marinas'}, //  Count: 4485
-        "marina":{'rawWmCategory':'marina'}, //  Count: 4485
-        "chocolatier":{'rawWmCategory':'chocolatier'}, //  Count: 4467
-        "confectionery":{'rawWmCategory':'confectionery'}, //  Count: 4467
-        "sweets / sweet shop":{'rawWmCategory':'sweets_/_sweet_shop'}, //  Count: 4467
-        "candy shop":{'rawWmCategory':'candy_shop'}, //  Count: 4467
+        "marinas":{'leisure':'marina'}, //  Count: 4485
+        "marina":{'leisure':'marina'}, //  Count: 4485
+        "chocolatier":{'shop':'confectionery'}, //  Count: 4467
+        "confectionery":{'shop':'confectionery'}, //  Count: 4467
+        "sweets / sweet shop":{'shop':'confectionery'}, //  Count: 4467
+        "candy shop":{'shop':'confectionery'}, //  Count: 4467
         "palm house":{'rawWmCategory':'palm_house'}, //  Count: 4429
-        "greenhouse":{'rawWmCategory':'greenhouse'}, //  Count: 4429
-        "glasshouse":{'rawWmCategory':'glasshouse'}, //  Count: 4429
-        "berth":{'rawWmCategory':'berth'}, //  Count: 4374
-        "radio station":{'rawWmCategory':'radio_station'}, //  Count: 4370
+        "greenhouse":{'building':'greenhouse'}, //  Count: 4429
+        "glasshouse":{'building':'greenhouse'}, //  Count: 4429
+        "berth":{'seamark:type':'berth'}, //  Count: 4374
+        "radio station":{'amenity':'radio'}, //  Count: 4370
         "ventilating shaft":{'rawWmCategory':'ventilating_shaft'}, //  Count: 4366
-        "social security":{'rawWmCategory':'social_security'}, //  Count: 4366
-        "pet shop/store":{'rawWmCategory':'pet_shop/store'}, //  Count: 4364
-        "suburb":{'rawWmCategory':'suburb'}, //  Count: 4360
-        "zoological garden":{'rawWmCategory':'zoological_garden'}, //  Count: 4353
-        "zoo":{'rawWmCategory':'zoo'}, //  Count: 4353
-        "lutheranism":{'rawWmCategory':'lutheranism'}, //  Count: 4344
-        "mountain pass":{'rawWmCategory':'mountain_pass'}, //  Count: 4342
-        "navy":{'rawWmCategory':'navy'}, //  Count: 4339
-        "toll booth":{'rawWmCategory':'toll_booth'}, //  Count: 4331
-        "toll gate":{'rawWmCategory':'toll_gate'}, //  Count: 4331
+        "social security":{'office':'social_security'}, //  Count: 4366
+        "pet shop/store":{'shop':'pet'}, //  Count: 4364
+        "suburb":{'place':'suburb'}, //  Count: 4360
+        "zoological garden":{'tourism':'zoo'}, //  Count: 4353
+        "zoo":{'tourism':'zoo'}, //  Count: 4353
+        "lutheranism":{'religion':'christian','denomination':'lutheran'}, //  Count: 4344
+        "mountain pass":{'mountain_pass':'yes'}, //  Count: 4342
+        "navy":{'military:service':'navy'}, //  Count: 4339
+        "toll booth":{'barrier':'toll_booth'}, //  Count: 4331
+        "toll gate":{'barrier':'toll_booth'}, //  Count: 4331
         "closed":{'rawWmCategory':'closed'}, //  Count: 4323
-        "civil defense facility":{'rawWmCategory':'civil_defense_facility'}, //  Count: 4320
-        "civil protection":{'rawWmCategory':'civil_protection'}, //  Count: 4320
-        "perfumes":{'rawWmCategory':'perfumes'}, //  Count: 4313
-        "perfume / cosmetics shop":{'rawWmCategory':'perfume_/_cosmetics_shop'}, //  Count: 4313
-        "cosmetics":{'rawWmCategory':'cosmetics'}, //  Count: 4313
-        "cultural center / centre":{'rawWmCategory':'cultural_center_/_centre'}, //  Count: 4305
-        "driving school":{'rawWmCategory':'driving_school'}, //  Count: 4274
+        "civil defense facility":{'military':'civil_defense_facility'}, //  Count: 4320
+        "civil protection":{'amenity':'civil_protection'}, //  Count: 4320
+        "perfumes":{'shop':'perfumery'}, //  Count: 4313
+        "perfume / cosmetics shop":{'shop':'cosmetics'}, //  Count: 4313
+        "cosmetics":{'shop':'cosmetics'}, //  Count: 4313
+        "cultural center / centre":{'amenity':'arts_centre'}, //  Count: 4305
+        "driving school":{'amenity':'driving_school'}, //  Count: 4274
         "shipbuilding":{'rawWmCategory':'shipbuilding'}, //  Count: 4272
-        "Mediterranean cuisine":{'rawWmCategory':'Mediterranean_cuisine'}, //  Count: 4258
-        "frazione":{'rawWmCategory':'frazione'}, //  Count: 4254
-        "flower bed":{'rawWmCategory':'flower_bed'}, //  Count: 4236
-        "barge slip":{'rawWmCategory':'barge_slip'}, //  Count: 4233
-        "ferry terminal":{'rawWmCategory':'ferry_terminal'}, //  Count: 4233
-        "ferry slip":{'rawWmCategory':'ferry_slip'}, //  Count: 4233
+        "Mediterranean cuisine":{'cuisine':'mediterranean'}, //  Count: 4258
+        "frazione":{'place':'village'}, //  Count: 4254
+        "flower bed":{'man_made':'flower_bed'}, //  Count: 4236
+        "barge slip":{'amenity':'barge_slip'}, //  Count: 4233
+        "ferry terminal":{'amenity':'ferry_terminal'}, //  Count: 4233
+        "ferry slip":{'amenity':'ferry_slip'}, //  Count: 4233
         "cavern":{'rawWmCategory':'cavern'}, //  Count: 4230
         "cave":{'rawWmCategory':'cave'}, //  Count: 4230
         "aparthotel":{'rawWmCategory':'aparthotel'}, //  Count: 4224
@@ -909,17 +909,17 @@ wikimapia.rules = {
         "megastore":{'rawWmCategory':'megastore'}, //  Count: 4169
         "supercenter":{'rawWmCategory':'supercenter'}, //  Count: 4169
         "big-box store":{'rawWmCategory':'big-box_store'}, //  Count: 4169
-        "butcher's shop":{'rawWmCategory':'butchers_shop'}, //  Count: 4168
-        "butcher shop / butchery":{'rawWmCategory':'butcher_shop_/_butchery'}, //  Count: 4168
+        "butcher's shop":{'shop':'butcher'}, //  Count: 4168
+        "butcher shop / butchery":{'shop':'butcher'}, //  Count: 4168
         "department":{'rawWmCategory':'department'}, //  Count: 4165
-        "christian school":{'rawWmCategory':'christian_school'}, //  Count: 4128
+        "christian school":{'amenity':'school','religion':'christian'}, //  Count: 4128
         "hydroelectric power station":{'rawWmCategory':'hydroelectric_power_station'}, //  Count: 4120
-        "gully":{'rawWmCategory':'gully'}, //  Count: 4091
+        "gully":{'natural':'gully'}, //  Count: 4091
         "baseball field":{'rawWmCategory':'baseball_field'}, //  Count: 4090
-        "Walmart":{'rawWmCategory':'Walmart'}, //  Count: 4086
-        "Wal-mart":{'rawWmCategory':'Wal-mart'}, //  Count: 4086
-        "jewellery store/shop":{'rawWmCategory':'jewellery_store/shop'}, //  Count: 4082
-        "jewelry store/shop":{'rawWmCategory':'jewelry_store/shop'}, //  Count: 4082
+        "Walmart":{'shop':'department_store','name':'Walmart'}, //  Count: 4086
+        "Wal-mart":{'shop':'department_store','name':'Walmart'}, //  Count: 4086
+        "jewellery store/shop":{'shop':'jewelry'}, //  Count: 4082
+        "jewelry store/shop":{'shop':'jewelry'}, //  Count: 4082
         "lock (water transport)":{'rawWmCategory':'lock_(water_transport)'}, //  Count: 4028
         "aircraft shelter":{'rawWmCategory':'aircraft_shelter'}, //  Count: 4010
         "aircraft hangar":{'rawWmCategory':'aircraft_hangar'}, //  Count: 4010
@@ -928,17 +928,17 @@ wikimapia.rules = {
         "interstate":{'rawWmCategory':'interstate'}, //  Count: 3981
         "1990s construction":{'rawWmCategory':'1990s_construction'}, //  Count: 3968
         "photographic studio":{'rawWmCategory':'photographic_studio'}, //  Count: 3953
-        "Japanese cuisine":{'rawWmCategory':'Japanese_cuisine'}, //  Count: 3936
-        "volleyball court":{'rawWmCategory':'volleyball_court'}, //  Count: 3936
+        "Japanese cuisine":{'cuisine':'japanese'}, //  Count: 3936
+        "volleyball court":{'leisure':'pitch','sport':'volleyball'}, //  Count: 3936
         "pier":{'rawWmCategory':'pier'}, //  Count: 3933
-        "Lutheran Church":{'rawWmCategory':'Lutheran_Church'}, //  Count: 3931
+        "Lutheran Church":{'building':'church','amenity':'place_of_worship','religion':'christian','denomination':'lutheran'}, //  Count: 3931
         "eid prayer ground":{'rawWmCategory':'eid_prayer_ground'}, //  Count: 3928
         "eidgah":{'rawWmCategory':'eidgah'}, //  Count: 3928
         "laundromat":{'rawWmCategory':'laundromat'}, //  Count: 3910
         "laundry":{'rawWmCategory':'laundry'}, //  Count: 3910
         "laundrette":{'rawWmCategory':'laundrette'}, //  Count: 3910
-        "toy shop":{'rawWmCategory':'toy_shop'}, //  Count: 3893
-        "bungalow":{'rawWmCategory':'bungalow'}, //  Count: 3882
+        "toy shop":{'shop':'toy'}, //  Count: 3893
+        "bungalow":{'building':'bungalow'}, //  Count: 3882
         "association":{'rawWmCategory':'association'}, //  Count: 3866
         "engineering":{'rawWmCategory':'engineering'}, //  Count: 3865
         "vehicle inspection":{'rawWmCategory':'vehicle_inspection'}, //  Count: 3864
