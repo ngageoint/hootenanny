@@ -157,7 +157,7 @@ public class MapInfoResource {
 	* <INPUT>None</INPUT>
   * <OUTPUT>
 	{ "layers": [ {
-	 * "mapid": 54, "size": "14582", }, { "mapid": 62, "size": "56818", } ] }
+	 * "id": 54, "size": "14582", }, { "id": 62, "size": "56818", } ] }
   * </OUTPUT>
   * </EXAMPLE>
 	 * @throws Exception 
@@ -180,13 +180,20 @@ public class MapInfoResource {
 			{
 				JSONObject jo = new JSONObject();
 				long nsize = 0;
-				for(String table : maptables)
+				try
 				{
-					nsize += DbUtils.getTableSizeInByte(table + "_" +  mapId);
+					for(String table : maptables)
+					{
+						nsize += DbUtils.getTableSizeInByte(table + "_" +  mapId);
+					}					
 				}
-				jo.put("mapid", mapId);
-				jo.put("size", nsize);
-				retval.put(jo);
+				catch (Exception exx){}
+				finally
+				{
+					jo.put("id", Long.parseLong(mapId));
+					jo.put("size", nsize);
+					retval.put(jo);
+				}
 			}
 			
 		}
