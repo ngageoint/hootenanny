@@ -8,7 +8,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="name" v="Georg-Brauchle-Ring"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Somewhat similar - similar POI type"/>
+        <tag k="hoot:review:note" v="Somewhat similar (44m) - similar POI type"/>
         <tag k="alt_name" v="U-BAHN-GEORG-BRAUCHLE-RING"/>
         <tag k="station" v="light_rail"/>
         <tag k="hoot:review:uuid" v="{40822740-275a-5758-bb90-4e25b9d30d49}"/>
@@ -29,7 +29,7 @@
         <tag k="hoot:review:source" v="1"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:uuid" v="{5c7b69a5-dc0f-5bc2-80fb-c2503e83d9b7}"/>
-        <tag k="hoot:review:note" v="Somewhat similar - similar POI type"/>
+        <tag k="hoot:review:note" v="Somewhat similar (44m) - similar POI type"/>
         <tag k="uuid" v="{40822740-275a-5758-bb90-4e25b9d30d49}"/>
         <tag k="railway" v="subway_entrance"/>
         <tag k="error:circular" v="15"/>

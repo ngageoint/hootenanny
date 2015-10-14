@@ -76,6 +76,7 @@ import hoot.services.models.osm.RelationMember;
 import hoot.services.models.osm.Way;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
+import hoot.services.utils.RandomNumberGenerator;
 import hoot.services.utils.XmlUtils;
 
 import com.mysema.query.sql.SQLQuery;
@@ -84,16 +85,6 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.ClientResponse.Status;
 
-/*
- * @todo Most of these tests could be converted to integration tests and after a refactoring,
- * could be replace with unit tests that test only the internal classes being used by this
- * Jersey resource.
- *
- * @todo I haven't seen these requests occur out of iD yet, but probably the service should
- * handle them:
- *
- * - upload modify references an element that was created within the same request
- */
 public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
 {
   private static final Logger log = LoggerFactory.getLogger(ChangesetResourceUploadModifyTest.class);
@@ -326,7 +317,6 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
         Assert.assertEquals(1, tags.size());
         Assert.assertEquals("val 3b", tags.get("key 3b"));
 
-        //TODO: check rest of node records here?
         nodeRecord = nodes.get(nodeIdsArr[2]);
         Assert.assertTrue(
           nodeRecord.getTags() == null ||
@@ -625,6 +615,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
       final Long[] wayIdsArr = wayIds.toArray(new Long[]{});
 
       //Now, update some of the elements and their tags.
+      //TODO: why was this disabled?
       //final BoundingBox updatedBounds =
         //OsmTestUtils.createAfterModifiedTestChangesetBounds();
       Document responseData = null;
@@ -1192,7 +1183,6 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
             nodeRecord.getTags() == null ||
             StringUtils.isEmpty(((PGobject)nodeRecord.getTags()).getValue()));
 
-        //TODO: check rest of the node records here?
         nodeRecord = nodes.get(nodeIdsArr[3]);
         Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject)nodeRecord.getTags());
         Assert.assertNotNull(tags);
@@ -1604,7 +1594,6 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
     final Set<Long> relationIds =
       OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
-
     final BoundingBox updateBounds =
       OsmTestUtils.createAfterModifiedTestChangesetBounds();
     //Update the changeset with a node that has an ID that doesn't exist.  A failure should occur
@@ -1627,7 +1616,9 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
                 "<tag k=\"key 1\" v=\"val 1\"></tag>" +
                 "<tag k=\"key 2\" v=\"val 2\"></tag>" +
               "</node>" +
-              "<node id=\"" + (nodeIdsArr[0] + 6) + "\" lon=\"" + updateBounds.getMinLon() + "\" " +
+              "<node id=\"" + 
+                ((int)RandomNumberGenerator.nextDouble(nodeIdsArr[0] + 10^4, Integer.MAX_VALUE)) + 
+                "\" lon=\"" + updateBounds.getMinLon() + "\" " +
                 "lat=\"" + updateBounds.getMinLat() + "\" version=\"1\" changeset=\"" +
                 changesetId + "\">" +
                 "<tag k=\"key 3\" v=\"val 3\"></tag>" +
@@ -2341,7 +2332,6 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
 
       try
       {
-        //changeset = changesetDao.findById(changesetId);
       	changeset =
             new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
             .where(changesets.id.eq(changesetId)).singleResult(changesets);
@@ -2499,8 +2489,6 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
     }
   }
 
-  //TODO: should we set a limit on members per relation?  i don't think rails port does
-
   @Test(expected=UniformInterfaceException.class)
   @Category(UnitTest.class)
   public void testUploadModifyWayInvalidVersion() throws Exception
@@ -2648,13 +2636,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
 
     final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
     changeset.setClosedAt(now);
-    //changesetDao.update(changeset);
     new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), changesets)
     .where(changesets.id.eq(changeset.getId()))
     .set(changesets.closedAt, now)
     .execute();
 
-    //changeset = changesetDao.findById(changesetId);
     changeset =
         new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
         .where(changesets.id.eq(changesetId)).singleResult(changesets);
@@ -3134,7 +3120,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
     		.where(currentNodesTbl.id.eq(nodeIdsArr[0]))
     		.singleResult(currentNodesTbl);
     invisibleNode.setVisible(false);
-    int success = //invisibleNode.update();
+    int success = 
     		(int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentNodesTbl)
     .where(currentNodesTbl.id.eq(invisibleNode.getId()))
   .set(currentNodesTbl.visible, false)
@@ -3207,7 +3193,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
     		.where(currentNodesTbl.id.eq(nodeIdsArr[0]))
     		.singleResult(currentNodesTbl);
     invisibleNode.setVisible(false);
-    int success = //invisibleNode.update();
+    int success = 
     		(int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentNodesTbl)
     .where(currentNodesTbl.id.eq(invisibleNode.getId()))
   .set(currentNodesTbl.visible, false)
@@ -3281,8 +3267,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
     		.where(currentWaysTbl.id.eq(wayIdsArr[0]))
     		.singleResult(currentWaysTbl);
     invisibleWay.setVisible(false);
-    int success = //invisibleWay.update();
-
+    int success =
     		(int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentWaysTbl)
     .where(currentWaysTbl.id.eq(invisibleWay.getId()))
   .set(currentWaysTbl.visible, false)
@@ -3358,7 +3343,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
     		.where(currentRelationsTbl.id.eq(relationIdsArr[0]))
     		.singleResult(currentRelationsTbl);
     invisibleRelation.setVisible(false);
-    int success = //invisibleRelation.update();
+    int success = 
     		(int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentRelationsTbl)
     .where(currentRelationsTbl.id.eq(invisibleRelation.getId()))
   .set(currentRelationsTbl.visible, false)
@@ -3820,6 +3805,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
+      //TODO: needed?
       //Assert.assertTrue(r.getEntity(String.class).contains("Invalid version"));
 
       OsmTestUtils.verifyTestDataUnmodified(
@@ -3882,6 +3868,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
+      //TODO: needed?
       //Assert.assertTrue(r.getEntity(String.class).contains("Invalid version"));
 
       OsmTestUtils.verifyTestDataUnmodified(
@@ -4002,7 +3989,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus())); //TODO: is this correct?
+      Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
       Assert.assertTrue(r.getEntity(String.class).contains(
         "contains a relation member that references itself"));
 

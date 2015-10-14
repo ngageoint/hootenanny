@@ -1,5 +1,3 @@
-Creating libpgosm lib
-Installing libpgosm lib
 Dropping old osm api db
 Creating osm api db
 Performing write operation

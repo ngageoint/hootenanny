@@ -479,7 +479,11 @@ SOURCES += \
     src/main/cpp/hoot/core/ops/CookieCutterOp.cpp \
     src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.cpp \
     src/main/cpp/hoot/core/conflate/CookieCutter.cpp \
-    src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.cpp
+    src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.cpp \
+    src/main/cpp/hoot/core/schema/SchemaVertex.cpp \
+    src/main/cpp/hoot/core/schema/TagCategoryDifferencer.cpp \
+    src/main/cpp/hoot/core/schema/TagAncestorDifferencer.cpp \
+    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -946,5 +950,10 @@ HEADERS += \
     src/main/cpp/hoot/core/ops/CookieCutterOp.h \
     src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.h \
     src/main/cpp/hoot/core/conflate/CookieCutter.h \
-    src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.h
+    src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.h \
+    src/main/cpp/hoot/core/schema/SchemaVertex.h \
+    src/main/cpp/hoot/core/schema/KeyValuePair.h \
+    src/main/cpp/hoot/core/schema/TagCategoryDifferencer.h \
+    src/main/cpp/hoot/core/schema/TagAncestorDifferencer.h \
+    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.h
 

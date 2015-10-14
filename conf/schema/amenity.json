@@ -258,8 +258,9 @@
         "similarTo": { "name": "amenity=boating", "weight": 0.7 } },
 
     "tag": { "name": "amenity=bus_station", "isA": "amenity",
-        "similarTo": { "name": "building=transportation", "weight": 0.9 },
-        "similarTo": { "name": "transport=station", "weight": 0.8 } },
+        "similarTo": { "name": "public_transport=station", "weight": [0.8, 0.3] },
+        "similarTo": { "name": "building=transportation", "weight": [0.9, 0.4] },
+        "similarTo": { "name": "transport=station", "weight": [0.8, 0.3] } },
 
     "tag": { "name": "amenity=car_rental", "isA": "amenity" },
     "tag": { "name": "amenity=car_repair", "isA": "amenity" },

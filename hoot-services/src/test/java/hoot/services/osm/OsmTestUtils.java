@@ -1387,7 +1387,7 @@ public class OsmTestUtils
     return expandedBounds;
   }
 
-  //TODO: This method adds nodes that are completely outside of the query bounds, so that we can
+  //This method adds nodes that are completely outside of the query bounds, so that we can
   //make sure it that ways and relations created with them don't come back in the response.
   //Eventually, this out of bounds data should be made part of the test dataset created in
   //ChangesetResourceUtils.  Since that involves updating *a lot* of tests, so not doing it right

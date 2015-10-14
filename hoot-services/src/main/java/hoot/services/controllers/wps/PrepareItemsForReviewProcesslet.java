@@ -30,9 +30,9 @@ import java.sql.Connection;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
-import hoot.services.review.ReviewItemsPreparer;
 import hoot.services.review.ReviewUtils;
 import hoot.services.validators.wps.ReviewInputParamsValidator;
+import hoot.services.writers.review.ReviewItemsPreparer;
 
 import org.deegree.services.wps.ProcessletException;
 import org.deegree.services.wps.ProcessletExecutionInfo;
@@ -48,9 +48,6 @@ import org.slf4j.LoggerFactory;
 public class PrepareItemsForReviewProcesslet extends BaseProcesslet
 {
   private static final Logger log = LoggerFactory.getLogger(PrepareItemsForReviewProcesslet.class);
-  
-  //TODO: see #6270
-  public static String reviewRecordWriter = "reviewPrepareDbWriter2";
   
   public PrepareItemsForReviewProcesslet() throws Exception
   {
@@ -100,7 +97,7 @@ public class PrepareItemsForReviewProcesslet extends BaseProcesslet
 
       ((LiteralOutput)outputParams.getParameter("jobId")).setValue(
         (new ReviewItemsPreparer(
-           conn, testDelayMilliseconds, simulateFailure, mapId, reviewRecordWriter))
+           conn, testDelayMilliseconds, simulateFailure, mapId))
          .prepare(overwriteExistingData));
     }
     catch (Exception e)

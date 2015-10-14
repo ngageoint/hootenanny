@@ -96,7 +96,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
     //Technically, changeset doesn't inherit from Element and thus doesn't implement
     //XmlSerializable or DbSerializable, so giving it an element type is a little bit confusing.
     //It helps the code clean up a little bit in places, so leaving as is for now.
-    //TODO: Can this be removed?
     Changeset
   }
 
@@ -223,9 +222,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
    */
   public long getMapId() throws Exception
   {
-    //this is a little risky, but I'm assuming the field probably won't ever change in name
-    //in the OSM tables
-    //return (Long)MethodUtils.invokeMethod(record, "getMapId", new Object[]{});
   	return _mapId;
   }
 
@@ -235,9 +231,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
    */
   public void setMapId(long id) throws Exception
   {
-    //this is a little risky, but I'm assuming the field probably won't ever change in name
-    //in the OSM tables
-    //MethodUtils.invokeMethod(record, "setMapId", new Object[]{ id });
   	_mapId = id;
   }
 
@@ -336,12 +329,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
    * The geospatial bounds for this element
    */
   public abstract BoundingBox getBounds() throws Exception;
-
-  /**
-   * Clears temporary data that was the result of parsing the XML to create the element - OPTIONAL
-   */
-  //TODO: Should this be re-enabled?
-  //public void clearTempData() {}
 
   @Override
   public String toString()
@@ -450,7 +437,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
     }
     else
     {
-      //TODO: I'm not sure how important it is that this check is strictly enforced here, but I'm
+      //I'm not sure how important it is that this check is strictly enforced here, but I'm
       //doing it for now anyway.
       final long parsedVersion =
         Long.parseLong(xmlAttributes.getNamedItem("version").getNodeValue());
@@ -464,7 +451,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
     return version;
   }
 
-  //TODO: is this timestamp even actually honored from the xml in the rails port?...don't think so;
+  //is this timestamp even actually honored from the xml in the rails port?...don't think so;
   //if not, remove this
   protected Timestamp parseTimestamp(final NamedNodeMap xmlAttributes)
   {
@@ -646,40 +633,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
   }
 
   /**
-   * Determines the ID sequence type for an element
-   *
-   * @param parentElementType OSM element type of the parent of the ID sequence
-   * @return an ID sequence type
-   * @todo is there a cleaner way to do this?
-   */
- /* public static Sequence<Long> getIdSequenceType(final ElementType parentElementType)
-  {
-    switch (parentElementType)
-    {
-      case Node:
-
-        return Sequences.CURRENT_NODES_ID_SEQ;
-
-      case Way:
-
-        return Sequences.CURRENT_WAYS_ID_SEQ;
-
-      case Relation:
-
-        return Sequences.CURRENT_RELATIONS_ID_SEQ;
-
-      case Changeset:
-
-        return Sequences.CHANGESETS_ID_SEQ;
-
-      default:
-
-        assert(false);
-        return null;
-    }
-  }*/
-
-  /**
    * Determines whether the specified elements exist in the services database
    *
    * @param mapId ID of the map owning the elements
@@ -700,13 +653,11 @@ public abstract class Element implements XmlSerializable, DbSerializable
   {
     final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
 
-    //SQLQuery query = new SQLQuery(dbConn, DbUtils.getConfiguration());
     if(elementIds.size() > 0)
     {
-  	return
+  	  return
   			new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable())
-  			.where(
-            prototype.getElementIdField().in(elementIds))
+  			.where(prototype.getElementIdField().in(elementIds))
   			.count() == elementIds.size();
     }
     else
@@ -737,10 +688,9 @@ public abstract class Element implements XmlSerializable, DbSerializable
   {
     final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
 
-    //SQLQuery query = new SQLQuery(dbConn, DbUtils.getConfiguration());
-    if(elementIds.size() > 0)
+    if (elementIds.size() > 0)
     {
-  	return
+  	  return
   			new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable())
   			.where(
             prototype.getElementIdField().in(elementIds)

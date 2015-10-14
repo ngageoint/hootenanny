@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 /*
- * @todo Having this inherit from OsmResourceTestAbstract is kind of messy and confusing.  It is
+ * Having this inherit from OsmResourceTestAbstract is kind of messy and confusing.  It is
  * necessary for now, however, because OsmResourceTestAbstract loads test map/user records before
  * tests and cleans the database out after tests, which this class needs.  Better separation 
  * should occur between the Jersey test classes and the WPS test classes.

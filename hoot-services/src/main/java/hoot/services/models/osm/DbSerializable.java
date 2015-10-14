@@ -26,7 +26,6 @@
  */
 package hoot.services.models.osm;
 
-import java.sql.Connection;
 import java.util.Collection;
 import java.util.List;
 
@@ -37,21 +36,13 @@ import hoot.services.models.osm.Element.ElementType;
 import com.mysema.query.sql.RelationalPathBase;
 import com.mysema.query.types.path.BooleanPath;
 import com.mysema.query.types.path.NumberPath;
-import com.mysema.query.types.path.SimplePath;
 
 /**
  * All OSM element models which want to be serializable to the services database should implement
  * this
- *
- * @todo This interface is probably way too thick, and should be minimized in scope to simplify
- * element implementations.
  */
 public interface DbSerializable
 {
-  //JDBC Connection
-  Connection getDbConnection();
-  void setDbConnection(Connection conn);
-
   //the record this implementation wraps
   Object getRecord();
   void setRecord(Object record)  throws Exception;
@@ -67,10 +58,7 @@ public interface DbSerializable
   RelationalPathBase<?> getElementTable();
   NumberPath<Long> getElementIdField();
   BooleanPath getElementVisibilityField();
-  NumberPath<Long> getElementVersionField();
   NumberPath<Long> getChangesetIdField();
-  //NumberPath<Long> getIdSequenceType();
-  SimplePath<Object> getTagField();
 
   // table/field info for the r wrapped by this implementation
   RelationalPathBase<?> getRelatedRecordTable();

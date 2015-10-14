@@ -236,28 +236,12 @@ public class Relation extends Element
 		}
 	}
 
-	// /**
-	// * Clears temporary data that was the result of parsing the XML to create
-	// the element - OPTIONAL
-	// * @throws Exception
-	// */
-	// public void clearTempData()
-	// {
-	// nodeCoordsCollection = null;
-	// relatedRecords = null;
-	// relatedRecordIds = null;
-	// }
-
 	/*
 	 * Parses a list of node/way relation members and computes their bounds
 	 * 
 	 * @param members a list of relation members
-	 * 
 	 * @return a bounds
-	 * 
 	 * @throws Exception
-	 * 
-	 * @todo this method is bloated and hard to follow
 	 */
 	private BoundingBox parseNodesAndWayMembersBounds(List<RelationMember> members)
 			throws Exception
@@ -387,15 +371,7 @@ public class Relation extends Element
 		if (nodes.size() > 0)
 		{
 			BoundingBox nodeBounds = new BoundingBox(nodes);
-			// TODO: fix??
-			// if (bounds == null)
-			// {
 			bounds = new BoundingBox(nodeBounds);
-			// }
-			// else
-			// {
-			// bounds.add(nodeBounds);
-			// }
 		}
 		return bounds;
 	}
@@ -432,8 +408,6 @@ public class Relation extends Element
 	 *
 	 * @return a bounding box; null if the relation only contains other relations
 	 * @throws Exception
-	 * @todo no bounds is being calculated for the contained relations...is that
-	 *       correct?
 	 */
 	public BoundingBox getBounds() throws Exception
 	{
@@ -684,13 +658,6 @@ public class Relation extends Element
 	}
 
 	/**
-	 * Returns the ID sequence type for this element
-	 *
-	 * @return a sequence type
-	 */
-	// public NumberPath<Long> getIdSequenceType() { return null; }
-
-	/**
 	 * Returns the generated table identifier for records related to this element
 	 *
 	 * @return a table
@@ -833,12 +800,9 @@ public class Relation extends Element
 			final List<RelationMember> members, final Map<String, String> tags,
 			Connection dbConn) throws Exception
 	{
-		// SQLQuery query = new SQLQuery(dbConn, DbUtils.getConfiguration());
-
 		final long nextRelationId = new SQLQuery(dbConn,
 				DbUtils.getConfiguration(mapId)).uniqueResult(SQLExpressions.nextval(
 						Long.class, "current_relations_id_seq"));
-		;
 
 		insertNew(nextRelationId, changesetId, mapId, members, tags, dbConn);
 		return nextRelationId;

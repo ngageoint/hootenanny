@@ -40,11 +40,6 @@ public class CaseInsensitiveStringList extends ArrayList<String>
   {
     
   }
-  
-  public CaseInsensitiveStringList(List<String> list)
-  {
-    this.addAll(list);
-  }
 
   @Override
   public boolean contains(Object o)

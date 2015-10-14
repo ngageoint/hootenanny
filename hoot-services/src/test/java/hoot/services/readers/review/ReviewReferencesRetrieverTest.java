@@ -1,42 +1,214 @@
 package hoot.services.readers.review;
 
+import java.io.IOException;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response.Status;
+
 import hoot.services.UnitTest;
-//import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.models.review.ReviewAgainstItem;
+import hoot.services.models.review.ReviewReferences;
+import hoot.services.models.review.ReviewReferencesCollection;
+import hoot.services.osm.OsmResourceTestAbstract;
+import hoot.services.review.ReviewTestUtils;
+import hoot.services.utils.RandomNumberGenerator;
 
-//import java.io.File;
-
-//import org.apache.commons.io.FileUtils;
-//import org.junit.BeforeClass;
-import org.junit.Ignore;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-//import org.w3c.dom.Document;
 
-//TODO: finish
-public class ReviewReferencesRetrieverTest
+import com.sun.jersey.api.client.UniformInterfaceException;
+
+public class ReviewReferencesRetrieverTest extends OsmResourceTestAbstract
 {
-  //private static Document changesetDoc;
-	
-	/*@BeforeClass
-  public static void beforeClass() throws Exception
+	public ReviewReferencesRetrieverTest() throws NumberFormatException, IOException
   {
-		changesetDoc = 
-			XmlDocumentBuilder.parse(
-        FileUtils.readFileToString(
-          new File(
-            Thread.currentThread().getContextClassLoader().getResource(
-              "hoot/services/review/ReviewItemsUpdater-testUpdateReviewItems.osm")
-            .getPath())));
-  }*/
+    super(new String[]{ "hoot.services.controllers.job" });
+  }
 	
-	@Ignore
 	@Test
 	@Category(UnitTest.class)
 	public void testGetReferences() throws Exception
 	{
-	  //ReviewItemsRetriever reviewItemsUpdater = Mockito.spy(new ReviewItemsRetriever());
-	  //reviewItemsUpdater.setMapId(1);
-	  //reviewItemsUpdater.setUserId(1);
-		//reviewItemsUpdater.ge
+		ReviewTestUtils.populateReviewDataForAllDataTypes();
+		
+		final ReviewReferencesCollection response = 
+	  	resource()
+	      .path("/review/refs")
+	      .queryParam("mapId", String.valueOf(mapId))
+	      .queryParam(
+	      	"elementUniqueIds", 
+	      	"{c254d8ab-3f1a-539f-91b7-98b485c5c129};{6117767e-8a0b-5624-a599-fa50f96213a6}")
+	      .accept(MediaType.APPLICATION_JSON)
+        .get(ReviewReferencesCollection.class);
+	  
+		final ReviewReferences[] refs = response.getReviewReferences();
+	  Assert.assertEquals(2, refs.length);
+	  
+	  final ReviewReferences refs1 = refs[0];
+	  Assert.assertEquals("{c254d8ab-3f1a-539f-91b7-98b485c5c129}", refs1.getUniqueId());
+	  Assert.assertNull(refs1.getReviewableItems());
+	  final ReviewAgainstItem[] reviewAgainst1 = refs1.getReviewAgainstItems();
+	  Assert.assertEquals(1, reviewAgainst1.length);
+	  final ReviewAgainstItem firstReviewAgainst1 = reviewAgainst1[0];
+	  Assert.assertEquals("node", firstReviewAgainst1.getType().toLowerCase());
+	  Assert.assertEquals("{6117767e-8a0b-5624-a599-fa50f96213a6}", firstReviewAgainst1.getUuid());
+	  
+	  final ReviewReferences refs2 = refs[1];
+	  Assert.assertEquals("{6117767e-8a0b-5624-a599-fa50f96213a6}", refs2.getUniqueId());
+	  final ReviewAgainstItem[] reviewables2 = refs2.getReviewableItems();
+	  Assert.assertEquals(2, reviewables2.length);
+	  final ReviewAgainstItem firstReviewable2 = reviewables2[0];
+	  Assert.assertEquals("node", firstReviewable2.getType().toLowerCase());
+	  Assert.assertEquals("{c254d8ab-3f1a-539f-91b7-98b485c5c129}", firstReviewable2.getUuid());
+	  final ReviewAgainstItem secondReviewable2 = reviewables2[1];
+	  Assert.assertEquals("node", secondReviewable2.getType().toLowerCase());
+	  Assert.assertEquals("{d1012bc9-92bc-5931-aac2-aa5702f42b8b}", secondReviewable2.getUuid());
+	  Assert.assertNull(refs2.getReviewAgainstItems());
 	}
+	
+	@Test(expected=UniformInterfaceException.class)
+  @Category(UnitTest.class)
+  public void testGetMapDoesntExist() throws Exception
+  {
+    try
+    {
+    	resource()
+        .path("/review/refs")
+        .queryParam(
+        	"mapId", 
+        	String.valueOf((int)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)))
+        .queryParam(
+      	  "elementUniqueIds", 
+      	  "{c254d8ab-3f1a-539f-91b7-98b485c5c129};{6117767e-8a0b-5624-a599-fa50f96213a6}")
+        .accept(MediaType.APPLICATION_JSON)
+        .get(ReviewReferencesCollection.class);
+    }
+    catch (UniformInterfaceException e)
+    {
+      Assert.assertEquals(Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
+      Assert.assertTrue(
+        e.getResponse().getEntity(String.class).contains("No record exists"));
+
+      throw e;
+    }
+  }
+
+  @Test(expected=UniformInterfaceException.class)
+  @Category(UnitTest.class)
+  public void testGetMissingMapIdParam() throws Exception
+  {
+    try
+    {
+    	resource()
+        .path("/review/refs")
+        .queryParam(
+    	    "elementUniqueIds", 
+    	    "{c254d8ab-3f1a-539f-91b7-98b485c5c129};{6117767e-8a0b-5624-a599-fa50f96213a6}")
+        .accept(MediaType.APPLICATION_JSON)
+        .get(ReviewReferencesCollection.class);
+    }
+    catch (UniformInterfaceException e)
+    {
+      Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+      Assert.assertTrue(
+        e.getResponse().getEntity(String.class).contains("Invalid input parameter value"));
+      throw e;
+    }
+  }
+
+  @Test(expected=UniformInterfaceException.class)
+  @Category(UnitTest.class)
+  public void testGetEmptyMapIdParam() throws Exception
+  {
+    try
+    {
+    	resource()
+        .path("/review/refs")
+        .queryParam("mapId", "")
+        .queryParam(
+    	    "elementUniqueIds", 
+    	    "{c254d8ab-3f1a-539f-91b7-98b485c5c129};{6117767e-8a0b-5624-a599-fa50f96213a6}")
+        .accept(MediaType.APPLICATION_JSON)
+        .get(ReviewReferencesCollection.class);
+    }
+    catch (UniformInterfaceException e)
+    {
+    	Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+      Assert.assertTrue(
+        e.getResponse().getEntity(String.class).contains("Invalid input parameter value"));
+      throw e;
+    }
+  }
+  
+  @Test(expected=UniformInterfaceException.class)
+  @Category(UnitTest.class)
+  public void testGetElementUniqueIdDoesntExist() throws Exception
+  {
+    try
+    {
+    	resource()
+        .path("/review/refs")
+        .queryParam(
+        	"mapId", 
+        	String.valueOf((int)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)))
+        .queryParam(
+    	    "elementUniqueIds", 
+    	    //invalid uuid
+    	    "{d254d8ab-3f1a-539f-91b7-98b485c5c129}")
+        .accept(MediaType.APPLICATION_JSON)
+        .get(ReviewReferencesCollection.class);
+    }
+    catch (UniformInterfaceException e)
+    {
+      Assert.assertEquals(Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
+      Assert.assertTrue(
+        e.getResponse().getEntity(String.class).contains("No record exists"));
+
+      throw e;
+    }
+  }
+  
+  @Test(expected=UniformInterfaceException.class)
+  @Category(UnitTest.class)
+  public void testGetMissingElementUniqueIdsParam() throws Exception
+  {
+    try
+    {
+    	resource()
+        .path("/review/refs")
+        .queryParam("mapId", String.valueOf(mapId + 1))
+        .accept(MediaType.APPLICATION_JSON)
+        .get(ReviewReferencesCollection.class);
+    }
+    catch (UniformInterfaceException e)
+    {
+    	Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+      Assert.assertTrue(
+        e.getResponse().getEntity(String.class).contains("Invalid input parameter value"));
+      throw e;
+    }
+  }
+
+  @Test(expected=UniformInterfaceException.class)
+  @Category(UnitTest.class)
+  public void testGetEmptyElementUniqueIdsParam() throws Exception
+  {
+    try
+    {
+    	resource()
+        .path("/review/refs")
+        .queryParam("mapId", String.valueOf(mapId + 1))
+        .queryParam("elementUniqueIds", "")
+        .accept(MediaType.APPLICATION_JSON)
+        .get(ReviewReferencesCollection.class);
+    }
+    catch (UniformInterfaceException e)
+    {
+    	Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+      Assert.assertTrue(
+        e.getResponse().getEntity(String.class).contains("Invalid input parameter value"));
+      throw e;
+    }
+  }
 }

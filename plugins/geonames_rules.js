@@ -383,7 +383,7 @@ geonames.rules = {
         'MSSNQ':{'abandoned:building':'abandoned_mission'}, //  abandoned mission: 
         'MSTY':{'amenity':'monastery'}, //  monastery: a building and grounds where a community of monks lives in seclusion
         'MT':{'natural':'mountain'}, //  mountain: an elevation standing high above the surrounding area with small summit area, steep slopes and local relief of 300m or more
-        'MTRO':{'railway':'station'}, //  metro station: metro station (Underground, Tube, or Metro) 
+        'MTRO':{'railway':'station','station':'subway'}, //  metro station: metro station (Underground, Tube, or Metro)
         'MTS':{'natural':'mountain'}, //  mountains: a mountain range or a group of mountains or high ridges
         'MTU':{'natural':'undersea_mountain'}, //  mountain: a well-delineated subdivision of a large and complex positive feature
         'MUS':{'amenity':'museum'}, //  museum: a building where objects of permanent interest in one or more of the arts and sciences are preserved and exhibited

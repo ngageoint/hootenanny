@@ -399,7 +399,7 @@ public class ChangesetDbWriter
             + ", entity change type: " + entityChangeType.toString() + "...");
         if (diffBounds == null)
         {
-          diffBounds = new BoundingBox(); // TODO: I think this is wrong
+          diffBounds = new BoundingBox(); // I think this is wrong
         }
         BoundingBox elementBounds = element.getBounds();
         // null check here if for relations that only contain members of type relation, for which
@@ -412,9 +412,6 @@ public class ChangesetDbWriter
                   "changesetBoundsExpansionFactorDeegrees",
                   HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees"))));
         }
-
-        // re-enable this?
-        // element.clearTempData();
       }
     }
     oldElementIds.clear();

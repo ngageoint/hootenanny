@@ -66,7 +66,7 @@ private:
 
 };
 
-inline v8::Handle<v8::Value> toV8(const TagVertex& tv)
+inline v8::Handle<v8::Value> toV8(const SchemaVertex& tv)
 {
   v8::Handle<v8::Object> result = v8::Object::New();
 

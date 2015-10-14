@@ -53,17 +53,13 @@ import hoot.services.models.osm.RelationMember;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
+import hoot.services.utils.RandomNumberGenerator;
 import hoot.services.utils.XmlUtils;
 
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.ClientResponse.Status;
 
-/*
- * @todo Most of these tests could be converted to integration tests and after a refactoring,
- * could be replace with unit tests that test only the internal classes being used by this
- * Jersey resource.
- */
 public class ElementResourceTest extends OsmResourceTestAbstract
 {
   @SuppressWarnings("unused")
@@ -109,6 +105,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
     
     OsmTestUtils.verifyOsmHeader(responseData);
     
+    //TODO: needed?
     //Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
     Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
     Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
@@ -874,7 +871,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract
     {
       resource()
         .path("api/0.6/node/" + nodeIdsArr[0])
-        .queryParam("mapId", String.valueOf(mapId + 1))
+        .queryParam(
+        	"mapId", 
+        	String.valueOf((int)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)))
         .accept(MediaType.TEXT_XML)
         .get(Document.class);
     }
@@ -901,7 +900,8 @@ public class ElementResourceTest extends OsmResourceTestAbstract
     final Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
     final Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
     
-    final String uniqueElementId = (mapId + 1) + "_n_" + nodeIdsArr[0];
+    final String uniqueElementId = 
+    	((int)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)) + "_n_" + nodeIdsArr[0];
     try
     {
       resource()
@@ -937,7 +937,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract
     {
       resource()
         .path("api/0.6/way/" + wayIdsArr[0] + "/full")
-        .queryParam("mapId", String.valueOf(mapId + 1))
+        .queryParam(
+        	"mapId", 
+        	String.valueOf((int)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)))
         .accept(MediaType.TEXT_XML)
         .get(Document.class);
     }
@@ -964,7 +966,8 @@ public class ElementResourceTest extends OsmResourceTestAbstract
     final Long[] wayIdsArr = wayIds.toArray(new Long[]{});
     final Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
     
-    final String uniqueElementId = (mapId + 1) + "_w_" + wayIdsArr[0];
+    final String uniqueElementId = 
+    	((int)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)) + "_w_" + wayIdsArr[0];
     try
     {
       resource()

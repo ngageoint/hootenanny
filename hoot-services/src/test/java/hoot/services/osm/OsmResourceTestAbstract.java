@@ -154,13 +154,6 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
         {
         	DbUtils.deleteOSMRecord(conn, ReviewTestUtils.secondMapId);
         }
-        
-        /*if (userId != DbUtils.getTestUserId(conn))
-        {
-        	new SQLDeleteClause(conn, DbUtils.getConfiguration(), QUsers.users)
-      	    .where(QUsers.users.id.eq(userId))
-      	    .execute();
-        }*/
     	}
     }
     catch (Exception e)

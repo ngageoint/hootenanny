@@ -668,7 +668,6 @@ public class ReviewItemsRetriever
     String availAgList = StringUtils.join(agList,";");
     ri.setAgainstList(availAgList);
 
-    
     long allAgainstCnt = _getAllReviewAgainstCount(reviewItemUUID);
     ri.setAllReviewAgainstCnt(allAgainstCnt);
     

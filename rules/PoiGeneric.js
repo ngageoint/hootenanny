@@ -174,11 +174,10 @@ function additiveScore(map, e1, e2) {
     var mean = translateMeanWordSetLevenshtein_1_5.extract(map, e1, e2);
     var weightedWordDistanceScore = weightedWordDistance.extract(map, e1, e2);
     var weightedPlusMean = mean + weightedWordDistanceScore;
-    var placeScore = getTagCategoryDistance("place", e1, e2);
-    var poiDistance = getTagCategoryDistance("poi", e1, e2);
-    var artworkTypeDistance = getTagAncestorDistance("artwork_type", e1, e2);
-    var cuisineDistance = getTagAncestorDistance("cuisine", e1, e2);
-    var sportDistance = getTagAncestorDistance("sport", e1, e2);
+    var poiDistance = getTagCategoryDistance("poi", map, e1, e2);
+    var artworkTypeDistance = getTagAncestorDistance("artwork_type", map, e1, e2);
+    var cuisineDistance = getTagAncestorDistance("cuisine", map, e1, e2);
+    var sportDistance = getTagAncestorDistance("sport", map, e1, e2);
 
     var score = 0;
 
@@ -194,6 +193,33 @@ function additiveScore(map, e1, e2) {
         score += 0.5;
         reason.push("very close together");
     }
+
+    var typeScore = 0;
+    if (artworkTypeDistance <= 0.3) {
+        typeScore += 1;
+        reason.push("similar artwork type");
+    }
+    if (cuisineDistance <= 0.3) {
+        typeScore += 1;
+        reason.push("similar cuisine");
+    }
+    if (sportDistance <= 0.3) {
+        typeScore += 1;
+        reason.push("similar sport");
+    }
+
+    // we're unlikely to get more evidence than the fact that it is a tower
+    // or pole. If the power tag matches exactly, give it 2 points of evidence
+    // if not, just give it one.
+    var powerDistance = getTagDistance("power", e1, e2);
+    if (powerDistance == 0) {
+        typeScore += 2;
+        reason.push("same power (electrical) type");
+    } else if (powerDistance <= 0.4) {
+        typeScore += 1;
+        reason.push("similar power (electrical) type");
+    }
+
 
     // if at least one feature contains a place
     var placeCount = getTagsByAncestor("place", t1).length + 
@@ -229,34 +255,12 @@ function additiveScore(map, e1, e2) {
         reason.push("similar POI type");
     // if the poi distance is very high, then they shouldn't be considered
     // for match based solely on name and proximity. See #6998
-    } else if (poiDistance >= 0.99) {
+    } else if (poiDistance >= 0.99 && typeScore == 0 && oneGeneric == false) {
         score = 0;
+        reason = ["similar names but no POI match"];
     }
 
-    if (artworkTypeDistance <= 0.3) {
-        score += 1;
-        reason.push("similar artwork type");
-    }
-    if (cuisineDistance <= 0.3) {
-        score += 1;
-        reason.push("similar cuisine");
-    }
-    if (sportDistance <= 0.3) {
-        score += 1;
-        reason.push("similar sport");
-    }
-
-    // we're unlikely to get more evidence than the fact that it is a tower
-    // or pole. If the power tag matches exactly, give it 2 points of evidence
-    // if not, just give it one.
-    var powerDistance = getTagDistance("power", e1, e2);
-    if (powerDistance == 0) {
-        score += 2;
-        reason.push("same power (electrical) type");
-    } else if (powerDistance <= 0.4) {
-        score += 1;
-        reason.push("similar power (electrical) type");
-    }
+    score = score + typeScore;
 
     result.score = score;
     result.reasons = reason;
@@ -289,13 +293,14 @@ exports.matchScore = function(map, e1, e2) {
     var additiveResult = additiveScore(map, e1, e2);
     var score = additiveResult.score;
     var reasons = additiveResult.reasons;
+    var d = "(" + prettyNumber(distance(e1, e2)) + "m)";
 
     if (score <= 0.5) {
-        return {miss: 1, explain: 'Not much evidence of a match'};
+        return {miss: 1, explain: 'Not much evidence of a match ' + d};
     } else if (score < 1.9) {
-        return {review: 1, explain: "Somewhat similar - " + reasons.join(", ") };
+        return {review: 1, explain: "Somewhat similar " + d + " - " + reasons.join(", ") };
     } else {
-        return {match: 1, explain: "Very similar - " + reasons.join(", ") };
+        return {match: 1, explain: "Very similar " + d + " - " + reasons.join(", ") };
     }
 };
 
@@ -330,4 +335,34 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
 
   return fd;
 };
+
+/**
+ * Given a number return a result that contains no more than 2 significant
+ * digits and no more than 1 digit after the decimal place. For example:
+ *
+ * 123.456 -> 120
+ * 1.234 -> 1.2
+ * 0.123 -> 0.1
+ * 1234567.89 -> 1200000
+ */
+function prettyNumber(n) {
+    var digits = String(Math.round(n)).length;
+    // a number that represents the number of digits we're rounding (e.g. for
+    // 1234567.89 this will be 100000
+    var f = Math.pow(10, digits - 2);
+    // divide n by f, (12.3456789), round (12), then multiple by up, 1200000
+    var r = Math.round(n / f) * f;
+    var result;
+
+    // I don't use the String conversion here b/c it sometimes gives weird
+    // floating point errors.
+
+    // if this is a small number remove the extra decimal places
+    if (r < 10) {
+        result = r.toFixed(1);
+    } else {
+        result = r.toFixed(0);
+    }
+    return result;
+}
 

@@ -120,6 +120,10 @@ SERVICES_INIT()
 m4_include([m4/rnd.m4])
 RND_INIT()
 
+# Include UI
+m4_include([m4/ui.m4])
+UI_INIT()
+
 # Code Coverage
 m4_include([m4/coverage.m4])
 COVERAGE_INIT()

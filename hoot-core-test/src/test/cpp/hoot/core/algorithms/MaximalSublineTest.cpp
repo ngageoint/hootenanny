@@ -551,6 +551,6 @@ public:
 };
 
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MaximalSublineTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MaximalSublineTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MaximalSublineTest, "slow");
 
 }

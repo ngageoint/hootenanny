@@ -1030,6 +1030,6 @@ public:
 };
 
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServicesDbTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServicesDbTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServicesDbTest, "slow");
 
 }

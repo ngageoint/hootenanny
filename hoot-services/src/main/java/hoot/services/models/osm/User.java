@@ -98,29 +98,4 @@ public class User extends Users
   {
     return detailsToXml(parentXml, changesetsCount);
   }
-
-  /**
-   * Returns the number of changesets modified by this user
-   *
-   * @return number of changesets
-   * @todo This functionaliy was broken during the changes to the services tests which prevented 
-   * them from cleaning out the entire database with each run.  Somehow it wasn't triggering errors
-   * until now.  Not sure exactly how to make it work yet with the table per map database 
-   * refactoring.  We don't really support individual user accounts, so low priority for now.
-   */
-  /*public long numChangesetsModified()
-  {
-  	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-  	Long mapid = query.from(maps).where(maps.userId.eq(getId())).singleResult(maps.id);
-  	if (mapid == null || mapid < 0)
-  	{
-  		return -1;
-  	}
-
-  	query = new SQLQuery(conn, DbUtils.getConfiguration(mapid));
-  	return
-  	    query.from(changesets)
-  			.where(changesets.userId.eq(getId()))
-  			.count();
-  }*/
 }

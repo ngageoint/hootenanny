@@ -81,10 +81,6 @@ QString TextTable::toWikiString()
   QStringList rows = _calculateRows();
   QStringList cols = _calculateColumns();
 
-  LOG_VAR(rows);
-  LOG_VAR(cols);
-  LOG_VAR(_columnWidth);
-
   QString result;
   QString rowTitle;
 

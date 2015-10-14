@@ -28,6 +28,7 @@ package hoot.services.controllers.job;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,13 +41,15 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.ReviewAgainstItem;
 import hoot.services.models.review.ReviewReferences;
+import hoot.services.models.review.ReviewReferencesCollection;
 import hoot.services.models.review.ReviewableItemsStatistics;
+import hoot.services.models.review.SetAllItemsReviewedRequest;
 import hoot.services.readers.review.ReviewItemsRetriever;
 import hoot.services.readers.review.ReviewReferencesRetriever;
 import hoot.services.readers.review.ReviewableItemsStatisticsCalculator;
-import hoot.services.review.ReviewItemsPreparer;
 import hoot.services.review.ReviewUtils;
 import hoot.services.validators.review.ReviewInputParamsValidator;
+import hoot.services.writers.review.ReviewItemsPreparer;
 import hoot.services.writers.review.ReviewItemsSynchronizer;
 
 import javax.ws.rs.Consumes;
@@ -72,11 +75,6 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 /**
  * Non-WPS service endpoint for the conflated data review process
- *
- * @todo Unfortunately, not having these default values as attributes in the methods makes
-  validation impossible, but having them as attributes renders their config values useless.
-  Need to come up with a better way to handle default values.  Is there some way to populate the
-  attribute values directly from a file?
  */
 @Path("/review")
 public class ReviewResource
@@ -87,8 +85,6 @@ public class ReviewResource
   //these params could probably go away.
   public static long testDelayMilliseconds = 0;
   public static boolean simulateFailure = false;
-  //TODO: see #6270
-  public static String reviewRecordWriter = "reviewPrepareDbWriter2";
 
   private ClassPathXmlApplicationContext appContext;
   private PlatformTransactionManager transactionManager;
@@ -171,8 +167,7 @@ public class ReviewResource
       log.debug("Initializing database connection...");
 
       jobId =
-        (new ReviewItemsPreparer(
-           conn, testDelayMilliseconds, simulateFailure, mapId, reviewRecordWriter))
+        (new ReviewItemsPreparer(conn, testDelayMilliseconds, simulateFailure, mapId))
          .prepare(overwriteExistingData);
     }
     catch (Exception e)
@@ -203,20 +198,12 @@ public class ReviewResource
 	 * 	<mapId>
 	 * 	string; required; ID string or unique name of the map associated with the reviewable conflated data
 	 * 	</mapId>
-	 *  <reviewScoreThresholdMinimum>
-	 *   double; optional; items with a review score lower than this threshold will not be included in the returned statistics; defaults to 0.0
-	 *  </reviewScoreThresholdMinimum>
-	 *  <geospatialBounds>
-	 *  string (WPS GET, Jersey); OWS BoundingBox (WPS POST); optional; OSM geospatial bounds
-	 *  to search for reviewable and reviewed data within; the format is minLon,minLat,maxLon,maxLat;
-	 *  optional; default bounds = world; only coordinate system EPSG:4326 will be supported initially
-	 *  </geospatialBounds>
 	 * </PARAMETERS>
 	 * <OUTPUT>
 	 * 	a set of reviewable item statistics
 	 * </OUTPUT>
 	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/statistics?mapId=1&reviewScoreThresholdMinimum=0.8&geospatialBounds=-77.09655761718749,38.89958342598271,-77.09106445312499,38.90385833966776</URL>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/statistics?mapId=1</URL>
 	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
 	 * 	<INPUT>
 	 *	</INPUT>
@@ -232,10 +219,6 @@ public class ReviewResource
    *
    *
    * @param mapId ID of the map to retrieve review statistics for
-   * @param reviewScoreThresholdMinimum for the reviewable items used to calculate the review
-   * statistics, the minimum review score the items should have
-   * @param geospatialBounds for the reviewable items used to calculate the review
-   * statistics, the geospatial bounding box the items should reside in
    * @return a set of reviewable item statistics
    * @throws Exception
    */
@@ -245,13 +228,7 @@ public class ReviewResource
   @Produces(MediaType.APPLICATION_JSON)
   public ReviewableItemsStatistics getReviewableItemsStatistics(
     @QueryParam("mapId")
-    String mapId,
-    @DefaultValue("0.0")
-    @QueryParam("reviewScoreThresholdMinimum")
-    double reviewScoreThresholdMinimum,
-    @DefaultValue("-180,-90,180,90")
-    @QueryParam("geospatialBounds")
-    String geospatialBounds)
+    String mapId)
     throws Exception
   {
   	log.debug("Initializing database connection...");
@@ -262,41 +239,17 @@ public class ReviewResource
     {
       Map<String, Object> inputParams = new HashMap<String, Object>();
       inputParams.put("mapId", mapId);
-      inputParams.put("reviewScoreThresholdMinimum", reviewScoreThresholdMinimum);
-      inputParams.put("geospatialBounds", geospatialBounds);
       ReviewInputParamsValidator inputParamsValidator = new ReviewInputParamsValidator(inputParams);
       mapId =
         (String)inputParamsValidator.validateAndParseInputParam("mapId", "", null, null, false, null);
-      reviewScoreThresholdMinimum =
-        (Double)inputParamsValidator.validateAndParseInputParam(
-          "reviewScoreThresholdMinimum",
-          new Double(0.0),
-          new Double(0.0),
-          new Double(1.0),
-          true,
-          Double.parseDouble(
-            HootProperties.getInstance().getProperty(
-              "reviewGetReviewScoreThresholdMinimumDefault",
-              HootProperties.getDefault("reviewGetReviewScoreThresholdMinimumDefault"))));
-      final BoundingBox geospatialBoundsObj =
-        (BoundingBox)inputParamsValidator.validateAndParseInputParam(
-          "geospatialBounds",
-          "",
-          null,
-          null,
-          true,
-          HootProperties.getInstance().getProperty(
-            "reviewGetGeospatialBoundsDefault",
-            HootProperties.getDefault("reviewGetGeospatialBoundsDefault")));
-
-      stats =
-        (new ReviewableItemsStatisticsCalculator(conn, mapId, true)).getStatistics(
-          reviewScoreThresholdMinimum, geospatialBoundsObj);
+      
+      stats = 
+      	(new ReviewableItemsStatisticsCalculator(conn, mapId, true)).getStatistics(
+      		0.0, BoundingBox.worldBounds());
       
       ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
 
     	long cnt = marker.getAvailableReviewCntQuery().count();
-    	//nextItem.put("status", "noneavailable");
     	if(cnt == 0)
     	{
     		stats.setNumReviewableItems(0);
@@ -304,7 +257,6 @@ public class ReviewResource
     }
     catch (Exception e)
     {
-      //ReviewUtils.handleError(e, errorMessageStart, false);
     	try
     	{
 	    	// Instead of throwing error we will just return empty stat
@@ -498,45 +450,80 @@ public class ReviewResource
   }
 
   /**
-   * Returns any review record references to the elements passed in including all references to any 
-   * item the specified element still needs to be reviewed against, as well as any other item that 
-   * needs to use the specified element to review against it.
+   * Returns any review record references to the elements associated with the ID's passed in 
+   * including all references to any item the specified element still needs to be reviewed against, 
+   * as well as any other item that needs to use the specified element to review against it.
    * 
-   * @param mapId map owning the feature whose review references are to be retrieved
-   * @param elementUniqueId unique ID of the element whose review references are to be retrieved
-   * @return an array of review records
+   * @param mapId contains an array of unique ID's and their associated map ID; all unique ID's
+   * should be associated with features owned by the single map ID
+   * @param elementUniqueIds
+   * @return an array of review references; one set of references for each unique ID passed in
    * @throws Exception
    */
   @GET
   @Path("/refs")
   @Consumes(MediaType.TEXT_PLAIN)
   @Produces(MediaType.APPLICATION_JSON)
-  public ReviewReferences getReviewReferences(
+  public ReviewReferencesCollection getReviewReferences(
   	@QueryParam("mapId")
-  	final long mapId,
-    @QueryParam("elementUniqueId")
-    final String elementUniqueId)
-    throws Exception
+    String mapId,
+    @QueryParam("elementUniqueIds")
+    String elementUniqueIds) 
+  	throws Exception
   {
   	log.debug("Returning review references...");
   	
   	Connection conn = DbUtils.createConnection();
-  	ReviewReferences response = new ReviewReferences();
+  	ReviewReferencesCollection response = new ReviewReferencesCollection();
+  	
+  	Map<String, Object> inputParams = new HashMap<String, Object>();
+    inputParams.put("mapId", mapId);
+    inputParams.put("elementUniqueIds", elementUniqueIds);
+    
   	try
   	{
-  		List<List<ReviewAgainstItem>> references = 
-  			(new ReviewReferencesRetriever(conn).getReferences(mapId, elementUniqueId));
-  		log.debug("Returning " + references.get(0).size() + " review against items.");
-  		response.setReviewAgainstItems(references.get(0).toArray(new ReviewAgainstItem[]{}));
-  		log.debug("Returning " + references.get(1).size() + " reviewable items.");
-  		response.setReviewableItems(references.get(1).toArray(new ReviewAgainstItem[]{}));
+  		ReviewInputParamsValidator inputParamsValidator = new ReviewInputParamsValidator(inputParams);
+      mapId =
+        (String)inputParamsValidator.validateAndParseInputParam(
+        	"mapId", "", null, null, false, null);
+      elementUniqueIds =
+        (String)inputParamsValidator.validateAndParseInputParam(
+        	"elementUniqueIds", "", null, null, false, null);
+  		String[] elementUniqueIdsArr;
+  		if (elementUniqueIds.contains(";"))
+  		{
+  			elementUniqueIdsArr = elementUniqueIds.split(";");
+  		}
+  		else
+  		{
+  			elementUniqueIdsArr = new String[] { elementUniqueIds };
+  		}
+  		
+  		List<ReviewReferences> responseRefsList = new ArrayList<ReviewReferences>();
+  		for (String elementUniqueId : elementUniqueIdsArr)
+  		{
+  			ReviewReferences responseRefs = new ReviewReferences();
+  			List<List<ReviewAgainstItem>> references = 
+	  			(new ReviewReferencesRetriever(conn, mapId)).getReferences(elementUniqueId);
+	  		log.debug(
+	  			"Returning " + references.get(0).size() + " review against items for unique ID: " + 
+	  		  elementUniqueId);
+	  		responseRefs.setReviewAgainstItems(references.get(0).toArray(new ReviewAgainstItem[]{}));
+	  		log.debug(
+	  			"Returning " + references.get(1).size() + " reviewable items for unique ID: " + 
+	  		  elementUniqueId);
+	  		responseRefs.setReviewableItems(references.get(1).toArray(new ReviewAgainstItem[]{}));
+	  		responseRefs.setUniqueId(elementUniqueId);
+	  		responseRefsList.add(responseRefs);
+  		}
+  		response.setReviewReferences(responseRefsList.toArray(new ReviewReferences[]{}));
   	}
   	catch (Exception e)
     {
       ReviewUtils.handleError(
       	e, 
-      	"Unable to retrieve review references for map ID: " + mapId + " and element unique ID: " + 
-      	  elementUniqueId, 
+      	"Unable to retrieve review references for map ID: " + mapId + " and element unique ID's: " + 
+      	  elementUniqueIds, 
       	false);
     }
     finally
@@ -551,7 +538,8 @@ public class ReviewResource
   /**
    * Sets all reviewable features in the dataset to reviewed
    * 
-   * @param mapId the map owning the elements to be set reviewed
+   * @param request contains a 'mapId' parameter associated with the map owning the elements to 
+   * be set reviewed
    * @return HTTP response
    * @throws Exception
    */
@@ -559,9 +547,7 @@ public class ReviewResource
   @Path("/setallreviewed")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.TEXT_PLAIN)
-  public Response setAllItemsReviewed(
-  	JSONObject request) 
-    throws Exception
+  public Response setAllItemsReviewed(final SetAllItemsReviewedRequest request) throws Exception
   {
   	Connection conn = DbUtils.createConnection();
   	log.debug("Intializing changeset upload transaction...");
@@ -569,10 +555,16 @@ public class ReviewResource
       transactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
     conn.setAutoCommit(false);
-    String mapId = null;
+    String mapId = String.valueOf(request.getMapId());
+    Map<String, Object> inputParams = new HashMap<String, Object>();
+    inputParams.put("mapId", mapId);
   	try
   	{
-  		mapId = request.get("mapId").toString();
+  		ReviewInputParamsValidator inputParamsValidator = new ReviewInputParamsValidator(inputParams);
+      mapId =
+        (String)inputParamsValidator.validateAndParseInputParam(
+        	"mapId", "", null, null, false, null);
+      
   	  (new ReviewItemsSynchronizer(conn, mapId)).setAllItemsReviewed();
   		
   		log.debug("Committing set all items reviewed transaction...");
