@@ -295,6 +295,21 @@ inline v8::Handle<v8::Value> toV8(bool v)
   return v8::Boolean::New(v);
 }
 
+inline v8::Handle<v8::Value> toV8(short i)
+{
+  return v8::Integer::New(i);
+}
+
+inline v8::Handle<v8::Value> toV8(unsigned short i)
+{
+  return v8::Integer::New(i);
+}
+
+inline v8::Handle<v8::Value> toV8(unsigned int i)
+{
+  return v8::Integer::New(i);
+}
+
 inline v8::Handle<v8::Value> toV8(int i)
 {
   return v8::Integer::New(i);
