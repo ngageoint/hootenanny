@@ -36,14 +36,15 @@
 using namespace geos::geom;
 
 // Hoot
+#include <hoot/core/Factory.h>
+#include <hoot/core/MapReprojector.h>
+#include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/util/Progress.h>
-#include <hoot/core/Factory.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -73,6 +74,11 @@ public:
   virtual ~OgrReaderInternal();
 
   void close();
+
+  /**
+   * See the associated configuration options text for details.
+   */
+  shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference *srs);
 
   Meters getDefaultCircularError() const { return _circularError; }
 
@@ -272,6 +278,12 @@ ElementIterator* OgrReader::createIterator(QString path, QString layer) const
   d->open(path, layer);
 
   return new OgrElementIterator(d);
+}
+
+shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
+  OGRSpatialReference* srs)
+{
+  return _d->getBoundingBoxFromConfig(s, srs);
 }
 
 QStringList OgrReader::getLayerNames(QString path)
@@ -703,6 +715,90 @@ void OgrReaderInternal::_finalizeTranslate()
   _translator.reset();
 }
 
+shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Settings& s,
+  OGRSpatialReference* srs)
+{
+  ConfigOptions co(s);
+  shared_ptr<Envelope> result;
+  QString bboxStrRaw = co.getOgrReaderBoundingBox();
+  QString bboxStrLatLng = co.getOgrReaderBoundingBoxLatlng();
+  QString bboxStr;
+  QString key;
+
+  if (bboxStrRaw.isEmpty() == false && bboxStrLatLng.isEmpty() == false)
+  {
+    throw HootException(QString("Only one of %1 or %2 may be specified at a time.").
+      arg(bboxStr).arg(bboxStrLatLng));
+  }
+  else if (bboxStrRaw.isEmpty() && bboxStrLatLng.isEmpty())
+  {
+    return result;
+  }
+  else if (bboxStrRaw.isEmpty() == false)
+  {
+    bboxStr = bboxStrRaw;
+    key = ConfigOptions::getOgrReaderBoundingBoxKey();
+  }
+  else
+  {
+    bboxStr = bboxStrLatLng;
+    key = ConfigOptions::getOgrReaderBoundingBoxLatlngKey();
+  }
+
+  QStringList bbox = bboxStr.split(",");
+
+  if (bbox.size() != 4)
+  {
+    throw HootException(QString("Error parsing %1 (%2)").arg(key).arg(bboxStr));
+  }
+
+  bool ok;
+  vector<double> bboxValues(4);
+  for (size_t i = 0; i < 4; i++)
+  {
+    bboxValues[i] = bbox[i].toDouble(&ok);
+    if (!ok)
+    {
+      throw HootException(QString("Error parsing %1 (%2)").arg(key).arg(bboxStr));
+    }
+  }
+
+  if (bboxStrRaw.isEmpty() == false)
+  {
+    result.reset(new Envelope(bboxValues[0], bboxValues[2], bboxValues[1], bboxValues[3]));
+  }
+  else
+  {
+    if (!srs)
+    {
+      throw HootException("A valid projection must be available when using a lat/lng bounding "
+        "box.");
+    }
+
+    result.reset(new Envelope());
+    shared_ptr<OGRSpatialReference> wgs84 = MapReprojector::getInstance().createWgs84Projection();
+    auto_ptr<OGRCoordinateTransformation> transform(
+      OGRCreateCoordinateTransformation(wgs84.get(), srs));
+    const int steps = 8;
+    for (int xi = 0; xi <= steps; xi++)
+    {
+      double x = bboxValues[0] + xi * (bboxValues[2] - bboxValues[0]) / (double)steps;
+      for (int yi = 0; yi <= steps; yi++)
+      {
+        double ty = bboxValues[1] + yi * (bboxValues[3] - bboxValues[1]) / (double)steps;
+        double tx = x;
+
+        transform->TransformEx(1, &tx, &ty);
+
+        result->expandToInclude(tx, ty);
+      }
+    }
+  }
+
+  return result;
+}
+
+
 void OgrReaderInternal::_initTranslate()
 {
   if (_translatePath != "" && _translator.get() == 0)
@@ -751,34 +847,6 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
     throw HootException("Failed to identify source layer from data source.");
   }
 
-  QString bboxStr = ConfigOptions().getOgrReaderBoundingBox();
-  if (bboxStr.isEmpty() == false)
-  {
-    QStringList bbox = bboxStr.split(",");
-
-    if (bbox.size() != 4)
-    {
-      LOG_INFO(ConfigOptions().getOgrReaderBoundingBoxDescription());
-      throw HootException("Error parsing " + ConfigOptions().getOgrReaderBoundingBoxKey() + " " +
-        bboxStr);
-    }
-
-    bool ok;
-    vector<double> bboxValues(4);
-    for (size_t i = 0; i < 4; i++)
-    {
-      bboxValues[i] = bbox[i].toDouble(&ok);
-      if (!ok)
-      {
-        LOG_INFO(ConfigOptions().getOgrReaderBoundingBoxDescription());
-        throw HootException("Error parsing " + ConfigOptions().getOgrReaderBoundingBoxKey() + " " +
-          bboxStr);
-      }
-    }
-
-    _layer->SetSpatialFilterRect(bboxValues[0], bboxValues[1], bboxValues[2], bboxValues[3]);
-    LOG_DEBUG("Setting spatial filter on " << layer << " to: " << bboxValues);
-  }
 
   auto_ptr<OGRSpatialReference> tmpSourceSrs;
   OGRSpatialReference* sourceSrs;
@@ -835,6 +903,14 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
     {
       throw HootException(QString("Error creating transformation object: ") + CPLGetLastErrorMsg());
     }
+  }
+
+  shared_ptr<Envelope> filter = getBoundingBoxFromConfig(conf(), sourceSrs);
+  if (filter.get())
+  {
+    _layer->SetSpatialFilterRect(filter->getMinX(), filter->getMinY(), filter->getMaxX(),
+      filter->getMaxY());
+    LOG_DEBUG("Setting spatial filter on " << layer << " to: " << filter->toString());
   }
 
   // retrieve the feature count for current layer

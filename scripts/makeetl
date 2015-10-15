@@ -21,6 +21,14 @@ ifeq "$(INPUT_TYPE)" "GEONAMES"
 	HOOT_OPTS+= -D translation.script="$(OP_TRANSLATION)"
 endif
 
+
+ifeq "$(INPUT_TYPE)" "OSM" 
+ifneq "$(NONE_TRANSLATION)" "true"
+	HOOT_OPTS+= -D convert.ops=hoot::TranslationOp
+	HOOT_OPTS+= -D translation.script="$(OP_TRANSLATION)"
+endif
+endif
+
 ###
 # Transform and load data
 ###
