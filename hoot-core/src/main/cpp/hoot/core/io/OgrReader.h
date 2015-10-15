@@ -124,6 +124,13 @@ public:
 
   virtual void finalizePartial();
 
+  /**
+   * Returns the bounding box for the specified projection and configuration settings. This is
+   * likely only useful in unit tests.
+   */
+  virtual shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s,
+    OGRSpatialReference* srs);
+
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
 

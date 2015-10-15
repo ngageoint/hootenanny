@@ -28,6 +28,7 @@ package hoot.services.controllers.ingest;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -69,9 +70,33 @@ public class BasemapResource extends JobControllerBase {
 	private static final Logger log = LoggerFactory.getLogger(BasemapResource.class);
 	protected static String _tileServerPath = null;
 	protected static String _ingestStagingPath = null;
-	private String homeFolder = null;
+	private static String homeFolder = null;
 
 	protected static Map<String, String> _basemapRasterExt = null;
+	
+	static
+	{
+		try
+		{
+			homeFolder = HootProperties.getProperty("homeFolder");
+			_tileServerPath = HootProperties.getProperty("tileServerPath");
+			_ingestStagingPath = HootProperties.getProperty("ingestStagingPath");	
+			
+			_basemapRasterExt = new HashMap<String, String>();
+			String extStr = HootProperties.getProperty("BasemapRasterExtensions");
+			String[] extList = extStr.toLowerCase().split(",");
+			for(String ext : extList)
+			{
+				_basemapRasterExt.put(ext, ext);
+			}
+			
+			
+		}
+		catch (Exception ex)
+		{
+			log.error(ex.getMessage());
+		}
+	}
 
 	public BasemapResource()
 	{
@@ -81,31 +106,6 @@ public class BasemapResource extends JobControllerBase {
 			{
 				processScriptName = HootProperties.getProperty("BasemapRasterToTiles");
 			}
-
-			if (_basemapRasterExt ==  null)
-			{
-				_basemapRasterExt = new HashMap<String, String>();
-				String extStr = HootProperties.getProperty("BasemapRasterExtensions");
-				String[] extList = extStr.toLowerCase().split(",");
-				for(String ext : extList)
-				{
-					_basemapRasterExt.put(ext, ext);
-				}
-			}
-
-			if(_tileServerPath == null)
-			{
-				_tileServerPath = HootProperties.getProperty("tileServerPath");
-
-			}
-
-			if(_ingestStagingPath == null)
-			{
-				_ingestStagingPath = HootProperties.getProperty("ingestStagingPath");
-			}
-			homeFolder = HootProperties.getProperty("homeFolder");
-
-
 		}
 		catch (Exception ex)
 		{
@@ -113,6 +113,25 @@ public class BasemapResource extends JobControllerBase {
 		}
 	}
 
+	public void createTileServerPath()
+	{
+		try
+		{
+			File f = new File(_tileServerPath);
+			if(!f.exists())
+			{
+				FileUtils.forceMkdir(f);
+			}
+		}
+		catch (IOException iex)
+		{
+			log.error(iex.getMessage());
+		}
+		catch (Exception ex)
+		{
+			log.error(ex.getMessage());
+		}
+	}
 
 
 	/**

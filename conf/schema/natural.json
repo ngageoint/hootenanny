@@ -8,6 +8,8 @@
         "categories": ["poi"]
     },
 
+    "tag": { "name": "natural=*", "isA": "natural", "geometries": ["node", "area"]},
+
     "#" : "Natural features",
     "tag": { "name": "natural=beach", "isA": "natural", "geometries": ["node", "area"]},
 
