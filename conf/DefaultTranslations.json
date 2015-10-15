@@ -23,12 +23,12 @@
 		"CANEXPORT" : false,
 		"PATH" : "translations/OSM_Ingest.js",
 	},
-    {
-        "NAME" : "GEONAMES",
-        "DESCRIPTION" : "GeoNames.org",
-        "CANEXPORT" : false,
-        "PATH" : "translations/GeoNames.js",
-   	},
+	{
+		"NAME" : "GEONAMES",
+		"DESCRIPTION" : "GeoNames.org",
+		"CANEXPORT" : false,
+		"PATH" : "translations/GeoNames.js",
+	},
 	{
 		"NAME" : "UTP",
 		"DESCRIPTION" : "Urban Tactical Planner (UTP)",
@@ -46,8 +46,15 @@
         {
                 "NAME" : "HotelsBase",
                 "DESCRIPTION" : "HotelsBase",
-                "CANEXPORT" : true,
+                "CANEXPORT" : false,
                 "PATH" : "translations-local/HotelsBase.js",
+                "FOUO_PATH" : "plugins-local"
+        },
+        {
+                "NAME" : "Wikimapia",
+                "DESCRIPTION" : "Wikimapia",
+                "CANEXPORT" : false,
+                "PATH" : "translations-local/Wikimapia.js",
                 "FOUO_PATH" : "plugins-local"
         },
 	{
