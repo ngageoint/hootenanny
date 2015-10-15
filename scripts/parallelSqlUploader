@@ -5,15 +5,24 @@ use threads;
 use threads::shared;
 
 sub sqlUploadWorker($$);
+sub printLog($);
 
 my @sqlFiles :shared;
+
+sub printLog($)
+{
+  my $dateTimeString = `date "+%F %T"`;
+  chomp( $dateTimeString );
+
+  print( $dateTimeString . ' -- ' . shift(@_) );
+}
 
 sub sqlUploadWorker($$)
 {
   my $dbName = shift(@_);
   my $threadNum = shift(@_);
 
-  print( "Upload worker #$threadNum starting\n");
+  printLog( "Upload worker #$threadNum starting\n");
 
   my $currSqlFile;
   my $haveWork = 1;
@@ -37,20 +46,20 @@ sub sqlUploadWorker($$)
 
     if ( $haveWork == 0 )
     {
-      print( "No more files for worker #$threadNum\n" );
+      printLog( "No more files for worker #$threadNum\n" );
       last;
     }
 
     chomp( $currSqlFile );
 
-    print( "Upload worker #$threadNum is working $currSqlFile\n" );
+    printLog( "Upload worker #$threadNum is working $currSqlFile\n" );
 
     `psql -f $currSqlFile $dbName`;
 
-    print( "Upload worker #$threadNum is done processing $currSqlFile\n" );
+    printLog( "Upload worker #$threadNum is done processing $currSqlFile\n" );
   }
 
-  print( "Upload worker #$threadNum has completed, exiting\n" );
+  printLog( "Upload worker #$threadNum has completed, exiting\n" );
 }
 
 if ( scalar(@ARGV) != 3 )
@@ -104,8 +113,8 @@ for ( $i = 0; $i < $workerThreads; ++$i )
 for ( $i = 0; $i < $workerThreads; ++$i )
 {
   $threadHandles[$i]->join();
-  print( 'Thread #' . ($i + 1) . " has completed and rejoined\n" );
+  printLog( 'Thread #' . ($i + 1) . " has completed and rejoined\n" );
 }
 
-print( "All threads rejoined cleanly, exiting\n" );
+printLog( "All threads rejoined cleanly, exiting\n" );
 
