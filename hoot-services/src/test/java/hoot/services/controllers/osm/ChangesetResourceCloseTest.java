@@ -76,11 +76,6 @@ import com.mysema.query.sql.SQLQuery;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
-/*
- * @todo Most of these tests could be converted to integration tests and after a refactoring,
- * could be replace with unit tests that test only the internal classes being used by this
- * Jersey resource.
- */
 public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 {
 	private static final Logger log = LoggerFactory
@@ -1036,11 +1031,11 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 				    currentNodesTbl).map(currentNodesTbl.id, currentNodesTbl);
 				Assert.assertEquals(5, nodes.size());
 
-				CurrentNodes nodeRecord = (CurrentNodes) nodes.get(nodeIdsArr[0]);
+				CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
 				Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
-				Assert.assertEquals(new Double((double) (updatedBounds.getMinLat())),
+				Assert.assertEquals(new Double((updatedBounds.getMinLat())),
 				    nodeRecord.getLatitude());
-				Assert.assertEquals(new Double((double) (updatedBounds.getMinLon())),
+				Assert.assertEquals(new Double((updatedBounds.getMinLon())),
 				    nodeRecord.getLongitude());
 				Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
 				Assert.assertEquals(
@@ -1057,12 +1052,12 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 				Assert.assertEquals("val 1b", tags.get("key 1b"));
 				Assert.assertEquals("val 2b", tags.get("key 2b"));
 
-				nodeRecord = (CurrentNodes) nodes.get(nodeIdsArr[1]);
+				nodeRecord = nodes.get(nodeIdsArr[1]);
 				Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
 				Assert.assertEquals(
-				  new Double((double)updatedBounds.getMinLat()), nodeRecord.getLatitude());
+				  new Double(updatedBounds.getMinLat()), nodeRecord.getLatitude());
 				Assert.assertEquals(
-					 new Double((double)updatedBounds.getMaxLon()), nodeRecord.getLongitude());
+					 new Double(updatedBounds.getMaxLon()), nodeRecord.getLongitude());
 				Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
 				Assert.assertEquals(
 				    new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(),
@@ -1076,14 +1071,14 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 				Assert.assertEquals(1, tags.size());
 				Assert.assertEquals("val 3b", tags.get("key 3b"));
 
-				nodeRecord = (CurrentNodes) nodes.get(nodeIdsArr[3]);
+				nodeRecord = nodes.get(nodeIdsArr[3]);
 				tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord
 				    .getTags());
 				Assert.assertNotNull(tags);
 				Assert.assertEquals(1, tags.size());
 				Assert.assertEquals("val 3", tags.get("key 3"));
 
-				nodeRecord = (CurrentNodes) nodes.get(nodeIdsArr[4]);
+				nodeRecord = nodes.get(nodeIdsArr[4]);
 				tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord
 				    .getTags());
 				Assert.assertNotNull(tags);
@@ -1103,7 +1098,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 				    .from(currentWaysTbl).map(currentWaysTbl.id, currentWaysTbl);
 				Assert.assertEquals(3, ways.size());
 
-				CurrentWays wayRecord = (CurrentWays) ways.get(wayIdsArr[0]);
+				CurrentWays wayRecord = ways.get(wayIdsArr[0]);
 				Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
 				Assert.assertEquals(wayIdsArr[0], wayRecord.getId());
 				Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -1130,7 +1125,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 				Assert.assertEquals(1, tags.size());
 				Assert.assertEquals("val 2", tags.get("key 2"));
 
-				wayRecord = (CurrentWays) ways.get(wayIdsArr[1]);
+				wayRecord = ways.get(wayIdsArr[1]);
 				Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
 				Assert.assertEquals(wayIdsArr[1], wayRecord.getId());
 				Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -1157,7 +1152,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 				            .getValue()));
 
 				// verify the created ways
-				wayRecord = (CurrentWays) ways.get(wayIdsArr[2]);
+				wayRecord = ways.get(wayIdsArr[2]);
 				Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
 				Assert.assertEquals(wayIdsArr[2], wayRecord.getId());
 				Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -1198,7 +1193,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 				    currentRelationsTbl);
 				Assert.assertEquals(4, relations.size());
 
-				CurrentRelations relationRecord = (CurrentRelations) relations
+				CurrentRelations relationRecord = relations
 				    .get(relationIdsArr[0]);
 				Assert.assertEquals(new Long(changesetId),
 				    relationRecord.getChangesetId());
@@ -1239,7 +1234,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 				    || StringUtils.trimToNull(((PGobject) relationRecord.getTags())
 				        .getValue()) == null);
 
-				relationRecord = (CurrentRelations) relations.get(relationIdsArr[1]);
+				relationRecord = relations.get(relationIdsArr[1]);
 				Assert.assertEquals(new Long(changesetId),
 				    relationRecord.getChangesetId());
 				Assert.assertEquals(relationIdsArr[1], relationRecord.getId());
@@ -1273,7 +1268,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 				Assert.assertEquals("val 2", tags.get("key 2"));
 				Assert.assertEquals("val 3", tags.get("key 3"));
 
-				relationRecord = (CurrentRelations) relations.get(relationIdsArr[2]);
+				relationRecord = relations.get(relationIdsArr[2]);
 				Assert.assertEquals(new Long(changesetId),
 				    relationRecord.getChangesetId());
 				Assert.assertEquals(relationIdsArr[2], relationRecord.getId());
@@ -1299,7 +1294,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 				Assert.assertEquals(1, tags.size());
 				Assert.assertEquals("val 4", tags.get("key 4"));
 
-				relationRecord = (CurrentRelations) relations.get(relationIdsArr[3]);
+				relationRecord = relations.get(relationIdsArr[3]);
 				Assert.assertEquals(new Long(changesetId),
 				    relationRecord.getChangesetId());
 				Assert.assertEquals(relationIdsArr[3], relationRecord.getId());

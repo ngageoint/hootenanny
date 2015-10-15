@@ -36,7 +36,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.HootProperties;
-import hoot.services.UnitTest;
+import hoot.services.IntegrationTest;
 import hoot.services.wps.WpsUtils;
 
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class CookieCutterProcessletTest {
 
 
 	  @Test
-	  @Category(UnitTest.class)
+	  @Category(IntegrationTest.class)
 	  public void testParseParam() throws Exception
 	  {
 		String ret = generateJobParam();

@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osmChange version="0.3" generator="iD">
    <create>
-      <node id="-1" lon="-104.907037158172" lat="38.8571566428667" version="0" changeset="71">
+      <node id="-1" lon="-104.907037158172" lat="38.8571566428667" version="0" changeset="">
          <tag k="place" v="town" />
          <tag k="poi" v="yes" />
          <tag k="hoot:status" v="3" />
-         <tag k="uuid" v="{abec823c-8d14-3a6c-c938-d62285f7550b}" />
-         <tag k="hoot" v="Merged_AllDataTypes_963" />
+         <tag k="uuid" v="{ca3ae25a-164e-27ca-5aef-77a4597c7c32}" />
+         <tag k="hoot" v="Merged_AllDataTypes_ef5" />
          <tag k="name" v="Manitou Springs" />
          <tag k="error:circular" v="1500" />
       </node>
    </create>
    <modify>
-      <node id="109" lon="-104.919758616214" lat="38.8593025332215" version="1" changeset="71">
+      <node id="109" lon="-104.919758616214" lat="38.8593025332215" version="1" changeset="">
          <tag k="hoot:review:source" v="1" />
          <tag k="poi" v="yes" />
          <tag k="hoot:review:note" v="Overlapping matches" />
          <tag k="hoot:status" v="1" />
          <tag k="hoot:review:needs" v="yes" />
-         <tag k="hoot:review:uuid" v="{abec823c-8d14-3a6c-c938-d62285f7550b}" />
+         <tag k="hoot:review:uuid" v="{ca3ae25a-164e-27ca-5aef-77a4597c7c32}" />
          <tag k="name" v="Manitou Springs" />
          <tag k="uuid" v="{d1012bc9-92bc-5931-aac2-aa5702f42b8b}" />
          <tag k="hoot:review:score" v="1" />
          <tag k="place" v="town" />
          <tag k="error:circular" v="2000" />
+         <tag k="hoot" v="Merged_AllDataTypes_ef5" />
       </node>
    </modify>
    <delete if-unused="true">
-      <node id="1" lon="-104.907037158172" lat="38.8571566428667" version="1" changeset="71">
+      <node id="1" lon="-104.907037158172" lat="38.8571566428667" version="1" changeset="">
          <tag k="hoot:review:source" v="1" />
          <tag k="poi" v="yes" />
          <tag k="hoot:review:note" v="Overlapping matches" />
@@ -39,9 +40,9 @@
          <tag k="hoot:review:score" v="1" />
          <tag k="place" v="town" />
          <tag k="error:circular" v="1500" />
-         <tag k="hoot" v="Merged_AllDataTypes_963" />
+         <tag k="hoot" v="Merged_AllDataTypes_ef5" />
       </node>
-      <node id="142" lon="-104.912548838381" lat="38.8578321389392" version="1" changeset="71">
+      <node id="142" lon="-104.912548838381" lat="38.8578321389392" version="1" changeset="">
          <tag k="hoot:review:source" v="2" />
          <tag k="poi" v="yes" />
          <tag k="hoot:review:note" v="Overlapping matches" />
@@ -53,7 +54,7 @@
          <tag k="hoot:review:score" v="1" />
          <tag k="place" v="city" />
          <tag k="error:circular" v="1000" />
-         <tag k="hoot" v="Merged_AllDataTypes_963" />
+         <tag k="hoot" v="Merged_AllDataTypes_ef5" />
       </node>
    </delete>
 </osmChange>

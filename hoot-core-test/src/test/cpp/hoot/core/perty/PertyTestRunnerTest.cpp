@@ -65,6 +65,8 @@ public:
 
   void runDynamicVariablesTest()
   {
+    TestUtils::resetEnvironment();
+
     QFile resultsFile("test-output/perty/PertyTestRunnerTest/results");
     resultsFile.remove();
     QFile resultsPlotFile("test-output/perty/PertyTestRunnerTest/results-plot.dat");
@@ -532,6 +534,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyTestRunnerTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyTestRunnerTest, "slow");
 
 }

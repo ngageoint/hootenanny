@@ -35,7 +35,7 @@ import java.util.Map;
  * TODO Document hoot.services.utils.ICommandRunner
  */
 public interface ICommandRunner {
-    // public methods
+
     /**
      * Runs a process using Runtime.exec(). The command to run is passed as a
      * String. Collects all output on System.out and System.err, passing

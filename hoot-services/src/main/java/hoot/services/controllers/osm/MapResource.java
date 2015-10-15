@@ -36,9 +36,9 @@ import hoot.services.db2.QMaps;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobExecutioner;
 import hoot.services.job.JobStatusManager;
+import hoot.services.models.dataset.FolderRecords;
+import hoot.services.models.dataset.LinkRecords;
 import hoot.services.models.osm.Element.ElementType;
-import hoot.services.models.osm.FolderRecords;
-import hoot.services.models.osm.LinkRecords;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.ModelDaoUtils;
@@ -565,8 +565,6 @@ public class MapResource
 		return Response
 				.ok(new DOMSource(responseDoc), MediaType.TEXT_XML)
 				.header("Content-type", MediaType.TEXT_XML)
-				// TODO: what's the point of setting this header?...taken directly from
-				// the rails port code
 				.header("Content-Disposition", "attachment; filename=\"map.osm\"")
 				.build();
 	}
@@ -621,7 +619,6 @@ public class MapResource
 					maxY = maxY < -90 ? -90 : maxY;
 
 					bbox = "" + minX + "," + minY + "," + maxX + "," + maxY;
-
 				}
 
 				QMaps maps = QMaps.maps;
@@ -642,7 +639,6 @@ public class MapResource
 				}
 				Map currMap = new Map(mapIdNum, conn);
 				nodeCnt += currMap.getNodesCount(queryBounds);
-
 			}
 
 			ret.put("nodescount", nodeCnt);
@@ -924,7 +920,6 @@ public class MapResource
 		SQLQuery query = new SQLQuery(conn, configuration);
 
 		long userId = 1;
-		// String userid = HootProperties.getProperty("dbUserId");
 
 		try
 		{
@@ -1152,13 +1147,7 @@ public class MapResource
 							folderMapMappings.folderId).values(newId, _mapId, _folderId)
 							.execute();
 				}
-			} /*
-			 * else if (updateType.equalsIgnoreCase("update")) { //find current
-			 * record for the layer and update with new folder new
-			 * SQLUpdateClause(conn, configuration, folderMapMappings)
-			 * .where(folderMapMappings.mapId.eq(_mapId))
-			 * .set(folderMapMappings.folderId,_folderId) .execute(); }
-			 */
+			}
 		}
 		catch (Exception e)
 		{

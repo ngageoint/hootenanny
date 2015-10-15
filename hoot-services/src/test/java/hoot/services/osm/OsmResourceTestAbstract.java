@@ -120,7 +120,9 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
 
       OsmTestUtils.userId = userId;
 
+
       OsmTestUtils.mapId = mapId;
+
     }
     catch (Exception e)
     {
@@ -141,7 +143,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
     	{
     		DbUtils.deleteOSMRecord(conn, mapId);
         
-        
+
     	}
     }
     catch (Exception e)

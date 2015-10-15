@@ -94,7 +94,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
     //Technically, changeset doesn't inherit from Element and thus doesn't implement
     //XmlSerializable or DbSerializable, so giving it an element type is a little bit confusing.
     //It helps the code clean up a little bit in places, so leaving as is for now.
-    //TODO: Can this be removed?
     Changeset
   }
 
@@ -117,7 +116,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
   protected Connection conn;
   public Connection getDbConnection() { return conn; }
   public void setDbConnection(Connection connection) { conn = connection; }
-  protected static DateTimeFormatter timeFormatter;
+  private static DateTimeFormatter timeFormatter;
   public static DateTimeFormatter getTimeFormatter() { return timeFormatter; }
 
   /**
@@ -214,16 +213,13 @@ public abstract class Element implements XmlSerializable, DbSerializable
   }
 
   //We will keep track of map id internally since we do not have map id column in table any longer
-  protected long _mapId = -1;
+  private long _mapId = -1;
 
   /**
    * Returns the map ID of the element's associated services database record
    */
   public long getMapId() throws Exception
   {
-    //this is a little risky, but I'm assuming the field probably won't ever change in name
-    //in the OSM tables
-    //return (Long)MethodUtils.invokeMethod(record, "getMapId", new Object[]{});
   	return _mapId;
   }
 
@@ -233,9 +229,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
    */
   public void setMapId(long id) throws Exception
   {
-    //this is a little risky, but I'm assuming the field probably won't ever change in name
-    //in the OSM tables
-    //MethodUtils.invokeMethod(record, "setMapId", new Object[]{ id });
   	_mapId = id;
   }
 
@@ -335,11 +328,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
    */
   public abstract BoundingBox getBounds() throws Exception;
 
-  /**
-   * Clears temporary data that was the result of parsing the XML to create the element - OPTIONAL
-   */
-  //TODO: Should this be re-enabled?
-  //public void clearTempData() {}
 
   @Override
   public String toString()
@@ -448,7 +436,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
     }
     else
     {
-      //TODO: I'm not sure how important it is that this check is strictly enforced here, but I'm
+      //I'm not sure how important it is that this check is strictly enforced here, but I'm
       //doing it for now anyway.
       final long parsedVersion =
         Long.parseLong(xmlAttributes.getNamedItem("version").getNodeValue());
@@ -462,7 +450,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
     return version;
   }
 
-  //TODO: is this timestamp even actually honored from the xml in the rails port?...don't think so;
+  //is this timestamp even actually honored from the xml in the rails port?...don't think so;
   //if not, remove this
   protected Timestamp parseTimestamp(final NamedNodeMap xmlAttributes)
   {
@@ -590,61 +578,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
   }
 
   /**
-   * Deletes a set of elements from the services database
-   *
-   * @param mapId ID of the map owning the elements
-   * @param elementType type of elements to be deleted
-   * @param elementIds IDs of the elements to be deleted
-   * @param dbConn JDBC Connection
-   * @throws Exception
-   */
-  public static void deleteElements(final long mapId, final ElementType elementType,
-    final Set<Long> elementIds, Connection dbConn) throws Exception
-  {
-    Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
-    RelationalPathBase<?> table = prototype.getElementTable();
-    NumberPath<Long> idField = prototype.getElementIdField();
-
-
-    long numElementsToDelete = 0;
-
-    if(elementIds.size() > 0)
-    {
-    	numElementsToDelete = new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(table).join(QChangesets.changesets)
-		.where(idField.in(elementIds))
-		.count();
-    }
-
-    if (numElementsToDelete != (long)elementIds.size())
-    {
-      throw new Exception("Not all element IDs specified for deletion are valid for element " +
-        "type: " + prototype.toString());
-    }
-    if (numElementsToDelete > 0)
-    {
-    	SQLDeleteClause sqldelete = new SQLDeleteClause(dbConn, DbUtils.getConfiguration(mapId), table);
-
-    	long result = 0;
-
-    	if(elementIds.size() > 0)
-    	{
-    	result = sqldelete.where(idField.in(elementIds))
-            .execute();
-    	}
-
-      if (result != numElementsToDelete)
-      {
-        throw new Exception("Unable to delete elements of type: " + prototype.toString());
-      }
-    }
-    else
-    {
-      log.warn("No elements exist with the specified set of IDs for element type: " +
-        prototype.toString());
-    }
-  }
-
-  /**
    * Removes all records related (e.g. way nodes for ways, relation members for relations, etc.)
    * to all of the elements with the passed in IDs
    *
@@ -699,40 +632,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
   }
 
   /**
-   * Determines the ID sequence type for an element
-   *
-   * @param parentElementType OSM element type of the parent of the ID sequence
-   * @return an ID sequence type
-   * @todo is there a cleaner way to do this?
-   */
- /* public static Sequence<Long> getIdSequenceType(final ElementType parentElementType)
-  {
-    switch (parentElementType)
-    {
-      case Node:
 
-        return Sequences.CURRENT_NODES_ID_SEQ;
-
-      case Way:
-
-        return Sequences.CURRENT_WAYS_ID_SEQ;
-
-      case Relation:
-
-        return Sequences.CURRENT_RELATIONS_ID_SEQ;
-
-      case Changeset:
-
-        return Sequences.CHANGESETS_ID_SEQ;
-
-      default:
-
-        assert(false);
-        return null;
-    }
-  }*/
-
-  /**
    * Determines whether the specified elements exist in the services database
    *
    * @param mapId ID of the map owning the elements
@@ -753,13 +653,11 @@ public abstract class Element implements XmlSerializable, DbSerializable
   {
     final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
 
-    //SQLQuery query = new SQLQuery(dbConn, DbUtils.getConfiguration());
     if(elementIds.size() > 0)
     {
   	return
   			new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable())
-  			.where(
-            prototype.getElementIdField().in(elementIds))
+  			.where(prototype.getElementIdField().in(elementIds))
   			.count() == elementIds.size();
     }
     else
@@ -790,7 +688,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
   {
     final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
 
-    //SQLQuery query = new SQLQuery(dbConn, DbUtils.getConfiguration());
+
     if(elementIds.size() > 0)
     {
   	return
@@ -877,33 +775,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
   }
 
   /**
-   * Returns the database relation member type given an element type
-   *
-   * @param elementType the element type for which to retrive the database relation member type
-   * @return a database relation member type
-   */
-  public static DbUtils.nwr_enum elementEnumForString(final String elementType)
-  {
-    if (elementType.toLowerCase().equals("node"))
-    {
-      return DbUtils.nwr_enum.node;
-    }
-    else if (elementType.toLowerCase().equals("way"))
-    {
-      return DbUtils.nwr_enum.way;
-    }
-    else if (elementType.toLowerCase().equals("relation"))
-    {
-      return DbUtils.nwr_enum.relation;
-    }
-    else
-    {
-      assert(false);
-      return null;
-    }
-  }
-
-  /**
    * Returns the IDs of all relations which own this element
    *
    * The ordering of returned records by ID and the use of TreeSet to keep them sorted is only
@@ -969,7 +840,8 @@ public abstract class Element implements XmlSerializable, DbSerializable
     {
       org.w3c.dom.Element tagElement = doc.createElement("tag");
       tagElement.setAttribute("k", tagEntry.getKey());
-      tagElement.setAttribute("v", tagEntry.getValue());
+      tagElement.setAttribute(
+      	"v", hoot.services.utils.StringUtils.encodeURIComponentForJavaScript(tagEntry.getValue()));
       elementXml.appendChild(tagElement);
     }
     return elementXml;
@@ -1007,7 +879,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
     return tagCount;
   }
   
-
   
   /**
    * Given a list of unique ID's, filters out any which aren't associated with an OSM element in 
@@ -1066,61 +937,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
 			log.warn("Filtered out " + String.valueOf(uuids.length - filteredUuids.size()) + " uuids.");
 		}
   	return filteredUuids;
-  }
-  
-  /**
-   * Determines whether any element in the database has a uuid tag as specified
-   *  
-   * @param mapId ID of the map owning the element
-   * @param uuid unique ID to search for
-   * @param elementType type of the element being searched for
-   * @param dbConn database connection
-   * @return true if the element exists; false otherwise
-   * @throws ClassNotFoundException 
-   * @throws SQLException 
-   * @throws InvocationTargetException 
-   * @throws NoSuchMethodException 
-   * @throws IllegalAccessException 
-   * @throws InstantiationException 
-   */
-  public static boolean elementExistsByUuid(final long mapId, final String uuid, 
-  	final ElementType elementType, Connection dbConn) throws ClassNotFoundException, SQLException, 
-  	InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
-  {
-  	final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
-  	String POSTGRESQL_DRIVER = "org.postgresql.Driver";
-		Statement stmt = null;
-		ResultSet rs = null;
-		try
-		{
-			Class.forName(POSTGRESQL_DRIVER);
-			stmt = dbConn.createStatement();
-			final String sql = 
-				"select count(*) as total from " + prototype.getElementTable() + "_" + mapId + 
-				" where tags->'uuid' = '" + uuid + "' ";
-			stmt = dbConn.createStatement();
-			rs = stmt.executeQuery(sql);
-			while (rs.next())
-			{
-				if (rs.getInt("total") > 0)
-				{
-					rs.close();
-					return true;
-				}
-			}
-			rs.close();
-		}
-		finally
-		{
-			try
-			{
-				if (stmt != null) stmt.close();
-				if (rs != null) rs.close();
-			}
-			catch (SQLException se2)
-			{
-			}
-		}
-  	return false;
+
   }
 }

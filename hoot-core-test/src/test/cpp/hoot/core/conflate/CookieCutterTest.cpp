@@ -187,7 +187,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CookieCutterTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CookieCutterTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CookieCutterTest, "slow");
 
 }

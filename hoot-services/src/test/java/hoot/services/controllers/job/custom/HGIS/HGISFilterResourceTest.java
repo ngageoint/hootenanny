@@ -6,7 +6,7 @@ import javax.ws.rs.core.Response.Status;
 
 import hoot.services.UnitTest;
 import hoot.services.models.review.custom.HGIS.FilterNonHgisPoisRequest;
-import hoot.services.models.review.custom.HGIS.FilterNonHgisPoisResponse;
+//import hoot.services.models.review.custom.HGIS.FilterNonHgisPoisResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -34,7 +34,7 @@ public class HGISFilterResourceTest {
 		FilterNonHgisPoisRequest request = new FilterNonHgisPoisRequest();
 		request.setSource("testSrc1");
 		request.setOutput("out1");
-		FilterNonHgisPoisResponse resp = spy.filterNonHgisPois(request);
+		/*FilterNonHgisPoisResponse resp =*/ spy.filterNonHgisPois(request);
 		
 		List<String> args = argCaptor.getAllValues();
 		String  param = args.get(0);
@@ -114,7 +114,7 @@ public class HGISFilterResourceTest {
 			FilterNonHgisPoisRequest request = new FilterNonHgisPoisRequest();
 			request.setSource("testSrc1");
 			request.setOutput("out1");
-			FilterNonHgisPoisResponse resp = spy.filterNonHgisPois(request);
+			/*FilterNonHgisPoisResponse resp =*/ spy.filterNonHgisPois(request);
 		}
 		catch(javax.ws.rs.WebApplicationException e)
 		{

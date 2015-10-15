@@ -26,7 +26,6 @@
  */
 package hoot.services.db;
 
-import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -56,6 +55,7 @@ import hoot.services.db2.QCurrentWays;
 import hoot.services.db2.QJobStatus;
 import hoot.services.db2.QMaps;
 import hoot.services.db2.QUsers;
+import hoot.services.models.osm.Element.ElementType;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
@@ -85,9 +85,9 @@ public class DbUtils
 
   public static final String TIMESTAMP_DATE_FORMAT = "YYYY-MM-dd HH:mm:ss";
 
-  protected static SQLTemplates templates = null;
+  private static SQLTemplates templates = null;
 
-  protected static org.apache.commons.dbcp.BasicDataSource dbcp_datasource = null;
+  private static org.apache.commons.dbcp.BasicDataSource dbcp_datasource = null;
   private static ClassPathXmlApplicationContext appContext = null;
 
   /**
@@ -167,7 +167,6 @@ public class DbUtils
   {
   	if(templates ==  null)
   	{
-  		//templates = new PostgresTemplates();
   		templates = PostgresTemplates.builder()
   				.quote()
   		    .build();
@@ -197,16 +196,6 @@ public class DbUtils
   	}
   }
 
-  public static BasicDataSource getdbcpdatasource ()
-  {
-  	if(dbcp_datasource == null)
-		{
-			appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
-			dbcp_datasource = appContext.getBean("dataSource", org.apache.commons.dbcp.BasicDataSource.class);
-		}
-
-  	return dbcp_datasource;
-  }
   public static Connection createConnection()
   {
   	try
@@ -226,68 +215,28 @@ public class DbUtils
   	return null;
   }
 
-  @SuppressWarnings("unused")
+
   public static boolean closeConnection(Connection conn) throws Exception
   {
+  	if (conn != null)
+  	{
   	if (conn.isClosed())
   	{
   		return true;
   	}
   	try
   	{
-	  	if (conn != null)
-	  	{
 	  		conn.close();
 	  		return true;
 	  	}
-  	}
   	catch (Exception e)
   	{
   		throw e;
   	}
+  	}
   	return false;
   }
 
-  public static void clearTable(com.mysema.query.sql.RelationalPathBase<?> t, Connection conn) throws Exception
-  {
-
-  	try
-  	{
-			Configuration configuration = getConfiguration();
-
-			new SQLDeleteClause(conn, configuration, t)
-	    	.execute() ;
-  	}
-  	catch(Exception e)
-  	{
-  		log.error(e.getCause().getMessage());
-  	}
-
-  }
-
-  /**
-   * Determines whether records exist in the services database
-   *
-   * @param conn JDBC Connection
-   * @return true if any records exist in the services database; false otherwise
-   * @throws Exception
-   */
-  public static boolean recordsExistInServicesDb(Connection conn) throws Exception
-  {
-    long recordCount = 0;
-
-    QChangesets changesets = QChangesets.changesets;
-    QMaps maps = QMaps.maps;
-    QUsers user = QUsers.users;
-
-  	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-
-  	recordCount += query.from(changesets).count();
-  	recordCount += query.from(maps).count();
-  	recordCount += query.from(user).count();
-
-    return elementDataExistsInServicesDb(conn) || recordCount > 0;
-  }
 
   /**
    * Determines whether any OSM element records exist in the services database
@@ -451,21 +400,6 @@ public class DbUtils
     return recordCount;
   }
 
-
-  /**
-   * Determines whether any job records exist in the services database
-   *
-   * @param conn JDBC Connection
-   * @return
-   * @throws Exception
-   */
-  public static boolean jobDataExistsInServicesDb(Connection conn) throws Exception
-  {
-  	QJobStatus jobStatus = QJobStatus.jobStatus;
-  	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-    return query.from(jobStatus).count() > 0;
-  }
-
   /**
    * Clears all data in all resource related tables in the database
    *
@@ -500,7 +434,6 @@ public class DbUtils
     	delete.execute();
     	delete = new SQLDeleteClause(conn, configuration, QUsers.users);
     	delete.execute();
-    	
     	delete = new SQLDeleteClause(conn, configuration, QJobStatus.jobStatus);
     	delete.execute();
     	conn.commit();
@@ -573,6 +506,8 @@ public class DbUtils
     	new SQLDeleteClause(conn, configuration, maps)
     	.where(maps.id.eq(mapId))
     	.execute();
+
+
 
     	conn.commit();
     }
@@ -674,7 +609,7 @@ public class DbUtils
 
   //TODO: this code needs to be changed to dynamically read in the data types from querydsl.  If
   //I make a change to the schema in liquibase, it will never be picked up unless this static code
-  //is also changed.  See #
+  //is also changed.  See #6777
   public static void createMap(final long mapId) throws Exception
   {
   	try {
@@ -889,7 +824,6 @@ public class DbUtils
       {
         stat.setEnd(ts);
       }
-      //statusDao.insert(stat);
       new SQLInsertClause(conn, configuration, jobStatusTbl)
       .populate(stat).execute();
 
@@ -913,31 +847,6 @@ public class DbUtils
 
     return stat.getStatus();
   }
-
-  /**
-   * Retrieves a job status as an object
-   *
-   * @param jobId ID of the job
-   * @param conn JDBC Connection
-   * @return a job status object
-   * @throws Exception
-   */
-  public static JobStatus getJobStatusObj(final String jobId, Connection conn)
-    throws Exception
-  {
-  	QJobStatus jobStatusTbl = QJobStatus.jobStatus;
-  	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-  	JobStatus dbJobStatus = query.from(jobStatusTbl).where(jobStatusTbl.jobId.eq(jobId)).singleResult(jobStatusTbl);
-
-    JobStatus jobStatus = new JobStatus();
-    jobStatus.setJobId(dbJobStatus.getJobId());
-    jobStatus.setEnd(dbJobStatus.getEnd());
-    jobStatus.setStart(dbJobStatus.getEnd());
-    jobStatus.setPercentComplete(dbJobStatus.getPercentComplete());
-    jobStatus.setStatusDetail(dbJobStatus.getStatusDetail());
-    jobStatus.setStatus(dbJobStatus.getStatus());
-    return jobStatus;
-  }
   
   public static long batchRecords(final long mapId, final List<?> records, 
     com.mysema.query.sql.RelationalPathBase<?> t,
@@ -947,7 +856,7 @@ public class DbUtils
       try
       {
         Configuration configuration = getConfiguration(mapId);
-        //conn.setAutoCommit(false);
+
 
         switch (recordBatchType)
         {
@@ -965,7 +874,7 @@ public class DbUtils
           		{
 	          		if(i % maxRecordBatchSize == 0) {
 	          			insert.execute();
-		              //conn.commit();
+
 		              insert = new SQLInsertClause(conn, configuration, t);
 		              nBatch = 0;
 		      			}
@@ -1003,7 +912,7 @@ public class DbUtils
           		{
 	          		if(i % maxRecordBatchSize == 0) {
 	          			update.execute();
-		              //conn.commit();
+
 		              update = new SQLUpdateClause(conn, configuration, t);
 		              nBatchUpdate = 0;
 		      			}
@@ -1040,7 +949,7 @@ public class DbUtils
         			{
 	        			if(i % maxRecordBatchSize == 0) {
 	          			delete.execute();
-		              //conn.commit();
+
 		              delete = new SQLDeleteClause(conn, configuration, t);
 		              nBatchDel = 0;
 		      			}
@@ -1059,18 +968,10 @@ public class DbUtils
         }
 
 
-     /*   if (execResult != records.size())
-        {
-        	String msg = "The number of batch records updates execute: " + execResult + " does not " +
-              "match the number of records sent to be updated: " + records.size();
-          log.warn(msg);
-          throw new Exception(msg);
-        }*/
-        //conn.commit();
       }
       catch (Exception e)
       {
-      	//conn.rollback();
+
         String msg = "Error executing batch query.";
         msg += "  " + e.getMessage();
         msg += " Cause:" + e.getCause().toString();
@@ -1144,14 +1045,15 @@ public class DbUtils
   	return tags;
   }
 
-  public static void batchRecordsDirectNodes(final long mapId, final List<?> records,
+  public static long batchRecordsDirectNodes(final long mapId, final List<?> records,
       final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
     {
+  	long updateCount = 0;
   		PreparedStatement ps = null;
       try
       {
       	String sql = null;
-        //conn.setAutoCommit(false);
+
         int count = 0;
 
         switch (recordBatchType)
@@ -1183,7 +1085,8 @@ public class DbUtils
 
 	      			String hstoreStr = "";
 	      			Iterator it = tags.entrySet().iterator();
-	      	    while (it.hasNext()) {
+      	    while (it.hasNext()) 
+      	    {
 	      	        Map.Entry pairs = (Map.Entry)it.next();
 	      	        if(hstoreStr.length() > 0)
 	      	        {
@@ -1196,9 +1099,9 @@ public class DbUtils
 
 	      			if(maxRecordBatchSize > -1)
 	      			{
-		      			if(++count % maxRecordBatchSize == 0) {
-		              ps.executeBatch();
-		              //conn.commit();
+	      			if (++count % maxRecordBatchSize == 0) 
+	      			{
+	      				updateCount += ps.executeBatch().length;
 
 		      			}
 	      			}
@@ -1230,7 +1133,8 @@ public class DbUtils
 
 	      			String hstoreStr = "";
 	      			Iterator it = tags.entrySet().iterator();
-	      	    while (it.hasNext()) {
+      	    while (it.hasNext()) 
+      	    {
 	      	        Map.Entry pairs = (Map.Entry)it.next();
 	      	        if(hstoreStr.length() > 0)
 	      	        {
@@ -1246,9 +1150,9 @@ public class DbUtils
 
 	      			if(maxRecordBatchSize > -1)
 	      			{
-		      			if(++count % maxRecordBatchSize == 0) {
-		              ps.executeBatch();
-		              //conn.commit();
+	      			if (++count % maxRecordBatchSize == 0) 
+	      			{
+	      				updateCount += ps.executeBatch().length;
 		              ps.clearBatch();
 		      			}
 	      			}
@@ -1271,9 +1175,9 @@ public class DbUtils
 	      			ps.addBatch();
 	      			if(maxRecordBatchSize > -1)
 	      			{
-		      			if(++count % maxRecordBatchSize == 0) {
-		              ps.executeBatch();
-		              //conn.commit();
+	      			if (++count % maxRecordBatchSize == 0) 
+	      			{
+	      				updateCount += ps.executeBatch().length;
 		              ps.clearBatch();
 		      			}
 	      			}
@@ -1286,12 +1190,11 @@ public class DbUtils
             throw new Exception("");
         }
 
-        ps.executeBatch();
-        //conn.commit();
+      updateCount += ps.executeBatch().length;
       }
       catch (Exception e)
       {
-      	//conn.rollback();
+
         String msg = "Error executing batch query.";
         msg += "  " + e.getMessage();
         msg += " Cause:" + e.getCause().toString();
@@ -1303,19 +1206,21 @@ public class DbUtils
       	{
       		ps.close();
       	}
-      	//conn.setAutoCommit(true);
+
       }
+    return updateCount;
     }
 
 
-  public static void batchRecordsDirectWays(final long mapId, final List<?> records,
+  public static long batchRecordsDirectWays(final long mapId, final List<?> records,
       final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
     {
+  	long updateCount = 0;
   		PreparedStatement ps = null;
       try
       {
       	String sql = null;
-        //conn.setAutoCommit(false);
+
         int count = 0;
 
         switch (recordBatchType)
@@ -1343,7 +1248,8 @@ public class DbUtils
 
 	      			String hstoreStr = "";
 	      			Iterator it = tags.entrySet().iterator();
-	      	    while (it.hasNext()) {
+      	    while (it.hasNext()) 
+      	    {
 	      	        Map.Entry pairs = (Map.Entry)it.next();
 	      	        if(hstoreStr.length() > 0)
 	      	        {
@@ -1356,9 +1262,9 @@ public class DbUtils
 
 	      			if(maxRecordBatchSize > -1)
 	      			{
-		      			if(++count % maxRecordBatchSize == 0) {
-		              ps.executeBatch();
-		              //conn.commit();
+	      			if (++count % maxRecordBatchSize == 0) 
+	      			{
+	      				updateCount += ps.executeBatch().length;
 		      			}
 	      			}
 
@@ -1385,7 +1291,8 @@ public class DbUtils
 
 	      			String hstoreStr = "";
 	      			Iterator it = tags.entrySet().iterator();
-	      	    while (it.hasNext()) {
+      	    while (it.hasNext()) 
+      	    {
 	      	        Map.Entry pairs = (Map.Entry)it.next();
 	      	        if(hstoreStr.length() > 0)
 	      	        {
@@ -1401,9 +1308,9 @@ public class DbUtils
 
 	      			if(maxRecordBatchSize > -1)
 	      			{
-		      			if(++count % maxRecordBatchSize == 0) {
-		              ps.executeBatch();
-		              //conn.commit();
+	      			if (++count % maxRecordBatchSize == 0) 
+	      			{
+	      				updateCount += ps.executeBatch().length;
 		      			}
 	      			}
           	}
@@ -1426,9 +1333,9 @@ public class DbUtils
 
 	      			if(maxRecordBatchSize > -1)
 	      			{
-		      			if(++count % maxRecordBatchSize == 0) {
-		              ps.executeBatch();
-		              //conn.commit();
+	      			if (++count % maxRecordBatchSize == 0) 
+	      			{
+	      				updateCount += ps.executeBatch().length;
 		      			}
 	      			}
 
@@ -1441,8 +1348,7 @@ public class DbUtils
             throw new Exception("");
         }
 
-        ps.executeBatch();
-        //conn.commit();
+      updateCount += ps.executeBatch().length;
       }
       catch (Exception e)
       {
@@ -1458,18 +1364,18 @@ public class DbUtils
       	{
       		ps.close();
       	}
-      	//conn.setAutoCommit(true);
       }
+    return updateCount;
     }
   
-  public static void batchRecordsDirectRelations(final long mapId, final List<?> records,
+  public static long batchRecordsDirectRelations(final long mapId, final List<?> records,
       final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
     {
+  	long updateCount = 0;
   		PreparedStatement ps = null;
       try
       {
       	String sql = null;
-        //conn.setAutoCommit(false);
         int count = 0;
 
         switch (recordBatchType)
@@ -1497,7 +1403,8 @@ public class DbUtils
 
 	      			String hstoreStr = "";
 	      			Iterator it = tags.entrySet().iterator();
-	      	    while (it.hasNext()) {
+      	    while (it.hasNext()) 
+      	    {
 	      	        Map.Entry pairs = (Map.Entry)it.next();
 	      	        if(hstoreStr.length() > 0)
 	      	        {
@@ -1510,9 +1417,9 @@ public class DbUtils
 
 	      			if(maxRecordBatchSize > -1)
 	      			{
-		      			if(++count % maxRecordBatchSize == 0) {
-		              ps.executeBatch();
-		              //conn.commit();
+	      			if(++count % maxRecordBatchSize == 0) 
+	      			{
+	      				updateCount += ps.executeBatch().length;
 		      			}
 	      			}
 
@@ -1539,7 +1446,8 @@ public class DbUtils
 
 	      			String hstoreStr = "";
 	      			Iterator it = tags.entrySet().iterator();
-	      	    while (it.hasNext()) {
+      	    while (it.hasNext()) 
+      	    {
 	      	        Map.Entry pairs = (Map.Entry)it.next();
 	      	        if(hstoreStr.length() > 0)
 	      	        {
@@ -1555,9 +1463,9 @@ public class DbUtils
 
 	      			if(maxRecordBatchSize > -1)
 	      			{
-		      			if(++count % maxRecordBatchSize == 0) {
-		              ps.executeBatch();
-		              //conn.commit();
+	      			if (++count % maxRecordBatchSize == 0) 
+	      			{
+	      				updateCount += ps.executeBatch().length;
 		      			}
 	      			}
           	}
@@ -1580,9 +1488,9 @@ public class DbUtils
 
 	      			if(maxRecordBatchSize > -1)
 	      			{
-		      			if(++count % maxRecordBatchSize == 0) {
-		              ps.executeBatch();
-		              //conn.commit();
+	      			if (++count % maxRecordBatchSize == 0) 
+	      			{
+	      				updateCount += ps.executeBatch().length;
 		      			}
 	      			}
 
@@ -1595,8 +1503,7 @@ public class DbUtils
             throw new Exception("");
         }
 
-        ps.executeBatch();
-        //conn.commit();
+      updateCount += ps.executeBatch().length;
       }
       catch (Exception e)
       {
@@ -1612,8 +1519,8 @@ public class DbUtils
       	{
       		ps.close();
       	}
-      	//conn.setAutoCommit(true);
       }
+    return updateCount;
     }
 
   
@@ -1632,7 +1539,8 @@ public class DbUtils
 			String sql = "select pg_total_relation_size('" + tableName + "') as tablesize";
 			ResultSet rs = stmt.executeQuery(sql);
       //STEP 5: Extract data from result set
-      while(rs.next()){
+      while(rs.next())
+      {
          //Retrieve by column name
       	ret = rs.getLong("tablesize");
          
@@ -1661,5 +1569,59 @@ public class DbUtils
 		}//end try
 		
 		return ret;
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param result
+	 * @param elementType
+	 * @return
+	 * @throws SQLException 
+	 * @todo change back to original element generic code
+	 */
+	public static Object resultToObj(final ResultSet rs, final ElementType elementType) 
+		throws SQLException
+	{
+		if (elementType == ElementType.Node)
+		{
+			CurrentNodes nodes = new CurrentNodes();
+			nodes.setId(rs.getLong("id"));
+
+			nodes.setLatitude(rs.getDouble("latitude"));
+			nodes.setLongitude(rs.getDouble("longitude"));
+			nodes.setChangesetId(rs.getLong("changeset_id"));
+			nodes.setVisible(rs.getBoolean("visible"));
+			nodes.setTimestamp(rs.getTimestamp("timestamp"));
+			nodes.setTile(rs.getLong("tile"));
+			nodes.setVersion(rs.getLong("version"));
+			nodes.setTags(rs.getObject("tags"));
+			return nodes;
+		}
+		else if (elementType == ElementType.Way)
+		{
+			CurrentWays ways = new CurrentWays();
+			ways.setId(rs.getLong("id"));
+
+			ways.setChangesetId(rs.getLong("changeset_id"));
+			ways.setVisible(rs.getBoolean("visible"));
+			ways.setTimestamp(rs.getTimestamp("timestamp"));
+			ways.setVersion(rs.getLong("version"));
+			ways.setTags(rs.getObject("tags"));
+			return ways;
+		}
+		else if (elementType == ElementType.Relation)
+		{
+			CurrentRelations rel = new CurrentRelations();
+			rel.setId(rs.getLong("id"));
+
+			rel.setChangesetId(rs.getLong("changeset_id"));
+			rel.setVisible(rs.getBoolean("visible"));
+			rel.setTimestamp(rs.getTimestamp("timestamp"));
+			rel.setVersion(rs.getLong("version"));
+			rel.setTags(rs.getObject("tags"));
+			return rel;
+		}
+		return null;
 	}
 }

@@ -68,7 +68,6 @@ private:
    * can be called multiple times efficiently.
    */
   void _init() const;
-
 };
 
 }

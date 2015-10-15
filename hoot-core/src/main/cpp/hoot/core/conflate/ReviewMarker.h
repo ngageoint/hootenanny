@@ -48,6 +48,10 @@ public:
   /// This definition may change over time.
   typedef ElementId ReviewUid;
 
+  /// Should only be used by AddHilbertReviewSortOrder. Please use the ReviewMarker helper methods
+  /// for other operations.
+  static QString reviewSortOrderKey;
+
   ReviewMarker();
 
   static QString getBadGeometryType() { return _complexGeometryType; }
@@ -103,6 +107,12 @@ private:
   static QString _reviewNeedsKey;
   static QString _reviewNoteKey;
   static QString _reviewTypeKey;
+
+  /**
+   * Returns a hilbert value that represents the center of the bounds that covers e1 and e2.
+   */
+  static int64_t _calculateHilbertValue(const ConstOsmMapPtr &map, ConstElementPtr e1,
+    ConstElementPtr e2 = ConstElementPtr());
 
   static set<ElementId> _getReviewRelations(const ConstOsmMapPtr &map, ElementId eid);
 

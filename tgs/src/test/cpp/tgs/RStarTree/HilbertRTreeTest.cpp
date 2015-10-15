@@ -207,7 +207,6 @@ public:
     for (int i = 0; i < testSize; i++)
     {
       uut.insert(boxes[i], fids[i]);
-      cout << endl;
       uut.sanityCheck();
     }
 
@@ -495,7 +494,7 @@ public:
 
   void validateTreeEntries(RStarTree& uut, int cc)
   {
-    printf("*** Begin Validation ***\n");
+    //printf("*** Begin Validation ***\n");
     std::vector<bool> found;
     found.resize(cc);
     for (unsigned int i = 0; i < found.size(); i++)

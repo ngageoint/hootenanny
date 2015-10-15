@@ -182,10 +182,15 @@ See also:
 
 * Data Type: list
 * Default Value:
-** `hoot::BuildingOutlineUpdateOp`
+** `hoot::BuildingOutlineUpdateOp;hoot::AddHilbertReviewSortOrderOp`
 
-Runs in the conflate command after data is conflated, but before exporting. The default, `hoot::BuildingOutlineUpdateOp` updates any multi-part building outlines that may have
-changed during conflation.
+Runs in the conflate command after data is conflated, but before exporting. The default perform the
+following:
+
+* `hoot::BuildingOutlineUpdateOp` updates any multi-part building outlines that may have
+  changed during conflation.
+* `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews. By processing reviews
+  in sorted order the results are a little more logically ordered.
 
 === conflate.pre.ops
 
@@ -1292,6 +1297,22 @@ all translation stats are disabled.
 * Default Value: `Invalid`
 
 The default status to match with a status criterion.
+
+=== tag.ancestor.differencer.name
+
+* Data Type: string
+* Default Value: ``
+
+The default ancestor to use when using the hoot::TagAncestorDifferencer class for comparing tags.
+Primarily this is useful within the node.js interface.
+
+=== tag.category.differencer.name
+
+* Data Type: string
+* Default Value: ``
+
+The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
+Primarily this is useful within the node.js interface.
 
 === tag.criterion.kvp
 

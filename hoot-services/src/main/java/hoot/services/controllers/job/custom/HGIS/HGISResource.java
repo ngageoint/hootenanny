@@ -36,7 +36,7 @@ public class HGISResource extends JobControllerBase
 		String dbHost = null;
 		try {
 			dbName = HootProperties.getProperty("dbName");
-			dbUserId = HootProperties.getProperty("dbName");
+			dbUserId = HootProperties.getProperty("dbUserId");
 			dbPassword = HootProperties.getProperty("dbPassword");
 			dbHost = HootProperties.getProperty("dbHost");
     } catch (IOException e) {

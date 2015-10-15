@@ -45,9 +45,6 @@ import org.w3c.dom.Node;
  * 
  * Partially based on OSM's BoundingBox, bounding_box.rb, at 
  * https://github.com/openstreetmap/openstreetmap-website/
- * 
- * @todo replace with a bounds class from GeoUtils?
- * @todo clean up the add/expand methods
  */
 public class BoundingBox
 {
@@ -95,9 +92,7 @@ public class BoundingBox
   public boolean equals(Object obj)
   {
     BoundingBox objBounds = (BoundingBox)obj;
-    //TODO: temp - allowing for a small amount of error until I figure out what's causing it
-//    return this.maxLat == objBounds.getMaxLat() && this.maxLon == objBounds.getMaxLon() &&
-//      this.minLat == objBounds.getMinLat() && this.minLon == objBounds.getMinLon();
+    //allowing for a small amount of error here
     return
       MathUtils.equals(this.maxLat, objBounds.getMaxLat(), BOUNDS_ERROR) &&
       MathUtils.equals(this.maxLon, objBounds.getMaxLon(), BOUNDS_ERROR) &&
@@ -189,9 +184,6 @@ public class BoundingBox
    * @param nodes a list of nodes the bounding box should contain
    * @return a bounding box containing all of the input nodes
    * @throws Exception
-   * @todo kind of silly to have to explicitly define ArrayList in the constructor signature for the
-   * nodes container type, but that's the only way to make the constructor signature unique when
-   * compared to BoundingBox(final List<Coordinates> coords)
    */
   public BoundingBox(final ArrayList<CurrentNodes> nodes)
   {

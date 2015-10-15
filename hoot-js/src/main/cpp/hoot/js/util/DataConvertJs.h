@@ -454,7 +454,7 @@ inline v8::Handle<v8::Value> toV8(const QHash<T, U>& m)
 
 // A catch all method to prevent implicit type conversion to the methods above.
 template<typename T>
-v8::Handle<v8::Value> toV8(const T& o)
+v8::Handle<v8::Value> toV8(const T&)
 {
   throw HootException("No toV8 implementation for this data type. " +
     QString::fromUtf8(typeid(T).name()));

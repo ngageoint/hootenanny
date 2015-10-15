@@ -11,6 +11,7 @@
 		class="hoot.services.nativeInterfaces.JobExecutionManager" init-method="init" destroy-method="destroy">
 		<property name="nativeInterface" ref="processStreamInterface"/>
 	</bean>
+  
 
 	<bean id="ResourcesCleanUtil" singleton="true" 
 		class="hoot.services.utils.ResourcesCleanUtil" init-method="init" destroy-method="destroy">

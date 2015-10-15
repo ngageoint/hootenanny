@@ -51,18 +51,12 @@ public class ConflationResourceTest {
 		String jobArgs = "\"exec\":\"makeconflate\",\"params\":[{\"USER_EMAIL\":\"test@test.com\"},{\"CONFLATION_TYPE\":\"Reference\"},"
 				+ "{\"MATCH_THRESHOLD\":\"0.6\"},{\"INPUT1_TYPE\":\"DB\"},{\"MISS_THRESHOLD\":\"0.6\"},{\"INPUT2_TYPE\":\"DB\"},"
 				+ "{\"INPUT2\":\"DcTigerRoads\"},{\"INPUT1\":\"DcGisRoads\"},{\"OUTPUT_NAME\":\"Merged_Roads_e0d\"},"
-				+ "{\"IS_BIG\":\"false\"}],\"exectype\":\"make\"},"
-				+ "{\"class\":\"hoot.services.controllers.osm.MapResource\",\"method\":\"updateTagsDirect\",\"params\":"
-				+ "[{\"isprimitivetype\":\"false\",\"value\":{\"input2\":\"DcTigerRoads\",\"input1\":\"DcGisRoads\"}"
-				+ ",\"paramtype\":\"java.util.Map\"},{\"isprimitivetype\":\"false\",\"value\":\"Merged_Roads_e0d\""
-				+ ",\"paramtype\":\"java.lang.String\"}],\"exectype\":\"reflection\"},"
-				+ "{\"class\":\"hoot.services.controllers.job.ReviewResource\",\"method\":\"prepareItemsForReview\",\"params\":"
-				+ "[{\"isprimitivetype\":\"false\",\"value\":\"Merged_Roads_e0d\",\"paramtype\":\"java.lang.String\"},"
-				+ "{\"isprimitivetype\":\"true\",\"value\":false,\"paramtype\":\"java.lang.Boolean\"}],\"exectype\":\"reflection\"},"
-				+ "{\"class\":\"hoot.services.controllers.ingest.RasterToTilesService\",\"method\":\"ingestOSMResourceDirect\",\"params\":"
-				+ "[{\"isprimitivetype\":\"false\",\"value\":\"Merged_Roads_e0d\",\"paramtype\":\"java.lang.String\"},"
-				+ "{\"isprimitivetype\":\"false\",\"value\":\"test@test.com\",\"paramtype\":\"java.lang.String\"}]"
-				+ ",\"exectype\":\"reflection\"}]";
+				+ "{\"IS_BIG\":\"false\"}],\"exectype\":\"make\"},{\"class\":\"hoot.services.controllers.osm.MapResource\","
+				+ "\"method\":\"updateTagsDirect\",\"params\":[{\"isprimitivetype\":\"false\",\"value\":{\"input2\":\"DcTigerRoads\","
+				+ "\"input1\":\"DcGisRoads\"},\"paramtype\":\"java.util.Map\"},{\"isprimitivetype\":\"false\",\"value\":\"Merged_Roads_e0d\","
+				+ "\"paramtype\":\"java.lang.String\"}],\"exectype\":\"reflection\"},{\"class\":\"hoot.services.controllers.ingest.RasterToTilesService\","
+				+ "\"method\":\"ingestOSMResourceDirect\",\"params\":[{\"isprimitivetype\":\"false\",\"value\":\"Merged_Roads_e0d\",\"paramtype\":\"java.lang.String\"},"
+				+ "{\"isprimitivetype\":\"false\",\"value\":\"test@test.com\",\"paramtype\":\"java.lang.String\"}],\"exectype\":\"reflection\"}]";
 		ConflationResource spy = Mockito.spy(new ConflationResource());
 		Mockito.doNothing().when((JobControllerBase)spy).postChainJobRquest(anyString(), anyString());
 		Response resp = spy.process(params);
@@ -72,41 +66,4 @@ public class ConflationResourceTest {
 		String jobId = o.get("jobid").toString();
 		verify(spy).postChainJobRquest(Matchers.matches(jobId), Matchers.endsWith(jobArgs));
 	}
-	/*
-	@Test
-	@Category(UnitTest.class)
-	public void testgetAdvOpts() throws Exception
-	{
-		ConflationResource spy = new ConflationResource();
-		JSONObject ret = spy.getAdvOpts();
-		JSONArray mergers = (JSONArray)ret.get("merger");
-		JSONArray matchers = (JSONArray)ret.get("matcher");
-		
-		assertNotNull(mergers);
-		assertNotNull(matchers);
-		
-		int nMerger = 0;
-		for(Object o: mergers)
-		{
-			JSONObject mrs = (JSONObject)o;
-			String cName = mrs.get("className").toString();
-			if(cName.contains("MergerCreator"))
-			{
-				nMerger++;
-			}
-		}
-		assertTrue(nMerger > 0);
-		
-		int nMatch = 0;
-		for(Object o: matchers)
-		{
-			JSONObject mrs = (JSONObject)o;
-			String cName = mrs.get("className").toString();
-			if(cName.contains("MatchCreator"))
-			{
-				nMatch++;
-			}
-		}
-		assertTrue(nMatch > 0);
-	}*/
 }

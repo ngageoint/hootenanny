@@ -8,10 +8,12 @@ var url = require('url');
 // cluster for load balancing
 var cluster = require('cluster');
 var os = require('os');
+var fs = require('fs');
 // default port
 var serverPort = 8233;
 
 var HOOT_HOME = process.env.HOOT_HOME;
+var availableTrans = {'TDSv40':{'isvailable':'true'}, 'TDSv61':{'isvailable':'true'}};
 hoot = require(HOOT_HOME + '/lib/HootJs');
 
 
@@ -22,6 +24,7 @@ var translationsMap = {};
 translationsMap['TDSv40'] = require(HOOT_HOME + '/plugins/etds_osm.js'); 
 translationsMap['TDSv61'] = require(HOOT_HOME + '/plugins/etds61_osm.js'); 
 
+
 var util = require('util');
 var nCPU = os.cpus().length;
 
@@ -29,10 +32,12 @@ var nCPU = os.cpus().length;
 var osmToTdsMap = {};
 osmToTdsMap['TDSv40'] = new hoot.TranslationOp({
 		    	'translation.script':HOOT_HOME + '/translations/OSM_to_englishTDS.js',
-		    	'translation.direction':'toogr'});;
+		    	'translation.direction':'toogr'});
 osmToTdsMap['TDSv61'] = new hoot.TranslationOp({
 		    	'translation.script':HOOT_HOME + '/translations/OSM_to_englishTDS61.js',
 		    	'translation.direction':'toogr'});
+
+
 
 var tdsToOsmMap = {};
 tdsToOsmMap['TDSv40'] = new hoot.TranslationOp({
@@ -42,12 +47,51 @@ tdsToOsmMap['TDSv61'] = new hoot.TranslationOp({
 		    	'translation.script':HOOT_HOME + '/translations/englishTDS61_to_OSM.js',
 		    	'translation.direction':'toosm'});
 
+
 // Gets the translation schema for field population for a fcode
 // TODO: In the future we should get this from caller
 var schemaMap = {};
 schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_schema.js');
 schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_schema.js');
 
+
+try {
+	var schemaPath = HOOT_HOME + '/plugins-local/hgis20_schema.js';
+    var fPath = fs.lstatSync(schemaPath);
+
+    if (fPath.isFile()) {
+        schemaMap['HGISv20'] = require(schemaPath);
+    }
+
+
+    var tds2OsmPath = HOOT_HOME + '/translations-local/HGISv20.js';
+    fPath = fs.lstatSync(tds2OsmPath);
+
+    if (fPath.isFile()) {
+        tdsToOsmMap['HGISv20'] = new hoot.TranslationOp({
+		    	'translation.script':tds2OsmPath,
+		    	'translation.direction':'toosm'});
+    }
+
+    var osm2tdsPath = HOOT_HOME + '/translations-local/HGISv20_UI.js';
+    fPath = fs.lstatSync(osm2tdsPath);
+
+    if (fPath.isFile()) {
+    	availableTrans['HGISv20'] = {'isvailable':'true', 'meta':{'filtertagname':'name', 'filterkey':'HGIS_Layer'}};
+    	osmToTdsMap['HGISv20'] = new hoot.TranslationOp({
+		    	'translation.script':osm2tdsPath,
+		    	'translation.direction':'toogr'});
+    }
+
+    var transPath = HOOT_HOME + '/plugins-local/hgis20.js';
+    fPath = fs.lstatSync(transPath);
+    if (fPath.isFile()) {
+    	translationsMap['HGISv20'] = require(transPath);
+    }
+}
+catch (e) {
+    // ...
+}
 
 // Argument parser
 process.argv.forEach(function (val, index, array) {
@@ -106,7 +150,9 @@ if(cluster.isMaster){
 				getTaginfoKeys(request, response);
 			} else if(subPath == '/schema') {
 				getFilteredSchema(request, response);
-			}else {
+			} else if(subPath == '/capabilities') {
+				getCapabilities(request, response);
+			} else {
 				response.writeHead(404, {"Content-Type": "text/plain", 'Access-Control-Allow-Origin' : '*'});
 				response.write("404 Not Found\n");
 				response.end();
@@ -115,6 +161,20 @@ if(cluster.isMaster){
 		}
 	).listen(serverPort);
 }
+
+
+var getCapabilities = function(request, response)
+{
+	if(request.method === "GET"){
+		response.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
+		response.end(JSON.stringify(availableTrans));
+	} else {
+		response.writeHead(404, {"Content-Type": "text/plain", 'Access-Control-Allow-Origin' : '*'});
+		response.write("Post not supported\n");
+		response.end();
+	}	
+}
+
 
 // OSM to TDS request handler
 var osmtotds = function(request, response)
@@ -145,7 +205,7 @@ var osmtotds = function(request, response)
 		}
 		for(var ii=0; ii<schema.length; ii++){
 			var elem = schema[ii];
-			if(elem.fcode === params.fcode){
+			if(elem[params.idelem] === params.idval){
 				featSchema = elem;
 				// We will take anything first and then if there is matching the geom
 				// then it will take precedent

@@ -245,6 +245,9 @@ shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr& w) con
 geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementPtr& e,
   bool throwError, const bool statsFlag)
 {
+  // This is used to pass the relation type back to the exception handler
+  QString relationType = "";
+
   ElementType t = e->getElementType();
   switch (t.getEnum())
   {
@@ -276,6 +279,8 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
     {
       ConstRelationPtr r = dynamic_pointer_cast<const Relation>(e);
       assert(r);
+
+
       if(statsFlag)
       {
         if (r->isMultiPolygon() || OsmSchema::getInstance().isAreaForStats(r->getTags(), ElementType::Relation))
@@ -297,6 +302,9 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
         }
       }
 
+      // We are going to throw an error so we save the type of relation
+      relationType = r->getType();
+
       break;
 
     }
@@ -308,7 +316,14 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
 
   if (throwError)
   {
-    throw IllegalArgumentException("Unknown geometry type.");
+    if (relationType != "")
+    {
+      throw IllegalArgumentException("Unknown geometry type: Relation = " + relationType);
+    }
+    else
+    {
+      throw IllegalArgumentException("Unknown geometry type.");
+    }
   }
   else
   {

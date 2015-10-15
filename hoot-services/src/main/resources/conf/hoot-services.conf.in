@@ -244,15 +244,14 @@ reviewPrepareOverwriteExistingDataDefault=false
 # If true, temp UUID database records will be cleaned up after review records are prepared.  Since
 # this sometimes causes problems with some datasets, making it optional as a temporary solution.
 reviewPrepareCleanup=true
+# If true, removes review uuid's from the hoot:review:uuid tag if no element exists with that uuid
+# as its uuid tag.
+cleanReviewTags=true
 
 # review get
 
 # review item lock time in millisec
 reviewLockTime=300000
-# default lowest review score threshold a returned reviewable item will have
-reviewGetReviewScoreThresholdMinimumDefault=0.5
-# default geographic bounds restriction on reviewable item requests
-reviewGetGeospatialBoundsDefault=-180,-90,180,90
 
 # review update
 
