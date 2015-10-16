@@ -93,7 +93,7 @@ public class ReviewResource
         (long)(new InputParamsValidator(inputParams)).validateAndParseInputParam(
         	"mapId", "", null, null, false, null);
       
-  	  (new ReviewStatusModifier(conn, mapId)).setAllItemsReviewed();
+  	  (new ReviewStatusModifier(conn)).setAllItemsReviewed(mapId);
   		
   		log.debug("Committing set all items reviewed transaction...");
       transactionManager.commit(transactionStatus);

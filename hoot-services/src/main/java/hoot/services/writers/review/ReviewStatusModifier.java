@@ -11,13 +11,11 @@ public class ReviewStatusModifier
 {
   private static final Logger log = LoggerFactory.getLogger(ReviewStatusModifier.class);
   
-  private long mapId;
   private Connection conn;
 	
-  public ReviewStatusModifier(final Connection conn, final long mapId) throws Exception
+  public ReviewStatusModifier(final Connection conn) throws Exception
   {
     this.conn = conn;
-    this.mapId = mapId;
   }
   
   /**
@@ -25,7 +23,7 @@ public class ReviewStatusModifier
    * 
    * @throws Exception 
    */
-  public void setAllItemsReviewed() throws Exception
+  public void setAllItemsReviewed(final long mapId) throws Exception
   {
     
   }
