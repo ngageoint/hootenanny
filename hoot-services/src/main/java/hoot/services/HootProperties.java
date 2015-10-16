@@ -269,14 +269,6 @@ public class HootProperties
     {
       return "5000";
     }
-    else if (key.equals("reviewGetMaxReviewSize"))
-    {
-      return "50000";
-    }
-    else if (key.equals("reviewPrepareOverwriteExistingDataDefault"))
-    {
-      return "false";
-    }
     else if (key.equals("testJobStatusPollerTimeout"))
     {
       return "250";
@@ -293,21 +285,9 @@ public class HootProperties
     {
       return "true";
     }
-    else if (key.equals("reviewPrepareCleanup"))
-    {
-      return "true";
-    }
-    else if (key.equals("reviewTags"))
-    {
-      return "hoot:review:uuid;hoot:review:score;hoot:review:note;hoot:review:needs";
-    }
     else if (key.equals("maxWarningsDisplayed"))
     {
       return "10";
-    }
-    else if (key.equals("cleanReviewTags"))
-    {
-      return "true";
     }
     return null;
   }

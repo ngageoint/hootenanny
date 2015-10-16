@@ -37,6 +37,10 @@ import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.ModelDaoUtils;
+import hoot.services.review.ReviewUtils;
+import hoot.services.validators.job.InputParamsValidator;
+import hoot.services.writers.review.ReviewStatusModifier;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -89,6 +93,51 @@ public class ReviewResource
     transactionManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
   }
 
-
- 
+  @PUT
+  @Path("/setallreviewed")
+  @Consumes(MediaType.TEXT_PLAIN)
+  @Produces(MediaType.TEXT_PLAIN)
+  public Response setAllItemsReviewed(
+  	@QueryParam("mapId") 
+  	long mapId)
+  	throws Exception
+  {
+  	Connection conn = DbUtils.createConnection();
+  	log.debug("Setting all items reviewed for map with ID: " + mapId + "...");
+    TransactionStatus transactionStatus = 
+      transactionManager.getTransaction(
+        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
+    conn.setAutoCommit(false);
+    Map<String, Object> inputParams = new HashMap<String, Object>();
+    inputParams.put("mapId", mapId);
+  	try
+  	{
+  		InputParamsValidator inputParamsValidator = new InputParamsValidator(inputParams);
+      mapId =
+        (long)inputParamsValidator.validateAndParseInputParam(
+        	"mapId", "", null, null, false, null);
+      
+  	  (new ReviewStatusModifier(conn, mapId)).setAllItemsReviewed();
+  		
+  		log.debug("Committing set all items reviewed transaction...");
+      transactionManager.commit(transactionStatus);
+      conn.commit();	
+  	}
+  	catch (Exception e)
+    {
+      transactionManager.rollback(transactionStatus);
+      conn.rollback();
+      ReviewUtils.handleError(
+      	e, 
+      	"Error setting all records to reviewed for map ID: " + mapId, 
+      	false);
+    }
+    finally
+    {
+    	conn.setAutoCommit(true);
+      DbUtils.closeConnection(conn);
+    }
+  	
+  	return Response.ok().build();
+  }
 }
