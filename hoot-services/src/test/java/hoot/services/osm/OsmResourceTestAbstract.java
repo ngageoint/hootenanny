@@ -28,7 +28,6 @@ package hoot.services.osm;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.util.List;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -42,9 +41,7 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
-import hoot.services.db2.QMaps;
 
-import com.mysema.query.sql.SQLQuery;
 import com.sun.jersey.api.client.AsyncWebResource;
 import com.sun.jersey.test.framework.JerseyTest;
 

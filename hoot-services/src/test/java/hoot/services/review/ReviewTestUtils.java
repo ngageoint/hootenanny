@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /*
- * 
+ * Various utilities for review process testing
  */
 public class ReviewTestUtils
 {
@@ -43,5 +43,13 @@ public class ReviewTestUtils
 
   public static long mapId = -1;
   
-  
+  //TODO: finish
+  /**
+   * Writes the conflated review relation output for conflating AllDataTypesA.osm with 
+   * AllDataTypesB.osm
+   */
+  public static void populateReviewDataForAllDataTypes()
+  {
+  	
+  }
 }

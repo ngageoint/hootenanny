@@ -27,21 +27,22 @@
 package hoot.services.controllers.job;
 
 import java.sql.Connection;
-import java.util.HashMap;
-import java.util.Map;
 
 import hoot.services.db.DbUtils;
+import hoot.services.db2.QMaps;
+import hoot.services.models.osm.ModelDaoUtils;
+import hoot.services.models.review.MapReviewResolverRequest;
 import hoot.services.review.ReviewUtils;
-import hoot.services.validators.job.InputParamsValidator;
-import hoot.services.writers.review.ReviewStatusModifier;
+import hoot.services.utils.ResourceErrorHandler;
+import hoot.services.writers.review.MapReviewResolver;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,8 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import com.mysema.query.sql.SQLQuery;
+
 /**
  * Service endpoint for the conflated data review process
  */
@@ -58,6 +61,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 public class ReviewResource
 {
   private static final Logger log = LoggerFactory.getLogger(ReviewResource.class);
+  
+  private QMaps maps = QMaps.maps;
 
   private ClassPathXmlApplicationContext appContext;
   private PlatformTransactionManager transactionManager;
@@ -70,30 +75,86 @@ public class ReviewResource
     transactionManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
   }
 
+  /**
+   * 
+   * 
+   * Have to use a request object here, rather than a single map ID query param, since d3 can't
+   * send plain text in a PUT statement.
+   * 
+   * @param mapId
+   * @return
+   * @throws Exception
+   */
   @PUT
-  @Path("/setallreviewed")
-  @Consumes(MediaType.TEXT_PLAIN)
+  @Path("/resolveall")
+  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.TEXT_PLAIN)
-  public Response setAllItemsReviewed(
-  	@QueryParam("mapId") 
-  	long mapId)
-  	throws Exception
+  public Response resolveAllReviews(final MapReviewResolverRequest request) throws Exception
   {
+  	log.debug("Setting all items reviewed for map with ID: " + request.getMapId() + "...");
+  	
   	Connection conn = DbUtils.createConnection();
-  	log.debug("Setting all items reviewed for map with ID: " + mapId + "...");
     TransactionStatus transactionStatus = 
       transactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
     conn.setAutoCommit(false);
-    Map<String, Object> inputParams = new HashMap<String, Object>();
-    inputParams.put("mapId", mapId);
+    
+    long mapIdNum = -1;
   	try
   	{
-      mapId =
-        (long)(new InputParamsValidator(inputParams)).validateAndParseInputParam(
-        	"mapId", "", null, null, false, null);
-      
-  	  (new ReviewStatusModifier(conn)).setAllItemsReviewed(mapId);
+  	  //input mapId may be a map ID or a map name
+      mapIdNum = 
+      	ModelDaoUtils.getRecordIdForInputString(
+      		request.getMapId(), conn, maps, maps.id, maps.displayName);
+      assert(mapIdNum != -1);
+  	}
+  	catch (Exception e)
+    {
+      if (e.getMessage().startsWith("Multiple records exist"))
+      {
+        ResourceErrorHandler.handleError(
+          e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
+          Status.NOT_FOUND,
+          log);
+      }
+      else if (e.getMessage().startsWith("No record exists"))
+      {
+        ResourceErrorHandler.handleError(
+          e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
+          Status.NOT_FOUND,
+          log);
+      }
+      ResourceErrorHandler.handleError(
+        "Error requesting map with ID: " + request.getMapId() + " (" + e.getMessage() + ")", 
+        Status.BAD_REQUEST,
+        log);
+    }
+    
+  	long userId = -1;
+  	try
+  	{
+  		log.debug(
+	      "Retrieving user ID associated with map having ID: " + String.valueOf(mapIdNum) + " ...");
+	  	userId = 
+	  		new SQLQuery(conn, DbUtils.getConfiguration())
+	  	    .from(maps)
+	  	    .where(maps.id.eq(mapIdNum))
+	  	    .singleResult(maps.userId);
+	    log.debug("Retrieved user ID: " + userId);
+  	}
+  	catch (Exception e)
+    {
+      ResourceErrorHandler.handleError(
+        "Error locating user associated with map having ID: " + request.getMapId() +  " (" + 
+          e.getMessage() + ")", 
+        Status.BAD_REQUEST,
+        log);
+    }
+  	assert(userId != -1);
+    
+  	try
+  	{
+  	  (new MapReviewResolver(conn)).setAllReviewsResolved(mapIdNum, userId);
   		
   		log.debug("Committing set all items reviewed transaction...");
       transactionManager.commit(transactionStatus);
@@ -105,7 +166,7 @@ public class ReviewResource
       conn.rollback();
       ReviewUtils.handleError(
       	e, 
-      	"Error setting all records to reviewed for map ID: " + mapId, 
+      	"Error setting all records to reviewed for map ID: " + request.getMapId(), 
       	false);
     }
     finally
@@ -114,6 +175,7 @@ public class ReviewResource
       DbUtils.closeConnection(conn);
     }
   	
+  	log.debug("Set all items reviewed for map with ID: " + request.getMapId());
   	return Response.ok().build();
   }
 }

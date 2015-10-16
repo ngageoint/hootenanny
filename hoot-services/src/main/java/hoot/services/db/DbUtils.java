@@ -57,7 +57,6 @@ import hoot.services.db2.QMaps;
 import hoot.services.db2.QUsers;
 import hoot.services.models.osm.Element.ElementType;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

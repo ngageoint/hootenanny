@@ -29,16 +29,17 @@ package hoot.services.models.review;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Represents a reviewable conflated data entity
+ * Represents a request to mark all reviews resolved
  */
 @XmlRootElement
-public class SetAllItemsReviewedRequest
+public class MapReviewResolverRequest
 {
-  private long mapId = -1;
-  public long getMapId() { return mapId; }
-  public void setMapId(long id) { this.mapId = id; }
+	//can be a map ID or name
+  private String mapId;
+  public String getMapId() { return mapId; }
+  public void setMapId(String id) { this.mapId = id; }
   
-  public SetAllItemsReviewedRequest()
+  public MapReviewResolverRequest()
   {
     
   }

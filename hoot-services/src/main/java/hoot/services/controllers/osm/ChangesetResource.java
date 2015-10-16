@@ -71,6 +71,8 @@ public class ChangesetResource
 {
   private static final Logger log = LoggerFactory.getLogger(ChangesetResource.class);
   
+  private QMaps maps = QMaps.maps;
+  
   private ClassPathXmlApplicationContext appContext;
   private PlatformTransactionManager transactionManager;
   
@@ -130,7 +132,7 @@ public class ChangesetResource
    *
    * Service method endpoint for creating a new OSM changeset
    * 
-   * @param changeset changeset create data
+   * @param changesetData changeset create data
    * @param mapId ID of the map the changeset belongs to
    * @return Response containing the ID assigned to the new changeset
    * @throws Exception 
@@ -145,8 +147,6 @@ public class ChangesetResource
     final String mapId) 
     throws Exception
   {
-    log.debug("Creating changeset for map with ID: " + mapId + " ...");
-    
     Document changesetDoc = null;
     try
     {
@@ -168,11 +168,9 @@ public class ChangesetResource
     {
       log.debug("Initializing database connection...");
     
-      
       long mapIdNum = -1;
       try
       {
-      	QMaps maps = QMaps.maps;
         //input mapId may be a map ID or a map name
         mapIdNum = 
           ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
@@ -206,10 +204,7 @@ public class ChangesetResource
         log.debug(
           "Retrieving user ID associated with map having ID: " + String.valueOf(mapIdNum) + " ...");
         
-        QMaps maps = QMaps.maps;
-
       	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-
       	userId = query.from(maps).where(maps.id.eq(mapIdNum)).singleResult(maps.userId);
       	
         log.debug("Retrieved user ID: " + userId);
@@ -431,11 +426,11 @@ public class ChangesetResource
     try
     {
       log.debug("Intializing database connection...");
-      if(mapId == null) {
+      if (mapId == null) 
+      {
     		throw new Exception("Invalid map id.");
     	}
     	long mapid = Long.parseLong(mapId);
-
 
       Changeset.closeChangeset(mapid, changesetId, conn);
     }

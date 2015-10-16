@@ -32,6 +32,7 @@ import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Calendar;
+import java.util.Map;
 
 import javax.ws.rs.core.Response.Status;
 import javax.xml.transform.TransformerException;
@@ -43,6 +44,7 @@ import hoot.services.db2.QChangesets;
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.GeoUtils;
 import hoot.services.utils.ResourceErrorHandler;
+
 import org.apache.xpath.XPathAPI;
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
@@ -52,6 +54,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
+
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
@@ -66,8 +69,6 @@ public class Changeset extends Changesets
 
   private static final Logger log = LoggerFactory.getLogger(Changeset.class);
   private static final QChangesets changesets  = QChangesets.changesets;
-  @SuppressWarnings("unused")
-  private int maxRecordBatchSize = -1;
   private Connection conn;
   private long _mapId = -1;
 
@@ -76,24 +77,15 @@ public class Changeset extends Changesets
    *
    * @param id changeset ID
    * @param conn JDBC Connection
+   * @throws IOException 
+   * @throws NumberFormatException 
    */
-  public Changeset(final long mapId, final long id, final Connection conn)
+  public Changeset(final long mapId, final long id, final Connection conn) 
+  	throws NumberFormatException, IOException
   {
   	_mapId = mapId;
     setId(id);
     this.conn = conn;
-    try
-    {
-	    maxRecordBatchSize =
-	        Integer.parseInt(
-	          HootProperties.getInstance()
-	            .getProperty(
-	              "maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
-    }
-    catch (Exception e)
-    {
-
-    }
   }
 
   /**
@@ -109,6 +101,8 @@ public class Changeset extends Changesets
   public static long createChangeset(final Document changesetDoc, final long mapId,
     final long userId, Connection dbConn) throws Exception
   {
+  	log.debug("Creating changeset for map ID: " + mapId + "...");
+  	
     final long changesetId = Changeset.insertNew(mapId, userId, dbConn);
     if (changesetId == Long.MAX_VALUE || changesetId < 1)
     {
@@ -117,6 +111,36 @@ public class Changeset extends Changesets
 
     (new Changeset(mapId, changesetId, dbConn)).insertTags(mapId,
       XPathAPI.selectNodeList(changesetDoc, "//changeset/tag"), dbConn);
+    
+    log.debug("Created changeset for with ID: " + changesetId + " for map with ID: " + mapId);
+
+    return changesetId;
+  }
+  
+  /**
+   * Creates a new changeset
+   * 
+   * @param mapId ID of the map owning the changeset
+   * @param userId ID of the user creating the changeset
+   * @param tags tags
+   * @param dbConn JDBC Connection
+   * @return ID of the created changeset
+   * @throws Exception
+   */
+  public static long createChangeset(final long mapId,
+    final long userId, final java.util.Map<String, String> tags, Connection dbConn) throws Exception
+  {
+  	log.debug("Creating changeset for map ID: " + mapId + "...");
+  	
+  	final long changesetId = Changeset.insertNew(mapId, userId, dbConn);
+    if (changesetId == Long.MAX_VALUE || changesetId < 1)
+    {
+      throw new Exception("Invalid changeset ID: " + changesetId);
+    }
+
+    (new Changeset(mapId, changesetId, dbConn)).insertTags(mapId, tags, dbConn);
+    
+    log.debug("Created changeset for with ID: " + changesetId + " for map with ID: " + mapId);
 
     return changesetId;
   }
@@ -183,10 +207,10 @@ public class Changeset extends Changesets
     log.debug("Closing changeset...");
     final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
-    if(new SQLUpdateClause(conn, DbUtils.getConfiguration(_mapId), changesets)
-    .where(changesets.id.eq(getId()))
-    .set(changesets.closedAt, now)
-    .execute() != 1)
+    if (new SQLUpdateClause(conn, DbUtils.getConfiguration(_mapId), changesets)
+          .where(changesets.id.eq(getId()))
+          .set(changesets.closedAt, now)
+          .execute() != 1)
     {
     	throw new Exception("Error closing changeset.");
     }
@@ -538,67 +562,91 @@ public class Changeset extends Changesets
        (newChangeCount + changeset.getNumChanges()) >
          Integer.parseInt(HootProperties.getInstance().getProperty("maximumChangesetElements"));
   }
+  
+  private void writeTags(final long mapId, final String tagsStr) throws Exception
+  {
+  	PreparedStatement ps = null;
+  	try
+  	{
+  		String sql = "UPDATE changesets_" + mapId + " SET tags=? WHERE id=?";
+      ps = conn.prepareStatement(sql);
+      ps.setObject(1, tagsStr, Types.OTHER);
+  		ps.setLong(2, getId());
+  		
+  		long execResult = ps.executeUpdate();
+  		if (execResult < 1)
+  		{
+  			throw new Exception("No tags were changed for changeset_" + mapId);
+  		}
+  	}
+  	catch (Exception e)
+    {
+      throw new Exception("Error inserting tags for changeset with ID: " + getId() +
+        " - " + e.getMessage());
+    }
+    finally
+    {
+    	if (ps != null)
+    	{
+    		ps.close();
+    	}
+    }
+  }
+  
+  /**
+   * Inserts all tags for an element into the services database
+   * 
+   * @param mapId ID of the map owning the element
+   * @param tags map containing tags
+   * @param conn JDBC Connection
+   * @throws Exception
+   */
+  public void insertTags(final long mapId, final java.util.Map<String, String> tags, 
+  	Connection conn) throws Exception
+  {
+  	String strKv = "";
+  	for (Map.Entry<String, String> tagEntry : tags.entrySet())
+  	{
+  		if (strKv.length() > 0)
+      {
+        strKv += ",";
+      }
+      strKv += tagEntry.getKey() + "=>" + tagEntry.getValue();
+  	}
+  	String tagsStr = "";
+    tagsStr += strKv;
+    
+  	writeTags(mapId, tagsStr);
+  }
 
   /**
   * Inserts all tags for an element into the services database
   *
+  * @param mapId ID of the map owning the element
   * @param xml list of XML tags
   * @param conn JDBC Connection
   * @throws Exception
   */
   public void insertTags(final long mapId, final NodeList xml, Connection conn) throws Exception
   {
-  	PreparedStatement ps = null;
-    try
+    log.debug("Inserting tags for changeset with ID: " + getId());
+
+    String strKv = "";
+
+    for (int i = 0; i < xml.getLength(); i++)
     {
-      log.debug("Inserting tags for changeset with ID: " + getId());
-
-      String strKv = "";
-
-      for (int i = 0; i < xml.getLength(); i++)
+      NamedNodeMap tagAttributes = xml.item(i).getAttributes();
+      String key = "\"" + tagAttributes.getNamedItem("k").getNodeValue() + "\"";
+      String val = "\"" + tagAttributes.getNamedItem("v").getNodeValue() + "\"";
+      if (strKv.length() > 0)
       {
-        NamedNodeMap tagAttributes = xml.item(i).getAttributes();
-
-        String key = "\"" + tagAttributes.getNamedItem("k").getNodeValue() + "\"";
-        String val = "\"" + tagAttributes.getNamedItem("v").getNodeValue() + "\"";
-        if (strKv.length() > 0)
-        {
-          strKv += ",";
-        }
-
-        strKv += key + "=>" + val;
-
+        strKv += ",";
       }
-      String strTags = "";
-      strTags += strKv;
-
-      String sql = "UPDATE changesets_" + mapId + " SET tags=? WHERE id=?";
-      ps = conn.prepareStatement(sql);
-      ps.setObject(1, strTags, Types.OTHER);
-			ps.setLong(2, getId());
-			
-			long execResult = ps.executeUpdate();
-			if(execResult < 1)
-			{
-				throw new Exception("No tags were changed for changeset_" + mapId);
-			}
+      strKv += key + "=>" + val;
     }
-    catch (Exception e)
-    {
-      throw new Exception("Error inserting tags for changeset with ID: " + getId() +
-        " - " + e.getMessage());
-    }
+    String tagsStr = "";
+    tagsStr += strKv;
 
-    finally
-    {
-      // finally block used to close resources
-    	
-    	if(ps != null)
-    	{
-    		ps.close();
-    	}
-
-    }// end try
-
+    writeTags(mapId, tagsStr);
   }
 }
