@@ -2,9 +2,15 @@ package hoot.services.writers.review;
 
 import java.io.IOException;
 
-import hoot.services.UnitTest;
-import hoot.services.osm.OsmResourceTestAbstract;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response.Status;
 
+import hoot.services.UnitTest;
+import hoot.services.models.review.SetAllItemsReviewedRequest;
+import hoot.services.osm.OsmResourceTestAbstract;
+import hoot.services.utils.RandomNumberGenerator;
+
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -23,17 +29,16 @@ public class ReviewStatusModifierTest extends OsmResourceTestAbstract
 	@Category(UnitTest.class)
 	public void testSetAllItemsReviewed() throws Exception
 	{
-  	/*ReviewTestUtils.populateReviewDataForAllDataTypes();
+  	//ReviewTestUtils.populateReviewDataForAllDataTypes();
   	
   	SetAllItemsReviewedRequest request = new SetAllItemsReviewedRequest();
   	request.setMapId(mapId);
-  	final String response =*
-	  	resource()
-	      .path("/review/setallreviewed")
-	      .type(MediaType.APPLICATION_JSON)
-	      .accept(MediaType.TEXT_PLAIN)
-	      .put(request);
-  	Assert.assertEquals(
+  	resource()
+      .path("/review/setallreviewed")
+      .type(MediaType.APPLICATION_JSON)
+      .accept(MediaType.TEXT_PLAIN)
+      .put(request);
+  	/*Assert.assertEquals(
   		5, 
   		new SQLQuery(conn, DbUtils.getConfiguration(mapId))
         .from(reviewItems)
@@ -48,7 +53,7 @@ public class ReviewStatusModifierTest extends OsmResourceTestAbstract
   @Category(UnitTest.class)
   public void testSetAllReviewedMapDoesntExist() throws Exception
   {
-    /*try
+    try
     {
     	SetAllItemsReviewedRequest request = new SetAllItemsReviewedRequest();
     	request.setMapId((long)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE));
@@ -56,7 +61,7 @@ public class ReviewStatusModifierTest extends OsmResourceTestAbstract
 	      .path("/review/setallreviewed")
 	      .type(MediaType.APPLICATION_JSON)
 	      .accept(MediaType.TEXT_PLAIN)
-	      .put(request);
+	      .put((long)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE));
     }
     catch (UniformInterfaceException e)
     {
@@ -65,7 +70,7 @@ public class ReviewStatusModifierTest extends OsmResourceTestAbstract
         e.getResponse().getEntity(String.class).contains("No record exists"));
 
       throw e;
-    }*/
+    }
   }
 
 	@Ignore
@@ -73,7 +78,7 @@ public class ReviewStatusModifierTest extends OsmResourceTestAbstract
   @Category(UnitTest.class)
   public void testSetAllReviewedMissingMapIdParam() throws Exception
   {
-    /*try
+    try
     {
     	SetAllItemsReviewedRequest request = new SetAllItemsReviewedRequest();
 	  	resource()
@@ -88,6 +93,6 @@ public class ReviewStatusModifierTest extends OsmResourceTestAbstract
       //Assert.assertTrue(
         //e.getResponse().getEntity(String.class).contains(""));
       throw e;
-    }*/
+    }
   }
 }

@@ -27,24 +27,15 @@
 package hoot.services.controllers.job;
 
 import java.sql.Connection;
-import java.sql.Timestamp;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
-import hoot.services.db2.QMaps;
-import hoot.services.geo.BoundingBox;
-import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.review.ReviewUtils;
 import hoot.services.validators.job.InputParamsValidator;
 import hoot.services.writers.review.ReviewStatusModifier;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -52,8 +43,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.lang3.StringUtils;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -63,24 +52,12 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 /**
- * Non-WPS service endpoint for the conflated data review process
- *
- * @todo Unfortunately, not having these default values as attributes in the methods makes
-  validation impossible, but having them as attributes renders their config values useless.
-  Need to come up with a better way to handle default values.  Is there some way to populate the
-  attribute values directly from a file?
+ * Service endpoint for the conflated data review process
  */
 @Path("/review")
 public class ReviewResource
 {
   private static final Logger log = LoggerFactory.getLogger(ReviewResource.class);
-
-  //These parameters are passed in by the unit tests only.  With better unit test coverage,
-  //these params could probably go away.
-  public static long testDelayMilliseconds = 0;
-  public static boolean simulateFailure = false;
-  //TODO: see #6270
-  public static String reviewRecordWriter = "reviewPrepareDbWriter2";
 
   private ClassPathXmlApplicationContext appContext;
   private PlatformTransactionManager transactionManager;
@@ -112,9 +89,8 @@ public class ReviewResource
     inputParams.put("mapId", mapId);
   	try
   	{
-  		InputParamsValidator inputParamsValidator = new InputParamsValidator(inputParams);
       mapId =
-        (long)inputParamsValidator.validateAndParseInputParam(
+        (long)(new InputParamsValidator(inputParams)).validateAndParseInputParam(
         	"mapId", "", null, null, false, null);
       
   	  (new ReviewStatusModifier(conn, mapId)).setAllItemsReviewed();
