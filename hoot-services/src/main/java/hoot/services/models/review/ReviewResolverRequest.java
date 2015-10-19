@@ -29,35 +29,21 @@ package hoot.services.models.review;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Review information
+ * Represents a request to mark all reviews resolved
  */
 @XmlRootElement
-public class ReviewInfo
+public class ReviewResolverRequest
 {
-  private long elementId = -1;
-  public long getElementId() { return elementId; }
-  public void setElementId(long id) { this.elementId = id; }
+  private String mapId;
+  public String getMapId() { return mapId; }
+  public void setMapId(String id) { this.mapId = id; }
   
-  private String uuid = null;
-  public String getUuid() { return uuid; }
-  public void setUuid(String id) { this.uuid = id; }
-  
-  private long mapId = -1;
-  public long getMapId() { return mapId; }
-  public void setMapId(long id) { this.mapId = id; }
-  
-  private String elementType;
-  public String getElementType() { return elementType; }
-  public void setElementType(String type) { this.elementType = type; }
-
-  public ReviewInfo()
+  public ReviewResolverRequest()
   {
   }
   
-  @Override
-  public String toString()
+  public ReviewResolverRequest(final String mapId)
   {
-  	return "map id: " + mapId + ", element id: " + elementId + ", unique ID: " + uuid + 
-  		", element type: " + elementType;
+  	this.mapId = mapId;
   }
 }

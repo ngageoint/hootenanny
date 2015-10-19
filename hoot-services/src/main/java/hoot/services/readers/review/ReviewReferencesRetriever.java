@@ -1,12 +1,24 @@
 package hoot.services.readers.review;
 
+import hoot.services.controllers.osm.MapResource;
 import hoot.services.db.DbUtils;
-import hoot.services.models.review.ReviewInfo;
+import hoot.services.db2.CurrentRelationMembers;
+import hoot.services.db2.QCurrentRelationMembers;
+import hoot.services.models.osm.Element;
+import hoot.services.models.osm.ElementInfo;
+import hoot.services.review.ReviewUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,87 +31,126 @@ public class ReviewReferencesRetriever
 {
 	private static final Logger log = LoggerFactory.getLogger(ReviewReferencesRetriever.class);
 	
-	private Connection conn;
-	private long mapId;
+	private static final QCurrentRelationMembers currentRelationMembers = 
+		QCurrentRelationMembers.currentRelationMembers;
 	
-  public ReviewReferencesRetriever(final Connection conn, final long mapId) throws Exception
+	private Connection conn;
+	
+  public ReviewReferencesRetriever(final Connection conn) throws Exception
   {
   	this.conn = conn;
-  	this.mapId = mapId;
+  }
+  
+  private List<Long> getUnresolvedReviewRelations(final ElementInfo queryElementInfo, 
+  	final long mapId) throws SQLException
+  {
+  	final String currentRelationMembersTableName = "current_relation_members_" + mapId;
+		final String currentRelationsTableName = "current_relations_" + mapId;
+		String sql = "";
+  	sql += "select relation_id from " + currentRelationMembersTableName;
+  	sql += " join " + currentRelationsTableName + " on " + currentRelationMembersTableName + 
+  	  ".relation_id = " + currentRelationsTableName + ".id";
+  	sql += " where " + currentRelationMembersTableName + ".member_id = " + 
+  		queryElementInfo.getElementId() + " and " + currentRelationMembersTableName +
+  	  ".member_type = " + Element.elementTypeFromString(queryElementInfo.getElementType()) + 
+  	  " and " + currentRelationsTableName + ".tags->'hoot:review:needs' = 'yes'";
+  	
+  	Statement stmt = null;
+  	ResultSet rs = null;
+  	List<Long> relationIds = new ArrayList<Long>();
+  	try
+  	{
+  		stmt = conn.createStatement();
+  	  rs = stmt.executeQuery(sql);
+  		while (rs.next())
+  		{
+  			relationIds.add(rs.getLong(1));
+  		}
+  	}
+  	finally
+  	{
+  		if (stmt != null)
+  		{
+  			stmt.close();
+  		}
+  		if (rs != null)
+  		{
+  			rs.close();
+  		}
+  	}
+  	
+  	return relationIds;
   }
 	
   /**
-   * Retrieves all other element references to reviews for an element
+   * Retrieves all other element references to reviews for a given element
    * 
-   * @param elementUniqueId unique ID of the element whose review references are to be retrieved
-   * @return a list containing all features the input feature was to be reviewed with
+   * @param requestingElementInfo element whose review references are to be retrieved
+   * @return a list containing all features the input feature needs to be reviewed with
+   * @throws Exception 
+   * @throws InvocationTargetException 
+   * @throws NoSuchMethodException 
+   * @throws ClassNotFoundException 
+   * @throws IllegalAccessException 
+   * @throws InstantiationException 
    */
-	public List<ReviewInfo> getReferences(final String elementUniqueId)
+	public List<ElementInfo> getUnresolvedReferences(final ElementInfo queryElementInfo) 
+		throws InstantiationException, IllegalAccessException, ClassNotFoundException, 
+		NoSuchMethodException, InvocationTargetException, Exception
   {
-		log.debug("mapId: " + mapId);
-  	log.debug("elementUniqueId: " + elementUniqueId);
-		List<ReviewInfo> references = new ArrayList<ReviewInfo>();
-		/*List<String> idsParsed = new ArrayList<String>();
+		log.debug("requestingElementInfo: " + queryElementInfo.toString());
+		List<ElementInfo> references = new ArrayList<ElementInfo>();
 		
-		List<ReviewAgainstItem> reviewAgainstItems = new ArrayList<ReviewAgainstItem>();
-		//get all review against items that are referenced by the input elements; since
-		//the review table data breaks up one to many reviewable uuid to review against uuid
-		//relationships, we don't have to break up the review against uuid's list here
-		final List<ElementIdMappings> reviewAgainstItemRecords =
-      new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-		    .from(reviewItems)
-		    .join(elementIdMappings)
-		    .on(
-		    	reviewItems.reviewAgainstItemId.eq(elementIdMappings.elementId)
-      			.and(elementIdMappings.mapId.eq(mapId)))
-  		  .where(
-  		  	reviewItems.reviewableItemId.eq(elementUniqueId)
-  		  	.and(reviewItems.mapId.eq(mapId)))
-  		  .orderBy(reviewItems.reviewId.asc())
-  		  .list(elementIdMappings);
-		for (ElementIdMappings itemRecord : reviewAgainstItemRecords)
+	  final long mapIdNum = MapResource.validateMap(queryElementInfo.getMapId(), conn);
+    assert(mapIdNum != -1);
+    
+    //check for query element existence
+    Set<Long> elementIds = new HashSet<Long>();
+		elementIds.add(queryElementInfo.getElementId());
+		if (StringUtils.trimToNull(queryElementInfo.getElementType()) == null ||
+				!Element.allElementsExist(
+				  mapIdNum, Element.elementTypeFromString(queryElementInfo.getElementType()), 
+				  elementIds, conn))
 		{
-			if (!idsParsed.contains(itemRecord.getElementId()))
-			{
-				ReviewAgainstItem item = new ReviewAgainstItem();
-				item.setId(itemRecord.getOsmElementId());
-				item.setType(itemRecord.getOsmElementType().toString().toLowerCase());
-				item.setUuid(itemRecord.getElementId());
-				reviewAgainstItems.add(item);
-				idsParsed.add(itemRecord.getElementId());
-			}	
+			ReviewUtils.handleError(
+				new Exception(
+					"Element with ID: " + queryElementInfo + " and type: " + 
+				  queryElementInfo.getElementType() + " does not exist."), 
+					"", 
+					false);
 		}
-		idsParsed.clear();
-		references.add(reviewAgainstItems);
 		
-		List<ReviewAgainstItem> reviewableItems = new ArrayList<ReviewAgainstItem>();
-    //add all items which reference the input features as a review against item
-		final List<ElementIdMappings> reviewableItemRecords =
-      new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-		    .from(reviewItems)  //was using distinct here but ordering was giving me problems when using it
-		    .join(elementIdMappings)
-		    .on(
-		    	reviewItems.reviewableItemId.eq(elementIdMappings.elementId)
-      			.and(elementIdMappings.mapId.eq(mapId)))
-  		  .where(
-  		  	reviewItems.reviewAgainstItemId.eq(elementUniqueId)
-  		  	  .and(reviewItems.mapId.eq(mapId)))
-  		  .orderBy(reviewItems.reviewId.asc())
-  		  .list(elementIdMappings);
-		for (ElementIdMappings itemRecord : reviewableItemRecords)
+		//select all unresolved review relation id's from current relation members where member id = 
+		//requesting element's member id and the element type = the requesting element type
+		final List<Long> unresolvedReviewRelationIds = 
+			getUnresolvedReviewRelations(queryElementInfo, mapIdNum);
+		
+		//select all relation members in the group of remaining unresolved relation id's where the 
+		//member's id is not equal to the requesting element's id and the member's type is not = to 
+		//the requesting element's type
+		final List<CurrentRelationMembers> referencedMembers = 
+	    new SQLQuery(conn, DbUtils.getConfiguration(mapIdNum))
+	      .from(currentRelationMembers)
+	      .where(currentRelationMembers.relationId.in(unresolvedReviewRelationIds))
+	      .orderBy(
+	      	currentRelationMembers.relationId.asc(), currentRelationMembers.memberId.asc(), 
+	      	currentRelationMembers.sequenceId.asc())
+	      .list(currentRelationMembers);
+		
+		//return all elements corresponding to the filtered down set of relation members
+		for (CurrentRelationMembers member : referencedMembers)
 		{
-			if (!idsParsed.contains(itemRecord.getElementId()))
+			final long memberElementId = member.getMemberId();
+			final String memberElementTypeStr = 
+				Element.elementTypeForElementEnum(member.getMemberType()).toString().toLowerCase();
+			//don't add a reference to the requesting element itself
+			if (queryElementInfo.getElementId() != memberElementId &&
+					!queryElementInfo.getElementType().equals(memberElementTypeStr))
 			{
-				ReviewAgainstItem item = new ReviewAgainstItem();
-				item.setId(itemRecord.getOsmElementId());
-				item.setType(itemRecord.getOsmElementType().toString().toLowerCase());
-				item.setUuid(itemRecord.getElementId());
-				reviewableItems.add(item);
-				idsParsed.add(itemRecord.getElementId());
+				references.add(
+					new ElementInfo(queryElementInfo.getMapId(), memberElementId, memberElementTypeStr));
 			}
 		}
-		idsParsed.clear();
-		references.add(reviewableItems);*/
 		
 		return references;
   }

@@ -70,7 +70,8 @@ public class ReviewUtils
       }
       else if (e.getMessage().contains("record exists") ||
                e.getMessage().contains("records exist") ||
-               e.getMessage().contains("to be updated does not exist"))
+               e.getMessage().contains("to be updated does not exist") ||
+               e.getMessage().contains("does not exist"))
       {
         status = Status.NOT_FOUND;
       }

@@ -1,21 +1,24 @@
 package hoot.services.controllers.job;
 
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
 import hoot.services.UnitTest;
-import hoot.services.db2.QCurrentRelations;
-import hoot.services.models.review.ReviewReferencesCollection;
+import hoot.services.models.osm.Element;
+import hoot.services.models.osm.ElementInfo;
+import hoot.services.models.osm.Element.ElementType;
+import hoot.services.models.review.ReviewReferences;
+import hoot.services.models.review.ReviewReferencesRequest;
+import hoot.services.models.review.ReviewReferencesResponse;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.review.ReviewTestUtils;
+import hoot.services.utils.JsonUtils;
 import hoot.services.utils.RandomNumberGenerator;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -23,56 +26,78 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 
 public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract
 {
-	protected static final QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
-	
 	public ReviewResourceGetReferencesTest() throws NumberFormatException, IOException
   {
     super(new String[]{ "hoot.services.controllers.job" });
   }
 	
-	@Ignore
 	@Test
 	@Category(UnitTest.class)
 	public void testGetReferences() throws Exception
 	{
-		/*ReviewTestUtils.populateReviewDataForAllDataTypes();
+		ReviewTestUtils testUtils = new ReviewTestUtils();
+		/*final long changesetId =*/ testUtils.populateReviewDataForAllDataTypes(mapId, userId);
+		Map<Long, Element> oldNodeIdsToNewNodes = 
+			testUtils.parsedElementIdsToElementsByType.get(ElementType.Node);
 		
-		final ReviewReferencesCollection response = 
+		final ReviewReferencesResponse response = 
 	  	resource()
 	      .path("/review/refs")
-	      .queryParam("mapId", String.valueOf(mapId))
 	      .queryParam(
-	      	"elementUniqueIds", 
-	      	"{c254d8ab-3f1a-539f-91b7-98b485c5c129};{6117767e-8a0b-5624-a599-fa50f96213a6}")
+        	"queryElements", 
+          JsonUtils.objectToJson(
+          	new ReviewReferencesRequest(
+      		    new ElementInfo[] { 
+      			    new ElementInfo(
+      			    	String.valueOf(mapId), oldNodeIdsToNewNodes.get(-116).getId(), "node"),
+      			    new ElementInfo(
+      			    	String.valueOf(mapId), oldNodeIdsToNewNodes.get(-117).getId(), "node")
+      			  })))
 	      .accept(MediaType.APPLICATION_JSON)
-        .get(ReviewReferencesCollection.class);
+        .get(ReviewReferencesResponse.class);
 	  
-		final ReviewReferences[] refs = response.getReviewReferences();
-	  Assert.assertEquals(2, refs.length);
-	  
-	  final ReviewReferences refs1 = refs[0];
-	  Assert.assertEquals("{c254d8ab-3f1a-539f-91b7-98b485c5c129}", refs1.getUniqueId());
-	  Assert.assertNull(refs1.getReviewableItems());
-	  final ReviewAgainstItem[] reviewAgainst1 = refs1.getReviewAgainstItems();
-	  Assert.assertEquals(1, reviewAgainst1.length);
-	  final ReviewAgainstItem firstReviewAgainst1 = reviewAgainst1[0];
-	  Assert.assertEquals("node", firstReviewAgainst1.getType().toLowerCase());
-	  Assert.assertEquals("{6117767e-8a0b-5624-a599-fa50f96213a6}", firstReviewAgainst1.getUuid());
-	  
-	  final ReviewReferences refs2 = refs[1];
-	  Assert.assertEquals("{6117767e-8a0b-5624-a599-fa50f96213a6}", refs2.getUniqueId());
-	  final ReviewAgainstItem[] reviewables2 = refs2.getReviewableItems();
-	  Assert.assertEquals(2, reviewables2.length);
-	  final ReviewAgainstItem firstReviewable2 = reviewables2[0];
-	  Assert.assertEquals("node", firstReviewable2.getType().toLowerCase());
-	  Assert.assertEquals("{c254d8ab-3f1a-539f-91b7-98b485c5c129}", firstReviewable2.getUuid());
-	  final ReviewAgainstItem secondReviewable2 = reviewables2[1];
-	  Assert.assertEquals("node", secondReviewable2.getType().toLowerCase());
-	  Assert.assertEquals("{d1012bc9-92bc-5931-aac2-aa5702f42b8b}", secondReviewable2.getUuid());
-	  Assert.assertNull(refs2.getReviewAgainstItems());*/
+		final ReviewReferences[] reviewReferenceResponses = response.getReviewReferenceResponses();
+		Assert.assertEquals(2, reviewReferenceResponses.length);
+		for (int i = 0; i < reviewReferenceResponses.length; i++)
+		{
+			ReviewReferences refsResponse = reviewReferenceResponses[i];
+			ElementInfo queryElementInfo = refsResponse.getQueryElementInfo();
+			
+			if (i == 0)
+			{
+				Assert.assertEquals(oldNodeIdsToNewNodes.get(-116).getId(), queryElementInfo.getElementId());
+				Assert.assertEquals("node", queryElementInfo.getElementType());
+				
+				final ElementInfo[] refs = refsResponse.getReviewReferences();
+				Assert.assertEquals(2, refs.length);
+				
+				Assert.assertEquals(oldNodeIdsToNewNodes.get(-46).getId(), refs[0].getElementId());
+				Assert.assertEquals("node", refs[0].getElementType());
+				Assert.assertEquals(mapId, refs[0].getMapId());
+				
+				Assert.assertEquals(oldNodeIdsToNewNodes.get(-49).getId(), refs[1].getElementId());
+				Assert.assertEquals("node", refs[1].getElementType());
+				Assert.assertEquals(mapId, refs[1].getMapId());
+			}
+			else if (i == 1)
+			{
+				Assert.assertEquals(oldNodeIdsToNewNodes.get(-117).getId(), queryElementInfo.getElementId());
+				Assert.assertEquals("node", queryElementInfo.getElementType());
+				
+				final ElementInfo[] refs = refsResponse.getReviewReferences();
+				Assert.assertEquals(2, refs.length);
+				
+				Assert.assertEquals(oldNodeIdsToNewNodes.get(-42).getId(), refs[0].getElementId());
+				Assert.assertEquals("node", refs[0].getElementType());
+				Assert.assertEquals(mapId, refs[0].getMapId());
+				
+				Assert.assertEquals(oldNodeIdsToNewNodes.get(-47).getId(), refs[1].getElementId());
+				Assert.assertEquals("node", refs[1].getElementType());
+				Assert.assertEquals(mapId, refs[1].getMapId());
+			}
+		}
 	}
 	
-	@Ignore
 	@Test(expected=UniformInterfaceException.class)
   @Category(UnitTest.class)
   public void testGetMapDoesntExist() throws Exception
@@ -82,143 +107,82 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract
     	resource()
         .path("/review/refs")
         .queryParam(
-        	"mapId", 
-        	String.valueOf((int)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)))
-        .queryParam(
-      	  "elementUniqueIds", 
-      	  "{c254d8ab-3f1a-539f-91b7-98b485c5c129};{6117767e-8a0b-5624-a599-fa50f96213a6}")
+        	"queryElements", 
+          JsonUtils.objectToJson(
+          	new ReviewReferencesRequest(
+      		    new ElementInfo[] { 
+      			    new ElementInfo(
+      				    String.valueOf(
+      				    	(long)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)), 
+      				    -1, 
+      				    "")})))
+        .type(MediaType.TEXT_PLAIN)
         .accept(MediaType.APPLICATION_JSON)
-        .get(ReviewReferencesCollection.class);
+        .get(ReviewReferencesResponse.class);
     }
     catch (UniformInterfaceException e)
     {
       Assert.assertEquals(Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
+      //System.out.println(e.getResponse().getEntity(String.class));
       Assert.assertTrue(
-        e.getResponse().getEntity(String.class).contains("No record exists"));
+        e.getResponse().getEntity(String.class).contains("No map exists"));
 
       throw e;
     }
   }
-
-	@Ignore
-  @Test(expected=UniformInterfaceException.class)
+	
+	@Test(expected=UniformInterfaceException.class)
   @Category(UnitTest.class)
-  public void testGetMissingMapIdParam() throws Exception
+  public void testGetQueryElementDoesntExist() throws Exception
   {
     try
     {
     	resource()
         .path("/review/refs")
         .queryParam(
-    	    "elementUniqueIds", 
-    	    "{c254d8ab-3f1a-539f-91b7-98b485c5c129};{6117767e-8a0b-5624-a599-fa50f96213a6}")
+        	"queryElements", 
+          JsonUtils.objectToJson(
+          	new ReviewReferencesRequest(
+      		    new ElementInfo[] { new ElementInfo(String.valueOf(mapId), -1, "node")})))
+        .type(MediaType.TEXT_PLAIN)
         .accept(MediaType.APPLICATION_JSON)
-        .get(ReviewReferencesCollection.class);
-    }
-    catch (UniformInterfaceException e)
-    {
-      Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-      Assert.assertTrue(
-        e.getResponse().getEntity(String.class).contains("Invalid input parameter value"));
-      throw e;
-    }
-  }
-
-  @Ignore
-  @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
-  public void testGetEmptyMapIdParam() throws Exception
-  {
-    try
-    {
-    	resource()
-        .path("/review/refs")
-        .queryParam("mapId", "")
-        .queryParam(
-    	    "elementUniqueIds", 
-    	    "{c254d8ab-3f1a-539f-91b7-98b485c5c129};{6117767e-8a0b-5624-a599-fa50f96213a6}")
-        .accept(MediaType.APPLICATION_JSON)
-        .get(ReviewReferencesCollection.class);
-    }
-    catch (UniformInterfaceException e)
-    {
-    	Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-      Assert.assertTrue(
-        e.getResponse().getEntity(String.class).contains("Invalid input parameter value"));
-      throw e;
-    }
-  }
-  
-  @Ignore
-  @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
-  public void testGetElementUniqueIdDoesntExist() throws Exception
-  {
-    try
-    {
-    	resource()
-        .path("/review/refs")
-        .queryParam(
-        	"mapId", 
-        	String.valueOf((int)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)))
-        .queryParam(
-    	    "elementUniqueIds", 
-    	    //invalid uuid
-    	    "{d254d8ab-3f1a-539f-91b7-98b485c5c129}")
-        .accept(MediaType.APPLICATION_JSON)
-        .get(ReviewReferencesCollection.class);
+        .get(ReviewReferencesResponse.class);
     }
     catch (UniformInterfaceException e)
     {
       Assert.assertEquals(Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
+      //System.out.println(e.getResponse().getEntity(String.class));
       Assert.assertTrue(
-        e.getResponse().getEntity(String.class).contains("No record exists"));
+        e.getResponse().getEntity(String.class).contains("does not exist"));
 
       throw e;
     }
   }
   
-  @Ignore
-  @Test(expected=UniformInterfaceException.class)
+	@Test(expected=UniformInterfaceException.class)
   @Category(UnitTest.class)
-  public void testGetMissingElementUniqueIdsParam() throws Exception
+  public void testGetQueryElementEmptyElementType() throws Exception
   {
     try
     {
     	resource()
         .path("/review/refs")
-        .queryParam("mapId", String.valueOf(mapId))
+        .queryParam(
+        	"queryElements", 
+          JsonUtils.objectToJson(
+          	new ReviewReferencesRequest(
+      		    new ElementInfo[] { new ElementInfo(String.valueOf(mapId), -1, "")})))
+        .type(MediaType.TEXT_PLAIN)
         .accept(MediaType.APPLICATION_JSON)
-        .get(ReviewReferencesCollection.class);
+        .get(ReviewReferencesResponse.class);
     }
     catch (UniformInterfaceException e)
     {
-    	Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+      Assert.assertEquals(Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
+      //System.out.println(e.getResponse().getEntity(String.class));
       Assert.assertTrue(
-        e.getResponse().getEntity(String.class).contains("Invalid input parameter value"));
-      throw e;
-    }
-  }
+        e.getResponse().getEntity(String.class).contains("does not exist"));
 
-  @Ignore
-  @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
-  public void testGetEmptyElementUniqueIdsParam() throws Exception
-  {
-    try
-    {
-    	resource()
-        .path("/review/refs")
-        .queryParam("mapId", String.valueOf(mapId))
-        .queryParam("elementUniqueIds", "")
-        .accept(MediaType.APPLICATION_JSON)
-        .get(ReviewReferencesCollection.class);
-    }
-    catch (UniformInterfaceException e)
-    {
-    	Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-      Assert.assertTrue(
-        e.getResponse().getEntity(String.class).contains("Invalid input parameter value"));
       throw e;
     }
   }

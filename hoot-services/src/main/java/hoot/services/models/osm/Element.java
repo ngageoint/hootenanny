@@ -655,16 +655,15 @@ public abstract class Element implements XmlSerializable, DbSerializable
 
     if(elementIds.size() > 0)
     {
-  	return
+  	  return
   			new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable())
   			.where(prototype.getElementIdField().in(elementIds))
   			.count() == elementIds.size();
     }
     else
     {
-    	return 0  == elementIds.size();
+    	return 0 == elementIds.size();
     }
-
   }
 
   /**
