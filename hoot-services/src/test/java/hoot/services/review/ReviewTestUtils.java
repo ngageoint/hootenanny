@@ -26,8 +26,14 @@
  */
 package hoot.services.review;
 
+import hoot.services.models.osm.Changeset;
+import hoot.services.writers.osm.ChangesetDbWriter;
+
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,15 +46,30 @@ public class ReviewTestUtils
   private static final Logger log = LoggerFactory.getLogger(ReviewTestUtils.class);
    
   public static Connection conn;
-
-  public static long mapId = -1;
   
   /**
    * Writes the conflated review relation output for conflating AllDataTypesA.osm with 
    * AllDataTypesB.osm
+   * 
+   * @throws Exception 
+   * @throws IOException 
    */
-  public static void populateReviewDataForAllDataTypes()
+  public static long populateReviewDataForAllDataTypes(final long mapId, final long userId) 
+  	throws IOException, Exception
   {
-  	
+    //write the reviewable data to the OSM tables
+    final long changesetId = Changeset.insertNew(mapId, userId, conn);
+    ChangesetDbWriter elementWriter = new ChangesetDbWriter(conn);
+    /*final Document response =*/
+      elementWriter.write(
+      	mapId,
+        changesetId,
+        FileUtils.readFileToString(
+          new File(
+            Thread.currentThread().getContextClassLoader().getResource(
+              "hoot/services/review/allDataTypesConflatedOut.osm")
+            .getPath()))
+          .replaceAll("changeset=\"\"", "changeset=\"" + changesetId + "\""));
+      return changesetId;
   }
 }

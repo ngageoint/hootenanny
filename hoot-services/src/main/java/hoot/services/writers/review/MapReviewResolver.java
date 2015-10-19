@@ -24,13 +24,14 @@ public class MapReviewResolver
   }
   
   /**
+   * Resolves all reviews for a given map
    * 
-   * 
-   * @param mapId
-   * @param userId
+   * @param mapId ID of the map owning the review data
+   * @param userId user ID associated with the review data
+   * @return the ID of the changeset used to resolve the reviews
    * @throws Exception
    */
-  public void setAllReviewsResolved(final long mapId, final long userId) throws Exception
+  public long setAllReviewsResolved(final long mapId, final long userId) throws Exception
   {
   	//create a changeset
     java.util.Map<String, String> changesetTags = new HashMap<String, String>();
@@ -43,11 +44,6 @@ public class MapReviewResolver
   	 * - mark all review relations belonging to the map as resolved
   	 * - update the changeset id for each review relation
   	 * - increment the version for each review relation
-  	 */
-  	/*
-  	 * update current_relations_1 
-  	 * set tags = tags || ('hoot:review:needs' => 'no'), changeset_id = changesetId, version = version +1
-  	 * where tags->'type' = 'review'
   	 */
   	String sql = "";
   	sql += "update current_relations_" + mapId;
@@ -70,5 +66,7 @@ public class MapReviewResolver
   			stmt.close();
   		}
   	}
+  	
+  	return changesetId;
   }
 }

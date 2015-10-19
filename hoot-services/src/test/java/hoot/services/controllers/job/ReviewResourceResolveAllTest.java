@@ -10,12 +10,12 @@ import javax.ws.rs.core.Response.Status;
 import hoot.services.UnitTest;
 import hoot.services.db2.QCurrentRelations;
 import hoot.services.models.review.MapReviewResolverRequest;
+import hoot.services.models.review.MapReviewResolverResponse;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.review.ReviewTestUtils;
 import hoot.services.utils.RandomNumberGenerator;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -29,25 +29,24 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract
   {
     super(new String[]{ "hoot.services.controllers.job" });
   }
-		
-	@Ignore
+	
 	@Test
 	@Category(UnitTest.class)
 	public void testSetAllReviewsResolved() throws Exception
 	{
-  	ReviewTestUtils.populateReviewDataForAllDataTypes();
+  	/*final long changesetId =*/ ReviewTestUtils.populateReviewDataForAllDataTypes(mapId, userId);
   	
-  	MapReviewResolverRequest request = new MapReviewResolverRequest();
-  	request.setMapId(String.valueOf(mapId));
-  	resource()
-      .path("/review/resolveall")
-      .type(MediaType.APPLICATION_JSON)
-      .accept(MediaType.TEXT_PLAIN)
-      .put(request);
+  	final MapReviewResolverResponse response = 
+  		resource()
+        .path("/review/resolveall")
+        .type(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON)
+        .put(MapReviewResolverResponse.class, new MapReviewResolverRequest(String.valueOf(mapId)));
   	
   	Statement stmt = null;
   	ResultSet rs = null;
   	
+    //all review relations should have been set to resolved
   	String sql = "select count(*) from current_relations_" + mapId;
   	sql += " where tags->'hoot:review:needs' = 'yes'";
   	try
@@ -55,7 +54,7 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract
   		stmt = conn.createStatement();
   		rs = stmt.executeQuery(sql);
   		rs.next();
-  		//should be no items left to review
+  		
   		Assert.assertEquals(0, rs.getInt(1));
   	}
   	finally
@@ -70,16 +69,51 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract
   		}
   	}
   	
-  	//TODO: finish
-  	
-  	//verify changeset ID was updated
-  	
+    //all review relations should have the incremented changeset id
     sql = "select count(*) from current_relations_" + mapId;
-  	sql += " where tags->'type' = 'review' and changeset_id != ";
+    //TODO: don't think this is right...
+  	sql += " where tags->'type' = 'review' and tags->'hoot:review:needs' = 'no' and " +
+      "changeset_id = " + response.getChangesetId();
+  	try
+  	{
+  		stmt = conn.createStatement();
+  		rs = stmt.executeQuery(sql);
+  		rs.next();
+  		Assert.assertEquals(5, rs.getInt(1));
+  	}
+  	finally
+  	{
+  		if (rs != null)
+  		{
+  			rs.close();
+  		}
+  		if (stmt != null)
+  		{
+  			stmt.close();
+  		}
+  	}
   	
-  	//verify version was incremented
-  	
-  	
+    //all review relations should have had their version incremented by one
+  	sql = "select count(*) from current_relations_" + mapId;
+  	sql += " where tags->'type' = 'review' and tags->'hoot:review:needs' = 'no' and version = 2";
+  	try
+  	{
+  		stmt = conn.createStatement();
+  		rs = stmt.executeQuery(sql);
+  		rs.next();
+  		Assert.assertEquals(5, rs.getInt(1));
+  	}
+  	finally
+  	{
+  		if (rs != null)
+  		{
+  			rs.close();
+  		}
+  		if (stmt != null)
+  		{
+  			stmt.close();
+  		}
+  	}
 	}
 	
 	@Test(expected=UniformInterfaceException.class)
@@ -88,14 +122,13 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract
   {
     try
     {
-    	MapReviewResolverRequest request = new MapReviewResolverRequest();
-    	request.setMapId(
-    		String.valueOf((long)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)));
 	  	resource()
 	      .path("/review/resolveall")
 	      .type(MediaType.APPLICATION_JSON)
-	      .accept(MediaType.TEXT_PLAIN)
-	      .put(request);
+	      .accept(MediaType.APPLICATION_JSON)
+	      .put(
+	      	new MapReviewResolverRequest(
+	      		String.valueOf((long)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE))));
     }
     catch (UniformInterfaceException e)
     {
@@ -113,12 +146,11 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract
   {
     try
     {
-    	MapReviewResolverRequest request = new MapReviewResolverRequest();
 	  	resource()
 	      .path("/review/resolveall")
 	      .type(MediaType.APPLICATION_JSON)
-	      .accept(MediaType.TEXT_PLAIN)
-	      .put(request);
+	      .accept(MediaType.APPLICATION_JSON)
+	      .put(new MapReviewResolverRequest());
     }
     catch (UniformInterfaceException e)
     {

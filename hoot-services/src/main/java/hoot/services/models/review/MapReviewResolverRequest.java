@@ -41,6 +41,10 @@ public class MapReviewResolverRequest
   
   public MapReviewResolverRequest()
   {
-    
+  }
+  
+  public MapReviewResolverRequest(final String mapId)
+  {
+  	this.mapId = mapId;
   }
 }

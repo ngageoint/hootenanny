@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
+import hoot.services.review.ReviewTestUtils;
 
 import com.sun.jersey.api.client.AsyncWebResource;
 import com.sun.jersey.test.framework.JerseyTest;
@@ -85,6 +86,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
     {
       conn = DbUtils.createConnection();
       OsmTestUtils.conn = conn;
+      ReviewTestUtils.conn = conn;
     }
     catch (Exception e)
     {
@@ -139,8 +141,6 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
             "servicesTestClearEntireDb", HootProperties.getDefault("servicesTestClearEntireDb"))))
     	{
     		DbUtils.deleteOSMRecord(conn, mapId);
-        
-
     	}
     }
     catch (Exception e)
@@ -156,6 +156,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
     try
     {
     	OsmTestUtils.conn = null;
+    	ReviewTestUtils.conn = null;
     }
     catch (Exception e)
     {

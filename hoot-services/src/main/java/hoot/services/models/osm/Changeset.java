@@ -473,7 +473,6 @@ public class Changeset extends Changesets
       closedAt = new Timestamp(now.plusMinutes(changesetIdleTimeout).getMillis());
     }
 
-
     return
       new SQLInsertClause(dbConn, DbUtils.getConfiguration("" + mapId), changesets)
         .columns(changesets.closedAt, changesets.createdAt, changesets.maxLat, changesets.maxLon

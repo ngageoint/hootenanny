@@ -407,10 +407,10 @@ public class ChangesetDbWriter
         if (elementBounds != null)
         {
           diffBounds.expand(
-              element.getBounds(),
-              Double.parseDouble(HootProperties.getInstance().getProperty(
-                  "changesetBoundsExpansionFactorDeegrees",
-                  HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees"))));
+            element.getBounds(),
+            Double.parseDouble(HootProperties.getInstance().getProperty(
+                "changesetBoundsExpansionFactorDeegrees",
+                HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees"))));
         }
       }
     }
@@ -639,10 +639,10 @@ public class ChangesetDbWriter
     // per OSM docs.
     BoundingBox newChangesetBounds = changeset.getBounds();
     newChangesetBounds.expand(
-        diffBounds,
-        Double.parseDouble(HootProperties.getInstance().getProperty(
-            "changesetBoundsExpansionFactorDeegrees",
-            HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees"))));
+      diffBounds,
+      Double.parseDouble(HootProperties.getInstance().getProperty(
+          "changesetBoundsExpansionFactorDeegrees",
+          HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees"))));
     changeset.setBounds(newChangesetBounds);
 
     changeset.updateExpiration();

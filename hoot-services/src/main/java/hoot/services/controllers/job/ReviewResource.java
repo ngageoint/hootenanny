@@ -32,6 +32,7 @@ import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.MapReviewResolverRequest;
+import hoot.services.models.review.MapReviewResolverResponse;
 import hoot.services.review.ReviewUtils;
 import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.writers.review.MapReviewResolver;
@@ -41,7 +42,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
@@ -76,20 +76,21 @@ public class ReviewResource
   }
 
   /**
-   * 
+   * Resolves all reviews for a given map
    * 
    * Have to use a request object here, rather than a single map ID query param, since d3 can't
    * send plain text in a PUT statement.
    * 
-   * @param mapId
-   * @return
+   * @param request a request containing the map ID for the reviews to be resolved
+   * @return a response with the changeset ID used to resolve the reviews
    * @throws Exception
    */
   @PUT
   @Path("/resolveall")
   @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.TEXT_PLAIN)
-  public Response resolveAllReviews(final MapReviewResolverRequest request) throws Exception
+  @Produces(MediaType.APPLICATION_JSON)
+  public MapReviewResolverResponse resolveAllReviews(final MapReviewResolverRequest request) 
+    throws Exception
   {
   	log.debug("Setting all items reviewed for map with ID: " + request.getMapId() + "...");
   	
@@ -152,9 +153,10 @@ public class ReviewResource
     }
   	assert(userId != -1);
     
+  	long changesetId = -1;
   	try
   	{
-  	  (new MapReviewResolver(conn)).setAllReviewsResolved(mapIdNum, userId);
+  	  changesetId = (new MapReviewResolver(conn)).setAllReviewsResolved(mapIdNum, userId);
   		
   		log.debug("Committing set all items reviewed transaction...");
       transactionManager.commit(transactionStatus);
@@ -175,7 +177,9 @@ public class ReviewResource
       DbUtils.closeConnection(conn);
     }
   	
-  	log.debug("Set all items reviewed for map with ID: " + request.getMapId());
-  	return Response.ok().build();
+  	log.debug(
+  		"Set all items reviewed for map with ID: " + request.getMapId() + " using changesetId: " + 
+  	  changesetId);
+  	return new MapReviewResolverResponse(changesetId);
   }
 }
