@@ -27,23 +27,35 @@
 package hoot.services.controllers.job;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.MapReviewResolverRequest;
 import hoot.services.models.review.MapReviewResolverResponse;
+import hoot.services.models.review.ReviewInfo;
+import hoot.services.models.review.ReviewReferences;
+import hoot.services.models.review.ReviewReferencesCollection;
+import hoot.services.readers.review.ReviewReferencesRetriever;
 import hoot.services.review.ReviewUtils;
 import hoot.services.utils.ResourceErrorHandler;
+import hoot.services.validators.job.InputParamsValidator;
 import hoot.services.writers.review.MapReviewResolver;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -181,5 +193,116 @@ public class ReviewResource
   		"Set all items reviewed for map with ID: " + request.getMapId() + " using changesetId: " + 
   	  changesetId);
   	return new MapReviewResolverResponse(changesetId);
+  }
+  
+  /**
+   * Returns any review references to the elements associated with the ID's passed in
+   * 
+   * @param mapId contains an array of unique ID's and their associated map ID; all unique ID's
+   * should be associated with features owned by the single map ID
+   * @param elementUniqueIds a collection of element unique ID's associated with the specified map
+   * @return an array of review references; one set of references for each unique ID passed in
+   * @throws Exception
+   */
+  @GET
+  @Path("/refs")
+  @Consumes(MediaType.TEXT_PLAIN)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ReviewReferencesCollection getReviewReferences(
+  	@QueryParam("mapId")
+    String mapId,
+    @QueryParam("elementUniqueIds")
+    String elementUniqueIds) 
+  	throws Exception
+  {
+  	log.debug("Returning review references...");
+  	
+  	Connection conn = DbUtils.createConnection();
+  	ReviewReferencesCollection response = new ReviewReferencesCollection();
+  	
+  	Map<String, Object> inputParams = new HashMap<String, Object>();
+    inputParams.put("mapId", mapId);
+    inputParams.put("elementUniqueIds", elementUniqueIds);
+    
+  	try
+  	{
+  		InputParamsValidator inputParamsValidator = new InputParamsValidator(inputParams);
+      mapId =
+        (String)inputParamsValidator.validateAndParseInputParam(
+        	"mapId", "", null, null, false, null);
+      elementUniqueIds =
+        (String)inputParamsValidator.validateAndParseInputParam(
+        	"elementUniqueIds", "", null, null, false, null);
+  		String[] elementUniqueIdsArr;
+  		if (elementUniqueIds.contains(";"))
+  		{
+  			elementUniqueIdsArr = elementUniqueIds.split(";");
+  		}
+  		else
+  		{
+  			elementUniqueIdsArr = new String[] { elementUniqueIds };
+  		}
+  		
+  		long mapIdNum = -1;
+    	try
+    	{
+    	  //input mapId may be a map ID or a map name
+        mapIdNum = 
+        	ModelDaoUtils.getRecordIdForInputString(
+        		mapId, conn, maps, maps.id, maps.displayName);
+        assert(mapIdNum != -1);
+    	}
+    	catch (Exception e)
+      {
+        if (e.getMessage().startsWith("Multiple records exist"))
+        {
+          ResourceErrorHandler.handleError(
+            e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
+            Status.NOT_FOUND,
+            log);
+        }
+        else if (e.getMessage().startsWith("No record exists"))
+        {
+          ResourceErrorHandler.handleError(
+            e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
+            Status.NOT_FOUND,
+            log);
+        }
+        ResourceErrorHandler.handleError(
+          "Error requesting map with ID: " + mapId + " (" + e.getMessage() + ")", 
+          Status.BAD_REQUEST,
+          log);
+      }
+  		
+  		List<ReviewReferences> responseRefsList = new ArrayList<ReviewReferences>();
+  		for (String elementUniqueId : elementUniqueIdsArr)
+  		{
+  			ReviewReferences responseRefs = new ReviewReferences();
+  			List<ReviewInfo> references = 
+	  			(new ReviewReferencesRetriever(conn, mapIdNum)).getReferences(elementUniqueId);
+	  		log.debug(
+	  			"Returning " + references.size() + " review against items for unique ID: " + 
+	  		  elementUniqueId);
+	  		responseRefs.setReviewInfoItems(references.toArray(new ReviewInfo[]{}));
+	  		responseRefs.setRequestElementUniqueId(elementUniqueId);
+	  		responseRefsList.add(responseRefs);
+  		}
+  		response.setReviewReferences(responseRefsList.toArray(new ReviewReferences[]{}));
+  	}
+  	catch (Exception e)
+    {
+      ReviewUtils.handleError(
+      	e, 
+      	"Unable to retrieve review references for map ID: " + mapId + " and element unique ID's: " + 
+      	  elementUniqueIds, 
+      	false);
+    }
+    finally
+    {
+      DbUtils.closeConnection(conn);
+    }
+  	
+  	log.debug("response : " + StringUtils.abbreviate(response.toString(), 1000));
+  	return response;
   }
 }
