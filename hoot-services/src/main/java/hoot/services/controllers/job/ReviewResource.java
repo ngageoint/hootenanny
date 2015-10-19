@@ -32,9 +32,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import hoot.services.controllers.osm.MapResource;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
-import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.MapReviewResolverRequest;
 import hoot.services.models.review.MapReviewResolverResponse;
 import hoot.services.models.review.ReviewInfo;
@@ -112,36 +112,7 @@ public class ReviewResource
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
     conn.setAutoCommit(false);
     
-    long mapIdNum = -1;
-  	try
-  	{
-  	  //input mapId may be a map ID or a map name
-      mapIdNum = 
-      	ModelDaoUtils.getRecordIdForInputString(
-      		request.getMapId(), conn, maps, maps.id, maps.displayName);
-      assert(mapIdNum != -1);
-  	}
-  	catch (Exception e)
-    {
-      if (e.getMessage().startsWith("Multiple records exist"))
-      {
-        ResourceErrorHandler.handleError(
-          e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
-          Status.NOT_FOUND,
-          log);
-      }
-      else if (e.getMessage().startsWith("No record exists"))
-      {
-        ResourceErrorHandler.handleError(
-          e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
-          Status.NOT_FOUND,
-          log);
-      }
-      ResourceErrorHandler.handleError(
-        "Error requesting map with ID: " + request.getMapId() + " (" + e.getMessage() + ")", 
-        Status.BAD_REQUEST,
-        log);
-    }
+    final long mapIdNum = MapResource.validateMap(request.getMapId(), conn);
     
   	long userId = -1;
   	try
@@ -230,6 +201,7 @@ public class ReviewResource
       mapId =
         (String)inputParamsValidator.validateAndParseInputParam(
         	"mapId", "", null, null, false, null);
+      final long mapIdNum = MapResource.validateMap(mapId, conn);
       elementUniqueIds =
         (String)inputParamsValidator.validateAndParseInputParam(
         	"elementUniqueIds", "", null, null, false, null);
@@ -242,37 +214,6 @@ public class ReviewResource
   		{
   			elementUniqueIdsArr = new String[] { elementUniqueIds };
   		}
-  		
-  		long mapIdNum = -1;
-    	try
-    	{
-    	  //input mapId may be a map ID or a map name
-        mapIdNum = 
-        	ModelDaoUtils.getRecordIdForInputString(
-        		mapId, conn, maps, maps.id, maps.displayName);
-        assert(mapIdNum != -1);
-    	}
-    	catch (Exception e)
-      {
-        if (e.getMessage().startsWith("Multiple records exist"))
-        {
-          ResourceErrorHandler.handleError(
-            e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
-            Status.NOT_FOUND,
-            log);
-        }
-        else if (e.getMessage().startsWith("No record exists"))
-        {
-          ResourceErrorHandler.handleError(
-            e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
-            Status.NOT_FOUND,
-            log);
-        }
-        ResourceErrorHandler.handleError(
-          "Error requesting map with ID: " + mapId + " (" + e.getMessage() + ")", 
-          Status.BAD_REQUEST,
-          log);
-      }
   		
   		List<ReviewReferences> responseRefsList = new ArrayList<ReviewReferences>();
   		for (String elementUniqueId : elementUniqueIdsArr)
