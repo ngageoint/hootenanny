@@ -43,7 +43,6 @@ public class ReviewTestUtils
 
   public static long mapId = -1;
   
-  //TODO: finish
   /**
    * Writes the conflated review relation output for conflating AllDataTypesA.osm with 
    * AllDataTypesB.osm

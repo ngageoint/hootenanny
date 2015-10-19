@@ -1,7 +1,6 @@
 package hoot.services.controllers.job;
 
 import java.io.IOException;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -9,7 +8,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
 import hoot.services.UnitTest;
-import hoot.services.db.DbUtils;
 import hoot.services.db2.QCurrentRelations;
 import hoot.services.models.review.MapReviewResolverRequest;
 import hoot.services.osm.OsmResourceTestAbstract;
@@ -21,14 +19,13 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import com.mysema.query.sql.SQLQuery;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
-public class ReviewResourceResolveTest extends OsmResourceTestAbstract
+public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract
 {
 	protected static final QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
 	
-	public ReviewResourceResolveTest() throws NumberFormatException, IOException
+	public ReviewResourceResolveAllTest() throws NumberFormatException, IOException
   {
     super(new String[]{ "hoot.services.controllers.job" });
   }
