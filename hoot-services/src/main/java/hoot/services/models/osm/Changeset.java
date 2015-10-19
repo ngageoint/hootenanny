@@ -578,11 +578,6 @@ public class Changeset extends Changesets
   			throw new Exception("No tags were changed for changeset_" + mapId);
   		}
   	}
-  	catch (Exception e)
-    {
-      throw new Exception("Error inserting tags for changeset with ID: " + getId() +
-        " - " + e.getMessage());
-    }
     finally
     {
     	if (ps != null)
@@ -603,19 +598,29 @@ public class Changeset extends Changesets
   public void insertTags(final long mapId, final java.util.Map<String, String> tags, 
   	Connection conn) throws Exception
   {
-  	String strKv = "";
-  	for (Map.Entry<String, String> tagEntry : tags.entrySet())
+  	try
   	{
-  		if (strKv.length() > 0)
-      {
-        strKv += ",";
-      }
-      strKv += tagEntry.getKey() + "=>" + tagEntry.getValue();
+  		log.debug("Inserting tags for changeset with ID: " + getId());
+  		
+  		String strKv = "";
+    	for (Map.Entry<String, String> tagEntry : tags.entrySet())
+    	{
+    		if (strKv.length() > 0)
+        {
+          strKv += ",";
+        }
+        strKv += tagEntry.getKey() + "=>" + tagEntry.getValue();
+    	}
+    	String tagsStr = "";
+      tagsStr += strKv;
+      
+    	writeTags(mapId, tagsStr);
   	}
-  	String tagsStr = "";
-    tagsStr += strKv;
-    
-  	writeTags(mapId, tagsStr);
+  	catch (Exception e)
+    {
+      throw new Exception("Error inserting tags for changeset with ID: " + getId() +
+        " - " + e.getMessage());
+    }
   }
 
   /**
@@ -628,24 +633,31 @@ public class Changeset extends Changesets
   */
   public void insertTags(final long mapId, final NodeList xml, Connection conn) throws Exception
   {
-    log.debug("Inserting tags for changeset with ID: " + getId());
+  	try
+  	{
+  		log.debug("Inserting tags for changeset with ID: " + getId());
 
-    String strKv = "";
-
-    for (int i = 0; i < xml.getLength(); i++)
-    {
-      NamedNodeMap tagAttributes = xml.item(i).getAttributes();
-      String key = "\"" + tagAttributes.getNamedItem("k").getNodeValue() + "\"";
-      String val = "\"" + tagAttributes.getNamedItem("v").getNodeValue() + "\"";
-      if (strKv.length() > 0)
+      String strKv = "";
+      for (int i = 0; i < xml.getLength(); i++)
       {
-        strKv += ",";
+        NamedNodeMap tagAttributes = xml.item(i).getAttributes();
+        String key = "\"" + tagAttributes.getNamedItem("k").getNodeValue() + "\"";
+        String val = "\"" + tagAttributes.getNamedItem("v").getNodeValue() + "\"";
+        if (strKv.length() > 0)
+        {
+          strKv += ",";
+        }
+        strKv += key + "=>" + val;
       }
-      strKv += key + "=>" + val;
-    }
-    String tagsStr = "";
-    tagsStr += strKv;
+      String tagsStr = "";
+      tagsStr += strKv;
 
-    writeTags(mapId, tagsStr);
+      writeTags(mapId, tagsStr);
+  	}
+  	catch (Exception e)
+    {
+      throw new Exception("Error inserting tags for changeset with ID: " + getId() +
+        " - " + e.getMessage());
+    }
   }
 }
