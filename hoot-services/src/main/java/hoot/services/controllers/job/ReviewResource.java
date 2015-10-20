@@ -170,13 +170,9 @@ public class ReviewResource
   /**
    * Returns any review references to the elements associated with the ID's passed in
    * 
-   * @param mapId contains an array of unique ID's and their associated map ID; All unique ID's
-   * should be associated with features owned by the single map ID.  Since the element ID's are
-   * unique under normal circumstances, a map ID actually doesn't have to be required here.
-   * However, when debugging and with the hoot repeatable UUID's setting turned on, requiring the
-   * map ID prevents you from seeing duplicated element results across different maps.
-   * @param elementUniqueIds a collection of element unique ID's associated with the specified map
-   * @return an array of review references; one set of references for each unique ID passed in
+   * @param queryElements a collection of elements for which review references are to be retrieved;
+   * the request should be a JSON string taking the form of the ElementInfo object; 
+   * @return an array of review references; one set of references for each query element passed in
    * @throws Exception
    */
   @GET
