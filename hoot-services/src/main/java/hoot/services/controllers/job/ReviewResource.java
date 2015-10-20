@@ -187,11 +187,11 @@ public class ReviewResource
   {
   	log.debug("Returning review references...");
   	
-  	Connection conn = DbUtils.createConnection();
   	ReviewReferencesRequest request = 
   		(new ObjectMapper()).readValue(queryElements, ReviewReferencesRequest.class);
   	ReviewReferencesResponse response = new ReviewReferencesResponse();
     
+  	Connection conn = DbUtils.createConnection();
   	try
   	{
   		ReviewReferencesRetriever refsRetriever = new ReviewReferencesRetriever(conn);
