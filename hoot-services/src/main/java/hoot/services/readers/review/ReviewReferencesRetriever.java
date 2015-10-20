@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.mysema.query.sql.SQLQuery;
 
 /**
- * Retrieves all other element references to reviews for an element
+ * Retrieves element references to reviews for a query element
  */
 public class ReviewReferencesRetriever
 {
@@ -41,6 +41,8 @@ public class ReviewReferencesRetriever
   	this.conn = conn;
   }
   
+  //would like to do this with QueryDSL, rather than straight JDBC, but don't know how to 
+  //do the tags part of the query with QueryDSL
   private List<Long> getUnresolvedReviewRelations(final ElementInfo queryElementInfo, 
   	final long mapId) throws SQLException
   {
@@ -84,7 +86,7 @@ public class ReviewReferencesRetriever
   }
 	
   /**
-   * Retrieves all other element references to reviews for a given element
+   * Retrieves all other unresolved element references to reviews for a given element
    * 
    * @param requestingElementInfo element whose review references are to be retrieved
    * @return a list containing all features the input feature needs to be reviewed with
