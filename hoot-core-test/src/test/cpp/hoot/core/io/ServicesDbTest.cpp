@@ -62,9 +62,6 @@ class ServicesDbTest : public CppUnit::TestFixture
 
   // osm apidb tests
   CPPUNIT_TEST(runOpenOsmApiTest);
-  CPPUNIT_TEST(runInsertNodeOsmApiTest);
-  CPPUNIT_TEST(runInsertWayOsmApiTest);
-  CPPUNIT_TEST(runInsertRelationOsmApiTest);
   CPPUNIT_TEST(runSelectAllElementsOsmApiTest);
 
   CPPUNIT_TEST_SUITE_END();
@@ -451,11 +448,6 @@ public:
     // INSERT NODES INTO DB
     /////////////////////////////////////
 
-    database.transaction();
-
-    // Create or get user, set our userId
-    database.setUserId(database.getOrCreateUser("OsmApiInsert@hoot.local", "Hootenanny Inserter"));
-    database.beginChangeset();
 
     // list of insertions
     QList<long> ids;
@@ -464,23 +456,12 @@ public:
     QList<float> lats = QList<float>() << 38.4 << 38;
     QList<float> lons = QList<float>() << -106.5 << -104;
 
-    // insert node into db
-    for(int i=0;i<2;i++)
-    {
-      Tags t;
-      if(i==0) {
-        t[keys[0].toStdString().c_str()] = values[0].toStdString().c_str();
-        t[keys[1].toStdString().c_str()] = values[1].toStdString().c_str();
-      } else {
-        t[keys[2].toStdString().c_str()] = values[2].toStdString().c_str();
-      }
-      long nodeId;
-      database.insertNode(lats[i], lons[i], t, nodeId);
-      ids.append(nodeId);
-    }
 
-    database.endChangeset();
-    database.commit();
+    // Insert nodes
+    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/users.sql > /dev/null 2>&1");
+    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1");
+    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodes.sql > /dev/null 2>&1");
+
 
     /////////////////////////////////////
     // SELECT THE NODES USING SELECT_ALL
@@ -545,6 +526,7 @@ public:
         ServicesDb::unescapeTags(database.extractTagFromRow_OsmApi(nodeResultIterator, ElementType::Node)));
     }
 
+    /*
     ///////////////////////////////////////////////
     /// Insert a way into the Osm Api DB
     ///////////////////////////////////////////////
@@ -699,6 +681,7 @@ public:
       HOOT_STR_EQUALS("type = multistuff\n", ServicesDb::unescapeTags(
         database.extractTagFromRow_OsmApi(relationResultIterator, ElementType::Relation)));
     }
+    */
 
   }
 

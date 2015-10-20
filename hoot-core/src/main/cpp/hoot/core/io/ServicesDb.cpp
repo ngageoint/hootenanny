@@ -133,31 +133,6 @@ void ServicesDb::close()
   //LOG_DEBUG("At close, we've added " << QString::number(_nodesAddedToCache) << " nodes");
   //LOG_DEBUG("At close, we've flushed " << QString::number(_nodesFlushedFromCache) << " nodes");
 
-  // Display unresolved relation members for debug
-  if ( _unresolvedRelationReferences.size() > 0 )
-  {
-    /*
-    LOG_DEBUG("Unresolved target relations at time of database close:");
-
-    long lastTargetRelation = -1;
-    for ( std::multimap<long, std::pair<long, RelationMemberCacheEntry > >::const_iterator
-          unresolvedRelationMembersIter = _unresolvedRelationReferences.begin();
-          unresolvedRelationMembersIter != _unresolvedRelationReferences.end();
-          ++unresolvedRelationMembersIter )
-    {
-      if ( lastTargetRelation != unresolvedRelationMembersIter->first )
-      {
-        LOG_DEBUG(
-          "\tDatabase ID: " << QString::number(unresolvedRelationMembersIter->first) );
-
-        lastTargetRelation = unresolvedRelationMembersIter->first;
-      }
-    }
-    */
-
-    _unresolvedRelationReferences.erase(_unresolvedRelationReferences.begin(), _unresolvedRelationReferences.end());
-  }
-
   _connectionType = DBTYPE_UNSUPPORTED;
 }
 
@@ -177,7 +152,7 @@ void ServicesDb::endChangeset()
     break;
 
   default:
-    _endChangeset_OsmApi();
+    throw NotImplementedException("Writing to OSM API DBs is not supported");
     break;
   }
 
@@ -251,20 +226,8 @@ void ServicesDb::commit()
     }
     break;
   case DBTYPE_OSMAPI:
-    LOG_DEBUG("Starting commit for OSM API");
-
-    // If there are elements in the OSM cache, flush them
-    _flushElementCacheToDb();
-
-    _resetQueries();
-
-    if ( _db.commit() == false )
-    {
-      LOG_WARN("Error committing transaction");
-      throw HootException("Error committing transaction");
-    }
-    LOG_DEBUG("Commit was successful");
-
+    LOG_ERROR("Cannot write to OSM API DB");
+    throw NotImplementedException("Cannot write to OSM API DB");
     break;
 
   default:
@@ -595,7 +558,8 @@ long ServicesDb::_getNextNodeId()
     retVal = _getNextNodeId_Services(_currMapId);
     break;
   case DBTYPE_OSMAPI:
-    retVal = _getNextNodeId_OsmApi();
+    LOG_ERROR("Cannot write to OSM API DB");
+    throw NotImplementedException("Cannot write to OSM API DB");
     break;
   default:
     throw HootException("Get Next Node ID for unsupported database type");
@@ -616,15 +580,6 @@ long ServicesDb::_getNextNodeId_Services(long mapId)
   return _nodeIdReserver->getNextId();
 }
 
-long ServicesDb::_getNextNodeId_OsmApi()
-{
-  if (_osmApiNodeIdReserver == 0)
-  {
-    _osmApiNodeIdReserver.reset(new SequenceIdReserver(_db, "current_nodes_id_seq"));
-  }
-
-  return _osmApiNodeIdReserver->getNextId();
-}
 
 long ServicesDb::_getNextRelationId()
 {
@@ -636,7 +591,8 @@ long ServicesDb::_getNextRelationId()
     retVal = _getNextRelationId_Services();
     break;
   case DBTYPE_OSMAPI:
-    retVal = _getNextRelationId_OsmApi();
+    LOG_ERROR("Do not support writing to OSM API DB");
+    throw NotImplementedException("Writing to OSM API DB is not supported");
     break;
   default:
     throw HootException("GetNextRelation called on unsupported database type");
@@ -644,16 +600,6 @@ long ServicesDb::_getNextRelationId()
   }
 
   return retVal;
-}
-
-long ServicesDb::_getNextRelationId_OsmApi()
-{
-  if (_osmApiRelationIdReserver == 0)
-  {
-    _osmApiRelationIdReserver.reset(new SequenceIdReserver(_db, "current_relations_id_seq"));
-  }
-
-  return _osmApiRelationIdReserver->getNextId();
 }
 
 long ServicesDb::_getNextRelationId_Services()
@@ -676,7 +622,8 @@ long ServicesDb::_getNextWayId()
     retVal = _getNextWayId_Services(_currMapId);
     break;
   case DBTYPE_OSMAPI:
-    retVal = _getNextWayId_OsmApi();
+    LOG_ERROR("Cannot write to OSM API DB");
+    throw NotImplementedException("Cannot write to OSM API DB");
     break;
   default:
     throw HootException("Get Next Node ID for unsupported database type");
@@ -738,13 +685,6 @@ void ServicesDb::_init()
   _currChangesetId = -1;
   _changesetEnvelope.init();
   _changesetChangeCount = 0;
-
-  // Value selected due to code comment: "500 found experimentally on my desktop [-initials]"
-  _elementCacheCapacity = 500;
-  _elementCache.reset(new ElementCacheLRU(_elementCacheCapacity));
-
-  _nodesAddedToCache = 0;
-  _nodesFlushedFromCache = 0;
 }
 
 void ServicesDb::beginChangeset()
@@ -765,7 +705,8 @@ void ServicesDb::beginChangeset(const Tags& tags)
     break;
 
   case DBTYPE_OSMAPI:
-    _beginChangeset_OsmApi();
+    LOG_ERROR("Cannot write to OSM API DB");
+    throw NotImplementedException("Cannot write to OSM API DB");
     break;
 
   default:
@@ -880,8 +821,8 @@ bool ServicesDb::insertNode(const long id, const double lat, const double lon, c
     break;
 
   case DBTYPE_OSMAPI:
-    _insertNode_OsmApi(id, lat, lon, tags);
-    retVal = true;
+    LOG_ERROR("Cannot write to OSM API DB");
+    throw NotImplementedException("Cannot write to OSM API DB");
     break;
   default:
     throw HootException("Insert node on unsupported database type");
@@ -958,7 +899,8 @@ bool ServicesDb::insertRelation(const long relationId, const Tags &tags)
     retVal = true;
     break;
   case DBTYPE_OSMAPI:
-    _insertRelation_OsmApi( tags, relationId );
+    LOG_ERROR("Cannot write to OSM API DB");
+    throw NotImplementedException("Cannot write to OSM API DB");
     retVal = true;
     break;
   default:
@@ -984,7 +926,8 @@ bool ServicesDb::insertRelationMember(const long relationId, const ElementType& 
     _insertRelationMember_Services(relationId, type, elementId, role, sequenceId);
     break;
   case DBTYPE_OSMAPI:
-    _insertRelationMember_OsmApi(relationId, type, elementId, role, sequenceId);
+    LOG_ERROR("Cannot write to OSM API DB");
+    throw NotImplementedException("Cannot write to OSM API DB");
     break;
   default:
     throw HootException("InsertRelationMembers called on unsupported database type");
@@ -1036,7 +979,8 @@ long ServicesDb::insertUser(QString email, QString displayName)
     retVal = _insertUser_Services(email, displayName);
     break;
   case DBTYPE_OSMAPI:
-    retVal = _insertUser_OsmApi(email);
+    LOG_ERROR("Cannot write to OSM API DB");
+    throw NotImplementedException("Cannot write to OSM API DB");
     break;
   default:
     throw HootException("insertUser called with unsupported database");
@@ -1100,58 +1044,6 @@ long ServicesDb::_insertUser_Services(QString email, QString displayName)
     }
 
     _insertUser->finish();
-  }
-
-  return id;
-}
-
-long ServicesDb::_insertUser_OsmApi(const QString& email)
-{
-  long id = -1;
-  QSqlQuery insertUserStmt(_db);
-
-  insertUserStmt.prepare(
-    "INSERT INTO users (email, pass_crypt, display_name, creation_time) VALUES (:email, 'abcdefg', :display_name, now()) RETURNING id;");
-  insertUserStmt.bindValue(":email", email);
-  insertUserStmt.bindValue(":display_name", email);
-
-  // if we failed to execute the query the first time
-  if (insertUserStmt.exec() == false)
-  {
-    // it may be that another process beat us to it and the user was already inserted. This can
-    // happen if a bunch of converts are run in parallel. See #3588
-    id = getUserId(email, false);
-
-    // nope, there is something else wrong. Report an error.
-    if (id == -1)
-    {
-      QString err = QString("Error executing query: %1 (%2)").arg(insertUserStmt.executedQuery()).
-          arg(insertUserStmt.lastError().text());
-      LOG_WARN(err)
-      throw HootException(err);
-    }
-    else
-    {
-      LOG_DEBUG("Did not insert user, queried a previously created user.")
-    }
-  }
-  // if the insert succeeded
-  else
-  {
-    bool ok = false;
-    if (insertUserStmt.next())
-    {
-      id = insertUserStmt.value(0).toLongLong(&ok);
-    }
-
-    if (!ok || id == -1)
-    {
-      LOG_ERROR("query bound values: ");
-      LOG_ERROR(insertUserStmt.boundValues());
-      LOG_ERROR("\n");
-      throw HootException("Error retrieving new ID " + insertUserStmt.lastError().text() + " Query: " +
-        insertUserStmt.executedQuery());
-    }
   }
 
   return id;
@@ -1500,11 +1392,6 @@ void ServicesDb::_resetQueries()
   _wayBulkInsert.reset();
   _wayIdReserver.reset();
 
-
-  // OSM API
-  _osmApiNodeIdReserver.reset();
-  _osmApiWayIdReserver.reset();
-  _osmApiRelationIdReserver.reset();
 }
 
 void ServicesDb::rollback()
@@ -1862,7 +1749,8 @@ vector<long> ServicesDb::selectNodeIdsForWay(long wayId)
         _selectNodeIdsForWay->setForwardOnly(true);
         _selectNodeIdsForWay->prepare(
           "SELECT node_id FROM " + _getWayNodesTableName_OsmApi() +
-              " WHERE way_id = :wayId ORDER BY sequence_id");
+          " WHERE way_id = :wayId ORDER BY sequence_id");
+
         break;
 
       default:
@@ -2087,8 +1975,8 @@ bool ServicesDb::insertWay(const long wayId, const Tags &tags)
     break;
 
   case DBTYPE_OSMAPI:
-    _insertWay_OsmApi(wayId, tags);
-    retVal = true;
+    LOG_ERROR("Cannot write to OSM API DB");
+    throw NotImplementedException("Cannot write to OSM API DB");
     break;
 
   default:
@@ -2141,7 +2029,8 @@ void ServicesDb::insertWayNodes(long wayId, const vector<long>& nodeIds)
     _insertWayNodes_Services(wayId, nodeIds);
     break;
   case DBTYPE_OSMAPI:
-    _insertWayNodes_OsmApi(wayId, nodeIds);
+    LOG_ERROR("Cannot write to OSM API DB");
+    throw NotImplementedException("Cannot write to OSM API DB");
     break;
   default:
     throw HootException("InsertWayNodes called on unsupported database");
@@ -2320,562 +2209,6 @@ void ServicesDb::incrementChangesetChangeCount()
   }
 }
 
-void ServicesDb::_beginChangeset_OsmApi()
-{
-  // Insert the data we know now, have to fill in gaps when we close changeset
-  QString changesetInsert("INSERT INTO changesets ( user_id, created_at, closed_at ) VALUES ( ");
-
-  changesetInsert += QString::number(_currUserId) + ", now(), now() );";
-
-  _execNoPrepare(changesetInsert);
-
-  QSqlQuery getChangesetId(_db);
-  getChangesetId.exec("SELECT currval('changesets_id_seq');");
-
-  if (getChangesetId.next())
-  {
-    _currChangesetId = getChangesetId.value(0).toInt();
-  }
-}
-
-void ServicesDb::_insertNode_OsmApi(const long id, const double lat, const double lon, const Tags &tags)
-{
-  /**
-   * When inserting a new node into the OSM API DB, we need to add rows to the following
-   * tables
-   *    - nodes (full list of all nodes, including historical versions)
-   *    - node_tags (tags associated with the new node)
-   *    - current_nodes (subset of the nodes table, includes current version of all nodes)
-   *    - current_nodes_tags (tags associated with current version of each node)
-   */
-
-  //LOG_DEBUG("Entering OSM node insert");
-
-  double start = Tgs::Time::getTime();
-
-  // Add to element cache
-  ElementPtr newNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
-  newNode->setTags(tags);
-  ConstElementPtr constNode(newNode);
-  _elementCache->addElement(constNode);
-  _nodesAddedToCache++;
-
-  // See if node portion of cache is full and needs to be flushed
-  if ( _elementCache->typeCount(ElementType::Node) == _elementCacheCapacity )
-  {
-    _flushElementCacheOsmApiNodes();
-  }
-
-  // Snag end time, update insert time
-  _nodesInsertElapsed += Tgs::Time::getTime() - start;
-
-  //LOG_DEBUG("Exiting OSM insert node with ID " << nodeId );
-}
-
-void ServicesDb::_flushElementCacheToDb()
-{
-  _flushElementCacheToDb(ElementType::Node);
-  _flushElementCacheToDb(ElementType::Way);
-  _flushElementCacheToDb(ElementType::Relation);
-}
-
-void ServicesDb::_flushElementCacheToDb(const ElementType::Type flushType )
-{
-  switch ( _connectionType )
-  {
-  case DBTYPE_OSMAPI:
-    switch ( flushType )
-    {
-    case ElementType::Node:
-      _flushElementCacheOsmApiNodes();
-      break;
-    case ElementType::Way:
-      _flushElementCacheOsmApiWays();
-      _flushElementCacheOsmApiWayNodes();
-      break;
-    case ElementType::Relation:
-      _flushElementCacheOsmApiRelations();
-      _flushElementCacheOsmApiRelationMembers();
-      break;
-    default:
-      throw HootException("Invalid type passed to flush");
-      break;
-    }
-
-    break;
-
-  default:
-    throw HootException("Unsupported DB type");
-  }
-}
-
-void ServicesDb::_flushElementCacheOsmApiNodes()
-{
-
-  if ( _elementCache->typeCount(ElementType::Node) == 0 )
-  {
-     return;
-  }
-
-  //LOG_DEBUG("Starting flush of node cache")
-
-  // already in transaction, no need to start new one
-
-  try
-  {
-    // Start building string for command
-
-    // Set up INSERT command for current_nodes.
-    QString currentNodesInsertCmd = "INSERT INTO current_nodes ( id, latitude, longitude, changeset_id, visible, timestamp, tile, version ) VALUES ";
-
-    // INSERT command for nodes
-    QString nodesInsertCmd =        "INSERT INTO nodes         ( node_id, latitude, longitude, changeset_id, visible, timestamp, tile, version ) VALUES ";
-
-    // INSERT command for current_node_tags
-    QString currentNodeTagsInsertCmd = "INSERT INTO current_node_tags ( node_id, k, v ) VALUES ";
-
-    // INSERT command for node_tags
-    QString nodeTagsInsertCmd = "INSERT INTO node_tags ( node_id, version, k, v ) VALUES ";
-
-    // Assume the insert tag commands don't need to be run until we see otherwise
-    bool needInsertTags = false;
-
-    // Iterate over all nodes in the cache, adding data to the current_nodes COPY command
-    _elementCache->resetElementIterators();
-    ConstNodePtr currNode = _elementCache->getNextNode();
-
-    // Testing a smart pointer against zero is equivalent to checking against null
-    while ( currNode != 0 )
-    {
-      // Populate variables to make string build a little bit cleaner
-      const QString nodeIDString(QString::number(currNode->getId()));
-      const QString latitudeString(QString::number(_round(currNode->getY() * COORDINATE_SCALE, 7)));
-      const QString longitudeString(QString::number(_round(currNode->getX() * COORDINATE_SCALE, 7)));
-      const QString changesetIDString(QString::number(_currChangesetId));
-      const QString tileNumberString(QString::number(_tileForPoint(currNode->getY(), currNode->getX())));
-
-      // nodes and current_nodes (identical data)
-      QString nodesCurrentNodesRow =
-
-        // Open paren
-        "(" +
-
-        // id
-        nodeIDString + "," +
-
-        // latitude
-        latitudeString + "," +
-
-        // longitude
-        longitudeString + "," +
-
-        // changeset_id
-        changesetIDString + "," +
-
-        // visible
-        "'true'," +
-
-        // timestamp
-        "now()," +
-
-        // tile
-        tileNumberString + "," +
-
-        // version
-        "1" +
-
-          // Closing paren
-          ")";
-
-        // current_node_tags and node_tags
-        const Tags nodeTags = currNode->getTags();
-        if ( nodeTags.size() > 0 )
-        {
-          // Mark that we've had to insert at least one tag
-          needInsertTags = true;
-
-          for ( Tags::const_iterator it = nodeTags.constBegin(); it != nodeTags.constEnd(); ++it )
-          {
-            // Do we need to prepend with comma?
-            if ( currentNodeTagsInsertCmd.endsWith( ")" ) == true )
-            {
-              currentNodeTagsInsertCmd  += ", ";
-              nodeTagsInsertCmd += ", ";
-            }
-
-            // String values containing single quotes need to be escaped (postgres uses double-single-quotes)
-            QString escapedKey = it.key();
-            QString escapedValue = it.value();
-            escapedKey.replace("'", "''");
-            escapedValue.replace("'", "''" );
-
-            currentNodeTagsInsertCmd  +=
-              // Opening paren
-              "(" +
-
-              // Id
-              nodeIDString + "," +
-
-              // Key (make sure to escape single quotes with double single quotes
-              "'" + escapedKey + "'," +
-
-              // Value
-              "'" + escapedValue + "'" +
-
-              // Closing paren
-              ")";
-
-            nodeTagsInsertCmd +=
-              // Opening paren
-              "(" +
-
-              // Id
-              nodeIDString + "," +
-
-              // Version
-              "1," +
-
-              // Key (make sure to escape single quotes with double single quotes
-              "'" + escapedKey + "'," +
-
-              // Value
-              "'" + escapedValue + "'" +
-
-              // Closing paren
-              ")";
-          }
-        }
-
-        // If there are more nodes to include, add a comma to the node row statements
-        currNode = _elementCache->getNextNode();
-        if ( currNode != 0 )
-        {
-          nodesCurrentNodesRow += ", ";
-        }
-
-        // Both node tables get same chunk of parenthesized data
-        currentNodesInsertCmd   += nodesCurrentNodesRow;
-        nodesInsertCmd          += nodesCurrentNodesRow;
-      }
-
-      // Add final semicolons
-      currentNodesInsertCmd   += ";";
-      nodesInsertCmd          += ";";
-
-      // Always execute inserts for both nodes tables
-      //LOG_DEBUG("Current_nodes:\n\t" + currentNodesInsertCmd);
-      _execNoPrepare(currentNodesInsertCmd);
-      //LOG_DEBUG("nodes:\n\t" + nodesInsertCmd);
-      _execNoPrepare(nodesInsertCmd);
-
-      // Does node have tags?
-      if ( needInsertTags == true )
-      {
-        // Do final semicolons
-        currentNodeTagsInsertCmd += ";";
-        nodeTagsInsertCmd += ";";
-
-        //LOG_DEBUG("current_node_tags: \n\t" + currentNodeTagsInsertCmd);
-        _execNoPrepare(currentNodeTagsInsertCmd);
-        //LOG_DEBUG("node_tags: \n\t" + nodeTagsInsertCmd);
-        _execNoPrepare(nodeTagsInsertCmd);
-      }
-
-  }
-  catch ( ... )
-  {
-    throw HootException("Database error when inserting nodes");
-  }
-
-  // Remove all nodes now that they've been flushed
-  _elementCache->removeElements(ElementType::Node);
-}
-
-void ServicesDb::_flushElementCacheOsmApiWays()
-{
-  //LOG_DEBUG("Flushing OSM API ways");
-  if ( _elementCache->typeCount(ElementType::Way) == 0 )
-  {
-    //LOG_DEBUG("Bailing from flush of cached ways; nothing in cache!")
-    return;
-  }
-
-  // First step is to flush any nodes to make sure we don't violate any foreign keys when inserting way
-  _flushElementCacheOsmApiNodes();
-
-  //LOG_DEBUG("Starting flush of way cache")
-
-  // already in transaction, no need to start new one
-
-  try
-  {
-    // Set up INSERT command for current_ways.
-    QString currentWaysInsertCmd = "INSERT INTO current_ways ( id, changeset_id, timestamp, visible, version ) VALUES ";
-
-    // INSERT command for ways
-    QString waysInsertCmd =        "INSERT INTO ways         ( way_id, changeset_id, timestamp, visible, version ) VALUES ";
-
-    // INSERT command for current_ways_tags
-    QString currentWayTagsInsertCmd = "INSERT INTO current_way_tags ( way_id, k, v ) VALUES ";
-
-    // INSERT command for way_tags
-    QString wayTagsInsertCmd = "INSERT INTO way_tags ( way_id, version, k, v ) VALUES ";
-
-    // Assume the insert tag commands don't need to be run until we see otherwise
-    bool needInsertTags = false;
-
-    // Iterate over all ways in the cache, adding data to the current_nodes INSERT command
-    _elementCache->resetElementIterators();
-    ConstWayPtr currWay = _elementCache->getNextWay();
-
-    // Testing a smart pointer against zero is equivalent to checking against null
-    while ( currWay != 0 )
-    {
-      // Populate variables to make string build a little bit cleaner
-      const QString wayIDString(QString::number(currWay->getId()));
-      const QString changesetIDString(QString::number(_currChangesetId));
-
-      // waysand current_ways (identical data)
-      QString waysCurrentWaysRow =
-
-        // Open paren
-        "(" +
-
-        // id
-        wayIDString + "," +
-
-        // changeset_id
-        changesetIDString + "," +
-
-        // timestamp
-        "now()," +
-
-        // visible
-        "'true'," +
-
-        // version
-        "1" +
-
-        // Closing paren
-        ")";
-
-      // current_way_tags and way_tags
-      const Tags wayTags = currWay->getTags();
-      if ( wayTags.size() > 0 )
-      {
-        // Mark that we've had to insert at least one tag
-        needInsertTags = true;
-        for ( Tags::const_iterator it = wayTags.constBegin(); it != wayTags.constEnd(); ++it )
-        {
-          // Do we need to prepend with comma?
-          if ( currentWayTagsInsertCmd.endsWith( ")" ) == true )
-          {
-            currentWayTagsInsertCmd  += ", ";
-            wayTagsInsertCmd += ", ";
-          }
-
-          // String values containing single quotes need to be escaped (postgres uses double-single-quotes)
-          QString escapedKey = it.key();
-          QString escapedValue = it.value();
-          escapedKey.replace("'", "''");
-          escapedValue.replace("'", "''" );
-
-          currentWayTagsInsertCmd  +=
-            // Opening paren
-            "(" +
-
-            // Id
-            wayIDString + "," +
-
-            // Key (make sure to escape single quotes with double single quotes
-            "'" + escapedKey + "'," +
-
-            // Value
-            "'" + escapedValue + "'" +
-
-            // Closing paren
-            ")";
-
-          wayTagsInsertCmd +=
-            // Opening paren
-            "(" +
-
-            // Id
-            wayIDString + "," +
-
-            // Version
-            "1," +
-
-            // Key (make sure to escape single quotes with double single quotes
-            "'" + escapedKey + "'," +
-
-            // Value
-            "'" + escapedValue + "'" +
-
-            // Closing paren
-            ")";
-        }
-      }
-
-      // If there are more ways to include, add a comma to the way row statements
-      currWay = _elementCache->getNextWay();
-
-      if ( currWay != 0 )
-      {
-        waysCurrentWaysRow += ", ";
-      }
-
-      // Both node tables get same chunk of parenthesized data
-      currentWaysInsertCmd  += waysCurrentWaysRow;
-      waysInsertCmd         += waysCurrentWaysRow;
-
-      //LOG_DEBUG("Way " << wayIDString << " added to flush string");
-    }
-
-    // Add final semicolons
-    currentWaysInsertCmd      += ";";
-    waysInsertCmd             += ";";
-
-    // Always execute inserts for all way and way node tables
-    //LOG_DEBUG("Current_ways:\n\t" + currentWaysInsertCmd);
-    _execNoPrepare(currentWaysInsertCmd);
-    //LOG_DEBUG("ways:\n\t" + waysInsertCmd);
-    _execNoPrepare(waysInsertCmd);
-
-    // Does way have tags?
-    if ( needInsertTags == true )
-    {
-      // Do final semicolons
-      currentWayTagsInsertCmd += ";";
-      wayTagsInsertCmd += ";";
-
-      //LOG_DEBUG("current_node_tags: \n\t" + currentWayTagsInsertCmd);
-      _execNoPrepare(currentWayTagsInsertCmd);
-      //LOG_DEBUG("node_tags: \n\t" + wayTagsInsertCmd);
-      _execNoPrepare(wayTagsInsertCmd);
-    }
-
-  }
-  catch ( ... )
-  {
-    throw HootException("Database error when inserting ways");
-  }
-
-  // Remove all ways from cache as they've been written
-  _elementCache->removeElements(ElementType::Way);
-}
-
-void ServicesDb::_flushElementCacheOsmApiWayNodes()
-{
-  if ( _wayNodesCache.size() == 0 )
-  {
-    //LOG_DEBUG("Bailing from flush of cached way nodes; nothing in cache!")
-    return;
-  }
-
-  // First step is to flush any ways (which in turn flushes nodes) to make sure we don't violate any foreign keys when inserting way
-  _flushElementCacheOsmApiWays();
-
-  //LOG_DEBUG("Starting flush of way node cache");
-
-  std::vector<long> wayIds;
-  try
-  {
-    QString currentWayNodesInsertCmd = "INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES ";
-    QString wayNodesInsertCmd = "INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES ";
-
-    for ( std::map< long, std::vector<long> >::const_iterator wayNodeIter = _wayNodesCache.begin();
-              wayNodeIter != _wayNodesCache.end(); ++wayNodeIter )
-    {
-
-      // Add way ID to list of way IDs (used for updating changeset envelope later on in function)
-      wayIds.push_back(wayNodeIter->first);
-
-      // Populate variables to make string build a little bit cleaner
-      const QString wayIDString(QString::number(wayNodeIter->first));
-
-      //LOG_DEBUG("Getting Node IDs");
-      // way_nodes and current_way_nodes
-      std::vector<long> wayNodeIds = wayNodeIter->second;
-
-      //LOG_DEBUG("Got " + QString::number(wayNodeIds.size()) + " node IDs");
-
-      unsigned int sequenceNumber = 1;
-      for ( std::vector<long>::const_iterator nodeIter = wayNodeIds.begin(); nodeIter != wayNodeIds.end(); ++nodeIter, ++sequenceNumber)
-      {
-        // Do we need to prepend with comma?
-        if ( currentWayNodesInsertCmd.endsWith( ")" ) == true )
-        {
-          currentWayNodesInsertCmd  += ", ";
-          wayNodesInsertCmd += ", ";
-        }
-
-        if ( *nodeIter == 0 )
-        {
-          LOG_ERROR("Way " << wayIDString << " has node with ID 0");
-          throw HootException("Bail");
-        }
-
-        currentWayNodesInsertCmd +=
-            // Opening paren
-            "(" +
-
-            // Way Id
-            wayIDString + ", " +
-
-            // Node_Id
-            QString::number(*nodeIter) + ", " +
-
-            // Sequence ID
-            QString::number(sequenceNumber) +
-
-            // Closing paren
-            ")";
-
-        wayNodesInsertCmd +=
-            // Opening paren
-            "(" +
-
-            // Way Id
-            wayIDString + ", " +
-
-            // Node_Id
-            QString::number(*nodeIter) + ", " +
-
-            // Version
-            QString::number(1) +", " +
-
-            // Sequence ID
-            QString::number(sequenceNumber) +
-
-            // Closing paren
-            ")";
-      }
-
-    }
-
-    // Add final semicolons
-    currentWayNodesInsertCmd  += ";";
-    wayNodesInsertCmd         += ";";
-
-    _execNoPrepare(currentWayNodesInsertCmd);
-    _execNoPrepare(wayNodesInsertCmd);
-
-    _updateChangesetEnvelopeWayIds(wayIds);
-  }
-  catch ( ... )
-  {
-    throw HootException("Database error when inserting ways");
-  }
-
-  _nodesFlushedFromCache += _wayNodesCache.size();
-
-  // Remove all way nodes from cache as they've been written
-  _wayNodesCache.clear();
-}
-
-
-
 
 void ServicesDb::_updateChangesetEnvelope(const ConstNodePtr node)
 {
@@ -2884,106 +2217,6 @@ void ServicesDb::_updateChangesetEnvelope(const ConstNodePtr node)
 
   _changesetEnvelope.expandToInclude(nodeX, nodeY);
   //LOG_DEBUG("Changeset bounding box updated to include X=" + QString::number(nodeX) + ", Y=" + QString::number(nodeY));
-}
-
-
-
-void ServicesDb::_endChangeset_OsmApi()
-{
-  // Set lat/lon envelope and closing time for changset
-  QSqlQuery closeChangeset(_db);
-
-  closeChangeset.prepare(
-    QString("UPDATE changesets SET min_lat=:min_lat, max_lat=:max_lat, min_lon=:min_lon, "
-          "max_lon=:max_lon, closed_at=NOW(), num_changes=:num_changes WHERE id=:id;") );
-
-  closeChangeset.bindValue(":min_lat", static_cast<qlonglong>(_round(_changesetEnvelope.getMinY() * COORDINATE_SCALE, 7)));
-  closeChangeset.bindValue(":max_lat", static_cast<qlonglong>(_round(_changesetEnvelope.getMaxY() * COORDINATE_SCALE, 7)));
-  closeChangeset.bindValue(":min_lon", static_cast<qlonglong>(_round(_changesetEnvelope.getMinX() * COORDINATE_SCALE, 7)));
-  closeChangeset.bindValue(":max_lon", static_cast<qlonglong>(_round(_changesetEnvelope.getMaxX() * COORDINATE_SCALE, 7)));
-  closeChangeset.bindValue(":num_changes", static_cast<qlonglong>(_changesetChangeCount) );
-  closeChangeset.bindValue(":id", static_cast<qlonglong>(_currChangesetId));
-
-  if (closeChangeset.exec() == false)
-  {
-    LOG_ERROR("query bound values: ");
-    LOG_ERROR(closeChangeset.boundValues());
-    LOG_ERROR("\n");
-    throw HootException("Error executing close changeset: " + closeChangeset.lastError().text() +
-                        " (SQL: " + closeChangeset.executedQuery() + ")");
-  }
-  else
-  {
-    //LOG_INFO("Successful changeset update with bound values: ");
-    //LOG_VARI(closeChangeset.boundValues());
-  }
-
-
-  // Add tags to the changeset
-  QSqlQuery addChangesetTags(_db);
-  addChangesetTags.prepare(
-    QString("INSERT INTO changeset_tags VALUES ( :changeset_id_1, 'created_by', 'Hootenanny' ), "
-            "( :changeset_id_2, 'comment', 'Hootenanny data ingest' ), "
-            "( :changeset_id_3, 'bot', 'yes' );") );
-
-  addChangesetTags.bindValue(":changeset_id_1", static_cast<qlonglong>(_currChangesetId));
-  addChangesetTags.bindValue(":changeset_id_2", static_cast<qlonglong>(_currChangesetId));
-  addChangesetTags.bindValue(":changeset_id_3", static_cast<qlonglong>(_currChangesetId));
-
-  if (addChangesetTags.exec() == false)
-  {
-    LOG_ERROR("query bound values: ");
-    LOG_ERROR(addChangesetTags.boundValues());
-    LOG_ERROR("\n");
-    throw HootException("Error executing add changeset tags: " + addChangesetTags.lastError().text() +
-                        " (SQL: " + addChangesetTags.executedQuery() + ")");
-  }
-
-  // Update users table as the number of changesets for this user has been incremented
-  QSqlQuery getUserChangesetsCount(_db);
-  getUserChangesetsCount.prepare(QString("SELECT changesets_count FROM users WHERE id=:id;"));
-  getUserChangesetsCount.bindValue(":id", static_cast<qlonglong>(_currUserId));
-  if ( getUserChangesetsCount.exec() == false )
-  {
-    LOG_ERROR("Could not get changesets_count from users");
-    throw HootException("Could not get changesets_count");
-  }
-
-  int changesetsCount;
-  if (getUserChangesetsCount.next())
-  {
-    changesetsCount = getUserChangesetsCount.value(0).toInt();
-  }
-  else
-  {
-    LOG_ERROR("Could not get changeset count data from result")
-    throw HootException("Could not get changesets count data from result");
-  }
-
-  // Increment value of changesets_count and update database
-   changesetsCount++;
-   QSqlQuery updateUserChangesetsCount(_db);
-   updateUserChangesetsCount.prepare(QString("UPDATE users SET changesets_count=:changeset_count WHERE id=:id;"));
-   updateUserChangesetsCount.bindValue(":changeset_count", changesetsCount);
-   updateUserChangesetsCount.bindValue(":id", static_cast<qlonglong>(_currUserId));
-   if ( updateUserChangesetsCount.exec() == false )
-   {
-     LOG_ERROR("Could not update changesets_count for user");
-     throw HootException("Could not get update changeset_counts for user");
-   }
-
-   // Add the user as a subscriber to the changeset they just added
-   QSqlQuery addChangesetSubscriber(_db);
-   addChangesetSubscriber.prepare(QString("INSERT INTO changesets_subscribers VALUES (:subscriber_id, :changeset_id);"));
-   addChangesetSubscriber.bindValue(":subscriber_id", static_cast<qlonglong>(_currUserId));
-   addChangesetSubscriber.bindValue(":changeset_id", static_cast<qlonglong>(_currChangesetId));
-   if ( addChangesetSubscriber.exec() == false )
-   {
-     LOG_ERROR("Could not update changesets_count for user");
-     throw HootException("Could not get update changeset_counts for user");
-   }
-
-   //LOG_DEBUG("Successfully closed changeset");
 }
 
 void ServicesDb::_updateChangesetEnvelopeWayIds(const std::vector<long>& wayIds)
@@ -3019,533 +2252,6 @@ void ServicesDb::_updateChangesetEnvelopeWayIds(const std::vector<long>& wayIds)
   }
 }
 
-void ServicesDb::_flushElementCacheOsmApiRelations()
-{
-  //LOG_DEBUG("Flushing OSM API relations");
-  if ( _elementCache->typeCount(ElementType::Relation) == 0 )
-  {
-    //LOG_DEBUG("Bailing from flush of cached relations; nothing in cache!")
-    return;
-  }
-
-  /*
-  LOG_DEBUG("Flushing " << QString::number(_elementCache->typeCount(ElementType::Relation)) <<
-    " relations");
-  */
-
-  // First step is to flush any ways and way nodes to make sure we don't violate foreign key integrity
-  _flushElementCacheOsmApiWays();
-  _flushElementCacheOsmApiWayNodes();
-
-  //LOG_DEBUG("Starting flush of relation cache")
-
-  // already in transaction, no need to start new one
-
-  // Have to keep list of relation IDs we insert, so we can come back update changeset envelope
-  std::vector<long> relationIds;
-
-  try
-  {
-    // INSERT command for current_relations.
-    QString currentRelationsInsertCmd( "INSERT INTO current_relations ( id, changeset_id, timestamp, visible, version ) VALUES " );
-
-    // INSERT command for relations
-    QString relationsInsertCmd(        "INSERT INTO relations         ( relation_id, changeset_id, timestamp, visible, version ) VALUES " );
-
-    // INSERT command for current_relations_tags
-    QString currentRelationTagsInsertCmd( "INSERT INTO current_relation_tags ( relation_id, k, v ) VALUES " );
-
-    // INSERT command for relation_tags
-    QString relationTagsInsertCmd( "INSERT INTO relation_tags ( relation_id, version, k, v ) VALUES " );
-
-    // Assume the insert tag commands don't need to be run until we see otherwise
-    bool needInsertTags = false;
-
-    // Iterate over all ways in the cache, adding data to the current_relations INSERT command
-    _elementCache->resetElementIterators();
-    ConstRelationPtr currRelation = _elementCache->getNextRelation();
-
-    const QString changesetIDString(QString::number(_currChangesetId));
-
-    // Testing a smart pointer against zero is equivalent to checking against null
-    while ( currRelation != 0 )
-    {
-      // add to list of relation IDs that are being inserted, used later for changeset envelope update
-      relationIds.push_back(currRelation->getId());
-
-      // Populate variables to make string build a little bit cleaner
-      const QString relationIDString(QString::number(currRelation->getId()));
-
-      LOG_DEBUG("Flushing relation " << relationIDString);
-
-      // relations and current_relations (identical data)
-      QString relationsCurrentRelationsRow =
-
-        // Open paren
-        "(" +
-
-        // id
-        relationIDString + "," +
-
-        // changeset_id
-        changesetIDString + "," +
-
-        // timestamp
-        "now()," +
-
-        // visible
-        "'true'," +
-
-        // version
-        "1" +
-
-        // Closing paren
-        ")";
-
-      // current_relation_tags and relation_tags
-      const Tags relationTags = currRelation->getTags();
-      if ( relationTags.size() > 0 )
-      {
-        // Mark that we've had to insert at least one tag
-        needInsertTags = true;
-
-        for ( Tags::const_iterator it = relationTags.constBegin(); it != relationTags.constEnd(); ++it )
-        {
-          // Do we need to prepend with comma?
-          if ( currentRelationTagsInsertCmd.endsWith( ")" ) == true )
-          {
-            currentRelationTagsInsertCmd  += ", ";
-            relationTagsInsertCmd += ", ";
-          }
-
-          // String values containing single quotes need to be escaped (postgres uses double-single-quotes)
-          QString escapedKey = it.key();
-          QString escapedValue = it.value();
-          escapedKey.replace("'", "''");
-          escapedValue.replace("'", "''" );
-
-          currentRelationTagsInsertCmd  +=
-            // Opening paren
-            "(" +
-
-            // Id
-            relationIDString + "," +
-
-            // Key (make sure to escape single quotes with double single quotes
-            "'" + escapedKey + "'," +
-
-            // Value
-            "'" + escapedValue + "'" +
-
-            // Closing paren
-            ")";
-
-          relationTagsInsertCmd +=
-            // Opening paren
-            "(" +
-
-            // Id
-            relationIDString + "," +
-
-            // Version
-            "1," +
-
-            // Key (make sure to escape single quotes with double single quotes
-            "'" + escapedKey + "'," +
-
-            // Value
-            "'" + escapedValue + "'" +
-
-            // Closing paren
-            ")";
-        }
-      }
-
-      // Do we need to prepend comma?
-      if ( currentRelationsInsertCmd.endsWith(")") == true )
-      {
-        currentRelationsInsertCmd  += ",";
-        relationsInsertCmd        += ",";
-      }
-
-      // Both node tables get same chunk of parenthesized data
-      currentRelationsInsertCmd += relationsCurrentRelationsRow;
-      relationsInsertCmd        += relationsCurrentRelationsRow;
-
-      // Now that we've flushed this relation, add it to list so we can check unresolved relation references
-      //    still queued up
-      _relationIdsWrittenToDb.insert(currRelation->getId());
-
-      /*
-      LOG_DEBUG("Flushed relation ID " <<
-                QString::number(currRelation->getId()));
-      */
-
-      currRelation = _elementCache->getNextRelation();
-    }
-
-    // Add final semicolons
-    currentRelationsInsertCmd      += ";";
-    relationsInsertCmd             += ";";
-
-    // Always execute inserts for all way and way node tables
-    //LOG_DEBUG("Current_ways:\n\t" + currentWaysInsertCmd);
-    _execNoPrepare(currentRelationsInsertCmd);
-    //LOG_DEBUG("ways:\n\t" + waysInsertCmd);
-    _execNoPrepare(relationsInsertCmd);
-
-    // Does relation have tags?
-    if ( needInsertTags == true )
-    {
-      // Do final semicolons
-      currentRelationTagsInsertCmd += ";";
-      relationTagsInsertCmd += ";";
-
-      //LOG_DEBUG("current_node_tags: \n\t" + currentRelationTagsInsertCmd);
-      _execNoPrepare(currentRelationTagsInsertCmd);
-      //LOG_DEBUG("node_tags: \n\t" + wayTagsInsertCmd);
-      _execNoPrepare(relationTagsInsertCmd);
-    }
-  }
-  catch ( ... )
-  {
-    throw HootException("Database error when inserting relations");
-  }
-
-  // Remove all relations from cache as they've been written
-  _elementCache->removeElements(ElementType::Relation);
-
-  // Iterate over the list of relations just flushed to the DB to find out if
-  //    we can now resolve any unresolved relation references that were queued
-  for ( std::vector<long>::const_iterator flushedRelationIdIter = relationIds.begin();
-        flushedRelationIdIter != relationIds.end(); ++flushedRelationIdIter )
-  {
-    // Can we resolve any pending references that were pointing to this relation?
-    if ( _unresolvedRelationReferences.count(*flushedRelationIdIter) > 0 )
-    {
-      /*
-      LOG_DEBUG("There are queued relation members that reference relation " <<
-          QString::number(*flushedRelationIdIter) << " which was just flushed. " <<
-          "Moving relation members back to queue to be flushed" );
-      */
-
-      //LOG_DEBUG("TODO: need to actually move them!!!!");
-
-      // Find range of matching values in the map -- it's a multimap, may be more than one
-      std::pair<
-          std::multimap<long, std::pair<long, RelationMemberCacheEntry > >::iterator,
-          std::multimap<long, std::pair<long, RelationMemberCacheEntry > >::iterator > searchResults;
-
-      searchResults = _unresolvedRelationReferences.equal_range(*flushedRelationIdIter);
-
-      for (std::multimap<long, std::pair<long, RelationMemberCacheEntry > >::iterator resultIter =
-           searchResults.first; resultIter != searchResults.second; ++resultIter )
-      {
-        // Add to cache of members for relations
-        _relationMembersCache.insert( std::pair<long, RelationMemberCacheEntry>(
-            resultIter->second.first, resultIter->second.second) );
-
-        LOG_DEBUG("Restored deferred member of relation " << QString::number(resultIter->second.first) <<
-            " to relation member cache, target relation "
-            << QString::number(*flushedRelationIdIter) << " has been written");
-
-        // is relation-member portion of cache full?
-        if ( _relationMembersCache.size() == _elementCacheCapacity)
-        {
-          _flushElementCacheOsmApiRelationMembers();
-        }
-      }
-
-      // Remove the entries from the deferred queue now that they are back in the pending queue
-      _unresolvedRelationReferences.erase(searchResults.first, searchResults.second);
-    }
-  }
-}
-
-void ServicesDb::_flushElementCacheOsmApiRelationMembers()
-{
-
-  LOG_DEBUG("Flushing OSM API relation members");
-  if ( _relationMembersCache.size() == 0 )
-  {
-    LOG_DEBUG("Bailing from flush of relation members; nothing in cache!")
-    return;
-  }
-
-  // First step is to flush any relations to make sure we don't violate any foreign keys when inserting relation member
-  _flushElementCacheOsmApiRelations();
-
-  LOG_DEBUG("Starting flush of relation member cache");
-
-  std::vector<long> relationIds;
-  try
-  {
-    QString currentRelationMembersInsertCmd = "INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role,          sequence_id) VALUES ";
-    QString relationMembersInsertCmd =        "INSERT INTO         relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES ";
-
-    for ( std::multimap< long, RelationMemberCacheEntry >::const_iterator relationMemberIter = _relationMembersCache.begin();
-              relationMemberIter != _relationMembersCache.end(); ++relationMemberIter )
-    {
-      // Find out if we have to defer this member as it points to a relation that's still unresolved
-      if ( (relationMemberIter->second.elementId.getType().getEnum() == ElementType::Relation) &&
-           (_relationIdsWrittenToDb.count(relationMemberIter->second.elementId.getId()) == 0) )
-      {
-        // Add to unresolved list.
-        std::pair<long, RelationMemberCacheEntry> unresolvedListData;
-        // SOURCE relation
-        unresolvedListData.first = relationMemberIter->first;
-        // Destination data (type, EID, role, etc)
-        unresolvedListData.second = relationMemberIter->second;
-
-        // Insert into unresolved list.  Key for the map is DESTINATION relation ID
-        _unresolvedRelationReferences.insert(
-              std::pair<long, std::pair<long, RelationMemberCacheEntry> >(relationMemberIter->second.elementId.getId(),
-                unresolvedListData) );
-
-        // NOTE: do NOT remove from this list -- the list will be cleared at the end of this function
-        //  but as it's on deferred list, it won't be lost
-
-
-        continue;
-      }
-
-      // Add relation ID to list of relation IDs (used for updating changeset envelope later on in function)
-      relationIds.push_back(relationMemberIter->first);
-
-      // Populate variables to make string build a little bit cleaner
-      const QString relationIDString(QString::number(relationMemberIter->first));
-
-      QString nwrType;
-      switch ( relationMemberIter->second.elementId.getType().getEnum() )
-      {
-      case ElementType::Node:
-        nwrType = "'Node'";
-        break;
-      case ElementType::Way:
-        nwrType = "'Way'";
-        break;
-
-      case ElementType::Relation:
-        nwrType = "'Relation'";
-        break;
-
-      default:
-        LOG_DEBUG("Found unsupported member relation type");
-        throw HootException("Unsupported relation member type");
-
-        break;
-      }
-
-
-      RelationMemberCacheEntry currMember = relationMemberIter->second;
-
-      LOG_DEBUG("Flushing relation member, source relation = " <<
-                QString::number(relationMemberIter->first) <<
-                ", target type = " << nwrType <<
-                ", target ID = " << currMember.elementId );
-
-      QString sqlMemberRole = currMember.role;
-
-      // Escape any single quotes
-      sqlMemberRole.replace("'", "''");
-
-      // Do we need to prepend with comma?
-      if ( currentRelationMembersInsertCmd.endsWith( ")" ) == true )
-      {
-        currentRelationMembersInsertCmd  += ", ";
-        relationMembersInsertCmd += ", ";
-      }
-
-      currentRelationMembersInsertCmd +=
-          // Opening paren
-          "(" +
-
-          // Relation ID
-          relationIDString + ", " +
-
-          // Member type
-          nwrType + ", " +
-
-          // Member ID
-          QString::number(currMember.elementId.getId()) + ", " +
-
-          // Role
-          "'" + sqlMemberRole + "', " +
-
-          // Sequence ID
-          QString::number(currMember.sequenceId) +
-
-          // Closing paren
-          ")";
-
-      relationMembersInsertCmd +=
-          // Opening paren
-          "(" +
-
-          // Relation ID
-          relationIDString + ", " +
-
-          // Member type
-          nwrType + ", " +
-
-          // Member ID
-          QString::number(currMember.elementId.getId()) + ", " +
-
-          // Role
-          "'" + sqlMemberRole + "', " +
-
-          // Version
-          "1, " +
-
-          // Sequence ID
-          QString::number(currMember.sequenceId) +
-
-          // Closing paren
-          ")";
-    }
-
-    // Add final semicolons
-    currentRelationMembersInsertCmd  += ";";
-    relationMembersInsertCmd         += ";";
-
-
-    _execNoPrepare(currentRelationMembersInsertCmd);
-    _execNoPrepare(relationMembersInsertCmd);
-
-    //LOG_VARD(currentRelationMembersInsertCmd);
-    //LOG_VARD(relationMembersInsertCmd);
-
-    // TODO: Iterate over all the relations for the members we just inserted, updating changeset envelope
-    //_updateChangesetEnvelopeRelationIds(relationIds);
-  }
-  catch ( ... )
-  {
-    throw HootException("Database error when inserting relation members");
-  }
-
-  // Remove all relation members from cache as they've been written
-  _relationMembersCache.clear();
-}
-
-void ServicesDb::_insertWay_OsmApi(const long wayId, const Tags &tags)
-{
-  double start = Tgs::Time::getTime();
-
-  // Add to element cache
-  WayPtr newWay( new Way(Status::Unknown1, wayId, 0.0) );
-  newWay->setTags(tags);
-  ConstElementPtr constWay(newWay);
-  _elementCache->addElement(constWay);
-  //LOG_DEBUG("Way " << QString::number(wayId) << " added to cache");
-
-  // See if way portion of cache is full and needs to be flushed
-  if ( _elementCache->typeCount(ElementType::Way) == _elementCacheCapacity )
-  {
-    _flushElementCacheOsmApiWays();
-  }
-
-  // Snag end time, update insert time
-  _wayInsertElapsed += Tgs::Time::getTime() - start;
-
-    // Note: changeset bounding box update is handled in flush, as it requires data to be in database
-}
-
-long ServicesDb::_getNextWayId_OsmApi()
-{
-  if ( _osmApiWayIdReserver == 0 )
-  {
-    _osmApiWayIdReserver.reset(new SequenceIdReserver(_db, "current_ways_id_seq"));
-  }
-
-  return _osmApiWayIdReserver->getNextId();
-}
-
-void ServicesDb::_insertWayNodes_OsmApi(const long wayId, const std::vector<long>& nodeIds)
-{
-  double start = Tgs::Time::getTime();
-
-  // Add to cache of nodes for ways
-  _wayNodesCache.insert( std::pair<long, std::vector<long> >(wayId, nodeIds) );
-
-  // is way-node portion of cache full?
-  if ( _wayNodesCache.size() == _elementCacheCapacity )
-  {
-    _flushElementCacheOsmApiWayNodes();
-  }
-
-  // Snag end time, update insert time
-  _wayNodesInsertElapsed += Tgs::Time::getTime() - start;
-}
-
-void ServicesDb::_insertRelation_OsmApi(const Tags &tags, const long assignedId)
-{
-  //LOG_DEBUG("Entering OSM relation insert");
-
-  // Add to element cache -- make sure to insert with mapped ID if appliable
-  RelationPtr newRelation( new Relation(Status::Unknown1, assignedId, 0.0) );
-  newRelation->setTags(tags);
-  ConstElementPtr constRelation(newRelation);
-  _elementCache->addElement(constRelation);
-
-  // See if relation portion of cache is full and needs to be flushed
-  if ( _elementCache->typeCount(ElementType::Relation) == _elementCacheCapacity)
-  {
-    _flushElementCacheOsmApiRelations();
-  }
-
-  // Note: changeset bounding box update is handled in flush, as it requires data to be in database
-
-  // Increment changes in the changeset
-  _changesetChangeCount++;
-
-  //LOG_DEBUG("Exiting OSM insert relation with ID " << relationId );
-}
-
-
-bool ServicesDb::_insertRelationMember_OsmApi(const long relationId, const ElementType& type,
-    const long elementId, const QString& role, const int sequenceId)
-{
-  // Create RelationMemberCacheEntry
-  ElementId eid;
-
-  switch ( type.getEnum() )
-  {
-  case ElementType::Node:
-    eid = ElementId::node(elementId);
-    break;
-  case ElementType::Way:
-    eid = ElementId::way(elementId);
-    break;
-
-  case ElementType::Relation:
-    eid = ElementId::relation(elementId);
-    break;
-  default:
-    throw HootException("Adding relation member of unknown type");
-    break;
-  }
-  RelationMemberCacheEntry cacheEntry;
-  cacheEntry.elementId = eid;
-  cacheEntry.role = role;
-  cacheEntry.sequenceId = sequenceId;
-
-  // Add to cache of members for relations
-  _relationMembersCache.insert( std::pair<long, RelationMemberCacheEntry>(relationId, cacheEntry));
-
-  if ( (relationId == 668) && (eid.getType().getEnum() == ElementType::Way) )
-  {
-    LOG_DEBUG("Cached relation " << QString::number(relationId) << " member for way " <<
-      QString::number(eid.getId()) );
-  }
-
-  // is relation-member portion of cache full?
-  if ( _relationMembersCache.size() == _elementCacheCapacity)
-  {
-    _flushElementCacheOsmApiRelationMembers();
-  }
-
-  return true;
-}
 
 long ServicesDb::reserveElementId(const ElementType::Type type)
 {
