@@ -600,26 +600,16 @@ public:
     /// Insert a relation into the Osm Api DB
     ///////////////////////////////////////////////
 
-    /*
-    database.transaction();
-
-    // Create or get user, set our userId
-    database.setUserId(database.getOrCreateUser("OsmApiInsert@hoot.local", "Hootenanny Inserter"));
-    database.beginChangeset();
-
     const long nodeId3 = nodeIds.at(0);
     const long wayId1 = ids.at(0);
     ids.clear();
     Tags rt;
     rt["type"] = "multistuff";
-    long relationId;
-    database.insertRelation(rt, relationId);
+    long relationId = 1;
     ids.append(relationId);
-    database.insertRelationMember(relationId, ElementType::Way, wayId1, "wayrole", 0);
-    database.insertRelationMember(relationId, ElementType::Node, nodeId3, "noderole", 1);
 
-    database.endChangeset();
-    database.commit();
+    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/relations.sql > /dev/null 2>&1");
+
 
     ///////////////////////////////////////////////
     /// Reads the relations from the Osm Api DB
@@ -673,7 +663,6 @@ public:
       HOOT_STR_EQUALS("type = multistuff\n", ServicesDb::unescapeTags(
         database.extractTagFromRow_OsmApi(relationResultIterator, ElementType::Relation)));
     }
-    */
 
   }
 
