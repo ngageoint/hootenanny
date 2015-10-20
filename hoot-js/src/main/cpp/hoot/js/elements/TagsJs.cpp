@@ -161,7 +161,6 @@ Handle<Value> TagsJs::set(const Arguments& args)
   t.set(key, value);
 
   return scope.Close(Undefined());
->>>>>>> develop
 }
 
 Handle<Value> TagsJs::toDict(const Arguments& args)
