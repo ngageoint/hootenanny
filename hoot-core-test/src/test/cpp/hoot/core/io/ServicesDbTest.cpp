@@ -462,7 +462,6 @@ public:
     std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1");
     std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodes.sql > /dev/null 2>&1");
 
-
     /////////////////////////////////////
     // SELECT THE NODES USING SELECT_ALL
     // Need to get the data in the format exactly like the return of the Services Db now so we don't need to

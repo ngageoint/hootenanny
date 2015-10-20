@@ -443,6 +443,7 @@ public:
     database.beginChangeset();
 
     // Insert single node
+    /*
     Tags simpleTags;
     simpleTags.appendValue("body_of_water", "haitis river");
     simpleTags.appendValue("accuracy", "3");
@@ -453,6 +454,11 @@ public:
     database.endChangeset();
     database.commit();
     database.close();
+    */
+
+    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/users.sql > /dev/null 2>&1");
+    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1");
+    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodesReadTest.sql > /dev/null 2>&1");
 
     ///////////////////////////////////////
     // test the reader
