@@ -6,6 +6,7 @@ import hoot.services.db2.CurrentRelationMembers;
 import hoot.services.db2.QCurrentRelationMembers;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.ElementInfo;
+import hoot.services.models.review.ReviewRef;
 import hoot.services.review.ReviewUtils;
 
 import java.lang.reflect.InvocationTargetException;
@@ -97,12 +98,12 @@ public class ReviewReferencesRetriever
    * @throws IllegalAccessException 
    * @throws InstantiationException 
    */
-	public List<ElementInfo> getUnresolvedReferences(final ElementInfo queryElementInfo) 
+	public List<ReviewRef> getUnresolvedReferences(final ElementInfo queryElementInfo) 
 		throws InstantiationException, IllegalAccessException, ClassNotFoundException, 
 		NoSuchMethodException, InvocationTargetException, Exception
   {
 		log.debug("requestingElementInfo: " + queryElementInfo.toString());
-		List<ElementInfo> references = new ArrayList<ElementInfo>();
+		List<ReviewRef> references = new ArrayList<ReviewRef>();
 		
 	  final long mapIdNum = MapResource.validateMap(queryElementInfo.getMapId(), conn);
     assert(mapIdNum != -1);
@@ -148,10 +149,11 @@ public class ReviewReferencesRetriever
 		for (CurrentRelationMembers member : referencedMembers)
 		{
 			references.add(
-				new ElementInfo(
+				new ReviewRef(
 					queryElementInfo.getMapId(), 
 					member.getMemberId(), 
-					Element.elementTypeForElementEnum(member.getMemberType()).toString().toLowerCase()));
+					Element.elementTypeForElementEnum(member.getMemberType()).toString().toLowerCase(),
+					member.getRelationId()));
 		}
 		
 		return references;

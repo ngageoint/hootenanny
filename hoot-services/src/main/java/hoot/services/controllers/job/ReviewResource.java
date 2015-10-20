@@ -34,11 +34,12 @@ import hoot.services.controllers.osm.MapResource;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
 import hoot.services.models.osm.ElementInfo;
-import hoot.services.models.review.ReviewReferencesRequest;
+import hoot.services.models.review.ReviewRef;
+import hoot.services.models.review.ReviewRefsRequest;
 import hoot.services.models.review.ReviewResolverRequest;
 import hoot.services.models.review.ReviewResolverResponse;
-import hoot.services.models.review.ReviewReferences;
-import hoot.services.models.review.ReviewReferencesResponse;
+import hoot.services.models.review.ReviewRefsResponse;
+import hoot.services.models.review.ReviewRefsResponses;
 import hoot.services.readers.review.ReviewReferencesRetriever;
 import hoot.services.review.ReviewUtils;
 import hoot.services.utils.ResourceErrorHandler;
@@ -172,14 +173,15 @@ public class ReviewResource
    * 
    * @param queryElements a collection of elements for which review references are to be retrieved;
    * the request should be a JSON string taking the form of the ElementInfo object; 
-   * @return an array of review references; one set of references for each query element passed in
+   * @return an array of review references; one set of references for each query element passed in;
+   * The ReviewRef object extends the ElementInfo object to add the associated review relation id.
    * @throws Exception
    */
   @GET
   @Path("/refs")
   @Consumes(MediaType.TEXT_PLAIN)
   @Produces(MediaType.APPLICATION_JSON)
-  public ReviewReferencesResponse getReviewReferences(
+  public ReviewRefsResponses getReviewReferences(
   	//not possible to pass an object directly in here, since its a GET method
   	@QueryParam("queryElements")
   	final String queryElements) 
@@ -187,27 +189,27 @@ public class ReviewResource
   {
   	log.debug("Returning review references...");
   	
-  	ReviewReferencesRequest request = 
-  		(new ObjectMapper()).readValue(queryElements, ReviewReferencesRequest.class);
-  	ReviewReferencesResponse response = new ReviewReferencesResponse();
+  	ReviewRefsRequest request = 
+  		(new ObjectMapper()).readValue(queryElements, ReviewRefsRequest.class);
+  	ReviewRefsResponses response = new ReviewRefsResponses();
     
   	Connection conn = DbUtils.createConnection();
   	try
   	{
   		ReviewReferencesRetriever refsRetriever = new ReviewReferencesRetriever(conn);
-  		List<ReviewReferences> responseRefsList = new ArrayList<ReviewReferences>();
+  		List<ReviewRefsResponse> responseRefsList = new ArrayList<ReviewRefsResponse>();
   		for (ElementInfo elementInfo : request.getElementInfos())
   		{
-  			ReviewReferences responseRefs = new ReviewReferences();
-  			List<ElementInfo> references = refsRetriever.getUnresolvedReferences(elementInfo);
+  			ReviewRefsResponse responseRefs = new ReviewRefsResponse();
+  			List<ReviewRef> references = refsRetriever.getUnresolvedReferences(elementInfo);
 	  		log.debug(
 	  			"Returning " + references.size() + " review references for requesting element: " + 
 	  			elementInfo.toString());
-	  		responseRefs.setReviewReferences(references.toArray(new ElementInfo[]{}));
+	  		responseRefs.setReviewRefs(references.toArray(new ReviewRef[]{}));
 	  		responseRefs.setQueryElementInfo(elementInfo);
 	  		responseRefsList.add(responseRefs);
   		}
-  		response.setReviewReferenceResponses(responseRefsList.toArray(new ReviewReferences[]{}));
+  		response.setReviewRefResponses(responseRefsList.toArray(new ReviewRefsResponse[]{}));
   	}
     finally
     {

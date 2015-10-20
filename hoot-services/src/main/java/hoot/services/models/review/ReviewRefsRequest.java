@@ -8,17 +8,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  * A request for review references
  */
 @XmlRootElement
-public class ReviewReferencesRequest
+public class ReviewRefsRequest
 {
 	private ElementInfo[] elementInfos;
   public ElementInfo[] getElementInfos() { return elementInfos; }
   public void setElementInfos(ElementInfo[] infos) { this.elementInfos = infos; }
   
-  public ReviewReferencesRequest()
+  public ReviewRefsRequest()
   {
   }
   
-  public ReviewReferencesRequest(final ElementInfo[] elementInfos)
+  public ReviewRefsRequest(final ElementInfo[] elementInfos)
   {
   	this.elementInfos = elementInfos;
   }
