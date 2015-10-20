@@ -16,7 +16,6 @@ import hoot.services.models.review.ReviewRefsRequest;
 import hoot.services.models.review.ReviewRefsResponses;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.review.ReviewTestUtils;
-import hoot.services.utils.JsonUtils;
 import hoot.services.utils.RandomNumberGenerator;
 
 import org.junit.Assert;
@@ -44,18 +43,17 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract
 		final ReviewRefsResponses response = 
 	  	resource()
 	      .path("/review/refs")
-	      .queryParam(
-        	"queryElements", 
-          JsonUtils.objectToJson(
-          	new ReviewRefsRequest(
-      		    new ElementInfo[] { 
+	      .type(MediaType.APPLICATION_JSON)
+	      .accept(MediaType.APPLICATION_JSON)
+        .post(
+        	ReviewRefsResponses.class, 
+        	new ReviewRefsRequest(
+    		    new ElementInfo[] { 
       			    new ElementInfo(
       			    	String.valueOf(mapId), oldNodeIdsToNewNodes.get((long)-116).getId(), "node"),
       			    new ElementInfo(
       			    	String.valueOf(mapId), oldNodeIdsToNewNodes.get((long)-117).getId(), "node")
-      			  })))
-	      .accept(MediaType.APPLICATION_JSON)
-        .get(ReviewRefsResponses.class);
+      			  }));
 	  
 		final ReviewRefsResponse[] reviewReferenceResponses = response.getReviewRefResponses();
 		Assert.assertEquals(2, reviewReferenceResponses.length);
@@ -113,19 +111,18 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract
     {
     	resource()
         .path("/review/refs")
-        .queryParam(
-        	"queryElements", 
-          JsonUtils.objectToJson(
-          	new ReviewRefsRequest(
-      		    new ElementInfo[] { 
-      			    new ElementInfo(
-      				    String.valueOf(
-      				    	(long)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)), 
-      				    -1, 
-      				    "")})))
-        .type(MediaType.TEXT_PLAIN)
+        .type(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON)
-        .get(ReviewRefsResponses.class);
+        .post(
+        	ReviewRefsResponses.class,
+        	new ReviewRefsRequest(
+    		    new ElementInfo[] { 
+    			    new ElementInfo(
+    			    	//map id doesn't exist
+    				    String.valueOf(
+    				    	(long)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)), 
+    				    -1, 
+    				    "")}));
     }
     catch (UniformInterfaceException e)
     {
@@ -146,14 +143,15 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract
     {
     	resource()
         .path("/review/refs")
-        .queryParam(
-        	"queryElements", 
-          JsonUtils.objectToJson(
-          	new ReviewRefsRequest(
-      		    new ElementInfo[] { new ElementInfo(String.valueOf(mapId), -1, "node")})))
-        .type(MediaType.TEXT_PLAIN)
+        .type(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON)
-        .get(ReviewRefsResponses.class);
+        .post(
+        	ReviewRefsResponses.class,
+        	new ReviewRefsRequest(
+      		  new ElementInfo[] { 
+      		  	//this element doesn't exist
+      		  	new ElementInfo(String.valueOf(mapId), -1, "node")
+      		  }));
     }
     catch (UniformInterfaceException e)
     {
@@ -174,14 +172,15 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract
     {
     	resource()
         .path("/review/refs")
-        .queryParam(
-        	"queryElements", 
-          JsonUtils.objectToJson(
-          	new ReviewRefsRequest(
-      		    new ElementInfo[] { new ElementInfo(String.valueOf(mapId), -1, "")})))
-        .type(MediaType.TEXT_PLAIN)
+        .type(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON)
-        .get(ReviewRefsResponses.class);
+        .post(
+        	ReviewRefsResponses.class,
+        	new ReviewRefsRequest(
+      		  new ElementInfo[] { 
+      		  	//this element has the incorrect type
+      		  	new ElementInfo(String.valueOf(mapId), -1, "")
+      		  }));
     }
     catch (UniformInterfaceException e)
     {

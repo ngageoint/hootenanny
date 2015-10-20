@@ -46,16 +46,14 @@ import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.writers.review.ReviewResolver;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -171,28 +169,27 @@ public class ReviewResource
   /**
    * Returns any review references to the elements associated with the ID's passed in
    * 
-   * @param queryElements a collection of elements for which review references are to be retrieved;
-   * the request should be a JSON string taking the form of the ElementInfo object; 
+   * Technically, this should be a GET request, but since the size of the input could potentially
+   * be large, making it a POST request to get past any size limit restrictions on GET requests.
+   * 
+   * @param request request containing a collection of elements for which review references are to 
+   * be retrieved
    * @return an array of review references; one set of references for each query element passed in;
-   * The ReviewRef object extends the ElementInfo object to add the associated review relation id.
+   * The returned ReviewRef object extends the ElementInfo object to add the associated review 
+   * relation id.
    * @throws Exception
    */
-  @GET
+  @POST
   @Path("/refs")
-  @Consumes(MediaType.TEXT_PLAIN)
+  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public ReviewRefsResponses getReviewReferences(
-  	//not possible to pass an object directly in here, since its a GET method
-  	@QueryParam("queryElements")
-  	final String queryElements) 
+  	final ReviewRefsRequest request) 
   	throws Exception
   {
   	log.debug("Returning review references...");
   	
-  	ReviewRefsRequest request = 
-  		(new ObjectMapper()).readValue(queryElements, ReviewRefsRequest.class);
   	ReviewRefsResponses response = new ReviewRefsResponses();
-    
   	Connection conn = DbUtils.createConnection();
   	try
   	{
