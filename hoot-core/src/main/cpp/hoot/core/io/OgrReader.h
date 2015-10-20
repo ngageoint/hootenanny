@@ -85,6 +85,15 @@ public:
 
   QStringList getFilteredLayerNames(QString path);
 
+  /**
+   * Read all geometry data from the specified path.
+   *
+   * @param path
+   * @param layer Read only from this layer. If no layer is specified then read from all geometry
+   *  layers.
+   * @param map Put what we read in this map.
+   * @param progress Report progress to this object.
+   */
   void read(QString path, QString layer, shared_ptr<OsmMap> map, Progress progress);
 
   void setDefaultCircularError(Meters circularError);
@@ -109,15 +118,18 @@ public:
 
   virtual bool isSupported(QString url);
 
-  void setLayerName(QString layerName);
-
-  QString getLayerName();
-
   virtual void open(QString url);
 
   virtual void setUseDataSourceIds(bool useDataSourceIds);
 
   virtual void finalizePartial();
+
+  /**
+   * Returns the bounding box for the specified projection and configuration settings. This is
+   * likely only useful in unit tests.
+   */
+  virtual shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s,
+    OGRSpatialReference* srs);
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 

@@ -35,7 +35,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;
@@ -49,6 +51,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -124,6 +127,22 @@ public class CustomScriptResourceTest
     String content = FileUtils.readFileToString(f, "UTF-8");
     assertTrue(content.equals(resStr));
   }
+  
+  @Test
+  @Category(UnitTest.class)
+  public void testSaveBadSyntax() throws Exception
+  {
+  	try
+  	{
+  		res.processSave("{ test", "testName", "Test Description");
+  	}
+  	catch (WebApplicationException e)
+    {
+      Response res = e.getResponse();
+			Assert.assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), res.getStatus());
+			Assert.assertTrue(res.getEntity().toString().contains("missing } in compound statement"));
+    }
+  }
 
   @Test
   @Category(UnitTest.class)
@@ -135,20 +154,6 @@ public class CustomScriptResourceTest
         new Script("testName1", "Test Description 1", "test1"),
         new Script("testName2", "Test Description 2", "test2") });
 
-//    ScriptsModifiedResponse response = null;
-//    try
-//    {
-//      response =
-//        resource()
-//          .path("/customscript/saveMultiple")
-//          .accept(MediaType.APPLICATION_JSON)
-//          .post(ScriptsModifiedResponse.class, request);
-//    }
-//    catch (UniformInterfaceException e)
-//    {
-//      ClientResponse r = e.getResponse();
-//      Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
-//    }
     ScriptsModifiedResponse response = res.saveScripts(request);
 
     assertEquals(2, response.getScriptsModified().length);
@@ -181,14 +186,7 @@ public class CustomScriptResourceTest
      * The upload directory should be created if it doesn't exist.
      */
 
-    //Tried to use a mock for this, but couldn't get it to work.
-//    CustomScriptResource resource =
-//      PowerMock.createPartialMock(CustomScriptResource.class, "uploadDirExists");
-//    PowerMock.expectPrivate(resource, "uploadDirExists").andReturn(false);
-//    resource.scriptFolder = res.scriptFolder;
     FileUtils.deleteDirectory(new File(res.scriptFolder));
-
-    //PowerMock.replay(resource);
 
     ModifyScriptsRequest request = new ModifyScriptsRequest();
     request.setScripts(
@@ -424,20 +422,6 @@ public class CustomScriptResourceTest
     scriptsToDelete.add(script);
     request.setScripts(scriptsToDelete.toArray(new Script[]{}));
 
-//    ScriptsModifiedResponse deleteResponse = null;
-//    try
-//    {
-//      deleteResponse =
-//        resource()
-//          .path("/customscript/deletescripts")
-//          .accept(MediaType.APPLICATION_JSON)
-//          .delete(ScriptsModifiedResponse.class, new String[]{ "testName9", "testName10" });
-//    }
-//    catch (UniformInterfaceException e)
-//    {
-//      ClientResponse r = e.getResponse();
-//      Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
-//    }
     ScriptsModifiedResponse deleteResponse = res.deleteScripts(request);
 
     assertEquals(2, deleteResponse.getScriptsModified().length);

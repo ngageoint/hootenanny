@@ -26,32 +26,39 @@
  */
 package hoot.services.controllers.ogr;
 
+import hoot.services.HootProperties;
+import hoot.services.UnitTest;
+
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class TranslatorResourceTest {
 	
 	@Ignore
 	@Test
+	@Category(UnitTest.class)
 	public void testParseOsm() throws Exception
 	{
 
 	}
-	/*
+	
+	@Ignore
 	@Test
 	@Category(UnitTest.class)
 	public void testExecOsmConversion() throws Exception
 	{
 		String homeFolder = HootProperties.getInstance().getProperty("homeFolder", "");
-		Translator translator = new Translator();
+		/*Translator translator = new Translator();
 		translator.execOsmConversion(homeFolder + "/test-files/conflate/unified/AllDataTypesA.osm", 
-				homeFolder + "/test-output/OsmConversion.osm");
-	}*/
+				homeFolder + "/test-output/OsmConversion.osm");*/
+	}
+	
 	@Ignore
 	@Test
+	@Category(UnitTest.class)
 	public void testTranslateToOgr() throws Exception
 	{
 
 	}
-
 }

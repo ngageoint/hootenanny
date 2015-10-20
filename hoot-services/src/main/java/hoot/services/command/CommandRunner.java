@@ -418,8 +418,7 @@ public class CommandRunner implements ICommandRunner {
     // private methods
 
     private  int handleProcess ( Process pProcess, String pOrigCmd, Writer pOut, Writer pErr,
-    		List<CharPump> stdOutErrList, MutableBoolean interrupt ) throws IOException,
-            InterruptedException {
+    		List<CharPump> stdOutErrList, MutableBoolean interrupt ) throws InterruptedException {
 
     	_processState = 0;
     	int res = handleProcessStatic (  pProcess,  pOrigCmd,  pOut,  pErr,
@@ -429,8 +428,7 @@ public class CommandRunner implements ICommandRunner {
     }
 
     private static int handleProcessStatic ( Process pProcess, String pOrigCmd, Writer pOut, Writer pErr,
-    		List<CharPump> stdOutErrList, MutableBoolean interrupt ) throws IOException,
-            InterruptedException {
+    		List<CharPump> stdOutErrList, MutableBoolean interrupt ) throws InterruptedException {
 
     		CharPump outpump = new CharPump ( new BufferedReader(new InputStreamReader ( pProcess.getInputStream ()) ), pOut, pOrigCmd, interrupt );
     		stdOutErrList.add(outpump);

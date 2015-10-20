@@ -47,17 +47,12 @@ import hoot.services.db2.QChangesets;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Changeset;
 import hoot.services.osm.OsmResourceTestAbstract;
-import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 
 import com.mysema.query.sql.SQLQuery;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
-/*
- * @todo Most of these tests could be converted to integration tests and after a refactoring,
- * could be replace with unit tests that test only the internal classes being used by this
- * Jersey resource.
- */
 public class UserResourceTest extends OsmResourceTestAbstract
 {
   private static final Logger log = LoggerFactory.getLogger(UserResourceTest.class);
@@ -89,7 +84,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       try
       {
@@ -145,7 +140,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       try
       {
@@ -233,7 +228,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       try
       {
@@ -355,7 +350,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       try
       {
@@ -370,7 +365,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
 
       try
       {
-      	//TODO: probably need a better check than this
+      	//probably need a better check than this
         Assert.assertTrue(XPathAPI.selectNodeList(responseData, "//osm/user").getLength() >= 1);
         Assert.assertEquals(
         	DbUtils.getTestUserId(conn), 

@@ -55,7 +55,7 @@ clean-db: services-clean-db
 clean-all: clean clean-db
 
 check: test
-test: build services-test pp-test plugins-test
+test: build ui-test services-test pp-test plugins-test 
 	bin/HootTest $(HOOT_TEST_DIFF) --slow
 
 docs: always HOOT_VERSION_FILE
@@ -64,7 +64,9 @@ docs: always HOOT_VERSION_FILE
 test-quick: build services-test pp-test
 	bin/HootTest $(HOOT_TEST_DIFF) --quick
 
-test-all: build services-test-all pp-test plugins-test
+test-all-no-core: ui-test build services-test-all pp-test plugins-test 
+
+test-all: test-all-no-core
 	bin/HootTest $(HOOT_TEST_DIFF) --glacial
 
 licenses:
@@ -101,6 +103,11 @@ endif
 plugins-test:
 	# Only run the plugins tests if mocha is installed.
 	cd plugins; (command -v mocha &> /dev/null) && mocha test || echo Skipping mocha tests
+
+ui-test:
+ifeq ($(BUILD_UI),ui)
+	cd hoot-ui; npm test #&> /dev/null
+endif
 
 pp-test-all:
 ifneq ($(HADOOP_HOME),)

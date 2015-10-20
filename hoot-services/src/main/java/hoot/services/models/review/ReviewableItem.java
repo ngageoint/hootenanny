@@ -53,7 +53,9 @@ public class ReviewableItem
   
   private String displayBounds = null;
   public String getDisplayBounds() { return displayBounds; }
-  public void setDisplayBounds(String displayBounds) { this.displayBounds = displayBounds; }
+  public void setDisplayBounds(String displayBounds) { 
+  	this.displayBounds = displayBounds; 
+  	}
   
   private ReviewAgainstItem itemToReviewAgainst = null;
   public ReviewAgainstItem getItemToReviewAgainst() { return itemToReviewAgainst; }
@@ -61,6 +63,18 @@ public class ReviewableItem
   { 
     this.itemToReviewAgainst = itemToReviewAgainst;
   }
+  
+  private long reviewId = -1;
+  public long getReviewId() { return reviewId;}
+  public void setReviewId(final long rid) {reviewId = rid;}
+  
+  private String againstList = null;
+  public String getAgainstList() {return againstList;}
+  public void setAgainstList(final String agList) {againstList = agList;}
+  
+  private long allReviewAgainstCnt = 0;
+  public long getAllReviewAgainstCnt() {return allReviewAgainstCnt;}
+  public void setAllReviewAgainstCnt(final long cnt) {this.allReviewAgainstCnt = cnt;}
   
   public ReviewableItem()
   {

@@ -24,9 +24,11 @@ src/main/resources/db/spring-database.xml: src/main/resources/db/spring-database
 src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml: src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml.in ../conf/DatabaseConfig.sh
 	../scripts/ReplaceEnvironmentVariables.sh src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml.in src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml
 
-
 pom.xml: pom.xml.in ../conf/DatabaseConfig.sh
 	../scripts/ReplaceEnvironmentVariables.sh pom.xml.in pom.xml
+	
+src/main/resources/log4j.xml: src/main/resources/log4j.xml.in ../conf/DatabaseConfig.sh 
+	../scripts/ReplaceEnvironmentVariables.sh src/main/resources/log4j.xml.in src/main/resources/log4j.xml
 
 src/main/resources/conf/hoot-services.conf: src/main/resources/conf/hoot-services.conf.in ../conf/DatabaseConfig.sh
 	../scripts/ReplaceEnvironmentVariables.sh src/main/resources/conf/hoot-services.conf.in src/main/resources/conf/hoot-services.conf
@@ -34,8 +36,7 @@ src/main/resources/conf/hoot-services.conf: src/main/resources/conf/hoot-service
 build-info:
 	../scripts/GenerateBuildInfoFiles.sh
 
-config: ./src/main/resources/db/liquibase.properties src/main/resources/db/spring-database.xml src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml pom.xml src/main/resources/conf/hoot-services.conf
-
+config: ./src/main/resources/db/liquibase.properties src/main/resources/db/spring-database.xml src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml pom.xml src/main/resources/conf/hoot-services.conf src/main/resources/log4j.xml
 
 build: build-info config
 	# If there isn't a local copy of the properties, copy the global version.
@@ -51,9 +52,10 @@ endif
 	cp target/hoot-services-*.war ../bin
 
 
-clean: pom.xml
+clean: pom.xml src/main/resources/log4j.xml
 	../scripts/mvn-build $(MVN_QUIET) clean
 	rm -f pom.xml
+	rm -f src/main/resources/log4j.xml
 
 # Both commands now do the same thing.
 clean-db: clean-db-force

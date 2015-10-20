@@ -78,9 +78,9 @@ public class CookieCutterResource extends JobControllerBase {
 	 * <NAME>Cookie Cutter Service</NAME>
 	 * <DESCRIPTION>
 	 * DEPRICATED
-	 *  Cookie cutter service contains 2 end points, WPS and rest. Both uses post request to execute job.
+	 *  Cookie cutter service contains 2 end points, WPS and rest. Both use post request to execute job.
 	 *  When successfully executed, the service willreturn Job Id where it is used to track the progress of job and result.
-	 *  For valid parameters following are accepted.
+	 *  For valid parameters, the following are accepted.
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * 	<INPUT_TYPE>
@@ -189,8 +189,6 @@ public class CookieCutterResource extends JobControllerBase {
 
 			JSONObject prepareItemsForReviewCommand = _createReflectionJobReq(reviewArgs, "hoot.services.controllers.job.ReviewResource",
 					"prepareItemsForReview");
-			//String argStr = createPostBody(commandArgs);
-
 
 
 //	  Density Raster
@@ -206,7 +204,6 @@ public class CookieCutterResource extends JobControllerBase {
 			JSONObject ingestOSMResource = _createReflectionJobReq(rasterTilesArgs,
 					"hoot.services.controllers.ingest.RasterToTilesService",
 					"ingestOSMResourceDirect");
-			////
 
 			JSONArray jobArgs = new JSONArray();
 			jobArgs.add(conflationCommand);

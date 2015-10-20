@@ -26,9 +26,11 @@
  */
 
 // Hoot
+#include <hoot/core/MapReprojector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Progress.h>
 using namespace hoot;
@@ -37,19 +39,19 @@ using namespace hoot;
 // Boost
 using namespace boost;
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
+#include "../TestUtils.h"
 
 // Qt
 #include <QDebug>
+
+namespace hoot
+{
 
 class OgrReaderTest : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(OgrReaderTest);
     CPPUNIT_TEST(runBasicTest);
+    CPPUNIT_TEST(runBoundingBoxTest);
     CPPUNIT_TEST(runJavaScriptTranslateTest);
     CPPUNIT_TEST(runPythonTranslateTest);
     CPPUNIT_TEST(runStreamHasMoreElementsTest);
@@ -68,6 +70,45 @@ public:
 
       CPPUNIT_ASSERT_EQUAL(604, map->getNodeMap().size());
       CPPUNIT_ASSERT_EQUAL(6, (int)map->getWays().size());
+    }
+
+    void runBoundingBoxTest()
+    {
+      OgrReader uut;
+
+      OGREnvelope env;
+      env.MinX = -1;
+      env.MaxX = 1;
+      env.MinY = 85;
+      env.MaxY = 86;
+
+      Coordinate c1(-1, 84);
+      Coordinate c2(1, 84);
+      double d = GeometryUtils::haversine(c1, c2);
+
+      {
+        shared_ptr<OGRSpatialReference> ortho1 = MapReprojector::createOrthographic(env);
+
+        Settings s;
+        // 15512.4m wide at the top
+        // 19381.6m wide at the bottom
+        // 111385.6m tall
+        s.set(ConfigOptions::getOgrReaderBoundingBoxLatlngKey(), "-1,85,1,86");
+        // resulting bounding box is
+        // 19403.28m wide
+        // 111385.6m tall
+        HOOT_STR_EQUALS("Env[-9701.64:9701.64,-55659:55726.6]",
+          uut.getBoundingBoxFromConfig(s, ortho1.get())->toString());
+      }
+
+      {
+        Settings s;
+        // 15512.4m wide
+        // 111385.6m tall
+        s.set(ConfigOptions::getOgrReaderBoundingBoxKey(), "-7756.2,-55692.8,7756.2,55692.8");
+        HOOT_STR_EQUALS("Env[-7756.2:7756.2,-55692.8:55692.8]",
+          uut.getBoundingBoxFromConfig(s, 0)->toString());
+      }
     }
 
     void runJavaScriptTranslateTest()
@@ -169,6 +210,6 @@ public:
     }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OgrReaderTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OgrReaderTest, "quick");
 
+}

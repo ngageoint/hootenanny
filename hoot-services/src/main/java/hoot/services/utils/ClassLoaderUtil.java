@@ -26,9 +26,6 @@
  */
 package hoot.services.utils;
 
-//import org.jboss.vfs.VFS;
-//import org.jboss.vfs.VirtualFile;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.JarURLConnection;
@@ -124,7 +121,6 @@ public class ClassLoaderUtil
       }
       else if (resource.getProtocol().equalsIgnoreCase("VFS"))
       {
-        // result.addAll( loadVfs( resource ));
         System.out.println("VFS");
       }
       else
@@ -136,27 +132,6 @@ public class ClassLoaderUtil
 
     return result;
   }
-
-  // public static List<URL> loadVfs( URL resource ) throws IOException
-  // {
-  // List<URL> result = new LinkedList<URL>();
-  //
-  // try {
-  // VirtualFile r = VFS.getChild( resource.toURI() );
-  // if ( r.exists() && r.isDirectory() ) {
-  // for ( VirtualFile f : r.getChildren() )
-  // {
-  // result.add( f.asFileURL() );
-  // }
-  // }
-  // } catch (URISyntaxException e) {
-  // System.out.println( "Problem reading resource '" + resource + "':\n " +
-  // e.getMessage() );
-  // e.printStackTrace();
-  // }
-  //
-  // return result;
-  // }
 
   private static List<URL> _loadJar(String path, URL resource) throws IOException
   {

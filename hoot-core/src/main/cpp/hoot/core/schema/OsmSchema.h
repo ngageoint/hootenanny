@@ -31,6 +31,7 @@
 // hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/Tags.h>
+#include <hoot/core/schema/SchemaVertex.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -45,22 +46,14 @@ namespace hoot
 
   using namespace std;
 
-enum TagValueType
-{
-  Boolean,
-  Text,
-  Enumeration,
-  Int,
-  Unknown
-};
-
 enum EdgeType
 {
   CanHave,
   IsA,
   SimilarTo,
   ParentOf,
-  AssociatedWith
+  AssociatedWith,
+  CompoundComponent,
 };
 
 struct OsmSchemaCategory {
@@ -73,13 +66,16 @@ struct OsmSchemaCategory {
     Use = 8,
     Name = 16,
     PseudoName = 32,
-    All = Poi | Building | Transportation | Use | Name
+    // Human Geography POI. See ticket #6853 for a definition of a "HGIS POI"
+    HgisPoi = 64,
+    All = Poi | Building | Transportation | Use | Name | HgisPoi
   } Type;
 
   OsmSchemaCategory() : _type(Empty) {}
   OsmSchemaCategory(OsmSchemaCategory::Type t) : _type(t) {}
 
   static OsmSchemaCategory building() { return OsmSchemaCategory(Building); }
+  static OsmSchemaCategory hgisPoi() { return OsmSchemaCategory(HgisPoi); }
   static OsmSchemaCategory poi() { return OsmSchemaCategory(Poi); }
   static OsmSchemaCategory transportation() { return OsmSchemaCategory(Transportation); }
   static OsmSchemaCategory use() { return OsmSchemaCategory(Use); }
@@ -116,6 +112,10 @@ struct OsmSchemaCategory {
     else if (s == "pseudoname")
     {
       return PseudoName;
+    }
+    else if (s == "hgispoi")
+    {
+      return HgisPoi;
     }
     else if (s == "")
     {
@@ -177,6 +177,10 @@ struct OsmSchemaCategory {
     {
       result << "pseudoname";
     }
+    if (_type & HgisPoi)
+    {
+      result << "hgispoi";
+    }
 
     return result;
   }
@@ -237,67 +241,6 @@ public:
   double w2;
 };
 
-struct TagVertex
-{
-
-  TagVertex()
-  {
-    influence = -1.0;
-    valueType = Unknown;
-    childWeight = -1.0;
-    mismatchScore = -1.0;
-    geometries = 0;
-  }
-
-  bool isEmpty() const
-  {
-    return name.isEmpty();
-  }
-
-  bool isValid() const { return !isEmpty(); }
-
-  QString toString() const
-  {
-    QString result = QString("name: %1\n").arg(name)
-        + QString("key: %1\n").arg(key)
-        + QString("value: %1\n").arg(value)
-        + QString("influence: %1\n").arg(influence)
-        + QString("childWeight: %1\n").arg(childWeight)
-        + QString("mismatchScore: %1\n").arg(mismatchScore)
-        + QString("valueType: %1\n").arg(valueType)
-        + QString("aliases: %1\n").arg(Tgs::toString(aliases))
-        + QString("geometries: %1\n").arg(geometries)
-        + QString("categories: %1\n").arg(Tgs::toString(categories));
-    return result;
-  }
-
-  QString name;
-  QString key;
-  QString value;
-  double influence;
-  double childWeight;
-
-  /**
-   * The mismatchScore is used only with wildcard enumerated types. (e.g. addr:housenumber=*).
-   * This score is the score returned when two wildcard enumerated types are compared that have
-   * different values.
-   */
-  double mismatchScore;
-  enum TagValueType valueType;
-  QStringList aliases;
-
-  /**
-   * Each tag can have categories associated with it. This can help when grouping a number of
-   * disparate tags into a category. E.g. building=school, amenity=restaurant and tourism=attraction
-   * are all POIs, but don't fit neatly into a single hierarchy.
-   *
-   * If a category is set on an ancestor then it is also set in the category tag.
-   */
-  QStringList categories;
-  uint16_t geometries;
-};
-
-
 class OsmSchemaData;
 class Relation;
 
@@ -318,7 +261,7 @@ public:
 
   void addIsA(QString name1, QString name2);
 
-  void addSimilarTo(QString name1, QString name2, double weight);
+  void addSimilarTo(QString name1, QString name2, double weight, bool oneway = false);
 
   QString average(const QString& kvp1, double w1, const QString& kvp2, double w2, double& best);
 
@@ -333,23 +276,51 @@ public:
    * Searches for the first common ancestor between two key value pairs. If there is no common
    * ancestor then an empty TagVertex is returned.
    */
-  const TagVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2);
+  const SchemaVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2);
 
-  vector<TagVertex> getAssociatedTags(QString name);
+  vector<SchemaVertex> getAssociatedTags(QString name);
 
   OsmSchemaCategory getCategories(const Tags& t) const;
   OsmSchemaCategory getCategories(const QString& k, const QString& v) const;
   OsmSchemaCategory getCategories(const QString& kvp) const;
 
-  vector<TagVertex> getChildTags(QString name);
+  vector<SchemaVertex> getAllTags();
+
+  vector<SchemaVertex> getChildTags(QString name);
 
   static OsmSchema& getInstance();
 
   double getIsACost() const;
 
-  vector<TagVertex> getTagByCategory(OsmSchemaCategory c) const;
+  /**
+   * Returns all tags that have a similar score >= minimumScore.
+   *
+   * minimumScore must be > 0.
+   */
+  vector<SchemaVertex> getSimilarTags(QString name, double minimumScore);
 
-  const TagVertex& getTagVertex(const QString& kvp) const;
+  vector<SchemaVertex> getTagByCategory(OsmSchemaCategory c) const;
+
+  /**
+   * Returns the tag vertex for a given kvp. If the vertex is compound then an empty vertex will
+   * be returned.
+   */
+  const SchemaVertex& getTagVertex(const QString& kvp) const;
+
+  /**
+   * Returns all schema vertices that are represented in the set of tags. This will return both
+   * compound vertices and tag vertices.
+   */
+  vector<SchemaVertex> getSchemaVertices(const Tags& tags) const;
+
+  /**
+   * Returns all the schema vertices in the set of tags that do not also have parent vertices in the
+   * set of tags. E.g. returns railway_platform, but not public_transit=platform.
+   *
+   * "Unique" may not be the best modifier in the method name, but "WithParentTagsRemoved" seemed
+   * a bit verbose. Open to suggestions. -JRS
+   */
+  vector<SchemaVertex> getUniqueSchemaVertices(const Tags& tags) const;
 
   /**
    * Returns true if at least one tag in the set of specified tags is part of the specified
@@ -382,6 +353,11 @@ public:
    * Returns true if this is a geometry collection.
    */
   bool isCollection(const Element& e) const;
+
+  /**
+   * Returns true if this is a POI as defined by the Tampa DG group.
+   */
+  bool isHgisPoi(const Element& e);
 
   /**
    * Returns true if the element is a highway type (e.g. road, primary, path, etc.)
@@ -434,6 +410,13 @@ public:
   void loadDefault();
 
   double score(const QString& kvp1, const QString& kvp2);
+  double score(const SchemaVertex& v1, const SchemaVertex& v2);
+
+  /**
+   * @brief scoreOneWay Returns a oneway score. E.g. highway=primary is similar to highway=road,
+   *  but a highway=road isn't necessarily similar to a highway=primary (so it gets a low score).
+   */
+  double scoreOneWay(const QString& kvp1, const QString& kvp2);
 
   /**
    * Sets the cost when traversing up the tree to a parent node. This is useful for strict score
@@ -447,14 +430,14 @@ public:
 
   void update();
 
-  void updateOrCreateVertex(const TagVertex& tv);
+  void updateOrCreateVertex(const SchemaVertex& tv);
 
 private:
   // the templates we're including take a crazy long time to include, so I'm isolating the
   // implementation.
   OsmSchemaData* d;
   static OsmSchema* _theInstance;
-  TagVertex _empty;
+  SchemaVertex _empty;
 };
 
 }

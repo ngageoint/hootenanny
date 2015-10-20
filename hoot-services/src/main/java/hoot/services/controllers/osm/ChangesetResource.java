@@ -27,6 +27,7 @@
 package hoot.services.controllers.osm;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
@@ -34,7 +35,9 @@ import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.validators.osm.ChangesetUploadXmlValidator;
 import hoot.services.writers.osm.ChangesetDbWriter;
+import hoot.services.writers.review.ReviewItemsSynchronizer;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.OPTIONS;
@@ -132,10 +135,6 @@ public class ChangesetResource
    * @param mapId ID of the map the changeset belongs to
    * @return Response containing the ID assigned to the new changeset
    * @throws Exception 
-   * @todo why can't I get changesetData in as an XML doc?
-   * @todo update for parsing multiple changesets in one request (#2894): duplicated changeset tag 
-     keys are allowed but later changeset tag keys overwrite earlier ones; isn't that contradictory
-     with the rest of the logic in this method?
    */
   @PUT
   @Path("/create")
@@ -315,12 +314,12 @@ public class ChangesetResource
    * 
    * @param changeset OSM changeset diff data
    * @param changesetId ID of the changeset being uploaded; changeset with the ID must already exist
+   * @param mapId ID of the map owning the changeset being uploaded
    * @return response acknowledging the result of the update operation with updated entity ID 
    * information
    * @throws Exception
    * @see http://wiki.openstreetmap.org/wiki/API_0.6 and 
    * http://wiki.openstreetmap.org/wiki/OsmChange
-   * @todo why can't I pass in changesetDiff as an XML doc instead of a string?
    */
   @POST
   @Path("/{changesetId}/upload")
@@ -334,13 +333,11 @@ public class ChangesetResource
     final String mapId)
     throws Exception
   {
+  	log.debug("Intializing database connection...");
     Connection conn = DbUtils.createConnection();
     Document changesetUploadResponse = null;
     try
     {
-      log.debug("Intializing database connection...");
-
-      
       log.debug("Intializing changeset upload transaction...");
       TransactionStatus transactionStatus = 
         transactionManager.getTransaction(
@@ -349,12 +346,26 @@ public class ChangesetResource
       
       try
       { 
-      	if(mapId == null) {
+      	if (mapId == null) 
+      	{
       		throw new Exception("Invalid map id.");
       	}
       	long mapid = Long.parseLong(mapId);
-        changesetUploadResponse = 
-          (new ChangesetDbWriter(conn)).write(mapid, changesetId, changeset);
+      	Document changesetDoc = null;
+        try
+        {
+        	changesetDoc = (new ChangesetUploadXmlValidator()).parseAndValidate(changeset);
+        }
+        catch (Exception e)
+        {
+          throw new Exception("Error parsing changeset diff data: "
+            + StringUtils.abbreviate(changeset, 100) + " (" + e.getMessage() + ")");
+        }
+        ChangesetDbWriter changesetDbWriter = new ChangesetDbWriter(conn);
+        changesetUploadResponse = changesetDbWriter.write(mapid, changesetId, changesetDoc);
+        	
+        (new ReviewItemsSynchronizer(conn, mapId)).updateReviewItems(
+          changesetDoc, changesetDbWriter.getParsedElementIdsToElementsByType());
       }
       catch (Exception e)
       {
@@ -442,6 +453,24 @@ public class ChangesetResource
   public static void handleError(final Exception e, final long changesetId, 
     final String changesetDiffSnippet)
   {
+  	String message = e.getMessage();
+  	if (e instanceof SQLException)
+    {
+    	SQLException sqlException = (SQLException)e;
+    	if (sqlException.getNextException() != null)
+    	{
+    		message += "  " + sqlException.getNextException().getMessage();
+    	}
+    }
+    if (e.getCause() instanceof SQLException)
+    {
+    	SQLException sqlException = (SQLException)e.getCause();
+    	if (sqlException.getNextException() != null)
+    	{
+    		message += "  " + sqlException.getNextException().getMessage();
+    	}
+    }
+    
     if (!StringUtils.isEmpty(e.getMessage()))
     {
       if (e.getMessage().contains("Invalid changeset ID") || 
@@ -450,25 +479,26 @@ public class ChangesetResource
           e.getMessage().contains("Changeset maximum element threshold exceeded") ||
           e.getMessage().contains("was closed at"))
       {
-        ResourceErrorHandler.handleError(e.getMessage(), Status.CONFLICT, log);  //409
+        ResourceErrorHandler.handleError(message, Status.CONFLICT, log);  //409
       }
       else if (e.getMessage().contains("to be updated does not exist"))
       {
-        ResourceErrorHandler.handleError(e.getMessage(), Status.NOT_FOUND, log); //404
+        ResourceErrorHandler.handleError(message, Status.NOT_FOUND, log); //404
       }
-      //TODO: should the visibility exception be changed from a 400 to a 409?
       else if (e.getMessage().contains("exist specified for") ||
                e.getMessage().contains("exist for") ||
-               e.getMessage().contains("is still used by"))
+               e.getMessage().contains("is still used by") ||
+               e.getMessage().contains(
+                 "One or more features in the changeset are involved in an unresolved review"))
       {
-        ResourceErrorHandler.handleError(e.getMessage(), Status.PRECONDITION_FAILED, log); //412
+        ResourceErrorHandler.handleError(message, Status.PRECONDITION_FAILED, log); //412
       }
     }
 
     //400
     ResourceErrorHandler.handleError(
       "Error uploading changeset with ID: " + changesetId + " - data: (" + 
-        e.getMessage() + ") " + changesetDiffSnippet, 
+        message + ") " + changesetDiffSnippet, 
       Status.BAD_REQUEST,
       log);
   }

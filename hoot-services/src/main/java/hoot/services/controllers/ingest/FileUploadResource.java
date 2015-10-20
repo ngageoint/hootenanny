@@ -83,7 +83,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 	 * <NAME>FileUpload Service</NAME>
 	 * <DESCRIPTION>
 	 * Purpose of this service is to provide ingest service for uploading shape and osm file and performing ETL operation on the uploaded file(s).
-   * This service is multipart post service which accepts sigle or multiple files sent by multipart client.
+   * This service is multipart post service which accepts single or multiple files sent by multipart client.
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * 	<TRANSLATION>
@@ -124,6 +124,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			@QueryParam("INPUT_TYPE") final String inputType,
 			@QueryParam("INPUT_NAME") final String inputName,
 			@QueryParam("USER_EMAIL") final String userEmail,
+			@QueryParam("NONE_TRANSLATION") final String noneTranslation,
 			@Context HttpServletRequest request)
 	{
 		String etlName = inputName;
@@ -205,6 +206,10 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			{
 				throw new Exception("Can not mix osm and ogr type.");
 			}
+			if(osmZipCnt > 0){
+				//#6027
+				throw new Exception("Hootennany does not support zip files containing .osm data.");
+			}
 
 			
 			String batchJobReqStatus = "success";
@@ -212,7 +217,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			JSONArray jobArgs = _createNativeRequest(reqList, zipCnt, shpZipCnt,
 					fgdbZipCnt, osmZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 					zipList, translation, jobId, 
-					etlName, inputsList, userEmail);
+					etlName, inputsList, userEmail, noneTranslation);
 			
 			//userEmail
 
@@ -243,7 +248,8 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			final int fgdbZipCnt, final int osmZipCnt, final int geonamesZipCnt, final int shpCnt, final int fgdbCnt, 
 			final int osmCnt, final int geonamesCnt,
 			final List<String> zipList, final String translation, final String jobId, 
-			final String etlName, final List<String> inputsList, final String userEmail) throws Exception
+			final String etlName, final List<String> inputsList, final String userEmail,
+			final String isNoneTranslation) throws Exception
 	{
 		JSONArray jobArgs = new JSONArray();
 		String curInputType = null;
@@ -325,6 +331,11 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 		
 		
 		
+		Boolean isNone = false;
+		if(isNoneTranslation != null)
+		{
+			isNone = isNoneTranslation.equals("true");
+		}
 		
 		
 		String translationPath = "translations/" + translation;
@@ -337,6 +348,8 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 		
 		
 	// Formulate request parameters
+		
+		param.put("NONE_TRANSLATION", isNone.toString());
 		param.put("TRANSLATION", translationPath);
 		param.put("INPUT_TYPE", curInputType);
 		param.put("INPUT_PATH", "upload/" + jobId);			

@@ -188,6 +188,10 @@ void TestUtils::resetEnvironment()
   ConfigOptions::populateDefaults(conf());
   conf().set("HOOT_HOME", getenv("HOOT_HOME"));
 
+  // Sometimes we add new projections to the MapReprojector, when this happens it may pick a new
+  // projection and subtly change the results.
+  conf().set(ConfigOptions::getTestForceOrthographicProjectionKey(), true);
+
   // these factories cache the creators. Flush them so they get any config changes.
   MatchFactory::getInstance().reset();
   MergerFactory::getInstance().reset();

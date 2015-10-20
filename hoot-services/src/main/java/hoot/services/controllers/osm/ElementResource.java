@@ -167,12 +167,12 @@ public class ElementResource
   }
   
   /**
-	 * <NAME>Element Service - Get Element By IDGet Element By Unique ID </NAME>
+	 * <NAME>Element Service - Get Element By ID Get Element By Unique ID </NAME>
 	 * <DESCRIPTION>
 	 * 	Convenience method which allows for retrieving a node, way, or relation by an OSM unique element ID.
 	 * Child element of ways and relations are not added to the output (use the "full" method for that functionality). The ID of
 	 * the map owning the element does not need to be specified in the query string because the information already exists in the
-	 * element ID. This method is not part of the OSM API
+	 * element ID. This method is not part of the OSM API.
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 *  <elementId>
@@ -333,7 +333,7 @@ public class ElementResource
 	 * 	Convenience method which allows for retrieving a way or relation and all of its child
 	 * elements (way nodes or relation members) by an OSM unique element ID. The ID of the map owning
 	 * the element does not need to be specified in the query string because the information already exists
-	 * in the element ID. This method is not part of the OSM API
+	 * in the element ID. This method is not part of the OSM API.
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 *  <elementId>
@@ -562,7 +562,7 @@ public class ElementResource
     }
     
     log.debug("Returning response: " + 
-      StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100) + " ...");
+      StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 10000) + " ...");
     return 
       Response
         .ok(new DOMSource(elementDoc), MediaType.APPLICATION_XML)
@@ -572,92 +572,80 @@ public class ElementResource
 
 
   private Document getElementsXml(final String mapId, final String[] elementIdsStr, 
-      final ElementType elementType, final boolean multiLayerUniqueElementIds, 
-      final boolean addChildren, Connection  dbConn) throws Exception
+    final ElementType elementType, final boolean multiLayerUniqueElementIds, 
+    final boolean addChildren, Connection  dbConn) throws Exception
+  {
+    long mapIdNum = -1;
+    try
     {
-      long mapIdNum = -1;
-      try
-      {
-      	QMaps maps = QMaps.maps;
-        //input mapId may be a map ID or a map name
-        mapIdNum = 
-          ModelDaoUtils.getRecordIdForInputString(mapId, dbConn, 
-          		maps, maps.id, maps.displayName);
-      }
-      catch (Exception e)
-      {
-        if (e.getMessage().startsWith("Multiple records exist"))
-        {
-          ResourceErrorHandler.handleError(
-            e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
-            Status.NOT_FOUND,
-            log);
-        }
-        else if (e.getMessage().startsWith("No record exists"))
-        {
-          ResourceErrorHandler.handleError(
-            e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
-            Status.NOT_FOUND,
-            log);
-        }
-        ResourceErrorHandler.handleError(
-          "Error requesting map with ID: " + mapId + " (" + e.getMessage() + ")", 
-          Status.BAD_REQUEST,
-          log);
-      }
-      
-      Document elementDoc = null;
-      Set<Long> elementIds = new HashSet<Long>();
-      //
-      for(String elemId : elementIdsStr)
-      {
-      	long elementId = Long.parseLong(elemId);
-      	elementIds.add(elementId);
-      }
-      
-      @SuppressWarnings("unchecked")
-      final List<Tuple> elementRecords = 
-        (List<Tuple>) Element.getElementRecordsWithUserInfo(mapIdNum, elementType, elementIds, dbConn);
-      if (elementRecords == null || elementRecords.size() == 0)
+    	QMaps maps = QMaps.maps;
+      //input mapId may be a map ID or a map name
+      mapIdNum = 
+        ModelDaoUtils.getRecordIdForInputString(mapId, dbConn, maps, maps.id, maps.displayName);
+    }
+    catch (Exception e)
+    {
+      if (e.getMessage().startsWith("Multiple records exist"))
       {
         ResourceErrorHandler.handleError(
-          "Elements with IDs: " + StringUtils.join(elementIdsStr) + " and type: " + elementType + " does not exist.", 
+          e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
           Status.NOT_FOUND,
           log);
       }
-      assert(elementRecords.size() == 1);
-      
-
-  		
-      
-      
-      elementDoc = XmlDocumentBuilder.create();
-      org.w3c.dom.Element elementRootXml = OsmResponseHeaderGenerator.getOsmDataHeader(elementDoc);
-      elementDoc.appendChild(elementRootXml);
-      
-      for(int i=0; i<elementRecords.size(); i++)
+      else if (e.getMessage().startsWith("No record exists"))
       {
-      	final Element element = 
-            ElementFactory.getInstance().create(elementType, elementRecords.get(i), dbConn, Long.parseLong(mapId));      
-          Users usersTable = elementRecords.get(i).get(QUsers.users);
-          
-          org.w3c.dom.Element elementXml = 
-              element.toXml(
-                elementRootXml,
-                usersTable.getId(), 
-                usersTable.getDisplayName(),
-                multiLayerUniqueElementIds,
-                addChildren);
-            elementRootXml.appendChild(elementXml);
+        ResourceErrorHandler.handleError(
+          e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
+          Status.NOT_FOUND,
+          log);
       }
-      
-      
-      
-      return elementDoc;
-    } 
-
-
-  
-
-  
+      ResourceErrorHandler.handleError(
+        "Error requesting map with ID: " + mapId + " (" + e.getMessage() + ")", 
+        Status.BAD_REQUEST,
+        log);
+    }
+    
+    Document elementDoc = null;
+    Set<Long> elementIds = new HashSet<Long>();
+    for(String elemId : elementIdsStr)
+    {
+    	long elementId = Long.parseLong(elemId);
+    	elementIds.add(elementId);
+    }
+    
+    @SuppressWarnings("unchecked")
+    final List<Tuple> elementRecords = 
+      (List<Tuple>) Element.getElementRecordsWithUserInfo(mapIdNum, elementType, elementIds, dbConn);
+    if (elementRecords == null || elementRecords.size() == 0)
+    {
+      ResourceErrorHandler.handleError(
+        "Elements with IDs: " + StringUtils.join(elementIdsStr, ",") + " and type: " + 
+          elementType + " does not exist.", 
+        Status.NOT_FOUND,
+        log);
+    }
+    assert(elementRecords.size() == 1);
+    
+    elementDoc = XmlDocumentBuilder.create();
+    org.w3c.dom.Element elementRootXml = OsmResponseHeaderGenerator.getOsmDataHeader(elementDoc);
+    elementDoc.appendChild(elementRootXml);
+    
+    for(int i=0; i<elementRecords.size(); i++)
+    {
+    	final Element element = 
+          ElementFactory.getInstance().create(elementType, elementRecords.get(i), dbConn, Long.parseLong(mapId));      
+        Users usersTable = elementRecords.get(i).get(QUsers.users);
+        
+        org.w3c.dom.Element elementXml = 
+            element.toXml(
+              elementRootXml,
+              usersTable.getId(), 
+              usersTable.getDisplayName(),
+              multiLayerUniqueElementIds,
+              addChildren);
+          elementRootXml.appendChild(elementXml);
+    }
+    
+    return elementDoc;
+  }
 }

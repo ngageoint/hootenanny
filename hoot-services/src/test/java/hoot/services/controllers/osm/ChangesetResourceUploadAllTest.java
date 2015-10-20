@@ -41,7 +41,6 @@ import javax.xml.xpath.XPathExpressionException;
 import org.junit.Assert;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
-
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.postgresql.util.PGobject;
@@ -53,7 +52,6 @@ import org.w3c.dom.NodeList;
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.db.DbUtils;
-
 import hoot.services.db.postgres.PostgresUtils;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelationMembers;
@@ -70,25 +68,12 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.geo.QuadTileCalculator;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
-import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 
 import com.mysema.query.sql.SQLQuery;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
-/*
- * @todo Most of these tests could be converted to integration tests and after a refactoring,
- * could be replace with unit tests that test only the internal classes being used by this
- * Jersey resource.
- * @todo I haven't seen these requests occur out of iD yet, but probably the service should
- * handle them:
- *
- * - upload all with ordering of node/way/relation shuffled (e.g. relations, then ways, then nodes)
-   - upload all with ordering of create/modify/delete shuffled (e.g. modify, then create, then
-   delete, etc.); should this even be allowed?
-
-   @todo write test that leaves out one of create/modify/delete tags in the osmChange request
- */
 public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
 {
   private static final Logger log = LoggerFactory.getLogger(ChangesetResourceUploadAllTest.class);
@@ -311,7 +296,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       Set<Long> createdNodeIds = new LinkedHashSet<Long>();
       Set<Long> createdWayIds = new LinkedHashSet<Long>();
       Set<Long> createdRelationIds = new LinkedHashSet<Long>();
@@ -514,12 +499,12 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
         Assert.assertEquals(6, nodes.size());
 
         //verify the updated nodes
-        CurrentNodes nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[0]);
+        CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)updatedBounds.getMinLat()), nodeRecord.getLatitude());
+          new Double(updatedBounds.getMinLat()), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)updatedBounds.getMinLon()), nodeRecord.getLongitude());
+          new Double(updatedBounds.getMinLon()), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
@@ -536,12 +521,12 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
         Assert.assertEquals("val 1b", tags.get("key 1b"));
         Assert.assertEquals("val 2b", tags.get("key 2b"));
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[1]);
+        nodeRecord = nodes.get(nodeIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)updatedBounds.getMinLat()), nodeRecord.getLatitude());
+          new Double(updatedBounds.getMinLat()), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)updatedBounds.getMinLon()), nodeRecord.getLongitude());
+          new Double(updatedBounds.getMinLon()), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
@@ -558,12 +543,12 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
         Assert.assertEquals("val 5b", tags.get("key 5b"));
 
         //verify the created nodes
-        nodeRecord = (CurrentNodes)nodes.get(createdNodeIdsArr[0]);
+        nodeRecord = nodes.get(createdNodeIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()), nodeRecord.getLatitude());
+          new Double(originalBounds.getMinLat()), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()), nodeRecord.getLongitude());
+          new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         Assert.assertEquals(createdNodeIdsArr[0], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
@@ -579,12 +564,12 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
         Assert.assertEquals("val 4", tags.get("key 4"));
         Assert.assertEquals("val 5", tags.get("key 5"));
 
-        nodeRecord = (CurrentNodes)nodes.get(createdNodeIdsArr[1]);
+        nodeRecord = nodes.get(createdNodeIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMaxLat()), nodeRecord.getLatitude());
+          new Double(originalBounds.getMaxLat()), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMaxLon()), nodeRecord.getLongitude());
+          new Double(originalBounds.getMaxLon()), nodeRecord.getLongitude());
         Assert.assertEquals(createdNodeIdsArr[1], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
@@ -602,7 +587,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
         Assert.assertNull(nodes.get(nodeIdsArr[3]));
 
         //verify the previously existing tags
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[4]);
+        nodeRecord = nodes.get(nodeIdsArr[4]);
         tags = PostgresUtils.postgresObjToHStore((PGobject)nodeRecord.getTags());
         Assert.assertNotNull(tags);
         Assert.assertEquals(1, tags.size());
@@ -622,7 +607,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
         Assert.assertEquals(4, ways.size());
 
         //verify the updated ways
-        CurrentWays wayRecord = (CurrentWays)ways.get(wayIdsArr[0]);
+        CurrentWays wayRecord = ways.get(wayIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
         Assert.assertEquals(wayIdsArr[0], wayRecord.getId());
         Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -647,7 +632,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
         Assert.assertEquals(1, tags.size());
         Assert.assertEquals("val 2", tags.get("key 2"));
 
-        wayRecord = (CurrentWays)ways.get(wayIdsArr[1]);
+        wayRecord = ways.get(wayIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
         Assert.assertEquals(wayIdsArr[1], wayRecord.getId());
         Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -671,7 +656,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
             StringUtils.isEmpty(((PGobject)wayRecord.getTags()).getValue()));
 
         //verify the created ways
-        wayRecord = (CurrentWays)ways.get(createdWayIdsArr[0]);
+        wayRecord = ways.get(createdWayIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
         Assert.assertEquals(createdWayIdsArr[0], wayRecord.getId());
         Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -696,7 +681,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
         Assert.assertEquals(1, tags.size());
         Assert.assertEquals("val 4", tags.get("key 4"));
 
-        wayRecord = (CurrentWays)ways.get(createdWayIdsArr[1]);
+        wayRecord = ways.get(createdWayIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
         Assert.assertEquals(createdWayIdsArr[1], wayRecord.getId());
         Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -747,7 +732,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
 
         //verify the updated relations
         CurrentRelations relationRecord =
-          (CurrentRelations)relations.get(relationIdsArr[0]);
+          relations.get(relationIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[0], relationRecord.getId());
         Assert.assertTrue(relationRecord.getTimestamp().before(now));
@@ -792,7 +777,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
             relationRecord.getTags() == null ||
             StringUtils.isEmpty(((PGobject)relationRecord.getTags()).getValue()));
 
-        relationRecord = (CurrentRelations)relations.get(relationIdsArr[1]);
+        relationRecord = relations.get(relationIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[1], relationRecord.getId());
         Assert.assertTrue(relationRecord.getTimestamp().before(now));
@@ -829,7 +814,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
         Assert.assertEquals("val 3", tags.get("key 3"));
 
         //verify the unmodified relation
-        relationRecord = (CurrentRelations)relations.get(relationIdsArr[3]);
+        relationRecord = relations.get(relationIdsArr[3]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(relationIdsArr[3], relationRecord.getId());
         Assert.assertTrue(relationRecord.getTimestamp().before(now));
@@ -854,7 +839,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
             StringUtils.isEmpty(((PGobject)relationRecord.getTags()).getValue()));
 
         //verify the created relations
-        relationRecord = (CurrentRelations)relations.get(createdRelationIdsArr[0]);
+        relationRecord = relations.get(createdRelationIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(createdRelationIdsArr[0], relationRecord.getId());
         Assert.assertTrue(relationRecord.getTimestamp().before(now));
@@ -896,7 +881,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
             relationRecord.getTags() == null ||
             StringUtils.isEmpty(((PGobject)relationRecord.getTags()).getValue()));
 
-        relationRecord = (CurrentRelations)relations.get(createdRelationIdsArr[1]);
+        relationRecord = relations.get(createdRelationIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(createdRelationIdsArr[1], relationRecord.getId());
         Assert.assertTrue(relationRecord.getTimestamp().before(now));
@@ -931,7 +916,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
         Assert.assertEquals(1, tags.size());
         Assert.assertEquals("val 4", tags.get("key 4"));
 
-        relationRecord = (CurrentRelations)relations.get(createdRelationIdsArr[2]);
+        relationRecord = relations.get(createdRelationIdsArr[2]);
         Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
         Assert.assertEquals(createdRelationIdsArr[2], relationRecord.getId());
         Assert.assertTrue(relationRecord.getTimestamp().before(now));
@@ -965,7 +950,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
           		);
 
         //verify the relations with no tags
-        relationRecord = (CurrentRelations)relations.get(relationIdsArr[3]);
+        relationRecord = relations.get(relationIdsArr[3]);
         Assert.assertTrue(
             relationRecord.getTags() == null ||
             StringUtils.isEmpty(((PGobject)relationRecord.getTags()).getValue()));

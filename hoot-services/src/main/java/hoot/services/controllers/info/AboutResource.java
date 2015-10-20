@@ -103,6 +103,7 @@ public class AboutResource
 	 * <EXAMPLE>
 	 * 	<URL>http://localhost:8080/hoot-services/info/about/servicesVersionInfo</URL>
 	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * <INPUT>None</INPUT>
    * <OUTPUT>
    * {
    *   "name": "Hootenanny Web Services",
@@ -155,6 +156,7 @@ public class AboutResource
 	 * <EXAMPLE>
 	 * 	<URL>http://localhost:8080/hoot-services/info/about/servicesVersionDetail</URL>
 	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * <INPUT>None</INPUT>
    * <OUTPUT>
 	 *	{
 	 *   "properties":
@@ -274,8 +276,9 @@ public class AboutResource
 	 * 	JSON containing Hoot core version information
 	 * </OUTPUT>
 	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/info/about/coreVersionInfo</URL>
+	 * <URL>http://localhost:8080/hoot-services/info/about/coreVersionInfo</URL>
 	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * <INPUT>None</INPUT>	
    * <OUTPUT>
    * {
    * 	"name": "Hootenanny Core",
@@ -330,6 +333,7 @@ public class AboutResource
 	 * <EXAMPLE>
 	 * 	<URL>http://localhost:8080/hoot-services/info/about/coreVersionDetail</URL>
 	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * <INPUT>None</INPUT>
    * <OUTPUT>
    * {
    *    "environmentInfo":

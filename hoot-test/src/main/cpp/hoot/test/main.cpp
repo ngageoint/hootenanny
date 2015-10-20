@@ -46,6 +46,7 @@ using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/Hoot.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
@@ -144,6 +145,26 @@ private:
   double _slowTest;
 };
 
+void filterPattern(CppUnit::Test* from, CppUnit::TestSuite* to, QString pattern,
+  bool includeOnMatch)
+{
+  QRegExp regex(pattern);
+
+  for (int i = 0; i < from->getChildTestCount(); i++)
+  {
+    CppUnit::Test* child = from->getChildTestAt(i);
+    QString name = QString::fromStdString(child->getName());
+    if (dynamic_cast<CppUnit::TestComposite*>(child))
+    {
+      filterPattern(child, to, pattern, includeOnMatch);
+    }
+    else if (regex.exactMatch(name) == includeOnMatch)
+    {
+      to->addTest(child);
+    }
+  }
+}
+
 CppUnit::Test* findTest(CppUnit::Test* t, QString name)
 {
   if (QString::fromStdString(t->getName()) == name)
@@ -216,6 +237,9 @@ int main(int argc, char *argv[])
   CppUnit::TextUi::TestRunner runner;
   CppUnit::TestSuite *rootSuite = new CppUnit::TestSuite( "All tests" );
 
+  // initialize OSM Schema so the time expense doesn't print in other tests.
+  OsmSchema::getInstance();
+
   if (args.contains("--core") == false)
   {
 #   if HOOT_HAVE_HADOOP
@@ -271,6 +295,8 @@ int main(int argc, char *argv[])
             "--info - Show info messages and above.\n"
             "--debug - Show debug messages and above.\n"
             "--diff - Print diff when a script test fails.\n"
+            "--include=[regex] - Include only tests that match the specified regex.\n"
+            "--exclude=[regex] - Exclude tests that match the specified regex.\n"
             "\n"
             "See https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/Developer_-_Code_Testing\n"
             ;
@@ -366,6 +392,29 @@ int main(int argc, char *argv[])
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest());
       }
+
+      for (int i = 0; i < args.size(); i++)
+      {
+        if (args[i].startsWith("--exclude="))
+        {
+          CppUnit::TestSuite *newSuite = new CppUnit::TestSuite( "All tests" );
+          int equalsPos = args[i].indexOf('=');
+          QString regex = args[i].mid(equalsPos + 1);
+          LOG_WARN("Excluding pattern: " << regex);
+          filterPattern(rootSuite, newSuite, regex, false);
+          rootSuite = newSuite;
+        }
+        else if (args[i].startsWith("--include="))
+        {
+          CppUnit::TestSuite *newSuite = new CppUnit::TestSuite( "All tests" );
+          int equalsPos = args[i].indexOf('=');
+          QString regex = args[i].mid(equalsPos + 1);
+          LOG_WARN("Including only tests that match: " << regex);
+          filterPattern(rootSuite, newSuite, regex, true);
+          rootSuite = newSuite;
+        }
+      }
+
       runner.addTest(rootSuite);
       cout << "Test count: " << rootSuite->countTestCases() << endl;
     }

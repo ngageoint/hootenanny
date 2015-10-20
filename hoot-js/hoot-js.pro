@@ -97,7 +97,9 @@ SOURCES += \
     src/main/cpp/hoot/js/conflate/MatchFactoryJs.cpp \
     src/main/cpp/hoot/js/conflate/MergerFactoryJs.cpp \
     src/test/cpp/hoot/js/conflate/js/ScriptMatchCreatorTest.cpp \
-    src/main/cpp/hoot/js/conflate/PoiMergerJs.cpp
+    src/main/cpp/hoot/js/conflate/PoiMergerJs.cpp \
+    src/main/cpp/hoot/js/visitors/JsFunctionVisitor.cpp \
+    src/main/cpp/hoot/js/schema/TagDifferencerJs.cpp
 
 HEADERS += \
     src/main/cpp/hoot/js/HelloWorld.h \
@@ -145,7 +147,9 @@ HEADERS += \
     src/main/cpp/hoot/js/io/OsmWriterJs.h \
     src/main/cpp/hoot/js/conflate/MatchFactoryJs.h \
     src/main/cpp/hoot/js/conflate/MergerFactoryJs.h \
-    src/main/cpp/hoot/js/conflate/PoiMergerJs.h
+    src/main/cpp/hoot/js/conflate/PoiMergerJs.h \
+    src/main/cpp/hoot/js/visitors/JsFunctionVisitor.h \
+    src/main/cpp/hoot/js/schema/TagDifferencerJs.h
 
 FORMS +=
 

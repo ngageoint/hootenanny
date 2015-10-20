@@ -1,12 +1,14 @@
 {
     "tag": {
         "name": "natural",
-        "isA": "poi=yes",
+        "isA": "hgispoi",
         "influence": 1.0,
         "type": "enumeration",
         "geometries": ["area"],
         "categories": ["poi"]
     },
+
+    "tag": { "name": "natural=*", "isA": "natural", "geometries": ["node", "area"]},
 
     "#" : "Natural features",
     "tag": { "name": "natural=beach", "isA": "natural", "geometries": ["node", "area"]},
@@ -34,6 +36,3 @@
 
     "#" : "end"
 }
-
-
-

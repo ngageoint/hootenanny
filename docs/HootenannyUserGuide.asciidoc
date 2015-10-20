@@ -12,11 +12,10 @@ include::JavascriptOverview.asciidoc[]
 include::tmp/RulesLib.asciidoc[]                                                
 include::tmp/RulesTemplate.asciidoc[]                                           
 :leveloffset: 0
-
 include::user/PostgresExamples.asciidoc[]
+include::user/SchemaFiles.asciidoc[]
 include::HootenannyConfigOptions.asciidoc[]
 :leveloffset: 0
-
 include::commands/HootCommandLineReference.asciidoc[]
 include::user/ConflationStatsReport.asciidoc[]
 include::References.asciidoc[]

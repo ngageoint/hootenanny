@@ -39,11 +39,6 @@
 // Standard
 #include <functional>
 
-// STXXL
-#include <stxxl/bits/mng/diskallocator.h>
-#include <stxxl/map>
-#include <stxxl/vector>
-
 // TGS
 #include <tgs/BigContainers/BigMap.h>
 #include <tgs/System/Time.h>
@@ -60,8 +55,6 @@ class ServicesDbWriterTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runEscapeTest);
   CPPUNIT_TEST(runInsertTest);
   CPPUNIT_TEST(runRemapInsertTest);
-  //CPPUNIT_TEST(runStxxlTest);
-  //CPPUNIT_TEST(benchmarkTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

@@ -52,6 +52,10 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.geo.zindex.Range;
 import hoot.services.geo.zindex.ZCurveRanger;
 import hoot.services.geo.zindex.ZValue;
+import hoot.services.models.dataset.FolderRecord;
+import hoot.services.models.dataset.FolderRecords;
+import hoot.services.models.dataset.LinkRecord;
+import hoot.services.models.dataset.LinkRecords;
 import hoot.services.models.osm.Element.ElementType;
 
 import org.json.simple.JSONObject;
@@ -66,7 +70,7 @@ import com.mysema.query.types.expr.BooleanExpression;
 /**
  * Represents the model for an Hootenanny OSM map
  *
- * When modifying the node query by bounds, make sure its using the index on the tile id.
+ * When modifying the node query by bounds, make sure it is using the index on the tile id.
    The index scan only seems to trigger if the number of rows returned by the query is <= 1%
    of the total rows.  The execution plan can be checked in postgres with EXPLAIN ANALYZE.
    Possibly, after query changes you may have to force it to use the tile index by doing
@@ -83,11 +87,11 @@ import com.mysema.query.types.expr.BooleanExpression;
 public class Map extends Maps
 {
   private static final Logger log = LoggerFactory.getLogger(Map.class);
+  
+  private static QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
 
   private Connection conn;
 
-  //for testing purposes only
-  public static boolean simulateFailure = false;
   public static long testDelayMilliseconds = -1;
 
   //I want to retrieve nodes, ways, and relations with one query and return a single
@@ -140,9 +144,7 @@ public class Map extends Maps
       //log.debug(range.toString());
       tileConditions.add(
       		currentNodes.tile.goe(range.getMin())
-      		.and(currentNodes.tile.loe(range.getMax()))
-        /*Tables.CURRENT_NODES.TILE.greaterOrEqual(range.getMin())
-          .and(Tables.CURRENT_NODES.TILE.lessOrEqual(range.getMax()))*/);
+      		.and(currentNodes.tile.loe(range.getMax())));
     }
     BooleanExpression combinedTileCondition = null;
     for (BooleanExpression tileCondition : tileConditions)
@@ -171,12 +173,6 @@ public class Map extends Maps
   			.and(nodes.latitude.goe(bounds.getMinLat()))
   			.and(nodes.longitude.loe(bounds.getMaxLon()))
   			.and(nodes.latitude.loe(bounds.getMaxLat()));
-  		/*
-    return
-      Tables.CURRENT_NODES.LONGITUDE.greaterOrEqual(bounds.getMinLonDb())
-      .and(Tables.CURRENT_NODES.LATITUDE.greaterOrEqual(bounds.getMinLatDb()))
-      .and(Tables.CURRENT_NODES.LONGITUDE.lessOrEqual(bounds.getMaxLonDb()))
-      .and(Tables.CURRENT_NODES.LATITUDE.lessOrEqual(bounds.getMaxLatDb()));*/
   }
 
   private void validateQueryBounds(final BoundingBox bounds) throws Exception
@@ -204,7 +200,6 @@ public class Map extends Maps
   {
     log.debug("Retrieving node count...");
 
-    //SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
     QCurrentNodes curr_nodes = QCurrentNodes.currentNodes;
     final long nodeCount =
     		new SQLQuery(conn, DbUtils.getConfiguration(getId())).from(curr_nodes)
@@ -229,10 +224,8 @@ public class Map extends Maps
     }
   }
 
-
   public JSONObject retrieveNodesMBR(final BoundingBox bounds) throws Exception
   {
-
   	JSONObject ret = new JSONObject();
     //get the intersecting tile ranges for the nodes
     final Vector<Range> tileIdRanges = getTileRanges(bounds);
@@ -240,28 +233,15 @@ public class Map extends Maps
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
-        ((BooleanExpression)getTileWhereCondition(tileIdRanges)).and(getGeospatialWhereCondition(bounds));
-
-      QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
-      QChangesets changesets = QChangesets.changesets;
-      QUsers users = QUsers.users;
-
+        getTileWhereCondition(tileIdRanges).and(getGeospatialWhereCondition(bounds));
       List<Tuple> geospatialQueryNodeResults =
-      		new SQLQuery(conn, DbUtils.getConfiguration(getId())).from(currentnodes)
-    				.join(changesets)
-    				.on(
-    						currentnodes.changesetId.eq(changesets.id)
-    						)
-    				.join(users)
-    				.on(
-    						changesets.userId.eq(users.id)
-    						)
-    				.where(
-    						combinedGeospatialCondition
-    						.and(currentnodes.visible.eq(true))
-    						)
-    				.list(currentnodes.longitude.max(), currentnodes.longitude.min(),
-    						currentnodes.latitude.max(), currentnodes.latitude.min() );
+    		new SQLQuery(conn, DbUtils.getConfiguration(getId()))
+          .from(currentnodes)
+  				.where(
+  						combinedGeospatialCondition
+  						.and(currentnodes.visible.eq(true)))
+  				.list(currentnodes.longitude.max(), currentnodes.longitude.min(),
+  					  	currentnodes.latitude.max(), currentnodes.latitude.min() );
 
       Double maxLon = geospatialQueryNodeResults.get(0).get(0, Double.class);
       Double minLon = geospatialQueryNodeResults.get(0).get(1, Double.class);
@@ -274,7 +254,6 @@ public class Map extends Maps
     }
 
     return ret;
-
   }
 
   public long getNodesCount(final BoundingBox bounds) throws Exception
@@ -286,32 +265,16 @@ public class Map extends Maps
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
-        ((BooleanExpression)getTileWhereCondition(tileIdRanges)).and(getGeospatialWhereCondition(bounds));
-
-      QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
-      QChangesets changesets = QChangesets.changesets;
-      QUsers users = QUsers.users;
-
+        getTileWhereCondition(tileIdRanges).and(getGeospatialWhereCondition(bounds));
       ret =
-      		new SQLQuery(conn, DbUtils.getConfiguration(getId())).from(currentnodes)
-    				.join(changesets)
-    				.on(
-    						currentnodes.changesetId.eq(changesets.id)
-    						)
-    				.join(users)
-    				.on(
-    						changesets.userId.eq(users.id)
-    						)
-    				.where(
-    						combinedGeospatialCondition
-    						.and(currentnodes.visible.eq(true))
-    						)
-    				.count();
-
+    		new SQLQuery(conn, DbUtils.getConfiguration(getId()))
+          .from(currentnodes)
+  				.where(
+  						combinedGeospatialCondition.and(currentnodes.visible.eq(true)))
+  				.count();
     }
 
     return ret;
-
   }
 
   public JSONObject retrieveANode(final BoundingBox bounds) throws Exception
@@ -324,22 +287,22 @@ public class Map extends Maps
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
-        ((BooleanExpression)getTileWhereCondition(tileIdRanges)).and(getGeospatialWhereCondition(bounds));
+        getTileWhereCondition(tileIdRanges).and(getGeospatialWhereCondition(bounds));
 
       QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
-      QChangesets changesets = QChangesets.changesets;
-      QUsers users = QUsers.users;
+      //QChangesets changesets = QChangesets.changesets;
+      //QUsers users = QUsers.users;
 
       List<Tuple> geospatialQueryNodeResults =
       		new SQLQuery(conn, DbUtils.getConfiguration(getId())).from(currentnodes)
-    				.join(changesets)
+    				/*.join(changesets)
     				.on(
     						currentnodes.changesetId.eq(changesets.id)
     						)
     				.join(users)
     				.on(
     						changesets.userId.eq(users.id)
-    						)
+    						)*/
     				.where(
     						combinedGeospatialCondition
     						.and(currentnodes.visible.eq(true)))
@@ -355,13 +318,13 @@ public class Map extends Maps
     }
 
     return ret;
-
   }
 
   private java.util.Map<ElementType, java.util.Map<Long, Tuple>> retrieveElements(
     final BooleanExpression combinedGeospatialCondition)
   {
-    //TODO: There is probably a way to get all this information by executing fewer queries...
+    //There is probably a way to get all this information by executing fewer queries...
+  	
   	//JDBC prepared statement number of parameters has a hard limit: 32767
     int nQueryPageSize = 32000;
     elementIdsToRecordsByType = new HashMap<ElementType, java.util.Map<Long, Tuple>>();
@@ -370,8 +333,6 @@ public class Map extends Maps
     //bounds, are visible, and belong to this map; join in user info
     log.debug("Retrieving node records within the query bounds...");
 
-
-    //SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
     QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
     QChangesets changesets = QChangesets.changesets;
     QUsers users = QUsers.users;
@@ -398,12 +359,10 @@ public class Map extends Maps
     List<Long> wayIds = new ArrayList<Long>();
     if (geospatialQueryNodeResults.size() > 0)
     {
-      //get all ways which have way nodes with ID's in the previously queried node results, are
+      //get all ways which have way nodes with IDs in the previously queried node results, are
       //visible, and belong to this map; join in user info
-      log.debug("Retrieving way ID's within the query bounds...");
+      log.debug("Retrieving way IDs within the query bounds...");
       QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
-      //query = new SQLQuery(conn, DbUtils.getConfiguration());
-
 
       List<Long>nodesList = new ArrayList<Long>(geospatialQueryNodeResults.keySet());
 
@@ -435,11 +394,11 @@ public class Map extends Maps
         	}
 	      	pageWayIds = new SQLQuery(conn, DbUtils.getConfiguration(getId())).from(currentWayNodes)
 	  			.where(
-	  					//currentWayNodes.nodeId.in(geospatialQueryNodeResults.keySet())
 	  					currentWayNodes.nodeId.in(pageList)
 	  					)
 	  			.list(currentWayNodes.wayId);
-	      	if(wayIds.addAll(pageWayIds) == false)
+	      	//TODO: should this be an assert instead?
+	      	if (wayIds.addAll(pageWayIds) == false)
 	      	{
 	      		// error
 	      	}
@@ -456,7 +415,6 @@ public class Map extends Maps
         //user info
         log.debug("Retrieving ways within the query bounds...");
         QCurrentWays currentWays = QCurrentWays.currentWays;
-        //query = new SQLQuery(conn, DbUtils.getConfiguration());
 
         java.util.Map<Long, Tuple> wayResults = null;
         int totalWayCnt = wayIds.size();
@@ -464,8 +422,6 @@ public class Map extends Maps
 
         for(int i=0; i <= wayPageCnt; i++)
         {
-
-
         	try
         	{
           	List<Long> pageList = null;
@@ -535,13 +491,10 @@ public class Map extends Maps
         elementIdsToRecordsByType.put(ElementType.Way, wayResults);
 
         //retrieve all way nodes for the previously retrieved ways
-        log.debug("Retrieving additional way nodes ID's within the query bounds...");
+        log.debug("Retrieving additional way nodes IDs within the query bounds...");
         Set<Long> wayNodeIds = new HashSet<Long>();
         for(int i=0; i <= wayPageCnt; i++)
         {
-
-
-
         	try
         	{
         		List<Long> pageList = null;
@@ -583,7 +536,7 @@ public class Map extends Maps
         final long numWayNodes = wayNodeIds.size();
         log.debug("Found " + numWayNodes + " way nodes.");
 
-        //retrieve all corresponding nodes to the ID's in the wayNodeIds collection that don't
+        //retrieve all corresponding nodes to the IDs in the wayNodeIds collection that don't
         //fall within the query bounds (all the way nodes referenced by all the ways minus the
         //nodes falling within the query bounds that have already been added); join in user info;
         //add the resulting nodes to the nodes collection
@@ -697,10 +650,9 @@ public class Map extends Maps
       /*
        * retrieve all relations that reference the nodes or ways previously retrieved
        */
-      log.debug("Retrieving relations ID's within the query bounds...");
+      log.debug("Retrieving relations IDs within the query bounds...");
 
       QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
-      //query = new SQLQuery(conn, DbUtils.getConfiguration());
 
       Set<Long> relationIds = new HashSet<Long>();
 
@@ -826,7 +778,6 @@ public class Map extends Maps
         log.debug("Retrieving relations within the query bounds...");
 
         QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
-        //query = new SQLQuery(conn, DbUtils.getConfiguration());
 
         java.util.Map<Long, Tuple> relationResults = null;
 
@@ -926,7 +877,7 @@ public class Map extends Maps
     themselves reference...only the ones in the query bounds).
    *
    * @param bounds geospatial bounds the returned nodes should fall within
-   * @return a collection of elements mapped to their ID's, grouped by element type
+   * @return a collection of elements mapped to their IDs, grouped by element type
    * @throws Exception if the number of nodes requested is larger than the maximum number allowed
    * @todo get the readonly transaction working; see
    * MapResourceTest::testReadTransactionWithoutFailure
@@ -934,7 +885,7 @@ public class Map extends Maps
   public java.util.Map<ElementType, java.util.Map<Long, Tuple>> query(final BoundingBox bounds)
     throws Exception
   {
-	//TODO: Is validateQueryBounds necessary to have around any longer?
+	  //TODO: do we need this validation?
     //validateQueryBounds(bounds);
     //get the intersecting tile ranges for the nodes
     final Vector<Range> tileIdRanges = getTileRanges(bounds);
@@ -943,15 +894,13 @@ public class Map extends Maps
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
-        ((BooleanExpression)getTileWhereCondition(tileIdRanges)).and(getGeospatialWhereCondition(bounds));
+        getTileWhereCondition(tileIdRanges).and(getGeospatialWhereCondition(bounds));
       validateNodeCount(combinedGeospatialCondition);
       elementIdsToRecordsByType = retrieveElements(combinedGeospatialCondition);
     }
 
     return elementIdsToRecordsByType;
   }
-
-
 
   private java.util.Map<ElementType, Set<Long>> retrieveElementIds(
     final BooleanExpression combinedGeospatialCondition)
@@ -961,7 +910,7 @@ public class Map extends Maps
 
     //if the limit hasn't been exceeded, query out all nodes which fall within the geospatial
     //bounds, are visible, and belong to this map
-    log.debug("Retrieving ID's of nodes within the query bounds...");
+    log.debug("Retrieving IDs of nodes within the query bounds...");
 
     QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
 
@@ -983,10 +932,8 @@ public class Map extends Maps
     {
       //get all ways which have way nodes that belong to the previously queried node results, are
       //visible, and belong to this map; join in user info
-      log.debug("Retrieving ID's of ways within the query bounds...");
-      //query = new SQLQuery(conn, DbUtils.getConfiguration());
+      log.debug("Retrieving IDs of ways within the query bounds...");
       QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
-
 
       wayIds =
           new HashSet<Long>(
@@ -1002,9 +949,8 @@ public class Map extends Maps
       /*
        * retrieve all relations that reference the nodes or ways previously retrieved
        */
-      log.debug("Retrieving relations ID's within the query bounds...");
+      log.debug("Retrieving relations IDs within the query bounds...");
 
-      //query = new SQLQuery(conn, DbUtils.getConfiguration());
       QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
 
     	Set<Long> nodesIds = elementIdsByType.get(ElementType.Node);
@@ -1041,7 +987,7 @@ public class Map extends Maps
   }
 
   /**
-   * Executes a geospatial query for element ID's against the services database
+   * Executes a geospatial query for element IDs against the services database
    *
    * Bounds calculation: see query
    *
@@ -1054,7 +1000,7 @@ public class Map extends Maps
     themselves reference...only the ones in the query bounds).
    *
    * @param bounds geospatial bounds the returned nodes should fall within
-   * @return a collection of element ID's, grouped by element type
+   * @return a collection of element IDs, grouped by element type
    * @throws Exception if the number of nodes requested is larger than the maximum number allowed
    * @todo see query
    */
