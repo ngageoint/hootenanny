@@ -52,8 +52,9 @@ public class ReviewReferencesRetriever
   	  ".relation_id = " + currentRelationsTableName + ".id";
   	sql += " where " + currentRelationMembersTableName + ".member_id = " + 
   		queryElementInfo.getElementId() + " and " + currentRelationMembersTableName +
-  	  ".member_type = " + Element.elementTypeFromString(queryElementInfo.getElementType()) + 
-  	  " and " + currentRelationsTableName + ".tags->'hoot:review:needs' = 'yes'";
+  	  ".member_type = '" + 
+  		Element.elementTypeFromString(queryElementInfo.getElementType()).toString().toLowerCase() + 
+  	  "' and " + currentRelationsTableName + ".tags->'hoot:review:needs' = 'yes'";
   	
   	Statement stmt = null;
   	ResultSet rs = null;
@@ -131,7 +132,11 @@ public class ReviewReferencesRetriever
 		final List<CurrentRelationMembers> referencedMembers = 
 	    new SQLQuery(conn, DbUtils.getConfiguration(mapIdNum))
 	      .from(currentRelationMembers)
-	      .where(currentRelationMembers.relationId.in(unresolvedReviewRelationIds))
+	      .where(
+	      	currentRelationMembers.relationId.in(unresolvedReviewRelationIds)
+	      	  .and(currentRelationMembers.memberId.ne(queryElementInfo.getElementId())
+	      	    .or(currentRelationMembers.memberType.ne(
+	      	    		  Element.elementEnumFromString(queryElementInfo.getElementType())))))
 	      .orderBy(
 	      	currentRelationMembers.relationId.asc(), currentRelationMembers.memberId.asc(), 
 	      	currentRelationMembers.sequenceId.asc())
@@ -140,16 +145,11 @@ public class ReviewReferencesRetriever
 		//return all elements corresponding to the filtered down set of relation members
 		for (CurrentRelationMembers member : referencedMembers)
 		{
-			final long memberElementId = member.getMemberId();
-			final String memberElementTypeStr = 
-				Element.elementTypeForElementEnum(member.getMemberType()).toString().toLowerCase();
-			//don't add a reference to the requesting element itself
-			if (queryElementInfo.getElementId() != memberElementId &&
-					!queryElementInfo.getElementType().equals(memberElementTypeStr))
-			{
-				references.add(
-					new ElementInfo(queryElementInfo.getMapId(), memberElementId, memberElementTypeStr));
-			}
+			references.add(
+				new ElementInfo(
+					queryElementInfo.getMapId(), 
+					member.getMemberId(), 
+					Element.elementTypeForElementEnum(member.getMemberType()).toString().toLowerCase()));
 		}
 		
 		return references;

@@ -704,6 +704,17 @@ public abstract class Element implements XmlSerializable, DbSerializable
     }
 
   }
+  
+  /**
+   * Returns the database relation member type given an element string type
+   * 
+   * @param elementTypeStr an element type string
+   * @return a database relation member type
+   */
+  public static DbUtils.nwr_enum elementEnumFromString(final String elementTypeStr)
+  {
+  	return elementEnumForElementType(elementTypeFromString(elementTypeStr));
+  }
 
   /**
    * Returns the database relation member type given an element type
