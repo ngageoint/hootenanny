@@ -56,13 +56,7 @@ COPY current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp",
 \.
 
 
-\.
-
-
 COPY current_node_tags (node_id, k, v) FROM stdin;
-\.
-
-
 \.
 
 
@@ -106,13 +100,7 @@ COPY nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", ti
 \.
 
 
-\.
-
-
 COPY node_tags (node_id, version, k, v) FROM stdin;
-\.
-
-
 \.
 
 
@@ -121,9 +109,6 @@ COPY current_ways (id, changeset_id, "timestamp", visible, version) FROM stdin;
 2	1	2015-10-21 14:54:01.428	t	1
 3	1	2015-10-21 14:54:01.428	t	1
 4	1	2015-10-21 14:54:01.428	t	1
-\.
-
-
 \.
 
 
@@ -171,8 +156,6 @@ COPY current_way_nodes (way_id, node_id, sequence_id) FROM stdin;
 \.
 
 
-\.
-
 
 COPY current_way_tags (way_id, k, v) FROM stdin;
 1	note	1
@@ -186,17 +169,11 @@ COPY current_way_tags (way_id, k, v) FROM stdin;
 \.
 
 
-\.
-
-
 COPY ways (way_id, changeset_id, "timestamp", version, visible, redaction_id) FROM stdin;
 1	1	2015-10-21 14:54:01.428	1	t	\N
 2	1	2015-10-21 14:54:01.428	1	t	\N
 3	1	2015-10-21 14:54:01.428	1	t	\N
 4	1	2015-10-21 14:54:01.428	1	t	\N
-\.
-
-
 \.
 
 
@@ -244,9 +221,6 @@ COPY way_nodes (way_id, node_id, version, sequence_id) FROM stdin;
 \.
 
 
-\.
-
-
 COPY way_tags (way_id, version, k, v) FROM stdin;
 1	1	note	1
 1	1	highway	road
@@ -256,9 +230,6 @@ COPY way_tags (way_id, version, k, v) FROM stdin;
 3	1	highway	road
 4	1	note	2
 4	1	highway	road
-\.
-
-
 \.
 
 

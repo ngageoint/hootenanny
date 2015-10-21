@@ -1071,18 +1071,18 @@ sub validateWays($$)
     my %wayTagsEntry;
 
     # Break into tokens based on tab delimiter
-    # Schema: way_id, key, value, version
+    # Schema: way_id, version, key, value
     my @tokens = split( /\t+/, $currLine);
 
     #print( "Found way tag\n");
 
-    $wayTagsEntry{$tokens[1]} = $tokens[2];
-    #print( "\tID: $tokens[0]\n\tKey: $tokens[1]\n\tValue: $tokens[2]\n");
+    $wayTagsEntry{$tokens[2]} = $tokens[3];
+    #print( "\tID: $tokens[0]\n\tKey: $tokens[2]\n\tValue: $tokens[3]\n");
 
     # Store the entry in hash of ways
     if ( exists($waysData{ $tokens[0] }->{'tags'} ) )
     {
-      $waysData{ $tokens[0] }->{'tags'}->{$tokens[1]} = $tokens[2];
+      $waysData{ $tokens[0] }->{'tags'}->{$tokens[2]} = $tokens[3];
 
       #my $key;
       #foreach $key ( keys( $waysData{ $tokens[0] }->{'tags'}) )
@@ -1092,7 +1092,7 @@ sub validateWays($$)
     }
     else
     {
-      $waysData{ $tokens[0] }->{'tags'} = { $tokens[1] => $tokens[2] };
+      $waysData{ $tokens[0] }->{'tags'} = { $tokens[2] => $tokens[3] };
     }
   }
 
@@ -1197,14 +1197,15 @@ sub validateWays($$)
       foreach $currTag ( @{$xmlTagsArrayRef} )
       {
         my %xmlTagEntry = %{ $currTag };
-        #print( "Key   : $tagEntry{'k'}\n");
-        #print( "Value : $tagEntry{'v'}\n");
+        #print( "Key   : $xmlTagEntry{'k'}\n");
+        #print( "Value : $xmlTagEntry{'v'}\n");
         if ( $xmlTagEntry{'k'} ne lc('error:circular') )
         {
           my %dbTagEntry = %{ $waysData{$databaseWayId}->{'tags'} };
           if ( ! exists( $dbTagEntry{ $xmlTagEntry{'k'} } ) )
           {
             print("Could not find database version of tag " . Dumper(%xmlTagEntry) . "\n" );
+	    print( Dumper(%dbTagEntry) );
             exit;
           }
           else

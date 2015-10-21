@@ -2439,11 +2439,11 @@ my $osmXmlFile = $ARGV[0];
 my $xmlDbIdMappingFile = $ARGV[1];
 my $pgsqlDumpFile = $ARGV[2];
 
-open(XMLFILE, "< $osmXmlFile");
+open(XMLFILE, "< $osmXmlFile") or die("Could not open $osmXmlFile\n")(;
 my @xmlLines = <XMLFILE>;
 close(XMLFILE);
 
-open(PGDUMPFILE, "< $pgsqlDumpFile" );
+open(PGDUMPFILE, "< $pgsqlDumpFile" ) or die("Could not open $pgsqlDumpFile\n");
 my @dumpLines = <PGDUMPFILE>;
 close(PGDUMPFILE);
 
