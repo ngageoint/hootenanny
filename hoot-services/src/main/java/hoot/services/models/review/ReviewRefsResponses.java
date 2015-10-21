@@ -9,17 +9,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ReviewRefsResponses
 {
 	private ReviewRefsResponse[] reviewRefsResponses;
-  public ReviewRefsResponse[] getReviewRefResponses() { return reviewRefsResponses; }
-  public void setReviewRefResponses(ReviewRefsResponse[] responses) 
+  public ReviewRefsResponse[] getReviewRefsResponses() { return reviewRefsResponses; }
+  public void setReviewRefsResponses(ReviewRefsResponse[] responses) 
   { this.reviewRefsResponses = responses; }
   
   public ReviewRefsResponses()
   {
   }
   
-  public ReviewRefsResponses(final ReviewRefsResponse[] reviewRefResponses)
+  public ReviewRefsResponses(final ReviewRefsResponse[] reviewRefsResponses)
   {
-  	this.reviewRefsResponses = reviewRefResponses;
+  	this.reviewRefsResponses = reviewRefsResponses;
   }
   
   @Override

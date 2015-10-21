@@ -55,7 +55,7 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract
       			    	String.valueOf(mapId), oldNodeIdsToNewNodes.get((long)-117).getId(), "node")
       			  }));
 	  
-		final ReviewRefsResponse[] reviewReferenceResponses = response.getReviewRefResponses();
+		final ReviewRefsResponse[] reviewReferenceResponses = response.getReviewRefsResponses();
 		Assert.assertEquals(2, reviewReferenceResponses.length);
 		for (int i = 0; i < reviewReferenceResponses.length; i++)
 		{

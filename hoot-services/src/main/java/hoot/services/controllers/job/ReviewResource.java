@@ -206,7 +206,7 @@ public class ReviewResource
 	  		responseRefs.setQueryElementInfo(elementInfo);
 	  		responseRefsList.add(responseRefs);
   		}
-  		response.setReviewRefResponses(responseRefsList.toArray(new ReviewRefsResponse[]{}));
+  		response.setReviewRefsResponses(responseRefsList.toArray(new ReviewRefsResponse[]{}));
   	}
     finally
     {
