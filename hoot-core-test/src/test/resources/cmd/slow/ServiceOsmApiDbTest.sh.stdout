@@ -1,35 +1,34 @@
 Dropping old osm api db
 Creating osm api db
-Performing write operation
-OSM XML file:		test-files/ToyTestA.osm
-PostgreSQL dump file:	test-output/cmd/ServiceOsmApiDbTest/ToyTestA-dump.sql
+ setval 
+--------
+      2
+(1 row)
 
-Validating data: nodes
-	current_nodes, current_node_tags:
-		Matching number of nodes: PASS (36)
-		Deep inspection of data integrity: PASS
-	nodes, node_tags:
-		Matching number of nodes: PASS (36)
-		Deep inspection of data integrity: PASS
+ setval 
+--------
+      2
+(1 row)
 
-Validating data: ways
-	current_ways, current_way_tags, current_way_nodes:
-		Matching number of ways: PASS (4)
-		Deep inspection of data integrity: PASS
-	ways, way_tags, way_nodes:
-		Matching number of ways: PASS (4)
-		Deep inspection of data integrity: PASS
+ setval 
+--------
+     37
+(1 row)
 
-Validating relations: ways
-	current_relations, current_relation_tags, current_relation_nodes:
-		Matching number of relations: PASS (0)
-		Deep inspection of data integrity: PASS
-	relations, relation_tags, relation_nodes:
-		Matching number of relations: PASS (0)
-		Deep inspection of data integrity: PASS
+ setval 
+--------
+      5
+(1 row)
+
+ setval 
+--------
+      1
+(1 row)
+
 Performing read operation
+Doing comparison
 OSM XML file:		test-output/cmd/ServiceOsmApiDbTest/ToyTestA-out.osm
-PostgreSQL dump file:	test-output/cmd/ServiceOsmApiDbTest/ToyTestA-dump.sql
+PostgreSQL dump file:	hoot-core-test/src/test/resources/ToyTestA.sql
 
 Validating data: nodes
 	current_nodes, current_node_tags:
