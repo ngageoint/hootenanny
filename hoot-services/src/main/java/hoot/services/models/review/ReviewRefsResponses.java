@@ -8,10 +8,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class ReviewRefsResponses
 {
-	private ReviewRefsResponse[] reviewRefResponses;
-  public ReviewRefsResponse[] getReviewRefResponses() { return reviewRefResponses; }
+	private ReviewRefsResponse[] reviewRefsResponses;
+  public ReviewRefsResponse[] getReviewRefResponses() { return reviewRefsResponses; }
   public void setReviewRefResponses(ReviewRefsResponse[] responses) 
-  { this.reviewRefResponses = responses; }
+  { this.reviewRefsResponses = responses; }
   
   public ReviewRefsResponses()
   {
@@ -19,14 +19,14 @@ public class ReviewRefsResponses
   
   public ReviewRefsResponses(final ReviewRefsResponse[] reviewRefResponses)
   {
-  	this.reviewRefResponses = reviewRefResponses;
+  	this.reviewRefsResponses = reviewRefResponses;
   }
   
   @Override
   public String toString()
   {
   	String str = "";
-  	for (ReviewRefsResponse refs : reviewRefResponses)
+  	for (ReviewRefsResponse refs : reviewRefsResponses)
   	{
   		str += refs.toString();
   	}
