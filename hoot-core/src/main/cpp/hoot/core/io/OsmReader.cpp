@@ -237,14 +237,11 @@ Status OsmReader::_parseStatus(QString s)
 
 void OsmReader::open(QString url)
 {
-    LOG_DEBUG("inside OsmReader::open...");
   _path = url;
-    LOG_DEBUG("leaving OsmReader::open...");
 }
 
 void OsmReader::read(shared_ptr<OsmMap> map)
 {
-        LOG_DEBUG("inside OsmReader::read...");
   _osmFound = false;
 
   _missingNodeCount = 0;
@@ -307,15 +304,14 @@ void OsmReader::read(shared_ptr<OsmMap> map)
       throw Exception(QObject::tr("Error opening OSM file for parsing: %1").arg(_path));
   }
   LOG_DEBUG("File " << _path << " opened for read");
-LOG_DEBUG("before xmlInputSource...");
+
   QXmlInputSource xmlInputSource(&file);
-  LOG_DEBUG("before reader.parse");
+
   if (reader.parse(xmlInputSource) == false)
   {
       throw Exception(_errorString);
   }
   file.close();
-LOG_DEBUG("after reader.parse...");
 
   // Ticket 5871: if we did have to decompress, delete the decompressed file when we're done
   if ( originalFile.length() > 0 )
@@ -329,7 +325,6 @@ LOG_DEBUG("after reader.parse...");
   _map->visitRw(visitor);
 
   _map.reset();
-      LOG_DEBUG("leaving OsmReader::read...");
 }
 
 void OsmReader::readFromString(QString xml, shared_ptr<OsmMap> map)
@@ -364,7 +359,6 @@ void OsmReader::readFromString(QString xml, shared_ptr<OsmMap> map)
 void OsmReader::read(const QString& path, shared_ptr<OsmMap> map)
 {
   open(path);
-  LOG_DEBUG("in OsmReader::read about to call read(map)...");
   read(map);
 }
 

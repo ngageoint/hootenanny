@@ -101,7 +101,6 @@ QString OsmWriter::_e(const QString& s)
 
 void OsmWriter::open(QString url)
 {
-LOG_DEBUG("in OsmWriter::open ...");
   QFile* f = new QFile();
   _fp.reset(f);
   f->setFileName(url);
@@ -109,7 +108,6 @@ LOG_DEBUG("in OsmWriter::open ...");
   {
     throw Exception(QObject::tr("Error opening %1 for writing").arg(url));
   }
-LOG_DEBUG("leaving OsmWriter::open ...");
 }
 
 void OsmWriter::setIncludeCompatibilityTags(bool includeCompatibility)
@@ -148,15 +146,12 @@ QString OsmWriter::_typeName(ElementType e)
 
 void OsmWriter::write(boost::shared_ptr<const OsmMap> map, const QString& path)
 {
-    LOG_DEBUG("in OsmWriter::write ...");
   open(path);
   write(map);
-      LOG_DEBUG("leaving OsmWriter::write ...after write");
 }
 
 void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
 {
-LOG_DEBUG("in OsmWriter::write ...");
   if (!_fp.get() || _fp->isWritable() == false)
   {
     throw HootException("Please open the file before attempting to write.");
@@ -184,7 +179,6 @@ LOG_DEBUG("in OsmWriter::write ...");
   writer.writeEndDocument();
 
   _fp->close();
-LOG_DEBUG("leaving OsmWriter::write ...");
 }
 
 void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)

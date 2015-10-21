@@ -156,7 +156,6 @@ void OsmMap::append(ConstOsmMapPtr appendFromMap)
 
 void OsmMap::addElement(const shared_ptr<Element>& e)
 {
-    LOG_DEBUG("in addElement...");
   switch(e->getElementType().getEnum())
   {
   case ElementType::Node:
@@ -175,12 +174,10 @@ void OsmMap::addElement(const shared_ptr<Element>& e)
 
 void OsmMap::addNode(const boost::shared_ptr<Node>& n)
 {
-    LOG_DEBUG("in addNode...");
   _idGen->ensureNodeBounds(n->getId());
   _nodes.insert(n->getId(), n);
   _index->addNode(n);
   //_nodeCounter = std::min(n->getId() - 1, _nodeCounter);
-  LOG_DEBUG("leaving addNode...");
 }
 
 void OsmMap::addRelation(const shared_ptr<Relation>& r)

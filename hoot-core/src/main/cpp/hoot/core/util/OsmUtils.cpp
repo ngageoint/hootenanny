@@ -113,9 +113,6 @@ QString OsmUtils::toTimeString(unsigned int timestamp)
   time_t tt = (time_t) timestamp;
   char buf[128];
   strftime(buf, sizeof(buf), "%Y-%m-%dT%H:%M:%SZ", gmtime(&tt));
-
-  LOG_DEBUG("computed timestamp = ");
-  LOG_DEBUG(buf);
   return QString::fromUtf8(buf);
 }
 
