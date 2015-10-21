@@ -65,38 +65,38 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract
 			if (i == 0)
 			{
 				Assert.assertEquals(
-					oldNodeIdsToNewNodes.get((long)-116).getId(), queryElementInfo.getElementId());
-				Assert.assertEquals("node", queryElementInfo.getElementType());
+					oldNodeIdsToNewNodes.get((long)-116).getId(), queryElementInfo.getId());
+				Assert.assertEquals("node", queryElementInfo.getType());
 				
 				final ReviewRef[] refs = refsResponse.getReviewRefs();
 				Assert.assertEquals(2, refs.length);
 				
-				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-46).getId(), refs[0].getElementId());
-				Assert.assertEquals("node", refs[0].getElementType());
+				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-46).getId(), refs[0].getId());
+				Assert.assertEquals("node", refs[0].getType());
 				Assert.assertEquals(String.valueOf(mapId), refs[0].getMapId());
 				Assert.assertEquals(2, refs[0].getReviewRelationId());
 				
-				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-49).getId(), refs[1].getElementId());
-				Assert.assertEquals("node", refs[1].getElementType());
+				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-49).getId(), refs[1].getId());
+				Assert.assertEquals("node", refs[1].getType());
 				Assert.assertEquals(String.valueOf(mapId), refs[1].getMapId());
 				Assert.assertEquals(3, refs[1].getReviewRelationId());
 			}
 			else if (i == 1)
 			{
 				Assert.assertEquals(
-					oldNodeIdsToNewNodes.get((long)-117).getId(), queryElementInfo.getElementId());
-				Assert.assertEquals("node", queryElementInfo.getElementType());
+					oldNodeIdsToNewNodes.get((long)-117).getId(), queryElementInfo.getId());
+				Assert.assertEquals("node", queryElementInfo.getType());
 				
 				final ReviewRef[] refs = refsResponse.getReviewRefs();
 				Assert.assertEquals(2, refs.length);
 				
-				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-42).getId(), refs[0].getElementId());
-				Assert.assertEquals("node", refs[0].getElementType());
+				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-42).getId(), refs[0].getId());
+				Assert.assertEquals("node", refs[0].getType());
 				Assert.assertEquals(String.valueOf(mapId), refs[0].getMapId());
 				Assert.assertEquals(4, refs[0].getReviewRelationId());
 				
-				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-47).getId(), refs[1].getElementId());
-				Assert.assertEquals("node", refs[1].getElementType());
+				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-47).getId(), refs[1].getId());
+				Assert.assertEquals("node", refs[1].getType());
 				Assert.assertEquals(String.valueOf(mapId), refs[1].getMapId());
 				Assert.assertEquals(6, refs[1].getReviewRelationId());
 			}

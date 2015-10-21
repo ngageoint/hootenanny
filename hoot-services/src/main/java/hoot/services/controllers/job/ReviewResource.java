@@ -195,7 +195,7 @@ public class ReviewResource
   	{
   		ReviewReferencesRetriever refsRetriever = new ReviewReferencesRetriever(conn);
   		List<ReviewRefsResponse> responseRefsList = new ArrayList<ReviewRefsResponse>();
-  		for (ElementInfo elementInfo : request.getElementInfos())
+  		for (ElementInfo elementInfo : request.getQueryElements())
   		{
   			ReviewRefsResponse responseRefs = new ReviewRefsResponse();
   			List<ReviewRef> references = refsRetriever.getUnresolvedReferences(elementInfo);

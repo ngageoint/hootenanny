@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class ReviewRefsRequest
 {
-	private ElementInfo[] elementInfos;
-  public ElementInfo[] getElementInfos() { return elementInfos; }
-  public void setElementInfos(ElementInfo[] infos) { this.elementInfos = infos; }
+	private ElementInfo[] queryElements;
+  public ElementInfo[] getQueryElements() { return queryElements; }
+  public void setQueryElements(ElementInfo[] infos) { this.queryElements = infos; }
   
   public ReviewRefsRequest()
   {
@@ -20,18 +20,18 @@ public class ReviewRefsRequest
   
   public ReviewRefsRequest(final ElementInfo[] elementInfos)
   {
-  	this.elementInfos = elementInfos;
+  	this.queryElements = elementInfos;
   }
   
   @Override
   public String toString()
   {
   	String str = "";
-  	if (elementInfos != null)
+  	if (queryElements != null)
   	{
-  		for (int i = 0; i < elementInfos.length; i++)
+  		for (int i = 0; i < queryElements.length; i++)
     	{
-    		str += elementInfos[i].toString();
+    		str += queryElements[i].toString();
     	}
   	}
   	return str;

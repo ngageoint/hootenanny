@@ -8,18 +8,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class ElementInfo
 {
-	private long elementId = -1;
-  public long getElementId() { return elementId; }
-  public void setElementId(long id) { this.elementId = id; }
+	private long id = -1;
+  public long getId() { return id; }
+  public void setId(long id) { this.id = id; }
   
   //can be map name or id
   private String mapId;
   public String getMapId() { return mapId; }
   public void setMapId(String id) { this.mapId = id; }
   
-  private String elementType;
-  public String getElementType() { return elementType; }
-  public void setElementType(String type) { this.elementType = type; }
+  private String type;
+  public String getType() { return type; }
+  public void setType(String type) { this.type = type; }
   
   public ElementInfo()
   {
@@ -28,13 +28,13 @@ public class ElementInfo
   public ElementInfo(final String mapId, final long elementId, final String elementType)
   {
   	this.mapId = mapId;
-  	this.elementId = elementId;
-  	this.elementType = elementType;
+  	this.id = elementId;
+  	this.type = elementType;
   }
   
   @Override
   public String toString()
   {
-  	return "map id: " + mapId + ", element id: " + elementId + ", element type: " + elementType;
+  	return "map id: " + mapId + ", element id: " + id + ", element type: " + type;
   }
 }

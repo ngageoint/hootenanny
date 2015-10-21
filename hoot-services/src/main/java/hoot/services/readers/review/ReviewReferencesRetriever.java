@@ -54,9 +54,9 @@ public class ReviewReferencesRetriever
   	sql += " join " + currentRelationsTableName + " on " + currentRelationMembersTableName + 
   	  ".relation_id = " + currentRelationsTableName + ".id";
   	sql += " where " + currentRelationMembersTableName + ".member_id = " + 
-  		queryElementInfo.getElementId() + " and " + currentRelationMembersTableName +
+  		queryElementInfo.getId() + " and " + currentRelationMembersTableName +
   	  ".member_type = '" + 
-  		Element.elementTypeFromString(queryElementInfo.getElementType()).toString().toLowerCase() + 
+  		Element.elementTypeFromString(queryElementInfo.getType()).toString().toLowerCase() + 
   	  "' and " + currentRelationsTableName + ".tags->'hoot:review:needs' = 'yes'";
   	
   	Statement stmt = null;
@@ -110,16 +110,16 @@ public class ReviewReferencesRetriever
     
     //check for query element existence
     Set<Long> elementIds = new HashSet<Long>();
-		elementIds.add(queryElementInfo.getElementId());
-		if (StringUtils.trimToNull(queryElementInfo.getElementType()) == null ||
+		elementIds.add(queryElementInfo.getId());
+		if (StringUtils.trimToNull(queryElementInfo.getType()) == null ||
 				!Element.allElementsExist(
-				  mapIdNum, Element.elementTypeFromString(queryElementInfo.getElementType()), 
+				  mapIdNum, Element.elementTypeFromString(queryElementInfo.getType()), 
 				  elementIds, conn))
 		{
 			ReviewUtils.handleError(
 				new Exception(
 					"Element with ID: " + queryElementInfo + " and type: " + 
-				  queryElementInfo.getElementType() + " does not exist."), 
+				  queryElementInfo.getType() + " does not exist."), 
 					"", 
 					false);
 		}
@@ -137,9 +137,9 @@ public class ReviewReferencesRetriever
 	      .from(currentRelationMembers)
 	      .where(
 	      	currentRelationMembers.relationId.in(unresolvedReviewRelationIds)
-	      	  .and(currentRelationMembers.memberId.ne(queryElementInfo.getElementId())
+	      	  .and(currentRelationMembers.memberId.ne(queryElementInfo.getId())
 	      	    .or(currentRelationMembers.memberType.ne(
-	      	    		  Element.elementEnumFromString(queryElementInfo.getElementType())))))
+	      	    		  Element.elementEnumFromString(queryElementInfo.getType())))))
 	      .orderBy(
 	      	currentRelationMembers.relationId.asc(), currentRelationMembers.memberId.asc(), 
 	      	currentRelationMembers.sequenceId.asc())
