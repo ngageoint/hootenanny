@@ -69,9 +69,10 @@ public:
 
 private:
 
-  shared_ptr<BuildingRfClassifier> _rf;
+  mutable shared_ptr<BuildingRfClassifier> _rf;
   shared_ptr<MatchThreshold> _matchThreshold;
 
+  shared_ptr<BuildingRfClassifier> _getRf() const;
 };
 
 }

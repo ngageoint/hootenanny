@@ -86,43 +86,47 @@ Handle<Value> LogJs::log(const Arguments& args, Log::WarningLevel level) {
   HandleScope scope;
   Context::Scope context_scope(Context::GetCurrent());
 
-  Local<StackTrace> stack = StackTrace::CurrentStackTrace(1);
-  Local<StackFrame> frame = stack->GetFrame(0);
-  int lineNumber = -1;
-  QString script("<unknown>");
-  QString functionName("<unknown>");
-
-  if (stack->GetFrameCount() >= 1)
+  if (level >= Log::getInstance().getLevel())
   {
-    lineNumber = frame->GetLineNumber();
-    script = toString(frame->GetScriptName());
-    functionName = toString(frame->GetFunctionName());
-  }
+    Local<StackTrace> stack = StackTrace::CurrentStackTrace(1);
+    Local<StackFrame> frame = stack->GetFrame(0);
+    int lineNumber = -1;
+    QString script("<unknown>");
+    QString functionName("<unknown>");
 
-  std::stringstream rMessage;
-  for (int i = 0; i < args.Length(); i++)
-  {
-    if (i != 0)
+    if (stack->GetFrameCount() >= 1)
     {
-      rMessage << " ";
+      lineNumber = frame->GetLineNumber();
+      script = toString(frame->GetScriptName());
+      functionName = toString(frame->GetFunctionName());
     }
-    rMessage << args[i];
+
+    std::stringstream rMessage;
+    for (int i = 0; i < args.Length(); i++)
+    {
+      if (i != 0)
+      {
+        rMessage << " ";
+      }
+      rMessage << args[i];
+    }
+
+    QString message = QString::fromUtf8(rMessage.str().data());
+
+    int logLimit = ConfigOptions().getOgrLogLimit();
+    int messageCount = getLogCount(message);
+
+    if (messageCount == logLimit)
+    {
+      message = QString("Received %1 of the same message. Silencing: ").arg(messageCount) + message;
+    }
+
+    if (messageCount <= logLimit)
+    {
+      Log::getInstance().log(level, message, script, functionName, lineNumber);
+    }
   }
 
-  QString message = QString::fromUtf8(rMessage.str().data());
-
-  int logLimit = ConfigOptions().getOgrLogLimit();
-  int messageCount = getLogCount(message);
-
-  if (messageCount == logLimit)
-  {
-    message = QString("Received %1 of the same message. Silencing: ").arg(messageCount) + message;
-  }
-
-  if (messageCount <= logLimit)
-  {
-    Log::getInstance().log(level, message, script, functionName, lineNumber);
-  }
   return scope.Close(Undefined());
 }
 

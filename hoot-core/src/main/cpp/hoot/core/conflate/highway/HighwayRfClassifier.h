@@ -53,15 +53,16 @@ public:
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const;
 
 private:
-  shared_ptr<Tgs::RandomForest> _rf;
-  QStringList _rfFactorLabels;
-  vector< shared_ptr<const FeatureExtractor> > _extractors;
+  mutable shared_ptr<Tgs::RandomForest> _rf;
+  mutable QStringList _rfFactorLabels;
+  mutable vector< shared_ptr<const FeatureExtractor> > _extractors;
 
-  void _createAllExtractors();
-  void _createTestExtractors();
+  void _createAllExtractors() const;
+  void _createTestExtractors() const;
 
   const vector< shared_ptr<const FeatureExtractor> >& _getExtractors() const;
 
+  void _init() const;
 };
 
 }

@@ -28,6 +28,7 @@
 // Hoot
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
+#include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/util/Log.h>
 using namespace hoot;
 
@@ -52,6 +53,7 @@ class TagComparatorTest : public CppUnit::TestFixture
   CPPUNIT_TEST(compareNamesTest);
   CPPUNIT_TEST(compareEnumTest);
   CPPUNIT_TEST(generalizeTest);
+  CPPUNIT_TEST(railwayBusStopTest);
   CPPUNIT_TEST(realWorldTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -551,6 +553,88 @@ public:
       Tags gen = uut.generalize(t1, t2);
       compareTags(expected, gen);
     }
+  }
+
+  /**
+   * Test rudimentary loading of the schema file.
+   */
+  void railwayBusStopTest()
+  {
+    TagComparator& uut = TagComparator::getInstance();
+
+    vector<Tags> railways;
+    vector<Tags> buses;
+
+    Tags t;
+
+    t.clear();
+    t["highway"] = "bus_stop";
+    buses.push_back(t);
+
+    t.clear();
+    t["amenity"] = "bus_station";
+    buses.push_back(t);
+
+    t.clear();
+    t["railway"] = "halt";
+    railways.push_back(t);
+
+    t.clear();
+    t["railway"] = "station";
+    railways.push_back(t);
+
+    t.clear();
+    t["station"] = "light_rail";
+    railways.push_back(t);
+
+    t.clear();
+    t["railway"] = "subway_entrance";
+    railways.push_back(t);
+
+    TextTable::Data data;
+
+    for (size_t i = 0; i < buses.size(); i++)
+    {
+      for (size_t j = 0; j < railways.size(); j++)
+      {
+        Tags t1 = buses[i];
+        Tags t2 = railways[j];
+        QString s1 = toString(t1).trimmed();
+        QString s2 = toString(t2).trimmed();
+        data[s1][s2] = uut.compareTags(t1, t2);
+        data[s2][s1] = uut.compareTags(t2, t1);
+        //LOG_VAR(uut.compareTags(buses[i], railways[i]));
+      }
+    }
+
+    for (size_t i = 0; i < buses.size(); i++)
+    {
+      for (size_t j = 0; j < buses.size(); j++)
+      {
+        Tags t1 = buses[i];
+        Tags t2 = buses[j];
+        QString s1 = toString(t1).trimmed();
+        QString s2 = toString(t2).trimmed();
+        data[s1][s2] = uut.compareTags(t1, t2);
+        //LOG_VAR(uut.compareTags(buses[i], railways[i]));
+      }
+    }
+
+    for (size_t i = 0; i < railways.size(); i++)
+    {
+      for (size_t j = 0; j < railways.size(); j++)
+      {
+        Tags t1 = railways[i];
+        Tags t2 = railways[j];
+        QString s1 = toString(t1).trimmed();
+        QString s2 = toString(t2).trimmed();
+        data[s1][s2] = uut.compareTags(t1, t2);
+        //LOG_VAR(uut.compareTags(buses[i], railways[i]));
+      }
+    }
+
+    TextTable table(data);
+    LOG_VAR(table.toWikiString());
   }
 
   /**

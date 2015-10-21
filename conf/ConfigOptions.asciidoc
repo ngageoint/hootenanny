@@ -724,6 +724,18 @@ Example Usage:
 hoot ogr2osm -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/Identity.js output.osm test-files/jakarta_raya_coastline.shp
 ----
 
+=== ogr.reader.bounding.box.latlng
+
+* Data Type: string
+* Default Value: ``
+
+Similar to `ogr.reader.bounding.box` but uses WGS84 to specify the bounds rather than the source
+projection. Only one of the two options can be specified.
+
+A best effort will be made to convert between the two projections. The translated bounding box
+will approximate the minimum bounding rectangle of the lat/lng bounding box. In some cases this
+may be significantly larger.
+
 === ogr.reader.epsg.override
 
 * Data Type: int
@@ -1376,6 +1388,22 @@ all translation stats are disabled.
 * Default Value: `Invalid`
 
 The default status to match with a status criterion.
+
+=== tag.ancestor.differencer.name
+
+* Data Type: string
+* Default Value: ``
+
+The default ancestor to use when using the hoot::TagAncestorDifferencer class for comparing tags.
+Primarily this is useful within the node.js interface.
+
+=== tag.category.differencer.name
+
+* Data Type: string
+* Default Value: ``
+
+The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
+Primarily this is useful within the node.js interface.
 
 === tag.criterion.kvp
 

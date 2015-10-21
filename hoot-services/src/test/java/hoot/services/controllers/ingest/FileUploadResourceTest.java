@@ -194,7 +194,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"fgdb_ogr", inputsList, "test@test.com");
+				"fgdb_ogr", inputsList, "test@test.com", "false");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -313,7 +313,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"fgdb_ogr", inputsList, "test@test.com");
+				"fgdb_ogr", inputsList, "test@test.com", "false");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -431,7 +431,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"osm", inputsList, "test@test.com");
+				"osm", inputsList, "test@test.com", "false");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -552,7 +552,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"ogr", inputsList, "test@test.com");
+				"ogr", inputsList, "test@test.com", "false");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -661,7 +661,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"ogr", inputsList, "test@test.com");
+				"ogr", inputsList, "test@test.com", "false");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -769,7 +769,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"osm", inputsList, "test@test.com");
+				"osm", inputsList, "test@test.com", "false");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -858,7 +858,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"fgdb", inputsList, "test@test.com");
+				"fgdb", inputsList, "test@test.com", "false");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
