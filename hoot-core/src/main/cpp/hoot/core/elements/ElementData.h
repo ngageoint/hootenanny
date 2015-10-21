@@ -56,6 +56,12 @@ public:
 
   long getId() const { return _id; }
 
+  long getChangeset() const { return _changeset; }
+
+  long getVersion() const { return _version; }
+
+  long getTimestamp() const { return _timestamp; }
+
   const Tags& getTags() const { return _tags; }
 
   Tags& getTags() { return _tags; }
@@ -74,7 +80,13 @@ protected:
 
   ElementData(long id, const Tags& tags, Meters circularError);
 
+  ElementData(long id, long changeset, long version, unsigned int timestamp) :
+    _id(id), _changeset(changeset), _version(version), _timestamp(timestamp) { }
+
   long _id;
+  long _changeset;
+  long _version;
+  unsigned int _timestamp;
   Tags _tags;
   Meters _circularError;
 };

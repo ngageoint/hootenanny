@@ -38,6 +38,7 @@ using namespace boost;
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/OsmUtils.h>
 
 // Qt
 #include <QBuffer>
@@ -100,6 +101,7 @@ QString OsmWriter::_e(const QString& s)
 
 void OsmWriter::open(QString url)
 {
+LOG_DEBUG("in OsmWriter::open ...");
   QFile* f = new QFile();
   _fp.reset(f);
   f->setFileName(url);
@@ -107,6 +109,7 @@ void OsmWriter::open(QString url)
   {
     throw Exception(QObject::tr("Error opening %1 for writing").arg(url));
   }
+LOG_DEBUG("leaving OsmWriter::open ...");
 }
 
 void OsmWriter::setIncludeCompatibilityTags(bool includeCompatibility)
@@ -145,12 +148,15 @@ QString OsmWriter::_typeName(ElementType e)
 
 void OsmWriter::write(boost::shared_ptr<const OsmMap> map, const QString& path)
 {
+    LOG_DEBUG("in OsmWriter::write ...");
   open(path);
   write(map);
+      LOG_DEBUG("leaving OsmWriter::write ...after write");
 }
 
 void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
 {
+LOG_DEBUG("in OsmWriter::write ...");
   if (!_fp.get() || _fp->isWritable() == false)
   {
     throw HootException("Please open the file before attempting to write.");
@@ -178,6 +184,7 @@ void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
   writer.writeEndDocument();
 
   _fp->close();
+LOG_DEBUG("leaving OsmWriter::write ...");
 }
 
 void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
@@ -194,8 +201,11 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
     writer.writeAttribute("id", QString::number(n->getId()));
     if (_includeCompatibilityTags)
     {
-      writer.writeAttribute("timestamp", _timestamp);
-      writer.writeAttribute("version", "1");
+      //writer.writeAttribute("timestamp", _timestamp);
+      writer.writeAttribute("timestamp", OsmUtils::toTimeString(n->getTimestamp()));
+      //writer.writeAttribute("version", "1");
+      writer.writeAttribute("version", QString::number(n->getVersion()));
+      writer.writeAttribute("changeset", QString::number(n->getChangeset()));
     }
     writer.writeAttribute("lat", QString::number(n->getY(), 'f', _precision));
     writer.writeAttribute("lon", QString::number(n->getX(), 'f', _precision));
@@ -252,8 +262,11 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
     writer.writeAttribute("id", QString::number(w->getId()));
     if (_includeCompatibilityTags)
     {
-      writer.writeAttribute("timestamp", _timestamp);
-      writer.writeAttribute("version", "1");
+      //writer.writeAttribute("timestamp", _timestamp);
+      writer.writeAttribute("timestamp", OsmUtils::toTimeString(w->getTimestamp()));
+      //writer.writeAttribute("version", "1");
+      writer.writeAttribute("version", QString::number(w->getVersion()));
+      writer.writeAttribute("changeset", QString::number(w->getChangeset()));
     }
 
     for (size_t j = 0; j < w->getNodeCount(); j++)
@@ -323,8 +336,11 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
     writer.writeAttribute("id", QString::number(r->getId()));
     if (_includeCompatibilityTags)
     {
-      writer.writeAttribute("timestamp", _timestamp);
-      writer.writeAttribute("version", "1");
+      //writer.writeAttribute("timestamp", _timestamp);
+      writer.writeAttribute("timestamp", OsmUtils::toTimeString(r->getTimestamp()));
+      //writer.writeAttribute("version", "1");
+      writer.writeAttribute("version", QString::number(r->getVersion()));
+      writer.writeAttribute("changeset", QString::number(r->getChangeset()));
     }
 
     const vector<RelationData::Entry>& members = r->getMembers();

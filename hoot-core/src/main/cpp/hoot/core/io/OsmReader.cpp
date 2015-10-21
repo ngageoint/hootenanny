@@ -43,6 +43,7 @@ using namespace boost;
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
 
@@ -92,7 +93,15 @@ void OsmReader::_createNode(const QXmlAttributes &attributes)
   double x = _parseDouble(attributes.value("lon"));
   double y = _parseDouble(attributes.value("lat"));
 
-  _element.reset(new Node(_status, newId, x, y, _circularError));
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
+  long version = 1;
+  if (attributes.value("version") != "") version = _parseDouble(attributes.value("version"));
+  long changeset = 1;
+  if (attributes.value("changeset") != "") changeset = _parseDouble(attributes.value("changeset"));
+  unsigned int timestamp = 0;
+  if (attributes.value("timestamp") != "") timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+
+  _element.reset(new Node(_status, newId, x, y, changeset, version, timestamp, _circularError));
 
   if (_element->getTags().getInformationCount() > 0)
   {
@@ -104,7 +113,16 @@ void OsmReader::_createRelation(const QXmlAttributes &attributes)
 {
   _relationId = _parseLong(attributes.value("id"));
   long newId = _getRelationId(_relationId);
-  _element.reset(new Relation(_status, newId, _circularError));
+
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
+  long version = 1;
+  if (attributes.value("version") != "") version = _parseDouble(attributes.value("version"));
+  long changeset = 1;
+  if (attributes.value("changeset") != "") changeset = _parseDouble(attributes.value("changeset"));
+  unsigned int timestamp = 0;
+  if (attributes.value("timestamp") != "") timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+
+  _element.reset(new Relation(_status, newId, changeset, version, timestamp, _circularError));
 
   _parseTimeStamp(attributes);
 }
@@ -124,7 +142,15 @@ void OsmReader::_createWay(const QXmlAttributes &attributes)
   }
   _wayIdMap.insert(_wayId, newId);
 
-  _element.reset(new Way(_status, newId, _circularError));
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
+  long version = 1;
+  if (attributes.value("version") != "") version = _parseDouble(attributes.value("version"));
+  long changeset = 1;
+  if (attributes.value("changeset") != "") changeset = _parseDouble(attributes.value("changeset"));
+  unsigned int timestamp = 0;
+  if (attributes.value("timestamp") != "") timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+
+  _element.reset(new Way(_status, newId, changeset, version, timestamp, _circularError));
 
   _parseTimeStamp(attributes);
 }
@@ -211,11 +237,14 @@ Status OsmReader::_parseStatus(QString s)
 
 void OsmReader::open(QString url)
 {
+    LOG_DEBUG("inside OsmReader::open...");
   _path = url;
+    LOG_DEBUG("leaving OsmReader::open...");
 }
 
 void OsmReader::read(shared_ptr<OsmMap> map)
 {
+        LOG_DEBUG("inside OsmReader::read...");
   _osmFound = false;
 
   _missingNodeCount = 0;
@@ -278,13 +307,15 @@ void OsmReader::read(shared_ptr<OsmMap> map)
       throw Exception(QObject::tr("Error opening OSM file for parsing: %1").arg(_path));
   }
   LOG_DEBUG("File " << _path << " opened for read");
-
+LOG_DEBUG("before xmlInputSource...");
   QXmlInputSource xmlInputSource(&file);
+  LOG_DEBUG("before reader.parse");
   if (reader.parse(xmlInputSource) == false)
   {
       throw Exception(_errorString);
   }
   file.close();
+LOG_DEBUG("after reader.parse...");
 
   // Ticket 5871: if we did have to decompress, delete the decompressed file when we're done
   if ( originalFile.length() > 0 )
@@ -298,6 +329,7 @@ void OsmReader::read(shared_ptr<OsmMap> map)
   _map->visitRw(visitor);
 
   _map.reset();
+      LOG_DEBUG("leaving OsmReader::read...");
 }
 
 void OsmReader::readFromString(QString xml, shared_ptr<OsmMap> map)
@@ -332,6 +364,7 @@ void OsmReader::readFromString(QString xml, shared_ptr<OsmMap> map)
 void OsmReader::read(const QString& path, shared_ptr<OsmMap> map)
 {
   open(path);
+  LOG_DEBUG("in OsmReader::read about to call read(map)...");
   read(map);
 }
 
