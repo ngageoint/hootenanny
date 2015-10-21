@@ -432,30 +432,6 @@ public:
     // insert simple test data
     ////////////////////////////////////////
 
-    ServicesDb database;
-    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
-
-    database.transaction();
-
-    // Create or get user, set our userId
-    database.setUserId(database.getOrCreateUser("OsmApiInsert@hoot.local", "Hootenanny Inserter"));
-
-    database.beginChangeset();
-
-    // Insert single node
-    /*
-    Tags simpleTags;
-    simpleTags.appendValue("body_of_water", "haitis river");
-    simpleTags.appendValue("accuracy", "3");
-
-    long assignedNodeId;
-    CPPUNIT_ASSERT( database.insertNode(38.4, -106.5, simpleTags, assignedNodeId ) == true );
-
-    database.endChangeset();
-    database.commit();
-    database.close();
-    */
-
     std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/users.sql > /dev/null 2>&1");
     std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1");
     std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodesReadTest.sql > /dev/null 2>&1");
@@ -463,6 +439,10 @@ public:
     ///////////////////////////////////////
     // test the reader
     ///////////////////////////////////////
+
+    ServicesDb database;
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
+
 
     Settings s = conf();
     reader.open(ConfigOptions(s).getServicesDbTestUrlOsmapi());

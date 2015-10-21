@@ -226,8 +226,7 @@ void ServicesDb::commit()
     }
     break;
   case DBTYPE_OSMAPI:
-    LOG_ERROR("Cannot write to OSM API DB");
-    throw NotImplementedException("Cannot write to OSM API DB");
+    // No-op
     break;
 
   default:

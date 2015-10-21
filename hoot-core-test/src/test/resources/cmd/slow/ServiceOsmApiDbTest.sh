@@ -11,24 +11,7 @@ source conf/DatabaseConfig.sh
 rm -rf test-output/cmd/ServiceOsmApiDbTest
 mkdir -p test-output/cmd/ServiceOsmApiDbTest
 
-# setup args
-export HOOT_OPTS="-D services.db.writer.create.user=true -D services.db.writer.email=OsmApiInsert@hoot.local -D reader.add.source.datetime=false -D services.db.writer.output.id.mappings=test-output/cmd/ServiceOsmApiDbTest/idmaps.xml "
-
-export DB_URL="postgresql://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$PGDATABASE"
-
-# do the write operation
-echo "Performing write operation"
-hoot convert $HOOT_OPTS test-files/ToyTestA.osm "$DB_URL"
-#wait
-
-# dump the database
-#echo "Doing postgres dump operation"
-pg_dump -U $PGUSER -a > test-output/cmd/ServiceOsmApiDbTest/ToyTestA-dump.sql
-#wait
-
-# compare input to dumped
-#echo "Doing comparison"
-scripts/compareOsmXmlToOsmApiDbDump test-files/ToyTestA.osm test-output/cmd/ServiceOsmApiDbTest/idmaps.xml test-output/cmd/ServiceOsmApiDbTest/ToyTestA-dump.sql
+# Load the database with known data
 
 # do the read operation
 echo "Performing read operation"
