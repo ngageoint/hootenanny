@@ -79,6 +79,7 @@ public:
     {
       read_stream_or_throw(is, value);
       _loadTags(value);
+      //_rewriteTags(value);
 
       size_t current = is.tellg();
       is.seekg (0, ios::end);
@@ -111,13 +112,17 @@ public:
     {
       return QString::fromStdString(value.get_str());
     }
-    if (value.type() == int_type)
+    else if (value.type() == int_type)
     {
       return QString("%1").arg(value.get_int());
     }
-    if (value.type() == real_type)
+    else if (value.type() == real_type)
     {
       return QString("%1").arg(value.get_real());
+    }
+    else if (value.type() == null_type)
+    {
+      return QString("null");
     }
     else
     {
@@ -528,6 +533,152 @@ private:
     }
   }
 
+  void _rewriteTags(const Value& value)
+  {
+    if (value.type() != obj_type)
+    {
+      throw HootException("Expected a list of tags at the top level.");
+    }
+    else
+    {
+      const Object& obj = value.get_obj();
+
+      for (size_t i = 0; i < obj.size(); i++)
+      {
+        QString name = QString::fromStdString(obj[i].name_);
+        if (name.startsWith("#"))
+        {
+          // comment
+          continue;
+        }
+        else if (name == "tag")
+        {
+          _rewriteTag(obj[i].value_);
+        }
+        else if (name == "compound")
+        {
+          _rewriteCompound(obj[i].value_);
+        }
+        else if (name == "import")
+        {
+          //load(_baseDir.back() + toString(obj[i].value_));
+        }
+        else
+        {
+          throw HootException("The specified top level tag isn't supported: " +
+            QString::fromStdString(obj[i].name_));
+        }
+      }
+    }
+  }
+
+  void _rewriteTag(const Value& value)
+  {
+    if (value.type() != obj_type)
+    {
+      throw HootException("Expected tag to be an object.");
+    }
+    else
+    {
+      Object obj = value.get_obj();
+
+      Object::value_type p;
+      p.name_ = "objectType";
+      p.value_ = "tag";
+      obj.push_back(p);
+
+      _rewriteObject(obj);
+      cout << ",";
+    }
+  }
+
+  void _rewriteCompound(const Value& value)
+  {
+    if (value.type() != obj_type)
+    {
+      throw HootException("Expected tag to be an object.");
+    }
+    else
+    {
+      Object obj = value.get_obj();
+
+      Object::value_type p;
+      p.name_ = "objectType";
+      p.value_ = "tag";
+      obj.push_back(p);
+
+      _rewriteObject(obj);
+      cout << ",";
+    }
+  }
+
+  void _rewrite(const Value& value)
+  {
+    switch (value.type())
+    {
+    case obj_type:
+      _rewriteObject(value);
+      break;
+    case str_type:
+      cout << "\"" << toString(value) << "\"";
+      break;
+    case bool_type:
+    case int_type:
+    case real_type:
+    case null_type:
+      cout << toString(value);
+      break;
+    case array_type:
+      {
+        const Array& arr = value.get_array();
+
+        cout << "[";
+        for (size_t i = 0; i < arr.size(); i++)
+        {
+          if (i != 0)
+          {
+            cout << ",";
+          }
+          _rewrite(arr[i]);
+        }
+        cout << "]";
+      }
+
+    }
+  }
+
+  void _rewriteObject(const Value& value)
+  {
+    if (value.type() != obj_type)
+    {
+      throw HootException("Expected tag to be an object.");
+    }
+    else
+    {
+      const Object& obj = value.get_obj();
+
+      cout << "{" << endl;
+
+      for (size_t i = 0; i < obj.size(); i++)
+      {
+        if (i != 0)
+        {
+          cout << "," << endl;
+        }
+        QString name = toString(obj[i].name_);
+        if (name == "type")
+        {
+          name = "dataType";
+        }
+        cout << "\"" << name << "\"" << ": ";
+
+        _rewrite(obj[i].value_);
+      }
+      cout << endl;
+      cout << "}" << endl;
+    }
+  }
+
   bool _toBool(const Value& value)
   {
     if (value.type() != bool_type)
@@ -580,12 +731,6 @@ set<QString> JsonSchemaLoader::getDependencies()
 void JsonSchemaLoader::load(QString fn)
 {
   _d->load(fn);
-}
-
-void JsonSchemaLoader::load(OsmSchema& schema, QString path)
-{
-  JsonSchemaLoader s(schema);
-  s.load(path);
 }
 
 }

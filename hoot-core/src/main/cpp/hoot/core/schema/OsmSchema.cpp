@@ -1705,7 +1705,7 @@ void OsmSchema::loadDefault()
   delete d;
   d = new OsmSchemaData();
 
-  JsonSchemaLoader::load(*this, path);
+  JsonSchemaLoader(*this).load(path);
 }
 
 double OsmSchema::score(const QString& kvp1, const QString& kvp2)

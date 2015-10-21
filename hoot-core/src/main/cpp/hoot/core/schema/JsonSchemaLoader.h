@@ -57,8 +57,6 @@ public:
    */
   set<QString> getDependencies();
 
-  static void load(OsmSchema& schema, QString path);
-
 private:
   JsonSchemaLoaderData* _d;
 };
