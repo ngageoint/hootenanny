@@ -3,9 +3,14 @@
     "OpenStreetMap": {
       "conn": "PG:dbname='osmsyria' host='192.168.33.12' port='5432' user='vagrant' password=''"
     },
+    "3395": {
+      "conn": "PG:dbname='osmsyria_3395' host='192.168.33.12' port='5432' user='vagrant' password=''"
+    },
     "3785": {
-      "conn": "PG:dbname='osmsyria_3785' host='192.168.33.12' port='5432' user='vagrant' password=''",
-      "epsg": "3785"
+      "conn": "PG:dbname='osmsyria_3785' host='192.168.33.12' port='5432' user='vagrant' password=''"
+    },
+    "3857": {
+      "conn": "PG:dbname='osmsyria_3857' host='192.168.33.12' port='5432' user='vagrant' password=''"
     },
     "MapEdit": {
       "conn": "PG:dbname='ogrsyria' host='192.168.33.12' port='5432' user='vagrant' password=''"
