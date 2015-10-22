@@ -133,10 +133,6 @@ private:
    * Close the current changeset and start a new one.
    */
   void _startNewChangeSet();
-
-  void _setOutputMappingFile(const QString& filename);
-
-  void _outputIdMappings();
 };
 
 }

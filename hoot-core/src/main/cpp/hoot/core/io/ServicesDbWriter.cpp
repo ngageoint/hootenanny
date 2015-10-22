@@ -79,12 +79,6 @@ void ServicesDbWriter::close()
     LOG_DEBUG("\t     Ways: " << QString::number(_waysWritten));
     LOG_DEBUG("\tRelations: " << QString::number(_relationsWritten));
   }
-
-  // Did user set configuration to dump the ID source->dest mappings to an output file?
-  if ( _outputMappingFile.length() > 0 )
-  {
-    _outputIdMappings();
-  }
 }
 
 void ServicesDbWriter::_countChange()
@@ -315,7 +309,6 @@ void ServicesDbWriter::setConfiguration(const Settings &conf)
   setUserEmail(conf.getString(emailKey(), ""));
   setCreateUser(ConfigOptions(conf).getServicesDbWriterCreateUser());
   setOverwriteMap(conf.getBool(overwriteMapKey(), false));
-  _setOutputMappingFile(ConfigOptions(conf).getServicesDbWriterOutputIdMappings());
 }
 
 void ServicesDbWriter::_startNewChangeSet()
@@ -489,69 +482,6 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
   //LOG_DEBUG("Leaving relation write cleanly");
 
   _relationsWritten++;
-}
-
-void ServicesDbWriter::_setOutputMappingFile(const QString& filename)
-{
-  if ( filename.length() > 0 )
-  {
-    _outputMappingFile = filename;
-    LOG_DEBUG("Configuration set to output ID mappings into file " <<
-        _outputMappingFile);
-  }
-}
-
-void ServicesDbWriter::_outputIdMappings()
-{
-  if ( (_sourceNodeIds.size() == 0) && (_sourceWayIds.size() == 0) &&
-       (_sourceRelationIds.size() == 0) )
-  {
-    // No mapping data was generated
-    return;
-  }
-
-  // If we can't open output file, just warn and bail -- this is testing purposes only
-  try
-  {
-    std::ofstream outputFile(_outputMappingFile.toStdString().c_str());
-
-    outputFile << "<id_mappings>" << std::endl;
-
-    for ( std::set<long>::const_iterator idIter = _sourceNodeIds.begin();
-          idIter != _sourceNodeIds.end(); ++idIter )
-    {
-      outputFile <<
-        "\t<id_mapping element_type=\"node\" source_id=\"" <<
-        *idIter << "\" database_id=\"" << _nodeRemap.at(*idIter) <<
-        "\" />" << std::endl;
-    }
-
-    for ( std::set<long>::const_iterator idIter = _sourceWayIds.begin();
-          idIter != _sourceWayIds.end(); ++idIter )
-    {
-      outputFile <<
-        "\t<id_mapping element_type=\"way\" source_id=\"" <<
-        *idIter << "\" database_id=\"" << _wayRemap.at(*idIter) <<
-        "\" />" << std::endl;
-    }
-
-    for ( std::set<long>::const_iterator idIter = _sourceRelationIds.begin();
-          idIter != _sourceRelationIds.end(); ++idIter )
-    {
-      outputFile <<
-        "\t<id_mapping element_type=\"relation\" source_id=\"" <<
-        *idIter << "\" database_id=\"" << _relationRemap.at(*idIter) <<
-        "\" />" << std::endl;
-    }
-
-    outputFile << "</id_mappings>" << std::endl;
-
-    outputFile.close();
-  }
-  catch ( ... )
-  {
-    LOG_WARN("Error creating output map file " << _outputMappingFile);
-  }
 }
 
 }

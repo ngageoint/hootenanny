@@ -119,12 +119,6 @@ public:
   void runOpenOsmApiTest()
   {
     Settings s = conf();
-
-    if(GREGSWORKSPACE)
-      s.set(ConfigOptions(s).getServicesDbTestUrlOsmapiKey(), "postgresql://vagrant:vagrant@localhost:15432/openstreetmap");
-    else
-      s.set(ConfigOptions(s).getServicesDbTestUrlOsmapiKey(), "postgresql://postgres@10.194.70.78:5432/terrytest");
-
     ServicesDb db;
     CPPUNIT_ASSERT_EQUAL(ServicesDb::DBTYPE_UNSUPPORTED, db.getDatabaseType());
     db.open(QUrl(ConfigOptions(s).getServicesDbTestUrlOsmapi()));
@@ -158,11 +152,9 @@ public:
 
     const shared_ptr<QList<long> > ids = insertTestMap1(database);
 
-    return;
-
     mapId = ids->at(0);
 
-    LOG_WARN("Map ID out of ITM1: " << mapId);
+    //LOG_WARN("Map ID out of ITM1: " << mapId);
 
     CPPUNIT_ASSERT(database.mapExists(mapId));
 
@@ -450,21 +442,12 @@ public:
   void runSelectAllElementsOsmApiTest()
   {
     ServicesDb database;
-
-    if(GREGSWORKSPACE)
-      database.open(QUrl("postgresql://vagrant:vagrant@localhost:15432/openstreetmap"));
-    else
-      database.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
 
     /////////////////////////////////////
     // INSERT NODES INTO DB
     /////////////////////////////////////
 
-    database.transaction();
-
-    // Create or get user, set our userId
-    database.setUserId(database.getOrCreateUser("OsmApiInsert@hoot.local", "Hootenanny Inserter"));
-    database.beginChangeset();
 
     // list of insertions
     QList<long> ids;
@@ -473,23 +456,10 @@ public:
     QList<float> lats = QList<float>() << 38.4 << 38;
     QList<float> lons = QList<float>() << -106.5 << -104;
 
-    // insert node into db
-    for(int i=0;i<2;i++)
-    {
-      Tags t;
-      if(i==0) {
-        t[keys[0].toStdString().c_str()] = values[0].toStdString().c_str();
-        t[keys[1].toStdString().c_str()] = values[1].toStdString().c_str();
-      } else {
-        t[keys[2].toStdString().c_str()] = values[2].toStdString().c_str();
-      }
-      long nodeId;
-      database.insertNode(lats[i], lons[i], t, nodeId);
-      ids.append(nodeId);
-    }
-
-    database.endChangeset();
-    database.commit();
+    // Insert nodes
+    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/users.sql > /dev/null 2>&1");
+    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1");
+    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodes.sql > /dev/null 2>&1");
 
     /////////////////////////////////////
     // SELECT THE NODES USING SELECT_ALL
@@ -551,34 +521,26 @@ public:
       LOG_DEBUG(QString("Processing tag ")+key);
       tagIndx = ServicesDbTestUtils::findIndex(keys, key);
       HOOT_STR_EQUALS(QString(keys[tagIndx]+" = "+values[tagIndx]+"\n").toStdString().c_str(),
-        ServicesDb::unescapeTags(database.extractTagFromRow_OsmApi(nodeResultIterator, ServicesDb::NODES_TAGS)));
+        ServicesDb::unescapeTags(database.extractTagFromRow_OsmApi(nodeResultIterator, ElementType::Node)));
     }
 
     ///////////////////////////////////////////////
     /// Insert a way into the Osm Api DB
     ///////////////////////////////////////////////
 
-    database.transaction();
-
-    // Create or get user, set our userId
-    database.setUserId(database.getOrCreateUser("OsmApiInsert@hoot.local", "Hootenanny Inserter"));
-    database.beginChangeset();
-
-    const long nodeId1 = ids.at(0);
-    const long nodeId2 = ids.at(1);
+    const long nodeId1 = 1;
+    const long nodeId2 = 2;
     ids.clear();
     Tags t2;
     t2["highway"] = "primary";
-    long insertedWayId;
-    database.insertWay(t2, insertedWayId);
+    long insertedWayId = 1;
     ids.append(insertedWayId);
     vector<long> nodeIds;
     nodeIds.push_back(nodeId1);
     nodeIds.push_back(nodeId2);
-    database.insertWayNodes(insertedWayId, nodeIds);
 
-    database.endChangeset();
-    database.commit();
+    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/ways.sql > /dev/null 2>&1");
+
 
     ///////////////////////////////////////////////
     /// Reads the ways from the Osm Api DB
@@ -629,32 +591,23 @@ public:
       QString key = wayResultIterator->value(ServicesDb::WAYS_TAGS).toString();
       LOG_DEBUG(QString("Processing tag ")+key);
       HOOT_STR_EQUALS("highway = primary\n", ServicesDb::unescapeTags(
-        database.extractTagFromRow_OsmApi(wayResultIterator, ServicesDb::WAYS_TAGS)));
+        database.extractTagFromRow_OsmApi(wayResultIterator, ElementType::Way)));
     }
 
     ///////////////////////////////////////////////
     /// Insert a relation into the Osm Api DB
     ///////////////////////////////////////////////
 
-    database.transaction();
-
-    // Create or get user, set our userId
-    database.setUserId(database.getOrCreateUser("OsmApiInsert@hoot.local", "Hootenanny Inserter"));
-    database.beginChangeset();
-
     const long nodeId3 = nodeIds.at(0);
     const long wayId1 = ids.at(0);
     ids.clear();
     Tags rt;
     rt["type"] = "multistuff";
-    long relationId;
-    database.insertRelation(rt, relationId);
+    long relationId = 1;
     ids.append(relationId);
-    database.insertRelationMember(relationId, ElementType::Way, wayId1, "wayrole", 0);
-    database.insertRelationMember(relationId, ElementType::Node, nodeId3, "noderole", 1);
 
-    database.endChangeset();
-    database.commit();
+    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/relations.sql > /dev/null 2>&1");
+
 
     ///////////////////////////////////////////////
     /// Reads the relations from the Osm Api DB
@@ -706,7 +659,7 @@ public:
       QString key = relationResultIterator->value(ServicesDb::WAYS_TAGS).toString();
       LOG_DEBUG(QString("Processing tag ")+key);
       HOOT_STR_EQUALS("type = multistuff\n", ServicesDb::unescapeTags(
-        database.extractTagFromRow_OsmApi(relationResultIterator, ServicesDb::RELATIONS_TAGS)));
+        database.extractTagFromRow_OsmApi(relationResultIterator, ElementType::Relation)));
     }
 
   }
@@ -865,16 +818,23 @@ public:
   {
     deleteUser(userEmail());
 
+    // tear down the ServicesDB
+    ServicesDb database;
     if (mapId > 0)
     {
-      ServicesDb database;
       database.open(getDbUrl());
       if (database.mapExists(mapId))
       {
         database.deleteMap(mapId);
       }
+      database.close();
     }
     mapId = -1;
+
+    // tear down the osm api db
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
+    database.deleteData_OsmApi();
+    database.close();
   }
 
 };

@@ -799,7 +799,7 @@ sub validateCurrentWays($$)
       my $xmlTagsArrayRef = $currXmlWay{'tag'};
 
       # Make sure number of tags are equal
-      if ( scalar( @{$xmlTagsArrayRef} ) !=
+      if ( scalar( @{$xmlTagsArrayRef} ) < 
           scalar( keys(%{ $currentWaysData{$databaseWayId}->{'tags'} })) )
       {
         print("ERROR: number of tags in XML for way $currXmlWayId " .
@@ -812,37 +812,39 @@ sub validateCurrentWays($$)
       foreach $currTag ( @{$xmlTagsArrayRef} )
       {
         my %xmlTagEntry = %{ $currTag };
-        #print( "Key   : $tagEntry{'k'}\n");
-        #print( "Value : $tagEntry{'v'}\n");
-
-        my %dbTagEntry = %{ $currentWaysData{$databaseWayId}->{'tags'} };
-        if ( ! exists( $dbTagEntry{ $xmlTagEntry{'k'} } ) )
+        #print( "Key   : $xmlTagEntry{'k'}\n");
+        #print( "Value : $xmlTagEntry{'v'}\n");
+        if ( $xmlTagEntry{'k'} ne lc('error:circular') )
         {
-          print("Could not find database version of tag " . Dumper(%xmlTagEntry) . "\n" );
-          exit;
-        }
-        else
-        {
-          #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
-          #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
-
-          if ( $xmlTagEntry{'v'} ne $dbTagEntry{ $xmlTagEntry{'k'}} )
+          my %dbTagEntry = %{ $currentWaysData{$databaseWayId}->{'tags'} };
+          if ( ! exists( $dbTagEntry{ $xmlTagEntry{'k'} } ) )
           {
-            print( "Tag values do not match for way XML $currXmlWayId, " .
-              "database way $databaseWayId, key = $xmlTagEntry{'k'}, " .
-              "XML = " . $xmlTagEntry{'v'} . ", DB = " .
-              $dbTagEntry{ $xmlTagEntry{'k'} } . "\n");
-
+            print("Could not find database version of tag " . Dumper(%xmlTagEntry) . "\n" );
             exit;
           }
           else
           {
-            #print( "Data match on key $xmlTagEntry{'k'}\n");
-            #print( "\tXML (UTF8): $xmlUtf8\n\tDB (UTF8): $dbUtf8\n");
+            #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
+            #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
 
+            if ( $xmlTagEntry{'v'} ne $dbTagEntry{ $xmlTagEntry{'k'}} )
+            {
+              print( "Tag values do not match for way XML $currXmlWayId, " .
+                "database way $databaseWayId, key = $xmlTagEntry{'k'}, " .
+                "XML = " . $xmlTagEntry{'v'} . ", DB = " .
+                $dbTagEntry{ $xmlTagEntry{'k'} } . "\n");
+
+              exit;
+            }
+            else
+            {
+              #print( "Data match on key $xmlTagEntry{'k'}\n");
+              #print( "\tXML (UTF8): $xmlUtf8\n\tDB (UTF8): $dbUtf8\n");
+
+            }
           }
 
-        }
+        } #end if for error:circular test
       }
     }
     else
@@ -1069,18 +1071,18 @@ sub validateWays($$)
     my %wayTagsEntry;
 
     # Break into tokens based on tab delimiter
-    # Schema: way_id, key, value, version
+    # Schema: way_id, version, key, value
     my @tokens = split( /\t+/, $currLine);
 
     #print( "Found way tag\n");
 
-    $wayTagsEntry{$tokens[1]} = $tokens[2];
-    #print( "\tID: $tokens[0]\n\tKey: $tokens[1]\n\tValue: $tokens[2]\n");
+    $wayTagsEntry{$tokens[2]} = $tokens[3];
+    #print( "\tID: $tokens[0]\n\tKey: $tokens[2]\n\tValue: $tokens[3]\n");
 
     # Store the entry in hash of ways
     if ( exists($waysData{ $tokens[0] }->{'tags'} ) )
     {
-      $waysData{ $tokens[0] }->{'tags'}->{$tokens[1]} = $tokens[2];
+      $waysData{ $tokens[0] }->{'tags'}->{$tokens[2]} = $tokens[3];
 
       #my $key;
       #foreach $key ( keys( $waysData{ $tokens[0] }->{'tags'}) )
@@ -1090,7 +1092,7 @@ sub validateWays($$)
     }
     else
     {
-      $waysData{ $tokens[0] }->{'tags'} = { $tokens[1] => $tokens[2] };
+      $waysData{ $tokens[0] }->{'tags'} = { $tokens[2] => $tokens[3] };
     }
   }
 
@@ -1182,7 +1184,7 @@ sub validateWays($$)
       my $xmlTagsArrayRef = $xmlWay{'tag'};
 
       # Make sure number of tags are equal
-      if ( scalar( @{$xmlTagsArrayRef} ) !=
+      if ( scalar( @{$xmlTagsArrayRef} ) < 
           scalar( keys(%{ $waysData{$databaseWayId}->{'tags'} })) )
       {
         print("ERROR: number of tags in XML for way $xmlWayId " .
@@ -1195,36 +1197,37 @@ sub validateWays($$)
       foreach $currTag ( @{$xmlTagsArrayRef} )
       {
         my %xmlTagEntry = %{ $currTag };
-        #print( "Key   : $tagEntry{'k'}\n");
-        #print( "Value : $tagEntry{'v'}\n");
-
-        my %dbTagEntry = %{ $waysData{$databaseWayId}->{'tags'} };
-        if ( ! exists( $dbTagEntry{ $xmlTagEntry{'k'} } ) )
+        #print( "Key   : $xmlTagEntry{'k'}\n");
+        #print( "Value : $xmlTagEntry{'v'}\n");
+        if ( $xmlTagEntry{'k'} ne lc('error:circular') )
         {
-          print("Could not find database version of tag " . Dumper(%xmlTagEntry) . "\n" );
-          exit;
-        }
-        else
-        {
-          #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
-          #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
-
-          if ( $xmlTagEntry{'v'} ne $dbTagEntry{ $xmlTagEntry{'k'}} )
+          my %dbTagEntry = %{ $waysData{$databaseWayId}->{'tags'} };
+          if ( ! exists( $dbTagEntry{ $xmlTagEntry{'k'} } ) )
           {
-            print( "Tag values do not match for way XML $xmlWayId, " .
-              "database way $databaseWayId, key = $xmlTagEntry{'k'}, " .
-              "XML = " . $xmlTagEntry{'v'} . ", DB = " .
-              $dbTagEntry{ $xmlTagEntry{'k'} } . "\n");
-
+            print("Could not find database version of tag " . Dumper(%xmlTagEntry) . "\n" );
+	    print( Dumper(%dbTagEntry) );
             exit;
           }
           else
           {
-            #print( "Data match on key $xmlTagEntry{'k'}\n");
-            #print( "\tXML (UTF8): $xmlUtf8\n\tDB (UTF8): $dbUtf8\n");
+            #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
+            #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
 
+            if ( $xmlTagEntry{'v'} ne $dbTagEntry{ $xmlTagEntry{'k'}} )
+            {
+              print( "Tag values do not match for way XML $xmlWayId, " .
+                "database way $databaseWayId, key = $xmlTagEntry{'k'}, " .
+                "XML = " . $xmlTagEntry{'v'} . ", DB = " .
+                $dbTagEntry{ $xmlTagEntry{'k'} } . "\n");
+
+              exit;
+            }
+            else
+            {
+              #print( "Data match on key $xmlTagEntry{'k'}\n");
+              #print( "\tXML (UTF8): $xmlUtf8\n\tDB (UTF8): $dbUtf8\n");
+            }
           }
-
         }
       }
     }
@@ -1590,7 +1593,7 @@ sub validateCurrentRelations($$$)
       my $xmlTagsArrayRef = $currXmlRelation{'tag'};
 
       # Make sure number of tags are equal
-      if ( scalar( @{$xmlTagsArrayRef} ) !=
+      if ( scalar( @{$xmlTagsArrayRef} ) <
           scalar( keys(%{ $currentRelationsData{$databaseRelationId}->{'tags'} })) )
       {
         print("ERROR: number of tags in XML for relation $currXmlRelationId " .
@@ -1609,33 +1612,34 @@ sub validateCurrentRelations($$$)
         my %xmlTagEntry = %{ $currTag };
         #print( "Key   : $tagEntry{'k'}\n");
         #print( "Value : $tagEntry{'v'}\n");
-
-        my %dbTagEntry = %{ $currentRelationsData{$databaseRelationId}->{'tags'} };
-        if ( ! exists( $dbTagEntry{ $xmlTagEntry{'k'} } ) )
+        if ( $xmlTagEntry{'k'} ne lc('error:circular') )
         {
-          print("ERROR: Could not find database version of tag. XML:\n" . 
-            Dumper(%xmlTagEntry) . "DB: " . 
-            Dumper($currentRelationsData{$databaseRelationId}->{'tags'}) );
-          exit;
-        }
-        else
-        {
-          #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
-          #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
-
-          if ( $xmlTagEntry{'v'} ne $dbTagEntry{ $xmlTagEntry{'k'}} )
+          my %dbTagEntry = %{ $currentRelationsData{$databaseRelationId}->{'tags'} };
+          if ( ! exists( $dbTagEntry{ $xmlTagEntry{'k'} } ) )
           {
-            print( "Tag values do not match for relation XML $currXmlRelationId, " .
-                "database relation $databaseRelationId, key = $xmlTagEntry{'k'}, " .
-                "XML = " . $xmlTagEntry{'v'} . ", DB = " . 
-                $dbTagEntry{ $xmlTagEntry{'k'} } . "\n");
-
+            print("ERROR: Could not find database version of tag. XML:\n" . 
+              Dumper(%xmlTagEntry) . "DB: " . 
+              Dumper($currentRelationsData{$databaseRelationId}->{'tags'}) );
             exit;
           }
           else
           {
-            #print( "Data match on key $xmlTagEntry{'k'}\n");
-            #print( "\tXML (UTF8): $xmlUtf8\n\tDB (UTF8): $dbUtf8\n");
+            #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
+            #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
+
+            if ( $xmlTagEntry{'v'} ne $dbTagEntry{ $xmlTagEntry{'k'}} )
+            {
+              print( "Tag values do not match for relation XML $currXmlRelationId, " .
+                  "database relation $databaseRelationId, key = $xmlTagEntry{'k'}, " .
+                  "XML = " . $xmlTagEntry{'v'} . ", DB = " . 
+                  $dbTagEntry{ $xmlTagEntry{'k'} } . "\n");
+              exit;
+            }
+            else
+            {
+              #print( "Data match on key $xmlTagEntry{'k'}\n");
+              #print( "\tXML (UTF8): $xmlUtf8\n\tDB (UTF8): $dbUtf8\n");
+            }
           }
         }
       }
@@ -2098,7 +2102,7 @@ sub validateRelations($$$)
       my $xmlTagsArrayRef = $currXmlRelation{'tag'};
 
       # Make sure number of tags are equal
-      if ( scalar( @{$xmlTagsArrayRef} ) !=
+      if ( scalar( @{$xmlTagsArrayRef} ) < 
           scalar( keys(%{ $relationsData{$databaseRelationId}->{'tags'} })) )
       {
         print("ERROR: number of tags in XML for relation $currXmlRelationId " .
@@ -2116,31 +2120,32 @@ sub validateRelations($$$)
         my %xmlTagEntry = %{ $currTag };
         #print( "Key   : $tagEntry{'k'}\n");
         #print( "Value : $tagEntry{'v'}\n");
-
-        my %dbTagEntry = %{ $relationsData{$databaseRelationId}->{'tags'} };
-        if ( ! exists( $dbTagEntry{ $xmlTagEntry{'k'} } ) )
+        if ( $xmlTagEntry{'k'} ne lc('error:circular') )
         {
-          print("ERROR: Could not find database version of tag " . Dumper(%xmlTagEntry) . "\n" );
-          exit;
-        }
-        else
-        {
-          #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
-          #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
-
-          if ( $xmlTagEntry{'v'} ne $dbTagEntry{ $xmlTagEntry{'k'}} )
+          my %dbTagEntry = %{ $relationsData{$databaseRelationId}->{'tags'} };
+          if ( ! exists( $dbTagEntry{ $xmlTagEntry{'k'} } ) )
           {
-            print( "Tag values do not match for relation XML $currXmlRelationId, " .
-                "database relation $databaseRelationId, key = $xmlTagEntry{'k'}, " .
-                "XML = " . $xmlTagEntry{'v'} . ", DB = " . 
-                $dbTagEntry{ $xmlTagEntry{'k'} } . "\n");
-
+            print("ERROR: Could not find database version of tag " . Dumper(%xmlTagEntry) . "\n" );
             exit;
           }
           else
           {
-            #print( "Data match on key $xmlTagEntry{'k'}\n");
-            #print( "\tXML (UTF8): $xmlUtf8\n\tDB (UTF8): $dbUtf8\n");
+            #print("XML tag: $xmlTagEntry{'k'} => $xmlTagEntry{'v'}\n");
+            #print(" DB tag: $xmlTagEntry{'k'} => $dbTagEntry{ $xmlTagEntry{'k'}}\n");
+
+            if ( $xmlTagEntry{'v'} ne $dbTagEntry{ $xmlTagEntry{'k'}} )
+            {
+              print( "Tag values do not match for relation XML $currXmlRelationId, " .
+                  "database relation $databaseRelationId, key = $xmlTagEntry{'k'}, " .
+                  "XML = " . $xmlTagEntry{'v'} . ", DB = " . 
+                  $dbTagEntry{ $xmlTagEntry{'k'} } . "\n");
+              exit;
+            }
+            else
+            {
+              #print( "Data match on key $xmlTagEntry{'k'}\n");
+              #print( "\tXML (UTF8): $xmlUtf8\n\tDB (UTF8): $dbUtf8\n");
+            }
           }
         }
       }
@@ -2439,11 +2444,11 @@ my $osmXmlFile = $ARGV[0];
 my $xmlDbIdMappingFile = $ARGV[1];
 my $pgsqlDumpFile = $ARGV[2];
 
-open(XMLFILE, "< $osmXmlFile") or die("Could not open $osmXmlFile\n")(;
+open(XMLFILE, "< $osmXmlFile");
 my @xmlLines = <XMLFILE>;
 close(XMLFILE);
 
-open(PGDUMPFILE, "< $pgsqlDumpFile" ) or die("Could not open $pgsqlDumpFile\n");
+open(PGDUMPFILE, "< $pgsqlDumpFile" );
 my @dumpLines = <PGDUMPFILE>;
 close(PGDUMPFILE);
 

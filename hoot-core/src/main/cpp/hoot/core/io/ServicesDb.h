@@ -35,7 +35,6 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/io/ElementCache.h>
-#include <hoot/core/io/db/SequenceIdReserver.h>
 
 // Qt
 #include <QUrl>
@@ -243,6 +242,11 @@ public:
   void deleteUser(long userId);
 
   /**
+    * Deletes data in the Osm Api db
+    */
+  void deleteData_OsmApi();
+
+  /**
    * Start a new changeset
    *
    * @note The changeset will not have any tags associated with it
@@ -325,7 +329,7 @@ public:
 
   void incrementChangesetChangeCount();
 
-  QString extractTagFromRow_OsmApi(shared_ptr<QSqlQuery> row, const int pos);
+  QString extractTagFromRow_OsmApi(shared_ptr<QSqlQuery> row, const ElementType::Type Type);
 
   /**
    * Reserve a unique indentifier for an element of the specified type
@@ -373,7 +377,6 @@ private:
   long _waysPerBulkInsert;
   double _wayInsertElapsed;
   shared_ptr<InternalIdReserver> _wayIdReserver;
-  shared_ptr<SequenceIdReserver> _osmApiWayIdReserver;
 
   shared_ptr<BulkInsert> _wayNodeBulkInsert;
   long _wayNodesPerBulkInsert;
@@ -382,7 +385,6 @@ private:
   shared_ptr<BulkInsert> _relationBulkInsert;
   long _relationsPerBulkInsert;
   shared_ptr<InternalIdReserver> _relationIdReserver;
-  shared_ptr<SequenceIdReserver> _osmApiRelationIdReserver;
 
   /// A vector of map ids that are pending index creation
   QVector<long> _pendingMapIndexes;
@@ -395,34 +397,6 @@ private:
   long _currChangesetId;
   Envelope _changesetEnvelope;
   long _changesetChangeCount;
-  ElementCachePtr _elementCache;
-  std::map< long, std::vector<long> > _wayNodesCache;
-
-  unsigned long _elementCacheCapacity;
-
-  boost::shared_ptr<SequenceIdReserver> _osmApiNodeIdReserver;
-
-  std::set<long> _relationIdsWrittenToDb;     ///< Stores IDs for all relations that have been flushed to the DB
-
-  struct RelationMemberCacheEntry
-  {
-    ElementId elementId;
-    QString role;
-    int sequenceId;
-  };
-
-  std::multimap<long, RelationMemberCacheEntry> _relationMembersCache;    ///< Current cache of relation members waiting to be flushed
-
-  /**
-   * If a relation member is ready to be written out to the database, but the relation it references has not yet been flushed to the
-   *     database, it is stored here until the target relation is written to disk OR we finish processing, at which time
-   *     it's an unresolveable reference and we discard it
-   *
-   *     Format:
-   *         multimap key: DESTINATION relation (unresolved reference)
-   *         std::pair<source relationID, destination relation info>
-   */
-  std::multimap<long, std::pair<long, RelationMemberCacheEntry > > _unresolvedRelationReferences;
 
   unsigned long _nodesAddedToCache;
   unsigned long _nodesFlushedFromCache;
@@ -510,28 +484,11 @@ private:
   static QString _getWaysTableName(long mapId)
   { return "current_ways" + _getMapIdString(mapId); }
 
-  // Osm Api DB table strings
-
-  static QString _getNodesTableName_OsmApi()
-  { return "current_nodes join current_node_tags on current_nodes.id=current_node_tags.node_id"; }
-  static QString _getWaysTableName_OsmApi()
-  { return "current_ways join current_way_tags on current_ways.id=current_way_tags.way_id"; }
   static QString _getWayNodesTableName_OsmApi()
   { return "current_way_nodes"; }
-  static QString _getRelationsTableName_OsmApi()
-  { return "current_relations join current_relation_tags on current_relations.id=current_relation_tags.relation_id"; }
   static QString _getRelationMembersTableName_OsmApi()
   { return "current_relation_members"; }
 
-  // Osm Api DB table field strings
-  QString _getElementTableFields_OsmApi(const ElementType& elementType) const;
-
-  static QString _getNodesTableFields_OsmApi()
-  { return "id, latitude, longitude, changeset_id, visible, timestamp, tile, version, k, v"; }
-  static QString _getWaysTableFields_OsmApi()
-  { return "id, changeset_id, timestamp, visible, version, k, v"; }
-  static QString _getRelationsTableFields_OsmApi()
-  { return "id, changeset_id, timestamp, visible, version, k, v"; }
 
   /**
    * Returns a map ID string suitable for using in table names. E.g. _1
@@ -581,14 +538,10 @@ private:
 
   void _endChangeset_Services(long changeSetId, Envelope env, int numChanges);
 
-  void _endChangeset_OsmApi();
-
   void _insertNode_Services(const long id, const double lat, const double lon,
     const Tags& tags);
 
   void _insertWay_Services(long wayId, long changeSetId, const Tags& tags);
-
-  void _insertWay_OsmApi(const long wayId, const Tags& tags);
 
   void _insertRelation_Services(long relationId, long changeSetId, const Tags& tags );
 
@@ -598,8 +551,6 @@ private:
 
   void _updateWay_Services(long id, long changeSetId, const Tags& tags);
 
-  void _beginChangeset_OsmApi();
-
   void _insertNode_OsmApi(const long id, const double lat, const double lon,
     const Tags& tags);
 
@@ -608,15 +559,6 @@ private:
 
   // Only flushes specified type
   void _flushElementCacheToDb(const ElementType::Type type);
-
-  void _flushElementCacheOsmApiNodes();
-
-  void _flushElementCacheOsmApiWays();
-  void _flushElementCacheOsmApiWayNodes();
-
-  void _flushElementCacheOsmApiRelations();
-
-  void _flushElementCacheOsmApiRelationMembers();
 
   void _updateChangesetEnvelope( const ConstNodePtr node );
 
@@ -632,40 +574,16 @@ private:
 
   long _getNextNodeId_Services(long mapId);
 
-  long _getNextNodeId_OsmApi();
-
   long _getNextWayId_Services(const long mapId);
-
-  long _getNextWayId_OsmApi();
 
   void _insertWayNodes_Services(long wayId, const vector<long>& nodeIds);
 
-  void _insertWayNodes_OsmApi(long wayId, const vector<long>& nodeIds);
-
   long _insertUser_Services(QString email, QString displayName);
-
-  long _insertUser_OsmApi(const QString& email);
 
   void _insertRelationMember_Services(long relationId, ElementType type,
     long elementId, QString role, int sequenceId);
 
-  void _insertRelation_OsmApi(const Tags &tags, const long assignedId);
-
-  /**
-   * Insert a member into an OSM API database relation
-   * @param relationId The relation receiving a new member
-   * @param type Type of the new member
-   * @param elementId ID value for the new member
-   * @param role String describing new role of the relation
-   * @param sequenceId one-based sequence ID
-   * @return True if success, else false
-   */
-  bool _insertRelationMember_OsmApi(const long relationId, const ElementType& type,
-      const long elementId, const QString& role, const int sequenceId);
-
   long _getNextRelationId_Services();
-  long _getNextRelationId_OsmApi();
-
 
 };
 

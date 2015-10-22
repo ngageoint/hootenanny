@@ -42,6 +42,7 @@
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
+
 namespace hoot
 {
 
@@ -84,12 +85,19 @@ public:
 
   void tearDown()
   {
+    // Services DB
     ServicesDbTestUtils::deleteUser(userEmail());
 
     ServicesDb database;
     database.open(ServicesDbTestUtils::getDbModifyUrl());
     database.deleteMap(mapId);
     database.close();
+
+    // Osm Api DB
+    ServicesDb database2;
+    database2.open(ServicesDbTestUtils::getOsmApiDbUrl());
+    database2.deleteData_OsmApi();
+    database2.close();
   }
 
   long populateMap()
@@ -223,6 +231,20 @@ public:
     }
     CPPUNIT_ASSERT_EQUAL(
       QString("No map exists with ID: " + QString::number(invalidMapId)).toStdString(), exceptionMsg.toStdString());
+  }
+
+  void verifyFullReadOutput_OsmApi(shared_ptr<OsmMap> map)
+  {
+    //nodes
+
+    //CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodeMap().size());
+    shared_ptr<Node> node = map->getNode(500);
+    CPPUNIT_ASSERT_EQUAL((long)500, node->getId());
+    CPPUNIT_ASSERT_EQUAL(38.4, node->getY());
+    CPPUNIT_ASSERT_EQUAL(-106.5, node->getX());
+    CPPUNIT_ASSERT_EQUAL(3.0, node->getCircularError());
+    CPPUNIT_ASSERT_EQUAL(1, node->getTags().size());
+    QString tagValue = node->getTags().get("hoot:status");
   }
 
   void verifyFullReadOutput(shared_ptr<OsmMap> map)
@@ -398,6 +420,34 @@ public:
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
     reader.read(map);
     verifyFullReadOutput(map);
+    reader.close();
+  }
+
+  void runReadOsmApiTest()
+  {
+    ServicesDbReader reader;
+    shared_ptr<OsmMap> map(new OsmMap());
+
+    ////////////////////////////////////////
+    // insert simple test data
+    ////////////////////////////////////////
+
+    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/users.sql > /dev/null 2>&1");
+    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1");
+    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodesReadTest.sql > /dev/null 2>&1");
+
+    ///////////////////////////////////////
+    // test the reader
+    ///////////////////////////////////////
+
+    ServicesDb database;
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
+
+
+    Settings s = conf();
+    reader.open(ConfigOptions(s).getServicesDbTestUrlOsmapi());
+    reader.read(map);
+    verifyFullReadOutput_OsmApi(map);
     reader.close();
   }
 
