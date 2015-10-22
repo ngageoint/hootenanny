@@ -107,7 +107,6 @@ void PbfReader::_init(bool useFileId)
   _permissive = true;
   _in = NULL;
   _needToCloseInput = false;
-  _idOrderConfigSet = false;
 
   initializePartial();
 
@@ -129,7 +128,6 @@ void PbfReader::setConfiguration(const Settings &conf)
 {
   setMaxElementsPerMap(ConfigOptions(conf).getMaxElementsPerPartialMap());
   _addSourceDateTime = ConfigOptions(conf).getReaderAddSourceDatetime();
-  _idOrderConfigSet = ConfigOptions(conf).getPbfReaderOrderId();
 }
 
 void PbfReader::_addTag(shared_ptr<Element> e, QString key, QString value)
@@ -1082,49 +1080,6 @@ shared_ptr<Element> PbfReader::readNextElement()
     _waysItr = _map->getWays().begin();
     _relationsItr = _map->getRelationMap().begin();
 
-    if ( _idOrderConfigSet == true )
-    {
-      // Created sorted lists of the keys stored in the unordered hash
-      _partialNodesOrderedKeys = _map->getNodeMap().keys();
-      qSort(_partialNodesOrderedKeys);
-      _nodeIdsOrderedItr = _partialNodesOrderedKeys.begin();
-
-      /*
-      for ( QList<long>::const_iterator debugItr = _partialNodesOrderedKeys.begin();
-            debugItr != _partialNodesOrderedKeys.end();
-            ++debugItr )
-      {
-        LOG_DEBUG("Ordered node ID " << QString::number(*debugItr));
-      }
-      */
-
-      // ways and relations are stored in a wildly different structure, so have to
-      // use a different approach to get the keys
-      if (_partialWaysOrderedKeys.empty() == false )
-      {
-        _partialWaysOrderedKeys.clear();
-      }
-      _partialWaysOrderedKeys.reserve(_map->getWays().size());
-      for (; _waysItr != _map->getWays().end(); ++_waysItr )
-      {
-        _partialWaysOrderedKeys.append(_waysItr->first);
-      }
-      qSort(_partialWaysOrderedKeys);
-      _wayIdsOrderedItr = _partialWaysOrderedKeys.begin();
-
-      if (_partialRelationsOrderedKeys.empty() == false )
-      {
-        _partialRelationsOrderedKeys.clear();
-      }
-      _partialRelationsOrderedKeys.reserve(_map->getRelationMap().size());
-      for (; _relationsItr != _map->getRelationMap().end(); ++_relationsItr )
-      {
-        _partialRelationsOrderedKeys.append(_relationsItr->first);
-      }
-      qSort(_partialRelationsOrderedKeys);
-    }
-    _relationIdsOrderedItr = _partialRelationsOrderedKeys.begin();
-
     _firstPartialReadCompleted = true;
   }
 
@@ -1155,65 +1110,20 @@ shared_ptr<Element> PbfReader::readNextElement()
     // we have to copy here so that the element isn't part of two maps. This should be fixed if we
     // need the reader to go faster.
 
-    if ( _idOrderConfigSet == true )
-    {
-      // Index into the node map with the next entry from the list of ordered node IDs
-      const long nextOrderedId = *_nodeIdsOrderedItr;
-      ConstNodePtr nextNode = _map->getNodeMap().find(nextOrderedId).value();
-
-      // Return a copy of the node from our list
-      element.reset( new Node( *nextNode.get()) );
-
-      //LOG_DEBUG("Returning node ID " << QString::number(*_nodeIdsOrderedItr) << " from stream read");
-      _nodeIdsOrderedItr++;
-    }
-    else
-    {
-      element.reset(new Node(*_nodesItr.value()));
-      _nodesItr++;
-    }
+    element.reset(new Node(*_nodesItr.value()));
+    _nodesItr++;
     _partialNodesRead++;
   }
   else if (_partialWaysRead < int(_map->getWays().size()))
   {
-    if ( _idOrderConfigSet == true )
-    {
-      // Index into the way map with the next entry from the list of ordered way IDs
-      const long nextOrderedId = *_wayIdsOrderedItr;
-      ConstWayPtr nextWay = _map->getWays().find(nextOrderedId)->second;
-
-      // Return a copy of the node from our list
-      element.reset( new Way( *nextWay.get()) );
-
-      //LOG_DEBUG("Returning way ID " << QString::number(*_wayIdsOrderedItr) << " from stream read");
-      _wayIdsOrderedItr++;
-    }
-    else
-    {
-      element.reset(new Way(*_waysItr->second.get()));
-      _waysItr++;
-    }
+    element.reset(new Way(*_waysItr->second.get()));
+    _waysItr++;
     _partialWaysRead++;
   }
   else if (_partialRelationsRead < int(_map->getRelationMap().size()))
   {
-    if ( _idOrderConfigSet == true )
-    {
-      // Index into the relation map with the next entry from the list of ordered relation IDs
-      const long nextOrderedId = *_relationIdsOrderedItr;
-      ConstRelationPtr nextRelation = _map->getRelationMap().find(nextOrderedId)->second;
-
-      // Return a copy of the node from our list
-      element.reset( new Relation( *nextRelation.get()) );
-
-      //LOG_DEBUG("Returning relation ID " << QString::number(nextOrderedId) << " from stream read");
-      _relationIdsOrderedItr++;
-    }
-    else
-    {
-      element.reset(new Relation(*_relationsItr->second.get()));
-      _relationsItr++;
-    }
+    element.reset(new Relation(*_relationsItr->second.get()));
+    _relationsItr++;
     _partialRelationsRead++;
   }
   assert(element.get());
