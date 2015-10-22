@@ -12,15 +12,25 @@ Once Vagrant has been installed, you can start an environment by checking out th
     git submodule update
     vagrant up
 
+If you would like to use Parallels instead of VirtualBox, please run the following command:
+    ```
+    vagrant up --provider=parallels
+    ```
+Please note that this requires the Parallels Vagrant plugin, which can be installed:
+
+    ```
+    vagrant plugin install vagrant-parallels
+    ```
+
 *On Windows hosts,*
 
 * Be sure to clone with the `--config core.autocrlf=input` option.
 * Windows hosts will also have to create a symlink that's in the git repo, but seems to be treated as a file when cloning to windows.
 
-    `vagrant ssh`  
-    `cd hoot`  
-    `rm test-files`  
-    `ln -s hoot-core-test/src/test/resources test-files`  
+    `vagrant ssh`
+    `cd hoot`
+    `rm test-files`
+    `ln -s hoot-core-test/src/test/resources test-files`
 
 The initialization of the vagrant vm will take a up to two hours to download required software from the internet and set it up as a running system. Once it is complete, uncomment the `#, group: "tomcat6"` portion of the in Vagrantfile to allow the webapp to write to shared folders.
 
@@ -55,3 +65,4 @@ If you've updated the code, you must connect to the vm via ssh to build and rede
     scripts/ezClean.sh
     scripts/ezBuildAll.sh
     sudo -u tomcat6 scripts/vagrantDeployTomcat.sh
+

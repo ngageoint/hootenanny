@@ -59,6 +59,15 @@ Vagrant.configure(2) do |config|
   #   vb.memory = 16384
     vb.cpus = 4
   end
+
+  # This is a provider for the Parallels Virtualization Software
+  # Run "vagrant up --provider=parallels" to spin up using parallels.
+  config.vm.provider "parallels" do |para, override|
+        para.memory = 8192
+        para.cpus = 4
+        override.vm.box = "parallels/ubuntu-14.04"
+        override.vm.box_url = "https://atlas.hashicorp.com/parallels/boxes/ubuntu-14.04"
+  end
   #
   # View the documentation for the provider you are using for more
   # information on available options.
