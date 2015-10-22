@@ -807,15 +807,6 @@ Specifies the reader that the OsmMapReaderFactory will use. This overrides any i
 
 Specifies the writer that the OsmMapWriterFactory will use. This overrides any information derived from the URL.
 
-=== pbf.reader.order.id
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, the PBF data reader will deliver data to consumers in type-then-id order (i.e., all nodes in
-increasing ID number order, followed by all ways in increasing ID order and finally all relations in
-increasing ID order).
-
 === perty.algorithm
 
 * Data Type: string
