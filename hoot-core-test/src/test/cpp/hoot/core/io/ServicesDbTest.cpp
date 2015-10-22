@@ -456,7 +456,6 @@ public:
     QList<float> lats = QList<float>() << 38.4 << 38;
     QList<float> lons = QList<float>() << -106.5 << -104;
 
-
     // Insert nodes
     std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/users.sql > /dev/null 2>&1");
     std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1");
