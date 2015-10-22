@@ -44,6 +44,14 @@ COPY current_relation_tags (relation_id, k, v) FROM stdin;
 
 SELECT pg_catalog.setval('current_relations_id_seq', 1, true);
 
+--
+-- Name: relations; Type: TABLE DATA; Schema: public; Owner: hoot
+--
+
+COPY relations (relation_id, changeset_id, "timestamp", version, visible, redaction_id) FROM stdin;
+1	1	2015-10-20 08:04:55.283796	1	t	\N
+\.
+
 
 --
 -- Data for Name: relation_members; Type: TABLE DATA; Schema: public; Owner: hoot
