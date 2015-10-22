@@ -44,7 +44,6 @@ OsmMapWriterFactory::OsmMapWriterFactory()
 
 shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
 {
-  LOG_DEBUG("Creating OsmMapWriter for " << url);
   QString writerOverride = ConfigOptions().getOsmMapWriterFactoryWriter();
 
   shared_ptr<OsmMapWriter> writer;
@@ -83,7 +82,6 @@ bool OsmMapWriterFactory::hasElementOutputStream(QString url)
   shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
   if (streamWriter)
   {
-    LOG_DEBUG("Streaming: writer support!");
     result = true;
   }
 

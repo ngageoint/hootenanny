@@ -86,8 +86,6 @@ public:
     OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
     OsmMapWriterFactory writerFactory = OsmMapWriterFactory::getInstance();
 
-    LOG_DEBUG("Size of convert ops: " << QString::number(ConfigOptions().getConvertOps().size()));
-
     // Is there a streaming reader and writer?
     if (readerFactory.hasElementInputStream(args[0]) &&
         writerFactory.hasElementOutputStream(args[1]) &&

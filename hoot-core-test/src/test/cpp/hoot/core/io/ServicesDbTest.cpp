@@ -38,10 +38,6 @@
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
-// special define:
-//   Greg's workspace set true; Terry's set false
-#define GREGSWORKSPACE true
-
 namespace hoot
 {
 
@@ -66,9 +62,6 @@ class ServicesDbTest : public CppUnit::TestFixture
 
   // osm apidb tests
   CPPUNIT_TEST(runOpenOsmApiTest);
-  CPPUNIT_TEST(runInsertNodeOsmApiTest);
-  CPPUNIT_TEST(runInsertWayOsmApiTest);
-  CPPUNIT_TEST(runInsertRelationOsmApiTest);
   CPPUNIT_TEST(runSelectAllElementsOsmApiTest);
 
   CPPUNIT_TEST_SUITE_END();
@@ -860,164 +853,6 @@ public:
           "3.1415;2.71828;true;3222453693;1",
           (qlonglong)nodeId);
   }
-
-  void runInsertNodeOsmApiTest()
-  {
-    LOG_DEBUG("Starting Insert node OSM test");
-    ServicesDb database;
-
-    if(GREGSWORKSPACE)
-      database.open(QUrl("postgresql://vagrant:vagrant@localhost:15432/openstreetmap"));
-    else
-      database.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
-
-    database.transaction();
-
-    // Create or get user, set our userId
-    database.setUserId(database.getOrCreateUser("OsmApiInsert@hoot.local", "Hootenanny Inserter"));
-
-    database.beginChangeset();
-
-    // Insert single node
-    Tags simpleTags;
-    simpleTags.appendValue("highway", "road");
-    simpleTags.appendValue("accuracy", "5");
-
-    long assignedNodeId;
-    CPPUNIT_ASSERT( database.insertNode(38.4, -106.5, simpleTags, assignedNodeId ) == true );
-
-    database.endChangeset();
-    database.commit();
-    database.close();
-
-    // TODO: confirm inserted data matches what we wanted to insert
-  }
-
-  void runInsertWayOsmApiTest()
-  {
-     ServicesDb database;
-
-     if(GREGSWORKSPACE)
-       database.open(QUrl("postgresql://vagrant:vagrant@localhost:15432/openstreetmap"));
-     else
-       database.open(QUrl("postgresql://postgres@10.194.70.78:5432/terrytest"));
-
-     LOG_DEBUG("Back from open, starting transactions")
-
-     database.transaction();
-
-     // Create or get user, set our userId
-     database.setUserId(database.getOrCreateUser("OsmApiInsert@hoot.local", "Hootenanny Inserter"));
-
-     database.beginChangeset();
-
-     // Insert two nodes (any way has minimum of two nodes)
-     Tags simpleTags;
-     simpleTags.appendValue("highway", "road");
-     simpleTags.appendValue("accuracy", "5");
-
-     long assignedNodeIds[2];
-     CPPUNIT_ASSERT( database.insertNode(38.9, -109.9, simpleTags, assignedNodeIds[0]) == true );
-     CPPUNIT_ASSERT( database.insertNode(38.91, -109.91, simpleTags, assignedNodeIds[1]) == true );
-
-     // Add a new way
-     long assignedWayId;
-     CPPUNIT_ASSERT( database.insertWay(simpleTags, assignedWayId) == true );
-
-     // Add the nodes into the way
-     std::vector<long> nodesInWay;
-     nodesInWay.push_back(assignedNodeIds[0]);
-     nodesInWay.push_back(assignedNodeIds[1]);
-     database.insertWayNodes(assignedWayId, nodesInWay);
-
-     // Close the changeset
-     database.endChangeset();
-
-     database.commit();
-
-     database.close();
-
-     LOG_DEBUG("Services DB closed");
-
-    // TODO: confirm inserted data matches what we wanted to insert
-  }
-
-  void runInsertRelationOsmApiTest()
-  {
-    ServicesDb database;
-    database.open(QUrl("postgresql://postgres@10.194.71.84:5432/terrytest"));
-
-    database.transaction();
-
-    // Create or get user, set our userId
-    database.setUserId(database.getOrCreateUser("OsmApiInsert@hoot.local", "Hootenanny Inserter"));
-
-    database.beginChangeset();
-
-    // Insert two nodes (any way has minimum of two nodes)
-    Tags emptyTags;
-
-    long assignedNodeIds[2];
-    CPPUNIT_ASSERT( database.insertNode(38.9, -109.9, emptyTags, assignedNodeIds[0]) == true );
-    CPPUNIT_ASSERT( database.insertNode(38.91, -109.91, emptyTags, assignedNodeIds[1]) == true );
-
-    // Add a new way
-    long assignedWayId[2];
-    Tags simpleTags;
-    simpleTags.appendValue("highway", "road");
-    simpleTags.appendValue("accuracy", "5");
-    CPPUNIT_ASSERT( database.insertWay(simpleTags, assignedWayId[0]) == true );
-
-    // Add the nodes into the way
-    std::vector<long> nodesInWay;
-    nodesInWay.push_back(assignedNodeIds[0]);
-    nodesInWay.push_back(assignedNodeIds[1]);
-    database.insertWayNodes(assignedWayId[0], nodesInWay);
-
-    // Add nodes for second way
-    CPPUNIT_ASSERT( database.insertNode(38.92, -109.925, simpleTags, assignedNodeIds[0]) == true );
-    CPPUNIT_ASSERT( database.insertNode(38.921, -109.9251, simpleTags, assignedNodeIds[1]) == true );
-
-    // Add second way
-    CPPUNIT_ASSERT( database.insertWay(simpleTags, assignedWayId[1]) == true );
-
-    // Add the nodes into the second way
-    nodesInWay.clear();
-    nodesInWay.push_back(assignedNodeIds[0]);
-    nodesInWay.push_back(assignedNodeIds[1]);
-    database.insertWayNodes(assignedWayId[1], nodesInWay);
-
-    // Create first relation over the first two ways
-    long relationIds[2];
-    Tags relationshipTags;
-    relationshipTags.appendValue("U-turn allowed", "yes");
-    database.insertRelation(relationshipTags, relationIds[0]);
-
-    // Insert ways into first relation
-    database.insertRelationMember(relationIds[0], ElementType::Way, assignedWayId[0], "", 1 );
-    database.insertRelationMember(relationIds[0], ElementType::Way, assignedWayId[1], "", 2 );
-
-    // Create a second relation
-    database.insertRelation(relationshipTags, relationIds[1]);
-
-    // Add ways plus first relation to second relation
-    database.insertRelationMember(relationIds[1], ElementType::Way, assignedWayId[0], "", 1 );
-    database.insertRelationMember(relationIds[1], ElementType::Way, assignedWayId[1], "", 2 );
-    database.insertRelationMember(relationIds[1], ElementType::Relation, relationIds[0], "", 3 );
-
-    // Close the changeset
-    database.endChangeset();
-
-    database.commit();
-
-    database.close();
-
-    LOG_DEBUG("Services DB closed");
-
-    // TODO: confirm inserted data matches what we wanted to insert
-  }
-
-
 
   void setUp()
   {

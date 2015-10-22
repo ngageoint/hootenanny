@@ -42,10 +42,6 @@
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
-// special define:
-//   Greg's workspace set true; Terry's set false
-#define GREGSWORKSPACE false
-
 namespace hoot
 {
 
@@ -62,7 +58,7 @@ class ServicesDbReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runFactoryReadTest);
 
   // Osm Api tests
-//  CPPUNIT_TEST(runReadOsmApiTest);
+  CPPUNIT_TEST(runReadOsmApiTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -404,24 +400,6 @@ public:
     verifyFullReadOutput(map);
     reader.close();
   }
-/*
-  void runReadOsmApiTest()
-  {
-    Settings s = conf();
-
-    if(GREGSWORKSPACE)
-      s.set(ConfigOptions(s).getServicesDbTestUrlOsmapiKey(), "postgresql://vagrant:vagrant@localhost:15432/openstreetmap");
-    else
-      s.set(ConfigOptions(s).getServicesDbTestUrlOsmapiKey(), "postgresql://postgres@10.194.70.78:5432/terrytest");
-
-    ServicesDbReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
-    reader.open(ConfigOptions(s).getServicesDbTestUrlOsmapi());
-    reader.read(map);
-    verifyFullReadOutput(map);
-    reader.close();
-  }
-  */
 
   void runReadWithElemTest()
   {
