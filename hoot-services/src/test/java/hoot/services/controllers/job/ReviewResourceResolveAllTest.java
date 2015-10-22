@@ -8,9 +8,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
 import hoot.services.UnitTest;
-import hoot.services.db2.QCurrentRelations;
-import hoot.services.models.review.MapReviewResolverRequest;
-import hoot.services.models.review.MapReviewResolverResponse;
+import hoot.services.models.review.ReviewResolverRequest;
+import hoot.services.models.review.ReviewResolverResponse;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.review.ReviewTestUtils;
 import hoot.services.utils.RandomNumberGenerator;
@@ -23,8 +22,6 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 
 public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract
 {
-	protected static final QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
-	
 	public ReviewResourceResolveAllTest() throws NumberFormatException, IOException
   {
     super(new String[]{ "hoot.services.controllers.job" });
@@ -34,14 +31,15 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract
 	@Category(UnitTest.class)
 	public void testSetAllReviewsResolved() throws Exception
 	{
-  	/*final long changesetId =*/ ReviewTestUtils.populateReviewDataForAllDataTypes(mapId, userId);
+		ReviewTestUtils testUtils = new ReviewTestUtils();
+  	/*final long changesetId =*/ testUtils.populateReviewDataForAllDataTypes(mapId, userId);
   	
-  	final MapReviewResolverResponse response = 
+  	final ReviewResolverResponse response = 
   		resource()
         .path("/review/resolveall")
         .type(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON)
-        .put(MapReviewResolverResponse.class, new MapReviewResolverRequest(String.valueOf(mapId)));
+        .put(ReviewResolverResponse.class, new ReviewResolverRequest(String.valueOf(mapId)));
   	
   	Statement stmt = null;
   	ResultSet rs = null;
@@ -127,7 +125,7 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract
 	      .type(MediaType.APPLICATION_JSON)
 	      .accept(MediaType.APPLICATION_JSON)
 	      .put(
-	      	new MapReviewResolverRequest(
+	      	new ReviewResolverRequest(
 	      		String.valueOf((long)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE))));
     }
     catch (UniformInterfaceException e)
@@ -150,7 +148,7 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract
 	      .path("/review/resolveall")
 	      .type(MediaType.APPLICATION_JSON)
 	      .accept(MediaType.APPLICATION_JSON)
-	      .put(new MapReviewResolverRequest());
+	      .put(new ReviewResolverRequest());
     }
     catch (UniformInterfaceException e)
     {

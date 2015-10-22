@@ -6,17 +6,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Represents a response from marking all reviews resolved
  */
 @XmlRootElement
-public class MapReviewResolverResponse
+public class ReviewResolverResponse
 {
 	private long changesetId;
   public long getChangesetId() { return changesetId; }
   public void setChangesetId(long id) { this.changesetId = id; }
   
-  public MapReviewResolverResponse()
+  public ReviewResolverResponse()
   {
   }
   
-  public MapReviewResolverResponse(final long changesetId)
+  public ReviewResolverResponse(final long changesetId)
   {
   	this.changesetId = changesetId;
   }

@@ -655,16 +655,15 @@ public abstract class Element implements XmlSerializable, DbSerializable
 
     if(elementIds.size() > 0)
     {
-  	return
+  	  return
   			new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable())
   			.where(prototype.getElementIdField().in(elementIds))
   			.count() == elementIds.size();
     }
     else
     {
-    	return 0  == elementIds.size();
+    	return 0 == elementIds.size();
     }
-
   }
 
   /**
@@ -704,6 +703,17 @@ public abstract class Element implements XmlSerializable, DbSerializable
     	return 0 == elementIds.size();
     }
 
+  }
+  
+  /**
+   * Returns the database relation member type given an element string type
+   * 
+   * @param elementTypeStr an element type string
+   * @return a database relation member type
+   */
+  public static DbUtils.nwr_enum elementEnumFromString(final String elementTypeStr)
+  {
+  	return elementEnumForElementType(elementTypeFromString(elementTypeStr));
   }
 
   /**
