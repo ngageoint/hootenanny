@@ -33,17 +33,26 @@ import hoot.services.db2.QMaps;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.MapReviewResolverRequest;
 import hoot.services.models.review.MapReviewResolverResponse;
+import hoot.services.models.review.ReviewQueryMapper;
+import hoot.services.models.review.ReviewableItem;
+import hoot.services.models.review.ReviewableStatistics;
+import hoot.services.readers.review.ReviewableReader;
 import hoot.services.review.ReviewUtils;
 import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.writers.review.MapReviewResolver;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -182,4 +191,82 @@ public class ReviewResource
   	  changesetId);
   	return new MapReviewResolverResponse(changesetId);
   }
+  
+  //http://localhost:8080/hoot-services/job/review/random?mapid=15
+	@GET
+	@Path("/random")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ReviewableItem getRandomReviewable(@QueryParam("mapid") String mapId)
+	{
+
+		ReviewableItem ret = new ReviewableItem(-1, -1,-1);
+		try(Connection conn = DbUtils.createConnection())
+		{
+			long nMapId = Long.parseLong(mapId);
+			ReviewableReader reader = new ReviewableReader();
+			ret = reader.getRandomReviewableItem(nMapId);
+		}
+		catch (Exception ex)
+		{
+			ResourceErrorHandler.handleError(
+	        "Error getting random reviewable item: " + mapId +  " (" + 
+	          ex.getMessage() + ")", 
+	        Status.BAD_REQUEST,
+	        log);
+		}
+		return ret;
+	}
+	
+	//http://localhost:8080/hoot-services/job/review/next?mapid=15&offsetseqid=2
+	@GET
+	@Path("/next")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ReviewableItem getNexReviewable(@QueryParam("mapid") String mapId,
+			@QueryParam("offsetseqid") String offsetSeqId)
+	{
+
+		ReviewableItem ret = new ReviewableItem(-1, -1,-1);
+		try(Connection conn = DbUtils.createConnection())
+		{
+			long nMapId = Long.parseLong(mapId);
+			long nOffsetSeqId = Long.parseLong(offsetSeqId);
+			ReviewableReader reader = new ReviewableReader();
+			ret = reader.getNextReviewableItem(nMapId, nOffsetSeqId);
+		}
+		catch (Exception ex)
+		{
+			ResourceErrorHandler.handleError(
+	        "Error getting next reviewable item: " + mapId +  " (" + 
+	          ex.getMessage() + ")", 
+	        Status.BAD_REQUEST,
+	        log);
+		}
+		return ret;
+	}
+	
+	
+	//http://localhost:8080/hoot-services/job/review/statistics?mapid=15
+	@GET
+	@Path("/statistics")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ReviewableStatistics getReviewableSstatistics(@QueryParam("mapid") String mapId)
+	{
+
+		ReviewableStatistics ret = new ReviewableStatistics(-1, -1);
+		try(Connection conn = DbUtils.createConnection())
+		{
+			long nMapId = Long.parseLong(mapId);
+			ReviewableReader reader = new ReviewableReader();
+			ret = reader.getReviewablesStatistics(nMapId);
+		}
+		catch (Exception ex)
+		{
+			ResourceErrorHandler.handleError(
+	        "Error getting reviewables statistics: " + mapId +  " (" + 
+	          ex.getMessage() + ")", 
+	        Status.BAD_REQUEST,
+	        log);
+		}
+		return ret;
+	}
 }
