@@ -31,8 +31,8 @@ public class ReviewableStatistics extends ReviewQueryMapper {
 	public String toString()
 	{
 		JSONObject o = new JSONObject();
-		
-		
+		o.put("totalCount", _totalCount);
+		o.put("unreviewedCount", _unreviewedCount);
 		return o.toJSONString();
 	}
 }

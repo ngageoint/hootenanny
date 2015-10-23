@@ -222,7 +222,34 @@ public class ReviewResource
   	return response;
   }
   
-  //http://localhost:8080/hoot-services/job/review/random?mapid=15
+  //
+  
+	/**
+	 * <NAME>Review Service Get Random Reviewable</NAME>
+	 * <DESCRIPTION>
+	 * To retrieve the random reviewable item. If a reviewable is not available
+	 * then return 0 result count
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * <mapid>
+	 *  Target map id
+	 * </mapid>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	JSON in ReviewableItem format
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/random?mapid=15</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 * <OUTPUT>
+	 * {"mapId":15,"relationId":-1,"sortOrder":-1,"resultCount":0}
+	 * </OUTPUT>
+	 * </EXAMPLE>
+	 * @param mapId
+	 * @return
+	 */
 	@GET
 	@Path("/random")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -247,7 +274,40 @@ public class ReviewResource
 		return ret;
 	}
 	
-	//http://localhost:8080/hoot-services/job/review/next?mapid=15&offsetseqid=2
+	//
+	
+	
+	
+	/**
+	 * <NAME>Review Service Get Next Reviewable</NAME>
+	 * <DESCRIPTION>
+	 * To retrieve the next reviewable item based on offset squence id. If next reviewable is not available
+	 * then return 0 result count
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * <mapid>
+	 *  Target map id
+	 * </mapid>
+	 * <offsetseqid>
+	 * 	Offset sequence id where next reviewable should have  offsetseqid+1.
+	 * </offsetseqid>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	JSON in ReviewableItem format
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/next?mapid=15&offsetseqid=2</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 * <OUTPUT>
+	 * {"mapId":15,"relationId":-1,"sortOrder":3,"resultCount":0}
+	 * </OUTPUT>
+	 * </EXAMPLE>
+	 * @param mapId
+	 * @param offsetSeqId
+	 * @return
+	 */
 	@GET
 	@Path("/next")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -275,7 +335,33 @@ public class ReviewResource
 	}
 	
 	
-	//http://localhost:8080/hoot-services/job/review/statistics?mapid=15
+	//
+	
+	/**
+	 * <NAME>Review Service Get Reviewable Statistics</NAME>
+	 * <DESCRIPTION>
+	 * To retrieve the reviewable statistics for a map
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * <mapid>
+	 *  Target map id
+	 * </mapid>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	JSON in ReviewableStatistics format
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/statistics?mapid=15</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 * <OUTPUT>
+	 * {"totalCount":5,"unreviewedCount":0}
+	 * </OUTPUT>
+	 * </EXAMPLE>
+	 * @param mapId
+	 * @return
+	 */
 	@GET
 	@Path("/statistics")
 	@Produces(MediaType.APPLICATION_JSON)
