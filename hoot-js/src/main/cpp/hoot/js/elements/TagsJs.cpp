@@ -81,6 +81,8 @@ void TagsJs::Init(Handle<Object> target)
       FunctionTemplate::New(get)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("getCreateUuid"),
       FunctionTemplate::New(getCreateUuid)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("getInformationCount"),
+      FunctionTemplate::New(getInformationCount)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("set"),
       FunctionTemplate::New(set)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("toDict"),
@@ -138,6 +140,15 @@ Handle<Value> TagsJs::getCreateUuid(const Arguments& args)
   Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
   return scope.Close(toV8(t.getCreateUuid()));
+}
+
+Handle<Value> TagsJs::getInformationCount(const Arguments& args)
+{
+  HandleScope scope;
+
+  Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
+
+  return scope.Close(toV8(t.getInformationCount()));
 }
 
 Handle<Value> TagsJs::set(const Arguments& args)

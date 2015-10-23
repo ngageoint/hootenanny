@@ -27,32 +27,38 @@
 package hoot.services.controllers.job;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 
+import hoot.services.controllers.osm.MapResource;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
-import hoot.services.models.osm.ModelDaoUtils;
-import hoot.services.models.review.MapReviewResolverRequest;
-import hoot.services.models.review.MapReviewResolverResponse;
-import hoot.services.models.review.ReviewQueryMapper;
+import hoot.services.models.osm.ElementInfo;
+import hoot.services.models.review.ReviewRef;
+import hoot.services.models.review.ReviewRefsRequest;
+import hoot.services.models.review.ReviewResolverRequest;
+import hoot.services.models.review.ReviewResolverResponse;
+import hoot.services.models.review.ReviewRefsResponse;
+import hoot.services.models.review.ReviewRefsResponses;
 import hoot.services.models.review.ReviewableItem;
 import hoot.services.models.review.ReviewableStatistics;
+import hoot.services.readers.review.ReviewReferencesRetriever;
 import hoot.services.readers.review.ReviewableReader;
 import hoot.services.review.ReviewUtils;
 import hoot.services.utils.ResourceErrorHandler;
-import hoot.services.writers.review.MapReviewResolver;
+import hoot.services.writers.review.ReviewResolver;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.json.simple.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -98,7 +104,7 @@ public class ReviewResource
   @Path("/resolveall")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public MapReviewResolverResponse resolveAllReviews(final MapReviewResolverRequest request) 
+  public ReviewResolverResponse resolveAllReviews(final ReviewResolverRequest request) 
     throws Exception
   {
   	log.debug("Setting all items reviewed for map with ID: " + request.getMapId() + "...");
@@ -109,42 +115,15 @@ public class ReviewResource
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
     conn.setAutoCommit(false);
     
-    long mapIdNum = -1;
-  	try
-  	{
-  	  //input mapId may be a map ID or a map name
-      mapIdNum = 
-      	ModelDaoUtils.getRecordIdForInputString(
-      		request.getMapId(), conn, maps, maps.id, maps.displayName);
-      assert(mapIdNum != -1);
-  	}
-  	catch (Exception e)
-    {
-      if (e.getMessage().startsWith("Multiple records exist"))
-      {
-        ResourceErrorHandler.handleError(
-          e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
-          Status.NOT_FOUND,
-          log);
-      }
-      else if (e.getMessage().startsWith("No record exists"))
-      {
-        ResourceErrorHandler.handleError(
-          e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
-          Status.NOT_FOUND,
-          log);
-      }
-      ResourceErrorHandler.handleError(
-        "Error requesting map with ID: " + request.getMapId() + " (" + e.getMessage() + ")", 
-        Status.BAD_REQUEST,
-        log);
-    }
+    final long mapIdNum = MapResource.validateMap(request.getMapId(), conn);
+    assert(mapIdNum != -1);
     
   	long userId = -1;
   	try
   	{
   		log.debug(
-	      "Retrieving user ID associated with map having ID: " + String.valueOf(mapIdNum) + " ...");
+	      "Retrieving user ID associated with map having ID: " + String.valueOf(request.getMapId()) + 
+	      " ...");
 	  	userId = 
 	  		new SQLQuery(conn, DbUtils.getConfiguration())
 	  	    .from(maps)
@@ -165,7 +144,7 @@ public class ReviewResource
   	long changesetId = -1;
   	try
   	{
-  	  changesetId = (new MapReviewResolver(conn)).setAllReviewsResolved(mapIdNum, userId);
+  	  changesetId = (new ReviewResolver(conn)).setAllReviewsResolved(mapIdNum, userId);
   		
   		log.debug("Committing set all items reviewed transaction...");
       transactionManager.commit(transactionStatus);
@@ -189,7 +168,58 @@ public class ReviewResource
   	log.debug(
   		"Set all items reviewed for map with ID: " + request.getMapId() + " using changesetId: " + 
   	  changesetId);
-  	return new MapReviewResolverResponse(changesetId);
+  	return new ReviewResolverResponse(changesetId);
+  }
+  
+  /**
+   * Returns any review references to the elements associated with the ID's passed in
+   * 
+   * Technically, this should be a GET request, but since the size of the input could potentially
+   * be large, making it a POST request to get past any size limit restrictions on GET requests.
+   * 
+   * @param request request containing a collection of elements for which review references are to 
+   * be retrieved
+   * @return an array of review references; one set of references for each query element passed in;
+   * The returned ReviewRef object extends the ElementInfo object to add the associated review 
+   * relation id.
+   * @throws Exception
+   */
+  @POST
+  @Path("/refs")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ReviewRefsResponses getReviewReferences(
+  	final ReviewRefsRequest request) 
+  	throws Exception
+  {
+  	log.debug("Returning review references...");
+  	
+  	ReviewRefsResponses response = new ReviewRefsResponses();
+  	Connection conn = DbUtils.createConnection();
+  	try
+  	{
+  		ReviewReferencesRetriever refsRetriever = new ReviewReferencesRetriever(conn);
+  		List<ReviewRefsResponse> responseRefsList = new ArrayList<ReviewRefsResponse>();
+  		for (ElementInfo elementInfo : request.getQueryElements())
+  		{
+  			ReviewRefsResponse responseRefs = new ReviewRefsResponse();
+  			List<ReviewRef> references = refsRetriever.getUnresolvedReferences(elementInfo);
+	  		log.debug(
+	  			"Returning " + references.size() + " review references for requesting element: " + 
+	  			elementInfo.toString());
+	  		responseRefs.setReviewRefs(references.toArray(new ReviewRef[]{}));
+	  		responseRefs.setQueryElementInfo(elementInfo);
+	  		responseRefsList.add(responseRefs);
+  		}
+  		response.setReviewRefsResponses(responseRefsList.toArray(new ReviewRefsResponse[]{}));
+  	}
+    finally
+    {
+      DbUtils.closeConnection(conn);
+    }
+  	
+  	log.debug("response : " + StringUtils.abbreviate(response.toString(), 1000));
+  	return response;
   }
   
   //http://localhost:8080/hoot-services/job/review/random?mapid=15

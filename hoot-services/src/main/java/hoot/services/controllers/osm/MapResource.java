@@ -102,6 +102,8 @@ import com.mysema.query.types.template.NumberTemplate;
 public class MapResource
 {
 	private static final Logger log = LoggerFactory.getLogger(MapResource.class);
+	
+	private static QMaps maps = QMaps.maps;
 
 	@SuppressWarnings("unused")
 	private ClassPathXmlApplicationContext appContext;
@@ -1275,5 +1277,40 @@ public class MapResource
 		}
 
 		return Response.ok(ret.toString(), MediaType.APPLICATION_JSON).build();
+	}
+	
+	public static long validateMap(final String mapId, Connection conn)
+	{
+		long mapIdNum = -1;
+  	try
+  	{
+  	  //input mapId may be a map ID or a map name
+      mapIdNum = 
+      	ModelDaoUtils.getRecordIdForInputString(
+      		mapId, conn, maps, maps.id, maps.displayName);
+      assert(mapIdNum != -1);
+  	}
+  	catch (Exception e)
+    {
+      if (e.getMessage().startsWith("Multiple records exist"))
+      {
+        ResourceErrorHandler.handleError(
+          e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
+          Status.NOT_FOUND,
+          log);
+      }
+      else if (e.getMessage().startsWith("No record exists"))
+      {
+        ResourceErrorHandler.handleError(
+          e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
+          Status.NOT_FOUND,
+          log);
+      }
+      ResourceErrorHandler.handleError(
+        "Error requesting map with ID: " + mapId + " (" + e.getMessage() + ")", 
+        Status.BAD_REQUEST,
+        log);
+    }
+  	return mapIdNum;
 	}
 }

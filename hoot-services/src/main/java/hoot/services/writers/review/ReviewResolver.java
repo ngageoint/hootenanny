@@ -12,13 +12,13 @@ import org.slf4j.LoggerFactory;
 /**
  * 
  */
-public class MapReviewResolver
+public class ReviewResolver
 {
-  private static final Logger log = LoggerFactory.getLogger(MapReviewResolver.class);
+  private static final Logger log = LoggerFactory.getLogger(ReviewResolver.class);
   
   private Connection conn;
 	
-  public MapReviewResolver(final Connection conn) throws Exception
+  public ReviewResolver(final Connection conn) throws Exception
   {
     this.conn = conn;
   }

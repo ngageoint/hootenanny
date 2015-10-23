@@ -32,18 +32,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Represents a request to mark all reviews resolved
  */
 @XmlRootElement
-public class MapReviewResolverRequest
+public class ReviewResolverRequest
 {
-	//can be a map ID or name
   private String mapId;
   public String getMapId() { return mapId; }
   public void setMapId(String id) { this.mapId = id; }
   
-  public MapReviewResolverRequest()
+  public ReviewResolverRequest()
   {
   }
   
-  public MapReviewResolverRequest(final String mapId)
+  public ReviewResolverRequest(final String mapId)
   {
   	this.mapId = mapId;
   }

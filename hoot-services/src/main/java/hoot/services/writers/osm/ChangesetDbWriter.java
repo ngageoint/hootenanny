@@ -124,7 +124,8 @@ public class ChangesetDbWriter
   public ChangesetDbWriter(final Connection conn) throws Exception
   {
     this.conn = conn;
-    maxRecordBatchSize = Integer.parseInt(HootProperties.getInstance().getProperty(
+    maxRecordBatchSize = 
+    	Integer.parseInt(HootProperties.getInstance().getProperty(
         "maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
   }
 
@@ -237,8 +238,8 @@ public class ChangesetDbWriter
       Map<ElementType, Map<Long, Element>> elementCache = new HashMap<ElementType, Map<Long, Element>>();
       for (ElementType relatedElementType : element.getRelatedElementTypes())
       {
-        elementCache.put(relatedElementType,
-            parsedElementIdsToElementsByType.get(relatedElementType));
+        elementCache.put(
+        	relatedElementType, parsedElementIdsToElementsByType.get(relatedElementType));
       }
       element.setElementCache(elementCache);
     }
