@@ -76,7 +76,7 @@ protected:
 
   ElementData() { }
 
-  ElementData(long id) : _id(id) { }
+  ElementData(long id) : _id(id), _changeset(0), _version(1), _timestamp(0) { }
 
   ElementData(long id, const Tags& tags, Meters circularError);
 

@@ -196,6 +196,8 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
     if (_includeCompatibilityTags)
     {
       //writer.writeAttribute("timestamp", _timestamp);
+       // LOG_WARN("timestamp value = ");
+       // LOG_WARN(n->getTimestamp());
       writer.writeAttribute("timestamp", OsmUtils::toTimeString(n->getTimestamp()));
       //writer.writeAttribute("version", "1");
       writer.writeAttribute("version", QString::number(n->getVersion()));
@@ -257,6 +259,8 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
     if (_includeCompatibilityTags)
     {
       //writer.writeAttribute("timestamp", _timestamp);
+      //LOG_WARN("wtimestamp value = ");
+      //LOG_WARN(w->getTimestamp());
       writer.writeAttribute("timestamp", OsmUtils::toTimeString(w->getTimestamp()));
       //writer.writeAttribute("version", "1");
       writer.writeAttribute("version", QString::number(w->getVersion()));
@@ -331,6 +335,8 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
     if (_includeCompatibilityTags)
     {
       //writer.writeAttribute("timestamp", _timestamp);
+      //LOG_WARN("rtimestamp value = ");
+      //LOG_WARN(r->getTimestamp());
       writer.writeAttribute("timestamp", OsmUtils::toTimeString(r->getTimestamp()));
       //writer.writeAttribute("version", "1");
       writer.writeAttribute("version", QString::number(r->getVersion()));
