@@ -351,4 +351,8 @@ describe('translateAttributes', function(){
     it('allows mapping to static tags', function(){
         assert.equal(JSON.stringify(translation.translateAttributes(attrs, layerName, mappingStatic)), JSON.stringify(tagsStatic));
     })
+    it('compares mapping columns for match if layername missing', function(){
+        assert.equal(JSON.stringify(translation.translateAttributes(attrs, "foo", mappingMultipleLayers)), JSON.stringify(tags));
+        assert.equal(JSON.stringify(translation.translateAttributes(attrsLayer2, "bar", mappingMultipleLayers)), JSON.stringify(tagsLayer2));
+    })
 })

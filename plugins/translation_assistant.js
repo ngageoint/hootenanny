@@ -11,11 +11,23 @@ translation_assistant = {
     {
         var tags = {};
         var extras = []
+        var l = attributeMapping[layerName];
+
+        //If layerName has no match in the mapping
+        //compare columns for a match
+        if (!l) {
+            for (var lyr in attributeMapping) {
+                if (Object.keys(attrs).toString() === Object.keys(attributeMapping[lyr]).toString()) {
+                    l = attributeMapping[lyr];
+                    break;
+                }
+            }
+        }
 
         for (var key in attrs)
         {
             var k = key;
-            var m = attributeMapping[layerName][k];
+            var m = l[k];
             if (m && m != "IGNORED") { //attribute does map to a tag
                 for (var tagKey in m) {
                     var tagValue = m[tagKey];
