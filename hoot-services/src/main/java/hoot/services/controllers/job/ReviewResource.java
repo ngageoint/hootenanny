@@ -281,15 +281,15 @@ public class ReviewResource
 	/**
 	 * <NAME>Review Service Get Next Reviewable</NAME>
 	 * <DESCRIPTION>
-	 * To retrieve the next reviewable item based on offset squence id. If next reviewable is not available
-	 * then return 0 result count
+	 * To retrieve the next reviewable item based on offset sequence id. If next reviewable is not available
+	 * then try to get random reviewable item. 
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * <mapid>
 	 *  Target map id
 	 * </mapid>
 	 * <offsetseqid>
-	 * 	Offset sequence id where next reviewable should have  offsetseqid+1.
+	 * 	Current Offset sequence id which gets incremented to  offsetseqid+1.
 	 * </offsetseqid>
 	 * </PARAMETERS>
 	 * <OUTPUT>
@@ -311,7 +311,7 @@ public class ReviewResource
 	@GET
 	@Path("/next")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ReviewableItem getNexReviewable(@QueryParam("mapid") String mapId,
+	public ReviewableItem getNextReviewable(@QueryParam("mapid") String mapId,
 			@QueryParam("offsetseqid") String offsetSeqId)
 	{
 
@@ -321,7 +321,12 @@ public class ReviewResource
 			long nMapId = Long.parseLong(mapId);
 			long nOffsetSeqId = Long.parseLong(offsetSeqId);
 			ReviewableReader reader = new ReviewableReader();
-			ret = reader.getNextReviewableItem(nMapId, nOffsetSeqId);
+			ret = reader.getReviewableItem(nMapId, nOffsetSeqId + 1);
+			// get random if we can not find immediate next sequence item
+			if(ret.getResultCount() < 1)
+			{
+				ret = getRandomReviewable(mapId);
+			}
 		}
 		catch (Exception ex)
 		{
@@ -334,6 +339,62 @@ public class ReviewResource
 		return ret;
 	}
 	
+	
+	/**
+	 * <NAME>Review Service Get Reviewable</NAME>
+	 * <DESCRIPTION>
+	 * To retrieve the reviewable item based on offset sequence id. If reviewable is not available
+	 * then return 0 result count
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * <mapid>
+	 *  Target map id
+	 * </mapid>
+	 * <offsetseqid>
+	 * 	Offset sequence id.
+	 * </offsetseqid>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	JSON in ReviewableItem format
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/next?mapid=15&offsetseqid=2</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 * <OUTPUT>
+	 * {"mapId":15,"relationId":-1,"sortOrder":3,"resultCount":0}
+	 * </OUTPUT>
+	 * </EXAMPLE>
+	 * @param mapId
+	 * @param offsetSeqId
+	 * @return
+	 */
+	@GET
+	@Path("/reviewable")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ReviewableItem getReviewable(@QueryParam("mapid") String mapId,
+			@QueryParam("offsetseqid") String offsetSeqId)
+	{
+
+		ReviewableItem ret = new ReviewableItem(-1, -1,-1);
+		try(Connection conn = DbUtils.createConnection())
+		{
+			long nMapId = Long.parseLong(mapId);
+			long nOffsetSeqId = Long.parseLong(offsetSeqId);
+			ReviewableReader reader = new ReviewableReader();
+			ret = reader.getReviewableItem(nMapId, nOffsetSeqId);
+		}
+		catch (Exception ex)
+		{
+			ResourceErrorHandler.handleError(
+	        "Error getting reviewable item: " + mapId +  " (" + 
+	          ex.getMessage() + ")", 
+	        Status.BAD_REQUEST,
+	        log);
+		}
+		return ret;
+	}
 	
 	//
 	

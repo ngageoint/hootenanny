@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 public class ReviewableQueryFactory {
 	private static final Logger log = LoggerFactory.getLogger(ReviewableQueryFactory.class);
 	
-	public IReviewableQuery getNextReviewableQuery(final Connection c, final long mapid, final long seqid)
+	public IReviewableQuery getReviewableQuery(final Connection c, final long mapid, final long seqid)
 	{
-		return new NextReviewableQuery(c, mapid, seqid);
+		return new ReviewableQuery(c, mapid, seqid);
 	}
 	
 	public IReviewableQuery getRandomReviewableQuery(final Connection c, final long mapid)

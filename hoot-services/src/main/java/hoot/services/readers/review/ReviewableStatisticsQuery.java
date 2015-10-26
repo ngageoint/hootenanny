@@ -11,7 +11,7 @@ import java.sql.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ReviewableStatisticsQuery extends ReviewableQuery implements IReviewableQuery  {
+public class ReviewableStatisticsQuery extends ReviewableQueryBase implements IReviewableQuery  {
 	private static final Logger log = LoggerFactory.getLogger(ReviewableStatisticsQuery.class);
 	
 	public ReviewableStatisticsQuery(final Connection c, final long mapid)

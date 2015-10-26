@@ -17,12 +17,12 @@ public class ReviewableReader {
 	
 	private ReviewableQueryFactory _fac = new ReviewableQueryFactory();
 	
-	public ReviewableItem getNextReviewableItem(final long mapid, final long seqid) throws Exception
+	public ReviewableItem getReviewableItem(final long mapid, final long seqid) throws Exception
 	{
 		ReviewableItem r = null;
 		try(Connection conn = DbUtils.createConnection())
 		{
-			r = (ReviewableItem)_fac.getNextReviewableQuery(conn, mapid, seqid).execQuery();
+			r = (ReviewableItem)_fac.getReviewableQuery(conn, mapid, seqid).execQuery();
 		}
 		
 		return r;
