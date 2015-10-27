@@ -29,8 +29,8 @@
 
 namespace hoot {
 
-ElementData::ElementData(long id, const Tags& tags, Meters circularError) : _id(id), _tags(tags),
-  _circularError(circularError)
+ElementData::ElementData(long id, const Tags& tags, Meters circularError) : _id(id), _changeset(0), _version(1),
+  _timestamp(0), _tags(tags), _circularError(circularError)
 {
 }
 

@@ -1039,6 +1039,7 @@ public class Map extends Maps
       MapLayer mapLayer = new MapLayer();
       mapLayer.setId(mapLayerRecord.getId());
       mapLayer.setName(mapLayerRecord.getDisplayName());
+      mapLayer.setDate(mapLayerRecord.getCreatedAt());
       mapLayerList.add(mapLayer);
     }
     mapLayers.setLayers(mapLayerList.toArray(new MapLayer[]{}));
