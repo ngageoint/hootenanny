@@ -245,6 +245,20 @@ var attrsNoRamp = {
     "T_ZLEV": "0"
 };
 
+var attrsMissingNull = {
+    "CITY": "CALI",
+    "CNTRY_CODE": "CO",
+    "COUNTRY": "COLOMBIA",
+    "FCC": "A30",
+    "NAME": "CL 10A",
+    "NAME_ALT": "CL 10A",
+    "ONE_WAY": "TF",
+    "RAMP": "T",
+    "ROUNDABOUT": "T",
+    "SPEED_KMH": "56",
+    "SPEED_MPH": "35",
+};
+
 var attrsLayer2 = {
      "id": "1",
      "name": "foo",
@@ -352,7 +366,17 @@ describe('translateAttributes', function(){
         assert.equal(JSON.stringify(translation.translateAttributes(attrs, layerName, mappingStatic)), JSON.stringify(tagsStatic));
     })
     it('compares mapping columns for match if layername missing', function(){
-        assert.equal(JSON.stringify(translation.translateAttributes(attrs, "foo", mappingMultipleLayers)), JSON.stringify(tags));
+        assert.equal(JSON.stringify(translation.translateAttributes(attrsMissingNull, "foo", mappingMultipleLayers)), JSON.stringify(tags));
         assert.equal(JSON.stringify(translation.translateAttributes(attrsLayer2, "bar", mappingMultipleLayers)), JSON.stringify(tagsLayer2));
+    })
+})
+
+var a = [1, 2, 'a', 'b'],
+    b = [2, 'b', 'c'],
+    d = [1, 'a'];
+
+describe('difference', function(){
+    it('should return elements in a not in b', function(){
+        assert.deepEqual(translation.difference(a, b), d);
     })
 })

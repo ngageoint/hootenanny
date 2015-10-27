@@ -5,7 +5,18 @@ if (typeof hoot !== 'undefined') {
     hoot.require('etds61_osm')
 }
 
+
 translation_assistant = {
+    difference: function(a, b) {
+            var diff = [];
+            for (var k in a) {
+                if (b.indexOf(a[k]) === -1) {
+                    diff.push(a[k]);
+                }
+            }
+            return diff;
+        },
+
     //Takes 'attrs' and returns OSM 'tags'
     translateAttributes: function(attrs, layerName, attributeMapping, fcode, schema)
     {
@@ -17,7 +28,7 @@ translation_assistant = {
         //compare columns for a match
         if (!l) {
             for (var lyr in attributeMapping) {
-                if (Object.keys(attrs).toString() === Object.keys(attributeMapping[lyr]).toString()) {
+                if (translation_assistant.difference(Object.keys(attrs), Object.keys(attributeMapping[lyr])).length === 0) {
                     l = attributeMapping[lyr];
                     break;
                 }
@@ -87,4 +98,5 @@ translation_assistant = {
 
 if (typeof exports !== 'undefined') {
     exports.translateAttributes = translation_assistant.translateAttributes;
+    exports.difference = translation_assistant.difference;
 }
