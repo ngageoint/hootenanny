@@ -54,6 +54,19 @@ public class MapLayer
     this.name = name;
   }
   
+  private java.sql.Timestamp date;
+  public String getDate()
+  {
+	  return String.format("%1$TD",date);
+	  //Use below to include time stamp
+	  //return String.format("%1$TD %1$TT", date);
+  }
+  public void setDate(java.sql.Timestamp date)
+  {
+    this.date = date;
+  }
+  
+  
   public MapLayer()
   {
     

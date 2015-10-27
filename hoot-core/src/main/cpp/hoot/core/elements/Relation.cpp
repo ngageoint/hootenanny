@@ -91,6 +91,14 @@ Relation::Relation(Status s, long id, Meters circularError, QString type) :
   _relationData->setType(type);
 }
 
+Relation::Relation(Status s, long id, long changeset, long version, unsigned int timestamp, Meters circularError, QString type) :
+  Element(s)
+{
+  _relationData.reset(new RelationData(id, changeset, version, timestamp));
+  _relationData->setCircularError(circularError);
+  _relationData->setType(type);
+}
+
 void Relation::addElement(const QString& role, const shared_ptr<const Element>& e)
 {
   addElement(role, e->getElementType(), e->getId());

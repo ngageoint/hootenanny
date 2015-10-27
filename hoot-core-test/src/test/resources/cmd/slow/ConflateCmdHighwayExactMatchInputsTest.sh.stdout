@@ -3,7 +3,13 @@
 13:20:48.118 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingOutlineRemoveOp
 13:20:48.118 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MapCleaner
 13:20:48.118 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ReprojectToPlanarOp
-Reprojecting 0 / 6326         Reprojecting 1000 / 6326         Reprojecting 2000 / 6326         Reprojecting 3000 / 6326         Reprojecting 4000 / 6326         Reprojecting 5000 / 6326         Reprojecting 6000 / 6326         
+Reprojecting 0 / 6326         
+Reprojecting 1000 / 6326         
+Reprojecting 2000 / 6326         
+Reprojecting 3000 / 6326         
+Reprojecting 4000 / 6326         
+Reprojecting 5000 / 6326         
+Reprojecting 6000 / 6326         
 13:20:48.158 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateWayRemover
 13:20:48.158 INFO  ...nflate/DuplicateWayRemover.cpp(  61) Removing duplicate ways...
 13:20:48.637 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousWayRemover
@@ -42,7 +48,13 @@ Reprojecting 0 / 6326         Reprojecting 1000 / 6326         Reprojecting 20
 13:20:53.964 INFO  ...conflate/UnifyingConflator.cpp( 221) Post constraining match count: 750
 13:20:54.429 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 13:20:54.429 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
-Reprojecting 0 / 3658         Reprojecting 1000 / 3658         Reprojecting 2000 / 3658         Reprojecting 3000 / 3658         
+Reprojecting 0 / 3658         
+Reprojecting 1000 / 3658         
+Reprojecting 2000 / 3658         
+Reprojecting 3000 / 3658         
 13:20:54.434 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
 13:20:54.446 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingOutlineUpdateOp
-Reprojecting 0 / 3163         Reprojecting 1000 / 3163         Reprojecting 2000 / 3163         Reprojecting 3000 / 3163         
+Reprojecting 0 / 3163         
+Reprojecting 1000 / 3163         
+Reprojecting 2000 / 3163         
+Reprojecting 3000 / 3163         

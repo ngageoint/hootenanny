@@ -48,6 +48,8 @@ public:
 
   WayData(long id) : ElementData(id) {}
 
+  WayData(long id, long changeset, long version, unsigned int timestamp) : ElementData(id, changeset, version, timestamp) {}
+
   virtual ~WayData();
 
   void addNode(long id) { _nodes.push_back(id); }
