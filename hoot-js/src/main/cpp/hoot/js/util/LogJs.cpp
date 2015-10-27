@@ -53,6 +53,7 @@ void LogJs::Init(Handle<Object> exports)
   Handle<Object> log = Object::New();
   exports->Set(String::NewSymbol("Log"), log);
   log->Set(String::NewSymbol("setLogLevel"), FunctionTemplate::New(setLogLevel)->GetFunction());
+  log->Set(String::NewSymbol("init"), FunctionTemplate::New(init)->GetFunction());
 
   exports->Set(String::NewSymbol("log"), FunctionTemplate::New(logInfo)->GetFunction());
   exports->Set(String::NewSymbol("debug"), FunctionTemplate::New(logDebug)->GetFunction());
@@ -167,6 +168,13 @@ Handle<Value> LogJs::logFatal(const Arguments& args)
   HandleScope scope;
 //  Context::Scope context_scope(Context::GetCurrent());
   log(args, Log::Fatal);
+  return scope.Close(Undefined());
+}
+
+Handle<Value> LogJs::init(const Arguments& args)
+{
+  HandleScope scope;
+  Log::getInstance().init();
   return scope.Close(Undefined());
 }
 

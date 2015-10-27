@@ -5,6 +5,9 @@
 var HOOT_HOME = process.env.HOOT_HOME
 var hoot = require(HOOT_HOME + '/lib/HootJs');
 
+hoot.Settings.set({"log.format": "%m%n"});
+hoot.Log.init();
+
 // print hello world to gain confidence
 console.log(hoot.hello());
 
