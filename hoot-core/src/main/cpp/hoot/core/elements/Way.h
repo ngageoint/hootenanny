@@ -65,6 +65,8 @@ public:
 
   Way(Status s, long id, Meters circularError);
   
+  Way(Status s, long id, long changeset, long version, unsigned int timestamp, Meters circularError);
+
   Way(const Way& way);
 
   virtual ~Way();
