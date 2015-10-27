@@ -426,7 +426,7 @@ public class ReviewResource
 	@GET
 	@Path("/statistics")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ReviewableStatistics getReviewableSstatistics(@QueryParam("mapid") String mapId)
+	public ReviewableStatistics getReviewableSstatistics(@QueryParam("mapId") String mapId)
 	{
 
 		ReviewableStatistics ret = new ReviewableStatistics(-1, -1);
