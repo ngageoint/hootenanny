@@ -91,14 +91,30 @@ public class ReviewResource
   }
 
   /**
-   * Resolves all reviews for a given map
+   * <NAME>Resolve All Reviews</NAME>
+	 * <DESCRIPTION>
+	 * Resolves all reviews for a given map
    * 
    * Have to use a request object here, rather than a single map ID query param, since d3 can't
    * send plain text in a PUT statement.
-   * 
-   * @param request a request containing the map ID for the reviews to be resolved
-   * @return a response with the changeset ID used to resolve the reviews
-   * @throws Exception
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * <request>
+	 *  a JSON request containing the map ID for the reviews to be resolved
+	 * </request>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	a JSON response with the changeset ID used to resolve the reviews
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/resolveall?TODO</URL>
+	 *  <REQUEST_TYPE>PUT</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 *  <OUTPUT>
+	 *   TODO
+	 *  </OUTPUT>
+	 * </EXAMPLE>
    */
   @PUT
   @Path("/resolveall")
@@ -172,17 +188,33 @@ public class ReviewResource
   }
   
   /**
-   * Returns any review references to the elements associated with the ID's passed in
-   * 
-   * Technically, this should be a GET request, but since the size of the input could potentially
+   * <NAME>Get Review References</NAME>
+	 * <DESCRIPTION>
+	 * Returns any review references to the elements associated with the ID's passed in
+	 * 
+	 * Technically, this should be a GET request, but since the size of the input could potentially
    * be large, making it a POST request to get past any size limit restrictions on GET requests.
-   * 
-   * @param request request containing a collection of elements for which review references are to 
-   * be retrieved
-   * @return an array of review references; one set of references for each query element passed in;
-   * The returned ReviewRef object extends the ElementInfo object to add the associated review 
-   * relation id.
-   * @throws Exception
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * <request>
+	 *  JSON request containing a collection of elements for which review references are to be 
+	 *  retrieved
+	 * </request>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	an array of review references in JSON; one set of references for each query element passed in;
+   *  The returned ReviewRef object extends the ElementInfo object to add the associated review 
+   *  relation id.
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/refs?TODO</URL>
+	 *  <REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 *  <OUTPUT>
+	 *   TODO
+	 *  </OUTPUT>
+	 * </EXAMPLE>
    */
   @POST
   @Path("/refs")
@@ -221,8 +253,6 @@ public class ReviewResource
   	log.debug("response : " + StringUtils.abbreviate(response.toString(), 1000));
   	return response;
   }
-  
-  //
   
 	/**
 	 * <NAME>Review Service Get Random Reviewable</NAME>
