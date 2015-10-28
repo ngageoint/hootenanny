@@ -278,7 +278,7 @@ void ServicesDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementT
 
     case ServicesDb::DBTYPE_OSMAPI:
       // check if db active or not
-      assert(elementResultsIterator.isActive());
+      assert(elementResultsIterator->isActive());
 
       while( elementResultsIterator->next() )
       {
