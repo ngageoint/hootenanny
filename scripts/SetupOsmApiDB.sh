@@ -23,11 +23,11 @@ export PGPASSWORD=hoottest
 # see if old db osmapi_test exists
 export flag=`psql -lqt -U hoot | cut -d \| -f 1 | grep -w osmapi_test | wc -l`
 if [ "$flag" = "1" ]; then
-  echo "Dropping old osm api db"
+#  echo "Dropping old osm api db"
   dropdb osmapi_test
 fi
 
 # create the osm apu db from the blank osm api db script
-echo "Creating osm api db"
+#echo "Creating osm api db"
 createdb osmapi_test
 psql -U hoot -f $HOOT_HOME/scripts/osmapidb/blank_osmapidb.sql osmapi_test >& /tmp/osmapidb.log
