@@ -11,11 +11,17 @@ hoot.Log.init();
 // print hello world to gain confidence
 console.log(hoot.hello());
 
+var rows = [['Dataset', 'Buildings', 'POI\'s', 'Linear Highways','Linear Rivers','Others']]
+var csvRows = [];
+
 // translation file to convert from input (e.g. UFD, TDS, etc.) to OSM
 var tran = process.argv[2]
 // Input file (e.g. SHP)
 var input = process.argv[3];
 hoot.log(input);
+
+var output = process.argv[4];
+hoot.log(output);
 
 // create a new map and populate it with the input file
 var map = new hoot.OsmMap();
@@ -25,14 +31,35 @@ hoot.loadMap(map, input, false, 1);
 new hoot.TranslationOp({"translation.script":tran}).apply(map);
 
 var buildingPolygonCount = 0;
+var highwayCount = 0;
+var poiCount = 0;
+var linerRiverCount = 0;
+var otherCount = 0;
 
 // Count the buildings by visiting every element and using the OsmSchema to
 // determine if it is a building or not.
 map.visit(function(e) {
     if (hoot.OsmSchema.isBuilding(e)) {
         buildingPolygonCount++;
+    } else if (hoot.OsmSchema.isLinearHighway(e)) {
+    	highwayCount++;
+    } else if (hoot.OsmSchema.isLinearWaterway(e)) {
+    	linerRiverCount++;
+    } else if (hoot.OsmSchema.isPoi(e)) {
+    	poiCount++;
+    } else {
+    	otherCount++;
     }
 });
 
-hoot.log(buildingPolygonCount);
+var inputFilename = input.replace(/^.*[\\\/]/, '')
+rows.push([inputFilename,buildingPolygonCount,poiCount,highwayCount,linerRiverCount,otherCount])
 
+var rowCount = rows.length;
+for(var i=0, i<rowCount; ++i){
+    csvRows.push(rows[i].join(','));   // unquoted CSV row
+}
+
+var csvString = csvRows.join("\n");
+var csv = require('fs')
+csv.writeFile(output, csvString)
