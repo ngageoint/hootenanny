@@ -51,9 +51,9 @@ namespace hoot
 class DuplicateNameRemoverTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(DuplicateNameRemoverTest);
-  //CPPUNIT_TEST(runCaseInsensitiveTest);
+  CPPUNIT_TEST(runCaseInsensitiveTest);
   CPPUNIT_TEST(runCaseSensitiveTest);
-  //CPPUNIT_TEST(runExtraNamesTest);
+  CPPUNIT_TEST(runExtraNamesTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
