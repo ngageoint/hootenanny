@@ -485,7 +485,7 @@ public:
     shared_ptr<QSqlQuery> nodeResultIterator = database.selectAllElements(ElementType::Node);
 
     // check if db active or not
-    assert(nodeResultIterator.isActive());
+    assert(nodeResultIterator->isActive());
 
     const int numNodeFields = 10;
     long long lastId = LLONG_MIN;
@@ -550,7 +550,7 @@ public:
     shared_ptr<QSqlQuery> wayResultIterator = database.selectAllElements(ElementType::Way);
 
     // check again if db active or not
-    assert(wayResultIterator.isActive());
+    assert(wayResultIterator->isActive());
 
     const int numWayFields = 7;
     lastId = LLONG_MIN;
@@ -619,7 +619,7 @@ public:
       database.selectAllElements(ElementType::Relation);
 
     // check again if db active or not
-    assert(relationResultIterator.isActive());
+    assert(relationResultIterator->isActive());
 
     const int numRelationFields = 7;
     lastId = LLONG_MIN;
