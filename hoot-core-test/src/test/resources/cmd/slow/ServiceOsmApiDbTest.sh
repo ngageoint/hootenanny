@@ -1,8 +1,10 @@
 #!/bin/bash
 set -e
 
+#echo $PGDATABASE $PGHOST $PGPORT $PGUSER $PGPASSWORD
+
 # clean out the database
-scripts/SetupOsmApiDB.sh
+source scripts/SetupOsmApiDB.sh
 
 # setup DB variables for automation
 source conf/DatabaseConfig.sh
@@ -10,6 +12,8 @@ source conf/DatabaseConfig.sh
 # setup dirs
 rm -rf test-output/cmd/ServiceOsmApiDbTest
 mkdir -p test-output/cmd/ServiceOsmApiDbTest
+
+#echo $PGDATABASE $PGHOST $PGPORT $PGUSER $PGPASSWORD
 
 # Load the database with known data
 psql -f hoot-core-test/src/test/resources/ToyTestA.sql $PGDATABASE
