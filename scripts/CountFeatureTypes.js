@@ -8,22 +8,22 @@ var hoot = require(HOOT_HOME + '/lib/HootJs');
 hoot.Settings.set({"log.format": "%m%n"});
 hoot.Log.init();
 
-// print hello world to gain confidence
-console.log(hoot.hello());
-
 //format output columns
 var rows = [['Dataset', 'Buildings', 'POI\'s', 'Linear Highways','Linear Rivers','Others']]
 var csvRows = [];
 
 // translation file to convert from input (e.g. UFD, TDS, etc.) to OSM
 var tran = process.argv[2]
+hoot.log("Translation file: " + tran);
 
 // Input file (e.g. SHP)
 var input = process.argv[3];
-hoot.log(input);
+hoot.log("Input file: " + input);
 
 var output = process.argv[4];
-hoot.log(output);
+if (typeof(output) !== 'undefined') {
+    hoot.log("Output file: " + output);
+}
 
 // create a new map and populate it with the input file
 var map = new hoot.OsmMap();
@@ -54,19 +54,24 @@ map.visit(function(e) {
     }
 });
 
-//if user passes the output file, write results to the file
-if (output !== null) {
-    var inputFilename = input.replace(/^.*[\\\/]/, '')
-    rows.push([inputFilename,buildingPolygonCount,poiCount,highwayCount,linerRiverCount,otherCount])
+//insert the count info into rows
+var inputFilename = input.replace(/^.*[\\\/]/, '')
+rows.push([inputFilename,buildingPolygonCount,poiCount,highwayCount,linerRiverCount,otherCount])
 
-    var rowCount = rows.length;
-    for(var i=0; i<rowCount; ++i){
-        csvRows.push(rows[i].join(','));   // unquoted CSV row
+// unquoted CSV row and push to an array
+var rowCount = rows.length;
+for(var i=0; i<rowCount; ++i) {
+    csvRows.push(rows[i].join(','));
+}
+
+//if user passes the output file, write results to the file, else print in console
+if (typeof(output) !== 'undefined') {
+    var fs = require('fs')
+    fs.writeFile(output, csvRows.join("\n"))
+} else {
+    for (var i=0; i<rowCount; i++) {
+        hoot.log(csvRows[i])
     }
-
-    var csvString = csvRows.join("\n");
-    var csv = require('fs')
-    csv.writeFile(output, csvString)
 }
 
 
