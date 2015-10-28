@@ -200,10 +200,12 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
   _addDefaults(t1);
   _addDefaults(t2);
 
+  /// @todo #7255 go through and use the cleaned tag vertices rather than tags directly.
+
   for (Tags::const_iterator it = t1.begin(); it != t1.end(); it++)
   {
     QString kvp = it.key() + "=" + it.value();
-    const TagVertex* tv = &schema.getTagVertex(kvp);
+    const SchemaVertex* tv = &schema.getTagVertex(kvp);
     if (tv->isEmpty())
     {
       tv = &schema.getTagVertex(it.key() + "=*");
@@ -218,7 +220,7 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
   for (Tags::const_iterator it = t2.begin(); it != t2.end(); it++)
   {
     QString kvp = it.key() + "=" + it.value();
-    const TagVertex* tv = &schema.getTagVertex(kvp);
+    const SchemaVertex* tv = &schema.getTagVertex(kvp);
     if (tv->isEmpty())
     {
       tv = &schema.getTagVertex(it.key() + "=*");
@@ -279,7 +281,7 @@ void TagComparator::compareTextTags(const Tags& t1, const Tags& t2, double& scor
 
   for (Tags::const_iterator it = t1.begin(); it != t1.end(); it++)
   {
-    const TagVertex& tv = schema.getTagVertex(it.key());
+    const SchemaVertex& tv = schema.getTagVertex(it.key());
     if (schema.isAncestor(it.key(), "abstract_name") == false &&
         tv.valueType == Text && t2.contains(it.key()))
     {
@@ -569,7 +571,7 @@ void TagComparator::_mergeText(Tags& t1, Tags& t2, Tags& result)
   const Tags t1Copy = t1;
   for (Tags::ConstIterator it1 = t1Copy.begin(); it1 != t1Copy.end(); ++it1)
   {
-    const TagVertex& tv = schema.getTagVertex(it1.key());
+    const SchemaVertex& tv = schema.getTagVertex(it1.key());
 
     // if this is a text field and it exists in both tag sets.
     if (tv.valueType == Text && t2.contains(it1.key()))
@@ -726,7 +728,7 @@ void TagComparator::_promoteToCommonAncestor(Tags& t1, Tags& t2, Tags& result)
   {
     for (Tags::iterator it2 = t2.begin(); it2 != t2.end(); )
     {
-      const TagVertex& ancestor = schema.getFirstCommonAncestor(it1.key() + "=" + it1.value(),
+      const SchemaVertex& ancestor = schema.getFirstCommonAncestor(it1.key() + "=" + it1.value(),
         it2.key() + "=" + it2.value());
       if (ancestor.isEmpty() == false)
       {

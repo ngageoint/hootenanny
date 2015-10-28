@@ -1,0 +1,12 @@
+{
+    "tag": {
+        "name": "capital=yes",
+        "isA": "poi=yes",
+        "influence": 1.0,
+        "type": "enumeration",
+        "similarTo": { "name": "place=city", "weight": 0.8 },
+        "geometries": ["node"]
+    },
+
+    "#" : "end"
+}

@@ -48,7 +48,11 @@ public:
 
   double getY() const { return _y; }
 
-  void init(long id, double x, double y) { _id = id; _x = x; _y = y; }
+  void init(long id, double x, double y) { _id = id; _x = x; _y = y;
+    _changeset = 0; _version = 1; _timestamp = 0; }
+
+  void init(long id, double x, double y, long changeset, long version, long timestamp) {
+   _id = id; _x = x; _y = y; _changeset = changeset; _version = version; _timestamp = timestamp; }
 
   void setX(double x) { _x = x; }
 

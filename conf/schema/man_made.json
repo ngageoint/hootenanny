@@ -1,7 +1,7 @@
 {
     "tag": {
         "name": "man_made",
-        "isA": "poi=yes",
+        "isA": "hgispoi",
         "influence": 1.0,
         "type": "enumeration",
         "geometries": ["node", "area"]

@@ -94,29 +94,44 @@ function getTagsByCategory(category, d) {
     return result;
 }
 
+// maintain a cache of diff classes
+var tagAncestorDiffs = {};
+
 /**
  * Given a common kvp, find the distance between the tags in e1 and e2 where common exists
  * between them.
  */
-function getTagCategoryDistance(category, e1, e2) {
-    var result = 1;
-    var t1 = e1.getTags().toDict();
-    var t2 = e2.getTags().toDict();
-    var c1 = getTagsByCategory(category, t1);
-    var c2 = getTagsByCategory(category, t2);
-
-    if (c1.length == 0 || c2.length == 0) {
-        return undefined;
+function getTagAncestorDistance(ancestorKvp, map, e1, e2) {
+    var differ;
+    if (ancestorKvp in tagAncestorDiffs == false) {
+        differ = new hoot.TagAncestorDifferencer(
+            {"tag.ancestor.differencer.name":ancestorKvp});
+        tagAncestorDiffs[ancestorKvp] = differ;
+    } else {
+        differ = tagAncestorDiffs[ancestorKvp];
     }
 
-    // find the best match between the two types
-    for (var i in c1) {
-        for (var j in c2) {
-            result = Math.min(1 - hoot.OsmSchema.score(c1[i], c2[j]), result);
-        }
+    return differ.diff(map, e1, e2);
+}
+
+// maintain a cache of diff classes
+var tagCategoryDiffs = {};
+
+/**
+ * Given a common kvp, find the distance between the tags in e1 and e2 where common exists
+ * between them.
+ */
+function getTagCategoryDistance(category, map, e1, e2) {
+    var differ;
+    if (category in tagCategoryDiffs == false) {
+        differ = new hoot.TagCategoryDifferencer(
+            {"tag.category.differencer.name":category});
+        tagCategoryDiffs[category] = differ;
+    } else {
+        differ = tagCategoryDiffs[category];
     }
 
-    return result;
+    return differ.diff(map, e1, e2);
 }
 
 /**

@@ -98,7 +98,7 @@ fi
 
 if [ "$SILENT_INSTALL" == "false" ]; then
   if [ "$INSTALL_DEPENDENCIES" == "false" ]; then
-    if [ "$INSTALL_HOOT_APPLICATION" == "true" ]; then
+    if [ "$INSTALL_HOOT_APPLICATION" == "false" ]; then
       echo "This script has not been configured.  Select either dependency installation, application installation, or both.  Installation canceled."
       exit -1;
     fi
@@ -487,7 +487,7 @@ EOT
   sudo service tomcat6 restart 
 
   echo "Configuring path..."
-  JAVA_HOME=`ls /usr/lib/jvm | grep -e java-1.7.*-openjdk-*.x86_64`
+  JAVA_HOME=/usr/lib/jvm/`ls /usr/lib/jvm | grep -e java-1.7.*-openjdk-*.x86_64`
   if ! grep --quiet 'JAVA_HOME' /etc/profile; then
     echo 'export JAVA_HOME='$JAVA_HOME >> /etc/profile
     source /etc/profile

@@ -28,7 +28,6 @@ package hoot.services.controllers.wps;
 
 import java.sql.Connection;
 
-import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.review.ReviewableItemsStatistics;
@@ -77,34 +76,13 @@ public class ReviewableItemsStatisticsProcesslet extends BaseProcesslet
       ReviewInputParamsValidator inputParamsValidator = new ReviewInputParamsValidator(inputParams);
       final String mapId = 
         (String)inputParamsValidator.validateAndParseInputParam("mapId", "", null, null, false, null);
-      final double reviewScoreThresholdMinimum = 
-        (Double)inputParamsValidator.validateAndParseInputParam(
-          "reviewScoreThresholdMinimum", 
-          new Double(0.0), 
-          new Double(0.0), 
-          new Double(1.0), 
-          true, 
-          Double.parseDouble(
-            HootProperties.getInstance().getProperty(
-              "reviewGetReviewScoreThresholdMinimumDefault", 
-              HootProperties.getDefault("reviewGetReviewScoreThresholdMinimumDefault"))));
-      final BoundingBox geospatialBounds = 
-        (BoundingBox)inputParamsValidator.validateAndParseInputParam(
-          "geospatialBounds", 
-          "", 
-          null, 
-          null, 
-          true, 
-          HootProperties.getInstance().getProperty(
-            "reviewGetGeospatialBoundsDefault", 
-            HootProperties.getDefault("reviewGetGeospatialBoundsDefault")));
       
       log.debug("Initializing database connection...");  
       
       //build the stats
       final ReviewableItemsStatistics stats = 
-        (new ReviewableItemsStatisticsCalculator(conn, mapId, true)).getStatistics(
-          reviewScoreThresholdMinimum, geospatialBounds);
+        (new ReviewableItemsStatisticsCalculator(conn, mapId, true))
+          .getStatistics(0.0, BoundingBox.worldBounds());
        
       //write the stats out to the response
       //besides string output, deegree only supports XML and binary types, so not returning as

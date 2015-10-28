@@ -1,7 +1,7 @@
 {
     "tag": {
         "name": "landuse",
-        "isA": "poi=yes",
+        "isA": "hgispoi",
         "influence": 1.0,
         "type": "enumeration",
         "geometries": ["node", "area"]
@@ -13,6 +13,10 @@
         "name": "landuse=cemetery",
         "isA": "landuse",
         "aliases": ["landuse=cemetary"]
+    },
+    "tag": {
+        "name": "landuse=military",
+        "isA": "landuse"
     },
     "tag": { "name": "landuse=recreation_ground",
         "isA": "landuse",

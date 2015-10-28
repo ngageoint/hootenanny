@@ -46,6 +46,7 @@ import hoot.services.IntegrationTest;
 import hoot.services.job.JobStatusWebPoller;
 import hoot.services.review.ReviewTestUtils;
 import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 import hoot.services.wps.WpsTestAbstract;
 
 public class PrepareItemsForReviewWpsTest extends WpsTestAbstract
@@ -58,8 +59,6 @@ public class PrepareItemsForReviewWpsTest extends WpsTestAbstract
     super("hoot.services.controllers.job");
     
     processId = "PrepareItemsForReview";
-    //TODO: see #6270
-    PrepareItemsForReviewProcesslet.reviewRecordWriter = "reviewPrepareDbWriter";
   }
   
   //WPS specifies that both GET and POST be supported, even when one or the other doesn't make
@@ -118,7 +117,7 @@ public class PrepareItemsForReviewWpsTest extends WpsTestAbstract
     Assert.assertNotNull(responseData);
     //System.out.println(XmlDocumentBuilder.toString(responseData));
     
-    XPath xpath = XmlDocumentBuilder.createXPath();    
+    XPath xpath = XmlUtils.createXPath();    
     String jobIdStr = null;
     try
     {

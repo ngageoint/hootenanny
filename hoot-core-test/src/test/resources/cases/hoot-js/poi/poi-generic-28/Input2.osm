@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-3956423' visible='true' lat='48.10652' lon='11.66883'>
+    <tag k='name' v='Cheap &amp; Good' />
+    <tag k='tourism' v='hotel' />
+  </node>
+</osm>

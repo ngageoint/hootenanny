@@ -57,7 +57,7 @@ if ! ogrinfo --formats | grep --quiet FileGDB; then
     export PATH=/usr/local/lib:/usr/local/bin:$PATH
     cd gdal-1.10.1
     sudo ./configure --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
-    sudo make -j5
+    sudo make -j$(nproc)
     sudo make install
     cd swig/python
     python setup.py build
@@ -132,6 +132,13 @@ cd /home/vagrant/hoot
 cp ./conf/DatabaseConfig.sh.orig ./conf/DatabaseConfig.sh
 source ./SetupEnv.sh
 
+# Check that hoot-ui submodule has been init'd and updated
+if [ ! "$(ls -A hoot-ui)" ]; then
+    echo "hoot-ui is empty"
+    echo "init'ing and updating submodule"
+    git submodule init && git submodule update
+fi
+
 echo "Configuring Hoot"
 aclocal && autoconf && autoheader && automake && ./configure -q --with-rnd --with-services
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
@@ -141,7 +148,7 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
 fi
 echo "Building Hoot"
 make clean
-make -sj4
+make -sj$(nproc)
 make docs
 
 # Tweak dev environment to make tests run faster
@@ -150,8 +157,8 @@ echo 'testJobStatusPollerTimeout=250' > $HOOT_HOME/hoot-services/src/main/resour
 
 # Run Tests
 #echo "Running tests"
-#make -sj4 test
-#make -sj4 test-all
+#make -sj$(nproc) test
+#make -sj$(nproc) test-all
 
 # Deploy to Tomcat
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
@@ -183,6 +190,13 @@ fi
 if grep -i --quiet 'gdal/1.10' /etc/default/tomcat6; then
     echo "Fixing Tomcat GDAL_DATA env var path"
     sudo sed -i.bak s@^GDAL_DATA=.*@GDAL_DATA=\/usr\/local\/share\/gdal@ /etc/default/tomcat6
+fi
+
+# Remove gdal libs installed by libgdal-dev that interfere with
+# mapedit-export-server using gdal libs compiled from source (fgdb support)
+if [ -f /usr/lib/libgdal.* ]; then
+    echo "Removing GDAL libs installed by libgdal-dev"
+    sudo rm /usr/lib/libgdal.*
 fi
 
 # Create Tomcat context path for tile images

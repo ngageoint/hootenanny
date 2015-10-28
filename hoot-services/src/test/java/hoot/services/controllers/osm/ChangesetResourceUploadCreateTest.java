@@ -68,7 +68,7 @@ import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
-import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLUpdateClause;
@@ -76,11 +76,6 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.ClientResponse.Status;
 
-/*
- * @todo Most of these tests could be converted to integration tests and after a refactoring,
- * could be replace with unit tests that test only the internal classes being used by this
- * Jersey resource.
- */
 public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
 {
   private static final Logger log = LoggerFactory.getLogger(ChangesetResourceUploadCreateTest.class);
@@ -185,7 +180,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       Set<Long> nodeIds = new LinkedHashSet<Long>();
       Set<Long> wayIds = new LinkedHashSet<Long>();
       Set<Long> relationIds = new LinkedHashSet<Long>();
@@ -401,7 +396,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       List<Long> nodeIds = new ArrayList<Long>();
       Set<Long> wayIds = new LinkedHashSet<Long>();
       try
@@ -472,12 +467,12 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
         		.map(currentNodesTbl.id, currentNodesTbl);
         Assert.assertEquals(3, nodes.size());
 
-        CurrentNodes nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[0]);
+        CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLat()), nodeRecord.getLatitude());
+          new Double(originalBounds.getMinLat()), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMinLon()), nodeRecord.getLongitude());
+          new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
@@ -488,12 +483,12 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
         Assert.assertEquals(new Long(1), nodeRecord.getVersion());
         Assert.assertEquals(new Boolean(true), nodeRecord.getVisible());
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[1]);
+        nodeRecord = nodes.get(nodeIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMaxLat()), nodeRecord.getLatitude());
+          new Double(originalBounds.getMaxLat()), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)originalBounds.getMaxLon()), nodeRecord.getLongitude());
+          new Double(originalBounds.getMaxLon()), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
@@ -504,12 +499,12 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
         Assert.assertEquals(new Long(1), nodeRecord.getVersion());
         Assert.assertEquals(new Boolean(true), nodeRecord.getVisible());
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[2]);
+        nodeRecord = nodes.get(nodeIdsArr[2]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Double((double)(originalBounds.getMinLat() - .001)), nodeRecord.getLatitude());
+          new Double(originalBounds.getMinLat() - .001), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Double((double)(originalBounds.getMinLon() - .001)), nodeRecord.getLongitude());
+          new Double(originalBounds.getMinLon() - .001), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
@@ -532,7 +527,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
         		.map(currentWaysTbl.id, currentWaysTbl);
         Assert.assertEquals(1, ways.size());
 
-        CurrentWays wayRecord = (CurrentWays)ways.get(wayIdsArr[0]);
+        CurrentWays wayRecord = ways.get(wayIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
         Assert.assertEquals(wayIdsArr[0], wayRecord.getId());
         Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -679,7 +674,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       Set<Long> nodeIds = new LinkedHashSet<Long>();
       Set<Long> wayIds = new LinkedHashSet<Long>();
       Set<Long> relationIds = new LinkedHashSet<Long>();
@@ -1155,7 +1150,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus())); //TODO: is this correct?
+      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
       Assert.assertTrue(r.getEntity(String.class).contains("Invalid OSM element ID for create"));
 
       //make sure the new nodes weren't created
@@ -1410,8 +1405,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
       throw e;
     }
   }
-
-  //TODO: should we set a limit on members per relation?  i don't think rails port does
 
   @Test(expected=UniformInterfaceException.class)
   @Category(UnitTest.class)
@@ -1679,8 +1672,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     }
   }
 
-  //TODO: test for relation that references the same member more than once...does that even matter?
-
   @Test(expected=UniformInterfaceException.class)
   @Category(UnitTest.class)
   public void testUploadCreateWayWithInvisibleNode() throws Exception
@@ -1702,7 +1693,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     		.where(currentNodesTbl.id.eq(new Long(nodeIdsArr[0])))
     		.singleResult(currentNodesTbl);
     invisibleNode.setVisible(false);
-    int success = //invisibleNode.update();
+    int success = 
     		((int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentNodesTbl)
         .where(currentNodesTbl.id.eq(invisibleNode.getId()))
         .set(currentNodesTbl.visible, false)
@@ -1771,7 +1762,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     		.where(currentNodesTbl.id.eq(new Long(nodeIdsArr[0])))
     		.singleResult(currentNodesTbl);
     invisibleNode.setVisible(false);
-    int success = //invisibleNode.update();
+    int success = 
     		(int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentNodesTbl)
     .where(currentNodesTbl.id.eq(invisibleNode.getId()))
   .set(currentNodesTbl.visible, false)
@@ -1836,14 +1827,13 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     final Set<Long> relationIds =
       OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
-
     //make one of relation way members invisible
     CurrentWays invisibleWay =
     		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWaysTbl)
     		.where(currentWaysTbl.id.eq(wayIdsArr[0]))
     		.singleResult(currentWaysTbl);
     invisibleWay.setVisible(false);
-    int success = //invisibleWay.update();
+    int success = 
     		(int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentWaysTbl)
     .where(currentWaysTbl.id.eq(invisibleWay.getId()))
   .set(currentWaysTbl.visible, false)
@@ -1919,7 +1909,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     invisibleRelation.setVisible(false);
 
 
-    int success = //invisibleRelation.update();
+    int success = 
     		(int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentRelationsTbl)
     .where(currentRelationsTbl.id.eq(invisibleRelation.getId()))
   .set(currentRelationsTbl.visible, false)
@@ -2129,7 +2119,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus())); //TODO: is this correct?
+      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
       Assert.assertTrue(r.getEntity(String.class).contains("Invalid OSM element ID for create"));
 
       OsmTestUtils.verifyTestDataUnmodified(
@@ -2192,7 +2182,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus())); //TODO: is this correct?
+      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
       Assert.assertTrue(r.getEntity(String.class).contains("Invalid OSM element ID for create"));
 
       OsmTestUtils.verifyTestDataUnmodified(

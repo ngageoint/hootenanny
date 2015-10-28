@@ -57,7 +57,6 @@ public class ReviewInputParamsValidator extends InputParamsValidatorAbstract
    * @param defaultValue a default value to assign to the parameter, if it has no value
    * @return a parameter value
    * @throws Exception
-   * @todo add enum validation capabilities
    */
   public Object validateAndParseInputParam(final String name, final Object type, 
     final Object rangeMin, final Object rangeMax, final boolean optional, final Object defaultValue) 

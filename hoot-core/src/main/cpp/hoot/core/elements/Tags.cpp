@@ -263,7 +263,7 @@ const QStringList& Tags::getNameKeys()
   // getting the name tags can be a bit expensive so we'll just do it once.
   if (_nameKeys.size() == 0)
   {
-    const vector<TagVertex>& tags =
+    const vector<SchemaVertex>& tags =
         OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::name());
 
     for (size_t i = 0; i < tags.size(); i++)
@@ -296,7 +296,7 @@ const QStringList& Tags::getPseudoNameKeys() const
   // getting the name tags can be a bit expensive so we'll just do it once.
   if (_pseudoNameKeys.size() == 0)
   {
-    const vector<TagVertex>& tags =
+    const vector<SchemaVertex>& tags =
         OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::pseudoName());
 
     for (size_t i = 0; i < tags.size(); i++)

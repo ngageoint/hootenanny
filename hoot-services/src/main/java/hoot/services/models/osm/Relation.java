@@ -48,7 +48,6 @@ import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelationMembers;
 import hoot.services.db2.CurrentRelations;
 import hoot.services.db2.QCurrentRelationMembers;
-import hoot.services.db2.QCurrentRelations;
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.Coordinates;
 
@@ -77,8 +76,8 @@ public class Relation extends Element
 	private static final Logger log = LoggerFactory.getLogger(Relation.class);
 	private int maxRecordBatchSize = -1;
 	private List<RelationMember> membersCache = new ArrayList<RelationMember>();
-	protected static final QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
-	protected static final QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
+	protected static final QCurrentRelationMembers currentRelationMembers = 
+		QCurrentRelationMembers.currentRelationMembers;
 
 	public Relation(final long mapId, Connection dbConn)
 	{
@@ -185,7 +184,7 @@ public class Relation extends Element
 	 * @param modifyingUserDisplayName
 	 *          user display name of the user which created this element
 	 * @param multiLayerUniqueElementIds
-	 *          if true, ID's are prepended with <map id>_<first letter of the
+	 *          if true, IDs are prepended with <map id>_<first letter of the
 	 *          element type>_; this setting activated is not compatible with
 	 *          standard OSM clients (specific to Hootenanny iD)
 	 * @param addChildren
@@ -237,28 +236,12 @@ public class Relation extends Element
 		}
 	}
 
-	// /**
-	// * Clears temporary data that was the result of parsing the XML to create
-	// the element - OPTIONAL
-	// * @throws Exception
-	// */
-	// public void clearTempData()
-	// {
-	// nodeCoordsCollection = null;
-	// relatedRecords = null;
-	// relatedRecordIds = null;
-	// }
-
 	/*
 	 * Parses a list of node/way relation members and computes their bounds
 	 * 
 	 * @param members a list of relation members
-	 * 
 	 * @return a bounds
-	 * 
 	 * @throws Exception
-	 * 
-	 * @todo this method is bloated and hard to follow
 	 */
 	private BoundingBox parseNodesAndWayMembersBounds(List<RelationMember> members)
 			throws Exception
@@ -375,7 +358,7 @@ public class Relation extends Element
 	}
 
 	/*
-	 * Retrieves geo info for the nodes/ways associated with the input ID's and
+	 * Retrieves geo info for the nodes/ways associated with the input IDs and
 	 * then computes the combined bounds for all the elements
 	 */
 	private BoundingBox getBoundsForNodesAndWays(final Set<Long> dbNodeIds,
@@ -388,22 +371,14 @@ public class Relation extends Element
 		if (nodes.size() > 0)
 		{
 			BoundingBox nodeBounds = new BoundingBox(nodes);
-			// TODO: fix??
-			// if (bounds == null)
-			// {
 			bounds = new BoundingBox(nodeBounds);
-			// }
-			// else
-			// {
-			// bounds.add(nodeBounds);
-			// }
 		}
 		return bounds;
 	}
 
 	private BoundingBox getBoundsForNodesAndWays() throws Exception
 	{
-		final List<Long> nodeIds = (List<Long>) new SQLQuery(conn,
+		final List<Long> nodeIds = new SQLQuery(conn,
 				DbUtils.getConfiguration(getMapId()))
 		.from(Relation.currentRelationMembers)
 		.where(
@@ -411,7 +386,7 @@ public class Relation extends Element
 						currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node)))
 						.list(currentRelationMembers.memberId);
 
-		final List<Long> wayIds = (List<Long>) new SQLQuery(conn,
+		final List<Long> wayIds = new SQLQuery(conn,
 				DbUtils.getConfiguration(getMapId()))
 		.from(Relation.currentRelationMembers)
 		.where(
@@ -433,8 +408,6 @@ public class Relation extends Element
 	 *
 	 * @return a bounding box; null if the relation only contains other relations
 	 * @throws Exception
-	 * @todo no bounds is being calculated for the contained relations...is that
-	 *       correct?
 	 */
 	public BoundingBox getBounds() throws Exception
 	{
@@ -685,13 +658,6 @@ public class Relation extends Element
 	}
 
 	/**
-	 * Returns the ID sequence type for this element
-	 *
-	 * @return a sequence type
-	 */
-	// public NumberPath<Long> getIdSequenceType() { return null; }
-
-	/**
 	 * Returns the generated table identifier for records related to this element
 	 *
 	 * @return a table
@@ -834,12 +800,9 @@ public class Relation extends Element
 			final List<RelationMember> members, final Map<String, String> tags,
 			Connection dbConn) throws Exception
 	{
-		// SQLQuery query = new SQLQuery(dbConn, DbUtils.getConfiguration());
-
 		final long nextRelationId = new SQLQuery(dbConn,
 				DbUtils.getConfiguration(mapId)).uniqueResult(SQLExpressions.nextval(
 						Long.class, "current_relations_id_seq"));
-		;
 
 		insertNew(nextRelationId, changesetId, mapId, members, tags, dbConn);
 		return nextRelationId;

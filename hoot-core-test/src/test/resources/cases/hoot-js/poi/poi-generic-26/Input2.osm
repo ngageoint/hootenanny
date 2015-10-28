@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-3886603' visible='true' lat='48.0435' lon='11.52006'>
+    <tag k='REF2' v='none' />
+    <tag k='access' v='yes' />
+    <tag k='addr:language' v='GER' />
+    <tag k='addr:street' v='ZEILLERSTRASSE' />
+    <tag k='error:circular' v='15' />
+    <tag k='historic' v='monument' />
+    <tag k='language' v='GER' />
+    <tag k='name' v='BURG GRÜNWALD' />
+    <tag k='source' v='navteq' />
+    <tag k='uuid' v='{52818661}' />
+  </node>
+</osm>

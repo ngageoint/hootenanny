@@ -245,6 +245,8 @@ public:
 
   const NodeMap& getNodeMap() const { return _nodes; }
 
+  set<ElementId> getParents(ElementId eid) const;
+
   /**
    * Returns the SRS for this map. The SRS should never be changed and defaults to WGS84.
    */
@@ -302,6 +304,11 @@ public:
    * part of any way before it is removed.
    */
   void removeNode(long nid);
+
+  /**
+   * Removes the node from all relations, ways and then removes the node from the map.
+   */
+  void removeNodeFully(long wId);
 
   /**
    * Remove the specified node from this map. No check will be made to remove this node from ways.

@@ -1,182 +1,36 @@
 {
+    "import": "metadata.json",
     "import": "poi.json",
     "import": "amenity.json",
     "import": "artworkType.json",
     "import": "barrier.json",
     "import": "building.json",
+    "import": "capital.json",
+    "import": "hgis.json",
     "import": "historic.json",
+    "import": "highway.json",
+    "import": "junction.json",
     "import": "landuse.json",
     "import": "leisure.json",
     "import": "man_made.json",
+    "import": "military.json",
     "import": "place.json",
+    "import": "parking.json",
     "import": "address.json",
-    "import": "metadata.json",
     "import": "waterway.json",
     "import": "name.json",
     "import": "natural.json",
     "import": "cuisine.json",
     "import": "power.json",
+    "import": "public_transport.json",
     "import": "railway.json",
+    "import": "seamark_type.json",
     "import": "shop.json",
+    "import": "source.json",
     "import": "sport.json",
     "import": "religion.json",
+    "import": "tourism.json",
     "import": "transport.json",
-
-
-    "###": "",
-    "###": "Highway related tags.",
-    "###": "",
-
-    "tag": {
-        "name": "highway",
-        "influence": 1.0,
-        "type": "enumeration",
-        "categories": ["transporation"]
-    },
-
-    "tag": {
-        "name": "highway",
-        "influence": 1.0,
-        "type": "enumeration"
-    },
-
-    "tag": {
-        "name": "highway=road",
-        "isA": "highway",
-        "geometries": ["linestring"]
-    },
-
-    "tag": {
-        "name": "highway=other",
-        "isA": "highway=road"
-    },
-
-    "tag": {
-        "name": "highway=motorway",
-        "isA": "highway=road",
-        "similarTo": { "name": "highway=trunk", "weight": 0.8 },
-        "similarTo": { "name": "highway=motorway_link", "weight": 0.9 }
-    },
-    "tag": { "name": "highway=motorway_link", "isA" : "highway=motorway" },
-
-    "tag": {
-        "name": "highway=trunk",
-        "isA": "highway=road",
-        "similarTo": { "name": "highway=motorway", "weight": 0.8 },
-        "similarTo": { "name": "highway=primary", "weight": 0.8 },
-        "similarTo": { "name": "highway=trunk_link", "weight": 0.9 }
-    },
-    "tag": { "name": "highway=trunk_link", "isA" : "highway=trunk" },
-
-    "tag": {
-        "name": "highway=primary",
-        "isA": "highway=road",
-        "similarTo": { "name": "highway=trunk", "weight": 0.8 },
-        "similarTo": { "name": "highway=secondary", "weight": 0.8 },
-        "similarTo": { "name": "highway=primary_link", "weight": 0.9 }
-    },
-    "tag": { "name": "highway=primary_link", "isA" : "highway=primary" },
-
-    "tag": {
-        "name": "highway=secondary",
-        "isA": "highway=road",
-        "similarTo": { "name": "highway=primary", "weight": 0.8 },
-        "similarTo": { "name": "highway=tertiary", "weight": 0.8 },
-        "similarTo": { "name": "highway=secondary_link", "weight": 0.9 }
-    },
-    "tag": { "name": "highway=secondary_link", "isA" : "highway=secondary" },
-
-    "tag": {
-        "name": "highway=tertiary",
-        "isA": "highway=road",
-        "similarTo": { "name": "highway=secondary", "weight": 0.8 },
-        "similarTo": { "name": "highway=unclassified", "weight": 0.8 },
-        "similarTo": { "name": "highway=residential", "weight": 0.8 },
-        "similarTo": { "name": "highway=tertiary_link", "weight": 0.9 }
-    },
-    "tag": { "name": "highway=tertiary_link", "isA" : "highway=tertiary" },
-
-    "tag": {
-        "name": "highway=residential",
-        "isA": "highway=road",
-        "similarTo": { "name": "highway=unclassified", "weight": 0.9 },
-        "similarTo": { "name": "highway=living_street", "weight": 0.8 },
-        "similarTo": { "name": "highway=tertiary", "weight": 0.8 }
-    },
-
-    "tag": {
-        "name": "highway=living_street",
-        "isA": "highway=road",
-        "similarTo": { "name": "highway=residential", "weight": 0.8 }
-    },
-
-    "tag": {
-        "name": "highway=unclassified",
-        "isA": "highway=road",
-        "similarTo": { "name": "highway=tertiary", "weight": 0.8 },
-        "similarTo": { "name": "highway=residential", "weight": 0.9 },
-        "similarTo": { "name": "highway=service", "weight": 0.8 }
-    },
-
-    "tag": {
-        "name": "highway=service",
-        "isA": "highway=road",
-        "similarTo": { "name": "highway=unclassified", "weight": 0.8 },
-        "similarTo": { "name": "highway=track", "weight": 0.8 }
-    },
-
-    "tag": {
-        "name": "highway=track",
-        "isA": "highway=road",
-        "similarTo": { "name": "highway=service", "weight": 0.8 },
-        "similarTo": { "name": "highway=ford", "weight": 0.8 },
-        "similarTo": { "name": "highway=path", "weight": 0.8 }
-    },
-
-    "tag": {
-        "name": "highway=raceway",
-        "isA": "highway=road",
-        "similarTo": { "name": "highway=unclassified", "weight": 0.5 }
-    },
-
-    "tag": {
-        "name": "highway=ford",
-        "isA": "highway=road",
-        "similarTo": { "name": "highway=track", "weight": 0.8 }
-    },
-
-    "tag": {
-        "name": "highway=path",
-        "isA": "highway",
-        "similarTo": { "name": "highway=track", "weight": 0.8 },
-        "similarTo": { "name": "highway=pedestrian", "weight": 0.8 },
-        "geometries": ["linestring"]
-    },
-
-    "tag": {
-        "name": "highway=footway",
-        "isA": "highway=path",
-        "# preferred": { "highway": "path", "foot": "designated" }
-    },
-
-    "tag": {
-        "name": "highway=steps",
-        "isA": "highway=footway" 
-    },
-
-    "tag": {
-        "name": "highway=pedestrian",
-        "isA": "highway=road",
-        "similarTo": { "name": "highway=path", "weight": 0.8 }
-    },
-
-    "tag": {
-        "name": "highway=construction",
-        "isA": "highway=road",
-        "similarTo": { "name": "highway=tertiary", "weight": 0.8 },
-        "similarTo": { "name": "highway=residential", "weight": 0.9 },
-        "similarTo": { "name": "highway=service", "weight": 0.8 }
-    },
 
 
     "###": "",
@@ -187,7 +41,7 @@
         "name": "oneway",
         "influence": 2.0,
         "type": "enumeration"
-    },        
+    },
 
     "tag": {
         "name": "oneway=yes",
@@ -431,7 +285,7 @@
         "isA": "bridge_tunnel=unknown",
         "similarTo": { "name": "bridge=no", "weight": 0.5 },
         "similarTo": { "name": "tunnel=yes", "weight": 0.01 },
-        "categories": ["poi"]
+        "categories": ["poi", "hgispoi"]
     },
 
     "tag": {
@@ -442,7 +296,8 @@
     "tag": {
         "name": "tunnel=yes",
         "isA": "bridge_tunnel=unknown",
-        "similarTo": { "name": "tunnel=no", "weight": 0.5 }
+        "similarTo": { "name": "tunnel=no", "weight": 0.5 },
+        "categories": ["poi", "hgispoi"]
     },
 
     "tag": {

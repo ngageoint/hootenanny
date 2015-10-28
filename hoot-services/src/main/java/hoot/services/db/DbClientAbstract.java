@@ -38,7 +38,7 @@ public abstract class DbClientAbstract
 {
   private static final Logger log = LoggerFactory.getLogger(DbClientAbstract.class);
   
-  protected ClassPathXmlApplicationContext appContext;
+  private ClassPathXmlApplicationContext appContext;
   protected PlatformTransactionManager transactionManager;
   protected boolean simulateFailure = false;
   protected long testDelayMilliseconds = -1;

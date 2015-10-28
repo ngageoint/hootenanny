@@ -27,6 +27,8 @@
 package hoot.services.controllers.osm;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -51,17 +53,13 @@ import hoot.services.models.osm.RelationMember;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
-import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.RandomNumberGenerator;
+import hoot.services.utils.XmlUtils;
 
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.ClientResponse.Status;
 
-/*
- * @todo Most of these tests could be converted to integration tests and after a refactoring,
- * could be replace with unit tests that test only the internal classes being used by this
- * Jersey resource.
- */
 public class ElementResourceTest extends OsmResourceTestAbstract
 {
   @SuppressWarnings("unused")
@@ -74,9 +72,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   
   private void verifyFirstNodeWasReturned(final Document responseData, final String id, 
     final long changesetId, final BoundingBox bounds) throws TransformerException, 
-    XPathExpressionException
+    XPathExpressionException, UnsupportedEncodingException
   {
-    XPath xpath = XmlDocumentBuilder.createXPath();
+    XPath xpath = XmlUtils.createXPath();
     
     OsmTestUtils.verifyOsmHeader(responseData);
     
@@ -90,19 +88,24 @@ public class ElementResourceTest extends OsmResourceTestAbstract
       2, 
       XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
     Assert.assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
-    Assert.assertEquals("val 1", xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData));
+    Assert.assertEquals(
+    	"val 1", 
+    	URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
     Assert.assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
-    Assert.assertEquals("val 2", xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData));
+    Assert.assertEquals(
+    	"val 2", 
+    	URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
   }
   
   private void verifyFirstWayWasReturned(final Document responseData, final String id, 
     final long changesetId, final Set<Long> wayNodeIds) throws TransformerException, 
-    XPathExpressionException
+    XPathExpressionException, UnsupportedEncodingException
   {
-    XPath xpath = XmlDocumentBuilder.createXPath();
+    XPath xpath = XmlUtils.createXPath();
     
     OsmTestUtils.verifyOsmHeader(responseData);
     
+    //TODO: needed?
     //Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
     Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
     Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
@@ -112,9 +115,13 @@ public class ElementResourceTest extends OsmResourceTestAbstract
       2, 
       XPathAPI.selectNodeList(responseData, "//osm/way[1]/tag").getLength());
     Assert.assertEquals("key 1", xpath.evaluate("//osm/way[1]/tag[1]/@k", responseData));
-    Assert.assertEquals("val 1", xpath.evaluate("//osm/way[1]/tag[1]/@v", responseData));
+    Assert.assertEquals(
+    	"val 1", 
+    	URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[1]/@v", responseData), "UTF-8"));
     Assert.assertEquals("key 2", xpath.evaluate("//osm/way[1]/tag[2]/@k", responseData));
-    Assert.assertEquals("val 2", xpath.evaluate("//osm/way[1]/tag[2]/@v", responseData));
+    Assert.assertEquals(
+    	"val 2", 
+    	URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[2]/@v", responseData), "UTF-8"));
     if (wayNodeIds != null)
     {
       Assert.assertEquals(
@@ -132,9 +139,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract
   
   private void verifyFirstRelationWasReturned(final Document responseData, final String id, 
     final long changesetId, final List<RelationMember> relationMembers) throws TransformerException, 
-    XPathExpressionException
+    XPathExpressionException, UnsupportedEncodingException
   {
-    XPath xpath = XmlDocumentBuilder.createXPath();
+    XPath xpath = XmlUtils.createXPath();
     
     OsmTestUtils.verifyOsmHeader(responseData);
     
@@ -147,7 +154,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract
       1, 
       XPathAPI.selectNodeList(responseData, "//osm/relation[1]/tag").getLength());
     Assert.assertEquals("key 1", xpath.evaluate("//osm/relation[1]/tag[1]/@k", responseData));
-    Assert.assertEquals("val 1", xpath.evaluate("//osm/relation[1]/tag[1]/@v", responseData));
+    Assert.assertEquals(
+    	"val 1", 
+    	URLDecoder.decode(xpath.evaluate("//osm/relation[1]/tag[1]/@v", responseData), "UTF-8"));
     if (relationMembers != null)
     {
       Assert.assertEquals(
@@ -862,7 +871,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract
     {
       resource()
         .path("api/0.6/node/" + nodeIdsArr[0])
-        .queryParam("mapId", String.valueOf(mapId + 1))
+        .queryParam(
+        	"mapId", 
+        	String.valueOf((int)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)))
         .accept(MediaType.TEXT_XML)
         .get(Document.class);
     }
@@ -889,7 +900,8 @@ public class ElementResourceTest extends OsmResourceTestAbstract
     final Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
     final Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
     
-    final String uniqueElementId = (mapId + 1) + "_n_" + nodeIdsArr[0];
+    final String uniqueElementId = 
+    	((int)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)) + "_n_" + nodeIdsArr[0];
     try
     {
       resource()
@@ -925,7 +937,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract
     {
       resource()
         .path("api/0.6/way/" + wayIdsArr[0] + "/full")
-        .queryParam("mapId", String.valueOf(mapId + 1))
+        .queryParam(
+        	"mapId", 
+        	String.valueOf((int)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)))
         .accept(MediaType.TEXT_XML)
         .get(Document.class);
     }
@@ -952,7 +966,8 @@ public class ElementResourceTest extends OsmResourceTestAbstract
     final Long[] wayIdsArr = wayIds.toArray(new Long[]{});
     final Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
     
-    final String uniqueElementId = (mapId + 1) + "_w_" + wayIdsArr[0];
+    final String uniqueElementId = 
+    	((int)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE)) + "_w_" + wayIdsArr[0];
     try
     {
       resource()

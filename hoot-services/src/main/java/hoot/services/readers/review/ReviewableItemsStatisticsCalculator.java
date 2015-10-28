@@ -59,8 +59,8 @@ public class ReviewableItemsStatisticsCalculator
   private static final Logger log = LoggerFactory
       .getLogger(ReviewableItemsStatisticsCalculator.class);
 
-  protected static final QReviewItems remviewItems = QReviewItems.reviewItems;
-  protected static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
+  private static final QReviewItems remviewItems = QReviewItems.reviewItems;
+  private static final QElementIdMappings elementIdMappings = QElementIdMappings.elementIdMappings;
   private long mapId;
 
   private Connection conn;
@@ -124,7 +124,7 @@ public class ReviewableItemsStatisticsCalculator
     java.util.Map<ElementType, Set<Long>> elementIdsWithinBoundsByType = null;
     if (!geospatialBounds.equals(BoundingBox.worldBounds()))
     {
-      // retrieve the ID's of all elements by type from the map that fall within
+      // retrieve the IDs of all elements by type from the map that fall within
       // the requested
       // geospatial bounds
       elementIdsWithinBoundsByType = (new Map(mapId, conn)).queryForElementIds(geospatialBounds);

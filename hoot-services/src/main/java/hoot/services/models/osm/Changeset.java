@@ -29,14 +29,11 @@ package hoot.services.models.osm;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Calendar;
 
 import javax.ws.rs.core.Response.Status;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import hoot.services.HootProperties;
@@ -46,9 +43,6 @@ import hoot.services.db2.QChangesets;
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.GeoUtils;
 import hoot.services.utils.ResourceErrorHandler;
-import hoot.services.utils.XmlDocumentBuilder;
-
-import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
@@ -58,16 +52,12 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 
 /**
  * Represents the model of an OSM changeset
- *
- * @todo Should this extend Element?
  */
 public class Changeset extends Changesets
 {
@@ -75,7 +65,7 @@ public class Changeset extends Changesets
   private static final long serialVersionUID = 4011802505587120104L;
 
   private static final Logger log = LoggerFactory.getLogger(Changeset.class);
-  protected static final QChangesets changesets  = QChangesets.changesets;
+  private static final QChangesets changesets  = QChangesets.changesets;
   @SuppressWarnings("unused")
   private int maxRecordBatchSize = -1;
   private Connection conn;
@@ -170,7 +160,7 @@ public class Changeset extends Changesets
     //use ChangesetDao anymore.
 
   	final Changesets changesetRecord =
-  	(Changesets)new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
+  	new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
   		.where(changesets.id.eq(getId()))
   		.singleResult(changesets);
 
@@ -203,7 +193,7 @@ public class Changeset extends Changesets
   }
 
   /**
-   * Updates the expiration of this changeset in the database by modifying its closed at time
+   * Updates the expiration of this changeset in the database by modifying it is closed at time
    *
    * This logic is pulled directly from the Rails port, and is meant to be executed
    * at the end of each upload process involving this changeset.  This effectively extends the
@@ -211,16 +201,13 @@ public class Changeset extends Changesets
    * if it has been opened but had no data added to it.
    *
    * @throws Exception
-   * @todo This method is very confusing.
    */
   public void updateExpiration() throws Exception
   {
     final DateTime now = new DateTime();
-
-    //SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-
+    
     Changesets changesetRecord =
-  	(Changesets)new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
+  	new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
   		.where(changesets.id.eq(getId()))
   		.singleResult(changesets);
 
@@ -315,7 +302,7 @@ public class Changeset extends Changesets
     }
     else
     {
-      //TODO: I have no idea why this code block is needed now.  It didn't use to be, but after
+      //I have no idea why this code block is needed now.  It didn't use to be, but after
       //some refactoring to support the changes to marking items as reviewed in ReviewResource, it
       //now is needed.  I've been unable to track down what causes this to happen.
       if (!changesetRecord.getClosedAt().before(new Timestamp(now.getMillis())))
@@ -350,7 +337,7 @@ public class Changeset extends Changesets
 
 
     Changesets changeset =
-  	(Changesets)new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
+  	new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
   		.where(changesets.id.eq(getId()))
   		.singleResult(changesets);
 
@@ -402,11 +389,11 @@ public class Changeset extends Changesets
     log.debug("Retrieving changeset bounds...");
 
     Changesets changeset =
-  	(Changesets)new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
+  	new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
   		.where(changesets.id.eq(getId()))
   		.singleResult(changesets);
 
-    //TODO: I don't like doing this...
+    //I don't like doing this...
     double minLon = changeset.getMinLon();
     double minLat = changeset.getMinLat();
     double maxLon = changeset.getMaxLon();
@@ -490,7 +477,7 @@ public class Changeset extends Changesets
     {
       log.debug("Verifying changeset with ID: " + getId() + " has previously been created ...");
       changesetRecord =
-    	(Changesets)new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
+    	new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
     		.where(changesets.id.eq(getId()))
     		.singleResult(changesets);
       changesetExists = changesetRecord != null;
@@ -517,7 +504,7 @@ public class Changeset extends Changesets
       //this needs to be retrieved again to refresh the data
 
       changesetRecord =
-    	(Changesets)new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
+    	new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
     		.where(changesets.id.eq(getId()))
     		.singleResult(changesets);
       throw new Exception(
@@ -543,9 +530,8 @@ public class Changeset extends Changesets
       XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange/*/way").getLength() +
       XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange/*/relation").getLength();
 
-    //SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
     Changesets changeset =
-  	(Changesets)new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
+  	new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
   		.where(changesets.id.eq(getId()))
   		.singleResult(changesets);
      return
@@ -614,32 +600,5 @@ public class Changeset extends Changesets
 
     }// end try
 
-  }
-
-
-  /**
-   * Creates a simple OSM changeset create XML document
-   *
-   * @param description an optional changeset description
-   * @return a changeset XML document
-   * @throws ParserConfigurationException
-   * @throws IOException
-   * @throws SAXException
-   */
-  public static Document getChangesetCreateDoc(final String description) throws SAXException,
-    IOException, ParserConfigurationException
-  {
-    String changesetDocStr =
-      "<osm>" +
-        "<changeset version=\"0.3\" generator=\"hoot-services\">";
-    if (StringUtils.trimToNull(description) != null)
-    {
-      changesetDocStr +=
-        "<tag k=\"description\" v=\"" + description + "\"/>";
-    }
-    changesetDocStr +=
-        "</changeset>" +
-      "</osm>";
-    return XmlDocumentBuilder.parse(changesetDocStr);
   }
 }

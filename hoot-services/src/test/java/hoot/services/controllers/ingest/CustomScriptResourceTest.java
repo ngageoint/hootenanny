@@ -56,8 +56,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import com.sun.jersey.api.client.UniformInterfaceException;
-
 /*
  * For the save/delete multiple tests, was unable to use the Jersey test container due to
  * BaseMapResource and FileUploadResource use of HttpServletRequest in their Jersey methods.  There
@@ -156,20 +154,6 @@ public class CustomScriptResourceTest
         new Script("testName1", "Test Description 1", "test1"),
         new Script("testName2", "Test Description 2", "test2") });
 
-//    ScriptsModifiedResponse response = null;
-//    try
-//    {
-//      response =
-//        resource()
-//          .path("/customscript/saveMultiple")
-//          .accept(MediaType.APPLICATION_JSON)
-//          .post(ScriptsModifiedResponse.class, request);
-//    }
-//    catch (UniformInterfaceException e)
-//    {
-//      ClientResponse r = e.getResponse();
-//      Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
-//    }
     ScriptsModifiedResponse response = res.saveScripts(request);
 
     assertEquals(2, response.getScriptsModified().length);
@@ -202,14 +186,7 @@ public class CustomScriptResourceTest
      * The upload directory should be created if it doesn't exist.
      */
 
-    //Tried to use a mock for this, but couldn't get it to work.
-//    CustomScriptResource resource =
-//      PowerMock.createPartialMock(CustomScriptResource.class, "uploadDirExists");
-//    PowerMock.expectPrivate(resource, "uploadDirExists").andReturn(false);
-//    resource.scriptFolder = res.scriptFolder;
     FileUtils.deleteDirectory(new File(res.scriptFolder));
-
-    //PowerMock.replay(resource);
 
     ModifyScriptsRequest request = new ModifyScriptsRequest();
     request.setScripts(
@@ -445,20 +422,6 @@ public class CustomScriptResourceTest
     scriptsToDelete.add(script);
     request.setScripts(scriptsToDelete.toArray(new Script[]{}));
 
-//    ScriptsModifiedResponse deleteResponse = null;
-//    try
-//    {
-//      deleteResponse =
-//        resource()
-//          .path("/customscript/deletescripts")
-//          .accept(MediaType.APPLICATION_JSON)
-//          .delete(ScriptsModifiedResponse.class, new String[]{ "testName9", "testName10" });
-//    }
-//    catch (UniformInterfaceException e)
-//    {
-//      ClientResponse r = e.getResponse();
-//      Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
-//    }
     ScriptsModifiedResponse deleteResponse = res.deleteScripts(request);
 
     assertEquals(2, deleteResponse.getScriptsModified().length);

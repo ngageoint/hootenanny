@@ -1,3 +1,4 @@
+
 == Hootenanny Advanced options rules meta file description
 
 This description is for quick overview of conflation advanced option meta data rule rest endpoint.
@@ -29,3 +30,4 @@ This description is for quick overview of conflation advanced option meta data r
 7. Service rest endpoint http://localhost:8080/hoot-services/info/advancedopts/getoptions?conftype=horizontal exposes modified conf/conflationHorizontalOps.json where it performs same operations as item #4 before returning output.
 8. reference, average and horizontal rest endpoint consists of subset of options used to be in UnifyingRoads.json
 9. reference, average and horizontal rest endpoint output is meant to override corresponding fields in custom rest endpoint when corresponding conflation type is selected on UI. (For example, for reference conflation, the fields in reference rest endpoint will override the matching fields from custom rest end point output)
+

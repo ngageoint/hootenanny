@@ -246,5 +246,6 @@ public:
     }
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(MaximalNearestSublineTest);
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MaximalNearestSublineTest, "slow");
 

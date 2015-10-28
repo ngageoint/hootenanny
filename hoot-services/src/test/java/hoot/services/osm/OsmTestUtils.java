@@ -48,7 +48,7 @@ import hoot.services.models.osm.Relation;
 import hoot.services.models.osm.RelationMember;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.Way;
-import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
@@ -454,13 +454,13 @@ public class OsmTestUtils
       		;
       Assert.assertEquals(5, nodes.size());
 
-      CurrentNodes nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[0]);
+      CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
       Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
       Assert.assertEquals(
-        new Double((double)originalBounds.getMinLat()),
+        new Double(originalBounds.getMinLat()),
         nodeRecord.getLatitude());
       Assert.assertEquals(
-        new Double((double)originalBounds.getMinLon()),
+        new Double(originalBounds.getMinLon()),
         nodeRecord.getLongitude());
       Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
       Assert.assertEquals(new Long(1), nodeRecord.getVersion());
@@ -482,13 +482,13 @@ public class OsmTestUtils
         }
       }
 
-      nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[1]);
+      nodeRecord = nodes.get(nodeIdsArr[1]);
       Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
       Assert.assertEquals(
-        new Double((double)originalBounds.getMaxLat()),
+        new Double(originalBounds.getMaxLat()),
         nodeRecord.getLatitude());
       Assert.assertEquals(
-        new Double((double)originalBounds.getMaxLon()),
+        new Double(originalBounds.getMaxLon()),
         nodeRecord.getLongitude());
       Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
       Assert.assertEquals(new Long(1), nodeRecord.getVersion());
@@ -506,13 +506,13 @@ public class OsmTestUtils
         }
       }
 
-      nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[2]);
+      nodeRecord = nodes.get(nodeIdsArr[2]);
       Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
       Assert.assertEquals(
-        new Double((double)originalBounds.getMinLat()),
+        new Double(originalBounds.getMinLat()),
         nodeRecord.getLatitude());
       Assert.assertEquals(
-        new Double((double)originalBounds.getMinLon()),
+        new Double(originalBounds.getMinLon()),
         nodeRecord.getLongitude());
       Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
       Assert.assertEquals(new Long(1), nodeRecord.getVersion());
@@ -530,13 +530,13 @@ public class OsmTestUtils
         }
       }
 
-      nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[3]);
+      nodeRecord = nodes.get(nodeIdsArr[3]);
       Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
       Assert.assertEquals(
-        new Double((double)originalBounds.getMinLat()),
+        new Double(originalBounds.getMinLat()),
         nodeRecord.getLatitude());
       Assert.assertEquals(
-        new Double((double)originalBounds.getMinLon()),
+        new Double(originalBounds.getMinLon()),
         nodeRecord.getLongitude());
       Assert.assertEquals(nodeIdsArr[3], nodeRecord.getId());
       Assert.assertEquals(new Long(1), nodeRecord.getVersion());
@@ -555,13 +555,13 @@ public class OsmTestUtils
         }
       }
 
-      nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[4]);
+      nodeRecord = nodes.get(nodeIdsArr[4]);
       Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
       Assert.assertEquals(
-        new Double((double)originalBounds.getMinLat()),
+        new Double(originalBounds.getMinLat()),
         nodeRecord.getLatitude());
       Assert.assertEquals(
-        new Double((double)originalBounds.getMinLon()),
+        new Double(originalBounds.getMinLon()),
         nodeRecord.getLongitude());
       Assert.assertEquals(nodeIdsArr[4], nodeRecord.getId());
       Assert.assertEquals(new Long(1), nodeRecord.getVersion());
@@ -609,7 +609,7 @@ public class OsmTestUtils
       Assert.assertEquals(3, ways.size());
 
       QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
-      CurrentWays wayRecord = (CurrentWays)ways.get(wayIdsArr[0]);
+      CurrentWays wayRecord = ways.get(wayIdsArr[0]);
       Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
       Assert.assertEquals(wayIdsArr[0], wayRecord.getId());
       Assert.assertEquals(new Long(1), wayRecord.getVersion());
@@ -648,7 +648,7 @@ public class OsmTestUtils
       }
 
 
-      wayRecord = (CurrentWays)ways.get(wayIdsArr[1]);
+      wayRecord = ways.get(wayIdsArr[1]);
       Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
       Assert.assertEquals(wayIdsArr[1], wayRecord.getId());
       Assert.assertEquals(new Long(1), wayRecord.getVersion());
@@ -682,7 +682,7 @@ public class OsmTestUtils
         }
       }
 
-      wayRecord = (CurrentWays)ways.get(wayIdsArr[2]);
+      wayRecord = ways.get(wayIdsArr[2]);
       Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
       Assert.assertEquals(wayIdsArr[2], wayRecord.getId());
       Assert.assertEquals(new Long(1), wayRecord.getVersion());
@@ -747,7 +747,7 @@ public class OsmTestUtils
 
       QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
       CurrentRelations relationRecord =
-        (CurrentRelations)relations.get(relationIdsArr[0]);
+        relations.get(relationIdsArr[0]);
       Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
       Assert.assertEquals(relationIdsArr[0], relationRecord.getId());
       Assert.assertEquals(new Long(1), relationRecord.getVersion());
@@ -810,7 +810,7 @@ public class OsmTestUtils
         }
       }
 
-      relationRecord = (CurrentRelations)relations.get(relationIdsArr[1]);
+      relationRecord = relations.get(relationIdsArr[1]);
       Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
       Assert.assertEquals(relationIdsArr[1], relationRecord.getId());
       Assert.assertEquals(new Long(1), relationRecord.getVersion());
@@ -858,7 +858,7 @@ public class OsmTestUtils
         }
       }
 
-      relationRecord = (CurrentRelations)relations.get(relationIdsArr[2]);
+      relationRecord = relations.get(relationIdsArr[2]);
       Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
       Assert.assertEquals(relationIdsArr[2], relationRecord.getId());
       Assert.assertEquals(new Long(1), relationRecord.getVersion());
@@ -894,7 +894,7 @@ public class OsmTestUtils
         }
       }
 
-      relationRecord = (CurrentRelations)relations.get(relationIdsArr[3]);
+      relationRecord = relations.get(relationIdsArr[3]);
       Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
       Assert.assertEquals(relationIdsArr[3], relationRecord.getId());
       Assert.assertEquals(new Long(1), relationRecord.getVersion());
@@ -955,7 +955,7 @@ public class OsmTestUtils
 
       QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
       CurrentRelations relationRecord =
-        (CurrentRelations)relations.get(relationIdsArr[0]);
+        relations.get(relationIdsArr[0]);
       Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
       Assert.assertEquals(relationIdsArr[0], relationRecord.getId());
       Assert.assertEquals(new Long(1), relationRecord.getVersion());
@@ -1001,7 +1001,7 @@ public class OsmTestUtils
         }
       }
 
-      relationRecord = (CurrentRelations)relations.get(relationIdsArr[1]);
+      relationRecord = relations.get(relationIdsArr[1]);
       Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
       Assert.assertEquals(relationIdsArr[1], relationRecord.getId());
       Assert.assertEquals(new Long(1), relationRecord.getVersion());
@@ -1050,7 +1050,7 @@ public class OsmTestUtils
         }
       }
 
-      relationRecord = (CurrentRelations)relations.get(relationIdsArr[2]);
+      relationRecord = relations.get(relationIdsArr[2]);
       Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
       Assert.assertEquals(relationIdsArr[2], relationRecord.getId());
       Assert.assertEquals(new Long(1), relationRecord.getVersion());
@@ -1097,7 +1097,7 @@ public class OsmTestUtils
   {
     try
     {
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
       Assert.assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
       Assert.assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
@@ -1115,7 +1115,7 @@ public class OsmTestUtils
   {
     try
     {
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/bounds").getLength());
       Assert.assertEquals(
         expectedBounds.getMinLat(),
@@ -1146,7 +1146,7 @@ public class OsmTestUtils
   {
     try
     {
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       if (!multiLayerUniqueElementIds)
       {
         Assert.assertEquals(
@@ -1210,7 +1210,7 @@ public class OsmTestUtils
   {
     try
     {
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       if (!multiLayerUniqueElementIds)
       {
@@ -1282,7 +1282,7 @@ public class OsmTestUtils
   {
     try
     {
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       if (!multiLayerUniqueElementIds)
       {
@@ -1387,7 +1387,7 @@ public class OsmTestUtils
     return expandedBounds;
   }
 
-  //TODO: This method adds nodes that are completely outside of the query bounds, so that we can
+  //This method adds nodes that are completely outside of the query bounds, so that we can
   //make sure it that ways and relations created with them don't come back in the response.
   //Eventually, this out of bounds data should be made part of the test dataset created in
   //ChangesetResourceUtils.  Since that involves updating *a lot* of tests, so not doing it right

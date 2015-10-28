@@ -289,6 +289,36 @@ std::ostream& operator<<(std::ostream& o, const std::set<T, C>& s)
   return o;
 }
 
+template <class T>
+std::ostream& operator<<(std::ostream & o, const shared_ptr<T>& v)
+{
+  if (v == 0)
+  {
+    o << "null";
+  }
+  else
+  {
+    o << *v;
+  }
+
+  return o;
+}
+
+template <class T>
+std::ostream& operator<<(std::ostream & o, const shared_ptr<const T>& v)
+{
+  if (v == 0)
+  {
+    o << "null";
+  }
+  else
+  {
+    o << *v;
+  }
+
+  return o;
+}
+
 template<class V>
 V conv(const std::string& s)
 {

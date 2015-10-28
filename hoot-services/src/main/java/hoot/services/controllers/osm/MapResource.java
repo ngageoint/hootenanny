@@ -36,9 +36,9 @@ import hoot.services.db2.QMaps;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobExecutioner;
 import hoot.services.job.JobStatusManager;
+import hoot.services.models.dataset.FolderRecords;
+import hoot.services.models.dataset.LinkRecords;
 import hoot.services.models.osm.Element.ElementType;
-import hoot.services.models.osm.FolderRecords;
-import hoot.services.models.osm.LinkRecords;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.ModelDaoUtils;
@@ -115,7 +115,7 @@ public class MapResource
 
 	/**
 	 * <NAME>Map Service - List Layers </NAME> <DESCRIPTION> Returns a list of all
-	 * map layers in the services database </DESCRIPTION> <PARAMETERS>
+	 * map layers in the services database. </DESCRIPTION> <PARAMETERS>
 	 * </PARAMETERS> <OUTPUT> a JSON object containing a list of map layers
 	 * </OUTPUT> <EXAMPLE>
 	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map/layers</URL>
@@ -169,7 +169,7 @@ public class MapResource
 
 	/**
 	 * <NAME>Map Service - List Folders </NAME> <DESCRIPTION> Returns a list of
-	 * all folders in the services database </DESCRIPTION> <PARAMETERS>
+	 * all folders in the services database. </DESCRIPTION> <PARAMETERS>
 	 * </PARAMETERS> <OUTPUT> a JSON object containing a list of folders </OUTPUT>
 	 * <EXAMPLE>
 	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map/folders</URL>
@@ -224,7 +224,7 @@ public class MapResource
 
 	/**
 	 * <NAME>Map Service - List Links </NAME> <DESCRIPTION> Returns a list of all
-	 * folder-map links </DESCRIPTION> <PARAMETERS> </PARAMETERS> <OUTPUT> a JSON
+	 * folder-map links. </DESCRIPTION> <PARAMETERS> </PARAMETERS> <OUTPUT> a JSON
 	 * object containing a list of folders </OUTPUT> <EXAMPLE>
 	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map/links</URL>
 	 * <REQUEST_TYPE>GET</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT> { "links": [ {
@@ -324,9 +324,17 @@ public class MapResource
 		boundsElem.setAttribute("maxlat", maxlat);
 		boundsElem.setAttribute("maxlon", maxlon);
 		osmElem.appendChild(boundsElem);
+		
+		//The ID's for these fabricated nodes were stepping on the ID's of actual nodes, so their
+		//ID's need to be made negative and large, so they have no chance of stepping on anything.
+		
+		final long node1Id = Long.MIN_VALUE + 3;
+		final long node2Id = Long.MIN_VALUE + 2;
+		final long node3Id = Long.MIN_VALUE + 1;
+		final long node4Id = Long.MIN_VALUE;
 
 		Element nodeElem = doc.createElement("node");
-		nodeElem.setAttribute("id", "0");
+		nodeElem.setAttribute("id", String.valueOf(node1Id));
 		nodeElem.setAttribute("timestamp", strDate);
 		nodeElem.setAttribute("user", "hootenannyuser");
 		nodeElem.setAttribute("visible", "true");
@@ -336,7 +344,7 @@ public class MapResource
 		osmElem.appendChild(nodeElem);
 
 		nodeElem = doc.createElement("node");
-		nodeElem.setAttribute("id", "1");
+		nodeElem.setAttribute("id", String.valueOf(node2Id));
 		nodeElem.setAttribute("timestamp", strDate);
 		nodeElem.setAttribute("user", "hootenannyuser");
 		nodeElem.setAttribute("visible", "true");
@@ -346,7 +354,7 @@ public class MapResource
 		osmElem.appendChild(nodeElem);
 
 		nodeElem = doc.createElement("node");
-		nodeElem.setAttribute("id", "2");
+		nodeElem.setAttribute("id", String.valueOf(node3Id));
 		nodeElem.setAttribute("timestamp", strDate);
 		nodeElem.setAttribute("user", "hootenannyuser");
 		nodeElem.setAttribute("visible", "true");
@@ -356,7 +364,7 @@ public class MapResource
 		osmElem.appendChild(nodeElem);
 
 		nodeElem = doc.createElement("node");
-		nodeElem.setAttribute("id", "3");
+		nodeElem.setAttribute("id", String.valueOf(node4Id));
 		nodeElem.setAttribute("timestamp", strDate);
 		nodeElem.setAttribute("user", "hootenannyuser");
 		nodeElem.setAttribute("visible", "true");
@@ -366,30 +374,30 @@ public class MapResource
 		osmElem.appendChild(nodeElem);
 
 		Element wayElem = doc.createElement("way");
-		wayElem.setAttribute("id", "0");
+		wayElem.setAttribute("id", String.valueOf(Long.MIN_VALUE));
 		wayElem.setAttribute("timestamp", strDate);
 		wayElem.setAttribute("user", "hootenannyuser");
 		wayElem.setAttribute("visible", "true");
 		wayElem.setAttribute("version", "1");
 
 		Element ndElem = doc.createElement("nd");
-		ndElem.setAttribute("ref", "0");
+		ndElem.setAttribute("ref", String.valueOf(node1Id));
 		wayElem.appendChild(ndElem);
 
 		ndElem = doc.createElement("nd");
-		ndElem.setAttribute("ref", "1");
+		ndElem.setAttribute("ref", String.valueOf(node2Id));
 		wayElem.appendChild(ndElem);
 
 		ndElem = doc.createElement("nd");
-		ndElem.setAttribute("ref", "2");
+		ndElem.setAttribute("ref", String.valueOf(node3Id));
 		wayElem.appendChild(ndElem);
 
 		ndElem = doc.createElement("nd");
-		ndElem.setAttribute("ref", "3");
+		ndElem.setAttribute("ref", String.valueOf(node4Id));
 		wayElem.appendChild(ndElem);
 
 		ndElem = doc.createElement("nd");
-		ndElem.setAttribute("ref", "0");
+		ndElem.setAttribute("ref", String.valueOf(node1Id));
 		wayElem.appendChild(ndElem);
 
 		/*
@@ -424,7 +432,7 @@ public class MapResource
 	 * </mapId> <bbox> string; geographic bounding box to restrict the map query
 	 * to of the form: minimum longitude, minimum latitude, maximum longitude,
 	 * maximum latitude; in WGS84 degrees </bbox> <multiLayerUniqueElementIds>
-	 * boolean; if true, returned element ID's are prepended with [map id]_[first
+	 * boolean; if true, returned element IDs are prepended with [map id]_[first
 	 * letter of the element type]_ </multiLayerUniqueElementIds> </PARAMETERS>
 	 * <OUTPUT> XML representation of each element which satisfied the map query
 	 * </OUTPUT> <EXAMPLE>
@@ -441,7 +449,7 @@ public class MapResource
 	 * @param bbox
 	 *          geographic bounding box the requested entities should reside in
 	 * @param multiLayerUniqueElementIds
-	 *          if true, returned element ID's are prepended with <map id>_<first
+	 *          if true, returned element IDs are prepended with <map id>_<first
 	 *          letter of the element type>_; this setting activated is not
 	 *          compatible with standard OSM clients (specific to Hootenanny iD);
 	 *          defaults to false
@@ -456,8 +464,9 @@ public class MapResource
 			@QueryParam("bbox") final String BBox,
 			@QueryParam("extent") final String extent,
 			@QueryParam("autoextent") final String auto,
-			@DefaultValue("false") @QueryParam("multiLayerUniqueElementIds") final boolean multiLayerUniqueElementIds)
-					throws Exception
+			@DefaultValue("false") @QueryParam("multiLayerUniqueElementIds") 
+			final boolean multiLayerUniqueElementIds)
+			throws Exception
 	{
 		Connection conn = DbUtils.createConnection();
 		Document responseDoc = null;
@@ -494,7 +503,6 @@ public class MapResource
 				maxY = maxY < -90 ? -90 : maxY;
 
 				bbox = "" + minX + "," + minY + "," + maxX + "," + maxY;
-
 			}
 
 			QMaps maps = QMaps.maps;
@@ -517,7 +525,6 @@ public class MapResource
 			boolean doDefault = true;
 			if (auto != null && extent != null)
 			{
-
 				if (auto.equalsIgnoreCase("manual"))
 				{
 					if (extent.length() > 0)
@@ -544,9 +551,7 @@ public class MapResource
 
 				responseDoc = (new MapQueryResponseWriter(mapIdNum, conn))
 						.writeResponse(results, queryBounds, multiLayerUniqueElementIds);
-
 			}
-
 		}
 		catch (Exception e)
 		{
@@ -560,8 +565,6 @@ public class MapResource
 		return Response
 				.ok(new DOMSource(responseDoc), MediaType.TEXT_XML)
 				.header("Content-type", MediaType.TEXT_XML)
-				// TODO: what's the point of setting this header?...taken directly from
-				// the rails port code
 				.header("Content-Disposition", "attachment; filename=\"map.osm\"")
 				.build();
 	}
@@ -616,7 +619,6 @@ public class MapResource
 					maxY = maxY < -90 ? -90 : maxY;
 
 					bbox = "" + minX + "," + minY + "," + maxX + "," + maxY;
-
 				}
 
 				QMaps maps = QMaps.maps;
@@ -637,7 +639,6 @@ public class MapResource
 				}
 				Map currMap = new Map(mapIdNum, conn);
 				nodeCnt += currMap.getNodesCount(queryBounds);
-
 			}
 
 			ret.put("nodescount", nodeCnt);
@@ -778,10 +779,10 @@ public class MapResource
 
 	/**
 	 * <NAME>Clean Map Data Service</NAME> <DESCRIPTION> Clean map data service
-	 * provides the ability to remove map associated record. It removes from
-	 * CURRENT_WAY_NODES,CURRENT_RELATION_MEMBERS,CURRENT_NODES,CURRENT_WAYS,
-	 * CURRENT_RELATIONS,
-	 * CHANGESET_TAGS,CHANGESETS,MAPS,REVIEW_ITEMS,ELEMENT_ID_MAPPINGS and
+	 * provides the ability to remove an associated map record. It removes from
+	 * CURRENT_WAY_NODES, CURRENT_RELATION_MEMBERS, CURRENT_NODES, CURRENT_WAYS, 
+	 * CURRENT_RELATIONS, 
+	 * CHANGESET_TAGS, CHANGESETS,MAPS, REVIEW_ITEMS, ELEMENT_ID_MAPPINGS, and
 	 * REVIEW_MAP. </DESCRIPTION> <PARAMETERS> <mapId> ID of map record to be
 	 * deleted
 	 * http://localhost:8080/hoot-services/osm/api/0.6/map/delete?mapId={Map ID}
@@ -817,7 +818,7 @@ public class MapResource
 
 	/**
 	 * <NAME>Modify Dataset or Folder Name</NAME> <DESCRIPTION> Modify Dataset or
-	 * Folder Name provides the ability to change the name of a dataset or Folder
+	 * Folder Name provides the ability to change the name of a dataset or Folder.
 	 * </DESCRIPTION> <PARAMETERS> <mapId> ID of map record or folder to be
 	 * modified </mapId> <modName> The new name for the dataset </modName>
 	 * <inputType> Flag for either dataset or folder </inputType> </PARAMETERS>
@@ -887,10 +888,10 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Add Folder </NAME> <DESCRIPTION> Adds new folder </DESCRIPTION>
+	 * <NAME>Add Folder </NAME> <DESCRIPTION> Adds new folder. </DESCRIPTION>
 	 * <PARAMETERS> <folderName> Display name of folder </folderName> <parentId>
 	 * The parent folder of the new folder. If at root level, is equal to 0.
-	 * </parentId> <OUTPUT> jobId Success = True/False </OUTPUT> <EXAMPLE>
+	 * </parentId> </PARAMETERS> <OUTPUT> jobId Success = True/False </OUTPUT> <EXAMPLE>
 	 * <URL>http
 	 * ://localhost:8080/hoot-services/osm/api/0.6/map/addfolder?folderName
 	 * ={foldername}&parentId={parentId}</URL> <REQUEST_TYPE>POST</REQUEST_TYPE>
@@ -919,7 +920,6 @@ public class MapResource
 		SQLQuery query = new SQLQuery(conn, configuration);
 
 		long userId = 1;
-		// String userid = HootProperties.getProperty("dbUserId");
 
 		try
 		{
@@ -953,8 +953,11 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Delete Folder </NAME> <DESCRIPTION> Deletes folder </DESCRIPTION>
-	 * <PARAMETERS> <folderId> Folder Id </folderName> <OUTPUT> jobId </OUTPUT>
+	 * <NAME>Delete Folder </NAME> <DESCRIPTION> Deletes folder. </DESCRIPTION>
+	 * <PARAMETERS> 
+	 * <folderId> Folder Id </folderId> 
+	 * </PARAMETERS>
+	 * <OUTPUT> jobId </OUTPUT>
 	 * <EXAMPLE>
 	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map/deletefolder
 	 * ?folderId={folderId}</URL> <REQUEST_TYPE>POST</REQUEST_TYPE> <INPUT>
@@ -1022,12 +1025,15 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Update Parent ID </NAME> <DESCRIPTION> Modifies the parent ID of a
-	 * folder </DESCRIPTION> <PARAMETERS> <folderId> ID of folder </folderId>
-	 * <parentId> ID of parent folder </mapId> <OUTPUT> jobId Success = True/False
-	 * </OUTPUT> <EXAMPLE>
+	 * <NAME>Update Parent ID </NAME> 
+	 * <DESCRIPTION> Modifies the parent ID of a folder. </DESCRIPTION> 
+	 * <PARAMETERS> 
+	 * <folderId> ID of folder </folderId>
+	 * </PARAMETERS>
+	 * <OUTPUT> jobId Success = True/False </OUTPUT> 
+	 * <EXAMPLE>
 	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map
-	 * /updateParentId?folderId={folderId}&parentId={parentId}</URL>
+	 * /updateParentId?folderId={folderId}</URL>
 	 * <REQUEST_TYPE>POST</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT>{"jobId":
 	 * "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT> </EXAMPLE>
 	 * 
@@ -1072,11 +1078,16 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Link Map and Folder </NAME> <DESCRIPTION> Adds or modifies record in
-	 * folder_map_mappings if layer is created or modified </DESCRIPTION>
-	 * <PARAMETERS> <folderId> ID of folder </folderName> <mapId> name of map.
-	 * Need to get Id from Map table. </mapId> <updateType> new: creates new link
-	 * update: updates link delete: deletes link </updateType> <OUTPUT> jobId
+	 * <NAME>Link Map and Folder </NAME> 
+	 * <DESCRIPTION> Adds or modifies record in
+	 * folder_map_mappings if layer is created or modified. </DESCRIPTION>
+	 * <PARAMETERS> 
+	 * <folderId> ID of folder </folderId> 
+	 * <mapId> ID of map. </mapId> 
+	 * <updateType> new: creates new link;
+	 * update: updates link delete: deletes link </updateType>
+	 * </PARAMETERS>
+	 * <OUTPUT> jobId
 	 * Success = True/False </OUTPUT> <EXAMPLE>
 	 * <URL>http://localhost:8080/hoot-services
 	 * /osm/api/0.6/map/addfolder?folderName
@@ -1136,13 +1147,7 @@ public class MapResource
 							folderMapMappings.folderId).values(newId, _mapId, _folderId)
 							.execute();
 				}
-			} /*
-			 * else if (updateType.equalsIgnoreCase("update")) { //find current
-			 * record for the layer and update with new folder new
-			 * SQLUpdateClause(conn, configuration, folderMapMappings)
-			 * .where(folderMapMappings.mapId.eq(_mapId))
-			 * .set(folderMapMappings.folderId,_folderId) .execute(); }
-			 */
+			}
 		}
 		catch (Exception e)
 		{

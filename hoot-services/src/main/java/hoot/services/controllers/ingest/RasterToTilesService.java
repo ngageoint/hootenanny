@@ -100,7 +100,6 @@ public class RasterToTilesService extends JobControllerBase {
 	{
 		//_zoomLevels
 		Connection conn = DbUtils.createConnection();
-		//String jobId = UUID.randomUUID().toString();
 
 		JobStatusManager jobStatusManager = null;
 		try
@@ -150,7 +149,6 @@ public class RasterToTilesService extends JobControllerBase {
 			JSONObject argStr =  _createCommandObj(name, zoomList, rasterSize, userEmail);
 			argStr.put("jobId", jobId);
 
-			//postJobRquest( jobId,  argStr);
 			JobExecutionManager jobExecManager = 
 				(JobExecutionManager)appContext.getBean("jobExecutionManagerNative");
 			jobExecManager.exec(argStr);
