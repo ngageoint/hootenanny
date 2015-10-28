@@ -431,10 +431,10 @@ public:
     ////////////////////////////////////////
     // insert simple test data
     ////////////////////////////////////////
-
-    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/users.sql > /dev/null 2>&1");
-    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1");
-    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodesReadTest.sql > /dev/null 2>&1");
+    std::system("export PGPASSWORD=hoottest; export PGUSER=hoot; export PGDATABASE=osmapi_test; \
+      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/users.sql > /dev/null 2>&1; \
+      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1; \
+      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodesReadTest.sql > /dev/null 2>&1");
 
     ///////////////////////////////////////
     // test the reader

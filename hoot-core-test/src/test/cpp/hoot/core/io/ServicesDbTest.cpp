@@ -448,7 +448,6 @@ public:
     // INSERT NODES INTO DB
     /////////////////////////////////////
 
-
     // list of insertions
     QList<long> ids;
     QList<QString> keys = QList<QString>() << "highway" << "accuracy" << "foo";
@@ -457,9 +456,10 @@ public:
     QList<float> lons = QList<float>() << -106.5 << -104;
 
     // Insert nodes
-    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/users.sql > /dev/null 2>&1");
-    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1");
-    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodes.sql > /dev/null 2>&1");
+    std::system("export PGPASSWORD=hoottest; export PGUSER=hoot; export PGDATABASE=osmapi_test; \
+      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/users.sql > /dev/null 2>&1; \
+      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1; \
+      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodes.sql > /dev/null 2>&1");
 
     /////////////////////////////////////
     // SELECT THE NODES USING SELECT_ALL
@@ -539,7 +539,8 @@ public:
     nodeIds.push_back(nodeId1);
     nodeIds.push_back(nodeId2);
 
-    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/ways.sql > /dev/null 2>&1");
+    std::system("export PGPASSWORD=hoottest; export PGUSER=hoot; export PGDATABASE=osmapi_test; \
+      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/ways.sql > /dev/null 2>&1");
 
 
     ///////////////////////////////////////////////
@@ -606,7 +607,8 @@ public:
     long relationId = 1;
     ids.append(relationId);
 
-    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/relations.sql > /dev/null 2>&1");
+    std::system("export PGPASSWORD=hoottest; export PGUSER=hoot; export PGDATABASE=osmapi_test; \
+      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/relations.sql > /dev/null 2>&1");
 
 
     ///////////////////////////////////////////////
