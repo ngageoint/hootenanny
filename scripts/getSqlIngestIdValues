@@ -29,6 +29,11 @@ sub parseSqlMax($)
     exit;
   }
 
+  if ( $returnLines[ scalar(@returnLines) - 2] =~ /^\s*$/ )
+  {
+    return 0;
+  }
+
   my $maxId = int($returnLines[ scalar(@returnLines) - 2 ]);
 
   if ( $maxId < 1 )
