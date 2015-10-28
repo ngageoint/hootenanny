@@ -168,6 +168,8 @@ protected:
 
   const static unsigned int  _maxChangesInChangeset  = 50000;     /// Max changes in one changeset
 
+  bool _dataWritten;
+
   void _closeSectionTempFilesAndConcat();
 
   void _createNodeTables();

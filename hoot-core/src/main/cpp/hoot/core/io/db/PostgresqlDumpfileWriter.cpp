@@ -66,7 +66,8 @@ PostgresqlDumpfileWriter::PostgresqlDumpfileWriter():
   _configData(),
   _idMappings(),
   _changesetData(),
-  _unresolvedRefs()
+  _unresolvedRefs(),
+  _dataWritten(false)
 {
   setConfiguration(conf());
 
@@ -116,6 +117,8 @@ void PostgresqlDumpfileWriter::open(QString url)
 
   _unresolvedRefs.unresolvedWaynodeRefs.reset();
   _unresolvedRefs.unresolvedRelationRefs.reset();
+
+  _dataWritten = false;
 }
 
 void PostgresqlDumpfileWriter::close()
@@ -155,7 +158,12 @@ void PostgresqlDumpfileWriter::finalizePartial()
     return;
   }
 
-  //LOG_INFO( QString("Finalize called, time to create ") + _outputFilename);
+  if ( _dataWritten == true )
+  {
+    return;
+  }
+
+  LOG_DEBUG( QString("Finalize called, time to create ") + _outputFilename);
 
   // Remove file if it used to be there;
   std::remove(_outputFilename.toStdString().c_str());
@@ -180,17 +188,20 @@ void PostgresqlDumpfileWriter::finalizePartial()
   // Do we have an unfinished changeset that needs flushing?
   if ( _changesetData.changesInChangeset >  0 )
   {
+    LOG_DEBUG("Flushed changeset to disk");
     _writeChangesetToTable();
   }
 
   for ( std::list<QString>::const_iterator it = _sectionNames.begin();
         it != _sectionNames.end(); ++it )
   {
-    if ( _outputSections.find(*it) == _outputSections.end() )
+   if ( _outputSections.find(*it) == _outputSections.end() )
     {
       LOG_DEBUG("No data for table " + *it);
       continue;
     }
+
+    LOG_DEBUG("Flushing section " << *it << " to file " << (_outputSections[*it].first)->fileName());
 
     // Write close marker for table
     if ( (*it != "byte_order_mark") && (*it != "sequence_updates") )
@@ -223,6 +234,8 @@ void PostgresqlDumpfileWriter::finalizePartial()
 
     LOG_DEBUG( "Wrote contents of section " + *it );
   }
+
+  _dataWritten = true;
 }
 
 void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
@@ -714,6 +727,7 @@ void PostgresqlDumpfileWriter::_createTable( const QString& tableName, const QSt
   {
     throw HootException("Could not open temp file for contents of table " + tableName);
   }
+  tempfile->setAutoRemove(false);
 
   _outputSections[tableName] =
       std::pair< boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> >(
