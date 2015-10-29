@@ -2,6 +2,6 @@
 # EZ script for cleaning and building hoot in one shot without services
 
 cd $HOOT_HOME
-make -sj8 clean-all
+make -sj8 clean
 aclocal && autoconf && autoheader && automake
 ./configure --with-rnd && make -sj8
