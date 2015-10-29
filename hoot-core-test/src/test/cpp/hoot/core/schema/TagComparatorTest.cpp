@@ -47,13 +47,13 @@ namespace hoot
 class TagComparatorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(TagComparatorTest);
-  //CPPUNIT_TEST(averageTest);
+  CPPUNIT_TEST(averageTest);
   CPPUNIT_TEST(averageCaseInsensitiveTest);
   CPPUNIT_TEST(buildingTest);
   CPPUNIT_TEST(compareTest);
   CPPUNIT_TEST(compareNamesTest);
   CPPUNIT_TEST(compareEnumTest);
-  //CPPUNIT_TEST(generalizeTest);
+  CPPUNIT_TEST(generalizeTest);
   //CPPUNIT_TEST(generalizeCaseInsensitiveTest);
   CPPUNIT_TEST(railwayBusStopTest);
   CPPUNIT_TEST(realWorldTest);
@@ -127,7 +127,7 @@ public:
         Tags expected;
         expected["highway"] = "primary";
         expected["name"] = "Midland Expressway";
-        expected["name:en"] = "Midland Expressway;MIDLAND EXPRESSWAY"; //TODO: fix
+        expected["name:en"] = "Midland Expressway";
         expected["ref"] = "US 24";
         expected["oneway"] = "yes";
         expected["lanes"] = "2";
@@ -170,7 +170,6 @@ public:
         uut.averageTags(t1, t2, avg);
         compareTags(expected, avg);
     }
-
 
     //    {
     //      Tags t1;
@@ -266,7 +265,7 @@ public:
       expected["ref"] = "US 24";
       expected["oneway"] = "yes";
       expected["lanes"] = "2";
-      expected["alt_name"] = "24;MIDLAND EXPRESSWAY;Midland Expy";  //TODO: is this right?
+      expected["alt_name"] = "24;Midland Expy";  //TODO: fix
       expected["name:he"] = "מידלנד המהיר";
       expected["bridge"] = "yes";
       expected["uuid"] = "foo;bar";
@@ -552,21 +551,21 @@ public:
         Tags t1;
         t1["name"] = "foo";
         t1["lala"] = "1;2";
-        t1["building"] = "YES";
+        t1["building"] = "yes";
         t1["uid"] = "123";
 
         Tags t2;
-        t2["name"] = "bar";
+        t2["name"] = "FOO";
         t2["lala"] = "2;1";
         t2["building"] = "yes";
         t2["uid"] = "456";
 
         Tags expected;
         expected["name"] = "foo";
-        expected["alt_name"] = "bar";
+        expected["alt_name"] = "FOO";
         expected["lala"] = "1;2";
         expected["uid"] = "123;456";
-        expected["building"] = "YES;yes";  //TODO: fix
+        expected["building"] = "yes";
 
         Tags gen = uut.generalize(t1, t2);
         compareTags(expected, gen);
@@ -672,21 +671,21 @@ public:
       Tags t1;
       t1["name"] = "foo";
       t1["lala"] = "1;2";
-      t1["building"] = "YES";
+      t1["building"] = "yes";
       t1["uid"] = "123";
 
       Tags t2;
-      t2["name"] = "bar";
+      t2["name"] = "FOO";
       t2["lala"] = "2;1";
       t2["building"] = "yes";
       t2["uid"] = "456";
 
       Tags expected;
       expected["name"] = "foo";
-      expected["alt_name"] = "bar";
+      expected["alt_name"] = ""; //TODO: fix
       expected["lala"] = "1;2";
       expected["uid"] = "123;456";
-      expected["building"] = "YES;yes"; //TODO: fix
+      expected["building"] = "yes";
 
       Tags gen = uut.generalize(t1, t2);
       compareTags(expected, gen);
@@ -839,10 +838,7 @@ public:
 
       CPPUNIT_ASSERT_DOUBLES_EQUAL(0.76, uut.compareTags(t1, t2), 0.001);
     }
-
   }
-
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TagComparatorTest, "quick");

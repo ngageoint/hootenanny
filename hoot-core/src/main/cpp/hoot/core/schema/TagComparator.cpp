@@ -120,22 +120,38 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
 
   Tags t1 = t1In;
   Tags t2 = t2In;
+  LOG_DEBUG("start");
+  LOG_VARD(t1);
+  LOG_VARD(t2);
 
   set<QString> k1, k2;
 
   mergeNames(t1, t2, result);
+  LOG_DEBUG("after merge names");
+  //LOG_VARD(t1);
+  //LOG_VARD(t2);
+  LOG_VARD(result);
 
   // Merge any text fields by concatenating the lists.
   _mergeText(t1, t2, result);
+  LOG_DEBUG("after merge text");
+  //LOG_VARD(t1);
+  //LOG_VARD(t2);
+  LOG_VARD(result);
 
   if (keepAllUnknownTags)
   {
     _mergeUnrecognizedTags(t1, t2, result);
+    LOG_DEBUG("after merge unrecognized tags");
+    //LOG_VARD(t1);
+    //LOG_VARD(t2);
+    LOG_VARD(result);
   }
 
   for (Tags::const_iterator it1 = t1.begin(); it1 != t1.end(); it1++)
   {
     QString kvp1 = it1.key() + "=" + it1.value();
+    //LOG_VARD(kvp1);
     QString kvp2;
     double bestScore = 0;
     QString bestKvp;
@@ -143,6 +159,7 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
     for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); it2++)
     {
       kvp2 = it2.key() + "=" + it2.value();
+      //LOG_VARD(kvp2);
       double score;
       QString thisKvp = schema.average(kvp1, w1, kvp2, w2, score);
       if (score > bestScore && k2.find(it2.key()) == k2.end())
@@ -168,23 +185,32 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
       }
     }
   }
+  LOG_DEBUG("after first loop");
+  LOG_VARD(result);
 
   for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); it2++)
   {
+    //LOG_VARD(it2.key());
+    //LOG_VARD(it2.value());
     if (k2.find(it2.key()) == k2.end())
     {
       result[it2.key()] = it2.value();
     }
   }
+  LOG_DEBUG("after second loop");
+  LOG_VARD(result);
 
   for (Tags::const_iterator it1 = t1.begin(); it1 != t1.end(); it1++)
   {
+    //LOG_VARD(it1.key());
+    //LOG_VARD(it1.value());
     if (k1.find(it1.key()) == k1.end())
     {
       result[it1.key()] = it1.value();
     }
   }
-
+  LOG_DEBUG("after third loop");
+  LOG_VARD(result);
 }
 
 void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
@@ -497,9 +523,12 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
   set<QString> toRemove;
 
   toRemove.insert("alt_name");
+  //LOG_VARD(toRemove);
 
   for (Tags::const_iterator it1 = t1.begin(); it1 != t1.end(); it1++)
   {
+    //LOG_VARD(it1.key());
+    //LOG_VARD(it1.value());
     if (it1.key() == "alt_name")
     {
       QStringList sl = Tags::split(it1.value());
@@ -510,34 +539,53 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
       if (OsmSchema::getInstance().isAncestor(it1.key(), "abstract_name"))
       {
         result[it1.key()] = it1.value();
+        //LOG_VARD(result);
         QStringList sl = Tags::split(it1.value());
+        //LOG_VARD(sl);
         // keep track of all the names we've used
         nonAltNames.insert(sl.begin(), sl.end());
+        //LOG_VARD(nonAltNames);
         toRemove.insert(it1.key());
+        //LOG_VARD(toRemove);
       }
     }
   }
 
   for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); it2++)
   {
+    //LOG_VARD(it2.key());
+    //LOG_VARD(it2.value());
     if (it2.key() == "alt_name")
     {
       QStringList sl = Tags::split(it2.value());
+      //LOG_VARD(sl);
       altNames.insert(sl.begin(), sl.end());
+      //LOG_VARD(altNames);
     }
-    else if (result.containsKey(it2.key(), _caseSensitive))
+    else if (result.contains(it2.key()))
     {
-      QStringList sl = Tags::split(it2.value());
-      altNames.insert(sl.begin(), sl.end());
+      const Qt::CaseSensitivity caseSensitivity =
+        _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+      if (result[it2.key()].compare(it2.value(), caseSensitivity) != 0)
+      {
+        QStringList sl = Tags::split(it2.value());
+        //LOG_VARD(sl);
+        altNames.insert(sl.begin(), sl.end());
+        //LOG_VARD(altNames);
+      }
     }
     else
     {
       if (OsmSchema::getInstance().isAncestor(it2.key(), "abstract_name"))
       {
         result[it2.key()] = it2.value();
+        //LOG_VARD(result);
         QStringList sl = Tags::split(it2.value());
+        //LOG_VARD(sl);
         nonAltNames.insert(sl.begin(), sl.end());
+        //LOG_VARD(nonAltNames);
         toRemove.insert(it2.key());
+        //LOG_VARD(toRemove);
       }
     }
   }
@@ -552,16 +600,19 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
   QStringList l;
   for (set<QString>::const_iterator it = altNames.begin(); it != altNames.end(); it++)
   {
+    //LOG_VARD(*it);
     if (nonAltNames.find(*it) == nonAltNames.end())
     {
       l.append(*it);
     }
   }
+  //LOG_VARD(l);
 
   if (l.size() > 0)
   {
     result.setList("alt_name", l);
   }
+  //LOG_VARD(l);
 }
 
 void TagComparator::_mergeText(Tags& t1, Tags& t2, Tags& result)
@@ -571,6 +622,8 @@ void TagComparator::_mergeText(Tags& t1, Tags& t2, Tags& result)
   const Tags t1Copy = t1;
   for (Tags::ConstIterator it1 = t1Copy.begin(); it1 != t1Copy.end(); ++it1)
   {
+    //LOG_VARD(it1.key());
+    //LOG_VARD(it1.value());
     const SchemaVertex& tv = schema.getTagVertex(it1.key());
 
     // if this is a text field and it exists in both tag sets.
@@ -579,6 +632,7 @@ void TagComparator::_mergeText(Tags& t1, Tags& t2, Tags& result)
       // only keep the unique text fields
       QStringList values = t1.getList(it1.key());
       values.append(t2.getList(it1.key()));
+      //LOG_VARD(values);
 
       // append all unique values in the existing order.
       for (int i = 0; i < values.size(); i++)
@@ -588,6 +642,7 @@ void TagComparator::_mergeText(Tags& t1, Tags& t2, Tags& result)
           result.appendValueIfUnique(it1.key(), values[i]);
         }
       }
+      //LOG_VARD(values);
 
       t1.remove(it1.key());
       t2.remove(it1.key());
@@ -602,6 +657,8 @@ void TagComparator::_mergeUnrecognizedTags(Tags& t1, Tags& t2, Tags& result)
   const Tags t1Copy = t1;
   for (Tags::ConstIterator it1 = t1Copy.begin(); it1 != t1Copy.end(); ++it1)
   {
+    //LOG_VARD(it1.key());
+    //LOG_VARD(it1.value());
     // if this is an unknown type
     if (schema.getTagVertex(it1.key() + "=" + it1.value()).isEmpty() &&
         schema.getTagVertex(it1.key()).isEmpty())
@@ -632,6 +689,8 @@ void TagComparator::_mergeUnrecognizedTags(Tags& t1, Tags& t2, Tags& result)
   const Tags t2Copy = t2;
   for (Tags::ConstIterator it2 = t2Copy.begin(); it2 != t2Copy.end(); ++it2)
   {
+    //LOG_VARD(it2.key());
+    //LOG_VARD(it2.value());
     // if this is an unknown type
     if (schema.getTagVertex(it2.key() + "=" + it2.value()).isEmpty())
     {

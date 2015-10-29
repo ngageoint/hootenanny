@@ -497,25 +497,4 @@ QString Tags::toString() const
   return result;
 }
 
-bool Tags::containsKey(const QString key, const bool caseSensitive) const
-{
-  if (caseSensitive)
-  {
-    return contains(key);
-  }
-  else
-  {
-    const Qt::CaseSensitivity caseSensitivity =
-      caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
-    for (Tags::const_iterator it = constBegin(); it != constEnd(); it++)
-    {
-      if (it.key().compare(key, caseSensitivity) == 0)
-      {
-        return true;
-      }
-    }
-    return false;
-  }
-}
-
 }
