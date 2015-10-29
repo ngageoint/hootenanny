@@ -1,0 +1,8 @@
+[
+    {
+        "dataType": "enumeration",
+        "influence": 1,
+        "name": "bridge_tunnel=unknown",
+        "objectType": "tag"
+    }
+]

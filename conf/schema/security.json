@@ -1,0 +1,12 @@
+[
+    {
+        "isA": "security",
+        "name": "regex?security:.*",
+        "objectType": "tag"
+    },
+    {
+        "isA": "metadata",
+        "name": "security",
+        "objectType": "tag"
+    }
+]

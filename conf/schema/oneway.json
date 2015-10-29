@@ -1,0 +1,32 @@
+[
+    {
+        "dataType": "enumeration",
+        "influence": 2,
+        "name": "oneway",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "oneway=0",
+            "oneway=false",
+            "oneway=off"
+        ],
+        "isA": "oneway",
+        "name": "oneway=no",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "oneway=yes",
+            "weight": 0.5
+        }
+    },
+    {
+        "aliases": [
+            "oneway=1",
+            "oneway=true",
+            "oneway=on"
+        ],
+        "isA": "oneway",
+        "name": "oneway=yes",
+        "objectType": "tag"
+    }
+]
