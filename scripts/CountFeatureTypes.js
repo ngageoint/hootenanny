@@ -3,19 +3,8 @@
  * stats.
  */
 
-//Define hoot, variables and functions
-var HOOT_HOME = process.env.HOOT_HOME
-var hoot = require(HOOT_HOME + '/lib/HootJs');
-
-hoot.Settings.set({"log.format": "%m%n"});
-hoot.Log.init();
-
-// translation file to convert from input (e.g. UFD, TDS, etc.) to OSM
-var ufdTran = HOOT_HOME + "/translations-local/UFD.js"
-var mgcpTran = HOOT_HOME + "/translations-local/MGCP_01.js"
-var fileList = [];
-
-//this function will recursively explore directories to find osm, mgcp and udf files
+//Define functions
+//this function will recursively explore directories to find osm, mgcp and udf files,  and process files
 var walk = function(dir) {
     var dive = function(dir) {
         fs.readdir(dir, function(err, list) {
@@ -26,10 +15,9 @@ var walk = function(dir) {
                         if (path.toLowerCase().indexOf("osm") > -1 || path.toLowerCase().indexOf("mgcp") > -1 || path.toLowerCase().indexOf("ufd") > -1) {
                             dive(path); // it's a directory, let's explore recursively
                         }
-                    }
-                    else {
+                    } else {
                         if (path.split('.').pop().toLowerCase() === 'osm' || path.split('.').pop().toLowerCase() === 'shp' || path.split('.').pop().toLowerCase() === 'pbf') {
-                            fileList.push(path)
+                            processFile(path);
                         }
                     }
                 });
@@ -54,36 +42,12 @@ var findFormat = function(filename) {
     return format.toLowerCase();
 };
 
-//Get user inputs
-//input file (e.g. SHP) or input dir
-var input = process.argv[2];
-hoot.log("Input: " + input);
-
-//optional output csv file
-var output = process.argv[3];
-if (typeof(output) !== 'undefined') {
-    hoot.log("Output file: " + output);
-}
-
-//Nodejs file system
-var fs = require('fs');
-if (fs.lstatSync(input).isDirectory()) {
-    walk(input)
-} else {
-    fileList.push(input)
-}
-
-//Format output columns
-var rows = [['Dataset', 'Buildings', 'POI\'s', 'Linear Highways','Linear Rivers','Others']]
-var csvRows = [];
-
-//Loop through file list
-for (var filecount = 0; filecount < fileList.length; filecount++) {
-    var inputFile = fileList[filecount];
+//Process file to get stats
+var processFile = function(inputFile) {
     var tran = '';
-    if (findFormat(inputFile) == 'mgcp') {
+    if (findFormat(inputFile) === 'mgcp') {
         tran = mgcpTran;
-    } else if (findFormat(inputFile) == 'ufd') {
+    } else if (findFormat(inputFile) === 'ufd') {
         tran = ufdTran;
     }
 
@@ -118,22 +82,53 @@ for (var filecount = 0; filecount < fileList.length; filecount++) {
         }
     });
 
-    //insert the count info into rows
+    //write output
     //var inputFilename = inputFile.replace(/^.*[\\\/]/, '')
-    rows.push([inputFile,buildingPolygonCount,poiCount,highwayCount,linerRiverCount,otherCount])
-}
-
-// unquoted CSV row and push to an array
-var rowCount = rows.length;
-for(var i=0; i<rowCount; ++i) {
-    csvRows.push(rows[i].join(','));
-}
-
-//if user passes the output file, write results to the file, else print in console
-if (typeof(output) !== 'undefined') {
-    fs.writeFile(output, csvRows.join("\n"))
-} else {
-    for (var i=0; i<rowCount; i++) {
-        hoot.log(csvRows[i])
+    var row = [inputFile,buildingPolygonCount,poiCount,highwayCount,linerRiverCount,otherCount];
+    if (typeof(output) !== 'undefined') {
+        fs.appendFile(output, '\n');
+        fs.appendFile(output, row.join(','));
+    } else {
+        hoot.log(row.join(','))
     }
+}
+
+
+//Define hoot, variables and functions
+var HOOT_HOME = process.env.HOOT_HOME
+var hoot = require(HOOT_HOME + '/lib/HootJs');
+
+hoot.Settings.set({"log.format": "%m%n"});
+hoot.Log.init();
+
+// translation file to convert from input (e.g. UFD, TDS, etc.) to OSM
+var ufdTran = HOOT_HOME + "/translations-local/UFD.js";
+var mgcpTran = HOOT_HOME + "/translations-local/MGCP_01.js";
+
+//Get user inputs
+//input file (e.g. SHP) or input dir
+var input = process.argv[2];
+hoot.log("Input: " + input);
+
+//optional output csv file
+var output = process.argv[3];
+if (typeof(output) !== 'undefined') {
+    hoot.log("Output file: " + output);
+}
+
+//Nodejs file system
+var fs = require('fs');
+
+//Format output columns
+var rowHeader = [['Dataset', 'Buildings', 'POI\'s', 'Linear Highways','Linear Rivers','Others']];
+if (typeof(output) !== 'undefined') {
+    fs.writeFile(output, rowHeader.join(','));
+} else {
+    hoot.log(rowHeader.join(','));
+}
+
+if (fs.lstatSync(input).isDirectory()) {
+    walk(input);
+} else {
+    processFile(input);
 }
