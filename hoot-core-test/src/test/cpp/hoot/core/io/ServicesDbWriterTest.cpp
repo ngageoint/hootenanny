@@ -161,6 +161,7 @@ public:
     map->addRelation(r1);
 
     writer.write(map);
+
     long mapId = writer.getMapId();
 
     compareRecords("SELECT email, display_name FROM users "

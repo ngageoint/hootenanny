@@ -1,0 +1,4 @@
+#!/bin/bash
+
+pg_dump -a -t relation -t current_relations -t current_relations_id_seq -t current_relation_tags -t relation_tags -t current_relation_members -t relation_members > relations.sql
+

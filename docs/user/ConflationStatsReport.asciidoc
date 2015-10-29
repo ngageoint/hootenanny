@@ -38,7 +38,3 @@ An example to generate the Report in PDF called 'BigReport.pdf' using the defaul
 ------
 hoot conflate -D writer.include.debug=true -D stats.class="hoot::ScriptStatsComposer" -D stats.script=$HOOT_HOME/report/csr-default.js -D stats.format=pdf -D stats.output=BigReport $HOOT_HOME/test-files/ToyTestA.osm $HOOT_HOME/test-files/ToyTestB.osm /tmp/ToyTestAandB.osm --stats
 ------
-
-=== Details about the contents of the report
-
-Coming Soon

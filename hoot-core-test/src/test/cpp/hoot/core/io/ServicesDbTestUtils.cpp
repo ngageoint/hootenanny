@@ -114,6 +114,12 @@ QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId, const long elemId, cons
   return url;
 }
 
+QUrl ServicesDbTestUtils::getOsmApiDbUrl()
+{
+  Settings s = conf();
+  return QUrl(ConfigOptions(s).getServicesDbTestUrlOsmapi());
+}
+
 void ServicesDbTestUtils::deleteUser(QString email)
 {
   ServicesDb database;
@@ -124,6 +130,17 @@ void ServicesDbTestUtils::deleteUser(QString email)
   {
     database.deleteUser(userId);
   }
+}
+
+int ServicesDbTestUtils::findIndex(const QList<QString>& keys, const QString& key)
+{
+  for(int i=0;i<keys.size();i++)
+  {
+    if(keys[i]==key) return i;
+  }
+
+  // didn't find a match so return -1
+  return -1;
 }
 
 }
