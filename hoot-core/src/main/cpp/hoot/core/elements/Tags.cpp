@@ -497,7 +497,7 @@ QString Tags::toString() const
   return result;
 }
 
-bool Tags::containsKey(const QString key, const bool caseSensitive)
+bool Tags::containsKey(const QString key, const bool caseSensitive) const
 {
   if (caseSensitive)
   {

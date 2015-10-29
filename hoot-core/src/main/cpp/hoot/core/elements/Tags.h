@@ -240,7 +240,7 @@ public:
    * @param caseSensitive if true, case of the key being queried for must match the specified tag exactly
    * @return true if the tag exists; false otherwise
    */
-  bool containsKey(const QString key, const bool caseSensitive);
+  bool containsKey(const QString key, const bool caseSensitive) const;
 
 private:
   static QStringList _nameKeys;
