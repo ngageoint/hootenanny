@@ -48,11 +48,13 @@ class TagComparatorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(TagComparatorTest);
   CPPUNIT_TEST(averageTest);
+  //CPPUNIT_TEST(averageCaseInsensitiveTest);
   CPPUNIT_TEST(buildingTest);
   CPPUNIT_TEST(compareTest);
   CPPUNIT_TEST(compareNamesTest);
   CPPUNIT_TEST(compareEnumTest);
   CPPUNIT_TEST(generalizeTest);
+  //CPPUNIT_TEST(generalizeCaseInsensitiveTest);
   CPPUNIT_TEST(railwayBusStopTest);
   CPPUNIT_TEST(realWorldTest);
   CPPUNIT_TEST_SUITE_END();
@@ -63,135 +65,141 @@ public:
   {
     //Log::getInstance().setLevel(Log::Info);
     TagComparator& uut = TagComparator::getInstance();
+    uut.setCaseSensitive(true);
 
     {
-      Tags t1;
-      t1["highway"] = "trunk";
-      t1["name"] = "Midland Expressway";
-      t1["name:en"] = "Midland Expressway";
-      t1["ref"] = "US 24";
-      t1["oneway"] = "yes";
-      t1["lanes"] = "2";
-      t1["uuid"] = "foo";
+        Tags t1;
+        t1["highway"] = "trunk";
+        t1["name"] = "Midland Expressway";
+        t1["name:en"] = "Midland Expressway";
+        t1["ref"] = "US 24";
+        t1["oneway"] = "yes";
+        t1["lanes"] = "2";
+        t1["uuid"] = "foo";
 
-      Tags t2;
-      t2["highway"] = "secondary";
-      t2["name"] = "Midland Expy";
-      t2["name:en"] = "Midland Expressway";
-      t2["name:he"] = "מידלנד המהיר";
-      t2["ref"] = "24";
-      t2["oneway"] = "true";
-      t2["bridge"] = "yes";
-      t2["uuid"] = "bar";
+        Tags t2;
+        t2["highway"] = "secondary";
+        t2["name"] = "Midland Expy";
+        t2["name:en"] = "Midland Expressway";
+        t2["name:he"] = "מידלנד המהיר";
+        t2["ref"] = "24";
+        t2["oneway"] = "true";
+        t2["bridge"] = "yes";
+        t2["uuid"] = "bar";
 
-      Tags expected;
-      expected["highway"] = "primary";
-      expected["name"] = "Midland Expressway";
-      expected["name:en"] = "Midland Expressway";
-      expected["ref"] = "US 24";
-      expected["oneway"] = "yes";
-      expected["lanes"] = "2";
-      expected["alt_name"] = "24;Midland Expy";
-      expected["name:he"] = "מידלנד המהיר";
-      expected["bridge"] = "yes";
-      expected["uuid"] = "foo;bar";
+        Tags expected;
+        expected["highway"] = "primary";
+        expected["name"] = "Midland Expressway";
+        expected["name:en"] = "Midland Expressway";
+        expected["ref"] = "US 24";
+        expected["oneway"] = "yes";
+        expected["lanes"] = "2";
+        expected["alt_name"] = "24;Midland Expy";
+        expected["name:he"] = "מידלנד המהיר";
+        expected["bridge"] = "yes";
+        expected["uuid"] = "foo;bar";
 
-      Tags avg;
-      uut.averageTags(t1, t2, avg);
-      compareTags(expected, avg);
+        Tags avg;
+        uut.averageTags(t1, t2, avg);
+        compareTags(expected, avg);
     }
 
     {
-      Tags t1;
-      t1["highway"] = "trunk";
-      t1["name"] = "Midland Expressway";
-      t1["name:en"] = "Midland Expressway";
-      t1["ref"] = "US 24";
-      t1["oneway"] = "yes";
-      t1["lanes"] = "2";
+        Tags t1;
+        t1["highway"] = "trunk";
+        t1["name"] = "Midland Expressway";
+        t1["name:en"] = "Midland Expressway";
+        t1["ref"] = "US 24";
+        t1["oneway"] = "yes";
+        t1["lanes"] = "2";
 
-      Tags t2;
-      t2["highway"] = "primary";
-      t2["name"] = "Midland Expy";
-      t2["name:en"] = "Midland Expy";
-      t2["ref"] = "24";
-      t2["oneway"] = "true";
+        Tags t2;
+        t2["highway"] = "primary";
+        t2["name"] = "Midland Expy";
+        t2["name:en"] = "Midland Expy";
+        t2["ref"] = "24";
+        t2["oneway"] = "true";
 
-      Tags expected;
-      expected["highway"] = "trunk";
-      expected["name"] = "Midland Expressway";
-      expected["name:en"] = "Midland Expressway";
-      expected["ref"] = "US 24";
-      expected["oneway"] = "yes";
-      expected["lanes"] = "2";
-      expected["alt_name"] = "24;Midland Expy";
+        Tags expected;
+        expected["highway"] = "trunk";
+        expected["name"] = "Midland Expressway";
+        expected["name:en"] = "Midland Expressway";
+        expected["ref"] = "US 24";
+        expected["oneway"] = "yes";
+        expected["lanes"] = "2";
+        expected["alt_name"] = "24;Midland Expy";
 
-      Tags avg;
-      uut.averageTags(t1, t2, avg);
-      compareTags(expected, avg);
+        Tags avg;
+        uut.averageTags(t1, t2, avg);
+        compareTags(expected, avg);
     }
 
 
-//    {
-//      Tags t1;
-//      t1["highway"] = "path";
-//      t1["foot"] = "designated";
-//      t1["name"] = "Intemann Trail";
-//      t1["official_name"] = "Paul Intemann Memorial Nature Trail";
+    //    {
+    //      Tags t1;
+    //      t1["highway"] = "path";
+    //      t1["foot"] = "designated";
+    //      t1["name"] = "Intemann Trail";
+    //      t1["official_name"] = "Paul Intemann Memorial Nature Trail";
 
-//      Tags t2;
-//      t2["highway"] = "footway";
-//      t2["name"] = "Intemann";
+    //      Tags t2;
+    //      t2["highway"] = "footway";
+    //      t2["name"] = "Intemann";
 
-//      Tags expected;
-//      expected["highway"] = "path";
-//      expected["foot"] = "designated";
-//      expected["name"] = "Intemann Trail";
-//      expected["official_name"] = "Paul Intemann Memorial Nature Trail";
-//      expected["alt_name"] = "Intemann";
+    //      Tags expected;
+    //      expected["highway"] = "path";
+    //      expected["foot"] = "designated";
+    //      expected["name"] = "Intemann Trail";
+    //      expected["official_name"] = "Paul Intemann Memorial Nature Trail";
+    //      expected["alt_name"] = "Intemann";
 
-//      Tags avg;
-//      uut.averageTags(t1, t2, avg);
-//      //LOG_WARN("average: \n" << avg.toString());
-//      compareTags(expected, avg);
-//    }
+    //      Tags avg;
+    //      uut.averageTags(t1, t2, avg);
+    //      //LOG_WARN("average: \n" << avg.toString());
+    //      compareTags(expected, avg);
+    //    }
 
     {
-      Tags t1;
-      t1["highway"] = "road";
-      t1["surface"] = "paved";
+        Tags t1;
+        t1["highway"] = "road";
+        t1["surface"] = "paved";
 
-      Tags t2;
-      t2["highway"] = "primary";
-      t2["surface"] = "asphault";
+        Tags t2;
+        t2["highway"] = "primary";
+        t2["surface"] = "asphault";
 
-      Tags expected;
-      expected["highway"] = "primary";
-      expected["surface"] = "asphault";
+        Tags expected;
+        expected["highway"] = "primary";
+        expected["surface"] = "asphault";
 
-      Tags avg;
-      uut.averageTags(t1, t2, avg);
-      //LOG_WARN("average: \n" << avg.toString());
-      compareTags(expected, avg);
+        Tags avg;
+        uut.averageTags(t1, t2, avg);
+        //LOG_WARN("average: \n" << avg.toString());
+        compareTags(expected, avg);
     }
 
     {
-      Tags t1;
-      t1["note"] = "b;a;c;c";
+        Tags t1;
+        t1["note"] = "b;a;c;c";
 
-      Tags t2;
-      t2["note"] = "a;b;d";
+        Tags t2;
+        t2["note"] = "a;b;d";
 
-      Tags expected;
-      expected["note"] = "b;a;c;d";
+        Tags expected;
+        expected["note"] = "b;a;c;d";
 
-      Tags avg;
-      uut.averageTags(t1, t2, avg);
-      //LOG_WARN("average: \n" << avg.toString());
-      compareTags(expected, avg);
+        Tags avg;
+        uut.averageTags(t1, t2, avg);
+        //LOG_WARN("average: \n" << avg.toString());
+        compareTags(expected, avg);
     }
 
     //Log::getInstance().setLevel(Log::Debug);
+  }
+
+  void averageCaseInsensitiveTest()
+  {
+
   }
 
   void buildingTest()
@@ -439,120 +447,126 @@ public:
   {
     //Log::getInstance().setLevel(Log::Info);
     TagComparator& uut = TagComparator::getInstance();
+    uut.setCaseSensitive(true);
 
     {
-      Tags t1;
-      t1["name"] = "foo";
-      t1["lala"] = "1;2";
-      t1["building"] = "yes";
-      t1["uid"] = "123";
+        Tags t1;
+        t1["name"] = "foo";
+        t1["lala"] = "1;2";
+        t1["building"] = "yes";
+        t1["uid"] = "123";
 
-      Tags t2;
-      t2["name"] = "bar";
-      t2["lala"] = "2;1";
-      t2["building"] = "yes";
-      t2["uid"] = "456";
+        Tags t2;
+        t2["name"] = "bar";
+        t2["lala"] = "2;1";
+        t2["building"] = "yes";
+        t2["uid"] = "456";
 
-      Tags expected;
-      expected["name"] = "foo";
-      expected["alt_name"] = "bar";
-      expected["lala"] = "1;2";
-      expected["uid"] = "123;456";
-      expected["building"] = "yes";
+        Tags expected;
+        expected["name"] = "foo";
+        expected["alt_name"] = "bar";
+        expected["lala"] = "1;2";
+        expected["uid"] = "123;456";
+        expected["building"] = "yes";
 
-      Tags gen = uut.generalize(t1, t2);
-      compareTags(expected, gen);
+        Tags gen = uut.generalize(t1, t2);
+        compareTags(expected, gen);
     }
 
     {
-      Tags t1;
-      t1["highway"] = "trunk";
-      t1["name"] = "Midland Expressway";
-      t1["name:en"] = "Midland Expressway";
-      t1["ref"] = "US 24";
-      t1["oneway"] = "yes";
-      t1["lanes"] = "2";
+        Tags t1;
+        t1["highway"] = "trunk";
+        t1["name"] = "Midland Expressway";
+        t1["name:en"] = "Midland Expressway";
+        t1["ref"] = "US 24";
+        t1["oneway"] = "yes";
+        t1["lanes"] = "2";
 
-      Tags t2;
-      t2["highway"] = "secondary";
-      t2["name"] = "Midland Expy";
-      t2["name:en"] = "Midland Expressway";
-      t2["name:he"] = "מידלנד המהיר";
-      t2["ref"] = "24";
-      t2["oneway"] = "true";
-      t2["bridge"] = "yes";
+        Tags t2;
+        t2["highway"] = "secondary";
+        t2["name"] = "Midland Expy";
+        t2["name:en"] = "Midland Expressway";
+        t2["name:he"] = "מידלנד המהיר";
+        t2["ref"] = "24";
+        t2["oneway"] = "true";
+        t2["bridge"] = "yes";
 
-      Tags expected;
-      expected["highway"] = "road";
-      expected["name"] = "Midland Expressway";
-      expected["name:en"] = "Midland Expressway";
-      expected["ref"] = "US 24";
-      expected["oneway"] = "yes";
-      expected["lanes"] = "2";
-      expected["alt_name"] = "24;Midland Expy";
-      expected["name:he"] = "מידלנד המהיר";
-      expected["bridge"] = "yes";
+        Tags expected;
+        expected["highway"] = "road";
+        expected["name"] = "Midland Expressway";
+        expected["name:en"] = "Midland Expressway";
+        expected["ref"] = "US 24";
+        expected["oneway"] = "yes";
+        expected["lanes"] = "2";
+        expected["alt_name"] = "24;Midland Expy";
+        expected["name:he"] = "מידלנד המהיר";
+        expected["bridge"] = "yes";
 
-      Tags gen = uut.generalize(t1, t2);
-      compareTags(expected, gen);
+        Tags gen = uut.generalize(t1, t2);
+        compareTags(expected, gen);
     }
 
     {
-      Tags t1;
-      t1["highway"] = "road";
-      t1["surface"] = "paved";
+        Tags t1;
+        t1["highway"] = "road";
+        t1["surface"] = "paved";
 
-      Tags t2;
-      t2["highway"] = "primary";
-      t2["surface"] = "asphault";
+        Tags t2;
+        t2["highway"] = "primary";
+        t2["surface"] = "asphault";
 
-      Tags expected;
-      expected["highway"] = "road";
-      expected["surface"] = "paved";
+        Tags expected;
+        expected["highway"] = "road";
+        expected["surface"] = "paved";
 
-      Tags gen = uut.generalize(t1, t2);
-      compareTags(expected, gen);
+        Tags gen = uut.generalize(t1, t2);
+        compareTags(expected, gen);
     }
 
     {
-      Tags t1;
-      t1["building"] = "residential";
-      t1["REF1"] = "foo";
+        Tags t1;
+        t1["building"] = "residential";
+        t1["REF1"] = "foo";
 
-      Tags t2;
-      t2["building"] = "no";
-      t2["REF1"] = "bar";
+        Tags t2;
+        t2["building"] = "no";
+        t2["REF1"] = "bar";
 
-      Tags expected;
-      expected["REF1"] = "foo;bar";
+        Tags expected;
+        expected["REF1"] = "foo;bar";
 
-      Tags gen = uut.generalize(t1, t2);
-      compareTags(expected, gen);
+        Tags gen = uut.generalize(t1, t2);
+        compareTags(expected, gen);
     }
 
     {
-      Tags t1;
-      t1["name"] = "foo";
-      t1["alt_name"] = "baz";
-      t1["name:en"] = "enfoo";
-      t1["note"] = "foo";
+        Tags t1;
+        t1["name"] = "foo";
+        t1["alt_name"] = "baz";
+        t1["name:en"] = "enfoo";
+        t1["note"] = "foo";
 
-      Tags t2;
-      t2["name"] = "bar";
-      t2["alt_name"] = "qux;quux";
-      t2["name:en"] = "enbar";
-      t2["note"] = "bar";
+        Tags t2;
+        t2["name"] = "bar";
+        t2["alt_name"] = "qux;quux";
+        t2["name:en"] = "enbar";
+        t2["note"] = "bar";
 
-      Tags expected;
-      // building is dropped due to conflict
-      expected["name"] = "foo";
-      expected["alt_name"] = "bar;baz;enbar;quux;qux";
-      expected["name:en"] = "enfoo";
-      expected["note"] = "foo;bar";
+        Tags expected;
+        // building is dropped due to conflict
+        expected["name"] = "foo";
+        expected["alt_name"] = "bar;baz;enbar;quux;qux";
+        expected["name:en"] = "enfoo";
+        expected["note"] = "foo;bar";
 
-      Tags gen = uut.generalize(t1, t2);
-      compareTags(expected, gen);
+        Tags gen = uut.generalize(t1, t2);
+        compareTags(expected, gen);
     }
+  }
+
+  void generalizeCaseInsensitiveTest()
+  {
+
   }
 
   /**
@@ -634,7 +648,7 @@ public:
     }
 
     TextTable table(data);
-    LOG_VAR(table.toWikiString());
+    LOG_VARD(table.toWikiString());
   }
 
   /**

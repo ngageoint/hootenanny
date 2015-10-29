@@ -125,6 +125,8 @@ public:
 
   /**
    * Return all the names for the current feature, including those that are an ancestor of a name tag.
+   *
+   * @return a list of names
    */
   QStringList getNamesRecursive() const;
 
@@ -230,6 +232,15 @@ public:
   static QStringList split(const QString& values);
 
   QString toString() const;
+
+  /**
+   * Determines whether the tag with the specified key exists in this tag collection
+   *
+   * @param key key of the tag to be queried for
+   * @param caseSensitive if true, case of the key being queried for must match the specified tag exactly
+   * @return true if the tag exists; false otherwise
+   */
+  bool containsKey(const QString key, const bool caseSensitive);
 
 private:
   static QStringList _nameKeys;
