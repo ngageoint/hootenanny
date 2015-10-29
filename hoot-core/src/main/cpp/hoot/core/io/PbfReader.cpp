@@ -185,7 +185,7 @@ double PbfReader::_convertLat(long lat)
   return .000000001 * (_latOffset + (_granularity * lat));
 }
 
-ElementId PbfReader::_convertToElementId(int id, int memberType)
+ElementId PbfReader::_convertToElementId(long id, int memberType)
 {
   ElementType t;
   switch (memberType)
@@ -1109,20 +1109,19 @@ shared_ptr<Element> PbfReader::readNextElement()
     /// @optimize
     // we have to copy here so that the element isn't part of two maps. This should be fixed if we
     // need the reader to go faster.
+
     element.reset(new Node(*_nodesItr.value()));
     _nodesItr++;
     _partialNodesRead++;
   }
   else if (_partialWaysRead < int(_map->getWays().size()))
   {
-    //LOG_DEBUG("way key: " + _waysItr->first);
     element.reset(new Way(*_waysItr->second.get()));
     _waysItr++;
     _partialWaysRead++;
   }
   else if (_partialRelationsRead < int(_map->getRelationMap().size()))
   {
-    //LOG_DEBUG("relation key: " + _relationsItr->first);
     element.reset(new Relation(*_relationsItr->second.get()));
     _relationsItr++;
     _partialRelationsRead++;

@@ -92,6 +92,7 @@ inline QString SqlBulkInsert::_escape(const QVariant& v) const
 
 void SqlBulkInsert::flush()
 {
+  //LOG_DEBUG("Inside SqlBulkInsert::flush");
   if (_pending.size() > 0)
   {
     double start = Tgs::Time::getTime();
@@ -146,6 +147,8 @@ void SqlBulkInsert::flush()
     double elapsed = Tgs::Time::getTime() - start;
     _time += elapsed;
   }
+
+  //LOG_DEBUG("Leaving SqlBulkInsert::flush");
 }
 
 void SqlBulkInsert::insert(const QList<QVariant> l)
