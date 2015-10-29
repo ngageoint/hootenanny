@@ -70,6 +70,7 @@ public:
     _baseDir.push_back(QDir(path + "/..").absolutePath() + "/");
     _dependencies.insert(QDir().absoluteFilePath(path));
 
+    LOG_VAR(path);
     if (is.is_open() == false)
     {
       throw HootException("Error opening " + path + " for reading.");
@@ -498,7 +499,7 @@ private:
   {
     if (value.type() != obj_type)
     {
-      throw HootException("Expected a list of tags at the top level.");
+      throw HootException("Expected a dict of tags at the top level.");
     }
     else
     {

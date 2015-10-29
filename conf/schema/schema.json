@@ -1,344 +1,287 @@
-{
-    "import": "metadata.json",
-    "import": "poi.json",
-    "import": "amenity.json",
-    "import": "artworkType.json",
-    "import": "barrier.json",
-    "import": "building.json",
-    "import": "capital.json",
-    "import": "hgis.json",
-    "import": "historic.json",
-    "import": "highway.json",
-    "import": "junction.json",
-    "import": "landuse.json",
-    "import": "leisure.json",
-    "import": "man_made.json",
-    "import": "military.json",
-    "import": "place.json",
-    "import": "parking.json",
-    "import": "address.json",
-    "import": "waterway.json",
-    "import": "name.json",
-    "import": "natural.json",
-    "import": "cuisine.json",
-    "import": "power.json",
-    "import": "public_transport.json",
-    "import": "railway.json",
-    "import": "seamark_type.json",
-    "import": "shop.json",
-    "import": "source.json",
-    "import": "sport.json",
-    "import": "religion.json",
-    "import": "tourism.json",
-    "import": "transport.json",
-
-
-    "###": "",
-    "###": "oneway related tags.",
-    "###": "",
-
-    "tag": {
-        "name": "oneway",
-        "influence": 2.0,
-        "type": "enumeration"
+[
+    {
+        "import": "FlowDir.json"
     },
-
-    "tag": {
-        "name": "oneway=yes",
-        "isA": "oneway",
-        "aliases": ["oneway=1", "oneway=true", "oneway=on"]
+    {
+        "import": "REF1.json"
     },
-
-    "tag": {
-        "name": "oneway=no",
-        "isA": "oneway",
-        "aliases": ["oneway=0", "oneway=false", "oneway=off"],
-        "similarTo": { "name": "oneway=yes", "weight": 0.5 }
+    {
+        "import": "REF2.json"
     },
-
-    "###": "",
-    "###": "surface related tags.",
-    "###": "",
-
-    "tag": {
-        "name": "surface",
-        "type": "enumeration",
-        "geometries": ["linestring", "area"]
+    {
+        "import": "abandoned.json"
     },
-
-    "tag": {
-        "name": "surface=unknown",
-        "influence": 1.0,
-        "type": "enumeration",
-        "childWeight": 0.1
+    {
+        "import": "addr.json"
     },
-
-    "tag": {
-        "name": "surface=paved",
-        "isA": "surface=unknown",
-        "childWeight": 0.2
+    {
+        "import": "address.json"
     },
-
-    "tag": {
-        "name": "surface=asphault",
-        "isA": "surface=paved",
-        "similarTo": { "name": "surface=concrete", "weight": 0.8 },
-        "similarTo": { "name": "surface=tartan", "weight": 0.8 },
-        "similarTo": { "name": "surface=paving_stones", "weight": 0.7 }
+    {
+        "import": "aeroway.json"
     },
-
-    "tag": {
-        "name": "surface=cobblestone",
-        "isA": "surface=paving_stones"
+    {
+        "import": "all_weather.json"
     },
-
-    "tag": {
-        "name": "surface=cobblestone:flattened",
-        "isA": "surface=cobblestone"
+    {
+        "import": "amenity.json"
     },
-
-    "tag": {
-        "name": "surface=concrete",
-        "isA": "surface=paved",
-        "similarTo": { "name": "surface=asphault", "weight": 0.8 }
+    {
+        "import": "artwork_type.json"
     },
-
-    "tag": {
-        "name": "surface=concrete:lanes",
-        "isA": "surface=concrete"
+    {
+        "import": "attribution.json"
     },
-
-    "tag": {
-        "name": "surface=concrete:plates",
-        "isA": "surface=concrete"
+    {
+        "import": "barrier.json"
     },
-
-    "tag": {
-        "name": "surface=paving_stones",
-        "isA": "surface=paved",
-        "similarTo": { "name": "surface=grass_paver", "weight": 0.8 }
+    {
+        "import": "brand.json"
     },
-
-    "tag": {
-        "name": "surface=paving_stones:30",
-        "isA": "surface=paving_stones"
+    {
+        "import": "bridge.json"
     },
-
-    "tag": {
-        "name": "surface=paving_stones:20",
-        "isA": "surface=paving_stones"
+    {
+        "import": "bridge_tunnel.json"
     },
-
-    "tag": {
-        "name": "surface=sett",
-        "isA": "surface=paving_stones"
+    {
+        "import": "building.json"
     },
-
-    "tag": {
-        "name": "surface=tartan",
-        "isA": "surface=paved",
-        "similarTo": { "name": "surface=asphault", "weight": 0.8 }
+    {
+        "import": "building_place_of_worship.json"
     },
-
-    "tag": {
-        "name": "surface=unpaved",
-        "isA": "surface=unknown"
+    {
+        "import": "capacity.json"
     },
-
-    "tag": {
-        "name": "surface=artificial_turf",
-        "isA": "surface=unpaved",
-        "similarTo": { "name": "surface=grass", "weight": 0.8 }
+    {
+        "import": "capital.json"
     },
-
-    "tag": {
-        "name": "surface=compacted",
-        "isA": "surface=unpaved",
-        "similarTo": { "name": "surface=ground", "weight": 0.7 },
-        "similarTo": { "name": "surface=gravel", "weight": 0.7 }
+    {
+        "import": "circumference.json"
     },
-
-    "tag": {
-        "name": "surface=dirt",
-        "isA": "surface=earth",
-        "similarTo": { "name": "surface=mud", "weight": 0.9 },
-        "similarTo": { "name": "surface=clay", "weight": 0.8 },
-        "similarTo": { "name": "surface=grass", "weight": 0.7 }
+    {
+        "import": "colour.json"
     },
-
-    "tag": {
-        "name": "surface=earth",
-        "isA": "surface=ground",
-        "similarTo": { "name": "surface=sand", "weight": 0.6 }
+    {
+        "import": "comment.json"
     },
-
-    "tag": {
-        "name": "surface=fine_gravel",
-        "isA": "surface=gravel"
+    {
+        "import": "contact.json"
     },
-
-    "tag": {
-        "name": "surface=grass",
-        "isA": "surface=earth",
-        "similarTo": { "name": "surface=artificial_turf", "weight": 0.8 },
-        "similarTo": { "name": "surface=dirt", "weight": 0.7 }
+    {
+        "import": "created_by.json"
     },
-
-    "tag": {
-        "name": "surface=grass_paver",
-        "isA": "surface=unpaved",
-        "similarTo": { "name": "surface=paving_stones", "weight": 0.8 }
+    {
+        "import": "cuisine.json"
     },
-
-    "tag": {
-        "name": "surface=gravel",
-        "isA": "surface=unpaved",
-        "childWeight": 0.9,
-        "similarTo": { "name": "surface=compacted", "weight": 0.7 }
+    {
+        "import": "denomination.json"
     },
-
-    "tag": {
-        "name": "surface=ground",
-        "isA": "surface=unpaved",
-        "childWeight": 0.3,
-        "similarTo": { "name": "surface=compacted", "weight": 0.7 }
+    {
+        "import": "description.json"
     },
-
-    "tag": {
-        "name": "surface=metal",
-        "isA": "surface=unpaved"
+    {
+        "import": "destination.json"
     },
-
-    "tag": {
-        "name": "surface=mud",
-        "isA": "surface=earth",
-        "similarTo": { "name": "surface=dirt", "weight": 0.9 }
+    {
+        "import": "destroyed.json"
     },
-
-    "tag": {
-        "name": "surface=pebblestone",
-        "isA": "surface=gravel"
+    {
+        "import": "ele.json"
     },
-
-    "tag": {
-        "name": "surface=sand",
-        "isA": "surface=ground"
+    {
+        "import": "email.json"
     },
-
-    "tag": {
-        "name": "surface=wood",
-        "isA": "surface=unpaved"
+    {
+        "import": "error.json"
     },
-
-    "tag": {
-        "name": "surface=clay",
-        "isA": "surface=earth",
-        "similarTo": { "name": "surface=dirt", "weight": 0.8 }
+    {
+        "import": "fire_hydrant.json"
     },
-
-    "###": "",
-    "###": "all_weather related tags.",
-    "###": "",
-
-    "tag": {
-        "name": "all_weather=unknown",
-        "influence": 1.0,
-        "type": "enumeration"
+    {
+        "import": "fixme.json"
     },
-
-    "tag": {
-        "name": "all_weather=yes",
-        "isA": "all_weather=unknown"
+    {
+        "import": "frequency.json"
     },
-
-    "tag": {
-        "name": "all_weather=no",
-        "isA": "all_weather=unknown"
+    {
+        "import": "gauge.json"
     },
-
-    "tag": {
-        "name": "all_weather=fair",
-        "isA": "all_weather=unknown",
-        "similarTo": { "name": "all_weather=no", "weight": 0.5 },
-        "similarTo": { "name": "all_weather=yes", "weight": 0.5 }
+    {
+        "import": "height.json"
     },
-
-    "tag": {
-        "name": "all_weather=winter",
-        "isA": "all_weather=unknown",
-        "similarTo": { "name": "all_weather=no", "weight": 0.5 },
-        "similarTo": { "name": "all_weather=yes", "weight": 0.5 }
+    {
+        "import": "hgis.json"
     },
-
-    "###": "",
-    "###": "bridge/tunnel related tags.",
-    "###": "",
-
-    "tag": {
-        "name": "bridge_tunnel=unknown",
-        "influence": 1.0,
-        "type": "enumeration"
+    {
+        "import": "hgispoi.json"
     },
-
-    "tag": {
-        "name": "bridge=yes",
-        "isA": "bridge_tunnel=unknown",
-        "similarTo": { "name": "bridge=no", "weight": 0.5 },
-        "similarTo": { "name": "tunnel=yes", "weight": 0.01 },
-        "categories": ["poi", "hgispoi"]
+    {
+        "import": "highway.json"
     },
-
-    "tag": {
-        "name": "bridge=no",
-        "isA": "bridge_tunnel=unknown"
+    {
+        "import": "historic.json"
     },
-
-    "tag": {
-        "name": "tunnel=yes",
-        "isA": "bridge_tunnel=unknown",
-        "similarTo": { "name": "tunnel=no", "weight": 0.5 },
-        "categories": ["poi", "hgispoi"]
+    {
+        "import": "industrial.json"
     },
-
-    "tag": {
-        "name": "tunnel=no",
-        "isA": "bridge_tunnel=unknown"
+    {
+        "import": "int_ref.json"
     },
-
-    "###": "",
-    "###": "numeric related tags.",
-    "###": "",
-
-    "tag": {
-        "name": "lanes",
-        "type": "int"
+    {
+        "import": "is_in.json"
     },
-
-    "#": "The sigma for this tag was derived from the top values listed here: http://taginfo.openstreetmap.org/keys/?key=width#values",
-    "#tag": {
-        "name": "width",
-        "type": "real",
-        "sigma": 4.0
+    {
+        "import": "junction.json"
     },
-
-    "tag": {
-        "name": "note",
-        "influence": 1.0,
-        "type": "text",
-        "geometries": ["node", "way", "relation"]
+    {
+        "import": "landuse.json"
     },
-
-    "tag": { "name": "regex?note:.*", "isA": "note" },
-
-    "tag": {
-        "name": "source",
-        "influence": 1.0,
-        "type": "text",
-        "geometries": ["node", "way", "relation"]
+    {
+        "import": "lanes.json"
     },
-
-    "tag": { "name": "REF1", "influence": 1.0, "type": "text", "geometries": ["node", "way", "relation"] },
-    "tag": { "name": "REF2", "influence": 1.0, "type": "text", "geometries": ["node", "way", "relation"] },
-
-    "#end" : ""
-}
+    {
+        "import": "leisure.json"
+    },
+    {
+        "import": "license.json"
+    },
+    {
+        "import": "man_made.json"
+    },
+    {
+        "import": "maxspeed.json"
+    },
+    {
+        "import": "metadata.json"
+    },
+    {
+        "import": "military.json"
+    },
+    {
+        "import": "mountain_pass.json"
+    },
+    {
+        "import": "name.json"
+    },
+    {
+        "import": "natural.json"
+    },
+    {
+        "import": "network.json"
+    },
+    {
+        "import": "note.json"
+    },
+    {
+        "import": "office.json"
+    },
+    {
+        "import": "old_ref.json"
+    },
+    {
+        "import": "oneway.json"
+    },
+    {
+        "import": "opening_hours.json"
+    },
+    {
+        "import": "operator.json"
+    },
+    {
+        "import": "parking.json"
+    },
+    {
+        "import": "place.json"
+    },
+    {
+        "import": "poi.json"
+    },
+    {
+        "import": "power.json"
+    },
+    {
+        "import": "public_transport.json"
+    },
+    {
+        "import": "railway.json"
+    },
+    {
+        "import": "ref.json"
+    },
+    {
+        "import": "religion.json"
+    },
+    {
+        "import": "river_flow.json"
+    },
+    {
+        "import": "river_type.json"
+    },
+    {
+        "import": "seamark.json"
+    },
+    {
+        "import": "security.json"
+    },
+    {
+        "import": "shop.json"
+    },
+    {
+        "import": "slope.json"
+    },
+    {
+        "import": "source.json"
+    },
+    {
+        "import": "sport.json"
+    },
+    {
+        "import": "start_date.json"
+    },
+    {
+        "import": "station.json"
+    },
+    {
+        "import": "surface.json"
+    },
+    {
+        "import": "survey.json"
+    },
+    {
+        "import": "tourism.json"
+    },
+    {
+        "import": "transport.json"
+    },
+    {
+        "import": "tunnel.json"
+    },
+    {
+        "import": "type.json"
+    },
+    {
+        "import": "url.json"
+    },
+    {
+        "import": "use.json"
+    },
+    {
+        "import": "uuid.json"
+    },
+    {
+        "import": "waterway.json"
+    },
+    {
+        "import": "website.json"
+    },
+    {
+        "import": "wetland.json"
+    },
+    {
+        "import": "width.json"
+    },
+    {
+        "import": "wikipedia.json"
+    }
+]

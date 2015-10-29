@@ -483,7 +483,9 @@ SOURCES += \
     src/main/cpp/hoot/core/schema/SchemaVertex.cpp \
     src/main/cpp/hoot/core/schema/TagCategoryDifferencer.cpp \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.cpp \
-    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.cpp
+    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.cpp \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.cpp \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -955,5 +957,7 @@ HEADERS += \
     src/main/cpp/hoot/core/schema/KeyValuePair.h \
     src/main/cpp/hoot/core/schema/TagCategoryDifferencer.h \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.h \
-    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.h
+    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.h \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoader.h \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h
 

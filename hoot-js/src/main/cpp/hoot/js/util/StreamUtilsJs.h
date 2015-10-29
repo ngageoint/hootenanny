@@ -28,6 +28,7 @@
 #define STREAMUTILSJS_H
 
 // hoot
+#include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 
 // v8
@@ -37,7 +38,13 @@ namespace hoot
 {
 using namespace v8;
 
-inline Handle<Value> fromJson(QString qstr)
+/**
+ * @param qstr JSON string to parse
+ * @param fileName Filename that is the source of this string. This is optional and is only used
+ *  to report errors.
+ * @return Parsed JSON value
+ */
+inline Handle<Value> fromJson(QString qstr, QString fileName="")
 {
   HandleScope scope;
   Handle<Context> context = Context::GetCurrent();
@@ -51,7 +58,35 @@ inline Handle<Value> fromJson(QString qstr)
 
   Handle<Value> args[1];
   args[0] = str;
-  return scope.Close(JSON_parse->Call(JSON, 1, args));
+
+  v8::TryCatch tc;
+  v8::Handle<v8::Value> result = JSON_parse->Call(JSON, 1, args);
+
+  if (result.IsEmpty())
+  {
+    v8::Handle<v8::Message> msg = tc.Message();
+
+    // See ReportException in http://v8.googlecode.com/svn/trunk/samples/shell.cc
+    if (fileName.isEmpty())
+    {
+      fileName = toString(msg->GetScriptResourceName());
+    }
+
+    int lineNumber = msg->GetLineNumber();
+
+    QString sourceLine = toString(msg->GetSourceLine());
+
+    // Put a cool wavy line under the error
+    int start = msg->GetStartColumn();
+    int end = msg->GetEndColumn();
+    QString blank(start,' ');
+    QString wave(end - start,'^');
+
+    throw HootException(QString("%1 (%2) \n%3\n%4").arg(fileName).arg(lineNumber).arg(sourceLine).
+      arg(blank + wave));
+  }
+
+  return scope.Close(result);
 }
 
 /**

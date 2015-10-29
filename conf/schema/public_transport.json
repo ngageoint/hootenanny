@@ -1,50 +1,103 @@
-{
-    "tag": {
-        "name": "public_transport",
-        "isA": "hgispoi",
-        "influence": 1.0,
-        "type": "enumeration",
-        "geometries": ["node", "area", "way", "relation"]
-    },
-
-    "#" : " The catch all",
-    "tag": { "name": "public_transport=*", "isA": "public_transport" },
-    "tag": { "name": "public_transport=stop_position", "isA": "public_transport",
-        "geometries": ["node"],
-        "similarTo": { "name": "public_transport=platform", "weight": 0.8 },
-        "similarTo": { "name": "public_transport=station", "weight": 0.7 }
-    },
-    "tag": { "name": "public_transport=station", "isA": "public_transport",
-        "geometries": ["node"],
-        "similarTo": { "name": "transport=station", "weight": 0.9 }
-    },
-    "tag": { "name": "public_transport=platform", "isA": "public_transport",
-        "similarTo": { "name": "transport=station", "weight": 0.8 }
-    },
-
-    "compound": {
+[
+    {
+        "#": "Any one of these tag combos can match, but all the tags in the sub-array must match.",
+        "categories": [
+            "poi",
+            "hgispoi"
+        ],
+        "isA": "public_transport=platform",
         "name": "bus_platform",
-        "isA": "public_transport=platform",
-        "#": "Any one of these tag combos can match, but all the tags in the sub-array must match.",
+        "objectType": "compound",
+        "similarTo": {
+            "name": "highway=bus_stop",
+            "weight": 1
+        },
         "tags": [
-            ["public_transport=platform", "bus=yes"],
-            ["public_transport=platform", "highway=bus_stop"]
-        ],
-        "similarTo": { "name": "highway=bus_stop", "weight": 1.0 },
-        "categories": ["poi", "hgispoi"]
+            [
+                "public_transport=platform",
+                "bus=yes"
+            ],
+            [
+                "public_transport=platform",
+                "highway=bus_stop"
+            ]
+        ]
     },
-
-    "compound": {
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "node",
+            "area",
+            "way",
+            "relation"
+        ],
+        "influence": 1,
+        "isA": "hgispoi",
+        "name": "public_transport",
+        "objectType": "tag"
+    },
+    {
+        "isA": "public_transport",
+        "name": "public_transport=*",
+        "objectType": "tag"
+    },
+    {
+        "isA": "public_transport",
+        "name": "public_transport=platform",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "transport=station",
+            "weight": 0.8
+        }
+    },
+    {
+        "geometries": [
+            "node"
+        ],
+        "isA": "public_transport",
+        "name": "public_transport=station",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "transport=station",
+            "weight": 0.9
+        }
+    },
+    {
+        "geometries": [
+            "node"
+        ],
+        "isA": "public_transport",
+        "name": "public_transport=stop_position",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "public_transport=platform",
+                "weight": 0.8
+            },
+            {
+                "name": "public_transport=station",
+                "weight": 0.7
+            }
+        ]
+    },
+    {
+        "#": "Any one of these tag combos can match, but all the tags in the sub-array must match.",
+        "categories": [
+            "poi",
+            "hgispoi"
+        ],
+        "isA": "public_transport=platform",
         "name": "railway_platform",
-        "isA": "public_transport=platform",
-        "#": "Any one of these tag combos can match, but all the tags in the sub-array must match.",
+        "objectType": "compound",
+        "similarTo": {
+            "name": "railway=platform",
+            "weight": 0.9
+        },
         "tags": [
-            ["public_transport=platform", "train=yes"]
-        ],
-        "similarTo": { "name": "railway=platform", "weight": 0.9 },
-        "categories": ["poi", "hgispoi"]
-    },
-
-
-    "#" : "end"
-}
+            [
+                "public_transport=platform",
+                "train=yes"
+            ]
+        ]
+    }
+]

@@ -27,8 +27,8 @@
 #include "Driver.h"
 
 // hoot
-#include <hoot/core/schema/JsonSchemaLoader.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/schema/OsmSchemaLoaderFactory.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/HootException.h>
 
@@ -47,10 +47,9 @@ Driver::Driver()
 
 void Driver::_addDefaultJobSettings(pp::Job& job)
 {
-  OsmSchema dummySchema;
-  JsonSchemaLoader jsl(dummySchema);
-  jsl.load(ConfPath::search("schema.json"));
-  set<QString> deps = jsl.getDependencies();
+  shared_ptr<OsmSchemaLoader> l =
+    OsmSchemaLoaderFactory::getInstance().createLoader(ConfPath::search("schema.json"));
+  set<QString> deps = l->getDependencies();
 
   QHash<QString,QString> fileList;
 

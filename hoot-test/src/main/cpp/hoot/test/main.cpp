@@ -237,9 +237,6 @@ int main(int argc, char *argv[])
   CppUnit::TextUi::TestRunner runner;
   CppUnit::TestSuite *rootSuite = new CppUnit::TestSuite( "All tests" );
 
-  // initialize OSM Schema so the time expense doesn't print in other tests.
-  OsmSchema::getInstance();
-
   if (args.contains("--core") == false)
   {
 #   if HOOT_HAVE_HADOOP
@@ -278,6 +275,9 @@ int main(int argc, char *argv[])
       LOG_WARN("HootJs tests disabled.");
 #endif
   }
+
+  // initialize OSM Schema so the time expense doesn't print in other tests.
+  OsmSchema::getInstance();
 
   if (argc == 1)
   {

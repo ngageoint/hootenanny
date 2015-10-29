@@ -48,6 +48,7 @@ using namespace boost;
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/schema/JsonSchemaLoader.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/schema/OsmSchemaLoaderFactory.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
@@ -166,6 +167,20 @@ private:
   TagGraph* _graph;
 };
 
+class VertexNameComparator
+{
+public:
+  VertexNameComparator(const TagGraph& graph) : _graph(graph) {}
+
+  bool operator()(VertexId v1, VertexId v2)
+  {
+    return _graph[v1].name < _graph[v2].name;
+  }
+
+private:
+  const TagGraph _graph;
+};
+
 OsmSchemaCategory OsmSchemaCategory::fromStringList(const QStringList &s)
 {
   OsmSchemaCategory result;
@@ -221,6 +236,7 @@ public:
 
     VertexId vid1 = createOrGetVertex(name1);
     VertexId vid2 = createOrGetVertex(name2);
+
     EdgeId result = add_edge(vid1, vid2, isA, _graph).first;
 
     _parents[vid1] = vid2;
@@ -238,6 +254,7 @@ public:
 
     VertexId vid1 = createOrGetVertex(name1);
     VertexId vid2 = createOrGetVertex(name2);
+
     EdgeId e1 = add_edge(vid1, vid2, similarTo, _graph).first;
     EdgeId e2;
     if (oneway == false)
@@ -256,6 +273,7 @@ public:
 
     VertexId vid1 = createOrGetVertex(name1);
     VertexId vid2 = createOrGetVertex(name2);
+
     EdgeId e1 = add_edge(vid1, vid2, associatedWith, _graph).first;
     EdgeId e2 = add_edge(vid2, vid1, associatedWith, _graph).first;
     return pair<EdgeId, EdgeId>(e1, e2);
@@ -308,6 +326,7 @@ public:
   void createTestingGraph()
   {
     SchemaVertex v;
+    v.setType(SchemaVertex::Tag);
     v.influence = 1;
     v.key = "highway";
     v.name = "highway=road";
@@ -414,9 +433,10 @@ public:
 
   VertexId createOrGetVertex(const QString& str)
   {
+    VertexId vid;
     if (_name2Vertex.contains(str))
     {
-      return _name2Vertex[str];
+      vid = _name2Vertex[str];
     }
     else
     {
@@ -425,10 +445,9 @@ public:
       v.name = str;
       v.valueType = Unknown;
 
-      VertexId vid = _addVertex(v);
-
-      return vid;
+      vid = _addVertex(v);
     }
+    return vid;
   }
 
   vector<SchemaVertex> getAllTags()
@@ -742,12 +761,25 @@ public:
 
     result += "digraph structs {\n";
 
+    QList<VertexId> orderedVertexes;
+    QMap<size_t, VertexId> vertexIndex;
+
     graph_traits < TagGraph >::vertex_iterator vi, vend;
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
     {
-      VertexId vid = *vi;
-      QString vStr = QString("v%1").arg(vid);
+      orderedVertexes.push_back(*vi);
+    }
+
+    VertexNameComparator vnc(_graph);
+    qSort(orderedVertexes.begin(), orderedVertexes.end(), vnc);
+
+    for (int i = 0; i < orderedVertexes.size(); i++)
+    {
+      VertexId vid = orderedVertexes[i];
       QString label = _graph[vid].name;
+      QString vStr = QString("\"%1\"").arg(label);
+      vertexIndex[vid] = i;
+
       label = label.replace("{", "\\}").replace("}", "\\}");
       if (_graph[vid].childWeight > 0)
       {
@@ -759,6 +791,7 @@ public:
     result += "\n";
 
     set< pair<VertexId, VertexId> > used;
+    QStringList orderedEdges;
 
     graph_traits < TagGraph >::edge_iterator ei, eend;
     for (boost::tie(ei, eend) = edges(_graph); ei != eend; ++ei)
@@ -766,27 +799,49 @@ public:
       VertexId src = source(*ei, _graph);
       VertexId trg = target(*ei, _graph);
 
-      pair<VertexId, VertexId> p(min(src, trg), max(src, trg));
+      if (_graph[trg].name == _graph[src].name)
+      {
+        throw IllegalArgumentException("Unexpected vertices with the same name. " +
+          _graph[src].name);
+      }
+
+      if (_graph[trg].name < _graph[src].name)
+      {
+        swap(src, trg);
+      }
+
+      pair<VertexId, VertexId> p(src, trg);
 
       if (used.find(p) == used.end())
       {
-        QString srcStr = QString("v%1").arg(src);
-        QString trgStr = QString("v%1").arg(trg);
+//        QString srcStr = QString("v%1").arg(vertexIndex[src]);
+//        QString trgStr = QString("v%1").arg(vertexIndex[trg]);
+
+        QString srcStr = _graph[src].name;
+        QString trgStr = _graph[trg].name;
+
         // only show is a relationships for legit tags. No need w/ things like "amenity" or "poi",
         // it just clutters the graph.
         if (_graph[*ei].type == IsA &&
           (_graph[src].name.contains("=") && _graph[trg].name.contains("=")))
         {
-          result += QString("%1 -> %2 [arrowhead=normal,color=blue2,weight=1,label=\"%3\"];\n").arg(srcStr, trgStr).arg(_graph[*ei].similarToWeight);
+          orderedEdges.push_back(
+            QString("\"%1\" -> \"%2\" [arrowhead=normal,color=blue2,weight=1,label=\"%3\"];\n").
+            arg(srcStr, trgStr).arg(_graph[*ei].similarToWeight));
         }
         else if (_graph[*ei].type == SimilarTo && _graph[*ei].show)
         {
-          result += QString("%1 -> %2 [arrowhead=odot,color=chartreuse3,weight=%3,arrowtail=odot,label=\"%4\"];\n").
-              arg(srcStr, trgStr).arg(_graph[*ei].similarToWeight).arg(_graph[*ei].similarToWeight);
+          orderedEdges.push_back(
+            QString("\"%1\" -> \"%2\" [arrowhead=odot,color=chartreuse3,weight=%3,arrowtail=odot,label=\"%4\"];\n").
+            arg(srcStr, trgStr).arg(_graph[*ei].similarToWeight).arg(_graph[*ei].similarToWeight));
           used.insert(p);
         }
       }
     }
+
+    qSort(orderedEdges);
+
+    result.append(orderedEdges.join(""));
 
     result += "}\n";
 
@@ -796,6 +851,13 @@ public:
   void updateOrCreateVertex(const SchemaVertex& tv)
   {
     VertexId vid = createOrGetVertex(tv.name);
+
+    const SchemaVertex& v = _graph[vid];
+    if (v.isValid())
+    {
+      LOG_WARN(tv.name << " was specified multiple times in the schema file.");
+    }
+
     _updateVertex(vid, tv);
   }
 
@@ -879,8 +941,8 @@ private:
     double bestScore = -1.0;
     VertexId bestVid = vid1;
     graph_traits < TagGraph >::vertex_iterator vi, vend;
-    //LOG_DEBUG("from " << _graph[vid1].name.toStdString() << " to " <<
-    //          _graph[vid2].name.toStdString());
+//    LOG_DEBUG("from " << _graph[vid1].name.toStdString() << " to " <<
+//              _graph[vid2].name.toStdString());
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
     {
       double s = std::min(d1[*vi], d2[*vi]);
@@ -893,7 +955,7 @@ private:
       }
     }
 
-    //LOG_DEBUG("  best vid: " << bestVid << " " << _graph[bestVid].name.toStdString());
+//    LOG_DEBUG("  best vid: " << bestVid << " " << _graph[bestVid].name.toStdString());
 
     score = bestScore;
     return bestVid;
@@ -1250,9 +1312,14 @@ private:
     // add in the list of aliases.
     for (int i = 0; i < v.aliases.size(); i++)
     {
+      if (_name2Vertex.contains(v.aliases[i]))
+      {
+        throw HootException(QString("Alias is being used multiple times. Please only reference an "
+          "alias once or use the base tag. (offending tag: %1, offending alias: %2)").
+          arg(v.name).arg(v.aliases[i]));
+      }
       _name2Vertex[v.aliases[i]] = vid;
     }
-
 
     return vid;
   }
@@ -1648,16 +1715,12 @@ bool OsmSchema::isLinearWaterway(const Element& e)
     const Tags& tags = e.getTags();
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
-      //LOG_VARD(it.key());
-      //LOG_VARD(it.value());
       if (it.key() == "waterway" || isAncestor(it.key(), "waterway") ||
           (it.key() == "type" && isAncestor("waterway=" + it.value(), "waterway")))
       {
-        //LOG_DEBUG("is a linear waterway; key: " << it.key());
         return true;
       }
     }
-    //LOG_DEBUG("is not a linear waterway: " << e.toString());
   }
   return false;
 }
@@ -1705,7 +1768,15 @@ void OsmSchema::loadDefault()
   delete d;
   d = new OsmSchemaData();
 
-  JsonSchemaLoader(*this).load(path);
+#warning remove me
+  if (path.contains("old"))
+  {
+    JsonSchemaLoader(*this).load(path);
+  }
+  else
+  {
+    OsmSchemaLoaderFactory::getInstance().createLoader(path)->load(path, *this);
+  }
 }
 
 double OsmSchema::score(const QString& kvp1, const QString& kvp2)

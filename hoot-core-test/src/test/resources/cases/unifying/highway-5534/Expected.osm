@@ -17,7 +17,7 @@
         <tag k="surface" v="flexible_pavement"/>
         <tag k="incline:interval:closure" v="closed_interval"/>
         <tag k="cartographic_scale:upper" v="1"/>
-        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga);usNationalGeoIntelAgency"/>
         <tag k="cartographic_scale:lower" v="25000"/>
         <tag k="source:ingest:datetime" v="2015-03-26T17:44:15.935Z"/>
         <tag k="divider" v="no"/>

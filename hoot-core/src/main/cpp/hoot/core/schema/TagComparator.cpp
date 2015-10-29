@@ -286,6 +286,12 @@ void TagComparator::compareTextTags(const Tags& t1, const Tags& t2, double& scor
       weight += tv.influence;
     }
   }
+
+  // if the weight is zero don't confuse things with a low score.
+  if (weight == 0.0)
+  {
+    score = 1;
+  }
 }
 
 void TagComparator::compareNames(const Tags& t1, const Tags& t2, double& score, double& weight,
@@ -371,16 +377,16 @@ double TagComparator::compareTags(const Tags &t1, const Tags &t2, bool strict)
   // compare and get a score for name comparison
   double nameScore, nameWeight;
   compareNames(t1, t2, nameScore, nameWeight, strict);
-  //LOG_WARN("Name score: " << nameScore);
+  //LOG_WARN("Name score: " << nameScore << "(" << nameWeight << ")");
 
   double textScore, textWeight;
   compareTextTags(t1, t2, textScore, textWeight);
-  //LOG_WARN("Text score: " << textScore);
+  //LOG_WARN("Text score: " << textScore << " (" << textWeight << ")");
 
   // compare the enumerated tags
   double enumScore, enumWeight;
   compareEnumeratedTags(t1, t2, enumScore, enumWeight);
-  //LOG_WARN("enumScore: " << enumScore);
+  //LOG_WARN("enumScore: " << enumScore << "(" << enumWeight << ")");
 
   // comparing numerical tags is difficult without some concept of the distribution. For that
   // reason I'm avoiding it for now.

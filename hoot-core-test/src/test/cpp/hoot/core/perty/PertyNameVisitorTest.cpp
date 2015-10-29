@@ -85,11 +85,11 @@ public:
 
     stringstream ss1;
     ss1 << n1->getTags().getNames();
-    CPPUNIT_ASSERT_EQUAL(string("[4]{ttsrnge tesa, strange, test, странное испытание}"), ss1.str());
+    CPPUNIT_ASSERT_EQUAL(string("[4]{etsrnga, test, strange test, странное испытание}"), ss1.str());
 
     stringstream ss2;
     ss2 << n2->getTags().getNames();
-    CPPUNIT_ASSERT_EQUAL(string("[4]{lintle towt, small town, littleville, הgיq קטנה}"), ss2.str());
+    CPPUNIT_ASSERT_EQUAL(string("[4]{small town, littleville, little town, העיר הקנט}"), ss2.str());
   }
 };
 
