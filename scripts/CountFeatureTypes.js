@@ -119,8 +119,8 @@ for (var filecount = 0; filecount < fileList.length; filecount++) {
     });
 
     //insert the count info into rows
-    var inputFilename = input.replace(/^.*[\\\/]/, '')
-    rows.push([inputFilename,buildingPolygonCount,poiCount,highwayCount,linerRiverCount,otherCount])
+    //var inputFilename = inputFile.replace(/^.*[\\\/]/, '')
+    rows.push([inputFile,buildingPolygonCount,poiCount,highwayCount,linerRiverCount,otherCount])
 }
 
 // unquoted CSV row and push to an array
