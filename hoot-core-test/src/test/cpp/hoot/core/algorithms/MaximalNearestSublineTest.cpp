@@ -128,9 +128,9 @@ public:
 
     void funnyCurveTest()
     {
-      OsmReader reader;
+      TestUtils::resetEnvironment();
 
-      OsmMap::resetCounters();
+      OsmReader reader;
 
       shared_ptr<OsmMap> map(new OsmMap());
       reader.setDefaultStatus(Status::Unknown1);
