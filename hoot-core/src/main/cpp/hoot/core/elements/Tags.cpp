@@ -33,7 +33,6 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
-#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -495,27 +494,6 @@ QString Tags::toString() const
     result += it.key() + " = " + it.value() + "\n";
   }
   return result;
-}
-
-bool Tags::containsKey(const QString key, const bool caseSensitive)
-{
-  if (caseSensitive)
-  {
-    return contains(key);
-  }
-  else
-  {
-    const Qt::CaseSensitivity caseSensitivity =
-      caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
-    for (Tags::const_iterator it = constBegin(); it != constEnd(); it++)
-    {
-      if (it.key().compare(key, caseSensitivity) == 0)
-      {
-        return true;
-      }
-    }
-    return false;
-  }
 }
 
 }

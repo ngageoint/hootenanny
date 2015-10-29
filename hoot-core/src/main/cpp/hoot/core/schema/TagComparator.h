@@ -71,7 +71,7 @@ public:
 
   /**
    * Generalize the tags in t1 and t2 to make them consistent. Using the following rules:
-   * - Names are merged using mergeNames.
+   * - Names are merged using _mergeNames.
    * - Exact matches are unchanged (lists are treated as unordered)
    * - Unrecognized tags are concatenated in a list.
    * - Tags that share an ancestor are promoted to the first common ancestor
