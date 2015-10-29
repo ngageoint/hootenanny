@@ -525,7 +525,7 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
       QStringList sl = Tags::split(it2.value());
       altNames.insert(sl.begin(), sl.end());
     }
-    else if (result.contains(it2.key()))
+    else if (result.containsKey(it2.key(), _caseSensitive))
     {
       QStringList sl = Tags::split(it2.value());
       altNames.insert(sl.begin(), sl.end());
