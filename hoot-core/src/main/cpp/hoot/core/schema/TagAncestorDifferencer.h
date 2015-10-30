@@ -9,6 +9,10 @@
 namespace hoot
 {
 
+/**
+ * Compare tags that have the specified ancestor. Ignore the other tags that don't have the
+ * same ancestor.
+ */
 class TagAncestorDifferencer : public TagFilteredDifferencer, public Configurable
 {
 public:
