@@ -64,6 +64,9 @@ void DuplicateNameRemover::apply(shared_ptr<OsmMap>& map)
   {
     const shared_ptr<Way>& w = it->second;
 
+    LOG_DEBUG("before dupe remove");
+    LOG_VARD(w->getTags());
+
     QStringList list = w->getTags().getNamesRecursive();
     // put all the alt_name values in a set, this will remove duplicates.
     list.append(w->getTags().getList("alt_name"));
@@ -116,6 +119,9 @@ void DuplicateNameRemover::apply(shared_ptr<OsmMap>& map)
     {
       w->getTags().remove("alt_name");
     }
+
+    LOG_DEBUG("after dupe remove");
+    LOG_VARD(w->getTags());
   }
 }
 

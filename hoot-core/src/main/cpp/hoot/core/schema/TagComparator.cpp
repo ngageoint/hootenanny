@@ -121,16 +121,26 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
   Tags t1 = t1In;
   Tags t2 = t2In;
 
+  LOG_DEBUG("avg start");
+  LOG_VARD(t1);
+  LOG_VARD(t2);
+
   set<QString> k1, k2;
 
   mergeNames(t1, t2, result);
+  LOG_DEBUG("after merge names");
+  LOG_VARD(result);
 
   // Merge any text fields by concatenating the lists.
   _mergeText(t1, t2, result);
+  LOG_DEBUG("after merge text");
+  LOG_VARD(result);
 
   if (keepAllUnknownTags)
   {
     _mergeUnrecognizedTags(t1, t2, result);
+    LOG_DEBUG("after _mergeUnrecognizedTags");
+    LOG_VARD(result);
   }
 
   for (Tags::const_iterator it1 = t1.begin(); it1 != t1.end(); it1++)
@@ -168,6 +178,8 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
       }
     }
   }
+  LOG_DEBUG("after first loop");
+  LOG_VARD(result);
 
   for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); it2++)
   {
@@ -176,6 +188,8 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
       result[it2.key()] = it2.value();
     }
   }
+  LOG_DEBUG("after second loop");
+  LOG_VARD(result);
 
   for (Tags::const_iterator it1 = t1.begin(); it1 != t1.end(); it1++)
   {
@@ -184,6 +198,9 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
       result[it1.key()] = it1.value();
     }
   }
+
+  LOG_DEBUG("after third loop");
+  LOG_VARD(result);
 }
 
 void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
