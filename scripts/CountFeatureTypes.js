@@ -1,3 +1,4 @@
+#!/usr/bin/nodejs
 /**
  * This little example loads a file, translates it and collects some simple
  * stats.

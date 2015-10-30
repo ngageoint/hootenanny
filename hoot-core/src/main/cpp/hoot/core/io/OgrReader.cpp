@@ -41,6 +41,7 @@ using namespace geos::geom;
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Settings.h>
@@ -1072,6 +1073,10 @@ void OgrReaderInternal::_translate(Tags& t)
   if (_translator.get() != 0)
   {
     _translator->translateToOsm(t, _layer->GetLayerDefn()->GetName());
+  }
+  else
+  {
+    t[OsmSchema::layerNameKey()] = _layer->GetLayerDefn()->GetName();
   }
 }
 
