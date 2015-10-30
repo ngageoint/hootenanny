@@ -46,18 +46,18 @@ namespace hoot
 class TagComparatorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(TagComparatorTest);
-  //CPPUNIT_TEST(averageTest);
-  //CPPUNIT_TEST(averageCaseSensitiveTest);
-  //CPPUNIT_TEST(averageCaseInsensitiveTest);
-  //CPPUNIT_TEST(buildingTest);
-  //CPPUNIT_TEST(compareTest);
-  //CPPUNIT_TEST(compareNamesTest);  //case sens?
-  //CPPUNIT_TEST(compareEnumTest);
-  //CPPUNIT_TEST(generalizeTest);
-  //CPPUNIT_TEST(generalizeCaseSensitiveTest);
+  CPPUNIT_TEST(averageTest);
+  CPPUNIT_TEST(averageCaseSensitiveTest);
+  CPPUNIT_TEST(averageCaseInsensitiveTest);
+  CPPUNIT_TEST(buildingTest);
+  CPPUNIT_TEST(compareTest);
+  CPPUNIT_TEST(compareNamesTest);  //case sens?
+  CPPUNIT_TEST(compareEnumTest);
+  CPPUNIT_TEST(generalizeTest);
+  CPPUNIT_TEST(generalizeCaseSensitiveTest);
   CPPUNIT_TEST(generalizeCaseInsensitiveTest);
-  //CPPUNIT_TEST(railwayBusStopTest);
-  //CPPUNIT_TEST(realWorldTest);
+  CPPUNIT_TEST(railwayBusStopTest);
+  CPPUNIT_TEST(realWorldTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -276,7 +276,7 @@ public:
       expected["ref"] = "US 24";
       expected["oneway"] = "yes";
       expected["lanes"] = "2";
-      expected["alt_name"] = "24;Midland Expy";  //TODO: fix
+      expected["alt_name"] = "24;Midland Expy";
       expected["name:he"] = "מידלנד המהיר";
       expected["bridge"] = "yes";
       expected["uuid"] = "foo;bar";
