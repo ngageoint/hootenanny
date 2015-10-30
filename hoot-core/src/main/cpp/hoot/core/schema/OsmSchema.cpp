@@ -266,9 +266,7 @@ public:
   {
     QString result;
     QString kvpNormalized1 = normalizeEnumeratedKvp(kvp1);
-    //LOG_VARD(kvpNormalized1);
     QString kvpNormalized2 = normalizeEnumeratedKvp(kvp2);
-    //LOG_VARD(kvpNormalized2);
     if (kvpNormalized1.isEmpty() || kvpNormalized2.isEmpty())
     {
       score = 0.0;
@@ -303,8 +301,6 @@ public:
         result = _graph[avgVid].name;
       }
     }
-    //LOG_VARD(score);
-    //LOG_VARD(result);
 
     return result;
   }

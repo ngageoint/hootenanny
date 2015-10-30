@@ -120,38 +120,22 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
 
   Tags t1 = t1In;
   Tags t2 = t2In;
-  LOG_DEBUG("start");
-  LOG_VARD(t1);
-  LOG_VARD(t2);
 
   set<QString> k1, k2;
 
   mergeNames(t1, t2, result);
-  LOG_DEBUG("after merge names");
-  //LOG_VARD(t1);
-  //LOG_VARD(t2);
-  LOG_VARD(result);
 
   // Merge any text fields by concatenating the lists.
   _mergeText(t1, t2, result);
-  LOG_DEBUG("after merge text");
-  //LOG_VARD(t1);
-  //LOG_VARD(t2);
-  LOG_VARD(result);
 
   if (keepAllUnknownTags)
   {
     _mergeUnrecognizedTags(t1, t2, result);
-    LOG_DEBUG("after merge unrecognized tags");
-    //LOG_VARD(t1);
-    //LOG_VARD(t2);
-    LOG_VARD(result);
   }
 
   for (Tags::const_iterator it1 = t1.begin(); it1 != t1.end(); it1++)
   {
     QString kvp1 = it1.key() + "=" + it1.value();
-    //LOG_VARD(kvp1);
     QString kvp2;
     double bestScore = 0;
     QString bestKvp;
@@ -159,7 +143,6 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
     for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); it2++)
     {
       kvp2 = it2.key() + "=" + it2.value();
-      //LOG_VARD(kvp2);
       double score;
       QString thisKvp = schema.average(kvp1, w1, kvp2, w2, score);
       if (score > bestScore && k2.find(it2.key()) == k2.end())
@@ -185,32 +168,22 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
       }
     }
   }
-  LOG_DEBUG("after first loop");
-  LOG_VARD(result);
 
   for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); it2++)
   {
-    //LOG_VARD(it2.key());
-    //LOG_VARD(it2.value());
     if (k2.find(it2.key()) == k2.end())
     {
       result[it2.key()] = it2.value();
     }
   }
-  LOG_DEBUG("after second loop");
-  LOG_VARD(result);
 
   for (Tags::const_iterator it1 = t1.begin(); it1 != t1.end(); it1++)
   {
-    //LOG_VARD(it1.key());
-    //LOG_VARD(it1.value());
     if (k1.find(it1.key()) == k1.end())
     {
       result[it1.key()] = it1.value();
     }
   }
-  LOG_DEBUG("after third loop");
-  LOG_VARD(result);
 }
 
 void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
@@ -451,31 +424,49 @@ Tags TagComparator::generalize(Tags t1, Tags t2, bool overwriteUnrecognizedTags)
 {
   Tags result;
 
+  LOG_DEBUG("start");
+  LOG_VARD(t1);
+  LOG_VARD(t2);
+
   // Names are merged using _mergeNames.
   mergeNames(t1, t2, result);
+  LOG_DEBUG("after merge names");
+  LOG_VARD(result);
 
   // Exact matches are unchanged
   _mergeExactMatches(t1, t2, result);
+  LOG_DEBUG("after merge exact matches");
+  LOG_VARD(result);
 
   // Merge any text fields by adding to a list.
   _mergeText(t1, t2, result);
+  LOG_DEBUG("after merge text");
+  LOG_VARD(result);
 
   // Unrecognized tags are concatenated in a list.
   if (overwriteUnrecognizedTags)
   {
     _overwriteUnrecognizedTags(t1, t2, result);
+    LOG_DEBUG("after _overwriteUnrecognizedTags");
+    LOG_VARD(result);
   }
   else
   {
     _mergeUnrecognizedTags(t1, t2, result);
+    LOG_DEBUG("after _mergeUnrecognizedTags");
+    LOG_VARD(result);
   }
 
   // Tags that share an ancestor are promoted to the first common ancestor
   _promoteToCommonAncestor(t1, t2, result);
+  LOG_DEBUG("after _promoteToCommonAncestor");
+  LOG_VARD(result);
 
   // If there are no conflicting tags the tag is kept
   _addNonConflictingTags(t1, t2, result);
   _addNonConflictingTags(t2, t1, result);
+  LOG_DEBUG("after _addNonConflictingTags");
+  LOG_VARD(result);
 
   return result;
 }
