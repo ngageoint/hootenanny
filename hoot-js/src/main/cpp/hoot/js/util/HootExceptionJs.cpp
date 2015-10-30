@@ -69,6 +69,8 @@ void HootExceptionJs::Init(Handle<Object> target)
     // Prototype
     tpl->PrototypeTemplate()->Set(String::NewSymbol("toString"),
         FunctionTemplate::New(toString)->GetFunction());
+    tpl->PrototypeTemplate()->Set(String::NewSymbol("toJSON"),
+        FunctionTemplate::New(toJSON)->GetFunction());
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                   toV8(HootException::className()));
 
@@ -156,6 +158,19 @@ void HootExceptionJs::throwAsHootException(TryCatch& tc)
       throw HootException(QString("%1 (%2) \n%3\n%4").arg(fileName).arg(lineNumber).arg(sourceLine).arg(blank + wave));
     }
   }
+}
+
+v8::Handle<v8::Value> HootExceptionJs::toJSON(const v8::Arguments& args)
+{
+  HandleScope scope;
+
+  shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
+
+  QVariantMap m;
+  m["message"] = e->getWhat();
+  m["classname"] = QString::fromStdString(e->getClassName());
+
+  return scope.Close(toV8(m));
 }
 
 v8::Handle<v8::Value> HootExceptionJs::toString(const v8::Arguments& args)
