@@ -16,5 +16,10 @@ fi
 
 # create the osm apu db from the blank osm api db script
 #echo "Creating osm api db"
+#echo "DB_HOST: " $DB_HOST
+#echo "DB_PORT: " $DB_PORT
+#echo "DB_USER: " $DB_USER
+#echo "PGPASSWORD: " $PGPASSWORD
+#echo "DB_NAME_OSMAPI: " $DB_NAME_OSMAPI
 createdb $AUTH $DB_NAME_OSMAPI
 psql $AUTH -d $DB_NAME_OSMAPI -f $HOOT_HOME/scripts/osmapidb/blank_osmapidb.sql >& /tmp/osmapidb.log
