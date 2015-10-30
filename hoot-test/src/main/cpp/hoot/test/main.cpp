@@ -218,6 +218,7 @@ void populateAllTests(CppUnit::TestSuite *suite, bool printDiff)
   suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
   suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
   suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
+  suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
   suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest());
 }
 
@@ -373,6 +374,7 @@ int main(int argc, char *argv[])
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
+        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
       }
       if (args.contains("--all") || args.contains("--glacial"))
       {
@@ -390,6 +392,7 @@ int main(int argc, char *argv[])
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
+        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest());
       }
 

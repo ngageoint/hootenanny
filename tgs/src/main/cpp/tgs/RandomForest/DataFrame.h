@@ -199,7 +199,7 @@ namespace Tgs
     *
     * @param factors a container to hold the factor labels
     */
-    const vector<string>& getFactorLabels() const;
+    const vector<string> getFactorLabels() const;
 
     const std::vector<int>& getFactorTypes() const { return _factorType; }
 
