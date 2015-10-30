@@ -49,7 +49,6 @@ class TagComparatorTest : public CppUnit::TestFixture
   CPPUNIT_TEST(averageTest);
   CPPUNIT_TEST(averageCaseSensitiveTest);
   CPPUNIT_TEST(averageCaseInsensitiveTest);
-  CPPUNIT_TEST(averageCaseInsensitiveTest2);
   CPPUNIT_TEST(buildingTest);
   CPPUNIT_TEST(compareTest);
   CPPUNIT_TEST(compareNamesTest);
@@ -274,53 +273,6 @@ public:
       expected["highway"] = "primary";
       expected["name"] = "Midland Expressway";
       expected["name:en"] = "Midland Expressway";
-      expected["ref"] = "US 24";
-      expected["oneway"] = "yes";
-      expected["lanes"] = "2";
-      expected["alt_name"] = "24;Midland Expy";
-      expected["name:he"] = "מידלנד המהיר";
-      expected["bridge"] = "yes";
-      expected["uuid"] = "foo;bar";
-
-      Tags avg;
-      uut.averageTags(t1, t2, avg);
-      compareTags(expected, avg);
-     }
-  }
-
-  //It seems that average tag merging favors the first tag.  I thought that possibly it would favor
-  //the camel case over the all caps name, but that doesn't seem to be the case.
-  void averageCaseInsensitiveTest2()
-  {
-    TagComparator& uut = TagComparator::getInstance();
-    uut.setCaseSensitive(false);
-
-    {
-      Tags t1;
-      t1["highway"] = "trunk";
-      t1["name"] = "Midland Expressway";
-      t1["name:en"] = "MIDLAND EXPRESSWAY";
-      t1["ref"] = "US 24";
-      t1["oneway"] = "yes";
-      t1["lanes"] = "2";
-      t1["uuid"] = "foo";
-
-      Tags t2;
-      t2["highway"] = "secondary";
-      t2["name"] = "Midland Expy";
-      t2["name:en"] = "Midland Expressway";
-      t2["name:he"] = "מידלנד המהיר";
-      t2["ref"] = "24";
-      t2["oneway"] = "true";
-      t2["bridge"] = "yes";
-      t2["uuid"] = "bar";
-
-      //With case sensitivity off, the two name:en tags are considered the same.  So, the first
-      //one is chosen and the other does not go into alt_name.
-      Tags expected;
-      expected["highway"] = "primary";
-      expected["name"] = "Midland Expressway";
-      expected["name:en"] = "MIDLAND EXPRESSWAY";
       expected["ref"] = "US 24";
       expected["oneway"] = "yes";
       expected["lanes"] = "2";
