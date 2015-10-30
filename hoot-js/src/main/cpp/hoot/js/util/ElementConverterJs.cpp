@@ -70,6 +70,7 @@ Handle<Value> ElementConverterJs::calculateLength(const Arguments& args) {
   }
   catch ( const HootException& err )
   {
+    LOG_VAR(err.getWhat());
     return v8::ThrowException(HootExceptionJs::create(err));
   }
 

@@ -99,7 +99,7 @@ var processFile = function(inputFile) {
             hoot.log(row.join(','))
         }
     } catch (err) {
-        hoot.log(err);
+        hoot.warn(err.toString());
     }
 }
 
