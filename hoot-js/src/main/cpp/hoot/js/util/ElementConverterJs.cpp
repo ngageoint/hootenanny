@@ -58,22 +58,22 @@ void ElementConverterJs::Init(Handle<Object> exports)
 
 Handle<Value> ElementConverterJs::calculateLength(const Arguments& args) {
   HandleScope scope;
-  ConstOsmMapPtr m;
-  ConstElementPtr e;
-  
+ 
   try
   {
     Context::Scope context_scope(Context::GetCurrent());
 
-  	m = toCpp<ConstOsmMapPtr>(args[0]);
-  	e = toCpp<ConstElementPtr>(args[1]);
+  	ConstOsmMapPtr m = toCpp<ConstOsmMapPtr>(args[0]);
+  	ConstElementPtr e = toCpp<ConstElementPtr>(args[1]);
+
+    return scope.Close(toV8(ElementConverter(m).calculateLength(e)));
   }
   catch ( const HootException& err )
   {
     return v8::ThrowException(HootExceptionJs::create(err));
   }
 
-  return scope.Close(toV8(ElementConverter(m).calculateLength(e)));
+  return scope.Close(Undefined());
 }
 
 }

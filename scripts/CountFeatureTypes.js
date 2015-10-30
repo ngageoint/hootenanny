@@ -51,11 +51,12 @@ var processFile = function(inputFile) {
     } else if (findFormat(inputFile) === 'ufd') {
         tran = ufdTran;
     }
-
+    
     try {
         //Create a new map and populate it with the input file
         var map = new hoot.OsmMap();
         hoot.loadMap(map, inputFile, false, 1);
+        new hoot.ReprojectToPlanarOp().apply(map);
 
         // Translate the file from the input format to OSM if input is not osm format
         if (tran.length > 0 ) {
