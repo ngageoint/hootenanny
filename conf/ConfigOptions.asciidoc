@@ -295,7 +295,8 @@ See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 * Default Value: `true`
 
 If true, all cleaning and conflation merge operations will only remove duplicate names when their
-case also matches; ignore case when removing otherwise.
+case also matches.  If false, cleaning and conflation merge operations will consider names with
+the same text but differing case as the same with each other.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
