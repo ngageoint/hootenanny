@@ -14,7 +14,7 @@ var walk = function(dir) {
                     if (stat && stat.isDirectory()) {
                         dive(path); // it's a directory, let's explore recursively
                     } else {
-                        if (findFormat(path) == "osm" || findFormat(path) == "ufd") {
+                        if (findFormat(path) == "osm" || findFormat(path) == "mgcp" || findFormat(path) == "ufd") {
                             if (path.split('.').pop().toLowerCase() === 'osm' || path.split('.').pop().toLowerCase() === 'shp' || path.split('.').pop().toLowerCase() === 'pbf') {
                                processFile(path);
                             }
@@ -35,7 +35,7 @@ var findFormat = function(filename) {
     var listPath = onlyPath.split("/");
     for (var i = 0; i < listPath.length; i++) {
         format = listPath[i];
-        if ( format.toLowerCase() == 'ufd' || format.toLowerCase() == 'osm') {
+        if (format.toLowerCase() == 'mgcp' || format.toLowerCase() == 'ufd' || format.toLowerCase() == 'osm') {
             break;
         }
     }
@@ -50,8 +50,7 @@ var processFile = function(inputFile) {
     } else if (findFormat(inputFile) === 'ufd') {
         tran = ufdTran;
     }
-    hoot.log(inputFile)
-   
+
     try {
         //Create a new map and populate it with the input file
         var map = new hoot.OsmMap();
@@ -91,7 +90,6 @@ var processFile = function(inputFile) {
         //write output
         //var inputFilename = inputFile.replace(/^.*[\\\/]/, '')
         var row = [inputFile,buildingPolygonCount,poiCount,highwayCount,highwayLength.toFixed(2),linerRiverCount,riverLength.toFixed(2),otherCount];
-        hoot.log(row)
         if (typeof(output) !== 'undefined') {
             fs.appendFile(output, '\n');
             fs.appendFile(output, row.join(','));
@@ -131,7 +129,6 @@ var fs = require('fs');
 
 //Format output columns
 var rowHeader = [['Dataset', 'Buildings', 'POI\'s', 'Linear Highways','Highway Length(meter)', 'Linear Rivers','Rivers Length(meter)','Others']];
-hoot.log(rowHeader.join(','));
 if (typeof(output) !== 'undefined') {
     fs.writeFile(output, rowHeader.join(','));
 } else {
