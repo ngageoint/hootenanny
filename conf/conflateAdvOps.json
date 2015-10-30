@@ -97,7 +97,7 @@
       {
         "id": "duplicate_name_remover",
         "elem_type": "checkbox",
-        "description": "Remove any duplicate names. See `duplicate.name.remover.case.sensitive` for modifying the case sensitivity.",
+        "description": "Remove any duplicate names. See `duplicate.name.case.sensitive` for modifying the case sensitivity.",
         "name": "Remove Duplicate Name",
         "hoot_val": "hoot::DuplicateNameRemover",
         "required": "true",
