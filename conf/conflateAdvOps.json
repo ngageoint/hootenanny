@@ -44,11 +44,11 @@
         "defaultvalue": "true",
         "members": [
           {
-            "id": "duplicate_name_remover_case_sensitive",
+            "id": "duplicate_name_case_sensitive",
             "elem_type": "checkbox",
-            "hoot_key": "duplicate.name.remover.case.sensitive",
+            "hoot_key": "duplicate.name.case.sensitive",
             "description": "If checked, the duplicate name remover will only remove duplicate names when their case also matches; Will ignore case when removing otherwise",
-            "name": "Duplicate Name Remover Case Sensitive",
+            "name": "Duplicate Name Case Sensitive",
             "defaultvalue": "true"
           }
         ]
