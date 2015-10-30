@@ -35,6 +35,7 @@
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
+#include <hoot/js/util/HootExceptionJs.h> 
 
 namespace hoot
 {
@@ -57,10 +58,20 @@ void ElementConverterJs::Init(Handle<Object> exports)
 
 Handle<Value> ElementConverterJs::calculateLength(const Arguments& args) {
   HandleScope scope;
-  Context::Scope context_scope(Context::GetCurrent());
+  ConstOsmMapPtr m;
+  ConstElementPtr e;
+  
+  try
+  {
+    Context::Scope context_scope(Context::GetCurrent());
 
-  ConstOsmMapPtr m = toCpp<ConstOsmMapPtr>(args[0]);
-  ConstElementPtr e = toCpp<ConstElementPtr>(args[1]);
+  	m = toCpp<ConstOsmMapPtr>(args[0]);
+  	e = toCpp<ConstElementPtr>(args[1]);
+  }
+  catch ( const HootException& err )
+  {
+    return v8::ThrowException(HootExceptionJs::create(err));
+  }
 
   return scope.Close(toV8(ElementConverter(m).calculateLength(e)));
 }

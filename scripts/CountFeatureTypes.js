@@ -12,12 +12,12 @@ var walk = function(dir) {
                 var path = dir + "/" + file;
                 fs.stat(path, function(err, stat) {
                     if (stat && stat.isDirectory()) {
-                        if (path.toLowerCase().indexOf("osm") > -1 || path.toLowerCase().indexOf("mgcp") > -1 || path.toLowerCase().indexOf("ufd") > -1) {
-                            dive(path); // it's a directory, let's explore recursively
-                        }
+                        dive(path); // it's a directory, let's explore recursively
                     } else {
-                        if (path.split('.').pop().toLowerCase() === 'osm' || path.split('.').pop().toLowerCase() === 'shp' || path.split('.').pop().toLowerCase() === 'pbf') {
-                            processFile(path);
+                        if (findFormat(path) == "osm" || findFormat(path) == "ufd") {
+                            if (path.split('.').pop().toLowerCase() === 'osm' || path.split('.').pop().toLowerCase() === 'shp' || path.split('.').pop().toLowerCase() === 'pbf') {
+                               processFile(path);
+                            }
                         }
                     }
                 });
@@ -35,7 +35,7 @@ var findFormat = function(filename) {
     var listPath = onlyPath.split("/");
     for (var i = 0; i < listPath.length; i++) {
         format = listPath[i];
-        if (format.toLowerCase() == 'mgcp' || format.toLowerCase() == 'ufd' || format.toLowerCase() == 'osm') {
+        if ( format.toLowerCase() == 'ufd' || format.toLowerCase() == 'osm') {
             break;
         }
     }
@@ -50,50 +50,56 @@ var processFile = function(inputFile) {
     } else if (findFormat(inputFile) === 'ufd') {
         tran = ufdTran;
     }
+    hoot.log(inputFile)
+   
+    try {
+        //Create a new map and populate it with the input file
+        var map = new hoot.OsmMap();
+        hoot.loadMap(map, inputFile, false, 1);
 
-    //Create a new map and populate it with the input file
-    var map = new hoot.OsmMap();
-    hoot.loadMap(map, inputFile, false, 1);
-
-    // Translate the file from the input format to OSM if input is not osm format
-    if (tran.length > 0 ) {
-        new hoot.TranslationOp({"translation.script":tran}).apply(map);
-    }
-
-    var buildingPolygonCount = 0;
-    var highwayCount = 0;
-    var highwayLength = 0.0;
-    var poiCount = 0;
-    var linerRiverCount = 0;
-    var riverLength = 0.0;
-    var otherCount = 0;
-
-    // Count the buildings, hightway,poi and river by visiting every element and
-    // using the OsmSchema to determine.
-    map.visit(function(e) {
-        if (hoot.OsmSchema.isBuilding(e)) {
-            buildingPolygonCount++;
-        } else if (hoot.OsmSchema.isLinearHighway(e)) {
-            highwayCount++;
-            highwayLength += hoot.ElementConverter.calculateLength(map, e);
-        } else if (hoot.OsmSchema.isLinearWaterway(e)) {
-            linerRiverCount++;
-            riverLength += hoot.ElementConverter.calculateLength(map, e);
-        } else if (hoot.OsmSchema.isPoi(e)) {
-            poiCount++;
-        } else {
-            otherCount++;
+        // Translate the file from the input format to OSM if input is not osm format
+        if (tran.length > 0 ) {
+            new hoot.TranslationOp({"translation.script":tran}).apply(map);
         }
-    });
 
-    //write output
-    //var inputFilename = inputFile.replace(/^.*[\\\/]/, '')
-    var row = [inputFile,buildingPolygonCount,poiCount,highwayCount,highwayLength.toFixed(2),linerRiverCount,riverLength.toFixed(2),otherCount];
-    if (typeof(output) !== 'undefined') {
-        fs.appendFile(output, '\n');
-        fs.appendFile(output, row.join(','));
-    } else {
-        hoot.log(row.join(','))
+        var buildingPolygonCount = 0;
+        var highwayCount = 0;
+        var highwayLength = 0.0;
+        var poiCount = 0;
+        var linerRiverCount = 0;
+        var riverLength = 0.0;
+        var otherCount = 0;
+
+        // Count the buildings, hightway,poi and river by visiting every element and
+        // using the OsmSchema to determine.
+        map.visit(function(e) {
+            if (hoot.OsmSchema.isBuilding(e)) {
+                buildingPolygonCount++;
+            } else if (hoot.OsmSchema.isLinearHighway(e)) {
+                highwayCount++;
+                highwayLength += hoot.ElementConverter.calculateLength(map, e);
+            } else if (hoot.OsmSchema.isLinearWaterway(e)) {
+                linerRiverCount++;
+                riverLength += hoot.ElementConverter.calculateLength(map, e);
+            } else if (hoot.OsmSchema.isPoi(e)) {
+                poiCount++;
+            } else {
+                otherCount++;
+            }
+        });
+
+        //write output
+        //var inputFilename = inputFile.replace(/^.*[\\\/]/, '')
+        var row = [inputFile,buildingPolygonCount,poiCount,highwayCount,highwayLength.toFixed(2),linerRiverCount,riverLength.toFixed(2),otherCount];
+        hoot.log(row)
+        if (typeof(output) !== 'undefined') {
+            fs.appendFile(output, '\n');
+            fs.appendFile(output, row.join(','));
+        } else {
+            hoot.log(row.join(','))
+        }
+    } catch (err) {
+        hoot.log(err);
     }
 }
 
@@ -125,6 +131,7 @@ var fs = require('fs');
 
 //Format output columns
 var rowHeader = [['Dataset', 'Buildings', 'POI\'s', 'Linear Highways','Highway Length(meter)', 'Linear Rivers','Rivers Length(meter)','Others']];
+hoot.log(rowHeader.join(','));
 if (typeof(output) !== 'undefined') {
     fs.writeFile(output, rowHeader.join(','));
 } else {
