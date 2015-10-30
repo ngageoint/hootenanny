@@ -291,6 +291,7 @@ public:
   {
     //Log::getInstance().setLevel(Log::Info);
     TagComparator& uut = TagComparator::getInstance();
+    uut.setCaseSensitive(true);
 
     {
       Tags t1;
@@ -358,6 +359,7 @@ public:
   {
     //Log::getInstance().setLevel(Log::Debug);
     TagComparator& uut = TagComparator::getInstance();
+    uut.setCaseSensitive(true);
 
     {
       Tags t1;
@@ -442,6 +444,7 @@ public:
   void compareEnumTest()
   {
     TagComparator& uut = TagComparator::getInstance();
+    uut.setCaseSensitive(true);
 
     {
       Tags t1;
@@ -495,6 +498,7 @@ public:
     //Log::getInstance().setLevel(Log::Debug);
 
     TagComparator& uut = TagComparator::getInstance();
+    uut.setCaseSensitive(true);
 
     {
       Tags t1;
@@ -718,6 +722,7 @@ public:
   void railwayBusStopTest()
   {
     TagComparator& uut = TagComparator::getInstance();
+    uut.setCaseSensitive(true);
 
     vector<Tags> railways;
     vector<Tags> buses;
@@ -800,6 +805,7 @@ public:
   void realWorldTest()
   {
     TagComparator& uut = TagComparator::getInstance();
+    uut.setCaseSensitive(true);
 
     {
       Tags t1;
