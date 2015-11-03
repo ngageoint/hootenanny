@@ -51,6 +51,7 @@ var processFile = function(inputFile) {
     } else if (findFormat(inputFile) === 'ufd') {
         tran = ufdTran;
     }
+    hoot.log(inputFile)
     
     try {
         //Create a new map and populate it with the input file
@@ -84,7 +85,7 @@ var processFile = function(inputFile) {
                 riverLength += hoot.ElementConverter.calculateLength(map, e);
             } else if (hoot.OsmSchema.isPoi(e)) {
                 poiCount++;
-            } else {
+            } else if (e.getTags().getInformationCount() > 0) {
                 otherCount++;
             }
         });
@@ -92,9 +93,10 @@ var processFile = function(inputFile) {
         //write output
         //var inputFilename = inputFile.replace(/^.*[\\\/]/, '')
         var row = [inputFile,buildingPolygonCount,poiCount,highwayCount,highwayLength.toFixed(2),linerRiverCount,riverLength.toFixed(2),otherCount];
+        hoot.log(row.join(','))
         if (typeof(output) !== 'undefined') {
-            fs.appendFile(output, '\n');
-            fs.appendFile(output, row.join(','));
+            fs.appendFileSync(output, '\n');
+            fs.appendFileSync(output, row.join(','));
         } else {
             hoot.log(row.join(','))
         }
@@ -113,7 +115,7 @@ hoot.Log.init();
 
 // translation file to convert from input (e.g. UFD, TDS, etc.) to OSM
 var ufdTran = HOOT_HOME + "/translations-local/UFD.js";
-var mgcpTran = HOOT_HOME + "/translations-local/MGCP_01.js";
+var mgcpTran = HOOT_HOME + "/translations/MGCP_TRD4.js";
 
 //Get user inputs
 //input file (e.g. SHP) or input dir
