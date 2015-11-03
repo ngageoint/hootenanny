@@ -1,5 +1,3 @@
-Dropping old osm api db
-Creating osm api db
  setval 
 --------
       2
@@ -25,6 +23,18 @@ Creating osm api db
       1
 (1 row)
 
+COPY 1
+COPY 1
+COPY 36
+COPY 0
+COPY 36
+COPY 0
+COPY 4
+COPY 40
+COPY 8
+COPY 4
+COPY 40
+COPY 8
 Performing read operation
 Doing comparison
 OSM XML file:		test-output/cmd/ServiceOsmApiDbTest/ToyTestA-out.osm

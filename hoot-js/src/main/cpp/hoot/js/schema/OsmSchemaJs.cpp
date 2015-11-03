@@ -63,6 +63,7 @@ void OsmSchemaJs::Init(Handle<Object> exports)
   schema->Set(String::NewSymbol("isLinearWaterway"), FunctionTemplate::New(isLinearWaterway)->GetFunction());
   schema->Set(String::NewSymbol("isMetaData"), FunctionTemplate::New(isMetaData)->GetFunction());
   schema->Set(String::NewSymbol("isPoi"), FunctionTemplate::New(isPoi)->GetFunction());
+  schema->Set(String::NewSymbol("isLinearHighway"), FunctionTemplate::New(isLinearHighway)->GetFunction());
   schema->Set(String::NewSymbol("score"), FunctionTemplate::New(score)->GetFunction());
   schema->Set(String::NewSymbol("scoreOneWay"), FunctionTemplate::New(scoreOneWay)->GetFunction());
 }
@@ -179,6 +180,14 @@ Handle<Value> OsmSchemaJs::isPoi(const Arguments& args) {
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
   return scope.Close(Boolean::New(OsmSchema::getInstance().isPoi(*e)));
+}
+
+Handle<Value> OsmSchemaJs::isLinearHighway(const Arguments& args) {
+  HandleScope scope;
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  return scope.Close(Boolean::New(OsmSchema::getInstance().isLinearHighway(e->getTags(), e->getElementType())));
 }
 
 Handle<Value> OsmSchemaJs::score(const Arguments& args) {

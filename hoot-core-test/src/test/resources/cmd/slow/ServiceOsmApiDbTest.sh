@@ -1,20 +1,27 @@
 #!/bin/bash
 set -e
 
+#echo $PGDATABASE $PGHOST $PGPORT $PGUSER $PGPASSWORD
+
 # clean out the database
-scripts/SetupOsmApiDB.sh
+source scripts/SetupOsmApiDB.sh
 
 # setup DB variables for automation
 source conf/DatabaseConfig.sh
+
+export AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
+export PGPASSWORD=$DB_PASSWORD
 
 # setup dirs
 rm -rf test-output/cmd/ServiceOsmApiDbTest
 mkdir -p test-output/cmd/ServiceOsmApiDbTest
 
-# Load the database with known data
-psql -f hoot-core-test/src/test/resources/ToyTestA.sql $PGDATABASE
+#echo $PGDATABASE $PGHOST $PGPORT $PGUSER $PGPASSWORD
 
-export DB_URL="postgresql://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$PGDATABASE"
+# Load the database with known data
+psql $AUTH -d $DB_NAME_OSMAPI -f hoot-core-test/src/test/resources/ToyTestA.sql
+
+export DB_URL="postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
 
 # do the read operation
 echo "Performing read operation"

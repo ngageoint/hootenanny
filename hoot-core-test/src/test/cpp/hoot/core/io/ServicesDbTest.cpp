@@ -444,10 +444,24 @@ public:
     ServicesDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
 
+    // parse out the osm api dbname, dbuser, and dbpassword
+    //example: postgresql://hoot:hoottest@localhost:5432/osmapi_test
+    QUrl dbUrl = ServicesDbTestUtils::getOsmApiDbUrl();
+    QString dbUrlString = dbUrl.toString();
+    QStringList dbUrlParts = dbUrlString.split("/");
+    QString dbName = dbUrlParts[dbUrlParts.size()-1];
+    QStringList userParts = dbUrlParts[dbUrlParts.size()-2].split(":");
+    QString dbUser = userParts[0];
+    QString dbPassword = userParts[1].split("@")[0];
+    QString dbHost = userParts[1].split("@")[1];
+    QString dbPort = userParts[2];
+    LOG_DEBUG("Name="+dbName+", user="+dbUser+", pass="+dbPassword+", port="+dbPort+", host="+dbHost);
+
+    QString auth = "-h "+dbHost+" -p "+dbPort+" -U "+dbUser;
+
     /////////////////////////////////////
     // INSERT NODES INTO DB
     /////////////////////////////////////
-
 
     // list of insertions
     QList<long> ids;
@@ -457,9 +471,16 @@ public:
     QList<float> lons = QList<float>() << -106.5 << -104;
 
     // Insert nodes
-    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/users.sql > /dev/null 2>&1");
-    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1");
-    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodes.sql > /dev/null 2>&1");
+    QString cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
+      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/users.sql > /dev/null 2>&1; \
+      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1; \
+      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodes.sql > /dev/null 2>&1";
+
+    if( std::system(cmd.toStdString().c_str()) != 0 )
+    {
+      LOG_WARN("Failed postgres command.  Exiting test.");
+      return;
+    }
 
     /////////////////////////////////////
     // SELECT THE NODES USING SELECT_ALL
@@ -485,7 +506,7 @@ public:
     shared_ptr<QSqlQuery> nodeResultIterator = database.selectAllElements(ElementType::Node);
 
     // check if db active or not
-    assert(nodeResultIterator.isActive());
+    assert(nodeResultIterator->isActive());
 
     const int numNodeFields = 10;
     long long lastId = LLONG_MIN;
@@ -539,8 +560,13 @@ public:
     nodeIds.push_back(nodeId1);
     nodeIds.push_back(nodeId2);
 
-    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/ways.sql > /dev/null 2>&1");
-
+    cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
+      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/ways.sql > /dev/null 2>&1";
+    if( std::system(cmd.toStdString().c_str()) != 0 )
+    {
+      LOG_WARN("Failed postgres command.  Exiting test.");
+      return;
+    }
 
     ///////////////////////////////////////////////
     /// Reads the ways from the Osm Api DB
@@ -549,7 +575,7 @@ public:
     shared_ptr<QSqlQuery> wayResultIterator = database.selectAllElements(ElementType::Way);
 
     // check again if db active or not
-    assert(wayResultIterator.isActive());
+    assert(wayResultIterator->isActive());
 
     const int numWayFields = 7;
     lastId = LLONG_MIN;
@@ -606,8 +632,13 @@ public:
     long relationId = 1;
     ids.append(relationId);
 
-    std::system("psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/relations.sql > /dev/null 2>&1");
-
+    cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
+      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/relations.sql > /dev/null 2>&1";
+    if( std::system(cmd.toStdString().c_str()) != 0 )
+    {
+      LOG_WARN("Failed postgres command.  Exiting test.");
+      return;
+    }
 
     ///////////////////////////////////////////////
     /// Reads the relations from the Osm Api DB
@@ -617,7 +648,7 @@ public:
       database.selectAllElements(ElementType::Relation);
 
     // check again if db active or not
-    assert(relationResultIterator.isActive());
+    assert(relationResultIterator->isActive());
 
     const int numRelationFields = 7;
     lastId = LLONG_MIN;
