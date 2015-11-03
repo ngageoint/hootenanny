@@ -197,7 +197,7 @@
     <servlet-class>org.mitre.dsmiley.httpproxy.ProxyServlet</servlet-class>
     <init-param>
       <param-name>targetUri</param-name>
-      <param-value>https://rdog.digitalglobe.com</param-value>
+      <param-value>https://evwhs.digitalglobe.com</param-value>
     </init-param>
     <init-param>
       <param-name>log</param-name>
