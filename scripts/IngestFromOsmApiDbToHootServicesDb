@@ -1,8 +1,0 @@
-#hoot convert -D services.db.writer.email=OsmEmail@hoot.local 
-# postgresql://hoot:hoottest@localhost:5432/osmapi_test /tmp/output.osm
-
-	
-hoot convert -D services.db.writer.email=test@test.com -D services.db.reader.email=test@test.com -D convert.bounding.box=$(bbox) $(inputDbUrl) $(DB_URL)/$(outputLayerName)  
-
-	
-

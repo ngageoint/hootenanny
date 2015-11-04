@@ -29,6 +29,7 @@ package hoot.services.controllers.ingest;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -45,7 +46,7 @@ import org.slf4j.LoggerFactory;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.utils.ResourceErrorHandler;
 
-@Path("/ingest/apidb")
+@Path("/apidb")
 public class OsmApiDbResource extends JobControllerBase 
 {
 	private static final Logger log = LoggerFactory.getLogger(OsmApiDbResource.class);
@@ -54,28 +55,34 @@ public class OsmApiDbResource extends JobControllerBase
 	{
 		if (processScriptName ==  null)
 		{
-			processScriptName = "IngestFromOsmApiDbToHootServicesDb";
+			processScriptName = "ExportFromOsmApiDbToHootServicesDb";
 		}
 	}
 	
+	//@GET
 	@POST
+	@Path("/bybbox")
   @Consumes(MediaType.TEXT_PLAIN)
   @Produces(MediaType.TEXT_PLAIN)
   public Response exportByBoundingBox(
-    @QueryParam("inputDbUrl")
-    String inputDbUrl,
+    @QueryParam("exportDbName")
+    String exportDbName,
     @QueryParam("bbox")
     String bbox,
     @QueryParam("outputLayerName")
     String outputLayerName)
     throws Exception
   {
+		log.debug(exportDbName);
+		log.debug(bbox);
+		log.debug(outputLayerName);
+		
 		String jobId = UUID.randomUUID().toString();
 		try
 		{
 			JSONArray jobArgs = new JSONArray();
 			JSONObject param = new JSONObject();
-			param.put("inputDbUrl", inputDbUrl);
+			param.put("exportDbName", exportDbName);
 			param.put("bbox", bbox);
 			param.put("outputLayerName", "outputLayerName");
 			JSONArray commandArgs = parseParams(param.toJSONString());
