@@ -24,34 +24,75 @@ void OsmChangeWriterSql::_create(const ConstNodePtr node)
 {
   long id = _getNextId(ElementType::Node);
 
-  QString values = QString("(node_id, latitude, longitude, changeset_id, visible, \"timestamp\", "
-      "tile,  version) VALUES (%1, %2, %3, %4, true, '%5', %6, 1);\n").
+  QString values = QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
+      "tile,  version) VALUES (%1, %2, %3, %4, true, now(), %5, 1);\n").
       arg(id).
       arg((qlonglong)ServicesDb::round(node->getY() * ServicesDb::COORDINATE_SCALE, 7)).
       arg((qlonglong)ServicesDb::round(node->getX() * ServicesDb::COORDINATE_SCALE, 7)).
-      arg(_changesetId).arg(OsmUtils::toTimeString(node->getTimestamp())).
+      arg(_changesetId).
       arg(ServicesDb::tileForPoint(node->getY(), node->getX()));
 
-  _outputSql.write(("INSERT INTO nodes " + values).toUtf8());
-  _outputSql.write(("INSERT INTO current_nodes " + values).toUtf8());
+  _outputSql.write(("INSERT INTO nodes (node_id, " + values).toUtf8());
+  _outputSql.write(("INSERT INTO current_nodes (id, " + values).toUtf8());
+
+  _createTags(node->getTags(), ElementId::node(id));
 }
 
-long OsmChangeWriterSql::_getNextId(const ElementType type)
+long OsmChangeWriterSql::_createChangeSet()
+{
+  long id = _getNextId("changesets");
+
+  _changesetId = id;
+
+  _outputSql.write(QString("INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES "
+                   "(%1, %2, now(), now());\n").arg(id).
+                   arg(ConfigOptions().getChangesetUserId()).toUtf8());
+
+}
+
+void OsmChangeWriterSql::_createTags(const Tags& tags, ElementId eid)
+{
+  QString tableName;
+
+  QString tn1 = "current_" + eid.getType().toString().toLower() + "_tags";
+  QString tn2 = eid.getType().toString().toLower() + "_tags";
+
+  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
+  {
+    QString k = it.key();
+    QString v = it.value();
+
+    QString values1 = QString("(%1_id, k, v) VALUES (%2, '%3', '%4');\n").
+        arg(eid.getType().toString().toLower()).
+        arg(eid.getId()).arg(k.replace('\'', "''")).
+        arg(v.replace('\'', "''"));
+
+    QString values2 = QString("(%1_id, k, v, version) VALUES (%2, '%3', '%4', 1);\n").
+        arg(eid.getType().toString().toLower()).
+        arg(eid.getId()).arg(k.replace('\'', "''")).
+        arg(v.replace('\'', "''"));
+
+    _outputSql.write((QString("INSERT INTO %1 ").arg(tn1) + values1).toUtf8());
+    _outputSql.write((QString("INSERT INTO %1 ").arg(tn2) + values2).toUtf8());
+  }
+}
+
+long OsmChangeWriterSql::_getNextId(QString type)
 {
   long result;
-  if (_seqQueries[type.getEnum()].get() == 0)
+  if (_seqQueries[type].get() == 0)
   {
-    _seqQueries[type.getEnum()].reset(new QSqlQuery(_db));
-    _seqQueries[type.getEnum()]->setForwardOnly(true);
-    _seqQueries[type.getEnum()]->prepare(
-      QString("SELECT NEXTVAL('current_%1s_id_seq')").arg(type.toString().toLower()));
+    _seqQueries[type].reset(new QSqlQuery(_db));
+    _seqQueries[type]->setForwardOnly(true);
+    _seqQueries[type]->prepare(
+      QString("SELECT NEXTVAL('%1_id_seq')").arg(type.toLower()));
   }
 
-  shared_ptr<QSqlQuery> query = _seqQueries[type.getEnum()];
+  shared_ptr<QSqlQuery> query = _seqQueries[type];
   if (query->exec() == false)
   {
     throw HootException("Error reserving IDs. type: " +
-      type.toString() + " Error: " + query->lastError().text());
+      type + " Error: " + query->lastError().text());
   }
 
   if (query->next())
@@ -66,13 +107,17 @@ long OsmChangeWriterSql::_getNextId(const ElementType type)
   else
   {
     throw HootException("Error retrieving sequence value. type: " +
-      type.toString() + " Error: " + query->lastError().text());
+      type + " Error: " + query->lastError().text());
   }
 
   query->finish();
 
   return result;
+}
 
+long OsmChangeWriterSql::_getNextId(const ElementType type)
+{
+  return _getNextId("current_" + type.toString().toLower() + "s");
 }
 
 void OsmChangeWriterSql::_open(QUrl url)
@@ -126,6 +171,10 @@ void OsmChangeWriterSql::write(const QString& path, const ChangeSetProviderPtr c
     throw HootException(QObject::tr("Error opening %1 for writing").arg(path));
   }
 
+  _outputSql.write("BEGIN TRANSACTION;\n");
+
+  int changes = 0;
+  _createChangeSet();
   while (cs->hasMoreChanges())
   {
     Change c = cs->readNextChange();
@@ -141,7 +190,16 @@ void OsmChangeWriterSql::write(const QString& path, const ChangeSetProviderPtr c
       //_updateExistingElement(c.e);
       break;
     }
+    changes++;
+
+    if (changes > 40000)
+    {
+      _createChangeSet();
+      changes = 0;
+    }
   }
+
+  _outputSql.write("COMMIT;\n");
 }
 
 void OsmChangeWriterSql::_updateExistingElement(const ConstElementPtr updatedElement)

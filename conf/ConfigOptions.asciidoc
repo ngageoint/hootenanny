@@ -126,6 +126,13 @@ Training a model is typically done during research. While all the tools are avai
 
 The DB URL for a OSM API DB. Used by changeset writing.
 
+=== changeset.user.id
+
+* Data Type: double
+* Default Value: `-1`
+
+The DB user ID for a OSM API DB. Used by changeset writing.
+
 === conflate.add.score.tags
 
 * Data Type: bool

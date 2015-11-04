@@ -32,7 +32,7 @@ private:
   long _changesetId;
   QSqlDatabase _db;
   QFile _outputSql;
-  QHash<int, shared_ptr<QSqlQuery> > _seqQueries;
+  QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
 
   Tgs::BigMap<long, long> _idMappingsNode;
   Tgs::BigMap<long, long> _idMappingsWay;
@@ -46,6 +46,7 @@ private:
   void _deleteExistingElement(const ConstElementPtr removedElement);
   // jason
   long _getNextId(const ElementType type);
+  long _getNextId(QString type);
 
   // Terry
   long _getLatestVersion(const ConstElementPtr element);
@@ -54,6 +55,9 @@ private:
   void _create(const ConstNodePtr node);
   void _create(const ConstWayPtr way);
   void _create(const ConstRelationPtr relation);
+  void _createTags(const Tags& tags, ElementId eid);
+
+  long _createChangeSet();
 
   // jason
   void _modify(const ConstNodePtr node);
