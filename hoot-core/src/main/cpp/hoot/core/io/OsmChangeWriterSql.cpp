@@ -8,6 +8,7 @@
 // Qt
 #include <QFile>
 #include <QSqlError>
+#include <QSqlQuery>
 #include <QXmlStreamWriter>
 
 namespace hoot
@@ -20,6 +21,40 @@ OsmChangeWriterSql::OsmChangeWriterSql(QUrl url)
 
 long OsmChangeWriterSql::_getNextId(const ElementType type)
 {
+  long result;
+  if (_seqQueries[type.getEnum()].get() == 0)
+  {
+    _seqQueries[type.getEnum()].reset(new QSqlQuery(_db));
+    _seqQueries[type.getEnum()]->setForwardOnly(true);
+    _seqQueries[type.getEnum()]->prepare(
+      QString("SELECT NEXTVAL('current_%1s_id_seq')").arg(type.toString().toLower()));
+  }
+
+  shared_ptr<QSqlQuery> query = _seqQueries[type.getEnum()];
+  if (query->exec() == false)
+  {
+    throw HootException("Error reserving IDs. type: " +
+      type.toString() + " Error: " + query->lastError().text());
+  }
+
+  if (query->next())
+  {
+    bool ok;
+    result = query->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Did not retrieve starting reserved ID.");
+    }
+  }
+  else
+  {
+    throw HootException("Error retrieving sequence value. type: " +
+      type.toString() + " Error: " + query->lastError().text());
+  }
+
+  query->finish();
+
+  return result;
 
 }
 

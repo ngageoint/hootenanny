@@ -31,6 +31,7 @@ public:
 private:
   QSqlDatabase _db;
   QFile _outputSql;
+  QHash<int, shared_ptr<QSqlQuery> > _seqQueries;
 
   Tgs::BigMap<long, long> _idMappingsNode;
   Tgs::BigMap<long, long> _idMappingsWay;
