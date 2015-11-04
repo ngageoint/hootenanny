@@ -616,10 +616,32 @@ public class ReviewResource
     {
     	ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
     	
-    	List<ReviewableItemInfo> list = marker.getAllReviewItems(Double.parseDouble(minx.substring(0, 15)),
-    			Double.parseDouble(miny.substring(0, 15)),
-    			Double.parseDouble(maxx.substring(0, 15)),
-    			Double.parseDouble(maxy.substring(0, 15)));
+    	int lenminx = minx.length();
+    	if(lenminx > 14)
+    	{
+    		lenminx = 14;
+    	}
+    	int lenminy = miny.length();
+    	if(lenminy > 14)
+    	{
+    		lenminy = 14;
+    	}
+    	int lenmaxx = maxx.length();
+    	if(lenmaxx > 14)
+    	{
+    		lenmaxx = 14;
+    	}
+    	int lenmaxy = maxy.length();
+    	if(lenmaxy > 14)
+    	{
+    		lenmaxy = 14;
+    	}
+    	
+    	List<ReviewableItemInfo> list = marker.getAllReviewItems(
+    			Double.parseDouble(minx.substring(0, lenminx)),
+    			Double.parseDouble(miny.substring(0, lenminy)),
+    			Double.parseDouble(maxx.substring(0, lenmaxx)),
+    			Double.parseDouble(maxy.substring(0, lenmaxy)));
     	
     	resp.setFeatures(list);
     	resp.setType("FeatureCollection");
