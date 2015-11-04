@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ReviewableItemInfoResponse {
 	private String _type;
-	private List<ReviewableItemInfo> _info;
+	private List<ReviewableItemInfo> _features;
 	
 	public void setType(String t)
 	{
@@ -18,11 +18,11 @@ public class ReviewableItemInfoResponse {
 	
 	public void setInfo(List<ReviewableItemInfo> inf)
 	{
-		_info = inf;
+		_features = inf;
 	}
 	
 	public List<ReviewableItemInfo> getInfo()
 	{
-		return  _info;
+		return  _features;
 	}
 }

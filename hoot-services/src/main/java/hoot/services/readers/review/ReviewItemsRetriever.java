@@ -48,6 +48,7 @@ import hoot.services.validators.review.ReviewMapValidator;
 import hoot.services.writers.review.ReviewItemsRetrieverWriter;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -556,9 +557,19 @@ public class ReviewItemsRetriever
 	   {
 	  	 BoundingBox bbox = _getNodeCoord(elemid);
 	  	 ReviewableItemInfo info = new ReviewableItemInfo();
-	  	 info.setStatus("resolved");
-	  	 info.setLat(bbox.getMaxLat());
-	  	 info.setLon(bbox.getMaxLon());
+	  	
+	  	 JSONObject prop = new JSONObject();
+	  	 prop.put("class", "resolved");
+	  	 info.setProperties(prop);
+	  	 
+	  	 JSONObject geom = new JSONObject();
+	  	 geom.put("type", "Point");
+	  	 JSONArray coords = new JSONArray();
+	  	 coords.add(bbox.getMaxLon());
+	  	 coords.add(bbox.getMaxLat());
+	  	 geom.put("coordinates", coords);
+	  	 info.setGeometry(geom);
+	  	 
 	  	 ret.add(info);
 	   }
 	   
@@ -567,9 +578,19 @@ public class ReviewItemsRetriever
 	   {
 	  	 BoundingBox bbox = _getNodeCoord(elemid);
 	  	 ReviewableItemInfo info = new ReviewableItemInfo();
-	  	 info.setStatus("open");
-	  	 info.setLat(bbox.getMaxLat());
-	  	 info.setLon(bbox.getMaxLon());
+	  	
+	  	 JSONObject prop = new JSONObject();
+	  	 prop.put("class", "open");
+	  	 info.setProperties(prop);
+	  	 
+	  	 JSONObject geom = new JSONObject();
+	  	 geom.put("type", "Point");
+	  	 JSONArray coords = new JSONArray();
+	  	 coords.add(bbox.getMaxLon());
+	  	 coords.add(bbox.getMaxLat());
+	  	 geom.put("coordinates", coords);
+	  	 info.setGeometry(geom);
+	  	 
 	  	 ret.add(info);
 	   }
 	   
@@ -579,9 +600,20 @@ public class ReviewItemsRetriever
 	   {
 	  	 BoundingBox bbox = _getWayBbox(elemid);
 	  	 ReviewableItemInfo info = new ReviewableItemInfo();
-	  	 info.setStatus("resolved");
-	  	 info.setLat(bbox.getCenterY());
-	  	 info.setLon(bbox.getCenterX());
+	  	
+	  	 
+	  	 JSONObject prop = new JSONObject();
+	  	 prop.put("class", "resolved");
+	  	 info.setProperties(prop);
+	  	 
+	  	 JSONObject geom = new JSONObject();
+	  	 geom.put("type", "Point");
+	  	 JSONArray coords = new JSONArray();
+	  	 coords.add(bbox.getMaxLon());
+	  	 coords.add(bbox.getMaxLat());
+	  	 geom.put("coordinates", coords);
+	  	 info.setGeometry(geom);
+	  	 
 	  	 ret.add(info);
 	   }
 	   
@@ -590,9 +622,19 @@ public class ReviewItemsRetriever
 	   {
 	  	 BoundingBox bbox = _getWayBbox(elemid);
 	  	 ReviewableItemInfo info = new ReviewableItemInfo();
-	  	 info.setStatus("open");
-	  	 info.setLat(bbox.getCenterY());
-	  	 info.setLon(bbox.getCenterX());
+	  	
+	  	 JSONObject prop = new JSONObject();
+	  	 prop.put("class", "open");
+	  	 info.setProperties(prop);
+	  	 
+	  	 JSONObject geom = new JSONObject();
+	  	 geom.put("type", "Point");
+	  	 JSONArray coords = new JSONArray();
+	  	 coords.add(bbox.getMaxLon());
+	  	 coords.add(bbox.getMaxLat());
+	  	 geom.put("coordinates", coords);
+	  	 info.setGeometry(geom);
+	  	 
 	  	 ret.add(info);
 	   }
 	   
@@ -603,9 +645,19 @@ public class ReviewItemsRetriever
 	   {
 	  	 BoundingBox bbox = _getRelationBbox(elemid);
 	  	 ReviewableItemInfo info = new ReviewableItemInfo();
-	  	 info.setStatus("resolved");
-	  	 info.setLat(bbox.getCenterY());
-	  	 info.setLon(bbox.getCenterX());
+	  	 
+	  	 JSONObject prop = new JSONObject();
+	  	 prop.put("class", "resolved");
+	  	 info.setProperties(prop);
+	  	 
+	  	 JSONObject geom = new JSONObject();
+	  	 geom.put("type", "Point");
+	  	 JSONArray coords = new JSONArray();
+	  	 coords.add(bbox.getMaxLon());
+	  	 coords.add(bbox.getMaxLat());
+	  	 geom.put("coordinates", coords);
+	  	 info.setGeometry(geom);
+	  	 
 	  	 ret.add(info);
 	   }
 	   
@@ -614,9 +666,19 @@ public class ReviewItemsRetriever
 	   {
 	  	 BoundingBox bbox = _getRelationBbox(elemid);
 	  	 ReviewableItemInfo info = new ReviewableItemInfo();
-	  	 info.setStatus("open");
-	  	 info.setLat(bbox.getCenterY());
-	  	 info.setLon(bbox.getCenterX());
+	  	
+	  	 JSONObject prop = new JSONObject();
+	  	 prop.put("class", "open");
+	  	 info.setProperties(prop);
+	  	 
+	  	 JSONObject geom = new JSONObject();
+	  	 geom.put("type", "Point");
+	  	 JSONArray coords = new JSONArray();
+	  	 coords.add(bbox.getMaxLon());
+	  	 coords.add(bbox.getMaxLat());
+	  	 geom.put("coordinates", coords);
+	  	 info.setGeometry(geom);
+	  	 
 	  	 ret.add(info);
 	   }
 	   return ret;

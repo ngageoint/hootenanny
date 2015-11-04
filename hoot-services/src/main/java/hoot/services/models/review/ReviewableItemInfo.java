@@ -1,39 +1,44 @@
 package hoot.services.models.review;
 
+import org.json.simple.JSONObject;
+
 public class ReviewableItemInfo {
-	private double _lat;
-	private double _lon;
-	private String _status;
+
+	private String _type = "Feature";
+	private JSONObject _geometry;
+	private JSONObject _properties;
+
 	
-	public double getLat()
+	public JSONObject getGeometry()
 	{
-		return _lat;
+		return _geometry;
 	}
 	
-	public void setLat(double y)
+	public void setGeometry(JSONObject geom)
 	{
-		_lat = y;
+		_geometry = geom;
 	}
 	
-	public double getLon()
+	public  JSONObject getProperties()
 	{
-		return _lon;
+		return _properties;
 	}
 	
-	public void setLon(double x)
+	public void setProperties(JSONObject prop)
 	{
-		_lon = x;
+		_properties = prop;
 	}
 	
-	
-	public void setStatus(String stat)
+	public String getType()
 	{
-		_status = stat;
+		return _type;
 	}
 	
-	public String getStatus()
+
+	
+	public void setType(String t)
 	{
-		return _status;
+		_type = t;
 	}
 	
 }
