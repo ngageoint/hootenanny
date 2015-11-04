@@ -581,7 +581,29 @@ public class ReviewItemsRetriever
     
     return q.list(em.osmElementId);
   }
-  public List<ReviewableItemInfo> getAllReviewItems() throws Exception
+  
+  private JSONObject _getCoords(BoundingBox bbox, double minx, double miny, double maxx, double maxy)
+  {
+  	double x = bbox.getMaxLon();
+  	double y = bbox.getMaxLat();
+  	
+  	JSONObject geom = new JSONObject();
+  	if(x >= minx && x <= maxx && y >= miny && y <= maxy)
+  	{
+  		
+  		geom.put("type", "Point");
+  		JSONArray coords = new JSONArray();
+  		coords.add(x);
+  		coords.add(y);
+  		geom.put("coordinates", coords);
+  	} else {
+  		geom = null;
+  	}
+  	
+  	
+	 return geom;
+  }
+  public List<ReviewableItemInfo> getAllReviewItems(double minx, double miny, double maxx, double maxy) throws Exception
   {   
   	List<ReviewableItemInfo> ret = new ArrayList<>();
     // Node
@@ -595,15 +617,14 @@ public class ReviewItemsRetriever
 	  	 prop.put("class", "resolved");
 	  	 info.setProperties(prop);
 	  	 
-	  	 JSONObject geom = new JSONObject();
-	  	 geom.put("type", "Point");
-	  	 JSONArray coords = new JSONArray();
-	  	 coords.add(bbox.getMaxLon());
-	  	 coords.add(bbox.getMaxLat());
-	  	 geom.put("coordinates", coords);
-	  	 info.setGeometry(geom);
+	  	 JSONObject geom = _getCoords(bbox, minx, miny, maxx, maxy);
 	  	 
-	  	 ret.add(info);
+	  	 if(geom != null)
+	  	 {
+	  		 info.setGeometry(geom);		  	 
+		  	 ret.add(info);
+	  	 }
+	  
 	   }
 	   
 	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.node, DbUtils.review_status_enum.unreviewed, false);
@@ -616,15 +637,13 @@ public class ReviewItemsRetriever
 	  	 prop.put("class", "open");
 	  	 info.setProperties(prop);
 	  	 
-	  	 JSONObject geom = new JSONObject();
-	  	 geom.put("type", "Point");
-	  	 JSONArray coords = new JSONArray();
-	  	 coords.add(bbox.getMaxLon());
-	  	 coords.add(bbox.getMaxLat());
-	  	 geom.put("coordinates", coords);
-	  	 info.setGeometry(geom);
+	  	 JSONObject geom = _getCoords(bbox, minx, miny, maxx, maxy);
 	  	 
-	  	 ret.add(info);
+	  	 if(geom != null)
+	  	 {
+	  		 info.setGeometry(geom);		  	 
+		  	 ret.add(info);
+	  	 }
 	   }
 	   
 	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.node, DbUtils.review_status_enum.unreviewed, true);
@@ -637,15 +656,13 @@ public class ReviewItemsRetriever
 	  	 prop.put("class", "locked");
 	  	 info.setProperties(prop);
 	  	 
-	  	 JSONObject geom = new JSONObject();
-	  	 geom.put("type", "Point");
-	  	 JSONArray coords = new JSONArray();
-	  	 coords.add(bbox.getMaxLon());
-	  	 coords.add(bbox.getMaxLat());
-	  	 geom.put("coordinates", coords);
-	  	 info.setGeometry(geom);
+	  	 JSONObject geom = _getCoords(bbox, minx, miny, maxx, maxy);
 	  	 
-	  	 ret.add(info);
+	  	 if(geom != null)
+	  	 {
+	  		 info.setGeometry(geom);		  	 
+		  	 ret.add(info);
+	  	 }
 	   }
 	   
     // Way   
@@ -660,15 +677,13 @@ public class ReviewItemsRetriever
 	  	 prop.put("class", "resolved");
 	  	 info.setProperties(prop);
 	  	 
-	  	 JSONObject geom = new JSONObject();
-	  	 geom.put("type", "Point");
-	  	 JSONArray coords = new JSONArray();
-	  	 coords.add(bbox.getMaxLon());
-	  	 coords.add(bbox.getMaxLat());
-	  	 geom.put("coordinates", coords);
-	  	 info.setGeometry(geom);
+	  	 JSONObject geom = _getCoords(bbox, minx, miny, maxx, maxy);
 	  	 
-	  	 ret.add(info);
+	  	 if(geom != null)
+	  	 {
+	  		 info.setGeometry(geom);		  	 
+		  	 ret.add(info);
+	  	 }
 	   }
 	   
 	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.way, DbUtils.review_status_enum.unreviewed, false);
@@ -681,15 +696,13 @@ public class ReviewItemsRetriever
 	  	 prop.put("class", "open");
 	  	 info.setProperties(prop);
 	  	 
-	  	 JSONObject geom = new JSONObject();
-	  	 geom.put("type", "Point");
-	  	 JSONArray coords = new JSONArray();
-	  	 coords.add(bbox.getMaxLon());
-	  	 coords.add(bbox.getMaxLat());
-	  	 geom.put("coordinates", coords);
-	  	 info.setGeometry(geom);
+	  	 JSONObject geom = _getCoords(bbox, minx, miny, maxx, maxy);
 	  	 
-	  	 ret.add(info);
+	  	 if(geom != null)
+	  	 {
+	  		 info.setGeometry(geom);		  	 
+		  	 ret.add(info);
+	  	 }
 	   }
 	   
 	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.way, DbUtils.review_status_enum.unreviewed, true);
@@ -702,15 +715,13 @@ public class ReviewItemsRetriever
 	  	 prop.put("class", "locked");
 	  	 info.setProperties(prop);
 	  	 
-	  	 JSONObject geom = new JSONObject();
-	  	 geom.put("type", "Point");
-	  	 JSONArray coords = new JSONArray();
-	  	 coords.add(bbox.getMaxLon());
-	  	 coords.add(bbox.getMaxLat());
-	  	 geom.put("coordinates", coords);
-	  	 info.setGeometry(geom);
+	  	 JSONObject geom = _getCoords(bbox, minx, miny, maxx, maxy);
 	  	 
-	  	 ret.add(info);
+	  	 if(geom != null)
+	  	 {
+	  		 info.setGeometry(geom);		  	 
+		  	 ret.add(info);
+	  	 }
 	   }
 	   
 	   // Relation
@@ -725,15 +736,13 @@ public class ReviewItemsRetriever
 	  	 prop.put("class", "resolved");
 	  	 info.setProperties(prop);
 	  	 
-	  	 JSONObject geom = new JSONObject();
-	  	 geom.put("type", "Point");
-	  	 JSONArray coords = new JSONArray();
-	  	 coords.add(bbox.getMaxLon());
-	  	 coords.add(bbox.getMaxLat());
-	  	 geom.put("coordinates", coords);
-	  	 info.setGeometry(geom);
+	  	 JSONObject geom = _getCoords(bbox, minx, miny, maxx, maxy);
 	  	 
-	  	 ret.add(info);
+	  	 if(geom != null)
+	  	 {
+	  		 info.setGeometry(geom);		  	 
+		  	 ret.add(info);
+	  	 }
 	   }
 	   
 	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.relation, DbUtils.review_status_enum.unreviewed, false);
@@ -746,15 +755,13 @@ public class ReviewItemsRetriever
 	  	 prop.put("class", "open");
 	  	 info.setProperties(prop);
 	  	 
-	  	 JSONObject geom = new JSONObject();
-	  	 geom.put("type", "Point");
-	  	 JSONArray coords = new JSONArray();
-	  	 coords.add(bbox.getMaxLon());
-	  	 coords.add(bbox.getMaxLat());
-	  	 geom.put("coordinates", coords);
-	  	 info.setGeometry(geom);
+	  	 JSONObject geom = _getCoords(bbox, minx, miny, maxx, maxy);
 	  	 
-	  	 ret.add(info);
+	  	 if(geom != null)
+	  	 {
+	  		 info.setGeometry(geom);		  	 
+		  	 ret.add(info);
+	  	 }
 	   }
 	   
 	   
@@ -768,15 +775,13 @@ public class ReviewItemsRetriever
 	  	 prop.put("class", "locked");
 	  	 info.setProperties(prop);
 	  	 
-	  	 JSONObject geom = new JSONObject();
-	  	 geom.put("type", "Point");
-	  	 JSONArray coords = new JSONArray();
-	  	 coords.add(bbox.getMaxLon());
-	  	 coords.add(bbox.getMaxLat());
-	  	 geom.put("coordinates", coords);
-	  	 info.setGeometry(geom);
+	  	 JSONObject geom = _getCoords(bbox, minx, miny, maxx, maxy);
 	  	 
-	  	 ret.add(info);
+	  	 if(geom != null)
+	  	 {
+	  		 info.setGeometry(geom);		  	 
+		  	 ret.add(info);
+	  	 }
 	   }
 	   return ret;
   }

@@ -596,7 +596,15 @@ public class ReviewResource
   @Produces(MediaType.APPLICATION_JSON)
   public ReviewableItemInfoResponse getAllReviewableItems(
     @QueryParam("mapId")
-    String mapId)
+    String mapId,
+    @QueryParam("minx")
+    String minx,
+    @QueryParam("miny")
+    String miny,
+    @QueryParam("maxx")
+    String maxx,
+    @QueryParam("maxy")
+    String maxy)
     throws Exception
   {
   	log.debug("Initializing database connection...");
@@ -608,7 +616,10 @@ public class ReviewResource
     	ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
     	
     	
-    	resp.setFeatures(marker.getAllReviewItems());
+    	resp.setFeatures(marker.getAllReviewItems(Double.parseDouble(minx),
+    			Double.parseDouble(miny),
+    			Double.parseDouble(maxx),
+    			Double.parseDouble(maxy)));
     	resp.setType("FeatureCollection");
     }
     catch (Exception e)
