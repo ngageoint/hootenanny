@@ -99,10 +99,20 @@ public:
   // them.
   static const int NODES_LATITUDE = 1;
   static const int NODES_LONGITUDE = 2;
+  static const int NODES_CHANGESET = 3;
+  static const int NODES_TIMESTAMP = 5;
+  static const int NODES_VERSION = 7;
   static const int NODES_TAGS = 8;
-  static const int RELATIONS_TAGS = 5;
+
+  static const int WAYS_CHANGESET = 1;
+  static const int WAYS_TIMESTAMP = 2;
+  static const int WAYS_VERSION = 4;
   static const int WAYS_TAGS = 5;
 
+  static const int RELATIONS_CHANGESET = 1;
+  static const int RELATIONS_TIMESTAMP = 2;
+  static const int RELATIONS_VERSION = 4;
+  static const int RELATIONS_TAGS = 5;
 
   /**
    * This value should be updated after the DB is upgraded and all tests run successfully.
