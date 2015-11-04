@@ -79,11 +79,34 @@ void OsmChangeWriterSql::write(const QString& path, const ChangeSetProviderPtr c
 void OsmChangeWriterSql::_updateExistingElement(const ConstElementPtr updatedElement)
 {
   //_modify(updatedElement);
+
+  switch ( updatedElement->getElementType().getEnum())
+  {
+  case ElementType::Node:
+    _modify(dynamic_pointer_cast<const ConstNodePtr>(updatedElement));
+    break;
+  case ElementType::Way:
+    _modify(dynamic_pointer_cast<const ConstWayPtr>(updatedElement));
+    throw NotImplementedException("Updating way not implemented");
+    break;
+  case ElementType::Relation:
+    throw NotImplementedException("Updating relation not implemented");
+    break;
+  case ElementType::Unknown:
+  default:
+    throw HootException("Unknown element type");
+    break;
+  }
 }
 
 void OsmChangeWriterSql::_deleteExistingElement(const ConstElementPtr removedElement)
 {
   throw NotImplementedException("Deleting existing element not supported");
+}
+
+void OsmChangeWriterSql::_modify(const ConstNodePtr node)
+{
+  ;
 }
 
 void OsmChangeWriterSql::_modify(const ConstWayPtr way)
