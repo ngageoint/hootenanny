@@ -40,6 +40,9 @@ private:
   // jason
   long _getNextId(const ElementType type);
 
+  // Terry
+  long _getLatestVersion(const ConstElementPtr element);
+
   // jason
   void _create(const ConstNodePtr node);
   void _create(const ConstWayPtr way);
