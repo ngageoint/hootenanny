@@ -614,28 +614,12 @@ public class ReviewResource
     ReviewableItemInfoResponse resp = new ReviewableItemInfoResponse();
     try
     {
+    	minx = minx.replaceAll("\\p{C}", " ").trim();
+    	miny = miny.replaceAll("\\p{C}", " ").trim();
+    	maxx = maxx.replaceAll("\\p{C}", " ").trim();
+    	maxy = maxy.replaceAll("\\p{C}", " ").trim();
+    	
     	ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
-    	/*
-    	int lenminx = minx.length();
-    	if(lenminx > 14)
-    	{
-    		lenminx = 14;
-    	}
-    	int lenminy = miny.length();
-    	if(lenminy > 14)
-    	{
-    		lenminy = 14;
-    	}
-    	int lenmaxx = maxx.length();
-    	if(lenmaxx > 14)
-    	{
-    		lenmaxx = 14;
-    	}
-    	int lenmaxy = maxy.length();
-    	if(lenmaxy > 14)
-    	{
-    		lenmaxy = 14;
-    	}*/
     	
     	List<ReviewableItemInfo> list = marker.getAllReviewItems(
     			Double.parseDouble(minx),
