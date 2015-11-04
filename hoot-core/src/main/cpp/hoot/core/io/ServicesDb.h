@@ -341,6 +341,18 @@ public:
    */
   long reserveElementId(const ElementType::Type type);
 
+  static long round(double x);
+  static long round(double x, int precision);
+
+  /**
+   * Calculates the QuadTile for a point.
+   * http://wiki.openstreetmap.org/wiki/QuadTiles
+   *
+   * The code was taken from quad_tile.h and quad_tile.c in the openstreetmap-website
+   * https://github.com/openstreetmap/openstreetmap-website
+   */
+  static unsigned int tileForPoint(double lat, double lon);
+
 private:
 
   static const int _maximumChangeSetEdits = 50000;    ///< Maximum edits per one OSM changeset
@@ -511,18 +523,6 @@ private:
    * Executes the insert, performs error checking and returns the new ID.
    */
   long _insertRecord(QSqlQuery& query);
-
-  /**
-   * Calculates the QuadTile for a point.
-   * http://wiki.openstreetmap.org/wiki/QuadTiles
-   *
-   * The code was taken from quad_tile.h and quad_tile.c in the openstreetmap-website
-   * https://github.com/openstreetmap/openstreetmap-website
-   */
-  unsigned int _tileForPoint(double lat, double lon);
-
-  long _round(double x);
-  long _round(double x, int precision);
 
   static void _unescapeString(QString& s);
 

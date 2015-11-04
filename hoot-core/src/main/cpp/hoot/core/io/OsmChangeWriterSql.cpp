@@ -2,6 +2,7 @@
 
 // hoot
 #include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/ServicesDb.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/OsmUtils.h>
 
@@ -17,6 +18,22 @@ namespace hoot
 OsmChangeWriterSql::OsmChangeWriterSql(QUrl url)
 {
   _open(url);
+}
+
+void OsmChangeWriterSql::_create(const ConstNodePtr node)
+{
+  long id = _getNextId(ElementType::Node);
+
+  QString values = QString("(node_id, latitude, longitude, changeset_id, visible, \"timestamp\", "
+      "tile,  version) VALUES (%1, %2, %3, %4, true, '%5', %6, 1);\n").
+      arg(id).
+      arg((qlonglong)ServicesDb::round(node->getY() * ServicesDb::COORDINATE_SCALE, 7)).
+      arg((qlonglong)ServicesDb::round(node->getX() * ServicesDb::COORDINATE_SCALE, 7)).
+      arg(_changesetId).arg(OsmUtils::toTimeString(node->getTimestamp())).
+      arg(ServicesDb::tileForPoint(node->getY(), node->getX()));
+
+  _outputSql.write(("INSERT INTO nodes " + values).toUtf8());
+  _outputSql.write(("INSERT INTO current_nodes " + values).toUtf8());
 }
 
 long OsmChangeWriterSql::_getNextId(const ElementType type)
@@ -109,6 +126,22 @@ void OsmChangeWriterSql::write(const QString& path, const ChangeSetProviderPtr c
     throw HootException(QObject::tr("Error opening %1 for writing").arg(path));
   }
 
+  while (cs->hasMoreChanges())
+  {
+    Change c = cs->readNextChange();
+    switch (c.type)
+    {
+    case Change::Create:
+      _writeNewElement(c.e);
+      break;
+    case Change::Delete:
+      //_deleteExistingElement(c.e);
+      break;
+    case Change::Modify:
+      //_updateExistingElement(c.e);
+      break;
+    }
+  }
 }
 
 void OsmChangeWriterSql::_updateExistingElement(const ConstElementPtr updatedElement)
@@ -162,6 +195,18 @@ long OsmChangeWriterSql::_getLatestVersion(const ConstElementPtr element)
 {
   throw NotImplementedException("Getting latest version not implemented");
   return -1;
+}
+
+void OsmChangeWriterSql::_writeNewElement(const ConstElementPtr newElement)
+{
+  switch (newElement->getElementType().getEnum())
+  {
+  case ElementType::Node:
+    _create(dynamic_pointer_cast<const Node>(newElement));
+    break;
+  default:
+    LOG_WARN("Not implemented");
+  }
 }
 
 }

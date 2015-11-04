@@ -29,6 +29,7 @@ public:
 
 
 private:
+  long _changesetId;
   QSqlDatabase _db;
   QFile _outputSql;
   QHash<int, shared_ptr<QSqlQuery> > _seqQueries;
