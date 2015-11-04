@@ -5,12 +5,16 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
-#include <QString>
-#include <QFile>
 #include <boost/shared_ptr.hpp>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/ElementType.h>
 #include <tgs/BigContainers/BigMap.h>
+
+// Qt
+#include <QUrl>
+#include <QFile>
+#include <QSqlDatabase>
+#include <QString>
 
 namespace hoot
 {
@@ -18,13 +22,14 @@ namespace hoot
 class OsmChangeWriterSql
 {
 public:
-  OsmChangeWriterSql();
+  OsmChangeWriterSql(QUrl url);
 
   // Jason
   void write(const QString& path, const ChangeSetProviderPtr cs);
 
 
 private:
+  QSqlDatabase _db;
   QFile _outputSql;
 
   Tgs::BigMap<long, long> _idMappingsNode;
@@ -55,6 +60,9 @@ private:
 
   // jason
   void _delete(const ConstNodePtr node);
+
+  void _open(QUrl url);
+
   void _delete(const ConstWayPtr way);
   void _delete(const ConstRelationPtr relation);
 };
