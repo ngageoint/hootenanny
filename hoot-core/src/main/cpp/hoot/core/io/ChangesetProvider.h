@@ -23,6 +23,8 @@ public:
 
   ElementPtr e;
   ChangeType type;
+
+  Change() : type(Unknown) {}
 };
 
 

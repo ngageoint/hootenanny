@@ -964,6 +964,5 @@ HEADERS += \
     src/main/cpp/hoot/core/io/ElementSorter.h \
     src/main/cpp/hoot/core/io/ChangesetDeriver.h \
     src/main/cpp/hoot/core/io/ChangesetProvider.h \
-    src/main/cpp/hoot/core/io/OsmChangeWriter.h \
-    src/main/cpp/hoot/core/io/OsmChangeWriterSql.h
+    src/main/cpp/hoot/core/io/OsmChangeWriter.h
 
