@@ -119,6 +119,13 @@ Path to the RF building model. A new model can be created with `build-model`. Se
 
 Training a model is typically done during research. While all the tools are available to do limited training, the documentation is not. Please contact the developers if you would like to dig deeper.
 
+=== changeset.api.url
+
+* Data Type: string
+* Default Value: ``
+
+The DB URL for a OSM API DB. Used by changeset writing.
+
 === conflate.add.score.tags
 
 * Data Type: bool

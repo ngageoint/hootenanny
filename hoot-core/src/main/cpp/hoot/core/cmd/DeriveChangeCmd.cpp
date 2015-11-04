@@ -32,6 +32,10 @@
 #include <hoot/core/io/ChangesetDeriver.h>
 #include <hoot/core/io/ElementSorter.h>
 #include <hoot/core/io/OsmChangeWriter.h>
+#include <hoot/core/io/OsmChangeWriterSql.h>
+
+// Qt
+#include <QUrl>
 
 namespace hoot
 {
@@ -72,9 +76,18 @@ public:
 
     ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2));
 
-    OsmChangeWriter writer;
+    if (args[2].endsWith(".osc"))
+    {
+      OsmChangeWriter writer;
 
-    writer.write(args[2], delta);
+      writer.write(args[2], delta);
+    }
+    else
+    {
+      OsmChangeWriterSql writer(QUrl("postgresql://openstreetmap:postgres@10.194.71.149/ngademo"));
+
+      writer.write(args[2], delta);
+    }
 
     return 0;
   }

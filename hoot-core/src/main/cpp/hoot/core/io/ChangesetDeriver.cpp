@@ -124,75 +124,65 @@ void ChangesetDeriver::close()
 
 bool ChangesetDeriver::hasMoreChanges()
 {
-  if (_next.e == 0)
+  if (_next.e.get() == 0)
   {
     _next = _nextChange();
   }
 
-  return _next.e;
+  return _next.e.get() != 0;
 }
 
 Change ChangesetDeriver::_nextChange()
 {
   Change result;
 
-  if (_fromE == 0 && _from->hasMoreElements())
+  if (!_fromE.get() && _from->hasMoreElements())
   {
     _fromE = _from->readNextElement();
   }
 
-  if (!_toE && _to->hasMoreElements())
+  if (!_toE.get() && _to->hasMoreElements())
   {
     _toE = _to->readNextElement();
   }
 
   // if we've run out of from elements, create all the remaining elements in to
-  if (!_fromE && _toE)
+  if (!_fromE.get() && _toE.get())
   {
     result.type = Change::Create;
     result.e = _toE;
+    _toE = _to->readNextElement();
   }
   // if we've run out of to elements, delete all the remaining elements in from
-  else if (_fromE && !_toE)
+  else if (_fromE.get() && !_toE.get())
   {
     result.type = Change::Delete;
     result.e = _fromE;
+    _fromE = _from->readNextElement();
   }
   else
   {
-    bool same = true;
     // while the elements are exactly the same there is nothing to do.
-    while (_fromE && _toE &&
+    while (_fromE.get() && _toE.get() &&
         _fromE->getElementId() == _toE->getElementId() &&
         ElementCompare().isSame(_fromE, _toE))
     {
-      if (_from->hasMoreElements())
-      {
-        _fromE = _from->readNextElement();
-      }
-      else
-      {
-        _fromE.reset();
-      }
-
-      if (_to->hasMoreElements())
-      {
-        _toE = _to->readNextElement();
-      }
-      else
-      {
-        _toE.reset();
-      }
+      _fromE = _from->readNextElement();
+      _toE = _to->readNextElement();
     }
 
-    if (!_fromE && _toE)
+    if (!_fromE.get() && !_toE.get())
+    {
+      // pass
+    }
+    else if (!_fromE.get() && _toE.get())
     {
       result.type = Change::Create;
       result.e = _toE;
       _toE = _to->readNextElement();
     }
     // if we've run out of to elements, delete all the remaining elements in from
-    else if (_fromE && !_toE)
+    else if (_fromE.get() && !_toE.get())
     {
       result.type = Change::Delete;
       result.e = _fromE;
