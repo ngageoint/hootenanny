@@ -115,13 +115,17 @@ void OsmChangeWriterSql::_updateExistingElement(const ConstElementPtr updatedEle
 {
   //_modify(updatedElement);
 
+
+
   switch ( updatedElement->getElementType().getEnum())
   {
   case ElementType::Node:
-    _modify(dynamic_pointer_cast<const ConstNodePtr>(updatedElement));
+  {
+    _modify(dynamic_pointer_cast<const Node>(updatedElement));
     break;
+  }
   case ElementType::Way:
-    _modify(dynamic_pointer_cast<const ConstWayPtr>(updatedElement));
+    //_modify(dynamic_pointer_cast<const ConstWayPtr>(updatedElement));
     throw NotImplementedException("Updating way not implemented");
     break;
   case ElementType::Relation:
