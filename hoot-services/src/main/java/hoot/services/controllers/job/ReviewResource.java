@@ -42,6 +42,7 @@ import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.ReviewAgainstItem;
 import hoot.services.models.review.ReviewReferences;
 import hoot.services.models.review.ReviewReferencesCollection;
+import hoot.services.models.review.ReviewableItemInfo;
 import hoot.services.models.review.ReviewableItemInfoResponse;
 import hoot.services.models.review.ReviewableItemsStatistics;
 import hoot.services.models.review.SetAllItemsReviewedRequest;
@@ -615,16 +616,17 @@ public class ReviewResource
     {
     	ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
     	
+    	List<ReviewableItemInfo> list = marker.getAllReviewItems(Double.parseDouble(minx.substring(0, 15)),
+    			Double.parseDouble(miny.substring(0, 15)),
+    			Double.parseDouble(maxx.substring(0, 15)),
+    			Double.parseDouble(maxy.substring(0, 15)));
     	
-    	resp.setFeatures(marker.getAllReviewItems(Double.parseDouble(minx),
-    			Double.parseDouble(miny),
-    			Double.parseDouble(maxx),
-    			Double.parseDouble(maxy)));
+    	resp.setFeatures(list);
     	resp.setType("FeatureCollection");
     }
     catch (Exception e)
     {
-    	
+    	log.error(e.getMessage());
     }
     finally
     {
