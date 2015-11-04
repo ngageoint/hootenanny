@@ -66,7 +66,7 @@ void OsmChangeWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
       default:
         throw IllegalArgumentException("Unexepected change type.");
       }
-
+      last = c.type;
     }
 
     switch (c.e->getElementType().getEnum())
@@ -84,6 +84,13 @@ void OsmChangeWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
       throw IllegalArgumentException("Unexpected element type.");
     }
   }
+
+  if (last != Change::Unknown)
+  {
+    writer.writeEndElement();
+  }
+  writer.writeEndElement();
+  writer.writeEndDocument();
 }
 
 void OsmChangeWriter::writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
