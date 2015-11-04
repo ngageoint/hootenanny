@@ -827,7 +827,7 @@ public:
 
     database.setUserId(database.getOrCreateUser(userEmail(), "ServicesDbTest"));
     database.beginChangeset();
-    database.updateNode(nodeId, 3.1415, 2.71828, Tags());
+    database.updateNode(nodeId, 3.1415, 2.71828, Tags(), 2);
 
     ServicesDbTestUtils::compareRecords(
           "SELECT latitude, longitude, visible, tile, version FROM " +

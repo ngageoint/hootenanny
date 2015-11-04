@@ -342,7 +342,7 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)
     long nodeId = _getRemappedElementId(n->getElementId());
     if (alreadyThere)
     {
-      _sdb.updateNode(nodeId, n->getY(), n->getX(), t);
+      _sdb.updateNode(nodeId, n->getY(), n->getX(), t, n->getVersion() + 1);
     }
     else
     {
@@ -387,7 +387,7 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Way>& w)
     wayId = _getRemappedElementId(w->getElementId());
     if (alreadyThere)
     {
-      _sdb.updateWay(wayId, tags);
+      _sdb.updateWay(wayId, tags, w->getVersion() + 1);
     }
     else
     {

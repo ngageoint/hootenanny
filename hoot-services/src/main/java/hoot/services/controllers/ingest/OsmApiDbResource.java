@@ -43,6 +43,7 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.utils.ResourceErrorHandler;
 
@@ -80,11 +81,30 @@ public class OsmApiDbResource extends JobControllerBase
 		String jobId = UUID.randomUUID().toString();
 		try
 		{
+			String tmpLoc = HootProperties.getProperty("osmTempOutputPath");
+			String dbname = HootProperties.getProperty("MapEditDbName");
+	  	String userid = HootProperties.getProperty("MapEditDbUserId");
+	  	String pwd = HootProperties.getProperty("MapEditDbPassword");
+	  	String host = HootProperties.getProperty("MapEditDbHostAddr");
+	  	String port = HootProperties.getProperty("MapEditDbHostPort");
+	  	
+			String[] coords = bbox.split(",");
 			JSONArray jobArgs = new JSONArray();
 			JSONObject param = new JSONObject();
 			param.put("exportDbName", exportDbName);
-			param.put("bbox", bbox);
-			param.put("outputLayerName", "outputLayerName");
+			param.put("minx", coords[0]);
+			param.put("miny", coords[1]);
+			param.put("maxx", coords[2]);
+			param.put("maxy", coords[3]);
+			param.put("outputLayerName", outputLayerName);
+			
+			param.put("MapEditDbName", dbname);
+			param.put("MapEditDbUserId", userid);
+			param.put("MapEditDbPassword", pwd);
+			param.put("MapEditDbHostAddr", host);
+			param.put("MapEditDbHostPort", port);
+			param.put("TempPath", tmpLoc);
+			
 			JSONArray commandArgs = parseParams(param.toJSONString());
 			JSONObject command = _createMakeScriptJobReq(commandArgs);
 			jobArgs.add(command);

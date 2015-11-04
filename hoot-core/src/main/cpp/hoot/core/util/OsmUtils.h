@@ -163,6 +163,7 @@ class OsmUtils
       */
     static unsigned int fromTimeString(QString timestamp);
 
+    static QString currentTimeAsString();
 };
 
 }
