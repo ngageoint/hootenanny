@@ -44,7 +44,7 @@ public:
 
   WayData(const WayData& from);
 
-  WayData() {}
+  //WayData() {}
 
   WayData(long id) : ElementData(id) {}
 

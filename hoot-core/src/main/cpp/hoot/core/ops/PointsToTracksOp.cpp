@@ -86,7 +86,7 @@ void PointsToTracksOp::_createWays(shared_ptr<OsmMap>& map, HashMap<QString, deq
 
     LOG_INFO("Circular Error: " << firstNode->getCircularError());
     shared_ptr<Way> w(new Way(firstNode->getStatus(), map->createNextWayId(),
-      firstNode->getCircularError()));
+      firstNode->getRawCircularError()));
 
     // check to see if all the nodes have the same non-empty highway tag.
     QString highway = firstNode->getTags()["highway"];

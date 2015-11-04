@@ -483,7 +483,11 @@ SOURCES += \
     src/main/cpp/hoot/core/schema/SchemaVertex.cpp \
     src/main/cpp/hoot/core/schema/TagCategoryDifferencer.cpp \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.cpp \
-    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.cpp
+    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.cpp \
+    src/main/cpp/hoot/core/io/ElementSorter.cpp \
+    src/main/cpp/hoot/core/io/ChangesetDeriver.cpp \
+    src/main/cpp/hoot/core/io/OsmChangeWriter.cpp \
+    src/main/cpp/hoot/core/cmd/DeriveChange.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -955,5 +959,9 @@ HEADERS += \
     src/main/cpp/hoot/core/schema/KeyValuePair.h \
     src/main/cpp/hoot/core/schema/TagCategoryDifferencer.h \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.h \
-    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.h
+    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.h \
+    src/main/cpp/hoot/core/io/ElementSorter.h \
+    src/main/cpp/hoot/core/io/ChangesetDeriver.h \
+    src/main/cpp/hoot/core/io/ChangesetProvider.h \
+    src/main/cpp/hoot/core/io/OsmChangeWriter.h
 

@@ -1719,3 +1719,12 @@ generally it should be `1 >= p >= 0`.
 * Default Value: `false`
 
 By default should a writer include debug information (e.g. status). Not honored by all writers.
+
+=== writer.precision
+
+* Data Type: double
+* Default Value: `16`
+
+Set the output precision when writing. Not honored by all writers.
+
+

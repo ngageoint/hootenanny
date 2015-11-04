@@ -212,6 +212,8 @@ void DuplicateWayRemover::_removeNodes(shared_ptr<const Way> w, int start, int l
 {
   const std::vector<long>& nodes = w->getNodeIds();
 
+  Meters ce = w->hasCircularError() ? w->getCircularError() : -1;
+
   // if we're not deleting all the nodes
   if (length != (int)nodes.size())
   {
@@ -219,8 +221,7 @@ void DuplicateWayRemover::_removeNodes(shared_ptr<const Way> w, int start, int l
     if (start == 0)
     {
       vector<long> newNodes(nodes.begin() + length - 1, nodes.end());
-      shared_ptr<Way> newWay(new Way(w->getStatus(), _map->createNextWayId(),
-                                     w->getCircularError()));
+      shared_ptr<Way> newWay(new Way(w->getStatus(), _map->createNextWayId(), ce));
       newWay->addNodes(newNodes);
       newWay->setTags(w->getTags());
       _map->replace(w, newWay);
@@ -229,8 +230,7 @@ void DuplicateWayRemover::_removeNodes(shared_ptr<const Way> w, int start, int l
     else if (start + length == (int)nodes.size())
     {
       vector<long> newNodes(nodes.begin(), nodes.begin() + start + 1);
-      shared_ptr<Way> newWay(new Way(w->getStatus(), _map->createNextWayId(),
-                                    w->getCircularError()));
+      shared_ptr<Way> newWay(new Way(w->getStatus(), _map->createNextWayId(), ce));
       newWay->addNodes(newNodes);
       newWay->setTags(w->getTags());
       _map->replace(w, newWay);
@@ -239,14 +239,12 @@ void DuplicateWayRemover::_removeNodes(shared_ptr<const Way> w, int start, int l
     else
     {
       vector<long> newNodes1(nodes.begin(), nodes.begin() + start + 1);
-      shared_ptr<Way> newWay1(new Way(w->getStatus(), _map->createNextWayId(),
-                                     w->getCircularError()));
+      shared_ptr<Way> newWay1(new Way(w->getStatus(), _map->createNextWayId(), ce));
       newWay1->addNodes(newNodes1);
       newWay1->setTags(w->getTags());
 
       vector<long> newNodes2(nodes.begin() + start + length - 1, nodes.end());
-      shared_ptr<Way> newWay2(new Way(w->getStatus(), _map->createNextWayId(),
-                                     w->getCircularError()));
+      shared_ptr<Way> newWay2(new Way(w->getStatus(), _map->createNextWayId(), ce));
       newWay2->addNodes(newNodes2);
       newWay2->setTags(w->getTags());
 

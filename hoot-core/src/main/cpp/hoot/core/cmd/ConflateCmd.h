@@ -125,7 +125,7 @@ public:
 
     // read input 1
     shared_ptr<OsmMap> map(new OsmMap());
-    loadMap(map, input1, false, Status::Unknown1);
+    loadMap(map, input1, true, Status::Unknown1);
 
     // read input 2
     if (!input2.isEmpty())

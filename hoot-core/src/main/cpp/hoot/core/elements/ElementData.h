@@ -52,11 +52,15 @@ public:
 
   virtual void clear() { _tags.clear(); }
 
-  Meters getCircularError() const { return _circularError; }
+  Meters getCircularError() const { return _circularError >= 0 ? _circularError : 15.0; }
+
+  bool hasCircularError() const { return _circularError >= 0; }
 
   long getId() const { return _id; }
 
   long getChangeset() const { return _changeset; }
+
+  Meters getRawCircularError() const { return _circularError; }
 
   long getVersion() const { return _version; }
 
@@ -74,14 +78,14 @@ public:
 
 protected:
 
-  ElementData() { }
+  //ElementData()  { }
 
-  ElementData(long id) : _id(id), _changeset(0), _version(1), _timestamp(0) { }
+  ElementData(long id, const Tags& tags = Tags(), Meters circularError = -1, long changeset = 0, long version = 1,
+    unsigned int timestamp = 0);
 
-  ElementData(long id, const Tags& tags, Meters circularError);
 
   ElementData(long id, long changeset, long version, unsigned int timestamp) :
-    _id(id), _changeset(changeset), _version(version), _timestamp(timestamp) { }
+    _id(id), _changeset(changeset), _version(version), _timestamp(timestamp), _circularError(-1) { }
 
   long _id;
   long _changeset;

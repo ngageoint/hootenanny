@@ -35,9 +35,10 @@ class NodeData : public ElementData
 {
 public:
 
-  NodeData() {}
+  //NodeData() {}
 
-  NodeData(const NodeData& nd) : ElementData(nd.getId(), nd.getTags(), nd.getCircularError()),
+  NodeData(const NodeData& nd) : ElementData(nd.getId(), nd.getTags(), nd.getCircularError(),
+    nd.getChangeset(), nd.getVersion(), nd.getTimestamp()),
     _x(nd._x), _y(nd._y) {}
 
   NodeData(long id, double x, double y) : ElementData(id), _x(x), _y(y) {}

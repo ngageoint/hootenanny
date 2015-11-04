@@ -100,6 +100,8 @@ public:
 
   long getChangeset() const { return _getElementData().getChangeset(); }
 
+  Meters getRawCircularError() const { return _getElementData().getRawCircularError(); }
+
   long getVersion() const { return _getElementData().getVersion(); }
 
   unsigned int getTimestamp() const { return _getElementData().getTimestamp(); }
@@ -107,6 +109,8 @@ public:
   const Tags& getTags() const { return _getElementData().getTags(); }
 
   Tags& getTags() { return _getElementData().getTags(); }
+
+  bool hasCircularError() const { return _getElementData().hasCircularError(); }
 
   void removeTag(QString k) { _getElementData().getTags().remove(k); }
 

@@ -32,7 +32,8 @@ using namespace boost;
 
 namespace hoot {
 
-WayData::WayData(const WayData& from) : ElementData(from._id, from.getTags(), from._circularError)
+WayData::WayData(const WayData& from) : ElementData(from._id, from.getTags(), from._circularError,
+  from._changeset, from._version, from._timestamp)
 {
   _nodes = from._nodes;
 }

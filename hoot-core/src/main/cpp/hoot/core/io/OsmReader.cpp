@@ -63,7 +63,7 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OsmReader)
 OsmReader::OsmReader()
 {
   _status = hoot::Status::Invalid;
-  _circularError = 15.0;
+  _circularError = -1;
   _useFileStatus = ConfigOptions().getReaderUseFileStatus();
   _useDataSourceId = false;
   _addSourceDateTime = ConfigOptions().getReaderAddSourceDatetime();

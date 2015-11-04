@@ -35,7 +35,7 @@ namespace hoot {
 
 NodeData& NodeData::operator=(const NodeData& nd)
 {
-  init(nd.getId(), nd.getX(), nd.getY());
+  init(nd.getId(), nd.getX(), nd.getY(), nd.getChangeset(), nd.getVersion(), nd.getTimestamp());
   setTags(nd.getTags());
   setCircularError(nd.getCircularError());
 
