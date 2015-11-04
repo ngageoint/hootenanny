@@ -129,9 +129,9 @@ unsigned int OsmUtils::fromTimeString(QString timestamp)
     ((t.tm_year-1)/100)*86400 + ((t.tm_year+299)/400)*86400;
 }
 
-unsigned int OsmUtils::currentTime()
+QString OsmUtils::currentTimeAsString()
 {
-  return fromTimeString(QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:ssZ"));
+  return QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:ssZ");
 }
 
 }
