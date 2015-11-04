@@ -327,11 +327,12 @@ public:
    */
   static Tags unescapeTags(const QVariant& v);
 
-  void updateNode(const long id, const double lat, const double lon, const Tags& tags);
+  void updateNode(const long id, const double lat, const double lon, const Tags& tags,
+                  const long version);
 
-  void updateRelation(const long id, const Tags& tags);
+  void updateRelation(const long id, const Tags& tags, const long version);
 
-  void updateWay(const long id, const Tags& tags);
+  void updateWay(const long id, const Tags& tags, const long version);
 
   DbType getDatabaseType() const { return _connectionType; }
 
@@ -553,13 +554,14 @@ private:
 
   void _insertWay_Services(long wayId, long changeSetId, const Tags& tags);
 
-  void _insertRelation_Services(long relationId, long changeSetId, const Tags& tags );
+  void _insertRelation_Services(long relationId, long changeSetId, const Tags& tags);
 
-  void _updateNode_Services(long id, double lat, double lon, long changeSetId, const Tags& tags);
+  void _updateNode_Services(long id, double lat, double lon, long changeSetId, const Tags& tags,
+                            const long version);
 
-  void _updateRelation_Services(long id, long changeSetId, const Tags& tags);
+  void _updateRelation_Services(long id, long changeSetId, const Tags& tags, const long version);
 
-  void _updateWay_Services(long id, long changeSetId, const Tags& tags);
+  void _updateWay_Services(long id, long changeSetId, const Tags& tags, const long version);
 
   void _insertNode_OsmApi(const long id, const double lat, const double lon,
     const Tags& tags);
