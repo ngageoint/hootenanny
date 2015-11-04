@@ -1,6 +1,7 @@
 #hoot convert -D services.db.writer.email=OsmEmail@hoot.local 
 # postgresql://hoot:hoottest@localhost:5432/osmapi_test /tmp/output.osm
 
+# This is what Greg's script call will look like, when its done.
 #hoot convert -D services.db.writer.email=test@test.com -D services.db.reader.email=test@test.com -D convert.bounding.box=$(bbox) $(DB_URL)/$(exportDbName) $(DB_URL)/$(outputLayerName)  
 
 echo 'bbox: ' $(bbox)
@@ -10,6 +11,9 @@ hoot --version
   
 # This assumes the same host for source and target db.
 #TODO: remove bounding box hardcode
+# This is Terry's temp solution until Greg's is done.  ;example:
+#osmosis --read-apidb host=10.194.71.149 user=openstreetmap password=postgres database=ngademo validateSchemaVersion=no --bounding-box top=36.512858 left=50.870645 right=52.013223 bottom=35.338563 --write-xml file=tmp/iran-test.osm
+
 #rm -f tmp/test1.osm
 #osmosis --read-apidb host=localhost user=$(dbUserId) password=$(dbPassword) database=$(exportDbName) validateSchemaVersion=no --bounding-box top=53.0 left=47.0 right=60.0 bottom=30.0 --write-xml file=tmp/test1.osm
 #hoot convert -D services.db.writer.email=test@test.com -D services.db.reader.email=test@test.com tmp/test1.osm $(DB_URL)/$(outputLayerName) 
