@@ -5,10 +5,16 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
-#include <QString>
-#include <QFile>
 #include <boost/shared_ptr.hpp>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/ElementType.h>
+#include <tgs/BigContainers/BigMap.h>
+
+// Qt
+#include <QUrl>
+#include <QFile>
+#include <QSqlDatabase>
+#include <QString>
 
 namespace hoot
 {
@@ -16,13 +22,14 @@ namespace hoot
 class OsmChangeWriterSql
 {
 public:
-  OsmChangeWriterSql(url);
+  OsmChangeWriterSql(QUrl url);
 
   // Jason
   void write(const QString& path, const ChangeSetProviderPtr cs);
 
 
 private:
+  QSqlDatabase _db;
   QFile _outputSql;
 
   Tgs::BigMap<long, long> _idMappingsNode;
@@ -40,21 +47,21 @@ private:
 
   // jason
   void _create(const ConstNodePtr node);
-  void _create(const ConstWayPtr node);
-  void _create(const ConstRelationPtr node);
+  void _create(const ConstWayPtr way);
+  void _create(const ConstRelationPtr relation);
 
   // jason
   void _modify(const ConstNodePtr node);
-  void _modify(const ConstWayPtr node);
-  void _modify(const ConstRelationPtr node);
+  void _modify(const ConstWayPtr way);
+  void _modify(const ConstRelationPtr relation);
 
   // jason
   void _delete(const ConstNodePtr node);
-  void _delete(const ConstWayPtr node);
-  void _delete(const ConstRelationPtr node);
 
-  void _open(QString url);
+  void _open(QUrl url);
 
+  void _delete(const ConstWayPtr way);
+  void _delete(const ConstRelationPtr relation);
 };
 
 }

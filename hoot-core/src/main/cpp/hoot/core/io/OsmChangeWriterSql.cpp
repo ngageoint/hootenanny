@@ -7,18 +7,23 @@
 
 // Qt
 #include <QFile>
-#include <QSqlDatabase>
+#include <QSqlError>
 #include <QXmlStreamWriter>
 
 namespace hoot
 {
 
-OsmChangeWriterSql::OsmChangeWriterSql(QString url)
+OsmChangeWriterSql::OsmChangeWriterSql(QUrl url)
 {
   _open(url);
 }
 
-void OsmChangeWriterSql::_open(QString url)
+long OsmChangeWriterSql::_getNextId(const ElementType type)
+{
+
+}
+
+void OsmChangeWriterSql::_open(QUrl url)
 {
   QStringList pList = url.path().split("/");
   QString db = pList[1];
@@ -61,14 +66,13 @@ void OsmChangeWriterSql::_open(QString url)
   }
 }
 
-void OsmChangeWriterSql::write(const QString& url, const ChangeSetProviderPtr cs)
+void OsmChangeWriterSql::write(const QString& path, const ChangeSetProviderPtr cs)
 {
   _outputSql.setFileName(path);
   if (_outputSql.open(QIODevice::WriteOnly | QIODevice::Text) == false)
   {
     throw HootException(QObject::tr("Error opening %1 for writing").arg(path));
   }
-
 
 }
 
