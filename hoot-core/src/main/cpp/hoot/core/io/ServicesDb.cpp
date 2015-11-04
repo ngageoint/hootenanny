@@ -864,7 +864,7 @@ void ServicesDb::_insertNode_Services(const long id, const double lat, const dou
 //  v.append((qlonglong)_round(lon * COORDINATE_SCALE, 7));
   v.append(lon);
   v.append((qlonglong)_currChangesetId);
-  v.append(_tileForPoint(lat, lon));
+  v.append(tileForPoint(lat, lon));
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
   // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
   // error.
@@ -1406,12 +1406,12 @@ void ServicesDb::rollback()
   _inTransaction = false;
 }
 
-long ServicesDb::_round(double x)
+long ServicesDb::round(double x)
 {
   return (long)(x + 0.5);
 }
 
-long ServicesDb::_round(double x, int precision)
+long ServicesDb::round(double x, int precision)
 {
   return (long)(floor(x * (10 * (precision - 1)) + 0.5) / (10 * (precision - 1)));
   //return (long)(ceil(x * (10 * (precision - 1))) / (10 * (precision - 1)));
@@ -1452,10 +1452,10 @@ LOG_DEBUG("userId = "+QString::number(userId));
   return result;
 }
 
-unsigned int ServicesDb::_tileForPoint(double lat, double lon)
+unsigned int ServicesDb::tileForPoint(double lat, double lon)
 {
-  int lonInt = _round((lon + 180.0) * 65535.0 / 360.0);
-  int latInt = _round((lat + 90.0) * 65535.0 / 180.0);
+  int lonInt = round((lon + 180.0) * 65535.0 / 360.0);
+  int latInt = round((lat + 90.0) * 65535.0 / 180.0);
 
   unsigned int tile = 0;
   int          i;
@@ -2106,7 +2106,7 @@ void ServicesDb::_updateNode_Services(long id, double lat, double lon, long chan
   //_updateNode->bindValue(":longitude", (qlonglong)_round(lon * COORDINATE_SCALE, 7));
   _updateNode->bindValue(":longitude", lon);
   _updateNode->bindValue(":changeset_id", (qlonglong)changeSetId);
-  _updateNode->bindValue(":tile", (qlonglong)_tileForPoint(lat, lon));
+  _updateNode->bindValue(":tile", (qlonglong)tileForPoint(lat, lon));
   _updateNode->bindValue(":tags", _escapeTags(tags));
 
   if (_updateNode->exec() == false)
