@@ -396,7 +396,8 @@ hgis20 = {
 //             ["t.wetland && t.natural == 'wetland'","delete t.natural"],
             ["t.water == 'river'","t.waterway = 'river'"],
             ["t.waterway == 'stream'","t.waterway = 'river'"], // Output is River/Stream
-            ["t.waterway == 'riverbank'","t.waterway = 'river'"]
+            ["t.waterway == 'riverbank'","t.waterway = 'river'"],
+            ["t.amenity == 'embassy' && !(t.diplomatic)","t.diplomatic = 'embassy'"]
             ];
 
             hgis20.hgisPreRules = translate.buildComplexRules(rulesList);
@@ -491,6 +492,22 @@ hgis20 = {
                 tags.train = 'yes';
             }
         } // End Tunnel
+
+        // Transportation type
+        if (tags['transport:type'])
+        {
+            if (tags['transport:type'] == 'underground_railway') {
+                tags['transport:type'] = 'subway';
+            }
+
+            var typ = tags['transport:type'];
+            tags[typ] = 'yes';
+        } // End type
+
+        if (tags.railway == 'yes') {
+            tags.train = 'yes';
+            delete tags.railway;
+        }
 
         // Bus POI's
         if (tags.highway == 'bus_stop')
@@ -1029,6 +1046,14 @@ hgis20 = {
 
             // List of layers & short versions
             hgis20.layerList = translate.flipList(hgis20.rules.layerNames);
+
+
+            hgis20.fuzy = schemaTools.generateToOgrTable(hgis20.rules.fuzyone2one);
+            for (var k1 in hgis20.fuzy) {
+                for (var v1 in hgis20.fuzy[k1]) {
+                    print(JSON.stringify([k1, v1, hgis20.fuzy[k1][v1][0], hgis20.fuzy[k1][v1][1], hgis20.fuzy[k1][v1][2]]));
+                }
+            }
         }
 
         // pre processing
@@ -1036,6 +1061,8 @@ hgis20 = {
 
         // one 2 one Rules
         translate.applyOne2One(tags, attrs, hgis20.lookup,hgis20.layerLookup, hgis20.ignoreList);
+
+        translate.applyOne2One(tags, attrs, hgis20.fuzy,hgis20.layerLookup, hgis20.ignoreList);
 
         // apply the simple number and text biased rules
         // Note: These are BACKWARD, not forward!
