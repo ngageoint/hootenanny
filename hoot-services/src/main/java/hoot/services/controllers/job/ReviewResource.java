@@ -615,7 +615,7 @@ public class ReviewResource
     try
     {
     	ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
-    	
+    	/*
     	int lenminx = minx.length();
     	if(lenminx > 14)
     	{
@@ -635,13 +635,13 @@ public class ReviewResource
     	if(lenmaxy > 14)
     	{
     		lenmaxy = 14;
-    	}
+    	}*/
     	
     	List<ReviewableItemInfo> list = marker.getAllReviewItems(
-    			Double.parseDouble(minx.substring(0, lenminx)),
-    			Double.parseDouble(miny.substring(0, lenminy)),
-    			Double.parseDouble(maxx.substring(0, lenmaxx)),
-    			Double.parseDouble(maxy.substring(0, lenmaxy)));
+    			Double.parseDouble(minx),
+    			Double.parseDouble(miny),
+    			Double.parseDouble(maxx),
+    			Double.parseDouble(maxy));
     	
     	resp.setFeatures(list);
     	resp.setType("FeatureCollection");
