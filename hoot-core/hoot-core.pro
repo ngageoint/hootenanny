@@ -487,7 +487,7 @@ SOURCES += \
     src/main/cpp/hoot/core/io/ElementSorter.cpp \
     src/main/cpp/hoot/core/io/ChangesetDeriver.cpp \
     src/main/cpp/hoot/core/io/OsmChangeWriter.cpp \
-    src/main/cpp/hoot/core/cmd/DeriveChange.cpp \
+    src/main/cpp/hoot/core/cmd/DeriveChangeCmd.cpp \
     src/main/cpp/hoot/core/io/OsmChangeWriterSql.cpp
 
 HEADERS += \

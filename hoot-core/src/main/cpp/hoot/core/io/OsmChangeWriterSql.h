@@ -9,6 +9,8 @@
 #include <QFile>
 #include <boost/shared_ptr.hpp>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/ElementType.h>
+#include <tgs/BigContainers/BigMap.h>
 
 namespace hoot
 {
@@ -40,21 +42,18 @@ private:
 
   // jason
   void _create(const ConstNodePtr node);
-  void _create(const ConstWayPtr node);
-  void _create(const ConstRelationPtr node);
+  void _create(const ConstWayPtr way);
+  void _create(const ConstRelationPtr relation);
 
   // jason
   void _modify(const ConstNodePtr node);
-  void _modify(const ConstWayPtr node);
-  void _modify(const ConstRelationPtr node);
+  void _modify(const ConstWayPtr way);
+  void _modify(const ConstRelationPtr relation);
 
   // jason
   void _delete(const ConstNodePtr node);
-  void _delete(const ConstWayPtr node);
-  void _delete(const ConstRelationPtr node);
-
-
-
+  void _delete(const ConstWayPtr way);
+  void _delete(const ConstRelationPtr relation);
 };
 
 }
