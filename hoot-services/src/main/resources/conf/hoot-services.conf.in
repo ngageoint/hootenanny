@@ -265,3 +265,11 @@ hgisPrepareForValidationScript=custom/HGIS/PrepareForValidation.sh
 
 # HGIS filter script name
 hgisFilterScript=custom/HGIS/RemoveNonHgisPois.sh
+
+# Map Edit
+HootToMapEdit=makeexporttomapedit
+MapEditDbName=osmapi_test
+MapEditDbUserId=hoot
+MapEditDbPassword=hoottest
+MapEditDbHostAddr=localhost
+MapEditDbHostPort=5432
