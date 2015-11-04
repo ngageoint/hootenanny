@@ -529,7 +529,7 @@ public class ReviewItemsRetriever
     return nextAvailableReviewItem;
   }
  
-  private List<Long> _getAllReviewItemsQuery(DbUtils.nwr_enum type, DbUtils.review_status_enum status)
+  private List<Long> _getAllReviewItemsQuery(DbUtils.nwr_enum type, DbUtils.review_status_enum status, boolean locked)
   {
   	QReviewItems rm = QReviewItems.reviewItems;
     QElementIdMappings em = QElementIdMappings.elementIdMappings;
@@ -546,13 +546,46 @@ public class ReviewItemsRetriever
     						)
     		);
     
+    if(status == DbUtils.review_status_enum.unreviewed)
+    {
+    	java.util.Date date= new java.util.Date();
+  		long waittime = date.getTime() - LOCK_TIME;
+      Timestamp compareTime = new Timestamp(waittime);
+      
+    	if(locked)
+    	{      
+    		q = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        .from(em)
+        .where(
+        		em.elementId.in(
+        				new SQLSubQuery().from(rm).where(rm.mapId.eq(mapId).and(rm.reviewStatus.eq(status))
+        						.and(rm.lastAccessed.goe(compareTime))).
+        					list(rm.reviewableItemId)).and(em.osmElementType.eq(type)
+        						)
+        		);
+    	}
+    	else
+    	{
+
+    		q = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        .from(em)
+        .where(
+        		em.elementId.in(
+        				new SQLSubQuery().from(rm).where(rm.mapId.eq(mapId).and(rm.reviewStatus.eq(status))
+        						.and(rm.lastAccessed.lt(compareTime).or(rm.lastAccessed.isNull()))).
+        					list(rm.reviewableItemId)).and(em.osmElementType.eq(type)
+        						)
+        		);
+    	}
+    }
+    
     return q.list(em.osmElementId);
   }
   public List<ReviewableItemInfo> getAllReviewItems() throws Exception
   {   
   	List<ReviewableItemInfo> ret = new ArrayList<>();
     // Node
-	   List<Long> elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.node, DbUtils.review_status_enum.reviewed);
+	   List<Long> elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.node, DbUtils.review_status_enum.reviewed, true);
 	   for(long elemid : elemIds)
 	   {
 	  	 BoundingBox bbox = _getNodeCoord(elemid);
@@ -573,7 +606,7 @@ public class ReviewItemsRetriever
 	  	 ret.add(info);
 	   }
 	   
-	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.node, DbUtils.review_status_enum.unreviewed);
+	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.node, DbUtils.review_status_enum.unreviewed, false);
 	   for(long elemid : elemIds)
 	   {
 	  	 BoundingBox bbox = _getNodeCoord(elemid);
@@ -581,6 +614,27 @@ public class ReviewItemsRetriever
 	  	
 	  	 JSONObject prop = new JSONObject();
 	  	 prop.put("class", "open");
+	  	 info.setProperties(prop);
+	  	 
+	  	 JSONObject geom = new JSONObject();
+	  	 geom.put("type", "Point");
+	  	 JSONArray coords = new JSONArray();
+	  	 coords.add(bbox.getMaxLon());
+	  	 coords.add(bbox.getMaxLat());
+	  	 geom.put("coordinates", coords);
+	  	 info.setGeometry(geom);
+	  	 
+	  	 ret.add(info);
+	   }
+	   
+	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.node, DbUtils.review_status_enum.unreviewed, true);
+	   for(long elemid : elemIds)
+	   {
+	  	 BoundingBox bbox = _getNodeCoord(elemid);
+	  	 ReviewableItemInfo info = new ReviewableItemInfo();
+	  	
+	  	 JSONObject prop = new JSONObject();
+	  	 prop.put("class", "locked");
 	  	 info.setProperties(prop);
 	  	 
 	  	 JSONObject geom = new JSONObject();
@@ -595,7 +649,7 @@ public class ReviewItemsRetriever
 	   }
 	   
     // Way   
-	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.way, DbUtils.review_status_enum.reviewed);
+	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.way, DbUtils.review_status_enum.reviewed, true);
 	   for(long elemid : elemIds)
 	   {
 	  	 BoundingBox bbox = _getWayBbox(elemid);
@@ -617,7 +671,7 @@ public class ReviewItemsRetriever
 	  	 ret.add(info);
 	   }
 	   
-	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.way, DbUtils.review_status_enum.unreviewed);
+	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.way, DbUtils.review_status_enum.unreviewed, false);
 	   for(long elemid : elemIds)
 	   {
 	  	 BoundingBox bbox = _getWayBbox(elemid);
@@ -625,6 +679,27 @@ public class ReviewItemsRetriever
 	  	
 	  	 JSONObject prop = new JSONObject();
 	  	 prop.put("class", "open");
+	  	 info.setProperties(prop);
+	  	 
+	  	 JSONObject geom = new JSONObject();
+	  	 geom.put("type", "Point");
+	  	 JSONArray coords = new JSONArray();
+	  	 coords.add(bbox.getMaxLon());
+	  	 coords.add(bbox.getMaxLat());
+	  	 geom.put("coordinates", coords);
+	  	 info.setGeometry(geom);
+	  	 
+	  	 ret.add(info);
+	   }
+	   
+	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.way, DbUtils.review_status_enum.unreviewed, true);
+	   for(long elemid : elemIds)
+	   {
+	  	 BoundingBox bbox = _getWayBbox(elemid);
+	  	 ReviewableItemInfo info = new ReviewableItemInfo();
+	  	
+	  	 JSONObject prop = new JSONObject();
+	  	 prop.put("class", "locked");
 	  	 info.setProperties(prop);
 	  	 
 	  	 JSONObject geom = new JSONObject();
@@ -640,7 +715,7 @@ public class ReviewItemsRetriever
 	   
 	   // Relation
 	   
-	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.relation, DbUtils.review_status_enum.reviewed);
+	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.relation, DbUtils.review_status_enum.reviewed, true);
 	   for(long elemid : elemIds)
 	   {
 	  	 BoundingBox bbox = _getRelationBbox(elemid);
@@ -661,7 +736,7 @@ public class ReviewItemsRetriever
 	  	 ret.add(info);
 	   }
 	   
-	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.relation, DbUtils.review_status_enum.unreviewed);
+	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.relation, DbUtils.review_status_enum.unreviewed, false);
 	   for(long elemid : elemIds)
 	   {
 	  	 BoundingBox bbox = _getRelationBbox(elemid);
@@ -669,6 +744,28 @@ public class ReviewItemsRetriever
 	  	
 	  	 JSONObject prop = new JSONObject();
 	  	 prop.put("class", "open");
+	  	 info.setProperties(prop);
+	  	 
+	  	 JSONObject geom = new JSONObject();
+	  	 geom.put("type", "Point");
+	  	 JSONArray coords = new JSONArray();
+	  	 coords.add(bbox.getMaxLon());
+	  	 coords.add(bbox.getMaxLat());
+	  	 geom.put("coordinates", coords);
+	  	 info.setGeometry(geom);
+	  	 
+	  	 ret.add(info);
+	   }
+	   
+	   
+	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.relation, DbUtils.review_status_enum.unreviewed, true);
+	   for(long elemid : elemIds)
+	   {
+	  	 BoundingBox bbox = _getRelationBbox(elemid);
+	  	 ReviewableItemInfo info = new ReviewableItemInfo();
+	  	
+	  	 JSONObject prop = new JSONObject();
+	  	 prop.put("class", "locked");
 	  	 info.setProperties(prop);
 	  	 
 	  	 JSONObject geom = new JSONObject();

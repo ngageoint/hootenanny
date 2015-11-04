@@ -608,7 +608,7 @@ public class ReviewResource
     	ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
     	
     	
-    	resp.setInfo(marker.getAllReviewItems());
+    	resp.setFeatures(marker.getAllReviewItems());
     	resp.setType("FeatureCollection");
     }
     catch (Exception e)

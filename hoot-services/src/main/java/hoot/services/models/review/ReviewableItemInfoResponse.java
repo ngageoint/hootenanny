@@ -16,12 +16,12 @@ public class ReviewableItemInfoResponse {
 		return _type;
 	}
 	
-	public void setInfo(List<ReviewableItemInfo> inf)
+	public void setFeatures(List<ReviewableItemInfo> f)
 	{
-		_features = inf;
+		_features = f;
 	}
 	
-	public List<ReviewableItemInfo> getInfo()
+	public List<ReviewableItemInfo> getFeatures()
 	{
 		return  _features;
 	}
