@@ -43,6 +43,7 @@ import hoot.services.exceptions.writer.review.ReviewItemsWriterException;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.review.ReviewAgainstItem;
 import hoot.services.models.review.ReviewableItem;
+import hoot.services.models.review.ReviewableItemInfo;
 import hoot.services.validators.review.ReviewMapValidator;
 import hoot.services.writers.review.ReviewItemsRetrieverWriter;
 
@@ -527,6 +528,99 @@ public class ReviewItemsRetriever
     return nextAvailableReviewItem;
   }
  
+  private List<Long> _getAllReviewItemsQuery(DbUtils.nwr_enum type, DbUtils.review_status_enum status)
+  {
+  	QReviewItems rm = QReviewItems.reviewItems;
+    QElementIdMappings em = QElementIdMappings.elementIdMappings;
+    
+    
+    // Node
+    // Way
+    SQLQuery q = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+    .from(em)
+    .where(
+    		em.elementId.in(
+    				new SQLSubQuery().from(rm).where(rm.mapId.eq(mapId).and(rm.reviewStatus.eq(status))).
+    					list(rm.reviewableItemId)).and(em.osmElementType.eq(type)
+    						)
+    		);
+    
+    return q.list(em.osmElementId);
+  }
+  public List<ReviewableItemInfo> getAllReviewItems() throws Exception
+  {   
+  	List<ReviewableItemInfo> ret = new ArrayList<>();
+    // Node
+	   List<Long> elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.node, DbUtils.review_status_enum.reviewed);
+	   for(long elemid : elemIds)
+	   {
+	  	 BoundingBox bbox = _getNodeCoord(elemid);
+	  	 ReviewableItemInfo info = new ReviewableItemInfo();
+	  	 info.setStatus("resolved");
+	  	 info.setLat(bbox.getMaxLat());
+	  	 info.setLon(bbox.getMaxLon());
+	  	 ret.add(info);
+	   }
+	   
+	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.node, DbUtils.review_status_enum.unreviewed);
+	   for(long elemid : elemIds)
+	   {
+	  	 BoundingBox bbox = _getNodeCoord(elemid);
+	  	 ReviewableItemInfo info = new ReviewableItemInfo();
+	  	 info.setStatus("open");
+	  	 info.setLat(bbox.getMaxLat());
+	  	 info.setLon(bbox.getMaxLon());
+	  	 ret.add(info);
+	   }
+	   
+    // Way   
+	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.way, DbUtils.review_status_enum.reviewed);
+	   for(long elemid : elemIds)
+	   {
+	  	 BoundingBox bbox = _getWayBbox(elemid);
+	  	 ReviewableItemInfo info = new ReviewableItemInfo();
+	  	 info.setStatus("resolved");
+	  	 info.setLat(bbox.getCenterY());
+	  	 info.setLon(bbox.getCenterX());
+	  	 ret.add(info);
+	   }
+	   
+	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.way, DbUtils.review_status_enum.unreviewed);
+	   for(long elemid : elemIds)
+	   {
+	  	 BoundingBox bbox = _getWayBbox(elemid);
+	  	 ReviewableItemInfo info = new ReviewableItemInfo();
+	  	 info.setStatus("open");
+	  	 info.setLat(bbox.getCenterY());
+	  	 info.setLon(bbox.getCenterX());
+	  	 ret.add(info);
+	   }
+	   
+	   // Relation
+	   
+	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.relation, DbUtils.review_status_enum.reviewed);
+	   for(long elemid : elemIds)
+	   {
+	  	 BoundingBox bbox = _getRelationBbox(elemid);
+	  	 ReviewableItemInfo info = new ReviewableItemInfo();
+	  	 info.setStatus("resolved");
+	  	 info.setLat(bbox.getCenterY());
+	  	 info.setLon(bbox.getCenterX());
+	  	 ret.add(info);
+	   }
+	   
+	   elemIds = _getAllReviewItemsQuery(DbUtils.nwr_enum.relation, DbUtils.review_status_enum.unreviewed);
+	   for(long elemid : elemIds)
+	   {
+	  	 BoundingBox bbox = _getRelationBbox(elemid);
+	  	 ReviewableItemInfo info = new ReviewableItemInfo();
+	  	 info.setStatus("open");
+	  	 info.setLat(bbox.getCenterY());
+	  	 info.setLon(bbox.getCenterX());
+	  	 ret.add(info);
+	   }
+	   return ret;
+  }
   private JSONObject _createNextReviewableResponse(final String status, final Tuple nextAvailableReviewItem,
   		final long offsetReviewId, final Timestamp past, final Timestamp now) throws ReviewItemsWriterException, Exception
   {

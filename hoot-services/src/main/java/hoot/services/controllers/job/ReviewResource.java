@@ -42,6 +42,7 @@ import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.ReviewAgainstItem;
 import hoot.services.models.review.ReviewReferences;
 import hoot.services.models.review.ReviewReferencesCollection;
+import hoot.services.models.review.ReviewableItemInfoResponse;
 import hoot.services.models.review.ReviewableItemsStatistics;
 import hoot.services.models.review.SetAllItemsReviewedRequest;
 import hoot.services.readers.review.ReviewItemsRetriever;
@@ -587,5 +588,45 @@ public class ReviewResource
     }
   	
   	return Response.ok().build();
+  }
+  
+  @GET
+  @Path("/getallreviewableitems")
+  @Consumes(MediaType.TEXT_PLAIN)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ReviewableItemInfoResponse getAllReviewableItems(
+    @QueryParam("mapId")
+    String mapId)
+    throws Exception
+  {
+  	log.debug("Initializing database connection...");
+  	Connection conn = DbUtils.createConnection();
+    final String errorMessageStart = "retrieving reviewable items";
+    ReviewableItemInfoResponse resp = new ReviewableItemInfoResponse();
+    try
+    {
+    	ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
+    	
+    	
+    	resp.setInfo(marker.getAllReviewItems());
+    	resp.setType("FeatureCollection");
+    }
+    catch (Exception e)
+    {
+    	
+    }
+    finally
+    {
+    	try
+      {
+        DbUtils.closeConnection(conn);
+      }
+      catch (Exception e)
+      {
+        ReviewUtils.handleError(e, errorMessageStart, false);
+      }
+    }
+
+    return resp;
   }
 }
