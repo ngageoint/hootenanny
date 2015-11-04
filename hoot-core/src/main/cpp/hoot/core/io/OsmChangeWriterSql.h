@@ -16,7 +16,7 @@ namespace hoot
 class OsmChangeWriterSql
 {
 public:
-  OsmChangeWriterSql();
+  OsmChangeWriterSql(url);
 
   // Jason
   void write(const QString& path, const ChangeSetProviderPtr cs);
@@ -53,7 +53,7 @@ private:
   void _delete(const ConstWayPtr node);
   void _delete(const ConstRelationPtr node);
 
-
+  void _open(QString url);
 
 };
 
