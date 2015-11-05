@@ -182,8 +182,10 @@ public:
    */
   shared_ptr<QSqlQuery> selectAllElements(const ElementType& elementType);
 
-
   shared_ptr<QSqlQuery> selectAllElements(const long elementId, const ElementType& elementType);
+
+  shared_ptr<QSqlQuery> selectBoundedElements(const long elementId, const ElementType& elementType,
+                                              const QString& bbox);
 
   /**
    * Returns a results iterator to all OSM elements for a given map and element type in the services
@@ -201,10 +203,20 @@ public:
   shared_ptr<QSqlQuery> selectElements_OsmApi(const long elementId,
     const ElementType& elementType, const long limit, const long offset);
 
+  shared_ptr<QSqlQuery> selectBoundedElements_OsmApi(const long elementId,
+    const ElementType& elementType, const QString& bbox, const long limit, const long offset);
+
   /**
    * Returns a vector with all the OSM node ID's for a given way
    */
   vector<long> selectNodeIdsForWay(long wayId);
+
+  /**
+   * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
+   */
+  shared_ptr<QSqlQuery> selectNodesForWay(long wayId);
+
+  shared_ptr<QSqlQuery> selectTagsForWay_OsmApi(long wayId);
 
   /**
    * Returns a vector with all the relation members for a given relation
@@ -375,6 +387,7 @@ private:
   shared_ptr<QSqlQuery> _selectReserveNodeIds;
   shared_ptr<QSqlQuery> _selectElementsForMap;
   shared_ptr<QSqlQuery> _selectNodeIdsForWay;
+  shared_ptr<QSqlQuery> _selectTagsForWay;
   shared_ptr<QSqlQuery> _selectMapIds;
   shared_ptr<QSqlQuery> _selectMembersForRelation;
   shared_ptr<QSqlQuery> _updateNode;

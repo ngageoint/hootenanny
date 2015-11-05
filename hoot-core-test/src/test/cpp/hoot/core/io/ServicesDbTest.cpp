@@ -863,9 +863,9 @@ public:
     mapId = -1;
 
     // tear down the osm api db
-    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
-    database.deleteData_OsmApi();
-    database.close();
+   // database.open(ServicesDbTestUtils::getOsmApiDbUrl());
+   // database.deleteData_OsmApi();
+   // database.close();
   }
 
 };

@@ -96,6 +96,8 @@ public:
 
   void setUserEmail(const QString& email) { _email = email; }
 
+  void setBoundingBox(const QString& bbox) { _bbox = bbox; }
+
   virtual bool hasMoreElements();
 
   virtual shared_ptr<Element> readNextElement();
@@ -111,11 +113,14 @@ private:
   long _getCurrentElementOffset(const ElementType& selectElementType) const;
   void _incrementElementIndex(const ElementType& selectElementType);
   void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
+  void _readBounded(shared_ptr<OsmMap> map, const ElementType& elementType);
+
 
   ServicesDb _database;
   bool _open;
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
+  QString _bbox;
 
   long _osmElemId;
   ElementType _osmElemType;
