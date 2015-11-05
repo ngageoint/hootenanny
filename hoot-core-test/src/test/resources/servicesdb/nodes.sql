@@ -26,7 +26,7 @@ COPY current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp",
 
 COPY current_node_tags (node_id, k, v) FROM stdin;
 1	highway	road
-1	accuracy	5
+1	accuracy1	5
 2	foo	bar
 \.
 
@@ -54,7 +54,7 @@ COPY nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", ti
 
 COPY node_tags (node_id, version, k, v) FROM stdin;
 1	1	highway	road
-1	1	accuracy	5
+1	1	accuracy1	5
 2	1	foo	bar
 \.
 

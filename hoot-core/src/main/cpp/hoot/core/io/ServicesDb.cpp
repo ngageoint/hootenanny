@@ -1604,6 +1604,100 @@ long ServicesDb::numElements(const ElementType& elementType)
   return result;
 }
 
+/// SELECT BOUNDED ELEMENTS
+
+shared_ptr<QSqlQuery> ServicesDb::selectBoundedElements(const long elementId, const ElementType& elementType,
+                                                        const QString& bbox)
+{
+  switch ( _connectionType )
+  {
+    case DBTYPE_SERVICES:
+      throw HootException("Bounded select on services db is not supported!");
+      break;
+
+    case DBTYPE_OSMAPI:
+      return selectBoundedElements_OsmApi(elementId, elementType, bbox, -1, 0);
+      break;
+
+    default:
+      throw HootException("SelectAllElements cannot operate on unsupported database type");
+      break;
+  }
+}
+
+shared_ptr<QSqlQuery> ServicesDb::selectBoundedElements_OsmApi(const long elementId,
+  const ElementType& elementType, const QString& bbox, const long limit, const long offset)
+{
+  LOG_DEBUG("IN selectBoundedElement_OsmApi");
+
+  QStringList bboxParts = bbox.split(",");
+  double minLat = bboxParts[1].toDouble()*(double)COORDINATE_SCALE;
+  double minLon = bboxParts[0].toDouble()*(double)COORDINATE_SCALE;
+  double maxLat = bboxParts[3].toDouble()*(double)COORDINATE_SCALE;
+  double maxLon = bboxParts[2].toDouble()*(double)COORDINATE_SCALE;
+
+  _selectElementsForMap.reset(new QSqlQuery(_db));
+  _selectElementsForMap->setForwardOnly(true);
+
+  // set the maximum number elements returned
+  QString limitStr;
+  if (limit == -1) { limitStr = "ALL"; }
+  else { limitStr = QString::number(limit); }
+
+  // setup base sql query string
+  QString sql =  "SELECT ";
+
+  if(elementType == ElementType::Node)
+  {
+    sql += _elementTypeToElementTableName_OsmApi(elementType) +
+      " where (latitude between "+QString::number(minLat)+" and "+QString::number(maxLat)+") and (longitude between "+
+      QString::number(minLon)+" and "+QString::number(maxLon)+")";
+    // if requesting a specific id then append this string
+    if(elementId > -1) { sql += " AND (id = :elementId) "; }
+  }
+  else if(elementType == ElementType::Way)
+  {
+    sql += "* FROM current_ways ";
+    // if requesting a specific id then append this string
+    if(elementId > -1) { sql += " WHERE id = :elementId "; }
+  }
+  else if(elementType == ElementType::Relation)
+  {
+    sql += "* FROM current_relations ";
+    // if requesting a specific id then append this string
+    if(elementId > -1) { sql += " WHERE id = :elementId "; }
+  }
+  else
+  {
+    throw HootException("selectBoundedElements_OsmApi cannot operate on an unknown data type.");
+  }
+
+  // sort them in descending order, set limit and offset
+  sql += " ORDER BY id DESC LIMIT " + limitStr + " OFFSET " + QString::number(offset);
+
+  // let's see what that sql query string looks like
+  LOG_DEBUG(QString("The sql query= "+sql));
+
+  _selectElementsForMap->prepare(sql);
+
+  // add the element id value if needed by inserting where the marker was placed
+  if(elementId > -1) { _selectElementsForMap->bindValue(":elementId", (qlonglong)elementId); }
+
+  // execute the query on the DB and get the results back
+  if (_selectElementsForMap->exec() == false)
+  {
+    QString err = _selectElementsForMap->lastError().text();
+    LOG_WARN(sql);
+    throw HootException("Error selecting elements of type: " + elementType.toString() +
+      " Error: " + err);
+  }
+
+  LOG_DEBUG("LEAVING ServicesDb::selectElements_OsmApi...");
+  return _selectElementsForMap;
+}
+
+/// SELECT ALL ELEMENTS
+
 shared_ptr<QSqlQuery> ServicesDb::selectAllElements(const long elementId, const ElementType& elementType)
 {
   switch ( _connectionType )
@@ -1711,6 +1805,7 @@ shared_ptr<QSqlQuery> ServicesDb::selectElements(const long elementId,
   return _selectElementsForMap;
 }
 
+
 vector<long> ServicesDb::selectNodeIdsForWay(long wayId)
 {
   const long mapId = _currMapId;
@@ -1732,12 +1827,13 @@ vector<long> ServicesDb::selectNodeIdsForWay(long wayId)
         break;
 
       case DBTYPE_OSMAPI:
+        {
         _selectNodeIdsForWay.reset(new QSqlQuery(_db));
         _selectNodeIdsForWay->setForwardOnly(true);
-        _selectNodeIdsForWay->prepare(
-          "SELECT node_id FROM " + _getWayNodesTableName_OsmApi() +
-          " WHERE way_id = :wayId ORDER BY sequence_id");
-
+        QString sql =  "SELECT ";
+        sql += "node_id FROM " + _getWayNodesTableName_OsmApi()+" WHERE way_id = :wayId ORDER BY sequence_id";
+        _selectNodeIdsForWay->prepare( sql );
+        }
         break;
 
       default:
@@ -1767,6 +1863,75 @@ vector<long> ServicesDb::selectNodeIdsForWay(long wayId)
   }
 
   return result;
+}
+
+shared_ptr<QSqlQuery> ServicesDb::selectTagsForWay_OsmApi(long wayId)
+{
+  if (!_selectTagsForWay)
+  {
+    _selectTagsForWay.reset(new QSqlQuery(_db));
+    _selectTagsForWay->setForwardOnly(true);
+    QString sql =  "SELECT ";
+    sql += "way_id, k, v FROM current_way_tags where way_id = :wayId";
+    _selectTagsForWay->prepare( sql );
+  }
+
+  _selectTagsForWay->bindValue(":wayId", (qlonglong)wayId);
+  if (_selectTagsForWay->exec() == false)
+  {
+    throw HootException("Error selecting tags for way with ID: " + QString::number(wayId) +
+      " Error: " + _selectTagsForWay->lastError().text());
+  }
+
+  return _selectTagsForWay;
+}
+
+
+shared_ptr<QSqlQuery> ServicesDb::selectNodesForWay(long wayId)
+{
+  const long mapId = _currMapId;
+  vector<long> result;
+
+  if (!_selectNodeIdsForWay)
+  {
+    switch ( _connectionType )
+    {
+      case DBTYPE_SERVICES:
+        {
+          // ToDo: would need updating if actually used
+          _checkLastMapId(mapId);
+          _selectNodeIdsForWay.reset(new QSqlQuery(_db));
+          _selectNodeIdsForWay->setForwardOnly(true);
+          _selectNodeIdsForWay->prepare(
+          "SELECT node_id FROM " + _getWayNodesTableName(mapId) +
+              " WHERE way_id = :wayId ORDER BY sequence_id");
+        }
+        break;
+
+      case DBTYPE_OSMAPI:
+        {
+        _selectNodeIdsForWay.reset(new QSqlQuery(_db));
+        _selectNodeIdsForWay->setForwardOnly(true);
+        QString sql =  "SELECT ";
+        sql += "node_id, latitude, longitude FROM current_way_nodes inner join current_nodes on current_way_nodes.node_id=current_nodes.id and way_id = :wayId ORDER BY sequence_id";
+        _selectNodeIdsForWay->prepare( sql );
+        }
+        break;
+
+      default:
+        throw HootException("selectNodesForWay cannot operate on unsupported database type");
+        break;
+    }
+  }
+
+  _selectNodeIdsForWay->bindValue(":wayId", (qlonglong)wayId);
+  if (_selectNodeIdsForWay->exec() == false)
+  {
+    throw HootException("Error selecting node ID's for way with ID: " + QString::number(wayId) +
+      " Error: " + _selectNodeIdsForWay->lastError().text());
+  }
+
+  return _selectNodeIdsForWay;
 }
 
 vector<RelationData::Entry> ServicesDb::selectMembersForRelation(long relationId)
