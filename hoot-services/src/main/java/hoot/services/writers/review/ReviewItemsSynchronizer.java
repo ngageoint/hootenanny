@@ -557,6 +557,7 @@ public class ReviewItemsSynchronizer
     //set all review records for this map ID to reviewed
   	new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), reviewItems)
       .set(reviewItems.reviewStatus, DbUtils.review_status_enum.reviewed)
+      .where(reviewItems.mapId.eq(mapId))
       .execute();
   	
   	//drop all review tags from all elements in the osm table
