@@ -437,6 +437,9 @@ public class Relation extends Element
 
 	}
 
+	/*
+	 * relations of size = 0 are allowed; see http://wiki.openstreetmap.org/wiki/Empty_relations
+	 */
 	private void validateMembersSize(final NodeList membersXml) throws Exception
 	{
 		if (!entityChangeType.equals(EntityChangeType.DELETE))
@@ -446,11 +449,6 @@ public class Relation extends Element
 			if (membersXml != null)
 			{
 				numMembers = membersXml.getLength();
-			}
-			if (numMembers < 1)
-			{
-				throw new Exception("Too few members specified for relation with ID: "
-						+ relationRecord.getId());
 			}
 		}
 	}
@@ -709,16 +707,13 @@ public class Relation extends Element
 
 	/*
 	 * Adds this relation's members to the services database
+	 * 
+	 * relations of size = 0 are allowed; see http://wiki.openstreetmap.org/wiki/Empty_relations
 	 */
 	private void addMembers(final long mapId, final List<RelationMember> members)
 			throws Exception
 	{
 		CurrentRelations relationRecord = (CurrentRelations) record;
-		if (members == null || members.size() < 1)
-		{
-			throw new Exception("Too few members specified for relation with ID: "
-					+ relationRecord.getId());
-		}
 		final Set<Long> nodeIds = getMemberIdsByType(members, ElementType.Node);
 		if (!Element.allElementsExist(getMapId(), ElementType.Node, nodeIds, conn))
 		{

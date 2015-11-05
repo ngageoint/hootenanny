@@ -1072,7 +1072,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
       .where(changesets.id.eq(changesetId)).singleResult(changesets);
       try
       {
-        //changeset = changesetDao.findById(changesetId);
       	changeset =
             new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
             .where(changesets.id.eq(changesetId)).singleResult(changesets);
@@ -1358,24 +1357,15 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     }
   }
 
-  @Test(expected=UniformInterfaceException.class)
   @Category(UnitTest.class)
   public void testUploadCreateNoMembersInRelation() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
     final long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-    final Set<Long> nodeIds =
-      OsmTestUtils.createTestNodes(changesetId, originalBounds);
-    final Set<Long> wayIds =
-      OsmTestUtils.createTestWays(changesetId, nodeIds);
-    final Set<Long> relationIds =
-      OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
-    //A relation must have at least one member.  Try to upload a relation with no members.  The
-    //request should fail and no data in the system should be modified.
-    try
-    {
-      resource()
+    //relations with no members are allowed
+    final Document responseData = 
+    	resource()
         .path("api/0.6/changeset/" + changesetId + "/upload")
         .queryParam("mapId", "" + mapId)
         .type(MediaType.TEXT_XML)
@@ -1391,19 +1381,14 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
             "<modify/>" +
             "<delete if-unused=\"true\"/>" +
           "</osmChange>");
-    }
-    catch (UniformInterfaceException e)
-    {
-      ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(
-        r.getEntity(String.class).contains("Too few members specified for relation"));
-
-      OsmTestUtils.verifyTestDataUnmodified(
-        originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
-      throw e;
-    }
+    
+    Assert.assertEquals(
+    	1, XPathAPI.selectNodeList(responseData, "//osm/diffResult/relation").getLength());
+    Assert.assertEquals(
+    	1, 
+    	new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        .from(currentRelationsTbl)
+        .count());
   }
 
   @Test(expected=UniformInterfaceException.class)
