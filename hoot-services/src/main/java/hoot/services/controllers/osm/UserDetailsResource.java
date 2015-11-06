@@ -54,7 +54,6 @@ public class UserDetailsResource
 
   public UserDetailsResource()
   {
-    log.debug("Reading application settings...");
     appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
   }
 

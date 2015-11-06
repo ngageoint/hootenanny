@@ -383,6 +383,10 @@ public class ReviewItemsSynchronizerTest extends OsmResourceTestAbstract
 	public void testSetAllItemsReviewed() throws Exception
 	{
   	ReviewTestUtils.populateReviewDataForAllDataTypes();
+  	//populate one extra dummy dataset so that we can verify review records associated with other
+  	//map id's don't get deleted
+  	final long dummyMapId = (long)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE);
+  	ReviewTestUtils.populateReviewDataForAllDataTypes(dummyMapId);
   	
   	SetAllItemsReviewedRequest request = new SetAllItemsReviewedRequest();
   	request.setMapId(mapId);
@@ -400,6 +404,14 @@ public class ReviewItemsSynchronizerTest extends OsmResourceTestAbstract
     	    reviewItems.mapId.eq(mapId)
     	      .and(reviewItems.reviewStatus.eq(DbUtils.review_status_enum.reviewed)))
 	      .count());
+  	Assert.assertEquals(
+    		5, 
+    		new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+          .from(reviewItems)
+          .where(
+      	    reviewItems.mapId.eq(dummyMapId)
+      	      .and(reviewItems.reviewStatus.eq(DbUtils.review_status_enum.unreviewed)))
+  	      .count());
 	}
 	
 	@Test(expected=UniformInterfaceException.class)

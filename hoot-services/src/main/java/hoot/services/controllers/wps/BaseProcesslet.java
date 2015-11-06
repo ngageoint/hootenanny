@@ -68,7 +68,6 @@ public abstract class BaseProcesslet implements Processlet
           "coreJobServerUrl", HootProperties.getDefault("coreJobServerUrl"));
     }
 
-    log.debug("Reading application settings...");
     appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
   }
 
