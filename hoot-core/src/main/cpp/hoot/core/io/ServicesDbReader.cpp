@@ -30,6 +30,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/elements/ElementId.h>
 
 // Qt
 #include <QtSql/QSqlDatabase>
@@ -245,8 +246,10 @@ void ServicesDbReader::read(shared_ptr<OsmMap> map)
   }
   else // process BOUNDED REGION
   {
-    for (int ctr = ElementType::Node; ctr != ElementType::Relation; ctr++)
+    for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
     {
+        LOG_DEBUG("About to call bounded with element");
+        LOG_DEBUG(ctr);
       ElementType::Type elementType = static_cast<ElementType::Type>(ctr);
       _readBounded(map, elementType);
     }
@@ -314,8 +317,6 @@ void ServicesDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& e
               {
                 if(tags.size()>0)
                 {
-                    LOG_DEBUG("1TAGS =");
-                    LOG_DEBUG(tags.join(", "));
                   element->setTags( ServicesDb::unescapeTags(tags.join(", ")) );
                   _addTagsToElement( element );
                 }
@@ -343,8 +344,6 @@ void ServicesDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& e
           {
             if(tags.size()>0)
             {
-                LOG_DEBUG("2TAGS =");
-                LOG_DEBUG(tags.join(", "));
               element->setTags( ServicesDb::unescapeTags(tags.join(", ")) );
               _addTagsToElement( element );
             }
@@ -405,7 +404,90 @@ void ServicesDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& e
         // RELATIONS
         ///////////////////////////////////////////////////////////////////
         case ElementType::Relation:
-          element = _resultToRelation_OsmApi(*elementResultsIterator, *map);
+          while( elementResultsIterator->next() )
+          {
+            long long relId = elementResultsIterator->value(0).toLongLong();
+            vector<RelationData::Entry> members = _database.selectMembersForRelation( relId );
+            for(vector<RelationData::Entry>::iterator it = members.begin(); it != members.end(); ++it)
+            {
+              ElementId eid = (*it).getElementId();
+              QString type = eid.getType().toString();
+              long idFromRelation = eid.getId();
+              if(type == "Node")
+              {
+                shared_ptr<QSqlQuery> nodeIterator = _database.selectBoundedElements(
+                            idFromRelation, ElementType::Node, _bbox);
+                if( nodeIterator->next() ) // we found a relation in the bounds
+                {
+                  // process the relation into a data structure
+                  shared_ptr<Element> element = _resultToRelation_OsmApi(*elementResultsIterator, *map);
+
+                  // get the way tags
+                  shared_ptr<QSqlQuery> relationTagIterator = _database.selectTagsForRelation_OsmApi( relId );
+                  while( relationTagIterator->next() )
+                  {
+                    // test for blank tag
+                    QString val1 = relationTagIterator->value(1).toString();
+                    QString val2 = relationTagIterator->value(2).toString();
+                    QString tag = "";
+                    if(val1!="" || val2!="") tag = "\""+val1+"\"=>\""+val2+"\"";
+                    if(tag != "") tags << tag;
+                  }
+                  if(tags.size()>0)
+                  {
+                    element->setTags( ServicesDb::unescapeTags(tags.join(", ")) );
+                    _addTagsToElement( element );
+                  }
+
+                  if (_status != Status::Invalid) { element->setStatus(_status); }
+                  map->addElement(element);
+                  tags.clear();
+                }
+              }
+              else if(type == "Way")
+              {
+                shared_ptr<QSqlQuery> nodeInfoIterator = _database.selectNodesForWay( idFromRelation );
+                bool foundOne = false;
+                while( nodeInfoIterator->next() && !foundOne)
+                {
+                  // do the bounds check
+                  double lat = nodeInfoIterator->value(ServicesDb::NODES_LATITUDE).toLongLong()/(double)ServicesDb::COORDINATE_SCALE;
+                  double lon = nodeInfoIterator->value(ServicesDb::NODES_LONGITUDE).toLongLong()/(double)ServicesDb::COORDINATE_SCALE;
+                  if(lat >= minLat && lat <= maxLat && lon >= minLon && lon <= maxLon) foundOne = true; // ToDo: process boundary condition
+                }
+                if( foundOne ) // we found a relation in the bounds
+                {
+                  // process the relation into a data structure
+                  shared_ptr<Element> element = _resultToRelation_OsmApi(*elementResultsIterator, *map);
+
+                  // get the way tags
+                  shared_ptr<QSqlQuery> relationTagIterator = _database.selectTagsForRelation_OsmApi( relId );
+                  while( relationTagIterator->next() )
+                  {
+                    // test for blank tag
+                    QString val1 = relationTagIterator->value(1).toString();
+                    QString val2 = relationTagIterator->value(2).toString();
+                    QString tag = "";
+                    if(val1!="" || val2!="") tag = "\""+val1+"\"=>\""+val2+"\"";
+                   if(tag != "") tags << tag;
+                  }
+                  if(tags.size()>0)
+                  {
+                    element->setTags( ServicesDb::unescapeTags(tags.join(", ")) );
+                    _addTagsToElement( element );
+                  }
+
+                  if (_status != Status::Invalid) { element->setStatus(_status); }
+                  map->addElement(element);
+                  tags.clear();
+                }
+              }
+              else
+              {
+                LOG_DEBUG("A relation found.  Not sure what to do with yet.");
+              }
+            }
+          }
           break;
 
         default:
