@@ -1,262 +1,316 @@
-15:42:09.232 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-output/translation/MgcpTestLines.shp MgcpTestLines
-Loading test-output/translation/MgcpTestLines.shp MgcpTestLines 0 / 2   15:42:09.245 WARN  ...ata/hoot/rules/lib/HootLib.js"( 167) "Expected a number for:: LTN got asdf instead. Dropping LTN"
+23:02:30.950 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:30.950 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:30.950 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
+23:02:30.950 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:30.951 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:30.951 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:30.954 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:30.954 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+23:02:30.957 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-output/translation/MgcpTestLines.shp MgcpTestLines
+23:02:30.965 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:30.965 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:30.965 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
+23:02:30.965 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:30.966 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:30.966 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:30.968 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:30.969 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+Loading test-output/translation/MgcpTestLines.shp MgcpTestLines 0 / 2   23:02:30.974 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Expected a number for:: LTN got asdf instead. Dropping LTN"
 
 Reprojecting 0 / 6         
-15:42:09.291 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-15:42:09.291 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+23:02:30.991 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+23:02:30.991 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
 MergeNearbyNodes 6 elapsed: 0ms        
-15:42:09.291 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+23:02:30.991 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 2        Ways: 2 / 2        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 6         
-15:42:10.810 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/MGCPv3/AAL015.shp AAL015
+23:02:31.165 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:31.165 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:31.165 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
+23:02:31.165 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:31.165 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:31.166 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:31.168 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:31.169 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+23:02:31.170 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/MGCPv3/AAL015.shp AAL015
+23:02:31.177 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:31.177 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:31.178 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
+23:02:31.178 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:31.178 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:31.179 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:31.181 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:31.181 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
 Loading test-files/MGCPv3/AAL015.shp AAL015 0 / 8   
 Reprojecting 0 / 40         
-15:42:12.108 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-15:42:12.108 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
-MergeNearbyNodes 0 1    MergeNearbyNodes 32 elapsed: 1ms        
-15:42:12.109 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+23:02:31.203 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+23:02:31.203 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+MergeNearbyNodes 0 1    MergeNearbyNodes 32 elapsed: 0ms        
+23:02:31.203 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 8        Ways: 8 / 8        
 Relations: 0 / 0        
 Combining Parts: 0 / 8        Combining Parts: 8 / 8        
 Reprojecting 0 / 32         
-15:42:14.181 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/MGCPv3/AAL020.shp AAL020
+23:02:31.378 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:31.378 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:31.378 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MGCP_TRD4.js
+23:02:31.378 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:31.378 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:31.379 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/schema/__init__.js
+23:02:31.400 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:31.403 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:31.403 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+23:02:31.644 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:31.644 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:31.644 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
+23:02:31.644 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:31.644 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:31.645 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:31.647 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:31.648 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+23:02:31.649 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/MGCPv3/AAL020.shp AAL020
+23:02:31.656 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:31.656 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:31.656 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
+23:02:31.656 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:31.657 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:31.657 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:31.660 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:31.660 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
 Loading test-files/MGCPv3/AAL020.shp AAL020 0 / 10   
 Reprojecting 0 / 50         
-15:42:15.479 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-15:42:15.480 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+23:02:31.682 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+23:02:31.682 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
 MergeNearbyNodes 50 elapsed: 0ms        
-15:42:15.480 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+23:02:31.682 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 10        Ways: 10 / 10        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 50         
-15:42:15.619 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:42:15.619 WARN  ...core/scoring/MapComparator.cpp( 136) < area = 
-15:42:15.619 WARN  ...core/scoring/MapComparator.cpp( 137) > area = yes
-15:42:15.619 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:42:15.619 WARN  ...core/scoring/MapComparator.cpp( 136) < area = 
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 137) > area = yes
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 136) < area = 
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 137) > area = yes
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 136) < area = 
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 137) > area = yes
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 136) < area = 
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 137) > area = yes
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 136) < area = 
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 137) > area = yes
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 136) < area = 
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 137) > area = yes
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 136) < area = 
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 137) > area = yes
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 136) < area = 
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 137) > area = yes
-15:42:15.620 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-3,53c3,53
-<     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4463031240471516" lon="153.0716510061599820"/>
-<     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4463031240471516" lon="153.0821926288960810"/>
-<     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4609253749391904" lon="153.0818525765497782"/>
-<     <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4604152964196970" lon="153.0709709014673194"/>
-<     <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4602452702465314" lon="153.0709709014673194"/>
-<     <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4461330978739895" lon="153.0570287552679360"/>
-<     <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4461330978739930" lon="153.0675703780040351"/>
-<     <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4607553487660176" lon="153.0672303256577322"/>
-<     <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4602452702465314" lon="153.0563486505752735"/>
-<     <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4600752440733764" lon="153.0563486505752735"/>
-<     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4655160816145916" lon="153.1206185440309469"/>
-<     <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4655160816145880" lon="153.1311601667670743"/>
-<     <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4801383325066269" lon="153.1308201144207715"/>
-<     <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4796282539871370" lon="153.1199384393383127"/>
-<     <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4794582278139750" lon="153.1199384393383127"/>
-<     <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4641558722292878" lon="153.1051461622731438"/>
-<     <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4641558722292913" lon="153.1156877850092428"/>
-<     <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4787781231213266" lon="153.1153477326629400"/>
-<     <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4782680446018333" lon="153.1044660575804812"/>
-<     <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4780980184286641" lon="153.1044660575804812"/>
-<     <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4643258984024463" lon="153.0874634402641732"/>
-<     <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4643258984024499" lon="153.0980050630002722"/>
-<     <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4789481492944887" lon="153.0976650106539410"/>
-<     <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4784380707749953" lon="153.0867833355715106"/>
-<     <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4782680446018333" lon="153.0867833355715106"/>
-<     <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4626256366708219" lon="153.0711409276404709"/>
-<     <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4626256366708184" lon="153.0816825503765699"/>
-<     <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4772478875628536" lon="153.0813424980302671"/>
-<     <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4767378090433674" lon="153.0704608229478083"/>
-<     <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4765677828702017" lon="153.0704608229478083"/>
-<     <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4466431763934793" lon="153.1216387010699691"/>
-<     <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4466431763934793" lon="153.1321803238060681"/>
-<     <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4612654272855110" lon="153.1318402714597653"/>
-<     <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4607553487660176" lon="153.1209585963773065"/>
-<     <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4605853225928627" lon="153.1209585963773065"/>
-<     <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4463031240471480" lon="153.1063363454852890"/>
-<     <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4463031240471516" lon="153.1168779682213881"/>
-<     <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4609253749391904" lon="153.1165379158750852"/>
-<     <node visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4604152964196970" lon="153.1056562407926265"/>
-<     <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4602452702465278" lon="153.1056562407926265"/>
-<     <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4463031240471480" lon="153.0888236496494699"/>
-<     <node visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4463031240471516" lon="153.0993652723855689"/>
-<     <node visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4609253749391833" lon="153.0990252200392661"/>
-<     <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4604152964196935" lon="153.0881435449567789"/>
-<     <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4602452702465349" lon="153.0881435449567789"/>
-<     <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4629656890171461" lon="153.0561786244021221"/>
-<     <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4629656890171425" lon="153.0667202471382211"/>
-<     <node visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4775879399091814" lon="153.0663801947919183"/>
-<     <node visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4770778613896880" lon="153.0554985197094595"/>
-<     <node visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4769078352165188" lon="153.0554985197094595"/>
-<     <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471516" lon="153.0716510061599820"/>
->     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471516" lon="153.0821926288960810"/>
->     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4609253749391904" lon="153.0818525765497782"/>
->     <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4604152964196970" lon="153.0709709014673194"/>
->     <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4602452702465314" lon="153.0709709014673194"/>
->     <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4461330978739895" lon="153.0570287552679360"/>
->     <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4461330978739930" lon="153.0675703780040351"/>
->     <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4607553487660176" lon="153.0672303256577322"/>
->     <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4602452702465314" lon="153.0563486505752735"/>
->     <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4600752440733764" lon="153.0563486505752735"/>
->     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4655160816145916" lon="153.1206185440309469"/>
->     <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4655160816145880" lon="153.1311601667670743"/>
->     <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4801383325066269" lon="153.1308201144207715"/>
->     <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4796282539871370" lon="153.1199384393383127"/>
->     <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4794582278139750" lon="153.1199384393383127"/>
->     <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4641558722292878" lon="153.1051461622731438"/>
->     <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4641558722292913" lon="153.1156877850092428"/>
->     <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4787781231213266" lon="153.1153477326629400"/>
->     <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4782680446018333" lon="153.1044660575804812"/>
->     <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4780980184286641" lon="153.1044660575804812"/>
->     <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4643258984024463" lon="153.0874634402641732"/>
->     <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4643258984024499" lon="153.0980050630002722"/>
->     <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4789481492944887" lon="153.0976650106539410"/>
->     <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4784380707749953" lon="153.0867833355715106"/>
->     <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4782680446018333" lon="153.0867833355715106"/>
->     <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4626256366708219" lon="153.0711409276404709"/>
->     <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4626256366708184" lon="153.0816825503765699"/>
->     <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4772478875628536" lon="153.0813424980302671"/>
->     <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4767378090433674" lon="153.0704608229478083"/>
->     <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4765677828702017" lon="153.0704608229478083"/>
->     <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4466431763934793" lon="153.1216387010699691"/>
->     <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4466431763934793" lon="153.1321803238060681"/>
->     <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4612654272855110" lon="153.1318402714597653"/>
->     <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4607553487660176" lon="153.1209585963773065"/>
->     <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4605853225928627" lon="153.1209585963773065"/>
->     <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471480" lon="153.1063363454852890"/>
->     <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471516" lon="153.1168779682213881"/>
->     <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4609253749391904" lon="153.1165379158750852"/>
->     <node visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4604152964196970" lon="153.1056562407926265"/>
->     <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4602452702465278" lon="153.1056562407926265"/>
->     <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471480" lon="153.0888236496494699"/>
->     <node visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471516" lon="153.0993652723855689"/>
->     <node visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4609253749391833" lon="153.0990252200392661"/>
->     <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4604152964196935" lon="153.0881435449567789"/>
->     <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4602452702465349" lon="153.0881435449567789"/>
->     <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4629656890171461" lon="153.0561786244021221"/>
->     <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4629656890171425" lon="153.0667202471382211"/>
->     <node visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4775879399091814" lon="153.0663801947919183"/>
->     <node visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4770778613896880" lon="153.0554985197094595"/>
->     <node visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4769078352165188" lon="153.0554985197094595"/>
->     <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
-60c60
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.436Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.013Z"/>
-67a68
->         <tag k="area" v="yes"/>
-73c74
-<     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
-80c81
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.436Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.013Z"/>
-88a90
->         <tag k="area" v="yes"/>
-95c97
-<     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
-102c104
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.436Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.013Z"/>
-109a112
->         <tag k="area" v="yes"/>
-116c119
-<     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
-123c126
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.436Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.013Z"/>
-131a135
->         <tag k="area" v="yes"/>
-138c142
-<     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
-145c149
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.435Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.013Z"/>
-152a157
->         <tag k="area" v="yes"/>
-159c164
-<     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
-166c171
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.435Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.013Z"/>
-174a180
->         <tag k="area" v="yes"/>
-181c187
-<     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
-188c194
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.435Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.013Z"/>
-197a204
->         <tag k="area" v="yes"/>
-204c211
-<     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
-211c218
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.434Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.013Z"/>
-220a228
->         <tag k="area" v="yes"/>
-227c235
-<     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
-234c242
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.434Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.012Z"/>
-243a252
->         <tag k="area" v="yes"/>
-250c259
-<     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-257c266
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:14.191Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.012Z"/>
-263a273
->         <tag k="area" v="yes"/>
+23:02:31.853 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:31.853 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:31.853 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MGCP_TRD4.js
+23:02:31.853 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:31.854 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:31.854 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/schema/__init__.js
+23:02:31.875 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:31.877 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:31.878 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+23:02:32.125 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:32.125 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:32.125 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
+23:02:32.125 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:32.125 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:32.126 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:32.128 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:32.129 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+23:02:32.130 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/MGCPv3/LAN010.shp LAN010
+23:02:32.137 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:32.137 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:32.137 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
+23:02:32.137 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:32.138 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:32.138 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:32.141 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:32.141 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+Loading test-files/MGCPv3/LAN010.shp LAN010 0 / 6   
+Reprojecting 0 / 18         
+23:02:32.163 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+23:02:32.164 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+MergeNearbyNodes 18 elapsed: 0ms        
+23:02:32.164 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+Ways: 0 / 6        Ways: 6 / 6        
+Relations: 0 / 0        
+Combining Parts: 0 / 0        
+Reprojecting 0 / 18         
+23:02:32.340 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:32.340 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:32.340 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MGCP_TRD4.js
+23:02:32.340 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:32.341 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:32.341 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/schema/__init__.js
+23:02:32.362 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:32.364 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:32.365 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+23:02:32.607 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:32.607 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:32.607 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
+23:02:32.607 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:32.608 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:32.608 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:32.611 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:32.611 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+23:02:32.612 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/MGCPv3/LAP010.shp LAP010
+23:02:32.620 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:32.620 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:32.620 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
+23:02:32.620 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:32.620 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:32.621 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:32.623 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:32.624 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+Loading test-files/MGCPv3/LAP010.shp LAP010 0 / 3   
+Reprojecting 0 / 9         
+23:02:32.652 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+23:02:32.653 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+MergeNearbyNodes 0 1    MergeNearbyNodes 6 elapsed: 0ms        
+23:02:32.653 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+Ways: 0 / 3        Ways: 3 / 3        
+Relations: 0 / 0        
+Combining Parts: 0 / 0        
+Reprojecting 0 / 6         
+23:02:32.826 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:32.826 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:32.826 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MGCP_TRD4.js
+23:02:32.826 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:32.827 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:32.827 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/schema/__init__.js
+23:02:32.848 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:32.850 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:32.851 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+23:02:33.091 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:33.091 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:33.091 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
+23:02:33.091 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:33.092 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:33.092 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:33.095 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:33.095 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+23:02:33.096 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/MGCPv3/LAP030.shp LAP030
+23:02:33.103 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:33.103 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:33.104 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
+23:02:33.104 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:33.104 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:33.105 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:33.107 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:33.107 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+Loading test-files/MGCPv3/LAP030.shp LAP030 0 / 6   
+Reprojecting 0 / 12         
+23:02:33.134 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+23:02:33.134 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+MergeNearbyNodes 12 elapsed: 0ms        
+23:02:33.134 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+Ways: 0 / 6        Ways: 6 / 6        
+Relations: 0 / 0        
+Combining Parts: 0 / 0        
+Reprojecting 0 / 12         
+23:02:33.308 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:33.308 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:33.308 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MGCP_TRD4.js
+23:02:33.308 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:33.309 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:33.309 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/schema/__init__.js
+23:02:33.330 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:33.333 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:33.333 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+23:02:33.573 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:33.573 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:33.573 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
+23:02:33.573 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:33.573 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:33.574 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:33.576 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:33.577 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+23:02:33.577 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/MGCPv3/LAP050.shp LAP050
+23:02:33.585 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:33.585 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:33.585 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
+23:02:33.585 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:33.586 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:33.586 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:33.589 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:33.589 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+Loading test-files/MGCPv3/LAP050.shp LAP050 0 / 6   
+Reprojecting 0 / 12         
+23:02:33.613 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+23:02:33.613 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+MergeNearbyNodes 12 elapsed: 0ms        
+23:02:33.613 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+Ways: 0 / 6        Ways: 6 / 6        
+Relations: 0 / 0        
+Combining Parts: 0 / 0        
+Reprojecting 0 / 12         
+23:02:33.780 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:33.780 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:33.780 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MGCP_TRD4.js
+23:02:33.780 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:33.781 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:33.781 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/schema/__init__.js
+23:02:33.802 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:33.805 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:33.805 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+23:02:34.049 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:34.049 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:34.049 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
+23:02:34.049 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:34.050 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:34.050 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:34.053 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:34.053 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+23:02:34.054 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/MGCPv3/LBH140.shp LBH140
+23:02:34.061 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:34.061 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:34.062 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
+23:02:34.062 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:34.062 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:34.063 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:34.065 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:34.065 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+Loading test-files/MGCPv3/LBH140.shp LBH140 0 / 15   
+Reprojecting 0 / 30         
+23:02:34.083 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+23:02:34.083 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+MergeNearbyNodes 30 elapsed: 0ms        
+23:02:34.083 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+Ways: 0 / 15        Ways: 15 / 15        
+Relations: 0 / 0        
+Combining Parts: 0 / 0        
+Reprojecting 0 / 30         
+23:02:34.252 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:34.252 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:34.252 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MGCP_TRD4.js
+23:02:34.252 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:34.253 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:34.253 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/schema/__init__.js
+23:02:34.274 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:34.277 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:34.277 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+23:02:34.523 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:34.523 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:34.523 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
+23:02:34.523 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:34.524 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:34.524 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:34.526 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:34.527 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+23:02:34.528 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/MGCPv3/PAL015.shp PAL015
+23:02:34.535 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:34.535 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:34.535 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
+23:02:34.536 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:34.536 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:34.536 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:34.539 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:34.539 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+Loading test-files/MGCPv3/PAL015.shp PAL015 0 / 40   
+Reprojecting 0 / 40         
+23:02:34.565 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+23:02:34.565 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+MergeNearbyNodes 40 elapsed: 0ms        
+23:02:34.565 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+Ways: 0 / 0        
+Relations: 0 / 0        
+Combining Parts: 0 / 0        
+Reprojecting 0 / 40         
+23:02:34.739 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:34.740 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+23:02:34.740 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MGCP_TRD4.js
+23:02:34.740 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+23:02:34.740 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
+23:02:34.741 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/schema/__init__.js
+23:02:34.761 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
+23:02:34.763 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+23:02:34.764 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js

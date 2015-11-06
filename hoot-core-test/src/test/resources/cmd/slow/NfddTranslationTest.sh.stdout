@@ -1,1666 +1,475 @@
-15:42:15.861 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/AIRCRAFT_HANGAR_P.shp AIRCRAFT_HANGAR_P
+15:09:32.505 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:32.505 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:32.505 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:32.505 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:32.506 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:32.544 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:32.551 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:32.552 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:32.552 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:32.555 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/AIRCRAFT_HANGAR_P.shp AIRCRAFT_HANGAR_P
+15:09:32.562 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:32.562 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:32.563 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:32.563 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:32.563 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:32.600 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:32.607 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:32.608 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:32.608 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/AIRCRAFT_HANGAR_P.shp AIRCRAFT_HANGAR_P 0 / 2   
-15:42:15.879 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/BUILDING_P.shp BUILDING_P
+15:09:32.624 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:32.624 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:32.624 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:32.624 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:32.625 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:32.663 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:32.671 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:32.671 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:32.672 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:32.672 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/BUILDING_P.shp BUILDING_P
+15:09:32.680 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:32.680 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:32.680 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:32.680 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:32.680 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:32.717 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:32.722 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:32.723 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:32.723 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/BUILDING_P.shp BUILDING_P 0 / 38   
-15:42:15.897 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/BUILDING_S.shp BUILDING_S
+15:09:32.744 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:32.744 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:32.744 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:32.744 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:32.744 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:32.780 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:32.785 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:32.786 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:32.786 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:32.787 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/BUILDING_S.shp BUILDING_S
+15:09:32.794 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:32.794 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:32.794 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:32.794 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:32.795 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:32.831 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:32.837 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:32.837 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:32.837 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/BUILDING_S.shp BUILDING_S 0 / 9   
-15:42:17.137 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/BUILDING_SUPERSTRUCTURE_P.shp BUILDING_SUPERSTRUCTURE_P
+15:09:32.853 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:32.853 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:32.854 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:32.854 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:32.854 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:32.891 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:32.896 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:32.896 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:32.897 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:32.897 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/BUILDING_SUPERSTRUCTURE_P.shp BUILDING_SUPERSTRUCTURE_P
+15:09:32.905 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:32.905 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:32.905 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:32.905 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:32.906 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:32.942 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:32.948 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:32.951 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:32.952 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/BUILDING_SUPERSTRUCTURE_P.shp BUILDING_SUPERSTRUCTURE_P 0 / 4   
-15:42:17.139 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/BUILT-UP_AREA_P.shp BUILT-UP_AREA_P
+15:09:32.966 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:32.966 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:32.966 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:32.966 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:32.966 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:33.005 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:33.011 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:33.011 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:33.012 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:33.013 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/BUILT-UP_AREA_P.shp BUILT-UP_AREA_P
+15:09:33.020 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.020 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.020 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:33.020 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:33.021 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:33.060 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:33.066 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:33.067 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:33.067 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/BUILT-UP_AREA_P.shp BUILT-UP_AREA_P 0 / 5   
-15:42:17.142 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/BUILT-UP_AREA_S.shp BUILT-UP_AREA_S
+15:09:33.081 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.081 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.081 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:33.081 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:33.082 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:33.130 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:33.136 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:33.136 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:33.136 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:33.137 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/BUILT-UP_AREA_S.shp BUILT-UP_AREA_S
+15:09:33.145 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.145 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.145 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:33.145 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:33.146 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:33.182 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:33.188 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:33.188 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:33.189 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/BUILT-UP_AREA_S.shp BUILT-UP_AREA_S 0 / 8   
-15:42:17.145 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/CART_TRACK_C.shp CART_TRACK_C
+15:09:33.202 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.202 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.202 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:33.202 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:33.203 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:33.239 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:33.245 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:33.245 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:33.245 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:33.246 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/CART_TRACK_C.shp CART_TRACK_C
+15:09:33.254 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.254 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.254 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:33.254 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:33.255 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:33.291 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:33.297 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:33.297 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:33.298 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/CART_TRACK_C.shp CART_TRACK_C 0 / 4   
-15:42:17.148 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/CONTROL_TOWER_P.shp CONTROL_TOWER_P
+15:09:33.310 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.310 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.310 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:33.310 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:33.310 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:33.347 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:33.353 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:33.353 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:33.353 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:33.354 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/CONTROL_TOWER_P.shp CONTROL_TOWER_P
+15:09:33.361 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.361 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.361 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:33.362 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:33.362 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:33.399 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:33.404 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:33.411 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:33.411 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/CONTROL_TOWER_P.shp CONTROL_TOWER_P 0 / 5   
-15:42:17.151 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/FACILITY_P.shp FACILITY_P
+15:09:33.425 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.425 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.425 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:33.425 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:33.426 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:33.464 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:33.470 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:33.471 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:33.471 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:33.472 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/FACILITY_P.shp FACILITY_P
+15:09:33.479 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.479 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.479 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:33.479 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:33.480 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:33.519 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:33.525 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:33.525 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:33.526 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/FACILITY_P.shp FACILITY_P 0 / 6   
-15:42:17.154 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/FACILITY_S.shp FACILITY_S
+15:09:33.540 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.540 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.540 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:33.540 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:33.541 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:33.580 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:33.585 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:33.592 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:33.592 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:33.593 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/FACILITY_S.shp FACILITY_S
+15:09:33.601 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.601 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.601 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:33.601 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:33.602 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:33.640 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:33.646 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:33.646 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:33.647 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/FACILITY_S.shp FACILITY_S 0 / 4   
-15:42:17.157 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/HUT_P.shp HUT_P
+15:09:33.661 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.661 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.661 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:33.661 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:33.662 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:33.712 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:33.717 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:33.718 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:33.718 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:33.719 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/HUT_P.shp HUT_P
+15:09:33.726 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.726 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.726 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:33.726 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:33.727 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:33.763 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:33.769 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:33.769 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:33.769 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/HUT_P.shp HUT_P 0 / 5   
-15:42:17.159 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/PYLON_P.shp PYLON_P
+15:09:33.781 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.781 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.782 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:33.782 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:33.782 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:33.819 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:33.824 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:33.824 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:33.825 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:33.825 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/PYLON_P.shp PYLON_P
+15:09:33.833 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.833 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.833 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:33.833 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:33.834 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:33.870 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:33.875 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:33.876 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:33.876 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/PYLON_P.shp PYLON_P 0 / 3   
-15:42:17.161 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/RAILWAY_C.shp RAILWAY_C
+15:09:33.888 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.888 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.888 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:33.888 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:33.889 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:33.925 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:33.930 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:33.931 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:33.931 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:33.932 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/RAILWAY_C.shp RAILWAY_C
+15:09:33.939 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.939 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:33.939 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:33.939 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:33.940 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:33.977 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:33.982 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:33.989 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:33.990 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/RAILWAY_C.shp RAILWAY_C 0 / 7   
-15:42:17.164 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/RIVER_C.shp RIVER_C
+15:09:34.002 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.002 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.002 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:34.002 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:34.003 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:34.039 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:34.045 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:34.045 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:34.046 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:34.046 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/RIVER_C.shp RIVER_C
+15:09:34.053 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.053 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.054 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:34.054 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:34.054 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:34.090 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:34.096 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:34.096 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:34.097 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/RIVER_C.shp RIVER_C 0 / 16   
-15:42:17.172 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/ROAD_C.shp ROAD_C
+15:09:34.111 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.111 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.111 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:34.112 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:34.112 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:34.149 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:34.155 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:34.161 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:34.162 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:34.162 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/ROAD_C.shp ROAD_C
+15:09:34.170 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.170 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.170 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:34.170 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:34.171 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:34.209 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:34.215 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:34.216 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:34.216 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/ROAD_C.shp ROAD_C 0 / 7   
-15:42:17.175 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/SHED_P.shp SHED_P
+15:09:34.232 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.232 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.232 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:34.232 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:34.232 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:34.271 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:34.277 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:34.278 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:34.278 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:34.279 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/SHED_P.shp SHED_P
+15:09:34.286 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.286 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.286 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:34.287 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:34.287 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:34.326 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:34.332 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:34.333 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:34.333 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/SHED_P.shp SHED_P 0 / 3   
-15:42:17.177 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/SHED_S.shp SHED_S
+15:09:34.353 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.353 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.353 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:34.353 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:34.354 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:34.392 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:34.398 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:34.399 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:34.399 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:34.400 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/SHED_S.shp SHED_S
+15:09:34.407 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.407 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.407 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:34.408 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:34.408 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:34.447 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:34.453 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:34.454 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:34.454 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/SHED_S.shp SHED_S 0 / 2   
-15:42:17.179 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/STADIUM_S.shp STADIUM_S
-15:42:17.180 WARN  ...ata/hoot/rules/lib/HootLib.js"( 167) "OTH:: Attribute :MCC: is supposed to be 999/Other. It is not set. Skipping it."
+15:09:34.468 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.468 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.468 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:34.468 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:34.468 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:34.508 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:34.514 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:34.515 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:34.515 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:34.516 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/STADIUM_S.shp STADIUM_S
+15:09:34.523 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.523 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.523 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:34.524 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:34.524 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:34.563 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:34.569 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:34.570 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:34.570 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:34.575 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "OTH:: Attribute :MCC: is supposed to be 999/Other. It is not set. Skipping it."
 Loading test-files/NFDD_TDSv4/STADIUM_S.shp STADIUM_S 0 / 2   
-15:42:17.181 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/TOWER_P.shp TOWER_P
+15:09:34.591 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.591 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.591 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:34.591 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:34.592 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:34.631 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:34.637 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:34.637 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:34.638 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:34.639 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/TOWER_P.shp TOWER_P
+15:09:34.646 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.646 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.646 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:34.646 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:34.647 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:34.703 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:34.709 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:34.709 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:34.709 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/TOWER_P.shp TOWER_P 0 / 6   
-15:42:17.186 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/TRAIL_C.shp TRAIL_C
+15:09:34.722 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.722 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.722 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:34.722 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:34.723 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:34.760 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:34.766 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:34.766 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:34.766 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:34.767 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/TRAIL_C.shp TRAIL_C
+15:09:34.774 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.774 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.774 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:34.775 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:34.775 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:34.811 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:34.817 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:34.817 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:34.818 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/TRAIL_C.shp TRAIL_C 0 / 7   
-15:42:17.188 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv4/TRANSPORTATION_STATION_P.shp TRANSPORTATION_STATION_P
+15:09:34.830 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.830 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.830 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:34.830 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:34.831 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:34.868 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:34.873 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:34.874 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:34.874 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:34.875 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/NFDD_TDSv4/TRANSPORTATION_STATION_P.shp TRANSPORTATION_STATION_P
+15:09:34.882 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.882 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:34.882 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:34.882 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:34.883 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:34.919 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:34.925 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:34.925 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:34.926 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
 Loading test-files/NFDD_TDSv4/TRANSPORTATION_STATION_P.shp TRANSPORTATION_STATION_P 0 / 3   
 Reprojecting 0 / 294         
-15:42:17.284 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-15:42:17.284 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
-MergeNearbyNodes 0 1    MergeNearbyNodes 279 elapsed: 3ms        
-15:42:17.287 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+15:09:34.968 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+15:09:34.968 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+MergeNearbyNodes 0 1    MergeNearbyNodes 279 elapsed: 1ms        
+15:09:34.969 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 66        Ways: 66 / 66        
 Relations: 0 / 0        
 Combining Parts: 0 / 13        Combining Parts: 13 / 13        
 Reprojecting 0 / 279         
-15:42:17.469 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 136) < area = 
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 137) > area = yes
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 136) < area = 
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 137) > area = yes
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 136) < area = 
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 137) > area = yes
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 136) < area = 
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 137) > area = yes
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 136) < area = 
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 137) > area = yes
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 136) < area = 
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 137) > area = yes
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 136) < area = 
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 137) > area = yes
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 136) < area = 
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 137) > area = yes
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 136) < area = 
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 137) > area = yes
-15:42:17.470 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-3c3
-<     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3670669453471120" lon="153.1348088644270433">
----
->     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3670669453471120" lon="153.1348088644270433">
-17c17
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.878Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.546Z"/>
-25,26c25,26
-<     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3830093579980307" lon="153.1866849690848085">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.879Z"/>
----
->     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3830093579980307" lon="153.1866849690848085">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.546Z"/>
-36c36
-<     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3551910609763276" lon="153.0798897137994459">
----
->     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3551910609763276" lon="153.0798897137994459">
-47c47
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.881Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.660Z"/>
-57c57
-<     <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3489174959950283" lon="153.0723523212778048">
----
->     <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3489174959950283" lon="153.0723523212778048">
-59c59
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.882Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.660Z"/>
-74c74
-<     <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3613204972742423" lon="153.0951367304635085">
----
->     <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3613204972742423" lon="153.0951367304635085">
-77c77
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.882Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.661Z"/>
-93c93
-<     <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3554041820521192" lon="153.1088747435583457">
----
->     <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3554041820521192" lon="153.1088747435583457">
-95c95
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.882Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.661Z"/>
-112c112
-<     <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3671464342120601" lon="153.0722121036109797">
----
->     <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3671464342120601" lon="153.0722121036109797">
-127c127
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.883Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.661Z"/>
-133c133
-<     <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3553177696351177" lon="153.1206011880129552">
----
->     <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3553177696351177" lon="153.1206011880129552">
-135c135
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.883Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.661Z"/>
-151c151
-<     <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3618249391992521" lon="153.1146985551249315">
----
->     <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3618249391992521" lon="153.1146985551249315">
-154c154
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.884Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.662Z"/>
-171c171
-<     <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3493432503869869" lon="153.0951127672499581">
----
->     <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3493432503869869" lon="153.0951127672499581">
-173c173
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.884Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.662Z"/>
-190c190
-<     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3616393883537548" lon="153.1089323707840606">
----
->     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3616393883537548" lon="153.1089323707840606">
-193c193
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.884Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.662Z"/>
-209c209
-<     <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3611844643170983" lon="153.0799760067764055">
----
->     <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3611844643170983" lon="153.0799760067764055">
-211c211
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.885Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.662Z"/>
-226c226
-<     <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3494637213724658" lon="153.1025694301153521">
----
->     <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3494637213724658" lon="153.1025694301153521">
-238c238
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.885Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.662Z"/>
-248,249c248,249
-<     <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3498783690497582" lon="153.1208289567668146">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.885Z"/>
----
->     <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498783690497582" lon="153.1208289567668146">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.663Z"/>
-266,267c266,267
-<     <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3616567836886837" lon="153.1208365965246685">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.886Z"/>
----
->     <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3616567836886837" lon="153.1208365965246685">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.663Z"/>
-280,281c280,281
-<     <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3550383186147137" lon="153.1276526628350609">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.886Z"/>
----
->     <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3550383186147137" lon="153.1276526628350609">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.663Z"/>
-297c297
-<     <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3494846154866558" lon="153.0878450789861631">
----
->     <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3494846154866558" lon="153.0878450789861631">
-299c299
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.887Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.663Z"/>
-316c316
-<     <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3551807571406620" lon="153.0951226492241517">
----
->     <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3551807571406620" lon="153.0951226492241517">
-318c318
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.887Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.663Z"/>
-331c331
-<     <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3550302953478912" lon="153.0723200037824938">
----
->     <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3550302953478912" lon="153.0723200037824938">
-339d338
-<         <tag k="name" v="Residential House"/>
-340a340
->         <tag k="name" v="Residential House"/>
-350c350
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.887Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.663Z"/>
-357c357
-<     <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3672681783417282" lon="153.0874559630275087">
----
->     <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3672681783417282" lon="153.0874559630275087">
-371c371
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.888Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.664Z"/>
-379,380c379,380
-<     <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3675899762107733" lon="153.1150252476068090">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.888Z"/>
----
->     <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3675899762107733" lon="153.1150252476068090">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.664Z"/>
-396c396
-<     <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3551316776950770" lon="153.1146594080182126">
----
->     <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3551316776950770" lon="153.1146594080182126">
-398c398
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.888Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.664Z"/>
-414,415c414,415
-<     <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3495625892536722" lon="153.1345447000032323">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.889Z"/>
----
->     <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3495625892536722" lon="153.1345447000032323">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.664Z"/>
-430c430
-<     <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3491402811469690" lon="153.0799969741597408">
----
->     <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3491402811469690" lon="153.0799969741597408">
-432c432
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.889Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.664Z"/>
-450c450
-<     <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3614914656853827" lon="153.1024525270879906">
----
->     <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3614914656853827" lon="153.1024525270879906">
-452c452
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.890Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.664Z"/>
-467c467
-<     <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3672986354791199" lon="153.0949535372358810">
----
->     <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3672986354791199" lon="153.0949535372358810">
-469c469
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.890Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.664Z"/>
-487c487
-<     <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3615447051822755" lon="153.0878782272478418">
----
->     <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3615447051822755" lon="153.0878782272478418">
-490c490
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.890Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.665Z"/>
-503c503
-<     <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3553774147008149" lon="153.1025475564638043">
----
->     <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3553774147008149" lon="153.1025475564638043">
-505c505
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.892Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.665Z"/>
-520c520
-<     <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3610064800120654" lon="153.0721254206466995">
----
->     <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3610064800120654" lon="153.0721254206466995">
-522c522
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.893Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.665Z"/>
-539,540c539,540
-<     <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3496817114895769" lon="153.1146748585752277">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.893Z"/>
----
->     <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3496817114895769" lon="153.1146748585752277">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.665Z"/>
-555c555
-<     <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3674952930392728" lon="153.1026673876897632">
----
->     <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3674952930392728" lon="153.1026673876897632">
-568c568
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.893Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.665Z"/>
-578,579c578,579
-<     <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3619384587453567" lon="153.1277678478489861">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.894Z"/>
----
->     <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3619384587453567" lon="153.1277678478489861">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.665Z"/>
-596c596
-<     <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3495215100153075" lon="153.1088703282008794">
----
->     <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3495215100153075" lon="153.1088703282008794">
-599c599
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.894Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.666Z"/>
-616,617c616,617
-<     <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3553182080778861" lon="153.0879616358091369">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.894Z"/>
----
->     <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3553182080778861" lon="153.0879616358091369">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.666Z"/>
-631c631
-<     <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3674807106049229" lon="153.1213093558860976">
----
->     <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3674807106049229" lon="153.1213093558860976">
-646c646
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.895Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.666Z"/>
-654c654
-<     <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3668293056664353" lon="153.0800777400004904">
----
->     <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3668293056664353" lon="153.0800777400004904">
-669c669
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.895Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.666Z"/>
-676c676
-<     <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3674189250628714" lon="153.1087615499867809">
----
->     <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3674189250628714" lon="153.1087615499867809">
-678c678
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.895Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.666Z"/>
-695c695
-<     <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3675801195806940" lon="153.1278579166307736">
----
->     <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3675801195806940" lon="153.1278579166307736">
-710c710
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.896Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.666Z"/>
-716,717c716,717
-<     <node visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3497234289403650" lon="153.1276267620594069">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.896Z"/>
----
->     <node visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3497234289403650" lon="153.1276267620594069">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.666Z"/>
-734,735c734,735
-<     <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3830270195731771" lon="153.1813644355934230">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.897Z"/>
----
->     <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3830270195731771" lon="153.1813644355934230">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.667Z"/>
-745,782c745,782
-<     <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4260605923855891" lon="153.0711096159979263"/>
-<     <node visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4258936348663696" lon="153.0841323024970393"/>
-<     <node visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4400850240000302" lon="153.0839653449778268"/>
-<     <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4399180664808178" lon="153.0712765735171388"/>
-<     <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4104181844545707" lon="153.1357195617999309"/>
-<     <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4102512269353582" lon="153.1487422482990439"/>
-<     <node visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4244426160690118" lon="153.1485752907798314"/>
-<     <node visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4242756585497993" lon="153.1358865193191434"/>
-<     <node visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4267406970782410" lon="153.1209272847347620"/>
-<     <node visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4265737395590214" lon="153.1339499712338750"/>
-<     <node visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4407651286926786" lon="153.1337830137146625"/>
-<     <node visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4405981711734626" lon="153.1210942422539745"/>
-<     <node visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4267638832534573" lon="153.0895405577593351"/>
-<     <node visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4267638832534573" lon="153.1000821804954626"/>
-<     <node visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4413861341454783" lon="153.0997421281491597"/>
-<     <node visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4408760556259885" lon="153.0888604530666726"/>
-<     <node visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4407060294528407" lon="153.0888604530666726"/>
-<     <node visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4270807494245688" lon="153.1051148506305708"/>
-<     <node visible="true" id="-62" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4269137919053527" lon="153.1181375371296838"/>
-<     <node visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4411051810390099" lon="153.1179705796104713"/>
-<     <node visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4409382235197938" lon="153.1052818081497833"/>
-<     <node visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4104181844545742" lon="153.1163365780593324"/>
-<     <node visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4102512269353547" lon="153.1293592645584454"/>
-<     <node visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4244426160690224" lon="153.1291923070392329"/>
-<     <node visible="true" id="-69" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4242756585497993" lon="153.1165035355785449"/>
-<     <node visible="true" id="-71" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4277608541172206" lon="153.1372497973584075"/>
-<     <node visible="true" id="-72" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4275938965980011" lon="153.1502724838575205"/>
-<     <node visible="true" id="-73" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4417852857316618" lon="153.1501055263383080"/>
-<     <node visible="true" id="-74" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4416183282124386" lon="153.1374167548776200"/>
-<     <node visible="true" id="-76" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4102481582814157" lon="153.1001840916088383"/>
-<     <node visible="true" id="-77" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4100812007621997" lon="153.1132067781079513"/>
-<     <node visible="true" id="-78" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4242725898958639" lon="153.1130398205887388"/>
-<     <node visible="true" id="-79" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4241056323766301" lon="153.1003510491280508"/>
-<     <node visible="true" id="-81" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4472460251350157" lon="153.1559758058690193"/>
-<     <node visible="true" id="-82" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4470790676158032" lon="153.1689984923681038"/>
-<     <node visible="true" id="-83" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4612704567494532" lon="153.1688315348488914"/>
-<     <node visible="true" id="-84" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4611034992302265" lon="153.1561427633882317"/>
-<     <node visible="true" id="-86" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3556276313675895" lon="153.1532276663120342">
----
->     <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4260605923855891" lon="153.0711096159979263"/>
->     <node visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4258936348663696" lon="153.0841323024970393"/>
->     <node visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4400850240000302" lon="153.0839653449778268"/>
->     <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4399180664808178" lon="153.0712765735171388"/>
->     <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4104181844545707" lon="153.1357195617999309"/>
->     <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4102512269353582" lon="153.1487422482990439"/>
->     <node visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4244426160690118" lon="153.1485752907798314"/>
->     <node visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4242756585497993" lon="153.1358865193191434"/>
->     <node visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4267406970782410" lon="153.1209272847347620"/>
->     <node visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4265737395590214" lon="153.1339499712338750"/>
->     <node visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4407651286926786" lon="153.1337830137146625"/>
->     <node visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4405981711734626" lon="153.1210942422539745"/>
->     <node visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4267638832534573" lon="153.0895405577593351"/>
->     <node visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4267638832534573" lon="153.1000821804954626"/>
->     <node visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4413861341454783" lon="153.0997421281491597"/>
->     <node visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4408760556259885" lon="153.0888604530666726"/>
->     <node visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4407060294528407" lon="153.0888604530666726"/>
->     <node visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4270807494245688" lon="153.1051148506305708"/>
->     <node visible="true" id="-62" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4269137919053527" lon="153.1181375371296838"/>
->     <node visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4411051810390099" lon="153.1179705796104713"/>
->     <node visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4409382235197938" lon="153.1052818081497833"/>
->     <node visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4104181844545742" lon="153.1163365780593324"/>
->     <node visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4102512269353547" lon="153.1293592645584454"/>
->     <node visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4244426160690224" lon="153.1291923070392329"/>
->     <node visible="true" id="-69" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4242756585497993" lon="153.1165035355785449"/>
->     <node visible="true" id="-71" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4277608541172206" lon="153.1372497973584075"/>
->     <node visible="true" id="-72" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4275938965980011" lon="153.1502724838575205"/>
->     <node visible="true" id="-73" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4417852857316618" lon="153.1501055263383080"/>
->     <node visible="true" id="-74" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4416183282124386" lon="153.1374167548776200"/>
->     <node visible="true" id="-76" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4102481582814157" lon="153.1001840916088383"/>
->     <node visible="true" id="-77" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4100812007621997" lon="153.1132067781079513"/>
->     <node visible="true" id="-78" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4242725898958639" lon="153.1130398205887388"/>
->     <node visible="true" id="-79" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4241056323766301" lon="153.1003510491280508"/>
->     <node visible="true" id="-81" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4472460251350157" lon="153.1559758058690193"/>
->     <node visible="true" id="-82" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4470790676158032" lon="153.1689984923681038"/>
->     <node visible="true" id="-83" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4612704567494532" lon="153.1688315348488914"/>
->     <node visible="true" id="-84" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4611034992302265" lon="153.1561427633882317"/>
->     <node visible="true" id="-86" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3556276313675895" lon="153.1532276663120342">
-784c784
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.138Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.894Z"/>
-798c798
-<     <node visible="true" id="-87" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3617221313676175" lon="153.1530528459964557">
----
->     <node visible="true" id="-87" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3617221313676175" lon="153.1530528459964557">
-800c800
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.138Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.894Z"/>
-814c814
-<     <node visible="true" id="-88" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3670881444417802" lon="153.1529877321243305">
----
->     <node visible="true" id="-88" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3670881444417802" lon="153.1529877321243305">
-816c816
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.138Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.894Z"/>
-830,831c830,831
-<     <node visible="true" id="-89" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3832105357953779" lon="153.1752433790204577">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.139Z"/>
----
->     <node visible="true" id="-89" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3832105357953779" lon="153.1752433790204577">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.895Z"/>
-842,843c842,843
-<     <node visible="true" id="-90" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3498269825651583" lon="153.1418447358926755">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.140Z"/>
----
->     <node visible="true" id="-90" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498269825651583" lon="153.1418447358926755">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.011Z"/>
-853d852
-<         <tag k="landuse" v="built_up_area"/>
-854a854
->         <tag k="landuse" v="built_up_area"/>
-857,858c857,858
-<     <node visible="true" id="-91" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3555007213724863" lon="153.1417852005552049">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.141Z"/>
----
->     <node visible="true" id="-91" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3555007213724863" lon="153.1417852005552049">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.011Z"/>
-870d869
-<         <tag k="landuse" v="built_up_area"/>
-871a871
->         <tag k="landuse" v="built_up_area"/>
-874,875c874,875
-<     <node visible="true" id="-92" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3619701421581709" lon="153.1419407639083943">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.141Z"/>
----
->     <node visible="true" id="-92" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3619701421581709" lon="153.1419407639083943">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.011Z"/>
-886d885
-<         <tag k="landuse" v="built_up_area"/>
-887a887
->         <tag k="landuse" v="built_up_area"/>
-890,891c890,891
-<     <node visible="true" id="-93" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3673729849577114" lon="153.1418234399279754">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.141Z"/>
----
->     <node visible="true" id="-93" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3673729849577114" lon="153.1418234399279754">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.011Z"/>
-902d901
-<         <tag k="landuse" v="built_up_area"/>
-903a903
->         <tag k="landuse" v="built_up_area"/>
-906,907c906,907
-<     <node visible="true" id="-94" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3828092892705151" lon="153.1696593985248001">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.141Z"/>
----
->     <node visible="true" id="-94" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3828092892705151" lon="153.1696593985248001">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.011Z"/>
-913d912
-<         <tag k="landuse" v="built_up_area"/>
-914a914
->         <tag k="landuse" v="built_up_area"/>
-917,965c917,965
-<     <node visible="true" id="-95" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4655160816145987" lon="153.1368317061420612"/>
-<     <node visible="true" id="-96" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4655160816145845" lon="153.1473733288781887"/>
-<     <node visible="true" id="-97" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4801383325066340" lon="153.1470332765318290"/>
-<     <node visible="true" id="-98" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4796282539871406" lon="153.1361516014494271"/>
-<     <node visible="true" id="-99" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4794582278139714" lon="153.1361516014494271"/>
-<     <node visible="true" id="-100" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4626256366708148" lon="153.0873540897515852"/>
-<     <node visible="true" id="-101" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4626256366708184" lon="153.0978957124876558"/>
-<     <node visible="true" id="-102" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4772478875628501" lon="153.0975556601413530"/>
-<     <node visible="true" id="-103" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4767378090433674" lon="153.0866739850588942"/>
-<     <node visible="true" id="-104" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4765677828702195" lon="153.0866739850588942"/>
-<     <node visible="true" id="-105" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4629656890171496" lon="153.0723917865132080"/>
-<     <node visible="true" id="-106" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4629656890171390" lon="153.0829334092493355"/>
-<     <node visible="true" id="-107" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4775879399091814" lon="153.0825933569029758"/>
-<     <node visible="true" id="-108" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4770778613896951" lon="153.0717116818205454"/>
-<     <node visible="true" id="-109" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4769078352165046" lon="153.0717116818205454"/>
-<     <node visible="true" id="-110" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4643258984024463" lon="153.1036766023752875"/>
-<     <node visible="true" id="-111" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4643258984024463" lon="153.1142182251113582"/>
-<     <node visible="true" id="-112" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4789481492944923" lon="153.1138781727650553"/>
-<     <node visible="true" id="-113" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4784380707750060" lon="153.1029964976825681"/>
-<     <node visible="true" id="-114" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4782680446018297" lon="153.1029964976825681"/>
-<     <node visible="true" id="-115" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4641558722292878" lon="153.1213593243842581"/>
-<     <node visible="true" id="-116" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4641558722292913" lon="153.1319009471203003"/>
-<     <node visible="true" id="-117" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4787781231213337" lon="153.1315608947739975"/>
-<     <node visible="true" id="-118" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4782680446018333" lon="153.1206792196915671"/>
-<     <node visible="true" id="-119" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4780980184286641" lon="153.1206792196915671"/>
-<     <node visible="true" id="-120" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4461330978739930" lon="153.0732419173790220"/>
-<     <node visible="true" id="-121" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4461330978739966" lon="153.0837835401151210"/>
-<     <node visible="true" id="-122" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4607553487660141" lon="153.0834434877688182"/>
-<     <node visible="true" id="-123" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4602452702465349" lon="153.0725618126863594"/>
-<     <node visible="true" id="-124" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4600752440733729" lon="153.0725618126863594"/>
-<     <node visible="true" id="-125" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4463031240471480" lon="153.0878641682710963"/>
-<     <node visible="true" id="-126" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4463031240471480" lon="153.0984057910071670"/>
-<     <node visible="true" id="-127" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4609253749391975" lon="153.0980657386608925"/>
-<     <node visible="true" id="-128" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4604152964196828" lon="153.0871840635784338"/>
-<     <node visible="true" id="-129" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4602452702465385" lon="153.0871840635784338"/>
-<     <node visible="true" id="-130" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4290762812696336" lon="153.1737776148251555"/>
-<     <node visible="true" id="-131" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4290762812696158" lon="153.1843192375612830"/>
-<     <node visible="true" id="-132" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4436985321616618" lon="153.1839791852149233"/>
-<     <node visible="true" id="-133" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4431884536421755" lon="153.1730975101324930"/>
-<     <node visible="true" id="-134" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4430184274690099" lon="153.1730975101324930"/>
-<     <node visible="true" id="-135" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3936230078083192" lon="153.1333291534427303"/>
-<     <node visible="true" id="-136" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4051587457780315" lon="153.1333291534427303"/>
-<     <node visible="true" id="-138" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3934482238996893" lon="153.1290469476811893"/>
-<     <node visible="true" id="-139" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4049839618693873" lon="153.1290469476811893"/>
-<     <node visible="true" id="-141" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3934273321572377" lon="153.1248521338741000"/>
-<     <node visible="true" id="-142" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4049630701269464" lon="153.1248521338741000"/>
-<     <node visible="true" id="-144" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3946352244845670" lon="153.1700220079567600"/>
-<     <node visible="true" id="-145" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4061709624542722" lon="153.1700220079567600"/>
-<     <node visible="true" id="-147" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3498177361501220" lon="153.1602973097869267">
----
->     <node visible="true" id="-95" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4655160816145987" lon="153.1368317061420612"/>
->     <node visible="true" id="-96" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4655160816145845" lon="153.1473733288781887"/>
->     <node visible="true" id="-97" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4801383325066340" lon="153.1470332765318290"/>
->     <node visible="true" id="-98" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4796282539871406" lon="153.1361516014494271"/>
->     <node visible="true" id="-99" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4794582278139714" lon="153.1361516014494271"/>
->     <node visible="true" id="-100" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4626256366708148" lon="153.0873540897515852"/>
->     <node visible="true" id="-101" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4626256366708184" lon="153.0978957124876558"/>
->     <node visible="true" id="-102" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4772478875628501" lon="153.0975556601413530"/>
->     <node visible="true" id="-103" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4767378090433674" lon="153.0866739850588942"/>
->     <node visible="true" id="-104" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4765677828702195" lon="153.0866739850588942"/>
->     <node visible="true" id="-105" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4629656890171496" lon="153.0723917865132080"/>
->     <node visible="true" id="-106" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4629656890171390" lon="153.0829334092493355"/>
->     <node visible="true" id="-107" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4775879399091814" lon="153.0825933569029758"/>
->     <node visible="true" id="-108" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4770778613896951" lon="153.0717116818205454"/>
->     <node visible="true" id="-109" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4769078352165046" lon="153.0717116818205454"/>
->     <node visible="true" id="-110" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4643258984024463" lon="153.1036766023752875"/>
->     <node visible="true" id="-111" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4643258984024463" lon="153.1142182251113582"/>
->     <node visible="true" id="-112" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4789481492944923" lon="153.1138781727650553"/>
->     <node visible="true" id="-113" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4784380707750060" lon="153.1029964976825681"/>
->     <node visible="true" id="-114" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4782680446018297" lon="153.1029964976825681"/>
->     <node visible="true" id="-115" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4641558722292878" lon="153.1213593243842581"/>
->     <node visible="true" id="-116" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4641558722292913" lon="153.1319009471203003"/>
->     <node visible="true" id="-117" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4787781231213337" lon="153.1315608947739975"/>
->     <node visible="true" id="-118" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4782680446018333" lon="153.1206792196915671"/>
->     <node visible="true" id="-119" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4780980184286641" lon="153.1206792196915671"/>
->     <node visible="true" id="-120" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4461330978739930" lon="153.0732419173790220"/>
->     <node visible="true" id="-121" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4461330978739966" lon="153.0837835401151210"/>
->     <node visible="true" id="-122" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4607553487660141" lon="153.0834434877688182"/>
->     <node visible="true" id="-123" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4602452702465349" lon="153.0725618126863594"/>
->     <node visible="true" id="-124" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4600752440733729" lon="153.0725618126863594"/>
->     <node visible="true" id="-125" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471480" lon="153.0878641682710963"/>
->     <node visible="true" id="-126" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471480" lon="153.0984057910071670"/>
->     <node visible="true" id="-127" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4609253749391975" lon="153.0980657386608925"/>
->     <node visible="true" id="-128" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4604152964196828" lon="153.0871840635784338"/>
->     <node visible="true" id="-129" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4602452702465385" lon="153.0871840635784338"/>
->     <node visible="true" id="-130" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4290762812696336" lon="153.1737776148251555"/>
->     <node visible="true" id="-131" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4290762812696158" lon="153.1843192375612830"/>
->     <node visible="true" id="-132" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4436985321616618" lon="153.1839791852149233"/>
->     <node visible="true" id="-133" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4431884536421755" lon="153.1730975101324930"/>
->     <node visible="true" id="-134" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4430184274690099" lon="153.1730975101324930"/>
->     <node visible="true" id="-135" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3936230078083192" lon="153.1333291534427303"/>
->     <node visible="true" id="-136" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4051587457780315" lon="153.1333291534427303"/>
->     <node visible="true" id="-138" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3934482238996893" lon="153.1290469476811893"/>
->     <node visible="true" id="-139" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4049839618693873" lon="153.1290469476811893"/>
->     <node visible="true" id="-141" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3934273321572377" lon="153.1248521338741000"/>
->     <node visible="true" id="-142" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4049630701269464" lon="153.1248521338741000"/>
->     <node visible="true" id="-144" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3946352244845670" lon="153.1700220079567600"/>
->     <node visible="true" id="-145" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4061709624542722" lon="153.1700220079567600"/>
->     <node visible="true" id="-147" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498177361501220" lon="153.1602973097869267">
-982c982
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.150Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.357Z"/>
-989c989
-<     <node visible="true" id="-148" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3554990691362221" lon="153.1600891370858619">
----
->     <node visible="true" id="-148" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3554990691362221" lon="153.1600891370858619">
-991c991
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.150Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.357Z"/>
-1008c1008
-<     <node visible="true" id="-149" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3616463209064165" lon="153.1602430413191769">
----
->     <node visible="true" id="-149" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3616463209064165" lon="153.1602430413191769">
-1011c1011
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.151Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.357Z"/>
-1028,1029c1028,1029
-<     <node visible="true" id="-150" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3832208864663471" lon="153.1628278514775445">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.151Z"/>
----
->     <node visible="true" id="-150" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3832208864663471" lon="153.1628278514775445">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.357Z"/>
-1039,1040c1039,1040
-<     <node visible="true" id="-152" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3616748649023123" lon="153.1478155630082654">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.153Z"/>
----
->     <node visible="true" id="-152" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3616748649023123" lon="153.1478155630082654">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.474Z"/>
-1056,1057c1056,1057
-<     <node visible="true" id="-153" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3495512104446341" lon="153.1531984712063377">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.153Z"/>
----
->     <node visible="true" id="-153" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3495512104446341" lon="153.1531984712063377">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.475Z"/>
-1074,1075c1074,1075
-<     <node visible="true" id="-154" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3670715207815611" lon="153.1480533459777291">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.153Z"/>
----
->     <node visible="true" id="-154" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3670715207815611" lon="153.1480533459777291">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.475Z"/>
-1090c1090
-<     <node visible="true" id="-155" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3553218837283083" lon="153.1477128779552004">
----
->     <node visible="true" id="-155" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3553218837283083" lon="153.1477128779552004">
-1106c1106
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.153Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.475Z"/>
-1111c1111
-<     <node visible="true" id="-156" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3496945658681341" lon="153.1480090525794253">
----
->     <node visible="true" id="-156" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3496945658681341" lon="153.1480090525794253">
-1123c1123
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.154Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.475Z"/>
-1134,1135c1134,1135
-<     <node visible="true" id="-157" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3832074149299167" lon="153.1564881754041494">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.154Z"/>
----
->     <node visible="true" id="-157" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3832074149299167" lon="153.1564881754041494">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.476Z"/>
-1145,1163c1145,1163
-<     <node visible="true" id="-158" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4469122731878947" lon="153.1368247194805008"/>
-<     <node visible="true" id="-159" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4467453156686716" lon="153.1498474059796138"/>
-<     <node visible="true" id="-160" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4609367048023323" lon="153.1496804484604013"/>
-<     <node visible="true" id="-161" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4607697472831163" lon="153.1369916769997133"/>
-<     <node visible="true" id="-163" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4463031240471516" lon="153.1225495075963750"/>
-<     <node visible="true" id="-164" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4463031240471516" lon="153.1330911303324740"/>
-<     <node visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4609253749391975" lon="153.1327510779861996"/>
-<     <node visible="true" id="-166" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4604152964196828" lon="153.1218694029037124"/>
-<     <node visible="true" id="-167" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4602452702465349" lon="153.1218694029037124"/>
-<     <node visible="true" id="-168" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4463031240471480" lon="153.1050368117605558"/>
-<     <node visible="true" id="-169" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4463031240471480" lon="153.1155784344966264"/>
-<     <node visible="true" id="-170" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4609253749391797" lon="153.1152383821503520"/>
-<     <node visible="true" id="-171" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4604152964196864" lon="153.1043567070678648"/>
-<     <node visible="true" id="-172" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4602452702465349" lon="153.1043567070678648"/>
-<     <node visible="true" id="-173" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4291984813535308" lon="153.1552976738220480"/>
-<     <node visible="true" id="-174" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4290315238343112" lon="153.1683203603211609"/>
-<     <node visible="true" id="-175" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4432229129679719" lon="153.1681534028019200"/>
-<     <node visible="true" id="-176" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4430559554487523" lon="153.1554646313412604"/>
-<     <node visible="true" id="-178" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3498229434480322" lon="153.1669064749711140">
----
->     <node visible="true" id="-158" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4469122731878947" lon="153.1368247194805008"/>
->     <node visible="true" id="-159" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4467453156686716" lon="153.1498474059796138"/>
->     <node visible="true" id="-160" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4609367048023323" lon="153.1496804484604013"/>
->     <node visible="true" id="-161" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4607697472831163" lon="153.1369916769997133"/>
->     <node visible="true" id="-163" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471516" lon="153.1225495075963750"/>
->     <node visible="true" id="-164" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471516" lon="153.1330911303324740"/>
->     <node visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4609253749391975" lon="153.1327510779861996"/>
->     <node visible="true" id="-166" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4604152964196828" lon="153.1218694029037124"/>
->     <node visible="true" id="-167" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4602452702465349" lon="153.1218694029037124"/>
->     <node visible="true" id="-168" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471480" lon="153.1050368117605558"/>
->     <node visible="true" id="-169" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471480" lon="153.1155784344966264"/>
->     <node visible="true" id="-170" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4609253749391797" lon="153.1152383821503520"/>
->     <node visible="true" id="-171" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4604152964196864" lon="153.1043567070678648"/>
->     <node visible="true" id="-172" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4602452702465349" lon="153.1043567070678648"/>
->     <node visible="true" id="-173" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4291984813535308" lon="153.1552976738220480"/>
->     <node visible="true" id="-174" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4290315238343112" lon="153.1683203603211609"/>
->     <node visible="true" id="-175" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4432229129679719" lon="153.1681534028019200"/>
->     <node visible="true" id="-176" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4430559554487523" lon="153.1554646313412604"/>
->     <node visible="true" id="-178" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498229434480322" lon="153.1669064749711140">
-1165c1165
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.158Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.721Z"/>
-1178,1179c1178,1179
-<     <node visible="true" id="-179" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3559810354979014" lon="153.1666839561039239">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.158Z"/>
----
->     <node visible="true" id="-179" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3559810354979014" lon="153.1666839561039239">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.721Z"/>
-1193c1193
-<     <node visible="true" id="-180" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3617150742330537" lon="153.1667106484875376">
----
->     <node visible="true" id="-180" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3617150742330537" lon="153.1667106484875376">
-1195c1195
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.159Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.721Z"/>
-1211c1211
-<     <node visible="true" id="-181" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3671571362670143" lon="153.1669716498628873">
----
->     <node visible="true" id="-181" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3671571362670143" lon="153.1669716498628873">
-1214c1214
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.159Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.721Z"/>
-1227,1228c1227,1228
-<     <node visible="true" id="-182" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3756344686923896" lon="153.1828488876220433">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.159Z"/>
----
->     <node visible="true" id="-182" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3756344686923896" lon="153.1828488876220433">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.721Z"/>
-1238,1239c1238,1239
-<     <node visible="true" id="-183" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3559408969122870" lon="153.1729478316758275">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.160Z"/>
----
->     <node visible="true" id="-183" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3559408969122870" lon="153.1729478316758275">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.829Z"/>
-1258,1259c1258,1259
-<     <node visible="true" id="-184" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3495773578195163" lon="153.1729240297067918">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.161Z"/>
----
->     <node visible="true" id="-184" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3495773578195163" lon="153.1729240297067918">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.829Z"/>
-1278,1279c1278,1279
-<     <node visible="true" id="-185" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3756419372329241" lon="153.1764667880736681">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.161Z"/>
----
->     <node visible="true" id="-185" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3756419372329241" lon="153.1764667880736681">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.829Z"/>
-1289,1356c1289,1356
-<     <node visible="true" id="-186" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4104339710140437" lon="153.0827592253301361"/>
-<     <node visible="true" id="-187" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4208334206284619" lon="153.0825844414214885"/>
-<     <node visible="true" id="-188" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4208334206284654" lon="153.0824096575128408"/>
-<     <node visible="true" id="-189" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4107835323468159" lon="153.0726217586294524"/>
-<     <node visible="true" id="-190" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4211829819587685" lon="153.0724469747208332"/>
-<     <node visible="true" id="-191" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4211829819587685" lon="153.0722721908121855"/>
-<     <node visible="true" id="-192" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4106087516804280" lon="153.0956058426145603"/>
-<     <node visible="true" id="-193" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4210082012936383" lon="153.0954310587058558"/>
-<     <node visible="true" id="-194" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4210082012936383" lon="153.0952562747972650"/>
-<     <node visible="true" id="-195" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4106961420136308" lon="153.0870414310915919"/>
-<     <node visible="true" id="-196" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4210955916261945" lon="153.0868666471829727"/>
-<     <node visible="true" id="-197" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4210955916261945" lon="153.0866918632743534"/>
-<     <node visible="true" id="-198" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4107835323468159" lon="153.0777778839340897"/>
-<     <node visible="true" id="-199" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4211829819587649" lon="153.0776031000254420"/>
-<     <node visible="true" id="-200" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4211829819587685" lon="153.0774283161168796"/>
-<     <node visible="true" id="-201" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4106961420136273" lon="153.0915858127160334"/>
-<     <node visible="true" id="-202" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4210955916261980" lon="153.0914110288073289"/>
-<     <node visible="true" id="-203" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4210955916261945" lon="153.0912362448987381"/>
-<     <node visible="true" id="-204" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3950941738649654" lon="153.1657456928443537"/>
-<     <node visible="true" id="-205" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4054936234769144" lon="153.1655709089357345"/>
-<     <node visible="true" id="-206" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4054936234769073" lon="153.1653961250270868"/>
-<     <node visible="true" id="-207" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3760454300832627" lon="153.1126494399773321"/>
-<     <node visible="true" id="-208" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3908661194900560" lon="153.1126494399773321"/>
-<     <node visible="true" id="-209" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3757832542203161" lon="153.0780422260681917"/>
-<     <node visible="true" id="-210" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3906039436271058" lon="153.0780422260681917"/>
-<     <node visible="true" id="-211" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3762202139918926" lon="153.1080176663985526"/>
-<     <node visible="true" id="-212" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3910409033986824" lon="153.1080176663985526"/>
-<     <node visible="true" id="-213" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3762202139918962" lon="153.0993658629212746"/>
-<     <node visible="true" id="-214" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3910409033986930" lon="153.0993658629212746"/>
-<     <node visible="true" id="-215" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3760454300832627" lon="153.1290791273887066"/>
-<     <node visible="true" id="-216" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3908661194900560" lon="153.1290791273887066"/>
-<     <node visible="true" id="-217" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3760454300832627" lon="153.1170190376930691"/>
-<     <node visible="true" id="-218" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3908661194900560" lon="153.1170190376930691"/>
-<     <node visible="true" id="-219" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3759580381289531" lon="153.0828487835555052"/>
-<     <node visible="true" id="-220" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3907787275357357" lon="153.0828487835555052"/>
-<     <node visible="true" id="-221" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3759580381289496" lon="153.0956080088857050"/>
-<     <node visible="true" id="-222" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3907787275357393" lon="153.0956080088857050"/>
-<     <node visible="true" id="-223" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3758706461746293" lon="153.1207768917286955"/>
-<     <node visible="true" id="-224" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3906913355814297" lon="153.1207768917286955"/>
-<     <node visible="true" id="-225" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3757832542203161" lon="153.0723617490376682"/>
-<     <node visible="true" id="-226" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3906039436271129" lon="153.0723617490376682"/>
-<     <node visible="true" id="-227" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3763949979005297" lon="153.1034732847741395"/>
-<     <node visible="true" id="-228" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3912156873073265" lon="153.1034732847741395"/>
-<     <node visible="true" id="-229" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3758706461746364" lon="153.1332739411958812"/>
-<     <node visible="true" id="-230" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3906913355814368" lon="153.1332739411958812"/>
-<     <node visible="true" id="-231" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3758706461746293" lon="153.0875679490886512"/>
-<     <node visible="true" id="-232" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3906913355814297" lon="153.0875679490886512"/>
-<     <node visible="true" id="-233" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3761328220375830" lon="153.0917627628958257"/>
-<     <node visible="true" id="-234" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3909535114443692" lon="153.0917627628958257"/>
-<     <node visible="true" id="-235" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3758706461746257" lon="153.1250590974901797"/>
-<     <node visible="true" id="-236" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3906913355814261" lon="153.1250590974901797"/>
-<     <node visible="true" id="-237" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3929909377165508" lon="153.1616898707166285"/>
-<     <node visible="true" id="-238" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4078116271233441" lon="153.1616898707166285"/>
-<     <node visible="true" id="-239" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3936021160658747" lon="153.1128220576147783"/>
-<     <node visible="true" id="-240" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4055748138071706" lon="153.1129094495690879"/>
-<     <node visible="true" id="-241" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3939516838831452" lon="153.0993636966501299"/>
-<     <node visible="true" id="-242" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4059243816244269" lon="153.0994510886044111"/>
-<     <node visible="true" id="-243" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3935147241115615" lon="153.1206873335032128"/>
-<     <node visible="true" id="-244" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4054874218528433" lon="153.1207747254575224"/>
-<     <node visible="true" id="-245" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3935147241115615" lon="153.1082776759903084"/>
-<     <node visible="true" id="-246" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4054874218528504" lon="153.1083650679446464"/>
-<     <node visible="true" id="-247" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3935147241115580" lon="153.1171916553305721"/>
-<     <node visible="true" id="-248" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4054874218528504" lon="153.1172790472848817"/>
-<     <node visible="true" id="-249" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3939516838831452" lon="153.1036459024116141"/>
-<     <node visible="true" id="-250" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4059243816244269" lon="153.1037332943659237"/>
-<     <node visible="true" id="-251" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3945269407878094" lon="153.1753470340206604"/>
-<     <node visible="true" id="-252" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4064996385290911" lon="153.1754344259749701"/>
-<     <node visible="true" id="-253" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3617991846666371" lon="153.1727598307532787">
----
->     <node visible="true" id="-186" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4104339710140437" lon="153.0827592253301361"/>
->     <node visible="true" id="-187" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4208334206284619" lon="153.0825844414214885"/>
->     <node visible="true" id="-188" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4208334206284654" lon="153.0824096575128408"/>
->     <node visible="true" id="-189" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4107835323468159" lon="153.0726217586294524"/>
->     <node visible="true" id="-190" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4211829819587685" lon="153.0724469747208332"/>
->     <node visible="true" id="-191" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4211829819587685" lon="153.0722721908121855"/>
->     <node visible="true" id="-192" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4106087516804280" lon="153.0956058426145603"/>
->     <node visible="true" id="-193" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4210082012936383" lon="153.0954310587058558"/>
->     <node visible="true" id="-194" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4210082012936383" lon="153.0952562747972650"/>
->     <node visible="true" id="-195" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4106961420136308" lon="153.0870414310915919"/>
->     <node visible="true" id="-196" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4210955916261945" lon="153.0868666471829727"/>
->     <node visible="true" id="-197" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4210955916261945" lon="153.0866918632743534"/>
->     <node visible="true" id="-198" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4107835323468159" lon="153.0777778839340897"/>
->     <node visible="true" id="-199" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4211829819587649" lon="153.0776031000254420"/>
->     <node visible="true" id="-200" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4211829819587685" lon="153.0774283161168796"/>
->     <node visible="true" id="-201" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4106961420136273" lon="153.0915858127160334"/>
->     <node visible="true" id="-202" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4210955916261980" lon="153.0914110288073289"/>
->     <node visible="true" id="-203" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4210955916261945" lon="153.0912362448987381"/>
->     <node visible="true" id="-204" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3950941738649654" lon="153.1657456928443537"/>
->     <node visible="true" id="-205" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4054936234769144" lon="153.1655709089357345"/>
->     <node visible="true" id="-206" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4054936234769073" lon="153.1653961250270868"/>
->     <node visible="true" id="-207" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760454300832627" lon="153.1126494399773321"/>
->     <node visible="true" id="-208" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3908661194900560" lon="153.1126494399773321"/>
->     <node visible="true" id="-209" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3757832542203161" lon="153.0780422260681917"/>
->     <node visible="true" id="-210" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906039436271058" lon="153.0780422260681917"/>
->     <node visible="true" id="-211" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3762202139918926" lon="153.1080176663985526"/>
->     <node visible="true" id="-212" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3910409033986824" lon="153.1080176663985526"/>
->     <node visible="true" id="-213" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3762202139918962" lon="153.0993658629212746"/>
->     <node visible="true" id="-214" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3910409033986930" lon="153.0993658629212746"/>
->     <node visible="true" id="-215" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760454300832627" lon="153.1290791273887066"/>
->     <node visible="true" id="-216" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3908661194900560" lon="153.1290791273887066"/>
->     <node visible="true" id="-217" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760454300832627" lon="153.1170190376930691"/>
->     <node visible="true" id="-218" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3908661194900560" lon="153.1170190376930691"/>
->     <node visible="true" id="-219" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3759580381289531" lon="153.0828487835555052"/>
->     <node visible="true" id="-220" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3907787275357357" lon="153.0828487835555052"/>
->     <node visible="true" id="-221" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3759580381289496" lon="153.0956080088857050"/>
->     <node visible="true" id="-222" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3907787275357393" lon="153.0956080088857050"/>
->     <node visible="true" id="-223" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758706461746293" lon="153.1207768917286955"/>
->     <node visible="true" id="-224" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906913355814297" lon="153.1207768917286955"/>
->     <node visible="true" id="-225" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3757832542203161" lon="153.0723617490376682"/>
->     <node visible="true" id="-226" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906039436271129" lon="153.0723617490376682"/>
->     <node visible="true" id="-227" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3763949979005297" lon="153.1034732847741395"/>
->     <node visible="true" id="-228" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3912156873073265" lon="153.1034732847741395"/>
->     <node visible="true" id="-229" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758706461746364" lon="153.1332739411958812"/>
->     <node visible="true" id="-230" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906913355814368" lon="153.1332739411958812"/>
->     <node visible="true" id="-231" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758706461746293" lon="153.0875679490886512"/>
->     <node visible="true" id="-232" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906913355814297" lon="153.0875679490886512"/>
->     <node visible="true" id="-233" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3761328220375830" lon="153.0917627628958257"/>
->     <node visible="true" id="-234" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3909535114443692" lon="153.0917627628958257"/>
->     <node visible="true" id="-235" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758706461746257" lon="153.1250590974901797"/>
->     <node visible="true" id="-236" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906913355814261" lon="153.1250590974901797"/>
->     <node visible="true" id="-237" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3929909377165508" lon="153.1616898707166285"/>
->     <node visible="true" id="-238" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4078116271233441" lon="153.1616898707166285"/>
->     <node visible="true" id="-239" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3936021160658747" lon="153.1128220576147783"/>
->     <node visible="true" id="-240" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4055748138071706" lon="153.1129094495690879"/>
->     <node visible="true" id="-241" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3939516838831452" lon="153.0993636966501299"/>
->     <node visible="true" id="-242" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4059243816244269" lon="153.0994510886044111"/>
->     <node visible="true" id="-243" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3935147241115615" lon="153.1206873335032128"/>
->     <node visible="true" id="-244" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4054874218528433" lon="153.1207747254575224"/>
->     <node visible="true" id="-245" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3935147241115615" lon="153.1082776759903084"/>
->     <node visible="true" id="-246" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4054874218528504" lon="153.1083650679446464"/>
->     <node visible="true" id="-247" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3935147241115580" lon="153.1171916553305721"/>
->     <node visible="true" id="-248" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4054874218528504" lon="153.1172790472848817"/>
->     <node visible="true" id="-249" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3939516838831452" lon="153.1036459024116141"/>
->     <node visible="true" id="-250" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4059243816244269" lon="153.1037332943659237"/>
->     <node visible="true" id="-251" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3945269407878094" lon="153.1753470340206604"/>
->     <node visible="true" id="-252" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4064996385290911" lon="153.1754344259749701"/>
->     <node visible="true" id="-253" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3617991846666371" lon="153.1727598307532787">
-1369c1369
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.176Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.292Z"/>
-1380c1380
-<     <node visible="true" id="-254" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3674131928516111" lon="153.1725601743348193">
----
->     <node visible="true" id="-254" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3674131928516111" lon="153.1725601743348193">
-1394c1394
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.177Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.299Z"/>
-1402,1403c1402,1403
-<     <node visible="true" id="-255" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3760170345997231" lon="153.1705357409823023">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.177Z"/>
----
->     <node visible="true" id="-255" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760170345997231" lon="153.1705357409823023">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.299Z"/>
-1413,1429c1413,1429
-<     <node visible="true" id="-256" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3887393922308711" lon="153.1418230716492417"/>
-<     <node visible="true" id="-257" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3747511173045055" lon="153.1419337859083214"/>
-<     <node visible="true" id="-258" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3748195675757948" lon="153.1483432503448512"/>
-<     <node visible="true" id="-259" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3888216059666547" lon="153.1481867669243968"/>
-<     <node visible="true" id="-260" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4246730842377175" lon="153.1676345968936062"/>
-<     <node visible="true" id="-261" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4106848093113449" lon="153.1677453111527143"/>
-<     <node visible="true" id="-262" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4107532595826306" lon="153.1741547755892157"/>
-<     <node visible="true" id="-263" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4247552979735012" lon="153.1739982921687897"/>
-<     <node visible="true" id="-264" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4060192676570153" lon="153.1416299457072228"/>
-<     <node visible="true" id="-265" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3920328636170147" lon="153.1417406599671835"/>
-<     <node visible="true" id="-266" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3921013047370145" lon="153.1481501244072092"/>
-<     <node visible="true" id="-267" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4061014703970152" lon="153.1479936409872096"/>
-<     <node visible="true" id="-268" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4244922219985590" lon="153.1565601416818936"/>
-<     <node visible="true" id="-269" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4105058179585654" lon="153.1566708559418828"/>
-<     <node visible="true" id="-270" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4105742590785617" lon="153.1630803203818800"/>
-<     <node visible="true" id="-271" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4245744247385694" lon="153.1629238369618804"/>
-<     <node visible="true" id="-272" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3493632724132070" lon="153.1798619156940333">
----
->     <node visible="true" id="-256" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3887393922308711" lon="153.1418230716492417"/>
->     <node visible="true" id="-257" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3747511173045055" lon="153.1419337859083214"/>
->     <node visible="true" id="-258" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3748195675757948" lon="153.1483432503448512"/>
->     <node visible="true" id="-259" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3888216059666547" lon="153.1481867669243968"/>
->     <node visible="true" id="-260" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4246730842377175" lon="153.1676345968936062"/>
->     <node visible="true" id="-261" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4106848093113449" lon="153.1677453111527143"/>
->     <node visible="true" id="-262" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4107532595826306" lon="153.1741547755892157"/>
->     <node visible="true" id="-263" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4247552979735012" lon="153.1739982921687897"/>
->     <node visible="true" id="-264" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4060192676570153" lon="153.1416299457072228"/>
->     <node visible="true" id="-265" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3920328636170147" lon="153.1417406599671835"/>
->     <node visible="true" id="-266" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3921013047370145" lon="153.1481501244072092"/>
->     <node visible="true" id="-267" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4061014703970152" lon="153.1479936409872096"/>
->     <node visible="true" id="-268" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4244922219985590" lon="153.1565601416818936"/>
->     <node visible="true" id="-269" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4105058179585654" lon="153.1566708559418828"/>
->     <node visible="true" id="-270" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4105742590785617" lon="153.1630803203818800"/>
->     <node visible="true" id="-271" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4245744247385694" lon="153.1629238369618804"/>
->     <node visible="true" id="-272" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3493632724132070" lon="153.1798619156940333">
-1443c1443
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.182Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.672Z"/>
-1451,1452c1451,1452
-<     <node visible="true" id="-273" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3553501507543224" lon="153.1796251043605821">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.184Z"/>
----
->     <node visible="true" id="-273" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3553501507543224" lon="153.1796251043605821">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.672Z"/>
-1470c1470
-<     <node visible="true" id="-274" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3615511146127020" lon="153.1794467435805132">
----
->     <node visible="true" id="-274" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3615511146127020" lon="153.1794467435805132">
-1487c1487
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.184Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.672Z"/>
-1498c1498
-<     <node visible="true" id="-275" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3677672298368861" lon="153.1793969750691531">
----
->     <node visible="true" id="-275" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3677672298368861" lon="153.1793969750691531">
-1511c1511
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.185Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.673Z"/>
-1521c1521
-<     <node visible="true" id="-276" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3670759346808161" lon="153.1601997394154751">
----
->     <node visible="true" id="-276" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3670759346808161" lon="153.1601997394154751">
-1532c1532
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.185Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.673Z"/>
-1542,1543c1542,1543
-<     <node visible="true" id="-277" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3756797764289317" lon="153.1634894436132868">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.185Z"/>
----
->     <node visible="true" id="-277" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3756797764289317" lon="153.1634894436132868">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.673Z"/>
-1553,1567c1553,1567
-<     <node visible="true" id="-278" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3942138597460882" lon="153.0828466172844173"/>
-<     <node visible="true" id="-279" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4063613413960034" lon="153.0827592253301077"/>
-<     <node visible="true" id="-280" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3937768999745082" lon="153.0956058426144466"/>
-<     <node visible="true" id="-281" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4059243816244233" lon="153.0955184506601938"/>
-<     <node visible="true" id="-282" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3941264677917715" lon="153.0727965425381001"/>
-<     <node visible="true" id="-283" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4062739494416867" lon="153.0727091505837620"/>
-<     <node visible="true" id="-284" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3940390758374548" lon="153.0919353805332719"/>
-<     <node visible="true" id="-285" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4061865574873735" lon="153.0918479885789623"/>
-<     <node visible="true" id="-286" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3942138597460811" lon="153.0781274517513566"/>
-<     <node visible="true" id="-287" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4063613413960034" lon="153.0780400597970470"/>
-<     <node visible="true" id="-288" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3939516838831345" lon="153.0874783908631684"/>
-<     <node visible="true" id="-289" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4060991655330533" lon="153.0873909989088588"/>
-<     <node visible="true" id="-290" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3940299541435763" lon="153.1570980056966107"/>
-<     <node visible="true" id="-291" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4061774357934880" lon="153.1570106137423295"/>
-<     <node visible="true" id="-292" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3552987319437761" lon="153.1343801890209591">
----
->     <node visible="true" id="-278" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3942138597460882" lon="153.0828466172844173"/>
->     <node visible="true" id="-279" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4063613413960034" lon="153.0827592253301077"/>
->     <node visible="true" id="-280" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3937768999745082" lon="153.0956058426144466"/>
->     <node visible="true" id="-281" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4059243816244233" lon="153.0955184506601938"/>
->     <node visible="true" id="-282" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3941264677917715" lon="153.0727965425381001"/>
->     <node visible="true" id="-283" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4062739494416867" lon="153.0727091505837620"/>
->     <node visible="true" id="-284" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3940390758374548" lon="153.0919353805332719"/>
->     <node visible="true" id="-285" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4061865574873735" lon="153.0918479885789623"/>
->     <node visible="true" id="-286" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3942138597460811" lon="153.0781274517513566"/>
->     <node visible="true" id="-287" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4063613413960034" lon="153.0780400597970470"/>
->     <node visible="true" id="-288" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3939516838831345" lon="153.0874783908631684"/>
->     <node visible="true" id="-289" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4060991655330533" lon="153.0873909989088588"/>
->     <node visible="true" id="-290" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3940299541435763" lon="153.1570980056966107"/>
->     <node visible="true" id="-291" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4061774357934880" lon="153.1570106137423295"/>
->     <node visible="true" id="-292" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3552987319437761" lon="153.1343801890209591">
-1581c1581
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.189Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.895Z"/>
-1589c1589
-<     <node visible="true" id="-293" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3620022145142556" lon="153.1343801890209591">
----
->     <node visible="true" id="-293" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3620022145142556" lon="153.1343801890209591">
-1604c1604
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.190Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.895Z"/>
-1613,1614c1613,1614
-<     <node visible="true" id="-294" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.3760491738068801" lon="153.1569020100675118">
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.190Z"/>
----
->     <node visible="true" id="-294" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760491738068801" lon="153.1569020100675118">
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.895Z"/>
-1624c1624
-<     <way visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1">
-1627c1627
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.188Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.782Z"/>
-1637c1637
-<     <way visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="1">
-1640c1640
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.188Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.782Z"/>
-1654c1654
-<     <way visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1">
-1657c1657
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.188Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.781Z"/>
-1674c1674
-<     <way visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1">
-1677c1677
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.187Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.781Z"/>
-1692c1692
-<     <way visible="true" id="-62" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-62" timestamp="1970-01-01T00:00:00Z" version="1">
-1695c1695
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.187Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.781Z"/>
-1714c1714
-<     <way visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1">
-1717c1717
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.187Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.781Z"/>
-1732c1732
-<     <way visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1">
-1735c1735
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.187Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.781Z"/>
-1752c1752
-<     <way visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1">
-1758c1758
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.181Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.538Z"/>
-1769c1769
-<     <way visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1">
-1789c1789
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.180Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.531Z"/>
-1797c1797
-<     <way visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1">
-1803c1803
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.179Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.415Z"/>
-1813c1813
-<     <way visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1">
-1835c1835
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.178Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.414Z"/>
-1846c1846
-<     <way visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1">
-1849c1849
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.175Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.174Z"/>
-1859c1859
-<     <way visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1">
-1869d1868
-<         <tag k="seasonal" v="no"/>
-1870a1870
->         <tag k="seasonal" v="no"/>
-1874c1874
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.174Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.174Z"/>
-1885c1885
-<     <way visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1">
-1907c1907
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.174Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.174Z"/>
-1917c1917
-<     <way visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1">
-1932c1932
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.174Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.173Z"/>
-1940c1940
-<     <way visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1">
-1955c1955
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.173Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.173Z"/>
-1963c1963
-<     <way visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1">
-1977d1976
-<         <tag k="seasonal" v="Spring"/>
-1978a1978
->         <tag k="seasonal" v="Spring"/>
-1982c1982
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.173Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.173Z"/>
-1989c1989
-<     <way visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1">
-2009c2009
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.173Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.172Z"/>
-2019c2019
-<     <way visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1">
-2022c2022
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.171Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.054Z"/>
-2032c2032
-<     <way visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1">
-2036c2036
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.171Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.053Z"/>
-2048c2048
-<     <way visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1">
-2052c2052
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.170Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.053Z"/>
-2067c2067
-<     <way visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1">
-2071c2071
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.170Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.053Z"/>
-2086c2086
-<     <way visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1">
-2090c2090
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.170Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.053Z"/>
-2103c2103
-<     <way visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1">
-2107c2107
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.169Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.053Z"/>
-2123c2123
-<     <way visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1">
-2127c2127
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.169Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.053Z"/>
-2142c2142
-<     <way visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1">
-2146c2146
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.169Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.052Z"/>
-2159c2159
-<     <way visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1">
-2163c2163
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.168Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.052Z"/>
-2179c2179
-<     <way visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1">
-2183c2183
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.168Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.052Z"/>
-2198c2198
-<     <way visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1">
-2202c2202
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.167Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.052Z"/>
-2217c2217
-<     <way visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1">
-2221c2221
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.167Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.051Z"/>
-2234c2234
-<     <way visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1">
-2238c2238
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.167Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.051Z"/>
-2252c2252
-<     <way visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1">
-2256c2256
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.166Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.051Z"/>
-2270c2270
-<     <way visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1">
-2274c2274
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.166Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.051Z"/>
-2288c2288
-<     <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
-2292c2292
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.166Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:24.050Z"/>
-2308c2308
-<     <way visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1">
-2312c2312
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.164Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.943Z"/>
-2322c2322
-<     <way visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1">
-2326c2326
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.164Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.943Z"/>
-2340c2340
-<     <way visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1">
-2344c2344
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.164Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.943Z"/>
-2363c2363
-<     <way visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
-2367c2367
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.163Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.942Z"/>
-2384c2384
-<     <way visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1">
-2388c2388
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.163Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.942Z"/>
-2404c2404
-<     <way visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1">
-2408c2408
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.163Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.942Z"/>
-2426c2426
-<     <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
-2430c2430
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.162Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.942Z"/>
-2445c2445
-<     <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
-2452c2452
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.157Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.598Z"/>
-2463c2463
-<     <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
-2474a2475
->         <tag k="area" v="yes"/>
-2486c2487
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.156Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.597Z"/>
-2498c2499
-<     <way visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1">
-2505c2506
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.156Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.597Z"/>
-2515a2517
->         <tag k="area" v="yes"/>
-2519c2521
-<     <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
-2527c2529
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.155Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.597Z"/>
-2540c2542
-<     <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
-2544c2546
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.147Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.240Z"/>
-2554c2556
-<     <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
-2558c2560
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.147Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.240Z"/>
-2571c2573
-<     <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
-2575c2577
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.147Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.240Z"/>
-2591c2593
-<     <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
-2595c2597
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.147Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.240Z"/>
-2610c2612
-<     <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
-2617c2619
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.145Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.132Z"/>
-2623c2625
-<         <tag k="landuse" v="built_up_area"/>
----
->         <tag k="area" v="yes"/>
-2624a2627
->         <tag k="landuse" v="built_up_area"/>
-2627c2630
-<     <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
-2634c2637
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.145Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.132Z"/>
-2641c2644
-<         <tag k="landuse" v="built_up_area"/>
----
->         <tag k="area" v="yes"/>
-2642a2646
->         <tag k="landuse" v="built_up_area"/>
-2645c2649
-<     <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
-2652c2656
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.144Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.132Z"/>
-2663c2667
-<         <tag k="landuse" v="built_up_area"/>
----
->         <tag k="area" v="yes"/>
-2664a2669
->         <tag k="landuse" v="built_up_area"/>
-2667c2672
-<     <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
-2674c2679
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.144Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.131Z"/>
-2683c2688
-<         <tag k="landuse" v="built_up_area"/>
----
->         <tag k="area" v="yes"/>
-2684a2690
->         <tag k="landuse" v="built_up_area"/>
-2687c2693
-<     <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
-2694c2700
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.144Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.131Z"/>
-2705c2711
-<         <tag k="landuse" v="built_up_area"/>
----
->         <tag k="area" v="yes"/>
-2706a2713
->         <tag k="landuse" v="built_up_area"/>
-2709c2716
-<     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
-2716c2723
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.143Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.131Z"/>
-2727c2734
-<         <tag k="landuse" v="built_up_area"/>
----
->         <tag k="area" v="yes"/>
-2728a2736
->         <tag k="landuse" v="built_up_area"/>
-2731c2739
-<     <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
-2738c2746
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.143Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.131Z"/>
-2748c2756
-<         <tag k="landuse" v="built_up_area"/>
----
->         <tag k="area" v="yes"/>
-2749a2758
->         <tag k="landuse" v="built_up_area"/>
-2752c2761
-<     <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
-2759c2768
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.143Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:23.131Z"/>
-2769c2778
-<         <tag k="landuse" v="built_up_area"/>
----
->         <tag k="area" v="yes"/>
-2770a2780
->         <tag k="landuse" v="built_up_area"/>
-2773c2783
-<     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
-2781c2791
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.136Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.779Z"/>
-2791c2801
-<     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
-2799c2809
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.136Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.779Z"/>
-2814c2824
-<     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
-2830d2839
-<         <tag k="navigation:landmark" v="yes"/>
-2831a2841
->         <tag k="navigation:landmark" v="yes"/>
-2835c2845
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.136Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.779Z"/>
-2845c2855
-<     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
-2853c2863
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.135Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.779Z"/>
-2866c2876
-<     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
-2888c2898
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.135Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.779Z"/>
-2893c2903
-<     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
-2900c2910
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.134Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.778Z"/>
-2914c2924
-<     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
-2922c2932
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.134Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.778Z"/>
-2935c2945
-<     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
-2943c2953
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:17.133Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.778Z"/>
-2957c2967
-<     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
----
->     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-2966c2976
-<         <tag k="source:ingest:datetime" v="2015-11-06T20:42:15.898Z"/>
----
->         <tag k="source:ingest:datetime" v="2015-02-25T03:54:22.777Z"/>
+15:09:35.161 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:35.161 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
+15:09:35.161 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/translations/TDSv40.js
+15:09:35.161 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/__init__.js
+15:09:35.162 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/schema/__init__.js
+15:09:35.199 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/tds40/rules/__init__.js
+15:09:35.207 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
+15:09:35.207 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+15:09:35.208 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
+15:09:35.429 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (shelter:type=tornado)"
+15:09:35.429 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (HST2:tornado)"
+15:09:35.435 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (material:vertical=smoke)"
+15:09:35.436 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (VCM2:smoke)"
+15:09:35.436 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (material:vertical=mirrors)"
+15:09:35.436 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (VCM3:mirrors)"
+15:09:35.436 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (roof:shape=gargoyles)"
+15:09:35.436 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (SSR3:gargoyles)"
+15:09:35.436 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (material:vertical=aerogel)"
+15:09:35.436 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (VCM:aerogel)"
+15:09:35.438 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (product=bamboo)"
+15:09:35.438 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (ZI014_PPO:bamboo)"
+15:09:35.438 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (use=video games)"
+15:09:35.438 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (FFN2:video games)"
+15:09:35.470 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (seasonal=Spring)"
+15:09:35.470 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (ZI016_WTC:Spring)"
+15:09:35.470 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (surface=Jello)"
+15:09:35.470 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (ZI016_ROC:Jello)"
+15:09:35.473 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (water:sink:type=unknown)"
+15:09:35.473 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (WST:unknown)"
+15:09:35.473 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (water:sink:type=unknown)"
+15:09:35.473 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (WST:unknown)"
+15:09:35.474 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) Received 3 of the same message. Silencing: "Lookup value not found for column:: (water:sink:type=unknown)"
+15:09:35.474 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) Received 3 of the same message. Silencing: "Adding to OTH field:: (WST:unknown)"
+15:09:35.476 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (water:sink:type=not_applicable)"
+15:09:35.476 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (WST:not_applicable)"
+15:09:35.477 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (water:sink:type=not_applicable)"
+15:09:35.477 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (WST:not_applicable)"
+15:09:35.478 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) Received 3 of the same message. Silencing: "Lookup value not found for column:: (water:sink:type=not_applicable)"
+15:09:35.478 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) Received 3 of the same message. Silencing: "Adding to OTH field:: (WST:not_applicable)"
+15:09:35.481 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (electrified=unknown)"
+15:09:35.482 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (ZI017_RRA:unknown)"
+15:09:35.483 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (electrified=contact_line)"
+15:09:35.483 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (ZI017_RRA:contact_line)"
+15:09:35.493 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (use=Hobbit Hole)"
+15:09:35.493 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (FFN:Hobbit Hole)"
