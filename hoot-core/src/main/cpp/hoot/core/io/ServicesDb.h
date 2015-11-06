@@ -218,6 +218,7 @@ public:
 
   shared_ptr<QSqlQuery> selectTagsForWay_OsmApi(long wayId);
 
+  shared_ptr<QSqlQuery> selectTagsForRelation_OsmApi(long wayId);
   /**
    * Returns a vector with all the relation members for a given relation
    */
@@ -388,6 +389,7 @@ private:
   shared_ptr<QSqlQuery> _selectElementsForMap;
   shared_ptr<QSqlQuery> _selectNodeIdsForWay;
   shared_ptr<QSqlQuery> _selectTagsForWay;
+  shared_ptr<QSqlQuery> _selectTagsForRelation;
   shared_ptr<QSqlQuery> _selectMapIds;
   shared_ptr<QSqlQuery> _selectMembersForRelation;
   shared_ptr<QSqlQuery> _updateNode;

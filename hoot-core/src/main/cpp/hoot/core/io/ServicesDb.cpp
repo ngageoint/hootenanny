@@ -1381,9 +1381,12 @@ void ServicesDb::_resetQueries()
   _selectNodeIdsForWay.reset();
   _selectMapIds.reset();
   _selectMembersForRelation.reset();
+  _selectTagsForWay.reset();
+  _selectTagsForRelation.reset();
   _updateNode.reset();
   _updateRelation.reset();
   _updateWay.reset();
+
 
   // bulk insert objects.
   _nodeBulkInsert.reset();
@@ -1885,6 +1888,26 @@ shared_ptr<QSqlQuery> ServicesDb::selectTagsForWay_OsmApi(long wayId)
   return _selectTagsForWay;
 }
 
+shared_ptr<QSqlQuery> ServicesDb::selectTagsForRelation_OsmApi(long relId)
+{
+  if (!_selectTagsForRelation)
+  {
+    _selectTagsForRelation.reset(new QSqlQuery(_db));
+    _selectTagsForRelation->setForwardOnly(true);
+    QString sql =  "SELECT ";
+    sql += "relation_id, k, v FROM current_relation_tags where relation_id = :relId";
+    _selectTagsForRelation->prepare( sql );
+  }
+
+  _selectTagsForRelation->bindValue(":relId", (qlonglong)relId);
+  if (_selectTagsForRelation->exec() == false)
+  {
+    throw HootException("Error selecting tags for relation with ID: " + QString::number(relId) +
+      " Error: " + _selectTagsForRelation->lastError().text());
+  }
+
+  return _selectTagsForRelation;
+}
 
 shared_ptr<QSqlQuery> ServicesDb::selectNodesForWay(long wayId)
 {
