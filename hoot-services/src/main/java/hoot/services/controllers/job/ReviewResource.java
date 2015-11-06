@@ -340,16 +340,26 @@ public class ReviewResource
 	@Path("/next")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ReviewableItem getNextReviewable(@QueryParam("mapid") String mapId,
-			@QueryParam("offsetseqid") String offsetSeqId)
+			@QueryParam("offsetseqid") String offsetSeqId,
+			@QueryParam("direction") String direction)
 	{
 
 		ReviewableItem ret = new ReviewableItem(-1, -1,-1);
 		try(Connection conn = DbUtils.createConnection())
 		{
+			
 			long nMapId = Long.parseLong(mapId);
 			long nOffsetSeqId = Long.parseLong(offsetSeqId);
+			
+			// if nextSquence is - or out of index value we will get random
+			long nextSequence = nOffsetSeqId + 1;
+			if(direction != null && direction.equalsIgnoreCase("backward"))
+			{
+				nextSequence = nOffsetSeqId - 1;
+			}
+				
 			ReviewableReader reader = new ReviewableReader();
-			ret = reader.getReviewableItem(nMapId, nOffsetSeqId + 1);
+			ret = reader.getReviewableItem(nMapId, nextSequence);
 			// get random if we can not find immediate next sequence item
 			if(ret.getResultCount() < 1)
 			{
