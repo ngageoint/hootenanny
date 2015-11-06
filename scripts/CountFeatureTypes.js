@@ -17,7 +17,13 @@ var walk = function(dir) {
                     } else {
                         if (findFormat(path) == "osm" || findFormat(path) == "mgcp" || findFormat(path) == "ufd") {
                             if (path.split('.').pop().toLowerCase() === 'osm' || path.split('.').pop().toLowerCase() === 'shp' || path.split('.').pop().toLowerCase() === 'pbf') {
-                               processFile(path);
+                                var stats = fs.statSync(path)
+                                var fileSizeInMBytes = stats["size"]/1000000.0;
+                                if (path.split('.').pop().toLowerCase() === 'pbf' && fileSizeInMBytes > 50) {
+                                    hoot.log(path + " is too big, it may cause memory problem. Please process individually.")
+                                } else {
+                                    processFile(path);
+                                }
                             }
                         }
                     }
@@ -51,11 +57,11 @@ var processFile = function(inputFile) {
     } else if (findFormat(inputFile) === 'ufd') {
         tran = ufdTran;
     }
-    hoot.log(inputFile)
-    
+
+    //Create a new map and populate it with the input file
+    var map = new hoot.OsmMap();
     try {
-        //Create a new map and populate it with the input file
-        var map = new hoot.OsmMap();
+        //Load map
         hoot.loadMap(map, inputFile, false, 1);
         new hoot.ReprojectToPlanarOp().apply(map);
 
@@ -92,16 +98,21 @@ var processFile = function(inputFile) {
 
         //write output
         //var inputFilename = inputFile.replace(/^.*[\\\/]/, '')
-        var row = [inputFile,buildingPolygonCount,poiCount,highwayCount,highwayLength.toFixed(2),linerRiverCount,riverLength.toFixed(2),otherCount];
-        hoot.log(row.join(','))
+        var row = [inputFile,buildingPolygonCount,poiCount,highwayCount,highwayLength.toFixed(2), +
+                   linerRiverCount,riverLength.toFixed(2),otherCount];
         if (typeof(output) !== 'undefined') {
             fs.appendFileSync(output, '\n');
             fs.appendFileSync(output, row.join(','));
         } else {
             hoot.log(row.join(','))
         }
+
+        map = null;
+        global.gc();
     } catch (err) {
-        hoot.warn(err);
+        hoot.warn(err.toString());
+        map = null;
+        global.gc();
     }
 }
 
@@ -132,7 +143,8 @@ if (typeof(output) !== 'undefined') {
 var fs = require('fs');
 
 //Format output columns
-var rowHeader = [['Dataset', 'Buildings', 'POI\'s', 'Linear Highways','Highway Length(meter)', 'Linear Rivers','Rivers Length(meter)','Others']];
+var rowHeader = [['Dataset', 'Buildings', 'POI\'s', 'Linear Highways','Highway Length(meter)', +
+                  'Linear Rivers','Rivers Length(meter)','Others']];
 if (typeof(output) !== 'undefined') {
     fs.writeFile(output, rowHeader.join(','));
 } else {

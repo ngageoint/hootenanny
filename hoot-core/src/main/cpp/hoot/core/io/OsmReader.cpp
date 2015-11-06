@@ -312,7 +312,7 @@ void OsmReader::read(shared_ptr<OsmMap> map)
 
   if (reader.parse(xmlInputSource) == false)
   {
-      throw Exception(_errorString);
+      throw HootException(_errorString);
   }
   file.close();
 

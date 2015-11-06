@@ -50,7 +50,6 @@ using namespace hoot::elements;
 // Qt
 #include <QDebug>
 
-
 namespace hoot {
 
 shared_ptr<OGRSpatialReference> OsmMap::_wgs84;
@@ -87,6 +86,7 @@ OsmMap::OsmMap(shared_ptr<const OsmMap> map, shared_ptr<OGRSpatialReference> srs
 
 OsmMap::~OsmMap()
 {
+  clear();
 }
 
 void OsmMap::append(ConstOsmMapPtr appendFromMap)
