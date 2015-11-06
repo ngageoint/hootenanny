@@ -45,6 +45,7 @@ using namespace geos::geom;
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -642,6 +643,10 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   if (p->getNumInteriorRings() == 0)
   {
     shared_ptr<Way> outer = _createWay(p->getExteriorRing(), circularError);
+    /*if (OsmSchema::getInstance().isArea(t, ElementType::Way) == false)
+    {
+      t.setArea(true);
+    }*/
     outer->setTags(t);
     _map->addWay(outer);
   }
@@ -649,6 +654,10 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   {
     shared_ptr<Relation> r(new Relation(_status, _map->createNextRelationId(), circularError,
       Relation::MULTIPOLYGON));
+    /*if (OsmSchema::getInstance().isArea(t, ElementType::Relation) == false)
+    {
+      t.setArea(true);
+    }*/
     r->setTags(t);
     _addPolygon(p, r, circularError);
     _map->addRelation(r);
