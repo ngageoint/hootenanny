@@ -50,6 +50,25 @@ import org.slf4j.LoggerFactory;
 public class ClipDatasetResource extends JobControllerBase {
 
 	private static final Logger log = LoggerFactory.getLogger(ClipDatasetResource.class);
+	protected static String _tileServerPath = null;
+
+	public ClipDatasetResource()
+	{
+		try
+		{
+
+			if (processScriptName ==  null)
+			{
+				processScriptName = HootProperties.getProperty("ClipDatasetMakefilePath");
+			}
+
+		}
+		catch (Exception ex)
+		{
+			log.error(ex.getMessage());
+		}
+	}
+	
 
 	/**
 	 * <NAME>Clip Dataset Service</NAME>
@@ -60,9 +79,9 @@ public class ClipDatasetResource extends JobControllerBase {
 	 * <BBOX>
 	 * The upper left and lower right of the bounding box to clip the dataset
 	 * </BBOX>	
-	 * <DATASET_ID>
-	 * 	The ID of the dataset to be clipped
-	 * 	</DATASET_ID>
+	 * <INPUT_NAME>
+	 * 	The name of the dataset to be clipped
+	 * 	</INPUT)NAME>
 	 * 	<OUTPUT_NAME>
 	 * 	The output name of the new dataset.
 	 * 	</OUTPUT_NAME>
@@ -75,7 +94,7 @@ public class ClipDatasetResource extends JobControllerBase {
 	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
 	 * 	<INPUT>{
    * "BBOX" : "{"LR":[-77.04813267598544,38.89292259454727],"UL":[-77.04315011486628,38.89958152667718]}",
-   * "DATASET_ID" : "2",
+   * "INPUT_NAME" : "DcRoads",
    * "OUTPUT_NAME" : "DcRoads_Clip"
 	 * }</INPUT>
 	 * <OUTPUT></OUTPUT>
@@ -93,51 +112,15 @@ public class ClipDatasetResource extends JobControllerBase {
 		{
 			JSONParser pars = new JSONParser();
 			JSONObject oParams = (JSONObject)pars.parse(params);
-			String confOutputName = oParams.get("OUTPUT_NAME").toString();
-
-
+			String clipOutputName = oParams.get("OUTPUT_NAME").toString();
 
 			JSONArray commandArgs = parseParams(params);
-			JSONObject conflationCommand = _createMakeScriptJobReq(commandArgs);
-
-			JSONArray reviewArgs = new JSONArray();
-			/*JSONObject param = new JSONObject();
-			param.put("value", confOutputName);
-			param.put("paramtype", String.class.getName());
-			param.put("isprimitivetype", "false");
-			reviewArgs.add(param);
-
-			param = new JSONObject();
-			param.put("value", false);
-			param.put("paramtype", Boolean.class.getName());
-			param.put("isprimitivetype", "true");
-			reviewArgs.add(param);
-
-			JSONObject prepareItemsForReviewCommand = _createReflectionJobReq(reviewArgs, "hoot.services.controllers.job.ReviewResource",
-					"prepareItemsForReview");
-
-
-//	  Density Raster
-			JSONArray rasterTilesArgs = new JSONArray();
-			JSONObject rasterTilesparam = new JSONObject();
-			rasterTilesparam.put("value", confOutputName);
-			rasterTilesparam.put("paramtype", String.class.getName());
-			rasterTilesparam.put("isprimitivetype", "false");
-			rasterTilesArgs.add(rasterTilesparam);
-
-
-
-			JSONObject ingestOSMResource = _createReflectionJobReq(rasterTilesArgs,
-					"hoot.services.controllers.ingest.RasterToTilesService",
-					"ingestOSMResourceDirect");
+			JSONObject clipCommand = _createMakeScriptJobReq(commandArgs);
 
 			JSONArray jobArgs = new JSONArray();
-			jobArgs.add(conflationCommand);
-			jobArgs.add(prepareItemsForReviewCommand);
-			jobArgs.add(ingestOSMResource);
+			jobArgs.add(clipCommand);
 
-
-			postChainJobRquest( jobId,  jobArgs.toJSONString());*/
+			postChainJobRquest( jobId,  jobArgs.toJSONString());
 		}
 		catch (Exception ex)
 		{
