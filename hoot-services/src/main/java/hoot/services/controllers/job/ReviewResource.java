@@ -91,9 +91,7 @@ public class ReviewResource
 
   public ReviewResource() throws Exception
   {
-    log.debug("Reading application settings...");
     appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
-    log.debug("Initializing transaction manager...");
     transactionManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
   }
 
