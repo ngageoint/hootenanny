@@ -68,7 +68,6 @@ public class UserResource
 
   public UserResource()
   {
-    log.debug("Reading application settings...");
     appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
   }
 
