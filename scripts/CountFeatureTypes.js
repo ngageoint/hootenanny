@@ -62,8 +62,10 @@ var processFile = function(inputFile) {
 
     var buildingPolygonCount = 0;
     var highwayCount = 0;
+    var highwayLength = 0.0;
     var poiCount = 0;
     var linerRiverCount = 0;
+    var riverLength = 0.0;
     var otherCount = 0;
 
     // Count the buildings, hightway,poi and river by visiting every element and
@@ -73,8 +75,10 @@ var processFile = function(inputFile) {
             buildingPolygonCount++;
         } else if (hoot.OsmSchema.isLinearHighway(e)) {
             highwayCount++;
+            highwayLength += hoot.ElementConverter.calculateLength(map, e);
         } else if (hoot.OsmSchema.isLinearWaterway(e)) {
             linerRiverCount++;
+            riverLength += hoot.ElementConverter.calculateLength(map, e);
         } else if (hoot.OsmSchema.isPoi(e)) {
             poiCount++;
         } else {
@@ -84,7 +88,7 @@ var processFile = function(inputFile) {
 
     //write output
     //var inputFilename = inputFile.replace(/^.*[\\\/]/, '')
-    var row = [inputFile,buildingPolygonCount,poiCount,highwayCount,linerRiverCount,otherCount];
+    var row = [inputFile,buildingPolygonCount,poiCount,highwayCount,highwayLength.toFixed(2),linerRiverCount,riverLength.toFixed(2),otherCount];
     if (typeof(output) !== 'undefined') {
         fs.appendFile(output, '\n');
         fs.appendFile(output, row.join(','));
@@ -120,7 +124,7 @@ if (typeof(output) !== 'undefined') {
 var fs = require('fs');
 
 //Format output columns
-var rowHeader = [['Dataset', 'Buildings', 'POI\'s', 'Linear Highways','Linear Rivers','Others']];
+var rowHeader = [['Dataset', 'Buildings', 'POI\'s', 'Linear Highways','Highway Length(meter)', 'Linear Rivers','Rivers Length(meter)','Others']];
 if (typeof(output) !== 'undefined') {
     fs.writeFile(output, rowHeader.join(','));
 } else {

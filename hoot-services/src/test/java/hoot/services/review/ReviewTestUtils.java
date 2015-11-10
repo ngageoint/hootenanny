@@ -1000,6 +1000,11 @@ public class ReviewTestUtils
   }
   
   public static void populateReviewDataForAllDataTypes() throws Exception
+  {
+  	populateReviewDataForAllDataTypes(mapId);
+  }
+  
+  public static void populateReviewDataForAllDataTypes(final long mapId) throws Exception
 	{
 		final String fakeJobId = UUID.randomUUID().toString();
     DbUtils.insertJobStatus(fakeJobId, JobStatusManager.JOB_STATUS.COMPLETE.toInt(), conn);

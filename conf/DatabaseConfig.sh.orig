@@ -1,3 +1,4 @@
+#hoot services variables
 export DB_NAME=hoot
 export DB_USER=hoot
 export DB_PASSWORD=hoottest
@@ -5,3 +6,4 @@ export DB_HOST=localhost
 export DB_PORT=5432
 export WFS_DB_NAME=wfsstoredb
 export DB_ALLOWED_TABLES=changesets,current_nodes,current_relation_members,current_relations,current_way_nodes,current_ways,databasechangelog,databasechangeloglock,element_id_mappings,folder_map_mappings,folders,job_status,maps,review_items,review_map,users
+export DB_NAME_OSMAPI=osmapi_test

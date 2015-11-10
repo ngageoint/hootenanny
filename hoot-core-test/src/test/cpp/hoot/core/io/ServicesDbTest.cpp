@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -444,6 +444,21 @@ public:
     ServicesDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
 
+    // parse out the osm api dbname, dbuser, and dbpassword
+    //example: postgresql://hoot:hoottest@localhost:5432/osmapi_test
+    QUrl dbUrl = ServicesDbTestUtils::getOsmApiDbUrl();
+    QString dbUrlString = dbUrl.toString();
+    QStringList dbUrlParts = dbUrlString.split("/");
+    QString dbName = dbUrlParts[dbUrlParts.size()-1];
+    QStringList userParts = dbUrlParts[dbUrlParts.size()-2].split(":");
+    QString dbUser = userParts[0];
+    QString dbPassword = userParts[1].split("@")[0];
+    QString dbHost = userParts[1].split("@")[1];
+    QString dbPort = userParts[2];
+    LOG_DEBUG("Name="+dbName+", user="+dbUser+", pass="+dbPassword+", port="+dbPort+", host="+dbHost);
+
+    QString auth = "-h "+dbHost+" -p "+dbPort+" -U "+dbUser;
+
     /////////////////////////////////////
     // INSERT NODES INTO DB
     /////////////////////////////////////
@@ -456,10 +471,16 @@ public:
     QList<float> lons = QList<float>() << -106.5 << -104;
 
     // Insert nodes
-    std::system("export PGPASSWORD=hoottest; export PGUSER=hoot; export PGDATABASE=osmapi_test; \
-      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/users.sql > /dev/null 2>&1; \
-      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1; \
-      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodes.sql > /dev/null 2>&1");
+    QString cmd = "export PGPASSWORD="+dbPassword+"; \
+      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/users.sql > /dev/null 2>&1; \
+      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1; \
+      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodes.sql > /dev/null 2>&1";
+
+    if( std::system(cmd.toStdString().c_str()) != 0 )
+    {
+      LOG_WARN("Failed postgres command.  Exiting test.");
+      return;
+    }
 
     /////////////////////////////////////
     // SELECT THE NODES USING SELECT_ALL
@@ -539,9 +560,13 @@ public:
     nodeIds.push_back(nodeId1);
     nodeIds.push_back(nodeId2);
 
-    std::system("export PGPASSWORD=hoottest; export PGUSER=hoot; export PGDATABASE=osmapi_test; \
-      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/ways.sql > /dev/null 2>&1");
-
+    cmd = "export PGPASSWORD="+dbPassword+";\
+      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/ways.sql > /dev/null 2>&1";
+    if( std::system(cmd.toStdString().c_str()) != 0 )
+    {
+      LOG_WARN("Failed postgres command.  Exiting test.");
+      return;
+    }
 
     ///////////////////////////////////////////////
     /// Reads the ways from the Osm Api DB
@@ -607,9 +632,13 @@ public:
     long relationId = 1;
     ids.append(relationId);
 
-    std::system("export PGPASSWORD=hoottest; export PGUSER=hoot; export PGDATABASE=osmapi_test; \
-      psql -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/relations.sql > /dev/null 2>&1");
-
+    cmd = "export PGPASSWORD="+dbPassword+";\
+      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/relations.sql > /dev/null 2>&1";
+    if( std::system(cmd.toStdString().c_str()) != 0 )
+    {
+      LOG_WARN("Failed postgres command.  Exiting test.");
+      return;
+    }
 
     ///////////////////////////////////////////////
     /// Reads the relations from the Osm Api DB
