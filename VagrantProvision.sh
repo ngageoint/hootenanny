@@ -76,6 +76,12 @@ if ! grep --quiet NODE_PATH ~/.profile; then
     source ~/.profile
 fi
 
+# Module needed for OSM API db test
+if [ ! -d /home/vagrant/.cpan ]; then
+    (echo y;echo o conf prerequisites_policy follow;echo o conf commit)|sudo cpan
+    sudo perl -MCPAN -e 'install XML::Simple'
+fi
+
 # Create Services Database
 if ! sudo -u postgres psql -lqt | grep -i --quiet hoot; then
     echo "Creating Services Database"

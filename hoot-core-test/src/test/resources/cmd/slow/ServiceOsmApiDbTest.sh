@@ -19,7 +19,7 @@ mkdir -p test-output/cmd/ServiceOsmApiDbTest
 #echo $PGDATABASE $PGHOST $PGPORT $PGUSER $PGPASSWORD
 
 # Load the database with known data
-psql $AUTH -d $DB_NAME_OSMAPI -f hoot-core-test/src/test/resources/ToyTestA.sql
+psql --quiet $AUTH -d $DB_NAME_OSMAPI -f hoot-core-test/src/test/resources/ToyTestA.sql
 
 export DB_URL="postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
 
