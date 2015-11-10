@@ -47,11 +47,16 @@ Driver::Driver()
 
 void Driver::_addDefaultJobSettings(pp::Job& job)
 {
+  QString schemaPath = ConfPath::search("schema.json");
   shared_ptr<OsmSchemaLoader> l =
-    OsmSchemaLoaderFactory::getInstance().createLoader(ConfPath::search("schema.json"));
+    OsmSchemaLoaderFactory::getInstance().createLoader(schemaPath);
+  OsmSchema tmp;
+  l->load(schemaPath, tmp);
   set<QString> deps = l->getDependencies();
 
   QHash<QString,QString> fileList;
+
+  job.addPlugin(getenv("HOOT_HOME") + string("/lib/libHootJs.so.1"));
 
   for (set<QString>::iterator it = deps.begin(); it != deps.end(); ++it)
   {

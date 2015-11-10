@@ -115,13 +115,10 @@ double AttributeComparator::compareMaps()
 
     if (bestScore >= 0.0)
     {
-      //if (scores.size() < 10)
-      {
-        LOG_INFO("====");
-        LOG_INFO("score: " << bestScore);
-        LOG_INFO("t1: \n" << t1);
-        LOG_INFO("t2: \n" << t2);
-      }
+//        LOG_INFO("====");
+//        LOG_INFO("score: " << bestScore);
+//        LOG_INFO("t1: \n" << t1);
+//        LOG_INFO("t2: \n" << t2);
 
       scoreSum += bestScore;
       scores.push_back(bestScore);

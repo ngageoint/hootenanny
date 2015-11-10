@@ -140,7 +140,7 @@
             [
                 "public_transport=station",
                 "train=yes"
-            ],
+            ]
         ]
     }
 ]

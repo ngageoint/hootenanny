@@ -36,7 +36,7 @@ shared_ptr<OsmSchemaLoader> OsmSchemaLoaderFactory::createLoader(QString url)
     }
   }
 
-  LOG_DEBUG("Available loaders: " << names);
+  LOG_WARN("Available loaders: " << names);
   throw HootException("Unable to load specified URL (wrong extension?): " + url);
 }
 
