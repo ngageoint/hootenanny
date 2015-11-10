@@ -941,12 +941,17 @@ private:
     double bestScore = -1.0;
     VertexId bestVid = vid1;
     graph_traits < TagGraph >::vertex_iterator vi, vend;
-//    LOG_DEBUG("from " << _graph[vid1].name.toStdString() << " to " <<
-//              _graph[vid2].name.toStdString());
+    // LOG_DEBUG("from " << _graph[vid1].name << " to " << _graph[vid2].name);
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
     {
-      double s = std::min(d1[*vi], d2[*vi]);
-      //LOG_DEBUG("  " << _graph[*vi].name.toStdString() << " : " << d1[*vi] << " " << d2[*vi]);
+      // The best minimum score is generally the average.
+      // give a very slight advantage to the tags with a higher max score.
+      // give a very slight advantage to the first input.
+      double s = std::min(d1[*vi], d2[*vi] + 1e-6) +
+        std::max(d1[*vi], d2[*vi]) / 1e6;
+      //if (s > 0)
+      // LOG_DEBUG("  " << _graph[*vi].name << " : " << d1[*vi] << " " << d2[*vi] <<
+      // " (" << s << ")");
 
       if (s > bestScore)
       {

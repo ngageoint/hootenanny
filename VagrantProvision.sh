@@ -57,7 +57,7 @@ if ! ogrinfo --formats | grep --quiet FileGDB; then
     export PATH=/usr/local/lib:/usr/local/bin:$PATH
     cd gdal-1.10.1
     sudo ./configure --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
-    sudo make -j5
+    sudo make -j$(nproc)
     sudo make install
     cd swig/python
     python setup.py build
@@ -74,6 +74,12 @@ if ! grep --quiet NODE_PATH ~/.profile; then
     echo 'Adding NODE_PATH to user environment'
     echo 'export NODE_PATH=/usr/local/lib/node_modules' >> ~/.profile
     source ~/.profile
+fi
+
+# Module needed for OSM API db test
+if [ ! -d /home/vagrant/.cpan ]; then
+    (echo y;echo o conf prerequisites_policy follow;echo o conf commit)|sudo cpan
+    sudo perl -MCPAN -e 'install XML::Simple'
 fi
 
 # Create Services Database
@@ -132,6 +138,13 @@ cd /home/vagrant/hoot
 cp ./conf/DatabaseConfig.sh.orig ./conf/DatabaseConfig.sh
 source ./SetupEnv.sh
 
+# Check that hoot-ui submodule has been init'd and updated
+if [ ! "$(ls -A hoot-ui)" ]; then
+    echo "hoot-ui is empty"
+    echo "init'ing and updating submodule"
+    git submodule init && git submodule update
+fi
+
 echo "Configuring Hoot"
 aclocal && autoconf && autoheader && automake && ./configure -q --with-rnd --with-services
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
@@ -141,7 +154,7 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
 fi
 echo "Building Hoot"
 make clean
-make -sj4
+make -sj$(nproc)
 make docs
 
 # Tweak dev environment to make tests run faster
@@ -150,8 +163,8 @@ echo 'testJobStatusPollerTimeout=250' > $HOOT_HOME/hoot-services/src/main/resour
 
 # Run Tests
 #echo "Running tests"
-#make -sj4 test
-#make -sj4 test-all
+#make -sj$(nproc) test
+#make -sj$(nproc) test-all
 
 # Deploy to Tomcat
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then

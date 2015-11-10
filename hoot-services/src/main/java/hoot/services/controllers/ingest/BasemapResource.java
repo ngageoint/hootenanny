@@ -28,6 +28,7 @@ package hoot.services.controllers.ingest;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -47,6 +48,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -59,6 +62,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
@@ -69,9 +76,33 @@ public class BasemapResource extends JobControllerBase {
 	private static final Logger log = LoggerFactory.getLogger(BasemapResource.class);
 	protected static String _tileServerPath = null;
 	protected static String _ingestStagingPath = null;
-	private String homeFolder = null;
+	private static String homeFolder = null;
 
 	protected static Map<String, String> _basemapRasterExt = null;
+	
+	static
+	{
+		try
+		{
+			homeFolder = HootProperties.getProperty("homeFolder");
+			_tileServerPath = HootProperties.getProperty("tileServerPath");
+			_ingestStagingPath = HootProperties.getProperty("ingestStagingPath");	
+			
+			_basemapRasterExt = new HashMap<String, String>();
+			String extStr = HootProperties.getProperty("BasemapRasterExtensions");
+			String[] extList = extStr.toLowerCase().split(",");
+			for(String ext : extList)
+			{
+				_basemapRasterExt.put(ext, ext);
+			}
+			
+			
+		}
+		catch (Exception ex)
+		{
+			log.error(ex.getMessage());
+		}
+	}
 
 	public BasemapResource()
 	{
@@ -81,31 +112,6 @@ public class BasemapResource extends JobControllerBase {
 			{
 				processScriptName = HootProperties.getProperty("BasemapRasterToTiles");
 			}
-
-			if (_basemapRasterExt ==  null)
-			{
-				_basemapRasterExt = new HashMap<String, String>();
-				String extStr = HootProperties.getProperty("BasemapRasterExtensions");
-				String[] extList = extStr.toLowerCase().split(",");
-				for(String ext : extList)
-				{
-					_basemapRasterExt.put(ext, ext);
-				}
-			}
-
-			if(_tileServerPath == null)
-			{
-				_tileServerPath = HootProperties.getProperty("tileServerPath");
-
-			}
-
-			if(_ingestStagingPath == null)
-			{
-				_ingestStagingPath = HootProperties.getProperty("ingestStagingPath");
-			}
-			homeFolder = HootProperties.getProperty("homeFolder");
-
-
 		}
 		catch (Exception ex)
 		{
@@ -113,6 +119,25 @@ public class BasemapResource extends JobControllerBase {
 		}
 	}
 
+	public void createTileServerPath()
+	{
+		try
+		{
+			File f = new File(_tileServerPath);
+			if(!f.exists())
+			{
+				FileUtils.forceMkdir(f);
+			}
+		}
+		catch (IOException iex)
+		{
+			log.error(iex.getMessage());
+		}
+		catch (Exception ex)
+		{
+			log.error(ex.getMessage());
+		}
+	}
 
 
 	/**
@@ -358,10 +383,40 @@ public class BasemapResource extends JobControllerBase {
 					JSONObject jsonMeta = (JSONObject) parser.parse(meta);
 					String jobId = jsonMeta.get("jobid").toString();
 
+					// Check for tilemapresource.xml in processed folder
+					JSONObject jsonExtent = new JSONObject();
+					
+					String XmlPath = _tileServerPath + "/BASEMAP/" + name + "/tilemapresource.xml";
+					File fXmlFile = new File(XmlPath);
+					if (fXmlFile.exists()) {
+						try {
+							DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+							DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+							Document doc = dBuilder.parse(fXmlFile);
+							doc.getDocumentElement().normalize();
+							NodeList l = doc.getElementsByTagName("BoundingBox");
+							Node prop = l.item(0);
+							NamedNodeMap attr = prop.getAttributes();
+							if (null != attr){
+								jsonExtent.put("minx", Double.parseDouble(attr.getNamedItem("minx").getNodeValue()));
+								jsonExtent.put("miny", Double.parseDouble(attr.getNamedItem("miny").getNodeValue()));
+								jsonExtent.put("maxx", Double.parseDouble(attr.getNamedItem("maxx").getNodeValue()));
+								jsonExtent.put("maxy", Double.parseDouble(attr.getNamedItem("maxy").getNodeValue()));
+								} 
+							else {
+								jsonExtent = null;
+							}
+						} catch (Exception e) {
+							jsonExtent = null;
+						}
+					}
+						
+
 					JSONObject oBaseMap = new JSONObject();
 					oBaseMap.put("name", name);
 					oBaseMap.put("status", ext);
 					oBaseMap.put("jobid", jobId);
+					oBaseMap.put("extent", jsonExtent);
 					filesList.add(oBaseMap);
 				}
 

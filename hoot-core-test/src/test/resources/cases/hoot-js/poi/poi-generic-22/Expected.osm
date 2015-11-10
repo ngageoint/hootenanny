@@ -12,7 +12,7 @@
         <tag k="int_name" v="‘Arab Banī Hamīda; Arab Bani Hamida"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:uuid" v="GeoNames.org:250376"/>
-        <tag k="hoot:review:note" v="Somewhat similar - very similar names, very close together, generic type to place match"/>
+        <tag k="hoot:review:note" v="Somewhat similar (0.3m) - very similar names, very close together, generic type to place match"/>
         <tag k="uuid" v="{b18057ff-736d-5d20-b873-837f0c172e33}"/>
         <tag k="name" v="Arab Bani Hamida - عرب بني حميدة"/>
         <tag k="name:en" v="Arab Bani Hamida"/>
@@ -26,7 +26,7 @@
         <tag k="hoot:review:score" v="1"/>
         <tag k="alt_name" v="`Arab Bani Hamida;`Arab Bani Hamidah;‘Arab Banī Hamīda;‘Arab Banī Ḩamīdah"/>
         <tag k="hoot:review:uuid" v="{b18057ff-736d-5d20-b873-837f0c172e33}"/>
-        <tag k="hoot:review:note" v="Somewhat similar - very similar names, very close together, generic type to place match"/>
+        <tag k="hoot:review:note" v="Somewhat similar (0.3m) - very similar names, very close together, generic type to place match"/>
         <tag k="uuid" v="GeoNames.org:250376"/>
         <tag k="name" v="‘Arab Banī Ḩamīdah"/>
         <tag k="error:circular" v="1000"/>

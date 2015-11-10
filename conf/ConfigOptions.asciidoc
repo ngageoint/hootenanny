@@ -724,6 +724,18 @@ Example Usage:
 hoot ogr2osm -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/Identity.js output.osm test-files/jakarta_raya_coastline.shp
 ----
 
+=== ogr.reader.bounding.box.latlng
+
+* Data Type: string
+* Default Value: ``
+
+Similar to `ogr.reader.bounding.box` but uses WGS84 to specify the bounds rather than the source
+projection. Only one of the two options can be specified.
+
+A best effort will be made to convert between the two projections. The translated bounding box
+will approximate the minimum bounding rectangle of the lat/lng bounding box. In some cases this
+may be significantly larger.
+
 === ogr.reader.epsg.override
 
 * Data Type: int
@@ -1199,6 +1211,16 @@ waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 
 Contains the DB URL for unit testing. This is typically only used by developers.
 
+=== services.db.test.url.osmapi
+
+* Data Type: string
+* Default Value: `postgresql://hoot:hoottest@localhost:5432/osmapi_test`
+//* Default Value: `postgresql://postgres@10.194.70.78:5432/terrytest`
+//note: both above will be replace with a local db and can be overridden 
+
+Contains the DB URL for an OpenStreetMaps (OSM) API database for unit testing. This is
+typically only used by developers.
+
 === services.db.writer.create.user
 
 * Data Type: bool
@@ -1206,6 +1228,15 @@ Contains the DB URL for unit testing. This is typically only used by developers.
 
 Should the services DB writer automatically create the specified user if it doesn't exist. This
 is most useful when debugging and testing.
+
+=== services.db.writer.output.id.mappings
+
+* Data Type: string
+* Default Value: ``
+
+If this value is set to a non-empty string, the system will attempt to open a file with the specified name
+and output all the ID mappings (source to destination) used for nodes, ways, and relations that were
+written to the database.
 
 === set.circular.error.visitor.value
 

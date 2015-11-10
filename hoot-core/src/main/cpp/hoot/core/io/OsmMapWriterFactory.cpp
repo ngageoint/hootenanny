@@ -50,7 +50,6 @@ shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
   if (writerOverride != "")
   {
     writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(writerOverride));
-    LOG_DEBUG("Using writer: " << writerOverride);
   }
 
   vector<std::string> names =

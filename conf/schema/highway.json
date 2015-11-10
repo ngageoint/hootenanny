@@ -34,21 +34,14 @@
         ]
     },
     {
+        "#": "Construction is a bit of an outlier. The construction tag takes the place of the road type, then construction=* will contain the road type. They do this in OSM to make the renderer easier. For conflation it is a bit problematic. We likely need to create compound tags for each of the construction types and link them appropriately. TBD",
         "isA": "highway=road",
         "name": "highway=construction",
         "objectType": "tag",
         "similarTo": [
             {
-                "name": "highway=tertiary",
-                "weight": 0.8
-            },
-            {
-                "name": "highway=residential",
-                "weight": 0.9
-            },
-            {
-                "name": "highway=service",
-                "weight": 0.8
+                "name": "highway=road",
+                "weight": 0.3
             }
         ]
     },
@@ -392,6 +385,10 @@
         "name": "highway=unclassified",
         "objectType": "tag",
         "similarTo": [
+            {
+                "name": "highway=track",
+                "weight": 0.8
+            },
             {
                 "name": "highway=tertiary",
                 "weight": 0.8

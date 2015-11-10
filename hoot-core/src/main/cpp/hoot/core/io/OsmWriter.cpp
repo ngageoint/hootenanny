@@ -38,6 +38,7 @@ using namespace boost;
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/OsmUtils.h>
 
 // Qt
 #include <QBuffer>
@@ -194,8 +195,13 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
     writer.writeAttribute("id", QString::number(n->getId()));
     if (_includeCompatibilityTags)
     {
-      writer.writeAttribute("timestamp", _timestamp);
-      writer.writeAttribute("version", "1");
+      //writer.writeAttribute("timestamp", _timestamp);
+       // LOG_WARN("timestamp value = ");
+       // LOG_WARN(n->getTimestamp());
+      writer.writeAttribute("timestamp", OsmUtils::toTimeString(n->getTimestamp()));
+      //writer.writeAttribute("version", "1");
+      writer.writeAttribute("version", QString::number(n->getVersion()));
+      writer.writeAttribute("changeset", QString::number(n->getChangeset()));
     }
     writer.writeAttribute("lat", QString::number(n->getY(), 'f', _precision));
     writer.writeAttribute("lon", QString::number(n->getX(), 'f', _precision));
@@ -252,8 +258,13 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
     writer.writeAttribute("id", QString::number(w->getId()));
     if (_includeCompatibilityTags)
     {
-      writer.writeAttribute("timestamp", _timestamp);
-      writer.writeAttribute("version", "1");
+      //writer.writeAttribute("timestamp", _timestamp);
+      //LOG_WARN("wtimestamp value = ");
+      //LOG_WARN(w->getTimestamp());
+      writer.writeAttribute("timestamp", OsmUtils::toTimeString(w->getTimestamp()));
+      //writer.writeAttribute("version", "1");
+      writer.writeAttribute("version", QString::number(w->getVersion()));
+      writer.writeAttribute("changeset", QString::number(w->getChangeset()));
     }
 
     for (size_t j = 0; j < w->getNodeCount(); j++)
@@ -323,8 +334,13 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
     writer.writeAttribute("id", QString::number(r->getId()));
     if (_includeCompatibilityTags)
     {
-      writer.writeAttribute("timestamp", _timestamp);
-      writer.writeAttribute("version", "1");
+      //writer.writeAttribute("timestamp", _timestamp);
+      //LOG_WARN("rtimestamp value = ");
+      //LOG_WARN(r->getTimestamp());
+      writer.writeAttribute("timestamp", OsmUtils::toTimeString(r->getTimestamp()));
+      //writer.writeAttribute("version", "1");
+      writer.writeAttribute("version", QString::number(r->getVersion()));
+      writer.writeAttribute("changeset", QString::number(r->getChangeset()));
     }
 
     const vector<RelationData::Entry>& members = r->getMembers();

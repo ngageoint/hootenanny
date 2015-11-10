@@ -244,7 +244,7 @@ private:
 
   double _convertLat(long lat);
 
-  ElementId _convertToElementId(int id, int memberType);
+  ElementId _convertToElementId(long id, int memberType);
 
   long _createRelationId(long fromFile);
 

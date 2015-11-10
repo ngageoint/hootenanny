@@ -9,6 +9,10 @@
 namespace hoot
 {
 
+/**
+ * Compare tags that have the specified category. Ignore the other tags that don't have the
+ * same category.
+ */
 class TagCategoryDifferencer : public TagFilteredDifferencer, public Configurable
 {
 public:

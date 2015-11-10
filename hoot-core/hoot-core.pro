@@ -30,7 +30,10 @@ OTHER_FILES = \
     ../rules/LinearWaterway.js \
     ../conf/LinearWaterway.conf \
     ../conf/LinearWaterway-match-scoring.conf \
-    ../conf/WaterwaySchema.json \
+    ../conf/schema/all_weather.json \
+    ../conf/schema/highway.json \
+    ../conf/schema/natural.json \
+    ../conf/schema/public_transport.json \
     ../rules/template/ConflateRules.js \
 
 include(../Configure.pri)

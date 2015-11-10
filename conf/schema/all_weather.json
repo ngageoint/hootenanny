@@ -6,11 +6,11 @@
         "similarTo": [
             {
                 "name": "all_weather=no",
-                "weight": 0.5
+                "weight": 0.7
             },
             {
                 "name": "all_weather=yes",
-                "weight": 0.5
+                "weight": 0.3
             }
         ]
     },
@@ -32,11 +32,11 @@
         "similarTo": [
             {
                 "name": "all_weather=no",
-                "weight": 0.5
+                "weight": 0.3
             },
             {
                 "name": "all_weather=yes",
-                "weight": 0.5
+                "weight": 0.7
             }
         ]
     },

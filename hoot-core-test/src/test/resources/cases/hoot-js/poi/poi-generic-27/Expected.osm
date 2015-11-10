@@ -6,7 +6,7 @@
         <tag k="hoot:review:source" v="1"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:uuid" v="{52813480}"/>
-        <tag k="hoot:review:note" v="Somewhat similar - very close together, similar POI type"/>
+        <tag k="hoot:review:note" v="Somewhat similar (44m) - very close together, similar POI type"/>
         <tag k="uuid" v="{b18057ff-736d-5d20-b873-837f0c172e33}"/>
         <tag k="name" v="Amiga"/>
         <tag k="tourism" v="hotel"/>
@@ -22,7 +22,7 @@
         <tag k="phone" v="89-4309044"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:uuid" v="{b18057ff-736d-5d20-b873-837f0c172e33}"/>
-        <tag k="hoot:review:note" v="Somewhat similar - very close together, similar POI type"/>
+        <tag k="hoot:review:note" v="Somewhat similar (44m) - very close together, similar POI type"/>
         <tag k="addr:housenumber" v="13"/>
         <tag k="language" v="GER"/>
         <tag k="source" v="navteq"/>

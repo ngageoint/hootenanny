@@ -43,6 +43,7 @@ using namespace boost;
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
 
@@ -65,11 +66,14 @@ OsmReader::OsmReader()
   _circularError = 15.0;
   _useFileStatus = ConfigOptions().getReaderUseFileStatus();
   _useDataSourceId = false;
+  _addSourceDateTime = ConfigOptions().getReaderAddSourceDatetime();
 }
 
 void OsmReader::_parseTimeStamp(const QXmlAttributes &attributes)
 {
-  if (attributes.value("timestamp") != "" && attributes.value("timestamp") != "1970-01-01T00:00:00Z" )
+  if ( (attributes.value("timestamp") != "") &&
+       (attributes.value("timestamp") != "1970-01-01T00:00:00Z") &&
+       (_addSourceDateTime == true) )
   {
     _element->setTag("source:datetime",attributes.value("timestamp"));
   }
@@ -92,7 +96,15 @@ void OsmReader::_createNode(const QXmlAttributes &attributes)
   double x = _parseDouble(attributes.value("lon"));
   double y = _parseDouble(attributes.value("lat"));
 
-  _element.reset(new Node(_status, newId, x, y, _circularError));
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
+  long version = 1;
+  if (attributes.value("version") != "") version = _parseDouble(attributes.value("version"));
+  long changeset = 1;
+  if (attributes.value("changeset") != "") changeset = _parseDouble(attributes.value("changeset"));
+  unsigned int timestamp = 0;
+  if (attributes.value("timestamp") != "") timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+
+  _element.reset(new Node(_status, newId, x, y, changeset, version, timestamp, _circularError));
 
   if (_element->getTags().getInformationCount() > 0)
   {
@@ -104,7 +116,16 @@ void OsmReader::_createRelation(const QXmlAttributes &attributes)
 {
   _relationId = _parseLong(attributes.value("id"));
   long newId = _getRelationId(_relationId);
-  _element.reset(new Relation(_status, newId, _circularError));
+
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
+  long version = 1;
+  if (attributes.value("version") != "") version = _parseDouble(attributes.value("version"));
+  long changeset = 1;
+  if (attributes.value("changeset") != "") changeset = _parseDouble(attributes.value("changeset"));
+  unsigned int timestamp = 0;
+  if (attributes.value("timestamp") != "") timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+
+  _element.reset(new Relation(_status, newId, changeset, version, timestamp, _circularError));
 
   _parseTimeStamp(attributes);
 }
@@ -124,7 +145,15 @@ void OsmReader::_createWay(const QXmlAttributes &attributes)
   }
   _wayIdMap.insert(_wayId, newId);
 
-  _element.reset(new Way(_status, newId, _circularError));
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
+  long version = 1;
+  if (attributes.value("version") != "") version = _parseDouble(attributes.value("version"));
+  long changeset = 1;
+  if (attributes.value("changeset") != "") changeset = _parseDouble(attributes.value("changeset"));
+  unsigned int timestamp = 0;
+  if (attributes.value("timestamp") != "") timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+
+  _element.reset(new Way(_status, newId, changeset, version, timestamp, _circularError));
 
   _parseTimeStamp(attributes);
 }
@@ -280,6 +309,7 @@ void OsmReader::read(shared_ptr<OsmMap> map)
   LOG_DEBUG("File " << _path << " opened for read");
 
   QXmlInputSource xmlInputSource(&file);
+
   if (reader.parse(xmlInputSource) == false)
   {
       throw Exception(_errorString);

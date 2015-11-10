@@ -24,6 +24,30 @@
         ]
     },
     {
+        "#": "Any one of these tag combos can match, but all the tags in the sub-array must match.",
+        "categories": [
+            "poi",
+            "hgispoi"
+        ],
+        "isA": "public_transport=station",
+        "name": "bus_station",
+        "objectType": "compound",
+        "similarTo": {
+            "name": "amenity=bus_station",
+            "weight": 1
+        },
+        "tags": [
+            [
+                "public_transport=station",
+                "bus=yes"
+            ],
+            [
+                "public_transport=station",
+                "amenity=bus_station"
+            ]
+        ]
+    },
+    {
         "dataType": "enumeration",
         "geometries": [
             "node",
@@ -98,6 +122,25 @@
                 "public_transport=platform",
                 "train=yes"
             ]
+        ]
+    },
+    {
+        "categories": [
+            "poi",
+            "hgispoi"
+        ],
+        "isA": "public_transport=station",
+        "name": "railway_station",
+        "objectType": "compound",
+        "similarTo": {
+            "name": "railway=station",
+            "weight": 1
+        },
+        "tags": [
+            [
+                "public_transport=station",
+                "train=yes"
+            ],
         ]
     }
 ]
