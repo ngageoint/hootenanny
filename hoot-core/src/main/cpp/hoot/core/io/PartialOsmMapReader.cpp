@@ -48,7 +48,6 @@ void PartialOsmMapReader::readPartial(shared_ptr<OsmMap> map)
   while (hasMoreElements() && (_elementsRead < _maxElementsPerMap))
   {
     shared_ptr<Element> element = readNextElement();
-    LOG_WARN(element->getId());
     //This check is necessary for now, unfortunately.  See ServicesDbReader::_resultToElement for
     //an explanation.
     if (element.get())

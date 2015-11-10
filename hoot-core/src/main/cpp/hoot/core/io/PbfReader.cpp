@@ -1050,7 +1050,6 @@ bool PbfReader::hasMoreElements()
 
 shared_ptr<Element> PbfReader::readNextElement()
 {
-  LOG_WARN("mingtest readNextElement");
   if (!hasMoreElements())
   {
     throw HootException("No more elements available to read for the map.");
