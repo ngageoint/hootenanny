@@ -97,10 +97,10 @@ void MergeNearbyNodes::apply(shared_ptr<OsmMap>& map)
 
   ClosePointHash cph(_distance);
 
-  const OsmMap::NodeMap& nodes = planar->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); it++)
+  const NodeMap& nodes = planar->getNodeMap();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); it++)
   {
-    const shared_ptr<Node>& n = it.value();
+    const shared_ptr<Node>& n = it->second;
     cph.addPoint(n->getX(), n->getY(), n->getId());
   }
 

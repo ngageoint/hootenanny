@@ -223,7 +223,7 @@ private:
   int _blobIndex;
 
   //partial read iterators
-  OsmMap::NodeMap::const_iterator _nodesItr;
+  NodeMap::const_iterator _nodesItr;
   WayMap::const_iterator _waysItr;
   RelationMap::const_iterator _relationsItr;
 

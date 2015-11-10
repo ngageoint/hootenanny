@@ -467,10 +467,10 @@ void OgrWriter::write(shared_ptr<const OsmMap> map)
   ElementProviderPtr provider(boost::const_pointer_cast<ElementProvider>(
     boost::dynamic_pointer_cast<const ElementProvider>(map)));
 
-  const OsmMap::NodeMap& nm = map->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
+  const NodeMap& nm = map->getNodeMap();
+  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    _writePartial(provider, it.value());
+    _writePartial(provider, it->second);
   }
 
   const WayMap& wm = map->getWays();

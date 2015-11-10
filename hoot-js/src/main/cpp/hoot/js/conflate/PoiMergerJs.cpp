@@ -111,31 +111,35 @@ v8::Handle<v8::Value> PoiMergerJs::jsPoiMerge(const v8::Arguments& args)
     //   A->B, A->C, A->D, A->E
     //
     // ...then pass those pairs one at a time through the merger, since it only merges pairs
-    OsmMap::NodeMap nodes = map->getNodeMap();
+    NodeMap nodes = map->getNodeMap();
     OsmMapPtr mergedMap(map);
-    const ElementId firstId = ElementId::node((*(nodes.constBegin()))->getId());
+    const ElementId firstId = ElementId::node(((nodes.begin()->second))->getId());
     //LOG_DEBUG("First ID: " << firstId.getId());
-    for (OsmMap::NodeMap::const_iterator it = nodes.constBegin() + 1; it != nodes.constEnd(); ++it)
+    int count = 0;
+    for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
     {
-      const boost::shared_ptr<const Node>& n = it.value();
+      if (count > 0) {
+        const boost::shared_ptr<const Node>& n = it->second;
 
-      std::set< std::pair< ElementId, ElementId> > matches;
-      matches.insert(std::pair<ElementId,ElementId>(firstId, ElementId::node(n->getId())));
+        std::set< std::pair< ElementId, ElementId> > matches;
+        matches.insert(std::pair<ElementId,ElementId>(firstId, ElementId::node(n->getId())));
 
-      // Now create scriptmerger, and invoke apply method which will apply apply merge transformation, reducing the POIs down to one
-      ScriptMerger merger(script, plugin, matches);
-      OsmMapPtr mergedMap(map);
-      std::vector< std::pair< ElementId, ElementId > > replacedNodes;
-      merger.apply(mergedMap, replacedNodes );
+        // Now create scriptmerger, and invoke apply method which will apply apply merge transformation, reducing the POIs down to one
+        ScriptMerger merger(script, plugin, matches);
+        OsmMapPtr mergedMap(map);
+        std::vector< std::pair< ElementId, ElementId > > replacedNodes;
+        merger.apply(mergedMap, replacedNodes );
 
-      if ( replacedNodes.size() == 1 )
-      {
-        /*
-        LOG_DEBUG("POI merge: replacing node #" << replacedNodes[0].first.getId() <<
-          " with updated version of node #" << replacedNodes[0].second.getId() );
-        */
-        mergedMap->replaceNode(replacedNodes[0].first.getId(), replacedNodes[0].second.getId());
+        if ( replacedNodes.size() == 1 )
+        {
+          /*
+          LOG_DEBUG("POI merge: replacing node #" << replacedNodes[0].first.getId() <<
+            " with updated version of node #" << replacedNodes[0].second.getId() );
+          */
+          mergedMap->replaceNode(replacedNodes[0].first.getId(), replacedNodes[0].second.getId());
+        }
       }
+      count++;
     }
 
     // Hand merged POIs back to caller in OsmMap

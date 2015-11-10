@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,39 +24,19 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PartialOsmMapReader.h"
 
+#ifndef NODEMAP_H
+#define NODEMAP_H
+
+// TGS
+#include <tgs/HashMap.h>
+#include <tgs/SharedPtr.h>
 
 namespace hoot
 {
-
-PartialOsmMapReader::PartialOsmMapReader()
-{
-  setMaxElementsPerMap(ConfigOptions().getMaxElementsPerPartialMap());
-  _elementsRead = 0;
+  class Node;
+  typedef HashMap<long, boost::shared_ptr<Node> > NodeMap;
 }
 
-void PartialOsmMapReader::read(shared_ptr<OsmMap> map)
-{
-  readPartial(map);
-  finalizePartial();
-}
+#endif // NODEMAP_H
 
-void PartialOsmMapReader::readPartial(shared_ptr<OsmMap> map)
-{
-  _partialMap = map;
-  while (hasMoreElements() && (_elementsRead < _maxElementsPerMap))
-  {
-    shared_ptr<Element> element = readNextElement();
-    LOG_WARN(element->getId());
-    //This check is necessary for now, unfortunately.  See ServicesDbReader::_resultToElement for
-    //an explanation.
-    if (element.get())
-    {
-      _partialMap->addElement(element);
-    }
-  }
-  _elementsRead = 0;
-}
-
-}

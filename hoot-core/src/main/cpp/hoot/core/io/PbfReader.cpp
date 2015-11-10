@@ -1050,6 +1050,7 @@ bool PbfReader::hasMoreElements()
 
 shared_ptr<Element> PbfReader::readNextElement()
 {
+  LOG_WARN("mingtest readNextElement");
   if (!hasMoreElements())
   {
     throw HootException("No more elements available to read for the map.");
@@ -1110,7 +1111,7 @@ shared_ptr<Element> PbfReader::readNextElement()
     // we have to copy here so that the element isn't part of two maps. This should be fixed if we
     // need the reader to go faster.
 
-    element.reset(new Node(*_nodesItr.value()));
+    element.reset(new Node(*_nodesItr->second.get()));
     _nodesItr++;
     _partialNodesRead++;
   }

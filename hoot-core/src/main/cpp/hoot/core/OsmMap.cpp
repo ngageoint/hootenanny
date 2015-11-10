@@ -134,10 +134,10 @@ void OsmMap::append(ConstOsmMapPtr appendFromMap)
     ++it;
   }
 
-  QHash<long, shared_ptr<Node> >::const_iterator itn = appendFromMap->_nodes.constBegin();
-  while (itn != appendFromMap->_nodes.constEnd())
+  NodeMap::const_iterator itn = appendFromMap->_nodes.begin();
+  while (itn != appendFromMap->_nodes.end())
   {
-    NodePtr node = itn.value();
+    NodePtr node = itn->second;
     if (containsElement(ElementId(node->getElementId())))
     {
       throw HootException("Map already contains this node: " + node->toString());
@@ -175,7 +175,8 @@ void OsmMap::addElement(const shared_ptr<Element>& e)
 void OsmMap::addNode(const boost::shared_ptr<Node>& n)
 {
   _idGen->ensureNodeBounds(n->getId());
-  _nodes.insert(n->getId(), n);
+  _nodes[n->getId()] = n;
+  n->registerListener(_index.get());
   _index->addNode(n);
   //_nodeCounter = std::min(n->getId() - 1, _nodeCounter);
 }
@@ -211,9 +212,9 @@ OGREnvelope OsmMap::calculateBounds() const
   OGREnvelope result;
 
   bool first = true;
-  for (NodeMap::const_iterator it = _nodes.constBegin(); it != _nodes.constEnd(); ++it)
+  for (NodeMap::const_iterator it = _nodes.begin(); it != _nodes.end(); ++it)
   {
-    const shared_ptr<const Node>& n = it.value();
+    const shared_ptr<const Node>& n = it->second;
     if (first)
     {
       result.MinX = result.MaxX = n->getX();
@@ -247,9 +248,9 @@ double OsmMap::calculateMaxCircularError() const
     acc = max(acc, w->getCircularError());
   }
 
-  for (NodeMap::const_iterator it = _nodes.constBegin(); it != _nodes.constEnd(); ++it)
+  for (NodeMap::const_iterator it = _nodes.begin(); it != _nodes.end(); ++it)
   {
-    const shared_ptr<const Node>& n = it.value();
+    const shared_ptr<const Node>& n = it->second;
     acc = max(acc, n->getCircularError());
   }
 
@@ -321,10 +322,10 @@ void OsmMap::_copy(boost::shared_ptr<const OsmMap> from)
     ++it;
   }
 
-  QHash<long, shared_ptr<Node> >::const_iterator itn = from->_nodes.constBegin();
-  while (itn != from->_nodes.constEnd())
+  NodeMap::const_iterator itn = from->_nodes.begin();
+  while (itn != from->_nodes.end())
   {
-    _nodes.insert(itn.key(), shared_ptr<Node>(new Node(*itn.value())));
+    _nodes[itn->first] = shared_ptr<Node>(new Node(*itn->second));
     // no need to add it to the index b/c the index is created in a lazy fashion.
     ++itn;
   }
@@ -351,7 +352,7 @@ shared_ptr<OsmMap> OsmMap::copyWays(const vector<long>& wIds) const
     for (size_t j = 0; j < oldWay->getNodeCount(); j++)
     {
       shared_ptr<const Node> oldNode = getNode(oldWay->getNodeId(j));
-      result->_nodes.insert(oldNode->getId(), shared_ptr<Node>(new Node(*oldNode)));
+      result->_nodes[oldNode->getId()] = shared_ptr<Node>(new Node(*oldNode));
     }
   }
 
@@ -362,9 +363,9 @@ std::vector<long> OsmMap::filterNodes(const NodeFilter& filter) const
 {
   std::vector<long> result;
 
-  for (NodeMap::const_iterator it = _nodes.constBegin(); it != _nodes.constEnd(); ++it)
+  for (NodeMap::const_iterator it = _nodes.begin(); it != _nodes.end(); ++it)
   {
-    const shared_ptr<const Node>& n = it.value();
+    const shared_ptr<const Node>& n = it->second;
     if (filter.isFiltered(n) == false)
     {
       result.push_back(n->getId());
@@ -500,7 +501,7 @@ std::vector<long> OsmMap::findNodes(QString key, QString value) const
   std::vector<long> result;
   for (NodeMap::const_iterator it = _nodes.begin(); it != _nodes.end(); ++it)
   {
-    NodePtr node = it.value();
+    NodePtr node = it->second;
     if (node->getTags().contains(key) && node->getTags()[key] == value)
     {
       result.push_back(node->getId());
@@ -652,7 +653,7 @@ void OsmMap::removeNodeFully(long nId)
 void OsmMap::removeNodeNoCheck(long nId)
 {
   _index->removeNode(getNode(nId));
-  _nodes.remove(nId);
+  _nodes.erase(nId);
 }
 
 void OsmMap::removeRelation(long rId)
@@ -886,9 +887,9 @@ void OsmMap::visitRo(ElementVisitor& visitor) const
   const NodeMap& allNodes = getNodeMap();
   for (NodeMap::const_iterator it = allNodes.begin(); it != allNodes.end(); ++it)
   {
-    if (containsNode(it.key()))
+    if (containsNode(it->first))
     {
-      visitor.visit(it.value());
+      visitor.visit(it->second);
     }
   }
 
@@ -925,9 +926,9 @@ void OsmMap::visitRw(ElementVisitor& visitor)
   const NodeMap allNodes = getNodeMap();
   for (NodeMap::const_iterator it = allNodes.begin(); it != allNodes.end(); ++it)
   {
-    if (containsNode(it.key()))
+    if (containsNode(it->first))
     {
-      visitor.visit(it.value());
+      visitor.visit(it->second);
     }
   }
 
@@ -960,7 +961,7 @@ void OsmMap::_replaceNodeInRelations(long oldId, long newId)
   LOG_DEBUG("Replace node in relations: replace " << oldId << " with " << newId );
 
   ConstElementPtr emptyElement;
-  NodeMap::Iterator it;
+  NodeMap::iterator it;
 
   // Make sure both nodes exist; calling getNode on non-existent IDs causes failed assert
 

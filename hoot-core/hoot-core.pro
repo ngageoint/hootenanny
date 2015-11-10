@@ -955,5 +955,6 @@ HEADERS += \
     src/main/cpp/hoot/core/schema/KeyValuePair.h \
     src/main/cpp/hoot/core/schema/TagCategoryDifferencer.h \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.h \
-    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.h
+    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.h \
+    src/main/cpp/hoot/core/NodeMap.h
 

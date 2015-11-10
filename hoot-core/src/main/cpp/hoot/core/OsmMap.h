@@ -60,6 +60,7 @@ namespace hoot {
 #include "DefaultIdGenerator.h"
 #include "RelationMap.h"
 #include "WayMap.h"
+#include "NodeMap.h"
 
 
 namespace hoot {
@@ -93,8 +94,6 @@ class OsmMap : public enable_shared_from_this<OsmMap>, public ElementProvider
 public:
 
   static string className() { return "hoot::OsmMap"; }
-
-  typedef QHash<long, boost::shared_ptr<Node> > NodeMap;
 
   OsmMap();
 
@@ -442,13 +441,13 @@ void addElements(T it, T end)
 
 inline const shared_ptr<Node> OsmMap::getNode(long id)
 {
-  NodeMap::Iterator it = _nodes.find(id);
+  NodeMap::iterator it = _nodes.find(id);
   if (it == _nodes.end())
   {
     LOG_ERROR("Requested an invalid node ID " << id);
     assert(false);
   }
-  return it.value();
+  return it->second;
 }
 
 inline const shared_ptr<const Relation> OsmMap::getRelation(long id) const

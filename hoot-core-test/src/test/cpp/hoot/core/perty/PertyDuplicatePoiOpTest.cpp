@@ -45,6 +45,7 @@
 
 // Qt
 #include <QDir>
+#include <QSet>
 
 using namespace std;
 
@@ -86,7 +87,14 @@ public:
     uut.setProbability(0.5);
     uut.apply(map);
 
-    QList<long> keys = map->getNodeMap().uniqueKeys();
+    QSet<long> nids;
+    NodeMap::const_iterator it = map->getNodeMap().begin();
+    while (it != map->getNodeMap().end()) {
+      nids.insert(it->first);
+      it++;
+    }
+    QList<long> keys = QList<long>::fromSet(nids);
+
     qSort(keys);
 
     // handy for recreating all the CPPUNIT_ASSERT* statements
