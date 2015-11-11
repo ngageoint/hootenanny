@@ -82,6 +82,8 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 public class MapResourceTest extends OsmResourceTestAbstract
 {
   private static final Logger log = LoggerFactory.getLogger(MapResourceTest.class);
+  
+  protected static final QMaps maps = QMaps.maps;
 
   public MapResourceTest() throws NumberFormatException, IOException
   {
@@ -1569,6 +1571,12 @@ public class MapResourceTest extends OsmResourceTestAbstract
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
       throw e;
+    }
+    finally
+    {
+    	new SQLDeleteClause(conn, DbUtils.getConfiguration(), maps)
+    	  .where(maps.id.eq(nextMapId))
+				.execute();
     }
   }
 
