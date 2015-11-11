@@ -19,7 +19,20 @@ var translateMeanWordSetLevenshtein_1_5 = new hoot.NameExtractor(
         new hoot.LevenshteinDistance({"levenshtein.distance.alpha": 1.5})));
 var translateMaxWordSetLevenshtein_1_15 = new hoot.NameExtractor(
     new hoot.MaxWordSetDistance(
-        new hoot.LevenshteinDistance({"levenshtein.distance.alpha": 1.15})));
+        {"token.separator": "[\\s-,';]+"},
+        new hoot.TranslateStringDistance(
+            // runs just a little faster w/ tokenize off
+            {"translate.string.distance.tokenize": "false"},
+            new hoot.LevenshteinDistance(
+                {"levenshtein.distance.alpha": 1.15}))));
+var translateMinWordSetLevenshtein_1_15 = new hoot.NameExtractor(
+    new hoot.MinSumWordSetDistance(
+        {"token.separator": "[\\s-,';]+"},
+        new hoot.TranslateStringDistance(
+            // runs just a little faster w/ tokenize off
+            {"translate.string.distance.tokenize": "false"},
+            new hoot.LevenshteinDistance(
+                {"levenshtein.distance.alpha": 1.15}))));
 var weightedWordDistance = new hoot.NameExtractor(
     new hoot.WeightedWordDistance(
         {"token.separator": "[\\s-,';]+", "weighted.word.distance.p": 0.5},
@@ -160,13 +173,9 @@ function additiveScore(map, e1, e2) {
         return result;
     }
 
-    var nameMultiplier = 1;
     // if there is no type information to compare the name becomes more 
     // important
     var oneGeneric = hasTypeTag(e1) == false || hasTypeTag(e2) == false;
-    if (oneGeneric) {
-        nameMultiplier = 2;
-    }
 
     var t1 = e1.getTags().toDict();
     var t2 = e2.getTags().toDict();
@@ -181,14 +190,31 @@ function additiveScore(map, e1, e2) {
 
     var score = 0;
 
-    if (weightedPlusMean > 0.987403 && weightedPlusMean < 1.2) {
-        score += 0.5 * nameMultiplier;
-        reason.push("similar names");
+    if (!oneGeneric) {
+        if (weightedPlusMean > 0.987403 && weightedPlusMean < 1.2) {
+            score += 0.5;
+            reason.push("similar names");
+        } else if (weightedPlusMean >= 1.2) {
+            score += 1;
+            reason.push("very similar names");
+        }
+    } else {
+        var min = translateMinWordSetLevenshtein_1_15.extract(map, e1, e2);
+
+        // if there is no type information be very restrictive, but just the name can be enough
+        // information for a match.
+        if (min > 0.8 && weightedPlusMean >= 1.2) {
+            score += 2;
+            reason.push("very similar names and generic type");
+
+        // with no type information just a similar name is enough to flag a review.
+        } else if (weightedPlusMean > 0.987403) {
+            score += 1;
+            reason.push("similar names and generic type");
+        }
     }
-    if (weightedPlusMean >= 1.2) {
-        score += 1 * nameMultiplier;
-        reason.push("very similar names");
-    }
+
+
     if (isSuperClose(e1, e2)) {
         score += 0.5;
         reason.push("very close together");
