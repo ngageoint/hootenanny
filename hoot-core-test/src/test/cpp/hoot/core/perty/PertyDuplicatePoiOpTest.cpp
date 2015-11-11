@@ -110,16 +110,16 @@ public:
 
     NodePtr n;
     n = map->getNode(keys[0]);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(102.711, n->getX(), 1e-3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(802.711, n->getX(), 1e-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.70974, n->getY(), 1e-3);
     n = map->getNode(keys[1]);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(99.6659, n->getX(), 1e-3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(799.6659, n->getX(), 1e-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4.11058, n->getY(), 1e-3);
     n = map->getNode(keys[2]);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.11255, n->getX(), 1e-3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(901.11255, n->getX(), 1e-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2.79405, n->getY(), 1e-3);
     n = map->getNode(keys[3]);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(5.09512, n->getX(), 1e-3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(905.09512, n->getX(), 1e-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-4.12888, n->getY(), 1e-3);
     n = map->getNode(keys[4]);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(900, n->getX(), 1e-3);

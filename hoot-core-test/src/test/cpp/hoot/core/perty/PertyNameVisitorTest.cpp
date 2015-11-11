@@ -89,7 +89,7 @@ public:
 
     stringstream ss2;
     ss2 << n2->getTags().getNames();
-    CPPUNIT_ASSERT_EQUAL(string("[4]{lintle towt, small town, littleville, הgיq קטנה}"), ss2.str());
+    CPPUNIT_ASSERT_EQUAL(string("[4]{niltle towt, small town, littleville, העיר הקנט}"), ss2.str());
   }
 };
 
