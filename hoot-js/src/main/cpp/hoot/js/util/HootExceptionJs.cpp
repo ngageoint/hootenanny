@@ -140,7 +140,9 @@ void HootExceptionJs::throwAsHootException(TryCatch& tc)
         throw HootException(toJson(exception));
       }
     }
-    else if (exception->IsNativeError())
+    // if this is a generic error (e.g. throw new Errro("blah");) then just report the string.
+    else if (exception->IsNativeError() &&
+      str(exception->ToObject()->GetConstructorName()) == "Error")
     {
       throw HootException(str(exception->ToDetailString()));
     }
