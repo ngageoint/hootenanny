@@ -42,7 +42,7 @@ using namespace std;
 /**
  * Returns the max (best) pairwise word comparison within two sets of words.
  */
-class MaxWordSetDistance : public StringDistance, public StringDistanceConsumer
+class MaxWordSetDistance : public StringDistance, public StringDistanceConsumer, public Configurable
 {
 public:
   static string className() { return "hoot::MaxWordSetDistance"; }
@@ -51,6 +51,8 @@ public:
   MaxWordSetDistance() {}
 
   virtual double compare(const QString& s1, const QString& s2) const;
+
+  virtual void setConfiguration(const Settings& conf);
 
   virtual void setStringDistance(const StringDistancePtr& sd) { _d = sd; }
 

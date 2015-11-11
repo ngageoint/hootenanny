@@ -49,22 +49,39 @@ MinSumWordSetDistance::MinSumWordSetDistance()
 
 double MinSumWordSetDistance::compare(const QString& s1, const QString& s2) const
 {
-  QStringList sl1 = s1.split(" ");
-  QStringList sl2 = s2.split(" ");
+  QStringList sl1 = _tokenizer.tokenize(s1);
+  QStringList sl2 = _tokenizer.tokenize(s2);
 
-  ScoreMatrix m(sl1.size(), sl2.size());
+  ScoreMatrix m(sl1.size() + 1, sl2.size() + 1);
+
+  // default the unassigned col/row to have a value of 1.
+  for (size_t c = 0; c < m.getWidth(); ++c)
+  {
+    m.set(c, 0, 1.0);
+  }
+  for (size_t r = 0; r < m.getHeight(); ++r)
+  {
+    m.set(0, r, 1.0);
+  }
 
   for (int i = 0; i < sl1.size(); i++)
   {
+    m.set(i, 0, 1);
     for (int j = 0; j < sl2.size(); j++)
     {
+      m.set(0, j, 1);
       // value from 0 (similar) to 1 (dissimilar)
       double v = 1 - _d->compare(sl1[i], sl2[j]);
-      m.set(i, j, v);
+      m.set(i + 1, j + 1, v);
     }
   }
 
-  return m.minSumScore();
+  return 1 - m.minSumScore() / (max(sl1.size(), sl2.size()));
+}
+
+void MinSumWordSetDistance::setConfiguration(const Settings& conf)
+{
+  _tokenizer.setConfiguration(conf);
 }
 
 }
