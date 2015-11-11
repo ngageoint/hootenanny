@@ -377,47 +377,93 @@ tds61 = {
     {
         var newAttrs = {};
 
-        // Sort out Roads, Railways and Bridges.
-        if (geometryType == 'Line' && tags.bridge && (tags.highway || tags.railway))
+        // Sort out Roads, Railways, Bridges and Tunnels.
+        // Note: We assume that we don't have BOTH a Tunnel and a Bridge on the same feature...
+        if (geometryType == 'Line' && (tags.highway || tags.railway))
         {
-            if (attrs.F_CODE !== 'AQ040') // Not a Bridge
+            if (tags.bridge && tags.bridge !== 'no')
             {
-                newAttrs.F_CODE = 'AQ040';
+                if (attrs.F_CODE !== 'AQ040') // Not a Bridge, therefore make a new bridge
+                {
+                    newAttrs.F_CODE = 'AQ040'; // Bridge
 
-                if (tags.highway)
-                {
-                    newAttrs.TRS = '13'; // Road
-                }
-                else if (tags.railway)
-                {
-                    newAttrs.TRS = '12'; // Railway
-                }
-            }
-            else // A Bridge
-            {
-                if (tags.railway)
-                {
-                    newAttrs.F_CODE = 'AN010'; // Railway
-                    attrs.TRS = '12'; // Railway
-                }
-                else
-                {
-                    if (tags.highway == 'track')
+                    if (tags.highway)
                     {
-                        newAttrs.F_CODE = 'AP010';
+                        newAttrs.TRS = '13'; // Road
+                    }
+                    else if (tags.railway)
+                    {
+                        newAttrs.TRS = '12'; // Railway
+                    }
+                }
+                else // A Bridge so build a Road or a Railway
+                {
+                    newAttrs.SBB = '1001'; // New feature is supported by Bridge Span
+                    
+                    if (tags.railway)
+                    {
+                        newAttrs.F_CODE = 'AN010'; // Railway
+                        attrs.TRS = '12'; // Railway
                     }
                     else
-                    {   // The default is to make it a road
-                        newAttrs.F_CODE = 'AP030';
-                    }
+                    {
+                        attrs.TRS = '13'; // Tag the Bridge as a Road Bridge
+                        newAttrs.RLE = '1'; // Raised level
 
-                    attrs.TRS = '13'; // Road
+                        if (tags.highway == 'track')
+                        {
+                            newAttrs.F_CODE = 'AP010';
+                        }
+                        else
+                        {   // The default is to make it a road
+                            newAttrs.F_CODE = 'AP030';
+                        }
+
+                    }
                 }
-            }
+            } // End Bridge
+            else if (tags.tunnel == 'yes')
+            {
+                if (attrs.F_CODE !== 'AQ130') // Not a Tunnel so go build one
+                {
+                    newAttrs.F_CODE = 'AQ130';
+
+                    if (tags.highway)
+                    {
+                        newAttrs.TRS = '13'; // Road
+                    }
+                    else if (tags.railway)
+                    {
+                        newAttrs.TRS = '12'; // Railway
+                    }
+                }
+                else // A Tunnel so build a Road or a Railway
+                {
+                    if (tags.railway)
+                    {
+                        newAttrs.F_CODE = 'AN010'; // Railway
+                        attrs.TRS = '12'; // Railway
+                    }
+                    else
+                    {
+                        attrs.TRS = '13'; // Road
+                        newAttrs.RLE = '998';
+                        
+                        if (tags.highway == 'track')
+                        {
+                            newAttrs.F_CODE = 'AP010';
+                        }
+                        else
+                        {   // The default is to make it a road
+                            newAttrs.F_CODE = 'AP030';
+                        }
+                    }
+                }
+            } // End Tunnel
 
             // Remove the uuid from the tag list so we get a new one for the second feature
             delete tags.uuid;
-        } // End sort out Road, Railway & Bridge
+        } // End sort out Road, Railway, Bridge and Tunnel
 
         // If we are making a second feature, process it.
         if (newAttrs.F_CODE)
@@ -708,8 +754,10 @@ tds61 = {
             if (roadList.indexOf(tags.highway) !== -1) tags.highway = tags.highway + '_link';
         }
 
+        // Add the LayerName to the source
+        tags.source = 'tdsv61:' + layerName.toLowerCase();
+        
         // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
-        tags.source = 'tdsv61'; 
         if (attrs.UFI)
         {
             tags.uuid = '{' + attrs['UFI'].toString().toLowerCase() + '}';
@@ -871,8 +919,8 @@ tds61 = {
                 continue;
             }
 
-            // Convert "abandoned:XXX" features
-            if (val.indexOf('abandoned:') !== -1)
+            // Convert "abandoned:XXX" and "disused:XXX"features
+            if ((val.indexOf('abandoned:') !== -1) || (val.indexOf('disused:') !== -1))
             {
                 // Hopeing there is only one ':' in the tag name...
                 var tList = val.split(':');
@@ -880,7 +928,8 @@ tds61 = {
                 tags.condition = 'abandoned';
                 delete tags[val];
             }
-        }
+
+        } // End Cleanup loop
 
         if (tds61.nfddPreRules == undefined)
         {
@@ -1288,9 +1337,23 @@ tds61 = {
                         break;
 
                     case 'road':
-                        attrs.RIN_ROI = '-999999'; // No Information
+                        attrs.RIN_ROI = '5'; // Local. Customer requested this translation value
                         attrs.RTY = '-999999'; // No Information
                 } // End tags.highway switch
+                
+            } // End ROI & RIN_ROI
+
+            // Use the Width to populate the Minimum Travelled Way Width - Customer requested
+            if (attrs.WID && !(attrs.ZI016_WD1))
+            {
+                attrs.ZI016_WD1 = attrs.WID;
+                delete attrs.WID;
+            }
+            
+            // Private Access roads - Customer requested
+            if (tags.access == 'private' && !(attrs.CAA))
+            {
+                attrs.CAA = '3';
             }
 
         }
