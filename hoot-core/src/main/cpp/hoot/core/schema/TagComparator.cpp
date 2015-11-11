@@ -198,34 +198,38 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
   _addDefaults(t2);
 
   /// @todo #7255 go through and use the cleaned tag vertices rather than tags directly.
+  vector<SchemaVertex> v1 = schema.getUniqueSchemaVertices(t1);
+  vector<SchemaVertex> v2 = schema.getUniqueSchemaVertices(t2);
 
-  for (Tags::const_iterator it = t1.begin(); it != t1.end(); it++)
+  for (size_t i = 0; i < v1.size(); ++i)
   {
-    QString kvp = it.key() + "=" + it.value();
-    const SchemaVertex* tv = &schema.getTagVertex(kvp);
-    if (tv->isEmpty())
-    {
-      tv = &schema.getTagVertex(it.key() + "=*");
-    }
-
+    const SchemaVertex* tv = &v1[i];
     if (tv->valueType == Enumeration)
     {
-      n1.push_back(kvp);
+      if (tv->value == "*")
+      {
+        n1.push_back(schema.toKvp(tv->key, t1[tv->key]));
+      }
+      else
+      {
+        n1.push_back(tv->name);
+      }
     }
   }
 
-  for (Tags::const_iterator it = t2.begin(); it != t2.end(); it++)
+  for (size_t i = 0; i < v2.size(); ++i)
   {
-    QString kvp = it.key() + "=" + it.value();
-    const SchemaVertex* tv = &schema.getTagVertex(kvp);
-    if (tv->isEmpty())
-    {
-      tv = &schema.getTagVertex(it.key() + "=*");
-    }
-
+    const SchemaVertex* tv = &v2[i];
     if (tv->valueType == Enumeration)
     {
-      n2.push_back(kvp);
+      if (tv->value == "*")
+      {
+        n2.push_back(schema.toKvp(tv->key, t2[tv->key]));
+      }
+      else
+      {
+        n2.push_back(tv->name);
+      }
     }
   }
 
