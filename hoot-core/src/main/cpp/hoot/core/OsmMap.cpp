@@ -555,12 +555,6 @@ size_t OsmMap::getElementCount() const
   return getNodeMap().size() + getWays().size() + getRelationMap().size();
 }
 
-const boost::shared_ptr<const Node> OsmMap::getNode(long id) const
-{
-  assert(_nodes.contains(id));
-  return _nodes[id];
-}
-
 set<ElementId> OsmMap::getParents(ElementId eid) const
 {
   return getIndex().getParents(eid);

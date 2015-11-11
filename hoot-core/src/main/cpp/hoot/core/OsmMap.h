@@ -409,9 +409,12 @@ protected:
   mutable WayMap _ways;
 
   shared_ptr<OsmMapIndex> _index;
+  shared_ptr<Node> _nullNode;
+  shared_ptr<const Node> _constNullNode;
   shared_ptr<Relation> _nullRelation;
   shared_ptr<Way> _nullWay;
   shared_ptr<const Way> _constNullWay;
+  mutable NodeMap::const_iterator _tmpNodeMapIt;
   RelationMap::iterator _tmpRelationIt;
   mutable WayMap::const_iterator _tmpWayIt;
   std::vector< shared_ptr<OsmMapListener> > _listeners;
@@ -441,13 +444,28 @@ void addElements(T it, T end)
 
 inline const shared_ptr<Node> OsmMap::getNode(long id)
 {
-  NodeMap::iterator it = _nodes.find(id);
-  if (it == _nodes.end())
+  _tmpNodeMapIt = _nodes.find(id);
+  if (_tmpNodeMapIt != _nodes.end())
   {
-    LOG_ERROR("Requested an invalid node ID " << id);
-    assert(false);
+    return _tmpNodeMapIt->second;
   }
-  return it->second;
+  else
+  {
+    return _nullNode;
+  }
+}
+
+inline const boost::shared_ptr<const Node> OsmMap::getNode(long id) const
+{
+  _tmpNodeMapIt = _nodes.find(id);
+  if (_tmpNodeMapIt != _nodes.end())
+  {
+    return _tmpNodeMapIt->second;
+  }
+  else
+  {
+    return _constNullNode;
+  }
 }
 
 inline const shared_ptr<const Relation> OsmMap::getRelation(long id) const
