@@ -32,6 +32,7 @@
 #include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Standard
 #include <assert.h>
@@ -55,8 +56,10 @@ struct Entry
   }
 };
 
-TagComparator::TagComparator()
+TagComparator::TagComparator() :
+_caseSensitive(true)
 {
+  setCaseSensitive(ConfigOptions().getDuplicateNameCaseSensitive());
 }
 
 void TagComparator::_addAsDefault(Tags& t, const QString& key, const QString& value)
@@ -181,7 +184,6 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
       result[it1.key()] = it1.value();
     }
   }
-
 }
 
 void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
@@ -198,34 +200,38 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
   _addDefaults(t2);
 
   /// @todo #7255 go through and use the cleaned tag vertices rather than tags directly.
+  vector<SchemaVertex> v1 = schema.getUniqueSchemaVertices(t1);
+  vector<SchemaVertex> v2 = schema.getUniqueSchemaVertices(t2);
 
-  for (Tags::const_iterator it = t1.begin(); it != t1.end(); it++)
+  for (size_t i = 0; i < v1.size(); ++i)
   {
-    QString kvp = it.key() + "=" + it.value();
-    const SchemaVertex* tv = &schema.getTagVertex(kvp);
-    if (tv->isEmpty())
-    {
-      tv = &schema.getTagVertex(it.key() + "=*");
-    }
-
+    const SchemaVertex* tv = &v1[i];
     if (tv->valueType == Enumeration)
     {
-      n1.push_back(kvp);
+      if (tv->value == "*")
+      {
+        n1.push_back(schema.toKvp(tv->key, t1[tv->key]));
+      }
+      else
+      {
+        n1.push_back(tv->name);
+      }
     }
   }
 
-  for (Tags::const_iterator it = t2.begin(); it != t2.end(); it++)
+  for (size_t i = 0; i < v2.size(); ++i)
   {
-    QString kvp = it.key() + "=" + it.value();
-    const SchemaVertex* tv = &schema.getTagVertex(kvp);
-    if (tv->isEmpty())
-    {
-      tv = &schema.getTagVertex(it.key() + "=*");
-    }
-
+    const SchemaVertex* tv = &v2[i];
     if (tv->valueType == Enumeration)
     {
-      n2.push_back(kvp);
+      if (tv->value == "*")
+      {
+        n2.push_back(schema.toKvp(tv->key, t2[tv->key]));
+      }
+      else
+      {
+        n2.push_back(tv->name);
+      }
     }
   }
 
@@ -530,8 +536,13 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
     }
     else if (result.contains(it2.key()))
     {
-      QStringList sl = Tags::split(it2.value());
-      altNames.insert(sl.begin(), sl.end());
+      const Qt::CaseSensitivity caseSensitivity =
+        _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+      if (result[it2.key()].compare(it2.value(), caseSensitivity) != 0)
+      {
+        QStringList sl = Tags::split(it2.value());
+        altNames.insert(sl.begin(), sl.end());
+      }
     }
     else
     {

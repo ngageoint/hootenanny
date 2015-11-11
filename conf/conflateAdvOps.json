@@ -41,17 +41,7 @@
         "name": "Remove Duplicate Way",
         "hoot_val": "hoot::DuplicateWayRemover",
 		"onchange":"if(d3.select('#duplicate_way_remover').property('checked')){d3.selectAll('.duplicate_way_remover_child').style('display','inline-block');}else{d3.selectAll('.duplicate_way_remover_child').style('display','none');}",
-        "defaultvalue": "true",
-        "members": [
-          {
-            "id": "duplicate_name_remover_case_sensitive",
-            "elem_type": "checkbox",
-            "hoot_key": "duplicate.name.remover.case.sensitive",
-            "description": "If checked, the duplicate name remover will only remove duplicate names when their case also matches; Will ignore case when removing otherwise",
-            "name": "Duplicate Name Remover Case Sensitive",
-            "defaultvalue": "true"
-          }
-        ]
+        "defaultvalue": "true"
       },
       {
         "id": "superfluous_way_remover",
@@ -97,7 +87,7 @@
       {
         "id": "duplicate_name_remover",
         "elem_type": "checkbox",
-        "description": "Remove any duplicate names. See `duplicate.name.remover.case.sensitive` for modifying the case sensitivity.",
+        "description": "Remove any duplicate names. See `duplicate.name.case.sensitive` for modifying the case sensitivity.",
         "name": "Remove Duplicate Name",
         "hoot_val": "hoot::DuplicateNameRemover",
         "required": "true",
@@ -242,6 +232,14 @@
         "name": "OGR TDS Structure",
         "defaultvalue": "true",
         "hoot_key": "ogr.tds.structure"
+      },
+      {
+        "id": "duplicate_name_case_sensitive",
+        "elem_type": "checkbox",
+        "hoot_key": "duplicate.name.case.sensitive",
+        "description": "If checked, the duplicate name remover will only remove duplicate names when their case also matches; Will ignore case when removing otherwise",
+        "name": "Duplicate Name Case Sensitive",
+        "defaultvalue": "true"
       }
     ]
   },
