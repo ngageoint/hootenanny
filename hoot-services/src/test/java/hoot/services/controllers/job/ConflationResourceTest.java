@@ -72,41 +72,4 @@ public class ConflationResourceTest {
 		String jobId = o.get("jobid").toString();
 		verify(spy).postChainJobRquest(Matchers.matches(jobId), Matchers.endsWith(jobArgs));
 	}
-	/*
-	@Test
-	@Category(UnitTest.class)
-	public void testgetAdvOpts() throws Exception
-	{
-		ConflationResource spy = new ConflationResource();
-		JSONObject ret = spy.getAdvOpts();
-		JSONArray mergers = (JSONArray)ret.get("merger");
-		JSONArray matchers = (JSONArray)ret.get("matcher");
-		
-		assertNotNull(mergers);
-		assertNotNull(matchers);
-		
-		int nMerger = 0;
-		for(Object o: mergers)
-		{
-			JSONObject mrs = (JSONObject)o;
-			String cName = mrs.get("className").toString();
-			if(cName.contains("MergerCreator"))
-			{
-				nMerger++;
-			}
-		}
-		assertTrue(nMerger > 0);
-		
-		int nMatch = 0;
-		for(Object o: matchers)
-		{
-			JSONObject mrs = (JSONObject)o;
-			String cName = mrs.get("className").toString();
-			if(cName.contains("MatchCreator"))
-			{
-				nMatch++;
-			}
-		}
-		assertTrue(nMatch > 0);
-	}*/
 }

@@ -65,6 +65,8 @@ public:
 
   Way(Status s, long id, Meters circularError);
   
+  Way(Status s, long id, long changeset, long version, unsigned int timestamp, Meters circularError);
+
   Way(const Way& way);
 
   virtual ~Way();
@@ -154,6 +156,12 @@ public:
    * contains two or more nodes. If way has zero or one nodes, returns false
    */
   bool isFirstLastNodeIdentical() const;
+
+  /**
+   * Remove all instances of the node with the specified id. If the node isn't in this way then
+   * nothing happens.
+   */
+  void removeNode(long id);
 
   /**
    * Replaces any node instance with oldId with newId. If oldId isn't referenced by this way then

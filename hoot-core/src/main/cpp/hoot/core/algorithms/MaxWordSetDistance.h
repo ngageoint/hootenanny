@@ -29,6 +29,9 @@
 
 #include "StringDistanceConsumer.h"
 
+// hoot
+#include <hoot/core/algorithms/string/StringTokenizer.h>
+
 // Tgs
 #include <tgs/SharedPtr.h>
 
@@ -39,7 +42,7 @@ using namespace std;
 /**
  * Returns the max (best) pairwise word comparison within two sets of words.
  */
-class MaxWordSetDistance : public StringDistance, public StringDistanceConsumer
+class MaxWordSetDistance : public StringDistance, public StringDistanceConsumer, public Configurable
 {
 public:
   static string className() { return "hoot::MaxWordSetDistance"; }
@@ -49,12 +52,15 @@ public:
 
   virtual double compare(const QString& s1, const QString& s2) const;
 
+  virtual void setConfiguration(const Settings& conf);
+
   virtual void setStringDistance(const StringDistancePtr& sd) { _d = sd; }
 
   virtual QString toString() const { return "MaxWordSet " + _d->toString(); }
 
 private:
   StringDistancePtr _d;
+  StringTokenizer _tokenizer;
 };
 
 }

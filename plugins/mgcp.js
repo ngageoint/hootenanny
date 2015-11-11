@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -32,7 +32,7 @@
 
     Based on TableExample.js script by Jason S.
 
-    Possible attribute values are taken from the MGCP TRD 3.0 and 4.0 specs  with the addition of 
+    Possible attribute values are taken from the MGCP TRD 3.0 and 4.0 specs  with the addition of
     values found in sample data and the DFDD/NFDD v4
 */
 
@@ -40,22 +40,22 @@
 mgcp = {
     getDbSchema: function() {
 
-    rawSchema = mgcp.schema.getDbSchema(); // This is <GLOBAL> so we can access it from other areas
+    mgcp.rawSchema = mgcp.schema.getDbSchema(); // This is <GLOBAL> so we can access it from other areas
 
     // Build the MGCP fcode/attrs lookup table. Note: This is <GLOBAL>
-    mgcpAttrLookup = translate.makeAttrLookup(rawSchema);
+    mgcpAttrLookup = translate.makeAttrLookup(mgcp.rawSchema);
 
     // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
-    layerNameLookup = translate.makeLayerNameLookup(rawSchema);
+    layerNameLookup = translate.makeLayerNameLookup(mgcp.rawSchema);
 
-    // Now add an o2s[A,L,P] feature to the rawSchema
+    // Now add an o2s[A,L,P] feature to the mgcp.rawSchema
     // We can drop features but this is a nice way to see what we would drop
-    rawSchema = translate.addEmptyFeature(rawSchema);
+    mgcp.rawSchema = translate.addEmptyFeature(mgcp.rawSchema);
 
     // This function dumps the schema to the screen for debugging
-    // translate.dumpSchema(rawSchema);
+    // translate.dumpSchema(mgcp.rawSchema);
 
-    return rawSchema;
+    return mgcp.rawSchema;
     }, // End of getDbSchema
 
 
@@ -72,7 +72,7 @@ mgcp = {
             {
                 for (var val in attrs)
                 {
-                    if (attrList.indexOf(val) == -1) 
+                    if (attrList.indexOf(val) == -1)
                     {
                         logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
                         delete attrs[val];
@@ -95,11 +95,11 @@ mgcp = {
         // No quick and easy way to do this unless we build yet another lookup table
         var feature = {};
 
-        for (var i=0, sLen = rawSchema.length; i < sLen; i++)
+        for (var i=0, sLen = mgcp.rawSchema.length; i < sLen; i++)
         {
-            if (rawSchema[i].fcode == attrs.F_CODE && rawSchema[i].geom == geometryType)
+            if (mgcp.rawSchema[i].fcode == attrs.F_CODE && mgcp.rawSchema[i].geom == geometryType)
             {
-                feature = rawSchema[i];
+                feature = mgcp.rawSchema[i];
                 break;
             }
         }
@@ -222,11 +222,11 @@ mgcp = {
                 'SRC_INFO':'SDP',
                 'SRC_DATE':'SDV',
                 'SMC':'MCC'
-                };     
+                };
 
         // List of data values to drop/ignore
-        var ignoreList = { '-32765':1, '-32767':1, '-32768':1, 
-                           '998':1, '-999999':1, 
+        var ignoreList = { '-32765':1, '-32767':1, '-32768':1,
+                           '998':1, '-999999':1,
                            'n_a':1, 'noinformation':1, 'unknown':1, 'unk':1 };
 
         // Unit conversion. Some attributes are in centimetres, others in decimetres
@@ -247,7 +247,7 @@ mgcp = {
             if (attrs[col] == '' || attrValue in ignoreList || attrs[col] in ignoreList)
             {
                 // debug: Comment this out to leave all of the No Info stuff in for testing
-                delete attrs[col]; 
+                delete attrs[col];
                 continue;
             }
 
@@ -273,7 +273,7 @@ mgcp = {
             }
         } // End col in attrs loop
 
- 
+
 
         if (attrs.F_CODE)
         {
@@ -330,7 +330,7 @@ mgcp = {
                 ['AP020', ['ap020','interchange_l', 'interchangel']], // Interchange
                 ['AP030', ['ap030','roadnet','road_l','roadl']], // Road
                 ['AP050', ['ap050','traill','trail_l']], // Trail
-                ['AQ040', ['aq040','bridgel','bridge_l','bridge_tunnel_l','bridge_overpass_l']], // Bridge 
+                ['AQ040', ['aq040','bridgel','bridge_l','bridge_tunnel_l','bridge_overpass_l']], // Bridge
                 ['AQ060', ['aq060']], // Control Tower
                 ['AQ065', ['aq065']], // Culvert
                 ['AQ090', ['aq090']], // Entrance and/or Exit
@@ -345,8 +345,8 @@ mgcp = {
                 ['AT080', ['at080']], // Communication Tower
                 ['BH010', ['bh010']], // Aqueduct
                 ['BH020', ['bh020']], // Canal
-                ['BH030', ['bh030']], // Ditch 
-                ['BH070', ['bh070']], // Ford 
+                ['BH030', ['bh030']], // Ditch
+                ['BH070', ['bh070']], // Ford
                 ['BH140', ['bh140','river_stream_l']], // River
                 ['BH145', ['bh145']], // Vanishing Point
                 ['BH170', ['bh170']], // Natural Pool
@@ -361,7 +361,7 @@ mgcp = {
                 ['GB010', ['gb010']], // Airport Navigation Lights
                 ['GB030', ['gb030']], // Helipad
                 ['GB040', ['gb040']], // Launch Pad
-                ['SU001', ['su001']], // Military Installation 
+                ['SU001', ['su001']], // Military Installation
                 ['ZD040', ['zd040']], // Annotated Location
                 ];
             // Funky but it makes life easier
@@ -453,7 +453,7 @@ mgcp = {
         // #####
         // #
         // # Now the funky rules start. These account for common tables that are shared between various
-        // # features 
+        // # features
         // #
         // #####
 
@@ -554,7 +554,7 @@ mgcp = {
         for (var val in tags)
         {
             // Remove empty tags
-            if (tags[val] == '') 
+            if (tags[val] == '')
             {
                 delete tags[val];
                 continue;
@@ -654,20 +654,20 @@ mgcp = {
             if (!(attrs.FFN)) attrs.FFN = facilityList[tags.amenity];
         }
 
-        // Cutlines and Highways. 
+        // Cutlines and Highways.
         // In OSM, a cutline is a cleared way, if it is a polygon then drop the highway info
         if (tags.man_made == 'cutline' && geometryType == 'Area' && tags.highway) delete tags.highway;
 
     /*
         // Geonames cause problems
-        if (tags.waterway && !(tags.intermittent)) 
+        if (tags.waterway && !(tags.intermittent))
         {
-            if (geometryType == "Point") 
+            if (geometryType == "Point")
             {
                 // Becomes a named area fCode = 'ZD040';
                 attrs.F_CODE = 'ZD040';
             }
-            else 
+            else
             {
                 // It's now a river of some sort fCode = 'BH140';
                 attrs.F_CODE = 'BH140';
@@ -747,16 +747,16 @@ mgcp = {
 
     applyToMgcpPostProcessing : function (tags, attrs, geometryType)
     {
-        // Gross generalisation. If we don't have an FCODE but we do have an FFN then we either have a 
-        // Building or a Facility. 
+        // Gross generalisation. If we don't have an FCODE but we do have an FFN then we either have a
+        // Building or a Facility.
         // In the absence of any other info, we are making it a Building
-        if (!attrs.F_CODE) 
+        if (!attrs.F_CODE)
         {
             if (attrs.FFN) attrs.F_CODE = 'AL015';
         }
 
         // If we still don't have an FCODE, try a bit of brute force
-        if (!attrs.F_CODE) 
+        if (!attrs.F_CODE)
         {
             var fcodeMap = {
                 'highway':'AP030', 'railway':'AN010', 'building':'AL015',
@@ -765,7 +765,7 @@ mgcp = {
 
             for (var i in fcodeMap)
             {
-                if (i in tags) 
+                if (i in tags)
                 {
                     // print('Added FCODE from Map: ' + fcodeMap[i]);
                     attrs.F_CODE = fcodeMap[i];
@@ -802,9 +802,9 @@ mgcp = {
         // The folloing bit of code is to account for the specs haveing two different attributes
         // with similar names and roughly the same attributes.
         // smcArray is the list of FCODE's that need to have MCC and SMC swapped
-        var smcArray = [ 'BA050', 'DB070', 'DA010', 'AK040' ]; 
+        var smcArray = [ 'BA050', 'DB070', 'DA010', 'AK040' ];
 
-        if (smcArray.indexOf(attrs.F_CODE) !== -1 && attrs.MCC) 
+        if (smcArray.indexOf(attrs.F_CODE) !== -1 && attrs.MCC)
         {
             attrs.SMC = attrs.MCC;
             delete attrs.MCC;
@@ -821,8 +821,8 @@ mgcp = {
         // Workaround until I fix the 'default' values
         // if (fCode == 'AP030' && !('CON' in attrs)) attrs['CON'] = '998';
 
-        // MCC and RST both have mappings to surface=XXX. 
-        if (fCode == 'AQ040' && attrs.RST) 
+        // MCC and RST both have mappings to surface=XXX.
+        if (fCode == 'AQ040' && attrs.RST)
         {
             // logWarn('Found RST = ' + attrsi.RST + ' in AQ040'); // Should not get this
             var convSurf = { 1:5, 2:46, 5:104, 6:104, 8:104, 999:999 };
@@ -839,7 +839,7 @@ mgcp = {
         // Therefore:
         // - clean up the the attrs.
         // - JSON the tags and stick them in a text field
-        var noAttrList = [ 'AJ010', 'AJ030', 'AK170', 'AL019', 'AL070', 'AL099', 'AN076', 
+        var noAttrList = [ 'AJ010', 'AJ030', 'AK170', 'AL019', 'AL070', 'AL099', 'AN076',
                            'BD100', 'BD180', 'BH165', 'BI010', 'BJ020', 'BJ031', 'BJ110',
                            'DB061', 'DB071', 'DB100',
                            'EA020', 'EA055', 'EC010', 'EC040', 'EC060',
@@ -848,7 +848,7 @@ mgcp = {
                            'ZD020',
                          ];
 
-        if (noAttrList.indexOf(fCode) !== -1) 
+        if (noAttrList.indexOf(fCode) !== -1)
         {
             // The metadata tags to skip
             var skipTags = ['F_CODE','ACC','TXT','UID','SDV','SDP','CCN','SRT'];
@@ -856,9 +856,9 @@ mgcp = {
 
             for (var i in attrs)
             {
-                // Skip the metadata tags, save the others, then delete them 
+                // Skip the metadata tags, save the others, then delete them
                 // from the main list of attrs
-                if (skipTags.indexOf(i) == -1) 
+                if (skipTags.indexOf(i) == -1)
                 {
                     tmpAttrs[i] = attrs[i];
                     delete attrs[i];
@@ -912,15 +912,15 @@ mgcp = {
     }, // End of applyToMgcpPostProcessing
 
     // ##### End of the xxToMgcpxx Block #####
-    
+
     // toOsm - Translate Attrs to Tags
     toOsm : function(attrs, layerName)
-    { 
+    {
         tags = {};  // This is the output
         // fCode = '';
 
         // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true') 
+        if (config.getOgrDebugDumpattrs() == 'true')
         {
             print('');
             print('#####');
@@ -945,15 +945,15 @@ mgcp = {
         if (mgcp.lookup == undefined)
         {
             // Setup lookup tables to make translation easier.
-    
+
             // Add the MGCPv3.0 specific attributes to the v4.0/common attribute table
             mgcp.rules.one2one.push.apply(mgcp.rules.one2one,mgcp.rules.one2oneIn);
 
             mgcp.lookup = translate.createLookup(mgcp.rules.one2one);
-            
+
             // Build an Object with both the SimpleText & SimpleNum lists
             mgcp.ignoreList = translate.joinList(mgcp.rules.numBiased, mgcp.rules.txtBiased);
-            
+
             // Add features to ignore
             mgcp.ignoreList.F_CODE = '';
             mgcp.ignoreList.UID = '';
@@ -997,19 +997,25 @@ mgcp = {
         var tableName = '';
         attrs = {}; // This is the output <GLOBAL>
         attrs.F_CODE = '';
-        
+
         var tableName2 = ''; // The second table name - will populate if appropriate
         var attrs2 = {}; // The second feature - will populate if appropriate
-        
+
+        // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
+        if (mgcp.rawSchema == undefined)
+        {
+            var tmp_schema = mgcp.getDbSchema();
+        }
+
         // The Nuke Option: If we have a relation, drop the feature and carry on
         if (tags['building:part']) return null;
 
-        // The Nuke Option: "Collections" are groups of different feature types: Point, Area and Line.  
+        // The Nuke Option: "Collections" are groups of different feature types: Point, Area and Line.
         // There is no way we can translate these to a single TDS feature.
         if (geometryType == 'Collection') return null;
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true') 
+        if (config.getOgrDebugDumptags() == 'true')
         {
             print ('');
             print ('#####');
@@ -1034,10 +1040,10 @@ mgcp = {
             mgcp.rules.one2one.push.apply(mgcp.rules.one2one,mgcp.rules.one2oneOut);
 
             mgcp.lookup = translate.createBackwardsLookup(mgcp.rules.one2one);
-            
+
             // Build a list of things to ignore and flip is backwards
             mgcp.ignoreList = translate.flipList(translate.joinList(mgcp.rules.numBiased, mgcp.rules.txtBiased));
-            
+
             // Add some features to ignore
             mgcp.ignoreList.uuid = '';
             mgcp.ignoreList.source = '';
@@ -1053,7 +1059,7 @@ mgcp = {
 
         // one 2 one
         translate.applyOne2One(tags, attrs, mgcp.lookup, mgcp.fcodeLookup, mgcp.ignoreList);
-        
+
         // apply the simple number and text biased rules
         translate.applySimpleNumBiased(attrs, tags, mgcp.rules.numBiased, 'backward');
         translate.applySimpleTxtBiased(attrs, tags,  mgcp.rules.txtBiased,'backward');
@@ -1067,7 +1073,7 @@ mgcp = {
         tableName = geometryType.toString().charAt(0) + attrs.F_CODE;
 
         // Now check for invalid feature geometry
-        // E.g. If the spec says a runway is a polygon and we have a line, throw error and 
+        // E.g. If the spec says a runway is a polygon and we have a line, throw error and
         // push the feature to the o2s layer
         if (!(layerNameLookup[tableName]))
         {
@@ -1075,7 +1081,7 @@ mgcp = {
             logError('FCODE and Geometry: ' + tableName + ' is not in the schema');
 
             tableName = 'o2s_' + geometryType.toString().charAt(0);
-           
+
             // Dump out what attributes we have converted before they get wiped out
             if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
 
@@ -1091,7 +1097,7 @@ mgcp = {
 
             // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
             // A nicer thing would be to arrange the tags until they fit neatly
-            // Apparently Shape & FGDB can't handle fields > 254 chars. 
+            // Apparently Shape & FGDB can't handle fields > 254 chars.
             if (str.length < 255 || config.getOgrSplitO2s() == 'false')
             {
                 // return {attrs:{tag1:str}, tableName: tableName};
@@ -1130,18 +1136,18 @@ mgcp = {
 
             // Validate attrs: remove all that are not supposed to be part of a feature
             mgcp.validateAttrs(geometryType,attrs);
-            
+
         } // End else
 
         // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true' || config.getOgrDebugDumptags() == 'true') 
+        if (config.getOgrDebugDumpattrs() == 'true' || config.getOgrDebugDumptags() == 'true')
         {
             print('TableName: ' + tableName + '  FCode: ' + attrs.F_CODE + '  Geom: ' + geometryType);
             if (tableName2 !== '') print('TableName2: ' + tableName2 + '  FCode: ' + attrs2.F_CODE + '  Geom: ' + geometryType);
         }
-        
+
         // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true') 
+        if (config.getOgrDebugDumpattrs() == 'true')
         {
             for (var i in attrs) print('Out Attrs:' + i + ': :' + attrs[i] + ':');
             if (attrs2.F_CODE) for (var i in attrs2) print('2Out Attrs:' + i + ': :' + attrs2[i] + ':');

@@ -31,7 +31,6 @@ import hoot.services.models.osm.XmlSerializable;
 import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
@@ -54,8 +53,6 @@ public class ChangesetUploadResponseWriter
    * @param changesetDiffElements Elements that have been modified in the corresponding changeset
    * request
    * @return a changeset upload response XML document
-   * @todo replace this by returning a Jersey object as xml
-   * @todo update copyright, attribution, and license tags
    */
   public Document writeResponse(final long changesetId,
     final List<XmlSerializable> changesetDiffElements)
@@ -92,34 +89,9 @@ public class ChangesetUploadResponseWriter
       ResourceErrorHandler.handleError(
         "Error creating response for changeset with ID: " + changesetId + " - data: (" +
           e.getMessage() + ") ",
-        Status.BAD_REQUEST, //TODO: change this status to an internal server error?
+        Status.BAD_REQUEST,
         log);
     }
-
-    return responseDoc;
-  }
-
-  //temp method
-  public Document writeEmptyResponse() throws IOException
-  {
-    log.debug("Building response...");
-
-    Document responseDoc = XmlDocumentBuilder.create();
-
-    org.w3c.dom.Element osmElement = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
-
-    org.w3c.dom.Element diffResultXmlElement = responseDoc.createElement("diffResult");
-    diffResultXmlElement.setAttribute(
-      "generator",
-      HootProperties.getInstance().getProperty(
-        "generator", HootProperties.getDefault("generator")));
-    diffResultXmlElement.setAttribute(
-      "version",
-      HootProperties.getInstance().getProperty(
-        "osmVersion", HootProperties.getDefault("osmVersion")));
-
-    osmElement.appendChild(diffResultXmlElement);
-    responseDoc.appendChild(osmElement);
 
     return responseDoc;
   }

@@ -1,0 +1,126 @@
+
+== OpenStreetMap Editing API Database Converter 
+
+Hootenanny offers the capability to convert data between an OpenStreetMap Editing API Database and any supported Hootenanny data sources.  The OpenStreetMap Editing API database allows fetching and saving of raw geo-data for OpenStreetMap.  The current supported API version is 0.6. More information about the database and API is found at: http://http://wiki.openstreetmap.org/wiki/API. 
+
+Hootenanny supports writing and reading from the OpenStreetMap API database using its 'convert' command.  Hootenanny's Services Database was refactored to support both Hootenanny's internal database and the OpenStreetMap Editing API database.  Conversion methods were created to write and read from the database.  A description of how to use Hootenanny's capability for 'writing to' and 'reading from' an OpenStreetMap Editing API Database is described here. 
+
+=== Writing to an OpenStreetMap Editing API Database
+
+Writing to an OpenStreetMap API database requires the use of Hootenanny's 'convert' command and the following command arguments described here:
+
+------
+% Hootenanny 'convert' command: hoot convert [args] input output
+
+% Command arguments:
+services.db.writer.email='email address'  e.g. make up an email address like: OsmApiInsert@hoot.local
+services.db.writer.create.user=true  e.g. set this to true
+reader.add.source.datetime=false  e.g. setting this to false uses current date
+services.db.writer.output.id.mappings=/tmp/idmaps.xml  e.g. optional to validation purposes
+
+% Input source:
+a sample osm file: $HOOT_HOME/test-files/ToyTestA.osm
+
+% Output source:
+a sample OpenStreetMap Editing API Database: postgresql://hoot:hoottest@localhost:5432/osmapi_test  This database is the test database and should be active for testing. However, any database output source may be applied here. 
+
+% Command syntax example:
+hoot convert -D services.db.writer.email=OsmApiInsert@hoot.local -D services.db.writer.create.user=true -D reader.add.source.datetime=false -D services.db.writer.output.id.mappings=/tmp/idmaps.xml $HOOT_HOME/test-files/ToyTestA.osm postgresql://hoot:hoottest@localhost:5432/osmapi_test
+------
+
+=== Reading from an OpenStreetMap Editing API Database
+
+Reading from an OpenStreetMap Editing API database requires the use of Hootenanny's 'convert' command and the following command arguments described here:
+
+------
+% Hootenanny 'convert' command: hoot convert [args] input output
+
+% Command arguments:
+services.db.writer.email='email address'  e.g. make up an email address like: OsmApiInsert@hoot.local
+services.db.writer.create.user=true  e.g. set this to true
+reader.add.source.datetime=false  e.g. setting this to false uses current date
+
+% Input source:
+a sample OpenStreetMap Edit API Database: postgresql://hoot:hoottest@localhost:5432/osmapi_test  This database is the test database and should be active for testing. However, any database input source may be supplied here. 
+
+% Output source:
+define an output osm file: /tmp/ToyTestA-out.osm
+
+% Command syntax example:
+hoot convert -D services.db.writer.email=OsmApiInsert@hoot.local -D services.db.writer.create.user=true -D reader.add.source.datetime=false postgresql://hoot:hoottest@localhost:5432/osmapi_test /tmp/ToyTestA-out.osm
+------
+
+=== Validating Writes to the OpenStreetMap Editing API Database
+
+After writing to the OpenSteetMap Editing API Database, the data can be validated by performing the following steps:
+
+------
+% Dump DB
+pg_dump -U hoot -h localhost -p 5432 osmapi_test -a > /tmp/ToyTestA-dump.sql
+% password=hoottest
+% Note: Assume ToyTestA.osm was written to the db previously
+% Note: Assume the arg -D services.db.writer.output.id.mapping=/tmp/idmaps.xml was used 
+  when writing.
+
+% Install dependencies for the compare script
+sudo apt-get install libxml-simple-perl
+
+% Compare input with the dumped output
+time $HOOT_HOME/scripts/compareOsmXmlToOsmApiDbDump $HOOT_HOME/test-files/ToyTestA.osm /tmp/idmaps.xml /tmp/ToyTestA-dump.sql
+------ 
+
+The sample output for validating the write operation using ToyTestA.osm should look something like this:
+
+------
+OSM XML file: ./test-files/ToyTestA.osm
+PostgreSQL dump file: /tmp/ToyTestA-dump.sql
+
+Validating data: nodes
+current_nodes, current_node_tags:
+Matching number of nodes: PASS (36)
+Deep inspection of data integrity: PASS
+nodes, node_tags:
+Matching number of nodes: PASS (36)
+Deep inspection of data integrity: PASS
+
+Validating data: ways
+current_ways, current_way_tags, current_way_nodes:
+Matching number of ways: PASS (4)
+Deep inspection of data integrity: PASS
+ways, way_tags, way_nodes:
+Matching number of ways: PASS (4)
+Deep inspection of data integrity: PASS
+
+Validating relations: ways
+current_relations, current_relation_tags, current_relation_nodes:
+Matching number of relations: PASS (0)
+Deep inspection of data integrity: PASS
+relations, relation_tags, relation_nodes:
+Matching number of relations: PASS (0)
+Deep inspection of data integrity: PASS
+
+real 0m0.086s
+user 0m0.082s
+sys 0m0.004s
+------
+
+=== Validating Reads from the OpenStreetMap Editing API Database
+
+After reading from the OpenSteetMap Editing API Database, the data can be validated by performing the following steps:
+
+------
+% Dump DB
+pg_dump -U hoot -h localhost -p 5432 osmapi_test -a > /tmp/ToyTestA-dump.sql
+% password=hoottest
+% Note: Assume ToyTestA.osm was written to the database previously
+
+% create new idmaps xml (idmaps2.xml) from the output data file
+./generateIdMapXmlFromOsm /tmp/ToyTestA-out.osm /tmp/idmaps2.xml
+% Note: Assume ToyTestA-out.osm was read from the db and written to file 
+
+% compare the output with the database 
+time scripts/compareOsmXmlToOsmApiDbDumpWriter /tmp/ToyTestA-out.osm /tmp/idmaps2.xml /tmp/ToyTestA-dump.sql
+------ 
+
+The reading validation output should be similar to the output for the writing validation.  If there is a mismatch, then contact the developer with the result so that the software can be checked for bugs.
+ 

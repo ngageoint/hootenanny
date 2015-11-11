@@ -69,6 +69,8 @@ public:
 
   Relation(Status s, long id, Meters circularError, QString type = "");
 
+  Relation(Status s, long id, long changeset, long version, unsigned int timestamp, Meters circularError, QString type = "");
+
   virtual ~Relation() {}
 
   void addElement(const QString& role, const shared_ptr<const Element>& e);
@@ -155,6 +157,12 @@ private:
   virtual const ElementData& _getElementData() const { return *_relationData; }
 
   void _makeWritable();
+
+  void _visitRo(const ElementProvider& map, ElementVisitor& filter,
+    QList<long>& visitedRelations) const;
+
+  void _visitRw(ElementProvider &map, ElementVisitor& filter,
+    QList<long> &visitedRelations);
 
 };
 

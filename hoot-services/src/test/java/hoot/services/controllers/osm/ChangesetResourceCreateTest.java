@@ -42,22 +42,17 @@ import hoot.services.UnitTest;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.Maps;
 import hoot.services.db2.QMaps;
-
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
 
 import com.mysema.query.sql.SQLExpressions;
 import com.mysema.query.sql.SQLQuery;
+import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.sql.dml.SQLInsertClause;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.ClientResponse.Status;
 
-/*
- * @todo Most of these tests could be converted to integration tests and after a refactoring,
- * could be replace with unit tests that test only the internal classes being used by this
- * Jersey resource.
- */
 public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
 {
   private static final Logger log = LoggerFactory.getLogger(ChangesetResourceCreateTest.class);
@@ -196,9 +191,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
     final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
     map.setCreatedAt(now);
     map.setDisplayName("map-with-id-" + mapId);
-    //map.setPublic(true);
     map.setUserId(userId);
-    //mapDao.insert(map);
     new SQLInsertClause(conn, DbUtils.getConfiguration(mapId), maps)
     .populate(map).execute();
     String mapName = null;
@@ -232,6 +225,12 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
           "Multiple maps exist with name: " + mapName + ".  Please specify a single, valid map."));
 
       throw e;
+    }
+    finally
+    {
+    	new SQLDeleteClause(conn, DbUtils.getConfiguration(), maps)
+    	  .where(maps.id.eq(nextMapId))
+				.execute();
     }
   }
 

@@ -7,7 +7,7 @@ var archiver = require("archiver");
 var exec = require('child_process').exec;
 var config = require('configure');
 var _ = require('lodash');
-var rmdir = require('rimraf')
+var rmdir = require('rimraf');
 var done = false;
 var dir;
 var jobs = {};
@@ -134,17 +134,17 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
         var command = 'hoot';
         if (isFile) {
             command += ' convert';
-            command += ' -D ogr.reader.bounding.box=' + exports.validateBbox(req.query.bbox)
+            command += ' -D ogr.reader.bounding.box.latlng=' + exports.validateBbox(req.query.bbox)
             if (config.schemas[req.params.schema] !== '') {
                 command += ' -D convert.ops=hoot::TranslationOp -D translation.script=' + config.schemas[req.params.schema] + ' -D translation.direction=toogr';
             }
         } else {
             command += ' osm2ogr';
-            command += ' -D ogr.reader.bounding.box=' + exports.validateBbox(req.query.bbox)
+            command += ' -D ogr.reader.bounding.box.latlng=' + exports.validateBbox(req.query.bbox)
             command += ' ' + config.schemas[req.params.schema]
 
         }
-        command += ' "' + config.datasources[req.params.datasource] + '" '
+        command += ' "' + config.datasources[req.params.datasource].conn + '" '
             + outFile
             ;
 

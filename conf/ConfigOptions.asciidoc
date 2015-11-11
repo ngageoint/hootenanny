@@ -566,12 +566,24 @@ Foo: Pre-constraining match count: 11
 
 A list of map operations to be applied to a map for cleaning purposes in order
 
+[[match.creators]]
 === match.creators
 
 * Data Type: string
 * Default Value: `hoot::BuildingMatchCreator;hoot::PlacesPoiMatchCreator;hoot::HighwayMatchCreator`
 
 List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).
+
+Some of the possible options include:
+
+* `hoot::BuildingMatchCreator` - Matches building polygons.
+* `hoot::PlacesPoiMatchCreator` - Matches POIs using the PLACES algorithm.
+* `hoot::HighwayMatchCreator` - Matches linear highway features using the Unify
+  algorithm.
+* `hoot::ScriptMatchCreator,PoiGeneric.js` - Matches POIs using the Unify
+  algorithm.
+* `hoot::ScriptMatchCreator,<yourscript.js>` - Uses a custom match script. The
+  script should be in `$HOOT_HOME/rules/<yourscript.js>`.
 
 === max.elements.per.partial.map
 
@@ -601,12 +613,25 @@ The Linux utility RLIMIT_AS is used for limiting virtual memory. This is analago
 less RAM will be utilized than the value specified. Typically this is most useful when limiting
 RAM usage of applications in a shared server environment.
 
+[[merger.creators]]
 === merger.creators
 
 * Data Type: string
 * Default Value: `hoot::BuildingMergerCreator;hoot::PlacesPoiMergerCreator;hoot::HighwaySnapMergerCreator`
 
 List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).
+
+Possible values include:
+
+* `hoot::BuildingMergerCreator` - Required if `hoot::BuildingMatchCreator` is
+  specified in `match.creators`.
+* `hoot::PlacesPoiMergerCreator` - Required if `hoot::PlacesPoiMatchCreator` is
+  specified in `match.creators`.
+* `hoot::HighwaySnapMergerCreator` - Required if `hoot::HighwayMatchCreator`
+  is specified in `match.creators`.
+* `hoot::ScriptMergerCreator` - Required if one or more instances of
+  `hoot::SplitMatchCreator` is specified in `match.creators`. Note that the
+  script name is not specified in this parameter.
 
 === node.matcher.strictness
 
@@ -697,6 +722,33 @@ Example Usage:
 
 ----
 hoot ogr2osm -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/Identity.js output.osm test-files/jakarta_raya_coastline.shp
+----
+
+=== ogr.reader.bounding.box.latlng
+
+* Data Type: string
+* Default Value: ``
+
+Similar to `ogr.reader.bounding.box` but uses WGS84 to specify the bounds rather than the source
+projection. Only one of the two options can be specified.
+
+A best effort will be made to convert between the two projections. The translated bounding box
+will approximate the minimum bounding rectangle of the lat/lng bounding box. In some cases this
+may be significantly larger.
+
+=== ogr.reader.epsg.override
+
+* Data Type: int
+* Default Value: `-1`
+
+If specified the OGR reader will override the reported projection with the specified EPSG code. If
+the value is < 0 then the projection reported by the source data set will be used. In most cases
+the default value is fine.
+
+This can sometimes be necessary when reading from a DB created with osm2pgsql. E.g.
+
+----
+hoot convert -D ogr.reader.epsg.override=900913 PG:"dbname='gis' host='localhost' port='5432' user='hoot' password='blahblah'" tmp/output.shp
 ----
 
 === ogr.split.o2s
@@ -1159,6 +1211,16 @@ waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 
 Contains the DB URL for unit testing. This is typically only used by developers.
 
+=== services.db.test.url.osmapi
+
+* Data Type: string
+* Default Value: `postgresql://hoot:hoottest@localhost:5432/osmapi_test`
+//* Default Value: `postgresql://postgres@10.194.70.78:5432/terrytest`
+//note: both above will be replace with a local db and can be overridden 
+
+Contains the DB URL for an OpenStreetMaps (OSM) API database for unit testing. This is
+typically only used by developers.
+
 === services.db.writer.create.user
 
 * Data Type: bool
@@ -1166,6 +1228,15 @@ Contains the DB URL for unit testing. This is typically only used by developers.
 
 Should the services DB writer automatically create the specified user if it doesn't exist. This
 is most useful when debugging and testing.
+
+=== services.db.writer.output.id.mappings
+
+* Data Type: string
+* Default Value: ``
+
+If this value is set to a non-empty string, the system will attempt to open a file with the specified name
+and output all the ID mappings (source to destination) used for nodes, ways, and relations that were
+written to the database.
 
 === set.circular.error.visitor.value
 
@@ -1253,6 +1324,22 @@ all translation stats are disabled.
 
 The default status to match with a status criterion.
 
+=== tag.ancestor.differencer.name
+
+* Data Type: string
+* Default Value: ``
+
+The default ancestor to use when using the hoot::TagAncestorDifferencer class for comparing tags.
+Primarily this is useful within the node.js interface.
+
+=== tag.category.differencer.name
+
+* Data Type: string
+* Default Value: ``
+
+The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
+Primarily this is useful within the node.js interface.
+
 === tag.criterion.kvp
 
 * Data Type: string
@@ -1263,7 +1350,7 @@ A key value pair to use in the tag criterion by default. E.g. 'highway,road'
 === tag.merger.default
 
 * Data Type: string
-* Default Value: `hoot::AverageTagMerger`
+* Default Value: `hoot::OverwriteTag2Merger`
 
 Specifies the default way of merging tags. This is used by most merge routines, but may be overriden
 depending on the specifics of the merger.
@@ -1305,6 +1392,16 @@ The key to be replaced by the TagRenameKeyVisitor.
 
 The key to replace with by the TagRenameKeyVisitor.
 
+=== test.force.orthographic.projection
+
+* Data Type: bool
+* Default Value: `false`
+
+Always force the orthographic projection when determining a proper planar projection. In typical
+usage this will never be used (the automatically selected projection should always be at least as
+good). This is most useful if you want to get consistent results even if the list of potential
+projections change over time. Very handy in unit tests.
+
 === token.separator
 
 * Data Type: string
@@ -1316,6 +1413,35 @@ names. The default value matches multiple whitespace charactors.
 Another useful option is `[\s-,';]+`. This will split on white space, or several forms of
 punctuation. See http://doc.qt.io/qt-4.8/QRegExp.html for a useful list of regular expression
 options.
+
+=== token.min.size
+
+* Data Type: double
+* Default Value: `3`
+
+This is the minimum string size that the string tokenizer should accept as a token. If the string
+length is less than this value, then it will not be accepted. Set the value to 0 if you want to
+accept all strings.
+
+This setting primarily applies to string comparison functions and will eliminate comparing very
+short strings such as "of" or "&".
+
+=== token.keep.non.words
+
+* Data Type: bool
+* Default Value: `false`
+
+This does a rudimentary check to see if the string contains any letters/numbers. If the string
+doesn't contain any letters or numbers then it will be dropped. Examples that would be dropped
+if the value is `true` include:
+
+* `&`
+* `--`
+
+Examples that will be kept if the value is `true` include:
+
+* `1&2`
+* `Joe's`
 
 === translate.string.distance.tokenize
 

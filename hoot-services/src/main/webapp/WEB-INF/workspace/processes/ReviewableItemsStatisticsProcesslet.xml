@@ -8,7 +8,7 @@
   <DESCRIPTION>Once the conflated data has been prepared, a call may be made to this endpoint to retrieve statistics about the reviewable items in the conflated dataset. Initially, only a very small set of statistics are returned.
   </DESCRIPTION>
   <EXAMPLE>
-  <URL>http://localhost:8080/hoot-services/ogc/ReviewableItemsStatistics?mapId=1&reviewScoreThresholdMinimum=0.8&geospatialBounds=-77.09655761718749,38.89958342598271,-77.09106445312499,38.90385833966776</URL>
+  <URL>http://localhost:8080/hoot-services/ogc/ReviewableItemsStatistics?mapId=1</URL>
   <REQUEST_TYPE>GET</REQUEST_TYPE>
   <INPUT></INPUT>
    <OUTPUT></OUTPUT>
@@ -25,29 +25,6 @@
       <Metadata href="http://schemas.mrgeo.org/wps/0.1.0/#Icon" about="formulaIcon"/>
       <DataType reference="http://www.w3.org/TR/xmlschema-2/#string">string</DataType>
     </LiteralInput>
-    <LiteralInput minOccurs="0" maxOccurs="1">
-      <Identifier>reviewScoreThresholdMinimum</Identifier>
-      <Title>Review Score Threhold Minimum</Title>
-      <Abstract>double; optional; items with a review score lower than this threshold will not be included in the returned statistics; defaults to 0.0</Abstract>
-      <Metadata href="http://schemas.mrgeo.org/wps/0.1.0/#Icon" about="formulaIcon"/>
-      <DataType reference="http://www.w3.org/TR/xmlschema-2/#double">double</DataType>
-      <DefaultValue>0.00</DefaultValue>
-      <!-- allowed values doesn't work in deegree yet  -->
-      <!-- AllowedValues>
-        <Range>
-          <MinimumValue>0.01</MinimumValue>
-          <MaximumValue>1.00</MaximumValue>
-        </Range>
-      </AllowedValues -->
-    </LiteralInput>
-    <BoundingBoxInput minOccurs="0" maxOccurs="1">
-      <Identifier>geospatialBounds</Identifier>
-      <Title>Geospatial Bounds</Title>
-      <Abstract>This parameter specifies the geospatial bounds that items should fall within.  
-      For GET requests, the parameter is a comma delimited string of the form: 
-      minLon,minLat,maxLon,maxLat,CRS - e.g. geospatialBounds=71.63,41.75,-70.78,42.90</Abstract>
-      <DefaultCRS>ESPG:4326</DefaultCRS>
-    </BoundingBoxInput>
 	</InputParameters>
 	<OutputParameters>
 		<LiteralOutput>

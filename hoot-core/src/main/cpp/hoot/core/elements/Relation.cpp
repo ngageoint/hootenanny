@@ -51,6 +51,31 @@ QString Relation::MULTILINESTRING = "multilinestring";
 QString Relation::MULTIPOLYGON = "multipolygon";
 QString Relation::OUTER = "outer";
 
+/**
+ * This is a convenience class to handle cases when exceptions are thrown.
+ */
+class AddToVisitedRelationsList
+{
+public:
+  AddToVisitedRelationsList(QList<long>& relationIds, long thisId) :
+    _relationIds(relationIds),
+    _thisId(thisId)
+  {
+    relationIds.append(thisId);
+  }
+
+  ~AddToVisitedRelationsList()
+  {
+    assert(_relationIds.size() >= 1);
+    assert(_relationIds.at(_relationIds.size() - 1) == _thisId);
+    _relationIds.removeLast();
+  }
+
+private:
+  QList<long>& _relationIds;
+  long _thisId;
+};
+
 Relation::Relation(const Relation& from) :
   Element(from.getStatus())
 {
@@ -61,6 +86,14 @@ Relation::Relation(Status s, long id, Meters circularError, QString type) :
   Element(s)
 {
   _relationData.reset(new RelationData(id));
+  _relationData->setCircularError(circularError);
+  _relationData->setType(type);
+}
+
+Relation::Relation(Status s, long id, long changeset, long version, unsigned int timestamp, Meters circularError, QString type) :
+  Element(s)
+{
+  _relationData.reset(new RelationData(id, changeset, version, timestamp));
   _relationData->setCircularError(circularError);
   _relationData->setType(type);
 }
@@ -205,6 +238,22 @@ QString Relation::toString() const
 
 void Relation::visitRo(const ElementProvider& map, ElementVisitor& filter) const
 {
+  QList<long> visitedRelations;
+  _visitRo(map, filter, visitedRelations);
+  assert(visitedRelations.size() == 0);
+}
+
+void Relation::_visitRo(const ElementProvider& map, ElementVisitor& filter,
+  QList<long> &visitedRelations) const
+{
+  if (visitedRelations.contains(getId()))
+  {
+    LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
+    return;
+  }
+
+  AddToVisitedRelationsList addTo(visitedRelations, getId());
+
   filter.visit(map.getRelation(getId()));
 
   const vector<RelationData::Entry>& members = getMembers();
@@ -224,7 +273,7 @@ void Relation::visitRo(const ElementProvider& map, ElementVisitor& filter) const
       }
       else if (m.getElementId().getType() == ElementType::Relation)
       {
-        map.getRelation(m.getElementId().getId())->visitRo(map, filter);
+        map.getRelation(m.getElementId().getId())->_visitRo(map, filter, visitedRelations);
       }
       else
       {
@@ -234,8 +283,25 @@ void Relation::visitRo(const ElementProvider& map, ElementVisitor& filter) const
   }
 }
 
+
 void Relation::visitRw(ElementProvider& map, ElementVisitor& filter)
 {
+  QList<long> visitedRelations;
+  _visitRw(map, filter, visitedRelations);
+  assert(visitedRelations.size() == 0);
+}
+
+void Relation::_visitRw(ElementProvider& map, ElementVisitor& filter,
+  QList<long> &visitedRelations)
+{
+  if (visitedRelations.contains(getId()))
+  {
+    LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
+    return;
+  }
+
+  AddToVisitedRelationsList addTo(visitedRelations, getId());
+
   filter.visit(map.getRelation(getId()));
 
   const vector<RelationData::Entry> members = getMembers();
@@ -258,7 +324,7 @@ void Relation::visitRw(ElementProvider& map, ElementVisitor& filter)
       else if (m.getElementId().getType() == ElementType::Relation &&
         map.containsRelation(m.getElementId().getId()))
       {
-        map.getRelation(m.getElementId().getId())->visitRw(map, filter);
+        map.getRelation(m.getElementId().getId())->_visitRw(map, filter, visitedRelations);
       }
       else
       {

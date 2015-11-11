@@ -38,7 +38,7 @@ public abstract class DbClientAbstract
 {
   private static final Logger log = LoggerFactory.getLogger(DbClientAbstract.class);
   
-  protected ClassPathXmlApplicationContext appContext;
+  private ClassPathXmlApplicationContext appContext;
   protected PlatformTransactionManager transactionManager;
   protected boolean simulateFailure = false;
   protected long testDelayMilliseconds = -1;
@@ -58,9 +58,7 @@ public abstract class DbClientAbstract
   
   protected void baseInit() throws Exception
   {
-    log.debug("Reading application settings...");
     appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
-    log.debug("Initializing transaction manager...");
     transactionManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
   }
 }

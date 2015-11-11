@@ -18,53 +18,84 @@
     "tag": {
         "name": "building=guardhouse",
         "isA": "building",
-        "categories": ["poi"],
+        "categories": ["poi", "hgispoi"],
         "similarTo": { "name": "barrier=toll_booth", "weight": 0.7 }
     },
 
     "tag": {
         "name": "building=shrine",
         "isA": "building",
+        "categories": ["poi", "hgispoi"],
         "similarTo": { "name": "historic=memorial", "weight": 0.7 }
     },
-    "tag": { "name": "building=fort", "isA": "building", "categories": ["poi"] },
-    "tag": { "name": "building=hospital", "isA": "building", "categories": ["poi"] },
-    "tag": { "name": "building=school", "isA": "building", "categories": ["poi"] },
+    "tag": { "name": "building=fort", "isA": "building", "categories": ["poi", "hgispoi"] },
+    "tag": { "name": "building=hospital", "isA": "building", "categories": ["poi", "hgispoi"] },
+    "tag": { "name": "building=school", "isA": "building", "categories": ["poi", "hgispoi"] },
 
+    "tag": {
+        "name": "building=hotel",
+        "isA": "building",
+        "categories": ["poi", "hgispoi"],
+        "similarTo": { "name": "tourism=hotel", "weight": 0.9 },
+        "similarTo": { "name": "amenity=hotel", "weight": 0.9 }
+    },
+
+    "tag": {
+        "name": "abstract_building_place_of_worship",
+        "isA": "building",
+        "categories": ["poi", "hgispoi"],
+        "similarTo": { "name": "amenity=place_of_worship", "weight": 0.9 }
+    },
 
     "#" : "##### Religious Buildings #####",
     "#" : "These are here since we currently can not add them in the Religion Schema",
-    "tag": { "name": "building=mosque", "isA": "building", "categories": ["poi"],
-        "similarTo": { "name": "religion=muslim", "weight": 0.9 } },
+    "tag": {
+        "name": "building=mosque",
+        "isA": "abstract_building_place_of_worship",
+        "categories": ["poi", "hgispoi"],
+        "similarTo": { "name": "religion=muslim", "weight": 0.9 }
+    },
 
-    "tag": { "name": "building=pagoda", "isA": "building", "categories": ["poi"],
-        "similarTo": { "name": "religion=buddhist", "weight": 0.9 } },
-    "tag": { "name": "building=stupa", "isA": "building", "categories": ["poi"],
+    "tag": {
+        "name": "building=pagoda",
+        "isA": "abstract_building_place_of_worship",
+        "similarTo": { "name": "religion=buddhist", "weight": 0.9 }
+    },
+    "tag": { "name": "building=stupa",
+        "isA": "abstract_building_place_of_worship",
         "similarTo": { "name": "religion=buddhist", "weight": 0.9 } },
 
-    "tag": { "name": "building=synagogue", "isA": "building", "categories": ["poi"],
+    "tag": { "name": "building=synagogue",
+        "isA": "abstract_building_place_of_worship",
         "similarTo": { "name": "religion=jewish", "weight": 0.9 } },
 
     "#" : "A church might not be Christian but probably is",
-    "tag": { "name": "building=church", "isA": "building", "categories": ["poi"],
+    "tag": { "name": "building=church",
+        "isA": "abstract_building_place_of_worship",
         "similarTo": { "name": "religion=christian", "weight": 0.7 } },
 
-    "tag": { "name": "building=cathedral", "isA": "building", "categories": ["poi"],
+    "tag": { "name": "building=cathedral",
+        "isA": "abstract_building_place_of_worship",
         "similarTo": { "name": "religion=christian", "weight": 0.9 } },
-    "tag": { "name": "building=basilica", "isA": "building", "categories": ["poi"],
+    "tag": { "name": "building=basilica",
+        "isA": "abstract_building_place_of_worship",
         "similarTo": { "name": "religion=christian", "weight": 0.9 } },
-    "tag": { "name": "building=chapel", "isA": "building", "categories": ["poi"],
+    "tag": { "name": "building=chapel",
+        "isA": "abstract_building_place_of_worship",
         "similarTo": { "name": "religion=christian", "weight": 0.9 } },
-    "tag": { "name": "building=abbey", "isA": "building", "categories": ["poi"],
+    "tag": { "name": "building=abbey",
+        "isA": "abstract_building_place_of_worship",
         "similarTo": { "name": "religion=christian", "weight": 1.0 } },
 
-    "tag": { "name": "building=transportation", "isA": "building", "categories": ["poi"] },
+    "tag": { "name": "building=garage", "isA": "building", "categories": ["poi", "hgispoi"] },
+    "tag": { "name": "building=transportation", "isA": "building", "categories": ["poi", "hgispoi"] },
     "tag": { "name": "building=train_station", 
         "isA": "building", 
-        "categories": ["poi"],
-        "similarTo": { "name": "building=transportation", "weight": 0.9 },
+        "categories": ["poi", "hgispoi"],
+        "similarTo": { "name": "building=transportation", "weight": [0.9, 0.3] },
+        "similarTo": { "name": "public_transport=station", "weight": [0.8, 0.3] },
         "similarTo": { "name": "railway=station", "weight": 0.9 },
-        "similarTo": { "name": "transport=station", "weight": 0.8 }
+        "similarTo": { "name": "transport=station", "weight": [0.8, 0.3] }
     },
 
     "tag": {

@@ -128,9 +128,9 @@ public:
 
     void funnyCurveTest()
     {
-      OsmReader reader;
+      TestUtils::resetEnvironment();
 
-      OsmMap::resetCounters();
+      OsmReader reader;
 
       shared_ptr<OsmMap> map(new OsmMap());
       reader.setDefaultStatus(Status::Unknown1);
@@ -246,5 +246,6 @@ public:
     }
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(MaximalNearestSublineTest);
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MaximalNearestSublineTest, "slow");
 

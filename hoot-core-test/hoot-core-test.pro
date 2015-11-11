@@ -195,4 +195,10 @@ SOURCES += \
     src/test/cpp/hoot/core/algorithms/string/WeightedWordDistanceTest.cpp \
     src/test/cpp/hoot/core/algorithms/string/SqliteWeightedWordDistanceTest.cpp \
     src/test/cpp/hoot/core/filters/BuildingCriterionTest.cpp \
-    src/test/cpp/hoot/core/visitors/SplitLongLinearWaysVisitorTest.cpp
+    src/test/cpp/hoot/core/visitors/SplitLongLinearWaysVisitorTest.cpp \
+    src/test/cpp/hoot/core/elements/WayTest.cpp \
+    src/test/cpp/hoot/core/algorithms/string/StringTokenizerTest.cpp \
+    src/test/cpp/hoot/core/schema/TagCategoryDifferencerTest.cpp \
+    src/test/cpp/hoot/core/schema/TagAncestorDifferencerTest.cpp \
+    src/test/cpp/hoot/core/elements/RelationTest.cpp
+

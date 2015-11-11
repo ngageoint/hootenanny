@@ -65,6 +65,5 @@ public:
 
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::MapStatsDriverTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::MapStatsDriverTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::MapStatsDriverTest, "slow");
 

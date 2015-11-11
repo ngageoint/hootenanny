@@ -1,21 +1,36 @@
 {
   "datasources": {
-      "OpenStreetMap": "PG:dbname='osmsyria' host='192.168.33.12' port='5432' user='vagrant' password=''",
-      "MapEdit": "PG:dbname='ogrsyria' host='192.168.33.12' port='5432' user='vagrant' password=''",
-      "XML": "syriasample.osm"
+    "OpenStreetMap": {
+      "conn": "PG:dbname='osmsyria' host='192.168.33.12' port='5432' user='vagrant' password=''"
+    },
+    "3395": {
+      "conn": "PG:dbname='osmsyria_3395' host='192.168.33.12' port='5432' user='vagrant' password=''"
+    },
+    "3785": {
+      "conn": "PG:dbname='osmsyria_3785' host='192.168.33.12' port='5432' user='vagrant' password=''"
+    },
+    "3857": {
+      "conn": "PG:dbname='osmsyria_3857' host='192.168.33.12' port='5432' user='vagrant' password=''"
+    },
+    "MapEdit": {
+      "conn": "PG:dbname='ogrsyria' host='192.168.33.12' port='5432' user='vagrant' password=''"
+    },
+    "XML": {
+      "conn": "syriasample.osm"
+    }
   },
   "formats": {
-      "OSM XML": ".osm",
-      "Shapefile": ".shp",
-      "File Geodatabase": ".gdb"
+    "OSM XML": ".osm",
+    "Shapefile": ".shp",
+    "File Geodatabase": ".gdb"
   },
   "schemas": {
-      "OSM": "",
-      "TDSv40": "translations/TDSv40.js",
-      "TDSv61": "translations/TDSv61.js",
-      "MGCP": "translations/MGCP_TRD4.js"
+    "OSM": "translations/RenderDb_to_ESRI.js",
+    "TDSv40": "translations/TDSv40.js",
+    "TDSv61": "translations/TDSv61.js",
+    "MGCP": "translations/MGCP_TRD4.js"
   },
   "settings": {
-      "cleanupDelay": 30000
+    "cleanupDelay": 30000
   }
 }

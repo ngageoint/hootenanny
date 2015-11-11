@@ -1,0 +1,4 @@
+#!/bin/bash
+
+pg_dump -a -t ways -t current_ways -t current_ways_id_seq -t current_way_tags -t way_tags -t current_way_nodes -t way_nodes > ways.sql
+

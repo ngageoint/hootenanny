@@ -94,9 +94,9 @@ public class ZCurveRanger
   }
 
   // the amount of slop to accept when merging ranges.
-  long _slop;
+  private long _slop;
 
-  ZValue _zv;
+  private ZValue _zv;
 
   public ZCurveRanger(ZValue zv)
   {

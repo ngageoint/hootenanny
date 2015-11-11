@@ -26,17 +26,17 @@
 
     "tag": { "name": "religion=atheist", "isA": "religion" },
 
+    "tag": { "name": "religion=christian and muslim", "isA": "religion",
+        "similarTo": { "name": "religion=christian", "weight": 0.5 },
+        "similarTo": { "name": "religion=muslim", "weight": 0.5 } },
+
     "#" : "##### Christian Religions #####",
-    "tag": { "name": "religion=christian", "isA": "religion" },
-    "tag": { "name": "religion=chtistian", "isA": "religion=christian" },
+    "tag": { "name": "religion=christian", "isA": "religion",
+        "aliases": ["religion=chtistian"] },
 
     "tag": { "name": "religion=gnostic", "isA": "religion",
         "similarTo": { "name": "religion=christian", "weight": 0.6 },
         "similarTo": { "name": "religion=buddhist", "weight": 0.4 } },
-
-    "tag": { "name": "religion=christian and muslim", "isA": "religion",
-        "similarTo": { "name": "religion=christian", "weight": 0.9 },
-        "similarTo": { "name": "religion=muslim", "weight": 0.9 } },
 
     "tag": { "name": "religion=masonic", "isA": "religion",
         "similarTo": { "name": "religion=christian", "weight": 0.9 } },

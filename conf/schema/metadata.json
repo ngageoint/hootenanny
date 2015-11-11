@@ -17,9 +17,6 @@
     "tag": { "name": "security", "isA": "metadata" },
     "tag": { "name": "regex?security:.*", "isA": "security" },
 
-    "tag": { "name": "source", "isA": "metadata" },
-    "tag": { "name": "regex?source:.*", "isA": "source" },
-
     "tag": { "name": "uuid", "isA": "metadata" },
     "tag": { "name": "uuid:history", "isA": "metadata" },
 

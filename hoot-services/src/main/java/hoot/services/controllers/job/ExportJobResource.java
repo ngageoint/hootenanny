@@ -107,7 +107,6 @@ public class ExportJobResource extends JobControllerBase {
 		}
 		catch (Exception ex)
 		{
-			//TODO: throw exception here?
 			log.error(ex.getMessage());
 		}
 	}

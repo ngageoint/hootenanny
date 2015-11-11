@@ -27,6 +27,7 @@
 package hoot.services.controllers.osm;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,6 +40,7 @@ import javax.ws.rs.core.MediaType;
 import javax.xml.xpath.XPath;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.apache.xpath.XPathAPI;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -57,21 +59,16 @@ import hoot.services.db2.QCurrentNodes;
 import hoot.services.db2.QCurrentRelations;
 import hoot.services.db2.QCurrentWays;
 import hoot.services.db2.QMaps;
-
 import hoot.services.geo.BoundingBox;
-//import hoot.services.job.JobStatusWebPoller;
-//import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayer;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.Relation;
 import hoot.services.models.osm.RelationMember;
 import hoot.services.models.osm.Way;
 import hoot.services.models.osm.Element.ElementType;
-//import hoot.services.osm.MapQuerierThread;
-//import hoot.services.osm.MapWriterThread;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
-import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 
 import com.mysema.query.sql.SQLExpressions;
 import com.mysema.query.sql.SQLQuery;
@@ -82,14 +79,11 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.ClientResponse.Status;
 
-/*
- * @todo Most of these tests could be converted to integration tests and after a refactoring,
- * could be replace with unit tests that test only the internal classes being used by this
- * Jersey resource.
- */
 public class MapResourceTest extends OsmResourceTestAbstract
 {
   private static final Logger log = LoggerFactory.getLogger(MapResourceTest.class);
+  
+  protected static final QMaps maps = QMaps.maps;
 
   public MapResourceTest() throws NumberFormatException, IOException
   {
@@ -186,7 +180,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
       OsmTestUtils.verifyOsmHeader(responseData);
       OsmTestUtils.verifyBounds(responseData, queryBounds);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       final boolean multiLayerUniqueElementIds =
         multiLayerUniqueElementIdsStr.toLowerCase().equals("true");
@@ -251,9 +245,13 @@ public class MapResourceTest extends OsmResourceTestAbstract
           2,
           XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
         Assert.assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 1", xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 1", 
+        	URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
         Assert.assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
-        Assert.assertEquals("val 2", xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData));
+        Assert.assertEquals(
+        	"val 2", 
+        	URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
 
         Assert.assertEquals(
           0,
@@ -267,13 +265,17 @@ public class MapResourceTest extends OsmResourceTestAbstract
           1,
           XPathAPI.selectNodeList(responseData, "//osm/node[4]/tag").getLength());
         Assert.assertEquals("key 3", xpath.evaluate("//osm/node[4]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 3", xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 3", 
+        	URLDecoder.decode(xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData), "UTF-8"));
 
         Assert.assertEquals(
           1,
           XPathAPI.selectNodeList(responseData, "//osm/node[5]/tag").getLength());
         Assert.assertEquals("key 4", xpath.evaluate("//osm/node[5]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 4", xpath.evaluate("//osm/node[5]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 4", 
+        	URLDecoder.decode(xpath.evaluate("//osm/node[5]/tag[1]/@v", responseData), "UTF-8"));
       }
       catch (Exception e)
       {
@@ -361,9 +363,13 @@ public class MapResourceTest extends OsmResourceTestAbstract
           2,
           XPathAPI.selectNodeList(responseData, "//osm/way[1]/tag").getLength());
         Assert.assertEquals("key 1", xpath.evaluate("//osm/way[1]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 1", xpath.evaluate("//osm/way[1]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 1", 
+        	URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[1]/@v", responseData), "UTF-8"));
         Assert.assertEquals("key 2", xpath.evaluate("//osm/way[1]/tag[2]/@k", responseData));
-        Assert.assertEquals("val 2", xpath.evaluate("//osm/way[1]/tag[2]/@v", responseData));
+        Assert.assertEquals(
+        	"val 2", 
+        	URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[2]/@v", responseData), "UTF-8"));
 
         Assert.assertEquals(
           0,
@@ -373,7 +379,9 @@ public class MapResourceTest extends OsmResourceTestAbstract
           1,
           XPathAPI.selectNodeList(responseData, "//osm/way[3]/tag").getLength());
         Assert.assertEquals("key 3", xpath.evaluate("//osm/way[3]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 3", xpath.evaluate("//osm/way[3]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 3", 
+        	URLDecoder.decode(xpath.evaluate("//osm/way[3]/tag[1]/@v", responseData), "UTF-8"));
       }
       catch (Exception e)
       {
@@ -483,21 +491,29 @@ public class MapResourceTest extends OsmResourceTestAbstract
           1,
           XPathAPI.selectNodeList(responseData, "//osm/relation[1]/tag").getLength());
         Assert.assertEquals("key 1", xpath.evaluate("//osm/relation[1]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 1", xpath.evaluate("//osm/relation[1]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 1", 
+        	URLDecoder.decode(xpath.evaluate("//osm/relation[1]/tag[1]/@v", responseData), "UTF-8"));
 
         Assert.assertEquals(
           2,
           XPathAPI.selectNodeList(responseData, "//osm/relation[2]/tag").getLength());
         Assert.assertEquals("key 2", xpath.evaluate("//osm/relation[2]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 2", xpath.evaluate("//osm/relation[2]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 2", 
+        	URLDecoder.decode(xpath.evaluate("//osm/relation[2]/tag[1]/@v", responseData), "UTF-8"));
         Assert.assertEquals("key 3", xpath.evaluate("//osm/relation[2]/tag[2]/@k", responseData));
-        Assert.assertEquals("val 3", xpath.evaluate("//osm/relation[2]/tag[2]/@v", responseData));
+        Assert.assertEquals(
+        	"val 3", 
+        	URLDecoder.decode(xpath.evaluate("//osm/relation[2]/tag[2]/@v", responseData), "UTF-8"));
 
         Assert.assertEquals(
           1,
           XPathAPI.selectNodeList(responseData, "//osm/relation[3]/tag").getLength());
         Assert.assertEquals("key 4", xpath.evaluate("//osm/relation[3]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 4", xpath.evaluate("//osm/relation[3]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 4", 
+        	URLDecoder.decode(xpath.evaluate("//osm/relation[3]/tag[1]/@v", responseData), "UTF-8"));
       }
       catch (Exception e)
       {
@@ -632,7 +648,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
       OsmTestUtils.verifyOsmHeader(responseData);
       OsmTestUtils.verifyBounds(responseData, queryBounds);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       try
       {
@@ -665,9 +681,13 @@ public class MapResourceTest extends OsmResourceTestAbstract
           2,
           XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
         Assert.assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 1", xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 1", 
+        	URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
         Assert.assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
-        Assert.assertEquals("val 2", xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData));
+        Assert.assertEquals(
+        	"val 2", 
+        	URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
 
         Assert.assertEquals(
           0,
@@ -677,13 +697,17 @@ public class MapResourceTest extends OsmResourceTestAbstract
           1,
           XPathAPI.selectNodeList(responseData, "//osm/node[3]/tag").getLength());
         Assert.assertEquals("key 3", xpath.evaluate("//osm/node[3]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 3", xpath.evaluate("//osm/node[3]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 3", 
+        	URLDecoder.decode(xpath.evaluate("//osm/node[3]/tag[1]/@v", responseData), "UTF-8"));
 
         Assert.assertEquals(
           1,
           XPathAPI.selectNodeList(responseData, "//osm/node[4]/tag").getLength());
         Assert.assertEquals("key 4", xpath.evaluate("//osm/node[4]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 4", xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 4", 
+        	URLDecoder.decode(xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData), "UTF-8"));
       }
       catch (Exception e)
       {
@@ -735,21 +759,29 @@ public class MapResourceTest extends OsmResourceTestAbstract
           1,
           XPathAPI.selectNodeList(responseData, "//osm/relation[1]/tag").getLength());
         Assert.assertEquals("key 1", xpath.evaluate("//osm/relation[1]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 1", xpath.evaluate("//osm/relation[1]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 1", 
+        	URLDecoder.decode(xpath.evaluate("//osm/relation[1]/tag[1]/@v", responseData), "UTF-8"));
 
         Assert.assertEquals(
           2,
           XPathAPI.selectNodeList(responseData, "//osm/relation[2]/tag").getLength());
         Assert.assertEquals("key 2", xpath.evaluate("//osm/relation[2]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 2", xpath.evaluate("//osm/relation[2]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 2", 
+        	URLDecoder.decode(xpath.evaluate("//osm/relation[2]/tag[1]/@v", responseData), "UTF-8"));
         Assert.assertEquals("key 3", xpath.evaluate("//osm/relation[2]/tag[2]/@k", responseData));
-        Assert.assertEquals("val 3", xpath.evaluate("//osm/relation[2]/tag[2]/@v", responseData));
+        Assert.assertEquals(
+        	"val 3", 
+        	URLDecoder.decode(xpath.evaluate("//osm/relation[2]/tag[2]/@v", responseData), "UTF-8"));
 
         Assert.assertEquals(
           1,
           XPathAPI.selectNodeList(responseData, "//osm/relation[3]/tag").getLength());
         Assert.assertEquals("key 4", xpath.evaluate("//osm/relation[3]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 4", xpath.evaluate("//osm/relation[3]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 4", 
+        	URLDecoder.decode(xpath.evaluate("//osm/relation[3]/tag[1]/@v", responseData), "UTF-8"));
       }
       catch (Exception e)
       {
@@ -819,7 +851,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
       OsmTestUtils.verifyOsmHeader(responseData);
       OsmTestUtils.verifyBounds(responseData, queryBounds);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       try
       {
@@ -858,9 +890,13 @@ public class MapResourceTest extends OsmResourceTestAbstract
           2,
           XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
         Assert.assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 1", xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 1", 
+        	URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
         Assert.assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
-        Assert.assertEquals("val 2", xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData));
+        Assert.assertEquals(
+        	"val 2", 
+        	URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
 
         Assert.assertEquals(
           0,
@@ -874,13 +910,17 @@ public class MapResourceTest extends OsmResourceTestAbstract
           1,
           XPathAPI.selectNodeList(responseData, "//osm/node[4]/tag").getLength());
         Assert.assertEquals("key 3", xpath.evaluate("//osm/node[4]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 3", xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 3", 
+        	URLDecoder.decode(xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData), "UTF-8"));
 
         Assert.assertEquals(
           1,
           XPathAPI.selectNodeList(responseData, "//osm/node[5]/tag").getLength());
         Assert.assertEquals("key 4", xpath.evaluate("//osm/node[5]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 4", xpath.evaluate("//osm/node[5]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 4", 
+        	URLDecoder.decode(xpath.evaluate("//osm/node[5]/tag[1]/@v", responseData), "UTF-8"));
       }
       catch (Exception e)
       {
@@ -928,9 +968,13 @@ public class MapResourceTest extends OsmResourceTestAbstract
           2,
           XPathAPI.selectNodeList(responseData, "//osm/way[1]/tag").getLength());
         Assert.assertEquals("key 1", xpath.evaluate("//osm/way[1]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 1", xpath.evaluate("//osm/way[1]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 1", 
+        	URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[1]/@v", responseData), "UTF-8"));
         Assert.assertEquals("key 2", xpath.evaluate("//osm/way[1]/tag[2]/@k", responseData));
-        Assert.assertEquals("val 2", xpath.evaluate("//osm/way[1]/tag[2]/@v", responseData));
+        Assert.assertEquals(
+        	"val 2", 
+        	URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[2]/@v", responseData), "UTF-8"));
 
         Assert.assertEquals(
           0,
@@ -940,7 +984,9 @@ public class MapResourceTest extends OsmResourceTestAbstract
           1,
           XPathAPI.selectNodeList(responseData, "//osm/way[3]/tag").getLength());
         Assert.assertEquals("key 3", xpath.evaluate("//osm/way[3]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 3", xpath.evaluate("//osm/way[3]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 3", 
+        	URLDecoder.decode(xpath.evaluate("//osm/way[3]/tag[1]/@v", responseData), "UTF-8"));
       }
       catch (Exception e)
       {
@@ -995,7 +1041,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
       OsmTestUtils.verifyOsmHeader(responseData);
       OsmTestUtils.verifyBounds(responseData, queryBounds);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       try
       {
@@ -1028,9 +1074,13 @@ public class MapResourceTest extends OsmResourceTestAbstract
           2,
           XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
         Assert.assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 1", xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 1", 
+        	URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
         Assert.assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
-        Assert.assertEquals("val 2", xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData));
+        Assert.assertEquals(
+        	"val 2", 
+        	URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
 
         Assert.assertEquals(
           0,
@@ -1040,13 +1090,17 @@ public class MapResourceTest extends OsmResourceTestAbstract
           1,
           XPathAPI.selectNodeList(responseData, "//osm/node[3]/tag").getLength());
         Assert.assertEquals("key 3", xpath.evaluate("//osm/node[3]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 3", xpath.evaluate("//osm/node[3]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 3", 
+        	URLDecoder.decode(xpath.evaluate("//osm/node[3]/tag[1]/@v", responseData), "UTF-8"));
 
         Assert.assertEquals(
           1,
           XPathAPI.selectNodeList(responseData, "//osm/node[4]/tag").getLength());
         Assert.assertEquals("key 4", xpath.evaluate("//osm/node[4]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 4", xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 4", 
+        	URLDecoder.decode(xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData), "UTF-8"));
       }
       catch (Exception e)
       {
@@ -1097,7 +1151,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
 
 
 
-      int success = //invisibleNode.update();
+      int success = 
       		(int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentNodes)
       .where(currentNodes.id.eq(invisibleNode.getId()))
    .set(currentNodes.visible, false)
@@ -1120,7 +1174,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
           .where(currentWays.id.eq(wayIdsArr[0]))
           .singleResult(currentWays);
       invisibleWay.setVisible(false);
-      success = //invisibleWay.update();
+      success = 
       		(int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentWays)
       .where(currentWays.id.eq(invisibleWay.getId()))
       .set(currentWays.visible, false)
@@ -1140,7 +1194,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
           .where(currentRelations.id.eq(relationIdsArr[0]))
           .singleResult(currentRelations);
       invisibleRelation.setVisible(false);
-      success = //invisibleRelation.update();
+      success = 
       		(int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentRelations)
       .where(currentRelations.id.eq(invisibleRelation.getId()))
       .set(currentRelations.visible, false)
@@ -1191,7 +1245,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
         responseData, 4, String.valueOf(nodeIdsArr[4]), changesetId, originalBounds.getMinLat(),
         originalBounds.getMinLon(), false);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       try
       {
         Assert.assertEquals(
@@ -1202,9 +1256,13 @@ public class MapResourceTest extends OsmResourceTestAbstract
           2,
           XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
         Assert.assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 1", xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 1", 
+        	URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
         Assert.assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
-        Assert.assertEquals("val 2", xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData));
+        Assert.assertEquals(
+        	"val 2", 
+        	URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
 
         Assert.assertEquals(
           0,
@@ -1218,7 +1276,9 @@ public class MapResourceTest extends OsmResourceTestAbstract
           1,
           XPathAPI.selectNodeList(responseData, "//osm/node[4]/tag").getLength());
         Assert.assertEquals("key 4", xpath.evaluate("//osm/node[4]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 4", xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 4", 
+        	URLDecoder.decode(xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData), "UTF-8"));
       }
       catch (Exception e)
       {
@@ -1252,14 +1312,14 @@ public class MapResourceTest extends OsmResourceTestAbstract
           1,
           XPathAPI.selectNodeList(responseData, "//osm/way[2]/tag").getLength());
         Assert.assertEquals("key 3", xpath.evaluate("//osm/way[2]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 3", xpath.evaluate("//osm/way[2]/tag[1]/@v", responseData));
+        Assert.assertEquals(
+        	"val 3", 
+        	URLDecoder.decode(xpath.evaluate("//osm/way[2]/tag[1]/@v", responseData), "UTF-8"));
       }
       catch (Exception e)
       {
         Assert.fail("Error parsing way tags from response document: " + e.getMessage());
       }
-
-      //TODO: verify relations
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -1484,9 +1544,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
     map.setCreatedAt(now);
     final String duplicatedMapName = "map-with-id-" + mapId;
     map.setDisplayName(duplicatedMapName);
-    //map.setPublic(true);
     map.setUserId(userId);
-    //mapDao.insert(map);
     new SQLInsertClause(conn, DbUtils.getConfiguration(mapId), maps)
     .populate(map).execute();
 
@@ -1513,6 +1571,12 @@ public class MapResourceTest extends OsmResourceTestAbstract
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
       throw e;
+    }
+    finally
+    {
+    	new SQLDeleteClause(conn, DbUtils.getConfiguration(), maps)
+    	  .where(maps.id.eq(nextMapId))
+				.execute();
     }
   }
 
@@ -1553,7 +1617,10 @@ public class MapResourceTest extends OsmResourceTestAbstract
       throw e;
     }
   }
- /*
+  
+  //TODO: why were these two tests disabled?
+ 
+  @Ignore
   @Test(expected=UniformInterfaceException.class)
   @Category(UnitTest.class)
   public void testGetMapBoundsOutsideWorld() throws Exception
@@ -1592,6 +1659,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
     }
   }
 
+  @Ignore
   @Test(expected=UniformInterfaceException.class)
   @Category(UnitTest.class)
   public void testGetMapBoundsTooLarge() throws Exception
@@ -1633,7 +1701,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
       throw e;
     }
   }
-  */
+  
   @Test
   @Category(UnitTest.class)
   public void testGetMapMissingMultiLayerUniqueElementIdsParam() throws Exception

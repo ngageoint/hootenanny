@@ -1,12 +1,14 @@
 {
     "tag": {
         "name": "natural",
-        "isA": "poi=yes",
+        "isA": "hgispoi",
         "influence": 1.0,
         "type": "enumeration",
         "geometries": ["area"],
         "categories": ["poi"]
     },
+
+    "tag": { "name": "natural=*", "isA": "natural", "geometries": ["node", "area"]},
 
     "#" : "Natural features",
     "tag": { "name": "natural=beach", "isA": "natural", "geometries": ["node", "area"]},
@@ -20,10 +22,15 @@
         "isA": "natural",
         "geometries": ["node"]
     },
+    "tag": { "name": "natural=mountain", 
+        "isA": "natural",
+        "geometries": ["node"]
+    },
     "tag": { "name": "natural=peak", 
         "isA": "natural",
         "geometries": ["node"],
-        "similarTo": { "name": "natural=hill", "weight": 0.8 }
+        "similarTo": { "name": "natural=hill", "weight": 0.8 },
+        "similarTo": { "name": "natural=mountain", "weight": 0.8 }
     },
     "tag": { "name": "natural=scrub", "isA": "natural", "geometries": ["node", "area"]},
     "tag": { "name": "natural=wood", "isA": "natural" },
@@ -34,6 +41,3 @@
 
     "#" : "end"
 }
-
-
-
