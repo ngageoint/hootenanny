@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-916984' visible='true' lat='38.9223335' lon='-77.0435882'>
+    <tag k='amenity' v='school' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='Columbian School' />
+    <tag k='source:ingest:datetime' v='2015-06-01T19:33:35.298Z' />
+  </node>
+</osm>
