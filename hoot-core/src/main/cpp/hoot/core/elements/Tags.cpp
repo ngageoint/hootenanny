@@ -236,29 +236,6 @@ QStringList Tags::getNames() const
   return result;
 }
 
-QStringList Tags::getNamesRecursive() const
-{
-  QStringList result;
-
-  if (size() == 0)
-  {
-    return result;
-  }
-
-  // make sure the _nameKeys field is populated.
-  getNameKeys();
-
-  for (int i = 0; i < _nameKeys.size(); i++)
-  {
-    if (OsmSchema::getInstance().isAncestor(_nameKeys[i], "abstract_name"))
-    {
-      readValues(_nameKeys[i], result);
-    }
-  }
-
-  return result;
-}
-
 const QStringList& Tags::getNameKeys()
 {
   // getting the name tags can be a bit expensive so we'll just do it once.

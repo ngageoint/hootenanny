@@ -124,13 +124,6 @@ public:
   QStringList getNames() const;
 
   /**
-   * Return all the names for the current feature, including those that are an ancestor of a name tag.
-   *
-   * @return a list of names
-   */
-  QStringList getNamesRecursive() const;
-
-  /**
    * Return the number of tags that contain actual information, not meta-data or debug tags.
    * Meta-data tags include things like source and license. Debug is anything that starts with
    * hoot:. An example of an informational tag is name or highway.
