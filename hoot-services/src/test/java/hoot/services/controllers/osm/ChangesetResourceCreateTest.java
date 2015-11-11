@@ -42,12 +42,12 @@ import hoot.services.UnitTest;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.Maps;
 import hoot.services.db2.QMaps;
-
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
 
 import com.mysema.query.sql.SQLExpressions;
 import com.mysema.query.sql.SQLQuery;
+import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.sql.dml.SQLInsertClause;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
@@ -225,6 +225,12 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
           "Multiple maps exist with name: " + mapName + ".  Please specify a single, valid map."));
 
       throw e;
+    }
+    finally
+    {
+    	new SQLDeleteClause(conn, DbUtils.getConfiguration(), maps)
+    	  .where(maps.id.eq(nextMapId))
+				.execute();
     }
   }
 
