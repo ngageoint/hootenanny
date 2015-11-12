@@ -240,7 +240,7 @@ ifeq ($(BUILD_SERVICES),services)
 endif
 
 
-FORCE:
+FORCE: vagrant
 
 HOOT_VERSION_FILE: FORCE
 	$(SHELL_PATH) ./HOOT_VERSION_GEN;
@@ -344,3 +344,7 @@ eclipse:
 ifeq ($(BUILD_SERVICES),services)
 	scripts/mvn-build $(MVN_QUIET) eclipse
 endif
+
+vagrant:
+	# Check the Vagrant.marker file data to see if provisioning needs to run
+	if [ -f Vagrant.marker ]; then if [ Vagrant.marker -ot VagrantProvision.sh ]; then echo "New dependencies have been added to Vagrant!"; echo "Please exit the vm and run 'vagrant provision'."; false; fi fi
