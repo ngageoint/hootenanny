@@ -402,21 +402,17 @@ public class ChangesetDbWriter
         {
           diffBounds = new BoundingBox(); // I think this is wrong
         }
-        // Delete does not guarantee populating location infor
-        if( !entityChangeType.equals(EntityChangeType.DELETE))
+      	BoundingBox elementBounds = element.getBounds();
+        
+        // null check here if for relations that only contain members of type relation, for which
+        // no bounds is being calculated
+        if (elementBounds != null)
         {
-        	BoundingBox elementBounds = element.getBounds();
-	        
-	        // null check here if for relations that only contain members of type relation, for which
-	        // no bounds is being calculated
-	        if (elementBounds != null)
-	        {
-	          diffBounds.expand(
-	            element.getBounds(),
-	            Double.parseDouble(HootProperties.getInstance().getProperty(
-	                "changesetBoundsExpansionFactorDeegrees",
-	                HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees"))));
-	        }
+          diffBounds.expand(
+            element.getBounds(),
+            Double.parseDouble(HootProperties.getInstance().getProperty(
+                "changesetBoundsExpansionFactorDeegrees",
+                HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees"))));
         }
       }
     }
