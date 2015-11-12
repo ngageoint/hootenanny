@@ -1,0 +1,11 @@
+{
+  "name": "node-mapnik-server",
+  "version": "0.0.1",
+  "dependencies": {
+    "mapnik": "1.x",
+    "generic-pool": "*"
+  },
+  "scripts": {
+    "start": "node app.js hoot_style.xml 8000"
+  }
+}
