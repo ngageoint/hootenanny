@@ -47,6 +47,9 @@ namespace hoot {
 class ElementData
 {
 public:
+  static long CHANGESET_EMPTY;
+  static long VERSION_EMPTY;
+  static long TIMESTAMP_EMPTY;
 
   virtual ~ElementData() {}
 

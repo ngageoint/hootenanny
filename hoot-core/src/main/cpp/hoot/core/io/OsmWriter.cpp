@@ -186,20 +186,25 @@ void OsmWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
   if (_includeCompatibilityTags)
   {
     writer.writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));
-    writer.writeAttribute("version", QString::number(e->getVersion()));
+    long version = e->getVersion();
+    if (version == ElementData::VERSION_EMPTY)
+    {
+      version = 1;
+    }
+    writer.writeAttribute("version", QString::number(version));
   }
   else
   {
-    if (e->getTimestamp() != 0)
+    if (e->getTimestamp() != ElementData::TIMESTAMP_EMPTY)
     {
       writer.writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));
     }
-    if (e->getVersion() != 0)
+    if (e->getVersion() != ElementData::VERSION_EMPTY)
     {
       writer.writeAttribute("version", QString::number(e->getVersion()));
     }
   }
-  if (e->getChangeset() != 0)
+  if (e->getChangeset() != ElementData::CHANGESET_EMPTY)
   {
     writer.writeAttribute("changeset", QString::number(e->getChangeset()));
   }
