@@ -135,7 +135,6 @@ sudo service postgresql restart
 
 # Configure and Build
 cd /home/vagrant/hoot
-cp ./conf/DatabaseConfig.sh.orig ./conf/DatabaseConfig.sh
 source ./SetupEnv.sh
 
 # Check that hoot-ui submodule has been init'd and updated
