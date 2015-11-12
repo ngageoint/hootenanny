@@ -33,6 +33,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {

@@ -29,6 +29,9 @@
 
 #include "../StringDistanceConsumer.h"
 
+// Hoot
+#include <hoot/core/algorithms/string/StringTokenizer.h>
+
 // Tgs
 #include <tgs/SharedPtr.h>
 
@@ -39,7 +42,8 @@ using namespace std;
 /**
  * See ScoreMatrix::minSumScore for details.
  */
-class MinSumWordSetDistance : public StringDistance, public StringDistanceConsumer
+class MinSumWordSetDistance : public StringDistance, public StringDistanceConsumer,
+  public Configurable
 {
 public:
   /**
@@ -53,12 +57,15 @@ public:
 
   virtual double compare(const QString& s1, const QString& s2) const;
 
+  virtual void setConfiguration(const Settings& conf);
+
   virtual void setStringDistance(const StringDistancePtr &sd) { _d = sd; }
 
   virtual QString toString() const { return QString("MinSumWordSetDistance %1 %2").arg(_p).arg(_d->toString()); }
 
 private:
   StringDistancePtr _d;
+  StringTokenizer _tokenizer;
   double _p;
 };
 
