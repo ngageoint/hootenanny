@@ -108,7 +108,6 @@ public class MapResource
 
 	public MapResource()
 	{
-		log.debug("Reading application settings...");
 		appContext = new ClassPathXmlApplicationContext(
 				new String[] { "db/spring-database.xml" });
 	}

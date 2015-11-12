@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -42,6 +42,8 @@ import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.review.ReviewAgainstItem;
 import hoot.services.models.review.ReviewReferences;
 import hoot.services.models.review.ReviewReferencesCollection;
+import hoot.services.models.review.ReviewableItemInfo;
+import hoot.services.models.review.ReviewableItemInfoResponse;
 import hoot.services.models.review.ReviewableItemsStatistics;
 import hoot.services.models.review.SetAllItemsReviewedRequest;
 import hoot.services.readers.review.ReviewItemsRetriever;
@@ -91,9 +93,7 @@ public class ReviewResource
 
   public ReviewResource() throws Exception
   {
-    log.debug("Reading application settings...");
     appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
-    log.debug("Initializing transaction manager...");
     transactionManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
   }
 
@@ -242,11 +242,11 @@ public class ReviewResource
       ReviewInputParamsValidator inputParamsValidator = new ReviewInputParamsValidator(inputParams);
       mapId =
         (String)inputParamsValidator.validateAndParseInputParam("mapId", "", null, null, false, null);
-      
-      stats = 
+
+      stats =
       	(new ReviewableItemsStatisticsCalculator(conn, mapId, true)).getStatistics(
       		0.0, BoundingBox.worldBounds());
-      
+
       ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
 
     	long cnt = marker.getAvailableReviewCntQuery().count();
@@ -263,7 +263,7 @@ public class ReviewResource
 	    	QMaps maps = QMaps.maps;
 	      final long mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn,
 	      		maps, maps.id, maps.displayName);
-	      
+
 	    	stats = new ReviewableItemsStatistics();
 	    	stats.setMapId(mapIdNum);
 	    	stats.setNumReviewableItems(0);
@@ -289,7 +289,7 @@ public class ReviewResource
 
     return stats;
   }
-  
+
   @SuppressWarnings("unchecked")
   @PUT
   @Path("/updatestatus")
@@ -338,7 +338,7 @@ public class ReviewResource
     updateReviewStatusResponse.put("locktime", "" + ReviewItemsRetriever.LOCK_TIME);
     return updateReviewStatusResponse;
   }
-  
+
   @SuppressWarnings("unchecked")
   @PUT
   @Path("/next")
@@ -357,14 +357,14 @@ public class ReviewResource
     {
       int offset = -1;
       Object oReqOffset = nextReviewItemRequest.get("offset");
-      
+
       if(oReqOffset != null)
       {
         offset = Integer.parseInt(oReqOffset.toString());
       }
-      
+
       Object oDirection = nextReviewItemRequest.get("direction");
-      
+
       boolean isForward = true;
       if(oDirection != null)
       {
@@ -374,7 +374,7 @@ public class ReviewResource
           isForward = false;
         }
       }
-    
+
       ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
       nextReviewableResponse = marker.getAvaiableReviewItem(offset, isForward);
       nextReviewableResponse.put("locktime", ReviewItemsRetriever.LOCK_TIME);
@@ -405,10 +405,10 @@ public class ReviewResource
         ReviewUtils.handleError(e, errorMessageStart, false);
       }
     }
-    
+
     return nextReviewableResponse;
   }
-  
+
   @SuppressWarnings("unchecked")
   @GET
   @Path("/lockcount")
@@ -424,7 +424,7 @@ public class ReviewResource
     JSONObject ret = new JSONObject();
     long lockcnt = 0;
     try
-    {    	
+    {
     	ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
     	lockcnt = marker.getLockedReviewCntQuery().count();
     }
@@ -444,16 +444,16 @@ public class ReviewResource
         ReviewUtils.handleError(e, errorMessageStart, false);
       }
     }
-    
+
     ret.put("count", lockcnt);
     return ret;
   }
 
   /**
-   * Returns any review record references to the elements associated with the ID's passed in 
-   * including all references to any item the specified element still needs to be reviewed against, 
+   * Returns any review record references to the elements associated with the ID's passed in
+   * including all references to any item the specified element still needs to be reviewed against,
    * as well as any other item that needs to use the specified element to review against it.
-   * 
+   *
    * @param mapId contains an array of unique ID's and their associated map ID; all unique ID's
    * should be associated with features owned by the single map ID
    * @param elementUniqueIds
@@ -468,18 +468,18 @@ public class ReviewResource
   	@QueryParam("mapId")
     String mapId,
     @QueryParam("elementUniqueIds")
-    String elementUniqueIds) 
+    String elementUniqueIds)
   	throws Exception
   {
   	log.debug("Returning review references...");
-  	
+
   	Connection conn = DbUtils.createConnection();
   	ReviewReferencesCollection response = new ReviewReferencesCollection();
-  	
+
   	Map<String, Object> inputParams = new HashMap<String, Object>();
     inputParams.put("mapId", mapId);
     inputParams.put("elementUniqueIds", elementUniqueIds);
-    
+
   	try
   	{
   		ReviewInputParamsValidator inputParamsValidator = new ReviewInputParamsValidator(inputParams);
@@ -498,19 +498,19 @@ public class ReviewResource
   		{
   			elementUniqueIdsArr = new String[] { elementUniqueIds };
   		}
-  		
+
   		List<ReviewReferences> responseRefsList = new ArrayList<ReviewReferences>();
   		for (String elementUniqueId : elementUniqueIdsArr)
   		{
   			ReviewReferences responseRefs = new ReviewReferences();
-  			List<List<ReviewAgainstItem>> references = 
+  			List<List<ReviewAgainstItem>> references =
 	  			(new ReviewReferencesRetriever(conn, mapId)).getReferences(elementUniqueId);
 	  		log.debug(
-	  			"Returning " + references.get(0).size() + " review against items for unique ID: " + 
+	  			"Returning " + references.get(0).size() + " review against items for unique ID: " +
 	  		  elementUniqueId);
 	  		responseRefs.setReviewAgainstItems(references.get(0).toArray(new ReviewAgainstItem[]{}));
 	  		log.debug(
-	  			"Returning " + references.get(1).size() + " reviewable items for unique ID: " + 
+	  			"Returning " + references.get(1).size() + " reviewable items for unique ID: " +
 	  		  elementUniqueId);
 	  		responseRefs.setReviewableItems(references.get(1).toArray(new ReviewAgainstItem[]{}));
 	  		responseRefs.setUniqueId(elementUniqueId);
@@ -521,24 +521,24 @@ public class ReviewResource
   	catch (Exception e)
     {
       ReviewUtils.handleError(
-      	e, 
-      	"Unable to retrieve review references for map ID: " + mapId + " and element unique ID's: " + 
-      	  elementUniqueIds, 
+      	e,
+      	"Unable to retrieve review references for map ID: " + mapId + " and element unique ID's: " +
+      	  elementUniqueIds,
       	false);
     }
     finally
     {
       DbUtils.closeConnection(conn);
     }
-  	
+
   	log.debug("response : " + StringUtils.abbreviate(response.toString(), 1000));
   	return response;
   }
-  
+
   /**
    * Sets all reviewable features in the dataset to reviewed
-   * 
-   * @param request contains a 'mapId' parameter associated with the map owning the elements to 
+   *
+   * @param request contains a 'mapId' parameter associated with the map owning the elements to
    * be set reviewed
    * @return HTTP response
    * @throws Exception
@@ -551,7 +551,7 @@ public class ReviewResource
   {
   	Connection conn = DbUtils.createConnection();
   	log.debug("Intializing changeset upload transaction...");
-    TransactionStatus transactionStatus = 
+    TransactionStatus transactionStatus =
       transactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
     conn.setAutoCommit(false);
@@ -564,20 +564,20 @@ public class ReviewResource
       mapId =
         (String)inputParamsValidator.validateAndParseInputParam(
         	"mapId", "", null, null, false, null);
-      
+
   	  (new ReviewItemsSynchronizer(conn, mapId)).setAllItemsReviewed();
-  		
+
   		log.debug("Committing set all items reviewed transaction...");
       transactionManager.commit(transactionStatus);
-      conn.commit();	
+      conn.commit();
   	}
   	catch (Exception e)
     {
       transactionManager.rollback(transactionStatus);
       conn.rollback();
       ReviewUtils.handleError(
-      	e, 
-      	"Error setting all records to reviewed for map ID: " + mapId, 
+      	e,
+      	"Error setting all records to reviewed for map ID: " + mapId,
       	false);
     }
     finally
@@ -585,7 +585,65 @@ public class ReviewResource
     	conn.setAutoCommit(true);
       DbUtils.closeConnection(conn);
     }
-  	
+
   	return Response.ok().build();
+  }
+
+  @GET
+  @Path("/getallreviewableitems")
+  @Consumes(MediaType.TEXT_PLAIN)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ReviewableItemInfoResponse getAllReviewableItems(
+    @QueryParam("mapId")
+    String mapId,
+    @QueryParam("minx")
+    String minx,
+    @QueryParam("miny")
+    String miny,
+    @QueryParam("maxx")
+    String maxx,
+    @QueryParam("maxy")
+    String maxy)
+    throws Exception
+  {
+  	log.debug("Initializing database connection...");
+  	Connection conn = DbUtils.createConnection();
+    final String errorMessageStart = "retrieving reviewable items";
+    ReviewableItemInfoResponse resp = new ReviewableItemInfoResponse();
+    try
+    {
+    	minx = minx.replaceAll("\\p{C}", " ").trim();
+    	miny = miny.replaceAll("\\p{C}", " ").trim();
+    	maxx = maxx.replaceAll("\\p{C}", " ").trim();
+    	maxy = maxy.replaceAll("\\p{C}", " ").trim();
+
+    	ReviewItemsRetriever marker = new ReviewItemsRetriever(conn, mapId);
+
+    	List<ReviewableItemInfo> list = marker.getAllReviewItems(
+    			Double.parseDouble(minx),
+    			Double.parseDouble(miny),
+    			Double.parseDouble(maxx),
+    			Double.parseDouble(maxy));
+
+    	resp.setFeatures(list);
+    	resp.setType("FeatureCollection");
+    }
+    catch (Exception e)
+    {
+    	log.error(e.getMessage(), e);
+    }
+    finally
+    {
+    	try
+      {
+        DbUtils.closeConnection(conn);
+      }
+      catch (Exception e)
+      {
+        ReviewUtils.handleError(e, errorMessageStart, false);
+      }
+    }
+
+    return resp;
   }
 }
