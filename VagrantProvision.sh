@@ -135,7 +135,6 @@ sudo service postgresql restart
 
 # Configure and Build
 cd /home/vagrant/hoot
-cp ./conf/DatabaseConfig.sh.orig ./conf/DatabaseConfig.sh
 source ./SetupEnv.sh
 
 # Check that hoot-ui submodule has been init'd and updated
@@ -145,28 +144,7 @@ if [ ! "$(ls -A hoot-ui)" ]; then
     git submodule init && git submodule update
 fi
 
-echo "Configuring Hoot"
-aclocal && autoconf && autoheader && automake && ./configure -q --with-rnd --with-services
-if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
-    echo 'Customizing LocalConfig.pri'
-    cp LocalConfig.pri.orig LocalConfig.pri
-    echo 'QMAKE_CXX=ccache g++' >> LocalConfig.pri
-fi
-echo "Building Hoot"
-make clean
-make -sj$(nproc)
-make docs
-
-# Tweak dev environment to make tests run faster
-# FIXME: make this command not destructive to local.conf
-echo 'testJobStatusPollerTimeout=250' > $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
-
-# Run Tests
-#echo "Running tests"
-#make -sj$(nproc) test
-#make -sj$(nproc) test-all
-
-# Deploy to Tomcat
+# Configure Tomcat
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
 echo "Configuring tomcat6 environment"
 sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
@@ -217,6 +195,41 @@ if ! grep -i --quiet 'allowLinking="true"' /etc/tomcat6/context.xml; then
     sudo sed -i.bak "s@^<Context>@<Context allowLinking=\"true\">@" /etc/tomcat6/context.xml
 fi
 
+# Create directory for webapp
+if [ ! -d /usr/share/tomcat6/.deegree ]; then
+    echo "Creating directory for webapp"
+    sudo mkdir /usr/share/tomcat6/.deegree
+    sudo chown tomcat6:tomcat6 /usr/share/tomcat6/.deegree
+fi
+
+# Tweak dev environment to make tests run faster
+if [ ! -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
+    echo 'testJobStatusPollerTimeout=250' > $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
+fi
+
+# Update marker file date now that dependency and config stuff has run
+# The make command will exit and provide a warning to run 'vagrant provision'
+# if the marker file is older than this file (VagrantProvision.sh)
+touch Vagrant.marker
+
+# Build Hoot
+echo "Configuring Hoot"
+aclocal && autoconf && autoheader && automake && ./configure -q --with-rnd --with-services
+if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
+    echo 'Customizing LocalConfig.pri'
+    cp LocalConfig.pri.orig LocalConfig.pri
+    echo 'QMAKE_CXX=ccache g++' >> LocalConfig.pri
+fi
+echo "Building Hoot"
+make clean -sj$(nproc)
+make -sj$(nproc)
+make docs -sj$(nproc)
+
+# Run Tests
+#echo "Running tests"
+#make -sj$(nproc) test
+#make -sj$(nproc) test-all
+
 # Deploy to Tomcat
 echo "Stopping Tomcat"
 sudo service tomcat6 stop
@@ -225,9 +238,3 @@ sudo -u tomcat6 scripts/vagrantDeployTomcat.sh
 echo "Starting Tomcat"
 sudo service tomcat6 start
 
-# Create directory for webapp
-if [ ! -d /usr/share/tomcat6/.deegree ]; then
-    echo "Creating directory for webapp"
-    sudo mkdir /usr/share/tomcat6/.deegree
-    sudo chown tomcat6:tomcat6 /usr/share/tomcat6/.deegree
-fi
