@@ -709,41 +709,45 @@ tds61 = {
              // Set a Default: "It is a road but we don't know what it is"
             tags.highway = 'road';
 
-            // Top level
-            if (tags['ref:road:type'] == 'motorway' || tags['ref:road:class'] == 'national_motorway')
+            if (tags['ref:road:type'])
             {
-                tags.highway = 'motorway';
-            }
-            else if (tags['ref:road:type'] == 'limited_access_motorway' || tags['ref:road:class'] == 'primary')
-            {
-                tags.highway = 'trunk';
-            }
-            else if (tags['ref:road:class'] == 'secondary')
-            {
-                tags.highway = 'primary';
-            }
-            else if (tags['ref:road:class'] == 'local')
-            {
-                tags.highway = 'secondary';
-            }
-            else if (tags['ref:road:type'] == 'road')
-            {
-                tags.highway = 'tertiary';
-            }
-            else if (tags['ref:road:type'] == 'street')
-            {
-                tags.highway = 'unclassified';
-            }
-            // Other should get picked up by the OTH field
-            else if (tags['ref:road:type'] == 'other')
-            {
-                tags.highway = 'road';
-            }
-            // Catch all for the rest of the ref:road:type: close, circle drive etc
-            else if (tags['ref:road:type'])
-            {
-                tags.highway = 'residential';
-            }
+                switch (tags['ref:road:type'])
+                {
+                    case 'motorway':
+                    case 'national_motorway':
+                        tags.highway = 'motorway';
+                        break;
+
+                    case 'limited_access_motorway':
+                    case 'primary':
+                        tags.highway = 'trunk';
+                        break;
+
+                    case 'secondary':
+                        tags.highway = 'primary';
+                        break;
+
+                    case 'local':
+                        tags.highway = 'secondary';
+                        break;
+
+                    case 'road':
+                        tags.highway = 'tertiary';
+                        break;
+
+                    case 'street':
+                        tags.highway = 'unclassified';
+                        break;
+
+                    case 'other':
+                        tags.highway = 'road';
+                        break;
+
+                    default:
+                        tags.highway = 'residential';
+                } // End switch road:type
+            } // End If road:type
+
         } // End if AP030
 
 
@@ -896,8 +900,10 @@ tds61 = {
         // Add defaults for common features
         if (attrs.F_CODE == 'AP020' && !(tags.junction)) tags.junction = 'yes';
         if (attrs.F_CODE == 'AQ040' && !(tags.bridge)) tags.bridge = 'yes';
-        if (attrs.F_CODE == 'AQ040' && !(tags.highway)) tags.highway = 'yes';
         if (attrs.F_CODE == 'BH140' && !(tags.waterway)) tags.waterway = 'river';
+
+        // Not sure about adding a Highway tag to this.
+        // if (attrs.F_CODE == 'AQ040' && !(tags.highway)) tags.highway = 'yes';
 
     }, // End of applyToOsmPostProcessing
   
