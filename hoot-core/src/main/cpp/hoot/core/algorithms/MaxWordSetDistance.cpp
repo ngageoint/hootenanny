@@ -64,4 +64,9 @@ double MaxWordSetDistance::compare(const QString& s1, const QString& s2) const
   return maxV;
 }
 
+void MaxWordSetDistance::setConfiguration(const Settings& conf)
+{
+  _tokenizer.setConfiguration(conf);
+}
+
 }
