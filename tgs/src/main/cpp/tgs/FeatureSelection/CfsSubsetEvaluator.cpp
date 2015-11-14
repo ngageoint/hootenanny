@@ -110,8 +110,6 @@ namespace Tgs
   double CfsSubsetEvaluator::evaluateSubset(const std::vector<int>& columns, 
     TgsProgress*)
   {
-//     cout << columns << endl;
-
     double classCorrSum = 0.0;
     for (unsigned int i = 0; i < columns.size(); i++)
     {
