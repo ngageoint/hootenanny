@@ -1,30 +1,58 @@
-{
-    "tag": {
-        "name": "historic", "isA": "hgispoi"
+[
+    {
+        "isA": "hgispoi",
+        "name": "historic",
+        "objectType": "tag"
     },
-    "tag": { "name": "historic=*", "isA": "historic" },
-    "tag": {
-        "name": "historic=memorial",
+    {
         "isA": "historic",
-        "similarTo": { "name": "leisure=park", "weight": 0.2 },
-        "similarTo": { "name": "historic=monument", "weight": 0.8 },
-        "similarTo": { "name": "landuse=cemetery", "weight": 0.6 }
+        "name": "historic=*",
+        "objectType": "tag"
     },
-    "tag": {
+    {
+        "isA": "historic",
         "name": "historic=castle",
-        "isA": "historic",
-        "similarTo": { "name": "building=fort", "weight": 0.8 }
+        "objectType": "tag",
+        "similarTo": {
+            "name": "building=fort",
+            "weight": 0.8
+        }
     },
-    "tag": {
-        "name": "historic=ruins",
+    {
         "isA": "historic",
-        "similarTo": { "name": "place=populated", "weight": 0.4 }
+        "name": "historic=memorial",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "leisure=park",
+                "weight": 0.2
+            },
+            {
+                "name": "historic=monument",
+                "weight": 0.8
+            },
+            {
+                "name": "landuse=cemetery",
+                "weight": 0.6
+            }
+        ]
     },
-    "tag": {
+    {
+        "isA": "historic",
         "name": "historic=monument",
-        "isA": "historic",
-        "similarTo": { "name": "tourism=artwork", "weight": 0.4 }
+        "objectType": "tag",
+        "similarTo": {
+            "name": "tourism=artwork",
+            "weight": 0.4
+        }
     },
-
-    "#" : "end"
-}
+    {
+        "isA": "historic",
+        "name": "historic=ruins",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "place=populated",
+            "weight": 0.4
+        }
+    }
+]

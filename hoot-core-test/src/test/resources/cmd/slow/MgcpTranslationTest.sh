@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+#set -e
 
 mkdir -p test-output/translation/
 
@@ -44,6 +44,6 @@ checkMgcpV3 LAP030
 checkMgcpV3 LAP050
 # Rivers
 checkMgcpV3 LBH140
-# BUilding Points
+# Building Points
 checkMgcpV3 PAL015
 

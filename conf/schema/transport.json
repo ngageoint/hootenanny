@@ -1,16 +1,23 @@
-{
-    "tag": {
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "influence": 1,
+        "isA": "hgispoi",
         "name": "transport",
-        "influence": 1.0,
-        "type": "enumeration",
-        "geometries": ["node","area"],
-        "isA": "hgispoi"
+        "objectType": "tag"
     },
-
-    "#" : " The catch all",
-    "tag": { "name": "transport=*", "isA": "transport" },
-
-    "tag": { "name": "transport=station", "isA": "transport" },
-
-    "#" : "end"
-}
+    {
+        "isA": "transport",
+        "name": "transport=*",
+        "objectType": "tag"
+    },
+    {
+        "isA": "transport",
+        "name": "transport=station",
+        "objectType": "tag"
+    }
+]

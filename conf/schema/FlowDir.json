@@ -1,0 +1,7 @@
+[
+    {
+        "isA": "waterway",
+        "name": "FlowDir=*",
+        "objectType": "tag"
+    }
+]
