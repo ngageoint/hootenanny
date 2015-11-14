@@ -42,6 +42,7 @@ using namespace geos::geom;
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 // Qt
 #include <QFileInfo>
@@ -221,7 +222,7 @@ void ShapefileWriter::writeLines(shared_ptr<const OsmMap> map, const QString& pa
   {
     shared_ptr<Way> way = it->second;
 
-    if (way->getTags().isArea() == false)
+    if (OsmSchema::getInstance().isArea(way) == false)
     {
       OGRFeature* poFeature = OGRFeature::CreateFeature( poLayer->GetLayerDefn() );
       // set all the column values.
@@ -429,7 +430,7 @@ void ShapefileWriter::writePolygons(shared_ptr<const OsmMap> map, const QString&
   {
     shared_ptr<Way> way = it->second;
 
-    if (way->getTags().isArea())
+    if (OsmSchema::getInstance().isArea(way))
     {
       _writeWayPolygon(map, way, poLayer, columns, shpColumns);
     }

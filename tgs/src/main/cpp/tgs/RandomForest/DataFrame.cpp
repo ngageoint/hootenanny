@@ -297,7 +297,7 @@ namespace Tgs
     }
   }
 
-  const vector<string>& DataFrame::getFactorLabels() const
+  const vector<string> DataFrame::getFactorLabels() const
   {
     return _factorLabels;
   }
