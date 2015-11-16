@@ -27,6 +27,7 @@
         <nd ref="-23"/>
         <tag k="width" v="10"/>
         <tag k="note" v="2;1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="source" v="Yahoo imagery"/>
         <tag k="name" v="average"/>
         <tag k="raw:COE" v="0"/>
@@ -58,6 +59,7 @@
         <nd ref="-23"/>
         <tag k="width" v="10"/>
         <tag k="note" v="2"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="raw:COE" v="0"/>
         <tag k="all_weather" v="yes"/>
         <tag k="highway" v="secondary"/>
@@ -69,6 +71,7 @@
         <nd ref="-15"/>
         <nd ref="-23"/>
         <tag k="note" v="1"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="source" v="Yahoo imagery"/>
         <tag k="highway" v="unclassified"/>
         <tag k="error:circular" v="15"/>
