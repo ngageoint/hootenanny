@@ -709,44 +709,41 @@ tds61 = {
              // Set a Default: "It is a road but we don't know what it is"
             tags.highway = 'road';
 
-            if (tags['ref:road:type'])
+            // Top level
+            if (tags['ref:road:type'] == 'motorway' || tags['ref:road:class'] == 'national_motorway')
             {
-                switch (tags['ref:road:type'])
-                {
-                    case 'motorway':
-                    case 'national_motorway':
-                        tags.highway = 'motorway';
-                        break;
-
-                    case 'limited_access_motorway':
-                    case 'primary':
-                        tags.highway = 'trunk';
-                        break;
-
-                    case 'secondary':
-                        tags.highway = 'primary';
-                        break;
-
-                    case 'local':
-                        tags.highway = 'secondary';
-                        break;
-
-                    case 'road':
-                        tags.highway = 'tertiary';
-                        break;
-
-                    case 'street':
-                        tags.highway = 'unclassified';
-                        break;
-
-                    case 'other':
-                        tags.highway = 'road';
-                        break;
-
-                    default:
-                        tags.highway = 'residential';
-                } // End switch road:type
-            } // End If road:type
+                tags.highway = 'motorway';
+            }
+            else if (tags['ref:road:type'] == 'limited_access_motorway' || tags['ref:road:class'] == 'primary')
+            {
+                tags.highway = 'trunk';
+            }
+            else if (tags['ref:road:class'] == 'secondary')
+            {
+                tags.highway = 'primary';
+            }
+            else if (tags['ref:road:class'] == 'local')
+            {
+                tags.highway = 'secondary';
+            }
+            else if (tags['ref:road:type'] == 'road')
+            {
+                tags.highway = 'tertiary';
+            }
+            else if (tags['ref:road:type'] == 'street')
+            {
+                tags.highway = 'unclassified';
+            }
+            // Other should get picked up by the OTH field
+            else if (tags['ref:road:type'] == 'other')
+            {
+                tags.highway = 'road';
+            }
+            // Catch all for the rest of the ref:road:type: close, circle drive etc
+            else if (tags['ref:road:type'])
+            {
+                tags.highway = 'residential';
+            }
 
         } // End if AP030
 
@@ -943,8 +940,10 @@ tds61 = {
             var rulesList = [
             ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] == 'bus'"],
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
-            ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
-            ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
+            ["t.highway == 'construction' && t.construction","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
+            ["t.railway == 'construction' && t.construction","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
+            ["t.highway == 'construction' && !(t.construction)","t.highway = 'road'; t.condition = 'construction'"],
+            ["t.railway == 'construction' && !(t.construction)","t.railway = 'rail'; t.condition = 'construction'"],
             ["t.control_tower && t.man_made == 'tower'","delete t.man_made"],
             ["t.crossing == 'tank' && t.highway == 'crossing'","delete t.highway"],
             ["t.dock && t.waterway == 'dock'","delete t.waterway"],
@@ -1228,7 +1227,6 @@ tds61 = {
            tags.highway = tags['highway'].replace('_link','');
            tags.road_ramp = 'yes';
        }
-
 
     }, // End applyToNfddPreProcessing
 

@@ -501,11 +501,11 @@ translate = {
     
     fixConstruction : function(tags, key)
     {
-        if ('status' in tags && key in tags && tags['status'] == 'construction' && tags[key] != '')
+        if ('condition' in tags && key in tags && tags.condition == 'construction' && tags[key] != '')
         {
-            tags['construction'] = tags[key];
+            tags.construction = tags[key];
             tags[key] = 'construction';
-            delete tags['status'];
+            delete tags.condition;
         }
     },
 
