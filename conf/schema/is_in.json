@@ -1,0 +1,47 @@
+[
+    {
+        "dataType": "text",
+        "name": "is_in",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "name": "is_in:city",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "name": "is_in:continent",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "name": "is_in:country",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "name": "is_in:country_code",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "name": "is_in:county",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "name": "is_in:municipality",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "name": "is_in:province",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "name": "is_in:state",
+        "objectType": "tag"
+    }
+]

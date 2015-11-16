@@ -30,7 +30,6 @@
 // Standard Includes
 #include <float.h>
 #include <stdio.h>
-#include <iostream>
 
 #include "../Progress.h"
 #include "../RandomForest/DataFrame.h"
@@ -42,8 +41,6 @@ namespace Tgs
 {
   GreedyStepwiseSearch::GreedyStepwiseSearch()
   {
-    // @todo Test Disabled. See #7251 for details.
-    std::cerr << "Test is disabled. Please fix before using." << std::endl;
     _direction = Backward;
   }
 
@@ -90,11 +87,7 @@ namespace Tgs
         for (unsigned int i = 0; i < columns.size(); i++)
         {
           string s = df.getFactorLabelFromIndex(columns[i]);
-          char* s2 = (char*)s.c_str();
-          s2[4] = 0;
-//           printf("%s\t", s2);
         }
-//         printf("\n");
         if (score >= bestScore)
         {
           bestScore = score;
@@ -106,7 +99,8 @@ namespace Tgs
     result.clear();
     for (unsigned int i = 0; i < bestSolution.size(); i++)
     {
-      result.push_back(df.getFactorLabelFromIndex(bestSolution[i]));
+      string s = df.getFactorLabelFromIndex(bestSolution[i]);
+      result.push_back(s);
     }
 
     if (p)

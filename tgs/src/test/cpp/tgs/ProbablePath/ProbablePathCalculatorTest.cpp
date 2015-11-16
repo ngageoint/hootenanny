@@ -40,7 +40,9 @@ using namespace std;
 
 #include "../PluginFactory.h"
 #include <tgs/ProbablePath/ProbablePathCalculator.h>
-using namespace Tgs;
+
+namespace Tgs
+{
 
 class ProbablePathCalculatorTest : public CppUnit::TestFixture
 {
@@ -193,9 +195,9 @@ public:
       ProbablePathCalculator uut;
       uut.setFriction(w, h, friction);
       uut.setRandomNoise(0.0);
-      Image<float> result = uut.updateCostSurface(cost);
+      cost = uut.updateCostSurface(cost);
       stringstream strm;
-      strm << result;
+      strm << cost;
       CPPUNIT_ASSERT_EQUAL(tmp, strm.str());
     }
 
@@ -206,11 +208,13 @@ public:
       ProbablePathCalculator uut;
       uut.setFriction(w, h, friction);
       uut.setRandomNoise(0.0);
-      Image<float> result = uut.updateCostSurface(cost);
+      uut.updateCostSurface(cost);
       stringstream strm;
-      strm << result;
+      strm << cost;
     }
   }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ProbablePathCalculatorTest, PluginFactory::testName());
+
+}

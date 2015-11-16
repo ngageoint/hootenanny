@@ -41,7 +41,8 @@ using namespace std;
 #include <tgs/RStarTree/HilbertRTree.h>
 #include <tgs/RStarTree/KnnIterator.h>
 
-using namespace Tgs;
+namespace Tgs
+{
 
 class Tmp
 {
@@ -582,3 +583,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HilbertRTreeTest, PluginFactory::testName());
+
+}

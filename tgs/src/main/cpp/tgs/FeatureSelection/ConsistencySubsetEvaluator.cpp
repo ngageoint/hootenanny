@@ -29,12 +29,12 @@
 
 // Standard Includes
 #include <assert.h>
-#include <iostream>
 #include <stdio.h>
 using namespace std;
 
 #include "../HashMap.h"
 #include "../Progress.h"
+#include "../StreamUtils.h"
 #include "../TgsException.h"
 #include "../RandomForest/DataFrame.h"
 #include "DataFrameDiscretizer.h"
@@ -51,6 +51,7 @@ namespace Tgs
 
     BinHashFunctor() {}
 
+    // hash operator
     size_t operator() (const std::vector<int>& factorBins) const
     {
       size_t hash = 0;
@@ -68,20 +69,17 @@ namespace Tgs
       return hash;
     }
 
+    // equals operator
     bool operator() (const std::vector<int>& k1, const std::vector<int>& k2) const
     {
       for (unsigned int i = 0; i < _columns.size(); i++)
       {
-        if (k1[_columns[i]] < k2[_columns[i]])
-        {
-          return true;
-        }
-        else if (k1[_columns[i]] > k2[_columns[i]])
+        if (k1[_columns[i]] != k2[_columns[i]])
         {
           return false;
         }
       }
-      return false;
+      return true;
     }
   };
 
@@ -136,7 +134,8 @@ namespace Tgs
     typedef HashMap< 
       std::vector<int>, // bin key
       InconsistentInstancesMap, // map of class enumerations to instance count
-      BinHashFunctor> // fancy hash function and comparison that only looks at 'columns'
+      BinHashFunctor, // fancy hash function and comparison that only looks at 'columns'
+      BinHashFunctor>
       BinMap;
     BinMap binMap;
     
@@ -178,8 +177,6 @@ namespace Tgs
 
   void ConsistencySubsetEvaluator::setDataFrame(const DataFrame& dataFrame, TgsProgress* progress) 
   {
-    // @todo Test Disabled. See #7251 for details.
-    std::cerr << "Test is disabled. Please fix before using." << std::endl;
     _dataFrame = dataFrame;
     DataFrameDiscretizer dfd;
     dfd.discretize(_dataFrame, progress);

@@ -88,8 +88,7 @@ namespace Tgs
   class CfsSubsetEvaluatorTest : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(CfsSubsetEvaluatorTest);
-//     CPPUNIT_TEST(testGeneratedData20);
-//     CPPUNIT_TEST(testColumnSplits);
+    CPPUNIT_TEST(testGeneratedData20);
     CPPUNIT_TEST(sanityCheck);
     CPPUNIT_TEST(testGeneratedData20);
     CPPUNIT_TEST(testGeneratedData1000);
@@ -169,6 +168,4 @@ namespace Tgs
   };
 }
 
-
-// @todo Disabled. See #7251 for details.
-// CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Tgs::CfsSubsetEvaluatorTest, PluginFactory::testName());
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Tgs::CfsSubsetEvaluatorTest, PluginFactory::testName());

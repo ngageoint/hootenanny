@@ -224,7 +224,8 @@ WayLocation WayLocation::move(Meters distance) const
   WayLocation result(*this);
   Coordinate last = result.getCoordinate();
 
-  while (distance > 0)
+  // This odd statement avoid us adding irrelevantly small distances.
+  while (1 + distance > 1)
   {
     // if we're at the end of the way
     if (result.isLast())
@@ -266,7 +267,8 @@ WayLocation WayLocation::move(Meters distance) const
     }
   }
 
-  while (distance < 0)
+  // This odd statement avoid us subtracting irrelevantly small distances.
+  while (1 + distance < 1)
   {
     // if we're at the end of the way
     if (result.isFirst())

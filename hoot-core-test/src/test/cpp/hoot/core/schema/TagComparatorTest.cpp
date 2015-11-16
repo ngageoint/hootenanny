@@ -430,7 +430,7 @@ public:
       t2["width"] = "3.5";
 
       //cout << uut.compareTags(t1, t2) << endl;
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.08, uut.compareTags(t1, t2), 0.001);
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.048, uut.compareTags(t1, t2), 0.001);
     }
 
 

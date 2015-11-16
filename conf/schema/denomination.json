@@ -1,0 +1,777 @@
+[
+    {
+        "isA": "religion=pastafarian",
+        "name": "denomination=CotFSM",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=pastafarian",
+        "name": "denomination=EVKdFSMiD",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=pastafarian",
+        "name": "denomination=VKdFSMA",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=adventist",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=muslim",
+        "name": "denomination=ahmadiyya",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=muslim",
+        "name": "denomination=alaouite",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=alliance",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=alternative",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=anglican",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=apostolic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=armenian_apostolic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=armenian_catholic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=pagan",
+        "name": "denomination=asatru",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=ashkenazi",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=assemblies_of_god",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=assyrian",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=baptist",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=buchari",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=catholic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=catholic_apostolic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=pagan",
+        "name": "denomination=celtic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=chaldean_catholic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=christ_scientist",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=christian_community",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=church_of_scotland",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=church_of_sweden",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=conservative",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=coptic_catholic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=coptic_orthodox",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=czechoslovak_hussite",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=druze",
+        "name": "denomination=druze",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=dutch_reformed",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=egalitarian",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=episcopal",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=eritrean_catholic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=eritrean_orthodox",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=ethiopian_catholic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=ethiopian_orthodox",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=evangelical",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=evangelical_covenant",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=exclusive_brethren",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=foursquare",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=pagan",
+        "name": "denomination=greco-roman",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=greek_catholic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=greek_orthodox",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=hindu",
+        "name": "denomination=hare_krishna",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=hasidic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=huayan",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=humanistic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=hungarian_greek_catholic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=muslim",
+        "name": "denomination=ibadi",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=iglesia_ni_cristo",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=zoroastrian",
+        "name": "denomination=irani",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=muslim",
+        "name": "denomination=ismaili",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=jehovahs_witness",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=jishu",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=jodo_shinshu",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=jodo_shu",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=kabbalistic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=karaite",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=sikh",
+        "name": "denomination=keshadharis",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=kimbanguist",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=liberal",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=liberal_catholic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=living_waters_church",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=lubavitch",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=lubavitch_messianic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=lutheran",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=mahayana",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=mariavite",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=maronite",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=mennonite",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=messianic_jewish",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=methodist",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=mission_covenant_church_of_sweden",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=mizrachi_baghdadi",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=mizrachi_chida",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=mizrachi_jerusalemite",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=mizrachi_livorno",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=mizrachi_moroccan",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=modern_orthodox",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=moravian",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=mormon",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=nazarene",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=neo_orthodox",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=new_apostolic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=nichiren",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=obaku",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=old_believers",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=old_catholic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=orthodox_ashkenaz",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=orthodox_sefard",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=zoroastrian",
+        "name": "denomination=parsi",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=pentecostal",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=philippine_independent",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=polish_catholic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=polish_national_catholic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=presbyterian",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=progressive",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=protestant",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=pure_land",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=quaker",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=reconstructionist",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=reform",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=reformed",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=renewal",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=rinzai",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=risshu",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=roman_catholic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=romanian_catholic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=romanian_orthodox",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=russian_orthodox",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=sikh",
+        "name": "denomination=sahajdharis",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=salvation_army",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=samaritan",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=santo_daime",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=sefardi",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=sefardi_amsterdam",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=sefardi_london",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=serbian_orthodox",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=seventh_day_adventist",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=hindu",
+        "name": "denomination=shaivism",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=hindu",
+        "name": "denomination=shaktism",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=muslim",
+        "name": "denomination=shia",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=shingon_shu",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=hindu",
+        "name": "denomination=smartism",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=soto",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=spiritist",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=muslim",
+        "name": "denomination=sufi",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=muslim",
+        "name": "denomination=sunni",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=thai_mahanikaya",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=thai_thammayut",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=theravada",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=tiantai",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=traditional",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=sikh",
+        "name": "denomination=udasi",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=ukrainian_greek_catholic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=ultra_orthodox",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=unaffiliated",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=united",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=united_church_of_christ",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=united_free_church_of_scotland",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=united_methodist",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=united_reformed",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=christian",
+        "name": "denomination=uniting",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=unity",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=vajrayana",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=hindu",
+        "name": "denomination=viashnavism",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=pagan",
+        "name": "denomination=wicca",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=yemenite",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=yemenite_baladi",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=jewish",
+        "name": "denomination=yemenite_shami",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=yogacara",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=yuzu_nembutsu",
+        "objectType": "tag"
+    },
+    {
+        "isA": "religion=buddhist",
+        "name": "denomination=zen",
+        "objectType": "tag"
+    }
+]

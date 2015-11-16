@@ -110,8 +110,6 @@ namespace Tgs
   double CfsSubsetEvaluator::evaluateSubset(const std::vector<int>& columns, 
     TgsProgress*)
   {
-//     cout << columns << endl;
-
     double classCorrSum = 0.0;
     for (unsigned int i = 0; i < columns.size(); i++)
     {
@@ -150,9 +148,6 @@ namespace Tgs
 
   void CfsSubsetEvaluator::setDataFrame(const DataFrame& dataFrame, TgsProgress* progress)
   {
-    // @todo Test Disabled. See #7251 for details.
-    std::cerr << "Test is disabled. Please fix before using.";
-
     TgsProgress* discretizeProgress = NULL;
     TgsProgress* classCorrelationProgress = NULL;
     TgsProgress* correlationMatrixProgress = NULL;
