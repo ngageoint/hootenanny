@@ -12,7 +12,7 @@ if (mapnik.register_default_input_plugins) mapnik.register_default_input_plugins
 var TMS_SCHEME = true;
 
 // create a pool of 5 maps to manage concurrency under load
-var maps = mappool.create_pool(5);
+var maps = mappool.create_pool(20);
 
 var usage = 'usage: app.js <port>\ndemo:  app.js 8000';
 
@@ -36,7 +36,7 @@ s += '                stroke-linecap="round" />';
 s += '        </Rule>';
 s += '        <Rule>';
 s += '            <Filter>[amenity] &lt;&gt; \'\' or [name] &lt;&gt; \'\'</Filter>';
-s += '            <MarkersSymbolizer file="poi.svg" fill="${COLOR}" />';
+s += '            <MarkersSymbolizer file="poi.svg" fill="${COLOR}" transform="translate(8, 23)" />';
 s += '        </Rule>';
 s += '    </Style>';
 s += '</Map>';
@@ -93,7 +93,6 @@ var aquire = function(id,options,callback) {
 http.createServer(function(req, res) {
 
             var query = url.parse(req.url.toLowerCase(), true).query;
-            console.log(JSON.stringify(query));
             var stylesheet = s.replace(/\${COLOR}/g, query.color || 'rgb(255, 85, 153)');
             aquire(stylesheet, {}, function(err, map) {
                 if (err) {
@@ -105,19 +104,19 @@ http.createServer(function(req, res) {
                     });
                     res.end(err.message);
                 } else {
+                    var map = new mapnik.Map(256, 256);
+                    map.fromStringSync(stylesheet);
                     // bbox for x,y,z
                     var bbox = mercator.xyz_to_envelope(parseInt(query.x), parseInt(query.y), parseInt(query.z), TMS_SCHEME);
-                    console.log(bbox);
                     //map.extent = bbox;
                     map.extent = prj.forward(bbox);
-                    console.log(map.extent);
                     var im = new mapnik.Image(map.width, map.height);
 
 // construct a mapnik layer dynamically
 var l = new mapnik.Layer('hoot');
 //l.srs = map.srs;
-//l.srs = '+epsg:4326';
-l.srs = '+proj=latlong +datum=WGS84';
+l.srs = '+init=epsg:4326';
+//l.srs = '+proj=latlong +datum=WGS84';
 l.styles = ['hoot'];
 
 var ds = new mapnik.Datasource({

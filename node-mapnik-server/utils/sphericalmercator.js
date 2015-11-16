@@ -1,7 +1,7 @@
 var mapnik = require('mapnik');
 
-var proj4 = '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over';
-//var proj4 = '+init=epsg:3857';
+//var proj4 = '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over';
+var proj4 = '+init=epsg:3857';
 var mercator = new mapnik.Projection(proj4);
 
 /**
@@ -78,14 +78,11 @@ SphericalMercator.prototype.px_to_ll = function(px, zoom) {
  * @return Object Mapnik envelope.
  */
 SphericalMercator.prototype.xyz_to_envelope = function(x, y, zoom, TMS_SCHEME) {
-    console.log(x + ', ' + y + ', ' + zoom);
     if (TMS_SCHEME) {
         y = (Math.pow(2, zoom) - 1) - y;
     }
-    console.log(x + ', ' + y + ', ' + zoom);
     var ll = [x * this.size, (y + 1) * this.size];
     var ur = [(x + 1) * this.size, y * this.size];
-    console.log(ll + ', ' + ur);
     var bbox = this.px_to_ll(ll, zoom).concat(this.px_to_ll(ur, zoom));
     //return mercator.forward(bbox);
     return bbox;
