@@ -97,22 +97,25 @@
         <tag k="error:circular" v="15"/>
     </way>
 </osm>
+Lines.cpg
 Lines.dbf
 Lines.prj
 Lines.shp
 Lines.shx
+Points.cpg
 Points.dbf
 Points.prj
 Points.shp
 Points.shx
+Polygons.cpg
 Polygons.dbf
 Polygons.prj
 Polygons.shp
 Polygons.shx
 Check for invalid characters. You should see 3 sets of warnings.
-19:56:28.945 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  90) Found an invalid character in string: 'foo '
-19:56:28.945 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  91)   UCS-4 version of the string: [5]{102, 111, 111, 32, 17}
-19:56:28.946 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  90) Found an invalid character in string: '3 '
-19:56:28.946 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  91)   UCS-4 version of the string: [3]{51, 32, 1}
-19:56:28.946 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  90) Found an invalid character in string: ''
-19:56:28.946 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  91)   UCS-4 version of the string: [8]{0, 104, 105, 103, 104, 119, 97, 121}
+15:15:07.182 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  90) Found an invalid character in string: 'foo '
+15:15:07.182 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  91)   UCS-4 version of the string: [5]{102, 111, 111, 32, 17}
+15:15:07.182 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  90) Found an invalid character in string: '3 '
+15:15:07.182 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  91)   UCS-4 version of the string: [3]{51, 32, 1}
+15:15:07.182 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  90) Found an invalid character in string: ''
+15:15:07.182 WARN  ...cpp/hoot/core/io/OsmWriter.cpp(  91)   UCS-4 version of the string: [8]{0, 104, 105, 103, 104, 119, 97, 121}
