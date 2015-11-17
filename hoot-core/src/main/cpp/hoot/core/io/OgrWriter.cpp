@@ -230,6 +230,11 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
       options["CREATE_CSVT"] = "YES";
     }
 
+    if (_ds->GetDriver()->GetName() == QString("ESRI Shapefile"))
+    {
+      options["ENCODING"] = "UTF-8";
+    }
+
     // Add a Feature Dataset to a ESRI File GeoDatabase if requested
     if (_ds->GetDriver()->GetName() == QString("FileGDB"))
     {
