@@ -33,10 +33,7 @@
 namespace hoot
 {
     class OsmMap;
-    namespace elements
-    {
-        class ElementData;
-    }
+    class ElementData;
 }
 
 // Boost
