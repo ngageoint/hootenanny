@@ -385,44 +385,12 @@ public abstract class Element implements XmlSerializable, DbSerializable
   protected long parseVersion(final NamedNodeMap xmlAttributes) throws Exception
   {
     long version = 1;
-    //version passed in the request can be ignored if it is a create request
+    //version passed in the request can be ignored if it is a create request, since we've already
+    //done version error checking at this point
     if (!entityChangeType.equals(EntityChangeType.CREATE))
     {
-    	/*Object existingRecord =
-    	  new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
-    	    .from(getElementTable())
-    	    .where(getElementIdField().eq(new Long(oldId)))
-    			.singleResult(getElementTable());
-      if (existingRecord == null)
-      {
-        throw new Exception(toString() + " to be updated does not exist with ID: " + oldId);
-      }*/
-      version = Long.parseLong(xmlAttributes.getNamedItem("version").getNodeValue());
-      //the specified version must be validated with what's already in the database on a modify
-      /*final long existingVersion =
-        (Long)MethodUtils.invokeMethod(existingRecord, "getVersion", new Object[]{});
-      if (version != existingVersion)
-      {
-        throw new Exception(
-        	"Invalid version: " + version + " specified for " + toString() + 
-        	" with ID: " + getId() + " and expected version " + existingVersion + " in changeset " +
-          " with ID: " + MethodUtils.invokeMethod(record, "getChangesetId", new Object[]{}));
-      }*/
       version++;
     }
-    /*else
-    {
-      //By convention, new features should be parsed in with version = 0.
-      final long parsedVersion =
-        Long.parseLong(xmlAttributes.getNamedItem("version").getNodeValue());
-      if (parsedVersion != 0)
-      {
-        throw new Exception(
-        	"Invalid version: " + parsedVersion + " specified for " + toString() + 
-          " with ID: " + getId() + " and expected version 0 in changeset " +
-          " with ID: " + MethodUtils.invokeMethod(record, "getChangesetId", new Object[]{}));
-      }
-    }*/
     return version;
   }
 

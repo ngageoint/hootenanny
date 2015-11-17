@@ -208,8 +208,8 @@ public class ChangesetDbWriter
    * @throws Exception
    */
   private Element parseElement(final org.w3c.dom.Node xml, final long oldId, final long newId,
-      final ElementType elementType, final EntityChangeType entityChangeType,
-      final boolean deleteIfUnused, boolean elementStillUsedByAnotherElement) throws Exception
+    final ElementType elementType, final EntityChangeType entityChangeType,
+    final boolean deleteIfUnused, boolean elementStillUsedByAnotherElement) throws Exception
   {
     //log.debug("Parsing OSM element type: " + elementType.toString() + ", entity change type: "
         //+ entityChangeType.toString() + "...");
@@ -496,7 +496,7 @@ public class ChangesetDbWriter
   	log.debug(XmlDocumentBuilder.toString(changesetDoc));
   	changesetErrorChecker = new ChangesetErrorChecker(changesetDoc, requestChangesetMapId, conn);
   	changesetErrorChecker.checkForVersionErrors();
-  	//changesetErrorChecker.checkForNodeExistenceErrors();
+  	//changesetErrorChecker.checkForElementExistenceErrors();
   	
   	initParsedElementCache();
     

@@ -237,9 +237,9 @@ public class ChangesetErrorChecker
    * @return
    * @throws Exception
    */
-  public Map<Long, CurrentNodes> checkForNodeExistenceErrors() throws Exception
+  public Map<Long, CurrentNodes> checkForElementExistenceErrors() throws Exception
   {
-    //if a child node is referenced (besides in its own create change) and doesn't exist in the db, 
+    //if a child element is referenced (besides in its own create change) and doesn't exist in the db, 
   	//then fail
   	
   	Map<ElementType, Set<Long>> elementTypesToElementIds = new HashMap<ElementType, Set<Long>>();
