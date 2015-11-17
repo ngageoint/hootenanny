@@ -258,6 +258,28 @@ Feature 2:
 
 We can proceed with this comparison using the typical score and aggregate approach and will see that `railway_platform` has a low similarity score to `bus_platform` which is the appropriate result.
 
+=== Comparing Enumerated Tags
+
+NOTE: Still in early development. -JRS
+
+There are a number of ways to compare enumerated tags. This is simply one
+approach that can be used within Hootenanny. It is not applied this way in all
+circumstances.
+
+Firstly, how similar are the tags. This similarity gives information on how
+similar two tags are. E.g. `surface=dirt` is similar to `surface=earth` and
+`amenity=fast_food` is similar to `amenity=restaurant`. However, this doesn't
+give us any information about how important this similarity is to determining
+a match.
+
+Second, how influential are the tags that are being compared? For instance if we
+know we have a `building=yes` match to `building=yes` that isn't too terribly
+interesting. There are a lot of buildings. However, `building=church` match
+to `amenity=church` is quite informative. This information is provided via the
+_influence_ tag in the schema file.
+
+To aggregate these scores and influence values
+
 === Visualizing the Graph
 
 The schema at the time of this writing has nearly 1200 tags defined and nearly

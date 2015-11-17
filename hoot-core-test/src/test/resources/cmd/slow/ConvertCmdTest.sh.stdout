@@ -97,14 +97,17 @@
         <tag k="error:circular" v="15"/>
     </way>
 </osm>
+Lines.cpg
 Lines.dbf
 Lines.prj
 Lines.shp
 Lines.shx
+Points.cpg
 Points.dbf
 Points.prj
 Points.shp
 Points.shx
+Polygons.cpg
 Polygons.dbf
 Polygons.prj
 Polygons.shp

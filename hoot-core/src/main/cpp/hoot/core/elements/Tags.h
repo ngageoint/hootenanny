@@ -140,13 +140,6 @@ public:
   QStringList getPseudoNames() const;
 
   /**
-   * Checks for common tags that denote area. E.g. building=yes, area=yes.
-   * In some cases you may need to look at the element too. If the element is a node then it
-   * doesn't matter if isArea returns true.
-   */
-  bool isArea() const;
-
-  /**
    * Checks for common false values such as "no", "false", "0", "off".
    *
    * Note: It is not guaranteed that isFalse(tag) != isTrue(tag), but you are guaranteed that if

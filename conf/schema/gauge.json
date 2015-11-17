@@ -1,0 +1,7 @@
+[
+    {
+        "dataType": "real",
+        "name": "gauge",
+        "objectType": "tag"
+    }
+]

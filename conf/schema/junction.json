@@ -1,25 +1,34 @@
-{
-    "tag": {
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "node"
+        ],
+        "influence": 1,
+        "isA": "hgispoi",
         "name": "junction",
-        "influence": 1.0,
-        "type": "enumeration",
-        "geometries": ["node"],
-        "isA": "hgispoi"
+        "objectType": "tag"
     },
-
-    "#" : " The catch all",
-    "tag": {
-        "name": "junction=*",
+    {
         "description": "This key describes how a specific junction is constituted.",
-        "isA": "junction"
-    },
-
-    "tag": { "name": "junction=roundabout",
         "isA": "junction",
-        "description": "A conventional roundabout",
-        "similarTo": { "name": "highway=motorway_junction", "weight": 0.4 },
-        "similarTo": { "name": "highway=mini_roundabout", "weight": 0.8 }
+        "name": "junction=*",
+        "objectType": "tag"
     },
-
-    "#" : "end"
-}
+    {
+        "description": "A conventional roundabout",
+        "isA": "junction",
+        "name": "junction=roundabout",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "highway=motorway_junction",
+                "weight": 0.4
+            },
+            {
+                "name": "highway=mini_roundabout",
+                "weight": 0.8
+            }
+        ]
+    }
+]

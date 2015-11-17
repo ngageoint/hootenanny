@@ -1,0 +1,12 @@
+[
+    {
+        "isA": "metadata",
+        "name": "error",
+        "objectType": "tag"
+    },
+    {
+        "isA": "error",
+        "name": "regex?error:.*",
+        "objectType": "tag"
+    }
+]
