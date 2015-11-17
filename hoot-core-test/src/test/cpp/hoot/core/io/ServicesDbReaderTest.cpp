@@ -178,7 +178,7 @@ public:
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
     reader.read(map);
 
-    HOOT_STR_EQUALS("[5]{-1, -2, -3, -4, -5}",
+    HOOT_STR_EQUALS("[5]{-5, -4, -3, -2, -1}",
       getKeys(map->getNodeMap().begin(), map->getNodeMap().end()));
     HOOT_STR_EQUALS("[2]{-2, -1}",
       getKeys(map->getRelationMap().begin(), map->getRelationMap().end()));

@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4085461402539110" lon="153.0726217586294524"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4189457828175094" lon="153.0724469747208332"/>
-    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4189457828175058" lon="153.0722721908121855"/>
-    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4085461402539146" lon="153.0777778839340897"/>
-    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4189457828175094" lon="153.0776031000254704"/>
-    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4189457828175094" lon="153.0774283161168512"/>
-    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4081965724366405" lon="153.0827592253301077"/>
-    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4185962150002389" lon="153.0825844414214885"/>
-    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4185962150002389" lon="153.0824096575128408"/>
-    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4084587482995872" lon="153.0870414310915919"/>
-    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4188583908631855" lon="153.0868666471829727"/>
-    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4188583908631855" lon="153.0866918632743534"/>
-    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4084587482995907" lon="153.0915858127160050"/>
-    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4188583908631855" lon="153.0914110288073857"/>
-    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4188583908631891" lon="153.0912362448987381"/>
-    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4083713563452704" lon="153.0956058426145319"/>
-    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4187709989088759" lon="153.0954310587058842"/>
-    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4187709989088759" lon="153.0952562747972650"/>
-    <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4085461402539110" lon="153.0726217586294524"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4189457828175094" lon="153.0724469747208332"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4189457828175058" lon="153.0722721908121855"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4085461402539146" lon="153.0777778839340897"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4189457828175094" lon="153.0776031000254704"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4189457828175094" lon="153.0774283161168512"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4081965724366405" lon="153.0827592253301077"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4185962150002389" lon="153.0825844414214885"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4185962150002389" lon="153.0824096575128408"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4084587482995872" lon="153.0870414310915919"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4188583908631855" lon="153.0868666471829727"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4188583908631855" lon="153.0866918632743534"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4084587482995907" lon="153.0915858127160050"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4188583908631855" lon="153.0914110288073857"/>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4188583908631891" lon="153.0912362448987381"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4083713563452704" lon="153.0956058426145319"/>
+    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4187709989088759" lon="153.0954310587058842"/>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0" lat="-25.4187709989088759" lon="153.0952562747972650"/>
+    <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
         <nd ref="-16"/>
         <nd ref="-17"/>
         <nd ref="-18"/>
-        <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.813Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-17T18:56:37.462Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="gauge:type" v="narrow"/>
@@ -38,7 +38,7 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="error:circular" v="28.65"/>
     </way>
-    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
         <nd ref="-13"/>
         <nd ref="-14"/>
         <nd ref="-15"/>
@@ -53,7 +53,7 @@
         <tag k="arrangement" v="juxtaposition"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="railway:in_road" v="separated"/>
-        <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.813Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-17T18:56:37.461Z"/>
         <tag k="gauge:type" v="standard"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="uuid" v="{1ea0b3a4-8ad2-4eb6-b523-8207d4da5b2e}"/>
@@ -61,11 +61,11 @@
         <tag k="location" v="surface"/>
         <tag k="error:circular" v="28.65"/>
     </way>
-    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
         <nd ref="-10"/>
         <nd ref="-11"/>
         <nd ref="-12"/>
-        <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.813Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-17T18:56:37.461Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="electrified" v="no"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
@@ -82,11 +82,11 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="error:circular" v="28.65"/>
     </way>
-    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
         <nd ref="-7"/>
         <nd ref="-8"/>
         <nd ref="-9"/>
-        <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.813Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-17T18:56:37.461Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="electrified" v="contact_line"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
@@ -102,7 +102,7 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="error:circular" v="28.65"/>
     </way>
-    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
         <nd ref="-4"/>
         <nd ref="-5"/>
         <nd ref="-6"/>
@@ -117,7 +117,7 @@
         <tag k="arrangement" v="single"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="railway:in_road" v="separated"/>
-        <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.813Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-17T18:56:37.460Z"/>
         <tag k="gauge:type" v="broad"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="uuid" v="{1ddc1109-9eef-442d-b959-4b973b429c8e}"/>
@@ -125,11 +125,11 @@
         <tag k="location" v="surface"/>
         <tag k="error:circular" v="28.65"/>
     </way>
-    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
         <nd ref="-1"/>
         <nd ref="-2"/>
         <nd ref="-3"/>
-        <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.812Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-17T18:56:37.459Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="gauge:type" v="narrow"/>
