@@ -41,9 +41,9 @@ To zoom to the layer extent simply right-click on the layer and click on the Zoo
 .Zooming to Layer extent.  Right click on the layer name and select zoom to layer.  
 image::user/images/id/hoot_zoom-to-layer.png[scaledwidth="25%"]
 
-When adding a layer with a large extent or a dense feature count, it is likely that the data will not be visible at the initial data extent.  To confirm whether this limitation is impacting the display of features for a given layer, we have added a yellow warning icon that will display warning messages such as "Features are loaded, but are currently not visible. Try zooming in for better results." when a user hovers the icon with their mouse cursor.
+When adding a layer with a large extent or a dense feature count, it is likely that the data will not be visible at the initial data extent.  To confirm whether this limitation is impacting the display of features for a given layer, we have added a yellow warning icon that will display warning messages such as "Features are loaded, but are currently not visible. Try zooming in for better results." when a user hovers the icon with their mouse cursor. 
 
-.Warning Message indicating features present but not visible at current zoom scale.
+.Warning Message indicating features present but not visible at current zoom scale.  
 image::user/images/id/hoot_alert.png[scaledwidth="50%"]
 
 NOTE: The order in which layers are added to Hootenanny is important. For Reference and Average conflation, the reference data is assumed to contain the reference geometry during conflation and whichever layer is selected to contain the reference attribution provided in the conflation options. For Cookie Cutter & Horizontal conflation, the reference data are typically higher fidelity dense urban data while the secondary data source are sparser regional level map data. 
@@ -176,7 +176,12 @@ NOTE: When measuring an object the pan/zoom functions are disabled.  Clicking on
 To access help for the standard features within iD, click on the bookmark icon below the Background Settings button or type the 'h' shortcut key. This feature is included within the standard iD Editor and includes background information on all OSM editing related functionality. It has been included in Hootenanny for continuity purposes noting that numerous tutorials on standard iD functionality such as adding/editing OSM features can be found in this help guide.
 
 .Accessing the iD editor Help page within Hootenanny.
-image::user/images/id/hoot_helpmenu.png[scaledwidth="25%"] 
+image::user/images/id/hoot_helpmenu.png[scaledwidth="50%"]
+
+==== Hoot UI Error Messages
+
+Hootenanny will display any UI related error messages, e.g. Layer already exists, in the top right corner of the map.  These will appear in either red, yellow or blue highlighted text to indicate an error, warning, or notice, respectively.
+
 
 [[Hoot-iD_Shortcuts]]
 === Hootenanny Shortcuts
@@ -337,18 +342,6 @@ When features are flagged as needing review, a number of different review notes 
 | generic type to place match | One of the POIs is a generic type (e.g. poi=yes) and the other is a place (e.g. place=town)
 | similar POI type | The two POIs have a similar type (e.g. amenity=restaurant vs. amenity=café)
 |======
-
-*_Building Review Text_*
-
-Building review explanations were generated before they were exposed to the UI. These are primarily helpful in debugging but not for providing users with meaningful text to make decisions.
-
-Building Review Examples:
-
-* BuildingMatch: Relation:-4054, Way:-33199 p: match: 0.15 miss: 0.25 review: 0.6
-* Relation:-4054, Way:-33199 - Element identifiers for the first and second element being reviewed.
-* match: 0.15 – Probability of a match as determined by the classifier
-* miss: 0.25 – Probability of a miss as determined by the classifier
-* review: 0.6 – Probability of a review as determined by the classifier
 
 *_Highway Review Text_*
 
