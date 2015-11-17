@@ -385,13 +385,13 @@ public class Way extends Element
     wayRecord.setChangesetId(parseChangesetId(xmlAttributes));
     wayRecord.setVersion(parseVersion(xmlAttributes));
 
-    /*final Set<Long> owningRelationIds = getOwningRelationIds();
+    final Set<Long> owningRelationIds = getOwningRelationIds();
     if (entityChangeType.equals(EntityChangeType.DELETE) && owningRelationIds.size() > 0)
     {
       throw new Exception(
       	"Way to be deleted with ID " + getId() + " is still used by relation(s): " + 
         Arrays.toString(owningRelationIds.toArray()));
-    }*/
+    }
 
     wayRecord.setTimestamp(parseTimestamp(xmlAttributes));
     wayRecord.setVisible(true);

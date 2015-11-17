@@ -38,6 +38,7 @@ import hoot.services.models.osm.Element;
 import hoot.services.models.osm.XmlSerializable;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
+import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.validators.osm.ChangesetErrorChecker;
 import hoot.services.validators.osm.ChangesetUploadXmlValidator;
 
@@ -505,9 +506,10 @@ public class ChangesetDbWriter
 
   private List<Element> write(final Document changesetDoc) throws Exception
   {
+  	log.debug(XmlDocumentBuilder.toString(changesetDoc));
   	changesetErrorChecker = new ChangesetErrorChecker(changesetDoc, requestChangesetMapId, conn);
   	changesetErrorChecker.checkForVersionErrors();
-  	changesetErrorChecker.checkForChildElementExistAndVisibilityErrors();
+  	//changesetErrorChecker.checkForNodeExistenceErrors();
   	
   	initParsedElementCache();
     
@@ -544,10 +546,11 @@ public class ChangesetDbWriter
           // or lack thereof is looked at. This seems a little confusing to me, but that's how
           // rails port parses it, and I'm trying to stay consistent with what it does when possible.
           boolean deleteIfUnused = false;
-          org.w3c.dom.Node deleteXml = XPathAPI.selectSingleNode(changesetDoc, "//osmChange/"
-              + entityChangeType.toString().toLowerCase());
-          if (deleteXml != null && deleteXml.hasAttributes()
-              && deleteXml.getAttributes().getNamedItem("if-unused") != null)
+          org.w3c.dom.Node deleteXml = 
+          	XPathAPI.selectSingleNode(changesetDoc, "//osmChange/" + 
+            entityChangeType.toString().toLowerCase());
+          if (deleteXml != null && deleteXml.hasAttributes() && 
+          		deleteXml.getAttributes().getNamedItem("if-unused") != null)
           {
             deleteIfUnused = true;
           }
@@ -653,7 +656,8 @@ public class ChangesetDbWriter
       }
     }
     
-    changesetErrorChecker.checkForOwnershipErrors();
+    //changesetErrorChecker.checkForOwnershipErrors();
+    //changesetErrorChecker.checkForElementVisibilityErrors();
 
     changeset.updateNumChanges((int) changesetDiffElementsSize);
 

@@ -11,6 +11,8 @@ import java.util.TreeSet;
 
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
+import hoot.services.db2.CurrentNodes;
+import hoot.services.db2.QCurrentNodes;
 import hoot.services.db2.QCurrentRelationMembers;
 import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.models.osm.Element;
@@ -31,11 +33,13 @@ import com.mysema.query.sql.SQLQuery;
  */
 public class ChangesetErrorChecker
 {
-	private static final Logger log = LoggerFactory.getLogger(ChangesetErrorChecker.class);
+	@SuppressWarnings("unused")
+  private static final Logger log = LoggerFactory.getLogger(ChangesetErrorChecker.class);
 	
 	private static final QCurrentRelationMembers currentRelationMembers = 
 	  QCurrentRelationMembers.currentRelationMembers;
 	private static final QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
+	protected static final QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
 	
 	private Document changesetDoc;
 	private long mapId;
@@ -48,6 +52,11 @@ public class ChangesetErrorChecker
 		this.dbConn = dbConn;
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @throws Exception
+	 */
 	public void checkForVersionErrors() throws Exception
   {
 		for (ElementType elementType : ElementType.values())
@@ -70,22 +79,26 @@ public class ChangesetErrorChecker
       			final long parsedVersion = 
       				Long.parseLong(
     					  elementXmlNodes.item(i).getAttributes().getNamedItem("version").getNodeValue());
-						if (entityChangeType.equals(EntityChangeType.CREATE) && parsedVersion != 0)
+						if (entityChangeType.equals(EntityChangeType.CREATE))
 						{
-      				throw new Exception(
-      					"Invalid version: " + parsedVersion + " specified for " + elementType.toString() + 
-      	          " with ID: " + id + "; expected version 0.");
+							if (parsedVersion != 0)
+							{
+								throw new Exception(
+		      				"Invalid version: " + parsedVersion + " specified for created " + 
+								  elementType.toString() + " with ID: " + id + "; expected version 0.");
+							}
 						}
 						else
 						{
-							if (id > 0)
-							{
+							//if (id > 0)
+							//{
 								elementIdsToVersionsFromChangeset.put(id, parsedVersion);
-							}
+							//}
 						}
 					}
 					
-					if (!entityChangeType.equals(EntityChangeType.CREATE))
+					if (!entityChangeType.equals(EntityChangeType.CREATE) && 
+							elementIdsToVersionsFromChangeset.size() > 0)
 					{
 						final Element prototype = 
 							ElementFactory.getInstance().create(mapId, elementType, dbConn);
@@ -104,6 +117,11 @@ public class ChangesetErrorChecker
 		}
   }
 	
+	/**
+	 * 
+	 * 
+	 * @throws Exception
+	 */
 	public void checkForOwnershipErrors() throws Exception
 	{
 		checkForRelationOwnershipErrors();
@@ -167,16 +185,18 @@ public class ChangesetErrorChecker
 		}
   }
   
-  //TODO
-  /*private void checkForCoordinateErrors()
-  {
-  	//way (type not equal to delete) and node
-  	
-  }*/
+  //It may be possible to combine the existence and visibility checks into the same method.
   
-  public void checkForChildElementExistAndVisibilityErrors() throws Exception
+  /**
+   * 
+   * 
+   * @throws Exception
+   * @todo is this check actually necessary?
+   */
+  public void checkForElementVisibilityErrors() throws Exception
   {
-    //if a child element is referenced with a non-negative id and doesn't exist in the db, then fail
+    //if a child element is referenced in a non-create change and doesn't exist in the db, then fail
+  	
   	for (ElementType elementType : ElementType.values())
   	{
   		if (!elementType.equals(ElementType.Changeset))
@@ -184,20 +204,12 @@ public class ChangesetErrorChecker
   			final NodeList relationMemberIdXmlNodes = 
 		  	  XPathAPI.selectNodeList(
 		  	  	changesetDoc, 
-		  	  	"//osmChange/create|update/relation/member[type = \"" + 
+		  	  	"//osmChange/modify|delete/relation/member[type = \"" + 
 		  	  	  elementType.toString().toLowerCase() + "\"]/@id");
 				Set<Long> relationMemberIds = new HashSet<Long>();
 				for (int i = 0; i < relationMemberIdXmlNodes.getLength(); i++)
 				{
-					final long id = Long.parseLong(relationMemberIdXmlNodes.item(i).getNodeValue());
-					if (id > 0)
-					{
-						relationMemberIds.add(id);
-					}		
-				}
-				if (!Element.allElementsExist(mapId, elementType, relationMemberIds, dbConn))
-				{
-					throw new Exception(elementType.toString() + " member(s) don't exist for relation.");
+					relationMemberIds.add(Long.parseLong(relationMemberIdXmlNodes.item(i).getNodeValue()));	
 				}
 				if (!Element.allElementsVisible(mapId, elementType, relationMemberIds, dbConn))
 				{
@@ -207,23 +219,96 @@ public class ChangesetErrorChecker
   	}
   	
   	final NodeList wayNodeIdXmlNodes = 
-  	  XPathAPI.selectNodeList(changesetDoc, "//osmChange/create|update/way/nd/@ref");
+  	  XPathAPI.selectNodeList(changesetDoc, "//osmChange/modify|delete/way/nd/@ref");
   	Set<Long> wayNodeIds = new HashSet<Long>();
 		for (int i = 0; i < wayNodeIdXmlNodes.getLength(); i++)
 		{
-			final long id = Long.parseLong(wayNodeIdXmlNodes.item(i).getNodeValue());
-			if (id > 0)
-			{
-				wayNodeIds.add(id);
-			}		
-		}
-		if (!Element.allElementsExist(mapId, ElementType.Node, wayNodeIds, dbConn))
-		{
-			throw new Exception("Way node(s) don't exist for way.");
+			wayNodeIds.add(Long.parseLong(wayNodeIdXmlNodes.item(i).getNodeValue()));
 		}
 		if (!Element.allElementsVisible(mapId, ElementType.Node, wayNodeIds, dbConn))
 		{
 			throw new Exception("Way node(s) aren't visible for way.");
 		}
+  }
+  
+  /**
+   * 
+   * 
+   * @return
+   * @throws Exception
+   */
+  public Map<Long, CurrentNodes> checkForNodeExistenceErrors() throws Exception
+  {
+    //if a child node is referenced (besides in its own create change) and doesn't exist in the db, 
+  	//then fail
+  	
+  	Map<ElementType, Set<Long>> elementTypesToElementIds = new HashMap<ElementType, Set<Long>>();
+  	for (ElementType elementType : ElementType.values())
+  	{
+  		if (!elementType.equals(ElementType.Changeset))
+  		{
+  			elementTypesToElementIds.put(elementType, new HashSet<Long>());
+  		}
+  	}
+  	
+  	for (ElementType elementType : ElementType.values())
+  	{
+  		if (!elementType.equals(ElementType.Changeset))
+  		{
+  			final NodeList relationMemberIdXmlNodes = 
+		  	  XPathAPI.selectNodeList(
+		  	  	changesetDoc, 
+		  	  	"//osmChange/*/relation/member[type = \"" + elementType.toString().toLowerCase() + 
+		  	  	  "\"]/@id");
+				for (int i = 0; i < relationMemberIdXmlNodes.getLength(); i++)
+				{
+					final long id = Long.parseLong(relationMemberIdXmlNodes.item(i).getNodeValue());
+					if (id > 0)
+					{
+						elementTypesToElementIds.get(elementType).add(id);
+					}
+				}
+  		}
+  	}
+  	
+  	final NodeList wayNodeIdXmlNodes = 
+  		XPathAPI.selectNodeList(changesetDoc, "//osmChange/*/way/nd/@ref");
+		for (int i = 0; i < wayNodeIdXmlNodes.getLength(); i++)
+		{
+			final long id = Long.parseLong(wayNodeIdXmlNodes.item(i).getNodeValue());
+			if (id > 0)
+			{
+				elementTypesToElementIds.get(ElementType.Node).add(id);
+			}
+		}
+		
+		final NodeList nodeIdXmlNodes = 
+  	  XPathAPI.selectNodeList(changesetDoc, "//osmChange/modify|delete/node/@id");
+		for (int i = 0; i < nodeIdXmlNodes.getLength(); i++)
+		{
+			final long id = Long.parseLong(nodeIdXmlNodes.item(i).getNodeValue());
+			if (id > 0)
+			{
+				elementTypesToElementIds.get(ElementType.Node).add(id);
+			}
+		}
+		
+		for (ElementType elementType : ElementType.values())
+  	{
+  		if (!elementType.equals(ElementType.Changeset))
+  		{
+  			if (!Element.allElementsExist(
+  					  mapId, elementType, elementTypesToElementIds.get(elementType), dbConn))
+  			{
+  				throw new Exception("Element(s) being referenced don't exist.");
+  			}
+  		}
+  	}
+		
+		return
+			new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
+        .from(currentNodes)
+        .where(currentNodes.id.in(elementTypesToElementIds.get(ElementType.Node)))
+		    .map(currentNodes.id, currentNodes);
   }
 }

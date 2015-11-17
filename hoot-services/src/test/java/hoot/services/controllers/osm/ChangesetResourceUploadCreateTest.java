@@ -79,10 +79,12 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
 {
   private static final Logger log = LoggerFactory.getLogger(ChangesetResourceUploadCreateTest.class);
+  
   private QCurrentNodes currentNodesTbl = QCurrentNodes.currentNodes;
   private QCurrentWays currentWaysTbl = QCurrentWays.currentWays;
   private QCurrentWayNodes currentWayNodesTbl = QCurrentWayNodes.currentWayNodes;
   private QCurrentRelations  currentRelationsTbl = QCurrentRelations.currentRelations;
+  
   public ChangesetResourceUploadCreateTest() throws NumberFormatException, IOException
   {
     super("hoot.services.controllers.osm");
@@ -1134,12 +1136,12 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
             "<modify/>" +
             "<create>" +
               "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + originalBounds.getMinLon() + "\" " +
-                "lat=\"" + originalBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                "lat=\"" + originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
                 "<tag k=\"key 1\" v=\"val 1\"></tag>" +
                 "<tag k=\"key 2\" v=\"val 2\"></tag>" +
               "</node>" +
               "<node id=\"-1\" lon=\"" + updateBounds.getMinLon() + "\" " +
-                "lat=\"" + updateBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                "lat=\"" + updateBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
                 "<tag k=\"key 3\" v=\"val 3\"></tag>" +
               "</node>" +
             "</create>" +

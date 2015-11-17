@@ -388,7 +388,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
     //version passed in the request can be ignored if it is a create request
     if (!entityChangeType.equals(EntityChangeType.CREATE))
     {
-    	Object existingRecord =
+    	/*Object existingRecord =
     	  new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
     	    .from(getElementTable())
     	    .where(getElementIdField().eq(new Long(oldId)))
@@ -396,10 +396,10 @@ public abstract class Element implements XmlSerializable, DbSerializable
       if (existingRecord == null)
       {
         throw new Exception(toString() + " to be updated does not exist with ID: " + oldId);
-      }
+      }*/
       version = Long.parseLong(xmlAttributes.getNamedItem("version").getNodeValue());
       //the specified version must be validated with what's already in the database on a modify
-      final long existingVersion =
+      /*final long existingVersion =
         (Long)MethodUtils.invokeMethod(existingRecord, "getVersion", new Object[]{});
       if (version != existingVersion)
       {
@@ -407,10 +407,10 @@ public abstract class Element implements XmlSerializable, DbSerializable
         	"Invalid version: " + version + " specified for " + toString() + 
         	" with ID: " + getId() + " and expected version " + existingVersion + " in changeset " +
           " with ID: " + MethodUtils.invokeMethod(record, "getChangesetId", new Object[]{}));
-      }
+      }*/
       version++;
     }
-    else
+    /*else
     {
       //By convention, new features should be parsed in with version = 0.
       final long parsedVersion =
@@ -422,7 +422,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
           " with ID: " + getId() + " and expected version 0 in changeset " +
           " with ID: " + MethodUtils.invokeMethod(record, "getChangesetId", new Object[]{}));
       }
-    }
+    }*/
     return version;
   }
 
