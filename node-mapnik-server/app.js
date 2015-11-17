@@ -3,39 +3,38 @@
 var mapnik = require('mapnik')
   , mercator = require('./utils/sphericalmercator.js')
   , mappool = require('./utils/pool.js')
+  , osm_geojson = require('osm-and-geojson')
+  , DOMParser = require('xmldom').DOMParser
   , http = require('http')
   , url = require('url');
 
-// register shapefile plugin
 if (mapnik.register_default_input_plugins) mapnik.register_default_input_plugins();
 
 var TMS_SCHEME = true;
 
 // create a pool of 5 maps to manage concurrency under load
-var maps = mappool.create_pool(20);
+var maps = mappool.create_pool(5);
 
 var usage = 'usage: app.js <port>\ndemo:  app.js 8000';
 
 var prj = new mapnik.Projection(mercator.proj4);
 
 // map with just a style
-// eventually the api will support adding styles in javascript
 var s = '<Map background-color="#00000000" srs="' + mercator.proj4 + '">';
-//var s = '<Map background-color="#00000000" srs="+proj=latlong +datum=WGS84">';
 s += '    <Style name="hoot">';
 s += '        <Rule>';
-s += '            <Filter>[building] &lt;&gt; \'\' or [name] &lt;&gt; \'\'</Filter>';
+s += '            <Filter>[building] &lt;&gt; \'\'</Filter>';
 s += '            <LineSymbolizer stroke="${COLOR}" stroke-width="2" stroke-linejoin="miter"';
 s += '                stroke-linecap="square" />';
 s += '            <PolygonSymbolizer fill="${COLOR}" fill-opacity="0.3" />';
 s += '        </Rule>';
 s += '        <Rule>';
-s += '            <Filter>[highway] &lt;&gt; \'\' or [name] &lt;&gt; \'\'</Filter>';
+s += '            <Filter>[highway] &lt;&gt; \'\'</Filter>';
 s += '            <LineSymbolizer stroke="${COLOR}" stroke-width="2" stroke-linejoin="round"';
 s += '                stroke-linecap="round" />';
 s += '        </Rule>';
 s += '        <Rule>';
-s += '            <Filter>[amenity] &lt;&gt; \'\' or [name] &lt;&gt; \'\'</Filter>';
+s += '            <Filter>[amenity] &lt;&gt; \'\'</Filter>';
 s += '            <MarkersSymbolizer file="poi.svg" fill="${COLOR}" transform="translate(8, 23)" />';
 s += '        </Rule>';
 s += '    </Style>';
@@ -68,90 +67,94 @@ var aquire = function(id,options,callback) {
     });
 };
 
-// var client = require('http').createClient(8080, 'localhost');
 
-// function search(mapid, bbox, callback) {
-//     var headers = {
-//         'Content-Length': el_query.length,
-//         'charset': 'UTF-8',
-//         'Content-Type': 'application/xml'
-//     };
-//     var request = client.request('GET', '/hoot-services/osm/api/0.6/map?mapId=', headers);
-//     request.write(el_query, 'utf8');
-//     request.on('response', function(response) {
-//         var body = '';
-//         response.on('data', function(data) {
-//             body += data;
-//         });
-//         response.on('end', function() {
-//             callback(JSON.parse(body));
-//         });
-//     });
-//     request.end();
-// }
+function search(mapid, bbox, callback) {
+    var options = {
+      host: 'localhost',
+      port: 8080,
+      path: '/hoot-services/osm/api/0.6/map?mapId=' + mapid + '&bbox=' + bbox
+    };
+console.log(options.path);
+    http.get(options, function(response){
+        var body = '';
+        response.on('data', function(data) {
+            body += data;
+        });
+        response.on('end', function() {
+            callback(body);
+        });
+    }).on('error', function(e) {
+        console.error(e.message);
+    });
+}
 
 http.createServer(function(req, res) {
+    var query = url.parse(req.url.toLowerCase(), true).query;
+    if (query
+        && query.x !== undefined
+        && query.y !== undefined
+        && query.z !== undefined
+        && query.color !== undefined
+        && query.mapid !== undefined
+    ) {
+    var stylesheet = s.replace(/\${COLOR}/g, query.color || 'rgb(255, 85, 153)');
+    aquire(stylesheet, {}, function(err, map) {
+        if (err) {
+            process.nextTick(function() {
+                maps.release(stylesheet, map);
+            });
+            res.writeHead(500, {
+              'Content-Type': 'text/plain'
+            });
+            res.end(err.message);
+        } else {
+            // bbox for x,y,z
+            var bbox = mercator.xyz_to_envelope(parseInt(query.x), parseInt(query.y), parseInt(query.z), TMS_SCHEME);
+            map.extent = prj.forward(bbox);
+            var im = new mapnik.Image(map.width, map.height);
 
-            var query = url.parse(req.url.toLowerCase(), true).query;
-            var stylesheet = s.replace(/\${COLOR}/g, query.color || 'rgb(255, 85, 153)');
-            aquire(stylesheet, {}, function(err, map) {
-                if (err) {
+            // construct a mapnik layer dynamically
+            var l = new mapnik.Layer('hoot');
+            l.srs = '+init=epsg:4326';
+            l.styles = ['hoot'];
+
+            search(query.mapid, bbox, function(osm) {
+                var gj = osm_geojson.osm2geojson(new DOMParser().parseFromString(osm, 'text/xml'));
+                if (gj.features.length > 0) {
+                    var ds = new mapnik.Datasource({
+                        type: 'geojson',
+                        inline: JSON.stringify(gj)
+                    });
+                    // add our custom datasource
+                    l.datasource = ds;
+                    // add this layer to the map
+                    map.add_layer(l);
+                }
+                map.render(im, function(err, im) {
                     process.nextTick(function() {
                         maps.release(stylesheet, map);
                     });
-                    res.writeHead(500, {
-                      'Content-Type': 'text/plain'
-                    });
-                    res.end(err.message);
-                } else {
-                    var map = new mapnik.Map(256, 256);
-                    map.fromStringSync(stylesheet);
-                    // bbox for x,y,z
-                    var bbox = mercator.xyz_to_envelope(parseInt(query.x), parseInt(query.y), parseInt(query.z), TMS_SCHEME);
-                    //map.extent = bbox;
-                    map.extent = prj.forward(bbox);
-                    var im = new mapnik.Image(map.width, map.height);
-
-// construct a mapnik layer dynamically
-var l = new mapnik.Layer('hoot');
-//l.srs = map.srs;
-l.srs = '+init=epsg:4326';
-//l.srs = '+proj=latlong +datum=WGS84';
-l.styles = ['hoot'];
-
-var ds = new mapnik.Datasource({
-    type: 'osm',
-    //url: 'http://localhost:8080/hoot-services/osm/api/0.6/map?mapId=' + query.mapid,
-    //bbox: bbox,
-    file: 'PortAuPrinceOsmPoiRoadBuilding.osm'
-});
-
-// add our custom datasource
-l.datasource = ds;
-
-// add this layer to the map
-map.add_layer(l);
-
-                    map.render(im, function(err, im) {
-                        process.nextTick(function() {
-                            maps.release(stylesheet, map);
+                    if (err) {
+                        res.writeHead(500, {
+                          'Content-Type': 'text/plain'
                         });
-                        if (err) {
-                            res.writeHead(500, {
-                              'Content-Type': 'text/plain'
-                            });
-                            res.end(err.message);
-                        } else {
-                            res.writeHead(200, {
-                              'Content-Type': 'image/png'
-                            });
-                            res.end(im.encodeSync('png'));
-                        }
-                    });
-                 }
-             });
-
+                        res.end(err.message);
+                    } else {
+                        res.writeHead(200, {
+                          'Content-Type': 'image/png'
+                        });
+                        res.end(im.encodeSync('png'));
+                    }
+                });
+            });
+        }
+    });
+    } else {
+        res.writeHead(500, {
+          'Content-Type': 'text/plain'
+        });
+        res.end('no x,y,z,color,mapid provided');
+    }
 }).listen(port);
-
 
 console.log('Test server listening on port %d', port);
