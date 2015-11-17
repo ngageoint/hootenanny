@@ -74,7 +74,7 @@ function search(mapid, bbox, callback) {
       port: 8080,
       path: '/hoot-services/osm/api/0.6/map?mapId=' + mapid + '&bbox=' + bbox
     };
-console.log(options.path);
+
     http.get(options, function(response){
         var body = '';
         response.on('data', function(data) {
@@ -111,41 +111,48 @@ http.createServer(function(req, res) {
             // bbox for x,y,z
             var bbox = mercator.xyz_to_envelope(parseInt(query.x), parseInt(query.y), parseInt(query.z), TMS_SCHEME);
             map.extent = prj.forward(bbox);
+            map.bufferSize = 128;
             var im = new mapnik.Image(map.width, map.height);
 
-            // construct a mapnik layer dynamically
-            var l = new mapnik.Layer('hoot');
-            l.srs = '+init=epsg:4326';
-            l.styles = ['hoot'];
+            (['polygon', 'line', 'point']).forEach(function(d) {
+                // change this to fit your db connection and settings
+                var postgis_settings = {
+                  dbname: query.mapid,
+                  table: 'planet_osm_' + d,
+                  user: 'hoot',
+                  password: 'hoottest',
+                  host: 'localhost',
+                  type: 'postgis',
+                  srid: '3857',
+                  extent: '-8052518,2105784.46,-8041386.05,2115534.51'
+                };
 
-            search(query.mapid, bbox, function(osm) {
-                var gj = osm_geojson.osm2geojson(new DOMParser().parseFromString(osm, 'text/xml'));
-                if (gj.features.length > 0) {
-                    var ds = new mapnik.Datasource({
-                        type: 'geojson',
-                        inline: JSON.stringify(gj)
-                    });
-                    // add our custom datasource
-                    l.datasource = ds;
-                    // add this layer to the map
-                    map.add_layer(l);
-                }
-                map.render(im, function(err, im) {
-                    process.nextTick(function() {
-                        maps.release(stylesheet, map);
-                    });
-                    if (err) {
-                        res.writeHead(500, {
-                          'Content-Type': 'text/plain'
-                        });
-                        res.end(err.message);
-                    } else {
-                        res.writeHead(200, {
-                          'Content-Type': 'image/png'
-                        });
-                        res.end(im.encodeSync('png'));
-                    }
+                // construct a mapnik layer dynamically
+                var l = new mapnik.Layer(d);
+                l.srs = map.srs;
+                l.styles = ['hoot'];
+
+                var ds = new mapnik.Datasource(postgis_settings);
+                // add our custom datasource
+                l.datasource = ds;
+                // add this layer to the map
+                map.add_layer(l);
+            });
+            map.render(im, function(err, im) {
+                process.nextTick(function() {
+                    maps.release(stylesheet, map);
                 });
+                if (err) {
+                    res.writeHead(500, {
+                      'Content-Type': 'text/plain'
+                    });
+                    res.end(err.message);
+                } else {
+                    res.writeHead(200, {
+                      'Content-Type': 'image/png'
+                    });
+                    res.end(im.encodeSync('png'));
+                }
             });
         }
     });
