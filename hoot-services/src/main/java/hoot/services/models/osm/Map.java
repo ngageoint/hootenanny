@@ -914,7 +914,6 @@ public class Map extends Maps
 
     QCurrentNodes currentnodes = QCurrentNodes.currentNodes;
 
-
     Set<Long> nodeIds =
         new HashSet<Long>(
         		new SQLQuery(conn, DbUtils.getConfiguration(getId())).from(currentnodes)
@@ -956,7 +955,7 @@ public class Map extends Maps
     	Set<Long> nodesIds = elementIdsByType.get(ElementType.Node);
     	Set<Long> waysIds = elementIdsByType.get(ElementType.Way);
 
-    	// if the Set is empty the in statement blows..
+    	// if the Set is empty the in statement blows up..
     	if(nodesIds.size() == 0)
     	{
     		nodesIds.add((long)-1);

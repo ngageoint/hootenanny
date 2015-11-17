@@ -82,6 +82,8 @@ public abstract class Element implements XmlSerializable, DbSerializable
   protected static final QCurrentWays currentWays = QCurrentWays.currentWays;
   protected static final QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
   protected static final QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
+  protected static final QCurrentRelationMembers currentRelationMembers = 
+  	QCurrentRelationMembers.currentRelationMembers;
 
   //order in the enum here is important, since the request diff writer methods use this to determine
   //the order for creating/updating/deleting elements; i.e. create nodes before referencing them
@@ -142,11 +144,11 @@ public abstract class Element implements XmlSerializable, DbSerializable
    */
   protected Object record;
   public Object getRecord() { return record; }
-  public void setRecord(Object record) throws Exception {
-  	if(record instanceof Tuple)
+  public void setRecord(Object record) throws Exception 
+  {
+  	if (record instanceof Tuple)
   	{
   		// This was forced since we are using reflection which need to be refactored to something more solid.
-
   		Tuple tRec = (Tuple)record;
   		Object[] tRecs = tRec.toArray();
   		if(tRecs.length > 0)
@@ -156,7 +158,9 @@ public abstract class Element implements XmlSerializable, DbSerializable
   		}
   		else
   		{
-  			throw new Exception("Bad Record type. Tuple is empty. Please make sure the first object is tuple is DTO that supports setVersion.");
+  			throw new Exception(
+  				"Bad Record type. Tuple is empty. Please make sure the first object is tuple is DTO " +
+  				"that supports setVersion.");
   		}
   	}
   	else
@@ -197,8 +201,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
    */
   public long getId() throws Exception
   {
-    //this is a little risky, but I'm assuming the field probably won't ever change in name
-    //in the OSM tables
     return (Long)MethodUtils.invokeMethod(record, "getId", new Object[]{});
   }
 
@@ -207,8 +209,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
    */
   public void setId(long id) throws Exception
   {
-    //this is a little risky, but I'm assuming the field probably won't ever change in name
-    //in the OSM tables
     MethodUtils.invokeMethod(record, "setId", new Object[]{ id });
   }
 
@@ -218,19 +218,12 @@ public abstract class Element implements XmlSerializable, DbSerializable
   /**
    * Returns the map ID of the element's associated services database record
    */
-  public long getMapId() throws Exception
-  {
-  	return _mapId;
-  }
-
+  public long getMapId() throws Exception { return _mapId; }
 
   /**
    * Sets the map ID of the element associated map
    */
-  public void setMapId(long id) throws Exception
-  {
-  	_mapId = id;
-  }
+  public void setMapId(long id) throws Exception { _mapId = id; }
 
   /**
    *  Returns the tags of the element associated services database record
@@ -241,17 +234,13 @@ public abstract class Element implements XmlSerializable, DbSerializable
   @SuppressWarnings("unchecked")
   public Map<String, String> getTags() throws Exception
   {
-    //this is a little risky, but I'm assuming the field probably won't ever change in name
-    //in the OSM tables
-
     Object oTags = MethodUtils.invokeMethod(record, "getTags", new Object[]{});
-    if(oTags instanceof PGobject)
+    if (oTags instanceof PGobject)
     {
     	return
-          PostgresUtils.postgresObjToHStore(
-            (PGobject)MethodUtils.invokeMethod(record, "getTags", new Object[]{}));
+        PostgresUtils.postgresObjToHStore(
+          (PGobject)MethodUtils.invokeMethod(record, "getTags", new Object[]{}));
     }
-
     return (Map<String, String>)oTags;
   }
 
@@ -266,10 +255,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
   public void setTags(final Map<String, String> tags) throws NoSuchMethodException,
     IllegalAccessException, InvocationTargetException
   {
-    MethodUtils.invokeMethod(
-      record,
-      "setTags",
-      tags);
+    MethodUtils.invokeMethod(record, "setTags", tags);
   }
 
   /**
@@ -301,8 +287,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
    */
   public boolean getVisible() throws Exception
   {
-    //this is a little risky, but I'm assuming the field probably won't ever change in name
-    //in the OSM tables
     return (Boolean)MethodUtils.invokeMethod(record, "getVisible", new Object[]{});
   }
 
@@ -311,15 +295,11 @@ public abstract class Element implements XmlSerializable, DbSerializable
    */
   public long getVersion() throws Exception
   {
-    //this is a little risky, but I'm assuming the field probably won't ever change in name
-    //in the OSM tables
     return (Long)MethodUtils.invokeMethod(record, "getVersion", new Object[]{});
   }
 
   public void setVersion(long version) throws Exception
   {
-    //this is a little risky, but I'm assuming the field probably won't ever change in name
-    //in the OSM tables
     MethodUtils.invokeMethod(record, "setVersion", version);
   }
 
@@ -327,7 +307,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
    * The geospatial bounds for this element
    */
   public abstract BoundingBox getBounds() throws Exception;
-
 
   @Override
   public String toString()
@@ -391,8 +370,9 @@ public abstract class Element implements XmlSerializable, DbSerializable
     }
     if (elementChangesetId != requestChangesetId)
     {
-      throw new Exception("Invalid changeset ID: " + elementChangesetId +
-        " for " + toString() + ".  Expected changeset ID: " + requestChangesetId);
+      throw new Exception(
+      	"Invalid changeset ID: " + elementChangesetId + " for " + toString() + 
+      	".  Expected changeset ID: " + requestChangesetId);
     }
     return elementChangesetId;
   }
@@ -408,11 +388,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
     //version passed in the request can be ignored if it is a create request
     if (!entityChangeType.equals(EntityChangeType.CREATE))
     {
-      //if it is ever determined that doing this fetch when this method is called in a loop hinders
-      //performance (#2951), replace this query with a query outside the loop that checks for the
-      //existence of all nodes and validates their versions in a batch query.  The downside to
-      //this, however, would be parsing the XML node data more than once.
-
     	Object existingRecord =
     	  new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
     	    .from(getElementTable())
@@ -428,7 +403,8 @@ public abstract class Element implements XmlSerializable, DbSerializable
         (Long)MethodUtils.invokeMethod(existingRecord, "getVersion", new Object[]{});
       if (version != existingVersion)
       {
-        throw new Exception("Invalid version: " + version + " specified for " + toString() + 
+        throw new Exception(
+        	"Invalid version: " + version + " specified for " + toString() + 
         	" with ID: " + getId() + " and expected version " + existingVersion + " in changeset " +
           " with ID: " + MethodUtils.invokeMethod(record, "getChangesetId", new Object[]{}));
       }
@@ -436,13 +412,13 @@ public abstract class Element implements XmlSerializable, DbSerializable
     }
     else
     {
-      //I'm not sure how important it is that this check is strictly enforced here, but I'm
-      //doing it for now anyway.
+      //By convention, new features should be parsed in with version = 0.
       final long parsedVersion =
         Long.parseLong(xmlAttributes.getNamedItem("version").getNodeValue());
       if (parsedVersion != 0)
       {
-        throw new Exception("Invalid version: " + parsedVersion + " specified for " + toString() + 
+        throw new Exception(
+        	"Invalid version: " + parsedVersion + " specified for " + toString() + 
           " with ID: " + getId() + " and expected version 0 in changeset " +
           " with ID: " + MethodUtils.invokeMethod(record, "getChangesetId", new Object[]{}));
       }
@@ -478,9 +454,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
 
   /**
    * Returns an XML representation of the element's data suitable for a changeset upload response
-   *
-   * It is a little risky to use reflection, but I'm assuming the ID/version fields probably won't
-   * ever change in name in the OSM tables.
    *
    * @param parent XML node this element should be attached under
    * @throws Exception
@@ -524,14 +497,16 @@ public abstract class Element implements XmlSerializable, DbSerializable
     InvocationTargetException
   {
     final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
-  	if(elementIds.size() > 0)
+  	if (elementIds.size() > 0)
   	{
-  	return
-  			new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable()).
-  				where(prototype.getElementIdField().in(elementIds)).orderBy(prototype.getElementIdField().asc()).
-  			list(prototype.getElementTable());
+  	  return
+  			new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
+  	      .from(prototype.getElementTable())
+  				.where(prototype.getElementIdField().in(elementIds))
+  				.orderBy(prototype.getElementIdField().asc())
+  			  .list(prototype.getElementTable());
   	}
-
+  	
   	return new ArrayList();
   }
 
@@ -573,7 +548,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
   			  .orderBy(prototype.getElementIdField().asc())
   			  .list(prototype.getElementTable(), users, changesets);
     }
-
+    
     return new ArrayList();
   }
 
@@ -598,16 +573,17 @@ public abstract class Element implements XmlSerializable, DbSerializable
     long recordsProcessed = 0;
     if (relatedRecordTable != null && joinField != null)
     {
-    	SQLDeleteClause sqldelete = new SQLDeleteClause(dbConn, DbUtils.getConfiguration(mapId), relatedRecordTable);
+    	SQLDeleteClause sqldelete = 
+    		new SQLDeleteClause(dbConn, DbUtils.getConfiguration(mapId), relatedRecordTable);
       recordsProcessed = 0;
 
-      if(elementIds.size() > 0)
+      if (elementIds.size() > 0)
       {
-      	recordsProcessed = sqldelete.where(joinField.in(elementIds)
-              )
-              .execute();
+      	recordsProcessed = 
+      		sqldelete
+      		  .where(joinField.in(elementIds))
+            .execute();
       }
-
     }
     if (recordsProcessed == 0)
     {
@@ -653,12 +629,13 @@ public abstract class Element implements XmlSerializable, DbSerializable
   {
     final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
 
-    if(elementIds.size() > 0)
+    if (elementIds.size() > 0)
     {
   	  return
-  			new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable())
-  			.where(prototype.getElementIdField().in(elementIds))
-  			.count() == elementIds.size();
+  			new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
+  	      .from(prototype.getElementTable())
+  			  .where(prototype.getElementIdField().in(elementIds))
+  			  .count() == elementIds.size();
     }
     else
     {
@@ -687,22 +664,20 @@ public abstract class Element implements XmlSerializable, DbSerializable
   {
     final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
 
-
     if(elementIds.size() > 0)
     {
-  	return
-  			new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable())
-  			.where(
+  	  return
+  			new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
+  	      .from(prototype.getElementTable())
+  			  .where(
             prototype.getElementIdField().in(elementIds)
-            .and(prototype.getElementVisibilityField().eq(true))
-            )
-  			.count() == elementIds.size();
+            .and(prototype.getElementVisibilityField().eq(true)))
+  			  .count() == elementIds.size();
     }
     else
     {
     	return 0 == elementIds.size();
     }
-
   }
   
   /**
@@ -796,18 +771,15 @@ public abstract class Element implements XmlSerializable, DbSerializable
    */
   protected Set<Long> getOwningRelationIds() throws Exception
   {
-    QCurrentRelationMembers currRelMem = QCurrentRelationMembers.currentRelationMembers;
-  	List<Long> res =
-  			new SQLQuery(conn, DbUtils.getConfiguration("" + getMapId())).from(currRelMem)
-  			.where(
-  					currRelMem.memberId.eq(getId())
-  					.and(currRelMem.memberType.eq(Element.elementEnumForElementType(elementType)))
-  					)
-				.orderBy(currRelMem.relationId.asc())
-				.list(currRelMem.relationId);
-
-  	return new TreeSet<Long>(res);
-
+  	return 
+  		new TreeSet<Long>(
+  			new SQLQuery(conn, DbUtils.getConfiguration("" + getMapId()))
+          .from(currentRelationMembers)
+		      .where(
+			      currentRelationMembers.memberId.eq(getId())
+		          .and(currentRelationMembers.memberType.eq(Element.elementEnumForElementType(elementType))))
+		      .orderBy(currentRelationMembers.relationId.asc())
+		      .list(currentRelationMembers.relationId));
   }
 
   /*
@@ -871,16 +843,14 @@ public abstract class Element implements XmlSerializable, DbSerializable
   {
     final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
     List<?> records =
-    		new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable())
+      new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
+        .from(prototype.getElementTable())
 				.list(prototype.getElementTable());
 
     long tagCount = 0;
     for (Object record : records)
     {
-
-    	PGobject tags =
-	        (PGobject)MethodUtils.invokeMethod(record, "getTags", new Object[]{});
-
+    	PGobject tags = (PGobject)MethodUtils.invokeMethod(record, "getTags", new Object[]{});
       if (tags != null)
       {
         tagCount += PostgresUtils.postgresObjToHStore(tags).size();
@@ -947,6 +917,5 @@ public abstract class Element implements XmlSerializable, DbSerializable
 			log.warn("Filtered out " + String.valueOf(uuids.length - filteredUuids.size()) + " uuids.");
 		}
   	return filteredUuids;
-
   }
 }

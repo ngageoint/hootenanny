@@ -38,6 +38,7 @@ import hoot.services.models.osm.Element;
 import hoot.services.models.osm.XmlSerializable;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
+import hoot.services.validators.osm.ChangesetErrorChecker;
 import hoot.services.validators.osm.ChangesetUploadXmlValidator;
 
 import java.lang.reflect.InvocationTargetException;
@@ -115,6 +116,8 @@ public class ChangesetDbWriter
    * for relations, etc.) to be inserted into the database
    */
   private List<Object> relatedRecordsToStore = new ArrayList<Object>();
+  
+  private ChangesetErrorChecker changesetErrorChecker;
 
   /**
    * Constructor
@@ -220,8 +223,8 @@ public class ChangesetDbWriter
       final ElementType elementType, final EntityChangeType entityChangeType,
       final boolean deleteIfUnused, boolean elementStillUsedByAnotherElement) throws Exception
   {
-    log.debug("Parsing OSM element type: " + elementType.toString() + ", entity change type: "
-        + entityChangeType.toString() + "...");
+    //log.debug("Parsing OSM element type: " + elementType.toString() + ", entity change type: "
+        //+ entityChangeType.toString() + "...");
     Element element = ElementFactory.getInstance().create(requestChangesetMapId, elementType, conn);
     element.setId(newId);
     element.setOldId(oldId);
@@ -280,7 +283,7 @@ public class ChangesetDbWriter
   private long getNextElementId(final ElementType elementType) throws InstantiationException,
     IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException
   {
-    log.debug("Retrieving next new element ID for element type: " + elementType.toString() + "...");
+    //log.debug("Retrieving next new element ID for element type: " + elementType.toString() + "...");
     
     long nextElementId = 
     	new SQLQuery(conn, DbUtils.getConfiguration(requestChangesetMapId))
@@ -300,8 +303,7 @@ public class ChangesetDbWriter
     final boolean recordExistsWithSameId =
       new SQLQuery(conn, DbUtils.getConfiguration(requestChangesetMapId))
         .from(prototypeElement.getElementTable())
-        .where(
-        	prototypeElement.getElementIdField().eq(nextElementId))
+        .where(prototypeElement.getElementIdField().eq(nextElementId))
         .singleResult(prototypeElement.getElementTable()) != null;
     if (recordExistsWithSameId)
     {
@@ -313,7 +315,7 @@ public class ChangesetDbWriter
       nextElementId = highestElementId + 1;
     }
     
-    log.debug("Retrieved next new element ID: " + nextElementId);
+    //log.debug("Retrieved next new element ID: " + nextElementId);
     return nextElementId;
   }
 
@@ -336,8 +338,8 @@ public class ChangesetDbWriter
 
     long nextElementId = -1;
     // no need to get the next element ID from the database unless we are creating a new one
-    if (entityChangeType.equals(EntityChangeType.CREATE)
-        && !elementType.equals(ElementType.Changeset))
+    if (entityChangeType.equals(EntityChangeType.CREATE) && 
+    		!elementType.equals(ElementType.Changeset))
     {
       try
       {
@@ -358,8 +360,8 @@ public class ChangesetDbWriter
       org.w3c.dom.Node xmlElement = xml.item(i);
       NamedNodeMap xmlAttributes = xmlElement.getAttributes();
 
-      log.debug("Calculating element IDs for OSM element type: " + elementType.toString()
-          + ", entity change type: " + entityChangeType.toString() + "...");
+      //log.debug("Calculating element IDs for OSM element type: " + elementType.toString()
+          //+ ", entity change type: " + entityChangeType.toString() + "...");
       // calculate the previous and new IDs for the element
       final long oldElementId = getOldElementId(xmlAttributes, entityChangeType, oldElementIds);
       final long newElementId = getNewElementId(oldElementId, nextElementId, entityChangeType, i);
@@ -369,8 +371,8 @@ public class ChangesetDbWriter
       	parseElement(xmlElement, oldElementId, newElementId, elementType, entityChangeType, 
       		deleteIfUnused, elementStillUsedByAnotherElement);
 
-      if (!entityChangeType.equals(EntityChangeType.DELETE)
-          || (entityChangeType.equals(EntityChangeType.DELETE) && !elementStillUsedByAnotherElement))
+      if (!entityChangeType.equals(EntityChangeType.DELETE) || 
+      		(entityChangeType.equals(EntityChangeType.DELETE) && !elementStillUsedByAnotherElement))
       {
         // update the parsed element cache; this allows us to keep track of the ID for each element
         // passed in the request for later use, if the ID is different than what the database ID
@@ -390,14 +392,14 @@ public class ChangesetDbWriter
         // etc.) that need to be updated *after* this element is inserted into the db. The delete
         // operation doesn't store these, because all related records will automatically be deleted
         // in writeDiff.
-        if (element.getRelatedRecords() != null
-            && !entityChangeType.equals(EntityChangeType.DELETE))
+        if (element.getRelatedRecords() != null && 
+        		!entityChangeType.equals(EntityChangeType.DELETE))
         {
           relatedRecordsToStore.addAll(element.getRelatedRecords());
         }
 
-        log.debug("Updating changeset bounds for OSM element type: " + elementType.toString()
-            + ", entity change type: " + entityChangeType.toString() + "...");
+        //log.debug("Updating changeset bounds for OSM element type: " + elementType.toString()
+            //+ ", entity change type: " + entityChangeType.toString() + "...");
         if (diffBounds == null)
         {
           diffBounds = new BoundingBox(); // I think this is wrong
@@ -410,7 +412,8 @@ public class ChangesetDbWriter
         {
           diffBounds.expand(
             element.getBounds(),
-            Double.parseDouble(HootProperties.getInstance().getProperty(
+            Double.parseDouble(
+            	HootProperties.getInstance().getProperty(
                 "changesetBoundsExpansionFactorDeegrees",
                 HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees"))));
         }
@@ -459,8 +462,9 @@ public class ChangesetDbWriter
     Collection<XmlSerializable> changesetDiffElements = new ArrayList<XmlSerializable>();
     changesetDiffElements.addAll(write(changesetDoc));
 
-    return (new ChangesetUploadResponseWriter()).writeResponse(changesetId,
-        (List<XmlSerializable>) (List<?>) changesetDiffElements);
+    return 
+    	(new ChangesetUploadResponseWriter()).writeResponse(
+    		changesetId, (List<XmlSerializable>)(List<?>)changesetDiffElements);
   }
   
   /**
@@ -501,9 +505,11 @@ public class ChangesetDbWriter
 
   private List<Element> write(final Document changesetDoc) throws Exception
   {
-    // System.out.println(XmlUtils.documentToString(changesetDoc));
-
-    initParsedElementCache();
+  	changesetErrorChecker = new ChangesetErrorChecker(changesetDoc, requestChangesetMapId, conn);
+  	changesetErrorChecker.checkForVersionErrors();
+  	changesetErrorChecker.checkForChildElementExistAndVisibilityErrors();
+  	
+  	initParsedElementCache();
     
     log.debug("Inserting new OSM elements and updating existing OSM elements...");
 
@@ -532,7 +538,7 @@ public class ChangesetDbWriter
       {
         if (!elementType.equals(ElementType.Changeset))
         {
-          // The "if-unused" attribute in the delete tag prevents any element being used by another
+        	// The "if-unused" attribute in the delete tag prevents any element being used by another
           // element from being deleted (e.g. node can't be deleted that is still being used by a way
           // or relation, etc.); its attribute value is ignored; only the presence of the attribute
           // or lack thereof is looked at. This seems a little confusing to me, but that's how
@@ -547,9 +553,11 @@ public class ChangesetDbWriter
           }
 
           // parse the elements from the request XML for the given element type
-          changesetDiffElements.addAll(parseElements(
-              XPathAPI.selectNodeList(changesetDoc, "//osmChange/"
-                  + entityChangeType.toString().toLowerCase() + "/"
+          changesetDiffElements.addAll(
+          	parseElements(
+              XPathAPI.selectNodeList(
+              	changesetDoc, 
+              	"//osmChange/" + entityChangeType.toString().toLowerCase() + "/"
                   + elementType.toString().toLowerCase()), elementType, entityChangeType,
               deleteIfUnused));
           // If any elements were actually parsed for this element and entity update type, update
@@ -572,34 +580,41 @@ public class ChangesetDbWriter
               	ElementFactory.getInstance().create(requestChangesetMapId, elementType, conn);
               // Elements which don't have related elements, will return a null for the 
               // relatedRecordType.
-              final RelationalPathBase<?> relatedRecordTable = prototypeElement
-                  .getRelatedRecordTable();
-              Element.removeRelatedRecords(requestChangesetMapId,
-                  relatedRecordTable,
-                  prototypeElement.getRelatedRecordJoinField(), parsedElementIds,
-                  relatedRecordTable != null, conn);
+              final RelationalPathBase<?> relatedRecordTable = 
+              	prototypeElement.getRelatedRecordTable();
+              Element.removeRelatedRecords(
+                requestChangesetMapId,
+                relatedRecordTable,
+                prototypeElement.getRelatedRecordJoinField(), 
+                parsedElementIds,
+                relatedRecordTable != null, 
+                conn);
             }
 
             // TODO: really need to be flushing these batch executions after they get to be a certain
             // size to avoid memory problems; see maxRecordBatchSize
 
+            //TODO: make this code element generic; reinstate the DbSerializable interface??
             if (elementType == ElementType.Node)
             {
-              DbUtils.batchRecordsDirectNodes(requestChangesetMapId, recordsToModify,
-                  DbUtils.recordBatchTypeForEntityChangeType(entityChangeType), conn,
-                  maxRecordBatchSize);
+              DbUtils.batchRecordsDirectNodes(
+              	requestChangesetMapId, recordsToModify,
+                 DbUtils.recordBatchTypeForEntityChangeType(entityChangeType), conn,
+                 maxRecordBatchSize);
             }
             else if (elementType == ElementType.Way)
             {
-              DbUtils.batchRecordsDirectWays(requestChangesetMapId, recordsToModify,
-                  DbUtils.recordBatchTypeForEntityChangeType(entityChangeType), conn,
-                  maxRecordBatchSize);
+              DbUtils.batchRecordsDirectWays(
+              	requestChangesetMapId, recordsToModify,
+                 DbUtils.recordBatchTypeForEntityChangeType(entityChangeType), conn,
+                 maxRecordBatchSize);
             }
             else if (elementType == ElementType.Relation)
             {
-              DbUtils.batchRecordsDirectRelations(requestChangesetMapId, recordsToModify,
-                  DbUtils.recordBatchTypeForEntityChangeType(entityChangeType), conn,
-                  maxRecordBatchSize);
+              DbUtils.batchRecordsDirectRelations(
+              	requestChangesetMapId, recordsToModify,
+                DbUtils.recordBatchTypeForEntityChangeType(entityChangeType), conn,
+                maxRecordBatchSize);
             }
 
             // make the database updates for the element records
@@ -609,12 +624,14 @@ public class ChangesetDbWriter
             // Add the related records after the parent element records to keep from violating 
             // foreign key constraints. Any existing related records for this element have already
             // been completely cleared.
+            //TODO: make this code element generic; reinstate the DbSerializable interface??
             if (relatedRecordsToStore != null && relatedRecordsToStore.size() > 0)
             {
               if (elementType == ElementType.Node)
               {
-                DbUtils.batchRecordsDirectNodes(requestChangesetMapId, relatedRecordsToStore, RecordBatchType.INSERT,
-                    conn, maxRecordBatchSize);
+                DbUtils.batchRecordsDirectNodes(
+                	requestChangesetMapId, relatedRecordsToStore, RecordBatchType.INSERT, conn, 
+                	maxRecordBatchSize);
               }
               else if (elementType == ElementType.Way)
               {
@@ -624,8 +641,9 @@ public class ChangesetDbWriter
               }
               else if (elementType == ElementType.Relation)
               {
-                DbUtils.batchRecords(requestChangesetMapId, relatedRecordsToStore,
-                  QCurrentRelationMembers.currentRelationMembers, null, RecordBatchType.INSERT,
+                DbUtils.batchRecords(
+                	requestChangesetMapId, relatedRecordsToStore, 
+                	QCurrentRelationMembers.currentRelationMembers, null, RecordBatchType.INSERT,
                   conn, maxRecordBatchSize);
               }
               relatedRecordsToStore.clear();
@@ -634,6 +652,8 @@ public class ChangesetDbWriter
         }
       }
     }
+    
+    changesetErrorChecker.checkForOwnershipErrors();
 
     changeset.updateNumChanges((int) changesetDiffElementsSize);
 
@@ -642,7 +662,8 @@ public class ChangesetDbWriter
     BoundingBox newChangesetBounds = changeset.getBounds();
     newChangesetBounds.expand(
       diffBounds,
-      Double.parseDouble(HootProperties.getInstance().getProperty(
+      Double.parseDouble(
+      	HootProperties.getInstance().getProperty(
           "changesetBoundsExpansionFactorDeegrees",
           HootProperties.getDefault("changesetBoundsExpansionFactorDeegrees"))));
     changeset.setBounds(newChangesetBounds);

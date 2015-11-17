@@ -92,15 +92,17 @@ public class Way extends Element
     elementType = ElementType.Way;
 
     this.record = new CurrentWays();
+    //TODO: what's the purpose of this catch?
     try
     {
     	setMapId(mapId);
-      maxRecordBatchSize = Integer.parseInt(HootProperties.getInstance().getProperty(
-          "maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
+      maxRecordBatchSize = 
+      	Integer.parseInt(
+      		HootProperties.getInstance().getProperty(
+            "maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
     }
     catch (Exception ex)
     {
-
     }
   }
 
@@ -117,35 +119,36 @@ public class Way extends Element
     wayRecord.setVisible(record.getVisible());
     wayRecord.setTags(record.getTags());
     this.record = wayRecord;
+     //TODO: what's the purpose of this catch?
     try
     {
     	setMapId(mapId);
-      maxRecordBatchSize = Integer.parseInt(HootProperties.getInstance().getProperty(
-          "maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
+      maxRecordBatchSize = 
+      	Integer.parseInt(
+      		HootProperties.getInstance().getProperty(
+            "maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
     }
     catch (Exception ex)
     {
-
     }
   }
 
   /**
    * Returns all node records for the specified ways from the services database
    *
-   * @param mapId
-   *          ID of the map owning the ways
-   * @param wayIds
-   *          a collection of way IDs for which to retrieve node records
-   * @param dbConn
-   *          JDBC Connection
+   * @param mapId ID of the map owning the ways
+   * @param wayIds a collection of way IDs for which to retrieve node records
+   * @param dbConn JDBC Connection
    * @return a list of node records
    */
   public static List<CurrentNodes> getNodesForWays(final long mapId, final Set<Long> wayIds,
-      Connection dbConn)
+    Connection dbConn)
   {
     if (wayIds.size() > 0)
     {
-      return new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(currentWayNodes)
+      return 
+      	new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
+          .from(currentWayNodes)
           .join(currentNodes)
           .on(currentWayNodes.nodeId.eq(currentNodes.id))
           .where(currentWayNodes.wayId.in(wayIds))
@@ -162,7 +165,10 @@ public class Way extends Element
    */
   private List<CurrentNodes> getNodes() throws Exception
   {
-    return new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).from(currentWayNodes).join(currentNodes)
+    return 
+    	new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+        .from(currentWayNodes)
+        .join(currentNodes)
         .on(currentWayNodes.nodeId.eq(currentNodes.id))
         .where(currentWayNodes.wayId.eq(getId()))
         .orderBy(currentWayNodes.sequenceId.asc()).list(currentNodes);
@@ -176,10 +182,11 @@ public class Way extends Element
    */
   private List<Long> getNodeIds() throws Exception
   {
-    return new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
-      .from(currentWayNodes)
-      .where(currentWayNodes.wayId.eq(getId()))
-      .orderBy(currentWayNodes.sequenceId.asc()).list(currentWayNodes.nodeId);
+    return 
+    	new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+        .from(currentWayNodes)
+        .where(currentWayNodes.wayId.eq(getId()))
+        .orderBy(currentWayNodes.sequenceId.asc()).list(currentWayNodes.nodeId);
   }
 
   /*
@@ -187,7 +194,9 @@ public class Way extends Element
    */
   private long getNodeCount() throws Exception
   {
-    return new SQLQuery(conn, DbUtils.getConfiguration(getMapId())).from(currentWayNodes)
+    return 
+    	new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+        .from(currentWayNodes)
         .where(currentWayNodes.wayId.eq(getId())).count();
   }
 
@@ -211,8 +220,10 @@ public class Way extends Element
       throw new Exception("Too few nodes specified for way with ID: " + wayRecord.getId());
     }
     final long numExistingNodes = getNodeCount();
-    final long maximumWayNodes = Long.parseLong(HootProperties.getInstance().getProperty(
-        "maximumWayNodes", HootProperties.getDefault("maximumWayNodes")));
+    final long maximumWayNodes = 
+    	Long.parseLong(
+    		HootProperties.getInstance().getProperty(
+          "maximumWayNodes", HootProperties.getDefault("maximumWayNodes")));
     if ((nodeIds.size() + numExistingNodes) > maximumWayNodes)
     {
       throw new Exception("Too many nodes specified for way with ID: " + wayRecord.getId());
@@ -238,8 +249,9 @@ public class Way extends Element
       sequenceCtr++;
     }
 
-    DbUtils.batchRecords(mapId, wayNodeRecords, QCurrentWayNodes.currentWayNodes, null,
-        RecordBatchType.INSERT, conn, maxRecordBatchSize);
+    DbUtils.batchRecords(
+    	mapId, wayNodeRecords, QCurrentWayNodes.currentWayNodes, null, RecordBatchType.INSERT, conn, 
+    	maxRecordBatchSize);
   }
   
   /*
@@ -291,8 +303,8 @@ public class Way extends Element
     // the remainder of the IDs in relatedRecordIds, request must now be
     // retrieved from the
     // database
-    final List<?> nodeRecords = Element.getElementRecords(getMapId(), ElementType.Node,
-        modifiedRecordIds, conn);
+    final List<?> nodeRecords = 
+    	Element.getElementRecords(getMapId(), ElementType.Node, modifiedRecordIds, conn);
     for (Object record : nodeRecords)
     {
       final CurrentNodes nodeRecord = (CurrentNodes) record;
@@ -354,7 +366,7 @@ public class Way extends Element
       return new BoundingBox(new ArrayList<CurrentNodes>(getNodes()));
     }
   }
-
+  
   /**
    * Populates this element model object based on osm diff data
    *
@@ -373,12 +385,13 @@ public class Way extends Element
     wayRecord.setChangesetId(parseChangesetId(xmlAttributes));
     wayRecord.setVersion(parseVersion(xmlAttributes));
 
-    final Set<Long> owningRelationIds = getOwningRelationIds();
+    /*final Set<Long> owningRelationIds = getOwningRelationIds();
     if (entityChangeType.equals(EntityChangeType.DELETE) && owningRelationIds.size() > 0)
     {
-      throw new Exception("Way to be deleted with ID " + getId() + " is still used by "
-          + "relation(s): " + Arrays.toString(owningRelationIds.toArray()));
-    }
+      throw new Exception(
+      	"Way to be deleted with ID " + getId() + " is still used by relation(s): " + 
+        Arrays.toString(owningRelationIds.toArray()));
+    }*/
 
     wayRecord.setTimestamp(parseTimestamp(xmlAttributes));
     wayRecord.setVisible(true);
@@ -391,8 +404,7 @@ public class Way extends Element
 
     setRecord(wayRecord);
 
-    // if we're deleting the way, all the way nodes will get deleted
-    // automatically..and no new
+    // if we're deleting the way, all the way nodes will get deleted automatically...and no new
     // ones need to be parsed
     if (!entityChangeType.equals(EntityChangeType.DELETE))
     {
@@ -404,27 +416,24 @@ public class Way extends Element
    * Returns an XML representation of the element returned in a query; does not
    * add tags; assumes way nodes have already been written to the services db
    *
-   * @param parent
-   *          XML node this element should be attached under
-   * @param modifyingUserId
-   *          ID of the user which created this element
-   * @param modifyingUserDisplayName
-   *          user display name of the user which created this element
-   * @param multiLayerUniqueElementIds
-   *          if true, IDs are prepended with <map id>_<first letter of the
-   *          element type>_; this setting activated is not compatible with
-   *          standard OSM clients (specific to Hootenanny iD)
-   * @param addChildren
-   *          if true, element children are added to the element xml
+   * @param parent XML node this element should be attached under
+   * @param modifyingUserId ID of the user which created this element
+   * @param modifyingUserDisplayName user display name of the user which created this element
+   * @param multiLayerUniqueElementIds if true, IDs are prepended with <map id>_<first letter of the
+   * element type>_; this setting activated is not compatible with standard OSM clients (specific 
+   * to Hootenanny iD)
+   * @param addChildren if true, element children are added to the element xml
    * @return an XML element
    * @throws Exception
    */
   public org.w3c.dom.Element toXml(final org.w3c.dom.Element parentXml, final long modifyingUserId,
-      final String modifyingUserDisplayName, final boolean multiLayerUniqueElementIds,
-      final boolean addChildren) throws Exception
+    final String modifyingUserDisplayName, final boolean multiLayerUniqueElementIds,
+    final boolean addChildren) throws Exception
   {
-    org.w3c.dom.Element element = super.toXml(parentXml, modifyingUserId, modifyingUserDisplayName,
-        multiLayerUniqueElementIds, addChildren);
+    org.w3c.dom.Element element = 
+    	super.toXml(
+    		parentXml, modifyingUserId, modifyingUserDisplayName, multiLayerUniqueElementIds, 
+    		addChildren);
     Document doc = parentXml.getOwnerDocument();
 
     if (addChildren)
@@ -443,11 +452,13 @@ public class Way extends Element
    
       @SuppressWarnings("unchecked")
       final List<Tuple> elementRecords = 
-          (List<Tuple>) Element.getElementRecordsWithUserInfo(getMapId(), ElementType.Node, elementIds, conn);
+        (List<Tuple>)Element.getElementRecordsWithUserInfo(
+        	getMapId(), ElementType.Node, elementIds, conn);
       for(int i=0; i<elementRecords.size(); i++)
       {
       	final Element nodeFullElement = 
-            ElementFactory.getInstance().create(ElementType.Node, elementRecords.get(i), conn, getMapId());
+          ElementFactory.getInstance().create(
+          	ElementType.Node, elementRecords.get(i), conn, getMapId());
         org.w3c.dom.Element nodeXml = 
         		nodeFullElement.toXml(
           	parentXml,
@@ -474,9 +485,11 @@ public class Way extends Element
   {
     if (!entityChangeType.equals(EntityChangeType.DELETE))
     {
-      CurrentWays wayRecord = (CurrentWays) record;
-      final long maximumWayNodes = Long.parseLong(HootProperties.getInstance().getProperty(
-          "maximumWayNodes", HootProperties.getDefault("maximumWayNodes")));
+      CurrentWays wayRecord = (CurrentWays)record;
+      final long maximumWayNodes = 
+        Long.parseLong(
+        	HootProperties.getInstance().getProperty(
+            "maximumWayNodes", HootProperties.getDefault("maximumWayNodes")));
       final long numWayNodes = wayNodesXml.getLength();
       if (numWayNodes < 2)
       {
@@ -507,37 +520,35 @@ public class Way extends Element
       if (!parsedNodes.containsKey(parsedNodeId))
       {
         // TODO: add test for this
-        throw new Exception("Created way references new node not found in create request with ID: "
-            + parsedNodeId);
+        throw new Exception(
+        	"Created way references new node not found in create request with ID: " + parsedNodeId);
       }
     }
-    // The node is referenced somewhere else in this request, so get its info
-    // from the request, not
-    // the database b/c the database either won't have it or will have outdated
-    // info. Only
-    // get info from the request if the node is being created/modified, as if it
-    // is being deleted,
-    // we can just get the info from the database since its coords won't be
-    // changing and might not
-    // be in the request (not required).
-    if (parsedNodes.containsKey(parsedNodeId)
-        && !parsedNodes.get(parsedNodeId).getEntityChangeType().equals(EntityChangeType.DELETE))
+    // The node is referenced somewhere else in this request, so get its info from the request, not
+    // the database b/c the database either won't have it or will have outdated info. Only get info 
+    // from the request if the node is being created/modified, as if it is being deleted, we can 
+    // just get the info from the database since its coords won't be changing and might not be in 
+    // the request (not required).
+    if (parsedNodes.containsKey(parsedNodeId) && 
+    		!parsedNodes.get(parsedNodeId).getEntityChangeType().equals(EntityChangeType.DELETE))
     {
-      Node node = (Node) parsedElementIdsToElementsByType.get(ElementType.Node).get(parsedNodeId);
-      CurrentNodes nodeRecord = (CurrentNodes) node.getRecord();
+      Node node = (Node)parsedElementIdsToElementsByType.get(ElementType.Node).get(parsedNodeId);
+      CurrentNodes nodeRecord = (CurrentNodes)node.getRecord();
       actualNodeId = nodeRecord.getId();
       nodeCoords.lat = nodeRecord.getLatitude();
       nodeCoords.lon = nodeRecord.getLongitude();
     }
-    // element not referenced in this request, so should already exist in the db
-    // and its info up
+    // element not referenced in this request, so should already exist in the db and its info be up
     // to date
     else
     {
+    	//TODO: can this query be gotten rid of?
+    	
       actualNodeId = parsedNodeId;
       // I don't like having to do this in a loop; see Element::parseVersion for more info
-      final CurrentNodes existingNodeRecord = new SQLQuery(conn,
-          DbUtils.getConfiguration(getMapId())).from(currentNodes)
+      final CurrentNodes existingNodeRecord = 
+      	new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
+          .from(currentNodes)
           .where(currentNodes.id.eq(new Long(actualNodeId)))
           .singleResult(currentNodes);
 
@@ -559,7 +570,7 @@ public class Way extends Element
   }
 
   private CurrentWayNodes createWayNodeRecord(final long actualNodeId, final long sequenceId)
-      throws Exception
+    throws Exception
   {
     CurrentWayNodes wayNodeRecord = new CurrentWayNodes();
     wayNodeRecord.setNodeId(actualNodeId);
@@ -569,12 +580,11 @@ public class Way extends Element
   }
 
   /*
-   * Parse the way nodes XML. Keep a cache of the parsed records and node geo
-   * info.
+   * Parse the way nodes XML. Keep a cache of the parsed records and node geo info.
    */
   private void parseWayNodesXml(final org.w3c.dom.Node xml) throws Exception
   {
-    assert (parsedElementIdsToElementsByType != null);
+    assert(parsedElementIdsToElementsByType != null);
     final NodeList wayNodesXml = XPathAPI.selectNodeList(xml, "nd");
 
     validateWayNodesSize(wayNodesXml);
@@ -664,8 +674,6 @@ public class Way extends Element
     return currentWayNodes.wayId;
   }
 
-
-
   /**
    * Returns the generated tag field for this element
    *
@@ -690,24 +698,20 @@ public class Way extends Element
   /**
    * Inserts a new way into the services database
    *
-   * @param changesetId
-   *          corresponding changeset ID for the way to be inserted
-   * @param mapId
-   *          corresponding map ID for the way to be inserted
-   * @param nodeIds
-   *          IDs for the collection of nodes to be associated with this way
-   * @param tags
-   *          element tags
-   * @param dbConn
-   *          JDBC Connection
+   * @param changesetId corresponding changeset ID for the way to be inserted
+   * @param mapId corresponding map ID for the way to be inserted
+   * @param nodeIds IDs for the collection of nodes to be associated with this way
+   * @param tags element tags
+   * @param dbConn JDBC Connection
    * @return ID of the newly created way
    * @throws Exception
    */
   public static long insertNew(final long changesetId, final long mapId, final List<Long> nodeIds,
       final Map<String, String> tags, Connection dbConn) throws Exception
   {
-    long nextWayId = new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).uniqueResult(SQLExpressions
-        .nextval(Long.class, "current_ways_id_seq"));
+    long nextWayId = 
+    	new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
+        .uniqueResult(SQLExpressions.nextval(Long.class, "current_ways_id_seq"));
     insertNew(nextWayId, changesetId, mapId, nodeIds, tags, dbConn);
 
     return nextWayId;
@@ -717,23 +721,16 @@ public class Way extends Element
    * Inserts a new way into the services database with the specified ID; useful
    * for testing
    *
-   * @param wayId
-   *          ID to assign to the new way
-   * @param changesetId
-   *          corresponding changeset ID for the way to be inserted
-   * @param mapId
-   *          corresponding map ID for the way to be inserted
-   * @param nodeIds
-   *          collection of nodes to be associated with this way
-   * @param tags
-   *          element tags
-   * @param dbConn
-   *          JDBC Connection
-   * @throws Exception
-   *           see addNodeRefs
+   * @param wayId ID to assign to the new way
+   * @param changesetId corresponding changeset ID for the way to be inserted
+   * @param mapId corresponding map ID for the way to be inserted
+   * @param nodeIds collection of nodes to be associated with this way
+   * @param tags element tags
+   * @param dbConn JDBC Connection
+   * @throws Exception see addNodeRefs
    */
   public static void insertNew(final long wayId, final long changesetId, final long mapId,
-      final List<Long> nodeIds, final Map<String, String> tags, Connection dbConn) throws Exception
+    final List<Long> nodeIds, final Map<String, String> tags, Connection dbConn) throws Exception
   {
     CurrentWays wayRecord = new CurrentWays();
     wayRecord.setChangesetId(changesetId);
@@ -778,7 +775,8 @@ public class Way extends Element
 
       stmt = dbConn.createStatement();
 
-      String sql = "INSERT INTO current_ways_" + mapId+ "("
+      String sql = 
+      	"INSERT INTO current_ways_" + mapId+ "("
           + "            id, changeset_id, \"timestamp\", visible, version, tags)"
           + " VALUES(" + wayId + "," + changesetId + "," + "CURRENT_TIMESTAMP" + ","
           + "true" + "," + "1" + "," + strTags +
@@ -795,7 +793,6 @@ public class Way extends Element
 
     finally
     {
-      // finally block used to close resources
       try
       {
         if (stmt != null)
@@ -803,9 +800,7 @@ public class Way extends Element
       }
       catch (SQLException se2)
       {
-
-      }// nothing we can do
-
-    }// end try
+      }
+    }
   }
 }
