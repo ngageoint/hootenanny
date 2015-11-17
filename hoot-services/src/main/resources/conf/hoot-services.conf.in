@@ -74,9 +74,6 @@ changesetMaxOpenTimeHours=24
 # allows for faster testing of changeset auto closing
 testChangesetAutoClose=false
 
-# allows nodes to have negative IDs to be compatible with hoot-core command line
-hootCoreServicesDatabaseWriterCompatibility=false
-
 # ETL
 
 # the folder location of the make file script for some processlet like ETLProcesslet

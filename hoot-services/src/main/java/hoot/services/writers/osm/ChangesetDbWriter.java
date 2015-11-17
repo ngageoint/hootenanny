@@ -184,23 +184,10 @@ public class ChangesetDbWriter
             + "changeset: " + requestChangesetId + ".  Use a negative ID value.");
       }
     }
-    else
-    {
-      if (oldElementId < 0)
-      {
-        if (!Boolean.parseBoolean(HootProperties.getInstance().getProperty(
-            "hootCoreServicesDatabaseWriterCompatibility",
-            HootProperties.getDefault("hootCoreServicesDatabaseWriterCompatibility"))))
-        {
-          // The hoot command line services database writer will write nodes with negative IDs to
-          // the database, which isn't allowed in regular OSM. Created a compatibility mode to
-          // allow for it, so that the hoot --convert functionality can be used as a source of
-          // test data for the services.
-          throw new Exception("Invalid OSM element ID: " + oldElementId
-              + ".  Existing OSM elements cannot have " + "negative IDs.");
-        }
-      }
-    }
+    //Formerly, we had a setting called "hootCoreServicesDatabaseWriterCompatibility" that would
+    //have to be turned on to allow nodes with negative ID's to be written, which was to accomodate
+    //the behavior of hoot --convert.  If it wasn't turned on, a failure would occur here.  Now, 
+    //by default the writing nodes with negative ID's is always allowed.
     oldElementIds.add(oldElementId);
     return oldElementId;
   }

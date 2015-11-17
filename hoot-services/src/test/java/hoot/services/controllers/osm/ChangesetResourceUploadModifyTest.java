@@ -1646,253 +1646,15 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
     }
   }
 
-  @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
-  public void testUploadModifyNegativeNodeId() throws Exception
-  {
-    //hootCoreServicesDatabaseWriterCompatibility must = false for this test to pass
-    Properties hootProps = HootProperties.getInstance();
-    hootProps.setProperty("hootCoreServicesDatabaseWriterCompatibility", "false");
-    HootProperties.setProperties(hootProps);
-    Assert.assertEquals(
-      false,
-      Boolean.parseBoolean(hootProps.getProperty("hootCoreServicesDatabaseWriterCompatibility")));
-
-    final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-    final long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-    final Set<Long> nodeIds =
-      OsmTestUtils.createTestNodes(changesetId, originalBounds);
-
-    final Long[] nodeIdsArr = nodeIds.toArray(new Long[]{});
-    final Set<Long> wayIds =
-      OsmTestUtils.createTestWays(changesetId, nodeIds);
-
-    final Set<Long> relationIds =
-      OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-
-
-    final BoundingBox updateBounds =
-      OsmTestUtils.createAfterModifiedTestChangesetBounds();
-    //Update the changeset with a node that has a negative ID, not allowed here since the property
-    //was changed above.  A failure should occur and no data in the system should be modified.
-    //Techically, the node with the negative ID doesn't exist, so even with the compatibility mode
-    //set to false here, this request will still fail.  I'm just looking for a specific error
-    //message to be thrown here that's guaranteed to throw before the error caused by trying to
-    //update an element that doesn't exist, so that's ok.
-    try
-    {
-      resource()
-        .path("api/0.6/changeset/" + changesetId + "/upload")
-        .queryParam("mapId", "" + mapId)
-        .type(MediaType.TEXT_XML)
-        .accept(MediaType.TEXT_XML)
-        .post(
-          Document.class,
-          "<osmChange version=\"0.3\" generator=\"iD\">" +
-            "<create/>" +
-            "<modify>" +
-              "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + originalBounds.getMinLon() + "\" " +
-                "lat=\"" + originalBounds.getMinLat() + "\" version=\"1\" changeset=\"" +
-                changesetId + "\">" +
-                "<tag k=\"key 1\" v=\"val 1\"></tag>" +
-                "<tag k=\"key 2\" v=\"val 2\"></tag>" +
-              "</node>" +
-              "<node id=\"-1\" lon=\"" + updateBounds.getMinLon() + "\" " +
-                "lat=\"" + updateBounds.getMinLat() + "\" version=\"1\" changeset=\"" +
-                changesetId + "\">" +
-                "<tag k=\"key 3\" v=\"val 3\"></tag>" +
-              "</node>" +
-            "</modify>" +
-            "<delete if-unused=\"true\"/>" +
-          "</osmChange>");
-    }
-    catch (UniformInterfaceException e)
-    {
-      ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("Invalid OSM element ID"));
-
-      OsmTestUtils.verifyTestDataUnmodified(
-        originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
-      throw e;
-    }
-    catch (Exception e)
-    {
-      log.error(e.getMessage());
-      throw e;
-    }
-  }
-
-  @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
-  public void testUploadModifyNegativeWayId() throws Exception
-  {
-    //hootCoreServicesDatabaseWriterCompatibility must = false for this test to pass
-    Properties hootProps = HootProperties.getInstance();
-    hootProps.setProperty("hootCoreServicesDatabaseWriterCompatibility", "false");
-    HootProperties.setProperties(hootProps);
-    Assert.assertEquals(
-      false,
-      Boolean.parseBoolean(hootProps.getProperty("hootCoreServicesDatabaseWriterCompatibility")));
-
-    final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-    final long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-    final Set<Long> nodeIds =
-      OsmTestUtils.createTestNodes(changesetId, originalBounds);
-    final Long[] nodeIdsArr = nodeIds.toArray(new Long[]{});
-
-    final Set<Long> wayIds =
-      OsmTestUtils.createTestWays(changesetId, nodeIds);
-    final Long[] wayIdsArr = wayIds.toArray(new Long[]{});
-
-    final Set<Long> relationIds =
-      OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-
-
-    //Update the changeset with a way that has a negative ID, not allowed here since the property
-    //was changed above.  A failure should occur and no data in the system should be modified.
-    try
-    {
-      resource()
-        .path("api/0.6/changeset/" + changesetId + "/upload")
-        .queryParam("mapId", "" + mapId)
-        .type(MediaType.TEXT_XML)
-        .accept(MediaType.TEXT_XML)
-        .post(
-          Document.class,
-          "<osmChange version=\"0.3\" generator=\"iD\">" +
-            "<create/>" +
-            "<modify>" +
-              "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" +
-                changesetId + "\">" +
-                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                "<nd ref=\"" + nodeIdsArr[4] + "\"></nd>" +
-                "<tag k=\"key 1\" v=\"val 1\"></tag>" +
-                "<tag k=\"key 2\" v=\"val 2\"></tag>" +
-              "</way>" +
-              "<way id=\"-1\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                "<nd ref=\"" + nodeIdsArr[4] + "\"></nd>" +
-                "<tag k=\"key 3\" v=\"val 3\"></tag>" +
-              "</way>" +
-            "</modify>" +
-            "<delete if-unused=\"true\"/>" +
-          "</osmChange>");
-    }
-    catch (UniformInterfaceException e)
-    {
-      ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("Invalid OSM element ID"));
-
-      OsmTestUtils.verifyTestDataUnmodified(
-        originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
-      throw e;
-    }
-    catch (Exception e)
-    {
-      log.error(e.getMessage());
-      throw e;
-    }
-  }
-
-  @Test(expected=UniformInterfaceException.class)
-  @Category(UnitTest.class)
-  public void testUploadModifyNegativeRelationId() throws Exception
-  {
-    //hootCoreServicesDatabaseWriterCompatibility must = false for this test to pass
-    Properties hootProps = HootProperties.getInstance();
-    hootProps.setProperty("hootCoreServicesDatabaseWriterCompatibility", "false");
-    HootProperties.setProperties(hootProps);
-    Assert.assertEquals(
-      false,
-      Boolean.parseBoolean(hootProps.getProperty("hootCoreServicesDatabaseWriterCompatibility")));
-
-    final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-    final long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-    final Set<Long> nodeIds =
-      OsmTestUtils.createTestNodes(changesetId, originalBounds);
-    final Long[] nodeIdsArr = nodeIds.toArray(new Long[]{});
-
-    final Set<Long> wayIds =
-      OsmTestUtils.createTestWays(changesetId, nodeIds);
-    final Long[] wayIdsArr = wayIds.toArray(new Long[]{});
-
-    final Set<Long> relationIds =
-      OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-    final Long[] relationIdsArr = relationIds.toArray(new Long[]{});
-
-
-    //Update the changeset with a relation that has a negative ID, not allowed here since the
-    //property was changed above.  A failure should occur and no data in the system should be
-    //modified.
-    try
-    {
-      resource()
-        .path("api/0.6/changeset/" + changesetId + "/upload")
-        .queryParam("mapId", "" + mapId)
-        .type(MediaType.TEXT_XML)
-        .accept(MediaType.TEXT_XML)
-        .post(
-          Document.class,
-          "<osmChange version=\"0.3\" generator=\"iD\">" +
-            "<create/>" +
-            "<modify>" +
-              "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" +
-                changesetId + "\">" +
-                "<member type=\"way\" role=\"role4\" ref=\"" + wayIdsArr[1] + "\"></member>" +
-                "<member type=\"way\" role=\"role2\" ref=\"" + wayIdsArr[0] + "\"></member>" +
-                "<member type=\"node\" ref=\"" + nodeIdsArr[2] + "\"></member>" +
-                "<tag k=\"key 1\" v=\"val 1\"></tag>" +
-                "<tag k=\"key 2\" v=\"val 2\"></tag>" +
-              "</relation>" +
-              "<relation id=\"-1\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                "<member type=\"way\" role=\"role4\" ref=\"" + wayIdsArr[1] + "\"></member>" +
-                "<member type=\"way\" role=\"role2\" ref=\"" + wayIdsArr[0] + "\"></member>" +
-                "<member type=\"node\" ref=\"" + nodeIdsArr[2] + "\"></member>" +
-                "<tag k=\"key 3\" v=\"val 3\"></tag>" +
-              "</relation>" +
-            "</modify>" +
-            "<delete if-unused=\"true\"/>" +
-          "</osmChange>");
-    }
-    catch (UniformInterfaceException e)
-    {
-      ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("Invalid OSM element ID"));
-
-      OsmTestUtils.verifyTestDataUnmodified(
-        originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
-      throw e;
-    }
-    catch (Exception e)
-    {
-      log.error(e.getMessage());
-      throw e;
-    }
-  }
-
   @Test
   @Category(UnitTest.class)
-  public void testUploadModifyNegativeElementIdHootCoreCompatibilityMode() throws Exception
+  public void testUploadModifyNegativeElementId() throws Exception
   {
-    Properties hootProps = null;
     try
     {
-      //Temporarily, (potentially) we allow elements with a negative ID to exist if a particular
-      //compatibility mode is enabled, which allows for using the hoot --convert command as a
-      //source of test data for the services.  This mode may go away in the future.
-      hootProps = HootProperties.getInstance();
-      hootProps.setProperty("hootCoreServicesDatabaseWriterCompatibility", "true");
-      HootProperties.setProperties(hootProps);
-      Assert.assertEquals(
-        true,
-        Boolean.parseBoolean(hootProps.getProperty("hootCoreServicesDatabaseWriterCompatibility")));
-
+      //We allow elements with a negative ID to exist, which allows for using the 
+    	//hootProps.hoot --convert command as a source of test data for the services.
+      
       final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
       final BoundingBox updateBounds =
         OsmTestUtils.createAfterModifiedTestChangesetBounds();
@@ -1900,7 +1662,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
 
       //link some nodes to the changeset
       Set<Long> nodeIds = new LinkedHashSet<Long>();
-      //explicitly create a node with a negative ID to test the compatibility mode
+      //explicitly create a node with a negative ID
       final long negativeNodeId = -1;
       Map<String, String> tags = new HashMap<String, String>();
       tags.put("key 3", "val 3");
@@ -1928,7 +1690,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
       //link some ways to the changeset
       Set<Long> wayIds = new LinkedHashSet<Long>();
       List<Long> wayNodeIds = new ArrayList<Long>();
-      //explicitly create a way with a negative ID to test the compatibility mode
+      //explicitly create a way with a negative ID
       final long negativeWayId = -1;
       wayNodeIds.add(nodeIdsArr[0]);
       wayNodeIds.add(nodeIdsArr[1]);
@@ -1953,7 +1715,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
 
       //link some relations to the changeset
       Set<Long> relationIds = new LinkedHashSet<Long>();
-      //explicitly create a relation with a negative ID to test the compatibility mode
+      //explicitly create a relation with a negative ID
       final long negativeRelationId = -1;
       List<RelationMember> members = new ArrayList<RelationMember>();
       members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
@@ -2359,15 +2121,6 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
     catch (Exception e)
     {
       log.error(e.getMessage());
-    }
-    finally
-    {
-      //set this back to default now that this test is over
-      hootProps.setProperty("hootCoreServicesDatabaseWriterCompatibility", "false");
-      HootProperties.setProperties(hootProps);
-      Assert.assertEquals(
-        false,
-        Boolean.parseBoolean(hootProps.getProperty("hootCoreServicesDatabaseWriterCompatibility")));
     }
   }
 
