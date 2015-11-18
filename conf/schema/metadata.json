@@ -1,24 +1,13 @@
-{
-    "#": "The metadata concept contains metadata about the feature. Who created it, where it came from, etc. This doesn't contain actual information about the feature.",
-    "tag": {
+[
+    {
+        "dataType": "text",
+        "geometries": [
+            "node",
+            "way",
+            "relation"
+        ],
+        "influence": 0,
         "name": "metadata",
-        "influence": 1.0,
-        "type": "text",
-        "geometries": ["node","way","relation"]
-    },
-
-    "tag": { "name": "created_by", "isA": "metadata" },
-
-    "tag": { "name": "error", "isA": "metadata" },
-    "tag": { "name": "regex?error:.*", "isA": "error" },
-
-    "tag": { "name": "license", "isA": "metadata" },
-
-    "tag": { "name": "security", "isA": "metadata" },
-    "tag": { "name": "regex?security:.*", "isA": "security" },
-
-    "tag": { "name": "uuid", "isA": "metadata" },
-    "tag": { "name": "uuid:history", "isA": "metadata" },
-
-    "#" : "end"
-}
+        "objectType": "tag"
+    }
+]

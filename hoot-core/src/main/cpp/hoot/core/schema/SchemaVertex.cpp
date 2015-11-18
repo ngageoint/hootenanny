@@ -14,7 +14,7 @@ SchemaVertex::SchemaVertex()
   childWeight = -1.0;
   mismatchScore = -1.0;
   geometries = 0;
-  _type = Tag;
+  _type = UnknownVertexType;
 }
 
 void SchemaVertex::addCompoundRule(const CompoundRule& rule)
@@ -74,6 +74,55 @@ void SchemaVertex::setType(VertexType t)
     _compoundRules.clear();
   }
   _type = t;
+}
+
+void SchemaVertex::setName(QString n)
+{
+  name = n;
+}
+
+void SchemaVertex::setNameKvp(QString n)
+{
+  int equalsPos = n.indexOf('=');
+  if (equalsPos == 0)
+  {
+    throw HootException("The name cannot start with an equals sign. " + n);
+  }
+  else if (equalsPos > 0)
+  {
+    key = n.left(equalsPos);
+    value = n.mid(equalsPos + 1);
+  }
+  else
+  {
+    key = n;
+    value.clear();
+  }
+  name = n;
+}
+
+void SchemaVertex::setValueTypeString(QString t)
+{
+  if (t == "enumeration")
+  {
+    valueType = Enumeration;
+  }
+  else if (t == "text")
+  {
+    valueType = Text;
+  }
+  else if (t == "int")
+  {
+    valueType = Int;
+  }
+  else if (t == "real")
+  {
+    valueType = Real;
+  }
+  else
+  {
+    throw HootException("Unexpected type tag: " + t);
+  }
 }
 
 QString SchemaVertex::toString() const

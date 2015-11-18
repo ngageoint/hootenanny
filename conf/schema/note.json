@@ -1,0 +1,18 @@
+[
+    {
+        "dataType": "text",
+        "geometries": [
+            "node",
+            "way",
+            "relation"
+        ],
+        "influence": 0,
+        "name": "note",
+        "objectType": "tag"
+    },
+    {
+        "isA": "note",
+        "name": "regex?note:.*",
+        "objectType": "tag"
+    }
+]

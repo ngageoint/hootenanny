@@ -1,12 +1,16 @@
-{
-    "tag": {
-        "name": "capital=yes",
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "node"
+        ],
+        "influence": 1,
         "isA": "poi=yes",
-        "influence": 1.0,
-        "type": "enumeration",
-        "similarTo": { "name": "place=city", "weight": 0.8 },
-        "geometries": ["node"]
-    },
-
-    "#" : "end"
-}
+        "name": "capital=yes",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "place=city",
+            "weight": 0.8
+        }
+    }
+]

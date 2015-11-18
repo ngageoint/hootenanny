@@ -181,6 +181,43 @@ void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
   _fp->close();
 }
 
+void OsmWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
+{
+  if (_includeCompatibilityTags)
+  {
+    writer.writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));
+    long version = e->getVersion();
+    if (version == ElementData::VERSION_EMPTY)
+    {
+      version = 1;
+    }
+    writer.writeAttribute("version", QString::number(version));
+  }
+  else
+  {
+    if (e->getTimestamp() != ElementData::TIMESTAMP_EMPTY)
+    {
+      writer.writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));
+    }
+    if (e->getVersion() != ElementData::VERSION_EMPTY)
+    {
+      writer.writeAttribute("version", QString::number(e->getVersion()));
+    }
+  }
+  if (e->getChangeset() != ElementData::CHANGESET_EMPTY)
+  {
+    writer.writeAttribute("changeset", QString::number(e->getChangeset()));
+  }
+  if (e->getUser() != ElementData::USER_EMPTY)
+  {
+    writer.writeAttribute("user", e->getUser());
+  }
+  if (e->getUid() != ElementData::UID_EMPTY)
+  {
+    writer.writeAttribute("uid", QString::number(e->getUid()));
+  }
+}
+
 void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
 {
   const OsmMap::NodeMap& nodes = map->getNodeMap();
@@ -193,16 +230,7 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
     writer.writeStartElement("node");
     writer.writeAttribute("visible", "true");
     writer.writeAttribute("id", QString::number(n->getId()));
-    if (_includeCompatibilityTags)
-    {
-      //writer.writeAttribute("timestamp", _timestamp);
-       // LOG_WARN("timestamp value = ");
-       // LOG_WARN(n->getTimestamp());
-      writer.writeAttribute("timestamp", OsmUtils::toTimeString(n->getTimestamp()));
-      //writer.writeAttribute("version", "1");
-      writer.writeAttribute("version", QString::number(n->getVersion()));
-      writer.writeAttribute("changeset", QString::number(n->getChangeset()));
-    }
+    _writeMetadata(writer, n);
     writer.writeAttribute("lat", QString::number(n->getY(), 'f', _precision));
     writer.writeAttribute("lon", QString::number(n->getX(), 'f', _precision));
 
@@ -256,16 +284,8 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
     writer.writeStartElement("way");
     writer.writeAttribute("visible", "true");
     writer.writeAttribute("id", QString::number(w->getId()));
-    if (_includeCompatibilityTags)
-    {
-      //writer.writeAttribute("timestamp", _timestamp);
-      //LOG_WARN("wtimestamp value = ");
-      //LOG_WARN(w->getTimestamp());
-      writer.writeAttribute("timestamp", OsmUtils::toTimeString(w->getTimestamp()));
-      //writer.writeAttribute("version", "1");
-      writer.writeAttribute("version", QString::number(w->getVersion()));
-      writer.writeAttribute("changeset", QString::number(w->getChangeset()));
-    }
+
+    _writeMetadata(writer, w);
 
     for (size_t j = 0; j < w->getNodeCount(); j++)
     {
@@ -332,16 +352,8 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
     writer.writeStartElement("relation");
     writer.writeAttribute("visible", "true");
     writer.writeAttribute("id", QString::number(r->getId()));
-    if (_includeCompatibilityTags)
-    {
-      //writer.writeAttribute("timestamp", _timestamp);
-      //LOG_WARN("rtimestamp value = ");
-      //LOG_WARN(r->getTimestamp());
-      writer.writeAttribute("timestamp", OsmUtils::toTimeString(r->getTimestamp()));
-      //writer.writeAttribute("version", "1");
-      writer.writeAttribute("version", QString::number(r->getVersion()));
-      writer.writeAttribute("changeset", QString::number(r->getChangeset()));
-    }
+
+    _writeMetadata(writer, r.get());
 
     const vector<RelationData::Entry>& members = r->getMembers();
     for (size_t j = 0; j < members.size(); j++)

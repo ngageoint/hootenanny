@@ -1,0 +1,20 @@
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "influence": 1,
+        "isA": "hgispoi",
+        "mismatchScore": 0.1,
+        "name": "seamark:type",
+        "objectType": "tag"
+    },
+    {
+        "description": "Defines the type of seamarks and other navigation aids for marine charts.",
+        "isA": "seamark:type",
+        "name": "seamark:type=*",
+        "objectType": "tag"
+    }
+]

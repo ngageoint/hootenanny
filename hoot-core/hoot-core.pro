@@ -1,7 +1,7 @@
 # -------------------------------------------------
 # Project created by QtCreator 2011-09-29T12:27:47
 # -------------------------------------------------
-QT += script \
+QT += \
     sql \
     testlib \
     xml \
@@ -19,7 +19,6 @@ INCLUDEPATH += \
   ../local/include/ \
 
 CONFIG += rtti \
-    qtestlib \
     debug
 
 OTHER_FILES = \
@@ -30,7 +29,10 @@ OTHER_FILES = \
     ../rules/LinearWaterway.js \
     ../conf/LinearWaterway.conf \
     ../conf/LinearWaterway-match-scoring.conf \
-    ../conf/WaterwaySchema.json \
+    ../conf/schema/all_weather.json \
+    ../conf/schema/highway.json \
+    ../conf/schema/natural.json \
+    ../conf/schema/public_transport.json \
     ../rules/template/ConflateRules.js \
 
 include(../Configure.pri)
@@ -484,7 +486,9 @@ SOURCES += \
     src/main/cpp/hoot/core/schema/SchemaVertex.cpp \
     src/main/cpp/hoot/core/schema/TagCategoryDifferencer.cpp \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.cpp \
-    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.cpp
+    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.cpp \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.cpp \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -956,5 +960,7 @@ HEADERS += \
     src/main/cpp/hoot/core/schema/KeyValuePair.h \
     src/main/cpp/hoot/core/schema/TagCategoryDifferencer.h \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.h \
-    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.h
+    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.h \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoader.h \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h
 

@@ -1,0 +1,23 @@
+[
+    {
+        "categories": [
+            "use"
+        ],
+        "dataType": "enumeration",
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "influence": 1,
+        "name": "use",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "use"
+        ],
+        "isA": "use",
+        "name": "use=*",
+        "objectType": "tag"
+    }
+]
