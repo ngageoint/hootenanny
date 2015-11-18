@@ -1,38 +1,105 @@
-{
-    "tag": {
-        "name": "natural",
+[
+    {
+        "categories": [
+            "poi"
+        ],
+        "dataType": "enumeration",
+        "geometries": [
+            "area"
+        ],
+        "influence": 1,
         "isA": "hgispoi",
-        "influence": 1.0,
-        "type": "enumeration",
-        "geometries": ["area"],
-        "categories": ["poi"]
+        "name": "natural",
+        "objectType": "tag"
     },
-
-    "tag": { "name": "natural=*", "isA": "natural", "geometries": ["node", "area"]},
-
-    "#" : "Natural features",
-    "tag": { "name": "natural=beach", "isA": "natural", "geometries": ["node", "area"]},
-
-    "tag": { "name": "natural=cliff", "isA": "natural", "geometries": ["node", "linestring", "area"]},
-
-    "tag": { "name": "natural=glacier", "isA": "natural", "geometries": ["node", "area"]},
-
-    "tag": { "name": "natural=grassland", "isA": "natural" },
-    "tag": { "name": "natural=hill", 
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
         "isA": "natural",
-        "geometries": ["node"]
+        "name": "natural=*",
+        "objectType": "tag"
     },
-    "tag": { "name": "natural=peak", 
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
         "isA": "natural",
-        "geometries": ["node"],
-        "similarTo": { "name": "natural=hill", "weight": 0.8 }
+        "name": "natural=beach",
+        "objectType": "tag"
     },
-    "tag": { "name": "natural=scrub", "isA": "natural", "geometries": ["node", "area"]},
-    "tag": { "name": "natural=wood", "isA": "natural" },
-
-    "tag": { "name": "natural=water", "isA": "natural", "geometries": ["node", "area"]},
-    "tag": { "name": "natural=wetland", "isA": "natural"},
-    "tag": { "name": "wetland=*", "isA": "natural"},
-
-    "#" : "end"
-}
+    {
+        "geometries": [
+            "node",
+            "linestring",
+            "area"
+        ],
+        "isA": "natural",
+        "name": "natural=cliff",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "isA": "natural",
+        "name": "natural=glacier",
+        "objectType": "tag"
+    },
+    {
+        "isA": "natural",
+        "name": "natural=grassland",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "node"
+        ],
+        "isA": "natural",
+        "name": "natural=hill",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "node"
+        ],
+        "isA": "natural",
+        "name": "natural=peak",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "natural=hill",
+            "weight": 0.8
+        }
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "isA": "natural",
+        "name": "natural=scrub",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "isA": "natural",
+        "name": "natural=water",
+        "objectType": "tag"
+    },
+    {
+        "isA": "natural",
+        "name": "natural=wetland",
+        "objectType": "tag"
+    },
+    {
+        "isA": "natural",
+        "name": "natural=wood",
+        "objectType": "tag"
+    }
+]

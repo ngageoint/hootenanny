@@ -24,6 +24,7 @@ enum TagValueType
   Text,
   Enumeration,
   Int,
+  Real,
   Unknown
 };
 
@@ -47,6 +48,7 @@ class SchemaVertex
 public:
   typedef enum VertexType
   {
+    UnknownVertexType,
     Tag,
     Compound
   } VertexType;
@@ -81,9 +83,21 @@ public:
    */
   static bool isMatch(const CompoundRule& rule, const Tags& t);
 
-  bool isValid() const { return !isEmpty(); }
+  bool isValid() const { return _type != UnknownVertexType; }
+
+  /**
+   * Sets the name and does not parse out the key/value. The key and value will not be changed.
+   */
+  void setName(QString n);
+
+  /**
+   * Sets the name and parses out and stores the key/value.
+   */
+  void setNameKvp(QString n);
 
   void setType(VertexType t);
+
+  void setValueTypeString(QString t);
 
   QString toString() const;
 

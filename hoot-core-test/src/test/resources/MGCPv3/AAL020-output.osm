@@ -65,7 +65,6 @@
         <tag k="source" v="mgcp"/>
         <tag k="uuid" v="{20e36268-9fa7-4f18-b8f3-d0cea7710455}"/>
         <tag k="building:density" v="sparse"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -87,7 +86,6 @@
         <tag k="source" v="mgcp"/>
         <tag k="uuid" v="{20c1223a-4735-4f7f-95db-13362a07d216}"/>
         <tag k="building:density" v="dense"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -109,7 +107,6 @@
         <tag k="source" v="mgcp"/>
         <tag k="uuid" v="{20bba864-bc5f-47c5-97fc-eae9b4c60c67}"/>
         <tag k="building:density" v="dense"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -132,7 +129,6 @@
         <tag k="source" v="mgcp"/>
         <tag k="uuid" v="{20b02702-078b-4daa-a649-31c28a3d3086}"/>
         <tag k="building:density" v="sparse"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -154,7 +150,6 @@
         <tag k="condition" v="functional"/>
         <tag k="source" v="mgcp"/>
         <tag k="uuid" v="{206c3ef8-34ab-46cb-a9c8-6bab1c21be7e}"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -177,7 +172,6 @@
         <tag k="source" v="mgcp"/>
         <tag k="uuid" v="{200ee386-f54b-4188-9383-ea93a9b90d29}"/>
         <tag k="building:density" v="sparse"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -201,7 +195,6 @@
         <tag k="uuid" v="{2005b758-e63c-41a3-8f91-ab84d8e0a149}"/>
         <tag k="building:density" v="dense"/>
         <tag k="name" v="Yet Again"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -225,7 +218,6 @@
         <tag k="uuid" v="{1feb8ee5-b54a-46ce-b9c5-8b48b92e0cd5}"/>
         <tag k="building:density" v="dense"/>
         <tag k="name" v="test1"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -249,7 +241,6 @@
         <tag k="uuid" v="{1fb8791d-2a98-4c2f-b5c2-01885e4d0b47}"/>
         <tag k="building:density" v="sparse"/>
         <tag k="name" v="bua02"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -270,7 +261,6 @@
         <tag k="source" v="mgcp"/>
         <tag k="uuid" v="{1fb144c2-de51-4b5f-874b-b309a22afe0a}"/>
         <tag k="name" v="BUA01"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>

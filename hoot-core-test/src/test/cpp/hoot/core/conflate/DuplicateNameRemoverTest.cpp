@@ -45,6 +45,9 @@ using namespace boost;
 
 #include "../TestUtils.h"
 
+namespace hoot
+{
+
 class DuplicateNameRemoverTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(DuplicateNameRemoverTest);
@@ -123,4 +126,6 @@ public:
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DuplicateNameRemoverTest, "quick");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DuplicateNameRemoverTest, "current");
+
+}
 

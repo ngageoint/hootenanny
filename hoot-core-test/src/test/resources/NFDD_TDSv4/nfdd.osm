@@ -707,7 +707,11 @@
         <tag k="roof:shape" v="with_minaret"/>
         <tag k="amenity" v="place_of_worship"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+<<<<<<< HEAD
         <tag k="source:ingest:datetime" v="2015-11-17T19:22:04.060Z"/>
+=======
+        <tag k="source:ingest:datetime" v="2015-11-14T02:08:43.646Z"/>
+>>>>>>> origin/develop
         <tag k="security:classification" v="U"/>
         <tag k="uuid" v="{fd5605a3-70b6-492b-896a-6bdb2e5e439c}"/>
         <tag k="use" v="islamic_prayer_hall"/>
@@ -910,7 +914,6 @@
         <tag k="security:classification" v="U"/>
         <tag k="source" v="tdsv40"/>
         <tag k="uuid" v="{079234b2-d394-43be-ba0e-cfa026788660}"/>
-        <tag k="landuse" v="built_up_area"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -2472,7 +2475,6 @@
         <tag k="condition" v="construction"/>
         <tag k="note" v="Big Factory"/>
         <tag k="communication:microwave_radio_relay" v="yes"/>
-        <tag k="area" v="yes"/>
         <tag k="name" v="Factory"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="material" v="adobe_brick"/>
@@ -2514,7 +2516,6 @@
         <tag k="uuid" v="{8f97a17a-a3df-40b4-9dc0-71228b65bf0a}"/>
         <tag k="facility" v="yes"/>
         <tag k="name" v="HealthCare"/>
-        <tag k="area" v="yes"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="error:circular" v="15"/>
     </way>

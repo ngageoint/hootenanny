@@ -97,14 +97,35 @@ void OsmReader::_createNode(const QXmlAttributes &attributes)
   double y = _parseDouble(attributes.value("lat"));
 
   // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
-  long version = 1;
-  if (attributes.value("version") != "") version = _parseDouble(attributes.value("version"));
-  long changeset = 1;
-  if (attributes.value("changeset") != "") changeset = _parseDouble(attributes.value("changeset"));
-  unsigned int timestamp = 0;
-  if (attributes.value("timestamp") != "") timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
+  long version = ElementData::VERSION_EMPTY;
+  if (attributes.value("version") != "")
+  {
+    version = _parseDouble(attributes.value("version"));
+  }
+  long changeset = ElementData::CHANGESET_EMPTY;
+  if (attributes.value("changeset") != "")
+  {
+    changeset = _parseDouble(attributes.value("changeset"));
+  }
+  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
+  if (attributes.value("timestamp") != "")
+  {
+    timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+  }
+  QString user = ElementData::USER_EMPTY;
+  if (attributes.value("user") != "")
+  {
+    user = attributes.value("user");
+  }
+  long uid = ElementData::UID_EMPTY;
+  if (attributes.value("uid") != "")
+  {
+    uid = _parseDouble(attributes.value("uid"));
+  }
 
-  _element.reset(new Node(_status, newId, x, y, changeset, version, timestamp, _circularError));
+  _element.reset(new Node(_status, newId, x, y, changeset, version, timestamp,
+                          user, uid, _circularError));
 
   if (_element->getTags().getInformationCount() > 0)
   {
@@ -118,14 +139,34 @@ void OsmReader::_createRelation(const QXmlAttributes &attributes)
   long newId = _getRelationId(_relationId);
 
   // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
-  long version = 1;
-  if (attributes.value("version") != "") version = _parseDouble(attributes.value("version"));
-  long changeset = 1;
-  if (attributes.value("changeset") != "") changeset = _parseDouble(attributes.value("changeset"));
-  unsigned int timestamp = 0;
-  if (attributes.value("timestamp") != "") timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+  long version = ElementData::VERSION_EMPTY;
+  if (attributes.value("version") != "")
+  {
+    version = _parseDouble(attributes.value("version"));
+  }
+  long changeset = ElementData::CHANGESET_EMPTY;
+  if (attributes.value("changeset") != "")
+  {
+    changeset = _parseDouble(attributes.value("changeset"));
+  }
+  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
+  if (attributes.value("timestamp") != "")
+  {
+    timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+  }
+  QString user = ElementData::USER_EMPTY;
+  if (attributes.value("user") != "")
+  {
+    user = attributes.value("user");
+  }
+  long uid = ElementData::UID_EMPTY;
+  if (attributes.value("uid") != "")
+  {
+    uid = _parseDouble(attributes.value("uid"));
+  }
 
-  _element.reset(new Relation(_status, newId, changeset, version, timestamp, _circularError));
+  _element.reset(new Relation(_status, newId, changeset, version, timestamp,
+                              user, uid, _circularError));
 
   _parseTimeStamp(attributes);
 }
@@ -146,14 +187,35 @@ void OsmReader::_createWay(const QXmlAttributes &attributes)
   _wayIdMap.insert(_wayId, newId);
 
   // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
-  long version = 1;
-  if (attributes.value("version") != "") version = _parseDouble(attributes.value("version"));
-  long changeset = 1;
-  if (attributes.value("changeset") != "") changeset = _parseDouble(attributes.value("changeset"));
-  unsigned int timestamp = 0;
-  if (attributes.value("timestamp") != "") timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
+  long version = ElementData::VERSION_EMPTY;
+  if (attributes.value("version") != "")
+  {
+    version = _parseDouble(attributes.value("version"));
+  }
+  long changeset = ElementData::CHANGESET_EMPTY;
+  if (attributes.value("changeset") != "")
+  {
+    changeset = _parseDouble(attributes.value("changeset"));
+  }
+  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
+  if (attributes.value("timestamp") != "")
+  {
+    timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+  }
+  QString user = ElementData::USER_EMPTY;
+  if (attributes.value("user") != "")
+  {
+    user = attributes.value("user");
+  }
+  long uid = ElementData::UID_EMPTY;
+  if (attributes.value("uid") != "")
+  {
+    uid = _parseDouble(attributes.value("uid"));
+  }
 
-  _element.reset(new Way(_status, newId, changeset, version, timestamp, _circularError));
+  _element.reset(new Way(_status, newId, changeset, version, timestamp, user,
+                         uid, _circularError));
 
   _parseTimeStamp(attributes);
 }

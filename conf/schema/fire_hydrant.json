@@ -1,0 +1,7 @@
+[
+    {
+        "dataType": "real",
+        "name": "fire_hydrant:diameter",
+        "objectType": "tag"
+    }
+]

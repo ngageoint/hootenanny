@@ -85,6 +85,7 @@ public:
 
     stringstream ss1;
     ss1 << n1->getTags().getNames();
+
     CPPUNIT_ASSERT_EQUAL(string("[4]{stratge tgsq, strange, test, странеоe нспwтzнии}"), ss1.str());
 
     stringstream ss2;

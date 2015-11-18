@@ -47,6 +47,11 @@ namespace hoot {
 class ElementData
 {
 public:
+  static long CHANGESET_EMPTY;
+  static long VERSION_EMPTY;
+  static unsigned int TIMESTAMP_EMPTY;
+  static QString USER_EMPTY;
+  static long UID_EMPTY;
 
   virtual ~ElementData() {}
 
@@ -60,7 +65,11 @@ public:
 
   long getVersion() const { return _version; }
 
-  long getTimestamp() const { return _timestamp; }
+  unsigned int getTimestamp() const { return _timestamp; }
+
+  QString getUser() const { return _user; }
+
+  long getUid() const { return _uid; }
 
   const Tags& getTags() const { return _tags; }
 
@@ -76,17 +85,21 @@ protected:
 
   ElementData() { }
 
-  ElementData(long id) : _id(id), _changeset(0), _version(1), _timestamp(0) { }
+  ElementData(long id) : _id(id), _changeset(CHANGESET_EMPTY), _version(VERSION_EMPTY),
+    _timestamp(TIMESTAMP_EMPTY), _user(USER_EMPTY), _uid(UID_EMPTY) { }
 
   ElementData(long id, const Tags& tags, Meters circularError);
 
-  ElementData(long id, long changeset, long version, unsigned int timestamp) :
-    _id(id), _changeset(changeset), _version(version), _timestamp(timestamp) { }
+  ElementData(long id, long changeset, long version, unsigned int timestamp,
+              QString user, long uid) : _id(id), _changeset(changeset), _version(version),
+             _timestamp(timestamp), _user(user), _uid(uid) { }
 
   long _id;
   long _changeset;
   long _version;
   unsigned int _timestamp;
+  QString _user;
+  long _uid;
   Tags _tags;
   Meters _circularError;
 };

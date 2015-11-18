@@ -1,93 +1,93 @@
-10:05:37.746 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 122) bytesRead: 520021
-10:05:37.915 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 135) inputBytes: 1.74787e+06
-10:05:37.915 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingOutlineRemoveOp
-10:05:37.915 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MapCleaner
-10:05:37.915 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ReprojectToPlanarOp
+15:29:19.976 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 123) bytesRead: 520169
+15:29:20.187 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 136) inputBytes: 1.74787e+06
+15:29:20.187 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingOutlineRemoveOp
+15:29:20.187 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MapCleaner
+15:29:20.187 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ReprojectToPlanarOp
 Reprojecting 0 / 7487         Reprojecting 1000 / 7487         Reprojecting 2000 / 7487         Reprojecting 3000 / 7487         Reprojecting 4000 / 7487         Reprojecting 5000 / 7487         Reprojecting 6000 / 7487         Reprojecting 7000 / 7487         
-10:05:37.955 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateWayRemover
-10:05:37.955 INFO  ...nflate/DuplicateWayRemover.cpp(  61) Removing duplicate ways...
-10:05:38.006 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousWayRemover
-10:05:38.006 INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
-10:05:38.006 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::IntersectionSplitter
-10:05:38.006 INFO  ...itter/IntersectionSplitter.cpp( 109) Splitting intersections...
+15:29:20.248 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateWayRemover
+15:29:20.248 INFO  ...nflate/DuplicateWayRemover.cpp(  61) Removing duplicate ways...
+15:29:20.328 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousWayRemover
+15:29:20.328 INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
+15:29:20.328 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::IntersectionSplitter
+15:29:20.328 INFO  ...itter/IntersectionSplitter.cpp( 109) Splitting intersections...
   Intersection splitter todo: 0       
-10:05:38.022 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::UnlikelyIntersectionRemover
-10:05:38.033 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DualWaySplitter
-10:05:38.033 INFO  ...e/splitter/DualWaySplitter.cpp(  83) Assuming drives on right.
-10:05:38.033 INFO  ...e/splitter/DualWaySplitter.cpp( 246) Splitting divided ways...
+15:29:20.351 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::UnlikelyIntersectionRemover
+15:29:20.368 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DualWaySplitter
+15:29:20.368 INFO  ...e/splitter/DualWaySplitter.cpp(  83) Assuming drives on right.
+15:29:20.368 INFO  ...e/splitter/DualWaySplitter.cpp( 246) Splitting divided ways...
 
-10:05:38.036 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ImpliedDividedMarker
-10:05:38.041 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateNameRemover
-10:05:38.043 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
-10:05:38.056 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveEmptyAreasVisitor
-10:05:38.066 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDuplicateAreaVisitor
-10:05:38.077 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
-10:05:38.089 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::RubberSheet
-10:05:38.205 INFO  .../core/conflate/RubberSheet.cpp( 324) Found 237 potential ties.
-10:05:38.205 INFO  .../core/conflate/RubberSheet.cpp( 362) Found 173 confident ties.
-10:05:38.222 INFO  .../core/conflate/RubberSheet.cpp( 244) candidate: DelaunayInterpolator RMSE: 0.85796
-10:05:38.962 INFO  .../core/conflate/RubberSheet.cpp( 244) candidate: IDW, p: 0 RMSE: 0.759081
-10:05:39.457 INFO  .../core/conflate/RubberSheet.cpp( 244) candidate: Kernel estimation, sigma: 3176.88 RMSE: 0.759046
-10:05:39.457 INFO  .../core/conflate/RubberSheet.cpp( 257) Best candidate: Kernel estimation, sigma: 3176.88
-10:05:39.457 INFO  .../core/conflate/RubberSheet.cpp( 371) Kernel estimation, sigma: 3176.88
-10:05:39.952 INFO  .../core/conflate/RubberSheet.cpp( 244) candidate: Kernel estimation, sigma: 3177.26 RMSE: 0.75905
-10:05:39.952 INFO  .../core/conflate/RubberSheet.cpp( 257) Best candidate: Kernel estimation, sigma: 3177.26
-10:05:39.952 INFO  .../core/conflate/RubberSheet.cpp( 375) Kernel estimation, sigma: 3177.26
-10:05:42.400 INFO  ...in/cpp/hoot/core/Conflator.cpp( 205) Preprocessing inputs...
-10:05:42.401 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ReprojectToPlanarOp
-10:05:42.401 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateWayRemover
-10:05:42.401 INFO  ...nflate/DuplicateWayRemover.cpp(  61) Removing duplicate ways...
-10:05:42.441 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousWayRemover
-10:05:42.441 INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
-10:05:42.441 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::IntersectionSplitter
-10:05:42.441 INFO  ...itter/IntersectionSplitter.cpp( 109) Splitting intersections...
+15:29:20.372 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ImpliedDividedMarker
+15:29:20.380 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateNameRemover
+15:29:20.382 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
+15:29:20.408 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveEmptyAreasVisitor
+15:29:20.428 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+15:29:20.451 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
+15:29:20.473 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::RubberSheet
+15:29:20.650 INFO  .../core/conflate/RubberSheet.cpp( 325) Found 237 potential ties.
+15:29:20.650 INFO  .../core/conflate/RubberSheet.cpp( 363) Found 173 confident ties.
+15:29:20.670 INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: DelaunayInterpolator RMSE: 0.9421
+15:29:21.537 INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: IDW, p: 0 RMSE: 0.759081
+15:29:22.101 INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: Kernel estimation, sigma: 3176.88 RMSE: 0.759046
+15:29:22.101 INFO  .../core/conflate/RubberSheet.cpp( 258) Best candidate: Kernel estimation, sigma: 3176.88
+15:29:22.101 INFO  .../core/conflate/RubberSheet.cpp( 372) Kernel estimation, sigma: 3176.88
+15:29:22.672 INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: Kernel estimation, sigma: 3177.26 RMSE: 0.75905
+15:29:22.672 INFO  .../core/conflate/RubberSheet.cpp( 258) Best candidate: Kernel estimation, sigma: 3177.26
+15:29:22.672 INFO  .../core/conflate/RubberSheet.cpp( 376) Kernel estimation, sigma: 3177.26
+15:29:25.507 INFO  ...in/cpp/hoot/core/Conflator.cpp( 205) Preprocessing inputs...
+15:29:25.508 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ReprojectToPlanarOp
+15:29:25.508 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateWayRemover
+15:29:25.508 INFO  ...nflate/DuplicateWayRemover.cpp(  61) Removing duplicate ways...
+15:29:25.606 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousWayRemover
+15:29:25.606 INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
+15:29:25.607 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::IntersectionSplitter
+15:29:25.607 INFO  ...itter/IntersectionSplitter.cpp( 109) Splitting intersections...
   Intersection splitter todo: 0       
-10:05:42.453 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::UnlikelyIntersectionRemover
-10:05:42.460 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DualWaySplitter
-10:05:42.460 INFO  ...e/splitter/DualWaySplitter.cpp(  83) Assuming drives on right.
-10:05:42.460 INFO  ...e/splitter/DualWaySplitter.cpp( 246) Splitting divided ways...
+15:29:25.630 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::UnlikelyIntersectionRemover
+15:29:25.641 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DualWaySplitter
+15:29:25.641 INFO  ...e/splitter/DualWaySplitter.cpp(  83) Assuming drives on right.
+15:29:25.641 INFO  ...e/splitter/DualWaySplitter.cpp( 246) Splitting divided ways...
 
-10:05:42.464 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ImpliedDividedMarker
-10:05:42.469 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateNameRemover
-10:05:42.470 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
-10:05:42.483 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveEmptyAreasVisitor
-10:05:42.493 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDuplicateAreaVisitor
-10:05:42.504 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
-10:05:42.515 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::RubberSheet
-10:05:42.621 INFO  .../core/conflate/RubberSheet.cpp( 324) Found 240 potential ties.
-10:05:42.621 INFO  .../core/conflate/RubberSheet.cpp( 362) Found 176 confident ties.
-10:05:42.636 INFO  .../core/conflate/RubberSheet.cpp( 244) candidate: DelaunayInterpolator RMSE: 0.887688
-10:05:43.400 INFO  .../core/conflate/RubberSheet.cpp( 244) candidate: IDW, p: 0 RMSE: 0.752127
-10:05:43.915 INFO  .../core/conflate/RubberSheet.cpp( 244) candidate: Kernel estimation, sigma: 3178.35 RMSE: 0.752132
-10:05:43.915 INFO  .../core/conflate/RubberSheet.cpp( 257) Best candidate: IDW, p: 0
-10:05:43.915 INFO  .../core/conflate/RubberSheet.cpp( 371) IDW, p: 0
-10:05:44.677 INFO  .../core/conflate/RubberSheet.cpp( 244) candidate: IDW, p: 0 RMSE: 0.752127
-10:05:44.677 INFO  .../core/conflate/RubberSheet.cpp( 257) Best candidate: IDW, p: 0
-10:05:44.677 INFO  .../core/conflate/RubberSheet.cpp( 375) IDW, p: 0
-10:05:46.897 INFO  ...in/cpp/hoot/core/Conflator.cpp( 229) Looking for manipulations...
-10:05:46.897 INFO  ...ore/manipulators/WayMerger.cpp(  95) Finding all way merge manipulations...
+15:29:25.646 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ImpliedDividedMarker
+15:29:25.654 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateNameRemover
+15:29:25.656 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
+15:29:25.681 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveEmptyAreasVisitor
+15:29:25.702 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+15:29:25.725 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
+15:29:25.747 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::RubberSheet
+15:29:25.910 INFO  .../core/conflate/RubberSheet.cpp( 325) Found 240 potential ties.
+15:29:25.910 INFO  .../core/conflate/RubberSheet.cpp( 363) Found 176 confident ties.
+15:29:25.928 INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: DelaunayInterpolator RMSE: 0.865625
+15:29:26.796 INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: IDW, p: 0 RMSE: 0.752127
+15:29:27.370 INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: Kernel estimation, sigma: 3178.35 RMSE: 0.752132
+15:29:27.371 INFO  .../core/conflate/RubberSheet.cpp( 258) Best candidate: IDW, p: 0
+15:29:27.371 INFO  .../core/conflate/RubberSheet.cpp( 372) IDW, p: 0
+15:29:28.243 INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: IDW, p: 0 RMSE: 0.752127
+15:29:28.243 INFO  .../core/conflate/RubberSheet.cpp( 258) Best candidate: IDW, p: 0
+15:29:28.243 INFO  .../core/conflate/RubberSheet.cpp( 376) IDW, p: 0
+15:29:30.788 INFO  ...in/cpp/hoot/core/Conflator.cpp( 229) Looking for manipulations...
+15:29:30.788 INFO  ...ore/manipulators/WayMerger.cpp(  95) Finding all way merge manipulations...
   finding manipulations: 100 / 434          finding manipulations: 200 / 434          finding manipulations: 300 / 434          finding manipulations: 400 / 434        
-10:05:49.994 INFO  ...in/cpp/hoot/core/Conflator.cpp( 231) Initial manipulation count: 789
-10:05:49.994 INFO  ...in/cpp/hoot/core/Conflator.cpp( 112) Conflating map. Node count: 7500 way count: 1183
-10:05:49.994 INFO  ...in/cpp/hoot/core/Conflator.cpp( 119) Manipulation heap 789
-Current Score: 31.6042 it: 68 remaining: 849 elapsed: 1011ms             Current Score: 64.4591 it: 137 remaining: 884 elapsed: 2011ms             Current Score: 104.203 it: 234 remaining: 902 elapsed: 3018ms             Current Score: 135.267 it: 332 remaining: 913 elapsed: 4019ms             Current Score: 150.153 it: 416 remaining: 952 elapsed: 5020ms             Current Score: 160.819 it: 584 remaining: 871 elapsed: 6031ms             Current Score: 173.32 it: 763 remaining: 876 elapsed: 7047ms             Current Score: 185.342 it: 1096 remaining: 727 elapsed: 8074ms             
-10:05:58.971 INFO  ...in/cpp/hoot/core/Conflator.cpp( 187) Conflating map. Node count: 7443 way count: 770
-10:05:58.971 INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
-10:05:58.971 INFO  ...in/cpp/hoot/core/Conflator.cpp( 195) Conflating map. Node count: 7443 way count: 770
-10:05:58.981 INFO  ...lygon/BuildingMatchCreator.cpp( 178) Loading model from: /home/jason.surratt/dg/src/hoot4/conf/BuildingModel.rf
-10:05:59.592 INFO  ...lygon/BuildingMatchCreator.cpp( 178) Loading model from: /home/jason.surratt/dg/src/hoot4/conf/BuildingModel.rf
-10:06:00.222 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveElementsVisitor
-10:06:00.225 INFO  ...lygon/BuildingMatchCreator.cpp( 212) *threshold: Thresholds; Match: 0.6 Miss: 0.6 Review: 0.6
-10:06:00.226 INFO  ...lygon/BuildingMatchCreator.cpp( 212) *threshold: Thresholds; Match: 0.6 Miss: 0.6 Review: 0.6
-10:06:00.260 INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 0
-10:06:00.260 INFO  ...conflate/UnifyingConflator.cpp( 183) CM took: 1.90735e-06s.
-10:06:00.260 INFO  ...conflate/UnifyingConflator.cpp( 184) CM Score: -1
-10:06:00.260 INFO  ...conflate/UnifyingConflator.cpp( 191) GM took: 2.14577e-06s.
-10:06:00.260 INFO  ...conflate/UnifyingConflator.cpp( 192) GM Score: -1
-10:06:00.260 INFO  ...conflate/UnifyingConflator.cpp( 215) Post constraining match count: 0
-10:06:00.260 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
-10:06:00.260 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
+15:29:35.016 INFO  ...in/cpp/hoot/core/Conflator.cpp( 231) Initial manipulation count: 789
+15:29:35.016 INFO  ...in/cpp/hoot/core/Conflator.cpp( 112) Conflating map. Node count: 7500 way count: 1183
+15:29:35.016 INFO  ...in/cpp/hoot/core/Conflator.cpp( 119) Manipulation heap 789
+Current Score: 21.5902 it: 46 remaining: 828 elapsed: 1006ms             Current Score: 48.3319 it: 100 remaining: 871 elapsed: 2026ms             Current Score: 68.5004 it: 147 remaining: 885 elapsed: 3046ms             Current Score: 100.313 it: 227 remaining: 899 elapsed: 4058ms             Current Score: 130.644 it: 313 remaining: 911 elapsed: 5141ms             Current Score: 140.936 it: 361 remaining: 949 elapsed: 6160ms             Current Score: 150.66 it: 421 remaining: 958 elapsed: 7186ms             Current Score: 160.603 it: 582 remaining: 873 elapsed: 8246ms             Current Score: 169.291 it: 738 remaining: 853 elapsed: 9266ms             Current Score: 179.506 it: 833 remaining: 886 elapsed: 10280ms             Current Score: 186.284 it: 1115 remaining: 724 elapsed: 11299ms             Current Score: 190.814 it: 1811 remaining: 200 elapsed: 12302ms             
+15:29:47.355 INFO  ...in/cpp/hoot/core/Conflator.cpp( 187) Conflating map. Node count: 7443 way count: 770
+15:29:47.355 INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
+15:29:47.356 INFO  ...in/cpp/hoot/core/Conflator.cpp( 195) Conflating map. Node count: 7443 way count: 770
+15:29:47.395 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveElementsVisitor
+15:29:47.398 INFO  ...lygon/BuildingMatchCreator.cpp( 200) *threshold: Thresholds; Match: 0.6 Miss: 0.6 Review: 0.6
+15:29:47.399 INFO  ...lygon/BuildingMatchCreator.cpp( 236) Loading model from: /fouo/jason.surratt/hoot-release-3/hoot/conf/BuildingModel.rf
+15:29:48.058 INFO  ...lygon/BuildingMatchCreator.cpp( 200) *threshold: Thresholds; Match: 0.6 Miss: 0.6 Review: 0.6
+15:29:48.058 INFO  ...lygon/BuildingMatchCreator.cpp( 236) Loading model from: /fouo/jason.surratt/hoot-release-3/hoot/conf/BuildingModel.rf
+15:29:48.854 INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 0
+15:29:48.854 INFO  ...conflate/UnifyingConflator.cpp( 188) CM took: 1.90735e-06s.
+15:29:48.854 INFO  ...conflate/UnifyingConflator.cpp( 189) CM Score: -1
+15:29:48.854 INFO  ...conflate/UnifyingConflator.cpp( 197) GM took: 1.90735e-06s.
+15:29:48.854 INFO  ...conflate/UnifyingConflator.cpp( 198) GM Score: -1
+15:29:48.854 INFO  ...conflate/UnifyingConflator.cpp( 221) Post constraining match count: 0
+15:29:48.854 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
+15:29:48.854 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
 Reprojecting 0 / 7443         Reprojecting 1000 / 7443         Reprojecting 2000 / 7443         Reprojecting 3000 / 7443         Reprojecting 4000 / 7443         Reprojecting 5000 / 7443         Reprojecting 6000 / 7443         Reprojecting 7000 / 7443         
-10:06:00.271 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
-10:06:00.289 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingOutlineUpdateOp
+15:29:48.867 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
+15:29:48.883 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingOutlineUpdateOp
 Reprojecting 0 / 7096         Reprojecting 1000 / 7096         Reprojecting 2000 / 7096         Reprojecting 3000 / 7096         Reprojecting 4000 / 7096         Reprojecting 5000 / 7096         Reprojecting 6000 / 7096         Reprojecting 7000 / 7096         

@@ -1,47 +1,151 @@
-{
-    "tag": {
-        "name": "parking",
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "influence": 1,
         "isA": "amenity=parking",
-        "influence": 1.0,
-        "type": "enumeration",
-        "geometries": ["node","area"]
+        "name": "parking",
+        "objectType": "tag"
     },
-
-    "#" : "Tags taken from the Taginfo parking= tags w/ more than ~100 values.",
-    "#" : "http://taginfo.openstreetmap.org/keys/parking#values",
-
-    "tag": { "name": "parking=yes", "isA": "parking" },
-    "tag": { "name": "parking=no", "isA": "parking" },
-
-    "#" : "The catch all",
-    "tag": { "name": "parking=*", "isA": "parking=yes" },
-
-    "tag": { "name": "parking=surface", "isA": "parking=yes" },
-    "tag": { "name": "parking=underground", "isA": "parking=yes",
-        "similarTo": { "name": "parking=covered", "weight": 0.8 } },
-    "tag": { "name": "parking=multi-storey", "isA": "parking=yes",
-        "similarTo": { "name": "parking=covered", "weight": 0.8 } },
-    "tag": { "name": "parking=garage_boxes", "isA": "parking=yes",
-        "similarTo": { "name": "parking=covered", "weight": 0.8 } },
-    "tag": { "name": "parking=lane", "isA": "parking=yes" },
-    "tag": { "name": "parking=garage", "isA": "parking=yes",
-        "similarTo": { "name": "parking=multi-storey", "weight": 0.8 },
-        "similarTo": { "name": "parking=covered", "weight": 0.8 } },
-    "tag": { "name": "parking=park_and_ride", "isA": "parking=yes",
-        "similarTo": { "name": "parking=surface", "weight": 0.8 } },
-    "tag": { "name": "parking=carports", "isA": "parking=yes",
-        "similarTo": { "name": "parking=covered", "weight": 0.8 } },
-    "tag": { "name": "parking=rooftop", "isA": "parking=yes" },
-    "tag": { "name": "parking=layby", "isA": "parking=yes" },
-    "tag": { "name": "parking=sheds", "isA": "parking=yes",
-        "similarTo": { "name": "parking=garage", "weight": 0.8 },
-        "similarTo": { "name": "parking=covered", "weight": 0.8 } },
-    "tag": { "name": "parking=garages", "isA": "parking=yes",
-        "similarTo": { "name": "parking=covered", "weight": 0.8 } },
-    "tag": { "name": "parking=off_street_covered", "isA": "parking=yes",
-        "similarTo": { "name": "parking=covered", "weight": 0.9 } },
-    "tag": { "name": "parking=disabled", "isA": "parking=yes" },
-    "tag": { "name": "parking=covered", "isA": "parking=yes" },
-
-    "#" : "end"
-}
+    {
+        "isA": "parking=yes",
+        "name": "parking=*",
+        "objectType": "tag"
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=carports",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "parking=covered",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=covered",
+        "objectType": "tag"
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=disabled",
+        "objectType": "tag"
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=garage",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "parking=multi-storey",
+                "weight": 0.8
+            },
+            {
+                "name": "parking=covered",
+                "weight": 0.8
+            }
+        ]
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=garage_boxes",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "parking=covered",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=garages",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "parking=covered",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=lane",
+        "objectType": "tag"
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=layby",
+        "objectType": "tag"
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=multi-storey",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "parking=covered",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "parking",
+        "name": "parking=no",
+        "objectType": "tag"
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=off_street_covered",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "parking=covered",
+            "weight": 0.9
+        }
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=park_and_ride",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "parking=surface",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=rooftop",
+        "objectType": "tag"
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=sheds",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "parking=garage",
+                "weight": 0.8
+            },
+            {
+                "name": "parking=covered",
+                "weight": 0.8
+            }
+        ]
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=surface",
+        "objectType": "tag"
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=underground",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "parking=covered",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "parking",
+        "name": "parking=yes",
+        "objectType": "tag"
+    }
+]

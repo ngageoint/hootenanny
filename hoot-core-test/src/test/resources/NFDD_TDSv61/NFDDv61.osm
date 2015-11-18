@@ -2822,7 +2822,6 @@
         <tag k="uuid" v="{8f97a17a-a3df-40b4-9dc0-71228b65bf0a}"/>
         <tag k="facility" v="yes"/>
         <tag k="name" v="HealthCare"/>
-        <tag k="area" v="yes"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -2838,7 +2837,6 @@
         <tag k="condition" v="construction"/>
         <tag k="note" v="Big Factory"/>
         <tag k="communication:microwave_radio_relay" v="yes"/>
-        <tag k="area" v="yes"/>
         <tag k="name" v="Factory"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="material" v="adobe_brick"/>
@@ -2993,24 +2991,27 @@
         <nd ref="-109"/>
         <nd ref="-110"/>
         <nd ref="-106"/>
-        <tag k="source" v="tdsv61"/>
+        <tag k="source:ingest:datetime" v="2015-11-14T02:13:07.460Z"/>
+        <tag k="use" v="residential"/>
+        <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="condition" v="destroyed"/>
         <tag k="note" v="Small suburb"/>
-        <tag k="area" v="yes"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
-        <tag k="name" v="Residential"/>
+        <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="source:ingest:datetime" v="2015-11-17T19:59:13.797Z"/>
         <tag k="source:spatial_source" v="no"/>
-        <tag k="is_in:country_code" v="XE"/>
-        <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="security:classification" v="U"/>
+        <tag k="is_in:country_code" v="XE"/>
+        <tag k="source" v="tdsv61"/>
         <tag k="uuid" v="{4c076d27-3ef4-4ad3-9137-920b4278ce6c}"/>
         <tag k="building:density" v="sparse"/>
-        <tag k="use" v="residential"/>
+        <tag k="name" v="Residential"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
@@ -3020,24 +3021,27 @@
         <nd ref="-104"/>
         <nd ref="-105"/>
         <nd ref="-101"/>
+        <tag k="source:ingest:datetime" v="2015-11-14T02:13:07.460Z"/>
+        <tag k="use" v="residential"/>
+        <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="controlling_authority" v="public"/>
-        <tag k="source" v="tdsv61"/>
         <tag k="condition" v="damaged"/>
-        <tag k="area" v="yes"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
-        <tag k="name" v="Residential"/>
+        <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="source:ingest:datetime" v="2015-11-17T19:59:13.796Z"/>
         <tag k="source:spatial_source" v="no"/>
-        <tag k="is_in:country_code" v="XE"/>
-        <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="security:classification" v="U"/>
+        <tag k="is_in:country_code" v="XE"/>
+        <tag k="source" v="tdsv61"/>
         <tag k="uuid" v="{0d490002-2c16-4659-8311-7b7c8b59b48e}"/>
         <tag k="building:density" v="sparse"/>
-        <tag k="use" v="residential"/>
+        <tag k="name" v="Residential"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
@@ -3072,24 +3076,27 @@
         <nd ref="-94"/>
         <nd ref="-95"/>
         <nd ref="-91"/>
+        <tag k="source:ingest:datetime" v="2015-11-14T02:13:07.459Z"/>
+        <tag k="use" v="military"/>
+        <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="controlling_authority" v="joint_military_civilian"/>
-        <tag k="source" v="tdsv61"/>
         <tag k="condition" v="functional"/>
-        <tag k="area" v="yes"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
-        <tag k="name" v="Defence"/>
+        <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="source:ingest:datetime" v="2015-11-17T19:59:13.795Z"/>
         <tag k="source:spatial_source" v="no"/>
-        <tag k="is_in:country_code" v="XE"/>
-        <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="security:classification" v="U"/>
+        <tag k="is_in:country_code" v="XE"/>
+        <tag k="source" v="tdsv61"/>
         <tag k="uuid" v="{c5d722af-c570-42de-8ac6-4abea5a4983f}"/>
         <tag k="building:density" v="moderate"/>
-        <tag k="use" v="military"/>
+        <tag k="name" v="Defence"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">

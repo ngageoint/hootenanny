@@ -239,6 +239,7 @@ public:
     //nodes
 
     //CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodeMap().size());
+    HOOT_STR_EQUALS(true, map->containsNode(500));
     shared_ptr<Node> node = map->getNode(500);
     CPPUNIT_ASSERT_EQUAL((long)500, node->getId());
     CPPUNIT_ASSERT_EQUAL(38.4, node->getY());

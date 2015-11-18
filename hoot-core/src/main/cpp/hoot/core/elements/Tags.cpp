@@ -33,6 +33,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -304,12 +305,6 @@ QStringList Tags::getPseudoNames() const
   }
 
   return result;
-}
-
-bool Tags::isArea() const
-{
-  return isTrue("area") ||
-      (contains("building") && isFalse("building") == false);
 }
 
 bool Tags::isFalse(const QString& key) const

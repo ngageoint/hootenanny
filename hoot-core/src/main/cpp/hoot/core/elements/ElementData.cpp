@@ -29,8 +29,16 @@
 
 namespace hoot {
 
-ElementData::ElementData(long id, const Tags& tags, Meters circularError) : _id(id), _changeset(0), _version(1),
-  _timestamp(0), _tags(tags), _circularError(circularError)
+long ElementData::CHANGESET_EMPTY = 0;
+long ElementData::VERSION_EMPTY = 0;
+unsigned int ElementData::TIMESTAMP_EMPTY = 0;
+QString ElementData::USER_EMPTY = "";
+long ElementData::UID_EMPTY = 0;
+
+
+ElementData::ElementData(long id, const Tags& tags, Meters circularError) : _id(id),
+  _changeset(CHANGESET_EMPTY), _version(VERSION_EMPTY), _timestamp(TIMESTAMP_EMPTY),
+  _user(USER_EMPTY), _uid(UID_EMPTY), _tags(tags), _circularError(circularError)
 {
 }
 
