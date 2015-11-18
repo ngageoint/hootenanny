@@ -517,7 +517,7 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
 
   // Add an ingest datetime tag
   t.appendValue("source:ingest:datetime",
-                QDateTime::currentDateTimeUtc().toString("yyyy-MM-ddThh:mm:ss.zzzZ"));
+                QDateTime::currentDateTime().toUTC().toString("yyyy-MM-ddThh:mm:ss.zzzZ"));
 
   if (t.size() != 0)
   {

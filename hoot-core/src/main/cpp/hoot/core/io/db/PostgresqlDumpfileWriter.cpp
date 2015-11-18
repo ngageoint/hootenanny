@@ -473,7 +473,7 @@ void PostgresqlDumpfileWriter::_writeNodeToTables(
   const int nodeYNanodegrees = _convertDegreesToNanodegrees(nodeY);
   const int nodeXNanodegrees = _convertDegreesToNanodegrees(nodeX);
   const int changesetId = _getChangesetId();
-  const QString datestring = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss.zzz");
+  const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
   const QString tileNumberString(QString::number(_tileForPoint(nodeY, nodeX)));
 
   if ( (nodeYNanodegrees < -900000000) || (nodeYNanodegrees > 900000000) )
@@ -542,7 +542,7 @@ void PostgresqlDumpfileWriter::_createWayTables()
 void PostgresqlDumpfileWriter::_writeWayToTables(const ElementIdDatatype wayDbId )
 {
   const int changesetId = _getChangesetId();
-  const QString datestring = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss.zzz");
+  const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
 
   QString outputLine = QString("%1\t%2\t%3\tt\t1\n")
       .arg(wayDbId)
@@ -604,7 +604,7 @@ void PostgresqlDumpfileWriter::_createRelationTables()
 void PostgresqlDumpfileWriter::_writeRelationToTables(const ElementIdDatatype relationDbId )
 {
   const int changesetId = _getChangesetId();
-  const QString datestring = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss.zzz");
+  const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
 
   QString outputLine = QString("%1\t%2\t%3\tt\t1\n")
       .arg(relationDbId)
@@ -823,7 +823,7 @@ void PostgresqlDumpfileWriter::_writeChangesetToTable()
   }
 
   boost::shared_ptr<QTextStream> changesetsStream  = _outputSections["changesets"].second;
-  const QString datestring = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss.zzz");
+  const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
   const QString changesetFormat("%1\t%2\t%3\t%4\t%5\n");
 
   *changesetsStream << changesetFormat.arg(
