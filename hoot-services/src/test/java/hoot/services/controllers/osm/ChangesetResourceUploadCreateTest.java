@@ -1723,7 +1723,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("visible for relation"));
+      Assert.assertTrue(r.getEntity(String.class).contains("visible for way"));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);

@@ -1725,7 +1725,8 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
       Relation.insertNew(negativeRelationId, changesetId, mapId, members, tags, conn);
       tags.clear();
       CurrentRelations insertedRelationRecord =
-      		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationsTbl)
+      	new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+          .from(currentRelationsTbl)
       		.where(currentRelationsTbl.id.eq(new Long(negativeRelationId)))
       		.singleResult(currentRelationsTbl);
       Assert.assertNotNull(insertedRelationRecord);

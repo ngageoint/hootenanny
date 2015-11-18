@@ -635,15 +635,14 @@ public abstract class Element implements XmlSerializable, DbSerializable
     InvocationTargetException
   {
     final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
-
-    if(elementIds.size() > 0)
+    if (elementIds.size() > 0)
     {
   	  return
   			new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
   	      .from(prototype.getElementTable())
   			  .where(
             prototype.getElementIdField().in(elementIds)
-            .and(prototype.getElementVisibilityField().eq(true)))
+              .and(prototype.getElementVisibilityField().eq(true)))
   			  .count() == elementIds.size();
     }
     else
