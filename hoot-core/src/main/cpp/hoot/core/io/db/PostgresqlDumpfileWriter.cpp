@@ -244,7 +244,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
   {
     _createNodeTables();
     _idMappings.nodeIdMap = boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> >(
-          new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>(_configData.maxMapElements));
+          new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>());
   }
 
   ElementIdDatatype nodeDbId;
@@ -277,7 +277,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
     _createWayTables();
 
     _idMappings.wayIdMap = boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> >(
-          new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>(_configData.maxMapElements));
+          new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>());
   }
 
   ElementIdDatatype wayDbId;
@@ -312,7 +312,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
     _createRelationTables();
 
     _idMappings.relationIdMap = boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> >(
-          new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>(_configData.maxMapElements));
+          new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>());
   }
 
   ElementIdDatatype relationDbId;
