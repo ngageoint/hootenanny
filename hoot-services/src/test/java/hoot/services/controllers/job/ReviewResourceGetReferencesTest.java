@@ -69,17 +69,30 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract
 				Assert.assertEquals("node", queryElementInfo.getType());
 				
 				final ReviewRef[] refs = refsResponse.getReviewRefs();
-				Assert.assertEquals(2, refs.length);
+				Assert.assertEquals(4, refs.length);
 				
-				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-46).getId(), refs[0].getId());
+				// Now we are returning self since in one to many queried element can be involved in
+				// many different relations and since we do not know the element's parent relation (or even if there is one)
+				// we are forced return all including self. (Client need to handle self)
+				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-116).getId(), refs[0].getId());
 				Assert.assertEquals("node", refs[0].getType());
 				Assert.assertEquals(String.valueOf(mapId), refs[0].getMapId());
 				Assert.assertEquals(2, refs[0].getReviewRelationId());
 				
-				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-49).getId(), refs[1].getId());
+				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-46).getId(), refs[1].getId());
 				Assert.assertEquals("node", refs[1].getType());
 				Assert.assertEquals(String.valueOf(mapId), refs[1].getMapId());
-				Assert.assertEquals(3, refs[1].getReviewRelationId());
+				Assert.assertEquals(2, refs[1].getReviewRelationId());
+				
+				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-116).getId(), refs[2].getId());
+				Assert.assertEquals("node", refs[2].getType());
+				Assert.assertEquals(String.valueOf(mapId), refs[2].getMapId());
+				Assert.assertEquals(3, refs[2].getReviewRelationId());
+				
+				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-49).getId(), refs[3].getId());
+				Assert.assertEquals("node", refs[3].getType());
+				Assert.assertEquals(String.valueOf(mapId), refs[3].getMapId());
+				Assert.assertEquals(3, refs[3].getReviewRelationId());
 			}
 			else if (i == 1)
 			{
@@ -88,17 +101,32 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract
 				Assert.assertEquals("node", queryElementInfo.getType());
 				
 				final ReviewRef[] refs = refsResponse.getReviewRefs();
-				Assert.assertEquals(2, refs.length);
+				Assert.assertEquals(4, refs.length);
 				
-				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-42).getId(), refs[0].getId());
+				// Now we are returning self since in one to many queried element can be involved in
+				// many different relations and since we do not know the element's parent relation (or even if there is one)
+				// we are forced return all including self. (Client need to handle self)
+				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-117).getId(), refs[0].getId());
 				Assert.assertEquals("node", refs[0].getType());
 				Assert.assertEquals(String.valueOf(mapId), refs[0].getMapId());
 				Assert.assertEquals(4, refs[0].getReviewRelationId());
 				
-				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-47).getId(), refs[1].getId());
+				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-42).getId(), refs[1].getId());
 				Assert.assertEquals("node", refs[1].getType());
 				Assert.assertEquals(String.valueOf(mapId), refs[1].getMapId());
-				Assert.assertEquals(6, refs[1].getReviewRelationId());
+				Assert.assertEquals(4, refs[1].getReviewRelationId());
+				
+				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-117).getId(), refs[2].getId());
+				Assert.assertEquals("node", refs[2].getType());
+				Assert.assertEquals(String.valueOf(mapId), refs[2].getMapId());
+				Assert.assertEquals(6, refs[2].getReviewRelationId());
+				
+				
+				
+				Assert.assertEquals(oldNodeIdsToNewNodes.get((long)-47).getId(), refs[3].getId());
+				Assert.assertEquals("node", refs[3].getType());
+				Assert.assertEquals(String.valueOf(mapId), refs[3].getMapId());
+				Assert.assertEquals(6, refs[3].getReviewRelationId());
 			}
 		}
 	}
