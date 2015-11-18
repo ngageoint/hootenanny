@@ -27,15 +27,10 @@
 package hoot.services.models.osm;
 
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -49,7 +44,6 @@ import org.w3c.dom.NodeList;
 
 import com.mysema.query.Tuple;
 import com.mysema.query.sql.RelationalPathBase;
-import com.mysema.query.sql.SQLExpressions;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.types.path.BooleanPath;
 import com.mysema.query.types.path.NumberPath;
@@ -58,7 +52,6 @@ import com.mysema.query.types.path.SimplePath;
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
-import hoot.services.db.DbUtils.RecordBatchType;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentWayNodes;
 import hoot.services.db2.CurrentWays;
@@ -72,7 +65,6 @@ import hoot.services.geo.Coordinates;
 public class Way extends Element
 {
   private static final Logger log = LoggerFactory.getLogger(Way.class);
-  private int maxRecordBatchSize = -1;
   private List<Long> wayNodeIdsCache = new ArrayList<Long>();
 
   public List<Long> getWayNodeIdsCache()
@@ -96,10 +88,6 @@ public class Way extends Element
     try
     {
     	setMapId(mapId);
-      maxRecordBatchSize = 
-      	Integer.parseInt(
-      		HootProperties.getInstance().getProperty(
-            "maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
     }
     catch (Exception ex)
     {
@@ -123,10 +111,6 @@ public class Way extends Element
     try
     {
     	setMapId(mapId);
-      maxRecordBatchSize = 
-      	Integer.parseInt(
-      		HootProperties.getInstance().getProperty(
-            "maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
     }
     catch (Exception ex)
     {
@@ -187,71 +171,6 @@ public class Way extends Element
         .from(currentWayNodes)
         .where(currentWayNodes.wayId.eq(getId()))
         .orderBy(currentWayNodes.sequenceId.asc()).list(currentWayNodes.nodeId);
-  }
-
-  /*
-   * Returns the number of nodes associated with this way
-   */
-  private long getNodeCount() throws Exception
-  {
-    return 
-    	new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
-        .from(currentWayNodes)
-        .where(currentWayNodes.wayId.eq(getId())).count();
-  }
-
-  /*
-   * Adds node refs to the way nodes services database table
-   *
-   * @param nodeIds a list of node ref IDs; This is a List, rather than a Set,
-   * since the same node ID can be used for the first and last node ID in the
-   * way nodes sequence for closed polygons.
-   *
-   * @throws Exception if the number of node refs is larger than the max allowed
-   * number of way nodes, if any of the referenced nodes do not exist in the
-   * services db, or if any of the referenced nodes are not set to be visible in
-   * the services db
-   */
-  private void addWayNodes(final long mapId, final List<Long> nodeIds) throws Exception
-  {
-    CurrentWays wayRecord = (CurrentWays) record;
-    if (nodeIds == null || nodeIds.size() < 2)
-    {
-      throw new Exception("Too few nodes specified for way with ID: " + wayRecord.getId());
-    }
-    final long numExistingNodes = getNodeCount();
-    final long maximumWayNodes = 
-    	Long.parseLong(
-    		HootProperties.getInstance().getProperty(
-          "maximumWayNodes", HootProperties.getDefault("maximumWayNodes")));
-    if ((nodeIds.size() + numExistingNodes) > maximumWayNodes)
-    {
-      throw new Exception("Too many nodes specified for way with ID: " + wayRecord.getId());
-    }
-    if (!Element.allElementsExist(getMapId(), ElementType.Node, new HashSet<Long>(nodeIds), conn))
-    {
-      throw new Exception("Not all nodes exist specified for way with ID: " + wayRecord.getId());
-    }
-    if (!Element.allElementsVisible(getMapId(), ElementType.Node, new HashSet<Long>(nodeIds), conn))
-    {
-      throw new Exception("Not all nodes are visible for way with ID: " + wayRecord.getId());
-    }
-
-    List<CurrentWayNodes> wayNodeRecords = new ArrayList<CurrentWayNodes>();
-    long sequenceCtr = 1;
-    for (long nodeId : nodeIds)
-    {
-      CurrentWayNodes wayNodeRecord = new CurrentWayNodes();
-      wayNodeRecord.setNodeId(nodeId);
-      wayNodeRecord.setSequenceId(sequenceCtr);
-      wayNodeRecord.setWayId(wayRecord.getId());
-      wayNodeRecords.add(wayNodeRecord);
-      sequenceCtr++;
-    }
-
-    DbUtils.batchRecords(
-    	mapId, wayNodeRecords, QCurrentWayNodes.currentWayNodes, null, RecordBatchType.INSERT, conn, 
-    	maxRecordBatchSize);
   }
   
   /*
@@ -685,114 +604,5 @@ public class Way extends Element
   public List<ElementType> getRelatedElementTypes()
   {
     return Arrays.asList(new ElementType[] { ElementType.Node });
-  }
-
-  /**
-   * Inserts a new way into the services database
-   *
-   * @param changesetId corresponding changeset ID for the way to be inserted
-   * @param mapId corresponding map ID for the way to be inserted
-   * @param nodeIds IDs for the collection of nodes to be associated with this way
-   * @param tags element tags
-   * @param dbConn JDBC Connection
-   * @return ID of the newly created way
-   * @throws Exception
-   */
-  public static long insertNew(final long changesetId, final long mapId, final List<Long> nodeIds,
-      final Map<String, String> tags, Connection dbConn) throws Exception
-  {
-    long nextWayId = 
-    	new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
-        .uniqueResult(SQLExpressions.nextval(Long.class, "current_ways_id_seq"));
-    insertNew(nextWayId, changesetId, mapId, nodeIds, tags, dbConn);
-
-    return nextWayId;
-  }
-
-  /**
-   * Inserts a new way into the services database with the specified ID; useful
-   * for testing
-   *
-   * @param wayId ID to assign to the new way
-   * @param changesetId corresponding changeset ID for the way to be inserted
-   * @param mapId corresponding map ID for the way to be inserted
-   * @param nodeIds collection of nodes to be associated with this way
-   * @param tags element tags
-   * @param dbConn JDBC Connection
-   * @throws Exception see addNodeRefs
-   */
-  public static void insertNew(final long wayId, final long changesetId, final long mapId,
-    final List<Long> nodeIds, final Map<String, String> tags, Connection dbConn) throws Exception
-  {
-    CurrentWays wayRecord = new CurrentWays();
-    wayRecord.setChangesetId(changesetId);
-    wayRecord.setId(wayId);
-
-    final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
-    wayRecord.setTimestamp(now);
-    wayRecord.setVersion(new Long(1));
-    wayRecord.setVisible(true);
-    if (tags != null && tags.size() > 0)
-    {
-      wayRecord.setTags(tags);
-    }
-
-    String strKv = "";
-
-    if (tags != null)
-    {
-      Iterator it = tags.entrySet().iterator();
-      while (it.hasNext())
-      {
-        Map.Entry pairs = (Map.Entry) it.next();
-        String key = "\"" + pairs.getKey() + "\"";
-        String val = "\"" + pairs.getValue() + "\"";
-        if (strKv.length() > 0)
-        {
-          strKv += ",";
-        }
-
-        strKv += key + "=>" + val;
-      }
-    }
-    String strTags = "'";
-    strTags += strKv;
-    strTags += "'";
-
-    String POSTGRESQL_DRIVER = "org.postgresql.Driver";
-    Statement stmt = null;
-    try
-    {
-      Class.forName(POSTGRESQL_DRIVER);
-
-      stmt = dbConn.createStatement();
-
-      String sql = 
-      	"INSERT INTO current_ways_" + mapId+ "("
-          + "            id, changeset_id, \"timestamp\", visible, version, tags)"
-          + " VALUES(" + wayId + "," + changesetId + "," + "CURRENT_TIMESTAMP" + ","
-          + "true" + "," + "1" + "," + strTags +
-
-          ")";
-      stmt.executeUpdate(sql);
-      new Way(mapId, dbConn, wayRecord).addWayNodes(mapId, nodeIds);
-
-    }
-    catch (Exception e)
-    {
-      throw new Exception("Error inserting node.");
-    }
-
-    finally
-    {
-      try
-      {
-        if (stmt != null)
-          stmt.close();
-      }
-      catch (SQLException se2)
-      {
-      }
-    }
   }
 }

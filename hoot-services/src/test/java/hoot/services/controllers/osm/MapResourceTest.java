@@ -112,7 +112,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
 
       //create a way completely outside the query bounds
       final long oobWayId =
-        Way.insertNew(changesetId, mapId, new ArrayList<Long>(oobNodeIds), null, conn);
+        OsmTestUtils.insertNewWay(changesetId, mapId, new ArrayList<Long>(oobNodeIds), null, conn);
 
       //create a way with some nodes inside the query bounds and some outside; The way and the
       //out of bounds nodes it owns should be returned by the query since at least one of the added
@@ -121,7 +121,8 @@ public class MapResourceTest extends OsmResourceTestAbstract
       partiallyOobNodeIds.add(nodeIdsArr[0]);
       partiallyOobNodeIds.add(oobNodeIdsArr[0]);
       wayIds.add(
-        Way.insertNew(changesetId, mapId, new ArrayList<Long>(partiallyOobNodeIds), null, conn));
+      	OsmTestUtils.insertNewWay(
+      		changesetId, mapId, new ArrayList<Long>(partiallyOobNodeIds), null, conn));
       final Long[] wayIdsArr = wayIds.toArray(new Long[]{});
 
       //create a relation where all members are completely outside of the query bounds
@@ -816,7 +817,7 @@ public class MapResourceTest extends OsmResourceTestAbstract
 
       //create a way completely outside the query bounds
       /*final long oobWayId =*/
-      Way.insertNew(changesetId, mapId, new ArrayList<Long>(oobNodeIds), null, conn);
+      OsmTestUtils.insertNewWay(changesetId, mapId, new ArrayList<Long>(oobNodeIds), null, conn);
 
       //create a way with some nodes inside the query bounds and some outside; The way and the
       //out of bounds nodes it owns should be returned by the query since at least one of the added
@@ -825,7 +826,8 @@ public class MapResourceTest extends OsmResourceTestAbstract
       partiallyOobNodeIds.add(nodeIdsArr[0]);
       partiallyOobNodeIds.add(oobNodeIdsArr[0]);
       wayIds.add(
-        Way.insertNew(changesetId, mapId, new ArrayList<Long>(partiallyOobNodeIds), null, conn));
+      	OsmTestUtils.insertNewWay(
+      		changesetId, mapId, new ArrayList<Long>(partiallyOobNodeIds), null, conn));
       final Long[] wayIdsArr = wayIds.toArray(new Long[]{});
 
       //Query the elements back out geospatially.  All but one of the nodes, one of the ways, and

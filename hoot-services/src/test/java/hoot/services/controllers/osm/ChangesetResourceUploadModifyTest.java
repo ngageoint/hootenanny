@@ -73,7 +73,6 @@ import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.Node;
 import hoot.services.models.osm.Relation;
 import hoot.services.models.osm.RelationMember;
-import hoot.services.models.osm.Way;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
 import hoot.services.utils.RandomNumberGenerator;
@@ -1697,7 +1696,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
       wayNodeIds.add(nodeIdsArr[1]);
       tags.put("key 1", "val 1");
       tags.put("key 2", "val 2");
-      Way.insertNew(negativeWayId, changesetId, mapId, wayNodeIds, tags, conn);
+      OsmTestUtils.insertNewWay(negativeWayId, changesetId, mapId, wayNodeIds, tags, conn);
       tags.clear();
       CurrentNodes insertedWayRecord =
       		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentNodesTbl)
@@ -1710,7 +1709,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
       wayNodeIds.clear();
       wayNodeIds.add(nodeIdsArr[1]);
       wayNodeIds.add(nodeIdsArr[2]);
-      wayIds.add(Way.insertNew(changesetId, mapId, wayNodeIds, null, conn));
+      wayIds.add(OsmTestUtils.insertNewWay(changesetId, mapId, wayNodeIds, null, conn));
 
       final Long[] wayIdsArr = wayIds.toArray(new Long[]{});
 
