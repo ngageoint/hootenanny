@@ -122,7 +122,7 @@ public class ChangesetErrorChecker
 	public void checkForOwnershipErrors() throws Exception
 	{
 		checkForRelationOwnershipErrors();
-		//checkForWayOwnershipErrors();
+		checkForWayOwnershipErrors();
 	}
   
 	/*

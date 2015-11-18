@@ -125,14 +125,6 @@ public class Relation extends Element
 		relationRecord.setChangesetId(parseChangesetId(xmlAttributes));
 		relationRecord.setVersion(parseVersion(xmlAttributes));
 
-		/*final Set<Long> owningRelationIds = getOwningRelationIds();
-		if (entityChangeType.equals(EntityChangeType.DELETE) && owningRelationIds.size() > 0)
-		{
-			throw new Exception(
-				"Relation to be deleted with ID " + getId() + " is still used by " + "relation(s): " + 
-			  Arrays.toString(owningRelationIds.toArray()));
-		}*/
-
 		relationRecord.setTimestamp(parseTimestamp(xmlAttributes));
 		relationRecord.setVisible(true);
 

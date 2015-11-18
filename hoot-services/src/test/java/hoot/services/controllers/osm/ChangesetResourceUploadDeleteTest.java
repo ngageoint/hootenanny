@@ -4436,7 +4436,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
             "<create/>" +
             "<modify/>" +
             "<delete>" +
-              "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + originalBounds.getMinLon() + "\" " +
+              "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + originalBounds.getMinLon() + "\" " +
                 "lat=\"" + originalBounds.getMinLat() + "\" version=\"1\" changeset=\"" +
                 changesetId + "\">" +
               "</node>" +
@@ -4447,7 +4447,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("is still used by way"));
+      //System.out.println(r.getEntity(String.class));
+      Assert.assertTrue(r.getEntity(String.class).contains("still used by other way(s)"));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -4503,8 +4504,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       Assert.assertTrue(r.getEntity(String.class).contains("still used by other relation(s)"));
 
       QChangesets changesets = QChangesets.changesets;
-      new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-      .where(changesets.id.eq(changesetId)).singleResult(changesets);
+      new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        .from(changesets)
+        .where(changesets.id.eq(changesetId))
+        .singleResult(changesets);
       OsmTestUtils.verifyTestChangesetUnmodified(changesetId, originalBounds);
 
       OsmTestUtils.verifyTestNodesUnmodified(nodeIds, changesetId, originalBounds);

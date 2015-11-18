@@ -744,11 +744,10 @@ public class OsmTestUtils
     try
     {
       final Map<Long, CurrentRelations> relations =
-
-      		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelations)
+      	new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+          .from(currentRelations)
           .where((currentRelations.changesetId.eq(changesetId)))
-          .map(currentRelations.id, currentRelations)
-      		;
+          .map(currentRelations.id, currentRelations);
       Assert.assertEquals(4, relations.size());
 
       QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;

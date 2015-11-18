@@ -30,12 +30,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +49,6 @@ import com.mysema.query.types.path.SimplePath;
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
 import hoot.services.db2.CurrentNodes;
-import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.GeoUtils;
 import hoot.services.geo.QuadTileCalculator;
@@ -62,8 +59,6 @@ import hoot.services.geo.QuadTileCalculator;
 public class Node extends Element
 {
   private static final Logger log = LoggerFactory.getLogger(Node.class);
-  
-  private static final QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
 
   public Node(final Long mapId, Connection dbConnection)
   {
@@ -165,27 +160,6 @@ public class Node extends Element
       return new ArrayList<CurrentNodes>();
     }
   }
-
-  /**
-   * Returns the IDs of all ways which own this node
-   *
-   * The ordering of returned records by ID and the use of TreeSet to keep them
-   * sorted is only for error reporting readability purposes only.
-   *
-   * @return a sorted list of way IDs
-   * @throws DataAccessException
-   * @throws Exception
-   */
-  private Set<Long> getOwningWayIds() throws Exception
-  {
-    return 
-    	new TreeSet<Long>(
-    		new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
-    	    .from(currentWayNodes)
-          .where(currentWayNodes.nodeId.eq(getId()))
-          .orderBy(currentWayNodes.nodeId.asc())
-          .list(currentWayNodes.nodeId));
-  }
     
   /**
    * Populates the element model object based on osm diff data
@@ -206,21 +180,6 @@ public class Node extends Element
     // following checks fail
     nodeRecord.setChangesetId(parseChangesetId(xmlAttributes));
     nodeRecord.setVersion(parseVersion(xmlAttributes));
-
-    final Set<Long> owningWayIds = getOwningWayIds();
-    if (entityChangeType.equals(EntityChangeType.DELETE) && owningWayIds.size() > 0)
-    {
-      throw new Exception(
-      	"Node to be deleted with ID " + getId() + " is still used by way(s): "
-          + Arrays.toString(owningWayIds.toArray()));
-    }
-    /*final Set<Long> owningRelationIds = getOwningRelationIds();
-    if (entityChangeType.equals(EntityChangeType.DELETE) && owningRelationIds.size() > 0)
-    {
-      throw new Exception(
-      	"Node to be deleted with ID " + getId() + " is still used by "
-          + "relation(s): " + Arrays.toString(owningRelationIds.toArray()));
-    }*/
 
     double latitude = -91;
     double longitude = -181;

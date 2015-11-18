@@ -86,6 +86,7 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
 {
   private static final Logger log = LoggerFactory.getLogger(ChangesetResourceUploadModifyTest.class);
+  
   private QCurrentNodes currentNodesTbl = QCurrentNodes.currentNodes;
   private QCurrentWays currentWaysTbl = QCurrentWays.currentWays;
   private QCurrentWayNodes currentWayNodesTbl = QCurrentWayNodes.currentWayNodes;
