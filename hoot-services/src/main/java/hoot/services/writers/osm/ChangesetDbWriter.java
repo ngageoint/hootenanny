@@ -498,7 +498,7 @@ public class ChangesetDbWriter
 
   private List<Element> write(final Document changesetDoc) throws Exception
   {
-  	log.debug(XmlDocumentBuilder.toString(changesetDoc));
+  	//log.debug(XmlDocumentBuilder.toString(changesetDoc));
   	changesetErrorChecker = new ChangesetErrorChecker(changesetDoc, requestChangesetMapId, conn);
   	dbNodeCache = changesetErrorChecker.checkForElementExistenceErrors();
   	changesetErrorChecker.checkForVersionErrors();

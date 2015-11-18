@@ -353,9 +353,7 @@ public class ChangesetResource
           throw new Exception("Error parsing changeset diff data: "
             + StringUtils.abbreviate(changeset, 100) + " (" + e.getMessage() + ")");
         }
-        ChangesetDbWriter changesetDbWriter = new ChangesetDbWriter(conn);
-        changesetUploadResponse = changesetDbWriter.write(mapid, changesetId, changesetDoc);
-        	
+        changesetUploadResponse = (new ChangesetDbWriter(conn)).write(mapid, changesetId, changesetDoc);
       }
       catch (Exception e)
       {
