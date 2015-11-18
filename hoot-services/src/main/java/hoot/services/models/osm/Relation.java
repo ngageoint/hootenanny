@@ -27,27 +27,19 @@
 package hoot.services.models.osm;
 
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
-import hoot.services.db.DbUtils.RecordBatchType;
 
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelationMembers;
 import hoot.services.db2.CurrentRelations;
-import hoot.services.db2.QCurrentRelationMembers;
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.Coordinates;
 
@@ -62,7 +54,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
 import com.mysema.query.sql.RelationalPathBase;
-import com.mysema.query.sql.SQLExpressions;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.types.path.BooleanPath;
 import com.mysema.query.types.path.NumberPath;
@@ -75,7 +66,6 @@ public class Relation extends Element
 {
 	private static final Logger log = LoggerFactory.getLogger(Relation.class);
 	
-	private int maxRecordBatchSize = -1;
 	private List<RelationMember> membersCache = new ArrayList<RelationMember>();
 
 	public Relation(final long mapId, Connection dbConn)
@@ -88,9 +78,6 @@ public class Relation extends Element
 		try
 		{
 			setMapId(mapId);
-			maxRecordBatchSize = Integer.parseInt(HootProperties.getInstance()
-			    .getProperty("maxRecordBatchSize",
-			        HootProperties.getDefault("maxRecordBatchSize")));
 		}
 		catch (Exception ex)
 		{
@@ -115,13 +102,9 @@ public class Relation extends Element
 		try
 		{
 			setMapId(mapId);
-			maxRecordBatchSize = Integer.parseInt(HootProperties.getInstance()
-			    .getProperty("maxRecordBatchSize",
-			        HootProperties.getDefault("maxRecordBatchSize")));
 		}
 		catch (Exception ex)
 		{
-
 		}
 	}
 
@@ -645,194 +628,5 @@ public class Relation extends Element
 	{
 		return 
 			Arrays.asList(new ElementType[] { ElementType.Node, ElementType.Way, ElementType.Relation });
-	}
-
-	/*
-	 * This method is inefficient but have yet to think of something better.
-	 */
-	private Set<Long> getMemberIdsByType(final List<RelationMember> members,
-	    final ElementType elementType)
-	{
-		Set<Long> memberIds = new HashSet<Long>();
-		for (RelationMember member : members)
-		{
-			if (member.getType().equals(elementType))
-			{
-				memberIds.add(member.getId());
-			}
-		}
-		return memberIds;
-	}
-
-	/*
-	 * Adds this relation's members to the services database
-	 * 
-	 * relations of size = 0 are allowed; see
-	 * http://wiki.openstreetmap.org/wiki/Empty_relations
-	 */
-	private void addMembers(final long mapId, final List<RelationMember> members)
-	    throws Exception
-	{
-		CurrentRelations relationRecord = (CurrentRelations) record;
-		final Set<Long> nodeIds = getMemberIdsByType(members, ElementType.Node);
-		if (!Element.allElementsExist(getMapId(), ElementType.Node, nodeIds, conn))
-		{
-			throw new Exception(
-			  "Not all nodes exist specified for relation with ID: " + relationRecord.getId());
-		}
-		if (!Element.allElementsVisible(getMapId(), ElementType.Node, nodeIds, conn))
-		{
-			throw new Exception(
-				"Not all nodes are visible for relation with ID: " + relationRecord.getId());
-		}
-		final Set<Long> wayIds = getMemberIdsByType(members, ElementType.Way);
-		if (!Element.allElementsExist(getMapId(), ElementType.Way, wayIds, conn))
-		{
-			throw new Exception(
-				"Not all ways exist specified for relation with ID: " + relationRecord.getId());
-		}
-		if (!Element.allElementsVisible(getMapId(), ElementType.Way, wayIds, conn))
-		{
-			throw new Exception("Not all ways are visible for relation with ID: " + relationRecord.getId());
-		}
-		final Set<Long> relationIds = getMemberIdsByType(members, ElementType.Relation);
-		if (!Element.allElementsExist(getMapId(), ElementType.Relation, relationIds, conn))
-		{
-			throw new Exception(
-			  "Not all relations exist specified for relation with ID: " + relationRecord.getId());
-		}
-		if (!Element.allElementsVisible(getMapId(), ElementType.Relation, relationIds, conn))
-		{
-			throw new Exception(
-			  "Not all relations are visible for relation with ID: " + relationRecord.getId());
-		}
-
-		List<CurrentRelationMembers> memberRecords = new ArrayList<CurrentRelationMembers>();
-		int sequenceCtr = 1;
-		for (RelationMember member : members)
-		{
-			CurrentRelationMembers memberRecord = new CurrentRelationMembers();
-			memberRecord.setMemberId(member.getId());
-			memberRecord.setMemberRole(member.getRole());
-			memberRecord.setMemberType(Element.elementEnumForElementType(member.getType()));
-			memberRecord.setRelationId(relationRecord.getId());
-			memberRecord.setSequenceId(sequenceCtr);
-			memberRecords.add(memberRecord);
-			sequenceCtr++;
-		}
-
-		DbUtils.batchRecords(
-			mapId, memberRecords, QCurrentRelationMembers.currentRelationMembers, null, 
-			RecordBatchType.INSERT, conn, maxRecordBatchSize);
-	}
-
-	/**
-	 * Inserts a new relation into the services database
-	 *
-	 * @param changesetId corresponding changeset ID for the way to be inserted
-	 * @param mapId corresponding map ID for the element to be inserted
-	 * @param members the relation's members
-	 * @param tags element tags
-	 * @param dbConn JDBC Connection
-	 * @return ID of the newly created element
-	 * @throws Exception
-	 */
-	public static long insertNew(final long changesetId, final long mapId,
-	  final List<RelationMember> members, final Map<String, String> tags, Connection dbConn) 
-	  throws Exception
-	{
-		final long nextRelationId = 
-			new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
-		    .uniqueResult(SQLExpressions.nextval(Long.class, "current_relations_id_seq"));
-		insertNew(nextRelationId, changesetId, mapId, members, tags, dbConn);
-		return nextRelationId;
-	}
-
-	/**
-	 * Inserts a new relation into the services database with the specified ID;
-	 * useful for testing
-	 *
-	 * @param wayId ID to assign to the new way
-	 * @param changesetId corresponding changeset ID for the element to be inserted
-	 * @param mapId corresponding map ID for the element to be inserted
-	 * @param members the relation's members
-	 * @param tags element tags
-	 * @param dbConn JDBC Connection
-	 * @throws Exception
-	 */
-	public static void insertNew(final long relId, final long changesetId, final long mapId, 
-	  final List<RelationMember> members, final Map<String, String> tags, Connection dbConn) 
-	  throws Exception
-	{
-		CurrentRelations relationRecord = new CurrentRelations();
-		relationRecord.setChangesetId(changesetId);
-		relationRecord.setId(relId);
-		final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
-		relationRecord.setTimestamp(now);
-		relationRecord.setVersion(new Long(1));
-		relationRecord.setVisible(true);
-		if (tags != null && tags.size() > 0)
-		{
-			relationRecord.setTags(tags);
-		}
-
-		String strKv = "";
-		if (tags != null)
-		{
-			Iterator it = tags.entrySet().iterator();
-			while (it.hasNext())
-			{
-				Map.Entry pairs = (Map.Entry) it.next();
-				String key = "\"" + pairs.getKey() + "\"";
-				String val = "\"" + pairs.getValue() + "\"";
-				if (strKv.length() > 0)
-				{
-					strKv += ",";
-				}
-
-				strKv += key + "=>" + val;
-			}
-		}
-		String strTags = "'";
-		strTags += strKv;
-		strTags += "'";
-
-		String POSTGRESQL_DRIVER = "org.postgresql.Driver";
-		Statement stmt = null;
-		try
-		{
-			Class.forName(POSTGRESQL_DRIVER);
-
-			stmt = dbConn.createStatement();
-
-			String sql = 
-				"INSERT INTO current_relations_"
-			    + mapId
-			    + "(\n"
-			    + "            id, changeset_id, \"timestamp\", visible, version, tags)\n"
-			    + " VALUES(" + relId + "," + changesetId + "," + "CURRENT_TIMESTAMP"
-			    + "," + "true" + "," + "1" + "," + strTags +
-
-			    ")";
-			stmt.executeUpdate(sql);
-			new Relation(mapId, dbConn, relationRecord).addMembers(mapId, members);
-
-		}
-		catch (Exception e)
-		{
-			throw new Exception("Error inserting node.");
-		}
-
-		finally
-		{
-			try
-			{
-				if (stmt != null)
-					stmt.close();
-			}
-			catch (SQLException se2)
-			{
-			}
-		}
 	}
 }

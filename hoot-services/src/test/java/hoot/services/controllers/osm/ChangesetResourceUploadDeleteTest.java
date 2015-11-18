@@ -2439,7 +2439,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       members.add(new RelationMember(wayIdsArr[0], ElementType.Way, "role1"));
       tags.put("key 1", "val 1");
       tags.put("key 2", "val 2");
-      Relation.insertNew(negativeRelationId, changesetId, mapId, members, tags, conn);
+      OsmTestUtils.insertNewRelation(negativeRelationId, changesetId, mapId, members, tags, conn);
       tags.clear();
       CurrentRelations insertedRelationRecord =
       		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationsTbl)
@@ -2452,7 +2452,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       members.clear();
       members.add(new RelationMember(nodeIdsArr[1], ElementType.Node, "role1"));
       members.add(new RelationMember(wayIdsArr[1], ElementType.Way, "role1"));
-      relationIds.add(Relation.insertNew(changesetId, mapId, members, null, conn));
+      relationIds.add(OsmTestUtils.insertNewRelation(changesetId, mapId, members, null, conn));
 
       final Long[] relationIdsArr = relationIds.toArray(new Long[]{});
 
