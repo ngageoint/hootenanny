@@ -11,6 +11,8 @@ The general case of the Hootenanny conflation workflow is shown in <<HootConflat
 .Hootenanny Conflation Workflow.
 image::user/images/id/hoot_general_workflow.png[]
 
+Hootenanny currently supports the conflation of POIs, Building polygons, Transportation polylines (highways, cart tracks, trails, bridges, and tunnels), and experimentally, Waterway polylines (hydrologic features such as rivers, streams, drainage, and ditches).   When conflating these features, it is important to note that conflation occurs between similar feature types (e.g. POI to POI, Building to Building, Transportation polyline to Transportation polyline, etc.) but not across feature domains (POI to Polygon, POI to Polyline, etc.).
+
 This guide is intended as a general purpose reference to understand various components of the software functionality and provide simple use cases that demonstrate how to leverage these capabilities using publically available datasets. The document is broken down into sections by application functionality such as adding new layers, editing map data, translation between different application schemas and performing conflation using reference and non-reference datasets. For background on the project history, command line interface, javascript api, and other technical details please refer to the Hootenanny User Guide. 
 
 === Accessing Hootenanny
@@ -21,7 +23,7 @@ Hootenanny can be accessed from a web browser using the standard URL http://(you
 .Hootenanny User Interface Layout. *A*: Layer editing tool bar for adding/editing Points, Lines and Polygons and Saving edits; *B*: Map navigation and background layer configuration tool bar (DigitalGlobe Global Basemap selected as background layer); *C*: Layer display; *D*: Hootenanny version info (click on Hootenanny); *E*: Hootenanny UI Manage link; *F*: Map View. San Diego, CA; Basemap Imagery is DigitalGlobe GlobalBasemap (GBM).
 image::user/images/id/hoot_UI_layout.png[]
 
-=== Adding Layers 
+=== Adding Layers to the Map
 
 During conflation, source datasets are merged based on user-specified conflation parameters to create an output layer that is ultimately superior in terms of complete geometry and attribution. Two datasets are required to perform a conflation; _Reference_ and _Secondary_ Data. To add a new Reference Dataset to the map, click on the _Add Reference Dataset_ button on the left side. A list of available layers will appear in the drop down menu as shown in <<hoot_add_datasets>>. Note that in order to add a layer it must be <<Hoot-iD_Datasets,imported>> into Hootenanny using the workflow described in <<Hoot-iD_Datasets>>. 
 
@@ -32,6 +34,17 @@ image::user/images/id/hoot_addlayer_folder.png[scaledwidth="25%"]
 [[HootiD-Addinglayers]]
 .Displaying Haiti roads layers in Hootenanny. datasets shown are extracted OSM highway data (blue) and MGCP data (pink) from link:$$http://www.arcgis.com/home/item.html?id=1a253aad38274c1a93b17eafdf885853as$$[ESRI] website; DigitalGlobe GlobalBasemap (GBM).
 image::user/images/id/hoot_Haiti_roads.png[] 
+
+To zoom to the layer extent simply right-click on the layer and click on the Zoom to Layer button that appears on the layer name.  This is useful when panning or zooming outside of the viewable extent or scale of the data.  
+
+[Hoot_zoomtolayer]]
+.Zooming to Layer extent.  Right click on the layer name and select zoom to layer.  
+image::user/images/id/hoot_zoom-to-layer.png[scaledwidth="25%"]
+
+When adding a layer with a large extent or a dense feature count, it is likely that the data will not be visible at the initial data extent.  To confirm whether this limitation is impacting the display of features for a given layer, we have added a yellow warning icon that will display warning messages such as "Features are loaded, but are currently not visible. Try zooming in for better results." when a user hovers the icon with their mouse cursor. 
+
+.Warning Message indicating features present but not visible at current zoom scale.  
+image::user/images/id/hoot_alert.png[scaledwidth="50%"]
 
 NOTE: The order in which layers are added to Hootenanny is important. For Reference and Average conflation, the reference data is assumed to contain the reference geometry during conflation and whichever layer is selected to contain the reference attribution provided in the conflation options. For Cookie Cutter & Horizontal conflation, the reference data are typically higher fidelity dense urban data while the secondary data source are sparser regional level map data. 
 
@@ -81,6 +94,8 @@ image::user/images/id/hoot_adddata.png[scaledwidth="75%"]
 
 To add a new linear feature, click on the Line button or use the '2' shortcut key and begin digitizing on the map. A pop-up message will appear if you would like to snap to an existing linear feature. Click on a single location to begin the linear feature and then continue clicking until feature has been completed. Double-click to complete the process and edit any attribution as needed. Repeat process for a new Area feature. Click Save to save all edits or step back/forward using the undo/redo buttons as needed.
 
+NOTE: clicking 'i' will display the length or area of a selected feature but note that the recommended tool for measuring is discussed <<Hoot_measure,here>>.
+
 ==== Copying Features/Tags
 
 In certain circumstances it may be useful to utilize copy/paste functionality when editing layers and addressing conflict reviews within Hootenanny.  For example, if users need to create multiple copies of a selected feature (or set of features) within the same map layer (e.g. foot path, bridge, secondary road, POI, etc...) or they would like to copy attributes from a feature (or multiple selected features) in the reference layer to similar feature in the secondary layer when reviewing conflicts, they could use the following currently supported work flows.  
@@ -98,7 +113,7 @@ NOTE: Hootenanny does not currently support copying feature geometry between mul
 
 ===== Copying Tags Between Two Layers
 
-When reviewing conflicts or performing any manual editing with two layers, it maybe useful to copy tags from a selected feature(s) in the Reference layer to a feature(s) in a Secondary layer.  For example, if during conflation a set of features has been identified as needing review, a user can use the copy/paste tag functionality to ensure that a set of attributes are included in the merged output.  Click on any field in either the blue/red conflict review table (selecting either the blue/red field will depend on which represents the reference or secondary layer) to select a feature to copy from (or by clicking on the feature geometry) and hit `ctrl+c` to copy the tags.  Then select to target feature(s) to paste to by clicking on target field and hit `shift+ctrl+v`.  This will copy all of the tags to the selected feature(s).  You may see a pop-up message indicating that an error occurred due to two active layer being present.  If that is the case you can turn off the source layer by unchecking it from the background settings (shortcut key = b) temporarily before pasting.  If you have all tags displayed you will notice that in addition to the pre-existing tags all copied tags from the source feature will appear listed.  
+When <<HootConflictReview,reviewing>> conflicts or performing any manual editing with two layers, it maybe useful to copy tags from a selected feature(s) in the Reference layer to a feature(s) in a Secondary layer.  For example, if during conflation a set of features has been identified as needing review, a user can use the copy/paste tag functionality to ensure that a set of attributes are included in the merged output.  Click on any field in either the blue/red conflict review table (selecting either the blue/red field will depend on which represents the reference or secondary layer) to select a feature to copy from (or by clicking on the feature geometry) and hit `ctrl+c` to copy the tags.  Then select to target feature(s) to paste to by clicking on target field and hit `shift+ctrl+v`.  This will copy all of the tags to the selected feature(s).  You may see a pop-up message indicating that an error occurred due to two active layer being present.  If that is the case you can turn off the source layer by unchecking it from the background settings (shortcut key = b) temporarily before pasting.  If you have all tags displayed you will notice that in addition to the pre-existing tags all copied tags from the source feature will appear listed.  
 
 NOTE: Any duplicate tags in the target feature will be overwritten during copy/paste.
 
@@ -106,20 +121,13 @@ NOTE: Any duplicate tags in the target feature will be overwritten during copy/p
 
 The Hootenanny map portion of the interface mirrors the Open Street Map iD editor link:$$https://www.openstreetmap.org/edit?editor=id$$[OpenStreetMap-iD] with additional customization to support conflation workflows. Map navigation options appear in the upper right portion of the map viewer noted by B in figure <<HootiD-UILayout>>. To view a maptip and/or <<Hoot-iD_Shortcuts,shortcut>>, hover the cursor over each button and information concerning the functionality of a particular feature will appear. 
 
-It is also possible to display a line length or polygon area by clicking the 'i' key when a feature has been selected.  Display units can be toggled between feet (imperial) and meters (metric) by clicking on either option.  To measure the distance between any two points, select line or hit the 2 shortcut and click from the starting to ending point with the feature info displayed.  This will give you a measurement between two locations.  
-
-.Display length of feature on map.  DC POI data from Geonames.org with DigitalGlobe Basemap imagery.
-image::user/images/id/hoot_measure.png[scaledwidth="50%"]
-
-NOTE: When creating a line between two POIs to measure a distance value, use the undo buttons to remove the line rather than the delete palette tool.  This is because the linear feature replaces the original POIs with a new start and end node and deleting the feature removes both the original POIs and the newly created line.
-
 ==== Map Navigation
 
 Clicking on either '+' or '-' buttons will zoom the user one level higher/lower in the map. Alternatively users can use the middle scroll wheel of their mouse to zoom up or down levels. To open the map to your current location, click on the arrow button noting that some browser security settings do not allow users to share their location information.  
 
 ==== Background Settings
 
-Clicking on the Background Settings button (shorcut key = b) opens up a panel displaying different background layer display options. To set the brightness for the background layer, click on the palette next to Background for 100%, 75%, 50%, or 25% brightness. Users can select from a range of publicly available basemaps such as Bing aerial imagery, MapQuest Open Aerial, Mapbox Satellite, OpenStreetMap, or create a custom basemap URL using the following URL template shown below. Any user uploaded <<Hoot-iD_Basemap,Basemap>> images will appear in this panel. For those with access to DigitalGlobe GBM/EGD imagery service via mapproxy, users can select from a variety of display options such as the Most Recent, Most Aesthetic Color, Least Cloud Cover, etc.. 
+Clicking on the Background Settings button (shorcut key = b) opens up a panel displaying different background layer display options. To set the brightness for the background layer, click on the palette next to Background for 100%, 75%, 50%, or 25% brightness. Users can select from a range of publicly available basemaps such as Bing aerial imagery, MapQuest Open Aerial, Mapbox Satellite, OpenStreetMap, or create a custom basemap URL using the following URL template shown below. Any user uploaded <<Hoot-iD_Basemap,Basemap>> images will appear in this panel. For those users with access to DigitalGlobe link:$$https://evwhs.digitalglobe.com/myDigitalGlobe/[EV Web Hosting Service] (EVWHS), the GBM/EGD imagery service can be selected using different imagery profiles e.g. Most Recent, Most Aesthetic Color, Least Cloud Cover.  To get register for an account please visit: https://evwhs.digitalglobe.com/myDigitalGlobeAdmin/RegistrationRequest.html 
 
 .DigitalGlobe GBM/EGD display options.
 image::user/images/id/hoot_GBM.png[scaledwidth="25%"]
@@ -134,6 +142,7 @@ http://(hosted_imagery_service_name)/OSM/{zoom}/{x}/{y}.png
 .Background Settings in Hootenanny with the Custom Basemap URL options displayed.
 image::user/images/id/hoot_background.png[scaledwidth="75%"] 
 
+NOTE: The DigitalGlobe GBM/EGD basemap is not enabled by default due to user access restrictions. If an account has been set up with a valid UUID, you will need to edit the _dgservices.js_ file located in $TOMCAT6_HOME/webapps/hootenanny-id/js/id/services/ adding in your UUID account credentials for the egd/gbm_connectId = 'enteruuidhere' parameters.  You will also need to set dg.enabled = true.
 
 ==== Image Carousel
 
@@ -142,11 +151,9 @@ The image carousel displays all of the available images by timestamp and sensor 
 .DG Image Carousel. Washington, D.C.; link:$$http://dcatlas.dcgis.dc.gov/catalog/download.asp?downloadID=88&downloadTYPE=ESRI$$[DC GIS Roads]; DigitalGlobe GlobalBasemap (GBM).
 image::user/images/id/hoot_image_carousel.png[]
 
-NOTE: Currently GBM/EGD image thumbnails do not display.
-
 ==== Map Data
 
-The Map datasettings allow users to add map overlay information such as a photo overlay from link:$$http://www.mapillary.com/map$$[Mapillary] or a local GPX file, modify the display settings for vector data, and filter existing Map Features. _Mapillary_ is a crowd source platform that allows users to upload street level photos (not commonly used for conflation but part of the core OSM iD interface) when available. Users can also drag and drop a local GPX (GPS generated dataset) or use the file browser to add. 
+The Map data settings allow users to add map overlay information such as a photo overlay from link:$$http://www.mapillary.com/map$$[Mapillary] or a local GPX file, modify the display settings for vector data, and filter existing Map Features. _Mapillary_ is a crowd source platform that allows users to upload street level photos (not commonly used for conflation but part of the core OSM iD interface) when available. Users can also drag and drop a local GPX (GPS generated dataset) or use the file browser to add. 
 
 Fill Areas allows users to select from three different options for displaying relevant vector data. The first option is _No Fill_ or Wireframe (shortcut key = W) which makes it easier to display background imagery. _Partial Fill_ displays fill areas around their inner edges only. _Full Fill_ displays features with complete fill turned. Finally, users can filter Map Features of interest by simply checking or unchecking the boxes next to the common map features such as Points, Major Roads, Buildings, etc. To access the settings click on the Map Data (shortcut key = F) highlighted in blue in <<Hoot-iD_MapData>>.  
 
@@ -154,13 +161,27 @@ Fill Areas allows users to select from three different options for displaying re
 .Map datasettings in Hootenanny.
 image::user/images/id/hoot_mapdata.png[scaledwidth="25%"]
 
+==== Tools
+
+The Map Tools button current provides measurement tools for capturing linear distances or area measurements.  To measure a feature click the Tools button shown in <<Hoot_measure>>. and select either Measure Line or Measure Area.  To measure a linear feature, click on the map to add nodes and double-click to complete the measurement.  To measure an area, click on each point and double-click to complete the polygon.  
+
+[[Hoot_measure]]
+.Tools. Options currently include measuring length and area.
+image::user/images/id/hoot_measure.png[scaledwidth="50%"]
+ 
+NOTE: When measuring an object the pan/zoom functions are disabled.  Clicking on the map after completing the measurement will cause the value to disappear from the screen.
 
 ==== Help
 
 To access help for the standard features within iD, click on the bookmark icon below the Background Settings button or type the 'h' shortcut key. This feature is included within the standard iD Editor and includes background information on all OSM editing related functionality. It has been included in Hootenanny for continuity purposes noting that numerous tutorials on standard iD functionality such as adding/editing OSM features can be found in this help guide.
 
 .Accessing the iD editor Help page within Hootenanny.
-image::user/images/id/hoot_helpmenu.png[scaledwidth="25%"] 
+image::user/images/id/hoot_helpmenu.png[scaledwidth="50%"]
+
+==== Hoot UI Error Messages
+
+Hootenanny will display any UI related error messages, e.g. Layer already exists, in the top right corner of the map.  These will appear in either red, yellow or blue highlighted text to indicate an error, warning, or notice, respectively.
+
 
 [[Hoot-iD_Shortcuts]]
 === Hootenanny Shortcuts
@@ -169,9 +190,9 @@ The following table provides all of the available shortcut keys for accessing Ho
 
 |======
 | *Shortcut* | *Action*
-| 1 | Create new Point feature
-| 2 | Create new Line feature
-| 3 | Create new Area feature
+| 1 | Create new Point feature ("Confirmed" in Validation Mode)
+| 2 | Create new Line feature ("Assessed" in Validation Mode)
+| 3 | Create new Area feature ("Reported" in Validation Mode)
 | ctrl + z | Undo
 | ctrl + y | Redo
 | ctrl + s | Save
@@ -184,7 +205,7 @@ The following table provides all of the available shortcut keys for accessing Ho
 | alt + n | Toggles layer visibility on/off
 | + | Zoom in 1 level
 | - | Zoom out 1 level
-| / | Toggles display of overview map
+| / | Toggles display of overview map and map-in-map results during Conflict Review
 | a | Continue drawing a line at the selected node
 | b | Display background layer switcher 
 | c | Open Image carousel
@@ -232,6 +253,8 @@ The existing folder path where you want to save the conflated output. To create 
 
 The name of a new folder if you wish to create one to save the output.  Note that it will be created at the level specified in the Path.  Leave blank if no new folder is required.
 
+NOTE: By default the output folder path will be the same as the input layers unless the two input folders are not the same.
+
 ===== Type
 
 There are *four* types of conflation that are exposed in the UI: *_Reference, Average, Cookie Cutter & Horizontal_* and *_Advanced_*.
@@ -264,6 +287,7 @@ image::user/images/id/hoot_convexhull_example.png[scaledwidth="40%"]
 
 NOTE: In the user interface there is no way to tune or modify the generated alpha-shape. You can however configure the alpha-value from the command line (see alpha-shape in User Guide). In either case, the generated alpha-shape will always approximate the bounds of the data regardless of shape of the urban area.
 
+[[Hoot_AdvancedConflation]]
 4) *_Advanced Conflation_*
 
 The _Advanced Conflation_ options provide users with the ability to customize a particular conflation job using a set of exposed advanced <<Advanced_Conflation_Options,options>>. These are intended for use cases where there is intimate familiarity with both the configuration parameters and the unique set of conditions that warrant their use. For example, to modify any of the Cleaning or Rubber Sheeting options when conflating rivers, users can simply expand the Cleaning Options and Waterway Options panels and modify accordingly. Note that caution should be exercised when applying these as their use may produce unexpected results. 
@@ -286,6 +310,7 @@ Hootenanny will generate a conflation performance report containing various stat
 .Sample page from Hootenanny Conflation Statistics Report.
 image::user/images/id/hoot_csr.png[scaledwidth="50%"]
 
+[[HootConflictReview]]
 ==== Reviewing Conflicts
 
 When conflating data it is inevitable that conflicts may arise due to the lack of a clear solution as a result of ambiguous relationships between matched features. When this occurs, reviewable items are flagged and presented to the user in the UI through an iterative review process where the user must decide a particular action, e.g. accept as resolved, modify or delete, merge, before merging the final conflated output. In Hootenanny core, the concept of a "Review" is used to refer to something that needs to be reviewed by the user. This could include any of the following: 
@@ -294,9 +319,85 @@ When conflating data it is inevitable that conflicts may arise due to the lack o
 * Conflicting matches – In the core conflict refers to two matches that cannot be applied to the same map.
 * Records that somewhat match, but aren’t clearly a match or miss.
 
-From the UI perspective, the term "Conflict" is used synonymously with a Review but note that not all reviews are conflicts. Each type of data (POI, Buildings, Roads, etc.) when conflated introduce their own unique types of conflicts where the user is advised to take some action of either merging two POIs together, editing a layer geometry to eliminate any potential conflict or resolve the item as is to maintain as a separate feature.  No single solution can be provided to address a particular conflation conflict but rather it is up to the user to take the necessary steps based on the review text presented to reduce the likelihood that erroneous data will get introduced during the conflation process. The following examples are provided as guidance to help users better understand potential conflation and review issues that may arise keeping in mind that each scenario will vary tremendously from one to another depending on the characteristics of the source data.  Hootenanny performs conflation in a pairwise manner where a feature is compared with another (based on convergence of geometry and attribution) to determine whether there is a relationship warranting merger or review. Features flagged for review will appear in the map after the conflation job has scanned the output for conflicts using either red or blue highlighting along with a corresponding attribute table.  Clicking in any of the highlighted fields will select the feature in question and display its attribute in the left tag panel (see <<ReferenceConflictReview>>).  Users can hide the table by clicking on the Hide/Show Table button located in the conflict review bar at the bottom.
+From the UI perspective, the term "Conflict" is used synonymously with "Review" but not all reviews are conflicts. Each type of data (POI, Buildings, Roads, etc.) when conflated introduce their own unique types of conflicts where the user is advised to take some action of either merging two POIs together, editing a layer geometry to eliminate any potential conflict or resolve the item as is to maintain as a separate feature.  No single solution can be provided to address a particular conflation conflict but rather it is up to the user to take the necessary steps based on the review text presented to reduce the likelihood that erroneous data will get introduced during the conflation process. 
+
+During review, a single feature is compared with another (based on convergence of geometry and attribution) to determine whether a merge or alternative action is required. Note that feature merging is only available for POI to POI conflation. Otherwise the user can modify  Features flagged for review will appear highlighted on the map in either red or blue corresponding to the Reference and Secondary input data.  Clicking in any of the highlighted fields in the review table will select the feature in question and display its attribute in the left tag panel (see <<ReferenceConflictReview>>).  Users can hide the table by clicking on the Hide/Show Table button located in the conflict review bar at the bottom.  In order to complete the review process, all reviews must be resolved either by stepping through each individually or by clicking the _Complete Review_ button to resolve remaining reviews and either export the data to the desired output format or add another layer for conflation.
+
+NOTE: Although reviews occur between single pairs of features, a review set may actually contain 1:Many features which will appear within the UI under the review note as 1 of X count.  
+
+===== Review Text
+
+When features are flagged as needing review, a number of different review notes may appear to provide some guidance to the user.  The review notes are general and don't provide the specific reasons why a pair of features are being reviewed against one another.  The following sections are meant to be a supplemental guide for users to help them evaluate the particular review scenarios.
+
+*_POI Review Text_*
+
+|======
+| *Review Note* | *Description* 
+| similar names | The name score is in the range (0.987403, 1.2)
+| very similar names | The name score is in the range [1.2, +∞)
+| very close together | The distance between the POIs is <= search radius * 0.2
+| no place match | At least one of the POIs is a place and the place types are not considered at all similar
+| poor place match | At least one of the POIs is a place and the place types are not considered very similar
+| similar name and place type | The names are very similar and the place types are similar
+| generic type to place match | One of the POIs is a generic type (e.g. poi=yes) and the other is a place (e.g. place=town)
+| similar POI type | The two POIs have a similar type (e.g. amenity=restaurant vs. amenity=café)
+|======
+
+*_Highway Review Text_*
+
+The review for highways tends to be a bit more complex due to the nature by which road features are handled within Hoot.  The following is meant to be a guide for helping address review scenarios.
+
+A. *Review Text*: _Elements contain too many ways and the computational complexity is unreasonable_ 
+
+* *Reason*: A multiline string geometry was attempted to be conflated that had more lines in it than Hootenanny can conflate in a reasonable amount of time using its current algorithms. Currently, that is when both input sublines to conflate contain more than four lines, or if the sum of lines they contain is greater than seven.
+* *User Action*: Review this feature manually. It can only be automatically conflated by developing new conflation algorithms that can handle multilinestring input data of this size.
+* *Possible Improvements*: We are using an exhaustive search now to find the best subline pairings, replacing that with a heuristic should make the computational complexity reasonable.
+
+B. *Review Text*: _Expected a matching subline, but got an empty match_
+
+* *Reason*: This is the a result of the "Delayed Detection of Complex Road Conflict"
+* *User Action*: Review this feature manually, and report this behavior to the Hootenanny development team for further examination. 
+* *Possible Improvements*: Spending time investigating specific situations where this comes up may lead to a solution that reduces or eliminates this review.
+
+C. *Review Text*: _MultiLineString relations can only contain ways when matching sublines_
+
+* *Reason*: A input being conflated of geometry type multiline string contained an OSM feature type other than a way (nodes or relations). This will likely only happen in OSM/MapEdit data.
+* *User Action*: Review this feature manually. This is invalid input data for Hootenanny conflation purposes and cannot be conflated automatically. Open up the relation and see what is inside. If there is a “highway” relation that contains non-way types it is likely invalid. If the solution isn’t clear then contact the developers.
+
+D. *Review Text*: _Multiple overlapping way matches were found within one set of ways_
+
+* *Reason*: If this occurs there is an internal logic error in Hoot.
+* *User Action*: If this appears it is an internal error. Please report this to hootenanny.help@digitalglobe.com.
+
+E. *Review Text*: _No valid matching subline found_
+
+* *Reason*: When conflating two linear inputs, Hootenanny could not find a corresponding matching subline part in one of the inputs.
+* *User Action*: Review this feature manually, as Hootenanny can not determine automatically whether it matches any feature in the opposite input dataset.
+* *Possible Improvements*: General improvements to road conflation (e.g. intersection matching) will reduce the frequency of this issue.
+ 
+===== Multi-user Review Scenarios
+
+It is possible for multiple concurrent users to edit the same layer to resolve reviews generated for larger conflated data scenarios.  The current approach that Hootenanny supports is to allow anyone with access to the same deployed instance of Hootenanny to load any layer in the database with the caveat that any features reviewed by active users will appear as "locked" to prevent any unauthorized modifications to these features.  By utilizing a time-based locking mechanism, Hootenanny prevents the same feature from being reviewed twice by concurrent users. Note that is not intended as a long term solution to address user authentication and security. For more fine grained control of feature/layer editing a robust user authentication and security profile will be required. 
+
+Using a quick example, if a conflation job produces a merged layer with 100 open reviews, the first user (user1) who loads the merged layer automatically locks the unresolved review pair loaded in their browser session. If a second user (user2) then simultaneously loads this layer, a different review will be presented to user2 and the total number of locked features will increase to 2 corresponding to the reviews of user1 and user2. 
+
+As a general rule, the number of locked features will increase as new users add the same merged layer and then decrease as reviews get resolved or as the time duration that features are locked (~2 minutes) expires.  When a review is locked, it cannot be resolved by anyone other than the user who is reviewing it unless they hit the resolve all remaining reviews. 
+
+NOTE: When a user modifies a feature's review status by clicking the Resolved button, the changes to the feature cannot be undone.
+
+[[MapInMap]]
+===== Map-in-Map
+
+In Hootenanny, the concept of 'Map-in-Map' is used here to describe an inset or overview map that contains additional spatial information relating to the conflation i.e where reviews occur within the AOI. When a conflation job completes and reviews are generated, users can display an overview map showing coloured points representing the location (or centroid of the location) where unresolved, merged, and currently reviewed features occur for the corresponding AOI.  To view this map, press the '/' key when reviewing features and the smaller overview map should display a set of points representing the review layer.  
+
+Depending on the density of data flagged for review, the features are represented in the following manner: yellow dots corresponding to the location of unresolved reviews; a single red dot indicating the currently reviewed feature in the user's session; and green dots representing any resolved or merged features.  This visual aid becomes useful particularly when multiple users are editing the same layer simultaneously since it provides a map of the spatial distribution of reviews in real or near-real time.  
+
+.Map-in-Map with unreviewed features displayed (yellow dots).  Shown here is a POI review of a conflation between OpenStreetMap POIs and Geoname POIs within Sao Paulo, Brazil (Imagery is DigitalGlobe GBM Basemap).  
+image::user/images/id/hoot_mapinmap_review.png[scaledwidth="75%"] 
 
 ==== Conflation Examples
+
+The following conflation examples are provided as guidance to help users better understand potential conflation and review issues that may arise keeping in mind that each scenario will vary tremendously from one to another depending on the characteristics of the source input data.  
 
 ===== Reference Conflation: Washington DC GIS Roads against Census Tiger data.
 
@@ -371,8 +472,6 @@ Unlike linear and polygon features, the review process for POIs provides the abi
 [[POI2POIConflictReview]]
 .Reviewing Washington, D.C. POI conflicts in Hootenanny using the DC POI and mapcruzen data. The figure shows two POIs representing what could either be the same location or two entirely different entities.  In this case the user would need to determine whether the feature highlighted in red, "Reed Elementary School", should be merged with the feature highlighted in blue, "MARIE REED ELEMENTARY SCHOOL".  Hovering over the merge button displays an arrow indicating the directionality of the merge.  
 image::user/images/id/hoot_poi_conflate.png[]
- 
-NOTE: If the PLACES algorithm is selected under the Advanced POI options than no reviews will be generated.
 
 [[HootiD_GenericRiverConflation]]
 ==== Advanced Conflation Example: Generic River Conflation
@@ -436,11 +535,9 @@ To begin the process, users select the tag schema they want to use to define the
 
 Users must upload the dataset files for which they want to define a translation. If the _Upload file(s)_ dialog is open, files chosen can be one or more shapefiles, consisting of .shp, .shx, and .dbf components at a minimum; or a zip file containing one or more shapefiles, or a folder that is a file geodatabase. If the _Upload folder_ dialog is opened, the chosen folder can contain one or more shapefiles or be a file geodatabase.
 
-NOTE:  If the uploaded dataset contains more than one layer a drop-down will be added to the UI and translation mappings should be defined for every attribute of each layer.
+NOTE:  If the uploaded dataset contains more than one layer a drop-down will be added to the UI and translation mappings should be defined for every attribute of each layer. 
 
 The translation mappings are defined at the attribute level and support one-to-one, one-to-many and many-to-one attribute-tag associations. To better illustrate the utility of this tool, a walk through example is provided using the Washington, D.C. Street Centerline data downloaded from DCGIS Open Data's data catalog (http://opendata.dc.gov/). For this example we will be using a downloaded link:$$http://opendata.dc.gov/datasets/f3b0c6a6ff5f4493b85d858e67b7400b_43.zip$$[shapefile] from the site and mapping it to the OSM Tag Schema.  
-
-===== Notes on Custom Translations
 
 *_One to One Mappings_*
 
@@ -490,113 +587,18 @@ Attributes such as _OWNERSHIP_, _STNAME_, _SHAPE_LENGTH_, and _REGISTERED_ repre
 
 NOTE:  After entering name, the user can either press Tab or Enter to select the first option or click the desired option from the list. To register a tag key not found in the lookup press Tab or Enter. To register a tag key that is a substring of a lookup key, use the Backspace button to remove the auto-completed portion of the string and press Tab or Enter. To dismiss an incomplete tag key press Escape. To remove a defined tag mapping click the X icon.
 
-Once all attributes have been either mapped or ignored, a _Save Translation_ button will appear at the bottom. To review the full list simple click on any attribute name to expand the list. A check will appear for all mapped attributes and a X for all ignored. It is important to note that while the Translation Assistant covers the vast majority of schema mapping use cases, there will invariably be situations that require a more complex set of conditions such as a dependency on multiple fields to set a tag value. For these cases, there are javascript examples in the %HOOT_HOME/translation directory of the install that can provide better guidance and any specific questions can be directed the hootenanny support email Hootenanny.Help@DigitalGlobe.com.
+Once all attributes have been either mapped or ignored, a _Save Translation_ button will appear at the bottom indicating that the translation is populated with enough values to be functional (when mapping to TDS tag schema at minimum users must have at least one feature type mapped to an F_CODE before they are prompted to save the translation). Users can review the expanded list of tag mappings by clicking on each attribute name under the attribute number bar. A check will appear for all mapped attributes and a X for all ignored. 
 
 .The translation mapping can be saved once all attributes have been defined. 'X' boxes indicate ignored attributes while checked boxes are mapped.
 image::user/images/id/hoot_TA_save_trans.png[scaledwidth="25%"] 
 
-Clicking Save Translation downloads the newly created custom translation javascript file to the users local desktop. The content of this file can be subsequently pasted into a new Translation named DC_Streets under the <<HootiD-Translation,Translation>> tab. Finally when <<Hoot-iD_Datasets,importing>> the DC Street Centerline dataset into Hootenanny, the user applies this translation to ensure that the necessary attribution is maintained in the file during conflation. For this particular example, the associated javascript will appear as below:
+When the user is satisfied that their translation is sufficiently populated with enough defined tag mappings, they can click on the Save Translation button and a pop-up message will appear asking whether you would like to add it to the list of available internal translations.  Clicking OK will open the _New Translation_ dialog box with the generated translation file in javascript.  Provide a name and description then Save Edits to save the translation.  This translation file will now be available to use for importing new data as discussed in <<Hoot-iD_Datasets>>.
 
-------
-hoot.require('translation_assistant')
+.Adding the translation to list of internal Hootenanny translations.
+image::user/images/id/hoot_addtranslation.png[scaledwidth="50%"]
 
-var attributeMapping = {
-    "Street_Centerlines_-_Light": {
-        "FUNCTIONAL": {
-            "highway": {
-                "Collector": "tertiary",
-                "Interstate": "primary",
-                "Local": "unclassified",
-                "Minor Arterial": "secondary",
-                "Other Freeway and Expressway": "motorway",
-                "Principal Arterial": "primary"
-            }
-        },
-        "INSERVICED": "IGNORED",
-        "ISALIAS": "IGNORED",
-        "LEFTZIPCOD": "IGNORED",
-        "LIFECYCLES": "IGNORED",
-        "NHSTYPE": "IGNORED",
-        "OBJECTID": "IGNORED",
-        "OBJECTID_1": "IGNORED",
-        "OWNERSHIP": {
-            "operator": "OWNERSHIP"
-        },
-        "STREETTYPE": "IGNORED",
-        "STTYPEID": "IGNORED",
-        "ST_NAME": {
-            "name": "ST_NAME"
-        },
-        "TOLEFTADDR": "IGNORED",
-        "TOLEFTTHEO": "IGNORED",
-        "TORIGHTADD": "IGNORED",
-        "TORIGHTTHE": "IGNORED",
-        "UPDATETIME": "IGNORED",
-        "USPS_ABBRE": "IGNORED",
-        "DESCRIPTIO": {
-            "ref:road:type": {
-                "AVENUE": "avenue",
-                "BOULEVARD": "boulevard",
-                "BRIDGE": "other",
-                "CIRCLE": "circle",
-                "COURT": "other",
-                "CRESCENT": "other",
-                "DRIVE": "drive",
-                "EXPRESSWAY": "motorway",
-                "FREEWAY": "motorway",
-                "GREEN": "motorway",
-                "INTERSTATE": "motorway",
-                "KEYS": "other",
-                "LANE": "lane",
-                "LOOP": "other",
-                "PARKWAY": "limited_access_motorway",
-                "PLACE": "place",
-                "PROMENADE": "boulevard",
-                "ROAD": "road",
-                "ROW": "other",
-                "SQUARE": "other",
-                "STREET": "street",
-                "TERRACE": "terrace",
-                "WAY": "other"
-            }
-        },
-        "DIRECTIONA": {
-            "oneway": {
-                "One Way (Digitizing direction)": "yes",
-                "One way (Against digitizing direction)": "yes",
-                "Two way": "no"
-            }
-        },
-        "FROMLEFTAD": "IGNORED",
-        "FROMLEFTTH": "IGNORED",
-        "FROMRIGHTA": "IGNORED",
-        "FROMRIGHTT": "IGNORED",
-        "QUADCODE": "IGNORED",
-        "QUADRANT": "IGNORED",
-        "REGISTERED": {
-            "alt_name": "REGISTERED"
-        },
-        "RIGHTZIPCO": "IGNORED",
-        "ROADTYPE": "IGNORED",
-        "ROADWAYSEG": "IGNORED",
-        "SHAPE_Leng": {
-            "length": "SHAPE_Leng"
-        },
-        "SOURCEID": "IGNORED",
-        "STCODE": "IGNORED",
-        "STREETID": "IGNORED",
-        "STREETSEGI": "IGNORED"
-    }
-};
-var fcode;
-var schema;
-
-//translateToOSM - takes 'attrs' and returns OSM 'tags'
-var translateToOSM = function(attrs, layerName) {
-    return translation_assistant.translateAttributes(attrs, layerName, attributeMapping, fcode, schema);
-};
-
-------
+.Creating a new translation.
+image::user/images/id/hoot_save_translationfile.png[scaledwidth="50%"]
 
 [[HootiD-Translation]]
 ==== Translations
@@ -610,38 +612,87 @@ image::user/images/id/hoot_translation_tab.png[scaledwidth="75%"]
 image::user/images/id/hoot_new_translation.png[scaledwidth="50%"]  
 
 [[Hoot-iD_Datasets]]
-==== Importing/Exporting Data into Hootenanny
+==== Managing Data into Hootenanny
 
 The Dataset tab provides users with different tools for managing data that they wish to use in Hootenanny including importing from source (shapefile, osm, geonames, FGDB), organizing data into a folder structure, renaming/deleting/moving data that has been already ingested, and exporting data from Hootenanny into different formats and translation schemas.  To access this feature click on the Manage button in the top right corner and then open the Datasets tab to expose the options.  
 
 .Manage Datasets tab. Users can refresh the view, add a new folder, and add data using the buttons shown. Any dataset or folder that has been added will appear here.  
 image::user/images/id/hoot_dataset_tab.png[scaledwidth="75%"] 
 
+===== Adding Folders
+
 To add a new folder, click on the Add Folder button and enter the name of the folder they wish to create.  The first folder created will always live at the root level. 
 
 .Add new folder.  Click the Add New folder button to open the dialog box.
-image::user/images/id/hoot_add_folder.png[scaledwidth="25%"]
+image::user/images/id/hoot_add_folder.png[scaledwidth="50%"]
 
 Once a new folder has been created, users can either add data directly by right-mouse clicking on the folder to expose the Add Dataset option or by simply clicking on the Add data button to open the add data dialog.  
 
-.Manage data options available from Right-click.
-image::user/images/id/hoot_rclick_dataoptions.png[scaledwidth="25%"]
+===== Importing Data
 
 When users click on Add Data, a dialog box including different options is presented. These options include selecting the type of data to import (shapefile, osm, .zip containing shapefile or fgdb, a FGDB data folder, geonames file from geonames.org), a browser button to locate the data, the name you wish to save the layer as, the folder path where the data should reside (root is default), any new folder name if needed, and the appropriate Translation Schema.    
 
-To import data into Hootenanny, click on the _Add Dataset_ button in the Dataset tab to bring up the Add Data menu shown in <<AddNewData>>. For _Import Type_, users can select either a single file (.osm, .shp, .zip), a GEONAMES dataset from geonames.org or a folder for  ESRI FileGeoDatabase (FGDB) files. It is possible to merge multiple files in a single zip file during import but note that these datasets will get merged into a single layer in Hootenanny. Currently there is no support for importing zip files containing one or more .osm files (multiple .osm files can be merged into a single layer as long as they are not inside of a .zip).
+To import data into Hootenanny, click on the _Add Dataset_ button in the Dataset tab to bring up the Add Data menu shown in <<AddNewData>>. 
 
 [[AddNewData]]
 .Importing data into Hootenanny. 
-image::user/images/id/hoot_add_dataset.png[scaledwidth="25%"]
+image::user/images/id/hoot_import.png[scaledwidth="50%"]
 
-With data and folders displayed in the dataset tab, users can employ different options for managing their data including deleting the folder or layer, modifying the name or folder path of the layer, or adding additional folders and data as required using the right-click or path specification. It is important to note when deleting a folder, only the top-level or specified folder and its contents are deleted but any recursive folders and datasets remain.  In other words, it is not possible to delete an entire data directory tree by deleting the top level folder.  Users must select each subfolder to delete until all are removed within a hierarchical directory structure.   
+* _Import Type_: The type of the file to import.  Users can select either a .osm file, .shp, .zip containing either shapefiles or fgdb, a GEONAMES dataset from geonames.org (must be saved in the format .geonames before uploading), or a folder for  ESRI FileGeoDatabase (FGDB) files. 
 
-To export a dataset, right-mouse click on a dataset and select the Export Dataset option to open the Export dialog box shown in <<hootexport>>.  The export options available from Hootenanny are discussed in <<HootiD_Exporting>>. 
+* _Import Data_: The local/network path to the dataset.
 
-[[right-click_export]]
-.Export from dataset.
-image::user/images/id/hoot_export_rtclick.png[scaledwidth="25%"]
+* _Layer Name_: The name of the layer once imported.
+
+* _Translation Schema_: The translation schema to use when importing the data.  Note that if importing data used to create a custom translation this is where you would specify that translation file generated earlier from translation assistant.  Otherwise you must use one of the available translation schemas (e.g. MGCP, TDS, etc.). When selecting the .geonames format, a GEONAMES translator is automatically selected.  Similarly with .osm files, user can either specify the default osm translation from openstreetmap.org or no translation to simply add the data (this assumes that it is already conformant).  
+
+NOTE: If multiple files are contained inside a single .zip file during import these datasets will get merged into a single layer in Hootenanny. Currently there is no support for importing zip files containing one or more .osm files (multiple .osm files can be merged into a single layer as long as they are not inside of a .zip).
+
+*_Bulk Import_*
+
+Using the Hootenanny bulk importer, users can add multiple datasets in a import single job.  To access this right-click on the Add Datasets button as shown below and select the Bulk Import option.  A Bulk Add Data dialog box will appear allowing users to create a bulk import job by adding new rows for each dataset they wish to import.  After adding the relevant datasets and selecting each option click on the Import button.
+
+[[HootBulkImport]]
+
+.Bulk Import in Hootenanny.  To access the bulk import option right-click on the Add Dataset button.  
+image::user/images/id/hoot_bulkimport.png[]
+
+===== Export Data 
+
+To export a dataset, right-mouse click on a dataset and select the Export Dataset option to open the Export dialog box shown in <<hootexport>>.  The export options available from Hootenanny are discussed in <<HootiD_Exporting>>.  
+
+===== Other Options
+
+Layers can be managed simply by right-clicking over an individual or multiple selected (using the ctrl key) datasets and picking an appropriate action from the list of presented options.
+
+.Manage data options available from Right-click.
+image::user/images/id/hoot_manageoptions.png[scaledwidth="50%"]
+
+To delete, move or rename an existing dataset(s), right click over the highlighted layers and select from the available options.  
+
+*_Prepare for Validation_*
+
+The Prepare for Validation option provides users with the capability of generating a 30% sample of validated POI features that can be used to determine the degree to which it can be identified using the basemap imagery data source. When using DigitalGlobe GBM/EGD data, the imagery metadata is appended to each POI indicating what image id was used to validate a given feature.  To prepare a POI layer for validation, right-click and select Prepare for Validation.  A dialog box will appear prompting users to enter a name for the layer.  
+
+.Create new validation layer.  Enter an output name and click run to generate the validation layer. 
+image::user/images/id/hoot_prepareforvalidation.png[scaledwidth="35%"]
+
+Once complete, users can load this newly generated validation layer and Hootenanny will popup a prompt to go into Validation mode whereby three validation options are presented.  Each option when selected by the user will populate different hoot:review:choices tags as well as any imagery source metadata if used.
+
+_Confirmed_: You can look at the point in the imagery and determine what it is (e.g. a mosque, airport, stadium, etc.) Shortcut key = 1.
+
+_Assessed_: You can determine that the point is a building from the imagery but you cannot verify its type (e.g. hair salon, coffee shop, etc..). Shortcut key = 2.
+
+_Reported_: You cannot determine the point using the provided imagery (missing coverage, clouds, etc.). Shortcut key = 3.  
+
+.Validating a layer of Washington, D.C. Points of Interest in Hootenanny against the DigitalGlobe GBM/EGD basemap.
+image::user/images/id/hoot_validate_layer.png[]
+
+NOTE: Panning the map during Validation causes the highlighted POI to become unselected and removes the validation options. To resume validation, click the Select button at the bottom.
+
+*_Filter Non-HGIS POIs_*
+
+The Filter Non-HGIS POI capabilities is provided for users working with HGIS data.  It provides a simple means to take any layer and filter anything that is not a HGIS POI (e.g. road and/or building) based on the HGIS v2.0 definitions for POI.  Note that this capability is very specific to the HGIS group at DigitalGlobe/NGA and should only be used in conjunction with those efforts.  Please contact hootenanny.help@digitalglobe.com for any questions regarding this.  To create a new filtered layer simply right-click and select the option, then provide an output layer name.  
 
 [[HootiD_WFSExport]]
 ==== WFS Exports
@@ -670,18 +721,21 @@ When the file has finished processing, you will see a crossed through eye indica
 .Managing Basemaps
 image::user/images/id/hoot_basemap2.png[] 
 
-Select the uploaded Basemap listed in the Background Settings button as shown below.
+Select the uploaded Basemap listed in the Background Settings button as shown below. Note you will be prompted to zoom to the bounding box of the background image when selecting.
 
 .Viewing Basemap in Hootenanny. Rome, Italy; 2012 WorldView-2 DigitalGlobe image displayed in Natural Color.
 image::user/images/id/hoot_view_basemap.png[] 
 
-===== Hoot UI Logs
+===== Hoot Log
 
-Users have the option to export the full log generated from Hootenanny by going to the Log tab and clicking on Export Full Log. This is particularly useful for troubleshooting and debugging and will help us determine the nature of a particular issue that might be occurring with the Hootenanny deployment on site. 
+The Log tab provides both the Application and UI log for users to troubleshoot any issues that may occur during a user session.  There are two panels that are provided here; The Error log which provides core and service logging detail (i.e. tomcat catalina.out) and the UI log which provides errors generated from the iD web client.  The full log can be exported by clicking on the export full log button.  Note that any UI issues will also appear on the map map in the upper right corner in red highlight when they are triggered.  This messages are maintained in the UI log until the browser session is reloaded.
+
+.Hootenanny Error and UI Log File.
+image::user/images/id/hoot_log_tab.png[] 
+
 Any additional questions can be emailed to hootenanny.help@digitalglobe.com. 
 
-.Hootenanny Log File
-image::user/images/id/hoot_logfile.png[] 
+NOTE: Those familiar with Chrome's developer console (hitting F-12 key will open it in a separate tab or browser window) can use that for additional debugging capability. This tool is used frequently by our developers for debugging client side code and greatly enhance the ability to diagnose issues.
 
 [[HootStatsReport]]
 ===== Reports
@@ -704,14 +758,14 @@ image::user/images/id/hoot_version.png[]
 [[Advanced_Conflation_Options]]
 == Appendix: Hootenanny Advanced Parameters
 
-The following advanced configuration parameters are provided to the user via the Advanced Conflation option. 
+The following conflation parameters are provided to the user as a reference when determining whether to modify any of the Advanced Conflation settings. These are exposed to the user via the Advanced Conflation options described in <<Hoot_AdvancedConflation>> but should be used with caution.
 
 [[Advanced_Cleaning_Options]]
 === Cleaning Options
 
 * *Enabled*: allows map cleaning operators to be applied during conflation.
 * *Remove Duplicate Way*: Remove duplicate ways (lines) that are exact duplicates. If the lines partially overlap with exactly the same geometry then only the partial overlap is removed from the more complex geometry.
-* *Duplicate Name Case Sensitive*: Only removes duplicate names when their case also matches if selected; otherwise ignore case when removing.
+* *Duplicate Name Remover Case Sensitive*: Removes duplicate names when their case also matches otherwise ignore case when removing.
 * *Remove Superfluous Way*: Remove all ways that contain no nodes or all the nodes are exactly the same.
 * *Remove Unlikely Intersections*: Remove implied intersections that are likely incorrect. For example, a motorway overpass intersecting a residential street at a 90° is considered unlikely and "unsnapped". The geometry location is not modified.
 * *DualWay Splitter*: Split highway types that are marked as divided into two separate geometries marked as oneway roads. A number of assumptions must be made to do this including assumptions about the direction of travel on roads (right or left hand drivers).
