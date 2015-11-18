@@ -512,13 +512,6 @@ public class Relation extends Element
 		// to date
 		else
 		{
-			Set<Long> elementIds = new HashSet<Long>(Arrays.asList(new Long[] { actualMemberId }));
-			if (!Element.allElementsVisible(getMapId(), elementType, elementIds, conn))
-			{
-				throw new Exception(
-					"Element with ID: " + actualMemberId + " and type: " + elementType.toString() +
-				  " is not visible for relation.");
-			}
 			memberElement = ElementFactory.getInstance().create(getMapId(), elementType, conn);
 		}
 		assert (actualMemberId > 0);

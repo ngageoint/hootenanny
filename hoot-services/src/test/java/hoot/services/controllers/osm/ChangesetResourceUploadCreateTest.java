@@ -1456,7 +1456,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
 
     final Set<Long> wayIds =
       OsmTestUtils.createTestWays(changesetId, nodeIds);
-   final Set<Long> relationIds =
+    final Set<Long> relationIds =
       OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
     //Try to create a relation referencing a node that doesn't exist.  The request should fail and
@@ -1723,7 +1723,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("is not visible for way"));
+      Assert.assertTrue(r.getEntity(String.class).contains("visible for relation"));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -1792,7 +1792,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("is not visible for relation"));
+      Assert.assertTrue(r.getEntity(String.class).contains("visible for relation"));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -1833,8 +1833,8 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     Assert.assertEquals(
       false,
       new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWaysTbl)
-  		.where(currentWaysTbl.id.eq(wayIdsArr[0]))
-  		.singleResult(currentWaysTbl.visible));
+  		  .where(currentWaysTbl.id.eq(wayIdsArr[0]))
+  		  .singleResult(currentWaysTbl.visible));
 
     //Try to upload a relation which references an invisible way.  The request should fail and no
     //data in the system should be modified.
@@ -1862,7 +1862,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("is not visible for relation"));
+      Assert.assertTrue(r.getEntity(String.class).contains("visible for relation"));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -1889,32 +1889,24 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
       OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
     final Long[] relationIdsArr = relationIds.toArray(new Long[]{});
 
-
     //make one of relation's relation members invisible
     CurrentRelations invisibleRelation =
-    		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationsTbl)
+    	new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationsTbl)
     		.where(currentRelationsTbl.id.eq(relationIdsArr[0]))
     		.singleResult(currentRelationsTbl);
-
-
     invisibleRelation.setVisible(false);
-
-
     int success = 
-    		(int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentRelationsTbl)
-    .where(currentRelationsTbl.id.eq(invisibleRelation.getId()))
-  .set(currentRelationsTbl.visible, false)
-  .execute();
-
-
-
-    Assert.assertEquals(1, success);
-    Assert.assertEquals(
-      false,
-      new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationsTbl)
-  		.where(currentRelationsTbl.id.eq(relationIdsArr[0]))
-  		.singleResult(currentRelationsTbl.visible)
-    		);
+    	(int)new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentRelationsTbl)
+             .where(currentRelationsTbl.id.eq(invisibleRelation.getId()))
+             .set(currentRelationsTbl.visible, false)
+             .execute();
+   Assert.assertEquals(1, success);
+   Assert.assertEquals(
+     false,
+      new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        .from(currentRelationsTbl)
+  		  .where(currentRelationsTbl.id.eq(relationIdsArr[0]))
+  		  .singleResult(currentRelationsTbl.visible));
 
     //Try to upload a relation which references an invisible relation.  The request should fail
     //and no data in the system should be modified.
@@ -1943,7 +1935,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("is not visible for relation"));
+      Assert.assertTrue(r.getEntity(String.class).contains("visible for relation"));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);

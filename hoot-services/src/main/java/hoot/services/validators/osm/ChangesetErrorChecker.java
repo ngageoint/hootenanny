@@ -192,22 +192,38 @@ public class ChangesetErrorChecker
    */
   public void checkForElementVisibilityErrors() throws Exception
   {
-    //if a child element is referenced in a non-create change and doesn't exist in the db, then fail
+    //if a child element is referenced and is invisible, then fail.  elements are created visible 
+  	//by default with a create changeset, which is why we can skip checking negative id's (elements 
+  	//being created)
   	
   	for (ElementType elementType : ElementType.values())
   	{
   		if (!elementType.equals(ElementType.Changeset))
   		{
-  			final NodeList relationMemberIdXmlNodes = 
-		  	  XPathAPI.selectNodeList(
-		  	  	changesetDoc, 
-		  	  	"//osmChange/modify|delete/relation/member[type = \"" + 
-		  	  	  elementType.toString().toLowerCase() + "\"]/@id");
 				Set<Long> relationMemberIds = new HashSet<Long>();
-				for (int i = 0; i < relationMemberIdXmlNodes.getLength(); i++)
-				{
-					relationMemberIds.add(Long.parseLong(relationMemberIdXmlNodes.item(i).getNodeValue()));	
-				}
+  			//I know there's a way to use the '|' operator in the xpath query to make this simpler...
+  			//its just not working
+  			for (EntityChangeType entityChangeType : EntityChangeType.values())
+  			{
+					final NodeList relationMemberIdXmlNodes = 
+			  	  XPathAPI.selectNodeList(
+			  	  	changesetDoc, 
+			  	  	"//osmChange/" + entityChangeType.toString().toLowerCase() + 
+			  	  	  "/relation/member[@type = \"" + elementType.toString().toLowerCase() + "\"]");
+					for (int i = 0; i < relationMemberIdXmlNodes.getLength(); i++)
+					{
+						//don't need to check for empty id here, b/c previous checking would have already
+						//errored out for it
+						final long id = 
+							Long.parseLong(
+								relationMemberIdXmlNodes.item(i).getAttributes().getNamedItem("ref").getNodeValue());
+						if (id > 0)
+						{
+							relationMemberIds.add(id);	
+						}
+					}
+  			}
+  			
 				if (!Element.allElementsVisible(mapId, elementType, relationMemberIds, dbConn))
 				{
 					throw new Exception(elementType.toString() + " member(s) aren't visible for relation.");
@@ -215,12 +231,24 @@ public class ChangesetErrorChecker
   		}
   	}
   	
-  	final NodeList wayNodeIdXmlNodes = 
-  	  XPathAPI.selectNodeList(changesetDoc, "//osmChange/modify|delete/way/nd/@ref");
   	Set<Long> wayNodeIds = new HashSet<Long>();
-		for (int i = 0; i < wayNodeIdXmlNodes.getLength(); i++)
+  	for (EntityChangeType entityChangeType : EntityChangeType.values())
 		{
-			wayNodeIds.add(Long.parseLong(wayNodeIdXmlNodes.item(i).getNodeValue()));
+			final NodeList wayNodeIdXmlNodes = 
+	  	  XPathAPI.selectNodeList(
+	  	  	changesetDoc, "//osmChange/" + entityChangeType.toString().toLowerCase() + "/way/nd");
+			for (int i = 0; i < wayNodeIdXmlNodes.getLength(); i++)
+			{
+			  //don't need to check for empty id here, b/c previous checking would have already
+				//errored out for it
+				final long id = 
+					Long.parseLong(
+						wayNodeIdXmlNodes.item(i).getAttributes().getNamedItem("ref").getNodeValue());
+				if (id > 0)
+				{
+					wayNodeIds.add(id);	
+				}
+			}
 		}
 		if (!Element.allElementsVisible(mapId, ElementType.Node, wayNodeIds, dbConn))
 		{

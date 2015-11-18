@@ -648,8 +648,12 @@ public class ChangesetDbWriter
       }
     }
     
+    //believe these need to be done after the data is written, since they depend upon the outcomes
+    //of the modify/delete changesets.  would be more efficient to do them at the start of the 
+    //save along with the other error checking, but would probably increase the code complexity
+    //quite a bit, if it could be done at all.
+    changesetErrorChecker.checkForElementVisibilityErrors();
     //changesetErrorChecker.checkForOwnershipErrors();
-    //changesetErrorChecker.checkForElementVisibilityErrors();
 
     changeset.updateNumChanges((int) changesetDiffElementsSize);
 
