@@ -5,6 +5,7 @@ var mapnik = require('mapnik')
   , mappool = require('./utils/pool.js')
   , osm_geojson = require('osm-and-geojson')
   , DOMParser = require('xmldom').DOMParser
+  , fs = require('fs')
   , http = require('http')
   , url = require('url');
 
@@ -12,33 +13,15 @@ if (mapnik.register_default_input_plugins) mapnik.register_default_input_plugins
 
 var TMS_SCHEME = true;
 
-// create a pool of 5 maps to manage concurrency under load
-var maps = mappool.create_pool(5);
+// create a pool of 10 maps to manage concurrency under load
+var maps = mappool.create_pool(10);
 
 var usage = 'usage: app.js <port>\ndemo:  app.js 8000';
 
 var prj = new mapnik.Projection(mercator.proj4);
 
 // map with just a style
-var s = '<Map background-color="#00000000" srs="' + mercator.proj4 + '">';
-s += '    <Style name="hoot">';
-s += '        <Rule>';
-s += '            <Filter>[building] &lt;&gt; \'\'</Filter>';
-s += '            <LineSymbolizer stroke="${COLOR}" stroke-width="2" stroke-linejoin="miter"';
-s += '                stroke-linecap="square" />';
-s += '            <PolygonSymbolizer fill="${COLOR}" fill-opacity="0.3" />';
-s += '        </Rule>';
-s += '        <Rule>';
-s += '            <Filter>[highway] &lt;&gt; \'\'</Filter>';
-s += '            <LineSymbolizer stroke="${COLOR}" stroke-width="2" stroke-linejoin="round"';
-s += '                stroke-linecap="round" />';
-s += '        </Rule>';
-s += '        <Rule>';
-s += '            <Filter>[amenity] &lt;&gt; \'\'</Filter>';
-s += '            <MarkersSymbolizer file="poi.svg" fill="${COLOR}" transform="translate(8, 23)" />';
-s += '        </Rule>';
-s += '    </Style>';
-s += '</Map>';
+var s = fs.readFileSync('hoot_style.xml', 'utf8');
 
 var port = process.argv[3];
 
@@ -115,6 +98,11 @@ http.createServer(function(req, res) {
             var im = new mapnik.Image(map.width, map.height);
 
             (['polygon', 'line', 'point']).forEach(function(d) {
+                // construct a mapnik layer dynamically
+                var l = new mapnik.Layer(d);
+                l.srs = map.srs;
+                l.styles = [d];
+
                 // change this to fit your db connection and settings
                 var postgis_settings = {
                   dbname: query.mapid,
@@ -127,17 +115,13 @@ http.createServer(function(req, res) {
                   extent: '-8052518,2105784.46,-8041386.05,2115534.51'
                 };
 
-                // construct a mapnik layer dynamically
-                var l = new mapnik.Layer(d);
-                l.srs = map.srs;
-                l.styles = ['hoot'];
-
                 var ds = new mapnik.Datasource(postgis_settings);
                 // add our custom datasource
                 l.datasource = ds;
                 // add this layer to the map
                 map.add_layer(l);
             });
+
             map.render(im, function(err, im) {
                 process.nextTick(function() {
                     maps.release(stylesheet, map);

@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
- <Map background-color="#00000000" srs="+proj=latlong +datum=WGS84">
-	<Style name="hoot">
+ <Map background-color="#00000000" srs="+init=epsg:3857">
+	<Style name="polygon">
 		<Rule>
-			<Filter>[building] &lt;&gt; '' or [name] &lt;&gt; ''</Filter>
-			<LineSymbolizer stroke="rgb(255, 85, 153)" stroke-width="2" stroke-linejoin="miter"
+			<Filter>[building] &lt;&gt; ''</Filter>
+			<LineSymbolizer stroke="${COLOR}" stroke-width="2" stroke-linejoin="miter"
 				stroke-linecap="square" />
-			<PolygonSymbolizer fill="rgb(255, 85, 153)" fill-opacity="0.3" />
-		</Rule>
-		<Rule>
-			<Filter>[highway] &lt;&gt; '' or [name] &lt;&gt; ''</Filter>
-			<LineSymbolizer stroke="rgb(255, 85, 153)" stroke-width="2" stroke-linejoin="round"
-				stroke-linecap="round" />
-		</Rule>
-		<Rule>
-			<Filter>[amenity] &lt;&gt; '' or [name] &lt;&gt; ''</Filter>
-			<MarkersSymbolizer file="poi.svg" fill="rgb(255, 85, 153)" />
+			<PolygonSymbolizer fill="${COLOR}" fill-opacity="0.3" />
 		</Rule>
 	</Style>
-	<Layer name="hoot" status="on" srs="+proj=latlong +datum=WGS84">
-		<StyleName>hoot</StyleName>
-		<Datasource>
-			<Parameter name="type">osm</Parameter>
-			<Parameter name="file">PortAuPrinceOsmPoiRoadBuilding.osm</Parameter>
-		</Datasource>
-	</Layer>
+	<Style name="line">
+		<Rule>
+			<Filter>[highway] &lt;&gt; ''</Filter>
+			<LineSymbolizer stroke="${COLOR}" stroke-width="2" stroke-linejoin="round"
+				stroke-linecap="round" />
+		</Rule>
+	</Style>
+	<Style name="point">
+		<Rule>
+			<Filter>[amenity] &lt;&gt; ''</Filter>
+			<MarkersSymbolizer file="poi.svg" fill="${COLOR}" />
+		</Rule>
+	</Style>
  </Map>
