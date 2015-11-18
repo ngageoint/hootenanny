@@ -82,7 +82,6 @@ public class WfsManager {
 		{
 	      log.error("WFS error: " + e.getMessage());
 		}
-		
 	}
 	
 	public void removeWfsResource(String wfsJobName) throws Exception

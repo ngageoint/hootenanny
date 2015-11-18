@@ -71,7 +71,6 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.geo.QuadTileCalculator;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.Node;
-import hoot.services.models.osm.Relation;
 import hoot.services.models.osm.RelationMember;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;

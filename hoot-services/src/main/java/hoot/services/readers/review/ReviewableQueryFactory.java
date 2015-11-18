@@ -1,11 +1,14 @@
 package hoot.services.readers.review;
 
 import java.sql.Connection;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ReviewableQueryFactory {
-	private static final Logger log = LoggerFactory.getLogger(ReviewableQueryFactory.class);
+public class ReviewableQueryFactory 
+{
+	@SuppressWarnings("unused")
+  private static final Logger log = LoggerFactory.getLogger(ReviewableQueryFactory.class);
 	
 	public IReviewableQuery getReviewableQuery(final Connection c, final long mapid, final long seqid)
 	{
