@@ -307,6 +307,24 @@ See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
 The spacing used by the EdgeDistanceExtractor.  Units in meters.
 
+=== english.words.files
+
+* Data Type: list
+* Default Value:
+** `/usr/share/dict/american-english-insane`
+** `/usr/share/dict/american-english-huge`
+** `/usr/share/dict/american-english-large`
+** `/usr/share/dict/american-english-small`
+** `/usr/share/dict/american-english`
+** `/usr/share/dict/words`
+
+Absolute file path to dictionaries of English words. The first file found will be loaded into the
+dictionary of English words and used by some algorithms. If the files are not found then the English
+words will be silently ignored.
+
+For CentOS 6.X use `sudo yum install words` to install the dictionary. For Ubuntu 14.04 use
+`sudo apt-get install dictionaries-common`.
+
 === generic.line.match.threshold
 
 * Data Type: double
