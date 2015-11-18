@@ -33,7 +33,6 @@ import com.mysema.query.sql.SQLQuery;
  */
 public class ChangesetErrorChecker
 {
-	@SuppressWarnings("unused")
   private static final Logger log = LoggerFactory.getLogger(ChangesetErrorChecker.class);
 	
 	private static final QCurrentRelationMembers currentRelationMembers = 
@@ -59,6 +58,8 @@ public class ChangesetErrorChecker
 	 */
 	public void checkForVersionErrors() throws Exception
   {
+		log.debug("Checking for element version errors...");
+		
 		for (ElementType elementType : ElementType.values())
 		{
 			if (!elementType.equals(ElementType.Changeset))
@@ -121,6 +122,7 @@ public class ChangesetErrorChecker
 	 */
 	public void checkForOwnershipErrors() throws Exception
 	{
+		log.debug("Checking for child element ownership errors...");
 		checkForRelationOwnershipErrors();
 		checkForWayOwnershipErrors();
 	}
@@ -202,6 +204,8 @@ public class ChangesetErrorChecker
    */
   public void checkForElementVisibilityErrors() throws Exception
   {
+  	log.debug("Checking for element visibility errors...");
+  	
     //if a child element is referenced and is invisible, then fail.  elements are created visible 
   	//by default with a create changeset, which is why we can skip checking negative id's (elements 
   	//being created).  we're also skipping checking anything in the delete sections, b/c since the
@@ -282,6 +286,8 @@ public class ChangesetErrorChecker
    */
   public Map<Long, CurrentNodes> checkForElementExistenceErrors() throws Exception
   {
+  	log.debug("Checking for element existence errors...");
+  	
     //if an element is referenced (besides in its own create change) and doesn't exist in the db, 
   	//then fail
   	

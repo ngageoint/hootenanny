@@ -121,10 +121,9 @@ public class Relation extends Element
 		NamedNodeMap xmlAttributes = xml.getAttributes();
 
 		assert (record != null);
-		CurrentRelations relationRecord = (CurrentRelations) record;
+		CurrentRelations relationRecord = (CurrentRelations)record;
 		relationRecord.setChangesetId(parseChangesetId(xmlAttributes));
 		relationRecord.setVersion(parseVersion(xmlAttributes));
-
 		relationRecord.setTimestamp(parseTimestamp(xmlAttributes));
 		relationRecord.setVisible(true);
 
@@ -429,6 +428,8 @@ public class Relation extends Element
 
 	private RelationMember parseMember(final org.w3c.dom.Node nodeXml) throws Exception
 	{
+		log.debug("Parsing relation member...");
+		
 		final NamedNodeMap memberXmlAttributes = nodeXml.getAttributes();
 
 		final long parsedMemberId = 
@@ -466,14 +467,16 @@ public class Relation extends Element
 			}
 			else
 			{
-				assert (parsedElements.containsKey(parsedMemberId));
+				assert(parsedElements.containsKey(parsedMemberId));
 			}
 		}
 
 		Element memberElement = null;
+		
+		//TODO: these comments need updating
 
 		// The element is referenced somewhere else in this request, so get its info from the request,
-		// not the database b/c the database either won't have it or will have outdated info for it.
+		// not the database, b/c the database either won't have it or will have outdated info for it.
 		// Only get info from the request if the element is being created/modified, because if it is
 		// being deleted, we can just get the info from the database since the element's bounds won't be
 		// changing and its geo info isn't in the request (not required for a delete).
@@ -507,6 +510,8 @@ public class Relation extends Element
 	// http://wiki.openstreetmap.org/wiki/Empty_relations
 	private void parseMembersXml(final org.w3c.dom.Node xml) throws Exception
 	{
+		log.debug("Parsing relation members...");
+		
 		assert (parsedElementIdsToElementsByType != null);
 		final NodeList membersXml = XPathAPI.selectNodeList(xml, "member");
 

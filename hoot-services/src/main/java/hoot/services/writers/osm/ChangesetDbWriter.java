@@ -39,7 +39,6 @@ import hoot.services.models.osm.Element;
 import hoot.services.models.osm.XmlSerializable;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
-import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.validators.osm.ChangesetErrorChecker;
 import hoot.services.validators.osm.ChangesetUploadXmlValidator;
 
@@ -655,7 +654,7 @@ public class ChangesetDbWriter
     changesetErrorChecker.checkForElementVisibilityErrors();
     changesetErrorChecker.checkForOwnershipErrors();
 
-    changeset.updateNumChanges((int) changesetDiffElementsSize);
+    changeset.updateNumChanges((int)changesetDiffElementsSize);
 
     // Even if a bounds is specified in the incoming changeset diff data, it should be ignored,
     // per OSM docs.

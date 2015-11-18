@@ -176,7 +176,7 @@ public abstract class WpsTestAbstract extends OsmResourceTestAbstract
   protected void verifyWpsErrorResponse(final String responseStr, final Status errorStatus, 
     final String errorMessage) throws Exception
   {
-    final Document responseData = XmlDocumentBuilder.parse(responseStr, false);
+    final Document responseData = XmlDocumentBuilder.parse(responseStr);
     Assert.assertNotNull(responseData);
     //System.out.println(XmlDocumentBuilder.toString(responseData));
     

@@ -152,10 +152,11 @@ public abstract class Element implements XmlSerializable, DbSerializable
   {
   	if (record instanceof Tuple)
   	{
-  		// This was forced since we are using reflection which need to be refactored to something more solid.
+  		// This was forced since we are using reflection which need to be refactored to something 
+  		//more solid.
   		Tuple tRec = (Tuple)record;
   		Object[] tRecs = tRec.toArray();
-  		if(tRecs.length > 0)
+  		if (tRecs.length > 0)
   		{
   			// assume first record is good.
   			this.record = tRecs[0];
@@ -758,7 +759,9 @@ public abstract class Element implements XmlSerializable, DbSerializable
    */
   protected Map<String, String> parseTags(final org.w3c.dom.Node elementXml) throws Exception
   {
-    Map<String, String> tags = new HashMap<String, String>();
+    log.debug("Parsing element tags...");
+  	
+  	Map<String, String> tags = new HashMap<String, String>();
     try
     {
       NodeList tagXmlNodes = XPathAPI.selectNodeList(elementXml, "tag");
