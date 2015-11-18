@@ -90,10 +90,7 @@ public class ChangesetErrorChecker
 						}
 						else
 						{
-							//if (id > 0)
-							//{
-								elementIdsToVersionsFromChangeset.put(id, parsedVersion);
-							//}
+							elementIdsToVersionsFromChangeset.put(id, parsedVersion);
 						}
 					}
 					
@@ -258,11 +255,20 @@ public class ChangesetErrorChecker
   			final NodeList relationMemberIdXmlNodes = 
 		  	  XPathAPI.selectNodeList(
 		  	  	changesetDoc, 
-		  	  	"//osmChange/*/relation/member[type = \"" + elementType.toString().toLowerCase() + 
-		  	  	  "\"]/@id");
-				for (int i = 0; i < relationMemberIdXmlNodes.getLength(); i++)
+		  	  	"//osmChange/*/relation/member[@type = '" + elementType.toString().toLowerCase() + "']");
+  			for (int i = 0; i < relationMemberIdXmlNodes.getLength(); i++)
 				{
-					final long id = Long.parseLong(relationMemberIdXmlNodes.item(i).getNodeValue());
+  				long id;
+  				try
+  				{
+  					id = 
+  					  Long.parseLong(
+  						  relationMemberIdXmlNodes.item(i).getAttributes().getNamedItem("ref").getNodeValue());
+  				}
+  				catch (NumberFormatException e)
+  				{
+  					throw new Exception("Element in changeset has empty ID.");
+  				}
 					if (id > 0)
 					{
 						elementTypesToElementIds.get(elementType).add(id);
@@ -275,21 +281,46 @@ public class ChangesetErrorChecker
   		XPathAPI.selectNodeList(changesetDoc, "//osmChange/*/way/nd/@ref");
 		for (int i = 0; i < wayNodeIdXmlNodes.getLength(); i++)
 		{
-			final long id = Long.parseLong(wayNodeIdXmlNodes.item(i).getNodeValue());
+			long id;
+			try
+			{
+				id = Long.parseLong(wayNodeIdXmlNodes.item(i).getNodeValue());
+			}
+			catch (NumberFormatException e)
+			{
+				throw new Exception("Element in changeset has empty ID.");
+			}
 			if (id > 0)
 			{
 				elementTypesToElementIds.get(ElementType.Node).add(id);
 			}
 		}
 		
-		final NodeList nodeIdXmlNodes = 
-  	  XPathAPI.selectNodeList(changesetDoc, "//osmChange/modify|delete/node/@id");
-		for (int i = 0; i < nodeIdXmlNodes.getLength(); i++)
+		for (EntityChangeType entityChangeType : EntityChangeType.values())
 		{
-			final long id = Long.parseLong(nodeIdXmlNodes.item(i).getNodeValue());
-			if (id > 0)
+			if (!entityChangeType.equals(EntityChangeType.CREATE))
 			{
-				elementTypesToElementIds.get(ElementType.Node).add(id);
+				final NodeList nodeIdXmlNodes = 
+		  	  XPathAPI.selectNodeList(
+		  	  	changesetDoc, 
+		  	  	"//osmChange/" + entityChangeType.toString().toLowerCase() + "/node/@id");
+				//log.debug(String.valueOf(nodeIdXmlNodes.getLength()));
+				for (int i = 0; i < nodeIdXmlNodes.getLength(); i++)
+				{
+					long id;
+					try
+					{
+						id = Long.parseLong(nodeIdXmlNodes.item(i).getNodeValue());
+					}
+					catch (NumberFormatException e)
+					{
+						throw new Exception("Element in changeset has empty ID.");
+					}
+					if (id > 0)
+					{
+						elementTypesToElementIds.get(ElementType.Node).add(id);
+					}
+				}
 			}
 		}
 		
@@ -305,10 +336,14 @@ public class ChangesetErrorChecker
   		}
   	}
 		
-		return
-			new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
-        .from(currentNodes)
-        .where(currentNodes.id.in(elementTypesToElementIds.get(ElementType.Node)))
-		    .map(currentNodes.id, currentNodes);
+		if (elementTypesToElementIds.get(ElementType.Node).size() > 0)
+		{
+			return
+				new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
+	        .from(currentNodes)
+	        .where(currentNodes.id.in(elementTypesToElementIds.get(ElementType.Node)))
+			    .map(currentNodes.id, currentNodes);
+		}
+		return null;
   }
 }

@@ -45,6 +45,7 @@ import java.util.TreeSet;
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
 import hoot.services.db.postgres.PostgresUtils;
+import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.QChangesets;
 import hoot.services.db2.QCurrentNodes;
 import hoot.services.db2.QCurrentRelationMembers;
@@ -84,6 +85,9 @@ public abstract class Element implements XmlSerializable, DbSerializable
   protected static final QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
   protected static final QCurrentRelationMembers currentRelationMembers = 
   	QCurrentRelationMembers.currentRelationMembers;
+  
+  protected Map<Long, CurrentNodes> nodeCache;
+  public void setNodeCache(Map<Long, CurrentNodes> cache) { nodeCache = cache; }
 
   //order in the enum here is important, since the request diff writer methods use this to determine
   //the order for creating/updating/deleting elements; i.e. create nodes before referencing them

@@ -30,6 +30,7 @@ import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
 import hoot.services.db.DbUtils.RecordBatchType;
+import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.QCurrentRelationMembers;
 import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.geo.BoundingBox;
@@ -119,6 +120,9 @@ public class ChangesetDbWriter
   private List<Object> relatedRecordsToStore = new ArrayList<Object>();
   
   private ChangesetErrorChecker changesetErrorChecker;
+  
+  //temporary node cache of nodes referenced in the changeset request; obtained from the database
+  private Map<Long, CurrentNodes> dbNodeCache;
 
   /**
    * Constructor
@@ -219,6 +223,7 @@ public class ChangesetDbWriter
     element.setRequestChangesetId(requestChangesetId);
     element.setMapId(requestChangesetMapId);
     element.setEntityChangeType(entityChangeType);
+    element.setNodeCache(dbNodeCache);
 
     // We pass the mappings for the previously parsed related element (child element) IDs here
     // (e.g. nodes for ways, relation members (nodes and ways) for relations).  Some elements have
@@ -495,8 +500,8 @@ public class ChangesetDbWriter
   {
   	log.debug(XmlDocumentBuilder.toString(changesetDoc));
   	changesetErrorChecker = new ChangesetErrorChecker(changesetDoc, requestChangesetMapId, conn);
+  	dbNodeCache = changesetErrorChecker.checkForElementExistenceErrors();
   	changesetErrorChecker.checkForVersionErrors();
-  	//changesetErrorChecker.checkForElementExistenceErrors();
   	
   	initParsedElementCache();
     

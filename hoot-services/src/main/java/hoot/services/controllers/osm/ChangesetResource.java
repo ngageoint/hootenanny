@@ -440,6 +440,7 @@ public class ChangesetResource
     return Response.status(Status.OK).toString();
   }
   
+  //TODO: clean up these message...some are obsolete now
   public static void handleError(final Exception e, final long changesetId, 
     final String changesetDiffSnippet)
   {
@@ -478,6 +479,7 @@ public class ChangesetResource
       else if (e.getMessage().contains("exist specified for") ||
                e.getMessage().contains("exist for") ||
                e.getMessage().contains("is still used by") ||
+               e.getMessage().contains("Element(s) being referenced don't exist.") ||
                e.getMessage().contains(
                  "One or more features in the changeset are involved in an unresolved review"))
       {

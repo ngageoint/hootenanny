@@ -1434,7 +1434,8 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("does not exist for way"));
+      Assert.assertTrue(
+      	r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -1484,7 +1485,8 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("does not exist for relation"));
+      Assert.assertTrue(
+      	r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -1537,7 +1539,8 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("does not exist for relation"));
+      Assert.assertTrue(
+      	r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -1590,7 +1593,8 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("does not exist for relation"));
+      Assert.assertTrue(
+      	r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -2739,14 +2743,11 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
     final long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-    final Set<Long> nodeIds =
-      OsmTestUtils.createTestNodes(changesetId, originalBounds);
+    final Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
     final Long[] nodeIdsArr = nodeIds.toArray(new Long[]{});
 
-    final Set<Long> wayIds =
-      OsmTestUtils.createTestWays(changesetId, nodeIds);
-   final Set<Long> relationIds =
-      OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+    final Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+   final Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
     //Update the changeset where one of the ways has a node with an empty string for its ID.  A
     //failure should occur and no data in the system should be modified.
@@ -2777,8 +2778,8 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("Invalid version"));
+      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
+      Assert.assertTrue(r.getEntity(String.class).contains("Element in changeset has empty ID."));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -2837,7 +2838,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-      //Assert.assertTrue(r.getEntity(String.class).contains("Invalid version"));
+      Assert.assertTrue(r.getEntity(String.class).contains("Element in changeset has empty ID."));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
