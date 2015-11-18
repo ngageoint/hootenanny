@@ -113,8 +113,19 @@ void OsmReader::_createNode(const QXmlAttributes &attributes)
   {
     timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
   }
+  QString user = ElementData::USER_EMPTY;
+  if (attributes.value("user") != "")
+  {
+    user = attributes.value("user");
+  }
+  long uid = ElementData::UID_EMPTY;
+  if (attributes.value("uid") != "")
+  {
+    uid = _parseDouble(attributes.value("uid"));
+  }
 
-  _element.reset(new Node(_status, newId, x, y, changeset, version, timestamp, _circularError));
+  _element.reset(new Node(_status, newId, x, y, changeset, version, timestamp,
+                          user, uid, _circularError));
 
   if (_element->getTags().getInformationCount() > 0)
   {
@@ -143,8 +154,19 @@ void OsmReader::_createRelation(const QXmlAttributes &attributes)
   {
     timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
   }
+  QString user = ElementData::USER_EMPTY;
+  if (attributes.value("user") != "")
+  {
+    user = attributes.value("user");
+  }
+  long uid = ElementData::UID_EMPTY;
+  if (attributes.value("uid") != "")
+  {
+    uid = _parseDouble(attributes.value("uid"));
+  }
 
-  _element.reset(new Relation(_status, newId, changeset, version, timestamp, _circularError));
+  _element.reset(new Relation(_status, newId, changeset, version, timestamp,
+                              user, uid, _circularError));
 
   _parseTimeStamp(attributes);
 }
@@ -181,8 +203,19 @@ void OsmReader::_createWay(const QXmlAttributes &attributes)
   {
     timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
   }
+  QString user = ElementData::USER_EMPTY;
+  if (attributes.value("user") != "")
+  {
+    user = attributes.value("user");
+  }
+  long uid = ElementData::UID_EMPTY;
+  if (attributes.value("uid") != "")
+  {
+    uid = _parseDouble(attributes.value("uid"));
+  }
 
-  _element.reset(new Way(_status, newId, changeset, version, timestamp, _circularError));
+  _element.reset(new Way(_status, newId, changeset, version, timestamp, user,
+                         uid, _circularError));
 
   _parseTimeStamp(attributes);
 }
