@@ -214,13 +214,13 @@ public class Node extends Element
       	"Node to be deleted with ID " + getId() + " is still used by way(s): "
           + Arrays.toString(owningWayIds.toArray()));
     }
-    final Set<Long> owningRelationIds = getOwningRelationIds();
+    /*final Set<Long> owningRelationIds = getOwningRelationIds();
     if (entityChangeType.equals(EntityChangeType.DELETE) && owningRelationIds.size() > 0)
     {
       throw new Exception(
       	"Node to be deleted with ID " + getId() + " is still used by "
           + "relation(s): " + Arrays.toString(owningRelationIds.toArray()));
-    }
+    }*/
 
     double latitude = -91;
     double longitude = -181;

@@ -653,7 +653,7 @@ public class ChangesetDbWriter
     //save along with the other error checking, but would probably increase the code complexity
     //quite a bit, if it could be done at all.
     changesetErrorChecker.checkForElementVisibilityErrors();
-    //changesetErrorChecker.checkForOwnershipErrors();
+    changesetErrorChecker.checkForOwnershipErrors();
 
     changeset.updateNumChanges((int) changesetDiffElementsSize);
 

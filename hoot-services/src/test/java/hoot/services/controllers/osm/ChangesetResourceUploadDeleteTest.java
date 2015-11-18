@@ -87,7 +87,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
   private QCurrentWays currentWaysTbl = QCurrentWays.currentWays;
   private QCurrentWayNodes currentWayNodesTbl = QCurrentWayNodes.currentWayNodes;
   private QCurrentRelations  currentRelationsTbl = QCurrentRelations.currentRelations;
-  private QCurrentRelationMembers currentRelationMembersTbl = QCurrentRelationMembers.currentRelationMembers;
+  private QCurrentRelationMembers currentRelationMembersTbl = 
+  	QCurrentRelationMembers.currentRelationMembers;
 
   public ChangesetResourceUploadDeleteTest() throws NumberFormatException, IOException
   {
@@ -4499,7 +4500,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("is still used by relation"));
+      Assert.assertTrue(r.getEntity(String.class).contains("still used by other relation(s)"));
 
       QChangesets changesets = QChangesets.changesets;
       new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
@@ -4664,7 +4665,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("is still used by relation"));
+      Assert.assertTrue(r.getEntity(String.class).contains("still used by other relation(s)"));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -4717,7 +4718,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("is still used by relation"));
+      Assert.assertTrue(r.getEntity(String.class).contains("still used by other relation(s)"));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);

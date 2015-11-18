@@ -122,9 +122,12 @@ public class ChangesetErrorChecker
 	public void checkForOwnershipErrors() throws Exception
 	{
 		checkForRelationOwnershipErrors();
-		checkForWayOwnershipErrors();
+		//checkForWayOwnershipErrors();
 	}
   
+	/*
+	 * 
+	 */
   private void checkForRelationOwnershipErrors() throws Exception
   {
   	for (ElementType elementType : ElementType.values())
@@ -139,26 +142,32 @@ public class ChangesetErrorChecker
 	  		{
 	  			deletedElementIds.add(Long.parseLong(deletedElementIdXmlNodes.item(i).getNodeValue()));
 	  		}
-	  		final Set<Long> owningRelationIds =
-	  			new TreeSet<Long>(
-	  				new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
-	          .from(currentRelationMembers)
-		        .where(
-			        currentRelationMembers.memberId.in(deletedElementIds)
-		            .and(currentRelationMembers.memberType.eq(
-		        	    Element.elementEnumForElementType(elementType))))
-		        .orderBy(currentRelationMembers.relationId.asc())
-					  .list(currentRelationMembers.relationId));
-	  		if (owningRelationIds.size() > 0)
+	  		if (deletedElementIds.size() > 0)
 	  		{
-	  			throw new Exception(
-	  				"Elements(s) to be deleted of type + " + elementType.toString() + " still used by " +
-	  			  "other relation(s): " + StringUtils.join(owningRelationIds));
+	  			final Set<Long> owningRelationIds =
+  	  			new TreeSet<Long>(
+  	  				new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
+  	          .from(currentRelationMembers)
+  		        .where(
+  			        currentRelationMembers.memberId.in(deletedElementIds)
+  		            .and(currentRelationMembers.memberType.eq(
+  		        	    Element.elementEnumForElementType(elementType))))
+  		        .orderBy(currentRelationMembers.relationId.asc())
+  					  .list(currentRelationMembers.relationId));
+  	  		if (owningRelationIds.size() > 0)
+  	  		{
+  	  			throw new Exception(
+  	  				"Elements(s) to be deleted of type + " + elementType.toString() + " still used by " +
+  	  			  "other relation(s): " + StringUtils.join(owningRelationIds));
+  	  		}
 	  		}
   		}
   	}
   }
   
+  /*
+   * 
+   */
   private void checkForWayOwnershipErrors() throws Exception
   {
   	final NodeList deletedNodeIdXmlNodes = 
@@ -168,21 +177,22 @@ public class ChangesetErrorChecker
 		{
 			deletedNodeIds.add(Long.parseLong(deletedNodeIdXmlNodes.item(i).getNodeValue()));
 		}
-		final Set<Long> owningWayIds =
-			new TreeSet<Long>(
-				new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
-          .from(currentWayNodes)
-          .where(currentWayNodes.nodeId.in(deletedNodeIds))
-          .orderBy(currentWayNodes.wayId.asc())
-			    .list(currentWayNodes.wayId));
-		if (owningWayIds.size() > 0)
+		if (deletedNodeIds.size() > 0)
 		{
-			throw new Exception(
-				"Node(s) to be deleted still used by other way(s): " + StringUtils.join(owningWayIds));
+			final Set<Long> owningWayIds =
+				new TreeSet<Long>(
+					new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
+	          .from(currentWayNodes)
+	          .where(currentWayNodes.nodeId.in(deletedNodeIds))
+	          .orderBy(currentWayNodes.wayId.asc())
+				    .list(currentWayNodes.wayId));
+			if (owningWayIds.size() > 0)
+			{
+				throw new Exception(
+					"Node(s) to be deleted still used by other way(s): " + StringUtils.join(owningWayIds));
+			}
 		}
   }
-  
-  //It may be possible to combine the existence and visibility checks into the same method.
   
   /**
    * 

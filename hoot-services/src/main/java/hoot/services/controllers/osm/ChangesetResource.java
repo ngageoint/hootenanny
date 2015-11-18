@@ -485,7 +485,7 @@ public class ChangesetResource
       }
       else if (e.getMessage().contains("exist specified for") ||
                e.getMessage().contains("exist for") ||
-               e.getMessage().contains("is still used by") ||
+               e.getMessage().contains("still used by") ||
                e.getMessage().contains(
                  "One or more features in the changeset are involved in an unresolved review"))
       {
