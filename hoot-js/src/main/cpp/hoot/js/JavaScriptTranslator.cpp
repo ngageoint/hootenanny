@@ -159,7 +159,7 @@ vector<JavaScriptTranslator::TranslatedFeature> JavaScriptTranslator::_createAll
   QVariantList list)
 {
   vector<TranslatedFeature> result;
-  result.reserve(list.size());
+  //result.reserve(list.size());
 
   for (int i = 0; i < list.size(); i++)
   {

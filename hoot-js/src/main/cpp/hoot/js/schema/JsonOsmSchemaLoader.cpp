@@ -100,7 +100,7 @@ QStringList JsonOsmSchemaLoader::_asStringList(const QVariant& v) const
   if (v.type() == QVariant::List)
   {
     QVariantList l = v.toList();
-    result.reserve(l.size());
+    //result.reserve(l.size());
 
     for (int i = 0; i < l.size(); i++)
     {
