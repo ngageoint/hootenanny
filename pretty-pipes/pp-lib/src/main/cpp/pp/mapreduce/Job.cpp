@@ -298,7 +298,7 @@ void Job::_uploadBinary()
   else
   {
     FileStatus status = fs.getFileStatus(hdfsPath);
-    if (f.lastModified().toMSecsSinceEpoch() / 1000 > status.getModificationTime() ||
+    if (f.lastModified().toTime_t() > status.getModificationTime() ||
         f.size() != status.getLen())
     {
       copy = true;
