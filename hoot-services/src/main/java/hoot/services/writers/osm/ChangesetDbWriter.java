@@ -223,7 +223,7 @@ public class ChangesetDbWriter
     element.setRequestChangesetId(requestChangesetId);
     element.setMapId(requestChangesetMapId);
     element.setEntityChangeType(entityChangeType);
-    element.setNodeCache(dbNodeCache);
+    element.setDbNodeCache(dbNodeCache);
 
     // We pass the mappings for the previously parsed related element (child element) IDs here
     // (e.g. nodes for ways, relation members (nodes and ways) for relations).  Some elements have

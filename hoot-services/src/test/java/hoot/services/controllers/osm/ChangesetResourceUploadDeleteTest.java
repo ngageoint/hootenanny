@@ -850,7 +850,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
     }
   }
 
-  @Test
+  @Test(expected=UniformInterfaceException.class)
   @Category(UnitTest.class)
   public void testUploadDeleteNoNodeCoords() throws Exception
   {
@@ -866,34 +866,52 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
     final Long[] relationIdsArr = relationIds.toArray(new Long[]{});
 
-    //Now, delete one of the nodes, one of the ways, and one of the relations.
-    testUploadDelete(
-      "<osmChange version=\"0.3\" generator=\"iD\">" +
-        "<create/>" +
-        "<modify/>" +
-        "<delete if-unused=\"true\">" +
-          "<node id=\"" + nodeIdsArr[3] + "\" version=\"1\" " +
-            "changeset=\"" + changesetId + "\">" +
-            "<tag k=\"key 1\" v=\"val 1\"></tag>" +
-          "</node>" +
-          "<way id=\"" + wayIdsArr[2] + "\" version=\"1\" " +
-            "changeset=\"" + changesetId + "\">" +
-            "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-            "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
-            "<tag k=\"key 1\" v=\"val 1\"></tag>" +
-          "</way>" +
-          "<relation id=\"" + relationIdsArr[2] + "\" version=\"1\" " +
-            "changeset=\"" + changesetId + "\">" +
-            "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[2] + "\"></member>" +
-            "<tag k=\"key 4\" v=\"val 4\"></tag>" +
-          "</relation>" +
-        "</delete>" +
-      "</osmChange>",
-      originalBounds,
-      changesetId,
-      nodeIdsArr,
-      wayIdsArr,
-      relationIdsArr);
+    try
+    {
+      //Now, delete one of the nodes, one of the ways, and one of the relations.  An error should be
+      //returned and no data in the system deleted, since we require passing in nodes with their
+    	//coords...even for a delete.
+    	resource()
+        .path("api/0.6/changeset/" + changesetId + "/upload")
+        .queryParam("mapId", "" + mapId)
+        .type(MediaType.TEXT_XML)
+        .accept(MediaType.TEXT_XML)
+        .post(
+          Document.class,
+            "<osmChange version=\"0.3\" generator=\"iD\">" +
+              "<create/>" +
+              "<modify/>" +
+              "<delete if-unused=\"true\">" +
+                "<node id=\"" + nodeIdsArr[3] + "\" version=\"1\" " +
+                  "changeset=\"" + changesetId + "\">" +
+                  "<tag k=\"key 1\" v=\"val 1\"></tag>" +
+                "</node>" +
+                "<way id=\"" + wayIdsArr[2] + "\" version=\"1\" " +
+                  "changeset=\"" + changesetId + "\">" +
+                  "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                  "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                  "<tag k=\"key 1\" v=\"val 1\"></tag>" +
+                "</way>" +
+                "<relation id=\"" + relationIdsArr[2] + "\" version=\"1\" " +
+                  "changeset=\"" + changesetId + "\">" +
+                  "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[2] + "\"></member>" +
+                  "<tag k=\"key 4\" v=\"val 4\"></tag>" +
+                "</relation>" +
+              "</delete>" +
+            "</osmChange>");
+    }
+    catch (UniformInterfaceException e)
+    {
+      ClientResponse r = e.getResponse();
+      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
+      //Assert.assertTrue(
+      	//r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
+
+      OsmTestUtils.verifyTestDataUnmodified(
+        originalBounds, changesetId, nodeIds, wayIds, relationIds);
+
+      throw e;
+    } 
   }
 
   @Test
@@ -1957,8 +1975,9 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(404, r.getStatus());
-      Assert.assertTrue(r.getEntity(String.class).contains("to be updated does not exist"));
+      Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
+      Assert.assertTrue(
+      	r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
       //make sure that any of the existing nodes weren't deleted
       OsmTestUtils.verifyTestDataUnmodified(
@@ -2015,8 +2034,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(404, r.getStatus());
-      Assert.assertTrue(r.getEntity(String.class).contains("to be updated does not exist"));
+      //System.out.println(r.getEntity(String.class));
+      Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
+      Assert.assertTrue(
+      	r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
       //make sure that any of the existing nodes weren't deleted
       OsmTestUtils.verifyTestDataUnmodified(
@@ -2074,8 +2095,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(404, r.getStatus());
-      Assert.assertTrue(r.getEntity(String.class).contains("to be updated does not exist"));
+      //System.out.println(r.getEntity(String.class));
+      Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
+      Assert.assertTrue(
+      	r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
       //make sure that any of the existing nodes weren't deleted
       OsmTestUtils.verifyTestDataUnmodified(

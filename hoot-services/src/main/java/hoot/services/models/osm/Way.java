@@ -542,16 +542,8 @@ public class Way extends Element
     // to date
     else
     {
-    	//TODO: can this query be gotten rid of?
-    	
       actualNodeId = parsedNodeId;
-      // I don't like having to do this in a loop; see Element::parseVersion for more info
-      /*final CurrentNodes existingNodeRecord = 
-      	new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
-          .from(currentNodes)
-          .where(currentNodes.id.eq(new Long(actualNodeId)))
-          .singleResult(currentNodes);*/
-      final CurrentNodes existingNodeRecord = nodeCache.get(actualNodeId);
+      final CurrentNodes existingNodeRecord = dbNodeCache.get(actualNodeId);
       if (existingNodeRecord == null)
       {
         throw new Exception("Node with ID: " + actualNodeId + " does not exist for way.");

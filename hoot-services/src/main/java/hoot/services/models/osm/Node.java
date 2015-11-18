@@ -224,45 +224,20 @@ public class Node extends Element
 
     double latitude = -91;
     double longitude = -181;
-    //if (!entityChangeType.equals(EntityChangeType.DELETE))
-    //{
-      nodeRecord.setTimestamp(parseTimestamp(xmlAttributes));
-      nodeRecord.setVisible(true);
-      // Lat/lon are required here on a delete request as well, b/c it keeps from having to do a 
-      // round trip to the db to get the node lat/long before it is deleted, so that can be used 
-      // to update the changeset bounds (rails port does it this way).
-      latitude = Double.parseDouble(xmlAttributes.getNamedItem("lat").getNodeValue());
-      longitude = Double.parseDouble(xmlAttributes.getNamedItem("lon").getNodeValue());
-      if (!GeoUtils.coordsInWorld(latitude, longitude))
-      {
-        throw new Exception(
-        	"Coordinates for node with ID: " + getId() + " not within world boundary.");
-      }
-    //}
-    // Unlike OSM, we're not requiring lat/lon to be specified in the request for a delete...b/c 
-    // it seems unnecessary to me. However, doing so would prevent the extra query made here.
-    //TODO: let's require it
-    
-    //maybe this query for the existing lat/lon could be done later in batch?
-    /*else
+    nodeRecord.setTimestamp(parseTimestamp(xmlAttributes));
+    nodeRecord.setVisible(true);
+    // Lat/lon are required here on a delete request as well, b/c it keeps from having to do a 
+    // round trip to the db to get the node lat/long before it is deleted, so that can be used 
+    // to update the changeset bounds (rails port does it this way).
+    latitude = Double.parseDouble(xmlAttributes.getNamedItem("lat").getNodeValue());
+    longitude = Double.parseDouble(xmlAttributes.getNamedItem("lon").getNodeValue());
+    if (!GeoUtils.coordsInWorld(latitude, longitude))
     {
-      final CurrentNodes existingRecord = 
-      	(CurrentNodes)new SQLQuery(conn, DbUtils.getConfiguration(getMapId()))
-          .from(getElementTable())
-          .where(getElementIdField().eq(getId()))
-          .singleResult(getElementTable());
-
-      // existence of record has already been checked
-      
-      // inefficient
-      assert(existingRecord != null);
-      latitude = existingRecord.getLatitude();
-      longitude = existingRecord.getLongitude();
-    }*/
-    // If the node is being deleted, we still need to make sure that the coords
-    // passed in match
-    // what's on the server, since we'll be relying on them to compute the
-    // changeset bounds.
+      throw new Exception(
+      	"Coordinates for node with ID: " + getId() + " not within world boundary.");
+    }
+    // If the node is being deleted, we still need to make sure that the coords passed in match
+    // what's on the server, since we'll be relying on them to compute the changeset bounds.
     nodeRecord.setLatitude(latitude);
     nodeRecord.setLongitude(longitude);
     // no point in updating the tile if we're not deleting

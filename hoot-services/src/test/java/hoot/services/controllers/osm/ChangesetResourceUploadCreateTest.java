@@ -1433,7 +1433,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
+      Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
       Assert.assertTrue(
       	r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
@@ -1484,7 +1484,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
+      Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
       Assert.assertTrue(
       	r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
@@ -1538,7 +1538,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
+      Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
       Assert.assertTrue(
       	r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
@@ -1592,7 +1592,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
+      Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
       Assert.assertTrue(
       	r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 

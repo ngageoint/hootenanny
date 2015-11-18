@@ -513,12 +513,6 @@ public class Relation extends Element
 		else
 		{
 			Set<Long> elementIds = new HashSet<Long>(Arrays.asList(new Long[] { actualMemberId }));
-			/*if (!Element.allElementsExist(getMapId(), elementType, elementIds, conn))
-			{
-				throw new Exception(
-					"Element with ID: " + actualMemberId + " and type: " + elementType.toString() +
-				  " does not exist for relation.");
-			}*/
 			if (!Element.allElementsVisible(getMapId(), elementType, elementIds, conn))
 			{
 				throw new Exception(

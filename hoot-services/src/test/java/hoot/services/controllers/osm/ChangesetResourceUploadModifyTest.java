@@ -1630,7 +1630,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.NOT_FOUND, r.getStatus());
+      Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
       Assert.assertTrue(
       	r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
@@ -2661,7 +2661,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
+      Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
       Assert.assertTrue(r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
       OsmTestUtils.verifyTestDataUnmodified(
@@ -2714,7 +2714,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
+      Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
       Assert.assertTrue(
       	r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
@@ -2769,7 +2769,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
+      Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
       Assert.assertTrue(
       	r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
@@ -2823,7 +2823,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
+      Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
       Assert.assertTrue(
       	r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
@@ -3821,7 +3821,6 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
     final Set<Long> relationIds =
       OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
     final Long[] relationIdsArr = relationIds.toArray(new Long[]{});
-
 
     //Update the changeset where one of the relations has a member with an empty string for an ID.
     //A failure should occur and no data in the system should be modified.

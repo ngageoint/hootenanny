@@ -86,8 +86,8 @@ public abstract class Element implements XmlSerializable, DbSerializable
   protected static final QCurrentRelationMembers currentRelationMembers = 
   	QCurrentRelationMembers.currentRelationMembers;
   
-  protected Map<Long, CurrentNodes> nodeCache;
-  public void setNodeCache(Map<Long, CurrentNodes> cache) { nodeCache = cache; }
+  protected Map<Long, CurrentNodes> dbNodeCache;
+  public void setDbNodeCache(Map<Long, CurrentNodes> cache) { dbNodeCache = cache; }
 
   //order in the enum here is important, since the request diff writer methods use this to determine
   //the order for creating/updating/deleting elements; i.e. create nodes before referencing them

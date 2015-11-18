@@ -236,7 +236,7 @@ public class ChangesetErrorChecker
    */
   public Map<Long, CurrentNodes> checkForElementExistenceErrors() throws Exception
   {
-    //if a child element is referenced (besides in its own create change) and doesn't exist in the db, 
+    //if an element is referenced (besides in its own create change) and doesn't exist in the db, 
   	//then fail
   	
   	Map<ElementType, Set<Long>> elementTypesToElementIds = new HashMap<ElementType, Set<Long>>();
@@ -248,6 +248,9 @@ public class ChangesetErrorChecker
   		}
   	}
   	
+  	final String emptyIdErrorMsg = "Element in changeset has empty ID.";
+  	
+  	//check relation members
   	for (ElementType elementType : ElementType.values())
   	{
   		if (!elementType.equals(ElementType.Changeset))
@@ -261,13 +264,19 @@ public class ChangesetErrorChecker
   				long id;
   				try
   				{
+  					//log.debug(
+  						//relationMemberIdXmlNodes.item(i).getAttributes().getNamedItem("ref").getNodeValue());
   					id = 
   					  Long.parseLong(
   						  relationMemberIdXmlNodes.item(i).getAttributes().getNamedItem("ref").getNodeValue());
   				}
   				catch (NumberFormatException e)
   				{
-  					throw new Exception("Element in changeset has empty ID.");
+  					throw new Exception(emptyIdErrorMsg);
+  				}
+  				catch (NullPointerException e)
+  				{
+  					throw new Exception(emptyIdErrorMsg);
   				}
 					if (id > 0)
 					{
@@ -277,6 +286,7 @@ public class ChangesetErrorChecker
   		}
   	}
   	
+  	//check way nodes
   	final NodeList wayNodeIdXmlNodes = 
   		XPathAPI.selectNodeList(changesetDoc, "//osmChange/*/way/nd/@ref");
 		for (int i = 0; i < wayNodeIdXmlNodes.getLength(); i++)
@@ -288,7 +298,11 @@ public class ChangesetErrorChecker
 			}
 			catch (NumberFormatException e)
 			{
-				throw new Exception("Element in changeset has empty ID.");
+				throw new Exception(emptyIdErrorMsg);
+			}
+			catch (NullPointerException e)
+			{
+				throw new Exception(emptyIdErrorMsg);
 			}
 			if (id > 0)
 			{
@@ -296,31 +310,44 @@ public class ChangesetErrorChecker
 			}
 		}
 		
+		//check top level elements
 		for (EntityChangeType entityChangeType : EntityChangeType.values())
 		{
 			if (!entityChangeType.equals(EntityChangeType.CREATE))
 			{
-				final NodeList nodeIdXmlNodes = 
-		  	  XPathAPI.selectNodeList(
-		  	  	changesetDoc, 
-		  	  	"//osmChange/" + entityChangeType.toString().toLowerCase() + "/node/@id");
-				//log.debug(String.valueOf(nodeIdXmlNodes.getLength()));
-				for (int i = 0; i < nodeIdXmlNodes.getLength(); i++)
-				{
-					long id;
-					try
-					{
-						id = Long.parseLong(nodeIdXmlNodes.item(i).getNodeValue());
-					}
-					catch (NumberFormatException e)
-					{
-						throw new Exception("Element in changeset has empty ID.");
-					}
-					if (id > 0)
-					{
-						elementTypesToElementIds.get(ElementType.Node).add(id);
-					}
-				}
+				
+				for (ElementType elementType : ElementType.values())
+		  	{
+		  		if (!elementType.equals(ElementType.Changeset))
+		  		{
+		  			final NodeList elementIdXmlNodes = 
+	  		  	  XPathAPI.selectNodeList(
+	  		  	  	changesetDoc, 
+	  		  	  	"//osmChange/" + entityChangeType.toString().toLowerCase() + "/" + 
+	  		  	  	elementType.toString().toLowerCase() + "/@id");
+	  				//log.debug(String.valueOf(nodeIdXmlNodes.getLength()));
+	  				for (int i = 0; i < elementIdXmlNodes.getLength(); i++)
+	  				{
+	  					long id;
+	  					try
+	  					{
+	  						id = Long.parseLong(elementIdXmlNodes.item(i).getNodeValue());
+	  					}
+	  					catch (NumberFormatException e)
+	    				{
+	    					throw new Exception(emptyIdErrorMsg);
+	    				}
+	    				catch (NullPointerException e)
+	    				{
+	    					throw new Exception(emptyIdErrorMsg);
+	    				}
+	  					if (id > 0)
+	  					{
+	  						elementTypesToElementIds.get(elementType).add(id);
+	  					}
+	  				}
+		  		}
+		  	}
 			}
 		}
 		
@@ -331,6 +358,7 @@ public class ChangesetErrorChecker
   			if (!Element.allElementsExist(
   					  mapId, elementType, elementTypesToElementIds.get(elementType), dbConn))
   			{
+  				//TODO: list the id's and types of the elements that don't exist
   				throw new Exception("Element(s) being referenced don't exist.");
   			}
   		}
