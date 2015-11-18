@@ -42,55 +42,61 @@
 <Map background-color="#00000000" srs="+init=epsg:3857">
 	<Style name="polygon" filter-mode="first">
 		<Rule>
-			<MaxScaleDenominator>750000</MaxScaleDenominator>
-			<MinScaleDenominator>100000</MinScaleDenominator>
-			<LineSymbolizer stroke="${COLOR}" stroke-width="0.5" stroke-linejoin="miter" stroke-linecap="square"/>
-			<PolygonSymbolizer fill="${COLOR}" fill-opacity="0.1"/>
+			&maxscale_zoom10;
+			&minscale_zoom12;
+			<LineSymbolizer stroke="${COLOR}" stroke-width="0.5" stroke-linejoin="miter"
+				stroke-linecap="square" />
+			<PolygonSymbolizer fill="${COLOR}" fill-opacity="0.1" />
 		</Rule>
 		<Rule>
-			<MaxScaleDenominator>200000</MaxScaleDenominator>
-			<MinScaleDenominator>25000</MinScaleDenominator>
-			<LineSymbolizer stroke="${COLOR}" stroke-width="1" stroke-linejoin="miter" stroke-linecap="square"/>
-			<PolygonSymbolizer fill="${COLOR}" fill-opacity="0.2"/>
+			&maxscale_zoom12;
+			&minscale_zoom14;
+			<LineSymbolizer stroke="${COLOR}" stroke-width="1" stroke-linejoin="miter"
+				stroke-linecap="square" />
+			<PolygonSymbolizer fill="${COLOR}" fill-opacity="0.2" />
 		</Rule>
 		<Rule>
-			<MaxScaleDenominator>50000</MaxScaleDenominator>
-			<MinScaleDenominator>1000</MinScaleDenominator>
-			<LineSymbolizer stroke="${COLOR}" stroke-width="2" stroke-linejoin="miter" stroke-linecap="square"/>
-			<PolygonSymbolizer fill="${COLOR}" fill-opacity="0.3"/>
+			&maxscale_zoom14;
+			&minscale_zoom18;
+			<LineSymbolizer stroke="${COLOR}" stroke-width="2" stroke-linejoin="miter"
+				stroke-linecap="square" />
+			<PolygonSymbolizer fill="${COLOR}" fill-opacity="0.3" />
 		</Rule>
 	</Style>
 	<Style name="line" filter-mode="first">
 		<Rule>
-			<MaxScaleDenominator>750000</MaxScaleDenominator>
-			<MinScaleDenominator>100000</MinScaleDenominator>
-			<LineSymbolizer stroke="${COLOR}" stroke-width="0.5" stroke-linejoin="round" stroke-linecap="round"/>
+			&maxscale_zoom10;
+			&minscale_zoom12;
+			<LineSymbolizer stroke="${COLOR}" stroke-width="0.5" stroke-linejoin="round"
+				stroke-linecap="round" />
 		</Rule>
 		<Rule>
-			<MaxScaleDenominator>200000</MaxScaleDenominator>
-			<MinScaleDenominator>25000</MinScaleDenominator>
-			<LineSymbolizer stroke="${COLOR}" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+			&maxscale_zoom12;
+			&minscale_zoom14;
+			<LineSymbolizer stroke="${COLOR}" stroke-width="1" stroke-linejoin="round"
+				stroke-linecap="round" />
 		</Rule>
 		<Rule>
-			<MaxScaleDenominator>50000</MaxScaleDenominator>
-			<MinScaleDenominator>1000</MinScaleDenominator>
-			<LineSymbolizer stroke="${COLOR}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+			&maxscale_zoom14;
+			&minscale_zoom18;
+			<LineSymbolizer stroke="${COLOR}" stroke-width="2" stroke-linejoin="round"
+				stroke-linecap="round" />
 		</Rule>
 	</Style>
 	<Style name="point" filter-mode="first">
 		<Rule>
-			<MaxScaleDenominator>750000</MaxScaleDenominator>
-			<MinScaleDenominator>100000</MinScaleDenominator>
+			&maxscale_zoom10;
+			&minscale_zoom12;
 			<MarkersSymbolizer file="poi.svg" fill="${COLOR}" transform="scale(0.25)"/>
 		</Rule>
 		<Rule>
-			<MaxScaleDenominator>200000</MaxScaleDenominator>
-			<MinScaleDenominator>25000</MinScaleDenominator>
+			&maxscale_zoom12;
+			&minscale_zoom14;
 			<MarkersSymbolizer file="poi.svg" fill="${COLOR}" transform="scale(0.5)"/>
 		</Rule>
 		<Rule>
-			<MaxScaleDenominator>50000</MaxScaleDenominator>
-			<MinScaleDenominator>1000</MinScaleDenominator>
+			&maxscale_zoom14;
+			&minscale_zoom18;
 			<MarkersSymbolizer file="poi.svg" fill="${COLOR}" transform="translate(0, -10)"/>
 		</Rule>
 	</Style>
