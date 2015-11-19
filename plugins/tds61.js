@@ -796,13 +796,13 @@ tds61 = {
             ["t['glacier:type'] == 'icecap' && t.natural == 'glacier'","delete t.natural"],
             ["t.golf == 'driving_range' && !(t.leisure)","t.leisure = 'golf_course'"],
             ["t.historic == 'castle' && !(t.ruins) && !(t.building)","t.building = 'yes'"],
-            ["t.in_tunnel && !(t.tunnel)","t.tunnel = t.in_tunnel; delete t.in_tunnel"],
+            ["t.in_tunnel == 'yes' && !(t.tunnel)","t.tunnel = 'yes'; delete t.in_tunnel"],
             ["t.industrial && !(t.landuse)","t.landuse = 'industrial'"],
             ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['material:vertical']","t.material = t['material:vertical']; delete t['material:vertical']"],
             ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
-            ["t.on_bridge && !(t.bridge)","t.bridge = t.on_bridge; delete t.on_bridge"],
+            ["t.on_bridge == 'yes' && !(t.bridge)","t.bridge = 'yes'; delete t.on_bridge"],
             ["t.public_transport == 'station' && t['transport:type'] == 'railway'","t.railway = 'station'"],
             ["t.public_transport == 'station' && t['transport:type'] == 'bus'","t.bus = 'yes'"],
             ["t.protect_class && !(t.boundary)","t.boundary = 'protected_area'"],
@@ -912,20 +912,17 @@ tds61 = {
 //         translate.fixConstruction(tags, 'railway');
         if (tags.condition)
         {
-            print ('Got Condition');
             if (tags.condition == 'construction')
             {
 //                 if (tags.highway && attrs.F_CODE == 'AP030')
                 if (tags.highway)
                 {
-            print ('Got Highway Condition. highway = ' + tags.highway);
                     tags.construction = tags.highway;
                     tags.highway = 'construction';
                     delete tags.condition;
                 }
                 else if (tags.railway)
                 {
-            print ('Got Railway Condition. Railway = ' + tags.railway);
                     tags.construction = tags.railway;
                     tags.railway = 'construction';
                     delete tags.condition;
@@ -941,6 +938,7 @@ tds61 = {
 
         // Not sure about adding a Highway tag to this.
         // if (attrs.F_CODE == 'AQ040' && !(tags.highway)) tags.highway = 'yes';
+
 
     }, // End of applyToOsmPostProcessing
   

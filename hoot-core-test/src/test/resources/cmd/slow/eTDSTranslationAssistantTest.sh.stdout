@@ -1,33 +1,39 @@
-20:54:50.340 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 176) Reading: test-files/translation_assistant/cali-test.shp cali-test
+15:53:15.849 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/translation_assistant/cali-test.shp cali-test
 Loading test-files/translation_assistant/cali-test.shp cali-test 0 / 357   
 Reprojecting 0 / 2339         Reprojecting 1000 / 2339         Reprojecting 2000 / 2339         
-20:54:50.491 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-20:54:50.491 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
-MergeNearbyNodes 0 2    MergeNearbyNodes 1000 750    MergeNearbyNodes 1400 elapsed: 11ms        
-20:54:50.503 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+15:53:15.929 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+15:53:15.929 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+MergeNearbyNodes 0 2    MergeNearbyNodes 1000 750    MergeNearbyNodes 1400 elapsed: 8ms        
+15:53:15.937 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 357        Ways: 357 / 357        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 1400         Reprojecting 1000 / 1400         
-20:54:50.911 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 176) Reading: test-files/translation_assistant/cali-test.shp cali-test
-Loading test-files/translation_assistant/cali-test.shp cali-test 0 / 357   
-Reprojecting 0 / 2339         Reprojecting 1000 / 2339         Reprojecting 2000 / 2339         
-20:54:51.037 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-20:54:51.037 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
-MergeNearbyNodes 0 2    MergeNearbyNodes 1000 750    MergeNearbyNodes 1400 elapsed: 14ms        
-20:54:51.052 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
-Ways: 0 / 357        Ways: 357 / 357        
-Relations: 0 / 0        
-Combining Parts: 0 / 0        
-Reprojecting 0 / 1400         Reprojecting 1000 / 1400         
-20:54:51.466 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 176) Reading: test-files/translation_assistant/cali-test.shp cali-test
-Loading test-files/translation_assistant/cali-test.shp cali-test 0 / 357   
-Reprojecting 0 / 2339         Reprojecting 1000 / 2339         Reprojecting 2000 / 2339         
-20:54:51.590 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-20:54:51.590 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
-MergeNearbyNodes 0 2    MergeNearbyNodes 1000 750    MergeNearbyNodes 1400 elapsed: 9ms        
-20:54:51.599 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
-Ways: 0 / 357        Ways: 357 / 357        
-Relations: 0 / 0        
-Combining Parts: 0 / 0        
-Reprojecting 0 / 1400         Reprojecting 1000 / 1400         
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv61:
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv61
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv61:
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv61
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv61:
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv61
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv61:
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv61
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv61:
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv61
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv61:
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv61
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv61:
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv61
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv61:
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv61
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv61:
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv61
+15:53:16.098 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:

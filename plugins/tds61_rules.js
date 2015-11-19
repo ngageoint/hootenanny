@@ -1079,8 +1079,8 @@ tds61.rules = {
 
      // CWT - Contained Within Tunnel
      // ['CWT','-999999',undefined,undefined],
-     ['CWT','1000','tunnel','no'],
-     ['CWT','1001','tunnel','yes'], // Need to think about this
+     ['CWT','1000','in_tunnel','no'],
+     ['CWT','1001','in_tunnel','yes'], // Need to think about this
 
      // DFT - Dam Face Type
      // ['DFT','-999999',undefined,undefined], // No Information
@@ -2645,8 +2645,8 @@ tds61.rules = {
 
      // SBB - Supported by Bridge Span
      // ['SBB','-999999',undefined,undefined], // No Information
-     ['SBB','1000','bridge','no'], // Do we need this??
-     ['SBB','1001','bridge','yes'],
+     ['SBB','1000','on_bridge','no'], // Do we need this??
+     ['SBB','1001','on_bridge','yes'],
 
      // SBC - Shelter Belt
      // ['SBC','-999999',undefined,undefined], // No Information
