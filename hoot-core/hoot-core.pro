@@ -541,6 +541,7 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/WayFilter.h \
     src/main/cpp/hoot/core/filters/NeighborFilter.h \
     src/main/cpp/hoot/core/WayMap.h \
+    src/main/cpp/hoot/core/NodeMap.h \
     src/main/cpp/hoot/core/filters/WayFilterChain.h \
     src/main/cpp/hoot/core/filters/UnknownFilter.h \
     src/main/cpp/hoot/core/filters/StatusFilter.h \
@@ -960,7 +961,6 @@ HEADERS += \
     src/main/cpp/hoot/core/schema/TagCategoryDifferencer.h \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.h \
     src/main/cpp/hoot/core/schema/TagFilteredDifferencer.h \
-    src/main/cpp/hoot/core/NodeMap.h
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.h \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h
 
