@@ -233,7 +233,10 @@ public class ReviewResource
   		for (ElementInfo elementInfo : request.getQueryElements())
   		{
   			ReviewRefsResponse responseRefs = new ReviewRefsResponse();
-  			List<ReviewRef> references = refsRetriever.getUnresolvedReferences(elementInfo);
+  			// Now we are returning self since in one to many queried element can be involved in
+				// many different relations and since we do not know the element's parent relation (or even if there is one)
+				// we are forced return all including self. (Client need to handle self)
+  			List<ReviewRef> references = refsRetriever.getAllReferences(elementInfo);
 	  		log.debug(
 	  			"Returning " + references.size() + " review references for requesting element: " + 
 	  			elementInfo.toString());
