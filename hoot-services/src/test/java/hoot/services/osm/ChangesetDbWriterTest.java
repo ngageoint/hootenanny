@@ -7,6 +7,7 @@ import hoot.services.db.DbUtils;
 import hoot.services.db2.QCurrentNodes;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Changeset;
+import hoot.services.models.osm.Element.ElementType;
 import hoot.services.writers.osm.ChangesetDbWriter;
 
 import org.junit.Assert;
@@ -17,6 +18,10 @@ import org.slf4j.LoggerFactory;
 
 import com.mysema.query.sql.SQLQuery;
 
+/**
+ * This is simply in place for doing a rough performance check on changeset writing.  Its
+ * not meant to be run as part of the test suite.
+ */
 @SuppressWarnings("unused")
 public class ChangesetDbWriterTest
 {
@@ -69,11 +74,13 @@ public class ChangesetDbWriterTest
 	    	(int)new SQLQuery(conn, DbUtils.getConfiguration(mapId))
           .from(nodes)
           .count());
+	    Assert.assertEquals(
+	    	NUM_NODES * NUM_TAGS_PER_NODE, 
+	    	OsmTestUtils.getTagCountForElementType(mapId, ElementType.Node, conn));
 		}
 		finally
 		{
 			//DbUtils.deleteOSMRecord(conn, mapId);
-      
       conn.close();
 		}
 	}
