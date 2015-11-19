@@ -64,7 +64,6 @@ import hoot.services.db2.QCurrentWays;
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.QuadTileCalculator;
 import hoot.services.models.osm.Changeset;
-import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
@@ -1224,7 +1223,9 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
 
       try
       {
-        Assert.assertEquals(4, Element.getTagCountForElementType(mapId, ElementType.Node, conn));
+        Assert.assertEquals(
+        	4, 
+        	OsmTestUtils.getTagCountForElementType(mapId, ElementType.Node, conn));
       }
       catch (Exception e2)
       {

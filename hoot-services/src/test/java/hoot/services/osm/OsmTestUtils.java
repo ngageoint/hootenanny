@@ -45,6 +45,7 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.geo.GeoUtils;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element;
+import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Node;
 import hoot.services.models.osm.Relation;
 import hoot.services.models.osm.RelationMember;
@@ -68,6 +69,7 @@ import java.util.Set;
 import javax.xml.xpath.XPath;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.xpath.XPathAPI;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -1733,4 +1735,34 @@ public class OsmTestUtils
 			}
 		}
 	}
+	
+	/**
+   * Gets a total tag count for a specified element type belonging to a specific map
+   *
+   * @param mapId ID of the map for which to retrieve the tag count
+   * @param elementType element type for which to retrieve the tag count
+   * @param dbConn JDBC Connection
+   * @return a tag count
+   * @throws Exception
+   */
+  public static long getTagCountForElementType(final long mapId, final ElementType elementType,
+    Connection dbConn) throws Exception
+  {
+    final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
+    List<?> records =
+      new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
+        .from(prototype.getElementTable())
+				.list(prototype.getElementTable());
+
+    long tagCount = 0;
+    for (Object record : records)
+    {
+    	PGobject tags = (PGobject)MethodUtils.invokeMethod(record, "getTags", new Object[]{});
+      if (tags != null)
+      {
+        tagCount += PostgresUtils.postgresObjToHStore(tags).size();
+      }
+    }
+    return tagCount;
+  }
 }

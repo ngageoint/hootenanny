@@ -51,7 +51,6 @@ import hoot.services.geo.BoundingBox;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.apache.xpath.XPathAPI;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.postgresql.util.PGobject;
@@ -673,14 +672,19 @@ public abstract class Element implements XmlSerializable, DbSerializable
   	Map<String, String> tags = new HashMap<String, String>();
     try
     {
-      NodeList tagXmlNodes = XPathAPI.selectNodeList(elementXml, "tag");
+    	//using xpath api here is slow...just check each child for a tag instead
+      //final NodeList tagXmlNodes = XPathAPI.selectNodeList(elementXml, "tag");
+      final NodeList tagXmlNodes = elementXml.getChildNodes();
       for (int i = 0; i < tagXmlNodes.getLength(); i++)
       {
         org.w3c.dom.Node tagXmlNode = tagXmlNodes.item(i);
-        NamedNodeMap nodeTagAttributes = tagXmlNode.getAttributes();
-        tags.put(
-          nodeTagAttributes.getNamedItem("k").getNodeValue(),
-          nodeTagAttributes.getNamedItem("v").getNodeValue());
+        if (tagXmlNode.getNodeName().equals("tag"))
+        {
+        	NamedNodeMap nodeTagAttributes = tagXmlNode.getAttributes();
+          tags.put(
+            nodeTagAttributes.getNamedItem("k").getNodeValue(),
+            nodeTagAttributes.getNamedItem("v").getNodeValue());
+        }
       }
     }
     catch (Exception e)
@@ -710,35 +714,5 @@ public abstract class Element implements XmlSerializable, DbSerializable
       elementXml.appendChild(tagElement);
     }
     return elementXml;
-  }
-
-  /**
-   * Gets a total tag count for a specified element type belonging to a specific map
-   *
-   * @param mapId ID of the map for which to retrieve the tag count
-   * @param elementType element type for which to retrieve the tag count
-   * @param dbConn JDBC Connection
-   * @return a tag count
-   * @throws Exception
-   */
-  public static long getTagCountForElementType(final long mapId, final ElementType elementType,
-    Connection dbConn) throws Exception
-  {
-    final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
-    List<?> records =
-      new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
-        .from(prototype.getElementTable())
-				.list(prototype.getElementTable());
-
-    long tagCount = 0;
-    for (Object record : records)
-    {
-    	PGobject tags = (PGobject)MethodUtils.invokeMethod(record, "getTags", new Object[]{});
-      if (tags != null)
-      {
-        tagCount += PostgresUtils.postgresObjToHStore(tags).size();
-      }
-    }
-    return tagCount;
   }
 }
