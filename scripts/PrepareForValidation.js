@@ -42,85 +42,6 @@ function createSubSampleArray(count, subsamplePercent, isRandom) {
     return result.slice(0, Math.ceil(count * subsamplePercent));
 }
 
-function addReviewTags(e) {
-    // this creates a copy of the tags so we have to set it when we're done
-    var tags = e.getTags();
-
-    // make sure there is a UUID
-    tags.getCreateUuid();
-    tags.set("hoot:review:needs", "yes");
-    tags.set("hoot:review:note", "Flagged for imagery validation");
-    tags.set("hoot:review:choices:1", JSON.stringify({
-        "label": "Confirmed",
-        "description": "You can look at the point and tell what it is (e.g. mosque or airport)",
-        "changes": {
-            "replaceTags": {
-                "hgis:imagery_confirmed": "confirmed",
-                "hgis:accuracy": "high"
-            },
-            "appendTags": {
-                // e.g. digitalglobe
-                "source:geometry": "${BASEMAP_IMAGE_SOURCE}",
-                // use name of sensor E.g. WV02
-                "source:geometry:sensor": "${BASEMAP_IMAGE_SENSOR}",
-                // use ISO date E.g. 2012-03-28 11:22:29
-                "source:geometry:date": "${BASEMAP_IMAGE_DATETIME}",
-                // The associated image identifier e.g. 32905903099a73faec6d7de72b9a2bdb
-                "source:geometry:id": "${BASEMAP_IMAGE_ID}"
-            }
-        }
-    }));
-    tags.set("hoot:review:choices:2", JSON.stringify({
-        "label": "Assessed",
-        "description": "The point is on a building, but you can't verify its type (e.g. hair salon).",
-        "changes": {
-            "replaceTags": {
-                "hgis:imagery_confirmed": "assessed",
-                "hgis:accuracy": "high"
-            },
-            "appendTags": {
-                // e.g. digitalglobe
-                "source:geometry": "${BASEMAP_IMAGE_SOURCE}",
-                // use name of sensor E.g. WV02
-                "source:geometry:sensor": "${BASEMAP_IMAGE_SENSOR}",
-                // use ISO date E.g. 2012-03-28 11:22:29
-                "source:geometry:date": "${BASEMAP_IMAGE_DATETIME}",
-                // The associated image identifier e.g. 32905903099a73faec6d7de72b9a2bdb
-                "source:geometry:id": "${BASEMAP_IMAGE_ID}"
-            }
-        }
-    }));
-    tags.set("hoot:review:choices:3", JSON.stringify({
-        "label": "Reported",
-        "description": "Imagery is pixelated or cloudy -- can not be assessed.",
-        "changes": {
-            "replaceTags": {
-                "hgis:imagery_confirmed": "reported"
-            },
-            "appendTags": {
-                // e.g. digitalglobe
-                "source:geometry": "${BASEMAP_IMAGE_SOURCE}",
-                // use name of sensor E.g. WV02
-                "source:geometry:sensor": "${BASEMAP_IMAGE_SENSOR}",
-                // use ISO date E.g. 2012-03-28 11:22:29
-                "source:geometry:date": "${BASEMAP_IMAGE_DATETIME}",
-                // The associated image identifier e.g. 32905903099a73faec6d7de72b9a2bdb
-                "source:geometry:id": "${BASEMAP_IMAGE_ID}"
-            }
-        }
-    }));
-
-    //console.log(JSON.stringify(tags.toDict(), null, 2));
-    //console.log("## hoot:review:choices:1 ##");
-    //console.log(JSON.stringify(JSON.parse(tags.toDict()["hoot:review:choices:1"]), null, 2));
-    //console.log("## hoot:review:choices:2 ##");
-    //console.log(JSON.stringify(JSON.parse(tags.toDict()["hoot:review:choices:2"]), null, 2));
-    //console.log("## hoot:review:choices:3 ##");
-    //console.log(JSON.stringify(JSON.parse(tags.toDict()["hoot:review:choices:3"]), null, 2));
-
-    e.setTags(tags);
-}
-
 var getListChoices = function() {
     var list = [];
     list.push(JSON.stringify({
@@ -205,8 +126,6 @@ map.visit(function(e) {
         // if this is an element flagged for validation
         if (index == randomIndexes[i]) {
             i++;
-            // add validation review tags.
-            //addReviewTags(e);
             hoot.ReviewMarker.mark(map, e, "Flagged for imagery validation", "Validation", 1, choices);
         } else if (index > randomIndexes[i]) {
             throw "Logic error: Expected the index to be <= randomIndexes[i]";
