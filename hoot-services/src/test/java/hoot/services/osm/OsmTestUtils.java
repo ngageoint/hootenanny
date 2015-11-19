@@ -1413,6 +1413,7 @@ public class OsmTestUtils
   }
   
   /**
+<<<<<<< HEAD
    * Inserts a new way into the services database
    *
    * @param changesetId corresponding changeset ID for the way to be inserted
@@ -1753,7 +1754,6 @@ public class OsmTestUtils
       new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
         .from(prototype.getElementTable())
 				.list(prototype.getElementTable());
-
     long tagCount = 0;
     for (Object record : records)
     {
