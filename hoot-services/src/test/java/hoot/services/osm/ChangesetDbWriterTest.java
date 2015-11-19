@@ -27,8 +27,8 @@ public class ChangesetDbWriterTest
 	private static final int NUM_NODES = 1000;
 	private static final int NUM_TAGS_PER_NODE = 10;
 	
-	@Test
-	@Category(IntegrationTest.class)
+	/*@Test
+	@Category(IntegrationTest.class)*/
 	public void testLargeWrite() throws Exception
 	{
 		Connection conn  = DbUtils.createConnection();
