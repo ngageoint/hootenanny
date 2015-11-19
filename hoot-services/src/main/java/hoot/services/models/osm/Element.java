@@ -61,7 +61,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
-import com.mysema.query.Tuple;
 import com.mysema.query.sql.RelationalPathBase;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLDeleteClause;
@@ -143,31 +142,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
    */
   protected Object record;
   public Object getRecord() { return record; }
-  public void setRecord(Object record) throws Exception 
-  {
-  	if (record instanceof Tuple)
-  	{
-  		// This was forced since we are using reflection which need to be refactored to something 
-  		//more solid.
-  		Tuple tRec = (Tuple)record;
-  		Object[] tRecs = tRec.toArray();
-  		if (tRecs.length > 0)
-  		{
-  			// assume first record is good.
-  			this.record = tRecs[0];
-  		}
-  		else
-  		{
-  			throw new Exception(
-  				"Bad Record type. Tuple is empty. Please make sure the first object is tuple is DTO " +
-  				"that supports setVersion.");
-  		}
-  	}
-  	else
-  	{
-  		this.record = record;
-  	}
-  }
+  public void setRecord(Object record) { this.record = record; }
 
   /**
    * Records associated with the contained services database record
