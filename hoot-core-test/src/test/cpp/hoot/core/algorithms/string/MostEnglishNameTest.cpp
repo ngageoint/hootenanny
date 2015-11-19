@@ -47,19 +47,19 @@ public:
   {
     MostEnglishName uut;
 
-    HOOT_STR_EQUALS(4.5, MostEnglishName::getInstance()->scoreName("Foo bar"));
+    HOOT_STR_EQUALS(1, MostEnglishName::getInstance()->scoreName("Foo bar"));
 
-    HOOT_STR_EQUALS(11,
+    HOOT_STR_EQUALS(1,
       MostEnglishName::getInstance()->scoreName("Disney World"));
     HOOT_STR_EQUALS(0,
       MostEnglishName::getInstance()->scoreName(""));
 
-    HOOT_STR_EQUALS(-6,
+    HOOT_STR_EQUALS(0,
       MostEnglishName::getInstance()->scoreName(QString::fromUtf8("улица Ильинка")));
-    HOOT_STR_EQUALS(-15,
+    HOOT_STR_EQUALS(0,
       MostEnglishName::getInstance()->scoreName(
         QString::fromUtf8("улица Куйбышева (1935 г.) улица Ильинка (до 1917 г.)")));
-    HOOT_STR_EQUALS(9,
+    HOOT_STR_EQUALS(.75,
       MostEnglishName::getInstance()->scoreName(QString::fromUtf8("street Ilinka")));
 
     Tags t;
@@ -70,7 +70,7 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MostEnglishNameTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MostEnglishNameTest, "slow");
 
 }
 

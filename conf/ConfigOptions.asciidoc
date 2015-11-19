@@ -323,7 +323,7 @@ dictionary of English words and used by some algorithms. If the files are not fo
 words will be silently ignored.
 
 For CentOS 6.X use `sudo yum install words` to install the dictionary. For Ubuntu 14.04 use
-`sudo apt-get install dictionaries-common`.
+`sudo apt-get install wamerican-insane`.
 
 === generic.line.match.threshold
 

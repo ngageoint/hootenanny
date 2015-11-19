@@ -63,7 +63,7 @@ const QSet<QString>& MostEnglishName::_getWords()
 {
   if (_initialized == false)
   {
-    LOG_VAR(_wordPaths);
+    LOG_DEBUG(_wordPaths);
     for (int i = 0; i < _wordPaths.size(); i++)
     {
       if (_loadEnglishWords(_wordPaths[i]) != 0)
@@ -72,7 +72,14 @@ const QSet<QString>& MostEnglishName::_getWords()
       }
     }
 
-    LOG_INFO("Unique (case-insensitive) words: " + QString::number(_englishWords.size()));
+    if (_englishWords.size() == 0)
+    {
+      LOG_WARN("Failed to load any English dictionaries. Please modify " +
+        ConfigOptions::getEnglishWordsFilesKey() + " dictionary to list an appropriate "
+        "dictionary. Search path: " << _wordPaths);
+    }
+
+    LOG_DEBUG("Unique (case-insensitive) words: " + QString::number(_englishWords.size()));
     _initialized = true;
   }
 
@@ -124,15 +131,13 @@ double MostEnglishName::scoreName(QString n)
   {
     if (englishWords.contains(words[i].toLower()))
     {
-      LOG_INFO("In dictionary: " << words[i]);
       score += words[i].size();
       characters += words[i].size();
     }
     else
     {
       QString s = words[i];
-      characters += s.size();
-      LOG_VAR(s);
+
       for (int j = 0; j < s.size(); j++)
       {
         if (s[j].toLatin1() != 0)
@@ -141,13 +146,18 @@ double MostEnglishName::scoreName(QString n)
           if (s[j].isLetter())
           {
             score += 0.5;
+            characters++;
           }
+        }
+        else if (s[j].isLetter())
+        {
+          characters++;
         }
       }
     }
   }
 
-  return score / characters;
+  return characters == 0 ? 0 : score / characters;
 }
 
 void MostEnglishName::setConfiguration(const Settings& conf)
