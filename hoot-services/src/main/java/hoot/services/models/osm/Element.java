@@ -28,19 +28,14 @@ package hoot.services.models.osm;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import hoot.services.db.DbUtils;
 import hoot.services.db.DbUtils.EntityChangeType;
@@ -264,48 +259,11 @@ public abstract class Element implements XmlSerializable, DbSerializable
   }
 
   /**
-   * Determines whether an element possesses tags beginning with a particular prefix
-   *
-   * @param startsWithText text to search tags for
-   * @return true if the element has one or more tags beginning with startsWithText
-   * @throws NoSuchMethodException
-   * @throws IllegalAccessException
-   * @throws InvocationTargetException
-   * @throws Exception
-   */
-  public boolean hasTagsStartingWithText(final String startsWithText)
-    throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, Exception
-  {
-    final Map<String, String> tags = getTags();
-    for (Map.Entry<String, String> tagEntry : tags.entrySet())
-    {
-      if (tagEntry.getKey().startsWith(startsWithText))
-      {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
    * Returns the visibility of the element associated services database record
    */
   public boolean getVisible() throws Exception
   {
     return (Boolean)MethodUtils.invokeMethod(record, "getVisible", new Object[]{});
-  }
-
-  /**
-   * Returns the version of the element associated services database record
-   */
-  public long getVersion() throws Exception
-  {
-    return (Long)MethodUtils.invokeMethod(record, "getVersion", new Object[]{});
-  }
-
-  public void setVersion(long version) throws Exception
-  {
-    MethodUtils.invokeMethod(record, "setVersion", version);
   }
 
   /**
@@ -601,7 +559,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
     InvocationTargetException, Exception
   {
     final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
-
     if (elementIds.size() > 0)
     {
   	  return
@@ -731,29 +688,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
     return null;
   }
 
-  /**
-   * Returns the IDs of all relations which own this element
-   *
-   * The ordering of returned records by ID and the use of TreeSet to keep them sorted is only
-   * for error reporting readability purposes only.
-   *
-   * @return sorted list of relation IDs
-   * @throws DataAccessException
-   * @throws Exception
-   */
-  protected Set<Long> getOwningRelationIds() throws Exception
-  {
-  	return 
-  		new TreeSet<Long>(
-  			new SQLQuery(conn, DbUtils.getConfiguration("" + getMapId()))
-          .from(currentRelationMembers)
-		      .where(
-			      currentRelationMembers.memberId.eq(getId())
-		          .and(currentRelationMembers.memberType.eq(Element.elementEnumForElementType(elementType))))
-		      .orderBy(currentRelationMembers.relationId.asc())
-		      .list(currentRelationMembers.relationId));
-  }
-
   /*
    * Parses tags from the element XML and returns them in a map
    */
@@ -831,65 +765,5 @@ public abstract class Element implements XmlSerializable, DbSerializable
       }
     }
     return tagCount;
-  }
-  
-  
-  /**
-   * Given a list of unique ID's, filters out any which aren't associated with an OSM element in 
-   * the database
-   * 
-   * @param mapId ID of the map owning the elements associated with the input uuid's
-   * @param uuids unique IDs to search for
-   * @param elementType type of the elements being searched for
-   * @param dbConn database connection
-   * @return a filtered list of unique ID's
-   * @throws InvocationTargetException 
-   * @throws NoSuchMethodException 
-   * @throws ClassNotFoundException 
-   * @throws IllegalAccessException 
-   * @throws InstantiationException 
-   * @throws SQLException 
-   */
-  public static Set<String> filterOutNonExistingUuids(final long mapId, final String[] uuids, 
-  	final ElementType elementType, Connection dbConn) throws InstantiationException, 
-  	IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, 
-  	SQLException
-  {
-  	Set<String> filteredUuids = new HashSet<String>();
-  	final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
-  	String POSTGRESQL_DRIVER = "org.postgresql.Driver";
-		Statement stmt = null;
-		ResultSet rs = null;
-		try
-		{
-			Class.forName(POSTGRESQL_DRIVER);
-			stmt = dbConn.createStatement();
-			final String sql = 
-				"select tags->'uuid' from " + prototype.getElementTable() + "_" + mapId + 
-				" where tags->'uuid' in ('" + StringUtils.join(uuids, "','") + "') ";
-			stmt = dbConn.createStatement();
-			rs = stmt.executeQuery(sql);
-			while (rs.next())
-			{
-				filteredUuids.add(rs.getString(1));
-			}
-			rs.close();
-		}
-		finally
-		{
-			try
-			{
-				if (stmt != null) stmt.close();
-				if (rs != null) rs.close();
-			}
-			catch (SQLException se2)
-			{
-			}
-		}
-		if (filteredUuids.size() > uuids.length)
-		{
-			log.warn("Filtered out " + String.valueOf(uuids.length - filteredUuids.size()) + " uuids.");
-		}
-  	return filteredUuids;
   }
 }

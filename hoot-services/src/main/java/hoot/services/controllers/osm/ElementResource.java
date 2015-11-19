@@ -629,20 +629,21 @@ public class ElementResource
     org.w3c.dom.Element elementRootXml = OsmResponseHeaderGenerator.getOsmDataHeader(elementDoc);
     elementDoc.appendChild(elementRootXml);
     
-    for(int i=0; i<elementRecords.size(); i++)
+    for (int i = 0; i < elementRecords.size(); i++)
     {
     	final Element element = 
-          ElementFactory.getInstance().create(elementType, elementRecords.get(i), dbConn, Long.parseLong(mapId));      
-        Users usersTable = elementRecords.get(i).get(QUsers.users);
-        
-        org.w3c.dom.Element elementXml = 
-            element.toXml(
-              elementRootXml,
-              usersTable.getId(), 
-              usersTable.getDisplayName(),
-              multiLayerUniqueElementIds,
-              addChildren);
-          elementRootXml.appendChild(elementXml);
+        ElementFactory.getInstance().create(elementType, elementRecords.get(i), dbConn, 
+        Long.parseLong(mapId));      
+      Users usersTable = elementRecords.get(i).get(QUsers.users);
+      
+      org.w3c.dom.Element elementXml = 
+          element.toXml(
+            elementRootXml,
+            usersTable.getId(), 
+            usersTable.getDisplayName(),
+            multiLayerUniqueElementIds,
+            addChildren);
+       elementRootXml.appendChild(elementXml);
     }
     
     return elementDoc;
