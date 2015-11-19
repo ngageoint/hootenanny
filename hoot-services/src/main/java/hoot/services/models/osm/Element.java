@@ -475,7 +475,9 @@ public abstract class Element implements XmlSerializable, DbSerializable
     final RelationalPathBase<?> relatedRecordTable, final NumberPath<Long> joinField,
     final Set<Long> elementIds, final boolean warnOnNothingRemoved, Connection dbConn)
   {
-    long recordsProcessed = 0;
+    log.debug("Removing related records...");
+  	
+  	long recordsProcessed = 0;
     if (relatedRecordTable != null && joinField != null)
     {
     	SQLDeleteClause sqldelete = 

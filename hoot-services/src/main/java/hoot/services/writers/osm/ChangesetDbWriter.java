@@ -505,7 +505,22 @@ public class ChangesetDbWriter
   	
   	initParsedElementCache();
     
-    log.debug("Inserting new OSM elements and updating existing OSM elements...");
+   // The "if-unused" attribute in the delete tag prevents any element being used by another
+    // element from being deleted (e.g. node can't be deleted that is still being used by a way
+    // or relation, etc.); its attribute value is ignored; only the presence of the attribute
+    // or lack thereof is looked at. This seems a little confusing to me, but that's how
+    // the OSM rails port parses it, and I'm trying to stay consistent with what it does 
+  	// when possible.
+    log.debug("Changeset delete unused check...");
+  	boolean deleteIfUnused = false;
+    org.w3c.dom.Node deleteXml = XPathAPI.selectSingleNode(changesetDoc, "//osmChange/delete");
+    if (deleteXml != null && deleteXml.hasAttributes() && 
+    		deleteXml.getAttributes().getNamedItem("if-unused") != null)
+    {
+      deleteIfUnused = true;
+    }
+  	
+  	log.debug("Inserting new OSM elements and updating existing OSM elements...");
 
     // By storing the elements and the element records in two different collections,
     // changesetDiffElements and recordsToStore, data is being duplicated here since Element 
@@ -532,28 +547,17 @@ public class ChangesetDbWriter
       {
         if (!elementType.equals(ElementType.Changeset))
         {
-        	// The "if-unused" attribute in the delete tag prevents any element being used by another
-          // element from being deleted (e.g. node can't be deleted that is still being used by a way
-          // or relation, etc.); its attribute value is ignored; only the presence of the attribute
-          // or lack thereof is looked at. This seems a little confusing to me, but that's how
-          // rails port parses it, and I'm trying to stay consistent with what it does when possible.
-          boolean deleteIfUnused = false;
-          org.w3c.dom.Node deleteXml = 
-          	XPathAPI.selectSingleNode(changesetDoc, "//osmChange/" + 
-            entityChangeType.toString().toLowerCase());
-          if (deleteXml != null && deleteXml.hasAttributes() && 
-          		deleteXml.getAttributes().getNamedItem("if-unused") != null)
-          {
-            deleteIfUnused = true;
-          }
-
+        	log.debug("Parsing " + entityChangeType.toString() + " for " + elementType.toString());
+        	
           // parse the elements from the request XML for the given element type
           changesetDiffElements.addAll(
           	parseElements(
               XPathAPI.selectNodeList(
               	changesetDoc, 
               	"//osmChange/" + entityChangeType.toString().toLowerCase() + "/"
-                  + elementType.toString().toLowerCase()), elementType, entityChangeType,
+                  + elementType.toString().toLowerCase()), 
+              elementType, 
+              entityChangeType,
               deleteIfUnused));
           // If any elements were actually parsed for this element and entity update type, update
           // the database with the parsed elements, their related records, and their tags
