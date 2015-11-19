@@ -208,6 +208,14 @@ void OsmWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
   {
     writer.writeAttribute("changeset", QString::number(e->getChangeset()));
   }
+  if (e->getUser() != ElementData::USER_EMPTY)
+  {
+    writer.writeAttribute("user", e->getUser());
+  }
+  if (e->getUid() != ElementData::UID_EMPTY)
+  {
+    writer.writeAttribute("uid", QString::number(e->getUid()));
+  }
 }
 
 void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)

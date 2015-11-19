@@ -74,7 +74,8 @@ public:
 
   RelationData(long id);
 
-  RelationData(long id, long changeset, long version, unsigned int timestamp);
+  RelationData(long id, long changeset, long version, unsigned int timestamp, QString user,
+               long uid);
 
   RelationData(const RelationData& rd);
 

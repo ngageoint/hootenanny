@@ -47,6 +47,7 @@ import hoot.services.job.JobStatusWebPoller;
 import hoot.services.job.JobStatusManager.JOB_STATUS;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.review.ReviewTestUtils;
+import hoot.services.utils.RandomNumberGenerator;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
@@ -187,7 +188,7 @@ public class ReviewResourcePrepareTest extends OsmResourceTestAbstract
   {
     ReviewTestUtils.createDataToPrepare();
 
-    final long fakeMapId = mapId + 2;
+    final long fakeMapId = (long)RandomNumberGenerator.nextDouble(mapId + 10^4, Integer.MAX_VALUE);
     try
     {
       runPrepareJob(String.valueOf(fakeMapId), String.valueOf(false));

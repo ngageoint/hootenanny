@@ -57,7 +57,8 @@ public:
 
   Node(Status s, long id, double x, double y, Meters circularError);
 
-  Node(Status s, long id, double x, double y, long changeset, long version, unsigned int timestamp, Meters circularError);
+  Node(Status s, long id, double x, double y, long changeset, long version, unsigned int timestamp,
+       QString user, long uid, Meters circularError);
 
   virtual ~Node() {}
 
