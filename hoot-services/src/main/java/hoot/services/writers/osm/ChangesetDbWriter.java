@@ -230,7 +230,8 @@ public class ChangesetDbWriter
     // getRelatedRecordTable method.
     if (element.getRelatedRecordTable() != null)
     {
-      Map<ElementType, Map<Long, Element>> elementCache = new HashMap<ElementType, Map<Long, Element>>();
+      Map<ElementType, Map<Long, Element>> elementCache = 
+      	new HashMap<ElementType, Map<Long, Element>>();
       for (ElementType relatedElementType : element.getRelatedElementTypes())
       {
         elementCache.put(

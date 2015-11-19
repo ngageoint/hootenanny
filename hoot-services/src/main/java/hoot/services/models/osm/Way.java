@@ -299,18 +299,17 @@ public class Way extends Element
 
     NamedNodeMap xmlAttributes = xml.getAttributes();
 
-    assert (record != null);
-    CurrentWays wayRecord = (CurrentWays) record;
+    assert(record != null);
+    CurrentWays wayRecord = (CurrentWays)record;
     wayRecord.setChangesetId(parseChangesetId(xmlAttributes));
-    wayRecord.setVersion(parseVersion(xmlAttributes));
+    wayRecord.setVersion(parseVersion());
 
     wayRecord.setTimestamp(parseTimestamp(xmlAttributes));
     wayRecord.setVisible(true);
 
     if (!entityChangeType.equals(EntityChangeType.DELETE))
     {
-      final java.util.Map<String, String> tags = parseTags(xml);
-      wayRecord.setTags(tags);
+      wayRecord.setTags(parseTags(xml));
     }
 
     setRecord(wayRecord);

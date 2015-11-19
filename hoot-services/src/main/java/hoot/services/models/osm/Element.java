@@ -203,7 +203,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
   {
     return (Long)MethodUtils.invokeMethod(record, "getId", new Object[]{});
   }
-
+  
   /**
    * Sets the ID of the element associated services database record
    */
@@ -345,7 +345,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
    * version passed in the changeset request must match the existing version the server to ensure
    * data integrity.
    */
-  protected long parseVersion(final NamedNodeMap xmlAttributes) throws Exception
+  protected long parseVersion() throws Exception
   {
     long version = 1;
     //version passed in the request can be ignored if it is a create request, since we've already

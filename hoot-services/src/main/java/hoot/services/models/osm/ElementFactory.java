@@ -77,11 +77,10 @@ public class ElementFactory
     throws InstantiationException, IllegalAccessException, ClassNotFoundException,
     NoSuchMethodException, InvocationTargetException
   {
-  	Long oMapId = new Long(mapId);
     return
       (Element)ConstructorUtils.invokeConstructor(
         Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType.toString()),
-        new Object[]{ oMapId, conn },
+        new Object[]{ new Long(mapId), conn },
         new Class<?>[]{ Long.class, Connection.class });
   }
 

@@ -120,17 +120,16 @@ public class Relation extends Element
 
 		NamedNodeMap xmlAttributes = xml.getAttributes();
 
-		assert (record != null);
+		assert(record != null);
 		CurrentRelations relationRecord = (CurrentRelations)record;
 		relationRecord.setChangesetId(parseChangesetId(xmlAttributes));
-		relationRecord.setVersion(parseVersion(xmlAttributes));
+		relationRecord.setVersion(parseVersion());
 		relationRecord.setTimestamp(parseTimestamp(xmlAttributes));
 		relationRecord.setVisible(true);
 
 		if (!entityChangeType.equals(EntityChangeType.DELETE))
 		{
-			final java.util.Map<String, String> tags = parseTags(xml);
-			relationRecord.setTags(tags);
+			relationRecord.setTags(parseTags(xml));
 		}
 
 		setRecord(relationRecord);

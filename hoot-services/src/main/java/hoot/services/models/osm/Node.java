@@ -179,7 +179,7 @@ public class Node extends Element
     // set these props at the very beginning, b/c they will be needed regardless of whether 
     // following checks fail
     nodeRecord.setChangesetId(parseChangesetId(xmlAttributes));
-    nodeRecord.setVersion(parseVersion(xmlAttributes));
+    nodeRecord.setVersion(parseVersion());
 
     double latitude = -91;
     double longitude = -181;
@@ -207,8 +207,7 @@ public class Node extends Element
 
     if (!entityChangeType.equals(EntityChangeType.DELETE))
     {
-      final java.util.Map<String, String> tags = parseTags(xml);
-      nodeRecord.setTags(tags);
+      nodeRecord.setTags(parseTags(xml));
     }
 
     setRecord(nodeRecord);
