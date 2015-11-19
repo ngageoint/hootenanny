@@ -1235,8 +1235,6 @@ Contains the DB URL for unit testing. This is typically only used by developers.
 
 * Data Type: string
 * Default Value: `postgresql://hoot:hoottest@localhost:5432/osmapi_test`
-//* Default Value: `postgresql://postgres@10.194.70.78:5432/terrytest`
-//note: both above will be replace with a local db and can be overridden 
 
 Contains the DB URL for an OpenStreetMaps (OSM) API database for unit testing. This is
 typically only used by developers.
