@@ -90,13 +90,13 @@ public:
    *  the feature being reviewed. E.g. "Highway" or "Building".
    */
   static void mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, const QString& note,
-    const QString& reviewType, double score = -1);
+    const QString& reviewType, double score = -1, vector<QString> choices = vector<QString>() );
 
   /**
    * Marks a single element as needing review.
    */
   static void mark(const OsmMapPtr &map, ElementPtr& e, const QString& note,
-    const QString& reviewType, double score = -1);
+    const QString& reviewType, double score = -1, vector<QString> choices = vector<QString>());
 
 private:
   // don't use these keys directly, instead call the helper functions above.
@@ -107,6 +107,7 @@ private:
   static QString _reviewNeedsKey;
   static QString _reviewNoteKey;
   static QString _reviewTypeKey;
+  static QString _reviewChoicesKey;
 
   /**
    * Returns a hilbert value that represents the center of the bounds that covers e1 and e2.
