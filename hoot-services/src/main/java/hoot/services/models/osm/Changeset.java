@@ -358,19 +358,14 @@ public class Changeset extends Changesets
           .getProperty(
             "maximumChangesetElements",
             HootProperties.getDefault("maximumChangesetElements")));
-
-
     Changesets changeset =
-  	new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
-  		.where(changesets.id.eq(getId()))
-  		.singleResult(changesets);
-
+  	  new SQLQuery(conn, DbUtils.getConfiguration(_mapId))
+        .from(changesets)
+  		  .where(changesets.id.eq(getId()))
+  		  .singleResult(changesets);
     final int currentNumChanges = changeset.getNumChanges();
-
     assert((currentNumChanges + numChanges) <= maximumChangesetElements);
-
-    if(
-    		new SQLUpdateClause(conn, DbUtils.getConfiguration(_mapId), changesets)
+    if(new SQLUpdateClause(conn, DbUtils.getConfiguration(_mapId), changesets)
     			.where(changesets.id.eq(getId()))
     			.set(changesets.numChanges, currentNumChanges + numChanges)
     			.execute() != 1)
@@ -499,11 +494,12 @@ public class Changeset extends Changesets
     try
     {
       log.debug("Verifying changeset with ID: " + getId() + " has previously been created ...");
-      changesetRecord =
-    	new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
-    		.where(changesets.id.eq(getId()))
-    		.singleResult(changesets);
-      changesetExists = changesetRecord != null;
+    	
+      changesetExists = 
+      	new SQLQuery(conn, DbUtils.getConfiguration(_mapId))
+          .from(changesets)
+      		.where(changesets.id.eq(getId()))
+      		.count() > 0;
     }
     catch (Exception e)
     {
@@ -525,11 +521,11 @@ public class Changeset extends Changesets
     if (!isOpen())
     {
       //this needs to be retrieved again to refresh the data
-
       changesetRecord =
-    	new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
-    		.where(changesets.id.eq(getId()))
-    		.singleResult(changesets);
+    	  new SQLQuery(conn, DbUtils.getConfiguration(_mapId))
+          .from(changesets)
+    		  .where(changesets.id.eq(getId()))
+    		  .singleResult(changesets);
       throw new Exception(
         "The changeset with ID: " + getId() + " was closed at " + changesetRecord.getClosedAt());
     }

@@ -59,6 +59,7 @@ public interface DbSerializable
   NumberPath<Long> getElementIdField();
   BooleanPath getElementVisibilityField();
   NumberPath<Long> getChangesetIdField();
+  NumberPath<Long> getElementVersionField();
 
   // table/field info for the r wrapped by this implementation
   RelationalPathBase<?> getRelatedRecordTable();

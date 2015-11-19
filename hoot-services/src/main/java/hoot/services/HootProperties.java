@@ -241,10 +241,6 @@ public class HootProperties
     {
       return "false";
     }
-    else if (key.equals("hootCoreServicesDatabaseWriterCompatibility"))
-    {
-      return "false";
-    }
     else if (key.equals("coreScriptPath"))
     {
       return "/project/hoot/scripts";

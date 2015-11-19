@@ -11,8 +11,10 @@ import java.sql.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RandomReviewableQuery  extends ReviewableQueryBase implements IReviewableQuery {
-	private static final Logger log = LoggerFactory.getLogger(RandomReviewableQuery.class);
+public class RandomReviewableQuery  extends ReviewableQueryBase implements IReviewableQuery 
+{
+	@SuppressWarnings("unused")
+  private static final Logger log = LoggerFactory.getLogger(RandomReviewableQuery.class);
 	
 	public RandomReviewableQuery(final Connection c, final long mapid)
 	{

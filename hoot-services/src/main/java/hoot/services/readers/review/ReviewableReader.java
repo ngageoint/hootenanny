@@ -3,17 +3,16 @@ package hoot.services.readers.review;
 import java.sql.Connection;
 
 import hoot.services.db.DbUtils;
-import hoot.services.models.review.ReviewQueryMapper;
 import hoot.services.models.review.ReviewableItem;
 import hoot.services.models.review.ReviewableStatistics;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysema.query.Tuple;
-
-public class ReviewableReader {
-	private static final Logger log = LoggerFactory.getLogger(ReviewableReader.class);
+public class ReviewableReader 
+{
+	@SuppressWarnings("unused")
+  private static final Logger log = LoggerFactory.getLogger(ReviewableReader.class);
 	
 	private ReviewableQueryFactory _fac = new ReviewableQueryFactory();
 	
