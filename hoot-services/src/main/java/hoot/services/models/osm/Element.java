@@ -674,8 +674,8 @@ public abstract class Element implements XmlSerializable, DbSerializable
   	Map<String, String> tags = new HashMap<String, String>();
     try
     {
-    	//using xpath api here is slow...just check each child for a tag instead
-      //final NodeList tagXmlNodes = XPathAPI.selectNodeList(elementXml, "tag");
+    	//using xpath api here to get the tags is *very* slow, since it ends up being called many 
+    	//times...just check each child for a tag instead
       final NodeList tagXmlNodes = elementXml.getChildNodes();
       for (int i = 0; i < tagXmlNodes.getLength(); i++)
       {
