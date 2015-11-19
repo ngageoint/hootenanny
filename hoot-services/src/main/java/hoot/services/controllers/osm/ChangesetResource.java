@@ -353,9 +353,8 @@ public class ChangesetResource
           throw new Exception("Error parsing changeset diff data: "
             + StringUtils.abbreviate(changeset, 100) + " (" + e.getMessage() + ")");
         }
-        ChangesetDbWriter changesetDbWriter = new ChangesetDbWriter(conn);
-        changesetUploadResponse = changesetDbWriter.write(mapid, changesetId, changesetDoc);
-        	
+        changesetUploadResponse = 
+        	(new ChangesetDbWriter(conn)).write(mapid, changesetId, changesetDoc);
       }
       catch (Exception e)
       {
@@ -440,6 +439,7 @@ public class ChangesetResource
     return Response.status(Status.OK).toString();
   }
   
+  //TODO: clean up these message...some are obsolete now
   public static void handleError(final Exception e, final long changesetId, 
     final String changesetDiffSnippet)
   {
@@ -461,6 +461,12 @@ public class ChangesetResource
     	}
     }
     
+    //To make the error checking code cleaner and simpler, if an element is referenced in an 
+    //update or delete changeset that doesn't exist in the database, we're not differentiating
+    //between whether it was an element, relation member, or way node reference.  Previously, we'd
+    //throw a 412 if the non-existing element was a relation member or way node reference and a 404
+    //otherwise.  Now, we're always throwing a 404.  This shouldn't be a big deal, b/c the hoot UI
+    //doesn't differentiate between the two types of failures.
     if (!StringUtils.isEmpty(e.getMessage()))
     {
       if (e.getMessage().contains("Invalid changeset ID") || 
@@ -471,13 +477,14 @@ public class ChangesetResource
       {
         ResourceErrorHandler.handleError(message, Status.CONFLICT, log);  //409
       }
-      else if (e.getMessage().contains("to be updated does not exist"))
+      else if (e.getMessage().contains("to be updated does not exist") ||
+      		     e.getMessage().contains("Element(s) being referenced don't exist."))
       {
         ResourceErrorHandler.handleError(message, Status.NOT_FOUND, log); //404
       }
       else if (e.getMessage().contains("exist specified for") ||
                e.getMessage().contains("exist for") ||
-               e.getMessage().contains("is still used by") ||
+               e.getMessage().contains("still used by") ||
                e.getMessage().contains(
                  "One or more features in the changeset are involved in an unresolved review"))
       {

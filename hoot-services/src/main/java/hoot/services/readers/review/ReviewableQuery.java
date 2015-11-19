@@ -11,9 +11,10 @@ import java.sql.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
-	
-	private static final Logger log = LoggerFactory.getLogger(ReviewableQuery.class);
+public class ReviewableQuery extends ReviewableQueryBase implements IReviewableQuery 
+{
+	@SuppressWarnings("unused")
+  private static final Logger log = LoggerFactory.getLogger(ReviewableQuery.class);
 	private long _seqId = -1;
 	
 	public ReviewableQuery(final Connection c, final long mapid, final long seqid)

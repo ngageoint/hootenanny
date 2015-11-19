@@ -91,10 +91,11 @@ Relation::Relation(Status s, long id, Meters circularError, QString type) :
   _relationData->setType(type);
 }
 
-Relation::Relation(Status s, long id, long changeset, long version, unsigned int timestamp, Meters circularError, QString type) :
+Relation::Relation(Status s, long id, long changeset, long version, unsigned int timestamp,
+                   QString user, long uid, Meters circularError, QString type) :
   Element(s)
 {
-  _relationData.reset(new RelationData(id, changeset, version, timestamp));
+  _relationData.reset(new RelationData(id, changeset, version, timestamp, user, uid));
   _relationData->setCircularError(circularError);
   _relationData->setType(type);
 }

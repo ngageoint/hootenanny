@@ -64,7 +64,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.mysema.query.sql.Configuration;
 import com.mysema.query.sql.PostgresTemplates;
 import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.SQLSubQuery;
 import com.mysema.query.sql.SQLTemplates;
 import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.sql.dml.SQLInsertClause;
@@ -72,7 +71,6 @@ import com.mysema.query.sql.dml.SQLUpdateClause;
 import com.mysema.query.sql.types.EnumAsObjectType;
 import com.mysema.query.types.expr.BooleanExpression;
 import com.mysema.query.types.expr.NumberExpression;
-import com.mysema.query.types.query.ListSubQuery;
 import com.mysema.query.types.template.NumberTemplate;
 
 /**
@@ -540,12 +538,12 @@ public class DbUtils
 
     	conn.setAutoCommit(false);
 
-			ListSubQuery<Long> res = new SQLSubQuery().from(maps)
-			.where(maps.displayName.equalsIgnoreCase(mapName)).list(maps.id);
+			//ListSubQuery<Long> res = new SQLSubQuery().from(maps)
+			//.where(maps.displayName.equalsIgnoreCase(mapName)).list(maps.id);
 
   	  new SQLDeleteClause(conn, configuration, maps)
-  	  .where(maps.displayName.eq(mapName))
-  	  .execute();
+  	    .where(maps.displayName.eq(mapName))
+  	    .execute();
 
   	  conn.commit();
     }
@@ -851,11 +849,12 @@ public class DbUtils
     com.mysema.query.sql.RelationalPathBase<?> t,
     List<List<BooleanExpression>> predicateslist, final RecordBatchType recordBatchType, 
   	Connection conn, int maxRecordBatchSize) throws Exception
-    {
-      try
+   {
+  	  log.debug("Batch element " + recordBatchType.toString() + "..."); 
+  	
+  	  try
       {
         Configuration configuration = getConfiguration(mapId);
-
 
         switch (recordBatchType)
         {
@@ -968,14 +967,6 @@ public class DbUtils
 
 
       }
-      catch (Exception e)
-      {
-
-        String msg = "Error executing batch query.";
-        msg += "  " + e.getMessage();
-        msg += " Cause:" + e.getCause().toString();
-        throw new Exception(msg);
-      }
       finally
       {
       	//conn.setAutoCommit(true);
@@ -1046,7 +1037,9 @@ public class DbUtils
 
   public static long batchRecordsDirectNodes(final long mapId, final List<?> records,
       final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
-    {
+  {
+  	log.debug("Batch node " + recordBatchType.toString() + "...");  
+  	
   	long updateCount = 0;
   		PreparedStatement ps = null;
       try
@@ -1058,7 +1051,6 @@ public class DbUtils
         switch (recordBatchType)
         {
           case INSERT:
-
 
       			sql = "insert into current_nodes_" + mapId + " (id, latitude, " +
       					"longitude, changeset_id, visible, \"timestamp\", tile, version, tags) " +
@@ -1104,7 +1096,6 @@ public class DbUtils
 
 		      			}
 	      			}
-
           	}
 
             break;
@@ -1157,7 +1148,6 @@ public class DbUtils
 	      			}
           	}
 
-
             break;
 
           case DELETE:
@@ -1182,7 +1172,6 @@ public class DbUtils
 	      			}
           	}
 
-
             break;
 
           default:
@@ -1190,14 +1179,6 @@ public class DbUtils
         }
 
       updateCount += ps.executeBatch().length;
-      }
-      catch (Exception e)
-      {
-
-        String msg = "Error executing batch query.";
-        msg += "  " + e.getMessage();
-        msg += " Cause:" + e.getCause().toString();
-        throw new Exception(msg);
       }
       finally
       {
@@ -1213,7 +1194,9 @@ public class DbUtils
 
   public static long batchRecordsDirectWays(final long mapId, final List<?> records,
       final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
-    {
+  {
+  	log.debug("Batch way " + recordBatchType.toString() + "..."); 
+  	
   	long updateCount = 0;
   		PreparedStatement ps = null;
       try
@@ -1349,14 +1332,6 @@ public class DbUtils
 
       updateCount += ps.executeBatch().length;
       }
-      catch (Exception e)
-      {
-      	conn.rollback();
-        String msg = "Error executing batch query.";
-        msg += "  " + e.getMessage();
-        msg += " Cause:" + e.getCause().toString();
-        throw new Exception(msg);
-      }
       finally
       {
       	if(ps != null)
@@ -1369,8 +1344,10 @@ public class DbUtils
   
   public static long batchRecordsDirectRelations(final long mapId, final List<?> records,
       final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
-    {
-  	long updateCount = 0;
+  {
+  	log.debug("Batch relation " + recordBatchType.toString() + "...");   
+  	
+  	  long updateCount = 0;
   		PreparedStatement ps = null;
       try
       {
@@ -1380,7 +1357,6 @@ public class DbUtils
         switch (recordBatchType)
         {
           case INSERT:
-
 
       			sql = "insert into current_relations_" + mapId + " (id, changeset_id, \"timestamp\", visible, version, tags) " +
       					"values (?, ?, ?, ?, ?, ?)";
@@ -1492,9 +1468,7 @@ public class DbUtils
 	      				updateCount += ps.executeBatch().length;
 		      			}
 	      			}
-
           	}
-
 
             break;
 
@@ -1503,14 +1477,6 @@ public class DbUtils
         }
 
       updateCount += ps.executeBatch().length;
-      }
-      catch (Exception e)
-      {
-      	conn.rollback();
-        String msg = "Error executing batch query.";
-        msg += "  " + e.getMessage();
-        msg += " Cause:" + e.getCause().toString();
-        throw new Exception(msg);
       }
       finally
       {

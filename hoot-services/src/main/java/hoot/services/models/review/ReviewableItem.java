@@ -4,11 +4,10 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysema.query.Tuple;
-
-public class ReviewableItem extends ReviewQueryMapper {
-
-	private static final Logger log = LoggerFactory.getLogger(ReviewableItem.class);
+public class ReviewableItem extends ReviewQueryMapper 
+{
+	@SuppressWarnings("unused")
+  private static final Logger log = LoggerFactory.getLogger(ReviewableItem.class);
 	private long _sortOrder;
 	private long _mapId;
 	private long _relationId;
