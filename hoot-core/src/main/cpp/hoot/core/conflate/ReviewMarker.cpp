@@ -162,7 +162,7 @@ void ReviewMarker::mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, co
 
   for (unsigned int i = 0; i < choices.size(); i++)
   {
-    r->getTags()[_reviewChoicesKey + ":" + QString::number(i)] = choices[i];
+    r->getTags()[_reviewChoicesKey + ":" + QString::number(i+1)] = choices[i];
   }
 
   map->addElement(r);
@@ -186,7 +186,7 @@ void ReviewMarker::mark(const OsmMapPtr& map, ElementPtr& e, const QString& note
 
   for (unsigned int i = 0; i < choices.size(); i++)
   {
-    r->getTags()[_reviewChoicesKey + ":" + QString::number(i)] = choices[i];
+    r->getTags()[_reviewChoicesKey + ":" + QString::number(i+1)] = choices[i];
   }
 
   map->addElement(r);
