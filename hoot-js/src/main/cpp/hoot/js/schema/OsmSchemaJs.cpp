@@ -71,7 +71,8 @@ void OsmSchemaJs::Init(Handle<Object> exports)
 Handle<Value> OsmSchemaJs::getAllTags(const Arguments& /*args*/) {
   HandleScope scope;
 
-  return scope.Close(toV8(OsmSchema::getInstance().getAllTags()));
+  Handle<Value> result = toV8(OsmSchema::getInstance().getAllTags());
+  return scope.Close(result);
 }
 
 Handle<Value> OsmSchemaJs::getCategories(const Arguments& args) {

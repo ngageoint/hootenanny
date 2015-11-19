@@ -59,9 +59,10 @@ Node::Node(Status s, long id, double x, double y, Meters circularError) : Elemen
   _getElementData().setCircularError(circularError);
 }
 
-Node::Node(Status s, long id, double x, double y, long changeset, long version, unsigned int timestamp, Meters circularError) : Element(s)
+Node::Node(Status s, long id, double x, double y, long changeset, long version, unsigned int timestamp,
+           QString user, long uid, Meters circularError) : Element(s)
 {
-  _nodeData.init(id, x, y, changeset, version, timestamp);
+  _nodeData.init(id, x, y, changeset, version, timestamp, user, uid);
   _getElementData().setCircularError(circularError);
 }
 
