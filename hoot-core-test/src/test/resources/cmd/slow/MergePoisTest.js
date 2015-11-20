@@ -20,9 +20,10 @@ var input1 = "<?xml version='1.0' encoding='UTF-8'?>\
 
 var map = new hoot.OsmMap();
 hoot.loadMapFromString(map, input1);
-var mergedMap = hoot.poiMerge(script, map);
+var mergedMap = hoot.poiMerge(script, map, -1);
 var xml = hoot.OsmWriter.toString(mergedMap);
 console.log(xml);
+map.clear();
 
 var input2 = "<?xml version='1.0' encoding='UTF-8'?>\
 <osm version='0.6' upload='true' generator='JOSM'>\
@@ -56,6 +57,6 @@ var input2 = "<?xml version='1.0' encoding='UTF-8'?>\
 
 var map = new hoot.OsmMap();
 hoot.loadMapFromString(map, input2);
-var mergedMap = hoot.poiMerge(script, map);
+var mergedMap = hoot.poiMerge(script, map, -3);
 var xml = hoot.OsmWriter.toString(mergedMap);
 console.log(xml);

@@ -75,6 +75,8 @@ void OsmMapJs::Init(Handle<Object> target) {
       FunctionTemplate::New(removeElement)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("visit"),
       FunctionTemplate::New(visit)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("clear"),
+      FunctionTemplate::New(clear)->GetFunction());
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                 String::New(OsmMap::className().data()));
 
@@ -91,6 +93,19 @@ Handle<Object> OsmMapJs::create(ConstOsmMapPtr map)
   from->_setMap(map);
 
   return scope.Close(result);
+}
+
+Handle<Value> OsmMapJs::clear(const Arguments& args)
+{
+  HandleScope scope;
+
+  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
+
+  if (obj->getMap()) {
+    obj->getMap()->clear();
+  }
+
+  return scope.Close(Undefined());
 }
 
 Handle<Object> OsmMapJs::create(OsmMapPtr map)

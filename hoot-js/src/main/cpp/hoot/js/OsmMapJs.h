@@ -59,6 +59,7 @@ private:
   static v8::Handle<v8::Value> getElementCount(const v8::Arguments& args);
   static v8::Handle<v8::Value> getParents(const v8::Arguments& args);
   static v8::Handle<v8::Value> removeElement(const v8::Arguments& args);
+  static v8::Handle<v8::Value> clear(const v8::Arguments& args);
   static Handle<Value> visit(const Arguments& args);
 
   OsmMapPtr _map;

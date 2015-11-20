@@ -116,9 +116,9 @@ var postHandler = function(data, response)
 	</osm>";*/
 
 	var map = new hoot.OsmMap();
-	hoot.loadMapFromString(map, data);
+    hoot.loadMapFromString(map, data);
 	var script = 'PoiGeneric.js';
-	var mergedMap = hoot.poiMerge(script, map);
+    var mergedMap = hoot.poiMerge(script, map, -1);
 	var xml = hoot.OsmWriter.toString(mergedMap);
 	result.input = data;
 	result.output = xml;

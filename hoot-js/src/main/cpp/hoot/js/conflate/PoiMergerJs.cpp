@@ -68,14 +68,18 @@ v8::Handle<v8::Value> PoiMergerJs::jsPoiMerge(const v8::Arguments& args)
   HandleScope scope;
 
   try{
-    if (args.Length() != 2)
+    if (args.Length() > 3)
     {
       return v8::ThrowException(HootExceptionJs::create(IllegalArgumentException(
-        "Expected exactly two arguments to 'poiMerge'.")));
+        "Expected two or three arguments to 'poiMerge'.")));
     }
 
     // Argument 1: script -- note second param is directory to search under (~/hoot/rules)
     const QString scriptPath = ConfPath::search(toCpp<QString>(args[0]), "rules");
+    int elementId = -1;
+    if (args.Length() == 3) {
+       elementId = toCpp<int>(args[2]);
+    }
 
     // Argument 2: Map with POIs
     OsmMapJs* mapJs = node::ObjectWrap::Unwrap<OsmMapJs>(args[1]->ToObject());
@@ -113,12 +117,12 @@ v8::Handle<v8::Value> PoiMergerJs::jsPoiMerge(const v8::Arguments& args)
     // ...then pass those pairs one at a time through the merger, since it only merges pairs
     NodeMap nodes = map->getNodeMap();
     OsmMapPtr mergedMap(map);
-    const ElementId firstId = ElementId::node(((nodes.begin()->second))->getId());
+
+    const ElementId firstId = ElementId::node(elementId);
     //LOG_DEBUG("First ID: " << firstId.getId());
-    int count = 0;
     for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
     {
-      if (count > 0) {
+      if (it->second->getId() != elementId) {
         const boost::shared_ptr<const Node>& n = it->second;
 
         std::set< std::pair< ElementId, ElementId> > matches;
@@ -139,7 +143,6 @@ v8::Handle<v8::Value> PoiMergerJs::jsPoiMerge(const v8::Arguments& args)
           mergedMap->replaceNode(replacedNodes[0].first.getId(), replacedNodes[0].second.getId());
         }
       }
-      count++;
     }
 
     // Hand merged POIs back to caller in OsmMap
