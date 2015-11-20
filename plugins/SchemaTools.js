@@ -123,6 +123,10 @@ schemaTools.generateRuleTags = function(rule) {
         }
     } else if (rule.ruleType === 'isA') {
         var tags = schemaTools.hoot.OsmSchema.getChildTags(rule.name);
+
+        // Add the parents
+        tags.push.apply(tags,[schemaTools.hoot.OsmSchema.getTagVertex(rule.name)]);
+
         tags = st.expandAliases(tags);
 
         for (i in tags) {

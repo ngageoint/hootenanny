@@ -152,8 +152,8 @@ translate = {
     
         return lookup;
     },
-    
-    
+
+
     // Apply one to one translations - used for import and export
     applyOne2One : function(inList, outList, lookup, fCodeList, ignoreList) 
     { 
@@ -220,7 +220,65 @@ translate = {
         } // End for col in inList
     }, // End applyOne2One
 
-    // Apply one to one translations - For NFDD export 
+
+    // Apply one to one translations and don't report errors: missing columns etc
+    applyOne2OneQuiet : function(inList, outList, lookup)
+    {
+        var endChar = '',
+            tAttrib = '',
+            row = [];
+
+        for (var col in inList)
+        {
+            var value = inList[col];
+            if (col in lookup)
+            {
+                if (value in lookup[col])
+                {
+                    row = lookup[col][value];
+
+                    // Drop all of the undefined values
+                    if (row[0]) outList[row[0]] = row[1];
+                }
+            }
+        } // End for col in inList
+    }, // End applyOne2OneQuiet
+
+
+    // Apply one to one translations and:
+    // * Don't report errors
+    // * Send back the tags that were used.
+    applyOne2OneUsed : function(inList, outList, lookup)
+    {
+        var endChar = '',
+            tAttrib = '',
+            row = [];
+            used = [];
+
+        for (var col in inList)
+        {
+            var value = inList[col];
+            if (col in lookup)
+            {
+                if (value in lookup[col])
+                {
+                    row = lookup[col][value];
+
+                    // Drop all of the undefined values
+                    if (row[0])
+                    {
+                        outList[row[0]] = row[1];
+                        used.push([col,value]);
+                    }
+                }
+            } // End col in lookup
+        } // End for col in inList
+
+        return used;
+    }, // End applyOne2OneUsed
+
+
+    // Apply one to one translations - For NFDD export
     // This version populates the OTH field for values that are not in the rules
     applyNfddOne2One : function(inList, outList, lookup, fCodeList, ignoreList) 
     { 

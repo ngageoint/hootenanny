@@ -3739,6 +3739,7 @@ tds61.rules = {
      ['ZI014_PRW','154','raw_material','sulphur'], // Sulphur -- Added from PRW
      ['ZI014_PRW','999','raw_material','other'], // Other
 
+     // Some of these have been added to the fuzy table for export
      // ZI016_ROC - Route Pavement Information : Route Surface Composition
      // ['ZI016_ROC','-999999','surface','unknown'], // Trying this instead of undefined
      ['ZI016_ROC','-999999',undefined,undefined], // No Information
@@ -4339,9 +4340,10 @@ tds61.rules = {
      // To account for an "error" in the TDSv61 sample GDB
      ['ZI001_VSC','Stereoscopic Imagery','source:vertical_source:type','stereoscopic_imagery'],
      ['ZI001_SRT','NTM Imagery','source:non_spatial_source:type','ntm_imagery'],
+     ['ZI016_ROC','-999999',undefined,undefined], // No Information
     ], // End one2oneIn
 
-    // One2one translation table for converting "Other" OSM attributes to NFDD
+    // One2one translation table for converting "Other" OSM attributes to TDS
     // This is for Export only. The values are swapped before use
     one2oneOut : [
      // OTH Filler.  These are to build OTH values
@@ -4381,11 +4383,11 @@ tds61.rules = {
      ['FFN','572','amenity','cafe'], // Restaurant
      ['FFN','572','building','restaurant'], // Restaurant
 
-     // Extra road stuff
-     ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM
-     ['ZI016_ROC','2','surface','unpaved'], // Stabilized earth
-     ['ZI016_ROC','1','surface','dirt'], // Unimproved 
-     ['ZI016_ROC','1','surface','earth'], // Unimproved 
+     // Extra road stuff - see similarTable
+     // ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM
+     // ['ZI016_ROC','3','surface','unpaved'], // Stabilized earth
+     // ['ZI016_ROC','1','surface','dirt'], // Unimproved
+     // ['ZI016_ROC','1','surface','earth'], // Unimproved
 
      // Fix up some of the Defaults
      // ['FFN','-999999','building','yes'], // Map to No Information
@@ -4478,6 +4480,32 @@ tds61.rules = {
         "trade", "tyres", "vacant", "variety_store", "video", "video_games", "wine"
     ],
     // ##### End of shopList #####
+
+    // ##### Start of fuzyTable #####
+    // This list uses the new IsA, IsSimilar etc functions to map a number of input values to a single output
+    fuzyTable : [
+     ['ZI016_ROC','7',schemaTools.isA('surface=paved', 0.8, 0.1, 0.5)], // Ridgid Pavement
+     ['ZI016_ROC','3',schemaTools.isA('surface=unpaved', 0.8, 0.1, 0.5)], // Flexible Pavement
+
+     ['ZI016_ROC','1',schemaTools.simple('surface=ground',2)], // Unimproved
+//      ['ZI016_ROC','2',schemaTools.simple('surface=compacted',2)], // Stabilized earth
+     ['ZI016_ROC','4',schemaTools.simple('surface=gravel',2)], // Aggregate
+//      ['ZI016_ROC','5',schemaTools.simple('surface=macadam',2)], // Macadam
+//      ['ZI016_ROC','6',schemaTools.simple('surface=bound_surface',2)], // Bound Surface
+     ['ZI016_ROC','8',schemaTools.simple('surface=concrete',2)], // Concrete
+     ['ZI016_ROC','9',schemaTools.simple('surface=asphalt',2)], // Asphalt
+//      ['ZI016_ROC','10',schemaTools.simple('surface=asphalt_over_concrete',2)], // Asphalt over Concrete
+     ['ZI016_ROC','11',schemaTools.simple('surface=cobblestone',2)], // Cebble-stone
+//      ['ZI016_ROC','12',schemaTools.simple('surface=brick',2)], // Brick
+//      ['ZI016_ROC','13',schemaTools.simple('surface=metal,2')], // Metal
+     ['ZI016_ROC','14',schemaTools.simple('surface=wood',2)], // Wood
+//      ['ZI016_ROC','15',schemaTools.simple('surface=corduroy',2)], // rough hewn logs...  // Corduroy
+//      ['ZI016_ROC','16',schemaTools.simple('surface=wood_plank',2)], // Wood Plank
+//      ['ZI016_ROC','17',schemaTools.simple('surface=ice',2)], // Ice
+//      ['ZI016_ROC','18',schemaTools.simple('surface=snow',2)], // Snow
+//      ['ZI016_ROC','999',schemaTools.simple('surface=other',2)], // Other
+    ],
+    // ##### End of fuzyTable #####
 
     // ##### Start of Thematic Group Rules #####
     thematicGroupList : {

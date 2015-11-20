@@ -19,7 +19,7 @@
     },
     {
         "isA": "surface=paved",
-        "name": "surface=asphault",
+        "name": "surface=asphalt",
         "objectType": "tag",
         "similarTo": [
             {
@@ -28,6 +28,10 @@
             },
             {
                 "name": "surface=tartan",
+                "weight": 0.8
+            },
+            {
+                "name": "surface=macadam",
                 "weight": 0.8
             },
             {
@@ -75,7 +79,16 @@
         "name": "surface=concrete",
         "objectType": "tag",
         "similarTo": {
-            "name": "surface=asphault",
+            "name": "surface=asphalt",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "surface=paved",
+        "name": "surface=macadam",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "surface=asphalt",
             "weight": 0.8
         }
     },
@@ -225,7 +238,7 @@
         "name": "surface=tartan",
         "objectType": "tag",
         "similarTo": {
-            "name": "surface=asphault",
+            "name": "surface=asphalt",
             "weight": 0.8
         }
     },

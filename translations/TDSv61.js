@@ -29,12 +29,12 @@
 // Convert TDSv61 to/from OSM+
 //
 
+hoot.require('SchemaTools');
 hoot.require('tds61');
 hoot.require('tds61_schema');
 hoot.require('tds61_rules');
 hoot.require('config');
 hoot.require('translate');
-hoot.require('SchemaTools');
 hoot.require('fcode_common');
 
 // Layer name filter - Filter out all layers that match this regexp

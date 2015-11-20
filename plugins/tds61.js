@@ -1664,7 +1664,7 @@ tds61 = {
             tds61.lookup = translate.createBackwardsLookup(tds61.rules.one2one);
             // translate.dumpOne2OneLookup(tds61.lookup);
             
-            // Build a list of things to ignore and flip is backwards
+            // Build a list of things to ignore and flip it backwards
             tds61.ignoreList = translate.flipList(translate.joinList(tds61.rules.numBiased, tds61.rules.txtBiased));
             
             // Add some more features to ignore
@@ -1674,12 +1674,51 @@ tds61 = {
             tds61.ignoreList['note:extra'] = '';
             tds61.ignoreList['hoot:status'] = '';
             tds61.ignoreList['error:circular'] = '';
-        }
+
+            // Make the fuzy lookup table
+            tds61.fuzy = schemaTools.generateToOgrTable(tds61.rules.fuzyTable);
+
+            // Debug
+            for (var k1 in tds61.fuzy)
+            {
+                for (var v1 in tds61.fuzy[k1])
+                {
+                    print(JSON.stringify([k1, v1, tds61.fuzy[k1][v1][0], tds61.fuzy[k1][v1][1], tds61.fuzy[k1][v1][2]]));
+                }
+            }
+        } // End tds61.lookup Undefined
 
         // pre processing
         tds61.applyToNfddPreProcessing(tags, attrs, geometryType);
 
-        // one 2 one - we call the version that knows about OTH fields
+        // Fuzy processing
+        // We do this BEFORE the one2one so we don't introduce errors by matching things too broadly
+        var usedList = translate.applyOne2OneUsed(tags, attrs, tds61.fuzy);
+
+        // If we used any of the tags, add them to the lookup list as things to ignore.
+        if (usedList.length > 0)
+        {
+            for (var i in usedList)
+            {
+                row = usedList[i];
+                print('Adding usedList: ' + row);
+
+                if (!(row[0] in tds61.lookup))
+                {
+                    tds61.lookup[row[0]] = {};
+                }
+                if (!(tds61.lookup[row[0]][row[1]]))
+                {
+                    tds61.lookup[row[0]][row[1]] = [undefined,undefined];
+                }
+                else // Debug
+                {
+                    print('Used: We already have: ' + row);
+                }
+            }
+        } // End usedList > 0
+
+        // one 2 one - we call the version that knows about the OTH field
         translate.applyNfddOne2One(tags, attrs, tds61.lookup, tds61.fcodeLookup, tds61.ignoreList);
 
         // apply the simple number and text biased rules
