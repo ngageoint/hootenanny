@@ -114,7 +114,7 @@ private:
   void _incrementElementIndex(const ElementType& selectElementType);
   void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
   void _readBounded(shared_ptr<OsmMap> map, const ElementType& elementType);
-
+  void _processRelation(const QSqlQuery& resultIterator, OsmMap& map);
 
   ServicesDb _database;
   bool _open;
