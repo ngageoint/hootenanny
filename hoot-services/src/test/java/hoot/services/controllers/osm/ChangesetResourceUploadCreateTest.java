@@ -1223,7 +1223,8 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
 
       try
       {
-        Assert.assertEquals(4, Element.getTagCountForElementType(mapId, ElementType.Node, conn));
+        Assert.assertEquals(
+        	4, OsmTestUtils.getTagCountForElementType(mapId, ElementType.Node, conn));
       }
       catch (Exception e2)
       {

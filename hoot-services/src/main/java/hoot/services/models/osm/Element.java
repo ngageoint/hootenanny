@@ -845,38 +845,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
     }
     return elementXml;
   }
-
-  /**
-   * Gets a total tag count for a specified element type belonging to a specific map
-   *
-   * @param mapId ID of the map for which to retrieve the tag count
-   * @param elementType element type for which to retrieve the tag count
-   * @param dbConn JDBC Connection
-   * @return a tag count
-   * @throws Exception
-   */
-  public static long getTagCountForElementType(final long mapId, final ElementType elementType,
-    Connection dbConn) throws Exception
-  {
-    final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
-    List<?> records =
-    		new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable())
-				.list(prototype.getElementTable());
-
-    long tagCount = 0;
-    for (Object record : records)
-    {
-
-    	PGobject tags =
-	        (PGobject)MethodUtils.invokeMethod(record, "getTags", new Object[]{});
-
-      if (tags != null)
-      {
-        tagCount += PostgresUtils.postgresObjToHStore(tags).size();
-      }
-    }
-    return tagCount;
-  }
   
   /**
    * Given a list of unique ID's, filters out any which do not have an element ID mapping record
