@@ -37,22 +37,22 @@ var acquire = function(id, mapid, color, stylesheet, options, callback) {
                     if (options.bufferSize) {
                         obj.bufferSize = options.bufferSize;
                     }
-                    (['polygon', 'line', 'point']).forEach(function(d) {
+                    (['area', 'line', 'point']).forEach(function(d) {
                         // construct a mapnik layer dynamically
                         var l = new mapnik.Layer(d);
-                        l.srs = obj.srs;
+                        l.srs = '+init=epsg:4326';
                         l.styles = [d];
 
                         // change this to fit your db connection and settings
                         var postgis_settings = {
-                          dbname: mapid,
-                          table: 'planet_osm_' + d,
+                          dbname: 'testhoot',
+                          table: d,
                           user: 'hoot',
                           password: 'hoottest',
                           host: 'localhost',
                           type: 'postgis',
                           srid: '3857',
-                          extent: '-8052518,2105784.46,-8041386.05,2115534.51'
+                          extent: '-180,-90,180,90'
                         };
 
                         var ds = new mapnik.Datasource(postgis_settings);
