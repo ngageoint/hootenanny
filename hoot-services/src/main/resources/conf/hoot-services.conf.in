@@ -91,6 +91,9 @@ ConflateMakefilePath=makeconflate
 # CookieCutter make file script
 CookieCutterMakefilePath=makecookiecutter
 
+# ClipDataset make file script
+ClipDatasetMakefilePath=makeclipdataset
+
 # Translation javascript header script path
 jsHeaderScriptPath=$(homeFolder)/scripts/rh.js
 
