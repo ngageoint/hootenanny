@@ -1679,13 +1679,13 @@ tds61 = {
             tds61.fuzy = schemaTools.generateToOgrTable(tds61.rules.fuzyTable);
 
             // Debug
-            for (var k1 in tds61.fuzy)
-            {
-                for (var v1 in tds61.fuzy[k1])
-                {
-                    print(JSON.stringify([k1, v1, tds61.fuzy[k1][v1][0], tds61.fuzy[k1][v1][1], tds61.fuzy[k1][v1][2]]));
-                }
-            }
+//             for (var k1 in tds61.fuzy)
+//             {
+//                 for (var v1 in tds61.fuzy[k1])
+//                 {
+//                     print(JSON.stringify([k1, v1, tds61.fuzy[k1][v1][0], tds61.fuzy[k1][v1][1], tds61.fuzy[k1][v1][2]]));
+//                 }
+//             }
         } // End tds61.lookup Undefined
 
         // pre processing
@@ -1701,7 +1701,6 @@ tds61 = {
             for (var i in usedList)
             {
                 row = usedList[i];
-                print('Adding usedList: ' + row);
 
                 if (!(row[0] in tds61.lookup))
                 {
@@ -1710,10 +1709,6 @@ tds61 = {
                 if (!(tds61.lookup[row[0]][row[1]]))
                 {
                     tds61.lookup[row[0]][row[1]] = [undefined,undefined];
-                }
-                else // Debug
-                {
-                    print('Used: We already have: ' + row);
                 }
             }
         } // End usedList > 0
