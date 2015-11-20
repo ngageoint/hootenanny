@@ -1570,6 +1570,7 @@ COPY current_relation_members (relation_id, member_type, member_id, member_role,
 1	Way	1	wayrole	0
 1	Node	1	noderole	1
 2	Way	1	wayrole	2
+1	Relation	2		3
 \.
 
 
