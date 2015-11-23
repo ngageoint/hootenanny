@@ -6,7 +6,7 @@
 
   <appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender">
     <layout class="org.apache.log4j.PatternLayout">
-      <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
+      <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %c{1}:%L - %m%n" />
     </layout>
     <!-- #2378 -->
     <filter class="org.apache.log4j.varia.StringMatchFilter">
@@ -25,7 +25,7 @@
     <param name="MaxFileSize" value="25MB" />
     <param name="maxBackupIndex" value="1" />
     <layout class="org.apache.log4j.PatternLayout">
-      <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
+      <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %c{1}:%L - %m%n" />
     </layout>
     <!-- #2378 -->
     <filter class="org.apache.log4j.varia.StringMatchFilter">

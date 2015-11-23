@@ -113,5 +113,5 @@ public:
 };
 
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(LineRecordReaderTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(LineRecordReaderTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(LineRecordReaderTest, "slow");
 

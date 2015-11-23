@@ -101,7 +101,8 @@ SOURCES += \
     src/main/cpp/hoot/js/conflate/PoiMergerJs.cpp \
     src/main/cpp/hoot/js/visitors/JsFunctionVisitor.cpp \
     src/main/cpp/hoot/js/schema/TagDifferencerJs.cpp \
-    src/main/cpp/hoot/js/schema/JsonOsmSchemaLoader.cpp
+    src/main/cpp/hoot/js/schema/JsonOsmSchemaLoader.cpp \
+    src/main/cpp/hoot/js/algorithms/string/MostEnglishNameJs.cpp
 
 HEADERS += \
     src/main/cpp/hoot/js/HelloWorld.h \
@@ -153,7 +154,8 @@ HEADERS += \
     src/main/cpp/hoot/js/conflate/PoiMergerJs.h \
     src/main/cpp/hoot/js/visitors/JsFunctionVisitor.h \
     src/main/cpp/hoot/js/schema/TagDifferencerJs.h \
-    src/main/cpp/hoot/js/schema/JsonOsmSchemaLoader.h
+    src/main/cpp/hoot/js/schema/JsonOsmSchemaLoader.h \
+    src/main/cpp/hoot/js/algorithms/string/MostEnglishNameJs.h
 
 FORMS +=
 
