@@ -19,10 +19,10 @@ void Debug::_init()
 bool Debug::printTroubled(const shared_ptr<const OsmMap>& map)
 {
   bool result = false;
-  const OsmMap::NodeMap& nm = map->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nm.constBegin(); it != nm.constEnd(); ++it)
+  const NodeMap& nm = map->getNodeMap();
+  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    const shared_ptr<Node>& n = it.value();
+    const shared_ptr<Node>& n = it->second;
     if (isTroubledNode(n->getId()))
     {
       LOG_WARN("Found troubled node: " << n->toString());

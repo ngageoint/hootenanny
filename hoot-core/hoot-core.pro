@@ -548,6 +548,7 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/WayFilter.h \
     src/main/cpp/hoot/core/filters/NeighborFilter.h \
     src/main/cpp/hoot/core/WayMap.h \
+    src/main/cpp/hoot/core/NodeMap.h \
     src/main/cpp/hoot/core/filters/WayFilterChain.h \
     src/main/cpp/hoot/core/filters/UnknownFilter.h \
     src/main/cpp/hoot/core/filters/StatusFilter.h \

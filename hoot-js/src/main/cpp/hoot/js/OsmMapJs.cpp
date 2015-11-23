@@ -79,6 +79,8 @@ void OsmMapJs::Init(Handle<Object> target) {
       FunctionTemplate::New(removeElement)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("visit"),
       FunctionTemplate::New(visit)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("setIdGenerator"),
+      FunctionTemplate::New(setIdGenerator)->GetFunction());
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                 String::New(OsmMap::className().data()));
 
@@ -95,6 +97,21 @@ Handle<Object> OsmMapJs::create(ConstOsmMapPtr map)
   from->_setMap(map);
 
   return scope.Close(result);
+}
+
+Handle<Value> OsmMapJs::setIdGenerator(const Arguments& args)
+{
+  HandleScope scope;
+
+  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
+
+  shared_ptr<IdGenerator> idGen =  toCpp<shared_ptr<IdGenerator> >(args[0]);
+
+  if (obj->getMap()) {
+    obj->getMap()->setIdGenerator(idGen);
+  }
+
+  return scope.Close(Undefined());
 }
 
 Handle<Object> OsmMapJs::create(OsmMapPtr map)

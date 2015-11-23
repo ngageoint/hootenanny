@@ -68,7 +68,7 @@ public:
       shared_ptr<OsmMap> map(new OsmMap());
       uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
 
-      CPPUNIT_ASSERT_EQUAL(604, map->getNodeMap().size());
+      CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodeMap().size());
       CPPUNIT_ASSERT_EQUAL(6, (int)map->getWays().size());
     }
 
@@ -120,7 +120,7 @@ public:
       uut.setTranslationFile("translations/cloudmade.js");
       uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
 
-      CPPUNIT_ASSERT_EQUAL(604, map->getNodeMap().size());
+      CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodeMap().size());
       CPPUNIT_ASSERT_EQUAL(6, (int)map->getWays().size());
 
       int shoreline = 0;
@@ -150,7 +150,7 @@ public:
       uut.setTranslationFile("cloudmade");
       uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
 
-      CPPUNIT_ASSERT_EQUAL(604, map->getNodeMap().size());
+      CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodeMap().size());
       CPPUNIT_ASSERT_EQUAL(6, (int)map->getWays().size());
 
       int shoreline = 0;

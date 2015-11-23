@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -25,49 +25,18 @@
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef IDGENERATOR_H
-#define IDGENERATOR_H
+#ifndef NODEMAP_H
+#define NODEMAP_H
 
+// TGS
+#include <tgs/HashMap.h>
 #include <tgs/SharedPtr.h>
-
-// standard
-#include <string>
 
 namespace hoot
 {
-using namespace std;
-
-class IdGenerator
-{
-public:
-  static string className() { return "hoot::IdGenerator"; }
-
-  IdGenerator() {}
-
-  virtual ~IdGenerator() {}
-
-  virtual long createNodeId() = 0;
-
-  virtual long createRelationId() = 0;
-
-  virtual long createWayId() = 0;
-
-  virtual void ensureNodeBounds(long nid) = 0;
-
-  virtual void ensureRelationBounds(long rid) = 0;
-
-  virtual void ensureWayBounds(long wid) = 0;
-
-  static shared_ptr<IdGenerator> getInstance();
-
-  virtual void reset() = 0;
-
-private:
-  static shared_ptr<IdGenerator> _theInstance;
-};
-
-typedef boost::shared_ptr<IdGenerator> IdGeneratorPtr;
-
+  class Node;
+  typedef HashMap<long, boost::shared_ptr<Node> > NodeMap;
 }
 
-#endif // IDGENERATOR_H
+#endif // NODEMAP_H
+

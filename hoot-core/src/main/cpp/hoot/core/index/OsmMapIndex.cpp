@@ -105,7 +105,7 @@ void OsmMapIndex::_buildNodeTree() const
   vector<Box> boxes;
   vector<int> ids;
 
-  const OsmMap::NodeMap& nodes = _map.getNodeMap();
+  const NodeMap& nodes = _map.getNodeMap();
 
   _treeIdToNid.resize(0);
   _treeIdToNid.reserve(nodes.size());
@@ -114,10 +114,10 @@ void OsmMapIndex::_buildNodeTree() const
 
   Box b(2);
   int count = 0;
-  for (QHash<long, boost::shared_ptr<Node> >::const_iterator it = nodes.constBegin();
-    it != nodes.constEnd(); ++it)
+  for (NodeMap::const_iterator it = nodes.begin();
+    it != nodes.end(); ++it)
   {
-    shared_ptr<const Node> n = it.value();
+    shared_ptr<const Node> n = it->second;
 
     b.setBounds(0, n->getX(), n->getX());
     b.setBounds(1, n->getY(), n->getY());

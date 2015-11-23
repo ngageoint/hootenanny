@@ -206,10 +206,10 @@ void TileOpMapper::_map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context)
   }
 
   // go through all nodes
-  const OsmMap::NodeMap& nm = m->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nm.constBegin(); it != nm.constEnd(); ++it)
+  const NodeMap& nm = m->getNodeMap();
+  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    const shared_ptr<Node>& n = it.value();
+    const shared_ptr<Node>& n = it->second;
 
     // add node to appropriate map
     _addNode(n);

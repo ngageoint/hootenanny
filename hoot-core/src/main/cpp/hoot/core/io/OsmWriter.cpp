@@ -220,8 +220,13 @@ void OsmWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
 
 void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
 {
-  const OsmMap::NodeMap& nodes = map->getNodeMap();
-  QList<long> nids = nodes.keys();
+  QList<long> nids;
+  NodeMap::const_iterator it = map->getNodeMap().begin();
+  while (it != map->getNodeMap().end()) {
+    nids.append(it->first);
+    ++it;
+  }
+
   // sort the values to give consistent results.
   qSort(nids.begin(), nids.end(), qGreater<long>());
   for (int i = 0; i < nids.size(); i++)

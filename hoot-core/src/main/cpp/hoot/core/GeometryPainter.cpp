@@ -232,10 +232,10 @@ void GeometryPainter::drawOsmMap(QPainter& pt, const OsmMap* map, const QMatrix&
     drawWay(pt, map, it->second.get(), m);
   }
 
-  const OsmMap::NodeMap& nodes = map->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nodes.constBegin(); it != nodes.constEnd(); ++it)
+  const NodeMap& nodes = map->getNodeMap();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    drawNode(pt, it.value().get(), m);
+    drawNode(pt, it->second.get(), m);
   }
 }
 

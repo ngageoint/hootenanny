@@ -96,6 +96,12 @@ public:
     }
 
     OsmReader reader;
+    bool useDataSourceIds = false;
+    if (args.Length() >= 5)
+    {
+      useDataSourceIds = toCpp<bool>(args[4]);
+      reader.setUseDataSourceIds(useDataSourceIds);
+    }
     reader.readFromString(mapXml, map->getMap());
 
     return scope.Close(Undefined());
