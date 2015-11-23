@@ -89,7 +89,7 @@ Handle<Value> IdGeneratorJs::New(const Arguments& args) {
   if (className == "Object")
   {
     return v8::ThrowException(HootExceptionJs::create(IllegalArgumentException(
-      "Invalid OsmMapOperation. Did you forget 'new'?")));
+      "Invalid IdGenerator. Did you forget 'new'?")));
   }
   IdGenerator* idGen = Factory::getInstance().constructObject<IdGenerator>(className);
   IdGeneratorJs* obj = new IdGeneratorJs(IdGeneratorPtr(idGen));

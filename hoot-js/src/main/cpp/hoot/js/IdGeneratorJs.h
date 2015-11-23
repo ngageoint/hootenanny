@@ -79,7 +79,7 @@ inline void toCpp(v8::Handle<v8::Value> v, IdGeneratorPtr& idGen)
   }
   else
   {
-    throw IllegalArgumentException("Expected a MostEnglishNameJs, got: (" + toJson(v) + ")");
+    throw IllegalArgumentException("Expected a IdGeneratorJs, got: (" + toJson(v) + ")");
   }
 }
 

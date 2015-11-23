@@ -257,7 +257,6 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
   {
     // Layer exists
     _layers[layer->getName()] = poLayer;
-
     // Loop through the fields making sure that they exist in the output. Print a warning if
     // they don't exist
     OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();

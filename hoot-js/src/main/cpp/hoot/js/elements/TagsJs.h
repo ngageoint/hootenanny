@@ -95,7 +95,10 @@ inline void toCpp(v8::Handle<v8::Value> v, Tags& t)
 
   v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
   TagsJs* js = 0;
-  js = node::ObjectWrap::Unwrap<TagsJs>(obj);
+  if (obj->InternalFieldCount() > 0)
+  {
+    js = node::ObjectWrap::Unwrap<TagsJs>(obj);
+  }
   if (js)
   {
     t = js->getTags();
