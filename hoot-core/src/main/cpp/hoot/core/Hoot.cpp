@@ -84,6 +84,9 @@ void Hoot::_init()
 
   Log::getInstance().setLevel(Log::Info);
 
+  // All streams will default to UTF-8. This makes supporting other scripts much easier.
+  setlocale(LC_ALL, "en_US.UTF-8");
+
   // make sure our GDAL versions are consistent.
   const char* gdalVersion = GDALVersionInfo("RELEASE_NAME");
   if (gdalVersion != QString(GDAL_RELEASE_NAME))

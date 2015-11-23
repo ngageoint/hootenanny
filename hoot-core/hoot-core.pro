@@ -493,7 +493,8 @@ SOURCES += \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.cpp \
     src/main/cpp/hoot/core/schema/TagFilteredDifferencer.cpp \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.cpp \
-    src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp
+    src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp \
+    src/main/cpp/hoot/core/algorithms/string/MostEnglishName.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -973,5 +974,6 @@ HEADERS += \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.h \
     src/main/cpp/hoot/core/schema/TagFilteredDifferencer.h \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.h \
-    src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h
+    src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h \
+    src/main/cpp/hoot/core/algorithms/string/MostEnglishName.h
 
