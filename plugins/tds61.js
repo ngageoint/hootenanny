@@ -1314,7 +1314,7 @@ tds61 = {
            if (tags.tunnel && tags.tunnel !== 'no')
            {
                tds61.fixTransType(tags);
-               tags.layer = '-1';
+               // tags.layer = '-1';
                tags.in_tunnel = 'yes';
            }
 
@@ -1474,10 +1474,17 @@ tds61 = {
                 attrs.CAA = '3';
             }
 
+            // Fix up RLE
+            // If Vertical Relative Location != Surface && Not on a Bridge, Relative Level == NA
+            if ((attrs.LOC && attrs.LOC !== '44') && (attrs.SBB && attrs.SBB == '1000'))
+            {
+                attrs.RLE = '998';
+            }
+
         }
 
         // RLE vs LOC: Need to deconflict this for various features.
-        // This is the list of features that can be "Above Surface". Other features use RLE (Relitive Level) instead.
+        // This is the list of features that can be "Above Surface". Other features use RLE (Relative Level) instead.
         if (attrs.LOC == '45' && (['AT005','AQ113','BH065','BH110'].indexOf(attrs.TRS) == -1))
         {
             attrs.RLE = '2'; // Raised above surface

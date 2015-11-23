@@ -77,7 +77,7 @@ isSimilar : function(name, threshold, minScore, maxScore) {
         maxScore = minScore;
     }
 
-    if (!schemaTools.hoot.OsmSchema.getTagVertex(name)) {
+    if (!hoot.OsmSchema.getTagVertex(name)) {
         throw new Error("Invalid tag specified in isSimilar: " + JSON.schemaToolsringify(name));
     }
 
@@ -105,14 +105,14 @@ generateRuleTags : function(rule) {
     var result = [];
 
     if (rule.ruleType === 'similarTo') {
-        var tags = schemaTools.hoot.OsmSchema.getSimilarTags(rule.name, rule.threshold);
+        var tags = hoot.OsmSchema.getSimilarTags(rule.name, rule.threshold);
 
         tags = schemaTools.expandAliases(tags);
 
         for (i in tags) {
             if (tags[i].value !== '' && tags[i].value !== '*')
             {
-                var schemaScore = schemaTools.hoot.OsmSchema.scoreOneWay(tags[i].name, rule.name);
+                var schemaScore = hoot.OsmSchema.scoreOneWay(tags[i].name, rule.name);
                 if (schemaScore >= rule.threshold)
                 {
                     // scale the score so that rule.threshold -> 0, and 1 -> 1. Linearly.
@@ -124,10 +124,10 @@ generateRuleTags : function(rule) {
             }
         }
     } else if (rule.ruleType === 'isA') {
-        var tags = schemaTools.hoot.OsmSchema.getChildTags(rule.name);
+        var tags = hoot.OsmSchema.getChildTags(rule.name);
 
         // Add the parents
-        tags.push.apply(tags,[schemaTools.hoot.OsmSchema.getTagVertex(rule.name)]);
+        tags.push.apply(tags,[hoot.OsmSchema.getTagVertex(rule.name)]);
 
         tags = schemaTools.expandAliases(tags);
 
@@ -139,7 +139,7 @@ generateRuleTags : function(rule) {
             }
         }
     } else if (rule.ruleType === 'simple') {
-        var tags = [schemaTools.hoot.OsmSchema.getTagVertex(rule.name)];
+        var tags = [hoot.OsmSchema.getTagVertex(rule.name)];
         tags = schemaTools.expandAliases(tags);
 
         for (i in tags) {
