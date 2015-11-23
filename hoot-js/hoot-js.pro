@@ -57,6 +57,7 @@ SOURCES += \
     src/main/cpp/hoot/js/OsmMapJs.cpp \
     src/main/cpp/hoot/js/MapIoJs.cpp \
     src/main/cpp/hoot/js/JsRegistrar.cpp \
+    src/main/cpp/hoot/js/IdGeneratorJs.cpp \
     src/main/cpp/hoot/js/ops/OsmMapOperationJs.cpp \
     src/main/cpp/hoot/js/util/SettingsJs.cpp \
     src/main/cpp/hoot/js/filter/ElementCriterionJs.cpp \
@@ -107,6 +108,7 @@ HEADERS += \
     src/main/cpp/hoot/js/OsmMapJs.h \
     src/main/cpp/hoot/js/MapIoJs.h \
     src/main/cpp/hoot/js/JsRegistrar.h \
+    src/main/cpp/hoot/js/IdGeneratorJs.h \
     src/main/cpp/hoot/js/ops/OsmMapOperationJs.h \
     src/main/cpp/hoot/js/util/SettingsJs.h \
     src/main/cpp/hoot/js/util/StringUtilsJs.h \

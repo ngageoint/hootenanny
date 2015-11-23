@@ -36,6 +36,7 @@
 #include <hoot/js/util/StreamUtilsJs.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
 #include <hoot/js/visitors/JsFunctionVisitor.h>
+#include <hoot/js/IdGeneratorJs.h>
 #include "JsRegistrar.h"
 
 using namespace v8;
@@ -75,8 +76,8 @@ void OsmMapJs::Init(Handle<Object> target) {
       FunctionTemplate::New(removeElement)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("visit"),
       FunctionTemplate::New(visit)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("clear"),
-      FunctionTemplate::New(clear)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("setIdGenerator"),
+      FunctionTemplate::New(setIdGenerator)->GetFunction());
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                 String::New(OsmMap::className().data()));
 
@@ -95,14 +96,14 @@ Handle<Object> OsmMapJs::create(ConstOsmMapPtr map)
   return scope.Close(result);
 }
 
-Handle<Value> OsmMapJs::clear(const Arguments& args)
+Handle<Value> OsmMapJs::setIdGenerator(const Arguments& args)
 {
   HandleScope scope;
 
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
   if (obj->getMap()) {
-    obj->getMap()->clear();
+    obj->getMap()->setIdGenerator(shared_ptr<IdGenerator>(new DefaultIdGenerator()));
   }
 
   return scope.Close(Undefined());
