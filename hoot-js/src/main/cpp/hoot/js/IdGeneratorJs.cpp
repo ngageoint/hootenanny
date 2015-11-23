@@ -32,7 +32,6 @@
 // hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/IdGenerator.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
@@ -52,8 +51,9 @@ using namespace boost;
 
 HOOT_JS_REGISTER(IdGeneratorJs)
 
-IdGeneratorJs::IdGeneratorJs(IdGenerator* idGen) : _idGen(idGen)
+IdGeneratorJs::IdGeneratorJs(IdGeneratorPtr idGen)
 {
+  _idGen = idGen;
 }
 
 IdGeneratorJs::~IdGeneratorJs()
@@ -92,7 +92,7 @@ Handle<Value> IdGeneratorJs::New(const Arguments& args) {
       "Invalid OsmMapOperation. Did you forget 'new'?")));
   }
   IdGenerator* idGen = Factory::getInstance().constructObject<IdGenerator>(className);
-  IdGeneratorJs* obj = new IdGeneratorJs(idGen);
+  IdGeneratorJs* obj = new IdGeneratorJs(IdGeneratorPtr(idGen));
   obj->Wrap(args.This());
 
   PopulateConsumersJs::populateConsumers<IdGenerator>(idGen, args);

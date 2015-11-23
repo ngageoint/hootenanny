@@ -36,7 +36,6 @@
 #include <hoot/js/util/StreamUtilsJs.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
 #include <hoot/js/visitors/JsFunctionVisitor.h>
-#include <hoot/js/IdGeneratorJs.h>
 #include "JsRegistrar.h"
 
 using namespace v8;
@@ -102,8 +101,10 @@ Handle<Value> OsmMapJs::setIdGenerator(const Arguments& args)
 
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
+  shared_ptr<IdGenerator> idGen =  toCpp<shared_ptr<IdGenerator> >(args[0]);
+
   if (obj->getMap()) {
-    obj->getMap()->setIdGenerator(shared_ptr<IdGenerator>(new DefaultIdGenerator()));
+    obj->getMap()->setIdGenerator(idGen);
   }
 
   return scope.Close(Undefined());

@@ -55,7 +55,7 @@ var input2 = "<?xml version='1.0' encoding='UTF-8'?>\
 </osm>";
 
 var map = new hoot.OsmMap();
-map.setIdGenerator();
+map.setIdGenerator(new hoot.DefaultIdGenerator());
 hoot.loadMapFromString(map, input2);
 var mergedMap = hoot.poiMerge(script, map, -1);
 var xml = hoot.OsmWriter.toString(mergedMap);

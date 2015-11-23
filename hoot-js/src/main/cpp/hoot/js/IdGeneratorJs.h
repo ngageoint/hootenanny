@@ -30,6 +30,8 @@
 // node.js
 // #include <nodejs/node.h>
 #include <hoot/js/SystemNodeJs.h>
+#include <hoot/core/IdGenerator.h>
+#include <hoot/js/util/DataConvertJs.h>
 
 // Qt
 #include <QString>
@@ -42,24 +44,49 @@ namespace hoot
 using namespace std;
 using namespace v8;
 
-class IdGenerator;
-
 class IdGeneratorJs : public node::ObjectWrap
 {
 public:
   static void Init(v8::Handle<v8::Object> target);
 
-  IdGenerator* getIdGeneratorOp() { return _idGen.get(); }
+  IdGeneratorPtr getIdGeneratorOp() { return _idGen; }
+
+  static Handle<Object> New(const IdGeneratorPtr& idGen);
 
 private:
-  IdGeneratorJs(IdGenerator *idGen);
+  IdGeneratorJs(IdGeneratorPtr idGen);
   ~IdGeneratorJs();
 
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
 
   QString _className;
-  auto_ptr<IdGenerator> _idGen;
+  IdGeneratorPtr _idGen;
 };
+
+inline void toCpp(v8::Handle<v8::Value> v, IdGeneratorPtr& idGen)
+{
+  if (!v->IsObject())
+  {
+    throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
+  }
+
+  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+  IdGeneratorJs* js = 0;
+  js = node::ObjectWrap::Unwrap<IdGeneratorJs>(obj);
+  if (js)
+  {
+    idGen = js->getIdGeneratorOp();
+  }
+  else
+  {
+    throw IllegalArgumentException("Expected a MostEnglishNameJs, got: (" + toJson(v) + ")");
+  }
+}
+
+inline v8::Handle<v8::Value> toV8(const IdGeneratorPtr& idGen)
+{
+  return IdGeneratorJs::New(idGen);
+}
 
 }
 
