@@ -136,12 +136,12 @@ void WayJoin2Mapper::mapOsmMap(shared_ptr<OsmMap> m)
 
   _key->elementType = NodesType;
   // Go through all the nodes
-  const OsmMap::NodeMap& nm = m->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nm.constBegin(); it != nm.constEnd(); ++it)
+  const NodeMap& nm = m->getNodeMap();
+  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
     // add this node onto a map. Since the nodes aren't very important at this stage we'll just
     // ship a bunch at a time in one big record.
-    _emitNode(it.value());
+    _emitNode(NodePtr((Node*)it->second->clone()));
   }
 
   _key->elementType = WayType;
