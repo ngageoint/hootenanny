@@ -1675,15 +1675,15 @@ tds61 = {
             tds61.ignoreList['hoot:status'] = '';
             tds61.ignoreList['error:circular'] = '';
 
-            // Make the fuzy lookup table
-            tds61.fuzy = schemaTools.generateToOgrTable(tds61.rules.fuzyTable);
+            // Make the fuzzy lookup table
+            tds61.fuzzy = schemaTools.generateToOgrTable(tds61.rules.fuzzyTable);
 
             // Debug
-//             for (var k1 in tds61.fuzy)
+//             for (var k1 in tds61.fuzzy)
 //             {
-//                 for (var v1 in tds61.fuzy[k1])
+//                 for (var v1 in tds61.fuzzy[k1])
 //                 {
-//                     print(JSON.stringify([k1, v1, tds61.fuzy[k1][v1][0], tds61.fuzy[k1][v1][1], tds61.fuzy[k1][v1][2]]));
+//                     print(JSON.stringify([k1, v1, tds61.fuzzy[k1][v1][0], tds61.fuzzy[k1][v1][1], tds61.fuzy[k1][v1][2]]));
 //                 }
 //             }
         } // End tds61.lookup Undefined
@@ -1691,9 +1691,9 @@ tds61 = {
         // pre processing
         tds61.applyToNfddPreProcessing(tags, attrs, geometryType);
 
-        // Fuzy processing
+        // Fuzzy processing
         // We do this BEFORE the one2one so we don't introduce errors by matching things too broadly
-        var usedList = translate.applyOne2OneUsed(tags, attrs, tds61.fuzy);
+        var usedList = translate.applyOne2OneUsed(tags, attrs, tds61.fuzzy);
 
         // If we used any of the tags, add them to the lookup list as things to ignore.
         if (usedList.length > 0)

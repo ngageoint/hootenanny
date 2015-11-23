@@ -3739,7 +3739,7 @@ tds61.rules = {
      ['ZI014_PRW','154','raw_material','sulphur'], // Sulphur -- Added from PRW
      ['ZI014_PRW','999','raw_material','other'], // Other
 
-     // Some of these have been added to the fuzy table for export
+     // Some of these have been added to the fuzzy table for export
      // ZI016_ROC - Route Pavement Information : Route Surface Composition
      // ['ZI016_ROC','-999999','surface','unknown'], // Trying this instead of undefined
      ['ZI016_ROC','-999999',undefined,undefined], // No Information
@@ -4481,9 +4481,9 @@ tds61.rules = {
     ],
     // ##### End of shopList #####
 
-    // ##### Start of fuzyTable #####
+    // ##### Start of fuzzyTable #####
     // This list uses the new IsA, IsSimilar etc functions to map a number of input values to a single output
-    fuzyTable : [
+    fuzzyTable : [
      ['ZI016_ROC','7',schemaTools.isA('surface=paved', 0.8, 0.1, 0.5)], // Ridgid Pavement
      ['ZI016_ROC','3',schemaTools.isA('surface=unpaved', 0.8, 0.1, 0.5)], // Flexible Pavement
 
@@ -4505,7 +4505,7 @@ tds61.rules = {
 //      ['ZI016_ROC','18',schemaTools.simple('surface=snow',2)], // Snow
 //      ['ZI016_ROC','999',schemaTools.simple('surface=other',2)], // Other
     ],
-    // ##### End of fuzyTable #####
+    // ##### End of fuzzyTable #####
 
     // ##### Start of Thematic Group Rules #####
     thematicGroupList : {
