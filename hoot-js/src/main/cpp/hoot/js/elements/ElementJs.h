@@ -92,6 +92,16 @@ inline void toCpp(v8::Handle<v8::Value> v, ConstElementPtr& e)
   e = node::ObjectWrap::Unwrap<ElementJs>(obj)->getConstElement();
 }
 
+inline void toCpp(v8::Handle<v8::Value> v, ElementPtr& e)
+{
+  if (v.IsEmpty() || !v->IsObject())
+  {
+    throw IllegalArgumentException("Expected input to be an ElementJs object type.");
+  }
+  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+  e = node::ObjectWrap::Unwrap<ElementJs>(obj)->getElement();
+}
+
 inline v8::Handle<v8::Value> toV8(const ConstElementPtr& e)
 {
   return ElementJs::New(e);

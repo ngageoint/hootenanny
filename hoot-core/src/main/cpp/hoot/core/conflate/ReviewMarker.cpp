@@ -42,6 +42,7 @@ QString ReviewMarker::reviewSortOrderKey = "hoot:review:sort_order";
 QString ReviewMarker::_reviewNeedsKey = "hoot:review:needs";
 QString ReviewMarker::_reviewNoteKey = "hoot:review:note";
 QString ReviewMarker::_reviewTypeKey = "hoot:review:type";
+QString ReviewMarker::_reviewChoicesKey = "hoot:review:choices";
 
 
 ReviewMarker::ReviewMarker()
@@ -143,7 +144,7 @@ bool ReviewMarker::isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid)
 }
 
 void ReviewMarker::mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, const QString& note,
-  const QString &reviewType, double score)
+  const QString &reviewType, double score, vector<QString> choices)
 {
   if (note.isEmpty())
   {
@@ -158,11 +159,17 @@ void ReviewMarker::mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, co
   r->addElement(_revieweeKey, e1->getElementId());
   r->addElement(_revieweeKey, e2->getElementId());
   r->setCircularError(-1);
+
+  for (unsigned int i = 0; i < choices.size(); i++)
+  {
+    r->getTags()[_reviewChoicesKey + ":" + QString::number(i+1)] = choices[i];
+  }
+
   map->addElement(r);
 }
 
 void ReviewMarker::mark(const OsmMapPtr& map, ElementPtr& e, const QString& note,
-  const QString &reviewType, double score)
+  const QString &reviewType, double score, vector<QString> choices)
 {
   if (note.isEmpty())
   {
@@ -176,6 +183,12 @@ void ReviewMarker::mark(const OsmMapPtr& map, ElementPtr& e, const QString& note
   r->getTags().set(_reviewScoreKey, score);
   r->addElement(_revieweeKey, e->getElementId());
   r->setCircularError(-1);
+
+  for (unsigned int i = 0; i < choices.size(); i++)
+  {
+    r->getTags()[_reviewChoicesKey + ":" + QString::number(i+1)] = choices[i];
+  }
+
   map->addElement(r);
 }
 
