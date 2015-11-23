@@ -153,7 +153,7 @@ protected:
   */
 
   //partial read iterators
-  OsmMap::NodeMap::const_iterator _nodesItr;
+  NodeMap::const_iterator _nodesItr;
   WayMap::const_iterator _waysItr;
   RelationMap::const_iterator _relationsItr;
 
@@ -222,10 +222,10 @@ protected:
     _map->clear();
     _d->readNext(_map);
 
-    const OsmMap::NodeMap& nm = _map->getNodeMap();
-    for (OsmMap::NodeMap::ConstIterator it = nm.constBegin(); it != nm.constEnd(); it++)
+    const NodeMap& nm = _map->getNodeMap();
+    for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); it++)
     {
-      _addElement(_map->getNode(it.key()));
+      _addElement(_map->getNode(it->first));
     }
 
     const WayMap& wm = _map->getWays();
@@ -1136,7 +1136,7 @@ ElementPtr OgrReaderInternal::readNextElement()
   ElementPtr returnElement;
   if ( _nodesItr != _map->getNodeMap().end() )
   {
-    returnElement.reset(new Node(*_nodesItr.value()));
+    returnElement.reset(new Node(*_nodesItr->second.get()));
     _nodesItr++;
   }
   else if ( _waysItr != _map->getWays().end() )

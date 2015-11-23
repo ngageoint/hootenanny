@@ -53,6 +53,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches,
 
   shared_ptr<PluginContext> script;
   Persistent<Object> plugin;
+  QStringList matchType;
 
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
@@ -75,6 +76,10 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches,
       plugin = sm->getPlugin();
       set< pair<ElementId, ElementId> > s = sm->getMatchPairs();
       eids.insert(s.begin(), s.end());
+      if (matchType.contains(sm->getMatchName()) == false)
+      {
+        matchType.append(sm->getMatchName());
+      }
     }
   }
 
@@ -102,7 +107,8 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches,
     else if (eids.size() > 1)
     {
       delete sm;
-      mergers.push_back(new MarkForReviewMerger(eids, "Overlapping matches", 1.0));
+      mergers.push_back(new MarkForReviewMerger(eids, "Overlapping matches", matchType.join(";"),
+        1.0));
       result = true;
     }
     else

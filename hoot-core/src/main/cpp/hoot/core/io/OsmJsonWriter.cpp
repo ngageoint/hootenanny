@@ -148,8 +148,12 @@ void OsmJsonWriter::_writeKvp(const QString& key, double value)
 
 void OsmJsonWriter::_writeNodes(shared_ptr<const OsmMap> map)
 {
-  const OsmMap::NodeMap& nodes = map->getNodeMap();
-  QList<long> nids = nodes.keys();
+  QList<long> nids;
+  NodeMap::const_iterator it = map->getNodeMap().begin();
+  while (it != map->getNodeMap().end()) {
+    nids.append(it->first);
+    it++;
+  }
   // sort the values to give consistent results.
   qSort(nids.begin(), nids.end(), qGreater<long>());
   for (int i = 0; i < nids.size(); i++)

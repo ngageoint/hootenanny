@@ -346,6 +346,15 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
       }
     }
   }
+  if (e->getElementType() == ElementType::Way)
+  {
+    ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+
+    if (w->getNodeCount() <= 1)
+    {
+      throw NeedsReviewException("Internal Error: Attempting to match against a zero length way.");
+    }
+  }
 }
 
 }

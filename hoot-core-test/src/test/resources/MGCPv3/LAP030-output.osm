@@ -15,7 +15,7 @@
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
         <nd ref="-11"/>
         <nd ref="-12"/>
-        <tag k="source:ingest:datetime" v="2015-11-14T02:02:16.772Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-17T18:56:39.638Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="width:minimum_traveled_way" v="4"/>
@@ -33,7 +33,7 @@
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
         <nd ref="-9"/>
         <nd ref="-10"/>
-        <tag k="source:ingest:datetime" v="2015-11-14T02:02:16.772Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-17T18:56:39.638Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="condition" v="construction"/>
@@ -54,7 +54,7 @@
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
         <nd ref="-7"/>
         <nd ref="-8"/>
-        <tag k="source:ingest:datetime" v="2015-11-14T02:02:16.772Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-17T18:56:39.637Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="condition" v="damaged"/>
@@ -75,7 +75,7 @@
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
         <nd ref="-5"/>
         <nd ref="-6"/>
-        <tag k="source:ingest:datetime" v="2015-11-14T02:02:16.772Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-17T18:56:39.637Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="width:minimum_traveled_way" v="4"/>
@@ -94,7 +94,7 @@
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
         <nd ref="-3"/>
         <nd ref="-4"/>
-        <tag k="source:ingest:datetime" v="2015-11-14T02:02:16.772Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-17T18:56:39.637Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="condition" v="construction"/>
@@ -114,7 +114,7 @@
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" changeset="0">
         <nd ref="-1"/>
         <nd ref="-2"/>
-        <tag k="source:ingest:datetime" v="2015-11-14T02:02:16.772Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-17T18:56:39.636Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="condition" v="functional"/>

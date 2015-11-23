@@ -139,7 +139,7 @@ public:
    * Checks that some of the existing indexes are consistent with the OsmMap backend. Any
    * inconsitencies will either be logged as warnings or throw exceptions.
    */
-  bool validate();
+  bool validate() const;
 
 private:
   const OsmMap& _map;

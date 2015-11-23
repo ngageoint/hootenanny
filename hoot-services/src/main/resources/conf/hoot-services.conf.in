@@ -74,9 +74,6 @@ changesetMaxOpenTimeHours=24
 # allows for faster testing of changeset auto closing
 testChangesetAutoClose=false
 
-# allows nodes to have negative IDs to be compatible with hoot-core command line
-hootCoreServicesDatabaseWriterCompatibility=false
-
 # ETL
 
 # the folder location of the make file script for some processlet like ETLProcesslet
@@ -240,17 +237,6 @@ P2PServerScript=P2PServer.js
 
 # REVIEW
 
-# review prepare
-
-# default setting for overwriting existing review data
-reviewPrepareOverwriteExistingDataDefault=false
-# If true, temp UUID database records will be cleaned up after review records are prepared.  Since
-# this sometimes causes problems with some datasets, making it optional as a temporary solution.
-reviewPrepareCleanup=true
-# If true, removes review uuid's from the hoot:review:uuid tag if no element exists with that uuid
-# as its uuid tag.
-cleanReviewTags=true
-
 # review get
 
 # review item lock time in millisec
@@ -258,8 +244,7 @@ reviewLockTime=300000
 
 # review update
 
-# semi-colon delimited list of review tags used by hoot core
-reviewTags=hoot:review:uuid;hoot:review:score;hoot:review:note;hoot:review:needs;hoot:review:source
+
 
 # HGIS
 

@@ -36,11 +36,6 @@ import org.deegree.services.wps.ProcessletException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.db.DbUtils;
-import hoot.services.db2.ElementIdMappings;
-import hoot.services.db2.ReviewItems;
-import hoot.services.models.osm.Element;
-import hoot.services.models.osm.Element.ElementType;
 import hoot.services.utils.ResourceErrorHandler;
 
 /**
@@ -75,7 +70,8 @@ public class ReviewUtils
       }
       else if (e.getMessage().contains("record exists") ||
                e.getMessage().contains("records exist") ||
-               e.getMessage().contains("to be updated does not exist"))
+               e.getMessage().contains("to be updated does not exist") ||
+               e.getMessage().contains("does not exist"))
       {
         status = Status.NOT_FOUND;
       }
@@ -88,13 +84,9 @@ public class ReviewUtils
       {
         status = Status.CONFLICT;
       }
-      else if (e.getMessage().contains("has not had review data prepared for it") ||
-               e.getMessage().contains(
-                 "prepare job must complete before attempting to retrieve items for review") ||
-               e.getMessage().contains("exist specified for") ||
+      else if (e.getMessage().contains("exist specified for") ||
                e.getMessage().contains("exist for") ||
-               e.getMessage().contains("is still used by") ||
-               e.getMessage().contains("Invalid review prepare job status"))
+               e.getMessage().contains("is still used by"))
       {
         status = Status.PRECONDITION_FAILED;
       }
@@ -140,58 +132,4 @@ public class ReviewUtils
       ResourceErrorHandler.handleError(message, status, log);
     }
   }
-  
-  /**
-   * Creates a record to represent the mapping of an element unique ID to an osm element ID
-   * 
-   * @param uniqueElementId element unique ID
-   * @param osmElementId element OSM ID
-   * @param elementType element's type
-   * @param mapId ID of map owning element
-   * @return an element ID mapping database record
-   */
-  public static ElementIdMappings createElementIdMappingRecord(final String uniqueElementId, 
-		final long osmElementId, final ElementType elementType, final long mapId)
-	{
-		ElementIdMappings elementIdMappingRecord = new ElementIdMappings();
-		log.debug("uniqueElementId: " + uniqueElementId);
-		elementIdMappingRecord.setElementId(uniqueElementId);
-		log.debug("mapId: " + mapId);
-		elementIdMappingRecord.setMapId(mapId);
-		log.debug("osmElementId: " + osmElementId);
-		elementIdMappingRecord.setOsmElementId(osmElementId);
-		log.debug("elementType: " + elementType.toString());
-		elementIdMappingRecord.setOsmElementType(Element
-		    .elementEnumForElementType(elementType));
-		return elementIdMappingRecord;
-	}
-  
-  /**
-   * Creates a record to represent the mapping of an element unique ID to an osm element ID
-   * 
-   * @param reviewableItemId the unique ID of the item being reviewed
-   * @param reviewScore the importance score of the associated review
-   * @param reviewAgainstItemId the unique ID of the item the reviewable item is being reviewed
-   * against
-   * @param mapId ID of map owning the review elements
-   * @return a review item database record
-   */
-  public static ReviewItems createReviewItemRecord(final String reviewableItemId,
-	  final double reviewScore, final String reviewAgainstItemId, final long mapId)
-	{
-  	log.debug("Creating review item record: ");
-		ReviewItems reviewItemRecord = new ReviewItems();
-		log.debug("mapId: " + mapId);
-		reviewItemRecord.setMapId(mapId);
-		log.debug("reviewableItemId: " + reviewableItemId);
-		reviewItemRecord.setReviewableItemId(reviewableItemId);
-		reviewItemRecord.setReviewScore(reviewScore);
-		if (reviewAgainstItemId != null)
-		{
-			log.debug("reviewAgainstItemId: " + reviewAgainstItemId);
-			reviewItemRecord.setReviewAgainstItemId(reviewAgainstItemId);
-		}
-		reviewItemRecord.setReviewStatus(DbUtils.review_status_enum.unreviewed);
-		return reviewItemRecord;
-	}
 }

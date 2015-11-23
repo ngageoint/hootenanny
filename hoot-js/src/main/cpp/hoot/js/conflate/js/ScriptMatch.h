@@ -53,6 +53,8 @@ public:
 
   virtual QString explain() const { return _explainText; }
 
+  virtual QString getMatchName() const { return _matchName; }
+
   virtual double getProbability() const;
 
   /**
@@ -79,6 +81,7 @@ private:
 
   ElementId _eid1, _eid2;
   bool _isWholeGroup;
+  QString _matchName;
   MatchClassification _p;
   Persistent<Object> _plugin;
   shared_ptr<PluginContext> _script;

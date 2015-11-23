@@ -168,5 +168,4 @@ namespace Tgs
   };
 }
 
-
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Tgs::CfsSubsetEvaluatorTest, PluginFactory::testName());
