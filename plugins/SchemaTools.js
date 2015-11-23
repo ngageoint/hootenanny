@@ -25,7 +25,8 @@
  * @copyright Copyright (C) 2013 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-if (!exports)
+// if (!exports)
+if (typeof exports === 'undefined')
 {
     exports = {};
 }
