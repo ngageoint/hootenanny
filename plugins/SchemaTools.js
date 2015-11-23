@@ -25,24 +25,22 @@
  * @copyright Copyright (C) 2013 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-// if (!exports)
-// {
-//     exports = {};
-// }
-// schemaTools = exports;
-// st = schemaTools;
-//
-// if (typeof hoot === 'undefined')
-// {
-//     var HOOT_HOME = process.env.HOOT_HOME;
-//     schemaTools.hoot = require(HOOT_HOME + '/lib/HootJs');
-// } else {
-//     schemaTools.hoot = hoot;
-// }
+if (!exports)
+{
+    exports = {};
+}
+schemaTools = exports;
+st = schemaTools;
 
-schemaTools = {
+if (typeof hoot === 'undefined')
+{
+    var HOOT_HOME = process.env.HOOT_HOME;
+    schemaTools.hoot = require(HOOT_HOME + '/lib/HootJs');
+} else {
+    schemaTools.hoot = hoot;
+}
 
-expandAliases : function(tags) {
+schemaTools.expandAliases = function(tags) {
     var result = [];
 
     for (var i in tags) {
@@ -51,8 +49,8 @@ expandAliases : function(tags) {
         for (var j in t.aliases) {
             var newT = JSON.parse(JSON.stringify(t));
             newT.name = t.aliases[j];
-            newT.key = schemaTools.splitKvp(newT.name)[0];
-            newT.value = schemaTools.splitKvp(newT.name)[1];
+            newT.key = st.splitKvp(newT.name)[0];
+            newT.value = st.splitKvp(newT.name)[1];
             newT.aliases = [];
 
             result.push(newT);
@@ -64,9 +62,9 @@ expandAliases : function(tags) {
     }
 
     return result;
-},
+}
 
-isSimilar : function(name, threshold, minScore, maxScore) {
+schemaTools.isSimilar = function(name, threshold, minScore, maxScore) {
     if (threshold === undefined) {
         threshold = 0.8;
     }
@@ -77,8 +75,8 @@ isSimilar : function(name, threshold, minScore, maxScore) {
         maxScore = minScore;
     }
 
-    if (!hoot.OsmSchema.getTagVertex(name)) {
-        throw new Error("Invalid tag specified in isSimilar: " + JSON.schemaToolsringify(name));
+    if (!st.hoot.OsmSchema.getTagVertex(name)) {
+        throw new Error("Invalid tag specified in isSimilar: " + JSON.stringify(name));
     }
 
     return {
@@ -89,7 +87,7 @@ isSimilar : function(name, threshold, minScore, maxScore) {
         "name": name,
         "toOsmKvp": name
     };
-},
+}
 
 /**
  * The input table is expected to be in the form:
@@ -101,18 +99,18 @@ isSimilar : function(name, threshold, minScore, maxScore) {
  *
  *
  */
-generateRuleTags : function(rule) {
+schemaTools.generateRuleTags = function(rule) {
     var result = [];
 
     if (rule.ruleType === 'similarTo') {
-        var tags = hoot.OsmSchema.getSimilarTags(rule.name, rule.threshold);
+        var tags = st.hoot.OsmSchema.getSimilarTags(rule.name, rule.threshold);
 
-        tags = schemaTools.expandAliases(tags);
+        tags = st.expandAliases(tags);
 
         for (i in tags) {
             if (tags[i].value !== '' && tags[i].value !== '*')
             {
-                var schemaScore = hoot.OsmSchema.scoreOneWay(tags[i].name, rule.name);
+                var schemaScore = st.hoot.OsmSchema.scoreOneWay(tags[i].name, rule.name);
                 if (schemaScore >= rule.threshold)
                 {
                     // scale the score so that rule.threshold -> 0, and 1 -> 1. Linearly.
@@ -124,12 +122,12 @@ generateRuleTags : function(rule) {
             }
         }
     } else if (rule.ruleType === 'isA') {
-        var tags = hoot.OsmSchema.getChildTags(rule.name);
+        var tags = schemaTools.hoot.OsmSchema.getChildTags(rule.name);
 
         // Add the parents
-        tags.push.apply(tags,[hoot.OsmSchema.getTagVertex(rule.name)]);
+        tags.push.apply(tags,[schemaTools.hoot.OsmSchema.getTagVertex(rule.name)]);
 
-        tags = schemaTools.expandAliases(tags);
+        tags = st.expandAliases(tags);
 
         for (i in tags) {
             if (tags[i].value !== '' && tags[i].value !== '*')
@@ -139,8 +137,8 @@ generateRuleTags : function(rule) {
             }
         }
     } else if (rule.ruleType === 'simple') {
-        var tags = [hoot.OsmSchema.getTagVertex(rule.name)];
-        tags = schemaTools.expandAliases(tags);
+        var tags = [schemaTools.hoot.OsmSchema.getTagVertex(rule.name)];
+        tags = st.expandAliases(tags);
 
         for (i in tags) {
             tags[i].score = rule.score;
@@ -154,14 +152,14 @@ generateRuleTags : function(rule) {
 
 
     return result;
-},
+}
 
 /**
  * The input table is expected to be in the form:
  * [ [key1, value1, rule1], [key2, value2, rule2] ]
  * Where rules is one of the above (isA or isSimilar).
  */
-generateToOsmTable : function(rules) {
+schemaTools.generateToOsmTable = function(rules) {
 
     // build a more efficient lookup
     var lookup = {}
@@ -193,9 +191,9 @@ generateToOsmTable : function(rules) {
     }
 
     return lookup;
-},
+}
 
-generateToOgrTable : function(rules) {
+schemaTools.generateToOgrTable = function(rules) {
 
     // build a more efficient lookup
     var lookup = {}
@@ -236,9 +234,9 @@ generateToOgrTable : function(rules) {
     }
 
     return lookup;
-},
+}
 
-getToOsmKvp : function(row) {
+schemaTools.getToOsmKvp = function(row) {
     var result;
 
     if (typeof row[2] == 'string') {
@@ -261,17 +259,17 @@ getToOsmKvp : function(row) {
     }
 
     return result;
-},
+}
 
-getWildcardTags : function(kvp, score) {
+schemaTools.getWildcardTags = function(kvp, score) {
     var result = [];
     var split = schemaTools.splitKvp(kvp);
 
     var keyRx = new RegExp(split[0]);
     var valueRx = new RegExp(split[1]);
 
-    var allTags = hoot.OsmSchema.getAllTags();
-    allTags = schemaTools.expandAliases(allTags);
+    var allTags = schemaTools.hoot.OsmSchema.getAllTags();
+    allTags = st.expandAliases(allTags);
 
     for (var i in allTags) {
         var tag = allTags[i];
@@ -286,14 +284,14 @@ getWildcardTags : function(kvp, score) {
     }
 
     return result;
-},
+}
 
-isA : function(name, score) {
+schemaTools.isA = function(name, score) {
     if (score === undefined) {
         score = 0.001;
     }
 
-    if (!hoot.OsmSchema.getTagVertex(name)) {
+    if (!st.hoot.OsmSchema.getTagVertex(name)) {
         throw new Error("Invalid tag specified in isA: " + JSON.stringify(name));
     }
 
@@ -303,14 +301,14 @@ isA : function(name, score) {
         "name": name,
         "toOsmKvp": name
     };
-},
+}
 
-simple : function(name, score) {
+schemaTools.simple = function(name, score) {
     if (!score) {
         score = 2;
     }
 
-    if (!hoot.OsmSchema.getTagVertex(name)) {
+    if (!st.hoot.OsmSchema.getTagVertex(name)) {
         throw new Error("Invalid tag specified in simple: " + JSON.stringify(name));
     }
 
@@ -320,23 +318,23 @@ simple : function(name, score) {
         "name": name,
         "toOsmKvp": name
     };
-},
+}
 
-splitKvp : function(kvp) {
+schemaTools.splitKvp = function(kvp) {
     var i = kvp.indexOf('=');
 
     return [kvp.substring(0, i), kvp.substring(i + 1)];
-},
+}
 
 /**
  * @param name is a key=[regex] where regex uses the JavaScript syntax.
  */
-wildcard : function(name, score) {
+schemaTools.wildcard = function(name, score) {
     if (score === undefined) {
         score = 1;
     }
 
-    if (schemaTools.getWildcardTags(name).length === 0) {
+    if (st.getWildcardTags(name).length === 0) {
         throw new Error("wildcard didn't match any tags: " + JSON.stringify(name));
     }
 
@@ -347,4 +345,3 @@ wildcard : function(name, score) {
     };
 }
 
-}
