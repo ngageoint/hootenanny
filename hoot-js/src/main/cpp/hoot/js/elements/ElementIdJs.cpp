@@ -107,15 +107,6 @@ Handle<Value> ElementIdJs::getType(const Arguments& args)
   return scope.Close(String::New(eid.getType().toString().toUtf8().data()));
 }
 
-Handle<Value> ElementIdJs::getId(const Arguments& args)
-{
-  HandleScope scope;
-
-  ElementId eid = ObjectWrap::Unwrap<ElementIdJs>(args.This())->getElementId();
-
-  return scope.Close(toV8(eid.getId()));
-}
-
 Handle<Value> ElementIdJs::toJSON(const Arguments& args)
 {
   HandleScope scope;

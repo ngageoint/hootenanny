@@ -72,7 +72,7 @@ private:
   ElementId _eid;
   static Persistent<Function> _constructor;
 
-  static Handle<Value> getId(const Arguments& args);
+  //static Handle<Value> getId(const Arguments& args);
   static Handle<Value> getType(const Arguments& args);
   static Handle<Value> toJSON(const Arguments& args);
   static Handle<Value> toString(const Arguments& args);
