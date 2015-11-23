@@ -817,7 +817,8 @@ tds61 = {
             ["t.use == 'islamic_prayer_hall' && !(t.amenity)","t.amenity = 'place_of_worship'"],
             ["t.water || t.landuse == 'basin'","t.natural = 'water'"],
             ["t.waterway == 'flow_control'","t.flow_control = 'sluice_gate'"],
-            ["t.wetland && !(t.natural)","t.natural = 'wetland'"]
+            ["t.wetland && !(t.natural)","t.natural = 'wetland'"],
+            ["t['width:minimum_traveled_way'] && !(t.width)","t.width = t['width:minimum_traveled_way']"]
             ];
 
             tds61.osmPostRules = translate.buildComplexRules(rulesList);
