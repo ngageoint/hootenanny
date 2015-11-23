@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -284,15 +284,15 @@ public class DbUtils
 
     return mapIds;
   }
-  
-  
+
+
   public static String getDisplayNameById(final Connection conn, final long mapId) throws Exception
   {
   	QMaps maps = QMaps.maps;
     SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-    
+
     String displayName = query.from(maps).where(maps.id.eq(mapId)).uniqueResult(maps.displayName);
-    
+
     return displayName;
   }
 
@@ -542,6 +542,28 @@ public class DbUtils
     }
   }
 
+  /**
+   * Drops the postgis render db created for hoot map dataset
+   *
+   * @param conn JDBC Connection
+   * @param mapName String
+   * @throws Exception
+   */
+  public static void deleteRenderDb(Connection conn, String mapName) throws Exception
+  {
+    try
+    {
+      String dbname = "renderdb_" + mapName;
+      DataDefinitionManager ddm = new DataDefinitionManager();
+      ddm.deleteDb(dbname, false);
+    }
+    catch (Exception e)
+    {
+      String msg = "Error dropping postgis render database.  ";
+      msg += "  " + e.getCause().getMessage();
+      throw new Exception(msg);
+    }
+  }
 
   //remove this. replace by calling hoot core layer delete native command
   public static void deleteOSMRecordByName(Connection conn, String  mapName) throws Exception
@@ -879,10 +901,10 @@ public class DbUtils
 
     return stat.getStatus();
   }
-  
-  public static long batchRecords(final long mapId, final List<?> records, 
+
+  public static long batchRecords(final long mapId, final List<?> records,
     com.mysema.query.sql.RelationalPathBase<?> t,
-    List<List<BooleanExpression>> predicateslist, final RecordBatchType recordBatchType, 
+    List<List<BooleanExpression>> predicateslist, final RecordBatchType recordBatchType,
   	Connection conn, int maxRecordBatchSize) throws Exception
     {
       try
@@ -892,7 +914,7 @@ public class DbUtils
         switch (recordBatchType)
         {
           case INSERT:
-          	
+
           	SQLInsertClause insert = new SQLInsertClause(conn, configuration, t);
           	long nBatch = 0;
           	for(int i=0; i<records.size(); i++)
@@ -1010,7 +1032,7 @@ public class DbUtils
     }
 
 
-  public static long updateMapsTableTags(final Map<String, String> tags, 
+  public static long updateMapsTableTags(final Map<String, String> tags,
   		final long mapId, final Connection conn) throws SQLException
   {
 
@@ -1019,7 +1041,7 @@ public class DbUtils
     try
     {
     	String sql = null;
-      
+
 
     	sql = "update maps set tags=? " +
 					"where id=?";
@@ -1036,7 +1058,7 @@ public class DbUtils
 	    }
 			ps.setObject(1, hstoreStr, Types.OTHER);
 			ps.setLong(2, mapId);
-		
+
 			execResult = ps.executeUpdate();
     }
     finally
@@ -1049,25 +1071,25 @@ public class DbUtils
     }
     return execResult;
   }
-  
-  
+
+
   public static Map<String, String> getMapsTableTags(final long mapId, final Connection conn) throws Exception
   {
   	Map<String, String> tags = new HashMap<String, String>();
   	QMaps  mp = QMaps.maps;
-  	
+
   	List<Object> res = new SQLQuery(conn,DbUtils.getConfiguration(mapId))
   	.from(mp)
   	.where(mp.id.eq(mapId))
   	.list(mp.tags);
-  	
+
   	if(res.size() > 0)
   	{
   		Object oTag = res.get(0);
-  		tags = 
+  		tags =
 					PostgresUtils.postgresObjToHStore((org.postgresql.util.PGobject)oTag);
   	}
-  	
+
   	return tags;
   }
 
@@ -1108,7 +1130,7 @@ public class DbUtils
 
       			String hstoreStr = "";
       			Iterator it = tags.entrySet().iterator();
-      	    while (it.hasNext()) 
+      	    while (it.hasNext())
       	    {
     	        Map.Entry pairs = (Map.Entry)it.next();
     	        if (hstoreStr.length() > 0)
@@ -1122,7 +1144,7 @@ public class DbUtils
 
       			if (maxRecordBatchSize > -1)
       			{
-	      			if (++count % maxRecordBatchSize == 0) 
+	      			if (++count % maxRecordBatchSize == 0)
 	      			{
 	      				updateCount += ps.executeBatch().length;
 	      			}
@@ -1154,7 +1176,7 @@ public class DbUtils
 
       			String hstoreStr = "";
       			Iterator it = tags.entrySet().iterator();
-      	    while (it.hasNext()) 
+      	    while (it.hasNext())
       	    {
     	        Map.Entry pairs = (Map.Entry)it.next();
     	        if(hstoreStr.length() > 0)
@@ -1171,7 +1193,7 @@ public class DbUtils
 
       			if (maxRecordBatchSize > -1)
       			{
-	      			if (++count % maxRecordBatchSize == 0) 
+	      			if (++count % maxRecordBatchSize == 0)
 	      			{
 	      				updateCount += ps.executeBatch().length;
 	              ps.clearBatch();
@@ -1195,7 +1217,7 @@ public class DbUtils
       			ps.addBatch();
       			if (maxRecordBatchSize > -1)
       			{
-	      			if (++count % maxRecordBatchSize == 0) 
+	      			if (++count % maxRecordBatchSize == 0)
 	      			{
 	      				updateCount += ps.executeBatch().length;
 	              ps.clearBatch();
@@ -1225,7 +1247,7 @@ public class DbUtils
     		ps.close();
     	}
     }
-    
+
     return updateCount;
   }
 
@@ -1262,7 +1284,7 @@ public class DbUtils
 
       			String hstoreStr = "";
       			Iterator it = tags.entrySet().iterator();
-      	    while (it.hasNext()) 
+      	    while (it.hasNext())
       	    {
     	        Map.Entry pairs = (Map.Entry)it.next();
     	        if(hstoreStr.length() > 0)
@@ -1276,7 +1298,7 @@ public class DbUtils
 
       			if (maxRecordBatchSize > -1)
       			{
-	      			if (++count % maxRecordBatchSize == 0) 
+	      			if (++count % maxRecordBatchSize == 0)
 	      			{
 	      				updateCount += ps.executeBatch().length;
 	      			}
@@ -1304,7 +1326,7 @@ public class DbUtils
 
       			String hstoreStr = "";
       			Iterator it = tags.entrySet().iterator();
-      	    while (it.hasNext()) 
+      	    while (it.hasNext())
       	    {
     	        Map.Entry pairs = (Map.Entry)it.next();
     	        if(hstoreStr.length() > 0)
@@ -1321,7 +1343,7 @@ public class DbUtils
 
       			if (maxRecordBatchSize > -1)
       			{
-	      			if (++count % maxRecordBatchSize == 0) 
+	      			if (++count % maxRecordBatchSize == 0)
 	      			{
 	      				updateCount += ps.executeBatch().length;
 	      			}
@@ -1345,7 +1367,7 @@ public class DbUtils
 
       			if (maxRecordBatchSize > -1)
       			{
-	      			if (++count % maxRecordBatchSize == 0) 
+	      			if (++count % maxRecordBatchSize == 0)
 	      			{
 	      				updateCount += ps.executeBatch().length;
 	      			}
@@ -1375,10 +1397,10 @@ public class DbUtils
     		ps.close();
     	}
     }
-    
+
     return updateCount;
   }
-  
+
   public static long batchRecordsDirectRelations(final long mapId, final List<?> records,
     final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
   {
@@ -1412,7 +1434,7 @@ public class DbUtils
 
       			String hstoreStr = "";
       			Iterator it = tags.entrySet().iterator();
-      	    while (it.hasNext()) 
+      	    while (it.hasNext())
       	    {
     	        Map.Entry pairs = (Map.Entry)it.next();
     	        if(hstoreStr.length() > 0)
@@ -1426,7 +1448,7 @@ public class DbUtils
 
       			if (maxRecordBatchSize > -1)
       			{
-	      			if(++count % maxRecordBatchSize == 0) 
+	      			if(++count % maxRecordBatchSize == 0)
 	      			{
 	      				updateCount += ps.executeBatch().length;
 	      			}
@@ -1454,7 +1476,7 @@ public class DbUtils
 
       			String hstoreStr = "";
       			Iterator it = tags.entrySet().iterator();
-      	    while (it.hasNext()) 
+      	    while (it.hasNext())
       	    {
     	        Map.Entry pairs = (Map.Entry)it.next();
     	        if(hstoreStr.length() > 0)
@@ -1471,7 +1493,7 @@ public class DbUtils
 
       			if (maxRecordBatchSize > -1)
       			{
-	      			if (++count % maxRecordBatchSize == 0) 
+	      			if (++count % maxRecordBatchSize == 0)
 	      			{
 	      				updateCount += ps.executeBatch().length;
 	      			}
@@ -1495,7 +1517,7 @@ public class DbUtils
 
       			if (maxRecordBatchSize > -1)
       			{
-	      			if (++count % maxRecordBatchSize == 0) 
+	      			if (++count % maxRecordBatchSize == 0)
 	      			{
 	      				updateCount += ps.executeBatch().length;
 	      			}
@@ -1525,7 +1547,7 @@ public class DbUtils
     		ps.close();
     	}
     }
-    
+
     return updateCount;
   }
 
@@ -1539,7 +1561,7 @@ public class DbUtils
 		{
 			conn = DbUtils.createConnection();
 			stmt = conn.createStatement();
-			
+
 			String sql = "select pg_total_relation_size('" + tableName + "') as tablesize";
 			ResultSet rs = stmt.executeQuery(sql);
       //STEP 5: Extract data from result set
@@ -1570,20 +1592,20 @@ public class DbUtils
       	log.equals(se.getMessage());
       }//end finally try
 		}//end try
-		
+
 		return ret;
 	}
-	
+
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @param result
 	 * @param elementType
 	 * @return
-	 * @throws SQLException 
+	 * @throws SQLException
 	 * @todo change back to original element generic code
 	 */
-	public static Object resultToObj(final ResultSet rs, final ElementType elementType) 
+	public static Object resultToObj(final ResultSet rs, final ElementType elementType)
 		throws SQLException
 	{
 		if (elementType == ElementType.Node)

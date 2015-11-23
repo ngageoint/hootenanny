@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -47,7 +47,7 @@ public class ResourcesCleanUtil implements Executable {
 	//remove data
 	// remove file store
 	private static final Logger log = LoggerFactory.getLogger(ResourcesCleanUtil.class);
-	
+
 	static
 	{
 		try
@@ -59,17 +59,17 @@ public class ResourcesCleanUtil implements Executable {
 			log.error("failed get hoot home value:" + ex.getMessage());
 		}
 	}
-	
+
   @SuppressWarnings("unused")
   private ClassPathXmlApplicationContext appContext;
-	
+
 	private String finalStatusDetail;
   public String getFinalStatusDetail() { return finalStatusDetail; }
 	public ResourcesCleanUtil()
 	{
 		appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
 	}
-	
+
 	public void exec(JSONObject command) throws Exception
 	{
 		JSONObject res = deleteLayers(command.get("mapId").toString());
@@ -82,15 +82,16 @@ public class ResourcesCleanUtil implements Executable {
 		res.put("result", "success");
 	  Connection conn = DbUtils.createConnection();
 	  try
-	  {     
+	  {
 	    log.debug("Initializing database connection...");
-	    
+
 	    List<Long> ids = DbUtils.getMapIdsByName( conn, mapId);
 	    int nMapCnt = ids.size();
-	    
+
 	    DbUtils.deleteOSMRecordByName(conn, mapId);
+	    DbUtils.deleteRenderDb(conn, mapId);
 	    // Modify when core implements broad casting map id when conflation completes
-	    _deleteIngestResource(mapId, nMapCnt);
+	    //_deleteIngestResource(mapId, nMapCnt);
 	  }
 	  catch (Exception e)
 	  {
@@ -101,47 +102,47 @@ public class ResourcesCleanUtil implements Executable {
 	  {
 	    DbUtils.closeConnection(conn);
 	  }
-	  
+
 		return res;
 	}
-	
+
 	// TODO; Change mapName to mapId
-	protected void _deleteIngestResource(final String mapName, final int nMapCnt) 
+	protected void _deleteIngestResource(final String mapName, final int nMapCnt)
 			throws NullPointerException, FileNotFoundException, IOException, Exception
 	{
 
 	  Connection conn = DbUtils.createConnection();
 	  try
-	  {     
+	  {
 	    log.debug("Initializing database connection...");
-	    
+
 	    // we will not delete resource for layer with duplicate names
 	    if(nMapCnt == 1)
 	    {
-	    	// This block is to check if we have file path manipulation by validating 
+	    	// This block is to check if we have file path manipulation by validating
 	    	// the new path is within container path
 	    	final String basePath = _ingestPath;
 	    	final String newPath = _ingestPath + "/" + mapName;
-	    	
+
 	    	boolean isValidated = false;
 	    	File fDel = new File(newPath);
 				String potentialPath = fDel.getCanonicalPath();
-				
+
 				File fBase = new File(basePath);
 				String containerPath = fBase.getCanonicalPath();
-				
+
 				// verify that newPath is within basePath
 				if(potentialPath.indexOf(containerPath) == 0)
 				{
 					isValidated = true;
 				}
-				
+
 				// If it is safe to delete then delete
 				if(isValidated)
 				{
 					org.apache.commons.io.FileUtils.forceDelete(fDel);
 				}
-				
+
 	    }
 	  }
 	  catch (NullPointerException npe)
@@ -163,9 +164,9 @@ public class ResourcesCleanUtil implements Executable {
 	  {
 	    DbUtils.closeConnection(conn);
 	  }
-	  
+
 	}
-	
+
 	/**
 	 * see CoreServiceContext.xml
 	 */
@@ -179,5 +180,5 @@ public class ResourcesCleanUtil implements Executable {
 	public void destroy(){
 
 	}
-	
+
 }
