@@ -59,14 +59,6 @@ log4cxx {
   HEADERS += src/main/cpp/hoot/core/util/LogGeneric.h
 }
 
-octave {
-  SOURCES += src/main/cpp/hoot/core/util/Octave.cpp \
-    src/main/cpp/hoot/core/perty/FullCovariance.cpp \
-
-  HEADERS += src/main/cpp/hoot/core/util/Octave.h \
-    src/main/cpp/hoot/core/perty/FullCovariance.h \
-}
-
 SOURCES += \
     src/main/cpp/hoot/core/util/Progress.cpp \
     src/main/cpp/hoot/core/OgrFeatureProvider.cpp \
