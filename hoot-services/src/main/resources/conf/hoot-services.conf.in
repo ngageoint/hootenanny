@@ -38,6 +38,12 @@ logPropsDynamicChangeScanInterval=1
 # Loosely enforced setting that determines the maximum number of times a class logs a warning
 maxWarningsDisplayed=10
 
+# If true, will seed the randomness used in sql queries; for testing purposes only.
+seedRandomQueries=false
+
+# Random query seed value; valid range: -1.0 to 1.0
+randomQuerySeed=0.1
+
 # OSM
 
 # OSM header info
@@ -122,22 +128,22 @@ cleanDataMakePath=makecleandata
 customScriptPath=customscript
 
 # Db Name
-dbName=${DB_NAME}
+dbName=hoot
 
 # Db server user id
-dbUserId=${DB_USER}
+dbUserId=hoot
 
 # Db server user password
-dbPassword=${DB_PASSWORD}
+dbPassword=hoottest
 
 # Db server user host
-dbHost=${DB_HOST}:${DB_PORT}
+dbHost=localhost:5432
 
 # WFS Store Connection Name
 wfsStoreConnName=WFS_Connection
 
 # WFS Store db name
-wfsStoreDb=${WFS_DB_NAME}
+wfsStoreDb=wfsstoredb
 
 # Translation extension install folder
 translationExtPath=$(homeFolder)/plugins-local/script/utp
@@ -236,13 +242,6 @@ P2PServerThreadCount=0
 P2PServerScript=P2PServer.js
 
 # REVIEW
-
-# review get
-
-# review item lock time in millisec
-reviewLockTime=300000
-
-# review update
 
 
 

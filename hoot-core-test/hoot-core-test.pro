@@ -39,11 +39,6 @@ release:OBJECTS_DIR = tmp/release
 else:OBJECTS_DIR = tmp/debug
 DESTDIR = ../lib/
 
-octave {
-cppunit:SOURCES += src/test/cpp/hoot/core/perty/PertyOpTest.cpp \
-
-}
-
 cppunit {
 SOURCES += \
     src/test/cpp/hoot/core/ConflatorTest.cpp \
@@ -163,6 +158,7 @@ SOURCES += \
     src/test/cpp/hoot/core/visitors/KeepTagsVisitorTest.cpp \
     src/test/cpp/hoot/core/conflate/CookieCutterTest.cpp \
     src/test/cpp/hoot/core/conflate/AlphaShapeGeneratorTest.cpp \
+    src/test/cpp/hoot/core/perty/PertyOpTest.cpp \
     src/test/cpp/hoot/core/ops/CookieCutterOpTest.cpp
 
 # These tests only succeed if the database has been populated by the java code.
