@@ -46,6 +46,7 @@ namespace hoot
 {
 
 QString HighwayMatch::_noMatchingSubline = "No valid matching subline found.";
+QString HighwayMatch::_matchName = "Highway";
 
 HighwayMatch::HighwayMatch(const shared_ptr<HighwayClassifier>& classifier,
   const shared_ptr<SublineStringMatcher>& sublineMatcher,

@@ -208,12 +208,6 @@ include::wpsDocs/ReportsGetListProcesslet.asciidoc[]
 include::wpsDocs/ReportsDeleteReportProcesslet.asciidoc[]
 :leveloffset: 0
 
-=== Hootenanny WPS Services - Review Items
-
-:leveloffset: 2
-include::wpsDocs/PrepareItemsForReviewProcesslet.asciidoc[]
-include::wpsDocs/ReviewableItemsStatisticsProcesslet.asciidoc[]
-:leveloffset: 0
 
 
 

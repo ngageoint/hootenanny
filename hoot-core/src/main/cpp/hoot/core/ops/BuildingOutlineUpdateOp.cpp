@@ -169,8 +169,10 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
               //cleaning that works here)
               ElementPtr elem = boost::dynamic_pointer_cast<Element>(building);
               ReviewMarker().mark(
-              elem,
-              "Element with uncleanable topology.  Error occurred during union operation.");
+                _map,
+                elem,
+                "Element with uncleanable topology.  Error occurred during union operation.",
+                ReviewMarker::getBadGeometryType());
               LOG_WARN(
                 "Element with uncleanable topology.  Error occurred during union operation: " +
                 QString(e.what()))

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<changeSet author="jong.choi" id="11" context="default">
+		<comment>
+            Deletes and modifies review related tables.
+		</comment>
+
+        <!--
+		<dropTable cascadeConstraints="true" tableName="element_id_mappings"/>
+        <dropTable cascadeConstraints="true" tableName="review_map"/>
+        
+
+        <dropColumn columnName="review_against_item_id" tableName="review_items" />
+        <dropColumn columnName="reviewable_item_id" tableName="review_items" />
+-->
+		<addColumn tableName="review_items">
+            <column name="reviewable_item_rel_id" type="bigint">
+				<constraints nullable="false" />
+			  </column>
+        </addColumn>
+
+		<dropForeignKeyConstraint
+                baseTableName="review_items"
+                constraintName="review_items_map_id_fkey" />
+
+		<dropForeignKeyConstraint
+                baseTableName="review_items"
+                constraintName="review_items_id_fkey" />
+		<dropForeignKeyConstraint
+                baseTableName="review_items"
+                constraintName="review_items_review_against_item_id_fkey" />
+
+	</changeSet>
+</databaseChangeLog>

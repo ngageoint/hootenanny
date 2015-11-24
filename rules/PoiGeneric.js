@@ -332,11 +332,9 @@ exports.matchScore = function(map, e1, e2) {
 
 exports.mergePair = function(map, e1, e2)
 {
-    var newTags = mergeTags(e1, e2);
-    e1.setTags(newTags);
+    // replace instances of e2 with e1 and merge tags
+    mergeElements(map, e1, e2);
     e1.setStatusString("conflated");
-
-    removeElement(map, e2);
 
     return e1;
 };

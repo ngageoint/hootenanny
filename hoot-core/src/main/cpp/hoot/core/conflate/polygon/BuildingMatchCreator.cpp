@@ -211,24 +211,7 @@ vector<MatchCreator::Description> BuildingMatchCreator::getAllCreators() const
   return result;
 }
 
-bool BuildingMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
-{
-  return BuildingMatchVisitor::isMatchCandidate(element);
-}
-
-shared_ptr<MatchThreshold> BuildingMatchCreator::getMatchThreshold()
-{
-  if (!_matchThreshold.get())
-  {
-    ConfigOptions config;
-    _matchThreshold.reset(
-      new MatchThreshold(config.getBuildingMatchThreshold(), config.getBuildingMissThreshold(),
-                         config.getBuildingReviewThreshold()));
-  }
-  return _matchThreshold;
-}
-
-shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf() const
+shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
 {
   if (!_rf)
   {
@@ -246,6 +229,23 @@ shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf() const
   }
 
   return _rf;
+}
+
+bool BuildingMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
+{
+  return BuildingMatchVisitor::isMatchCandidate(element);
+}
+
+shared_ptr<MatchThreshold> BuildingMatchCreator::getMatchThreshold()
+{
+  if (!_matchThreshold.get())
+  {
+    ConfigOptions config;
+    _matchThreshold.reset(
+      new MatchThreshold(config.getBuildingMatchThreshold(), config.getBuildingMissThreshold(),
+                         config.getBuildingReviewThreshold()));
+  }
+  return _matchThreshold;
 }
 
 }

@@ -79,10 +79,10 @@ void PbfElementIterator::_next()
   {
     _reader->parseBlob(_blobs[_blobIndex++], _in.get(), _map);
 
-    const OsmMap::NodeMap& nodes = _map->getNodeMap();
-    for (OsmMap::NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+    const NodeMap& nodes = _map->getNodeMap();
+    for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
     {
-      _addElement(_map->getNode(it.key()));
+      _addElement(_map->getNode(it->first));
     }
 
     const WayMap& ways = _map->getWays();

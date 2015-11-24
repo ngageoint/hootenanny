@@ -100,10 +100,10 @@ public:
 
   shared_ptr<const Node> getNode(const ConstOsmMapPtr& a, QString k, QString v)
   {
-    for (OsmMap::NodeMap::const_iterator it = a->getNodeMap().constBegin();
-      it != a->getNodeMap().constEnd(); ++it)
+    for (NodeMap::const_iterator it = a->getNodeMap().begin();
+      it != a->getNodeMap().end(); ++it)
     {
-      const shared_ptr<const Node>& n = it.value();
+      const shared_ptr<const Node>& n = it->second;
       if (n->getTags().contains(k) && n->getTags()[k] == v)
       {
         return n;

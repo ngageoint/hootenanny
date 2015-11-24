@@ -14,7 +14,7 @@
         <tag k="roof:shape" v="pyramidal"/>
         <tag k="attached" v="no"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.563Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.000Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="uuid" v="{c253da4d-f6d4-41e1-a7ad-8bb6ea55d8f8}"/>
         <tag k="use2" v="warehouse"/>
@@ -23,7 +23,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3830093579980307" lon="153.1866849690848085">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.563Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.001Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="security:classification" v="U"/>
@@ -44,7 +44,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="navigation:landmark" v="no"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.564Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.005Z"/>
         <tag k="repair2" v="electronic_equipment"/>
         <tag k="security:classification" v="U"/>
         <tag k="uuid" v="{20599e44-9357-4b09-bc43-f3b5f7c47ac9}"/>
@@ -56,7 +56,7 @@
     </node>
     <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3489174959950283" lon="153.0723523212778048">
         <tag k="roof:shape" v="with_cupola"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.564Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.006Z"/>
         <tag k="controlling_authority" v="private"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="building:multi_unit" v="yes"/>
@@ -74,7 +74,7 @@
     <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3613204972742423" lon="153.0951367304635085">
         <tag k="roof:shape" v="pitched"/>
         <tag k="building:levels" v="1"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.565Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.007Z"/>
         <tag k="controlling_authority" v="military"/>
         <tag k="communication:cellular_phone" v="yes"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -92,7 +92,7 @@
     </node>
     <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3554041820521192" lon="153.1088747435583457">
         <tag k="building:levels" v="2"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.565Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.007Z"/>
         <tag k="product" v="explosive"/>
         <tag k="controlling_authority" v="joint_military_civilian"/>
         <tag k="condition" v="dismantled"/>
@@ -124,7 +124,7 @@
         <tag k="attached" v="yes"/>
         <tag k="amenity" v="bank"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.565Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.008Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="uuid" v="{af4e3199-44c2-477d-bb18-758584294df8}"/>
         <tag k="height" v="21"/>
@@ -132,7 +132,7 @@
     </node>
     <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3553177696351177" lon="153.1206011880129552">
         <tag k="building:levels" v="1"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.565Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.008Z"/>
         <tag k="use" v="paper_mill"/>
         <tag k="controlling_authority" v="public"/>
         <tag k="condition" v="functional"/>
@@ -151,7 +151,7 @@
     <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3618249391992521" lon="153.1146985551249315">
         <tag k="roof:shape" v="pitched"/>
         <tag k="building:levels" v="1"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.566Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.009Z"/>
         <tag k="use" v="palace"/>
         <tag k="controlling_authority" v="private"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -170,7 +170,7 @@
     </node>
     <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3493432503869869" lon="153.0951127672499581">
         <tag k="building:levels" v="4"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.566Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.010Z"/>
         <tag k="use" v="petroleum_and_coal_product_manufacturing"/>
         <tag k="product" v="oil"/>
         <tag k="controlling_authority" v="private"/>
@@ -190,7 +190,7 @@
     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3616393883537548" lon="153.1089323707840606">
         <tag k="roof:shape" v="with_steeple"/>
         <tag k="building:levels" v="5"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.566Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.010Z"/>
         <tag k="controlling_authority" v="private"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
@@ -208,7 +208,7 @@
     </node>
     <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3611844643170983" lon="153.0799760067764055">
         <tag k="building:levels" v="6"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.566Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.010Z"/>
         <tag k="use" v="agriculture"/>
         <tag k="product" v="fruit"/>
         <tag k="controlling_authority" v="civilian"/>
@@ -235,7 +235,7 @@
         <tag k="roof:shape" v="flat_with_parapet"/>
         <tag k="attached" v="no"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.566Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.011Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="by_product" v="cinders"/>
         <tag k="product" v="electric_power"/>
@@ -246,7 +246,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498783690497582" lon="153.1208289567668146">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.567Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.011Z"/>
         <tag k="controlling_authority" v="civilian"/>
         <tag k="communication:cellular_phone" v="yes"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -264,7 +264,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3616567836886837" lon="153.1208365965246685">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.567Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.012Z"/>
         <tag k="use" v="water_transport"/>
         <tag k="controlling_authority" v="civilian"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -278,7 +278,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3550383186147137" lon="153.1276526628350609">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.567Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.012Z"/>
         <tag k="controlling_authority" v="civilian"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="religion" v="roman_catholic"/>
@@ -296,7 +296,7 @@
     </node>
     <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3494846154866558" lon="153.0878450789861631">
         <tag k="roof:shape" v="flat"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.567Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.013Z"/>
         <tag k="use" v="higher_education"/>
         <tag k="controlling_authority" v="joint_military_civilian"/>
         <tag k="condition" v="dismantled"/>
@@ -315,7 +315,7 @@
     </node>
     <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3551807571406620" lon="153.0951226492241517">
         <tag k="building:levels" v="1"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.567Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.013Z"/>
         <tag k="controlling_authority" v="joint_military_civilian"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
@@ -347,7 +347,7 @@
         <tag k="attached" v="no"/>
         <tag k="roof:shape3" v="gargoyles"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.568Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.013Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="uuid" v="{31a7d704-3216-44d3-a71c-0fb3ccf1e44f}"/>
         <tag k="building:manufactured" v="yes"/>
@@ -368,7 +368,7 @@
         <tag k="building:levels" v="1"/>
         <tag k="attached" v="yes"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.568Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.015Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="product" v="milk"/>
         <tag k="uuid" v="{815aac0f-05fd-41b2-9881-65311103dbee}"/>
@@ -377,7 +377,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3675899762107733" lon="153.1150252476068090">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.568Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.015Z"/>
         <tag k="controlling_authority" v="joint_military_civilian"/>
         <tag k="condition" v="destroyed"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -395,7 +395,7 @@
     </node>
     <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3551316776950770" lon="153.1146594080182126">
         <tag k="roof:shape" v="pitched"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.568Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.016Z"/>
         <tag k="controlling_authority" v="public"/>
         <tag k="condition" v="construction"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -412,7 +412,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3495625892536722" lon="153.1345447000032323">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.568Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.017Z"/>
         <tag k="use" v="wind_tunnel"/>
         <tag k="controlling_authority" v="public"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -429,7 +429,7 @@
     </node>
     <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3491402811469690" lon="153.0799969741597408">
         <tag k="building:levels" v="6"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.569Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.017Z"/>
         <tag k="use" v="confectionry_manufacturing"/>
         <tag k="product" v="bamboo"/>
         <tag k="controlling_authority" v="public"/>
@@ -449,7 +449,7 @@
     </node>
     <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3614914656853827" lon="153.1024525270879906">
         <tag k="building:levels" v="6"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.569Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.017Z"/>
         <tag k="controlling_authority" v="public"/>
         <tag k="condition" v="functional"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -466,7 +466,7 @@
     </node>
     <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3672986354791199" lon="153.0949535372358810">
         <tag k="building:levels" v="2"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.569Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.018Z"/>
         <tag k="use" v="secondary_education"/>
         <tag k="condition" v="functional"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -487,7 +487,7 @@
     <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3615447051822755" lon="153.0878782272478418">
         <tag k="roof:shape" v="pitched"/>
         <tag k="building:levels" v="3"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.569Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.018Z"/>
         <tag k="use" v="education"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
@@ -502,7 +502,7 @@
     </node>
     <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3553774147008149" lon="153.1025475564638043">
         <tag k="roof:shape" v="with_minaret"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.570Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.021Z"/>
         <tag k="use" v="public_order"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="religion" v="muslim"/>
@@ -519,7 +519,7 @@
     </node>
     <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3610064800120654" lon="153.0721254206466995">
         <tag k="building:levels" v="2"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.570Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.022Z"/>
         <tag k="controlling_authority" v="military"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="shop" v="pet-shop"/>
@@ -537,7 +537,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3496817114895769" lon="153.1146748585752277">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.571Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.022Z"/>
         <tag k="controlling_authority" v="military"/>
         <tag k="condition" v="functional"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -565,7 +565,7 @@
         <tag k="building:levels" v="1"/>
         <tag k="by_product2" v="slag"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.571Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.022Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="by_product" v="scrap-metal"/>
         <tag k="product" v="consumer_goods"/>
@@ -576,7 +576,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3619384587453567" lon="153.1277678478489861">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.571Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.023Z"/>
         <tag k="condition" v="functional"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="religion" v="buddhist"/>
@@ -596,7 +596,7 @@
     <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3495215100153075" lon="153.1088703282008794">
         <tag k="roof:shape" v="pitched"/>
         <tag k="building:levels" v="1"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.571Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.023Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="height" v="71"/>
         <tag k="security:resource_owner" v="USA"/>
@@ -614,7 +614,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3553182080778861" lon="153.0879616358091369">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.571Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.023Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="security:classification" v="U"/>
@@ -643,7 +643,7 @@
         <tag k="building:levels" v="1"/>
         <tag k="attached" v="no"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.571Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.024Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="uuid" v="{b14e13c0-5ea4-4b04-8ce9-422e15b3037e}"/>
         <tag k="height" v="60"/>
@@ -666,7 +666,7 @@
         <tag k="communication:mobile_phone" v="yes"/>
         <tag k="roof:shape" v="with_steeple"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.572Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.024Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="product" v="milk"/>
         <tag k="uuid" v="{26cb3035-d35e-4b09-aeba-ec27be6a0bb1}"/>
@@ -675,7 +675,7 @@
     </node>
     <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3674189250628714" lon="153.1087615499867809">
         <tag k="addr:full" v="Left of Main Street"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.572Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.025Z"/>
         <tag k="use" v="healthcare"/>
         <tag k="controlling_authority" v="public"/>
         <tag k="condition" v="abandoned"/>
@@ -707,14 +707,14 @@
         <tag k="roof:shape" v="with_minaret"/>
         <tag k="amenity" v="place_of_worship"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.572Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.026Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="uuid" v="{fd5605a3-70b6-492b-896a-6bdb2e5e439c}"/>
         <tag k="use" v="islamic_prayer_hall"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3497234289403650" lon="153.1276267620594069">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.572Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.026Z"/>
         <tag k="use" v="religious_activities"/>
         <tag k="controlling_authority" v="civilian"/>
         <tag k="note" v="We are on a Mission"/>
@@ -732,7 +732,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3830270195731771" lon="153.1813644355934230">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.572Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.027Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="security:classification" v="U"/>
@@ -745,15 +745,15 @@
     <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4260605923855891" lon="153.0711096159979263"/>
     <node visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4258936348663696" lon="153.0841323024970393"/>
     <node visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4400850240000302" lon="153.0839653449778268"/>
-    <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4399180664808178" lon="153.0712765735171388"/>
+    <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4399180664808178" lon="153.0712765735171388"/>
     <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4104181844545707" lon="153.1357195617999309"/>
     <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4102512269353582" lon="153.1487422482990439"/>
     <node visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4244426160690118" lon="153.1485752907798314"/>
-    <node visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4242756585497993" lon="153.1358865193191434"/>
+    <node visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4242756585497993" lon="153.1358865193191434"/>
     <node visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4267406970782410" lon="153.1209272847347620"/>
     <node visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4265737395590214" lon="153.1339499712338750"/>
     <node visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4407651286926786" lon="153.1337830137146625"/>
-    <node visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4405981711734626" lon="153.1210942422539745"/>
+    <node visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4405981711734626" lon="153.1210942422539745"/>
     <node visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4267638832534573" lon="153.0895405577593351"/>
     <node visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4267638832534573" lon="153.1000821804954626"/>
     <node visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4413861341454783" lon="153.0997421281491597"/>
@@ -762,26 +762,26 @@
     <node visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4270807494245688" lon="153.1051148506305708"/>
     <node visible="true" id="-62" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4269137919053527" lon="153.1181375371296838"/>
     <node visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4411051810390099" lon="153.1179705796104713"/>
-    <node visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4409382235197938" lon="153.1052818081497833"/>
+    <node visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4409382235197938" lon="153.1052818081497833"/>
     <node visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4104181844545742" lon="153.1163365780593324"/>
     <node visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4102512269353547" lon="153.1293592645584454"/>
     <node visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4244426160690224" lon="153.1291923070392329"/>
-    <node visible="true" id="-69" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4242756585497993" lon="153.1165035355785449"/>
+    <node visible="true" id="-70" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4242756585497993" lon="153.1165035355785449"/>
     <node visible="true" id="-71" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4277608541172206" lon="153.1372497973584075"/>
     <node visible="true" id="-72" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4275938965980011" lon="153.1502724838575205"/>
     <node visible="true" id="-73" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4417852857316618" lon="153.1501055263383080"/>
-    <node visible="true" id="-74" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4416183282124386" lon="153.1374167548776200"/>
+    <node visible="true" id="-75" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4416183282124386" lon="153.1374167548776200"/>
     <node visible="true" id="-76" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4102481582814157" lon="153.1001840916088383"/>
     <node visible="true" id="-77" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4100812007621997" lon="153.1132067781079513"/>
     <node visible="true" id="-78" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4242725898958639" lon="153.1130398205887388"/>
-    <node visible="true" id="-79" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4241056323766301" lon="153.1003510491280508"/>
+    <node visible="true" id="-80" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4241056323766301" lon="153.1003510491280508"/>
     <node visible="true" id="-81" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4472460251350157" lon="153.1559758058690193"/>
     <node visible="true" id="-82" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4470790676158032" lon="153.1689984923681038"/>
     <node visible="true" id="-83" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4612704567494532" lon="153.1688315348488914"/>
-    <node visible="true" id="-84" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4611034992302265" lon="153.1561427633882317"/>
+    <node visible="true" id="-85" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4611034992302265" lon="153.1561427633882317"/>
     <node visible="true" id="-86" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3556276313675895" lon="153.1532276663120342">
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.601Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.105Z"/>
         <tag k="building:superstructure" v="yes"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="height" v="13"/>
@@ -797,7 +797,7 @@
     </node>
     <node visible="true" id="-87" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3617221313676175" lon="153.1530528459964557">
         <tag k="width" v="2"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.601Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.105Z"/>
         <tag k="building:superstructure" v="yes"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="height" v="8"/>
@@ -813,7 +813,7 @@
     </node>
     <node visible="true" id="-88" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3670881444417802" lon="153.1529877321243305">
         <tag k="width" v="2"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.601Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.106Z"/>
         <tag k="building:superstructure" v="yes"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="height" v="9"/>
@@ -828,7 +828,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-89" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3832105357953779" lon="153.1752433790204577">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.601Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.106Z"/>
         <tag k="building:superstructure" v="yes"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
@@ -840,7 +840,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-90" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498269825651583" lon="153.1418447358926755">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.602Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.109Z"/>
         <tag k="use" v="religious_activities"/>
         <tag k="condition" v="construction"/>
         <tag k="controlling_authority" v="private"/>
@@ -855,7 +855,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-91" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3555007213724863" lon="153.1417852005552049">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.602Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.109Z"/>
         <tag k="use" v="residential"/>
         <tag k="condition" v="functional"/>
         <tag k="controlling_authority" v="civilian"/>
@@ -872,7 +872,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-92" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3619701421581709" lon="153.1419407639083943">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.602Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.110Z"/>
         <tag k="use" v="manufacturing"/>
         <tag k="condition" v="functional"/>
         <tag k="controlling_authority" v="public"/>
@@ -888,7 +888,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-93" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3673729849577114" lon="153.1418234399279754">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.603Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.110Z"/>
         <tag k="use" v="commercial"/>
         <tag k="condition" v="destroyed"/>
         <tag k="controlling_authority" v="military"/>
@@ -904,7 +904,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-94" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3828092892705151" lon="153.1696593985248001">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.603Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.110Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="security:classification" v="U"/>
@@ -955,40 +955,16 @@
     <node visible="true" id="-133" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4431884536421755" lon="153.1730975101324930"/>
     <node visible="true" id="-134" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4430184274690099" lon="153.1730975101324930"/>
     <node visible="true" id="-135" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3936230078083192" lon="153.1333291534427303"/>
-    <node visible="true" id="-136" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4051587457780315" lon="153.1333291534427303"/>
+    <node visible="true" id="-137" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4051587457780315" lon="153.1333291534427303"/>
     <node visible="true" id="-138" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3934482238996893" lon="153.1290469476811893"/>
-    <node visible="true" id="-139" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4049839618693873" lon="153.1290469476811893"/>
+    <node visible="true" id="-140" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4049839618693873" lon="153.1290469476811893"/>
     <node visible="true" id="-141" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3934273321572377" lon="153.1248521338741000"/>
-    <node visible="true" id="-142" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4049630701269464" lon="153.1248521338741000"/>
+    <node visible="true" id="-143" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4049630701269464" lon="153.1248521338741000"/>
     <node visible="true" id="-144" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3946352244845670" lon="153.1700220079567600"/>
-    <node visible="true" id="-145" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4061709624542722" lon="153.1700220079567600"/>
-    <node visible="true" id="-147" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498177361501220" lon="153.1602973097869267">
-        <tag k="source" v="tdsv40"/>
-        <tag k="condition" v="functional"/>
-        <tag k="tower:type" v="observation"/>
-        <tag k="note" v="Yes it is"/>
-        <tag k="security:dissemination_control:non_ic" v="DS"/>
-        <tag k="name" v="Airport Control Tower"/>
-        <tag k="light:obstacle" v="no"/>
-        <tag k="material" v="brick"/>
-        <tag k="security:resource_owner" v="USA"/>
-        <tag k="navigation:landmark" v="yes"/>
-        <tag k="addr:full" v="On the left of the airfield"/>
-        <tag k="roof:shape" v="pyramidal"/>
-        <tag k="control_tower" v="yes"/>
-        <tag k="roof:shape2" v="with_steeple"/>
-        <tag k="transport:type" v="air"/>
-        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.606Z"/>
-        <tag k="security:classification" v="U"/>
-        <tag k="uuid" v="{65322290-34e9-4b36-90d0-0cf930ec8142}"/>
-        <tag k="man_made" v="tower"/>
-        <tag k="use" v="air_traffic_control"/>
-        <tag k="error:circular" v="15"/>
-    </node>
+    <node visible="true" id="-146" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4061709624542722" lon="153.1700220079567600"/>
     <node visible="true" id="-148" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3554990691362221" lon="153.1600891370858619">
         <tag k="roof:shape" v="sawtoothed"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.607Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.123Z"/>
         <tag k="control_tower" v="yes"/>
         <tag k="use" v="emergency_operations"/>
         <tag k="condition" v="construction"/>
@@ -1008,7 +984,7 @@
     <node visible="true" id="-149" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3616463209064165" lon="153.1602430413191769">
         <tag k="roof:shape" v="semi-cylindrical"/>
         <tag k="addr:full" v="The other side of the airfield"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.607Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.123Z"/>
         <tag k="control_tower" v="yes"/>
         <tag k="use" v="air_transport"/>
         <tag k="condition" v="functional"/>
@@ -1026,7 +1002,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-150" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3832208864663471" lon="153.1628278514775445">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.607Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.123Z"/>
         <tag k="control_tower" v="yes"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
@@ -1036,8 +1012,32 @@
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="error:circular" v="15"/>
     </node>
+    <node visible="true" id="-151" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498177361501220" lon="153.1602973097869267">
+        <tag k="source" v="tdsv40"/>
+        <tag k="condition" v="functional"/>
+        <tag k="tower:type" v="observation"/>
+        <tag k="note" v="Yes it is"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="name" v="Airport Control Tower"/>
+        <tag k="light:obstacle" v="no"/>
+        <tag k="material" v="brick"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="navigation:landmark" v="yes"/>
+        <tag k="addr:full" v="On the left of the airfield"/>
+        <tag k="roof:shape" v="pyramidal"/>
+        <tag k="control_tower" v="yes"/>
+        <tag k="roof:shape2" v="with_steeple"/>
+        <tag k="transport:type" v="air"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.124Z"/>
+        <tag k="security:classification" v="U"/>
+        <tag k="uuid" v="{65322290-34e9-4b36-90d0-0cf930ec8142}"/>
+        <tag k="man_made" v="tower"/>
+        <tag k="use" v="air_traffic_control"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <node visible="true" id="-152" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3616748649023123" lon="153.1478155630082654">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.608Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.126Z"/>
         <tag k="use" v="education"/>
         <tag k="controlling_authority" v="private"/>
         <tag k="condition" v="functional"/>
@@ -1054,7 +1054,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-153" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3495512104446341" lon="153.1531984712063377">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.608Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.126Z"/>
         <tag k="use" v="healthcare"/>
         <tag k="controlling_authority" v="civilian"/>
         <tag k="condition" v="construction"/>
@@ -1072,7 +1072,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-154" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3670715207815611" lon="153.1480533459777291">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.608Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.127Z"/>
         <tag k="condition" v="destroyed"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="height" v="1"/>
@@ -1103,7 +1103,7 @@
         <tag k="facility" v="yes"/>
         <tag k="amenity" v="place_of_worship"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.608Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.127Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="uuid" v="{f9f1e2e7-7699-4dd7-8271-586970f42122}"/>
         <tag k="error:circular" v="15"/>
@@ -1120,7 +1120,7 @@
         <tag k="facility" v="yes"/>
         <tag k="by_product2" v="cinders"/>
         <tag k="raw_material2" v="plant_material"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.608Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.128Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="by_product" v="ash"/>
         <tag k="raw_material" v="clay"/>
@@ -1132,7 +1132,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-157" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3832074149299167" lon="153.1564881754041494">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.608Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.128Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="security:classification" v="U"/>
@@ -1145,7 +1145,7 @@
     <node visible="true" id="-158" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4469122731878947" lon="153.1368247194805008"/>
     <node visible="true" id="-159" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4467453156686716" lon="153.1498474059796138"/>
     <node visible="true" id="-160" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4609367048023323" lon="153.1496804484604013"/>
-    <node visible="true" id="-161" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4607697472831163" lon="153.1369916769997133"/>
+    <node visible="true" id="-162" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4607697472831163" lon="153.1369916769997133"/>
     <node visible="true" id="-163" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471516" lon="153.1225495075963750"/>
     <node visible="true" id="-164" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471516" lon="153.1330911303324740"/>
     <node visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4609253749391975" lon="153.1327510779861996"/>
@@ -1159,10 +1159,10 @@
     <node visible="true" id="-173" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4291984813535308" lon="153.1552976738220480"/>
     <node visible="true" id="-174" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4290315238343112" lon="153.1683203603211609"/>
     <node visible="true" id="-175" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4432229129679719" lon="153.1681534028019200"/>
-    <node visible="true" id="-176" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4430559554487523" lon="153.1554646313412604"/>
+    <node visible="true" id="-177" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4430559554487523" lon="153.1554646313412604"/>
     <node visible="true" id="-178" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498229434480322" lon="153.1669064749711140">
         <tag k="addr:full" v="On a hill"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.611Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.136Z"/>
         <tag k="use" v="agriculture"/>
         <tag k="condition" v="construction"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -1176,7 +1176,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-179" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3559810354979014" lon="153.1666839561039239">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.611Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.136Z"/>
         <tag k="use" v="vacation_cottage"/>
         <tag k="condition" v="functional"/>
         <tag k="note" v="On the beach"/>
@@ -1192,7 +1192,7 @@
     </node>
     <node visible="true" id="-180" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3617150742330537" lon="153.1667106484875376">
         <tag k="addr:full" v="In a field"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.611Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.137Z"/>
         <tag k="use" v="leprosy_care"/>
         <tag k="condition" v="abandoned"/>
         <tag k="note" v="Yes, a memo"/>
@@ -1211,7 +1211,7 @@
     <node visible="true" id="-181" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3671571362670143" lon="153.1669716498628873">
         <tag k="social_facility" v="shelter"/>
         <tag k="addr:full" v="Third village from the left"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.611Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.137Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="social_facility:for" v="refugee"/>
         <tag k="security:resource_owner" v="USA"/>
@@ -1225,7 +1225,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-182" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3756344686923896" lon="153.1828488876220433">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.611Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.137Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="security:classification" v="U"/>
@@ -1236,7 +1236,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-183" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3559408969122870" lon="153.1729478316758275">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.612Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.139Z"/>
         <tag k="condition" v="functional"/>
         <tag k="note" v="Excel Energy"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -1256,7 +1256,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-184" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3495773578195163" lon="153.1729240297067918">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.612Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.140Z"/>
         <tag k="condition" v="construction"/>
         <tag k="cable:type2" v="load_bearing"/>
         <tag k="note" v="Google Fibre"/>
@@ -1276,7 +1276,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-185" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3756419372329241" lon="153.1764667880736681">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.612Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.140Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="security:classification" v="U"/>
@@ -1366,7 +1366,7 @@
         <tag k="addr:full" v="Jason's Backyard"/>
         <tag k="roof:shape" v="with_smokestack"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.620Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.163Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="by_product" v="slag"/>
         <tag k="raw_material" v="plant_material"/>
@@ -1391,7 +1391,7 @@
         <tag k="by_product2" v="no_byproduct"/>
         <tag k="roof:shape2" v="with_minaret"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.620Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.163Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="raw_material" v="no_raw_material"/>
         <tag k="product" v="consumer_goods"/>
@@ -1400,7 +1400,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-255" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760170345997231" lon="153.1705357409823023">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.620Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.164Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="security:classification" v="U"/>
@@ -1440,7 +1440,7 @@
         <tag k="roof:shape" v="domed"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="design" v="a-frame"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.623Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.174Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="tower:shape" v="truss"/>
         <tag k="guyed" v="no"/>
@@ -1449,7 +1449,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-273" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3553501507543224" lon="153.1796251043605821">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.624Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.179Z"/>
         <tag k="condition" v="functional"/>
         <tag k="communication:cellular_phone" v="yes"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -1484,7 +1484,7 @@
         <tag k="roof:shape2" v="flat_with_parapet"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="design" v="t-frame"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.624Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.180Z"/>
         <tag k="ele:max" v="782.60809999000003"/>
         <tag k="tower:type2" v="observation"/>
         <tag k="security:classification" v="U"/>
@@ -1508,7 +1508,7 @@
         <tag k="roof:shape" v="flat_with_parapet"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="design" v="a-frame"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.625Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.180Z"/>
         <tag k="ele:max" v="306.32649999"/>
         <tag k="security:classification" v="U"/>
         <tag k="tower:shape" v="truss"/>
@@ -1529,7 +1529,7 @@
         <tag k="navigation:landmark" v="yes"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="design" v="a-frame"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.625Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.181Z"/>
         <tag k="ele:max" v="304.98230000000001"/>
         <tag k="security:classification" v="U"/>
         <tag k="tower:shape" v="truss"/>
@@ -1540,7 +1540,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-277" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3756797764289317" lon="153.1634894436132868">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.625Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.181Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="security:classification" v="U"/>
@@ -1578,7 +1578,7 @@
         <tag k="roof:shape" v="flat"/>
         <tag k="transport:type" v="underground_railway"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.627Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.188Z"/>
         <tag k="public_transport" v="station"/>
         <tag k="underground" v="yes"/>
         <tag k="security:classification" v="U"/>
@@ -1601,7 +1601,7 @@
         <tag k="roof:shape" v="sawtoothed"/>
         <tag k="transport:type" v="railway"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.627Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.188Z"/>
         <tag k="public_transport" v="station"/>
         <tag k="underground" v="no"/>
         <tag k="security:classification" v="U"/>
@@ -1611,7 +1611,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-294" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760491738068801" lon="153.1569020100675118">
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.627Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.189Z"/>
         <tag k="public_transport" v="station"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
@@ -1624,7 +1624,7 @@
     <way visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-290"/>
         <nd ref="-291"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.626Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.185Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="security:classification" v="U"/>
@@ -1637,7 +1637,7 @@
     <way visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-288"/>
         <nd ref="-289"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.626Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.185Z"/>
         <tag k="condition" v="destroyed"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="location" v="underground"/>
@@ -1654,7 +1654,7 @@
     <way visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-286"/>
         <nd ref="-287"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.626Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.184Z"/>
         <tag k="condition" v="destroyed"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="location" v="underground"/>
@@ -1674,7 +1674,7 @@
     <way visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-284"/>
         <nd ref="-285"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.626Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.184Z"/>
         <tag k="condition" v="functional"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
@@ -1692,7 +1692,7 @@
     <way visible="true" id="-62" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-282"/>
         <nd ref="-283"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.626Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.184Z"/>
         <tag k="condition" v="damaged"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="location" v="surface"/>
@@ -1714,7 +1714,7 @@
     <way visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-280"/>
         <nd ref="-281"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.626Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.183Z"/>
         <tag k="condition" v="functional"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="location" v="surface"/>
@@ -1732,7 +1732,7 @@
     <way visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-278"/>
         <nd ref="-279"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.625Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.183Z"/>
         <tag k="condition" v="functional"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
@@ -1755,7 +1755,7 @@
         <nd ref="-270"/>
         <nd ref="-271"/>
         <nd ref="-268"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.622Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.170Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="leisure" v="stadium"/>
@@ -1786,7 +1786,7 @@
         <tag k="addr:full" v="Downtown Denver"/>
         <tag k="roof:shape" v="domed"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.622Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.170Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="uuid" v="{627c4c65-2a14-4c7f-b8b9-9b799fe12f4f}"/>
         <tag k="cover:type" v="moveable"/>
@@ -1800,7 +1800,7 @@
         <nd ref="-262"/>
         <nd ref="-263"/>
         <nd ref="-260"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.621Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.167Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="security:classification" v="U"/>
@@ -1832,7 +1832,7 @@
         <tag k="roof:shape2" v="with_turret"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="raw_material2" v="tobacco"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.621Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.166Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="by_product" v="radioactive_material"/>
         <tag k="raw_material" v="gold"/>
@@ -1846,7 +1846,7 @@
     <way visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-251"/>
         <nd ref="-252"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.619Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.160Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="security:classification" v="U"/>
@@ -1862,18 +1862,18 @@
         <tag k="ref:road:type" v="motorway"/>
         <tag k="width:minimum_traveled_way" v="4"/>
         <tag k="source" v="tdsv40"/>
-        <tag k="construction" v="motorway"/>
+        <tag k="condition" v="construction"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="name" v="Main"/>
         <tag k="lanes" v="2"/>
-        <tag k="security:resource_owner" v="USA"/>
         <tag k="seasonal" v="no"/>
+        <tag k="security:resource_owner" v="USA"/>
         <tag k="in_tunnel" v="yes"/>
         <tag k="surface" v="asphalt"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.619Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.160Z"/>
         <tag k="security:classification" v="U"/>
-        <tag k="highway" v="construction"/>
+        <tag k="highway" v="motorway"/>
         <tag k="highway:through_route" v="yes"/>
         <tag k="on_bridge" v="yes"/>
         <tag k="uuid" v="{c87f3ed7-5656-4f80-b556-5b85df1cb9be}"/>
@@ -1890,9 +1890,9 @@
         <tag k="width:minimum_traveled_way" v="4"/>
         <tag k="feature_configuration" v="same"/>
         <tag k="source" v="tdsv40"/>
+        <tag k="condition" v="construction"/>
         <tag k="road:runway" v="no"/>
         <tag k="ref" v="470"/>
-        <tag k="construction" v="secondary"/>
         <tag k="oneway" v="yes"/>
         <tag k="lanes" v="1"/>
         <tag k="name" v="back"/>
@@ -1904,10 +1904,10 @@
         <tag k="surface" v="asphalt"/>
         <tag k="median" v="yes"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.619Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.160Z"/>
         <tag k="divider" v="yes"/>
         <tag k="security:classification" v="U"/>
-        <tag k="highway" v="construction"/>
+        <tag k="highway" v="secondary"/>
         <tag k="on_bridge" v="no"/>
         <tag k="uuid" v="{632db716-7256-4b2c-b27d-593bf9a2093e}"/>
         <tag k="location" v="surface"/>
@@ -1929,7 +1929,7 @@
         <tag k="surface" v="compacted"/>
         <tag k="median" v="no"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.619Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.159Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="highway" v="primary"/>
         <tag k="uuid" v="{68d0dd28-6b60-468a-b33c-eaa663675dc8}"/>
@@ -1952,7 +1952,7 @@
         <tag k="surface" v="wood"/>
         <tag k="median" v="no"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.618Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.158Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="highway" v="secondary"/>
         <tag k="uuid" v="{f0ecd77e-fdac-4deb-bd9c-d4f84dad328c}"/>
@@ -1979,7 +1979,7 @@
         <tag k="in_tunnel" v="no"/>
         <tag k="layer" v="0"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.618Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.158Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="highway" v="tertiary"/>
         <tag k="uuid" v="{1432b382-1299-4aa7-af5f-c89e3c15234d}"/>
@@ -2006,7 +2006,7 @@
         <tag k="surface" v="Jello"/>
         <tag k="median" v="yes"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.618Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.157Z"/>
         <tag k="divider" v="yes"/>
         <tag k="security:classification" v="U"/>
         <tag k="highway" v="trunk"/>
@@ -2019,7 +2019,7 @@
     <way visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-237"/>
         <nd ref="-238"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.617Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.155Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="security:classification" v="U"/>
@@ -2033,7 +2033,7 @@
         <nd ref="-235"/>
         <nd ref="-236"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.617Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.154Z"/>
         <tag k="intermittent" v="no"/>
         <tag k="water:sink:type" v="dissipating"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -2049,7 +2049,7 @@
         <nd ref="-233"/>
         <nd ref="-234"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.617Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.154Z"/>
         <tag k="intermittent" v="no"/>
         <tag k="tidal" v="no"/>
         <tag k="water:sink:type" v="unknown"/>
@@ -2068,7 +2068,7 @@
         <nd ref="-231"/>
         <nd ref="-232"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.617Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.154Z"/>
         <tag k="intermittent" v="dry"/>
         <tag k="tidal" v="yes"/>
         <tag k="water:sink:type" v="unknown"/>
@@ -2087,7 +2087,7 @@
         <nd ref="-229"/>
         <nd ref="-230"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.617Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.153Z"/>
         <tag k="intermittent" v="yes"/>
         <tag k="water:sink:type" v="disappearing"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -2104,7 +2104,7 @@
         <nd ref="-227"/>
         <nd ref="-228"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.616Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.153Z"/>
         <tag k="intermittent" v="no"/>
         <tag k="tidal" v="yes"/>
         <tag k="water:sink:type" v="unknown"/>
@@ -2124,7 +2124,7 @@
         <nd ref="-225"/>
         <nd ref="-226"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.616Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.152Z"/>
         <tag k="intermittent" v="dry"/>
         <tag k="tidal" v="no"/>
         <tag k="water:sink:type" v="disappearing"/>
@@ -2143,7 +2143,7 @@
         <nd ref="-223"/>
         <nd ref="-224"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.616Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.152Z"/>
         <tag k="intermittent" v="no"/>
         <tag k="tidal" v="no"/>
         <tag k="water:sink:type" v="unknown"/>
@@ -2160,7 +2160,7 @@
         <nd ref="-221"/>
         <nd ref="-222"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.616Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.151Z"/>
         <tag k="tidal" v="no"/>
         <tag k="water:sink:type" v="unknown"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -2180,7 +2180,7 @@
         <nd ref="-219"/>
         <nd ref="-220"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.616Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.151Z"/>
         <tag k="intermittent" v="yes"/>
         <tag k="tidal" v="yes"/>
         <tag k="water:sink:type" v="not_applicable"/>
@@ -2199,7 +2199,7 @@
         <nd ref="-217"/>
         <nd ref="-218"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.616Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.150Z"/>
         <tag k="intermittent" v="no"/>
         <tag k="tidal" v="no"/>
         <tag k="water:sink:type" v="unknown"/>
@@ -2218,7 +2218,7 @@
         <nd ref="-215"/>
         <nd ref="-216"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.615Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.150Z"/>
         <tag k="intermittent" v="yes"/>
         <tag k="water:sink:type" v="dissipating"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -2235,7 +2235,7 @@
         <nd ref="-213"/>
         <nd ref="-214"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.615Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.150Z"/>
         <tag k="intermittent" v="no"/>
         <tag k="tidal" v="no"/>
         <tag k="water:sink:type" v="not_applicable"/>
@@ -2253,7 +2253,7 @@
         <nd ref="-211"/>
         <nd ref="-212"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.615Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.148Z"/>
         <tag k="tidal" v="no"/>
         <tag k="water:sink:type" v="dissipating"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -2271,7 +2271,7 @@
         <nd ref="-209"/>
         <nd ref="-210"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.615Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.148Z"/>
         <tag k="intermittent" v="dry"/>
         <tag k="tidal" v="yes"/>
         <tag k="water:sink:type" v="not_applicable"/>
@@ -2289,7 +2289,7 @@
         <nd ref="-207"/>
         <nd ref="-208"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.615Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.147Z"/>
         <tag k="tidal" v="yes"/>
         <tag k="note" v="Very long river"/>
         <tag k="water:sink:type" v="dissipating"/>
@@ -2309,7 +2309,7 @@
         <nd ref="-204"/>
         <nd ref="-205"/>
         <nd ref="-206"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.614Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.145Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="security:classification" v="U"/>
@@ -2323,8 +2323,8 @@
         <nd ref="-201"/>
         <nd ref="-202"/>
         <nd ref="-203"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.614Z"/>
-        <tag k="construction" v="rail"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.145Z"/>
+        <tag k="condition" v="construction"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="location" v="surface"/>
         <tag k="security:resource_owner" v="USA"/>
@@ -2332,7 +2332,7 @@
         <tag k="arrangement" v="single"/>
         <tag k="source" v="tdsv40"/>
         <tag k="uuid" v="{2df4f57e-69bd-468a-9113-35434c475dc9}"/>
-        <tag k="railway" v="construction"/>
+        <tag k="railway" v="rail"/>
         <tag k="name" v="Big Train"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="error:circular" v="15"/>
@@ -2341,7 +2341,7 @@
         <nd ref="-198"/>
         <nd ref="-199"/>
         <nd ref="-200"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.614Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.144Z"/>
         <tag k="electrified" v="rail"/>
         <tag k="gauge:type" v="broad"/>
         <tag k="gauge" v="3"/>
@@ -2364,7 +2364,7 @@
         <nd ref="-195"/>
         <nd ref="-196"/>
         <nd ref="-197"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.613Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.144Z"/>
         <tag k="electrified" v="no"/>
         <tag k="gauge:type" v="standard"/>
         <tag k="gauge" v="4"/>
@@ -2385,7 +2385,7 @@
         <nd ref="-192"/>
         <nd ref="-193"/>
         <nd ref="-194"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.613Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.143Z"/>
         <tag k="electrified" v="unknown"/>
         <tag k="gauge:type" v="narrow"/>
         <tag k="gauge" v="2"/>
@@ -2405,11 +2405,11 @@
         <nd ref="-189"/>
         <nd ref="-190"/>
         <nd ref="-191"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.613Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.143Z"/>
         <tag k="electrified" v="no"/>
-        <tag k="construction" v="logging"/>
         <tag k="gauge:type" v="narrow"/>
         <tag k="gauge" v="1"/>
+        <tag k="condition" v="construction"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="location" v="surface"/>
         <tag k="security:resource_owner" v="USA"/>
@@ -2418,7 +2418,7 @@
         <tag k="arrangement" v="single"/>
         <tag k="source" v="tdsv40"/>
         <tag k="uuid" v="{cbcf9671-3825-46a9-8ef0-f1676648b43e}"/>
-        <tag k="railway" v="construction"/>
+        <tag k="railway" v="logging"/>
         <tag k="name" v="Santa Train"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="error:circular" v="15"/>
@@ -2427,7 +2427,7 @@
         <nd ref="-186"/>
         <nd ref="-187"/>
         <nd ref="-188"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.613Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.142Z"/>
         <tag k="electrified" v="contact_line"/>
         <tag k="gauge" v="2"/>
         <tag k="condition" v="destroyed"/>
@@ -2446,10 +2446,10 @@
         <nd ref="-173"/>
         <nd ref="-174"/>
         <nd ref="-175"/>
-        <nd ref="-176"/>
-        <nd ref="-176"/>
+        <nd ref="-177"/>
+        <nd ref="-177"/>
         <nd ref="-173"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.610Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.133Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="security:classification" v="U"/>
@@ -2483,7 +2483,7 @@
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="raw_material2" v="radioactive_material"/>
         <tag k="raw_material3" v="plastic"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.610Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.132Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="by_product" v="scrap-metal"/>
         <tag k="raw_material" v="aluminum"/>
@@ -2502,7 +2502,7 @@
         <nd ref="-166"/>
         <nd ref="-167"/>
         <nd ref="-163"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.609Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.132Z"/>
         <tag k="use" v="healthcare"/>
         <tag k="controlling_authority" v="military"/>
         <tag k="note" v="Hospital"/>
@@ -2520,11 +2520,11 @@
         <nd ref="-158"/>
         <nd ref="-159"/>
         <nd ref="-160"/>
-        <nd ref="-161"/>
-        <nd ref="-161"/>
+        <nd ref="-162"/>
+        <nd ref="-162"/>
         <nd ref="-158"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.609Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.130Z"/>
         <tag k="controlling_authority" v="private"/>
         <tag k="condition" v="functional"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -2539,9 +2539,9 @@
     </way>
     <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-144"/>
-        <nd ref="-145"/>
-        <nd ref="-145"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.606Z"/>
+        <nd ref="-146"/>
+        <nd ref="-146"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.120Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="security:classification" v="U"/>
@@ -2553,9 +2553,9 @@
     </way>
     <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-141"/>
-        <nd ref="-142"/>
-        <nd ref="-142"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.606Z"/>
+        <nd ref="-143"/>
+        <nd ref="-143"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.119Z"/>
         <tag k="width:minimum_traveled_way" v="3"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
@@ -2570,9 +2570,9 @@
     </way>
     <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-138"/>
-        <nd ref="-139"/>
-        <nd ref="-139"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.605Z"/>
+        <nd ref="-140"/>
+        <nd ref="-140"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.119Z"/>
         <tag k="condition" v="abandoned"/>
         <tag k="width:minimum_traveled_way" v="2.5"/>
         <tag k="note" v="What a trail"/>
@@ -2590,9 +2590,9 @@
     </way>
     <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-135"/>
-        <nd ref="-136"/>
-        <nd ref="-136"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.605Z"/>
+        <nd ref="-137"/>
+        <nd ref="-137"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.119Z"/>
         <tag k="condition" v="functional"/>
         <tag k="width:minimum_traveled_way" v="4"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -2614,7 +2614,7 @@
         <nd ref="-133"/>
         <nd ref="-134"/>
         <nd ref="-130"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.604Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.116Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="security:classification" v="U"/>
@@ -2631,7 +2631,7 @@
         <nd ref="-128"/>
         <nd ref="-129"/>
         <nd ref="-125"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.604Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.116Z"/>
         <tag k="controlling_authority" v="military"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
@@ -2649,7 +2649,7 @@
         <nd ref="-123"/>
         <nd ref="-124"/>
         <nd ref="-120"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.604Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.115Z"/>
         <tag k="use" v="military"/>
         <tag k="condition" v="functional"/>
         <tag k="controlling_authority" v="joint_military_civilian"/>
@@ -2671,7 +2671,7 @@
         <nd ref="-118"/>
         <nd ref="-119"/>
         <nd ref="-115"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.604Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.115Z"/>
         <tag k="use" v="religious_activities"/>
         <tag k="condition" v="destroyed"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -2691,7 +2691,7 @@
         <nd ref="-113"/>
         <nd ref="-114"/>
         <nd ref="-110"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.604Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.115Z"/>
         <tag k="use" v="residential"/>
         <tag k="condition" v="damaged"/>
         <tag k="controlling_authority" v="public"/>
@@ -2713,7 +2713,7 @@
         <nd ref="-108"/>
         <nd ref="-109"/>
         <nd ref="-105"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.604Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.114Z"/>
         <tag k="use" v="residential"/>
         <tag k="condition" v="destroyed"/>
         <tag k="note" v="Small suburb"/>
@@ -2735,7 +2735,7 @@
         <nd ref="-103"/>
         <nd ref="-104"/>
         <nd ref="-100"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.604Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.114Z"/>
         <tag k="use" v="utilities"/>
         <tag k="condition" v="functional"/>
         <tag k="controlling_authority" v="civilian"/>
@@ -2756,7 +2756,7 @@
         <nd ref="-98"/>
         <nd ref="-99"/>
         <nd ref="-95"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.603Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.113Z"/>
         <tag k="use" v="manufacturing"/>
         <tag k="condition" v="functional"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -2774,11 +2774,11 @@
         <nd ref="-81"/>
         <nd ref="-82"/>
         <nd ref="-83"/>
-        <nd ref="-84"/>
-        <nd ref="-84"/>
+        <nd ref="-85"/>
+        <nd ref="-85"/>
         <nd ref="-81"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.600Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.102Z"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="security:classification" v="U"/>
@@ -2792,11 +2792,11 @@
         <nd ref="-76"/>
         <nd ref="-77"/>
         <nd ref="-78"/>
-        <nd ref="-79"/>
-        <nd ref="-79"/>
+        <nd ref="-80"/>
+        <nd ref="-80"/>
         <nd ref="-76"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.600Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.102Z"/>
         <tag k="controlling_authority" v="private"/>
         <tag k="communication:cellular_phone" v="yes"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -2815,8 +2815,8 @@
         <nd ref="-71"/>
         <nd ref="-72"/>
         <nd ref="-73"/>
-        <nd ref="-74"/>
-        <nd ref="-74"/>
+        <nd ref="-75"/>
+        <nd ref="-75"/>
         <nd ref="-71"/>
         <tag k="shelter:type" v="storm"/>
         <tag k="controlling_authority" v="public"/>
@@ -2832,7 +2832,7 @@
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="raw_material2" v="petroleum_and/or_natural_gas"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.600Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.102Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="by_product" v="ash"/>
         <tag k="raw_material" v="oil"/>
@@ -2846,11 +2846,11 @@
         <nd ref="-66"/>
         <nd ref="-67"/>
         <nd ref="-68"/>
-        <nd ref="-69"/>
-        <nd ref="-69"/>
+        <nd ref="-70"/>
+        <nd ref="-70"/>
         <nd ref="-66"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.600Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.101Z"/>
         <tag k="controlling_authority" v="civilian"/>
         <tag k="condition" v="construction"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -2867,8 +2867,8 @@
         <nd ref="-61"/>
         <nd ref="-62"/>
         <nd ref="-63"/>
-        <nd ref="-64"/>
-        <nd ref="-64"/>
+        <nd ref="-65"/>
+        <nd ref="-65"/>
         <nd ref="-61"/>
         <tag k="shelter:type" v="storm"/>
         <tag k="source" v="tdsv40"/>
@@ -2885,7 +2885,7 @@
         <tag k="amenity" v="place_of_worship"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.599Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.101Z"/>
         <tag k="security:classification" v="U"/>
         <tag k="uuid" v="{c57bcb46-fabf-46f1-a3e6-2e77f4f5c32d}"/>
         <tag k="error:circular" v="15"/>
@@ -2897,7 +2897,7 @@
         <nd ref="-59"/>
         <nd ref="-60"/>
         <nd ref="-56"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.599Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.100Z"/>
         <tag k="use" v="Hobbit Hole"/>
         <tag k="condition" v="functional"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -2915,11 +2915,11 @@
         <nd ref="-51"/>
         <nd ref="-52"/>
         <nd ref="-53"/>
-        <nd ref="-54"/>
-        <nd ref="-54"/>
+        <nd ref="-55"/>
+        <nd ref="-55"/>
         <nd ref="-51"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.599Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.099Z"/>
         <tag k="controlling_authority" v="military"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="building:multi_unit" v="yes"/>
@@ -2936,11 +2936,11 @@
         <nd ref="-46"/>
         <nd ref="-47"/>
         <nd ref="-48"/>
-        <nd ref="-49"/>
-        <nd ref="-49"/>
+        <nd ref="-50"/>
+        <nd ref="-50"/>
         <nd ref="-46"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.599Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.099Z"/>
         <tag k="controlling_authority" v="military"/>
         <tag k="condition" v="abandoned"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -2958,12 +2958,12 @@
         <nd ref="-41"/>
         <nd ref="-42"/>
         <nd ref="-43"/>
-        <nd ref="-44"/>
-        <nd ref="-44"/>
+        <nd ref="-45"/>
+        <nd ref="-45"/>
         <nd ref="-41"/>
         <tag k="width" v="25"/>
         <tag k="addr:full" v="Left side of the street"/>
-        <tag k="source:ingest:datetime" v="2015-11-19T03:46:06.573Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-18T23:59:44.030Z"/>
         <tag k="condition" v="destroyed"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="building:multi_unit" v="no"/>

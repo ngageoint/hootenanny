@@ -26,15 +26,8 @@
  */
 package hoot.services.controllers.info;
 
-import java.sql.Connection;
-import java.util.List;
-
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
-import hoot.services.db2.Maps;
-import hoot.services.db2.QMaps;
-import hoot.services.models.osm.Map;
-import hoot.services.models.osm.MapLayers;
 import hoot.services.utils.ResourceErrorHandler;
 
 import javax.ws.rs.GET;
@@ -49,8 +42,6 @@ import org.codehaus.jettison.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.mysema.query.sql.SQLQuery;
 
 @Path("/map")
 public class MapInfoResource {

@@ -53,6 +53,7 @@ public:
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const;
 
 private:
+  // these are mutable because we do a lazy load.
   mutable shared_ptr<Tgs::RandomForest> _rf;
   mutable QStringList _rfFactorLabels;
   mutable vector< shared_ptr<const FeatureExtractor> > _extractors;
@@ -62,6 +63,10 @@ private:
 
   const vector< shared_ptr<const FeatureExtractor> >& _getExtractors() const;
 
+  /**
+   * This provides a lazy load and should be called before any private members are accessed. This
+   * can be called multiple times efficiently.
+   */
   void _init() const;
 };
 

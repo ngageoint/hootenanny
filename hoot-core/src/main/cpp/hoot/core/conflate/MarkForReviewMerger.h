@@ -44,7 +44,8 @@ public:
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
-  MarkForReviewMerger(const set< pair<ElementId, ElementId> >& pairs, QString note, double score);
+  MarkForReviewMerger(const set< pair<ElementId, ElementId> >& pairs, QString note,
+    QString reviewType, double score);
 
   virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
     const;
@@ -60,6 +61,7 @@ public:
 private:
   set< pair<ElementId, ElementId> > _pairs;
   QString _note;
+  QString _reviewType;
   double _score;
 
 };

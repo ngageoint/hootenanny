@@ -48,12 +48,12 @@ OsmMapPtr AlphaShapeGenerator::generate(OsmMapPtr cutterShapeMap)
   // put all the nodes into a vector of points.
   std::vector< std::pair<double, double> > points;
   points.reserve(cutterShapeMap->getNodeMap().size());
-  const OsmMap::NodeMap& nodes = cutterShapeMap->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  const NodeMap& nodes = cutterShapeMap->getNodeMap();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     pair<double, double> p;
-    p.first = (*it)->getX();
-    p.second = (*it)->getY();
+    p.first = (it->second)->getX();
+    p.second = (it->second)->getY();
     points.push_back(p);
   }
 

@@ -62,6 +62,7 @@ public:
   static QString MULTILINESTRING;
   static QString MULTIPOLYGON;
   static QString OUTER;
+  static QString REVIEW;
 
   static string className() { return "hoot::Relation"; }
 

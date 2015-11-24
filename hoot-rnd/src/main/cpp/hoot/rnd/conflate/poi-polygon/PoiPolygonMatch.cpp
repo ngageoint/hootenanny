@@ -42,6 +42,8 @@
 namespace hoot
 {
 
+QString PoiPolygonMatch::_matchName = "POI to Polygon";
+
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold) :
 Match(threshold)

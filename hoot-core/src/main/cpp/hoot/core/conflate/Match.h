@@ -70,6 +70,16 @@ public:
   virtual MatchMembers getMatchMembers() const { return MatchMembers::None; }
 
   /**
+   * Return the name of this kind of match. This is used when tagging the types of reviews. This
+   * typically just returns the name of the feature being reviewed. (e.g. Building or Highway)
+   *
+   * Since this is likely the same name returned over and over it is suggested you use a static
+   * QString to return the name. This avoid constructing multiple duplicate QStrings (possibly
+   * lots of duplicates).
+   */
+  virtual QString getMatchName() const = 0;
+
+  /**
    * Returns the score associated with this match. Score is a bit abstract at this point and may
    * end up being feature specific. In the case of roads it is the probability * length.
    */
