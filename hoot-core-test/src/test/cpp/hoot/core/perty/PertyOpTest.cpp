@@ -47,6 +47,7 @@
 
 // Qt
 #include <QDir>
+#include <QSet>
 
 using namespace std;
 
