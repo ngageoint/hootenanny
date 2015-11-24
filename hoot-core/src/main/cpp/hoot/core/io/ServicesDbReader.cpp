@@ -589,7 +589,8 @@ shared_ptr<Node> ServicesDbReader::_resultToNode(const QSqlQuery& resultIterator
       resultIterator.value(ServicesDb::NODES_LATITUDE).toDouble(),
       resultIterator.value(ServicesDb::NODES_CHANGESET).toLongLong(),
       resultIterator.value(ServicesDb::NODES_VERSION).toLongLong(),
-      OsmUtils::fromTimeString(resultIterator.value(ServicesDb::NODES_TIMESTAMP).toDateTime().toString()),
+      OsmUtils::fromTimeString(
+        resultIterator.value(ServicesDb::NODES_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ")),
       ServicesDb::DEFAULT_ELEMENT_CIRCULAR_ERROR));
 
   result->setTags(ServicesDb::unescapeTags(resultIterator.value(ServicesDb::NODES_TAGS)));
@@ -614,7 +615,6 @@ shared_ptr<Node> ServicesDbReader::_resultToNode_OsmApi(const QSqlQuery& resultI
   return result;
 }
 
-
 shared_ptr<Way> ServicesDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map)
 {
   const long wayId = resultIterator.value(0).toLongLong();
@@ -625,7 +625,8 @@ shared_ptr<Way> ServicesDbReader::_resultToWay(const QSqlQuery& resultIterator, 
       newWayId,
       resultIterator.value(ServicesDb::WAYS_CHANGESET).toLongLong(),
       resultIterator.value(ServicesDb::WAYS_VERSION).toLongLong(),
-      OsmUtils::fromTimeString(resultIterator.value(ServicesDb::WAYS_TIMESTAMP).toDateTime().toString()),
+      OsmUtils::fromTimeString(
+        resultIterator.value(ServicesDb::WAYS_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ")),
       ServicesDb::DEFAULT_ELEMENT_CIRCULAR_ERROR));
 
   way->setTags(ServicesDb::unescapeTags(resultIterator.value(ServicesDb::WAYS_TAGS)));
@@ -675,7 +676,8 @@ shared_ptr<Relation> ServicesDbReader::_resultToRelation(const QSqlQuery& result
       newRelationId,
       resultIterator.value(ServicesDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ServicesDb::RELATIONS_VERSION).toLongLong(),
-      OsmUtils::fromTimeString(resultIterator.value(ServicesDb::RELATIONS_TIMESTAMP).toDateTime().toString()),
+      OsmUtils::fromTimeString(
+        resultIterator.value(ServicesDb::RELATIONS_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ")),
       ServicesDb::DEFAULT_ELEMENT_CIRCULAR_ERROR/*,
       "collection"*/));  //TODO: services db doesn't support relation "type" yet
 
