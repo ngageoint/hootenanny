@@ -99,7 +99,13 @@ public:
     ////
     // Handy bit for regenerating the test values, _AFTER_ it has been visually verified.
     ////
-    QList<long> keys = map->getNodeMap().uniqueKeys();
+    QSet<long> nids;
+    NodeMap::const_iterator it = map->getNodeMap().begin();
+    while (it != map->getNodeMap().end()) {
+      nids.insert(it->first);
+      it++;
+    }
+    QList<long> keys = QList<long>::fromSet(nids);
     qSort(keys);
 //    OsmWriter writer;
 //    QDir().mkpath("test-output/perty");
@@ -178,8 +184,15 @@ public:
     ////
     // Handy bit for regenerating the test values, _AFTER_ it has been visually verified.
     ////
-    QList<long> keys = map->getNodeMap().uniqueKeys();
+    QSet<long> nids;
+    NodeMap::const_iterator it = map->getNodeMap().begin();
+    while (it != map->getNodeMap().end()) {
+      nids.insert(it->first);
+      it++;
+    }
+    QList<long> keys = QList<long>::fromSet(nids);
     qSort(keys);
+
 //    OsmWriter writer;
 //    QDir().mkpath("test-output/perty");
 //    MapReprojector::reprojectToWgs84(map);
