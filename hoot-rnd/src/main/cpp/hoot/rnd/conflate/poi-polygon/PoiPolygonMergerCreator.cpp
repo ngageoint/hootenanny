@@ -178,8 +178,6 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
     auto_ptr<Match> ma(_createMatch(map, o1, o2));
 
     // return conflict only if it is a miss, a review is ok.
-#warning need to load this from a configuration
-    MatchThreshold mt;
     result = false;
     if (ma.get() == 0 ||
         ma->getType() == MatchType::Miss)

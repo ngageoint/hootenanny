@@ -58,14 +58,34 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerTest.cpp \
     src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerCreatorTest.cpp \
     src/main/cpp/hoot/rnd/ops/KeepPoiAndBuildingRefOp.cpp \
-    src/test/cpp/hoot/rnd/visitors/MatchCandidateCountVisitorRndTest.cpp
+    src/test/cpp/hoot/rnd/visitors/MatchCandidateCountVisitorRndTest.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/NetworkMatch.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/NetworkMerger.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/NetworkMergerCreator.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/NetworkEdge.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/OsmNetworkExtractor.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/OsmNetwork.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/IterativeNetworkMatcher.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/NetworkEdgeMatch.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/NetworkVertex.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreator.h \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatch.h \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMerger.h \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerCreator.h \
-    src/main/cpp/hoot/rnd/ops/KeepPoiAndBuildingRefOp.h
+    src/main/cpp/hoot/rnd/ops/KeepPoiAndBuildingRefOp.h \
+    src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.h \
+    src/main/cpp/hoot/rnd/conflate/network/NetworkMatch.h \
+    src/main/cpp/hoot/rnd/conflate/network/NetworkMerger.h \
+    src/main/cpp/hoot/rnd/conflate/network/NetworkMergerCreator.h \
+    src/main/cpp/hoot/rnd/conflate/network/OsmNetworkExtractor.h \
+    src/main/cpp/hoot/rnd/conflate/network/NetworkEdge.h \
+    src/main/cpp/hoot/rnd/conflate/network/OsmNetwork.h \
+    src/main/cpp/hoot/rnd/conflate/network/IterativeNetworkMatcher.h \
+    src/main/cpp/hoot/rnd/conflate/network/NetworkEdgeMatch.h \
+    src/main/cpp/hoot/rnd/conflate/network/NetworkVertex.h
 
 FORMS +=
 
