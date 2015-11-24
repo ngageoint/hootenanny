@@ -837,7 +837,12 @@ Specifies the writer that the OsmMapWriterFactory will use. This overrides any i
 * Data Type: string
 * Default Value: `hoot::DirectSequentialSimulation`
 
-Perturbation algorithm to use with the PERTY process.  Valid values are hoot::DirectSequentialSimulation or hoot::FullCovariance
+Perturbation algorithm to use with the PERTY process.  Valid values is
+hoot::DirectSequentialSimulation.
+
+Previously the full covariance method was also supported as described in Doucette et al. However,
+the newer DirectSequentialSimulation is more efficient and produces similar results. By removing
+the full covariance method we were able to simplify the build process and reduce maintenance cost.
 
 === perty.apply.rubber.sheet
 
