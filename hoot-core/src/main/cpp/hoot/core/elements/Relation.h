@@ -71,6 +71,9 @@ public:
   Relation(Status s, long id, Meters circularError, QString type = "");
 
   Relation(Status s, long id, long changeset, long version, unsigned int timestamp,
+           Meters circularError, QString type = "");
+
+  Relation(Status s, long id, long changeset, long version, unsigned int timestamp,
            QString user, long uid, Meters circularError, QString type = "");
 
   virtual ~Relation() {}
