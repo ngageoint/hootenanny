@@ -75,25 +75,10 @@ public class ConflateProcesslet extends JobProcesslet {
 				}
 			}
 			JSONObject conflationCommand = _createPostBody(args);
-			JSONArray reviewArgs = new JSONArray();
-			JSONObject param = new JSONObject();
-			param.put("value", confOutputName);
-			param.put("paramtype", String.class.getName());
-			param.put("isprimitivetype", "false");
-			reviewArgs.add(param);
-			
-			param = new JSONObject();
-			param.put("value", false);
-			param.put("paramtype", Boolean.class.getName());
-			param.put("isprimitivetype", "true");
-			reviewArgs.add(param);
-			
-			JSONObject prepareItemsForReviewCommand = _createReflectionJobReq(reviewArgs, "hoot.services.controllers.job.ReviewResource",
-					"prepareItemsForReview");
+
 			
 			JSONArray jobArgs = new JSONArray();
 			jobArgs.add(conflationCommand);
-			jobArgs.add(prepareItemsForReviewCommand);
 			
 			
 			postChainJobRquest( jobIdStr,  jobArgs.toJSONString());	
