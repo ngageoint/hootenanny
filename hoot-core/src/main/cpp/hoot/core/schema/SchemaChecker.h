@@ -18,15 +18,26 @@ public:
   ~SchemaChecker() {}
 
   /**
-   * Print out error if schemavertex is unkonw vertex type.
+   * Print out error message if schemavertex is unkonw vertex type.
    */
 
   void checkUnknownVertexType();
 
   /**
-   * Print out if schemavertex has empty geometry.
+   * Print out error message if schemavertex has empty geometry.
    */
   void checkEmptyGeometry();
+
+  /**
+   * Retrun true if schemavertex is unkonw vertex type.
+   */
+
+  static bool isUnknownVertexType(const SchemaVertex& schemaVertex) { return schemaVertex.isValid(); }
+
+  /**
+   * Return true if schemavertex has empty geometry.
+   */
+  static bool isEmptyGeometry(const SchemaVertex& schemaVertex) { return schemaVertex.geometries > 0; }
 
   OsmSchema getOsmSchema() { return _osmSchema; }
 
