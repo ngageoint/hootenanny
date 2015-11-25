@@ -128,22 +128,22 @@ cleanDataMakePath=makecleandata
 customScriptPath=customscript
 
 # Db Name
-dbName=hoot
+dbName=${DB_NAME}
 
 # Db server user id
-dbUserId=hoot
+dbUserId=${DB_USER}
 
 # Db server user password
-dbPassword=hoottest
+dbPassword=${DB_PASSWORD}
 
 # Db server user host
-dbHost=localhost:5432
+dbHost=${DB_HOST}:${DB_PORT}
 
 # WFS Store Connection Name
 wfsStoreConnName=WFS_Connection
 
 # WFS Store db name
-wfsStoreDb=wfsstoredb
+wfsStoreDb=${WFS_DB_NAME}
 
 # Translation extension install folder
 translationExtPath=$(homeFolder)/plugins-local/script/utp
