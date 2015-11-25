@@ -101,13 +101,6 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
   {
     try
     {
-    	if (Boolean.parseBoolean(
-    			  HootProperties.getInstance().getProperty(
-              "servicesTestClearEntireDb", HootProperties.getDefault("servicesTestClearEntireDb"))))
-    	{
-    		DbUtils.clearServicesDb(conn);
-    	}
-    	
     	//TODO: This is going to result in a lot of users created by the services test, now that
     	//we don't clear out the database automatically between tests.  Only inserting one user is
     	//causing UserResourceTest failures for a not so obvious reason.
