@@ -53,6 +53,7 @@ public class ReviewUtils
    * @param throwWpsError if true; throws a deegree ProcessletException; otherwise a
    * Jersey WebApplicationException is thrown
    * @throws Exception
+   * @todo go through and clean out these message text checks
    */
   public static void handleError(final Exception e, final String errorMessageStart,
     final boolean throwWpsError) throws Exception
