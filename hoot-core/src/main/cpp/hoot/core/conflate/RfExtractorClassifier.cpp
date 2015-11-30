@@ -101,12 +101,12 @@ map<QString, double> RfExtractorClassifier::getFeatures(const shared_ptr<const O
   return result;
 }
 
-void RfExtractorClassifier::import(istream& is)
+void RfExtractorClassifier::import(QDomElement& docRoot)
 {
   _getExtractors();
 
   _rf.reset(new RandomForest());
-  _rf->import(is);
+  _rf->importModel(docRoot);
   vector<string> factorLabels = _rf->getFactorLabels();
 
   QStringList extractorNames;

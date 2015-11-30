@@ -39,6 +39,7 @@
 
 // Qt
 #include <QFile>
+#include <QTextStream>
 
 // Standard
 #include <fstream>
@@ -111,10 +112,18 @@ public:
     rf.findAverageError(df, error, sigma);
     LOG_INFO("Error: " << error << " sigma: " << sigma);
 
-    ofstream rfFp;
-    rfFp.open((output).toStdString().data());
-    rf.exportModel(rfFp);
-    rfFp.close();
+    shared_ptr<QDomDocument> doc(new QDomDocument());
+    shared_ptr<QDomElement> docRoot(new QDomElement(doc->documentElement()));
+    rf.exportModel(*doc, *docRoot);
+    const QString path = (output + ".rf").toStdString().data();
+    QFile file(path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+      throw HootException("Error opening file: " + path);
+    }
+    QTextStream stream(&file);
+    stream << doc->toString();
+    file.close();;
 
     return 0;
   }

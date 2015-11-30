@@ -60,6 +60,9 @@
 // Standard
 #include <fstream>
 
+// Qt
+#include <QFile>
+
 namespace hoot
 {
 
@@ -71,14 +74,23 @@ PoiRfClassifier::PoiRfClassifier()
   QString path = ConfPath::search(ConfigOptions().getConflateMatchPoiModel());
   LOG_INFO("Loading POI model from: " << path);
 
-  ifstream fp;
-  fp.open(path.toAscii().data());
-  if (!fp.is_open())
+  QFile file(path.toAscii().data());
+  if (!file.open(QIODevice::ReadOnly))
   {
     throw HootException("Error opening file: " + path);
   }
+  QDomDocument doc("");
+  if (!doc.setContent(&file))
+  {
+    file.close();
+    throw HootException("Error opening file: " + path);
+  }
+  file.close();
+  LOG_VAR(doc.toString());
   _rf.reset(new RandomForest());
-  _rf->import(fp);
+  shared_ptr<QDomElement> docRoot(new QDomElement(doc.documentElement()));
+  _rf->importModel(*docRoot);
+
   vector<string> factorLabels = _rf->getFactorLabels();
   LOG_VAR(factorLabels);
 

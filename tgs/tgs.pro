@@ -104,6 +104,7 @@ HEADERS += src/main/cpp/tgs/HashMap.h \
     src/main/cpp/tgs/RandomForest/RandomForestManager.h \
     src/main/cpp/tgs/RandomForest/RandomTree.h \
     src/main/cpp/tgs/RandomForest/TreeNode.h \
+    src/main/cpp/tgs/RandomForest/MissingDataHandler.h \
     src/main/cpp/tgs/RasterOps/Image.hpp \
     src/main/cpp/tgs/RasterOps/MaxChannelCombiner.h \
     src/main/cpp/tgs/RStarTree/Box.h \
@@ -186,6 +187,7 @@ SOURCES += src/main/cpp/tgs/StreamUtils.cpp \
     src/main/cpp/tgs/RandomForest/BaseRandomForestManager.cpp \
     src/main/cpp/tgs/RandomForest/RandomForestManager.cpp \
     src/main/cpp/tgs/RandomForest/RandomTree.cpp \
+    src/main/cpp/tgs/RandomForest/MissingDataHandler.cpp \
     src/main/cpp/tgs/RasterOps/MaxChannelCombiner.cpp \
     src/main/cpp/tgs/RStarTree/Box.cpp \
     src/main/cpp/tgs/RStarTree/DistanceIterator.cpp \

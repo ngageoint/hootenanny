@@ -205,7 +205,7 @@ namespace Tgs
     {
       QDomNodeList childList = e.childNodes();
 
-      for(unsigned int i = 0; i < childList.size(); i++)
+      for (unsigned int i = 0; i < (unsigned int)childList.size(); i++)
       {
         if(childList.at(i).nodeType() == QDomNode::CommentNode)
         {
@@ -233,7 +233,7 @@ namespace Tgs
           {
             QStringList factorList = e.text().split(" ");
 
-            for(unsigned int fIdx = 0; fIdx < factorList.size(); fIdx++)
+            for (unsigned int fIdx = 0; fIdx < (unsigned int)factorList.size(); fIdx++)
             {
               _factorLabels.push_back(factorList[fIdx].toLatin1().constData());
             }
@@ -242,13 +242,18 @@ namespace Tgs
           {
             QDomNodeList treeList = e.childNodes();
 
-            for(unsigned int rIdx = 0; rIdx < treeList.size(); rIdx++)
+            for (unsigned int rIdx = 0; rIdx < (unsigned int)treeList.size(); rIdx++)
             {
               QDomElement treeElement = treeList.at(rIdx).toElement();
 
               _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
               _forest.back()->import(treeElement);
             }
+          }
+          else if (tag == "RANDOMTREE") //for hoot backward compatibility
+          {
+            _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
+            _forest.back()->import(e);
           }
           else
           {

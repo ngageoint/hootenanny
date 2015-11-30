@@ -55,7 +55,7 @@ public:
   virtual map<QString, double> getFeatures(const shared_ptr<const OsmMap>& m,
     ElementId eid1, ElementId eid2) const;
 
-  void import(istream& is);
+  void import(QDomElement& docRoot);
 
 protected:
   mutable vector< shared_ptr<const FeatureExtractor> > _extractors;
