@@ -212,6 +212,9 @@ fi
 # if the marker file is older than this file (VagrantProvision.sh)
 touch Vagrant.marker
 
+# Update the init.d script for node-mapnik-server
+sudo cp node-mapnik-server/init.d/node-mapnik-server /etc/init.d
+
 # Build Hoot
 echo "Configuring Hoot"
 aclocal && autoconf && autoheader && automake && ./configure -q --with-rnd --with-services
@@ -231,10 +234,5 @@ make docs -sj$(nproc)
 #make -sj$(nproc) test-all
 
 # Deploy to Tomcat
-echo "Stopping Tomcat"
-sudo service tomcat6 stop
 echo "Deploying Hoot to Tomcat"
 sudo -u tomcat6 scripts/vagrantDeployTomcat.sh
-echo "Starting Tomcat"
-sudo service tomcat6 start
-

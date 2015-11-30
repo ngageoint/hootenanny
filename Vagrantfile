@@ -32,7 +32,7 @@ Vagrant.configure(2) do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  # config.vm.network "private_network", ip: "192.168.33.10"
+  # config.vm.network "private_network", ip: "192.168.33.11"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -55,9 +55,8 @@ Vagrant.configure(2) do |config|
   #   vb.gui = true
   #
   #   # Customize the amount of memory on the VM:
-    vb.memory = 8192
-  #   vb.memory = 16384
-    vb.cpus = 4
+     vb.memory = 8192
+     vb.cpus = 4
   end
   #
   # View the documentation for the provider you are using for more
@@ -78,5 +77,7 @@ Vagrant.configure(2) do |config|
   #   sudo apt-get install -y apache2
   # SHELL
   config.vm.provision :shell, :path => "VagrantProvision.sh"
+  config.vm.provision :shell, :inline => "sudo service tomcat6 restart", run: "always"
+  config.vm.provision :shell, :inline => "sudo service node-mapnik-server start", run: "always"
 
 end
