@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ * Resolves reviews in the database
  */
 public class ReviewResolver
 {

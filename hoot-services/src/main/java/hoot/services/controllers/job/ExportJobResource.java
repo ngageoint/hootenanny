@@ -211,12 +211,12 @@ public class ExportJobResource extends JobControllerBase {
 				wfsArgs.add(param);
 
 
-				JSONObject prepareItemsForReviewCommand = _createReflectionSycJobReq(wfsArgs, "hoot.services.controllers.wfs.WfsManager",
+				JSONObject createWfsResCommand = _createReflectionSycJobReq(wfsArgs, "hoot.services.controllers.wfs.WfsManager",
 						"createWfsResource");
 
 				JSONArray jobArgs = new JSONArray();
 				jobArgs.add(osm2orgCommand);
-				jobArgs.add(prepareItemsForReviewCommand);
+				jobArgs.add(createWfsResCommand);
 
 
 				postChainJobRquest( jobId,  jobArgs.toJSONString());

@@ -9,6 +9,9 @@ import hoot.services.models.review.ReviewableStatistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 
+ */
 public class ReviewableReader 
 {
 	@SuppressWarnings("unused")
@@ -27,7 +30,6 @@ public class ReviewableReader
 		return r;
 	}
 	
-	
 	public ReviewableItem getRandomReviewableItem(final long mapid) throws Exception
 	{
 		ReviewableItem r = null;
@@ -38,8 +40,7 @@ public class ReviewableReader
 		
 		return r;
 	}
-	
-	
+
 	public ReviewableStatistics getReviewablesStatistics(final long mapid) throws Exception
 	{
 		ReviewableStatistics r = null;

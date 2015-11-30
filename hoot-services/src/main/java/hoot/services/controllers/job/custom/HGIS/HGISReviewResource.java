@@ -108,13 +108,16 @@ public class HGISReviewResource extends HGISResource {
 			JSONObject validationCommand = _createBashPostBody(_createParamObj(src, output));
 			//postJobRquest( jobId,  argStr);		
 		
-			JSONObject prepareItemsForReviewCommand = _createPrepareReviewCommand(output); 
+		
 					
 			JSONObject updateMapTagCommand = _createUpdateMapTagCommand(output);
 			
+			// with new relation based review process
+			// we will no longer need to run prepare review
+			// Instead core will take care of generation relation review for
+			// POI validation
 			JSONArray jobArgs = new JSONArray();
-			jobArgs.add(validationCommand);
-			jobArgs.add(prepareItemsForReviewCommand);
+			jobArgs.add(validationCommand);			
 			jobArgs.add(updateMapTagCommand);
 
 
@@ -134,25 +137,7 @@ public class HGISReviewResource extends HGISResource {
   	}
   	return res;
   }
-  
-  private JSONObject _createPrepareReviewCommand(final String mapName) throws Exception
-  {
-		JSONArray reviewArgs = new JSONArray();
-		JSONObject param = new JSONObject();
-		param.put("value", mapName);
-		param.put("paramtype", String.class.getName());
-		param.put("isprimitivetype", "false");
-		reviewArgs.add(param);
 
-		param = new JSONObject();
-		param.put("value", false);
-		param.put("paramtype", Boolean.class.getName());
-		param.put("isprimitivetype", "true");
-		reviewArgs.add(param);
-
-		return _createReflectionJobReq(reviewArgs, "hoot.services.controllers.job.ReviewResource",
-				"prepareItemsForReview");
-  }
   private JSONObject _createUpdateMapTagCommand(final String mapName) throws Exception
   {
   	JSONArray reviewArgs = new JSONArray();
