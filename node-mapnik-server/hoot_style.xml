@@ -40,7 +40,7 @@
 <!ENTITY zoom_inf "<MinScaleDenominator>1</MinScaleDenominator>">
 ]>
 <Map background-color="#00000000" srs="+init=epsg:3857">
-	<Style name="area" filter-mode="first">
+	<Style name="polygon" filter-mode="first">
 		<Rule>
 			<MaxScaleDenominator>750000</MaxScaleDenominator>
 			<MinScaleDenominator>100000</MinScaleDenominator>
