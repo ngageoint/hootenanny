@@ -1,6 +1,9 @@
 #ifndef NETWORKVERTEX_H
 #define NETWORKVERTEX_H
 
+// hoot
+#include <hoot/core/elements/Element.h>
+
 #include <tgs/SharedPtr.h>
 
 namespace hoot
@@ -16,11 +19,25 @@ namespace hoot
 class NetworkVertex
 {
 public:
-  NetworkVertex();
+  NetworkVertex(ConstElementPtr e) : _e(e) {}
+
+  ConstElementPtr getElement() const { return _e; }
+
+  ElementId getElementId() const { return _e->getElementId(); }
+
+  QString toString() const;
+
+private:
+  ConstElementPtr _e;
 };
 
 typedef shared_ptr<NetworkVertex> NetworkVertexPtr;
 typedef shared_ptr<const NetworkVertex> ConstNetworkVertexPtr;
+
+inline uint qHash(const NetworkVertexPtr& v)
+{
+  return qHash(v->getElementId());
+}
 
 }
 

@@ -5,6 +5,9 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/rnd/conflate/network/NetworkVertex.h>
 
+// Qt
+#include <QSet>
+
 namespace hoot
 {
 
@@ -20,21 +23,42 @@ public:
 
   NetworkEdge(NetworkVertexPtr from, NetworkVertexPtr to, bool directed);
 
-  void addMember(ElementPtr e) { _members.append(e); }
+  void addMember(ConstElementPtr e) { _members.append(e); }
 
   NetworkVertexPtr getFrom() { return _from; }
+
+  QList<ConstElementPtr> getMembers() const { return _members; }
 
   NetworkVertexPtr getTo() { return _to; }
 
   bool isDirected() { return _directed; }
 
+  void setMembers(QList<ConstElementPtr> members) { _members = members; }
+
+  QString toString() const;
+
 private:
   NetworkVertexPtr _from, _to;
   bool _directed;
-  QList<ElementPtr> _members;
+  QList<ConstElementPtr> _members;
 };
 
 typedef shared_ptr<NetworkEdge> NetworkEdgePtr;
+typedef shared_ptr<const NetworkEdge> ConstNetworkEdgePtr;
+
+inline uint qHash(const NetworkEdgePtr& v)
+{
+  uint result = 0;
+  QList<ConstElementPtr> l = v->getMembers();
+  for (int i = 0; i < l.size(); ++i)
+  {
+    result = qHash(l[i]->getElementId()) ^ result;
+  }
+  result = qHash(v->getFrom()) ^ result;
+  result = qHash(v->getTo()) ^ result;
+
+  return result;
+}
 
 }
 

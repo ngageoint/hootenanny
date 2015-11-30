@@ -23,23 +23,31 @@ namespace hoot
 class OsmNetwork
 {
 public:
+  typedef QHash<ElementId, NetworkVertexPtr> VertexMap;
+  typedef QHash<ElementId, NetworkEdgePtr> EdgeMap;
+
   OsmNetwork();
 
-  void addEdge(NetworkEdgePtr edge) { _edges.append(edge); }
+  void addEdge(NetworkEdgePtr edge);
 
-  void addVertex(NetworkVertexPtr node) { _vertices.append(node); }
+  void addVertex(NetworkVertexPtr node);
 
-  QList<NetworkEdgePtr> getEdges() const { return _edges; }
+  const EdgeMap& getEdgeMap() const { return _eidToEdge; }
 
-  QList<NetworkVertexPtr> getVertices() const { return _vertices; }
+  NetworkVertexPtr getVertex(ElementId eid) const { return _eidToVertex[eid]; }
 
+  const VertexMap& getVertexMap() const { return _eidToVertex; }
+
+  QString toString();
 
 private:
   QList<NetworkEdgePtr> _edges;
-  QList<NetworkVertexPtr> _vertices;
+  VertexMap _eidToVertex;
+  EdgeMap _eidToEdge;
 };
 
 typedef shared_ptr<OsmNetwork> OsmNetworkPtr;
+typedef shared_ptr<const OsmNetwork> ConstOsmNetworkPtr;
 
 }
 

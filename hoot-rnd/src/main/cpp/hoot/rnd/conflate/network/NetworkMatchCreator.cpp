@@ -85,7 +85,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
   // call class to derive final graph node and graph edge matches
   IterativeNetworkMatcher matcher;
-  matcher.matchNetworks(n1, n2);
+  matcher.matchNetworks(map, n1, n2);
 
   // convert graph edge matches into NetworkMatch objects.
   _createMatches(matcher.getEdgeMatches());

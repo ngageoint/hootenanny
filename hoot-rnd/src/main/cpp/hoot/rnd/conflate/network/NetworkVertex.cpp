@@ -3,8 +3,19 @@
 namespace hoot
 {
 
-NetworkVertex::NetworkVertex()
+QString NetworkVertex::toString() const
 {
+  QString result;
+  if (!_e.get())
+  {
+    result = "<null>";
+  }
+  else
+  {
+    result = _e->getElementId().toString();
+  }
+
+  return result;
 }
 
 }

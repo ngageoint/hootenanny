@@ -15,4 +15,28 @@ NetworkEdge::NetworkEdge(NetworkVertexPtr from, NetworkVertexPtr to, bool direct
 
 }
 
+QString NetworkEdge::toString() const
+{
+  QString result;
+
+  QStringList memberIds;
+  for (int i = 0; i < _members.size(); ++i)
+  {
+    memberIds << _members[i]->getElementId().toString();
+  }
+
+  if (_directed)
+  {
+    result = QString("%1 -- %2 --> %3").arg(_from->toString()).arg(memberIds.join(",")).
+      arg(_to->toString());
+  }
+  else
+  {
+    result = QString("%1 -- %2 -- %3").arg(_from->toString()).arg(memberIds.join(",")).
+      arg(_to->toString());
+  }
+
+  return result;
+}
+
 }

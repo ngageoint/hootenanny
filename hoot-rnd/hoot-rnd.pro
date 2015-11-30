@@ -68,7 +68,9 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/network/OsmNetwork.cpp \
     src/main/cpp/hoot/rnd/conflate/network/IterativeNetworkMatcher.cpp \
     src/main/cpp/hoot/rnd/conflate/network/NetworkEdgeMatch.cpp \
-    src/main/cpp/hoot/rnd/conflate/network/NetworkVertex.cpp
+    src/main/cpp/hoot/rnd/conflate/network/NetworkVertex.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/OsmNetworkExtractorTest.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/NetworkDetails.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreator.h \
@@ -85,7 +87,8 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/OsmNetwork.h \
     src/main/cpp/hoot/rnd/conflate/network/IterativeNetworkMatcher.h \
     src/main/cpp/hoot/rnd/conflate/network/NetworkEdgeMatch.h \
-    src/main/cpp/hoot/rnd/conflate/network/NetworkVertex.h
+    src/main/cpp/hoot/rnd/conflate/network/NetworkVertex.h \
+    src/main/cpp/hoot/rnd/conflate/network/NetworkDetails.h
 
 FORMS +=
 

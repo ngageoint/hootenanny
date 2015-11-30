@@ -27,12 +27,24 @@ public:
    *
    * This criterion should only let linear types through. No arbitrary collections or nodes.
    */
-  void setCriterion(ElementCriterionPtr criterion);
+  void setCriterion(ElementCriterionPtr criterion) { _criterion = criterion; }
 
 private:
   friend class OsmNetworkExtractorVisitor;
 
   ElementCriterionPtr _criterion;
+  ConstOsmMapPtr _map;
+  OsmNetworkPtr _network;
+
+  void _addEdge(ConstElementPtr from, ConstElementPtr to, QList<ConstElementPtr> members,
+    bool directed);
+
+  /**
+   * This is a very strict definition of contiguous. We're looking to make sure that the first
+   * member connects to the second, connects to the third, etc. We could be more liberal, but we
+   * can let that be use case driven.
+   */
+  bool _isContiguous(const ConstRelationPtr& r);
 
   bool _isValidElement(const ConstElementPtr& e);
 

@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 #include "WayFilter.h"
 
@@ -45,7 +46,10 @@ public:
    */
   OneWayFilter(bool oneway = true) { _oneway = oneway; }
 
-  virtual bool isFiltered(const Way &w) const { return w.isOneWay() != _oneway; }
+  virtual bool isFiltered(const Way &w) const
+  {
+    return OsmSchema::getInstance().isOneWay(w) != _oneway;
+  }
 
 private:
   bool _oneway;
