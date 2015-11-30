@@ -418,7 +418,7 @@ namespace Tgs
       //First read data sources
       QDomNodeList childList = docElem.childNodes();
 
-      for(unsigned int i = 0; i < childList.size(); i++)
+      for(unsigned int i = 0; i < (unsigned int)childList.size(); i++)
       {
         if(childList.at(i).nodeType() == QDomNode::CommentNode)
         {

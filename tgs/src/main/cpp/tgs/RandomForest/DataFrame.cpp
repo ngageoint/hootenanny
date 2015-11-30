@@ -847,7 +847,7 @@ namespace Tgs
     {
       QDomNodeList childList = e.childNodes();
 
-      for(unsigned int i = 0; i < childList.size(); i++)
+      for(unsigned int i = 0; i < (unsigned int)childList.size(); i++)
       {
         if(childList.at(i).nodeType() == QDomNode::CommentNode)
         {
@@ -864,7 +864,7 @@ namespace Tgs
           {
             QStringList factorList = childNode.text().split(" ");
 
-            for(unsigned int fIdx = 0; fIdx < factorList.size(); fIdx++)
+            for(unsigned int fIdx = 0; fIdx < (unsigned int)factorList.size(); fIdx++)
             {
               _factorLabels.push_back(factorList[fIdx].toLatin1().constData());
             }
@@ -873,7 +873,7 @@ namespace Tgs
           {
             QDomNodeList vecNodeList = childNode.childNodes();
 
-            for(unsigned int vIdx = 0; vIdx < vecNodeList.size(); vIdx++)
+            for(unsigned int vIdx = 0; vIdx < (unsigned int)vecNodeList.size(); vIdx++)
             {
               QDomElement vecElement = vecNodeList.at(vIdx).toElement();
               _importDataVector(vecElement);
@@ -1540,7 +1540,7 @@ namespace Tgs
     {
       QDomNodeList childList = e.childNodes();
 
-      for(unsigned int i = 0; i < childList.size(); i++)
+      for(unsigned int i = 0; i < (unsigned int)childList.size(); i++)
       {
         if(childList.at(i).nodeType() == QDomNode::CommentNode)
         {
@@ -1565,7 +1565,7 @@ namespace Tgs
 
             std::vector<double> dataVector(factorList.size());
 
-            for(unsigned int dIdx = 0; dIdx < factorList.size(); dIdx++)
+            for(unsigned int dIdx = 0; dIdx < (unsigned int)factorList.size(); dIdx++)
             {
               double dataValue = factorList[dIdx].toDouble(&parseOk);
 

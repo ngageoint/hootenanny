@@ -191,7 +191,7 @@ BuildingMatchCreator::BuildingMatchCreator()
     file.close();
     throw HootException("Error opening file: " + path);
   }
-  LOG_VAR(doc.toString());
+  LOG_VARD(doc.toString());
   file.close();
   _rf.reset(new BuildingRfClassifier());
   shared_ptr<QDomElement> docRoot(new QDomElement(doc.documentElement()));

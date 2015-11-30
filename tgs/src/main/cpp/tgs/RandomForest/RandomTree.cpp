@@ -900,11 +900,11 @@ namespace Tgs
         {
           QStringList classList = nodeElement.text().split(" ");
 
-          for(unsigned int i = 0; i < classList.size(); i++)
+          for(unsigned int i = 0; i < (unsigned int)classList.size(); i++)
           {
             node->classLabel += classList[i].toLatin1().constData();
 
-            if(i != classList.size() - 1)
+            if(i != (unsigned int)classList.size() - 1)
             {
               node->classLabel += " ";
             }
@@ -920,7 +920,7 @@ namespace Tgs
 
             bool parsedOk;
 
-            for(unsigned int i = 0; i < dataList.size(); i++)
+            for(unsigned int i = 0; i < (unsigned int)dataList.size(); i++)
             {
               QString dataIndexString = dataList[i];
 
@@ -1065,9 +1065,12 @@ namespace Tgs
     try
     {
       QStringList oobList = oobString.split(" ");
+      //cout << oobList.size();
+      //oobList = oobString.split("\t");
+      //cout << oobList.size();
 
       bool parseOk = true;
-      for(unsigned int i = 0; i < oobList.size(); i++)
+      for(unsigned int i = 0; i < (unsigned int)oobList.size(); i++)
       {
         int oobValue = oobList[i].toInt(&parseOk);
 

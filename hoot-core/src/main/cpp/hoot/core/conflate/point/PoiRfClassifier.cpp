@@ -86,7 +86,7 @@ PoiRfClassifier::PoiRfClassifier()
     throw HootException("Error opening file: " + path);
   }
   file.close();
-  LOG_VAR(doc.toString());
+  LOG_VARD(doc.toString());
   _rf.reset(new RandomForest());
   shared_ptr<QDomElement> docRoot(new QDomElement(doc.documentElement()));
   _rf->importModel(*docRoot);

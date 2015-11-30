@@ -71,7 +71,7 @@ namespace Tgs
 
       //Append factor labels
       QDomElement factorLabelsNode = modelDoc.createElement("FactorLabels");
-      std:stringstream labelStream;
+      stringstream labelStream;
 
       for (size_t i = 0; i < _factorLabels.size(); ++i)
       {
@@ -250,11 +250,11 @@ namespace Tgs
               _forest.back()->import(treeElement);
             }
           }
-          else if (tag == "RANDOMTREE") //for hoot backward compatibility
+          /*else if (tag == "RANDOMTREE") //for hoot backward compatibility
           {
             _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
             _forest.back()->import(e);
-          }
+          }*/
           else
           {
             std::stringstream ss;
