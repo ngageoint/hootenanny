@@ -177,14 +177,14 @@ public class Changeset extends Changesets
    */
   public boolean isOpen() throws NumberFormatException, IOException
   {
-    //For some strange reason, Changeset DAO's started not working here after some changes to the
-    //review mark logic in ReviewResource.  More specifically, calls to ChangesetDao would return
-    //stale data.  I suspect it has something to do with the way the transaction was initialized in
-    //ReviewResource, but since I couldn't figure out how to fix it, I changed this code to not
-    //use ChangesetDao anymore.
+    //For some strange reason, Changeset DAO's started not working at some point.  More 
+  	//specifically, calls to ChangesetDao would return stale data.  I suspect it has something to 
+  	//do with the way the transaction is being initialized, but since I couldn't figure out how to 
+  	//fix it, I changed this code to not use ChangesetDao anymore.
 
   	final Changesets changesetRecord =
-  	new SQLQuery(conn, DbUtils.getConfiguration(_mapId)).from(changesets)
+  	new SQLQuery(conn, DbUtils.getConfiguration(_mapId))
+  	  .from(changesets)
   		.where(changesets.id.eq(getId()))
   		.singleResult(changesets);
 
@@ -314,8 +314,7 @@ public class Changeset extends Changesets
 
       if (newClosedAt != null)
       {
-        if(
-        		new SQLUpdateClause(conn, DbUtils.getConfiguration(_mapId), changesets)
+        if (new SQLUpdateClause(conn, DbUtils.getConfiguration(_mapId), changesets)
         			.where(changesets.id.eq(getId()))
         			.set(changesets.closedAt, newClosedAt)
         			.execute() != 1)
@@ -326,13 +325,14 @@ public class Changeset extends Changesets
     }
     else
     {
+    	//TODO: see if this code block is still needed
+    	
       //I have no idea why this code block is needed now.  It didn't use to be, but after
       //some refactoring to support the changes to marking items as reviewed in ReviewResource, it
       //now is needed.  I've been unable to track down what causes this to happen.
       if (!changesetRecord.getClosedAt().before(new Timestamp(now.getMillis())))
       {
-      	if(
-        		new SQLUpdateClause(conn, DbUtils.getConfiguration(_mapId), changesets)
+      	if (new SQLUpdateClause(conn, DbUtils.getConfiguration(_mapId), changesets)
         			.where(changesets.id.eq(getId()))
         			.set(changesets.closedAt, new Timestamp(now.getMillis()))
         			.execute() != 1)

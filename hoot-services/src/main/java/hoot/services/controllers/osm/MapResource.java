@@ -780,11 +780,8 @@ public class MapResource
 
 	/**
 	 * <NAME>Clean Map Data Service</NAME> <DESCRIPTION> Clean map data service
-	 * provides the ability to remove an associated map record. It removes from
-	 * CURRENT_WAY_NODES, CURRENT_RELATION_MEMBERS, CURRENT_NODES, CURRENT_WAYS, 
-	 * CURRENT_RELATIONS, 
-	 * CHANGESET_TAGS, CHANGESETS,MAPS, REVIEW_ITEMS, ELEMENT_ID_MAPPINGS, and
-	 * REVIEW_MAP. </DESCRIPTION> <PARAMETERS> <mapId> ID of map record to be
+	 * provides the ability to remove an associated map record.
+	 * </DESCRIPTION> <PARAMETERS> <mapId> ID of map record to be
 	 * deleted
 	 * http://localhost:8080/hoot-services/osm/api/0.6/map/delete?mapId={Map ID}
 	 * </mapId> </PARAMETERS> <OUTPUT> Job ID </OUTPUT> <EXAMPLE>
