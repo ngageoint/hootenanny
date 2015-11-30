@@ -1,3 +1,5 @@
+QT += xml
+
 TEMPLATE = lib
 win32:CONFIG += dll
 
@@ -96,8 +98,9 @@ HEADERS += src/main/cpp/tgs/HashMap.h \
     src/main/cpp/tgs/ProbablePath/ProbablePathCalculator.h \
     src/main/cpp/tgs/RandomForest/DataFrame.h \
     src/main/cpp/tgs/RandomForest/InfoGainCalculator.h \
-    src/main/cpp/tgs/RandomForest/InternalRandomForestManager.h \
+    src/main/cpp/tgs/RandomForest/BaseRandomForest.h \
     src/main/cpp/tgs/RandomForest/RandomForest.h \
+    src/main/cpp/tgs/RandomForest/BaseRandomForestManager.h \
     src/main/cpp/tgs/RandomForest/RandomForestManager.h \
     src/main/cpp/tgs/RandomForest/RandomTree.h \
     src/main/cpp/tgs/RandomForest/TreeNode.h \
@@ -178,8 +181,9 @@ SOURCES += src/main/cpp/tgs/StreamUtils.cpp \
     src/main/cpp/tgs/ProbablePath/ProbablePathCalculator.cpp \
     src/main/cpp/tgs/RandomForest/DataFrame.cpp \
     src/main/cpp/tgs/RandomForest/InfoGainCalculator.cpp \
-    src/main/cpp/tgs/RandomForest/InternalRandomForestManager.cpp \
+    src/main/cpp/tgs/RandomForest/BaseRandomForest.cpp \
     src/main/cpp/tgs/RandomForest/RandomForest.cpp \
+    src/main/cpp/tgs/RandomForest/BaseRandomForestManager.cpp \
     src/main/cpp/tgs/RandomForest/RandomForestManager.cpp \
     src/main/cpp/tgs/RandomForest/RandomTree.cpp \
     src/main/cpp/tgs/RasterOps/MaxChannelCombiner.cpp \

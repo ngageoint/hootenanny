@@ -6,7 +6,7 @@
 //Std Includes
 #include <cmath>
 
-#include "TgsException.h"
+#include "../TgsException.h"
 
 namespace Tgs
 {
