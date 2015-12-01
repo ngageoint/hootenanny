@@ -346,7 +346,9 @@ namespace Tgs
 
   void DataFrame::exportData(std::ostream & fileStream, std::string tabDepth) const
   {
-    throw Exception(__LINE__, "This function has been deprecated.");
+    //Its a *lot* of work to lose this method in hoot.  Making it a future task.
+    //throw Exception(__LINE__, "This function has been deprecated.");
+#warning replace this with DataFrame::exportData(QDomDocument&, QDomElement&)
 
     //Yes, this is awful. A real parser would be better (see above). Jason G.
     try
@@ -677,7 +679,9 @@ namespace Tgs
 
   void DataFrame::import(std::istream & fileStream)
   {
-    throw Exception(__LINE__, "This function has been deprecated.");
+    //Its a *lot* of work to lose this method in hoot.  Making it a future task.
+    //throw Exception(__LINE__, "This function has been deprecated.");
+#warning replace this with DataFrame::import(QDomElement&)
 
     //Yes, this is awful. A real parser would be better. Jason G.
     try

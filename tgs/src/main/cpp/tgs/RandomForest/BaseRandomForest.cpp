@@ -215,6 +215,24 @@ namespace Tgs
     }
   }
 
+  void BaseRandomForest::importModel(QFile& file)
+  {
+    if (file.isOpen())
+    {
+      QDomDocument doc("");
+      if (!doc.setContent(&file))
+      {
+        throw Exception("Error reading the <RandomForest> header.");
+      }
+      QDomElement docRoot = doc.elementsByTagName("RandomForest").at(0).toElement();
+      importModel(docRoot);
+    }
+    else
+    {
+      throw Exception("Error reading the <RandomForest> header.");
+    }
+  }
+
   void BaseRandomForest::importModel(QDomElement & e)
   {
     try
@@ -236,16 +254,16 @@ namespace Tgs
 
           bool parseOkay = true;
 
-          if(tag == "NUMTREES")
+          if(tag.toUpper() == "NUMTREES")
           {
             unsigned int numTrees = e.text().toUInt(&parseOkay);
             _forest.reserve(numTrees);
           }
-          else if(tag == "NUMSPLITFACTORS")
+          else if(tag.toUpper() == "NUMSPLITFACTORS")
           {
             _numSplitFactors = e.text().toUInt(&parseOkay);
           }
-          else if(tag == "FACTORLABELS")
+          else if(tag.toUpper() == "FACTORLABELS")
           {
             QStringList factorList = e.text().split(" ");
 
@@ -254,7 +272,7 @@ namespace Tgs
               _factorLabels.push_back(factorList[fIdx].toLatin1().constData());
             }
           }
-          else if(tag == "RANDOMTREES")
+          else if(tag.toUpper() == "RANDOMTREES")
           {
             QDomNodeList treeList = e.childNodes();
 
@@ -266,11 +284,6 @@ namespace Tgs
               _forest.back()->import(treeElement);
             }
           }
-          /*else if (tag == "RANDOMTREE") //for hoot backward compatibility
-          {
-            _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
-            _forest.back()->import(e);
-          }*/
           else
           {
             std::stringstream ss;

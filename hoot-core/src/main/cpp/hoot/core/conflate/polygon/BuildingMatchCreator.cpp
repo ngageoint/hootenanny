@@ -193,9 +193,10 @@ BuildingMatchCreator::BuildingMatchCreator()
   }
   //LOG_VARD(doc.toString());
   file.close();
+
   _rf.reset(new BuildingRfClassifier());
-  shared_ptr<QDomElement> docRoot(new QDomElement(doc.documentElement()));
-  _rf->import(*docRoot);
+  QDomElement docRoot = doc.elementsByTagName("RandomForest").at(0).toElement();
+  _rf->import(docRoot);
 }
 
 Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)

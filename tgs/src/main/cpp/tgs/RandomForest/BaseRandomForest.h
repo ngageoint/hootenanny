@@ -4,6 +4,9 @@
 //Boost Includes
 #include <boost/shared_ptr.hpp>
 
+// Qt includes
+#include <QFile>
+
 #include "DataFrame.h"
 #include "RandomTree.h"
 
@@ -130,6 +133,13 @@ namespace Tgs
      * @param e the XML DOM element for the forest
      */
     void importModel(QDomElement & e);
+
+    /**
+     *
+     *
+     * @param file
+     */
+    void importModel(QFile& file);
 
     /**
     *  @return true if the forest has been trained
