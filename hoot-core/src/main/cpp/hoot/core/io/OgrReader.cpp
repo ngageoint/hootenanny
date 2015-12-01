@@ -181,6 +181,12 @@ protected:
 
   void _finalizeTranslate();
 
+  /**
+   * Use some hard coded rules to convert from projections that PROJ4 doesn't handle to projections
+   * that it will handle.
+   */
+  shared_ptr<OGRSpatialReference> _fixProjection(shared_ptr<OGRSpatialReference> srs);
+
   void _initTranslate();
 
   void _openLayer(QString path, QString layer);
@@ -279,6 +285,65 @@ ElementIterator* OgrReader::createIterator(QString path, QString layer) const
   d->open(path, layer);
 
   return new OgrElementIterator(d);
+}
+
+shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(shared_ptr<OGRSpatialReference> srs)
+{
+  shared_ptr<OGRSpatialReference> result;
+  int epsgOverride = ConfigOptions().getOgrReaderEpsgOverride();
+  if (epsgOverride >= 0)
+  {
+    result.reset(new OGRSpatialReference());
+
+    if (result->importFromEPSG(epsgOverride) != OGRERR_NONE)
+    {
+      throw HootException(QString("Error creating EPSG:%1 projection.").arg(epsgOverride));
+    }
+
+    return result;
+  }
+
+  // proj4 requires some extra parameters to handle Google map style projections. Check for this
+  // situation for known EPSGs and warn/fix the issue.
+  result.reset(new OGRSpatialReference());
+  result->importFromEPSG(3785);
+  if (srs && result->IsSame(srs.get()) &&
+    _toWkt(result.get()) != _toWkt(srs.get()))
+  {
+    LOG_WARN("Overriding input projection with proj4 compatible EPSG:3785. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
+    return result;
+  }
+
+  result->importFromEPSG(900913);
+  if (srs && result->IsSame(srs.get()) &&
+    _toWkt(result.get()) != _toWkt(srs.get()))
+  {
+    LOG_WARN("Overriding input projection with proj4 compatible EPSG:900913. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
+    return result;
+  }
+
+  result->importFromEPSG(3857);
+  if (srs && result->IsSame(srs.get()) &&
+    _toWkt(result.get()) != _toWkt(srs.get()))
+  {
+    LOG_WARN("Overriding input projection with proj4 compatible EPSG:3857. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
+    return result;
+  }
+
+  // this check came from https://insightcloud.digitalglobe.com/redmine/issues/4399
+  // The input isn't considered the same as EPSG:3857 according to OGR. I do this WKT level check
+  // to override the projection.
+  const char* wkt3857 = "PROJCS[\"WGS_1984_Web_Mercator_Auxiliary_Sphere\",GEOGCS[\"GCS_WGS_1984\",DATUM[\"WGS_1984\",SPHEROID[\"WGS_84\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Mercator_Auxiliary_Sphere\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",0.0],PARAMETER[\"Standard_Parallel_1\",0.0],PARAMETER[\"Auxiliary_Sphere_Type\",0.0],UNIT[\"Meter\",1.0],AUTHORITY[\"EPSG\",\"3857\"]]";
+  result->importFromWkt((char**)&wkt3857);
+  if (srs && result->IsSame(srs.get()))
+  {
+    LOG_WARN("Overriding input projection with proj4 compatible EPSG:3857. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
+    result->importFromEPSG(3857);
+    return result;
+  }
+
+  result = srs;
+  return result;
 }
 
 shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
@@ -852,56 +917,24 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
   }
 
 
-  auto_ptr<OGRSpatialReference> tmpSourceSrs;
-  OGRSpatialReference* sourceSrs;
+  shared_ptr<OGRSpatialReference> sourceSrs;
 
-  int epsgOverride = ConfigOptions().getOgrReaderEpsgOverride();
-  if (epsgOverride >= 0)
+  if (_layer->GetSpatialRef())
   {
-    tmpSourceSrs.reset(new OGRSpatialReference());
-    sourceSrs = tmpSourceSrs.get();
-
-    if (sourceSrs->importFromEPSG(epsgOverride) != OGRERR_NONE)
-    {
-      throw HootException(QString("Error creating EPSG:%1 projection.").arg(epsgOverride));
-    }
-  }
-  else
-  {
-    sourceSrs = _layer->GetSpatialRef();
-
-    // proj4 requires some extra parameters to handle Google map style projections. Check for this
-    // situation for known EPSGs and warn/fix the issue.
-    tmpSourceSrs.reset(new OGRSpatialReference());
-    tmpSourceSrs->importFromEPSG(3785);
-    if (sourceSrs && tmpSourceSrs->IsSame(sourceSrs) &&
-      _toWkt(tmpSourceSrs.get()) != _toWkt(sourceSrs))
-    {
-      LOG_WARN("Overriding input projection with proj4 compatible EPSG:3785. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
-      sourceSrs = tmpSourceSrs.get();
-    }
-    else
-    {
-      tmpSourceSrs->importFromEPSG(900913);
-      if (sourceSrs && tmpSourceSrs->IsSame(sourceSrs) &&
-        _toWkt(tmpSourceSrs.get()) != _toWkt(sourceSrs))
-      {
-        LOG_WARN("Overriding input projection with proj4 compatible EPSG:900913. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
-        sourceSrs = tmpSourceSrs.get();
-      }
-    }
+    sourceSrs.reset(_layer->GetSpatialRef()->Clone());
+    sourceSrs = _fixProjection(sourceSrs);
   }
 
-  if (sourceSrs != 0 && sourceSrs->IsProjected())
+  if (sourceSrs.get() != 0 && sourceSrs->IsProjected())
   {
-    LOG_DEBUG("Input SRS: " << _toWkt(sourceSrs));
+    LOG_DEBUG("Input SRS: " << _toWkt(sourceSrs.get()));
     _wgs84.reset(new OGRSpatialReference());
     if (_wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
     {
       throw HootException("Error creating EPSG:4326 projection.");
     }
 
-    _transform = OGRCreateCoordinateTransformation(sourceSrs, _wgs84.get());
+    _transform = OGRCreateCoordinateTransformation(sourceSrs.get(), _wgs84.get());
 
     if (_transform == 0)
     {
@@ -909,7 +942,7 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
     }
   }
 
-  shared_ptr<Envelope> filter = getBoundingBoxFromConfig(conf(), sourceSrs);
+  shared_ptr<Envelope> filter = getBoundingBoxFromConfig(conf(), sourceSrs.get());
   if (filter.get())
   {
     _layer->SetSpatialFilterRect(filter->getMinX(), filter->getMinY(), filter->getMaxX(),
