@@ -14,4 +14,4 @@ createdb $AUTH $RENDER_DB -E UTF-8
 psql $AUTH -d $RENDER_DB -f /usr/share/postgresql/9.1/contrib/postgis-1.5/postgis.sql
 psql $AUTH -d $RENDER_DB -f /usr/share/postgresql/9.1/contrib/postgis-1.5/spatial_ref_sys.sql
 psql $AUTH -d $RENDER_DB -c 'CREATE EXTENSION hstore'
-hoot osm2ogr -D services.db.reader.email=test@test.com $HOOT_HOME/translations/RenderDb_to_ESRI.js "$DB_URL/$INPUT" "PG:dbname='$RENDER_DB' host='$DB_HOST' port='$DB_PORT' user='$DB_USER' password='$DB_PASSWORD'"
+hoot osm2ogr -D services.db.reader.email=test@test.com $HOOT_HOME/translations/RenderDb.js "$DB_URL/$INPUT" "PG:dbname='$RENDER_DB' host='$DB_HOST' port='$DB_PORT' user='$DB_USER' password='$DB_PASSWORD'"
