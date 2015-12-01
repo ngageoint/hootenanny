@@ -2563,7 +2563,7 @@ tds61.rules = {
      // ROR - Road Interchange Ramp
      // ['ROR','-999999',undefined,undefined], // No Information
      ['ROR','1000',undefined,undefined], // The default: No ramp
-     ['ROR','1001','link_road','yes'],
+     ['ROR','1001','interchange_ramp','yes'],
 
      // RRC - Railway Use
      // ['RRC','-999999',undefined,undefined], // No Information

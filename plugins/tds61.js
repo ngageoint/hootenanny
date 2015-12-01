@@ -720,23 +720,38 @@ tds61 = {
             {
                 tags.highway = 'motorway';
             }
-            else if (tags['ref:road:type'] == 'limited_access_motorway' || tags['ref:road:class'] == 'primary')
+            else if (tags['ref:road:type'] == 'limited_access_motorway')
             {
                 tags.highway = 'trunk';
             }
-            else if (tags['ref:road:class'] == 'secondary')
+            else if (tags['ref:road:class'] == 'primary')
             {
                 tags.highway = 'primary';
             }
-            else if (tags['ref:road:class'] == 'local')
+            else if (tags['ref:road:class'] == 'secondary')
             {
                 tags.highway = 'secondary';
             }
-            else if (tags['ref:road:type'] == 'road')
+            else if (tags['ref:road:class'] == 'local')
+            {
+                if (tags['ref:road:type'] == 'road') // RTY=3
+                {
+                    tags.highway = 'tertiary';
+                }
+                else
+                {
+                    tags.highway = 'unclassified';
+                }
+            }
+            else if (tags['ref:road:type'] == 'pedestrian')
+            {
+                tags.highway = 'pedestrian';
+            }
+            else if (tags['ref:road:type'] == 'road') // RTY=3
             {
                 tags.highway = 'tertiary';
             }
-            else if (tags['ref:road:type'] == 'street')
+            else if (tags['ref:road:type'] == 'street') // RTY=4
             {
                 tags.highway = 'unclassified';
             }
@@ -745,17 +760,11 @@ tds61 = {
             {
                 tags.highway = 'road';
             }
-            // Catch all for the rest of the ref:road:type: close, circle drive etc
-            else if (tags['ref:road:type'])
-            {
-                tags.highway = 'residential';
-            }
-
         } // End if AP030
 
 
         // New TDSv61 Attribute - ROR (Road Interchange Ramp)
-        if (tags.highway && tags.link_road == 'yes')
+        if (tags.highway && tags.interchange_ramp == 'yes')
         {
             var roadList = ['motorway','trunk','primary','secondary','tertiary'];
             if (roadList.indexOf(tags.highway) !== -1) tags.highway = tags.highway + '_link';
@@ -1258,11 +1267,11 @@ tds61 = {
        }
 
        // Split link roads. TDSv61 now has an attribute for this
-       if (tags.highway && (tags['highway'].indexOf('_link') !== -1))
-       {
-           tags.highway = tags['highway'].replace('_link','');
-           tags.road_ramp = 'yes';
-       }
+//        if (tags.highway && (tags['highway'].indexOf('_link') !== -1))
+//        {
+//            tags.highway = tags['highway'].replace('_link','');
+//            tags.interchange_ramp = 'yes';
+//        }
 
 
        // Sort out "construction" etc
@@ -1423,32 +1432,38 @@ tds61 = {
                 switch (tags.highway)
                 {
                     case 'motorway':
+                    case 'motorway_link':
                         attrs.RIN_ROI = '2'; // National Motorway
                         attrs.RTY = '1'; // Motorway
                         break;
 
                     case 'trunk':
+                    case 'trunk_link':
                         attrs.RIN_ROI = '3'; // National/Primary
                         attrs.RTY = '2'; // Limited Access Motorway
                         break;
 
                     case 'primary':
+                    case 'primary_link':
                         attrs.RIN_ROI = '3'; // National
                         attrs.RTY = '3'; // road: Road outside a BUA
                         break;
 
                     case 'secondary':
+                    case 'secondary_link':
                         attrs.RIN_ROI = '4'; // Secondary
                         attrs.RTY = '3'; // road: Road outside a BUA
                         break;
 
                     case 'tertiary':
+                    case 'tertiary_link':
                         attrs.RIN_ROI = '5'; // Local
                         attrs.RTY = '3'; // road: Road outside a BUA
                         break;
 
                     case 'residential':
                     case 'unclassified':
+                    case 'pedestrian':
                     case 'service':
                         attrs.RIN_ROI = '5'; // Local
                         attrs.RTY = '4'; // street: Road inside a BUA
