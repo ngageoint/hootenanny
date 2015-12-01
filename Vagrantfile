@@ -29,6 +29,8 @@ Vagrant.configure(2) do |config|
   config.vm.network "forwarded_port", guest: 8094, host: 8094
   # merge nodejs service
   config.vm.network "forwarded_port", guest: 8096, host: 8096
+  # node-mapnik-server nodejs service
+  config.vm.network "forwarded_port", guest: 8000, host: 8000
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
