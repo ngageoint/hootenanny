@@ -108,15 +108,9 @@ public:
     rf.findAverageError(df, error, sigma);
     LOG_INFO("Error: " << error << " sigma: " << sigma);
 
-    QDomDocument doc;
-    QDomElement docRoot = doc.createElement("Model");
-    rf.exportModel(doc, docRoot);
-    doc.appendChild(docRoot);
-
     ofstream fileStream;
     fileStream.open((output).toStdString().data());
-    string xmlData = doc.toString().toLatin1().constData();
-    fileStream << xmlData;
+    rf.exportModel(fileStream);
     fileStream.close();
 
     return 0;

@@ -51,6 +51,22 @@ namespace Tgs
     }
   }
 
+  void BaseRandomForest::exportModel(std::ostream& filestream)
+  {
+    if (filestream.good())
+    {
+      QDomDocument doc;
+      QDomElement docRoot = doc.createElement("Model");
+      exportModel(doc, docRoot);
+      doc.appendChild(docRoot);
+      filestream << doc.toString().toLatin1().constData();
+    }
+    else
+    {
+      throw Exception("Random forest export - File stream is not open for exporting.");
+    }
+  }
+
   void BaseRandomForest::exportModel(QDomDocument & modelDoc, QDomElement & parentNode)
   {
     try

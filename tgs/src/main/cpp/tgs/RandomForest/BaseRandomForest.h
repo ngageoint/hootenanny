@@ -78,6 +78,13 @@ namespace Tgs
     void exportModel(QDomDocument & modelDoc, QDomElement & parentNode);
 
     /**
+     *
+     *
+     * @param fileStream
+     */
+    void exportModel(std::ostream& filestream);
+
+    /**
     * Finds the average classification error statistic for the forest based on the
     * oob sets for the trees
     *
