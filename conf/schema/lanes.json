@@ -1,6 +1,11 @@
 [
     {
         "dataType": "int",
+        "geometries": [
+            "node",
+            "way",
+            "relation"
+        ],
         "name": "lanes",
         "objectType": "tag"
     }

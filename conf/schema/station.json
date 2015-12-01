@@ -34,5 +34,10 @@
         "isA": "station",
         "name": "station=subway_entrance",
         "objectType": "tag"
+    },
+    {
+        "isA": "station",
+        "name": "station=station",
+        "objectType": "tag"
     }
 ]

@@ -6,6 +6,7 @@
             "area"
         ],
         "name": "surface",
+        "influence": 1.0,
         "objectType": "tag"
     },
     {
@@ -246,6 +247,7 @@
         "childWeight": 0.1,
         "dataType": "enumeration",
         "influence": 1,
+        "isA": "surface",
         "name": "surface=unknown",
         "objectType": "tag"
     },

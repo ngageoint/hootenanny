@@ -137,7 +137,7 @@ tgs/src/main/cpp/tgs/TgsConfig.h: config.h
 
 conf/DatabaseConfig.sh: conf/DatabaseConfig.sh.orig
 	# This will copy conf/DatabaseConfig.sh.orig to conf/DatabaseConfig.sh if necessary
-	if [ ! -f conf/DatabaseConfig.sh ]; then echo "Using default database configuration. You can safely customize: conf/DatabaseConfig.sh"; cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh; else echo "Check your conf/DatabaseConfig.sh to see if it needs updating with conf/DatabaseConfig.sh.orig, if not just 'touch conf/DatabaseConfig.sh'"; false; fi
+	if [ ! -f conf/DatabaseConfig.sh ]; then echo "Using default database configuration. You can safely customize: conf/DatabaseConfig.sh"; cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh; else echo; echo; echo "Check your conf/DatabaseConfig.sh to see if it needs updating with conf/DatabaseConfig.sh.orig, if not just 'touch conf/DatabaseConfig.sh'"; echo; echo; false; fi
 
 conf/LocalHoot.json: conf/LocalHoot.json.in conf/DatabaseConfig.sh
 	export HOOT_HOME=`pwd`; scripts/ReplaceEnvironmentVariables.sh conf/LocalHoot.json.in conf/LocalHoot.json
@@ -347,4 +347,4 @@ endif
 
 vagrant:
 	# Check the Vagrant.marker file data to see if provisioning needs to run
-	if [ -f Vagrant.marker ]; then if [ Vagrant.marker -ot VagrantProvision.sh ]; then echo "New dependencies have been added to Vagrant!"; echo "Please exit the vm and run 'vagrant provision'."; false; fi fi
+	if [ -f Vagrant.marker ]; then if [ Vagrant.marker -ot VagrantProvision.sh ]; then echo; echo; echo "New dependencies have been added to Vagrant!"; echo "Please exit the vm and run 'vagrant provision' or"; echo "run 'touch Vagrant.marker' and re-run 'make' to continue."; echo; echo; false; fi fi
