@@ -159,6 +159,9 @@
         "import": "military.json"
     },
     {
+        "import": "min_height.json"
+    },
+    {
         "import": "mountain_pass.json"
     },
     {
@@ -217,6 +220,9 @@
     },
     {
         "import": "river_type.json"
+    },
+    {
+        "import": "roof.json"
     },
     {
         "import": "seamark.json"

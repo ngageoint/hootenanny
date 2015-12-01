@@ -1,6 +1,10 @@
 [
     {
         "dataType": "enumeration",
+        "geometries": [
+            "linestring",
+            "area"
+        ],
         "influence": 2,
         "name": "oneway",
         "objectType": "tag"

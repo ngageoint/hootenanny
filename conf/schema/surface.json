@@ -233,6 +233,7 @@
         "childWeight": 0.1,
         "dataType": "enumeration",
         "influence": 1,
+        "isA": "surface",
         "name": "surface=unknown",
         "objectType": "tag"
     },
