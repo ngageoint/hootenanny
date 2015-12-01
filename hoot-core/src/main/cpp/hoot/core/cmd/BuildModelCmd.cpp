@@ -36,10 +36,6 @@
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-// Qt
-#include <QFile>
-#include <QTextStream>
-
 // Standard
 #include <fstream>
 #include <iostream>
@@ -143,18 +139,16 @@ public:
     rf.findAverageError(df, error, sigma);
     LOG_INFO("Error: " << error << " sigma: " << sigma);
 
-    shared_ptr<QDomDocument> doc(new QDomDocument());
-    shared_ptr<QDomElement> docRoot(new QDomElement(doc->documentElement()));
-    rf.exportModel(*doc, *docRoot);
-    const QString path = (output + ".rf").toStdString().data();
-    QFile file(path);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-      throw HootException("Error opening file: " + path);
-    }
-    QTextStream stream(&file);
-    stream << doc->toString();
-    file.close();
+    QDomDocument doc;
+    QDomElement docRoot = doc.createElement("Model");
+    rf.exportModel(doc, docRoot);
+    doc.appendChild(docRoot);
+
+    ofstream fileStream;
+    fileStream.open((output + ".rf").toStdString().data());
+    string xmlData = doc.toString().toLatin1().constData();
+    fileStream << xmlData;
+    fileStream.close();
 
     return 0;
   }

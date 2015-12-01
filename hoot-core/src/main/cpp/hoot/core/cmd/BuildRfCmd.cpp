@@ -37,10 +37,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 
-// Qt
-#include <QFile>
-#include <QTextStream>
-
 // Standard
 #include <fstream>
 #include <iostream>
@@ -117,21 +113,11 @@ public:
     rf.exportModel(doc, docRoot);
     doc.appendChild(docRoot);
 
-    const QString path = (output).toStdString().data();
-    QFile file(path);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-      throw HootException("Error opening file: " + path);
-    }
-    QTextStream stream(&file);
-    stream << doc.toString();
-    file.close();
-
-    /*ofstream fileStream;
+    ofstream fileStream;
     fileStream.open((output).toStdString().data());
     string xmlData = doc.toString().toLatin1().constData();
     fileStream << xmlData;
-    fileStream.close();*/
+    fileStream.close();
 
     return 0;
   }
