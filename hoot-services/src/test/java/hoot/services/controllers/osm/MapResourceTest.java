@@ -1709,8 +1709,6 @@ public class MapResourceTest extends OsmResourceTestAbstract
     getMap(String.valueOf(mapId), "true", false);
   }
 
-  //See ReviewResourceGetStatsTest::testGetEmptyReviewScoreMinParam for an explanation of why
-  //this test doesn't throw an error.
   @Test
   @Category(UnitTest.class)
   public void testGetMapInvalidMultiLayerUniqueElementIdsParam() throws Exception
@@ -1718,8 +1716,6 @@ public class MapResourceTest extends OsmResourceTestAbstract
     getMap(String.valueOf(mapId), "blah", true);
   }
 
-  //See ReviewResourceGetStatsTest::testGetEmptyReviewScoreMinParam for an explanation of why
-  //this test doesn't throw an error.
   @Test
   @Category(UnitTest.class)
   public void testGetMapEmptyMultiLayerUniqueElementIdsParam() throws Exception

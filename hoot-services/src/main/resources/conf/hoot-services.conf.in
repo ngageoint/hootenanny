@@ -23,11 +23,6 @@ homeFolder=$(HOOT_HOME)
 # slowly to queries
 testJobStatusPollerTimeout=2000
 
-# If true, the entire services database will be cleared before every test run.  Normally, this 
-# would not need to be set to true, unless the database was in an inconsistent state somehow which
-# causes the tests to not be able to insert maps properly.
-servicesTestClearEntireDb=false
-
 # determines whether the system automatically scans for changes to the log4j props file
 autoScanForLogPropsChanges=true
 
@@ -37,6 +32,12 @@ logPropsDynamicChangeScanInterval=1
 
 # Loosely enforced setting that determines the maximum number of times a class logs a warning
 maxWarningsDisplayed=10
+
+# If true, will seed the randomness used in sql queries; for testing purposes only.
+seedRandomQueries=false
+
+# Random query seed value; valid range: -1.0 to 1.0
+randomQuerySeed=0.1
 
 # OSM
 
@@ -236,13 +237,6 @@ P2PServerThreadCount=0
 P2PServerScript=P2PServer.js
 
 # REVIEW
-
-# review get
-
-# review item lock time in millisec
-reviewLockTime=300000
-
-# review update
 
 
 

@@ -27,6 +27,7 @@
 package hoot.services.controllers.wfs;
 
 import hoot.services.HootProperties;
+import hoot.services.db.DataDefinitionManager;
 import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
 
@@ -83,6 +84,20 @@ public class WfsManager {
 	      log.error("WFS error: " + e.getMessage());
 		}
 	}
+	
+	
+		public void createWfsResource(String wfsJobName) throws Exception
+		{
+			
+			DataDefinitionManager ddlMan = new DataDefinitionManager();
+	
+			List<String>tblsList = ddlMan.getTablesList(wfsStoreDb, wfsJobName);		
+			_createWFSDatasourceFeature(wfsJobName, wfsStoreConnName, tblsList);
+			_createService(wfsJobName);
+			
+	
+		}
+		
 	
 	public void removeWfsResource(String wfsJobName) throws Exception
 	{

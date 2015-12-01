@@ -119,7 +119,7 @@ Download the ISO image for the latest 64-bit LTS release of 64-bit Ubuntu (14.04
 
 ---------------
 sudo apt-get purge automake
-sudo apt-get remove qt5-default octave postgresql-9.3
+sudo apt-get remove qt5-default postgresql-9.3
 sudo apt-get autoremove
 --------------
 

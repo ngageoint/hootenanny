@@ -4,6 +4,9 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ *
+ */
 public class ReviewableItem extends ReviewQueryMapper 
 {
 	@SuppressWarnings("unused")

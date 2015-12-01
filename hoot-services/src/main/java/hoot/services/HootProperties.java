@@ -285,6 +285,14 @@ public class HootProperties
     {
       return "10";
     }
+    else if (key.equals("seedRandomQueries"))
+    {
+      return "false";
+    }
+    else if (key.equals("randomQuerySeed"))
+    {
+      return "0.1";
+    }
     return null;
   }
 }

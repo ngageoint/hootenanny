@@ -5,6 +5,9 @@ import java.sql.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ *
+ */
 public class ReviewableQueryFactory 
 {
 	@SuppressWarnings("unused")
@@ -24,6 +27,4 @@ public class ReviewableQueryFactory
 	{
 		return new ReviewableStatisticsQuery(c, mapid);
 	}
-	
-	
 }
