@@ -7,11 +7,12 @@
 	    "relation"
         ],
         "name": "abstract_is_in",
+        "influence": 1,
         "objectType": "tag"
     },
     {
-        "name": "is_in",
         "isA": "abstract_is_in",
+        "name": "is_in",
         "objectType": "tag"
     },
     {
