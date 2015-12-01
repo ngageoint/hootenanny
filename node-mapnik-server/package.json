@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "dependencies": {
     "mapnik": "3.x",
-    "generic-pool": "*"
+    "generic-pool": "*",
+    "pg": "*"
   },
   "scripts": {
     "start": "node app.js hoot_style.xml 8000"

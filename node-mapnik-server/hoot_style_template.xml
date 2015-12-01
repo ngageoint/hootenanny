@@ -40,9 +40,9 @@
 <!ENTITY zoom_inf "<MinScaleDenominator>1</MinScaleDenominator>">
 ]>
 <Map background-color="#00000000" srs="+init=epsg:3857">
-	<Style name="polygon" filter-mode="first">
+	<Style name="area" filter-mode="first">
 		<Rule>
-			&maxscale_zoom10;
+			&maxscale_zoom4;
 			&minscale_zoom12;
 			<LineSymbolizer stroke="${COLOR}" stroke-width="0.5" stroke-linejoin="miter"
 				stroke-linecap="square" />
@@ -65,7 +65,7 @@
 	</Style>
 	<Style name="line" filter-mode="first">
 		<Rule>
-			&maxscale_zoom10;
+			&maxscale_zoom4;
 			&minscale_zoom12;
 			<LineSymbolizer stroke="${COLOR}" stroke-width="0.5" stroke-linejoin="round"
 				stroke-linecap="round" />
@@ -85,7 +85,7 @@
 	</Style>
 	<Style name="point" filter-mode="first">
 		<Rule>
-			&maxscale_zoom10;
+			&maxscale_zoom4;
 			&minscale_zoom12;
 			<MarkersSymbolizer file="poi.svg" fill="${COLOR}" transform="scale(0.25)"/>
 		</Rule>

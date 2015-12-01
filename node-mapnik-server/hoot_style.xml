@@ -42,7 +42,7 @@
 <Map background-color="#00000000" srs="+init=epsg:3857">
 	<Style name="area" filter-mode="first">
 		<Rule>
-			<MaxScaleDenominator>750000</MaxScaleDenominator>
+			<MaxScaleDenominator>50000000</MaxScaleDenominator>
 			<MinScaleDenominator>100000</MinScaleDenominator>
 			<LineSymbolizer stroke="${COLOR}" stroke-width="0.5" stroke-linejoin="miter" stroke-linecap="square"/>
 			<PolygonSymbolizer fill="${COLOR}" fill-opacity="0.1"/>
@@ -62,7 +62,7 @@
 	</Style>
 	<Style name="line" filter-mode="first">
 		<Rule>
-			<MaxScaleDenominator>750000</MaxScaleDenominator>
+			<MaxScaleDenominator>50000000</MaxScaleDenominator>
 			<MinScaleDenominator>100000</MinScaleDenominator>
 			<LineSymbolizer stroke="${COLOR}" stroke-width="0.5" stroke-linejoin="round" stroke-linecap="round"/>
 		</Rule>
@@ -79,7 +79,7 @@
 	</Style>
 	<Style name="point" filter-mode="first">
 		<Rule>
-			<MaxScaleDenominator>750000</MaxScaleDenominator>
+			<MaxScaleDenominator>50000000</MaxScaleDenominator>
 			<MinScaleDenominator>100000</MinScaleDenominator>
 			<MarkersSymbolizer file="poi.svg" fill="${COLOR}" transform="scale(0.25)"/>
 		</Rule>

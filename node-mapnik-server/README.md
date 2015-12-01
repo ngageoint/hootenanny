@@ -37,3 +37,8 @@ sudo update-rc.d -f node-mapnik-server remove
 ```
 
 *Note:*  Adding the init.d script to rc.d will not work for Vagrant vms, due to the late mounting of the shared folder that contains the node-mapnik-server source code.  The Vagrantfile works around this by adding a 'run always' inline command to start the service.
+
+### Mapnik Style
+The mapnik style is generated from a template to replace entities that are not supported by mapnik.  Make edits to then hoot_style_template.xml run this command:
+
+`xmllint --noent hoot_style_template.xml > hoot_style.xml`

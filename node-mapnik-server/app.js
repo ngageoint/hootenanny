@@ -6,6 +6,7 @@ var mapnik = require('mapnik')
   , fs = require('fs')
   , http = require('http')
   , url = require('url')
+  , pg = require('pg')
   ;
 
 if (mapnik.register_default_input_plugins) mapnik.register_default_input_plugins();
@@ -34,6 +35,25 @@ if (!port) {
 // map with just a style
 var s = fs.readFileSync(stylesheet, 'utf8');
 
+var getLayers = function(db, cb) {
+  var conString = 'postgres://' + process.env['DB_USER'] + ':' + process.env['DB_PASSWORD']
+                  + '@' + process.env['DB_HOST'] + ':' + process.env['DB_PORT'] + '/' + db;
+
+  var client = new pg.Client(conString);
+  client.connect(function(err) {
+    if(err) {
+      return console.error('could not connect to postgres', err);
+    }
+    client.query('select f_table_name from geometry_columns', function(err, result) {
+      if(err) {
+        return console.error('error running query', err);
+      }
+      client.end();
+      cb(result.rows);
+    });
+  });
+};
+
 var acquire = function(id, name, color, stylesheet, options, callback) {
     methods = {
         create: function(cb) {
@@ -43,7 +63,10 @@ var acquire = function(id, name, color, stylesheet, options, callback) {
                     if (options.bufferSize) {
                         obj.bufferSize = options.bufferSize;
                     }
-                    (['area', 'line', 'point']).forEach(function(d) {
+                    var db = 'renderdb_' + name;
+                    getLayers(db, function(rows) {
+                      rows.forEach(function(r) {
+                        var d = r.f_table_name;
                         // construct a mapnik layer dynamically
                         var l = new mapnik.Layer(d);
                         l.srs = '+init=epsg:4326';
@@ -51,7 +74,7 @@ var acquire = function(id, name, color, stylesheet, options, callback) {
 
                         // db connection and settings
                         var postgis_settings = {
-                          dbname: 'renderdb_' + name,
+                          dbname: db,
                           table: d,
                           user: process.env['DB_USER'],
                           password: process.env['DB_PASSWORD'],
@@ -67,6 +90,7 @@ var acquire = function(id, name, color, stylesheet, options, callback) {
                         l.datasource = ds;
                         // add this layer to the map
                         obj.add_layer(l);
+                      });
                     });
 
                     cb(err, obj);
