@@ -68,18 +68,7 @@ void JsonOsmSchemaLoader::load(QString path, OsmSchema& s)
     s.update();
 
     //check if schemavertex is unknown type or has empty geometries
-    vector<SchemaVertex> schemaVertexList = s.getAllTags();
-    for (unsigned int i = 0; i < schemaVertexList.size(); i++)
-    {
-      if (SchemaChecker::isUnknownVertexType(schemaVertexList[i]) == false)
-      {
-        LOG_WARN("Error: Unknown type: " << schemaVertexList[i].name);
-      }
-      if (SchemaChecker::isEmptyGeometry(schemaVertexList[i]) == false)
-      {
-        LOG_WARN("Error: Empty geometries: " << schemaVertexList[i].name);
-      }
-    }
+    SchemaChecker(s).check();
   }
 
 }

@@ -29,6 +29,11 @@ public:
   void checkEmptyGeometry();
 
   /**
+   * Print out error message if schemavertex has empty geometry or geometries are empty
+   */
+  void check();
+
+  /**
    * Retrun true if schemavertex is unkonw vertex type.
    */
 
@@ -39,10 +44,8 @@ public:
    */
   static bool isEmptyGeometry(const SchemaVertex& schemaVertex) { return schemaVertex.geometries > 0; }
 
-  OsmSchema getOsmSchema() { return _osmSchema; }
-
 private:
-  OsmSchema _osmSchema;
+  vector<SchemaVertex> _schemaVertexList;
 };
 
 }

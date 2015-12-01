@@ -6,6 +6,7 @@
             "area"
         ],
         "name": "surface",
+        "influence": 1.0,
         "objectType": "tag"
     },
     {
