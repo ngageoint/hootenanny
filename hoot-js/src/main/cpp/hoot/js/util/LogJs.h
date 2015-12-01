@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LOGJS_H
 #define LOGJS_H
@@ -57,6 +57,7 @@ private:
   static v8::Handle<v8::Value> logWarn(const v8::Arguments& args);
   static v8::Handle<v8::Value> logError(const v8::Arguments& args);
   static v8::Handle<v8::Value> logFatal(const v8::Arguments& args);
+  static v8::Handle<v8::Value> init(const v8::Arguments& args);
   static v8::Handle<v8::Value> setLogLevel(const v8::Arguments& args);
 
   /**

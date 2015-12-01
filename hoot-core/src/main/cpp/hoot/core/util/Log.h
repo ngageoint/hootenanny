@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LOG_H
@@ -149,9 +149,10 @@ private:
 }
 
 /// print out a variable along w/ it's value. E.g. int a = 3; LOG_VAR(a); => logs "a: 3"
+#define LOG_VARD(var) LOG_DEBUG(#var << ": " << (var))
 #define LOG_VARI(var) LOG_INFO(#var << ": " << (var))
 #define LOG_VARW(var) LOG_WARN(#var << ": " << (var))
-#define LOG_VARD(var) LOG_DEBUG(#var << ": " << (var))
+#define LOG_VARE(var) LOG_ERROR(#var << ": " << (var))
 #define LOG_VAR(var) LOG_VARI(var)
 
 // The following macros will be defined by these includes. Using anything else could cause

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ELEMENT_WAY_DATA_H__
 #define __ELEMENT_WAY_DATA_H__
@@ -47,6 +47,9 @@ public:
   WayData() {}
 
   WayData(long id) : ElementData(id) {}
+
+  WayData(long id, long changeset, long version, unsigned int timestamp, QString user,
+          long uid) : ElementData(id, changeset, version, timestamp, user, uid) {}
 
   virtual ~WayData();
 

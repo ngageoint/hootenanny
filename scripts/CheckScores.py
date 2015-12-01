@@ -3,7 +3,17 @@
 import re
 import sys
 
-scoreFn = sys.argv[1]
+errorOnHigh = False
+argi = 1
+
+# If the user specifies --error-on-high then a high value will cause an error
+# rather than a warning.
+if sys.argv[argi] == "--error-on-high":
+    errorOnHigh = True
+    argi = argi + 1
+
+scoreFn = sys.argv[argi]
+argi = argi + 1
 fp = open(scoreFn)
 
 d = {}
@@ -24,15 +34,18 @@ d = {}
 for line in fp:
     v = re.split("\t|: ", line)
     try:
-        n = float(v[1].split()[0])
-        d[v[0]] = n
+        if (len(v) >= 2):
+            n = float(v[1].split()[0])
+            d[v[0]] = n
     except ValueError:
         pass
 
 result = 0
 
+
+
 # Go through all the score argument and check for a legit range.
-for a in sys.argv[2:]:
+for a in sys.argv[argi:]:
     v = a.split(",")
     key = v[0]
     lower = float(v[1])
@@ -48,7 +61,11 @@ for a in sys.argv[2:]:
     else:
         n = d[key]
         if (n > upper):
-            print "%s is %g, This is better than expected. Expected a value between %g and %g" % (key, n, lower, upper)
+            if (errorOnHigh):
+                print "%s is %g, expected a value between %g and %g" % (key, n, lower, upper)
+                result = -1
+            else:
+                print "%s is %g, This is better than expected. Expected a value between %g and %g" % (key, n, lower, upper)
         elif (n < lower):
             print "%s is %g, expected a value between %g and %g" % (key, n, lower, upper)
             result = -1

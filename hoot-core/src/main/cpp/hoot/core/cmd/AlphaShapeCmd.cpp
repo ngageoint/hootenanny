@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // GEOS
@@ -31,17 +31,9 @@
 // Hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/MapReprojector.h>
-#include <hoot/core/algorithms/AlphaShape.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/conflate/SuperfluousWayRemover.h>
-#include <hoot/core/io/PbfWriter.h>
 #include <hoot/core/io/ShapefileWriter.h>
-#include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/util/GeometryConverter.h>
-
-// Standard
-#include <fstream>
+#include <hoot/core/conflate/AlphaShapeGenerator.h>
 
 namespace hoot
 {
@@ -88,49 +80,9 @@ public:
     double buffer = args[i++].toDouble();
     QString outputPath = args[i++];
 
-    std::vector< std::pair<double, double> > points;
     shared_ptr<OsmMap> pointsMap(new OsmMap());
     loadMap(pointsMap, pointsPath, false, Status::Unknown1);
-
-    MapReprojector::reprojectToPlanar(pointsMap);
-
-    // put all the nodes into a vector of points.
-    points.reserve(pointsMap->getNodeMap().size());
-    const OsmMap::NodeMap& nodes = pointsMap->getNodeMap();
-    for (OsmMap::NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
-    {
-      pair<double, double> p;
-      p.first = (*it)->getX();
-      p.second = (*it)->getY();
-      points.push_back(p);
-    }
-
-    // create a complex geometry representing the alpha shape
-    shared_ptr<Geometry> cutterShape;
-    {
-      AlphaShape alphaShape(alpha);
-      alphaShape.insert(points);
-      cutterShape = alphaShape.toGeometry();
-      cutterShape.reset(cutterShape->buffer(buffer));
-    }
-
-    if (cutterShape->getArea() == 0.0)
-    {
-      LOG_WARN("Alpha Shape area is zero. Try increasing the buffer size and/or alpha.");
-    }
-
-    shared_ptr<OsmMap> result;
-
-    result.reset(new OsmMap(pointsMap->getProjection()));
-    // add the resulting alpha shape for debugging.
-    GeometryConverter(result).convertGeometryToElement(cutterShape.get(), Status::Invalid, -1);
-
-    const RelationMap& rm = result->getRelationMap();
-    for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
-    {
-      Relation* r = result->getRelation(it->first).get();
-      r->setTag("area", "yes");
-    }
+    OsmMapPtr result = AlphaShapeGenerator(alpha, buffer).generate(pointsMap);
 
     // reproject back into lat/lng
     MapReprojector::reprojectToWgs84(result);

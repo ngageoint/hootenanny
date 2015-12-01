@@ -1,0 +1,26 @@
+
+= Hootenanny Algorithms
+DigitalGlobe, Inc.
+:Email: hootenanny@digitalglobe.com
+
+include::algorithms/Introduction.asciidoc[]
+include::algorithms/ExistingTechnology.asciidoc[]
+include::algorithms/ApproachesAndAssumptions.asciidoc[]
+include::algorithms/AlphaShape.asciidoc[]
+include::algorithms/RubberSheeting.asciidoc[]
+include::algorithms/UnifyingConflation.asciidoc[]
+include::algorithms/RoadConflation.asciidoc[]
+include::algorithms/GenericLineConflation.asciidoc[]
+include::algorithms/Places.asciidoc[]
+include::algorithms/UnifyingPoiToPoi.asciidoc[]
+include::algorithms/BuildingConflation.asciidoc[]
+include::algorithms/BuildingtoPOIConflation.asciidoc[]
+include::algorithms/FqTree.asciidoc[]
+include::algorithms/Evaluation.asciidoc[]
+include::algorithms/ProcessingError.asciidoc[]
+include::algorithms/ProjectionErrors.asciidoc[]
+include::algorithms/Techniques.asciidoc[]
+include::algorithms/ServicesScalability.asciidoc[]
+include::algorithms/FourPassConflation.asciidoc[]
+include::algorithms/FutureWork.asciidoc[]
+include::References.asciidoc[]

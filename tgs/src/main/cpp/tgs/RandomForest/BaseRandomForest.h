@@ -81,9 +81,10 @@ namespace Tgs
     void exportModel(QDomDocument & modelDoc, QDomElement & parentNode);
 
     /**
+     * Exports the random forest to a file
      *
-     *
-     * @param fileStream
+     * @param fileStream Opened filestream for writing the random forest to a file; caller is
+     * responsible for closing the stream
      */
     void exportModel(std::ostream& filestream);
 
@@ -135,9 +136,10 @@ namespace Tgs
     void importModel(QDomElement & e);
 
     /**
+     * Import the random forest object
      *
-     *
-     * @param file
+     * @param file an opened file handle to a random forest (.rf) file; caller is responsible for
+     * closing the handle
      */
     void importModel(QFile& file);
 

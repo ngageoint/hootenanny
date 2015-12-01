@@ -5,7 +5,7 @@
 
 * *You cannot resolve any Hootenanny commands by typing 'hoot' at the command line?* --> Hootenanny Core has been installed incorrectly by the InstallHoot.sh script.  The script is designed to clear existing
 Hootenanny installations from the install target path when run, but its possible this did not occur.  The following commands will completely clean Hootenanny core from the system (paths are dependent upon the
-settings used in the InstallHoot.sh script):
+settings used in the UpdateHoot-CentOS6.sh script):
  ** sudo rm -rf $HOOT_CORE_INSTALL_DIR/hootenanny-$NEW_VERSION
  ** sudo rm -f $HOOT_CORE_INSTALL_DIR/hoot 
  ** sudo rm -f $HOOT_CORE_INSTALL_DIR/bin/hoot
@@ -60,7 +60,7 @@ export HOOT_HOME=/usr/local/hoot
 $HOOT_HOME/scripts/DeleteAllTables.sh
 -------------------------------------- 
 
-To re-create the hoot database, run the InstallHoot.sh script with only the +UPDATE_DATABASE+ variable set to "true".
+To re-create the hoot database, run the UpdateHoot-CentOS6.sh script with only the +UPDATE_DATABASE+ variable set to "true".
 
 * *When using PSQL, asked for a password for a database (rather than for a user) and don't have it?* --> Possibly, you have authentication still set to MD5 in the pg_hba.conf file. Temporarily set unset if from MD5 (see Postgres install steps) to use PSQL. Set it back to MD5 when you've finished using PSQL.
 
@@ -121,7 +121,7 @@ tail -f /var/log/tomcat6/catalina.out | grep -i -e ERROR -e SEVERE
   ** +http://localhost/hoot-services/info/about/servicesVersionInfo+
   ** +http://localhost/hoot-services/info/about/servicesVersionDetail+
 
-* *Can't hit the service URL's above?* --> The install script should handle this installation correctly, but perhaps the Hootenanny web application was installed to the incorrect location.  It should exist at: /var/lib/tomcat6/webapps/hoot-services .  Although InstallHoot.sh will clean out any previously existing Hootenanny web applications, as a manual alternative, the following commands will clean out any previously existing
+* *Can't hit the service URL's above?* --> The install script should handle this installation correctly, but perhaps the Hootenanny web application was installed to the incorrect location.  It should exist at: /var/lib/tomcat6/webapps/hoot-services .  Although UpdateHoot-CentOS6.sh will clean out any previously existing Hootenanny web applications, as a manual alternative, the following commands will clean out any previously existing
 installations:
   ** sudo rm -f /var/lib/tomcat6/webapps/hoot*-services*.war
   ** sudo rm -rf /var/lib/tomcat6/webapps/hoot*-services*

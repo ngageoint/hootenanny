@@ -1,0 +1,34 @@
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "node"
+        ],
+        "influence": 1,
+        "isA": "hgispoi",
+        "name": "junction",
+        "objectType": "tag"
+    },
+    {
+        "description": "This key describes how a specific junction is constituted.",
+        "isA": "junction",
+        "name": "junction=*",
+        "objectType": "tag"
+    },
+    {
+        "description": "A conventional roundabout",
+        "isA": "junction",
+        "name": "junction=roundabout",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "highway=motorway_junction",
+                "weight": 0.4
+            },
+            {
+                "name": "highway=mini_roundabout",
+                "weight": 0.8
+            }
+        ]
+    }
+]

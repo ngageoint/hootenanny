@@ -1,7 +1,7 @@
 
 == Hootenanny Development Environment Setup Instructions
 
-This document contains the current set of instructions to install the Hootenanny developer build environment within a VirtualBox virtual machine running Ubuntu 14.04.  An alternative more streamlined approach to installing Hootenanny can be taken using the Vagrant file instructions provided in <<HootenannyVagrantSetup>> but note that this has been fairly recently introduced and thus not thoroughly tested.
+This document contains the current set of instructions to install the Hootenanny developer build environment within a VirtualBox virtual machine running Ubuntu 14.04.  An alternative more streamlined approach to installing Hootenanny can be taken using the Vagrant file instructions provided in <<HootenannyVagrantSetup>>.
 
 === External Dependencies
 
@@ -31,7 +31,7 @@ Download the ISO image for the latest 64-bit LTS release of 64-bit Ubuntu (14.04
 [[CreateHootVM]]
 ==== Create VM
 
-. Launch VirtualBox 
+. Launch VirtualBox
 . Click the `New` button
 . Name and operating system
 .. Name: can be anything
@@ -45,7 +45,7 @@ Download the ISO image for the latest 64-bit LTS release of 64-bit Ubuntu (14.04
 .. Select `Create a virtual hard drive now`
 .. Click `Create`
 . Hard drive file type
-.. Leave the option at `VDI` 
+.. Leave the option at `VDI`
 .. Click `Next`
 . Storage on physical hard drive
 .. Select `Fixed size`
@@ -117,23 +117,36 @@ Download the ISO image for the latest 64-bit LTS release of 64-bit Ubuntu (14.04
 
 ==== Items from apt repo
 
+---------------
+sudo apt-get purge automake
+sudo apt-get remove qt5-default postgresql-9.3
+sudo apt-get autoremove
+--------------
+
 . `sudo` `apt-get` `install` `texinfo` `g++` `libicu-dev` `libqt4-dev`
   `git-core` `libboost-dev` `libcppunit-dev` `libcv-dev` `libopencv-dev`
+  `libopencv-core-dev` `libopencv-imgproc-dev`
   `libgdal-dev` `liblog4cxx10-dev` `libnewmat10-dev` `libproj-dev` `python-dev`
-  `libjson-spirit-dev` `automake1.11` `protobuf-compiler` `libprotobuf-dev`
-  `libqt4-sql-psql` `libgeos++-dev` `swig` `lcov` `tomcat6` `openjdk-6-jdk`
-  `openjdk-6-dbg` `maven` `libstxxl-dev` `nodejs-dev` `doxygen` `xsltproc`
-  `asciidoc` `pgadmin3` `curl` `npm` `libxerces-c28` `libglpk-dev`
-  `libboost-all-dev` `source-highlight` `texlive-lang-all` `graphviz` `w3m`
-  `python-setuptools` `python` `python-pip` `git` `postgresql-contrib-9.1`
-  `ccache` `libogdi3.2-dev` `gnuplot` `python-matplotlib`
+  `libjson-spirit-dev` `automake1.11` `protobuf-compiler` `libprotobuf-dev` `make` `gdb`
+  `libqt4-sql-psql` `libgeos-dev` `libgeos++-dev` `swig` `lcov` `tomcat6` `openjdk-7-jdk`
+  `openjdk-7-dbg` `maven` `libstxxl-dev` `zip` `nodejs-dev` `doxygen` `xsltproc`
+  `asciidoc` `pgadmin3` `curl` `npm` `postgresql-9.1-postgis` `libxerces-c-dev` `libxerces-c28` `libglpk-dev`
+  `libboost-all-dev` `source-highlight` `texlive-lang-all` `graphviz` `w3m``libhdf5-dev` `libgif-dev`
+  `gfortran` `python-setuptools` `python` `python-pip` `git` `postgresql-contrib-9.1`
+  `ccache` `libogdi3.2-dev` `gnuplot` `python-matplotlib` `postgresql-server-dev-9.1` `libxml-simple-perl`
+  `wamerican-insane`
 +
+
+-------------
+sudo apt-get autoremove
+--------------
+
 NOTE: In some cases, the package `libqt4-dev` may not install properly due to unmet dependencies. If an error message appears when attempting to compile Hoot core, it may be useful to remove all of the unmet dependencies listed when executing `sudo apt-get install libqt4-dev`, then remove `libqt4-dev` (`sudo apt-get remove libqt4-dev`) and reinstall without the unmet dependencies present.  Typically these will get installed by the dependent package.
 +
-. Modify `~/.profile` and append the following to the bottom of the file: 
+. Modify `~/.profile` and append the following to the bottom of the file:
 +
 ----
-export JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64
+export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
 ----
 +
 . Run `source ~/.profile`
@@ -157,7 +170,7 @@ include /etc/ld.so.conf.d/*.conf
 +
 . `export PATH=/usr/local/lib:/usr/local/bin:$PATH`
 . `cd <path_to_gdal-1.10.1_directory>`
-. `sudo ./configure --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config 
+. `sudo ./configure --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config
 --with-python`
 . `sudo make -j5`
 . `sudo make install`
@@ -178,7 +191,7 @@ include /etc/ld.so.conf.d/*.conf
 . Confirm that you log in successfully
 . `exit`
 
-==== Firewall 
+==== Firewall
 
 Run `sudo iptables -L -n` and confirm that all three chains have a policy set to `ACCEPT` and no rules under them. If that isn't the case, you'll need to disable your firewall which is out of scope for this document.
 
@@ -305,7 +318,7 @@ Run `sudo iptables -L -n` and confirm that all three chains have a policy set to
 to read
 +
 ----
-export JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64
+export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
 ----
 +
 . Add the following lines to `~/.profile`
@@ -342,7 +355,7 @@ Found 1 items
 drwxr-xr-x   - tott supergroup          0 2015-02-27 13:45 /tmp
 ----
 +
-. Visit `http://localhost:50030` 
+. Visit `http://localhost:50030`
 .. Verify the `Nodes` field under `Cluster Summary` reads 1
 . Visit `http://localhost:50070`
 .. Verify the `DFS Remaining` value is fairly close to the available space on `/dev/sda1` as reported by a `df -Hs` command
@@ -363,7 +376,7 @@ Starting Job
 15/02/27 15:05:55 INFO mapred.JobClient:  map 100% reduce 100%
 15/02/27 15:05:57 INFO mapred.JobClient: Job complete: job_201502271345_0001
 15/02/27 15:05:57 INFO mapred.JobClient: Counters: 18
-15/02/27 15:05:57 INFO mapred.JobClient:   Job Counters 
+15/02/27 15:05:57 INFO mapred.JobClient:   Job Counters
 15/02/27 15:05:57 INFO mapred.JobClient:     Launched reduce tasks=1
 15/02/27 15:05:57 INFO mapred.JobClient:     Launched map tasks=2
 15/02/27 15:05:57 INFO mapred.JobClient:     Data-local map tasks=2
@@ -386,7 +399,29 @@ Starting Job
 15/02/27 15:05:57 INFO mapred.JobClient:     Reduce input records=4
 Job Finished in 23.716 seconds
 Estimated value of Pi is 3.12000000000000000000
-tott@tott-VirtualBox:/usr/local/hadoop$ 
+tott@tott-VirtualBox:/usr/local/hadoop$
+----
+
+==== Hadoop Configuration After Upgrading from Java 6 to 7
+
+If for some reason you had Java 6 previously installed and upgraded to Java 7 as a result of these
+instructions, you may have to perform the following steps.
+
+. Update JAVA_HOME in ~/.profile: export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+. Update JAVA_HOME in $HADOOP_HOME/conf/hadoop-env.sh: export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+. Run the following:
+----
+cd /lib
+sudo ln -s /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/libjvm.so libjvm.so
+cd /lib64
+sudo ln -s /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/libjvm.so libjvm.so
+cd /x86_64-linux-gnu
+sudo ln -s /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/libjvm.so libjvm.so
+sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-1.7.0-openjdk-amd64/bin/java 1
+sudo update-alternatives --config java
+sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/java-1.7.0-openjdk-amd64/bin/javac" 1
+sudo update-alternatives --config javac
+$HADOOP_HOME/bin/stop-all.sh && $HADOOP_HOME/bin/start-all.sh
 ----
 
 ==== Node.js modules
@@ -402,7 +437,9 @@ tott@tott-VirtualBox:/usr/local/hadoop$
 
 ==== Services Database
 
-. `sudo -u postgres createuser --superuser --pwprompt hoot `enter default pw'
+. `sudo -u postgres createuser --superuser'`
+. `sudo -u postgres psql -c "alter user hoot with password 'hoottest';"`
+.. If you choose an alternate password, be sure to update the value in conf/DatabaseConfig.sh
 . `sudo -u postgres createdb hoot --owner=hoot`
 . `sudo -u postgres createdb wfsstoredb --owner=hoot`
 . `sudo vi /etc/postgresql/9.1/main/pg_hba.conf`
@@ -415,12 +452,12 @@ tott@tott-VirtualBox:/usr/local/hadoop$
 .. Confirm that the system displays the `wfsstoredb=#` prompt, rather than the following error: `psql: FATAL:  database "wfsstore" does not exist`
 . `wfsstoredb=# \q`
 
-==== postgis 
+==== postgis
 
 Execute the following SQL statements
 
 ----
-sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='wfsstoredb'" 
+sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='wfsstoredb'"
 sudo -u postgres psql -d wfsstoredb -f /usr/share/postgresql/9.1/contrib/postgis-1.5/postgis.sql
 sudo -u postgres psql -d wfsstoredb -f /usr/share/postgresql/9.1/contrib/postgis-1.5/spatial_ref_sys.sql
 sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on geometry_columns TO PUBLIC;"
@@ -430,7 +467,7 @@ sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on spatial_ref_sys TO PUBLIC;"
 
 === PostgreSQL Tuning
 
-. `sudo -u postgres vi /etc/postgresql/9.1/main/postgresql.conf` 
+. `sudo -u postgres vi /etc/postgresql/9.1/main/postgresql.conf`
 .. `max_connections`: increase from `100` to `1000`
 .. `shared_buffers`: increase from `24M` to `1024M`
 .. `max_files_per_process`: uncomment the line that sets it to `1000`
@@ -447,7 +484,7 @@ sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on spatial_ref_sys TO PUBLIC;"
 .. `sudo vi /etc/sysctl.conf`
 ... Add the following lines at the bottom of the file:
 +
----- 
+----
 kernel.shmmax=1173741824
 kernel.shmall=2097152
 ----
@@ -470,6 +507,7 @@ Find Hootenanny on GitHub and then:
 
 . `cd ~/hoot`
 . `cp ./conf/DatabaseConfig.sh.orig ./conf/DatabaseConfig.sh`
+.. If you chose an alternate password for the hoot db user, be sure to update the value in conf/DatabaseConfig.sh
 . `source ./SetupEnv.sh`
 . `aclocal` (ignore warning)
 . `autoconf`
@@ -485,7 +523,7 @@ QMAKE_CXX=ccache g++
 ----
 +
 
-. `make -sj5` 
+. `make -sj5`
 
 ----
 Please note if you need add new table or remove table from hoot db, please make sure to modify DB_ALLOWED_TABLES variable in DatabaseConfig.sh.orig'
@@ -495,7 +533,7 @@ Please note if you need add new table or remove table from hoot db, please make 
 
 ==== Services Local Configuration
 
-You can permanently override services configuration settings in your development environment by 
+You can permanently override services configuration settings in your development environment by
 adding a local.conf file to hoot-services/src/main/resources/conf.  Override any number of settings
 from hoot-services/src/main/resources/conf/hoot-services.conf in this file.
 
@@ -514,15 +552,15 @@ from hoot-services/src/main/resources/conf/hoot-services.conf in this file.
 
 You can significantly speed up the time the services test take to execute by adjusting the job
 status poller timeout.  The setting is configured to run on the build servers without issues, but
-can be optimized for some developer environments.  In 
+can be optimized for some developer environments.  In
 hoot-services/src/main/resources/conf/local.conf adjust the testJobStatusPollerTimeout setting
 to something lower than the default value (value in milliseconds):
 
 ===== Disabling Warning Messages in the C++ Unit Tests
 
-Some tests, by their very nature, will log warning messages to the Hootenanny log when run (even 
-when tests are run in silent mode).  To avoid cluttering up the display during testing, you can 
-temporarily disable the log for your test.  Do this by referencing the DisableLog class at the 
+Some tests, by their very nature, will log warning messages to the Hootenanny log when run (even
+when tests are run in silent mode).  To avoid cluttering up the display during testing, you can
+temporarily disable the log for your test.  Do this by referencing the DisableLog class at the
 beginning of your test.  An example:
 ------------
 class BuildingOutlineUpdateOpTest : public CppUnit::TestFixture
@@ -594,7 +632,7 @@ Name[en]=Eclipse
 . Set your tab spacing to 2 spaces.
 
 ==== Load Projects into Eclipse
- 
+
 ===== Hoot Services
 'Hoot Services (hoot-services)': Web services that expose OSM data editing, core Hootenanny functionality via WPS, and Hootenanny data via WFS.
 
@@ -651,7 +689,7 @@ start
 ... VM arguments should contain text similar to:
 +
 -----------
- -Dcatalina.base="/home/username/workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp0" -Dcatalina.home="/usr/share/tomcat6" -Dwtp.deploy="/home/username/workspace/.metadata/.plugins/org.eclipse.wst.server.core  /tmp0/wtpwebapps" -Djava.endorsed.dirs="/usr/share/tomcat6/endorsed" 
+ -Dcatalina.base="/home/username/workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp0" -Dcatalina.home="/usr/share/tomcat6" -Dwtp.deploy="/home/username/workspace/.metadata/.plugins/org.eclipse.wst.server.core  /tmp0/wtpwebapps" -Djava.endorsed.dirs="/usr/share/tomcat6/endorsed"
 -----------
 +
 where "/home/username/workspace" should be replaced by the location of your Eclipse workspace directory root.
@@ -670,8 +708,8 @@ where "/home/username/workspace" should be replaced by the location of your Ecli
 sudo service tomcat6 stop
 -----------
 +
-. Launch hoot-services in debug mode by right-click on the project and select Debug as -> Debug on Server. You should see the Tomcat server startup logging in the console view. 
-. hoot-services should start and load all the WPS services.  If you see "Class not found" errors, your Tomcat debug environment is probably not set up properly.  
+. Launch hoot-services in debug mode by right-click on the project and select Debug as -> Debug on Server. You should see the Tomcat server startup logging in the console view.
+. hoot-services should start and load all the WPS services.  If you see "Class not found" errors, your Tomcat debug environment is probably not set up properly.
 . From a browser, you should be able to navigate to link:http://localhost:8080/hoot-services/info/about/servicesVersionInfo[http://localhost:8080/hoot-services/info/about/servicesVersionInfo] and see some diagnostic XML.
 . From a browser, you should be able to navigate to link:http://localhost:8080/hoot-ui/#background=Bing&map=17.20/47.43525/6.77106[http://localhost:8080/hoot-ui/#background=Bing&map=17.20/47.43525/6.77106] and see the user interface.  Substitute any map coordiantes and zoom to the level you want.
 . Debug the services (debugging the UI is not covered in these instructions, and could be completed in the client using the browser's Developer Tools) by setting up a breakpoint anywhere in the hoot-services classes to capture incoming requests.

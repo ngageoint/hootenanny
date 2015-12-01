@@ -22,97 +22,145 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "GeoNamesReader.h"
 
 // hoot
+#include <hoot/core/Factory.h>
 #include <hoot/core/MapReprojector.h>
 
 // qt
+#include <QDir>
 #include <QFile>
 
 namespace hoot
 {
 
+HOOT_FACTORY_REGISTER(OsmMapReader, GeoNamesReader)
+
 GeoNamesReader::GeoNamesReader()
 {
   _circularError = 15.0;
+  _useDataSourceIds = false;
+
+  _columns << "geonameid";
+  _columns << "name";
+  _columns << "asciiname";
+  _columns << "alternatenames";
+  _columns << "latitude";
+  _columns << "longitude";
+  _columns << "feature_class";
+  _columns << "feature_code";
+  _columns << "country_code";
+  _columns << "cc2";
+  _columns << "admin1_code";
+  _columns << "admin2_code";
+  _columns << "admin3_code";
+  _columns << "admin4_code";
+  _columns << "population";
+  _columns << "elevation";
+  _columns << "dem";
+  _columns << "timezone";
+  _columns << "modification_date";
+
+  _GEONAMESID = 0;
+  _convertColumns << 1 << 3 << 6 << 7 << 8 << 9 << 10 << 11 << 12 << 13 << 14 << 15 << 18;
+  _LATITUDE = 4;
+  _LONGITUDE = 5;
 }
 
-void GeoNamesReader::read(QString path, shared_ptr<OsmMap> map)
+void GeoNamesReader::close()
 {
-  MapReprojector::reprojectToWgs84(map);
+  _fp.close();
+}
 
-  QFile fp(path);
-
-  if (fp.open(QFile::ReadOnly) == false)
+shared_ptr<OGRSpatialReference> GeoNamesReader::getProjection() const
+{
+  if (!_wgs84)
   {
-    throw HootException("Error opening file for reading: " + path);
+    _wgs84 = MapReprojector::getInstance().createWgs84Projection();
   }
 
-  QStringList l;
-  l << "geonameid";
-  l << "name";
-  l << "asciiname";
-  l << "alternatenames";
-  l << "latitude";
-  l << "longitude";
-  l << "feature_class";
-  l << "feature_code";
-  l << "country_code";
-  l << "cc2";
-  l << "admin1_code";
-  l << "admin2_code";
-  l << "admin3_code";
-  l << "admin4_code";
-  l << "population";
-  l << "elevation";
-  l << "dem";
-  l << "timezone";
-  l << "modification_date";
+  return _wgs84;
+}
 
-  QList<int> convertColumns;
-  convertColumns << 1 << 3 << 6 << 7 << 8 << 9 << 10 << 11 << 12 << 13 << 14 << 15 << 18;
-  const int LATITUDE = 4;
-  const int LONGITUDE = 5;
+bool GeoNamesReader::hasMoreElements()
+{
+  return !_fp.atEnd();
+}
 
-  while (!fp.atEnd())
+bool GeoNamesReader::isSupported(QString url)
+{
+  url = QDir().absoluteFilePath(url);
+  QFile f(url);
+
+  bool result = url.toLower().endsWith(".geonames") && f.exists();
+  return result;
+}
+
+void GeoNamesReader::open(QString url)
+{
+  _fp.close();
+  _fp.setFileName(QDir().absoluteFilePath(url));
+  _elementsRead = 0;
+
+  if (_fp.open(QFile::ReadOnly) == false)
   {
-    QByteArray lineBytes = fp.readLine();
-    QString line = QString::fromUtf8(lineBytes.constData());
-    QStringList fields = line.split('\t');
+    throw HootException("Error opening file for reading: " + url);
+  }
+}
 
+ElementPtr GeoNamesReader::readNextElement()
+{
+  QByteArray lineBytes = _fp.readLine();
+  QString line = QString::fromUtf8(lineBytes.constData());
+  QStringList fields = line.split('\t');
+
+  bool ok;
+  double x = fields[_LONGITUDE].toDouble(&ok);
+  if (ok == false)
+  {
+    throw HootException(QString("Error parsing longitude (%1): %2").arg(fields[_LONGITUDE]).
+      arg(line));
+  }
+  double y = fields[_LATITUDE].toDouble(&ok);
+  if (ok == false)
+  {
+    throw HootException(QString("Error parsing latitude (%1): %2").arg(fields[_LATITUDE]).
+      arg(line));
+  }
+
+  long id;
+  if (_useDataSourceIds)
+  {
     bool ok;
-    double x = fields[LONGITUDE].toDouble(&ok);
-    if (ok == false)
+    id = fields[_GEONAMESID].toLong(&ok);
+    if (!ok)
     {
-      throw HootException(QString("Error parsing longitude (%1): %2").arg(fields[LONGITUDE]).
-        arg(line));
+      throw HootException("Error parsing geonames ID: " + line);
     }
-    double y = fields[LATITUDE].toDouble(&ok);
-    if (ok == false)
-    {
-      throw HootException(QString("Error parsing latitude (%1): %2").arg(fields[LATITUDE]).
-        arg(line));
-    }
-
-    shared_ptr<Node> n(new Node(_status, map->createNextNodeId(), x, y, _circularError));
-
-    if (l.size() != fields.size())
-    {
-      throw HootException(QString("Expected %1 fields but found %2 fields. %3").arg(l.size()).
-        arg(fields.size()).arg(line));
-    }
-
-    for (int i = 0; i < l.size(); i++)
-    {
-      int j = i; //convertColumns[i];
-      n->getTags()[l[j]] = _saveMemory(fields[j]);
-    }
-
-    map->addNode(n);
   }
+  else
+  {
+    id = _partialMap->createNextNodeId();
+  }
+
+  shared_ptr<Node> n(new Node(_status, id, x, y, _circularError));
+
+  if (_columns.size() != fields.size())
+  {
+    throw HootException(QString("Expected %1 fields but found %2 fields. %3").arg(_columns.size()).
+      arg(fields.size()).arg(line));
+  }
+
+  for (int i = 0; i < _columns.size(); i++)
+  {
+    int j = i; //convertColumns[i];
+    n->getTags()[_columns[j]] = _saveMemory(fields[j]);
+  }
+
+  return n;
 }
 
 const QString& GeoNamesReader::_saveMemory(const QString& s)

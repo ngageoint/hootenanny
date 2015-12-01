@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-3302720' visible='true' lat='30.7333329885' lon='31.416667'>
+    <tag k='REF1' v='000105' />
+    <tag k='alt_name' v='سيدي عسكر' />
+    <tag k='amenity' v='grave_yard' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:mismatch' v='1' />
+    <tag k='hoot:wrong' v='1' />
+    <tag k='int_name' v='Sīdī ‘Askar, Sidi Askar' />
+    <tag k='is_in' v='Egypt, جمهورية مصر العربية' />
+    <tag k='name' v='سيدي عسكر' />
+    <tag k='name:ar' v='سيدي عسكر' />
+    <tag k='name:ar1' v='سيدي عسكر' />
+    <tag k='name:de' v='Sidi Askar' />
+    <tag k='name:en' v='Sidi Askar' />
+    <tag k='name:fr' v='Sidi Askar' />
+    <tag k='uuid' v='{95df6cd2-0da8-5265-9936-573328ef8fbf}' />
+  </node>
+</osm>

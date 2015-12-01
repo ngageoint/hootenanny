@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SequenceIdReserver.h"
 
@@ -68,7 +68,7 @@ long SequenceIdReserver::_reserveIds()
     // This query contains a race condition. It is possible that one process could call SETVAL
     // between the call to CURRVAL and SETVAL. This can result in a smaller value than expected
     // and duplicate IDs. See #3607 for details.
-    ///
+    //
     LOG_WARN("This query contains a race condition and may not do what you want.");
     _query->prepare(
       QString("SELECT NEXTVAL('%1'), "

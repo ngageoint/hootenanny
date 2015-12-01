@@ -22,91 +22,174 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ReviewMarker.h"
 
 #include <hoot/core/util/Log.h>
 
+// Tgs
+#include <tgs/RStarTree/HilbertCurve.h>
+
 namespace hoot
 {
+
+QString ReviewMarker::_complexGeometryType = "Bad Geometry";
+QString ReviewMarker::_revieweeKey = "reviewee";
+QString ReviewMarker::_reviewUuidKey = "hoot:review:uuid";
+QString ReviewMarker::_reviewScoreKey = "hoot:review:score";
+QString ReviewMarker::reviewSortOrderKey = "hoot:review:sort_order";
+QString ReviewMarker::_reviewNeedsKey = "hoot:review:needs";
+QString ReviewMarker::_reviewNoteKey = "hoot:review:note";
+QString ReviewMarker::_reviewTypeKey = "hoot:review:type";
+QString ReviewMarker::_reviewChoicesKey = "hoot:review:choices";
+
 
 ReviewMarker::ReviewMarker()
 {
 }
 
-bool ReviewMarker::isNeedsReview(const Tags& tags)
+set<ElementId> ReviewMarker::getReviewElements(const ConstOsmMapPtr &map, ReviewUid uid)
 {
-  return tags.isTrue(reviewNeedsKey());
+  set<ElementId> result;
+
+  ConstRelationPtr r = map->getRelation(uid.getId());
+
+  if (r)
+  {
+    const vector<RelationData::Entry>& entries = r->getMembers();
+
+    for (size_t i = 0; i < entries.size(); i++)
+    {
+      result.insert(entries[i].getElementId());
+    }
+  }
+
+  return result;
 }
 
-bool ReviewMarker::isNeedsReview(ConstElementPtr e1, ConstElementPtr e2)
+set<ElementId> ReviewMarker::_getReviewRelations(const ConstOsmMapPtr &map, ElementId eid)
 {
-  return isNeedsReview(e1->getTags()) && isNeedsReview(e2->getTags()) &&
-    (e1->getTags().get(reviewUuidKey()).contains(e2->getTags().get("uuid")) ||
-     e2->getTags().get(reviewUuidKey()).contains(e1->getTags().get("uuid")));
+  set<ElementId> result = map->getParents(eid);
+
+  for (set<ElementId>::iterator it = result.begin(); it != result.end();)
+  {
+    set<ElementId>::iterator current = it++;
+    ElementId p = *current;
+    if (p.getType() != ElementType::Relation ||
+        map->getRelation(p.getId())->getType() != Relation::REVIEW)
+    {
+      result.erase(current);
+    }
+  }
+
+  return result;
 }
 
-void ReviewMarker::mark(ElementPtr& e1, ElementPtr& e2, const QString& note, double score)
+QString ReviewMarker::getReviewType(const ConstOsmMapPtr &map, ReviewUid uid)
 {
-  markElement(e1, e2, note, score);
-  markElement(e2, e1, note, score);
+  assert(isReviewUid(map, uid));
+
+  ConstRelationPtr r = map->getRelation(uid.getId());
+
+  return r->getTags()[_reviewTypeKey];
 }
 
-void ReviewMarker::mark(ElementPtr& e, const QString& note, double score)
+set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr &map,
+  ConstElementPtr e1)
 {
-  e->getTags().set(reviewNeedsKey(), true);
-  e->getTags().set(reviewSourceKey(), QString::number(e->getStatus().getEnum()));
+  return _getReviewRelations(map, e1->getElementId());
+}
+
+bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1)
+{
+  // get all the review relations for e1
+  set<ElementId> review1 = _getReviewRelations(map, e1->getElementId());
+
+  // if there are more than one relations in the intersection, return true.
+  return review1.size() >= 1;
+}
+
+bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1, ConstElementPtr e2)
+{
+  // get all the review relations for e1
+  set<ElementId> review1 = _getReviewRelations(map, e1->getElementId());
+  // get all the review relations for e2
+  set<ElementId> review2 = _getReviewRelations(map, e2->getElementId());
+
+  // intersect the relations
+  set<ElementId> intersection;
+  set_intersection(review1.begin(), review1.end(), review2.begin(), review2.end(),
+    std::inserter(intersection, intersection.begin()));
+
+  // if there are more than one relations in the intersection, return true.
+  return intersection.size() >= 1;
+}
+
+bool ReviewMarker::isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid)
+{
+  bool result = false;
+
+  if (uid.getType() == ElementType::Relation)
+  {
+    ConstRelationPtr r = map->getRelation(uid.getId());
+
+    if (r->getTags().isTrue(_reviewNeedsKey))
+    {
+      result = true;
+    }
+  }
+
+  return result;
+}
+
+void ReviewMarker::mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, const QString& note,
+  const QString &reviewType, double score, vector<QString> choices)
+{
   if (note.isEmpty())
   {
     throw IllegalArgumentException("You must specify a review note.");
   }
-  e->getTags().appendValueIfUnique(reviewNoteKey(), note);
-  _updateScore(e->getTags(), score);
+
+  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
+  r->getTags().set(_reviewNeedsKey, true);
+  r->getTags().appendValueIfUnique(_reviewNoteKey, note);
+  r->getTags().appendValueIfUnique(_reviewTypeKey, reviewType);
+  r->getTags().set(_reviewScoreKey, score);
+  r->addElement(_revieweeKey, e1->getElementId());
+  r->addElement(_revieweeKey, e2->getElementId());
+  r->setCircularError(-1);
+
+  for (unsigned int i = 0; i < choices.size(); i++)
+  {
+    r->getTags()[_reviewChoicesKey + ":" + QString::number(i+1)] = choices[i];
+  }
+
+  map->addElement(r);
 }
 
-void ReviewMarker::markElement(ElementPtr& e, ElementPtr& other, const QString& note, double score)
+void ReviewMarker::mark(const OsmMapPtr& map, ElementPtr& e, const QString& note,
+  const QString &reviewType, double score, vector<QString> choices)
 {
-  e->getTags().appendValueIfUnique(reviewUuidKey(), other->getTags().getCreateUuid());
-  e->getTags().set(reviewNeedsKey(), true);
-  e->getTags().set(reviewSourceKey(), QString::number(e->getStatus().getEnum()));
   if (note.isEmpty())
   {
     throw IllegalArgumentException("You must specify a review note.");
   }
-  e->getTags().appendValueIfUnique(reviewNoteKey(), note);
-  _updateScore(e->getTags(), score);
-}
 
-void ReviewMarker::_updateScore(Tags& t, double score)
-{
-  if (score >= 0)
+  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
+  r->getTags().set(_reviewNeedsKey, true);
+  r->getTags().appendValueIfUnique(_reviewNoteKey, note);
+  r->getTags().appendValueIfUnique(_reviewTypeKey, reviewType);
+  r->getTags().set(_reviewScoreKey, score);
+  r->addElement(_revieweeKey, e->getElementId());
+  r->setCircularError(-1);
+
+  for (unsigned int i = 0; i < choices.size(); i++)
   {
-    QStringList l = t.getList(reviewScoreKey());
-
-    if (l.size() > 1)
-    {
-      LOG_WARN("Found an unexpected list of scores. Did you forget to strip reviews "
-               "before running conflate (-C RemoveReview2Pre.conf)? " + t.get(reviewScoreKey()));
-    }
-
-    double maxScore = score;
-    for (int i = 0; i < l.size(); i++)
-    {
-      bool ok;
-      double s = l[i].toDouble(&ok);
-      if (ok)
-      {
-        maxScore = max(s, maxScore);
-      }
-      else
-      {
-        LOG_WARN("Found an invalid score in tags: " + t.toString());
-      }
-    }
-
-    t.set(reviewScoreKey(), maxScore);
+    r->getTags()[_reviewChoicesKey + ":" + QString::number(i+1)] = choices[i];
   }
+
+  map->addElement(r);
 }
 
 }

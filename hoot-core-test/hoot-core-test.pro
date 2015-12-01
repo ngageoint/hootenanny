@@ -39,11 +39,6 @@ release:OBJECTS_DIR = tmp/release
 else:OBJECTS_DIR = tmp/debug
 DESTDIR = ../lib/
 
-octave {
-cppunit:SOURCES += src/test/cpp/hoot/core/perty/PertyOpTest.cpp \
-
-}
-
 cppunit {
 SOURCES += \
     src/test/cpp/hoot/core/ConflatorTest.cpp \
@@ -160,7 +155,11 @@ SOURCES += \
     src/test/cpp/hoot/core/conflate/point/CustomPoiMatchCreatorTest.cpp \
     src/test/cpp/hoot/core/conflate/ConflateStatsHelperTest.cpp \
     src/test/cpp/hoot/core/visitors/MatchCandidateCountVisitorTest.cpp \
-    src/test/cpp/hoot/core/visitors/KeepTagsVisitorTest.cpp
+    src/test/cpp/hoot/core/visitors/KeepTagsVisitorTest.cpp \
+    src/test/cpp/hoot/core/conflate/CookieCutterTest.cpp \
+    src/test/cpp/hoot/core/conflate/AlphaShapeGeneratorTest.cpp \
+    src/test/cpp/hoot/core/perty/PertyOpTest.cpp \
+    src/test/cpp/hoot/core/ops/CookieCutterOpTest.cpp
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
@@ -186,9 +185,17 @@ nodejs:SOURCES += \
 
 SOURCES += \
     src/test/cpp/hoot/core/conflate/SearchRadiusCalculatorTest.cpp \
+    src/test/cpp/hoot/core/io/ElementCacheLruTest.cpp \
     src/test/cpp/hoot/core/algorithms/string/TextFileWordWeightDictionaryTest.cpp \
     src/test/cpp/hoot/core/schema/ScoreMatrixTest.cpp \
     src/test/cpp/hoot/core/algorithms/string/WeightedWordDistanceTest.cpp \
     src/test/cpp/hoot/core/algorithms/string/SqliteWeightedWordDistanceTest.cpp \
-    src/test/cpp/hoot/core/filters/BuildingCriterionTest.cpp
+    src/test/cpp/hoot/core/filters/BuildingCriterionTest.cpp \
+    src/test/cpp/hoot/core/visitors/SplitLongLinearWaysVisitorTest.cpp \
+    src/test/cpp/hoot/core/elements/WayTest.cpp \
+    src/test/cpp/hoot/core/algorithms/string/StringTokenizerTest.cpp \
+    src/test/cpp/hoot/core/schema/TagCategoryDifferencerTest.cpp \
+    src/test/cpp/hoot/core/schema/TagAncestorDifferencerTest.cpp \
+    src/test/cpp/hoot/core/elements/RelationTest.cpp \
+    src/test/cpp/hoot/core/algorithms/string/MostEnglishNameTest.cpp
 

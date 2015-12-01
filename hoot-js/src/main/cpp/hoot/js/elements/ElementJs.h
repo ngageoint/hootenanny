@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTJS_H
 #define ELEMENTJS_H
@@ -73,6 +73,7 @@ protected:
   static v8::Handle<v8::Value> getId(const v8::Arguments& args);
   static v8::Handle<v8::Value> getStatusString(const v8::Arguments& args);
   static v8::Handle<v8::Value> getTags(const v8::Arguments& args);
+  static v8::Handle<v8::Value> setStatusString(const v8::Arguments& args);
   static v8::Handle<v8::Value> setTags(const v8::Arguments& args);
   static v8::Handle<v8::Value> toString(const v8::Arguments& args);
 
@@ -89,6 +90,26 @@ inline void toCpp(v8::Handle<v8::Value> v, ConstElementPtr& e)
   }
   v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
   e = node::ObjectWrap::Unwrap<ElementJs>(obj)->getConstElement();
+}
+
+inline void toCpp(v8::Handle<v8::Value> v, ElementPtr& e)
+{
+  if (v.IsEmpty() || !v->IsObject())
+  {
+    throw IllegalArgumentException("Expected input to be an ElementJs object type.");
+  }
+  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+  e = node::ObjectWrap::Unwrap<ElementJs>(obj)->getElement();
+}
+
+inline v8::Handle<v8::Value> toV8(const ConstElementPtr& e)
+{
+  return ElementJs::New(e);
+}
+
+inline v8::Handle<v8::Value> toV8(const ElementPtr& e)
+{
+  return ElementJs::New(e);
 }
 
 }

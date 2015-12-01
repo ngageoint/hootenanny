@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-3692883' visible='true' lat='30.03000218818' lon='31.2618605'>
+    <tag k='REF1' v='00216d' />
+    <tag k='artwork' v='statue' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='ابراهيم باشا' />
+    <tag k='name:en' v='Ibrahim Pasha' />
+    <tag k='tourism' v='artwork' />
+  </node>
+</osm>

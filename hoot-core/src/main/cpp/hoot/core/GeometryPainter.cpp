@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GeometryPainter.h"
@@ -232,10 +232,10 @@ void GeometryPainter::drawOsmMap(QPainter& pt, const OsmMap* map, const QMatrix&
     drawWay(pt, map, it->second.get(), m);
   }
 
-  const OsmMap::NodeMap& nodes = map->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nodes.constBegin(); it != nodes.constEnd(); ++it)
+  const NodeMap& nodes = map->getNodeMap();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    drawNode(pt, it.value().get(), m);
+    drawNode(pt, it->second.get(), m);
   }
 }
 
@@ -255,71 +255,77 @@ void GeometryPainter::drawPolygon(QPainter& pt, const OGRPolygon* polygon, const
 {
   QPen pen = pt.pen();
   QBrush brush = pt.brush();
-  QPainter* lpt;
+  QPainter* lpt = NULL;
   QImage* image = NULL;
-  if (polygon->getNumInteriorRings() > 0)
+  try
   {
-    image = new QImage(pt.window().size(), QImage::Format_ARGB32);
-    if (image->isNull() == true)
+    if (polygon->getNumInteriorRings() > 0)
     {
-      delete image;
-      throw Exception("Internal Error: GeometryPainter::drawPolygon "
-        "Error allocating image.");
-    }
-    image->fill(qRgba(0, 0, 0, 0));
-    lpt = new QPainter(image);
-    lpt->setMatrix(pt.matrix());
-    lpt->setPen(pen);
-    lpt->setBrush(brush);
-  }
-  else
-  {
-    lpt = &pt;
-  }
-
-  const OGRLinearRing* ring = polygon->getExteriorRing();
-  QPolygonF qp;
-  _convertRingToQPolygon(ring, qp, m);
-
-  lpt->setPen(Qt::NoPen);
-  lpt->setBrush(brush);
-  lpt->drawPolygon(qp, Qt::WindingFill);
-
-  lpt->setPen(pen);
-  lpt->setBrush(Qt::NoBrush);
-  lpt->drawPolygon(qp);
-
-  if (polygon->getNumInteriorRings() > 0)
-  {
-    OGRPoint p;
-    for (int i = 0; i < polygon->getNumInteriorRings(); i++)
-    {
-      ring = polygon->getInteriorRing(i);
-
-      // draw the appropriate border around the section we erased.
-      _convertRingToQPolygon(ring, qp, m);
-
-      // clear out the hole
-      lpt->setPen(Qt::NoPen);
-      lpt->setBrush(QColor(0, 0, 0, 0));
-      lpt->setCompositionMode(QPainter::CompositionMode_Clear);
-      lpt->drawPolygon(qp, Qt::WindingFill);
-
+      image = new QImage(pt.window().size(), QImage::Format_ARGB32);
+      if (image->isNull() == true)
+      {
+        delete image;
+        throw Exception("Internal Error: GeometryPainter::drawPolygon "
+          "Error allocating image.");
+      }
+      image->fill(qRgba(0, 0, 0, 0));
+      lpt = new QPainter(image);
+      lpt->setMatrix(pt.matrix());
       lpt->setPen(pen);
-      lpt->setBrush(Qt::NoBrush);
-      lpt->setCompositionMode(QPainter::CompositionMode_SourceOver);
-      lpt->drawPolygon(qp, Qt::WindingFill);
+      lpt->setBrush(brush);
+    }
+    else
+    {
+      lpt = &pt;
     }
 
-    lpt->end();
+    const OGRLinearRing* ring = polygon->getExteriorRing();
+    QPolygonF qp;
+    _convertRingToQPolygon(ring, qp, m);
 
-    QMatrix m = pt.matrix();
-    pt.resetMatrix();
-    pt.drawImage(pt.window(), *image);
-    pt.setMatrix(m);
+    lpt->setPen(Qt::NoPen);
+    lpt->setBrush(brush);
+    lpt->drawPolygon(qp, Qt::WindingFill);
 
+    lpt->setPen(pen);
+    lpt->setBrush(Qt::NoBrush);
+    lpt->drawPolygon(qp);
+
+    if (polygon->getNumInteriorRings() > 0)
+    {
+      OGRPoint p;
+      for (int i = 0; i < polygon->getNumInteriorRings(); i++)
+      {
+        ring = polygon->getInteriorRing(i);
+
+        // draw the appropriate border around the section we erased.
+        _convertRingToQPolygon(ring, qp, m);
+
+        // clear out the hole
+        lpt->setPen(Qt::NoPen);
+        lpt->setBrush(QColor(0, 0, 0, 0));
+        lpt->setCompositionMode(QPainter::CompositionMode_Clear);
+        lpt->drawPolygon(qp, Qt::WindingFill);
+
+        lpt->setPen(pen);
+        lpt->setBrush(Qt::NoBrush);
+        lpt->setCompositionMode(QPainter::CompositionMode_SourceOver);
+        lpt->drawPolygon(qp, Qt::WindingFill);
+      }
+
+      lpt->end();
+
+      QMatrix m = pt.matrix();
+      pt.resetMatrix();
+      pt.drawImage(pt.window(), *image);
+      pt.setMatrix(m);
+    }
+  }
+  catch (const std::exception& e)
+  {
     delete lpt;
     delete image;
+    throw e;
   }
 }
 

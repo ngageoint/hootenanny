@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCOREMATRIX_H
 #define SCOREMATRIX_H
@@ -40,7 +40,7 @@ using namespace std;
 
 /**
  * A matrix of scores where the scores usually represent tag or name combinations. E.g. if you have
- * two names "Hotel California" and "California Hotel in Hollywood". You may assign the values s/t
+ * two names "Hotel California" and "California Hostel in Hollywood". You may assign the values s/t
  *
  *            | California | Hostel | in | Hollywood
  * Hotel      | 0.02       | 0.9    | 0  | 0.2
@@ -77,7 +77,7 @@ public:
   /**
    * Uses each row or col at most one time to calculate a reasonable estimate of the minimum sum of
    * values. Typically this is useful if the score represents distance instead of similarity.
-   * The first row and column as special in that they represent the unassigned weight of a row/col.
+   * The first row and column are special in that they represent the unassigned weight of a row/col.
    * A word may be matched to unassigned multiple times.
    *
    * In this example:

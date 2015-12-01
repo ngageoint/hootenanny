@@ -15,6 +15,15 @@
         </listener-class>
    </listener>
   <servlet>
+    <servlet-name>logging</servlet-name>
+    <servlet-class>hoot.services.DynamicLogPropsChangeScanner</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>logging</servlet-name>
+    <url-pattern>/logging/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>osm</servlet-name>
     <servlet-class>
       com.sun.jersey.spi.container.servlet.ServletContainer
@@ -35,7 +44,7 @@
       <param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
       <param-value>hoot.services.controllers.filters.CorsResponseFilter</param-value>
     </init-param>
-    <load-on-startup>1</load-on-startup>
+    <load-on-startup>2</load-on-startup>
   </servlet>
   <servlet-mapping>
     <servlet-name>osm</servlet-name>
@@ -62,7 +71,7 @@
       <param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
       <param-value>hoot.services.controllers.filters.CorsResponseFilter</param-value>
     </init-param>
-    <load-on-startup>1</load-on-startup>
+    <load-on-startup>2</load-on-startup>
   </servlet>
   <servlet-mapping>
     <servlet-name>job</servlet-name>
@@ -89,7 +98,7 @@
       <param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
       <param-value>hoot.services.controllers.filters.CorsResponseFilter</param-value>
     </init-param>
-    <load-on-startup>1</load-on-startup>
+    <load-on-startup>2</load-on-startup>
   </servlet>
   <servlet-mapping>
     <servlet-name>info</servlet-name>
@@ -116,7 +125,7 @@
       <param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
       <param-value>hoot.services.controllers.filters.CorsResponseFilter</param-value>
     </init-param>
-    <load-on-startup>1</load-on-startup>
+    <load-on-startup>2</load-on-startup>
   </servlet>
   <servlet-mapping>
     <servlet-name>ogr</servlet-name>
@@ -143,7 +152,7 @@
       <param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
       <param-value>hoot.services.controllers.filters.CorsResponseFilter</param-value>
     </init-param>
-    <load-on-startup>1</load-on-startup>
+    <load-on-startup>2</load-on-startup>
   </servlet>
   <servlet-mapping>
     <servlet-name>ingest</servlet-name>
@@ -152,7 +161,7 @@
   <servlet>
     <servlet-name>ogc</servlet-name>
     <servlet-class>org.deegree.services.controller.OGCFrontController</servlet-class>
-    <load-on-startup>2</load-on-startup>
+    <load-on-startup>3</load-on-startup>
   </servlet>
   <servlet-mapping>
     <servlet-name>ogc</servlet-name>
@@ -161,7 +170,7 @@
  <servlet>
     <servlet-name>config</servlet-name>
     <servlet-class>org.deegree.services.config.servlet.ConfigServlet</servlet-class>
-    <load-on-startup>2</load-on-startup>
+    <load-on-startup>3</load-on-startup>
   </servlet>
   <servlet-mapping>
     <servlet-name>config</servlet-name>
@@ -188,7 +197,7 @@
     <servlet-class>org.mitre.dsmiley.httpproxy.ProxyServlet</servlet-class>
     <init-param>
       <param-name>targetUri</param-name>
-      <param-value>https://rdog.digitalglobe.com</param-value>
+      <param-value>https://evwhs.digitalglobe.com</param-value>
     </init-param>
     <init-param>
       <param-name>log</param-name>

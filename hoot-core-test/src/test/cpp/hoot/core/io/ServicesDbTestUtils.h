@@ -63,11 +63,23 @@ public:
    */
   static QUrl getDbReadUrl(const long mapId, const long elemId, const QString& elemType);
 
+  /**
+   * Retrieves URL for OSM API database
+   *
+   * @return URL for OSM API database
+   */
+  static QUrl getOsmApiDbUrl();
+
 
   /**
    * Delete the user with the specified email from the services database
    */
   static void deleteUser(QString email);
+
+  /**
+   * Find a match in the test key list and return the index
+   */
+  static int findIndex(const QList<QString>& keys, const QString& key);
 };
 
 }

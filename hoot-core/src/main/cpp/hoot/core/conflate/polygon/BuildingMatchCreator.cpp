@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMatchCreator.h"
 
@@ -146,12 +146,11 @@ public:
     }
   }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    shared_ptr<const Element> element(_map->getElement(type, id));
-    if (element->getStatus() == _matchStatus && isMatchCandidate(element))
+    if (e->getStatus() == _matchStatus && isMatchCandidate(e))
     {
-      checkForMatch(element);
+      checkForMatch(e);
     }
   }
 
@@ -177,26 +176,6 @@ private:
 
 BuildingMatchCreator::BuildingMatchCreator()
 {
-  QString path = ConfPath::search(ConfigOptions().getBuildingModelPath());
-  LOG_INFO("Loading model from: " << path);
-
-  QFile file(path.toAscii().data());
-  if (!file.open(QIODevice::ReadOnly))
-  {
-    throw HootException("Error opening file: " + path);
-  }
-  QDomDocument doc("");
-  if (!doc.setContent(&file))
-  {
-    file.close();
-    throw HootException("Error opening file: " + path);
-  }
-  //LOG_VARD(doc.toString());
-  file.close();
-
-  _rf.reset(new BuildingRfClassifier());
-  QDomElement docRoot = doc.elementsByTagName("RandomForest").at(0).toElement();
-  _rf->import(docRoot);
 }
 
 Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
@@ -211,7 +190,7 @@ Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
     if (BuildingMatchVisitor::isRelated(e1, e2))
     {
       // score each candidate and push it on the result vector
-      result = new BuildingMatch(map, _rf, eid1, eid2, getMatchThreshold());
+      result = new BuildingMatch(map, _getRf(), eid1, eid2, getMatchThreshold());
     }
   }
 
@@ -222,7 +201,7 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const
   ConstMatchThresholdPtr threshold)
 {
   LOG_VAR(*threshold);
-  BuildingMatchVisitor v(map, matches, _rf, threshold, Status::Unknown1);
+  BuildingMatchVisitor v(map, matches, _getRf(), threshold, Status::Unknown1);
   map->visitRo(v);
 }
 
@@ -233,6 +212,35 @@ vector<MatchCreator::Description> BuildingMatchCreator::getAllCreators() const
   result.push_back(Description(className(), "Building Match Creator", false));
 
   return result;
+}
+
+shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
+{
+  if (!_rf)
+  {
+    QString path = ConfPath::search(ConfigOptions().getBuildingModelPath());
+    LOG_INFO("Loading model from: " << path);
+
+    QFile file(path.toAscii().data());
+    if (!file.open(QIODevice::ReadOnly))
+    {
+      throw HootException("Error opening file: " + path);
+    }
+    QDomDocument doc("");
+    if (!doc.setContent(&file))
+    {
+      file.close();
+      throw HootException("Error opening file: " + path);
+    }
+    //LOG_VARD(doc.toString());
+    file.close();
+
+    _rf.reset(new BuildingRfClassifier());
+    QDomElement docRoot = doc.elementsByTagName("RandomForest").at(0).toElement();
+    _rf->import(docRoot);
+  }
+
+  return _rf;
 }
 
 bool BuildingMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)

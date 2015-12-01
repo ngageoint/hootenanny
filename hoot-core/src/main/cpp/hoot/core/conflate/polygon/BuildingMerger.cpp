@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMerger.h"
 
@@ -30,6 +30,7 @@
 #include <hoot/core/filters/BaseFilter.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/schema/OverwriteTagMerger.h>
@@ -72,6 +73,7 @@ BuildingMerger::BuildingMerger(const set< pair<ElementId, ElementId> >& pairs) :
 void BuildingMerger::apply(const OsmMapPtr& map,
   vector< pair<ElementId, ElementId> >& replaced) const
 {
+  LOG_VAR(_pairs);
   // use node count as a surrogate for complexity of the geometry.
   CountNodesVisitor count1;
   shared_ptr<Element> e1 = _buildBuilding1(map);
@@ -123,7 +125,9 @@ void BuildingMerger::apply(const OsmMapPtr& map,
 
   // remove the duplicate element.
   DeletableBuildingPart filter;
+  ReplaceElementOp(scrap->getElementId(), keeper->getElementId()).apply(map);
   RecursiveElementRemover(scrap->getElementId(), &filter).apply(map);
+  scrap->getTags().clear();
 
   // if we created a relation, we now need to make sure the building part information is added
   // properly
@@ -164,7 +168,7 @@ shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const se
     {
       shared_ptr<Element> e = map->getElement(*it);
       bool isBuilding = false;
-      if (e->getElementType() == ElementType::Relation)
+      if (e && e->getElementType() == ElementType::Relation)
       {
         shared_ptr<Relation> r = dynamic_pointer_cast<Relation>(e);
         if (r->getType() == "building")
@@ -205,7 +209,14 @@ shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const se
     // likely create a filter that only matches buildings and building parts and pass that to the
     for (size_t i = 0; i < toRemove.size(); i++)
     {
-      RecursiveElementRemover(toRemove[i], &filter).apply(map);
+      if (map->containsElement(toRemove[i]))
+      {
+        ElementPtr willRemove = map->getElement(toRemove[i]);
+        ReplaceElementOp(toRemove[i], result->getElementId()).apply(map);
+        RecursiveElementRemover(toRemove[i], &filter).apply(map);
+        // just in case it wasn't removed (e.g. part of another relation)
+        willRemove->getTags().clear();
+      }
     }
 
     return result;

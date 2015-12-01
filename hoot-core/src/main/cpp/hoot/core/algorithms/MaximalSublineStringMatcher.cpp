@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MaximalSublineStringMatcher.h"
 
@@ -344,6 +344,15 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
         throw NeedsReviewException("MultiLineString relations can only contain ways when matching "
                                    "sublines.");
       }
+    }
+  }
+  if (e->getElementType() == ElementType::Way)
+  {
+    ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+
+    if (w->getNodeCount() <= 1)
+    {
+      throw NeedsReviewException("Internal Error: Attempting to match against a zero length way.");
     }
   }
 }

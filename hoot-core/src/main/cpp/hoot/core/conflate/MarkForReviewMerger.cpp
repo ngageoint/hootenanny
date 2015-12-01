@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MarkForReviewMerger.h"
 
@@ -38,9 +38,10 @@ namespace hoot
 {
 
 MarkForReviewMerger::MarkForReviewMerger(const set< pair<ElementId, ElementId> >& pairs,
-                                         QString note, double score) :
+                                         QString note, QString reviewType, double score) :
   _pairs(pairs),
   _note(note),
+  _reviewType(reviewType),
   _score(score)
 {
 }
@@ -57,7 +58,7 @@ void MarkForReviewMerger::apply(const OsmMapPtr& map,
     ElementPtr e1 = map->getElement(eid1);
     ElementPtr e2 = map->getElement(eid2);
 
-    ReviewMarker().mark(e1, e2, _note, _score);
+    ReviewMarker().mark(map, e1, e2, _note, _reviewType, _score);
   }
 }
 

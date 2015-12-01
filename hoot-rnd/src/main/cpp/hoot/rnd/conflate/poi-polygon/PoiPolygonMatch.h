@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONMATCH_H
 #define POIPOLYGONMATCH_H
@@ -60,6 +60,8 @@ public:
 
   virtual MatchMembers getMatchMembers() const { return MatchMembers::Poi | MatchMembers::Polygon; }
 
+  virtual QString getMatchName() const { return _matchName; }
+
   virtual set< pair<ElementId, ElementId> > getMatchPairs() const;
 
   virtual double getProbability() const { return _c.getMatchP(); }
@@ -77,6 +79,7 @@ public:
 
 private:
 
+  static QString _matchName;
   ElementId _poiEid, _polyEid;
   MatchClassification _c;
 

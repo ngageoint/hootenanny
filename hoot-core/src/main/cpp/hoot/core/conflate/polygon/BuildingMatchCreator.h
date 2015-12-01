@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGMATCHCREATOR_H
 #define BUILDINGMATCHCREATOR_H
@@ -69,9 +69,14 @@ public:
 
 private:
 
+  /// Don't use this directly. See below.
   shared_ptr<BuildingRfClassifier> _rf;
   shared_ptr<MatchThreshold> _matchThreshold;
 
+  /**
+   * The building model can be slow to load, this provides a lazy load.
+   */
+  shared_ptr<BuildingRfClassifier> _getRf();
 };
 
 }

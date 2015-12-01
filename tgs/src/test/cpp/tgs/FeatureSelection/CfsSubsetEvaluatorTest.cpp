@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Standard Includes
@@ -88,8 +88,7 @@ namespace Tgs
   class CfsSubsetEvaluatorTest : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(CfsSubsetEvaluatorTest);
-//     CPPUNIT_TEST(testGeneratedData20);
-//     CPPUNIT_TEST(testColumnSplits);
+    CPPUNIT_TEST(testGeneratedData20);
     CPPUNIT_TEST(sanityCheck);
     CPPUNIT_TEST(testGeneratedData20);
     CPPUNIT_TEST(testGeneratedData1000);
@@ -168,6 +167,5 @@ namespace Tgs
     }
   };
 }
-
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Tgs::CfsSubsetEvaluatorTest, PluginFactory::testName());

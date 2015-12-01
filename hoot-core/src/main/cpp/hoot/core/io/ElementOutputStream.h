@@ -33,6 +33,7 @@ namespace hoot
 {
 class ElementInputStream;
 
+
 /**
  * Element output stream interface.
  */
@@ -52,7 +53,7 @@ public:
   /**
    * @brief writeElement
    */
-  virtual void writeElement(const ConstElementPtr& e) = 0;
+  virtual void writeElement(ElementInputStream& inputStream) = 0;
 
   /**
    * Read elements from the input stream and write to the output stream. There may be a better place

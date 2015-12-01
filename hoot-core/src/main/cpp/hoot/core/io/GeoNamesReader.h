@@ -22,32 +22,63 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef GEONAMESREADER_H
 #define GEONAMESREADER_H
 
 // hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/io/PartialOsmMapReader.h>
+
+// Qt
+#include <QFile>
 
 namespace hoot
 {
 
-class GeoNamesReader
+class GeoNamesReader : public PartialOsmMapReader
 {
 public:
+  static string className() { return "hoot::GeoNamesReader"; }
+
   GeoNamesReader();
 
-  void read(QString path, shared_ptr<OsmMap> map);
+  virtual void close();
+
+  virtual void initializePartial() {}
+
+  virtual void finalizePartial() {}
+
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+
+  virtual bool hasMoreElements();
+
+  virtual bool isSupported(QString url);
+
+  virtual void open(QString url);
+
+  virtual ElementPtr readNextElement();
 
   void setDefaultAccuracy(Meters circularError) { _circularError = circularError; }
 
   void setDefaultStatus(Status s) { _status = s; }
 
+  virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceIds = useDataSourceIds; }
+
 private:
   Meters _circularError;
+  QStringList _columns;
+  QList<int> _convertColumns;
+  QFile _fp;
   Status _status;
   QHash<QString, QString> _strings;
+  int _LATITUDE;
+  int _LONGITUDE;
+  int _GEONAMESID;
+  bool _useDataSourceIds;
+  mutable shared_ptr<OGRSpatialReference> _wgs84;
+
 
   const QString& _saveMemory(const QString& s);
 };

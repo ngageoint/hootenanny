@@ -22,12 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A case insensitive string list
@@ -39,11 +38,6 @@ public class CaseInsensitiveStringList extends ArrayList<String>
   public CaseInsensitiveStringList()
   {
     
-  }
-  
-  public CaseInsensitiveStringList(List<String> list)
-  {
-    this.addAll(list);
   }
 
   @Override

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMWRITER_H
 #define OSMWRITER_H
@@ -114,6 +114,7 @@ protected:
 
   static QString _typeName(ElementType e);
 
+  void _writeMetadata(QXmlStreamWriter& writer, const Element* e);
   void _writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer);
   void _writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer);
   void _writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer);

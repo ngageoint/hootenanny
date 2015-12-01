@@ -22,13 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ELEMENT_PROVIDER_H__
 #define __ELEMENT_PROVIDER_H__
 
+#include <ogr_spatialref.h>
+
+#include <boost/shared_ptr.hpp>
+
 #include "ElementId.h"
 #include "Element.h"
+#include "Node.h"
+#include "Way.h"
+#include "Relation.h"
 
 namespace hoot
 {
@@ -39,10 +46,34 @@ public:
 
   virtual ~ElementProvider() {}
 
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const = 0;
+
   virtual bool containsElement(const ElementId& eid) const = 0;
 
   virtual ConstElementPtr getElement(const ElementId& id) const = 0;
+
+  virtual const boost::shared_ptr<const Node> getNode(long id) const = 0;
+
+  virtual const boost::shared_ptr<Node> getNode(long id) = 0;
+
+  virtual const boost::shared_ptr<const Relation> getRelation(long id) const = 0;
+
+  virtual const boost::shared_ptr<Relation> getRelation(long id) = 0;
+
+  virtual const boost::shared_ptr<const Way> getWay(long id) const = 0;
+
+  virtual const boost::shared_ptr<Way> getWay(long id) = 0;
+
+  virtual bool containsNode(long id) const = 0;
+
+  virtual bool containsRelation(long id) const = 0;
+
+  virtual bool containsWay(long id) const = 0;
+
 };
+
+typedef boost::shared_ptr<const ElementProvider> ConstElementProviderPtr;
+typedef boost::shared_ptr<ElementProvider> ElementProviderPtr;
 
 }
 

@@ -51,6 +51,11 @@ run-eclipse() {
     # This removes the warning: "Classpath entry M2_REPO/<xxx>.jar will not be exported or published. Runtime ClassNotFoundExceptions may result." 
     pushd hoot-services
     sed -i '/<classpathentry kind="var"/{s|/>$|><attributes><attribute name="org.eclipse.jst.component.nondependency" value=""\/\></attributes></classpathentry>|}' .classpath     
+
+    # Move the JDK to the top of libs to make sure the correct libraries get placed on the path first.
+    sed -i 's/<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"\/>/ /g' .classpath
+    sed -i 's/<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"\/>/ /g' .classpath
+    sed -i 's/<classpath>/<classpath>\n  <classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"\/>/g' .classpath
 }
 
 CWD=`pwd`

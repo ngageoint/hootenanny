@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchComparator.h"
 
@@ -63,10 +63,8 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    shared_ptr<const Element> e = _map->getElement(type, id);
-
     QStringList refs;
     if (e->getTags().contains(_ref))
     {
@@ -119,26 +117,23 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    shared_ptr<const Element> e = _map->getElement(type, id);
-
     QString uuid;
     if (e->getTags().contains("uuid"))
     {
       uuid = e->getTags().get("uuid");
     }
 
-    ElementId eid = ElementId(type, id);
     if (!uuid.isEmpty())
     {
       //For more information on the need for this assertion, see
       //https://insightcloud.digitalglobe.com/redmine/issues/4775 , comments 61 through 63
       //This assertion will fail since UUID's in the conflated output may be repeated
       //across multiple elements.  Ticket 5496 will address this.
-#warning Address this issue with ticket 5496.
+      /// @todo Address this issue with ticket 5496.
       //assert(_uuidToEid.count(uuid) == 0);
-      _uuidToEid[uuid] = eid;
+      _uuidToEid[uuid] = e->getElementId();
     }
   }
 
@@ -512,12 +507,13 @@ bool MatchComparator::_isNeedsReview(QString uuid1, QString uuid2, const ConstOs
 
   if (eid1.isNull() || eid2.isNull())
   {
-#warning Change this back to LOG_WARN after addressing 5560
+    /// @todo Change this back to LOG_WARN after addressing 5560
     LOG_INFO("Couldn't find an expected element.");
     return false;
   }
 
-  if (ReviewMarker().isNeedsReview(conflated->getElement(eid1), conflated->getElement(eid2)))
+  if (ReviewMarker().isNeedsReview(conflated, conflated->getElement(eid1),
+    conflated->getElement(eid2)))
   {
     result = true;
   }

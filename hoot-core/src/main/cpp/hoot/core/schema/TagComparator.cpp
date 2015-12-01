@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "TagComparator.h"
@@ -32,6 +32,7 @@
 #include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Standard
 #include <assert.h>
@@ -55,8 +56,10 @@ struct Entry
   }
 };
 
-TagComparator::TagComparator()
+TagComparator::TagComparator() :
+_caseSensitive(true)
 {
+  setCaseSensitive(ConfigOptions().getDuplicateNameCaseSensitive());
 }
 
 void TagComparator::_addAsDefault(Tags& t, const QString& key, const QString& value)
@@ -181,7 +184,6 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
       result[it1.key()] = it1.value();
     }
   }
-
 }
 
 void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
@@ -197,33 +199,39 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
   _addDefaults(t1);
   _addDefaults(t2);
 
-  for (Tags::const_iterator it = t1.begin(); it != t1.end(); it++)
-  {
-    QString kvp = it.key() + "=" + it.value();
-    const TagVertex* tv = &schema.getTagVertex(kvp);
-    if (tv->isEmpty())
-    {
-      tv = &schema.getTagVertex(it.key() + "=*");
-    }
+  /// @todo #7255 go through and use the cleaned tag vertices rather than tags directly.
+  vector<SchemaVertex> v1 = schema.getUniqueSchemaVertices(t1);
+  vector<SchemaVertex> v2 = schema.getUniqueSchemaVertices(t2);
 
+  for (size_t i = 0; i < v1.size(); ++i)
+  {
+    const SchemaVertex* tv = &v1[i];
     if (tv->valueType == Enumeration)
     {
-      n1.push_back(kvp);
+      if (tv->value == "*")
+      {
+        n1.push_back(schema.toKvp(tv->key, t1[tv->key]));
+      }
+      else
+      {
+        n1.push_back(tv->name);
+      }
     }
   }
 
-  for (Tags::const_iterator it = t2.begin(); it != t2.end(); it++)
+  for (size_t i = 0; i < v2.size(); ++i)
   {
-    QString kvp = it.key() + "=" + it.value();
-    const TagVertex* tv = &schema.getTagVertex(kvp);
-    if (tv->isEmpty())
-    {
-      tv = &schema.getTagVertex(it.key() + "=*");
-    }
-
+    const SchemaVertex* tv = &v2[i];
     if (tv->valueType == Enumeration)
     {
-      n2.push_back(kvp);
+      if (tv->value == "*")
+      {
+        n2.push_back(schema.toKvp(tv->key, t2[tv->key]));
+      }
+      else
+      {
+        n2.push_back(tv->name);
+      }
     }
   }
 
@@ -241,7 +249,7 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
     {
       e.j = j;
       e.score = schema.score(n1[i], n2[j]);
-      //LOG_WARN("n1: " << n1[i] << " n2: " << n2[j] << " " << e.score);
+      //LOG_INFO("n1: " << n1[i] << " n2: " << n2[j] << " " << e.score);
       heap.push(e);
     }
   }
@@ -256,7 +264,7 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
     heap.pop();
     if (e.score > 0.0 && used1.find(e.i) == used1.end() && used2.find(e.j) == used2.end())
     {
-      //LOG_WARN("  " << n1[e.i] << ", " << n2[e.j] << ": " << e.score);
+      //LOG_INFO("  " << n1[e.i] << ", " << n2[e.j] << ": " << e.score);
       score *= e.score;
       used1.insert(e.i);
       used2.insert(e.j);
@@ -264,7 +272,7 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
   }
 
   weight = used1.size();
-  //LOG_WARN("score: " << score);
+  //LOG_INFO("score: " << score);
 }
 
 void TagComparator::compareTextTags(const Tags& t1, const Tags& t2, double& score, double& weight)
@@ -276,13 +284,19 @@ void TagComparator::compareTextTags(const Tags& t1, const Tags& t2, double& scor
 
   for (Tags::const_iterator it = t1.begin(); it != t1.end(); it++)
   {
-    const TagVertex& tv = schema.getTagVertex(it.key());
+    const SchemaVertex& tv = schema.getTagVertex(it.key());
     if (schema.isAncestor(it.key(), "abstract_name") == false &&
         tv.valueType == Text && t2.contains(it.key()))
     {
       score *= LevenshteinDistance::score(it.value(), t2[it.key()]);
       weight += tv.influence;
     }
+  }
+
+  // if the weight is zero don't confuse things with a low score.
+  if (weight == 0.0)
+  {
+    score = 1;
   }
 }
 
@@ -369,16 +383,16 @@ double TagComparator::compareTags(const Tags &t1, const Tags &t2, bool strict)
   // compare and get a score for name comparison
   double nameScore, nameWeight;
   compareNames(t1, t2, nameScore, nameWeight, strict);
-  //LOG_WARN("Name score: " << nameScore);
+  //LOG_WARN("Name score: " << nameScore << "(" << nameWeight << ")");
 
   double textScore, textWeight;
   compareTextTags(t1, t2, textScore, textWeight);
-  //LOG_WARN("Text score: " << textScore);
+  //LOG_WARN("Text score: " << textScore << " (" << textWeight << ")");
 
   // compare the enumerated tags
   double enumScore, enumWeight;
   compareEnumeratedTags(t1, t2, enumScore, enumWeight);
-  //LOG_WARN("enumScore: " << enumScore);
+  //LOG_WARN("enumScore: " << enumScore << "(" << enumWeight << ")");
 
   // comparing numerical tags is difficult without some concept of the distribution. For that
   // reason I'm avoiding it for now.
@@ -522,8 +536,13 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
     }
     else if (result.contains(it2.key()))
     {
-      QStringList sl = Tags::split(it2.value());
-      altNames.insert(sl.begin(), sl.end());
+      const Qt::CaseSensitivity caseSensitivity =
+        _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+      if (result[it2.key()].compare(it2.value(), caseSensitivity) != 0)
+      {
+        QStringList sl = Tags::split(it2.value());
+        altNames.insert(sl.begin(), sl.end());
+      }
     }
     else
     {
@@ -566,7 +585,7 @@ void TagComparator::_mergeText(Tags& t1, Tags& t2, Tags& result)
   const Tags t1Copy = t1;
   for (Tags::ConstIterator it1 = t1Copy.begin(); it1 != t1Copy.end(); ++it1)
   {
-    const TagVertex& tv = schema.getTagVertex(it1.key());
+    const SchemaVertex& tv = schema.getTagVertex(it1.key());
 
     // if this is a text field and it exists in both tag sets.
     if (tv.valueType == Text && t2.contains(it1.key()))
@@ -723,7 +742,7 @@ void TagComparator::_promoteToCommonAncestor(Tags& t1, Tags& t2, Tags& result)
   {
     for (Tags::iterator it2 = t2.begin(); it2 != t2.end(); )
     {
-      const TagVertex& ancestor = schema.getFirstCommonAncestor(it1.key() + "=" + it1.value(),
+      const SchemaVertex& ancestor = schema.getFirstCommonAncestor(it1.key() + "=" + it1.value(),
         it2.key() + "=" + it2.value());
       if (ancestor.isEmpty() == false)
       {

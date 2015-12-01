@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "LengthOfWaysVisitor.h"
 
@@ -47,11 +47,11 @@ Meters LengthOfWaysVisitor::getLengthOfWays(const OsmMapPtr& map, ElementPtr e)
   return v.getLengthOfWays();
 }
 
-void LengthOfWaysVisitor::visit(ElementType type, long id)
+void LengthOfWaysVisitor::visit(const ConstElementPtr& e)
 {
-  if (type == ElementType::Way)
+  if (e->getElementType() == ElementType::Way)
   {
-    const shared_ptr<const Way> w = _map->getWay(id);
+    const shared_ptr<const Way> w = _map->getWay(e->getId());
     _total += ElementConverter(_map->shared_from_this()).convertToLineString(w)->getLength();
   }
 }

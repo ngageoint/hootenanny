@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -44,16 +44,11 @@ import org.w3c.dom.Document;
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.osm.OsmResourceTestAbstract;
-import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
-/*
- * @todo Most of these tests could be converted to integration tests and after a refactoring,
- * could be replace with unit tests that test only the internal classes being used by this
- * Jersey resource.
- */
 public class CapabilitiesResourceTest extends OsmResourceTestAbstract
 {
   @SuppressWarnings("unused")
@@ -84,7 +79,7 @@ public class CapabilitiesResourceTest extends OsmResourceTestAbstract
     }
     
     Assert.assertNotNull(responseData);
-    XPath xpath = XmlDocumentBuilder.createXPath();
+    XPath xpath = XmlUtils.createXPath();
     try
     {
       Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Tags.h"
@@ -33,6 +33,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -240,7 +241,7 @@ const QStringList& Tags::getNameKeys()
   // getting the name tags can be a bit expensive so we'll just do it once.
   if (_nameKeys.size() == 0)
   {
-    const vector<TagVertex>& tags =
+    const vector<SchemaVertex>& tags =
         OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::name());
 
     for (size_t i = 0; i < tags.size(); i++)
@@ -273,7 +274,7 @@ const QStringList& Tags::getPseudoNameKeys() const
   // getting the name tags can be a bit expensive so we'll just do it once.
   if (_pseudoNameKeys.size() == 0)
   {
-    const vector<TagVertex>& tags =
+    const vector<SchemaVertex>& tags =
         OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::pseudoName());
 
     for (size_t i = 0; i < tags.size(); i++)
@@ -304,12 +305,6 @@ QStringList Tags::getPseudoNames() const
   }
 
   return result;
-}
-
-bool Tags::isArea() const
-{
-  return isTrue("area") ||
-      (contains("building") && isFalse("building") == false);
 }
 
 bool Tags::isFalse(const QString& key) const

@@ -12,15 +12,6 @@
 		<property name="nativeInterface" ref="processStreamInterface"/>
 	</bean>
   
-  <!-- reviewPrepareDbWriter2 is the new implementation to fix some -->
-  <bean id="reviewPrepareDbWriter" singleton="true" 
-    class="hoot.services.writers.review.ReviewPrepareDbWriter" init-method="init" 
-    destroy-method="destroy">
-  </bean>
-  <bean id="reviewPrepareDbWriter2" singleton="true" 
-    class="hoot.services.writers.review.ReviewPrepareDbWriter2" init-method="init" 
-    destroy-method="destroy">
-  </bean>
 
 	<bean id="ResourcesCleanUtil" singleton="true" 
 		class="hoot.services.utils.ResourcesCleanUtil" init-method="init" destroy-method="destroy">

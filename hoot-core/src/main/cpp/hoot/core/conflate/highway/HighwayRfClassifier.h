@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYRFCLASSIFIER_H
 #define HIGHWAYRFCLASSIFIER_H
@@ -53,15 +53,21 @@ public:
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const;
 
 private:
-  shared_ptr<Tgs::RandomForest> _rf;
-  QStringList _rfFactorLabels;
-  vector< shared_ptr<const FeatureExtractor> > _extractors;
+  // these are mutable because we do a lazy load.
+  mutable shared_ptr<Tgs::RandomForest> _rf;
+  mutable QStringList _rfFactorLabels;
+  mutable vector< shared_ptr<const FeatureExtractor> > _extractors;
 
-  void _createAllExtractors();
-  void _createTestExtractors();
+  void _createAllExtractors() const;
+  void _createTestExtractors() const;
 
   const vector< shared_ptr<const FeatureExtractor> >& _getExtractors() const;
 
+  /**
+   * This provides a lazy load and should be called before any private members are accessed. This
+   * can be called multiple times efficiently.
+   */
+  void _init() const;
 };
 
 }

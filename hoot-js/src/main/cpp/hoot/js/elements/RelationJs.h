@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RELATIONJS_H
 #define RELATIONJS_H
@@ -68,6 +68,7 @@ private:
   ~RelationJs();
 
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
+  static v8::Handle<v8::Value> replaceElement(const v8::Arguments& args);
 
   QString _className;
   ConstRelationPtr _constRelation;

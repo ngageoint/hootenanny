@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef _ELEMENTS_NODE_DATA_H_
 #define _ELEMENTS_NODE_DATA_H_
@@ -48,7 +48,14 @@ public:
 
   double getY() const { return _y; }
 
-  void init(long id, double x, double y) { _id = id; _x = x; _y = y; }
+  void init(long id, double x, double y) { _id = id; _x = x; _y = y;
+    _changeset = CHANGESET_EMPTY; _version = VERSION_EMPTY; _timestamp = TIMESTAMP_EMPTY;
+    _user = USER_EMPTY; _uid = UID_EMPTY; }
+
+  void init(long id, double x, double y, long changeset, long version, long timestamp,
+            QString user, long uid) {
+   _id = id; _x = x; _y = y; _changeset = changeset; _version = version; _timestamp = timestamp;
+   _user = user; _uid = uid; }
 
   void setX(double x) { _x = x; }
 

@@ -22,17 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.nativeInterfaces;
-
 
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -477,7 +475,8 @@ public class ProcessStreamInterface implements INativeInterface {
 				Iterator iter = param.entrySet().iterator();
 
 				String arg = "";
-				String key = "";
+				@SuppressWarnings("unused")
+        String key = "";
 				while (iter.hasNext()) {
 					Map.Entry mEntry = (Map.Entry) iter.next();
 					key = (String)mEntry.getKey();

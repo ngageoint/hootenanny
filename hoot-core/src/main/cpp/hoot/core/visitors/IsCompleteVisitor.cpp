@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "IsCompleteVisitor.h"
 
@@ -62,12 +62,15 @@ bool IsCompleteVisitor::isComplete(const OsmMap* map, ElementId eid)
   return result;
 }
 
-void IsCompleteVisitor::visit(ElementType type, long id)
+void IsCompleteVisitor::visit(const ConstElementPtr& e)
 {
   if (!_complete)
   {
     return;
   }
+
+  ElementType type = e->getElementType();
+  long id = e->getId();
 
   if (_map->containsElement(type, id) == false)
   {

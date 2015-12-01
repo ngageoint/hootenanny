@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CONFIGURATION_H
@@ -135,6 +135,12 @@ public:
   QVariant getValue(const QString& value) const;
 
   bool hasKey(const QString& key) const { return _settings.contains(key); }
+
+  /**
+   * Parses common arguments (e.g. "-D foo=bar --debug")
+   * Any arguments parsed are removed from args.
+   */
+  static void parseCommonArguments(QStringList &args);
 
   void set(const QString& key, const char* value) { set(key, QString(value)); }
 

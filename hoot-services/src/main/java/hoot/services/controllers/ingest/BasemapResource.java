@@ -22,12 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -47,6 +48,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -59,6 +62,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
@@ -69,9 +76,33 @@ public class BasemapResource extends JobControllerBase {
 	private static final Logger log = LoggerFactory.getLogger(BasemapResource.class);
 	protected static String _tileServerPath = null;
 	protected static String _ingestStagingPath = null;
-	private String homeFolder = null;
+	private static String homeFolder = null;
 
 	protected static Map<String, String> _basemapRasterExt = null;
+	
+	static
+	{
+		try
+		{
+			homeFolder = HootProperties.getProperty("homeFolder");
+			_tileServerPath = HootProperties.getProperty("tileServerPath");
+			_ingestStagingPath = HootProperties.getProperty("ingestStagingPath");	
+			
+			_basemapRasterExt = new HashMap<String, String>();
+			String extStr = HootProperties.getProperty("BasemapRasterExtensions");
+			String[] extList = extStr.toLowerCase().split(",");
+			for(String ext : extList)
+			{
+				_basemapRasterExt.put(ext, ext);
+			}
+			
+			
+		}
+		catch (Exception ex)
+		{
+			log.error(ex.getMessage());
+		}
+	}
 
 	public BasemapResource()
 	{
@@ -81,31 +112,26 @@ public class BasemapResource extends JobControllerBase {
 			{
 				processScriptName = HootProperties.getProperty("BasemapRasterToTiles");
 			}
+		}
+		catch (Exception ex)
+		{
+			log.error(ex.getMessage());
+		}
+	}
 
-			if (_basemapRasterExt ==  null)
+	public void createTileServerPath()
+	{
+		try
+		{
+			File f = new File(_tileServerPath);
+			if(!f.exists())
 			{
-				_basemapRasterExt = new HashMap<String, String>();
-				String extStr = HootProperties.getProperty("BasemapRasterExtensions");
-				String[] extList = extStr.toLowerCase().split(",");
-				for(String ext : extList)
-				{
-					_basemapRasterExt.put(ext, ext);
-				}
+				FileUtils.forceMkdir(f);
 			}
-
-			if(_tileServerPath == null)
-			{
-				_tileServerPath = HootProperties.getProperty("tileServerPath");
-
-			}
-
-			if(_ingestStagingPath == null)
-			{
-				_ingestStagingPath = HootProperties.getProperty("ingestStagingPath");
-			}
-			homeFolder = HootProperties.getProperty("homeFolder");
-
-
+		}
+		catch (IOException iex)
+		{
+			log.error(iex.getMessage());
 		}
 		catch (Exception ex)
 		{
@@ -114,7 +140,32 @@ public class BasemapResource extends JobControllerBase {
 	}
 
 
-
+	/**
+	 * <NAME>Basemap Upload Service</NAME>
+	 * <DESCRIPTION>Upload file and create TMS tiles.</DESCRIPTION>
+	 * <PARAMETERS>
+	 * <INPUT_NAME>
+	 * 	Name of basemap;
+	 * </INPUT_NAME>
+	 * <PROJECTION>
+	 * 	Projection to apply. defaults to EPSG:4326
+	 * </PROJECTION>
+	 * </PARAMETERS>
+	 * <INPUT>multipart data</INPUT>
+	 * <OUTPUT>
+	 * 	JSON Array containing JSON of job id
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/ingest/basemap/upload?INPUT_NAME=MyBasemap</URL>
+	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
+	 * <INPUT>None</INPUT>
+	 * <OUTPUT>[{"name":"MyBasemap","jobid":"1234567"}]</OUTPUT>
+	 * </EXAMPLE>
+	 * @param inputName
+	 * @param projection
+	 * @param request
+	 * @return
+	 */
 	@POST
 	@Path("/upload")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -178,21 +229,13 @@ public class BasemapResource extends JobControllerBase {
 	    		String jobId = UUID.randomUUID().toString();
 	        Map.Entry pairs = (Map.Entry)it.next();
 	        String fName = pairs.getKey().toString();
-	        String ext = pairs.getValue().toString();
+	        pairs.getValue().toString();
 
 	        log.debug("Preparing Basemap Ingest for :" + fName);
 	        String inputFileName = "";
 	        String bmName = inputName;
+	        bmName = fName;
 
-
-	        if(bmName != null && bmName.length() > 0 )
-	        {
-	        	bmName = bmName;
-	        }
-	        else
-	  			{
-	        	bmName = fName;
-	  			}
 
 	  			inputFileName = uploadedFilesPaths.get(fName);
 
@@ -261,7 +304,23 @@ public class BasemapResource extends JobControllerBase {
 		return Response.ok(jobsArr.toJSONString(), MediaType.APPLICATION_JSON).build();
 	}
 
-
+	/**
+  * <NAME>Get Basemaps List Service</NAME>
+  * <DESCRIPTION>Service method endpoint for retrieving the uploaded basemaps list.</DESCRIPTION>
+  * <PARAMETERS></PARAMETERS>
+	* <OUTPUT>
+	* 	JSON Array containing basemap information
+	* </OUTPUT>
+	* <EXAMPLE>
+	* 	<URL>http://localhost:8093/hoot-services/ingest/basemap/getlist</URL>
+	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	* <INPUT>None</INPUT>
+  * <OUTPUT>
+	* [{"status":"enabled","name":"TestMap","jobid":"123-456-789"},{"status":"enabled","name":"TestMap2","jobid":"123-456-789"}]
+	* </OUTPUT>
+  * </EXAMPLE>
+  * 
+  */
 	@GET
 	@Path("/getlist")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -324,10 +383,40 @@ public class BasemapResource extends JobControllerBase {
 					JSONObject jsonMeta = (JSONObject) parser.parse(meta);
 					String jobId = jsonMeta.get("jobid").toString();
 
+					// Check for tilemapresource.xml in processed folder
+					JSONObject jsonExtent = new JSONObject();
+					
+					String XmlPath = _tileServerPath + "/BASEMAP/" + name + "/tilemapresource.xml";
+					File fXmlFile = new File(XmlPath);
+					if (fXmlFile.exists()) {
+						try {
+							DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+							DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+							Document doc = dBuilder.parse(fXmlFile);
+							doc.getDocumentElement().normalize();
+							NodeList l = doc.getElementsByTagName("BoundingBox");
+							Node prop = l.item(0);
+							NamedNodeMap attr = prop.getAttributes();
+							if (null != attr){
+								jsonExtent.put("minx", Double.parseDouble(attr.getNamedItem("minx").getNodeValue()));
+								jsonExtent.put("miny", Double.parseDouble(attr.getNamedItem("miny").getNodeValue()));
+								jsonExtent.put("maxx", Double.parseDouble(attr.getNamedItem("maxx").getNodeValue()));
+								jsonExtent.put("maxy", Double.parseDouble(attr.getNamedItem("maxy").getNodeValue()));
+								} 
+							else {
+								jsonExtent = null;
+							}
+						} catch (Exception e) {
+							jsonExtent = null;
+						}
+					}
+						
+
 					JSONObject oBaseMap = new JSONObject();
 					oBaseMap.put("name", name);
 					oBaseMap.put("status", ext);
 					oBaseMap.put("jobid", jobId);
+					oBaseMap.put("extent", jsonExtent);
 					filesList.add(oBaseMap);
 				}
 
@@ -339,35 +428,59 @@ public class BasemapResource extends JobControllerBase {
 
 	protected void _toggleBaseMap(String bmName, boolean enable) throws Exception
 	{
-		String fileName = _ingestStagingPath + "/BASEMAP/" + bmName;
-		String targetName = _ingestStagingPath + "/BASEMAP/" + bmName;;
+		// See ticket#6760
+		// for file path manipulation
+		String fileExt = "enabled";
+		String targetExt = ".disabled";
 		if(enable)
 		{
-			fileName += ".disabled";
-			targetName += ".enabled";
+			fileExt = "disabled";
+			targetExt = ".enabled";
 		}
-		else
+
+		
+		// We first verify that file exits in the folder first and then try to get the source file
+		File sourceFile = hoot.services.utils.FileUtils.getFileFromFolder(_ingestStagingPath + "/BASEMAP/", bmName , fileExt); 
+		
+		if(sourceFile != null && sourceFile.exists())
 		{
-			fileName += ".enabled";
-			targetName += ".disabled";
-		}
-		File sourceFile = new File(fileName);
-		File destFile = new File(targetName);
-		if(sourceFile.exists())
-		{
-			boolean res = sourceFile.renameTo(destFile);
+			// if the source file exist then just swap the extension
+			boolean res = sourceFile.renameTo(new File(_ingestStagingPath + "/BASEMAP/", bmName + targetExt));
 			if(res == false)
 			{
-				throw new Exception("Failed to rename file:" + fileName + " to " + targetName );
+				throw new Exception("Failed to rename file:" + bmName + fileExt + " to " + bmName + targetExt );
 			}
 		}
 		else
 		{
-			throw new Exception("Can not enable file:" + fileName + ". It does not exist.");
+			throw new Exception("Can not enable file:" + bmName + targetExt + ". It does not exist.");
 		}
 	}
 
-
+	/**
+  * <NAME>Enable Basemap Service</NAME>
+  * <DESCRIPTION>Service method endpoint for enabling a basemap.</DESCRIPTION>
+  * <PARAMETERS>
+  * <NAME>
+  * Name of a basemap
+  * </NAME>
+  * <ENABLE>
+  * true/false
+  * </ENABLE>
+  * </PARAMETERS>
+	* <OUTPUT>
+	* 	JSON containing enable state
+	* </OUTPUT>
+	* <EXAMPLE>
+	* 	<URL>http://localhost:8093/hoot-services/ingest/basemap/enable?NAME=abc&ENABLE=true</URL>
+	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	* <INPUT>{"name":"abc","isenabled":"true"}</INPUT>
+  * <OUTPUT>
+	* {"name":"abc","isenabled":"true"}
+	* </OUTPUT>
+  * </EXAMPLE>
+  * 
+  */
 	@GET
 	@Path("/enable")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -404,12 +517,10 @@ public class BasemapResource extends JobControllerBase {
 
 	protected void _deleteBaseMap(String bmName) throws Exception
 	{
-		//List<String> delList = new ArrayList<String>();
 		String controlFolder = _ingestStagingPath + "/BASEMAP/";
-		String tileDirectoryPath = _tileServerPath + "/BASEMAP/" + bmName;
 
-		File tileDir = new File(tileDirectoryPath);
-		if(tileDir.exists())
+		File tileDir = hoot.services.utils.FileUtils.getSubFolderFromFolder(_tileServerPath + "/BASEMAP/", bmName);
+		if(tileDir != null && tileDir.exists())
 		{
 			FileUtils.forceDelete(tileDir);
 		}
@@ -420,11 +531,33 @@ public class BasemapResource extends JobControllerBase {
 		for (int i = 0; i < files.length; i++) {
 			File curFile = files[i];
 			FileUtils.forceDelete(curFile);
-			//delList.add(curFile.getPath());
 		}
 
 	}
 
+	/**
+  * <NAME>Delete Basemap Service</NAME>
+  * <DESCRIPTION>Service method endpoint for deleting a basemap.</DESCRIPTION>
+  * <PARAMETERS>
+  * <NAME>
+  * Name of a basemap
+  * </NAME>
+  * </PARAMETERS>
+	* <OUTPUT>
+	* 	JSON containing enable state
+	* </OUTPUT>
+	* <EXAMPLE>
+	* 	<URL>http://localhost:8093/hoot-services/ingest/basemap/delete?NAME=abc</URL>
+	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	* <INPUT>
+	* {"name":"abc"}
+	* </INPUT>
+  * <OUTPUT>
+	* {"name":"abc"}
+	* </OUTPUT>
+  * </EXAMPLE>
+  * 
+  */
 	@GET
 	@Path("/delete")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -448,13 +581,6 @@ public class BasemapResource extends JobControllerBase {
 
 		return Response.ok(resp.toString(), MediaType.TEXT_PLAIN).build();
 	}
-
-
-
-
-
-
-
 
 
 }

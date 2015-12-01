@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <tgs/RStarTree/HilbertCurve.h>
@@ -46,6 +46,7 @@ class HilbertCurveTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(HilbertCurveTest);
   CPPUNIT_TEST(test1);
   CPPUNIT_TEST(sanityCheck);
+  CPPUNIT_TEST(sanityCheck2);
   CPPUNIT_TEST_SUITE_END();
 public:
   void test1()
@@ -79,6 +80,26 @@ public:
       {
         int a[] = {x, y};
         int r = uut.encode(a);
+        CPPUNIT_ASSERT(r >= 0 && r < orderBorder * orderBorder);
+        CPPUNIT_ASSERT(values.find(r) == values.end());
+        values.insert(r);
+      }
+    }
+  }
+
+  void sanityCheck2()
+  {
+    std::set<int64_t> values;
+
+    int order = 31;
+    HilbertCurve uut(2, order);
+    int64_t orderBorder = 1 << order;
+    for (int x = 0; x < orderBorder; x += (orderBorder / 877))
+    {
+      for (int y = 0; y < orderBorder; y += (orderBorder / 997))
+      {
+        int a[] = {x, y};
+        int64_t r = uut.encode(a);
         CPPUNIT_ASSERT(r >= 0 && r < orderBorder * orderBorder);
         CPPUNIT_ASSERT(values.find(r) == values.end());
         values.insert(r);

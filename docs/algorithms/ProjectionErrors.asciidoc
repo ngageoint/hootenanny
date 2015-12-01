@@ -1,0 +1,171 @@
+
+[[SelectingAProjection]]
+== Selecting a Projection
+
+NOTE: Last updated 10/17/2014
+
+Most datasets provided by the NGA are provided in WGS84. This is a convenient
+coordinate system for the exchange of data because all data can then be
+presented within a GIS in a consistent projection. However, when conflating it
+is difficult to perform some computational geometry operations such as
+buffering while unprojected. For this reason Hootenanny projects all data into
+a planar projection before most computations are performed. This short paper
+discusses how Hootenanny chooses a projection and the errors that may be
+incurred as a result of choosing a specific projection.
+
+=== Projection Errors
+
+There is no best projection. In projecting on to a planar surface from a sphere
+some information will be distorted. Primarily this breaks down into the
+distance or angle which is sometimes described as a combination of area and
+shape. Hootenanny is not concerned with the aesthetic appearance of the
+projected data, but with maintaining the relative angle of nearby features and
+the relative distance of nearby features. When two features are more than 1km
+or so apart they rarely impact the conflation process so distortions over large
+areas are not of significant concern.
+
+Depending on the area of interest one projection may be superior for preserving
+angle and distance over another. For instance, over a small region close to the
+poles orthographic performs very well. When dealing with a large region that
+wraps the globe such as Asia, Orthographic cannot be used due to the way the
+data wraps around the globe, but Albers Equal Area Conic projection performs
+admirably.
+
+=== Projection Error Test
+
+The following test is designed to evaluate the amount of angular and distance
+error the projection introduces over a distance of 1000m. To do this an
+operating envelope is defined and a series of points are sampled from within
+the envelope. For each point selected in the envelope a number of test points
+are picked that are exactly 1000m away (by calculating a specific distance
+given a bearing on the sphere). Bearing values start at 0 degrees (north) and
+march around in 20 degree increments. Each point is then projected and the
+distance and angle of the point are calculated in the projected space. The
+angle is taken relative to a vector that represents north in the projected
+space for the test point. The test is repeated using multiple projections and
+envelopes. All test points that fall outside the envelope are discarded.
+
+For testing purposes the earth is approximated as a sphere with a radius of 6,371.009km.
+
+NOTE: A map of the test cases should be inserted.
+
+.Testing Bounding Boxes
+|======
+| *Test Name*	| *Latitude*	| *Longitude*
+| Small North	| 80 to 81	| 0 to 1
+| Big North	| 0 to 89.5	| -180 to 180
+| Reasonable North	| 0 to 65	| -180 to 180
+| Almost Globe	| -89.5 to 89.5	| -180 to 180
+| Reasonable Globe	| -65 to 65	| -180 to 180
+| Small Middle	| 0 to 1	| 0 to 1
+| Medium Middle	| 0 to 10	| -5 to 5
+|======
+
+=== Projection Test Results
+
+Below are a number of examples showing the error results with the Sinusoidal projection. After that a summary of all test cases is presented.
+
+==== Sinusoidal Results
+
+Below the Sinusoidal test case is used as an example showing how the distance and angle errors manifest.
+ 
+[[ProjectionErrorsSinusoidal1]]
+.Distance error values for sinusoidal viewed as unprojected (WGS84). The black values are within 10% error. Light green values are well below the expected value (< 900m). Dark green values are well above the expected values (>1100m). Blue is greater than three times the expected value (>3000m). This uses the Almost Globe test case, -89.5, -180 to 89.5,180. 
+image::algorithms/ProjectionErrorsSinusoidal1.png[]
+
+[NOTE]
+======
+Add a scale and provide country outlines for context. It should also use something more prominent than light green for the below values. Rather than use transparency to fake the average color, take the maximum error for a given point.
+
+Maybe show with http://en.wikipedia.org/wiki/Tissot's_indicatrix[Tissot's indicatrix]?
+======
+
+<<ProjectionErrorsSinusoidal1>> is given to show how the sample points are distributed in the familiar WGS84. There are 21 samples going north/south and 41 samples going east/west. The remaining images use the same samples, but display the results in the Sinusoidal projection.
+
+[[ProjectionErrorsSinusoidal2]]
+.Above is an image of the sample points in a Sinusoidal projection. This is the same data as displayed in <<ProjectionErrorsSinusoidal1>>.
+image::algorithms/ProjectionErrorsSinusoidal2.png[]
+ 
+The largest errors tend to occur near the edges of the projection, or more specifically when the latitude and longitude move away from zero. One particularly extreme example is shown below which is found at 62.65, 180 (pointed to by the red arrow in <<ProjectionErrorsSinusoidal2>>).   
+ 
+[[ProjectionErrorsSinusoidal3]]
+.Zoom in of distance error at 62.65, 180. The region is pointed to by the red arrow in <<ProjectionErrorsSinusoidal2>>.
+image::algorithms/ProjectionErrorsSinusoidal3.png[]
+
+The above image only shows half of the testing “star pattern”; the test point is on the edge of the map and all rays that extend past 180E are discarded. The values on each of the rays are the distance of the ray. The expected pattern is a star with exactly 1000m long rays creating a half circle.
+ 
+Similar to distance errors, the values closer to 0 longitudes and 0 latitudes have less angular error.
+
+[[ProjectionErrorsSinusoidal4]]
+.Image of angle error in the sinusoidal projection. Black is less than 1 degree error, greens are higher and blue is 55 to 69 degrees error.
+image::algorithms/ProjectionErrorsSinusoidal4.png[]
+
+Similar to distance errors, the values closer to 0 longitudes and 0 latitudes have less angular error.
+
+[[ProjectionErrorsSinusoidal5]]
+.Zoom in of angle error at 62.65, 180. The values are the number of degrees off from the expected angle measurement. The zoom area is pointed to by the red arrow in <<ProjectionErrorsSinusoidal4>>.
+image::algorithms/ProjectionErrorsSinusoidal5.png[]
+
+The desired star pattern is a point with equally spaced rays radiating out with 20deg spacing creating a half circle instead of an ellipse. The star patterns closer to 0 longitudes and latitudes look much more like a circle.
+
+=== Summary Test Results
+ 
+[[ProjectionErrorsGraph1]]
+.Distance errors for various test cases. The expected results are 1km for each of the measured values. A value of zero is no error (perfect). The box plots show the minimum, Q1, median, Q3 and maximum error. AEAC is Alber’s Equal Area Conic)
+image::algorithms/ProjectionErrorsGraph1.png[]
+
+The above test case shows the distance error results for six different projections. There can be dramatic differences in distance error from one region to another. The Alber’s Equal Area Conic (AEAC) and Orthographic projections do not support all the test bounding boxes. When the bounding box is not supported the test results are omitted.
+ 
+[[ProjectionErrorsGraph2]]
+.Angle errors for various test cases. A value of zero denotes no difference from the expected results (perfect). The box plots show the minimum, Q1, median, Q3 and maximum error.
+image::algorithms/ProjectionErrorsGraph2.png[]
+
+The above test case shows the angle error results for six different projections. Similar to the distance results there can be dramatic differences in angle error from one region to another. The Alber’s Equal Area Conic (AEAC) and Orthographic projections do not support all the test bounding boxes. When the bounding box is not supported the test results are omitted.
+
+=== Hootenanny Modifications
+
+As a result of the tests Hootenanny now runs an experiment at runtime to determine the best projection from a list of candidate projections. The candidate projections used are below :
+
+* Orthographic centered on the center of the bounding box.
+* Alber’s Equal Area Conic Projection – The parallels are chosen as ¼ of the way down from the top and up from the bottom of the bounding box. Bounding areas that span the equator are not supported.
+* Sinusoidal
+* Mollweide
+* Ecker VI
+* Sphere Bonne
+* Mercator – The center of the Mercator projection is picked as the center of the bounding box.
+* Custom Bonne – The center of the Bonne projection is picked as the center of the bounding box.
+* Lambert Azimuth Equal Area Projection – Centered at the center of the bounding box.
+* Lambert Conformal Conic Projection – Centered at the center of the bounding box.
+* Robinson – The longitude centered at the center of the bounding box.
+* Custom Transverse Mercator - Centered at the center of the bounding box.
+* Polyconic - Centered at the center of the bounding box.
+* Two Point Equidistant - The two points are centered in the bounding box in
+  longitude and one is 1/4 of the way down from the top of the bounding box, the
+  other is 1/4 of the way up from the bottom of the bounding box.
+* Equidistant Conic - Centered at the center of the bounding box. The standard
+  parallels are 1/4 of the way down from the top of the bounding box and 1/4 of
+  the way up from the bottom.
+* Azimuth Equidistant - Centered at the center of the bounding box.
+
+To determine the projection for a given area an experiment is run for each of the projections where the star pattern is generated for each of the projections and tested in a similar fashion to what is described above. A threshold has been set to allow any projection with a maximum 10m distance error (~1%) or 2° angle error. The following equation is used to score each projection:
+
+// print pretty equations
+ifdef::HasLatexMath[]
+[latexmath]
++++++++++++++++++++++++++
+\[score = \frac{max distance error}{10m} + \frac{max angle error}{2deg}\]
++++++++++++++++++++++++++
+endif::HasLatexMath[]
+
+// print simple equations
+ifndef::HasLatexMath[]
+--------------------------------------
+score = max distance error / 10m + max angle error / 2deg
+--------------------------------------
+endif::HasLatexMath[]
+
+The projection with the lowest score that also meets the threshold requirements is picked as the best. If none of the projections meet the threshold requirements then a prominent warning message is presented to the user . 
+
+Running an experiment against all the above projections takes approximately 40ms on circa 2012 hardware (AMD FX-8150). Since a projection is generally selected once or twice per conflation run it is unlikely that this will add a significant cost to the overall runtime.
+
+

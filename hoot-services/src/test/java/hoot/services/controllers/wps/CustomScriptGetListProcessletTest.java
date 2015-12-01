@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
 
@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
 
 import java.util.LinkedList;
 
-import hoot.services.UnitTest;
+import hoot.services.IntegrationTest;
 import hoot.services.wps.WpsUtils;
 
 import org.deegree.process.jaxb.java.ProcessDefinition;
@@ -42,7 +42,6 @@ import org.deegree.services.wps.ProcessletOutputs;
 import org.deegree.services.wps.input.ProcessletInput;
 import org.deegree.services.wps.output.LiteralOutputImpl;
 import org.deegree.services.wps.output.ProcessletOutput;
-
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.Mockito;
@@ -51,7 +50,7 @@ public class CustomScriptGetListProcessletTest {
 
   
 	@Test
-	@Category(UnitTest.class)
+	@Category(IntegrationTest.class)
 	public void testProcess() throws Exception
 	{
 		CustomScriptGetListProcesslet processlet = Mockito.spy(new CustomScriptGetListProcesslet());

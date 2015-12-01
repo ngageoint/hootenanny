@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MapCropper.h"
@@ -154,10 +154,10 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
   LOG_INFO("  Removing nodes...");
 
   // go through all the nodes
-  const OsmMap::NodeMap nodes = result->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nodes.constBegin(); it != nodes.constEnd(); it++)
+  const NodeMap nodes = result->getNodeMap();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); it++)
   {
-    const Coordinate& c = it.value()->toCoordinate();
+    const Coordinate& c = it->second->toCoordinate();
 
     bool nodeInside = false;
 
@@ -193,10 +193,10 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
       if (_nodeBounds.isNull() == true || _nodeBounds.contains(c))
       {
         // if the node is not part of a way
-        if (n2w.find(it.key()) == n2w.end())
+        if (n2w.find(it->first) == n2w.end())
         {
           // remove the node
-          result->removeNodeNoCheck(it.value()->getId());
+          result->removeNodeNoCheck(it->second->getId());
         }
       }
     }

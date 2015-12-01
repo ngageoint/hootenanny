@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayMergeManipulation.h"
@@ -74,7 +74,7 @@ void WayMergeManipulation::addBogusReviewTags(const OsmMapPtr& map) const
   ElementPtr right = map->getWay(_right);
 
   QString note("The review scores on this way are bogus. See #3242.");
-  ReviewMarker().mark(left, right, note, getBogusReviewScore());
+  ReviewMarker().mark(map, left, right, note, "Bogus", getBogusReviewScore());
 }
 
 void WayMergeManipulation::applyManipulation(shared_ptr<OsmMap> map,

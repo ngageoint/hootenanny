@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __OGR_READER_H__
@@ -33,6 +33,8 @@
 #include <hoot/core/elements/ElementIterator.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/util/Progress.h>
 
 // Qt
 #include <QHash>
@@ -40,6 +42,10 @@
 #include <QStringList>
 #include <QXmlDefaultHandler>
 class QString;
+
+#include <boost/shared_ptr.hpp>
+
+#include <ogr_spatialref.h>
 
 // Standard
 #include <vector>
@@ -53,9 +59,11 @@ class OgrReaderInternal;
  * This class is broken out into an internal and external class to avoid issues with Python's
  * include file approach.
  */
-class OgrReader
+class OgrReader : public PartialOsmMapReader
 {
 public:
+
+  static string className() { return "hoot::OgrReader"; }
 
   /**
    * Returns true if this appears to be a reasonable path without actually attempting to open the
@@ -65,6 +73,10 @@ public:
 
   OgrReader();
 
+  OgrReader(QString path);
+
+  OgrReader(QString path, QString layer);
+
   ~OgrReader();
 
   ElementIterator* createIterator(QString path, QString layer) const;
@@ -73,6 +85,15 @@ public:
 
   QStringList getFilteredLayerNames(QString path);
 
+  /**
+   * Read all geometry data from the specified path.
+   *
+   * @param path
+   * @param layer Read only from this layer. If no layer is specified then read from all geometry
+   *  layers.
+   * @param map Put what we read in this map.
+   * @param progress Report progress to this object.
+   */
   void read(QString path, QString layer, shared_ptr<OsmMap> map, Progress progress);
 
   void setDefaultCircularError(Meters circularError);
@@ -84,6 +105,34 @@ public:
   void setTranslationFile(QString translate);
 
   long getFeatureCount(QString path, QString layer);
+
+  virtual void initializePartial();
+
+  virtual bool hasMoreElements();
+
+  virtual ElementPtr readNextElement();
+
+  Progress streamGetProgress() const;
+
+  virtual void close();
+
+  virtual bool isSupported(QString url);
+
+  virtual void open(QString url);
+
+  virtual void setUseDataSourceIds(bool useDataSourceIds);
+
+  virtual void finalizePartial();
+
+  /**
+   * Returns the bounding box for the specified projection and configuration settings. This is
+   * likely only useful in unit tests.
+   */
+  virtual shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s,
+    OGRSpatialReference* srs);
+
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+
 
 protected:
   OgrReaderInternal* _d;

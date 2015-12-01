@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGS_JS_H
 #define TAGS_JS_H
@@ -30,11 +30,12 @@
 // hoot
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/elements/ElementJs.h>
+#include <hoot/js/util/DataConvertJs.h>
 
 // node.js
 // #include <nodejs/node.h>
-#include <hoot/js/SystemNodeJs.h>
 
 // Qt
 #include <QString>
@@ -76,11 +77,51 @@ private:
 
   static Handle<Value> contains(const Arguments& args);
   static Handle<Value> get(const Arguments& args);
+  static Handle<Value> getCreateUuid(const Arguments& args);
+  static Handle<Value> getInformationCount(const Arguments& args);
+  static Handle<Value> set(const Arguments& args);
   static Handle<Value> toDict(const Arguments& args);
   static Handle<Value> toString(const Arguments& args);
 
   void _setTags(const Tags& t) { _tags = t; }
 };
+
+inline void toCpp(v8::Handle<v8::Value> v, Tags& t)
+{
+  if (!v->IsObject())
+  {
+    throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
+  }
+
+  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+  TagsJs* js = 0;
+  if (obj->InternalFieldCount() > 0)
+  {
+    js = node::ObjectWrap::Unwrap<TagsJs>(obj);
+  }
+  if (js)
+  {
+    t = js->getTags();
+  }
+  else
+  {
+    QStringList keys = toCpp<QStringList>(obj->GetPropertyNames());
+
+    if (keys.size() == 0)
+    {
+      throw IllegalArgumentException("Expected a MostEnglishNameJs, got: (" + toJson(v) + ")");
+    }
+    else
+    {
+      t.clear();
+      for (int i = 0; i < keys.size(); i++)
+      {
+        QString value = toCpp<QString>(obj->Get(toV8(keys[i])));
+        t[keys[i]] = value;
+      }
+    }
+  }
+}
 
 }
 #endif // TAGS_JS_H

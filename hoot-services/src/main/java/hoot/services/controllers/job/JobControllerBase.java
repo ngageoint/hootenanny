@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
@@ -49,9 +49,9 @@ import org.slf4j.LoggerFactory;
 
 public class JobControllerBase {
 	private static final Logger log = LoggerFactory.getLogger(JobControllerBase.class);
-	protected String coreJobServerUrl = null;
+	private String coreJobServerUrl = null;
 	protected String processScriptName = null;
-	protected int jobResConnectionTimeout = 3000;
+	private int jobResConnectionTimeout = 3000;
 
 
 	public JobControllerBase()
@@ -182,7 +182,7 @@ public class JobControllerBase {
 
 	protected JSONObject _createReflectionJobReq(JSONArray args, String className, String methodName)
 	{
-		String resourceName = this.getClass().getSimpleName();
+		this.getClass().getSimpleName();
 
 		JSONObject command = new JSONObject();
 		command.put("exectype", "reflection");
@@ -195,7 +195,7 @@ public class JobControllerBase {
 
 	protected JSONObject _createReflectionJobReq(JSONArray args, String className, String methodName, String internalJobId)
 	{
-		String resourceName = this.getClass().getSimpleName();
+		this.getClass().getSimpleName();
 
 		JSONObject command = new JSONObject();
 		command.put("exectype", "reflection");
@@ -209,7 +209,7 @@ public class JobControllerBase {
 
 	protected JSONObject _createReflectionSycJobReq(JSONArray args, String className, String methodName)
 	{
-		String resourceName = this.getClass().getSimpleName();
+		this.getClass().getSimpleName();
 
 		JSONObject command = new JSONObject();
 		command.put("exectype", "reflection_sync");

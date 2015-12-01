@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmMapIndex.h"
@@ -89,6 +89,7 @@ void OsmMapIndex::addRelation(const shared_ptr<const Relation>& r)
   if (_elementToRelationMap != 0)
   {
     _elementToRelationMap->addRelation(_map, r);
+    VALIDATE(validate());
   }
 }
 
@@ -104,7 +105,7 @@ void OsmMapIndex::_buildNodeTree() const
   vector<Box> boxes;
   vector<int> ids;
 
-  const OsmMap::NodeMap& nodes = _map.getNodeMap();
+  const NodeMap& nodes = _map.getNodeMap();
 
   _treeIdToNid.resize(0);
   _treeIdToNid.reserve(nodes.size());
@@ -113,10 +114,10 @@ void OsmMapIndex::_buildNodeTree() const
 
   Box b(2);
   int count = 0;
-  for (QHash<long, boost::shared_ptr<Node> >::const_iterator it = nodes.constBegin();
-    it != nodes.constEnd(); ++it)
+  for (NodeMap::const_iterator it = nodes.begin();
+    it != nodes.end(); ++it)
   {
-    shared_ptr<const Node> n = it.value();
+    shared_ptr<const Node> n = it->second;
 
     b.setBounds(0, n->getX(), n->getX());
     b.setBounds(1, n->getY(), n->getY());
@@ -433,6 +434,7 @@ const shared_ptr<ElementToRelationMap> &OsmMapIndex::getElementToRelationMap() c
     {
       _elementToRelationMap->addRelation(_map, it->second);
     }
+    VALIDATE(validate());
   }
   return _elementToRelationMap;
 }
@@ -663,7 +665,7 @@ void OsmMapIndex::reset()
   _nodeTree.reset();
 }
 
-bool OsmMapIndex::validate()
+bool OsmMapIndex::validate() const
 {
   bool result = true;
   if (_nodeToWayMap != 0)

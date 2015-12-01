@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
@@ -42,7 +42,7 @@ public class RandomNumberGenerator
    */
   public static double nextDouble(double min, double max)
   {
-    Random r = new Random();
+    Random r = new Random(System.currentTimeMillis());
     return min + (max - min) * r.nextDouble();
   }
 }

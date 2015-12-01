@@ -22,12 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.validators.osm;
 
 import hoot.services.utils.XmlDocumentBuilder;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,14 +44,14 @@ public class ChangesetUploadXmlValidator
   /**
    * Validates a changeset
    * 
-   * @param reviewedItemsChangeset an OSM changeset for reviewed items
+   * @param changesetXml an OSM changeset for reviewed items
    */
   public Document parseAndValidate(final String changesetXml) throws Exception
   {
     Document changesetDiffDoc = null;
     try
     {
-      log.debug("Parsing changeset diff XML...");
+      log.debug("Parsing changeset diff XML: " + StringUtils.abbreviate(changesetXml, 1000));
       changesetDiffDoc = XmlDocumentBuilder.parse(changesetXml);
     }
     catch (Exception e)

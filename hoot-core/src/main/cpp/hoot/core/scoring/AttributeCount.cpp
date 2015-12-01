@@ -165,6 +165,15 @@ QString AttributeCount::_printJSON(QString lName, AttributeCountHash& data)
       // Escape linefeeds
       tmpVal.replace("\r","\\r");
 
+      // Escape form feeds
+      tmpVal.replace("\f","\\f");
+
+      // Escape tabs
+      tmpVal.replace("\t","\\t");
+
+      // Escape vertical tabs
+      tmpVal.replace("\v","\\v");
+
       // And double quotes
       tmpVal.replace("\"","\\\"");
 

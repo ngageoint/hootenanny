@@ -1,0 +1,245 @@
+
+[[PoiConflation]]
+== PLACES POI Conflation
+
+The following sections describe the attempt to emulated PLACES point conflation
+and provides some simple examples of data processing.
+
+NOTE: This implementation is based on PLACES as of 3/11/2014. Regular updates
+are not being made to the PLACES algorithm within Hootenanny. Unifying POI Conflation is now the default in Hootenanny and is recommended in most situations.
+
+Hootenanny now provides a simple function for performing point-based conflation.
+This only provides point to point conflation (no point to polygon) and uses
+names and geometry for matching criteria. An attempt has been made to mimic
+PLACES conflation as closely as is reasonable. PLACES provides a lot of
+functionality that is not available through Hootenanny such as user workflows
+and a convenient web interface for editing and distributing point data. PLACES
+also maintains a database of all the conflated results with links to the source
+data. These sections are only concerned with the POI conflation and do not 
+address the database, web interface or persisting source data.
+
+=== PLACES Conflation Process
+
+The conflation process is a rule based approach to determining point matches and
+then merging those matches into a single feature. Because there may be features
+that are duplicates within data sets as well as between data sets the first step
+is a Self-Conflation (intra-dataset), followed by Challenge-Conflation
+(inter-dataset). When both steps are complete a final conflated data set is
+produced as a series of links between records as well as a new record with the
+best geometry and all referenced names.
+
+_Self-Conflation_
+
+1. Name Conflation - Match and merge POIs where there is an exact latitude/longitude and name match.
+2. Place Conflation - Match and merge POIs where there is an exact latitude/longitude match and name does not have to be the same.
+3. Accuracy Conflation - Match and merge _inaccurate_ POIs with other POIs using goodness (defined below).
+4. Name Conflation - Repeats the process in step 2.
+5. Goodness Conflation - Match and merge all POIs using goodness.
+6. Name Conflation - Repeats the process in step 2.
+
+_Challenge-Conflation_
+
+Challenge conflation contains the same steps as Self-Conflation but performs them in a different order and works on the result of the two Self-Conflated data sets rather than within a single data set.
+
+1. Name Challenge - Match and merge POIs where there is an exact latitude/longitude and name match.
+2. Accuracy Challenge - Match and merge _inaccurate_ POIs with other POIs using goodness (defined below).
+3. Goodness Challenge - Match and merge _accurate_ POIs with _accurate_ POIs using goodness.
+4. Place Challenge - Match and merge POIs where there is an exact latitude/longitude match and name does not have to be the same.
+5. Challenge NoMatch - Insert unmatched data from the challenge dataset into the base dataset.
+
+==== Goodness
+
+Goodness is a concept in the PLACES code for determining if two points are a
+match or not. It is based on rules for geometric distance as well as edit
+distance between names. If both the names are considered close enough and the
+distance is considered close enough then the points are merged. The sections
+below describe the algorithms used to determine these matches.
+
+===== Point Accuracy
+
+Each point is classified as either accurate or inaccurate based on the point location of the data. If the point rounds to the nearest arcminute then it is considered inaccurate. Otherwise it is considered accurate.
+
+===== Geometry Matching
+
+If the distance between the two points is less than _x_ distance then the POIs are candidates for matching.
+
+_x_ is determined based on the inaccurate/accurate class of the POI. If the POI is _inaccurate_ then x is 56km. If the POI is _accurate_ then _x_ is 1km.
+
+===== Name Matching
+
+A Levenshtein Similarity score is calculated for each candidate POI. To calculate the similarity the highest scoring similarity of all name combinations is used where Levenshtein Similarity is defined as:
+
+* M - The maximum length of the two strings.
+
+image::algorithms/images/places/image007.png[]
+
+===== Calculating Goodness
+
+Goodness is calculated as:
+
+* G - Goodness
+* d - The distance between the points
+* dmax - The maximum allowable distance between the points (e.g. 56km for inaccurate and 1km for accurate)
+* wd - Weight of d [0, 1] (defaults to .1)
+* s - The Levenshtein similarity score
+* ws - Weight of s [0, 1] (defaults to .9)
+
+image::algorithms/images/places/image008.png[]
+
+image::algorithms/images/places/image009.png[]
+
+Any goodness score greater than or equal to a threshold is considered a match. The threshold defaults to 0.3.
+
+==== Merge Matched Records
+
+If one record is considered accurate and the other is not, then the accurate
+geometry is used as the geometry for both names. Otherwise the chosen geometry
+is arbitrary. All names are carried over to the newly merged record along with
+links such that the original data can be retrieved for any conflated record. The
+Name Conflation portion of the algorithm removes duplicate names at the same
+point, while retaining all other associated information.
+
+=== Hootenannys PLACES Conflation
+
+In the POI conflation code Hootenanny attempts to follow the PLACES approach
+closely but rather than perform both a Self-Conflation and Challenge-Conflation
+step, Hootenanny conflates all the data as a single step. This may introduce
+some differences with the PLACES conflation process. A discussion occurs at the
+end of the document as well as some potential solutions to the problems.
+
+==== Geometry Matching
+
+With regards to an exact geometry match, Hootenanny defines an exact geometry
+match as any two points that are within \~1mm to avoid minor floating point
+precision errors. Rather than explicitly specifying _inaccurate_ and _accurate_
+data types, Hootenanny supports anerror:circularcolumn that specifies the
+circular error (CE) of a feature in meters. Hootenanny uses that to define the
+threshold of a geometry match. Typically Hootenanny uses the sum of the two
+circular error values as the threshold, but for PLACES compatibility it uses the
+maximum of the two values as the threshold. It is expected that the input data
+will have this field populated with either 56km or 1km as appropriate.
+
+==== POI Merging
+
+When two or more features are identified as matching, they are grouped into a
+set. The feature with the lowest CE is used as merged geometry and adopt that
+geometry's CE. At this point only name merging is supported (not the full
+attribute conflation). To this end any name that is unique will be kept in the
+final output.
+
+==== Provenance
+
+Provenance can be provided in Hootenanny by specifying a uid (unique identifier
+tag). This uid tag will be carried along with all input data and as multiple
+features are conflated it will receive multiple uid values. For example,
+conflating two features with +uid=1234+ and +uid=4321+ will result in a new
+record with +uid=1234;4321+. It is recommended that the user use Universally
+Unique Identifiers (<<UUID,UUID>>) for uid values, but any string is supported
+as long as it is guaranteed to be unique and semi-colons are escaped as double
+semi-colons as described on the <<OpenStreetMap,OpenStreetMap>> wiki. This
+provenance information can be used to link the conflated output to the original
+source data and possibly used to recreate the links that PLACES maintains.
+
+=== Calling Hootenanny Conflation
+
+The input data must contain at least the following tags:
+
+* name - The name of the POI
+* error:circular - A real number (double) representing the number of meters of error. Typically this is 1000 or 56000, but any number is acceptable.
+
+A POI tag The simplest tag is +poi=yes+, but other more specific attributes are
+defined in +conf/PoiSchema.json+.
+
+You can use the typical translation mechanisms in Hootenanny to convert input
+data into the OSM schema. An example translation file for geonames.org data can
+be found in +translations/GeoNamesOrg.js+. Hootenanny does support reading
+geonames.org data directly from a geonames .org text file by renaming the
+extension to.geonames. For example:
+
+------
+wget http://download.geonames.org/export/dump/allCountries.zip
+unzip allCountries.zip
+mv allCountries.txt allCountries.geonames
+hoot convert -D "convert.ops=hoot::TranslationOp" -D translation.script=$HOOT_HOME/translations/GeoNamesOrg.js allCountries.geonames allCountries.osm.pbf
+------
+
+==== Conflate using PLACES Algorithm
+
+To run an example conflation:
+
+------
+hoot --conflate test-files/conflate/point/Poi1.osm test-files/conflate/point/Poi2.osm conflated.osm
+------
+
+=== Hootenanny Example Conflation Results
+
+Below is an example using generated data over Colorado Springs, CO. There are a
+total of 21 input features including four park POIs, five city/town center
+points, and 12 Starbucks. The 12 Starbucks were chosen to show some limitations
+in the conflation process. This data was created specifically to show how the
+conflation occurs and is _not_ representative of real world data.
+
+All the cities conflate as expected. There are some small naming deviations, but
+all the data was generated such that the accuracy values would make them
+conflate properly. The real problems are around Starbucks as discussed in the
+_The Starbucks Problem_ below.
+
+[[placesinput1]]
+.Input 1
+image::algorithms/images/places/image010.jpg[scale="75"]
+
+[[placesinput2]]
+.Input 2
+image::algorithms/images/places/image011.jpg[scale="75"]
+
+[[placesconflated]]
+.Conflated Result
+image::algorithms/images/places/image012.jpg[scale="75"]
+
+_The Starbucks Problem_ 
+
+On the right hand side are a string of Starbucks coffee shops along Powers Blvd.
+These are real world coffee shops that are spaced from about 150m apart at the
+closest and 4km apart at the furthest. The topmost Starbucks in input 1 has a CE
+of 100m, the southernmost coffee shop in input 2 has a CE of 150m and all others
+have a CE of 1000m. The CE values were chosen to demonstrate conflation issues.
+There are no intra-dataset duplicates.
+
+If we allow self-conflation then there isnt enough information available to get
+the correct answer. In the Southern portion there are six coffee shops all
+within 1km of each other. However, given that the northern coffee shop is 4km
+from the southernmost coffee shop those two points should never be conflated
+together. Using the current mechanism it is possible to conflate those two
+points together by chaining together matches. For example, the southernmost
+coffee shop matches its northern neighbor, which matches its northern neighbor,
+until you final reach the northernmost shop in < 1km hops. This results in a
+single coffee shop as the output using Hootenanny.
+
+The PLACES approach of first self-conflating each input and then performing the
+challenge-conflation results in a slightly different problem. The
+self-conflation of input 1 will result in a single point in the north with a CE
+of 100m. The self-conflation of input 2 will result in a single point in the
+south with a CE of 150m. Neither of these shops will be conflated together
+during the challenge-conflation. This is a more desirable output, but a few
+small changes to the data will create the single point problem as well.
+
+_Possible Solution to the Starbucks Problem_
+
+Currently there is no concept of a conflicting match. This allows very large
+groups of matches to occur. If a conflict concept is introduced it allows two
+matches to define either a conflicting or non-conflicting relationship. For
+instance:
+
+* Distance A -> B is 700m
+* Distance B -> C is 700m
+* Distance A -> C is 1300m
+
+If our threshold is 1000m then A and C cannot match. Therefore match A->B and
+B->C are conflicting matches. While the specifics are beyond the scope of this
+document, this is very similar to concepts we would like to introduce to support
+Li & Goodchild's conflation approach. Using this approach would avoid creating
+very long chains of Starbucks by preventing high accuracy points from being
+merged together and do so in a reasonable and deterministic way. This will also
+prevent a very high CE point from conflating with a large number of low CE
+points.
+

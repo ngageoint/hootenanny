@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OGROPTIONS_H
 #define OGROPTIONS_H
@@ -37,6 +37,12 @@
 namespace hoot
 {
 
+/**
+ * OGR uses an old school C approach to encoding options as parameters. This class exposes a simple
+ * interface to manipulating the options and then a function to encode the options for OGR. The
+ * encoded options are only good for the life time of this class or until a new set is generated
+ * again.
+ */
 class OgrOptions : public QMap<QString, QString>
 {
 public:
@@ -63,6 +69,9 @@ public:
     }
   }
 
+  /**
+   * Returns an old school C encoding of the options suitable for OGR parameters.
+   */
   char** getCrypticOptions()
   {
     deleteCrypticOptions();

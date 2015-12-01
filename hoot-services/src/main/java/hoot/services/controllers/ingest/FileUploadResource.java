@@ -22,11 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,11 +50,6 @@ import hoot.services.HootProperties;
 import hoot.services.ingest.MultipartSerializer;
 import hoot.services.utils.ResourceErrorHandler;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -89,7 +83,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 	 * <NAME>FileUpload Service</NAME>
 	 * <DESCRIPTION>
 	 * Purpose of this service is to provide ingest service for uploading shape and osm file and performing ETL operation on the uploaded file(s).
-   * This service is multipart post service which accepts sigle or multiple files sent by multipart client.
+   * This service is multipart post service which accepts single or multiple files sent by multipart client.
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * 	<TRANSLATION>
@@ -101,6 +95,9 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 	 * 	<INPUT_NAME>
 	 * 	optional input name which is used in hoot db. Defaults to the file name.
 	 * 	</INPUT_NAME>
+	 * <USER_EMAIL>
+	 * Email address of the user requesting job
+	 * </USER_EMAIL>
 	 * </PARAMETERS>
 	 * <OUTPUT>
 	 * Array of job status
@@ -126,6 +123,8 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 	public Response processUpload2( @QueryParam("TRANSLATION") final String translation,
 			@QueryParam("INPUT_TYPE") final String inputType,
 			@QueryParam("INPUT_NAME") final String inputName,
+			@QueryParam("USER_EMAIL") final String userEmail,
+			@QueryParam("NONE_TRANSLATION") final String noneTranslation,
 			@Context HttpServletRequest request)
 	{
 		String etlName = inputName;
@@ -148,10 +147,12 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			int shpCnt = 0;
 			int osmCnt = 0;
 			int fgdbCnt = 0;
+			int geonamesCnt = 0;
 			
 			int zipCnt = 0;
 			int shpZipCnt = 0;
 			int osmZipCnt = 0;
+			int geonamesZipCnt = 0;
 			int fgdbZipCnt = 0;
 			List<String> zipList = new ArrayList<String>();
 			
@@ -186,6 +187,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 		       shpZipCnt += (Integer) zipStat.get("shpzipcnt");
 		       fgdbZipCnt += (Integer) zipStat.get("fgdbzipcnt");
 		       osmZipCnt += (Integer) zipStat.get("osmzipcnt");
+		       geonamesZipCnt += (Integer) zipStat.get("geonameszipcnt");
 		       
 
 		       zipList.add(fName);
@@ -196,6 +198,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 	      	 shpCnt += (Integer) zipStat.get("shpcnt");
 		       fgdbCnt += (Integer) zipStat.get("fgdbcnt");
 		       osmCnt += (Integer) zipStat.get("osmcnt");
+		       geonamesCnt += (Integer) zipStat.get("geonamescnt");
 	       }
 			}
 			
@@ -203,14 +206,20 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			{
 				throw new Exception("Can not mix osm and ogr type.");
 			}
+			if(osmZipCnt > 0){
+				//#6027
+				throw new Exception("Hootennany does not support zip files containing .osm data.");
+			}
 
 			
 			String batchJobReqStatus = "success";
 			String batchJobId = UUID.randomUUID().toString();
 			JSONArray jobArgs = _createNativeRequest(reqList, zipCnt, shpZipCnt,
-					fgdbZipCnt, osmZipCnt, shpCnt, fgdbCnt, osmCnt,
+					fgdbZipCnt, osmZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 					zipList, translation, jobId, 
-					etlName, inputsList);
+					etlName, inputsList, userEmail, noneTranslation);
+			
+			//userEmail
 
 			log.debug("Posting Job Request for Job :" + batchJobId+ " With Args: " + jobArgs.toJSONString());
 			postChainJobRquest( batchJobId,  jobArgs.toJSONString());
@@ -236,9 +245,11 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 	
 	
 	protected JSONArray _createNativeRequest(final JSONArray reqList, final int zipCnt, final int shpZipCnt,
-			final int fgdbZipCnt, final int osmZipCnt, final int shpCnt, final int fgdbCnt, final int osmCnt,
+			final int fgdbZipCnt, final int osmZipCnt, final int geonamesZipCnt, final int shpCnt, final int fgdbCnt, 
+			final int osmCnt, final int geonamesCnt,
 			final List<String> zipList, final String translation, final String jobId, 
-			final String etlName, final List<String> inputsList) throws Exception
+			final String etlName, final List<String> inputsList, final String userEmail,
+			final String isNoneTranslation) throws Exception
 	{
 		JSONArray jobArgs = new JSONArray();
 		String curInputType = null;
@@ -279,6 +290,12 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 					String mergedZipList = StringUtils.join(zipList.toArray(), ';');
 					param.put("UNZIP_LIST", mergedZipList);
 				}
+				else if(geonamesCnt > 0) // Mix of One or more all osm zip + osm
+				{
+					curInputType = "GEONAMES";
+					String mergedZipList = StringUtils.join(zipList.toArray(), ';');
+					param.put("UNZIP_LIST", mergedZipList);
+				}
 				else //One or more zip (all ogr) || One or more zip (all osm)
 				{
 					// If contains zip of just shape or osm then we will etl zip directly
@@ -307,9 +324,18 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 		{
 			curInputType = "FGDB";
 		}
+		else if(geonamesCnt > 0)
+		{
+			curInputType = "GEONAMES";
+		}
 		
 		
 		
+		Boolean isNone = false;
+		if(isNoneTranslation != null)
+		{
+			isNone = isNoneTranslation.equals("true");
+		}
 		
 		
 		String translationPath = "translations/" + translation;
@@ -322,11 +348,14 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 		
 		
 	// Formulate request parameters
+		
+		param.put("NONE_TRANSLATION", isNone.toString());
 		param.put("TRANSLATION", translationPath);
 		param.put("INPUT_TYPE", curInputType);
 		param.put("INPUT_PATH", "upload/" + jobId);			
 		param.put("INPUT", inputs );
 		param.put("INPUT_NAME", etlName);
+		param.put("USER_EMAIL", userEmail);
 		
 		
 		JSONArray commandArgs = parseParams(param.toJSONString());
@@ -338,6 +367,12 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 		JSONArray rasterTilesArgs = new JSONArray();
 		JSONObject rasterTilesparam = new JSONObject();
 		rasterTilesparam.put("value", etlName);
+		rasterTilesparam.put("paramtype", String.class.getName());
+		rasterTilesparam.put("isprimitivetype", "false");
+		rasterTilesArgs.add(rasterTilesparam);
+
+		rasterTilesparam = new JSONObject();
+		rasterTilesparam.put("value", userEmail);
 		rasterTilesparam.put("paramtype", String.class.getName());
 		rasterTilesparam.put("isprimitivetype", "false");
 		rasterTilesArgs.add(rasterTilesparam);
@@ -391,9 +426,22 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			osmZipCnt = (Integer)oOsmStat;
 		}
   	
+  	
+  	int geonamesZipCnt = 0;
+  	Object oGeonamesStat = zipStat.get("geonameszipcnt");
+  	if(oGeonamesStat == null)
+		{
+			zipStat.put("geonameszipcnt", 0);
+		}
+		else
+		{
+			geonamesZipCnt = (Integer)oGeonamesStat;
+		}
+  	
   	int osmCnt = 0;
   	int shpCnt = 0;
   	int fgdbCnt = 0;
+  	int geonamesCnt = 0;
   	
 		if(ext.equalsIgnoreCase("osm"))
     {
@@ -402,6 +450,14 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
     	reqType.put("name", inputFileName);
 			reqList.add(reqType);
 			osmCnt++;
+    }
+		else if(ext.equalsIgnoreCase("geonames"))
+    {
+    	JSONObject reqType = new JSONObject();
+    	reqType.put("type", "GEONAMES");
+    	reqType.put("name", inputFileName);
+			reqList.add(reqType);
+			geonamesCnt++;
     }
     else if(ext.equalsIgnoreCase("shp"))
     {
@@ -421,6 +477,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			shpZipCnt += (Integer) res.get("shpcnt");
 			fgdbZipCnt += (Integer) res.get("fgdbcnt");
 			osmZipCnt += (Integer) res.get("osmcnt");
+			geonamesZipCnt += (Integer) res.get("geonamescnt");
    	 
    	 	// We do not allow mix of ogr and osm in zip
 			if((shpZipCnt + fgdbZipCnt) > 0 && osmZipCnt > 0 )
@@ -431,6 +488,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			zipStat.put("shpzipcnt", shpZipCnt);
 			zipStat.put("fgdbzipcnt", fgdbZipCnt);
 			zipStat.put("osmzipcnt", osmZipCnt);
+			zipStat.put("geonameszipcnt", geonamesZipCnt);
     }
     else if(ext.equalsIgnoreCase("gdb"))
     {
@@ -444,6 +502,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 		zipStat.put("shpcnt", shpCnt);
 		zipStat.put("fgdbcnt", fgdbCnt);
 		zipStat.put("osmcnt", osmCnt);
+		zipStat.put("geonamescnt", geonamesCnt);
 	}
 	
 	
@@ -454,104 +513,124 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 	protected JSONObject _getZipContentType(final String zipFilePath, JSONArray contentTypes, String fName) throws Exception
 	{
 		JSONObject resultStat = new JSONObject();
-		String[] extList = {"gdb","osm","shp"};
+		String[] extList = {"gdb","osm","shp","geonames"};
 		
 		int shpCnt = 0;
 		int osmCnt = 0;
+		int geonamesCnt = 0;
 		int fgdbCnt = 0;
-		ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFilePath));
-		ZipEntry ze = zis.getNextEntry();
+		ZipInputStream zis = null;
+		try
+		{
+			zis = new ZipInputStream(new FileInputStream(zipFilePath));
+			ZipEntry ze = zis.getNextEntry();
 
-  	while(ze!=null)
-  	{
-  		String zipName = ze.getName();
-  		// check to see if zipName ends with slash and remove
-  		if(zipName.endsWith("/"))
-  		{
-  			zipName = zipName.substring(0, zipName.length() - 1);
-  		}
-  		
-  		String[] fileNameParts = zipName.split("\\.");
-  		String ext = null;
-  		
-  		int partsLen = fileNameParts.length;
-  		if(partsLen > 1)
-  		{
-  			ext = fileNameParts[partsLen-1];
-  		}
-  		
-  		
-  		//See if there is extension and if none then throw error
-  		if(ext == null) 
-  		{
-  			throw new Exception("Unknown file type.");
-  		}
-  		else
-  		{
-  			// for each type of extensions
-  			for(int i=0; i<extList.length; i++)
-  			{
-  				if(ext.equalsIgnoreCase(extList[i]))
-  				{
-  					if(ze.isDirectory())
-  					{
-  						if(ext.equals("gdb"))
-  						{
-	  						JSONObject contentType = new JSONObject();
-	  	  				contentType.put("type", "FGDB_ZIP");
-	  	  				contentType.put("name", fName + "/" + zipName);
-	  	  				contentTypes.add(contentType);
-	  	  				fgdbCnt++;
-  						}
-  						else
-  						{
-  							throw new Exception("Unknown folder type. Only gdb folder type is supported.");
-  						}
-  					}
-  					else //file
-  					{
-  						if(ext.equals("shp"))
-  						{
-  							JSONObject contentType = new JSONObject();
-	  	  				contentType.put("type", "OGR_ZIP");
-	  	  				contentType.put("name", fName + "/" + zipName);
-	  	  				contentTypes.add(contentType);
-	  	  				shpCnt++;
-  						}
-  						else if(ext.equals("osm"))
-  						{
-  							JSONObject contentType = new JSONObject();
-	  	  				contentType.put("type", "OSM_ZIP");
-	  	  				contentType.put("name", fName + "/" + zipName);
-	  	  				contentTypes.add(contentType);
-	  	  				osmCnt++;
-  						}
-  						else
-  						{
-  							// We will not throw error here since shape file can contain mutiple types of support files.
-  							// We will let hoot-core decide if it can handle the zip.
-  						}
-  					}
-  				}
-  				// We do not allow mix of ogr and osm in zip
-  				if((shpCnt + fgdbCnt) > 0 && osmCnt > 0 )
-    			{
-    				throw new Exception("Zip should not contain both osm and ogr types.");
-    			}
-  			}
-  			
-  		}
-  		
-  		ze = zis.getNextEntry();
-  	}
-
-  	zis.closeEntry();
-  	zis.close();
-  	
-  	resultStat.put("shpcnt", shpCnt);
-  	resultStat.put("fgdbcnt", fgdbCnt);
-  	resultStat.put("osmcnt", osmCnt);
+	  	while(ze!=null)
+	  	{
+	  		String zipName = ze.getName();
+	  		// check to see if zipName ends with slash and remove
+	  		if(zipName.endsWith("/"))
+	  		{
+	  			zipName = zipName.substring(0, zipName.length() - 1);
+	  		}
+	  		
+	  		String[] fileNameParts = zipName.split("\\.");
+	  		String ext = null;
+	  		
+	  		int partsLen = fileNameParts.length;
+	  		if(partsLen > 1)
+	  		{
+	  			ext = fileNameParts[partsLen-1];
+	  		}
+	  		
+	  		
+	  		//See if there is extension and if none then throw error
+	  		if(ext == null) 
+	  		{
+	  			throw new Exception("Unknown file type.");
+	  		}
+	  		else
+	  		{
+	  			// for each type of extensions
+	  			for(int i=0; i<extList.length; i++)
+	  			{
+	  				if(ext.equalsIgnoreCase(extList[i]))
+	  				{
+	  					if(ze.isDirectory())
+	  					{
+	  						if(ext.equals("gdb"))
+	  						{
+		  						JSONObject contentType = new JSONObject();
+		  	  				contentType.put("type", "FGDB_ZIP");
+		  	  				contentType.put("name", fName + "/" + zipName);
+		  	  				contentTypes.add(contentType);
+		  	  				fgdbCnt++;
+	  						}
+	  						else
+	  						{
+	  							throw new Exception("Unknown folder type. Only gdb folder type is supported.");
+	  						}
+	  					}
+	  					else //file
+	  					{
+	  						if(ext.equals("shp"))
+	  						{
+	  							JSONObject contentType = new JSONObject();
+		  	  				contentType.put("type", "OGR_ZIP");
+		  	  				contentType.put("name", fName + "/" + zipName);
+		  	  				contentTypes.add(contentType);
+		  	  				shpCnt++;
+	  						}
+	  						else if(ext.equals("osm"))
+	  						{
+	  							JSONObject contentType = new JSONObject();
+		  	  				contentType.put("type", "OSM_ZIP");
+		  	  				contentType.put("name", fName + "/" + zipName);
+		  	  				contentTypes.add(contentType);
+		  	  				osmCnt++;
+	  						}
+	  						else if(ext.equals("geonames"))
+	  						{
+	  							JSONObject contentType = new JSONObject();
+		  	  				contentType.put("type", "GEONAMES_ZIP");
+		  	  				contentType.put("name", fName + "/" + zipName);
+		  	  				contentTypes.add(contentType);
+		  	  				geonamesCnt++;
+	  						}
+	  						else
+	  						{
+	  							// We will not throw error here since shape file can contain mutiple types of support files.
+	  							// We will let hoot-core decide if it can handle the zip.
+	  						}
+	  					}
+	  				}
+	  				// We do not allow mix of ogr and osm in zip
+	  				if((shpCnt + fgdbCnt) > 0 && osmCnt > 0 )
+	    			{
+	    				throw new Exception("Zip should not contain both osm and ogr types.");
+	    			}
+	  			}
+	  			
+	  		}
+	  		
+	  		ze = zis.getNextEntry();
+	  	}
+	  	
+	  	resultStat.put("shpcnt", shpCnt);
+	  	resultStat.put("fgdbcnt", fgdbCnt);
+	  	resultStat.put("osmcnt", osmCnt);
+	  	resultStat.put("geonamescnt", geonamesCnt);
+			
+			return resultStat;
+		}
+		finally
+		{
+			if (zis != null)
+			{
+				zis.closeEntry();
+		  	zis.close();
+			}
+		}
 		
-		return resultStat;
 	}
 }

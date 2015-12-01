@@ -22,16 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
 import java.io.File;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;
@@ -44,11 +42,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.junit.rules.ExpectedException;
-import org.mockito.Mockito;
 
 public class FileUploadResourceTest {
 	private static String homeFolder = null;
@@ -176,26 +171,30 @@ public class FileUploadResourceTest {
 		
 		int shpCnt = 0;
 		int osmCnt = 0;
+		int geonamesCnt = 0;
 		int fgdbCnt = 0;
 		
 		int zipCnt = 0;
 		int shpZipCnt = 0;
 		int osmZipCnt = 0;
+		int geonamesZipCnt = 0;
 		int fgdbZipCnt = 0;
 		List<String> zipList = new ArrayList<String>();
 		
 		shpZipCnt += (Integer) zipStat.get("shpzipcnt");
     fgdbZipCnt += (Integer) zipStat.get("fgdbzipcnt");
     osmZipCnt += (Integer) zipStat.get("osmzipcnt");
+    geonamesZipCnt += (Integer) zipStat.get("geonameszipcnt");
     
 
     zipList.add("fgdb_ogr");
     zipCnt++;
 		
 		// Test zip containing fgdb + shp
-		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, shpCnt, fgdbCnt, osmCnt,
+		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
+				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"fgdb_ogr", inputsList);
+				"fgdb_ogr", inputsList, "test@test.com", "false");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -270,16 +269,19 @@ public class FileUploadResourceTest {
 		int shpCnt = 0;
 		int osmCnt = 0;
 		int fgdbCnt = 0;
+		int geonamesCnt = 0;
 		
 		int zipCnt = 0;
 		int shpZipCnt = 0;
 		int osmZipCnt = 0;
 		int fgdbZipCnt = 0;
+		int geonamesZipCnt = 0;
 		List<String> zipList = new ArrayList<String>();
 		
 		shpZipCnt += (Integer) zipStat.get("shpzipcnt");
     fgdbZipCnt += (Integer) zipStat.get("fgdbzipcnt");
     osmZipCnt += (Integer) zipStat.get("osmzipcnt");
+    geonamesZipCnt += (Integer) zipStat.get("osmzipcnt");
     
 
     zipList.add("fgdb_ogr");
@@ -302,14 +304,16 @@ public class FileUploadResourceTest {
 		shpCnt += (Integer) zipStat.get("shpcnt");
     fgdbCnt += (Integer) zipStat.get("fgdbcnt");
     osmCnt += (Integer) zipStat.get("osmcnt");
+    geonamesCnt += (Integer) zipStat.get("geonamescnt");
 		
 		
     
 		
 		// Test zip containing fgdb + shp
-		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, shpCnt, fgdbCnt, osmCnt,
+		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
+				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"fgdb_ogr", inputsList);
+				"fgdb_ogr", inputsList, "test@test.com", "false");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -383,16 +387,19 @@ public class FileUploadResourceTest {
 		int shpCnt = 0;
 		int osmCnt = 0;
 		int fgdbCnt = 0;
+		int geonamesCnt = 0;
 		
 		int zipCnt = 0;
 		int shpZipCnt = 0;
 		int osmZipCnt = 0;
 		int fgdbZipCnt = 0;
+		int geonamesZipCnt = 0;
 		List<String> zipList = new ArrayList<String>();
 		
 		shpZipCnt += (Integer) zipStat.get("shpzipcnt");
     fgdbZipCnt += (Integer) zipStat.get("fgdbzipcnt");
     osmZipCnt += (Integer) zipStat.get("osmzipcnt");
+    geonamesZipCnt += (Integer) zipStat.get("osmzipcnt");
     
 
     zipList.add("osm");
@@ -415,14 +422,16 @@ public class FileUploadResourceTest {
 		shpCnt += (Integer) zipStat.get("shpcnt");
     fgdbCnt += (Integer) zipStat.get("fgdbcnt");
     osmCnt += (Integer) zipStat.get("osmcnt");
+    geonamesCnt += (Integer) zipStat.get("osmcnt");
 		
 		
     
 		
 		// Test zip containing fgdb + shp
-		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, shpCnt, fgdbCnt, osmCnt,
+		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
+				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"osm", inputsList);
+				"osm", inputsList, "test@test.com", "false");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -497,16 +506,19 @@ public class FileUploadResourceTest {
 		int shpCnt = 0;
 		int osmCnt = 0;
 		int fgdbCnt = 0;
+		int geonamesCnt = 0;
 		
 		int zipCnt = 0;
 		int shpZipCnt = 0;
 		int osmZipCnt = 0;
 		int fgdbZipCnt = 0;
+		int geonamesZipCnt = 0;
 		List<String> zipList = new ArrayList<String>();
 		
 		shpZipCnt += (Integer) zipStat.get("shpzipcnt");
     fgdbZipCnt += (Integer) zipStat.get("fgdbzipcnt");
     osmZipCnt += (Integer) zipStat.get("osmzipcnt");
+    geonamesZipCnt += (Integer) zipStat.get("osmzipcnt");
     
 
     zipList.add("ogr");
@@ -529,6 +541,7 @@ public class FileUploadResourceTest {
 		shpZipCnt += (Integer) zipStat.get("shpzipcnt");
     fgdbZipCnt += (Integer) zipStat.get("fgdbzipcnt");
     osmZipCnt += (Integer) zipStat.get("osmzipcnt");
+    geonamesCnt += (Integer) zipStat.get("osmcnt");
 		
     zipList.add("zip1");
     zipCnt++;
@@ -536,9 +549,10 @@ public class FileUploadResourceTest {
     
 		
 		// Test zip containing fgdb + shp
-		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, shpCnt, fgdbCnt, osmCnt,
+		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
+				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"ogr", inputsList);
+				"ogr", inputsList, "test@test.com", "false");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -608,16 +622,19 @@ public class FileUploadResourceTest {
 		int shpCnt = 0;
 		int osmCnt = 0;
 		int fgdbCnt = 0;
+		int geonamesCnt = 0;
 		
 		int zipCnt = 0;
 		int shpZipCnt = 0;
 		int osmZipCnt = 0;
 		int fgdbZipCnt = 0;
+		int geonamesZipCnt = 0;
 		List<String> zipList = new ArrayList<String>();
 		
 		shpCnt += (Integer) zipStat.get("shpcnt");
     fgdbCnt += (Integer) zipStat.get("fgdbcnt");
     osmCnt += (Integer) zipStat.get("osmcnt");
+    geonamesZipCnt += (Integer) zipStat.get("osmzipcnt");
     
     
     // shape 2
@@ -637,12 +654,14 @@ public class FileUploadResourceTest {
 		shpCnt += (Integer) zipStat.get("shpcnt");
     fgdbCnt += (Integer) zipStat.get("fgdbcnt");
     osmCnt += (Integer) zipStat.get("osmcnt");
+    geonamesCnt += (Integer) zipStat.get("osmcnt");
 		
     
 		
-		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, shpCnt, fgdbCnt, osmCnt,
+		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
+				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"ogr", inputsList);
+				"ogr", inputsList, "test@test.com", "false");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -711,16 +730,19 @@ public class FileUploadResourceTest {
 		int shpCnt = 0;
 		int osmCnt = 0;
 		int fgdbCnt = 0;
+		int geonamesCnt = 0;
 		
 		int zipCnt = 0;
 		int shpZipCnt = 0;
 		int osmZipCnt = 0;
 		int fgdbZipCnt = 0;
+		int geonamesZipCnt = 0;
 		List<String> zipList = new ArrayList<String>();
 		
 		shpCnt += (Integer) zipStat.get("shpcnt");
     fgdbCnt += (Integer) zipStat.get("fgdbcnt");
     osmCnt += (Integer) zipStat.get("osmcnt");
+    geonamesCnt += (Integer) zipStat.get("osmcnt");
     
     
     // shape 2
@@ -740,12 +762,14 @@ public class FileUploadResourceTest {
 		shpCnt += (Integer) zipStat.get("shpcnt");
     fgdbCnt += (Integer) zipStat.get("fgdbcnt");
     osmCnt += (Integer) zipStat.get("osmcnt");
+    geonamesCnt += (Integer) zipStat.get("osmcnt");
 		
     
 		
-		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, shpCnt, fgdbCnt, osmCnt,
+		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
+				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"osm", inputsList);
+				"osm", inputsList, "test@test.com", "false");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -815,23 +839,26 @@ public class FileUploadResourceTest {
 		int shpCnt = 0;
 		int osmCnt = 0;
 		int fgdbCnt = 0;
+		int geonamesCnt = 0;
 		
 		int zipCnt = 0;
 		int shpZipCnt = 0;
 		int osmZipCnt = 0;
 		int fgdbZipCnt = 0;
+		int geonamesZipCnt = 0;
 		List<String> zipList = new ArrayList<String>();
 		
 		shpCnt += (Integer) zipStat.get("shpcnt");
     fgdbCnt += (Integer) zipStat.get("fgdbcnt");
     osmCnt += (Integer) zipStat.get("osmcnt");
-    
+    geonamesCnt += (Integer) zipStat.get("osmcnt");
   
     
 		
-		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, shpCnt, fgdbCnt, osmCnt,
+		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
+				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"fgdb", inputsList);
+				"fgdb", inputsList, "test@test.com", "false");
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -871,7 +898,7 @@ public class FileUploadResourceTest {
 	@Category(UnitTest.class)
 	public void TestserializeFGDB() throws Exception
 	{
-		FileUploadResource res = new FileUploadResource();
+		new FileUploadResource();
 
 		//homeFolder + "/upload/" + jobId + "/" + relPath;
 		// Create dummy FGDB
@@ -932,7 +959,7 @@ public class FileUploadResourceTest {
 	@Category(UnitTest.class)
 	public void TestserializeUploadedFiles() throws Exception
 	{
-		FileUploadResource res = new FileUploadResource();
+		new FileUploadResource();
 
 		//homeFolder + "/upload/" + jobId + "/" + relPath;
 		// Create dummy FGDB

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmWriter.h"
 
@@ -38,6 +38,7 @@ using namespace boost;
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/OsmUtils.h>
 
 // Qt
 #include <QBuffer>
@@ -180,10 +181,52 @@ void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
   _fp->close();
 }
 
+void OsmWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
+{
+  if (_includeCompatibilityTags)
+  {
+    writer.writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));
+    long version = e->getVersion();
+    if (version == ElementData::VERSION_EMPTY)
+    {
+      version = 1;
+    }
+    writer.writeAttribute("version", QString::number(version));
+  }
+  else
+  {
+    if (e->getTimestamp() != ElementData::TIMESTAMP_EMPTY)
+    {
+      writer.writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));
+    }
+    if (e->getVersion() != ElementData::VERSION_EMPTY)
+    {
+      writer.writeAttribute("version", QString::number(e->getVersion()));
+    }
+  }
+  if (e->getChangeset() != ElementData::CHANGESET_EMPTY)
+  {
+    writer.writeAttribute("changeset", QString::number(e->getChangeset()));
+  }
+  if (e->getUser() != ElementData::USER_EMPTY)
+  {
+    writer.writeAttribute("user", e->getUser());
+  }
+  if (e->getUid() != ElementData::UID_EMPTY)
+  {
+    writer.writeAttribute("uid", QString::number(e->getUid()));
+  }
+}
+
 void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
 {
-  const OsmMap::NodeMap& nodes = map->getNodeMap();
-  QList<long> nids = nodes.keys();
+  QList<long> nids;
+  NodeMap::const_iterator it = map->getNodeMap().begin();
+  while (it != map->getNodeMap().end()) {
+    nids.append(it->first);
+    ++it;
+  }
+
   // sort the values to give consistent results.
   qSort(nids.begin(), nids.end(), qGreater<long>());
   for (int i = 0; i < nids.size(); i++)
@@ -192,11 +235,7 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
     writer.writeStartElement("node");
     writer.writeAttribute("visible", "true");
     writer.writeAttribute("id", QString::number(n->getId()));
-    if (_includeCompatibilityTags)
-    {
-      writer.writeAttribute("timestamp", _timestamp);
-      writer.writeAttribute("version", "1");
-    }
+    _writeMetadata(writer, n);
     writer.writeAttribute("lat", QString::number(n->getY(), 'f', _precision));
     writer.writeAttribute("lon", QString::number(n->getX(), 'f', _precision));
 
@@ -250,11 +289,8 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
     writer.writeStartElement("way");
     writer.writeAttribute("visible", "true");
     writer.writeAttribute("id", QString::number(w->getId()));
-    if (_includeCompatibilityTags)
-    {
-      writer.writeAttribute("timestamp", _timestamp);
-      writer.writeAttribute("version", "1");
-    }
+
+    _writeMetadata(writer, w);
 
     for (size_t j = 0; j < w->getNodeCount(); j++)
     {
@@ -321,11 +357,8 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
     writer.writeStartElement("relation");
     writer.writeAttribute("visible", "true");
     writer.writeAttribute("id", QString::number(r->getId()));
-    if (_includeCompatibilityTags)
-    {
-      writer.writeAttribute("timestamp", _timestamp);
-      writer.writeAttribute("version", "1");
-    }
+
+    _writeMetadata(writer, r.get());
 
     const vector<RelationData::Entry>& members = r->getMembers();
     for (size_t j = 0; j < members.size(); j++)

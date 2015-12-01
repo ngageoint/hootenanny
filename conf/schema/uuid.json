@@ -1,0 +1,12 @@
+[
+    {
+        "isA": "metadata",
+        "name": "uuid",
+        "objectType": "tag"
+    },
+    {
+        "isA": "metadata",
+        "name": "uuid:history",
+        "objectType": "tag"
+    }
+]

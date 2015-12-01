@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayMatch.h"
 
@@ -46,6 +46,7 @@ namespace hoot
 {
 
 QString HighwayMatch::_noMatchingSubline = "No valid matching subline found.";
+QString HighwayMatch::_matchName = "Highway";
 
 HighwayMatch::HighwayMatch(const shared_ptr<HighwayClassifier>& classifier,
   const shared_ptr<SublineStringMatcher>& sublineMatcher,

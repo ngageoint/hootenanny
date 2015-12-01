@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SERVICESDBWRITER_H
 #define SERVICESDBWRITER_H
@@ -55,7 +55,7 @@ public:
 
   virtual void finalizePartial();
 
-  long getMapId() const { return _mapId; }
+  long getMapId() const { return _sdb.getMapId(); }
 
   virtual bool isSupported(QString urlStr);
 
@@ -91,18 +91,24 @@ private:
   bool _overwriteMap;
   QString _userEmail;
   ServicesDb _sdb;
-  long _mapId;
-  int _numChangeSetChanges;
-  long _userId;
-  long _changeSetId;
-  geos::geom::Envelope _env;
+  //int _numChangeSetChanges;
+  //geos::geom::Envelope _env;
   bool _open;
   IdRemap _nodeRemap;
   IdRemap _relationRemap;
   IdRemap _wayRemap;
   bool _remapIds;
 
-  QString _openDb(QString& urlStr, bool deleteMapFlag);
+  unsigned long _nodesWritten;
+  unsigned long _waysWritten;
+  unsigned long _relationsWritten;
+
+  QString _outputMappingFile;
+  std::set<long> _sourceNodeIds;
+  std::set<long> _sourceWayIds;
+  std::set<long> _sourceRelationIds;
+
+  void _openDb(QString& urlStr, bool deleteMapFlag);
 
   void _addElementTags(const shared_ptr<const Element>& e, Tags& t);
 
@@ -111,7 +117,15 @@ private:
    */
   void _countChange();
 
-  ElementId _remapOrCreateElementId(ElementId eid, const Tags& t);
+  /**
+   * Return the remapped ID for the specified element if it exists
+   * @param eid The ID for the ID from the source data
+   * @return unique ID of the element in the database namespace
+   *
+   * @note If there is no mapping for the requested element ID in the
+   *  database, a new one is created which is guaranteed to be unique
+   */
+  long _getRemappedElementId(const ElementId& eid);
 
   vector<long> _remapNodes(const vector<long>& nids);
 

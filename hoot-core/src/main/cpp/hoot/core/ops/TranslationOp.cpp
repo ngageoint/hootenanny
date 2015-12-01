@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TranslationOp.h"
 
@@ -36,85 +36,12 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/visitors/TranslationVisitor.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, TranslationOp)
-
-class TranslationVisitor : public ElementVisitor
-{
-public:
-
-  TranslationVisitor(ScriptTranslator& t, bool toOgr, const OsmMapPtr& map) : _t(t), _toOgr(toOgr), _map(map)
-  {
-    _circularErrorKey = "error:circular";
-    _accuracyKey = "accuracy";
-
-    if (toOgr)
-    {
-      _togr = dynamic_cast<ScriptToOgrTranslator*>(&t);
-      if (_togr == 0)
-      {
-        throw HootException("Translating to OGR requires a script that supports to OGR "
-          "translations.");
-      }
-    }
-  }
-
-  virtual void visit(ElementType type, long id)
-  {
-    visit(_map->getElement(type, id));
-  }
-
-  virtual void visit(const shared_ptr<Element>& e)
-  {
-    if (e->getTags().getNonDebugCount() > 0)
-    {
-      if (_toOgr)
-      {
-        GeometryTypeId gtype = ElementConverter::getGeometryType(e);
-
-        vector<Tags> allTags = _togr->translateToOgrTags(e->getTags(), e->getElementType(), gtype);
-
-        if (allTags.size() > 0)
-        {
-          if (allTags.size() > 1)
-          {
-            LOG_WARN("More than one feature was returned, only keeping the first feature.");
-          }
-
-          e->setTags(allTags[0]);
-        }
-      }
-      else
-      {
-        _t.translateToOsm(e->getTags(), "");
-
-        if (e->getTags().contains(_circularErrorKey))
-        {
-          e->setCircularError(e->getTags().getDouble(_circularErrorKey));
-          e->getTags().remove(_circularErrorKey);
-          e->getTags().remove(_accuracyKey);
-        }
-        else if (e->getTags().contains(_accuracyKey))
-        {
-          e->setCircularError(e->getTags().getDouble(_accuracyKey));
-          e->getTags().remove(_circularErrorKey);
-          e->getTags().remove(_accuracyKey);
-        }
-      }
-    }
-  }
-
-private:
-  ScriptTranslator& _t;
-  ScriptToOgrTranslator* _togr;
-  QString _circularErrorKey;
-  QString _accuracyKey;
-  bool _toOgr;
-  const OsmMapPtr& _map;
-};
 
 TranslationOp::TranslationOp()
 {
@@ -129,7 +56,7 @@ void TranslationOp::apply(shared_ptr<OsmMap>& map)
                     "the configuration key: " + ConfigOptions().getTranslationScriptKey());
   }
 
-  TranslationVisitor v(*_translator, _toOgr, map);
+  TranslationVisitor v(*_translator, _toOgr, map.get());
   map->visitRw(v);
 }
 

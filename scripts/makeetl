@@ -5,15 +5,29 @@
 HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor -D reporting=json
 HOOT_OPTS+= -D services.db.writer.overwrite.map=true -D services.db.writer.create.user=true
 HOOT_OPTS+= -D services.db.writer.email=test@test.com -D services.db.reader.email=test@test.com
+
 OP_INPUT=$(INPUT)
 OP_TRANSLATION=$(HOOT_HOME)/$(TRANSLATION)
 OP_INPUT_PATH=$(HOOT_HOME)/$(INPUT_PATH)
+
 
 # This replaces semicolon with vsizip and path 
 ifeq "$(INPUT_TYPE)" "ZIP" 
 	OP_INPUT="/vsizip/$(HOOT_HOME)/$(INPUT_PATH)/$(subst ;,/" "/vsizip/$(HOOT_HOME)/$(INPUT_PATH)/,$(INPUT))/"
 endif
 
+ifeq "$(INPUT_TYPE)" "GEONAMES" 
+	HOOT_OPTS+= -D convert.ops=hoot::TranslationOp
+	HOOT_OPTS+= -D translation.script="$(OP_TRANSLATION)"
+endif
+
+
+ifeq "$(INPUT_TYPE)" "OSM" 
+ifneq "$(NONE_TRANSLATION)" "true"
+	HOOT_OPTS+= -D convert.ops=hoot::TranslationOp
+	HOOT_OPTS+= -D translation.script="$(OP_TRANSLATION)"
+endif
+endif
 
 ###
 # Transform and load data
@@ -37,6 +51,10 @@ endif
 
   ifeq "$(INPUT_TYPE)" "FGDB" 
 	  cd "$(OP_INPUT_PATH)" && hoot --ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
+  endif
+
+  ifeq "$(INPUT_TYPE)" "GEONAMES" 
+	  cd "$(OP_INPUT_PATH)" && hoot convert $(HOOT_OPTS) $(OP_INPUT) "$(DB_URL)/$(INPUT_NAME)" 
   endif
 	rm -rf "$(OP_INPUT_PATH)"
 

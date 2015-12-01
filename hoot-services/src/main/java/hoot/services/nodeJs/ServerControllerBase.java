@@ -27,9 +27,8 @@
 package hoot.services.nodeJs;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Field;
+import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +68,13 @@ public class ServerControllerBase {
 	{
 		_closeAllServers(processSignature);
 	}
+	
+	private Integer getProcessId(final Process serverProc)
+	{
+		//this may not work with every JVM implementation
+		return Integer.parseInt(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
+	}
+	
 	protected boolean getStatus(final Process serverProc) throws Exception
 	{
 		boolean isRunning = false;
@@ -76,12 +82,7 @@ public class ServerControllerBase {
 		Integer transServerPID = null;
 		if (serverProc.getClass().getName().equals("java.lang.UNIXProcess"))
     {
-        Class cl = serverProc.getClass();
-        Field field = cl.getDeclaredField("pid");
-        field.setAccessible(true);
-        Object pidObject = field.get(serverProc);
-        log.debug( "server process id is :" + (Integer) pidObject);
-        transServerPID = (Integer) pidObject;
+			transServerPID = getProcessId(serverProc);
     } 
 		else
     {
@@ -116,7 +117,7 @@ public class ServerControllerBase {
 	}
 	
 	
-  private void _closeAllServers(final String processSignature) throws IOException
+  private void _closeAllServers(final String processSignature)
   {
 
   	try

@@ -1,7 +1,11 @@
 [[Configuration]]
 == Configuration Options
 
-Configuration settings can dramatically change the operation of Hootenanny. The configuration options are carried through any Hadoop commands and can be set in a configuration file (+$HOOT_HOME/conf/hoot.json+) or specified on the command line. Most of the configuration values are documented in more detail in the following sections.
+Configuration settings can dramatically change the operation of Hootenanny. The
+configuration options are carried through any Hadoop commands and can be set in
+a configuration file (+$HOOT_HOME/conf/hoot.json+), environment variables or
+specified on the command line. Most of the configuration values are documented
+in more detail in the following sections.
 
 These configuration options are advanced manipulations of the Hootenanny engine and may result in unexpected results. Please contact the developers hootenanny.help@digitalglobe.com if you have specific questions.
 
@@ -19,10 +23,22 @@ hoot --convert \
   -D ogr.writer.script=test-files/io/SampleTranslation.js \
   -D ogr.writer.pre.layer.name=bar \
   test-files/io/SampleTranslation.osm \
-  PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'" 
+  PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'"
 ------
 
-If you find yourself using a set of defines routinely you can specify them within a JSON configuration file such as:
+If you want to specify some values for a short iteration, or within a script you
+can specify the settings in the `HOOT_OPTIONS` environment variables. This
+environment variable uses the same syntax as the command line. For example:
+
+-----
+export HOOT_OPTIONS="-D ogr.writer.script=test-files/io/SampleTranslation.js \
+  -D ogr.writer.pre.layer.name=bar"
+hoot test-files/io/SampleTranslation.osm \
+  PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'"
+-----
+
+If you find yourself using a set of defines routinely you can specify them
+within a JSON configuration file such as:
 
 ------
 {
@@ -462,8 +478,11 @@ There is also a convenience configuration file that enables both the Snap Way Ma
 hoot --conflate -C Snap.json input1.osm input2.osm output.osm
 ------
 
+[[Hoot-ConfigOptions]]
 === Configuration Parameters
 
 :leveloffset: 1
 
 include::../conf/ConfigOptions.asciidoc[]
+
+:leveloffset: 0

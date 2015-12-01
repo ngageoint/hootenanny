@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingPartMergeOp.h"
 
@@ -53,7 +53,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingPartMergeOp)
 
 BuildingPartMergeOp::BuildingPartMergeOp()
 {
-  vector<TagVertex> buildingPartTags =
+  vector<SchemaVertex> buildingPartTags =
       OsmSchema::getInstance().getAssociatedTags("building:part=yes");
   for (size_t i = 0; i < buildingPartTags.size(); i++)
   {

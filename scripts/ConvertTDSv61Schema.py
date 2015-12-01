@@ -40,11 +40,8 @@
 
 import sys,os,csv,argparse,gzip
 
-# printJavascript: Dump out the structure as Javascript
-#
-# Note: This uses double quotes ( " ) around data elements in the output.  The csv files have values with
-# single quotes ( ' ) in them.  These quotes are also in the DFDD and NFDD specs.
-def printJavascript(schema):
+
+def printJSHeader():
     print notice
     print
     print "var _global = (0, eval)('this');"
@@ -57,6 +54,12 @@ def printJavascript(schema):
     print '//  Schema built from %s and %s' % (main_csv_file, other_csv_file)
     print 'getDbSchema: function()'
     print '{'
+
+# printJavascript: Dump out the structure as Javascript
+#
+# Note: This uses double quotes ( " ) around data elements in the output.  The csv files have values with
+# single quotes ( ' ) in them.  These quotes are also in the DFDD and NFDD specs.
+def printJavascript(schema):
     print '    var schema = [' # And so it begins...
 
     num_feat = len(schema.keys()) # How many features in the schema?
@@ -81,21 +84,25 @@ def printJavascript(schema):
             if 'length' in schema[f]['columns'][k]:
                 print '                       length:"%s", ' % (schema[f]['columns'][k]['length'])
 
-            if schema[f]['columns'][k]['type'] == 'enumeration':
-                print '                       type:"%s",' % (schema[f]['columns'][k]['type'])
+            #if schema[f]['columns'][k]['type'].find('numeration') != -1:
+            if 'func' in schema[f]['columns'][k]:
+                print '                       type:"enumeration",'
+                print '                       defValue:"%s", ' % (schema[f]['columns'][k]['defValue'])
+                print '                       enumerations: %s' % (schema[f]['columns'][k]['func'])
+
+            elif schema[f]['columns'][k]['type'] == 'enumeration':
+                #print '                       type:"%s",' % (schema[f]['columns'][k]['type'])
+                print '                       type:"enumeration",'
                 print '                       defValue:"%s", ' % (schema[f]['columns'][k]['defValue'])
                 print '                       enumerations:['
                 for l in schema[f]['columns'][k]['enum']:
                     print '                           { name:"%s", value:"%s" }, ' % (l['name'],l['value'])
                 print '                        ] // End of Enumerations '
 
-            # Convert all of the Text Enumerations to be plain strings
-            elif schema[f]['columns'][k]['type'] == 'textEnumeration':
-                print '                       type:"String",'
-                print '                       defValue:"%s" ' % (schema[f]['columns'][k]['defValue'])
-                # For debugging: Dump all of the text enumerations out
-                #for l in schema[f]['columns'][k]['enum']:
-                    #print '           DEBUG:          { name:"%s", value:"%s" }, ' % (l['name'],l['value'])
+            #elif schema[f]['columns'][k]['type'] == 'textEnumeration':
+                #print '                       type:"Xenumeration",'
+                #print '                       defValue:"%s", ' % (schema[f]['columns'][k]['defValue'])
+                #print '                       enumerations: text_%s' % (k)
 
             else:
                 print '                       type:"%s",' % (schema[f]['columns'][k]['type'])
@@ -116,6 +123,9 @@ def printJavascript(schema):
             num_feat -= 1
 
     print '    ]; // End of schema\n' # End of schema
+
+
+def printJSFooter():
     print '    return schema; \n'
     print '} // End of getDbSchema\n'
     print '} // End of tds61.schema\n'
@@ -126,9 +136,39 @@ def printJavascript(schema):
 # End printJavascript
 
 
+# Print out a codelist as a JS variable
+def printVariableBody(name,var):
+    print '    var %s = [' % (name)
+
+    num_vals = len(var.keys()) # How many values does the thing have?
+    for l in var:
+        if num_vals == 1: # Are we at the last feature? yes = no trailing comma
+            print '              { name:"%s", value:"%s" } ' % (l,var[l])
+        else:
+            print '              { name:"%s", value:"%s" }, ' % (l,var[l])
+            num_vals -= 1
+
+    print '             ];'
+    print
+# End printVariableBody
+
+
+# Drop all of the text enumerations and replace them with strings
+def dropTextEnumerations(tschema):
+    for i in tschema:
+        for j in tschema[i]['columns']:
+            if tschema[i]['columns'][j]['type'] == 'textEnumeration':
+                del tschema[i]['columns'][j]['func']
+                tschema[i]['columns'][j]['type'] = 'String'
+
+    return tschema
+# End dropTextEnumerations
+
+
 def asint(s):
     try: return int(s)
     except ValueError: return s
+
 
 # Print Rules
 def printRules(schema):
@@ -418,6 +458,27 @@ notice = """/*
  """
 
 geo_list = {'T':'Table', 'C':'Line', 'S':'Area', 'P':'Point' }
+
+buildingFuncList = {
+    }
+
+
+textFuncList = {
+    'CPS':'text_CPS',
+    'EQC':'text_EQC',
+    'ETS':'text_ETS',
+    'HZD':'text_HZD',
+    'RCG':'text_RCG',
+    'ZI004_RCG':'text_RCG',
+    'VDT':'text_VDT',
+    'ZVH_VDT':'text_VDT',
+    'ZI001_SRT':'text_SRT',
+    'ZI001_VSC':'text_VSC',
+    'ZI020_GE4':'text_GE4',
+    'ZI020_GE42':'text_GE4',
+    'ZI020_GE43':'text_GE4',
+    'ZI020_GE44':'text_GE4'
+    }
 
 dataType_list = {
     'Double':'Real',
@@ -1547,7 +1608,7 @@ def processFile(fileName):
                 if aLength != '':
                     tschema[fName]['columns'][aName]['length'] = aLength
 
-                if aType == 'enumeration'  or aType == 'textEnumeration':
+                if aType.find('numeration') > -1:
                     tschema[fName]['columns'][aName]['enum'] = []
                     continue
 
@@ -1557,17 +1618,24 @@ def processFile(fileName):
                     if fCode == 'AL013': # Building
                         for i in building_FFN:
                             tschema[fName]['columns'][aName]['enum'].append({'name':i,'value':building_FFN[i]})
+                        tschema[fName]['columns'][aName]['func'] = 'building_FFN'
 
                     if fCode == 'AL010': # Facility
                         for i in facility_FFN:
                             tschema[fName]['columns'][aName]['enum'].append({'name':i,'value':facility_FFN[i]})
+                        tschema[fName]['columns'][aName]['func'] = 'facility_FFN'
 
                     if fCode == 'AH055': # Fortified Building
                         for i in fortified_FFN:
                             tschema[fName]['columns'][aName]['enum'].append({'name':i,'value':fortified_FFN[i]})
+                        tschema[fName]['columns'][aName]['func'] = 'fortified_FFN'
                     continue
 
+
                 if dataType == 'Local specification': # Text Enumeration
+                    if aName in textFuncList:
+                        tschema[fName]['columns'][aName]['func'] = textFuncList[aName]
+
                     if aName == 'CPS': # Cell Partitioning Scheme
                         for i in text_CPS:
                             tschema[fName]['columns'][aName]['enum'].append({'name':i,'value':text_CPS[i]})
@@ -1611,7 +1679,7 @@ def processFile(fileName):
                     if aName.find('ZI020_GE4') > -1: # Country Location
                         for i in text_GE4:
                             tschema[fName]['columns'][aName]['enum'].append({'name':i,'value':text_GE4[i]})
-                        continue
+                    continue
 
                 # Default: Split the value and store it
                 (eValue,eName) = fieldValue.split("=")
@@ -1635,6 +1703,7 @@ parser.add_argument('--fcodelist', help='Dump out a list of attributes',action='
 parser.add_argument('--toenglish', help='Dump out To English translation rules',action='store_true')
 parser.add_argument('--fromenglish', help='Dump out From English translation rules',action='store_true')
 parser.add_argument('--attributecsv', help='Dump out attributes as a CSV file',action='store_true')
+parser.add_argument('--fullschema', help='Dump out a schema with text enumerations',action='store_true')
 parser.add_argument('mainfile', help='The main TDS spec csv file', action='store')
 parser.add_argument('otherfile', help='The NGA Additional attributes csv file', action='store')
 
@@ -1680,8 +1749,30 @@ elif args.fromenglish:
     printFromEnglish(schema)
 elif args.attributecsv:
     printAttributeCsv(schema)
-else:
-    printJavascript(schema)
+elif args.fullschema:
+    printJSHeader()
+    printVariableBody('building_FFN',building_FFN)
+    printVariableBody('facility_FFN',facility_FFN)
+    printVariableBody('fortified_FFN',fortified_FFN)
+    printVariableBody('text_CPS',text_CPS)
+    printVariableBody('text_EQC',text_EQC)
+    printVariableBody('text_ETS',text_ETS)
+    printVariableBody('text_HZD',text_HZD)
+    printVariableBody('text_RCG',text_RCG)
+    printVariableBody('text_VDT',text_VDT)
+    printVariableBody('text_SRT',text_SRT)
+    printVariableBody('text_VSC',text_VSC)
+    printVariableBody('text_GE4',text_GE4)
 
+    printJavascript(schema)
+    printJSFooter()
+else:
+    dropTextEnumerations(schema)
+    printJSHeader()
+    printVariableBody('building_FFN',building_FFN)
+    printVariableBody('facility_FFN',facility_FFN)
+    printVariableBody('fortified_FFN',fortified_FFN)
+    printJavascript(schema)
+    printJSFooter()
 # End
 

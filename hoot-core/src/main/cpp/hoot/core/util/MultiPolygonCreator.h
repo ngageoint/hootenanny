@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIPOLYGONCREATOR_H
 #define MULTIPOLYGONCREATOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+//#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/ElementProvider.h>
 
 namespace geos
 {
@@ -70,7 +71,8 @@ using namespace geos::geom;
 class MultiPolygonCreator
 {
 public:
-  MultiPolygonCreator(const ConstOsmMapPtr& map, const ConstRelationPtr& r);
+
+  MultiPolygonCreator(const ConstElementProviderPtr& provider, const ConstRelationPtr& r);
 
   /**
    * Create and return a multipolygon. If the multipolygon contains gross errors then an empty
@@ -81,7 +83,8 @@ public:
 
 private:
 
-  const ConstOsmMapPtr& _map;
+  //const ConstOsmMapPtr& _map;
+  const ConstElementProviderPtr& _provider;
   const ConstRelationPtr& _r;
 
   Geometry* _addHoles(vector<LinearRing*> &outers, vector<LinearRing*> &inners) const;

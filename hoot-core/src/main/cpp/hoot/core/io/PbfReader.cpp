@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "PbfReader.h"
@@ -49,6 +49,11 @@ using namespace hoot::pb;
 
 // TGS
 #include <tgs/System/Time.h>
+
+#include <boost/shared_ptr.hpp>
+
+#include <ogr_spatialref.h>
+
 
 // ZLib Includes
 #include <zlib.h>
@@ -180,7 +185,7 @@ double PbfReader::_convertLat(long lat)
   return .000000001 * (_latOffset + (_granularity * lat));
 }
 
-ElementId PbfReader::_convertToElementId(int id, int memberType)
+ElementId PbfReader::_convertToElementId(long id, int memberType)
 {
   ElementType t;
   switch (memberType)
@@ -972,16 +977,29 @@ bool PbfReader::isSupported(QString urlStr)
 void PbfReader::open(QString urlStr)
 {
   fstream* fp = new fstream();
-  fp->open(urlStr.toUtf8().data(), ios::in | ios::binary);
-  if (fp->is_open() == false)
+  try
   {
-    throw HootException("Error opening " + urlStr + " for reading.");
-  }
-  _in = fp;
-  _needToCloseInput = true;
+    fp->open(urlStr.toUtf8().data(), ios::in | ios::binary);
+    if (fp->is_open() == false)
+    {
+      throw HootException("Error opening " + urlStr + " for reading.");
+    }
+    _in = fp;
+    _needToCloseInput = true;
 
-  // Have to call initial partial to ensure stream functions work
-  initializePartial();
+    // Have to call initial partial to ensure stream functions work
+    initializePartial();
+  }
+  catch (const HootException& e)
+  {
+    delete fp;
+    throw e;
+  }
+  catch (const std::exception& e)
+  {
+    delete fp;
+    throw e;
+  }
 }
 
 void PbfReader::initializePartial()
@@ -1091,20 +1109,19 @@ shared_ptr<Element> PbfReader::readNextElement()
     /// @optimize
     // we have to copy here so that the element isn't part of two maps. This should be fixed if we
     // need the reader to go faster.
-    element.reset(new Node(*_nodesItr.value()));
+
+    element.reset(new Node(*_nodesItr->second.get()));
     _nodesItr++;
     _partialNodesRead++;
   }
   else if (_partialWaysRead < int(_map->getWays().size()))
   {
-    //LOG_DEBUG("way key: " + _waysItr->first);
     element.reset(new Way(*_waysItr->second.get()));
     _waysItr++;
     _partialWaysRead++;
   }
   else if (_partialRelationsRead < int(_map->getRelationMap().size()))
   {
-    //LOG_DEBUG("relation key: " + _relationsItr->first);
     element.reset(new Relation(*_relationsItr->second.get()));
     _relationsItr++;
     _partialRelationsRead++;
@@ -1163,6 +1180,17 @@ void PbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)
       }
     }
   }
+}
+
+boost::shared_ptr<OGRSpatialReference> PbfReader::getProjection() const
+{
+  boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
+  if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
+  {
+    throw HootException("Error creating EPSG:4326 projection.");
+  }
+
+  return wgs84;
 }
 
 }

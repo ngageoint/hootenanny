@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ScriptTest.h"
@@ -85,7 +85,7 @@ QString ScriptTest::_removeIgnoredSubstrings(QString output) const
   {
     bool keep = true;
     if (inLines[i].contains(" INFO ") || inLines[i].contains(" DEBUG ") ||
-        inLines[i].contains(" elapsed: "))
+        inLines[i].contains(" elapsed: ") )
     {
       keep = false;
     }
@@ -126,6 +126,9 @@ void ScriptTest::runTest()
              "  verify: \n"
              "    less " + _script + ".stdout.first\n"
              "    less " + _script + ".stderr.first\n"
+             "  ### NOTE: If the test is comparing against a known good file (e.g. .osm\n"
+             "  ### then it may be better to update that file. You'll have to look at\n"
+             "  ### the source files to be sure.\n"
              "  Make a new baseline:\n"
              "    mv " + _script + ".stdout.first " + _script + ".stdout\n"
              "    mv " + _script + ".stderr.first " + _script + ".stderr\n"
@@ -167,6 +170,9 @@ void ScriptTest::runTest()
                "  creating a new baseline. E.g.\n"
                "  verify: \n"
                "    diff " + _script + ".stdout.stripped " + _script + ".stdout.failed.stripped\n"
+               "  ### NOTE: If the test is comparing against a known good file (e.g. .osm\n"
+               "  ### then it may be better to update that file. You'll have to look at\n"
+               "  ### the source files to be sure.\n"
                "  Make a new baseline:\n"
                "    mv " + _script + ".stdout.failed " + _script + ".stdout\n"
                "*************************\n"
@@ -197,6 +203,9 @@ void ScriptTest::runTest()
                "  creating a new baseline. E.g.\n"
                "  verify: \n"
                "    diff " + _script + ".stderr.stripped " + _script + ".stderr.failed.stripped\n"
+               "  ### NOTE: If the test is comparing against a known good file (e.g. .osm\n"
+               "  ### then it may be better to update that file. You'll have to look at\n"
+               "  ### the source files to be sure.\n"
                "  Make a new baseline:\n"
                "    mv " + _script + ".stderr.failed " + _script + ".stderr\n"
                "*************************\n"

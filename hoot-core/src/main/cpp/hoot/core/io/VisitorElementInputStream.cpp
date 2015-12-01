@@ -44,4 +44,9 @@ ElementPtr VisitorElementInputStream::readNextElement()
   return e;
 }
 
+boost::shared_ptr<OGRSpatialReference> VisitorElementInputStream::getProjection() const
+{
+  return _source->getProjection();
+}
+
 }

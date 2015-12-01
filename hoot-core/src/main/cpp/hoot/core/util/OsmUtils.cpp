@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmUtils.h"
@@ -87,33 +87,44 @@ Coordinate OsmUtils::nodeToCoord(shared_ptr<const Node> node)
 
 void OsmUtils::loadMap(shared_ptr<OsmMap> map, QString path, bool useFileId, Status defaultStatus)
 {
-  if (path.endsWith(".geonames"))
+  QStringList pathLayer = path.split(";");
+  QString justPath = pathLayer[0];
+  if (OgrReader::isReasonablePath(justPath))
   {
-    GeoNamesReader reader;
+    OgrReader reader;
+    Progress progress("OsmUtils");
     reader.setDefaultStatus(defaultStatus);
-    reader.read(path, map);
+    reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map, progress);
   }
   else
   {
-    QStringList pathLayer = path.split(";");
-    QString justPath = pathLayer[0];
-    if (OgrReader::isReasonablePath(justPath))
-    {
-      OgrReader reader;
-      Progress progress("OsmUtils");
-      reader.setDefaultStatus(defaultStatus);
-      reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map, progress);
-    }
-    else
-    {
-      OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
-    }
+    OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
   }
 }
 
 void OsmUtils::saveMap(shared_ptr<const OsmMap> map, QString path)
 {
   OsmMapWriterFactory::write(map, path);
+}
+
+QString OsmUtils::toTimeString(unsigned int timestamp)
+{
+  // convert time in seconds since epoch into timestamp string
+  time_t tt = (time_t) timestamp;
+  char buf[128];
+  strftime(buf, sizeof(buf), "%Y-%m-%dT%H:%M:%SZ", gmtime(&tt));
+  return QString::fromUtf8(buf);
+}
+
+unsigned int OsmUtils::fromTimeString(QString timestamp)
+{
+  struct tm t;
+  strptime(timestamp.toStdString().c_str(), "%Y-%m-%dT%H:%M:%SZ", &t);
+
+  // calc time in seconds since epoch
+  return t.tm_sec + t.tm_min*60 + t.tm_hour*3600 + t.tm_yday*86400 +
+    (t.tm_year-70)*31536000 + ((t.tm_year-69)/4)*86400 -
+    ((t.tm_year-1)/100)*86400 + ((t.tm_year+299)/400)*86400;
 }
 
 }

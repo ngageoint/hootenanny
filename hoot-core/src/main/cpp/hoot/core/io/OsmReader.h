@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __IO_OSM_READER_H__
 #define __IO_OSM_READER_H__
@@ -33,10 +33,7 @@
 namespace hoot
 {
     class OsmMap;
-    namespace elements
-    {
-        class ElementData;
-    }
+    class ElementData;
 }
 
 // Boost
@@ -120,6 +117,7 @@ protected:
   QString _path;
   bool _useFileStatus;
   bool _useDataSourceId;
+  bool _addSourceDateTime;      ///< Should reader add source:datetime attribute to values read in?
   long _wayId;
   long _relationId;
 

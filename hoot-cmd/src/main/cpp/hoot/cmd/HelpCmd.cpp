@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -106,13 +106,8 @@ private:
   {
     vector<string> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
 
-    // Please update the wiki page at https://duff.spadac.com/redmine/projects/hootenany/wiki/
-    // if you change this usage.
-    cout << "usage: hoot <command> [--debug] [--warn] [-D name=value] [--conf <path>] [<args>]\n"
-            "\n"
-            "--cleanup-nga (input.osm) (output.osm)\n"
-            "  Clean up a given NGA input.\n"
-            ;
+    // Please update the asciidoc user documentation if you change this usage.
+    cout << "usage: hoot <command> [--debug] [--warn] [-D name=value] [--conf <path>] [<args>]\n";
     cout << endl;
     cout << "For detailed help on the following commands type: hoot --help (command name)\n"
             "\n";

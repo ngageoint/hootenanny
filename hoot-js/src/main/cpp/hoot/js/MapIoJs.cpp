@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MapIoJs.h"
 
@@ -96,6 +96,12 @@ public:
     }
 
     OsmReader reader;
+    bool useDataSourceIds = false;
+    if (args.Length() >= 5)
+    {
+      useDataSourceIds = toCpp<bool>(args[4]);
+      reader.setUseDataSourceIds(useDataSourceIds);
+    }
     reader.readFromString(mapXml, map->getMap());
 
     return scope.Close(Undefined());

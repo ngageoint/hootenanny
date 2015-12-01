@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GmlWriter.h"
@@ -106,10 +106,10 @@ void GmlWriter::writePoints(shared_ptr<const OsmMap> map, const QString& path)
     }
   }
 
-  const OsmMap::NodeMap& nodes = map->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  const NodeMap& nodes = map->getNodeMap();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    const shared_ptr<Node>& node = it.value();
+    const shared_ptr<Node>& node = it->second;
 
     if (node->getTags().getNonDebugCount() > 0)
     {

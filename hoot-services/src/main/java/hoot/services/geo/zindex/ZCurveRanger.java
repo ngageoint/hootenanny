@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.geo.zindex;
 
@@ -94,9 +94,9 @@ public class ZCurveRanger
   }
 
   // the amount of slop to accept when merging ranges.
-  long _slop;
+  private long _slop;
 
-  ZValue _zv;
+  private ZValue _zv;
 
   public ZCurveRanger(ZValue zv)
   {

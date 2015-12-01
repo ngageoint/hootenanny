@@ -26,10 +26,7 @@
  */
 
 // CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
+#include "../TestUtils.h"
 
 // Hoot
 #include <hoot/core/Exception.h>
@@ -46,6 +43,7 @@
 
 // Qt
 #include <QDir>
+#include <QSet>
 
 using namespace std;
 
@@ -63,6 +61,7 @@ public:
 
   void runBasicTest()
   {
+    TestUtils::resetEnvironment();
     shared_ptr<OsmMap> map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
@@ -88,7 +87,13 @@ public:
     ////
     // Handy bit for regenerating the test values, _AFTER_ it has been visually verified.
     ////
-    QList<long> keys = map->getNodeMap().uniqueKeys();
+    QSet<long> nids;
+    NodeMap::const_iterator it = map->getNodeMap().begin();
+    while (it != map->getNodeMap().end()) {
+      nids.insert(it->first);
+      it++;
+    }
+    QList<long> keys = QList<long>::fromSet(nids);
     qSort(keys);
 //    OsmWriter writer;
 //    QDir().mkpath("test-output/perty");
@@ -141,11 +146,11 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2, n->getX(), 1e-6);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4, n->getY(), 1e-6);
     n = map->getNode(keys[11]);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.99999148, n->getX(), 1e-6);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.9999098, n->getY(), 1e-6);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.00000001, n->getX(), 1e-6);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3.00003791, n->getY(), 1e-6);
     n = map->getNode(keys[12]);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.99998833, n->getX(), 1e-6);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.00005715, n->getY(), 1e-6);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.9998872, n->getX(), 1e-6);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.99984757, n->getY(), 1e-6);
     n = map->getNode(keys[13]);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2, n->getX(), 1e-6);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1, n->getY(), 1e-6);
@@ -156,11 +161,11 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1, n->getX(), 1e-6);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4, n->getY(), 1e-6);
     n = map->getNode(keys[16]);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.99988711, n->getX(), 1e-6);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.99984757, n->getY(), 1e-6);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.999988319, n->getX(), 1e-6);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3.00005715, n->getY(), 1e-6);
     n = map->getNode(keys[17]);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.00000001, n->getX(), 1e-6);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.00003791, n->getY(), 1e-6);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.999991482, n->getX(), 1e-6);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.9999098, n->getY(), 1e-6);
     n = map->getNode(keys[18]);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1, n->getX(), 1e-6);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1, n->getY(), 1e-6);

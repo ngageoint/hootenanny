@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptMerger.h"
 
@@ -33,6 +33,7 @@
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
 #include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
 
 // node.js
@@ -85,6 +86,7 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
   HandleScope handleScope;
   Context::Scope context_scope(_script->getContext());
   Handle<Value> v = _callMergePair(map);
+
   Handle<Object> o = Handle<Object>::Cast(v);
   ElementJs* newElementJs = ObjectWrap::Unwrap<ElementJs>(o);
   ConstElementPtr newElement = newElementJs->getConstElement();
@@ -133,7 +135,9 @@ Handle<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
   jsArgs[argc++] = ElementJs::New(map->getElement(_eid1));
   jsArgs[argc++] = ElementJs::New(map->getElement(_eid2));
 
+  TryCatch trycatch;
   Handle<Value> result = func->Call(_plugin, argc, jsArgs);
+  HootExceptionJs::checkV8Exception(result, trycatch);
 
   if (result.IsEmpty() || result == Undefined())
   {
@@ -165,7 +169,9 @@ void ScriptMerger::_callMergeSets(const OsmMapPtr& map,
   jsArgs[argc++] = toV8(_pairs);
   jsArgs[argc++] = toV8(replaced);
 
-  func->Call(_plugin, argc, jsArgs);
+  TryCatch trycatch;
+  Handle<Value> result = func->Call(_plugin, argc, jsArgs);
+  HootExceptionJs::checkV8Exception(result, trycatch);
 
   // read the replaced values back out
   toCpp(jsArgs[2], replaced);

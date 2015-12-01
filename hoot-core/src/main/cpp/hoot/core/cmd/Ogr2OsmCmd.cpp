@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -33,6 +33,8 @@
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/visitors/SplitLongLinearWaysVisitor.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {

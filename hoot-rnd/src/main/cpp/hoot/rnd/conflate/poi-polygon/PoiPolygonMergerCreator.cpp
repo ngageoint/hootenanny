@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMergerCreator.h"
 
@@ -65,6 +65,7 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches,
 
   bool foundAPoi = false;
   bool foundAPolygon = false;
+  QStringList matchTypes;
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
@@ -76,6 +77,10 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches,
     if (m->getMatchMembers() & MatchMembers::Polygon)
     {
       foundAPolygon = true;
+    }
+    if (matchTypes.contains(m->getMatchName()) == false)
+    {
+      matchTypes.append(m->getMatchName());
     }
   }
 
@@ -94,7 +99,8 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches,
 
     if (_isConflictingSet(matches))
     {
-      mergers.push_back(new MarkForReviewMerger(eids, "Conflicting information", 1));
+      mergers.push_back(new MarkForReviewMerger(eids, "Conflicting information",
+        matchTypes.join(";"), 1));
     }
     else
     {

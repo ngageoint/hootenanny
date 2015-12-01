@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PlacesPoiMatchCreator.h"
 
@@ -164,9 +164,8 @@ public:
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
   }
 
-  virtual void visit(ElementType type, long id)
+  virtual void visit(const ConstElementPtr& e)
   {
-    shared_ptr<const Element> e(_map->getElement(type, id));
     if (isMatchCandidate(e))
     {
       checkForMatch(dynamic_pointer_cast<const Node>(e));
@@ -223,10 +222,10 @@ private:
     keys.reserve(_map->getNodeMap().size() * 2);
     nids.reserve(_map->getNodeMap().size() * 2);
 
-    for (OsmMap::NodeMap::const_iterator it = _map->getNodeMap().begin();
+    for (NodeMap::const_iterator it = _map->getNodeMap().begin();
          it != _map->getNodeMap().end(); ++it)
     {
-      const shared_ptr<const Node>& n = it.value();
+      const shared_ptr<const Node>& n = it->second;
       set<QString> allNames = _getNamePermutations(n->getTags().getNames());
       for (set<QString>::iterator it = allNames.begin(); it != allNames.end(); ++it)
       {

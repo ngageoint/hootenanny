@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ELEMENT_WAY_H__
 #define __ELEMENT_WAY_H__
@@ -65,6 +65,9 @@ public:
 
   Way(Status s, long id, Meters circularError);
   
+  Way(Status s, long id, long changeset, long version, unsigned int timestamp,
+      QString user, long uid, Meters circularError);
+
   Way(const Way& way);
 
   virtual ~Way();
@@ -127,6 +130,8 @@ public:
    */
   int getNodeIndex(long nodeId) const;
 
+  long getFirstNodeId() const { return getNodeId(0); }
+
   long getLastNodeId() const { return getNodeId(getNodeCount() - 1); }
 
   size_t getNodeCount() const { return _wayData->getNodeIds().size(); }
@@ -148,6 +153,18 @@ public:
   bool isValidPolygon() const;
 
   /**
+   * Returns True if the first and last node in the Way have the same node ID, provided the way
+   * contains two or more nodes. If way has zero or one nodes, returns false
+   */
+  bool isFirstLastNodeIdentical() const;
+
+  /**
+   * Remove all instances of the node with the specified id. If the node isn't in this way then
+   * nothing happens.
+   */
+  void removeNode(long id);
+
+  /**
    * Replaces any node instance with oldId with newId. If oldId isn't referenced by this way then
    * no action is taken.
    */
@@ -166,9 +183,9 @@ public:
 
   QString toString() const;
 
-  virtual void visitRo(const OsmMap& map, ElementVisitor& filter) const;
+  virtual void visitRo(const ElementProvider& map, ElementVisitor& filter) const;
 
-  virtual void visitRw(OsmMap& map, ElementVisitor& filter);
+  virtual void visitRw(ElementProvider& map, ElementVisitor& filter);
 
 protected:
 

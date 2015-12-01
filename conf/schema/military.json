@@ -1,0 +1,18 @@
+[
+    {
+        "isA": "hgispoi",
+        "name": "military",
+        "objectType": "tag"
+    },
+    {
+        "description": "Used for facilities and land used by the military, including the Navy, Army, Airforce and Marines. There's also landuse=military for tagging land areas owned/used by the military for whatever purpose.",
+        "isA": "military",
+        "mismatchScore": 0.4,
+        "name": "military=*",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "landuse=military",
+            "weight": 0.1
+        }
+    }
+]

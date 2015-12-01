@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayLocation.h"
@@ -224,7 +224,8 @@ WayLocation WayLocation::move(Meters distance) const
   WayLocation result(*this);
   Coordinate last = result.getCoordinate();
 
-  while (distance > 0)
+  // This odd statement avoid us adding irrelevantly small distances.
+  while (1 + distance > 1)
   {
     // if we're at the end of the way
     if (result.isLast())
@@ -266,7 +267,8 @@ WayLocation WayLocation::move(Meters distance) const
     }
   }
 
-  while (distance < 0)
+  // This odd statement avoid us subtracting irrelevantly small distances.
+  while (1 + distance < 1)
   {
     // if we're at the end of the way
     if (result.isFirst())
@@ -315,7 +317,17 @@ WayLocation WayLocation::move(Meters distance) const
         Coordinate last = _map->getNode(_way->getNodeId(result.getSegmentIndex()))->toCoordinate();
         double segmentLength = last.distance(next);
         result._segmentFraction = 1.0 + (distance / segmentLength);
-        result._segmentIndex = result.getSegmentIndex() - 1;
+        // if we're suffering from a floating point issue.
+        if (result._segmentFraction >= 1.0)
+        {
+          // make sure the floating point issue is within the expected bounds.
+          assert(result._segmentFraction < 1.0 + 1e-14);
+          result._segmentFraction = 0;
+        }
+        else
+        {
+          result._segmentIndex = result.getSegmentIndex() - 1;
+        }
         distance = 0;
       }
       else

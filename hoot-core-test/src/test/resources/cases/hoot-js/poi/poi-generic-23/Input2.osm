@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-3302722' visible='true' lat='30.73052500013' lon='31.41357699958'>
+    <tag k='REF2' v='000105' />
+    <tag k='error:circular' v='28.65' />
+    <tag k='hoot:mismatch' v='2' />
+    <tag k='hoot:wrong' v='1' />
+    <tag k='landuse' v='cemetary' />
+    <tag k='religion' v='islam' />
+    <tag k='source' v='mgcp' />
+    <tag k='source:abs_horiz_accuracy' v='25' />
+    <tag k='source:abs_horiz_accuracy_eval' v='emc_product_specification' />
+    <tag k='source:abs_vert_accuracy' v='-32765' />
+    <tag k='source:abs_vert_accuracy_eval' v='NA' />
+    <tag k='source:commercial_distribution_restriction' v='Limited distribution. Official use only by MGCP members.' />
+    <tag k='source:copyright' v='Copyright 2013 by the Bundeswehr GeoInformation Office. All rights reserved.' />
+    <tag k='source:date_time' v='2007-04-29' />
+    <tag k='source:description' v='IKONOS - 1m resolution' />
+    <tag k='source:horiz_accuracy_cat' v='accurate' />
+    <tag k='source:name' v='very_high_resolution_commercial_monoscopic_imagery' />
+    <tag k='source:review_source_type' v='NA' />
+    <tag k='source:vertical_source_category' v='no_elevations' />
+    <tag k='uuid' v='{a1b7812d-6a20-58ef-bc87-2b1f24a7da56}' />
+  </node>
+</osm>

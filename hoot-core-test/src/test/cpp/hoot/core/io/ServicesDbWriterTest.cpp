@@ -39,11 +39,6 @@
 // Standard
 #include <functional>
 
-// STXXL
-#include <stxxl/bits/mng/diskallocator.h>
-#include <stxxl/map>
-#include <stxxl/vector>
-
 // TGS
 #include <tgs/BigContainers/BigMap.h>
 #include <tgs/System/Time.h>
@@ -60,8 +55,6 @@ class ServicesDbWriterTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runEscapeTest);
   CPPUNIT_TEST(runInsertTest);
   CPPUNIT_TEST(runRemapInsertTest);
-  //CPPUNIT_TEST(runStxxlTest);
-  //CPPUNIT_TEST(benchmarkTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -168,6 +161,7 @@ public:
     map->addRelation(r1);
 
     writer.write(map);
+
     long mapId = writer.getMapId();
 
     compareRecords("SELECT email, display_name FROM users "
@@ -179,8 +173,8 @@ public:
                    ServicesDb::_getNodesTableName(mapId) +
                    " ORDER BY longitude",
                    "0;0;true;3221225472;1;\"note\"=>\"n1\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"10\"\n"
-                   "0;1000000;true;3221225992;1;\"note\"=>\"n2\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"11\"\n"
-                   "0;2000000;true;3221227552;1;\"note\"=>\"n3\", \"hoot:status\"=>\"3\", \"error:circular\"=>\"12\"",
+                   "0;0.1;true;3221225992;1;\"note\"=>\"n2\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"11\"\n"
+                   "0;0.2;true;3221227552;1;\"note\"=>\"n3\", \"hoot:status\"=>\"3\", \"error:circular\"=>\"12\"",
                    (qlonglong)mapId);
 
     compareRecords("SELECT id, visible, version, tags FROM " +
@@ -266,8 +260,8 @@ public:
                    ServicesDb::_getNodesTableName(mapId) +
                    " ORDER BY longitude",
                    "0;0;true;3221225472;1;\"note\"=>\"n1\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"10\"\n"
-                   "0;1000000;true;3221225992;1;\"note\"=>\"n2\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"11\"\n"
-                   "0;2000000;true;3221227552;1;\"note\"=>\"n3\", \"hoot:status\"=>\"3\", \"error:circular\"=>\"12\"",
+                   "0;0.1;true;3221225992;1;\"note\"=>\"n2\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"11\"\n"
+                   "0;0.2;true;3221227552;1;\"note\"=>\"n3\", \"hoot:status\"=>\"3\", \"error:circular\"=>\"12\"",
                    (qlonglong)mapId);
 
     compareRecords("SELECT visible, version, tags FROM " +
@@ -280,10 +274,10 @@ public:
     compareRecords("SELECT sequence_id FROM " +
                    ServicesDb::_getWayNodesTableName(mapId) +
                    " ORDER BY way_id, node_id, sequence_id",
-                   "0\n"
                    "1\n"
                    "0\n"
-                   "1",
+                   "1\n"
+                   "0",
                    (qlonglong)mapId);
 
     compareRecords("SELECT visible, version, tags FROM " +

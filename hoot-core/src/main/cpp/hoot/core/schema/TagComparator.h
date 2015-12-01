@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TAGCOMPARATOR_H
@@ -40,6 +40,7 @@ namespace hoot
 class TagComparator
 {
 public:
+
   TagComparator();
 
   /**
@@ -70,7 +71,7 @@ public:
 
   /**
    * Generalize the tags in t1 and t2 to make them consistent. Using the following rules:
-   * - Names are merged using _mergeNames.
+   * - Names are merged using mergeNames.
    * - Exact matches are unchanged (lists are treated as unordered)
    * - Unrecognized tags are concatenated in a list.
    * - Tags that share an ancestor are promoted to the first common ancestor
@@ -86,6 +87,8 @@ public:
    * Keep all names. If there is a conflict in tags between t1 and t2 then use the value in t1.
    */
   Tags overwriteMerge(Tags t1, Tags t2);
+
+  void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
 
 private:
 
@@ -130,6 +133,8 @@ private:
   void _promoteToCommonAncestor(Tags& t1, Tags& t2, Tags& result);
 
   QSet<QString> _toSet(const Tags& t, const QString& k);
+
+  bool _caseSensitive;
 };
 
 }

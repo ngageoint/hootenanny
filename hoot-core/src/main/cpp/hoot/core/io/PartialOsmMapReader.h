@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PARTIALOSMMAPREADER_H
 #define PARTIALOSMMAPREADER_H
@@ -77,21 +77,6 @@ public:
   virtual bool hasMoreElements() = 0;
 
   virtual ElementPtr readNextElement() = 0;
-
-  /**
-   * @brief streamHasMoreElements
-   * @return true if more elements can be read, else false
-   */
-  virtual bool streamHasMoreElements(
-      void );
-
-  /**
-   * @brief streamReadNextElement
-   * @return Pointer to next element read from stream
-   */
-  virtual ElementPtr streamReadNextElement(
-      void );
-
 
 protected:
 

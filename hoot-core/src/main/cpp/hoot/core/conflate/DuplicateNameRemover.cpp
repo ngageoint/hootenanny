@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DuplicateNameRemover.h"
@@ -51,7 +51,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, DuplicateNameRemover)
 DuplicateNameRemover::DuplicateNameRemover() :
 _caseSensitive(true)
 {
-  setCaseSensitive(ConfigOptions().getDuplicateNameRemoverCaseSensitive());
+  setCaseSensitive(ConfigOptions().getDuplicateNameCaseSensitive());
 }
 
 void DuplicateNameRemover::apply(shared_ptr<OsmMap>& map)
@@ -64,7 +64,7 @@ void DuplicateNameRemover::apply(shared_ptr<OsmMap>& map)
   {
     const shared_ptr<Way>& w = it->second;
 
-    QStringList list = w->getTags().getList("name");
+    QStringList list = w->getTags().getNames();
     // put all the alt_name values in a set, this will remove duplicates.
     list.append(w->getTags().getList("alt_name"));
 

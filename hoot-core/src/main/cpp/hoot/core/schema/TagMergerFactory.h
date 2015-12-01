@@ -22,13 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGMERGERFACTORY_H
 #define TAGMERGERFACTORY_H
 
 #include "TagMerger.h"
 #include "AverageTagMerger.h"
+
+// Tgs
+#include <tgs/SharedPtr.h>
 
 namespace hoot
 {
@@ -56,8 +59,13 @@ public:
    */
   static Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et);
 
+  /**
+   * Reset all cached information. This is necessary if the default tag config information changes.
+   */
+  void reset();
+
 private:
-  QHash<QString, const TagMerger*> _mergers;
+  QHash<QString, shared_ptr<const TagMerger> > _mergers;
   const TagMerger* _default;
 
   static TagMergerFactory _theInstance;

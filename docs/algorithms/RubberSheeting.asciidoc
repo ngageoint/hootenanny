@@ -1,0 +1,106 @@
+
+== Rubber Sheeting
+
+An option while conflating two data sets is to use rubber sheeting (See
+<<hootuser>>, _Rubber Sheeting_ for usage details). The rubber sheeting
+operation uses intersections in roads to determine high confidence intersection
+matches. The high confidence matches are considered to be tie points for
+determining rubber sheeting transforms.
+
+=== Identify Tie Points
+
+Intersections are matched if there are three or more roads that intersect at a
+point and the intersection does not have any similar pairs nearby. Generally
+this works fairly well on well formed data. Each tie is given a score in the
+range [0, 1].
+
+The following process is used for identifying candidate tie points:
+
+1. Clean the data. Most importantly, remove all duplicates and break all ways at
+   intersections.
+2. Calculate the search radius as two times with worst circular error within the
+   data set.
+3. Identify all nodes that are contained by three or more ways these are referred to
+   as intersections.
+4. Join all the intersections in the first dataset against intersections in the
+   second data set that are within the radius calculated in step 2.
+5. Score the pair of intersections as a "candidate tie point" as described in
+   the following section.
+
+The following process is used for scoring the two intersections that make up a
+candidate tie point:
+
+. Calculate all the absolute angles of the inbound ways for each intersection.
+. If there are more than 6 ways in both intersections return a score of 1. This
+   is very unusual and prohibitively expensive to calculate the theta score
+   described below.
+. Calculate the theta score by recursively and exhaustively matching all the
+   angles in the intersections to find the maximum score. Any extra ways that
+   are not matched are omitted from the score. Intuitively this score represents
+   how well the angles match between the two intersections. The score is
+   calculated as: 
+** theta1 and theta2 represent the vector of the angles of matched ways. Where
+   theta1~i~ best matches theta2~i~.
+** `s` is a tunable parameter. The larger the value the less forgiving the score
+   will be of differences in angle. Defaults to 2. See also
+   `node.matcher.strictness` in <<hootuser>>.
+. Calculate the tie point score as described below. Intuitively, the higher the
+  number of intersections and the better the theta & distance scores the higher
+  the overall score.
+** d - Distance between the two points in meters.
+** ce - Maximum circular error of all intersecting ways.
+** Φ - CDF of a normal curve.
+footnote:[http://en.wikipedia.org/wiki/Normal_distribution]
+// print pretty equations
+ifdef::HasLatexMath[]
+[latexmath]
++++++++++++++++++++++++++
+\[thetaScore = \prod{}{}{\cos|\theta1_{i} - \theta2_{i}|^s} \]
+\[distanceScore = -2 \Phi \left(\frac{1.5 d}{ce}\right) \]
+\[diff = \bigl\lvert |\theta1| - |\theta2| \bigr\rvert \]
+\[score = min(|\theta1|, |\theta2|) - diff * thetaScore * distanceScore\]
++++++++++++++++++++++++++
+endif::HasLatexMath[]
+
+ifndef::HasLatexMath[]
+ thetaScore = product(cos(|theta1i - theta2i| ^ s))
+ distanceScore = -2 * Phi(1.5 * d / ce)
+ diff = | |theta1| - |theta2| |
+ score = min(|theta1|, |theta2|) - diff * thetaScore * distanceScore
+endif::HasLatexMath[]
+
+A single intersection could easily be part of multiple tie points during the
+calculation, but in actuality a single intersection can only be involved in
+a single tie point. To account for this the tie points are further penalized for
+containing an intersection that is part of multiple candidate tie points. This
+weighting uses the sum of all the candidate tie point scores that contain a
+single intersection as the denominator.
+
+The candidate tie points are sorted by score, descending. All candidate tie
+points with a score greater than 0.5 are accepted as _confident tie points_. No
+intersection is used in more than one confident tie point.
+
+=== Evaluate Interpolation Methods
+
+Multiple interpolation methods are evaluated using cross-validation to determine
+the lowest RMSE. The best approach is selected.
+
+* Delaunay Triangulation using Linear Interpolation
+* Inverse Distance Weighted
+* Kernel Estimation
+
+=== Application
+
+The best interpolation method is applied to the data by either moving one dataset
+toward the other, or moving both datasets towards each other. There is also
+functionality for storing the solution and applying it at a later time using
+`derive-rubber-sheet` and `apply-rubber-sheet` (see <<hootuser>> for details).
+
+=== Future Work
+
+At times the confident tie points sometimes give false positives, especially on
+extremely noisy data. In these cases it may be worthwhile to determine and
+eliminate outliers using the
+http://en.wikipedia.org/wiki/Interquartile_range[interquartile range] or similar
+method while evaluating interpolation methods. This may be done using
+expectation maximization or a similar method.

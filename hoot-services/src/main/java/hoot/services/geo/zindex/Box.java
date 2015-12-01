@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.geo.zindex;
 
@@ -35,7 +35,7 @@ import com.vividsolutions.jts.geom.Envelope;
  */
 final public class Box
 {
-  double[] _min, _max;
+  private double[] _min, _max;
 
   public Box(double[] min, double[] max)
   {

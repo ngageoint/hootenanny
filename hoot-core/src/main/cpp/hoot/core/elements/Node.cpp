@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Node.h"
@@ -56,6 +56,13 @@ Node::Node(Status s, long id, const Coordinate& c, Meters circularError) : Eleme
 Node::Node(Status s, long id, double x, double y, Meters circularError) : Element(s)
 {
   _nodeData.init(id, x, y);
+  _getElementData().setCircularError(circularError);
+}
+
+Node::Node(Status s, long id, double x, double y, long changeset, long version, unsigned int timestamp,
+           QString user, long uid, Meters circularError) : Element(s)
+{
+  _nodeData.init(id, x, y, changeset, version, timestamp, user, uid);
   _getElementData().setCircularError(circularError);
 }
 
@@ -94,12 +101,12 @@ QString Node::toString() const
     arg(getTags().toString());
 }
 
-void Node::visitRo(const OsmMap& map, ElementVisitor& filter) const
+void Node::visitRo(const ElementProvider& map, ElementVisitor& filter) const
 {
   filter.visit(map.getNode(getId()));
 }
 
-void Node::visitRw(OsmMap& map, ElementVisitor& filter)
+void Node::visitRw(ElementProvider& map, ElementVisitor& filter)
 {
   filter.visit(map.getNode(getId()));
 }

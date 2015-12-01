@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
@@ -53,6 +53,19 @@ public class MapLayer
   {
     this.name = name;
   }
+  
+  private java.sql.Timestamp date;
+  public String getDate()
+  {
+	  return String.format("%1$TD",date);
+	  //Use below to include time stamp
+	  //return String.format("%1$TD %1$TT", date);
+  }
+  public void setDate(java.sql.Timestamp date)
+  {
+    this.date = date;
+  }
+  
   
   public MapLayer()
   {

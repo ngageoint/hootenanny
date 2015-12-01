@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EXTRACTWAYSVISITOR_H
 #define EXTRACTWAYSVISITOR_H
@@ -32,7 +32,7 @@
 namespace hoot
 {
 
-class ExtractWaysVisitor : public ElementConstOsmMapVisitor
+class ExtractWaysVisitor :  public ElementConstOsmMapVisitor
 {
 public:
 
@@ -54,6 +54,7 @@ public:
   {
     vector<ConstWayPtr> result;
     ExtractWaysVisitor v(result);
+
     v.setOsmMap(map.get());
     e->visitRo(*map, v);
     return result;

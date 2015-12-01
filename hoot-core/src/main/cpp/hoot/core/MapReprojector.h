@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __MAP_REPROJECTOR_H__
 #define __MAP_REPROJECTOR_H__
@@ -40,6 +40,8 @@
 
 // Hoot
 #include <hoot/core/Units.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/ElementProvider.h>
 
 // Qt
 #include <QString>
@@ -49,7 +51,6 @@
 
 namespace hoot
 {
-  class OsmMap;
   using namespace boost;
   using namespace geos::geom;
   using namespace std;
@@ -96,13 +97,15 @@ public:
 
   static MapReprojector& getInstance() { return _theInstance; }
 
-  static bool isGeographic(const shared_ptr<const OsmMap>& map);
+  //static bool isGeographic(const shared_ptr<const OsmMap>& map);
+  static bool isGeographic(const ConstElementProviderPtr& provider );
 
   /**
    * Returns true if the projection is planar. This method simply assumes that if the projection
    * is not geographic it is planar.
    */
-  static bool isPlanar(const shared_ptr<const OsmMap>& map) { return !isGeographic(map); }
+  //static bool isPlanar(const shared_ptr<const OsmMap>& map) { return !isGeographic(map); }
+  static bool isPlanar(const ConstElementProviderPtr& provider ) { return !isGeographic(provider); }
 
   /**
    * Reprojects the specified geometry from srs1 to srs2. The coordinates of g will change, but

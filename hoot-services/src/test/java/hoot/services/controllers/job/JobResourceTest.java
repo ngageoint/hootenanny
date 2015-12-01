@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
@@ -30,7 +30,6 @@ import static org.mockito.Mockito.verify;
 
 import java.util.List;
 
-import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -48,7 +47,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 import org.mockito.Matchers;
-import org.mockito.Mockito.*;
+
 @Ignore
 public class JobResourceTest {
 	@Test
@@ -85,7 +84,7 @@ public class JobResourceTest {
 		JobResource spy = Mockito.spy(real);
 		org.mockito.Mockito.when(spy.getJobStatusObj(org.mockito.Matchers.anyString())).thenReturn(mockRet);
 
-		Mockito.doNothing().when((JobResource)spy)._terminateJob(org.mockito.Matchers.anyString());
+		Mockito.doNothing().when(spy)._terminateJob(org.mockito.Matchers.anyString());
 
 		spy.terminateJob("1234", null);
 
@@ -111,10 +110,10 @@ public class JobResourceTest {
 
 		// Create Mock JobStatusManager Class
 		JobStatusManager mockJobStatusManager = Mockito.mock(JobStatusManager.class);
-		Mockito.doNothing().when((JobStatusManager)mockJobStatusManager).addJob(org.mockito.Matchers.anyString());
-		Mockito.doNothing().when((JobStatusManager)mockJobStatusManager).updateJob(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
-		Mockito.doNothing().when((JobStatusManager)mockJobStatusManager).setComplete(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
-		Mockito.doNothing().when((JobStatusManager)mockJobStatusManager).setFailed(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
+		Mockito.doNothing().when(mockJobStatusManager).addJob(org.mockito.Matchers.anyString());
+		Mockito.doNothing().when(mockJobStatusManager).updateJob(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
+		Mockito.doNothing().when(mockJobStatusManager).setComplete(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
+		Mockito.doNothing().when(mockJobStatusManager).setFailed(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
 
 		// Mock child info
 		JSONObject mockChild = new JSONObject();
@@ -127,14 +126,7 @@ public class JobResourceTest {
 
 
 		org.mockito.Mockito.when(spy._createDbConnection()).thenReturn(null);
-		Mockito.doNothing().when((JobResource)spy)._closeDbConnection(org.mockito.Matchers.any(java.sql.Connection.class));
-		// This one works for void return method only
-		/*Mockito.doNothing().when((JobResource)spy)._processJob(org.mockito.Matchers.anyString(),
-				org.mockito.Matchers.any(JSONObject.class));*/
-		// This actually calls the method
-		// http://stackoverflow.com/questions/11620103/mockito-trying-to-spy-on-method-is-calling-the-original-method
-		/*org.mockito.Mockito.when(spy._processJob(org.mockito.Matchers.anyString(),org.mockito.Matchers.any(JSONObject.class))).
-		thenReturn(null);*/
+		Mockito.doNothing().when(spy)._closeDbConnection(org.mockito.Matchers.any(java.sql.Connection.class));
 
 		// so I use this to avoid actual call
 		org.mockito.Mockito.doReturn(new JSONObject()).when(spy)._processJob(org.mockito.Matchers.anyString(),org.mockito.Matchers.any(JSONObject.class));
@@ -143,8 +135,6 @@ public class JobResourceTest {
 
 		org.mockito.Mockito.doReturn(mockChild).when(spy)._execReflection(org.mockito.Matchers.anyString(),
 				org.mockito.Matchers.any(JSONObject.class), org.mockito.Matchers.any(JobStatusManager.class));
-
-
 
 		spy.processChainJob("test_job_id_1234", jobStr);
 
@@ -250,10 +240,10 @@ public class JobResourceTest {
 
 		// Create Mock JobStatusManager Class
 		JobStatusManager mockJobStatusManager = Mockito.mock(JobStatusManager.class);
-		Mockito.doNothing().when((JobStatusManager)mockJobStatusManager).addJob(org.mockito.Matchers.anyString());
-		Mockito.doNothing().when((JobStatusManager)mockJobStatusManager).updateJob(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
-		Mockito.doNothing().when((JobStatusManager)mockJobStatusManager).setComplete(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
-		Mockito.doNothing().when((JobStatusManager)mockJobStatusManager).setFailed(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
+		Mockito.doNothing().when(mockJobStatusManager).addJob(org.mockito.Matchers.anyString());
+		Mockito.doNothing().when(mockJobStatusManager).updateJob(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
+		Mockito.doNothing().when(mockJobStatusManager).setComplete(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
+		Mockito.doNothing().when(mockJobStatusManager).setFailed(org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
 
 		// Mock child info
 		JSONObject mockChild = new JSONObject();
@@ -266,14 +256,7 @@ public class JobResourceTest {
 
 
 		org.mockito.Mockito.when(spy._createDbConnection()).thenReturn(null);
-		Mockito.doNothing().when((JobResource)spy)._closeDbConnection(org.mockito.Matchers.any(java.sql.Connection.class));
-		// This one works for void return method only
-		/*Mockito.doNothing().when((JobResource)spy)._processJob(org.mockito.Matchers.anyString(),
-				org.mockito.Matchers.any(JSONObject.class));*/
-		// This actually calls the method
-		// http://stackoverflow.com/questions/11620103/mockito-trying-to-spy-on-method-is-calling-the-original-method
-		/*org.mockito.Mockito.when(spy._processJob(org.mockito.Matchers.anyString(),org.mockito.Matchers.any(JSONObject.class))).
-		thenReturn(null);*/
+		Mockito.doNothing().when(spy)._closeDbConnection(org.mockito.Matchers.any(java.sql.Connection.class));
 
 		// so I use this to avoid actual call
 		org.mockito.Mockito.doReturn(new JSONObject()).when(spy)._processJob(org.mockito.Matchers.anyString(),org.mockito.Matchers.any(JSONObject.class));
@@ -284,8 +267,6 @@ public class JobResourceTest {
 		org.mockito.Mockito.doThrow(new Exception("Mock failure for testing Process Chain Job failure. (Not real failure!!!)")).when(spy)
 		._execReflection(org.mockito.Matchers.anyString(),
 				org.mockito.Matchers.any(JSONObject.class), org.mockito.Matchers.any(JobStatusManager.class));
-
-
 
 		try
 		{

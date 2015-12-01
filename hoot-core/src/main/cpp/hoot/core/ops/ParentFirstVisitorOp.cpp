@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ParentFirstVisitorOp.h"
 
@@ -67,12 +67,12 @@ void ParentFirstVisitorOp::apply(shared_ptr<OsmMap> &map)
     }
   }
 
-  const OsmMap::NodeMap nm = map->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
+  const NodeMap nm = map->getNodeMap();
+  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    if (map->containsNode(it.key()))
+    if (map->containsNode(it->first))
     {
-      _visitor->visit(it.value());
+      _visitor->visit(it->second);
     }
   }
 

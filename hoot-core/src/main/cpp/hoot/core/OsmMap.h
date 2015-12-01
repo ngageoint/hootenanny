@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAP_H
 #define OSMMAP_H
@@ -60,6 +60,7 @@ namespace hoot {
 #include "DefaultIdGenerator.h"
 #include "RelationMap.h"
 #include "WayMap.h"
+#include "NodeMap.h"
 
 
 namespace hoot {
@@ -94,8 +95,6 @@ public:
 
   static string className() { return "hoot::OsmMap"; }
 
-  typedef QHash<long, boost::shared_ptr<Node> > NodeMap;
-
   OsmMap();
 
   explicit OsmMap(shared_ptr<const OsmMap>);
@@ -107,6 +106,17 @@ public:
   OsmMap(shared_ptr<const OsmMap>, shared_ptr<OGRSpatialReference> srs);
 
   ~OsmMap();
+
+  /**
+   * Append all the elements in input map to this map.
+   *
+   * @param map
+   * @throws If there is element ID overlap.
+   * @throws If the map being appended to is the same as the map being appended from.
+   * @throws If the map being appended to does not have the same projection as the map being
+   * appended from
+   */
+  void append(shared_ptr<const OsmMap> map);
 
   void addElement(const shared_ptr<Element>& e);
   template<class T>
@@ -148,11 +158,11 @@ public:
   /**
    * Returns true if the node is in this map.
    */
-  bool containsNode(long id) const { return _nodes.find(id) != _nodes.end(); }
+  virtual bool containsNode(long id) const { return _nodes.find(id) != _nodes.end(); }
 
-  bool containsRelation(long id) const { return _relations.find(id) != _relations.end(); }
+  virtual bool containsRelation(long id) const { return _relations.find(id) != _relations.end(); }
 
-  bool containsWay(long id) const { return _ways.find(id) != _ways.end(); }
+  virtual bool containsWay(long id) const { return _ways.find(id) != _ways.end(); }
 
   /**
    * Returns a copy of this map that only contains the specified ways. This can be handy when
@@ -187,12 +197,6 @@ public:
   set<ElementId> findElements(const Envelope& e) const;
 
   /**
-   * Does a very inefficient search for all neighbors within buffer distance. This should be
-   * replaced by an index search at some point.
-   */
-  std::vector<long> findWayNeighbors(shared_ptr<const Way> way, Meters buffer) const;
-
-  /**
    * Does a very inefficient search for all the ways that contain the given node.
    */
   std::vector<long> findWayByNode(long nodeId) const;
@@ -224,32 +228,34 @@ public:
    */
   const OsmMapIndex& getIndex() const { return *_index; }
 
-  boost::shared_ptr<const Node> getNode(long id) const;
+  virtual const boost::shared_ptr<const Node> getNode(long id) const;
 
-  const shared_ptr<Node>& getNode(long id);
+  virtual const shared_ptr<Node> getNode(long id);
 
   ConstNodePtr getNode(const ElementId& eid) const { return getNode(eid.getId()); }
 
-  const NodePtr& getNode(const ElementId& eid) { return getNode(eid.getId()); }
+  const NodePtr getNode(const ElementId& eid) { return getNode(eid.getId()); }
 
   const NodeMap& getNodeMap() const { return _nodes; }
+
+  set<ElementId> getParents(ElementId eid) const;
 
   /**
    * Returns the SRS for this map. The SRS should never be changed and defaults to WGS84.
    */
-  boost::shared_ptr<OGRSpatialReference> getProjection() const { return _srs; }
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const { return _srs; }
 
-  const shared_ptr<const Relation> getRelation(long id) const;
+  virtual const shared_ptr<const Relation> getRelation(long id) const;
 
-  const shared_ptr<Relation>& getRelation(long id);
+  virtual const shared_ptr<Relation> getRelation(long id);
 
   const RelationMap& getRelationMap() const { return _relations; }
 
   /**
    * Return the way with the specified id or null if it doesn't exist.
    */
-  const shared_ptr<Way>& getWay(long id);
-  const shared_ptr<Way>& getWay(ElementId eid);
+  virtual const shared_ptr<Way> getWay(long id);
+  const shared_ptr<Way> getWay(ElementId eid);
   
   /**
    * Similar to above but const'd.
@@ -291,6 +297,11 @@ public:
    * part of any way before it is removed.
    */
   void removeNode(long nid);
+
+  /**
+   * Removes the node from all relations, ways and then removes the node from the map.
+   */
+  void removeNodeFully(long wId);
 
   /**
    * Remove the specified node from this map. No check will be made to remove this node from ways.
@@ -392,9 +403,12 @@ protected:
   mutable WayMap _ways;
 
   shared_ptr<OsmMapIndex> _index;
+  shared_ptr<Node> _nullNode;
+  shared_ptr<const Node> _constNullNode;
   shared_ptr<Relation> _nullRelation;
   shared_ptr<Way> _nullWay;
   shared_ptr<const Way> _constNullWay;
+  mutable NodeMap::const_iterator _tmpNodeMapIt;
   RelationMap::iterator _tmpRelationIt;
   mutable WayMap::const_iterator _tmpWayIt;
   std::vector< shared_ptr<OsmMapListener> > _listeners;
@@ -422,15 +436,30 @@ void addElements(T it, T end)
   }
 }
 
-inline const shared_ptr<Node>& OsmMap::getNode(long id)
+inline const shared_ptr<Node> OsmMap::getNode(long id)
 {
-  NodeMap::Iterator it = _nodes.find(id);
-  if (it == _nodes.end())
+  _tmpNodeMapIt = _nodes.find(id);
+  if (_tmpNodeMapIt != _nodes.end())
   {
-    LOG_ERROR("Requested an invalid node ID " << id);
-    assert(false);
+    return _tmpNodeMapIt->second;
   }
-  return it.value();
+  else
+  {
+    return _nullNode;
+  }
+}
+
+inline const boost::shared_ptr<const Node> OsmMap::getNode(long id) const
+{
+  _tmpNodeMapIt = _nodes.find(id);
+  if (_tmpNodeMapIt != _nodes.end())
+  {
+    return _tmpNodeMapIt->second;
+  }
+  else
+  {
+    return _constNullNode;
+  }
 }
 
 inline const shared_ptr<const Relation> OsmMap::getRelation(long id) const
@@ -446,7 +475,7 @@ inline const shared_ptr<const Relation> OsmMap::getRelation(long id) const
   }
 }
 
-inline const shared_ptr<Relation>& OsmMap::getRelation(long id)
+inline const shared_ptr<Relation> OsmMap::getRelation(long id)
 {
   _tmpRelationIt = _relations.find(id);
   if (_tmpRelationIt != _relations.end())
@@ -478,7 +507,7 @@ inline const shared_ptr<const Way> OsmMap::getWay(ElementId eid) const
   return getWay(eid.getId());
 }
 
-inline const shared_ptr<Way>& OsmMap::getWay(long id)
+inline const shared_ptr<Way> OsmMap::getWay(long id)
 {
   _tmpWayIt = _ways.find(id);
   if (_tmpWayIt != _ways.end())
@@ -491,7 +520,7 @@ inline const shared_ptr<Way>& OsmMap::getWay(long id)
   }
 }
 
-inline const shared_ptr<Way>& OsmMap::getWay(ElementId eid)
+inline const shared_ptr<Way> OsmMap::getWay(ElementId eid)
 {
   assert(eid.getType() == ElementType::Way);
   return getWay(eid.getId());

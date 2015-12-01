@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RecursiveElementRemover.h"
 
@@ -111,6 +111,14 @@ void RecursiveElementRemover::apply(const shared_ptr<OsmMap> &map)
 
   // remove the relations from most general to most specific
   _remove(map, _eid, toErase);
+
+#warning remove me
+  if (_eid == ElementId::way(-638))
+  {
+    LOG_INFO("Here!");
+    LOG_VAR(toErase);
+    LOG_VAR(map->getElement(_eid));
+  }
 }
 
 void RecursiveElementRemover::_remove(const shared_ptr<OsmMap>& map, ElementId eid,

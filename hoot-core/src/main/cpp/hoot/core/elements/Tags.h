@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGS_H
 #define TAGS_H
@@ -140,13 +140,6 @@ public:
   QStringList getPseudoNames() const;
 
   /**
-   * Checks for common tags that denote area. E.g. building=yes, area=yes.
-   * In some cases you may need to look at the element too. If the element is a node then it
-   * doesn't matter if isArea returns true.
-   */
-  bool isArea() const;
-
-  /**
    * Checks for common false values such as "no", "false", "0", "off".
    *
    * Note: It is not guaranteed that isFalse(tag) != isTrue(tag), but you are guaranteed that if
@@ -184,6 +177,7 @@ public:
   void set(const QString& key, const QString& value);
   void set(const QString& key, bool v);
   void set(const QString& key, double v) { set(key, QString::number(v)); }
+  void set(const QString& key, int64_t v) { set(key, QString::number(v)); }
 
   /**
    * If a kvp is in other, then set it in this. If this already has that key then the value will

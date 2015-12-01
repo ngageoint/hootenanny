@@ -1,0 +1,16 @@
+Reprojecting 0 / 3163         Reprojecting 1000 / 3163         Reprojecting 2000 / 3163         Reprojecting 3000 / 3163         
+Reprojecting 0 / 56         
+15:09:12.675 INFO  ...p/hoot/core/ops/MapCropper.cpp( 115) Cropping map.
+15:09:12.719 INFO  ...p/hoot/core/ops/MapCropper.cpp( 154)   Removing nodes...
+15:09:12.808 INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
+15:09:12.808 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
+Reprojecting 0 / 115         
+Reprojecting 0 / 115         
+Reprojecting 0 / 3163         Reprojecting 1000 / 3163         Reprojecting 2000 / 3163         Reprojecting 3000 / 3163         
+Reprojecting 0 / 56         
+15:09:14.683 INFO  ...p/hoot/core/ops/MapCropper.cpp( 115) Cropping map.
+15:09:14.776 INFO  ...p/hoot/core/ops/MapCropper.cpp( 154)   Removing nodes...
+15:09:14.856 INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
+15:09:14.858 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
+Reprojecting 0 / 3164         Reprojecting 1000 / 3164         Reprojecting 2000 / 3164         Reprojecting 3000 / 3164         
+Reprojecting 0 / 3164         Reprojecting 1000 / 3164         Reprojecting 2000 / 3164         Reprojecting 3000 / 3164         

@@ -1,41 +1,75 @@
-{
-    "###": "",
-    "###": "name related tags.",
-    "###": "",
-
-    "tag": {
+[
+    {
+        "categories": [
+            "name"
+        ],
+        "dataType": "text",
+        "geometries": [
+            "node",
+            "way",
+            "relation"
+        ],
+        "influence": 2,
         "name": "abstract_name",
-        "influence": 2.0,
-        "type": "text",
-        "geometries": ["node", "way", "relation"],
-        "categories": ["name"]
+        "objectType": "tag"
     },
-
-    "tag": { "name": "name", "isA": "abstract_name" },
-    "tag": { "name": "alt_name", "isA": "abstract_name" },
-    "tag": { "name": "regex?name:.*", "isA": "abstract_name" },
-    "tag": { "name": "loc_name", "isA": "abstract_name" },
-    "tag": { "name": "int_name", "isA": "abstract_name" },
-    "tag": { "name": "nat_name", "isA": "abstract_name" },
-    "tag": { "name": "official_name", "isA": "abstract_name" },
-    "tag": { "name": "old_name", "isA": "abstract_name" },
-    "tag": { "name": "reg_name", "isA": "abstract_name" },
-    "tag": { "name": "ref", "isA": "abstract_name" },
-
-    "###": "",
-    "###": "Tags that contain names, but not necessarily the place name.",
-    "###": "",
-
-    "tag": {
+    {
+        "isA": "abstract_name",
+        "name": "alt_name",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_name",
+        "name": "int_name",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_name",
+        "name": "loc_name",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_name",
+        "name": "name",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_name",
+        "name": "nat_name",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_name",
+        "name": "official_name",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_name",
+        "name": "old_name",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "pseudoname"
+        ],
+        "dataType": "text",
+        "geometries": [
+            "node",
+            "way",
+            "relation"
+        ],
+        "influence": 1,
         "name": "pseudo_name",
-        "influence": 1.0,
-        "type": "text",
-        "geometries": ["node", "way", "relation"],
-        "categories": ["pseudoname"]
+        "objectType": "tag"
     },
-
-    "tag": { "name": "operator", "isA": "pseudo_name" },
-    "tag": { "name": "brand", "isA": "pseudo_name" },
-
-    "#end" : ""
-}
+    {
+        "isA": "abstract_name",
+        "name": "reg_name",
+        "objectType": "tag"
+    },
+    {
+        "isA": "abstract_name",
+        "name": "regex?name:.*",
+        "objectType": "tag"
+    }
+]

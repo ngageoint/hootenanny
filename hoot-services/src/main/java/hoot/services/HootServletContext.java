@@ -26,6 +26,7 @@
  */
 package hoot.services;
 
+import hoot.services.controllers.ingest.BasemapResource;
 import hoot.services.controllers.ogr.TranslatorResource;
 import hoot.services.controllers.services.P2PResource;
 
@@ -36,13 +37,19 @@ public class HootServletContext implements ServletContextListener {
 
 	private TranslatorResource _transRes = null;
 	private P2PResource _P2PRes = null;
+	private BasemapResource _BRes = null;
 	public void contextInitialized(ServletContextEvent arg0) 
 	{
 		_transRes = new TranslatorResource();
-		_transRes.startTranslationService(null, null);
+		_transRes.startTranslationService();
 		
 		_P2PRes = new P2PResource();
-		_P2PRes.startP2PService(null, null);
+		_P2PRes.startP2PService();
+		
+		
+		// Doing this to make sure we create ingest folder
+		_BRes = new BasemapResource();
+		_BRes.createTileServerPath();
 	}
 	
 	public void contextDestroyed(ServletContextEvent arg0) 

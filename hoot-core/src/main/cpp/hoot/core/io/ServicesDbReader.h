@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SERVICESDBREADER_H
 #define SERVICESDBREADER_H
@@ -32,6 +32,10 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
+
+#include <boost/shared_ptr.hpp>
+
+#include <ogr_spatialref.h>
 
 // tgs
 #include <tgs/BigContainers/BigMap.h>
@@ -96,6 +100,7 @@ public:
 
   virtual shared_ptr<Element> readNextElement();
 
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
 private:
 
@@ -112,7 +117,6 @@ private:
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
 
-  long _mapId;
   long _osmElemId;
   ElementType _osmElemType;
 
@@ -143,13 +147,17 @@ private:
    * Converts a query result to an OSM element
    */
   shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
-    const ElementType& elementType, OsmMap& map, long mapId);
+    const ElementType& elementType, OsmMap& map);
 
+  // Services data assignment methods
   shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
-  shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map, long mapId);
-  shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map,
-    long mapId);
+  shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
+  shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
 
+  // Osm Api data assignment methods
+  shared_ptr<Node> _resultToNode_OsmApi(const QSqlQuery& resultIterator, OsmMap& map);
+  shared_ptr<Way> _resultToWay_OsmApi(const QSqlQuery& resultIterator, OsmMap& map);
+  shared_ptr<Relation> _resultToRelation_OsmApi(const QSqlQuery& resultIterator, const OsmMap& map);
 };
 
 }

@@ -81,6 +81,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(RasterComparatorTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RasterComparatorTest, "slow");
 
 }

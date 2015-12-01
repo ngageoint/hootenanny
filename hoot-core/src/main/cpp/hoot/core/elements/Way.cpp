@@ -22,13 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Way.h"
 
 // Hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -51,6 +50,13 @@ namespace hoot {
 Way::Way(Status s, long id, Meters circularError) : Element(s)
 {
   _wayData.reset(new WayData(id));
+  _getElementData().setCircularError(circularError);
+}
+
+Way::Way(Status s, long id, long changeset, long version, unsigned int timestamp,
+         QString user, long uid, Meters circularError) : Element(s)
+{
+  _wayData.reset(new WayData(id, changeset, version, timestamp, user, uid));
   _getElementData().setCircularError(circularError);
 }
 
@@ -97,23 +103,21 @@ bool Way::containsNodeId(long nid) const
   return false;
 }
 
-void Way::visitRo(const OsmMap& map, ElementVisitor& filter) const
+void Way::visitRo(const ElementProvider& map, ElementVisitor& filter) const
 {
   filter.visit(map.getWay(getId()));
   const std::vector<long>& nids = getNodeIds();
 
-  const OsmMap::NodeMap& nodes = map.getNodeMap();
   for (size_t i = 0; i < nids.size(); i++)
   {
-    OsmMap::NodeMap::const_iterator it = nodes.find(nids[i]);
-    if (it != nodes.end())
+    if (map.containsNode(nids[i]))
     {
-      filter.visit(it.value());
+      filter.visit(map.getNode(nids[i]));
     }
   }
 }
 
-void Way::visitRw(OsmMap& map, ElementVisitor& filter)
+void Way::visitRw(ElementProvider& map, ElementVisitor& filter)
 {
   visitRo(map, filter);
 }
@@ -251,6 +255,23 @@ void Way::_makeWritable()
   }
 }
 
+void Way::removeNode(long id)
+{
+  std::vector<long>& nodes = _wayData->getNodeIds();
+  size_t newCount = 0;
+
+  // copy the array in place and remove the unwanted nodes.
+  for (size_t i = 0; i < nodes.size(); i++)
+  {
+    if (nodes[i] != id) {
+      nodes[newCount] = nodes[i];
+      newCount++;
+    }
+  }
+
+  nodes.resize(newCount);
+}
+
 void Way::replaceNode(long oldId, long newId)
 {
   const vector<long>& ids = getNodeIds();
@@ -306,6 +327,16 @@ QString Way::toString() const
   ss << "cached envelope: " << GeometryUtils::toString(_cachedEnvelope).toStdString() << endl;
   ss << "status: " << getStatusString().toStdString();
   return QString::fromStdString(ss.str());
+}
+
+bool Way::isFirstLastNodeIdentical() const
+{
+  if ( getNodeCount() < 2 )
+  {
+    return false;
+  }
+
+  return ( getFirstNodeId() == getLastNodeId() );
 }
 
 }

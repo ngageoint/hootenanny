@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GreedyStepwiseSearch.h"
@@ -87,11 +87,7 @@ namespace Tgs
         for (unsigned int i = 0; i < columns.size(); i++)
         {
           string s = df.getFactorLabelFromIndex(columns[i]);
-          char* s2 = (char*)s.c_str();
-          s2[4] = 0;
-//           printf("%s\t", s2);
         }
-//         printf("\n");
         if (score >= bestScore)
         {
           bestScore = score;
@@ -103,7 +99,8 @@ namespace Tgs
     result.clear();
     for (unsigned int i = 0; i < bestSolution.size(); i++)
     {
-      result.push_back(df.getFactorLabelFromIndex(bestSolution[i]));
+      string s = df.getFactorLabelFromIndex(bestSolution[i]);
+      result.push_back(s);
     }
 
     if (p)

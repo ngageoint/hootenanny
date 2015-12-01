@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 /*
@@ -79,8 +79,7 @@ public:
         "  * input - The input OSM data path.\n"
         "  * output - The output OSM data path.\n"
         "  * bounds - Comma delimited bounds. minx,miny,maxx,maxy E.g.\n"
-        "    38,-105,39,-104\n"        "  Delete a map from the database\n"
-        "  * Map Name - The name of the map.";
+        "    -105,38,-104,39\n";
   }
 
   virtual QString getName() const { return "crop-map"; }

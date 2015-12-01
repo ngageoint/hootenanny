@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Standard Includes
@@ -40,7 +40,9 @@ using namespace std;
 
 #include "../PluginFactory.h"
 #include <tgs/ProbablePath/ProbablePathCalculator.h>
-using namespace Tgs;
+
+namespace Tgs
+{
 
 class ProbablePathCalculatorTest : public CppUnit::TestFixture
 {
@@ -193,7 +195,7 @@ public:
       ProbablePathCalculator uut;
       uut.setFriction(w, h, friction);
       uut.setRandomNoise(0.0);
-      uut.updateCostSurface(cost);
+      cost = uut.updateCostSurface(cost);
       stringstream strm;
       strm << cost;
       CPPUNIT_ASSERT_EQUAL(tmp, strm.str());
@@ -214,3 +216,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ProbablePathCalculatorTest, PluginFactory::testName());
+
+}

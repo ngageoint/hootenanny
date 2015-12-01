@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPWRITERFACTORY_H
 #define OSMMAPWRITERFACTORY_H
@@ -49,6 +49,8 @@ public:
   shared_ptr<OsmMapWriter> createWriter(QString url);
 
   static OsmMapWriterFactory& getInstance() { return _theInstance; }
+
+  bool hasElementOutputStream(QString url);
 
   bool hasPartialWriter(QString url);
 

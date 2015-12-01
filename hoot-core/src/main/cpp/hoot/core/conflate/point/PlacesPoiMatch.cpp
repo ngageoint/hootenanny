@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PlacesPoiMatch.h"
 
@@ -37,6 +37,8 @@
 
 namespace hoot
 {
+
+QString PlacesPoiMatch::_matchName = "PLACES POI";
 
 class PlacesStringDistance : public StringDistance
 {

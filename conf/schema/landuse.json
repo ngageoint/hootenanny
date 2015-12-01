@@ -1,19 +1,40 @@
-{
-    "tag": {
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "influence": 1,
+        "isA": "hgispoi",
         "name": "landuse",
-        "isA": "poi",
-        "influence": 1.0,
-        "type": "enumeration",
-        "geometries": ["node", "area"]
+        "objectType": "tag"
     },
-
-    "#" : " The catch all",
-    "tag": { "name": "landuse=*", "isA": "landuse" },
-    "tag": { "name": "landuse=recreation_ground",
+    {
         "isA": "landuse",
-        "similarTo": { "name": "leisure=recreation_ground", "weight": 0.9 }
+        "name": "landuse=*",
+        "objectType": "tag"
     },
-
-
-    "#" : "end"
-}
+    {
+        "aliases": [
+            "landuse=cemetary"
+        ],
+        "isA": "landuse",
+        "name": "landuse=cemetery",
+        "objectType": "tag"
+    },
+    {
+        "isA": "landuse",
+        "name": "landuse=military",
+        "objectType": "tag"
+    },
+    {
+        "isA": "landuse",
+        "name": "landuse=recreation_ground",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "leisure=recreation_ground",
+            "weight": 0.9
+        }
+    }
+]

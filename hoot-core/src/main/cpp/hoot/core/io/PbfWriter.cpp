@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "PbfWriter.h"
@@ -358,12 +358,12 @@ void PbfWriter::_writeMap()
 {
   // Add the nodes and ways to the blob one at a time. When the blob gets sufficiently large it is
   // written to the output stream and a new blob is started.
-  const OsmMap::NodeMap& nodes = _map->getNodeMap();
+  const NodeMap& nodes = _map->getNodeMap();
   vector<long> nids;
   nids.reserve(nodes.size());
-  for (OsmMap::NodeMap::const_iterator it = nodes.constBegin(); it != nodes.constEnd(); ++it)
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    nids.push_back((*it)->getId());
+    nids.push_back((it->second)->getId());
   }
   sort(nids.begin(), nids.end());
   for (size_t i = 0; i < nids.size(); i++)

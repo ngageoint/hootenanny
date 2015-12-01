@@ -22,14 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.osm;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -42,7 +40,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
-import hoot.services.db.DataDefinitionManager;
 import hoot.services.db.DbUtils;
 import hoot.services.review.ReviewTestUtils;
 
@@ -66,7 +63,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
   protected static DateTimeFormatter timeFormatter =
     DateTimeFormat.forPattern(DbUtils.TIMESTAMP_DATE_FORMAT);
 
-  protected long userId = -1;
+  protected static long userId = -1;
   protected long mapId = -1;
 
   protected static Connection conn = null;
@@ -104,17 +101,20 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
   {
     try
     {
-      DbUtils.clearServicesDb(conn);
-
-
-      userId = DbUtils.insertUser(conn);
+    	//TODO: This is going to result in a lot of users created by the services test, now that
+    	//we don't clear out the database automatically between tests.  Only inserting one user is
+    	//causing UserResourceTest failures for a not so obvious reason.
+    	//if (userId == -1)
+    	//{
+    		userId = DbUtils.insertUser(conn);
+    	//}
     	mapId = DbUtils.insertMap(userId, conn);
 
       OsmTestUtils.userId = userId;
-      ReviewTestUtils.userId = userId;
+
 
       OsmTestUtils.mapId = mapId;
-      ReviewTestUtils.mapId = mapId;
+
     }
     catch (Exception e)
     {
@@ -128,7 +128,13 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
   {
     try
     {
-
+    	//no need to clear out each map, if we're clearing the whole db out before each run
+    	if (!Boolean.parseBoolean(
+  			  HootProperties.getInstance().getProperty(
+            "servicesTestClearEntireDb", HootProperties.getDefault("servicesTestClearEntireDb"))))
+    	{
+    		DbUtils.deleteOSMRecord(conn, mapId);
+    	}
     }
     catch (Exception e)
     {
@@ -142,9 +148,8 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
   {
     try
     {
-      //DbUtils.clearServicesDb(conn);
-      OsmTestUtils.conn = null;
-      ReviewTestUtils.conn = null;
+    	OsmTestUtils.conn = null;
+    	ReviewTestUtils.conn = null;
     }
     catch (Exception e)
     {
@@ -156,6 +161,4 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
       DbUtils.closeConnection(conn);
     }
   }
-
-
 }

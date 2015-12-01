@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Hoot.h"
 
@@ -77,13 +77,15 @@ void Hoot::_init()
     // initialize the environment variable for loading STXXL configuration. If the environment
     // variable has already been set then don't overwrite it (that is the 0 at the end).
     QString stxxlConf = QString(getenv("HOOT_HOME")) + "/conf/stxxl.conf";
-
     Tgs::Stxxl::getInstance().setConfig(stxxlConf);
 # endif
 
   SignalCatcher::registerHandlers();
 
   Log::getInstance().setLevel(Log::Info);
+
+  // All streams will default to UTF-8. This makes supporting other scripts much easier.
+  setlocale(LC_ALL, "en_US.UTF-8");
 
   // make sure our GDAL versions are consistent.
   const char* gdalVersion = GDALVersionInfo("RELEASE_NAME");

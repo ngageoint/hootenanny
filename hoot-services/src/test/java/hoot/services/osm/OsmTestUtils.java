@@ -22,20 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.osm;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
-
+import hoot.services.db.DbUtils.RecordBatchType;
 import hoot.services.db.postgres.PostgresUtils;
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelationMembers;
 import hoot.services.db2.CurrentRelations;
 import hoot.services.db2.CurrentWayNodes;
 import hoot.services.db2.CurrentWays;
-
 import hoot.services.db2.QChangesets;
 import hoot.services.db2.QCurrentNodes;
 import hoot.services.db2.QCurrentRelationMembers;
@@ -45,18 +44,23 @@ import hoot.services.db2.QCurrentWays;
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.GeoUtils;
 import hoot.services.models.osm.Changeset;
+import hoot.services.models.osm.Element;
+import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Node;
 import hoot.services.models.osm.Relation;
 import hoot.services.models.osm.RelationMember;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.Way;
-import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -65,14 +69,15 @@ import java.util.Set;
 import javax.xml.xpath.XPath;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.xpath.XPathAPI;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-
 import org.junit.Assert;
 import org.postgresql.util.PGobject;
 import org.w3c.dom.Document;
 
+import com.mysema.query.sql.SQLExpressions;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 
@@ -204,19 +209,19 @@ public class OsmTestUtils
     wayNodeIds.add(nodeIdsArr[0]);
     wayNodeIds.add(nodeIdsArr[1]);
     wayNodeIds.add(nodeIdsArr[4]);
-    wayIds.add(Way.insertNew(changesetId, mapId, wayNodeIds, tags, conn));
+    wayIds.add(insertNewWay(changesetId, mapId, wayNodeIds, tags, conn));
     tags.clear();
     wayNodeIds.clear();
 
     wayNodeIds.add(nodeIdsArr[2]);
     wayNodeIds.add(nodeIdsArr[1]);
-    wayIds.add(Way.insertNew(changesetId, mapId, wayNodeIds, null, conn));
+    wayIds.add(insertNewWay(changesetId, mapId, wayNodeIds, null, conn));
     wayNodeIds.clear();
 
     tags.put("key 3", "val 3");
     wayNodeIds.add(nodeIdsArr[0]);
     wayNodeIds.add(nodeIdsArr[1]);
-    wayIds.add(Way.insertNew(changesetId, mapId, wayNodeIds, tags, conn));
+    wayIds.add(insertNewWay(changesetId, mapId, wayNodeIds, tags, conn));
     tags.clear();
     wayNodeIds.clear();
 
@@ -237,7 +242,7 @@ public class OsmTestUtils
     members.add(new RelationMember(wayIdsArr[0], ElementType.Way, "role2"));
     members.add(new RelationMember(nodeIdsArr[2], ElementType.Node));
     tags.put("key 1", "val 1");
-    final long firstRelationId = Relation.insertNew(changesetId, mapId, members, tags, conn);
+    final long firstRelationId = insertNewRelation(changesetId, mapId, members, tags, conn);
     relationIds.add(firstRelationId);
     tags.clear();
     members.clear();
@@ -246,18 +251,18 @@ public class OsmTestUtils
     tags.put("key 3", "val 3");
     members.add(new RelationMember(nodeIdsArr[4], ElementType.Node, "role1"));
     members.add(new RelationMember(firstRelationId, ElementType.Relation, "role1"));
-    relationIds.add(Relation.insertNew(changesetId, mapId, members, tags, conn));
+    relationIds.add(insertNewRelation(changesetId, mapId, members, tags, conn));
     tags.clear();
     members.clear();
 
     tags.put("key 4", "val 4");
     members.add(new RelationMember(wayIdsArr[1], ElementType.Way));
-    relationIds.add(Relation.insertNew(changesetId, mapId, members, tags, conn));
+    relationIds.add(insertNewRelation(changesetId, mapId, members, tags, conn));
     tags.clear();
     members.clear();
 
     members.add(new RelationMember(nodeIdsArr[2], ElementType.Node, "role1"));
-    relationIds.add(Relation.insertNew(changesetId, mapId, members, null, conn));
+    relationIds.add(insertNewRelation(changesetId, mapId, members, null, conn));
     members.clear();
 
     return relationIds;
@@ -275,7 +280,7 @@ public class OsmTestUtils
     members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
     members.add(new RelationMember(nodeIdsArr[2], ElementType.Node));
     tags.put("key 1", "val 1");
-    final long firstRelationId = Relation.insertNew(changesetId, mapId, members, tags, conn);
+    final long firstRelationId = insertNewRelation(changesetId, mapId, members, tags, conn);
     relationIds.add(firstRelationId);
     tags.clear();
     members.clear();
@@ -284,13 +289,13 @@ public class OsmTestUtils
     tags.put("key 3", "val 3");
     members.add(new RelationMember(nodeIdsArr[4], ElementType.Node, "role1"));
     members.add(new RelationMember(firstRelationId, ElementType.Relation, "role1"));
-    relationIds.add(Relation.insertNew(changesetId, mapId, members, tags, conn));
+    relationIds.add(insertNewRelation(changesetId, mapId, members, tags, conn));
     tags.clear();
     members.clear();
 
     tags.put("key 4", "val 4");
     members.add(new RelationMember(nodeIdsArr[2], ElementType.Node, "role1"));
-    relationIds.add(Relation.insertNew(changesetId, mapId, members, tags, conn));
+    relationIds.add(insertNewRelation(changesetId, mapId, members, tags, conn));
     tags.clear();
     members.clear();
 
@@ -316,21 +321,19 @@ public class OsmTestUtils
       changeset.getCreatedAt().before(now));
     Assert.assertTrue(changeset.getClosedAt().after(changeset.getCreatedAt()));
     Assert.assertEquals(
-      new Integer(DbUtils.toDbCoordValue(GeoUtils.DEFAULT_COORD_VALUE)),
+      new Double(GeoUtils.DEFAULT_COORD_VALUE),
       changeset.getMaxLat());
     Assert.assertEquals(
-      new Integer(DbUtils.toDbCoordValue(GeoUtils.DEFAULT_COORD_VALUE)),
+      new Double(GeoUtils.DEFAULT_COORD_VALUE),
       changeset.getMaxLon());
     Assert.assertEquals(
-      new Integer(DbUtils.toDbCoordValue(GeoUtils.DEFAULT_COORD_VALUE)),
+      new Double(GeoUtils.DEFAULT_COORD_VALUE),
       changeset.getMinLon());
     Assert.assertEquals(
-      new Integer(DbUtils.toDbCoordValue(GeoUtils.DEFAULT_COORD_VALUE)),
+      new Double(GeoUtils.DEFAULT_COORD_VALUE),
       changeset.getMinLat());
     Assert.assertEquals(new Integer(0), changeset.getNumChanges());
     Assert.assertEquals(new Long(userId), changeset.getUserId());
-
-
   }
 
   public static void verifyTestDataUnmodified(final BoundingBox originalBounds,
@@ -459,15 +462,13 @@ public class OsmTestUtils
       		;
       Assert.assertEquals(5, nodes.size());
 
-      CurrentNodes nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[0]);
+      CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
       Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
       Assert.assertEquals(
-        new Integer((int)(DbUtils.toDbCoordPrecision(originalBounds.getMinLat()) *
-          GeoUtils.GEO_RECORD_SCALE)),
+        new Double(originalBounds.getMinLat()),
         nodeRecord.getLatitude());
       Assert.assertEquals(
-        new Integer((int)(DbUtils.toDbCoordPrecision(originalBounds.getMinLon()) *
-          GeoUtils.GEO_RECORD_SCALE)),
+        new Double(originalBounds.getMinLon()),
         nodeRecord.getLongitude());
       Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
       Assert.assertEquals(new Long(1), nodeRecord.getVersion());
@@ -489,15 +490,13 @@ public class OsmTestUtils
         }
       }
 
-      nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[1]);
+      nodeRecord = nodes.get(nodeIdsArr[1]);
       Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
       Assert.assertEquals(
-        new Integer((int)(DbUtils.toDbCoordPrecision(originalBounds.getMaxLat()) *
-          GeoUtils.GEO_RECORD_SCALE)),
+        new Double(originalBounds.getMaxLat()),
         nodeRecord.getLatitude());
       Assert.assertEquals(
-        new Integer((int)(DbUtils.toDbCoordPrecision(originalBounds.getMaxLon()) *
-          GeoUtils.GEO_RECORD_SCALE)),
+        new Double(originalBounds.getMaxLon()),
         nodeRecord.getLongitude());
       Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
       Assert.assertEquals(new Long(1), nodeRecord.getVersion());
@@ -515,15 +514,13 @@ public class OsmTestUtils
         }
       }
 
-      nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[2]);
+      nodeRecord = nodes.get(nodeIdsArr[2]);
       Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
       Assert.assertEquals(
-        new Integer((int)(DbUtils.toDbCoordPrecision(originalBounds.getMinLat()) *
-          GeoUtils.GEO_RECORD_SCALE)),
+        new Double(originalBounds.getMinLat()),
         nodeRecord.getLatitude());
       Assert.assertEquals(
-        new Integer((int)(DbUtils.toDbCoordPrecision(originalBounds.getMinLon()) *
-          GeoUtils.GEO_RECORD_SCALE)),
+        new Double(originalBounds.getMinLon()),
         nodeRecord.getLongitude());
       Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
       Assert.assertEquals(new Long(1), nodeRecord.getVersion());
@@ -541,15 +538,13 @@ public class OsmTestUtils
         }
       }
 
-      nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[3]);
+      nodeRecord = nodes.get(nodeIdsArr[3]);
       Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
       Assert.assertEquals(
-        new Integer((int)(DbUtils.toDbCoordPrecision(originalBounds.getMinLat()) *
-          GeoUtils.GEO_RECORD_SCALE)),
+        new Double(originalBounds.getMinLat()),
         nodeRecord.getLatitude());
       Assert.assertEquals(
-        new Integer((int)(DbUtils.toDbCoordPrecision(originalBounds.getMinLon()) *
-          GeoUtils.GEO_RECORD_SCALE)),
+        new Double(originalBounds.getMinLon()),
         nodeRecord.getLongitude());
       Assert.assertEquals(nodeIdsArr[3], nodeRecord.getId());
       Assert.assertEquals(new Long(1), nodeRecord.getVersion());
@@ -568,15 +563,13 @@ public class OsmTestUtils
         }
       }
 
-      nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[4]);
+      nodeRecord = nodes.get(nodeIdsArr[4]);
       Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
       Assert.assertEquals(
-        new Integer((int)(DbUtils.toDbCoordPrecision(originalBounds.getMinLat()) *
-          GeoUtils.GEO_RECORD_SCALE)),
+        new Double(originalBounds.getMinLat()),
         nodeRecord.getLatitude());
       Assert.assertEquals(
-        new Integer((int)(DbUtils.toDbCoordPrecision(originalBounds.getMinLon()) *
-          GeoUtils.GEO_RECORD_SCALE)),
+        new Double(originalBounds.getMinLon()),
         nodeRecord.getLongitude());
       Assert.assertEquals(nodeIdsArr[4], nodeRecord.getId());
       Assert.assertEquals(new Long(1), nodeRecord.getVersion());
@@ -624,7 +617,7 @@ public class OsmTestUtils
       Assert.assertEquals(3, ways.size());
 
       QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
-      CurrentWays wayRecord = (CurrentWays)ways.get(wayIdsArr[0]);
+      CurrentWays wayRecord = ways.get(wayIdsArr[0]);
       Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
       Assert.assertEquals(wayIdsArr[0], wayRecord.getId());
       Assert.assertEquals(new Long(1), wayRecord.getVersion());
@@ -663,7 +656,7 @@ public class OsmTestUtils
       }
 
 
-      wayRecord = (CurrentWays)ways.get(wayIdsArr[1]);
+      wayRecord = ways.get(wayIdsArr[1]);
       Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
       Assert.assertEquals(wayIdsArr[1], wayRecord.getId());
       Assert.assertEquals(new Long(1), wayRecord.getVersion());
@@ -697,7 +690,7 @@ public class OsmTestUtils
         }
       }
 
-      wayRecord = (CurrentWays)ways.get(wayIdsArr[2]);
+      wayRecord = ways.get(wayIdsArr[2]);
       Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
       Assert.assertEquals(wayIdsArr[2], wayRecord.getId());
       Assert.assertEquals(new Long(1), wayRecord.getVersion());
@@ -753,16 +746,15 @@ public class OsmTestUtils
     try
     {
       final Map<Long, CurrentRelations> relations =
-
-      		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelations)
+      	new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+          .from(currentRelations)
           .where((currentRelations.changesetId.eq(changesetId)))
-          .map(currentRelations.id, currentRelations)
-      		;
+          .map(currentRelations.id, currentRelations);
       Assert.assertEquals(4, relations.size());
 
       QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
       CurrentRelations relationRecord =
-        (CurrentRelations)relations.get(relationIdsArr[0]);
+        relations.get(relationIdsArr[0]);
       Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
       Assert.assertEquals(relationIdsArr[0], relationRecord.getId());
       Assert.assertEquals(new Long(1), relationRecord.getVersion());
@@ -825,7 +817,7 @@ public class OsmTestUtils
         }
       }
 
-      relationRecord = (CurrentRelations)relations.get(relationIdsArr[1]);
+      relationRecord = relations.get(relationIdsArr[1]);
       Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
       Assert.assertEquals(relationIdsArr[1], relationRecord.getId());
       Assert.assertEquals(new Long(1), relationRecord.getVersion());
@@ -873,7 +865,7 @@ public class OsmTestUtils
         }
       }
 
-      relationRecord = (CurrentRelations)relations.get(relationIdsArr[2]);
+      relationRecord = relations.get(relationIdsArr[2]);
       Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
       Assert.assertEquals(relationIdsArr[2], relationRecord.getId());
       Assert.assertEquals(new Long(1), relationRecord.getVersion());
@@ -909,7 +901,7 @@ public class OsmTestUtils
         }
       }
 
-      relationRecord = (CurrentRelations)relations.get(relationIdsArr[3]);
+      relationRecord = relations.get(relationIdsArr[3]);
       Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
       Assert.assertEquals(relationIdsArr[3], relationRecord.getId());
       Assert.assertEquals(new Long(1), relationRecord.getVersion());
@@ -970,7 +962,7 @@ public class OsmTestUtils
 
       QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
       CurrentRelations relationRecord =
-        (CurrentRelations)relations.get(relationIdsArr[0]);
+        relations.get(relationIdsArr[0]);
       Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
       Assert.assertEquals(relationIdsArr[0], relationRecord.getId());
       Assert.assertEquals(new Long(1), relationRecord.getVersion());
@@ -1016,7 +1008,7 @@ public class OsmTestUtils
         }
       }
 
-      relationRecord = (CurrentRelations)relations.get(relationIdsArr[1]);
+      relationRecord = relations.get(relationIdsArr[1]);
       Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
       Assert.assertEquals(relationIdsArr[1], relationRecord.getId());
       Assert.assertEquals(new Long(1), relationRecord.getVersion());
@@ -1065,7 +1057,7 @@ public class OsmTestUtils
         }
       }
 
-      relationRecord = (CurrentRelations)relations.get(relationIdsArr[2]);
+      relationRecord = relations.get(relationIdsArr[2]);
       Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
       Assert.assertEquals(relationIdsArr[2], relationRecord.getId());
       Assert.assertEquals(new Long(1), relationRecord.getVersion());
@@ -1112,7 +1104,7 @@ public class OsmTestUtils
   {
     try
     {
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
       Assert.assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
       Assert.assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
@@ -1130,7 +1122,7 @@ public class OsmTestUtils
   {
     try
     {
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/bounds").getLength());
       Assert.assertEquals(
         expectedBounds.getMinLat(),
@@ -1161,7 +1153,7 @@ public class OsmTestUtils
   {
     try
     {
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       if (!multiLayerUniqueElementIds)
       {
         Assert.assertEquals(
@@ -1205,11 +1197,11 @@ public class OsmTestUtils
         userId,
         Long.parseLong(xpath.evaluate("//osm/node[" + index + "]/@uid", responseData)));
       Assert.assertEquals(
-        DbUtils.toDbCoordPrecision(lat),
+        lat,
         Double.parseDouble(xpath.evaluate("//osm/node[" + index + "]/@lat", responseData)),
         0.0);
       Assert.assertEquals(
-        DbUtils.toDbCoordPrecision(lon),
+        lon,
         Double.parseDouble(xpath.evaluate("//osm/node[" + index + "]/@lon", responseData)),
         0.0);
     }
@@ -1225,7 +1217,7 @@ public class OsmTestUtils
   {
     try
     {
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       if (!multiLayerUniqueElementIds)
       {
@@ -1297,7 +1289,7 @@ public class OsmTestUtils
   {
     try
     {
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
 
       if (!multiLayerUniqueElementIds)
       {
@@ -1402,7 +1394,7 @@ public class OsmTestUtils
     return expandedBounds;
   }
 
-  //TODO: This method adds nodes that are completely outside of the query bounds, so that we can
+  //This method adds nodes that are completely outside of the query bounds, so that we can
   //make sure it that ways and relations created with them don't come back in the response.
   //Eventually, this out of bounds data should be made part of the test dataset created in
   //ChangesetResourceUtils.  Since that involves updating *a lot* of tests, so not doing it right
@@ -1418,5 +1410,359 @@ public class OsmTestUtils
       Node.insertNew(
         changesetId, mapId, queryBounds.getMinLat() - 10, queryBounds.getMinLon() - 10, null, conn));
     return nodeIds;
+  }
+  
+  /**
+<<<<<<< HEAD
+   * Inserts a new way into the services database
+   *
+   * @param changesetId corresponding changeset ID for the way to be inserted
+   * @param mapId corresponding map ID for the way to be inserted
+   * @param nodeIds IDs for the collection of nodes to be associated with this way
+   * @param tags element tags
+   * @param dbConn JDBC Connection
+   * @return ID of the newly created way
+   * @throws Exception
+   */
+  public static long insertNewWay(final long changesetId, final long mapId, final List<Long> nodeIds,
+    final Map<String, String> tags, Connection dbConn) throws Exception
+  {
+    long nextWayId = 
+    	new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
+        .uniqueResult(SQLExpressions.nextval(Long.class, "current_ways_id_seq"));
+    insertNewWay(nextWayId, changesetId, mapId, nodeIds, tags, dbConn);
+
+    return nextWayId;
+  }
+
+  /**
+   * Inserts a new way into the services database with the specified ID; useful
+   * for testing
+   *
+   * @param wayId ID to assign to the new way
+   * @param changesetId corresponding changeset ID for the way to be inserted
+   * @param mapId corresponding map ID for the way to be inserted
+   * @param nodeIds collection of nodes to be associated with this way
+   * @param tags element tags
+   * @param dbConn JDBC Connection
+   * @throws Exception see addNodeRefs
+   */
+  public static void insertNewWay(final long wayId, final long changesetId, final long mapId,
+    final List<Long> nodeIds, final Map<String, String> tags, Connection dbConn) throws Exception
+  {
+    CurrentWays wayRecord = new CurrentWays();
+    wayRecord.setChangesetId(changesetId);
+    wayRecord.setId(wayId);
+
+    final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+    wayRecord.setTimestamp(now);
+    wayRecord.setVersion(new Long(1));
+    wayRecord.setVisible(true);
+    if (tags != null && tags.size() > 0)
+    {
+      wayRecord.setTags(tags);
+    }
+
+    String strKv = "";
+
+    if (tags != null)
+    {
+      Iterator it = tags.entrySet().iterator();
+      while (it.hasNext())
+      {
+        Map.Entry pairs = (Map.Entry) it.next();
+        String key = "\"" + pairs.getKey() + "\"";
+        String val = "\"" + pairs.getValue() + "\"";
+        if (strKv.length() > 0)
+        {
+          strKv += ",";
+        }
+
+        strKv += key + "=>" + val;
+      }
+    }
+    String strTags = "'";
+    strTags += strKv;
+    strTags += "'";
+
+    String POSTGRESQL_DRIVER = "org.postgresql.Driver";
+    Statement stmt = null;
+    try
+    {
+      Class.forName(POSTGRESQL_DRIVER);
+
+      stmt = dbConn.createStatement();
+
+      String sql = 
+      	"INSERT INTO current_ways_" + mapId+ "("
+          + "            id, changeset_id, \"timestamp\", visible, version, tags)"
+          + " VALUES(" + wayId + "," + changesetId + "," + "CURRENT_TIMESTAMP" + ","
+          + "true" + "," + "1" + "," + strTags +
+
+          ")";
+      stmt.executeUpdate(sql);
+      addWayNodes(mapId, new Way(mapId, dbConn, wayRecord), nodeIds);
+
+    }
+    catch (Exception e)
+    {
+      throw new Exception("Error inserting node.");
+    }
+
+    finally
+    {
+      try
+      {
+        if (stmt != null)
+          stmt.close();
+      }
+      catch (SQLException se2)
+      {
+      }
+    }
+  }
+  
+  /*
+   * Adds node refs to the way nodes services database table
+   *
+   * @param mapId
+   * @param way
+   * @param nodeIds a list of node ref IDs; This is a List, rather than a Set,
+   * since the same node ID can be used for the first and last node ID in the
+   * way nodes sequence for closed polygons.
+   *
+   * @throws Exception if the number of node refs is larger than the max allowed
+   * number of way nodes, if any of the referenced nodes do not exist in the
+   * services db, or if any of the referenced nodes are not set to be visible in
+   * the services db
+   */
+  private static void addWayNodes(final long mapId, final Way way, final List<Long> nodeIds) 
+    throws Exception
+  {
+    CurrentWays wayRecord = (CurrentWays)way.getRecord();
+    List<CurrentWayNodes> wayNodeRecords = new ArrayList<CurrentWayNodes>();
+    long sequenceCtr = 1;
+    for (long nodeId : nodeIds)
+    {
+      CurrentWayNodes wayNodeRecord = new CurrentWayNodes();
+      wayNodeRecord.setNodeId(nodeId);
+      wayNodeRecord.setSequenceId(sequenceCtr);
+      wayNodeRecord.setWayId(wayRecord.getId());
+      wayNodeRecords.add(wayNodeRecord);
+      sequenceCtr++;
+    }
+
+    final int maxRecordBatchSize = 
+    	Integer.parseInt(
+    		HootProperties.getInstance().getProperty(
+          "maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
+    DbUtils.batchRecords(
+    	mapId, wayNodeRecords, QCurrentWayNodes.currentWayNodes, null, RecordBatchType.INSERT, conn, 
+    	maxRecordBatchSize);
+  }
+  
+  /*
+	 * Adds this relation's members to the services database
+	 * 
+	 * relations of size = 0 are allowed; see
+	 * http://wiki.openstreetmap.org/wiki/Empty_relations
+	 */
+	private static void addRelationMembers(final long mapId, final Relation relation, 
+		final List<RelationMember> members) throws Exception
+	{
+		CurrentRelations relationRecord = (CurrentRelations)relation.getRecord();
+		/*final Set<Long> nodeIds = getMemberIdsByType(members, ElementType.Node);
+		if (!Element.allElementsExist(getMapId(), ElementType.Node, nodeIds, conn))
+		{
+			throw new Exception(
+			  "Not all nodes exist specified for relation with ID: " + relationRecord.getId());
+		}
+		if (!Element.allElementsVisible(getMapId(), ElementType.Node, nodeIds, conn))
+		{
+			throw new Exception(
+				"Not all nodes are visible for relation with ID: " + relationRecord.getId());
+		}
+		final Set<Long> wayIds = getMemberIdsByType(members, ElementType.Way);
+		if (!Element.allElementsExist(getMapId(), ElementType.Way, wayIds, conn))
+		{
+			throw new Exception(
+				"Not all ways exist specified for relation with ID: " + relationRecord.getId());
+		}
+		if (!Element.allElementsVisible(getMapId(), ElementType.Way, wayIds, conn))
+		{
+			throw new Exception("Not all ways are visible for relation with ID: " + relationRecord.getId());
+		}
+		final Set<Long> relationIds = getMemberIdsByType(members, ElementType.Relation);
+		if (!Element.allElementsExist(getMapId(), ElementType.Relation, relationIds, conn))
+		{
+			throw new Exception(
+			  "Not all relations exist specified for relation with ID: " + relationRecord.getId());
+		}
+		if (!Element.allElementsVisible(getMapId(), ElementType.Relation, relationIds, conn))
+		{
+			throw new Exception(
+			  "Not all relations are visible for relation with ID: " + relationRecord.getId());
+		}*/
+
+		List<CurrentRelationMembers> memberRecords = new ArrayList<CurrentRelationMembers>();
+		int sequenceCtr = 1;
+		for (RelationMember member : members)
+		{
+			CurrentRelationMembers memberRecord = new CurrentRelationMembers();
+			memberRecord.setMemberId(member.getId());
+			memberRecord.setMemberRole(member.getRole());
+			memberRecord.setMemberType(Element.elementEnumForElementType(member.getType()));
+			memberRecord.setRelationId(relationRecord.getId());
+			memberRecord.setSequenceId(sequenceCtr);
+			memberRecords.add(memberRecord);
+			sequenceCtr++;
+		}
+
+		final int maxRecordBatchSize = 
+    	Integer.parseInt(
+    		HootProperties.getInstance().getProperty(
+          "maxRecordBatchSize", HootProperties.getDefault("maxRecordBatchSize")));
+		DbUtils.batchRecords(
+			mapId, memberRecords, QCurrentRelationMembers.currentRelationMembers, null, 
+			RecordBatchType.INSERT, conn, maxRecordBatchSize);
+	}
+
+	/**
+	 * Inserts a new relation into the services database
+	 *
+	 * @param changesetId corresponding changeset ID for the way to be inserted
+	 * @param mapId corresponding map ID for the element to be inserted
+	 * @param members the relation's members
+	 * @param tags element tags
+	 * @param dbConn JDBC Connection
+	 * @return ID of the newly created element
+	 * @throws Exception
+	 */
+	public static long insertNewRelation(final long changesetId, final long mapId,
+	  final List<RelationMember> members, final Map<String, String> tags, Connection dbConn) 
+	  throws Exception
+	{
+		final long nextRelationId = 
+			new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
+		    .uniqueResult(SQLExpressions.nextval(Long.class, "current_relations_id_seq"));
+		insertNewRelation(nextRelationId, changesetId, mapId, members, tags, dbConn);
+		return nextRelationId;
+	}
+
+	/**
+	 * Inserts a new relation into the services database with the specified ID;
+	 * useful for testing
+	 *
+	 * @param wayId ID to assign to the new way
+	 * @param changesetId corresponding changeset ID for the element to be inserted
+	 * @param mapId corresponding map ID for the element to be inserted
+	 * @param members the relation's members
+	 * @param tags element tags
+	 * @param dbConn JDBC Connection
+	 * @throws Exception
+	 */
+	public static void insertNewRelation(final long relId, final long changesetId, final long mapId, 
+	  final List<RelationMember> members, final Map<String, String> tags, Connection dbConn) 
+	  throws Exception
+	{
+		CurrentRelations relationRecord = new CurrentRelations();
+		relationRecord.setChangesetId(changesetId);
+		relationRecord.setId(relId);
+		final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+		relationRecord.setTimestamp(now);
+		relationRecord.setVersion(new Long(1));
+		relationRecord.setVisible(true);
+		if (tags != null && tags.size() > 0)
+		{
+			relationRecord.setTags(tags);
+		}
+
+		String strKv = "";
+		if (tags != null)
+		{
+			Iterator it = tags.entrySet().iterator();
+			while (it.hasNext())
+			{
+				Map.Entry pairs = (Map.Entry) it.next();
+				String key = "\"" + pairs.getKey() + "\"";
+				String val = "\"" + pairs.getValue() + "\"";
+				if (strKv.length() > 0)
+				{
+					strKv += ",";
+				}
+
+				strKv += key + "=>" + val;
+			}
+		}
+		String strTags = "'";
+		strTags += strKv;
+		strTags += "'";
+
+		String POSTGRESQL_DRIVER = "org.postgresql.Driver";
+		Statement stmt = null;
+		try
+		{
+			Class.forName(POSTGRESQL_DRIVER);
+
+			stmt = dbConn.createStatement();
+
+			String sql = 
+				"INSERT INTO current_relations_"
+			    + mapId
+			    + "(\n"
+			    + "            id, changeset_id, \"timestamp\", visible, version, tags)\n"
+			    + " VALUES(" + relId + "," + changesetId + "," + "CURRENT_TIMESTAMP"
+			    + "," + "true" + "," + "1" + "," + strTags +
+
+			    ")";
+			stmt.executeUpdate(sql);
+			addRelationMembers(mapId, new Relation(mapId, dbConn, relationRecord), members);
+
+		}
+		catch (Exception e)
+		{
+			throw new Exception("Error inserting node.");
+		}
+
+		finally
+		{
+			try
+			{
+				if (stmt != null)
+					stmt.close();
+			}
+			catch (SQLException se2)
+			{
+			}
+		}
+	}
+	
+	/**
+   * Gets a total tag count for a specified element type belonging to a specific map
+   *
+   * @param mapId ID of the map for which to retrieve the tag count
+   * @param elementType element type for which to retrieve the tag count
+   * @param dbConn JDBC Connection
+   * @return a tag count
+   * @throws Exception
+   */
+  public static long getTagCountForElementType(final long mapId, final ElementType elementType,
+    Connection dbConn) throws Exception
+  {
+    final Element prototype = ElementFactory.getInstance().create(mapId, elementType, dbConn);
+    List<?> records =
+      new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
+        .from(prototype.getElementTable())
+				.list(prototype.getElementTable());
+    long tagCount = 0;
+    for (Object record : records)
+    {
+    	PGobject tags = (PGobject)MethodUtils.invokeMethod(record, "getTags", new Object[]{});
+      if (tags != null)
+      {
+        tagCount += PostgresUtils.postgresObjToHStore(tags).size();
+      }
+    }
+    return tagCount;
   }
 }

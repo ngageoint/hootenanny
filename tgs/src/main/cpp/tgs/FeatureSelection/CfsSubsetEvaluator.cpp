@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 /***************************************************************************
@@ -110,8 +110,6 @@ namespace Tgs
   double CfsSubsetEvaluator::evaluateSubset(const std::vector<int>& columns, 
     TgsProgress*)
   {
-//     cout << columns << endl;
-
     double classCorrSum = 0.0;
     for (unsigned int i = 0; i < columns.size(); i++)
     {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "LocalTileWorker2.h"
@@ -288,16 +288,16 @@ void LocalTileWorker2::_writeTheRest(QString dirIn, QString dirOut,
     OutsideBoundsRemover::removeWays(map, buffered, true);
   }
 
-  OsmMap::NodeMap nodes = map->getNodeMap();
+  NodeMap nodes = map->getNodeMap();
   // @optimize could use the index for this, but not necessary in debug mode.
-  for (OsmMap::NodeMap::const_iterator it = nodes.constBegin(); it != nodes.constEnd(); ++it)
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     for (size_t i = 0; i < conflatedBits.size(); i++)
     {
       const Envelope& tile = conflatedBits[i];
-      if (tile.contains((*it)->getX(), (*it)->getY()))
+      if (tile.contains((it->second)->getX(), (it->second)->getY()))
       {
-        map->removeNodeNoCheck((*it)->getId());
+        map->removeNodeNoCheck((it->second)->getId());
       }
     }
   }

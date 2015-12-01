@@ -1,0 +1,309 @@
+
+== Schema Files
+
+Internally Hootenanny stores all data in the OSM schema (plus some additional
+atypical tags). Using this schema provides us with the flexibility to add new
+tags as needed, but also provides the structure necessary to answer questions
+such as:
+
+* "Is `building=church` similar to `amenity=place_of_worship`?"
+* "What data type is stored in this tag?"
+* "Is this feature considered to be a building?"
+* "Is this way a linear or area geometry?"
+
+However, to answer such questions we must have knowledge of OSM's tags baked
+into Hootenanny. To provide this the tag information is stored in schema files
+found in a set of JSON files in `$HOOT_HOME/conf/schema/`. These files contains
+several pieces of information:
+
+* The text associated with the tag. E.g. `amenity=cinema`
+* `isA` and `similarTo` relationships with other tags.
+* The type of value stored in the tag (e.g. real number, enumerated text, etc.)
+* The geometries that might be associated with the tag.
+* The relative influence of the tag -- though this is not being used much.
+* Any categories that the tag may be part of (e.g. POI, building,
+  transportation).
+
+=== File Format
+
+Each file is formatted as a JSON file. The top-most file is `schema.json`.
+`schema.json` contains some of the earliest schema definitions from hootenanny
+and also imports the other schema files. Most of the schema files that are
+imported are broken out by the key in the tag. E.g. `amenity`, `barrier`,
+`building`, etc.
+
+In the following examples the schema has been simplified for illustrative
+purposes. Please see the raw schema files for more details.
+
+Each tag is represented as an object in the JSON file. For instance:
+
+-----
+...
+"#": "Any 'tag' that starts with the hash (#) as a key will be ignored as though
+it is a comment."
+"tag": {
+  "name": "highway",
+  "influence": 1.0,
+  "type": "enumeration",
+  "categories": ["transporation"]
+},
+...
+-----
+
+In this case the name `highway` represents the name of the tag. Influence gives
+a value of 1 (not really used anymore). Type is `enumeration` meaning that the
+tag will contain one of a series of meaningful words. The tag is part of the
+`transportation` category.
+
+You'll note that no geometry was given. This is because each highway tag may
+have a different geometry type. For example `highway=road` is a `linestring` and
+`highway=bus_stop` is generally a point.
+
+The tag above tells us very little information about the `highway` tag, but
+Hootenanny uses `isA` relationships in the schema files to denote inheritance,
+and the `highway` tag's children will tell us a great deal. For instance:
+
+-----
+...
+"tag": {
+  "name": "highway=road",
+  "isA": "highway",
+  "geometries": ["linestring"]
+},
+...
+-----
+
+By specifying a isA relationship between `highway=road` and `highway` the
+`highway=road` tag gets (or inherits) all the `highway=road` attributes for
+free. The `highway=road` tag can then override only the relevant attributes. So
+the snippet above is equivalent to:
+
+-----
+...
+"tag": {
+  "name": "highway=road",
+  "isA": "highway",
+  "influence": 1.0,
+  "type": "enumeration",
+  "categories": ["transporation"],
+  "geometries": ["linestring"]
+},
+...
+-----
+
+This also denotes that a `highway=road` is a highway so if the code needs to
+know about roads it can answer the question "Is a `highway=road` a `highway`?
+Yes."
+
+We can further expand on this by inheriting from `highway=road` and introducing
+the `similarTo` relationship.
+
+----
+...
+"tag": {
+  "name": "highway=motorway",
+  "isA": "highway=road",
+  "similarTo": { "name": "highway=trunk", "weight": 0.8 },
+},
+"tag":
+{
+  "name": "highway=trunk",
+  "isA": "highway=road",
+},
+...
+-----
+
+In the cases above we have two new tags that inherit from `highway=road`. They
+also list that `highway=motorway` is similar to `highway=trunk`. This
+relationship is reciprocal. So it is also implied that `highway=trunk` is
+similar to `highway=motorway`.
+
+With this new information Hootenanny can answer "Is `highway=motorway` similar
+to `highway=trunk`? Yes, with a weight of 0.9." Since we know `highway=motorway` is
+a `highway=road` we can also answer "Is `highway=motorway` similar to
+`highway=road`? Yes, with a weight of 1.0." In this case since a motorway is a
+road then they are absolutely similar. However the inverse is not necessarily
+true. A road is not necessarily a motorway which can be an important distinction
+when traversing the graph.
+
+The actual highway relationships can be viewed in the image below. Blue lines
+represent `isA` relationships and green lines represent `similarTo`
+relationships:
+
+image::user/images/HighwaySchema.jpg[]
+
+There are many more intricacies to the schema file format and how the internal
+structure is built. If you would like more information please post to the GitHub
+site.
+
+=== Compound Tags
+
+Before describing the details of what a _compound tag_ is within the context of
+a schema a list of the problems with the 2012 schema will be discussed.
+
+In some cases it makes sense only to create links in the schema if multiple
+criteria are met. For example, a `highway=bus_stop` has a high similarity to a
+`public_transport=platform` if and only if `bus=yes` is also specified. It is
+not particularly similar to `public_transport=platform;train=yes`. Using the
+basic tag schema that was created in 2012 will not properly handle this case
+as it only declares similarities between individual tags. These distances can be
+aggregated, but you can't compare the distance between groups of tags.
+
+In this case I'm defining a _compound tag_ to be a grouping of two or more tags
+that must be combined to define a concept that is more than the sum of the
+individual tags. These concepts can then be used to define similarities between
+two elements.
+
+Unlike the tag scoring that occurs in the 2012 code, this code defines
+distances between two sets of key value pairs. Using compound tags you can have
+two or more tags involved in a single compound tag. For instance:
+
+* `public_transport=platform`
+* `bus=yes`
+* `train=yes`
+
+It is easy to conceive of a concept that defines a bus platform and another for
+a train platform. E.g.
+
+----
+"tag": { "name": "public_transport=platform", "isA": "public_transport",
+    "similarTo": { "name": "transport=station", "weight": 0.8 }
+},
+
+"compound": {
+    "name": "bus_platform",
+    "isA": "public_transport=platform",
+    "#": "Any one of these tag combos can match, but all the tags in the sub-array must match.",
+    "tags": [
+        ["public_transport=platform", "bus=yes"],
+        ["public_transport=platform", "highway=bus_stop"]
+    ],
+    "categories": ["poi", "hgispoi"]
+},
+
+"compound": {
+    "name": "railway_platform",
+    "isA": "public_transport=platform",
+    "#": "Any one of these tag combos can match, but all the tags in the sub-array must match.",
+    "tags": [
+        ["public_transport=platform", "train=yes"]
+    ],
+    "similarTo": { "name": "railway=platform", "weight": 0.9 },
+    "categories": ["poi", "hgispoi"]
+},
+
+"tag": {
+    "name": "railway=platform",
+    "isA": "railway",
+    "categories": ["poi", "hgispoi"]
+    "similarTo": { "name": "public_transport=platform", "weight": 0.3 }
+},
+----
+
+The compound tag concept allows us to define how tags can interact. This will require some significant changes in the way scoring interacts with the OsmSchema graph. For example, now when a similarity score is calculated for two sets of tags the tags are each evaluated individually and then aggregated to calculate the score. Unfortunately this will no longer work with compound tags as we will need to look at all the tags that are in a feature at one time to determine similarity. For instance when comparing these two features:
+
+Feature 1:
+* `public_transport=platform`
+* `bus=yes`
+* `train=yes`
+
+Feature 2:
+* `railway=platform`
+
+Evaluating all the tags in _Feature 1_ will show that it contains the following tags and compound tags:
+
+* `public_transport=platform`
+* `bus=yes`
+* `train=yes`
+* `bus_platform`
+* `railway_platform`
+
+_Feature 2_ doesn't contain any compound tags so it will simple have contain the following tags and compound tags:
+
+* `railway=platform`
+
+The above tags and compound tags can then be compared between the two features to determine the similarity of the two sets using typical aggregation methods.
+
+A slightly more complex situation is below:
+
+Feature 1:
+
+* Tags:
+** `public_transport=platform`
+** `train=yes`
+* Compound Tags:
+** `railway_platform`
+
+Feature 2:
+
+* Tags:
+** `public_transport=platform`
+** `bus=yes`
+* Compound Tags:
+** `bus_platform`
+
+If we take the naive approach above then `public_transport=platform` will be matched between the two tags sets and the tags will be given a very high similarity score. Another approach must be taken to prevent this.
+
+First, we find all the tags and compound tags in a given tag set. Within this tag set we then only keep the most specific of the tags. Or in other words, `public_transport=platform` is an ancestor of `railway_platform` (using the `isA` relationship). So rather than keep both of those when doing a tag comparison we keep only `railway_platform` and then perform the comparison. This gives us the following tags and compound tags for comparison:
+
+Feature 1:
+
+* `train=yes`
+* `railway_platform`
+
+Feature 2:
+
+* `bus=yes`
+* `bus_platform`
+
+We can proceed with this comparison using the typical score and aggregate approach and will see that `railway_platform` has a low similarity score to `bus_platform` which is the appropriate result.
+
+=== Comparing Enumerated Tags
+
+NOTE: Still in early development. -JRS
+
+There are a number of ways to compare enumerated tags. This is simply one
+approach that can be used within Hootenanny. It is not applied this way in all
+circumstances.
+
+Firstly, how similar are the tags. This similarity gives information on how
+similar two tags are. E.g. `surface=dirt` is similar to `surface=earth` and
+`amenity=fast_food` is similar to `amenity=restaurant`. However, this doesn't
+give us any information about how important this similarity is to determining
+a match.
+
+Second, how influential are the tags that are being compared? For instance if we
+know we have a `building=yes` match to `building=yes` that isn't too terribly
+interesting. There are a lot of buildings. However, `building=church` match
+to `amenity=church` is quite informative. This information is provided via the
+_influence_ tag in the schema file.
+
+To aggregate these scores and influence values
+
+=== Visualizing the Graph
+
+The schema at the time of this writing has nearly 1200 tags defined and nearly
+1600 relationships between those tags. This is difficult to visualize. However,
+you can generate a graph of the schema to view and manipulate with the following
+steps from the command line:
+
+. Go to the `$HOOT_HOME` directory and type `make tmp/schema.dot`
+. Install http://gephi.github.io/[Gephi] using the instructions on the website.
+. Start Gephi
+. Click _Open Graph File..._
+. Browse to `$HOOT_HOME/tmp/` and select `schema.dot`.
+. Click _Overview_
+. In the _Layout_ choose the _Frucheterman Reingold_ layout
+. Choose _Gravity_ of .1 and _Speed_ of 100.
+. Click _Run_
+. Zoom out with the mouse wheel till you see the whole graph, when it stabilizes 
+  change gravity to .5 and hit enter.
+. When that stabilizes, increase the gravity again, reduce the speed and
+  continue in that fashion until you have a gravity of about 1 and speed of 1.
+. Click _Stop_.
+. When the graph looks good, click the _Preview_ button at the top.
+. Change the options on the left to achieve a look you like and then export.
+
+Alternatively you can use graphviz to visualize the results, but I think the
+Gephi results look much better.
+

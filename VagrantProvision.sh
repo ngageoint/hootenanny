@@ -17,7 +17,7 @@ fi
 
 # Install dependencies
 echo "Installing dependencies"
-sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-6-jdk openjdk-6-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-all graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite
+sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-all graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane
 
 # Hoot Baseline is PostgreSQL 9.1 and PostGIS 1.5, so we need a deb file and
 # then remove 9.4
@@ -57,7 +57,7 @@ if ! ogrinfo --formats | grep --quiet FileGDB; then
     export PATH=/usr/local/lib:/usr/local/bin:$PATH
     cd gdal-1.10.1
     sudo ./configure --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
-    sudo make -j5
+    sudo make -j$(nproc)
     sudo make install
     cd swig/python
     python setup.py build
@@ -74,6 +74,12 @@ if ! grep --quiet NODE_PATH ~/.profile; then
     echo 'Adding NODE_PATH to user environment'
     echo 'export NODE_PATH=/usr/local/lib/node_modules' >> ~/.profile
     source ~/.profile
+fi
+
+# Module needed for OSM API db test
+if [ ! -d /home/vagrant/.cpan ]; then
+    (echo y;echo o conf prerequisites_policy follow;echo o conf commit)|sudo cpan
+    sudo perl -MCPAN -e 'install XML::Simple'
 fi
 
 # Create Services Database
@@ -129,31 +135,16 @@ sudo service postgresql restart
 
 # Configure and Build
 cd /home/vagrant/hoot
-cp ./conf/DatabaseConfig.sh.orig ./conf/DatabaseConfig.sh
 source ./SetupEnv.sh
 
-echo "Configuring Hoot"
-aclocal && autoconf && autoheader && automake && ./configure -q --with-rnd --with-services
-if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
-    echo 'Customizing LocalConfig.pri'
-    cp LocalConfig.pri.orig LocalConfig.pri
-    echo 'QMAKE_CXX=ccache g++' >> LocalConfig.pri
+# Check that hoot-ui submodule has been init'd and updated
+if [ ! "$(ls -A hoot-ui)" ]; then
+    echo "hoot-ui is empty"
+    echo "init'ing and updating submodule"
+    git submodule init && git submodule update
 fi
-echo "Building Hoot"
-make clean
-make -sj4
-make docs
 
-# Tweak dev environment to make tests run faster
-# FIXME: make this command not destructive to local.conf
-echo 'testJobStatusPollerTimeout=250' > $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
-
-# Run Tests
-#echo "Running tests"
-#make -sj4 test
-#make -sj4 test-all
-
-# Deploy to Tomcat
+# Configure Tomcat
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
 echo "Configuring tomcat6 environment"
 sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
@@ -185,6 +176,13 @@ if grep -i --quiet 'gdal/1.10' /etc/default/tomcat6; then
     sudo sed -i.bak s@^GDAL_DATA=.*@GDAL_DATA=\/usr\/local\/share\/gdal@ /etc/default/tomcat6
 fi
 
+# Remove gdal libs installed by libgdal-dev that interfere with
+# mapedit-export-server using gdal libs compiled from source (fgdb support)
+if [ -f /usr/lib/libgdal.* ]; then
+    echo "Removing GDAL libs installed by libgdal-dev"
+    sudo rm /usr/lib/libgdal.*
+fi
+
 # Create Tomcat context path for tile images
 if ! grep -i --quiet 'ingest/processed' /etc/tomcat6/server.xml; then
     echo "Adding Tomcat context path for tile images"
@@ -197,6 +195,41 @@ if ! grep -i --quiet 'allowLinking="true"' /etc/tomcat6/context.xml; then
     sudo sed -i.bak "s@^<Context>@<Context allowLinking=\"true\">@" /etc/tomcat6/context.xml
 fi
 
+# Create directory for webapp
+if [ ! -d /usr/share/tomcat6/.deegree ]; then
+    echo "Creating directory for webapp"
+    sudo mkdir /usr/share/tomcat6/.deegree
+    sudo chown tomcat6:tomcat6 /usr/share/tomcat6/.deegree
+fi
+
+# Tweak dev environment to make tests run faster
+if [ ! -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
+    echo 'testJobStatusPollerTimeout=250' > $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
+fi
+
+# Update marker file date now that dependency and config stuff has run
+# The make command will exit and provide a warning to run 'vagrant provision'
+# if the marker file is older than this file (VagrantProvision.sh)
+touch Vagrant.marker
+
+# Build Hoot
+echo "Configuring Hoot"
+aclocal && autoconf && autoheader && automake && ./configure -q --with-rnd --with-services
+if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
+    echo 'Customizing LocalConfig.pri'
+    cp LocalConfig.pri.orig LocalConfig.pri
+    echo 'QMAKE_CXX=ccache g++' >> LocalConfig.pri
+fi
+echo "Building Hoot"
+make clean -sj$(nproc)
+make -sj$(nproc)
+make docs -sj$(nproc)
+
+# Run Tests
+#echo "Running tests"
+#make -sj$(nproc) test
+#make -sj$(nproc) test-all
+
 # Deploy to Tomcat
 echo "Stopping Tomcat"
 sudo service tomcat6 stop
@@ -205,9 +238,3 @@ sudo -u tomcat6 scripts/vagrantDeployTomcat.sh
 echo "Starting Tomcat"
 sudo service tomcat6 start
 
-# Create directory for webapp
-if [ ! -d /usr/share/tomcat6/.deegree ]; then
-    echo "Creating directory for webapp"
-    sudo mkdir /usr/share/tomcat6/.deegree
-    sudo chown tomcat6:tomcat6 /usr/share/tomcat6/.deegree
-fi

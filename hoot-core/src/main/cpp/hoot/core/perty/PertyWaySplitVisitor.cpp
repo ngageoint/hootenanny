@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyWaySplitVisitor.h"
 
@@ -292,6 +292,7 @@ shared_ptr<Node> PertyWaySplitVisitor::_getNodeAddedBySplit(const QList<long>& n
   LOG_VARD(firstNodeIdInLastWay);
   assert(lastNodeIdInFirstWay == firstNodeIdInLastWay);
   assert(!nodeIdsBeforeSplit.contains(lastNodeIdInFirstWay));
+  LOG_VARD(nodeIdsBeforeSplit);
   return _map->getNode(firstNodeIdInLastWay);
 }
 

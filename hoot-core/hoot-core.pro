@@ -1,7 +1,7 @@
 # -------------------------------------------------
 # Project created by QtCreator 2011-09-29T12:27:47
 # -------------------------------------------------
-QT += script \
+QT += \
     sql \
     testlib \
     xml \
@@ -19,7 +19,6 @@ INCLUDEPATH += \
   ../local/include/ \
 
 CONFIG += rtti \
-    qtestlib \
     debug
 
 OTHER_FILES = \
@@ -30,7 +29,10 @@ OTHER_FILES = \
     ../rules/LinearWaterway.js \
     ../conf/LinearWaterway.conf \
     ../conf/LinearWaterway-match-scoring.conf \
-    ../conf/WaterwaySchema.json \
+    ../conf/schema/all_weather.json \
+    ../conf/schema/highway.json \
+    ../conf/schema/natural.json \
+    ../conf/schema/public_transport.json \
     ../rules/template/ConflateRules.js \
 
 include(../Configure.pri)
@@ -55,14 +57,6 @@ log4cxx {
 } else {
   SOURCES += src/main/cpp/hoot/core/util/LogGeneric.cpp
   HEADERS += src/main/cpp/hoot/core/util/LogGeneric.h
-}
-
-octave {
-  SOURCES += src/main/cpp/hoot/core/util/Octave.cpp \
-    src/main/cpp/hoot/core/perty/FullCovariance.cpp \
-
-  HEADERS += src/main/cpp/hoot/core/util/Octave.h \
-    src/main/cpp/hoot/core/perty/FullCovariance.h \
 }
 
 SOURCES += \
@@ -460,6 +454,11 @@ SOURCES += \
     src/main/cpp/hoot/core/io/ElementOutputStream.cpp \
     src/main/cpp/hoot/core/io/ElementInputStream.cpp \
     src/main/cpp/hoot/core/io/VisitorElementInputStream.cpp \
+    src/main/cpp/hoot/core/visitors/TranslationVisitor.cpp \
+    src/main/cpp/hoot/core/io/ElementVisitorInputStream.cpp \
+    src/main/cpp/hoot/core/io/ElementCacheLRU.cpp \
+    src/main/cpp/hoot/core/cmd/ExportCmd.cpp \
+    src/main/cpp/hoot/core/visitors/MatchCandidateCountVisitor.cpp \
     src/main/cpp/hoot/core/algorithms/string/WeightedWordDistance.cpp \
     src/main/cpp/hoot/core/algorithms/string/TextFileWordWeightDictionary.cpp \
     src/main/cpp/hoot/core/algorithms/string/MinSumWordSetDistance.cpp \
@@ -468,10 +467,26 @@ SOURCES += \
     src/main/cpp/hoot/core/algorithms/string/SqliteWordWeightDictionary.cpp \
     src/main/cpp/hoot/core/algorithms/string/StringTokenizer.cpp \
     src/main/cpp/hoot/core/conflate/ConflateStatsHelper.cpp \
-    src/main/cpp/hoot/core/visitors/MatchCandidateCountVisitor.cpp \
     src/main/cpp/hoot/core/filters/HighwayCriterion.cpp \
     src/main/cpp/hoot/core/visitors/RemoveTagVisitor.cpp \
-    src/main/cpp/hoot/core/visitors/KeepTagsVisitor.cpp
+    src/main/cpp/hoot/core/visitors/KeepTagsVisitor.cpp \
+    src/main/cpp/hoot/core/ops/CookieCutterOp.cpp \
+    src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.cpp \
+    src/main/cpp/hoot/core/conflate/CookieCutter.cpp \
+    src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.cpp \
+    src/main/cpp/hoot/core/ops/ReplaceElementOp.cpp \
+    src/main/cpp/hoot/core/filters/NeedsReviewCriterion.cpp \
+    src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.cpp \
+    src/main/cpp/hoot/core/ops/RemoveReviewsByEidOp.cpp \
+    src/main/cpp/hoot/core/conflate/highway/HighwayReviewCleanerOp.cpp \
+    src/main/cpp/hoot/core/ops/AddHilbertReviewSortOrderOp.cpp \
+    src/main/cpp/hoot/core/schema/SchemaVertex.cpp \
+    src/main/cpp/hoot/core/schema/TagCategoryDifferencer.cpp \
+    src/main/cpp/hoot/core/schema/TagAncestorDifferencer.cpp \
+    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.cpp \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.cpp \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp \
+    src/main/cpp/hoot/core/algorithms/string/MostEnglishName.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -525,6 +540,7 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/WayFilter.h \
     src/main/cpp/hoot/core/filters/NeighborFilter.h \
     src/main/cpp/hoot/core/WayMap.h \
+    src/main/cpp/hoot/core/NodeMap.h \
     src/main/cpp/hoot/core/filters/WayFilterChain.h \
     src/main/cpp/hoot/core/filters/UnknownFilter.h \
     src/main/cpp/hoot/core/filters/StatusFilter.h \
@@ -915,6 +931,12 @@ HEADERS += \
     src/main/cpp/hoot/core/io/ElementInputStream.h \
     src/main/cpp/hoot/core/io/ElementOutputStream.h \
     src/main/cpp/hoot/core/io/VisitorElementInputStream.h \
+    src/main/cpp/hoot/core/visitors/TranslationVisitor.h \
+    src/main/cpp/hoot/core/io/ElementVisitorInputStream.h \
+    src/main/cpp/hoot/core/io/ElementCache.h \
+    src/main/cpp/hoot/core/io/ElementCacheLRU.h \
+    src/main/cpp/hoot/core/visitors/MatchCandidateCountVisitor.h \
+    src/main/cpp/hoot/core/util/DataProducer.h \
     src/main/cpp/hoot/core/algorithms/string/WeightedWordDistance.h \
     src/main/cpp/hoot/core/algorithms/string/WordWeightDictionary.h \
     src/main/cpp/hoot/core/algorithms/string/TextFileWordWeightDictionary.h \
@@ -925,9 +947,26 @@ HEADERS += \
     src/main/cpp/hoot/core/algorithms/string/SqliteWordWeightDictionary.h \
     src/main/cpp/hoot/core/algorithms/string/StringTokenizer.h \
     src/main/cpp/hoot/core/conflate/ConflateStatsHelper.h \
-    src/main/cpp/hoot/core/visitors/MatchCandidateCountVisitor.h \
     src/main/cpp/hoot/core/util/DataProducer.h \
     src/main/cpp/hoot/core/filters/HighwayCriterion.h \
     src/main/cpp/hoot/core/visitors/KeepTagsVisitor.h \
-    src/main/cpp/hoot/core/cmd/ConflateCmd.h
+    src/main/cpp/hoot/core/cmd/ConflateCmd.h \
+    src/main/cpp/hoot/core/ops/CookieCutterOp.h \
+    src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.h \
+    src/main/cpp/hoot/core/conflate/CookieCutter.h \
+    src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.h \
+    src/main/cpp/hoot/core/ops/ReplaceElementOp.h \
+    src/main/cpp/hoot/core/filters/NeedsReviewCriterion.h \
+    src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.h \
+    src/main/cpp/hoot/core/ops/RemoveReviewsByEidOp.h \
+    src/main/cpp/hoot/core/conflate/highway/HighwayReviewCleanerOp.h \
+    src/main/cpp/hoot/core/ops/AddHilbertReviewSortOrderOp.h \
+    src/main/cpp/hoot/core/schema/SchemaVertex.h \
+    src/main/cpp/hoot/core/schema/KeyValuePair.h \
+    src/main/cpp/hoot/core/schema/TagCategoryDifferencer.h \
+    src/main/cpp/hoot/core/schema/TagAncestorDifferencer.h \
+    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.h \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoader.h \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h \
+    src/main/cpp/hoot/core/algorithms/string/MostEnglishName.h
 

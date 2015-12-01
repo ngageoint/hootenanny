@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.writers.osm;
 
@@ -65,7 +65,7 @@ public class UserResponseWriter
       
       Element osmElement = OsmResponseHeaderGenerator.getOsmHeader(responseDoc);
       
-      Element userElement = user.toXml(osmElement, user.numChangesetsModified());
+      Element userElement = user.toXml(osmElement, /*user.numChangesetsModified()*/-1);
       osmElement.appendChild(userElement);
       
       responseDoc.appendChild(osmElement);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPREADERFACTORY_H
 #define OSMMAPREADERFACTORY_H
@@ -60,6 +60,8 @@ public:
    * Returns true if a partial reader is available for the given URL.
    */
   bool hasPartialReader(QString url);
+
+  bool hasElementInputStream(QString url);
 
   bool hasReader(QString url);
 

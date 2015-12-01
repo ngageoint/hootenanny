@@ -1,0 +1,151 @@
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "influence": 1,
+        "isA": "amenity=parking",
+        "name": "parking",
+        "objectType": "tag"
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=*",
+        "objectType": "tag"
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=carports",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "parking=covered",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=covered",
+        "objectType": "tag"
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=disabled",
+        "objectType": "tag"
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=garage",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "parking=multi-storey",
+                "weight": 0.8
+            },
+            {
+                "name": "parking=covered",
+                "weight": 0.8
+            }
+        ]
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=garage_boxes",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "parking=covered",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=garages",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "parking=covered",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=lane",
+        "objectType": "tag"
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=layby",
+        "objectType": "tag"
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=multi-storey",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "parking=covered",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "parking",
+        "name": "parking=no",
+        "objectType": "tag"
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=off_street_covered",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "parking=covered",
+            "weight": 0.9
+        }
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=park_and_ride",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "parking=surface",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=rooftop",
+        "objectType": "tag"
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=sheds",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "parking=garage",
+                "weight": 0.8
+            },
+            {
+                "name": "parking=covered",
+                "weight": 0.8
+            }
+        ]
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=surface",
+        "objectType": "tag"
+    },
+    {
+        "isA": "parking=yes",
+        "name": "parking=underground",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "parking=covered",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "parking",
+        "name": "parking=yes",
+        "objectType": "tag"
+    }
+]

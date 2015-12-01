@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Standard Includes
@@ -41,7 +41,8 @@ using namespace std;
 #include <tgs/RStarTree/HilbertRTree.h>
 #include <tgs/RStarTree/KnnIterator.h>
 
-using namespace Tgs;
+namespace Tgs
+{
 
 class Tmp
 {
@@ -207,7 +208,6 @@ public:
     for (int i = 0; i < testSize; i++)
     {
       uut.insert(boxes[i], fids[i]);
-      cout << endl;
       uut.sanityCheck();
     }
 
@@ -495,7 +495,7 @@ public:
 
   void validateTreeEntries(RStarTree& uut, int cc)
   {
-    printf("*** Begin Validation ***\n");
+    //printf("*** Begin Validation ***\n");
     std::vector<bool> found;
     found.resize(cc);
     for (unsigned int i = 0; i < found.size(); i++)
@@ -583,3 +583,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HilbertRTreeTest, PluginFactory::testName());
+
+}

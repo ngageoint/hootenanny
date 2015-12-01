@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OGRWRITER_H
@@ -35,13 +35,18 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/io/OsmMapWriter.h>
+#include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/io/ElementCache.h>
+#include <hoot/core/io/ElementInputStream.h>
+#include <hoot/core/io/ElementOutputStream.h>
+#include <hoot/core/elements/ElementProvider.h>
 
 
 // GDAL
+#include <ogr_spatialref.h>
 class OGRDataSource;
 class OGRLayer;
 
@@ -62,7 +67,7 @@ class Schema;
 /**
  * Writes a file to an OGR data source.
  */
-class OgrWriter : public OsmMapWriter, public Configurable
+class OgrWriter : public PartialOsmMapWriter, public Configurable
 {
 public:
   static std::string className() { return "hoot::OgrWriter"; }
@@ -85,6 +90,18 @@ public:
 
   OgrWriter();
 
+  /**
+   * @brief setCacheCapacity
+   * @param maxElementsPerType Number of entries for the cache per type (node, way, relation).
+   *
+   * @note Total cache size is three times this value, as there are three types of entries in the
+   *    cache that are all set to hold this many elements
+   *
+   * @note This call deletes the existing cache and creates an entirely new one -- make sure
+   *    this function is called BEFORE any data is stored in the cache
+   */
+  void setCacheCapacity(unsigned long maxElementsPerType);
+
   virtual ~OgrWriter();
 
   void close();
@@ -103,6 +120,20 @@ public:
 
   virtual void write(boost::shared_ptr<const OsmMap> map);
 
+  virtual void finalizePartial();
+
+  virtual void writePartial(const boost::shared_ptr<const hoot::Node>&);
+
+  virtual void writePartial(const boost::shared_ptr<const hoot::Way>&);
+
+  virtual void writePartial(const boost::shared_ptr<const hoot::Relation>&);
+
+  virtual void writeElement(ElementInputStream& inputStream);
+
+  virtual void writeElement(ElementInputStream& inputStream, bool debug);
+
+  static unsigned long getDefaultCacheCapacity() { return _maxCacheElementsPerTypeDefault; }
+
 protected:
   bool _createAllLayers;
   bool _appendData;
@@ -113,8 +144,15 @@ protected:
   QString _prependLayerName;
   shared_ptr<const Schema> _schema;
   StrictChecking _strictChecking;
+  static const unsigned long _maxCacheElementsPerTypeDefault = 20000;
+  long _currElementCacheCapacity;
+  ElementCachePtr _elementCache;
+  OGRSpatialReference _wgs84;
 
   void _addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<Geometry> g);
+
+  void _addFeatureToLayer(OGRLayer* layer, shared_ptr<Feature> f, const Geometry* g,
+                          OGRFeature* poFeature);
 
   void _createLayer(shared_ptr<const Layer> layer);
 
@@ -124,7 +162,7 @@ protected:
 
   void strictError(QString warning);
 
-  virtual void _writePartial(const ConstOsmMapPtr& map, const shared_ptr<const Element>& e);
+  virtual void _writePartial(ElementProviderPtr& provider, const ConstElementPtr& e);
 
 };
 

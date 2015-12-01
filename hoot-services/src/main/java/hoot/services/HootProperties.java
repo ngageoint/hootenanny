@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services;
 
@@ -55,9 +55,17 @@ public class HootProperties
     if (properties == null)
     {
       properties = new Properties();
-      properties.load(
-        HootProperties.class.getClassLoader().getResourceAsStream("conf/hoot-services.conf"));
-
+      InputStream propsStrm = null;
+      try
+      {
+      	propsStrm = 
+      	  HootProperties.class.getClassLoader().getResourceAsStream("conf/hoot-services.conf");
+        properties.load(propsStrm);
+      }
+      finally
+      {
+      	propsStrm.close();
+      }
     }
 
     // This block of code checks for the local.conf and if there is one then it overrides the
@@ -65,17 +73,28 @@ public class HootProperties
     if (localProperties == null)
     {
     	localProperties = new Properties();
-    	InputStream inRes = HootProperties.class.getClassLoader().getResourceAsStream("conf/local.conf");
-    	if(inRes != null)
+    	InputStream inRes = null;
+    	try
     	{
-	    	localProperties.load(inRes);
+    		inRes = HootProperties.class.getClassLoader().getResourceAsStream("conf/local.conf");
+      	if (inRes != null)
+      	{
+  	    	localProperties.load(inRes);
 
-	    	Enumeration<?> enumeration = localProperties.propertyNames();
-	      while (enumeration.hasMoreElements()) {
-	          String key = (String) enumeration.nextElement();
-	          String value = localProperties.getProperty(key);
-	          properties.setProperty(key, value);
-	      }
+  	    	Enumeration<?> enumeration = localProperties.propertyNames();
+  	      while (enumeration.hasMoreElements()) {
+  	          String key = (String) enumeration.nextElement();
+  	          String value = localProperties.getProperty(key);
+  	          properties.setProperty(key, value);
+  	      }
+      	}
+    	}
+    	finally
+    	{
+    		if (inRes != null)
+    		{
+    			inRes.close();
+    		}
     	}
     }
     return properties;
@@ -159,7 +178,6 @@ public class HootProperties
    *
    * @param key property key
    * @return a property value
-   * @todo put these default values in the config file
    */
   public static String getDefault(String key)
   {
@@ -223,10 +241,6 @@ public class HootProperties
     {
       return "false";
     }
-    else if (key.equals("hootCoreServicesDatabaseWriterCompatibility"))
-    {
-      return "false";
-    }
     else if (key.equals("coreScriptPath"))
     {
       return "/project/hoot/scripts";
@@ -247,57 +261,37 @@ public class HootProperties
     {
       return "9998";
     }
-    else if (key.equals("maxRecordSelectSize"))
-    {
-      return "5000";
-    }
     else if (key.equals("maxRecordBatchSize"))
     {
-      return "1000";
-    }
-    else if (key.equals("reviewGetMaxReviewSize"))
-    {
-      return "50000";
-    }
-    else if (key.equals("reviewPrepareOverwriteExistingDataDefault"))
-    {
-      return "false";
-    }
-    else if (key.equals("reviewStatsReviewScoreThresholdMinimumDefault"))
-    {
-      return "0.0";
-    }
-    else if (key.equals("reviewStatsGeospatialBoundsDefault"))
-    {
-      return "180,-90,180,90";
-    }
-    else if (key.equals("reviewGetNumItemsDefault"))
-    {
-      return "1";
-    }
-    else if (key.equals("reviewGetHighestReviewScoreFirstDefault"))
-    {
-      return "true";
-    }
-    else if (key.equals("reviewGetReviewScoreThresholdMinimumDefault"))
-    {
-      return "0.5";
-    }
-    else if (key.equals("reviewGetGeospatialBoundsDefault"))
-    {
-      return "-180,-90,180,90";
-    }
-    else if (key.equals("reviewDisplayBoundsZoomAdjustDefault"))
-    {
-      return "-0.0015";
-    }
-    else if (key.equals("reviewDisplayBoundsMethod"))
-    {
-      return "reviewableAndReviewAgainstItemCombined";
+      return "5000";
     }
     else if (key.equals("testJobStatusPollerTimeout"))
     {
       return "250";
+    }
+    else if (key.equals("servicesTestClearEntireDb"))
+    {
+      return "false";
+    }
+    else if (key.equals("logPropsDynamicChangeScanInterval"))
+    {
+      return "1";
+    }
+    else if (key.equals("autoScanForLogPropsChanges"))
+    {
+      return "true";
+    }
+    else if (key.equals("maxWarningsDisplayed"))
+    {
+      return "10";
+    }
+    else if (key.equals("seedRandomQueries"))
+    {
+      return "false";
+    }
+    else if (key.equals("randomQuerySeed"))
+    {
+      return "0.1";
     }
     return null;
   }

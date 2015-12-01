@@ -11,7 +11,7 @@ SHELL=/bin/bash
 # If you're adding another schema file be sure and update the archive target
 # too.
 #SCHEMA_FILES=plugins/script/tds40/schema/__init__.js plugins/script/tds61/schema/__init__.js plugins/script/mgcp/schema/__init__.js plugins/script/etds/rules/__init__.js plugins/script/etds61/rules/__init__.js plugins/script/etds61_osm/rules/__init__.js
-SCHEMA_FILES=plugins/tds40_schema.js plugins/tds61_schema.js plugins/mgcp_schema.js plugins/etds_rules.js plugins/etds61_rules.js plugins/etds61_osm_rules.js
+SCHEMA_FILES=plugins/tds40_schema.js plugins/tds61_schema.js plugins/mgcp_schema.js plugins/etds_rules.js plugins/etds61_rules.js plugins/etds61_osm_rules.js plugins/tds61_full_schema.js
 
 -include Makefile.inc
 
@@ -20,7 +20,8 @@ default: build
 all: build
 always:
 
-build: js-make qt-make pp-build services-build model-build conf/words.sqlite
+build: js-make qt-make pp-build services-build model-build conf/words.sqlite \
+	conf/WordsAbridged.sqlite osmapidb
 
 clean: Makefile.qmake services-clean
 	$(MAKE) -f Makefile.qmake clean
@@ -38,15 +39,16 @@ clean: Makefile.qmake services-clean
 	rm -f $(SCHEMA_FILES)
 	# The following bits are due to moving files in git. Since the Output.osm
 	# file is written to the test-files/cases/**/ directory git won't remove
-	# the directory. Doing this as part of clean will ensure that the 
+	# the directory. Doing this as part of clean will ensure that the
 	# directories are removed.
-	# remove any empty test cases 
+	# remove any empty test cases
 	find test-files/cases -type f -name Output.osm -exec rm {} \;
 	# call this command 3 times b/c there may be sub-dirs that need deleteing.
 	rm -rf `find test-files/cases -type d -empty`
 	rm -rf `find test-files/cases -type d -empty`
 	rm -rf `find test-files/cases -type d -empty`
 	cd docs; $(MAKE) clean
+	scripts/CleanOsmApiDB.sh
 
 clean-db: services-clean-db
 
@@ -54,7 +56,7 @@ clean-db: services-clean-db
 clean-all: clean clean-db
 
 check: test
-test: build services-test pp-test plugins-test
+test: build ui-test services-test pp-test plugins-test
 	bin/HootTest $(HOOT_TEST_DIFF) --slow
 
 docs: always HOOT_VERSION_FILE
@@ -63,7 +65,9 @@ docs: always HOOT_VERSION_FILE
 test-quick: build services-test pp-test
 	bin/HootTest $(HOOT_TEST_DIFF) --quick
 
-test-all: build services-test-all pp-test plugins-test
+test-all-no-core: ui-test build services-test-all pp-test plugins-test
+
+test-all: test-all-no-core
 	bin/HootTest $(HOOT_TEST_DIFF) --glacial
 
 licenses:
@@ -100,6 +104,11 @@ endif
 plugins-test:
 	# Only run the plugins tests if mocha is installed.
 	cd plugins; (command -v mocha &> /dev/null) && mocha test || echo Skipping mocha tests
+
+ui-test:
+ifeq ($(BUILD_UI),ui)
+	cd hoot-ui; npm test #&> /dev/null
+endif
 
 pp-test-all:
 ifneq ($(HADOOP_HOME),)
@@ -161,6 +170,12 @@ plugins/tds61_schema.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv.gz 
 	mkdir -p $(@D)
 	$< $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
+# TDSv61 full schema is built from the TDSv60 spec with NGA's extensions.
+# This one has all of the Text Enumerations
+plugins/tds61_full_schema.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv.gz conf/nfdd/TDS_NGAv01.csv.gz
+	mkdir -p $(@D)
+	$< --fullschema $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+
 # Build the TDS61 "To English" rules
 plugins/etds61_rules.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv.gz conf/nfdd/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
@@ -171,6 +186,9 @@ plugins/etds61_osm_rules.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
+# Build osmapi db
+osmapidb: conf/DatabaseConfig.sh
+	scripts/SetupOsmApiDB.sh
 
 # Build automatically generated JS files
 js-make: $(SCHEMA_FILES) plugins/config.js
@@ -190,7 +208,7 @@ conf/%.rf: conf/%.arff.bz2 qt-make
 
 qt-make: HOOT_VERSION_FILE Makefile.qmake hoot-core/src/main/cpp/hoot/core/HootConfig.h conf/LocalHoot.json tgs/src/main/cpp/tgs/TgsConfig.h hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h bin/hoot bin/HootTest
 	$(MAKE) -f Makefile.qmake
-	
+
 services-build:	HOOT_VERSION_FILE conf/DatabaseConfig.sh
 ifeq ($(BUILD_SERVICES),services)
 	cd hoot-services && $(MAKE) -f Makefile build
@@ -222,7 +240,7 @@ ifeq ($(BUILD_SERVICES),services)
 endif
 
 
-FORCE:
+FORCE: vagrant
 
 HOOT_VERSION_FILE: FORCE
 	$(SHELL_PATH) ./HOOT_VERSION_GEN;
@@ -250,19 +268,20 @@ archive: default docs
 	mkdir -p $(HOOT_TARNAME)/plugins/
 	cp plugins/tds40_schema.js $(HOOT_TARNAME)/plugins/tds40_schema.js
 	cp plugins/tds61_schema.js $(HOOT_TARNAME)/plugins/tds61_schema.js
+	cp plugins/tds61_full_schema.js $(HOOT_TARNAME)/plugins/tds61_full_schema.js
 	cp plugins/mgcp_schema.js $(HOOT_TARNAME)/plugins/mgcp_schema.js
 	cp plugins/etds_rules.js $(HOOT_TARNAME)/plugins/etds_rules.js
 	cp plugins/etds61_rules.js $(HOOT_TARNAME)/plugins/etds61_rules.js
 	if [ "$(BUILD_SERVICES)" == "services" ]; then mkdir -p $(HOOT_TARNAME)/hoot-ui/data; cp hoot-ui/data/buildInfo.json $(HOOT_TARNAME)/hoot-ui/data; fi
 	echo $(HOOT_VERSION) > $(HOOT_TARNAME)/version
 	tar rf $(HOOT_TARNAME).tar \
-	$(HOOT_TARNAME)/*  
+	$(HOOT_TARNAME)/*
 	rm -rf $(HOOT_TARNAME)
 	gzip -9 $(HOOT_TARNAME).tar
 
 LocalConfig.pri:
 	cp LocalConfig.pri.orig LocalConfig.pri
-  
+
 Makefile.qmake: Hootenanny.pro Configure.pri LocalConfig.pri
 	qmake
 
@@ -270,25 +289,25 @@ tmp/schema.dot: qt-make
 	HootTest --single hoot::OsmSchemaTest
 
 tmp/schema.png: tmp/schema.dot
-	neato -Tpng -Gsize=50,50\! -GK=3 -Gratio=.5 -Gmindist=1 -Gmclimit=10 -Gnodesep=4 -Granksep=4 -Gsplines=true -Glen=0.5 -Gconcentrate=true -Gdpi=50 -Elen=3 -o tmp/schema.png tmp/schema.dot
+	neato -Tpng -Gsize=50,50\! -GK=3 -Gratio=.5 -Gmindist=1 -Gmclimit=10 -Gnodesep=4 -Granksep=4 -Gsplines=true -Glen=0.5 -Gconcentrate=true -Gdpi=50 -Goverlap=false -Elen=3 -o tmp/schema.png tmp/schema.dot
 
 # Code Coverage
 
 IGNORED=/usr/\* \*test/cpp\* \*tgs/src\* \*/local/\* \*/tmp/moc/\*
 
-tmp/coverage/core/index.html: 
+tmp/coverage/core/index.html:
 	mkdir -p tmp/coverage
 	lcov --capture --ignore-errors source -d hoot-core/tmp/debug -b hoot-core/ --output-file tmp/coverage/Core.info
 	lcov -r tmp/coverage/Core.info $(IGNORED) \*tbs/src\* -o tmp/coverage/CoreTrimmed.info
 	genhtml tmp/coverage/CoreTrimmed.info --output-directory tmp/coverage/core/
 
-tmp/coverage/hadoop/index.html: 
+tmp/coverage/hadoop/index.html:
 	mkdir -p tmp/coverage
 	lcov --capture --ignore-errors source -d hoot-hadoop/tmp/debug -b hoot-hadoop/ --output-file tmp/coverage/Hadoop.info
 	lcov -r tmp/coverage/Hadoop.info $(IGNORED) \*tbs/src\* -o tmp/coverage/HadoopTrimmed.info
 	genhtml tmp/coverage/HadoopTrimmed.info --output-directory tmp/coverage/hadoop/
 
-tmp/coverage/tbs/index.html: 
+tmp/coverage/tbs/index.html:
 	mkdir -p tmp/coverage
 	lcov --capture --ignore-errors source -d tbs/tmp/debug -b tbs/ --output-file tmp/coverage/Tbs.info
 	lcov -r tmp/coverage/Tbs.info $(IGNORED) -o tmp/coverage/TbsTrimmed.info
@@ -296,14 +315,17 @@ tmp/coverage/tbs/index.html:
 
 coverage: services-coverage tmp/coverage/core/index.html  tmp/coverage/hadoop/index.html tmp/coverage/tbs/index.html
 
+conf/WordsAbridged.sqlite: conf/WordsAbridged.sqlite.gz
+	gunzip -c $^ > $@
+
 conf/words.sqlite: conf/words1.sqlite
 	rm -f conf/words.sqlite
-	ln -s words1.sqlite conf/words.sqlite
+	[ -e $^ ] && ln -s words1.sqlite conf/words.sqlite
 
 # If you create a new words.sqlite please just increment the number rather than
 # replacing the old file. This way we can maintain the history.
 conf/words1.sqlite:
-	wget -N -P conf/ https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/words1.sqlite
+	wget -N -P conf/ https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/words1.sqlite || echo "Failure downloading words1.sqlite. Build will continue, but conflation accuracy may suffer."
 
 bin/HootEnv.sh: scripts/HootEnv.sh
 	mkdir -p bin
@@ -322,3 +344,7 @@ eclipse:
 ifeq ($(BUILD_SERVICES),services)
 	scripts/mvn-build $(MVN_QUIET) eclipse
 endif
+
+vagrant:
+	# Check the Vagrant.marker file data to see if provisioning needs to run
+	if [ -f Vagrant.marker ]; then if [ Vagrant.marker -ot VagrantProvision.sh ]; then echo "New dependencies have been added to Vagrant!"; echo "Please exit the vm and run 'vagrant provision'."; false; fi fi

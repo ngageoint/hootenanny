@@ -44,7 +44,7 @@ void ElementOutputStream::writeAllElements(ElementInputStream& eis,
 {
   while (eis.hasMoreElements())
   {
-    eos.writeElement(eis.readNextElement());
+    eos.writeElement(eis);
   }
 }
 

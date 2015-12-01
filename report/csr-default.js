@@ -487,15 +487,22 @@ histPost("tagCountHistogram1.png", "tagCountHistogram1r.png")+
 addNAs(dataTables["tagCountTokens1"],"Metadata Tags")+
   "<<<\n"+
   "=== Summary of Translated Tags\n" +
-  "The translated tags are tags produced using the Hootenanny translator.  The attributes from the source data are converted to OSM tags.  The translation to the OSM feature may only minimally need a portion of the input attributes to fill the requirements it needs.  For example, an input may have ten different attributes, but the same type of feature in OSM might only require or define five of those attributes.\n"+
+  "Translated tags are generated in Hootenanny by applying the translator to the inputs and conflated output data.  It applies the translation schema defined in Section 2 and then collects information about what was generated to build the statistics for the translated tags.  There are three types of translated tags: populated, default, and null.\n\n"+
+  "- Populated tags are tags that have been assigned non-default values.  In other words, values populated from the source by the translation script.\n"+
+  "- Default tags are tags that have been assigned the default value from the translation schema. For example, from the translation schema TDSv61:\n\n"+
+  "--------------------------\n"+
+  "\{ name:\"CAA\",\n"+
+  "   desc:\"Controlling Authority\",\n"+
+  "   optional:\"R\",\n"+
+  "   defValue:\"-999999\",\n"+
+  "   type:\"enumeration\",\n"+
+  "   \<...\>\n"+
+  "\}\n"+
+  "--------------------------\n"+
+  "If the translated output used the default value \'CAA == \"-999999\"' then the tag is a translated default tag.\n\n"+
+  "- Null tags are tags that have been assigned a null value to the output where no default value (from the schema) nor any translated value was available.\n"+
   "\n"+
-"There are three types of translated tags: populated, default, and null.  The translated default tags may be defined in a few ways.  OSM has a large collection of default attributes for naming features and parts of features like types of highways: primary, secondary, tertiary, etc.  These attributes serve as defaults for the translation when some equivalent attribute is populated on the input.  Defaults are also driven by the tag merging mechanism in Hootenanny which may be configured in four ways: overwrite input 1--use the second input attributes instead of the first input's; overwrite input 2--just the opposite of the prior configuration; average the inputs--take attributes from both inputs; and generalize--define an internal set of rules that are applied as default during translation like assigning any OSM highway type as a generalized name such as 'road'.\n"+
-  "\n"+
-"The translated populated tags are those tags defined in the input where there is no translation rule and are simply passed through to the output. The rules for \"pass through\"  depend on the tag merging rules defined, for example, if the tag merging mechanism is set to: tag.merger.default\=hoot::OverwriteTag1Merger and the attribute pair on input 1 of \"lanes:2\" is not defined in input 2, then it will be written into the output as it is \"lanes:2\".  The translated populated tag counts are the number of tags that satisfy the criterion defined above.\n"+
-  "\n"+
-"Translated null tags are the tags assigned to the output that were not defined or populated in the inputs and are required by the output schema.  For example, if the feature is a highway type, but the type of road was not defined in the inputs (i.e., primary, secondary, etc.) the output attribute is assigned for that type as null.\n\
-\n\
-A summary of the different translated tag types is shown in the bar graph and table for the two inputs and the output.  A breakdown of the translated tags into the three tags types of default, popoulated, and null are shown.  Specific values for each of the tag types are shown in the table.\n" + 
+"The number of each translated tag type for the inputs and the conflated output are shown in the bar graph and table.  The breakdown of each tag type (default, populated, and null) are presented with the specific values provided in the table.\n" + 
   "\n" +
   "[gnuplot, tagCountHistogram2.png]\n\
 ------\n\

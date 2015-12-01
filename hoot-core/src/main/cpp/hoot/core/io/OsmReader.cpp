@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmReader.h"
@@ -43,6 +43,7 @@ using namespace boost;
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
 
@@ -65,11 +66,14 @@ OsmReader::OsmReader()
   _circularError = 15.0;
   _useFileStatus = ConfigOptions().getReaderUseFileStatus();
   _useDataSourceId = false;
+  _addSourceDateTime = ConfigOptions().getReaderAddSourceDatetime();
 }
 
 void OsmReader::_parseTimeStamp(const QXmlAttributes &attributes)
 {
-  if (attributes.value("timestamp") != "" && attributes.value("timestamp") != "1970-01-01T00:00:00Z" )
+  if ( (attributes.value("timestamp") != "") &&
+       (attributes.value("timestamp") != "1970-01-01T00:00:00Z") &&
+       (_addSourceDateTime == true) )
   {
     _element->setTag("source:datetime",attributes.value("timestamp"));
   }
@@ -92,7 +96,36 @@ void OsmReader::_createNode(const QXmlAttributes &attributes)
   double x = _parseDouble(attributes.value("lon"));
   double y = _parseDouble(attributes.value("lat"));
 
-  _element.reset(new Node(_status, newId, x, y, _circularError));
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
+  long version = ElementData::VERSION_EMPTY;
+  if (attributes.value("version") != "")
+  {
+    version = _parseDouble(attributes.value("version"));
+  }
+  long changeset = ElementData::CHANGESET_EMPTY;
+  if (attributes.value("changeset") != "")
+  {
+    changeset = _parseDouble(attributes.value("changeset"));
+  }
+  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
+  if (attributes.value("timestamp") != "")
+  {
+    timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+  }
+  QString user = ElementData::USER_EMPTY;
+  if (attributes.value("user") != "")
+  {
+    user = attributes.value("user");
+  }
+  long uid = ElementData::UID_EMPTY;
+  if (attributes.value("uid") != "")
+  {
+    uid = _parseDouble(attributes.value("uid"));
+  }
+
+  _element.reset(new Node(_status, newId, x, y, changeset, version, timestamp,
+                          user, uid, _circularError));
 
   if (_element->getTags().getInformationCount() > 0)
   {
@@ -104,7 +137,36 @@ void OsmReader::_createRelation(const QXmlAttributes &attributes)
 {
   _relationId = _parseLong(attributes.value("id"));
   long newId = _getRelationId(_relationId);
-  _element.reset(new Relation(_status, newId, _circularError));
+
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
+  long version = ElementData::VERSION_EMPTY;
+  if (attributes.value("version") != "")
+  {
+    version = _parseDouble(attributes.value("version"));
+  }
+  long changeset = ElementData::CHANGESET_EMPTY;
+  if (attributes.value("changeset") != "")
+  {
+    changeset = _parseDouble(attributes.value("changeset"));
+  }
+  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
+  if (attributes.value("timestamp") != "")
+  {
+    timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+  }
+  QString user = ElementData::USER_EMPTY;
+  if (attributes.value("user") != "")
+  {
+    user = attributes.value("user");
+  }
+  long uid = ElementData::UID_EMPTY;
+  if (attributes.value("uid") != "")
+  {
+    uid = _parseDouble(attributes.value("uid"));
+  }
+
+  _element.reset(new Relation(_status, newId, changeset, version, timestamp,
+                              user, uid, _circularError));
 
   _parseTimeStamp(attributes);
 }
@@ -124,7 +186,36 @@ void OsmReader::_createWay(const QXmlAttributes &attributes)
   }
   _wayIdMap.insert(_wayId, newId);
 
-  _element.reset(new Way(_status, newId, _circularError));
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
+  long version = ElementData::VERSION_EMPTY;
+  if (attributes.value("version") != "")
+  {
+    version = _parseDouble(attributes.value("version"));
+  }
+  long changeset = ElementData::CHANGESET_EMPTY;
+  if (attributes.value("changeset") != "")
+  {
+    changeset = _parseDouble(attributes.value("changeset"));
+  }
+  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
+  if (attributes.value("timestamp") != "")
+  {
+    timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+  }
+  QString user = ElementData::USER_EMPTY;
+  if (attributes.value("user") != "")
+  {
+    user = attributes.value("user");
+  }
+  long uid = ElementData::UID_EMPTY;
+  if (attributes.value("uid") != "")
+  {
+    uid = _parseDouble(attributes.value("uid"));
+  }
+
+  _element.reset(new Way(_status, newId, changeset, version, timestamp, user,
+                         uid, _circularError));
 
   _parseTimeStamp(attributes);
 }
@@ -238,9 +329,9 @@ void OsmReader::read(shared_ptr<OsmMap> map)
     int retVal;
     if ( (retVal = std::system(cmd.c_str())) != 0 )
     {
-      LOG_FATAL("Error " << boost::lexical_cast<std::string>(retVal)  <<
-                " returned from uncompress command: " << cmd);
-      return;
+      QString error = QString("Error %1 returned from uncompress command: %2").arg(retVal).
+        arg(QString::fromStdString(cmd));
+      throw HootException(error);
     }
 
     LOG_DEBUG("Uncompress succeeded!");
@@ -259,9 +350,9 @@ void OsmReader::read(shared_ptr<OsmMap> map)
     int retVal;
     if ( (retVal = std::system(cmd.c_str())) != 0 )
     {
-      LOG_FATAL("Error " << boost::lexical_cast<std::string>(retVal)  <<
-                " returned from uncompress command: " << cmd);
-      return;
+      QString error = QString("Error %1 returned from uncompress command: %2").arg(retVal).
+        arg(QString::fromStdString(cmd));
+      throw HootException(error);
     }
 
     LOG_DEBUG("Uncompress succeeded!");
@@ -280,6 +371,7 @@ void OsmReader::read(shared_ptr<OsmMap> map)
   LOG_DEBUG("File " << _path << " opened for read");
 
   QXmlInputSource xmlInputSource(&file);
+
   if (reader.parse(xmlInputSource) == false)
   {
       throw Exception(_errorString);

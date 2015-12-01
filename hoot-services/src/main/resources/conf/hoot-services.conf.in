@@ -3,13 +3,9 @@
 # Port Jersey tests running on the Grizzy framework uses; only needed by Jersey async calls
 grizzlyPort=9998
 
-# generic setting for max to send to sql limit/offset queries; this setting could be duplicated and
-# made more specific for different types of queries
-maxRecordSelectSize=5000
-
 # generic setting for max size of records when executing batch query; this setting could be
 # duplicated and made more specific for different types of queries
-maxRecordBatchSize=1000
+maxRecordBatchSize=2000
 
 # allows for printing executed sql statement
 debugSql=false
@@ -27,7 +23,23 @@ homeFolder=$(HOOT_HOME)
 # slowly to queries
 testJobStatusPollerTimeout=2000
 
-# OSM SERVICES
+# determines whether the system automatically scans for changes to the log4j props file
+autoScanForLogPropsChanges=true
+
+# amount of time in minutes (integer) that the system checks the log verbosity level for changes 
+# in the log4j properties file
+logPropsDynamicChangeScanInterval=1
+
+# Loosely enforced setting that determines the maximum number of times a class logs a warning
+maxWarningsDisplayed=10
+
+# If true, will seed the randomness used in sql queries; for testing purposes only.
+seedRandomQueries=false
+
+# Random query seed value; valid range: -1.0 to 1.0
+randomQuerySeed=0.1
+
+# OSM
 
 # OSM header info
 osmVersion=0.6
@@ -54,7 +66,7 @@ maximumWayNodes=2000
 # amount to auto-expand changeset by after an update
 changesetBoundsExpansionFactorDeegrees=0.1
 
-# maximum amount of time that may pass without a changeset being updated before its closed
+# maximum amount of time that may pass without a changeset being updated before it is closed
 changesetIdleTimeoutMinutes=60
 
 # maximum amount of time a changeset can remain open
@@ -63,10 +75,7 @@ changesetMaxOpenTimeHours=24
 # allows for faster testing of changeset auto closing
 testChangesetAutoClose=false
 
-# allows nodes to have negative ID's to be compatible with hoot-core command line
-hootCoreServicesDatabaseWriterCompatibility=false
-
-# ETL SERVICE
+# ETL
 
 # the folder location of the make file script for some processlet like ETLProcesslet
 coreScriptPath=$(homeFolder)/scripts
@@ -82,6 +91,9 @@ ConflateMakefilePath=makeconflate
 
 # CookieCutter make file script
 CookieCutterMakefilePath=makecookiecutter
+
+# ClipDataset make file script
+ClipDatasetMakefilePath=makeclipdataset
 
 # Translation javascript header script path
 jsHeaderScriptPath=$(homeFolder)/scripts/rh.js
@@ -119,10 +131,8 @@ dbUserId=${DB_USER}
 # Db server user password
 dbPassword=${DB_PASSWORD}
 
-
 # Db server user host
 dbHost=${DB_HOST}:${DB_PORT}
-
 
 # WFS Store Connection Name
 wfsStoreConnName=WFS_Connection
@@ -132,7 +142,6 @@ wfsStoreDb=${WFS_DB_NAME}
 
 # Translation extension install folder
 translationExtPath=$(homeFolder)/plugins-local/script/utp
-
 
 # Ingest service staging folder
 ingestStagingPath=$(homeFolder)/ingest/upload
@@ -160,6 +169,9 @@ JobQueryInterval=3000
 
 # Default translations config file
 defaultTranslationsConfig=$(homeFolder)/conf/DefaultTranslations.json
+
+# Default FOUO translations config file
+defaultFOUOTranslationsConfig=$(homeFolder)/translations-local/DefaultTranslationsFOUO.json
 
 # Main document name
 documentName=Hootenanny - User Interface Guide.pdf
@@ -212,10 +224,8 @@ advOptRefOverride=conf/conflationRefOps.json
 # Advanced options horizontal override
 advOptHorizontalOverride=conf/conflationHorizontalOps.json
 
-
 # Advanced options horizontal override
 advOptAverageOverride=conf/conflationAverageOps.json
-
 
 # POI to POI Node Server port
 P2PServerPort=8096
@@ -226,36 +236,14 @@ P2PServerThreadCount=0
 # POI to POI Server Script in scripts folder
 P2PServerScript=P2PServer.js
 
-# REVIEW SERVICE
+# REVIEW
 
-# review prepare
 
-# default setting for overwriting existing review data
-reviewPrepareOverwriteExistingDataDefault=false
 
-# review stats
+# HGIS
 
-# default lowest review score threshold the stats calculator will recognize when looking at
-# reviewable items
-reviewStatsReviewScoreThresholdMinimumDefault=0.0
-# default geographic bounds restriction on reviewable item stats calculations
-reviewStatsGeospatialBoundsDefault=-180,-90,180,90
+# HGIS review prepare for validation script name
+hgisPrepareForValidationScript=custom/HGIS/PrepareForValidation.sh
 
-# review get
-
-# default number of reviewable items returned in a single service call
-reviewGetNumItemsDefault=1
-# default reviewable item sorting parameter; if true, reviewable items are returned with the
-# highest review scored items first
-reviewGetHighestReviewScoreFirstDefault=true
-# default lowest review score threshold a returned reviewable item will have
-reviewGetReviewScoreThresholdMinimumDefault=0.5
-# default geographic bounds restriction on reviewable item requests
-reviewGetGeospatialBoundsDefault=-180,-90,180,90
-# maximum number of review items that can be retrieved at once
-reviewGetMaxGetSize=50000
-# negative values zoom out; positive values zoom in
-reviewDisplayBoundsZoomAdjustDefault=-0.0015
-# method by which the display bounds is calculated for review item pairs; valid values are:
-# reviewableItemOnly, reviewAgainstItemOnly, reviewableAndReviewAgainstItemCombined
-reviewDisplayBoundsMethod=reviewableAndReviewAgainstItemCombined
+# HGIS filter script name
+hgisFilterScript=custom/HGIS/RemoveNonHgisPois.sh

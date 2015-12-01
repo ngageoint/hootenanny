@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
 
@@ -96,12 +96,12 @@ public class ExportJobProcesslet extends JobProcesslet {
 				wfsArgs.add(param);
 				
 				
-				JSONObject prepareItemsForReviewCommand = _createReflectionSycJobReq(wfsArgs, "hoot.services.controllers.wfs.WfsManager",
+				JSONObject createWfsResCommand = _createReflectionSycJobReq(wfsArgs, "hoot.services.controllers.wfs.WfsManager",
 						"createWfsResource");
 				
 				JSONArray jobArgs = new JSONArray();
 				jobArgs.add(osm2orgCommand);
-				jobArgs.add(prepareItemsForReviewCommand);
+				jobArgs.add(createWfsResCommand);
 				
 				
 				postChainJobRquest( jobIdStr,  jobArgs.toJSONString());	

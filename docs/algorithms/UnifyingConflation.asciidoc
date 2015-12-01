@@ -1,0 +1,226 @@
+
+
+[[UnifyingConflation]]
+== Unifying Conflation
+
+There are two conflation designs built into Hootenanny. The original, from the
+initial software design stage (circa 2012) uses a custom approach built upon a greedy
+optimization method. This approach is still available using the `conflate`
+method in conjunction with the `conflate.enable.old.roads` configuration option.
+However, the legacy approach only deals with roads and does not flag 
+questionable situations as reviews.
+
+Unifying conflation is the newer conflation approach initially developed under
+subsequent efforts with the following design goals:
+
+* Process the <<RoadConflation,road>>, <<BuildingConflation,building>> and
+  <<PoiConflation,POI>> conflation routines in a single process flow.
+* Take advantage of the optimization methods presented in <<li2011>>.
+* Flag reviewable items for the user.
+
+[[unifying-conflation-flow]]
+.Unifying Conflation Flow
+[graphviz]
+---------------------------------------------------------------------
+digraph G
+{
+  rankdir = LR;
+  node [shape=record,width=2,height=1,style=filled,fillcolor="#e7e7f3"];
+  split [label = "Split Data Based\non Subgraphs",shape=diamond,height=1.5];
+  optimize [label = "Optimize Set\nof Matches"];
+  graphBased [label = "Create Graph\nBased Merges"];
+  apply [label = "Apply Merges"];
+  "Ingest & Clean" ->
+  "Estimate Pairwise\nRelationships" ->
+  split ->
+  optimize ->
+  apply ->
+  "Export";
+  split -> graphBased -> apply;
+}
+---------------------------------------------------------------------
+
+In <<unifying-conflation-flow>> the high level conflation data flow is
+presented. Each of these steps will be discussed in more detail in the following
+sections.
+
+See also:
+
+* `conflate` command, <<hootuser>>
+* `conflate.enable.old.roads` configuration option, <<hootuser>>
+
+=== Ingest & Clean
+
+This part of the data flow is consistent with the legacy road conflation
+approach. For details on the cleaning operations please see <<hootuser>>.
+
+See also:
+
+* `cleanup` command, <<hootuser>>
+* `map.cleaner.transforms` configuration option, <<hootuser>>
+
+[[EstimatePairwiseRelationships]]
+=== Estimate Pairwise Relationships
+
+The relationship between all features in a data set are estimated in a pairwise
+fashion during this stage. Because calculating all the relationships explicitly
+would be computationally impractical many of the relationships are eliminated
+implicitly based on simple rules such as feature type or distance thresholds.
+Relationships are represented as one of three states:
+
+* Match - The two features represent the same entity.
+* Miss - The two features do not represent the same entity.
+* Review - The relationship between the two features is uncertain.
+
+The relationship between two entities is internally calculated as a probability
+of each state (value [0, 1], where the sum of the probabilities equals 1). A
+tunable MatchThreshold is exposed that determines the relationship when a
+concrete decision must be made. The match threshold contains a threshold for
+each of the Match, Miss and Review and uses the following logic to determine the
+relationship:
+
+------
+if P(review) >= review threshold:
+  return "Review"
+if P(match) >= match threshold && P(miss) >= miss threshold:
+  return "Review"
+if P(match) >= match threshold:
+  return "Match"
+if P(miss) >= miss threshold:
+  return "Miss"
+else:
+  return "Review"
+------
+
+Each match type may have it's own logic for discovering relationships. For
+instance, when discovering building relationships queries are made to determine
+all buildings that fall within the specified threshold using the map's R-Tree
+index. The matches are then evaluated and any "Match" or "Review" relationships
+are stored for processing in later stages.
+
+Conversely, the POI match types create a custom <<fq-tree,FQ-Tree/R-Tree Hybrid
+Index>> for querying out similar matches. This custom index is then utilized to
+find candidate matches and the resulting "Match" and "Review" relationships are
+stored for later processing.
+
+NOTE: The `conflate.*.threshold` configuration options are not applied
+consistently across map types and require refinement so they can be set on an
+type by type basis. This is a known issue.
+
+See also:
+
+* `highway.match.threshold` configuration option, <<hootuser>>
+* `highway.miss.threshold` configuration option, <<hootuser>>
+* `highway.review.threshold` configuration option, <<hootuser>>
+* `building.match.threshold` configuration option, <<hootuser>>
+* `building.miss.threshold` configuration option, <<hootuser>>
+* `building.review.threshold` configuration option, <<hootuser>>
+* `poi.match.threshold` configuration option, <<hootuser>>
+* `poi.miss.threshold` configuration option, <<hootuser>>
+* `poi.review.threshold` configuration option, <<hootuser>>
+* `match.creators` configuration option, <<hootuser>>
+* `matchScore` JavaScript method, <<hootuser>>
+
+=== Split Data Based on Sub-graphs
+
+During conflation matches are processed using either an aggressive or
+conservative approach to selecting the best set of matches. Before a best set of
+matches can be determined, conflicting matches must be flagged. A match conflict
+is defined as two matches that cannot be applied as merges to a map
+simultaneously.
+
+Each match type defines exactly how a conflict is defined for that data type.
+For instance, roads are considered conflicting if applying one match as a merge
+prevents the second match from being applied as a merge. POIs are considered a
+conflict if any of the POIs in the group contains a Miss relationship. E.g. A
+matches B, B matches C, but A misses C.
+
+[[confictexamples]]
+.Simple Example of Conflicting and Non-Conflicting Lines
+image::algorithms/images/ConflictExamples.png[]
+
+The aggressive approach, inspired by <<li2011>>, selects a set of
+non-conflicting matches that maximizes the score of all the non-conflicting
+matches. The score of the match is match type specific, but generally is just
+the P(match).
+
+The conservative approach keeps all <<ConnectedComponent,connected components>>
+of matches that are non-conflicting as matches and marks all connected
+components that contain conflicts as needing review.
+
+Each match type defines the appropriate way of selecting matches. For building
+to building, building to POI and POI to POI matches the conservative connected
+component approach is utilized. Due to the amount of overlap between matches
+with roads the more aggressive approach must be used.
+
+See also:
+
+* `isWholeGroup` JavaScript method, <<hootuser>>
+
+=== Optimize
+
+The data selected for the more aggressive optimization goes through the
+following steps:
+
+. Determine the set of conflicts within the matches
+. Use linear programming to determine a good set of matches. 
+. Use greedy search to determine a good set of matches.
+. Select the best result from the methods above.
+
+Using a linear programming approach to determining the best set of matches can
+be extremely expensive (for large data sets it can take 95% or more of the total
+conflation time). However, anecdotal results show that the increased compute
+time sometimes yields only minor improvements in the conflated result. To ensure
+a balance between compute time and conflation quality is achieved, a
+configuration option is exposed to the user to select the amount of time spent
+optimizing. Even if no solution is found in the specified time limit the greedy
+search is guaranteed to find a solution and runs very quickly in comparison.
+
+The best set of matches found is carried through the process and the remaining
+conflicting matches are discarded.
+
+See also:
+
+* `unify.optimizer.time.limit` configuration option, <<hootuser>>
+
+=== Apply Merges
+
+While there may have been some cleanup operations that modified the map, up
+until this point there have been no changes made to the map during conflation.
+
+After the optimization is complete a selection of identified matches is ready to
+be applied as merges. Any matches that overlap (e.g. two POIs that match a
+single building) are combined into a single merge operation. Each merge
+operation is applied in turn to create the final conflated map.
+
+During this process the status of features that are conflated is changed from
+either _Unknown1_ or _Unknown2_ (representing the source data set) to
+_Conflated_. Features marked for review maintain the _Unknown*_ status. 
+
+* `merger.creators` configuration option, <<hootuser>>
+
+==== Orphaned Matches
+
+In some cases it is too computationally expensive to determine that a conflict
+exists. To account for this the detection of the conflict may be delayed until
+the merge is applied. In these cases, a merge may realize the conflict while merging
+and mark the feature as needing review. In some cases this can create a single
+output record that doesn't appear to have any neighboring features that require
+reviewing.
+
+This is an open problem that require more investigation.
+
+.Example of delayed conflict detection
+image::algorithms/images/DelayedConflict.png[]
+
+=== Export
+
+After conflation the data is ready for export. The data goes through the typical
+Hootenanny save process to store the output data.
+
+See also:
+
+* `convert` command, <<hootuser>>
+* _File Formats_, <<hootuser>>
+* `writer.include.debug` configuration option, <<hootuser>>
+

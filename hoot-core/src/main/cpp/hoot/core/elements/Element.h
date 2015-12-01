@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENT_H
 #define ELEMENT_H
@@ -62,7 +62,6 @@ namespace hoot {
 using namespace boost;
 using namespace geos::geom;
 
-class OsmMap;
 class ElementListener;
 class ElementProvider;
 class ElementVisitor;
@@ -98,6 +97,16 @@ public:
   virtual Envelope* getEnvelope(const shared_ptr<const ElementProvider>& ep) const = 0;
 
   long getId() const { return _getElementData().getId(); }
+
+  long getChangeset() const { return _getElementData().getChangeset(); }
+
+  long getVersion() const { return _getElementData().getVersion(); }
+
+  unsigned int getTimestamp() const { return _getElementData().getTimestamp(); }
+
+  QString getUser() const { return _getElementData().getUser(); }
+
+  long getUid() const { return _getElementData().getUid(); }
 
   const Tags& getTags() const { return _getElementData().getTags(); }
 
@@ -146,7 +155,9 @@ public:
    *
    * "this" is guaranteed to be visited last.
    */
-  virtual void visitRo(const OsmMap& map, ElementVisitor& visitor) const = 0;
+
+  virtual void visitRo(const ElementProvider& map, ElementVisitor& visitor) const = 0;
+
 
   /**
    * Applies a read write visitor to this element and all child elements. The visitor will be called
@@ -164,7 +175,7 @@ public:
    *
    * "this" is guaranteed to be visited last.
    */
-  virtual void visitRw(OsmMap& map, ElementVisitor& visitor) = 0;
+  virtual void visitRw(ElementProvider& map, ElementVisitor& visitor) = 0;
 
 
 protected:

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef _ELEMENTS_NODE_H_
 #define _ELEMENTS_NODE_H_
@@ -57,6 +57,9 @@ public:
 
   Node(Status s, long id, double x, double y, Meters circularError);
 
+  Node(Status s, long id, double x, double y, long changeset, long version, unsigned int timestamp,
+       QString user, long uid, Meters circularError);
+
   virtual ~Node() {}
 
   /**
@@ -86,9 +89,10 @@ public:
 
   QString toString() const;
 
-  void visitRo(const OsmMap& map, ElementVisitor& filter) const;
+  virtual void visitRo(const ElementProvider& map, ElementVisitor& visitor) const;
 
-  void visitRw(OsmMap& map, ElementVisitor& filter);
+  virtual void visitRw(ElementProvider& map, ElementVisitor& visitor);
+
 
 protected:
 

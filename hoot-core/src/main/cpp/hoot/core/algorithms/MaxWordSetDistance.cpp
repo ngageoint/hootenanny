@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MaxWordSetDistance.h"
 
@@ -45,8 +45,8 @@ MaxWordSetDistance::MaxWordSetDistance(StringDistance* d)
 
 double MaxWordSetDistance::compare(const QString& s1, const QString& s2) const
 {
-  QStringList sl1 = s1.split(" ");
-  QStringList sl2 = s2.split(" ");
+  QStringList sl1 = _tokenizer.tokenize(s1);
+  QStringList sl2 = _tokenizer.tokenize(s2);
 
   ScoreMatrix m(sl1.size(), sl2.size());
 
@@ -62,6 +62,11 @@ double MaxWordSetDistance::compare(const QString& s1, const QString& s2) const
   }
 
   return maxV;
+}
+
+void MaxWordSetDistance::setConfiguration(const Settings& conf)
+{
+  _tokenizer.setConfiguration(conf);
 }
 
 }

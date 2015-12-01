@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WaySplitter.h"
@@ -32,8 +32,9 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/FindNodesInWayFactory.h>
 

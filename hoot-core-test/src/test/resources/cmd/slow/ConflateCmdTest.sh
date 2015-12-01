@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+mkdir -p $HOOT_HOME/tmp/
 mkdir -p test-output/cmd/ConflateCmdTest
 hoot --conflate test-files/conflate/unified/AllDataTypesA.osm test-files/conflate/unified/AllDataTypesB.osm test-output/cmd/ConflateCmdTest/output.osm
 hoot --is-match test-output/cmd/ConflateCmdTest/output.osm test-files/cmd/slow/ConflateCmdTest/output.osm || diff test-output/cmd/ConflateCmdTest/output.osm test-files/cmd/slow/ConflateCmdTest/output.osm 

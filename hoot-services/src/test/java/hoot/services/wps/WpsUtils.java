@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.wps;
 
@@ -98,7 +98,7 @@ public class WpsUtils
     CodeType ct = new CodeType();
     ct.setValue(key);
     cod.setIdentifier(ct);
-    OutputStorage output = null;  //TODO: I don't know what to do with this...
+    OutputStorage output = null;  //I don't know what to do with this...
     ComplexOutputImpl coi = 
       new ComplexOutputImpl(
         cod, 
@@ -138,7 +138,6 @@ public class WpsUtils
     DefaultPoint max = 
       new DefaultPoint(null, null, null, new double[]{ bounds.getMaxLon(), bounds.getMaxLat() });
     Envelope env = new DefaultEnvelope(min, max);
-    //env.setCoordinateSystem(GeographicCRS.WGS84);
     BoundingBoxInputImpl lii = 
       new BoundingBoxInputImpl(
          bid, new LanguageString(key, null), new LanguageString(key, null), env);

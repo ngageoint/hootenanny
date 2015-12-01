@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementToRelationMap.h"
 
@@ -51,13 +51,13 @@ void ElementToRelationMap::addRelation(const OsmMap& map, const shared_ptr<const
       _rid = rid;
     }
 
-    virtual void visit(ElementType type, long id)
+    virtual void visit(const ConstElementPtr& e)
     {
-      ElementId eid(type, id);
+      ElementId eid = e->getElementId();
       // no need to map it to itself.
       if (eid != ElementId::relation(_rid))
       {
-        _mapping[ElementId(type, id)].insert(_rid);
+        _mapping[ElementId(e->getElementType(), e->getId())].insert(_rid);
       }
     }
   };
@@ -104,9 +104,9 @@ void ElementToRelationMap::removeRelation(const OsmMap& map, const shared_ptr<co
       _rid = rid;
     }
 
-    virtual void visit(ElementType type, long id)
+    virtual void visit(const ConstElementPtr& e)
     {
-      ElementId ep(type, id);
+      ElementId ep(e->getElementType(), e->getId());
       set<long>& relations = _mapping[ep];
       relations.erase(_rid);
       if (relations.size() == 0)
@@ -132,10 +132,9 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
       _found = false;
     }
 
-    virtual void visit(ElementType type, long id)
+    virtual void visit(const ConstElementPtr& e)
     {
-      ElementId eid(type, id);
-      if (eid == _eid)
+      if (e->getElementId() == _eid)
       {
         _found = true;
       }
@@ -166,8 +165,10 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
       return v.isFound();
     }
 
-    virtual void visit(ElementType type, long id)
+    virtual void visit(const ConstElementPtr& e)
     {
+      ElementType type = e->getElementType();
+      long id = e->getId();
 
       // first check to see that this element maps to the right relations.
       const set<long>& mappedRelations = _mapping.getRelationByElement(ElementId(type, id));
@@ -188,7 +189,8 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
         }
         else
         {
-          if (containsRecursive(r, ElementId(type, id)) == true)
+          if (containsRecursive(r, ElementId(type, id)) == true &&
+            r->getElementId() != ElementId(type, id))
           {
             LOG_WARN("ElementToRelationMap didn't expect relation " << *it <<
               " to contain: " << type.toString() << " " << id << " but it does.");

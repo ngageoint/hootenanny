@@ -27,6 +27,9 @@
 #ifndef ELEMENTINPUTSTREAM_H
 #define ELEMENTINPUTSTREAM_H
 
+#include <ogr_spatialref.h>
+
+#include <boost/shared_ptr.hpp>
 #include <hoot/core/elements/Element.h>
 
 namespace hoot
@@ -44,6 +47,12 @@ public:
    *
    */
   ElementInputStream() {}
+
+  /**
+   * @brief getProjection
+   * @return
+   */
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const = 0;
 
   /**
    * @brief ~ElementInputStream
@@ -70,7 +79,7 @@ public:
   virtual ElementPtr readNextElement() = 0;
 };
 
-typedef shared_ptr<ElementInputStream> ElementInputStreamPtr;
+typedef boost::shared_ptr<ElementInputStream> ElementInputStreamPtr;
 
 }
 

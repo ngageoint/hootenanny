@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -68,7 +68,9 @@ public:
   void attributeCompare(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2, shared_ptr<OsmMap> outMap,
                         int& mean, int& confidence)
   {
-    int iterations = 300;
+    srand(100);
+
+    int iterations = 600;
     {
       AttributeComparator attr(map1, outMap);
       attr.setIterations(iterations);

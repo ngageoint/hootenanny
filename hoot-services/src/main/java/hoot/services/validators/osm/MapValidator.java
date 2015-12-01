@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.validators.osm;
 
@@ -55,8 +55,6 @@ public class MapValidator
    * @param mapIdStr map ID; may be a map ID or unique map name
    * @return the map's numeric ID
    * @throws Exception if the map doesn't exist
-   * @todo Calls to ModelDaoUtils referencing maps in other parts of the code should be replaced
-   * with a call to this method.
    */
   public long verifyMapExists(final String mapIdStr) throws Exception
   {

@@ -22,38 +22,29 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 package hoot.services.utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathFactory;
 
-import org.apache.commons.io.FileUtils;
+
+//import javax.xml.transform.TransformerConfigurationException;
+//import javax.xml.transform.TransformerFactory;
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
 
 /**
  * General XML utilities
@@ -66,31 +57,11 @@ public class XmlDocumentBuilder
    * 
    * @return XML document
    * @throws IOException
+   * @throws ParserConfigurationException 
    */
-  public static Document create() throws IOException
+  public static Document create() throws IOException, ParserConfigurationException
   {
-    DocumentBuilderFactory dBF = DocumentBuilderFactory.newInstance();
-    DocumentBuilder builder;
-    try
-    {
-      builder = dBF.newDocumentBuilder();
-    }
-    catch (ParserConfigurationException e)
-    {
-      throw new IOException("Error creating document builder. (" + e.getMessage() + ")");
-    }
-    return builder.newDocument();
-  }
-
-  /**
-   * Creates an XPATH instance for querying with
-   * 
-   * @return an XPATH instance
-   */
-  public static XPath createXPath()
-  {
-    XPathFactory factory = XPathFactory.newInstance();
-    return factory.newXPath();
+  	return XmlDocumentBuilder.getSecureDocBuilderFactory().newDocumentBuilder().newDocument();
   }
 
   /**
@@ -105,46 +76,23 @@ public class XmlDocumentBuilder
   public static Document parse(String xml) throws SAXException, IOException,
     ParserConfigurationException
   {
-    return parse(xml, true);
-  }
-  
-  /**
-   * Parses an XML string into a DOM
-   * 
-   * @param xml an XML string
-   * @param namespaceAware determines whether namespaces are respected during the parsing
-   * @return an XML DOM
-   * @throws SAXException
-   * @throws IOException
-   * @throws ParserConfigurationException
-   */
-  public static Document parse(String xml, boolean namespaceAware) throws SAXException, 
-    IOException, ParserConfigurationException
-  {
-    DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-    domFactory.setNamespaceAware(namespaceAware); // never forget this!
+  	DocumentBuilderFactory domFactory = getSecureDocBuilderFactory();
+  	//DocumentBuilderFactory domFactory = getNormalDocBuilderFactory();
+    domFactory.setNamespaceAware(false);
+    domFactory.setValidating(false);
+    domFactory.setFeature("http://xml.org/sax/features/namespaces", false);
+    domFactory.setFeature("http://xml.org/sax/features/validation", false);
+    domFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+    domFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+    
     DocumentBuilder builder;
     builder = domFactory.newDocumentBuilder();
     
     InputSource is = new InputSource();
     is.setCharacterStream(new StringReader(xml));
     
+    //#6760: formerly line 132
     return builder.parse(is);
-  }
-  
-  /**
-   * Creates a DOM from file content
-   * 
-   * @param file file to read
-   * @return an XML DOM
-   * @throws ParserConfigurationException 
-   * @throws IOException 
-   * @throws SAXException 
-   */
-  public static Document parse(File file) throws SAXException, IOException, 
-    ParserConfigurationException
-  {
-    return parse(FileUtils.readFileToString(file));
   }
   
   /**
@@ -158,23 +106,6 @@ public class XmlDocumentBuilder
   {
     StringWriter writer = new StringWriter();
     write(document, writer);
-    return writer.toString();
-  }
-  
-  /**
-   * 
-   * 
-   * @param node
-   * @return
-   * @throws TransformerFactoryConfigurationError 
-   * @throws TransformerException 
-   */
-  public static String nodeToString(final Node node) throws TransformerFactoryConfigurationError, 
-    TransformerException
-  {
-    StringWriter writer = new StringWriter();
-    Transformer transformer = TransformerFactory.newInstance().newTransformer();
-    transformer.transform(new DOMSource(node), new StreamResult(writer));
     return writer.toString();
   }
 
@@ -197,26 +128,46 @@ public class XmlDocumentBuilder
   }
   
   /**
-   * Walks the document and removes all nodes of the specified type and specified name. 
-   * If name is null, then the node is removed if the type matches.
-   *
-   * @param node starting node
-   * @param nodeType type of nodes to remove
-   * @param name name of nodes to remove
+   * Returns a secure TransformerFactory, as identified by HP Fortify
+   * 
+   * @return a TransformerFactory
+   * @throws TransformerConfigurationException
+   * @todo could not get this code to run in JDK 1.7
    */
-  public static void removeAll(Node node, final short nodeType, final String name) 
+  /*public static TransformerFactory getSecureTransformerFactory() 
+    throws TransformerConfigurationException
   {
-    if (node.getNodeType() == nodeType && (name == null || node.getNodeName().equals(name))) 
-    {
-      node.getParentNode().removeChild(node);
-    } 
-    else 
-    {
-      NodeList list = node.getChildNodes();
-      for (int i=0; i<list.getLength(); i++) 
-      {
-        removeAll(list.item(i), nodeType, name);
-      }
-    }
+  	TransformerFactory transformerFactory = TransformerFactory.newInstance();
+  	transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+  	transformerFactory.setFeature(XMLConstants.ACCESS_EXTERNAL_DTD, false);
+  	return transformerFactory;
+  }*/
+  
+  /**
+   * Returns a secure DocumentBuilderFactory, as identified by HP Fortify
+   * 
+   * @return a DocumentBuilderFactory
+   * @throws ParserConfigurationException
+   */
+  public static DocumentBuilderFactory getSecureDocBuilderFactory() 
+    throws ParserConfigurationException
+  {
+  	DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+  	docBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+  	docBuilderFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+  	docBuilderFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+  	docBuilderFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+    return docBuilderFactory;
+  }
+  
+  /**
+   * 
+   * @return
+   */
+  @SuppressWarnings("unused")
+  private static DocumentBuilderFactory getNormalDocBuilderFactory() 
+  {
+  	DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+    return docBuilderFactory;
   }
 }

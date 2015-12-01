@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "UnifyingConflator.h"
 
@@ -131,7 +131,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
     LOG_DEBUG("Writing debug map.");
     OsmMapPtr debug(new OsmMap(map));
     MapReprojector::reprojectToWgs84(debug);
-    OsmMapWriterFactory::write(debug, "tmp/debug.osm");
+    OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
 
     _stats.append(SingleStat("Write Debug Map Time (sec)", timer.getElapsedAndRestart()));
   }
@@ -174,15 +174,21 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   // Globally optimize the set of matches to maximize the conflation score.
   {
     OptimalConstrainedMatches cm(map);
-    cm.addMatches(_matches.begin(), _matches.end());
+    vector<const Match*> cmMatches;
 
-    cm.setTimeLimit(ConfigOptions(_settings).getUnifyOptimizerTimeLimit());
+    if (ConfigOptions(_settings).getUnifyEnableOptimalConstrainedMatches())
+    {
+      cm.addMatches(_matches.begin(), _matches.end());
 
-    double cmStart = Time::getTime();
-    vector<const Match*> cmMatches = cm.calculateSubset();
-    LOG_INFO("CM took: " << Time::getTime() - cmStart << "s.");
-    LOG_INFO("CM Score: " << cm.getScore());
-    LOG_DEBUG(SystemInfo::getMemoryUsageString());
+      cm.setTimeLimit(ConfigOptions(_settings).getUnifyOptimizerTimeLimit());
+
+      double cmStart = Time::getTime();
+//      vector<const Match*> cmMatches = cm.calculateSubset();
+      cmMatches = cm.calculateSubset();
+      LOG_INFO("CM took: " << Time::getTime() - cmStart << "s.");
+      LOG_INFO("CM Score: " << cm.getScore());
+      LOG_DEBUG(SystemInfo::getMemoryUsageString());
+    }
 
     GreedyConstrainedMatches gm(map);
     gm.addMatches(_matches.begin(), _matches.end());

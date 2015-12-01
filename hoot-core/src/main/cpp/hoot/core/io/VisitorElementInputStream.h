@@ -32,6 +32,9 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/io/ElementInputStream.h>
 
+#include <boost/shared_ptr.hpp>
+#include <ogr_spatialref.h>
+
 namespace hoot
 {
 
@@ -47,6 +50,8 @@ public:
   virtual bool hasMoreElements() { return _source->hasMoreElements(); }
 
   virtual ElementPtr readNextElement();
+
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
 private:
   ElementInputStreamPtr _source;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIMATCH_H
 #define POIMATCH_H
@@ -58,6 +58,8 @@ public:
 
   virtual MatchMembers getMatchMembers() const { return MatchMembers::Poi; }
 
+  virtual QString getMatchName() const { return _matchName; }
+
   virtual double getProbability() const;
 
   /**
@@ -75,6 +77,7 @@ public:
 private:
 
   ElementId _eid1, _eid2;
+  static QString _matchName;
   MatchClassification _p;
   double _goodnessThreshold;
 

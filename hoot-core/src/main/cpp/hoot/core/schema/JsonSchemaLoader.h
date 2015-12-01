@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef JSONSCHEMALOADER_H
@@ -56,8 +56,6 @@ public:
    * list.
    */
   set<QString> getDependencies();
-
-  static void load(OsmSchema& schema, QString path);
 
 private:
   JsonSchemaLoaderData* _d;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
 
@@ -113,7 +113,7 @@ public class CustomScriptSaveProcesslet  extends BaseProcesslet {
 			
 			HttpEntity entity = resp.getEntity();
 			if (entity != null) {
-			    long len = entity.getContentLength();
+			    entity.getContentLength();
 			    ret = EntityUtils.toString(entity);
 			}
 			

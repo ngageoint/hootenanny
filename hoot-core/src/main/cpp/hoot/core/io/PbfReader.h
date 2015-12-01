@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef PBFREADER_H
@@ -46,6 +46,11 @@
 
 // tgs
 #include <tgs/BigContainers/BigMap.h>
+
+#include <boost/shared_ptr.hpp>
+
+#include <ogr_spatialref.h>
+
 
 namespace hoot
 {
@@ -167,6 +172,8 @@ public:
   virtual void closeStream(
       void );
 
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+
 private:
 
   Meters _circularError;
@@ -216,7 +223,7 @@ private:
   int _blobIndex;
 
   //partial read iterators
-  OsmMap::NodeMap::const_iterator _nodesItr;
+  NodeMap::const_iterator _nodesItr;
   WayMap::const_iterator _waysItr;
   RelationMap::const_iterator _relationsItr;
 
@@ -237,7 +244,7 @@ private:
 
   double _convertLat(long lat);
 
-  ElementId _convertToElementId(int id, int memberType);
+  ElementId _convertToElementId(long id, int memberType);
 
   long _createRelationId(long fromFile);
 

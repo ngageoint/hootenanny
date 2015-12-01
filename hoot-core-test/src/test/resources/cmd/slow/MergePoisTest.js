@@ -1,5 +1,6 @@
 var HOOT_HOME = process.env.HOOT_HOME;
 var hoot = require(HOOT_HOME + '/lib/HootJs');
+hoot.Settings.set({"tag.merger.default":"hoot::OverwriteTagMerger"});
 var script = 'PoiGeneric.js';
 
 var input1 = "<?xml version='1.0' encoding='UTF-8'?>\
@@ -19,7 +20,7 @@ var input1 = "<?xml version='1.0' encoding='UTF-8'?>\
 
 var map = new hoot.OsmMap();
 hoot.loadMapFromString(map, input1);
-var mergedMap = hoot.poiMerge(script, map);
+var mergedMap = hoot.poiMerge(script, map, -1);
 var xml = hoot.OsmWriter.toString(mergedMap);
 console.log(xml);
 
@@ -54,7 +55,8 @@ var input2 = "<?xml version='1.0' encoding='UTF-8'?>\
 </osm>";
 
 var map = new hoot.OsmMap();
+map.setIdGenerator(new hoot.DefaultIdGenerator());
 hoot.loadMapFromString(map, input2);
-var mergedMap = hoot.poiMerge(script, map);
+var mergedMap = hoot.poiMerge(script, map, -1);
 var xml = hoot.OsmWriter.toString(mergedMap);
 console.log(xml);

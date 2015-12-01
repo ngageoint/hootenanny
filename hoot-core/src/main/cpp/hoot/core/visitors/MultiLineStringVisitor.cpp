@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiLineStringVisitor.h"
 
@@ -39,10 +39,11 @@
 namespace hoot
 {
 
-MultiLineStringVisitor::MultiLineStringVisitor()
+MultiLineStringVisitor::MultiLineStringVisitor() :
+  _provider(),
+  _ls(0)
 {
-  _ls = 0;
-  _map = 0;
+  ;
 }
 
 MultiLineString* MultiLineStringVisitor::createMultiLineString()
@@ -58,11 +59,12 @@ MultiLineString* MultiLineStringVisitor::createMultiLineString()
   }
 }
 
-void MultiLineStringVisitor::visit(ElementType type, long id)
+void MultiLineStringVisitor::visit(const ConstElementPtr& e)
 {
-  if (type == ElementType::Way)
+  if (e->getElementType() == ElementType::Way)
   {
-    shared_ptr<const Way> w = _map->getWay(id);
+   // shared_ptr<const Way> w = _provider->getWay(e->getId());
+    shared_ptr<const Way> w = dynamic_pointer_cast<const Way>(e);
     visit(w);
   }
 }
@@ -76,7 +78,7 @@ void MultiLineStringVisitor::visit(const shared_ptr<const Way>& w)
       _ls = new vector<Geometry*>();
     }
 
-    Geometry* g = ElementConverter(_map->shared_from_this()).convertToLineString(w)->clone();
+    Geometry* g = ElementConverter(_provider).convertToLineString(w)->clone();
     _ls->push_back(g);
   }
 }

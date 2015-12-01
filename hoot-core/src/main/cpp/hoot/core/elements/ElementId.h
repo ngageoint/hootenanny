@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTID_H
 #define ELEMENTID_H
@@ -49,6 +49,8 @@ namespace hoot
 class ElementId
 {
 public:
+  static string className() { return "ElementId"; }
+
   ElementId() : _type(ElementType::Unknown), _id(-std::numeric_limits<int>::max()) {}
 
   ElementId(ElementType type, long id) : _type(type), _id(id) {}

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYSNAPMERGER_H
 #define HIGHWAYSNAPMERGER_H
@@ -66,7 +66,8 @@ private:
    */
   bool _directConnect(const ConstOsmMapPtr &map, shared_ptr<Way> w) const;
 
-  void _markNeedsReview(ElementPtr e1, ElementPtr e2, QString note) const;
+  void _markNeedsReview(const OsmMapPtr& map, ElementPtr e1, ElementPtr e2, QString reviewType,
+    QString note) const;
 
   void _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
                    vector< pair<ElementId, ElementId> >& replaced) const;

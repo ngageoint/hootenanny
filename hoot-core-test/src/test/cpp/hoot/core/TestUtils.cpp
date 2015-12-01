@@ -32,8 +32,10 @@
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/conflate/MergerFactory.h>
 #include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/scoring/MapComparator.h>
 #include <hoot/core/io/OsmReader.h>
+#include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -187,9 +189,14 @@ void TestUtils::resetEnvironment()
   ConfigOptions::populateDefaults(conf());
   conf().set("HOOT_HOME", getenv("HOOT_HOME"));
 
+  // Sometimes we add new projections to the MapReprojector, when this happens it may pick a new
+  // projection and subtly change the results.
+  conf().set(ConfigOptions::getTestForceOrthographicProjectionKey(), true);
+
   // these factories cache the creators. Flush them so they get any config changes.
   MatchFactory::getInstance().reset();
   MergerFactory::getInstance().reset();
+  TagMergerFactory::getInstance().reset();
 
   // make sure the UUIDs are repeatable
   UuidHelper::resetRepeatableKey();

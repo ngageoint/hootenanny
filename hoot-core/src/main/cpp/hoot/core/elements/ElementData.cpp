@@ -22,15 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Element.h"
 
 namespace hoot {
 
-ElementData::ElementData(long id, const Tags& tags, Meters circularError) : _id(id), _tags(tags),
-  _circularError(circularError)
+long ElementData::CHANGESET_EMPTY = 0;
+long ElementData::VERSION_EMPTY = 0;
+unsigned int ElementData::TIMESTAMP_EMPTY = 0;
+QString ElementData::USER_EMPTY = "";
+long ElementData::UID_EMPTY = 0;
+
+
+ElementData::ElementData(long id, const Tags& tags, Meters circularError) : _id(id),
+  _changeset(CHANGESET_EMPTY), _version(VERSION_EMPTY), _timestamp(TIMESTAMP_EMPTY),
+  _user(USER_EMPTY), _uid(UID_EMPTY), _tags(tags), _circularError(circularError)
 {
 }
 

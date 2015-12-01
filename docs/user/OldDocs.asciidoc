@@ -13,6 +13,55 @@ Hootenanny can be installed on both CentOS/RHEL 6.5 and Ubuntu 12.04/14.04 opera
 [[OldDocsConflation]]
 == Conflation
 
+[[POIConflation]]
+=== POI Conflation
+
+Hootenanny provides the ability to perform point to point, i.e. POI to POI, conflation to merge input dataset geometry and attribution using two general approaches: 
+
+* PLACES  
+* Unify 
+
+The _PLACES_ approach is appropriate when conflating
+link:$$http://www.geonames.org/about.html$$[GeoNames] source data where the goal
+is to conflate in an efficient and timely manner without depending heavily on
+discerning between different POI types (e.g. cities vs. hotels) and their the
+unique geographic characteristics.  The PLACES methods are generally fast and
+work for country-level POI datasets that contain similar types of POIs (e.g.
+localities) but are less useful for conflating datasets containing highly
+heterogeneous POIs that vary in their tag structure and subtype.  In this
+regard, the PLACES matching routines are not going to produce the best results
+for users who are trying to conflate POIs from OSM sources which tend to have
+dense POI information that is heavily reliant on the type tags to provide
+context to its users.
+
+When dealing with more complex (and generally more reflective of real world) POI
+conflation scenarios, Hootenanny provides a second conflation approach using
+Unify. The _Unify_ POI to POI conflation code uses the Hootenanny JavaScript
+interface described in <<HootJavaScriptOverview>> to find, label and merge match
+candidate features. Because this code deals with a broader range of POI
+conditions, conflating POI datasets using Unify will invariably produce reviews
+that the user must manually confirm using the workflow described in the
+<<hootUI>>, _Reviewing Conflicts_.  Unless there is a pressing need for faster
+execution or zero reviews the _Unify_ algorithm should be preferred over the
+_PLACES_ algorithm.  Further background on both PLACES and Unifying POI
+conflation can be found in <<hootalgo>>, _PLACES POI Conflation_ and _Unifying
+POI Conflation_.
+
+There are a number of configurable distance thresholds that can be specified if
+you are comfortable making changes to JavaScript. Please see
+`$HOOT_HOME/rules/PoiGeneric.js` to modify the tables found in the script. Any
+changes made to `PoiGeneric.js` will apply to all jobs launched in the user
+interface as well as command line.
+
+To enable or change the POI conflation approach please see the following
+configuration options:
+
+* `match.creators` - <<match.creators>>
+* `merger.creators` - <<merger.creators>>
+
+For background on leveraging the Hootenanny JavaScript interface to call
+functions using Node.js, see <<HootJavaScriptOverview>>.
+
 [[Building-Conflation]]
 === Building Conflation
 
@@ -144,6 +193,25 @@ in +conf/ConfigOptions.asciidoc++ and are read in by +rules/LinearWaterway.js+  
 settings can result in better conflation performance depending on the datasets being conflated.  
 See the configuration options for details on the settings that may be modified (search for 
 "waterway").
+
+[[Feature-Review]]
+=== Feature Review
+
+During the conflation process if Hootenanny cannot determine with confidence the best way to 
+conflate features, it will mark one or more features as needing a manual review by the user.  Below
+are listed the possible solutions where Hootenanny may request a manual review from a user.
+
+.*Feature Review Situations*
+[width="100%"]
+|======
+| *Needs Review Message* | *Possible Causes* | *Potential User Actions to Take*
+| Elements contain too many ways and the computational complexity is unreasonable. | A multiline string geometry was attempted to be conflated that had more lines in it than Hootenanny can conflate in a reasonable amount of time using its current algorithms. Currently, that is when both input sublines to conflate contain more than four lines, or if the sum of lines they contain is greater than seven. | Review this feature manually. It can only be automatically conflated by developing new conflation algorithms that can handle multilinestring input data of this size.
+| Internal Error: Expected a matching subline, but got an empty match. Please report this to the developers. | An unexpected internal error occurred. Multiple matching line parts have caused extra difficulty during the line matching process. | Review this feature manually, and report this behavior to the Hootenanny development team for further examination.
+| MultiLineString relations can only contain ways when matching sublines. | A input being conflated of geometry type multiline string contained an OSM feature type other than a way (nodes or relations). | Review this feature manually. This is invalid input data for Hootenanny conflation purposes and cannot be conflated automatically.
+| Multiple overlapping way matches were found within one set of ways. | When attempting to conflate sublines from line inputs, multiple overlapping lines were found. | TODO
+| No valid matching subline found. | When conflating two linear inputs, Hootenanny could not find a corresponding matching subline part in one of the inputs. | Review this feature manually, as Hootenanny can not determine automatically whether it matches any feature in the opposite input dataset.
+| When matching sublines expected a multilinestring relation not a <osm feature type>. | When conflating linear features, Hootenanny expects all relations to be of the type multilinestring. | Review this feature manually. This is invalid input data for Hootenanny conflation purposes and cannot be conflated.
+|======
 
 [[Translation]]
 == Translation

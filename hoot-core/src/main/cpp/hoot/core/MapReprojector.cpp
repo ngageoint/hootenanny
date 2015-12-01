@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 
@@ -33,6 +33,7 @@ using namespace boost;
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/HootException.h>
@@ -147,65 +148,107 @@ vector< shared_ptr<OGRSpatialReference> > MapReprojector::createAllPlanarProject
 
   double centerLat = (env.MaxY + env.MinY) / 2.0;
   double centerLon = (env.MaxX + env.MinX) / 2.0;
+  double height = env.MaxY - env.MinY;
+  double stdP1 = env.MinY + height * .25;
+  double stdP2 = env.MinY + height * .75;
 
   try { result.push_back(createOrthographic(env)); } catch (HootException& e) { }
-  try { result.push_back(createAeacProjection(env)); } catch (HootException& e) { }
-  try { result.push_back(createSinusoidalProjection(env)); } catch (HootException& e) { }
 
-  shared_ptr<OGRSpatialReference> mollweide(new OGRSpatialReference());
-  if (mollweide->importFromEPSG(54009) == OGRERR_NONE)
+  if (ConfigOptions().getTestForceOrthographicProjection() == false)
   {
-    result.push_back(mollweide);
-  }
+    try { result.push_back(createAeacProjection(env)); } catch (HootException& e) { }
+    try { result.push_back(createSinusoidalProjection(env)); } catch (HootException& e) { }
 
-  shared_ptr<OGRSpatialReference> eckertVI(new OGRSpatialReference());
-  if (eckertVI->importFromEPSG(53010) == OGRERR_NONE)
-  {
-    result.push_back(eckertVI);
-  }
+    shared_ptr<OGRSpatialReference> mollweide(new OGRSpatialReference());
+    if (mollweide->importFromEPSG(54009) == OGRERR_NONE)
+    {
+      result.push_back(mollweide);
+    }
 
-  shared_ptr<OGRSpatialReference> sphereBonne(new OGRSpatialReference());
-  if (sphereBonne->importFromEPSG(53024) == OGRERR_NONE)
-  {
-    result.push_back(sphereBonne);
-  }
+    shared_ptr<OGRSpatialReference> eckertVI(new OGRSpatialReference());
+    if (eckertVI->importFromEPSG(53010) == OGRERR_NONE)
+    {
+      result.push_back(eckertVI);
+    }
 
-  shared_ptr<OGRSpatialReference> customMercator(new OGRSpatialReference());
-  if (customMercator->SetMercator(centerLat, centerLon, 1.0, 0.0, 0.0) == OGRERR_NONE)
-  {
-    result.push_back(customMercator);
-  }
+    shared_ptr<OGRSpatialReference> sphereBonne(new OGRSpatialReference());
+    if (sphereBonne->importFromEPSG(53024) == OGRERR_NONE)
+    {
+      result.push_back(sphereBonne);
+    }
 
-  shared_ptr<OGRSpatialReference> customBonne(new OGRSpatialReference());
-  if (customBonne->SetBonne(M_PI_2, centerLon, 0.0, 0.0) == OGRERR_NONE)
-  {
-    result.push_back(customBonne);
-  }
+    shared_ptr<OGRSpatialReference> customMercator(new OGRSpatialReference());
+    if (customMercator->SetMercator(centerLat, centerLon, 1.0, 0.0, 0.0) == OGRERR_NONE)
+    {
+      result.push_back(customMercator);
+    }
 
-  // Lambert azimuthal equal-area projection
-  shared_ptr<OGRSpatialReference> customLaea(new OGRSpatialReference());
-  if (customLaea->SetLAEA(centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
-  {
-    result.push_back(customLaea);
-  }
+    shared_ptr<OGRSpatialReference> customBonne(new OGRSpatialReference());
+    if (customBonne->SetBonne(M_PI_2, centerLon, 0.0, 0.0) == OGRERR_NONE)
+    {
+      result.push_back(customBonne);
+    }
 
-  shared_ptr<OGRSpatialReference> customLcc(new OGRSpatialReference());
-  if (customLcc->SetLCC1SP(centerLat, centerLon, 1.0, 0.0, 0.0) == OGRERR_NONE)
-  {
-    result.push_back(customLcc);
-  }
+    // Lambert azimuthal equal-area projection
+    shared_ptr<OGRSpatialReference> customLaea(new OGRSpatialReference());
+    if (customLaea->SetLAEA(centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
+    {
+      result.push_back(customLaea);
+    }
 
-  shared_ptr<OGRSpatialReference> customRobinson(new OGRSpatialReference());
-  if (customRobinson->SetRobinson(centerLon, 0.0, 0.0) == OGRERR_NONE)
-  {
-    result.push_back(customRobinson);
-  }
+    shared_ptr<OGRSpatialReference> customLcc1sp(new OGRSpatialReference());
+    if (customLcc1sp->SetLCC1SP(centerLat, centerLon, 1.0, 0.0, 0.0) == OGRERR_NONE)
+    {
+      result.push_back(customLcc1sp);
+    }
 
-  // custom transverse mercator
-  shared_ptr<OGRSpatialReference> customTm(new OGRSpatialReference());
-  if (customTm->SetTM(centerLat, centerLon, 1.0, 0.0, 0.0) == OGRERR_NONE)
-  {
-    result.push_back(customTm);
+    shared_ptr<OGRSpatialReference> customRobinson(new OGRSpatialReference());
+    if (customRobinson->SetRobinson(centerLon, 0.0, 0.0) == OGRERR_NONE)
+    {
+      result.push_back(customRobinson);
+    }
+
+    // custom transverse mercator
+    shared_ptr<OGRSpatialReference> customTm(new OGRSpatialReference());
+    if (customTm->SetTM(centerLat, centerLon, 1.0, 0.0, 0.0) == OGRERR_NONE)
+    {
+      result.push_back(customTm);
+    }
+
+    // Polyconic
+    shared_ptr<OGRSpatialReference> customPolyconic(new OGRSpatialReference());
+    if (customPolyconic->SetPolyconic(centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
+    {
+      result.push_back(customPolyconic);
+    }
+
+    // Two Point Equidistant
+    shared_ptr<OGRSpatialReference> customTped(new OGRSpatialReference());
+    if (customTped->SetTPED(stdP1, centerLon, stdP2, centerLon, 0.0, 0.0) == OGRERR_NONE)
+    {
+      result.push_back(customTped);
+    }
+
+    // Equidistant Conic
+    shared_ptr<OGRSpatialReference> customEc(new OGRSpatialReference());
+    if (customEc->SetEC(stdP1, stdP2, centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
+    {
+      result.push_back(customEc);
+    }
+
+    // Azimuthal Equidistant
+    shared_ptr<OGRSpatialReference> customAe(new OGRSpatialReference());
+    if (customAe->SetAE(centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
+    {
+      result.push_back(customAe);
+    }
+
+    // Lambert Convformal Conic
+    shared_ptr<OGRSpatialReference> customLcc(new OGRSpatialReference());
+    if (customLcc->SetLCC(stdP1, stdP2, centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
+    {
+      result.push_back(customLcc);
+    }
   }
 
   return result;
@@ -451,9 +494,9 @@ size_t MapReprojector::_findBestScore(vector<PlanarTestResult>& results)
   return orderByScore[0].i;
 }
 
-bool MapReprojector::isGeographic(const shared_ptr<const OsmMap>& map)
+bool MapReprojector::isGeographic(const ConstElementProviderPtr& provider)
 {
-  return map->getProjection()->IsGeographic();
+  return provider->getProjection()->IsGeographic();
 }
 
 Coordinate MapReprojector::reproject(const Coordinate& c, shared_ptr<OGRSpatialReference> srs1,
@@ -492,10 +535,10 @@ void MapReprojector::reproject(shared_ptr<OsmMap> map,
   ReprojectCoordinateFilter rcf(t);
 
   int count = 0;
-  const OsmMap::NodeMap& nodes = map->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nodes.constBegin(); it != nodes.constEnd(); ++it)
+  const NodeMap& nodes = map->getNodeMap();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    Node* n = it.value().get();
+    Node* n = it->second.get();
     Coordinate c = n->toCoordinate();
     try
     {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.filters;
 
@@ -45,10 +45,8 @@ public class CorsResponseFilter implements ContainerResponseFilter
   public ContainerResponse filter(final ContainerRequest req, ContainerResponse contResp)
   {
     ResponseBuilder resp = Response.fromResponse(contResp.getResponse());
-    //TODO: Access-Control-Allow-Origin = * is too loose to allow cross domain requests from iD 
-    //- CHANGE!
     resp
-      .header("Access-Control-Allow-Origin", "*") //TODO: read from config
+      .header("Access-Control-Allow-Origin", "*")
       .header("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS");
 
     String reqHead = req.getHeaderValue("Access-Control-Request-Headers");

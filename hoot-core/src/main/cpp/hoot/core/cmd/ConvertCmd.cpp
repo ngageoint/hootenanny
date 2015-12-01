@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -35,6 +35,8 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
+#include <hoot/core/io/ElementInputStream.h>
+#include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 
@@ -81,12 +83,15 @@ public:
       throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
-    // if there is both a partial reader and writer
-    if (OsmMapReaderFactory::getInstance().hasPartialReader(args[0]) &&
-        OsmMapWriterFactory::getInstance().hasPartialWriter(args[1]))
+    OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
+    OsmMapWriterFactory writerFactory = OsmMapWriterFactory::getInstance();
+
+        // Is there a streaming reader and writer?
+    if (readerFactory.hasElementInputStream(args[0]) &&
+        writerFactory.hasElementOutputStream(args[1]) &&
+        ConfigOptions().getConvertOps().size() == 0)
     {
-      // stream the data rather than bulk read/write
-      streamPartial(args[0], args[1]);
+      streamElements(args[0], args[1]);
     }
     else
     {
@@ -104,24 +109,20 @@ public:
     return 0;
   }
 
-  void streamPartial(QString in, QString out)
+  void streamElements(QString in, QString out)
   {
-    LOG_DEBUG("Streaming data conversion.");
+    LOG_DEBUG("Streaming data conversion (element input/output streams)");
+
     shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(in);
     reader->open(in);
-    shared_ptr<PartialOsmMapReader> pr = dynamic_pointer_cast<PartialOsmMapReader>(reader);
+    shared_ptr<ElementInputStream> streamReader = dynamic_pointer_cast<ElementInputStream>(reader);
     shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::getInstance().createWriter(out);
     writer->open(out);
-    shared_ptr<PartialOsmMapWriter> pw = dynamic_pointer_cast<PartialOsmMapWriter>(writer);
+    shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
 
-    pr->initializePartial();
-    while (pr->hasMoreElements())
-    {
-      pw->writePartial(pr->readNextElement());
-    }
-    pr->finalizePartial();
-    pw->finalizePartial();
+    ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
   }
+
 };
 
 HOOT_FACTORY_REGISTER(Command, ConvertCmd)

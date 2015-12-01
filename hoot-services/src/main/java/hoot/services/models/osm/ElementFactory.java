@@ -22,11 +22,9 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
-
-import hoot.services.db.DbUtils;
 
 import hoot.services.models.osm.Element.ElementType;
 
@@ -38,7 +36,6 @@ import org.apache.commons.lang3.ClassUtils;
 
 
 import com.mysema.query.Tuple;
-import com.mysema.query.sql.SQLQuery;
 
 /**
  * Factory for creating the different OSM element types
@@ -47,7 +44,6 @@ public class ElementFactory
 {
   private ElementFactory()
   {
-
   }
 
   private static ElementFactory instance;
@@ -81,11 +77,10 @@ public class ElementFactory
     throws InstantiationException, IllegalAccessException, ClassNotFoundException,
     NoSuchMethodException, InvocationTargetException
   {
-  	Long oMapId = new Long(mapId);
     return
       (Element)ConstructorUtils.invokeConstructor(
         Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType.toString()),
-        new Object[]{ oMapId, conn },
+        new Object[]{ new Long(mapId), conn },
         new Class<?>[]{ Long.class, Connection.class });
   }
 
@@ -102,8 +97,8 @@ public class ElementFactory
    * @throws IllegalAccessException
    * @throws NoSuchMethodException
    */
-  public Element create(final ElementType elementType, final Object record, Connection conn, final long mapId)
-    throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
+  public Element create(final ElementType elementType, final Object record, Connection conn, 
+  	final long mapId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
     InstantiationException, ClassNotFoundException, Exception
   {
   	Object oRec = record;
@@ -121,54 +116,18 @@ public class ElementFactory
   		}
   		else
   		{
-  			throw new Exception("Bad Record type. Tuple is empty. Please make sure the first object is tuple is DTO that supports setVersion.");
+  			throw new Exception(
+  				"Bad Record type. Tuple is empty. Please make sure the first object is tuple is DTO " +
+  				"that supports setVersion.");
   		}
   	}
     Long oMapId = new Long(mapId);
-    String className = ClassUtils.getPackageName(ElementFactory.class) + "." + elementType.toString();
+    ClassUtils.getPackageName(ElementFactory.class);
+		elementType.toString();
     return
       (Element)ConstructorUtils.invokeConstructor(
         Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType.toString()),
         new Object[]{ oMapId, conn, oElem },
         new Class<?>[]{ Long.class, Connection.class, oElem.getClass() });
-  }
-
-  /**
-   * Creates an element by querying for its element record
-   *
-   * This method assumes the element already exists in the services database.
-   *
-   * @param mapId ID of the map owning the element
-   * @param elementType the type of element to create
-   * @param elementId the ID of the element being created
-   * @param dbConn JDBC Connection
-   * @return an element
-   * @throws Exception
-   */
-  public Element create(final long mapId, final ElementType elementType, final long elementId,
-    Connection dbConn) throws Exception
-  {
-  	Long oMapId = new Long(mapId);
-    Element element =
-      (Element)ConstructorUtils.invokeConstructor(
-        Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType.toString()),
-        new Object[]{ oMapId, dbConn },
-        new Class<?>[]{ Long.class, Connection.class });
-
-  	Object record =
-  			new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(element.getElementTable())
-  			.where(element.getElementIdField().eq(elementId)).singleResult(element.getElementTable());
-
-    if (record != null)
-    {
-      element.setRecord(record);
-    }
-    else
-    {
-      throw new Exception(
-        "No ecord exists for map with ID: " + mapId + " and element ID: " + elementId +
-        " and type: " + elementType.toString());
-    }
-    return element;
   }
 }

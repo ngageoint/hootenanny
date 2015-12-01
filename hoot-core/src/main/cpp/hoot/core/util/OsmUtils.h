@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_UTILS_H
@@ -148,6 +148,21 @@ class OsmUtils
       instead.
       */
     static void saveMap(shared_ptr<const OsmMap> map, QString path);
+
+    /**
+      Converts an unsigned int timestamp (time from epoch) to a QString (utc zulu)
+
+      @param timestamp unsigned int time encoding in seconds from the epoch (1970-01-01 00:00:00)
+      */
+    static QString toTimeString(unsigned int timestamp);
+
+    /**
+      Converts a utc zulu timestamp to time since the epoch in seconds.
+
+      @param timestamp in utc zulu string to be convered to seconds from the epoch (1970-01-01 00:00:00)
+      */
+    static unsigned int fromTimeString(QString timestamp);
+
 };
 
 }

@@ -22,15 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef VALIDATE_H
 #define VALIDATE_H
 
 #ifdef VALIDATE_ON
+# include <hoot/core/util/SignalCatcher.h>
 # warning Validate is on, this will slow things considerably.
-# define VALIDATE(a) { if ((a) == false) LOG_WARN("Validate failed here."); }
+# define VALIDATE(a) { if ((a) == false) { LOG_WARN("Validate failed here."); SignalCatcher::print_stacktrace(); } }
 #else
 # define VALIDATE(a)
 #endif

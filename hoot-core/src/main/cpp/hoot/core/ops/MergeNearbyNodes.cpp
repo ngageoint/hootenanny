@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MergeNearbyNodes.h"
@@ -97,10 +97,10 @@ void MergeNearbyNodes::apply(shared_ptr<OsmMap>& map)
 
   ClosePointHash cph(_distance);
 
-  const OsmMap::NodeMap& nodes = planar->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); it++)
+  const NodeMap& nodes = planar->getNodeMap();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); it++)
   {
-    const shared_ptr<Node>& n = it.value();
+    const shared_ptr<Node>& n = it->second;
     cph.addPoint(n->getX(), n->getY(), n->getId());
   }
 

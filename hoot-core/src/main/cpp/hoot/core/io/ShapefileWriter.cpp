@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ShapefileWriter.h"
@@ -39,6 +39,8 @@
 using namespace geos::geom;
 
 // Hoot
+#include <hoot/core/io/OgrOptions.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
@@ -180,10 +182,14 @@ void ShapefileWriter::writeLines(shared_ptr<const OsmMap> map, const QString& pa
 
   OGRLayer *poLayer;
 
+  OgrOptions options;
+  options["ENCODING"] = "UTF-8";
+
   QString layerName;
   layerName = QFileInfo(path).baseName();
   poLayer = poDS->CreateLayer(layerName.toAscii(),
-                              map->getProjection().get(), wkbLineString, NULL );
+                              map->getProjection().get(), wkbLineString,
+                              options.getCrypticOptions());
   if( poLayer == NULL )
   {
     throw HootException(QString("Layer creation failed. %1").arg(path));
@@ -221,7 +227,7 @@ void ShapefileWriter::writeLines(shared_ptr<const OsmMap> map, const QString& pa
   {
     shared_ptr<Way> way = it->second;
 
-    if (way->getTags().isArea() == false)
+    if (OsmSchema::getInstance().isArea(way) == false)
     {
       OGRFeature* poFeature = OGRFeature::CreateFeature( poLayer->GetLayerDefn() );
       // set all the column values.
@@ -230,7 +236,7 @@ void ShapefileWriter::writeLines(shared_ptr<const OsmMap> map, const QString& pa
         if (way->getTags().contains(columns[i]))
         {
           QByteArray c = shpColumns[i].toAscii();
-          QByteArray v = way->getTags()[columns[i]].toAscii();
+          QByteArray v = way->getTags()[columns[i]].toUtf8();
           poFeature->SetField(c.constData(), v.constData());
         }
       }
@@ -285,12 +291,15 @@ void ShapefileWriter::writePoints(shared_ptr<const OsmMap> map, const QString& p
     throw HootException(QString("Data source creation failed. %1").arg(path));
   }
 
+  OgrOptions options;
+  options["ENCODING"] = "UTF-8";
+
   OGRLayer *poLayer;
 
   QString layerName;
   layerName = QFileInfo(path).baseName();
   poLayer = poDS->CreateLayer(layerName.toAscii(),
-                              map->getProjection().get(), wkbPoint, NULL );
+                              map->getProjection().get(), wkbPoint, options.getCrypticOptions());
   if( poLayer == NULL )
   {
     throw HootException(QString("Layer creation failed. %1").arg(path));
@@ -323,10 +332,10 @@ void ShapefileWriter::writePoints(shared_ptr<const OsmMap> map, const QString& p
     _circularErrorIndex = poLayer->GetLayerDefn()->GetFieldCount() - 1;
   }
 
-  const OsmMap::NodeMap& nodes = map->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  const NodeMap& nodes = map->getNodeMap();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    const shared_ptr<Node>& node = it.value();
+    const shared_ptr<Node>& node = it->second;
 
     if (node->getTags().getNonDebugCount() > 0)
     {
@@ -337,7 +346,7 @@ void ShapefileWriter::writePoints(shared_ptr<const OsmMap> map, const QString& p
         if (node->getTags().contains(columns[i]))
         {
           QByteArray c = shpColumns[i].toAscii();
-          QByteArray v = node->getTags()[columns[i]].toAscii();
+          QByteArray v = node->getTags()[columns[i]].toUtf8();
           poFeature->SetField(c.constData(), v.constData());
         }
       }
@@ -386,12 +395,16 @@ void ShapefileWriter::writePolygons(shared_ptr<const OsmMap> map, const QString&
     throw HootException(QString("Data source creation failed. %1").arg(path));
   }
 
+  OgrOptions options;
+  options["ENCODING"] = "UTF-8";
+
   OGRLayer *poLayer;
 
   QString layerName;
   layerName = QFileInfo(path).baseName();
   poLayer = poDS->CreateLayer(layerName.toAscii(),
-                              map->getProjection().get(), wkbMultiPolygon, NULL );
+                              map->getProjection().get(), wkbMultiPolygon,
+                              options.getCrypticOptions());
   if( poLayer == NULL )
   {
     throw HootException(QString("Layer creation failed. %1").arg(path));
@@ -429,7 +442,7 @@ void ShapefileWriter::writePolygons(shared_ptr<const OsmMap> map, const QString&
   {
     shared_ptr<Way> way = it->second;
 
-    if (way->getTags().isArea())
+    if (OsmSchema::getInstance().isArea(way))
     {
       _writeWayPolygon(map, way, poLayer, columns, shpColumns);
     }
@@ -460,7 +473,7 @@ void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map,
     if (relation->getTags().contains(columns[i]))
     {
       QByteArray c = shpColumns[i].toAscii();
-      QByteArray v = relation->getTags()[columns[i]].toAscii();
+      QByteArray v = relation->getTags()[columns[i]].toUtf8();
       poFeature->SetField(c.constData(), v.constData());
     }
   }
@@ -503,7 +516,7 @@ void ShapefileWriter::_writeWayPolygon(const ConstOsmMapPtr &map, const shared_p
     if (way->getTags().contains(columns[i]))
     {
       QByteArray c = shpColumns[i].toAscii();
-      QByteArray v = way->getTags()[columns[i]].toAscii();
+      QByteArray v = way->getTags()[columns[i]].toUtf8();
       poFeature->SetField(c.constData(), v.constData());
     }
   }

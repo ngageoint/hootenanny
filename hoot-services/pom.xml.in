@@ -49,8 +49,10 @@
       </plugin -->
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.14.1</version>
+        <version>2.18.1</version>
         <configuration>
+          <forkCount>8</forkCount>
+          <reuseForks>true</reuseForks>
           <groups>hoot.services.UnitTest</groups>
           <skipTests>${skip.hoot.services.tests}</skipTests>
           <excludes>
@@ -63,7 +65,7 @@
           <dependency>
             <groupId>org.apache.maven.surefire</groupId>
             <artifactId>surefire-junit47</artifactId>
-            <version>2.14.1</version>
+            <version>2.18.1</version>
           </dependency>
         </dependencies>
       </plugin>
@@ -74,7 +76,7 @@
           <dependency>
             <groupId>org.apache.maven.surefire</groupId>
             <artifactId>surefire-junit47</artifactId>
-            <version>2.14.1</version>
+            <version>2.18.1</version>
           </dependency>
         </dependencies>
         <configuration>
@@ -525,6 +527,14 @@
         </executions>
 
       <dependencies>
+      
+        <!-- powermock needs this to run in Java 1.7 (deegree also uses this).  javassist behavior
+        in 1.7 is kind of erratic, so upgrade with caution. -->
+        <dependency>
+          <groupId>org.javassist</groupId>
+          <artifactId>javassist</artifactId>
+          <version>3.18.2-GA</version>
+        </dependency>
 
         <!-- Apache commons -->
         <dependency>
@@ -547,7 +557,6 @@
           <artifactId>commons-codec</artifactId>
           <version>1.7</version>
         </dependency>
-
         <dependency>
           <groupId>commons-fileupload</groupId>
           <artifactId>commons-fileupload</artifactId>
@@ -901,6 +910,10 @@
        <exclusion>
         <groupId>commons-logging</groupId>
         <artifactId>commons-logging</artifactId>
+       </exclusion>
+       <exclusion>
+        <groupId>javassist</groupId>
+        <artifactId>javassist</artifactId>
        </exclusion>
       </exclusions>
     </dependency>

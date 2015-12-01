@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TextTable.h"
 
@@ -80,10 +80,6 @@ QString TextTable::toWikiString()
 {
   QStringList rows = _calculateRows();
   QStringList cols = _calculateColumns();
-
-  LOG_VAR(rows);
-  LOG_VAR(cols);
-  LOG_VAR(_columnWidth);
 
   QString result;
   QString rowTitle;

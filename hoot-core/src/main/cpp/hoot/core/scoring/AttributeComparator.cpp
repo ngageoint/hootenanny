@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "AttributeComparator.h"
@@ -115,13 +115,10 @@ double AttributeComparator::compareMaps()
 
     if (bestScore >= 0.0)
     {
-//      if (scores.size() < 10)
-//      {
-//        cout << "====\n";
-//        cout << "score: " << bestScore << endl;
-//        cout << "\nt1: \n" << t1.toString().toStdString() << endl;
-//        cout << "\nt2: \n" << t2.toString().toStdString() << endl;
-//      }
+//        LOG_INFO("====");
+//        LOG_INFO("score: " << bestScore);
+//        LOG_INFO("t1: \n" << t1);
+//        LOG_INFO("t2: \n" << t2);
 
       scoreSum += bestScore;
       scores.push_back(bestScore);

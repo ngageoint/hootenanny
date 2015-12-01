@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSMMAPINDEX_H
@@ -139,7 +139,7 @@ public:
    * Checks that some of the existing indexes are consistent with the OsmMap backend. Any
    * inconsitencies will either be logged as warnings or throw exceptions.
    */
-  bool validate();
+  bool validate() const;
 
 private:
   const OsmMap& _map;

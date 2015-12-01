@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
@@ -49,9 +49,5 @@ public interface XmlSerializable
   long getOldId();
   void setOldId(long id);
   
-  long getRequestChangesetId();
   void setRequestChangesetId(long id);
-  
-  //TODO: re-enable this?
-  //void clearTempData();
 }

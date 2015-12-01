@@ -1,0 +1,58 @@
+[
+    {
+        "isA": "hgispoi",
+        "name": "historic",
+        "objectType": "tag"
+    },
+    {
+        "isA": "historic",
+        "name": "historic=*",
+        "objectType": "tag"
+    },
+    {
+        "isA": "historic",
+        "name": "historic=castle",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "building=fort",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "historic",
+        "name": "historic=memorial",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "leisure=park",
+                "weight": 0.2
+            },
+            {
+                "name": "historic=monument",
+                "weight": 0.8
+            },
+            {
+                "name": "landuse=cemetery",
+                "weight": 0.6
+            }
+        ]
+    },
+    {
+        "isA": "historic",
+        "name": "historic=monument",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "tourism=artwork",
+            "weight": 0.4
+        }
+    },
+    {
+        "isA": "historic",
+        "name": "historic=ruins",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "place=populated",
+            "weight": 0.4
+        }
+    }
+]

@@ -1,22 +1,37 @@
-{
-    "tag": {
+[
+    {
+        "categories": [
+            "poi"
+        ],
+        "dataType": "enumeration",
+        "geometries": [
+            "node",
+            "linestring"
+        ],
+        "influence": 1,
         "name": "power",
-        "influence": 1.0,
-        "type": "enumeration",
-        "geometries": ["node", "linestring"]
+        "objectType": "tag"
     },
-
-    "#" : " The catch all",
-
-    "tag": { "name": "power=*", "isA": "power" },
-    "tag": { "name": "power=pole", "isA": "power" },
-    "tag": {
-        "name": "power=tower",
+    {
         "isA": "power",
-        "categories": ["poi"],
-        "geometries": ["node"],
-        "similarTo": { "name": "power=pole", "weight": 0.7 }
+        "name": "power=*",
+        "objectType": "tag"
     },
-
-    "#" : "end"
-}
+    {
+        "isA": "power",
+        "name": "power=pole",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "node"
+        ],
+        "isA": "power",
+        "name": "power=tower",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "power=pole",
+            "weight": 0.7
+        }
+    }
+]

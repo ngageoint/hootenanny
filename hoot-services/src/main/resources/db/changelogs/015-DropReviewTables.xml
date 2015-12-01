@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<changeSet author="jong.choi" id="15" context="default">
+		<comment>
+			delete review related tables
+		</comment>
+		
+		
+		<sql>DROP TABLE IF EXISTS review_map CASCADE</sql>
+		<sql>DROP TABLE IF EXISTS element_id_mappings CASCADE</sql>
+		<sql>DROP TABLE IF EXISTS review_items CASCADE</sql>
+		<sql>DROP TYPE IF EXISTS review_status_enum</sql>
+     
+	</changeSet>
+</databaseChangeLog>
