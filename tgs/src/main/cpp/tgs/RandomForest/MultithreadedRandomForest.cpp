@@ -8,7 +8,7 @@
 #include <QThreadPool>
 
 
-#include "TgsException.h"
+#include "../TgsException.h"
 
 namespace Tgs
 {

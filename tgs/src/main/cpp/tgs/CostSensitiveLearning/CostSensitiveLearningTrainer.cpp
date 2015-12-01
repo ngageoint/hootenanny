@@ -4,8 +4,8 @@
 #include <iostream>
 
 #include "MetaCostAlgorithm.h"
-#include "RandomForest/RandomForestUtilities.h"
-#include "TgsException.h"
+#include "../RandomForest/RandomForestUtilities.h"
+#include "../TgsException.h"
 
 namespace Tgs
 {

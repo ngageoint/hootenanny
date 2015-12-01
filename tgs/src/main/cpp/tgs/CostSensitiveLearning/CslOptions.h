@@ -1,6 +1,9 @@
 #ifndef CSLOPTIONS_H
 #define CSLOPTIONS_H
 
+namespace Tgs
+{
+
 class CslOptions
 {
 public:
@@ -11,5 +14,7 @@ private:
 
   static void _runValidationExample(int argc, char** argv);
 };
+
+}
 
 #endif // CSLOPTIONS_H

@@ -7,7 +7,7 @@
 #include <fstream>
 #include <iostream>
 
-#include "TgsException.h"
+#include "../TgsException.h"
 
 std::vector<float> CslUtilities::readCostMatrix(std::string filename)
 {

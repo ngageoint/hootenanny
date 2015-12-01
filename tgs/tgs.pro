@@ -70,6 +70,10 @@ HEADERS += src/main/cpp/tgs/HashMap.h \
     src/main/cpp/tgs/TgsException.h \
     src/main/cpp/tgs/TgsExport.h \
     src/main/cpp/tgs/Version.h \
+    src/main/cpp/tgs/CostSensitiveLearning/CostSensitiveLearningTrainer.h \
+    src/main/cpp/tgs/CostSensitiveLearning/CslOptions.h \
+    src/main/cpp/tgs/CostSensitiveLearning/CslUtilities.h \
+    src/main/cpp/tgs/CostSensitiveLearning/MetaCostAlgorithm.h \
     src/main/cpp/tgs/FeatureExtraction/BasicMathCalculatorNode.h \
     src/main/cpp/tgs/FeatureExtraction/CalculatorGenome.h \
     src/main/cpp/tgs/FeatureExtraction/CalculatorGenomeNode.h \
@@ -105,6 +109,10 @@ HEADERS += src/main/cpp/tgs/HashMap.h \
     src/main/cpp/tgs/RandomForest/RandomTree.h \
     src/main/cpp/tgs/RandomForest/TreeNode.h \
     src/main/cpp/tgs/RandomForest/MissingDataHandler.h \
+    src/main/cpp/tgs/RandomForest/MultithreadedRandomForest.h \
+    src/main/cpp/tgs/RandomForest/MultithreadedRandomForestManager.h \
+    src/main/cpp/tgs/RandomForest/RandomForestThread.h \
+    src/main/cpp/tgs/RandomForest/RandomForestUtilities.h \
     src/main/cpp/tgs/RasterOps/Image.hpp \
     src/main/cpp/tgs/RasterOps/MaxChannelCombiner.h \
     src/main/cpp/tgs/RStarTree/Box.h \
@@ -161,6 +169,10 @@ win32:HEADERS += src/main/cpp/tgs/RStarTree/FilePageStore.h \
 
 SOURCES += src/main/cpp/tgs/StreamUtils.cpp \
     src/main/cpp/tgs/Version.cpp \
+    src/main/cpp/tgs/CostSensitiveLearning/CostSensitiveLearningTrainer.cpp \
+    src/main/cpp/tgs/CostSensitiveLearning/CslOptions.cpp \
+    src/main/cpp/tgs/CostSensitiveLearning/CslUtilities.cpp \
+    src/main/cpp/tgs/CostSensitiveLearning/MetaCostAlgorithm.cpp \
     src/main/cpp/tgs/FeatureExtraction/BasicMathCalculatorNode.cpp \
     src/main/cpp/tgs/FeatureExtraction/CalculatorGenome.cpp \
     src/main/cpp/tgs/FeatureExtraction/CalculatorGenomeNode.cpp \
@@ -189,6 +201,10 @@ SOURCES += src/main/cpp/tgs/StreamUtils.cpp \
     src/main/cpp/tgs/RandomForest/RandomForestManager.cpp \
     src/main/cpp/tgs/RandomForest/RandomTree.cpp \
     src/main/cpp/tgs/RandomForest/MissingDataHandler.cpp \
+    src/main/cpp/tgs/RandomForest/MultithreadedRandomForest.cpp \
+    src/main/cpp/tgs/RandomForest/MultithreadedRandomForestManager.cpp \
+    src/main/cpp/tgs/RandomForest/RandomForestThread.cpp \
+    src/main/cpp/tgs/RandomForest/RandomForestUtilities.cpp \
     src/main/cpp/tgs/RasterOps/MaxChannelCombiner.cpp \
     src/main/cpp/tgs/RStarTree/Box.cpp \
     src/main/cpp/tgs/RStarTree/DistanceIterator.cpp \

@@ -5,7 +5,7 @@
 #include <typeinfo>
 
 //Tgs Includes
-#include "TgsException.h"
+#include "../TgsException.h"
 
 namespace Tgs
 {

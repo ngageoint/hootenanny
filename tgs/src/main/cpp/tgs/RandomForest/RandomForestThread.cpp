@@ -1,6 +1,6 @@
 #include "RandomForestThread.h"
 
-#include "TgsException.h"
+#include "../TgsException.h"
 
 namespace Tgs
 {

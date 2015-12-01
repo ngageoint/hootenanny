@@ -9,12 +9,15 @@
 #include <string>
 #include <typeinfo>
 
-#include "CostSensitiveLearning/CostSensitiveLearningTrainer.h"
-#include "CostSensitiveLearning/CslUtilities.h"
-#include "RandomForest/RandomForestManager.h"
-#include "RandomForest/RandomForestUtilities.h"
-#include "TgsException.h"
+#include "../RandomForest/RandomForestUtilities.h"
+#include "../RandomForest/RandomForestManager.h"
+#include "../RandomForest/MultithreadedRandomForestManager.h"
+#include "CostSensitiveLearningTrainer.h"
+#include "CslUtilities.h"
+#include "../TgsException.h"
 
+namespace Tgs
+{
 
 void CslOptions::run(int argc, char** argv)
 {
@@ -145,7 +148,7 @@ void CslOptions::_runBasicExample(int argc, char** argv)
          " : " << cslTestingRanges[className].second << std::endl;
     }
 
-    Tgs::RandomForestManager cslModel = CostSensitiveLearningTrainer::trainCslModel(rfInputs,
+    MultithreadedRandomForestManager cslModel = CostSensitiveLearningTrainer::trainCslModel(rfInputs,
       numTrees, costMatrix, initialTrainingRanges, cslTrainingRanges,
       reportBaseName + "_InitRF");
 
@@ -216,4 +219,6 @@ void CslOptions::_runValidationExample(int argc, char** argv)
   {
     throw Tgs::Exception("CslOptions", __FUNCTION__, __LINE__, e);
   }
+}
+
 }

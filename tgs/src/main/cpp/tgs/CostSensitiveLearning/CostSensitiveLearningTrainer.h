@@ -3,8 +3,8 @@
 
 //Boost Includes
 
-#include "RandomForest/MultithreadedRandomForestManager.h"
-#include "RandomForest/RandomForestUtilities.h"
+#include "../RandomForest/MultithreadedRandomForestManager.h"
+#include "../RandomForest/RandomForestUtilities.h"
 
 namespace Tgs
 {

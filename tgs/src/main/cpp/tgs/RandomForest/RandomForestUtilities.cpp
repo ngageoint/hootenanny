@@ -9,7 +9,7 @@
 #include <iostream>
 
 #include "RandomForestManager.h"
-#include "TgsException.h"
+#include "../TgsException.h"
 
 namespace Tgs
 {
