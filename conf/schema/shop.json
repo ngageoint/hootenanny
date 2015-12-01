@@ -114,7 +114,7 @@
                 "weight": 0.7
             },
             {
-                "name": "shop=homegoods",
+                "name": "shop=home_goods",
                 "weight": 0.7
             },
             {
@@ -156,7 +156,7 @@
                 "weight": 0.7
             },
             {
-                "name": "shop=homegoods",
+                "name": "shop=home_goods",
                 "weight": 0.7
             }
         ]
@@ -228,9 +228,12 @@
         "description": "Shop focused on selling alcoholic and non-alcoholic beverages.",
         "isA": "shop",
         "name": "shop=beverages",
+        "aliases": [
+            "shop=beverage"
+        ],
         "objectType": "tag",
         "similarTo": {
-            "name": "shop=alcoholic",
+            "name": "shop=alcohol",
             "weight": 0.8
         }
     },
@@ -375,7 +378,7 @@
                 "weight": 0.6
             },
             {
-                "name": "shop=confectionary",
+                "name": "shop=confectionery",
                 "weight": 0.8
             }
         ]
@@ -523,7 +526,7 @@
                 "weight": 0.7
             },
             {
-                "name": "shop=confectionary",
+                "name": "shop=confectionery",
                 "weight": 0.8
             },
             {
@@ -551,7 +554,7 @@
                 "weight": 0.8
             },
             {
-                "name": "shop=beverage",
+                "name": "shop=beverages",
                 "weight": 0.7
             },
             {
@@ -608,7 +611,7 @@
                 "weight": 0.6
             },
             {
-                "name": "shop=alcoholic",
+                "name": "shop=alcohol",
                 "weight": 0.8
             }
         ]
@@ -620,7 +623,7 @@
         "name": "shop=copyshop",
         "objectType": "tag",
         "similarTo": {
-            "name": "shop=stationary",
+            "name": "shop=stationery",
             "weight": 0.7
         }
     },
@@ -694,7 +697,7 @@
                 "weight": 0.8
             },
             {
-                "name": "shop=restaurant",
+                "name": "amenity=restaurant",
                 "weight": 0.8
             },
             {
@@ -851,6 +854,13 @@
         "description": "A shop which sells and/or rents property",
         "isA": "shop",
         "name": "shop=estate_agent",
+        "objectType": "tag"
+    },
+    {
+        "#": "Count in tag info is 3524 on 2015-09-01",
+        "description": "Variety store",
+        "isA": "shop",
+        "name": "amenity=variety_store",
         "objectType": "tag"
     },
     {
@@ -1036,7 +1046,7 @@
         "name": "shop=furniture",
         "objectType": "tag",
         "similarTo": {
-            "name": "shop=homegoods",
+            "name": "shop=home_goods",
             "weight": 0.7
         }
     },
@@ -1350,6 +1360,12 @@
         "objectType": "tag"
     },
     {
+        "#": "Count in tag info is 16 on 2015-11-30",
+        "isA": "shop",
+        "name": "shop=home_goods",
+        "objectType": "tag"
+    },
+    {
         "#": "Count in tag info is 3716 on 2015-09-01",
         "isA": "shop",
         "name": "shop=interior_decoration",
@@ -1360,7 +1376,7 @@
                 "weight": 0.7
             },
             {
-                "name": "shop=homegoods",
+                "name": "shop=home_goods",
                 "weight": 0.8
             }
         ]
@@ -1512,7 +1528,7 @@
                 "weight": 0.6
             },
             {
-                "name": "amenity=doctor",
+                "name": "amenity=doctors",
                 "weight": 0.6
             },
             {
@@ -1593,7 +1609,7 @@
                 "weight": 0.7
             },
             {
-                "name": "shop=music_venue",
+                "name": "amenity=music_venue",
                 "weight": 0.3
             }
         ]
@@ -1837,7 +1853,7 @@
         "name": "shop=pottery",
         "objectType": "tag",
         "similarTo": {
-            "name": "shop=homegoods",
+            "name": "shop=home_goods",
             "weight": 0.7
         }
     },
@@ -2099,7 +2115,7 @@
                 "weight": 0.7
             },
             {
-                "name": "shop=beverage",
+                "name": "shop=beverages",
                 "weight": 0.7
             }
         ]
@@ -2339,7 +2355,7 @@
         "objectType": "tag",
         "similarTo": [
             {
-                "name": "shop=homegoods",
+                "name": "shop=home_goods",
                 "weight": 0.7
             },
             {

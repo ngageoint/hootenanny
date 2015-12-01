@@ -23,6 +23,10 @@
         "dataType": "enumeration",
         "influence": 1,
         "name": "all_weather=unknown",
+        "geometries": [
+            "node",
+            "linestring"
+        ],
         "objectType": "tag"
     },
     {

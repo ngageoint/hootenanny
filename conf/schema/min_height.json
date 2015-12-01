@@ -2,10 +2,10 @@
     {
         "dataType": "real",
         "geometries": [
-            "node",
-            "way"
+            "linestring",
+            "relation"
         ],
-        "name": "fire_hydrant:diameter",
+        "name": "min_height",
         "objectType": "tag"
     }
 ]

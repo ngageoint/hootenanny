@@ -56,6 +56,7 @@ SOURCES += \
     src/test/cpp/hoot/core/ops/MergeNearbyNodesTest.cpp \
     src/test/cpp/hoot/core/algorithms/LevenshteinDistanceTest.cpp \
     src/test/cpp/hoot/core/schema/OsmSchemaTest.cpp \
+    src/test/cpp/hoot/core/schema/SchemaCheckerTest.cpp \
     src/test/cpp/hoot/core/schema/TagComparatorTest.cpp \
     src/test/cpp/hoot/core/scoring/AttributeComparatorTest.cpp \
     src/test/cpp/hoot/core/index/ClosePointHashTest.cpp \
