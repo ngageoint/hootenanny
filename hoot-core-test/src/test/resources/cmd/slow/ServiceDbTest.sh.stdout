@@ -1,19 +1,19 @@
-Reprojecting 0 / 135         
-14:15:56.616 INFO  .../core/ops/CalculateStatsOp.cpp(  94) Calculating map statistics...
-14:15:56.687 INFO  .../core/ops/CalculateStatsOp.cpp( 512) Map statistics calculated.
+Reprojecting 0 / 136         
+15:44:20.639 INFO  .../core/ops/CalculateStatsOp.cpp(  94) Calculating map statistics...
+15:44:20.705 INFO  .../core/ops/CalculateStatsOp.cpp( 512) Map statistics calculated.
 Stat Name	test-output/cmd/ServiceDbTest/output.osm
-Node Count	135
-Way Count	22
+Node Count	136
+Way Count	23
 Relation Count	1
-Minimum Node ID	-295
+Minimum Node ID	-299
 Maximum Node ID	-1
 Minimum Way ID	-252
 Maximum Way ID	-1
 Minimum Relation ID	-4
 Maximum Relation ID	-4
-Total Feature Tags	92
-Total Feature Information Tags	92
-Total Feature Metadata Tags	0
+Total Feature Tags	101
+Total Feature Information Tags	94
+Total Feature Metadata Tags	7
 Unique Names	19
 Meters of Linear Features	1268.39175668
 Meters Squared of Area Features	25292.8857397
@@ -21,7 +21,7 @@ Meters of Highway	1268.39175668
 Highway Unique Name Count	0
 Meters Squared of Buildings	25292.8857397
 Building Unique Name Count	13
-Total Feature Count	31
+Total Feature Count	32
 Total Conflatable Features	0
 Percentage of Total Features Conflatable	0
 Total Unconflatable Features	0
@@ -32,12 +32,12 @@ Features Conflatable by: hoot::BuildingMatchCreator	0
 Features Conflatable by: hoot::PlacesPoiMatchCreator	0
 Features Conflatable by: hoot::HighwayMatchCreator	0
 Total Conflated Features	21
-Percentage of Total Features Conflated	67.7419354839
+Percentage of Total Features Conflated	65.625
 Total Features Marked for Review	0
 Percentage of Total Features Marked for Review	0
 Total Number of Reviews to be Made	0
-Total Unmatched Features	10
-Percentage of Total Features Unmatched	32.2580645161
+Total Unmatched Features	11
+Percentage of Total Features Unmatched	34.375
 POI Count	8
 Conflatable POIs	0
 Conflated POIs	8
@@ -47,16 +47,16 @@ Unmatched POIs	0
 Percentage of POIs Conflated	100
 Percentage of POIs Marked for Review	0
 Percentage of Unmatched POIs	0
-Highway Count	9
+Highway Count	10
 Conflatable Highways	0
 Conflated Highways	8
 Highways Marked for Review	0
 Number of Highway Reviews to be Made	0
-Unmatched Highways	1
-Meters of Highway Processed by Conflation	1193.10917055
-Percentage of Highways Conflated	88.8888888889
+Unmatched Highways	2
+Meters of Highway Processed by Conflation	1187.56513069
+Percentage of Highways Conflated	80
 Percentage of Highways Marked for Review	0
-Percentage of Unmatched Highways	11.1111111111
+Percentage of Unmatched Highways	20
 Building Count	11
 Conflatable Buildings	0
 Conflated Buildings	4
@@ -68,10 +68,11 @@ Percentage of Buildings Conflated	36.3636363636
 Percentage of Buildings Marked for Review	0
 Percentage of Unmatched Buildings	63.6363636364
 Longest Tag	52
-Translated Populated Tag Percent	0.605882352941
-Translated Populated Tag Count	103
-Translated Default Tag Count	67
+Translated Populated Tag Percent	0.607954545455
+Translated Populated Tag Count	107
+Translated Default Tag Count	69
 Translated Null Tag Count	0
 Building Translated Populated Tag Percent	0.5
 Highway Translated Populated Tag Percent	0.666666666667
 POI Translated Populated Tag Percent	0.704545454545
+
