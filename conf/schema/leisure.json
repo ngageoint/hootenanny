@@ -107,6 +107,15 @@
     {
         "geometries": [
             "node",
+            "area"
+        ],
+        "isA": "leisure",
+        "name": "leisure=amusement_arcade",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "node",
             "way"
         ],
         "isA": "leisure",
