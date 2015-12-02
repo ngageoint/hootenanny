@@ -39,7 +39,7 @@
 
 namespace Tgs
 {
-  RandomForest::RandomForest() : _numSplitFactors(0), _forestCreated(false) 
+  RandomForest::RandomForest()
   {
     //Set the random seed
     //clock_t t1 = clock();
@@ -51,460 +51,285 @@ namespace Tgs
    
   }
 
-  void RandomForest::classifyVector(std::vector<double> & dataVector,
-    std::map<std::string, double> & scores) const
+  void RandomForest::trainBinary(boost::shared_ptr<DataFrame> data, unsigned int numTrees,
+    unsigned int numFactors, std::string posClass, unsigned int nodeSize, double retrain,
+    bool balanced)
   {
-    double itrVal = 1.0/(double)_forest.size();
-
-    for(unsigned int i = 0; i < _forest.size(); i++)
+    try
     {
-      std::string result;
-      _forest[i].classifyDataVector(dataVector, result);
-      scores[result] += itrVal;
-    }
-  }
+      data->validateData();
 
-  void RandomForest::clear()
-  {
-    _forest.clear();
-  }
+      _factorLabels = data->getFactorLabels();
+      _forest.clear();
+      _numSplitFactors = numFactors;
 
-  void RandomForest::exportModel(std::ostream & fileStream, std::string tabDepth)
-  {
-    if(fileStream.good())
-    {
-      fileStream << tabDepth << "<RandomForest>" << std::endl;
-      fileStream << tabDepth << "\t<NumTrees>\t" << _forest.size() << "\t</NumTrees>" << std::endl;
-      fileStream << tabDepth << "\t<NumSplitFactors>\t" << _numSplitFactors << "\t</NumSplitFactors>" << std::endl;
-
-      fileStream << tabDepth << "\t<FactorLabels>";
-      for (size_t i = 0; i < _factorLabels.size(); ++i)
+      if(!data->empty())
       {
-        fileStream << "\t" << _factorLabels[i];
-      }
-      fileStream << "\t</FactorLabels>" << std::endl;
+        _forest.reserve(numTrees);
 
-      for(unsigned int i = 0; i < _forest.size(); i++)
-      {
-        _forest[i].exportTree(fileStream, tabDepth + "\t");
-      }
-      fileStream << tabDepth << "</RandomForest>" << std::endl;
-    }
-    else
-    {
-      throw Exception("SaUrgent::RandomForest::export - File stream is not open for exporting");
-    }
-  }
+        data->setBinaryClassLabels(posClass); //Set all non pos example to negative
 
-  void RandomForest::findAverageError(DataFrame & data, double & average, double & stdDev)
-  {
-    if(isTrained())
-    {
-      double errorSum = 0;
-      double errorSumSqr = 0;
-      double variance;
-  
-      for(unsigned int i = 0; i < _forest.size(); i++)
-      {
-        double errRate = _forest[i].computeErrorRate(data);
-        errorSum += errRate;
-        errorSumSqr += errRate * errRate;
-        
-      }
-
-      average = errorSum / ((double)_forest.size());
-      variance = errorSumSqr / ((double)_forest.size()) - average * average;
-      stdDev = sqrt(variance);      
-    }
-    else
-    {
-      throw Exception("SaUrgent::RandomForest::findAverageError - Forest has not been trained");
-    }
-  }
-
-  void RandomForest::findProximity(DataFrame & data, std::vector<unsigned int> & proximity)
-  {
-    unsigned int dSize = data.getNumDataVectors();
-
-    if(_forestCreated  && dSize > 0)
-    {
-      proximity.resize(dSize * dSize);
-      std::fill(proximity.begin(), proximity.end(), 0);
-
-      for(unsigned int i = 0; i < _forest.size(); i++)
-      {
-        _forest[i].findProximity(data, proximity);
-      }
-    }
-    else
-    {
-      throw Exception("SaUrgent::RandomForest::findProximity - Forest has not been trained");
-    }
-    
-  }
-
-  void RandomForest::getFactorImportance(DataFrame & data, 
-    std::map<std::string, double> & factorImportance)
-  {
-    std::map<unsigned int, double>::iterator itr;
-    std::vector<std::string> factorLabels = data.getFactorLabels();
-
-    //Init factor importance map with all factors
-    for(unsigned int j = 0; j < factorLabels.size(); j++)
-    {
-      factorImportance[factorLabels[j]] = 0;
-    }
-
-    //Calc factor importance for each tree in forest
-    //and aggregate the results
-    for(unsigned int i = 0; i < _forest.size(); i++)
-    {
-      std::map<unsigned int, double> factPureMap;
-      _forest[i].getFactorImportance(factPureMap);
-
-      for(itr = factPureMap.begin(); itr != factPureMap.end(); ++itr)
-      {
-        factorImportance[factorLabels[itr->first]] += itr->second;
-      }
-    }
-  }
-
-  void RandomForest::import(std::istream & fileStream)
-  {
-    clear();
-    _forestCreated = false;
-
-    if(fileStream.good())
-    {
-      unsigned int numTrees = 0;
-      std::string buffer;
-      std::getline(fileStream, buffer);
-      std::string headerString;
-      std::stringstream ss(buffer);
-      ss >> headerString;
-      
-      if(headerString == "<RandomForest>")
-      {
-        std::getline(fileStream, buffer);
-        std::string firstStr;
-        
-        while(buffer.find("</RandomForest>") == std::string::npos)
+        for(unsigned int i = 0; i < numTrees; i++)
         {
-          std::stringstream ss0(buffer);
-          ss0 >> firstStr;
-
-          if(firstStr == "<NumTrees>")
-          {
-            ss0 >> numTrees; 
-            //std::cout << "Num Trees " << numTrees << std::endl;
-            _forest.reserve(numTrees);
-          }
-          else if(firstStr == "<NumSplitFactors>")
-          {
-            ss0 >> _numSplitFactors;
-          }
-          else if(firstStr == "<RandomTree>")
-          {
-            _forest.push_back(RandomTree());
-            _forest.back().import(fileStream);
-          }
-          else if (firstStr == "<FactorLabels>")
-          {
-            _importFactorLabels(buffer);
-          }
-          else
-          {
-            stringstream err;
-            err << "Tgs::RandomForest::import - illegal tag read from import file " << firstStr;
-            throw Exception(err.str());
-          }
-
-          std::getline(fileStream, buffer);
+          _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
+          _forest.back()->trainBinary(data, numFactors, posClass, nodeSize, true);
+          std::cout << "Trained Tree # " << i + 1 << " / " << numTrees << "     \r";
+          std::cout.flush();
         }
+        std::cout << std::endl;
+
+        //std::cout << "Mode Trained " << std::endl;
+        if(retrain >= 0 && retrain < 1.0)
+        {
+          std::cout << "Retraining model on top " << (retrain * 100) << "% of factors" << std::endl;
+          std::map<std::string, double> topFactors;
+          std::map<std::string, double>::iterator mapItr;
+
+          getFactorImportance(data, topFactors);
+
+          std::vector<std::string> badFactors;
+
+          unsigned int cutOffIdx = topFactors.size() - (unsigned int)((double)topFactors.size() * retrain);
+
+          std::multimap<double, std::string> sortedFactors;
+          std::multimap<double, std::string>::iterator mMapItr;
+
+          //Create a map from lowest to highest of important mapped to factor type
+          for(mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
+          {
+            sortedFactors.insert(std::pair<double, std::string>(mapItr->second, mapItr->first));
+          }
+
+          unsigned int cutOffCtr = 0;
+
+          for(mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
+          {
+            if(cutOffCtr <  cutOffIdx)
+            {
+              badFactors.push_back(mMapItr->second);
+              cutOffCtr++;
+            }
+            else
+            {
+              break;
+            }
+          }
+
+          for(unsigned int i = 0; i < badFactors.size(); i++)
+          {
+            data->deactivateFactor(badFactors[i]);
+          }
+
+          _forest.clear();
+
+          _forest.reserve(numTrees);
+
+          for(unsigned int i = 0; i < numTrees; i++)
+          {
+            _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
+            _forest.back()->trainBinary(data,
+              (unsigned int)sqrt((double)(topFactors.size() - cutOffIdx)), posClass, 1 , balanced);
+          }
+        }
+
+        _forestCreated = true;
+        data->restoreClassLabels();  //Restore the original class labels
       }
       else
       {
-        throw Exception("Error reading the <RandomForest> header.");
+        throw Exception(__LINE__, "Unable to operate on empty dataset");
       }
-       
-      _forestCreated = true;
     }
-    else
+    catch(const Exception & e)
     {
-      throw Exception("SaUrgent::RandomForest::import - File stream is not open for importing");
+      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
     }
   }
 
-  void RandomForest::_importFactorLabels(string& factorLabelsLine)
+  void RandomForest::trainMulticlass(boost::shared_ptr<DataFrame> data, unsigned int numTrees,
+    unsigned int numFactors, unsigned int nodeSize, double retrain, bool balanced)
   {
-    std::stringstream ss(factorLabelsLine);
-    string tmp;
-    // read off the <FactorLabels> tag
-    ss >> tmp;
-    while (ss.peek() != EOF)
+    try
     {
-      string fl;
-      ss >> fl;
-      _factorLabels.push_back(fl);
-    }
-    // remove the </FactorLabels> tag
-    _factorLabels.resize(_factorLabels.size() - 1);
-  }
+      data->validateData();
 
-  void RandomForest::trainBinary(DataFrame & data, unsigned int numTrees, unsigned int numFactors,
-    std::string posClass, unsigned int nodeSize, double retrain, bool balanced)
-  {
-    data.validateData();
+      _factorLabels = data->getFactorLabels();
+      _forest.clear();
+      numFactors = min<size_t>(data->getActiveFactorCount(), numFactors);
+      _numSplitFactors = numFactors;
+      cout << _numSplitFactors;
 
-    _factorLabels = data.getFactorLabels();
-    _forest.clear();
-    _numSplitFactors = numFactors;
-
-    if(!data.empty())
-    {
-      _forest.reserve(numTrees);
-     
-      data.setBinaryClassLabels(posClass); //Set all non pos example to negative
-
-      for(unsigned int i = 0; i < numTrees; i++)
+      if(!data->empty())
       {
-        _forest.push_back(RandomTree());
-        _forest.back().trainBinary(data, numFactors, posClass, nodeSize, true);
-        std::cout << "Trained Tree # " << i + 1 << " / " << numTrees << "     \r";
-        std::cout.flush();
-      }
-      std::cout << std::endl;
-
-      
-
-      //std::cout << "Mode Trained " << std::endl;
-      if(retrain >= 0 && retrain < 1.0)
-      {
-        std::cout << "Retraining model on top " << (retrain * 100) << "% of factors" << std::endl;
-        std::map<std::string, double> topFactors;
-        std::map<std::string, double>::iterator mapItr;
-
-        getFactorImportance(data, topFactors);
-
-        std::vector<std::string> badFactors;
-
-        unsigned int cutOffIdx = topFactors.size() - (unsigned int)((double)topFactors.size() * retrain);
-
-        std::multimap<double, std::string> sortedFactors;
-        std::multimap<double, std::string>::iterator mMapItr;
-
-        //Create a map from lowest to highest of important mapped to factor type
-        for(mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
-        {
-          sortedFactors.insert(std::pair<double, std::string>(mapItr->second, mapItr->first));
-        }
-
-        unsigned int cutOffCtr = 0;
-
-        for(mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
-        {
-          if(cutOffCtr <  cutOffIdx)
-          {
-            badFactors.push_back(mMapItr->second);
-            cutOffCtr++;
-          }
-          else
-          {
-            break;
-          }
-        }
-
-        for(unsigned int i = 0; i < badFactors.size(); i++)
-        {
-          data.deactivateFactor(badFactors[i]);
-        }
-
-        _forest.clear();
-
         _forest.reserve(numTrees);
 
         for(unsigned int i = 0; i < numTrees; i++)
         {
-          _forest.push_back(RandomTree());
-          _forest.back().trainBinary(data, (unsigned int)sqrt((double)(topFactors.size() - cutOffIdx)), posClass, 1 , balanced);
+          _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
+          _forest.back()->trainMulticlass(data, numFactors, nodeSize, true);
+          std::cout << "Trained Tree # " << i + 1 << " / " << numTrees << "     \r";
+          std::cout.flush();
         }
-      }
+        std::cout << std::endl;
 
-      _forestCreated = true;
-      data.restoreClassLabels();  //Restore the original class labels
-    }
-    else
-    {
-      throw Exception("SaUrgent::RandomForest::buildTest - Unable to operate on empty dataset");
-    }
-  }
-
-  void RandomForest::trainMulticlass(DataFrame & data, unsigned int numTrees, unsigned int numFactors, 
-    unsigned int nodeSize, double retrain, bool balanced)
-  {
-    data.validateData();
-
-    _factorLabels = data.getFactorLabels();
-    _forest.clear();
-    numFactors = min<size_t>(data.getActiveFactorCount(), numFactors);
-    _numSplitFactors = numFactors;
-    cout << _numSplitFactors;
-
-    if(!data.empty())
-    {
-      _forest.reserve(numTrees);
-
-      for(unsigned int i = 0; i < numTrees; i++)
-      {
-        _forest.push_back(RandomTree());
-        _forest.back().trainMulticlass(data, numFactors, nodeSize, true);
-        std::cout << "Trained Tree # " << i + 1 << " / " << numTrees << "     \r";
-        std::cout.flush();
-      }
-      std::cout << std::endl;
-
-      //std::cout << "Mode Trained " << std::endl;
-      if(retrain >= 0 && retrain < 1.0)
-      {
-        std::cout << "Retraining model on top " << (retrain * 100) << "% of factors" << std::endl;
-        std::map<std::string, double> topFactors;
-        std::map<std::string, double>::iterator mapItr;
-
-        getFactorImportance(data, topFactors);
-
-        std::vector<std::string> badFactors;
-
-        unsigned int cutOffIdx = topFactors.size() - (unsigned int)((double)topFactors.size() * retrain);
-
-        std::multimap<double, std::string> sortedFactors;
-        std::multimap<double, std::string>::iterator mMapItr;
-
-        //Create a map from lowest to highest of important mapped to factor type
-        for(mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
+        //std::cout << "Mode Trained " << std::endl;
+        if(retrain >= 0 && retrain < 1.0)
         {
-          sortedFactors.insert(std::pair<double, std::string>(mapItr->second, mapItr->first));
-        }
+          std::cout << "Retraining model on top " << (retrain * 100) << "% of factors" << std::endl;
+          std::map<std::string, double> topFactors;
+          std::map<std::string, double>::iterator mapItr;
 
-        unsigned int cutOffCtr = 0;
+          getFactorImportance(data, topFactors);
 
-        for(mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
-        {
-          if(cutOffCtr <  cutOffIdx)
+          std::vector<std::string> badFactors;
+
+          unsigned int cutOffIdx =
+            topFactors.size() - (unsigned int)((double)topFactors.size() * retrain);
+
+          std::multimap<double, std::string> sortedFactors;
+          std::multimap<double, std::string>::iterator mMapItr;
+
+          //Create a map from lowest to highest of important mapped to factor type
+          for(mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
           {
-            badFactors.push_back(mMapItr->second);
-            cutOffCtr++;
+            sortedFactors.insert(std::pair<double, std::string>(mapItr->second, mapItr->first));
           }
-          else
+
+          unsigned int cutOffCtr = 0;
+
+          for(mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
           {
-            break;
+            if(cutOffCtr <  cutOffIdx)
+            {
+              badFactors.push_back(mMapItr->second);
+              cutOffCtr++;
+            }
+            else
+            {
+              break;
+            }
+          }
+
+          for(unsigned int i = 0; i < badFactors.size(); i++)
+          {
+            data->deactivateFactor(badFactors[i]);
+          }
+
+          _forest.clear();
+
+          _forest.reserve(numTrees);
+
+          for(unsigned int i = 0; i < numTrees; i++)
+          {
+            _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
+            _forest.back()->trainMulticlass(data,
+              (unsigned int)sqrt((double)(topFactors.size() - cutOffIdx)), 1, balanced);
           }
         }
 
-        for(unsigned int i = 0; i < badFactors.size(); i++)
-        {
-          data.deactivateFactor(badFactors[i]);
-        }
-
-        _forest.clear();
-
-        _forest.reserve(numTrees);
-
-        for(unsigned int i = 0; i < numTrees; i++)
-        {
-          _forest.push_back(RandomTree());
-          _forest.back().trainMulticlass(data, (unsigned int)sqrt((double)(topFactors.size() - cutOffIdx)), 1, balanced);
-        }
+        _forestCreated = true;
       }
-
-      _forestCreated = true;
+      else
+      {
+        throw Exception(__LINE__, "Unable to operate on empty dataset");
+      }
     }
-    else
+    catch(const Exception & e)
     {
-      throw Exception("SaUrgent::RandomForest::buildTest - Unable to operate on empty dataset");
+      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
     }
   }
 
-  void RandomForest::trainRoundRobin(DataFrame & data, unsigned int numTrees, 
+  void RandomForest::trainRoundRobin(boost::shared_ptr<DataFrame> data, unsigned int numTrees,
     unsigned int numFactors, std::string posClass, std::string negClass, unsigned int nodeSize,
     double retrain, bool balanced)
   {
-    data.validateData();
-
-    _factorLabels = data.getFactorLabels();
-    _forest.clear();
-    _numSplitFactors = numFactors;
-
-    if(!data.empty())
+    try
     {
-      _forest.reserve(numTrees);
+      data->validateData();
 
-      for(unsigned int i = 0; i < numTrees; i++)
+      _factorLabels = data->getFactorLabels();
+      _forest.clear();
+      _numSplitFactors = numFactors;
+
+      if(!data->empty())
       {
-        _forest.push_back(RandomTree());
-        _forest.back().trainRoundRobin(data, numFactors, posClass, negClass, nodeSize, true);
-        std::cout << "Trained Tree # " << i + 1 << " / " << numTrees << "     \r";
-        std::cout.flush();
-      }
-      std::cout << std::endl;
-
-     //std::cout << "Mode Trained " << std::endl;
-      if(retrain >= 0 && retrain < 1.0)
-      {
-        std::cout << "Retraining model on top " << (retrain * 100) << "% of factors" << std::endl;
-        std::map<std::string, double> topFactors;
-        std::map<std::string, double>::iterator mapItr;
-
-        getFactorImportance(data, topFactors);
-
-        std::vector<std::string> badFactors;
-
-        unsigned int cutOffIdx = topFactors.size() - (unsigned int)((double)topFactors.size() * retrain);
-
-        std::multimap<double, std::string> sortedFactors;
-        std::multimap<double, std::string>::iterator mMapItr;
-
-        //Create a map from lowest to highest of important mapped to factor type
-        for(mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
-        {
-          sortedFactors.insert(std::pair<double, std::string>(mapItr->second, mapItr->first));
-        }
-
-        unsigned int cutOffCtr = 0;
-
-        for(mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
-        {
-          if(cutOffCtr <  cutOffIdx)
-          {
-            badFactors.push_back(mMapItr->second);
-            cutOffCtr++;
-          }
-          else
-          {
-            break;
-          }
-        }
-
-        for(unsigned int i = 0; i < badFactors.size(); i++)
-        {
-          data.deactivateFactor(badFactors[i]);
-        }
-
-        _forest.clear();
-
         _forest.reserve(numTrees);
 
         for(unsigned int i = 0; i < numTrees; i++)
         {
-          _forest.push_back(RandomTree());
-          _forest.back().trainMulticlass(data, (unsigned int)sqrt((double)(topFactors.size() - cutOffIdx)), 1, balanced);
+          _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
+          _forest.back()->trainRoundRobin(data, numFactors, posClass, negClass, nodeSize, true);
+          std::cout << "Trained Tree # " << i + 1 << " / " << numTrees << "     \r";
+          std::cout.flush();
         }
-      }
+        std::cout << std::endl;
 
-      _forestCreated = true;
+       //std::cout << "Mode Trained " << std::endl;
+        if(retrain >= 0 && retrain < 1.0)
+        {
+          std::cout << "Retraining model on top " << (retrain * 100) << "% of factors" << std::endl;
+          std::map<std::string, double> topFactors;
+          std::map<std::string, double>::iterator mapItr;
+
+          getFactorImportance(data, topFactors);
+
+          std::vector<std::string> badFactors;
+
+          unsigned int cutOffIdx =
+            topFactors.size() - (unsigned int)((double)topFactors.size() * retrain);
+
+          std::multimap<double, std::string> sortedFactors;
+          std::multimap<double, std::string>::iterator mMapItr;
+
+          //Create a map from lowest to highest of important mapped to factor type
+          for(mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
+          {
+            sortedFactors.insert(std::pair<double, std::string>(mapItr->second, mapItr->first));
+          }
+
+          unsigned int cutOffCtr = 0;
+
+          for(mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
+          {
+            if(cutOffCtr <  cutOffIdx)
+            {
+              badFactors.push_back(mMapItr->second);
+              cutOffCtr++;
+            }
+            else
+            {
+              break;
+            }
+          }
+
+          for(unsigned int i = 0; i < badFactors.size(); i++)
+          {
+            data->deactivateFactor(badFactors[i]);
+          }
+
+          _forest.clear();
+
+          _forest.reserve(numTrees);
+
+          for(unsigned int i = 0; i < numTrees; i++)
+          {
+            _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
+            _forest.back()->trainMulticlass(data,
+              (unsigned int)sqrt((double)(topFactors.size() - cutOffIdx)), 1, balanced);
+          }
+        }
+
+        _forestCreated = true;
+      }
+      else
+      {
+        throw Exception(__LINE__, "Unable to operate on empty dataset");
+      }
     }
-    else
+    catch(const Exception & e)
     {
-      throw Exception("SaUrgent::RandomForest::buildTest - Unable to operate on empty dataset");
+      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
     }
   }
 }  //End namespace

@@ -26,7 +26,7 @@
  */
 
 #include "RandomForestManager.h"
-#include "InternalRandomForestManager.h"
+#include "RandomForest.h"
 
 //STD Includes
 #include <exception>
@@ -36,107 +36,55 @@ namespace Tgs
 {
   RandomForestManager::RandomForestManager()
   {
-    _irfm = new InternalRandomForestManager();
+    try
+    {
+
+    }
+    catch(const Exception & e)
+    {
+      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+    }
+
   }
 
   RandomForestManager::~RandomForestManager()
   {
-    delete _irfm;
+
   }
 
-  void RandomForestManager::addTrainingVector(std::string classLabel, 
-    const std::vector<double>& trainVec)
+  void RandomForestManager::_initForests(int numForests)
   {
-    _irfm->addTrainingVector(classLabel, trainVec);
+    try
+    {
+      for(unsigned int i = 0; i < (unsigned int)numForests; i++)
+      {
+        _rfList.push_back(boost::shared_ptr<RandomForest>(new RandomForest()));
+      }
+    }
+    catch(const Exception & e)
+    {
+      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+    }
   }
 
-  void RandomForestManager::classifyTestVector(std::string objId, std::string objClass, 
-    std::vector<double> & dataVector, std::map<std::string, double> & scores)
+  void RandomForestManager::_parseXmlForestNodes(QDomNodeList & forestNodes)
   {
-    _irfm->classifyTestVector(objId, objClass, dataVector, scores);
+    try
+    {
+      _rfList.clear();
+
+      for(unsigned int fIdx = 0; fIdx < (unsigned int)forestNodes.size(); fIdx++)
+      {
+        QDomElement forestElement = forestNodes.at(fIdx).toElement();
+        _rfList.push_back(
+          boost::shared_ptr<RandomForest>(new RandomForest()));
+        _rfList.back()->importModel(forestElement);
+      }
+    }
+    catch(const Exception & e)
+    {
+      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+    }
   }
 
-  void RandomForestManager::classifyVector(std::string objId, std::vector<double> & dataVector, 
-    std::map<std::string, double> & scores)
-  {
-    _irfm->classifyVector(objId, dataVector, scores);
-  }
-
-  void RandomForestManager::exportModel(std::ostream & fileStream, std::string tabDepth)
-  {
-    _irfm->exportModel(fileStream, tabDepth);
-  }
-
-  void RandomForestManager::exportTrainingData(std::fstream & fileStream, std::string tabDepth)
-  {
-    _irfm->exportTrainingData(fileStream, tabDepth);
-  }
-
-//   void RandomForestManager::findTopFactors(unsigned int numTrees, unsigned int numFactors, 
-//     std::vector<std::string> & factorLabels)
-//   {
-//     _irfm->findTopFactors(numTrees, numFactors, factorLabels);
-//   }
-
-  void RandomForestManager::generateRemappedReports(std::string reportName, std::map<std::string,
-    std::vector<std::string> > & classMap)
-  {
-    _irfm->generateRemappedReports(reportName, classMap);
-  }
-
-  void RandomForestManager::generateReports(std::string filename)
-  {
-    _irfm->generateReports(filename);
-  }
-
-  void RandomForestManager::generateResults(std::string filename)
-  {
-    _irfm->generateResults(filename);
-  }
-
-  std::set<std::string> RandomForestManager::getClassLabels()
-  {
-    return _irfm->getClassLabels();
-  }
-
-  void RandomForestManager::generateTopFactors(std::string basefilename)
-  {
-    _irfm->generateTopFactors(basefilename);
-  }
-
-  void RandomForestManager::getFactorLabels(std::vector<std::string> & factors)
-  {
-    _irfm->getFactorLabels(factors);
-  }
-
-  void RandomForestManager::import(std::istream & fileStream)
-  {
-    _irfm->import(fileStream);
-  }
-
-  void RandomForestManager::init(unsigned int modelMethod, std::vector<std::string> & factorLabels)
-  {
-    _irfm->init(modelMethod, factorLabels);
-  }
-
-  void RandomForestManager::reset()
-  {
-    _irfm->reset();
-  }
-
-  void RandomForestManager::resetResults()
-  {
-    _irfm->resetResults();
-  }
-
-  void RandomForestManager::setFactorLabels(std::vector<std::string> & factorLabels)
-  {
-    _irfm->setFactorLabels(factorLabels);
-  }
-
-  void RandomForestManager::train(unsigned int numTrees, int numFactors,
-    unsigned int nodeSize, double retrain, bool balanced)
-  {
-    _irfm->train(numTrees, numFactors, nodeSize, retrain, balanced);
-  }
 }  //End namespace
