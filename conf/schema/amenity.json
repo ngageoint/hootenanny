@@ -822,6 +822,11 @@
     },
     {
         "isA": "amenity",
+        "name": "amenity=florist",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
         "name": "amenity=forest_warden",
         "objectType": "tag"
     },
@@ -1040,6 +1045,11 @@
                 "weight": 0.9
             }
         ]
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=hostel",
+        "objectType": "tag"
     },
     {
         "isA": "amenity",
@@ -1325,7 +1335,7 @@
         "name": "amenity=music_venue",
         "objectType": "tag",
         "similarTo": {
-            "name": "amenity=night_club",
+            "name": "amenity=nightclub",
             "weight": 0.6
         }
     },

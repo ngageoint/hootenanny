@@ -92,6 +92,9 @@
     },
     {
         "dataType": "text",
+        "geometries": [
+            "linestring"
+        ],
         "influence": 2,
         "name": "addr:interpolation",
         "objectType": "tag"

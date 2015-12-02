@@ -481,6 +481,7 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/highway/HighwayReviewCleanerOp.cpp \
     src/main/cpp/hoot/core/ops/AddHilbertReviewSortOrderOp.cpp \
     src/main/cpp/hoot/core/schema/SchemaVertex.cpp \
+    src/main/cpp/hoot/core/schema/SchemaChecker.cpp \
     src/main/cpp/hoot/core/schema/TagCategoryDifferencer.cpp \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.cpp \
     src/main/cpp/hoot/core/schema/TagFilteredDifferencer.cpp \
@@ -962,6 +963,7 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/highway/HighwayReviewCleanerOp.h \
     src/main/cpp/hoot/core/ops/AddHilbertReviewSortOrderOp.h \
     src/main/cpp/hoot/core/schema/SchemaVertex.h \
+    src/main/cpp/hoot/core/schema/SchemaChecker.h \
     src/main/cpp/hoot/core/schema/KeyValuePair.h \
     src/main/cpp/hoot/core/schema/TagCategoryDifferencer.h \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.h \
