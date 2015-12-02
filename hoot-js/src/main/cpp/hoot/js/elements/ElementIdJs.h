@@ -80,14 +80,11 @@ private:
 
 inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
 {
-  LOG_INFO("Here.");
-  LOG_VAR(toString(v));
   if (v.IsEmpty() || !v->IsObject())
   {
     throw IllegalArgumentException("Expected an object, got: (" + toString(v) + ")");
   }
 
-  LOG_INFO("Here.");
   v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
 
   QString className = str(obj->Get(PopulateConsumersJs::baseClass()));

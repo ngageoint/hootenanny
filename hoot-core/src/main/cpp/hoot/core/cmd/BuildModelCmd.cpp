@@ -36,9 +36,6 @@
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-// Qt
-#include <QFile>
-
 // Standard
 #include <fstream>
 #include <iostream>
@@ -134,18 +131,18 @@ public:
       dc.reset(new DisableCout());
     }
     int numFactors = min(df->getNumFactors(), max<unsigned int>(3, df->getNumFactors() / 5));
-    rf.trainMulticlass(*df, 40, numFactors);
+    rf.trainMulticlass(df, 40, numFactors);
     dc.reset();
 
     double error;
     double sigma;
-    rf.findAverageError(*df, error, sigma);
+    rf.findAverageError(df, error, sigma);
     LOG_INFO("Error: " << error << " sigma: " << sigma);
 
-    ofstream rfFp;
-    rfFp.open((output + ".rf").toStdString().data());
-    rf.exportModel(rfFp);
-    rfFp.close();
+    ofstream fileStream;
+    fileStream.open((output + ".rf").toStdString().data());
+    rf.exportModel(fileStream);
+    fileStream.close();
 
     return 0;
   }
