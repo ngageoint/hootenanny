@@ -153,7 +153,7 @@ tileServerPath=$(homeFolder)/ingest/processed
 IngestMakefile=ingestraster
 
 # Raster to tile make file
-RasterToTiles=makerastertotiles
+RasterToTiles=exportrenderdb.makefile
 
 # Basemap Raster to tile make file
 BasemapRasterToTiles=makebasemaprastertotiles.sh

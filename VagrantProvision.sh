@@ -213,6 +213,13 @@ if [ ! -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
     echo 'testJobStatusPollerTimeout=250' > $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
 fi
 
+# Update the init.d script for node-mapnik-server
+sudo cp node-mapnik-server/init.d/node-mapnik-server /etc/init.d
+# Make sure all npm modules are installed
+cd node-mapnik-server
+npm install
+cd ..
+
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'
 # if the marker file is older than this file (VagrantProvision.sh)
@@ -237,10 +244,5 @@ make docs -sj$(nproc)
 #make -sj$(nproc) test-all
 
 # Deploy to Tomcat
-echo "Stopping Tomcat"
-sudo service tomcat6 stop
 echo "Deploying Hoot to Tomcat"
 sudo -u tomcat6 scripts/vagrantDeployTomcat.sh
-echo "Starting Tomcat"
-sudo service tomcat6 start
-

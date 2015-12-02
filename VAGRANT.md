@@ -17,10 +17,10 @@ Once Vagrant has been installed, you can start an environment by checking out th
 * Be sure to clone with the `--config core.autocrlf=input` option.
 * Windows hosts will also have to create a symlink that's in the git repo, but seems to be treated as a file when cloning to windows.
 
-    `vagrant ssh`  
-    `cd hoot`  
-    `rm test-files`  
-    `ln -s hoot-core-test/src/test/resources test-files`  
+    `vagrant ssh`
+    `cd hoot`
+    `rm test-files`
+    `ln -s hoot-core-test/src/test/resources test-files`
 
 The initialization of the vagrant vm will take a up to two hours to download required software from the internet and set it up as a running system. Once it is complete, uncomment the `#, group: "tomcat6"` portion of the in Vagrantfile to allow the webapp to write to shared folders.
 
@@ -31,9 +31,6 @@ The initialization of the vagrant vm will take a up to two hours to download req
 Then issue the reload command for the changes to take effect on the vm:
 
     vagrant reload
-    vagrant ssh --command 'sudo service tomcat6 restart'
-
-Restarting Tomcat is currently necessary after reload because of issue #2.
 
 You should be able to log into the running VM by typing:
 
