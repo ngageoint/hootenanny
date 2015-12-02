@@ -254,16 +254,16 @@ namespace Tgs
 
           bool parseOkay = true;
 
-          if(tag.toUpper() == "NUMTREES")
+          if(tag == "NUMTREES")
           {
             unsigned int numTrees = e.text().toUInt(&parseOkay);
             _forest.reserve(numTrees);
           }
-          else if(tag.toUpper() == "NUMSPLITFACTORS")
+          else if(tag == "NUMSPLITFACTORS")
           {
             _numSplitFactors = e.text().toUInt(&parseOkay);
           }
-          else if(tag.toUpper() == "FACTORLABELS")
+          else if(tag == "FACTORLABELS")
           {
             QStringList factorList = e.text().split(" ");
 
@@ -272,7 +272,7 @@ namespace Tgs
               _factorLabels.push_back(factorList[fIdx].toLatin1().constData());
             }
           }
-          else if(tag.toUpper() == "RANDOMTREES")
+          else if(tag == "RANDOMTREES")
           {
             QDomNodeList treeList = e.childNodes();
 
