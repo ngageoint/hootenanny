@@ -127,31 +127,41 @@ public class RasterToTilesService extends JobControllerBase {
 
       hoot.services.models.osm.Map currMap = new hoot.services.models.osm.Map(mapIdNum, conn);
       final JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
-
-			double dMinLon = (Double)extents.get("minlon");
-			double dMaxLon = (Double)extents.get("maxlon");
-			double dMinLat = (Double)extents.get("minlat");
-			double dMaxLat = (Double)extents.get("maxlat");
-
-			double deltaLon = dMaxLon - dMinLon;
-			double deltaLat = dMaxLat - dMinLat;
-
-			double maxDelta = deltaLon;
-			if(deltaLat > maxDelta)
-			{
-				maxDelta = deltaLat;
-			}
-			JSONObject zoomInfo = _getZoomInfo( maxDelta);
-
-			String zoomList = zoomInfo.get("zoomlist").toString();
-			int rasterSize = (Integer)zoomInfo.get("rastersize");
-
-			JSONObject argStr =  _createCommandObj(name, zoomList, rasterSize, userEmail);
-			argStr.put("jobId", jobId);
-
-			JobExecutionManager jobExecManager = 
-				(JobExecutionManager)appContext.getBean("jobExecutionManagerNative");
-			jobExecManager.exec(argStr);
+      
+      Object oMinLon = extents.get("minlon");
+      Object oMaxLon = extents.get("maxlon");
+      Object oMinLat = extents.get("minlat");
+      Object oMaxLat = extents.get("maxlat");
+      
+      // Make sure we have valid bbox. We may end up with invalid bbox and in that case we should
+      // not produce raster density map
+      if(oMinLon != null && oMaxLon != null && oMinLat != null && oMaxLat != null)
+      {
+				double dMinLon = (Double)extents.get("minlon");
+				double dMaxLon = (Double)extents.get("maxlon");
+				double dMinLat = (Double)extents.get("minlat");
+				double dMaxLat = (Double)extents.get("maxlat");
+	
+				double deltaLon = dMaxLon - dMinLon;
+				double deltaLat = dMaxLat - dMinLat;
+	
+				double maxDelta = deltaLon;
+				if(deltaLat > maxDelta)
+				{
+					maxDelta = deltaLat;
+				}
+				JSONObject zoomInfo = _getZoomInfo( maxDelta);
+	
+				String zoomList = zoomInfo.get("zoomlist").toString();
+				int rasterSize = (Integer)zoomInfo.get("rastersize");
+	
+				JSONObject argStr =  _createCommandObj(name, zoomList, rasterSize, userEmail);
+				argStr.put("jobId", jobId);
+	
+				JobExecutionManager jobExecManager = 
+					(JobExecutionManager)appContext.getBean("jobExecutionManagerNative");
+				jobExecManager.exec(argStr);
+      }
 			jobStatusManager.setComplete(jobId);
 		}
 		catch (Exception ex)

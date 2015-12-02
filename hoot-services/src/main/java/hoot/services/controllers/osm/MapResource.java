@@ -690,7 +690,13 @@ public class MapResource
 
 			Map currMap = new Map(mapIdNum, conn);
 			final JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
-
+			
+			if(extents.get("minlat") == null || extents.get("maxlat") == null || 
+					extents.get("minlon") == null || extents.get("maxlon") == null)
+			{
+				throw new Exception("Map is empty.");
+				
+			}
 			final JSONObject anode = currMap.retrieveANode(queryBounds);
 			long nodeCnt = currMap.getNodesCount(queryBounds);
 
@@ -746,6 +752,11 @@ public class MapResource
 			ResourceErrorHandler.handleError(
 					e.getMessage().replaceAll("records", "maps")
 					.replaceAll("record", "map"), Status.NOT_FOUND, log);
+		}
+		else if (e.getMessage().startsWith("Map is empty"))
+		{
+			ResourceErrorHandler.handleError(
+					e.getMessage(), Status.NOT_FOUND, log);
 		}
 		else if (e.getMessage().startsWith(
 				"Error parsing bounding box from bbox param"))

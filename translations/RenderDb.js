@@ -32,12 +32,39 @@
 hoot.require('config');
 hoot.require('translate');
 
+function initialize()
+{
+    var _global = (0, eval)('this');
+
+    // If it exists, we assume we are good.....
+    if (!_global.renderDb)
+    {
+        _global.renderDb = {}
+
+        var schema = getDbSchema();
+
+        // Loop through the schema and make a list of the field names
+        for (var i = 0, schemaLen = schema.length; i < schemaLen; i++)
+        {
+            var fName = schema[i].name;
+
+            _global.renderDb[fName] = [];
+
+            for (var j = 0, columnLen = schema[i].columns.length; j < columnLen; j++)
+            {
+                _global.renderDb[fName].push(schema[i].columns[j].name);
+            } // End for j
+        } // End for i
+
+    } // End !_global
+
+} // End Initialize
+
 // IMPORT
 // translateAttributes - takes 'attrs' and returns OSM 'tags'
 function translateToOsm(attrs, layerName)
 {
     return attrs;
-
 } // End of Translate Attributes
 
 
@@ -49,59 +76,45 @@ function translateToOgr(tags, elementType, geometryType)
     if (config.getOgrDebugDumptags() == 'true')
     {
         print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
-        for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
+        for (var i in tags) print('In Tags :' + i + ': :' + tags[i] + ':');
         print('');
     }
 
-//     if (tags.tags)
-//     {
-//         // The 'tags' value is a string with this structure: 'cables'=>'3', 'voltage'=>'230000'
-//         // Trying to split on ", instead of just , due to having comma's inside the data values. Arrrggghhh!
-//         var tList = tags['tags'].split('\",');
-//
-//         for (var i = 0, tLen = tList.length; i < tLen; i++)
-//         {
-//             var rTag = tList[i].replace(/\"/g,'').split('=>');
-//             tags[rTag[0].trim()] = rTag[1].trim();
-//         }
-//
-//         delete tags.tags;
-//     }
-
-    // Clean out all of the source: hoot: and error: tags
+    // Clean out the Tags
     for (var i in tags)
     {
-        if (i.indexOf('source:') !== -1) delete tags[i];
-        if (i.indexOf('hoot:') !== -1) delete tags[i];
-        if (i.indexOf('error:') !== -1) delete tags[i];
+        // Drop Hoot specific stuff
+        if (i.indexOf('source:') !== -1 || i.indexOf('hoot:') !== -1 || i.indexOf('error:') !== -1)
+        {
+            delete tags[i];
+            continue;
+        }
+
+        // Look for the tag in the schema lookup tables. We assume that the initialize function has been run.
+        if (renderDb[geometryType].indexOf(i) == -1)
+        {
+            // Add the value to the "tags" tags with this format:
+            // "operator_type"=>"private_religious", "error:circular"=>"15", "school:first_cycle"=>"yes", "school:preschool_cycle"=>"yes"
+            if (tags.tags)
+            {
+                tags.tags = tags.tags + ',\"' + i + '\"=>\"' + tags[i] + '\"';
+            }
+            else
+            {
+                tags.tags = '\"' + i + '\"=>\"' + tags[i] + '\"';
+            }
+
+            delete tags[i];
+        }
     }
 
-
-    var tableName = '';
-
-    switch (geometryType)
+    // Debug:
+    if (config.getOgrDebugDumpattrs() == 'true')
     {
-        case 'Point':
-            tableName = 'Point';
-            break;
-
-        case 'Line':
-            tableName = 'Line';
-            break;
-
-        case 'Area':
-            tableName = 'Polygon';
-            break;
+        for (var i in tags) print('Out Tags :' + i + ': :' + tags[i] + ':');
+        print('');
     }
 
-//     // Debug:
-//     if (config.getOgrDebugDumpattrs() == 'true')
-//     {
-//         for (var i in attrs) print('Out Attrs:' + i + ': :' + attrs[i] + ':');
-//         print('');
-//     }
-
-//     return [{attrs:tags, tableName: tableName}];
     return [{attrs:tags, tableName: geometryType}];
 
 } // End of translateToOgr
@@ -225,9 +238,8 @@ function getDbSchema()
                 });
 
     // Debug
-    translate.dumpSchema(schema);
+    // translate.dumpSchema(schema);
 
     return schema;
 
 } // End of GetDBSchema
-

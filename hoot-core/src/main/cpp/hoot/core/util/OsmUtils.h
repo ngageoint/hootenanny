@@ -163,6 +163,12 @@ class OsmUtils
       */
     static unsigned int fromTimeString(QString timestamp);
 
+    /**
+     * Returns a time string for the current time
+     *
+     * @return
+     */
+    static QString currentTimeAsString();
 };
 
 }
