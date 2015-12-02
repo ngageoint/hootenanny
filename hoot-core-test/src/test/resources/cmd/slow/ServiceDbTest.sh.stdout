@@ -1,6 +1,6 @@
 Reprojecting 0 / 136         
-20:06:33.431 INFO  .../core/ops/CalculateStatsOp.cpp(  92) Calculating map statistics...
-20:06:33.606 INFO  .../core/ops/CalculateStatsOp.cpp( 523) Map statistics calculated.
+15:44:20.639 INFO  .../core/ops/CalculateStatsOp.cpp(  94) Calculating map statistics...
+15:44:20.705 INFO  .../core/ops/CalculateStatsOp.cpp( 512) Map statistics calculated.
 Stat Name	test-output/cmd/ServiceDbTest/output.osm
 Node Count	136
 Way Count	23
@@ -11,9 +11,9 @@ Minimum Way ID	-252
 Maximum Way ID	-1
 Minimum Relation ID	-4
 Maximum Relation ID	-4
-Total Feature Tags	94
+Total Feature Tags	101
 Total Feature Information Tags	94
-Total Feature Metadata Tags	0
+Total Feature Metadata Tags	7
 Unique Names	19
 Meters of Linear Features	1268.39175668
 Meters Squared of Area Features	25292.8857397
