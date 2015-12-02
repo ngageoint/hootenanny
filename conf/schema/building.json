@@ -15,12 +15,37 @@
     },
     {
         "dataType": "text",
+        "geometries": [
+            "node",
+            "area",
+            "relation"
+        ],
         "name": "building:colour",
         "objectType": "tag"
     },
     {
-        "dataType": "text",
+        "dataType": "int",
+        "geometries": [
+            "area"
+        ],
         "name": "building:levels",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "int",
+        "geometries": [
+            "area"
+        ],
+        "name": "building:min_level",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "description": "This tag is deprecated. The old usage is defined here: http://wiki.openstreetmap.org/w/index.php?title=Proposed_features/Building_attributes&oldid=719036",
+        "geometries": [
+            "area"
+        ],
+        "name": "building:shape",
         "objectType": "tag"
     },
     {
@@ -69,6 +94,16 @@
             "name": "building:roof:shape=flat",
             "weight": 0.5
         }
+    },
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "area",
+            "relation"
+        ],
+        "influence": 1,
+        "name": "building:material",
+        "objectType": "tag"
     },
     {
         "isA": "building=yes",

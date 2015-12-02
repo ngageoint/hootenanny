@@ -4,6 +4,11 @@
             "transportation"
         ],
         "dataType": "enumeration",
+        "geometries": [
+            "node",
+            "linestring",
+            "relation"
+        ],
         "influence": 1,
         "name": "highway",
         "objectType": "tag"
@@ -111,6 +116,19 @@
         ],
         "isA": "highway",
         "name": "highway=motorway_junction",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "poi",
+            "hgispoi"
+        ],
+        "description": "Use the highway=mini_roundabout tag to identify a point along a highway=* with junction refs or names where it is possible to exit the highway onto another road.",
+        "geometries": [
+            "node"
+        ],
+        "isA": "highway",
+        "name": "highway=mini_roundabout",
         "objectType": "tag"
     },
     {
