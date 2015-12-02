@@ -44,7 +44,7 @@ public class ChangesetUploadXmlValidator
   /**
    * Validates a changeset
    * 
-   * @param reviewedItemsChangeset an OSM changeset for reviewed items
+   * @param changesetXml an OSM changeset for reviewed items
    */
   public Document parseAndValidate(final String changesetXml) throws Exception
   {

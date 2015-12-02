@@ -37,7 +37,6 @@ import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.validators.osm.ChangesetUploadXmlValidator;
 import hoot.services.writers.osm.ChangesetDbWriter;
-import hoot.services.writers.review.ReviewItemsSynchronizer;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.OPTIONS;
@@ -71,6 +70,8 @@ import com.mysema.query.sql.SQLQuery;
 public class ChangesetResource
 {
   private static final Logger log = LoggerFactory.getLogger(ChangesetResource.class);
+  
+  private QMaps maps = QMaps.maps;
   
   private ClassPathXmlApplicationContext appContext;
   private PlatformTransactionManager transactionManager;
@@ -129,7 +130,7 @@ public class ChangesetResource
    *
    * Service method endpoint for creating a new OSM changeset
    * 
-   * @param changeset changeset create data
+   * @param changesetData changeset create data
    * @param mapId ID of the map the changeset belongs to
    * @return Response containing the ID assigned to the new changeset
    * @throws Exception 
@@ -144,8 +145,6 @@ public class ChangesetResource
     final String mapId) 
     throws Exception
   {
-    log.debug("Creating changeset for map with ID: " + mapId + " ...");
-    
     Document changesetDoc = null;
     try
     {
@@ -167,11 +166,9 @@ public class ChangesetResource
     {
       log.debug("Initializing database connection...");
     
-      
       long mapIdNum = -1;
       try
       {
-      	QMaps maps = QMaps.maps;
         //input mapId may be a map ID or a map name
         mapIdNum = 
           ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
@@ -205,10 +202,7 @@ public class ChangesetResource
         log.debug(
           "Retrieving user ID associated with map having ID: " + String.valueOf(mapIdNum) + " ...");
         
-        QMaps maps = QMaps.maps;
-
       	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-
       	userId = query.from(maps).where(maps.id.eq(mapIdNum)).singleResult(maps.userId);
       	
         log.debug("Retrieved user ID: " + userId);
@@ -359,11 +353,8 @@ public class ChangesetResource
           throw new Exception("Error parsing changeset diff data: "
             + StringUtils.abbreviate(changeset, 100) + " (" + e.getMessage() + ")");
         }
-        ChangesetDbWriter changesetDbWriter = new ChangesetDbWriter(conn);
-        changesetUploadResponse = changesetDbWriter.write(mapid, changesetId, changesetDoc);
-        	
-        (new ReviewItemsSynchronizer(conn, mapId)).updateReviewItems(
-          changesetDoc, changesetDbWriter.getParsedElementIdsToElementsByType());
+        changesetUploadResponse = 
+        	(new ChangesetDbWriter(conn)).write(mapid, changesetId, changesetDoc);
       }
       catch (Exception e)
       {
@@ -432,11 +423,11 @@ public class ChangesetResource
     try
     {
       log.debug("Intializing database connection...");
-      if(mapId == null) {
+      if (mapId == null) 
+      {
     		throw new Exception("Invalid map id.");
     	}
     	long mapid = Long.parseLong(mapId);
-
 
       Changeset.closeChangeset(mapid, changesetId, conn);
     }
@@ -448,6 +439,7 @@ public class ChangesetResource
     return Response.status(Status.OK).toString();
   }
   
+  //TODO: clean up these message...some are obsolete now
   public static void handleError(final Exception e, final long changesetId, 
     final String changesetDiffSnippet)
   {
@@ -469,6 +461,12 @@ public class ChangesetResource
     	}
     }
     
+    //To make the error checking code cleaner and simpler, if an element is referenced in an 
+    //update or delete changeset that doesn't exist in the database, we're not differentiating
+    //between whether it was an element, relation member, or way node reference.  Previously, we'd
+    //throw a 412 if the non-existing element was a relation member or way node reference and a 404
+    //otherwise.  Now, we're always throwing a 404.  This shouldn't be a big deal, b/c the hoot UI
+    //doesn't differentiate between the two types of failures.
     if (!StringUtils.isEmpty(e.getMessage()))
     {
       if (e.getMessage().contains("Invalid changeset ID") || 
@@ -479,13 +477,14 @@ public class ChangesetResource
       {
         ResourceErrorHandler.handleError(message, Status.CONFLICT, log);  //409
       }
-      else if (e.getMessage().contains("to be updated does not exist"))
+      else if (e.getMessage().contains("to be updated does not exist") ||
+      		     e.getMessage().contains("Element(s) being referenced don't exist."))
       {
         ResourceErrorHandler.handleError(message, Status.NOT_FOUND, log); //404
       }
       else if (e.getMessage().contains("exist specified for") ||
                e.getMessage().contains("exist for") ||
-               e.getMessage().contains("is still used by") ||
+               e.getMessage().contains("still used by") ||
                e.getMessage().contains(
                  "One or more features in the changeset are involved in an unresolved review"))
       {

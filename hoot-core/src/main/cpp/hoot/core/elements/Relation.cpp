@@ -50,6 +50,7 @@ QString Relation::INNER = "inner";
 QString Relation::MULTILINESTRING = "multilinestring";
 QString Relation::MULTIPOLYGON = "multipolygon";
 QString Relation::OUTER = "outer";
+QString Relation::REVIEW = "review";
 
 /**
  * This is a convenience class to handle cases when exceptions are thrown.

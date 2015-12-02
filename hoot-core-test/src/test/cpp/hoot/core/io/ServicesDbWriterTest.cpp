@@ -274,10 +274,10 @@ public:
     compareRecords("SELECT sequence_id FROM " +
                    ServicesDb::_getWayNodesTableName(mapId) +
                    " ORDER BY way_id, node_id, sequence_id",
-                   "0\n"
                    "1\n"
                    "0\n"
-                   "1",
+                   "1\n"
+                   "0",
                    (qlonglong)mapId);
 
     compareRecords("SELECT visible, version, tags FROM " +

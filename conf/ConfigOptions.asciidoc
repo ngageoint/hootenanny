@@ -38,7 +38,7 @@
 // asciidoc just make sure you don't start any lines with "=== ".
 // http://www.methods.co.nz/asciidoc/
 //
-// Please keep the configuration options in alphabetical order.
+// Again, please keep the configuration options in alphabetical order.
 //
 === add.ref1.visitor.prefix
 
@@ -182,10 +182,15 @@ See also:
 
 * Data Type: list
 * Default Value:
-** `hoot::BuildingOutlineUpdateOp`
+** `hoot::BuildingOutlineUpdateOp;hoot::AddHilbertReviewSortOrderOp`
 
-Runs in the conflate command after data is conflated, but before exporting. The default, `hoot::BuildingOutlineUpdateOp` updates any multi-part building outlines that may have
-changed during conflation.
+Runs in the conflate command after data is conflated, but before exporting. The default perform the
+following:
+
+* `hoot::BuildingOutlineUpdateOp` updates any multi-part building outlines that may have
+  changed during conflation.
+* `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews. By processing reviews
+  in sorted order the results are a little more logically ordered.
 
 === conflate.pre.ops
 
@@ -307,6 +312,24 @@ See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
 The spacing used by the EdgeDistanceExtractor.  Units in meters.
 
+=== english.words.files
+
+* Data Type: list
+* Default Value:
+** `/usr/share/dict/american-english-insane`
+** `/usr/share/dict/american-english-huge`
+** `/usr/share/dict/american-english-large`
+** `/usr/share/dict/american-english-small`
+** `/usr/share/dict/american-english`
+** `/usr/share/dict/words`
+
+Absolute file path to dictionaries of English words. The first file found will be loaded into the
+dictionary of English words and used by some algorithms. If the files are not found then the English
+words will be silently ignored.
+
+For CentOS 6.X use `sudo yum install words` to install the dictionary. For Ubuntu 14.04 use
+`sudo apt-get install wamerican-insane`.
+
 === generic.line.match.threshold
 
 * Data Type: double
@@ -418,7 +441,7 @@ Sets that maximum angle that is still considered a highway match. Units in degre
 === highway.miss.threshold
 
 * Data Type: double
-* Default Value: `1.1`
+* Default Value: `0.999`
 
 The threshold at which a miss is called a miss for roads.
 
@@ -814,7 +837,12 @@ Specifies the writer that the OsmMapWriterFactory will use. This overrides any i
 * Data Type: string
 * Default Value: `hoot::DirectSequentialSimulation`
 
-Perturbation algorithm to use with the PERTY process.  Valid values are hoot::DirectSequentialSimulation or hoot::FullCovariance
+Perturbation algorithm to use with the PERTY process.  Valid values is
+hoot::DirectSequentialSimulation.
+
+Previously the full covariance method was also supported as described in Doucette et al. However,
+the newer DirectSequentialSimulation is more efficient and produces similar results. By removing
+the full covariance method we were able to simplify the build process and reduce maintenance cost.
 
 === perty.apply.rubber.sheet
 
@@ -1217,8 +1245,6 @@ Contains the DB URL for unit testing. This is typically only used by developers.
 
 * Data Type: string
 * Default Value: `postgresql://hoot:hoottest@localhost:5432/osmapi_test`
-//* Default Value: `postgresql://postgres@10.194.70.78:5432/terrytest`
-//note: both above will be replace with a local db and can be overridden 
 
 Contains the DB URL for an OpenStreetMaps (OSM) API database for unit testing. This is
 typically only used by developers.

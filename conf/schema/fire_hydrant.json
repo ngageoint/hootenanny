@@ -1,6 +1,10 @@
 [
     {
         "dataType": "real",
+        "geometries": [
+            "node",
+            "way"
+        ],
         "name": "fire_hydrant:diameter",
         "objectType": "tag"
     }

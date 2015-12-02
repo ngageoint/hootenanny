@@ -49,8 +49,7 @@ public:
   /**
    * Not implemented.
    */
-  virtual Match* createMatch(const ConstOsmMapPtr&, ElementId, ElementId)
-  { throw NotImplementedException(); }
+  virtual Match* createMatch(const ConstOsmMapPtr&, ElementId eid1, ElementId eid2);
 
   /**
    * Search the provided map for highway matches and add the matches to the matches vector.

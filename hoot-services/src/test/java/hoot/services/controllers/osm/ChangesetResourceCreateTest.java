@@ -435,6 +435,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
+      //System.out.println(r.getEntity(String.class));
       Assert.assertTrue(r.getEntity(String.class).contains("Error inserting tags"));
 
       Assert.assertFalse(DbUtils.changesetDataExistsInServicesDb(conn));

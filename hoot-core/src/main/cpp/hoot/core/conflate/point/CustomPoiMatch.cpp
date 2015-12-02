@@ -41,6 +41,8 @@
 namespace hoot
 {
 
+QString CustomPoiMatch::_matchName = "POI";
+
 CustomPoiMatch::CustomPoiMatch(const ConstOsmMapPtr& map, const PoiRfClassifierPtr& rf,
   const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt) :
   Match(mt),

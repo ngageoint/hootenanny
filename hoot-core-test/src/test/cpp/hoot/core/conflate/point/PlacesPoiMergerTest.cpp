@@ -150,7 +150,7 @@ public:
       mergers[i]->apply(map, replaced);
     }
 
-    CPPUNIT_ASSERT_EQUAL(3, map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map->getNodeMap().size());
 
     CPPUNIT_ASSERT_EQUAL(true, map->containsNode(n2->getId()));
     CPPUNIT_ASSERT_EQUAL(string("Mc Donalds"), n2->getTags()["name"].toStdString());

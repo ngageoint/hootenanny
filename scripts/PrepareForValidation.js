@@ -7,6 +7,11 @@ var hoot = require('../lib/HootJs');
 var input = process.argv[2]
 var output = process.argv[3]
 var poiCount = 0;
+var isRandom = true;
+
+if (process.argv.length == 5) {
+    isRandom = process.argv[4] == "true" ? true : false
+}
 
 // visitor for counting the number of POIs in a map
 function countPois(e) {
@@ -15,35 +20,31 @@ function countPois(e) {
     }
 }
 
-// creates a randomly ordered array of indexes
-function createRandomArray(count, subsamplePercent) {
+// creates a sub sample ordered array of indexes, if isRandom is true, the indexes are random.
+function createSubSampleArray(count, subsamplePercent, isRandom) {
     // create an array of ascending numbers of count size
     var result = new Array(count);
     for (i = 0; i < count; i++) {
         result[i] = i;
     }
 
-    // randomize the array
-    for (var i = result.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = result[i];
-        result[i] = result[j];
-        result[j] = temp;
+    if (isRandom == true) {
+        // randomize the array
+        for (var i = result.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = result[i];
+            result[i] = result[j];
+            result[j] = temp;
+        }
     }
 
     // crop the array to subsample size
     return result.slice(0, Math.ceil(count * subsamplePercent));
 }
 
-function addReviewTags(e) {
-    // this creates a copy of the tags so we have to set it when we're done
-    var tags = e.getTags();
-
-    // make sure there is a UUID
-    tags.getCreateUuid();
-    tags.set("hoot:review:needs", "yes");
-    tags.set("hoot:review:note", "Flagged for imagery validation");
-    tags.set("hoot:review:choices:1", JSON.stringify({
+var getListChoices = function() {
+    var list = [];
+    list.push(JSON.stringify({
         "label": "Confirmed",
         "description": "You can look at the point and tell what it is (e.g. mosque or airport)",
         "changes": {
@@ -63,7 +64,7 @@ function addReviewTags(e) {
             }
         }
     }));
-    tags.set("hoot:review:choices:2", JSON.stringify({
+    list.push(JSON.stringify({
         "label": "Assessed",
         "description": "The point is on a building, but you can't verify its type (e.g. hair salon).",
         "changes": {
@@ -83,7 +84,7 @@ function addReviewTags(e) {
             }
         }
     }));
-    tags.set("hoot:review:choices:3", JSON.stringify({
+    list.push(JSON.stringify({
         "label": "Reported",
         "description": "Imagery is pixelated or cloudy -- can not be assessed.",
         "changes": {
@@ -102,16 +103,7 @@ function addReviewTags(e) {
             }
         }
     }));
-
-    //console.log(JSON.stringify(tags.toDict(), null, 2));
-    //console.log("## hoot:review:choices:1 ##");
-    //console.log(JSON.stringify(JSON.parse(tags.toDict()["hoot:review:choices:1"]), null, 2));
-    //console.log("## hoot:review:choices:2 ##");
-    //console.log(JSON.stringify(JSON.parse(tags.toDict()["hoot:review:choices:2"]), null, 2));
-    //console.log("## hoot:review:choices:3 ##");
-    //console.log(JSON.stringify(JSON.parse(tags.toDict()["hoot:review:choices:3"]), null, 2));
-
-    e.setTags(tags);
+    return list;
 }
 
 // create a new map and populate it with a input file
@@ -122,19 +114,19 @@ hoot.loadMap(map, input, false, 1);
 map.visit(countPois);
 
 // Create an array of indexes for the random 30% sample
-var randomIndexes = createRandomArray(poiCount, 0.30).sort(function(a,b) { return a - b; });
+var randomIndexes = createSubSampleArray(poiCount, 0.30, isRandom).sort(function(a,b) { return a - b; });
 randomIndexes[randomIndexes.length] = poiCount;
 
 // go through all the elements
 var index = 0;
 var i = 0;
+var choices = getListChoices();
 map.visit(function(e) {
     if (hoot.OsmSchema.isPoi(e)) {
         // if this is an element flagged for validation
         if (index == randomIndexes[i]) {
             i++;
-            // add validation review tags.
-            addReviewTags(e);
+            hoot.ReviewMarker.mark(map, e, "Flagged for imagery validation", "Validation", 1, choices);
         } else if (index > randomIndexes[i]) {
             throw "Logic error: Expected the index to be <= randomIndexes[i]";
         }

@@ -207,21 +207,6 @@ public class ConflationResource extends JobControllerBase {
 			JSONObject updateMapsTagsCommand = _createReflectionJobReq(mapTagsArgs, "hoot.services.controllers.osm.MapResource",
 					"updateTagsDirect");
 
-			JSONArray reviewArgs = new JSONArray();
-			param = new JSONObject();
-			param.put("value", confOutputName);
-			param.put("paramtype", String.class.getName());
-			param.put("isprimitivetype", "false");
-			reviewArgs.add(param);
-
-			param = new JSONObject();
-			param.put("value", false);
-			param.put("paramtype", Boolean.class.getName());
-			param.put("isprimitivetype", "true");
-			reviewArgs.add(param);
-
-			JSONObject prepareItemsForReviewCommand = _createReflectionJobReq(reviewArgs, "hoot.services.controllers.job.ReviewResource",
-					"prepareItemsForReview");
 
 			Object oUserEmail = oParams.get("USER_EMAIL");
 			String userEmail = (oUserEmail ==  null)? null : oUserEmail.toString();
@@ -248,7 +233,6 @@ public class ConflationResource extends JobControllerBase {
 			JSONArray jobArgs = new JSONArray();
 			jobArgs.add(conflationCommand);
 			jobArgs.add(updateMapsTagsCommand);
-			jobArgs.add(prepareItemsForReviewCommand);
 			jobArgs.add(ingestOSMResource);
 
 

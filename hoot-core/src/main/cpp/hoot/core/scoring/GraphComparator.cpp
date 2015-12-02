@@ -84,6 +84,11 @@ cv::Mat GraphComparator::_calculateCostDistance(shared_ptr<OsmMap> map, Coordina
   WayLocation wl = LocationOfPoint::locate(map, w, c);
   vector< shared_ptr<Way> > v = WaySplitter::split(map, w, wl);
   wl = LocationOfPoint::locate(map, v[0], c);
+  if (wl.isNode() == false)
+  {
+    // I haven't been able to recreate the case when this happens.
+    LOG_WARN("Internal Error: Expected wl to be on a node, but it was this: " << wl);
+  }
   assert(wl.isNode() == true);
 
   // populate graph
@@ -325,12 +330,12 @@ void GraphComparator::drawCostDistance(shared_ptr<OsmMap> map, vector<Coordinate
 void GraphComparator::_exportGraphImage(shared_ptr<OsmMap> map, DirectedGraph& /*graph*/,
                                         ShortestPath& sp, QString path)
 {
-  const OsmMap::NodeMap& nodes = map->getNodeMap();
+  const NodeMap& nodes = map->getNodeMap();
 
   double maxCost = 1e-100;
-  for (OsmMap::NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    double cost = sp.getNodeCost(it.key());
+    double cost = sp.getNodeCost(it->first);
     maxCost = std::max(cost, maxCost);
   }
 
@@ -355,9 +360,9 @@ void GraphComparator::_exportGraphImage(shared_ptr<OsmMap> map, DirectedGraph& /
 
   cout << "max cost: " << maxCost << endl;
 
-  for (OsmMap::NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    double cost = sp.getNodeCost(it.key());
+    double cost = sp.getNodeCost(it->first);
     if (cost == 0)
     {
       c.setRgb(0, 255, 0);
@@ -376,7 +381,7 @@ void GraphComparator::_exportGraphImage(shared_ptr<OsmMap> map, DirectedGraph& /
 
     pen.setColor(c);
     pt.setPen(pen);
-    gp.drawNode(pt, it.value().get(), m);
+    gp.drawNode(pt, it->second.get(), m);
   }
 
   image.save(path);

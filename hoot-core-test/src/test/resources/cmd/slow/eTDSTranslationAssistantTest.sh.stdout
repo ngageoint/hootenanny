@@ -1,33 +1,33 @@
-20:54:50.340 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 176) Reading: test-files/translation_assistant/cali-test.shp cali-test
+19:02:06.295 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/translation_assistant/cali-test.shp cali-test
 Loading test-files/translation_assistant/cali-test.shp cali-test 0 / 357   
 Reprojecting 0 / 2339         Reprojecting 1000 / 2339         Reprojecting 2000 / 2339         
-20:54:50.491 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-20:54:50.491 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
-MergeNearbyNodes 0 2    MergeNearbyNodes 1000 750    MergeNearbyNodes 1400 elapsed: 11ms        
-20:54:50.503 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+19:02:06.522 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+19:02:06.522 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+MergeNearbyNodes 0 2    MergeNearbyNodes 1000 741    MergeNearbyNodes 1413 elapsed: 17ms        
+19:02:06.540 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 357        Ways: 357 / 357        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
-Reprojecting 0 / 1400         Reprojecting 1000 / 1400         
-20:54:50.911 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 176) Reading: test-files/translation_assistant/cali-test.shp cali-test
+Reprojecting 0 / 1413         Reprojecting 1000 / 1413         
+19:02:07.244 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/translation_assistant/cali-test.shp cali-test
 Loading test-files/translation_assistant/cali-test.shp cali-test 0 / 357   
 Reprojecting 0 / 2339         Reprojecting 1000 / 2339         Reprojecting 2000 / 2339         
-20:54:51.037 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-20:54:51.037 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
-MergeNearbyNodes 0 2    MergeNearbyNodes 1000 750    MergeNearbyNodes 1400 elapsed: 14ms        
-20:54:51.052 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+19:02:07.468 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+19:02:07.469 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+MergeNearbyNodes 0 2    MergeNearbyNodes 1000 741    MergeNearbyNodes 1413 elapsed: 17ms        
+19:02:07.487 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 357        Ways: 357 / 357        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
-Reprojecting 0 / 1400         Reprojecting 1000 / 1400         
-20:54:51.466 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 176) Reading: test-files/translation_assistant/cali-test.shp cali-test
+Reprojecting 0 / 1413         Reprojecting 1000 / 1413         
+19:02:08.186 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/translation_assistant/cali-test.shp cali-test
 Loading test-files/translation_assistant/cali-test.shp cali-test 0 / 357   
 Reprojecting 0 / 2339         Reprojecting 1000 / 2339         Reprojecting 2000 / 2339         
-20:54:51.590 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-20:54:51.590 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
-MergeNearbyNodes 0 2    MergeNearbyNodes 1000 750    MergeNearbyNodes 1400 elapsed: 9ms        
-20:54:51.599 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+19:02:08.408 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+19:02:08.408 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+MergeNearbyNodes 0 2    MergeNearbyNodes 1000 741    MergeNearbyNodes 1413 elapsed: 18ms        
+19:02:08.426 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 357        Ways: 357 / 357        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
-Reprojecting 0 / 1400         Reprojecting 1000 / 1400         
+Reprojecting 0 / 1413         Reprojecting 1000 / 1413         
