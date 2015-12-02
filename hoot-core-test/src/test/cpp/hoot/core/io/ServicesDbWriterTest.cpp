@@ -35,6 +35,7 @@
 #include <hoot/core/io/ServicesDb.h>
 #include <hoot/core/io/ServicesDbWriter.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/OsmUtils.h>
 
 // Standard
 #include <functional>
@@ -205,6 +206,27 @@ public:
                    "1;node;1;n1;0\n"
                    "1;way;1;w1;1",
                    (qlonglong)mapId);
+
+    ServicesDb db;
+    db.open(ServicesDbTestUtils::getDbModifyUrl());
+
+    QStringList tableNames;
+    tableNames.append(ServicesDb::_getNodesTableName(mapId));
+    tableNames.append(ServicesDb::_getWaysTableName(mapId));
+    tableNames.append(ServicesDb::_getRelationsTableName(mapId));
+
+    for (int i = 0; i < tableNames.length(); i++)
+    {
+      QStringList results =
+        db._execToString("SELECT timestamp FROM " + tableNames[i],
+                         (qlonglong)mapId).split("\n");
+      for (int j = 0; j < results.length(); j++)
+      {
+        CPPUNIT_ASSERT(OsmUtils::fromTimeString(results[j]) != ElementData::TIMESTAMP_EMPTY);
+      }
+    }
+
+    db.close();
   }
 
   void runRemapInsertTest()
