@@ -25,11 +25,11 @@ public:
 
   void addMember(ConstElementPtr e) { _members.append(e); }
 
-  NetworkVertexPtr getFrom() { return _from; }
+  ConstNetworkVertexPtr getFrom() const { return _from; }
 
   QList<ConstElementPtr> getMembers() const { return _members; }
 
-  NetworkVertexPtr getTo() { return _to; }
+  ConstNetworkVertexPtr getTo() const { return _to; }
 
   bool isDirected() { return _directed; }
 
@@ -46,7 +46,7 @@ private:
 typedef shared_ptr<NetworkEdge> NetworkEdgePtr;
 typedef shared_ptr<const NetworkEdge> ConstNetworkEdgePtr;
 
-inline uint qHash(const NetworkEdgePtr& v)
+inline uint qHash(const ConstNetworkEdgePtr& v)
 {
   uint result = 0;
   QList<ConstElementPtr> l = v->getMembers();
@@ -58,6 +58,11 @@ inline uint qHash(const NetworkEdgePtr& v)
   result = qHash(v->getTo()) ^ result;
 
   return result;
+}
+
+inline uint qHash(const NetworkEdgePtr& v)
+{
+  return qHash(dynamic_pointer_cast<const NetworkEdge>(v));
 }
 
 }

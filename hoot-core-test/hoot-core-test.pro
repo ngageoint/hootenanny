@@ -99,7 +99,7 @@ SOURCES += \
     src/test/cpp/hoot/core/algorithms/ExpectationIntersectionTest.cpp \
     src/test/cpp/hoot/core/conflate/point/PlacesPoiMatchTest.cpp \
     src/test/cpp/hoot/core/conflate/point/PlacesPoiMergerTest.cpp \
-    src/test/cpp/hoot/core/algorithms/IntegerProgrammingSolverTest.cpp \
+    src/test/cpp/hoot/core/algorithms/optimizer/IntegerProgrammingSolverTest.cpp \
     src/test/cpp/hoot/core/elements/NodeTest.cpp \
     src/test/cpp/hoot/core/perty/PertyNameVisitorTest.cpp \
     src/test/cpp/hoot/core/perty/PertyDuplicatePoiOpTest.cpp \
@@ -201,5 +201,6 @@ SOURCES += \
     src/test/cpp/hoot/core/schema/TagCategoryDifferencerTest.cpp \
     src/test/cpp/hoot/core/schema/TagAncestorDifferencerTest.cpp \
     src/test/cpp/hoot/core/elements/RelationTest.cpp \
-    src/test/cpp/hoot/core/algorithms/string/MostEnglishNameTest.cpp
+    src/test/cpp/hoot/core/algorithms/string/MostEnglishNameTest.cpp \
+    src/test/cpp/hoot/core/algorithms/optimizer/GlpkBinaryOptimizerTest.cpp
 

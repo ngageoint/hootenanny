@@ -34,6 +34,11 @@ private:
 typedef shared_ptr<NetworkVertex> NetworkVertexPtr;
 typedef shared_ptr<const NetworkVertex> ConstNetworkVertexPtr;
 
+inline uint qHash(const ConstNetworkVertexPtr& v)
+{
+  return qHash(v->getElementId());
+}
+
 inline uint qHash(const NetworkVertexPtr& v)
 {
   return qHash(v->getElementId());

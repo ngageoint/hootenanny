@@ -292,7 +292,7 @@ SOURCES += \
     src/main/cpp/hoot/core/ops/FindIntersectionsOp.cpp \
     src/main/cpp/hoot/core/cmd/FindIntersectionsCmd.cpp \
     src/main/cpp/hoot/core/visitors/FindIntersectionsVisitor.cpp \
-    src/main/cpp/hoot/core/algorithms/IntegerProgrammingSolver.cpp \
+    src/main/cpp/hoot/core/algorithms/optimizer/IntegerProgrammingSolver.cpp \
     src/main/cpp/hoot/core/conflate/match-graph/ConstrainedMatches.cpp \
     src/main/cpp/hoot/core/conflate/point/CustomPoiMatch.cpp \
     src/main/cpp/hoot/core/conflate/point/CustomPoiMatchCreator.cpp \
@@ -488,7 +488,9 @@ SOURCES += \
     src/main/cpp/hoot/core/schema/TagFilteredDifferencer.cpp \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.cpp \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp \
-    src/main/cpp/hoot/core/algorithms/string/MostEnglishName.cpp
+    src/main/cpp/hoot/core/algorithms/string/MostEnglishName.cpp \
+    src/main/cpp/hoot/core/algorithms/optimizer/BinaryOptimizer.cpp \
+    src/main/cpp/hoot/core/algorithms/optimizer/GlpkBinaryOptimizer.cpp \
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -738,7 +740,7 @@ HEADERS += \
     src/main/cpp/hoot/core/ops/FindIntersectionsOp.h \
     src/main/cpp/hoot/core/cmd/FindIntersectionsCmd.h \
     src/main/cpp/hoot/core/visitors/FindIntersectionsVisitor.h \
-    src/main/cpp/hoot/core/algorithms/IntegerProgrammingSolver.h \
+    src/main/cpp/hoot/core/algorithms/optimizer/IntegerProgrammingSolver.h \
     src/main/cpp/hoot/core/conflate/match-graph/ConstrainedMatches.h \
     src/main/cpp/hoot/core/conflate/point/CustomPoiMatch.h \
     src/main/cpp/hoot/core/conflate/point/CustomPoiMatchCreator.h \
@@ -963,5 +965,7 @@ HEADERS += \
     src/main/cpp/hoot/core/schema/TagFilteredDifferencer.h \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.h \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h \
-    src/main/cpp/hoot/core/algorithms/string/MostEnglishName.h
+    src/main/cpp/hoot/core/algorithms/string/MostEnglishName.h \
+    src/main/cpp/hoot/core/algorithms/optimizer/BinaryOptimizer.h \
+    src/main/cpp/hoot/core/algorithms/optimizer/GlpkBinaryOptimizer.h \
 

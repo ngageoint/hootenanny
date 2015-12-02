@@ -7,8 +7,34 @@
 namespace hoot
 {
 
+const double IterativeNetworkMatcher::EPSILON = 1e-6;
+
 IterativeNetworkMatcher::IterativeNetworkMatcher()
 {
+}
+
+bool greaterThan(const double& v1, const double& v2)
+{
+  return v1 > v2;
+}
+
+double IterativeNetworkMatcher::_aggregateEdgeScores(QList<double> pairs)
+{
+  qSort(pairs.begin(), pairs.end(), greaterThan);
+
+  // this quick little method makes the scores: score[0] / 2 + score[1] / 4 + ...
+  // the idea being that you get big boost for the highest score than then the benefit goes down
+  // quickly. So more intersections matched is better, but having one poorly matched or unmatched
+  // intersection won't hurt. We'll see what happens.
+  double result = EPSILON;
+  double denominator = 0.5;
+  for (int i = 0; i < pairs.size(); i++)
+  {
+    result += pairs[i] * denominator;
+    denominator /= 2.0;
+  }
+
+  return result;
 }
 
 void IterativeNetworkMatcher::_createEdge2Index()
@@ -92,12 +118,22 @@ void IterativeNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1
   {
     // create a more refined estimate of vertex match based on the proximity & way count as well
     // as the neighboring edge scores (product of neighboring scores?)
-    _updateVertexScores();
+    _updateVertexScores(_vertex12Scores, _edge12Scores);
+    _updateVertexScores(_vertex21Scores, _edge21Scores);
 
     // create a more refined estimate of edge match based on the typical similarity scores and
     // the neighboring node scores (product of neighboring scores?)
-    _updateEdgeScores();
+    _updateEdgeScores(_edge12Scores, _vertex12Scores);
+    _updateEdgeScores(_edge21Scores, _vertex21Scores);
   }
+}
+
+void IterativeNetworkMatcher::_normalizeAllScores()
+{
+  _normalizeScores<ConstNetworkEdgePtr>(_edge12Scores);
+  _normalizeScores<ConstNetworkEdgePtr>(_edge21Scores);
+  _normalizeScores<ConstNetworkVertexPtr>(_vertex12Scores);
+  _normalizeScores<ConstNetworkVertexPtr>(_vertex21Scores);
 }
 
 double IterativeNetworkMatcher::_scoreEdges(ConstNetworkEdgePtr /*e1*/,
@@ -118,6 +154,7 @@ void IterativeNetworkMatcher::_seedEdgeScores()
   const OsmNetwork::EdgeMap& em = _n1->getEdgeMap();
   for (OsmNetwork::EdgeMap::const_iterator it = em.begin(); it != em.end(); ++it)
   {
+    NetworkEdgePtr e1 = it.value();
     // find all the n2 edges that are in range of this one
     Envelope env = _details1->getEnvelope(it.value());
     env.expandBy(_details1->getSearchRadius(it.value()));
@@ -130,7 +167,8 @@ void IterativeNetworkMatcher::_seedEdgeScores()
 
       if (score > 0)
       {
-        _edgeScores[EdgePair(it.value(), e2)] = score;
+        _edge12Scores[e1][e2] = score;
+        _edge12Scores[e2][e1] = score;
       }
     }
   }
@@ -146,61 +184,105 @@ void IterativeNetworkMatcher::_seedVertexScores()
 
     // find all the vertices that are in range of this one
     ConstElementPtr e1 = it.value()->getElement();
-    ConstNodePtr n1 = dynamic_pointer_cast<const Node>(e1);
-    auto_ptr<Envelope> env(e1->getEnvelope(_map));
-    env->expandBy(e1->getCircularError());
-    IntersectionIterator iit = _createIterator(*env, _vertex2Index);
-
-    double s1 = n1->getCircularError() / 2.0;
+    Envelope env = _details1->getEnvelope(v1);
+    env.expandBy(_details1->getSearchRadius(v1));
+    IntersectionIterator iit = _createIterator(env, _vertex2Index);
 
     // set the initial match score to 1 for all candidate matches
     while (iit.next())
     {
       NetworkVertexPtr v2 = _index2Vertex[iit.getId()];
-      ConstNodePtr n2 = dynamic_pointer_cast<const Node>(v2->getElement());
-      Meters d = n2->toCoordinate().distance(n1->toCoordinate());
-      double s2 = n2->getCircularError() / 2.0;
 
-      // calculate the combined standard deviation
-      double sigma = sqrt(s1 * s1 + s2 * s2);
-
-      // threshold is standard deviation * 2
-      if (d <= sigma * 2)
+      double score = _scoreVertices(v1, v2);
+      if (score > 0)
       {
-        VertexPair p(v1, v2);
-        _vertexScores[p] = _scoreVertices(v1, v2);
+        _vertex12Scores[v1][v2] = score;
+        _vertex21Scores[v2][v1] = score;
       }
     }
   }
 }
 
-void IterativeNetworkMatcher::_updateEdgeScores()
+void IterativeNetworkMatcher::_updateEdgeScores(EdgeScoreMap &em, VertexScoreMap& vm)
 {
   // go through all edge matches
+  for (EdgeScoreMap::iterator it = em.begin(); it != em.end(); ++it)
+  {
+    ConstNetworkEdgePtr e1 = it.key();
 
     // get the vertex match for the from node
-
+    ConstNetworkVertexPtr from1 = e1->getFrom();
     // get the vertex match for the to node
+    ConstNetworkVertexPtr to1 = e1->getTo();
 
-    // aggregate the scores of the vertex matches
+    QHash<ConstNetworkEdgePtr, double>& t2 = it.value();
 
-    // set this edge score to the new aggregated score.
+    for (QHash<ConstNetworkEdgePtr, double>::iterator jt = t2.begin(); jt != t2.end(); ++jt)
+    {
+      ConstNetworkEdgePtr e2 = jt.key();
+      ConstNetworkVertexPtr from2 = e2->getFrom();
 
+      ConstNetworkVertexPtr to2 = e2->getTo();
+
+      // aggregate the scores of the vertex matches
+      double sFrom = vm[from1][from2];
+      double sTo = vm[to1][to2];
+
+      // set this edge score to the new aggregated score.
+      double newScore = sFrom * sTo;
+      jt.value() = newScore;
+    }
+  }
 }
 
-void IterativeNetworkMatcher::_updateVertexScores()
+void IterativeNetworkMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &em)
 {
+  CostFunction cost;
+  cost.em = &em;
+
   // go through all vertex matches
+  for (VertexScoreMap::iterator it = vm.begin(); it != vm.end(); ++it)
+  {
+    ConstNetworkVertexPtr v1 = it.key();
 
-    // get all the neighboring edges for the first vertex.
+    QList<ConstNetworkEdgePtr> edges1 = _getEdgesOnVertex(v1);
 
-    // get all the neighboring edges for the second vertex.
+    // Go through all the potential matching vertices
+    QHash<ConstNetworkVertexPtr, double>& t2 = it.value();
+    for (QHash<ConstNetworkVertexPtr, double>::iterator jt = t2.begin(); jt != t2.end(); ++jt)
+    {
+      Saps sap(cost);
+      ConstNetworkVertexPtr v2 = jt.key();
+      QList<ConstNetworkEdgePtr> edges2 = _getEdgesOnVertex(v2);
 
-    // find the best match of scores between the two sets of edges
+      // get all the neighboring edges for the first vertex.
+      for (int i1 = 0; i1 < edges1.size(); ++i1)
+      {
+        sap.addActor(&(edges1[i1]));
+      }
 
-    // aggregate the scores between the two sets of edges
+      // get all the neighboring edges for the second vertex.
+      for (int i2 = 0; i2 < edges2.size(); ++i2)
+      {
+        sap.addActor(&(edges2[i2]));
+      }
 
-    // set this vertexes score to the new aggregated score.
+      // find the best match of scores between the two sets of edges
+      vector<Saps::ResultPair> pairing = sap.calculatePairing();
+      QList<double> scores;
+
+      for (size_t i = 0; i < pairing.size(); ++i)
+      {
+        scores[i] = cost.cost(pairing[i].actor, pairing[i].task);
+      }
+
+      // aggregate the scores between the two sets of edges
+      double edgeScore = _aggregateEdgeScores(scores);
+
+      // set this vertex pair's score to the new aggregated score.
+      jt.value() = edgeScore;
+    }
+  }
 }
 
 }
