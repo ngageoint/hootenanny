@@ -15,6 +15,11 @@ The node-mapnik-server provides a service endpoint in the format:
 
 where `z, x, y` parameters follow the tile index from the TMS spec, the `name` parameter is used to identify the render database to access and the `color` is used to set the stroke and fill color for the mapnik style.
 
+### Installing
+```
+cd node-mapnik-server
+npm install
+```
 ### Running
 To run:
 ```
