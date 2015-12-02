@@ -41,9 +41,9 @@ namespace Tgs
     }
   }
 
-  void MultithreadedRandomForest::trainBinary(boost::shared_ptr<DataFrame> data,
-    unsigned int numTrees, unsigned int numFactors, std::string posClass, unsigned int nodeSize,
-    double retrain, bool balanced)
+  void MultithreadedRandomForest::trainBinary(boost::shared_ptr<DataFrame> /*data*/,
+    unsigned int /*numTrees*/, unsigned int /*numFactors*/, std::string /*posClass*/, unsigned int /*nodeSize*/,
+    double /*retrain*/, bool /*balanced*/)
   {
     try
     {
@@ -174,9 +174,9 @@ namespace Tgs
     }
   }
 
-  void MultithreadedRandomForest::trainRoundRobin(boost::shared_ptr<DataFrame> data,
-    unsigned int numTrees, unsigned int numFactors, std::string posClass, std::string negClass,
-    unsigned int nodeSize, double retrain, bool balanced)
+  void MultithreadedRandomForest::trainRoundRobin(boost::shared_ptr<DataFrame> /*data*/,
+    unsigned int /*numTrees*/, unsigned int /*numFactors*/, std::string /*posClass*/, std::string /*negClass*/,
+    unsigned int /*nodeSize*/, double /*retrain*/, bool /*balanced*/)
   {
     try
     {
