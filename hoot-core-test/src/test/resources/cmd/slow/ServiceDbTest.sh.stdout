@@ -1,6 +1,6 @@
 Reprojecting 0 / 135         
-16:01:14.211 INFO  .../core/ops/CalculateStatsOp.cpp(  94) Calculating map statistics...
-16:01:14.278 INFO  .../core/ops/CalculateStatsOp.cpp( 512) Map statistics calculated.
+06:38:05.873 INFO  .../core/ops/CalculateStatsOp.cpp(  94) Calculating map statistics...
+06:38:05.914 INFO  .../core/ops/CalculateStatsOp.cpp( 512) Map statistics calculated.
 Stat Name	test-output/cmd/ServiceDbTest/output.osm
 Node Count	135
 Way Count	22
