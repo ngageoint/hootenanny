@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 source $HOOT_HOME/conf/DatabaseConfig.sh
 
@@ -11,7 +10,11 @@ export RENDER_DB=renderdb_$INPUT
 #  Export hoot dataset to a PostGIS render db
 #
 createdb $AUTH $RENDER_DB -E UTF-8
-psql $AUTH -d $RENDER_DB -f /usr/share/postgresql/9.1/contrib/postgis-1.5/postgis.sql
-psql $AUTH -d $RENDER_DB -f /usr/share/postgresql/9.1/contrib/postgis-1.5/spatial_ref_sys.sql
-psql $AUTH -d $RENDER_DB -c 'CREATE EXTENSION hstore'
+if psql $AUTH -d $RENDER_DB -c 'CREATE EXTENSION postgis'; then
+    #Do Nothing
+    :
+else
+    psql $AUTH -d $RENDER_DB -f /usr/share/postgresql/9.1/contrib/postgis-1.5/postgis.sql
+    psql $AUTH -d $RENDER_DB -f /usr/share/postgresql/9.1/contrib/postgis-1.5/spatial_ref_sys.sql
+fi
 hoot osm2ogr -D services.db.reader.email=test@test.com $HOOT_HOME/translations/RenderDb.js "$DB_URL/$INPUT" "PG:dbname='$RENDER_DB' host='$DB_HOST' port='$DB_PORT' user='$DB_USER' password='$DB_PASSWORD'"

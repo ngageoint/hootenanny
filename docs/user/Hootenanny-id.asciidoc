@@ -41,9 +41,9 @@ To zoom to the layer extent simply right-click on the layer and click on the Zoo
 .Zooming to Layer extent.  Right click on the layer name and select zoom to layer.  
 image::user/images/id/hoot_zoom-to-layer.png[scaledwidth="25%"]
 
-When adding a layer with a large extent or a dense feature count, it is likely that the data will not be visible at the initial data extent.  To confirm whether this limitation is impacting the display of features for a given layer, we have added a yellow warning icon that will display warning messages such as "Features are loaded, but are currently not visible. Try zooming in for better results." when a user hovers the icon with their mouse cursor. 
+When adding a layer with a large extent or a dense feature count, it is likely that the data will not be visible at the initial data extent.  To confirm whether this limitation is impacting the display of features for a given layer, we have added a yellow warning icon that will display warning messages such as "Features are loaded, but are currently not visible. Try zooming in for better results." when a user hovers the icon with their mouse cursor.
 
-.Warning Message indicating features present but not visible at current zoom scale.  
+.Warning Message indicating features present but not visible at current zoom scale.
 image::user/images/id/hoot_alert.png[scaledwidth="50%"]
 
 NOTE: The order in which layers are added to Hootenanny is important. For Reference and Average conflation, the reference data is assumed to contain the reference geometry during conflation and whichever layer is selected to contain the reference attribution provided in the conflation options. For Cookie Cutter & Horizontal conflation, the reference data are typically higher fidelity dense urban data while the secondary data source are sparser regional level map data. 
@@ -163,25 +163,39 @@ image::user/images/id/hoot_mapdata.png[scaledwidth="25%"]
 
 ==== Tools
 
-The Map Tools button current provides measurement tools for capturing linear distances or area measurements.  To measure a feature click the Tools button shown in <<Hoot_measure>>. and select either Measure Line or Measure Area.  To measure a linear feature, click on the map to add nodes and double-click to complete the measurement.  To measure an area, click on each point and double-click to complete the polygon.  
+The Tools button provides users with a quick set of customized tools for measuring length/area and cropping layers to smaller subsets using either the visual extent or user defined bounding box. To access both options click on the Tools button and select either Measurement or Clip Tools.
+
+[[Hoot_Tools]]
+.Tools button shown in Hoot UI.
+image::user/images/id/hoot_tools.png[scaledwidth="50%"]
 
 [[Hoot_measure]]
-.Tools. Options currently include measuring length and area.
-image::user/images/id/hoot_measure.png[scaledwidth="50%"]
+===== Measurement Tools
+
+There are two measurement tools currently provided; Measure linear distance or length of an object and measure the area of an object. To measure the length of an object on the map, click on the Tools button and select Measurement Tools | Measure Length.  The cursor will then change into crosshairs indicating that you are able to measure a feature by drawing a line.  To continue a drawing, left click to add nodes as needed.  To complete the measurement double-click. To measure an area/perimeter of a feature, select the Measure Area option and click on the screen to add nodes and double click to complete the measurement.  The measurement values will appear with the perimeter value listed above the area.
+
+[[Hoot_Area_Measure]]
+.Measuring area in Hootenanny.  
+image::user/images/id/hoot_measure_area.png[scaledwidth="50%"]
  
-NOTE: When measuring an object the pan/zoom functions are disabled.  Clicking on the map after completing the measurement will cause the value to disappear from the screen.
+NOTE: The pan/zoom functions are disabled when measuring an object due to the way that measurements are captured on the screen. Clicking on the map after completing the measurement will cause the value to disappear from the screen. It is also possible to display the measurement of a selected layer geometry by clicking the `i` key.
+
+===== Clip Tools
+
+The clip tools provide a simple mechanism for cropping map layers using either the current visual extent of the map or a user defined bounding box.  An example use case might be if the user ingests a country level dataset into Hootenanny but is only interested in conflating a region or city within that data. Rather than conflate the entire country dataset, the user would clip the area using the Clip Tools to reduce it to a specific AOI and then run the conflation against that clipped dataset.  Two options are provided; clip to visual extent and clip to bounding box.  When clip to visual extent is selected the current visible map is used as the clip AOI.  If the preference is to define a bounding box on the map, the user can select clip to bounding box and then single left-click on any location dragging the displayed box to the desired size and direction. Keep in mind the first point clicked on the map is either the top or bottom corner depending on where the box is positioned. 
+
+Once a bounding box (or visual extent) has been selected, a dialog box will pop up with options to specify an output name and path of the clipped dataset.  After the job has successfully completed it will appear in the list of available datasets. 
+
+[[Hoot_Clip_Map]]
+.Clipping a layer using a defined bounding box.  This image shows the user selecting the bounding box option, creating a rectangular clip area and submitting the job to the server. The imagery basemap displayed is the DigitalGlobe GBM service.  
+image::user/images/id/hoot_clip.png[scaledwidth="50%"]
 
 ==== Help
 
 To access help for the standard features within iD, click on the bookmark icon below the Background Settings button or type the 'h' shortcut key. This feature is included within the standard iD Editor and includes background information on all OSM editing related functionality. It has been included in Hootenanny for continuity purposes noting that numerous tutorials on standard iD functionality such as adding/editing OSM features can be found in this help guide.
 
 .Accessing the iD editor Help page within Hootenanny.
-image::user/images/id/hoot_helpmenu.png[scaledwidth="50%"]
-
-==== Hoot UI Error Messages
-
-Hootenanny will display any UI related error messages, e.g. Layer already exists, in the top right corner of the map.  These will appear in either red, yellow or blue highlighted text to indicate an error, warning, or notice, respectively.
-
+image::user/images/id/hoot_helpmenu.png[scaledwidth="25%"] 
 
 [[Hoot-iD_Shortcuts]]
 === Hootenanny Shortcuts
@@ -190,9 +204,9 @@ The following table provides all of the available shortcut keys for accessing Ho
 
 |======
 | *Shortcut* | *Action*
-| 1 | Create new Point feature ("Confirmed" in Validation Mode)
-| 2 | Create new Line feature ("Assessed" in Validation Mode)
-| 3 | Create new Area feature ("Reported" in Validation Mode)
+| 1 | Create new Point feature
+| 2 | Create new Line feature
+| 3 | Create new Area feature
 | ctrl + z | Undo
 | ctrl + y | Redo
 | ctrl + s | Save
@@ -287,7 +301,6 @@ image::user/images/id/hoot_convexhull_example.png[scaledwidth="40%"]
 
 NOTE: In the user interface there is no way to tune or modify the generated alpha-shape. You can however configure the alpha-value from the command line (see alpha-shape in User Guide). In either case, the generated alpha-shape will always approximate the bounds of the data regardless of shape of the urban area.
 
-[[Hoot_AdvancedConflation]]
 4) *_Advanced Conflation_*
 
 The _Advanced Conflation_ options provide users with the ability to customize a particular conflation job using a set of exposed advanced <<Advanced_Conflation_Options,options>>. These are intended for use cases where there is intimate familiarity with both the configuration parameters and the unique set of conditions that warrant their use. For example, to modify any of the Cleaning or Rubber Sheeting options when conflating rivers, users can simply expand the Cleaning Options and Waterway Options panels and modify accordingly. Note that caution should be exercised when applying these as their use may produce unexpected results. 
@@ -329,9 +342,8 @@ NOTE: Although reviews occur between single pairs of features, a review set may 
 
 When features are flagged as needing review, a number of different review notes may appear to provide some guidance to the user.  The review notes are general and don't provide the specific reasons why a pair of features are being reviewed against one another.  The following sections are meant to be a supplemental guide for users to help them evaluate the particular review scenarios.
 
-*_POI Review Text_*
+1. POI Review Text
 
-|======
 | *Review Note* | *Description* 
 | similar names | The name score is in the range (0.987403, 1.2)
 | very similar names | The name score is in the range [1.2, +∞)
@@ -341,9 +353,20 @@ When features are flagged as needing review, a number of different review notes 
 | similar name and place type | The names are very similar and the place types are similar
 | generic type to place match | One of the POIs is a generic type (e.g. poi=yes) and the other is a place (e.g. place=town)
 | similar POI type | The two POIs have a similar type (e.g. amenity=restaurant vs. amenity=café)
-|======
 
-*_Highway Review Text_*
+2. Building Review Text
+
+Building review explanations were generated before they were exposed to the UI. These are primarily helpful in debugging but not for providing users with meaningful text to make decisions.
+
+Building Review Examples:
+
+* BuildingMatch: Relation:-4054, Way:-33199 p: match: 0.15 miss: 0.25 review: 0.6
+* Relation:-4054, Way:-33199 - Element identifiers for the first and second element being reviewed.
+* match: 0.15 – Probability of a match as determined by the classifier
+* miss: 0.25 – Probability of a miss as determined by the classifier
+* review: 0.6 – Probability of a review as determined by the classifier
+
+3. Highway Review Text
 
 The review for highways tends to be a bit more complex due to the nature by which road features are handled within Hoot.  The following is meant to be a guide for helping address review scenarios.
 
@@ -379,16 +402,12 @@ E. *Review Text*: _No valid matching subline found_
 
 It is possible for multiple concurrent users to edit the same layer to resolve reviews generated for larger conflated data scenarios.  The current approach that Hootenanny supports is to allow anyone with access to the same deployed instance of Hootenanny to load any layer in the database with the caveat that any features reviewed by active users will appear as "locked" to prevent any unauthorized modifications to these features.  By utilizing a time-based locking mechanism, Hootenanny prevents the same feature from being reviewed twice by concurrent users. Note that is not intended as a long term solution to address user authentication and security. For more fine grained control of feature/layer editing a robust user authentication and security profile will be required. 
 
-Using a quick example, if a conflation job produces a merged layer with 100 open reviews, the first user (user1) who loads the merged layer automatically locks the unresolved review pair loaded in their browser session. If a second user (user2) then simultaneously loads this layer, a different review will be presented to user2 and the total number of locked features will increase to 2 corresponding to the reviews of user1 and user2. 
-
-As a general rule, the number of locked features will increase as new users add the same merged layer and then decrease as reviews get resolved or as the time duration that features are locked (~2 minutes) expires.  When a review is locked, it cannot be resolved by anyone other than the user who is reviewing it unless they hit the resolve all remaining reviews. 
-
-NOTE: When a user modifies a feature's review status by clicking the Resolved button, the changes to the feature cannot be undone.
+Using a quick example, if a conflation job produces a merged layer with 100 open reviews, the first user (user1) who loads the merged layer automatically locks the unresolved review pair loaded in their browser session. If a second user (user2) then simultaneously loads this layer, a different review will be presented to user2 and the total number of locked features will increase to 2 corresponding to the reviews of user1 and user2s. This number of locked features increases as new users add the same merged layer and then decreases as reviews get resolved or as the time duration that features are locked (~2 minutes) expires.  When a review is locked, it cannot be resolved by anyone other than the user who is reviewing it unless they hit the resolve all remaining reviews. Also note that review status changes are committed to the Hootenanny database on a per-review basis and cannot be undone using the undo/redo buttons.
 
 [[MapInMap]]
 ===== Map-in-Map
 
-In Hootenanny, the concept of 'Map-in-Map' is used here to describe an inset or overview map that contains additional spatial information relating to the conflation i.e where reviews occur within the AOI. When a conflation job completes and reviews are generated, users can display an overview map showing coloured points representing the location (or centroid of the location) where unresolved, merged, and currently reviewed features occur for the corresponding AOI.  To view this map, press the '/' key when reviewing features and the smaller overview map should display a set of points representing the review layer.  
+In Hootenanny, the concept of Map-in-Map is used here to describe an inset or overview map that contains additional spatial information relating to the conflation i.e where reviews occur within the AOI. When a conflation job completes and reviews are generated, users can display an overview map showing coloured points representing the location (or centroid of the location) where unresolved, merged, and currently reviewed features occur for the corresponding AOI.  To view this map, press the '/' key when reviewing features and the smaller overview map should display a set of points representing the review layer.  
 
 Depending on the density of data flagged for review, the features are represented in the following manner: yellow dots corresponding to the location of unresolved reviews; a single red dot indicating the currently reviewed feature in the user's session; and green dots representing any resolved or merged features.  This visual aid becomes useful particularly when multiple users are editing the same layer simultaneously since it provides a map of the spatial distribution of reviews in real or near-real time.  
 
@@ -595,10 +614,10 @@ image::user/images/id/hoot_TA_save_trans.png[scaledwidth="25%"]
 When the user is satisfied that their translation is sufficiently populated with enough defined tag mappings, they can click on the Save Translation button and a pop-up message will appear asking whether you would like to add it to the list of available internal translations.  Clicking OK will open the _New Translation_ dialog box with the generated translation file in javascript.  Provide a name and description then Save Edits to save the translation.  This translation file will now be available to use for importing new data as discussed in <<Hoot-iD_Datasets>>.
 
 .Adding the translation to list of internal Hootenanny translations.
-image::user/images/id/hoot_addtranslation.png[scaledwidth="50%"]
+image::user/images/id/hoot_addtranslation.png[scaledwidth="25%"]
 
 .Creating a new translation.
-image::user/images/id/hoot_save_translationfile.png[scaledwidth="50%"]
+image::user/images/id/hoot_save_translationfile.png[scaledwidth="25%"]
 
 [[HootiD-Translation]]
 ==== Translations
@@ -624,7 +643,7 @@ image::user/images/id/hoot_dataset_tab.png[scaledwidth="75%"]
 To add a new folder, click on the Add Folder button and enter the name of the folder they wish to create.  The first folder created will always live at the root level. 
 
 .Add new folder.  Click the Add New folder button to open the dialog box.
-image::user/images/id/hoot_add_folder.png[scaledwidth="50%"]
+image::user/images/id/hoot_add_folder.png[scaledwidth="25%"]
 
 Once a new folder has been created, users can either add data directly by right-mouse clicking on the folder to expose the Add Dataset option or by simply clicking on the Add data button to open the add data dialog.  
 
@@ -632,67 +651,63 @@ Once a new folder has been created, users can either add data directly by right-
 
 When users click on Add Data, a dialog box including different options is presented. These options include selecting the type of data to import (shapefile, osm, .zip containing shapefile or fgdb, a FGDB data folder, geonames file from geonames.org), a browser button to locate the data, the name you wish to save the layer as, the folder path where the data should reside (root is default), any new folder name if needed, and the appropriate Translation Schema.    
 
-To import data into Hootenanny, click on the _Add Dataset_ button in the Dataset tab to bring up the Add Data menu shown in <<AddNewData>>. 
+To import data into Hootenanny, click on the _Add Dataset_ button in the Dataset tab to bring up the Add Data menu shown in <<AddNewData>>. For _Import Type_, users can select either a single file (.osm, .shp, .zip), a GEONAMES dataset from geonames.org or a folder for  ESRI FileGeoDatabase (FGDB) files. It is possible to merge multiple files in a single zip file during import but note that these datasets will get merged into a single layer in Hootenanny. Currently there is no support for importing zip files containing one or more .osm files (multiple .osm files can be merged into a single layer as long as they are not inside of a .zip).
 
 [[AddNewData]]
 .Importing data into Hootenanny. 
-image::user/images/id/hoot_import.png[scaledwidth="50%"]
+image::user/images/id/hoot_add_dataset.png[scaledwidth="25%"]
 
-* _Import Type_: The type of the file to import.  Users can select either a .osm file, .shp, .zip containing either shapefiles or fgdb, a GEONAMES dataset from geonames.org (must be saved in the format .geonames before uploading), or a folder for  ESRI FileGeoDatabase (FGDB) files. 
-
-* _Import Data_: The local/network path to the dataset.
-
-* _Layer Name_: The name of the layer once imported.
-
-* _Translation Schema_: The translation schema to use when importing the data.  Note that if importing data used to create a custom translation this is where you would specify that translation file generated earlier from translation assistant.  Otherwise you must use one of the available translation schemas (e.g. MGCP, TDS, etc.). When selecting the .geonames format, a GEONAMES translator is automatically selected.  Similarly with .osm files, user can either specify the default osm translation from openstreetmap.org or no translation to simply add the data (this assumes that it is already conformant).  
-
-NOTE: If multiple files are contained inside a single .zip file during import these datasets will get merged into a single layer in Hootenanny. Currently there is no support for importing zip files containing one or more .osm files (multiple .osm files can be merged into a single layer as long as they are not inside of a .zip).
+With data and folders displayed in the dataset tab, users can employ different options for managing their data including deleting the folder or layer, modifying the name or folder path of the layer, or adding additional folders and data as required using the right-click or path specification. It is important to note when deleting a folder, only the top-level or specified folder and its contents are deleted but any recursive folders and datasets remain.  In other words, it is not possible to delete an entire data directory tree by deleting the top level folder.  Users must select each subfolder to delete until all are removed within a hierarchical directory structure.   
 
 *_Bulk Import_*
 
-Using the Hootenanny bulk importer, users can add multiple datasets in a import single job.  To access this right-click on the Add Datasets button as shown below and select the Bulk Import option.  A Bulk Add Data dialog box will appear allowing users to create a bulk import job by adding new rows for each dataset they wish to import.  After adding the relevant datasets and selecting each option click on the Import button.
+Using the Hootenanny bulk importer, users can add multiple datasets in a import single job.  To access this right-click on the Add Datasets button as shown below and select the Bulk Import option.  A Bulk Add Data dialog box will appear allowing users to create a bulk import job by adding new rows for each dataset they wish to import.  Note that all options except for defining a new folder are available here.  After adding the relevant datasets, click on the Import button.
 
 [[HootBulkImport]]
-
-.Bulk Import in Hootenanny.  To access the bulk import option right-click on the Add Dataset button.  
-image::user/images/id/hoot_bulkimport.png[]
+.Bulk Import in Hootenanny.  To access right-click on the Add Dataset button and populate each field.  Note that larger datasets will require more time to import. 
+image::user/images/id/hoot_bulkimport.png[scaledwidth="25%"]
 
 ===== Export Data 
 
-To export a dataset, right-mouse click on a dataset and select the Export Dataset option to open the Export dialog box shown in <<hootexport>>.  The export options available from Hootenanny are discussed in <<HootiD_Exporting>>.  
+To export a dataset, right-mouse click on a dataset and select the Export Dataset option to open the Export dialog box shown in <<hootexport>>.  The export options available from Hootenanny are discussed in <<HootiD_Exporting>>. 
 
-===== Other Options
+[[right-click_export]]
+.Export from dataset.
+image::user/images/id/hoot_export_rtclick.png[scaledwidth="25%"]
+
+NOTE: To select multiple datasets 
+
+===== Other Data Manage Options
 
 Layers can be managed simply by right-clicking over an individual or multiple selected (using the ctrl key) datasets and picking an appropriate action from the list of presented options.
-
 .Manage data options available from Right-click.
-image::user/images/id/hoot_manageoptions.png[scaledwidth="50%"]
+image::user/images/id/hoot_manageoptions.png[scaledwidth="25%"]
 
-To delete, move or rename an existing dataset(s), right click over the highlighted layers and select from the available options.  
+To delete, move or rename an existing dataset(s), right click over the highlighted layers and select the appropriate option.  
 
 *_Prepare for Validation_*
 
 The Prepare for Validation option provides users with the capability of generating a 30% sample of validated POI features that can be used to determine the degree to which it can be identified using the basemap imagery data source. When using DigitalGlobe GBM/EGD data, the imagery metadata is appended to each POI indicating what image id was used to validate a given feature.  To prepare a POI layer for validation, right-click and select Prepare for Validation.  A dialog box will appear prompting users to enter a name for the layer.  
 
 .Create new validation layer.  Enter an output name and click run to generate the validation layer. 
-image::user/images/id/hoot_prepareforvalidation.png[scaledwidth="35%"]
+image::user/images/id/hoot_prepareforvalidation.png[scaledwidth="25%"]
 
-Once complete, users can load this newly generated validation layer and Hootenanny will popup a prompt to go into Validation mode whereby three validation options are presented.  Each option when selected by the user will populate different hoot:review:choices tags as well as any imagery source metadata if used.
+Once complete, users can load this newly generated validation layer and Hootenanny will popup a prompt to go into Validation mode whereby three validation options are presented.  Each presented option (either 1, 2, or 3) when selected will populate different hoot:review:choices tags as well as any imagery source metadata if used.
 
-_Confirmed_: You can look at the point in the imagery and determine what it is (e.g. a mosque, airport, stadium, etc.) Shortcut key = 1.
+.Confirmed: You can look at the point in the imagery and determine what it is (e.g. a mosque, airport, stadium, etc.) Shortcut key = 1.
 
-_Assessed_: You can determine that the point is a building from the imagery but you cannot verify its type (e.g. hair salon, coffee shop, etc..). Shortcut key = 2.
+.Assessed: You can determine that the point is a building from the imagery but you cannot verify its type (e.g. hair salon, coffee shop, etc..). Shortcut key = 2.
 
-_Reported_: You cannot determine the point using the provided imagery (missing coverage, clouds, etc.). Shortcut key = 3.  
+.Reported: You cannot determine the point using the provided imagery (missing coverage, clouds, etc.). Shortcut key = 3.  
 
 .Validating a layer of Washington, D.C. Points of Interest in Hootenanny against the DigitalGlobe GBM/EGD basemap.
-image::user/images/id/hoot_validate_layer.png[]
+image::user/images/id/hoot_validate_layer.png[scaledwidth="50%"]
 
 NOTE: Panning the map during Validation causes the highlighted POI to become unselected and removes the validation options. To resume validation, click the Select button at the bottom.
 
 *_Filter Non-HGIS POIs_*
 
-The Filter Non-HGIS POI capabilities is provided for users working with HGIS data.  It provides a simple means to take any layer and filter anything that is not a HGIS POI (e.g. road and/or building) based on the HGIS v2.0 definitions for POI.  Note that this capability is very specific to the HGIS group at DigitalGlobe/NGA and should only be used in conjunction with those efforts.  Please contact hootenanny.help@digitalglobe.com for any questions regarding this.  To create a new filtered layer simply right-click and select the option, then provide an output layer name.  
+The Filter Non-HGIS POI capabilities is provided for users working with the Human Geography Information Service (HGIS) version 2.0.  It provides a simple means to take any layer and filter anything that is not a HGIS POI (e.g. road and/or building) based on the HGIS v2.0 definitions for POI.  Note that this capability is very specific to the HGIS group at DigitalGlobe/NGA and should only be used in conjunction with those efforts.  Please contact hootenanny.help@digitalglobe.com for any questions regarding this.  To create a new filtered layer simply right-click and select the option, then provide an output layer name.  
 
 [[HootiD_WFSExport]]
 ==== WFS Exports
@@ -758,7 +773,7 @@ image::user/images/id/hoot_version.png[]
 [[Advanced_Conflation_Options]]
 == Appendix: Hootenanny Advanced Parameters
 
-The following conflation parameters are provided to the user as a reference when determining whether to modify any of the Advanced Conflation settings. These are exposed to the user via the Advanced Conflation options described in <<Hoot_AdvancedConflation>> but should be used with caution.
+The following advanced configuration parameters are provided to the user via the Advanced Conflation option. 
 
 [[Advanced_Cleaning_Options]]
 === Cleaning Options
