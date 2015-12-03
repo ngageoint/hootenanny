@@ -460,8 +460,31 @@ public class DbUtils
     }
   }
 
+  /**
+   * Drops the postgis render db created for hoot map dataset
+   *
+   * @param conn JDBC Connection
+   * @param mapName String
+   * @throws Exception
+   */
+  public static void deleteRenderDb(Connection conn, String mapName) throws Exception
+  {
+    try
+    {
+      String dbname = "renderdb_" + mapName;
+      DataDefinitionManager ddm = new DataDefinitionManager();
+      ddm.deleteDb(dbname, false);
+    }
+    catch (Exception e)
+    {
+      String msg = "Error dropping postgis render database.  ";
+      msg += "  " + e.getCause().getMessage();
+      throw new Exception(msg);
+    }
+  }
+
   //remove this. replace by calling hoot core layer delete native command
-  
+ 
   /**
    * 
    * 

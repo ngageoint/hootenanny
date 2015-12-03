@@ -19,6 +19,12 @@ fi
 echo "Installing dependencies"
 sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-all graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane
 
+# See /usr/share/doc/dictionaries-common/README.problems for details
+# http://www.linuxquestions.org/questions/debian-26/dpkg-error-processing-dictionaries-common-4175451951/
+sudo apt-get install -y wamerican-insane
+sudo /usr/share/debconf/fix_db.pl
+sudo dpkg-reconfigure dictionaries-common
+
 # Hoot Baseline is PostgreSQL 9.1 and PostGIS 1.5, so we need a deb file and
 # then remove 9.4
 if [ ! -f postgresql-9.1-postgis_1.5.3-2_amd64.deb ]; then
@@ -77,7 +83,7 @@ if ! grep --quiet NODE_PATH ~/.profile; then
 fi
 
 # Module needed for OSM API db test
-if [ ! -d /home/vagrant/.cpan ]; then
+if [ ! -d /home/mjeffe/.cpan ]; then
     (echo y;echo o conf prerequisites_policy follow;echo o conf commit)|sudo cpan
     sudo perl -MCPAN -e 'install XML::Simple'
 fi
@@ -134,7 +140,7 @@ fi
 sudo service postgresql restart
 
 # Configure and Build
-cd /home/vagrant/hoot
+cd /home/mjeffe/hoot
 source ./SetupEnv.sh
 
 # Check that hoot-ui submodule has been init'd and updated
@@ -152,7 +158,7 @@ sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
 #--------------
 # Hoot Settings
 #--------------
-HOOT_HOME=/home/vagrant/hoot
+HOOT_HOME=/home/mjeffe/hoot
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT_HOME/pretty-pipes/lib
 GDAL_DATA=/usr/local/share/gdal
 GDAL_LIB_DIR=/usr/local/lib
@@ -186,7 +192,7 @@ fi
 # Create Tomcat context path for tile images
 if ! grep -i --quiet 'ingest/processed' /etc/tomcat6/server.xml; then
     echo "Adding Tomcat context path for tile images"
-    sudo sed -i.bak "s@<\/Host>@  <Context docBase=\"\/home\/vagrant\/hoot\/ingest\/processed\" path=\"\/static\" \/>\n      &@" /etc/tomcat6/server.xml
+    sudo sed -i.bak "s@<\/Host>@  <Context docBase=\"\/home\/mjeffe\/hoot\/ingest\/processed\" path=\"\/static\" \/>\n      &@" /etc/tomcat6/server.xml
 fi
 
 # Allow linking in Tomcat context
@@ -206,6 +212,13 @@ fi
 if [ ! -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
     echo 'testJobStatusPollerTimeout=250' > $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
 fi
+
+# Update the init.d script for node-mapnik-server
+sudo cp node-mapnik-server/init.d/node-mapnik-server /etc/init.d
+# Make sure all npm modules are installed
+cd node-mapnik-server
+npm install
+cd ..
 
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'
@@ -231,10 +244,5 @@ make docs -sj$(nproc)
 #make -sj$(nproc) test-all
 
 # Deploy to Tomcat
-echo "Stopping Tomcat"
-sudo service tomcat6 stop
 echo "Deploying Hoot to Tomcat"
 sudo -u tomcat6 scripts/vagrantDeployTomcat.sh
-echo "Starting Tomcat"
-sudo service tomcat6 start
-
