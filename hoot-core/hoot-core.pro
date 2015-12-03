@@ -33,6 +33,7 @@ OTHER_FILES = \
     ../conf/schema/highway.json \
     ../conf/schema/natural.json \
     ../conf/schema/public_transport.json \
+    ../conf/schema/surface.json \
     ../rules/template/ConflateRules.js \
 
 include(../Configure.pri)
