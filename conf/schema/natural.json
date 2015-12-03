@@ -67,12 +67,20 @@
             "node"
         ],
         "isA": "natural",
+        "name": "natural=mountain",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "node"
+        ],
+        "isA": "natural",
         "name": "natural=peak",
         "objectType": "tag",
-        "similarTo": {
-            "name": "natural=hill",
-            "weight": 0.8
-        }
+        "similarTo": [
+            { "name": "natural=hill", "weight": 0.8 },
+            { "name": "natural=mountain", "weight": 0.8 }
+        ]
     },
     {
         "geometries": [
