@@ -28,12 +28,20 @@
                 "weight": 0.8
             },
             {
+                "name": "surface=asphalt_over_concrete",
+                "weight": 0.8
+            },
+            {
                 "name": "surface=tartan",
                 "weight": 0.8
             },
             {
                 "name": "surface=macadam",
                 "weight": 0.8
+            },
+            {
+                "name": "surface=bound_surface",
+                "weight": 0.5
             },
             {
                 "name": "surface=paving_stones",
@@ -83,6 +91,21 @@
             "name": "surface=asphalt",
             "weight": 0.8
         }
+    },
+    {
+        "isA": "surface=paved",
+        "name": "surface=asphalt_over_concrete",
+        "objectType": "tag",
+        "similarTo": [
+        {
+            "name": "surface=asphalt",
+            "weight": 0.8
+        },
+        {
+            "name": "surface=concrete",
+            "weight": 0.8
+        }
+        ]
     },
     {
         "isA": "surface=paved",
@@ -204,8 +227,23 @@
         "isA": "surface=paved",
         "name": "surface=paving_stones",
         "objectType": "tag",
-        "similarTo": {
+        "similarTo": [
+        {
             "name": "surface=grass_paver",
+            "weight": 0.8
+        },
+        {
+            "name": "surface=brick",
+            "weight": 0.8
+        }
+        ]
+    },
+    {
+        "isA": "surface=paved",
+        "name": "surface=brick",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "surface=paving_stones",
             "weight": 0.8
         }
     },
@@ -244,6 +282,15 @@
         }
     },
     {
+        "isA": "surface=paved",
+        "name": "surface=bound_surface",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "surface=asphalt",
+            "weight": 0.5
+        }
+    },
+    {
         "childWeight": 0.1,
         "dataType": "enumeration",
         "influence": 1,
@@ -257,8 +304,33 @@
         "objectType": "tag"
     },
     {
+        "isA": "surface=unknown",
+        "name": "surface=other",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=unpaved",
+        "name": "surface=snow",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=unpaved",
+        "name": "surface=ice",
+        "objectType": "tag"
+    },
+    {
         "isA": "surface=unpaved",
         "name": "surface=wood",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=unpaved",
+        "name": "surface=wood_plank",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=wood",
+        "name": "surface=corduroy",
         "objectType": "tag"
     }
 ]

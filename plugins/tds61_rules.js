@@ -3743,25 +3743,25 @@ tds61.rules = {
      // ZI016_ROC - Route Pavement Information : Route Surface Composition
      // ['ZI016_ROC','-999999','surface','unknown'], // Trying this instead of undefined
      ['ZI016_ROC','-999999',undefined,undefined], // No Information
-     ['ZI016_ROC','1','surface','ground'], // Unimproved
-     ['ZI016_ROC','2','surface','compacted'], // Stabilized earth
-     ['ZI016_ROC','3','surface','flexible_pavement'], // Flexible Pavement
-     ['ZI016_ROC','4','surface','gravel'], // Aggregate
-     ['ZI016_ROC','5','surface','macadam'], // Macadam
-     ['ZI016_ROC','6','surface','bound_surface'], // Bound Surface
-     ['ZI016_ROC','7','surface','ridgid_pavement'], // Rigid Pavement
-     ['ZI016_ROC','8','surface','concrete'], // Concrete
-     ['ZI016_ROC','9','surface','asphalt'], // Asphalt
-     ['ZI016_ROC','10','surface','asphalt_over_concrete'], // Asphalt over Concrete
-     ['ZI016_ROC','11','surface','cobblestone'], // Cebble-stone
-     ['ZI016_ROC','12','surface','brick'], // Brick
-     ['ZI016_ROC','13','surface','metal'], // Metal
-     ['ZI016_ROC','14','surface','wood'], // Wood
-     ['ZI016_ROC','15','surface','corduroy'], // rough hewn logs...  // Corduroy
-     ['ZI016_ROC','16','surface','wood_plank'], // Wood Plank
-     ['ZI016_ROC','17','surface','ice'], // Ice
-     ['ZI016_ROC','18','surface','snow'], // Snow
-     ['ZI016_ROC','999','surface','other'], // Other
+//      ['ZI016_ROC','1','surface','ground'], // Unimproved
+//      ['ZI016_ROC','2','surface','compacted'], // Stabilized earth
+//      ['ZI016_ROC','3','surface','flexible_pavement'], // Flexible Pavement
+//      ['ZI016_ROC','4','surface','gravel'], // Aggregate
+//      ['ZI016_ROC','5','surface','macadam'], // Macadam
+//      ['ZI016_ROC','6','surface','bound_surface'], // Bound Surface
+//      ['ZI016_ROC','7','surface','ridgid_pavement'], // Rigid Pavement
+//      ['ZI016_ROC','8','surface','concrete'], // Concrete
+//      ['ZI016_ROC','9','surface','asphalt'], // Asphalt
+//      ['ZI016_ROC','10','surface','asphalt_over_concrete'], // Asphalt over Concrete
+//      ['ZI016_ROC','11','surface','cobblestone'], // Cobble-stone
+//      ['ZI016_ROC','12','surface','brick'], // Brick
+//      ['ZI016_ROC','13','surface','metal'], // Metal
+//      ['ZI016_ROC','14','surface','wood'], // Wood
+//      ['ZI016_ROC','15','surface','corduroy'], // rough hewn logs...  // Corduroy
+//      ['ZI016_ROC','16','surface','wood_plank'], // Wood Plank
+//      ['ZI016_ROC','17','surface','ice'], // Ice
+//      ['ZI016_ROC','18','surface','snow'], // Snow
+//      ['ZI016_ROC','999','surface','other'], // Other
 
      // ZI016_WTC - Route Pavement Information : Road Weather Restriction
      // ['ZI016_WTC','-999999',undefined,undefined], // No Information
@@ -4340,7 +4340,28 @@ tds61.rules = {
      // To account for an "error" in the TDSv61 sample GDB
      ['ZI001_VSC','Stereoscopic Imagery','source:vertical_source:type','stereoscopic_imagery'],
      ['ZI001_SRT','NTM Imagery','source:non_spatial_source:type','ntm_imagery'],
+
      ['ZI016_ROC','-999999',undefined,undefined], // No Information
+     ['ZI016_ROC','1','surface','ground'], // Unimproved
+     ['ZI016_ROC','2','surface','compacted'], // Stabilized earth
+     ['ZI016_ROC','3','surface','unpaved'], // Flexible Pavement
+     ['ZI016_ROC','4','surface','gravel'], // Aggregate
+     ['ZI016_ROC','5','surface','macadam'], // Macadam
+     ['ZI016_ROC','6','surface','bound_surface'], // Bound Surface
+     ['ZI016_ROC','7','surface','paved'], // Rigid Pavement
+     ['ZI016_ROC','8','surface','concrete'], // Concrete
+     ['ZI016_ROC','9','surface','asphalt'], // Asphalt
+     ['ZI016_ROC','10','surface','asphalt_over_concrete'], // Asphalt over Concrete
+     ['ZI016_ROC','11','surface','cobblestone'], // Cobble-stone
+     ['ZI016_ROC','12','surface','brick'], // Brick
+     ['ZI016_ROC','13','surface','metal'], // Metal
+     ['ZI016_ROC','14','surface','wood'], // Wood
+     ['ZI016_ROC','15','surface','corduroy'], // rough hewn logs...  // Corduroy
+     ['ZI016_ROC','16','surface','wood_plank'], // Wood Plank
+     ['ZI016_ROC','17','surface','ice'], // Ice
+     ['ZI016_ROC','18','surface','snow'], // Snow
+     ['ZI016_ROC','999','surface','other'], // Other
+
     ], // End one2oneIn
 
     // One2one translation table for converting "Other" OSM attributes to TDS
@@ -4484,26 +4505,27 @@ tds61.rules = {
     // ##### Start of fuzzyTable #####
     // This list uses the new IsA, IsSimilar etc functions to map a number of input values to a single output
     fuzzyTable : [
-     ['ZI016_ROC','7',schemaTools.isA('surface=paved', 0.8, 0.1, 0.5)], // Ridgid Pavement
-     ['ZI016_ROC','3',schemaTools.isA('surface=unpaved', 0.8, 0.1, 0.5)], // Flexible Pavement
 
-     ['ZI016_ROC','1',schemaTools.simple('surface=ground',2)], // Unimproved
-//      ['ZI016_ROC','2',schemaTools.simple('surface=compacted',2)], // Stabilized earth
-     ['ZI016_ROC','4',schemaTools.simple('surface=gravel',2)], // Aggregate
-//      ['ZI016_ROC','5',schemaTools.simple('surface=macadam',2)], // Macadam
-//      ['ZI016_ROC','6',schemaTools.simple('surface=bound_surface',2)], // Bound Surface
-     ['ZI016_ROC','8',schemaTools.simple('surface=concrete',2)], // Concrete
-     ['ZI016_ROC','9',schemaTools.simple('surface=asphalt',2)], // Asphalt
-//      ['ZI016_ROC','10',schemaTools.simple('surface=asphalt_over_concrete',2)], // Asphalt over Concrete
-     ['ZI016_ROC','11',schemaTools.simple('surface=cobblestone',2)], // Cebble-stone
-//      ['ZI016_ROC','12',schemaTools.simple('surface=brick',2)], // Brick
-//      ['ZI016_ROC','13',schemaTools.simple('surface=metal,2')], // Metal
-     ['ZI016_ROC','14',schemaTools.simple('surface=wood',2)], // Wood
-//      ['ZI016_ROC','15',schemaTools.simple('surface=corduroy',2)], // rough hewn logs...  // Corduroy
-//      ['ZI016_ROC','16',schemaTools.simple('surface=wood_plank',2)], // Wood Plank
-//      ['ZI016_ROC','17',schemaTools.simple('surface=ice',2)], // Ice
-//      ['ZI016_ROC','18',schemaTools.simple('surface=snow',2)], // Snow
-//      ['ZI016_ROC','999',schemaTools.simple('surface=other',2)], // Other
+     ['ZI016_ROC','1',schemaTools.simple('surface=ground',1)], // Unimproved
+     ['ZI016_ROC','2',schemaTools.simple('surface=compacted',1)], // Stabilized earth
+     ['ZI016_ROC','3',schemaTools.isA('surface=unpaved', 0.8)], // Flexible Pavement
+     ['ZI016_ROC','4',schemaTools.simple('surface=gravel',1)], // Aggregate
+     ['ZI016_ROC','5',schemaTools.simple('surface=macadam',1)], // Macadam
+     ['ZI016_ROC','6',schemaTools.simple('surface=bound_surface',1)], // Bound Surface
+     ['ZI016_ROC','7',schemaTools.isA('surface=paved', 0.8)], // Ridgid Pavement
+     ['ZI016_ROC','8',schemaTools.simple('surface=concrete',1)], // Concrete
+     ['ZI016_ROC','9',schemaTools.simple('surface=asphalt',1)], // Asphalt
+     ['ZI016_ROC','10',schemaTools.simple('surface=asphalt_over_concrete',1)], // Asphalt over Concrete
+     ['ZI016_ROC','11',schemaTools.simple('surface=cobblestone',1)], // Cobble-stone
+     ['ZI016_ROC','11',schemaTools.simple('surface=sett',1)], // Cobble-stone
+     ['ZI016_ROC','12',schemaTools.simple('surface=brick',1)], // Brick
+     ['ZI016_ROC','13',schemaTools.simple('surface=metal',1)], // Metal
+     ['ZI016_ROC','14',schemaTools.simple('surface=wood',1)], // Wood
+     ['ZI016_ROC','15',schemaTools.simple('surface=corduroy',1)], // rough hewn logs...  // Corduroy
+     ['ZI016_ROC','16',schemaTools.simple('surface=wood_plank',1)], // Wood Plank
+     ['ZI016_ROC','17',schemaTools.simple('surface=ice',1)], // Ice
+     ['ZI016_ROC','18',schemaTools.simple('surface=snow',1)], // Snow
+     ['ZI016_ROC','999',schemaTools.simple('surface=other',1)], // Other
     ],
     // ##### End of fuzzyTable #####
 
