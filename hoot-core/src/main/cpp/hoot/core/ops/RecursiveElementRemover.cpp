@@ -111,14 +111,6 @@ void RecursiveElementRemover::apply(const shared_ptr<OsmMap> &map)
 
   // remove the relations from most general to most specific
   _remove(map, _eid, toErase);
-
-#warning remove me
-  if (_eid == ElementId::way(-638))
-  {
-    LOG_INFO("Here!");
-    LOG_VAR(toErase);
-    LOG_VAR(map->getElement(_eid));
-  }
 }
 
 void RecursiveElementRemover::_remove(const shared_ptr<OsmMap>& map, ElementId eid,

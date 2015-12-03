@@ -73,7 +73,7 @@ BuildingMerger::BuildingMerger(const set< pair<ElementId, ElementId> >& pairs) :
 void BuildingMerger::apply(const OsmMapPtr& map,
   vector< pair<ElementId, ElementId> >& replaced) const
 {
-  LOG_VAR(_pairs);
+  //LOG_VAR(_pairs);
   // use node count as a surrogate for complexity of the geometry.
   CountNodesVisitor count1;
   shared_ptr<Element> e1 = _buildBuilding1(map);
