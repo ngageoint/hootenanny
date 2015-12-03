@@ -83,7 +83,7 @@ if ! grep --quiet NODE_PATH ~/.profile; then
 fi
 
 # Module needed for OSM API db test
-if [ ! -d /home/vagrant/.cpan ]; then
+if [ ! -d /home/mjeffe/.cpan ]; then
     (echo y;echo o conf prerequisites_policy follow;echo o conf commit)|sudo cpan
     sudo perl -MCPAN -e 'install XML::Simple'
 fi
@@ -140,7 +140,7 @@ fi
 sudo service postgresql restart
 
 # Configure and Build
-cd /home/vagrant/hoot
+cd /home/mjeffe/hoot
 source ./SetupEnv.sh
 
 # Check that hoot-ui submodule has been init'd and updated
@@ -158,7 +158,7 @@ sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
 #--------------
 # Hoot Settings
 #--------------
-HOOT_HOME=/home/vagrant/hoot
+HOOT_HOME=/home/mjeffe/hoot
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT_HOME/pretty-pipes/lib
 GDAL_DATA=/usr/local/share/gdal
 GDAL_LIB_DIR=/usr/local/lib
@@ -192,7 +192,7 @@ fi
 # Create Tomcat context path for tile images
 if ! grep -i --quiet 'ingest/processed' /etc/tomcat6/server.xml; then
     echo "Adding Tomcat context path for tile images"
-    sudo sed -i.bak "s@<\/Host>@  <Context docBase=\"\/home\/vagrant\/hoot\/ingest\/processed\" path=\"\/static\" \/>\n      &@" /etc/tomcat6/server.xml
+    sudo sed -i.bak "s@<\/Host>@  <Context docBase=\"\/home\/mjeffe\/hoot\/ingest\/processed\" path=\"\/static\" \/>\n      &@" /etc/tomcat6/server.xml
 fi
 
 # Allow linking in Tomcat context
