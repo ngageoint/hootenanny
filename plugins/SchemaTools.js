@@ -183,8 +183,8 @@ schemaTools.generateToOsmTable = function(rules) {
 
             if (lookup[row[0]][row[1]])
             {
-                throw new Error('Export Table Clash: ' + row[2] + ' ' + row[3] + '  is ' +
-                    lookup[row[2]][row[3]] + '  tried to change to ' + [row[0], row[1]]);
+                throw new Error('Export Table Clash: ' + row[0] + ' ' + row[1] + '  is ' +
+                    lookup[row[0]][row[1]] + '  tried to change to ' + [key, value]);
             }
 
             lookup[row[0]][row[1]] = [key, value];

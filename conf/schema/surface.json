@@ -316,17 +316,19 @@
     {
         "isA": "surface=unpaved",
         "name": "surface=ice",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": { "name": "surface=snow", "weight": 0.6 }
     },
     {
-        "isA": "surface=unpaved",
+        "isA": "surface=paved",
         "name": "surface=wood",
         "objectType": "tag"
     },
     {
-        "isA": "surface=unpaved",
+        "isA": "surface=wood",
         "name": "surface=wood_plank",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": { "name": "surface=corduroy", "weight": 0.7 }
     },
     {
         "isA": "surface=wood",

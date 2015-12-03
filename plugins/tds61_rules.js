@@ -4516,8 +4516,7 @@ tds61.rules = {
      ['ZI016_ROC','8',schemaTools.simple('surface=concrete',1)], // Concrete
      ['ZI016_ROC','9',schemaTools.simple('surface=asphalt',1)], // Asphalt
      ['ZI016_ROC','10',schemaTools.simple('surface=asphalt_over_concrete',1)], // Asphalt over Concrete
-     ['ZI016_ROC','11',schemaTools.simple('surface=cobblestone',1)], // Cobble-stone
-     ['ZI016_ROC','11',schemaTools.simple('surface=sett',1)], // Cobble-stone
+     ['ZI016_ROC','11',"surface=cobblestone",schemaTools.isA('surface=cobblestone',1),schemaTools.simple('surface=sett')], // Cobble-stone
      ['ZI016_ROC','12',schemaTools.simple('surface=brick',1)], // Brick
      ['ZI016_ROC','13',schemaTools.simple('surface=metal',1)], // Metal
      ['ZI016_ROC','14',schemaTools.simple('surface=wood',1)], // Wood
