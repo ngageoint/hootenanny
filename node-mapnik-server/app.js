@@ -155,4 +155,4 @@ http.createServer(function(req, res) {
     }
 }).listen(port);
 
-console.log('node-mapnik server listening on port %d', port);
+console.log('node-mapnik-server listening on port %d', port);
