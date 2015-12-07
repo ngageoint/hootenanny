@@ -176,6 +176,12 @@ umask 002
 EOT
 fi
 
+# Change Tomcat java opts
+if grep -i --quiet '^JAVA_OPTS=.*\-Xmx128m' /etc/default/tomcat6; then
+    echo "Changing Tomcat java opts"
+    sudo sed -i.bak "s@\-Xmx128m@\-Xms512m \-Xmx2048m \-XX:PermSize=512m \-XX:MaxPermSize=4096m@" /etc/default/tomcat6
+fi
+
 # Fix env var path for GDAL_DATA
 if grep -i --quiet 'gdal/1.10' /etc/default/tomcat6; then
     echo "Fixing Tomcat GDAL_DATA env var path"
