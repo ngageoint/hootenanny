@@ -102,6 +102,8 @@ import com.mysema.query.types.template.NumberTemplate;
 public class MapResource
 {
 	private static final Logger log = LoggerFactory.getLogger(MapResource.class);
+	
+	private static QMaps maps = QMaps.maps;
 
 	@SuppressWarnings("unused")
 	private ClassPathXmlApplicationContext appContext;
@@ -688,7 +690,13 @@ public class MapResource
 
 			Map currMap = new Map(mapIdNum, conn);
 			final JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
-
+			
+			if(extents.get("minlat") == null || extents.get("maxlat") == null || 
+					extents.get("minlon") == null || extents.get("maxlon") == null)
+			{
+				throw new Exception("Map is empty.");
+				
+			}
 			final JSONObject anode = currMap.retrieveANode(queryBounds);
 			long nodeCnt = currMap.getNodesCount(queryBounds);
 
@@ -745,6 +753,11 @@ public class MapResource
 					e.getMessage().replaceAll("records", "maps")
 					.replaceAll("record", "map"), Status.NOT_FOUND, log);
 		}
+		else if (e.getMessage().startsWith("Map is empty"))
+		{
+			ResourceErrorHandler.handleError(
+					e.getMessage(), Status.NOT_FOUND, log);
+		}
 		else if (e.getMessage().startsWith(
 				"Error parsing bounding box from bbox param"))
 		{
@@ -778,11 +791,8 @@ public class MapResource
 
 	/**
 	 * <NAME>Clean Map Data Service</NAME> <DESCRIPTION> Clean map data service
-	 * provides the ability to remove an associated map record. It removes from
-	 * CURRENT_WAY_NODES, CURRENT_RELATION_MEMBERS, CURRENT_NODES, CURRENT_WAYS, 
-	 * CURRENT_RELATIONS, 
-	 * CHANGESET_TAGS, CHANGESETS,MAPS, REVIEW_ITEMS, ELEMENT_ID_MAPPINGS, and
-	 * REVIEW_MAP. </DESCRIPTION> <PARAMETERS> <mapId> ID of map record to be
+	 * provides the ability to remove an associated map record.
+	 * </DESCRIPTION> <PARAMETERS> <mapId> ID of map record to be
 	 * deleted
 	 * http://localhost:8080/hoot-services/osm/api/0.6/map/delete?mapId={Map ID}
 	 * </mapId> </PARAMETERS> <OUTPUT> Job ID </OUTPUT> <EXAMPLE>
@@ -1274,5 +1284,40 @@ public class MapResource
 		}
 
 		return Response.ok(ret.toString(), MediaType.APPLICATION_JSON).build();
+	}
+	
+	public static long validateMap(final String mapId, Connection conn)
+	{
+		long mapIdNum = -1;
+  	try
+  	{
+  	  //input mapId may be a map ID or a map name
+      mapIdNum = 
+      	ModelDaoUtils.getRecordIdForInputString(
+      		mapId, conn, maps, maps.id, maps.displayName);
+      assert(mapIdNum != -1);
+  	}
+  	catch (Exception e)
+    {
+      if (e.getMessage().startsWith("Multiple records exist"))
+      {
+        ResourceErrorHandler.handleError(
+          e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
+          Status.NOT_FOUND,
+          log);
+      }
+      else if (e.getMessage().startsWith("No record exists"))
+      {
+        ResourceErrorHandler.handleError(
+          e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
+          Status.NOT_FOUND,
+          log);
+      }
+      ResourceErrorHandler.handleError(
+        "Error requesting map with ID: " + mapId + " (" + e.getMessage() + ")", 
+        Status.BAD_REQUEST,
+        log);
+    }
+  	return mapIdNum;
 	}
 }

@@ -483,12 +483,20 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/CookieCutter.cpp \
     src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.cpp \
 	src/main/cpp/hoot/core/io/db/PostgresqlDumpfileWriter.cpp \
+    src/main/cpp/hoot/core/ops/ReplaceElementOp.cpp \
+    src/main/cpp/hoot/core/filters/NeedsReviewCriterion.cpp \
+    src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.cpp \
+    src/main/cpp/hoot/core/ops/RemoveReviewsByEidOp.cpp \
+    src/main/cpp/hoot/core/conflate/highway/HighwayReviewCleanerOp.cpp \
+    src/main/cpp/hoot/core/ops/AddHilbertReviewSortOrderOp.cpp \
     src/main/cpp/hoot/core/schema/SchemaVertex.cpp \
+    src/main/cpp/hoot/core/schema/SchemaChecker.cpp \
     src/main/cpp/hoot/core/schema/TagCategoryDifferencer.cpp \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.cpp \
     src/main/cpp/hoot/core/schema/TagFilteredDifferencer.cpp \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.cpp \
-    src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp
+    src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp \
+    src/main/cpp/hoot/core/algorithms/string/MostEnglishName.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -542,6 +550,7 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/WayFilter.h \
     src/main/cpp/hoot/core/filters/NeighborFilter.h \
     src/main/cpp/hoot/core/WayMap.h \
+    src/main/cpp/hoot/core/NodeMap.h \
     src/main/cpp/hoot/core/filters/WayFilterChain.h \
     src/main/cpp/hoot/core/filters/UnknownFilter.h \
     src/main/cpp/hoot/core/filters/StatusFilter.h \
@@ -956,11 +965,19 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.h \
     src/main/cpp/hoot/core/conflate/CookieCutter.h \
     src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.h \
+    src/main/cpp/hoot/core/ops/ReplaceElementOp.h \
+    src/main/cpp/hoot/core/filters/NeedsReviewCriterion.h \
+    src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.h \
+    src/main/cpp/hoot/core/ops/RemoveReviewsByEidOp.h \
+    src/main/cpp/hoot/core/conflate/highway/HighwayReviewCleanerOp.h \
+    src/main/cpp/hoot/core/ops/AddHilbertReviewSortOrderOp.h \
     src/main/cpp/hoot/core/schema/SchemaVertex.h \
+    src/main/cpp/hoot/core/schema/SchemaChecker.h \
     src/main/cpp/hoot/core/schema/KeyValuePair.h \
     src/main/cpp/hoot/core/schema/TagCategoryDifferencer.h \
     src/main/cpp/hoot/core/schema/TagAncestorDifferencer.h \
     src/main/cpp/hoot/core/schema/TagFilteredDifferencer.h \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.h \
-    src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h
+    src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h \
+    src/main/cpp/hoot/core/algorithms/string/MostEnglishName.h
 

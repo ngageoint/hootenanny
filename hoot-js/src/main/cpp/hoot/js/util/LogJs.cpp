@@ -171,7 +171,7 @@ Handle<Value> LogJs::logFatal(const Arguments& args)
   return scope.Close(Undefined());
 }
 
-Handle<Value> LogJs::init(const Arguments& args)
+Handle<Value> LogJs::init(const Arguments& /*args*/)
 {
   HandleScope scope;
   Log::getInstance().init();

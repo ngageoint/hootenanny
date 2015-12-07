@@ -94,20 +94,32 @@ public:
   };
 
   static const int COORDINATE_SCALE = 1e7;
+
   // below are the column indexes when calling select*Elements()
   // Not all parts of the code use these consts. Please convert "magic numbers" when you find
   // them.
   static const int NODES_LATITUDE = 1;
   static const int NODES_LONGITUDE = 2;
+  static const int NODES_CHANGESET = 3;
+  static const int NODES_TIMESTAMP = 5;
+  static const int NODES_VERSION = 7;
   static const int NODES_TAGS = 8;
-  static const int RELATIONS_TAGS = 5;
+
+  static const int WAYS_CHANGESET = 1;
+  static const int WAYS_TIMESTAMP = 2;
+  static const int WAYS_VERSION = 4;
   static const int WAYS_TAGS = 5;
 
+  static const int RELATIONS_CHANGESET = 1;
+  static const int RELATIONS_TIMESTAMP = 2;
+  static const int RELATIONS_VERSION = 4;
+  static const int RELATIONS_TAGS = 5;
 
   /**
    * This value should be updated after the DB is upgraded and all tests run successfully.
    */
-  static QString expectedDbVersion() { return "14:brandon.witham"; }
+  static QString expectedDbVersion() { return "15:jong.choi"; }
+  static int maximumChangeSetEdits() { return 50000; }
 
   static const Status DEFAULT_ELEMENT_STATUS;
   static const Meters DEFAULT_ELEMENT_CIRCULAR_ERROR = 0.0;
@@ -317,11 +329,12 @@ public:
    */
   static Tags unescapeTags(const QVariant& v);
 
-  void updateNode(const long id, const double lat, const double lon, const Tags& tags);
+  void updateNode(const long id, const double lat, const double lon, const long version,
+                  const Tags& tags);
 
-  void updateRelation(const long id, const Tags& tags);
+  void updateRelation(const long id, const long version, const Tags& tags);
 
-  void updateWay(const long id, const Tags& tags);
+  void updateWay(const long id, const long version, const Tags& tags);
 
   DbType getDatabaseType() const { return _connectionType; }
 
@@ -545,11 +558,12 @@ private:
 
   void _insertRelation_Services(long relationId, long changeSetId, const Tags& tags );
 
-  void _updateNode_Services(long id, double lat, double lon, long changeSetId, const Tags& tags);
+  void _updateNode_Services(long id, double lat, double lon, long changeSetId, long version,
+                            const Tags& tags);
 
-  void _updateRelation_Services(long id, long changeSetId, const Tags& tags);
+  void _updateRelation_Services(long id, long changeSetId, long version, const Tags& tags);
 
-  void _updateWay_Services(long id, long changeSetId, const Tags& tags);
+  void _updateWay_Services(long id, long changeSetId, long version, const Tags& tags);
 
   void _insertNode_OsmApi(const long id, const double lat, const double lon,
     const Tags& tags);
@@ -590,6 +604,3 @@ private:
 }
 
 #endif // SERVICESDB_H
-
-
-

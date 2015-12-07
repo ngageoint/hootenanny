@@ -128,7 +128,7 @@ if [ "$INSTALL_DEPENDENCIES" == "true" ]; then
   
   # Install everything from the yum repo where hoot is ok with using the latest version.
   echo "Installing packages from yum..."
-  sudo yum -y install gcc gcc-c++ libicu-devel boost-devel python-devel gdb cmake python-numeric swig glpk glpk-devel python-argparse apr-devel apr-util-devel nodejs-devel nodejs v8-devel libX11-devel fontconfig-devel libXcursor-devel libXext-devel libXfixes libXft-devel libXi-devel libXrandr-devel libXrender-devel java-1.7.0-openjdk-devel unixODBC-devel.x86_64 uuid.x86_64 tomcat6 tomcat6-webapps tomcat6-admin-webapps freetype-devel   wget autoconf libxslt poppler kpathsea xdvipdfmx dvipdfm dvipng teckit perl-PDF-Reuse ruby tex-preview python-requests geos hdf5 json-c proj gdal npm unzip doxygen nano gd-devel libX11-devel libXau-devel libXpm-devel libjpeg-turbo-devel libxcb-devel xorg-x11-proto-devel
+  sudo yum -y install gcc gcc-c++ libicu-devel boost-devel python-devel gdb cmake python-numeric swig glpk glpk-devel python-argparse apr-devel apr-util-devel nodejs-devel nodejs v8-devel libX11-devel fontconfig-devel libXcursor-devel libXext-devel libXfixes libXft-devel libXi-devel libXrandr-devel libXrender-devel java-1.7.0-openjdk-devel unixODBC-devel.x86_64 uuid.x86_64 tomcat6 tomcat6-webapps tomcat6-admin-webapps freetype-devel   wget autoconf libxslt poppler kpathsea xdvipdfmx dvipdfm dvipng teckit perl-PDF-Reuse ruby tex-preview python-requests geos hdf5 json-c proj gdal npm unzip doxygen nano gd-devel libX11-devel libXau-devel libXpm-devel libjpeg-turbo-devel libxcb-devel xorg-x11-proto-devel words
   sudo yum -y install python-argparse || export ARGPARSE_FAILED=1
   if [ "$ARGPARSE_FAILED" == "1" ]; then
     sudo yum -y install python-setuptools

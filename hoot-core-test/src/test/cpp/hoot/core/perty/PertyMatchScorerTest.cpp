@@ -60,6 +60,7 @@ public:
 
   void runLoadReferenceMapTest()
   {
+    TestUtils::resetEnvironment();
     OsmMap::resetCounters();
 
     PertyMatchScorer matchScorer;
@@ -75,6 +76,7 @@ public:
 
   void runLoadPerturbedMapTest()
   {
+    TestUtils::resetEnvironment();
     Settings testSettings = conf();
     testSettings.set("perty.seed", QString::number(1));
     testSettings.set("perty.systematic.error.x", QString::number(1));
@@ -94,6 +96,7 @@ public:
 
   void runCombineMapTest()
   {
+    TestUtils::resetEnvironment();
     OsmMap::resetCounters();
     OsmReader reader;
     shared_ptr<OsmMap> referenceMap(new OsmMap());
@@ -124,6 +127,7 @@ public:
 
   void runConflateTest()
   {
+    TestUtils::resetEnvironment();
     Settings testSettings = conf();
     testSettings.set("conflate.enable.old.roads", "false");
 

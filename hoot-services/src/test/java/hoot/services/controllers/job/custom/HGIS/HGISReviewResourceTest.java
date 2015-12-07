@@ -55,19 +55,9 @@ public class HGISReviewResourceTest {
 		connStr = spy._generateDbMapParam("out1");
 		Assert.assertEquals(((JSONObject)arr.get(1)).get("OUTPUT"), connStr);
 		
+	
+		
 		command = (JSONObject)result.get(1);
-		
-		Assert.assertEquals(command.get("class"), "hoot.services.controllers.job.ReviewResource");
-		Assert.assertEquals(command.get("method"), "prepareItemsForReview");
-		Assert.assertEquals(command.get("exectype"), "reflection");
-		Assert.assertNotNull(command.get("params"));
-		arr = (JSONArray)command.get("params");
-
-		Assert.assertEquals(((JSONObject)arr.get(0)).get("value"), "out1");
-		Assert.assertEquals(((JSONObject)arr.get(1)).get("value"), false);
-		
-		
-		command = (JSONObject)result.get(2);
 		
 		Assert.assertEquals(command.get("class"), "hoot.services.controllers.job.custom.HGIS.HGISReviewResource");
 		Assert.assertEquals(command.get("method"), "updateMapsTag");

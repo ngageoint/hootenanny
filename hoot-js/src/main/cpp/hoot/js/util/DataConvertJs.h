@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -128,10 +128,8 @@ inline void toCpp(v8::Handle<v8::Value> v, QString& s)
     throw IllegalArgumentException("Expected a string. Got: (" + toJson(v) + ")");
   }
 
-  size_t utf8Length = str->Utf8Length() + 1;
-  std::auto_ptr<char> buffer(new char[utf8Length]);
-  str->WriteUtf8(buffer.get(), utf8Length);
-  s = QString::fromUtf8(buffer.get());
+  v8::String::Utf8Value param(str);
+  s = QString::fromUtf8(*param);
 }
 
 inline void toCpp(v8::Handle<v8::Value> v, QStringList& o)

@@ -32,6 +32,7 @@
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Validate.h>
 
 namespace hoot
 {
@@ -130,6 +131,7 @@ void OsmMapReaderFactory::read(shared_ptr<OsmMap> map, QString url, bool useData
     getInstance().createReader(url, useDataSourceIds, defaultStatus);
   reader->open(url);
   reader->read(map);
+  VALIDATE(map->validate(true));
 }
 
 }

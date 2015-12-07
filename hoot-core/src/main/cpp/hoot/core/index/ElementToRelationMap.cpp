@@ -189,7 +189,8 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
         }
         else
         {
-          if (containsRecursive(r, ElementId(type, id)) == true)
+          if (containsRecursive(r, ElementId(type, id)) == true &&
+            r->getElementId() != ElementId(type, id))
           {
             LOG_WARN("ElementToRelationMap didn't expect relation " << *it <<
               " to contain: " << type.toString() << " " << id << " but it does.");

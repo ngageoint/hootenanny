@@ -38,6 +38,8 @@
 namespace hoot
 {
 
+QString PlacesPoiMatch::_matchName = "PLACES POI";
+
 class PlacesStringDistance : public StringDistance
 {
 public:

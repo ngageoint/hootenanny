@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/Factory.h>
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/elements/TagsJs.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>

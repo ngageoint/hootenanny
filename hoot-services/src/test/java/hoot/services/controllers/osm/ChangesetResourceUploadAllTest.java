@@ -81,7 +81,8 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract
   private QCurrentWays currentWaysTbl = QCurrentWays.currentWays;
   private QCurrentWayNodes currentWayNodesTbl = QCurrentWayNodes.currentWayNodes;
   private QCurrentRelations  currentRelationsTbl = QCurrentRelations.currentRelations;
-  private QCurrentRelationMembers currentRelationMembersTbl = QCurrentRelationMembers.currentRelationMembers;
+  private QCurrentRelationMembers currentRelationMembersTbl = 
+  	QCurrentRelationMembers.currentRelationMembers;
 
   public ChangesetResourceUploadAllTest() throws NumberFormatException, IOException
   {

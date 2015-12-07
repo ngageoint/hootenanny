@@ -499,12 +499,12 @@ public:
     // Original data had nodes -1 through -36.  Make sure that even-numbered nodes -2 through
     //  -20 are gone
 
-    const OsmMap::NodeMap nodes = map->getNodeMap();
-    CPPUNIT_ASSERT_EQUAL(26, nodes.size());
-    for ( OsmMap::NodeMap::const_iterator nodeIter = nodes.constBegin();
-          nodeIter != nodes.constEnd(); ++nodeIter )
+    const NodeMap nodes = map->getNodeMap();
+    CPPUNIT_ASSERT_EQUAL(26, (int)nodes.size());
+    for ( NodeMap::const_iterator nodeIter = nodes.begin();
+          nodeIter != nodes.end(); ++nodeIter )
     {
-      const shared_ptr<const Node> n = nodeIter.value();
+      const shared_ptr<const Node> n = nodeIter->second;
       //LOG_DEBUG("Node: " << n->getId());
       CPPUNIT_ASSERT( (n->getId() >= -36) && (n->getId() <= -1) );
 

@@ -94,10 +94,10 @@ public:
       "POLYGON ((-50 0, 0 50, 50 0, 0 -50, 0 0, -50 0))"));
 
     int insideCount = 0;
-    const OsmMap::NodeMap& nm = map->getNodeMap();
-    for (OsmMap::NodeMap::const_iterator it = nm.constBegin(); it != nm.constEnd(); ++it)
+    const NodeMap& nm = map->getNodeMap();
+    for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
     {
-      Coordinate c = it.value()->toCoordinate();
+      Coordinate c = it->second->toCoordinate();
       auto_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
       if (g->intersects(p.get()))
       {
@@ -109,7 +109,7 @@ public:
       MapCropper uut(g, false);
       uut.apply(map);
 
-      CPPUNIT_ASSERT_EQUAL(insideCount, map->getNodeMap().size());
+      CPPUNIT_ASSERT_EQUAL(insideCount, (int)map->getNodeMap().size());
     }
 
     {
@@ -117,7 +117,7 @@ public:
 
       MapCropper uut(g, true);
       uut.apply(map);
-      CPPUNIT_ASSERT_EQUAL(1000 - insideCount, map->getNodeMap().size());
+      CPPUNIT_ASSERT_EQUAL(1000 - insideCount, (int)map->getNodeMap().size());
     }
   }
 

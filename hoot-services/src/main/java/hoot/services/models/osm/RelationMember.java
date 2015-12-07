@@ -102,9 +102,9 @@ public class RelationMember
    * @return a relation member database record
    * @throws Exception
    */
-  public static CurrentRelationMembers createRecord(final long id,
-    final int sequenceId, final String role, final Object elementType, final long relationId,
-    Connection dbConn) throws Exception
+  public static CurrentRelationMembers createRecord(final long id, final int sequenceId, 
+  	final String role, final Object elementType, final long relationId, Connection dbConn) 
+  	throws Exception
   {
     CurrentRelationMembers memberRecord = new CurrentRelationMembers();
     memberRecord.setMemberId(id);

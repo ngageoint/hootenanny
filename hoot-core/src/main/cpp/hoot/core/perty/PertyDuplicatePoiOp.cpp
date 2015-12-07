@@ -66,12 +66,12 @@ void PertyDuplicatePoiOp::apply(shared_ptr<OsmMap>& map)
   boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<> > N(*_rng, nd);
 
   // make a copy since we'll be modifying the map as we go.
-  OsmMap::NodeMap nm = map->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nm.constBegin(); it != nm.constEnd(); ++it)
+  NodeMap nm = map->getNodeMap();
+  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
     if (uni(*_rng) < _p)
     {
-      const NodePtr& n = it.value();
+      const NodePtr& n = it->second;
       int copies = round(fabs(N() * _duplicateSigma)) + 1;
 
       for (int i = 0; i < copies; i++)

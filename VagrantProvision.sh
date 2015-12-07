@@ -17,7 +17,13 @@ fi
 
 # Install dependencies
 echo "Installing dependencies"
-sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-all graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite
+sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-all graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane
+
+# See /usr/share/doc/dictionaries-common/README.problems for details
+# http://www.linuxquestions.org/questions/debian-26/dpkg-error-processing-dictionaries-common-4175451951/
+sudo apt-get install -y wamerican-insane
+sudo /usr/share/debconf/fix_db.pl
+sudo dpkg-reconfigure dictionaries-common
 
 # Hoot Baseline is PostgreSQL 9.1 and PostGIS 1.5, so we need a deb file and
 # then remove 9.4
@@ -207,6 +213,13 @@ if [ ! -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
     echo 'testJobStatusPollerTimeout=250' > $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
 fi
 
+# Update the init.d script for node-mapnik-server
+sudo cp node-mapnik-server/init.d/node-mapnik-server /etc/init.d
+# Make sure all npm modules are installed
+cd node-mapnik-server
+npm install
+cd ..
+
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'
 # if the marker file is older than this file (VagrantProvision.sh)
@@ -231,10 +244,5 @@ make docs -sj$(nproc)
 #make -sj$(nproc) test-all
 
 # Deploy to Tomcat
-echo "Stopping Tomcat"
-sudo service tomcat6 stop
 echo "Deploying Hoot to Tomcat"
 sudo -u tomcat6 scripts/vagrantDeployTomcat.sh
-echo "Starting Tomcat"
-sudo service tomcat6 start
-

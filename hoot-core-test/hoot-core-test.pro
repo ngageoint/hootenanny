@@ -39,11 +39,6 @@ release:OBJECTS_DIR = tmp/release
 else:OBJECTS_DIR = tmp/debug
 DESTDIR = ../lib/
 
-octave {
-cppunit:SOURCES += src/test/cpp/hoot/core/perty/PertyOpTest.cpp \
-
-}
-
 cppunit {
 SOURCES += \
     src/test/cpp/hoot/core/ConflatorTest.cpp \
@@ -61,6 +56,7 @@ SOURCES += \
     src/test/cpp/hoot/core/ops/MergeNearbyNodesTest.cpp \
     src/test/cpp/hoot/core/algorithms/LevenshteinDistanceTest.cpp \
     src/test/cpp/hoot/core/schema/OsmSchemaTest.cpp \
+    src/test/cpp/hoot/core/schema/SchemaCheckerTest.cpp \
     src/test/cpp/hoot/core/schema/TagComparatorTest.cpp \
     src/test/cpp/hoot/core/scoring/AttributeComparatorTest.cpp \
     src/test/cpp/hoot/core/index/ClosePointHashTest.cpp \
@@ -163,6 +159,7 @@ SOURCES += \
     src/test/cpp/hoot/core/visitors/KeepTagsVisitorTest.cpp \
     src/test/cpp/hoot/core/conflate/CookieCutterTest.cpp \
     src/test/cpp/hoot/core/conflate/AlphaShapeGeneratorTest.cpp \
+    src/test/cpp/hoot/core/perty/PertyOpTest.cpp \
     src/test/cpp/hoot/core/ops/CookieCutterOpTest.cpp
 
 # These tests only succeed if the database has been populated by the java code.
@@ -200,5 +197,6 @@ SOURCES += \
     src/test/cpp/hoot/core/algorithms/string/StringTokenizerTest.cpp \
     src/test/cpp/hoot/core/schema/TagCategoryDifferencerTest.cpp \
     src/test/cpp/hoot/core/schema/TagAncestorDifferencerTest.cpp \
-    src/test/cpp/hoot/core/elements/RelationTest.cpp
+    src/test/cpp/hoot/core/elements/RelationTest.cpp \
+    src/test/cpp/hoot/core/algorithms/string/MostEnglishNameTest.cpp
 

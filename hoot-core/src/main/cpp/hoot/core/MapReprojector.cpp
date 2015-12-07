@@ -535,10 +535,10 @@ void MapReprojector::reproject(shared_ptr<OsmMap> map,
   ReprojectCoordinateFilter rcf(t);
 
   int count = 0;
-  const OsmMap::NodeMap& nodes = map->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nodes.constBegin(); it != nodes.constEnd(); ++it)
+  const NodeMap& nodes = map->getNodeMap();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    Node* n = it.value().get();
+    Node* n = it->second.get();
     Coordinate c = n->toCoordinate();
     try
     {

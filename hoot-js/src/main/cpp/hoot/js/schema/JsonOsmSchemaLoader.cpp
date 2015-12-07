@@ -4,6 +4,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
+#include <hoot/core/schema/SchemaChecker.h>
 
 // Qt
 #include <QByteArray>
@@ -65,7 +66,11 @@ void JsonOsmSchemaLoader::load(QString path, OsmSchema& s)
   if (_baseDir.size() == 0)
   {
     s.update();
+
+    //check if schemavertex is unknown type or has empty geometries
+    SchemaChecker(s).check();
   }
+
 }
 
 double JsonOsmSchemaLoader::_asDouble(const QVariant& v) const

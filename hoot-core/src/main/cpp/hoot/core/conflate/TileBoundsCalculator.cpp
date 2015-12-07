@@ -433,10 +433,10 @@ void TileBoundsCalculator::renderImage(shared_ptr<OsmMap> map, cv::Mat& r1, cv::
     }
   }
 
-  const OsmMap::NodeMap& nm = map->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nm.begin(); it != nm.end(); it++)
+  const NodeMap& nm = map->getNodeMap();
+  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); it++)
   {
-    const shared_ptr<Node>& n = *it;
+    const shared_ptr<Node>& n = it->second;
     _countNode(n);
   }
 

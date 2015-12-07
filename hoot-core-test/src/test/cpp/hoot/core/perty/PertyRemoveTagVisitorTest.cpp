@@ -78,11 +78,11 @@ public:
 
     stringstream ss1;
     ss1 << n1->getTags().keys();
-    CPPUNIT_ASSERT_EQUAL(string("[1]{name}"), ss1.str());
+    CPPUNIT_ASSERT_EQUAL(string("[2]{name:ru, alt_name}"), ss1.str());
 
     stringstream ss2;
     ss2 << n2->getTags().keys();
-    CPPUNIT_ASSERT_EQUAL(string("[2]{alt_name, name:he}"), ss2.str());
+    CPPUNIT_ASSERT_EQUAL(string("[1]{name}"), ss2.str());
   }
 
   void runExemptTagKeysTest()

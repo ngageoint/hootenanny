@@ -62,12 +62,16 @@ public:
   static QString MULTILINESTRING;
   static QString MULTIPOLYGON;
   static QString OUTER;
+  static QString REVIEW;
 
   static string className() { return "hoot::Relation"; }
 
   explicit Relation(const Relation& from);
 
   Relation(Status s, long id, Meters circularError, QString type = "");
+
+  Relation(Status s, long id, long changeset, long version, unsigned int timestamp,
+           Meters circularError, QString type = "");
 
   Relation(Status s, long id, long changeset, long version, unsigned int timestamp,
            QString user, long uid, Meters circularError, QString type = "");

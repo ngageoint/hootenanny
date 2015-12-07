@@ -36,6 +36,7 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 public abstract class DbClientAbstract
 {
+  @SuppressWarnings("unused")
   private static final Logger log = LoggerFactory.getLogger(DbClientAbstract.class);
   
   private ClassPathXmlApplicationContext appContext;

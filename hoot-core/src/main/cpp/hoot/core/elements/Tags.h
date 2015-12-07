@@ -177,6 +177,7 @@ public:
   void set(const QString& key, const QString& value);
   void set(const QString& key, bool v);
   void set(const QString& key, double v) { set(key, QString::number(v)); }
+  void set(const QString& key, int64_t v) { set(key, QString::number(v)); }
 
   /**
    * If a kvp is in other, then set it in this. If this already has that key then the value will

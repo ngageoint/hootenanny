@@ -39,7 +39,6 @@
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/perty/PertyOp.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/perty/FullCovariance.h>
 #include <hoot/core/perty/DirectSequentialSimulation.h>
 
 // tbs
@@ -47,6 +46,7 @@
 
 // Qt
 #include <QDir>
+#include <QSet>
 
 using namespace std;
 
@@ -56,91 +56,11 @@ namespace hoot
 class PertyOpTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(PertyOpTest);
-  CPPUNIT_TEST(runFullCovarianceTest);
   CPPUNIT_TEST(runDirectSequentialSimulationTest);
   //CPPUNIT_TEST(runDebugTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  void runFullCovarianceTest()
-  {
-    shared_ptr<OsmMap> map(new OsmMap());
-    OGREnvelope env;
-    env.MinX = 0;
-    env.MinY = 0;
-    env.MaxX = 1;
-    env.MaxY = 1;
-    map->setProjection(MapReprojector::createAeacProjection(env));
-    //OsmReader reader;
-    //reader.read("test-files/ToyTestA.osm", map);
-    // force the map bounds.
-    NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
-    NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), 500, 500, 10));
-    map->addNode(n1);
-    map->addNode(n2);
-
-    for (double x = 0.0; x <= 500.0; x += 220)
-    {
-      for (double y = 0.0; y <= 500.0; y += 260)
-      {
-        NodePtr n(new Node(Status::Unknown1, map->createNextNodeId(), x, y, 10));
-        map->addNode(n);
-      }
-    }
-
-    PertyOp uut;
-    uut.setSeed(1);
-    uut.setCsmParameters(9, 100);
-    uut.setPermuteAlgorithm(QString::fromStdString(FullCovariance::className()));
-    uut.setNamedOps(QStringList());
-    uut.apply(map);
-
-    ////
-    // Handy bit for regenerating the test values, _AFTER_ it has been visually verified.
-    ////
-    QList<long> keys = map->getNodeMap().uniqueKeys();
-    qSort(keys);
-//    OsmWriter writer;
-//    QDir().mkpath("test-output/perty");
-//    MapReprojector::reprojectToWgs84(map);
-//    writer.write(map, "test-output/perty/BasicTest.osm");
-//    QString result = "";
-//    for (int i = 0; i < keys.size(); i++)
-//    {
-//      const NodePtr& n = map->getNode(keys[i]);
-//      result += QString("n = map->getNode(keys[%1]);\n").arg(i);
-//      result += QString("CPPUNIT_ASSERT_DOUBLES_EQUAL(%1, n->getX(), 1e-3);\n").arg(n->getX());
-//      result += QString("CPPUNIT_ASSERT_DOUBLES_EQUAL(%1, n->getY(), 1e-3);\n").arg(n->getY());
-//    }
-//    LOG_INFO(result);
-
-    NodePtr n;
-    n = map->getNode(keys[0]);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(442.786, n->getX(), 1e-3);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(280.686, n->getY(), 1e-3);
-    n = map->getNode(keys[1]);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(427.903, n->getX(), 1e-3);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(30.3295, n->getY(), 1e-3);
-    n = map->getNode(keys[2]);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(258.949, n->getX(), 1e-3);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(270.03, n->getY(), 1e-3);
-    n = map->getNode(keys[3]);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(259.729, n->getX(), 1e-3);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(20.6173, n->getY(), 1e-3);
-    n = map->getNode(keys[4]);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(21.9168, n->getX(), 1e-3);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(283.485, n->getY(), 1e-3);
-    n = map->getNode(keys[5]);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-5.71276, n->getX(), 1e-3);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(8.83212, n->getY(), 1e-3);
-    n = map->getNode(keys[6]);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(499.789, n->getX(), 1e-3);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(486.422, n->getY(), 1e-3);
-    n = map->getNode(keys[7]);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-5.71276, n->getX(), 1e-3);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(8.83212, n->getY(), 1e-3);
-  }
 
   void runDirectSequentialSimulationTest()
   {
@@ -178,8 +98,15 @@ public:
     ////
     // Handy bit for regenerating the test values, _AFTER_ it has been visually verified.
     ////
-    QList<long> keys = map->getNodeMap().uniqueKeys();
+    QSet<long> nids;
+    NodeMap::const_iterator it = map->getNodeMap().begin();
+    while (it != map->getNodeMap().end()) {
+      nids.insert(it->first);
+      it++;
+    }
+    QList<long> keys = QList<long>::fromSet(nids);
     qSort(keys);
+
 //    OsmWriter writer;
 //    QDir().mkpath("test-output/perty");
 //    MapReprojector::reprojectToWgs84(map);

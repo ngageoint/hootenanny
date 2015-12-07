@@ -217,6 +217,7 @@ void populateAllTests(CppUnit::TestSuite *suite, bool printDiff)
   suite->addTest(new ConflateCaseTestSuite("test-files/cases"));
   suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
   suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
+  suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
   suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
   suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
   suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest());
@@ -359,6 +360,7 @@ int main(int argc, char *argv[])
                                                printDiff));
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
+        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
       }
       if (args.contains("--slow"))
       {
@@ -373,6 +375,7 @@ int main(int argc, char *argv[])
         rootSuite->addTest(new ConflateCaseTestSuite("test-files/cases"));
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
+        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
       }
@@ -391,6 +394,7 @@ int main(int argc, char *argv[])
         rootSuite->addTest(new ConflateCaseTestSuite("test-files/cases"));
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
+        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest());

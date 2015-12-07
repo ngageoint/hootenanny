@@ -66,6 +66,8 @@ public:
 
   virtual MatchMembers getMatchMembers() const { return MatchMembers::Polygon; }
 
+  virtual QString getMatchName() const { return _matchName; }
+
   virtual double getProbability() const;
 
   /**
@@ -83,6 +85,7 @@ public:
 private:
 
   ElementId _eid1, _eid2;
+  static QString _matchName;
   MatchClassification _p;
   shared_ptr<const BuildingRfClassifier> _rf;
 

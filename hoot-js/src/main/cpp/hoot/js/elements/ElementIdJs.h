@@ -32,6 +32,7 @@
 #include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/js/elements/ElementIdJs.h>
 #include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/util/PopulateConsumersJs.h>
 
 // node.js
 // #include <nodejs/node.h>
@@ -71,6 +72,7 @@ private:
   ElementId _eid;
   static Persistent<Function> _constructor;
 
+  //static Handle<Value> getId(const Arguments& args);
   static Handle<Value> getType(const Arguments& args);
   static Handle<Value> toJSON(const Arguments& args);
   static Handle<Value> toString(const Arguments& args);
@@ -78,30 +80,35 @@ private:
 
 inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
 {
-  if (!v->IsObject())
+  if (v.IsEmpty() || !v->IsObject())
   {
-    throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
+    throw IllegalArgumentException("Expected an object, got: (" + toString(v) + ")");
   }
 
   v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+
+  QString className = str(obj->Get(PopulateConsumersJs::baseClass()));
   ElementIdJs* eidj = 0;
-  if (obj->InternalFieldCount() >= 1)
+  if (obj->InternalFieldCount() >= 1 && className == QString::fromStdString(ElementId::className()))
   {
     eidj = node::ObjectWrap::Unwrap<ElementIdJs>(obj);
   }
+
   if (eidj)
   {
     eid = eidj->getElementId();
   }
-  else
+  else if (obj->Has(String::NewSymbol("id")) && obj->Has(String::NewSymbol("type")))
   {
-    Handle<Object> obj = Handle<Object>::Cast(v);
-
     long id;
     QString type;
     toCpp(obj->Get(String::NewSymbol("id")), id);
     toCpp(obj->Get(String::NewSymbol("type")), type);
     eid = ElementId(ElementType::fromString(type), id);
+  }
+  else
+  {
+    throw IllegalArgumentException("Expected an ElementId object, got: (" + toString(v) + ")");
   }
 }
 
