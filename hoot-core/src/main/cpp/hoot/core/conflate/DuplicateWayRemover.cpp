@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -36,6 +36,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/schema/TagComparator.h>
 
 // Standard
 #include <iostream>
@@ -127,13 +128,34 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
         // if this is a candidate for de-duping
         if (_isCandidateWay(w2))
         {
-          if (w->getNodeCount() > w2->getNodeCount())
+          double score, weight;
+          //if (w->getTags().get("name") != w2->getTags().get("name"))
+          TagComparator::getInstance().compareNames(w->getTags(), w2->getTags(), score, weight);
+          if (score != 1.0)
           {
-            _removeDuplicateNodes(w, _map->getWay(wit->first));
+            int test = 1;
           }
-          else
+          LOG_VARD(w->getId());
+          LOG_VARD(w2->getId());
+          LOG_VARD(w->getTags());
+          LOG_VARD(w2->getTags());
+          TagComparator::getInstance().compareTextTags(w->getTags(), w2->getTags(), score, weight);
+          if (score == 1.0 || !ConfigOptions().getDuplicateWayRemoverStrictTagMatching())
           {
-            _removeDuplicateNodes(_map->getWay(wit->first), w);
+            Tags result;
+            TagComparator::getInstance().mergeNames(w->getTags(), w2->getTags(), result);
+            w->getTags().addTags(result);
+            w2->getTags().addTags(result);
+            LOG_VARD(w->getTags());
+            LOG_VARD(w2->getTags());
+            if (w->getNodeCount() > w2->getNodeCount())
+            {
+              _removeDuplicateNodes(w, _map->getWay(wit->first));
+            }
+            else
+            {
+              _removeDuplicateNodes(_map->getWay(wit->first), w);
+            }
           }
         }
       }
