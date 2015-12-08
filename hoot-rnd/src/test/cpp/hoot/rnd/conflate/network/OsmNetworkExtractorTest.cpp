@@ -49,7 +49,7 @@ public:
   {
     OsmMapPtr map(new OsmMap());
 
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestA.osm");
+    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyInput.osm");
 
     ElementCriterionPtr c(new HighwayCriterion());
     OsmNetworkExtractor uut;

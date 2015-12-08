@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/conflate/MatchCreator.h>
 #include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/rnd/conflate/network/NetworkEdgeMatch.h>
+#include <hoot/rnd/conflate/network/NetworkEdgeScore.h>
 
 namespace hoot
 {
@@ -63,8 +63,6 @@ private:
 
   shared_ptr<MatchThreshold> _matchThreshold;
   ElementCriterionPtr _userCriterion;
-
-  void _createMatches(QList<ConstNetworkEdgeMatchPtr> edgeMatches);
 };
 
 }

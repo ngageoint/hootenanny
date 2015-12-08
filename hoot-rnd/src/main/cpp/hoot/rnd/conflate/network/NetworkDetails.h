@@ -19,6 +19,8 @@ class NetworkDetails
 public:
   NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr network);
 
+  double getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
+
   Envelope getEnvelope(ConstNetworkEdgePtr e);
 
   Envelope getEnvelope(ConstNetworkVertexPtr v);
@@ -26,6 +28,8 @@ public:
   Meters getSearchRadius(ConstNetworkEdgePtr e);
 
   Meters getSearchRadius(ConstNetworkVertexPtr v);
+
+  bool isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
 private:
   ConstOsmMapPtr _map;

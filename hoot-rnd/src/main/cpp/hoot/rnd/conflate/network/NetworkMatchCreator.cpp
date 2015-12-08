@@ -88,7 +88,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   matcher.matchNetworks(map, n1, n2);
 
   // convert graph edge matches into NetworkMatch objects.
-  _createMatches(matcher.getEdgeMatches());
+  #warning todo
 }
 
 vector<MatchCreator::Description> NetworkMatchCreator::getAllCreators() const

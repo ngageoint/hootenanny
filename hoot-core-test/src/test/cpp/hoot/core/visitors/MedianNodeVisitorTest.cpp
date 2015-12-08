@@ -22,21 +22,25 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/algorithms/optimizer/GlpkBinaryOptimizer.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/MapReprojector.h>
+#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/visitors/MedianNodeVisitor.h>
+using namespace hoot;
 
-#include "../../TestUtils.h"
+#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class GlpkBinaryOptimizerTest : public CppUnit::TestFixture
+class MedianNodeVisitorTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(GlpkBinaryOptimizerTest);
+  CPPUNIT_TEST_SUITE(MedianNodeVisitorTest);
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -44,38 +48,23 @@ public:
 
   void runTest()
   {
-    GlpkBinaryOptimizer uut;
+    TestUtils::resetEnvironment();
 
-    // this test is approximating a series of matches between A & B vs. X, Y & Z.
-    // 0 - AX
-    uut.addColumn(0, 0.9);
-    // 1 - AY
-    uut.addColumn(1, 0.5);
-    // 2 - AZ
-    uut.addColumn(2, 0.2);
-    // 3 - BX
-    uut.addColumn(3, 0.7);
-    // 4 - BY
-    uut.addColumn(4, 0.6);
-    // 5 - BZ
-    uut.addColumn(5, 0.1);
+    OsmReader reader;
+    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMap::resetCounters();
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/ToyTestA.osm", map);
+    MapReprojector::reprojectToPlanar(map);
 
-    uut.addConstraint(0, 1);
-    uut.addConstraint(0, 2);
-    uut.addConstraint(1, 2);
-    uut.addConstraint(0, 3);
-    uut.addConstraint(1, 4);
-    uut.addConstraint(2, 5);
-    uut.addConstraint(3, 4);
-    uut.addConstraint(3, 5);
-    uut.addConstraint(4, 5);
-
-    vector<size_t> solution;
-    HOOT_STR_EQUALS(1.5, uut.solve(solution));
-    HOOT_STR_EQUALS("[2]{0, 4}", solution);
+    MedianNodeVisitor uut;
+    map->visitRo(uut);
+    NodePtr n = map->getNode(uut.calculateMedianNode()->getElementId());
+    MapReprojector::reprojectToWgs84(map);
+    HOOT_STR_EQUALS("-104.89970698747904 38.854167001890765", n->toCoordinate().toString());
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(GlpkBinaryOptimizerTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MedianNodeVisitorTest, "quick");
 
 }

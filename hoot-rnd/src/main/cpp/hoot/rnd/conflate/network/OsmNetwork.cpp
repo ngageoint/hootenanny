@@ -23,12 +23,19 @@ void OsmNetwork::addEdge(NetworkEdgePtr edge)
     }
     _eidToEdge[e->getElementId()] = edge;
   }
+  _vertexToEdge.insertMulti(edge->getFrom(), edge);
+  _vertexToEdge.insertMulti(edge->getTo(), edge);
   _edges.append(edge);
 }
 
 void OsmNetwork::addVertex(NetworkVertexPtr node)
 {
   _eidToVertex[node->getElementId()] = node;
+}
+
+QList<ConstNetworkEdgePtr> OsmNetwork::getEdgesFromVertex(ConstNetworkVertexPtr v) const
+{
+  return _vertexToEdge.values(v);
 }
 
 QString OsmNetwork::toString()

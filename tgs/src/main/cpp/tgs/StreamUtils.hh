@@ -286,6 +286,14 @@ operator<<(std::ostream& o, const T& t)
   return o;
 }
 
+template<typename T>
+typename enable_if< has_to_string<T, std::string(T::*)() const>::value, std::ostream& >::type
+operator<<(std::ostream& o, const T& t)
+{
+  o << t.toString();
+  return o;
+}
+
 #endif
 
 template<class T, class C>

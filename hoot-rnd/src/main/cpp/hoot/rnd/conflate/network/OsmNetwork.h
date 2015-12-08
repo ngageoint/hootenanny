@@ -19,18 +19,24 @@ namespace hoot
  *
  * Network vs. Graph - Typically I think of graph analysis when writing applications, however in
  * GIS paralance network is more common. I'm just trying to fit in.
+ *
+ * It is assumed that after the network is created the Network*Ptrs will not change. Changing them
+ * will result in undefined behaviour.
  */
 class OsmNetwork
 {
 public:
   typedef QHash<ElementId, NetworkVertexPtr> VertexMap;
   typedef QHash<ElementId, NetworkEdgePtr> EdgeMap;
+  typedef QMultiHash<ConstNetworkVertexPtr, ConstNetworkEdgePtr> VertexToEdgeMap;
 
   OsmNetwork();
 
   void addEdge(NetworkEdgePtr edge);
 
   void addVertex(NetworkVertexPtr node);
+
+  QList<ConstNetworkEdgePtr> getEdgesFromVertex(ConstNetworkVertexPtr v) const;
 
   const EdgeMap& getEdgeMap() const { return _eidToEdge; }
 
@@ -44,6 +50,7 @@ private:
   QList<NetworkEdgePtr> _edges;
   VertexMap _eidToVertex;
   EdgeMap _eidToEdge;
+  VertexToEdgeMap _vertexToEdge;
 };
 
 typedef shared_ptr<OsmNetwork> OsmNetworkPtr;

@@ -148,7 +148,7 @@ SOURCES += \
     src/test/cpp/hoot/core/conflate/DuplicateNameRemoverTest.cpp \
     src/test/cpp/hoot/core/conflate/NoInformationElementRemoverTest.cpp \
     src/test/cpp/hoot/core/perty/PertyMatchScorerTest.cpp \
-    src/test/cpp/hoot/core/algorithms/SingleAssignmentProblemSolverTest.cpp \
+    src/test/cpp/hoot/core/algorithms/optimizer/SingleAssignmentProblemSolverTest.cpp \
     src/test/cpp/hoot/core/conflate/extractors/SampledAngleHistogramExtractorTest.cpp \
     src/test/cpp/hoot/core/io/ArffWriterTest.cpp \
     src/test/cpp/hoot/core/io/ArffReaderTest.cpp \
@@ -202,5 +202,5 @@ SOURCES += \
     src/test/cpp/hoot/core/schema/TagAncestorDifferencerTest.cpp \
     src/test/cpp/hoot/core/elements/RelationTest.cpp \
     src/test/cpp/hoot/core/algorithms/string/MostEnglishNameTest.cpp \
-    src/test/cpp/hoot/core/algorithms/optimizer/GlpkBinaryOptimizerTest.cpp
+    src/test/cpp/hoot/core/visitors/MedianNodeVisitorTest.cpp
 

@@ -439,7 +439,7 @@ SOURCES += \
     src/main/cpp/hoot/core/visitors/TransliterateNameVisitor.cpp \
     src/main/cpp/hoot/core/conflate/extractors/LengthScoreExtractor.cpp \
     src/main/cpp/hoot/core/cmd/RollInitiativeCmd.cpp \
-    src/main/cpp/hoot/core/algorithms/SingleAssignmentProblemSolver.cpp \
+    src/main/cpp/hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.cpp \
     src/main/cpp/hoot/core/conflate/extractors/Histogram.cpp \
     src/main/cpp/hoot/core/conflate/extractors/SampledAngleHistogramExtractor.cpp \
     src/main/cpp/hoot/core/conflate/point/PoiRfClassifier.cpp \
@@ -489,8 +489,7 @@ SOURCES += \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.cpp \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.cpp \
-    src/main/cpp/hoot/core/algorithms/optimizer/BinaryOptimizer.cpp \
-    src/main/cpp/hoot/core/algorithms/optimizer/GlpkBinaryOptimizer.cpp \
+    src/main/cpp/hoot/core/visitors/MedianNodeVisitor.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -913,7 +912,7 @@ HEADERS += \
     src/main/cpp/hoot/core/elements/ElementProvider.h \
     src/main/cpp/hoot/core/io/EnvelopeProvider.h \
     src/main/cpp/hoot/core/visitors/TransliterateNameVisitor.h \
-    src/main/cpp/hoot/core/algorithms/SingleAssignmentProblemSolver.h \
+    src/main/cpp/hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h \
     src/main/cpp/hoot/core/conflate/extractors/Histogram.h \
     src/main/cpp/hoot/core/conflate/extractors/SampledAngleHistogramExtractor.h \
     src/main/cpp/hoot/core/algorithms/StringDistanceConsumer.h \
@@ -966,6 +965,5 @@ HEADERS += \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.h \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.h \
-    src/main/cpp/hoot/core/algorithms/optimizer/BinaryOptimizer.h \
-    src/main/cpp/hoot/core/algorithms/optimizer/GlpkBinaryOptimizer.h \
+    src/main/cpp/hoot/core/visitors/MedianNodeVisitor.h
 
