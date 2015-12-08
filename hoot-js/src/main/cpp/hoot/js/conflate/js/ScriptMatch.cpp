@@ -104,9 +104,9 @@ void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Obj
     _p.setMissP(_script->toNumber(v, "miss", 0));
     _p.setReviewP(_script->toNumber(v, "review", 0));
 
+    _explainText = vm["explain"].toString();
     if (_threshold->getType(_p) == MatchType::Review)
     {
-      _explainText = vm["explain"].toString();
       if (_explainText.isEmpty())
       {
         throw IllegalArgumentException("If the match is a review an appropriate explanation must "
