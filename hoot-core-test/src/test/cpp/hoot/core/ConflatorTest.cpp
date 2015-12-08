@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/Conflator.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/io/PbfReader.h>
@@ -70,7 +70,7 @@ public:
     uut.conflate();
 
     shared_ptr<OsmMap> out(new OsmMap(uut.getBestMap()));
-    MapReprojector::reprojectToWgs84(out);
+    MapProjector::reprojectToWgs84(out);
 
     CPPUNIT_ASSERT_EQUAL((size_t)15, out->getWays().size());
 
@@ -94,7 +94,7 @@ public:
     uut.conflate();
 
     shared_ptr<OsmMap> out(new OsmMap(uut.getBestMap()));
-    MapReprojector::reprojectToWgs84(out);
+    MapProjector::reprojectToWgs84(out);
 
     CPPUNIT_ASSERT_EQUAL((size_t)9, out->getWays().size());
 

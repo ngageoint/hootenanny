@@ -29,7 +29,7 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/MaximalSublineStringMatcher.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -81,7 +81,7 @@ public:
     env.MinY = 0;
     env.MaxX = 1;
     env.MaxY = 1;
-    MapReprojector::reprojectToOrthographic(map, env);
+    MapProjector::reprojectToOrthographic(map, env);
 
     return map;
   }
@@ -111,7 +111,7 @@ public:
     env.MaxX = 1;
     env.MinY = 0;
     env.MaxY = 1;
-    MapReprojector::reprojectToPlanar(map, env);
+    MapProjector::reprojectToPlanar(map, env);
 
     // Many of these scenarios are taken directly from "Hootenanny - Multilinestring *.pptx"
 

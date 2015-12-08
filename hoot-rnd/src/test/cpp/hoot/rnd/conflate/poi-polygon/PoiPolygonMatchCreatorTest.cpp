@@ -30,7 +30,7 @@
 #include <hoot/core/conflate/Match.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreator.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/io/OsmReader.h>
 
 namespace hoot
@@ -104,7 +104,7 @@ public:
     map.reset(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::reprojectToPlanar(map);
     CPPUNIT_ASSERT(!uut.isMatchCandidate(map->getWay(map->findWays("note", "1")[0]), map));
   }
 };

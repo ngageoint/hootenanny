@@ -33,7 +33,7 @@
 
 // Hoot
 #include <hoot/core/Conflator.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -174,7 +174,7 @@ public:
 
     mapA->append(mapB);
 
-    MapReprojector::reprojectToWgs84(mapA);
+    MapProjector::reprojectToWgs84(mapA);
 
     OsmWriter writer;
     writer.write(mapA, "test-output/OsmMapAppendTest.osm");
@@ -315,7 +315,7 @@ public:
     shared_ptr<OsmMap> mapB(new OsmMap());
     reader.read("test-files/ToyTestB.osm", mapB);
 
-    MapReprojector::reprojectToPlanar(mapB);
+    MapProjector::reprojectToPlanar(mapB);
 
     QString exceptionMsg;
     try
@@ -347,7 +347,7 @@ public:
 
     t.restart();
 
-    MapReprojector::reprojectToOrthographic(map);
+    MapProjector::reprojectToOrthographic(map);
     const WayMap& ways = map ->getWays();
 
     LOG_INFO("Finished reprojecting. " << t.elapsed() << "ms");
@@ -401,7 +401,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
-    MapReprojector::reprojectToOrthographic(map);
+    MapProjector::reprojectToOrthographic(map);
 
     shared_ptr<const HilbertRTree> tree = map->getIndex().getWayTree();
 
@@ -428,7 +428,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
-    MapReprojector::reprojectToOrthographic(map);
+    MapProjector::reprojectToOrthographic(map);
 
     // force it to build the tree before we start removing nodes.
     map->getIndex().getWayTree();

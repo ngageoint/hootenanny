@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/util/Settings.h>
@@ -45,7 +45,7 @@ WaySplitterOp::WaySplitterOp()
 
 void WaySplitterOp::apply(shared_ptr<OsmMap>& map)
 {
-  MapReprojector::reprojectToPlanar(map);
+  MapProjector::reprojectToPlanar(map);
 
   // use a copy of the map since we'll be making changes
   const WayMap ways = map->getWays();

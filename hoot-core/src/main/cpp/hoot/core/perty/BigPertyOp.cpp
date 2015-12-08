@@ -32,7 +32,7 @@
 
 // hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Settings.h>
@@ -56,7 +56,7 @@ BigPertyOp::~BigPertyOp()
 
 void BigPertyOp::apply(shared_ptr<OsmMap>& map)
 {
-  MapReprojector::reprojectToWgs84(map);
+  MapProjector::reprojectToWgs84(map);
 
   const QString pertiedStr("hoot:pertied");
   const QString trueStr("true");

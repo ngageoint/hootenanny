@@ -35,7 +35,7 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/MaximalSublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
@@ -83,7 +83,7 @@ public:
     env.MinY = 0;
     env.MaxX = 1;
     env.MaxY = 1;
-    MapReprojector::reprojectToOrthographic(map, env);
+    MapProjector::reprojectToOrthographic(map, env);
 
     return map;
   }
@@ -303,7 +303,7 @@ public:
     QString json = OsmJsonWriter().toString(map);
 
     QDir().mkpath("tmp");
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::reprojectToWgs84(map);
     OsmMapWriterFactory::write(map, "tmp/dum.osm");
 
     QString expected = QString("{'version': 0.6,'generator': 'Hootenanny','elements': [\n"
@@ -372,7 +372,7 @@ public:
 
     QString json = OsmJsonWriter().toString(map);
 
-//    MapReprojector::reprojectToWgs84(map);
+//    MapProjector::reprojectToWgs84(map);
 //    OsmMapWriterFactory::write(map, "tmp/dum.osm");
 
     QString expected = QString(

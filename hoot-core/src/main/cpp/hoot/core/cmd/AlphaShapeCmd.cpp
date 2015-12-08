@@ -30,7 +30,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/ShapefileWriter.h>
 #include <hoot/core/conflate/AlphaShapeGenerator.h>
@@ -85,7 +85,7 @@ public:
     OsmMapPtr result = AlphaShapeGenerator(alpha, buffer).generate(pointsMap);
 
     // reproject back into lat/lng
-    MapReprojector::reprojectToWgs84(result);
+    MapProjector::reprojectToWgs84(result);
 
     // save out the result.
     if (outputPath.toLower().endsWith(".shp"))

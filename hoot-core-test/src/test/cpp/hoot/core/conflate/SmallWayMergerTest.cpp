@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/SmallWayMerger.h>
 #include <hoot/core/io/OsmReader.h>
@@ -63,9 +63,9 @@ public:
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/conflate/SmallWayMergerInput1.osm", map);
 
-      MapReprojector::reprojectToPlanar(map);
+      MapProjector::reprojectToPlanar(map);
       SmallWayMerger::mergeWays(map, 15.0);
-      MapReprojector::reprojectToWgs84(map);
+      MapProjector::reprojectToWgs84(map);
 
       OsmWriter writer;
       writer.write(map, "test-output/conflate/SmallWayMergerOutput1.osm");

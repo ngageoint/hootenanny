@@ -43,7 +43,7 @@ using namespace boost;
 #include <cppunit/TestFixture.h>
 
 // hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 
 // Qt
 #include <QDebug>
@@ -76,7 +76,7 @@ public:
     BuildingOutlineUpdateOp uut;
     uut.apply(map);
 
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::reprojectToWgs84(map);
 
     QDir().mkpath("test-output/ops/BuildingOutlineUpdateOp/");
     OsmWriter writer;

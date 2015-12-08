@@ -43,7 +43,7 @@
 
 // Hoot
 #include <hoot/core/Conflator.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/polygon/BuildingMergeManipulator.h>
 #include <hoot/core/elements/Way.h>
@@ -96,7 +96,7 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/ToyBuildingsTestB.osm", map);
 
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::reprojectToPlanar(map);
 
     WayMap wm = map->getWays();
     for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
@@ -120,7 +120,7 @@ public:
     uut.conflate();
 
     shared_ptr<OsmMap> out(new OsmMap(uut.getBestMap()));
-    MapReprojector::reprojectToWgs84(out);
+    MapProjector::reprojectToWgs84(out);
 
     OsmWriter writer;
     writer.setIncludeIds(true);

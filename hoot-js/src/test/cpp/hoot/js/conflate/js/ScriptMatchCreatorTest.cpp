@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -65,7 +65,7 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::getInstance().read(
       map, "test-files/algorithms/js/ScriptMatchTest.osm", true);
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::reprojectToPlanar(map);
 
     //to be a candidate: needs to be determined a candidate by the JS rules file...which for this
     //particular rules file, the element must be linear

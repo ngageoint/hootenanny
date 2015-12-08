@@ -30,7 +30,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/CookieCutter.h>
 
@@ -110,7 +110,7 @@ public:
     OsmMapPtr result = doughMap;
 
     // reproject back into lat/lng
-    MapReprojector::reprojectToWgs84(result);
+    MapProjector::reprojectToWgs84(result);
 
     // save out the result.
     saveMap(result, outputPath);

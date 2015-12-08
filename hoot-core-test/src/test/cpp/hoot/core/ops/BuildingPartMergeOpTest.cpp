@@ -47,7 +47,7 @@ using namespace boost;
 #include <geos/geom/Point.h>
 
 // hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 
 // Qt
 #include <QDebug>
@@ -82,7 +82,7 @@ public:
     BuildingPartMergeOp uut;
     uut.apply(map);
 
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::reprojectToWgs84(map);
 
     QDir().mkpath("test-output/ops/BuildingPartMergeOp/");
     OsmWriter writer;

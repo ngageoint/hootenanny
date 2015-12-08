@@ -81,7 +81,7 @@ SOURCES += \
     src/main/cpp/hoot/core/elements/WayData.cpp \
     src/main/cpp/hoot/core/elements/NodeData.cpp \
     src/main/cpp/hoot/core/elements/ElementData.cpp \
-    src/main/cpp/hoot/core/MapReprojector.cpp \
+    src/main/cpp/hoot/core/MapProjector.cpp \
     src/main/cpp/hoot/core/io/OsmWriter.cpp \
     src/main/cpp/hoot/core/WorkingMap.cpp \
     src/main/cpp/hoot/core/manipulators/WayMerger.cpp \
@@ -502,7 +502,7 @@ HEADERS += \
     src/main/cpp/hoot/core/elements/WayData.h \
     src/main/cpp/hoot/core/elements/NodeData.h \
     src/main/cpp/hoot/core/elements/ElementData.h \
-    src/main/cpp/hoot/core/MapReprojector.h \
+    src/main/cpp/hoot/core/MapProjector.h \
     src/main/cpp/hoot/core/io/OsmWriter.h \
     src/main/cpp/hoot/core/Units.h \
     src/main/cpp/hoot/core/manipulators/WayMerger.h \
