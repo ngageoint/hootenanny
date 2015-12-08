@@ -73,6 +73,8 @@ protected:
 
   void _replaceMultiple(const shared_ptr<const Way>& oldWay,
     const shared_ptr<Way>& newWay1, const shared_ptr<Way>& newWay2);
+
+  void _mergeWayNameTags(shared_ptr<Way> way1, shared_ptr<Way> way2);
 };
 
 }

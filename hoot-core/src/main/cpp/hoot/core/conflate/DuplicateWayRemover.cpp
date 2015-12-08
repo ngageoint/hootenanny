@@ -128,21 +128,15 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
         // if this is a candidate for de-duping
         if (_isCandidateWay(w2))
         {
-          //LOG_VARD(w->getId());
-          //LOG_VARD(w2->getId());
-          LOG_DEBUG("candidate ways");
-          LOG_VARD(w->getTags());
-          LOG_VARD(w2->getTags());
+          //LOG_DEBUG("candidate ways");
+          //LOG_VARD(w->getTags());
+          //LOG_VARD(w2->getTags());
           double score, weight;
+          //If all non-name tags aren't exactly the same between these two ways (or the strict
+          //tag matching isn't activated) then we won't merge their geometries or tags.
           TagComparator::getInstance().compareTextTags(w->getTags(), w2->getTags(), score, weight);
           if (score == 1.0 || !ConfigOptions().getDuplicateWayRemoverStrictTagMatching())
           {
-            //Tags result;
-            //TagComparator::getInstance().mergeNames(w->getTags(), w2->getTags(), result);
-            //w->getTags().addTags(result);
-            //w2->getTags().addTags(result);
-            //LOG_VARD(w->getTags());
-            //LOG_VARD(w2->getTags());
             if (w->getNodeCount() > w2->getNodeCount())
             {
               _removeDuplicateNodes(w, _map->getWay(wit->first));
@@ -152,10 +146,10 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
               _removeDuplicateNodes(_map->getWay(wit->first), w);
             }
           }
-          else
-          {
-            LOG_DEBUG("non-name tags do not match");
-          }
+          //else
+          //{
+            //LOG_DEBUG("non-name tags do not match");
+          //}
         }
       }
     }
@@ -180,31 +174,38 @@ bool DuplicateWayRemover::_isCandidateWay(const ConstWayPtr& w) const
   return result;
 }
 
+void DuplicateWayRemover::_mergeWayNameTags(shared_ptr<Way> way1, shared_ptr<Way> way2)
+{
+  Tags mergedNameTags;
+  Tags tags1 = way1->getTags();
+  Tags tags2 = way2->getTags();
+  TagComparator::getInstance().mergeNames(tags1, tags2, mergedNameTags);
+  //way1 may have been removed from the map in _removeNodes
+  if (_map->containsWay(way1->getId()))
+  {
+    tags1.addTags(mergedNameTags);
+    way1->setTags(tags1);
+    //LOG_DEBUG("way1");
+    //LOG_VARD(way1->getTags());
+  }
+  tags2.addTags(mergedNameTags);
+  way2->setTags(tags2);
+  //LOG_DEBUG("way2");
+  //LOG_VARD(way2->getTags());
+}
+
 void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<Way> w2)
 { 
-  Tags mergedNameTags;
-
   LongestCommonNodeString lcs(w1, w2);
+
+  //If the ways have any common geometry, then merge their name tags so we retain both names.
 
   int length = lcs.apply();
   if (length > 1)
   {
-    Tags tags1 = w1->getTags();
-    Tags tags2 = w2->getTags();
-    TagComparator::getInstance().mergeNames(tags1, tags2, mergedNameTags);
-    tags1.addTags(mergedNameTags);
-    w1->setTags(tags1);
-    tags2.addTags(mergedNameTags);
-    w2->setTags(tags2);
+    //LOG_DEBUG("found common nodes");
     _removeNodes(w1, lcs.getW1Index(), length);
-    LOG_DEBUG("found matches");
-    if (_map->containsWay(w1->getId()))
-    {
-      LOG_DEBUG("way1");
-      LOG_VARD(w1->getTags());
-    }
-    LOG_DEBUG("way2");
-    LOG_VARD(w2->getTags());
+    _mergeWayNameTags(w1, w2);
   }
   else
   {
@@ -223,26 +224,14 @@ void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
     int length = lcs.apply();
     if (length > 1)
     {
-      Tags tags1 = w1->getTags();
-      Tags tags2 = w2->getTags();
-      TagComparator::getInstance().mergeNames(tags1, tags2, mergedNameTags);
-      tags1.addTags(mergedNameTags);
-      w1->setTags(tags1);
-      tags2.addTags(mergedNameTags);
-      w2->setTags(tags2);
+      //LOG_DEBUG("found common nodes");
       _removeNodes(w1, lcs.getW1Index(), length);
-      LOG_DEBUG("found matches");
-      if (_map->containsWay(w1->getId()))
-      {
-        LOG_DEBUG("way1");
-        LOG_VARD(w1->getTags());
-      }
-      LOG_DEBUG("way2");
-      LOG_VARD(w2->getTags());
+      _mergeWayNameTags(w1, w2);
     }
     else
     {
       // if we didn't find any matches then reverse it back to the original direction
+      //LOG_DEBUG("didn't find any matches");
       if (rev1)
       {
         w1->reverseOrder();
@@ -251,11 +240,10 @@ void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
       {
         w2->reverseOrder();
       }
-      LOG_DEBUG("didn't find any matches");
+
     }
   }
-
-  LOG_DEBUG("--------------------------------------------");
+  //LOG_DEBUG("--------------------------------------------");
 }
 
 void DuplicateWayRemover::removeDuplicates(shared_ptr<OsmMap> map)
@@ -287,9 +275,10 @@ void DuplicateWayRemover::_removeNodes(shared_ptr<const Way> w, int start, int l
     {
       vector<long> newNodes(nodes.begin(), nodes.begin() + start + 1);
       shared_ptr<Way> newWay(new Way(w->getStatus(), _map->createNextWayId(),
-                                    w->getCircularError()));
+                                     w->getCircularError()));
       newWay->addNodes(newNodes);
       newWay->setTags(w->getTags());
+
       _map->replace(w, newWay);
     }
     // If the section to remove is in the middle of the way
@@ -297,14 +286,14 @@ void DuplicateWayRemover::_removeNodes(shared_ptr<const Way> w, int start, int l
     {
       vector<long> newNodes1(nodes.begin(), nodes.begin() + start + 1);
       shared_ptr<Way> newWay1(new Way(w->getStatus(), _map->createNextWayId(),
-                                     w->getCircularError()));
+                                      w->getCircularError()));
 
       newWay1->addNodes(newNodes1);
       newWay1->setTags(w->getTags());
 
       vector<long> newNodes2(nodes.begin() + start + length - 1, nodes.end());
       shared_ptr<Way> newWay2(new Way(w->getStatus(), _map->createNextWayId(),
-                                     w->getCircularError()));
+                                      w->getCircularError()));
       newWay2->addNodes(newNodes2);
       newWay2->setTags(w->getTags());
 
