@@ -128,17 +128,11 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
         // if this is a candidate for de-duping
         if (_isCandidateWay(w2))
         {
-          double score, weight;
-          //if (w->getTags().get("name") != w2->getTags().get("name"))
-          TagComparator::getInstance().compareNames(w->getTags(), w2->getTags(), score, weight);
-          if (score != 1.0)
-          {
-            int test = 1;
-          }
           LOG_VARD(w->getId());
           LOG_VARD(w2->getId());
           LOG_VARD(w->getTags());
           LOG_VARD(w2->getTags());
+          double score, weight;
           TagComparator::getInstance().compareTextTags(w->getTags(), w2->getTags(), score, weight);
           if (score == 1.0 || !ConfigOptions().getDuplicateWayRemoverStrictTagMatching())
           {
