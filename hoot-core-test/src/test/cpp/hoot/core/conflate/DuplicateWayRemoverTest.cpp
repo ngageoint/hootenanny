@@ -63,6 +63,7 @@ class DuplicateWayRemoverTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(DuplicateWayRemoverTest);
   CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(runNameTagsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -87,6 +88,27 @@ public:
     HOOT_FILE_EQUALS("test-files/conflate/LongestCommonNodeStringTest.osm",
                      "test-output/conflate/LongestCommonNodeStringTest.osm");
 
+  }
+
+  void runNameTagsTest()
+  {
+    OsmReader reader;
+
+    OsmMap::resetCounters();
+    shared_ptr<OsmMap> map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/DcTigerRoads.osm", map);
+
+    MapReprojector::reprojectToOrthographic(map);
+    DuplicateWayRemover::removeDuplicates(map);
+    MapReprojector::reprojectToWgs84(map);
+
+    OsmWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    writer.write(map, "test-output/conflate/DuplicateWayRemoverTagsTest.osm");
+
+    HOOT_FILE_EQUALS("test-files/conflate/DuplicateWayRemoverTagsTest.osm",
+                     "test-output/conflate/DuplicateWayRemoverTagsTest.osm");
   }
 };
 
