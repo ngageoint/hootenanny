@@ -229,23 +229,31 @@ Handle<Value> OsmMapJs::visit(const Arguments& args)
 {
   HandleScope scope;
 
-  OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-
-  if (args[0]->IsFunction())
+  try
   {
-    Persistent<Function> func = Persistent<Function>::New(Handle<Function>::Cast(args[0]));
+    OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
-    JsFunctionVisitor v;
-    v.addFunction(func);
+    if (args[0]->IsFunction())
+    {
+      Persistent<Function> func = Persistent<Function>::New(Handle<Function>::Cast(args[0]));
 
-    map->getMap()->visitRw(v);
+      JsFunctionVisitor v;
+      v.addFunction(func);
+
+      map->getMap()->visitRw(v);
+    }
+    else
+    {
+      shared_ptr<ElementVisitor> v =
+          ObjectWrap::Unwrap<ElementVisitorJs>(args[0]->ToObject())->getVisitor();
+
+      map->getMap()->visitRw(*v);
+    }
   }
-  else
+  catch (const HootException& err)
   {
-    shared_ptr<ElementVisitor> v =
-        ObjectWrap::Unwrap<ElementVisitorJs>(args[0]->ToObject())->getVisitor();
-
-    map->getMap()->visitRw(*v);
+    LOG_VAR(err.getWhat());
+    return v8::ThrowException(HootExceptionJs::create(err));
   }
 
   return scope.Close(Undefined());
