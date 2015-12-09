@@ -59,7 +59,10 @@ OsmMapJs::OsmMapJs(OsmMapPtr map)
   _setMap(map);
 }
 
-OsmMapJs::~OsmMapJs() {}
+OsmMapJs::~OsmMapJs()
+{
+  while (!v8::V8::IdleNotification());
+}
 
 void OsmMapJs::Init(Handle<Object> target) {
   // Prepare constructor template

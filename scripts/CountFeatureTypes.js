@@ -108,11 +108,9 @@ var processFile = function(inputFile) {
         }
 
         map = null;
-        global.gc();
     } catch (err) {
         hoot.warn(err.toString());
         map = null;
-        global.gc();
     }
 }
 

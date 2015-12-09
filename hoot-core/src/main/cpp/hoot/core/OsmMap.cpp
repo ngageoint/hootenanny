@@ -87,7 +87,6 @@ OsmMap::OsmMap(shared_ptr<const OsmMap> map, shared_ptr<OGRSpatialReference> srs
 
 OsmMap::~OsmMap()
 {
-  clear();
 }
 
 void OsmMap::append(ConstOsmMapPtr appendFromMap)
