@@ -461,6 +461,13 @@ void ScriptMatchCreator::setArguments(QStringList args)
   _script->loadScript(path, "plugin");
 }
 
+Match* ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
+{
+  Match* result = new ScriptMatch(_script, ScriptMatchVisitor::getPlugin(_script), map, 
+    eid1, eid2, getMatchThreshold());
+  return result;
+}
+
 void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match *> &matches,
                                        ConstMatchThresholdPtr threshold)
 {

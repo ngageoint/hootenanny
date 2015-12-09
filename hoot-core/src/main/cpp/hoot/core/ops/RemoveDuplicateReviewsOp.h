@@ -24,38 +24,44 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef COPYSUBSETOP_H
-#define COPYSUBSETOP_H
+#ifndef DUPLICATEREVIEWSOP_H
+#define DUPLICATEREVIEWSOP_H
 
-// hoot
+// Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/io/Serializable.h>
 
-#include "OsmMapOperation.h"
+// Standard
+#include <set>
 
 namespace hoot
 {
+using namespace Tgs;
 
 /**
- * Copies a subset of the map into a new map. The old map is unchanged.
+ * Goes through all relations and check if there are any duplicate reviews.
  */
-class CopySubsetOp : public OsmMapOperation
+class RemoveDuplicateReviewsOp : public OsmMapOperation, public Serializable
 {
 public:
-  CopySubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids);
 
-  CopySubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
+  static string className() { return "hoot::RemoveDuplicateReviewsOp"; }
 
-  /**
-   * A new map is created and the eids specified in the constructor and their depedencies will be
-   * copied into the new map. The @a map will be set to point to the new map.
-   */
+  RemoveDuplicateReviewsOp();
+
   virtual void apply(shared_ptr<OsmMap>& map);
 
+  virtual string getClassName() const { return className(); }
+
+  virtual void readObject(QDataStream& /*is*/) {}
+
+  virtual void writeObject(QDataStream& /*os*/) const {}
+
 private:
-  set<ElementId> _eids;
-  const ConstOsmMapPtr& _from;
+  shared_ptr<OsmMap> _map;
 };
 
 }
 
-#endif // COPYSUBSETOP_H
+#endif // DUPLICATEREVIEWSOP_H
