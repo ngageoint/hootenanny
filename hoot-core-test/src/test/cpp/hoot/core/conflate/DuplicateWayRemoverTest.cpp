@@ -29,7 +29,7 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/conflate/DuplicateWayRemover.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
@@ -76,9 +76,9 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/algorithms/LongestCommonNodeStringTest.osm", map);
 
-    MapReprojector::reprojectToOrthographic(map);
+    MapProjector::reprojectToOrthographic(map);
     DuplicateWayRemover::removeDuplicates(map);
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::reprojectToWgs84(map);
 
     OsmWriter writer;
     writer.setIncludeCompatibilityTags(false);

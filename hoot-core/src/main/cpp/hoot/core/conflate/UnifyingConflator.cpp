@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/conflate/Merger.h>
 #include <hoot/core/conflate/MarkForReviewMergerCreator.h>
 #include <hoot/core/conflate/MatchFactory.h>
@@ -122,7 +122,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 
   // will reproject if necessary.
-  MapReprojector::reprojectToPlanar(map);
+  MapProjector::reprojectToPlanar(map);
 
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
 
@@ -130,7 +130,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   {
     LOG_DEBUG("Writing debug map.");
     OsmMapPtr debug(new OsmMap(map));
-    MapReprojector::reprojectToWgs84(debug);
+    MapProjector::reprojectToWgs84(debug);
     OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
 
     _stats.append(SingleStat("Write Debug Map Time (sec)", timer.getElapsedAndRestart()));

@@ -33,7 +33,7 @@
 
 // Hoot
 #include <hoot/core/Exception.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
@@ -71,7 +71,7 @@ public:
     env.MinY = 0;
     env.MaxX = 1;
     env.MaxY = 1;
-    map->setProjection(MapReprojector::createAeacProjection(env));
+    map->setProjection(MapProjector::createAeacProjection(env));
     //OsmReader reader;
     //reader.read("test-files/ToyTestA.osm", map);
     // force the map bounds.
@@ -103,7 +103,7 @@ public:
     qSort(keys);
 //    OsmWriter writer;
 //    QDir().mkpath("test-output/perty");
-//    MapReprojector::reprojectToWgs84(map);
+//    MapProjector::reprojectToWgs84(map);
 //    writer.write(map, "test-output/perty/BasicTest.osm");
 //    QString result = "";
 //    for (int i = 0; i < keys.size(); i++)
@@ -150,7 +150,7 @@ public:
     env.MinY = 0;
     env.MaxX = 1;
     env.MaxY = 1;
-    map->setProjection(MapReprojector::createAeacProjection(env));
+    map->setProjection(MapProjector::createAeacProjection(env));
     //OsmReader reader;
     //reader.read("test-files/ToyTestA.osm", map);
     // force the map bounds.
@@ -182,7 +182,7 @@ public:
     qSort(keys);
 //    OsmWriter writer;
 //    QDir().mkpath("test-output/perty");
-//    MapReprojector::reprojectToWgs84(map);
+//    MapProjector::reprojectToWgs84(map);
 //    writer.write(map, "test-output/perty/BasicTest.osm");
 //    QString result = "";
 //    for (int i = 0; i < keys.size(); i++)
@@ -232,7 +232,7 @@ public:
     env.MinY = 0;
     env.MaxX = 1;
     env.MaxY = 1;
-    map->setProjection(MapReprojector::createAeacProjection(env));
+    map->setProjection(MapProjector::createAeacProjection(env));
     //OsmReader reader;
     //reader.read("test-files/ToyTestA.osm", map);
     // force the map bounds.
@@ -257,7 +257,7 @@ public:
     QDir().mkpath("test-output/perty");
 
     shared_ptr<OsmMap> original(new OsmMap(map));
-    MapReprojector::reprojectToWgs84(original);
+    MapProjector::reprojectToWgs84(original);
     writer.write(original, "test-output/perty/Original.osm");
 
     PertyOp uut;
@@ -284,9 +284,9 @@ public:
         //LOG_INFO("sd: " << ss.calculateUnbiasedStandardDeviation
 
 
-    MapReprojector::reprojectToWgs84(debug);
+    MapProjector::reprojectToWgs84(debug);
     writer.write(debug, "test-output/perty/Debug.osm");
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::reprojectToWgs84(map);
     writer.write(map, "test-output/perty/Permuted.osm");
   }
 };

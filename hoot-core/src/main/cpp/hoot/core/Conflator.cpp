@@ -31,7 +31,7 @@ using namespace boost;
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/elements/ElementId.h>
@@ -323,7 +323,7 @@ void Conflator::_saveMap(QString path)
   LOG_INFO("Writing debug .osm file..." << path.toStdString());
 
   shared_ptr<OsmMap> wgs84(new OsmMap(_map));
-  MapReprojector::reprojectToWgs84(wgs84);
+  MapProjector::reprojectToWgs84(wgs84);
   OsmWriter writer;
   writer.setIncludeHootInfo(true);
   writer.setIncludeIds(true);

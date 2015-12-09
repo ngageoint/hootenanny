@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/LargeWaySplitter.h>
 #include <hoot/core/io/OsmReader.h>
@@ -65,9 +65,9 @@ public:
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/ToyTestA.osm", map);
 
-      MapReprojector::reprojectToPlanar(map);
+      MapProjector::reprojectToPlanar(map);
       LargeWaySplitter::splitWays(map, 20.0);
-      MapReprojector::reprojectToWgs84(map);
+      MapProjector::reprojectToWgs84(map);
 
       OsmWriter writer;
       writer.write(map, "test-output/conflate/LargeWaySplitterOutput1.osm");

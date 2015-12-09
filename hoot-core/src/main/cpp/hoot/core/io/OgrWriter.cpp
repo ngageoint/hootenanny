@@ -36,7 +36,7 @@
 
 // hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/RelationData.h>
@@ -273,7 +273,7 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
   {
     // Layer does not exist
     poLayer = _ds->CreateLayer(layerName.toAscii(),
-                  MapReprojector::createWgs84Projection()->Clone(), gtype, options.getCrypticOptions());
+                  MapProjector::createWgs84Projection()->Clone(), gtype, options.getCrypticOptions());
 
     if( poLayer == NULL )
     {

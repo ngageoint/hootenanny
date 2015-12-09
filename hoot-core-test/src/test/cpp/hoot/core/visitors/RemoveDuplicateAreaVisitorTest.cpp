@@ -36,7 +36,7 @@
 #include <geos/geom/Point.h>
 
 // hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
@@ -72,13 +72,13 @@ public:
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/visitors/RemoveDuplicateAreaVisitorTest.osm", map);
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::reprojectToPlanar(map);
 
     RemoveDuplicateAreaVisitor uut;
     map->visitRw(uut);
 
 //#warning debug
-//    MapReprojector::reprojectToWgs84(map);
+//    MapProjector::reprojectToWgs84(map);
 //    QDir().mkpath("test-output/visitors/");
 //    OsmWriter writer;
 //    writer.write(map, "test-output/visitors/RemoveDuplicateAreaVisitorTest.osm");

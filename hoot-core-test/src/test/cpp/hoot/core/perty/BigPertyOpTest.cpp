@@ -33,7 +33,7 @@
 
 // Hoot
 #include <hoot/core/Exception.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
@@ -92,7 +92,7 @@ public:
     qSort(keys);
 //    OsmWriter writer;
 //    QDir().mkpath("test-output/perty");
-//    MapReprojector::reprojectToWgs84(map);
+//    MapProjector::reprojectToWgs84(map);
 //    writer.write(map, "test-output/perty/BasicTest.osm");
 //    QString result = "";
 //    for (int i = 0; i < keys.size(); i++)

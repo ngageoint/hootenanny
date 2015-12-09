@@ -37,7 +37,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
@@ -50,9 +50,9 @@ using namespace hoot;
 namespace hoot
 {
 
-class MapReprojectorTest : public CppUnit::TestFixture
+class MapProjectorTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(MapReprojectorTest);
+  CPPUNIT_TEST_SUITE(MapProjectorTest);
   CPPUNIT_TEST(runErrorTest);
   CPPUNIT_TEST(runCreatePlanarProjectionTest);
   CPPUNIT_TEST_SUITE_END();
@@ -72,7 +72,7 @@ public:
 
   void evaluateProjection(const OGREnvelope& env, shared_ptr<OGRSpatialReference> srs)
   {
-    shared_ptr<OGRSpatialReference> wgs84 = MapReprojector::createWgs84Projection();
+    shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
 
     OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(wgs84.get(), srs.get()));
 
@@ -181,13 +181,13 @@ public:
 
   void testRegion(const OGREnvelope& env, QString name)
   {
-    shared_ptr<OGRSpatialReference> sinusoidal = MapReprojector::createSinusoidalProjection(env);
+    shared_ptr<OGRSpatialReference> sinusoidal = MapProjector::createSinusoidalProjection(env);
     shared_ptr<OGRSpatialReference> mollweide(new OGRSpatialReference());
     if (mollweide->importFromEPSG(54009) != OGRERR_NONE)
     {
       throw HootException("Error creating mollweide projection.");
     }
-    shared_ptr<OGRSpatialReference> orthographic = MapReprojector::createOrthographic(env);
+    shared_ptr<OGRSpatialReference> orthographic = MapProjector::createOrthographic(env);
 
     shared_ptr<OGRSpatialReference> eckertVI(new OGRSpatialReference());
     if (eckertVI->importFromEPSG(53010) != OGRERR_NONE)
@@ -218,7 +218,7 @@ public:
 //    fs << 5 + o << "\tAEAC";
 //    if ((env.MinY >= 0 && env.MaxY >= 0) || (env.MinY <= 0 && env.MaxY <= 0))
 //    {
-//      shared_ptr<OGRSpatialReference> aeac = MapReprojector::createAeacProjection(env);
+//      shared_ptr<OGRSpatialReference> aeac = MapProjector::createAeacProjection(env);
 //      evaluateProjection(env, aeac);
 //    }
 //    else
@@ -247,10 +247,10 @@ public:
       env.MaxX = 160;
       env.MaxY = 65;
 
-      shared_ptr<OGRSpatialReference> srs = MapReprojector::getInstance().
+      shared_ptr<OGRSpatialReference> srs = MapProjector::getInstance().
           createPlanarProjection(env, toRadians(2), 61);
       CPPUNIT_ASSERT_EQUAL(true,
-        (bool)MapReprojector::toWkt(srs).contains("Lambert_Conformal_Conic_1SP"));
+        (bool)MapProjector::toWkt(srs).contains("Lambert_Conformal_Conic_1SP"));
     }
 
     {
@@ -260,10 +260,10 @@ public:
       env.MaxX = 160;
       env.MaxY = 71;
 
-      shared_ptr<OGRSpatialReference> srs = MapReprojector::getInstance().
+      shared_ptr<OGRSpatialReference> srs = MapProjector::getInstance().
         createPlanarProjection(env);
       CPPUNIT_ASSERT_EQUAL(true,
-        (bool)MapReprojector::toWkt(srs).contains("Orthographic"));
+        (bool)MapProjector::toWkt(srs).contains("Orthographic"));
     }
 
     {
@@ -273,10 +273,10 @@ public:
       env.MaxX = 150;
       env.MaxY = 85;
 
-      shared_ptr<OGRSpatialReference> srs = MapReprojector::getInstance().
+      shared_ptr<OGRSpatialReference> srs = MapProjector::getInstance().
         createPlanarProjection(env);
       CPPUNIT_ASSERT_EQUAL(true,
-        (bool)MapReprojector::toWkt(srs).contains("Transverse_Mercator"));
+        (bool)MapProjector::toWkt(srs).contains("Transverse_Mercator"));
     }
 
     {
@@ -286,10 +286,10 @@ public:
       env.MaxX = 130;
       env.MaxY = 65;
 
-      shared_ptr<OGRSpatialReference> srs = MapReprojector::getInstance().
+      shared_ptr<OGRSpatialReference> srs = MapProjector::getInstance().
         createPlanarProjection(env);
       CPPUNIT_ASSERT_EQUAL(true,
-        (bool)MapReprojector::toWkt(srs).contains("Orthographic"));
+        (bool)MapProjector::toWkt(srs).contains("Orthographic"));
     }
   }
 
@@ -327,9 +327,9 @@ public:
       env.MinY = 0.0;
       env.MaxX = 180.0;
       env.MaxY = 89.5;
-      shared_ptr<OGRSpatialReference> srs = MapReprojector::createOrthographic(env);
+      shared_ptr<OGRSpatialReference> srs = MapProjector::createOrthographic(env);
       Coordinate c(500, 200);
-      CPPUNIT_ASSERT_THROW(MapReprojector::reproject(c, OsmMap::getWgs84(), srs),
+      CPPUNIT_ASSERT_THROW(MapProjector::reproject(c, OsmMap::getWgs84(), srs),
                            IllegalArgumentException);
     }
 
@@ -395,7 +395,7 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapReprojectorTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapReprojectorTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapProjectorTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapProjectorTest, "current");
 
 }

@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
@@ -76,7 +76,7 @@ public:
     const int numWaysBeforeSplitting = map->getWays().size();
     LOG_VARD(numWaysBeforeSplitting)
 
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::reprojectToPlanar(map);
     PertyWaySplitVisitor waySplitVisitor;
     boost::minstd_rand rng;
     rng.seed(1);
@@ -84,7 +84,7 @@ public:
     waySplitVisitor.setWaySplitProbability(0.5);
     waySplitVisitor.setMinNodeSpacing(1.0);
     map->visitRw(waySplitVisitor);
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::reprojectToWgs84(map);
     const int numNewNodesCreatedBySpliting = map->getNodeMap().size() - numNodesBeforeSplitting;
     LOG_VARD(numNewNodesCreatedBySpliting);
     const int numNewWaysCreatedBySpliting = map->getWays().size() - numWaysBeforeSplitting;
@@ -119,7 +119,7 @@ public:
     const int numWaysBeforeSplitting = map->getWays().size();
     LOG_VARD(numWaysBeforeSplitting)
 
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::reprojectToPlanar(map);
     PertyWaySplitVisitor waySplitVisitor;
     boost::minstd_rand rng;
     rng.seed(1);
@@ -127,7 +127,7 @@ public:
     waySplitVisitor.setWaySplitProbability(0.5);
     waySplitVisitor.setMinNodeSpacing(1.0);
     map->visitRw(waySplitVisitor);
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::reprojectToWgs84(map);
     const int numNewNodesCreatedBySplitting = map->getNodeMap().size() - numNodesBeforeSplitting;
     LOG_VARD(numNewNodesCreatedBySplitting);
     const int numNewWaysCreatedBySplitting = map->getWays().size() - numWaysBeforeSplitting;

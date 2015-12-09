@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
 #include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
@@ -78,7 +78,7 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/ToyBuildingsTestB.osm", map);
 
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::reprojectToPlanar(map);
 
     vector<long> r1 = map->findWays("REF1", "Target");
     vector<long> r2 = map->findWays("name", "Target Grocery");
@@ -113,7 +113,7 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/conflate/extractor/EdgeDistanceExtractor/ToyTestB.osm", map);
 
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::reprojectToPlanar(map);
 
     EdgeDistanceExtractor uut2(new RmseAggregator());
 

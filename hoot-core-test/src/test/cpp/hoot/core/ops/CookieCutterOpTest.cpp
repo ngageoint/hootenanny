@@ -43,7 +43,7 @@ using namespace boost;
 #include <cppunit/TestFixture.h>
 
 // hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/conflate/MapCleaner.h>
 
 // Qt
@@ -83,7 +83,7 @@ public:
     uut.setOutputBuffer(0.0);
     uut.apply(map);
 
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::reprojectToWgs84(map);
 
     QDir().mkpath("test-output/ops/CookieCutterOp");
     OsmWriter writer;

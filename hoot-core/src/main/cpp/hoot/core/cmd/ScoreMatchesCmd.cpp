@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
@@ -78,7 +78,7 @@ public:
       if (i == 0 && !output.isEmpty())
       {
         BuildingOutlineUpdateOp().apply(copy);
-        MapReprojector::reprojectToWgs84(copy);
+        MapProjector::reprojectToWgs84(copy);
         saveMap(copy, output);
       }
     }
@@ -208,7 +208,7 @@ public:
       }
 
       shared_ptr<OsmMap> mapCopy(map);
-      MapReprojector::reprojectToWgs84(mapCopy);
+      MapProjector::reprojectToWgs84(mapCopy);
       OsmUtils::saveMap(mapCopy, "/tmp/score-matches-before-prep.osm");
 
       MatchScoringMapPreparer().prepMap(map, conf().getBool(removeNodesKey(), false));
@@ -217,7 +217,7 @@ public:
 
     LOG_VARD(maps.size());
     shared_ptr<OsmMap> mapCopy(maps[0]);
-    MapReprojector::reprojectToWgs84(mapCopy);
+    MapProjector::reprojectToWgs84(mapCopy);
     OsmUtils::saveMap(mapCopy, "/tmp/score-matches-after-prep.osm");
 
     if (optimizeThresholds)

@@ -44,7 +44,7 @@
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/conflate/js/ScriptMergerCreator.h>
 #include <hoot/js/elements/ElementJs.h>
