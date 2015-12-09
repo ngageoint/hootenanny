@@ -225,6 +225,7 @@ fi
 
 # Update the init.d script for node-mapnik-server
 sudo cp node-mapnik-server/init.d/node-mapnik-server /etc/init.d
+sudo chmod a+x /etc/init.d/node-mapnik-server
 # Make sure all npm modules are installed
 cd node-mapnik-server
 npm install
