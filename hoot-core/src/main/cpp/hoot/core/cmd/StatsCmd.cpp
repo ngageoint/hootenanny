@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -89,7 +89,7 @@ public:
       shared_ptr<OsmMap> map(new OsmMap());
       loadMap(map, args[i], true, Status::Invalid);
 
-      MapReprojector::reprojectToPlanar(map);
+      MapProjector::reprojectToPlanar(map);
 
       shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
       cso->setQuickSubset(quick);

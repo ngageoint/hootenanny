@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef __MAP_REPROJECTOR_H__
-#define __MAP_REPROJECTOR_H__
+#ifndef __MAP_PROJECTOR_H__
+#define __MAP_PROJECTOR_H__
 
 
 // Boost
@@ -55,7 +55,7 @@ namespace hoot
   using namespace geos::geom;
   using namespace std;
 
-class MapReprojector
+class MapProjector
 {
 public:
 
@@ -95,7 +95,7 @@ public:
     Radians maxAngleError = toRadians(2.0), Meters maxDistanceError = 10.0,
     Meters testDistance = 1000.0, bool warnOnFail = true);
 
-  static MapReprojector& getInstance() { return _theInstance; }
+  static MapProjector& getInstance() { return _theInstance; }
 
   //static bool isGeographic(const shared_ptr<const OsmMap>& map);
   static bool isGeographic(const ConstElementProviderPtr& provider );
@@ -160,9 +160,9 @@ private:
     double score;
   };
 
-  MapReprojector() {}
+  MapProjector() {}
 
-  static MapReprojector _theInstance;
+  static MapProjector _theInstance;
 
   static bool _angleLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
 

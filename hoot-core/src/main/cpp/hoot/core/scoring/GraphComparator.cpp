@@ -40,7 +40,7 @@ using namespace geos::operation::distance;
 
 // Hoot
 #include <hoot/core/GeometryPainter.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
@@ -305,10 +305,10 @@ void GraphComparator::drawCostDistance(shared_ptr<OsmMap> map, vector<Coordinate
   shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
   srs->importFromEPSG(900913);
 
-  Coordinate c1 = MapReprojector::reproject(Coordinate(_projectedBounds.MinX, _projectedBounds.MinY), map->getProjection(), srs);
+  Coordinate c1 = MapProjector::reproject(Coordinate(_projectedBounds.MinX, _projectedBounds.MinY), map->getProjection(), srs);
   cout << "coord " << c1.x << ", " << c1.y << endl;
 
-  Coordinate c2 = MapReprojector::reproject(Coordinate(_projectedBounds.MaxX, _projectedBounds.MaxY), map->getProjection(), srs);
+  Coordinate c2 = MapProjector::reproject(Coordinate(_projectedBounds.MaxX, _projectedBounds.MaxY), map->getProjection(), srs);
   cout << "coord2 " << c2.x << ", " << c2.y << endl;
 
   printf("POSITION_Y=%f\n", (c1.y + c2.y) / 2.0);

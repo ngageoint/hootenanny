@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
@@ -104,7 +104,7 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/ToyBuildingsTestB.osm", map);
 
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::reprojectToPlanar(map);
 
     WayMap wm = map->getWays();
     for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
@@ -138,7 +138,7 @@ public:
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::reprojectToPlanar(map);
 
     CPPUNIT_ASSERT(uut.isMatchCandidate(map->getWay(map->findWays("name", "Panera Bread")[0]), map));
 
@@ -146,7 +146,7 @@ public:
     map.reset(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::reprojectToPlanar(map);
 
     CPPUNIT_ASSERT(!uut.isMatchCandidate(map->getWay(map->findWays("note", "1")[0]), map));
   }

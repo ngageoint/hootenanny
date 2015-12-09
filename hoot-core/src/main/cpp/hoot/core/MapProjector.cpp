@@ -26,7 +26,7 @@
  */
 
 
-#include "MapReprojector.h"
+#include "MapProjector.h"
 
 // Boost
 using namespace boost;
@@ -50,7 +50,7 @@ using namespace boost;
 namespace hoot
 {
 
-MapReprojector MapReprojector::_theInstance;
+MapProjector MapProjector::_theInstance;
 
 class DisableCplErrors
 {
@@ -94,9 +94,9 @@ public:
       QString err = QString("Error projecting point. Is the point outside of the projection's "
                             "bounds?");
       LOG_WARN("Source Point, x:" << inx << " y: " << iny);
-      LOG_WARN("Source SRS: " << MapReprojector::toWkt(_transform->GetSourceCS()));
+      LOG_WARN("Source SRS: " << MapProjector::toWkt(_transform->GetSourceCS()));
       LOG_WARN("Target Point, x:" << c->x << " y: " << c->y);
-      LOG_WARN("Target SRS: " << MapReprojector::toWkt(_transform->GetTargetCS()));
+      LOG_WARN("Target SRS: " << MapProjector::toWkt(_transform->GetTargetCS()));
       throw IllegalArgumentException(err);
     }
   }
@@ -105,13 +105,13 @@ private:
   OGRCoordinateTransformation* _transform;
 };
 
-bool MapReprojector::_angleLessThan(const MapReprojector::PlanarTestResult& p1,
-  const MapReprojector::PlanarTestResult& p2)
+bool MapProjector::_angleLessThan(const MapProjector::PlanarTestResult& p1,
+  const MapProjector::PlanarTestResult& p2)
 {
   return p1.angleError < p2.angleError;
 }
 
-Radians MapReprojector::_calculateAngle(Coordinate p1, Coordinate p2, Coordinate p3)
+Radians MapProjector::_calculateAngle(Coordinate p1, Coordinate p2, Coordinate p3)
 {
   Radians theta1 = atan2(p2.y - p1.y, p2.x - p1.x);
   Radians theta2 = atan2(p3.y - p1.y, p3.x - p1.x);
@@ -119,7 +119,7 @@ Radians MapReprojector::_calculateAngle(Coordinate p1, Coordinate p2, Coordinate
   return theta1 - theta2;
 }
 
-shared_ptr<OGRSpatialReference> MapReprojector::createAeacProjection(const OGREnvelope& env)
+shared_ptr<OGRSpatialReference> MapProjector::createAeacProjection(const OGREnvelope& env)
 {
   shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
   double height = env.MaxY - env.MinY;
@@ -141,7 +141,7 @@ shared_ptr<OGRSpatialReference> MapReprojector::createAeacProjection(const OGREn
   return srs;
 }
 
-vector< shared_ptr<OGRSpatialReference> > MapReprojector::createAllPlanarProjections(
+vector< shared_ptr<OGRSpatialReference> > MapProjector::createAllPlanarProjections(
   const OGREnvelope& env)
 {
   vector< shared_ptr<OGRSpatialReference> > result;
@@ -254,7 +254,7 @@ vector< shared_ptr<OGRSpatialReference> > MapReprojector::createAllPlanarProject
   return result;
 }
 
-shared_ptr<OGRSpatialReference> MapReprojector::createOrthographic(const OGREnvelope& env)
+shared_ptr<OGRSpatialReference> MapProjector::createOrthographic(const OGREnvelope& env)
 {
   shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
   double x = (env.MinX + env.MaxX) / 2.0;
@@ -266,7 +266,7 @@ shared_ptr<OGRSpatialReference> MapReprojector::createOrthographic(const OGREnve
   return srs;
 }
 
-shared_ptr<OGRSpatialReference> MapReprojector::createPlanarProjection(const OGREnvelope& env,
+shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const OGREnvelope& env,
   Radians maxAngleError, Meters maxDistanceError, Meters testDistance, bool warnOnFail)
 {
   vector< shared_ptr<OGRSpatialReference> > projs = createAllPlanarProjections(env);
@@ -355,7 +355,7 @@ shared_ptr<OGRSpatialReference> MapReprojector::createPlanarProjection(const OGR
 }
 
 
-shared_ptr<OGRSpatialReference> MapReprojector::createSinusoidalProjection(const OGREnvelope& env)
+shared_ptr<OGRSpatialReference> MapProjector::createSinusoidalProjection(const OGREnvelope& env)
 {
   double centerLon = (env.MaxX + env.MinX) / 2.0;
 
@@ -369,7 +369,7 @@ shared_ptr<OGRSpatialReference> MapReprojector::createSinusoidalProjection(const
   return srs;
 }
 
-shared_ptr<OGRSpatialReference> MapReprojector::createWgs84Projection()
+shared_ptr<OGRSpatialReference> MapProjector::createWgs84Projection()
 {
   shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
 
@@ -383,14 +383,14 @@ shared_ptr<OGRSpatialReference> MapReprojector::createWgs84Projection()
   return srs;
 }
 
-bool MapReprojector::_evaluateProjection(const OGREnvelope& env,
+bool MapProjector::_evaluateProjection(const OGREnvelope& env,
   shared_ptr<OGRSpatialReference> srs, Meters testDistance, Meters& maxDistanceError,
   Radians& maxAngleError)
 {
   // Disable CPL error messages. They will be re-enabled when the DisableCplErrors object is
   // destructed.
   DisableCplErrors disableErrors;
-  shared_ptr<OGRSpatialReference> wgs84 = MapReprojector::createWgs84Projection();
+  shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
 
   auto_ptr<OGRCoordinateTransformation> t(OGRCreateCoordinateTransformation(wgs84.get(),
                                                                             srs.get()));
@@ -460,13 +460,13 @@ bool MapReprojector::_evaluateProjection(const OGREnvelope& env,
   return success;
 }
 
-bool MapReprojector::_distanceLessThan(const MapReprojector::PlanarTestResult& p1,
-  const MapReprojector::PlanarTestResult& p2)
+bool MapProjector::_distanceLessThan(const MapProjector::PlanarTestResult& p1,
+  const MapProjector::PlanarTestResult& p2)
 {
   return p1.distanceError < p2.distanceError;
 }
 
-size_t MapReprojector::_findBestResult(vector<PlanarTestResult>& results)
+size_t MapProjector::_findBestResult(vector<PlanarTestResult>& results)
 {
   vector<PlanarTestResult> orderByAngle = results;
   vector<PlanarTestResult> orderByDistance = results;
@@ -486,7 +486,7 @@ size_t MapReprojector::_findBestResult(vector<PlanarTestResult>& results)
   throw InternalErrorException("Unable to find a best result. Bug?");
 }
 
-size_t MapReprojector::_findBestScore(vector<PlanarTestResult>& results)
+size_t MapProjector::_findBestScore(vector<PlanarTestResult>& results)
 {
   vector<PlanarTestResult> orderByScore = results;
   sort(orderByScore.begin(), orderByScore.end(), _scoreLessThan);
@@ -494,12 +494,12 @@ size_t MapReprojector::_findBestScore(vector<PlanarTestResult>& results)
   return orderByScore[0].i;
 }
 
-bool MapReprojector::isGeographic(const ConstElementProviderPtr& provider)
+bool MapProjector::isGeographic(const ConstElementProviderPtr& provider)
 {
   return provider->getProjection()->IsGeographic();
 }
 
-Coordinate MapReprojector::reproject(const Coordinate& c, shared_ptr<OGRSpatialReference> srs1,
+Coordinate MapProjector::reproject(const Coordinate& c, shared_ptr<OGRSpatialReference> srs1,
                             shared_ptr<OGRSpatialReference> srs2)
 {
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(srs1.get(), srs2.get()));
@@ -521,7 +521,7 @@ Coordinate MapReprojector::reproject(const Coordinate& c, shared_ptr<OGRSpatialR
 }
 
 
-void MapReprojector::reproject(shared_ptr<OsmMap> map,
+void MapProjector::reproject(shared_ptr<OsmMap> map,
                                              shared_ptr<OGRSpatialReference> ref)
 {
   shared_ptr<OGRSpatialReference> sourceSrs = map->getProjection();
@@ -570,7 +570,7 @@ void MapReprojector::reproject(shared_ptr<OsmMap> map,
   OGRCoordinateTransformation::DestroyCT(t);
 }
 
-void MapReprojector::reproject(const shared_ptr<Geometry>& g,
+void MapProjector::reproject(const shared_ptr<Geometry>& g,
   const shared_ptr<OGRSpatialReference>& srs1, const shared_ptr<OGRSpatialReference>& srs2)
 {
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(srs1.get(), srs2.get()));
@@ -586,22 +586,22 @@ void MapReprojector::reproject(const shared_ptr<Geometry>& g,
   OGRCoordinateTransformation::DestroyCT(t);
 }
 
-void MapReprojector::reprojectToAeac(shared_ptr<OsmMap> map)
+void MapProjector::reprojectToAeac(shared_ptr<OsmMap> map)
 {
   shared_ptr<OGRSpatialReference> srs = getInstance().createAeacProjection(
     map->calculateBounds());
   reproject(map, srs);
 }
 
-void MapReprojector::reprojectToOrthographic(shared_ptr<OsmMap> map)
+void MapProjector::reprojectToOrthographic(shared_ptr<OsmMap> map)
 {
   OGREnvelope env = map->calculateBounds();
   return reprojectToOrthographic(map, env);
 }
 
-void MapReprojector::reprojectToOrthographic(shared_ptr<OsmMap> map, const OGREnvelope& env)
+void MapProjector::reprojectToOrthographic(shared_ptr<OsmMap> map, const OGREnvelope& env)
 {
-  MapReprojector proj;
+  MapProjector proj;
   shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
   double x = (env.MinX + env.MaxX) / 2.0;
   double y = (env.MinY + env.MaxY) / 2.0;
@@ -612,7 +612,7 @@ void MapReprojector::reprojectToOrthographic(shared_ptr<OsmMap> map, const OGREn
   proj.reproject(map, srs);
 }
 
-void MapReprojector::reprojectToPlanar(shared_ptr<OsmMap> map)
+void MapProjector::reprojectToPlanar(shared_ptr<OsmMap> map)
 {
   if (isGeographic(map))
   {
@@ -621,7 +621,7 @@ void MapReprojector::reprojectToPlanar(shared_ptr<OsmMap> map)
   }
 }
 
-void MapReprojector::reprojectToPlanar(shared_ptr<OsmMap> map, const OGREnvelope& env)
+void MapProjector::reprojectToPlanar(shared_ptr<OsmMap> map, const OGREnvelope& env)
 {
   if (map->getProjection()->IsProjected() == false)
   {
@@ -630,11 +630,11 @@ void MapReprojector::reprojectToPlanar(shared_ptr<OsmMap> map, const OGREnvelope
   }
 }
 
-void MapReprojector::reprojectToWgs84(shared_ptr<OsmMap> map)
+void MapProjector::reprojectToWgs84(shared_ptr<OsmMap> map)
 {
   if (isGeographic(map) == false)
   {
-    MapReprojector proj;
+    MapProjector proj;
     shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
     //srs->importFromEPSG(4326);
     srs->SetWellKnownGeogCS("WGS84");
@@ -642,7 +642,7 @@ void MapReprojector::reprojectToWgs84(shared_ptr<OsmMap> map)
   }
 }
 
-Coordinate MapReprojector::reprojectFromWgs84(const Coordinate& c,
+Coordinate MapProjector::reprojectFromWgs84(const Coordinate& c,
                                      shared_ptr<OGRSpatialReference> srs)
 {
   shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
@@ -651,13 +651,13 @@ Coordinate MapReprojector::reprojectFromWgs84(const Coordinate& c,
   return reproject(c, wgs84, srs);
 }
 
-bool MapReprojector::_scoreLessThan(const MapReprojector::PlanarTestResult& p1,
-  const MapReprojector::PlanarTestResult& p2)
+bool MapProjector::_scoreLessThan(const MapProjector::PlanarTestResult& p1,
+  const MapProjector::PlanarTestResult& p2)
 {
   return p1.score < p2.score;
 }
 
-QString MapReprojector::toWkt(OGRSpatialReference* srs)
+QString MapProjector::toWkt(OGRSpatialReference* srs)
 {
   char* wkt = 0;
   srs->exportToWkt(&wkt);

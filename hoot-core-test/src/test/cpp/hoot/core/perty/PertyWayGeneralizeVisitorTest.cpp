@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
@@ -101,7 +101,7 @@ public:
     const int numWaysBefore = map->getWays().size();
     LOG_VARD(numWaysBefore);
 
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::reprojectToPlanar(map);
     PertyWayGeneralizeVisitor wayGeneralizeVisitor;
     boost::minstd_rand rng;
     rng.seed(randomNumberGeneratorSeed);
@@ -109,7 +109,7 @@ public:
     wayGeneralizeVisitor.setWayGeneralizeProbability(generalizeProbability);
     wayGeneralizeVisitor.setEpsilon(epsilon);
     map->visitRw(wayGeneralizeVisitor);
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::reprojectToWgs84(map);
 
     const int numNodesRemoved = numNodesBefore - map->getNodeMap().size();
     CPPUNIT_ASSERT_EQUAL(0, numNodesRemoved);

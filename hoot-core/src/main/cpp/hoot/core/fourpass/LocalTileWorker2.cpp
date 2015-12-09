@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/Conflator.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/conflate/LargeWaySplitter.h>
 #include <hoot/core/conflate/OutsideBoundsRemover.h>
@@ -98,7 +98,7 @@ void LocalTileWorker2::applyOp(shared_ptr<OsmMapOperation> op, const vector<Enve
       op->apply(map);
 
       // it only actually does a reprojection if necessary.
-      MapReprojector::reprojectToWgs84(map);
+      MapProjector::reprojectToWgs84(map);
 
       // Using a copy of the map so we can split ways as needed. Make sure they're the right size.
       const WayMap wm = map->getWays();

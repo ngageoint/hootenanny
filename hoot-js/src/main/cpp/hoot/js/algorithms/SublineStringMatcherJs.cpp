@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/algorithms/MultiLineStringSplitter.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/ops/CopySubsetOp.h>
@@ -111,7 +111,7 @@ Handle<Value> SublineStringMatcherJs::extractMatchingSublines(const Arguments& a
     catch (const IllegalArgumentException& e)
     {
       // this is unusual print out some information useful to debugging.
-      MapReprojector::reprojectToWgs84(copiedMap);
+      MapProjector::reprojectToWgs84(copiedMap);
       LOG_WARN(OsmWriter::toString(copiedMap));
       throw e;
     }

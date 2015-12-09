@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/Factory.h>
 
 // Standard
@@ -76,12 +76,12 @@ void SuperfluousNodeRemover::apply(shared_ptr<OsmMap>& map)
   shared_ptr<OsmMap> reprojected;
   const NodeMap* nodesWgs84 = &nodes;
   // if the map is not in WGS84
-  if (MapReprojector::isGeographic(map) == false)
+  if (MapProjector::isGeographic(map) == false)
   {
     // create a new copy of the map and reproject it. This way we can be sure we do the bounds
     // calculation correctly.
     reprojected.reset(new OsmMap(map));
-    MapReprojector::reprojectToWgs84(reprojected);
+    MapProjector::reprojectToWgs84(reprojected);
     nodesWgs84 = &reprojected->getNodeMap();
   }
 

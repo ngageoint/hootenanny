@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 
@@ -63,7 +63,7 @@ AddHilbertReviewSortOrderOp::AddHilbertReviewSortOrderOp()
 void AddHilbertReviewSortOrderOp::apply(shared_ptr<OsmMap>& map)
 {
   _mapEnvelope.reset();
-  MapReprojector::reprojectToPlanar(map);
+  MapProjector::reprojectToPlanar(map);
 
   const RelationMap& relations = map->getRelationMap();
 

@@ -32,7 +32,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
@@ -139,7 +139,7 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const shared_ptr<Relation>& r)
 
 void BuildingPartMergeOp::apply(shared_ptr<OsmMap>& map)
 {
-  MapReprojector::reprojectToPlanar(map);
+  MapProjector::reprojectToPlanar(map);
   ////
   // treat the map as read only while we determine building parts.
   ////

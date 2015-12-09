@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
@@ -67,11 +67,11 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/UndividedHighway.osm", map);
 
-    MapReprojector::reprojectToOrthographic(map);
+    MapProjector::reprojectToOrthographic(map);
 
     shared_ptr<OsmMap> after = DualWaySplitter::splitAll(map, DualWaySplitter::Right, 10.0);
 
-    MapReprojector::reprojectToWgs84(after);
+    MapProjector::reprojectToWgs84(after);
 
     OsmWriter writer;
     writer.write(after, "test-output/DualWaySplitterTest.osm");

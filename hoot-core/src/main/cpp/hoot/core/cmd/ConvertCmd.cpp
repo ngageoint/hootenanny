@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/RubberSheet.h>
@@ -101,7 +101,7 @@ public:
       // Apply any user specified operations.
       NamedOp(ConfigOptions().getConvertOps()).apply(map);
 
-      MapReprojector::reprojectToWgs84(map);
+      MapProjector::reprojectToWgs84(map);
 
       saveMap(map, args[1]);
     }

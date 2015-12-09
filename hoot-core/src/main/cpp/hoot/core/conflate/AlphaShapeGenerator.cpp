@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/algorithms/AlphaShape.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/util/GeometryConverter.h>
 
 namespace hoot
@@ -43,7 +43,7 @@ _buffer(buffer)
 
 OsmMapPtr AlphaShapeGenerator::generate(OsmMapPtr cutterShapeMap)
 {
-  MapReprojector::reprojectToPlanar(cutterShapeMap);
+  MapProjector::reprojectToPlanar(cutterShapeMap);
 
   // put all the nodes into a vector of points.
   std::vector< std::pair<double, double> > points;
