@@ -166,6 +166,141 @@ double Tags::getDouble(const QString& k, double defaultValue) const
   }
 }
 
+double Tags::getSpeed(const QString& k) const
+{
+  QString v = get(k);
+
+  bool isKm = false;    //kilometer per hour
+  bool isMph = false;   //miles per hour
+  bool isKnots = false; //knots
+  if (v.contains("km/h", Qt::CaseInsensitive))
+  {
+     isKm = true;
+  }
+  else if (v.contains("mph", Qt::CaseInsensitive))
+  {
+    isMph = true;
+  }
+  else if (v.contains("knots", Qt::CaseInsensitive))
+  {
+    isKnots = true;
+  }
+  else //default kilometre per hour is assumed
+  {
+    isKm = true;
+  }
+
+  bool ok;
+  double result = v.split(" ")[0].toDouble(&ok);
+  if (!ok)
+  {
+    throw HootException("Expected a double for key: " + k + " but got: " + v);
+  }
+
+  if (isKm)
+  {
+    result = result * 1000.0 / 3600.0;
+  }
+  else if (isMph)
+  {
+    result = result * 1.609344 * 1000.0 / 3600.0;
+  }
+  else if (isKnots)
+  {
+    result = result * 1.852 * 1000.0 / 3600.0;
+  }
+  return result;
+}
+
+double Tags::getLength(const QString& k) const
+{
+  QString v = get(k);
+
+  bool isKm = false;  //kilometer
+  bool isMi = false;  //mile
+  bool isNmi = false; //nautical mile
+  bool isFi = false;  //feet and inch
+
+  if (v.contains("km", Qt::CaseInsensitive))
+  {
+     isKm = true;
+  }
+  else if (v.contains("mi", Qt::CaseInsensitive) && !v.contains("n", Qt::CaseInsensitive))
+  {
+    isMi = true;
+  }
+  else if (v.contains("nmi", Qt::CaseInsensitive))
+  {
+    isNmi = true;
+  }
+  else if (v.contains("'", Qt::CaseInsensitive) || v.contains("\"", Qt::CaseInsensitive))
+  {
+    isFi = true;
+  }
+
+  bool ok;
+  double result = v.split(" ")[0].toDouble(&ok);
+  if (!ok && !isFi)
+  {
+    throw HootException("Expected a double for key: " + k + " but got: " + v);
+  }
+
+  if (isKm)
+  {
+    result = result * 1000.0;
+  }
+  else if (isMi)
+  {
+    result = result * 1.609344 * 1000.0;
+  }
+  else if (isNmi)
+  {
+    result = result * 1.852 * 1000.0;
+  }
+  else if (isFi)
+  {
+    v = v.split(" ")[0];
+    QString vf = "";
+    QString vi = "";
+    double vfd = 0.0;
+    double vid = 0.0;
+    if (v.contains("'", Qt::CaseInsensitive))
+    {
+      QStringList vfi = v.split("'");
+      if (vfi.length() == 2)
+      {
+        vf = vfi[0];
+        vi = vfi[1];
+        if (vi.contains("\""))
+        {
+          vi = vi.replace("\"","");
+        }
+        vfd = vf.toDouble(&ok);
+        if (!ok)
+        {
+          throw HootException("Expected a double for key: " + k + " but got: " + v);
+        }
+        vid = vi.toDouble(&ok);
+        if (!ok)
+        {
+          throw HootException("Expected a double for key: " + k + " but got: " + v);
+        }
+      }
+      else
+      {
+        vf = vfi[0];
+        vfd = vf.toDouble(&ok);
+        if (!ok)
+        {
+          throw HootException("Expected a double for key: " + k + " but got: " + v);
+        }
+      }
+    }
+    result = (vfd * 12.0 + vid) * 0.0254;
+  }
+  return result;
+}
+
 int Tags::getInformationCount() const
 {
   int count = 0;
