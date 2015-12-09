@@ -61,6 +61,19 @@ public:
    */
   static void removeDuplicates(shared_ptr<OsmMap> map);
 
+  /**
+   * see duplicate.way.remover.strict.tag.matching
+   */
+  bool getStrictTagMatching() { return _strictTagMatching; }
+
+  /**
+   * see duplicate.way.remover.strict.tag.matching
+   */
+  void setStrictTagMatching(bool strictTagMatching)
+  {
+    _strictTagMatching = strictTagMatching;
+  }
+
 protected:
 
   shared_ptr<OsmMap> _map;
@@ -74,7 +87,11 @@ protected:
   void _replaceMultiple(const shared_ptr<const Way>& oldWay,
     const shared_ptr<Way>& newWay1, const shared_ptr<Way>& newWay2);
 
-  void _mergeWayNameTags(shared_ptr<Way> way1, shared_ptr<Way> way2);
+  void _updateWayNameTags(shared_ptr<Way> way1, shared_ptr<Way> way2);
+
+ private:
+
+  bool _strictTagMatching;
 };
 
 }

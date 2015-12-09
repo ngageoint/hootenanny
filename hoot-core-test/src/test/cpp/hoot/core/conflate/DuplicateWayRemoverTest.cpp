@@ -34,6 +34,8 @@
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 using namespace hoot;
 
 
@@ -59,12 +61,39 @@ using namespace Tgs;
 
 #include "../TestUtils.h"
 
+namespace hoot
+{
+
 class DuplicateWayRemoverTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(DuplicateWayRemoverTest);
   CPPUNIT_TEST(runTest);
-  CPPUNIT_TEST(runNameTagsTest);
+  CPPUNIT_TEST(runStrictTagMatchingOnTest);
+  CPPUNIT_TEST(runStrictTagMatchingOffTest);
   CPPUNIT_TEST_SUITE_END();
+
+private:
+
+  void modifyWayTagsForStrictNameMatching(OsmMapPtr map)
+  {
+    //The input test file already has enumerated tag differences for duplicates, but no text tag
+    //differences.  So, find some candidate dupe ways and modify some way's non-name text tag so the
+    //two do not match exactly.  This should prevent the two ways as being considered duplicates of
+    //each other.
+    const long wayId = map->findWays("name", "Constitution Ave NW")[0];
+    WayPtr way = map->getWay(wayId);
+    Tags tags = way->getTags();
+    tags.set("email", "blah");
+    way->setTags(tags);
+    vector<long> wayIds = map->findWays("name", "US Hwy 50");
+    for (size_t i = 0; i < wayIds.size(); i++)
+    {
+      WayPtr way = map->getWay(wayIds[i]);
+      Tags tags = way->getTags();
+      tags.set("email", "blah2");
+      way->setTags(tags);
+    }
+  }
 
 public:
 
@@ -90,27 +119,64 @@ public:
 
   }
 
-  void runNameTagsTest()
+  /*
+   * In this test we add in some non-matching text tags for two ways (see
+   * modifyWayTagsForStrictNameMatching), and since strict matching is *on*, we *should not* see those
+   * two ways get merged.
+   */
+  void runStrictTagMatchingOnTest()
   {
-    OsmReader reader;
-
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());
-    reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/DcTigerRoads.osm", map);
+    OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
+
+    modifyWayTagsForStrictNameMatching(map);
+
+    DuplicateWayRemover dupeWayRemover;
+    dupeWayRemover.setStrictTagMatching(true);
 
     MapReprojector::reprojectToOrthographic(map);
-    DuplicateWayRemover::removeDuplicates(map);
+    dupeWayRemover.apply(map);
     MapReprojector::reprojectToWgs84(map);
 
     OsmWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(map, "test-output/conflate/DuplicateWayRemoverTagsTest.osm");
+    writer.write(map, "test-output/conflate/DuplicateWayRemoverStrictTagMatchingOnTest.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/DuplicateWayRemoverTagsTest.osm",
-                     "test-output/conflate/DuplicateWayRemoverTagsTest.osm");
+    HOOT_FILE_EQUALS("test-files/conflate/DuplicateWayRemoverStrictTagMatchingOnTest.osm",
+                     "test-output/conflate/DuplicateWayRemoverStrictTagMatchingOnTest.osm");
+  }
+
+  /*
+   * In this test we add in some non-matching text tags for two ways (see
+   * modifyWayTagsForStrictNameMatching), and since strict matching is *off*, we *should* see those
+   * two ways get merged.
+   */
+  void runStrictTagMatchingOffTest()
+  {
+    OsmMap::resetCounters();
+    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
+
+    modifyWayTagsForStrictNameMatching(map);
+
+    DuplicateWayRemover dupeWayRemover;
+    dupeWayRemover.setStrictTagMatching(false);
+
+    MapReprojector::reprojectToOrthographic(map);
+    dupeWayRemover.apply(map);
+    MapReprojector::reprojectToWgs84(map);
+
+    OsmWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    writer.write(map, "test-output/conflate/DuplicateWayRemoverStrictTagMatchingOffTest.osm");
+
+    HOOT_FILE_EQUALS("test-files/conflate/DuplicateWayRemoverStrictTagMatchingOffTest.osm",
+                     "test-output/conflate/DuplicateWayRemoverStrictTagMatchingOffTest.osm");
   }
 };
+
+}
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DuplicateWayRemoverTest, "quick");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DuplicateWayRemoverTest, "current");

@@ -55,6 +55,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, DuplicateWayRemover)
 
 DuplicateWayRemover::DuplicateWayRemover()
 {
+  setStrictTagMatching(ConfigOptions().getDuplicateWayRemoverStrictTagMatching());
 }
 
 void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
@@ -128,14 +129,12 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
         // if this is a candidate for de-duping
         if (_isCandidateWay(w2))
         {
-          //LOG_DEBUG("candidate ways");
-          //LOG_VARD(w->getTags());
-          //LOG_VARD(w2->getTags());
-          double score, weight;
+          double textTagScore, enumTagScore, weight;
           //If all non-name tags aren't exactly the same between these two ways (or the strict
-          //tag matching isn't activated) then we won't merge their geometries or tags.
-          TagComparator::getInstance().compareTextTags(w->getTags(), w2->getTags(), score, weight);
-          if (score == 1.0 || !ConfigOptions().getDuplicateWayRemoverStrictTagMatching())
+          //tag matching isn't activated), then we won't merge their geometries or tags.
+          TagComparator::getInstance().compareTextTags(w->getTags(), w2->getTags(), textTagScore, weight);
+          TagComparator::getInstance().compareEnumeratedTags(w->getTags(), w2->getTags(), enumTagScore, weight);
+          if ((textTagScore == 1.0 && enumTagScore == 1.0) || !_strictTagMatching)
           {
             if (w->getNodeCount() > w2->getNodeCount())
             {
@@ -146,10 +145,6 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
               _removeDuplicateNodes(_map->getWay(wit->first), w);
             }
           }
-          //else
-          //{
-            //LOG_DEBUG("non-name tags do not match");
-          //}
         }
       }
     }
@@ -174,24 +169,26 @@ bool DuplicateWayRemover::_isCandidateWay(const ConstWayPtr& w) const
   return result;
 }
 
-void DuplicateWayRemover::_mergeWayNameTags(shared_ptr<Way> way1, shared_ptr<Way> way2)
+void DuplicateWayRemover::_updateWayNameTags(shared_ptr<Way> way1, shared_ptr<Way> way2)
 {
-  Tags mergedNameTags;
-  Tags tags1 = way1->getTags();
-  Tags tags2 = way2->getTags();
-  TagComparator::getInstance().mergeNames(tags1, tags2, mergedNameTags);
-  //way1 may have been removed from the map in _removeNodes
-  if (_map->containsWay(way1->getId()))
+  //merge name tags for these two ways, if they aren't already identical
+  double namesScore, weight;
+  TagComparator::getInstance().compareNames(way1->getTags(), way2->getTags(), namesScore, weight);
+  if (namesScore != 1.0)
   {
-    tags1.addTags(mergedNameTags);
-    way1->setTags(tags1);
-    //LOG_DEBUG("way1");
-    //LOG_VARD(way1->getTags());
+    Tags mergedNameTags;
+    Tags tags1 = way1->getTags();
+    Tags tags2 = way2->getTags();
+    TagComparator::getInstance().mergeNames(tags1, tags2, mergedNameTags);
+    //way1 may have been removed from the map in _removeNodes, so check for its existence
+    if (_map->containsWay(way1->getId()))
+    {
+      tags1.addTags(mergedNameTags);
+      way1->setTags(tags1);
+    }
+    tags2.addTags(mergedNameTags);
+    way2->setTags(tags2);
   }
-  tags2.addTags(mergedNameTags);
-  way2->setTags(tags2);
-  //LOG_DEBUG("way2");
-  //LOG_VARD(way2->getTags());
 }
 
 void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<Way> w2)
@@ -203,9 +200,8 @@ void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
   int length = lcs.apply();
   if (length > 1)
   {
-    //LOG_DEBUG("found common nodes");
     _removeNodes(w1, lcs.getW1Index(), length);
-    _mergeWayNameTags(w1, w2);
+    _updateWayNameTags(w1, w2);
   }
   else
   {
@@ -224,14 +220,12 @@ void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
     int length = lcs.apply();
     if (length > 1)
     {
-      //LOG_DEBUG("found common nodes");
       _removeNodes(w1, lcs.getW1Index(), length);
-      _mergeWayNameTags(w1, w2);
+      _updateWayNameTags(w1, w2);
     }
     else
     {
       // if we didn't find any matches then reverse it back to the original direction
-      //LOG_DEBUG("didn't find any matches");
       if (rev1)
       {
         w1->reverseOrder();
@@ -243,7 +237,6 @@ void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
 
     }
   }
-  //LOG_DEBUG("--------------------------------------------");
 }
 
 void DuplicateWayRemover::removeDuplicates(shared_ptr<OsmMap> map)
@@ -303,8 +296,6 @@ void DuplicateWayRemover::_removeNodes(shared_ptr<const Way> w, int start, int l
   // if we're removing all the nodes, then just remove the way.
   else
   {
-    //LOG_DEBUG("Removing all nodes.");
-    //LOG_VARD(w->getTags());
     _map->removeWayFully(w->getId());
   }
 }
@@ -334,6 +325,5 @@ void DuplicateWayRemover::_replaceMultiple(const shared_ptr<const Way>& oldWay,
 
   _map->removeWay(oldWay);
 }
-
 
 }
