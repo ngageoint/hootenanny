@@ -252,6 +252,7 @@ class OsmSchema
 public:
 
   static QString errorCircularKey() { return "error:circular"; }
+  static const QString& layerNameKey() { return _layerNameKey; }
 
   OsmSchema();
 
@@ -438,6 +439,7 @@ private:
   OsmSchemaData* d;
   static OsmSchema* _theInstance;
   SchemaVertex _empty;
+  static QString _layerNameKey;
 };
 
 }
