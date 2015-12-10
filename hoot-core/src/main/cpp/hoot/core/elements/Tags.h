@@ -126,7 +126,7 @@ public:
   /**
    * Returns the speed in standard units (m/s).
    */
-  double getSpeed(const QString& k) const;
+  double getVelocity(const QString& k) const;
 
   /**
    * Returns the length in standard units (m).

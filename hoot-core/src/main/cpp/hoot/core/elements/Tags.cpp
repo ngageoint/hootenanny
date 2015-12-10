@@ -34,6 +34,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/Units.h>
 
 namespace hoot
 {
@@ -166,14 +167,15 @@ double Tags::getDouble(const QString& k, double defaultValue) const
   }
 }
 
-double Tags::getSpeed(const QString& k) const
+double Tags::getVelocity(const QString& k) const
 {
   QString v = get(k);
 
   bool isKm = false;    //kilometer per hour
   bool isMph = false;   //miles per hour
   bool isKnots = false; //knots
-  if (v.contains("km/h", Qt::CaseInsensitive))
+  if (v.contains("km/h", Qt::CaseInsensitive) || v.contains("kph", Qt::CaseInsensitive)
+      || v.contains("kmph", Qt::CaseInsensitive))
   {
      isKm = true;
   }
@@ -203,11 +205,11 @@ double Tags::getSpeed(const QString& k) const
   }
   else if (isMph)
   {
-    result = result * 1.609344 * 1000.0 / 3600.0;
+    result = mileToVelocity(result).value();
   }
   else if (isKnots)
   {
-    result = result * 1.852 * 1000.0 / 3600.0;
+    result = knotToVelocity(result).value();
   }
   return result;
 }
@@ -221,15 +223,18 @@ double Tags::getLength(const QString& k) const
   bool isNmi = false; //nautical mile
   bool isFi = false;  //feet and inch
 
-  if (v.contains("km", Qt::CaseInsensitive))
+  if (v.contains("km", Qt::CaseInsensitive) || v.contains("kilometre", Qt::CaseInsensitive)
+      || v.contains("kilometres", Qt::CaseInsensitive) || v.contains("kilometer", Qt::CaseInsensitive)
+      || v.contains("kilometers", Qt::CaseInsensitive))
   {
      isKm = true;
   }
-  else if (v.contains("mi", Qt::CaseInsensitive) && !v.contains("n", Qt::CaseInsensitive))
+  else if ((v.contains("mi", Qt::CaseInsensitive) && !v.contains("n", Qt::CaseInsensitive))
+            || v.contains("mile", Qt::CaseInsensitive) || v.contains("miles", Qt::CaseInsensitive))
   {
     isMi = true;
   }
-  else if (v.contains("nmi", Qt::CaseInsensitive))
+  else if (v.contains("nmi", Qt::CaseInsensitive) || v.contains("international nautical mile", Qt::CaseInsensitive))
   {
     isNmi = true;
   }
@@ -251,15 +256,16 @@ double Tags::getLength(const QString& k) const
   }
   else if (isMi)
   {
-    result = result * 1.609344 * 1000.0;
+    result = mileToLength(result).value();
   }
   else if (isNmi)
   {
-    result = result * 1.852 * 1000.0;
+    result = nmiToLength(result).value();
   }
   else if (isFi)
   {
     v = v.split(" ")[0];
+
     QString vf = "";
     QString vi = "";
     double vfd = 0.0;
@@ -280,10 +286,13 @@ double Tags::getLength(const QString& k) const
         {
           throw HootException("Expected a double for key: " + k + " but got: " + v);
         }
-        vid = vi.toDouble(&ok);
-        if (!ok)
+        if (!vi.isEmpty())
         {
-          throw HootException("Expected a double for key: " + k + " but got: " + v);
+          vid = vi.toDouble(&ok);
+          if (!ok)
+          {
+            throw HootException("Expected a double for key: " + k + " but got: " + v);
+          }
         }
       }
       else
@@ -296,7 +305,7 @@ double Tags::getLength(const QString& k) const
         }
       }
     }
-    result = (vfd * 12.0 + vid) * 0.0254;
+    result = feetToLength(vfd + vid * 0.0833333).value();
   }
   return result;
 }

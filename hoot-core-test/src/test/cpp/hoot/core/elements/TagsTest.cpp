@@ -51,6 +51,7 @@ class TagsTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(TagsTest);
   CPPUNIT_TEST(runSplitTest);
   CPPUNIT_TEST(runEqualsTest);
+  CPPUNIT_TEST(unitsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -83,6 +84,25 @@ public:
     t.setList("a", l);
     HOOT_STR_EQUALS("[3]{foo;bar, baz;qux, b}", t.getList("a"));
     HOOT_STR_EQUALS("foo;;bar;baz;;qux;b", t["a"]);
+  }
+
+  void unitsTest()
+  {
+    Tags t1, t2, t3, t4, t5;
+    t1.setList("maxspeed", QStringList() << "60 mph");
+    CPPUNIT_ASSERT_EQUAL(26.82, QString::number(t1.getVelocity("maxspeed"),'g',4).toDouble());
+
+    t2.setList("length", QStringList() << "12'5\"");
+    CPPUNIT_ASSERT_EQUAL(3.78, QString::number(t2.getLength("length"), 'g', 3).toDouble());
+
+    t3.setList("length", QStringList() << "60 mi");
+    CPPUNIT_ASSERT_EQUAL(96560.6, QString::number(t3.getLength("length"), 'g', 6).toDouble());
+
+    t4.setList("length", QStringList() << "10 nmi");
+    CPPUNIT_ASSERT_EQUAL(18520.0, QString::number(t4.getLength("length"), 'g', 6).toDouble());
+
+    t5.setList("maxspeed", QStringList() << "10 knots");
+    CPPUNIT_ASSERT_EQUAL(5.14, QString::number(t5.getVelocity("maxspeed"), 'g', 3).toDouble());
   }
 };
 
