@@ -135,9 +135,9 @@ public:
     DuplicateWayRemover dupeWayRemover;
     dupeWayRemover.setStrictTagMatching(true);
 
-    MapReprojector::reprojectToOrthographic(map);
+    MapProjector::projectToOrthographic(map);
     dupeWayRemover.apply(map);
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     OsmWriter writer;
     writer.setIncludeCompatibilityTags(false);
@@ -163,9 +163,9 @@ public:
     DuplicateWayRemover dupeWayRemover;
     dupeWayRemover.setStrictTagMatching(false);
 
-    MapReprojector::reprojectToOrthographic(map);
+    MapProjector::projectToOrthographic(map);
     dupeWayRemover.apply(map);
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     OsmWriter writer;
     writer.setIncludeCompatibilityTags(false);

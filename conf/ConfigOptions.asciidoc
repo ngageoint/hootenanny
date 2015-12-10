@@ -277,9 +277,9 @@ Debugging: The filename to use when saving the debug map during conflation.
 * Data Type: bool
 * Default Value: `true`
 
-If true, when comparing duplicate ways, name tags will only be merged together between the ways
-when all other non-name tags between the two match.  If false, name tags for the ways will be merged
-together regardless of whether all non-name tags match between the two.
+If true, when comparing duplicate ways, the ways and their name tags will only be merged together
+when all other non-name tags between the two match.  If false, the ways and their name tags will be
+merged together regardless of whether all of their non-name tags match.
 
 === dual.way.splitter.driving.side
 
