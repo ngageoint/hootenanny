@@ -33,7 +33,7 @@
 // Hoot
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 #include <hoot/core/ops/NamedOp.h>
@@ -102,7 +102,7 @@ public:
 
     LOG_DEBUG(SystemInfo::getMemoryUsageString());
 
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     LOG_DEBUG(SystemInfo::getMemoryUsageString());
     saveMap(map, args[2]);

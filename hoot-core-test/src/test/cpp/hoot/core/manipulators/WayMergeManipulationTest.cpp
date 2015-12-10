@@ -33,7 +33,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
@@ -70,7 +70,7 @@ public:
     OsmMap::resetCounters();
     reader.read("test-files/manipulators/WayMergeManipulation.osm", map);
 
-    MapReprojector::reprojectToOrthographic(map);
+    MapProjector::projectToOrthographic(map);
 
     long left = map->findWays("note", "3")[0];
     long right = map->findWays("note", "4")[0];
@@ -83,7 +83,7 @@ public:
     shared_ptr<OsmMap> after(new OsmMap(map));
     uut.applyManipulation(after, ignored1, ignored2);
 
-    MapReprojector::reprojectToWgs84(after);
+    MapProjector::projectToWgs84(after);
 
     QDir().mkpath("test-output/manipulators/");
 

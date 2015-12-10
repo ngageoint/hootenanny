@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/Conflator.h>
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/RubberSheet.h>
@@ -100,7 +100,7 @@ public:
       }
     }
 
-    MapReprojector::reprojectToWgs84(conflated);
+    MapProjector::projectToWgs84(conflated);
     saveMap(conflated, output);
 
     return 0;

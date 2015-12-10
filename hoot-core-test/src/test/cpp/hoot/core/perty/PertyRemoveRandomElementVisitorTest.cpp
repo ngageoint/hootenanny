@@ -37,7 +37,7 @@
 
 // Hoot
 #include <hoot/core/Exception.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
@@ -68,7 +68,7 @@ public:
     env.MinY = 0;
     env.MaxX = 1;
     env.MaxY = 1;
-    map->setProjection(MapReprojector::createAeacProjection(env));
+    map->setProjection(MapProjector::createAeacProjection(env));
 
     boost::minstd_rand rng(1);
     boost::uniform_real<> uni(0.0, 1000.0);
