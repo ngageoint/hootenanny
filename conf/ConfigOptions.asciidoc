@@ -182,15 +182,11 @@ See also:
 
 * Data Type: list
 * Default Value:
-** `hoot::BuildingOutlineUpdateOp;hoot::AddHilbertReviewSortOrderOp`
+** `hoot::RemoveDuplicateReviewsOp` - Checks if there are any duplicate reviews
+** `hoot::BuildingOutlineUpdateOp` - Updates any multi-part building outlines that may have changed during conflation.
+** `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews. By processing reviews in sorted order the results are a little more logically ordered.
 
-Runs in the conflate command after data is conflated, but before exporting. The default perform the
-following:
-
-* `hoot::BuildingOutlineUpdateOp` updates any multi-part building outlines that may have
-  changed during conflation.
-* `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews. By processing reviews
-  in sorted order the results are a little more logically ordered.
+Runs in the conflate command after data is conflated, but before exporting.
 
 === conflate.pre.ops
 

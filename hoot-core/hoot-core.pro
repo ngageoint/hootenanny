@@ -203,6 +203,7 @@ SOURCES += \
     src/main/cpp/hoot/core/ops/BuildingPartMergeOp.cpp \
     src/main/cpp/hoot/core/index/ElementToRelationMap.cpp \
     src/main/cpp/hoot/core/ops/BuildingOutlineUpdateOp.cpp \
+    src/main/cpp/hoot/core/ops/RemoveDuplicateReviewsOp.cpp \
     src/main/cpp/hoot/core/cmd/ConvertCmd.cpp \
     src/main/cpp/hoot/core/ops/VisitorOp.cpp \
     src/main/cpp/hoot/core/ops/NamedOp.cpp \
@@ -644,6 +645,7 @@ HEADERS += \
     src/main/cpp/hoot/core/ops/BuildingPartMergeOp.h \
     src/main/cpp/hoot/core/index/ElementToRelationMap.h \
     src/main/cpp/hoot/core/ops/BuildingOutlineUpdateOp.h \
+    src/main/cpp/hoot/core/ops/RemoveDuplicateReviewsOp.h \
     src/main/cpp/hoot/core/ops/VisitorOp.h \
     src/main/cpp/hoot/core/OsmMapConsumer.h \
     src/main/cpp/hoot/core/ops/NamedOp.h \
