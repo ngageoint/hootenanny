@@ -76,7 +76,7 @@ SOURCES += \
     src/main/cpp/hoot/core/elements/WayData.cpp \
     src/main/cpp/hoot/core/elements/NodeData.cpp \
     src/main/cpp/hoot/core/elements/ElementData.cpp \
-    src/main/cpp/hoot/core/MapReprojector.cpp \
+    src/main/cpp/hoot/core/MapProjector.cpp \
     src/main/cpp/hoot/core/io/OsmWriter.cpp \
     src/main/cpp/hoot/core/WorkingMap.cpp \
     src/main/cpp/hoot/core/manipulators/WayMerger.cpp \
@@ -196,6 +196,7 @@ SOURCES += \
     src/main/cpp/hoot/core/ops/BuildingPartMergeOp.cpp \
     src/main/cpp/hoot/core/index/ElementToRelationMap.cpp \
     src/main/cpp/hoot/core/ops/BuildingOutlineUpdateOp.cpp \
+    src/main/cpp/hoot/core/ops/RemoveDuplicateReviewsOp.cpp \
     src/main/cpp/hoot/core/cmd/ConvertCmd.cpp \
     src/main/cpp/hoot/core/ops/VisitorOp.cpp \
     src/main/cpp/hoot/core/ops/NamedOp.cpp \
@@ -511,7 +512,7 @@ HEADERS += \
     src/main/cpp/hoot/core/elements/WayData.h \
     src/main/cpp/hoot/core/elements/NodeData.h \
     src/main/cpp/hoot/core/elements/ElementData.h \
-    src/main/cpp/hoot/core/MapReprojector.h \
+    src/main/cpp/hoot/core/MapProjector.h \
     src/main/cpp/hoot/core/io/OsmWriter.h \
     src/main/cpp/hoot/core/Units.h \
     src/main/cpp/hoot/core/manipulators/WayMerger.h \
@@ -636,6 +637,7 @@ HEADERS += \
     src/main/cpp/hoot/core/ops/BuildingPartMergeOp.h \
     src/main/cpp/hoot/core/index/ElementToRelationMap.h \
     src/main/cpp/hoot/core/ops/BuildingOutlineUpdateOp.h \
+    src/main/cpp/hoot/core/ops/RemoveDuplicateReviewsOp.h \
     src/main/cpp/hoot/core/ops/VisitorOp.h \
     src/main/cpp/hoot/core/OsmMapConsumer.h \
     src/main/cpp/hoot/core/ops/NamedOp.h \

@@ -34,7 +34,7 @@
 // Hoot
 #include <hoot/core/Conflator.h>
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/ConflateStatsHelper.h>
 #include <hoot/core/conflate/StatsComposer.h>
@@ -186,7 +186,7 @@ public:
     // Apply any user specified operations.
     NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
 
-    MapReprojector::reprojectToWgs84(result);
+    MapProjector::projectToWgs84(result);
     stats.append(SingleStat("Project to WGS84 Time (sec)", t.getElapsedAndRestart()));
 
     saveMap(result, output);

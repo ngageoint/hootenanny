@@ -37,10 +37,11 @@ using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Settings.h>
@@ -845,7 +846,7 @@ shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Settings&
     }
 
     result.reset(new Envelope());
-    shared_ptr<OGRSpatialReference> wgs84 = MapReprojector::getInstance().createWgs84Projection();
+    shared_ptr<OGRSpatialReference> wgs84 = MapProjector::getInstance().createWgs84Projection();
     auto_ptr<OGRCoordinateTransformation> transform(
       OGRCreateCoordinateTransformation(wgs84.get(), srs));
     const int steps = 8;
@@ -1109,6 +1110,10 @@ void OgrReaderInternal::_translate(Tags& t)
   if (_translator.get() != 0)
   {
     _translator->translateToOsm(t, _layer->GetLayerDefn()->GetName());
+  }
+  else
+  {
+    t[OsmSchema::layerNameKey()] = _layer->GetLayerDefn()->GetName();
   }
 }
 

@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/index/metric-hybrid/RFqHybridTree.h>
@@ -477,7 +477,7 @@ public:
 //    PbfReader(true).readFile("/scratch/gis-data/geonames.org/tmp/GeoNamesOrgAfghanistan.osm.pbf",
 //                             map);
 
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     vector<RFqHybridDummyData> keys;
     vector<int> values;

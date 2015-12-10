@@ -89,14 +89,20 @@ public:
    * @param reviewType A human readable review type. Typically this is a one word description of
    *  the feature being reviewed. E.g. "Highway" or "Building".
    */
-  static void mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, const QString& note,
-    const QString& reviewType, double score = -1, vector<QString> choices = vector<QString>() );
+  static void mark(const OsmMapPtr &map, const ElementPtr& e1, const ElementPtr& e2,
+    const QString& note, const QString& reviewType, double score = -1,
+    vector<QString> choices = vector<QString>() );
 
   /**
    * Marks a single element as needing review.
    */
-  static void mark(const OsmMapPtr &map, ElementPtr& e, const QString& note,
+  static void mark(const OsmMapPtr &map, const ElementPtr& e, const QString& note,
     const QString& reviewType, double score = -1, vector<QString> choices = vector<QString>());
+
+  /**
+   * Removes a single element.
+   */
+  static void removeElement(const OsmMapPtr& map, ElementId eid);
 
 private:
   // don't use these keys directly, instead call the helper functions above.

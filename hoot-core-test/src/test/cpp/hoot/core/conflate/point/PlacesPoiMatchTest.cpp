@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/point/PlacesPoiMatch.h>
@@ -95,7 +95,7 @@ public:
     env.MinY = 0.0;
     env.MaxX = 1.0;
     env.MaxY = 1.0;
-    MapReprojector::reprojectToPlanar(map, env);
+    MapProjector::projectToPlanar(map, env);
 
     int matchCount = 0;
 

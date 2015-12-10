@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
@@ -70,7 +70,7 @@ public:
 
     OsmMapPtr cutShapeMap = AlphaShapeGenerator(1000.0, 0.0).generate(map);
 
-    MapReprojector::reprojectToWgs84(cutShapeMap);
+    MapProjector::projectToWgs84(cutShapeMap);
 
     QDir().mkpath("test-output/conflate");
     OsmWriter writer;
@@ -92,7 +92,7 @@ public:
 
     OsmMapPtr cutShapeMap = AlphaShapeGenerator(1000.0, 500.0).generate(map);
 
-    MapReprojector::reprojectToWgs84(cutShapeMap);
+    MapProjector::projectToWgs84(cutShapeMap);
 
     QDir().mkpath("test-output/conflate");
     OsmWriter writer;
@@ -114,7 +114,7 @@ public:
 
     OsmMapPtr cutShapeMap = AlphaShapeGenerator(1000.0, -500.0).generate(map);
 
-    MapReprojector::reprojectToWgs84(cutShapeMap);
+    MapProjector::projectToWgs84(cutShapeMap);
 
     QDir().mkpath("test-output/conflate");
     OsmWriter writer;

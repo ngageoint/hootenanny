@@ -51,7 +51,6 @@ using namespace hoot::elements;
 // Qt
 #include <QDebug>
 
-
 namespace hoot {
 
 shared_ptr<OGRSpatialReference> OsmMap::_wgs84;
