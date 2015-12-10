@@ -1,5 +1,7 @@
 package hoot.services.readers.review;
 
+import hoot.services.geo.BoundingBox;
+
 import java.sql.Connection;
 
 import org.slf4j.Logger;
@@ -26,5 +28,10 @@ public class ReviewableQueryFactory
 	public IReviewableQuery getReviewableStatisticsQuery(final Connection c, final long mapid)
 	{
 		return new ReviewableStatisticsQuery(c, mapid);
+	}
+	
+	public IReviewableQuery getAllReviewableItemsQuery(final Connection c, final long mapid, final BoundingBox bbox)
+	{
+		return new AllReviewableItemsQuery(c, mapid, bbox);
 	}
 }
