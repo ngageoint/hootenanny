@@ -343,7 +343,6 @@ public class CustomScriptResource
     			{
     				desc = oTrans.get("NAME").toString();
     			}
-    			desc += " (Hootenanny Default)";
     			oTrans.put("DESCRIPTION", desc);
 
     			Object oCanExport = oTrans.get("CANEXPORT");

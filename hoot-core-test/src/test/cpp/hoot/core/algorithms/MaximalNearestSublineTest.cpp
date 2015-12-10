@@ -30,7 +30,7 @@
 
 // Hoot
 #include <hoot/core/Conflator.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/WayAverager.h>
@@ -81,8 +81,8 @@ public:
       shared_ptr<OsmMap> map2(new OsmMap(map->getProjection()));
 
       shared_ptr<OGRSpatialReference> srs =
-          MapReprojector::createAeacProjection(map->calculateBounds());
-      MapReprojector::reproject(map, srs);
+          MapProjector::createAeacProjection(map->calculateBounds());
+      MapProjector::project(map, srs);
 
       stringstream ss;
 
@@ -113,7 +113,7 @@ public:
 
 //      {
 //        shared_ptr<OsmMap> wgs84(new OsmMap(map2));
-//        MapReprojector::reprojectToWgs84(wgs84);
+//        MapProjector::reprojectToWgs84(wgs84);
 //        OsmWriter writer;
 //        QString fn = QString("test-output/algorithms/MaximalNearestSublineTestOutput.osm");
 //        writer.write(wgs84, fn);
@@ -136,7 +136,7 @@ public:
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/MaximalNearestSubline2.osm", map);
 
-      MapReprojector::reprojectToPlanar(map);
+      MapProjector::projectToPlanar(map);
 
       long n1 = map->findWays("note", "1")[0];
       long n2 = map->findWays("note", "2")[0];
@@ -168,7 +168,7 @@ public:
 
       {
         shared_ptr<OsmMap> wgs84(new OsmMap(map));
-        MapReprojector::reprojectToWgs84(wgs84);
+        MapProjector::projectToWgs84(wgs84);
         OsmWriter writer;
         writer.setIncludeCompatibilityTags(false);
         writer.setIncludeHootInfo(false);
@@ -192,7 +192,7 @@ public:
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/MaximalNearestSubline2.osm", map);
 
-      MapReprojector::reprojectToPlanar(map);
+      MapProjector::projectToPlanar(map);
 
       long n3 = map->findWays("note", "3")[0];
       long n4 = map->findWays("note", "4")[0];
@@ -227,7 +227,7 @@ public:
 
       {
         shared_ptr<OsmMap> wgs84(new OsmMap(map));
-        MapReprojector::reprojectToWgs84(wgs84);
+        MapProjector::projectToWgs84(wgs84);
         OsmWriter writer;
         QString fn = QString("test-output/algorithms/MaximalNearestSublineOneShortTestOutput.osm");
         writer.write(wgs84, fn);
