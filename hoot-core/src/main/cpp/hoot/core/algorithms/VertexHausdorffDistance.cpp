@@ -64,7 +64,7 @@ public:
       LOG_WARN("d less than zero. " << _g.toString());
     }
 
-    if (d < _distance || _distance == -1)
+    if (d > _distance || _distance == -1)
     {
       _distance = d;
     }

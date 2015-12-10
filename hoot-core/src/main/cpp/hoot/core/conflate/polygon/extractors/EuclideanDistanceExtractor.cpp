@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,19 +22,45 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
+ * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef DISTANCEUTILS_H
-#define DISTANCEUTILS_H
+#include "EuclideanDistanceExtractor.h"
 
-namespace hoot {
+// geos
+#include <geos/util/TopologyException.h>
 
-class DistanceUtils
+// hoot
+#include <hoot/core/Factory.h>
+#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/util/GeometryUtils.h>
+
+namespace hoot
 {
-public:
 
-};
+HOOT_FACTORY_REGISTER(FeatureExtractor, EuclideanDistanceExtractor)
 
+double EuclideanDistanceExtractor::distance(const OsmMap &map,
+  const shared_ptr<const Element>& target, const shared_ptr<const Element> &candidate) const
+{
+  ElementConverter ec(map.shared_from_this());
+  shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
+  shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
+
+  if (g1->isEmpty() || g2->isEmpty())
+  {
+    return nullValue();
+  }
+
+  g1.reset(GeometryUtils::validateGeometry(g1.get()));
+  g2.reset(GeometryUtils::validateGeometry(g2.get()));
+
+  if (g1.get() == 0 || g2.get() == 0)
+  {
+    return nullValue();
+  }
+
+  return g1->distance(g2.get());
 }
 
-#endif // DISTANCEUTILS_H
+}

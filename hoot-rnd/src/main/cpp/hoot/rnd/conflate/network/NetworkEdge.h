@@ -33,6 +33,8 @@ public:
 
   bool isDirected() { return _directed; }
 
+  bool operator==(const NetworkEdge& other) const { return _from == other._from && _to == other._to; }
+
   void setMembers(QList<ConstElementPtr> members) { _members = members; }
 
   QString toString() const;

@@ -4,7 +4,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
-#include <hoot/rnd/conflate/network/NetworkDetails.h>
+#include <hoot/rnd/conflate/network/NetworkMatcher.h>
 #include <hoot/rnd/conflate/network/NetworkEdgeScore.h>
 #include <hoot/rnd/conflate/network/NetworkVertexScore.h>
 #include <hoot/rnd/conflate/network/OsmNetwork.h>
@@ -18,8 +18,12 @@ namespace hoot
 
 using namespace Tgs;
 
-#warning comment me
-class IterativeNetworkMatcher
+/**
+ * This approach iteratively improves scores based on neighboring vertex and edge scores.
+ *
+ * The approach seems to work well most of the time, but suffers from a greedy mentality.
+ */
+class IterativeNetworkMatcher : public NetworkMatcher
 {
 public:
 
@@ -122,31 +126,27 @@ private:
     }
   };
 
-  HilbertRTreePtr _edge2Index;
-  deque<NetworkEdgePtr> _index2Edge;
   EdgeScoreMap _edge12Scores, _edge21Scores;
-  ConstOsmMapPtr _map;
-  OsmNetworkPtr _n1, _n2;
-  HilbertRTreePtr _vertex2Index;
-  deque<NetworkVertexPtr> _index2Vertex;
   VertexScoreMap _vertex12Scores, _vertex21Scores;
-  NetworkDetailsPtr _details1, _details2;
   /// P modifies the aggressiveness of the algorithm. Higher is more aggressive.
   double _p;
+  double _dampening;
 
   double _aggregateScores(QList<double> pairs);
 
   double _calculateEdgeVertexScore(const VertexScoreMap& vm, ConstNetworkVertexPtr from1,
     ConstNetworkVertexPtr from2, ConstNetworkVertexPtr to1, ConstNetworkVertexPtr to2) const;
 
-  void _createEdge2Index();
-  void _createVertex2Index();
-
-  IntersectionIterator _createIterator(Envelope env, HilbertRTreePtr tree);
-
   QList<ConstNetworkEdgePtr> _getEdgesOnVertex(ConstNetworkVertexPtr v);
 
   void _normalizeAllScores();
+
+  /**
+   * Normalizes the scores in a table. All the weights will sum to a constant based on the network
+   * size. All values will be treated as at least EPSILON for normalizing purposes.
+   */
+  void _normalizeGlobalScores(EdgeScoreMap& t);
+  void _normalizeGlobalScores(VertexScoreMap& t);
 
   /**
    * Normalizes the scores in a table. All the columns in a given row will sum to 1. All values will

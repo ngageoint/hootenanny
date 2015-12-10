@@ -3,6 +3,7 @@
 // hoot
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
+#include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
 
 namespace hoot
 {
@@ -61,6 +62,15 @@ Meters NetworkDetails::getSearchRadius(ConstNetworkEdgePtr e)
 Meters NetworkDetails::getSearchRadius(ConstNetworkVertexPtr v)
 {
   return v->getElement()->getCircularError();
+}
+
+bool NetworkDetails::isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2)
+{
+  Meters ce = max(getSearchRadius(v1), getSearchRadius(v2));
+
+  double d = EuclideanDistanceExtractor().distance(*_map, v1->getElement(), v2->getElement());
+
+  return d <= ce;
 }
 
 bool NetworkDetails::isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)

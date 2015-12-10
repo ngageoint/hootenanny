@@ -38,6 +38,7 @@ void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edg
     w->getTags().set("hoot:edge:score12", edgeScore->getScore12());
     w->getTags().set("hoot:edge:score21", edgeScore->getScore21());
     w->getTags().set("hoot:edge:score", edgeScore->getScore());
+    w->getTags().set("hoot:edge:id", edgeScore->getUid());
     if (edgeScore->getScore() >= 0.15)
     {
       w->getTags().set("highway", "cycleway");

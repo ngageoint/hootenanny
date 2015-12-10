@@ -28,6 +28,10 @@ public:
 
   double getScore21() const { return _score21; }
 
+  QString getUid() const { return _uid; }
+
+  void setUid(const QString uid) { _uid = uid; }
+
   QString toString() const
   {
     return QString("e1: %1 e2: %2 score: %3").arg(_e1->toString()).arg(_e2->toString()).
@@ -37,6 +41,7 @@ public:
 private:
   ConstNetworkEdgePtr _e1, _e2;
   double _score12, _score21;
+  QString _uid;
 
 };
 

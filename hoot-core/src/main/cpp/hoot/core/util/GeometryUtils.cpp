@@ -175,6 +175,8 @@ Geometry* GeometryUtils::validateGeometry(const Geometry* g)
 {
   switch (g->getGeometryTypeId())
   {
+  case GEOS_POINT:
+    return GeometryFactory::getDefaultInstance()->createGeometry(g);
   case GEOS_GEOMETRYCOLLECTION:
   case GEOS_MULTIPOINT:
   case GEOS_MULTILINESTRING:
@@ -185,7 +187,7 @@ Geometry* GeometryUtils::validateGeometry(const Geometry* g)
   case GEOS_POLYGON:
     return validatePolygon(dynamic_cast<const Polygon*>(g));
   default:
-    LOG_WARN("Got an unrecognized geometry.");
+    LOG_WARN("Got an unrecognized geometry. " << g->getGeometryTypeId());
     return GeometryFactory::getDefaultInstance()->createGeometry(g);
   }
 }

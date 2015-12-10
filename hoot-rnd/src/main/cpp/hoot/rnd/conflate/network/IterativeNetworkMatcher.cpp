@@ -1,16 +1,13 @@
 #include "IterativeNetworkMatcher.h"
 
-// Tgs
-#include <tgs/RStarTree/HilbertRTree.h>
-#include <tgs/RStarTree/MemoryPageStore.h>
-
 namespace hoot
 {
 
 const double IterativeNetworkMatcher::EPSILON = 1e-6;
 
 IterativeNetworkMatcher::IterativeNetworkMatcher() :
-  _p(2)
+  _p(.5),
+  _dampening(1)
 {
 }
 
@@ -49,82 +46,8 @@ double IterativeNetworkMatcher::_calculateEdgeVertexScore(const VertexScoreMap& 
     std::max(_vertex12Scores[from2][from1], _vertex21Scores[from2][from1]);
   double sTo = std::max(_vertex12Scores[to1][to2], _vertex21Scores[to1][to2]) *
     std::max(_vertex12Scores[to2][to1], _vertex21Scores[to2][to1]);
-  LOG_VAR(sFrom);
-  LOG_VAR(sTo);
 
-  return sFrom * sTo;
-}
-
-void IterativeNetworkMatcher::_createEdge2Index()
-{
-  // No tuning was done, I just copied these settings from OsmMapIndex.
-  // 10 children = 368 bytes
-  shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-  _edge2Index.reset(new HilbertRTree(mps, 2));
-
-  std::vector<Box> boxes;
-  std::vector<int> fids;
-
-  const OsmNetwork::EdgeMap& em = _n2->getEdgeMap();
-  for (OsmNetwork::EdgeMap::const_iterator it = em.begin(); it != em.end(); ++it)
-  {
-    fids.push_back((int)_index2Edge.size());
-    _index2Edge.push_back(it.value());
-
-    Box b(2);
-    Meters searchRadius = _details2->getSearchRadius(it.value());
-    Envelope env(_details2->getEnvelope(it.value()));
-    env.expandBy(searchRadius);
-
-    b.setBounds(0, env.getMinX(), env.getMaxX());
-    b.setBounds(1, env.getMinY(), env.getMaxY());
-
-    boxes.push_back(b);
-  }
-
-  _edge2Index->bulkInsert(boxes, fids);
-}
-
-IntersectionIterator IterativeNetworkMatcher::_createIterator(Envelope env, HilbertRTreePtr tree)
-{
-  vector<double> min(2), max(2);
-  min[0] = env.getMinX();
-  min[1] = env.getMinY();
-  max[0] = env.getMaxX();
-  max[1] = env.getMaxY();
-  IntersectionIterator it(tree.get(), min, max);
-
-  return it;
-}
-
-void IterativeNetworkMatcher::_createVertex2Index()
-{
-  // No tuning was done, I just copied these settings from OsmMapIndex.
-  // 10 children = 368 bytes
-  shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-  _vertex2Index.reset(new HilbertRTree(mps, 2));
-
-  std::vector<Box> boxes;
-  std::vector<int> fids;
-
-  const OsmNetwork::VertexMap& vm = _n2->getVertexMap();
-  for (OsmNetwork::VertexMap::const_iterator it = vm.begin(); it != vm.end(); ++it)
-  {
-    fids.push_back((int)_index2Vertex.size());
-    _index2Vertex.push_back(it.value());
-
-    Box b(2);
-    Meters searchRadius = _details2->getSearchRadius(it.value());
-    Envelope env(_details2->getEnvelope(it.value()));
-    env.expandBy(searchRadius);
-
-    b.setBounds(0, env.getMinX(), env.getMaxX());
-    b.setBounds(1, env.getMinY(), env.getMaxY());
-
-    boxes.push_back(b);
-  }
-
-  _vertex2Index->bulkInsert(boxes, fids);
+  return pow(sFrom * sTo, _p);
 }
 
 QList<NetworkEdgeScorePtr> IterativeNetworkMatcher::getAllEdgeScores() const
@@ -227,21 +150,51 @@ void IterativeNetworkMatcher::_normalizeAllScores()
   _normalizeScores(_vertex21Scores);
 }
 
-void IterativeNetworkMatcher::_normalizeScores(VertexScoreMap& t)
+void IterativeNetworkMatcher::_normalizeGlobalScores(EdgeScoreMap& t)
 {
+  double sum = 0.0;
+  for (EdgeScoreMap::iterator it = t.begin(); it != t.end(); ++it)
+  {
+    QHash<ConstNetworkEdgePtr, DirectedEdgeScore>& t2 = it.value();
+    for (QHash<ConstNetworkEdgePtr, DirectedEdgeScore>::iterator jt = t2.begin(); jt != t2.end();
+      ++jt)
+    {
+      sum += std::max(EPSILON, jt.value().score);
+    }
+  }
+  double expected = std::max(_edge12Scores.size(), _edge21Scores.size());
+
+  for (EdgeScoreMap::iterator it = t.begin(); it != t.end(); ++it)
+  {
+    QHash<ConstNetworkEdgePtr, DirectedEdgeScore>& t2 = it.value();
+    for (QHash<ConstNetworkEdgePtr, DirectedEdgeScore>::iterator jt = t2.begin(); jt != t2.end();
+      ++jt)
+    {
+      jt.value().score = std::max(EPSILON, jt.value().score) / sum * expected;
+    }
+  }
+}
+
+void IterativeNetworkMatcher::_normalizeGlobalScores(VertexScoreMap& t)
+{
+  double sum = 0.0;
   for (VertexScoreMap::iterator it = t.begin(); it != t.end(); ++it)
   {
-    double sum = 0.0;
     QHash<ConstNetworkVertexPtr, double>& t2 = it.value();
     for (QHash<ConstNetworkVertexPtr, double>::iterator jt = t2.begin(); jt != t2.end(); ++jt)
     {
       sum += std::max(EPSILON, jt.value());
     }
+  }
+  double expected = std::max(_vertex12Scores.size(), _vertex21Scores.size());
 
+  for (VertexScoreMap::iterator it = t.begin(); it != t.end(); ++it)
+  {
+    QHash<ConstNetworkVertexPtr, double>& t2 = it.value();
     for (QHash<ConstNetworkVertexPtr, double>::iterator jt = t2.begin(); jt != t2.end();
       ++jt)
     {
-      jt.value() = std::max(EPSILON, jt.value()) / sum;
+      jt.value() = std::max(EPSILON, jt.value()) / sum * expected;
     }
   }
 }
@@ -258,16 +211,29 @@ void IterativeNetworkMatcher::_normalizeScores(EdgeScoreMap& t)
       sum += std::max(EPSILON, jt.value().score);
     }
 
-    if (it.key()->getMembers()[0]->getId() == -1803232)
-    {
-      LOG_VAR(it.key());
-      LOG_VAR(it.value());
-    }
-
     for (QHash<ConstNetworkEdgePtr, DirectedEdgeScore>::iterator jt = t2.begin(); jt != t2.end();
       ++jt)
     {
       jt.value().score = std::max(EPSILON, jt.value().score) / sum;
+    }
+  }
+}
+
+void IterativeNetworkMatcher::_normalizeScores(VertexScoreMap& t)
+{
+  for (VertexScoreMap::iterator it = t.begin(); it != t.end(); ++it)
+  {
+    double sum = 0.0;
+    QHash<ConstNetworkVertexPtr, double>& t2 = it.value();
+    for (QHash<ConstNetworkVertexPtr, double>::iterator jt = t2.begin(); jt != t2.end(); ++jt)
+    {
+      sum += std::max(EPSILON, jt.value());
+    }
+
+    for (QHash<ConstNetworkVertexPtr, double>::iterator jt = t2.begin(); jt != t2.end();
+      ++jt)
+    {
+      jt.value() = std::max(EPSILON, jt.value()) / sum;
     }
   }
 }
@@ -365,19 +331,18 @@ void IterativeNetworkMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexSc
 
       // aggregate the scores of the vertex matches
       // try matching each of the vertices since we don't know if 1 matches 1 or 1 matches 2.
-      double newScore;
+      double newScore, v, e;
 
       if (!reversed)
       {
-        if (e1->getMembers()[0]->getId() == -1803232 || e2->getMembers()[0]->getId() == -1803232)
+        if (e1->getMembers()[0]->getId() == -1803179 || e2->getMembers()[0]->getId() == -1803179)
         {
           LOG_INFO(from1 << " => " << from2);
           LOG_INFO(to1 << " => " << to2);
         }
-        double v = _calculateEdgeVertexScore(vm, from1, from2, to1, to2);
-        double e = _scoreEdges(e1, e2);
-        newScore = v * e;
-        if (e1->getMembers()[0]->getId() == -1803232 || e2->getMembers()[0]->getId() == -1803232)
+        v = _calculateEdgeVertexScore(vm, from1, from2, to1, to2);
+        e = _scoreEdges(e1, e2);
+        if (e1->getMembers()[0]->getId() == -1803179 || e2->getMembers()[0]->getId() == -1803179)
         {
           LOG_INFO(from1 << " => " << from2);
           LOG_INFO(to1 << " => " << to2);
@@ -389,10 +354,10 @@ void IterativeNetworkMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexSc
       }
       else
       {
-        double v = _calculateEdgeVertexScore(vm, to1, from2, from1, to2);
-        double e = _scoreEdges(e1, e2);
-        newScore = e * v;
+        v = _calculateEdgeVertexScore(vm, to1, from2, from1, to2);
+        e = _scoreEdges(e1, e2);
       }
+      newScore = pow(v, _dampening) * e;
 
       jt.value() = DirectedEdgeScore(newScore, reversed);
     }
@@ -456,7 +421,7 @@ void IterativeNetworkMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreM
       }
 
       // aggregate the scores between the two sets of edges
-      double edgeScore = _aggregateScores(scores) * _scoreVertices(v1, v2);
+      double edgeScore = pow(_aggregateScores(scores), _dampening) * _scoreVertices(v1, v2);
       if (v1->getElementId() == ElementId::node(-1803252))
       {
         LOG_VAR(em);

@@ -87,7 +87,6 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmWriter.cpp \
     src/main/cpp/hoot/core/WorkingMap.cpp \
     src/main/cpp/hoot/core/manipulators/WayMerger.cpp \
-    src/main/cpp/hoot/core/DistanceUtils.cpp \
     src/main/cpp/hoot/core/algorithms/WayDiscretizer.cpp \
     src/main/cpp/hoot/core/algorithms/DirectionFinder.cpp \
     src/main/cpp/hoot/core/algorithms/MaximalNearestSubline.cpp \
@@ -489,7 +488,8 @@ SOURCES += \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.cpp \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.cpp \
-    src/main/cpp/hoot/core/visitors/MedianNodeVisitor.cpp
+    src/main/cpp/hoot/core/visitors/MedianNodeVisitor.cpp \
+    src/main/cpp/hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -516,7 +516,6 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmWriter.h \
     src/main/cpp/hoot/core/Units.h \
     src/main/cpp/hoot/core/manipulators/WayMerger.h \
-    src/main/cpp/hoot/core/DistanceUtils.h \
     src/main/cpp/hoot/core/algorithms/WayDiscretizer.h \
     src/main/cpp/hoot/core/algorithms/Distance.h \
     src/main/cpp/hoot/core/algorithms/DirectionFinder.h \
@@ -965,5 +964,6 @@ HEADERS += \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.h \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.h \
-    src/main/cpp/hoot/core/visitors/MedianNodeVisitor.h
+    src/main/cpp/hoot/core/visitors/MedianNodeVisitor.h \
+    src/main/cpp/hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h
 

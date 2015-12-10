@@ -35,21 +35,21 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/rnd/conflate/network/DebugNetworkMapCreator.h>
-#include <hoot/rnd/conflate/network/IterativeNetworkMatcher.h>
+#include <hoot/rnd/conflate/network/VagabondNetworkMatcher.h>
 #include <hoot/rnd/conflate/network/OsmNetworkExtractor.h>
 
 namespace hoot
 {
 
-class IterativeNetworkMatcherTest : public CppUnit::TestFixture
+class VagabondNetworkMatcherTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(IterativeNetworkMatcherTest);
+  CPPUNIT_TEST_SUITE(VagabondNetworkMatcherTest);
   CPPUNIT_TEST(toyTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void writeDebugMap(OsmMapPtr map, IterativeNetworkMatcher& uut, int index)
+  void writeDebugMap(OsmMapPtr map, VagabondNetworkMatcher& uut, int index)
   {
     OsmMapPtr copy(new OsmMap(map));
     DebugNetworkMapCreator().addDebugElements(copy, uut.getAllEdgeScores(),
@@ -68,9 +68,9 @@ public:
   {
     OsmMapPtr map(new OsmMap());
 
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestD1.osm", true,
+    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB1.osm", true,
       Status::Unknown1);
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestD2.osm", false,
+    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB2.osm", false,
       Status::Unknown2);
 //    OsmMapReaderFactory::getInstance().read(map, "test-files/DcGisRoads.osm", true,
 //      Status::Unknown1);
@@ -91,11 +91,11 @@ public:
     one.setCriterion(c2);
     OsmNetworkPtr network2 = one.extractNetwork(map);
 
-    IterativeNetworkMatcher uut;
+    VagabondNetworkMatcher uut;
     uut.matchNetworks(map, network1, network2);
 
     writeDebugMap(map, uut, 0);
-    for (int i = 1; i <= 100; ++i)
+    for (int i = 1; i <= 20; ++i)
     {
       LOG_VAR(i);
       uut.iterate();
@@ -106,6 +106,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(IterativeNetworkMatcherTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(VagabondNetworkMatcherTest, "quick");
 
 }
