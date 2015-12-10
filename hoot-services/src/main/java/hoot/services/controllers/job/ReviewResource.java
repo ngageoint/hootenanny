@@ -493,6 +493,47 @@ public class ReviewResource
 	}
 	
 	
+	/**
+	 * <NAME>Review Service Get geojson for all reviewable items</NAME>
+	 * <DESCRIPTION>
+	 * To retrieve GeoJson of all reviewable items within bouding box
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * <mapid>
+	 *  Target map id
+	 * </mapid>
+	 * <minlon>
+	 *  Minimum longitude
+	 * </minlon>
+	 * <minlat>
+	 *  Minimum latitude
+	 * </minlat>
+	 * <maxlon>
+	 *  Maximum longitude
+	 * </maxlon>
+	 * <maxlat>
+	 *  Maximum latitude
+	 * </maxlat>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	GeoJson containing reviewable bounding box and state
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/allreviewables?mapid=53&minlon=-180&minlat=-90&maxlon=180&maxlat=90</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 * <OUTPUT>
+	 * GeoJson
+	 * </OUTPUT>
+	 * </EXAMPLE>
+	 * @param mapId
+	 * @param minLon
+	 * @param minLat
+	 * @param maxLon
+	 * @param maxLat
+	 * @return
+	 */
 	@GET
 	@Path("/allreviewables")
 	@Produces(MediaType.APPLICATION_JSON)

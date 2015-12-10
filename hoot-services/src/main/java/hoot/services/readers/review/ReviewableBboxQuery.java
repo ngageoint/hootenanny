@@ -24,6 +24,11 @@ import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.SQLSubQuery;
 import com.mysema.query.types.query.ListSubQuery;
 
+/**
+ * The purpose of this class is to retrieve the bounding box of all members of specified 
+ * relation combined recursively. 
+ *
+ */
 public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuery  {
 	private static final Logger log = LoggerFactory.getLogger(ReviewableBboxQuery.class);
 	
@@ -35,6 +40,10 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 		_relationId = relationid;
 	}
 	
+	/* (non-Javadoc)
+	 * @see hoot.services.readers.review.IReviewableQuery#execQuery()
+	 * Main entry point
+	 */
 	public ReviewQueryMapper execQuery() throws SQLException, Exception
 	{
 		BoundingBox currBbox = new BoundingBox();
@@ -62,6 +71,14 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 		return ret;
 	}
 	
+	/**
+	 * This function gets bbox of node and way members and add to members list. If the relation contain relation member
+	 * then it recurse.
+	 * 
+	 * @param membersBboxList - storage containing bbox of all member elements
+	 * @param relIds - relation ids of relation members
+	 * @throws Exception
+	 */
 	private void _getRelationMembersBboxRecursive(final List<BoundingBox> membersBboxList, final List<Long> relIds) throws Exception
 	{
 		try
@@ -94,6 +111,13 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 		}
 	}
 	
+	/**
+	 * Helper function to translation Tuple to Bonding box
+	 * 
+	 * @param tup - source Tuple
+	 * @return - BoundingBox
+	 * @throws Exception
+	 */
 	private BoundingBox _resultSetToBbox(final Tuple tup) throws Exception
 	{
 		BoundingBox bbox = null;
@@ -116,6 +140,13 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 		return bbox;
 	}
 	
+	/**
+	 * Retrieves relation way member's bbox.
+	 * 
+	 * @param relationId - container relation id
+	 * @return - BoundingBox
+	 * @throws Exception
+	 */
 	protected BoundingBox _getRelationWayMembersBbox(final long relationId) throws Exception
 	{
 		BoundingBox bbox = null;
@@ -143,6 +174,12 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 		
 	
 	
+	/**
+	 * Query for retrieving relation way member's bbox.
+	 * 
+	 * @param relationId - container relation id
+	 * @return - com.mysema.query.sql.SQLQuery object
+	 */
 	protected SQLQuery _getRelationWayMembersBboxQuery(final long relationId)
 	{
 		
@@ -159,22 +196,17 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 		QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
 		return new SQLQuery(this.getConnection(), DbUtils.getConfiguration(this.getMapId()))
 			.from(currentNodes).where(currentNodes.id.in(wayNodesSub));
-		
-	/*	"select max(latitude) as maxlat, min(latitude) as minlat, max(longitude) as maxlon, min(longitude) as minlon "
-				+ "from current_nodes_"
-				+ getMapId()
-				+ " where id in"
-				+ "(select node_id from current_way_nodes_"
-				+ getMapId()
-				+ " where way_id in"
-				+ "(select member_id from current_relation_members_"
-				+ getMapId()
-				+ " where relation_id="
-				+ relationId
-				+ " and member_type='way'))";		*/
+
 	}
 	
 	
+	/**
+	 * Retrieves relation node member's bbox.
+	 * 
+	 * @param relationId - container relation id
+	 * @return - BoundingBox
+	 * @throws Exception
+	 */
 	protected BoundingBox _getRelationNodeMembersBbox(final long relationId) throws Exception
 	{
 		BoundingBox bbox = null;
@@ -199,19 +231,14 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 		return bbox;
 	}	
 	
+	/**
+	 * Query for retrieving relation node member's bbox.
+	 * 
+	 * @param relationId - container relation id
+	 * @return - com.mysema.query.sql.SQLQuery object
+	 */
 	protected SQLQuery _getRelationNodeMembersBboxQuery(final long relationId)
 	{
-		
-	/*	"select max(latitude) as maxlat, min(latitude) as minlat, max(longitude) as maxlon, min(longitude) as minlon "
-				+ "from current_nodes_"
-				+ getMapId()
-				+ " where id in"
-				+ "(select member_id from current_relation_members_"
-				+ getMapId()
-				+ " where relation_id="
-				+ relationId
-				+ " and member_type='node')";*/
-		
 		QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
 		ListSubQuery<Long> sub = new SQLSubQuery()
 		.from(currentRelationMembers).where(currentRelationMembers.relationId.eq(relationId)
@@ -224,6 +251,13 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 	
 	
 	
+	/**
+	 * Retrieves all relation members of a relation.
+	 * 
+	 * @param relationId  - container relation id
+	 * @return - List of relation member ids
+	 * @throws Exception
+	 */
 	private List<Long> _getRelationMembers(final long relationId) throws Exception
 	{
 		List<Long> relMemberIds = new ArrayList<>();
@@ -242,13 +276,15 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 	}
 	
 	
+	/**
+	 * Query for retrieving all relation members of a relation.
+	 * 
+	 * @param relationId - container relation id
+	 * @return - com.mysema.query.sql.SQLQuery object
+	 */
 	protected SQLQuery _getRelationMembersQuery(final long relationId)
 	{
-		/*"select member_id from current_relation_members_"
-				+ getMapId()
-				+ " where relation_id="
-				+ relationId
-				+ " and member_type='relation'";*/
+	
 		QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
 		return new SQLQuery(this.getConnection(), DbUtils.getConfiguration(this.getMapId()))
 		.from(currentRelationMembers).where(currentRelationMembers.relationId.eq(relationId)
