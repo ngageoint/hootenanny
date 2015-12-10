@@ -67,11 +67,11 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/UndividedHighway.osm", map);
 
-    MapProjector::reprojectToOrthographic(map);
+    MapProjector::projectToOrthographic(map);
 
     shared_ptr<OsmMap> after = DualWaySplitter::splitAll(map, DualWaySplitter::Right, 10.0);
 
-    MapProjector::reprojectToWgs84(after);
+    MapProjector::projectToWgs84(after);
 
     OsmWriter writer;
     writer.write(after, "test-output/DualWaySplitterTest.osm");

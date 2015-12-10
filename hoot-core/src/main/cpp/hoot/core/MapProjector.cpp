@@ -499,7 +499,7 @@ bool MapProjector::isGeographic(const ConstElementProviderPtr& provider)
   return provider->getProjection()->IsGeographic();
 }
 
-Coordinate MapProjector::reproject(const Coordinate& c, shared_ptr<OGRSpatialReference> srs1,
+Coordinate MapProjector::project(const Coordinate& c, shared_ptr<OGRSpatialReference> srs1,
                             shared_ptr<OGRSpatialReference> srs2)
 {
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(srs1.get(), srs2.get()));
@@ -521,7 +521,7 @@ Coordinate MapProjector::reproject(const Coordinate& c, shared_ptr<OGRSpatialRef
 }
 
 
-void MapProjector::reproject(shared_ptr<OsmMap> map,
+void MapProjector::project(shared_ptr<OsmMap> map,
                                              shared_ptr<OGRSpatialReference> ref)
 {
   shared_ptr<OGRSpatialReference> sourceSrs = map->getProjection();
@@ -570,7 +570,7 @@ void MapProjector::reproject(shared_ptr<OsmMap> map,
   OGRCoordinateTransformation::DestroyCT(t);
 }
 
-void MapProjector::reproject(const shared_ptr<Geometry>& g,
+void MapProjector::project(const shared_ptr<Geometry>& g,
   const shared_ptr<OGRSpatialReference>& srs1, const shared_ptr<OGRSpatialReference>& srs2)
 {
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(srs1.get(), srs2.get()));
@@ -586,20 +586,20 @@ void MapProjector::reproject(const shared_ptr<Geometry>& g,
   OGRCoordinateTransformation::DestroyCT(t);
 }
 
-void MapProjector::reprojectToAeac(shared_ptr<OsmMap> map)
+void MapProjector::projectToAeac(shared_ptr<OsmMap> map)
 {
   shared_ptr<OGRSpatialReference> srs = getInstance().createAeacProjection(
     map->calculateBounds());
-  reproject(map, srs);
+  project(map, srs);
 }
 
-void MapProjector::reprojectToOrthographic(shared_ptr<OsmMap> map)
+void MapProjector::projectToOrthographic(shared_ptr<OsmMap> map)
 {
   OGREnvelope env = map->calculateBounds();
-  return reprojectToOrthographic(map, env);
+  return projectToOrthographic(map, env);
 }
 
-void MapProjector::reprojectToOrthographic(shared_ptr<OsmMap> map, const OGREnvelope& env)
+void MapProjector::projectToOrthographic(shared_ptr<OsmMap> map, const OGREnvelope& env)
 {
   MapProjector proj;
   shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
@@ -609,28 +609,28 @@ void MapProjector::reprojectToOrthographic(shared_ptr<OsmMap> map, const OGREnve
   {
     throw HootException("Error creating orthographic projection.");
   }
-  proj.reproject(map, srs);
+  proj.project(map, srs);
 }
 
-void MapProjector::reprojectToPlanar(shared_ptr<OsmMap> map)
+void MapProjector::projectToPlanar(shared_ptr<OsmMap> map)
 {
   if (isGeographic(map))
   {
     OGREnvelope env = map->calculateBounds();
-    reprojectToPlanar(map, env);
+    projectToPlanar(map, env);
   }
 }
 
-void MapProjector::reprojectToPlanar(shared_ptr<OsmMap> map, const OGREnvelope& env)
+void MapProjector::projectToPlanar(shared_ptr<OsmMap> map, const OGREnvelope& env)
 {
   if (map->getProjection()->IsProjected() == false)
   {
     shared_ptr<OGRSpatialReference> srs = getInstance().createPlanarProjection(env);
-    reproject(map, srs);
+    project(map, srs);
   }
 }
 
-void MapProjector::reprojectToWgs84(shared_ptr<OsmMap> map)
+void MapProjector::projectToWgs84(shared_ptr<OsmMap> map)
 {
   if (isGeographic(map) == false)
   {
@@ -638,17 +638,17 @@ void MapProjector::reprojectToWgs84(shared_ptr<OsmMap> map)
     shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
     //srs->importFromEPSG(4326);
     srs->SetWellKnownGeogCS("WGS84");
-    proj.reproject(map, srs);
+    proj.project(map, srs);
   }
 }
 
-Coordinate MapProjector::reprojectFromWgs84(const Coordinate& c,
+Coordinate MapProjector::projectFromWgs84(const Coordinate& c,
                                      shared_ptr<OGRSpatialReference> srs)
 {
   shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
   wgs84->importFromEPSG(4326);
 
-  return reproject(c, wgs84, srs);
+  return project(c, wgs84, srs);
 }
 
 bool MapProjector::_scoreLessThan(const MapProjector::PlanarTestResult& p1,

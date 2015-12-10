@@ -81,7 +81,7 @@ void SuperfluousNodeRemover::apply(shared_ptr<OsmMap>& map)
     // create a new copy of the map and reproject it. This way we can be sure we do the bounds
     // calculation correctly.
     reprojected.reset(new OsmMap(map));
-    MapProjector::reprojectToWgs84(reprojected);
+    MapProjector::projectToWgs84(reprojected);
     nodesWgs84 = &reprojected->getNodeMap();
   }
 

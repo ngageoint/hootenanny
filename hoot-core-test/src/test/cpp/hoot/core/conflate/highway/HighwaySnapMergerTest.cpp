@@ -83,7 +83,7 @@ public:
     env.MinY = 0;
     env.MaxX = 1;
     env.MaxY = 1;
-    MapProjector::reprojectToOrthographic(map, env);
+    MapProjector::projectToOrthographic(map, env);
 
     return map;
   }
@@ -303,7 +303,7 @@ public:
     QString json = OsmJsonWriter().toString(map);
 
     QDir().mkpath("tmp");
-    MapProjector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::write(map, "tmp/dum.osm");
 
     QString expected = QString("{'version': 0.6,'generator': 'Hootenanny','elements': [\n"

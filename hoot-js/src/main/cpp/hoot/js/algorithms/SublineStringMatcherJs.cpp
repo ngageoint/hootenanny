@@ -111,7 +111,7 @@ Handle<Value> SublineStringMatcherJs::extractMatchingSublines(const Arguments& a
     catch (const IllegalArgumentException& e)
     {
       // this is unusual print out some information useful to debugging.
-      MapProjector::reprojectToWgs84(copiedMap);
+      MapProjector::projectToWgs84(copiedMap);
       LOG_WARN(OsmWriter::toString(copiedMap));
       throw e;
     }

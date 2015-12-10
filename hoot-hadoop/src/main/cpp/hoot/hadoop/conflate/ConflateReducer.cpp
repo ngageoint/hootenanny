@@ -149,7 +149,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   map->registerListener(rnl);
 
   /// @todo consolidate this inside the conflator and make it easier to read.
-  MapProjector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
 
   _validate(map);
   DuplicateWayRemover::removeDuplicates(map);
@@ -163,7 +163,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   map = ImpliedDividedMarker::markDivided(map);
   DuplicateNameRemover::removeDuplicates(map);
 
-  MapProjector::reprojectToWgs84(map);
+  MapProjector::projectToWgs84(map);
 
   // Disable no information element remover. See #4125
   // In short, the no information element remover may remove nodes that have no parent during the
@@ -179,7 +179,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   conflator.conflate();
 
   shared_ptr<OsmMap> result(new OsmMap(conflator.getBestMap()));
-  MapProjector::reprojectToWgs84(result);
+  MapProjector::projectToWgs84(result);
 
   for (HashMap<long, long>::const_iterator it = _nr.getReplacements().begin();
        it != _nr.getReplacements().end(); ++it)

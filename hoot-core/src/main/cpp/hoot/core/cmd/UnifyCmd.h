@@ -102,7 +102,7 @@ public:
 
     LOG_DEBUG(SystemInfo::getMemoryUsageString());
 
-    MapProjector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     LOG_DEBUG(SystemInfo::getMemoryUsageString());
     saveMap(map, args[2]);

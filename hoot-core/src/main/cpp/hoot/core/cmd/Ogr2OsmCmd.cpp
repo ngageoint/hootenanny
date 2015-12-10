@@ -187,12 +187,12 @@ public:
       throw HootException("After translation the map is empty. Aborting.");
     }
 
-    MapProjector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     // Apply any user specified operations.
     NamedOp(conf().getList(opsKey(), "")).apply(map);
 
-    MapProjector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     saveMap(map, output);
 

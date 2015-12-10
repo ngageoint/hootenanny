@@ -63,7 +63,7 @@ public:
     env.MinY = 0;
     env.MaxX = 1;
     env.MaxY = 1;
-    MapProjector::reprojectToOrthographic(map, env);
+    MapProjector::projectToOrthographic(map, env);
 
     return map;
   }

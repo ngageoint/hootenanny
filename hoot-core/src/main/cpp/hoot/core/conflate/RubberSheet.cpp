@@ -140,12 +140,12 @@ void RubberSheet::applyTransform(shared_ptr<OsmMap>& map)
 
   if (_projection.get() != 0)
   {
-    MapProjector::reproject(_map, _projection);
+    MapProjector::project(_map, _projection);
   }
   else
   {
     // if it is already planar then nothing will be done.
-    MapProjector::reprojectToPlanar(_map);
+    MapProjector::projectToPlanar(_map);
   }
 
   const NodeMap& nm = map->getNodeMap();
@@ -265,7 +265,7 @@ void RubberSheet::calculateTransform(shared_ptr<OsmMap>& map)
   _map = map;
 
   // if it is already planar then nothing will be done.
-  MapProjector::reprojectToPlanar(_map);
+  MapProjector::projectToPlanar(_map);
   _projection = _map->getProjection();
 
   _findTies();

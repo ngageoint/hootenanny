@@ -76,7 +76,7 @@ public:
     BuildingOutlineUpdateOp uut;
     uut.apply(map);
 
-    MapProjector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     // This output includes two reviews instead of the expected 1 review. See ticket #7043 for
     // an idea to clean this up.

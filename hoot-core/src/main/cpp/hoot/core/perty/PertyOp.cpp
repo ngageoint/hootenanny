@@ -211,7 +211,7 @@ void PertyOp::apply(shared_ptr<OsmMap>& map)
   // Apply any user specified operations.
   NamedOp namedOps(_namedOps);
   namedOps.setConfiguration(_settings);
-  MapProjector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
   namedOps.apply(map);
 }
 
@@ -238,7 +238,7 @@ Mat PertyOp::_calculatePermuteGrid(geos::geom::Envelope env, int& rows, int& col
 
 shared_ptr<OsmMap> PertyOp::generateDebugMap(shared_ptr<OsmMap>& map)
 {
-  MapProjector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
   shared_ptr<OsmMap> result(new OsmMap(map->getProjection()));
 
   LOG_INFO(toString());
@@ -285,7 +285,7 @@ shared_ptr<OsmMap> PertyOp::generateDebugMap(shared_ptr<OsmMap>& map)
 
 void PertyOp::permute(const shared_ptr<OsmMap> &map)
 {
-  MapProjector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
 
   geos::geom::Envelope env = map->calculateEnvelope();
 

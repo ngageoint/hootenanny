@@ -69,7 +69,7 @@ public:
       shared_ptr<OsmMap> map(new OsmMap());
       uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
 
-      MapProjector::reprojectToOrthographic(map);
+      MapProjector::projectToOrthographic(map);
 
       CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodeMap().size());
 
@@ -78,7 +78,7 @@ public:
 
       CPPUNIT_ASSERT_EQUAL(601, (int)map->getNodeMap().size());
 
-      MapProjector::reprojectToWgs84(map);
+      MapProjector::projectToWgs84(map);
 
       OsmWriter writer;
       writer.write(map, "output.osm");

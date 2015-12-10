@@ -69,7 +69,7 @@ public:
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);
-    MapProjector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     CPPUNIT_ASSERT(!uut.isMatchCandidate(map->getWay(map->findWays("name", "Panera Bread")[0]), map));
 
@@ -77,7 +77,7 @@ public:
     map.reset(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
-    MapProjector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     CPPUNIT_ASSERT(uut.isMatchCandidate(map->getWay(map->findWays("note", "1")[0]), map));
   }

@@ -89,7 +89,7 @@ public:
       shared_ptr<OsmMap> map(new OsmMap());
       loadMap(map, args[i], true, Status::Invalid);
 
-      MapProjector::reprojectToPlanar(map);
+      MapProjector::projectToPlanar(map);
 
       shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
       cso->setQuickSubset(quick);

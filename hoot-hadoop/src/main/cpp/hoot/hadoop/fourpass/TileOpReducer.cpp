@@ -169,7 +169,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   LOG_INFO("Result before way splitting. Node count: " << map->getNodeMap().size() <<
            " way count: " << map->getWays().size());
 
-  MapProjector::reprojectToWgs84(map);
+  MapProjector::projectToWgs84(map);
 
   // Using a copy of the map so we can split ways as needed. Make sure they're the right size.
   const WayMap wm = map->getWays();

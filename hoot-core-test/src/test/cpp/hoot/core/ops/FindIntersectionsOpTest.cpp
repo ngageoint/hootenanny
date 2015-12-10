@@ -80,7 +80,7 @@ public:
 
     LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter(5).toString(map)));
 
-    MapProjector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
     QDir().mkpath("test-output/ops/FindIntersectionsOp/");
     OsmWriter writer;
     writer.write(map, "test-output/ops/FindIntersectionsOp/Toy_intersections.osm");

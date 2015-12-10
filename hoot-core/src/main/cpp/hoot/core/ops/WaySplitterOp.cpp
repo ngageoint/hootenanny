@@ -45,7 +45,7 @@ WaySplitterOp::WaySplitterOp()
 
 void WaySplitterOp::apply(shared_ptr<OsmMap>& map)
 {
-  MapProjector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
 
   // use a copy of the map since we'll be making changes
   const WayMap ways = map->getWays();

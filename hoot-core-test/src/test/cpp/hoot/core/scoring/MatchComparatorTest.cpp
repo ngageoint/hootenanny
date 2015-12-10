@@ -105,7 +105,7 @@ public:
     LOG_INFO(comparator.toString());
 
     // for debugging
-    MapProjector::reprojectToWgs84(copy);
+    MapProjector::projectToWgs84(copy);
     QDir(".").mkpath("test-output/scoring");
     OsmWriter writer;
     writer.write(copy, "test-output/scoring/MatchComparatorTest.osm");

@@ -170,7 +170,7 @@ void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& stat
   conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
   shared_ptr<OsmMap> map(new OsmMap());
   OsmUtils::loadMap(map, mapInputPath, true, Status::Invalid);
-  MapProjector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
 
   QList< QList<SingleStat> > allStats;
   shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());

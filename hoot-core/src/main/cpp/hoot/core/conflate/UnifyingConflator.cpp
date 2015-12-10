@@ -122,7 +122,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 
   // will reproject if necessary.
-  MapProjector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
 
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
 
@@ -130,7 +130,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   {
     LOG_DEBUG("Writing debug map.");
     OsmMapPtr debug(new OsmMap(map));
-    MapProjector::reprojectToWgs84(debug);
+    MapProjector::projectToWgs84(debug);
     OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
 
     _stats.append(SingleStat("Write Debug Map Time (sec)", timer.getElapsedAndRestart()));

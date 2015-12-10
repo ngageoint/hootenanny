@@ -70,7 +70,7 @@ public:
 
     OsmMapPtr cutShapeMap = AlphaShapeGenerator(1000.0, 0.0).generate(map);
 
-    MapProjector::reprojectToWgs84(cutShapeMap);
+    MapProjector::projectToWgs84(cutShapeMap);
 
     QDir().mkpath("test-output/conflate");
     OsmWriter writer;
@@ -92,7 +92,7 @@ public:
 
     OsmMapPtr cutShapeMap = AlphaShapeGenerator(1000.0, 500.0).generate(map);
 
-    MapProjector::reprojectToWgs84(cutShapeMap);
+    MapProjector::projectToWgs84(cutShapeMap);
 
     QDir().mkpath("test-output/conflate");
     OsmWriter writer;
@@ -114,7 +114,7 @@ public:
 
     OsmMapPtr cutShapeMap = AlphaShapeGenerator(1000.0, -500.0).generate(map);
 
-    MapProjector::reprojectToWgs84(cutShapeMap);
+    MapProjector::projectToWgs84(cutShapeMap);
 
     QDir().mkpath("test-output/conflate");
     OsmWriter writer;

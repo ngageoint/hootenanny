@@ -75,7 +75,7 @@ public:
 
   static shared_ptr<OGRSpatialReference> createWgs84Projection();
 
-  static void reproject(shared_ptr<OsmMap> map, shared_ptr<OGRSpatialReference> ref);
+  static void project(shared_ptr<OsmMap> map, shared_ptr<OGRSpatialReference> ref);
 
   /**
    * Returns a vector of all candidate planar projections for a given envelope.
@@ -111,43 +111,43 @@ public:
    * Reprojects the specified geometry from srs1 to srs2. The coordinates of g will change, but
    * nothing else will be modified.
    */
-  static void reproject(const shared_ptr<Geometry>& g, const shared_ptr<OGRSpatialReference>& srs1,
+  static void project(const shared_ptr<Geometry>& g, const shared_ptr<OGRSpatialReference>& srs1,
     const shared_ptr<OGRSpatialReference>& srs2);
 
-  static void reprojectToAeac(shared_ptr<OsmMap> map);
+  static void projectToAeac(shared_ptr<OsmMap> map);
 
   /**
    * Picks the center of the orthographic projection as the center of the map bounds. Should be
    * a reasonable projection for small areas. Units are in meters.
    */
-  static void reprojectToOrthographic(shared_ptr<OsmMap> map);
+  static void projectToOrthographic(shared_ptr<OsmMap> map);
 
-  static void reprojectToOrthographic(shared_ptr<OsmMap> map, const OGREnvelope& env);
+  static void projectToOrthographic(shared_ptr<OsmMap> map, const OGREnvelope& env);
 
   /**
    * Uses createPlanarProjection to create a planar projection and then reprojects the given map.
    * Uses the envelope of the map to determine the projection.
    */
-  static void reprojectToPlanar(shared_ptr<OsmMap> map);
+  static void projectToPlanar(shared_ptr<OsmMap> map);
 
   /**
    * Uses createPlanarProjection to create a planar projection and then reprojects the given map.
    * Uses the provided envelope to determine the projection.
    */
-  static void reprojectToPlanar(shared_ptr<OsmMap> map, const OGREnvelope& env);
+  static void projectToPlanar(shared_ptr<OsmMap> map, const OGREnvelope& env);
 
-  static void reprojectToWgs84(shared_ptr<OsmMap> map);
+  static void projectToWgs84(shared_ptr<OsmMap> map);
 
   /**
    * Very slow convenience function.
    */
-  static Coordinate reprojectFromWgs84(const Coordinate& c,
+  static Coordinate projectFromWgs84(const Coordinate& c,
                                        shared_ptr<OGRSpatialReference> srs);
 
   /**
    * Very slow convenience function.
    */
-  static Coordinate reproject(const Coordinate& c, shared_ptr<OGRSpatialReference> srs1,
+  static Coordinate project(const Coordinate& c, shared_ptr<OGRSpatialReference> srs1,
                               shared_ptr<OGRSpatialReference> srs2);
 
   static QString toWkt(shared_ptr<OGRSpatialReference> srs) { return toWkt(srs.get()); }

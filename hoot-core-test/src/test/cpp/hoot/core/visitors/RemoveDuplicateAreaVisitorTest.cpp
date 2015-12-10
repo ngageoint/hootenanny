@@ -72,7 +72,7 @@ public:
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/visitors/RemoveDuplicateAreaVisitorTest.osm", map);
-    MapProjector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     RemoveDuplicateAreaVisitor uut;
     map->visitRw(uut);

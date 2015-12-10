@@ -81,7 +81,7 @@ public:
     env.MinY = 0;
     env.MaxX = 1;
     env.MaxY = 1;
-    MapProjector::reprojectToOrthographic(map, env);
+    MapProjector::projectToOrthographic(map, env);
 
     return map;
   }
@@ -111,7 +111,7 @@ public:
     env.MaxX = 1;
     env.MinY = 0;
     env.MaxY = 1;
-    MapProjector::reprojectToPlanar(map, env);
+    MapProjector::projectToPlanar(map, env);
 
     // Many of these scenarios are taken directly from "Hootenanny - Multilinestring *.pptx"
 

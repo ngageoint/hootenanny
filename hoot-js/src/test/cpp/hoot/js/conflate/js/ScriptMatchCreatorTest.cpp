@@ -65,7 +65,7 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::getInstance().read(
       map, "test-files/algorithms/js/ScriptMatchTest.osm", true);
-    MapProjector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     //to be a candidate: needs to be determined a candidate by the JS rules file...which for this
     //particular rules file, the element must be linear

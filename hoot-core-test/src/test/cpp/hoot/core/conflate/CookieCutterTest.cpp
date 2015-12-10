@@ -76,7 +76,7 @@ public:
     CookieCutter(false).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
 
-    MapProjector::reprojectToWgs84(cookieCutMap);
+    MapProjector::projectToWgs84(cookieCutMap);
 
     QDir().mkpath("test-output/conflate");
     OsmWriter writer;
@@ -101,7 +101,7 @@ public:
     CookieCutter(true).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
 
-    MapProjector::reprojectToWgs84(cookieCutMap);
+    MapProjector::projectToWgs84(cookieCutMap);
 
     QDir().mkpath("test-output/conflate");
     OsmWriter writer;
@@ -126,7 +126,7 @@ public:
     CookieCutter(false, 100.0).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
 
-    MapProjector::reprojectToWgs84(cookieCutMap);
+    MapProjector::projectToWgs84(cookieCutMap);
 
     QDir().mkpath("test-output/conflate");
     OsmWriter writer;
@@ -151,7 +151,7 @@ public:
     CookieCutter(false, -100.0).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
 
-    MapProjector::reprojectToWgs84(cookieCutMap);
+    MapProjector::projectToWgs84(cookieCutMap);
 
     QDir().mkpath("test-output/conflate");
     OsmWriter writer;
@@ -176,7 +176,7 @@ public:
     CookieCutter(true, 100.0).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
 
-    MapProjector::reprojectToWgs84(cookieCutMap);
+    MapProjector::projectToWgs84(cookieCutMap);
 
     QDir().mkpath("test-output/conflate");
     OsmWriter writer;

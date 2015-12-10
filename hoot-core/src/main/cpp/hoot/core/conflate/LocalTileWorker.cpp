@@ -163,7 +163,7 @@ shared_ptr<OsmMap> LocalTileWorker::_conflate(shared_ptr<OsmMap> map,
 
   map->registerListener(rnl);
 
-  MapProjector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
 
   // call conflation routine
   Conflator conflator;
@@ -171,7 +171,7 @@ shared_ptr<OsmMap> LocalTileWorker::_conflate(shared_ptr<OsmMap> map,
   conflator.conflate();
 
   shared_ptr<OsmMap> result(new OsmMap(conflator.getBestMap()));
-  MapProjector::reprojectToWgs84(result);
+  MapProjector::projectToWgs84(result);
 
   return result;
 }

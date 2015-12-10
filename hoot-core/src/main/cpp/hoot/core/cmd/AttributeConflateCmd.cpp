@@ -100,7 +100,7 @@ public:
       }
     }
 
-    MapProjector::reprojectToWgs84(conflated);
+    MapProjector::projectToWgs84(conflated);
     saveMap(conflated, output);
 
     return 0;

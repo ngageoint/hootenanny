@@ -76,9 +76,9 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/algorithms/LongestCommonNodeStringTest.osm", map);
 
-    MapProjector::reprojectToOrthographic(map);
+    MapProjector::projectToOrthographic(map);
     DuplicateWayRemover::removeDuplicates(map);
-    MapProjector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     OsmWriter writer;
     writer.setIncludeCompatibilityTags(false);

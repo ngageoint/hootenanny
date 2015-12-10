@@ -63,7 +63,7 @@ AddHilbertReviewSortOrderOp::AddHilbertReviewSortOrderOp()
 void AddHilbertReviewSortOrderOp::apply(shared_ptr<OsmMap>& map)
 {
   _mapEnvelope.reset();
-  MapProjector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
 
   const RelationMap& relations = map->getRelationMap();
 

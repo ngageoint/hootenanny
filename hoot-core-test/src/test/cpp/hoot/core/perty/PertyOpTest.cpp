@@ -184,7 +184,7 @@ public:
     QDir().mkpath("test-output/perty");
 
     shared_ptr<OsmMap> original(new OsmMap(map));
-    MapProjector::reprojectToWgs84(original);
+    MapProjector::projectToWgs84(original);
     writer.write(original, "test-output/perty/Original.osm");
 
     PertyOp uut;
@@ -211,9 +211,9 @@ public:
         //LOG_INFO("sd: " << ss.calculateUnbiasedStandardDeviation
 
 
-    MapProjector::reprojectToWgs84(debug);
+    MapProjector::projectToWgs84(debug);
     writer.write(debug, "test-output/perty/Debug.osm");
-    MapProjector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
     writer.write(map, "test-output/perty/Permuted.osm");
   }
 };

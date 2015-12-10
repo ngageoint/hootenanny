@@ -77,7 +77,7 @@ public:
 
       MapCleaner().apply(map);
 
-      MapProjector::reprojectToWgs84(map);
+      MapProjector::projectToWgs84(map);
 
       QDir().mkpath("test-output/conflate");
       OsmWriter writer;

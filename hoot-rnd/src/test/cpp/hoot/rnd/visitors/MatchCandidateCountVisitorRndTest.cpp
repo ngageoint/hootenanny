@@ -75,7 +75,7 @@ public:
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
-    MapProjector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
 

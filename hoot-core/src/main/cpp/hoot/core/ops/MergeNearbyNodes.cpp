@@ -82,7 +82,7 @@ void MergeNearbyNodes::apply(shared_ptr<OsmMap>& map)
   {
     wgs84 = map;
     planar.reset(new OsmMap(map));
-    MapProjector::reprojectToPlanar(planar);
+    MapProjector::projectToPlanar(planar);
   }
   else
   {
@@ -91,7 +91,7 @@ void MergeNearbyNodes::apply(shared_ptr<OsmMap>& map)
     if (_bounds.isNull() == false)
     {
       wgs84.reset(new OsmMap(map));
-      MapProjector::reprojectToWgs84(wgs84);
+      MapProjector::projectToWgs84(wgs84);
     }
   }
 

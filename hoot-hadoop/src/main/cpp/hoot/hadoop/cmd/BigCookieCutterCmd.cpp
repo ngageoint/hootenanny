@@ -54,11 +54,11 @@ public:
     auto_ptr<OGREnvelope> e(GeometryUtils::toOGREnvelope(*g->getEnvelopeInternal()));
     shared_ptr<OGRSpatialReference> planar = MapProjector::createAeacProjection(*e);
 
-    MapProjector::reproject(g, wgs84, planar);
+    MapProjector::project(g, wgs84, planar);
 
     g.reset(g->buffer(b));
 
-    MapProjector::reproject(g, planar, wgs84);
+    MapProjector::project(g, planar, wgs84);
   }
 
   QString getHelp() const

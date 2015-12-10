@@ -477,7 +477,7 @@ public:
 //    PbfReader(true).readFile("/scratch/gis-data/geonames.org/tmp/GeoNamesOrgAfghanistan.osm.pbf",
 //                             map);
 
-    MapProjector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     vector<RFqHybridDummyData> keys;
     vector<int> values;

@@ -101,7 +101,7 @@ public:
     const int numWaysBefore = map->getWays().size();
     LOG_VARD(numWaysBefore);
 
-    MapProjector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
     PertyWayGeneralizeVisitor wayGeneralizeVisitor;
     boost::minstd_rand rng;
     rng.seed(randomNumberGeneratorSeed);
@@ -109,7 +109,7 @@ public:
     wayGeneralizeVisitor.setWayGeneralizeProbability(generalizeProbability);
     wayGeneralizeVisitor.setEpsilon(epsilon);
     map->visitRw(wayGeneralizeVisitor);
-    MapProjector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     const int numNodesRemoved = numNodesBefore - map->getNodeMap().size();
     CPPUNIT_ASSERT_EQUAL(0, numNodesRemoved);

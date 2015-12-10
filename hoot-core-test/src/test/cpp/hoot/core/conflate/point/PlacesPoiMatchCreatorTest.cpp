@@ -69,7 +69,7 @@ public:
     env.MinY = 0.0;
     env.MaxX = 1.0;
     env.MaxY = 1.0;
-    MapProjector::reprojectToPlanar(map, env);
+    MapProjector::projectToPlanar(map, env);
 
     //to be a match candidate: needs to be a node, in bounds (only if a bounds has been set), and
     //be a poi; being a poi means its tagged as a poi OR has a name tag

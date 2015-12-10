@@ -96,7 +96,7 @@ public:
     env.MinY = 0.0;
     env.MaxX = 1.0;
     env.MaxY = 1.0;
-    MapProjector::reprojectToPlanar(map, env);
+    MapProjector::projectToPlanar(map, env);
 
     int matchCount = 0;
 

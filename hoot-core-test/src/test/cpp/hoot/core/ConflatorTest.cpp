@@ -70,7 +70,7 @@ public:
     uut.conflate();
 
     shared_ptr<OsmMap> out(new OsmMap(uut.getBestMap()));
-    MapProjector::reprojectToWgs84(out);
+    MapProjector::projectToWgs84(out);
 
     CPPUNIT_ASSERT_EQUAL((size_t)15, out->getWays().size());
 
@@ -94,7 +94,7 @@ public:
     uut.conflate();
 
     shared_ptr<OsmMap> out(new OsmMap(uut.getBestMap()));
-    MapProjector::reprojectToWgs84(out);
+    MapProjector::projectToWgs84(out);
 
     CPPUNIT_ASSERT_EQUAL((size_t)9, out->getWays().size());
 

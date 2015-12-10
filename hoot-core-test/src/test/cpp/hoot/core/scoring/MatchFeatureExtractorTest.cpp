@@ -77,7 +77,7 @@ public:
     reader.read(s2, map);
 
     // make the results consistent.
-    MapProjector::reprojectToAeac(map);
+    MapProjector::projectToAeac(map);
     MapCleaner().apply(map);
 
     return map;

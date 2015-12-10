@@ -43,7 +43,7 @@ void ReprojectToPlanarOp::apply(shared_ptr<OsmMap>& map)
 {
   if (MapProjector::isGeographic(map))
   {
-    MapProjector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
   }
 }
 

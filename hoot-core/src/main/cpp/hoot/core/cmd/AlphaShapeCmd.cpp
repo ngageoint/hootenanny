@@ -85,7 +85,7 @@ public:
     OsmMapPtr result = AlphaShapeGenerator(alpha, buffer).generate(pointsMap);
 
     // reproject back into lat/lng
-    MapProjector::reprojectToWgs84(result);
+    MapProjector::projectToWgs84(result);
 
     // save out the result.
     if (outputPath.toLower().endsWith(".shp"))

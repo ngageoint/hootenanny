@@ -305,10 +305,10 @@ void GraphComparator::drawCostDistance(shared_ptr<OsmMap> map, vector<Coordinate
   shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
   srs->importFromEPSG(900913);
 
-  Coordinate c1 = MapProjector::reproject(Coordinate(_projectedBounds.MinX, _projectedBounds.MinY), map->getProjection(), srs);
+  Coordinate c1 = MapProjector::project(Coordinate(_projectedBounds.MinX, _projectedBounds.MinY), map->getProjection(), srs);
   cout << "coord " << c1.x << ", " << c1.y << endl;
 
-  Coordinate c2 = MapProjector::reproject(Coordinate(_projectedBounds.MaxX, _projectedBounds.MaxY), map->getProjection(), srs);
+  Coordinate c2 = MapProjector::project(Coordinate(_projectedBounds.MaxX, _projectedBounds.MaxY), map->getProjection(), srs);
   cout << "coord2 " << c2.x << ", " << c2.y << endl;
 
   printf("POSITION_Y=%f\n", (c1.y + c2.y) / 2.0);

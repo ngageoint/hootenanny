@@ -139,7 +139,7 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const shared_ptr<Relation>& r)
 
 void BuildingPartMergeOp::apply(shared_ptr<OsmMap>& map)
 {
-  MapProjector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
   ////
   // treat the map as read only while we determine building parts.
   ////

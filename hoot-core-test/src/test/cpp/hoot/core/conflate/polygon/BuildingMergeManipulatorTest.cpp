@@ -96,7 +96,7 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/ToyBuildingsTestB.osm", map);
 
-    MapProjector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     WayMap wm = map->getWays();
     for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
@@ -120,7 +120,7 @@ public:
     uut.conflate();
 
     shared_ptr<OsmMap> out(new OsmMap(uut.getBestMap()));
-    MapProjector::reprojectToWgs84(out);
+    MapProjector::projectToWgs84(out);
 
     OsmWriter writer;
     writer.setIncludeIds(true);

@@ -97,7 +97,7 @@ shared_ptr<MatchComparator> PertyMatchScorer::scoreMatches(const QString referen
   shared_ptr<OsmMap> combinedMap =
     _combineMapsAndPrepareForConflation(referenceMap, perturbedMapOutputPath);
 
-  MapProjector::reprojectToWgs84(combinedMap);
+  MapProjector::projectToWgs84(combinedMap);
   OsmUtils::saveMap(combinedMap, combinedMapOutputPath);
 
   return _conflateAndScoreMatches(combinedMap, conflatedMapOutputPath);
@@ -132,7 +132,7 @@ shared_ptr<OsmMap> PertyMatchScorer::_loadReferenceMap(const QString referenceMa
   }
 
   shared_ptr<OsmMap> referenceMapCopy(referenceMap);
-  MapProjector::reprojectToWgs84(referenceMapCopy);
+  MapProjector::projectToWgs84(referenceMapCopy);
   OsmUtils::saveMap(referenceMapCopy, referenceMapOutputPath);
 
   return referenceMap;
@@ -184,7 +184,7 @@ void PertyMatchScorer::_loadPerturbedMap(const QString perturbedMapInputPath,
     LOG_VARD(numTotalTags);
   }
 
-  MapProjector::reprojectToWgs84(perturbedMap);
+  MapProjector::projectToWgs84(perturbedMap);
   OsmUtils::saveMap(perturbedMap, perturbedMapOutputPath);
 }
 
@@ -317,7 +317,7 @@ void PertyMatchScorer::_saveMap(OsmMapPtr map, QString path)
     LOG_VARD(numTotalTags);
   }
 
-  MapProjector::reprojectToWgs84(map);
+  MapProjector::projectToWgs84(map);
   OsmUtils::saveMap(map, path);
 }
 

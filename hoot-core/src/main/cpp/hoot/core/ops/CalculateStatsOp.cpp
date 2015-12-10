@@ -94,7 +94,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
   LOG_INFO(logMsg);
   Filter::FilterType keep = Filter::KeepMatches;
 
-  MapProjector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
 
   shared_ptr<const OsmMap> constMap = map;
 

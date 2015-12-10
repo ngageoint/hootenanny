@@ -71,9 +71,9 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
-    MapProjector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
     LargeWaySplitter::splitWays(map, 20.0);
-    MapProjector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     OsmWriter writer;
     writer.write(map, "test-output/conflate/LargeWaySplitterOutput1.osm");

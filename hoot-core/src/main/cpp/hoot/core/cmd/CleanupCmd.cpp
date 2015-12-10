@@ -79,7 +79,7 @@ public:
 
     MapCleaner().apply(map);
 
-    MapProjector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     saveMap(map, args[1]);
 

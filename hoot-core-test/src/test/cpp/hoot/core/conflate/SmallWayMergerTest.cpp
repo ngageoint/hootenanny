@@ -63,9 +63,9 @@ public:
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/conflate/SmallWayMergerInput1.osm", map);
 
-      MapProjector::reprojectToPlanar(map);
+      MapProjector::projectToPlanar(map);
       SmallWayMerger::mergeWays(map, 15.0);
-      MapProjector::reprojectToWgs84(map);
+      MapProjector::projectToWgs84(map);
 
       OsmWriter writer;
       writer.write(map, "test-output/conflate/SmallWayMergerOutput1.osm");

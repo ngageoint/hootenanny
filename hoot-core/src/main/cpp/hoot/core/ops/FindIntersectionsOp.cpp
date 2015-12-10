@@ -74,7 +74,7 @@ void FindIntersectionsOp::apply(shared_ptr<OsmMap>& map)
   map->removeWays(TagFilter(Filter::FilterMatches, "source", "AIMS"));
 
   // reproject into a planar projection centered in the middle of bounding box.
-  MapProjector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
 
   DuplicateWayRemover::removeDuplicates(map);
   SuperfluousWayRemover::removeWays(map);

@@ -43,7 +43,7 @@ _buffer(buffer)
 
 OsmMapPtr AlphaShapeGenerator::generate(OsmMapPtr cutterShapeMap)
 {
-  MapProjector::reprojectToPlanar(cutterShapeMap);
+  MapProjector::projectToPlanar(cutterShapeMap);
 
   // put all the nodes into a vector of points.
   std::vector< std::pair<double, double> > points;

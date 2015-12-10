@@ -95,7 +95,7 @@ public:
 
     rs.applyTransform(map);
 
-    MapProjector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     saveMap(map, outputPath);
 

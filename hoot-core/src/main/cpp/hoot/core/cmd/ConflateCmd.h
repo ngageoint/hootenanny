@@ -186,7 +186,7 @@ public:
     // Apply any user specified operations.
     NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
 
-    MapProjector::reprojectToWgs84(result);
+    MapProjector::projectToWgs84(result);
     stats.append(SingleStat("Project to WGS84 Time (sec)", t.getElapsedAndRestart()));
 
     saveMap(result, output);

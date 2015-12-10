@@ -67,7 +67,7 @@ public:
     reader.read(
       "test-files/conflate/extractor/SampledAngleHistogramExtractorTest/Haiti_osm_waterway_ss_REF2-cropped.osm",
       map);
-    MapProjector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     SampledAngleHistogramExtractor angleHistogramExtractor;
     angleHistogramExtractor.setHeadingDelta(ConfigOptions().getWayMatcherHeadingDelta());

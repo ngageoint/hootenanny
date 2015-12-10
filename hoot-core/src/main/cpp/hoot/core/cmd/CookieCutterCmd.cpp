@@ -110,7 +110,7 @@ public:
     OsmMapPtr result = doughMap;
 
     // reproject back into lat/lng
-    MapProjector::reprojectToWgs84(result);
+    MapProjector::projectToWgs84(result);
 
     // save out the result.
     saveMap(result, outputPath);

@@ -118,14 +118,14 @@ public:
 
         vector<Coordinate> v;
 
-        MapProjector::reprojectToPlanar(map);
+        MapProjector::projectToPlanar(map);
 
         LOG_WARN("Computing...");
         //v.push_back(Coordinate(-104.77236, 39.71378));
         // Mississippi
         //v.push_back(MapProjector::reprojectFromWgs84(Coordinate(-104.77236, 39.71378), map->getSrs()));
         // Natural History Museum
-        v.push_back(MapProjector::reprojectFromWgs84(Coordinate(-104.94057, 39.74748), map->getProjection()));
+        v.push_back(MapProjector::projectFromWgs84(Coordinate(-104.94057, 39.74748), map->getProjection()));
         // Kelly
         //v.push_back(MapProjector::reprojectFromWgs84(Coordinate(-105.03129, 39.74912), map->getSrs()));
         // jakarta easy
@@ -157,14 +157,14 @@ public:
 
         vector<Coordinate> v;
 
-        MapProjector::reprojectToPlanar(map);
+        MapProjector::projectToPlanar(map);
 
         LOG_WARN("Computing...");
         //v.push_back(Coordinate(-104.77236, 39.71378));
         // Mississippi
         //v.push_back(MapProjector::reprojectFromWgs84(Coordinate(-104.77236, 39.71378), map->getSrs()));
         // Natural History Museum
-        v.push_back(MapProjector::reprojectFromWgs84(Coordinate(-85.514581,38.326101), map->getProjection()));
+        v.push_back(MapProjector::projectFromWgs84(Coordinate(-85.514581,38.326101), map->getProjection()));
         // Kelly
         //v.push_back(MapProjector::reprojectFromWgs84(Coordinate(-105.03129, 39.74912), map->getSrs()));
         // jakarta easy

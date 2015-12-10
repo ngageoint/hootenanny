@@ -56,7 +56,7 @@ BigPertyOp::~BigPertyOp()
 
 void BigPertyOp::apply(shared_ptr<OsmMap>& map)
 {
-  MapProjector::reprojectToWgs84(map);
+  MapProjector::projectToWgs84(map);
 
   const QString pertiedStr("hoot:pertied");
   const QString trueStr("true");

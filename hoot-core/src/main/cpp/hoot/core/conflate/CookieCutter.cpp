@@ -51,8 +51,8 @@ void CookieCutter::cut(OsmMapPtr cutterShapeMap, OsmMapPtr doughMap)
   env.Merge(doughMap->calculateBounds());
 
   // reproject the dough and cutter into the same planar projection.
-  MapProjector::reprojectToPlanar(doughMap, env);
-  MapProjector::reprojectToPlanar(cutterShapeMap, env);
+  MapProjector::projectToPlanar(doughMap, env);
+  MapProjector::projectToPlanar(cutterShapeMap, env);
 
   // create a complex geometry representing the alpha shape
   UnionPolygonsVisitor v;

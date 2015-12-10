@@ -83,7 +83,7 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/ToyBuildingsTestB.osm", map);
 
-    MapProjector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     vector<long> r1 = map->findWays("REF1", "Target");
     vector<long> r2 = map->findWays("name", "Target Grocery");
@@ -118,7 +118,7 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/conflate/extractor/EdgeDistanceExtractor/ToyTestB.osm", map);
 
-    MapProjector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     EdgeDistanceExtractor uut2(new RmseAggregator());
 

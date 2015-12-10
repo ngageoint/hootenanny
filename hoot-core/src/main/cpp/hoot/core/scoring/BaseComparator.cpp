@@ -176,9 +176,9 @@ void BaseComparator::_init(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2)
   _worldBounds.Merge(_map2->calculateBounds());
 
   _mapP1.reset(new OsmMap(_map1));
-  MapProjector::reprojectToOrthographic(_mapP1, _worldBounds);
+  MapProjector::projectToOrthographic(_mapP1, _worldBounds);
   _mapP2.reset(new OsmMap(_map2));
-  MapProjector::reprojectToOrthographic(_mapP2, _worldBounds);
+  MapProjector::projectToOrthographic(_mapP2, _worldBounds);
 }
 
 void BaseComparator::_saveImage(cv::Mat& image, QString path, double max, bool gradient)

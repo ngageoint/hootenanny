@@ -63,7 +63,7 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::getInstance().read(map, "test-files/algorithms/js/ScriptMatchTest.osm",
       true);
-    MapProjector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     // create the test scenario in ScriptMatchTest
     // call ScriptMatch is consistent repeatedly.

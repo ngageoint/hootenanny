@@ -98,7 +98,7 @@ void LocalTileWorker2::applyOp(shared_ptr<OsmMapOperation> op, const vector<Enve
       op->apply(map);
 
       // it only actually does a reprojection if necessary.
-      MapProjector::reprojectToWgs84(map);
+      MapProjector::projectToWgs84(map);
 
       // Using a copy of the map so we can split ways as needed. Make sure they're the right size.
       const WayMap wm = map->getWays();

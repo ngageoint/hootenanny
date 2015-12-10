@@ -78,7 +78,7 @@ public:
       if (i == 0 && !output.isEmpty())
       {
         BuildingOutlineUpdateOp().apply(copy);
-        MapProjector::reprojectToWgs84(copy);
+        MapProjector::projectToWgs84(copy);
         saveMap(copy, output);
       }
     }
@@ -208,7 +208,7 @@ public:
       }
 
       shared_ptr<OsmMap> mapCopy(map);
-      MapProjector::reprojectToWgs84(mapCopy);
+      MapProjector::projectToWgs84(mapCopy);
       OsmUtils::saveMap(mapCopy, "/tmp/score-matches-before-prep.osm");
 
       MatchScoringMapPreparer().prepMap(map, conf().getBool(removeNodesKey(), false));
@@ -217,7 +217,7 @@ public:
 
     LOG_VARD(maps.size());
     shared_ptr<OsmMap> mapCopy(maps[0]);
-    MapProjector::reprojectToWgs84(mapCopy);
+    MapProjector::projectToWgs84(mapCopy);
     OsmUtils::saveMap(mapCopy, "/tmp/score-matches-after-prep.osm");
 
     if (optimizeThresholds)

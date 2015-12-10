@@ -262,8 +262,8 @@ public:
 
     Log::getInstance().setLevel(Log::Warn);
     shared_ptr<OsmMap> mapReproject(new OsmMap(map));
-    MapProjector::reprojectToPlanar(mapReproject);
-    MapProjector::reprojectToWgs84(mapReproject);
+    MapProjector::projectToPlanar(mapReproject);
+    MapProjector::projectToWgs84(mapReproject);
     cout << "Reproject\t";
     compareMaps(map, mapReproject, pointCount).print();
     cout << endl;
@@ -277,10 +277,10 @@ public:
     e2.MaxY = (e2.MinY + e2.MaxY) / 2.0;
     shared_ptr<OsmMap> mapReproject1(new OsmMap(map));
     shared_ptr<OsmMap> mapReproject2(new OsmMap(map));
-    MapProjector::reprojectToPlanar(mapReproject1, e1);
-    MapProjector::reprojectToPlanar(mapReproject2, e2);
-    MapProjector::reprojectToWgs84(mapReproject1);
-    MapProjector::reprojectToWgs84(mapReproject2);
+    MapProjector::projectToPlanar(mapReproject1, e1);
+    MapProjector::projectToPlanar(mapReproject2, e2);
+    MapProjector::projectToWgs84(mapReproject1);
+    MapProjector::projectToWgs84(mapReproject2);
     cout << "Different Reprojections\t";
     compareMaps(mapReproject1, mapReproject2, pointCount).print();
     cout << endl;

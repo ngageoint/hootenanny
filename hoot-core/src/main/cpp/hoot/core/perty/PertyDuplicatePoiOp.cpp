@@ -60,7 +60,7 @@ QString PertyDuplicatePoiOp::toString()
 
 void PertyDuplicatePoiOp::apply(shared_ptr<OsmMap>& map)
 {
-  MapProjector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
   boost::uniform_real<> uni(0.0, 1.0);
   boost::normal_distribution<> nd;
   boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<> > N(*_rng, nd);

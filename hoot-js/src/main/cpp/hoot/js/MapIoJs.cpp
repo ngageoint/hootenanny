@@ -120,7 +120,7 @@ public:
 
     OsmMapPtr map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap();
 
-    MapProjector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     v8::String::Utf8Value param1(args[1]->ToString());
     QString url = QString::fromUtf8(*param1);

@@ -323,7 +323,7 @@ void Conflator::_saveMap(QString path)
   LOG_INFO("Writing debug .osm file..." << path.toStdString());
 
   shared_ptr<OsmMap> wgs84(new OsmMap(_map));
-  MapProjector::reprojectToWgs84(wgs84);
+  MapProjector::projectToWgs84(wgs84);
   OsmWriter writer;
   writer.setIncludeHootInfo(true);
   writer.setIncludeIds(true);

@@ -81,7 +81,7 @@ public:
     const int numWaysBeforeSplitting = map->getWays().size();
     LOG_VARD(numWaysBeforeSplitting)
 
-    MapProjector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
     PertyWaySplitVisitor waySplitVisitor;
     boost::minstd_rand rng;
     rng.seed(1);
@@ -89,7 +89,7 @@ public:
     waySplitVisitor.setWaySplitProbability(0.5);
     waySplitVisitor.setMinNodeSpacing(1.0);
     map->visitRw(waySplitVisitor);
-    MapProjector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
     const int numNewNodesCreatedBySpliting = map->getNodeMap().size() - numNodesBeforeSplitting;
     LOG_VARD(numNewNodesCreatedBySpliting);
     const int numNewWaysCreatedBySpliting = map->getWays().size() - numWaysBeforeSplitting;
@@ -124,7 +124,7 @@ public:
     const int numWaysBeforeSplitting = map->getWays().size();
     LOG_VARD(numWaysBeforeSplitting)
 
-    MapProjector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
     PertyWaySplitVisitor waySplitVisitor;
     boost::minstd_rand rng;
     rng.seed(1);
@@ -132,7 +132,7 @@ public:
     waySplitVisitor.setWaySplitProbability(0.5);
     waySplitVisitor.setMinNodeSpacing(1.0);
     map->visitRw(waySplitVisitor);
-    MapProjector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
     const int numNewNodesCreatedBySplitting = map->getNodeMap().size() - numNodesBeforeSplitting;
     LOG_VARD(numNewNodesCreatedBySplitting);
     const int numNewWaysCreatedBySplitting = map->getWays().size() - numWaysBeforeSplitting;

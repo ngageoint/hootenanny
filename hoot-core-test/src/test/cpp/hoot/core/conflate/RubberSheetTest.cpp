@@ -115,7 +115,7 @@ public:
 
       uut.applyTransform(map);
 
-      MapProjector::reprojectToWgs84(map);
+      MapProjector::projectToWgs84(map);
 
       QDir().mkdir("test-output/conflate/");
       OsmWriter writer;
@@ -145,7 +145,7 @@ public:
     uut.setReference(false);
     uut.apply(map);
 
-    MapProjector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     QDir().mkdir("test-output/conflate/");
     OsmWriter writer;

@@ -68,7 +68,7 @@ public:
     env.MaxX = 1;
     env.MinY = 0;
     env.MaxY = 1;
-    MapProjector::reprojectToPlanar(map, env);
+    MapProjector::projectToPlanar(map, env);
 
     map->resetCounters();
     for (int i = 0; i < 10; i++)

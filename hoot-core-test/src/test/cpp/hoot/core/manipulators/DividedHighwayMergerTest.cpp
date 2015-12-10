@@ -84,7 +84,7 @@ public:
     conflator.conflate();
 
     shared_ptr<OsmMap> after(new OsmMap(conflator.getBestMap()));
-    MapProjector::reprojectToWgs84(after);
+    MapProjector::projectToWgs84(after);
 
     OsmWriter writer;
     writer.write(after, "test-output/DividedHighwayMergerTest.osm");
@@ -109,7 +109,7 @@ public:
     conflator.conflate();
 
     shared_ptr<OsmMap> after(new OsmMap(conflator.getBestMap()));
-    MapProjector::reprojectToWgs84(after);
+    MapProjector::projectToWgs84(after);
 
     OsmWriter writer;
     writer.setIncludeIds(true);
@@ -127,7 +127,7 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/UndividedHighway.osm", map);
 
-    MapProjector::reprojectToOrthographic(map);
+    MapProjector::projectToOrthographic(map);
 
     long n0 = map->findWays("note", "0")[0];
     long n1 = map->findWays("note", "1")[0];

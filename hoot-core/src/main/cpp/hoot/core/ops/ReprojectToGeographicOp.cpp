@@ -43,7 +43,7 @@ void ReprojectToGeographicOp::apply(shared_ptr<OsmMap>& map)
 {
   if (MapProjector::isGeographic(map) == false)
   {
-    MapProjector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
   }
 }
 

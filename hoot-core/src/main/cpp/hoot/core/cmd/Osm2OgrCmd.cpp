@@ -84,7 +84,7 @@ public:
     // Apply any user specified operations.
     NamedOp(conf().getList(opsKey(), "")).apply(map);
 
-    MapProjector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     writer.write(map);
 
