@@ -30,6 +30,7 @@
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
+#include <hoot/js/util/StringUtilsJs.h>
 
 namespace hoot
 {
@@ -140,6 +141,16 @@ void HootExceptionJs::throwAsHootException(TryCatch& tc)
       {
         throw HootException(toJson(exception));
       }
+    }
+    // if this is a generic error (e.g. throw new Errro("blah");) then just report the string.
+    else if (exception->IsNativeError() &&
+      str(exception->ToObject()->GetConstructorName()) == "Error")
+    {
+      throw HootException(str(exception->ToDetailString()));
+    }
+    else if (exception->IsString())
+    {
+      throw HootException(str(exception));
     }
     else
     {
