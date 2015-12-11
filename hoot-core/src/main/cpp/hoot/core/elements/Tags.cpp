@@ -218,10 +218,11 @@ double Tags::getLength(const QString& k) const
 {
   QString v = get(k);
 
-  bool isKm = false;  //kilometer
-  bool isMi = false;  //mile
-  bool isNmi = false; //nautical mile
-  bool isFi = false;  //feet and inch
+  bool isKm = false;     //kilometer
+  bool isMi = false;     //mile
+  bool isNmi = false;    //nautical mile
+  bool isFi = false;     //feet and inch
+  bool isDecimi = false; //decimetres
 
   if (v.contains("km", Qt::CaseInsensitive) || v.contains("kilometre", Qt::CaseInsensitive)
       || v.contains("kilometres", Qt::CaseInsensitive) || v.contains("kilometer", Qt::CaseInsensitive)
@@ -242,6 +243,10 @@ double Tags::getLength(const QString& k) const
   {
     isFi = true;
   }
+  else if (v.contains("decimetres", Qt::CaseInsensitive) || v.contains("decimetre", Qt::CaseInsensitive))
+  {
+    isDecimi = true;
+  }
 
   bool ok;
   double result = v.split(" ")[0].toDouble(&ok);
@@ -261,6 +266,10 @@ double Tags::getLength(const QString& k) const
   else if (isNmi)
   {
     result = nmiToLength(result).value();
+  }
+  else if (isDecimi)
+  {
+    result = decimiToLength(result).value();
   }
   else if (isFi)
   {

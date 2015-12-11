@@ -88,7 +88,7 @@ public:
 
   void unitsTest()
   {
-    Tags t1, t2, t3, t4, t5, t6, t7;
+    Tags t1, t2, t3, t4, t5, t6, t7, t8;
     t1.setList("length", QStringList() << "60 mi");
     CPPUNIT_ASSERT_EQUAL(96560.6, QString::number(t1.getLength("length"), 'g', 6).toDouble());
 
@@ -109,6 +109,9 @@ public:
 
     t7.setList("maxspeed", QStringList() << "10 km");
     CPPUNIT_ASSERT_EQUAL(2.78, QString::number(t7.getVelocity("maxspeed"), 'g', 3).toDouble());
+
+    t8.setList("length", QStringList() << "10 decimetres");
+    CPPUNIT_ASSERT_EQUAL(1.0, QString::number(t8.getLength("length"), 'g', 2).toDouble());
   }
 };
 

@@ -71,6 +71,12 @@ namespace hoot
     return static_cast<Length>(f * l);
   }
 
+  inline Length decimiToLength(double f)
+  {
+    Length l = 0.1 * boost::units::si::meters;
+    return static_cast<Length>(f * l);
+  }
+
   inline Length feetToLength(double f)
   {
     return static_cast<Length>(f * feet);
