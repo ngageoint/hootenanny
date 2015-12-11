@@ -88,7 +88,7 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TileConflatorTest, "glacial");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TileConflatorTest, "current");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TileConflatorTest, "glacial");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TileConflatorTest, "current");
 
 }

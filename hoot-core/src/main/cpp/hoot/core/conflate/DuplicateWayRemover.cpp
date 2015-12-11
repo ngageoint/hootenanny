@@ -129,13 +129,19 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
         // if this is a candidate for de-duping
         if (_isCandidateWay(w2))
         {
+          LOG_DEBUG("candidate way tags:");
+          LOG_VARD(w->getTags());
+          LOG_VARD(w2->getTags());
+
           double textTagScore, enumTagScore, weight;
           //If all non-name tags aren't exactly the same between these two ways (or the strict
           //tag matching isn't activated), then we won't merge their geometries or tags.
           TagComparator::getInstance().compareTextTags(w->getTags(), w2->getTags(), textTagScore, weight);
           TagComparator::getInstance().compareEnumeratedTags(w->getTags(), w2->getTags(), enumTagScore, weight);
           if ((textTagScore == 1.0 && enumTagScore == 1.0) || !_strictTagMatching)
-          {
+          { 
+            LOG_DEBUG("Ways have exact non-name tag match or strict tag matching is disabled.");
+
             if (w->getNodeCount() > w2->getNodeCount())
             {
               _removeDuplicateNodes(w, _map->getWay(wit->first));
@@ -188,6 +194,10 @@ void DuplicateWayRemover::_updateWayNameTags(shared_ptr<Way> way1, shared_ptr<Wa
     }
     tags2.addTags(mergedNameTags);
     way2->setTags(tags2);
+
+    LOG_DEBUG("Merged way name tags:");
+    LOG_VARD(way1->getTags());
+    LOG_VARD(way2->getTags());
   }
 }
 
@@ -200,6 +210,7 @@ void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
   int length = lcs.apply();
   if (length > 1)
   {
+    LOG_DEBUG("Ways have common geometry.");
     _removeNodes(w1, lcs.getW1Index(), length);
     _updateWayNameTags(w1, w2);
   }
@@ -220,6 +231,7 @@ void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
     int length = lcs.apply();
     if (length > 1)
     {
+      LOG_DEBUG("Ways have common geometry.");
       _removeNodes(w1, lcs.getW1Index(), length);
       _updateWayNameTags(w1, w2);
     }
@@ -234,7 +246,6 @@ void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
       {
         w2->reverseOrder();
       }
-
     }
   }
 }
