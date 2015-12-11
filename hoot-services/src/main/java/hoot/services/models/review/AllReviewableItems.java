@@ -11,6 +11,7 @@ import org.json.simple.JSONObject;
 public class AllReviewableItems extends ReviewQueryMapper {
 
 	private long _mapId;
+	private boolean _overflow = false;
 	private Map<Long, ReviewableItemBboxInfo> _reviewableItems;
 	
 	public AllReviewableItems(final long mapid, final Map<Long, ReviewableItemBboxInfo> reviewableItems)
@@ -39,6 +40,14 @@ public class AllReviewableItems extends ReviewQueryMapper {
 		_reviewableItems = reviewableItems;
 	}
 	
+	public boolean getOverFlow()
+	{
+		return _overflow;
+	}
+	
+	public void setOverFlow(final boolean isOverFlow) {
+		_overflow = isOverFlow;
+	}
 	@Override
 	public String toString() {
 		JSONObject o = new JSONObject();

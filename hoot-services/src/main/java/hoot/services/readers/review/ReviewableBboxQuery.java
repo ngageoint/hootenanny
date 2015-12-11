@@ -111,6 +111,29 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 		}
 	}
 	
+	private boolean _validateTuple(final Tuple tup)
+	{
+		boolean ret = true;
+		try
+		{
+			int nCols = tup.size();
+			for(int i=0; i<nCols; i++)
+			{
+				Object o = tup.get(i, Object.class);
+				if(o ==  null)
+				{
+					ret = false;
+					break;
+				}
+			}
+		}
+		catch(Exception ex)
+		{
+			log.error(ex.getMessage());
+		}
+		return ret;
+	}
+	
 	/**
 	 * Helper function to translation Tuple to Bonding box
 	 * 
@@ -118,24 +141,29 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 	 * @return - BoundingBox
 	 * @throws Exception
 	 */
-	private BoundingBox _resultSetToBbox(final Tuple tup) throws Exception
+	private BoundingBox _resultSetToBbox(final Tuple tup)
 	{
 		BoundingBox bbox = null;
 		double minLon=-1, minLat=-1, maxLon=-1, maxLat=-1;
 		try
 		{
 
-			minLat = tup.get(0, Double.class);
-			maxLat = tup.get(1, Double.class);
-			minLon = tup.get(2, Double.class);
-			maxLon = tup.get(3, Double.class);
-			
-			bbox = new BoundingBox( minLon,  minLat, maxLon,  maxLat);
+			if(_validateTuple(tup))
+			{
+				minLat = tup.get(0, Double.class);
+				maxLat = tup.get(1, Double.class);
+				minLon = tup.get(2, Double.class);
+				maxLon = tup.get(3, Double.class);
+				
+				bbox = new BoundingBox( minLon,  minLat, maxLon,  maxLat);
+			}
 		}
 		catch (Exception ex)
 		{
+			// we will not throw error since ret will be null and null ret 
+			// will be handled gracefully by caller.
 			log.error(ex.getMessage());;
-			throw ex;
+			
 		}
 		return bbox;
 	}

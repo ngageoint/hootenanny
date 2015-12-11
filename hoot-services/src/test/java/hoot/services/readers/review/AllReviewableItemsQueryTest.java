@@ -9,6 +9,11 @@ import java.util.Map;
 
 import hoot.services.UnitTest;
 import hoot.services.db.DbUtils;
+import hoot.services.db2.CurrentRelations;
+import hoot.services.db2.QCurrentNodes;
+import hoot.services.db2.QCurrentRelationMembers;
+import hoot.services.db2.QCurrentRelations;
+import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.review.AllReviewableItems;
 import hoot.services.models.review.ReviewableItemBbox;
@@ -21,6 +26,15 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.Mockito;
 
+import com.mysema.query.QueryFlag;
+import com.mysema.query.Tuple;
+import com.mysema.query.sql.SQLQuery;
+import com.mysema.query.sql.SQLSubQuery;
+import com.mysema.query.support.Expressions;
+import com.mysema.query.types.Path;
+import com.mysema.query.types.Predicate;
+import com.mysema.query.types.query.ListSubQuery;
+
 public class AllReviewableItemsQueryTest {
 	@Test
   @Category(UnitTest.class)
@@ -28,47 +42,27 @@ public class AllReviewableItemsQueryTest {
 	{
 		BoundingBox bbox = new BoundingBox(-77.0520431244303, 38.9025514720831, -77.0120431244303, 38.9925514720831);
 		AllReviewableItemsQuery q = new AllReviewableItemsQuery(null,10,bbox);
-		String actual = q._getReviewableRelatioWithWayMembersCentroidInBboxQuery();
+		String actual = q._getReviewableRelatioWithWayMembersCentroidInBboxQuery().toString();
 		
-		String expected = "SELECT relation_id, needreview, minlat, maxlat, minlon, maxlon FROM"
-				+ " ("
-				+ "	SELECT reviewRelJoinRelMemberJoinCurrentWayNodesSubQ.relation_id, reviewRelJoinRelMemberJoinCurrentWayNodesSubQ.needreview,"
-				+ "					max(currentNodeSubQ.latitude) as maxlat, min(currentNodeSubQ.latitude) as minlat," 
-				+ "					max(currentNodeSubQ.longitude) as maxlon, min(currentNodeSubQ.longitude) as minlon,"
-				+ "					(((max(currentNodeSubQ.latitude) - min(currentNodeSubQ.latitude))/2)+min(currentNodeSubQ.latitude)) AS centlat,"
-				+ " 					(((max(currentNodeSubQ.longitude) - min(currentNodeSubQ.longitude))/2)+min(currentNodeSubQ.longitude)) AS centlon"
-				+ " 	FROM"
-				+ "	("
-				+ "		SELECT id, latitude  , longitude FROM current_nodes_10"
-				+ "	) AS currentNodeSubQ"
-				+ "	JOIN"
-				+ "	("
-				+ "		SELECT currentWayNodesSubQ.node_id, reviewRelJoinRelMemberSubQ.relation_id, reviewRelJoinRelMemberSubQ.needreview FROM"
-				+ "		("
-				+ "			SELECT node_id, way_id FROM current_way_nodes_10"
-				+ "		) AS currentWayNodesSubQ"
-				+ "		JOIN"
-				+ "		("
-				+ "			SELECT currentRelMembersSubQ.member_id, currentRelMembersSubQ.relation_id, reviewableCurrentRelSubQ.needreview"
-				+ " 			FROM"
-				+ " 			("
-				+ "				SELECT member_id, relation_id, member_type FROM current_relation_members_10"
-				+ "			) AS currentRelMembersSubQ"
-				+ "			JOIN"
-				+ "			("
-				+ "				SELECT id, tags->'hoot:review:needs' AS needreview  FROM current_relations_10 WHERE exist(tags,'hoot:review:needs')"
-				+ "			) AS reviewableCurrentRelSubQ"
-				+ " 			ON (currentRelMembersSubQ.relation_id=reviewableCurrentRelSubQ.id)"
-				+ "  			AND currentRelMembersSubQ.member_type='way'"
-				+ "		) AS reviewRelJoinRelMemberSubQ"
-				+ " 		ON (currentWayNodesSubQ.way_id=reviewRelJoinRelMemberSubQ.member_id)"
-				+ "	) AS reviewRelJoinRelMemberJoinCurrentWayNodesSubQ"
-				+ " 	ON (currentNodeSubQ.id=reviewRelJoinRelMemberJoinCurrentWayNodesSubQ.node_id)"
-				+ "	GROUP BY reviewRelJoinRelMemberJoinCurrentWayNodesSubQ.relation_id,"
-				+ " reviewRelJoinRelMemberJoinCurrentWayNodesSubQ.needreview)"
-				+ " AS"
-				+ " reviewRelWayMembersCentroidSubQ"
-				+ " WHERE centlat>=38.9025514720831 AND centlat<=38.9925514720831 AND centlon>=-77.0520431244303 AND centlon<=-77.0120431244303";
+		String expected = "from (select \"reviewRelJoinRelMemberJoinCurrentWayNodesSubQ\".\"relation_id\", \"reviewRelJoinRelMemberJoinCurrentWayNodesSubQ\".\"needreview\", max(\"currentNodeSubQ\".\"latitude\") as \"maxlat\", min(\"currentNodeSubQ\".\"latitude\") as \"minlat\", max(\"currentNodeSubQ\".\"longitude\") as \"maxlon\", min(\"currentNodeSubQ\".\"longitude\") as \"minlon\", (((max(\"currentNodeSubQ\".\"latitude\") - min(\"currentNodeSubQ\".\"latitude\"))/2)+min(\"currentNodeSubQ\".\"latitude\")) as \"centlat\", (((max(\"currentNodeSubQ\".\"longitude\") - min(\"currentNodeSubQ\".\"longitude\"))/2)+min(\"currentNodeSubQ\".\"longitude\")) as \"centlon\"\n" + 
+				"from (select \"current_nodes\".\"id\", \"current_nodes\".\"latitude\", \"current_nodes\".\"longitude\"\n" + 
+				"from \"current_nodes_10\" \"current_nodes\") as \"currentNodeSubQ\"\n" + 
+				"join (select \"currentWayNodesSubQ\".\"node_id\", \"reviewRelJoinRelMemberSubQ\".\"relation_id\", \"reviewRelJoinRelMemberSubQ\".\"needreview\"\n" + 
+				"from (select \"current_way_nodes\".\"node_id\", \"current_way_nodes\".\"way_id\"\n" + 
+				"from \"current_way_nodes_10\" \"current_way_nodes\") as \"currentWayNodesSubQ\"\n" + 
+				"join (select \"currentRelMembersSubQ\".\"member_id\", \"currentRelMembersSubQ\".\"relation_id\", \"reviewableCurrentRelSubQ\".\"needreview\"\n" + 
+				"from (select \"current_relation_members\".\"member_id\", \"current_relation_members\".\"relation_id\", \"current_relation_members\".\"member_type\"\n" + 
+				"from \"current_relation_members_10\" \"current_relation_members\"\n" + 
+				"where \"current_relation_members\".\"member_type\" = ?) as \"currentRelMembersSubQ\"\n" + 
+				"join (select \"current_relations\".\"id\", tags->'hoot:review:needs' as \"needreview\"\n" + 
+				"from \"current_relations_10\" \"current_relations\"\n" + 
+				"where exist(tags,'hoot:review:needs')) as \"reviewableCurrentRelSubQ\"\n" + 
+				"on \"currentRelMembersSubQ\".\"relation_id\" = \"reviewableCurrentRelSubQ\".\"id\") as \"reviewRelJoinRelMemberSubQ\"\n" + 
+				"on \"currentWayNodesSubQ\".\"way_id\" = \"reviewRelJoinRelMemberSubQ\".\"member_id\") as \"reviewRelJoinRelMemberJoinCurrentWayNodesSubQ\"\n" + 
+				"on \"currentNodeSubQ\".\"id\" = \"reviewRelJoinRelMemberJoinCurrentWayNodesSubQ\".\"node_id\"\n" + 
+				"group by \"reviewRelJoinRelMemberJoinCurrentWayNodesSubQ\".\"relation_id\", \"reviewRelJoinRelMemberJoinCurrentWayNodesSubQ\".\"needreview\") as \"reviewRelWayMembersCentroidSubQ\"\n" + 
+				"where \"reviewRelWayMembersCentroidSubQ\".\"centlat\" >= ? and \"reviewRelWayMembersCentroidSubQ\".\"centlat\" <= ? and \"reviewRelWayMembersCentroidSubQ\".\"centlon\" >= ? and \"reviewRelWayMembersCentroidSubQ\".\"centlon\" <= ?\n" + 
+				"limit ?";
 		org.junit.Assert.assertEquals(expected, actual);
 	}
 	
@@ -79,44 +73,27 @@ public class AllReviewableItemsQueryTest {
 	{
 		BoundingBox bbox = new BoundingBox();
 		AllReviewableItemsQuery q = new AllReviewableItemsQuery(null,7,bbox);
-		String actual = q._getReviewableRelatioWithWayMembersCentroidInBboxQuery();
+		String actual = q._getReviewableRelatioWithWayMembersCentroidInBboxQuery().toString();
 		
-		String expected = "SELECT relation_id, needreview, minlat, maxlat, minlon, maxlon"
-				+ " FROM"
-				+ " ("
-				+ "	SELECT reviewRelJoinRelMemberJoinCurrentWayNodesSubQ.relation_id, reviewRelJoinRelMemberJoinCurrentWayNodesSubQ.needreview,"
-				+ "					max(currentNodeSubQ.latitude) as maxlat, min(currentNodeSubQ.latitude) as minlat," 
-				+ "					max(currentNodeSubQ.longitude) as maxlon, min(currentNodeSubQ.longitude) as minlon,"
-				+ "					(((max(currentNodeSubQ.latitude) - min(currentNodeSubQ.latitude))/2)+min(currentNodeSubQ.latitude)) AS centlat,"
-				+ " 					(((max(currentNodeSubQ.longitude) - min(currentNodeSubQ.longitude))/2)+min(currentNodeSubQ.longitude)) AS centlon"
-				+ " 	FROM"
-				+ "	("
-				+ "		SELECT id, latitude  , longitude FROM current_nodes_7	) AS currentNodeSubQ"
-				+ "	JOIN"
-				+ "	(		SELECT currentWayNodesSubQ.node_id, reviewRelJoinRelMemberSubQ.relation_id, reviewRelJoinRelMemberSubQ.needreview FROM"
-				+ "		("
-				+ "			SELECT node_id, way_id FROM current_way_nodes_7"
-				+ "		) AS currentWayNodesSubQ"
-				+ "		JOIN"
-				+ "		("
-				+ "			SELECT currentRelMembersSubQ.member_id, currentRelMembersSubQ.relation_id, reviewableCurrentRelSubQ.needreview"
-				+ " 			FROM"
-				+ " 			("
-				+ "				SELECT member_id, relation_id, member_type FROM current_relation_members_7"
-				+ "			) AS currentRelMembersSubQ"
-				+ "			JOIN"
-				+ "			("
-				+ "				SELECT id, tags->'hoot:review:needs' AS needreview  FROM current_relations_7 WHERE exist(tags,'hoot:review:needs')"
-				+ "			) AS reviewableCurrentRelSubQ"
-				+ " 			ON (currentRelMembersSubQ.relation_id=reviewableCurrentRelSubQ.id)"
-				+ "  			AND currentRelMembersSubQ.member_type='way'"
-				+ "		) AS reviewRelJoinRelMemberSubQ"
-				+ " 		ON (currentWayNodesSubQ.way_id=reviewRelJoinRelMemberSubQ.member_id)"
-				+ "	) AS reviewRelJoinRelMemberJoinCurrentWayNodesSubQ"
-				+ " 	ON (currentNodeSubQ.id=reviewRelJoinRelMemberJoinCurrentWayNodesSubQ.node_id)"
-				+ "	GROUP BY reviewRelJoinRelMemberJoinCurrentWayNodesSubQ.relation_id,"
-				+ " reviewRelJoinRelMemberJoinCurrentWayNodesSubQ.needreview)"
-				+ " AS reviewRelWayMembersCentroidSubQ WHERE centlat>=-181.0 AND centlat<=-181.0 AND centlon>=-181.0 AND centlon<=-181.0";
+		String expected = "from (select \"reviewRelJoinRelMemberJoinCurrentWayNodesSubQ\".\"relation_id\", \"reviewRelJoinRelMemberJoinCurrentWayNodesSubQ\".\"needreview\", max(\"currentNodeSubQ\".\"latitude\") as \"maxlat\", min(\"currentNodeSubQ\".\"latitude\") as \"minlat\", max(\"currentNodeSubQ\".\"longitude\") as \"maxlon\", min(\"currentNodeSubQ\".\"longitude\") as \"minlon\", (((max(\"currentNodeSubQ\".\"latitude\") - min(\"currentNodeSubQ\".\"latitude\"))/2)+min(\"currentNodeSubQ\".\"latitude\")) as \"centlat\", (((max(\"currentNodeSubQ\".\"longitude\") - min(\"currentNodeSubQ\".\"longitude\"))/2)+min(\"currentNodeSubQ\".\"longitude\")) as \"centlon\"\n" + 
+				"from (select \"current_nodes\".\"id\", \"current_nodes\".\"latitude\", \"current_nodes\".\"longitude\"\n" + 
+				"from \"current_nodes_7\" \"current_nodes\") as \"currentNodeSubQ\"\n" + 
+				"join (select \"currentWayNodesSubQ\".\"node_id\", \"reviewRelJoinRelMemberSubQ\".\"relation_id\", \"reviewRelJoinRelMemberSubQ\".\"needreview\"\n" + 
+				"from (select \"current_way_nodes\".\"node_id\", \"current_way_nodes\".\"way_id\"\n" + 
+				"from \"current_way_nodes_7\" \"current_way_nodes\") as \"currentWayNodesSubQ\"\n" + 
+				"join (select \"currentRelMembersSubQ\".\"member_id\", \"currentRelMembersSubQ\".\"relation_id\", \"reviewableCurrentRelSubQ\".\"needreview\"\n" + 
+				"from (select \"current_relation_members\".\"member_id\", \"current_relation_members\".\"relation_id\", \"current_relation_members\".\"member_type\"\n" + 
+				"from \"current_relation_members_7\" \"current_relation_members\"\n" + 
+				"where \"current_relation_members\".\"member_type\" = ?) as \"currentRelMembersSubQ\"\n" + 
+				"join (select \"current_relations\".\"id\", tags->'hoot:review:needs' as \"needreview\"\n" + 
+				"from \"current_relations_7\" \"current_relations\"\n" + 
+				"where exist(tags,'hoot:review:needs')) as \"reviewableCurrentRelSubQ\"\n" + 
+				"on \"currentRelMembersSubQ\".\"relation_id\" = \"reviewableCurrentRelSubQ\".\"id\") as \"reviewRelJoinRelMemberSubQ\"\n" + 
+				"on \"currentWayNodesSubQ\".\"way_id\" = \"reviewRelJoinRelMemberSubQ\".\"member_id\") as \"reviewRelJoinRelMemberJoinCurrentWayNodesSubQ\"\n" + 
+				"on \"currentNodeSubQ\".\"id\" = \"reviewRelJoinRelMemberJoinCurrentWayNodesSubQ\".\"node_id\"\n" + 
+				"group by \"reviewRelJoinRelMemberJoinCurrentWayNodesSubQ\".\"relation_id\", \"reviewRelJoinRelMemberJoinCurrentWayNodesSubQ\".\"needreview\") as \"reviewRelWayMembersCentroidSubQ\"\n" + 
+				"where \"reviewRelWayMembersCentroidSubQ\".\"centlat\" >= ? and \"reviewRelWayMembersCentroidSubQ\".\"centlat\" <= ? and \"reviewRelWayMembersCentroidSubQ\".\"centlon\" >= ? and \"reviewRelWayMembersCentroidSubQ\".\"centlon\" <= ?\n" + 
+				"limit ?";
 		org.junit.Assert.assertEquals(expected, actual);
 	}
 
@@ -129,7 +106,7 @@ public class AllReviewableItemsQueryTest {
 		AllReviewableItemsQuery q = new AllReviewableItemsQuery(null,10,bbox);
 		try
 		{
-			String sql = q._getReviewableRelatioWithWayMembersCentroidInBboxQuery();
+			q._getReviewableRelatioWithWayMembersCentroidInBboxQuery();
 		}
 		catch(Exception ex)
 		{
@@ -145,19 +122,25 @@ public class AllReviewableItemsQueryTest {
 	{
 		BoundingBox bbox = new BoundingBox();
 		AllReviewableItemsQuery q = new AllReviewableItemsQuery(null,10,bbox);
-		String actual = q._getReviewableRelationMembersCountByTypeQuery("node");
-		String expected = "select count(*) as cnt from current_relation_members_10 where relation_id in "
-				+ "(select id from current_relations_10 where exist(tags,'hoot:review:needs'))and member_type='node'";
+		String actual = q._getReviewableRelationMembersCountByTypeQuery(DbUtils.nwr_enum.node).toString();
+		String expected = "from \"current_relation_members_10\" \"current_relation_members\"\n" + 
+				"where \"current_relation_members\".\"relation_id\" in (select \"current_relations\".\"id\"\n" + 
+				"from \"current_relations_10\" \"current_relations\"\n" + 
+				"where exist(tags,'hoot:review:needs')) and \"current_relation_members\".\"member_type\" = ?";
 		org.junit.Assert.assertEquals(expected, actual);
 		
-		actual = q._getReviewableRelationMembersCountByTypeQuery("way");
-		expected = "select count(*) as cnt from current_relation_members_10 where relation_id in "
-				+ "(select id from current_relations_10 where exist(tags,'hoot:review:needs'))and member_type='way'";
+		actual = q._getReviewableRelationMembersCountByTypeQuery(DbUtils.nwr_enum.way).toString();
+		expected = "from \"current_relation_members_10\" \"current_relation_members\"\n" + 
+				"where \"current_relation_members\".\"relation_id\" in (select \"current_relations\".\"id\"\n" + 
+				"from \"current_relations_10\" \"current_relations\"\n" + 
+				"where exist(tags,'hoot:review:needs')) and \"current_relation_members\".\"member_type\" = ?";
 		org.junit.Assert.assertEquals(expected, actual);
 		
-		actual = q._getReviewableRelationMembersCountByTypeQuery("relation");
-		expected = "select count(*) as cnt from current_relation_members_10 where relation_id in "
-				+ "(select id from current_relations_10 where exist(tags,'hoot:review:needs'))and member_type='relation'";
+		actual = q._getReviewableRelationMembersCountByTypeQuery(DbUtils.nwr_enum.relation).toString();
+		expected = "from \"current_relation_members_10\" \"current_relation_members\"\n" + 
+				"where \"current_relation_members\".\"relation_id\" in (select \"current_relations\".\"id\"\n" + 
+				"from \"current_relations_10\" \"current_relations\"\n" + 
+				"where exist(tags,'hoot:review:needs')) and \"current_relation_members\".\"member_type\" = ?";
 		org.junit.Assert.assertEquals(expected, actual);
 	}
 
@@ -167,7 +150,7 @@ public class AllReviewableItemsQueryTest {
   @Category(UnitTest.class)
 	public void testGetReviewableRelatioWithWayMembersCentroidInBbox() throws Exception
 	{
-		class ReviewMockResultSet extends MockResultSet
+/*		class ReviewMockResultSet extends MockResultSet
 		{
 			private int _currIdx = -1;
 			private List<JSONObject> _mockData = new ArrayList<>();
@@ -228,9 +211,7 @@ public class AllReviewableItemsQueryTest {
 		org.mockito.Mockito.doReturn(mockResult).when(spy)
 			._execReviewableRelatioWithWayMembersCentroidInBboxQuery(org.mockito.Matchers.any(java.sql.Statement.class));
 		
-		org.mockito.Mockito.doReturn(new MockStatement()).when(spy)
-		._createStatement();
-		
+	
 
 		
 		Map<Long, ReviewableItemBboxInfo> res = spy._getReviewableRelatioWithWayMembersCentroidInBbox();
@@ -258,7 +239,7 @@ public class AllReviewableItemsQueryTest {
 		org.junit.Assert.assertTrue(38.892085 == resBbox.getMaxLat());
 		org.junit.Assert.assertTrue(-77.028118 == resBbox.getMaxLon());
 		
-		
+		*/
 	}
 	
 	@Test
@@ -267,41 +248,23 @@ public class AllReviewableItemsQueryTest {
 	{
 		BoundingBox bbox = new BoundingBox(-77.0520431244303, 38.9025514720831, -77.0120431244303, 38.9925514720831);
 		AllReviewableItemsQuery q = new AllReviewableItemsQuery(null,10,bbox);
-		String actual = q._getReviewableRelatioWithNodeMembersCentroidInBboxQuery();
+		String actual = q._getReviewableRelatioWithNodeMembersCentroidInBboxQuery().toString();
 		
-		String expected ="SELECT relation_id, needreview, minlat, maxlat, minlon, maxlon FROM"
-				+ "("
-				+ "	SELECT reviewRelJoinRelMemberSubQ.relation_id, reviewRelJoinRelMemberSubQ.needreview,"
-				+ "	max(currentNodeSubQ.latitude) as maxlat, min(currentNodeSubQ.latitude) as minlat," 
-				+ "	max(currentNodeSubQ.longitude) as maxlon, min(currentNodeSubQ.longitude) as minlon," 
-				+ " (((max(currentNodeSubQ.latitude) - min(currentNodeSubQ.latitude))/2)+min(currentNodeSubQ.latitude)) AS centlat,"
-				+ " (((max(currentNodeSubQ.longitude) - min(currentNodeSubQ.longitude))/2)+min(currentNodeSubQ.longitude)) AS centlon"
-				+ " 	FROM"
-				+ "	("
-				+ "		SELECT id, latitude  , longitude FROM current_nodes_10"
-				+ "	) AS currentNodeSubQ"
-				+ "	JOIN"
-				+ "	("
-				+ "		SELECT currentRelMembersSubQ.member_id, currentRelMembersSubQ.relation_id, reviewableCurrentRelSubQ.needreview"
-				+ " 		FROM"
-				+ " 		("
-				+ "			SELECT member_id, relation_id, member_type FROM current_relation_members_10"
-				+ "		) AS currentRelMembersSubQ"
-				+ "		JOIN"
-				+ "		("
-				+ "			SELECT id, tags->'hoot:review:needs' AS needreview"
-				+ "  FROM current_relations_10 WHERE exist(tags,'hoot:review:needs')"
-				+ "		) AS reviewableCurrentRelSubQ"
-				+ " 		ON (currentRelMembersSubQ.relation_id=reviewableCurrentRelSubQ.id)"
-				+ "  		AND currentRelMembersSubQ.member_type='node'"
-				+ "	) AS reviewRelJoinRelMemberSubQ"
-				+ "  	ON (currentNodeSubQ.id=reviewRelJoinRelMemberSubQ.member_id)"
-				+ "	GROUP BY reviewRelJoinRelMemberSubQ.relation_id, reviewRelJoinRelMemberSubQ.needreview"
-				+ "	) AS reviewRelNodeMembersCentroidSubQ"
-				+ "	WHERE centlat>=38.9025514720831"
-				+ " AND centlat<=38.9925514720831"
-				+ " AND centlon>=-77.0520431244303"
-				+ " AND centlon<=-77.0120431244303";
+		String expected ="from (select \"reviewRelJoinRelMemberSubQ\".\"relation_id\", \"reviewRelJoinRelMemberSubQ\".\"needreview\", max(\"currentNodeSubQ\".\"latitude\") as \"maxlat\", min(\"currentNodeSubQ\".\"latitude\") as \"minlat\", max(\"currentNodeSubQ\".\"longitude\") as \"maxlon\", min(\"currentNodeSubQ\".\"longitude\") as \"minlon\", (((max(\"currentNodeSubQ\".\"latitude\") - min(\"currentNodeSubQ\".\"latitude\"))/2)+min(\"currentNodeSubQ\".\"latitude\")) as \"centlat\", (((max(\"currentNodeSubQ\".\"longitude\") - min(\"currentNodeSubQ\".\"longitude\"))/2)+min(\"currentNodeSubQ\".\"longitude\")) as \"centlon\"\n" + 
+				"from (select \"current_nodes\".\"id\", \"current_nodes\".\"latitude\", \"current_nodes\".\"longitude\"\n" + 
+				"from \"current_nodes_10\" \"current_nodes\") as \"currentNodeSubQ\"\n" + 
+				"join (select \"currentRelMembersSubQ\".\"member_id\", \"currentRelMembersSubQ\".\"relation_id\", \"reviewableCurrentRelSubQ\".\"needreview\"\n" + 
+				"from (select \"current_relation_members\".\"member_id\", \"current_relation_members\".\"relation_id\", \"current_relation_members\".\"member_type\"\n" + 
+				"from \"current_relation_members_10\" \"current_relation_members\"\n" + 
+				"where \"current_relation_members\".\"member_type\" = ?) as \"currentRelMembersSubQ\"\n" + 
+				"join (select \"current_relations\".\"id\", tags->'hoot:review:needs' as \"needreview\"\n" + 
+				"from \"current_relations_10\" \"current_relations\"\n" + 
+				"where exist(tags,'hoot:review:needs')) as \"reviewableCurrentRelSubQ\"\n" + 
+				"on \"currentRelMembersSubQ\".\"relation_id\" = \"reviewableCurrentRelSubQ\".\"id\") as \"reviewRelJoinRelMemberSubQ\"\n" + 
+				"on \"currentNodeSubQ\".\"id\" = \"reviewRelJoinRelMemberSubQ\".\"member_id\"\n" + 
+				"group by \"reviewRelJoinRelMemberSubQ\".\"relation_id\", \"reviewRelJoinRelMemberSubQ\".\"needreview\") as \"reviewRelNodeMembersCentroidSubQ\"\n" + 
+				"where \"reviewRelNodeMembersCentroidSubQ\".\"centlat\" >= ? and \"reviewRelNodeMembersCentroidSubQ\".\"centlat\" <= ? and \"reviewRelNodeMembersCentroidSubQ\".\"centlon\" >= ? and \"reviewRelNodeMembersCentroidSubQ\".\"centlon\" <= ?\n" + 
+				"limit ?";
 		org.junit.Assert.assertEquals(expected, actual);
 	}
 	
@@ -313,7 +276,7 @@ public class AllReviewableItemsQueryTest {
 		AllReviewableItemsQuery q = new AllReviewableItemsQuery(null,10,bbox);
 		try
 		{
-			String sql = q._getReviewableRelatioWithNodeMembersCentroidInBboxQuery();
+			q._getReviewableRelatioWithNodeMembersCentroidInBboxQuery();
 		}
 		catch(Exception ex)
 		{
@@ -327,7 +290,7 @@ public class AllReviewableItemsQueryTest {
   @Category(UnitTest.class)
 	public void testGetReviewableRelatioWithNodeMembersCentroidInBbox() throws Exception
 	{
-		class ReviewMockResultSet extends MockResultSet
+/*		class ReviewMockResultSet extends MockResultSet
 		{
 			private int _currIdx = -1;
 			private List<JSONObject> _mockData = new ArrayList<>();
@@ -418,14 +381,14 @@ public class AllReviewableItemsQueryTest {
 		org.junit.Assert.assertTrue(38.892085 == resBbox.getMaxLat());
 		org.junit.Assert.assertTrue(-77.028118 == resBbox.getMaxLon());
 		
-		
+		*/
 	}
 
 	@Test
   @Category(UnitTest.class)
 	public void testGetReviewableRelationMembers() throws Exception
 	{
-		class ReviewMockResultSet extends MockResultSet
+/*		class ReviewMockResultSet extends MockResultSet
 		{
 			private int _currIdx = -1;
 			private List<JSONObject> _mockData = new ArrayList<>();
@@ -512,14 +475,14 @@ public class AllReviewableItemsQueryTest {
 		org.junit.Assert.assertTrue((long)628 == (long)o.get("memberid"));
 		org.junit.Assert.assertTrue((long)6 == (long)o.get("relationid"));
 		org.junit.Assert.assertTrue(o.get("needreview").toString().equals("yes"));
-		
+		*/
 	}
 	
 	@Test
   @Category(UnitTest.class)
 	public void testExecQueryNode() throws Exception
 	{
-		BoundingBox bbox = new BoundingBox();
+/*		BoundingBox bbox = new BoundingBox();
 		AllReviewableItemsQuery real = new AllReviewableItemsQuery(null,10,bbox);
 		AllReviewableItemsQuery spy = Mockito.spy(real);	
 		
@@ -572,7 +535,7 @@ public class AllReviewableItemsQueryTest {
 		org.junit.Assert.assertTrue(-77.047465 == resp.getReviewableItems().get((long)4).getBbox().getMaxLon());
 		
 		org.junit.Assert.assertTrue(-77.047465 == resp.getReviewableItems().get((long)4).getBbox().getCenterX());
-		org.junit.Assert.assertTrue(38.895676 == resp.getReviewableItems().get((long)4).getBbox().getCenterY());
+		org.junit.Assert.assertTrue(38.895676 == resp.getReviewableItems().get((long)4).getBbox().getCenterY());*/
 	}
 
 	
@@ -580,7 +543,7 @@ public class AllReviewableItemsQueryTest {
   @Category(UnitTest.class)
 	public void testExecQueryWay() throws Exception
 	{
-		BoundingBox bbox = new BoundingBox();
+/*		BoundingBox bbox = new BoundingBox();
 		AllReviewableItemsQuery real = new AllReviewableItemsQuery(null,10,bbox);
 		AllReviewableItemsQuery spy = Mockito.spy(real);	
 		
@@ -633,7 +596,7 @@ public class AllReviewableItemsQueryTest {
 		org.junit.Assert.assertTrue(-77.047465 == resp.getReviewableItems().get((long)4).getBbox().getMaxLon());
 		
 		org.junit.Assert.assertTrue(-77.047465 == resp.getReviewableItems().get((long)4).getBbox().getCenterX());
-		org.junit.Assert.assertTrue(38.895676 == resp.getReviewableItems().get((long)4).getBbox().getCenterY());
+		org.junit.Assert.assertTrue(38.895676 == resp.getReviewableItems().get((long)4).getBbox().getCenterY());*/
 	}
 	
 	
@@ -641,7 +604,7 @@ public class AllReviewableItemsQueryTest {
   @Category(UnitTest.class)
 	public void testExecQueryRelation() throws Exception
 	{
-		BoundingBox bbox = new BoundingBox(-104.912548,38.857832,-104.719153,38.875195);
+/*		BoundingBox bbox = new BoundingBox(-104.912548,38.857832,-104.719153,38.875195);
 		AllReviewableItemsQuery real = new AllReviewableItemsQuery(null,10,bbox);
 		AllReviewableItemsQuery spy = Mockito.spy(real);	
 		
@@ -723,25 +686,8 @@ public class AllReviewableItemsQueryTest {
 		org.junit.Assert.assertTrue(resp.getReviewableItems().get((long)6).getBbox().getMinLon()==-104.9197586);
 		org.junit.Assert.assertTrue(resp.getReviewableItems().get((long)6).getBbox().getMaxLat()==38.859302);
 		org.junit.Assert.assertTrue(resp.getReviewableItems().get((long)6).getBbox().getMaxLon()==-104.912548);
-		
+		*/
 	
 	}
-	/*
-	@Test
-  @Category(UnitTest.class)
-	public void testExecQuerySystem() throws Exception
-	{
-		try(Connection conn = DbUtils.createConnection())
-		{
-			//BoundingBox bbox = new BoundingBox(-104.912548,38.857832,-104.719153,38.875195);
-			BoundingBox bbox = new BoundingBox(-180,-90,180,90);
-			AllReviewableItemsQuery real = new AllReviewableItemsQuery(conn,10,bbox);
-			AllReviewableItemsQuery spy = Mockito.spy(real);
-			AllReviewableItems resp = (AllReviewableItems) spy.execQuery();
-			org.junit.Assert.assertEquals(2, resp.getReviewableItems().size());
-		}
-	}*/
 	
-
-
 }

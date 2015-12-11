@@ -30,6 +30,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+import hoot.services.HootProperties;
 import hoot.services.controllers.osm.MapResource;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
@@ -85,6 +86,20 @@ public class ReviewResource
 
   private ClassPathXmlApplicationContext appContext;
   private PlatformTransactionManager transactionManager;
+  
+	private static long MAX_RESULT_SIZE = 60000;
+	static
+	{
+		try
+		{
+			String maxQuerySize = HootProperties.getProperty("maxQueryNodes"); 
+			MAX_RESULT_SIZE = Long.parseLong(maxQuerySize);
+		}
+		catch(Exception ex)
+		{
+			log.error(ex.getMessage());
+		}
+	}
 
   public ReviewResource() throws Exception
   {
@@ -558,7 +573,14 @@ public class ReviewResource
 			double maxlat = Double.parseDouble(maxLat);
 			ReviewableReader reader = new ReviewableReader(conn);
 			AllReviewableItems result = reader.getAllReviewableItems(nMapId, new BoundingBox(minlon, minlat, maxlon, maxlat));
-			ret = result.toGeoJson();
+			ret = new JSONObject();
+			if(result.getOverFlow() == true)
+			{
+				ret.put("warning", "The result size is greater than maximum limit of:" + MAX_RESULT_SIZE
+						+ ". Returning truncated data.");
+			}
+			ret.put("total", result.getReviewableItems().size());
+			ret.put("geojson", result.toGeoJson());
 		}
 		catch (Exception ex)
 		{
