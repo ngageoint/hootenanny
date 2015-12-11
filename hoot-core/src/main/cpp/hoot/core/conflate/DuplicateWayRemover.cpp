@@ -127,6 +127,10 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
         // if this is a candidate for de-duping
         if (_isCandidateWay(w2))
         {
+          LOG_DEBUG("candidate way tags:");
+          LOG_VARD(w->getTags());
+          LOG_VARD(w2->getTags());
+
           if (w->getNodeCount() > w2->getNodeCount())
           {
             _removeDuplicateNodes(w, _map->getWay(wit->first));
@@ -210,6 +214,8 @@ void DuplicateWayRemover::removeDuplicates(shared_ptr<OsmMap> map)
 
 void DuplicateWayRemover::_removeNodes(shared_ptr<const Way> w, int start, int length)
 {
+  LOG_DEBUG("Ways have common geometry.");
+
   const std::vector<long>& nodes = w->getNodeIds();
 
   // if we're not deleting all the nodes
