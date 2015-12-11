@@ -210,7 +210,6 @@ void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
   int length = lcs.apply();
   if (length > 1)
   {
-    LOG_DEBUG("Ways have common geometry.");
     _removeNodes(w1, lcs.getW1Index(), length);
     _updateWayNameTags(w1, w2);
   }
@@ -231,7 +230,6 @@ void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
     int length = lcs.apply();
     if (length > 1)
     {
-      LOG_DEBUG("Ways have common geometry.");
       _removeNodes(w1, lcs.getW1Index(), length);
       _updateWayNameTags(w1, w2);
     }
@@ -258,6 +256,8 @@ void DuplicateWayRemover::removeDuplicates(shared_ptr<OsmMap> map)
 
 void DuplicateWayRemover::_removeNodes(shared_ptr<const Way> w, int start, int length)
 {
+  LOG_DEBUG("Ways have common geometry.");
+
   const std::vector<long>& nodes = w->getNodeIds();
 
   // if we're not deleting all the nodes
