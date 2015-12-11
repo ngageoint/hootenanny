@@ -37,6 +37,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
+#include <hoot/core/schema/TagMergerFactory.h>
 
 // Standard
 #include <iostream>
@@ -133,14 +134,16 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
           LOG_VARD(w->getTags());
           LOG_VARD(w2->getTags());
 
-          double textTagScore, enumTagScore, weight;
+          double textTagScore = 0.0;
+          double enumTagScore = 0.0;
+          double weight = 0.0;
           //If all non-name tags aren't exactly the same between these two ways (or the strict
           //tag matching isn't activated), then we won't merge their geometries or tags.
           TagComparator::getInstance().compareTextTags(w->getTags(), w2->getTags(), textTagScore, weight);
           TagComparator::getInstance().compareEnumeratedTags(w->getTags(), w2->getTags(), enumTagScore, weight);
           if ((textTagScore == 1.0 && enumTagScore == 1.0) || !_strictTagMatching)
-          { 
-            //LOG_DEBUG("Ways have exact non-name tag match or strict tag matching is disabled.");
+          {
+            LOG_DEBUG("Ways have exact non-name tag match or strict tag matching is disabled.");
 
             if (w->getNodeCount() > w2->getNodeCount())
             {
@@ -178,26 +181,21 @@ bool DuplicateWayRemover::_isCandidateWay(const ConstWayPtr& w) const
 void DuplicateWayRemover::_updateWayNameTags(shared_ptr<Way> way1, shared_ptr<Way> way2)
 {
   //merge name tags for these two ways, if they aren't already identical
-  double namesScore, weight;
+  double namesScore = 0.0;
+  double weight = 0.0;
   TagComparator::getInstance().compareNames(way1->getTags(), way2->getTags(), namesScore, weight);
   if (namesScore != 1.0)
   {
     Tags mergedNameTags;
-    Tags tags1 = way1->getTags();
-    Tags tags2 = way2->getTags();
-    TagComparator::getInstance().mergeNames(tags1, tags2, mergedNameTags);
-    //way1 may have been removed from the map in _removeNodes, so check for its existence
-    if (_map->containsWay(way1->getId()))
-    {
-      tags1.addTags(mergedNameTags);
-      way1->setTags(tags1);
-    }
-    tags2.addTags(mergedNameTags);
-    way2->setTags(tags2);
+    TagComparator::getInstance().mergeNames(way1->getTags(), way2->getTags(), mergedNameTags);
+    way2->getTags().addTags(mergedNameTags);
+    //TODO: without a copy and replace here, we get inconsistent output in some of the hadoop tests;
+    //with a copy here DuplicateWayRemoverTest yields bad output
+    //WayPtr way2Copy(new Way(*way2));
+    //_map->replace(way2, way2Copy);
 
-    //LOG_DEBUG("Merged way name tags:");
-    //LOG_VARD(way1->getTags());
-    //LOG_VARD(way2->getTags());
+    LOG_DEBUG("Merged way name tags:");
+    LOG_VARD(way2->getTags());
   }
 }
 
@@ -256,7 +254,7 @@ void DuplicateWayRemover::removeDuplicates(shared_ptr<OsmMap> map)
 
 void DuplicateWayRemover::_removeNodes(shared_ptr<const Way> w, int start, int length)
 {
-  LOG_DEBUG("Ways have common geometry.");
+  LOG_DEBUG("Ways have common node(s)");
 
   const std::vector<long>& nodes = w->getNodeIds();
 
