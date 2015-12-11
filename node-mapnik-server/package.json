@@ -1,6 +1,7 @@
 {
   "name": "node-mapnik-server",
   "version": "0.0.1",
+  "private": true,
   "dependencies": {
     "mapnik": "3.x",
     "generic-pool": "*",
