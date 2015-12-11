@@ -1534,7 +1534,7 @@ Enable the calculation of Optimal Constrained Matches during conflation. When en
 === unify.optimizer.time.limit
 
 * Data Type: double
-* Default Value: `-1`
+* Default Value: `30`
 
 The maximum amount of time in seconds to wait for the optimizer to complete. A
 value of -1 makes the time limit unlimited.
@@ -1563,7 +1563,7 @@ Semi-colon delimited list of operations to apply before conflating.
 === uuid.helper.repeatable
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 Creates a repeatable UUID for the features. This is useful for debugging, but shouldn't be used in normal operation.
 
