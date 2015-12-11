@@ -65,6 +65,12 @@ namespace hoot
   inline Degrees toDegrees(Radians r) { return r / M_PI * 180.0; }
 
   //Boost units functions
+  inline Length kiloToLength(double f)
+  {
+    Length l = 1000.0 * boost::units::si::meters;
+    return static_cast<Length>(f * l);
+  }
+
   inline Length feetToLength(double f)
   {
     return static_cast<Length>(f * feet);
@@ -80,16 +86,22 @@ namespace hoot
     return static_cast<Length>(f * nmi);
   }
 
+  inline Velocity kiloToVelocity(double f)
+  {
+    Times ts = 3600.0 * boost::units::si::seconds;
+    return kiloToLength(f)/ts;
+  }
+
   inline Velocity feetToVelocity(double f)
   {
     Times ts = 3600.0 * boost::units::si::seconds;
-    return static_cast<Length>(f * feet)/ts;
+    return feetToLength(f)/ts;
   }
 
   inline Velocity mileToVelocity(double f)
   {
     Times ts = 3600.0 * boost::units::si::seconds;
-    return static_cast<Length>(f * mile)/ts;
+    return mileToLength(f)/ts;
   }
 
   inline Velocity knotToVelocity(double f)

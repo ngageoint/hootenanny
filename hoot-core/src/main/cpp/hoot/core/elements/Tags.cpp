@@ -201,7 +201,7 @@ double Tags::getVelocity(const QString& k) const
 
   if (isKm)
   {
-    result = result * 1000.0 / 3600.0;
+    result = kiloToVelocity(result).value();
   }
   else if (isMph)
   {
@@ -252,7 +252,7 @@ double Tags::getLength(const QString& k) const
 
   if (isKm)
   {
-    result = result * 1000.0;
+    result = kiloToLength(result).value();
   }
   else if (isMi)
   {
