@@ -166,7 +166,7 @@ mgcp = {
             {
                 if (tags.railway)
                 {
-                    newAttrs.F_CODE = 'AT010';
+                    newAttrs.F_CODE = 'AN010';
                 }
                 else
                 {

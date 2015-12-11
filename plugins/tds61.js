@@ -1540,6 +1540,21 @@ tds61 = {
             delete attrs.ZI005_FNA3;
         }
 
+        // The ZI001_SDV (source date time) field can only be 20 characters long. When we conflate features,
+        // we concatenate the tag values for this field.
+        // We are getting guidance from the customer on what value they would like in this field:
+        // * The earliest date/time,
+        // * The first on in the list
+        // * etc
+        //
+        // Until we get an answer, we are going to take the first value in the list.
+        if (attrs.ZI001_SDV)
+        {
+            var tmpList = attrs.ZI001_SDV.split(';');
+            attrs.ZI001_SDV = tmpList[0];
+        }
+
+
     }, // End applyToNfddPostProcessing
 
 // #####################################################################################################
