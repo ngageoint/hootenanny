@@ -277,14 +277,6 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
 
 void TagComparator::compareTextTags(const Tags& t1, const Tags& t2, double& score, double& weight)
 {
-  //LOG_VARD(t1);
-  //LOG_VARD(t2);
-
-  //if (t1.contains("blah") || t2.contains("blah"))
-  //{
-    //int test = 1;
-  //}
-
   OsmSchema& schema = OsmSchema::getInstance();
 
   score = 1.0;
@@ -292,11 +284,6 @@ void TagComparator::compareTextTags(const Tags& t1, const Tags& t2, double& scor
 
   for (Tags::const_iterator it = t1.begin(); it != t1.end(); it++)
   {
-    //LOG_VARD(it.key());
-    //if (it.key() == "accuracy")
-    //{
-      //int test = 1;
-    //}
     const SchemaVertex& tv = schema.getTagVertex(it.key());
     if (schema.isAncestor(it.key(), "abstract_name") == false &&
         tv.valueType == Text && t2.contains(it.key()))
