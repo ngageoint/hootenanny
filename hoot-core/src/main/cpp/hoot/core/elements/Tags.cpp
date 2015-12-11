@@ -243,7 +243,8 @@ double Tags::getLength(const QString& k) const
   {
     isFi = true;
   }
-  else if (v.contains("decimetres", Qt::CaseInsensitive) || v.contains("decimetre", Qt::CaseInsensitive))
+  else if (v.contains("decimetres", Qt::CaseInsensitive) || v.contains("decimetre", Qt::CaseInsensitive)
+           || v.contains("dm", Qt::CaseInsensitive))
   {
     isDecimi = true;
   }
