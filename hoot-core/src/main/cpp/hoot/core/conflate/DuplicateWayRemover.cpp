@@ -140,7 +140,7 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
           TagComparator::getInstance().compareEnumeratedTags(w->getTags(), w2->getTags(), enumTagScore, weight);
           if ((textTagScore == 1.0 && enumTagScore == 1.0) || !_strictTagMatching)
           { 
-            LOG_DEBUG("Ways have exact non-name tag match or strict tag matching is disabled.");
+            //LOG_DEBUG("Ways have exact non-name tag match or strict tag matching is disabled.");
 
             if (w->getNodeCount() > w2->getNodeCount())
             {
@@ -195,9 +195,9 @@ void DuplicateWayRemover::_updateWayNameTags(shared_ptr<Way> way1, shared_ptr<Wa
     tags2.addTags(mergedNameTags);
     way2->setTags(tags2);
 
-    LOG_DEBUG("Merged way name tags:");
-    LOG_VARD(way1->getTags());
-    LOG_VARD(way2->getTags());
+    //LOG_DEBUG("Merged way name tags:");
+    //LOG_VARD(way1->getTags());
+    //LOG_VARD(way2->getTags());
   }
 }
 
