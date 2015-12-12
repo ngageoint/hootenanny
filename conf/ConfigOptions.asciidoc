@@ -217,6 +217,26 @@ See also:
 
 The string that lists the types of conflation used in the user interface.  The possible values are: reference, cookieCutter, average, and advancedConflation. 
 
+=== conflator.manipulators
+
+* Data Type: list
+* Default Value:
+** `hoot::WayMerger`
+
+List of manipulators to enable in the conflator.
+
+Some of the possible options include:
+
+* `hoot::WayMerger` -
+* `hoot::WayTagMerger` -
+
+=== conflator.min.valid.score
+
+* Data Type: double
+* Default Value: `0.01`
+
+TODO: Update conflator min valid score
+
 === convert.ops
 
 * Data Type: list
@@ -257,6 +277,13 @@ positive or negative.
 
 Crops based on the polygon rather than doing a cookie cut when using the cookie cutter map
 operation (CookieCutterOp).
+
+=== create.bogus.review.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO: Get description of create bogus review tags
 
 === crop.bounds
 
@@ -470,6 +497,39 @@ The highway subline matcher to use when determining matching sublines.
 
 The way subline string matcher to use when determining matching sublines for highways.
 
+=== hoot.hadoop.file.deps
+
+* Data Type: list
+* Default Value:
+** `${HOOT_HOME}/conf/BuildingModel.rf`
+
+Used by the building matching code.
+
+=== hoot.hadoop.libpath
+
+* Data Type: list
+* Default Value:
+** `${HOOT_HOME}/lib/`
+** `${HOOT_HOME}/local/lib/`
+** `${HADOOP_HOME}/c++/Linux-amd64-64/lib/`
+** `${HOOT_HOME}/pretty-pipes/lib/`
+
+List of library paths to check for hadoop
+
+=== hoot.hadoop.maxNodeCount
+
+* Data Type: int
+* Default Value: `5000000`
+
+The maximum number of nodes that can be processed by a single task tracker. See User Manual for details.",
+
+=== hoot.hadoop.pixelSize
+
+* Data Type: double
+* Default Value: `0.01`
+
+The size of a pixel when calculating node density. See User Manual for details.
+
 === id.generator
 
 * Data Type: string
@@ -606,6 +666,31 @@ Some of the possible options include:
 * `hoot::ScriptMatchCreator,<yourscript.js>` - Uses a custom match script. The
   script should be in `$HOOT_HOME/rules/<yourscript.js>`.
 
+=== match.model.enabled
+
+* Data Type: bool
+* Default Value: `false`
+
+If set to 'true' then the ProbabilityMatch class will use a model for evaluating the probability of a match.
+
+=== match.model.name
+
+* Data Type: string
+* Default Value: `dc-attributes`
+
+The name of the model to use when classifying a pair of ways as a match or miss.
+
+Some of the possible options includ:
+* `dc-noattributes`
+* `dc-attr-intersection`
+
+=== match.parallel.exponent
+
+* Data Type: double
+* Default Value: `1`
+
+Used in the calculation of the parallel score, cos (delta) ^ match.parallel.exponent
+
 === max.elements.per.partial.map
 
 * Data Type: double
@@ -633,6 +718,13 @@ For instance setting the value to 500KB is equivalent to 500000 bytes.
 The Linux utility RLIMIT_AS is used for limiting virtual memory. This is analagous to RAM, but
 less RAM will be utilized than the value specified. Typically this is most useful when limiting
 RAM usage of applications in a shared server environment.
+
+=== merge.nearby.nodes.distance
+
+* Data Type: double
+* Default Value: `1.0`
+
+When merging nodes during --ogr2osm, what tolerance should be used for deciding two nodes are identical. Units in meters and defaults to 1.0m.
 
 [[merger.creators]]
 === merger.creators
@@ -814,6 +906,15 @@ The name to use for the ESRI Feature Dataset on export. Note: This only applies 
 
 Export TDS data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one FCODE per file/layer (ROAD_L, BUILDING_P etc).
 
+=== ogr2osm.ops
+
+* Data Type: list
+* Default Value:
+** `hoot::MergeNearbyNodes`
+** `hoot::BuildingPartMergeOp`
+
+Operations that should be applied to ingested data before saving the data.
+
 === osm.map.reader.factory.reader
 
 * Data Type: string
@@ -827,6 +928,13 @@ Specifies the reader that the OsmMapReaderFactory will use. This overrides any i
 * Default Value: ``
 
 Specifies the writer that the OsmMapWriterFactory will use. This overrides any information derived from the URL.
+
+=== pbf.reader.max.elements.per.partial.map
+
+* Data Type: int
+* Default Value: `50000`
+
+The maximum number of OSM elements that may be read from the services database into a single OSM map during a partial map read.
 
 === perty.algorithm
 
@@ -1052,6 +1160,51 @@ The probability between 0.0 and 1.0 that a way will be split into multiple featu
 
 A list of scripts to include before loading the user's plugin script. The path will be search as: current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
 
+=== places.distance.weight
+
+* Data Type: double
+* Default Value: `0.1`
+
+TODO: What is the distance weight?
+
+=== places.goodness.threshold
+
+* Data Type: double
+* Default Value: `0.3`
+
+TODO: What is the goodness threshold?
+
+=== places.minimum.edit.similarity
+
+* Data Type: double
+* Default Value: `0.8`
+
+TODO: What is the minimum edit similarity?
+
+=== places.poi.epsilon.distance
+
+* Data Type: double
+* Default Value: `0.001`
+
+Distance that is considered an exact match. Defaults to 1mm.
+
+=== places.string.weight
+
+* Data Type: double
+* Default Value: `0.9`
+
+TODO: What is the string weight?
+
+=== places.tag.merger
+
+* Data Type: string
+* Default Value: `hoot::OverwriteTag2Merger`
+
+Possible options include:
+
+* `hoot::GeneralizeTagMerger`
+* `hoot::OverwriteTag2Merger`
+
 === poi.match.threshold
 
 * Data Type: double
@@ -1229,6 +1382,12 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 
 The search radius to use when conflating waterways.  Not used if
 waterway.auto.calc.search.radius = true.  See `search.radius.default`.
+
+=== services.db.reader.max.elements.per.partial.map
+* Data Type: int
+* Default Value: `50000`
+
+The maximum number of OSM elements that may be read from the services database into a single OSM map during a partial map read.
 
 === services.db.test.url
 

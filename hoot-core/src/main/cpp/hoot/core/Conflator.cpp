@@ -70,10 +70,9 @@ Conflator::Conflator()
   _debug = false;
   _vectorError = 15.0;
   _maxDividedSeparation = 25.0;
-  _createBogusReviewTags = conf().getBool(createBogusReviewTagsKey(), false);
+  _createBogusReviewTags = ConfigOptions().getCreateBogusReviewTags();
 
-  QStringList manipulatorNames = conf().getList(manipulatorsKey(),
-    QString::fromStdString(WayMerger::className()));
+  QStringList manipulatorNames = ConfigOptions().getConflatorManipulators();
 
   for (int i = 0; i < manipulatorNames.size(); i++)
   {
@@ -82,7 +81,7 @@ Conflator::Conflator()
   }
 
   _maxIterations = -1;
-  _minValidScore = conf().getDouble("conflator.min.valid.score", 0.01);
+  _minValidScore = ConfigOptions().getConflatorMinValidScore();
 }
 
 void Conflator::_applyManipulations()

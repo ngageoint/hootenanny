@@ -61,10 +61,10 @@ bool ProbabilityOfMatch::debug = false;
 
 ProbabilityOfMatch::ProbabilityOfMatch()
 {
-  _useModel = Settings::getInstance().getBool("match.model.enabled", false);
+  _useModel = ConfigOptions().getMatchModelEnabled();
 
-  QString model = Settings::getInstance().getString("match.model.name", "dc-attributes");
-  _parallelExp = Settings::getInstance().getDouble("match.parallel.exponent", 1);
+  QString model = ConfigOptions().getMatchModelName();
+  _parallelExp = ConfigOptions().getMatchParallelExponent();
 
   if (_useModel)
   {
