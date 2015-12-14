@@ -95,9 +95,9 @@ public:
 
     // Osm Api DB
     ServicesDb database2;
-    //database2.open(ServicesDbTestUtils::getOsmApiDbUrl());
-    //database2.deleteData_OsmApi();
-    //database2.close();
+    database2.open(ServicesDbTestUtils::getOsmApiDbUrl());
+    database2.deleteData_OsmApi();
+    database2.close();
   }
 
   long populateMap()
