@@ -112,7 +112,7 @@ void FindIntersectionsOp::apply(shared_ptr<OsmMap>& map)
 
 
   // Apply any user specified operations.
-  NamedOp(conf().getList(opsKey(), "")).apply(map);
+  NamedOp(ConfigOptions().getMapCleanerTransforms()).apply(map);
 }
 
 }

@@ -237,10 +237,19 @@ Some of the possible options include:
 
 TODO: Update conflator min valid score
 
+=== conflator.post.ops
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of user specified operations to run post conflation.
+
 === convert.ops
 
 * Data Type: list
 * Default Value:
+** ``
 
 Specifies one or more semi-colon delimited operations to perform before writing data. This is only applicable to the convert command.
 
@@ -947,6 +956,14 @@ Specifies the reader that the OsmMapReaderFactory will use. This overrides any i
 * Default Value: ``
 
 Specifies the writer that the OsmMapWriterFactory will use. This overrides any information derived from the URL.
+
+=== osm2ogr.ops
+
+* Data Type: list
+* Default Value:
+** ``
+
+User specified operations for converting OSM files to OGR compatible file types.
 
 === pbf.reader.max.elements.per.partial.map
 

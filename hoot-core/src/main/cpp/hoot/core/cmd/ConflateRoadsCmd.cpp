@@ -86,7 +86,7 @@ public:
     shared_ptr<OsmMap> result(new OsmMap(conflator.getBestMap()));
 
     // Apply any user specified operations.
-    NamedOp(conf().getList(postOpsKey(), "")).apply(result);
+    NamedOp(ConfigOptions().getConflatorPostOps()).apply(result);
 
     MapReprojector::reprojectToWgs84(result);
 

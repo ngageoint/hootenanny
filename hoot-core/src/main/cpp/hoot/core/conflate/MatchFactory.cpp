@@ -137,7 +137,7 @@ MatchFactory& MatchFactory::getInstance()
 {
   if (_theInstance._creators.size() == 0)
   {
-    _setMatchCreators(ConfigOptions(conf()).getMatchCreators().split(";"));
+    _setMatchCreators(ConfigOptions().getMatchCreators().split(";"));
   }
   return _theInstance;
 }
