@@ -975,6 +975,36 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
   {
     bool ok;
     double a = t["error:circular"].toDouble(&ok);
+    if (!ok)
+    {
+      //check if value contian velocity units
+      if (t["error:circular"].contains("km/h", Qt::CaseInsensitive)
+          || t["error:circular"].contains("kph", Qt::CaseInsensitive)
+          || t["error:circular"].contains("kmph", Qt::CaseInsensitive)
+          || t["error:circular"].contains("mph", Qt::CaseInsensitive)
+          || t["error:circular"].contains("knots", Qt::CaseInsensitive))
+      {
+        try
+        {
+          a = t.getVelocity("error:circular");
+        }
+        catch (const HootException& e)
+        {
+          ok = false;
+        }
+      }
+      else //assum value has length units
+      {
+        try
+        {
+          a = t.getLength("error:circular");
+        }
+        catch (const HootException& e)
+        {
+          ok = false;
+        }
+      }
+    }
     if (ok)
     {
       circularError = a;
@@ -985,6 +1015,36 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
   {
     bool ok;
     double a = t["accuracy"].toDouble(&ok);
+    if (!ok)
+    {
+      //check if value contian velocity units
+      if (t["accuracy"].contains("km/h", Qt::CaseInsensitive)
+          || t["accuracy"].contains("kph", Qt::CaseInsensitive)
+          || t["accuracy"].contains("kmph", Qt::CaseInsensitive)
+          || t["accuracy"].contains("mph", Qt::CaseInsensitive)
+          || t["accuracy"].contains("knots", Qt::CaseInsensitive))
+      {
+        try
+        {
+          a = t.getVelocity("accuracy");
+        }
+        catch (const HootException& e)
+        {
+          ok = false;
+        }
+      }
+      else //assum value has length units
+      {
+        try
+        {
+          a = t.getLength("accuracy");
+        }
+        catch (const HootException& e)
+        {
+          ok = false;
+        }
+      }
+    }
     if (ok)
     {
       circularError = a;

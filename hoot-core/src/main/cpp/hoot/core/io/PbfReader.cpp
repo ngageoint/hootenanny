@@ -153,14 +153,62 @@ void PbfReader::_addTag(shared_ptr<Element> e, QString key, QString value)
     }
     else
     {
-      e->setCircularError(_circularError);
-      if (_badAccuracyCount < 10)
+      bool isBad = false;
+      Tags t1;
+      t1.setList(key, QStringList() << value);
+      //check if value contian velocity units
+      if (value.contains("km/h", Qt::CaseInsensitive) || value.contains("kph", Qt::CaseInsensitive)
+          || value.contains("kmph", Qt::CaseInsensitive) || value.contains("mph", Qt::CaseInsensitive)
+          || value.contains("knots", Qt::CaseInsensitive))
       {
-        LOG_WARN("Bad circular error value: " << value.toStdString());
-        _badAccuracyCount++;
-        if (_badAccuracyCount == 10)
+        try
         {
-          LOG_WARN("Found 10 bad circular error values, no longer reporting bad accuracies.");
+          circularError = t1.getVelocity(key);
+          if (circularError > 0)
+          {
+            e->setCircularError(circularError);
+          }
+          else
+          {
+            isBad = true;
+          }
+        }
+        catch (const HootException& e)
+        {
+          isBad = true;
+        }
+      }
+      else //assum value has length units
+      {
+        try
+        {
+          circularError = t1.getLength(key);
+          if (circularError > 0)
+          {
+            e->setCircularError(circularError);
+          }
+          else
+          {
+            isBad = true;
+          }
+        }
+        catch (const HootException& e)
+        {
+          isBad = true;
+        }
+      }
+
+      if (isBad)
+      {
+        e->setCircularError(_circularError);
+        if (_badAccuracyCount < 10)
+        {
+          LOG_WARN("Bad circular error value: " << value.toStdString());
+          _badAccuracyCount++;
+          if (_badAccuracyCount == 10)
+          {
+            LOG_WARN("Found 10 bad circular error values, no longer reporting bad accuracies.");
+          }
         }
       }
     }

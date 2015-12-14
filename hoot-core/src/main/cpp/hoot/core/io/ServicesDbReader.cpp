@@ -94,7 +94,39 @@ void ServicesDbReader::_addTagsToElement(shared_ptr<Element> element)
     element->setCircularError(tags.get("error:circular").toDouble(&ok));
     if (!ok)
     {
-      LOG_WARN("Error parsing error:circular.");
+      //check if value contian velocity units
+      if (tags.get("error:circular").contains("km/h", Qt::CaseInsensitive)
+          || tags.get("error:circular").contains("kph", Qt::CaseInsensitive)
+          || tags.get("error:circular").contains("kmph", Qt::CaseInsensitive)
+          || tags.get("error:circular").contains("mph", Qt::CaseInsensitive)
+          || tags.get("error:circular").contains("knots", Qt::CaseInsensitive))
+      {
+        try
+        {
+          double tv = tags.getVelocity("error:circular");
+          element->setCircularError(tv);
+        }
+        catch (const HootException& e)
+        {
+          ok = false;
+        }
+      }
+      else //assum value has length units
+      {
+        try
+        {
+          double tv = tags.getLength("error:circular");
+          element->setCircularError(tv);
+        }
+        catch (const HootException& e)
+        {
+          ok = false;
+        }
+      }
+      if (!ok)
+      {
+        LOG_WARN("Error parsing error:circular.");
+      }
     }
     tags.remove("error:circular");
   }
@@ -104,7 +136,39 @@ void ServicesDbReader::_addTagsToElement(shared_ptr<Element> element)
 
     if (!ok)
     {
-      LOG_WARN("Error parsing accuracy.");
+      //check if value contian velocity units
+      if (tags.get("accuracy").contains("km/h", Qt::CaseInsensitive)
+          || tags.get("accuracy").contains("kph", Qt::CaseInsensitive)
+          || tags.get("accuracy").contains("kmph", Qt::CaseInsensitive)
+          || tags.get("accuracy").contains("mph", Qt::CaseInsensitive)
+          || tags.get("accuracy").contains("knots", Qt::CaseInsensitive))
+      {
+        try
+        {
+          double tv = tags.getVelocity("accuracy");
+          element->setCircularError(tv);
+        }
+        catch (const HootException& e)
+        {
+          ok = false;
+        }
+      }
+      else //assum value has length units
+      {
+        try
+        {
+          double tv = tags.getLength("accuracy");
+          element->setCircularError(tv);
+        }
+        catch (const HootException& e)
+        {
+          ok = false;
+        }
+      }
+      if (!ok)
+      {
+        LOG_WARN("Error parsing accuracy.");
+      }
     }
     tags.remove("accuracy");
   }
