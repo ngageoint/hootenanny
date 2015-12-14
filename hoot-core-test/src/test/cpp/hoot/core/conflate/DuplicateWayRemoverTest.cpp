@@ -113,9 +113,8 @@ public:
   }
 
   /*
-   * In this test we add in some non-matching text tags for two ways (see
-   * modifyWayTagsForStrictNameMatching), and since strict matching is *on*, we *should not* see those
-   * two ways get merged.
+   * In this test we add in some non-matching text tags for two ways, and since strict matching is
+   * *on*, we *should not* see those two ways get merged.
    */
   void runStrictTagMatchingOnTest()
   {
@@ -141,9 +140,8 @@ public:
   }
 
   /*
-   * In this test we add in some non-matching text tags for two ways (see
-   * modifyWayTagsForStrictNameMatching), and since strict matching is *off*, we *should* see those
-   * two ways get merged.
+   * In this test we add in some non-matching text tags for two ways, and since strict matching
+   * is *off*, we *should* see those two ways get merged.
    */
   void runStrictTagMatchingOffTest()
   {
