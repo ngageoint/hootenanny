@@ -235,7 +235,9 @@ Some of the possible options include:
 * Data Type: double
 * Default Value: `0.01`
 
-TODO: Update conflator min valid score
+This is the minimum valid manipulation score in the legacy greedy optimization routine. Setting
+the value lower will create more (likely overzealous) matches. Setting the value higher will drop
+less confident matches.
 
 === conflator.post.ops
 
@@ -292,7 +294,7 @@ operation (CookieCutterOp).
 * Data Type: bool
 * Default Value: `false`
 
-TODO: Get description of create bogus review tags
+Creates example review tags for debugging. All reviews created with this mechanism are invalid.
 
 === crop.bounds
 
@@ -920,7 +922,8 @@ Export TDS data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) i
 * Data Type: bool
 * Default Value: `false`
 
-TODO: Explain create all layers
+Create all layers when using the OGR writer whether or not the layers contain features. Setting this
+to true can be useful when conforming to strict specifications.
 
 === ogr.writer.pre.layer.name
 
@@ -932,7 +935,15 @@ TODO: Explain create all layers
 * Data Type: string
 * Default Value: ``
 
-TODO: Explain ogr writer script key
+Set the script to use with OGR writer. For example:
+
+----
+hoot --convert \
+  -D ogr.writer.script=test-files/io/SampleTranslation.js \
+  -D ogr.writer.pre.layer.name=bar \
+  test-files/io/SampleTranslation.osm \
+  PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'"
+----
 
 === ogr2osm.ops
 
@@ -1010,21 +1021,25 @@ The beta value used in the PERTY simplified community sensor model. This is only
 * Data Type: double
 * Default Value: `1.0`
 
-TODO: Description for perty.duplicate.poi.duplicate.sigma
+The number of duplicate POIs is set as `round(abs(N(0, sigma^2))) + 1`. Setting sigma to 0 will
+guarantee that there will always be exactly one duplicate.
 
 === perty.duplicate.poi.move.multiplier
 
 * Data Type: double
 * Default Value: `1.0`
 
-TODO: Description for perty.duplicate.poi.move.multiplier
+The distance that a feature is moved is based on the circular error of the source point. The
+new point will be put within N(0, sigma^2) * moveMultiplier meters of the source point where
+sigma is the standard deviation associated with the source point.
 
 === perty.duplicate.poi.p
 
 * Data Type: double
 * Default Value: `0.10`
 
-TODO: Description for perty.duplicate.poi.p
+The probability of at least one duplicate being created. See setDuplicateSigma to determine
+how many duplicates will be created.
 
 === perty.grid.spacing
 
@@ -1038,14 +1053,15 @@ The size of the PERTY grid spacing in meters.
 * Data Type: double
 * Default Value: `0.05`
 
-TODO: Description for perty.name.p
+The probability that a name will be modified.
 
 === perty.name.change.p
 
 * Data Type: double
 * Default Value: `0.05`
 
-TODO: Description for perty.name.change.p
+The probability of a change to each character in the name. The expected number of changes is
+`perty.name.change.p` * str.size().
 
 === perty.ops
 
@@ -1079,14 +1095,14 @@ The sigma ry parameter for PERTY (random error in Y). This is only relevant when
 * Data Type: double
 * Default Value: `0.05`
 
-TODO: Definition for perty.remove.random.p
+The probability that a feature will be removed.
 
 === perty.remove.tag.p
 
 * Data Type: double
 * Default Value: `0.05`
 
-TODO: Definition for perty.remove.tag.p
+Set the probability that a tag will be removed.
 
 === perty.remove.tag.visitor.exempt.tag.keys
 
@@ -1250,21 +1266,33 @@ A list of scripts to include before loading the user's plugin script. The path w
 * Data Type: double
 * Default Value: `0.1`
 
-TODO: What is the distance weight?
+The PLACES `wd` value for calculating goodness.
+
+See also:
+
+ * _PLACES POI Conflation_, <<hootalgo>>
 
 === places.goodness.threshold
 
 * Data Type: double
 * Default Value: `0.3`
 
-TODO: What is the goodness threshold?
+The PLACES goodness threshold.
+
+See also:
+
+ * _PLACES POI Conflation_, <<hootalgo>>
 
 === places.minimum.edit.similarity
 
 * Data Type: double
 * Default Value: `0.8`
 
-TODO: What is the minimum edit similarity?
+If the similarity score is less than this value then the POIs are not considered for match.
+
+See also:
+
+ * _PLACES POI Conflation_, <<hootalgo>>
 
 === places.poi.epsilon.distance
 
@@ -1278,7 +1306,11 @@ Distance that is considered an exact match. Defaults to 1mm.
 * Data Type: double
 * Default Value: `0.9`
 
-TODO: What is the string weight?
+The PLACES `ws` value for calculating goodness.
+
+See also:
+
+ * _PLACES POI Conflation_, <<hootalgo>>
 
 === places.tag.merger
 
@@ -1509,7 +1541,8 @@ Email address of the DG writer user.  Can be set here for debugging and testing.
 * Data Type: bool
 * Default Value: `false`
 
-TODO: What does services.db.writer.overwrite.map do?
+If set to true then if there is already a map with the specified name then it will be removed before
+a new map is written.
 
 === services.db.writer.output.id.mappings
 
@@ -1945,7 +1978,8 @@ The minimum size that a way should be split into for merging. Units in meters.
 * Data Type: double
 * Default Value: `5000`
 
-TODO: Description for way.splitter.max.length
+This configuration option is used by hoot::WaySplitterOp. If a way is longer than this length
+(in meters) then it will be split into smaller ways.
 
 === way.subline.matcher
 
