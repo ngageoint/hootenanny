@@ -147,11 +147,11 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
 
             if (w->getNodeCount() > w2->getNodeCount())
             {
-              _removeDuplicateNodes(w, _map->getWay(wit->first));
+              _removeDuplicateNodes(w, w2);
             }
             else
             {
-              _removeDuplicateNodes(_map->getWay(wit->first), w);
+              _removeDuplicateNodes(w2, w);
             }
           }
         }
@@ -189,10 +189,6 @@ void DuplicateWayRemover::_updateWayNameTags(shared_ptr<Way> way1, shared_ptr<Wa
     Tags mergedNameTags;
     TagComparator::getInstance().mergeNames(way1->getTags(), way2->getTags(), mergedNameTags);
     way2->getTags().addTags(mergedNameTags);
-    //TODO: without a copy and replace here, we get inconsistent output in some of the hadoop tests;
-    //with a copy here DuplicateWayRemoverTest yields bad output
-    //WayPtr way2Copy(new Way(*way2));
-    //_map->replace(way2, way2Copy);
 
     LOG_DEBUG("Merged way name tags:");
     LOG_VARD(way2->getTags());
