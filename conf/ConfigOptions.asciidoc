@@ -1016,6 +1016,20 @@ TODO: Description for perty.duplicate.poi.p
 
 The size of the PERTY grid spacing in meters.
 
+=== perty.name.p
+
+* Data Type: double
+* Default Value: `0.05`
+
+TODO: Description for perty.name.p
+
+=== perty.name.change.p
+
+* Data Type: double
+* Default Value: `0.05`
+
+TODO: Description for perty.name.change.p
+
 === perty.ops
 
 * Data Type: list
@@ -1042,6 +1056,20 @@ The sigma rx parameter for PERTY (random error in X). This is only relevant when
 * Default Value: `0`
 
 The sigma ry parameter for PERTY (random error in Y). This is only relevant when perty.algorithm is set to FullCovariance.
+
+=== perty.remove.random.p
+
+* Data Type: double
+* Default Value: `0.05`
+
+TODO: Definition for perty.remove.random.p
+
+=== perty.remove.tag.p
+
+* Data Type: double
+* Default Value: `0.05`
+
+TODO: Definition for perty.remove.tag.p
 
 === perty.remove.tag.visitor.exempt.tag.keys
 

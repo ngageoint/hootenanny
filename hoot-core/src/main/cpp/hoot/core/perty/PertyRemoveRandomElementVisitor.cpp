@@ -56,8 +56,8 @@ QString PertyRemoveRandomElementVisitor::toString()
 
 void PertyRemoveRandomElementVisitor::setConfiguration(const Settings& conf)
 {
-  setProbability(conf.getDouble(pKey(), 0.05));
   ConfigOptions configOptions(conf);
+  setProbability(configOptions.getPertyRemoveRandomP());
   const int seed = configOptions.getPertySeed();
   LOG_VARD(seed);
   if (seed == -1)

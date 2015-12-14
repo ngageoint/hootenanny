@@ -126,8 +126,9 @@ PbfReader::~PbfReader()
 
 void PbfReader::setConfiguration(const Settings &conf)
 {
-  setMaxElementsPerMap(ConfigOptions(conf).getMaxElementsPerPartialMap());
-  _addSourceDateTime = ConfigOptions(conf).getReaderAddSourceDatetime();
+  ConfigOptions configOptions(conf);
+  setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
+  _addSourceDateTime = configOptions.getReaderAddSourceDatetime();
 }
 
 void PbfReader::_addTag(shared_ptr<Element> e, QString key, QString value)

@@ -128,8 +128,9 @@ void BigPertyOp::readObject(QDataStream& is)
 
 void BigPertyOp::setConfiguration(const Settings &conf)
 {
-  setSigma(ConfigOptions(conf).getBigPertyOpSigma());
-  setMaxDistance(ConfigOptions(conf).getBigPertyOpMaxDistance());
+  ConfigOptions configOptions(conf);
+  setSigma(configOptions.getBigPertyOpSigma());
+  setMaxDistance(configOptions.getBigPertyOpMaxDistance());
 }
 
 void BigPertyOp::setMaxDistance(Meters maxDistance)

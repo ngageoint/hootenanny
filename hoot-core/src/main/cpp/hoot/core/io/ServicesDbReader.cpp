@@ -721,8 +721,9 @@ shared_ptr<Relation> ServicesDbReader::_resultToRelation_OsmApi(const QSqlQuery&
 
 void ServicesDbReader::setConfiguration(const Settings& conf)
 {
-  setMaxElementsPerMap(ConfigOptions(conf).getMaxElementsPerPartialMap());
-  setUserEmail(ConfigOptions(conf).getServicesDbWriterEmail());
+  ConfigOptions configOptions(conf);
+  setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
+  setUserEmail(configOptions.getServicesDbWriterEmail());
 }
 
 boost::shared_ptr<OGRSpatialReference> ServicesDbReader::getProjection() const

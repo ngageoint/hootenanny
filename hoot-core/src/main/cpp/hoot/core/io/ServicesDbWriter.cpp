@@ -306,9 +306,10 @@ vector<long> ServicesDbWriter::_remapNodes(const vector<long>& nids)
 
 void ServicesDbWriter::setConfiguration(const Settings &conf)
 {
-  setUserEmail(ConfigOptions(conf).getServicesDbWriterEmail());
-  setCreateUser(ConfigOptions(conf).getServicesDbWriterCreateUser());
-  setOverwriteMap(ConfigOptions(conf).getServicesDbWriterOverwriteMap());
+  ConfigOptions configOptions(conf);
+  setUserEmail(configOptions.getServicesDbWriterEmail());
+  setCreateUser(configOptions.getServicesDbWriterCreateUser());
+  setOverwriteMap(configOptions.getServicesDbWriterOverwriteMap());
 }
 
 void ServicesDbWriter::_startNewChangeSet()
