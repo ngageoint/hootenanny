@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -237,14 +237,13 @@ public:
   {
     //nodes
 
-    //CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodeMap().size());
+    HOOT_STR_EQUALS(true, map->containsNode(500));
     shared_ptr<Node> node = map->getNode(500);
     CPPUNIT_ASSERT_EQUAL((long)500, node->getId());
     CPPUNIT_ASSERT_EQUAL(38.4, node->getY());
     CPPUNIT_ASSERT_EQUAL(-106.5, node->getX());
-    CPPUNIT_ASSERT_EQUAL(3.0, node->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(1, node->getTags().size());
-    QString tagValue = node->getTags().get("hoot:status");
+    CPPUNIT_ASSERT_EQUAL(0.0, node->getCircularError());
+    CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
   }
 
   void verifyFullReadOutput(shared_ptr<OsmMap> map)
@@ -457,14 +456,12 @@ public:
       return;
     }
 
-
     ///////////////////////////////////////
     // test the reader
     ///////////////////////////////////////
 
     ServicesDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
-
 
     Settings s = conf();
     reader.open(ConfigOptions(s).getServicesDbTestUrlOsmapi());
