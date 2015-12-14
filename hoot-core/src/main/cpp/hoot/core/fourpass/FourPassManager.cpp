@@ -39,7 +39,6 @@
 
 // Qt
 #include <QDir>
-#include <QUuid>
 
 // Standard
 #include <set>

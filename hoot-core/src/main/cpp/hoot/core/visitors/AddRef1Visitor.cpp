@@ -51,7 +51,6 @@ void AddRef1Visitor::visit(const ConstElementPtr& e)
 
   if (ee->getTags().getNonDebugCount() > 0)
   {
-    //ee->getTags()["REF1"] = QUuid::createUuid().toString();
     ee->getTags()["REF1"] = _prefix + QString("%1").arg(_count++, 6, 16, QChar('0'));
   }
 }
