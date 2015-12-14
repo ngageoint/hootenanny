@@ -906,6 +906,25 @@ The name to use for the ESRI Feature Dataset on export. Note: This only applies 
 
 Export TDS data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one FCODE per file/layer (ROAD_L, BUILDING_P etc).
 
+=== ogr.writer.create.all.layers
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO: Explain create all layers
+
+=== ogr.writer.pre.layer.name
+
+* Data Type: string
+* Default Value: ``
+
+=== ogr.writer.script
+
+* Data Type: string
+* Default Value: ``
+
+TODO: Explain ogr writer script key
+
 === ogr2osm.ops
 
 * Data Type: list
@@ -968,6 +987,27 @@ The PERTY D value. When perty.algorithm is set to FullCovariance this is used in
 * Default Value: `9`
 
 The beta value used in the PERTY simplified community sensor model. This is only relevant when perty.algorithm is set to FullCovariance.
+
+=== perty.duplicate.poi.duplicate.sigma
+
+* Data Type: double
+* Default Value: `1.0`
+
+TODO: Description for perty.duplicate.poi.duplicate.sigma
+
+=== perty.duplicate.poi.move.multiplier
+
+* Data Type: double
+* Default Value: `1.0`
+
+TODO: Description for perty.duplicate.poi.move.multiplier
+
+=== perty.duplicate.poi.p
+
+* Data Type: double
+* Default Value: `0.10`
+
+TODO: Description for perty.duplicate.poi.p
 
 === perty.grid.spacing
 
@@ -1412,6 +1452,20 @@ typically only used by developers.
 Should the services DB writer automatically create the specified user if it doesn't exist. This
 is most useful when debugging and testing.
 
+=== services.db.writer.email
+
+* Data Type: string
+* Default Value: ``
+
+Email address of the DG writer user.  Can be set here for debugging and testing.
+
+=== services.db.writer.overwrite.map
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO: What does services.db.writer.overwrite.map do?
+
 === services.db.writer.output.id.mappings
 
 * Data Type: string
@@ -1840,6 +1894,13 @@ Sets that maximum angle that is still considered a way match. Units in degrees.
 * Default Value: `5`
 
 The minimum size that a way should be split into for merging. Units in meters.
+
+=== way.splitter.max.length
+
+* Data Type: double
+* Default Value: `5000`
+
+TODO: Description for way.splitter.max.length
 
 === way.subline.matcher
 

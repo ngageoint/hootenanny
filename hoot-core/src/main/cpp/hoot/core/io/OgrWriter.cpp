@@ -390,13 +390,13 @@ void OgrWriter::open(QString url)
 
 void OgrWriter::setConfiguration(const Settings& conf)
 {
-  setCreateAllLayers(conf.getBool(createAllLayersKey(), false));
-  setScriptPath(conf.getString(scriptKey(), ""));
-  setPrependLayerName(conf.getString(preLayerNameKey(), ""));
+  setCreateAllLayers(ConfigOptions(conf).getOgrWriterCreateAllLayers());
+  setScriptPath(ConfigOptions(conf).getOgrWriterScript());
+  setPrependLayerName(ConfigOptions(conf).getOgrWriterPreLayerName());
 
   _appendData = ConfigOptions(conf).getOgrAppendData();
 
-  QString strictStr = conf.getString(strictCheckingKey(), strictCheckingDefault());
+  QString strictStr = ConfigOptions(conf).getOgrStrictChecking();
   if (strictStr == "on")
   {
     _strictChecking = StrictOn;
