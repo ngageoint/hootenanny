@@ -90,33 +90,6 @@ namespace hoot
    return static_cast<Length>(1.0 * feet);
   }
 
-  inline Length kiloToLength(double f)
-  {
-    Length l = 1000.0 * boost::units::si::meters;
-    return static_cast<Length>(f * l);
-  }
-
-  inline Length decimiToLength(double f)
-  {
-    Length l = 0.1 * boost::units::si::meters;
-    return static_cast<Length>(f * l);
-  }
-
-  inline Length feetToLength(double f)
-  {
-    return static_cast<Length>(f * feet);
-  }
-
-  inline Length mileToLength(double f)
-  {
-    return static_cast<Length>(f * mile);
-  }
-
-  inline Length nmiToLength(double f)
-  {
-    return static_cast<Length>(f * nmi);
-  }
-
   inline Velocity getKph()
   {
     Times ts = 3600.0 * boost::units::si::seconds;
@@ -132,23 +105,6 @@ namespace hoot
   inline Velocity getKnotph()
   {
     return static_cast<Velocity>(1.0 * knot);
-  }
-
-  inline Velocity kphToVelocity(double f)
-  {
-    Times ts = 3600.0 * boost::units::si::seconds;
-    return kiloToLength(f)/ts;
-  }
-
-  inline Velocity mphToVelocity(double f)
-  {
-    Times ts = 3600.0 * boost::units::si::seconds;
-    return mileToLength(f)/ts;
-  }
-
-  inline Velocity knotToVelocity(double f)
-  {
-    return static_cast<Velocity>(f * knot);
   }
 }
 
