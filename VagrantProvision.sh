@@ -19,11 +19,15 @@ fi
 echo "Installing dependencies"
 sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-all graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane
 
-# See /usr/share/doc/dictionaries-common/README.problems for details
-# http://www.linuxquestions.org/questions/debian-26/dpkg-error-processing-dictionaries-common-4175451951/
-sudo apt-get install -y wamerican-insane
-sudo /usr/share/debconf/fix_db.pl
-sudo dpkg-reconfigure dictionaries-common
+if ! dpkg -l | grep --quiet wamerican-insane; then
+    # See /usr/share/doc/dictionaries-common/README.problems for details
+    # http://www.linuxquestions.org/questions/debian-26/dpkg-error-processing-dictionaries-common-4175451951/
+    sudo apt-get install -y wamerican-insane
+    sudo /usr/share/debconf/fix_db.pl
+    sudo dpkg-reconfigure dictionaries-common
+fi
+
+sudo apt-get autoremove -y
 
 # Hoot Baseline is PostgreSQL 9.1 and PostGIS 1.5, so we need a deb file and
 # then remove 9.4
@@ -176,6 +180,12 @@ umask 002
 EOT
 fi
 
+# Change Tomcat java opts
+if grep -i --quiet '^JAVA_OPTS=.*\-Xmx128m' /etc/default/tomcat6; then
+    echo "Changing Tomcat java opts"
+    sudo sed -i.bak "s@\-Xmx128m@\-Xms512m \-Xmx2048m \-XX:PermSize=512m \-XX:MaxPermSize=4096m@" /etc/default/tomcat6
+fi
+
 # Fix env var path for GDAL_DATA
 if grep -i --quiet 'gdal/1.10' /etc/default/tomcat6; then
     echo "Fixing Tomcat GDAL_DATA env var path"
@@ -215,6 +225,7 @@ fi
 
 # Update the init.d script for node-mapnik-server
 sudo cp node-mapnik-server/init.d/node-mapnik-server /etc/init.d
+sudo chmod a+x /etc/init.d/node-mapnik-server
 # Make sure all npm modules are installed
 cd node-mapnik-server
 npm install

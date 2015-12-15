@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 
 namespace hoot
 {
@@ -41,9 +41,9 @@ ReprojectToGeographicOp::ReprojectToGeographicOp()
 
 void ReprojectToGeographicOp::apply(shared_ptr<OsmMap>& map)
 {
-  if (MapReprojector::isGeographic(map) == false)
+  if (MapProjector::isGeographic(map) == false)
   {
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
   }
 }
 

@@ -30,10 +30,13 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+import hoot.services.HootProperties;
 import hoot.services.controllers.osm.MapResource;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
+import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.ElementInfo;
+import hoot.services.models.review.AllReviewableItems;
 import hoot.services.models.review.ReviewRef;
 import hoot.services.models.review.ReviewRefsRequest;
 import hoot.services.models.review.ReviewResolverRequest;
@@ -59,6 +62,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -81,6 +86,20 @@ public class ReviewResource
 
   private ClassPathXmlApplicationContext appContext;
   private PlatformTransactionManager transactionManager;
+  
+	private static long MAX_RESULT_SIZE = 60000;
+	static
+	{
+		try
+		{
+			String maxQuerySize = HootProperties.getProperty("maxQueryNodes"); 
+			MAX_RESULT_SIZE = Long.parseLong(maxQuerySize);
+		}
+		catch(Exception ex)
+		{
+			log.error(ex.getMessage());
+		}
+	}
 
   public ReviewResource() throws Exception
   {
@@ -291,7 +310,7 @@ public class ReviewResource
 		try(Connection conn = DbUtils.createConnection())
 		{
 			long nMapId = Long.parseLong(mapId);
-			ReviewableReader reader = new ReviewableReader();
+			ReviewableReader reader = new ReviewableReader(conn);
 			ret = reader.getRandomReviewableItem(nMapId);
 		}
 		catch (Exception ex)
@@ -361,7 +380,7 @@ public class ReviewResource
 				nextSequence = nOffsetSeqId - 1;
 			}
 				
-			ReviewableReader reader = new ReviewableReader();
+			ReviewableReader reader = new ReviewableReader(conn);
 			ret = reader.getReviewableItem(nMapId, nextSequence);
 			// get random if we can not find immediate next sequence item
 			if(ret.getResultCount() < 1)
@@ -423,7 +442,7 @@ public class ReviewResource
 		{
 			long nMapId = Long.parseLong(mapId);
 			long nOffsetSeqId = Long.parseLong(offsetSeqId);
-			ReviewableReader reader = new ReviewableReader();
+			ReviewableReader reader = new ReviewableReader(conn);
 			ret = reader.getReviewableItem(nMapId, nOffsetSeqId);
 		}
 		catch (Exception ex)
@@ -474,13 +493,99 @@ public class ReviewResource
 		try(Connection conn = DbUtils.createConnection())
 		{
 			long nMapId = Long.parseLong(mapId);
-			ReviewableReader reader = new ReviewableReader();
+			ReviewableReader reader = new ReviewableReader(conn);
 			ret = reader.getReviewablesStatistics(nMapId);
 		}
 		catch (Exception ex)
 		{
 			ResourceErrorHandler.handleError(
 	        "Error getting reviewables statistics: " + mapId +  " (" + 
+	          ex.getMessage() + ")", 
+	        Status.BAD_REQUEST,
+	        log);
+		}
+		return ret;
+	}
+	
+	
+	/**
+	 * <NAME>Review Service Get geojson for all reviewable items</NAME>
+	 * <DESCRIPTION>
+	 * To retrieve GeoJson of all reviewable items within bouding box
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * <mapid>
+	 *  Target map id
+	 * </mapid>
+	 * <minlon>
+	 *  Minimum longitude
+	 * </minlon>
+	 * <minlat>
+	 *  Minimum latitude
+	 * </minlat>
+	 * <maxlon>
+	 *  Maximum longitude
+	 * </maxlon>
+	 * <maxlat>
+	 *  Maximum latitude
+	 * </maxlat>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	GeoJson containing reviewable bounding box and state
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/allreviewables?mapid=53&minlon=-180&minlat=-90&maxlon=180&maxlat=90</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 * <OUTPUT>
+	 * GeoJson
+	 * </OUTPUT>
+	 * </EXAMPLE>
+	 * @param mapId
+	 * @param minLon
+	 * @param minLat
+	 * @param maxLon
+	 * @param maxLat
+	 * @return
+	 */
+	@GET
+	@Path("/allreviewables")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject getReviewable(@QueryParam("mapid") String mapId,
+			@QueryParam("minlon") String minLon,
+			@QueryParam("minlat") String minLat,
+			@QueryParam("maxlon") String maxLon,
+			@QueryParam("maxlat") String maxLat
+			)
+	{
+
+		JSONObject ret = new JSONObject();
+		ret.put("type", "FeatureCollection");
+		ret.put("features", new JSONArray());
+		
+		try(Connection conn = DbUtils.createConnection())
+		{
+			long nMapId = Long.parseLong(mapId);
+			double minlon = Double.parseDouble(minLon);
+			double minlat = Double.parseDouble(minLat);
+			double maxlon = Double.parseDouble(maxLon);
+			double maxlat = Double.parseDouble(maxLat);
+			ReviewableReader reader = new ReviewableReader(conn);
+			AllReviewableItems result = reader.getAllReviewableItems(nMapId, new BoundingBox(minlon, minlat, maxlon, maxlat));
+			ret = new JSONObject();
+			if(result.getOverFlow() == true)
+			{
+				ret.put("warning", "The result size is greater than maximum limit of:" + MAX_RESULT_SIZE
+						+ ". Returning truncated data.");
+			}
+			ret.put("total", result.getReviewableItems().size());
+			ret.put("geojson", result.toGeoJson());
+		}
+		catch (Exception ex)
+		{
+			ResourceErrorHandler.handleError(
+	        "Error getting reviewable item: " + mapId +  " (" + 
 	          ex.getMessage() + ")", 
 	        Status.BAD_REQUEST,
 	        log);

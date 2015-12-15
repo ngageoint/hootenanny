@@ -35,7 +35,7 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/MultiLineStringSplitter.h>
 #include <hoot/core/algorithms/linearreference/MultiLineStringLocation.h>
@@ -72,7 +72,7 @@ public:
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     auto_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
-    MapReprojector::reprojectToPlanar(map, *env);
+    MapProjector::projectToPlanar(map, *env);
 
     return map;
   }

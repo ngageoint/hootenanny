@@ -100,7 +100,7 @@ SOURCES += \
     src/test/cpp/hoot/core/perty/PertyNameVisitorTest.cpp \
     src/test/cpp/hoot/core/perty/PertyDuplicatePoiOpTest.cpp \
     src/test/cpp/hoot/core/perty/PertyRemoveTagVisitorTest.cpp \
-    src/test/cpp/hoot/core/MapReprojectorTest.cpp \
+    src/test/cpp/hoot/core/MapProjectorTest.cpp \
     src/test/cpp/hoot/core/util/GeometryUtilsTest.cpp \
     src/test/cpp/hoot/core/elements/TagsTest.cpp \
     src/test/cpp/hoot/core/conflate/polygon/BuildingMergeManipulatorTest.cpp \

@@ -33,7 +33,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/util/OsmUtils.h>
 
 // Tgs
@@ -105,7 +105,7 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const 
     }
 
     //shared_ptr<OsmMap> copy(new OsmMap(*map));
-    //MapReprojector::reprojectToWgs84(copy);
+    //MapProjector::reprojectToWgs84(copy);
     //OsmUtils::saveMap(copy, "/data/river-data/NodeMatcherMap-temp.osm");
 
     throw HootException("calculateAngles was called with a node that was not a start or end node"

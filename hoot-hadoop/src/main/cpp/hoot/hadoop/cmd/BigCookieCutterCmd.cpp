@@ -19,7 +19,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/fourpass/FourPassManager.h>
 #include <hoot/core/ops/OpList.h>
@@ -52,13 +52,13 @@ public:
       throw HootException("Error creating EPSG:4326 projection.");
     }
     auto_ptr<OGREnvelope> e(GeometryUtils::toOGREnvelope(*g->getEnvelopeInternal()));
-    shared_ptr<OGRSpatialReference> planar = MapReprojector::createAeacProjection(*e);
+    shared_ptr<OGRSpatialReference> planar = MapProjector::createAeacProjection(*e);
 
-    MapReprojector::reproject(g, wgs84, planar);
+    MapProjector::project(g, wgs84, planar);
 
     g.reset(g->buffer(b));
 
-    MapReprojector::reproject(g, planar, wgs84);
+    MapProjector::project(g, planar, wgs84);
   }
 
   QString getHelp() const

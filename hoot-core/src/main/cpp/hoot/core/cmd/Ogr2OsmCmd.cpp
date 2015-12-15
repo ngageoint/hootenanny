@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/io/OgrReader.h>
@@ -187,12 +187,12 @@ public:
       throw HootException("After translation the map is empty. Aborting.");
     }
 
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     // Apply any user specified operations.
     NamedOp(ConfigOptions().getOgr2osmOps()).apply(map);
 
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     saveMap(map, output);
 

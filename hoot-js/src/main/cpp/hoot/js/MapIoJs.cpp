@@ -27,7 +27,7 @@
 #include "MapIoJs.h"
 
 // hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -120,7 +120,7 @@ public:
 
     OsmMapPtr map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap();
 
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     v8::String::Utf8Value param1(args[1]->ToString());
     QString url = QString::fromUtf8(*param1);
