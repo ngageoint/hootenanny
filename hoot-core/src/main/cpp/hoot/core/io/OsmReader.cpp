@@ -606,47 +606,22 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
           {
             bool isBad = false;
             hoot::Tags t1;
-            t1.setList(key, QStringList() << value);
-            //check if value contian velocity units
-            if (value.contains("km/h", Qt::CaseInsensitive) || value.contains("kph", Qt::CaseInsensitive)
-                || value.contains("kmph", Qt::CaseInsensitive) || value.contains("mph", Qt::CaseInsensitive)
-                || value.contains("knots", Qt::CaseInsensitive))
+            t1.set(key, value);
+            try
             {
-              try
+              circularError = t1.getLength(key).value();
+              if (circularError > 0)
               {
-                circularError = t1.getVelocity(key);
-                if (circularError > 0)
-                {
-                  _element->setCircularError(circularError);
-                }
-                else
-                {
-                  isBad = true;
-                }
+                _element->setCircularError(circularError);
               }
-              catch (const HootException& e)
+              else
               {
                 isBad = true;
               }
             }
-            else //assum value has length units
+            catch (const HootException& e)
             {
-              try
-              {
-                circularError = t1.getLength(key);
-                if (circularError > 0)
-                {
-                  _element->setCircularError(circularError);
-                }
-                else
-                {
-                  isBad = true;
-                }
-              }
-              catch (const HootException& e)
-              {
-                isBad = true;
-              }
+              isBad = true;
             }
 
             if (isBad && _badAccuracyCount < 10)

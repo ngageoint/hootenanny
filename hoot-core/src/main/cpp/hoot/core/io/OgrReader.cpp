@@ -977,32 +977,14 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
     double a = t["error:circular"].toDouble(&ok);
     if (!ok)
     {
-      //check if value contian velocity units
-      if (t["error:circular"].contains("km/h", Qt::CaseInsensitive)
-          || t["error:circular"].contains("kph", Qt::CaseInsensitive)
-          || t["error:circular"].contains("kmph", Qt::CaseInsensitive)
-          || t["error:circular"].contains("mph", Qt::CaseInsensitive)
-          || t["error:circular"].contains("knots", Qt::CaseInsensitive))
+      try
       {
-        try
-        {
-          a = t.getVelocity("error:circular");
-        }
-        catch (const HootException& e)
-        {
-          ok = false;
-        }
+        a = t.getLength("error:circular").value();
+        ok = true;
       }
-      else //assum value has length units
+      catch (const HootException& e)
       {
-        try
-        {
-          a = t.getLength("error:circular");
-        }
-        catch (const HootException& e)
-        {
-          ok = false;
-        }
+        ok = false;
       }
     }
     if (ok)
@@ -1017,32 +999,14 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
     double a = t["accuracy"].toDouble(&ok);
     if (!ok)
     {
-      //check if value contian velocity units
-      if (t["accuracy"].contains("km/h", Qt::CaseInsensitive)
-          || t["accuracy"].contains("kph", Qt::CaseInsensitive)
-          || t["accuracy"].contains("kmph", Qt::CaseInsensitive)
-          || t["accuracy"].contains("mph", Qt::CaseInsensitive)
-          || t["accuracy"].contains("knots", Qt::CaseInsensitive))
+      try
       {
-        try
-        {
-          a = t.getVelocity("accuracy");
-        }
-        catch (const HootException& e)
-        {
-          ok = false;
-        }
+        a = t.getLength("accuracy").value();
+        ok = true;
       }
-      else //assum value has length units
+      catch (const HootException& e)
       {
-        try
-        {
-          a = t.getLength("accuracy");
-        }
-        catch (const HootException& e)
-        {
-          ok = false;
-        }
+        ok = false;
       }
     }
     if (ok)

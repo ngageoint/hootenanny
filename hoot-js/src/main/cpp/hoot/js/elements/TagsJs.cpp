@@ -154,7 +154,7 @@ Handle<Value> TagsJs::getLengthInMeters(const Arguments& args)
 
   QString key = str(args[0]->ToString());
 
-  return scope.Close(toV8(t.getLength(key)));
+  return scope.Close(toV8(t.getLength(key).value()));
 }
 
 Handle<Value> TagsJs::getVelocityInMeters(const Arguments& args)
@@ -165,7 +165,7 @@ Handle<Value> TagsJs::getVelocityInMeters(const Arguments& args)
 
   QString key = str(args[0]->ToString());
 
-  return scope.Close(toV8(t.getVelocity(key)));
+  return scope.Close(toV8(t.getVelocity(key).value()));
 }
 
 Handle<Value> TagsJs::getInformationCount(const Arguments& args)

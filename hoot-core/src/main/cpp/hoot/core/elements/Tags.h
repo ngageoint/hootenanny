@@ -126,12 +126,12 @@ public:
   /**
    * Returns the speed in standard units (m/s).
    */
-  double getVelocity(const QString& k) const;
+  Velocity getVelocity(const QString& k) const;
 
   /**
    * Returns the length in standard units (m).
    */
-  double getLength(const QString& k) const;
+  Length getLength(const QString& k) const;
 
   /**
    * Return the number of tags that contain actual information, not meta-data or debug tags.
@@ -231,6 +231,8 @@ public:
   QString toString() const;
 
 private:
+  void _valueRegexParser(const QString& str, QString& num, QString& units) const;
+
   static QStringList _nameKeys;
   static QStringList _pseudoNameKeys;
 };

@@ -65,6 +65,31 @@ namespace hoot
   inline Degrees toDegrees(Radians r) { return r / M_PI * 180.0; }
 
   //Boost units functions
+  inline Length getKiloLength()
+  {
+    return 1000.0 * boost::units::si::meters;
+  }
+
+  inline Length getDecimiLength()
+  {
+    return 0.1 * boost::units::si::meters;
+  }
+
+  inline Length getMileLength()
+  {
+    return static_cast<Length>(1.0 * mile);
+  }
+
+  inline Length getNmiLength()
+  {
+    return static_cast<Length>(1.0 * nmi);
+  }
+
+  inline Length getFeetLength()
+  {
+   return static_cast<Length>(1.0 * feet);
+  }
+
   inline Length kiloToLength(double f)
   {
     Length l = 1000.0 * boost::units::si::meters;
@@ -92,19 +117,30 @@ namespace hoot
     return static_cast<Length>(f * nmi);
   }
 
-  inline Velocity kiloToVelocity(double f)
+  inline Velocity getKph()
+  {
+    Times ts = 3600.0 * boost::units::si::seconds;
+    return getKiloLength()/ts;
+  }
+
+  inline Velocity getMph()
+  {
+    Times ts = 3600.0 * boost::units::si::seconds;
+    return getMileLength()/ts;
+  }
+
+  inline Velocity getKnotph()
+  {
+    return static_cast<Velocity>(1.0 * knot);
+  }
+
+  inline Velocity kphToVelocity(double f)
   {
     Times ts = 3600.0 * boost::units::si::seconds;
     return kiloToLength(f)/ts;
   }
 
-  inline Velocity feetToVelocity(double f)
-  {
-    Times ts = 3600.0 * boost::units::si::seconds;
-    return feetToLength(f)/ts;
-  }
-
-  inline Velocity mileToVelocity(double f)
+  inline Velocity mphToVelocity(double f)
   {
     Times ts = 3600.0 * boost::units::si::seconds;
     return mileToLength(f)/ts;

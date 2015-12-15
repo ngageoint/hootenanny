@@ -89,29 +89,35 @@ public:
   void unitsTest()
   {
     Tags t1, t2, t3, t4, t5, t6, t7, t8;
-    t1.setList("length", QStringList() << "60 mi");
-    CPPUNIT_ASSERT_EQUAL(96560.6, QString::number(t1.getLength("length"), 'g', 6).toDouble());
+    t1.set("length", "60.0 mi");
+    CPPUNIT_ASSERT_EQUAL(96560.6, QString::number(t1.getLength("length").value(), 'g', 6).toDouble());
 
-    t2.setList("maxspeed", QStringList() << "60 mph");
-    CPPUNIT_ASSERT_EQUAL(26.82, QString::number(t2.getVelocity("maxspeed"),'g',4).toDouble());
+    t1.set("length", "60mi");
+    CPPUNIT_ASSERT_EQUAL(96560.6, QString::number(t1.getLength("length").value(), 'g', 6).toDouble());
 
-    t3.setList("length", QStringList() << "12'5\"");
-    CPPUNIT_ASSERT_EQUAL(3.78, QString::number(t3.getLength("length"), 'g', 3).toDouble());
+    t2.set("maxspeed", "60 mph");
+    CPPUNIT_ASSERT_EQUAL(26.82, QString::number(t2.getVelocity("maxspeed").value(),'g',4).toDouble());
 
-    t4.setList("length", QStringList() << "10 nmi");
-    CPPUNIT_ASSERT_EQUAL(18520.0, QString::number(t4.getLength("length"), 'g', 6).toDouble());
+    t2.set("maxspeed", "60mph");
+    CPPUNIT_ASSERT_EQUAL(26.82, QString::number(t2.getVelocity("maxspeed").value(),'g',4).toDouble());
 
-    t5.setList("maxspeed", QStringList() << "10 knots");
-    CPPUNIT_ASSERT_EQUAL(5.14, QString::number(t5.getVelocity("maxspeed"), 'g', 3).toDouble());
+    t3.set("length", "12'5\"");
+    CPPUNIT_ASSERT_EQUAL(3.78, QString::number(t3.getLength("length").value(), 'g', 3).toDouble());
 
-    t6.setList("length", QStringList() << "10 km");
-    CPPUNIT_ASSERT_EQUAL(10000.0, QString::number(t6.getLength("length"), 'g', 6).toDouble());
+    t4.set("length", "10 nmi");
+    CPPUNIT_ASSERT_EQUAL(18520.0, QString::number(t4.getLength("length").value(), 'g', 6).toDouble());
 
-    t7.setList("maxspeed", QStringList() << "10 km");
-    CPPUNIT_ASSERT_EQUAL(2.78, QString::number(t7.getVelocity("maxspeed"), 'g', 3).toDouble());
+    t5.set("maxspeed", "10 knots");
+    CPPUNIT_ASSERT_EQUAL(5.14, QString::number(t5.getVelocity("maxspeed").value(), 'g', 3).toDouble());
 
-    t8.setList("length", QStringList() << "10 decimetres");
-    CPPUNIT_ASSERT_EQUAL(1.0, QString::number(t8.getLength("length"), 'g', 2).toDouble());
+    t6.set("length", "10 km");
+    CPPUNIT_ASSERT_EQUAL(10000.0, QString::number(t6.getLength("length").value(), 'g', 6).toDouble());
+
+    t7.set("maxspeed", "10 km/h");
+    CPPUNIT_ASSERT_EQUAL(2.78, QString::number(t7.getVelocity("maxspeed").value(), 'g', 3).toDouble());
+
+    t8.set("length", "10 decimetres");
+    CPPUNIT_ASSERT_EQUAL(1.0, QString::number(t8.getLength("length").value(), 'g', 2).toDouble());
   }
 };
 
