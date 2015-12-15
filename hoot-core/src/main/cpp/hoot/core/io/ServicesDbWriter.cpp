@@ -438,7 +438,6 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
 
   if (_remapIds)
   {
-    //bool alreadyThere = _relationRemap.count(r->getId()) != 0;
     relationId = _getRemappedElementId(r->getElementId());
 
     LOG_DEBUG("Inserting relation with source ID = " <<
