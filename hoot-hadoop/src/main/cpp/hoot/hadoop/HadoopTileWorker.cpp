@@ -139,8 +139,7 @@ void HadoopTileWorker::cleanup(QString mapIn, QString mapOut)
 void HadoopTileWorker::conflate(const vector<Envelope>& tiles, QString mapIn, QString mapOut)
 {
   ConflateDriver cd;
-  cd.conflate(mapIn, tiles, _buffer,
-    mapOut);
+  cd.conflate(mapIn, tiles, _buffer, mapOut);
 }
 
 bool HadoopTileWorker::exists(QString dir)
