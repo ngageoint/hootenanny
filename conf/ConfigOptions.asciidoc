@@ -224,6 +224,21 @@ The string that lists the types of conflation used in the user interface.  The p
 
 Specifies one or more semi-colon delimited operations to perform before writing data. This is only applicable to the convert command.
 
+=== convert.bounding.box
+
+* Data Type: string
+* Default Value: ``
+
+If specified the convert reader will limit data read from the data source to only features that
+intersect the given bounding box. The format is "minx,miny,maxx,maxy" specified in the projection
+of the input data source.
+
+Example Usage:
+
+----
+hoot convert -D convert.bounding.box=106.851,-6.160,107.052,-5.913 input.osm output.osm
+----
+
 === cookie.cutter.alpha
 
 * Data Type: double
