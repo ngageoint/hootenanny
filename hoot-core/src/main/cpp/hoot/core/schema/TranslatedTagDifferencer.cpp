@@ -168,9 +168,10 @@ shared_ptr<ScriptToOgrTranslator> TranslatedTagDifferencer::_getTranslator() con
 
 void TranslatedTagDifferencer::setConfiguration(const Settings& conf)
 {
-  QStringList il = ConfigOptions(conf).getTranslatedTagDifferencerIgnoreList().split(";");
+  ConfigOptions configOptions(conf);
+  QStringList il = configOptions.getTranslatedTagDifferencerIgnoreList().split(";");
   _ignoreList = QSet<QString>::fromList(il);
-  _script = ConfigOptions(conf).getTranslatedTagDifferencerScript();
+  _script = configOptions.getTranslatedTagDifferencerScript();
   _translator.reset();
 }
 

@@ -72,8 +72,8 @@ public:
     QString in2 = args[1];
     QString out = args[2];
     bool local = args.contains("--local");
-    double pixelSize = conf().getDouble(HadoopTileWorker2::pixelSizeKey());
-    int maxNodeCount = conf().getInt(HadoopTileWorker2::maxNodeCountKey());
+    double pixelSize = ConfigOptions().getHootHadoopPixelSize();
+    int maxNodeCount = ConfigOptions().getHootHadoopMaxNodeCount();
     if (args.size() >= 4)
     {
       bool ok;
