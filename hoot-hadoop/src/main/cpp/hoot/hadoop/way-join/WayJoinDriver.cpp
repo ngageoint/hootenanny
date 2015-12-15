@@ -23,14 +23,12 @@
 #include <hoot/hadoop/PbfRecordWriter.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/UuidHelper.h>
 
 // Pretty Pipes
 #include <pp/Hdfs.h>
 #include <pp/mapreduce/Job.h>
 #include <pp/io/CppSeqFileRecordWriter.h>
-
-// Qt
-#include <QUuid>
 
 #include "WayJoin1Mapper.h"
 #include "WayJoin1Reducer.h"
@@ -55,7 +53,7 @@ WayJoinDriver::WayJoinDriver(Meters maxWaySize)
 void WayJoinDriver::calculateWayBounds(QString in, QString out)
 {
   Hdfs fs;
-  QString tmp = "tmp/" + QUuid::createUuid().toString().replace("{", "").replace("}", "") +
+  QString tmp = "tmp/" + UuidHelper::createUuid().toString().replace("{", "").replace("}", "") +
       "-JoinWaysToPoints.csq";
   try
   {

@@ -62,7 +62,7 @@ void PbfInputFormat::_addSplit(const string& path)
     split.addHeader(result[i].headerOffset, result[i].getSize());
     if (result[i].headerOffset + result[i].getSize() >= nextBlock - 1)
     {
-      QStringList hosts = hdfs.getLocations(path, split.getStart(), split.getLength());
+      QStringList hosts = hdfs.getLocations(path, split.getStart(), split.getLength(), true);
       split.setLocations(hosts.join(";").toStdString());
       _splits.push_back(split);
       split.reset();
@@ -73,7 +73,7 @@ void PbfInputFormat::_addSplit(const string& path)
 
   if (split.isValid())
   {
-    QStringList hosts = hdfs.getLocations(path, split.getStart(), split.getLength());
+    QStringList hosts = hdfs.getLocations(path, split.getStart(), split.getLength(), true);
     split.setLocations(hosts.join(";").toStdString());
     _splits.push_back(split);
   }

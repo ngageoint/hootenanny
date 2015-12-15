@@ -148,7 +148,7 @@ FileStatus Hdfs::getFileStatus(string path)
   return result;
 }
 
-QStringList Hdfs::getLocations(string path, long start, long length)
+QStringList Hdfs::getLocations(string path, long start, long length, const bool sort)
 {
   char*** h = hdfsGetHosts(_getFs(), path.data(), start, length);
   if (h == NULL)
@@ -172,7 +172,12 @@ QStringList Hdfs::getLocations(string path, long start, long length)
     i++;
   }
 
-  return QStringList(hosts.toList());
+  QStringList hostsList(hosts.toList());
+  if (sort)
+  {
+    hostsList.sort();
+  }
+  return hostsList;
 }
 
 bool Hdfs::_fileStatusPathCompare(const FileStatus& fs1, const FileStatus& fs2)

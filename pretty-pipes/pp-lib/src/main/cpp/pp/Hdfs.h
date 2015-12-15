@@ -140,7 +140,7 @@ public:
   /**
    * Returns a list of data nodes that have a copy of the given file segment.
    */
-  QStringList getLocations(string path, long start, long length);
+  QStringList getLocations(string path, long start, long length, const bool sort = false);
 
   /**
    * Return the file status of all the files/directories in the given path.
