@@ -86,7 +86,7 @@ void PbfInputFormat::_init()
   FileStatus s = fs.getFileStatus(_path);
   if (s.isDir())
   {
-    vector<FileStatus> status = fs.listStatus(_path);
+    vector<FileStatus> status = fs.listStatus(_path, true);
     for (size_t i = 0; i < status.size(); i++)
     {
       QString str = QString::fromStdString(status[i].getPath());

@@ -175,7 +175,12 @@ QStringList Hdfs::getLocations(string path, long start, long length)
   return QStringList(hosts.toList());
 }
 
-std::vector<FileStatus> Hdfs::listStatus(string path)
+bool Hdfs::_fileStatusPathCompare(const FileStatus& fs1, const FileStatus& fs2)
+{
+  return fs1.getPath() > fs2.getPath();
+}
+
+std::vector<FileStatus> Hdfs::listStatus(string path, const bool sortByPath)
 {
   if (exists(path) == false)
   {
@@ -204,6 +209,11 @@ std::vector<FileStatus> Hdfs::listStatus(string path)
   }
 
   hdfsFreeFileInfo(fis, numEntries);
+
+  if (sortByPath)
+  {
+    sort(result.begin(), result.end(), _fileStatusPathCompare);
+  }
 
   return result;
 }

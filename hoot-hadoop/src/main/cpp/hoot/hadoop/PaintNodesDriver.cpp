@@ -149,7 +149,7 @@ void PaintNodesDriver::_loadOutputDir(const QString& output)
 
   Hdfs fs;
 
-  vector<FileStatus> status = fs.listStatus(output.toStdString());
+  vector<FileStatus> status = fs.listStatus(output.toStdString(), true);
   for (size_t i = 0; i < status.size(); i++)
   {
     QString fn = QString::fromStdString(status[i].getPath());

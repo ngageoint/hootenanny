@@ -71,7 +71,7 @@ void HadoopTileWorker::breakWays(QString out)
   wjd2.calculateWayBounds(_in2, tmp);
 
   QString moveTo = out + "/in2-part";
-  vector<pp::FileStatus> s = fs.listStatus(tmp.toStdString());
+  vector<pp::FileStatus> s = fs.listStatus(tmp.toStdString(), true);
   for (size_t i = 0; i < s.size(); i++)
   {
     QString fn = QString::fromStdString(s[i].getPath());
@@ -106,7 +106,7 @@ MapStats HadoopTileWorker::_calculateStats(QString in)
   MapStats result;
   pp::Hdfs fs;
   // if the stats have already been calculated
-  vector<pp::FileStatus> files = fs.listStatus(in.toStdString());
+  vector<pp::FileStatus> files = fs.listStatus(in.toStdString(), true);
   for (size_t i = 0; i < files.size(); i++)
   {
     if (QString::fromStdString(files[i].getPath()).endsWith(".stats"))

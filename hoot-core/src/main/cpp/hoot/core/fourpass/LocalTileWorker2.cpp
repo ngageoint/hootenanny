@@ -218,7 +218,7 @@ shared_ptr<OsmMap> LocalTileWorker2::_readAllParts(QString dir)
     reader.read(dregs, map);
   }
   QDir d(dir);
-  Q_FOREACH(QFileInfo info, d.entryList(filters, QDir::Files))
+  Q_FOREACH(QFileInfo info, d.entryList(filters, QDir::Files, QDir::Name))
   {
     LOG_INFO(info.filePath() << " " << d.absoluteFilePath(info.filePath()) << " " << d.absolutePath() <<
              " " << info.absoluteFilePath());

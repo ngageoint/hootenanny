@@ -20648,7 +20648,7 @@
         <tag k="hoot:id" v="542"/>
         <tag k="hoot:status" v="0"/>
     </node>
-    <node visible="true" id="538" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025242000000020" lon="-77.0362149999999986">
+    <node visible="true" id="538" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025243000000032" lon="-77.0362149000000045">
         <tag k="hoot:id" v="538"/>
         <tag k="hoot:status" v="0"/>
     </node>
@@ -20932,7 +20932,7 @@
         <tag k="hoot:id" v="187"/>
         <tag k="hoot:status" v="0"/>
     </node>
-    <node visible="true" id="186" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025243000000032" lon="-77.0362149000000045">
+    <node visible="true" id="186" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025242000000020" lon="-77.0362149999999986">
         <tag k="hoot:id" v="186"/>
         <tag k="hoot:status" v="0"/>
     </node>
@@ -20940,7 +20940,7 @@
         <tag k="hoot:id" v="182"/>
         <tag k="hoot:status" v="0"/>
     </node>
-    <node visible="true" id="179" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8860434000000055" lon="-77.0320127000000099">
+    <node visible="true" id="179" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8860440000000054" lon="-77.0320348000000052">
         <tag k="hoot:id" v="179"/>
         <tag k="hoot:status" v="0"/>
     </node>
@@ -21096,7 +21096,7 @@
         <tag k="hoot:id" v="106"/>
         <tag k="hoot:status" v="0"/>
     </node>
-    <node visible="true" id="102" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8860440000000054" lon="-77.0320348000000052">
+    <node visible="true" id="102" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8860434000000055" lon="-77.0320127000000099">
         <tag k="hoot:id" v="102"/>
         <tag k="hoot:status" v="0"/>
     </node>
@@ -33106,9 +33106,9 @@
     </way>
     <way visible="true" id="15527" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="11161"/>
-        <nd ref="179"/>
+        <nd ref="102"/>
         <nd ref="11149"/>
-        <tag k="alt_name" v="14TH ST SW"/>
+        <tag k="alt_name" v="14TH ST SW;US Hwy 1"/>
         <tag k="name" v="14th St SW"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="3.53553"/>
@@ -46918,9 +46918,9 @@
     <way visible="true" id="22905" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="14151"/>
         <nd ref="874"/>
-        <nd ref="186"/>
+        <nd ref="538"/>
         <nd ref="14139"/>
-        <tag k="alt_name" v="K ST NW"/>
+        <tag k="alt_name" v="K ST NW;US Hwy 29"/>
         <tag k="name" v="K St NW"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="3.53553"/>

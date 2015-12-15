@@ -74,6 +74,7 @@ protected:
 LocalTileWorker::LocalTileWorker()
 {
   //LOG_VARD(ConfigOptions().getUuidHelperRepeatable());
+  LOG_VARD(Settings::getInstance().get(ConfigOptions().getUuidHelperRepeatableKey()));
 
   _mapPart = 0;
   _workDir = QDir::tempPath() + "/" +

@@ -69,10 +69,10 @@ public:
     srand(0);
     OsmMap::resetCounters();
     Settings::getInstance().clear();
+    conf().set(ConfigOptions().getUuidHelperRepeatableKey(), true);
+    conf().set(ConfigOptions().getUnifyOptimizerTimeLimitKey(), -1);
 
     FileUtils::removeDir("test-output/conflate/TileConflatorTest.osm-cache");
-
-    //LOG_VARD(ConfigOptions().getUuidHelperRepeatable());
 
     shared_ptr<TileWorker> worker(new LocalTileWorker());
     TileConflator uut(worker);
@@ -84,8 +84,15 @@ public:
 
     uut.conflate("test-output/conflate/TileConflatorTest.osm");
 
+    LOG_VARD(Settings::getInstance().get(ConfigOptions().getUuidHelperRepeatableKey()));
+
     CPPUNIT_ASSERT_EQUAL(true, TestUtils::compareMaps("test-files/conflate/TileConflatorTest.osm",
       "test-output/conflate/TileConflatorTest.osm"));
+  }
+
+  virtual void tearDown()
+  {
+    Settings::getInstance().clear();
   }
 
 };

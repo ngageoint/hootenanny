@@ -71,7 +71,7 @@ void FileInputFormat::_init()
   }
   else
   {
-    vector<FileStatus> children = hdfs.listStatus(_path);
+    vector<FileStatus> children = hdfs.listStatus(_path, true);
 
     for (size_t i = 0; i < children.size(); i++)
     {

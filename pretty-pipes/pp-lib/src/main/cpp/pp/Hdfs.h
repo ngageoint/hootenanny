@@ -65,7 +65,7 @@ public:
 
   long getModificationTime() { return _modTime; }
 
-  const string& getPath() { return _path; }
+  const string& getPath() const { return _path; }
 
   bool isDir() { return _kind == kObjectKindDirectory; }
 
@@ -145,7 +145,7 @@ public:
   /**
    * Return the file status of all the files/directories in the given path.
    */
-  std::vector<FileStatus> listStatus(string path);
+  std::vector<FileStatus> listStatus(string path, const bool sortByPath = false);
 
   /**
    * Creates a directory and all the necessary parent directories with default permissions.
@@ -175,6 +175,8 @@ private:
   hdfsFS _fs;
 
   hdfsFS _getFs();
+
+  static bool _fileStatusPathCompare(const FileStatus& fs1, const FileStatus& fs2);
 };
 
 }
