@@ -30132,7 +30132,7 @@
         <tag k="hoot:id" v="-22507"/>
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-22508" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025660327089966" lon="-77.0487589884759245">
+    <node visible="true" id="-22508" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025516127412132" lon="-77.0487625919813439">
         <tag k="hoot:id" v="-22508"/>
         <tag k="hoot:status" v="2"/>
     </node>
@@ -30260,7 +30260,7 @@
         <tag k="hoot:id" v="-22539"/>
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-22540" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025516127412132" lon="-77.0487625919813439">
+    <node visible="true" id="-22540" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025660327089966" lon="-77.0487589884759245">
         <tag k="hoot:id" v="-22540"/>
         <tag k="hoot:status" v="2"/>
     </node>
@@ -37129,9 +37129,9 @@
     <way visible="true" id="-44462" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-58721" x="-77.04685375008594" y="38.90251413646994"/>
         <nd ref="-17263" x="-77.04869250573165" y="38.90254605248568"/>
-        <nd ref="-22540" x="-77.04876259198134" y="38.90255161274121"/>
+        <nd ref="-22508" x="-77.04876259198134" y="38.90255161274121"/>
         <nd ref="-58414" x="-77.04882435871053" y="38.90254599531143"/>
-        <tag k="alt_name" v="K St NW;US Hwy 29"/>
+        <tag k="alt_name" v="K St NW"/>
         <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="3.53553"/>
@@ -47071,16 +47071,6 @@
         <tag k="hoot:id" v="-38896"/>
         <tag k="hoot:status" v="3"/>
     </way>
-    <way visible="true" id="-34266" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-22609" x="-77.05298601698935" y="38.90248196903774"/>
-        <nd ref="-58595" x="-77.05330599327148" y="38.90250673782852"/>
-        <tag k="alt_name" v="K St NW"/>
-        <tag k="name" v="US Hwy 29"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-34266"/>
-        <tag k="hoot:status" v="2"/>
-    </way>
     <way visible="true" id="-41981" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-56661" x="-77.05474613161108" y="38.90229527919018"/>
         <nd ref="-58316" x="-77.05474040249879" y="38.90250676753577"/>
@@ -49196,16 +49186,6 @@
         <tag k="hoot:id" v="-24837"/>
         <tag k="hoot:status" v="3"/>
     </way>
-    <way visible="true" id="-34095" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-58711" x="-77.05256681624601" y="38.90250203937006"/>
-        <nd ref="-22609" x="-77.05298601698935" y="38.90248196903774"/>
-        <tag k="alt_name" v="K St NW"/>
-        <tag k="name" v="US Hwy 29"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-34095"/>
-        <tag k="hoot:status" v="2"/>
-    </way>
     <way visible="true" id="-1688" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-22147" x="-77.043886" y="38.90306800000002"/>
         <nd ref="-22148" x="-77.044308" y="38.90307399999996"/>
@@ -49768,7 +49748,7 @@
         <nd ref="-58711" x="-77.05256681624601" y="38.90250203937006"/>
         <nd ref="-17279" x="-77.05265438532783" y="38.90250510988836"/>
         <nd ref="-58652" x="-77.05298587600572" y="38.90250484459187"/>
-        <tag k="alt_name" v="K St NW"/>
+        <tag k="alt_name" v="K St NW;US Hwy 29"/>
         <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="3.53553"/>
@@ -50050,6 +50030,15 @@
         <tag k="hoot:id" v="-1641"/>
         <tag k="hoot:status" v="2"/>
     </way>
+    <way visible="true" id="-34043" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-58711" x="-77.05256681624601" y="38.90250203937006"/>
+        <nd ref="-22550" x="-77.05298601698935" y="38.90248196903774"/>
+        <tag k="name" v="K St NW"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-34043"/>
+        <tag k="hoot:status" v="2"/>
+    </way>
     <way visible="true" id="-1639" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-46075" x="-77.03821985333683" y="38.89327707221883"/>
         <nd ref="-22430" x="-77.038252" y="38.89319599999998"/>
@@ -50099,6 +50088,15 @@
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-34041"/>
+        <tag k="hoot:status" v="2"/>
+    </way>
+    <way visible="true" id="-34040" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-22550" x="-77.05298601698935" y="38.90248196903774"/>
+        <nd ref="-58595" x="-77.05330599327148" y="38.90250673782852"/>
+        <tag k="name" v="K St NW"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-34040"/>
         <tag k="hoot:status" v="2"/>
     </way>
     <way visible="true" id="-34039" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -50756,7 +50754,7 @@
         <nd ref="-17283" x="-77.05318670495032" y="38.90251301123725"/>
         <nd ref="-22803" x="-77.0533059899072" y="38.90251760674282"/>
         <nd ref="-58595" x="-77.05330599327148" y="38.90250673782852"/>
-        <tag k="alt_name" v="K St NW"/>
+        <tag k="alt_name" v="K St NW;US Hwy 29"/>
         <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="3.53553"/>

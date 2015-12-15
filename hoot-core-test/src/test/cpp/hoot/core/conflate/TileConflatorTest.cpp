@@ -72,6 +72,8 @@ public:
 
     FileUtils::removeDir("test-output/conflate/TileConflatorTest.osm-cache");
 
+    //LOG_VARD(ConfigOptions().getUuidHelperRepeatable());
+
     shared_ptr<TileWorker> worker(new LocalTileWorker());
     TileConflator uut(worker);
     // ~240m

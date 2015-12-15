@@ -63,6 +63,8 @@ TileConflator::TileConflator(shared_ptr<TileWorker> worker)
   // set the buffer to ~5km.
   _buffer = 0.05;
   _maxNodesPerBox = 5000000;
+
+  //LOG_VARD(ConfigOptions().getUuidHelperRepeatable());
 }
 
 TileConflator::~TileConflator()
