@@ -63,7 +63,7 @@ void WaySplitterOp::readObject(QDataStream& is)
 
 void WaySplitterOp::setConfiguration(const Settings& conf)
 {
-  _maxLength = conf.getDouble(maxLengthKey(), 5000);
+  _maxLength = ConfigOptions(conf).getWaySplitterMaxLength();
   LOG_INFO("max length: " << _maxLength);
 }
 

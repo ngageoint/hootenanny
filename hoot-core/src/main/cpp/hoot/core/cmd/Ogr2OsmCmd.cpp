@@ -171,7 +171,7 @@ public:
     MapProjector::projectToPlanar(map);
 
     // Apply any user specified operations.
-    NamedOp(conf().getList(opsKey(), "")).apply(map);
+    NamedOp(ConfigOptions().getOgr2osmOps()).apply(map);
 
     MapProjector::projectToWgs84(map);
 

@@ -80,7 +80,7 @@ HOOT_FACTORY_REGISTER(Manipulator, WayMerger)
 
 WayMerger::WayMerger()
 {
-  _minSplitSize = ConfigOptions(conf()).getWayMergerMinSplitSize();
+  _minSplitSize = ConfigOptions().getWayMergerMinSplitSize();
 }
 
 Manipulation* WayMerger::_createManipulation(long leftId, long rightId,

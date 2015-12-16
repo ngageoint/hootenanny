@@ -81,8 +81,8 @@ public:
     }
     bool local = args.contains("--local");
     bool crop = args.contains("--crop");
-    double pixelSize = conf().getDouble(HadoopTileWorker2::pixelSizeKey());
-    int maxNodeCount = conf().getInt(HadoopTileWorker2::maxNodeCountKey());
+    double pixelSize = ConfigOptions().getHootHadoopPixelSize();
+    int maxNodeCount = ConfigOptions().getHootHadoopMaxNodeCount();
 
     if (local)
     {

@@ -64,7 +64,7 @@ MergeNearbyNodes::MergeNearbyNodes(Meters distance)
 
   if (_distance < 0.0)
   {
-    _distance = conf().getDouble(distanceKey(), 1.0);
+    _distance = ConfigOptions().getMergeNearbyNodesDistance();
   }
 }
 

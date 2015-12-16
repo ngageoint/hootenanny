@@ -51,13 +51,14 @@ RemoveElementsVisitor::RemoveElementsVisitor(const shared_ptr<ElementCriterion>&
 
 void RemoveElementsVisitor::setConfiguration(const Settings& conf)
 {
-  QString filterName = ConfigOptions(conf).getRemoveElementsVisitorFilter();
+  ConfigOptions configOptions(conf);
+  QString filterName = configOptions.getRemoveElementsVisitorFilter();
   if (filterName.isEmpty() == false)
   {
     ElementCriterion* ef = Factory::getInstance().constructObject<ElementCriterion>(filterName);
     _filter.reset(ef);
   }
-  _recursive = ConfigOptions(conf).getRemoveElementsVisitorRecursive();
+  _recursive = configOptions.getRemoveElementsVisitorRecursive();
 }
 
 void RemoveElementsVisitor::visit(const ConstElementPtr& e)

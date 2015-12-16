@@ -44,7 +44,7 @@ UuidHelper::UuidHelper()
 
 QUuid UuidHelper::createUuid()
 {
-  if (ConfigOptions(conf()).getUuidHelperRepeatable())
+  if (ConfigOptions().getUuidHelperRepeatable())
   {
     //QByteArray ba(16, 0);
     //return toUuid(ba);
