@@ -1,30 +1,24 @@
 == help
 
-
 === Description
-Prints detailed help for one command, a summary of all commands, or detailed help for all commands (verbose).  Note you can also simply type hoot and the command to get the help.
 
-* +help+
-* command
-* +verbose+
+Prints detailed help for one command, a summary of all commands, or detailed
+help for all commands (verbose).  Note you can also simply type hoot and the
+command to get the help.
 
+* +command+ - Optionally specify a command
+* +--verbose+ - Print long help for all commands
 
 === Usage
+
 --------------------------------------
-help [command]
+help [command] [--verbose]
 --------------------------------------
 
 ==== Example
+
 --------------------------------------
 hoot help conflate
+hoot help --verbose
 --------------------------------------
 
-Output:
---------------------------------------
-conflate (input1) [input2] (output) [--stats]
-Conflates two input sources into one output.
-
-  * input1 - First input.
-  * input2 - Second input.
-  * output - The output path.
---------------------------------------

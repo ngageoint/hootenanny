@@ -46,14 +46,6 @@ public:
 
   ReviewedTagCmd() { }
 
-  virtual QString getHelp() const
-  {
-    return getName() + " (input) (output)\n"
-        "  Prints the reviewed tags for input and writes to output.\n"
-        "  * input - Input (e.g. .osm file).\n"
-        "  * output - Output file (e.g. .osm file).";
-  }
-
   virtual QString getName() const { return "reviewed-tag"; }
 
   virtual int runSimple(QStringList args)

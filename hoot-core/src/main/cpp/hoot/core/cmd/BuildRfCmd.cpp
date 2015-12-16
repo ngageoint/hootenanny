@@ -56,22 +56,6 @@ public:
 
   BuildRfCmd() { }
 
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return "build-rf (input1.arff) (output.rf)\n"
-        " The `build-rf` command reads the input `.arff` file and generates a Random\n"
-        " Forest model. The result is written to a `.rf` files.\n"
-        " \n"
-        " The `build-rf` command can be used to generate a `.arff` file. This is most\n"
-        " useful when trying to reduce the size of a stored model file. The `.arff` file\n"
-        " is considerably smaller than the .rf output.\n"
-        " \n"
-        " * `input.arff` - Input .arff file.\n"
-        " * `output.rf` - Output model name.";
-  }
-
   virtual QString getName() const { return "build-rf"; }
 
   virtual int runSimple(QStringList args)

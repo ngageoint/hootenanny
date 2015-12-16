@@ -56,14 +56,6 @@ public:
 
   CleanupCmd() { }
 
-  virtual QString getHelp() const
-  {
-    return "cleanup (input) (output)\n"
-        "  Removes common erroneous data scenarios from input and writes to output.\n"
-        "  * input - Input (e.g. .osm file).\n"
-        "  * output - Output file (e.g. .osm file).";
-  }
-
   virtual QString getName() const { return "cleanup"; }
 
   virtual int runSimple(QStringList args)

@@ -49,18 +49,6 @@ public:
 
   StatsCmd() {}
 
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " [--quick] (input) [input2, ...]\n"
-        "  Reads input and write out stats like node and way count. More may be added in\n"
-        "  the future.\n"
-        "  * --quick - If quick is specified then only a fast subset of the stats are \n"
-        "    calculated.\n"
-        "  * input - The input map path.";
-  }
-
   virtual QString getName() const { return "stats"; }
 
   int runSimple(QStringList args)

@@ -43,14 +43,6 @@ public:
 
   PertyCmd() { }
 
-  virtual QString getHelp() const
-  {
-    return getName() + " (input) (output)\n"
-        "  Apply perty manipulations to input and write to output.\n"
-        "  * input - Input (e.g. .osm file).\n"
-        "  * output - Output file (e.g. .osm file).";
-  }
-
   virtual QString getName() const { return "perty"; }
 
   virtual int runSimple(QStringList args)

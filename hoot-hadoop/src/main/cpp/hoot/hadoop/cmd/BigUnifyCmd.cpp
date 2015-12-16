@@ -45,19 +45,6 @@ public:
   {
   }
 
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (input1.pbf) (input2.pbf) (output.pbf) [pixelSize] \n"
-        "[maxNodeCount] [--local]\n"
-        "  Reads from inputs, conflates using unify and writes the result to output.pbf.\n"
-        "  * input1.pbf - Input 1 .pbf dir -- must reside on HDFS.\n"
-        "  * input2.pbf - Input 2 .pbf dir -- must reside on HDFS.\n"
-        "  * output.pbf - Output .pbf dir -- must reside on HDFS.\n"
-        "  * --local - Runs the job locally rather than using Hadoop.";
-  }
-
   virtual QString getName() const { return "big-unify"; }
 
   int runSimple(QStringList args)

@@ -40,15 +40,6 @@ public:
   {
   }
 
-  QString getHelp() const
-  {
-    return getName() + " (input.pbf) (output.pbf) [pixelSize] [maxNodeCount] [--local]\n"
-        "  Reads the nodes from inputs, conflates and writes the result to output.pbf.\n"
-        "  * input.pbf - Input .pbf dir -- must reside on HDFS.\n"
-        "  * output.pbf - Output .pbf dir -- must reside on HDFS.\n"
-        "  * --local - Runs the job locally rather than using Hadoop.";
-  }
-
   QString getName() const { return "big-merge-nodes"; }
 
   int runSimple(QStringList args)

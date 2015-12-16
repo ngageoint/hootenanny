@@ -44,16 +44,6 @@ public:
 
   RubberSheetCmd() { }
 
-  virtual QString getHelp() const
-  {
-    return getName() + " (input1) (input2) (output)\n"
-        "  Reads from inputs, matches nodes, transforms input2 and writes the combined data to\n"
-        "  output.\n"
-        "  * input1 - Input 1 (e.g. .osm file).\n"
-        "  * input2 - Input 2 (e.g. .osm file).\n"
-        "  * output - Output file (e.g. .osm file).";
-  }
-
   virtual QString getName() const { return "rubber-sheet"; }
 
   virtual int runSimple(QStringList args)

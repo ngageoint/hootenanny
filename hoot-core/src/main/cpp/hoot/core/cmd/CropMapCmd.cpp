@@ -69,19 +69,6 @@ public:
 
   CropMapCmd() {}
 
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (input.osm) (output.osm) (bounds)\n"
-        "  Crops the input map to the given bounds. Individual features on the border are\n"
-        "  modified to make sure nothing is outside the given bounds.\n"
-        "  * input - The input OSM data path.\n"
-        "  * output - The output OSM data path.\n"
-        "  * bounds - Comma delimited bounds. minx,miny,maxx,maxy E.g.\n"
-        "    -105,38,-104,39\n";
-  }
-
   virtual QString getName() const { return "crop-map"; }
 
   int runSimple(QStringList args)
