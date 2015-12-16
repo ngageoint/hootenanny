@@ -1,0 +1,20 @@
+== export
+
+=== Description
+
+* translation - JavaScript file name.\n"
+* output - Output file name. The format is determined by extension. FileGDB
+  (*.gdb) and Shapefile (*.shp) have been tested but other OGR-compatible
+  formats will likely work.
+* inputURL - An identifier for a PostGIS database. (e.g.,
+  PG:"dbname='databasename' host='addr' port='5432' user='x' password='y'")
+* cacheCapacity - OPTIONAL - number of cache entries for *each* of the three
+  element types (nodes, ways, relations).  If not specified, will use
+  default capacity value elements per type
+
+=== Usage
+
+--------------------------------------
+export (translation) (output) (inputURL) [cacheCapacity]
+--------------------------------------
+
