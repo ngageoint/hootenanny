@@ -97,7 +97,7 @@ public:
     }
 
     // make sure rubber sheeting isn't applied during cleaning.
-    QStringList l = conf().getList(MapCleaner::opsKey(), "");
+    QStringList l = ConfigOptions().getMapCleanerTransforms();
     l.removeAll(QString::fromStdString(RubberSheet::className()));
     conf().set(MapCleaner::opsKey(), l);
     MapCleaner().apply(map);

@@ -82,7 +82,7 @@ public:
     loadMap(map, input, true);
 
     // Apply any user specified operations.
-    NamedOp(conf().getList(opsKey(), "")).apply(map);
+    NamedOp(ConfigOptions().getOsm2ogrOps()).apply(map);
 
     MapProjector::projectToWgs84(map);
 

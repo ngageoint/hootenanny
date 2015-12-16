@@ -99,10 +99,10 @@ void PertyDuplicatePoiOp::duplicateNode(const NodePtr& n, const OsmMapPtr& map)
 
 void PertyDuplicatePoiOp::setConfiguration(const Settings& conf)
 {
-  setDuplicateSigma(conf.getDouble(duplicateSigmaKey(), defaultDuplicateSigma()));
-  setProbability(conf.getDouble(pKey(), defaultProbability()));
-  setMoveMultiplier(conf.getDouble(moveMultiplierKey(), defaultMoveMultiplier()));
   ConfigOptions configOptions(conf);
+  setDuplicateSigma(configOptions.getPertyDuplicatePoiDuplicateSigma());
+  setProbability(configOptions.getPertyDuplicatePoiP());
+  setMoveMultiplier(configOptions.getPertyDuplicatePoiMoveMultiplier());
   const int seed = configOptions.getPertySeed();
   LOG_VARD(seed);
   if (seed == -1)

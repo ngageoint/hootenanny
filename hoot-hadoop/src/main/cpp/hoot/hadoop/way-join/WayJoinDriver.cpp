@@ -97,9 +97,7 @@ void WayJoinDriver::joinWaysToNodes(QString input, QString out)
   job.setRecordWriterClass(CppSeqFileRecordWriter::className());
 
   // Adds all libraries in this directory to the job.
-  job.addLibraryDirs(conf().getList("hoot.hadoop.libpath",
-    "${HOOT_HOME}/lib/;${HOOT_HOME}/local/lib/;${HADOOP_HOME}/c++/Linux-amd64-64/lib/;"
-    "${HOOT_HOME}/pretty-pipes/lib/"));
+  job.addLibraryDirs(ConfigOptions().getHootHadoopLibpath());
 
   job.addFile(ConfPath::search("hoot.json").toStdString());
 
@@ -153,9 +151,7 @@ void WayJoinDriver::joinPointsToWays(QString input, QString out)
   job.setRecordWriterClass(PbfRecordWriter::className());
 
   // Adds all libraries in this directory to the job.
-  job.addLibraryDirs(conf().getList("hoot.hadoop.libpath",
-    "${HOOT_HOME}/lib/;${HOOT_HOME}/local/lib/;${HADOOP_HOME}/c++/Linux-amd64-64/lib/;"
-    "${HOOT_HOME}/pretty-pipes/lib/"));
+  job.addLibraryDirs(ConfigOptions().getHootHadoopLibpath());
 
   job.addFile(ConfPath::search("hoot.json").toStdString());
 

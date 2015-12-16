@@ -82,7 +82,6 @@ public:
    */
   static QString preLayerNameKey() { return "ogr.writer.pre.layer.name"; }
   static QString scriptKey() { return "ogr.writer.script"; }
-  static QString strictCheckingDefault() { return "on"; }
   /**
    * Valid values are "on", "off" and "warn"
    */

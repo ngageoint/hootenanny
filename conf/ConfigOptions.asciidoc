@@ -217,10 +217,41 @@ See also:
 
 The string that lists the types of conflation used in the user interface.  The possible values are: reference, cookieCutter, average, and advancedConflation.
 
+=== conflator.manipulators
+
+* Data Type: list
+* Default Value:
+** `hoot::WayMerger`
+
+List of manipulators to enable in the conflator.
+
+Some of the possible options include:
+
+* `hoot::WayMerger` -
+* `hoot::WayTagMerger` -
+
+=== conflator.min.valid.score
+
+* Data Type: double
+* Default Value: `0.01`
+
+This is the minimum valid manipulation score in the legacy greedy optimization routine. Setting
+the value lower will create more (likely overzealous) matches. Setting the value higher will drop
+less confident matches.
+
+=== conflator.post.ops
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of user specified operations to run post conflation.
+
 === convert.ops
 
 * Data Type: list
 * Default Value:
+** ``
 
 Specifies one or more semi-colon delimited operations to perform before writing data. This is only applicable to the convert command.
 
@@ -272,6 +303,13 @@ positive or negative.
 
 Crops based on the polygon rather than doing a cookie cut when using the cookie cutter map
 operation (CookieCutterOp).
+
+=== create.bogus.review.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+Creates example review tags for debugging. All reviews created with this mechanism are invalid.
 
 === crop.bounds
 
@@ -494,6 +532,39 @@ The highway subline matcher to use when determining matching sublines.
 
 The way subline string matcher to use when determining matching sublines for highways.
 
+=== hoot.hadoop.file.deps
+
+* Data Type: list
+* Default Value:
+** `${HOOT_HOME}/conf/BuildingModel.rf`
+
+Used by the building matching code.
+
+=== hoot.hadoop.libpath
+
+* Data Type: list
+* Default Value:
+** `${HOOT_HOME}/lib/`
+** `${HOOT_HOME}/local/lib/`
+** `${HADOOP_HOME}/c++/Linux-amd64-64/lib/`
+** `${HOOT_HOME}/pretty-pipes/lib/`
+
+List of library paths to check for hadoop
+
+=== hoot.hadoop.maxNodeCount
+
+* Data Type: int
+* Default Value: `5000000`
+
+The maximum number of nodes that can be processed by a single task tracker. See User Manual for details.",
+
+=== hoot.hadoop.pixelSize
+
+* Data Type: double
+* Default Value: `0.01`
+
+The size of a pixel when calculating node density. See User Manual for details.
+
 === id.generator
 
 * Data Type: string
@@ -630,6 +701,31 @@ Some of the possible options include:
 * `hoot::ScriptMatchCreator,<yourscript.js>` - Uses a custom match script. The
   script should be in `$HOOT_HOME/rules/<yourscript.js>`.
 
+=== match.model.enabled
+
+* Data Type: bool
+* Default Value: `false`
+
+If set to 'true' then the ProbabilityMatch class will use a model for evaluating the probability of a match.
+
+=== match.model.name
+
+* Data Type: string
+* Default Value: `dc-attributes`
+
+The name of the model to use when classifying a pair of ways as a match or miss.
+
+Some of the possible options includ:
+* `dc-noattributes`
+* `dc-attr-intersection`
+
+=== match.parallel.exponent
+
+* Data Type: double
+* Default Value: `1`
+
+Used in the calculation of the parallel score, cos (delta) ^ match.parallel.exponent
+
 === max.elements.per.partial.map
 
 * Data Type: double
@@ -657,6 +753,13 @@ For instance setting the value to 500KB is equivalent to 500000 bytes.
 The Linux utility RLIMIT_AS is used for limiting virtual memory. This is analagous to RAM, but
 less RAM will be utilized than the value specified. Typically this is most useful when limiting
 RAM usage of applications in a shared server environment.
+
+=== merge.nearby.nodes.distance
+
+* Data Type: double
+* Default Value: `1.0`
+
+When merging nodes during --ogr2osm, what tolerance should be used for deciding two nodes are identical. Units in meters and defaults to 1.0m.
 
 [[merger.creators]]
 === merger.creators
@@ -838,6 +941,43 @@ The name to use for the ESRI Feature Dataset on export. Note: This only applies 
 
 Export TDS data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one FCODE per file/layer (ROAD_L, BUILDING_P etc).
 
+=== ogr.writer.create.all.layers
+
+* Data Type: bool
+* Default Value: `false`
+
+Create all layers when using the OGR writer whether or not the layers contain features. Setting this
+to true can be useful when conforming to strict specifications.
+
+=== ogr.writer.pre.layer.name
+
+* Data Type: string
+* Default Value: ``
+
+=== ogr.writer.script
+
+* Data Type: string
+* Default Value: ``
+
+Set the script to use with OGR writer. For example:
+
+----
+hoot --convert \
+  -D ogr.writer.script=test-files/io/SampleTranslation.js \
+  -D ogr.writer.pre.layer.name=bar \
+  test-files/io/SampleTranslation.osm \
+  PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'"
+----
+
+=== ogr2osm.ops
+
+* Data Type: list
+* Default Value:
+** `hoot::MergeNearbyNodes`
+** `hoot::BuildingPartMergeOp`
+
+Operations that should be applied to ingested data before saving the data.
+
 === osm.map.reader.factory.reader
 
 * Data Type: string
@@ -851,6 +991,21 @@ Specifies the reader that the OsmMapReaderFactory will use. This overrides any i
 * Default Value: ``
 
 Specifies the writer that the OsmMapWriterFactory will use. This overrides any information derived from the URL.
+
+=== osm2ogr.ops
+
+* Data Type: list
+* Default Value:
+** ``
+
+User specified operations for converting OSM files to OGR compatible file types.
+
+=== pbf.reader.max.elements.per.partial.map
+
+* Data Type: int
+* Default Value: `50000`
+
+The maximum number of OSM elements that may be read from the services database into a single OSM map during a partial map read.
 
 === perty.algorithm
 
@@ -885,12 +1040,52 @@ The PERTY D value. When perty.algorithm is set to FullCovariance this is used in
 
 The beta value used in the PERTY simplified community sensor model. This is only relevant when perty.algorithm is set to FullCovariance.
 
+=== perty.duplicate.poi.duplicate.sigma
+
+* Data Type: double
+* Default Value: `1.0`
+
+The number of duplicate POIs is set as `round(abs(N(0, sigma^2))) + 1`. Setting sigma to 0 will
+guarantee that there will always be exactly one duplicate.
+
+=== perty.duplicate.poi.move.multiplier
+
+* Data Type: double
+* Default Value: `1.0`
+
+The distance that a feature is moved is based on the circular error of the source point. The
+new point will be put within N(0, sigma^2) * moveMultiplier meters of the source point where
+sigma is the standard deviation associated with the source point.
+
+=== perty.duplicate.poi.p
+
+* Data Type: double
+* Default Value: `0.10`
+
+The probability of at least one duplicate being created. See setDuplicateSigma to determine
+how many duplicates will be created.
+
 === perty.grid.spacing
 
 * Data Type: double
 * Default Value: `100`
 
 The size of the PERTY grid spacing in meters.
+
+=== perty.name.p
+
+* Data Type: double
+* Default Value: `0.05`
+
+The probability that a name will be modified.
+
+=== perty.name.change.p
+
+* Data Type: double
+* Default Value: `0.05`
+
+The probability of a change to each character in the name. The expected number of changes is
+`perty.name.change.p` * str.size().
 
 === perty.ops
 
@@ -918,6 +1113,20 @@ The sigma rx parameter for PERTY (random error in X). This is only relevant when
 * Default Value: `0`
 
 The sigma ry parameter for PERTY (random error in Y). This is only relevant when perty.algorithm is set to FullCovariance.
+
+=== perty.remove.random.p
+
+* Data Type: double
+* Default Value: `0.05`
+
+The probability that a feature will be removed.
+
+=== perty.remove.tag.p
+
+* Data Type: double
+* Default Value: `0.05`
+
+Set the probability that a tag will be removed.
 
 === perty.remove.tag.visitor.exempt.tag.keys
 
@@ -1075,6 +1284,67 @@ The probability between 0.0 and 1.0 that a way will be split into multiple featu
 ** `HootLib.js`
 
 A list of scripts to include before loading the user's plugin script. The path will be search as: current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
+
+=== places.distance.weight
+
+* Data Type: double
+* Default Value: `0.1`
+
+The PLACES `wd` value for calculating goodness.
+
+See also:
+
+ * _PLACES POI Conflation_, <<hootalgo>>
+
+=== places.goodness.threshold
+
+* Data Type: double
+* Default Value: `0.3`
+
+The PLACES goodness threshold.
+
+See also:
+
+ * _PLACES POI Conflation_, <<hootalgo>>
+
+=== places.minimum.edit.similarity
+
+* Data Type: double
+* Default Value: `0.8`
+
+If the similarity score is less than this value then the POIs are not considered for match.
+
+See also:
+
+ * _PLACES POI Conflation_, <<hootalgo>>
+
+=== places.poi.epsilon.distance
+
+* Data Type: double
+* Default Value: `0.001`
+
+Distance that is considered an exact match. Defaults to 1mm.
+
+=== places.string.weight
+
+* Data Type: double
+* Default Value: `0.9`
+
+The PLACES `ws` value for calculating goodness.
+
+See also:
+
+ * _PLACES POI Conflation_, <<hootalgo>>
+
+=== places.tag.merger
+
+* Data Type: string
+* Default Value: `hoot::OverwriteTag2Merger`
+
+Possible options include:
+
+* `hoot::GeneralizeTagMerger`
+* `hoot::OverwriteTag2Merger`
 
 === poi.match.threshold
 
@@ -1254,6 +1524,12 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 The search radius to use when conflating waterways.  Not used if
 waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 
+=== services.db.reader.max.elements.per.partial.map
+* Data Type: int
+* Default Value: `50000`
+
+The maximum number of OSM elements that may be read from the services database into a single OSM map during a partial map read.
+
 === services.db.test.url
 
 * Data Type: string
@@ -1276,6 +1552,21 @@ typically only used by developers.
 
 Should the services DB writer automatically create the specified user if it doesn't exist. This
 is most useful when debugging and testing.
+
+=== services.db.writer.email
+
+* Data Type: string
+* Default Value: ``
+
+Email address of the DG writer user.  Can be set here for debugging and testing.
+
+=== services.db.writer.overwrite.map
+
+* Data Type: bool
+* Default Value: `false`
+
+If set to true then if there is already a map with the specified name then it will be removed before
+a new map is written.
 
 === services.db.writer.output.id.mappings
 
@@ -1705,6 +1996,14 @@ Sets that maximum angle that is still considered a way match. Units in degrees.
 * Default Value: `5`
 
 The minimum size that a way should be split into for merging. Units in meters.
+
+=== way.splitter.max.length
+
+* Data Type: double
+* Default Value: `5000`
+
+This configuration option is used by hoot::WaySplitterOp. If a way is longer than this length
+(in meters) then it will be split into smaller ways.
 
 === way.subline.matcher
 
