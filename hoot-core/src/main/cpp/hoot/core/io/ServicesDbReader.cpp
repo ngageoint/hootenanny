@@ -95,7 +95,21 @@ void ServicesDbReader::_addTagsToElement(shared_ptr<Element> element)
     element->setCircularError(tags.get("error:circular").toDouble(&ok));
     if (!ok)
     {
-      LOG_WARN("Error parsing error:circular.");
+      try
+      {
+        double tv = tags.getLength("error:circular").value();
+        element->setCircularError(tv);
+        ok = true;
+      }
+      catch (const HootException& e)
+      {
+        ok = false;
+      }
+
+      if (!ok)
+      {
+        LOG_WARN("Error parsing error:circular.");
+      }
     }
     tags.remove("error:circular");
   }
@@ -105,7 +119,21 @@ void ServicesDbReader::_addTagsToElement(shared_ptr<Element> element)
 
     if (!ok)
     {
-      LOG_WARN("Error parsing accuracy.");
+      try
+      {
+        double tv = tags.getLength("accuracy").value();
+        element->setCircularError(tv);
+        ok = true;
+      }
+      catch (const HootException& e)
+      {
+        ok = false;
+      }
+
+      if (!ok)
+      {
+        LOG_WARN("Error parsing accuracy.");
+      }
     }
     tags.remove("accuracy");
   }
