@@ -54,7 +54,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, DuplicateWayRemover)
 
-DuplicateWayRemover::DuplicateWayRemover()
+DuplicateWayRemover::DuplicateWayRemover() :
+_strictTagMatching(true)
 {
   setStrictTagMatching(ConfigOptions().getDuplicateWayRemoverStrictTagMatching());
 }
