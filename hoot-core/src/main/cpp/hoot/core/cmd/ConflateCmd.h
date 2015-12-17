@@ -64,15 +64,6 @@ public:
 
   ConflateCmd() {}
 
-  QString getHelp() const
-  {
-    return getName() + " (input1) [input2] (output) [--stats]\n"
-        "  Conflates two input sources into one output.\n"
-        "  * input1 - First input.\n"
-        "  * input2 - Second input.\n"
-        "  * output - The output path.";
-  }
-
   virtual QString getName() const { return "conflate"; }
 
   void printStats(const QList<SingleStat>& stats)

@@ -43,15 +43,6 @@ class PertyScoreCmd : public BaseCommand
 
     PertyScoreCmd() { }
 
-    virtual QString getHelp() const
-    {
-      return getName() + " (reference-input-file) (output-dir)\n"
-        "  Apply perty manipulations to input, conflate the perturbed data with the input, \n"
-        "  generate a PERTY score, and write to output.\n"
-        "  * reference-input-file - Input reference data path (e.g. .osm file).\n"
-        "  * output-dir - Output directory";
-    }
-
     virtual QString getName() const { return "perty-score"; }
 
     virtual int runSimple(QStringList args)

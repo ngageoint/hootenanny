@@ -48,20 +48,6 @@ public:
 
   BigOgr2OsmCmd() { }
 
-  virtual QString getHelp() const
-  {
-    return getName() + " (translation) (output.osm.pbf) (input1[;layer]) [input2[;layer]] ...\n"
-        "  * translation - python script base name. This looks in the 'translations'\n"
-        "    directory and takes the same format translations file as ogr2osm.py.\n"
-        "    leave off the '.py' to use the files in PYTHONPATH or specify the relative\n"
-        "    or absolute path name with the '.py'.\n"
-        "  * output.osm - Output file name.\n"
-        "  * inputs - One or more OGR compatible inputs. If you're using a layer within a\n"
-        "    data source then delimit it with a semicolon. E.g:\n"
-        "       myshapefile.shp \"myfgb.gdb;mylayer\"";
-;
-  }
-
   virtual QString getName() const { return "big-ogr2osm"; }
 
   virtual int runSimple(QStringList args)

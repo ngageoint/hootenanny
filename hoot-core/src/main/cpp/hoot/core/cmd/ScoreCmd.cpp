@@ -52,17 +52,6 @@ public:
 
   ScoreCmd() { }
 
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (base1) [base2] (uut)\n"
-        "  Compares a map (uut, Unit Under Test) to one or two test maps (base1 & base)\n"
-        "  * base1 - The first base file to compare against.\n"
-        "  * base2 - (optional) The second base file to compare against.\n"
-        "  * uut - The file being evaluated.";
-  }
-
   virtual QString getName() const { return "score"; }
 
   void attributeCompare(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2, shared_ptr<OsmMap> outMap,

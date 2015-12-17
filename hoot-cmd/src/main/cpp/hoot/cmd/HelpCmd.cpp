@@ -48,13 +48,6 @@ public:
     return c1->getName() < c2->getName();
   }
 
-  QString getHelp() const
-  {
-    return getName() + " [command]\n"
-        "  Prints detailed help for one command, a summary of all commands, or detailed help for"
-        "  all commands (--verbose).";
-  }
-
   virtual QString getName() const { return "help"; }
 
   int runSimple(QStringList args)

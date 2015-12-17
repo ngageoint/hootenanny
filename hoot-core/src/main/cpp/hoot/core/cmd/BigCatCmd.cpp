@@ -49,14 +49,6 @@ public:
 
   BigCatCmd() { }
 
-  virtual QString getHelp() const
-  {
-    return getName() + " (output.osm.pbf) (input1.osm.pbf) [input2.osm.pbf] ...\n"
-        "Concatenates two OSM files re-numbering elements as needed to avoid conflicts.\n"
-        "  * output.osm.pbf - Output file name.\n"
-        "  * inputs - One or more .osm.pbf inputs.";
-  }
-
   virtual QString getName() const { return "big-cat"; }
 
   virtual int runSimple(QStringList args)

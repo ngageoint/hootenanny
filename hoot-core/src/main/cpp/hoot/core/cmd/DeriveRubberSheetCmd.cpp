@@ -47,24 +47,6 @@ public:
 
   DeriveRubberSheetCmd() { }
 
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " [--ref] (input1) (input2) (transform2to1.rs) \n"
-        "  [transform1to2.rs]\n"
-        "\n"
-        "  Creates a transform file for rubber sheeting inputs.\n"
-        "  * --ref - If specified, treat input1 as a reference layer and only produce \n"
-        "    one output transform.\n"
-        "  * input1 - Input 1 (e.g. .osm file).\n"
-        "  * input2 - Input 2 (e.g. .osm file).\n"
-        "  * transform2to1.rs - Output transform rubber sheet spec. provides a transform\n"
-        "    for moving input 2 towards input 1.\n"
-        "  * transform1to2.rs - Output transform rubber sheet spec. Provides a transform\n"
-        "    for moving input 1 towards input 2. Required if --ref is not specified.\n";
-  }
-
   virtual QString getName() const { return "derive-rubber-sheet"; }
 
   virtual int runSimple(QStringList args)

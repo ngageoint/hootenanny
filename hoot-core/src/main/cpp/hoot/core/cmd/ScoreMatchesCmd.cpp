@@ -103,22 +103,6 @@ public:
     return result;
   }
 
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " [--confusion] (input1 input2) [input1 input2 ...] (output)\n"
-        "  Reads from inputs, adds UUIDs, conflates using unify and scores the matches.  The \n"
-        "  command will return an error if the first input file contains any REF2 tags or \n"
-        "  the second input file contains any REF1 tags.\n"
-        ""
-        "  * --confusion - print the confusion matrix\n"
-        "  * input1 - Input 1 containing REF1 tags (e.g. .osm file).\n"
-        "  * input2 - Input 2 containing REF2 tags (e.g. .osm file).\n"
-        "  * output - Output file for debugging (e.g. .osm file). Only the first "
-        "             conflation will be output.";
-  }
-
   virtual QString getName() const { return "score-matches"; }
 
   class ScoreFunction : public Tgs::NelderMead::Function
