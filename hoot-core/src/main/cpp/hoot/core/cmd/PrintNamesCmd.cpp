@@ -100,16 +100,6 @@ public:
 
   PrintNamesCmd() {}
 
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (input) [inputs...] [--write outputBase]\n"
-        "  Reads input and write out a list of names ordered by frequency.\n"
-        "  * input - One or more input map paths.\n"
-        "  * outputBase - Write out the counts to a .frequent and .all dictionary.";
-  }
-
   virtual QString getName() const { return "names"; }
 
   int runSimple(QStringList args)

@@ -1,14 +1,18 @@
 == perty
 
 === Description
-The +perty+ command permutes data.  It reads from input, permutes the data, and writes to output files. The +perty+ command is based on the paper, "Evaluating conflation methods using uncertainty modeling," P. Doucette, et. al, 2012. 
+
+The +perty+ command permutes data.  It reads from input, permutes the data, and
+writes to output files. The +perty+ command is based on the paper, "Evaluating
+conflation methods using uncertainty modeling," P. Doucette, et. al, 2012. 
 
 * +input+ - Input (e.g. .osm file).
 * +output+ - Output file (e.g. .osm file).
 
 === Optional Defines
 
-See the Configuration Options section for details on these configuration parameters can be used with this command:
+See the Configuration Options section for details on these configuration
+parameters can be used with this command:
 
 * +perty.algorithm+
 * +perty.csm.beta+
@@ -30,16 +34,19 @@ See the Configuration Options section for details on these configuration paramet
 * +perty.way.split.probability+
 
 === Usage
+
 --------------------------------------
 perty (input) (output)
 --------------------------------------
 
 === Example
 
-The following example perturbs the file "reference-in.osm", given the specified PERTY options (overrides default settings for those options), and writes the perturbed data to a file "perturbed-out.osm":
+The following example perturbs the file "reference-in.osm", given the specified
+PERTY options (overrides default settings for those options), and writes the
+perturbed data to a file "perturbed-out.osm":
 
 --------------------------------------
-hoot perty -D perty.search.distance=20 -D perty.way.generalize.probability=0.7 reference-in.osm perturbed-out.osm
+hoot perty -D perty.search.distance=20 -D perty.way.generalize.probability=0.7
+  reference-in.osm perturbed-out.osm
 --------------------------------------
-
 

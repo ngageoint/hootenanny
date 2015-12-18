@@ -47,18 +47,6 @@ public:
 
   ApplyRubberSheetCmd() { }
 
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (transform.rs) (input) (output)\n"
-        "\n"
-        "  Creates a transform file for rubber sheeting inputs.\n"
-        "  * transform.rs - Transform rubber sheet spec for moving the input.\n"
-        "  * input - Input (e.g. .osm file).\n"
-        "  * output - Write transformed result to this file. (e.g. .osm file).\n";
-  }
-
   virtual QString getName() const { return "apply-rubber-sheet"; }
 
   virtual int runSimple(QStringList args)

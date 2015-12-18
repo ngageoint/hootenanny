@@ -41,19 +41,6 @@ public:
 
   Osm2ShpCmd() { }
 
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " [columns] (input.osm) (output.shp)\n"
-        "  Converts a .osm file to a shapefile. This is a lossy process that generates \n"
-        "  a point, line and polygon shapefile.\n"
-        "  * columns - comma delimited list of keys to use for columns. If empty the\n"
-        "    list of columns will be automatically determined."
-        "  * input - Input .osm or similar file.\n"
-        "  * output.shp - Output .shp file.";
-  }
-
   virtual QString getName() const { return "osm2shp"; }
 
   virtual int runSimple(QStringList args)

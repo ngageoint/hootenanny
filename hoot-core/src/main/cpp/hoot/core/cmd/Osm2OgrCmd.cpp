@@ -44,18 +44,6 @@ public:
 
   Osm2OgrCmd() { }
 
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (translation) (input.osm) (output)\n"
-        "  * translation - JavaScript file name.\n"
-        "  * input.osm - An OSM compatible input format (e.g. .osm or .osm.pbf)\n"
-        "  * output - Output file name. The format is determined by extension. \n"
-        "      FileGDB (*.gdb) and Shapefile (*.shp) have been tested but other\n"
-        "      OGR compatible formats will likely work.\n";
-  }
-
   virtual QString getName() const { return "osm2ogr"; }
 
   static QString opsKey() { return "osm2ogr.ops"; }

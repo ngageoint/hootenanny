@@ -39,6 +39,7 @@ using namespace boost;
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/Tags.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
@@ -582,6 +583,7 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
       {
         const QString& key = _saveMemory(attributes.value("k"));
         const QString& value = _saveMemory(attributes.value("v"));
+
         if (_useFileStatus && key == "hoot:status")
         {
           _element->setStatus(_parseStatus(value));
@@ -595,13 +597,34 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
         {
           bool ok;
           Meters circularError = value.toDouble(&ok);
+
           if (circularError > 0 && ok)
           {
             _element->setCircularError(circularError);
           }
           else
           {
-            if (_badAccuracyCount < 10)
+            bool isBad = false;
+            hoot::Tags t1;
+            t1.set(key, value);
+            try
+            {
+              circularError = t1.getLength(key).value();
+              if (circularError > 0)
+              {
+                _element->setCircularError(circularError);
+              }
+              else
+              {
+                isBad = true;
+              }
+            }
+            catch (const HootException& e)
+            {
+              isBad = true;
+            }
+
+            if (isBad && _badAccuracyCount < 10)
             {
               LOG_WARN("Bad circular error value: " << value.toStdString());
               _badAccuracyCount++;
@@ -620,9 +643,6 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
           }
         }
       }
-
-
-
   }
   catch (const Exception& e)
   {

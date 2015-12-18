@@ -46,6 +46,8 @@ public:
 
   virtual ~BaseCommand() {}
 
+  virtual QString getHelp() const;
+
   void loadMap(shared_ptr<OsmMap> map, QString path, bool useFileId,
     Status defaultStatus = Status::Invalid);
 
@@ -68,6 +70,9 @@ public:
   void saveMap(shared_ptr<const OsmMap> map, QString path);
 
   QStringList toQStringList(char* argv[], int argc);
+
+protected:
+  virtual QString _getHelpPath() const;
 
 };
 

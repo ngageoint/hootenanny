@@ -34,6 +34,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/Units.h>
 
 namespace hoot
 {
@@ -164,6 +165,134 @@ double Tags::getDouble(const QString& k, double defaultValue) const
   {
     return defaultValue;
   }
+}
+
+Velocity Tags::getVelocity(const QString& k) const
+{
+  QString v = get(k);
+
+  QMap<QString, Velocity> stringUnits;
+  stringUnits["km/h"] = getKph();
+  stringUnits["kph"] = getKph();
+  stringUnits["kmph"] = getKph();
+
+  stringUnits["mph"] = getMph();
+  stringUnits["knots"] = getKnotph();
+
+  QString num;
+  QString units;
+  _valueRegexParser(v, num, units);
+
+  bool ok;
+  double r = num.toDouble(&ok);
+  if (!ok)
+  {
+    throw HootException("Expected a double for key: " + k + " but got: " + v);
+  }
+
+  Velocity result;
+  if (stringUnits.contains(units))
+  {
+    result = r * stringUnits[units];
+  }
+  else
+  {
+    throw HootException("Invalid units: " + units);
+  }
+  return result;
+}
+
+Length Tags::getLength(const QString& k) const
+{
+  QString v = get(k);
+
+  Length result;
+  bool ok;
+  //feet and inch are special case, do check and calculation.
+  if (v.contains("'", Qt::CaseInsensitive) || v.contains("\"", Qt::CaseInsensitive))
+  {
+    QString vf = "";
+    QString vi = "";
+    double vfd = 0.0;
+    double vid = 0.0;
+    if (v.contains("'", Qt::CaseInsensitive))
+    {
+      QStringList vfi = v.split("'");
+      if (vfi.length() == 2)
+      {
+        vf = vfi[0];
+        vi = vfi[1];
+        if (vi.contains("\""))
+        {
+          vi = vi.replace("\"","");
+        }
+        vfd = vf.toDouble(&ok);
+        if (!ok)
+        {
+          throw HootException("Expected a double for key: " + k + " but got: " + v);
+        }
+        if (!vi.isEmpty())
+        {
+          vid = vi.toDouble(&ok);
+          if (!ok)
+          {
+            throw HootException("Expected a double for key: " + k + " but got: " + v);
+          }
+        }
+      }
+      else
+      {
+        vf = vfi[0];
+        vfd = vf.toDouble(&ok);
+        if (!ok)
+        {
+          throw HootException("Expected a double for key: " + k + " but got: " + v);
+        }
+      }
+    }
+    result = (vfd + vid * 0.0833333) * getFeetLength();
+  }
+  else
+  {
+    QString num;
+    QString units;
+
+    QMap<QString, Length> stringUnits;
+    stringUnits["miles"] = getMileLength();
+    stringUnits["mile"] = getMileLength();
+    stringUnits["mi"] = getMileLength();
+
+    stringUnits["km"] = getKiloLength();
+    stringUnits["kilometre"] = getKiloLength();
+    stringUnits["kilometres"] = getKiloLength();
+    stringUnits["kilometer"] = getKiloLength();
+    stringUnits["kilometers"] = getKiloLength();
+
+    stringUnits["nmi"] = getNmiLength();
+    stringUnits["international nautical mile"] = getNmiLength();
+    stringUnits["ft"] = getFeetLength();
+    stringUnits["feet"] = getFeetLength();
+    stringUnits["foot"] = getFeetLength();
+    stringUnits["decimetres"] = getDecimiLength();
+
+    _valueRegexParser(v, num, units);
+
+    double r = num.toDouble(&ok);
+    if (!ok)
+    {
+      throw HootException("Expected a double for key: " + k + " but got: " + v);
+    }
+
+    if (stringUnits.contains(units))
+    {
+      result = r * stringUnits[units];
+    }
+    else
+    {
+      throw HootException("Invalid units: " + units);
+    }
+  }
+  return result;
 }
 
 int Tags::getInformationCount() const
@@ -466,6 +595,20 @@ QString Tags::toString() const
     result += it.key() + " = " + it.value() + "\n";
   }
   return result;
+}
+
+void Tags::_valueRegexParser(const QString& str, QString& num, QString& units) const
+{
+  QRegExp nRegExp("(\\d+(\\.\\d+)?)");
+  int pos = 0;
+  while ((pos = nRegExp.indexIn(str,pos)) != -1){
+    num = nRegExp.cap(1).trimmed();
+    pos += nRegExp.matchedLength();
+  }
+
+  QRegExp sRegExp("(\\d+(\\.\\d+)?)");
+  QString copyStr = str;
+  units = copyStr.replace(sRegExp, QString("")).trimmed();
 }
 
 }

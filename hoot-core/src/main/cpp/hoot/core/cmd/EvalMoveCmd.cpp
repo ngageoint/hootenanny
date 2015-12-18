@@ -61,21 +61,6 @@ public:
 
   EvalMoveCmd() { }
 
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (point-count) (bounds) (working-dir)\n"
-        "\n"
-        "  Creates a series of files filled with a random set of points then calculates \n"
-        "  the error introduced by various operations. A pair of points is created and \n"
-        "  checked to make sure both points are moved together."
-        "  * point-count - Number of points.\n"
-        "  * bounds - Comma delimited bounds minx,miny,maxx,maxy."
-        "  * working-dir - Local directory to store temporary files. If it doesn't\n"
-        "    exist it will be created.\n";
-  }
-
   virtual QString getName() const { return "eval-move"; }
 
   struct Comparison

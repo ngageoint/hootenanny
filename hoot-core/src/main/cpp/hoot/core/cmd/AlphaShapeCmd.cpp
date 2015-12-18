@@ -46,25 +46,6 @@ public:
 
   AlphaShapeCmd() {}
 
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (points) (alpha) (buffer) (output)\n"
-        "  Reads in a OSM input file and uses the points to derives a polygon that\n"
-        "  approximately represents the bounds as a alpha shape. The resulting\n"
-        "  multipolygon is written to 'output'.\n"
-        "  * points - The input OSM data to use for deriving the cookie cutter shape.\n"
-        "             The alpha shape algorithm is used to derive a polygon representing\n"
-        "             the bounds.\n"
-        "  * alpha - The size in meters used for alpha. A larger value makes a smoother\n"
-        "             shape and a smaller value will create a rough shape with more \n"
-        "             holes. Value in meters.\n"
-        "  * buffer - The buffer to add to the alpha shape before cutting. A negative\n"
-        "             value will make the shape smaller. Value in meters.\n"
-        "  * output - The output .osm data path.";
-  }
-
   virtual QString getName() const { return "alpha-shape"; }
 
   int runSimple(QStringList args)
