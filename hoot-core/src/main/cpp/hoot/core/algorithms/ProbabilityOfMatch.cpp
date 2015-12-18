@@ -184,7 +184,7 @@ double ProbabilityOfMatch::expertProbability(const ConstOsmMapPtr& map, const sh
   // weight this more heavily.
   double ps = parallelScore(map, w1, w2);
   double as = (attributeScore(map, w1, w2) * .7 + .3);
-  double zs = zipperScore(map, w1, w2);
+  double zs = zipperScore(w1, w2);
   double ls = lengthScore(map, w1, w2);
 
   if (debug)
@@ -199,8 +199,8 @@ double ProbabilityOfMatch::expertProbability(const ConstOsmMapPtr& map, const sh
   return ds * ps * as * zs * ls;
 }
 
-double ProbabilityOfMatch::zipperScore(const ConstOsmMapPtr& map,
-  const shared_ptr<const Way>& w1, const shared_ptr<const Way>& w2)
+double ProbabilityOfMatch::zipperScore(const shared_ptr<const Way>& w1,
+                                       const shared_ptr<const Way>& w2)
 {
   double result = 1.0;
 
