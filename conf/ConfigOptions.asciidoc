@@ -692,24 +692,6 @@ Some of the possible options include:
 * `hoot::ScriptMatchCreator,<yourscript.js>` - Uses a custom match script. The
   script should be in `$HOOT_HOME/rules/<yourscript.js>`.
 
-=== match.model.enabled
-
-* Data Type: bool
-* Default Value: `false`
-
-If set to 'true' then the ProbabilityMatch class will use a model for evaluating the probability of a match.
-
-=== match.model.name
-
-* Data Type: string
-* Default Value: `dc-attributes`
-
-The name of the model to use when classifying a pair of ways as a match or miss.
-
-Some of the possible options includ:
-* `dc-noattributes`
-* `dc-attr-intersection`
-
 === match.parallel.exponent
 
 * Data Type: double

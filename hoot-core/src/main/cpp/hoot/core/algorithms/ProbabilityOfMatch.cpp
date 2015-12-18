@@ -61,59 +61,7 @@ bool ProbabilityOfMatch::debug = false;
 
 ProbabilityOfMatch::ProbabilityOfMatch()
 {
-  _useModel = ConfigOptions().getMatchModelEnabled();
-
-  QString model = ConfigOptions().getMatchModelName();
   _parallelExp = ConfigOptions().getMatchParallelExponent();
-
-  if (_useModel)
-  {
-    LOG_INFO("Using model: " << model);
-  }
-
-  if (model == "dc-attributes")
-  {
-    // using attributes on DC perm7-1to3.arff
-    LogisticRegression::Coeff coeff;
-    coeff["AttributeScore"] = 121.9717;
-    coeff["DistanceScore"] = -2.9825;
-    coeff["LengthScore"] = -8.254;
-    coeff["ParallelScore"] = 35.6726;
-    coeff["PortionScore"] = 18.4649;
-    coeff["ProbabilityScore"] = 20.8245;
-    _model.setIntercept(-166.5986);
-    _model.setCoefficients(coeff);
-  }
-  else if (model == "dc-noattributes")
-  {
-    // no attributes on DC perm7-1to3-noattr.arff
-    LogisticRegression::Coeff coeff;
-    coeff["DistanceScore"] = 1.3947;
-    coeff["LengthScore"] = -4.9846;
-    coeff["ParallelScore"] = 56.557;
-    coeff["PortionScore"] = 18.7814;
-    coeff["ProbabilityScore"] = -0.1394;
-    _model.setIntercept(-68.4266);
-    _model.setCoefficients(coeff);
-  }
-  else if (model == "dc-attr-intersection")
-  {
-    LogisticRegression::Coeff coeff;
-    coeff["AttributeScore"] = 173.5906;
-    coeff["DistanceScore"] = -8.2995;
-    coeff["DistanceScoreMax"] = -16.6474;
-    coeff["IntersectionScore"] = 19.8346;
-    coeff["LengthScore"] = -0.9609;
-    coeff["ParallelScore"] = 11.6577;
-    coeff["PortionScore"] = 16.146;
-    coeff["ProbabilityScore"] = -4.949;
-    _model.setIntercept(-205.7471);
-    _model.setCoefficients(coeff);
-  }
-  else
-  {
-    throw HootException("Unrecognized model name.");
-  }
 }
 
 double ProbabilityOfMatch::attributeScore(const ConstOsmMapPtr& map,
@@ -152,30 +100,6 @@ double ProbabilityOfMatch::attributeScore(const ConstOsmMapPtr& map,
   }
 
   return score;
-}
-
-map<QString, double> ProbabilityOfMatch::calculateStats(const ConstOsmMapPtr& map,
-  const shared_ptr<const Way>& w1, const shared_ptr<const Way>& w2, double portionScore)
-{
-  double ds = distanceScore(map, w1, w2);
-  double dsMax = _dMax;
-  // weight this more heavily.
-  double ps = parallelScore(map, w1, w2);
-  double as = (attributeScore(map, w1, w2) * .7 + .3);
-  double zs = zipperScore(map, w1, w2);
-  double ls = lengthScore(map, w1, w2);
-
-  std::map<QString, double> sample;
-  sample["AttributeScore"] = as;
-  sample["DistanceScore"] = ds;
-  sample["DistanceScoreMax"] = dsMax;
-  sample["LengthScore"] = ls;
-  sample["ParallelScore"] = ps;
-  sample["PortionScore"] = portionScore;
-  sample["ProbabilityScore"] = ds * ps * as * zs * ls;
-  sample["ZipperScore"] = zs;
-
-  return sample;
 }
 
 double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const shared_ptr<const Way>& w1,
@@ -244,14 +168,6 @@ double ProbabilityOfMatch::lengthScore(const ConstOsmMapPtr &map, const shared_p
   return 0.2 + ((mean / (mean + 20)) * 0.8);
 }
 
-double ProbabilityOfMatch::modelProbability(const ConstOsmMapPtr& map,
-  const shared_ptr<const Way>& w1, const shared_ptr<const Way>& w2, double portionScore)
-{
-  std::map<QString, double> sample = calculateStats(map, w1, w2, portionScore);
-
-  return _model.evaluate(sample);
-}
-
 double ProbabilityOfMatch::parallelScore(const ConstOsmMapPtr& map, const shared_ptr<const Way>& w1,
                                          const shared_ptr<const Way>& w2)
 {
@@ -259,20 +175,6 @@ double ProbabilityOfMatch::parallelScore(const ConstOsmMapPtr& map, const shared
 
   double delta = pwf.calculateDifference(w2);
   return pow(cos(delta), _parallelExp);
-}
-
-double ProbabilityOfMatch::probability(const ConstOsmMapPtr& map, const shared_ptr<const Way>& w1,
-                                       const shared_ptr<const Way>& w2,
-  double portionScore)
-{
-  if (_useModel)
-  {
-    return modelProbability(map, w1, w2, portionScore);
-  }
-  else
-  {
-    return expertProbability(map, w1, w2);
-  }
 }
 
 double ProbabilityOfMatch::expertProbability(const ConstOsmMapPtr& map, const shared_ptr<const Way>& w1,
@@ -297,7 +199,7 @@ double ProbabilityOfMatch::expertProbability(const ConstOsmMapPtr& map, const sh
   return ds * ps * as * zs * ls;
 }
 
-double ProbabilityOfMatch::zipperScore(const ConstOsmMapPtr& /*map*/,
+double ProbabilityOfMatch::zipperScore(const ConstOsmMapPtr& map,
   const shared_ptr<const Way>& w1, const shared_ptr<const Way>& w2)
 {
   double result = 1.0;
