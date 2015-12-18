@@ -74,12 +74,13 @@ BuildingMerger::BuildingMerger(const set< pair<ElementId, ElementId> >& pairs) :
 void BuildingMerger::apply(const OsmMapPtr& map,
   vector< pair<ElementId, ElementId> >& replaced) const
 {
+  LOG_VAR(_pairs)
   //check if it is many to many
   set<ElementId> firstPairs;
   set<ElementId> secondPairs;
   set<ElementId> combined;
   set< pair<ElementId, ElementId> >::iterator sit = _pairs.begin();
-  while (sit != _pairs.begin())
+  while (sit != _pairs.end())
   {
     firstPairs.insert(sit->first);
     secondPairs.insert(sit->second);
@@ -89,12 +90,13 @@ void BuildingMerger::apply(const OsmMapPtr& map,
   }
   if (firstPairs.size() > 1 && secondPairs.size() > 1) //it is many to many
   {
+    LOG_WARN("****************************many to many");
     QString note = "Merging multiple buildings from each data source is error prone and requires a human eye.";
     ReviewMarker::mark(map, combined, note, "Building");
   }
   else
   {
-    //LOG_VAR(_pairs);
+    LOG_WARN("****************************one to many");
     // use node count as a surrogate for complexity of the geometry.
     CountNodesVisitor count1;
     shared_ptr<Element> e1 = _buildBuilding1(map);
