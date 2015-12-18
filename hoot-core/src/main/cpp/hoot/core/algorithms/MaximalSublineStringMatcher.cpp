@@ -118,8 +118,8 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   }
   catch(OverlappingMatchesException &e)
   {
-    throw NeedsReviewException("Multiple overlapping way matches were found within one set of "
-                               "ways.");
+    throw NeedsReviewException("Internal Error: Multiple overlapping way matches were found within "
+      "one set of ways.  Please report this to hootenanny.help@digitalglobe.com.");
   }
 }
 
@@ -332,8 +332,9 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
 
     if (OsmSchema::getInstance().isMultiLineString(*r) == false)
     {
-      throw NeedsReviewException("When matching sublines expected a multilinestring relation not"
-                                 " a " + r->getType());
+      throw NeedsReviewException("Internal Error: When matching sublines expected a multilinestring "
+        "relation not a " + r->getType() + ".  A non-multilinestring should never be found here.  "
+        "Please report this to hootenanny.help@digitalglobe.com");
     }
 
     const vector<RelationData::Entry>& entries = r->getMembers();
