@@ -1848,7 +1848,7 @@ wikimapia.rules = {
         "thermal power station":{'rawWmCategory':'thermal_power_station'}, //  Count: 1006
         "Selsoviet":{'rawWmCategory':'Selsoviet'}, //  Count: 1005
         "paint":{'rawWmCategory':'paint'}, //  Count: 1002
-        "Macedonian Orthodox Church - Ohrid Archbishopric":{'amenity''place_of_worship','religion':'christian','denomination':'macedonian_orthodox','building':'church'}, //  Count: 1001
+        "Macedonian Orthodox Church - Ohrid Archbishopric":{'amenity':'place_of_worship','religion':'christian','denomination':'macedonian_orthodox','building':'church'}, //  Count: 1001
         "justice":{'rawWmCategory':'justice'}, //  Count: 1000
         "Gothic architecture":{'building:architecture':'gothic'}, //  Count: 995
         "diner":{'amenity':'restaurant','cuisine':'diner'}, //  Count: 993
@@ -1919,7 +1919,7 @@ wikimapia.rules = {
         "terrain":{'rawWmCategory':'terrain'}, //  Count: 920
         "film studio":{'rawWmCategory':'film_studio'}, //  Count: 918
         "film/video production studio/facility":{'rawWmCategory':'film/video_production_studio/facility'}, //  Count: 918
-        "covered reservoir - water":{'rawWmCategory':'covered_reservoir_-_water'}, //  Count: 912
+        "covered reservoir - water":{'man_made':'reservoir','covered':'yes','reservoir_type':'water_storage'}, //  Count: 912
         "scheduled ancient monument":{'rawWmCategory':'scheduled_ancient_monument'}, //  Count: 910
         "migration service":{'rawWmCategory':'migration_service'}, //  Count: 910
         "pillar":{'rawWmCategory':'pillar'}, //  Count: 901
@@ -2575,9 +2575,9 @@ wikimapia.rules = {
         "soft drink bottling plant":{'rawWmCategory':'soft_drink_bottling_plant'}, //  Count: 411
         "meditation":{'rawWmCategory':'meditation'}, //  Count: 411
         "soft drink production":{'rawWmCategory':'soft_drink_production'}, //  Count: 411
-        "cakery":{'rawWmCategory':'cakery'}, //  Count: 410
-        "cake shop":{'rawWmCategory':'cake_shop'}, //  Count: 410
-        "Korean cuisine":{'rawWmCategory':'Korean_cuisine'}, //  Count: 408
+        "cakery":{'shop':'pastry'}, //  Count: 410
+        "cake shop":{'shop':'pastry'}, //  Count: 410
+        "Korean cuisine":{'cuisine':'korean'}, //  Count: 408
         "humanitarian":{'rawWmCategory':'humanitarian'}, //  Count: 408
         "promenade":{'rawWmCategory':'promenade'}, //  Count: 407
         "monolith":{'man_made':'monolith'}, //  Count: 406
