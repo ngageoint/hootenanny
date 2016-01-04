@@ -85,27 +85,6 @@ public:
     {
       streamElements(args[0], args[1]);
     }
-//    else if (readerFactory.hasElementInputStream(args[0]) &&
-//             !writerFactory.hasElementOutputStream(args[1]) &&
-//             ConfigOptions().getConvertOps().size() == 0)
-//    {
-//      shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(args[0]);
-//      reader->open(args[0]);
-//      shared_ptr<ElementInputStream> streamReader = dynamic_pointer_cast<ElementInputStream>(reader);
-//      shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::getInstance().createWriter(args[1]);
-//      writer->open(args[1]);
-
-//      shared_ptr<OsmMap> map(new OsmMap());
-//      while (streamReader->hasMoreElements())
-//      {
-//        ElementPtr ele = streamReader->readNextElement();
-//        if ( ele != 0)
-//        {
-//          map->addElement(ele);
-//        }
-//      }
-//      saveMap(map, args[1]);
-//    }
     else
     {
       shared_ptr<OsmMap> map(new OsmMap());
