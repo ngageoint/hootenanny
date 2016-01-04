@@ -43,6 +43,7 @@
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/PluginContext.h>
 
 // Qt
@@ -866,8 +867,10 @@ QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
                         "(Missing translateToOgr)");
   }
 
+  TryCatch trycatch;
   // Hardcoded to 3 arguments
   Handle<Value> translated = tFunc->Call(tObj, 3, args);
+  HootExceptionJs::checkV8Exception(translated, trycatch);
 
   if (Log::getInstance().getLevel() <= Log::Debug)
   {
@@ -922,7 +925,9 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName)
 
   // This has a variable since we don't know if it will be "translateToOsm" or "translateAttributes"
   Handle<v8::Function> tFunc = Handle<v8::Function>::Cast(tObj->Get(toV8(_toOsmFunctionName)));
+  TryCatch trycatch;
   Handle<Value> newTags = tFunc->Call(tObj, 2, args);
+  HootExceptionJs::checkV8Exception(newTags, trycatch);
 
   double start = 0.00; // to stop warnings
   if (Log::getInstance().getLevel() <= Log::Debug)

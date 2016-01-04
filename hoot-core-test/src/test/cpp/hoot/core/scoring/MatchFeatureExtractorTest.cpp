@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
@@ -77,7 +77,7 @@ public:
     reader.read(s2, map);
 
     // make the results consistent.
-    MapReprojector::reprojectToAeac(map);
+    MapProjector::projectToAeac(map);
     MapCleaner().apply(map);
 
     return map;

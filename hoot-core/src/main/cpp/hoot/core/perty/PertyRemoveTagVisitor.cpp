@@ -62,8 +62,8 @@ QString PertyRemoveTagVisitor::toString()
 
 void PertyRemoveTagVisitor::setConfiguration(const Settings& conf)
 {
-  setProbability(conf.getDouble(pKey(), 0.05));
   ConfigOptions configOptions(conf);
+  setProbability(configOptions.getPertyRemoveTagP());
   const int seed = configOptions.getPertySeed();
   LOG_VARD(seed);
   if (seed == -1)

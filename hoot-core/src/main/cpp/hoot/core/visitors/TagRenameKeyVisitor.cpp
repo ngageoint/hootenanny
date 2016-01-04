@@ -47,8 +47,9 @@ _newKey(newKey)
 
 void TagRenameKeyVisitor::setConfiguration(const Settings& conf)
 {
-  _oldKey = ConfigOptions(conf).getTagRenameVisitorOldKey();
-  _newKey = ConfigOptions(conf).getTagRenameVisitorNewKey();
+  ConfigOptions configOptions(conf);
+  _oldKey = configOptions.getTagRenameVisitorOldKey();
+  _newKey = configOptions.getTagRenameVisitorNewKey();
   if (_oldKey.trimmed() == "" || _newKey.trimmed() == "")
   {
     throw HootException("Invalid configuration value(s) for the TagRenameKeyVisitor.");

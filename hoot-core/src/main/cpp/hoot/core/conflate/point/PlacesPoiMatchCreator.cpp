@@ -250,8 +250,7 @@ private:
 
     set<QString> allNames = _getNamePermutations(n->getTags().getNames());
 
-    double minSimilarity = conf().getDouble(PlacesPoiMatch::minimumEditSimilarityKey(),
-                                            PlacesPoiMatch::minimumEditSimilarityDefault());
+    double minSimilarity = ConfigOptions().getPlacesMinimumEditSimilarity();
 
     for (set<QString>::const_iterator it = allNames.begin(); it != allNames.end(); ++it)
     {

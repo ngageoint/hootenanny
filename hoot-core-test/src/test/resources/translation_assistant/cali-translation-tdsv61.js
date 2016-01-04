@@ -1,3 +1,4 @@
+hoot.require('SchemaTools')
 hoot.require('translation_assistant')
 
 var attributeMapping = {

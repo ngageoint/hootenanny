@@ -31,7 +31,7 @@
 // Hoot
 #include <hoot/core/Conflator.h>
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/Settings.h>
@@ -86,9 +86,9 @@ public:
     shared_ptr<OsmMap> result(new OsmMap(conflator.getBestMap()));
 
     // Apply any user specified operations.
-    NamedOp(conf().getList(postOpsKey(), "")).apply(result);
+    NamedOp(ConfigOptions().getConflatorPostOps()).apply(result);
 
-    MapReprojector::reprojectToWgs84(result);
+    MapProjector::projectToWgs84(result);
 
     saveMap(result, args[2]);
 

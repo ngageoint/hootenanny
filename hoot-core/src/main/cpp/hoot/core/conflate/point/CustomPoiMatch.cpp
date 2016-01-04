@@ -129,7 +129,7 @@ bool CustomPoiMatch::_isDistanceMatch(const ConstNodePtr &n1, const ConstNodePtr
 bool CustomPoiMatch::_isExactMatch(const ConstNodePtr& n1, const ConstNodePtr& n2) const
 {
   // distance that is considered an exact match. Defaults to 1mm.
-  Meters epsilon = conf().getDouble(epsilonDistanceKey(), 1e-3);
+  Meters epsilon = ConfigOptions().getPlacesPoiEpsilonDistance();
 
   bool result = true;
 

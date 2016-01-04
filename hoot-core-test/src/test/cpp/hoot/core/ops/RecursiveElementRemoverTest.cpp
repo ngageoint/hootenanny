@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Log.h>

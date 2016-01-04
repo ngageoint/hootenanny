@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/io/OgrWriter.h>
@@ -82,9 +82,9 @@ public:
     loadMap(map, input, true);
 
     // Apply any user specified operations.
-    NamedOp(conf().getList(opsKey(), "")).apply(map);
+    NamedOp(ConfigOptions().getOsm2ogrOps()).apply(map);
 
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     writer.write(map);
 
