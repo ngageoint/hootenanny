@@ -90,7 +90,7 @@ void BuildingMerger::apply(const OsmMapPtr& map,
   if (firstPairs.size() > 1 && secondPairs.size() > 1) //it is many to many
   {
     QString note = "Merging multiple buildings from each data source is error prone and requires a human eye.";
-    ReviewMarker::mark(map, combined, note, "Building");
+    ReviewMarker::mark(map, combined, note, "Building", 1);
   }
   else
   {
@@ -127,8 +127,6 @@ void BuildingMerger::apply(const OsmMapPtr& map,
 
     ref1.sort();
     ref2.sort();
-    LOG_WARN(ref1);
-    LOG_WARN(ref2);
 
     if (ref1.size() != 0 || ref2.size() != 0)
     {
