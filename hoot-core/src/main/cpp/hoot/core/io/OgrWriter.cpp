@@ -275,6 +275,7 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
   }
   else
   {
+    LOG_INFO("Layer: " << layerName << " not found.  Creating layer...");
     // Layer does not exist
     poLayer = _ds->CreateLayer(layerName.toAscii(),
                   MapProjector::createWgs84Projection()->Clone(), gtype, options.getCrypticOptions());
