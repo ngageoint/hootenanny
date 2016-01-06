@@ -177,7 +177,10 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, shared_ptr<Feature> f, const
       QString("Error setting geometry - OGR Error Code: (%1)  Geometry: (%2)").arg(QString::number(errCode)).arg(QString::fromStdString(g->toString())));
   }
 
+  //Unsetting the FID with SetFID(-1) before calling CreateFeature() to avoid reusing the same feature object for sequential insertions
+  poFeature->SetFID(-1);
   errCode = layer->CreateFeature(poFeature);
+
   if (errCode != OGRERR_NONE)
   {
     throw HootException(
