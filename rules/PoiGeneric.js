@@ -164,34 +164,19 @@ function additiveScore(map, e1, e2) {
 
     var reason = result.reasons;
 
-    var searchRadius = Math.max(exports.getSearchRadius(e1), exports.getSearchRadius(e2));
+    var t1 = e1.getTags().toDict();
+    var t2 = e2.getTags().toDict();
 
-    //hoot.log("element 1 id: " + e1.getId() + " tags: " + e1.getTags());
-    //hoot.log("element 2 id: " + e2.getId() + " tags: " + e2.getTags());
-
-    /*hoot.log("1: " + getTagsByAncestor("railway=station", e1.getTags().toDict()).length);
-    hoot.log("2: " + getTagsByAncestor("highway=bus_stop", e2.getTags().toDict()).length);
-    hoot.log("3: " + getTagsByAncestor("highway=bus_stop", e2.getTags().toDict()).length);
-    hoot.log("4: " + getTagsByAncestor("railway=station", e1.getTags().toDict()).length);
-    hoot.log("5: " + getTagsByAncestor("railway", e1.getTags().toDict()).length);
-    hoot.log("6: " + getTagsByAncestor("railway", e2.getTags().toDict()).length);*/
-
-    //if ((e1.getTags().contains("railway") && e2.getTags().contains("highway") && e2.getTags().get("highway") == "bus_stop") ||
-    //     (e2.getTags().contains("railway") && e1.getTags().contains("highway") && e1.getTags().get("highway") == "bus_stop"))
-    //if ((getTagsByAncestor("railway", e1.getTags().toDict()).length > 0 && getRelatedTags("railway", e2.getTags().toDict()).length > 0) ||
-        //(getTagsByAncestor("railway", e2.getTags().toDict()).length > 0 && getRelatedTags("railway", e1.getTags().toDict()).length > 0))
-    /*if ((getTagsByAncestor("railway=station", e1.getTags().toDict()).length > 0 &&
-         getTagsByAncestor("highway=bus_stop", e2.getTags().toDict()).length > 0) ||
-        (getTagsByAncestor("highway=bus_stop", e2.getTags().toDict()).length > 0 &&
-         getTagsByAncestor("railway=station", e1.getTags().toDict()).length > 0))*/
-    if ((getRelatedTags("railway=station", e1.getTags().toDict()).length > 0 &&
-         getRelatedTags("highway=bus_stop", e2.getTags().toDict()).length > 0) ||
-        (getRelatedTags("highway=bus_stop", e2.getTags().toDict()).length > 0 &&
-         getRelatedTags("railway=station", e1.getTags().toDict()).length > 0))
+    var e1SearchRadius = exports.getSearchRadius(e1);
+    var e2SearchRadius = exports.getSearchRadius(e2)
+    var searchRadius = Math.max(e1SearchRadius, e2SearchRadius);
+    if ((getRelatedTags("railway=station", t1).length > 0 &&
+         getRelatedTags("highway=bus_stop", t2).length > 0) ||
+        (getRelatedTags("highway=bus_stop", t1).length > 0 &&
+         getRelatedTags("railway=station", t2).length > 0))
     {
-      searchRadius = Math.min(exports.getSearchRadius(e1), exports.getSearchRadius(e2));
+      searchRadius = Math.min(e1SearchRadius, e2SearchRadius);
     }
-    //hoot.log("search radius: " + searchRadius);
 
     var d = distance(e1, e2);
 
@@ -202,9 +187,6 @@ function additiveScore(map, e1, e2) {
     // if there is no type information to compare the name becomes more 
     // important
     var oneGeneric = hasTypeTag(e1) == false || hasTypeTag(e2) == false;
-
-    var t1 = e1.getTags().toDict();
-    var t2 = e2.getTags().toDict();
 
     var mean = translateMeanWordSetLevenshtein_1_5.extract(map, e1, e2);
     var weightedWordDistanceScore = weightedWordDistance.extract(map, e1, e2);
