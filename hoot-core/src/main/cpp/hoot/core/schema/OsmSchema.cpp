@@ -1600,11 +1600,6 @@ bool OsmSchema::isBuilding(const Tags& t, ElementType type) const
     result = true;
   }
 
-  if ( result == true )
-  {
-    LOG_DEBUG("In OsmSchema::isBuilding, returning true")
-  }
-
   return result;
 }
 

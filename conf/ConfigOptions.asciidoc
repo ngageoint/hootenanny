@@ -182,6 +182,7 @@ See also:
 
 * Data Type: list
 * Default Value:
+** `hoot::RemoveMissingElementsVisitor` - Remove non-existent element references from relations or ways with negative IDs.
 ** `hoot::RemoveDuplicateReviewsOp` - Checks if there are any duplicate reviews
 ** `hoot::BuildingOutlineUpdateOp` - Updates any multi-part building outlines that may have changed during conflation.
 ** `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews. By processing reviews in sorted order the results are a little more logically ordered.
