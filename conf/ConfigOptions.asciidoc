@@ -2030,6 +2030,14 @@ Sets that maximum angle that is still considered a way match. Units in degrees.
 
 The minimum size that a way should be split into for merging. Units in meters.
 
+=== way.splitter.max.length
+
+* Data Type: double
+* Default Value: `5000`
+
+This configuration option is used by hoot::WaySplitterOp. If a way is longer than this length
+(in meters) then it will be split into smaller ways.
+
 === way.subline.matcher
 
 * Data Type: string
