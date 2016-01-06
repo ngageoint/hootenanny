@@ -667,7 +667,7 @@ sudo service tomcat6 stop
 +
 .. Select Window -> Show View -> Servers.
 .. Right-click in the dialog window and select New -> Server.
-.. Select "Tomcat v6.0 Server" and click Next.  Select the "Tomcat v6.0" server.  You may be foreced to click the "Download and Install" button even if you have Tomcat installed.
+.. Select "Tomcat v6.0 Server" and click Next.  Select the "Tomcat v6.0" server.  You may be forced to click the "Download and Install" button even if you have Tomcat installed.
 .. Add the hoot-services and hoot-ui projects to the list of configured and click Finish.
 .. Right-click the hoot-services Java project and select Debug As -> Debug Configurations.
 .. Select "Apache Tomcat" from the list.
