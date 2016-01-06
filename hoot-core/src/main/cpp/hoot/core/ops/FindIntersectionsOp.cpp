@@ -28,7 +28,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/conflate/DuplicateNameRemover.h>
 #include <hoot/core/conflate/DuplicateWayRemover.h>
 #include <hoot/core/conflate/ImpliedDividedMarker.h>
@@ -74,7 +74,7 @@ void FindIntersectionsOp::apply(shared_ptr<OsmMap>& map)
   map->removeWays(TagFilter(Filter::FilterMatches, "source", "AIMS"));
 
   // reproject into a planar projection centered in the middle of bounding box.
-  MapReprojector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
 
   DuplicateWayRemover::removeDuplicates(map);
   SuperfluousWayRemover::removeWays(map);
@@ -112,7 +112,7 @@ void FindIntersectionsOp::apply(shared_ptr<OsmMap>& map)
 
 
   // Apply any user specified operations.
-  NamedOp(conf().getList(opsKey(), "")).apply(map);
+  NamedOp(ConfigOptions().getMapCleanerTransforms()).apply(map);
 }
 
 }

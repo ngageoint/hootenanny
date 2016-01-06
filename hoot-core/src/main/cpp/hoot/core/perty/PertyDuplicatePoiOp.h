@@ -55,10 +55,6 @@ public:
   static QString moveMultiplierKey() { return "perty.duplicate.poi.move.multiplier"; }
   static QString pKey() { return "perty.duplicate.poi.p"; }
 
-  static double defaultDuplicateSigma() { return 1.0; }
-  static double defaultMoveMultiplier() { return 1.0; }
-  static double defaultProbability() { return 0.10; }
-
   PertyDuplicatePoiOp();
 
   virtual ~PertyDuplicatePoiOp() {}

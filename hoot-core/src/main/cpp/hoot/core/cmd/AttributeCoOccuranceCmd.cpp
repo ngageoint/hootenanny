@@ -69,17 +69,6 @@ public:
 
   AttributeCoOccurenceCmd() { }
 
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " [--no-table] (input1 input2)\n"
-        "  Reads from inputs and outputs a co-occurence matrix based on attribute values\n"
-        "  * --no-table - print the matrix as a list The default is to print as a table\n"
-        "  * input1 - Input 1 (e.g. .osm file).\n"
-        "  * input2 - Input 2 (e.g. .osm file).\n";
-  }
-
   virtual QString getName() const { return "attr-co-occurence"; }
 
   virtual int runSimple(QStringList args)

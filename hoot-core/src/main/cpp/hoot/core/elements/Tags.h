@@ -124,6 +124,16 @@ public:
   QStringList getNames() const;
 
   /**
+   * Returns the speed in standard units (m/s).
+   */
+  Velocity getVelocity(const QString& k) const;
+
+  /**
+   * Returns the length in standard units (m).
+   */
+  Length getLength(const QString& k) const;
+
+  /**
    * Return the number of tags that contain actual information, not meta-data or debug tags.
    * Meta-data tags include things like source and license. Debug is anything that starts with
    * hoot:. An example of an informational tag is name or highway.
@@ -221,6 +231,8 @@ public:
   QString toString() const;
 
 private:
+  void _valueRegexParser(const QString& str, QString& num, QString& units) const;
+
   static QStringList _nameKeys;
   static QStringList _pseudoNameKeys;
 };

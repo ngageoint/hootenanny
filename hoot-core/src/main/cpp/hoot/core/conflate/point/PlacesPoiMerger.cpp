@@ -98,7 +98,7 @@ void PlacesPoiMerger::setConfiguration(const Settings& conf)
 {
   if (conf.hasKey(placesTagMerger()))
   {
-    _merger = &TagMergerFactory::getInstance().getMerger(conf.getString(placesTagMerger()));
+    _merger = &TagMergerFactory::getInstance().getMerger(ConfigOptions(conf).getPlacesTagMerger());
   }
   else
   {

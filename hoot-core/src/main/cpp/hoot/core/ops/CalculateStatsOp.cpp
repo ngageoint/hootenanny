@@ -26,7 +26,7 @@
  */
 #include "CalculateStatsOp.h"
 
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/filters/AreaFilter.h>
 #include <hoot/core/filters/BuildingCriterion.h>
@@ -94,7 +94,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
   LOG_INFO(logMsg);
   Filter::FilterType keep = Filter::KeepMatches;
 
-  MapReprojector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
 
   shared_ptr<const OsmMap> constMap = map;
 

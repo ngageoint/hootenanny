@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/RubberSheet.h>
@@ -43,16 +43,6 @@ public:
   static string className() { return "hoot::RubberSheetCmd"; }
 
   RubberSheetCmd() { }
-
-  virtual QString getHelp() const
-  {
-    return getName() + " (input1) (input2) (output)\n"
-        "  Reads from inputs, matches nodes, transforms input2 and writes the combined data to\n"
-        "  output.\n"
-        "  * input1 - Input 1 (e.g. .osm file).\n"
-        "  * input2 - Input 2 (e.g. .osm file).\n"
-        "  * output - Output file (e.g. .osm file).";
-  }
 
   virtual QString getName() const { return "rubber-sheet"; }
 
@@ -74,7 +64,7 @@ public:
     MapCleaner().apply(map);
     RubberSheet().apply(map);
 
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     saveMap(map, args[2]);
 

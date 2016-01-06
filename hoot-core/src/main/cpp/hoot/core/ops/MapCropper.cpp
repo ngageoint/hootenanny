@@ -39,7 +39,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -115,7 +115,7 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
   LOG_INFO("Cropping map.");
   shared_ptr<OsmMap> result = map;
 
-  if (MapReprojector::isGeographic(map) == false && _nodeBounds.isNull() == false)
+  if (MapProjector::isGeographic(map) == false && _nodeBounds.isNull() == false)
   {
     throw HootException("If the node bounds is set the projection must be geographic.");
   }

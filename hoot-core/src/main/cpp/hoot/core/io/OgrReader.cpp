@@ -37,7 +37,7 @@ using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
@@ -846,7 +846,7 @@ shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Settings&
     }
 
     result.reset(new Envelope());
-    shared_ptr<OGRSpatialReference> wgs84 = MapReprojector::getInstance().createWgs84Projection();
+    shared_ptr<OGRSpatialReference> wgs84 = MapProjector::getInstance().createWgs84Projection();
     auto_ptr<OGRCoordinateTransformation> transform(
       OGRCreateCoordinateTransformation(wgs84.get(), srs));
     const int steps = 8;
@@ -976,6 +976,18 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
   {
     bool ok;
     double a = t["error:circular"].toDouble(&ok);
+    if (!ok)
+    {
+      try
+      {
+        a = t.getLength("error:circular").value();
+        ok = true;
+      }
+      catch (const HootException& e)
+      {
+        ok = false;
+      }
+    }
     if (ok)
     {
       circularError = a;
@@ -986,6 +998,18 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
   {
     bool ok;
     double a = t["accuracy"].toDouble(&ok);
+    if (!ok)
+    {
+      try
+      {
+        a = t.getLength("accuracy").value();
+        ok = true;
+      }
+      catch (const HootException& e)
+      {
+        ok = false;
+      }
+    }
     if (ok)
     {
       circularError = a;

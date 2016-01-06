@@ -80,6 +80,6 @@ Vagrant.configure(2) do |config|
   # SHELL
   config.vm.provision :shell, :path => "VagrantProvision.sh"
   config.vm.provision :shell, :inline => "sudo service tomcat6 restart", run: "always"
-  config.vm.provision :shell, :inline => "sudo service node-mapnik-server start --force", run: "always"
+  config.vm.provision :shell, :inline => "sudo service node-mapnik-server start", run: "always"
 
 end

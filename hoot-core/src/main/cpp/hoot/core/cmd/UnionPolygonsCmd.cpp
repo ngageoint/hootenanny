@@ -31,7 +31,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/io/OgrReader.h>
@@ -49,17 +49,6 @@ public:
   static string className() { return "hoot::UnionPolygonsCmd"; }
 
   UnionPolygonsCmd() { }
-
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (output) (input1) [input2 ...]\n"
-        "Reads polygons from one or more inputs, unions them and writes the single \n"
-        "polygon to output."
-        "  * output - Output file name.\n"
-        "  * inputs - One or more inputs.";
-  }
 
   virtual QString getName() const { return "union-polygons"; }
 

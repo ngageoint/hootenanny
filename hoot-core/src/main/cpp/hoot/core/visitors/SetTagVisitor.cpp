@@ -48,8 +48,9 @@ _v(value)
 
 void SetTagVisitor::setConfiguration(const Settings& conf)
 {
-  _k = ConfigOptions(conf).getSetTagVisitorKey();
-  _v = ConfigOptions(conf).getSetTagVisitorValue();
+  ConfigOptions configOptions(conf);
+  _k = configOptions.getSetTagVisitorKey();
+  _v = configOptions.getSetTagVisitorValue();
 }
 
 void SetTagVisitor::visit(const shared_ptr<Element>& e)

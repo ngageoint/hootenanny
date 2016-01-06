@@ -1,8 +1,8 @@
-
 [[conflate]]
 == conflate
 
 === Description
+
 Conflates two input sources into a single output.
 
 * +input1+ - First input.
@@ -11,15 +11,18 @@ Conflates two input sources into a single output.
 * +--stats+ - Hootenanny map statistics such as node and way count
 
 === Usage
+
 --------------------------------------
 conflate (input1) [input2] (output) [--stats]
 ---------------------------------
 
 ==== Example
+
 --------------------------------------
 hoot conflate input1.osm input2.osm output.osm --stats
 --------------------------------------
 
 ==== See Also
 
-* _Unifying Conflation_, <<hootalgo>>
+* _Unifying Conflation_, <<hootalgo,Hootenanny - Algorithms>>
+

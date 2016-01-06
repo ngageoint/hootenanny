@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/Conflator.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
@@ -163,7 +163,7 @@ shared_ptr<OsmMap> LocalTileWorker::_conflate(shared_ptr<OsmMap> map,
 
   map->registerListener(rnl);
 
-  MapReprojector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
 
   // call conflation routine
   Conflator conflator;
@@ -171,7 +171,7 @@ shared_ptr<OsmMap> LocalTileWorker::_conflate(shared_ptr<OsmMap> map,
   conflator.conflate();
 
   shared_ptr<OsmMap> result(new OsmMap(conflator.getBestMap()));
-  MapReprojector::reprojectToWgs84(result);
+  MapProjector::projectToWgs84(result);
 
   return result;
 }

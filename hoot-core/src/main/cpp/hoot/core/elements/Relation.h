@@ -110,6 +110,12 @@ public:
   bool isMultiPolygon() const { return _relationData->getType() == MULTIPOLYGON; }
 
   /**
+   * Returns true if this is a review.
+   */
+  bool isReview() const { return _relationData->getType() == REVIEW; }
+
+
+  /**
    * Remove all members that meet the speicified criteria. If no members meet the criteria then
    * no changes are made.
    */

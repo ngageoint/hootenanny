@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/io/OgrReader.h>
@@ -69,7 +69,7 @@ public:
       shared_ptr<OsmMap> map(new OsmMap());
       uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
 
-      MapReprojector::reprojectToOrthographic(map);
+      MapProjector::projectToOrthographic(map);
 
       CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodeMap().size());
 
@@ -78,7 +78,7 @@ public:
 
       CPPUNIT_ASSERT_EQUAL(601, (int)map->getNodeMap().size());
 
-      MapReprojector::reprojectToWgs84(map);
+      MapProjector::projectToWgs84(map);
 
       OsmWriter writer;
       writer.write(map, "output.osm");

@@ -44,20 +44,6 @@ public:
 
   AddOsmPbfHeaderCmd() {}
 
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (input.osm.pbf) (output.osm.pbf)\n"
-        "  Reads in a .osm.pbf file, adds an OSM Block header and writes the result to \n"
-        "  the output. This is primarily useful as a post processing step when using \n"
-        "  Hadoop to conflate data.\n"
-        "  * input - The input .osm.pbf map path. If '-' is specified then it will be \n"
-        "            read from standard in.\n"
-        "  * output - The output .osm.pbf map path. If '-' is specified then the result \n"
-        "             will be written to stdout.";
-  }
-
   virtual QString getName() const { return "add-pbf-header"; }
 
   int runSimple(QStringList args)

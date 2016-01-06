@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/splitter/DualWaySplitter.h>
 #include <hoot/core/conflate/SuperfluousWayRemover.h>
@@ -51,17 +51,6 @@ public:
   static string className() { return "hoot::ScoreCmd"; }
 
   ScoreCmd() { }
-
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (base1) [base2] (uut)\n"
-        "  Compares a map (uut, Unit Under Test) to one or two test maps (base1 & base)\n"
-        "  * base1 - The first base file to compare against.\n"
-        "  * base2 - (optional) The second base file to compare against.\n"
-        "  * uut - The file being evaluated.";
-  }
 
   virtual QString getName() const { return "score"; }
 

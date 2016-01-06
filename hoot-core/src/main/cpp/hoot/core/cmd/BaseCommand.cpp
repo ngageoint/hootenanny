@@ -37,15 +37,39 @@
 #include <hoot/core/io/GeoNamesReader.h>
 #include <hoot/core/io/PbfReader.h>
 #include <hoot/core/io/PbfWriter.h>
+#include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/Progress.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
-#include <hoot/core/util/Progress.h>
+
+// Qt
+#include <QFileInfo>
 
 namespace hoot
 {
 
 BaseCommand::BaseCommand()
 {
+}
+
+QString BaseCommand::getHelp() const
+{
+  QFile fp(_getHelpPath());
+
+  if (fp.open(QFile::ReadOnly) == false)
+  {
+    LOG_WARN(QString("Error opening command help for reading. (%1) Is HOOT_HOME set properly?").
+      arg(_getHelpPath()));
+  }
+
+  return QString::fromUtf8(fp.readAll());
+}
+
+QString BaseCommand::_getHelpPath() const
+{
+  QString result = ConfPath::getHootHome() + "/docs/commands/" + getName() + ".asciidoc";
+
+  return result;
 }
 
 void BaseCommand::loadMap(shared_ptr<OsmMap> map, QString path, bool useFileId,

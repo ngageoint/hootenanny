@@ -100,7 +100,7 @@ SOURCES += \
     src/test/cpp/hoot/core/perty/PertyNameVisitorTest.cpp \
     src/test/cpp/hoot/core/perty/PertyDuplicatePoiOpTest.cpp \
     src/test/cpp/hoot/core/perty/PertyRemoveTagVisitorTest.cpp \
-    src/test/cpp/hoot/core/MapReprojectorTest.cpp \
+    src/test/cpp/hoot/core/MapProjectorTest.cpp \
     src/test/cpp/hoot/core/util/GeometryUtilsTest.cpp \
     src/test/cpp/hoot/core/elements/TagsTest.cpp \
     src/test/cpp/hoot/core/conflate/polygon/BuildingMergeManipulatorTest.cpp \
@@ -160,7 +160,8 @@ SOURCES += \
     src/test/cpp/hoot/core/conflate/CookieCutterTest.cpp \
     src/test/cpp/hoot/core/conflate/AlphaShapeGeneratorTest.cpp \
     src/test/cpp/hoot/core/perty/PertyOpTest.cpp \
-    src/test/cpp/hoot/core/ops/CookieCutterOpTest.cpp
+    src/test/cpp/hoot/core/ops/CookieCutterOpTest.cpp \
+    src/test/cpp/hoot/core/visitors/RemoveElementsVisitorTest.cpp \
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \

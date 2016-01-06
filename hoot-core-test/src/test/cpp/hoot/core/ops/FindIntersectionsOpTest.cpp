@@ -30,7 +30,7 @@
 #include <geos/geom/Point.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/filters/BuildingCriterion.h>
 #include <hoot/core/io/OsmJsonWriter.h>
@@ -80,7 +80,7 @@ public:
 
     LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter(5).toString(map)));
 
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
     QDir().mkpath("test-output/ops/FindIntersectionsOp/");
     OsmWriter writer;
     writer.write(map, "test-output/ops/FindIntersectionsOp/Toy_intersections.osm");
