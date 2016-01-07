@@ -976,6 +976,18 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
   {
     bool ok;
     double a = t["error:circular"].toDouble(&ok);
+    if (!ok)
+    {
+      try
+      {
+        a = t.getLength("error:circular").value();
+        ok = true;
+      }
+      catch (const HootException& e)
+      {
+        ok = false;
+      }
+    }
     if (ok)
     {
       circularError = a;
@@ -986,6 +998,18 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
   {
     bool ok;
     double a = t["accuracy"].toDouble(&ok);
+    if (!ok)
+    {
+      try
+      {
+        a = t.getLength("accuracy").value();
+        ok = true;
+      }
+      catch (const HootException& e)
+      {
+        ok = false;
+      }
+    }
     if (ok)
     {
       circularError = a;

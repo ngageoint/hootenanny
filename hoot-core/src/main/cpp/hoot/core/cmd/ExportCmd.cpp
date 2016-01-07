@@ -76,26 +76,6 @@ public:
 
   ExportCmd() { }
 
-  virtual QString getHelp() const
-  {
-
-    const QString defaultCacheCapacity = QString::number(OgrWriter::getDefaultCacheCapacity());
-
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (translation) (output) (inputURL) [cacheCapacity]\n"
-        "  * translation - JavaScript file name.\n"
-        "  * output - Output file name. The format is determined by extension. \n"
-        "      FileGDB (*.gdb) and Shapefile (*.shp) have been tested but other\n"
-        "      OGR-compatible formats will likely work.\n"
-        "  * inputURL - An identifier for a PostGIS database. \n"
-        "      (e.g., PG:\"dbname='databasename' host='addr' port='5432' user='x' \n"
-        "      password='y'\")\n"
-        "  * cacheCapacity - OPTIONAL - number of cache entries for *each* of the three \n"
-        "      element types (nodes, ways, relations). If not specified, will use \n"
-        "      default capacity value of " + defaultCacheCapacity + " elements per type \n";
-  }
-
   virtual QString getName() const { return "export"; }
 
   static QString opsKey() { return "export.ops"; }

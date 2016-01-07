@@ -1,9 +1,13 @@
 == version
 
 === Description
-Prints the version of Hootenanny.
+
+Prints the version of Hootenanny. Including the debug flag will also print
+some relevant library versions and statistics.
 
 === Usage
+
 --------------------------------------
-hoot version
+hoot version [--debug]
 --------------------------------------
+

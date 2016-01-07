@@ -43,7 +43,6 @@ using namespace geos::operation::distance;
 #include <hoot/core/WorkingMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/MaximalNearestSubline.h>
-#include <hoot/core/algorithms/ProbabilityOfMatch.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/filters/ParallelWayFilter.h>

@@ -43,20 +43,6 @@ public:
 
   IsMatchCmd() { }
 
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " [--ignore-uuid] (input1) (input2)\n"
-        "  Checks to see if maps are essentially the same. Returns 0 if they're the same\n"
-        "  or 1 if they differ significantly. If they differ significantly warnings will\n"
-        "  be printed with more information.\n"
-        "  --ignore-uuid - Ignore UUID's in the map comparison\n"
-        "  --use-datetime - Use the ingest datetime in the map comparison\n"
-        "  * input1 - Input 1 (e.g. .osm file).\n"
-        "  * intpu2 - Input 2 (e.g. .osm file).";
-  }
-
   virtual QString getName() const { return "is-match"; }
 
   virtual int runSimple(QStringList args)

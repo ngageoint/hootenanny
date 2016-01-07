@@ -254,7 +254,7 @@ map<QString, double> HighwayRfClassifier::getFeatures(const shared_ptr<const Osm
     LOG_VAR(eid2);
     LOG_VAR(match.toString());
     throw NeedsReviewException("Internal Error: Expected a matching subline, but got an empty "
-                               "match. Please report this to the developers.");
+                               "match. Please report this to hootenanny.help@digitalglobe.com.");
   }
   else
   {

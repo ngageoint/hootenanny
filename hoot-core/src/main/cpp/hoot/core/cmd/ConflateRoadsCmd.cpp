@@ -50,18 +50,6 @@ public:
 
   ConflateRoadsCmd() {}
 
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (input1) (input2) (output)\n"
-        "  This will be deprecated in the future. --conflate is preferred.\n"
-        "  Conflates two input sources into one output. Only roads are conflated.\n"
-        "  * input1 - First input.\n"
-        "  * input2 - Second input.\n"
-        "  * output - The output path.";
-  }
-
   virtual QString getName() const { return "conflate-roads"; }
 
   static QString postOpsKey() { return "conflator.post.ops"; }
