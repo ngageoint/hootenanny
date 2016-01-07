@@ -109,7 +109,7 @@ QString Job::_getFiles()
     QDir d(QString::fromStdString(_libraryDir[i]));
     if (d.exists())
     {
-      QFileInfoList fil = d.entryInfoList(libFilter, QDir::Files);
+      QFileInfoList fil = d.entryInfoList(libFilter, QDir::Files, QDir::Name);
       for (int i = 0; i < fil.size(); i++)
       {
         result << fil.at(i).absoluteFilePath();
