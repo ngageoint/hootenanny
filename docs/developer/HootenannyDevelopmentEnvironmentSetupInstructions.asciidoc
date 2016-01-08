@@ -491,7 +491,7 @@ kernel.shmall=2097152
 +
 . `sudo service postgresql restart`
 
-=== Get Hootenany Source Code
+=== Get Hootenanny Source Code
 
 Find Hootenanny on GitHub and then:
 
@@ -598,7 +598,7 @@ cd /opt/ && sudo tar -zkvf ~/Downloads/eclipse-*.tar.gz
 -----------
 +
 . Launch eclipse from the command line or create launcher shortcut for Eclipse (optional).
-. To create launcher, copy/paste below to */usr/share/applications/eclipse.dekstop*.
+. To create launcher, copy/paste below to */usr/share/applications/eclipse.desktop*.
 +
 -----------
 [Desktop Entry]
@@ -667,13 +667,13 @@ sudo service tomcat6 stop
 +
 .. Select Window -> Show View -> Servers.
 .. Right-click in the dialog window and select New -> Server.
-.. Select "Tomcat v6.0 Server" and click Next.  Select the "Tomcat v6.0" server.  You may be foreced to click the "Download and Install" button even if you have Tomcat installed.
+.. Select "Tomcat v6.0 Server" and click Next.  Select the "Tomcat v6.0" server.  You may be forced to click the "Download and Install" button even if you have Tomcat installed.
 .. Add the hoot-services and hoot-ui projects to the list of configured and click Finish.
 .. Right-click the hoot-services Java project and select Debug As -> Debug Configurations.
 .. Select "Apache Tomcat" from the list.
 .. Click the "New Launch Configuration" button.
 .. Name the new configuration "hoot-services".
-.. Click the Claspath tab.
+.. Click the Classpath tab.
 .. Left-click "User Entries" and click "Add External Jars".
 .. Add the following jars if they are not already present:
 ... /usr/share/tomcat6/bin/bootstrap.jar
@@ -711,6 +711,6 @@ sudo service tomcat6 stop
 . Launch hoot-services in debug mode by right-click on the project and select Debug as -> Debug on Server. You should see the Tomcat server startup logging in the console view.
 . hoot-services should start and load all the WPS services.  If you see "Class not found" errors, your Tomcat debug environment is probably not set up properly.
 . From a browser, you should be able to navigate to link:http://localhost:8080/hoot-services/info/about/servicesVersionInfo[http://localhost:8080/hoot-services/info/about/servicesVersionInfo] and see some diagnostic XML.
-. From a browser, you should be able to navigate to link:http://localhost:8080/hoot-ui/#background=Bing&map=17.20/47.43525/6.77106[http://localhost:8080/hoot-ui/#background=Bing&map=17.20/47.43525/6.77106] and see the user interface.  Substitute any map coordiantes and zoom to the level you want.
+. From a browser, you should be able to navigate to link:http://localhost:8080/hoot-ui/#background=Bing&map=17.20/47.43525/6.77106[http://localhost:8080/hoot-ui/#background=Bing&map=17.20/47.43525/6.77106] and see the user interface.  Substitute any map coordinates and zoom to the level you want.
 . Debug the services (debugging the UI is not covered in these instructions, and could be completed in the client using the browser's Developer Tools) by setting up a breakpoint anywhere in the hoot-services classes to capture incoming requests.
 

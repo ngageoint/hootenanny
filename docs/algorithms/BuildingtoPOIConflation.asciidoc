@@ -13,7 +13,7 @@ Building to POI conflation is in very early development and disabled by default.
 Building to POI conflation in Hootenanny is a rule based conflation based on the following rules:
 
 * Find all candidate POI / building pairs. A candidate is any POI that is within the combined circular error of a building plus the user definable +poi.polygon.match.review.distance+ config option. (see below for the combined circular error calculation)
-* Assign Match: If the POI is inside the building and the name is either non-existant or a close match
+* Assign Match: If the POI is inside the building and the name is either nonexistent or a close match
 * Assign Review: If the POI is inside the building and the name is not a close match
 * Assign Review: If the POI is close to the building and the name is a close match
 * Assign Miss: Everything else

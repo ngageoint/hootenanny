@@ -4,7 +4,7 @@
 
 Hootenanny is designed to facilitate automated and semi-automated conflation of 
 critical Foundation GEOINT features in the topographic domain, namely roads (polylines), 
-buildings (polygons), and points-of-interest (POI’s) (points). While a number of 
+buildings (polygons), and points-of-interest (POIs) (points). While a number of 
 small tools are built into the suite for file conversion and evaluation, the main 
 function of Hootenanny is to take two input files and produce a single conflated 
 output file. 

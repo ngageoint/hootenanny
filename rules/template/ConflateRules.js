@@ -5,7 +5,7 @@
  *
  * The Conflation API provides the ability to perform simple matches and 
  * merges. Such as merging two points, or merging two buildings. This does
- * not provide the fascilities to merge complex geometries such as one to many
+ * not provide the facilities to merge complex geometries such as one to many
  * or many to many merges.
  *
  * The methods below describe the methods that are recognized by Hootenanny
@@ -97,7 +97,7 @@ exports['isMatchCandidate'] = isMatchCandidate;
  *
  * The resulting match is an object with at least one of the match, miss and
  * review scores. Values that are omitted are assumed to be zero. If the result
- * is a review then an explaination must be given in the 'explain' key. The
+ * is a review then an explanation must be given in the 'explain' key. The
  * following are all valid results:
  *
  * - `return {'match': 1};`
