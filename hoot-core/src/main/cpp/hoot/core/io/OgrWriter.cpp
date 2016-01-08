@@ -177,7 +177,10 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, shared_ptr<Feature> f, const
       QString("Error setting geometry - OGR Error Code: (%1)  Geometry: (%2)").arg(QString::number(errCode)).arg(QString::fromStdString(g->toString())));
   }
 
+  //Unsetting the FID with SetFID(-1) before calling CreateFeature() to avoid reusing the same feature object for sequential insertions
+  poFeature->SetFID(-1);
   errCode = layer->CreateFeature(poFeature);
+
   if (errCode != OGRERR_NONE)
   {
     throw HootException(
@@ -248,9 +251,7 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
   }
 
   QString layerName = _prependLayerName + layer->getName();
-
-  // Check if the layer exists in the output.
-  poLayer = _ds->GetLayerByName(layerName.toAscii());
+  poLayer = _getLayerByName(layerName);
 
   // We only want to add to a layer IFF the config option "ogr.append.data" set
   if (poLayer != NULL && _appendData)
@@ -304,6 +305,25 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
       }
     }
   } // End layer does not exist
+}
+
+OGRLayer* OgrWriter::_getLayerByName(const QString layerName)
+{
+  // Check if the layer exists in the output.
+  int layerCount = _ds->GetLayerCount();
+  for (int i = 0; i < layerCount; i++)
+  {
+    OGRLayer* layer = _ds->GetLayer(i+1);
+    if (layer != NULL)
+    {
+      QString tmpLayerName = QString(layer->GetName());
+      if (tmpLayerName == layerName)
+      {
+        return layer;
+      }
+    }
+  }
+  return NULL;
 }
 
 OGRLayer* OgrWriter::_getLayer(const QString layerName)
