@@ -60,9 +60,6 @@ TileConflator::TileConflator(shared_ptr<TileWorker> worker)
   // set the buffer to ~5km.
   _buffer = 0.05;
   _maxNodesPerBox = 5000000;
-
-  //LOG_VARD(ConfigOptions().getUuidHelperRepeatable());
-  LOG_VARD(Settings::getInstance().get(ConfigOptions().getUuidHelperRepeatableKey()));
 }
 
 TileConflator::~TileConflator()
@@ -76,8 +73,6 @@ TileConflator::~TileConflator()
 
 void TileConflator::conflate(QString outputPath)
 {
-  LOG_VARD(Settings::getInstance().get(ConfigOptions().getUuidHelperRepeatableKey()));
-
   if (_worker->exists(outputPath))
   {
     _worker->rmdir(outputPath);

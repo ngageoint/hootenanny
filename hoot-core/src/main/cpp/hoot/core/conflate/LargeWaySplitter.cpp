@@ -45,7 +45,6 @@ using namespace geos::geom;
 LargeWaySplitter::LargeWaySplitter(double threshold)
 {
   _threshold = threshold;
-  LOG_VARD(_threshold);
 }
 
 void LargeWaySplitter::apply(shared_ptr<OsmMap> map)

@@ -84,8 +84,6 @@ public:
 
     uut.conflate("test-output/conflate/TileConflatorTest.osm");
 
-    LOG_VARD(Settings::getInstance().get(ConfigOptions().getUuidHelperRepeatableKey()));
-
     CPPUNIT_ASSERT_EQUAL(true, TestUtils::compareMaps("test-files/conflate/TileConflatorTest.osm",
       "test-output/conflate/TileConflatorTest.osm"));
   }
