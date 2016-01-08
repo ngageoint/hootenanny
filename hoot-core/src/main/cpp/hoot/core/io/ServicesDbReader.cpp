@@ -158,6 +158,7 @@ void ServicesDbReader::open(QString urlStr)
   {
     throw HootException("An unsupported URL was passed in.");
   }
+  initializePartial();
 
   QUrl url(urlStr);
   QString osmElemId = url.queryItemValue("osm-element-id");
