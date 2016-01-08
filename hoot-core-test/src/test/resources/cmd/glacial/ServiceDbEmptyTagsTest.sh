@@ -4,6 +4,8 @@ set -e
 # This script recreates the problem in https://github.com/ngageoint/hootenanny/issues/168
 source $HOOT_HOME/conf/DatabaseConfig.sh
 
+export PGPASSWORD=$DB_PASSWORD
+
 export HOOT_OPTS="-D services.db.writer.create.user=true -D services.db.writer.email=ServicesDbWriterTest@hoottestcpp.org -D services.db.writer.overwrite.map=true -D services.db.reader.email=ServicesDbWriterTest@hoottestcpp.org -D writer.include.debug=true --warn"
 
 export DB_URL="postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
