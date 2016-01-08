@@ -66,10 +66,6 @@ var distances = [
     {k:'natural',                       match:1000,     review:1500},
     {k:'building',  v:'hospital',       match:300,      review:500},
     {k:'barrier', v:'toll_booth',       match:25,       review:50},
-    //{k:'highway', v:'bus_stop',         match:50,      review:100},
-    //{k:'railway', v:'tram_stop',        match:25,       review:50},
-    {k:'public_transport', v:'stop_position',         match:100,      review:200},
-    //{k:'railway', v:'station',         match:100,      review:200},
 ];
 
 function distance(e1, e2) {
@@ -171,19 +167,14 @@ function additiveScore(map, e1, e2) {
     var t1 = e1.getTags().toDict();
     var t2 = e2.getTags().toDict();
 
-    var bothElementsAreRelatedToPublicTransportStopPositions =
-      getRelatedTags("public_transport=stop_position", e1.getTags().toDict()).length > 0 &&
-      getRelatedTags("public_transport=stop_position", e2.getTags().toDict()).length > 0;
-
     var searchRadius = Math.max(exports.getSearchRadius(e1), exports.getSearchRadius(e2));
-    if (bothElementsAreRelatedToPublicTransportStopPositions)
+
+    var stopPositionThreshold = 0.7;
+    if (getRelatedTagsByThreshold("public_transport=stop_position", e1.getTags().toDict(), stopPositionThreshold).length > 0 &&
+        getRelatedTagsByThreshold("public_transport=stop_position", e2.getTags().toDict(), stopPositionThreshold).length > 0)
     {
-      //searchRadius = Math.min(exports.getSearchRadius(e1), exports.getSearchRadius(e2));
-      searchRadius = 600;
+      searchRadius = Math.min(exports.getSearchRadius(e1), exports.getSearchRadius(e2));
     }
-    //hoot.log("element 1 id: " + e1.getId() + " tags: " + e1.getTags());
-    //hoot.log("element 2 id: " + e2.getId() + " tags: " + e2.getTags());
-    //hoot.log("search radius: " + searchRadius);
 
     var d = distance(e1, e2);
 

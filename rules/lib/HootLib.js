@@ -64,6 +64,22 @@ function getRelatedTags(relateToKvp, d) {
 }
 
 /**
+ * Returns all the kvps that are related to a specified kvp (even a little).
+ */
+function getRelatedTagsByThreshold(relateToKvp, d, minScore) {
+    var result = [];
+    for (var k in d) {
+        var kvp = k + '=' + d[k];
+        if (kvp != "poi=yes" && kvp != "place=locality") {
+            if (hoot.OsmSchema.score(relateToKvp, kvp) >= minScore) {
+                result.push(kvp);
+            }
+        }
+    }
+    return result;
+}
+
+/**
  * Returns all the kvps that share a common ancestor
  */
 function getTagsByAncestor(ancestorKvp, d) {
