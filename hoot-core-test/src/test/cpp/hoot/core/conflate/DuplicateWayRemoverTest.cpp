@@ -74,7 +74,7 @@ class DuplicateWayRemoverTest : public CppUnit::TestFixture
 
 private:
 
-  void createSomeNonMatchingTextTags(OsmMapPtr map)
+  void createSomeNonMatchingNonNameTextTags(OsmMapPtr map)
   {
     //The input test file already has enumerated tag differences for duplicates, but no text tag
     //differences.  So, find some candidate dupe ways and modify some way's non-name text tag so the
@@ -113,8 +113,8 @@ public:
   }
 
   /*
-   * In this test we add in some non-matching text tags for two ways, and since strict matching is
-   * *on*, we *should not* see those two ways get merged.
+   * In this test we add in some non-matching, non-name text tags for two ways, and since strict
+   * matching is *on*, we *should not* see those two ways get merged.
    */
   void runStrictTagMatchingOnTest()
   {
@@ -122,7 +122,7 @@ public:
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 
-    createSomeNonMatchingTextTags(map);
+    createSomeNonMatchingNonNameTextTags(map);
 
     DuplicateWayRemover dupeWayRemover;
     dupeWayRemover.setStrictTagMatching(true);
@@ -140,8 +140,8 @@ public:
   }
 
   /*
-   * In this test we add in some non-matching text tags for two ways, and since strict matching
-   * is *off*, we *should* see those two ways get merged.
+   * In this test we add in some non-matching, non-name text tags for two ways, and since strict
+   * matching is *off*, we *should* see those two ways get merged.
    */
   void runStrictTagMatchingOffTest()
   {
@@ -149,7 +149,7 @@ public:
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 
-    createSomeNonMatchingTextTags(map);
+    createSomeNonMatchingNonNameTextTags(map);
 
     DuplicateWayRemover dupeWayRemover;
     dupeWayRemover.setStrictTagMatching(false);
