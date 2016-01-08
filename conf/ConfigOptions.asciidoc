@@ -1325,7 +1325,7 @@ Possible options include:
 * Data Type: double
 * Default Value: `${conflate.match.threshold.default}`
 
-The threshold at which a match is called a match for POI's.
+The threshold at which a match is called a match for POIs.
 
 See also:
 
@@ -1336,7 +1336,7 @@ See also:
 * Data Type: double
 * Default Value: `${conflate.miss.threshold.default}`
 
-The threshold at which a miss is called a miss for POI's.
+The threshold at which a miss is called a miss for POIs.
 
 See also:
 
@@ -1347,7 +1347,7 @@ See also:
 * Data Type: double
 * Default Value: `${conflate.review.threshold.default}`
 
-The threshold at which a review is called a review for POI's. See `conflate.review.threshold.default`.
+The threshold at which a review is called a review for POIs. See `conflate.review.threshold.default`.
 
 See also:
 
@@ -1721,7 +1721,7 @@ projections change over time. Very handy in unit tests.
 * Default Value: `\s+`
 
 The token separator defined as a regular expression. This is used in some methods for tokenizing
-names. The default value matches multiple whitespace charactors.
+names. The default value matches multiple whitespace characters.
 
 Another useful option is `[\s-,';]+`. This will split on white space, or several forms of
 punctuation. See http://doc.qt.io/qt-4.8/QRegExp.html for a useful list of regular expression
@@ -1938,7 +1938,7 @@ The way subline matcher to use when determining matching sublines.
 * Data Type: double
 * Default Value: `10.0`
 
-Distance, in meters, used for sampling way dataduring angle histogram extraction with the SampledAngleHistogramExtractor
+Distance, in meters, used for sampling way data during angle histogram extraction with the SampledAngleHistogramExtractor
 
 === way.matcher.heading.delta
 

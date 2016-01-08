@@ -10,7 +10,7 @@ settings used in the UpdateHoot-CentOS6.sh script):
  ** sudo rm -f $HOOT_CORE_INSTALL_DIR/hoot 
  ** sudo rm -f $HOOT_CORE_INSTALL_DIR/bin/hoot
 
-* *Don't think the correct version of Hootenanny core is installed?* --> You can check the version of the core by clicking on the "Hootenanny | Innovision" logo from within the UI.  Or as a sanity check, type 'hoot --version' from the command line.  The version displayed should match the version you installed.  Finally, the core version used by the services can be found by navigating to the following URL's:
+* *Don't think the correct version of Hootenanny core is installed?* --> You can check the version of the core by clicking on the "Hootenanny | Innovision" logo from within the UI.  Or as a sanity check, type 'hoot --version' from the command line.  The version displayed should match the version you installed.  Finally, the core version used by the services can be found by navigating to the following URLs:
   ** +http://localhost/hoot-services/info/about/coreVersionInfo+
   ** +http://localhost/hoot-services/info/about/coreVersionDetail+
 
@@ -117,7 +117,7 @@ COMMIT
 tail -f /var/log/tomcat6/catalina.out | grep -i -e ERROR -e SEVERE
 -------------------------------------- 
 
-* *Not sure the correct version of Hootenanny services are deployed?* --> You can check the version of the core by clicking on the "Hootenanny | Innovision| logo from within the UI.  Or as a sanity check, verify the services version by navigating to the following URL's:
+* *Not sure the correct version of Hootenanny services are deployed?* --> You can check the version of the core by clicking on the "Hootenanny | Innovision| logo from within the UI.  Or as a sanity check, verify the services version by navigating to the following URLs:
   ** +http://localhost/hoot-services/info/about/servicesVersionInfo+
   ** +http://localhost/hoot-services/info/about/servicesVersionDetail+
 
