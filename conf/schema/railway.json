@@ -157,17 +157,6 @@
     },
     {
         "isA": "railway",
-        "name": "railway=tram_stop",
-        "objectType": "tag",
-        "similarTo": [
-            {
-              "name": "railway=halt",
-              "weight": 0.7
-            }
-        ]
-    },
-    {
-        "isA": "railway",
         "name": "railway=subway_entrance",
         "objectType": "tag",
         "similarTo": [
