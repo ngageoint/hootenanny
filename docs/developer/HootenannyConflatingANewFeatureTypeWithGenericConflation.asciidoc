@@ -103,7 +103,7 @@ log messages for debugging purposes.
 As you build your model, you may need to add new configuration options which can be customized at
 runtime.  To do this, see @$HOOT_HOME/conf/ConfigOptions.asciidoc@. 
 
-To be able to go ahead and do an inital match scoring, copy one of the existing *.js rules files in
+To be able to go ahead and do an initial match scoring, copy one of the existing *.js rules files in
 @$HOOT_HOME/rules@ to a new file and make sure its referenced from your configuration file. 
 
 === Scoring Matches
@@ -436,7 +436,7 @@ From the Preprocess tab mentioned in the previous step, you can quickly visualiz
 classifications for each of your extracted features by clicking the Visualize All button.
 
 For a more detailed visualization, click the Visualize tab.  From this tab you can see pairwise plots
-of the classifictions between all of the imported features.
+of the classifications between all of the imported features.
 
 ===== Selecting Features
 

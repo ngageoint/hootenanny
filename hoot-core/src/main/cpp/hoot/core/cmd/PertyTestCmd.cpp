@@ -47,18 +47,6 @@ class PertyTestCmd : public BaseCommand
 
     PertyTestCmd() { }
 
-    virtual QString getHelp() const
-    {
-      return getName() + " (reference-input-file) (output-dir)\n"
-        "  Runs one or more PERTY test runs to calculate a PERTY score, while optionally altering a selected input\n"
-        "  variable across the test runs, and averages the scores over multiple simulation runs.\n"
-        "  The success of each test is determined by comparing each test run score to a set of expected test run score values.\n"
-        "  The results of all test runs are written to (output-dir)/results.\n"
-        "  Optionally, statistics for each output map may also be written to (output-dir).\n"
-        "  * reference-input-file - Input reference data path (e.g. .osm file).\n"
-        "  * output-dir - Output directory.";
-    }
-
     virtual QString getName() const { return "perty-test"; }
 
     virtual int runSimple(QStringList args)

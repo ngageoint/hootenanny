@@ -5,8 +5,9 @@ The +delete-map+ command deletes a map from the hoot database.
 
 * +Map Name+  - The name of the map.
 
-
 === Usage
+
 --------------------------------------
 delete-map (Map Name)
 --------------------------------------
+

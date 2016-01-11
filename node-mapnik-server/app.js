@@ -82,7 +82,9 @@ var acquire = function(id, name, color, stylesheet, options, callback) {
                           port: process.env['DB_PORT'],
                           type: 'postgis',
                           srid: '4326',
-                          extent: '-180,-90,180,90'
+                          extent: '-180,-90,180,90',
+                          row_limit: 2000,
+                          connect_timeout: 6
                         };
 
                         var ds = new mapnik.Datasource(postgis_settings);

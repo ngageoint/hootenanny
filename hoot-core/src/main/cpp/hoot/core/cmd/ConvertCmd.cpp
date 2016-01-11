@@ -65,14 +65,6 @@ public:
 
   ConvertCmd() { }
 
-  virtual QString getHelp() const
-  {
-    return getName() + " (input) (output)\n"
-        "  Convert from one format to another. This command is memory bound.\n"
-        "  * input - Input (e.g. .osm file).\n"
-        "  * output - Output file (e.g. .osm file).";
-  }
-
   virtual QString getName() const { return "convert"; }
 
   virtual int runSimple(QStringList args)

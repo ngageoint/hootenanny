@@ -56,18 +56,6 @@ public:
 
   UnifyCmd() {}
 
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (input1) (input2) (output)\n"
-        "  Conflates two input sources into one output using the unifying conflation\n"
-        "  approach.\n"
-        "  * input1 - First input.\n"
-        "  * input2 - Second input.\n"
-        "  * output - The output path.";
-  }
-
   virtual QString getName() const { return "unify"; }
 
   int runSimple(QStringList args)

@@ -50,17 +50,6 @@ public:
 
   UnionPolygonsCmd() { }
 
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (output) (input1) [input2 ...]\n"
-        "Reads polygons from one or more inputs, unions them and writes the single \n"
-        "polygon to output."
-        "  * output - Output file name.\n"
-        "  * inputs - One or more inputs.";
-  }
-
   virtual QString getName() const { return "union-polygons"; }
 
   virtual int runSimple(QStringList args)

@@ -61,28 +61,6 @@ public:
     MapProjector::project(g, planar, wgs84);
   }
 
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (cutter-shape) (dough.osm.pbf) (output.osm.pbf) [buffer] \n"
-        "  [--local] [--crop]\n"
-        "  Reads in a OSM input file as the 'cutter-shape', and removes the \n"
-        "  cookie cutter shape from the contents of the 'dough' file. The\n"
-        "  resulting geometries are written to 'output'. Very large inputs are\n"
-        "  supported.\n"
-        "  * cutter-shape - The input Polygons to use as the cutter shape. This must \n"
-        "             reside on the local file system and must easily fit in RAM.\n"
-        "  * dough.osm.pbf - The input OSM data to cut from. This is the data that will \n"
-        "             be cut and written out. This must reside on HDFS.\n"
-        "  * output.osm.pbf - The output OSM data path. This must reside on HDFS.\n"
-        "  * buffer - Optional buffer value, if the buffer value is provided then the\n"
-        "             shape is buffered by this many meters before cutting. The buffer\n"
-        "             may be positive or negative.\n"
-        "  * --local - Runs the job locally rather than using Hadoop.\n"
-        "  * --crop - Crops based on the polygon rather than doing a cookie cut.";
-  }
-
   QString getName() const { return "big-cookie-cutter"; }
 
   int runSimple(QStringList args)
