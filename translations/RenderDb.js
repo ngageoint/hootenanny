@@ -80,6 +80,10 @@ function translateToOgr(tags, elementType, geometryType)
         print('');
     }
 
+    // The Nuke Option: "Collections" are groups of different feature types: Point, Area and Line.
+    // There is no way we can translate these to a single geometry.
+    if (geometryType == 'Collection') return null;
+
     // Clean out the Tags
     for (var i in tags)
     {
