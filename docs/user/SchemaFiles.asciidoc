@@ -45,7 +45,7 @@ it is a comment."
   "name": "highway",
   "influence": 1.0,
   "type": "enumeration",
-  "categories": ["transporation"]
+  "categories": ["transportation"]
 },
 ...
 -----
@@ -85,7 +85,7 @@ the snippet above is equivalent to:
   "isA": "highway",
   "influence": 1.0,
   "type": "enumeration",
-  "categories": ["transporation"],
+  "categories": ["transportation"],
   "geometries": ["linestring"]
 },
 ...

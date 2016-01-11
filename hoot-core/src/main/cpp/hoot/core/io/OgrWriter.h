@@ -157,6 +157,8 @@ protected:
 
   OGRLayer* _getLayer(const QString layerName);
 
+  OGRLayer* _getLayerByName(const QString layerName);
+
   shared_ptr<Geometry> _toMulti(shared_ptr<Geometry> from);
 
   void strictError(QString warning);
