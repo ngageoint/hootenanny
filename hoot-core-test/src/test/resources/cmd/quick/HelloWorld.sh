@@ -2,3 +2,4 @@
 
 echo Hello World.
 echo This is an error. 1>&2
+echo break again
