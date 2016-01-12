@@ -147,23 +147,11 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
 
             if (w->getNodeCount() > w2->getNodeCount())
             {
-              if (_removeDuplicateNodes(w, w2))
-              {
-                Tags mergedTags =
-                  TagMergerFactory::getInstance().mergeTags(
-                    w->getTags(), w2->getTags(), ElementType::Way);
-                w2->setTags(mergedTags);
-              }
+              _removeDuplicateNodes(w, w2);
             }
             else
             {
-              if (_removeDuplicateNodes(w2, w))
-              {
-                Tags mergedTags =
-                  TagMergerFactory::getInstance().mergeTags(
-                    w2->getTags(), w->getTags(), ElementType::Way);
-                w->setTags(mergedTags);
-              }
+              _removeDuplicateNodes(w2, w);
             }
           }
         }
@@ -191,7 +179,7 @@ bool DuplicateWayRemover::_isCandidateWay(const ConstWayPtr& w) const
 }
 
 
-bool DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<Way> w2)
+void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<Way> w2)
 {
   bool nodesRemoved = false;
 
@@ -239,7 +227,13 @@ bool DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
     }
   }
 
-  return nodesRemoved;
+  if (nodesRemoved)
+  {
+    const Tags mergedTags =
+      TagMergerFactory::getInstance().mergeTags(w1->getTags(), w2->getTags(), ElementType::Way);
+    //w1->setTags(mergedTags);
+    w2->setTags(mergedTags);
+  }
 }
 
 void DuplicateWayRemover::removeDuplicates(shared_ptr<OsmMap> map)
