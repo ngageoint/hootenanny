@@ -33,7 +33,7 @@
 // hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/algorithms/MultiLineStringSplitter.h>
@@ -292,6 +292,7 @@ shared_ptr<Node> PertyWaySplitVisitor::_getNodeAddedBySplit(const QList<long>& n
   LOG_VARD(firstNodeIdInLastWay);
   assert(lastNodeIdInFirstWay == firstNodeIdInLastWay);
   assert(!nodeIdsBeforeSplit.contains(lastNodeIdInFirstWay));
+  LOG_VARD(nodeIdsBeforeSplit);
   return _map->getNode(firstNodeIdInLastWay);
 }
 

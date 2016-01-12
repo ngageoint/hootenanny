@@ -128,10 +128,8 @@ inline void toCpp(v8::Handle<v8::Value> v, QString& s)
     throw IllegalArgumentException("Expected a string. Got: (" + toJson(v) + ")");
   }
 
-  size_t utf8Length = str->Utf8Length() + 1;
-  std::auto_ptr<char> buffer(new char[utf8Length]);
-  str->WriteUtf8(buffer.get(), utf8Length);
-  s = QString::fromUtf8(buffer.get());
+  v8::String::Utf8Value param(str);
+  s = QString::fromUtf8(*param);
 }
 
 inline void toCpp(v8::Handle<v8::Value> v, QStringList& o)
@@ -146,6 +144,22 @@ inline void toCpp(v8::Handle<v8::Value> v, QStringList& o)
   for (uint32_t i = 0; i < arr->Length(); i++)
   {
     o.append(toCpp<QString>(arr->Get(i)));
+  }
+}
+
+inline void toCpp(v8::Handle<v8::Value> v, QVariantList& l)
+{
+  if (v.IsEmpty() || v->IsArray() == false)
+  {
+    throw IllegalArgumentException("Expected to get an array. Got: (" + toJson(v) + ")");
+  }
+  v8::Handle<v8::Array> arr = v8::Handle<v8::Array>::Cast(v);
+
+  l.clear();
+  l.reserve(arr->Length());
+  for (uint32_t i = 0; i < arr->Length(); i++)
+  {
+    l.append(toCpp<QVariant>(arr->Get(i)));
   }
 }
 
@@ -193,16 +207,7 @@ inline void toCpp(v8::Handle<v8::Value> v, QVariant& qv)
   }
   else if (v->IsArray())
   {
-    QVariantList l;
-    v8::Handle<v8::Array> arr = v8::Handle<v8::Array>::Cast(v);
-
-    l.reserve(arr->Length());
-    for (uint32_t i = 0; i < arr->Length(); i++)
-    {
-      l.append(toCpp<QVariant>(arr->Get(i)));
-    }
-
-    qv = l;
+    qv = toCpp<QVariantList>(v);
   }
   else if (v->IsObject())
   {

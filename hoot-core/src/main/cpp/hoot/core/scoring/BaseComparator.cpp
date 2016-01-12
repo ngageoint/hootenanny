@@ -36,7 +36,7 @@ using namespace geos::operation::distance;
 
 // Hoot
 #include <hoot/core/GeometryPainter.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ElementConverter.h>
@@ -176,9 +176,9 @@ void BaseComparator::_init(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2)
   _worldBounds.Merge(_map2->calculateBounds());
 
   _mapP1.reset(new OsmMap(_map1));
-  MapReprojector::reprojectToOrthographic(_mapP1, _worldBounds);
+  MapProjector::projectToOrthographic(_mapP1, _worldBounds);
   _mapP2.reset(new OsmMap(_map2));
-  MapReprojector::reprojectToOrthographic(_mapP2, _worldBounds);
+  MapProjector::projectToOrthographic(_mapP2, _worldBounds);
 }
 
 void BaseComparator::_saveImage(cv::Mat& image, QString path, double max, bool gradient)

@@ -27,7 +27,7 @@
 
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/splitter/IntersectionSplitter.h>
 #include <hoot/core/io/OsmReader.h>
@@ -118,18 +118,18 @@ public:
 
         vector<Coordinate> v;
 
-        MapReprojector::reprojectToPlanar(map);
+        MapProjector::projectToPlanar(map);
 
         LOG_WARN("Computing...");
         //v.push_back(Coordinate(-104.77236, 39.71378));
         // Mississippi
-        //v.push_back(MapReprojector::reprojectFromWgs84(Coordinate(-104.77236, 39.71378), map->getSrs()));
+        //v.push_back(MapProjector::reprojectFromWgs84(Coordinate(-104.77236, 39.71378), map->getSrs()));
         // Natural History Museum
-        v.push_back(MapReprojector::reprojectFromWgs84(Coordinate(-104.94057, 39.74748), map->getProjection()));
+        v.push_back(MapProjector::projectFromWgs84(Coordinate(-104.94057, 39.74748), map->getProjection()));
         // Kelly
-        //v.push_back(MapReprojector::reprojectFromWgs84(Coordinate(-105.03129, 39.74912), map->getSrs()));
+        //v.push_back(MapProjector::reprojectFromWgs84(Coordinate(-105.03129, 39.74912), map->getSrs()));
         // jakarta easy
-        //v.push_back(MapReprojector::reprojectFromWgs84(Coordinate(106.7838233, -6.2014298), map->getSrs()));
+        //v.push_back(MapProjector::reprojectFromWgs84(Coordinate(106.7838233, -6.2014298), map->getSrs()));
         //v.push_back(Coordinate(106.7838233, -6.2014298));
 
         uut.drawCostDistance(map, v, "tmp/denver.png");
@@ -157,18 +157,18 @@ public:
 
         vector<Coordinate> v;
 
-        MapReprojector::reprojectToPlanar(map);
+        MapProjector::projectToPlanar(map);
 
         LOG_WARN("Computing...");
         //v.push_back(Coordinate(-104.77236, 39.71378));
         // Mississippi
-        //v.push_back(MapReprojector::reprojectFromWgs84(Coordinate(-104.77236, 39.71378), map->getSrs()));
+        //v.push_back(MapProjector::reprojectFromWgs84(Coordinate(-104.77236, 39.71378), map->getSrs()));
         // Natural History Museum
-        v.push_back(MapReprojector::reprojectFromWgs84(Coordinate(-85.514581,38.326101), map->getProjection()));
+        v.push_back(MapProjector::projectFromWgs84(Coordinate(-85.514581,38.326101), map->getProjection()));
         // Kelly
-        //v.push_back(MapReprojector::reprojectFromWgs84(Coordinate(-105.03129, 39.74912), map->getSrs()));
+        //v.push_back(MapProjector::reprojectFromWgs84(Coordinate(-105.03129, 39.74912), map->getSrs()));
         // jakarta easy
-        //v.push_back(MapReprojector::reprojectFromWgs84(Coordinate(106.7838233, -6.2014298), map->getSrs()));
+        //v.push_back(MapProjector::reprojectFromWgs84(Coordinate(106.7838233, -6.2014298), map->getSrs()));
         //v.push_back(Coordinate(106.7838233, -6.2014298));
 
         uut.drawCostDistance(map, v, "tmp/MikesHouse.png");

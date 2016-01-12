@@ -26,53 +26,77 @@
  */
 package hoot.services.models.review;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Represents a reviewable conflated data entity
+ *
  */
-@XmlRootElement
-public class ReviewableItem
+public class ReviewableItem extends ReviewQueryMapper 
 {
-  private long id = -1;
-  public long getId() { return id; }
-  public void setId(long id) { this.id = id; }
-  
-  //primarily for debugging purposes on the client
-  private String uuid = null;
-  public String getUuid() { return uuid; }
-  public void setUuid(String uuid) { this.uuid = uuid; }
-  
-  private String type = null;
-  public String getType() { return type; }
-  public void setType(String type) { this.type = type; } 
-  
-  private double reviewScore = -1;
-  public double getReviewScore() { return reviewScore; }
-  public void setReviewScore(double reviewScore) { this.reviewScore = reviewScore; }
-  
-  private String displayBounds = null;
-  public String getDisplayBounds() { return displayBounds; }
-  public void setDisplayBounds(String displayBounds) { this.displayBounds = displayBounds; }
-  
-  private ReviewAgainstItem itemToReviewAgainst = null;
-  public ReviewAgainstItem getItemToReviewAgainst() { return itemToReviewAgainst; }
-  public void setItemToReviewAgainst(ReviewAgainstItem itemToReviewAgainst) 
-  { 
-    this.itemToReviewAgainst = itemToReviewAgainst;
-  }
-  
-  public ReviewableItem()
-  {
-    
-  }
-  
-  @Override
-  public String toString()
-  {
-    return "Reviewable Item ID: " + id + ", Reviewable Item Type: " + type + ", " +
-      "Reviewable Item UUID: " + uuid + ", Review Against Item ID: " + itemToReviewAgainst.getId() + 
-      ", Review Against Item Type: " + itemToReviewAgainst.getType() + 
-      ", Review Against Item UUID: " + itemToReviewAgainst.getUuid();
-  }
+	@SuppressWarnings("unused")
+  private static final Logger log = LoggerFactory.getLogger(ReviewableItem.class);
+	private long _sortOrder;
+	private long _mapId;
+	private long _relationId;
+	private long _resultCount = 0;
+	
+	
+	public ReviewableItem(final long sortOrder, final long mapid, final long relationid)
+	{
+		_sortOrder = sortOrder;
+		_mapId = mapid;
+		_relationId = relationid;
+	}
+	
+	public long getRelationId()
+	{
+		return _relationId;
+	}
+	public void setRelationId(final long relid)
+	{
+		_relationId = relid;
+	}
+	
+	public long getSortOrder()
+	{
+		return _sortOrder;
+	}
+	public void setSortOrder(final long sortOrder)
+	{
+		_sortOrder = sortOrder;
+	}
+	
+	
+	public long getMapId()
+	{
+		return _mapId;
+	}
+	
+	public void setMapId(final long mapId)
+	{
+		_mapId = mapId;
+	}
+	
+	public long getResultCount()
+	{
+		return _resultCount;
+	}
+	
+	public void setResultCount(final long cnt)
+	{
+		_resultCount = cnt;
+	}
+
+	public String toString()
+	{
+		JSONObject o = new JSONObject();
+		o.put("sortorder", _sortOrder);
+		o.put("mapid", _mapId);
+		o.put("relationid", _relationId);
+		
+		return o.toJSONString();
+	}
+	
 }

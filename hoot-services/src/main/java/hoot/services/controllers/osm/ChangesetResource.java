@@ -27,6 +27,7 @@
 package hoot.services.controllers.osm;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
@@ -34,6 +35,7 @@ import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.validators.osm.ChangesetUploadXmlValidator;
 import hoot.services.writers.osm.ChangesetDbWriter;
 
 import javax.ws.rs.Consumes;
@@ -69,14 +71,14 @@ public class ChangesetResource
 {
   private static final Logger log = LoggerFactory.getLogger(ChangesetResource.class);
   
+  private QMaps maps = QMaps.maps;
+  
   private ClassPathXmlApplicationContext appContext;
   private PlatformTransactionManager transactionManager;
   
   public ChangesetResource()
   {
-    log.debug("Reading application settings...");
     appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
-    log.debug("Initializing transaction manager...");
     transactionManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
   }
   
@@ -128,14 +130,10 @@ public class ChangesetResource
    *
    * Service method endpoint for creating a new OSM changeset
    * 
-   * @param changeset changeset create data
+   * @param changesetData changeset create data
    * @param mapId ID of the map the changeset belongs to
    * @return Response containing the ID assigned to the new changeset
    * @throws Exception 
-   * @todo why can't I get changesetData in as an XML doc?
-   * @todo update for parsing multiple changesets in one request (#2894): duplicated changeset tag 
-     keys are allowed but later changeset tag keys overwrite earlier ones; isn't that contradictory
-     with the rest of the logic in this method?
    */
   @PUT
   @Path("/create")
@@ -147,8 +145,6 @@ public class ChangesetResource
     final String mapId) 
     throws Exception
   {
-    log.debug("Creating changeset for map with ID: " + mapId + " ...");
-    
     Document changesetDoc = null;
     try
     {
@@ -170,11 +166,9 @@ public class ChangesetResource
     {
       log.debug("Initializing database connection...");
     
-      
       long mapIdNum = -1;
       try
       {
-      	QMaps maps = QMaps.maps;
         //input mapId may be a map ID or a map name
         mapIdNum = 
           ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
@@ -208,10 +202,7 @@ public class ChangesetResource
         log.debug(
           "Retrieving user ID associated with map having ID: " + String.valueOf(mapIdNum) + " ...");
         
-        QMaps maps = QMaps.maps;
-
       	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-
       	userId = query.from(maps).where(maps.id.eq(mapIdNum)).singleResult(maps.userId);
       	
         log.debug("Retrieved user ID: " + userId);
@@ -315,12 +306,12 @@ public class ChangesetResource
    * 
    * @param changeset OSM changeset diff data
    * @param changesetId ID of the changeset being uploaded; changeset with the ID must already exist
+   * @param mapId ID of the map owning the changeset being uploaded
    * @return response acknowledging the result of the update operation with updated entity ID 
    * information
    * @throws Exception
    * @see http://wiki.openstreetmap.org/wiki/API_0.6 and 
    * http://wiki.openstreetmap.org/wiki/OsmChange
-   * @todo why can't I pass in changesetDiff as an XML doc instead of a string?
    */
   @POST
   @Path("/{changesetId}/upload")
@@ -334,13 +325,11 @@ public class ChangesetResource
     final String mapId)
     throws Exception
   {
+  	log.debug("Intializing database connection...");
     Connection conn = DbUtils.createConnection();
     Document changesetUploadResponse = null;
     try
     {
-      log.debug("Intializing database connection...");
-
-      
       log.debug("Intializing changeset upload transaction...");
       TransactionStatus transactionStatus = 
         transactionManager.getTransaction(
@@ -349,12 +338,23 @@ public class ChangesetResource
       
       try
       { 
-      	if(mapId == null) {
+      	if (mapId == null) 
+      	{
       		throw new Exception("Invalid map id.");
       	}
       	long mapid = Long.parseLong(mapId);
+      	Document changesetDoc = null;
+        try
+        {
+        	changesetDoc = (new ChangesetUploadXmlValidator()).parseAndValidate(changeset);
+        }
+        catch (Exception e)
+        {
+          throw new Exception("Error parsing changeset diff data: "
+            + StringUtils.abbreviate(changeset, 100) + " (" + e.getMessage() + ")");
+        }
         changesetUploadResponse = 
-          (new ChangesetDbWriter(conn)).write(mapid, changesetId, changeset);
+        	(new ChangesetDbWriter(conn)).write(mapid, changesetId, changesetDoc);
       }
       catch (Exception e)
       {
@@ -423,11 +423,11 @@ public class ChangesetResource
     try
     {
       log.debug("Intializing database connection...");
-      if(mapId == null) {
+      if (mapId == null) 
+      {
     		throw new Exception("Invalid map id.");
     	}
     	long mapid = Long.parseLong(mapId);
-
 
       Changeset.closeChangeset(mapid, changesetId, conn);
     }
@@ -439,9 +439,34 @@ public class ChangesetResource
     return Response.status(Status.OK).toString();
   }
   
+  //TODO: clean up these message...some are obsolete now
   public static void handleError(final Exception e, final long changesetId, 
     final String changesetDiffSnippet)
   {
+  	String message = e.getMessage();
+  	if (e instanceof SQLException)
+    {
+    	SQLException sqlException = (SQLException)e;
+    	if (sqlException.getNextException() != null)
+    	{
+    		message += "  " + sqlException.getNextException().getMessage();
+    	}
+    }
+    if (e.getCause() instanceof SQLException)
+    {
+    	SQLException sqlException = (SQLException)e.getCause();
+    	if (sqlException.getNextException() != null)
+    	{
+    		message += "  " + sqlException.getNextException().getMessage();
+    	}
+    }
+    
+    //To make the error checking code cleaner and simpler, if an element is referenced in an 
+    //update or delete changeset that doesn't exist in the database, we're not differentiating
+    //between whether it was an element, relation member, or way node reference.  Previously, we'd
+    //throw a 412 if the non-existing element was a relation member or way node reference and a 404
+    //otherwise.  Now, we're always throwing a 404.  This shouldn't be a big deal, b/c the hoot UI
+    //doesn't differentiate between the two types of failures.
     if (!StringUtils.isEmpty(e.getMessage()))
     {
       if (e.getMessage().contains("Invalid changeset ID") || 
@@ -450,25 +475,27 @@ public class ChangesetResource
           e.getMessage().contains("Changeset maximum element threshold exceeded") ||
           e.getMessage().contains("was closed at"))
       {
-        ResourceErrorHandler.handleError(e.getMessage(), Status.CONFLICT, log);  //409
+        ResourceErrorHandler.handleError(message, Status.CONFLICT, log);  //409
       }
-      else if (e.getMessage().contains("to be updated does not exist"))
+      else if (e.getMessage().contains("to be updated does not exist") ||
+      		     e.getMessage().contains("Element(s) being referenced don't exist."))
       {
-        ResourceErrorHandler.handleError(e.getMessage(), Status.NOT_FOUND, log); //404
+        ResourceErrorHandler.handleError(message, Status.NOT_FOUND, log); //404
       }
-      //TODO: should the visibility exception be changed from a 400 to a 409?
       else if (e.getMessage().contains("exist specified for") ||
                e.getMessage().contains("exist for") ||
-               e.getMessage().contains("is still used by"))
+               e.getMessage().contains("still used by") ||
+               e.getMessage().contains(
+                 "One or more features in the changeset are involved in an unresolved review"))
       {
-        ResourceErrorHandler.handleError(e.getMessage(), Status.PRECONDITION_FAILED, log); //412
+        ResourceErrorHandler.handleError(message, Status.PRECONDITION_FAILED, log); //412
       }
     }
 
     //400
     ResourceErrorHandler.handleError(
       "Error uploading changeset with ID: " + changesetId + " - data: (" + 
-        e.getMessage() + ") " + changesetDiffSnippet, 
+        message + ") " + changesetDiffSnippet, 
       Status.BAD_REQUEST,
       log);
   }

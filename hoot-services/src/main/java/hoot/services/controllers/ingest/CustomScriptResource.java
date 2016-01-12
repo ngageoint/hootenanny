@@ -61,6 +61,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Function;
 
 @Path("/customscript")
@@ -341,7 +343,6 @@ public class CustomScriptResource
     			{
     				desc = oTrans.get("NAME").toString();
     			}
-    			desc += " (Hootenanny Default)";
     			oTrans.put("DESCRIPTION", desc);
 
     			Object oCanExport = oTrans.get("CANEXPORT");
@@ -755,8 +756,8 @@ public class CustomScriptResource
       if (iHeader > 0)
       {
         String header = content.substring(0, iHeader);
-        header = header.replace((CharSequence) headerStart, (CharSequence) "");
-        header = header.replace((CharSequence) headerEnd, (CharSequence) "");
+        header = header.replace(headerStart, "");
+        header = header.replace(headerEnd, "");
 
         String body = content.substring(iHeader + headerEnd.length());
 
@@ -828,8 +829,9 @@ public class CustomScriptResource
     return oHeader;
   }
 
-  // This function checks to see if the script has both getDbSchema and translateToOgr which indicates if it can export
-  protected boolean validateExport(String script)
+  // This function checks to see if the script has both getDbSchema and translateToOgr which 
+  // indicates if it can export
+  protected boolean validateExport(String script) throws Exception
   {
 
   	boolean canExport = false;
@@ -888,10 +890,14 @@ public class CustomScriptResource
     catch(Exception ex)
     {
     	log.error(ex.getMessage());
+    	if (ex instanceof EvaluatorException)
+    	{
+    		throw ex;
+    	}
     }
     finally
     {
-    	context.exit();
+    	Context.exit();
     }
     return canExport;
   }

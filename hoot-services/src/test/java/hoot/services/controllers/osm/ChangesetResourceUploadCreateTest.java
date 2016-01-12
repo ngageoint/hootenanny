@@ -52,26 +52,22 @@ import org.w3c.dom.NodeList;
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.db.DbUtils;
-
 import hoot.services.db2.CurrentNodes;
 import hoot.services.db2.CurrentRelations;
 import hoot.services.db2.CurrentWayNodes;
 import hoot.services.db2.CurrentWays;
 import hoot.services.db2.QChangesets;
 import hoot.services.db2.QCurrentNodes;
-import hoot.services.db2.QCurrentRelationMembers;
 import hoot.services.db2.QCurrentRelations;
 import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.db2.QCurrentWays;
 import hoot.services.geo.BoundingBox;
-import hoot.services.geo.GeoUtils;
 import hoot.services.geo.QuadTileCalculator;
 import hoot.services.models.osm.Changeset;
-import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
-import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.XmlUtils;
 
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLUpdateClause;
@@ -79,20 +75,15 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.ClientResponse.Status;
 
-/*
- * @todo Most of these tests could be converted to integration tests and after a refactoring,
- * could be replace with unit tests that test only the internal classes being used by this
- * Jersey resource.
- */
 public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
 {
   private static final Logger log = LoggerFactory.getLogger(ChangesetResourceUploadCreateTest.class);
+  
   private QCurrentNodes currentNodesTbl = QCurrentNodes.currentNodes;
   private QCurrentWays currentWaysTbl = QCurrentWays.currentWays;
   private QCurrentWayNodes currentWayNodesTbl = QCurrentWayNodes.currentWayNodes;
   private QCurrentRelations  currentRelationsTbl = QCurrentRelations.currentRelations;
-  private QCurrentRelationMembers currentRelationMembersTbl = QCurrentRelationMembers.currentRelationMembers;
-
+  
   public ChangesetResourceUploadCreateTest() throws NumberFormatException, IOException
   {
     super("hoot.services.controllers.osm");
@@ -190,7 +181,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       Set<Long> nodeIds = new LinkedHashSet<Long>();
       Set<Long> wayIds = new LinkedHashSet<Long>();
       Set<Long> relationIds = new LinkedHashSet<Long>();
@@ -406,7 +397,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       List<Long> nodeIds = new ArrayList<Long>();
       Set<Long> wayIds = new LinkedHashSet<Long>();
       try
@@ -477,61 +468,49 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
         		.map(currentNodesTbl.id, currentNodesTbl);
         Assert.assertEquals(3, nodes.size());
 
-        CurrentNodes nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[0]);
+        CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision(originalBounds.getMinLat()) *
-            GeoUtils.GEO_RECORD_SCALE)),
-          nodeRecord.getLatitude());
+          new Double(originalBounds.getMinLat()), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision(originalBounds.getMinLon()) *
-            GeoUtils.GEO_RECORD_SCALE)),
-          nodeRecord.getLongitude());
+          new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
-            DbUtils.fromDbCoordValue(nodeRecord.getLatitude()),
-            DbUtils.fromDbCoordValue(nodeRecord.getLongitude()))),
+            nodeRecord.getLatitude(),
+            nodeRecord.getLongitude())),
           nodeRecord.getTile());
         Assert.assertTrue(nodeRecord.getTimestamp().before(now));
         Assert.assertEquals(new Long(1), nodeRecord.getVersion());
         Assert.assertEquals(new Boolean(true), nodeRecord.getVisible());
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[1]);
+        nodeRecord = nodes.get(nodeIdsArr[1]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision(originalBounds.getMaxLat()) *
-            GeoUtils.GEO_RECORD_SCALE)),
-          nodeRecord.getLatitude());
+          new Double(originalBounds.getMaxLat()), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision(originalBounds.getMaxLon()) *
-            GeoUtils.GEO_RECORD_SCALE)),
-          nodeRecord.getLongitude());
+          new Double(originalBounds.getMaxLon()), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
-            DbUtils.fromDbCoordValue(nodeRecord.getLatitude()),
-            DbUtils.fromDbCoordValue(nodeRecord.getLongitude()))),
+            nodeRecord.getLatitude(),
+            nodeRecord.getLongitude())),
           nodeRecord.getTile());
         Assert.assertTrue(nodeRecord.getTimestamp().before(now));
         Assert.assertEquals(new Long(1), nodeRecord.getVersion());
         Assert.assertEquals(new Boolean(true), nodeRecord.getVisible());
 
-        nodeRecord = (CurrentNodes)nodes.get(nodeIdsArr[2]);
+        nodeRecord = nodes.get(nodeIdsArr[2]);
         Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision((originalBounds.getMinLat() - .001)) *
-            GeoUtils.GEO_RECORD_SCALE)),
-          nodeRecord.getLatitude());
+          new Double(originalBounds.getMinLat() - .001), nodeRecord.getLatitude());
         Assert.assertEquals(
-          new Integer((int)(DbUtils.toDbCoordPrecision((originalBounds.getMinLon() - .001)) *
-            GeoUtils.GEO_RECORD_SCALE)),
-          nodeRecord.getLongitude());
+          new Double(originalBounds.getMinLon() - .001), nodeRecord.getLongitude());
         Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
         Assert.assertEquals(
           new Long(QuadTileCalculator.tileForPoint(
-            DbUtils.fromDbCoordValue(nodeRecord.getLatitude()),
-            DbUtils.fromDbCoordValue(nodeRecord.getLongitude()))),
+            nodeRecord.getLatitude(),
+            nodeRecord.getLongitude())),
           nodeRecord.getTile());
         Assert.assertTrue(nodeRecord.getTimestamp().before(now));
         Assert.assertEquals(new Long(1), nodeRecord.getVersion());
@@ -549,7 +528,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
         		.map(currentWaysTbl.id, currentWaysTbl);
         Assert.assertEquals(1, ways.size());
 
-        CurrentWays wayRecord = (CurrentWays)ways.get(wayIdsArr[0]);
+        CurrentWays wayRecord = ways.get(wayIdsArr[0]);
         Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
         Assert.assertEquals(wayIdsArr[0], wayRecord.getId());
         Assert.assertTrue(wayRecord.getTimestamp().before(now));
@@ -696,7 +675,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
       }
       Assert.assertNotNull(responseData);
 
-      XPath xpath = XmlDocumentBuilder.createXPath();
+      XPath xpath = XmlUtils.createXPath();
       Set<Long> nodeIds = new LinkedHashSet<Long>();
       Set<Long> wayIds = new LinkedHashSet<Long>();
       Set<Long> relationIds = new LinkedHashSet<Long>();
@@ -1094,7 +1073,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
       .where(changesets.id.eq(changesetId)).singleResult(changesets);
       try
       {
-        //changeset = changesetDao.findById(changesetId);
       	changeset =
             new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
             .where(changesets.id.eq(changesetId)).singleResult(changesets);
@@ -1157,12 +1135,12 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
             "<modify/>" +
             "<create>" +
               "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + originalBounds.getMinLon() + "\" " +
-                "lat=\"" + originalBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                "lat=\"" + originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
                 "<tag k=\"key 1\" v=\"val 1\"></tag>" +
                 "<tag k=\"key 2\" v=\"val 2\"></tag>" +
               "</node>" +
               "<node id=\"-1\" lon=\"" + updateBounds.getMinLon() + "\" " +
-                "lat=\"" + updateBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                "lat=\"" + updateBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
                 "<tag k=\"key 3\" v=\"val 3\"></tag>" +
               "</node>" +
             "</create>" +
@@ -1172,7 +1150,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus())); //TODO: is this correct?
+      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
       Assert.assertTrue(r.getEntity(String.class).contains("Invalid OSM element ID for create"));
 
       //make sure the new nodes weren't created
@@ -1194,8 +1172,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
     final long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-    final Set<Long> nodeIds =
-      OsmTestUtils.createTestNodes(changesetId, originalBounds);
+    OsmTestUtils.createTestNodes(changesetId, originalBounds);
 
     //Try to create two nodes with the same ID.  A failure should occur and no data in the system
     //should be modified.
@@ -1246,7 +1223,8 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
 
       try
       {
-        Assert.assertEquals(4, Element.getTagCountForElementType(mapId, ElementType.Node, conn));
+        Assert.assertEquals(
+        	4, OsmTestUtils.getTagCountForElementType(mapId, ElementType.Node, conn));
       }
       catch (Exception e2)
       {
@@ -1381,24 +1359,15 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     }
   }
 
-  @Test(expected=UniformInterfaceException.class)
   @Category(UnitTest.class)
   public void testUploadCreateNoMembersInRelation() throws Exception
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
     final long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-    final Set<Long> nodeIds =
-      OsmTestUtils.createTestNodes(changesetId, originalBounds);
-    final Set<Long> wayIds =
-      OsmTestUtils.createTestWays(changesetId, nodeIds);
-    final Set<Long> relationIds =
-      OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
-    //A relation must have at least one member.  Try to upload a relation with no members.  The
-    //request should fail and no data in the system should be modified.
-    try
-    {
-      resource()
+    //relations with no members are allowed
+    final Document responseData = 
+    	resource()
         .path("api/0.6/changeset/" + changesetId + "/upload")
         .queryParam("mapId", "" + mapId)
         .type(MediaType.TEXT_XML)
@@ -1414,22 +1383,15 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
             "<modify/>" +
             "<delete if-unused=\"true\"/>" +
           "</osmChange>");
-    }
-    catch (UniformInterfaceException e)
-    {
-      ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(
-        r.getEntity(String.class).contains("Too few members specified for relation"));
-
-      OsmTestUtils.verifyTestDataUnmodified(
-        originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
-      throw e;
-    }
+    
+    Assert.assertEquals(
+    	1, XPathAPI.selectNodeList(responseData, "//osm/diffResult/relation").getLength());
+    Assert.assertEquals(
+    	1, 
+    	new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        .from(currentRelationsTbl)
+        .count());
   }
-
-  //TODO: should we set a limit on members per relation?  i don't think rails port does
 
   @Test(expected=UniformInterfaceException.class)
   @Category(UnitTest.class)
@@ -1471,8 +1433,9 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("does not exist for way"));
+      Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
+      Assert.assertTrue(
+      	r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -1493,7 +1456,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
 
     final Set<Long> wayIds =
       OsmTestUtils.createTestWays(changesetId, nodeIds);
-   final Set<Long> relationIds =
+    final Set<Long> relationIds =
       OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
     //Try to create a relation referencing a node that doesn't exist.  The request should fail and
@@ -1521,8 +1484,9 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("does not exist for relation"));
+      Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
+      Assert.assertTrue(
+      	r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -1574,8 +1538,9 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("does not exist for relation"));
+      Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
+      Assert.assertTrue(
+      	r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -1627,8 +1592,9 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.PRECONDITION_FAILED, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("does not exist for relation"));
+      Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
+      Assert.assertTrue(
+      	r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -1697,8 +1663,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     }
   }
 
-  //TODO: test for relation that references the same member more than once...does that even matter?
-
   @Test(expected=UniformInterfaceException.class)
   @Category(UnitTest.class)
   public void testUploadCreateWayWithInvisibleNode() throws Exception
@@ -1720,7 +1684,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     		.where(currentNodesTbl.id.eq(new Long(nodeIdsArr[0])))
     		.singleResult(currentNodesTbl);
     invisibleNode.setVisible(false);
-    int success = //invisibleNode.update();
+    int success = 
     		((int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentNodesTbl)
         .where(currentNodesTbl.id.eq(invisibleNode.getId()))
         .set(currentNodesTbl.visible, false)
@@ -1759,7 +1723,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("is not visible for way"));
+      Assert.assertTrue(r.getEntity(String.class).contains("visible for way"));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -1789,7 +1753,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     		.where(currentNodesTbl.id.eq(new Long(nodeIdsArr[0])))
     		.singleResult(currentNodesTbl);
     invisibleNode.setVisible(false);
-    int success = //invisibleNode.update();
+    int success = 
     		(int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentNodesTbl)
     .where(currentNodesTbl.id.eq(invisibleNode.getId()))
   .set(currentNodesTbl.visible, false)
@@ -1828,7 +1792,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("is not visible for relation"));
+      Assert.assertTrue(r.getEntity(String.class).contains("visible for relation"));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -1854,14 +1818,13 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     final Set<Long> relationIds =
       OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
-
     //make one of relation way members invisible
     CurrentWays invisibleWay =
     		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWaysTbl)
     		.where(currentWaysTbl.id.eq(wayIdsArr[0]))
     		.singleResult(currentWaysTbl);
     invisibleWay.setVisible(false);
-    int success = //invisibleWay.update();
+    int success = 
     		(int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentWaysTbl)
     .where(currentWaysTbl.id.eq(invisibleWay.getId()))
   .set(currentWaysTbl.visible, false)
@@ -1870,8 +1833,8 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     Assert.assertEquals(
       false,
       new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWaysTbl)
-  		.where(currentWaysTbl.id.eq(wayIdsArr[0]))
-  		.singleResult(currentWaysTbl.visible));
+  		  .where(currentWaysTbl.id.eq(wayIdsArr[0]))
+  		  .singleResult(currentWaysTbl.visible));
 
     //Try to upload a relation which references an invisible way.  The request should fail and no
     //data in the system should be modified.
@@ -1899,7 +1862,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("is not visible for relation"));
+      Assert.assertTrue(r.getEntity(String.class).contains("visible for relation"));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -1926,32 +1889,24 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
       OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
     final Long[] relationIdsArr = relationIds.toArray(new Long[]{});
 
-
     //make one of relation's relation members invisible
     CurrentRelations invisibleRelation =
-    		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationsTbl)
+    	new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationsTbl)
     		.where(currentRelationsTbl.id.eq(relationIdsArr[0]))
     		.singleResult(currentRelationsTbl);
-
-
     invisibleRelation.setVisible(false);
-
-
-    int success = //invisibleRelation.update();
-    		(int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentRelationsTbl)
-    .where(currentRelationsTbl.id.eq(invisibleRelation.getId()))
-  .set(currentRelationsTbl.visible, false)
-  .execute();
-
-
-
-    Assert.assertEquals(1, success);
-    Assert.assertEquals(
-      false,
-      new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationsTbl)
-  		.where(currentRelationsTbl.id.eq(relationIdsArr[0]))
-  		.singleResult(currentRelationsTbl.visible)
-    		);
+    int success = 
+    	(int)new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentRelationsTbl)
+             .where(currentRelationsTbl.id.eq(invisibleRelation.getId()))
+             .set(currentRelationsTbl.visible, false)
+             .execute();
+   Assert.assertEquals(1, success);
+   Assert.assertEquals(
+     false,
+      new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        .from(currentRelationsTbl)
+  		  .where(currentRelationsTbl.id.eq(relationIdsArr[0]))
+  		  .singleResult(currentRelationsTbl.visible));
 
     //Try to upload a relation which references an invisible relation.  The request should fail
     //and no data in the system should be modified.
@@ -1980,7 +1935,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("is not visible for relation"));
+      Assert.assertTrue(r.getEntity(String.class).contains("visible for relation"));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -2147,7 +2102,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus())); //TODO: is this correct?
+      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
       Assert.assertTrue(r.getEntity(String.class).contains("Invalid OSM element ID for create"));
 
       OsmTestUtils.verifyTestDataUnmodified(
@@ -2210,7 +2165,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus())); //TODO: is this correct?
+      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
       Assert.assertTrue(r.getEntity(String.class).contains("Invalid OSM element ID for create"));
 
       OsmTestUtils.verifyTestDataUnmodified(
@@ -2780,14 +2735,11 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
   {
     final BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
     final long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-    final Set<Long> nodeIds =
-      OsmTestUtils.createTestNodes(changesetId, originalBounds);
+    final Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
     final Long[] nodeIdsArr = nodeIds.toArray(new Long[]{});
 
-    final Set<Long> wayIds =
-      OsmTestUtils.createTestWays(changesetId, nodeIds);
-   final Set<Long> relationIds =
-      OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+    final Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+   final Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
     //Update the changeset where one of the ways has a node with an empty string for its ID.  A
     //failure should occur and no data in the system should be modified.
@@ -2818,8 +2770,8 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     catch (UniformInterfaceException e)
     {
       ClientResponse r = e.getResponse();
-      Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
-      Assert.assertTrue(r.getEntity(String.class).contains("Invalid version"));
+      Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
+      Assert.assertTrue(r.getEntity(String.class).contains("Element in changeset has empty ID."));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -2878,7 +2830,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract
     {
       ClientResponse r = e.getResponse();
       Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-      //Assert.assertTrue(r.getEntity(String.class).contains("Invalid version"));
+      Assert.assertTrue(r.getEntity(String.class).contains("Element in changeset has empty ID."));
 
       OsmTestUtils.verifyTestDataUnmodified(
         originalBounds, changesetId, nodeIds, wayIds, relationIds);

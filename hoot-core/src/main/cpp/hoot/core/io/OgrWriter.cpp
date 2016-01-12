@@ -36,7 +36,7 @@
 
 // hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/RelationData.h>
@@ -177,7 +177,10 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, shared_ptr<Feature> f, const
       QString("Error setting geometry - OGR Error Code: (%1)  Geometry: (%2)").arg(QString::number(errCode)).arg(QString::fromStdString(g->toString())));
   }
 
+  //Unsetting the FID with SetFID(-1) before calling CreateFeature() to avoid reusing the same feature object for sequential insertions
+  poFeature->SetFID(-1);
   errCode = layer->CreateFeature(poFeature);
+
   if (errCode != OGRERR_NONE)
   {
     throw HootException(
@@ -230,6 +233,11 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
       options["CREATE_CSVT"] = "YES";
     }
 
+    if (_ds->GetDriver()->GetName() == QString("ESRI Shapefile"))
+    {
+      options["ENCODING"] = "UTF-8";
+    }
+
     // Add a Feature Dataset to a ESRI File GeoDatabase if requested
     if (_ds->GetDriver()->GetName() == QString("FileGDB"))
     {
@@ -243,16 +251,13 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
   }
 
   QString layerName = _prependLayerName + layer->getName();
-
-  // Check if the layer exists in the output.
-  poLayer = _ds->GetLayerByName(layerName.toAscii());
+  poLayer = _getLayerByName(layerName);
 
   // We only want to add to a layer IFF the config option "ogr.append.data" set
   if (poLayer != NULL && _appendData)
   {
     // Layer exists
     _layers[layer->getName()] = poLayer;
-
     // Loop through the fields making sure that they exist in the output. Print a warning if
     // they don't exist
     OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
@@ -271,9 +276,10 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
   }
   else
   {
+    LOG_INFO("Layer: " << layerName << " not found.  Creating layer...");
     // Layer does not exist
     poLayer = _ds->CreateLayer(layerName.toAscii(),
-                  MapReprojector::createWgs84Projection()->Clone(), gtype, options.getCrypticOptions());
+                  MapProjector::createWgs84Projection()->Clone(), gtype, options.getCrypticOptions());
 
     if( poLayer == NULL )
     {
@@ -299,6 +305,25 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
       }
     }
   } // End layer does not exist
+}
+
+OGRLayer* OgrWriter::_getLayerByName(const QString layerName)
+{
+  // Check if the layer exists in the output.
+  int layerCount = _ds->GetLayerCount();
+  for (int i = 0; i < layerCount; i++)
+  {
+    OGRLayer* layer = _ds->GetLayer(i+1);
+    if (layer != NULL)
+    {
+      QString tmpLayerName = QString(layer->GetName());
+      if (tmpLayerName == layerName)
+      {
+        return layer;
+      }
+    }
+  }
+  return NULL;
 }
 
 OGRLayer* OgrWriter::_getLayer(const QString layerName)
@@ -386,13 +411,14 @@ void OgrWriter::open(QString url)
 
 void OgrWriter::setConfiguration(const Settings& conf)
 {
-  setCreateAllLayers(conf.getBool(createAllLayersKey(), false));
-  setScriptPath(conf.getString(scriptKey(), ""));
-  setPrependLayerName(conf.getString(preLayerNameKey(), ""));
+  ConfigOptions configOptions(conf);
+  setCreateAllLayers(configOptions.getOgrWriterCreateAllLayers());
+  setScriptPath(configOptions.getOgrWriterScript());
+  setPrependLayerName(configOptions.getOgrWriterPreLayerName());
 
-  _appendData = ConfigOptions(conf).getOgrAppendData();
+  _appendData = configOptions.getOgrAppendData();
 
-  QString strictStr = conf.getString(strictCheckingKey(), strictCheckingDefault());
+  QString strictStr = configOptions.getOgrStrictChecking();
   if (strictStr == "on")
   {
     _strictChecking = StrictOn;
@@ -467,10 +493,10 @@ void OgrWriter::write(shared_ptr<const OsmMap> map)
   ElementProviderPtr provider(boost::const_pointer_cast<ElementProvider>(
     boost::dynamic_pointer_cast<const ElementProvider>(map)));
 
-  const OsmMap::NodeMap& nm = map->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
+  const NodeMap& nm = map->getNodeMap();
+  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    _writePartial(provider, it.value());
+    _writePartial(provider, it->second);
   }
 
   const WayMap& wm = map->getWays();
@@ -495,7 +521,21 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
 
   if (e->getTags().getInformationCount() > 0)
   {
-    shared_ptr<Geometry> g = ElementConverter(provider).convertToGeometry(e);
+    // There is probably a cleaner way of doing this.
+    // convertToGeometry calls  getGeometryType which will throw an exception if it gets a relation
+    // that it doesn't know about. E.g. "route", "superroute", " turnlanes:turns" etc
+
+    shared_ptr<Geometry> g;
+
+    try
+    {
+      g = ElementConverter(provider).convertToGeometry(e);
+    }
+    catch (IllegalArgumentException& err)
+    {
+      LOG_WARN("Error converting geometry: " << err.getWhat() << " (" << e->toString() << ")");
+      g.reset((GeometryFactory::getDefaultInstance()->createEmptyGeometry()));
+    }
 
     /*
     LOG_DEBUG("After conversion to geometry, element is now a " <<

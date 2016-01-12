@@ -37,7 +37,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Future;
 
 import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.DocumentBuilder;
@@ -47,17 +46,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
-import org.apache.http.impl.nio.client.HttpAsyncClients;
-import org.apache.http.util.EntityUtils;
 import org.deegree.commons.config.DeegreeWorkspace;
 import org.deegree.commons.config.ResourceState;
 import org.deegree.commons.config.ResourceState.StateType;
@@ -74,7 +62,8 @@ import org.w3c.dom.Element;
 
 public class WfsManager {
 	private static final Logger log = LoggerFactory.getLogger(WfsManager.class);
-	private String coreJobServerUrl = null;
+	@SuppressWarnings("unused")
+  private String coreJobServerUrl = null;
 	private String wfsStoreConnName = null;
 	private String wfsStoreDb = null;
 	public WfsManager()
@@ -89,28 +78,26 @@ public class WfsManager {
 			
 			wfsStoreDb = 
 	        HootProperties.getInstance().getProperty("wfsStoreDb");
-			
-			//
 		}
 		catch (Exception e)
 		{
 	      log.error("WFS error: " + e.getMessage());
 		}
-		
-	}
-
-	public void createWfsResource(String wfsJobName) throws Exception
-	{
-		
-		DataDefinitionManager ddlMan = new DataDefinitionManager();
-
-		List<String>tblsList = ddlMan.getTablesList(wfsStoreDb, wfsJobName);		
-		_createWFSDatasourceFeature(wfsJobName, wfsStoreConnName, tblsList);
-		_createService(wfsJobName);
-		
-
 	}
 	
+	
+		public void createWfsResource(String wfsJobName) throws Exception
+		{
+			
+			DataDefinitionManager ddlMan = new DataDefinitionManager();
+	
+			List<String>tblsList = ddlMan.getTablesList(wfsStoreDb, wfsJobName);		
+			_createWFSDatasourceFeature(wfsJobName, wfsStoreConnName, tblsList);
+			_createService(wfsJobName);
+			
+	
+		}
+		
 	
 	public void removeWfsResource(String wfsJobName) throws Exception
 	{
@@ -118,123 +105,8 @@ public class WfsManager {
 		_removeService(wfsJobName);
 	}
 	
-	protected String _getRequest(String url) throws Exception
-	{
-		String ret = null;
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-		HttpGet httpget = new HttpGet(url);
-		CloseableHttpResponse response = httpclient.execute(httpget);
-		try {
-			
-			if(response.getStatusLine().getStatusCode() != 200)
-			{
-				String reason = response.getStatusLine().getReasonPhrase();
-				if(reason == null)
-				{
-					reason = "Unkown reason.";
-				}
-				throw new Exception(reason);			
-			}
-			
-			
-			HttpEntity entity = response.getEntity();
-			if (entity != null) {
-			    long len = entity.getContentLength();
-			    ret = EntityUtils.toString(entity);
-
-			}
-		} finally {
-		    response.close();
-		}
-		
-		return ret;
-	}
-	
-	
-	protected void _putRequest(String url, String content) throws Exception
-	{
-		CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
-		try{
-			httpclient.start();
-			// Execute request
-			
-	    final HttpPut request1 = new HttpPut(url);
-	    StringEntity se = new StringEntity( content);  
-	    request1.setEntity(se);
-	    Future<HttpResponse> future = httpclient.execute(request1, null);
-			
-		} catch (Exception ee){
-			//log.error(ee.getMessage());
-		}
-		finally
-		{
-		}
-	}
-	
-	public void createWfsDb(String name) throws Exception
-	{
-		DataDefinitionManager ddlMan = new DataDefinitionManager();
-		ddlMan.createDb(name);
-	}
-	
-/*
-	protected String _createWFSConnectionResource(String dbName) throws Exception
-	{
-		String connName = dbName + "_Connection";
-		String userid = HootProperties.getProperty("dbUserId");
-		String pwd = HootProperties.getProperty("dbPassword");
-		String host = HootProperties.getProperty("dbHost");
-		String dbUrl = "jdbc:postgresql://" + host + "/WfsStoreDb"  ;
-		
-		//URL url = ExportJobProcesslet.class.getClassLoader().getResource("../../WEB-INF/workspace/jdbc");
-    //String wfsConnResPath = url.getPath();
-    
-    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-    Document doc = dBuilder.newDocument();
-
-    Element root = doc.createElement("JDBCConnection");
-    doc.appendChild(root);
-    root.setAttribute("configVersion", "3.0.0");
-    root.setAttribute("xmlns", "http://www.deegree.org/jdbc");
-    root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-    root.setAttribute("xsi:schemaLocation", "http://www.deegree.org/jdbc http://schemas.deegree.org/jdbc/3.0.0/jdbc.xsd");   
-    
-    Element elem = doc.createElement("Url");
-    elem.appendChild(doc.createTextNode(dbUrl));
-    root.appendChild(elem);
-    
-    
-    elem = doc.createElement("User");
-    elem.appendChild(doc.createTextNode(userid));
-    root.appendChild(elem);
-    
-    elem = doc.createElement("Password");
-    elem.appendChild(doc.createTextNode(pwd));
-    root.appendChild(elem);
-    
-    elem = doc.createElement("ReadOnly");
-    elem.appendChild(doc.createTextNode("false"));
-    root.appendChild(elem);
-    
-
-    
-    TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		Transformer transformer = transformerFactory.newTransformer();
-		//transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-		StringWriter writer = new StringWriter();
-		transformer.transform(new DOMSource(doc), new StreamResult(writer));
-		String content = writer.getBuffer().toString();//.replaceAll("\n|\r", "");
-		_putRequest(coreJobServerUrl + "/hoot-services/config/upload/jdbc/" + connName + ".xml",  content);
-		
-		return connName;
-	}
-	*/
 	protected void _createWFSDatasourceFeature(String wfsDatasetName, String connectionName, List<String> features) throws Exception
 	{
-	/*	URL url = ETLProcesslet.class.getClassLoader().getResource("../../WEB-INF/workspace/datasources/feature");
-    String wfsFeaturePath = url.getPath();
-    */
     DocumentBuilderFactory dbFactory = XmlDocumentBuilder.getSecureDocBuilderFactory();
     DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
     Document doc = dBuilder.newDocument();
@@ -278,6 +150,7 @@ public class WfsManager {
 		catch (Exception ex)
 		{
 			log.error(ex.getMessage());
+			throw ex;
 		}
 		
 	}
@@ -306,6 +179,7 @@ public class WfsManager {
 		catch(Exception ex)
 		{
 			log.error(ex.getMessage());
+			throw ex;
 		}
 	}
 	
@@ -323,7 +197,7 @@ public class WfsManager {
 		}
 		
 		InputStream stream = new ByteArrayInputStream(content.getBytes("UTF-8"));
-		ResourceState resStatus = fsMan.createResource(name, stream);
+		ResourceState<?> resStatus = fsMan.createResource(name, stream);
 		
 		if(resStatus.getType() == StateType.deactivated)
 		{
@@ -438,7 +312,7 @@ public class WfsManager {
 					"  <QueryMaxFeatures>-1</QueryMaxFeatures>\n" + 
 					"</deegreeWFS>";
 			InputStream stream = new ByteArrayInputStream(content.getBytes("UTF-8"));
-			ResourceState resStatus = wsMan.createResource(wfsResourceName, stream);
+			ResourceState<?> resStatus = wsMan.createResource(wfsResourceName, stream);
 			
 			if(resStatus.getType() == StateType.init_error)
 			{

@@ -31,7 +31,7 @@
 // Hoot
 #include <hoot/core/Conflator.h>
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/Settings.h>
@@ -49,18 +49,6 @@ public:
   static string className() { return "hoot::ConflateRoadsCmd"; }
 
   ConflateRoadsCmd() {}
-
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (input1) (input2) (output)\n"
-        "  This will be deprecated in the future. --conflate is preferred.\n"
-        "  Conflates two input sources into one output. Only roads are conflated.\n"
-        "  * input1 - First input.\n"
-        "  * input2 - Second input.\n"
-        "  * output - The output path.";
-  }
 
   virtual QString getName() const { return "conflate-roads"; }
 
@@ -86,9 +74,9 @@ public:
     shared_ptr<OsmMap> result(new OsmMap(conflator.getBestMap()));
 
     // Apply any user specified operations.
-    NamedOp(conf().getList(postOpsKey(), "")).apply(result);
+    NamedOp(ConfigOptions().getConflatorPostOps()).apply(result);
 
-    MapReprojector::reprojectToWgs84(result);
+    MapProjector::projectToWgs84(result);
 
     saveMap(result, args[2]);
 

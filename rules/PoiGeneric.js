@@ -19,7 +19,20 @@ var translateMeanWordSetLevenshtein_1_5 = new hoot.NameExtractor(
         new hoot.LevenshteinDistance({"levenshtein.distance.alpha": 1.5})));
 var translateMaxWordSetLevenshtein_1_15 = new hoot.NameExtractor(
     new hoot.MaxWordSetDistance(
-        new hoot.LevenshteinDistance({"levenshtein.distance.alpha": 1.15})));
+        {"token.separator": "[\\s-,';]+"},
+        new hoot.TranslateStringDistance(
+            // runs just a little faster w/ tokenize off
+            {"translate.string.distance.tokenize": "false"},
+            new hoot.LevenshteinDistance(
+                {"levenshtein.distance.alpha": 1.15}))));
+var translateMinWordSetLevenshtein_1_15 = new hoot.NameExtractor(
+    new hoot.MinSumWordSetDistance(
+        {"token.separator": "[\\s-,';]+"},
+        new hoot.TranslateStringDistance(
+            // runs just a little faster w/ tokenize off
+            {"translate.string.distance.tokenize": "false"},
+            new hoot.LevenshteinDistance(
+                {"levenshtein.distance.alpha": 1.15}))));
 var weightedWordDistance = new hoot.NameExtractor(
     new hoot.WeightedWordDistance(
         {"token.separator": "[\\s-,';]+", "weighted.word.distance.p": 0.5},
@@ -44,6 +57,8 @@ var distances = [
     {k:'landuse',                       match:200,      review:600},
     {k:'leisure',                       match:100,      review:200},
     {k:'tourism',                       match:100,      review:200},
+    // hotel campuses can be quite large
+    {k:'tourism',   v:'hotel',          match:200,      review:400},
     {k:'shop',                          match:100,      review:200},
     {k:'station',                       match:100,      review:200},
     {k:'transport',                     match:100,      review:200},
@@ -158,13 +173,9 @@ function additiveScore(map, e1, e2) {
         return result;
     }
 
-    var nameMultiplier = 1;
     // if there is no type information to compare the name becomes more 
     // important
     var oneGeneric = hasTypeTag(e1) == false || hasTypeTag(e2) == false;
-    if (oneGeneric) {
-        nameMultiplier = 2;
-    }
 
     var t1 = e1.getTags().toDict();
     var t2 = e2.getTags().toDict();
@@ -172,27 +183,69 @@ function additiveScore(map, e1, e2) {
     var mean = translateMeanWordSetLevenshtein_1_5.extract(map, e1, e2);
     var weightedWordDistanceScore = weightedWordDistance.extract(map, e1, e2);
     var weightedPlusMean = mean + weightedWordDistanceScore;
-    var placeScore = getTagCategoryDistance("place", e1, e2);
-    var poiScore = getTagCategoryDistance("poi", e1, e2);
-    var artworkTypeDistance = getTagDistance("artwork_type", e1, e2);
-    var cuisineDistance = getTagDistance("cuisine", e1, e2);
-    var sportDistance = getTagDistance("sport", e1, e2);
-    hoot.debug(poiScore);
+    var poiDistance = getTagCategoryDistance("poi", map, e1, e2);
+    var artworkTypeDistance = getTagAncestorDistance("artwork_type", map, e1, e2);
+    var cuisineDistance = getTagAncestorDistance("cuisine", map, e1, e2);
+    var sportDistance = getTagAncestorDistance("sport", map, e1, e2);
 
     var score = 0;
 
-    if (weightedPlusMean > 0.987403 && weightedPlusMean < 1.2) {
-        score += 0.5 * nameMultiplier;
-        reason.push("similar names");
+    if (!oneGeneric) {
+        if (weightedPlusMean > 0.987403 && weightedPlusMean < 1.2) {
+            score += 0.5;
+            reason.push("similar names");
+        } else if (weightedPlusMean >= 1.2) {
+            score += 1;
+            reason.push("very similar names");
+        }
+    } else {
+        var min = translateMinWordSetLevenshtein_1_15.extract(map, e1, e2);
+
+        // if there is no type information be very restrictive, but just the name can be enough
+        // information for a match.
+        if (min > 0.8 && weightedPlusMean >= 1.2) {
+            score += 2;
+            reason.push("very similar names and generic type");
+
+        // with no type information just a similar name is enough to flag a review.
+        } else if (weightedPlusMean > 0.987403) {
+            score += 1;
+            reason.push("similar names and generic type");
+        }
     }
-    if (weightedPlusMean >= 1.2) {
-        score += 1 * nameMultiplier;
-        reason.push("very similar names");
-    }
+
+
     if (isSuperClose(e1, e2)) {
         score += 0.5;
         reason.push("very close together");
     }
+
+    var typeScore = 0;
+    if (artworkTypeDistance <= 0.3) {
+        typeScore += 1;
+        reason.push("similar artwork type");
+    }
+    if (cuisineDistance <= 0.3) {
+        typeScore += 1;
+        reason.push("similar cuisine");
+    }
+    if (sportDistance <= 0.3) {
+        typeScore += 1;
+        reason.push("similar sport");
+    }
+
+    // we're unlikely to get more evidence than the fact that it is a tower
+    // or pole. If the power tag matches exactly, give it 2 points of evidence
+    // if not, just give it one.
+    var powerDistance = getTagDistance("power", e1, e2);
+    if (powerDistance == 0) {
+        typeScore += 2;
+        reason.push("same power (electrical) type");
+    } else if (powerDistance <= 0.4) {
+        typeScore += 1;
+        reason.push("similar power (electrical) type");
+    }
+
 
     // if at least one feature contains a place
     var placeCount = getTagsByAncestor("place", t1).length + 
@@ -214,7 +267,7 @@ function additiveScore(map, e1, e2) {
             reason.push('poor place match');
         // else if the places match, only increase score if the names match too.
         } else if (weightedPlusMean > 0.987403) {
-            if (poiScore <= 0.5) {
+            if (poiDistance <= 0.5) {
                 score += 1;
                 reason.push("similar name and place type");
             }
@@ -223,38 +276,21 @@ function additiveScore(map, e1, e2) {
     } else if (placeCount > 0 && oneGeneric) {
         score = Math.min(0.6, score);
         reason.push('generic type to place match');
-    } else if (poiScore <= 0.5) {
+    } else if (poiDistance <= 0.5) {
         score += 1;
         reason.push("similar POI type");
+    // if the poi distance is very high, then they shouldn't be considered
+    // for match based solely on name and proximity. See #6998
+    } else if (poiDistance >= 0.99 && typeScore == 0 && oneGeneric == false) {
+        score = 0;
+        reason = ["similar names but no POI match"];
     }
 
-    if (artworkTypeDistance <= 0.3) {
-        score += 1;
-        reason.push("similar artwork type");
-    }
-    if (cuisineDistance <= 0.3) {
-        score += 1;
-        reason.push("similar cuisine");
-    }
-    if (sportDistance <= 0.3) {
-        score += 1;
-        reason.push("similar sport");
-    }
-
-    // we're unlikely to get more evidence than the fact that it is a tower
-    // or pole. If the power tag matches exactly, give it 2 points of evidence
-    // if not, just give it one.
-    var powerDistance = getTagDistance("power", e1, e2);
-    if (powerDistance == 0) {
-        score += 2;
-        reason.push("same power (electrical) type");
-    } else if (powerDistance <= 0.4) {
-        score += 1;
-        reason.push("similar power (electrical) type");
-    }
+    score = score + typeScore;
 
     result.score = score;
     result.reasons = reason;
+
     hoot.debug(reason);
     hoot.debug(score);
 
@@ -283,22 +319,22 @@ exports.matchScore = function(map, e1, e2) {
     var additiveResult = additiveScore(map, e1, e2);
     var score = additiveResult.score;
     var reasons = additiveResult.reasons;
+    var d = "(" + prettyNumber(distance(e1, e2)) + "m)";
 
     if (score <= 0.5) {
-        return {miss: 1, explain: 'Not much evidence of a match'};
+        return {miss: 1, explain: 'Not much evidence of a match ' + d};
     } else if (score < 1.9) {
-        return {review: 1, explain: "Somewhat similar - " + reasons.join(", ") };
+        return {review: 1, explain: "Somewhat similar " + d + " - " + reasons.join(", ") };
     } else {
-        return {match: 1, explain: "Very similar - " + reasons.join(", ") };
+        return {match: 1, explain: "Very similar " + d + " - " + reasons.join(", ") };
     }
 };
 
 exports.mergePair = function(map, e1, e2)
 {
-    var newTags = mergeTags(e1, e2);
-    e1.setTags(newTags);
-
-    removeElement(map, e2);
+    // replace instances of e2 with e1 and merge tags
+    mergeElements(map, e1, e2);
+    e1.setStatusString("conflated");
 
     return e1;
 };
@@ -323,4 +359,34 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
 
   return fd;
 };
+
+/**
+ * Given a number return a result that contains no more than 2 significant
+ * digits and no more than 1 digit after the decimal place. For example:
+ *
+ * 123.456 -> 120
+ * 1.234 -> 1.2
+ * 0.123 -> 0.1
+ * 1234567.89 -> 1200000
+ */
+function prettyNumber(n) {
+    var digits = String(Math.round(n)).length;
+    // a number that represents the number of digits we're rounding (e.g. for
+    // 1234567.89 this will be 100000
+    var f = Math.pow(10, digits - 2);
+    // divide n by f, (12.3456789), round (12), then multiple by up, 1200000
+    var r = Math.round(n / f) * f;
+    var result;
+
+    // I don't use the String conversion here b/c it sometimes gives weird
+    // floating point errors.
+
+    // if this is a small number remove the extra decimal places
+    if (r < 10) {
+        result = r.toFixed(1);
+    } else {
+        result = r.toFixed(0);
+    }
+    return result;
+}
 

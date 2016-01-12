@@ -60,6 +60,8 @@ public:
 
   virtual MatchMembers getMatchMembers() const { return MatchMembers::Poi | MatchMembers::Polygon; }
 
+  virtual QString getMatchName() const { return _matchName; }
+
   virtual set< pair<ElementId, ElementId> > getMatchPairs() const;
 
   virtual double getProbability() const { return _c.getMatchP(); }
@@ -77,6 +79,7 @@ public:
 
 private:
 
+  static QString _matchName;
   ElementId _poiEid, _polyEid;
   MatchClassification _c;
 

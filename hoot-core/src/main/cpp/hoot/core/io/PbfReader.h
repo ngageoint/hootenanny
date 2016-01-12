@@ -223,7 +223,7 @@ private:
   int _blobIndex;
 
   //partial read iterators
-  OsmMap::NodeMap::const_iterator _nodesItr;
+  NodeMap::const_iterator _nodesItr;
   WayMap::const_iterator _waysItr;
   RelationMap::const_iterator _relationsItr;
 
@@ -244,7 +244,7 @@ private:
 
   double _convertLat(long lat);
 
-  ElementId _convertToElementId(int id, int memberType);
+  ElementId _convertToElementId(long id, int memberType);
 
   long _createRelationId(long fromFile);
 

@@ -69,9 +69,14 @@ public:
 
 private:
 
+  /// Don't use this directly. See below.
   shared_ptr<BuildingRfClassifier> _rf;
   shared_ptr<MatchThreshold> _matchThreshold;
 
+  /**
+   * The building model can be slow to load, this provides a lazy load.
+   */
+  shared_ptr<BuildingRfClassifier> _getRf();
 };
 
 }

@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -140,18 +140,18 @@ void RubberSheet::applyTransform(shared_ptr<OsmMap>& map)
 
   if (_projection.get() != 0)
   {
-    MapReprojector::reproject(_map, _projection);
+    MapProjector::project(_map, _projection);
   }
   else
   {
     // if it is already planar then nothing will be done.
-    MapReprojector::reprojectToPlanar(_map);
+    MapProjector::projectToPlanar(_map);
   }
 
-  const OsmMap::NodeMap& nm = map->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nm.constBegin(); it != nm.constEnd(); ++it)
+  const NodeMap& nm = map->getNodeMap();
+  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    const shared_ptr<Node>& n = it.value();
+    const shared_ptr<Node>& n = it->second;
 
     if (_ref == false || n->getStatus() == Status::Unknown2)
     {
@@ -265,7 +265,7 @@ void RubberSheet::calculateTransform(shared_ptr<OsmMap>& map)
   _map = map;
 
   // if it is already planar then nothing will be done.
-  MapReprojector::reprojectToPlanar(_map);
+  MapProjector::projectToPlanar(_map);
   _projection = _map->getProjection();
 
   _findTies();

@@ -31,10 +31,9 @@ import static org.mockito.Mockito.*;
 
 import java.util.LinkedList;
 
-import hoot.services.UnitTest;
+import hoot.services.IntegrationTest;
 import hoot.services.wps.WpsUtils;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.message.BasicStatusLine;
@@ -45,7 +44,6 @@ import org.deegree.services.wps.ProcessletInputs;
 import org.deegree.services.wps.ProcessletOutputs;
 import org.deegree.services.wps.input.ProcessletInput;
 import org.deegree.services.wps.output.ProcessletOutput;
-
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.Matchers;
@@ -55,12 +53,12 @@ public class CustomScriptGetScriptProcessletTest {
 
   
 	@Test
-	@Category(UnitTest.class)
+	@Category(IntegrationTest.class)
 	public void testProcess() throws Exception
 	{
 		CustomScriptGetScriptProcesslet processlet = Mockito.spy(new CustomScriptGetScriptProcesslet());
 
-		HttpResponse mockResp = new BasicHttpResponse(
+		new BasicHttpResponse(
         new BasicStatusLine(new ProtocolVersion("HTTP", 1, 1), 200, "OK"));
 
 		doReturn("Test Script Content").when(processlet).getRequest(anyString());

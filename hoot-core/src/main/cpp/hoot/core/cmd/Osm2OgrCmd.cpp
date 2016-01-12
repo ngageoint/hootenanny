@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/io/OgrWriter.h>
@@ -43,18 +43,6 @@ public:
   static string className() { return "hoot::Osm2OgrCmd"; }
 
   Osm2OgrCmd() { }
-
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (translation) (input.osm) (output)\n"
-        "  * translation - JavaScript file name.\n"
-        "  * input.osm - An OSM compatible input format (e.g. .osm or .osm.pbf)\n"
-        "  * output - Output file name. The format is determined by extension. \n"
-        "      FileGDB (*.gdb) and Shapefile (*.shp) have been tested but other\n"
-        "      OGR compatible formats will likely work.\n";
-  }
 
   virtual QString getName() const { return "osm2ogr"; }
 
@@ -82,9 +70,9 @@ public:
     loadMap(map, input, true);
 
     // Apply any user specified operations.
-    NamedOp(conf().getList(opsKey(), "")).apply(map);
+    NamedOp(ConfigOptions().getOsm2ogrOps()).apply(map);
 
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     writer.write(map);
 

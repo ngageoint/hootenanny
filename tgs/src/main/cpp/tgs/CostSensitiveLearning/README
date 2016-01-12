@@ -1,0 +1,5 @@
+CostSensitiveLearning 
+
+Contains class and methods related to Cost Sensitive Learning as related to Machine Learning.  
+
+It depends on RandomForest.

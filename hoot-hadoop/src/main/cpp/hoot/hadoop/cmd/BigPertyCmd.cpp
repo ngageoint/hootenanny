@@ -41,18 +41,6 @@ public:
   {
   }
 
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (sigma) (input.osm.pbf) (output.osm.pbf) [--local]\n"
-        "  Reads in a OSM input file add random gaussian noise and write to output.\n"
-        "  * sigma - The sigma of the perturbation in meters."
-        "  * input.osm.pbf - The input OSM data to perturb. This must reside on HDFS.\n"
-        "  * output.osm.pbf - The output OSM data path. This must reside on HDFS.\n"
-        "  * --local - Run in local mode.\n";
-  }
-
   QString getName() const { return "big-perty"; }
 
   int runSimple(QStringList args)
@@ -72,8 +60,8 @@ public:
     QString out = args[2];
 
     bool local = args.contains("--local");
-    double pixelSize = conf().getDouble(HadoopTileWorker2::pixelSizeKey());
-    int maxNodeCount = conf().getInt(HadoopTileWorker2::maxNodeCountKey());
+    double pixelSize = ConfigOptions().getHootHadoopPixelSize();
+    int maxNodeCount = ConfigOptions().getHootHadoopMaxNodeCount();
 
     if (local)
     {

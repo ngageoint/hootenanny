@@ -27,19 +27,10 @@
 package hoot.services.info;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
-import java.io.Reader;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
 import java.util.UUID;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang3.StringUtils;
 
 import hoot.services.HootProperties;
@@ -47,8 +38,8 @@ import hoot.services.controllers.info.AboutResource;
 
 public class ErrorLog {
 
-	protected static String _errLogPath = null;
-	protected static String _tempOutputPath = null;
+	private static String _errLogPath = null;
+	private static String _tempOutputPath = null;
 	public ErrorLog() {
 		//ErrorLogPath
 		if(_errLogPath == null)

@@ -118,8 +118,8 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   }
   catch(OverlappingMatchesException &e)
   {
-    throw NeedsReviewException("Multiple overlapping way matches were found within one set of "
-                               "ways.");
+    throw NeedsReviewException("Internal Error: Multiple overlapping way matches were found within "
+      "one set of ways.  Please report this to hootenanny.help@digitalglobe.com.");
   }
 }
 
@@ -332,8 +332,9 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
 
     if (OsmSchema::getInstance().isMultiLineString(*r) == false)
     {
-      throw NeedsReviewException("When matching sublines expected a multilinestring relation not"
-                                 " a " + r->getType());
+      throw NeedsReviewException("Internal Error: When matching sublines expected a multilinestring "
+        "relation not a " + r->getType() + ".  A non-multilinestring should never be found here.  "
+        "Please report this to hootenanny.help@digitalglobe.com");
     }
 
     const vector<RelationData::Entry>& entries = r->getMembers();
@@ -344,6 +345,15 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
         throw NeedsReviewException("MultiLineString relations can only contain ways when matching "
                                    "sublines.");
       }
+    }
+  }
+  if (e->getElementType() == ElementType::Way)
+  {
+    ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+
+    if (w->getNodeCount() <= 1)
+    {
+      throw NeedsReviewException("Internal Error: Attempting to match against a zero length way.");
     }
   }
 }

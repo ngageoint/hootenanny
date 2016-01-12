@@ -96,6 +96,8 @@ public:
 
   void setUserEmail(const QString& email) { _email = email; }
 
+  void setBoundingBox(const QString& bbox) { _bbox = bbox; }
+
   virtual bool hasMoreElements();
 
   virtual shared_ptr<Element> readNextElement();
@@ -111,13 +113,15 @@ private:
   long _getCurrentElementOffset(const ElementType& selectElementType) const;
   void _incrementElementIndex(const ElementType& selectElementType);
   void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
+  void _readBounded(shared_ptr<OsmMap> map, const ElementType& elementType);
+  void _processRelation(const QSqlQuery& resultIterator, OsmMap& map);
 
   ServicesDb _database;
   bool _open;
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
+  QString _bbox;
 
-  long _mapId;
   long _osmElemId;
   ElementType _osmElemType;
 
@@ -148,13 +152,17 @@ private:
    * Converts a query result to an OSM element
    */
   shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
-    const ElementType& elementType, OsmMap& map, long mapId);
+    const ElementType& elementType, OsmMap& map);
 
+  // Services data assignment methods
   shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
-  shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map, long mapId);
-  shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map,
-    long mapId);
+  shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
+  shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
 
+  // Osm Api data assignment methods
+  shared_ptr<Node> _resultToNode_OsmApi(const QSqlQuery& resultIterator, OsmMap& map);
+  shared_ptr<Way> _resultToWay_OsmApi(const QSqlQuery& resultIterator, OsmMap& map);
+  shared_ptr<Relation> _resultToRelation_OsmApi(const QSqlQuery& resultIterator, const OsmMap& map);
 };
 
 }

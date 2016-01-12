@@ -74,6 +74,13 @@ public:
   virtual unsigned long size() const = 0;
 
   /**
+   * Find out how many of a given element type are stored inside the cache
+   * @param typeToCount What type (node, way, relation) caller wants count for
+   * @return Number of requested type stored in cache
+   */
+  virtual unsigned long typeCount(const ElementType::Type typeToCount) const = 0;
+
+  /**
    * @brief addElement
    *
    * Add a new element into the cache. If the item already exists in the cache, the operation
@@ -168,6 +175,13 @@ public:
   virtual bool containsRelation(long id) const = 0;
 
   virtual bool containsWay(long id) const = 0;
+
+
+  // Cache-specific items
+  virtual void removeElement(const ElementId& eid) = 0;
+
+  virtual void removeElements(const ElementType::Type type) = 0;
+
 };
 
 typedef boost::shared_ptr<ElementCache> ElementCachePtr;

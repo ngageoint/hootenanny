@@ -1,0 +1,11 @@
+[
+    {
+        "dataType": "text",
+        "geometries": [
+            "node",
+            "way"
+        ],
+        "name": "opening_hours",
+        "objectType": "tag"
+    }
+]

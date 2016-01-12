@@ -1,0 +1,56 @@
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "influence": 1,
+        "isA": "hgispoi",
+        "name": "tourism",
+        "objectType": "tag"
+    },
+    {
+        "#": "Give this a low level similarity to all historic, leisure & amenity tags. The very low similarity score should prevent it from being used inappropriately.",
+        "isA": "tourism",
+        "name": "tourism=*",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "leisure",
+                "weight": 0.1
+            },
+            {
+                "name": "historic",
+                "weight": 0.1
+            },
+            {
+                "name": "amenity",
+                "weight": 0.1
+            }
+        ]
+    },
+    {
+        "isA": "tourism",
+        "name": "tourism=artwork",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "historic=monument",
+            "weight": 0.6
+        }
+    },
+    {
+        "isA": "tourism",
+        "name": "tourism=guest_house",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "tourism=hotel",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "tourism",
+        "name": "tourism=hotel",
+        "objectType": "tag"
+    }
+]

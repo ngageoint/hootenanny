@@ -30,7 +30,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/GmlWriter.h>
 #include <hoot/core/io/OgrReader.h>
@@ -61,21 +61,6 @@ public:
 
   EvalMoveCmd() { }
 
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (point-count) (bounds) (working-dir)\n"
-        "\n"
-        "  Creates a series of files filled with a random set of points then calculates \n"
-        "  the error introduced by various operations. A pair of points is created and \n"
-        "  checked to make sure both points are moved together."
-        "  * point-count - Number of points.\n"
-        "  * bounds - Comma delimited bounds minx,miny,maxx,maxy."
-        "  * working-dir - Local directory to store temporary files. If it doesn't\n"
-        "    exist it will be created.\n";
-  }
-
   virtual QString getName() const { return "eval-move"; }
 
   struct Comparison
@@ -100,10 +85,10 @@ public:
 
   shared_ptr<const Node> getNode(const ConstOsmMapPtr& a, QString k, QString v)
   {
-    for (OsmMap::NodeMap::const_iterator it = a->getNodeMap().constBegin();
-      it != a->getNodeMap().constEnd(); ++it)
+    for (NodeMap::const_iterator it = a->getNodeMap().begin();
+      it != a->getNodeMap().end(); ++it)
     {
-      const shared_ptr<const Node>& n = it.value();
+      const shared_ptr<const Node>& n = it->second;
       if (n->getTags().contains(k) && n->getTags()[k] == v)
       {
         return n;
@@ -262,8 +247,8 @@ public:
 
     Log::getInstance().setLevel(Log::Warn);
     shared_ptr<OsmMap> mapReproject(new OsmMap(map));
-    MapReprojector::reprojectToPlanar(mapReproject);
-    MapReprojector::reprojectToWgs84(mapReproject);
+    MapProjector::projectToPlanar(mapReproject);
+    MapProjector::projectToWgs84(mapReproject);
     cout << "Reproject\t";
     compareMaps(map, mapReproject, pointCount).print();
     cout << endl;
@@ -277,10 +262,10 @@ public:
     e2.MaxY = (e2.MinY + e2.MaxY) / 2.0;
     shared_ptr<OsmMap> mapReproject1(new OsmMap(map));
     shared_ptr<OsmMap> mapReproject2(new OsmMap(map));
-    MapReprojector::reprojectToPlanar(mapReproject1, e1);
-    MapReprojector::reprojectToPlanar(mapReproject2, e2);
-    MapReprojector::reprojectToWgs84(mapReproject1);
-    MapReprojector::reprojectToWgs84(mapReproject2);
+    MapProjector::projectToPlanar(mapReproject1, e1);
+    MapProjector::projectToPlanar(mapReproject2, e2);
+    MapProjector::projectToWgs84(mapReproject1);
+    MapProjector::projectToWgs84(mapReproject2);
     cout << "Different Reprojections\t";
     compareMaps(mapReproject1, mapReproject2, pointCount).print();
     cout << endl;

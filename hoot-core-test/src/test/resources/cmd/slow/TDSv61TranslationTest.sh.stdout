@@ -1,102 +1,106 @@
-17:53:17.804 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/AIRCRAFT_HANGAR_P.shp AIRCRAFT_HANGAR_P
+17:08:00.467 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/AIRCRAFT_HANGAR_P.shp AIRCRAFT_HANGAR_P
 Loading test-files/NFDD_TDSv61/AIRCRAFT_HANGAR_P.shp AIRCRAFT_HANGAR_P 0 / 1   
-17:53:17.811 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/BUILDING_P.shp BUILDING_P
+17:08:00.480 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/BUILDING_P.shp BUILDING_P
 Loading test-files/NFDD_TDSv61/BUILDING_P.shp BUILDING_P 0 / 37   
-17:53:17.825 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/BUILDING_S.shp BUILDING_S
+17:08:00.494 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/BUILDING_S.shp BUILDING_S
 Loading test-files/NFDD_TDSv61/BUILDING_S.shp BUILDING_S 0 / 8   
-17:53:17.827 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/BUILDING_SUPERSTRUCTURE_P.shp BUILDING_SUPERSTRUCTURE_P
+17:08:00.498 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/BUILDING_SUPERSTRUCTURE_P.shp BUILDING_SUPERSTRUCTURE_P
 Loading test-files/NFDD_TDSv61/BUILDING_SUPERSTRUCTURE_P.shp BUILDING_SUPERSTRUCTURE_P 0 / 3   
-17:53:17.828 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/BUILT_UP_AREA_P.shp BUILT_UP_AREA_P
+17:08:00.500 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/BUILT_UP_AREA_P.shp BUILT_UP_AREA_P
 Loading test-files/NFDD_TDSv61/BUILT_UP_AREA_P.shp BUILT_UP_AREA_P 0 / 4   
-17:53:17.829 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/BUILT_UP_AREA_S.shp BUILT_UP_AREA_S
+17:08:00.501 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/BUILT_UP_AREA_S.shp BUILT_UP_AREA_S
 Loading test-files/NFDD_TDSv61/BUILT_UP_AREA_S.shp BUILT_UP_AREA_S 0 / 7   
-17:53:17.831 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/CART_TRACK_C.shp CART_TRACK_C
-Loading test-files/NFDD_TDSv61/CART_TRACK_C.shp CART_TRACK_C 0 / 3   
-17:53:17.832 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/CONTROL_TOWER_P.shp CONTROL_TOWER_P
+17:08:00.504 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/CART_TRACK_C.shp CART_TRACK_C
+Loading test-files/NFDD_TDSv61/CART_TRACK_C.shp CART_TRACK_C 0 / 4   
+17:08:00.506 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/CONTROL_TOWER_P.shp CONTROL_TOWER_P
 Loading test-files/NFDD_TDSv61/CONTROL_TOWER_P.shp CONTROL_TOWER_P 0 / 3   
-17:53:17.833 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/CROSSING_P.shp CROSSING_P
+17:08:00.508 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/CROSSING_P.shp CROSSING_P
 Loading test-files/NFDD_TDSv61/CROSSING_P.shp CROSSING_P 0 / 4   
-17:53:17.834 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/FACILITY_P.shp FACILITY_P
+17:08:00.511 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/FACILITY_P.shp FACILITY_P
 Loading test-files/NFDD_TDSv61/FACILITY_P.shp FACILITY_P 0 / 5   
-17:53:17.835 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/FACILITY_S.shp FACILITY_S
+17:08:00.514 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/FACILITY_S.shp FACILITY_S
 Loading test-files/NFDD_TDSv61/FACILITY_S.shp FACILITY_S 0 / 3   
-17:53:17.836 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/HUT_P.shp HUT_P
+17:08:00.516 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/HUT_P.shp HUT_P
 Loading test-files/NFDD_TDSv61/HUT_P.shp HUT_P 0 / 4   
-17:53:17.837 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/PYLON_P.shp PYLON_P
+17:08:00.518 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/PYLON_P.shp PYLON_P
 Loading test-files/NFDD_TDSv61/PYLON_P.shp PYLON_P 0 / 2   
-17:53:17.838 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/RAILWAY_C.shp RAILWAY_C
+17:08:00.520 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/RAILWAY_C.shp RAILWAY_C
 Loading test-files/NFDD_TDSv61/RAILWAY_C.shp RAILWAY_C 0 / 6   
-17:53:17.840 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/RIVER_C.shp RIVER_C
+17:08:00.525 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/RIVER_C.shp RIVER_C
 Loading test-files/NFDD_TDSv61/RIVER_C.shp RIVER_C 0 / 15   
-17:53:17.845 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/ROAD_C.shp ROAD_C
-Loading test-files/NFDD_TDSv61/ROAD_C.shp ROAD_C 0 / 11   
-17:53:17.848 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/SHED_P.shp SHED_P
+17:08:00.530 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/ROAD_C.shp ROAD_C
+Loading test-files/NFDD_TDSv61/ROAD_C.shp ROAD_C 0 / 21   
+17:08:00.537 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/SHED_P.shp SHED_P
 Loading test-files/NFDD_TDSv61/SHED_P.shp SHED_P 0 / 2   
-17:53:17.849 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/SHED_S.shp SHED_S
+17:08:00.539 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/SHED_S.shp SHED_S
 Loading test-files/NFDD_TDSv61/SHED_S.shp SHED_S 0 / 1   
-17:53:17.849 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/STADIUM_S.shp STADIUM_S
-17:53:17.850 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "OTH:: Attribute :MCC: is supposed to be 999/Other. It is not set. Skipping it."
+17:08:00.541 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/STADIUM_S.shp STADIUM_S
+17:08:00.542 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "OTH:: Attribute :MCC: is supposed to be 999/Other. It is not set. Skipping it."
 Loading test-files/NFDD_TDSv61/STADIUM_S.shp STADIUM_S 0 / 1   
-17:53:17.850 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/TOWER_P.shp TOWER_P
+17:08:00.543 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/STAIR_C.shp STAIR_C
+Loading test-files/NFDD_TDSv61/STAIR_C.shp STAIR_C 0 / 1   
+17:08:00.545 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/TOWER_P.shp TOWER_P
 Loading test-files/NFDD_TDSv61/TOWER_P.shp TOWER_P 0 / 5   
-17:53:17.852 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/TRAIL_C.shp TRAIL_C
-Loading test-files/NFDD_TDSv61/TRAIL_C.shp TRAIL_C 0 / 6   
-17:53:17.853 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/TRANSPORTATION_STATION_P.shp TRANSPORTATION_STATION_P
+17:08:00.548 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/TRAIL_C.shp TRAIL_C
+Loading test-files/NFDD_TDSv61/TRAIL_C.shp TRAIL_C 0 / 8   
+17:08:00.550 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/NFDD_TDSv61/TRANSPORTATION_STATION_P.shp TRANSPORTATION_STATION_P
 Loading test-files/NFDD_TDSv61/TRANSPORTATION_STATION_P.shp TRANSPORTATION_STATION_P 0 / 2   
-Reprojecting 0 / 261         
-17:53:17.887 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-17:53:17.887 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
-MergeNearbyNodes 0 1    MergeNearbyNodes 250 elapsed: 0ms        
-17:53:17.887 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
-Ways: 0 / 61        Ways: 61 / 61        
+Reprojecting 0 / 289         
+17:08:00.601 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+17:08:00.601 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+MergeNearbyNodes 0 1    MergeNearbyNodes 278 elapsed: 0ms        
+17:08:00.601 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+Ways: 0 / 75        Ways: 75 / 75        
 Relations: 0 / 0        
 Combining Parts: 0 / 10        Combining Parts: 10 / 10        
-Reprojecting 0 / 250         
-17:53:18.604 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (roof:shape=with_cupola)"
-17:53:18.604 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (SSR:with_cupola)"
-17:53:18.612 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (roof:shape=with_steeple)"
-17:53:18.612 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (SSR:with_steeple)"
-17:53:18.613 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (roof:shape=flat_with_parapet)"
-17:53:18.613 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (SSR:flat_with_parapet)"
-17:53:18.619 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (product=bamboo)"
-17:53:18.619 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (ZI014_PPO:bamboo)"
-17:53:18.619 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (use=Elf Store)"
-17:53:18.619 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (FFN2:Elf Store)"
-17:53:18.619 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (use=Smurf Factory)"
-17:53:18.619 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (FFN:Smurf Factory)"
-17:53:18.619 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (material:vertical=Smoke)"
-17:53:18.619 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (VCM:Smoke)"
-17:53:18.621 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (roof:shape=with_minaret)"
-17:53:18.621 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (SSR:with_minaret)"
-17:53:18.626 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (roof:shape=with_steeple)"
-17:53:18.626 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (SSR:with_steeple)"
-17:53:18.627 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (roof:shape=with_minaret)"
-17:53:18.627 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (SSR:with_minaret)"
-17:53:18.631 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (roof:shape=51)"
-17:53:18.631 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (SSR2:51)"
-17:53:18.643 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (roof:shape=with_smokestack)"
-17:53:18.643 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (SSR:with_smokestack)"
-17:53:18.644 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (roof:shape=80)"
-17:53:18.644 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (SSR2:80)"
-17:53:18.645 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (roof:shape=star)"
-17:53:18.645 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (SSR2:star)"
-17:53:18.646 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (roof:shape=flat_with_parapet)"
-17:53:18.646 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (SSR:flat_with_parapet)"
-17:53:18.656 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (roof:shape=78)"
-17:53:18.656 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (SSR2:78)"
-17:53:18.662 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (surface=Jello)"
-17:53:18.662 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (ZI016_ROC:Jello)"
-17:53:18.662 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (ref:road:class=Elf Road)"
-17:53:18.662 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (RIN_ROI2:Elf Road)"
-17:53:18.663 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (seasonal=Spring)"
-17:53:18.663 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (ZI016_WTC:Spring)"
-17:53:18.675 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (waterway=Raging Torrent)"
-17:53:18.675 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (WCC:Raging Torrent)"
-17:53:18.679 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (electrified=contact_line)"
-17:53:18.679 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (ZI017_RRA:contact_line)"
-17:53:18.681 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (electrified=unknown)"
-17:53:18.681 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (ZI017_RRA:unknown)"
-17:53:18.695 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Lookup value not found for column:: (use=Hobbit Hole)"
-17:53:18.695 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Adding to OTH field:: (FFN:Hobbit Hole)"
-17:53:18.695 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) Received 3 of the same message. Silencing: "Lookup value not found for column:: (roof:shape=with_minaret)"
-17:53:18.695 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) Received 3 of the same message. Silencing: "Adding to OTH field:: (SSR:with_minaret)"
+Reprojecting 0 / 278         
+17:08:01.266 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (roof:shape=51)"
+17:08:01.266 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (SSR2:51)"
+17:08:01.270 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (roof:shape=with_minaret)"
+17:08:01.271 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (SSR:with_minaret)"
+17:08:01.272 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (roof:shape=with_steeple)"
+17:08:01.272 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (SSR:with_steeple)"
+17:08:01.276 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (roof:shape=with_minaret)"
+17:08:01.276 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (SSR:with_minaret)"
+17:08:01.278 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (product=bamboo)"
+17:08:01.278 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (ZI014_PPO:bamboo)"
+17:08:01.278 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (use=Elf Store)"
+17:08:01.278 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (FFN2:Elf Store)"
+17:08:01.278 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (use=Smurf Factory)"
+17:08:01.278 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (FFN:Smurf Factory)"
+17:08:01.278 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (material:vertical=Smoke)"
+17:08:01.278 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (VCM:Smoke)"
+17:08:01.284 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (roof:shape=flat_with_parapet)"
+17:08:01.284 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (SSR:flat_with_parapet)"
+17:08:01.285 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (roof:shape=with_steeple)"
+17:08:01.285 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (SSR:with_steeple)"
+17:08:01.289 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (roof:shape=with_cupola)"
+17:08:01.289 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (SSR:with_cupola)"
+17:08:01.292 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (roof:shape=flat_with_parapet)"
+17:08:01.292 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (SSR:flat_with_parapet)"
+17:08:01.293 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (roof:shape=star)"
+17:08:01.293 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (SSR2:star)"
+17:08:01.295 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (roof:shape=80)"
+17:08:01.295 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (SSR2:80)"
+17:08:01.295 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (roof:shape=with_smokestack)"
+17:08:01.295 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (SSR:with_smokestack)"
+17:08:01.309 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (roof:shape=78)"
+17:08:01.309 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (SSR2:78)"
+17:08:01.316 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (ref:road:type=pedestrian)"
+17:08:01.316 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (RTY:pedestrian)"
+17:08:01.317 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (highway=pedestrian)"
+17:08:01.317 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (RTY:pedestrian)"
+17:08:01.324 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (ref:road:class=Elf Road)"
+17:08:01.324 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (RIN_ROI2:Elf Road)"
+17:08:01.324 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (seasonal=Spring)"
+17:08:01.324 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (ZI016_WTC:Spring)"
+17:08:01.337 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (waterway=Raging Torrent)"
+17:08:01.337 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (WCC:Raging Torrent)"
+17:08:01.341 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (electrified=contact_line)"
+17:08:01.341 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (ZI017_RRA:contact_line)"
+17:08:01.343 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (electrified=unknown)"
+17:08:01.343 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (ZI017_RRA:unknown)"
+17:08:01.360 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Lookup value not found for column:: (use=Hobbit Hole)"
+17:08:01.360 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) "Adding to OTH field:: (FFN:Hobbit Hole)"
+17:08:01.361 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) Received 3 of the same message. Silencing: "Lookup value not found for column:: (roof:shape=with_minaret)"
+17:08:01.361 WARN  ...src/hoot/rules/lib/HootLib.js"( 167) Received 3 of the same message. Silencing: "Adding to OTH field:: (SSR:with_minaret)"

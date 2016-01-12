@@ -1,0 +1,3 @@
+#!/bin/bash
+
+pg_dump -a -t nodes -t current_nodes -t current_nodes_id_seq -t current_node_tags -t node_tags > nodes.sql

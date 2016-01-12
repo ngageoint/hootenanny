@@ -1,8 +1,12 @@
 
 [[PoiConflation]]
-== POI Conflation
+== PLACES POI Conflation
 
-The following sections describe the attempt to emulated PLACES point conflation and provides some simple examples of data processing.
+The following sections describe the attempt to emulated PLACES point conflation
+and provides some simple examples of data processing.
+
+NOTE: This implementation is based on PLACES as of 3/11/2014. Regular updates
+are not being made to the PLACES algorithm within Hootenanny. Unifying POI Conflation is now the default in Hootenanny and is recommended in most situations.
 
 Hootenanny now provides a simple function for performing point-based conflation.
 This only provides point to point conflation (no point to polygon) and uses
@@ -95,7 +99,7 @@ links such that the original data can be retrieved for any conflated record. The
 Name Conflation portion of the algorithm removes duplicate names at the same
 point, while retaining all other associated information.
 
-=== Hootenannys PLACES Conflation
+=== Hootenanny's PLACES Conflation
 
 In the POI conflation code Hootenanny attempts to follow the PLACES approach
 closely but rather than perform both a Self-Conflation and Challenge-Conflation
@@ -201,7 +205,7 @@ of 100m, the southernmost coffee shop in input 2 has a CE of 150m and all others
 have a CE of 1000m. The CE values were chosen to demonstrate conflation issues.
 There are no intra-dataset duplicates.
 
-If we allow self-conflation then there isnt enough information available to get
+If we allow self-conflation then there isn't enough information available to get
 the correct answer. In the Southern portion there are six coffee shops all
 within 1km of each other. However, given that the northern coffee shop is 4km
 from the southernmost coffee shop those two points should never be conflated

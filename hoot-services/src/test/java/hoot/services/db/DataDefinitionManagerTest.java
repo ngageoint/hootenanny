@@ -37,10 +37,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import com.mysema.query.sql.SQLExpressions;
-import com.mysema.query.sql.SQLQuery;
-
-
 public class DataDefinitionManagerTest {
 	@Test
 	@Category(UnitTest.class)

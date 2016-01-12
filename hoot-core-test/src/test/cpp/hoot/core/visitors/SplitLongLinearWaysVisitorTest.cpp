@@ -349,15 +349,16 @@ private:
     startNode += numNodes;
   }
 
-  void _sanityCheckSplit(SplitLongLinearWaysVisitor& splitVisitor, const int startNode, const int numNodes, const int numWays)
+  void _sanityCheckSplit(SplitLongLinearWaysVisitor& /*splitVisitor*/, const int startNode,
+                         const int numNodes, const int numWays)
   {
     // Pull out ways
     WayMap ways = _map->getWays();
     CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(numWays), ways.size() );
 
     // Pull out nodes
-    OsmMap::NodeMap nodes = _map->getNodeMap();
-    CPPUNIT_ASSERT_EQUAL( numNodes, nodes.size() );
+    NodeMap nodes = _map->getNodeMap();
+    CPPUNIT_ASSERT_EQUAL( numNodes, (int)nodes.size() );
 
     // Make sure no relations
     RelationMap relations = _map->getRelationMap();

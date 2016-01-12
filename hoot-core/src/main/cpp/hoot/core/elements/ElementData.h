@@ -39,6 +39,8 @@
 // Standard
 #include <set>
 
+#include <QString>
+
 namespace hoot {
 
 /**
@@ -47,6 +49,11 @@ namespace hoot {
 class ElementData
 {
 public:
+  static long CHANGESET_EMPTY;
+  static long VERSION_EMPTY;
+  static unsigned int TIMESTAMP_EMPTY;
+  static QString USER_EMPTY;
+  static long UID_EMPTY;
 
   virtual ~ElementData() {}
 
@@ -55,6 +62,16 @@ public:
   Meters getCircularError() const { return _circularError; }
 
   long getId() const { return _id; }
+
+  long getChangeset() const { return _changeset; }
+
+  long getVersion() const { return _version; }
+
+  unsigned int getTimestamp() const { return _timestamp; }
+
+  QString getUser() const { return _user; }
+
+  long getUid() const { return _uid; }
 
   const Tags& getTags() const { return _tags; }
 
@@ -70,11 +87,25 @@ protected:
 
   ElementData() { }
 
-  ElementData(long id) : _id(id) { }
+  ElementData(long id) : _id(id), _changeset(CHANGESET_EMPTY), _version(VERSION_EMPTY),
+    _timestamp(TIMESTAMP_EMPTY), _user(USER_EMPTY), _uid(UID_EMPTY) { }
 
   ElementData(long id, const Tags& tags, Meters circularError);
 
+  ElementData(long id, long changeset, long version, unsigned int timestamp) :
+             _id(id), _changeset(changeset), _version(version),
+             _timestamp(timestamp), _user(USER_EMPTY), _uid(UID_EMPTY) { }
+
+  ElementData(long id, long changeset, long version, unsigned int timestamp,
+              QString user, long uid) : _id(id), _changeset(changeset), _version(version),
+             _timestamp(timestamp), _user(user), _uid(uid) { }
+
   long _id;
+  long _changeset;
+  long _version;
+  unsigned int _timestamp;
+  QString _user;
+  long _uid;
   Tags _tags;
   Meters _circularError;
 };

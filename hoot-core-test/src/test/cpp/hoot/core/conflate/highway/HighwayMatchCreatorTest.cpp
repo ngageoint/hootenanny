@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/highway/HighwayMatchCreator.h>
 #include <hoot/core/elements/Way.h>
@@ -69,7 +69,7 @@ public:
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     CPPUNIT_ASSERT(!uut.isMatchCandidate(map->getWay(map->findWays("name", "Panera Bread")[0]), map));
 
@@ -77,13 +77,13 @@ public:
     map.reset(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     CPPUNIT_ASSERT(uut.isMatchCandidate(map->getWay(map->findWays("note", "1")[0]), map));
   }
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HighwayMatchCreatorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HighwayMatchCreatorTest, "slow");
 
 }

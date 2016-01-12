@@ -1,0 +1,11 @@
+[
+    {
+        "categories": [
+            "poi",
+            "hgispoi"
+        ],
+        "isA": "poi=yes",
+        "name": "hgispoi",
+        "objectType": "tag"
+    }
+]

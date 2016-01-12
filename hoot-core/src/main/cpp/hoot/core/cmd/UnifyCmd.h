@@ -33,7 +33,7 @@
 // Hoot
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 #include <hoot/core/ops/NamedOp.h>
@@ -55,18 +55,6 @@ public:
   static string className() { return "hoot::UnifyCmd"; }
 
   UnifyCmd() {}
-
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (input1) (input2) (output)\n"
-        "  Conflates two input sources into one output using the unifying conflation\n"
-        "  approach.\n"
-        "  * input1 - First input.\n"
-        "  * input2 - Second input.\n"
-        "  * output - The output path.";
-  }
 
   virtual QString getName() const { return "unify"; }
 
@@ -102,7 +90,7 @@ public:
 
     LOG_DEBUG(SystemInfo::getMemoryUsageString());
 
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     LOG_DEBUG(SystemInfo::getMemoryUsageString());
     saveMap(map, args[2]);

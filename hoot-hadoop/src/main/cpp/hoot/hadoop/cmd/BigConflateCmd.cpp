@@ -43,22 +43,6 @@ public:
   {
   }
 
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (input1.pbf) (input2.pbf) (output.pbf) [pixelSize] \n"
-        "[maxNodeCount] [--local]\n"
-        "  Reads the nodes from inputs, conflates and writes the result to output.pbf.\n"
-        "  * input1.pbf - Input 1 .pbf dir -- must reside on HDFS.\n"
-        "  * input2.pbf - Input 2 .pbf dir -- must reside on HDFS.\n"
-        "  * output.pbf - Output .pbf dir -- must reside on HDFS.\n"
-        "  * pixelSize - Optional pixel size in degrees (0.1 is reasonable for global \n"
-        "    data)\n"
-        "  * maxNodeCount - Optional max node count.\n"
-        "  * --local - Runs the job locally rather than using Hadoop.";
-  }
-
   virtual QString getName() const { return "big-conflate"; }
 
   int runSimple(QStringList args)
@@ -72,8 +56,8 @@ public:
     QString in2 = args[1];
     QString out = args[2];
     bool local = args.contains("--local");
-    double pixelSize = conf().getDouble(HadoopTileWorker2::pixelSizeKey());
-    int maxNodeCount = conf().getInt(HadoopTileWorker2::maxNodeCountKey());
+    double pixelSize = ConfigOptions().getHootHadoopPixelSize();
+    int maxNodeCount = ConfigOptions().getHootHadoopMaxNodeCount();
     if (args.size() >= 4)
     {
       bool ok;

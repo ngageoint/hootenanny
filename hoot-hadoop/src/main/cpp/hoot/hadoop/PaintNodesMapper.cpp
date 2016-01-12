@@ -91,11 +91,11 @@ void PaintNodesMapper::_map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& cont
     _init(context);
   }
 
-  const OsmMap::NodeMap& nm = m->getNodeMap();
+  const NodeMap& nm = m->getNodeMap();
   LOG_INFO("Processing map. Node count: " << nm.size());
-  for (OsmMap::NodeMap::const_iterator it = nm.constBegin(); it != nm.constEnd(); ++it)
+  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    const shared_ptr<const Node>& n = it.value();
+    const shared_ptr<const Node>& n = it->second;
 
     int px = int((n->getX() - _envelope.getMinX()) / _pixelSize);
     int py = int((n->getY() - _envelope.getMinY()) / _pixelSize);

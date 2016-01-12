@@ -33,7 +33,7 @@
 
 // Hoot
 #include <hoot/core/Conflator.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -174,7 +174,7 @@ public:
 
     mapA->append(mapB);
 
-    MapReprojector::reprojectToWgs84(mapA);
+    MapProjector::projectToWgs84(mapA);
 
     OsmWriter writer;
     writer.write(mapA, "test-output/OsmMapAppendTest.osm");
@@ -315,7 +315,7 @@ public:
     shared_ptr<OsmMap> mapB(new OsmMap());
     reader.read("test-files/ToyTestB.osm", mapB);
 
-    MapReprojector::reprojectToPlanar(mapB);
+    MapProjector::projectToPlanar(mapB);
 
     QString exceptionMsg;
     try
@@ -347,7 +347,7 @@ public:
 
     t.restart();
 
-    MapReprojector::reprojectToOrthographic(map);
+    MapProjector::projectToOrthographic(map);
     const WayMap& ways = map ->getWays();
 
     LOG_INFO("Finished reprojecting. " << t.elapsed() << "ms");
@@ -401,7 +401,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
-    MapReprojector::reprojectToOrthographic(map);
+    MapProjector::projectToOrthographic(map);
 
     shared_ptr<const HilbertRTree> tree = map->getIndex().getWayTree();
 
@@ -428,7 +428,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
-    MapReprojector::reprojectToOrthographic(map);
+    MapProjector::projectToOrthographic(map);
 
     // force it to build the tree before we start removing nodes.
     map->getIndex().getWayTree();
@@ -499,12 +499,12 @@ public:
     // Original data had nodes -1 through -36.  Make sure that even-numbered nodes -2 through
     //  -20 are gone
 
-    const OsmMap::NodeMap nodes = map->getNodeMap();
-    CPPUNIT_ASSERT_EQUAL(26, nodes.size());
-    for ( OsmMap::NodeMap::const_iterator nodeIter = nodes.constBegin();
-          nodeIter != nodes.constEnd(); ++nodeIter )
+    const NodeMap nodes = map->getNodeMap();
+    CPPUNIT_ASSERT_EQUAL(26, (int)nodes.size());
+    for ( NodeMap::const_iterator nodeIter = nodes.begin();
+          nodeIter != nodes.end(); ++nodeIter )
     {
-      const shared_ptr<const Node> n = nodeIter.value();
+      const shared_ptr<const Node> n = nodeIter->second;
       //LOG_DEBUG("Node: " << n->getId());
       CPPUNIT_ASSERT( (n->getId() >= -36) && (n->getId() <= -1) );
 

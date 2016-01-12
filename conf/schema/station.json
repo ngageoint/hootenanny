@@ -1,0 +1,43 @@
+[
+    {
+        "isA": "hgispoi",
+        "name": "station",
+        "objectType": "tag"
+    },
+    {
+        "isA": "station",
+        "name": "station=*",
+        "objectType": "tag"
+    },
+    {
+        "isA": "station",
+        "name": "station=light_rail",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "public_transport=station",
+                "weight": [
+                    0.8,
+                    0.4
+                ]
+            },
+            {
+                "name": "transport=station",
+                "weight": [
+                    0.8,
+                    0.4
+                ]
+            }
+        ]
+    },
+    {
+        "isA": "station",
+        "name": "station=subway_entrance",
+        "objectType": "tag"
+    },
+    {
+        "isA": "station",
+        "name": "station=station",
+        "objectType": "tag"
+    }
+]

@@ -16,9 +16,13 @@ see the Hootenanny - Developers Guide document.
 
 To run Hootenanny on CentOS/RHEL, follow the Hootenanny - Installation Instructions document.  
 There is currently no Vagrant set up available for CentOS/RHEL, but there may be one in the future.  
-Following the CentOS/RHEL installation instructions is currently more complicated installing 
+Following the CentOS/RHEL installation instructions is currently more complicated than installing 
 Hootenanny on Ubuntu and requires a higher level of Linux expertise.  Setting up a Hootenanny 
 development environment on CentOS/RHEL is neither advised nor supported.
+
+Running Hootenanny with Hadoop is optional.  Hootenanny has been tested on Hadoop 0.20.2.  Neither 
+the Ubuntu nor CentOS/RHEL installation documents currently include instructions for installing 
+Hadoop, but the Developer's Guide has instructions for setting up a pseudo-distributed test cluster.
 
 # Redistribution
 
@@ -42,9 +46,11 @@ In alphabetical order:
 * Jason Goffeney (jason.goffeney@digitalglobe.com)
 * Brian Hatchl (Brian.Hatchl@digitalglobe.com)
 * Matt Jackson (Matthew.Jackson@digitalglobe.com)
+* Ben Marchant (Benjamin.Marchant@digitalglobe.com)
 * Terry Ott (Terry.Ott@digitalglobe.com)
-* Jason R. Surratt (Jason.Surratt@digitalglobe.com)
-* Josh Sisskind (Josh.Sisskind@digitalglobe.com)
 * Greg Schmidt (Greg.Schmidt@digitalglobe.com)
+* Josh Sisskind (Josh.Sisskind@digitalglobe.com)
+* Ming Su (Ming.Su@digitalglobe.com)
+* Jason R. Surratt (Jason.Surratt@digitalglobe.com)
 * Brandon Witham (Brandon.Witham@digitalglobe.com)
 

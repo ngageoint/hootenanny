@@ -39,14 +39,13 @@ import org.junit.experimental.categories.Category;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
-public class WfsManagerTest {
+public class WfsManagerTest 
+{
 	@Test
 	@Category(UnitTest.class)
 	public void createWFSDatasourceFeatureTest() throws Exception
 	{
 		WfsManager spy = Mockito.spy(new WfsManager());
-		//WfsManager wfsMock = Mockito.mock(WfsManager.class);
-		//WfsManager spy = Mockito.spy(wfsMock);
 		Mockito.doReturn(null).when(spy)._createFeatureStore(anyString(), anyString());
 		Mockito.doNothing().when(spy)._addToWfsStore(null);
 		List<String> features = new ArrayList<String>();
@@ -60,6 +59,5 @@ public class WfsManagerTest {
 				"<JDBCConnId>testconn</JDBCConnId><FeatureTypeMapping table=\"feat1\"/>" +
 				"<FeatureTypeMapping table=\"feat2\"/></SQLFeatureStore>";
 		verify(spy)._createFeatureStore(Matchers.matches("testdb"), Matchers.startsWith(content));
-		
 	}
 }

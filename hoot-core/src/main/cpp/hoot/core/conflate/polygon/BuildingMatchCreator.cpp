@@ -45,6 +45,9 @@
 // tgs
 #include <tgs/RandomForest/RandomForest.h>
 
+//Qt
+#include <QFile>
+
 #include "BuildingMergeManipulator.h"
 
 namespace hoot
@@ -173,17 +176,6 @@ private:
 
 BuildingMatchCreator::BuildingMatchCreator()
 {
-  QString path = ConfPath::search(ConfigOptions().getBuildingModelPath());
-  LOG_INFO("Loading model from: " << path);
-
-  ifstream fp;
-  fp.open(path.toAscii().data());
-  if (!fp.is_open())
-  {
-    throw HootException("Error opening file: " + path);
-  }
-  _rf.reset(new BuildingRfClassifier());
-  _rf->import(fp);
 }
 
 Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
@@ -198,7 +190,7 @@ Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
     if (BuildingMatchVisitor::isRelated(e1, e2))
     {
       // score each candidate and push it on the result vector
-      result = new BuildingMatch(map, _rf, eid1, eid2, getMatchThreshold());
+      result = new BuildingMatch(map, _getRf(), eid1, eid2, getMatchThreshold());
     }
   }
 
@@ -209,7 +201,7 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const
   ConstMatchThresholdPtr threshold)
 {
   LOG_VAR(*threshold);
-  BuildingMatchVisitor v(map, matches, _rf, threshold, Status::Unknown1);
+  BuildingMatchVisitor v(map, matches, _getRf(), threshold, Status::Unknown1);
   map->visitRo(v);
 }
 
@@ -220,6 +212,35 @@ vector<MatchCreator::Description> BuildingMatchCreator::getAllCreators() const
   result.push_back(Description(className(), "Building Match Creator", false));
 
   return result;
+}
+
+shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
+{
+  if (!_rf)
+  {
+    QString path = ConfPath::search(ConfigOptions().getBuildingModelPath());
+    LOG_INFO("Loading model from: " << path);
+
+    QFile file(path.toAscii().data());
+    if (!file.open(QIODevice::ReadOnly))
+    {
+      throw HootException("Error opening file: " + path);
+    }
+    QDomDocument doc("");
+    if (!doc.setContent(&file))
+    {
+      file.close();
+      throw HootException("Error opening file: " + path);
+    }
+    //LOG_VARD(doc.toString());
+    file.close();
+
+    _rf.reset(new BuildingRfClassifier());
+    QDomElement docRoot = doc.elementsByTagName("RandomForest").at(0).toElement();
+    _rf->import(docRoot);
+  }
+
+  return _rf;
 }
 
 bool BuildingMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)

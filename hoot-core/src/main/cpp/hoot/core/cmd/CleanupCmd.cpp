@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/RubberSheet.h>
@@ -56,14 +56,6 @@ public:
 
   CleanupCmd() { }
 
-  virtual QString getHelp() const
-  {
-    return "cleanup (input) (output)\n"
-        "  Removes common erroneous data scenarios from input and writes to output.\n"
-        "  * input - Input (e.g. .osm file).\n"
-        "  * output - Output file (e.g. .osm file).";
-  }
-
   virtual QString getName() const { return "cleanup"; }
 
   virtual int runSimple(QStringList args)
@@ -79,7 +71,7 @@ public:
 
     MapCleaner().apply(map);
 
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     saveMap(map, args[1]);
 

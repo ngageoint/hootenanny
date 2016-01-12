@@ -33,10 +33,7 @@
 namespace hoot
 {
     class OsmMap;
-    namespace elements
-    {
-        class ElementData;
-    }
+    class ElementData;
 }
 
 // Boost
@@ -120,6 +117,7 @@ protected:
   QString _path;
   bool _useFileStatus;
   bool _useDataSourceId;
+  bool _addSourceDateTime;      ///< Should reader add source:datetime attribute to values read in?
   long _wayId;
   long _relationId;
 

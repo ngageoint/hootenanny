@@ -1,42 +1,20 @@
-{
-    "tag": {
+[
+    {
+        "categories": [
+            "poi"
+        ],
+        "dataType": "enumeration",
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "influence": 1,
         "name": "poi",
-        "influence": 1.0,
-        "type": "enumeration",
-        "geometries": ["node","area"],
-        "categories": ["poi"]
+        "objectType": "tag"
     },
-
-    "#" : "For water POI's, see WaterwaySchema.json.",
-
-    "#" : "Generic POI made up to handle poor data.",
-    "tag": { "name": "poi=yes", "isA": "poi" },
-    "tag": { "name": "aeroway=*", "isA": "poi=yes" },
-
-    "tag": { "name": "highway=rest_area", "isA": "poi=yes" },
-    "tag": { "name": "highway=services", "isA": "poi=yes" },
-    "tag": { "name": "industrial=*", "isA": "poi=yes" },
-    "tag": { "name": "mountain_pass=*", "isA": "poi=yes" },
-    "tag": { "name": "office=*", "isA": "poi=yes" },
-    "tag": { "name": "slope=yes", "isA": "poi=yes" },
-    "tag": { "name": "tourism=*", "isA": "poi=yes" },
-    "tag": { "name": "station", "isA": "poi=yes" },
-    "tag": { "name": "station=*", "isA": "station" },
-    "tag": { "name": "station=subway_entrance", "isA": "station" },
-    "tag": { "name": "station=light_rail", "isA": "station" },
-
-    "tag": {
-        "name": "use",
-        "influence": 1.0,
-        "type": "enumeration",
-        "geometries": ["node","area"],
-        "categories": ["use"]
-    },
-    "tag": { "name": "use=*", "isA": "use", "categories": ["use"] },
-
-
-    "#" : "end"
-}
-
-
-
+    {
+        "isA": "poi",
+        "name": "poi=yes",
+        "objectType": "tag"
+    }
+]

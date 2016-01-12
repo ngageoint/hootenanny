@@ -98,6 +98,16 @@ public:
 
   long getId() const { return _getElementData().getId(); }
 
+  long getChangeset() const { return _getElementData().getChangeset(); }
+
+  long getVersion() const { return _getElementData().getVersion(); }
+
+  unsigned int getTimestamp() const { return _getElementData().getTimestamp(); }
+
+  QString getUser() const { return _getElementData().getUser(); }
+
+  long getUid() const { return _getElementData().getUid(); }
+
   const Tags& getTags() const { return _getElementData().getTags(); }
 
   Tags& getTags() { return _getElementData().getTags(); }

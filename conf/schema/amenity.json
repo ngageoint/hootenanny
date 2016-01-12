@@ -1,485 +1,2133 @@
-{
-    "tag": {
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "influence": 1,
+        "isA": "hgispoi",
+        "mismatchScore": 0.1,
         "name": "amenity",
-        "isA": "poi=yes",
-        "influence": 1.0,
-        "type": "enumeration",
-        "geometries": ["node","area"]
+        "objectType": "tag"
     },
-
-    "#" : "Tags taken from the Hootenanny OSM+ translations and the top 250 amenity tags from Taginfo",
-    "#" : "http://taginfo.openstreetmap.org/api/4/key/values?key=amenity&filter=all&lang=en&sortname=count&sortorder=desc&page=1&rp=250&qtype=value&format=json_pretty",
-
-    "#" : "The catch all",
-    "tag": { "name": "amenity=*", "isA": "amenity" },
-
-    "#" : "Town & City",
-    "tag": { "name": "amenity=embassy", "isA": "amenity",
-        "aliases": ["amenity=chancery","amenity=diplomatic_mission", "amenity=diplomatic_building",
-                    "amenity=diplomacy"] },
-    "tag": { "name": "amenity=consulate", "isA": "amenity",
-        "aliases": ["amenity=consul"],
-        "similarTo": { "name": "amenity=embassy", "weight": 0.8 } },
-    "tag": { "name": "amenity=legation", "isA": "amenity",
-        "similarTo": { "name": "amenity=consulate", "weight": 0.8 } },
-    "tag": { "name": "amenity=ambassadorial_residence", "isA": "amenity",
-        "similarTo": { "name": "amenity=embassy", "weight": 0.6 } },
-
-    "tag": { "name": "amenity=arts_centre", "isA": "amenity" },
-    "tag": { "name": "amenity=gallery", "isA": "amenity",
-        "similarTo": { "name": "amenity=arts_centre", "weight": 0.6 } },
-    "tag": { "name": "amenity=artwork", "isA": "amenity",
-        "similarTo": { "name": "amenity=arts_centre", "weight": 0.8 },
-        "similarTo": { "name": "amenity=gallery", "weight": 0.9 }  },
-
-    "tag": { "name": "amenity=auditorium", "isA": "amenity" },
-    "tag": { "name": "amenity=concert_hall", "isA": "amenity",
-        "similarTo": { "name": "amenity=concert_hall", "weight": 0.8 } },
-
-    "tag": { "name": "amenity=building", "isA": "amenity",
-        "aliases": ["amenity=bulding"] },
-
-    "tag": { "name": "amenity=cinema", "isA": "amenity" },
-    "tag": { "name": "amenity=theatre", "isA": "amenity",
-        "similarTo": { "name": "amenity=cinema", "weight": 0.7 } },
-
-    "tag": { "name": "amenity=community_centre", "isA": "amenity",
-        "aliases": ["amenity=community_center"] },
-    "tag": { "name": "amenity=community_hall", "isA": "amenity",
-        "aliases": ["amenity=hall", "amenity=village_hall", "amenity=public_hall",
-                    "amenity=parish_hall", "amenity=church_hall", "amenity=municipal_hall"],
-        "similarTo": { "name": "amenity=community_centre", "weight": 0.6 } },
-
-    "tag": { "name": "amenity=townhall", "isA": "amenity",
-        "similarTo": { "name": "amenity=community_hall", "weight": 0.7 } },
-    "tag": { "name": "amenity=government", "isA": "amenity",
-        "aliases": ["amenity=government_administration_building", "amenity=register_office",
-                    "amenity=legislative_building"] },
-
-    "tag": { "name": "amenity=conference_centre", "isA": "amenity",
-        "aliases": ["amenity=convention_centre"] },
-    "tag": { "name": "amenity=exhibition_hall", "isA": "amenity",
-        "similarTo": { "name": "amenity=conference_centre", "weight": 0.8 } },
-
-    "tag": { "name": "amenity=hotel", "isA": "amenity" },
-    "tag": { "name": "amenity=dormitory", "isA": "amenity",
-        "similarTo": { "name": "amenity=hotel", "weight": 0.5 } },
-
-    "tag": { "name": "amenity=library", "isA": "amenity" },
-    "tag": { "name": "amenity=public_bookcase", "isA": "amenity",
-        "similarTo": { "name": "amenity=library", "weight": 0.4 }  },
-    "tag": { "name": "amenity=plaza", "isA": "amenity" },
-    "tag": { "name": "amenity=public_bath", "isA": "amenity" },
-    "tag": { "name": "amenity=public_building", "isA": "amenity",
-        "aliases": ["amenity=public_facility", "amenity=public_service",
-                    "amenity=public_service_outbuilding"] },
-    "tag": { "name": "amenity=public_records", "isA": "amenity" },
-
-    "tag": { "name": "amenity=residential", "isA": "amenity" },
-    "tag": { "name": "amenity=winery", "isA": "amenity" },
-    "tag": { "name": "amenity=trailer_park", "isA": "amenity" },
-    "tag": { "name": "amenity=research_institute", "isA": "amenity" },
-
-    "tag": { "name": "amenity=farm", "isA": "amenity" },
-    "tag": { "name": "amenity=feeding_place", "isA": "amenity" },
-    "tag": { "name": "amenity=garden", "isA": "amenity" },
-    "tag": { "name": "amenity=grass_strip", "isA": "amenity" },
-    "tag": { "name": "amenity=greenhouse", "isA": "amenity" },
-    "tag": { "name": "amenity=hunting", "isA": "amenity" },
-    "tag": { "name": "amenity=hunting_stand", "isA": "amenity",
-        "similarTo": { "name": "amenity=hunting", "weight": 0.9 }  },
-    "tag": { "name": "amenity=game_feeding", "isA": "amenity",
-        "similarTo": { "name": "amenity=hunting", "weight": 0.5 }  },
-
-
-    "#" : "Government",
-    "tag": { "name": "amenity=border_control", "isA": "amenity" },
-    "tag": { "name": "amenity=customs", "isA": "amenity",
-        "aliases": ["amenity=customs_house"],
-        "similarTo": { "name": "amenity=border_control", "weight": 0.9 } },
-    "tag": { "name": "amenity=immigration_control", "isA": "amenity",
-        "similarTo": { "name": "amenity=border_control", "weight": 0.9 } },
-
-    "tag": { "name": "amenity=fire_and_police", "isA": "amenity",
-        "similarTo": { "name": "amenity=police", "weight": 0.5 },
-        "similarTo": { "name": "amenity=fire_station", "weight": 0.5 } },
-    "tag": { "name": "amenity=fire_station", "isA": "amenity" },
-
-    "tag": { "name": "amenity=hydrant", "isA": "amenity" },
-
-    "tag": { "name": "amenity=police", "isA": "amenity",
-        "aliases": ["amenity=water_police"] },
-    "tag": { "name": "amenity=courthouse", "isA": "amenity",
-        "aliases": ["amenity=judicial_activities"] },
-
-        "tag": { "name": "amenity=prison", "isA": "amenity",
-        "aliases": ["amenity=jail", "amenity=correctional_institute", "amenity=custodial_service"] },
-    "tag": { "name": "amenity=juvenile_corrections", "isA": "amenity",
-        "similarTo": { "name": "amenity=prison", "weight": 0.9 }   },
-
-    "tag": { "name": "amenity=post_office", "isA": "amenity" },
-    "tag": { "name": "amenity=post_box", "isA": "amenity",
-        "similarTo": { "name": "amenity=post_office", "weight": 0.6 } },
-    "tag": { "name": "amenity=post_depot", "isA": "amenity",
-        "similarTo": { "name": "amenity=post_office", "weight": 0.8 } },
-
-    "tag": { "name": "amenity=forest_warden", "isA": "amenity" },
-    "tag": { "name": "amenity=ranger_station", "isA": "amenity",
-        "similarTo": { "name": "amenity=forest_warden", "weight": 0.8 } },
-    "tag": { "name": "amenity=rescue", "isA": "amenity",
-        "aliases": ["amenity=rescue_and_paramedical_services", "amenity=mountain_rescue",
-                    "amenity=rescue_station"]  },
-    "tag": { "name": "amenity=emergency_service", "isA": "amenity",
-        "similarTo": { "name": "amenity=rescue", "weight": 0.7 } },
-
-
-    "#" : "Commerce",
-    "tag": { "name": "amenity=bank", "isA": "amenity" },
-    "tag": { "name": "amenity=bureau_de_change", "isA": "amenity",
-        "similarTo": { "name": "amenity=bank", "weight": 0.5 } },
-    "tag": { "name": "amenity=money_transfer", "isA": "amenity",
-        "similarTo": { "name": "amenity=bank", "weight": 0.5 } },
-    "tag": { "name": "amenity=check_cashing", "isA": "amenity",
-        "similarTo": { "name": "amenity=bank", "weight": 0.5 } },
-    "tag": { "name": "amenity=atm", "isA": "amenity",
-        "aliases": ["amenity=payment_terminal"],
-        "similarTo": { "name": "amenity=bank", "weight": 0.5 } },
-
-    "tag": { "name": "amenity=business_service", "isA": "amenity" },
-    "tag": { "name": "amenity=industry", "isA": "amenity" },
-    "tag": { "name": "amenity=information_service", "isA": "amenity" },
-    "tag": { "name": "amenity=market", "isA": "amenity",
-        "aliases": ["amenity=marketplace"] },
-    "tag": { "name": "amenity=office", "isA": "amenity" },
-    "tag": { "name": "amenity=sales_yard", "isA": "amenity",
-        "similarTo": { "name": "amenity=market", "weight": 0.5 } },
-    "tag": { "name": "amenity=shop", "isA": "amenity",
-        "aliases": ["amenity=trading_post"],
-        "similarTo": { "name": "amenity=market", "weight": 0.7 } },
-    "tag": { "name": "amenity=tax_service", "isA": "amenity" },
-
-
-    "#" : "Education",
-    "tag": { "name": "amenity=school", "isA": "amenity",
-        "aliases": ["amenity=education"] },
-    "tag": { "name": "amenity=university", "isA": "amenity",
-        "aliases": ["amenity=college"],
-        "similarTo": { "name": "amenity=school", "weight": 0.7 }  },
-    "tag": { "name": "amenity=prep_school", "isA": "amenity",
-        "similarTo": { "name": "amenity=school", "weight": 0.7 }  },
-    "tag": { "name": "amenity=preschool", "isA": "amenity" },
-    "tag": { "name": "amenity=kindergarten", "isA": "amenity",
-        "similarTo": { "name": "amenity=preschool", "weight": 0.8 },
-        "similarTo": { "name": "amenity=school", "weight": 0.6 }  },
-    "tag": { "name": "amenity=childcare", "isA": "amenity",
-        "aliases": ["amenity=creche", "amenity=day_care", "amenity=nursery"] },
-
-    "tag": { "name": "amenity=dancing_school", "isA": "amenity",
-        "similarTo": { "name": "amenity=school", "weight": 0.3 } },
-    "tag": { "name": "amenity=driving_school", "isA": "amenity",
-        "similarTo": { "name": "amenity=school", "weight": 0.3 } },
-    "tag": { "name": "amenity=music_school", "isA": "amenity",
-        "similarTo": { "name": "amenity=school", "weight": 0.3 } },
-
-
-    "#" : "Vehicles",
-    "tag": { "name": "amenity=bicycle_parking", "isA": "amenity",
-        "similarTo": { "name": "amenity=parking", "weight": 0.4 } },
-    "tag": { "name": "amenity=bicycle_rental", "isA": "amenity" },
-    "tag": { "name": "amenity=bicycle_repair_station", "isA": "amenity" },
-    "tag": { "name": "amenity=boating", "isA": "amenity" },
-    "tag": { "name": "amenity=boat_rental", "isA": "amenity",
-        "similarTo": { "name": "amenity=boating", "weight": 0.7 } },
-    "tag": { "name": "amenity=boat_sharing", "isA": "amenity",
-        "similarTo": { "name": "amenity=boating", "weight": 0.7 } },
-    "tag": { "name": "amenity=boat_storage", "isA": "amenity",
-        "similarTo": { "name": "amenity=boating", "weight": 0.7 } },
-    "tag": { "name": "amenity=boathouse", "isA": "amenity",
-        "similarTo": { "name": "amenity=boating", "weight": 0.7 } },
-
-    "tag": { "name": "amenity=bus_station", "isA": "amenity",
-        "similarTo": { "name": "building=transportation", "weight": 0.9 },
-        "similarTo": { "name": "transport=station", "weight": 0.8 } },
-
-    "tag": { "name": "amenity=car_rental", "isA": "amenity" },
-    "tag": { "name": "amenity=car_repair", "isA": "amenity" },
-    "tag": { "name": "amenity=car_sharing", "isA": "amenity" },
-    "tag": { "name": "amenity=car_wash", "isA": "amenity" },
-    "tag": { "name": "amenity=charging_station", "isA": "amenity",
-        "aliases": ["amenity=ev_charging"] },
-
-    "tag": { "name": "amenity=ferry_terminal", "isA": "amenity" },
-
-    "tag": { "name": "amenity=fuel", "isA": "amenity" },
-    "tag": { "name": "amenity=fuel_storage", "isA": "amenity",
-        "similarTo": { "name": "amenity=fuel", "weight": 0.4 } },
-    "tag": { "name": "amenity=motor_vehicle_station", "isA": "amenity",
-        "similarTo": { "name": "amenity=fuel", "weight": 0.8 } },
-
-    "tag": { "name": "amenity=garage", "isA": "amenity",
-        "aliases": ["amenity=garages"]  },
-    "tag": { "name": "amenity=grit_bin", "isA": "amenity" },
-
-    "tag": { "name": "amenity=motorcycle_parking", "isA": "amenity",
-        "similarTo": { "name": "amenity=parking", "weight": 0.8 } },
-    "tag": { "name": "amenity=parking", "isA": "amenity" },
-    "tag": { "name": "amenity=parking_entrance", "isA": "amenity",
-        "similarTo": { "name": "amenity=parking", "weight": 0.8 } },
-    "tag": { "name": "amenity=parking_space", "isA": "amenity",
-        "similarTo": { "name": "amenity=parking", "weight": 0.9 } },
-
-    "tag": { "name": "amenity=road_assistance", "isA": "amenity" },
-    "tag": { "name": "amenity=shipyard", "isA": "amenity" },
-    "tag": { "name": "amenity=taxi", "isA": "amenity" },
-    "tag": { "name": "amenity=transfer_hub", "isA": "amenity" },
-    "tag": { "name": "amenity=transportation", "isA": "amenity" },
-    "tag": { "name": "amenity=tricycle_station", "isA": "amenity" },
-    "tag": { "name": "amenity=truck_stop", "isA": "amenity" },
-    "tag": { "name": "amenity=vehicle_inspection", "isA": "amenity" },
-    "tag": { "name": "amenity=vehicle_ramp", "isA": "amenity" },
-    "tag": { "name": "amenity=weighbridge", "isA": "amenity" },
-    "tag": { "name": "amenity=ticket_validator", "isA": "amenity" },
-
-
-    "#" : "Religious",
-    "tag": { "name": "amenity=place_of_worship", "isA": "amenity",
-        "aliases": ["amenity=religion", "amenity=religious_activities", "amenity=chapel",
-                    "amenity=church"] },
-    "tag": { "name": "amenity=monastery", "isA": "amenity" },
-    "tag": { "name": "amenity=mission", "isA": "amenity",
-        "similarTo": { "name": "amenity=monastery", "weight": 0.7 } },
-
-
-    "#" : "Medical",
-    "tag": { "name": "amenity=hospital", "isA": "amenity",
-        "aliases": ["amenity=medical_centre"] },
-
-    "tag": { "name": "amenity=doctors", "isA": "amenity",
-        "aliases": ["amenity=medical"],
-        "similarTo": { "name": "amenity=clinic", "weight": 0.7 } },
-
-    "tag": { "name": "amenity=clinic", "isA": "amenity",
-        "similarTo": { "name": "amenity=hospital", "weight": 0.6 } },
-
-    "tag": { "name": "amenity=nursing_home", "isA": "amenity",
-        "aliases": ["amenity=care_home", "amenity=retirement_home", "amenity=social_facility",
-                    "amenity=church"] },
-
-    "tag": { "name": "amenity=hospice", "isA": "amenity",
-        "similarTo": { "name": "amenity=hospital", "weight": 0.6 },
-        "similarTo": { "name": "amenity=nursing_home", "weight": 0.6 } },
-
-    "tag": { "name": "amenity=sanatorium", "isA": "amenity",
-        "aliases": ["amenity=sanitarium"],
-        "similarTo": { "name": "amenity=hospital", "weight": 0.4 } },
-
-    "tag": { "name": "amenity=ambulance_station", "isA": "amenity",
-        "similarTo": { "name": "amenity=clinic", "weight": 0.7 } },
-    "tag": { "name": "amenity=first_aid", "isA": "amenity",
-        "similarTo": { "name": "amenity=ambulance_station", "weight": 0.6 } },
-    "tag": { "name": "amenity=health_office", "isA": "amenity",
-        "similarTo": { "name": "amenity=healthcare", "weight": 0.4 } },
-    "tag": { "name": "amenity=healthcare", "isA": "amenity",
-        "aliases": ["amenity=health_care"],
-        "similarTo": { "name": "amenity=hospital", "weight": 0.8 } },
-    "tag": { "name": "amenity=health_centre", "isA": "amenity",
-        "similarTo": { "name": "amenity=healthcare", "weight": 0.8 } },
-    "tag": { "name": "amenity=health_post", "isA": "amenity",
-        "similarTo": { "name": "amenity=first_aid", "weight": 0.6 } },
-
-    "tag": { "name": "amenity=dentist", "isA": "amenity" },
-    "tag": { "name": "amenity=pharmacy", "isA": "amenity" },
-    "tag": { "name": "amenity=veterinary", "isA": "amenity" },
-    "tag": { "name": "amenity=baby_hatch", "isA": "amenity" },
-
-    "tag": { "name": "amenity=mortuary", "isA": "amenity",
-        "aliases": ["amenity=funeral_home", "amenity=death_care_services"] },
-    "tag": { "name": "amenity=crematorium", "isA": "amenity",
-        "aliases": ["amenity=cremation"] },
-
-    "tag": {
-        "name": "amenity=cemetery",
+    {
         "isA": "amenity",
-        "aliases": ["amenity=cemetary"]
+        "name": "amenity=*",
+        "objectType": "tag"
     },
-
-    "tag": { "name": "amenity=grave_yard", "isA": "amenity",
-        "similarTo": { "name": "amenity=cemetery", "weight": 0.6 },
-        "similarTo": { "name": "landuse=cemetery", "weight": 0.6 } },
-    "tag": { "name": "amenity=tomb", "isA": "amenity",
-        "similarTo": { "name": "amenity=grave_yard", "weight": 0.5 } },
-    "tag": { "name": "amenity=storage_of_human_remains", "isA": "amenity",
-        "similarTo": { "name": "amenity=grave_yard", "weight": 0.7 } },
-
-
-    "#" : "Services",
-    "tag": { "name": "amenity=animal_boarding", "isA": "amenity" },
-    "tag": { "name": "amenity=animal_shelter", "isA": "amenity" },
-    "tag": { "name": "amenity=animal_training", "isA": "amenity" },
-    "tag": { "name": "amenity=construction", "isA": "amenity" },
-    "tag": { "name": "amenity=service", "isA": "amenity" },
-    "tag": { "name": "amenity=personal_service", "isA": "amenity" },
-    "tag": { "name": "amenity=coworking_space", "isA": "amenity" },
-    "tag": { "name": "amenity=internet_cafe", "isA": "amenity" },
-    "tag": { "name": "amenity=wifi", "isA": "amenity" },
-    "tag": { "name": "amenity=telephone", "isA": "amenity",
-        "aliases": ["amenity=emergency_phone"]  },
-    "tag": { "name": "amenity=spa", "isA": "amenity" },
-    "tag": { "name": "amenity=sauna", "isA": "amenity",
-        "similarTo": { "name": "amenity=spa", "weight": 0.5 } },
-    "tag": { "name": "amenity=shower", "isA": "amenity" },
-    "tag": { "name": "amenity=lavoir", "isA": "amenity",
-        "aliases": ["amenity=wash_center", "amenity=washing_place"]  },
-    "tag": { "name": "amenity=toilets", "isA": "amenity",
-        "aliases": ["amenity=private_toilets"] },
-
-    "tag": { "name": "amenity=recycling", "isA": "amenity",
-        "similarTo": { "name": "amenity=waste_basket", "weight": 0.6 } },
-    "tag": { "name": "amenity=waste_basket", "isA": "amenity",
-        "aliases": ["amenity=waste_disposal"] },
-    "tag": { "name": "amenity=waste_transfer_station", "isA": "amenity" },
-    "tag": { "name": "amenity=sanitary_dump_station", "isA": "amenity",
-        "similarTo": { "name": "amenity=waste_transfer_station", "weight": 0.3 } },
-
-    "tag": { "name": "amenity=drinking_water", "isA": "amenity",
-        "aliases": ["amenity=water", "amenity=watering_place", "amenity=water_point",
-                    "amenity=tap"] },
-
-    "tag": { "name": "amenity=kneipp_water_cure", "isA": "amenity" },
-    "tag": { "name": "amenity=landscaping_service", "isA": "amenity" },
-    "tag": { "name": "amenity=newspaper_plant", "isA": "amenity" },
-    "tag": { "name": "amenity=social_service", "isA": "amenity" },
-
-
-    "#" : "Sport and Leisure",
-    "tag": { "name": "amenity=gym", "isA": "amenity",
-        "similarTo": { "name": "amenity=fitness_centre", "weight": 0.7 } },
-    "tag": { "name": "amenity=health_club", "isA": "amenity",
-        "similarTo": { "name": "amenity=fitness_centre", "weight": 0.6 } },
-    "tag": { "name": "amenity=fitness_centre", "isA": "amenity",
-        "aliases": ["amenity=fitness_center"] },
-    "tag": { "name": "amenity=exercise_point", "isA": "amenity" },
-    "tag": { "name": "amenity=ski_rental", "isA": "amenity",
-        "similarTo": { "name": "amenity=ski_school", "weight": 0.4 } },
-    "tag": { "name": "amenity=ski_school", "isA": "amenity" },
-
-    "tag": { "name": "amenity=scout_hut", "isA": "amenity" },
-    "tag": { "name": "amenity=picnic_table", "isA": "amenity" },
-    "tag": { "name": "amenity=club_house", "isA": "amenity" },
-    "tag": { "name": "amenity=dive_centre", "isA": "amenity",
-        "aliases": ["amenity=dive_center"] },
-    "tag": { "name": "amenity=dojo", "isA": "amenity" },
-    "tag": { "name": "amenity=planetarium", "isA": "amenity" },
-
-    "tag": { "name": "amenity=sports", "isA": "amenity" },
-    "tag": { "name": "amenity=sport_camp", "isA": "amenity",
-        "similarTo": { "name": "amenity=sports", "weight": 0.6 } },
-    "tag": { "name": "amenity=stables", "isA": "amenity" },
-    "tag": { "name": "amenity=swimming_pool", "isA": "amenity",
-        "similarTo": { "name": "amenity=sports", "weight": 0.6 },
-        "similarTo": { "name": "amenity=fitness_centre", "weight": 0.4 } },
-    "tag": { "name": "amenity=social_centre", "isA": "amenity" },
-    "tag": { "name": "amenity=social_club", "isA": "amenity",
-        "similarTo": { "name": "amenity=social_centre", "weight": 0.8 } },
-    "tag": { "name": "amenity=youth_centre", "isA": "amenity" },
-    "tag": { "name": "amenity=youth_club", "isA": "amenity",
-        "similarTo": { "name": "amenity=youth_centre", "weight": 0.8 } },
-    "tag": { "name": "amenity=park", "isA": "amenity" },
-
-
-    "#" : "Food, Drink and Entertainment",
-    "tag": { "name": "amenity=bar", "isA": "amenity" },
-    "tag": { "name": "amenity=pub", "isA": "amenity",
-        "similarTo": { "name": "amenity=bar", "weight": 0.8 } },
-    "tag": { "name": "amenity=biergarten", "isA": "amenity",
-        "similarTo": { "name": "amenity=pub", "weight": 0.8 } },
-    "tag": { "name": "amenity=cocktail_lounge", "isA": "amenity",
-        "similarTo": { "name": "amenity=bar", "weight": 0.7 },
-        "similarTo": { "name": "amenity=nightclub", "weight": 0.7 } },
-    "tag": { "name": "amenity=karaoke_box", "isA": "amenity",
-        "similarTo": { "name": "amenity=bar", "weight": 0.4 } },
-    "tag": { "name": "amenity=nightclub", "isA": "amenity",
-        "similarTo": { "name": "amenity=bar", "weight": 0.5 } },
-    "tag": { "name": "amenity=licensed_club", "isA": "amenity" },
-
-    "tag": { "name": "amenity=restaurant", "isA": "amenity" },
-    "tag": { "name": "amenity=fast_food", "isA": "amenity",
-        "similarTo": { "name": "amenity=restaurant", "weight": 0.6 } },
-    "tag": { "name": "amenity=cafe", "isA": "amenity",
-        "similarTo": { "name": "amenity=restaurant", "weight": 0.6 } },
-    "tag": { "name": "amenity=food_court", "isA": "amenity",
-        "similarTo": { "name": "amenity=fast_food", "weight": 0.8 } },
-    "tag": { "name": "amenity=kitchen", "isA": "amenity",
-        "similarTo": { "name": "amenity=restaurant", "weight": 0.6 } },
-    "tag": { "name": "amenity=bbq", "isA": "amenity",
-        "similarTo": { "name": "amenity=kitchen", "weight": 0.3 } },
-    "tag": { "name": "amenity=kiosk", "isA": "amenity",
-        "similarTo": { "name": "amenity=cafe", "weight": 0.6 } },
-    "tag": { "name": "amenity=banquet_hall", "isA": "amenity",
-        "similarTo": { "name": "amenity=dining_hall", "weight": 0.8 } },
-    "tag": { "name": "amenity=dining_hall", "isA": "amenity" },
-
-    "tag": { "name": "amenity=club", "isA": "amenity" },
-    "tag": { "name": "amenity=ice_cream", "isA": "amenity",
-        "similarTo": { "name": "amenity=kiosk", "weight": 0.6 } },
-    "tag": { "name": "amenity=gambling", "isA": "amenity" },
-    "tag": { "name": "amenity=casino", "isA": "amenity",
-        "similarTo": { "name": "amenity=gambling", "weight": 0.9 } },
-
-    "tag": { "name": "amenity=adult_entertainment", "isA": "amenity",
-        "similarTo": { "name": "amenity=stripclub", "weight": 0.6 },
-        "similarTo": { "name": "amenity=swingerclub", "weight": 0.6 },
-        "similarTo": { "name": "amenity=brothel", "weight": 0.6 },
-        "similarTo": { "name": "amenity=love_hotel", "weight": 0.6 } },
-    "tag": { "name": "amenity=stripclub", "isA": "amenity" },
-    "tag": { "name": "amenity=swingerclub", "isA": "amenity" },
-    "tag": { "name": "amenity=brothel", "isA": "amenity" },
-    "tag": { "name": "amenity=love_hotel", "isA": "amenity" },
-
-    "tag": { "name": "amenity=music_venue", "isA": "amenity" },
-    "tag": { "name": "amenity=membership_organization", "isA": "amenity" },
-
-
-    "#" : "Misc",
-    "tag": { "name": "amenity=advertising", "isA": "amenity" },
-    "tag": { "name": "amenity=alm", "isA": "amenity" },
-    "tag": { "name": "amenity=astronomical_station", "isA": "amenity" },
-    "tag": { "name": "amenity=bench", "isA": "amenity" },
-    "tag": { "name": "amenity=bts", "isA": "amenity" },
-    "tag": { "name": "amenity=charity", "isA": "amenity" },
-    "tag": { "name": "amenity=citymap_post", "isA": "amenity" },
-    "tag": { "name": "amenity=clock", "isA": "amenity" },
-    "tag": { "name": "amenity=compressed_air", "isA": "amenity" },
-    "tag": { "name": "amenity=cultural", "isA": "amenity" },
-    "tag": { "name": "amenity=disused", "isA": "amenity" },
-    "tag": { "name": "amenity=dog_bin", "isA": "amenity",
-        "aliases": ["amenity=dog_waste_bin"] },
-    "tag": { "name": "amenity=elevator", "isA": "amenity" },
-    "tag": { "name": "amenity=enclosing", "isA": "amenity" },
-    "tag": { "name": "amenity=fire_hydrant", "isA": "amenity" },
-    "tag": { "name": "amenity=fountain", "isA": "amenity",
-        "aliases": ["amenity=fontanile"] },
-    "tag": { "name": "amenity=life_ring", "isA": "amenity" },
-    "tag": { "name": "amenity=loading_dock", "isA": "amenity" },
-    "tag": { "name": "amenity=nameplate", "isA": "amenity" },
-    "tag": { "name": "amenity=other", "isA": "amenity" },
-    "tag": { "name": "amenity=photo_booth", "isA": "amenity" },
-    "tag": { "name": "amenity=proposed", "isA": "amenity" },
-    "tag": { "name": "amenity=reception_area", "isA": "amenity" },
-    "tag": { "name": "amenity=refugee_housing", "isA": "amenity" },
-    "tag": { "name": "amenity=relay_box", "isA": "amenity" },
-    "tag": { "name": "amenity=shelter", "isA": "amenity" },
-    "tag": { "name": "amenity=sign", "isA": "amenity" },
-    "tag": { "name": "amenity=storage", "isA": "amenity" },
-    "tag": { "name": "amenity=street_light", "isA": "amenity" },
-    "tag": { "name": "amenity=studio", "isA": "amenity" },
-    "tag": { "name": "amenity=table", "isA": "amenity" },
-    "tag": { "name": "amenity=training", "isA": "amenity" },
-    "tag": { "name": "amenity=vacuum_cleaner", "isA": "amenity" },
-    "tag": { "name": "amenity=vending_machine", "isA": "amenity" },
-    "tag": { "name": "amenity=vivarium", "isA": "amenity" },
-    "tag": { "name": "amenity=whirlpool", "isA": "amenity" },
-
-    "#" : "end"
-
-}
+    {
+        "isA": "amenity",
+        "name": "amenity=adult_entertainment",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=stripclub",
+                "weight": 0.6
+            },
+            {
+                "name": "amenity=swingerclub",
+                "weight": 0.6
+            },
+            {
+                "name": "amenity=brothel",
+                "weight": 0.6
+            },
+            {
+                "name": "amenity=love_hotel",
+                "weight": 0.6
+            }
+        ]
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=advertising",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=alm",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=ambassadorial_residence",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=embassy",
+            "weight": 0.6
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=ambulance_station",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=clinic",
+            "weight": 0.7
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=animal_boarding",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=animal_shelter",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=animal_training",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=arts_centre",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=artwork",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=arts_centre",
+                "weight": 0.8
+            },
+            {
+                "name": "amenity=gallery",
+                "weight": 0.9
+            }
+        ]
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=astronomical_station",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "atm=yes"
+        ],
+        "isA": "amenity",
+        "name": "amenity=atm",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=bank",
+            "weight": 0.5
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=auditorium",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=baby_hatch",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=bank",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=banquet_hall",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=dining_hall",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=bar",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=bbq",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=kitchen",
+            "weight": 0.3
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=bench",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=bicycle_parking",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=parking",
+            "weight": 0.4
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=bicycle_rental",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=bicycle_repair_station",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=biergarten",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=bar",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=boat_rental",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=boating",
+            "weight": 0.7
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=boat_sharing",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=boating",
+            "weight": 0.7
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=boat_storage",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=boating",
+            "weight": 0.7
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=boathouse",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=boating",
+            "weight": 0.7
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=boating",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=border_control",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=brothel",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=bts",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "amenity=bulding"
+        ],
+        "isA": "amenity",
+        "name": "amenity=building",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=bureau_de_change",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=bank",
+            "weight": 0.5
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=bus_station",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "public_transport=station",
+                "weight": [
+                    0.8,
+                    0.3
+                ]
+            },
+            {
+                "name": "building=transportation",
+                "weight": [
+                    0.9,
+                    0.4
+                ]
+            },
+            {
+                "name": "transport=station",
+                "weight": [
+                    0.8,
+                    0.3
+                ]
+            }
+        ]
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=business_service",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=cafe",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=restaurant",
+            "weight": 0.7
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=car_rental",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=car_repair",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=car_sharing",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=car_wash",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity=social_facility",
+        "name": "amenity=care_home",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=casino",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=gambling",
+            "weight": 0.9
+        }
+    },
+    {
+        "aliases": [
+            "amenity=cemetary"
+        ],
+        "isA": "amenity",
+        "name": "amenity=cemetery",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity=place_of_worship",
+        "name": "amenity=chapel",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=monastery",
+                "weight": 0.8
+            },
+            {
+                "name": "religion=christian",
+                "weight": 0.9
+            },
+            {
+                "name": "building=chapel",
+                "weight": 0.9
+            }
+        ]
+    },
+    {
+        "aliases": [
+            "amenity=ev_charging"
+        ],
+        "isA": "amenity",
+        "name": "amenity=charging_station",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=charity",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=check_cashing",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=bank",
+            "weight": 0.5
+        }
+    },
+    {
+        "aliases": [
+            "amenity=creche",
+            "amenity=day_care"
+        ],
+        "isA": "amenity",
+        "name": "amenity=childcare",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=preschool",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity=place_of_worship",
+        "name": "amenity=church",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=chapel",
+                "weight": 0.8
+            },
+            {
+                "name": "amenity=monastery",
+                "weight": 0.8
+            },
+            {
+                "name": "religion=christian",
+                "weight": 0.9
+            },
+            {
+                "name": "building=church",
+                "weight": 0.9
+            }
+        ]
+    },
+    {
+        "isA": "amenity=hall",
+        "name": "amenity=church_hall",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=church",
+                "weight": 0.8
+            },
+            {
+                "name": "building=church",
+                "weight": 0.8
+            }
+        ]
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=cinema",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=citymap_post",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=clinic",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=hospital",
+            "weight": 0.6
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=clock",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=club",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=club_house",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=cocktail_lounge",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=bar",
+                "weight": 0.7
+            },
+            {
+                "name": "amenity=nightclub",
+                "weight": 0.7
+            }
+        ]
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=college",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=education",
+            "weight": 0.7
+        }
+    },
+    {
+        "aliases": [
+            "amenity=community_center"
+        ],
+        "isA": "amenity",
+        "name": "amenity=community_centre",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity=hall",
+        "name": "amenity=community_hall",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=public_hall",
+                "weight": 0.8
+            },
+            {
+                "name": "amenity=church_hall",
+                "weight": 0.8
+            }
+        ]
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=compressed_air",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=concert_hall",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=arts_centre",
+                "weight": 0.8
+            },
+            {
+                "name": "amenity=music_venue",
+                "weight": 0.8
+            }
+        ]
+    },
+    {
+        "aliases": [
+            "amenity=convention_centre"
+        ],
+        "isA": "amenity",
+        "name": "amenity=conference_centre",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=construction",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "amenity=consul"
+        ],
+        "isA": "amenity",
+        "name": "amenity=consulate",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=embassy",
+            "weight": 0.8
+        }
+    },
+    {
+        "aliases": [
+            "amenity=judicial_activities"
+        ],
+        "isA": "amenity",
+        "name": "amenity=courthouse",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=coworking_space",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "amenity=cremation"
+        ],
+        "isA": "amenity",
+        "name": "amenity=crematorium",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=cultural",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "amenity=customs_house"
+        ],
+        "isA": "amenity",
+        "name": "amenity=customs",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=border_control",
+            "weight": 0.9
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=dancing_school",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=school",
+            "weight": 0.3
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=dentist",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=dining_hall",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=disused",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "amenity=dive_center"
+        ],
+        "isA": "amenity",
+        "name": "amenity=dive_centre",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "amenity=medical"
+        ],
+        "isA": "amenity",
+        "name": "amenity=doctors",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=clinic",
+            "weight": 0.7
+        }
+    },
+    {
+        "aliases": [
+            "amenity=dog_waste_bin"
+        ],
+        "isA": "amenity",
+        "name": "amenity=dog_bin",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=dojo",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=dormitory",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=hotel",
+            "weight": 0.5
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=drinking_water",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=water",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=driving_school",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=school",
+            "weight": 0.3
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=education",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=elevator",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "amenity=chancery",
+            "amenity=diplomatic_mission",
+            "amenity=diplomatic_building",
+            "amenity=diplomacy"
+        ],
+        "isA": "amenity",
+        "name": "amenity=embassy",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=emergency_phone",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=telephone",
+            "weight": 0.7
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=emergency_service",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=rescue",
+            "weight": 0.7
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=enclosing",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=exercise_point",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=exhibition_hall",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=conference_centre",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=farm",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=fast_food",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=restaurant",
+            "weight": 0.9
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=feeding_place",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=ferry_terminal",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=fire_and_police",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=police",
+                "weight": 0.5
+            },
+            {
+                "name": "amenity=fire_station",
+                "weight": 0.5
+            }
+        ]
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=fire_hydrant",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=fire_station",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=first_aid",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=ambulance_station",
+            "weight": 0.6
+        }
+    },
+    {
+        "aliases": [
+            "amenity=fitness_center"
+        ],
+        "isA": "amenity",
+        "name": "amenity=fitness_centre",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=food_court",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=fast_food",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=florist",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=forest_warden",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "amenity=fontanile"
+        ],
+        "isA": "amenity",
+        "name": "amenity=fountain",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=fuel",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=fuel_storage",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=fuel",
+            "weight": 0.4
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=gallery",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=arts_centre",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=gambling",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=game_feeding",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=hunting",
+            "weight": 0.4
+        }
+    },
+    {
+        "aliases": [
+            "amenity=garages"
+        ],
+        "isA": "amenity",
+        "name": "amenity=garage",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "building=garage",
+                "weight": 0.9
+            },
+            {
+                "name": "parking=garage",
+                "weight": 0.9
+            }
+        ]
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=garden",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=government",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity=government",
+        "name": "amenity=government_administration_building",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=grass_strip",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=grave_yard",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=cemetery",
+                "weight": 0.6
+            },
+            {
+                "name": "landuse=cemetery",
+                "weight": 0.6
+            }
+        ]
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=greenhouse",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=grit_bin",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=gym",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=fitness_centre",
+            "weight": 0.7
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=hall",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=community_centre",
+            "weight": 0.6
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=health_centre",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=healthcare",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=health_club",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=fitness_centre",
+            "weight": 0.6
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=health_office",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=healthcare",
+            "weight": 0.4
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=health_post",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=first_aid",
+            "weight": 0.6
+        }
+    },
+    {
+        "aliases": [
+            "amenity=health_care"
+        ],
+        "isA": "amenity",
+        "name": "amenity=healthcare",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=hospital",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=hospice",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=hospital",
+                "weight": 0.6
+            },
+            {
+                "name": "amenity=nursing_home",
+                "weight": 0.6
+            }
+        ]
+    },
+    {
+        "aliases": [
+            "amenity=medical_centre"
+        ],
+        "isA": "amenity",
+        "name": "amenity=hospital",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "building=hospital",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=hotel",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=hostel",
+                "weight": 0.7
+            },
+            {
+                "name": "tourism=hotel",
+                "weight": 0.9
+            }
+        ]
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=hostel",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=hunting",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=hunting_stand",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=hunting",
+            "weight": 0.9
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=hydrant",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=ice_cream",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=kiosk",
+            "weight": 0.6
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=immigration_control",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=border_control",
+            "weight": 0.9
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=industry",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=information_service",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=internet_cafe",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=juvenile_corrections",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=prison",
+            "weight": 0.9
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=karaoke_box",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=bar",
+            "weight": 0.4
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=kindergarten",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=preschool",
+                "weight": 0.8
+            },
+            {
+                "name": "amenity=school",
+                "weight": 0.6
+            }
+        ]
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=kiosk",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=cafe",
+            "weight": 0.6
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=kitchen",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=restaurant",
+            "weight": 0.6
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=kneipp_water_cure",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=landscaping_service",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "amenity=wash_center",
+            "amenity=washing_place"
+        ],
+        "isA": "amenity",
+        "name": "amenity=lavoir",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=legation",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=consulate",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity=government",
+        "name": "amenity=legislative_building",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=government_administration_building",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=library",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=licensed_club",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=life_ring",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=loading_dock",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=love_hotel",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "amenity=marketplace"
+        ],
+        "isA": "amenity",
+        "name": "amenity=market",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=membership_organization",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity=place_of_worship",
+        "name": "amenity=mission",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "religion=christian",
+                "weight": 0.9
+            },
+            {
+                "name": "building=church",
+                "weight": 0.8
+            },
+            {
+                "name": "building=chapel",
+                "weight": 0.8
+            }
+        ]
+    },
+    {
+        "isA": "amenity=place_of_worship",
+        "name": "amenity=monastery",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=mission",
+                "weight": 0.8
+            },
+            {
+                "name": "religion=christian",
+                "weight": 0.9
+            },
+            {
+                "name": "building=church",
+                "weight": 0.8
+            },
+            {
+                "name": "building=chapel",
+                "weight": 0.8
+            }
+        ]
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=money_transfer",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=bank",
+            "weight": 0.5
+        }
+    },
+    {
+        "aliases": [
+            "amenity=funeral_home",
+            "amenity=death_care_services"
+        ],
+        "isA": "amenity",
+        "name": "amenity=mortuary",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=motor_vehicle_station",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=fuel",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=motorcycle_parking",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=parking",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity=rescue",
+        "name": "amenity=mountain_rescue",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity=hall",
+        "name": "amenity=municipal_hall",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=townhall",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=music_school",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=school",
+            "weight": 0.3
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=music_venue",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=nightclub",
+            "weight": 0.6
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=nameplate",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=newspaper_plant",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=nightclub",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=bar",
+            "weight": 0.5
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=nursery",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=childcare",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity=social_facility",
+        "name": "amenity=nursing_home",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=retirement_home",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=office",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=other",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=park",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=parking",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=parking_entrance",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=parking",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=parking_space",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=parking",
+            "weight": 0.9
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=payment_terminal",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=atm",
+            "weight": 0.5
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=personal_service",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=pharmacy",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=photo_booth",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=picnic_table",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "amenity=religion",
+            "amenity=religious_activities"
+        ],
+        "isA": "amenity",
+        "name": "amenity=place_of_worship",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=planetarium",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=plaza",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "amenity=water_police"
+        ],
+        "isA": "amenity",
+        "name": "amenity=police",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=post_box",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=post_office",
+            "weight": 0.6
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=post_depot",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=post_office",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=post_office",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=prep_school",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=school",
+            "weight": 0.7
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=preschool",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "amenity=jail",
+            "amenity=correctional_institute",
+            "amenity=custodial_service"
+        ],
+        "isA": "amenity",
+        "name": "amenity=prison",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=private_toilets",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=toilets",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=proposed",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=pub",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=bar",
+            "weight": 0.9
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=public_bath",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=public_bookcase",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=library",
+            "weight": 0.4
+        }
+    },
+    {
+        "aliases": [
+            "amenity=public_facility",
+            "amenity=public_service",
+            "amenity=public_service_outbuilding"
+        ],
+        "isA": "amenity",
+        "name": "amenity=public_building",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=townhall",
+            "weight": 0.7
+        }
+    },
+    {
+        "isA": "amenity=hall",
+        "name": "amenity=public_hall",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=public_records",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=townhall",
+            "weight": 0.4
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=ranger_station",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=forest_warden",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=reception_area",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=recycling",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=waste_basket",
+            "weight": 0.6
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=refugee_housing",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=register_office",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=government_administration_building",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=relay_box",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=rescue",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity=rescue",
+        "name": "amenity=rescue_and_paramedical_services",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity=rescue",
+        "name": "amenity=rescue_station",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=mountain_rescue",
+                "weight": 0.7
+            },
+            {
+                "name": "amenity=rescue_and_paramedical_services",
+                "weight": 0.8
+            }
+        ]
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=research_institute",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=residential",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=restaurant",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=pub",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=retirement_home",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=road_assistance",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=sales_yard",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=market",
+            "weight": 0.5
+        }
+    },
+    {
+        "aliases": [
+            "amenity=sanitarium"
+        ],
+        "isA": "amenity",
+        "name": "amenity=sanatorium",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=hospital",
+            "weight": 0.4
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=sanitary_dump_station",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=waste_transfer_station",
+            "weight": 0.3
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=sauna",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=spa",
+            "weight": 0.5
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=school",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "building=school",
+                "weight": 0.7
+            },
+            {
+                "name": "amenity=education",
+                "weight": 0.7
+            }
+        ]
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=scout_hut",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=service",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=shelter",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=shipyard",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "amenity=trading_post"
+        ],
+        "isA": "amenity",
+        "name": "amenity=shop",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=market",
+            "weight": 0.7
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=shower",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=sign",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=ski_rental",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=ski_school",
+            "weight": 0.4
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=ski_school",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=social_centre",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=social_club",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=social_centre",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=social_facility",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=social_service",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=spa",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=sport_camp",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=sports",
+            "weight": 0.6
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=sports",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=dojo",
+            "weight": 0.4
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=stables",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=storage",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=storage_of_human_remains",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=grave_yard",
+            "weight": 0.7
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=street_light",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=stripclub",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=studio",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=swimming_pool",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=sports",
+                "weight": 0.6
+            },
+            {
+                "name": "amenity=dive_centre",
+                "weight": 0.6
+            },
+            {
+                "name": "amenity=fitness_centre",
+                "weight": 0.4
+            }
+        ]
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=swingerclub",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=table",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=tap",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=water",
+            "weight": 0.6
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=tax_service",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=taxi",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=telephone",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=theatre",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=arts_centre",
+                "weight": 0.8
+            },
+            {
+                "name": "amenity=cinema",
+                "weight": 0.7
+            }
+        ]
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=ticket_validator",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=toilets",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=tomb",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=grave_yard",
+            "weight": 0.5
+        }
+    },
+    {
+        "isA": "amenity=hall",
+        "name": "amenity=townhall",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=community_hall",
+            "weight": 0.7
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=trailer_park",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=training",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=transfer_hub",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=transportation",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=tricycle_station",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=truck_stop",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=university",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=college",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=vacuum_cleaner",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=vehicle_inspection",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=vehicle_ramp",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=vending_machine",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=veterinary",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=vivarium",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=farm",
+                "weight": 0.8
+            },
+            {
+                "name": "amenity=greenhouse",
+                "weight": 0.8
+            }
+        ]
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=waste_basket",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=waste_disposal",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=waste_basket",
+                "weight": 0.9
+            },
+            {
+                "name": "amenity=waste_transfer_station",
+                "weight": 0.5
+            }
+        ]
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=waste_transfer_station",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=water",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=water_point",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=water",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=watering_place",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=water",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=weighbridge",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=whirlpool",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=wifi",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=internet_cafe",
+            "weight": 0.4
+        }
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=winery",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=youth_centre",
+        "objectType": "tag"
+    },
+    {
+        "isA": "amenity",
+        "name": "amenity=youth_club",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=youth_centre",
+            "weight": 0.8
+        }
+    }
+]

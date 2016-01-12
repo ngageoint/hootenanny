@@ -33,6 +33,16 @@ RelationData::RelationData(long id) : ElementData(id)
 {
 }
 
+RelationData::RelationData(long id, long changeset, long version, unsigned int timestamp) :
+ElementData(id, changeset, version, timestamp)
+{
+}
+
+RelationData::RelationData(long id, long changeset, long version, unsigned int timestamp,
+  QString user, long uid) : ElementData(id, changeset, version, timestamp, user, uid)
+{
+}
+
 RelationData::RelationData(const RelationData& rd) :
   ElementData(rd.getId(), rd.getTags(), rd.getCircularError())
 {

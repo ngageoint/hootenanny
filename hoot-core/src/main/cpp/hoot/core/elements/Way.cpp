@@ -53,6 +53,20 @@ Way::Way(Status s, long id, Meters circularError) : Element(s)
   _getElementData().setCircularError(circularError);
 }
 
+Way::Way(Status s, long id, long changeset, long version, unsigned int timestamp,
+         Meters circularError) : Element(s)
+{
+  _wayData.reset(new WayData(id, changeset, version, timestamp));
+  _getElementData().setCircularError(circularError);
+}
+
+Way::Way(Status s, long id, long changeset, long version, unsigned int timestamp,
+         QString user, long uid, Meters circularError) : Element(s)
+{
+  _wayData.reset(new WayData(id, changeset, version, timestamp, user, uid));
+  _getElementData().setCircularError(circularError);
+}
+
 Way::Way(const Way& way) : Element(way._status)
 {
   _wayData = way._wayData;
@@ -246,6 +260,23 @@ void Way::_makeWritable()
   {
     _wayData.reset(new WayData(*_wayData));
   }
+}
+
+void Way::removeNode(long id)
+{
+  std::vector<long>& nodes = _wayData->getNodeIds();
+  size_t newCount = 0;
+
+  // copy the array in place and remove the unwanted nodes.
+  for (size_t i = 0; i < nodes.size(); i++)
+  {
+    if (nodes[i] != id) {
+      nodes[newCount] = nodes[i];
+      newCount++;
+    }
+  }
+
+  nodes.resize(newCount);
 }
 
 void Way::replaceNode(long oldId, long newId)

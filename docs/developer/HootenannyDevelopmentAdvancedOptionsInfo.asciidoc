@@ -1,3 +1,4 @@
+
 == Hootenanny Advanced options rules meta file description
 
 This description is for quick overview of conflation advanced option meta data rule rest endpoint.
@@ -13,7 +14,7 @@ This description is for quick overview of conflation advanced option meta data r
 	e. hoot_val: unique option value understood by hootenanny. (It should be in configOptions.asciidoc)
 	f. hoot_key: unique option key understood by hootenanny. (It should be in configOptions.asciidoc)
 	g. members: JSONArray consists of child fields. Intended as sub field of a field. For example, enable checkbox and sub items dependent of the checkbox. Any field object can contain member field.
-	h. override: JSONObject containing KV pair which gets overridden. For exmaple if override object contains "elem_type":"checkplus" then the parent object's elem_type will always be "checkplus"
+	h. override: JSONObject containing KV pair which gets overridden. For example if override object contains "elem_type":"checkplus" then the parent object's elem_type will always be "checkplus"
 	i. defaultvalue: the default value set in UI
 	j. onchange: js which gets executed when the field value changes
 	k. required: This field forces value to be set all time when the group is enabled. On UI if required=true then the field is hidden
@@ -29,3 +30,4 @@ This description is for quick overview of conflation advanced option meta data r
 7. Service rest endpoint http://localhost:8080/hoot-services/info/advancedopts/getoptions?conftype=horizontal exposes modified conf/conflationHorizontalOps.json where it performs same operations as item #4 before returning output.
 8. reference, average and horizontal rest endpoint consists of subset of options used to be in UnifyingRoads.json
 9. reference, average and horizontal rest endpoint output is meant to override corresponding fields in custom rest endpoint when corresponding conflation type is selected on UI. (For example, for reference conflation, the fields in reference rest endpoint will override the matching fields from custom rest end point output)
+

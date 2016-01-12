@@ -27,7 +27,6 @@
 package hoot.services.utils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A case insensitive string list
@@ -39,11 +38,6 @@ public class CaseInsensitiveStringList extends ArrayList<String>
   public CaseInsensitiveStringList()
   {
     
-  }
-  
-  public CaseInsensitiveStringList(List<String> list)
-  {
-    this.addAll(list);
   }
 
   @Override

@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/Conflator.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/conflate/LargeWaySplitter.h>
 #include <hoot/core/conflate/OutsideBoundsRemover.h>
@@ -98,7 +98,7 @@ void LocalTileWorker2::applyOp(shared_ptr<OsmMapOperation> op, const vector<Enve
       op->apply(map);
 
       // it only actually does a reprojection if necessary.
-      MapReprojector::reprojectToWgs84(map);
+      MapProjector::projectToWgs84(map);
 
       // Using a copy of the map so we can split ways as needed. Make sure they're the right size.
       const WayMap wm = map->getWays();
@@ -288,16 +288,16 @@ void LocalTileWorker2::_writeTheRest(QString dirIn, QString dirOut,
     OutsideBoundsRemover::removeWays(map, buffered, true);
   }
 
-  OsmMap::NodeMap nodes = map->getNodeMap();
+  NodeMap nodes = map->getNodeMap();
   // @optimize could use the index for this, but not necessary in debug mode.
-  for (OsmMap::NodeMap::const_iterator it = nodes.constBegin(); it != nodes.constEnd(); ++it)
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     for (size_t i = 0; i < conflatedBits.size(); i++)
     {
       const Envelope& tile = conflatedBits[i];
-      if (tile.contains((*it)->getX(), (*it)->getY()))
+      if (tile.contains((it->second)->getX(), (it->second)->getY()))
       {
-        map->removeNodeNoCheck((*it)->getId());
+        map->removeNodeNoCheck((it->second)->getId());
       }
     }
   }

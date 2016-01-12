@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
@@ -76,7 +76,7 @@ public:
     CookieCutter(false).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
 
-    MapReprojector::reprojectToWgs84(cookieCutMap);
+    MapProjector::projectToWgs84(cookieCutMap);
 
     QDir().mkpath("test-output/conflate");
     OsmWriter writer;
@@ -101,7 +101,7 @@ public:
     CookieCutter(true).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
 
-    MapReprojector::reprojectToWgs84(cookieCutMap);
+    MapProjector::projectToWgs84(cookieCutMap);
 
     QDir().mkpath("test-output/conflate");
     OsmWriter writer;
@@ -126,7 +126,7 @@ public:
     CookieCutter(false, 100.0).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
 
-    MapReprojector::reprojectToWgs84(cookieCutMap);
+    MapProjector::projectToWgs84(cookieCutMap);
 
     QDir().mkpath("test-output/conflate");
     OsmWriter writer;
@@ -151,7 +151,7 @@ public:
     CookieCutter(false, -100.0).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
 
-    MapReprojector::reprojectToWgs84(cookieCutMap);
+    MapProjector::projectToWgs84(cookieCutMap);
 
     QDir().mkpath("test-output/conflate");
     OsmWriter writer;
@@ -176,7 +176,7 @@ public:
     CookieCutter(true, 100.0).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
 
-    MapReprojector::reprojectToWgs84(cookieCutMap);
+    MapProjector::projectToWgs84(cookieCutMap);
 
     QDir().mkpath("test-output/conflate");
     OsmWriter writer;
@@ -187,7 +187,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CookieCutterTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CookieCutterTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CookieCutterTest, "slow");
 
 }

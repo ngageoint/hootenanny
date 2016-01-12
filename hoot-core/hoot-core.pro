@@ -1,7 +1,7 @@
 # -------------------------------------------------
 # Project created by QtCreator 2011-09-29T12:27:47
 # -------------------------------------------------
-QT += script \
+QT += \
     sql \
     testlib \
     xml \
@@ -19,7 +19,6 @@ INCLUDEPATH += \
   ../local/include/ \
 
 CONFIG += rtti \
-    qtestlib \
     debug
 
 OTHER_FILES = \
@@ -30,7 +29,11 @@ OTHER_FILES = \
     ../rules/LinearWaterway.js \
     ../conf/LinearWaterway.conf \
     ../conf/LinearWaterway-match-scoring.conf \
-    ../conf/WaterwaySchema.json \
+    ../conf/schema/all_weather.json \
+    ../conf/schema/highway.json \
+    ../conf/schema/natural.json \
+    ../conf/schema/public_transport.json \
+    ../conf/schema/surface.json \
     ../rules/template/ConflateRules.js \
 
 include(../Configure.pri)
@@ -57,14 +60,6 @@ log4cxx {
   HEADERS += src/main/cpp/hoot/core/util/LogGeneric.h
 }
 
-octave {
-  SOURCES += src/main/cpp/hoot/core/util/Octave.cpp \
-    src/main/cpp/hoot/core/perty/FullCovariance.cpp \
-
-  HEADERS += src/main/cpp/hoot/core/util/Octave.h \
-    src/main/cpp/hoot/core/perty/FullCovariance.h \
-}
-
 SOURCES += \
     src/main/cpp/hoot/core/util/Progress.cpp \
     src/main/cpp/hoot/core/OgrFeatureProvider.cpp \
@@ -81,7 +76,7 @@ SOURCES += \
     src/main/cpp/hoot/core/elements/WayData.cpp \
     src/main/cpp/hoot/core/elements/NodeData.cpp \
     src/main/cpp/hoot/core/elements/ElementData.cpp \
-    src/main/cpp/hoot/core/MapReprojector.cpp \
+    src/main/cpp/hoot/core/MapProjector.cpp \
     src/main/cpp/hoot/core/io/OsmWriter.cpp \
     src/main/cpp/hoot/core/WorkingMap.cpp \
     src/main/cpp/hoot/core/manipulators/WayMerger.cpp \
@@ -201,6 +196,7 @@ SOURCES += \
     src/main/cpp/hoot/core/ops/BuildingPartMergeOp.cpp \
     src/main/cpp/hoot/core/index/ElementToRelationMap.cpp \
     src/main/cpp/hoot/core/ops/BuildingOutlineUpdateOp.cpp \
+    src/main/cpp/hoot/core/ops/RemoveDuplicateReviewsOp.cpp \
     src/main/cpp/hoot/core/cmd/ConvertCmd.cpp \
     src/main/cpp/hoot/core/ops/VisitorOp.cpp \
     src/main/cpp/hoot/core/ops/NamedOp.cpp \
@@ -479,7 +475,22 @@ SOURCES += \
     src/main/cpp/hoot/core/ops/CookieCutterOp.cpp \
     src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.cpp \
     src/main/cpp/hoot/core/conflate/CookieCutter.cpp \
-    src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.cpp
+    src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.cpp \
+    src/main/cpp/hoot/core/ops/ReplaceElementOp.cpp \
+    src/main/cpp/hoot/core/filters/NeedsReviewCriterion.cpp \
+    src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.cpp \
+    src/main/cpp/hoot/core/ops/RemoveReviewsByEidOp.cpp \
+    src/main/cpp/hoot/core/conflate/highway/HighwayReviewCleanerOp.cpp \
+    src/main/cpp/hoot/core/ops/AddHilbertReviewSortOrderOp.cpp \
+    src/main/cpp/hoot/core/schema/SchemaVertex.cpp \
+    src/main/cpp/hoot/core/schema/SchemaChecker.cpp \
+    src/main/cpp/hoot/core/schema/TagCategoryDifferencer.cpp \
+    src/main/cpp/hoot/core/schema/TagAncestorDifferencer.cpp \
+    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.cpp \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.cpp \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp \
+    src/main/cpp/hoot/core/algorithms/string/MostEnglishName.cpp \
+    src/main/cpp/hoot/core/visitors/RemoveMissingElementsVisitor.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -502,7 +513,7 @@ HEADERS += \
     src/main/cpp/hoot/core/elements/WayData.h \
     src/main/cpp/hoot/core/elements/NodeData.h \
     src/main/cpp/hoot/core/elements/ElementData.h \
-    src/main/cpp/hoot/core/MapReprojector.h \
+    src/main/cpp/hoot/core/MapProjector.h \
     src/main/cpp/hoot/core/io/OsmWriter.h \
     src/main/cpp/hoot/core/Units.h \
     src/main/cpp/hoot/core/manipulators/WayMerger.h \
@@ -533,6 +544,7 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/WayFilter.h \
     src/main/cpp/hoot/core/filters/NeighborFilter.h \
     src/main/cpp/hoot/core/WayMap.h \
+    src/main/cpp/hoot/core/NodeMap.h \
     src/main/cpp/hoot/core/filters/WayFilterChain.h \
     src/main/cpp/hoot/core/filters/UnknownFilter.h \
     src/main/cpp/hoot/core/filters/StatusFilter.h \
@@ -626,6 +638,7 @@ HEADERS += \
     src/main/cpp/hoot/core/ops/BuildingPartMergeOp.h \
     src/main/cpp/hoot/core/index/ElementToRelationMap.h \
     src/main/cpp/hoot/core/ops/BuildingOutlineUpdateOp.h \
+    src/main/cpp/hoot/core/ops/RemoveDuplicateReviewsOp.h \
     src/main/cpp/hoot/core/ops/VisitorOp.h \
     src/main/cpp/hoot/core/OsmMapConsumer.h \
     src/main/cpp/hoot/core/ops/NamedOp.h \
@@ -946,5 +959,21 @@ HEADERS += \
     src/main/cpp/hoot/core/ops/CookieCutterOp.h \
     src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.h \
     src/main/cpp/hoot/core/conflate/CookieCutter.h \
-    src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.h
+    src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.h \
+    src/main/cpp/hoot/core/ops/ReplaceElementOp.h \
+    src/main/cpp/hoot/core/filters/NeedsReviewCriterion.h \
+    src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.h \
+    src/main/cpp/hoot/core/ops/RemoveReviewsByEidOp.h \
+    src/main/cpp/hoot/core/conflate/highway/HighwayReviewCleanerOp.h \
+    src/main/cpp/hoot/core/ops/AddHilbertReviewSortOrderOp.h \
+    src/main/cpp/hoot/core/schema/SchemaVertex.h \
+    src/main/cpp/hoot/core/schema/SchemaChecker.h \
+    src/main/cpp/hoot/core/schema/KeyValuePair.h \
+    src/main/cpp/hoot/core/schema/TagCategoryDifferencer.h \
+    src/main/cpp/hoot/core/schema/TagAncestorDifferencer.h \
+    src/main/cpp/hoot/core/schema/TagFilteredDifferencer.h \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoader.h \
+    src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h \
+    src/main/cpp/hoot/core/algorithms/string/MostEnglishName.h \
+    src/main/cpp/hoot/core/visitors/RemoveMissingElementsVisitor.h
 

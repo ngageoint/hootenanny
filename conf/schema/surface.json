@@ -1,0 +1,338 @@
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "linestring",
+            "area"
+        ],
+        "name": "surface",
+        "influence": 1.0,
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=unpaved",
+        "name": "surface=artificial_turf",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "surface=grass",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "surface=paved",
+        "name": "surface=asphalt",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "surface=concrete",
+                "weight": 0.8
+            },
+            {
+                "name": "surface=asphalt_over_concrete",
+                "weight": 0.8
+            },
+            {
+                "name": "surface=tartan",
+                "weight": 0.8
+            },
+            {
+                "name": "surface=macadam",
+                "weight": 0.8
+            },
+            {
+                "name": "surface=bound_surface",
+                "weight": 0.5
+            },
+            {
+                "name": "surface=paving_stones",
+                "weight": 0.7
+            }
+        ]
+    },
+    {
+        "isA": "surface=earth",
+        "name": "surface=clay",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "surface=dirt",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "surface=paving_stones",
+        "name": "surface=cobblestone",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=cobblestone",
+        "name": "surface=cobblestone:flattened",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=unpaved",
+        "name": "surface=compacted",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "surface=ground",
+                "weight": 0.7
+            },
+            {
+                "name": "surface=gravel",
+                "weight": 0.7
+            }
+        ]
+    },
+    {
+        "isA": "surface=paved",
+        "name": "surface=concrete",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "surface=asphalt",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "surface=paved",
+        "name": "surface=asphalt_over_concrete",
+        "objectType": "tag",
+        "similarTo": [
+        {
+            "name": "surface=asphalt",
+            "weight": 0.8
+        },
+        {
+            "name": "surface=concrete",
+            "weight": 0.8
+        }
+        ]
+    },
+    {
+        "isA": "surface=paved",
+        "name": "surface=macadam",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "surface=asphalt",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "surface=concrete",
+        "name": "surface=concrete:lanes",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=concrete",
+        "name": "surface=concrete:plates",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=earth",
+        "name": "surface=dirt",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "surface=mud",
+                "weight": 0.9
+            },
+            {
+                "name": "surface=clay",
+                "weight": 0.8
+            },
+            {
+                "name": "surface=grass",
+                "weight": 0.7
+            }
+        ]
+    },
+    {
+        "isA": "surface=ground",
+        "name": "surface=earth",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "surface=sand",
+            "weight": 0.6
+        }
+    },
+    {
+        "isA": "surface=gravel",
+        "name": "surface=fine_gravel",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=earth",
+        "name": "surface=grass",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "surface=artificial_turf",
+                "weight": 0.8
+            },
+            {
+                "name": "surface=dirt",
+                "weight": 0.7
+            }
+        ]
+    },
+    {
+        "isA": "surface=unpaved",
+        "name": "surface=grass_paver",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "surface=paving_stones",
+            "weight": 0.8
+        }
+    },
+    {
+        "childWeight": 0.9,
+        "isA": "surface=unpaved",
+        "name": "surface=gravel",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "surface=compacted",
+            "weight": 0.7
+        }
+    },
+    {
+        "childWeight": 0.3,
+        "isA": "surface=unpaved",
+        "name": "surface=ground",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "surface=compacted",
+            "weight": 0.7
+        }
+    },
+    {
+        "isA": "surface=unpaved",
+        "name": "surface=metal",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=earth",
+        "name": "surface=mud",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "surface=dirt",
+            "weight": 0.9
+        }
+    },
+    {
+        "childWeight": 0.2,
+        "isA": "surface=unknown",
+        "name": "surface=paved",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=paved",
+        "name": "surface=paving_stones",
+        "objectType": "tag",
+        "similarTo": [
+        {
+            "name": "surface=grass_paver",
+            "weight": 0.8
+        },
+        {
+            "name": "surface=brick",
+            "weight": 0.8
+        }
+        ]
+    },
+    {
+        "isA": "surface=paved",
+        "name": "surface=brick",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "surface=paving_stones",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "surface=paving_stones",
+        "name": "surface=paving_stones:20",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=paving_stones",
+        "name": "surface=paving_stones:30",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=gravel",
+        "name": "surface=pebblestone",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=ground",
+        "name": "surface=sand",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=paving_stones",
+        "name": "surface=sett",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=paved",
+        "name": "surface=tartan",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "surface=asphalt",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "surface=paved",
+        "name": "surface=bound_surface",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "surface=asphalt",
+            "weight": 0.5
+        }
+    },
+    {
+        "childWeight": 0.1,
+        "dataType": "enumeration",
+        "influence": 1,
+        "isA": "surface",
+        "name": "surface=unknown",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=unknown",
+        "name": "surface=unpaved",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=unknown",
+        "name": "surface=other",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=unpaved",
+        "name": "surface=snow",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=unpaved",
+        "name": "surface=ice",
+        "objectType": "tag",
+        "similarTo": { "name": "surface=snow", "weight": 0.6 }
+    },
+    {
+        "isA": "surface=paved",
+        "name": "surface=wood",
+        "objectType": "tag"
+    },
+    {
+        "isA": "surface=wood",
+        "name": "surface=wood_plank",
+        "objectType": "tag",
+        "similarTo": { "name": "surface=corduroy", "weight": 0.7 }
+    },
+    {
+        "isA": "surface=wood",
+        "name": "surface=corduroy",
+        "objectType": "tag"
+    }
+]

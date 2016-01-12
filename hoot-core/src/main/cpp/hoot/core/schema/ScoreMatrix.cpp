@@ -27,6 +27,7 @@
 #include "ScoreMatrix.h"
 
 // hoot
+#include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -54,6 +55,13 @@ ScoreMatrix::ScoreMatrix(int width, int height)
 double ScoreMatrix::meanScore(double portion) const
 {
   priority_queue<Entry, deque<Entry>, Entry> heap;
+
+  if (_v.size() == 0)
+  {
+    QString msg("Attempting to calculate the mean score on an empty matrix.");
+    LOG_WARN(msg);
+    throw HootException(msg);
+  }
 
   Entry e;
   for (size_t i = 0; i < _v.size(); i++)

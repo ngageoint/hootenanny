@@ -48,7 +48,6 @@ public:
   static QString goodnessThresholdKey() { return "places.goodness.threshold"; }
   static QString distanceWeightKey() { return "places.distance.weight"; }
   static QString stringWeightKey() { return "places.string.weight"; }
-  static double minimumEditSimilarityDefault() { return 0.8; }
   static QString minimumEditSimilarityKey() { return "places.minimum.edit.similarity"; }
 
   PlacesPoiMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
@@ -57,6 +56,8 @@ public:
   virtual const MatchClassification& getClassification() const { return _p; }
 
   virtual MatchMembers getMatchMembers() const { return MatchMembers::Poi; }
+
+  virtual QString getMatchName() const { return _matchName; }
 
   virtual double getProbability() const;
 
@@ -75,6 +76,7 @@ public:
 private:
 
   ElementId _eid1, _eid2;
+  static QString _matchName;
   MatchClassification _p;
   double _goodnessThreshold;
 

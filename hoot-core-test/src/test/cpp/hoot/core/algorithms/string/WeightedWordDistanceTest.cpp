@@ -87,14 +87,14 @@ public:
   {
     WeightedWordDistance uut(new LevenshteinDistance(),
       new TextFileWordWeightDictionary("test-files/algorithms/string/WordWeight.tsv"));
-    LOG_VAR(uut.compare("foo", "bar"));
-    //HOOT_STR_EQUALS(0, uut.compare("foo", "bar"));
-    //HOOT_STR_EQUALS(0.627329, uut.compare("foo", "fou"));
-    LOG_VAR(uut.compare("foo street", "fou street"));
-    LOG_VAR(uut.compare("foo road", "foo street"));
+    HOOT_STR_EQUALS(0, uut.compare("foo", "bar"));
+    HOOT_STR_EQUALS(0.631018, uut.compare("foo street", "fou street"));
+    HOOT_STR_EQUALS(0.987104, uut.compare("foo road", "foo street"));
 
-    LOG_VAR(uut.compare("Kafr Ibrahim al Aydi", "Kafr Ayyub"));
-    LOG_VAR(uut.compare("Kafr Ayyub", "Kafr Ayyub"));
+    HOOT_STR_EQUALS(0.539453, uut.compare("Kafr Ibrahim al Aydi", "Kafr Ayyub"));
+    HOOT_STR_EQUALS(1, uut.compare("Kafr Ayyub", "Kafr Ayyub"));
+
+    HOOT_STR_EQUALS(0.359162, uut.compare("Food & More", "Cheap & Good"));
   }
 
   void runRealWorldTest()

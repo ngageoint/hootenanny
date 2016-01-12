@@ -27,6 +27,7 @@
 #ifndef REVIEWMARKER_H
 #define REVIEWMARKER_H
 
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Element.h>
 
 namespace hoot
@@ -36,13 +37,35 @@ namespace hoot
  * This class centralizes adding tags to mark elements for review. Please do not set or get any
  * hoot:review:* tags directly. If you need some new functionality then please add another method
  * here.
+ *
+ * NOTE: Some of these methods may seem like unnecessary abstraction. This is b/c the review tagging
+ * approach already changed once from the original definition. Chances of another change are
+ * probably pretty good. If there is another change then we want to make it easy to refactor.
  */
 class ReviewMarker
 {
 public:
+  /// This definition may change over time.
+  typedef ElementId ReviewUid;
+
+  /// Should only be used by AddHilbertReviewSortOrder. Please use the ReviewMarker helper methods
+  /// for other operations.
+  static QString reviewSortOrderKey;
+
   ReviewMarker();
 
-  bool isNeedsReview(const Tags& tags);
+  static QString getBadGeometryType() { return _complexGeometryType; }
+
+  static set<ElementId> getReviewElements(const ConstOsmMapPtr &map, ReviewUid uid);
+
+  static set<ReviewUid> getReviewUids(const ConstOsmMapPtr &map, ConstElementPtr e1);
+
+  static QString getReviewType(const ConstOsmMapPtr &map, ReviewUid uid);
+
+  /**
+   * Returns true if the element is in at least one review.
+   */
+  static bool isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1);
 
   /**
    * Determines whether a pair of elements should be returned for review
@@ -51,32 +74,54 @@ public:
    * @param e2 the second element in the element pair being examined
    * @return true if the pair should be reviewed against each other; false otherwise
    */
-  bool isNeedsReview(ConstElementPtr e1, ConstElementPtr e2);
+  static bool isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1, ConstElementPtr e2);
+
+  /**
+   * Returns true if the specified UID is a review tag.
+   */
+  static bool isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid);
 
   /**
    * Marks e1 and e2 as needing review and sets them to reference each other. If the score is
    * negative then the score is omitted.
+   *
+   * @param note A human readable note describing the review.
+   * @param reviewType A human readable review type. Typically this is a one word description of
+   *  the feature being reviewed. E.g. "Highway" or "Building".
    */
-  void mark(ElementPtr& e1, ElementPtr& e2, const QString& note, double score = -1);
+  static void mark(const OsmMapPtr &map, const ElementPtr& e1, const ElementPtr& e2,
+    const QString& note, const QString& reviewType, double score = -1,
+    vector<QString> choices = vector<QString>() );
 
   /**
-   * Marks a single element as needing review, but no reviewUuidKey() field is populated.
+   * Marks a single element as needing review.
    */
-  void mark(ElementPtr& e, const QString& note, double score = -1);
+  static void mark(const OsmMapPtr &map, const ElementPtr& e, const QString& note,
+    const QString& reviewType, double score = -1, vector<QString> choices = vector<QString>());
 
   /**
-   * Adds review tags only to e1 and references the UUID in other. Other may get a new UUID but
-   * will not be changed otherwise.
+   * Removes a single element.
    */
-  void markElement(ElementPtr& e, ElementPtr& other, const QString& note, double score = -1);
+  static void removeElement(const OsmMapPtr& map, ElementId eid);
 
 private:
   // don't use these keys directly, instead call the helper functions above.
-  static QString reviewUuidKey() { return "hoot:review:uuid"; }
-  static QString reviewScoreKey() { return "hoot:review:score"; }
-  static QString reviewSourceKey() { return "hoot:review:source"; }
-  static QString reviewNeedsKey() { return "hoot:review:needs"; }
-  static QString reviewNoteKey() { return "hoot:review:note"; }
+  static QString _complexGeometryType;
+  static QString _revieweeKey;
+  static QString _reviewUuidKey;
+  static QString _reviewScoreKey;
+  static QString _reviewNeedsKey;
+  static QString _reviewNoteKey;
+  static QString _reviewTypeKey;
+  static QString _reviewChoicesKey;
+
+  /**
+   * Returns a hilbert value that represents the center of the bounds that covers e1 and e2.
+   */
+  static int64_t _calculateHilbertValue(const ConstOsmMapPtr &map, ConstElementPtr e1,
+    ConstElementPtr e2 = ConstElementPtr());
+
+  static set<ElementId> _getReviewRelations(const ConstOsmMapPtr &map, ElementId eid);
 
   void _updateScore(Tags& t, double score);
 };

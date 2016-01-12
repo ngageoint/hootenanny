@@ -120,6 +120,10 @@ SERVICES_INIT()
 m4_include([m4/rnd.m4])
 RND_INIT()
 
+# Include UI
+m4_include([m4/ui.m4])
+UI_INIT()
+
 # Code Coverage
 m4_include([m4/coverage.m4])
 COVERAGE_INIT()
@@ -131,10 +135,6 @@ CPPUNIT_INIT()
 # GLPK
 m4_include([m4/glpk.m4])
 GLPK_INIT()
-
-# GLPK
-m4_include([m4/octave.m4])
-OCTAVE_INIT()
 
 # Newmat
 m4_include([m4/newmat.m4])

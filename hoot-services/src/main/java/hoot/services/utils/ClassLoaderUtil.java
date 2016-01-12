@@ -26,9 +26,6 @@
  */
 package hoot.services.utils;
 
-//import org.jboss.vfs.VFS;
-//import org.jboss.vfs.VirtualFile;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.JarURLConnection;
@@ -63,9 +60,9 @@ public class ClassLoaderUtil
     try
     {
       // this seems to populate more jars. Odd.
-      getChildResources("META-INF/services");
-      getChildResources("");
-      getChildResources("/");
+    	_getChildResources("META-INF/services");
+    	_getChildResources("");
+    	_getChildResources("/");
 
     }
     catch (Exception e1)
@@ -104,7 +101,7 @@ public class ClassLoaderUtil
     return result;
   }
 
-  public static List<URL> getChildResources(String path) throws IOException, ClassNotFoundException
+  private static List<URL> _getChildResources(String path) throws IOException, ClassNotFoundException
   {
     List<URL> result = new LinkedList<URL>();
 
@@ -120,11 +117,10 @@ public class ClassLoaderUtil
       }
       else if (resource.getProtocol().equalsIgnoreCase("JAR"))
       {
-        result.addAll(loadJar(path, resource));
+        result.addAll(_loadJar(path, resource));
       }
       else if (resource.getProtocol().equalsIgnoreCase("VFS"))
       {
-        // result.addAll( loadVfs( resource ));
         System.out.println("VFS");
       }
       else
@@ -137,28 +133,7 @@ public class ClassLoaderUtil
     return result;
   }
 
-  // public static List<URL> loadVfs( URL resource ) throws IOException
-  // {
-  // List<URL> result = new LinkedList<URL>();
-  //
-  // try {
-  // VirtualFile r = VFS.getChild( resource.toURI() );
-  // if ( r.exists() && r.isDirectory() ) {
-  // for ( VirtualFile f : r.getChildren() )
-  // {
-  // result.add( f.asFileURL() );
-  // }
-  // }
-  // } catch (URISyntaxException e) {
-  // System.out.println( "Problem reading resource '" + resource + "':\n " +
-  // e.getMessage() );
-  // e.printStackTrace();
-  // }
-  //
-  // return result;
-  // }
-
-  public static List<URL> loadJar(String path, URL resource) throws IOException
+  private static List<URL> _loadJar(String path, URL resource) throws IOException
   {
     JarURLConnection conn = (JarURLConnection) resource.openConnection();
     JarFile jarFile = conn.getJarFile();

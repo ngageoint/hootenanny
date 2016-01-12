@@ -34,8 +34,9 @@ d = {}
 for line in fp:
     v = re.split("\t|: ", line)
     try:
-        n = float(v[1].split()[0])
-        d[v[0]] = n
+        if (len(v) >= 2):
+            n = float(v[1].split()[0])
+            d[v[0]] = n
     except ValueError:
         pass
 

@@ -1,0 +1,105 @@
+[
+    {
+        "isA": "source",
+        "name": "regex?source:.*",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "geometries": [
+            "node",
+            "way",
+            "relation"
+        ],
+        "influence": 1,
+        "isA": "metadata",
+        "name": "source",
+        "objectType": "tag"
+    },
+    {
+        "isA": "source",
+        "name": "source:addr",
+        "objectType": "tag"
+    },
+    {
+        "isA": "source",
+        "name": "source:building",
+        "objectType": "tag"
+    },
+    {
+        "isA": "source",
+        "name": "source:date",
+        "objectType": "tag"
+    },
+    {
+        "isA": "source",
+        "name": "source:en",
+        "objectType": "tag"
+    },
+    {
+        "description": "Use the source:geometry=* tag to indicate the source of the geometry of an object added to OpenStreetMap.",
+        "isA": "source",
+        "name": "source:geometry",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "text",
+        "description": "The date the source material was collected. Preferrably as ISO 8601.",
+        "isA": "source",
+        "name": "source:geometry:date",
+        "objectType": "tag"
+    },
+    {
+        "dataType": "enumeration",
+        "description": "The sensor used to collect the source imagery.",
+        "isA": "source",
+        "name": "source:geometry:sensor",
+        "objectType": "tag"
+    },
+    {
+        "description": "Catch all sensor match",
+        "isA": "source:geometry:sensor",
+        "name": "source:geometry:sensor=*",
+        "objectType": "tag"
+    },
+    {
+        "description": "DigitalGlobe WorldView 1",
+        "isA": "source:geometry:sensor",
+        "name": "source:geometry:sensor=WV01",
+        "objectType": "tag"
+    },
+    {
+        "description": "DigitalGlobe WorldView 2",
+        "isA": "source:geometry:sensor",
+        "name": "source:geometry:sensor=WV02",
+        "objectType": "tag"
+    },
+    {
+        "isA": "source",
+        "name": "source:ja",
+        "objectType": "tag"
+    },
+    {
+        "isA": "source",
+        "name": "source:maxspeed",
+        "objectType": "tag"
+    },
+    {
+        "isA": "source",
+        "name": "source:name",
+        "objectType": "tag"
+    },
+    {
+        "isA": "source",
+        "name": "source:position",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "source_ref"
+        ],
+        "isA": "source",
+        "name": "source:ref",
+        "objectType": "tag"
+    }
+]

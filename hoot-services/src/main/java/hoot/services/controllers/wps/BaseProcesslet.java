@@ -52,7 +52,7 @@ public abstract class BaseProcesslet implements Processlet
 
   protected static String coreJobServerUrl = null;
 
-  protected ClassPathXmlApplicationContext appContext;
+  private ClassPathXmlApplicationContext appContext;
 
   /**
    * @throws Exception
@@ -68,7 +68,6 @@ public abstract class BaseProcesslet implements Processlet
           "coreJobServerUrl", HootProperties.getDefault("coreJobServerUrl"));
     }
 
-    log.debug("Reading application settings...");
     appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
   }
 

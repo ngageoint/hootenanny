@@ -82,7 +82,6 @@ public:
    */
   static QString preLayerNameKey() { return "ogr.writer.pre.layer.name"; }
   static QString scriptKey() { return "ogr.writer.script"; }
-  static QString strictCheckingDefault() { return "on"; }
   /**
    * Valid values are "on", "off" and "warn"
    */
@@ -157,6 +156,8 @@ protected:
   void _createLayer(shared_ptr<const Layer> layer);
 
   OGRLayer* _getLayer(const QString layerName);
+
+  OGRLayer* _getLayerByName(const QString layerName);
 
   shared_ptr<Geometry> _toMulti(shared_ptr<Geometry> from);
 

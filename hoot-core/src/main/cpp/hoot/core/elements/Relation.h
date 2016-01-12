@@ -62,12 +62,19 @@ public:
   static QString MULTILINESTRING;
   static QString MULTIPOLYGON;
   static QString OUTER;
+  static QString REVIEW;
 
   static string className() { return "hoot::Relation"; }
 
   explicit Relation(const Relation& from);
 
   Relation(Status s, long id, Meters circularError, QString type = "");
+
+  Relation(Status s, long id, long changeset, long version, unsigned int timestamp,
+           Meters circularError, QString type = "");
+
+  Relation(Status s, long id, long changeset, long version, unsigned int timestamp,
+           QString user, long uid, Meters circularError, QString type = "");
 
   virtual ~Relation() {}
 
@@ -101,6 +108,12 @@ public:
    * is valid.
    */
   bool isMultiPolygon() const { return _relationData->getType() == MULTIPOLYGON; }
+
+  /**
+   * Returns true if this is a review.
+   */
+  bool isReview() const { return _relationData->getType() == REVIEW; }
+
 
   /**
    * Remove all members that meet the speicified criteria. If no members meet the criteria then
@@ -155,6 +168,12 @@ private:
   virtual const ElementData& _getElementData() const { return *_relationData; }
 
   void _makeWritable();
+
+  void _visitRo(const ElementProvider& map, ElementVisitor& filter,
+    QList<long>& visitedRelations) const;
+
+  void _visitRw(ElementProvider &map, ElementVisitor& filter,
+    QList<long> &visitedRelations);
 
 };
 

@@ -418,8 +418,7 @@ public class CommandRunner implements ICommandRunner {
     // private methods
 
     private  int handleProcess ( Process pProcess, String pOrigCmd, Writer pOut, Writer pErr,
-    		List<CharPump> stdOutErrList, MutableBoolean interrupt ) throws IOException,
-            InterruptedException {
+    		List<CharPump> stdOutErrList, MutableBoolean interrupt ) throws InterruptedException {
 
     	_processState = 0;
     	int res = handleProcessStatic (  pProcess,  pOrigCmd,  pOut,  pErr,
@@ -429,8 +428,7 @@ public class CommandRunner implements ICommandRunner {
     }
 
     private static int handleProcessStatic ( Process pProcess, String pOrigCmd, Writer pOut, Writer pErr,
-    		List<CharPump> stdOutErrList, MutableBoolean interrupt ) throws IOException,
-            InterruptedException {
+    		List<CharPump> stdOutErrList, MutableBoolean interrupt ) throws InterruptedException {
 
     		CharPump outpump = new CharPump ( new BufferedReader(new InputStreamReader ( pProcess.getInputStream ()) ), pOut, pOrigCmd, interrupt );
     		stdOutErrList.add(outpump);
@@ -457,8 +455,6 @@ public class CommandRunner implements ICommandRunner {
 
         private Writer iOut;
 
-        private String iCmd;
-
         private int bufSize;
 
         private MutableBoolean interrupt_sig;
@@ -468,7 +464,6 @@ public class CommandRunner implements ICommandRunner {
         		interrupt_sig = pInterrupt;
             iIn = pIn;
             iOut = pOut;
-            iCmd = pCmd;
             String bufSizeString = System.getProperty ( "ew.util.os.charPumpBuffer", "1024" );
             try {
                 bufSize = Integer.parseInt ( bufSizeString );
@@ -487,17 +482,8 @@ public class CommandRunner implements ICommandRunner {
 	            try {
 	                while ( ok ) {
 	                		ok = !interrupt_sig.getValue();
-	                    long t0 = 0, t1 = 0, t2 = 0;
 	                    if ( pumpLog.isDebugEnabled () ) {
-	                        /*
-	                         * t0 = System.currentTimeMillis(); while (
-	                         * !iIn.ready()) { Thread.sleep(100); }
-	                         */
-	                        t1 = System.currentTimeMillis ();
-	                        /*
-	                         * pumpLog.debug( "CharPump waited "+(t1-t0)+" ms for
-	                         * input.");
-	                         */
+	                        System.currentTimeMillis ();
 	                    }
 
 	                  	int n = iIn.read ( buf, 0, buf.length );
@@ -506,19 +492,14 @@ public class CommandRunner implements ICommandRunner {
 	                        break;
 	                    }
 	                    if ( pumpLog.isDebugEnabled () ) {
-	                        t2 = System.currentTimeMillis ();
-	                        //see comment made in CharPump writing
-	                        //pumpLog.debug ( "CharPump read " + n + " bytes in " + ( t2 - t1 ) + " ms." );
+	                        System.currentTimeMillis ();
 	                    }
 	                    if ( pumpLog.isDebugEnabled () ) {
-	                        t1 = System.currentTimeMillis ();
+	                        System.currentTimeMillis ();
 	                    }
 	                    iOut.write ( buf, 0, n );
 	                    if ( pumpLog.isDebugEnabled () ) {
-	                        t2 = System.currentTimeMillis ();
-	                        //This adds too much clutter and can't get it to disable from log4j, so 
-	                        //only re-enable as needed.
-	                        //pumpLog.debug ( "CharPump wrote " + n + " bytes in " + ( t2 - t1 ) + " ms." );
+	                        System.currentTimeMillis ();
 	                    }
 	                    iOut.flush ();
 	                }
@@ -554,13 +535,12 @@ public class CommandRunner implements ICommandRunner {
     public static void main ( String[] pArgs ) {
         try {
             ICommandRunner runner = new CommandRunner ();
-            CommandResult result = null;
             if ( 1 == pArgs.length ) {
                 StringWriter out = new StringWriter ();
                 StringWriter err = new StringWriter ();
-                result = runner.exec ( pArgs[0], out, err );
+                runner.exec ( pArgs[0], out, err );
             } else {
-                result = runner.exec ( pArgs );
+                runner.exec ( pArgs );
             }
             //System.out.println ( result.getStdout () );
             //System.out.println ( result.getStderr () );

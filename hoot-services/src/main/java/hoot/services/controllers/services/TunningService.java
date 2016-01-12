@@ -65,7 +65,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class TunningService  implements Executable {
 	
 	private static final Logger log = LoggerFactory.getLogger(TunningService.class);
-	private ClassPathXmlApplicationContext appContext;
+	@SuppressWarnings("unused")
+  private ClassPathXmlApplicationContext appContext;
 	private String finalStatusDetail;
 	private Double totalSize = null;
 	private String tempPath = null;
@@ -92,25 +93,20 @@ public class TunningService  implements Executable {
 		String input = command.get("input").toString();
 		String inputtype = command.get("inputtype").toString();
 		Connection conn = DbUtils.createConnection();
-		long count = 0;
 		long starttime =  new Date().getTime();
-		//System.out.println("Start: " + starttime);
-		String jobId = UUID.randomUUID().toString();
+		UUID.randomUUID().toString();
 		try
 		{
 			String tempOutputPath = "";
 			if(inputtype.equalsIgnoreCase("db"))
 			{
-				long nodeCnt = DbUtils.getNodesCountByName(conn, input);
-				long wayCnt = DbUtils.getWayCountByName(conn, input);
-				long relCnt = DbUtils.getRelationCountByName(conn, input);
+				DbUtils.getNodesCountByName(conn, input);
+				DbUtils.getWayCountByName(conn, input);
+				DbUtils.getRelationCountByName(conn, input);
 				
-				long nodeSize = nodeCnt * 72;
-				long waySize = wayCnt * 96;
-				long relSize = relCnt * 64;
 				
-				count = nodeSize + waySize + relSize;
-				count *= 15;
+				
+				
 				
 				// if the count is greater than threshold then just use it and tell it too big
 				
@@ -121,14 +117,12 @@ public class TunningService  implements Executable {
 						" OUTPUT=" + tempPath +  "/" + input + ".osm";
 				CommandResult result = cmdRunner.exec(commandArr);
 
-				if(res != null){
 					if(result.getExitStatus() == 0){
-						String stdOut = result.getStdout();
+						result.getStdout();
 					} else {
 						String err = result.getStderr();
 						throw new Exception(err);
 					}
-				}
 				
 				tempOutputPath = tempPath +  "/" + input + ".osm";      	  
 			}
@@ -146,16 +140,13 @@ public class TunningService  implements Executable {
     	Object attribute = mBeanServer.getAttribute(new javax.management.ObjectName("java.lang","type","OperatingSystem"), "TotalPhysicalMemorySize");
     	long totalMemSize = Long.parseLong(attribute.toString());
     	
-    	Double maxMemThreshold = new Double(totalMemSize);
+    	new Double(totalMemSize);
     	
     	long endTime = new Date().getTime();
   		log.debug("Start:" + starttime + "  - End: " + endTime + " Diff:" + (endTime-starttime) + " TOTAL:" + totalSize
   				+ " NODES:" + sinkImplementation.getTotalNodes() + " Way:" + sinkImplementation.getTotalWay() + " Relations:" + 
   				sinkImplementation.getTotalRelation());
  
-  		//res.put("Start", starttime);
-  		//res.put("End", endTime);
-  		//res.put("Delta", (endTime-starttime));
   		res.put("EstimatedSize", totalSize * 15);
   		res.put("NodeCount", sinkImplementation.getTotalNodes());
   		res.put("WayCount", sinkImplementation.getTotalWay());

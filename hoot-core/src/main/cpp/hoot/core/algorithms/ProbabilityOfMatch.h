@@ -34,7 +34,6 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/ml/LogisticRegression.h>
 
 // TGS
 #include <tgs/SharedPtr.h>
@@ -53,49 +52,29 @@ public:
   double attributeScore(const ConstOsmMapPtr &map, const shared_ptr<const Way>& w1,
     const shared_ptr<const Way> &w2);
 
-  map<QString, double> calculateStats(const ConstOsmMapPtr &map,
-    const shared_ptr<const Way>& w1, const shared_ptr<const Way> &w2, double portionScore);
-
   double distanceScore(const ConstOsmMapPtr& map, const shared_ptr<const Way>& w1,
     const shared_ptr<const Way>& w2);
 
   double distanceScore(const hoot::ConstOsmMapPtr &map, const shared_ptr<const Way> &w1,
     const shared_ptr<const LineString> &ls2, Meters circularError);
 
-  double evaluateSample(const map<QString, double>& sample) { return _model.evaluate(sample); }
-
   double lengthScore(const ConstOsmMapPtr& map, const shared_ptr<const Way>& w1,
     const shared_ptr<const Way>& w2);
-
-  double modelProbability(const ConstOsmMapPtr& map, const shared_ptr<const Way>& w1,
-    const shared_ptr<const Way>& w2, double portionScore);
 
   double parallelScore(const ConstOsmMapPtr& map, const shared_ptr<const Way>& w1,
     const shared_ptr<const Way>& w2);
 
-  double portionScore(const ConstOsmMapPtr& map, const shared_ptr<const Way>& w1,
-    const shared_ptr<const Way>& w2);
-
-  double probability(const ConstOsmMapPtr& map, const shared_ptr<const Way>& w1,
-    const shared_ptr<const Way>& w2, double portionScore);
-
   double expertProbability(const ConstOsmMapPtr &map, const shared_ptr<const Way>& w1,
     const shared_ptr<const Way> &w2);
 
-  bool useModel() const { return _useModel; }
-
-  double zipperScore(const ConstOsmMapPtr &map, const shared_ptr<const Way>& w1,
-    const shared_ptr<const Way>& w2);
+   double zipperScore(const shared_ptr<const Way>& w1, const shared_ptr<const Way>& w2);
 
   static bool debug;
 
 private:
   static ProbabilityOfMatch _default;
-  bool _useModel;
-  LogisticRegression _model;
   double _parallelExp;
   double _dMax;
-  double _dMedian;
 
 };
 

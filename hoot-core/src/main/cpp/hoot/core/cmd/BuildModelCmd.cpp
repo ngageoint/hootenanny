@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/MatchCreator.h>
@@ -35,9 +35,6 @@
 #include <hoot/core/io/ArffWriter.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
 #include <hoot/core/util/ConfigOptions.h>
-
-// Qt
-#include <QFile>
 
 // Standard
 #include <fstream>
@@ -57,18 +54,6 @@ public:
   static string className() { return "hoot::BuildModelCmd"; }
 
   BuildModelCmd() { }
-
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return "build-model (ref1 ref2) [ref1 ref2 ...] (output)\n"
-        "  Reads the inputs, generates a model and writes the result to a .arff and \n"
-        "  .rf files.\n"
-        "  * input1 - Input with REF1 tags (e.g. .osm file).\n"
-        "  * input2 - Input with REF2 tags (e.g. .osm file).\n"
-        "  * output - Output model base name.";
-  }
 
   virtual QString getName() const { return "build-model"; }
 
@@ -134,18 +119,18 @@ public:
       dc.reset(new DisableCout());
     }
     int numFactors = min(df->getNumFactors(), max<unsigned int>(3, df->getNumFactors() / 5));
-    rf.trainMulticlass(*df, 40, numFactors);
+    rf.trainMulticlass(df, 40, numFactors);
     dc.reset();
 
     double error;
     double sigma;
-    rf.findAverageError(*df, error, sigma);
+    rf.findAverageError(df, error, sigma);
     LOG_INFO("Error: " << error << " sigma: " << sigma);
 
-    ofstream rfFp;
-    rfFp.open((output + ".rf").toStdString().data());
-    rf.exportModel(rfFp);
-    rfFp.close();
+    ofstream fileStream;
+    fileStream.open((output + ".rf").toStdString().data());
+    rf.exportModel(fileStream);
+    fileStream.close();
 
     return 0;
   }

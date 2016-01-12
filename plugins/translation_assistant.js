@@ -5,17 +5,45 @@ if (typeof hoot !== 'undefined') {
     hoot.require('etds61_osm')
 }
 
+
 translation_assistant = {
+    difference: function(a, b) {
+            var diff = [];
+            for (var k in a) {
+                if (b.indexOf(a[k]) === -1) {
+                    diff.push(a[k]);
+                }
+            }
+            return diff;
+        },
+
     //Takes 'attrs' and returns OSM 'tags'
     translateAttributes: function(attrs, layerName, attributeMapping, fcode, schema)
     {
         var tags = {};
         var extras = []
+        var l = attributeMapping[layerName];
+
+        //If layerName has no match in the mapping
+        //compare columns for a match
+        if (!l) {
+            for (var lyr in attributeMapping) {
+                if (translation_assistant.difference(Object.keys(attrs), Object.keys(attributeMapping[lyr])).length === 0) {
+                    l = attributeMapping[lyr];
+                    break;
+                }
+            }
+        }
+
+        //Throw error if no matching attribute mapping could be found
+        if (!l) {
+            throw new Error('No matching attribute mapping could be found!');
+        }
 
         for (var key in attrs)
         {
             var k = key;
-            var m = attributeMapping[layerName][k];
+            var m = l[k];
             if (m && m != "IGNORED") { //attribute does map to a tag
                 for (var tagKey in m) {
                     var tagValue = m[tagKey];
@@ -69,10 +97,16 @@ translation_assistant = {
             }
         }
 
+        //Throw error if no attrs were translated to tags
+        if (Object.keys(tags).length === 0) {
+            throw new Error('No attributes could be translated to tags!');
+        }
+
         return tags;
     }
 }
 
 if (typeof exports !== 'undefined') {
     exports.translateAttributes = translation_assistant.translateAttributes;
+    exports.difference = translation_assistant.difference;
 }

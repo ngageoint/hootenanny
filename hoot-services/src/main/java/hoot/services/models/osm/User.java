@@ -26,10 +26,6 @@
  */
 package hoot.services.models.osm;
 
-
-import hoot.services.db.DbUtils;
-import hoot.services.db2.QChangesets;
-import hoot.services.db2.QMaps;
 import hoot.services.db2.Users;
 
 import java.sql.Connection;
@@ -37,18 +33,15 @@ import java.sql.Connection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.mysema.query.sql.SQLQuery;
-
 /**
  * Represents the model for an OSM user
  */
 public class User extends Users
 {
-  @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
   private static final long serialVersionUID = 4395123526768281005L;
-  protected static final QChangesets changesets = QChangesets.changesets;
-  protected static final QMaps maps = QMaps.maps;
 
+  @SuppressWarnings("unused")
   private Connection conn;
 
   public User(final Users user, Connection conn)
@@ -69,7 +62,7 @@ public class User extends Users
    * @return an XML node
    * @see http://wiki.openstreetmap.org/wiki/API_0.6
    */
-  public Element detailsToXml(final Element parentXml, final long changesetsCount)
+  private Element detailsToXml(final Element parentXml, final long changesetsCount)
   {
     Document doc = parentXml.getOwnerDocument();
 
@@ -104,27 +97,5 @@ public class User extends Users
   public Element toXml(final Element parentXml, final long changesetsCount)
   {
     return detailsToXml(parentXml, changesetsCount);
-  }
-
-  /**
-   * Returns the number of changesets modified by this user
-   *
-   * @return number of changesets
-   */
-  public long numChangesetsModified()
-  {
-
-  	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-  	Long mapid = query.from(maps).where(maps.userId.eq(getId())).singleResult(maps.id);
-  	if (mapid == null || mapid < 0)
-  	{
-  		return -1;
-  	}
-
-  	query = new SQLQuery(conn, DbUtils.getConfiguration(mapid));
-  	return
-  	    query.from(changesets)
-  			.where( changesets.userId.eq(getId()))
-  			.count();
   }
 }

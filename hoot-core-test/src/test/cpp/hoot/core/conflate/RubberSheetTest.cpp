@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/RubberSheet.h>
 #include <hoot/core/io/OsmReader.h>
@@ -115,7 +115,7 @@ public:
 
       uut.applyTransform(map);
 
-      MapReprojector::reprojectToWgs84(map);
+      MapProjector::projectToWgs84(map);
 
       QDir().mkdir("test-output/conflate/");
       OsmWriter writer;
@@ -145,7 +145,7 @@ public:
     uut.setReference(false);
     uut.apply(map);
 
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     QDir().mkdir("test-output/conflate/");
     OsmWriter writer;

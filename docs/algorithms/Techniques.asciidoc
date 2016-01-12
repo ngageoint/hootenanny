@@ -143,6 +143,8 @@ and removes all others.
 If a name is recorded multiple times within the attributes, then the duplicate
 names are removed.  For instance, the attributes +name=Foo Street, alt_name=Foo
 Street;Bar Street+ will be converted to: +name=Foo Street, alt_name=Bar Street+.
+You can control whether Hootenanny is sensitive to name case with the 
+duplicate.name.case.sensitive configuration parameter.
 
 ==== Dual Way Splitter
 
@@ -436,6 +438,7 @@ To merge names from two features into one new set of names, we treat the names a
  +
  +
  +
+[[CalculatingEnumeratedScore]]
 *_Calculating the Enumerated Score_*
 
 Enumerated tags are tags with predefined nominal values. This includes +surface=dirt+ , +surface=paved+ and +highway=primary+ . These tags have relationships that must be manually defined (<<HighwayTagRelate>>).

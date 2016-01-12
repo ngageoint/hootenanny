@@ -54,7 +54,6 @@ public class UserDetailsResource
 
   public UserDetailsResource()
   {
-    log.debug("Reading application settings...");
     appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
   }
 
@@ -87,7 +86,7 @@ public class UserDetailsResource
    *
    * @return Response with user detail information
    * @throws Exception
-   * @todo update to get actual logged in user once OAuth is implemented
+   * @todo update to get actual logged in user once security is implemented
    */
   @GET
   @Consumes(MediaType.TEXT_PLAIN)

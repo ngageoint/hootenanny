@@ -33,6 +33,7 @@ namespace hoot
 PartialOsmMapReader::PartialOsmMapReader()
 {
   setMaxElementsPerMap(ConfigOptions().getMaxElementsPerPartialMap());
+  _elementsRead = 0;
 }
 
 void PartialOsmMapReader::read(shared_ptr<OsmMap> map)

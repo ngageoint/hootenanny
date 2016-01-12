@@ -1,0 +1,48 @@
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "node",
+            "area",
+            "relation"
+        ],
+        "influence": 1,
+        "name": "artwork_type",
+        "objectType": "tag"
+    },
+    {
+        "isA": "artwork_type",
+        "name": "artwork_type=*",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "artwork=sculpture"
+        ],
+        "isA": "artwork_type",
+        "name": "artwork_type=sculpture",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "historic=monument",
+            "weight": 0.8
+        }
+    },
+    {
+        "aliases": [
+            "artwork=statue"
+        ],
+        "isA": "artwork_type",
+        "name": "artwork_type=statue",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "artwork_type=sculpture",
+                "weight": 0.8
+            },
+            {
+                "name": "historic=monument",
+                "weight": 0.8
+            }
+        ]
+    }
+]

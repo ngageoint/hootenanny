@@ -124,6 +124,16 @@ public:
   QStringList getNames() const;
 
   /**
+   * Returns the speed in standard units (m/s).
+   */
+  Velocity getVelocity(const QString& k) const;
+
+  /**
+   * Returns the length in standard units (m).
+   */
+  Length getLength(const QString& k) const;
+
+  /**
    * Return the number of tags that contain actual information, not meta-data or debug tags.
    * Meta-data tags include things like source and license. Debug is anything that starts with
    * hoot:. An example of an informational tag is name or highway.
@@ -138,13 +148,6 @@ public:
    */
   const QStringList& getPseudoNameKeys() const;
   QStringList getPseudoNames() const;
-
-  /**
-   * Checks for common tags that denote area. E.g. building=yes, area=yes.
-   * In some cases you may need to look at the element too. If the element is a node then it
-   * doesn't matter if isArea returns true.
-   */
-  bool isArea() const;
 
   /**
    * Checks for common false values such as "no", "false", "0", "off".
@@ -184,6 +187,7 @@ public:
   void set(const QString& key, const QString& value);
   void set(const QString& key, bool v);
   void set(const QString& key, double v) { set(key, QString::number(v)); }
+  void set(const QString& key, int64_t v) { set(key, QString::number(v)); }
 
   /**
    * If a kvp is in other, then set it in this. If this already has that key then the value will
@@ -227,6 +231,8 @@ public:
   QString toString() const;
 
 private:
+  void _valueRegexParser(const QString& str, QString& num, QString& units) const;
+
   static QStringList _nameKeys;
   static QStringList _pseudoNameKeys;
 };

@@ -29,8 +29,9 @@
 #define VALIDATE_H
 
 #ifdef VALIDATE_ON
+# include <hoot/core/util/SignalCatcher.h>
 # warning Validate is on, this will slow things considerably.
-# define VALIDATE(a) { if ((a) == false) LOG_WARN("Validate failed here."); }
+# define VALIDATE(a) { if ((a) == false) { LOG_WARN("Validate failed here."); SignalCatcher::print_stacktrace(); } }
 #else
 # define VALIDATE(a)
 #endif

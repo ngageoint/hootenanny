@@ -34,7 +34,7 @@
 // hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/RandomNumberUtils.h>
@@ -60,18 +60,18 @@ QString PertyDuplicatePoiOp::toString()
 
 void PertyDuplicatePoiOp::apply(shared_ptr<OsmMap>& map)
 {
-  MapReprojector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
   boost::uniform_real<> uni(0.0, 1.0);
   boost::normal_distribution<> nd;
   boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<> > N(*_rng, nd);
 
   // make a copy since we'll be modifying the map as we go.
-  OsmMap::NodeMap nm = map->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nm.constBegin(); it != nm.constEnd(); ++it)
+  NodeMap nm = map->getNodeMap();
+  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
     if (uni(*_rng) < _p)
     {
-      const NodePtr& n = it.value();
+      const NodePtr& n = it->second;
       int copies = round(fabs(N() * _duplicateSigma)) + 1;
 
       for (int i = 0; i < copies; i++)
@@ -99,10 +99,10 @@ void PertyDuplicatePoiOp::duplicateNode(const NodePtr& n, const OsmMapPtr& map)
 
 void PertyDuplicatePoiOp::setConfiguration(const Settings& conf)
 {
-  setDuplicateSigma(conf.getDouble(duplicateSigmaKey(), defaultDuplicateSigma()));
-  setProbability(conf.getDouble(pKey(), defaultProbability()));
-  setMoveMultiplier(conf.getDouble(moveMultiplierKey(), defaultMoveMultiplier()));
   ConfigOptions configOptions(conf);
+  setDuplicateSigma(configOptions.getPertyDuplicatePoiDuplicateSigma());
+  setProbability(configOptions.getPertyDuplicatePoiP());
+  setMoveMultiplier(configOptions.getPertyDuplicatePoiMoveMultiplier());
   const int seed = configOptions.getPertySeed();
   LOG_VARD(seed);
   if (seed == -1)

@@ -49,9 +49,5 @@ public interface XmlSerializable
   long getOldId();
   void setOldId(long id);
   
-  long getRequestChangesetId();
   void setRequestChangesetId(long id);
-  
-  //TODO: re-enable this?
-  //void clearTempData();
 }

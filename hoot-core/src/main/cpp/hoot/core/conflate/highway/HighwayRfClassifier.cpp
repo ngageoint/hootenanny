@@ -60,6 +60,9 @@
 // Standard
 #include <fstream>
 
+// Qt
+#include <QFile>
+
 namespace hoot
 {
 
@@ -67,56 +70,14 @@ HOOT_FACTORY_REGISTER(HighwayClassifier, HighwayRfClassifier)
 
 HighwayRfClassifier::HighwayRfClassifier()
 {
-  //_createAllExtractors();
-  _createTestExtractors();
-
-  QString path = ConfPath::search(ConfigOptions().getConflateMatchHighwayModel());
-  LOG_INFO("Loading highway model from: " << path);
-
-  ifstream fp;
-  fp.open(path.toAscii().data());
-  if (!fp.is_open())
-  {
-    throw HootException("Error opening file: " + path);
-  }
-  _rf.reset(new RandomForest());
-  _rf->import(fp);
-  vector<string> factorLabels = _rf->getFactorLabels();
-  LOG_VAR(factorLabels);
-
-  QStringList extractorNames;
-  for (size_t i = 0; i < _extractors.size(); i++)
-  {
-    extractorNames.append(QString::fromStdString(_extractors[i]->getName()).
-                          replace(QRegExp("[^\\w]"), "_"));
-  }
-
-  QStringList missingExtractors;
-  for (size_t i = 0; i < factorLabels.size(); i++)
-  {
-    QString fn = QString::fromStdString(factorLabels[i]);
-    if (extractorNames.contains(fn) == false)
-    {
-      missingExtractors.append(fn);
-    }
-    _rfFactorLabels.append(fn);
-  }
-  LOG_VAR(extractorNames);
-  LOG_VAR(missingExtractors);
-  LOG_VAR(_rfFactorLabels);
-
-  if (missingExtractors.size() > 0)
-  {
-    LOG_WARN("An extractor used by the model is not being calculated. We will still try, but");
-    LOG_WARN("this will undoubtably result in poor quality matches. Missing extractors:");
-    LOG_WARN(missingExtractors);
-    LOG_WARN("Available extractors: " << extractorNames);
-  }
+  // we do a lazy initialization
 }
 
 MatchClassification HighwayRfClassifier::classify(const ConstOsmMapPtr& map,
   ElementId eid1, ElementId eid2, const WaySublineMatchString& match)
 {
+  _init();
+
   MatchClassification p;
 
   if (match.isValid() == false)
@@ -160,7 +121,7 @@ MatchClassification HighwayRfClassifier::classify(const ConstOsmMapPtr& map,
   return p;
 }
 
-void HighwayRfClassifier::_createAllExtractors()
+void HighwayRfClassifier::_createAllExtractors() const
 {
   _extractors.clear();
 //  vector<std::string> extractorNames = Factory::getInstance().getObjectNamesByBase(
@@ -239,7 +200,7 @@ void HighwayRfClassifier::_createAllExtractors()
 
 }
 
-void HighwayRfClassifier::_createTestExtractors()
+void HighwayRfClassifier::_createTestExtractors() const
 {
   _extractors.clear();
 
@@ -262,6 +223,8 @@ void HighwayRfClassifier::_createTestExtractors()
 map<QString, double> HighwayRfClassifier::getFeatures(const shared_ptr<const OsmMap>& m,
   ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const
 {
+  _init();
+
   map<QString, double> result;
 
   // convert match into elements in a new map.
@@ -291,7 +254,7 @@ map<QString, double> HighwayRfClassifier::getFeatures(const shared_ptr<const Osm
     LOG_VAR(eid2);
     LOG_VAR(match.toString());
     throw NeedsReviewException("Internal Error: Expected a matching subline, but got an empty "
-                               "match. Please report this to the developers.");
+                               "match. Please report this to hootenanny.help@digitalglobe.com.");
   }
   else
   {
@@ -309,6 +272,67 @@ map<QString, double> HighwayRfClassifier::getFeatures(const shared_ptr<const Osm
   }
 
   return result;
+}
+
+void HighwayRfClassifier::_init() const
+{
+  if (!_rf)
+  {
+    //_createAllExtractors();
+    _createTestExtractors();
+
+    QString path = ConfPath::search(ConfigOptions().getConflateMatchHighwayModel());
+    LOG_INFO("Loading highway model from: " << path);
+
+    QFile file(path.toAscii().data());
+    if (!file.open(QIODevice::ReadOnly))
+    {
+      throw HootException("Error opening file: " + path);
+    }
+    _rf.reset(new RandomForest());
+    try
+    {
+      _rf->importModel(file);
+      file.close();
+    }
+    catch (const Exception& e)
+    {
+      file.close();
+      throw e;
+    }
+
+    vector<string> factorLabels = _rf->getFactorLabels();
+    LOG_VAR(factorLabels);
+
+    QStringList extractorNames;
+    for (size_t i = 0; i < _extractors.size(); i++)
+    {
+      extractorNames.append(QString::fromStdString(_extractors[i]->getName()).
+                            replace(QRegExp("[^\\w]"), "_"));
+    }
+
+    QStringList missingExtractors;
+    for (size_t i = 0; i < factorLabels.size(); i++)
+    {
+      QString fn = QString::fromStdString(factorLabels[i]);
+      if (extractorNames.contains(fn) == false)
+      {
+        missingExtractors.append(fn);
+      }
+      _rfFactorLabels.append(fn);
+    }
+    LOG_VAR(extractorNames);
+    LOG_VAR(missingExtractors);
+    LOG_VAR(_rfFactorLabels);
+
+    if (missingExtractors.size() > 0)
+    {
+      LOG_WARN("An extractor used by the model is not being calculated. We will still try, but");
+      LOG_WARN("this will undoubtably result in poor quality matches. Missing extractors:");
+      LOG_WARN(missingExtractors);
+      LOG_WARN("Available extractors: " << extractorNames);
+    }
+  }
 }
 
 }

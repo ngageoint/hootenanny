@@ -1,20 +1,23 @@
-{
-    "tag": {
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "influence": 1,
+        "isA": "hgispoi",
         "name": "transport",
-        "influence": 1.0,
-        "type": "enumeration",
-        "geometries": ["node","area"],
-        "isA": "poi=yes"
+        "objectType": "tag"
     },
-
-    "#" : " The catch all",
-    "tag": { "name": "transport=*", "isA": "transport" },
-
-    "tag": { "name": "transport=station", "isA": "transport",
-        "similarTo": { "name": "amenity=bus_station", "weight": 0.8 },
-        "similarTo": { "name": "building=train_station", "weight": 0.8 },
-        "similarTo": { "name": "railway=station", "weight": 0.8 },
-        "similarTo": { "name": "station=light_rail", "weight": 0.8 } },
-
-    "#" : "end"
-}
+    {
+        "isA": "transport",
+        "name": "transport=*",
+        "objectType": "tag"
+    },
+    {
+        "isA": "transport",
+        "name": "transport=station",
+        "objectType": "tag"
+    }
+]

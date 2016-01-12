@@ -45,15 +45,6 @@ public:
 
   TileConflateCmd() { }
 
-  virtual QString getHelp() const
-  {
-    return getName() + " (input1) (input2) (output)\n"
-        "  Conflates tiles input1 and input2 and generates output.\n"
-        "  * input1 - Input (e.g. .osm file).\n"
-        "  * input2 - Input (e.g. .osm file).\n"
-        "  * output - Output file (e.g. .osm file).";
-  }
-
   virtual QString getName() const { return "tile-conflate"; }
 
   virtual int runSimple(QStringList args)

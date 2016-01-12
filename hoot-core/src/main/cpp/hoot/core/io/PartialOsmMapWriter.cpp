@@ -45,10 +45,10 @@ void PartialOsmMapWriter::write(boost::shared_ptr<const OsmMap> map)
 
 void PartialOsmMapWriter::writePartial(const shared_ptr<const OsmMap>& map)
 {
-  const OsmMap::NodeMap& nm = map->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
+  const NodeMap& nm = map->getNodeMap();
+  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    writePartial(it.value());
+    writePartial(it->second);
   }
 
   const WayMap& wm = map->getWays();
@@ -91,5 +91,15 @@ void PartialOsmMapWriter::writePartial(const shared_ptr<Relation>& r)
 {
   writePartial((const shared_ptr<const Relation>)r);
 }
+
+void PartialOsmMapWriter::writeElement(ElementInputStream& in)
+{
+  ElementPtr ele = in.readNextElement();
+  if (ele != 0)
+  {
+    writePartial(ele);
+  }
+}
+
 
 }

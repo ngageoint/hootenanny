@@ -13,6 +13,9 @@ bin/hoot:
 bin/hoot.bin:
 pretty-pipes/bin/PrettyPipes:
 
+osmapidb:
+	$(MAKE) -f Makefile.old osmapidb
+
 archive:
 	$(MAKE) -f Makefile.old dist
 
@@ -57,6 +60,9 @@ test:
 
 test-all:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old test-all
+
+test-all-no-core:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old test-all-no-core
 
 test-quick:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old test-quick

@@ -1,63 +1,495 @@
-{
-    "tag": {
+[
+    {
+        "isA": "poi=yes",
         "name": "place",
-        "isA": "poi=yes"
+        "objectType": "tag"
     },
-
-    "#" : " The catch all",
-    "tag": { "name": "place=*", "isA": "place" },
-
-    "#" : "This tag provides absolutely no information so we don't consider it a proper place",
-    "tag": { "name": "place=locality", "isA": "poi" },
-
-    "tag": {
+    {
+        "isA": "poi",
+        "name": "place=*",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
         "name": "place=administrative",
-        "isA": "place",
-        "similarTo": { "name": "place=built_up_area", "weight": 0.8 },
-        "similarTo": { "name": "place=neighborhood", "weight": 0.8 },
-        "similarTo": { "name": "place=suburb", "weight": 0.8 }
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "place=built_up_area",
+                "weight": 0.8
+            },
+            {
+                "name": "place=neighbourhood",
+                "weight": 0.8
+            },
+            {
+                "name": "place=suburb",
+                "weight": 0.8
+            },
+            {
+                "name": "place=subdivision",
+                "weight": 0.8
+            },
+            {
+                "name": "place=census-designated",
+                "weight": 0.8
+            },
+            {
+                "name": "place=quarter",
+                "weight": 0.8
+            }
+        ]
     },
-    "tag": { "name": "place=built_up_area", "isA": "place" },
-    "tag": {
+    {
+        "categories": [
+            "hgispoi"
+        ],
+        "isA": "place",
+        "name": "place=allotments",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "place=farm",
+            "weight": 0.6
+        }
+    },
+    {
+        "isA": "place",
+        "name": "place=archipelago",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=atol",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "place=island",
+            "weight": 0.7
+        }
+    },
+    {
+        "isA": "place",
+        "name": "place=borough",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "hgispoi"
+        ],
+        "isA": "place",
+        "name": "place=buffer_zone",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=built_up_area",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=census-designated",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
         "name": "place=city",
-        "isA": "place",
-        "similarTo": { "name": "place=town", "weight": 0.8 },
-        "similarTo": { "name": "place=village", "weight": 0.8 }
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "place=town",
+                "weight": 0.8
+            },
+            {
+                "name": "place=village",
+                "weight": 0.8
+            }
+        ]
     },
-    "tag": {
+    {
+        "aliases": [
+            "place=block"
+        ],
+        "isA": "place",
+        "name": "place=city_block",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "place=neighbourhood",
+            "weight": 0.7
+        }
+    },
+    {
+        "isA": "place",
+        "name": "place=continent",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place=political_entity",
+        "name": "place=country",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=county",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "place=state",
+                "weight": 0.8
+            },
+            {
+                "name": "place=district",
+                "weight": 0.8
+            },
+            {
+                "name": "place=borough",
+                "weight": 0.8
+            },
+            {
+                "name": "place=municipality",
+                "weight": 0.8
+            },
+            {
+                "name": "place=parish",
+                "weight": 0.8
+            }
+        ]
+    },
+    {
+        "isA": "place",
+        "name": "place=croft",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place=political_entity",
+        "name": "place=dependent_political_entity",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=district",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "hgispoi"
+        ],
+        "isA": "place",
+        "name": "place=farm",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "hgispoi"
+        ],
+        "isA": "place",
+        "name": "place=free_trade_zone",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
         "name": "place=hamlet",
-        "isA": "place",
-        "similarTo": { "name": "place=isolated_dwelling", "weight": 0.8 },
-        "similarTo": { "name": "place=village", "weight": 0.8 }
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "place=isolated_dwelling",
+                "weight": 0.8
+            },
+            {
+                "name": "place=village",
+                "weight": 0.8
+            }
+        ]
     },
-    "tag": { "name": "place=isolated_dwelling", "isA": "place" },
-    "tag": {
+    {
+        "isA": "place=political_entity",
+        "name": "place=historical_political_entity",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place=political_entity",
+        "name": "place=independent_political_entity",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=island",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "place=archipelago",
+            "weight": 0.7
+        }
+    },
+    {
+        "isA": "place",
+        "name": "place=islet",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "place=island",
+            "weight": 0.7
+        }
+    },
+    {
+        "isA": "place",
+        "name": "place=isolated_dwelling",
+        "objectType": "tag"
+    },
+    {
+        "isA": "poi",
+        "name": "place=locality",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "place=maritime_farm"
+        ],
+        "categories": [
+            "hgispoi"
+        ],
+        "isA": "place",
+        "name": "place=marine_farm",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "place=farm",
+            "weight": 0.9
+        }
+    },
+    {
+        "isA": "place",
+        "name": "place=municipality",
+        "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "place=neighborhood",
+            "place=official_neighborhood"
+        ],
+        "isA": "place",
         "name": "place=neighbourhood",
-        "isA": "place",
-        "similarTo": { "name": "place=built_up_area", "weight": 0.8 },
-        "similarTo": { "name": "place=populated", "weight": 0.8 },
-        "similarTo": { "name": "place=hamlet", "weight": 0.8 },
-        "similarTo": { "name": "place=suburb", "weight": 0.8 },
-        "similarTo": { "name": "place=town", "weight": 0.8 },
-        "similarTo": { "name": "place=village", "weight": 0.8 }
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "place=built_up_area",
+                "weight": 0.8
+            },
+            {
+                "name": "place=populated",
+                "weight": 0.8
+            },
+            {
+                "name": "place=hamlet",
+                "weight": 0.8
+            },
+            {
+                "name": "place=suburb",
+                "weight": 0.8
+            },
+            {
+                "name": "place=town",
+                "weight": 0.8
+            },
+            {
+                "name": "place=village",
+                "weight": 0.8
+            }
+        ]
     },
-    "tag": { "name": "place=populated", "isA": "place" },
-    "tag": {
+    {
+        "isA": "place",
+        "name": "place=ocean",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=parish",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=plot",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=political_entity",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=populated",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=province",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=quarter",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=region",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=religious_community",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=sea",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "place=ocean",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "place=political_entity",
+        "name": "place=section_of_independent_political_entity",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place=political_entity",
+        "name": "place=semi-independent_political_entity",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=settlement",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=shanty_town",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place=political_entity",
+        "name": "place=state",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "place=province",
+                "weight": 0.8
+            },
+            {
+                "name": "place=region",
+                "weight": 0.8
+            },
+            {
+                "name": "place=territory",
+                "weight": 0.8
+            }
+        ]
+    },
+    {
+        "isA": "place",
+        "name": "place=subdistrict",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "place=district",
+            "weight": 0.8
+        }
+    },
+    {
+        "isA": "place",
+        "name": "place=subdivision",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
         "name": "place=suburb",
-        "isA": "place",
-        "similarTo": { "name": "place=built_up_area", "weight": 0.8 },
-        "similarTo": { "name": "place=populated", "weight": 0.8 },
-        "similarTo": { "name": "place=town", "weight": 0.8 }
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "place=built_up_area",
+                "weight": 0.8
+            },
+            {
+                "name": "place=populated",
+                "weight": 0.8
+            },
+            {
+                "name": "place=town",
+                "weight": 0.8
+            }
+        ]
     },
-    "tag": { "name": "place=town", "isA": "place" },
-    "tag": { "name": "place=tribal_area", "isA": "place" },
-    "tag": {
+    {
+        "isA": "place",
+        "name": "place=territory",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=town",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=township",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "place=town",
+                "weight": 0.8
+            },
+            {
+                "name": "place=village",
+                "weight": 0.8
+            }
+        ]
+    },
+    {
+        "isA": "place",
+        "name": "place=tribal_area",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
+        "name": "place=unknown",
+        "objectType": "tag"
+    },
+    {
+        "isA": "place",
         "name": "place=village",
-        "isA": "place",
-        "similarTo": { "name": "place=populated", "weight": 0.8 },
-        "similarTo": { "name": "place=hamlet", "weight": 0.8 },
-        "similarTo": { "name": "place=built_up_area", "weight": 0.8 }
-    },
-
-    "#" : "end"
-}
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "place=populated",
+                "weight": 0.8
+            },
+            {
+                "name": "place=hamlet",
+                "weight": 0.8
+            },
+            {
+                "name": "place=croft",
+                "weight": 0.8
+            },
+            {
+                "name": "place=settlement",
+                "weight": 0.8
+            },
+            {
+                "name": "place=shanty_town",
+                "weight": 0.7
+            },
+            {
+                "name": "place=religious_community",
+                "weight": 0.7
+            },
+            {
+                "name": "place=isolated_dwelling",
+                "weight": 0.7
+            },
+            {
+                "name": "place=built_up_area",
+                "weight": 0.8
+            }
+        ]
+    }
+]

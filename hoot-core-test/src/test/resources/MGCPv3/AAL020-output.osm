@@ -57,7 +57,7 @@
         <nd ref="-49"/>
         <nd ref="-50"/>
         <nd ref="-46"/>
-        <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.013Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-24T17:41:24.376Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -65,7 +65,6 @@
         <tag k="source" v="mgcp"/>
         <tag k="uuid" v="{20e36268-9fa7-4f18-b8f3-d0cea7710455}"/>
         <tag k="building:density" v="sparse"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -78,7 +77,7 @@
         <nd ref="-44"/>
         <nd ref="-45"/>
         <nd ref="-41"/>
-        <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.013Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-24T17:41:24.376Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="education"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
@@ -87,7 +86,6 @@
         <tag k="source" v="mgcp"/>
         <tag k="uuid" v="{20c1223a-4735-4f7f-95db-13362a07d216}"/>
         <tag k="building:density" v="dense"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -101,7 +99,7 @@
         <nd ref="-39"/>
         <nd ref="-40"/>
         <nd ref="-36"/>
-        <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.013Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-24T17:41:24.376Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="healthcare"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
@@ -109,7 +107,6 @@
         <tag k="source" v="mgcp"/>
         <tag k="uuid" v="{20bba864-bc5f-47c5-97fc-eae9b4c60c67}"/>
         <tag k="building:density" v="dense"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -123,7 +120,7 @@
         <nd ref="-34"/>
         <nd ref="-35"/>
         <nd ref="-31"/>
-        <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.013Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-24T17:41:24.375Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="urbanised"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
@@ -132,7 +129,6 @@
         <tag k="source" v="mgcp"/>
         <tag k="uuid" v="{20b02702-078b-4daa-a649-31c28a3d3086}"/>
         <tag k="building:density" v="sparse"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -146,7 +142,7 @@
         <nd ref="-29"/>
         <nd ref="-30"/>
         <nd ref="-26"/>
-        <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.013Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-24T17:41:24.375Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="correctional"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
@@ -154,7 +150,6 @@
         <tag k="condition" v="functional"/>
         <tag k="source" v="mgcp"/>
         <tag k="uuid" v="{206c3ef8-34ab-46cb-a9c8-6bab1c21be7e}"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -168,7 +163,7 @@
         <nd ref="-24"/>
         <nd ref="-25"/>
         <nd ref="-21"/>
-        <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.013Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-24T17:41:24.375Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="residential"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
@@ -177,7 +172,6 @@
         <tag k="source" v="mgcp"/>
         <tag k="uuid" v="{200ee386-f54b-4188-9383-ea93a9b90d29}"/>
         <tag k="building:density" v="sparse"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -191,7 +185,7 @@
         <nd ref="-19"/>
         <nd ref="-20"/>
         <nd ref="-16"/>
-        <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.013Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-24T17:41:24.375Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="institute"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
@@ -201,7 +195,6 @@
         <tag k="uuid" v="{2005b758-e63c-41a3-8f91-ab84d8e0a149}"/>
         <tag k="building:density" v="dense"/>
         <tag k="name" v="Yet Again"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -215,7 +208,7 @@
         <nd ref="-14"/>
         <nd ref="-15"/>
         <nd ref="-11"/>
-        <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.013Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-24T17:41:24.375Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="commercial"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
@@ -225,7 +218,6 @@
         <tag k="uuid" v="{1feb8ee5-b54a-46ce-b9c5-8b48b92e0cd5}"/>
         <tag k="building:density" v="dense"/>
         <tag k="name" v="test1"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -239,7 +231,7 @@
         <nd ref="-9"/>
         <nd ref="-10"/>
         <nd ref="-6"/>
-        <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.012Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-24T17:41:24.375Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="industrial"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
@@ -249,7 +241,6 @@
         <tag k="uuid" v="{1fb8791d-2a98-4c2f-b5c2-01885e4d0b47}"/>
         <tag k="building:density" v="sparse"/>
         <tag k="name" v="bua02"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -263,14 +254,13 @@
         <nd ref="-4"/>
         <nd ref="-5"/>
         <nd ref="-1"/>
-        <tag k="source:ingest:datetime" v="2015-08-05T21:55:34.012Z"/>
+        <tag k="source:ingest:datetime" v="2015-11-24T17:41:24.348Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="source" v="mgcp"/>
         <tag k="uuid" v="{1fb144c2-de51-4b5f-874b-b309a22afe0a}"/>
         <tag k="name" v="BUA01"/>
-        <tag k="area" v="yes"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal" v="25"/>

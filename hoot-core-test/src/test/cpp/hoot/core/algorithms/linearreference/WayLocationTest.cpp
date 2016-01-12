@@ -35,7 +35,7 @@
 #include <geos/geom/Coordinate.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 
@@ -63,7 +63,7 @@ public:
     env.MinY = 0;
     env.MaxX = 1;
     env.MaxY = 1;
-    MapReprojector::reprojectToOrthographic(map, env);
+    MapProjector::projectToOrthographic(map, env);
 
     return map;
   }

@@ -28,9 +28,7 @@ package hoot.services.writers.osm;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.util.HashMap;
 import java.util.Map;
-
 
 import hoot.services.db2.QUsers;
 import hoot.services.db2.Users;
@@ -68,9 +66,9 @@ public class MapQueryResponseWriter
   /**
    * Writes the query response to an XML document
    *
-   * @param results query results; a mapping of element ID's to records, grouped by element type
+   * @param results query results; a mapping of element IDs to records, grouped by element type
    * @param queryBounds bounds of the query
-   * @param multiLayerUniqueElementIds if true, ID's are prepended with
+   * @param multiLayerUniqueElementIds if true, IDs are prepended with
    * <map id>_<first letter of the element type>_; this setting activated is not compatible with
    * standard OSM clients (specific to Hootenanny iD)
    * @return an XML document
@@ -106,9 +104,6 @@ public class MapQueryResponseWriter
                 Element element =
                   ElementFactory.getInstance().create(elementType, record, conn, mapId);
 
-                //TEST CODE ONLY
-                //element = modifyTagsForTesting(element);
-
                 //the query that sent this in should have already handled filtering out invisible
                 //elements
 
@@ -139,30 +134,5 @@ public class MapQueryResponseWriter
 
     //System.out.println(XmlDocumentBuilder.toString(responseDoc));
     return responseDoc;
-  }
-
-  /*
-   * Simple helper method for letting me drop some tags from elements, wholesale, at the service
-   * level.
-   *
-   * FOR TESTING ONLY
-   */
-  @SuppressWarnings("unused")
-  private Element modifyTagsForTesting(Element element) throws Exception
-  {
-    Map<String, String> tags = element.getTags();
-    Map<String, String> newTags = new HashMap<String, String>();
-    for (Map.Entry<String, String> tagEntry : tags.entrySet())
-    {
-      String tagKey = tagEntry.getKey();
-      if (tagKey.equals("hoot:review:uuid") || tagKey.equals("uuid"))
-      {
-        newTags.put(tagKey, tagEntry.getValue());
-      }
-    }
-    newTags.put("hoot:osmId", String.valueOf(element.getId()));
-    newTags.put("hoot:osmType", element.toString().toLowerCase());
-    element.setTags(newTags);
-    return element;
   }
 }

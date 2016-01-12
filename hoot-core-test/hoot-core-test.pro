@@ -39,11 +39,6 @@ release:OBJECTS_DIR = tmp/release
 else:OBJECTS_DIR = tmp/debug
 DESTDIR = ../lib/
 
-octave {
-cppunit:SOURCES += src/test/cpp/hoot/core/perty/PertyOpTest.cpp \
-
-}
-
 cppunit {
 SOURCES += \
     src/test/cpp/hoot/core/ConflatorTest.cpp \
@@ -61,6 +56,7 @@ SOURCES += \
     src/test/cpp/hoot/core/ops/MergeNearbyNodesTest.cpp \
     src/test/cpp/hoot/core/algorithms/LevenshteinDistanceTest.cpp \
     src/test/cpp/hoot/core/schema/OsmSchemaTest.cpp \
+    src/test/cpp/hoot/core/schema/SchemaCheckerTest.cpp \
     src/test/cpp/hoot/core/schema/TagComparatorTest.cpp \
     src/test/cpp/hoot/core/scoring/AttributeComparatorTest.cpp \
     src/test/cpp/hoot/core/index/ClosePointHashTest.cpp \
@@ -104,7 +100,7 @@ SOURCES += \
     src/test/cpp/hoot/core/perty/PertyNameVisitorTest.cpp \
     src/test/cpp/hoot/core/perty/PertyDuplicatePoiOpTest.cpp \
     src/test/cpp/hoot/core/perty/PertyRemoveTagVisitorTest.cpp \
-    src/test/cpp/hoot/core/MapReprojectorTest.cpp \
+    src/test/cpp/hoot/core/MapProjectorTest.cpp \
     src/test/cpp/hoot/core/util/GeometryUtilsTest.cpp \
     src/test/cpp/hoot/core/elements/TagsTest.cpp \
     src/test/cpp/hoot/core/conflate/polygon/BuildingMergeManipulatorTest.cpp \
@@ -163,7 +159,9 @@ SOURCES += \
     src/test/cpp/hoot/core/visitors/KeepTagsVisitorTest.cpp \
     src/test/cpp/hoot/core/conflate/CookieCutterTest.cpp \
     src/test/cpp/hoot/core/conflate/AlphaShapeGeneratorTest.cpp \
-    src/test/cpp/hoot/core/ops/CookieCutterOpTest.cpp
+    src/test/cpp/hoot/core/perty/PertyOpTest.cpp \
+    src/test/cpp/hoot/core/ops/CookieCutterOpTest.cpp \
+    src/test/cpp/hoot/core/visitors/RemoveElementsVisitorTest.cpp \
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
@@ -195,4 +193,11 @@ SOURCES += \
     src/test/cpp/hoot/core/algorithms/string/WeightedWordDistanceTest.cpp \
     src/test/cpp/hoot/core/algorithms/string/SqliteWeightedWordDistanceTest.cpp \
     src/test/cpp/hoot/core/filters/BuildingCriterionTest.cpp \
-    src/test/cpp/hoot/core/visitors/SplitLongLinearWaysVisitorTest.cpp
+    src/test/cpp/hoot/core/visitors/SplitLongLinearWaysVisitorTest.cpp \
+    src/test/cpp/hoot/core/elements/WayTest.cpp \
+    src/test/cpp/hoot/core/algorithms/string/StringTokenizerTest.cpp \
+    src/test/cpp/hoot/core/schema/TagCategoryDifferencerTest.cpp \
+    src/test/cpp/hoot/core/schema/TagAncestorDifferencerTest.cpp \
+    src/test/cpp/hoot/core/elements/RelationTest.cpp \
+    src/test/cpp/hoot/core/algorithms/string/MostEnglishNameTest.cpp
+

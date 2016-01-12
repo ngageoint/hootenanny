@@ -219,13 +219,16 @@ public class ReportsResource {
 		JSONObject res = new JSONObject();
 		
 		String metaDataPath = _homeFolder + "/" + _rptStorePath + "/" + id + "/meta.data";
-		
-		File f = new File(metaDataPath);
-		if(f.exists())
-		{
-			String meta = FileUtils.readFileToString(f, "UTF-8");
-			JSONParser p = new JSONParser();
-			res = (JSONObject)p.parse(meta);
+		File metaFolder = hoot.services.utils.FileUtils.getSubFolderFromFolder(_homeFolder + "/" + _rptStorePath, id);
+		if(metaFolder != null)
+		{		
+			File f = new File(metaDataPath);
+			if(f.exists())
+			{
+				String meta = FileUtils.readFileToString(f, "UTF-8");
+				JSONParser p = new JSONParser();
+				res = (JSONObject)p.parse(meta);
+			}
 		}
 		return res;
 	}
@@ -260,7 +263,7 @@ public class ReportsResource {
 				catch(Exception ee)
 				{
 					// we ignore and continue
-					log.error(ee.getMessage());
+					//log.error(ee.getMessage());
 				}
 			}
 		}
@@ -294,9 +297,9 @@ public class ReportsResource {
 	protected boolean _deleteReport(String id) throws Exception
 	{
 		boolean deleted = false;
-		String repDataPath = _homeFolder + "/" + _rptStorePath + "/" + id;
-		File f = new File(repDataPath);
-		if(f.exists())
+		
+		File f = hoot.services.utils.FileUtils.getSubFolderFromFolder(_homeFolder + "/" + _rptStorePath, id);
+		if(f != null && f.exists())
 		{
 			FileUtils.forceDelete(f);
 			deleted = true;

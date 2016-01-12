@@ -82,6 +82,11 @@ lib/lib*
 libtool
 LocalConfig.pri
 /Makefile
+hoot-cmd/Makefile
+hoot-core-test/Makefile
+hoot-core/Makefile
+tbs/Makefile
+tgs/Makefile
 Makefile.in
 Makefile.inc
 Makefile.qmake
@@ -156,3 +161,5 @@ data/
 inputFeatures.png
 docs/developer/restDocs/
 docs/developer/wpsDocs/
+log4j.xml
+Vagrant.marker

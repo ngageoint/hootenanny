@@ -38,7 +38,7 @@
 // asciidoc just make sure you don't start any lines with "=== ".
 // http://www.methods.co.nz/asciidoc/
 //
-// Please keep the configuration options in alphabetical order.
+// Again, please keep the configuration options in alphabetical order.
 //
 === add.ref1.visitor.prefix
 
@@ -182,10 +182,12 @@ See also:
 
 * Data Type: list
 * Default Value:
-** `hoot::BuildingOutlineUpdateOp`
+** `hoot::RemoveMissingElementsVisitor` - Remove non-existent element references from relations or ways with negative IDs.
+** `hoot::RemoveDuplicateReviewsOp` - Checks if there are any duplicate reviews
+** `hoot::BuildingOutlineUpdateOp` - Updates any multi-part building outlines that may have changed during conflation.
+** `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews. By processing reviews in sorted order the results are a little more logically ordered.
 
-Runs in the conflate command after data is conflated, but before exporting. The default, `hoot::BuildingOutlineUpdateOp` updates any multi-part building outlines that may have
-changed during conflation.
+Runs in the conflate command after data is conflated, but before exporting.
 
 === conflate.pre.ops
 
@@ -216,12 +218,58 @@ See also:
 
 The string that lists the types of conflation used in the user interface.  The possible values are: reference, cookieCutter, average, and advancedConflation. 
 
+=== conflator.manipulators
+
+* Data Type: list
+* Default Value:
+** `hoot::WayMerger`
+
+List of manipulators to enable in the conflator.
+
+Some of the possible options include:
+
+* `hoot::WayMerger` -
+* `hoot::WayTagMerger` -
+
+=== conflator.min.valid.score
+
+* Data Type: double
+* Default Value: `0.01`
+
+This is the minimum valid manipulation score in the legacy greedy optimization routine. Setting
+the value lower will create more (likely overzealous) matches. Setting the value higher will drop
+less confident matches.
+
+=== conflator.post.ops
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of user specified operations to run post conflation.
+
 === convert.ops
 
 * Data Type: list
 * Default Value:
+** ``
 
 Specifies one or more semi-colon delimited operations to perform before writing data. This is only applicable to the convert command.
+
+=== convert.bounding.box
+
+* Data Type: string
+* Default Value: ``
+
+If specified the convert reader will limit data read from the data source to only features that
+intersect the given bounding box. The format is "minx,miny,maxx,maxy" specified in the projection
+of the input data source.
+
+Example Usage:
+
+----
+hoot convert -D convert.bounding.box=106.851,-6.160,107.052,-5.913 input.osm output.osm
+----
 
 === cookie.cutter.alpha
 
@@ -257,6 +305,13 @@ positive or negative.
 Crops based on the polygon rather than doing a cookie cut when using the cookie cutter map
 operation (CookieCutterOp).
 
+=== create.bogus.review.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+Creates example review tags for debugging. All reviews created with this mechanism are invalid.
+
 === crop.bounds
 
 * Data Type: string
@@ -289,12 +344,14 @@ By default how much space should be put between two divided roads when they're d
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
-=== duplicate.name.remover.case.sensitive
+=== duplicate.name.case.sensitive
 
 * Data Type: bool
 * Default Value: `true`
 
-If true the duplicate name remover will only remove duplicate names when their case also matches; ignore case when removing otherwise.
+If true, all cleaning and conflation merge operations will only remove duplicate names when their
+case also matches.  If false, cleaning and conflation merge operations will consider names with
+the same text but differing case as the same with each other.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
@@ -304,6 +361,24 @@ See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 * Default Value: `5.0`
 
 The spacing used by the EdgeDistanceExtractor.  Units in meters.
+
+=== english.words.files
+
+* Data Type: list
+* Default Value:
+** `/usr/share/dict/american-english-insane`
+** `/usr/share/dict/american-english-huge`
+** `/usr/share/dict/american-english-large`
+** `/usr/share/dict/american-english-small`
+** `/usr/share/dict/american-english`
+** `/usr/share/dict/words`
+
+Absolute file path to dictionaries of English words. The first file found will be loaded into the
+dictionary of English words and used by some algorithms. If the files are not found then the English
+words will be silently ignored.
+
+For CentOS 6.X use `sudo yum install words` to install the dictionary. For Ubuntu 14.04 use
+`sudo apt-get install wamerican-insane`.
 
 === generic.line.match.threshold
 
@@ -416,7 +491,7 @@ Sets that maximum angle that is still considered a highway match. Units in degre
 === highway.miss.threshold
 
 * Data Type: double
-* Default Value: `1.1`
+* Default Value: `0.999`
 
 The threshold at which a miss is called a miss for roads.
 
@@ -448,6 +523,39 @@ The highway subline matcher to use when determining matching sublines.
 * Default Value: `${way.subline.string.matcher}`
 
 The way subline string matcher to use when determining matching sublines for highways.
+
+=== hoot.hadoop.file.deps
+
+* Data Type: list
+* Default Value:
+** `${HOOT_HOME}/conf/BuildingModel.rf`
+
+Used by the building matching code.
+
+=== hoot.hadoop.libpath
+
+* Data Type: list
+* Default Value:
+** `${HOOT_HOME}/lib/`
+** `${HOOT_HOME}/local/lib/`
+** `${HADOOP_HOME}/c++/Linux-amd64-64/lib/`
+** `${HOOT_HOME}/pretty-pipes/lib/`
+
+List of library paths to check for hadoop
+
+=== hoot.hadoop.maxNodeCount
+
+* Data Type: int
+* Default Value: `5000000`
+
+The maximum number of nodes that can be processed by a single task tracker. See User Manual for details.",
+
+=== hoot.hadoop.pixelSize
+
+* Data Type: double
+* Default Value: `0.01`
+
+The size of a pixel when calculating node density. See User Manual for details.
 
 === id.generator
 
@@ -558,7 +666,7 @@ Foo: Pre-constraining match count: 11
 ** `hoot::UnlikelyIntersectionRemover` - Remove implied intersections that are likely incorrect. For example, a motorway overpass intersecting a residential street at a 90° is considered unlikely and "unsnapped". The geometry location is not modified.
 ** `hoot::DualWaySplitter` - Split highway types that are marked as divided into two separate geometries marked as oneway roads. A number of assumptions must be made to do this including assumptions about the direction of travel on roads (right or left hand drivers).
 ** `hoot::ImpliedDividedMarker` - If two roads implicitly should be marked as divided based on the surrounding roads, mark it as such. This is primarily caused by the FACC+ spec which does not allow bridges to be marked as divided.
-** `hoot::DuplicateNameRemover` - Remove any duplicate names. See `duplicate.name.remover.case.sensitive` for modifying the case sensitivity.
+** `hoot::DuplicateNameRemover` - Remove any duplicate names. See `duplicate.name.case.sensitive` for modifying the case sensitivity.
 ** `hoot::SmallWayMerger` - Merge any ludicrously small ways that have essentially the same attributes. Things like `UUID` are ignored. See `small.way.merger.threshold` for setting the threshold value.
 ** `hoot::RemoveEmptyAreasVisitor` - Remove all area elements that have a area of zero.
 ** `hoot::RemoveDuplicateAreaVisitor` - Remove any area elements that are essentially the same.
@@ -566,12 +674,31 @@ Foo: Pre-constraining match count: 11
 
 A list of map operations to be applied to a map for cleaning purposes in order
 
+[[match.creators]]
 === match.creators
 
 * Data Type: string
 * Default Value: `hoot::BuildingMatchCreator;hoot::PlacesPoiMatchCreator;hoot::HighwayMatchCreator`
 
 List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).
+
+Some of the possible options include:
+
+* `hoot::BuildingMatchCreator` - Matches building polygons.
+* `hoot::PlacesPoiMatchCreator` - Matches POIs using the PLACES algorithm.
+* `hoot::HighwayMatchCreator` - Matches linear highway features using the Unify
+  algorithm.
+* `hoot::ScriptMatchCreator,PoiGeneric.js` - Matches POIs using the Unify
+  algorithm.
+* `hoot::ScriptMatchCreator,<yourscript.js>` - Uses a custom match script. The
+  script should be in `$HOOT_HOME/rules/<yourscript.js>`.
+
+=== match.parallel.exponent
+
+* Data Type: double
+* Default Value: `1`
+
+Used in the calculation of the parallel score, cos (delta) ^ match.parallel.exponent
 
 === max.elements.per.partial.map
 
@@ -601,12 +728,32 @@ The Linux utility RLIMIT_AS is used for limiting virtual memory. This is analago
 less RAM will be utilized than the value specified. Typically this is most useful when limiting
 RAM usage of applications in a shared server environment.
 
+=== merge.nearby.nodes.distance
+
+* Data Type: double
+* Default Value: `1.0`
+
+When merging nodes during --ogr2osm, what tolerance should be used for deciding two nodes are identical. Units in meters and defaults to 1.0m.
+
+[[merger.creators]]
 === merger.creators
 
 * Data Type: string
 * Default Value: `hoot::BuildingMergerCreator;hoot::PlacesPoiMergerCreator;hoot::HighwaySnapMergerCreator`
 
 List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).
+
+Possible values include:
+
+* `hoot::BuildingMergerCreator` - Required if `hoot::BuildingMatchCreator` is
+  specified in `match.creators`.
+* `hoot::PlacesPoiMergerCreator` - Required if `hoot::PlacesPoiMatchCreator` is
+  specified in `match.creators`.
+* `hoot::HighwaySnapMergerCreator` - Required if `hoot::HighwayMatchCreator`
+  is specified in `match.creators`.
+* `hoot::ScriptMergerCreator` - Required if one or more instances of
+  `hoot::SplitMatchCreator` is specified in `match.creators`. Note that the
+  script name is not specified in this parameter.
 
 === node.matcher.strictness
 
@@ -699,6 +846,33 @@ Example Usage:
 hoot ogr2osm -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/Identity.js output.osm test-files/jakarta_raya_coastline.shp
 ----
 
+=== ogr.reader.bounding.box.latlng
+
+* Data Type: string
+* Default Value: ``
+
+Similar to `ogr.reader.bounding.box` but uses WGS84 to specify the bounds rather than the source
+projection. Only one of the two options can be specified.
+
+A best effort will be made to convert between the two projections. The translated bounding box
+will approximate the minimum bounding rectangle of the lat/lng bounding box. In some cases this
+may be significantly larger.
+
+=== ogr.reader.epsg.override
+
+* Data Type: int
+* Default Value: `-1`
+
+If specified the OGR reader will override the reported projection with the specified EPSG code. If
+the value is < 0 then the projection reported by the source data set will be used. In most cases
+the default value is fine.
+
+This can sometimes be necessary when reading from a DB created with osm2pgsql. E.g.
+
+----
+hoot convert -D ogr.reader.epsg.override=900913 PG:"dbname='gis' host='localhost' port='5432' user='hoot' password='blahblah'" tmp/output.shp
+----
+
 === ogr.split.o2s
 
 * Data Type: bool
@@ -741,6 +915,43 @@ The name to use for the ESRI Feature Dataset on export. Note: This only applies 
 
 Export TDS data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one FCODE per file/layer (ROAD_L, BUILDING_P etc).
 
+=== ogr.writer.create.all.layers
+
+* Data Type: bool
+* Default Value: `false`
+
+Create all layers when using the OGR writer whether or not the layers contain features. Setting this
+to true can be useful when conforming to strict specifications.
+
+=== ogr.writer.pre.layer.name
+
+* Data Type: string
+* Default Value: ``
+
+=== ogr.writer.script
+
+* Data Type: string
+* Default Value: ``
+
+Set the script to use with OGR writer. For example:
+
+----
+hoot --convert \
+  -D ogr.writer.script=test-files/io/SampleTranslation.js \
+  -D ogr.writer.pre.layer.name=bar \
+  test-files/io/SampleTranslation.osm \
+  PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'"
+----
+
+=== ogr2osm.ops
+
+* Data Type: list
+* Default Value:
+** `hoot::MergeNearbyNodes`
+** `hoot::BuildingPartMergeOp`
+
+Operations that should be applied to ingested data before saving the data.
+
 === osm.map.reader.factory.reader
 
 * Data Type: string
@@ -755,12 +966,32 @@ Specifies the reader that the OsmMapReaderFactory will use. This overrides any i
 
 Specifies the writer that the OsmMapWriterFactory will use. This overrides any information derived from the URL.
 
+=== osm2ogr.ops
+
+* Data Type: list
+* Default Value:
+** ``
+
+User specified operations for converting OSM files to OGR compatible file types.
+
+=== pbf.reader.max.elements.per.partial.map
+
+* Data Type: int
+* Default Value: `50000`
+
+The maximum number of OSM elements that may be read from the services database into a single OSM map during a partial map read.
+
 === perty.algorithm
 
 * Data Type: string
 * Default Value: `hoot::DirectSequentialSimulation`
 
-Perturbation algorithm to use with the PERTY process.  Valid values are hoot::DirectSequentialSimulation or hoot::FullCovariance
+Perturbation algorithm to use with the PERTY process.  Valid values is
+hoot::DirectSequentialSimulation.
+
+Previously the full covariance method was also supported as described in Doucette et al. However,
+the newer DirectSequentialSimulation is more efficient and produces similar results. By removing
+the full covariance method we were able to simplify the build process and reduce maintenance cost.
 
 === perty.apply.rubber.sheet
 
@@ -783,12 +1014,52 @@ The PERTY D value. When perty.algorithm is set to FullCovariance this is used in
 
 The beta value used in the PERTY simplified community sensor model. This is only relevant when perty.algorithm is set to FullCovariance.
 
+=== perty.duplicate.poi.duplicate.sigma
+
+* Data Type: double
+* Default Value: `1.0`
+
+The number of duplicate POIs is set as `round(abs(N(0, sigma^2))) + 1`. Setting sigma to 0 will
+guarantee that there will always be exactly one duplicate.
+
+=== perty.duplicate.poi.move.multiplier
+
+* Data Type: double
+* Default Value: `1.0`
+
+The distance that a feature is moved is based on the circular error of the source point. The
+new point will be put within N(0, sigma^2) * moveMultiplier meters of the source point where
+sigma is the standard deviation associated with the source point.
+
+=== perty.duplicate.poi.p
+
+* Data Type: double
+* Default Value: `0.10`
+
+The probability of at least one duplicate being created. See setDuplicateSigma to determine
+how many duplicates will be created.
+
 === perty.grid.spacing
 
 * Data Type: double
 * Default Value: `100`
 
 The size of the PERTY grid spacing in meters.
+
+=== perty.name.p
+
+* Data Type: double
+* Default Value: `0.05`
+
+The probability that a name will be modified.
+
+=== perty.name.change.p
+
+* Data Type: double
+* Default Value: `0.05`
+
+The probability of a change to each character in the name. The expected number of changes is
+`perty.name.change.p` * str.size().
 
 === perty.ops
 
@@ -816,6 +1087,20 @@ The sigma rx parameter for PERTY (random error in X). This is only relevant when
 * Default Value: `0`
 
 The sigma ry parameter for PERTY (random error in Y). This is only relevant when perty.algorithm is set to FullCovariance.
+
+=== perty.remove.random.p
+
+* Data Type: double
+* Default Value: `0.05`
+
+The probability that a feature will be removed.
+
+=== perty.remove.tag.p
+
+* Data Type: double
+* Default Value: `0.05`
+
+Set the probability that a tag will be removed.
 
 === perty.remove.tag.visitor.exempt.tag.keys
 
@@ -974,12 +1259,73 @@ The probability between 0.0 and 1.0 that a way will be split into multiple featu
 
 A list of scripts to include before loading the user's plugin script. The path will be search as: current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
 
+=== places.distance.weight
+
+* Data Type: double
+* Default Value: `0.1`
+
+The PLACES `wd` value for calculating goodness.
+
+See also:
+
+ * _PLACES POI Conflation_, <<hootalgo>>
+
+=== places.goodness.threshold
+
+* Data Type: double
+* Default Value: `0.3`
+
+The PLACES goodness threshold.
+
+See also:
+
+ * _PLACES POI Conflation_, <<hootalgo>>
+
+=== places.minimum.edit.similarity
+
+* Data Type: double
+* Default Value: `0.8`
+
+If the similarity score is less than this value then the POIs are not considered for match.
+
+See also:
+
+ * _PLACES POI Conflation_, <<hootalgo>>
+
+=== places.poi.epsilon.distance
+
+* Data Type: double
+* Default Value: `0.001`
+
+Distance that is considered an exact match. Defaults to 1mm.
+
+=== places.string.weight
+
+* Data Type: double
+* Default Value: `0.9`
+
+The PLACES `ws` value for calculating goodness.
+
+See also:
+
+ * _PLACES POI Conflation_, <<hootalgo>>
+
+=== places.tag.merger
+
+* Data Type: string
+* Default Value: `hoot::OverwriteTag2Merger`
+
+Possible options include:
+
+* `hoot::GeneralizeTagMerger`
+* `hoot::OverwriteTag2Merger`
+
 === poi.match.threshold
 
 * Data Type: double
 * Default Value: `${conflate.match.threshold.default}`
 
-The threshold at which a match is called a match for POI's.
+The threshold at which a match is called a match for POIs.
 
 See also:
 
@@ -990,7 +1336,7 @@ See also:
 * Data Type: double
 * Default Value: `${conflate.miss.threshold.default}`
 
-The threshold at which a miss is called a miss for POI's.
+The threshold at which a miss is called a miss for POIs.
 
 See also:
 
@@ -1001,7 +1347,7 @@ See also:
 * Data Type: double
 * Default Value: `${conflate.review.threshold.default}`
 
-The threshold at which a review is called a review for POI's. See `conflate.review.threshold.default`.
+The threshold at which a review is called a review for POIs. See `conflate.review.threshold.default`.
 
 See also:
 
@@ -1152,12 +1498,26 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 The search radius to use when conflating waterways.  Not used if
 waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 
+=== services.db.reader.max.elements.per.partial.map
+* Data Type: int
+* Default Value: `50000`
+
+The maximum number of OSM elements that may be read from the services database into a single OSM map during a partial map read.
+
 === services.db.test.url
 
 * Data Type: string
 * Default Value: `postgresql://hoot:hoottest@localhost:5432/hoot/testMap`
 
 Contains the DB URL for unit testing. This is typically only used by developers.
+
+=== services.db.test.url.osmapi
+
+* Data Type: string
+* Default Value: `postgresql://hoot:hoottest@localhost:5432/osmapi_test`
+
+Contains the DB URL for an OpenStreetMaps (OSM) API database for unit testing. This is
+typically only used by developers.
 
 === services.db.writer.create.user
 
@@ -1166,6 +1526,30 @@ Contains the DB URL for unit testing. This is typically only used by developers.
 
 Should the services DB writer automatically create the specified user if it doesn't exist. This
 is most useful when debugging and testing.
+
+=== services.db.writer.email
+
+* Data Type: string
+* Default Value: ``
+
+Email address of the DG writer user.  Can be set here for debugging and testing.
+
+=== services.db.writer.overwrite.map
+
+* Data Type: bool
+* Default Value: `false`
+
+If set to true then if there is already a map with the specified name then it will be removed before
+a new map is written.
+
+=== services.db.writer.output.id.mappings
+
+* Data Type: string
+* Default Value: ``
+
+If this value is set to a non-empty string, the system will attempt to open a file with the specified name
+and output all the ID mappings (source to destination) used for nodes, ways, and relations that were
+written to the database.
 
 === set.circular.error.visitor.value
 
@@ -1253,6 +1637,22 @@ all translation stats are disabled.
 
 The default status to match with a status criterion.
 
+=== tag.ancestor.differencer.name
+
+* Data Type: string
+* Default Value: ``
+
+The default ancestor to use when using the hoot::TagAncestorDifferencer class for comparing tags.
+Primarily this is useful within the node.js interface.
+
+=== tag.category.differencer.name
+
+* Data Type: string
+* Default Value: ``
+
+The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
+Primarily this is useful within the node.js interface.
+
 === tag.criterion.kvp
 
 * Data Type: string
@@ -1263,7 +1663,7 @@ A key value pair to use in the tag criterion by default. E.g. 'highway,road'
 === tag.merger.default
 
 * Data Type: string
-* Default Value: `hoot::AverageTagMerger`
+* Default Value: `hoot::OverwriteTag2Merger`
 
 Specifies the default way of merging tags. This is used by most merge routines, but may be overriden
 depending on the specifics of the merger.
@@ -1305,17 +1705,56 @@ The key to be replaced by the TagRenameKeyVisitor.
 
 The key to replace with by the TagRenameKeyVisitor.
 
+=== test.force.orthographic.projection
+
+* Data Type: bool
+* Default Value: `false`
+
+Always force the orthographic projection when determining a proper planar projection. In typical
+usage this will never be used (the automatically selected projection should always be at least as
+good). This is most useful if you want to get consistent results even if the list of potential
+projections change over time. Very handy in unit tests.
+
 === token.separator
 
 * Data Type: string
 * Default Value: `\s+`
 
 The token separator defined as a regular expression. This is used in some methods for tokenizing
-names. The default value matches multiple whitespace charactors.
+names. The default value matches multiple whitespace characters.
 
 Another useful option is `[\s-,';]+`. This will split on white space, or several forms of
 punctuation. See http://doc.qt.io/qt-4.8/QRegExp.html for a useful list of regular expression
 options.
+
+=== token.min.size
+
+* Data Type: double
+* Default Value: `3`
+
+This is the minimum string size that the string tokenizer should accept as a token. If the string
+length is less than this value, then it will not be accepted. Set the value to 0 if you want to
+accept all strings.
+
+This setting primarily applies to string comparison functions and will eliminate comparing very
+short strings such as "of" or "&".
+
+=== token.keep.non.words
+
+* Data Type: bool
+* Default Value: `false`
+
+This does a rudimentary check to see if the string contains any letters/numbers. If the string
+doesn't contain any letters or numbers then it will be dropped. Examples that would be dropped
+if the value is `true` include:
+
+* `&`
+* `--`
+
+Examples that will be kept if the value is `true` include:
+
+* `1&2`
+* `Joe's`
 
 === translate.string.distance.tokenize
 
@@ -1499,7 +1938,7 @@ The way subline matcher to use when determining matching sublines.
 * Data Type: double
 * Default Value: `10.0`
 
-Distance, in meters, used for sampling way dataduring angle histogram extraction with the SampledAngleHistogramExtractor
+Distance, in meters, used for sampling way data during angle histogram extraction with the SampledAngleHistogramExtractor
 
 === way.matcher.heading.delta
 
@@ -1531,6 +1970,14 @@ Sets that maximum angle that is still considered a way match. Units in degrees.
 * Default Value: `5`
 
 The minimum size that a way should be split into for merging. Units in meters.
+
+=== way.splitter.max.length
+
+* Data Type: double
+* Default Value: `5000`
+
+This configuration option is used by hoot::WaySplitterOp. If a way is longer than this length
+(in meters) then it will be split into smaller ways.
 
 === way.subline.matcher
 

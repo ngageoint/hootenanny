@@ -42,7 +42,7 @@ public class RandomNumberGenerator
    */
   public static double nextDouble(double min, double max)
   {
-    Random r = new Random();
+    Random r = new Random(System.currentTimeMillis());
     return min + (max - min) * r.nextDouble();
   }
 }
