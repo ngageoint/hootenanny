@@ -52624,8 +52624,9 @@
     <way visible="true" id="-2929" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-28294" x="-77.04738700721492" y="38.8956848162773"/>
         <nd ref="-35813" x="-77.04744682341344" y="38.89568563517229"/>
+        <tag k="alt_name" v="Virginia Ave NW"/>
         <tag k="name" v="VIRGINIA AVE NW"/>
-        <tag k="highway" v="road"/>
+        <tag k="highway" v="unclassified"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-2929"/>
         <tag k="hoot:status" v="1"/>

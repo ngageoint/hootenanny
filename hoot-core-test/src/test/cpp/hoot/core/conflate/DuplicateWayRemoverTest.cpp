@@ -50,6 +50,7 @@ using namespace boost;
 
 // Qt
 #include <QDebug>
+#include <QDir>
 
 // Standard
 #include <sstream>
@@ -109,7 +110,6 @@ public:
 
     HOOT_FILE_EQUALS("test-files/conflate/LongestCommonNodeStringTest.osm",
                      "test-output/conflate/LongestCommonNodeStringTest.osm");
-
   }
 
   /*
@@ -118,6 +118,7 @@ public:
    */
   void runStrictTagMatchingOnTest()
   {
+    QDir().mkdir("test-output/conflate");
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
@@ -145,6 +146,7 @@ public:
    */
   void runStrictTagMatchingOffTest()
   {
+    QDir().mkdir("test-output/conflate");
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);

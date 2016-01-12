@@ -54,8 +54,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, DuplicateWayRemover)
 
-DuplicateWayRemover::DuplicateWayRemover() :
-_strictTagMatching(true)
+DuplicateWayRemover::DuplicateWayRemover()
 {
   setStrictTagMatching(ConfigOptions().getDuplicateWayRemoverStrictTagMatching());
 }
@@ -140,8 +139,10 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
           double weight = 0.0;
           //If all non-name tags aren't exactly the same between these two ways (or the strict
           //tag matching isn't activated), then we won't merge their geometries or tags.
-          TagComparator::getInstance().compareTextTags(w->getTags(), w2->getTags(), textTagScore, weight);
-          TagComparator::getInstance().compareEnumeratedTags(w->getTags(), w2->getTags(), enumTagScore, weight);
+          TagComparator::getInstance().compareTextTags(
+            w->getTags(), w2->getTags(), textTagScore, weight);
+          TagComparator::getInstance().compareEnumeratedTags(
+            w->getTags(), w2->getTags(), enumTagScore, weight);
           if ((textTagScore == 1.0 && enumTagScore == 1.0) || !_strictTagMatching)
           {
             LOG_DEBUG("Ways have exact non-name tag match or strict tag matching is disabled.");
@@ -179,34 +180,20 @@ bool DuplicateWayRemover::_isCandidateWay(const ConstWayPtr& w) const
   return result;
 }
 
-void DuplicateWayRemover::_updateWayNameTags(shared_ptr<Way> way1, shared_ptr<Way> way2)
-{
-  //merge name tags for these two ways, if they aren't already identical
-  double namesScore = 0.0;
-  double weight = 0.0;
-  TagComparator::getInstance().compareNames(way1->getTags(), way2->getTags(), namesScore, weight);
-  if (namesScore != 1.0)
-  {
-    Tags mergedNameTags;
-    TagComparator::getInstance().mergeNames(way1->getTags(), way2->getTags(), mergedNameTags);
-    way2->getTags().addTags(mergedNameTags);
-
-    LOG_DEBUG("Merged way name tags:");
-    LOG_VARD(way2->getTags());
-  }
-}
 
 void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<Way> w2)
-{ 
+{
   LongestCommonNodeString lcs(w1, w2);
 
-  //If the ways have any common geometry, then merge their name tags so we retain both names.
+  //If the ways have any common geometry, then merge their tags.
 
   int length = lcs.apply();
   if (length > 1)
   {
     _removeNodes(w1, lcs.getW1Index(), length);
-    _updateWayNameTags(w1, w2);
+    Tags mergedTags =
+      TagMergerFactory::getInstance().mergeTags(w1->getTags(), w2->getTags(), ElementType::Way);
+    w2->setTags(mergedTags);
   }
   else
   {
@@ -226,7 +213,9 @@ void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
     if (length > 1)
     {
       _removeNodes(w1, lcs.getW1Index(), length);
-      _updateWayNameTags(w1, w2);
+      Tags mergedTags =
+        TagMergerFactory::getInstance().mergeTags(w1->getTags(), w2->getTags(), ElementType::Way);
+      w2->setTags(mergedTags);
     }
     else
     {
