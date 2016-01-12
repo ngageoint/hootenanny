@@ -168,20 +168,29 @@ hgis20 = {
         // If we are making a second feature, process it.
         if (newAttrs.XtableName)
         {
+        // Debug
+        print('2F: XtableName: ' + newAttrs.XtableName);
+
             // Now go make a second feature
             // pre processing
             hgis20.applyToHgisPreProcessing(tags, newAttrs, geometryType);
+        print('2F: After Pre: ' + newAttrs.XtableName);
+
 
             // one 2 one - we call the version that knows about OTH fields
             translate.applyOne2One(tags, newAttrs, hgis20.lookup, hgis20.layerLookup, hgis20.ignoreList);
+        print('2F: After One2One: ' + newAttrs.XtableName);
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
             translate.applySimpleNumBiased(newAttrs, tags, hgis20.rules.numBiased, 'backward');
+        print('2F: After Simple Num: ' + newAttrs.XtableName);
             translate.applySimpleTxtBiased(newAttrs, tags, hgis20.rules.txtBiased, 'backward');
+        print('2F: After Simple Txt: ' + newAttrs.XtableName);
 
             // post processing
             hgis20.applyToHgisPostProcessing(tags, newAttrs, geometryType);
+        print('2F: After Post: ' + newAttrs.XtableName);
         }
 
         // Debug:
@@ -247,15 +256,18 @@ hgis20 = {
             var acc_val = attrs.SPA_ACC;
             if (acc_val.indexOf('1' > -1 || acc_val.indexOf('igh') > -1)) // High
             {
-                attrs.SPA_ACC = '1 - High';
+//                 attrs.SPA_ACC = '1 - High';
+                attrs.SPA_ACC = '1';
             }
             else if (acc_val.indexOf('2' > -1 || acc_val.indexOf('edium') > -1)) // Medium
             {
-                attrs.SPA_ACC = '2 - Medium';
+//                 attrs.SPA_ACC = '2 - Medium';
+                attrs.SPA_ACC = '2';
             }
             else if (acc_val.indexOf('3' > -1 || acc_val.indexOf('ow') > -1)) // Low
             {
-                attrs.SPA_ACC = '3 - Low';
+//                 attrs.SPA_ACC = '3 - Low';
+                attrs.SPA_ACC = '3';
             }
       } // End SPA_ACC
 
@@ -287,13 +299,12 @@ hgis20 = {
             logError('Layer: ' + layerName + ' not found in layer names list.');
         }
 
-
     }, // End of applyToOsmPreProcessing
 
     applyToOsmPostProcessing : function (attrs, tags, layerName)
     {
-        // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
-        if (!(tags.source)) tags.source = 'hgisv20';
+        // Metadata
+        attrs.source = translate.appendValue(attrs.source,'hgisv20:' + layerName.toLowerCase(),';');
         tags.uuid = createUuid();
 
         // Refugee Camps
@@ -416,7 +427,8 @@ hgis20 = {
             }
             else
             {
-                attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,tags.wetland,';');
+                // From Feedback, don't add the wetland type into the comments.
+                // attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,tags.wetland,';');
                 delete tags.wetland;
             }
         }
@@ -567,6 +579,7 @@ hgis20 = {
 
                 case 'kindergarten':
                     tags.amenity = 'school';
+                    tags['isced:level'] = '1';
                     tags.note = translate.appendValue(tags.note,'TYPE1:Kindergarten',';');
                     break;
 
@@ -595,24 +608,24 @@ hgis20 = {
     {
         // Start looking for a Table Name
         // Next step is to make this a list: we might get more than one match...
-//         if (!(attrs.XtableName))
-//         {
-        for (var val in attrs)
+        if (!(attrs.XtableName))
         {
-        // Unsplit the layer and the type
-            if (val.indexOf('$') !== -1)
+            for (var val in attrs)
             {
-                var tList = val.split('$');
-                attrs.XtableName = hgis20.layerList[tList[0]];
+            // Unsplit the layer and the type
+                if (val.indexOf('$') !== -1)
+                {
+                    var tList = val.split('$');
+                    attrs.XtableName = hgis20.layerList[tList[0]];
 
-                // Debug
-                // print('Post: Loop XtableName: ' + attrs.XtableName);
+                    // Debug
+                    // print('Post: Loop XtableName: ' + attrs.XtableName);
 
-                attrs[tList[1]] = attrs[val];
-                delete attrs[val];
+                    attrs[tList[1]] = attrs[val];
+                    delete attrs[val];
+                }
             }
         }
-//         }
 
         // Now run through the list of layer specific tags. This is after the one2one list so we can correct some of the
         // previous rules
@@ -657,6 +670,15 @@ hgis20 = {
             } // End attrs loop
         } // End find XtableName
 
+        // Convert source:datetime to just Month Year
+        if (attrs.SOURCE_DT)
+        {
+            var dt = new Date(attrs.SOURCE_DT)
+            if (dt)
+            {
+                attrs.SOURCE_DT = hgis20.rules.monthList[dt.getMonth()] + ' ' + dt.getFullYear();
+            }
+        }
 
         // Fix up Hydro Lines vs Areas. Just for what is in the spec, everything else should throw an error
         if (attrs.XtableName == 'Hydrology_Polygons')
@@ -715,26 +737,37 @@ hgis20 = {
             delete attrs.STATUS;
         }
 
-        // Assign a default Spatial Accuracy if we don't have one
-        if (!(attrs.SPA_ACC) && tags.source)
+        // Assign a Spatial Accuracy if we don't have one and simplify the Source
+        if (tags.source)
         {
-            if (tags['source'].indexOf('osm') > -1)
+            if (!(attrs.SPA_ACC))
             {
-                attrs.SPA_ACC = '1 - High';
-            }
-            else if (tags['source'].indexOf('wikimapia') > -1)
-            {
-                attrs.SPA_ACC = '1 - High';
-            }
-            else if (tags['source'].indexOf('hoteldb') > -1)
-            {
-                attrs.SPA_ACC = '3 - Low';
-            }
-            else if (tags['source'].indexOf('geonames') > -1)
-            {
-                attrs.SPA_ACC = '3 - Low';
-            }
-        } // End SPA_ACC
+                if ((tags['source'].indexOf('osm') > -1) || (tags['source'].indexOf('OpenStreetMap') > -1)  )
+                {
+    //                 attrs.SPA_ACC = '1 - High';
+                    attrs.SPA_ACC = '1';
+                    attrs.SOURCE = 'OpenStreetMap';
+                }
+                else if (tags['source'].indexOf('ikimapia') > -1)
+                {
+    //                 attrs.SPA_ACC = '1 - High';
+                    attrs.SPA_ACC = '1';
+                    attrs.SOURCE = 'Wikimapia';
+                }
+                else if (tags['source'].indexOf('hoteldb') > -1)
+                {
+    //                 attrs.SPA_ACC = '3 - Low';
+                    attrs.SPA_ACC = '3';
+                    attrs.SOURCE = 'Hotelsbase';
+                }
+                else if ((tags['source'].indexOf('geonames') > -1) || (tags['source'].indexOf('GeoNames') > -1))
+                {
+    //                 attrs.SPA_ACC = '3 - Low';
+                    attrs.SPA_ACC = '3';
+                    attrs.SOURCE = 'GeoNames';
+                }
+            } // End SPA_ACC
+        }
 
         // Easy Stuff:
         // Jam shops into Commercial_POI if they haven't been categorised
@@ -742,7 +775,7 @@ hgis20 = {
         {
             attrs.XtableName = 'Commercial_POI';
             attrs.TYPE1 = 'Retail';
-            attrs.TYPE2 = 'Other';
+            attrs.TYPE2 = 'Store';
             attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'shop:' + tags.shop,';');
         }
 
@@ -755,63 +788,15 @@ hgis20 = {
             attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'office:' + tags.office,';');
         }
 
-        // Post process the Commercial POI into TYPE1 & TYPE2
-        if (attrs.XtableName == 'Commercial_POI' && !(attrs.TYPE1))
+        // Try to fix the TYPE1 & TYPE2 values
+        if (attrs.XtableName && (attrs.XtableName in hgis20.rules.mapType) && !(attrs.TYPE1))
         {
-            var comTypeList = {
-                'Airline':'Service',
-                'ATM':'Financial',
-                'Auto Repair':'Automotive',
-                'Bakery':'Retail',
-                'Bank':'Financial',
-                'Bar':'Retail',
-                'Beauty Salon':'Retail',
-                'Brewery':'Manufacturing',
-                'Butcher':'Retail',
-                'Car Dealership':'Automotive',
-                'Car Rental':'Automotive',
-                'Car Wash':'Automotive',
-                'Computer':'Retail',
-                'Construction':'Industrial',
-                'Day Care':'Service',
-                'Delicatessen':'Retail',
-                'Electronics':'Retail',
-                'Entertainment':'Service',
-                'Factory':'Industrial',
-                'Film':'Service',
-                'Freight - Shipping':'Service',
-                'Funeral Home':'Service',
-                'Fuel':'Retail',
-                'Gas':'Retail',
-                'Grocery':'Retail',
-                'Heavy Machinery':'Industrial',
-                'Legal':'Service',
-                'Market':'Retail',
-                'Medical':'Service',
-                'Mining':'Industrial',
-                'Nursery':'Retail',
-                'Office':'Service',
-                'Other':'Other',
-                'Research':'Service',
-                'Restaurant':'Retail',
-                'Shipping':'Service',
-                'Store':'Retail',
-                'Telecommunications':'Telecommunications',
-                'Television':'Telecommunications',
-                'Tourist':'Service',
-                'Tower':'Telecommunications',
-                'Veterinarian':'Service',
-            }; // End comTypeList
+            if (attrs.TYPE2 && (attrs.TYPE2 in hgis20.rules.mapType[attrs.XtableName]))
+            {
+                attrs.TYPE1 = hgis20.rules.mapType[attrs.XtableName][attrs.TYPE2];
+            }
+        } // End find TYPE1
 
-            if (attrs.TYPE2 in comTypeList)
-            {
-                attrs.TYPE1 = comTypeList[attrs.TYPE2];
-            }
-            else
-            {
-                attrs.TYPE1 = 'Other';
-            }
-        } // End post process Commercial POI
 
         // Clean up the Religion polygon layer
         // * This layer is for religious demographics, not buildings, cemetery's etc
@@ -1024,6 +1009,8 @@ hgis20 = {
             hgis20.rules.one2one.push.apply(hgis20.rules.one2one,hgis20.rules.one2oneOut);
 
             hgis20.lookup = translate.createBackwardsLookup(hgis20.rules.one2one);
+
+            // Debug
             // translate.dumpOne2OneLookup(hgis20.lookup);
 
             // Build a list of things to ignore and flip is backwards
@@ -1042,6 +1029,7 @@ hgis20 = {
             hgis20.ignoreList['error:circular'] = '';
             hgis20.ignoreList['source:ingest:datetime'] = '';
 
+            // Debug
             // translate.dumpLookup(hgis20.ignoreList);
 
             // List of layers & short versions
@@ -1049,12 +1037,15 @@ hgis20 = {
 
 
             hgis20.fuzy = schemaTools.generateToOgrTable(hgis20.rules.fuzyone2one);
-            for (var k1 in hgis20.fuzy) {
-                for (var v1 in hgis20.fuzy[k1]) {
-                    print(JSON.stringify([k1, v1, hgis20.fuzy[k1][v1][0], hgis20.fuzy[k1][v1][1], hgis20.fuzy[k1][v1][2]]));
-                }
-            }
-        }
+
+            // Debug: Dump the Fuzy!
+//             for (var k1 in hgis20.fuzy) {
+//                 for (var v1 in hgis20.fuzy[k1]) {
+//                     print(JSON.stringify([k1, v1, hgis20.fuzy[k1][v1][0], hgis20.fuzy[k1][v1][1], hgis20.fuzy[k1][v1][2]]));
+//                 }
+//             }
+
+        } // End hgis20.lookup undefined
 
         // pre processing
         hgis20.applyToHgisPreProcessing(tags, attrs, geometryType);
@@ -1062,7 +1053,9 @@ hgis20 = {
         // one 2 one Rules
         translate.applyOne2One(tags, attrs, hgis20.lookup,hgis20.layerLookup, hgis20.ignoreList);
 
-        translate.applyOne2One(tags, attrs, hgis20.fuzy,hgis20.layerLookup, hgis20.ignoreList);
+        // Apply the fuzy rules.
+        // NOTE: This uses the Quiet One2One function that doesn't report any errors, missing columns, missing values etc
+        translate.applyOne2OneQuiet(tags, attrs, hgis20.fuzy);
 
         // apply the simple number and text biased rules
         // Note: These are BACKWARD, not forward!
@@ -1156,8 +1149,12 @@ hgis20 = {
         {
             print('TableName: ' + tableName + '  Geom: ' + geometryType);
             for (var i in attrs) print('Out Attrs:' + i + ': :' + attrs[i] + ':');
-            if (tableName2 !== '') for (var i in attrs2) print('2Out Attrs:' + i + ': :' + attrs2[i] + ':');
-            print('');
+            if (tableName2 !== '')
+            {
+                print('2TableName: ' + tableName2);
+                for (var i in attrs2) print('2Out Attrs:' + i + ': :' + attrs2[i] + ':');
+                print('');
+            }
         }
 
         var returnData = [{attrs:attrs, tableName: tableName}];

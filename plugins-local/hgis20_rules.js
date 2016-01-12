@@ -1208,11 +1208,11 @@ hgis20.rules = {
      ['R2_SURFACE','Concrete','surface:2','concrete'],
 
      // SPA_ACC - Spatial Accuracy
-     ['SPA_ACC','1 - High','hgis:accuracy','high'],
-     ['SPA_ACC','2 - Medium','hgis:accuracy','medium'],
-     ['SPA_ACC','3 - Low','hgis:accuracy','low'],
-     ['SPA_ACC','4 - Regional','hgis:accuracy','regional'],
-     ['SPA_ACC','5 - Country','hgis:accuracy','country'],
+     ['SPA_ACC','1','hgis:accuracy','high'],
+     ['SPA_ACC','2','hgis:accuracy','medium'],
+     ['SPA_ACC','3','hgis:accuracy','low'],
+     ['SPA_ACC','4','hgis:accuracy','regional'],
+     ['SPA_ACC','5','hgis:accuracy','country'],
 
      // Status - Protected area status
      ['STATUS','Proposed','site_status','proposed'],
@@ -1313,8 +1313,7 @@ hgis20.rules = {
      ['commercial$TYPE2','Film','amenity','film'],
      ['commercial$TYPE2','Freight - Shipping','amenity','freight_shipping'],
      ['commercial$TYPE2','Funeral Home','shop','funeral_directors'],
-     ['commercial$TYPE2','Fuel','amenity','fuel'],
-     ['commercial$TYPE2','Gas','shop','gas'],
+     ['commercial$TYPE2','Gas','amenity','fuel'],
      //['commercial$TYPE2','Grocery','shop','grocery'],
      ['commercial$TYPE2','Heavy Machinery','amenity','heavy_machinery'], // ???
      ['commercial$TYPE2','Legal','office','lawyer'],
@@ -1854,6 +1853,9 @@ hgis20.rules = {
 
     // ##### End of One2One Rules #####
 
+    // Month list: Used to make the months pretty
+    monthList : ['January', 'February','March','April','May','June','July','August','September','October','November','December'],
+
     // List of unique attributes for each layer
     uniqList : {
       'NAME_ISO':'ADMIN0','NAME_FAO':'ADMIN0','NAME_LOCAL':'ADMIN0','NAME_VARIA':'ADMIN0','VALIDFR':'ADMIN0',
@@ -1883,6 +1885,112 @@ hgis20.rules = {
       'POPULATION':'Refugee_Camps',
       'FAOSOIL':'Soils','DOMSOI':'Soils'
       },
+
+   // Lookup table for mapping TYPE2 to TYPE1
+   // The format is: TYPE2 = TYPE1
+   mapType : {
+       Agricultural_POI : {
+           'Breeding Ground':'Farm',
+           'Cooperative':'Farm',
+           'Dairy':'Farm',
+           'Duck':'Livestock',
+           'Fisheries':'Aquaculture',
+           'Goat':'Livestock',
+           'Greenhouse':'Nursery',
+           'Ostrich':'Livestock',
+           'Other':'999999',
+           'Pig':'Livestock',
+           'Pigeon':'Livestock',
+           'Poultry':'Farm',
+           'Rabbit':'Livestock',
+           'Rice Field':'Farm',
+           'Salt':'999999'
+       },
+       Commercial_POI : {
+           'Airline':'Service',
+           'ATM':'Financial',
+           'Auto Repair':'Automotive',
+           'Bakery':'Retail',
+           'Bank':'Financial',
+           'Bar':'Retail',
+           'Beauty Salon':'Retail',
+           'Brewery':'Manufacturing',
+           'Butcher':'Retail',
+           'Car Dealership':'Automotive',
+           'Car Rental':'Automotive',
+           'Car Wash':'Automotive',
+           'Computer':'Retail',
+           'Construction':'Industrial',
+           'Day Care':'Service',
+           'Delicatessen':'Retail',
+           'Electronics':'Retail',
+           'Entertainment':'Service',
+           'Factory':'Industrial',
+           'Film':'Service',
+           'Freight - Shipping':'Service',
+           'Funeral Home':'Service',
+           'Fuel':'Retail',
+           'Gas':'Retail',
+           'Grocery':'Retail',
+           'Heavy Machinery':'Industrial',
+           'Legal':'Service',
+           'Market':'Retail',
+           'Medical':'Service',
+           'Mining':'Industrial',
+           'Nursery':'Retail',
+           'Office':'Service',
+           'Other':'Other',
+           'Research':'Service',
+           'Restaurant':'Service',
+           'Shipping':'Service',
+           'Store':'Retail',
+           'Telecommunications':'Telecommunications',
+           'Television':'Telecommunications',
+           'Tourist':'Service',
+           'Tower':'Telecommunications',
+           'Veterinarian':'Service'
+       },
+       Government_POI : {
+           'National Facility':'Civic',
+           'Other':'Other',
+           'Political Party Facility':'Political',
+           'Post Office':'Civic',
+           'Social':'Civic',
+           'State Facility':'Civic',
+           'Local Government Facility':'Civic'
+       },
+       Lodging_POI : {
+           'Apartment':'Permanent',
+           'Bed & Breakfast':'Transient',
+           'Camp Site':'Transient',
+           'Condominium':'Permanent',
+           'Dormitory':'Transient',
+           'Elite Area':'Permanent',
+           'Guest House':'Transient',
+           'Hostel':'Transient',
+           'Hotel':'Transient',
+           'Housing':'Permanent',
+           'Inn':'Transient',
+           'Lodge':'Transient',
+           'Motel':'Transient',
+           'Resort':'Transient',
+           'Villas':'Permanent'
+       },
+       Medical_Facilities : {
+           'Bath House':'Medical Facility',
+           // 'Children':'medical:type',
+           'Dental':'Clinic',
+           'Emergency':'Medical Facility',
+           'Headquarters':'999999',
+           'Health Center':'Medical Facility',
+           'Health Complex':'Medical Facility',
+           'Hot Spring':'Medical Facility',
+           'Other':'Medical Facility',
+           'Pharmaceutical':'Pharmacy',
+           'Rehabilitation':'Clinic',
+           'Spa':'Medical Facility'
+       }
+   }, // End mapType
 
 
    // Lookup table for layernames.
