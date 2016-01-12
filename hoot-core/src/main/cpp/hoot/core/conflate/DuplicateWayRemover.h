@@ -80,7 +80,7 @@ protected:
 
   bool _isCandidateWay(const ConstWayPtr& w) const;
 
-  void _removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<Way> w2);
+  bool _removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<Way> w2);
 
   void _removeNodes(shared_ptr<const Way> w, int start, int length);
 

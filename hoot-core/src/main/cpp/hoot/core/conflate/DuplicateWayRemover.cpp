@@ -149,11 +149,23 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
 
             if (w->getNodeCount() > w2->getNodeCount())
             {
-              _removeDuplicateNodes(w, w2);
+              if (_removeDuplicateNodes(w, w2))
+              {
+                Tags mergedTags =
+                  TagMergerFactory::getInstance().mergeTags(
+                    w->getTags(), w2->getTags(), ElementType::Way);
+                w2->setTags(mergedTags);
+              }
             }
             else
             {
-              _removeDuplicateNodes(w2, w);
+              if (_removeDuplicateNodes(w2, w))
+              {
+                Tags mergedTags =
+                  TagMergerFactory::getInstance().mergeTags(
+                    w2->getTags(), w->getTags(), ElementType::Way);
+                w->setTags(mergedTags);
+              }
             }
           }
         }
@@ -181,8 +193,10 @@ bool DuplicateWayRemover::_isCandidateWay(const ConstWayPtr& w) const
 }
 
 
-void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<Way> w2)
+bool DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<Way> w2)
 {
+  bool nodesRemoved = false;
+
   LongestCommonNodeString lcs(w1, w2);
 
   //If the ways have any common geometry, then merge their tags.
@@ -191,9 +205,7 @@ void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
   if (length > 1)
   {
     _removeNodes(w1, lcs.getW1Index(), length);
-    Tags mergedTags =
-      TagMergerFactory::getInstance().mergeTags(w1->getTags(), w2->getTags(), ElementType::Way);
-    w2->setTags(mergedTags);
+    nodesRemoved = true;
   }
   else
   {
@@ -213,9 +225,7 @@ void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
     if (length > 1)
     {
       _removeNodes(w1, lcs.getW1Index(), length);
-      Tags mergedTags =
-        TagMergerFactory::getInstance().mergeTags(w1->getTags(), w2->getTags(), ElementType::Way);
-      w2->setTags(mergedTags);
+      nodesRemoved = true;
     }
     else
     {
@@ -230,6 +240,8 @@ void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
       }
     }
   }
+
+  return nodesRemoved;
 }
 
 void DuplicateWayRemover::removeDuplicates(shared_ptr<OsmMap> map)
