@@ -356,6 +356,7 @@ hgis20 = {
             ["t.building == 'hospital' && !(t.amenity)","t.amenity = 'hospital'; delete t.building"],
             ["t.building == 'school' && !(t.amenity)","t.amenity = 'school'; delete t.building"],
             ["t.building == 'university' && !(t.amenity)","t.amenity = 'university'; delete t.building"],
+            ["t.building == 'warehouse' && !(t.amenity)","t.amenity = 'freight_shipping'; delete t.building"],
             ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
 //             ["t.control_tower && t.man_made == 'tower'","delete t.man_made"],
@@ -559,8 +560,19 @@ hgis20 = {
         {
             switch (tags.amenity)
             {
+                case 'doctors':
+                    tags.amenity = 'health_center';
+                    break;
+
+                case 'bicycle_rental':
+                    tags['commercial:category'] = 'service';
+                    tags['commercial:type'] = 'other';
+                    tags.note = translate.appendValue(tags.note,'TYPE2:bicycle_rental',';');
+                    delete tags.amenity;
+                    break;
+
                 case 'ferry_terminal':
-                    tags.ferry = 'yes'
+                    tags.ferry = 'yes';
                     tags.public_transport = 'terminal';
                     delete tags.amenity;
                     break;
@@ -572,7 +584,7 @@ hgis20 = {
                     break;
 
                 case 'bus_station':
-                    tags.bus = 'yes'
+                    tags.bus = 'yes';
                     tags.public_transport = 'station';
                     delete tags.amenity;
                     break;
@@ -589,10 +601,22 @@ hgis20 = {
                     tags.amenity = 'bar';
                     break;
 
+                case 'restaurant': // Adding more info to this one
+                    if (tags.cuisine)
+                    {
+                        tags.note = translate.appendValue(tags.note,'TYPE2:cuisine=' + tags.cuisine,';');
+                    }
+                    break;
+
                 case 'fast_food':
                 case 'food_court':
                 case 'cafe':
-                    tags.note = translate.appendValue(tags.note,'TYPE1:' + tags.amenity,';');
+                    var tNote = 'TYPE2:' + tags.amenity;
+                    if (tags.cuisine)
+                    {
+                        tNote = tNote + ',cuisine=' + tags.cuisine;
+                    }
+                    tags.note = translate.appendValue(tags.note,tNote,';');
                     tags.amenity = 'restaurant';
                     break;
             } // End switch
@@ -652,6 +676,25 @@ hgis20 = {
 
         // Debug
         // print('Post: XtableName: ' + attrs.XtableName);
+
+        // Easy Stuff:
+        // Jam shops into Commercial_POI if they haven't been categorised
+        if (!(attrs.XtableName) && tags.shop)
+        {
+            attrs.XtableName = 'Commercial_POI';
+            attrs.TYPE1 = 'Retail';
+            attrs.TYPE2 = 'Store';
+            attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'shop:' + tags.shop,';');
+        }
+
+        // Do the same with Offices
+        if (!(attrs.XtableName) && tags.office)
+        {
+            attrs.XtableName = 'Commercial_POI';
+            attrs.TYPE1 = 'Service';
+            attrs.TYPE2 = 'Office';
+            attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'office:' + tags.office,';');
+        }
 
         // If we still don't have a tablename, try looking for unique attributes
         if (!(attrs.XtableName) && hgis20.rules.uniqList)
@@ -767,25 +810,6 @@ hgis20 = {
                     attrs.SOURCE = 'GeoNames';
                 }
             } // End SPA_ACC
-        }
-
-        // Easy Stuff:
-        // Jam shops into Commercial_POI if they haven't been categorised
-        if (!(attrs.XtableName) && tags.shop)
-        {
-            attrs.XtableName = 'Commercial_POI';
-            attrs.TYPE1 = 'Retail';
-            attrs.TYPE2 = 'Store';
-            attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'shop:' + tags.shop,';');
-        }
-
-        // Do the same with Offices
-        if (!(attrs.XtableName) && tags.office)
-        {
-            attrs.XtableName = 'Commercial_POI';
-            attrs.TYPE1 = 'Service';
-            attrs.TYPE2 = 'Office';
-            attrs.COMMENTS = translate.appendValue(attrs.COMMENTS,'office:' + tags.office,';');
         }
 
         // Try to fix the TYPE1 & TYPE2 values

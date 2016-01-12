@@ -1867,7 +1867,7 @@ hgis20.rules = {
       'RIVER':'Dams','YR_OPER':'Dams','HEIGHT':'Dams',
       'TOT_BOYS':'Educational_Institutions','TOT_CLASS':'Educational_Institutions','TOT_F_TEAC':'Educational_Institutions',
       'TOT_GIRLS':'Educational_Institutions','TOT_M_TEAC':'Educational_Institutions',
-      'WEBSITE':'Embassies',
+      // 'WEBSITE':'Embassies',
       'PEOPLEGP_1':'Ethnicity','PEOPLEGP_2':'Ethnicity','PEOPLEGP_3':'Ethnicity','PEOPLEGP_4':'Ethnicity','PEOPLEGP_5':'Ethnicity',
       'SECTOR':'Foreign_Investment_Projects','VALUE':'Foreign_Investment_Projects','LEND_INSTR':'Foreign_Investment_Projects',
       'DESCRIP':'Foreign_Investment_Projects','APP_DATE':'Foreign_Investment_Projects','APP_YEAR':'Foreign_Investment_Projects',
