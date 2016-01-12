@@ -27,7 +27,28 @@ if ! dpkg -l | grep --quiet wamerican-insane; then
     sudo dpkg-reconfigure dictionaries-common
 fi
 
+# Install deps for Cucumber tests
+sudo apt-get install ruby-dev xvfb
+sudo gem install mime-types -v 2.6.2
+sudo gem install cucumber capybara capybara-webkit selenium-webdriver rspec capybara-screenshot
+
 sudo apt-get autoremove -y
+
+# Install Chrome browser for Cucumber
+if [ ! -f google-chrome-stable_current_amd64.deb ]; then
+    echo "Installing Chrome"
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    sudo dpkg -i google-chrome-stable_current_amd64.deb
+    sudo apt-get -f install -y
+fi
+
+# Install Chromedriver
+if [ ! -f bin/chromedriver_linux64 ]; then
+    echo "Installing Chromedriver"
+    mkdir -p /home/vagrant/bin
+    wget http://chromedriver.storage.googleapis.com/2.20/chromedriver_linux64.zip
+    unzip -d /home/vagrant/bin chromedriver_linux64.zip
+fi
 
 # Hoot Baseline is PostgreSQL 9.1 and PostGIS 1.5, so we need a deb file and
 # then remove 9.4
