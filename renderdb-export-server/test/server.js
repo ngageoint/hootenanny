@@ -1,7 +1,7 @@
 var expect  = require("chai").expect;
 var server = require("../server.js");
 
-describe("MapEdit Export Server", function() {
+describe("RenderDb Export Server", function() {
     describe("Validate BBOX", function() {
         it("fails for empty string", function() {
             var bbox = '';

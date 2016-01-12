@@ -193,7 +193,7 @@ if grep -i --quiet 'gdal/1.10' /etc/default/tomcat6; then
 fi
 
 # Remove gdal libs installed by libgdal-dev that interfere with
-# mapedit-export-server using gdal libs compiled from source (fgdb support)
+# renderdb-export-server using gdal libs compiled from source (fgdb support)
 if [ -f /usr/lib/libgdal.* ]; then
     echo "Removing GDAL libs installed by libgdal-dev"
     sudo rm /usr/lib/libgdal.*
