@@ -23,7 +23,15 @@ QMAKE_CXX=g++
 
 # Warn about uninitialized variables
 QMAKE_CXXFLAGS+=-Wuninitialized 
-QMAKE_CXXFLAGS+=-Wmaybe-uninitialized
+
+# If the g++ version is 4.0 to 4.4, then don't use maybe-uninitialized.
+# I couldn't find the exact version maybe-unintialized was introduced, but
+# I know it works in g++ 4.8.4 -JRS
+system( g++ --version | grep -e "\<4.[0-7]" ) {
+  # pass
+} else {
+  QMAKE_CXXFLAGS+=-Wmaybe-uninitialized
+}
 
 # Set all uninitialized variables to their default values                                                      
 #QMAKE_CXXFLAGS+=-fno-common 
