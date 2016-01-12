@@ -73,22 +73,6 @@ class DuplicateWayRemoverTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runStrictTagMatchingOffTest);
   CPPUNIT_TEST_SUITE_END();
 
-private:
-
-  void createSomeNonMatchingNonNameTextTags(OsmMapPtr map)
-  {
-    //The input test file already has enumerated tag differences for duplicates, but no text tag
-    //differences.  So, find some candidate dupe ways and modify some way's non-name text tag so the
-    //two do not match exactly.  This should prevent the two ways as being considered duplicates of
-    //each other.
-    map->getWay(map->findWays("name", "Constitution Ave NW")[0])->getTags().set("email", "blah");
-    vector<long> wayIds = map->findWays("name", "US Hwy 50");
-    for (size_t i = 0; i < wayIds.size(); i++)
-    {
-      map->getWay(wayIds[i])->getTags().set("email", "blah2");
-    }
-  }
-
 public:
 
   void runTest()
@@ -123,7 +107,8 @@ public:
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 
-    createSomeNonMatchingNonNameTextTags(map);
+    //create a non matching text tag between two of the ways that will be examined
+    map->getWay(map->findWays("name", "Constitution Ave NW")[0])->getTags().set("email", "blah");
 
     DuplicateWayRemover dupeWayRemover;
     dupeWayRemover.setStrictTagMatching(true);
@@ -151,7 +136,8 @@ public:
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 
-    createSomeNonMatchingNonNameTextTags(map);
+    //create a non matching text tag between two of the ways that will be examined
+    map->getWay(map->findWays("name", "Constitution Ave NW")[0])->getTags().set("email", "blah");
 
     DuplicateWayRemover dupeWayRemover;
     dupeWayRemover.setStrictTagMatching(false);

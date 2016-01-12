@@ -134,16 +134,14 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
           LOG_VARD(w->getTags());
           LOG_VARD(w2->getTags());
 
-          double textTagScore = 0.0;
-          double enumTagScore = 0.0;
-          double weight = 0.0;
-          //If all non-name tags aren't exactly the same between these two ways (or the strict
-          //tag matching isn't activated), then we won't merge their geometries or tags.
-          TagComparator::getInstance().compareTextTags(
-            w->getTags(), w2->getTags(), textTagScore, weight);
-          TagComparator::getInstance().compareEnumeratedTags(
-            w->getTags(), w2->getTags(), enumTagScore, weight);
-          if ((textTagScore == 1.0 && enumTagScore == 1.0) || !_strictTagMatching)
+          bool nonNameTagsIdentical = false;
+          if (_strictTagMatching)
+          {
+            nonNameTagsIdentical =
+              TagComparator::getInstance().nonNameTagsExactlyMatch(w->getTags(), w2->getTags());
+          }
+
+          if (nonNameTagsIdentical || !_strictTagMatching)
           {
             LOG_DEBUG("Ways have exact non-name tag match or strict tag matching is disabled.");
 

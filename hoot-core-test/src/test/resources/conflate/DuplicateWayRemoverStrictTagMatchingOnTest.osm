@@ -5149,7 +5149,6 @@
         <nd ref="-1367"/>
         <nd ref="-1368"/>
         <nd ref="-1369"/>
-        <tag k="email" v="blah2"/>
         <tag k="alt_name" v="US Hwy 50"/>
         <tag k="name" v="US Hwy 1"/>
         <tag k="highway" v="secondary"/>
@@ -5444,7 +5443,6 @@
         <nd ref="-70558"/>
         <nd ref="-70559"/>
         <nd ref="-89002"/>
-        <tag k="email" v="blah2"/>
         <tag k="name" v="US Hwy 50"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
@@ -6765,7 +6763,6 @@
         <nd ref="-5482"/>
         <nd ref="-5483"/>
         <nd ref="-88951"/>
-        <tag k="email" v="blah2"/>
         <tag k="alt_name" v="US Hwy 50"/>
         <tag k="name" v="I- 66"/>
         <tag k="highway" v="primary"/>
@@ -7199,7 +7196,6 @@
         <nd ref="-70577"/>
         <nd ref="-70578"/>
         <nd ref="-5482"/>
-        <tag k="email" v="blah2"/>
         <tag k="name" v="US Hwy 50"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
@@ -7566,7 +7562,6 @@
         <nd ref="-1371"/>
         <nd ref="-1370"/>
         <nd ref="-1369"/>
-        <tag k="email" v="blah2"/>
         <tag k="name" v="US Hwy 50"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>

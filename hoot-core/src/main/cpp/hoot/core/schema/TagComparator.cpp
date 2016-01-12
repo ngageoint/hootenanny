@@ -56,8 +56,7 @@ struct Entry
   }
 };
 
-TagComparator::TagComparator() :
-_caseSensitive(true)
+TagComparator::TagComparator()
 {
   setCaseSensitive(ConfigOptions().getDuplicateNameCaseSensitive());
 }
@@ -418,6 +417,54 @@ double TagComparator::compareTags(const Tags &t1, const Tags &t2, bool strict)
     }
     //return (nameScore * nameWeight + enumScore * enumWeight) / (nameWeight + enumWeight);
   }
+}
+
+bool TagComparator::nonNameTagsExactlyMatch(const Tags& t1, const Tags& t2)
+{
+  const Qt::CaseSensitivity caseSensitivity =
+    _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+
+  QStringList t1FilteredKeys, t1FilteredValues;
+  for (Tags::const_iterator it1 = t1.begin(); it1 != t1.end(); it1++)
+  {
+    QString key = it1.key();
+    QString value = it1.value();
+    if (!Tags::getNameKeys().contains(key, caseSensitivity) &&
+        !OsmSchema::getInstance().isMetaData(key, value))
+    {
+      if (!_caseSensitive)
+      {
+        key = key.toUpper();
+        value = value.toUpper();
+      }
+      t1FilteredKeys.append(key);
+      t1FilteredValues.append(value);
+    }
+  }
+  t1FilteredKeys.sort();
+  t1FilteredValues.sort();
+
+  QStringList t2FilteredKeys, t2FilteredValues;
+  for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); it2++)
+  {
+    QString key = it2.key();
+    QString value = it2.value();
+    if (!Tags::getNameKeys().contains(key, caseSensitivity) &&
+        !OsmSchema::getInstance().isMetaData(key, value))
+    {
+      if (!_caseSensitive)
+      {
+        key = key.toUpper();
+        value = value.toUpper();
+      }
+      t2FilteredKeys.append(key);
+      t2FilteredValues.append(value);
+    }
+  }
+  t2FilteredKeys.sort();
+  t2FilteredValues.sort();
+
+  return (t1FilteredKeys == t2FilteredKeys) && (t1FilteredValues == t2FilteredValues);
 }
 
 TagComparator& TagComparator::getInstance()
