@@ -737,6 +737,7 @@ cd autoconf-2.69
 -----------
 +
 . Install JDK & Maven
++
 -----------
 wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u66-b17/jdk-8u66-linux-x64.rpm
 sudo rpm -Uvh jdk-8u66-linux-x64.rpm
@@ -748,5 +749,9 @@ echo "M2_HOME=/usr/local/maven" | sudo tee /etc/profile.d/maven.sh
 echo "PATH=\${M2_HOME}/bin:\${PATH}" | sudo tee -a /etc/profile.d/maven.sh
 sudo chmod +x /etc/profile.d/maven.sh
 -----------
++
+
+The hoot developer build in CentOS will not properly build docs or run all tests
+at this time.
 
 
