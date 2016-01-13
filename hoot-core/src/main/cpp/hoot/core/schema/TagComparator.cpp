@@ -424,12 +424,14 @@ bool TagComparator::nonNameTagsExactlyMatch(const Tags& t1, const Tags& t2)
   const Qt::CaseSensitivity caseSensitivity =
     _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
 
-  QStringList t1FilteredKeys, t1FilteredValues;
+  Tags t1Filtered;
   for (Tags::const_iterator it1 = t1.begin(); it1 != t1.end(); it1++)
   {
     QString key = it1.key();
     QString value = it1.value();
     if (!Tags::getNameKeys().contains(key, caseSensitivity) &&
+        //Metadata keys are controlled by hoot and, therefore, should always be lower case, so no
+        //case check needed.
         !OsmSchema::getInstance().isMetaData(key, value))
     {
       if (!_caseSensitive)
@@ -437,14 +439,11 @@ bool TagComparator::nonNameTagsExactlyMatch(const Tags& t1, const Tags& t2)
         key = key.toUpper();
         value = value.toUpper();
       }
-      t1FilteredKeys.append(key);
-      t1FilteredValues.append(value);
+      t1Filtered.insert(key, value);
     }
   }
-  t1FilteredKeys.sort();
-  t1FilteredValues.sort();
 
-  QStringList t2FilteredKeys, t2FilteredValues;
+  Tags t2Filtered;
   for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); it2++)
   {
     QString key = it2.key();
@@ -457,14 +456,11 @@ bool TagComparator::nonNameTagsExactlyMatch(const Tags& t1, const Tags& t2)
         key = key.toUpper();
         value = value.toUpper();
       }
-      t2FilteredKeys.append(key);
-      t2FilteredValues.append(value);
+      t2Filtered.insert(key, value);
     }
   }
-  t2FilteredKeys.sort();
-  t2FilteredValues.sort();
 
-  return (t1FilteredKeys == t2FilteredKeys) && (t1FilteredValues == t2FilteredValues);
+  return t1Filtered == t2Filtered;
 }
 
 TagComparator& TagComparator::getInstance()

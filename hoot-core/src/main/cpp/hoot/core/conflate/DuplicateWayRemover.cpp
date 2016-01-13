@@ -181,8 +181,6 @@ bool DuplicateWayRemover::_isCandidateWay(const ConstWayPtr& w) const
 
 void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<Way> w2)
 {
-  bool nodesRemoved = false;
-
   LongestCommonNodeString lcs(w1, w2);
 
   //If the ways have any common geometry, then merge their tags.
@@ -190,8 +188,11 @@ void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
   int length = lcs.apply();
   if (length > 1)
   {
+    const Tags mergedTags =
+      TagMergerFactory::getInstance().mergeTags(w1->getTags(), w2->getTags(), ElementType::Way);
+    //w1->setTags(mergedTags);
+    w2->setTags(mergedTags);
     _removeNodes(w1, lcs.getW1Index(), length);
-    nodesRemoved = true;
   }
   else
   {
@@ -210,8 +211,11 @@ void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
     int length = lcs.apply();
     if (length > 1)
     {
+      const Tags mergedTags =
+        TagMergerFactory::getInstance().mergeTags(w1->getTags(), w2->getTags(), ElementType::Way);
+      //w1->setTags(mergedTags);
+      w2->setTags(mergedTags);
       _removeNodes(w1, lcs.getW1Index(), length);
-      nodesRemoved = true;
     }
     else
     {
@@ -225,14 +229,6 @@ void DuplicateWayRemover::_removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<W
         w2->reverseOrder();
       }
     }
-  }
-
-  if (nodesRemoved)
-  {
-    const Tags mergedTags =
-      TagMergerFactory::getInstance().mergeTags(w1->getTags(), w2->getTags(), ElementType::Way);
-    //w1->setTags(mergedTags);
-    w2->setTags(mergedTags);
   }
 }
 
