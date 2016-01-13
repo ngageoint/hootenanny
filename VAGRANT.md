@@ -12,6 +12,16 @@ Once Vagrant has been installed, you can start an environment by checking out th
     git submodule update
     vagrant up
 
+If you would like to use Parallels instead of VirtualBox, please run the following command:
+    ```
+    vagrant up --provider=parallels
+    ```
+Please note that this requires the Parallels Vagrant plugin, which can be installed:
+
+    ```
+    vagrant plugin install vagrant-parallels
+    ```
+
 *On Windows hosts,*
 
 * Be sure to clone with the `--config core.autocrlf=input` option.
@@ -52,3 +62,4 @@ If you've updated the code, you must connect to the vm via ssh to build and rede
     scripts/ezClean.sh
     scripts/ezBuildAll.sh
     sudo -u tomcat6 scripts/vagrantDeployTomcat.sh
+

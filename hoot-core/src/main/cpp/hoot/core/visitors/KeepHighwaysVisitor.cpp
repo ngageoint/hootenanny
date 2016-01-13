@@ -33,9 +33,6 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 
-// Qt
-#include <QUuid>
-
 namespace hoot
 {
 

@@ -339,10 +339,10 @@ void Conflator::setSource(shared_ptr<OsmMap> map)
 void Conflator::_updateManipulationEstimates(shared_ptr<const OsmMap> map,
   const set<ElementId>& eids)
 {
-  set< shared_ptr<Manipulation> > found;
+  set< shared_ptr<Manipulation>, LessThanManipulation > found;
   for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); it++)
   {
-    const set< shared_ptr<Manipulation> >& s = _impacted2Manipulation[*it];
+    const set< shared_ptr<Manipulation>, LessThanManipulation >& s = _impacted2Manipulation[*it];
     found.insert(s.begin(), s.end());
   }
 

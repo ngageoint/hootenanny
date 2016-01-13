@@ -2,7 +2,7 @@
 
 === Description
 
-The +big-perty+ command reads in a OSM input file add random gaussian noise and
+The +big-perty+ command reads in a OSM input file add random Gaussian noise and
 write to output.  For more details on non-Hadoop perty functionality see +perty+
 help.
 

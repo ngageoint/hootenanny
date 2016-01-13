@@ -3,14 +3,20 @@
 13:21:19.456 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingOutlineRemoveOp
 13:21:19.456 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MapCleaner
 13:21:19.457 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ReprojectToPlanarOp
-Reprojecting 0 / 6326         Reprojecting 1000 / 6326         Reprojecting 2000 / 6326         Reprojecting 3000 / 6326         Reprojecting 4000 / 6326         Reprojecting 5000 / 6326         Reprojecting 6000 / 6326         
+Reprojecting 0 / 6326
+Reprojecting 1000 / 6326
+Reprojecting 2000 / 6326
+Reprojecting 3000 / 6326
+Reprojecting 4000 / 6326
+Reprojecting 5000 / 6326
+Reprojecting 6000 / 6326
 13:21:19.563 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateWayRemover
 13:21:19.563 INFO  ...nflate/DuplicateWayRemover.cpp(  61) Removing duplicate ways...
 13:21:19.903 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousWayRemover
 13:21:19.903 INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
 13:21:19.904 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::IntersectionSplitter
 13:21:19.904 INFO  ...itter/IntersectionSplitter.cpp( 109) Splitting intersections...
-  Intersection splitter todo: 0       
+  Intersection splitter todo: 0
 13:21:20.073 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::UnlikelyIntersectionRemover
 13:21:20.146 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DualWaySplitter
 13:21:20.146 INFO  ...e/splitter/DualWaySplitter.cpp(  83) Assuming drives on right.
@@ -42,10 +48,16 @@ Reprojecting 0 / 6326         Reprojecting 1000 / 6326         Reprojecting 20
 13:21:38.917 INFO  ...conflate/UnifyingConflator.cpp( 221) Post constraining match count: 750
 13:21:41.611 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
 13:21:41.611 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
-Reprojecting 0 / 3658         Reprojecting 1000 / 3658         Reprojecting 2000 / 3658         Reprojecting 3000 / 3658         
+Reprojecting 0 / 3658
+Reprojecting 1000 / 3658
+Reprojecting 2000 / 3658
+Reprojecting 3000 / 3658
 13:21:41.641 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
 13:21:41.664 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveMissingElementsVisitor
 13:21:41.672 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::RemoveDuplicateReviewsOp
 13:21:41.673 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingOutlineUpdateOp
 13:21:41.673 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::AddHilbertReviewSortOrderOp
-Reprojecting 0 / 3163         Reprojecting 1000 / 3163         Reprojecting 2000 / 3163         Reprojecting 3000 / 3163         
+Reprojecting 0 / 3163
+Reprojecting 1000 / 3163
+Reprojecting 2000 / 3163
+Reprojecting 3000 / 3163

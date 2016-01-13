@@ -247,7 +247,7 @@ void TileOpMapper::_replaceNodes(shared_ptr<OsmMap>& m)
 
   if (fs.getFileStatus(_replacmentsPath).isDir())
   {
-    vector<pp::FileStatus> status = fs.listStatus(_replacmentsPath);
+    vector<pp::FileStatus> status = fs.listStatus(_replacmentsPath, true);
     for (size_t i = 0; i < status.size(); i++)
     {
       if (QString::fromStdString(status[i].getPath()).endsWith(".replacement") &&

@@ -165,7 +165,7 @@ protected:
   shared_ptr<OsmMap> _map;
   shared_ptr<WorkingMap> _bestMap;
   shared_ptr<OGRSpatialReference> _planarSrs;
-  map< ElementId, set< shared_ptr<Manipulation> > > _impacted2Manipulation;
+  map< ElementId, set< shared_ptr<Manipulation>, LessThanManipulation > > _impacted2Manipulation;
 
   double _minValidScore;
   bool _createBogusReviewTags;
