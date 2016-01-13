@@ -75,7 +75,8 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/network/NetworkEdgeScore.cpp \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatcher.cpp \
     src/main/cpp/hoot/rnd/conflate/network/VagabondNetworkMatcher.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/VagabondNetworkMatcherTest.cpp
+    src/test/cpp/hoot/rnd/conflate/network/VagabondNetworkMatcherTest.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/IterativeEdgeMatcher.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreator.h \
@@ -97,7 +98,8 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/NetworkVertexScore.h \
     src/main/cpp/hoot/rnd/conflate/network/DebugNetworkMapCreator.h \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatcher.h \
-    src/main/cpp/hoot/rnd/conflate/network/VagabondNetworkMatcher.h
+    src/main/cpp/hoot/rnd/conflate/network/VagabondNetworkMatcher.h \
+    src/main/cpp/hoot/rnd/conflate/network/IterativeEdgeMatcher.h
 
 FORMS +=
 

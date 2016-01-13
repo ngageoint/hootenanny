@@ -3,7 +3,9 @@
 // hoot
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
+#include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
+#include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
 
 namespace hoot
 {
@@ -64,12 +66,34 @@ Meters NetworkDetails::getSearchRadius(ConstNetworkVertexPtr v)
   return v->getElement()->getCircularError();
 }
 
+bool NetworkDetails::isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
+{
+  Meters ce = max(getSearchRadius(e1), getSearchRadius(e2));
+
+  assert(e1->getMembers().size() == 1 && e2->getMembers().size() == 1);
+
+  ConstElementPtr ep1 = e1->getMembers()[0];
+  ConstElementPtr ep2 = e2->getMembers()[0];
+
+  double d = EuclideanDistanceExtractor().distance(*_map, ep1, ep2);
+  bool result = d <= ce;
+
+  double hd = HausdorffDistanceExtractor().distance(*_map, ep1, ep2);
+  result = result && hd <= ce;
+
+  AngleHistogramExtractor ahe;
+  ahe.setSmoothing(toRadians(20.0));
+  double ah = ahe.extract(*_map, ep1, ep2);
+  result = result && ah >= 0.5;
+
+  return result;
+}
+
 bool NetworkDetails::isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2)
 {
   Meters ce = max(getSearchRadius(v1), getSearchRadius(v2));
 
   double d = EuclideanDistanceExtractor().distance(*_map, v1->getElement(), v2->getElement());
-
   return d <= ce;
 }
 

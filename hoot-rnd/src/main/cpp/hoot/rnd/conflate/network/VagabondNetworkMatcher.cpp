@@ -1,5 +1,6 @@
 #include "VagabondNetworkMatcher.h"
 
+#include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
 
 namespace hoot
@@ -8,7 +9,7 @@ namespace hoot
 int NetworkEdgePair::count = 0;
 
 VagabondNetworkMatcher::VagabondNetworkMatcher() :
-  _dampen(0.95)
+  _dampen(0.8)
 {
 }
 
@@ -16,11 +17,14 @@ QList<NetworkEdgeScorePtr> VagabondNetworkMatcher::getAllEdgeScores() const
 {
   QList<NetworkEdgeScorePtr> result;
 
+    LOG_VAR(_pr.size());
   for (PrHash::const_iterator it = _pr.begin(); it != _pr.end(); ++it)
   {
     NetworkEdgeScorePtr p(new NetworkEdgeScore(it.key()->e1, it.key()->e2, it.value() * _pr.size(),
       1));
     p->setUid(QString("%1").arg(it.key()->id));
+    LOG_VAR(it.key());
+    LOG_VAR(it.value());
     result.append(p);
   }
 
@@ -34,6 +38,11 @@ QList<NetworkVertexScorePtr> VagabondNetworkMatcher::getAllVertexScores() const
 }
 
 void VagabondNetworkMatcher::iterate()
+{
+  iteratePageRank();
+}
+
+void VagabondNetworkMatcher::iteratePageRank()
 {
   // assign a new PR to all edge pairs based on
   // PR(A) = (1 - _damping) / N + d * (PR(B) / L(B) + PR(C) / L(C) + ...)
@@ -67,9 +76,13 @@ void VagabondNetworkMatcher::iterate()
     {
       double contribution = (_pr[from] / values.size()) * _dampen;
 
+      LOG_VAR(from);
       foreach (NetworkEdgePairPtr to, values)
       {
         newHash[to] = newHash[to] + contribution;
+        LOG_VAR(to);
+        LOG_VAR(newHash[to]);
+        LOG_VAR(contribution);
       }
     }
     else
@@ -77,10 +90,72 @@ void VagabondNetworkMatcher::iterate()
       allWeight += _pr[from] / (double)_pr.size();
     }
   }
+  LOG_VAR(allWeight);
 
   for (PrHash::iterator it = newHash.begin(); it != newHash.end(); ++it)
   {
     it.value() = it.value() + allWeight;
+  }
+
+  _pr = newHash;
+}
+
+void VagabondNetworkMatcher::iterateVoting()
+{
+  // assign a new PR to all edge pairs based on
+  // PR(A) = (1 - _damping) / N + d * (PR(B) / L(B) + PR(C) / L(C) + ...)
+  // where A is the edge being traversed into
+  // B, C, ... are edges that traverse into A and L is the number of outbound edges for that edge
+
+  PrHash newHash = _pr;
+
+  double sum = 0.0;
+
+  for (PrHash::iterator it = newHash.begin(); it != newHash.end(); ++it)
+  {
+    sum += it.value();
+    it.value() = 0;
+  }
+
+  LOG_VAR(sum);
+  LOG_VAR(_links.size());
+
+  // add this weight to all edges at the end.
+  double allWeight = (1 - _dampen) / _pr.size();
+
+  // this is much less efficient then some iterator approaches, but it is easy to write & read.
+  // if this works and it is a bottle neck, please fix it.
+  for (PrHash::iterator it = newHash.begin(); it != newHash.end(); ++it)
+  {
+    NetworkEdgePairPtr from = it.key();
+    QList<NetworkEdgePairPtr> values = _links.values(from);
+
+    if (values.size() != 0)
+    {
+      double contribution = _pr[from] * _dampen;
+
+      LOG_VAR(from);
+      foreach (NetworkEdgePairPtr to, values)
+      {
+        newHash[to] = newHash[to] + contribution;
+        LOG_VAR(to);
+        LOG_VAR(newHash[to]);
+        LOG_VAR(contribution);
+      }
+    }
+  }
+  LOG_VAR(allWeight);
+
+  double finalSum = 0.0;
+  for (PrHash::iterator it = newHash.begin(); it != newHash.end(); ++it)
+  {
+    it.value() = it.value() + allWeight;
+    finalSum += it.value();
+  }
+
+  for (PrHash::iterator it = newHash.begin(); it != newHash.end(); ++it)
+  {
+    it.value() /= finalSum;
   }
 
   _pr = newHash;
@@ -164,15 +239,21 @@ void VagabondNetworkMatcher::_calculateEdgePairs()
       ConstNetworkEdgePtr e2 = _index2Edge[iit.getId()];
       /// @todo an assumption for now that may not work in the future.
       assert(e1->getMembers().size() == 1 && e2->getMembers().size() == 1);
-      double radius = std::max(_details1->getSearchRadius(it.value()),
-        _details2->getSearchRadius(e2));
-      double d = hde.distance(*_map, e1->getMembers()[0], e2->getMembers()[0]);
-      LOG_VAR(d);
 
-      if (d < radius)
+      if (_details1->isCandidateMatch(e1, e2))
       {
         NetworkEdgePairPtr nep(new NetworkEdgePair(e1, e2));
         nep->reversed = _details1->isReversed(e1, e2);
+
+        AngleHistogramExtractor ahe;
+        ahe.setSmoothing(toRadians(30.0));
+        double ah = ahe.extract(*_map, e1->getMembers()[0], e2->getMembers()[0]);
+        if (nep->id == 271 || nep->id == 196)
+        {
+          LOG_VAR(nep);
+          LOG_VAR(ah);
+        }
+
         if (_details1->isCandidateMatch(nep->getFrom1(), nep->getFrom2()) &&
           _details1->isCandidateMatch(nep->getTo1(), nep->getTo2()))
         {

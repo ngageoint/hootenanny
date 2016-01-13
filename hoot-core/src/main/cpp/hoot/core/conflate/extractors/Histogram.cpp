@@ -29,9 +29,18 @@
 // geos
 #include <geos/geom/Geometry.h>
 
+// hoot
+#include <hoot/core/util/Log.h>
+
+// Qt
+#include <QStringList>
+
 // Standard
 #include <assert.h>
 #include <math.h>
+
+// Tgs
+#include <tgs/Statistics/Normal.h>
 
 namespace hoot
 {
@@ -41,18 +50,26 @@ Histogram::Histogram(int bins)
   _bins.resize(bins, 0.0);
 }
 
-void Histogram::addAngle(double theta, double length)
+void Histogram::addAngle(Radians theta, double length)
 {
   _bins[getBin(theta)] += length;
 }
 
-int Histogram::getBin(double theta)
+int Histogram::getBin(Radians theta)
 {
   while (theta < 0.0)
   {
     theta += 2 * M_PI;
   }
   return (theta / (2 * M_PI)) * _bins.size();
+}
+
+Radians Histogram::getBinCenter(size_t bin) const
+{
+  assert(bin >= 0 && bin < _bins.size());
+
+  Radians binSize = 2.0 * M_PI / (double)_bins.size();
+  return bin * binSize + binSize / 2.0;
 }
 
 void Histogram::normalize()
@@ -84,6 +101,34 @@ double Histogram::diff(Histogram& other)
   }
 
   return diff / 2.0;
+}
+
+void Histogram::smooth(Radians sigma)
+{
+  vector<double> old = _bins;
+
+  // this is quite inefficient and can be reworked to cache the normal curve and reuse it as needed.
+  for (size_t i = 0; i < _bins.size(); ++i)
+  {
+    _bins[i] = 0.0;
+    Radians center = getBinCenter(i);
+    for (size_t j = 0; j < old.size(); ++j)
+    {
+      Radians rawDiff = fabs(getBinCenter(j) - center);
+      Radians diff = std::min(rawDiff, 2 * M_PI - rawDiff);
+      _bins[i] += old[j] * Tgs::Normal::normal(diff, sigma);
+    }
+  }
+}
+
+QString Histogram::toString() const
+{
+  QStringList l;
+  for (size_t i = 0; i < _bins.size(); ++i)
+  {
+    l << QString::fromUtf8("%1°: %2").arg(toDegrees(getBinCenter(i))).arg(_bins[i]);
+  }
+  return l.join(", ");
 }
 
 }

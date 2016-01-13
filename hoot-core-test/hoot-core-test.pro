@@ -202,5 +202,6 @@ SOURCES += \
     src/test/cpp/hoot/core/schema/TagAncestorDifferencerTest.cpp \
     src/test/cpp/hoot/core/elements/RelationTest.cpp \
     src/test/cpp/hoot/core/algorithms/string/MostEnglishNameTest.cpp \
-    src/test/cpp/hoot/core/visitors/MedianNodeVisitorTest.cpp
+    src/test/cpp/hoot/core/visitors/MedianNodeVisitorTest.cpp \
+    src/test/cpp/hoot/core/conflate/extractors/HistogramTest.cpp
 

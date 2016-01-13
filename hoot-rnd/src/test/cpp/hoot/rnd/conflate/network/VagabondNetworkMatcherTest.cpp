@@ -68,14 +68,21 @@ public:
   {
     OsmMapPtr map(new OsmMap());
 
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB1.osm", true,
-      Status::Unknown1);
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB2.osm", false,
-      Status::Unknown2);
-//    OsmMapReaderFactory::getInstance().read(map, "test-files/DcGisRoads.osm", true,
+//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB1.osm", true,
 //      Status::Unknown1);
-//    OsmMapReaderFactory::getInstance().read(map, "tmp/dcperb.osm", false,
+//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB2.osm", false,
 //      Status::Unknown2);
+
+    OsmMapReaderFactory::getInstance().read(map, "test-files/DcGisRoads.osm", true,
+      Status::Unknown1);
+    OsmMapReaderFactory::getInstance().read(map, "tmp/dcperb3.osm", false,
+      Status::Unknown2);
+
+//    OsmMapReaderFactory::getInstance().read(map, "tmp/sub1.osm", true,
+//      Status::Unknown1);
+//    OsmMapReaderFactory::getInstance().read(map, "tmp/sub2.osm", false,
+//      Status::Unknown2);
+
     MapCleaner().apply(map);
     MapReprojector::reprojectToPlanar(map);
 

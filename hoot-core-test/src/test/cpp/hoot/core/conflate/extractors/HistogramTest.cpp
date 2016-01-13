@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,63 +24,35 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef HISTOGRAM_H
-#define HISTOGRAM_H
 
-#include <vector>
+#include <hoot/core/conflate/extractors/Histogram.h>
 
-// hoot
-#include <hoot/core/Units.h>
-
-// Qt
-#include <QString>
-
-using namespace std;
+#include "../../TestUtils.h"
 
 namespace hoot
 {
 
-/**
- * A class for storing a histogram of angle values.
- */
-class Histogram
+class HistogramTest : public CppUnit::TestFixture
 {
+  CPPUNIT_TEST_SUITE(HistogramTest);
+  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST_SUITE_END();
+
 public:
 
-  Histogram(int bins);
+  void runTest()
+  {
+    Histogram uut(16);
 
-  void addAngle(Radians theta, double length);
+    uut.addAngle(toRadians(25.0), 10);
+    uut.addAngle(toRadians(100.0), 20);
+    uut.smooth(M_PI / 8.0);
+    uut.normalize();
 
-  int getBin(Radians theta);
-
-  /**
-   * Returns the angle of the center of the specified bin.
-   */
-  Radians getBinCenter(size_t bin) const;
-
-  /**
-   * Normalize all the bins so the sum of the bins is 1.0.
-   */
-  void normalize();
-
-  /**
-   * Returns a value from 0.0 to 1.0 describing the diff. 1.0 is exactly the same.
-   */
-  double diff(Histogram& other);
-
-  /**
-   * Smooth the histogram with a gaussian filter with the specified sigma.
-   */
-  void smooth(Radians sigma);
-
-  QString toString() const;
-
-private:
-
-  vector<double> _bins;
-
+    HOOT_STR_EQUALS("11.25°: 0.0807461, 33.75°: 0.135935, 56.25°: 0.116651, 78.75°: 0.179311, 101.25°: 0.267439, 123.75°: 0.161358, 146.25°: 0.0359945, 168.75°: 0.00295457, 191.25°: 8.92202e-05, 213.75°: 9.91146e-07, 236.25°: 4.05363e-09, 258.75°: 2.03138e-09, 281.25°: 4.95573e-07, 303.75°: 4.46101e-05, 326.25°: 0.00147729, 348.75°: 0.017998", uut);
+  }
 };
 
-}
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HistogramTest, "quick");
 
-#endif // HISTOGRAM_H
+}

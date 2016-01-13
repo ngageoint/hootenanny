@@ -31,6 +31,8 @@ public:
 
   bool isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
+  bool isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
+
   bool isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
 
 private:

@@ -97,7 +97,11 @@ class VagabondNetworkMatcher : public NetworkMatcher
 public:
   VagabondNetworkMatcher();
 
-  void iterate();
+  virtual void iterate();
+
+  virtual void iteratePageRank();
+
+  virtual void iterateVoting();
 
   virtual void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2);
 

@@ -78,14 +78,16 @@ private:
   const OsmMap& _map;
 };
 
-AngleHistogramExtractor::AngleHistogramExtractor()
+AngleHistogramExtractor::AngleHistogramExtractor() :
+  _bins(16),
+  _smoothingSigma(-1.0)
 {
 }
 
 Histogram* AngleHistogramExtractor::_createHistogram(const OsmMap& map, const ConstElementPtr& e)
   const
 {
-  Histogram* result = new Histogram(16);
+  Histogram* result = new Histogram(_bins);
   HistogramVisitor v(*result, map);
   e->visitRo(map, v);
   return result;
@@ -96,8 +98,22 @@ double AngleHistogramExtractor::extract(const OsmMap& map, const ConstElementPtr
 {
   auto_ptr<Histogram> h1(_createHistogram(map, target));
   auto_ptr<Histogram> h2(_createHistogram(map, candidate));
+  if (_smoothingSigma > 0.0)
+  {
+    Degrees binSize = 360.0 / _bins;
+    h1->smooth(_smoothingSigma);
+    h2->smooth(_smoothingSigma);
+  }
   h1->normalize();
   h2->normalize();
+  if (target->getId() == -91649 || candidate->getId() == -91649)
+  {
+    LOG_VAR(target->getElementId());
+    LOG_VAR(h1->toString());
+    LOG_VAR(candidate->getElementId());
+    LOG_VAR(h2->toString());
+    LOG_VAR(1.0 - max(0.0, h1->diff(*h2)));
+  }
 
   const double diff = max(0.0, h1->diff(*h2));
   return 1.0 - diff;
