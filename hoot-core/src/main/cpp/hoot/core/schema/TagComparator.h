@@ -90,6 +90,17 @@ public:
 
   void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
 
+  /**
+   * Determines whether two tag sets have identical non-name, non-metadata tags.  Case sensitivity
+   * is determined with duplicate.name.case.sensitive.
+   *
+   * @param t1 first set of tags to compare
+   * @param t2 second set of tags to compare
+   * @return true if both tag sets have identical non-name, non-metadata contents (excluding
+   * ordering); false otherwise
+   */
+  bool nonNameTagsExactlyMatch(const Tags& t1, const Tags& t2);
+
 private:
 
   static TagComparator* _theInstance;

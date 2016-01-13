@@ -58,6 +58,7 @@ class TagComparatorTest : public CppUnit::TestFixture
   CPPUNIT_TEST(generalizeCaseInsensitiveTest);
   CPPUNIT_TEST(railwayBusStopTest);
   CPPUNIT_TEST(realWorldTest);
+  CPPUNIT_TEST(nonNameTagsExactlyMatchTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -863,6 +864,124 @@ public:
       t2["width"] = "10";
 
       CPPUNIT_ASSERT_DOUBLES_EQUAL(0.76, uut.compareTags(t1, t2), 0.001);
+    }
+  }
+
+  void nonNameTagsExactlyMatchTest()
+  {
+    TagComparator& uut = TagComparator::getInstance();
+
+    uut.setCaseSensitive(true);
+    {
+      Tags t1;
+      t1["highway"] = "primary_link";
+      t1["all_weather"] = "yes";
+      t1["bridge"] = "";
+      t1["surface"] = "paved";
+      t1["tunnel"] = "";
+
+      Tags t2;
+      t2["highway"] = "primary_link";
+      t2["all_weather"] = "yes";
+      t2["bridge"] = "";
+      t2["surface"] = "paved";
+      t2["tunnel"] = "";
+      t2["hoot:id"] = "1";
+
+      CPPUNIT_ASSERT(uut.nonNameTagsExactlyMatch(t1, t2));
+    }
+
+    uut.setCaseSensitive(true);
+    {
+      Tags t1;
+      t1["highway"] = "primary_link";
+      t1["all_weather"] = "yes";
+      t1["bridge"] = "";
+      t1["surface"] = "paved";
+      t1["tunnel"] = "";
+
+      Tags t2;
+      t2["highway"] = "primary_link";
+      t2["tunnel"] = "";
+      t2["all_weather"] = "yes";
+      t2["surface"] = "paved";
+      t2["hoot:id"] = "1";
+      t2["bridge"] = "";
+
+      CPPUNIT_ASSERT(uut.nonNameTagsExactlyMatch(t1, t2));
+    }
+
+    uut.setCaseSensitive(false);
+    {
+      Tags t1;
+      t1["highway"] = "primary_link";
+      t1["all_weather"] = "yes";
+      t1["bridge"] = "";
+      t1["surface"] = "paved";
+      t1["tunnel"] = "";
+
+      Tags t2;
+      t2["HIGHWAY"] = "primary_link";
+      t2["all_weather"] = "YES";
+      t2["bridge"] = "";
+      t2["surface"] = "paved";
+      t2["tunnel"] = "";
+      t2["hoot:id"] = "1";
+
+      CPPUNIT_ASSERT(uut.nonNameTagsExactlyMatch(t1, t2));
+    }
+
+    uut.setCaseSensitive(false);
+    {
+      Tags t1;
+      t1["highway"] = "primary_link";
+      t1["all_weather"] = "YES";
+      t1["bridge"] = "";
+      t1["SURFACE"] = "PAVED";
+      t1["tunnel"] = "";
+
+      Tags t2;
+      t2["highway"] = "PRIMARY_LINK";
+      t2["tunnel"] = "";
+      t2["all_weather"] = "yes";
+      t2["surface"] = "paved";
+      t2["hoot:id"] = "1";
+      t2["BRIDGE"] = "";
+
+      CPPUNIT_ASSERT(uut.nonNameTagsExactlyMatch(t1, t2));
+    }
+
+    uut.setCaseSensitive(true);
+    {
+      Tags t1;
+      t1["highway"] = "primary_link";
+      t1["all_weather"] = "yes";
+      t1["bridge"] = "";
+      t1["surface"] = "paved";
+      t1["tunnel"] = "";
+
+      Tags t2;
+      t2["HIGHWAY"] = "primary_link";
+      t2["all_weather"] = "YES";
+      t2["bridge"] = "";
+      t2["surface"] = "paved";
+      t2["tunnel"] = "";
+      t2["hoot:id"] = "1";
+
+      CPPUNIT_ASSERT(!uut.nonNameTagsExactlyMatch(t1, t2));
+    }
+
+    uut.setCaseSensitive(true);
+    {
+      Tags t1;
+      t1["key1"] = "bar";
+      t1["key2"] = "foo";
+
+      Tags t2;
+      t2["key1"] = "foo";
+      t2["key2"] = "bar";
+
+      CPPUNIT_ASSERT(!uut.nonNameTagsExactlyMatch(t1, t2));
     }
   }
 };
