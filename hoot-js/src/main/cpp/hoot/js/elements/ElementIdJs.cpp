@@ -115,7 +115,7 @@ Handle<Value> ElementIdJs::toJSON(const Arguments& args)
 
   Handle<Object> result = Object::New();
   result->Set(String::NewSymbol("type"), String::New(eid.getType().toString().toUtf8().data()));
-  result->Set(String::NewSymbol("id"), Integer::New(eid.getId()));
+  result->Set(String::NewSymbol("id"), v8::Integer::New(eid.getId()));
 
   return scope.Close(result);
 }
