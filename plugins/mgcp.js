@@ -1041,6 +1041,9 @@ mgcp = {
 
             mgcp.lookup = translate.createBackwardsLookup(mgcp.rules.one2one);
 
+            // Debug
+            // translate.dumpOne2OneLookup(mgcp.lookup);
+
             // Build a list of things to ignore and flip is backwards
             mgcp.ignoreList = translate.flipList(translate.joinList(mgcp.rules.numBiased, mgcp.rules.txtBiased));
 
