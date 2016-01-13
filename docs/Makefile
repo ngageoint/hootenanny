@@ -116,6 +116,7 @@ Hootenanny\ -\ Developer\ Guide.pdf: \
 	../HOOT_VERSION_FILE \
 	docinfo.xml \
 	styles/* \
+	developer/* \
 	tmp/RulesLib.asciidoc \
 	tmp/RulesTemplate.asciidoc \
 	tmp/rules-lib-doxygen \
