@@ -36,6 +36,8 @@
 #include <QStringList>
 
 // Standard
+// needed by some dev environments
+#include <stdint.h>
 #include <string>
 
 namespace hoot {
