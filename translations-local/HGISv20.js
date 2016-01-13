@@ -29,6 +29,7 @@
 // Convert HGISv20 to/from OSM+
 //
 
+hoot.require('SchemaTools');
 hoot.require('hgis20');
 hoot.require('hgis20_schema');
 hoot.require('hgis20_rules');

@@ -546,6 +546,32 @@ hgis20.rules = {
      'YEAR':'year',
     }, // End numBiased
     
+    
+
+    fuzyone2one :[
+      ['commercial$TYPE2','Bar',schemaTools.isSimilar('amenity=bar', 0.8, 0.1, 0.5)],
+      ['religioni$TYPE','Mosque',schemaTools.isSimilar('building=mosque', 0.8, 0.1, 0.5)],
+      ['commercial$TYPE2','Market',schemaTools.isSimilar('amenity=marketplace', 0.8, 0.1, 0.5)],
+      ['commercial$TYPE2','Beauty Salon',schemaTools.isSimilar('shop=beauty', 0.8, 0.1, 0.5)],
+      ['commercial$TYPE2','Delicatessen',schemaTools.isSimilar('shop=deli', 0.8, 0.1, 0.5)],
+      ['commercial$TYPE2','Grocery',schemaTools.isSimilar('shop=grocery', 0.8, 0.1, 0.5)],
+      ['commercial$TYPE2','Restaurant',schemaTools.isSimilar('amenity=restaurant', 0.8, 0.1, 0.5)],
+      ['commercial$TYPE2','Store',schemaTools.isSimilar('shop=general', 0.8, 0.1, 0.5)],
+      ['commercial$TYPE2','Tower',schemaTools.isSimilar('man_made=tower', 0.8, 0.1, 0.5)],
+      ['cultural$TYPE','Memorial',schemaTools.isSimilar('historic=memorial', 0.8, 0.1, 0.5)],
+      ['cultural$TYPE','Monument',schemaTools.isSimilar('historic=monument', 0.8, 0.1, 0.5)],
+      ['cultural$TYPE','Theatre',schemaTools.isSimilar('amenity=theatre', 0.8, 0.1, 0.5)],
+      ['cultural$TYPE','Burial Site',schemaTools.isSimilar('amenity=grave_yard', 0.8, 0.1, 0.5)],
+      ['hydroa$TYPE','River',schemaTools.isSimilar('waterway=river', 0.8, 0.1, 0.5)],
+      ['lodging$TYPE2','Guest House',schemaTools.isSimilar('tourism=guest_house', 0.8, 0.1, 0.5)],
+      ['medical$TYPE1','Hospital',schemaTools.isSimilar('amenity=hospital', 0.8, 0.1, 0.5)],
+      ['medical$TYPE1','Pharmacy',schemaTools.isSimilar('amenity=pharmacy', 0.8, 0.1, 0.5)],
+      ['religioni$TYPE','Church',schemaTools.isSimilar('building=church', 0.8, 0.1, 0.5)],
+      ['tourist$TYPE','Library',schemaTools.isSimilar('amenity=library', 0.8, 0.1, 0.5)],
+      ['tourist$TYPE','Casino',schemaTools.isSimilar('amenity=casino', 0.8, 0.1, 0.5)],
+      ['religion$TYPE1','0',schemaTools.isSimilar('religion=christian', 0.8, 0.1, 0.5)],
+      ['religion$TYPE1','3',schemaTools.isSimilar('religion=buddhist', 0.8, 0.1, 0.5)]
+    ],
 
     // Common one2one rules. Used for both import and export
     // taken from the HGISv20 spec.
@@ -1182,11 +1208,11 @@ hgis20.rules = {
      ['R2_SURFACE','Concrete','surface:2','concrete'],
 
      // SPA_ACC - Spatial Accuracy
-     ['SPA_ACC','1 - High','hgis:accuracy','high'],
-     ['SPA_ACC','2 - Medium','hgis:accuracy','medium'],
-     ['SPA_ACC','3 - Low','hgis:accuracy','low'],
-     ['SPA_ACC','4 - Regional','hgis:accuracy','regional'],
-     ['SPA_ACC','5 - Country','hgis:accuracy','country'],
+     ['SPA_ACC','1','hgis:accuracy','high'],
+     ['SPA_ACC','2','hgis:accuracy','medium'],
+     ['SPA_ACC','3','hgis:accuracy','low'],
+     ['SPA_ACC','4','hgis:accuracy','regional'],
+     ['SPA_ACC','5','hgis:accuracy','country'],
 
      // Status - Protected area status
      ['STATUS','Proposed','site_status','proposed'],
@@ -1270,8 +1296,8 @@ hgis20.rules = {
      ['commercial$TYPE2','Auto Repair','shop','car_repair'],
      ['commercial$TYPE2','Bakery','shop','bakery'],
      ['commercial$TYPE2','Bank','amenity','bank'],
-     ['commercial$TYPE2','Bar','amenity','bar'],
-     ['commercial$TYPE2','Beauty Salon','shop','beauty'],
+     //['commercial$TYPE2','Bar','amenity','bar'],
+     //['commercial$TYPE2','Beauty Salon','shop','beauty'],
      ['commercial$TYPE2','Brewery','building','brewery'],
      ['commercial$TYPE2','Butcher','shop','butcher'],
      ['commercial$TYPE2','Car Dealership','shop','car'],
@@ -1280,32 +1306,31 @@ hgis20.rules = {
      ['commercial$TYPE2','Computer','shop','computer'],
      ['commercial$TYPE2','Construction','amenity','construction'],
      ['commercial$TYPE2','Day Care','amenity','child_care'],
-     ['commercial$TYPE2','Delicatessen','shop','deli'],
+     //['commercial$TYPE2','Delicatessen','shop','deli'],
      ['commercial$TYPE2','Electronics','shop','electronics'],
      ['commercial$TYPE2','Entertainment','amenity','entertainment'],
      ['commercial$TYPE2','Factory','building','industrial'],
      ['commercial$TYPE2','Film','amenity','film'],
      ['commercial$TYPE2','Freight - Shipping','amenity','freight_shipping'],
      ['commercial$TYPE2','Funeral Home','shop','funeral_directors'],
-     ['commercial$TYPE2','Fuel','amenity','fuel'],
-     ['commercial$TYPE2','Gas','shop','gas'],
-     ['commercial$TYPE2','Grocery','shop','grocery'],
+     ['commercial$TYPE2','Gas','amenity','fuel'],
+     //['commercial$TYPE2','Grocery','shop','grocery'],
      ['commercial$TYPE2','Heavy Machinery','amenity','heavy_machinery'], // ???
      ['commercial$TYPE2','Legal','office','lawyer'],
-     ['commercial$TYPE2','Market','amenity','marketplace'],
+     //['commercial$TYPE2','Market','amenity','marketplace'],
      ['commercial$TYPE2','Medical','amenity','medical'], // Not good
      ['commercial$TYPE2','Mining','amenity','mining'], // ???
      ['commercial$TYPE2','Nursery','amenity','nursery'],
      ['commercial$TYPE2','Office','building','office'],
      ['commercial$TYPE2','Other','commercial:type','other'],
      ['commercial$TYPE2','Research','building','research'],
-     ['commercial$TYPE2','Restaurant','amenity','restaurant'],
+     //['commercial$TYPE2','Restaurant','amenity','restaurant'],
      ['commercial$TYPE2','Shipping','amenity','shipping'],
-     ['commercial$TYPE2','Store','shop','general'],
+     //['commercial$TYPE2','Store','shop','general'],
      ['commercial$TYPE2','Telecommunications','shop','mobile_phone'],
      ['commercial$TYPE2','Television','shop','television'], // Not great
      ['commercial$TYPE2','Tourist','tourism','information'],
-     ['commercial$TYPE2','Tower','man_made','tower'],
+     //['commercial$TYPE2','Tower','man_made','tower'],
      ['commercial$TYPE2','Veterinarian','amenity','veterinary'],
 
      ['crime$TYPE','Armed Robbery','crime:event','armed_robbery'],
@@ -1324,15 +1349,15 @@ hgis20.rules = {
      ['crime$TYPE','Violence','crime:event','violence'],
      ['crime$TYPE','Weapons Smuggling','crime:event','weapons_smuggling'],
 
-     ['cultural$TYPE','Burial Site','amenity','grave_yard'],  // Not great
+     //['cultural$TYPE','Burial Site','amenity','grave_yard'],  // Not great
      ['cultural$TYPE','Cultural Center','amenity','cultural_center'],
-     ['cultural$TYPE','Memorial','historic','memorial'],
-     ['cultural$TYPE','Monument','historic','monument'],
+     //['cultural$TYPE','Memorial','historic','memorial'],
+     //['cultural$TYPE','Monument','historic','monument'],
      ['cultural$TYPE','Museum','tourism','museum'],
      ['cultural$TYPE','Other','cultural','other'],
      ['cultural$TYPE','Sculpture','artwork:type','sculpture'],
      ['cultural$TYPE','Statue','artwork:type','statue'],
-     ['cultural$TYPE','Theatre','amenity','theatre'],
+     //['cultural$TYPE','Theatre','amenity','theatre'],
 
      ['dams$TYPE','Electricity','dam:use','electricity'],
      ['dams$TYPE','Electricity, Water Supply','dam:use','electricity_water_supply'],
@@ -1416,7 +1441,7 @@ hgis20.rules = {
 //      ['hydrop$TYPE','Well','man_made','water_well'],
 
      ['hydroa$TYPE','Lake','water','lake'],
-     ['hydroa$TYPE','River','waterway','river'],
+     //['hydroa$TYPE','River','waterway','river'],
      ['hydroa$TYPE','Inland Water','waterway','inland_water'], // ?????
      ['hydroa$TYPE','Land Subject to Inundation','water','intermittent'],
      ['hydroa$TYPE','Reservoir','water','reservoir'],
@@ -1439,7 +1464,7 @@ hgis20.rules = {
      ['lodging$TYPE2','Condominium','building','condominium'],
      ['lodging$TYPE2','Dormitory','building','dormitory'],
      ['lodging$TYPE2','Elite Area','landuse','elite_area'],
-     ['lodging$TYPE2','Guest House','tourism','guest_house'],
+     //['lodging$TYPE2','Guest House','tourism','guest_house'],
      ['lodging$TYPE2','Hostel','tourism','hostel'],
      ['lodging$TYPE2','Hotel','tourism','hotel'],
      ['lodging$TYPE2','Housing','building','residential'],
@@ -1468,9 +1493,9 @@ hgis20.rules = {
 
      ['medical$TYPE1','Clinic','amenity','clinic'],
      ['medical$TYPE1','Dispensary','amenity','dispensary'],
-     ['medical$TYPE1','Hospital','amenity','hospital'],
+     //['medical$TYPE1','Hospital','amenity','hospital'],
      ['medical$TYPE1','Medical Facility','amenity','medical_facility'],
-     ['medical$TYPE1','Pharmacy','amenity','pharmacy'],
+     //['medical$TYPE1','Pharmacy','amenity','pharmacy'],
      ['medical$TYPE1','Rehabilitation Center','amenity','rehabilitation_center'],
      ['medical$TYPE1','Sanatorium','amenity','sanatorium'],
 
@@ -1609,10 +1634,10 @@ hgis20.rules = {
      ['refugee$TYPE','Village of Interest','refugee','village_of_interest'],
 
      // NOTE: This is taken from the SUBTYPE value, not the domain
-     ['religion$TYPE1','0','religion','christian'],
+     //['religion$TYPE1','0','religion','christian'],
      ['religion$TYPE1','1','religion','muslim'],
      ['religion$TYPE1','2','religion','hindu'],
-     ['religion$TYPE1','3','religion','buddhist'],
+     //['religion$TYPE1','3','religion','buddhist'],
      ['religion$TYPE1','5','religion','jewish'],
      ['religion$TYPE1','6','religion','ethnic'],
      ['religion$TYPE1','7','religion','juche'],
@@ -1654,8 +1679,8 @@ hgis20.rules = {
      ['religion$TYPE2','Sahajdharis','denomination','sahajdharis'],
      ['religion$TYPE2','Keshadharis','denomination','keshadharis'],
 
-     ['religioni$TYPE','Church','building','church'],
-     ['religioni$TYPE','Mosque','building','mosque'],
+     //['religioni$TYPE','Church','building','church'],
+     //['religioni$TYPE','Mosque','building','mosque'],
      ['religioni$TYPE','Mission','building','mission'],
      ['religioni$TYPE','Youth Center','building','youth_center'],
      ['religioni$TYPE','Temple','building','temple'],
@@ -1715,12 +1740,12 @@ hgis20.rules = {
      ['smugglingp$TYPE','Weapons','smuggling:type','weapons'],
 
      ['tourist$TYPE','Botanic Garden','garden:type','botanical'],
-     ['tourist$TYPE','Casino','amenity','casino'],
+     //['tourist$TYPE','Casino','amenity','casino'],
      ['tourist$TYPE','Cultural','amenity','cultural'],
      ['tourist$TYPE','Gallery','tourism','gallery'],
      ['tourist$TYPE','Game Reserve','landuse','game_reserve'],
      ['tourist$TYPE','Historical','historic','yes'],
-     ['tourist$TYPE','Library','amenity','library'],
+     //['tourist$TYPE','Library','amenity','library'],
 //      ['tourist$TYPE','Memorial','raw:touristTYPE','memorial'],
 //      ['tourist$TYPE','Monument','raw:touristTYPE','monument'],
 //      ['tourist$TYPE','Museum','raw:touristTYPE','museum'],
@@ -1828,6 +1853,9 @@ hgis20.rules = {
 
     // ##### End of One2One Rules #####
 
+    // Month list: Used to make the months pretty
+    monthList : ['January', 'February','March','April','May','June','July','August','September','October','November','December'],
+
     // List of unique attributes for each layer
     uniqList : {
       'NAME_ISO':'ADMIN0','NAME_FAO':'ADMIN0','NAME_LOCAL':'ADMIN0','NAME_VARIA':'ADMIN0','VALIDFR':'ADMIN0',
@@ -1839,7 +1867,7 @@ hgis20.rules = {
       'RIVER':'Dams','YR_OPER':'Dams','HEIGHT':'Dams',
       'TOT_BOYS':'Educational_Institutions','TOT_CLASS':'Educational_Institutions','TOT_F_TEAC':'Educational_Institutions',
       'TOT_GIRLS':'Educational_Institutions','TOT_M_TEAC':'Educational_Institutions',
-      'WEBSITE':'Embassies',
+      // 'WEBSITE':'Embassies',
       'PEOPLEGP_1':'Ethnicity','PEOPLEGP_2':'Ethnicity','PEOPLEGP_3':'Ethnicity','PEOPLEGP_4':'Ethnicity','PEOPLEGP_5':'Ethnicity',
       'SECTOR':'Foreign_Investment_Projects','VALUE':'Foreign_Investment_Projects','LEND_INSTR':'Foreign_Investment_Projects',
       'DESCRIP':'Foreign_Investment_Projects','APP_DATE':'Foreign_Investment_Projects','APP_YEAR':'Foreign_Investment_Projects',
@@ -1857,6 +1885,112 @@ hgis20.rules = {
       'POPULATION':'Refugee_Camps',
       'FAOSOIL':'Soils','DOMSOI':'Soils'
       },
+
+   // Lookup table for mapping TYPE2 to TYPE1
+   // The format is: TYPE2 = TYPE1
+   mapType : {
+       Agricultural_POI : {
+           'Breeding Ground':'Farm',
+           'Cooperative':'Farm',
+           'Dairy':'Farm',
+           'Duck':'Livestock',
+           'Fisheries':'Aquaculture',
+           'Goat':'Livestock',
+           'Greenhouse':'Nursery',
+           'Ostrich':'Livestock',
+           'Other':'999999',
+           'Pig':'Livestock',
+           'Pigeon':'Livestock',
+           'Poultry':'Farm',
+           'Rabbit':'Livestock',
+           'Rice Field':'Farm',
+           'Salt':'999999'
+       },
+       Commercial_POI : {
+           'Airline':'Service',
+           'ATM':'Financial',
+           'Auto Repair':'Automotive',
+           'Bakery':'Retail',
+           'Bank':'Financial',
+           'Bar':'Retail',
+           'Beauty Salon':'Retail',
+           'Brewery':'Manufacturing',
+           'Butcher':'Retail',
+           'Car Dealership':'Automotive',
+           'Car Rental':'Automotive',
+           'Car Wash':'Automotive',
+           'Computer':'Retail',
+           'Construction':'Industrial',
+           'Day Care':'Service',
+           'Delicatessen':'Retail',
+           'Electronics':'Retail',
+           'Entertainment':'Service',
+           'Factory':'Industrial',
+           'Film':'Service',
+           'Freight - Shipping':'Service',
+           'Funeral Home':'Service',
+           'Fuel':'Retail',
+           'Gas':'Retail',
+           'Grocery':'Retail',
+           'Heavy Machinery':'Industrial',
+           'Legal':'Service',
+           'Market':'Retail',
+           'Medical':'Service',
+           'Mining':'Industrial',
+           'Nursery':'Retail',
+           'Office':'Service',
+           'Other':'Other',
+           'Research':'Service',
+           'Restaurant':'Service',
+           'Shipping':'Service',
+           'Store':'Retail',
+           'Telecommunications':'Telecommunications',
+           'Television':'Telecommunications',
+           'Tourist':'Service',
+           'Tower':'Telecommunications',
+           'Veterinarian':'Service'
+       },
+       Government_POI : {
+           'National Facility':'Civic',
+           'Other':'Other',
+           'Political Party Facility':'Political',
+           'Post Office':'Civic',
+           'Social':'Civic',
+           'State Facility':'Civic',
+           'Local Government Facility':'Civic'
+       },
+       Lodging_POI : {
+           'Apartment':'Permanent',
+           'Bed & Breakfast':'Transient',
+           'Camp Site':'Transient',
+           'Condominium':'Permanent',
+           'Dormitory':'Transient',
+           'Elite Area':'Permanent',
+           'Guest House':'Transient',
+           'Hostel':'Transient',
+           'Hotel':'Transient',
+           'Housing':'Permanent',
+           'Inn':'Transient',
+           'Lodge':'Transient',
+           'Motel':'Transient',
+           'Resort':'Transient',
+           'Villas':'Permanent'
+       },
+       Medical_Facilities : {
+           'Bath House':'Medical Facility',
+           // 'Children':'medical:type',
+           'Dental':'Clinic',
+           'Emergency':'Medical Facility',
+           'Headquarters':'999999',
+           'Health Center':'Medical Facility',
+           'Health Complex':'Medical Facility',
+           'Hot Spring':'Medical Facility',
+           'Other':'Medical Facility',
+           'Pharmaceutical':'Pharmacy',
+           'Rehabilitation':'Clinic',
+           'Spa':'Medical Facility'
+       }
+   }, // End mapType
 
 
    // Lookup table for layernames.
