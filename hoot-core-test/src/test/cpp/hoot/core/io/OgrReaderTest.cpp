@@ -84,7 +84,6 @@ public:
 
       Coordinate c1(-1, 84);
       Coordinate c2(1, 84);
-      double d = GeometryUtils::haversine(c1, c2);
 
       {
         shared_ptr<OGRSpatialReference> ortho1 = MapProjector::createOrthographic(env);

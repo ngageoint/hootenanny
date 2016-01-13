@@ -30,9 +30,6 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
 
-// Qt
-#include <QUuid>
-
 namespace hoot
 {
 

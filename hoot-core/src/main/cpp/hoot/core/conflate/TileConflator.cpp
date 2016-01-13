@@ -42,10 +42,6 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/NotImplementedException.h>
 
-// Qt
-#include <QDir>
-#include <QUuid>
-
 // Standard
 #include <set>
 
