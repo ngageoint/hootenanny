@@ -1,6 +1,9 @@
 [
     {
         "dataType": "real",
+        "geometries": [
+            "node"
+        ],
         "name": "circumference",
         "objectType": "tag"
     }

@@ -88,7 +88,7 @@ private:
  *
  * Every exception should be exposed through the factory interface. This allows V8
  * (See HootExceptionJs.h) to instantiate and throw Hoot specific exceptions such as NeedsReview.
- * To fascilitate this we must be able to instantiate the exception from the factory _and_ throw
+ * To facilitate this we must be able to instantiate the exception from the factory _and_ throw
  * a hoot exception from a hoot exception pointer. If you simply
  * "HootException* e = getException(); throw *myexception;" you will throw an exception of the
  * HootException type rather than NeedsReview or similar. C++11 has some fascilities that may help

@@ -47,7 +47,7 @@ void WayJoin2InputFormat::_addCsqSplits(const QString& p)
   Hdfs fs;
   if (fs.getFileStatus(p.toStdString()).isDir())
   {
-    vector<FileStatus> status = fs.listStatus(p.toStdString());
+    vector<FileStatus> status = fs.listStatus(p.toStdString(), true);
     for (size_t i = 0; i < status.size(); i++)
     {
       QString ps = QString::fromStdString(status[i].getPath());

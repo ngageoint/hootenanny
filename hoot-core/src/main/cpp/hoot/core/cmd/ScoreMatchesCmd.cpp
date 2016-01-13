@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
@@ -78,7 +78,7 @@ public:
       if (i == 0 && !output.isEmpty())
       {
         BuildingOutlineUpdateOp().apply(copy);
-        MapReprojector::reprojectToWgs84(copy);
+        MapProjector::projectToWgs84(copy);
         saveMap(copy, output);
       }
     }
@@ -101,22 +101,6 @@ public:
     cout << "Score: " << score << endl;
 
     return result;
-  }
-
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " [--confusion] (input1 input2) [input1 input2 ...] (output)\n"
-        "  Reads from inputs, adds UUIDs, conflates using unify and scores the matches.  The \n"
-        "  command will return an error if the first input file contains any REF2 tags or \n"
-        "  the second input file contains any REF1 tags.\n"
-        ""
-        "  * --confusion - print the confusion matrix\n"
-        "  * input1 - Input 1 containing REF1 tags (e.g. .osm file).\n"
-        "  * input2 - Input 2 containing REF2 tags (e.g. .osm file).\n"
-        "  * output - Output file for debugging (e.g. .osm file). Only the first "
-        "             conflation will be output.";
   }
 
   virtual QString getName() const { return "score-matches"; }
@@ -208,7 +192,7 @@ public:
       }
 
       shared_ptr<OsmMap> mapCopy(map);
-      MapReprojector::reprojectToWgs84(mapCopy);
+      MapProjector::projectToWgs84(mapCopy);
       OsmUtils::saveMap(mapCopy, "/tmp/score-matches-before-prep.osm");
 
       MatchScoringMapPreparer().prepMap(map, conf().getBool(removeNodesKey(), false));
@@ -217,7 +201,7 @@ public:
 
     LOG_VARD(maps.size());
     shared_ptr<OsmMap> mapCopy(maps[0]);
-    MapReprojector::reprojectToWgs84(mapCopy);
+    MapProjector::projectToWgs84(mapCopy);
     OsmUtils::saveMap(mapCopy, "/tmp/score-matches-after-prep.osm");
 
     if (optimizeThresholds)

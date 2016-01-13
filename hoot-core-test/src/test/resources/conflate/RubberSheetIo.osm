@@ -1449,6 +1449,7 @@
         <nd ref="-5512"/>
         <nd ref="-5513"/>
         <nd ref="-5181"/>
+        <tag k="alt_name" v="US Hwy 50"/>
         <tag k="name" v="Constitution Ave NW"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
@@ -1489,6 +1490,7 @@
         <nd ref="-5510"/>
         <nd ref="-5511"/>
         <nd ref="-5512"/>
+        <tag k="alt_name" v="US Hwy 50"/>
         <tag k="name" v="Constitution Ave NW"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
@@ -1496,6 +1498,7 @@
     <way visible="true" id="-648" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5509"/>
         <nd ref="-5510"/>
+        <tag k="alt_name" v="US Hwy 50"/>
         <tag k="name" v="Constitution Ave NW"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
@@ -1550,6 +1553,7 @@
     <way visible="true" id="-642" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5508"/>
         <nd ref="-5509"/>
+        <tag k="alt_name" v="US Hwy 50"/>
         <tag k="name" v="Constitution Ave NW"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
@@ -1581,6 +1585,7 @@
     <way visible="true" id="-636" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7506"/>
         <nd ref="-5508"/>
+        <tag k="alt_name" v="US Hwy 50"/>
         <tag k="name" v="Constitution Ave NW"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
@@ -2390,6 +2395,7 @@
     <way visible="true" id="-757" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5501"/>
         <nd ref="-6990"/>
+        <tag k="alt_name" v="I- 66"/>
         <tag k="name" v="US Hwy 50"/>
         <tag k="highway" v="primary"/>
         <tag k="error:circular" v="5"/>
@@ -2397,6 +2403,7 @@
     <way visible="true" id="-756" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5498"/>
         <nd ref="-5501"/>
+        <tag k="alt_name" v="I- 66"/>
         <tag k="name" v="US Hwy 50"/>
         <tag k="highway" v="primary"/>
         <tag k="error:circular" v="5"/>

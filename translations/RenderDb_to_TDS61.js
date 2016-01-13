@@ -26,7 +26,7 @@
  */
 
 //
-// Convert MapEdit RenderDb to TDSv61
+// Convert RenderDb to TDSv61
 //
 
 hoot.require('tds61');

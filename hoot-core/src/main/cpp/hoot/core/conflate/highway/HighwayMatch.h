@@ -71,6 +71,9 @@ public:
 
   virtual map<QString, double> getFeatures(const shared_ptr<const OsmMap>& m) const;
 
+  virtual QString getMatchName() const { return getHighwayMatchName(); }
+  static QString getHighwayMatchName() { return _matchName; }
+
   virtual double getProbability() const;
 
   virtual double getScore() const { return _score; }
@@ -99,6 +102,7 @@ private:
   WaySublineMatchString _sublineMatch;
   mutable QHash<ElementId, bool> _conflicts;
   QString _explainText;
+  static QString _matchName;
   static QString _noMatchingSubline;
 
   double _calculateExpertProbability(const ConstOsmMapPtr& map) const;

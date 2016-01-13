@@ -18,7 +18,7 @@
 
 // Hoot
 #include <hoot/core/Conflator.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/conflate/DuplicateNameRemover.h>
@@ -44,7 +44,7 @@
 #include <pp/Hdfs.h>
 
 // Qt
-#include <QUuid>
+//#include <QUuid>
 
 #include "ConflateMapper.h"
 
@@ -149,7 +149,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   map->registerListener(rnl);
 
   /// @todo consolidate this inside the conflator and make it easier to read.
-  MapReprojector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
 
   _validate(map);
   DuplicateWayRemover::removeDuplicates(map);
@@ -163,7 +163,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   map = ImpliedDividedMarker::markDivided(map);
   DuplicateNameRemover::removeDuplicates(map);
 
-  MapReprojector::reprojectToWgs84(map);
+  MapProjector::projectToWgs84(map);
 
   // Disable no information element remover. See #4125
   // In short, the no information element remover may remove nodes that have no parent during the
@@ -179,7 +179,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   conflator.conflate();
 
   shared_ptr<OsmMap> result(new OsmMap(conflator.getBestMap()));
-  MapReprojector::reprojectToWgs84(result);
+  MapProjector::projectToWgs84(result);
 
   for (HashMap<long, long>::const_iterator it = _nr.getReplacements().begin();
        it != _nr.getReplacements().end(); ++it)

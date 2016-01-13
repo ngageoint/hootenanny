@@ -83,6 +83,7 @@ protected:
   long _maxElementsPerMap;
   long _elementsRead;
   shared_ptr<OsmMap> _partialMap;
+  QString _bbox;
 
 };
 

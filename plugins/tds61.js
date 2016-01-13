@@ -371,79 +371,131 @@ tds61 = {
     }, // End validateTDSAttrs
 
 
-    // Sort out if we need to return two features or one.
-    // This is generally for Roads/Railways & bridges but can also be for other features.
-    twoFeatures: function(geometryType, tags, attrs)
+    // Sort out if we need to return more than one feature.
+    // This is generally for Roads, Railways, bridges, tunnels etc.
+    manyFeatures: function(geometryType, tags, attrs)
     {
-        var newAttrs = {};
+        var newfeatures = [];
 
-        // Sort out Roads, Railways and Bridges.
-        if (geometryType == 'Line' && tags.bridge && (tags.highway || tags.railway))
+        // Add the first feature to the structure that we return
+        var returnData = [{attrs:attrs, tableName:''}];
+
+        // Sort out Roads, Railways, Bridges, Tunnels, Embankments and Cuttings.
+        if (geometryType == 'Line' && (tags.highway || tags.railway))
         {
-            if (attrs.F_CODE !== 'AQ040') // Not a Bridge
-            {
-                newAttrs.F_CODE = 'AQ040';
+            // var tagList = ['bridge','tunnel','embankment','ford','cutting'];
+            var tagList = ['bridge','tunnel','embankment','cutting'];
 
-                if (tags.highway)
-                {
-                    newAttrs.TRS = '13'; // Road
-                }
-                else if (tags.railway)
-                {
-                    newAttrs.TRS = '12'; // Railway
-                }
-            }
-            else // A Bridge
+            // 1. Look at the fcodes
+            // Bridge, Tunnel, Ford, Embankment, Cut
+            if (['AQ040','AQ130','BH070','DB090','DB070'].indexOf(attrs.F_CODE) > -1)
             {
-                if (tags.railway)
+                var nTags = JSON.parse(JSON.stringify(tags));
+                delete nTags.uuid;
+
+                // Roads can go over a Ford, Railways can't
+                tagList.push('ford');
+
+                for (var i in tagList)
                 {
-                    newAttrs.F_CODE = 'AN010'; // Railway
-                    attrs.TRS = '12'; // Railway
-                }
-                else
-                {
-                    if (tags.highway == 'track')
+                    if (nTags[tagList[i]] && nTags[tagList[i]] !== 'no')
                     {
-                        newAttrs.F_CODE = 'AP010';
+                        delete nTags[tagList[i]];
                     }
-                    else
-                    {   // The default is to make it a road
-                        newAttrs.F_CODE = 'AP030';
-                    }
+                } // End for tag list
 
-                    attrs.TRS = '13'; // Road
+                newfeatures.push({attrs: {}, tags: nTags});
+            }
+            // Now look for road type features
+            // Road, Cart Track, Trail
+            else if (['AP030','AP010','AP050'].indexOf(attrs.F_CODE) > -1)
+            {
+                // Roads can go over a Ford, Railways can't
+                tagList.push('ford');
+
+                for (var i in tagList)
+                {
+                    if (tags[tagList[i]] && tags[tagList[i]] !== 'no') // We have one of these...
+                    {
+                        var nTags = JSON.parse(JSON.stringify(tags));
+                        delete nTags.uuid;
+
+                        if (nTags.highway) // Paranoid.....
+                        {
+                            delete nTags.highway;
+                        }
+
+                        newfeatures.push({attrs: {'TRS':'13'}, tags: nTags});
+                        break;
+                    }
                 }
             }
+            // Now look for Railways
+            else if(['AN010','AN050'].indexOf(attrs.F_CODE) > -1)
+            {
+                for (var i in tagList)
+                {
+                    if (tags[tagList[i]] && tags[tagList[i]] !== 'no') // We have one of these...
+                    {
+                        var nTags = JSON.parse(JSON.stringify(tags));
+                        delete nTags.uuid;
 
-            // Remove the uuid from the tag list so we get a new one for the second feature
-            delete tags.uuid;
-        } // End sort out Road, Railway & Bridge
+                        if (nTags.railway) // Paranoid.....
+                        {
+                            delete nTags.railway;
+                        }
+                        newfeatures.push({attrs: {'TRS':'12'}, tags: nTags});
+                        break;
+                    }
+                }
 
-        // If we are making a second feature, process it.
-        if (newAttrs.F_CODE)
+            } // End Railway
+
+
+        } // End sort out Road, Railway, Bridge and Tunnel
+
+        // Loop through the new features and process them.
+        // Note: This is the same as we did for the main feature.
+        for (var i = 0, nFeat = newfeatures.length; i < nFeat; i++)
         {
-            // Now go make a second feature
             // pre processing
-            tds61.applyToNfddPreProcessing(tags, newAttrs, geometryType);
+            tds61.applyToNfddPreProcessing(newfeatures[i]['tags'], newfeatures[i]['attrs'], geometryType);
 
             // one 2 one - we call the version that knows about OTH fields
-            translate.applyNfddOne2One(tags, newAttrs, tds61.lookup, tds61.fcodeLookup, tds61.ignoreList);
+            translate.applyNfddOne2One(newfeatures[i]['tags'], newfeatures[i]['attrs'], tds61.lookup, tds61.fcodeLookup, tds61.ignoreList);
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
-            translate.applySimpleNumBiased(newAttrs, tags, tds61.rules.numBiased, 'backward');
-            translate.applySimpleTxtBiased(newAttrs, tags, tds61.rules.txtBiased, 'backward');
+            translate.applySimpleNumBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], tds61.rules.numBiased, 'backward');
+            translate.applySimpleTxtBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], tds61.rules.txtBiased, 'backward');
 
             // post processing
-            tds61.applyToNfddPostProcessing(tags, newAttrs, geometryType);
+            tds61.applyToNfddPostProcessing(newfeatures[i]['tags'], newfeatures[i]['attrs'], geometryType);
+
+            returnData.push({attrs: newfeatures[i]['attrs'],tableName: ''});
         }
 
-        // Debug:
-        // for (var i in newAttrs) print('twoFeatures: New Attrs:' + i + ': :' + newAttrs[i] + ':');
+        return returnData;
+    }, // End manyFeatures
 
-        // Return the new attributes
-        return newAttrs;
-    }, // End twoFeatures
+    // Doesn't do much but saves typing the same code out a few times in the to NFDD Pre Processing
+    fixTransType : function(tags)
+    {
+        if (tags.railway)
+        {
+            tags['transport:type'] = 'railway';
+        }
+        else if (tags.highway && ['path','pedestrian','steps','trail'].indexOf(tags.highway) > -1)
+        {
+            tags['transport:type'] = 'pedestrian';
+        }
+        else if (tags.highway)
+        {
+            tags['transport:type'] = 'road';
+        }
+    },
+
+
 
 // #####################################################################################################
     // ##### Start of the xxToOsmxx Block #####
@@ -668,23 +720,38 @@ tds61 = {
             {
                 tags.highway = 'motorway';
             }
-            else if (tags['ref:road:type'] == 'limited_access_motorway' || tags['ref:road:class'] == 'primary')
+            else if (tags['ref:road:type'] == 'limited_access_motorway')
             {
                 tags.highway = 'trunk';
             }
-            else if (tags['ref:road:class'] == 'secondary')
+            else if (tags['ref:road:class'] == 'primary')
             {
                 tags.highway = 'primary';
             }
-            else if (tags['ref:road:class'] == 'local')
+            else if (tags['ref:road:class'] == 'secondary')
             {
                 tags.highway = 'secondary';
             }
-            else if (tags['ref:road:type'] == 'road')
+            else if (tags['ref:road:class'] == 'local')
+            {
+                if (tags['ref:road:type'] == 'road') // RTY=3
+                {
+                    tags.highway = 'tertiary';
+                }
+                else
+                {
+                    tags.highway = 'unclassified';
+                }
+            }
+            else if (tags['ref:road:type'] == 'pedestrian')
+            {
+                tags.highway = 'pedestrian';
+            }
+            else if (tags['ref:road:type'] == 'road') // RTY=3
             {
                 tags.highway = 'tertiary';
             }
-            else if (tags['ref:road:type'] == 'street')
+            else if (tags['ref:road:type'] == 'street') // RTY=4
             {
                 tags.highway = 'unclassified';
             }
@@ -693,23 +760,20 @@ tds61 = {
             {
                 tags.highway = 'road';
             }
-            // Catch all for the rest of the ref:road:type: close, circle drive etc
-            else if (tags['ref:road:type'])
-            {
-                tags.highway = 'residential';
-            }
         } // End if AP030
 
 
         // New TDSv61 Attribute - ROR (Road Interchange Ramp)
-        if (tags.highway && tags.link_road == 'yes')
+        if (tags.highway && tags.interchange_ramp == 'yes')
         {
             var roadList = ['motorway','trunk','primary','secondary','tertiary'];
             if (roadList.indexOf(tags.highway) !== -1) tags.highway = tags.highway + '_link';
         }
 
+        // Add the LayerName to the source
+        tags.source = 'tdsv61:' + layerName.toLowerCase();
+        
         // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
-        tags.source = 'tdsv61'; 
         if (attrs.UFI)
         {
             tags.uuid = '{' + attrs['UFI'].toString().toLowerCase() + '}';
@@ -741,11 +805,13 @@ tds61 = {
             ["t['glacier:type'] == 'icecap' && t.natural == 'glacier'","delete t.natural"],
             ["t.golf == 'driving_range' && !(t.leisure)","t.leisure = 'golf_course'"],
             ["t.historic == 'castle' && !(t.ruins) && !(t.building)","t.building = 'yes'"],
+            ["t.in_tunnel == 'yes' && !(t.tunnel)","t.tunnel = 'yes'; delete t.in_tunnel"],
             ["t.industrial && !(t.landuse)","t.landuse = 'industrial'"],
             ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['material:vertical']","t.material = t['material:vertical']; delete t['material:vertical']"],
             ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
+            ["t.on_bridge == 'yes' && !(t.bridge)","t.bridge = 'yes'; delete t.on_bridge"],
             ["t.public_transport == 'station' && t['transport:type'] == 'railway'","t.railway = 'station'"],
             ["t.public_transport == 'station' && t['transport:type'] == 'bus'","t.bus = 'yes'"],
             ["t.protect_class && !(t.boundary)","t.boundary = 'protected_area'"],
@@ -760,7 +826,8 @@ tds61 = {
             ["t.use == 'islamic_prayer_hall' && !(t.amenity)","t.amenity = 'place_of_worship'"],
             ["t.water || t.landuse == 'basin'","t.natural = 'water'"],
             ["t.waterway == 'flow_control'","t.flow_control = 'sluice_gate'"],
-            ["t.wetland && !(t.natural)","t.natural = 'wetland'"]
+            ["t.wetland && !(t.natural)","t.natural = 'wetland'"],
+            ["t['width:minimum_traveled_way'] && !(t.width)","t.width = t['width:minimum_traveled_way']"]
             ];
 
             tds61.osmPostRules = translate.buildComplexRules(rulesList);
@@ -841,15 +908,47 @@ tds61 = {
         */
         }
 
-      // Should be disabled until polygons are fixed....
-        translate.fixConstruction(tags, 'highway');
-        translate.fixConstruction(tags, 'railway');
+
+        // Fix up lifestyle tags.
+        // This needs to be expanded to handle all of the options.
+//      ['PCF','1','condition','construction'], // Construction
+//      ['PCF','2','condition','functional'], // Intact in spec, using for MGCP compatibility
+//      ['PCF','3','condition','abandoned'], // Unmaintained in spec
+//      ['PCF','4','condition','damaged'], // Damaged
+//      ['PCF','5','condition','dismantled'], // Dismantled
+//      ['PCF','6','condition','destroyed'], // Destroyed
+        // Old Method:
+//         translate.fixConstruction(tags, 'highway');
+//         translate.fixConstruction(tags, 'railway');
+        if (tags.condition)
+        {
+            if (tags.condition == 'construction')
+            {
+//                 if (tags.highway && attrs.F_CODE == 'AP030')
+                if (tags.highway)
+                {
+                    tags.construction = tags.highway;
+                    tags.highway = 'construction';
+                    delete tags.condition;
+                }
+                else if (tags.railway)
+                {
+                    tags.construction = tags.railway;
+                    tags.railway = 'construction';
+                    delete tags.condition;
+                }
+            } // End Construction
+
+        } // End Condition tags
 
         // Add defaults for common features
         if (attrs.F_CODE == 'AP020' && !(tags.junction)) tags.junction = 'yes';
         if (attrs.F_CODE == 'AQ040' && !(tags.bridge)) tags.bridge = 'yes';
-        if (attrs.F_CODE == 'AQ040' && !(tags.highway)) tags.highway = 'yes';
         if (attrs.F_CODE == 'BH140' && !(tags.waterway)) tags.waterway = 'river';
+
+        // Not sure about adding a Highway tag to this.
+        // if (attrs.F_CODE == 'AQ040' && !(tags.highway)) tags.highway = 'yes';
+
 
     }, // End of applyToOsmPostProcessing
   
@@ -871,8 +970,8 @@ tds61 = {
                 continue;
             }
 
-            // Convert "abandoned:XXX" features
-            if (val.indexOf('abandoned:') !== -1)
+            // Convert "abandoned:XXX" and "disused:XXX"features
+            if ((val.indexOf('abandoned:') !== -1) || (val.indexOf('disused:') !== -1))
             {
                 // Hopeing there is only one ':' in the tag name...
                 var tList = val.split(':');
@@ -880,7 +979,8 @@ tds61 = {
                 tags.condition = 'abandoned';
                 delete tags[val];
             }
-        }
+
+        } // End Cleanup loop
 
         if (tds61.nfddPreRules == undefined)
         {
@@ -888,8 +988,6 @@ tds61 = {
             var rulesList = [
             ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] == 'bus'"],
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
-            ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
-            ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.control_tower && t.man_made == 'tower'","delete t.man_made"],
             ["t.crossing == 'tank' && t.highway == 'crossing'","delete t.highway"],
             ["t.dock && t.waterway == 'dock'","delete t.waterway"],
@@ -917,6 +1015,7 @@ tds61 = {
             // ["t.landuse == 'meadow'","a.F_CODE = 'EB010'; t['grassland:type'] = 'meadow';"],
             ["t.leisure == 'sports_centre'","t.facility = 'yes'; t.use = 'recreation'; delete t.leisure"],
             ["t.leisure == 'stadium' && t.building","delete t.building"],
+            ["t.man_made == 'embankment'","t.embankment = 'yes'; delete t.man_made"],
             ["t.median == 'yes'","t.divider = 'yes'"],
             ["t.natural == 'desert' && t.surface","t.desert_surface = t.surface; delete t.surface"],
             ["t.natural == 'wood'","t.landuse = 'forest'; delete t.natural"],
@@ -1010,7 +1109,7 @@ tds61 = {
         }
 
         // Cutlines/Cleared Ways & Highways
-        // When we can output two features, this will be split
+        // This might need a cleanup
         if (tags.man_made == 'cutline' && tags.highway)
         {
             if (geometryType == 'Area')
@@ -1168,11 +1267,88 @@ tds61 = {
        }
 
        // Split link roads. TDSv61 now has an attribute for this
-       if (tags.highway && (tags['highway'].indexOf('_link') !== -1))
+//        if (tags.highway && (tags['highway'].indexOf('_link') !== -1))
+//        {
+//            tags.highway = tags['highway'].replace('_link','');
+//            tags.interchange_ramp = 'yes';
+//        }
+
+
+       // Sort out "construction" etc
+       // This gets ugly due to the mix of construction, highway & railway
+//             ["t.highway == 'construction' && t.construction","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
+//             ["t.railway == 'construction' && t.construction","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
+//             ["t.highway == 'construction' && !(t.construction)","t.highway = 'road'; t.condition = 'construction'"],
+//             ["t.railway == 'construction' && !(t.construction)","t.railway = 'rail'; t.condition = 'construction'"],
+       if (tags.highway == 'construction' || tags.railway == 'construction')
        {
-           tags.highway = tags['highway'].replace('_link','');
-           tags.road_ramp = 'yes';
-       }
+           if (tags.construction)
+           {
+                tags.condition = 'construction';
+                if (tags.railway)
+                {
+                    tags.railway = tags.construction;
+                }
+                else
+                {
+                    tags.highway = tags.construction;
+                }
+                delete tags.construction;
+           }
+           else
+           {
+                tags.condition = 'construction';
+                if (tags.railway)
+                {
+                    tags.railway = 'rail';
+                }
+                else
+                {
+                    tags.highway = 'road';
+                }
+           }
+       } // End Highway & Railway construction
+
+       // Now set the relative levels and transportation types for various features
+       if (tags.highway || tags.railway)
+       {
+           if (tags.bridge && tags.bridge !== 'no')
+           {
+               tds61.fixTransType(tags);
+               tags.location = 'surface';
+               tags.layer = '1';
+               tags.on_bridge = 'yes';
+           }
+
+           if (tags.tunnel && tags.tunnel !== 'no')
+           {
+               tds61.fixTransType(tags);
+               // tags.layer = '-1';
+               tags.in_tunnel = 'yes';
+           }
+
+           if (tags.embankment && tags.embankment !== 'no')
+           {
+               tds61.fixTransType(tags);
+               tags.layer = '1';
+           }
+
+           if (tags.cutting && tags.cutting !== 'no')
+           {
+               tds61.fixTransType(tags);
+               tags.layer = '-1';
+           }
+
+           if (tags.ford && tags.ford !== 'no')
+           {
+               tds61.fixTransType(tags);
+               tags.location = 'on_waterbody_bottom';
+           }
+
+       } // End if highway || railway
+
+       // Debug
+       // for (var i in tags) print('End PreProc Tags: ' + i + ': :' + tags[i] + ':');
 
 
     }, // End applyToNfddPreProcessing
@@ -1256,47 +1432,74 @@ tds61 = {
                 switch (tags.highway)
                 {
                     case 'motorway':
+                    case 'motorway_link':
                         attrs.RIN_ROI = '2'; // National Motorway
                         attrs.RTY = '1'; // Motorway
                         break;
 
                     case 'trunk':
+                    case 'trunk_link':
                         attrs.RIN_ROI = '3'; // National/Primary
                         attrs.RTY = '2'; // Limited Access Motorway
                         break;
 
                     case 'primary':
+                    case 'primary_link':
                         attrs.RIN_ROI = '3'; // National
                         attrs.RTY = '3'; // road: Road outside a BUA
                         break;
 
                     case 'secondary':
+                    case 'secondary_link':
                         attrs.RIN_ROI = '4'; // Secondary
                         attrs.RTY = '3'; // road: Road outside a BUA
                         break;
 
                     case 'tertiary':
+                    case 'tertiary_link':
                         attrs.RIN_ROI = '5'; // Local
                         attrs.RTY = '3'; // road: Road outside a BUA
                         break;
 
                     case 'residential':
                     case 'unclassified':
+                    case 'pedestrian':
                     case 'service':
                         attrs.RIN_ROI = '5'; // Local
                         attrs.RTY = '4'; // street: Road inside a BUA
                         break;
 
                     case 'road':
-                        attrs.RIN_ROI = '-999999'; // No Information
+                        attrs.RIN_ROI = '5'; // Local. Customer requested this translation value
                         attrs.RTY = '-999999'; // No Information
                 } // End tags.highway switch
+                
+            } // End ROI & RIN_ROI
+
+            // Use the Width to populate the Minimum Travelled Way Width - Customer requested
+            if (attrs.WID && !(attrs.ZI016_WD1))
+            {
+                attrs.ZI016_WD1 = attrs.WID;
+                delete attrs.WID;
+            }
+            
+            // Private Access roads - Customer requested
+            if (tags.access == 'private' && !(attrs.CAA))
+            {
+                attrs.CAA = '3';
+            }
+
+            // Fix up RLE
+            // If Vertical Relative Location != Surface && Not on a Bridge, Relative Level == NA
+            if ((attrs.LOC && attrs.LOC !== '44') && (attrs.SBB && attrs.SBB == '1000'))
+            {
+                attrs.RLE = '998';
             }
 
         }
 
         // RLE vs LOC: Need to deconflict this for various features.
-        // This is the list of features that can be "Above Surface". Other features use RLE (Relitive Level) instead.
+        // This is the list of features that can be "Above Surface". Other features use RLE (Relative Level) instead.
         if (attrs.LOC == '45' && (['AT005','AQ113','BH065','BH110'].indexOf(attrs.TRS) == -1))
         {
             attrs.RLE = '2'; // Raised above surface
@@ -1336,6 +1539,21 @@ tds61 = {
             attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
             delete attrs.ZI005_FNA3;
         }
+
+        // The ZI001_SDV (source date time) field can only be 20 characters long. When we conflate features,
+        // we concatenate the tag values for this field.
+        // We are getting guidance from the customer on what value they would like in this field:
+        // * The earliest date/time,
+        // * The first on in the list
+        // * etc
+        //
+        // Until we get an answer, we are going to take the first value in the list.
+        if (attrs.ZI001_SDV)
+        {
+            var tmpList = attrs.ZI001_SDV.split(';');
+            attrs.ZI001_SDV = tmpList[0];
+        }
+
 
     }, // End applyToNfddPostProcessing
 
@@ -1440,11 +1658,8 @@ tds61 = {
     toNfdd : function(tags, elementType, geometryType)
     {
         var tableName = ''; // The final table name
+        var returnData = []; // The array of features to return
         attrs = {}; // The output
-        
-        var tableName2 = ''; // The second table name - will populate if appropriate
-        var attrs2 = {}; // The second feature - will populate if appropriate
-
         attrs.F_CODE = ''; // Initial setup
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
@@ -1487,7 +1702,7 @@ tds61 = {
             tds61.lookup = translate.createBackwardsLookup(tds61.rules.one2one);
             // translate.dumpOne2OneLookup(tds61.lookup);
             
-            // Build a list of things to ignore and flip is backwards
+            // Build a list of things to ignore and flip it backwards
             tds61.ignoreList = translate.flipList(translate.joinList(tds61.rules.numBiased, tds61.rules.txtBiased));
             
             // Add some more features to ignore
@@ -1497,12 +1712,46 @@ tds61 = {
             tds61.ignoreList['note:extra'] = '';
             tds61.ignoreList['hoot:status'] = '';
             tds61.ignoreList['error:circular'] = '';
-        }
+
+            // Make the fuzzy lookup table
+            tds61.fuzzy = schemaTools.generateToOgrTable(tds61.rules.fuzzyTable);
+
+            // Debug
+//             for (var k1 in tds61.fuzzy)
+//             {
+//                 for (var v1 in tds61.fuzzy[k1])
+//                 {
+//                     print(JSON.stringify([k1, v1, tds61.fuzzy[k1][v1][0], tds61.fuzzy[k1][v1][1], tds61.fuzy[k1][v1][2]]));
+//                 }
+//             }
+        } // End tds61.lookup Undefined
 
         // pre processing
         tds61.applyToNfddPreProcessing(tags, attrs, geometryType);
 
-        // one 2 one - we call the version that knows about OTH fields
+        // Fuzzy processing
+        // We do this BEFORE the one2one so we don't introduce errors by matching things too broadly
+        var usedList = translate.applyOne2OneUsed(tags, attrs, tds61.fuzzy);
+
+        // If we used any of the tags, add them to the lookup list as things to ignore.
+        if (usedList.length > 0)
+        {
+            for (var i in usedList)
+            {
+                row = usedList[i];
+
+                if (!(row[0] in tds61.lookup))
+                {
+                    tds61.lookup[row[0]] = {};
+                }
+                if (!(tds61.lookup[row[0]][row[1]]))
+                {
+                    tds61.lookup[row[0]][row[1]] = [undefined,undefined];
+                }
+            }
+        } // End usedList > 0
+
+        // one 2 one - we call the version that knows about the OTH field
         translate.applyNfddOne2One(tags, attrs, tds61.lookup, tds61.fcodeLookup, tds61.ignoreList);
 
         // apply the simple number and text biased rules
@@ -1566,75 +1815,51 @@ tds61 = {
         }
         else // We have a feature
         {
-            // Check if we need to make a second feature.
-            attrs2 = tds61.twoFeatures(geometryType,tags,attrs);
+            // Check if we need to make more features.
+            // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
+            returnData = tds61.manyFeatures(geometryType,tags,attrs);
 
-            // If we have a second feature, we need another layer name
-            if (attrs2.F_CODE)
+            // Debug: Add the first feature
+            //returnData.push({attrs: attrs, tableName: ''});
+
+            // Now go through the features and clean them up.
+            var gType = geometryType.toString().charAt(0);
+            for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
-                // Repeat the feature validation and adding attributes
-                var gFcode2 = geometryType.toString().charAt(0) + attrs2.F_CODE;
 
                 // Validate attrs: remove all that are not supposed to be part of a feature
-                tds61.validateAttrs(geometryType,attrs2);
+                tds61.validateAttrs(geometryType,returnData[i]['attrs']);
 
-                // Now set the FCSubtype.help
-
+                // Now set the FCSubtype.
                 // NOTE: If we export to shapefile, GAIT _will_ complain about this
-                if (config.getOgrTdsAddFcsubtype() == 'true') attrs2.FCSUBTYPE = tds61.rules.subtypeList[attrs2.F_CODE];
+                if (config.getOgrTdsAddFcsubtype() == 'true')
+                {
+                    returnData[i]['attrs']['FCSUBTYPE'] = tds61.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
+                }
 
-                // If we are using the TDS structure, fill the rest of the unused attrs in the schema
+                var gFcode = gType + returnData[i]['attrs']['F_CODE'];
+                // If we are using the TDS structre, fill the rest of the unused attrs in the schema
                 if (config.getOgrTdsStructure() == 'true')
                 {
-                    tableName2 = tds61.rules.thematicGroupList[gFcode2];
-                    tds61.validateTDSAttrs(gFcode2, attrs2);
+                    returnData[i]['tableName'] = tds61.rules.thematicGroupList[gFcode];
+                    tds61.validateTDSAttrs(gFcode, returnData[i]['attrs']);
                 }
                 else
                 {
-                    tableName2 = layerNameLookup[gFcode2.toUpperCase()];
+                    returnData[i]['tableName'] = layerNameLookup[gFcode.toUpperCase()];
                 }
-            } // End if attrs2.F_CODE
-
-            // Validate attrs: remove all that are not supposed to be part of a feature
-            tds61.validateAttrs(geometryType,attrs);
-
-            // Now set the FCSubtype. 
-            // NOTE: If we export to shapefile, GAIT _will_ complain about this
-            if (config.getOgrTdsAddFcsubtype() == 'true') attrs.FCSUBTYPE = tds61.rules.subtypeList[attrs.F_CODE];
-
-            // If we are using the TDS structre, fill the rest of the unused attrs in the schema
-            if (config.getOgrTdsStructure() == 'true')
-            {
-                tableName = tds61.rules.thematicGroupList[gFcode];
-                tds61.validateTDSAttrs(gFcode, attrs);
-            }
-            else
-            {
-                tableName = layerNameLookup[gFcode.toUpperCase()]; 
-            }
-
+            } // End returnData loop
         } // End else We have a feature
 
         // Debug:
         if (config.getOgrDebugDumpattrs() == 'true' || config.getOgrDebugDumptags() == 'true')
         {
-            print('TableName: ' + tableName + '  FCode: ' + attrs.F_CODE + '  Geom: ' + geometryType);
-            if (tableName2 !== '') print('TableName2: ' + tableName2 + '  FCode: ' + attrs2.F_CODE + '  Geom: ' + geometryType);
-        }
-
-        // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true')
-        {
-            for (var i in attrs) print('Out Attrs:' + i + ': :' + attrs[i] + ':');
-            if (attrs2.F_CODE) for (var i in attrs2) print('2Out Attrs:' + i + ': :' + attrs2[i] + ':');
+            for (var i = 0, fLen = returnData.length; i < fLen; i++)
+            {
+                print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
+                for (var j in returnData[i]['attrs']) print('Out Attrs:' + j + ': :' + returnData[i]['attrs'][j] + ':');
+            }
             print('');
-        }
-
-        var returnData = [{attrs:attrs, tableName: tableName}];
-
-        if (attrs2.F_CODE)
-        {
-            returnData.push({attrs: attrs2, tableName: tableName2});
         }
 
         // Look for Review tags and push them to a review layer if found

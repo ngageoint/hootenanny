@@ -48,15 +48,6 @@ public:
 
   BigPaintNodesCmd() { }
 
-  virtual QString getHelp() const
-  {
-    return getName() + " (input.pbf) (pixelSize) (output.png)\n"
-        "  Reads the nodes from input.pbf and paints them to the raster output.png.\n"
-        "  * input.pbf - Input .pbf file -- must reside on HDFS.\n"
-        "  * pixelSize - Pixel size in degrees (0.1 is reasonable for global data)\n"
-        "  * output.png - Output .png file -- must reside on local FS.";
-  }
-
   virtual QString getName() const { return "big-paint-nodes"; }
 
   //int BigPaintNodesCmd::run(char *argv[], int argc)

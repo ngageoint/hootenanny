@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmWriter.h>
@@ -68,7 +68,7 @@ public:
       shared_ptr<OsmMap> map(new OsmMap());
       uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
 
-      CPPUNIT_ASSERT_EQUAL(604, map->getNodeMap().size());
+      CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodeMap().size());
       CPPUNIT_ASSERT_EQUAL(6, (int)map->getWays().size());
     }
 
@@ -84,10 +84,9 @@ public:
 
       Coordinate c1(-1, 84);
       Coordinate c2(1, 84);
-      double d = GeometryUtils::haversine(c1, c2);
 
       {
-        shared_ptr<OGRSpatialReference> ortho1 = MapReprojector::createOrthographic(env);
+        shared_ptr<OGRSpatialReference> ortho1 = MapProjector::createOrthographic(env);
 
         Settings s;
         // 15512.4m wide at the top
@@ -120,7 +119,7 @@ public:
       uut.setTranslationFile("translations/cloudmade.js");
       uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
 
-      CPPUNIT_ASSERT_EQUAL(604, map->getNodeMap().size());
+      CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodeMap().size());
       CPPUNIT_ASSERT_EQUAL(6, (int)map->getWays().size());
 
       int shoreline = 0;
@@ -150,7 +149,7 @@ public:
       uut.setTranslationFile("cloudmade");
       uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
 
-      CPPUNIT_ASSERT_EQUAL(604, map->getNodeMap().size());
+      CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodeMap().size());
       CPPUNIT_ASSERT_EQUAL(6, (int)map->getWays().size());
 
       int shoreline = 0;

@@ -41,7 +41,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/NotImplementedException.h>
@@ -69,7 +69,7 @@ ElementConverter::ElementConverter(const ConstElementProviderPtr& provider) :
 Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
 {
   // Doing length/distance calcs only make sense if we've projected down onto a flat surface
-  assert(MapReprojector::isPlanar(_constProvider));
+  assert(MapProjector::isPlanar(_constProvider));
 
   // if the element is not a point and is not an area.
   // NOTE: Originally I was using isLinear. This was a bit too strict in that it wants evidence of
@@ -249,6 +249,7 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
   QString relationType = "";
 
   ElementType t = e->getElementType();
+
   switch (t.getEnum())
   {
   case ElementType::Node:
@@ -280,7 +281,6 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
       ConstRelationPtr r = dynamic_pointer_cast<const Relation>(e);
       assert(r);
 
-
       if(statsFlag)
       {
         if (r->isMultiPolygon() || OsmSchema::getInstance().isAreaForStats(r->getTags(), ElementType::Relation))
@@ -290,14 +290,17 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
       } else {
         if (r->isMultiPolygon() || OsmSchema::getInstance().isArea(r->getTags(), ElementType::Relation))
           return GEOS_MULTIPOLYGON;
-        else if (OsmSchema::getInstance().isLinear(*r))
-        {
+        else if (OsmSchema::getInstance().isLinear(*r)) {
           return GEOS_MULTILINESTRING;
         }
         else if (r->getMembers().size() == 0 ||
-                 OsmSchema::getInstance().isCollection(*r))
-        {
+                 OsmSchema::getInstance().isCollection(*r)) {
           // an empty geometry, pass back a collection
+          return GEOS_GEOMETRYCOLLECTION;
+        }
+        // Need to find a better way of doing this.
+        // If we have a review, send back a collection. This gets converted into an empty geometry.
+        else if (r->isReview()) {
           return GEOS_GEOMETRYCOLLECTION;
         }
       }

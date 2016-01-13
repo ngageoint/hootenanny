@@ -47,18 +47,6 @@ public:
 
   PrintOsmDocsCmd() {}
 
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " [documentation script]\n"
-        "  Print OSM+ tag documentation.\n"
-        "  If [documentation script] is not given, the default translation script\n"
-        "  $HOOT_HOME/translations/PrintOsmDocs.js will be used.\n"
-        "  * documentation script - The script that will print the documentation.\n";
-
-  }
-
   virtual QString getName() const { return "print-tags"; }
 
   virtual int runSimple(QStringList /*args*/)

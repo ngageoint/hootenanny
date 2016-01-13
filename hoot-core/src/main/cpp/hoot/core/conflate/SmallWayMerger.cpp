@@ -37,6 +37,7 @@
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/ExactTagDifferencer.h>
 #include <hoot/core/schema/TagMergerFactory.h>
@@ -199,7 +200,10 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
       Tags tags = TagMergerFactory::mergeTags(first->getTags(), next->getTags(),
         first->getElementType());
       first->setTags(tags);
-      _map->removeWay(next->getId());
+
+      // just in case we can't delete it, clear the tags.
+      next->getTags().clear();
+      RecursiveElementRemover(next->getElementId()).apply(_map);
     }
   }
 }

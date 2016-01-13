@@ -67,15 +67,6 @@ public:
 
   DeleteMapCmd() {}
 
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (Map Name)\n"
-        "  Delete a map from the database\n"
-        "  * Map Name - The name of the map.";
-  }
-
   virtual QString getName() const { return "delete-map"; }
 
   int runSimple(QStringList args)

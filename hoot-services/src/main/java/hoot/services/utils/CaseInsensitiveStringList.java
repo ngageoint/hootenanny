@@ -27,7 +27,6 @@
 package hoot.services.utils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A case insensitive string list

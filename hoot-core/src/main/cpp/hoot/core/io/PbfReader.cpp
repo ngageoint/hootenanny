@@ -126,8 +126,9 @@ PbfReader::~PbfReader()
 
 void PbfReader::setConfiguration(const Settings &conf)
 {
-  setMaxElementsPerMap(ConfigOptions(conf).getMaxElementsPerPartialMap());
-  _addSourceDateTime = ConfigOptions(conf).getReaderAddSourceDatetime();
+  ConfigOptions configOptions(conf);
+  setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
+  _addSourceDateTime = configOptions.getReaderAddSourceDatetime();
 }
 
 void PbfReader::_addTag(shared_ptr<Element> e, QString key, QString value)
@@ -153,14 +154,37 @@ void PbfReader::_addTag(shared_ptr<Element> e, QString key, QString value)
     }
     else
     {
-      e->setCircularError(_circularError);
-      if (_badAccuracyCount < 10)
+      bool isBad = false;
+      Tags t1;
+      t1.set(key, value);
+      try
       {
-        LOG_WARN("Bad circular error value: " << value.toStdString());
-        _badAccuracyCount++;
-        if (_badAccuracyCount == 10)
+        circularError = t1.getLength(key).value();
+        if (circularError > 0)
         {
-          LOG_WARN("Found 10 bad circular error values, no longer reporting bad accuracies.");
+          e->setCircularError(circularError);
+        }
+        else
+        {
+          isBad = true;
+        }
+      }
+      catch (const HootException& e)
+      {
+        isBad = true;
+      }
+
+      if (isBad)
+      {
+        e->setCircularError(_circularError);
+        if (_badAccuracyCount < 10)
+        {
+          LOG_WARN("Bad circular error value: " << value.toStdString());
+          _badAccuracyCount++;
+          if (_badAccuracyCount == 10)
+          {
+            LOG_WARN("Found 10 bad circular error values, no longer reporting bad accuracies.");
+          }
         }
       }
     }
@@ -1110,7 +1134,7 @@ shared_ptr<Element> PbfReader::readNextElement()
     // we have to copy here so that the element isn't part of two maps. This should be fixed if we
     // need the reader to go faster.
 
-    element.reset(new Node(*_nodesItr.value()));
+    element.reset(new Node(*_nodesItr->second.get()));
     _nodesItr++;
     _partialNodesRead++;
   }

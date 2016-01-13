@@ -25,7 +25,7 @@ COPY current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp",
 
 COPY current_node_tags (node_id, k, v) FROM stdin;
 500	body_of_water	haitis river
-500	accuracy	3
+500	accuracy1	3
 \.
 
 
@@ -50,7 +50,7 @@ COPY nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", ti
 --
 
 COPY node_tags (node_id, version, k, v) FROM stdin;
-500	1	accuracy	3
+500	1	accuracy1	3
 500	1	body_of_water	haitis river
 \.
 

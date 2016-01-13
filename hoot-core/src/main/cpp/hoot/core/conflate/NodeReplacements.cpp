@@ -107,7 +107,7 @@ void NodeReplacements::readDir(QString inputDir)
   QStringList filters;
   filters << "*.replacement";
   QDir d(inputDir);
-  Q_FOREACH(QFileInfo info, d.entryList(filters, QDir::Files))
+  Q_FOREACH(QFileInfo info, d.entryList(filters, QDir::Files, QDir::Name))
   {
     QString fn = inputDir + "/" + info.filePath();
     _read(fn);

@@ -33,6 +33,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/IdGeneratorJs.h>
 
 namespace hoot
 {
@@ -49,6 +50,8 @@ public:
  OsmMapPtr& getMap();
  ConstOsmMapPtr& getConstMap() { return _constMap; }
 
+ bool isConst() const { return !_map.get() && _constMap.get(); }
+
 private:
  OsmMapJs();
  OsmMapJs(OsmMapPtr map);
@@ -56,9 +59,11 @@ private:
 
   static Handle<Value> clone(const Arguments& args);
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
+  static v8::Handle<v8::Value> getElement(const v8::Arguments& args);
   static v8::Handle<v8::Value> getElementCount(const v8::Arguments& args);
   static v8::Handle<v8::Value> getParents(const v8::Arguments& args);
   static v8::Handle<v8::Value> removeElement(const v8::Arguments& args);
+  static v8::Handle<v8::Value> setIdGenerator(const v8::Arguments& args);
   static Handle<Value> visit(const Arguments& args);
 
   OsmMapPtr _map;

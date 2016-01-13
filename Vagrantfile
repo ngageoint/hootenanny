@@ -29,10 +29,12 @@ Vagrant.configure(2) do |config|
   config.vm.network "forwarded_port", guest: 8094, host: 8094
   # merge nodejs service
   config.vm.network "forwarded_port", guest: 8096, host: 8096
+  # node-mapnik-server nodejs service
+  config.vm.network "forwarded_port", guest: 8000, host: 8000
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  # config.vm.network "private_network", ip: "192.168.33.10"
+  # config.vm.network "private_network", ip: "192.168.33.11"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -55,9 +57,17 @@ Vagrant.configure(2) do |config|
   #   vb.gui = true
   #
   #   # Customize the amount of memory on the VM:
-    vb.memory = 8192
-  #   vb.memory = 16384
-    vb.cpus = 4
+     vb.memory = 8192
+     vb.cpus = 4
+  end
+
+  # This is a provider for the Parallels Virtualization Software
+  # Run "vagrant up --provider=parallels" to spin up using parallels.
+  config.vm.provider "parallels" do |para, override|
+        para.memory = 8192
+        para.cpus = 4
+        override.vm.box = "parallels/ubuntu-14.04"
+        override.vm.box_url = "https://atlas.hashicorp.com/parallels/boxes/ubuntu-14.04"
   end
   #
   # View the documentation for the provider you are using for more
@@ -78,5 +88,7 @@ Vagrant.configure(2) do |config|
   #   sudo apt-get install -y apache2
   # SHELL
   config.vm.provision :shell, :path => "VagrantProvision.sh"
+  config.vm.provision :shell, :inline => "sudo service tomcat6 restart", run: "always"
+  config.vm.provision :shell, :inline => "sudo service node-mapnik-server start", run: "always"
 
 end

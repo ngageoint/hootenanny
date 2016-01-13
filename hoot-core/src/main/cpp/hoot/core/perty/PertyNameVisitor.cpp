@@ -93,9 +93,9 @@ QString PertyNameVisitor::permuteName(const QString& s)
 
 void PertyNameVisitor::setConfiguration(const Settings& conf)
 {
-  setProbability(conf.getDouble(pKey(), 0.05));
-  setChangeProbability(conf.getDouble(changePKey(), 0.05));
   ConfigOptions configOptions(conf);
+  setProbability(configOptions.getPertyNameP());
+  setChangeProbability(configOptions.getPertyNameChangeP());
   const int seed = configOptions.getPertySeed();
   LOG_VARD(seed);
   if (seed == -1)

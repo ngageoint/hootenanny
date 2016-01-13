@@ -33,7 +33,7 @@
 
 // Hoot
 #include <hoot/core/Exception.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
@@ -85,11 +85,12 @@ public:
 
     stringstream ss1;
     ss1 << n1->getTags().getNames();
-    CPPUNIT_ASSERT_EQUAL(string("[4]{etsrnga, test, strange test, странное испытание}"), ss1.str());
+
+    CPPUNIT_ASSERT_EQUAL(string("[4]{straneg, test, strange test, странное испытание}"), ss1.str());
 
     stringstream ss2;
     ss2 << n2->getTags().getNames();
-    CPPUNIT_ASSERT_EQUAL(string("[4]{small town, littleville, little town, העיר הקנט}"), ss2.str());
+    CPPUNIT_ASSERT_EQUAL(string("[4]{nmsal towl, littleville, little town, העיר קטנה}"), ss2.str());
   }
 };
 

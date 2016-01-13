@@ -35,6 +35,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/ElementCacheLRU.h>
+#include <hoot/core/util/OsmUtils.h>
 
 // qt
 #include <QStringList>
@@ -470,13 +471,16 @@ QString ServicesDb::_escapeTags(const Tags& tags) const
 
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    // this doesn't appear to be working, but I think it is implementing the spec as described here:
-    // http://www.postgresql.org/docs/9.0/static/hstore.html
-    // The spec described above does seem to work on the psql command line. Curious.
-    QString k = QString(it.key()).replace(f1, "\\\\").replace(f2, "\\\"");
-    QString v = QString(it.value()).replace(f1, "\\\\").replace(f2, "\\\"");
+    if (it.value().isEmpty() == false && it.key().isEmpty() == false)
+    {
+      // this doesn't appear to be working, but I think it is implementing the spec as described here:
+      // http://www.postgresql.org/docs/9.0/static/hstore.html
+      // The spec described above does seem to work on the psql command line. Curious.
+      QString k = QString(it.key()).replace(f1, "\\\\").replace(f2, "\\\"");
+      QString v = QString(it.value()).replace(f1, "\\\\").replace(f2, "\\\"");
 
-    l << QString("\"%1\"=>\"%2\"").arg(k).arg(v);
+      l << QString("\"%1\"=>\"%2\"").arg(k).arg(v);
+    }
   }
   return l.join(",");
 }
@@ -851,8 +855,8 @@ void ServicesDb::_insertNode_Services(const long id, const double lat, const dou
   if (_nodeBulkInsert == 0)
   {
     QStringList columns;
-    columns << "id" << "latitude" << "longitude" << "changeset_id" <<
-               "tile" << "tags";
+    columns << "id" << "latitude" << "longitude" << "changeset_id" << "timestamp" <<
+               "tile" << "version" << "tags";
 
     _nodeBulkInsert.reset(new SqlBulkInsert(_db, _getNodesTableName(mapId), columns));
   }
@@ -864,7 +868,9 @@ void ServicesDb::_insertNode_Services(const long id, const double lat, const dou
 //  v.append((qlonglong)_round(lon * COORDINATE_SCALE, 7));
   v.append(lon);
   v.append((qlonglong)_currChangesetId);
+  v.append(OsmUtils::currentTimeAsString());
   v.append(_tileForPoint(lat, lon));
+  v.append((qlonglong)1);
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
   // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
   // error.
@@ -1378,9 +1384,12 @@ void ServicesDb::_resetQueries()
   _selectNodeIdsForWay.reset();
   _selectMapIds.reset();
   _selectMembersForRelation.reset();
+  _selectTagsForWay.reset();
+  _selectTagsForRelation.reset();
   _updateNode.reset();
   _updateRelation.reset();
   _updateWay.reset();
+
 
   // bulk insert objects.
   _nodeBulkInsert.reset();
@@ -1600,6 +1609,100 @@ long ServicesDb::numElements(const ElementType& elementType)
   return result;
 }
 
+/// SELECT BOUNDED ELEMENTS
+
+shared_ptr<QSqlQuery> ServicesDb::selectBoundedElements(const long elementId, const ElementType& elementType,
+                                                        const QString& bbox)
+{
+  switch ( _connectionType )
+  {
+    case DBTYPE_SERVICES:
+      throw HootException("Bounded select on services db is not supported!");
+      break;
+
+    case DBTYPE_OSMAPI:
+      return selectBoundedElements_OsmApi(elementId, elementType, bbox, -1, 0);
+      break;
+
+    default:
+      throw HootException("SelectAllElements cannot operate on unsupported database type");
+      break;
+  }
+}
+
+shared_ptr<QSqlQuery> ServicesDb::selectBoundedElements_OsmApi(const long elementId,
+  const ElementType& elementType, const QString& bbox, const long limit, const long offset)
+{
+  LOG_DEBUG("IN selectBoundedElement_OsmApi");
+
+  QStringList bboxParts = bbox.split(",");
+  double minLat = bboxParts[1].toDouble()*(double)COORDINATE_SCALE;
+  double minLon = bboxParts[0].toDouble()*(double)COORDINATE_SCALE;
+  double maxLat = bboxParts[3].toDouble()*(double)COORDINATE_SCALE;
+  double maxLon = bboxParts[2].toDouble()*(double)COORDINATE_SCALE;
+
+  _selectElementsForMap.reset(new QSqlQuery(_db));
+  _selectElementsForMap->setForwardOnly(true);
+
+  // set the maximum number elements returned
+  QString limitStr;
+  if (limit == -1) { limitStr = "ALL"; }
+  else { limitStr = QString::number(limit); }
+
+  // setup base sql query string
+  QString sql =  "SELECT ";
+
+  if(elementType == ElementType::Node)
+  {
+    sql += _elementTypeToElementTableName_OsmApi(elementType) +
+      " where (latitude between "+QString::number(minLat)+" and "+QString::number(maxLat)+") and (longitude between "+
+      QString::number(minLon)+" and "+QString::number(maxLon)+")";
+    // if requesting a specific id then append this string
+    if(elementId > -1) { sql += " AND (id = :elementId) "; }
+  }
+  else if(elementType == ElementType::Way)
+  {
+    sql += "* FROM current_ways ";
+    // if requesting a specific id then append this string
+    if(elementId > -1) { sql += " WHERE id = :elementId "; }
+  }
+  else if(elementType == ElementType::Relation)
+  {
+    sql += "* FROM current_relations ";
+    // if requesting a specific id then append this string
+    if(elementId > -1) { sql += " WHERE id = :elementId "; }
+  }
+  else
+  {
+    throw HootException("selectBoundedElements_OsmApi cannot operate on an unknown data type.");
+  }
+
+  // sort them in descending order, set limit and offset
+  sql += " ORDER BY id DESC LIMIT " + limitStr + " OFFSET " + QString::number(offset);
+
+  // let's see what that sql query string looks like
+  LOG_DEBUG(QString("The sql query= "+sql));
+
+  _selectElementsForMap->prepare(sql);
+
+  // add the element id value if needed by inserting where the marker was placed
+  if(elementId > -1) { _selectElementsForMap->bindValue(":elementId", (qlonglong)elementId); }
+
+  // execute the query on the DB and get the results back
+  if (_selectElementsForMap->exec() == false)
+  {
+    QString err = _selectElementsForMap->lastError().text();
+    LOG_WARN(sql);
+    throw HootException("Error selecting elements of type: " + elementType.toString() +
+      " Error: " + err);
+  }
+
+  LOG_DEBUG("LEAVING ServicesDb::selectElements_OsmApi...");
+  return _selectElementsForMap;
+}
+
+/// SELECT ALL ELEMENTS
+
 shared_ptr<QSqlQuery> ServicesDb::selectAllElements(const long elementId, const ElementType& elementType)
 {
   switch ( _connectionType )
@@ -1707,6 +1810,7 @@ shared_ptr<QSqlQuery> ServicesDb::selectElements(const long elementId,
   return _selectElementsForMap;
 }
 
+
 vector<long> ServicesDb::selectNodeIdsForWay(long wayId)
 {
   const long mapId = _currMapId;
@@ -1728,12 +1832,13 @@ vector<long> ServicesDb::selectNodeIdsForWay(long wayId)
         break;
 
       case DBTYPE_OSMAPI:
+        {
         _selectNodeIdsForWay.reset(new QSqlQuery(_db));
         _selectNodeIdsForWay->setForwardOnly(true);
-        _selectNodeIdsForWay->prepare(
-          "SELECT node_id FROM " + _getWayNodesTableName_OsmApi() +
-          " WHERE way_id = :wayId ORDER BY sequence_id");
-
+        QString sql =  "SELECT ";
+        sql += "node_id FROM " + _getWayNodesTableName_OsmApi()+" WHERE way_id = :wayId ORDER BY sequence_id";
+        _selectNodeIdsForWay->prepare( sql );
+        }
         break;
 
       default:
@@ -1763,6 +1868,95 @@ vector<long> ServicesDb::selectNodeIdsForWay(long wayId)
   }
 
   return result;
+}
+
+shared_ptr<QSqlQuery> ServicesDb::selectTagsForWay_OsmApi(long wayId)
+{
+  if (!_selectTagsForWay)
+  {
+    _selectTagsForWay.reset(new QSqlQuery(_db));
+    _selectTagsForWay->setForwardOnly(true);
+    QString sql =  "SELECT ";
+    sql += "way_id, k, v FROM current_way_tags where way_id = :wayId";
+    _selectTagsForWay->prepare( sql );
+  }
+
+  _selectTagsForWay->bindValue(":wayId", (qlonglong)wayId);
+  if (_selectTagsForWay->exec() == false)
+  {
+    throw HootException("Error selecting tags for way with ID: " + QString::number(wayId) +
+      " Error: " + _selectTagsForWay->lastError().text());
+  }
+
+  return _selectTagsForWay;
+}
+
+shared_ptr<QSqlQuery> ServicesDb::selectTagsForRelation_OsmApi(long relId)
+{
+  if (!_selectTagsForRelation)
+  {
+    _selectTagsForRelation.reset(new QSqlQuery(_db));
+    _selectTagsForRelation->setForwardOnly(true);
+    QString sql =  "SELECT ";
+    sql += "relation_id, k, v FROM current_relation_tags where relation_id = :relId";
+    _selectTagsForRelation->prepare( sql );
+  }
+
+  _selectTagsForRelation->bindValue(":relId", (qlonglong)relId);
+  if (_selectTagsForRelation->exec() == false)
+  {
+    throw HootException("Error selecting tags for relation with ID: " + QString::number(relId) +
+      " Error: " + _selectTagsForRelation->lastError().text());
+  }
+
+  return _selectTagsForRelation;
+}
+
+shared_ptr<QSqlQuery> ServicesDb::selectNodesForWay(long wayId)
+{
+  const long mapId = _currMapId;
+  vector<long> result;
+
+  if (!_selectNodeIdsForWay)
+  {
+    switch ( _connectionType )
+    {
+      case DBTYPE_SERVICES:
+        {
+          // ToDo: would need updating if actually used
+          _checkLastMapId(mapId);
+          _selectNodeIdsForWay.reset(new QSqlQuery(_db));
+          _selectNodeIdsForWay->setForwardOnly(true);
+          _selectNodeIdsForWay->prepare(
+          "SELECT node_id FROM " + _getWayNodesTableName(mapId) +
+              " WHERE way_id = :wayId ORDER BY sequence_id");
+        }
+        break;
+
+      case DBTYPE_OSMAPI:
+        {
+        _selectNodeIdsForWay.reset(new QSqlQuery(_db));
+        _selectNodeIdsForWay->setForwardOnly(true);
+        QString sql =  "SELECT ";
+        sql += "node_id, latitude, longitude FROM current_way_nodes inner join current_nodes on current_way_nodes.node_id=current_nodes.id and way_id = :wayId ORDER BY sequence_id";
+        _selectNodeIdsForWay->prepare( sql );
+        }
+        break;
+
+      default:
+        throw HootException("selectNodesForWay cannot operate on unsupported database type");
+        break;
+    }
+  }
+
+  _selectNodeIdsForWay->bindValue(":wayId", (qlonglong)wayId);
+  if (_selectNodeIdsForWay->exec() == false)
+  {
+    throw HootException("Error selecting node ID's for way with ID: " + QString::number(wayId) +
+      " Error: " + _selectNodeIdsForWay->lastError().text());
+  }
+
+  return _selectNodeIdsForWay;
 }
 
 vector<RelationData::Entry> ServicesDb::selectMembersForRelation(long relationId)
@@ -1867,24 +2061,25 @@ Tags ServicesDb::unescapeTags(const QVariant &v)
   return result;
 }
 
-void ServicesDb::updateNode(const long id, const double lat, const double lon, const Tags& tags)
+void ServicesDb::updateNode(const long id, const double lat, const double lon, const long version,
+                            const Tags& tags)
 {
   switch ( _connectionType )
   {
   case DBTYPE_SERVICES:
-    _updateNode_Services(id, lat, lon, _currChangesetId, tags);
+    _updateNode_Services(id, lat, lon, _currChangesetId, version, tags);
     break;
   default:
     throw HootException("UpdateNode on unsupported database type");
   }
 }
 
-void ServicesDb::updateRelation(const long id, const Tags& tags)
+void ServicesDb::updateRelation(const long id, const long version, const Tags& tags)
 {
   switch ( _connectionType )
   {
   case DBTYPE_SERVICES:
-    _updateRelation_Services(id, _currChangesetId, tags);
+    _updateRelation_Services(id, _currChangesetId, version, tags);
     break;
   case DBTYPE_OSMAPI:
     /*
@@ -1898,12 +2093,12 @@ void ServicesDb::updateRelation(const long id, const Tags& tags)
   }
 }
 
-void ServicesDb::updateWay(const long id, const Tags& tags)
+void ServicesDb::updateWay(const long id, const long version, const Tags& tags)
 {
   switch ( _connectionType )
   {
   case DBTYPE_SERVICES:
-    _updateWay_Services(id, _currChangesetId, tags);
+    _updateWay_Services(id, _currChangesetId, version, tags);
     break;
   default:
     throw HootException("UpdateWay on unsupported database type");
@@ -1981,7 +2176,7 @@ void ServicesDb::_insertWay_Services(long wayId, long changeSetId, const Tags& t
   if (_wayBulkInsert == 0)
   {
     QStringList columns;
-    columns << "id" << "changeset_id" << "tags";
+    columns << "id" << "changeset_id" << "timestamp" << "version" << "tags";
 
     _wayBulkInsert.reset(new SqlBulkInsert(_db, _getWaysTableName(mapId), columns));
   }
@@ -1989,6 +2184,8 @@ void ServicesDb::_insertWay_Services(long wayId, long changeSetId, const Tags& t
   QList<QVariant> v;
   v.append((qlonglong)wayId);
   v.append((qlonglong)changeSetId);
+  v.append(OsmUtils::currentTimeAsString());
+  v.append((qlonglong)1);
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
   // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
   // error.
@@ -2063,7 +2260,7 @@ void ServicesDb::_insertRelation_Services(long relationId, long changeSetId, con
   if (_relationBulkInsert == 0)
   {
     QStringList columns;
-    columns << "id" << "changeset_id" << "tags";
+    columns << "id" << "changeset_id" << "timestamp" << "version" << "tags";
 
     _relationBulkInsert.reset(new SqlBulkInsert(_db, _getRelationsTableName(mapId), columns));
   }
@@ -2071,6 +2268,8 @@ void ServicesDb::_insertRelation_Services(long relationId, long changeSetId, con
   QList<QVariant> v;
   v.append((qlonglong)relationId);
   v.append((qlonglong)changeSetId);
+  v.append(OsmUtils::currentTimeAsString());
+  v.append((qlonglong)1);
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
   // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
   // error.
@@ -2083,7 +2282,7 @@ void ServicesDb::_insertRelation_Services(long relationId, long changeSetId, con
 
 
 void ServicesDb::_updateNode_Services(long id, double lat, double lon, long changeSetId,
-                            const Tags& tags)
+                                      long version, const Tags& tags)
 {
   const long mapId = _currMapId;
   _flushBulkInserts();
@@ -2095,8 +2294,8 @@ void ServicesDb::_updateNode_Services(long id, double lat, double lon, long chan
     _updateNode.reset(new QSqlQuery(_db));
     _updateNode->prepare(
       "UPDATE " + _getNodesTableName(mapId) +
-      " SET latitude=:latitude, longitude=:longitude, changeset_id=:changeset_id, tile=:tile, "
-      "    tags=:tags "
+      " SET latitude=:latitude, longitude=:longitude, changeset_id=:changeset_id, "
+      " timestamp=:timestamp, tile=:tile, version=:version, tags=:tags "
       "WHERE id=:id");
   }
 
@@ -2106,7 +2305,9 @@ void ServicesDb::_updateNode_Services(long id, double lat, double lon, long chan
   //_updateNode->bindValue(":longitude", (qlonglong)_round(lon * COORDINATE_SCALE, 7));
   _updateNode->bindValue(":longitude", lon);
   _updateNode->bindValue(":changeset_id", (qlonglong)changeSetId);
+  _updateNode->bindValue(":timestamp", OsmUtils::currentTimeAsString());
   _updateNode->bindValue(":tile", (qlonglong)_tileForPoint(lat, lon));
+  _updateNode->bindValue(":version", (qlonglong)version);
   _updateNode->bindValue(":tags", _escapeTags(tags));
 
   if (_updateNode->exec() == false)
@@ -2120,7 +2321,7 @@ void ServicesDb::_updateNode_Services(long id, double lat, double lon, long chan
   _updateNode->finish();
 }
 
-void ServicesDb::_updateRelation_Services(long id, long changeSetId, const Tags& tags)
+void ServicesDb::_updateRelation_Services(long id, long changeSetId, long version, const Tags& tags)
 {
   const long mapId = _currMapId;
   _flushBulkInserts();
@@ -2131,12 +2332,14 @@ void ServicesDb::_updateRelation_Services(long id, long changeSetId, const Tags&
     _updateRelation.reset(new QSqlQuery(_db));
     _updateRelation->prepare(
       "UPDATE " + _getRelationsTableName(mapId) +
-      " SET changeset_id=:changeset_id, tags=:tags "
+      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=:tags "
       "WHERE id=:id");
   }
 
   _updateRelation->bindValue(":id", (qlonglong)id);
   _updateRelation->bindValue(":changeset_id", (qlonglong)changeSetId);
+  _updateRelation->bindValue(":timestamp", OsmUtils::currentTimeAsString());
+  _updateRelation->bindValue(":version", (qlonglong)version);
   _updateRelation->bindValue(":tags", _escapeTags(tags));
 
   if (_updateRelation->exec() == false)
@@ -2150,7 +2353,7 @@ void ServicesDb::_updateRelation_Services(long id, long changeSetId, const Tags&
   _updateRelation->finish();
 }
 
-void ServicesDb::_updateWay_Services(long id, long changeSetId, const Tags& tags)
+void ServicesDb::_updateWay_Services(long id, long changeSetId, long version, const Tags& tags)
 {
   const long mapId = _currMapId;
   _flushBulkInserts();
@@ -2161,12 +2364,14 @@ void ServicesDb::_updateWay_Services(long id, long changeSetId, const Tags& tags
     _updateWay.reset(new QSqlQuery(_db));
     _updateWay->prepare(
       "UPDATE " + _getWaysTableName(mapId) +
-      " SET changeset_id=:changeset_id, tags=:tags "
+      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=:tags "
       "WHERE id=:id");
   }
 
   _updateWay->bindValue(":id", (qlonglong)id);
   _updateWay->bindValue(":changeset_id", (qlonglong)changeSetId);
+  _updateWay->bindValue(":timestamp", OsmUtils::currentTimeAsString());
+  _updateWay->bindValue(":version", (qlonglong)version);
   _updateWay->bindValue(":tags", _escapeTags(tags));
 
   if (_updateWay->exec() == false)

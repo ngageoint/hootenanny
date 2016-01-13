@@ -12,10 +12,6 @@
 		<property name="nativeInterface" ref="processStreamInterface"/>
 	</bean>
   
-  <bean id="reviewPrepareDbWriter" singleton="true" 
-    class="hoot.services.writers.review.ReviewPrepareDbWriter" init-method="init" 
-    destroy-method="destroy">
-  </bean>
 
 	<bean id="ResourcesCleanUtil" singleton="true" 
 		class="hoot.services.utils.ResourcesCleanUtil" init-method="init" destroy-method="destroy">

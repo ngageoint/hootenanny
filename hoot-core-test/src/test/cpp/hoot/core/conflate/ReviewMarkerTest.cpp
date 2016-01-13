@@ -27,6 +27,7 @@
 
 // Hoot
 #include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 using namespace hoot;
@@ -39,38 +40,69 @@ namespace hoot
 class ReviewMarkerTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ReviewMarkerTest);
+  CPPUNIT_TEST(runNeedsReviewTest);
   CPPUNIT_TEST(runSimpleTest);
   CPPUNIT_TEST(runMultipleScoresTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
+  void runNeedsReviewTest()
+  {
+    TestUtils::resetEnvironment();
+
+    OsmMapPtr map(new OsmMap());
+    ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
+    ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
+    ElementPtr n3(new Node(Status::Unknown2, 3, 0, 0, 0));
+
+    // set the uuids so they don't change with each test
+    n1->getTags().set("uuid", "n1");
+    n2->getTags().set("uuid", "n2");
+    n3->getTags().set("uuid", "n2");
+    map->addElement(n1);
+    map->addElement(n2);
+    map->addElement(n3);
+
+    ReviewMarker uut;
+
+    uut.mark(map, n1, n2, "a note", "test");
+    LOG_VAR(uut.isNeedsReview(map, n1, n2));
+    LOG_VAR(uut.isNeedsReview(map, n2, n3));
+    LOG_VAR(uut.isNeedsReview(map, n3, n1));
+
+    HOOT_STR_EQUALS(true, uut.isNeedsReview(map, n1, n2));
+    HOOT_STR_EQUALS(true, uut.isNeedsReview(map, n2, n1));
+    HOOT_STR_EQUALS(false, uut.isNeedsReview(map, n2, n3));
+    HOOT_STR_EQUALS(false, uut.isNeedsReview(map, n3, n1));
+  }
+
   void runSimpleTest()
   {
+    TestUtils::resetEnvironment();
+
+    OsmMapPtr map(new OsmMap());
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
     ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
 
     // set the uuids so they don't change with each test
     n1->getTags().set("uuid", "n1");
     n2->getTags().set("uuid", "n2");
+    map->addElement(n1);
+    map->addElement(n2);
 
     ReviewMarker uut;
 
-    uut.mark(n1, n2, "a note");
+    uut.mark(map, n1, n2, "a note", "test");
 
-    HOOT_STR_EQUALS("hoot:review:needs = yes\n"
-                    "hoot:review:source = 1\n"
-                    "hoot:review:uuid = n2\n"
-                    "hoot:review:note = a note\n"
-                    "uuid = n1\n"
-                    "", n1->getTags());
-
-    HOOT_STR_EQUALS("hoot:review:needs = yes\n"
-                    "hoot:review:source = 2\n"
-                    "hoot:review:uuid = n1\n"
-                    "hoot:review:note = a note\n"
-                    "uuid = n2\n"
-                    "", n2->getTags());
+    HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
+      "{\"type\":\"node\",\"id\":2,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n2\"}},\n"
+      "{\"type\":\"node\",\"id\":1,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n1\"}},\n"
+      "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
+      "{\"type\":\"node\",\"ref\":1,\"role\":\"reviewee\"},\n"
+      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:needs\":\"yes\",\"hoot:review:type\":\"test\",\"hoot:review:score\":\"-1\",\"hoot:review:note\":\"a note\",\"error:circular\":\"-1\"}]\n"
+      "}\n",
+      OsmJsonWriter().toString(map));
   }
 
   /**
@@ -78,6 +110,9 @@ public:
    */
   void runMultipleScoresTest()
   {
+    TestUtils::resetEnvironment();
+
+    OsmMapPtr map(new OsmMap());
     DisableLog dl;
 
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
@@ -86,27 +121,27 @@ public:
     // set the uuids so they don't change with each test
     n1->getTags().set("uuid", "n1");
     n2->getTags().set("uuid", "n2");
-    n2->getTags().set("hoot:review:score", "0.1;0.2");
+    map->addElement(n1);
+    map->addElement(n2);
 
     ReviewMarker uut;
 
-    uut.mark(n1, n2, "a note", 0.15);
+    uut.mark(map, n1, n2, "a note", "test", 0.15);
+    uut.mark(map, n1, n2, "a note 2", "test", 0.5);
 
-    HOOT_STR_EQUALS("hoot:review:needs = yes\n"
-                    "hoot:review:source = 1\n"
-                    "hoot:review:score = 0.15\n"
-                    "hoot:review:uuid = n2\n"
-                    "hoot:review:note = a note\n"
-                    "uuid = n1\n"
-                    "", n1->getTags());
+    //LOG_VARW(TestUtils::toQuotedString(OsmJsonWriter().toString(map)));
 
-    HOOT_STR_EQUALS("hoot:review:needs = yes\n"
-                    "hoot:review:source = 2\n"
-                    "hoot:review:score = 0.2\n"
-                    "hoot:review:uuid = n1\n"
-                    "hoot:review:note = a note\n"
-                    "uuid = n2\n"
-                    "", n2->getTags());
+    HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
+      "{\"type\":\"node\",\"id\":2,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n2\"}},\n"
+      "{\"type\":\"node\",\"id\":1,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n1\"}},\n"
+      "{\"type\":\"relation\",\"id\":-2,\"members\":[\n"
+      "{\"type\":\"node\",\"ref\":1,\"role\":\"reviewee\"},\n"
+      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:needs\":\"yes\",\"hoot:review:type\":\"test\",\"hoot:review:score\":\"0.5\",\"hoot:review:note\":\"a note 2\",\"error:circular\":\"-1\"},\n"
+      "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
+      "{\"type\":\"node\",\"ref\":1,\"role\":\"reviewee\"},\n"
+      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:needs\":\"yes\",\"hoot:review:type\":\"test\",\"hoot:review:score\":\"0.15\",\"hoot:review:note\":\"a note\",\"error:circular\":\"-1\"}]\n"
+      "}\n",
+      OsmJsonWriter().toString(map));
   }
 
 };

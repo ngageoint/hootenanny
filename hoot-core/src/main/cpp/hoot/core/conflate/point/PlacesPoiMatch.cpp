@@ -38,6 +38,8 @@
 namespace hoot
 {
 
+QString PlacesPoiMatch::_matchName = "PLACES POI";
+
 class PlacesStringDistance : public StringDistance
 {
 public:
@@ -75,7 +77,7 @@ PlacesPoiMatch::PlacesPoiMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
   _eid1(eid1),
   _eid2(eid2)
 {
-  _goodnessThreshold = conf().getDouble(goodnessThresholdKey(), 0.3);
+  _goodnessThreshold = ConfigOptions().getPlacesGoodnessThreshold();
   _calculateClassification(map);
 }
 
@@ -125,8 +127,8 @@ double PlacesPoiMatch::_calculateGoodness(const ConstNodePtr &n1, const ConstNod
     return 0.0;
   }
 
-  double wd1 = conf().getDouble(distanceWeightKey(), 0.1);
-  double ws1 = conf().getDouble(stringWeightKey(), 0.9);
+  double wd1 = ConfigOptions().getPlacesDistanceWeight();
+  double ws1 = ConfigOptions().getPlacesStringWeight();
   // normalize so they add to 1.
   double wd = wd1 / (wd1 + ws1);
   double ws = ws1 / (wd1 + ws1);
@@ -139,7 +141,7 @@ double PlacesPoiMatch::_calculateGoodness(const ConstNodePtr &n1, const ConstNod
   ////
   double G;
   // if the edit similarity is less than a threshold then it is no longer a candidate.
-  if (s < conf().getDouble(minimumEditSimilarityKey(), minimumEditSimilarityDefault()))
+  if (s < ConfigOptions().getPlacesMinimumEditSimilarity())
   {
     G = 0.0;
   }
@@ -179,7 +181,7 @@ bool PlacesPoiMatch::isConflicting(const Match& other, const ConstOsmMapPtr& /*t
 bool PlacesPoiMatch::_isExactMatch(const ConstNodePtr& n1, const ConstNodePtr& n2) const
 {
   // distance that is considered an exact match. Defaults to 1mm.
-  Meters epsilon = conf().getDouble(epsilonDistanceKey(), 1e-3);
+  Meters epsilon = ConfigOptions().getPlacesPoiEpsilonDistance();
 
   bool result = true;
 

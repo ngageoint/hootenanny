@@ -272,10 +272,10 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.410, score, 0.001);
     CPPUNIT_ASSERT_EQUAL(std::string("highway=tertiary"), avg.toStdString());
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.7, uut.score("surface=cobblestone", "surface=asphault"), 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.7, uut.score("surface=cobblestone", "surface=asphalt"), 0.001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.score("surface=cobblestone:flattened",
                                                 "surface=cobblestone"), 0.001);
-    avg = uut.average("surface=cobblestone:flattened", "surface=asphault", score);
+    avg = uut.average("surface=cobblestone:flattened", "surface=asphalt", score);
     CPPUNIT_ASSERT_EQUAL(std::string("surface=paved"), avg.toStdString());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(.2, score, 0.001);
     avg = uut.average("surface=cobblestone:flattened", "surface=earth", score);

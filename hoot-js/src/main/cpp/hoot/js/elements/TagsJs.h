@@ -78,6 +78,8 @@ private:
   static Handle<Value> contains(const Arguments& args);
   static Handle<Value> get(const Arguments& args);
   static Handle<Value> getCreateUuid(const Arguments& args);
+  static Handle<Value> getLengthInMeters(const Arguments& args);
+  static Handle<Value> getVelocityInMeters(const Arguments& args);
   static Handle<Value> getInformationCount(const Arguments& args);
   static Handle<Value> set(const Arguments& args);
   static Handle<Value> toDict(const Arguments& args);
@@ -95,7 +97,10 @@ inline void toCpp(v8::Handle<v8::Value> v, Tags& t)
 
   v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
   TagsJs* js = 0;
-  js = node::ObjectWrap::Unwrap<TagsJs>(obj);
+  if (obj->InternalFieldCount() > 0)
+  {
+    js = node::ObjectWrap::Unwrap<TagsJs>(obj);
+  }
   if (js)
   {
     t = js->getTags();

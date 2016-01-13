@@ -30,7 +30,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/CookieCutter.h>
 
@@ -44,24 +44,6 @@ public:
   static string className() { return "hoot::CookieCutterCmd"; }
 
   CookieCutterCmd() {}
-
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (cutter-shape) (dough) (output) [buffer] [--crop]\n"
-        "  Reads in a OSM input file as the 'cutter-shape', and removes the \n"
-        "  cookie cutter shape from the contents of the 'dough' file. The\n"
-        "  resulting geometries are written to 'output'. The dough input is limited by\n"
-        "  the available RAM.\n"
-        "  * cutter-shape - The input Polygons to use as the cutter shape.\n"
-        "  * dough - The input OSM data to cut from.\n"
-        "  * output - The output OSM data path.\n"
-        "  * buffer - Optional buffer value, if the buffer value is provided then the\n"
-        "             shape is buffered by this many meters before cutting. The buffer\n"
-        "             may be positive or negative.\n"
-        "  * --crop - Crops based on the polygon rather than doing a cookie cut.";
-  }
 
   virtual QString getName() const { return "cookie-cutter"; }
 
@@ -110,7 +92,7 @@ public:
     OsmMapPtr result = doughMap;
 
     // reproject back into lat/lng
-    MapReprojector::reprojectToWgs84(result);
+    MapProjector::projectToWgs84(result);
 
     // save out the result.
     saveMap(result, outputPath);

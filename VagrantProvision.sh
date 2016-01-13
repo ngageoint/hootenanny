@@ -19,6 +19,37 @@ fi
 echo "Installing dependencies"
 sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-all graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane
 
+if ! dpkg -l | grep --quiet wamerican-insane; then
+    # See /usr/share/doc/dictionaries-common/README.problems for details
+    # http://www.linuxquestions.org/questions/debian-26/dpkg-error-processing-dictionaries-common-4175451951/
+    sudo apt-get install -y wamerican-insane
+    sudo /usr/share/debconf/fix_db.pl
+    sudo dpkg-reconfigure dictionaries-common
+fi
+
+# Install deps for Cucumber tests
+sudo apt-get install ruby ruby-dev xvfb
+sudo gem install mime-types -v 2.6.2
+sudo gem install cucumber capybara capybara-webkit selenium-webdriver rspec capybara-screenshot
+
+sudo apt-get autoremove -y
+
+# Install Chrome browser for Cucumber
+if [ ! -f google-chrome-stable_current_amd64.deb ]; then
+    echo "Installing Chrome"
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    sudo dpkg -i google-chrome-stable_current_amd64.deb
+    sudo apt-get -f install -y
+fi
+
+# Install Chromedriver
+if [ ! -f bin/chromedriver ]; then
+    echo "Installing Chromedriver"
+    mkdir -p /home/vagrant/bin
+    wget http://chromedriver.storage.googleapis.com/2.20/chromedriver_linux64.zip
+    unzip -d /home/vagrant/bin chromedriver_linux64.zip
+fi
+
 # Hoot Baseline is PostgreSQL 9.1 and PostGIS 1.5, so we need a deb file and
 # then remove 9.4
 if [ ! -f postgresql-9.1-postgis_1.5.3-2_amd64.deb ]; then
@@ -170,6 +201,12 @@ umask 002
 EOT
 fi
 
+# Change Tomcat java opts
+if grep -i --quiet '^JAVA_OPTS=.*\-Xmx128m' /etc/default/tomcat6; then
+    echo "Changing Tomcat java opts"
+    sudo sed -i.bak "s@\-Xmx128m@\-Xms512m \-Xmx2048m \-XX:PermSize=512m \-XX:MaxPermSize=4096m@" /etc/default/tomcat6
+fi
+
 # Fix env var path for GDAL_DATA
 if grep -i --quiet 'gdal/1.10' /etc/default/tomcat6; then
     echo "Fixing Tomcat GDAL_DATA env var path"
@@ -177,7 +214,7 @@ if grep -i --quiet 'gdal/1.10' /etc/default/tomcat6; then
 fi
 
 # Remove gdal libs installed by libgdal-dev that interfere with
-# mapedit-export-server using gdal libs compiled from source (fgdb support)
+# renderdb-export-server using gdal libs compiled from source (fgdb support)
 if [ -f /usr/lib/libgdal.* ]; then
     echo "Removing GDAL libs installed by libgdal-dev"
     sudo rm /usr/lib/libgdal.*
@@ -207,6 +244,14 @@ if [ ! -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
     echo 'testJobStatusPollerTimeout=250' > $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
 fi
 
+# Update the init.d script for node-mapnik-server
+sudo cp node-mapnik-server/init.d/node-mapnik-server /etc/init.d
+sudo chmod a+x /etc/init.d/node-mapnik-server
+# Make sure all npm modules are installed
+cd node-mapnik-server
+npm install
+cd ..
+
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'
 # if the marker file is older than this file (VagrantProvision.sh)
@@ -231,10 +276,5 @@ make docs -sj$(nproc)
 #make -sj$(nproc) test-all
 
 # Deploy to Tomcat
-echo "Stopping Tomcat"
-sudo service tomcat6 stop
 echo "Deploying Hoot to Tomcat"
 sudo -u tomcat6 scripts/vagrantDeployTomcat.sh
-echo "Starting Tomcat"
-sudo service tomcat6 start
-

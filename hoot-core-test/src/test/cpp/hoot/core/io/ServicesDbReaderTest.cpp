@@ -178,7 +178,8 @@ public:
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
     reader.read(map);
 
-    HOOT_STR_EQUALS("[5]{-1, -2, -3, -4, -5}", map->getNodeMap().keys());
+    HOOT_STR_EQUALS("[5]{-5, -4, -3, -2, -1}",
+      getKeys(map->getNodeMap().begin(), map->getNodeMap().end()));
     HOOT_STR_EQUALS("[2]{-2, -1}",
       getKeys(map->getRelationMap().begin(), map->getRelationMap().end()));
     HOOT_STR_EQUALS("[3]{-3, -2, -1}", getKeys(map->getWays().begin(), map->getWays().end()));
@@ -237,15 +238,13 @@ public:
   {
     //nodes
 
-    //CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodeMap().size());
     HOOT_STR_EQUALS(true, map->containsNode(500));
     shared_ptr<Node> node = map->getNode(500);
     CPPUNIT_ASSERT_EQUAL((long)500, node->getId());
     CPPUNIT_ASSERT_EQUAL(38.4, node->getY());
     CPPUNIT_ASSERT_EQUAL(-106.5, node->getX());
-    CPPUNIT_ASSERT_EQUAL(3.0, node->getCircularError());
-    CPPUNIT_ASSERT_EQUAL(1, node->getTags().size());
-    QString tagValue = node->getTags().get("hoot:status");
+    CPPUNIT_ASSERT_EQUAL(0.0, node->getCircularError());
+    CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
   }
 
   void verifyFullReadOutput(shared_ptr<OsmMap> map)
@@ -264,6 +263,8 @@ public:
     QString tagValue = node->getTags().get("hoot:status");
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL(10.0, node->getCircularError());
+    CPPUNIT_ASSERT_EQUAL((long)1, node->getVersion());
+    CPPUNIT_ASSERT(node->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
 
     node = map->getNode(2);
     CPPUNIT_ASSERT_EQUAL(Status::Unknown2, node->getStatus().getEnum());
@@ -277,6 +278,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(QString("n2b").toStdString(), tagValue.toStdString());
     CPPUNIT_ASSERT_EQUAL(Status::Unknown2, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL(11.0, node->getCircularError());
+    CPPUNIT_ASSERT_EQUAL((long)1, node->getVersion());
+    CPPUNIT_ASSERT(node->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
 
     node = map->getNode(3);
     CPPUNIT_ASSERT_EQUAL(Status::Conflated, node->getStatus().getEnum());
@@ -290,6 +293,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(QString("n3").toStdString(), tagValue.toStdString());
     CPPUNIT_ASSERT_EQUAL(Status::Conflated, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL(12.0, node->getCircularError());
+    CPPUNIT_ASSERT_EQUAL((long)1, node->getVersion());
+    CPPUNIT_ASSERT(node->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
 
     node = map->getNode(4);
     CPPUNIT_ASSERT_EQUAL(Status::Conflated, node->getStatus().getEnum());
@@ -303,6 +308,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(QString("n4").toStdString(), tagValue.toStdString());
     CPPUNIT_ASSERT_EQUAL(Status::Conflated, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL(13.0, node->getCircularError());
+    CPPUNIT_ASSERT_EQUAL((long)1, node->getVersion());
+    CPPUNIT_ASSERT(node->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
 
     node = map->getNode(5);
     CPPUNIT_ASSERT_EQUAL(Status::Invalid, node->getStatus().getEnum());
@@ -313,6 +320,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, node->getTags().size());
     CPPUNIT_ASSERT_EQUAL(Status::Invalid, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL(14.0, node->getCircularError());
+    CPPUNIT_ASSERT_EQUAL((long)1, node->getVersion());
+    CPPUNIT_ASSERT(node->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
 
     //ways
 
@@ -330,6 +339,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(QString("w1b").toStdString(), tagValue.toStdString());
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, way->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL(15.0, way->getCircularError());
+    CPPUNIT_ASSERT_EQUAL((long)1, way->getVersion());
+    CPPUNIT_ASSERT(way->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
 
     way = map->getWay(2);
     CPPUNIT_ASSERT_EQUAL(Status::Unknown2, way->getStatus().getEnum());
@@ -343,6 +354,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(QString("w2").toStdString(), tagValue.toStdString());
     CPPUNIT_ASSERT_EQUAL(Status::Unknown2, way->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL(16.0, way->getCircularError());
+    CPPUNIT_ASSERT_EQUAL((long)1, way->getVersion());
+    CPPUNIT_ASSERT(way->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
 
     way = map->getWay(3);
     CPPUNIT_ASSERT_EQUAL(Status::Unknown2, way->getStatus().getEnum());
@@ -352,6 +365,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, way->getTags().size());
     CPPUNIT_ASSERT_EQUAL(Status::Unknown2, way->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL(17.0, way->getCircularError());
+    CPPUNIT_ASSERT_EQUAL((long)1, way->getVersion());
+    CPPUNIT_ASSERT(way->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
 
     //relations
 
@@ -378,6 +393,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(QString("r1").toStdString(), tagValue.toStdString());
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, relation->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL(18.1, relation->getCircularError());
+    CPPUNIT_ASSERT_EQUAL((long)1, relation->getVersion());
+    CPPUNIT_ASSERT(relation->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
 
     relation = map->getRelation(2);
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, relation->getStatus().getEnum());
@@ -391,6 +408,8 @@ public:
     CPPUNIT_ASSERT_EQUAL((long)2, member.getElementId().getId());
     CPPUNIT_ASSERT_EQUAL(0, relation->getTags().size());
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, relation->getStatus().getEnum());
+    CPPUNIT_ASSERT_EQUAL((long)1, relation->getVersion());
+    CPPUNIT_ASSERT(relation->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
   }
 
   void verifySingleReadOutput(shared_ptr<OsmMap> map)
@@ -458,14 +477,12 @@ public:
       return;
     }
 
-
     ///////////////////////////////////////
     // test the reader
     ///////////////////////////////////////
 
     ServicesDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
-
 
     Settings s = conf();
     reader.open(ConfigOptions(s).getServicesDbTestUrlOsmapi());

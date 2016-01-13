@@ -166,7 +166,7 @@ mgcp = {
             {
                 if (tags.railway)
                 {
-                    newAttrs.F_CODE = 'AT010';
+                    newAttrs.F_CODE = 'AN010';
                 }
                 else
                 {
@@ -1040,6 +1040,9 @@ mgcp = {
             mgcp.rules.one2one.push.apply(mgcp.rules.one2one,mgcp.rules.one2oneOut);
 
             mgcp.lookup = translate.createBackwardsLookup(mgcp.rules.one2one);
+
+            // Debug
+            // translate.dumpOne2OneLookup(mgcp.lookup);
 
             // Build a list of things to ignore and flip is backwards
             mgcp.ignoreList = translate.flipList(translate.joinList(mgcp.rules.numBiased, mgcp.rules.txtBiased));

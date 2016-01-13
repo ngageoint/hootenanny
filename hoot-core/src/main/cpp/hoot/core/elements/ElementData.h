@@ -39,6 +39,8 @@
 // Standard
 #include <set>
 
+#include <QString>
+
 namespace hoot {
 
 /**
@@ -89,6 +91,10 @@ protected:
     _timestamp(TIMESTAMP_EMPTY), _user(USER_EMPTY), _uid(UID_EMPTY) { }
 
   ElementData(long id, const Tags& tags, Meters circularError);
+
+  ElementData(long id, long changeset, long version, unsigned int timestamp) :
+             _id(id), _changeset(changeset), _version(version),
+             _timestamp(timestamp), _user(USER_EMPTY), _uid(UID_EMPTY) { }
 
   ElementData(long id, long changeset, long version, unsigned int timestamp,
               QString user, long uid) : _id(id), _changeset(changeset), _version(version),

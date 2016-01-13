@@ -36,6 +36,8 @@
 #include <QStringList>
 
 // Standard
+// needed by some dev environments
+#include <stdint.h>
 #include <string>
 
 namespace hoot {
@@ -124,6 +126,16 @@ public:
   QStringList getNames() const;
 
   /**
+   * Returns the speed in standard units (m/s).
+   */
+  Velocity getVelocity(const QString& k) const;
+
+  /**
+   * Returns the length in standard units (m).
+   */
+  Length getLength(const QString& k) const;
+
+  /**
    * Return the number of tags that contain actual information, not meta-data or debug tags.
    * Meta-data tags include things like source and license. Debug is anything that starts with
    * hoot:. An example of an informational tag is name or highway.
@@ -177,6 +189,7 @@ public:
   void set(const QString& key, const QString& value);
   void set(const QString& key, bool v);
   void set(const QString& key, double v) { set(key, QString::number(v)); }
+  void set(const QString& key, int64_t v) { set(key, QString::number(v)); }
 
   /**
    * If a kvp is in other, then set it in this. If this already has that key then the value will
@@ -220,6 +233,8 @@ public:
   QString toString() const;
 
 private:
+  void _valueRegexParser(const QString& str, QString& num, QString& units) const;
+
   static QStringList _nameKeys;
   static QStringList _pseudoNameKeys;
 };

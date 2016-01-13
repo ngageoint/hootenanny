@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/Factory.h>
 #include <hoot/js/JsRegistrar.h>
-#include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
 
 // Qt
@@ -61,13 +60,18 @@ void ElementIdJs::Init(Handle<Object> target)
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-    String::New(Element::className().data()));
+    String::New(ElementId::className().data()));
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("getId"),
+      FunctionTemplate::New(getType)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("getType"),
       FunctionTemplate::New(getType)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("toString"),
       FunctionTemplate::New(toString)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("toJSON"),
       FunctionTemplate::New(toJSON)->GetFunction());
+  tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
+                                String::New(ElementId::className().data()));
+
 
   _constructor = Persistent<Function>::New(tpl->GetFunction());
   target->Set(String::NewSymbol("ElementId"), _constructor);
@@ -111,7 +115,7 @@ Handle<Value> ElementIdJs::toJSON(const Arguments& args)
 
   Handle<Object> result = Object::New();
   result->Set(String::NewSymbol("type"), String::New(eid.getType().toString().toUtf8().data()));
-  result->Set(String::NewSymbol("id"), Integer::New(eid.getId()));
+  result->Set(String::NewSymbol("id"), v8::Integer::New(eid.getId()));
 
   return scope.Close(result);
 }

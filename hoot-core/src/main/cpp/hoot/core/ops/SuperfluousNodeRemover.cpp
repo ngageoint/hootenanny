@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/Factory.h>
 
 // Standard
@@ -63,10 +63,10 @@ void SuperfluousNodeRemover::apply(shared_ptr<OsmMap>& map)
     _usedNodes.insert(nodeIds.begin(), nodeIds.end());
   }
 
-  const OsmMap::NodeMap nodes = map->getNodeMap();
-  for (OsmMap::NodeMap::const_iterator it = nodes.constBegin(); it != nodes.constEnd(); ++it)
+  const NodeMap nodes = map->getNodeMap();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    const Node* n = it.value().get();
+    const Node* n = it->second.get();
     if (n->getTags().getNonDebugCount() != 0)
     {
       _usedNodes.insert(n->getId());
@@ -74,21 +74,21 @@ void SuperfluousNodeRemover::apply(shared_ptr<OsmMap>& map)
   }
 
   shared_ptr<OsmMap> reprojected;
-  const OsmMap::NodeMap* nodesWgs84 = &nodes;
+  const NodeMap* nodesWgs84 = &nodes;
   // if the map is not in WGS84
-  if (MapReprojector::isGeographic(map) == false)
+  if (MapProjector::isGeographic(map) == false)
   {
     // create a new copy of the map and reproject it. This way we can be sure we do the bounds
     // calculation correctly.
     reprojected.reset(new OsmMap(map));
-    MapReprojector::reprojectToWgs84(reprojected);
+    MapProjector::projectToWgs84(reprojected);
     nodesWgs84 = &reprojected->getNodeMap();
   }
 
-  for (OsmMap::NodeMap::const_iterator it = nodesWgs84->constBegin(); it != nodesWgs84->constEnd();
+  for (NodeMap::const_iterator it = nodesWgs84->begin(); it != nodesWgs84->end();
        ++it)
   {
-    const Node* n = it.value().get();
+    const Node* n = it->second.get();
     if (_usedNodes.find(n->getId()) == _usedNodes.end())
     {
       if (_bounds.isNull() || _bounds.contains(n->getX(), n->getY()))

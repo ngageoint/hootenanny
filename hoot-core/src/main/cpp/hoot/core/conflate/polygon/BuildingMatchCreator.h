@@ -69,10 +69,14 @@ public:
 
 private:
 
-  mutable shared_ptr<BuildingRfClassifier> _rf;
+  /// Don't use this directly. See below.
+  shared_ptr<BuildingRfClassifier> _rf;
   shared_ptr<MatchThreshold> _matchThreshold;
 
-  shared_ptr<BuildingRfClassifier> _getRf() const;
+  /**
+   * The building model can be slow to load, this provides a lazy load.
+   */
+  shared_ptr<BuildingRfClassifier> _getRf();
 };
 
 }

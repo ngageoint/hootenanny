@@ -28,6 +28,9 @@
 #ifndef __TREE_NODE_H__
 #define __TREE_NODE_H__
 
+//Boost Includes
+#include <boost/shared_ptr.hpp>
+
 //STL Includes
 #include <vector>
 
@@ -43,18 +46,18 @@ namespace Tgs
   */
   struct TreeNode
   {
-    TreeNode * leftChild;
-    TreeNode * rightChild;
+    boost::shared_ptr<TreeNode> leftChild;  //The right child of a split node else NULL
+    boost::shared_ptr<TreeNode> rightChild; //The left child of a split node else NULL
 
-    double splitValue;
-    double purityDelta;
-    std::string classLabel;
-    unsigned int factorIndex;
-    std::vector<unsigned int> dataList;
-    bool isPure;
-    unsigned int nodeId;
-    double rangeMin;
-    double rangeMax;
+    double splitValue;      //The factor value used to split a node
+    double purityDelta;     //For a split node the information gain improvement derived from splitting the data by a factor
+    std::string classLabel;     //For a pure node its classification label
+    unsigned int factorIndex;   //The factor index for a split node
+    std::vector<unsigned int> dataList;  //Pure: the indices for training vectors classified to this node
+    bool isPure;            //True if the node is a leaf
+    unsigned int nodeId;    //Split: 0,  Pure: the unique pure node id used for proximity calculations
+    double rangeMin;        //Split: The lower interquartile value based on the bandwidth of the training data for the factor, Pure: 0
+    double rangeMax;        //Split: The upperr interquartile value based on the bandwidth of the training data for the factor, Pure: 0
   };
 }  //End Namespace
 #endif

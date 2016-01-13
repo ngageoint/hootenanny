@@ -45,6 +45,9 @@
 // tgs
 #include <tgs/RandomForest/RandomForest.h>
 
+//Qt
+#include <QFile>
+
 #include "BuildingMergeManipulator.h"
 
 namespace hoot
@@ -211,6 +214,35 @@ vector<MatchCreator::Description> BuildingMatchCreator::getAllCreators() const
   return result;
 }
 
+shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
+{
+  if (!_rf)
+  {
+    QString path = ConfPath::search(ConfigOptions().getBuildingModelPath());
+    LOG_INFO("Loading model from: " << path);
+
+    QFile file(path.toAscii().data());
+    if (!file.open(QIODevice::ReadOnly))
+    {
+      throw HootException("Error opening file: " + path);
+    }
+    QDomDocument doc("");
+    if (!doc.setContent(&file))
+    {
+      file.close();
+      throw HootException("Error opening file: " + path);
+    }
+    //LOG_VARD(doc.toString());
+    file.close();
+
+    _rf.reset(new BuildingRfClassifier());
+    QDomElement docRoot = doc.elementsByTagName("RandomForest").at(0).toElement();
+    _rf->import(docRoot);
+  }
+
+  return _rf;
+}
+
 bool BuildingMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
 {
   return BuildingMatchVisitor::isMatchCandidate(element);
@@ -226,26 +258,6 @@ shared_ptr<MatchThreshold> BuildingMatchCreator::getMatchThreshold()
                          config.getBuildingReviewThreshold()));
   }
   return _matchThreshold;
-}
-
-shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf() const
-{
-  if (!_rf)
-  {
-    QString path = ConfPath::search(ConfigOptions().getBuildingModelPath());
-    LOG_INFO("Loading model from: " << path);
-
-    ifstream fp;
-    fp.open(path.toAscii().data());
-    if (!fp.is_open())
-    {
-      throw HootException("Error opening file: " + path);
-    }
-    _rf.reset(new BuildingRfClassifier());
-    _rf->import(fp);
-  }
-
-  return _rf;
 }
 
 }

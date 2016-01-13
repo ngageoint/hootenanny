@@ -1,3 +1,29 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ */
 package hoot.services.controllers.job.custom.HGIS;
 
 import java.sql.Connection;
@@ -108,13 +134,16 @@ public class HGISReviewResource extends HGISResource {
 			JSONObject validationCommand = _createBashPostBody(_createParamObj(src, output));
 			//postJobRquest( jobId,  argStr);		
 		
-			JSONObject prepareItemsForReviewCommand = _createPrepareReviewCommand(output); 
+		
 					
 			JSONObject updateMapTagCommand = _createUpdateMapTagCommand(output);
 			
+			// with new relation based review process
+			// we will no longer need to run prepare review
+			// Instead core will take care of generation relation review for
+			// POI validation
 			JSONArray jobArgs = new JSONArray();
-			jobArgs.add(validationCommand);
-			jobArgs.add(prepareItemsForReviewCommand);
+			jobArgs.add(validationCommand);			
 			jobArgs.add(updateMapTagCommand);
 
 
@@ -134,25 +163,7 @@ public class HGISReviewResource extends HGISResource {
   	}
   	return res;
   }
-  
-  private JSONObject _createPrepareReviewCommand(final String mapName) throws Exception
-  {
-		JSONArray reviewArgs = new JSONArray();
-		JSONObject param = new JSONObject();
-		param.put("value", mapName);
-		param.put("paramtype", String.class.getName());
-		param.put("isprimitivetype", "false");
-		reviewArgs.add(param);
 
-		param = new JSONObject();
-		param.put("value", false);
-		param.put("paramtype", Boolean.class.getName());
-		param.put("isprimitivetype", "true");
-		reviewArgs.add(param);
-
-		return _createReflectionJobReq(reviewArgs, "hoot.services.controllers.job.ReviewResource",
-				"prepareItemsForReview");
-  }
   private JSONObject _createUpdateMapTagCommand(final String mapName) throws Exception
   {
   	JSONArray reviewArgs = new JSONArray();

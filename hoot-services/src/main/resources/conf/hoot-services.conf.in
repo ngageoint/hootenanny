@@ -23,11 +23,6 @@ homeFolder=$(HOOT_HOME)
 # slowly to queries
 testJobStatusPollerTimeout=2000
 
-# If true, the entire services database will be cleared before every test run.  Normally, this 
-# would not need to be set to true, unless the database was in an inconsistent state somehow which
-# causes the tests to not be able to insert maps properly.
-servicesTestClearEntireDb=false
-
 # determines whether the system automatically scans for changes to the log4j props file
 autoScanForLogPropsChanges=true
 
@@ -37,6 +32,12 @@ logPropsDynamicChangeScanInterval=1
 
 # Loosely enforced setting that determines the maximum number of times a class logs a warning
 maxWarningsDisplayed=10
+
+# If true, will seed the randomness used in sql queries; for testing purposes only.
+seedRandomQueries=false
+
+# Random query seed value; valid range: -1.0 to 1.0
+randomQuerySeed=0.1
 
 # OSM
 
@@ -73,9 +74,6 @@ changesetMaxOpenTimeHours=24
 
 # allows for faster testing of changeset auto closing
 testChangesetAutoClose=false
-
-# allows nodes to have negative IDs to be compatible with hoot-core command line
-hootCoreServicesDatabaseWriterCompatibility=false
 
 # ETL
 
@@ -155,7 +153,7 @@ tileServerPath=$(homeFolder)/ingest/processed
 IngestMakefile=ingestraster
 
 # Raster to tile make file
-RasterToTiles=makerastertotiles
+RasterToTiles=exportrenderdb.makefile
 
 # Basemap Raster to tile make file
 BasemapRasterToTiles=makebasemaprastertotiles.sh
@@ -240,26 +238,7 @@ P2PServerScript=P2PServer.js
 
 # REVIEW
 
-# review prepare
 
-# default setting for overwriting existing review data
-reviewPrepareOverwriteExistingDataDefault=false
-# If true, temp UUID database records will be cleaned up after review records are prepared.  Since
-# this sometimes causes problems with some datasets, making it optional as a temporary solution.
-reviewPrepareCleanup=true
-# If true, removes review uuid's from the hoot:review:uuid tag if no element exists with that uuid
-# as its uuid tag.
-cleanReviewTags=true
-
-# review get
-
-# review item lock time in millisec
-reviewLockTime=300000
-
-# review update
-
-# semi-colon delimited list of review tags used by hoot core
-reviewTags=hoot:review:uuid;hoot:review:score;hoot:review:note;hoot:review:needs;hoot:review:source
 
 # HGIS
 

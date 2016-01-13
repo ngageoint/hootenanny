@@ -26,7 +26,7 @@
  */
 
 //
-// Convert MapEdit RenderDb to MGCP
+// Convert RenderDb to MGCP
 //
 
 hoot.require('mgcp');

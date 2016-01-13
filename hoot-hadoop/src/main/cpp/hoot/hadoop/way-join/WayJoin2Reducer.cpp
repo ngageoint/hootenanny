@@ -216,9 +216,15 @@ void WayJoin2Reducer::_writeWay(HadoopPipes::ReduceContext& context)
   const vector<long>& nids = w->getNodeIds();
   nodeIds.insert(nids.begin(), nids.end());
   // if the way has all the intended nodes.
-  if (_map->getNodeMap().size() == (int)nodeIds.size())
+  if (_map->getNodeMap().size() == nodeIds.size())
   {
-    QList<long> tempNodes = _map->getNodeMap().keys();
+    QList<long> tempNodes;
+    for (NodeMap::const_iterator it = _map->getNodeMap().begin();
+      it != _map->getNodeMap().end(); ++it)
+    {
+      tempNodes.append(it->first);
+    }
+
     // if the envelope is larger than the max way threshold
     if (_maxWaySize > 0 && (env.getWidth() > _maxWaySize || env.getHeight() > _maxWaySize))
     {

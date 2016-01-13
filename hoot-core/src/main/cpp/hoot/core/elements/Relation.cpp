@@ -50,6 +50,7 @@ QString Relation::INNER = "inner";
 QString Relation::MULTILINESTRING = "multilinestring";
 QString Relation::MULTIPOLYGON = "multipolygon";
 QString Relation::OUTER = "outer";
+QString Relation::REVIEW = "review";
 
 /**
  * This is a convenience class to handle cases when exceptions are thrown.
@@ -86,6 +87,15 @@ Relation::Relation(Status s, long id, Meters circularError, QString type) :
   Element(s)
 {
   _relationData.reset(new RelationData(id));
+  _relationData->setCircularError(circularError);
+  _relationData->setType(type);
+}
+
+Relation::Relation(Status s, long id, long changeset, long version, unsigned int timestamp,
+                   Meters circularError, QString type) :
+  Element(s)
+{
+  _relationData.reset(new RelationData(id, changeset, version, timestamp));
   _relationData->setCircularError(circularError);
   _relationData->setType(type);
 }

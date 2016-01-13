@@ -68,14 +68,6 @@ public:
 
   VersionCmd() {}
 
-  QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + "\n"
-        "  Prints the version.";
-  }
-
   virtual QString getName() const { return "version"; }
 
   int runSimple(QStringList args)
