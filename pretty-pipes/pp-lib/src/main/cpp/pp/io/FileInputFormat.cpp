@@ -54,7 +54,7 @@ void FileInputFormat::_addFile(const string& path)
     fis->setLength(std::min(blockSize, len - pos));
     fis->setPath(path);
 
-    QStringList hosts = hdfs.getLocations(path, fis->getStart(), fis->getLength());
+    QStringList hosts = hdfs.getLocations(path, fis->getStart(), fis->getLength(), true);
     fis->setLocations(hosts.join(";").toStdString());
     _splits.push_back(fis);
   }
@@ -71,7 +71,7 @@ void FileInputFormat::_init()
   }
   else
   {
-    vector<FileStatus> children = hdfs.listStatus(_path);
+    vector<FileStatus> children = hdfs.listStatus(_path, true);
 
     for (size_t i = 0; i < children.size(); i++)
     {

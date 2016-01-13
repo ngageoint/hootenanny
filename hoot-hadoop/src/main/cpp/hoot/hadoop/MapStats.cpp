@@ -214,7 +214,7 @@ void MapStats::readDir(QString dir)
   QStringList dirs = dir.split(",");
   for (int d = 0; d < dirs.size(); d++)
   {
-    vector<pp::FileStatus> status = fs.listStatus(dirs[d].toStdString());
+    vector<pp::FileStatus> status = fs.listStatus(dirs[d].toStdString(), true);
     for (size_t i = 0; i < status.size(); i++)
     {
       QString fn = QString::fromStdString(status[i].getPath());

@@ -1,5 +1,5 @@
 //
-// The ConfigOptions.asciidoc is a specially formatted file that is parsed 
+// The ConfigOptions.asciidoc is a specially formatted file that is parsed
 // during the build process to generate the ConfigOptions.h header file and
 // user documentation. Changing the default values in this file will change
 // the way Hootenanny runs so be careful, this isn't just documentation.
@@ -20,10 +20,10 @@
 //
 // The format is as follows:
 //
-// The section name is all lowercase and separated by periods. This shouldn't 
+// The section name is all lowercase and separated by periods. This shouldn't
 // contain any special characters.
 // === key.name
-// 
+//
 // * Data Type: <string, double, list, bool>
 // * Default Value: <value>
 //
@@ -34,7 +34,7 @@
 // ** `<Value 2>`
 // The left ticks provide proper formatting in the documentation.
 //
-// Finally the section that contains the documentation. This is free-form 
+// Finally the section that contains the documentation. This is free-form
 // asciidoc just make sure you don't start any lines with "=== ".
 // http://www.methods.co.nz/asciidoc/
 //
@@ -216,7 +216,7 @@ See also:
 * Data Type: string
 * Default Value: ``
 
-The string that lists the types of conflation used in the user interface.  The possible values are: reference, cookieCutter, average, and advancedConflation. 
+The string that lists the types of conflation used in the user interface.  The possible values are: reference, cookieCutter, average, and advancedConflation.
 
 === conflator.manipulators
 
@@ -325,6 +325,15 @@ Bounds used by the map cropper when cropping a map, of the form: minx,miny,maxx,
 * Default Value: `tmp/debug.osm`
 
 Debugging: The filename to use when saving the debug map during conflation.
+
+=== duplicate.way.remover.strict.tag.matching
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, when comparing duplicate ways, the ways and their name tags will only be merged together
+when all other non-name tags between the two match.  If false, the ways and their name tags will be
+merged together regardless of whether all of their non-name tags match.
 
 === dual.way.splitter.driving.side
 
@@ -472,13 +481,13 @@ The threshold at which a match is called a match for roads.
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
- 
+
 === highway.matcher.heading.delta
 
 * Data Type: double
 * Default Value: `${way.matcher.heading.delta}`
 
-The distance around a point on a highway to look when calculating the heading.  See 
+The distance around a point on a highway to look when calculating the heading.  See
 `way.matcher.heading.delta`.
 
 === highway.matcher.max.angle
@@ -562,7 +571,7 @@ The size of a pixel when calculating node density. See User Manual for details.
 * Data Type: string
 * Default Value: `hoot::DefaultIdGenerator`
 
-Sets the default ID generator class name. This determines how Hootenanny will assign new element IDs as they're created. The `DefaultIdGenerator` assigns IDs in a decrementing fashion (e.g. -1, -2, ...). The `hoot::PositiveIdGenerator` increments the IDs (e.g. 1, 2, 3, ...). 
+Sets the default ID generator class name. This determines how Hootenanny will assign new element IDs as they're created. The `DefaultIdGenerator` assigns IDs in a decrementing fashion (e.g. -1, -2, ...). The `hoot::PositiveIdGenerator` increments the IDs (e.g. 1, 2, 3, ...).
 
 Both generators maintain a different count for each element type. E.g. you can have a Node with ID 1 and a Way with ID 1. This will not cause any problems within Hootenanny and is a legitimate way of assigning IDs within OSM.
 
@@ -596,7 +605,7 @@ Sets the default start ID for ways. The first value assigned is generator specif
 === javascript.translator.path
 
 * Data Type: list
-* Default Value: 
+* Default Value:
 ** `${HOOT_TRANSLATE_PATH}`
 ** `${HOOT_HOME}/plugins`
 ** `${HOOT_HOME}/plugins-local`
@@ -658,7 +667,7 @@ Foo: Pre-constraining match count: 11
 === map.cleaner.transforms
 
 * Data Type: list
-* Default Value: 
+* Default Value:
 ** `hoot::ReprojectToPlanarOp` - Before any cleaning, reproject to a planar projection (e.g. UTM).
 ** `hoot::DuplicateWayRemover` - Remove duplicate ways (lines) that are exact duplicates. If the lines partially overlap with exactly the same geometry then only the partial overlap is removed from the more complex geometry.
 ** `hoot::SuperfluousWayRemover` - Remove all ways that contain no nodes or all the nodes are exactly the same.
@@ -793,10 +802,10 @@ Debugging: Print out Attribute values during translation.
 Debugging: Print out OSM Tag values during translation.
 
 === ogr.debug.lookupclash
- 
+
 * Data Type: bool
 * Default Value: `false`
- 
+
 Debugging: When building internal lookup tables, print values that clash.
 
 === ogr.debug.lookupcolumn
@@ -808,10 +817,10 @@ Debugging: Print the columns that are not matched during one2one translation. Th
 
 
 === ogr.debug.dumpvalidate
- 
+
 * Data Type: bool
 * Default Value: `false`
- 
+
 Debugging: Print out which attributes are dropped during export validation.
 
 === ogr.import.filter
@@ -1064,7 +1073,7 @@ The probability of a change to each character in the name. The expected number o
 === perty.ops
 
 * Data Type: list
-* Default Value: 
+* Default Value:
 ** `hoot::PertyWaySplitVisitor`
 ** `hoot::PertyWayGeneralizeVisitor`
 ** `hoot::PertyRemoveRandomElementVisitor`
@@ -1105,7 +1114,7 @@ Set the probability that a tag will be removed.
 === perty.remove.tag.visitor.exempt.tag.keys
 
 * Data Type: list
-* Default Value: 
+* Default Value:
 ** `REF1`
 ** `REF2`
 ** `hoot:status`
@@ -1116,7 +1125,7 @@ A list of tag keys which are exempt from the tag removal done by PertyRemoveTags
 === perty.remove.tag.visitor.substitution.keys
 
 * Data Type: list
-* Default Value: 
+* Default Value:
 ** `highway`
 
 A list of tag keys which, rather than being removed by the PertyRemoveTagVisitor, will have their values replaced instead.  The tag keys in the list match one to one with the replacement values in perty.remove.tag.visitor.subsitution.values.
@@ -1124,7 +1133,7 @@ A list of tag keys which, rather than being removed by the PertyRemoveTagVisitor
 === perty.remove.tag.visitor.substitution.values
 
 * Data Type: list
-* Default Value: 
+* Default Value:
 ** `road`
 
 A list of tag values which, should be substituted by PertyRemoveTagVisitor.  The tag values in the list match one to one with the replacement values in perty.remove.tag.visitor.subsitution.keys.
@@ -1183,14 +1192,14 @@ Dynamic variable value initially assigned to a PERTY test dynamic variable when 
 === perty.test.dynamic.variables
 
 * Data Type: list
-* Default Value: 
+* Default Value:
 
 A list of one or more numeric PERTY variables to be assigned a start value (specified in perty.test.dynamic.variable.start.value) and then incremented once per test run by `perty-test` (specified in perty.test.dynamic.variable.increment) to the value of.  The list is restricted to Hootenanny PERTY options only (perty.*) of a numeric type.
 
 === perty.test.expected.scores
 
 * Data Type: list
-* Default Value: 
+* Default Value:
 ** `1.0`
 
 A list of expected PERTY scores in the range of 0.0 to 1.0 for a `perty-test` run.  The number of scores must match the value assigned to perty.test.num.runs.  If you are not sure what your expected scores should be and want to bypass this check, create a list with all entries equal to "1.0" of the same size as perty.test.num.runs, and then set perty.test.allowed.score.variance to "1.0".  This effectively disables the score validation.
@@ -1254,7 +1263,7 @@ The probability between 0.0 and 1.0 that a way will be split into multiple featu
 === plugin.context.includes
 
 * Data Type: list
-* Default Value: 
+* Default Value:
 ** `HootLib.js`
 
 A list of scripts to include before loading the user's plugin script. The path will be search as: current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
@@ -1454,7 +1463,7 @@ Export some of the images used when evaluating the graph connections between two
 === script.match.scripts
 
 * Data Type: list
-* Default Value: 
+* Default Value:
 ** `rules/PolygonBuildings.js`
 
 List of scripts to use for matching features.

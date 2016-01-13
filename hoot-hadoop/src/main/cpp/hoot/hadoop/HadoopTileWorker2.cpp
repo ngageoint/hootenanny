@@ -23,13 +23,11 @@
 #include <hoot/hadoop/fourpass/TileOpDriver.h>
 #include <hoot/hadoop/stats/MapStatsDriver.h>
 #include <hoot/hadoop/way-join/WayJoinDriver.h>
+#include <hoot/core/util/UuidHelper.h>
 
 // Pretty Pipes
 #include <pp/Hdfs.h>
 #include <pp/mapreduce/Job.h>
-
-// Qt
-#include <QUuid>
 
 #include "PaintNodesDriver.h"
 
@@ -39,7 +37,7 @@ namespace hoot
 HadoopTileWorker2::HadoopTileWorker2()
 {
   _workDir = "tmp/" +
-      QUuid::createUuid().toString().replace("{", "").replace("}", "") +
+      UuidHelper::createUuid().toString().replace("{", "").replace("}", "") +
       "-HadoopTileWorker2/";
   pp::Hdfs fs;
   _workDir = QString::fromStdString(fs.getAbsolutePath(_workDir.toStdString()));
@@ -69,7 +67,7 @@ void HadoopTileWorker2::breakWays(QString out)
   if (_in2.isEmpty() == false)
   {
     pp::Hdfs fs;
-    QString tmp = "tmp/" + QUuid::createUuid().toString().replace("{", "").replace("}", "") +
+    QString tmp = "tmp/" + UuidHelper::createUuid().toString().replace("{", "").replace("}", "") +
         "-WayJoinDriver2.pbf";
     tmp = QString::fromStdString(fs.getAbsolutePath(tmp.toStdString()));
 
