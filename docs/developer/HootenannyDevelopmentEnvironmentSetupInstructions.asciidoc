@@ -719,7 +719,7 @@ sudo service tomcat6 stop
 
 Installing a development environment on CentOS is not suggested or supported, but if you want to go down this road, then here are some pointers:
 
-* Start by looking at the `scripts/InstallHoot-CentOS-RHEL.sh`. This script will be very useful and running with something these settings will get you headed in the right direction:
+. Start by looking at the `scripts/InstallHoot-CentOS-RHEL.sh`. This script will be very useful and running with something these settings will get you headed in the right direction:
 +
 -----------
 INSTALL_DEPENDENCIES=true
@@ -737,7 +737,6 @@ cd autoconf-2.69
 -----------
 +
 . Install JDK & Maven
-+
 -----------
 wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u66-b17/jdk-8u66-linux-x64.rpm
 sudo rpm -Uvh jdk-8u66-linux-x64.rpm
@@ -749,7 +748,5 @@ echo "M2_HOME=/usr/local/maven" | sudo tee /etc/profile.d/maven.sh
 echo "PATH=\${M2_HOME}/bin:\${PATH}" | sudo tee -a /etc/profile.d/maven.sh
 sudo chmod +x /etc/profile.d/maven.sh
 -----------
-+
-
 
 
