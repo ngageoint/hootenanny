@@ -1,14 +1,13 @@
-The MapEdit export server is a node js service that can be configured to provide the MapEdit OpenStreetMap website app
-the capability to leverage Hootenanny to export data from any number of datasources to a number of vector schemas and file formats.
+The RenderDb export server is a node js service that can be configured to provide the capability to leverage Hootenanny to export data from any number of datasources to a number of vector schemas and file formats.
 
 This service depends on the Hootenanny environment being configured, so
 
     cd hoot
     source SetupEnv.sh
 should be run before starting the server.
-The MapEdit export server is built with Node.js.  Node and the node package manager are required.  To install dependencies, run
+The RenderDb export server is built with Node.js.  Node and the node package manager are required.  To install dependencies, run
 
-    cd mapedit-export-server
+    cd renderdb-export-server
     npm install
 To start the service run
 
@@ -18,14 +17,8 @@ The service uses a json configuration file, `config.json`.  Any valid Hootenanny
 ```
 {
   "datasources": {
-    "OpenStreetMap": {
+    "RenderDb": {
       "conn": "PG:dbname='osmsyria' host='192.168.33.12' port='5432' user='vagrant' password=''"
-    },
-    "3785": {
-      "conn": "PG:dbname='osmsyria_3785' host='192.168.33.12' port='5432' user='vagrant' password=''"
-    },
-    "MapEdit": {
-      "conn": "PG:dbname='ogrsyria' host='192.168.33.12' port='5432' user='vagrant' password=''"
     },
     "XML": {
       "conn": "syriasample.osm"
@@ -62,4 +55,4 @@ This is the table of supported schema/format combinations:
 
 The remaining setting, `cleanupDelay`, is how long the exported files should remain on the server after initial download.  The default is 30 seconds, but can be configured to be longer, say if the same url is sent to someone else so they can download the export too.
 
-All export files are removed when the mapedit-export-server process is shutdown.
+All export files are removed when the renderdb-export-server process is shutdown.

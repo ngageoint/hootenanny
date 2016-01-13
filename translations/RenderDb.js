@@ -26,7 +26,7 @@
  */
 
 //
-// Convert MapEdit RenderDb to FGDB & Shapefile
+// Convert RenderDb to FGDB & Shapefile
 //
 
 hoot.require('config');
