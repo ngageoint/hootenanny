@@ -70,6 +70,8 @@ public:
    * data source.
    */
   static bool isReasonablePath(QString path);
+  static bool isReasonableDatabase(QString url);
+  static bool isReasonableFilepath(QString path);
 
   OgrReader();
 

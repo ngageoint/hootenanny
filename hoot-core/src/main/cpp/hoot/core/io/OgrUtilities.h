@@ -54,6 +54,18 @@ public:
    */
   bool isReasonableUrl(QString url);
 
+  /**
+   * Returns true if this is likley a database url data source OGR can open.  This will just do a
+   * quick check and doesn't verify that the source exists or is a proper format.
+   */
+  bool isReasonableDatabase(QString url);
+
+  /**
+   * Returns true if this is likely a file url data souce OGR can open.  This will just do a quick
+   * check and doesn't verify that the source exists or is a proper format.
+   */
+  bool isReasonableFilepath(QString url);
+
   shared_ptr<OGRDataSource> openDataSource(QString url);
 
 private:

@@ -30,6 +30,7 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/util/Settings.h>
 
@@ -50,31 +51,65 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 3)
+    if (args.size() < 3 || args.size() > 4 )
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes exactly three parameters.").arg(getName()));
+      throw HootException(QString("%1 takes either three or four parameters.").arg(getName()));
     }
 
     int a = 0;
     QString translation = args[a++];
     QString input = args[a++];
     QString output = args[a++];
+    unsigned long elementCacheSize = 0;
+
+    if ( args.size() == 4 )
+    {
+      elementCacheSize = args[a++].toLong();
+    }
 
     OgrWriter writer;
+    if ( elementCacheSize > 0 )
+    {
+      writer.setCacheCapacity(elementCacheSize);
+    }
     writer.setScriptPath(translation);
     writer.open(output);
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OgrReader inputReader;
+    if ( inputReader.isReasonableDatabase(input) == true )
+    {
+      inputReader.open(input);
+      LOG_DEBUG("Input database opened successfully!");
+      unsigned long long elementsRead(0);
+      long lastPercentComplete = 0;
+      while ( inputReader.hasMoreElements() == true )
+      {
+        elementsRead++;
 
-    loadMap(map, input, true);
+        writer.writeElement(inputReader, false);
 
-    // Apply any user specified operations.
-    NamedOp(ConfigOptions().getOsm2ogrOps()).apply(map);
+        long percentComplete = inputReader.streamGetProgress().getPercentComplete();
+        if ( percentComplete != lastPercentComplete)
+        {
+          LOG_INFO("Osm2Ogr progress: " << percentComplete << "% complete");
+          lastPercentComplete = percentComplete;
+        }
+      }
+    }
+    else
+    {
+      shared_ptr<OsmMap> map(new OsmMap());
 
-    MapProjector::projectToWgs84(map);
+      loadMap(map, input, true);
 
-    writer.write(map);
+      // Apply any user specified operations.
+      NamedOp(ConfigOptions().getOsm2ogrOps()).apply(map);
+
+      MapProjector::projectToWgs84(map);
+
+      writer.write(map);
+    }
 
     return 0;
   }
