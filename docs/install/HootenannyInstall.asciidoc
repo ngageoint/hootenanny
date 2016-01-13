@@ -31,7 +31,7 @@ compile code, to unexpected or severe runtime results that result in a failed in
 instructions have been tested on CentOS 6.5/6.6.  
 
 To install Hootenanny on CentOS/RHEL follow the instruction in 
-hootenanny-$HOOT_VERSION/scripts/InstallHoot-CentOS-RHEL.sh.
+`hootenanny-$HOOT_VERSION/scripts/InstallHoot-CentOS-RHEL.sh`.
 
 The script does not install Hadoop.
 

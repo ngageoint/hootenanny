@@ -26,7 +26,7 @@
  */
 
 //
-// Convert MapEdit RenderDb to FGDB & Shapefile
+// Convert RenderDb to FGDB & Shapefile
 //
 
 hoot.require('config');
@@ -79,6 +79,10 @@ function translateToOgr(tags, elementType, geometryType)
         for (var i in tags) print('In Tags :' + i + ': :' + tags[i] + ':');
         print('');
     }
+
+    // The Nuke Option: "Collections" are groups of different feature types: Point, Area and Line.
+    // There is no way we can translate these to a single geometry.
+    if (geometryType == 'Collection') return null;
 
     // Clean out the Tags
     for (var i in tags)

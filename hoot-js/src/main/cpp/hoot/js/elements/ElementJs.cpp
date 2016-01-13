@@ -105,7 +105,7 @@ Handle<Value> ElementJs::getId(const Arguments& args) {
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
 
-  return scope.Close(Integer::New(e->getId()));
+  return scope.Close(v8::Integer::New(e->getId()));
 }
 
 Handle<Value> ElementJs::getStatusString(const Arguments& args)
