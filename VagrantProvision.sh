@@ -28,7 +28,7 @@ if ! dpkg -l | grep --quiet wamerican-insane; then
 fi
 
 # Install deps for Cucumber tests
-sudo apt-get install ruby-dev xvfb
+sudo apt-get install ruby ruby-dev xvfb
 sudo gem install mime-types -v 2.6.2
 sudo gem install cucumber capybara capybara-webkit selenium-webdriver rspec capybara-screenshot
 
@@ -43,7 +43,7 @@ if [ ! -f google-chrome-stable_current_amd64.deb ]; then
 fi
 
 # Install Chromedriver
-if [ ! -f bin/chromedriver_linux64 ]; then
+if [ ! -f bin/chromedriver ]; then
     echo "Installing Chromedriver"
     mkdir -p /home/vagrant/bin
     wget http://chromedriver.storage.googleapis.com/2.20/chromedriver_linux64.zip
