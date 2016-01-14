@@ -69,6 +69,15 @@ Vagrant.configure(2) do |config|
         override.vm.box = "parallels/ubuntu-14.04"
         override.vm.box_url = "https://atlas.hashicorp.com/parallels/boxes/ubuntu-14.04"
   end
+
+  # This is a provider for VMware Workstation
+  # Run "vagrant up --provider=vmware_workstation" to spin up using VMware.
+  config.vm.provider "vmware_workstation" do |vw, override|
+      vw.memory = 8192
+      vw.cpus = 4
+      override.vm.box = "puphpet/ubuntu1404-x64"
+      override.vm.box_url = "https://atlas.hashicorp.com/puphpet/boxes/ubuntu1404-x64"
+  end
   #
   # View the documentation for the provider you are using for more
   # information on available options.
