@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/visitors/MedianNodeVisitor.h>
@@ -55,12 +55,12 @@ public:
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     MedianNodeVisitor uut;
     map->visitRo(uut);
     NodePtr n = map->getNode(uut.calculateMedianNode()->getElementId());
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
     HOOT_STR_EQUALS("-104.89970698747904 38.854167001890765", n->toCoordinate().toString());
   }
 };

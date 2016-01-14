@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/filters/ChainCriterion.h>
@@ -55,7 +55,7 @@ public:
     DebugNetworkMapCreator().addDebugElements(copy, uut.getAllEdgeScores(),
       uut.getAllVertexScores());
 
-    MapReprojector::reprojectToWgs84(copy);
+    MapProjector::projectToWgs84(copy);
     conf().set(ConfigOptions().getWriterIncludeDebugKey(), true);
     OsmMapWriterFactory::getInstance().write(copy, QString("tmp/dum-%1.osm").arg(index, 3, 10,
       QLatin1Char('0')));
@@ -84,7 +84,7 @@ public:
 //      Status::Unknown2);
 
     MapCleaner().apply(map);
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     OsmNetworkExtractor one;
 
