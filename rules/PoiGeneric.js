@@ -45,15 +45,15 @@ var weightedWordDistance = new hoot.NameExtractor(
 var distances = [
 
     {k:'amenity',                             match:250,      review:750},
-    {k:'amenity',   v:'grave_yard',           match:500,      review:1000}, //
+    {k:'amenity',   v:'grave_yard',           match:500,      review:1000}, //3
     {k:'building',                            match:500,      review:1000},
     {k:'building',  v:'hospital',             match:300,      review:500},
-    {k:'building',  v:'train_station',        match:750,      review:1500}, //
+    {k:'building',  v:'train_station',        match:750,      review:1500}, //3
     {k:'barrier',   v:'toll_booth',           match:25,       review:50},
     {k:'barrier',   v:'border_control',       match:100,      review:200},
     {k:'historic',                            match:100,      review:200},
     {k:'landuse',                             match:750,      review:1500},
-    {k:'landuse',   v:'cemetary',             match:1500,     review:3000}, //
+    {k:'landuse',   v:'cemetary',             match:1500,     review:3000}, //3
     {k:'leisure',                             match:100,      review:200},
     {k:'man_made',                            match:500,      review:1000},
     {k:'natural',                             match:1500,     review:2500},
@@ -71,7 +71,7 @@ var distances = [
     {k:'place',     v:'village',              match:2000,     review:3000},
     {k:'power',                               match:25,       review:50},
     {k:'railway',                             match:250,      review:500},
-    {k:'railway',   v:'station',              match:500,      review:1000}, //
+    {k:'railway',   v:'station',              match:500,      review:1000}, //3
     {k:'shop',                                match:100,      review:200},
     {k:'sport',                               match:100,      review:200},
     {k:'station',                             match:100,      review:200},
@@ -79,7 +79,7 @@ var distances = [
     // hotel campuses can be quite large
     {k:'tourism',    v:'hotel',               match:200,      review:400},
     {k:'transport',                           match:500,      review:1000},
-    {k:'transport',   v:'station',            match:1000,     review:2000}, //
+    {k:'transport',   v:'station',            match:1000,     review:2000}, //3
     {k:'water',                               match:1000,     review:2000},
     {k:'waterway',                            match:1500,     review:3000},
 
