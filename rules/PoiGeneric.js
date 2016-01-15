@@ -45,38 +45,42 @@ var weightedWordDistance = new hoot.NameExtractor(
 var distances = [
 
     {k:'amenity',                             match:250,      review:750},
+    {k:'amenity',   v:'grave_yard',           match:500,      review:1000}, //
     {k:'building',                            match:500,      review:1000},
     {k:'building',  v:'hospital',             match:300,      review:500},
+    {k:'building',  v:'train_station',        match:750,      review:1500}, //
     {k:'barrier',   v:'toll_booth',           match:25,       review:50},
     {k:'barrier',   v:'border_control',       match:100,      review:200},
     {k:'historic',                            match:100,      review:200},
     {k:'landuse',                             match:750,      review:1500},
+    {k:'landuse',   v:'cemetary',             match:1500,     review:3000}, //
     {k:'leisure',                             match:100,      review:200},
+    //{k:'leisure',   v:'recreation_ground',    match:500,      review:1000},  //
     {k:'man_made',                            match:500,      review:1000},
     {k:'natural',                             match:1500,     review:2500},
     {k:'place',                               match:500,      review:1000},
     {k:'place',     v:'built_up_area',        match:1000,     review:2000},
     {k:'place',     v:'city',                 match:2500,     review:5000},
     {k:'place',     v:'hamlet',               match:2000,     review:3000},
-    {k:'place',     v:'locality',             match:2500,     review:5000},
+    {k:'place',     v:'locality',             match:2000,     review:3000},
     {k:'place',     v:'neighborhood',         match:1000,     review:2000},
     {k:'place',     v:'neighbourhood',        match:1000,     review:2000}, //TODO: any way to get rid of this alt spelling?
-    {k:'place',     v:'populated',            match:2500,     review:5000},
+    {k:'place',     v:'populated',            match:2000,     review:3000},
     {k:'place',     v:'region',               match:2000,     review:3000},
     {k:'place',     v:'suburb',               match:1000,     review:2000},
     {k:'place',     v:'tribal_area',          match:2000,     review:3000},
     {k:'place',     v:'village',              match:2000,     review:3000},
-    {k:'poi',                                 match:2500,     review:5000}, //TODO: this one seems a little suspect...
     {k:'power',                               match:25,       review:50},
     {k:'railway',                             match:250,      review:500},
-    {k:'railway',   v:'station',              match:500,      review:1000},
+    {k:'railway',   v:'station',              match:500,      review:1000}, //
     {k:'shop',                                match:100,      review:200},
     {k:'sport',                               match:100,      review:200},
     {k:'station',                             match:100,      review:200},
     {k:'tourism',                             match:100,      review:200},
     // hotel campuses can be quite large
-    {k:'tourism',   v:'hotel',                match:200,      review:400},
+    {k:'tourism',    v:'hotel',               match:200,      review:400},
     {k:'transport',                           match:500,      review:1000},
+    {k:'transport',   v:'station',            match:1000,     review:2000}, //
     {k:'water',                               match:1000,     review:2000},
     {k:'waterway',                            match:1500,     review:3000},
 
@@ -99,24 +103,31 @@ function isSuperClose(e1, e2) {
     return result;
 }
 
+exports.hasDistanceEntry = function(e)
+{
+  var tags = e.getTags();
+  for (var i = 0; i < distances.length; i++)
+  {
+    if (tags.contains(distances[i].k) &&
+        (distances[i].v == undefined || tags.get(distances[i].k) == distances[i].v))
+    {
+      return true;
+    }
+  }
+}
+
 exports.getSearchRadius = function(e) {
     var tags = e.getTags();
 
     var radius = e.getCircularError();
 
-    //var foundDistance = false;
     for (var i = 0; i < distances.length; i++) {
         if (tags.contains(distances[i].k) &&
             (distances[i].v == undefined ||
              tags.get(distances[i].k) == distances[i].v)) {
             radius = Math.max(radius, distances[i].review);
-            //foundDistance = true;
         }
     }
-    /*if (!foundDistance) //TODO: remove - hack to make poi generic case tests 29 and 30 work
-    {
-      radius = 500;
-    }*/
 
     return radius;
 }
@@ -188,9 +199,41 @@ function additiveScore(map, e1, e2) {
     var t1 = e1.getTags().toDict();
     var t2 = e2.getTags().toDict();
 
-    var e1SearchRadius = exports.getSearchRadius(e1);
-    var e2SearchRadius = exports.getSearchRadius(e2);
-    var searchRadius = Math.min(e1SearchRadius, e2SearchRadius);
+    var oneElementHasNoDistanceLookupEntry = false;
+    var e1SearchRadius;
+    if (!exports.hasDistanceEntry(e1))
+    {
+      e1SearchRadius = e1.getCircularError();
+      oneElementHasNoDistanceLookupEntry = true;
+    }
+    else
+    {
+      e1SearchRadius = exports.getSearchRadius(e1);
+    }
+    var e2SearchRadius;
+    if (!exports.hasDistanceEntry(e2))
+    {
+      e2SearchRadius = e2.getCircularError();
+      oneElementHasNoDistanceLookupEntry = true;
+    }
+    else
+    {
+      e2SearchRadius = exports.getSearchRadius(e2);
+    }
+    var searchRadius;
+    //TODO: Looking for a situation where at least one of the two elements doesn't have a search
+    //search radius distance defined for it and its tagged as poi=yes.  Many times these just
+    //have the hoot default search radius, which isn't large enough to match them to anything else.
+    //This is not the best solution, but don't have a better one yet.
+    if (oneElementHasNoDistanceLookupEntry &&
+        (e1.getTags().get("poi") == "yes" || e2.getTags().get("poi") == "yes"))
+    {
+      searchRadius = Math.max(e1SearchRadius, e2SearchRadius);
+    }
+    else
+    {
+      searchRadius = Math.min(e1SearchRadius, e2SearchRadius);
+    }
 
     var d = distance(e1, e2);
 
