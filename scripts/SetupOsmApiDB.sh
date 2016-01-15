@@ -22,4 +22,7 @@ fi
 #echo "PGPASSWORD: " $PGPASSWORD
 #echo "DB_NAME_OSMAPI: " $DB_NAME_OSMAPI
 createdb $AUTH $DB_NAME_OSMAPI
-psql $AUTH -d $DB_NAME_OSMAPI -f $HOOT_HOME/scripts/osmapidb/blank_osmapidb.sql >& /tmp/osmapidb.log
+
+mkdir -p $HOOT_HOME/tmp
+
+psql $AUTH -d $DB_NAME_OSMAPI -f $HOOT_HOME/scripts/osmapidb/blank_osmapidb.sql >& $HOOT_HOME/tmp/osmapidb.log
