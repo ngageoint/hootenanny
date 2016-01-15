@@ -104,19 +104,19 @@ exports.getSearchRadius = function(e) {
 
     var radius = e.getCircularError();
 
-    var foundDistance = false;
+    //var foundDistance = false;
     for (var i = 0; i < distances.length; i++) {
         if (tags.contains(distances[i].k) &&
             (distances[i].v == undefined ||
              tags.get(distances[i].k) == distances[i].v)) {
             radius = Math.max(radius, distances[i].review);
-            foundDistance = true;
+            //foundDistance = true;
         }
     }
-    if (!foundDistance) //TODO: fix - hack to make poi generic case tests 29 and 30 work
+    /*if (!foundDistance) //TODO: remove - hack to make poi generic case tests 29 and 30 work
     {
       radius = 500;
-    }
+    }*/
 
     return radius;
 }
