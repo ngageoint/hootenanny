@@ -55,7 +55,6 @@ var distances = [
     {k:'landuse',                             match:750,      review:1500},
     {k:'landuse',   v:'cemetary',             match:1500,     review:3000}, //
     {k:'leisure',                             match:100,      review:200},
-    //{k:'leisure',   v:'recreation_ground',    match:500,      review:1000},  //
     {k:'man_made',                            match:500,      review:1000},
     {k:'natural',                             match:1500,     review:2500},
     {k:'place',                               match:500,      review:1000},
