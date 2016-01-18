@@ -45,15 +45,15 @@ var weightedWordDistance = new hoot.NameExtractor(
 var distances = [
 
     {k:'amenity',                             match:500,      review:1000}, //3
-    {k:'building',                            match:500,      review:1000},
+    {k:'building',                            match:250,      review:500},
     {k:'building',  v:'hospital',             match:300,      review:500},
     {k:'barrier',   v:'toll_booth',           match:25,       review:50},
     {k:'barrier',   v:'border_control',       match:100,      review:200},
     {k:'historic',                            match:100,      review:200},
-    {k:'landuse',                             match:750,      review:1500},
+    {k:'landuse',                             match:500,      review:1000}, //3
     {k:'leisure',                             match:250,      review:500}, //6
-    {k:'man_made',                            match:500,      review:1000},
-    {k:'natural',                             match:1500,     review:2500},
+    {k:'man_made',                            match:250,      review:500},
+    {k:'natural',                             match:750,      review:1500},
     {k:'place',                               match:500,      review:1000},
     {k:'place',     v:'built_up_area',        match:1000,     review:2000},
     {k:'place',     v:'city',                 match:2500,     review:5000},
@@ -77,7 +77,7 @@ var distances = [
     {k:'tourism',   v:'hotel',                match:200,      review:400},
     {k:'transport',                           match:1000,     review:2000}, //7
     {k:'water',                               match:1000,     review:2000},
-    {k:'waterway',                            match:1500,     review:3000},
+    {k:'waterway',                            match:1000,     review:2000},
 
 ];
 
