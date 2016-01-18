@@ -74,7 +74,7 @@ var distances = [
     {k:'shop',                                match:100,      review:200},
     //{k:'shop',                                match:250,      review:500}, //1,6
     {k:'sport',                               match:100,      review:200},
-    //{k:'station',                             match:100,      review:200},
+    {k:'station',                             match:100,      review:200},
     //{k:'station',                             match:250,      review:500}, //1,6
     {k:'tourism',                             match:100,      review:200},
     // hotel campuses can be quite large
