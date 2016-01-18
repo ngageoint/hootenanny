@@ -43,6 +43,9 @@ import hoot.services.models.review.ReviewResolverRequest;
 import hoot.services.models.review.ReviewResolverResponse;
 import hoot.services.models.review.ReviewRefsResponse;
 import hoot.services.models.review.ReviewRefsResponses;
+import hoot.services.models.review.ReviewTagGetResponse;
+import hoot.services.models.review.ReviewTagSaveRequest;
+import hoot.services.models.review.ReviewTagsSaveResponse;
 import hoot.services.models.review.ReviewableItem;
 import hoot.services.models.review.ReviewableStatistics;
 import hoot.services.readers.review.ReviewReferencesRetriever;
@@ -56,6 +59,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -592,4 +596,63 @@ public class ReviewResource
 		}
 		return ret;
 	}
+	
+	
+	
+
+  @POST
+  @Path("/tag/save")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ReviewTagsSaveResponse createReviewTag(
+  	final ReviewTagSaveRequest request) 
+  	throws Exception
+  {
+  	log.debug("Returning review references...");
+  	
+  	ReviewTagsSaveResponse response = new ReviewTagsSaveResponse();
+  	Connection conn = DbUtils.createConnection();
+  	try
+  	{
+  		
+  	}
+    finally
+    {
+      DbUtils.closeConnection(conn);
+    }
+  	
+  	log.debug("response : " + StringUtils.abbreviate(response.toString(), 1000));
+  	return response;
+  }
+  
+  @GET
+  @Path("/tag/{reviewtagid}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public ReviewTagGetResponse getReviewTag(@PathParam("reviewtagid") 
+  		final long reviewTagId) throws Exception
+  {
+  	ReviewTagGetResponse response = new  ReviewTagGetResponse();
+  	
+  	return response;
+  }
+  
+  
+  /*
+   * tag/create (map + relation) create since it is new so we do not know where to put
+   * ReviewTagSaveRequest
+   * ReviewTagSaveResponse
+   * 
+tag/get (map + relation)
+ReviewTagGetRequest
+ReviewTagGetResponse
+
+tag/modify (tag id) PUT since we know where to put
+ReviewTagModReqeust
+ReviewTagModResponse
+
+tag/delete (tag id)
+ReviewTagDelRequest
+ReviewTagDelResponse
+   */
+  
 }

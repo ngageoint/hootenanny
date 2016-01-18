@@ -30,10 +30,10 @@
             	<constraints nullable="true"/>
             </column>
 			<column name="created_by" type="bigint">
-            	<constraints nullable="false"/>
+            	<constraints nullable="true"/>
             </column>
 			<column name="last_modified_by" type="bigint">
-            	<constraints nullable="false"/>
+            	<constraints nullable="true"/>
             </column>
             
         </createTable>
@@ -43,30 +43,10 @@
         	baseColumnNames="map_id" 
         	referencedTableName="maps" 
         	referencedColumnNames="id"/>
-		<addForeignKeyConstraint 
-        	constraintName="review_tags_relation_id_fkey" 
-        	baseTableName="review_tags" 
-        	baseColumnNames="relation_id" 
-        	referencedTableName="current_relations" 
-        	referencedColumnNames="id"/>
-		<addForeignKeyConstraint 
-        	constraintName="review_tags_created_by_id_fkey" 
-        	baseTableName="review_tags" 
-        	baseColumnNames="created_by" 
-        	referencedTableName="users" 
-        	referencedColumnNames="id"/>
-		<addForeignKeyConstraint 
-        	constraintName="review_tags_last_modified_by_id_fkey" 
-        	baseTableName="review_tags" 
-        	baseColumnNames="last_modified_by" 
-        	referencedTableName="users" 
-        	referencedColumnNames="id"/>
        	<createIndex tableName="review_tags" indexName="review_tags_map_id_idx">
        		<column name="map_id"></column>
        	</createIndex>
-		<createIndex tableName="review_tags" indexName="review_tags_relation_id_idx">
-       		<column name="relation_id"></column>
-       	</createIndex>
+
 
 
 		<!-- review tag notes table -->
@@ -89,10 +69,10 @@
             	<constraints nullable="true"/>
             </column>
 			<column name="created_by" type="bigint">
-            	<constraints nullable="false"/>
+            	<constraints nullable="true"/>
             </column>
 			<column name="last_modified_by" type="bigint">
-            	<constraints nullable="false"/>
+            	<constraints nullable="true"/>
             </column>
             
         </createTable>
