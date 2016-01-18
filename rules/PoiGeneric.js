@@ -44,16 +44,17 @@ var weightedWordDistance = new hoot.NameExtractor(
 
 var distances = [
 
-    {k:'amenity',                             match:500,      review:1000}, //3
-    {k:'building',                            match:250,      review:500},
+    {k:'amenity',                             match:100,      review:200}, //3
+    {k:'amenity',  v:'grave_yard',            match:500,      review:1000}, //3
+    {k:'building',                            match:100,      review:200},
     {k:'building',  v:'hospital',             match:300,      review:500},
     {k:'barrier',   v:'toll_booth',           match:25,       review:50},
     {k:'barrier',   v:'border_control',       match:100,      review:200},
     {k:'historic',                            match:100,      review:200},
     {k:'landuse',                             match:500,      review:1000}, //3
     {k:'leisure',                             match:250,      review:500}, //6
-    {k:'man_made',                            match:250,      review:500},
-    {k:'natural',                             match:750,      review:1500},
+    {k:'man_made',                            match:100,      review:200},
+    {k:'natural',                             match:500,      review:1000},
     {k:'place',                               match:500,      review:1000},
     {k:'place',     v:'built_up_area',        match:1000,     review:2000},
     {k:'place',     v:'city',                 match:2500,     review:5000},
@@ -74,9 +75,10 @@ var distances = [
     {k:'tourism',                             match:100,      review:200},
     // hotel campuses can be quite large
     {k:'tourism',   v:'hotel',                match:200,      review:400},
-    {k:'transport',                           match:1000,     review:2000}, //7
-    {k:'water',                               match:1000,     review:2000},
-    {k:'waterway',                            match:1000,     review:2000},
+    {k:'transport',                           match:100,      review:200},
+    {k:'transport',  v:'station',             match:500,      review:1000}, //3
+    {k:'water',                               match:100,      review:200},
+    {k:'waterway',                            match:100,      review:200},
 
 ];
 
