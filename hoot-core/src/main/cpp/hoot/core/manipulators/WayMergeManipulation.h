@@ -57,8 +57,6 @@ public:
 
   virtual double calculateScore(shared_ptr<const OsmMap> map) const;
 
-  virtual map<QString, double> getFeatures(const shared_ptr<const OsmMap>& m) const;
-
   virtual const set<ElementId>& getImpactedElementIds(const ConstOsmMapPtr& map) const;
 
   virtual const set<long>& getImpactedWayIds(const ConstOsmMapPtr& map) const;

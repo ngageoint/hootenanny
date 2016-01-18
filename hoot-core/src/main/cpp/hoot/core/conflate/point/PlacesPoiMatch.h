@@ -48,7 +48,6 @@ public:
   static QString goodnessThresholdKey() { return "places.goodness.threshold"; }
   static QString distanceWeightKey() { return "places.distance.weight"; }
   static QString stringWeightKey() { return "places.string.weight"; }
-  static double minimumEditSimilarityDefault() { return 0.8; }
   static QString minimumEditSimilarityKey() { return "places.minimum.edit.similarity"; }
 
   PlacesPoiMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,

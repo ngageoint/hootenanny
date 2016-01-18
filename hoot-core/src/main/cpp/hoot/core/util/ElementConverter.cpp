@@ -41,7 +41,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/NotImplementedException.h>
@@ -69,7 +69,7 @@ ElementConverter::ElementConverter(const ConstElementProviderPtr& provider) :
 Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
 {
   // Doing length/distance calcs only make sense if we've projected down onto a flat surface
-  assert(MapReprojector::isPlanar(_constProvider));
+  assert(MapProjector::isPlanar(_constProvider));
 
   // if the element is not a point and is not an area.
   // NOTE: Originally I was using isLinear. This was a bit too strict in that it wants evidence of

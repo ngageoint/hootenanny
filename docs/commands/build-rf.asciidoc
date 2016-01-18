@@ -1,6 +1,7 @@
 == build-rf
 
-=== Description 
+=== Description
+
 The +build-rf+ command reads the input `.arff` file and generates a Random
 Forest model. The result is written to a `.rf` files.
 
@@ -12,6 +13,7 @@ is considerably smaller than the .rf output.
 * +output.rf+ - Output model name.
 
 === Usage
+
 --------------------------------------
 build-rf (input.arff) (output.arff)
 --------------------------------------

@@ -27,11 +27,12 @@
 #include "MapIoJs.h"
 
 // hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/js/util/HootExceptionJs.h>
 
 // node.js
 // #include <nodejs/node.h>
@@ -60,24 +61,31 @@ public:
   static Handle<Value> loadMap(const Arguments& args) {
     HandleScope scope;
 
-    OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-
-    v8::String::Utf8Value param1(args[1]->ToString());
-    QString url = QString::fromUtf8(*param1);
-
-    bool useFileId = true;
-    if (args.Length() >= 3)
+    try
     {
-      useFileId = args[2]->ToBoolean()->Value();
-    }
+      OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
 
-    Status status = Status::Invalid;
-    if (args.Length() >= 4)
+      v8::String::Utf8Value param1(args[1]->ToString());
+      QString url = QString::fromUtf8(*param1);
+
+      bool useFileId = true;
+      if (args.Length() >= 3)
+      {
+        useFileId = args[2]->ToBoolean()->Value();
+      }
+
+      Status status = Status::Invalid;
+      if (args.Length() >= 4)
+      {
+        status = (Status::Type)args[3]->ToInteger()->Value();
+      }
+
+      OsmMapReaderFactory::getInstance().read(map->getMap(), url, useFileId, status);
+    }
+    catch ( const HootException& e )
     {
-      status = (Status::Type)args[3]->ToInteger()->Value();
+      return v8::ThrowException(HootExceptionJs::create(e));
     }
-
-    OsmMapReaderFactory::getInstance().read(map->getMap(), url, useFileId, status);
 
     return scope.Close(Undefined());
   }
@@ -112,7 +120,7 @@ public:
 
     OsmMapPtr map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap();
 
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     v8::String::Utf8Value param1(args[1]->ToString());
     QString url = QString::fromUtf8(*param1);

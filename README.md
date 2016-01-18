@@ -48,9 +48,11 @@ In alphabetical order:
 * Jason Goffeney (jason.goffeney@digitalglobe.com)
 * Brian Hatchl (Brian.Hatchl@digitalglobe.com)
 * Matt Jackson (Matthew.Jackson@digitalglobe.com)
+* Ben Marchant (Benjamin.Marchant@digitalglobe.com)
 * Terry Ott (Terry.Ott@digitalglobe.com)
-* Jason R. Surratt (Jason.Surratt@digitalglobe.com)
-* Josh Sisskind (Josh.Sisskind@digitalglobe.com)
 * Greg Schmidt (Greg.Schmidt@digitalglobe.com)
+* Josh Sisskind (Josh.Sisskind@digitalglobe.com)
+* Ming Su (Ming.Su@digitalglobe.com)
+* Jason R. Surratt (Jason.Surratt@digitalglobe.com)
 * Brandon Witham (Brandon.Witham@digitalglobe.com)
 

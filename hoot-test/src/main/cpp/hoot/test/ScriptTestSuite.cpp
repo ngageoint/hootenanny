@@ -47,6 +47,9 @@ ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff) : TestSuite(dir.to
 # ifndef HOOT_HAVE_SERVICES
     ignorePrefix << "Service";
 # endif
+# ifndef HOOT_HAVE_HADOOP
+    ignorePrefix << "Big";
+# endif
 
   for (int i = 0; i < files.size(); i++)
   {

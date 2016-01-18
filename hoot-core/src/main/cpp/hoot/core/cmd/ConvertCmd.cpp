@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/RubberSheet.h>
@@ -65,14 +65,6 @@ public:
 
   ConvertCmd() { }
 
-  virtual QString getHelp() const
-  {
-    return getName() + " (input) (output)\n"
-        "  Convert from one format to another. This command is memory bound.\n"
-        "  * input - Input (e.g. .osm file).\n"
-        "  * output - Output file (e.g. .osm file).";
-  }
-
   virtual QString getName() const { return "convert"; }
 
   virtual int runSimple(QStringList args)
@@ -101,7 +93,7 @@ public:
       // Apply any user specified operations.
       NamedOp(ConfigOptions().getConvertOps()).apply(map);
 
-      MapReprojector::reprojectToWgs84(map);
+      MapProjector::projectToWgs84(map);
 
       saveMap(map, args[1]);
     }

@@ -1014,14 +1014,14 @@ References:
 ==== Requirements
 The main requirement is access to a copy of ESRI ArcGIS with the following:
 
-* ArcGis Standard or ArcGis Desktop license
+* ArcGIS Standard or ArcGIS Desktop license
 * Production Mapping Extension & license
 * Defense Mapping Extension & license
 
 ==== Process:
 
 Get an empty TDS template FileGeodatabase::
-* From the ArcGis Defence Mapping Extension install location.
+* From the ArcGIS Defence Mapping Extension install location.
 +
 ----
 C:\Program Files\ArcGIS\EsriDefenseMapping\Desktop10.2\Tds\Local\Schema\Gdb\LTDS_4_0.zip+
@@ -1037,7 +1037,7 @@ Run Hootenanny and add your data to the template File GeoDatabase::
 hoot osm2ogr -D ogr.append.data="true" $HOOT_HOME/translations/TDS.js your_data.osm LTDS_4_0.gdb
 ----
 
-Transfer the LTDS_4_0.gdb to the machine that has ESRI ArcGis installed::
+Transfer the LTDS_4_0.gdb to the machine that has ESRI ArcGIS installed::
 * Place it in a convenient location
 
 

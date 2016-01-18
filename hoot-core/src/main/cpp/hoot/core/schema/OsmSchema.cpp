@@ -73,6 +73,8 @@ using namespace std;
 namespace hoot
 {
 
+QString OsmSchema::_layerNameKey = "hoot:layername";
+
 typedef boost::adjacency_list<
   // Use listS for storing VertexList -- faster, but not as space efficient (no biggie)
   boost::listS,
@@ -1598,11 +1600,6 @@ bool OsmSchema::isBuilding(const Tags& t, ElementType type) const
     result = true;
   }
 
-  if ( result == true )
-  {
-    LOG_DEBUG("In OsmSchema::isBuilding, returning true")
-  }
-
   return result;
 }
 
@@ -1773,15 +1770,7 @@ void OsmSchema::loadDefault()
   delete d;
   d = new OsmSchemaData();
 
-#warning remove me
-  if (path.contains("old"))
-  {
-    JsonSchemaLoader(*this).load(path);
-  }
-  else
-  {
-    OsmSchemaLoaderFactory::getInstance().createLoader(path)->load(path, *this);
-  }
+  OsmSchemaLoaderFactory::getInstance().createLoader(path)->load(path, *this);
 }
 
 double OsmSchema::score(const QString& kvp1, const QString& kvp2)

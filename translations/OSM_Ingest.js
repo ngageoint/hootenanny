@@ -29,13 +29,24 @@
 // Simple script to add tags to an OSM file
 //
 
-function translateAttributes(attrs, layerName) 
+hoot.require('translate');
+
+function translateAttributes(attrs, layerName)
 { 
     // Add UUID
     if (!(attrs.uuid)) attrs.uuid = createUuid();
 
     // Say where the data came from
-    if (!(attrs.source)) attrs.source = 'osm';
+    // NOTE: layerName will be empty if using a translationOp to convert the OSM file.
+    // This is due to not having metadata pass from OSM reader -> map -> translation
+    if (layerName !== '')
+    {
+        attrs.source = translate.appendValue(attrs.source,'osm:' + layerName.toLowerCase(),';');
+    }
+    else
+    {
+        attrs.source = translate.appendValue(attrs.source,'osm',';');
+    }
 
     if (!(attrs.attribution))
     {

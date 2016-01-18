@@ -103,7 +103,7 @@ namespace Tgs
 
       for(classItr = frequencyMap.begin(); classItr != frequencyMap.end(); ++classItr)
       {
-        double maxValue;
+        double maxValue = 0.0;
         int maxCount = -1;
 
         for(valueItr = classItr->second.begin(); valueItr != classItr->second.end(); ++valueItr)

@@ -3,7 +3,7 @@
 set -e
 
 function printOnError {
-    OUT=/tmp/HootDeploy$RANDOM.log
+    OUT=$HOOT_HOME/tmp/HootDeploy$RANDOM.log
     eval $* &> $OUT || (cat $OUT; rm -f $OUT; false)
     rm -f $OUT
 }
@@ -33,6 +33,7 @@ sleep 10
 # If the stop didn't work kill it hard
 # Split tomcat6 so it doesn't match itself
 pkill -9 -f $TOMCAT6_HOME"/endorsed" || true
+mkdir -p $HOOT_HOME/tmp
 printOnError bin/catalina.sh start
 sleep 10
 printOnError bin/catalina.sh stop -force 20

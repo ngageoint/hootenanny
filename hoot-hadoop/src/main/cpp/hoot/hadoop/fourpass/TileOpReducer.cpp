@@ -18,7 +18,7 @@
 
 // Hoot
 #include <hoot/core/Conflator.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/io/ObjectInputStream.h>
@@ -35,7 +35,7 @@
 #include <pp/Hdfs.h>
 
 // Qt
-#include <QUuid>
+//#include <QUuid>
 
 // Tgs
 #include <tgs/System/SystemInfo.h>
@@ -169,7 +169,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   LOG_INFO("Result before way splitting. Node count: " << map->getNodeMap().size() <<
            " way count: " << map->getWays().size());
 
-  MapReprojector::reprojectToWgs84(map);
+  MapProjector::projectToWgs84(map);
 
   // Using a copy of the map so we can split ways as needed. Make sure they're the right size.
   const WayMap wm = map->getWays();

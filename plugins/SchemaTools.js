@@ -1,6 +1,32 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ */
 
-
-if (!exports)
+// if (!exports)
+if (typeof exports === 'undefined')
 {
     exports = {};
 }
@@ -98,6 +124,10 @@ schemaTools.generateRuleTags = function(rule) {
         }
     } else if (rule.ruleType === 'isA') {
         var tags = schemaTools.hoot.OsmSchema.getChildTags(rule.name);
+
+        // Add the parents
+        tags.push.apply(tags,[schemaTools.hoot.OsmSchema.getTagVertex(rule.name)]);
+
         tags = st.expandAliases(tags);
 
         for (i in tags) {
@@ -153,8 +183,8 @@ schemaTools.generateToOsmTable = function(rules) {
 
             if (lookup[row[0]][row[1]])
             {
-                throw new Error('Export Table Clash: ' + row[2] + ' ' + row[3] + '  is ' +
-                    lookup[row[2]][row[3]] + '  tried to change to ' + [row[0], row[1]]);
+                throw new Error('Export Table Clash: ' + row[0] + ' ' + row[1] + '  is ' +
+                    lookup[row[0]][row[1]] + '  tried to change to ' + [key, value]);
             }
 
             lookup[row[0]][row[1]] = [key, value];

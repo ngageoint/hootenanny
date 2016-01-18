@@ -380,12 +380,12 @@ int main(int argc, char *argv[])
   QStringList classPath;
   QStringList jars;
   jars << "*.jar" << "*.JAR";
-  QFileInfoList fiLib = QDir(hadoopHome + "/lib/").entryInfoList(jars, QDir::Files);
+  QFileInfoList fiLib = QDir(hadoopHome + "/lib/").entryInfoList(jars, QDir::Files, QDir::Name);
   for (int i = 0; i < fiLib.size(); i++)
   {
     classPath << fiLib[i].absoluteFilePath();
   }
-  QFileInfoList fi = QDir(hadoopHome).entryInfoList(jars, QDir::Files);
+  QFileInfoList fi = QDir(hadoopHome).entryInfoList(jars, QDir::Files, QDir::Name);
   for (int i = 0; i < fi.size(); i++)
   {
     classPath << fi[i].absoluteFilePath();

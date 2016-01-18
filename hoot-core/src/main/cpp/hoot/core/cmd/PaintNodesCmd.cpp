@@ -53,18 +53,6 @@ class PaintNodesCmd : public BaseCommand
 
     PaintNodesCmd() { }
 
-    virtual QString getHelp() const
-    {
-      return getName() + " (input) (output-image) [base-colors] [count-colors]\n"
-        "  Create a density plot of the specified input.\n"
-        "  * input - Input path.\n"
-        "  * output-image - Output image name.\n"
-        "  * max-dimension - maximum size of the image on one side. The actual size will be\n"
-        "    determined based on the envelope.\n"
-        "  * base-colors - Base colors to use. These will be added to each channel.\n"
-        "  * multipliers - Multiply the log count ratio by these values. 4 comma delimi.";
-    }
-
     virtual QString getName() const { return "paint-nodes"; }
 
     Envelope getEnvelope(shared_ptr<OsmMapReader> reader)

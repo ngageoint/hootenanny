@@ -36,6 +36,8 @@
 #include <QStringList>
 
 // Standard
+// needed by some dev environments
+#include <stdint.h>
 #include <string>
 
 namespace hoot {
@@ -122,6 +124,16 @@ public:
    * Return all the names for the current feature.
    */
   QStringList getNames() const;
+
+  /**
+   * Returns the speed in standard units (m/s).
+   */
+  Velocity getVelocity(const QString& k) const;
+
+  /**
+   * Returns the length in standard units (m).
+   */
+  Length getLength(const QString& k) const;
 
   /**
    * Return the number of tags that contain actual information, not meta-data or debug tags.
@@ -221,6 +233,8 @@ public:
   QString toString() const;
 
 private:
+  void _valueRegexParser(const QString& str, QString& num, QString& units) const;
+
   static QStringList _nameKeys;
   static QStringList _pseudoNameKeys;
 };

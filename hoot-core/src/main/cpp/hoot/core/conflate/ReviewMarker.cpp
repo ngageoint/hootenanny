@@ -143,8 +143,8 @@ bool ReviewMarker::isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid)
   return result;
 }
 
-void ReviewMarker::mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, const QString& note,
-  const QString &reviewType, double score, vector<QString> choices)
+void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const ElementPtr& e2,
+  const QString& note, const QString &reviewType, double score, vector<QString> choices)
 {
   if (note.isEmpty())
   {
@@ -168,7 +168,7 @@ void ReviewMarker::mark(const OsmMapPtr &map, ElementPtr& e1, ElementPtr& e2, co
   map->addElement(r);
 }
 
-void ReviewMarker::mark(const OsmMapPtr& map, ElementPtr& e, const QString& note,
+void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString& note,
   const QString &reviewType, double score, vector<QString> choices)
 {
   if (note.isEmpty())
@@ -190,6 +190,11 @@ void ReviewMarker::mark(const OsmMapPtr& map, ElementPtr& e, const QString& note
   }
 
   map->addElement(r);
+}
+
+void ReviewMarker::removeElement(const OsmMapPtr& map, ElementId eid)
+{
+  map->removeElement(eid);
 }
 
 }

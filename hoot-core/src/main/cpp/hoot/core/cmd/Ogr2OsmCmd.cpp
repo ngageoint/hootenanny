@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/io/OgrReader.h>
@@ -46,25 +46,6 @@ public:
   static string className() { return "hoot::Ogr2OsmCmd"; }
 
   Ogr2OsmCmd() { }
-
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " [--limit n] (translation) (output.osm) (input1[;layer]) \n"
-        "      [input2[;layer]] ...\n"
-        "  * limit - 'n' specifies the maximum number of features to translate. This is\n"
-        "    useful when debugging.\n"
-        "  * translation - python script base name. This looks in the 'translations'\n"
-        "    directory and takes the same format translations file as ogr2osm.py.\n"
-        "    leave off the '.py' to use the files in PYTHONPATH or specify the relative\n"
-        "    or absolute path name with the '.py'.\n"
-        "  * output.osm - Output file name.\n"
-        "  * inputs - One or more OGR compatible inputs. If you're using a layer within a\n"
-        "    data source then delimit it with a semicolon. E.g:\n"
-        "       myshapefile.shp \"myfgb.gdb;mylayer\"";
-;
-  }
 
   virtual QString getName() const { return "ogr2osm"; }
 
@@ -187,12 +168,12 @@ public:
       throw HootException("After translation the map is empty. Aborting.");
     }
 
-    MapReprojector::reprojectToPlanar(map);
+    MapProjector::projectToPlanar(map);
 
     // Apply any user specified operations.
-    NamedOp(conf().getList(opsKey(), "")).apply(map);
+    NamedOp(ConfigOptions().getOgr2osmOps()).apply(map);
 
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     saveMap(map, output);
 

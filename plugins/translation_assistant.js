@@ -37,8 +37,7 @@ translation_assistant = {
 
         //Throw error if no matching attribute mapping could be found
         if (!l) {
-            var msg = 'No matching attribute mapping could be found!';
-            throw new Error(msg);
+            throw new Error('No matching attribute mapping could be found!');
         }
 
         for (var key in attrs)
@@ -100,8 +99,7 @@ translation_assistant = {
 
         //Throw error if no attrs were translated to tags
         if (Object.keys(tags).length === 0) {
-            var msg = 'No attributes could be translated to tags!';
-            throw new Error(msg);
+            throw new Error('No attributes could be translated to tags!');
         }
 
         return tags;

@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmWriter.h>
@@ -84,10 +84,9 @@ public:
 
       Coordinate c1(-1, 84);
       Coordinate c2(1, 84);
-      double d = GeometryUtils::haversine(c1, c2);
 
       {
-        shared_ptr<OGRSpatialReference> ortho1 = MapReprojector::createOrthographic(env);
+        shared_ptr<OGRSpatialReference> ortho1 = MapProjector::createOrthographic(env);
 
         Settings s;
         // 15512.4m wide at the top

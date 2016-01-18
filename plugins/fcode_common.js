@@ -320,7 +320,7 @@ fcodeCommon = {
       ['F_CODE','DB070','cutting','yes'], // Cut
       ['F_CODE','DB071','man_made','cut_edge'], // Cut Line ## In TDS, this is the edge of the cut
       ['F_CODE','DB080','natural','depression'], // Depression
-      ['F_CODE','DB090','man_made','embankment'], // Embankment, Embankment/Fill 
+      ['F_CODE','DB090','embankment','yes'], // Embankment, Embankment/Fill
       ['F_CODE','DB100','landform','esker'], // Esker
       ['F_CODE','DB110','geological','fault'], // Fault, Geologic Fault
       ['F_CODE','DB115','natural','geothermal_outlet'], // Geothermal Feature, Geothermal Outlet

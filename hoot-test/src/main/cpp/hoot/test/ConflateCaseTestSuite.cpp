@@ -72,7 +72,7 @@ void ConflateCaseTestSuite::_loadDir(QString dir, QStringList confs)
     ignoreList << "hoot-js";
 # endif
 
-  QStringList dirs = d.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+  QStringList dirs = d.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
   for (int i = 0; i < dirs.size(); i++)
   {
     QString path = d.absoluteFilePath(dirs[i]);

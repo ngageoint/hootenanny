@@ -153,19 +153,7 @@ void WayMergeManipulation::applyManipulation(shared_ptr<OsmMap> map,
 
 double WayMergeManipulation::calculateProbability(shared_ptr<const OsmMap> map) const
 {
-  if (ProbabilityOfMatch::getInstance().useModel())
-  {
-    std::map<QString, double> sample = getFeatures(map);
-    if (sample.size() == 0)
-    {
-      return 0.0;
-    }
-    return ProbabilityOfMatch::getInstance().evaluateSample(sample);
-  }
-  else
-  {
-    return _calculateExpertProbability(map);
-  }
+  return _calculateExpertProbability(map);
 }
 
 double WayMergeManipulation::calculateScore(shared_ptr<const OsmMap> map) const
@@ -252,61 +240,6 @@ bool WayMergeManipulation::isValid(shared_ptr<const OsmMap> map) const
     result = map->getWay(_left)->isUnknown();
     result = result && map->getWay(_right)->isUnknown();
   }
-
-  return result;
-}
-
-std::map<QString, double> WayMergeManipulation::getFeatures(const shared_ptr<const OsmMap>& m) const
-{
-  std::map<QString, double> result;
-
-  std::vector<long> wids;
-  wids.push_back(_left);
-  wids.push_back(_right);
-  getImpactedWayIds(m);
-  for (set<long>::const_iterator it = _impactedWays.begin(); it != _impactedWays.end(); ++it)
-  {
-    wids.push_back(*it);
-  }
-  shared_ptr<OsmMap> theMap = m->copyWays(wids);
-
-  shared_ptr<Way> left = theMap->getWay(_left);
-  shared_ptr<Way> right = theMap->getWay(_right);
-
-  // adding epsilon to avoid divide by zero.
-  double epsilon = 0.001;
-  double w1First = theMap->findWayByNode(left->getNodeId(0)).size() + epsilon;
-  double w1Last = theMap->findWayByNode(left->getLastNodeId()).size() + epsilon;
-
-  double w2First = theMap->findWayByNode(right->getNodeId(0)).size() + epsilon;
-  double w2Last = theMap->findWayByNode(right->getLastNodeId()).size() + epsilon;
-
-  if (DirectionFinder::isSimilarDirection(m, left, right) == false)
-  {
-    swap(w2First, w2Last);
-  }
-
-  double intersectionScore = (min(w1First, w2First) / (max(w1First, w2First) + 0.1)) *
-      (min(w1Last, w2Last) / (max(w1Last, w2Last) + 0.1));
-
-  if (_calculateExpertProbability(m) == 0.0)
-  {
-    return result;
-  }
-
-  _splitWays(theMap, left, right);
-
-  // what portion of the original lines is the MNS
-  double pl = ElementConverter(theMap).convertToLineString(left)->getLength() /
-      ElementConverter(m).convertToLineString(m->getWay(_left))->getLength();
-  double pr = ElementConverter(theMap).convertToLineString(right)->getLength() /
-      ElementConverter(m).convertToLineString(m->getWay(_right))->getLength();
-
-  // give it a score
-  double ps = std::min(pl, pr) / 2.0 + 0.5;
-  result = ProbabilityOfMatch::getInstance().calculateStats(m, left, right, ps);
-
-  result["IntersectionScore"] = intersectionScore;
 
   return result;
 }

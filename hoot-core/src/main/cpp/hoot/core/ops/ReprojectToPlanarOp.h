@@ -39,7 +39,7 @@ namespace hoot
 
 /**
  * If not already reprojected, reprojects the given map to a custom planar projection. See
- * MapReprojector::reprojectToPlanar
+ * MapProjector::reprojectToPlanar
  *
  * This is compatible with fourpass.
  */

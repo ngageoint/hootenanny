@@ -24,11 +24,11 @@ Ingest a *.osm.pbf dataset into a PostGIS database.
 
 Example Usage:
 
------- 
-hoot convert -D services.db.write.email='test@test.com' /hoot/data/DcGISRoads.osm.pbf postgresql://hoot:hoottest@localhost:5432/hoot/DcGISRoads
+------
+hoot convert -D services.db.writer.email='test@test.com' /hoot/data/DcGISRoads.osm.pbf postgresql://hoot:hoottest@localhost:5432/hoot/DcGISRoads
 ------
 
-* +-D services.db.write.email+ - a required email notification parameter for the hoot.json file.  The value should appear in +hoot.json+ with a placeholder email address.
+* +-D services.db.writer.email+ - a required email notification parameter for the hoot.json file.  The value should appear in +hoot.json+ with a placeholder email address.
 * input - a path to any input data (e.g. .osm, .shp, etc..)
 * output - output dataset name (name to appear in PostGIS)
 
@@ -75,7 +75,7 @@ hoot --osm2shp translations/OSM_Ingest.js postgresql://hoot:hoottest@localhost:5
 
 Crops the input map to the given bounds. Individual features on the border are modified to make sure nothing is outside the given bounds.  For additional details see the +crop-map+ command line section.
 
-Example Usage: 
+Example Usage:
 
 ------
 crop-map (input.osm) (output.osm) (bounds)
@@ -84,7 +84,7 @@ e.g. hoot --crop-map postgresql://hoot:hoottest@localhost:5432/hoot/DcGisRoads "
 
 ==== Generate Stats
 
-The --stats command reads input and write out hootenanny map statistics such as node and way count. For more details refer to the +stats+ command line section. 
+The --stats command reads input and write out hootenanny map statistics such as node and way count. For more details refer to the +stats+ command line section.
 
 Example Usage:
 

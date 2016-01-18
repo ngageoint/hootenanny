@@ -306,9 +306,10 @@ vector<long> ServicesDbWriter::_remapNodes(const vector<long>& nids)
 
 void ServicesDbWriter::setConfiguration(const Settings &conf)
 {
-  setUserEmail(conf.getString(emailKey(), ""));
-  setCreateUser(ConfigOptions(conf).getServicesDbWriterCreateUser());
-  setOverwriteMap(conf.getBool(overwriteMapKey(), false));
+  ConfigOptions configOptions(conf);
+  setUserEmail(configOptions.getServicesDbWriterEmail());
+  setCreateUser(configOptions.getServicesDbWriterCreateUser());
+  setOverwriteMap(configOptions.getServicesDbWriterOverwriteMap());
 }
 
 void ServicesDbWriter::_startNewChangeSet()
@@ -339,6 +340,7 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Node>& n)
   if (_remapIds)
   {
     bool alreadyThere = _nodeRemap.count(n->getId()) != 0;
+    LOG_VARD(alreadyThere);
     long nodeId = _getRemappedElementId(n->getElementId());
     if (alreadyThere)
     {
@@ -437,7 +439,6 @@ void ServicesDbWriter::writePartial(const shared_ptr<const Relation>& r)
 
   if (_remapIds)
   {
-    bool alreadyThere = _relationRemap.count(r->getId()) != 0;
     relationId = _getRemappedElementId(r->getElementId());
 
     LOG_DEBUG("Inserting relation with source ID = " <<

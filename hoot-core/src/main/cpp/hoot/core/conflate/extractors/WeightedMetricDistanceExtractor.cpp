@@ -108,8 +108,9 @@ void WeightedMetricDistanceExtractor::setSearchRadius(const double radius)
 
 void WeightedMetricDistanceExtractor::setConfiguration(const Settings& conf)
 {
-  setPointAggregator(ConfigOptions(conf).getWeightedMetricDistanceExtractorPointAggregator());
-  setSearchRadius(ConfigOptions(conf).getWeightedMetricDistanceExtractorSearchRadius());
+  ConfigOptions configOptions(conf);
+  setPointAggregator(configOptions.getWeightedMetricDistanceExtractorPointAggregator());
+  setSearchRadius(configOptions.getWeightedMetricDistanceExtractorSearchRadius());
 }
 
 }
