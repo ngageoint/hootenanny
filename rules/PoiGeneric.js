@@ -44,12 +44,10 @@ var weightedWordDistance = new hoot.NameExtractor(
 
 var distances = [
 
-    //{k:'aeroway',                             match:100,      review:200}, //1,6
     {k:'amenity',                             match:500,      review:1000}, //3
     {k:'building',                            match:500,      review:1000},
-    //{k:'building',                            match:750,      review:1500}, //1,6
     {k:'building',  v:'hospital',             match:300,      review:500},
-    {k:'barrier',   v:'toll_booth',           match:25,       review:50}, //reduce barrier?
+    {k:'barrier',   v:'toll_booth',           match:25,       review:50},
     {k:'barrier',   v:'border_control',       match:100,      review:200},
     {k:'historic',                            match:100,      review:200},
     {k:'landuse',                             match:750,      review:1500},
@@ -62,24 +60,21 @@ var distances = [
     {k:'place',     v:'hamlet',               match:2000,     review:3000},
     {k:'place',     v:'locality',             match:2000,     review:3000},
     {k:'place',     v:'neighborhood',         match:1000,     review:2000},
-    {k:'place',     v:'neighbourhood',        match:1000,     review:2000}, //retest - //TODO: any way to get rid of this alt spelling?
+    {k:'place',     v:'neighbourhood',        match:1000,     review:2000}, //TODO: any way to get rid of this alt spelling?
     {k:'place',     v:'populated',            match:2000,     review:3000},
     {k:'place',     v:'region',               match:2000,     review:3000},
     {k:'place',     v:'suburb',               match:1000,     review:2000},
     {k:'place',     v:'tribal_area',          match:2000,     review:3000},
     {k:'place',     v:'village',              match:2000,     review:3000},
     {k:'power',                               match:25,       review:50},
-    {k:'railway',                             match:250,      review:500}, //move station to this and add halt and tram_stop?
+    {k:'railway',                             match:250,      review:500}, //TODO: move station to this and add halt and tram_stop?
     {k:'railway',   v:'station',              match:500,      review:1000}, //3
     {k:'shop',                                match:100,      review:200},
-    //{k:'shop',                                match:250,      review:500}, //1,6
     {k:'sport',                               match:100,      review:200},
     {k:'station',                             match:100,      review:200},
-    //{k:'station',                             match:250,      review:500}, //1,6
     {k:'tourism',                             match:100,      review:200},
     // hotel campuses can be quite large
     {k:'tourism',   v:'hotel',                match:200,      review:400},
-    //{k:'tourism',   v:'hotel',                match:500,      review:1000}, //1,6
     {k:'transport',                           match:1000,     review:2000}, //7
     {k:'water',                               match:1000,     review:2000},
     {k:'waterway',                            match:1500,     review:3000},
@@ -199,34 +194,14 @@ function additiveScore(map, e1, e2) {
     var t1 = e1.getTags().toDict();
     var t2 = e2.getTags().toDict();
 
-    var oneElementHasNoDistanceLookupEntry = false;
-    var e1SearchRadius;
-    if (!exports.hasDistanceEntry(e1))
-    {
-      e1SearchRadius = e1.getCircularError();
-      oneElementHasNoDistanceLookupEntry = true;
-    }
-    else
-    {
-      e1SearchRadius = exports.getSearchRadius(e1);
-    }
-    var e2SearchRadius;
-    if (!exports.hasDistanceEntry(e2))
-    {
-      e2SearchRadius = e2.getCircularError();
-      oneElementHasNoDistanceLookupEntry = true;
-    }
-    else
-    {
-      e2SearchRadius = exports.getSearchRadius(e2);
-    }
+    // if there is no type information to compare the name becomes more
+    // important
+    var oneGeneric = hasTypeTag(e1) == false || hasTypeTag(e2) == false;
+
+    var e1SearchRadius = exports.getSearchRadius(e1);
+    var e2SearchRadius = exports.getSearchRadius(e2);
     var searchRadius;
-    //TODO: Looking for a situation where at least one of the two elements doesn't have a search
-    //search radius distance defined for it and its tagged as poi=yes.  Many times these just
-    //have the hoot default search radius, which isn't large enough to match them to anything else.
-    //This is not the best solution, but don't have a better one yet.
-    if (oneElementHasNoDistanceLookupEntry &&
-        (e1.getTags().get("poi") == "yes" || e2.getTags().get("poi") == "yes"))
+    if (oneGeneric)
     {
       searchRadius = Math.max(e1SearchRadius, e2SearchRadius);
     }
@@ -243,10 +218,6 @@ function additiveScore(map, e1, e2) {
           result.score);
         return result;
     }
-
-    // if there is no type information to compare the name becomes more 
-    // important
-    var oneGeneric = hasTypeTag(e1) == false || hasTypeTag(e2) == false;
 
     var mean = translateMeanWordSetLevenshtein_1_5.extract(map, e1, e2);
     var weightedWordDistanceScore = weightedWordDistance.extract(map, e1, e2);
