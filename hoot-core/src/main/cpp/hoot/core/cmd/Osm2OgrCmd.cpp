@@ -77,53 +77,32 @@ public:
     writer->setScriptPath(translation);
     writer->open(output);
 
-    shared_ptr<OgrReader> inputReader(new OgrReader());
-    if ( inputReader->isReasonableDatabase(input) == true )
+    OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
+    if (readerFactory.hasElementInputStream(input) &&
+      ConfigOptions().getOsm2ogrOps().size() == 0)
     {
-      inputReader->open(input);
-      LOG_DEBUG("Input database opened successfully!");
-      unsigned long long elementsRead(0);
-      long lastPercentComplete = 0;
-      while ( inputReader->hasMoreElements() == true )
+      shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(input);
+      reader->open(input);
+      shared_ptr<ElementInputStream> streamReader = dynamic_pointer_cast<ElementInputStream>(reader);
+      shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
+
+      while (streamReader->hasMoreElements() == true)
       {
-        elementsRead++;
-
-        writer->writeElement(*inputReader, false);
-
-        long percentComplete = inputReader->streamGetProgress().getPercentComplete();
-        if ( percentComplete != lastPercentComplete)
-        {
-          LOG_INFO("Osm2Ogr progress: " << percentComplete << "% complete");
-          lastPercentComplete = percentComplete;
-        }
+        streamWriter->writeElement(*streamReader);
       }
     }
     else
     {
-      OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
-      if (readerFactory.hasElementInputStream(input) &&
-          ConfigOptions().getOsm2ogrOps().size() == 0)
-      {
-        shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(input);
-        reader->open(input);
-        shared_ptr<ElementInputStream> streamReader = dynamic_pointer_cast<ElementInputStream>(reader);
-        shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
+      shared_ptr<OsmMap> map(new OsmMap());
 
-        ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
-      }
-      else
-      {
-        shared_ptr<OsmMap> map(new OsmMap());
+      loadMap(map, input, true);
 
-        loadMap(map, input, true);
+      // Apply any user specified operations.
+      NamedOp(ConfigOptions().getOsm2ogrOps()).apply(map);
 
-        // Apply any user specified operations.
-        NamedOp(ConfigOptions().getOsm2ogrOps()).apply(map);
+      MapProjector::projectToWgs84(map);
 
-        MapProjector::projectToWgs84(map);
-
-        writer->write(map);
-      }
+      writer->write(map);
     }
 
     return 0;
