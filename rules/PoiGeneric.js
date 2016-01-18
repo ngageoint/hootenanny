@@ -44,35 +44,32 @@ var weightedWordDistance = new hoot.NameExtractor(
 
 var distances = [
 
-    {k:'amenity',                             match:100,      review:200}, //regression 3
-    {k:'amenity',  v:'grave_yard',            match:500,      review:1000}, //regression 3
-    {k:'building',                            match:50,       review:100}, //regression 3
+    {k:'amenity',                             match:100,      review:200},
+    {k:'amenity',  v:'grave_yard',            match:500,      review:1000},
+    {k:'building',                            match:50,       review:100},
     {k:'building',  v:'hospital',             match:300,      review:500},
     {k:'barrier',   v:'toll_booth',           match:25,       review:50},
-    {k:'barrier',   v:'border_control',       match:50,       review:100}, //regression 5
-    {k:'historic',                            match:100,      review:200}, //case 26
-    {k:'landuse',                             match:500,      review:1000}, //regression 3
-    {k:'leisure',                             match:250,      review:500}, //regression 6
+    {k:'barrier',   v:'border_control',       match:50,       review:100},
+    {k:'historic',                            match:100,      review:200},
+    {k:'landuse',                             match:500,      review:1000},
+    {k:'leisure',                             match:250,      review:500},
     {k:'man_made',                            match:25,       review:50},
-    {k:'natural',                             match:500,      review:1000}, //regression 5
-    {k:'place',                               match:500,      review:1000}, //regression 5
-    {k:'place',     v:'built_up_area',        match:1000,     review:2000}, //regression 7
-    {k:'place',     v:'locality',             match:2000,     review:3000}, //regression 7
-    {k:'place',     v:'populated',            match:2000,     review:3000}, //regression 5
-    {k:'place',     v:'region',               match:1000,     review:2000}, //regression 5
-    {k:'place',     v:'village',              match:2000,     review:3000}, //regression 5
-    {k:'power',                               match:25,       review:50}, //regression 4
-    {k:'railway',                             match:250,      review:500}, //case 31/32?
-    {k:'railway',   v:'station',              match:500,      review:1000}, //regression 3
-    {k:'shop',                                match:25,       review:50},
-    {k:'sport',                               match:50,       review:100}, //case 11
+    {k:'natural',                             match:500,      review:1000},
+    {k:'place',                               match:500,      review:1000},
+    {k:'place',     v:'built_up_area',        match:1000,     review:2000},
+    {k:'place',     v:'locality',             match:2000,     review:3000},
+    {k:'place',     v:'populated',            match:2000,     review:3000},
+    {k:'place',     v:'region',               match:1000,     review:2000},
+    {k:'place',     v:'village',              match:2000,     review:3000},
+    {k:'power',                               match:25,       review:50},
+    {k:'railway',                             match:250,      review:500},
+    {k:'railway',   v:'station',              match:500,      review:1000},
+    {k:'sport',                               match:50,       review:100},
     {k:'station',                             match:25,       review:50},
     {k:'tourism',                             match:25,       review:50},
     // hotel campuses can be quite large
     {k:'tourism',   v:'hotel',                match:200,      review:400},
-    {k:'transport',                           match:25,       review:50},
-    {k:'transport',  v:'station',             match:500,      review:1000}, //regression 3
-    {k:'water',                               match:25,       review:50},
+    {k:'transport',  v:'station',             match:500,      review:1000},
 
 ];
 
