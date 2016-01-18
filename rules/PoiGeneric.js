@@ -60,14 +60,13 @@ var distances = [
     {k:'place',     v:'hamlet',               match:2000,     review:3000},
     {k:'place',     v:'locality',             match:2000,     review:3000},
     {k:'place',     v:'neighborhood',         match:1000,     review:2000},
-    {k:'place',     v:'neighbourhood',        match:1000,     review:2000}, //TODO: any way to get rid of this alt spelling?
     {k:'place',     v:'populated',            match:2000,     review:3000},
     {k:'place',     v:'region',               match:2000,     review:3000},
     {k:'place',     v:'suburb',               match:1000,     review:2000},
     {k:'place',     v:'tribal_area',          match:2000,     review:3000},
     {k:'place',     v:'village',              match:2000,     review:3000},
     {k:'power',                               match:25,       review:50},
-    {k:'railway',                             match:250,      review:500}, //TODO: move station to this and add halt and tram_stop?
+    {k:'railway',                             match:250,      review:500},
     {k:'railway',   v:'station',              match:500,      review:1000}, //3
     {k:'shop',                                match:100,      review:200},
     {k:'sport',                               match:100,      review:200},
