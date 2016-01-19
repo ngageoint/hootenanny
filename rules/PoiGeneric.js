@@ -93,19 +93,6 @@ function isSuperClose(e1, e2) {
     return result;
 }
 
-exports.hasDistanceEntry = function(e)
-{
-  var tags = e.getTags();
-  for (var i = 0; i < distances.length; i++)
-  {
-    if (tags.contains(distances[i].k) &&
-        (distances[i].v == undefined || tags.get(distances[i].k) == distances[i].v))
-    {
-      return true;
-    }
-  }
-}
-
 exports.getSearchRadius = function(e) {
     var tags = e.getTags();
 
