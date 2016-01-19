@@ -162,7 +162,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
 
   // add review tags to all matches that have some review component
   _addReviewTags(map, allMatches);
-  LOG_INFO("Pre-constraining match count: " << allMatches.size());
+  LOG_DEBUG("Pre-constraining match count: " << allMatches.size());
 
   _stats.append(SingleStat("Number of Matches Before Whole Groups", _matches.size()));
 
@@ -170,6 +170,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   MatchSetVector matchSets;
   _removeWholeGroups(_matches, matchSets, map);
   _stats.append(SingleStat("Number of Whole Groups", matchSets.size()));
+  LOG_DEBUG("Number of Whole Groups: " << matchSets.size());
 
   // Globally optimize the set of matches to maximize the conflation score.
   {
@@ -185,8 +186,8 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
       double cmStart = Time::getTime();
 //      vector<const Match*> cmMatches = cm.calculateSubset();
       cmMatches = cm.calculateSubset();
-      LOG_INFO("CM took: " << Time::getTime() - cmStart << "s.");
-      LOG_INFO("CM Score: " << cm.getScore());
+      LOG_DEBUG("CM took: " << Time::getTime() - cmStart << "s.");
+      LOG_DEBUG("CM Score: " << cm.getScore());
       LOG_DEBUG(SystemInfo::getMemoryUsageString());
     }
 
@@ -194,8 +195,8 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
     gm.addMatches(_matches.begin(), _matches.end());
     double gmStart = Time::getTime();
     vector<const Match*> gmMatches = gm.calculateSubset();
-    LOG_INFO("GM took: " << Time::getTime() - gmStart << "s.");
-    LOG_INFO("GM Score: " << gm.getScore());
+    LOG_DEBUG("GM took: " << Time::getTime() - gmStart << "s.");
+    LOG_DEBUG("GM Score: " << gm.getScore());
 
     if (gm.getScore() > cm.getScore())
     {
@@ -218,15 +219,14 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
 //  #warning validateConflictSubset is on, this is slow.
 //  _validateConflictSubset(map, _matches);
 
-  LOG_INFO("Post constraining match count: " << _matches.size());
+  LOG_DEBUG("Post constraining match count: " << _matches.size());
 
   {
     // search the matches for groups (subgraphs) of matches. In other words, groups where all the
     // matches are interrelated by element id
     MatchGraph mg;
     mg.addMatches(_matches.begin(), _matches.end());
-    vector< set<const Match*, MatchPtrComparator> > tmpMatchSets =
-      mg.findSubgraphs(map);
+    vector< set<const Match*, MatchPtrComparator> > tmpMatchSets = mg.findSubgraphs(map);
     matchSets.insert(matchSets.end(), tmpMatchSets.begin(), tmpMatchSets.end());
     LOG_DEBUG(SystemInfo::getMemoryUsageString());
   }

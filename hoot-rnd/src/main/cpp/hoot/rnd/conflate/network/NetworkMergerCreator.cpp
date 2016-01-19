@@ -57,6 +57,32 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matches,
   bool result = false;
   assert(matches.size() > 0);
 
+  const NetworkMatch* m = dynamic_cast<const NetworkMatch*>(*matches.begin());
+  LOG_INFO(m->toString());
+
+  if (m)
+  {
+    LOG_INFO("Found a network merge");
+    set< pair<ElementId, ElementId> > eids;
+    if (matches.size() != 1)
+    {
+      // go through all the matches
+      for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
+      {
+        set< pair<ElementId, ElementId> > s = (*it)->getMatchPairs();
+        eids.insert(s.begin(), s.end());
+      }
+
+      mergers.push_back(new MarkForReviewMerger(eids, "A complex road situation was found.",
+        m->getMatchName(), 1.0));
+    }
+    else
+    {
+      mergers.push_back(new NetworkMerger(m->getMatchPairs()));
+    }
+    result = true;
+  }
+
   return result;
 }
 
@@ -64,6 +90,7 @@ vector<MergerCreator::Description> NetworkMergerCreator::getAllCreators() const
 {
   vector<Description> result;
 
+LOG_INFO("Here");
   result.push_back(Description(className(), "Network Merge Creator", true));
 
   return result;
@@ -72,14 +99,21 @@ vector<MergerCreator::Description> NetworkMergerCreator::getAllCreators() const
 bool NetworkMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Match* m1,
   const Match* m2) const
 {
-  return false;
+  bool result = false;
+
+  if (dynamic_cast<const NetworkMatch*>(m1) || dynamic_cast<const NetworkMatch*>(m2))
+  {
+    result = m1->isConflicting(*m2, map);
+  }
+
+  return result;
 }
 
 bool NetworkMergerCreator::_isConflictingSet(const MatchSet& matches) const
 {
   // _map must be set using setOsmMap()
   assert(_map != 0);
-  bool conflicting = false;
+  bool conflicting = matches.size() > 1;
 
   return conflicting;
 }

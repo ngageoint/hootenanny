@@ -57,6 +57,7 @@ using namespace Tgs;
 
 NetworkMatchCreator::NetworkMatchCreator()
 {
+  _userCriterion.reset(new HighwayCriterion());
 }
 
 Match* NetworkMatchCreator::createMatch(const ConstOsmMapPtr& /*map*/, ElementId /*eid1*/,
@@ -67,8 +68,18 @@ Match* NetworkMatchCreator::createMatch(const ConstOsmMapPtr& /*map*/, ElementId
   return result;
 }
 
-void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& /*matches*/,
-  ConstMatchThresholdPtr /*threshold*/)
+const Match* NetworkMatchCreator::_createMatch(const ConstOsmMapPtr& map, NetworkEdgeScorePtr e,
+  ConstMatchThresholdPtr mt)
+{
+  assert(e->getE1()->getMembers().size() == 1);
+  assert(e->getE2()->getMembers().size() == 1);
+
+  return new NetworkMatch(map, e->getE1()->getMembers()[0]->getElementId(),
+    e->getE2()->getMembers()[0]->getElementId(), e->getScore(), mt);
+}
+
+void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
+  ConstMatchThresholdPtr threshold)
 {
   // use another class to extract graph nodes and graph edges.
   OsmNetworkExtractor e1;
@@ -88,7 +99,12 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   matcher.matchNetworks(map, n1, n2);
 
   // convert graph edge matches into NetworkMatch objects.
-  #warning todo
+  QList<NetworkEdgeScorePtr> edgeMatch = matcher.getAllEdgeScores();
+
+  for (int i = 0; i < edgeMatch.size(); i++)
+  {
+    matches.push_back(_createMatch(map, edgeMatch[i], threshold));
+  }
 }
 
 vector<MatchCreator::Description> NetworkMatchCreator::getAllCreators() const
@@ -100,9 +116,9 @@ vector<MatchCreator::Description> NetworkMatchCreator::getAllCreators() const
   return result;
 }
 
-bool NetworkMatchCreator::isMatchCandidate(ConstElementPtr /*element*/, const ConstOsmMapPtr& /*map*/)
+bool NetworkMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
 {
-  return false;
+  return _userCriterion->isSatisfied(element);
 }
 
 shared_ptr<MatchThreshold> NetworkMatchCreator::getMatchThreshold()

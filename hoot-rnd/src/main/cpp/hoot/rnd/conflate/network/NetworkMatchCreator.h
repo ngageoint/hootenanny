@@ -63,6 +63,9 @@ private:
 
   shared_ptr<MatchThreshold> _matchThreshold;
   ElementCriterionPtr _userCriterion;
+
+  const Match* _createMatch(const ConstOsmMapPtr& map, NetworkEdgeScorePtr e,
+    ConstMatchThresholdPtr mt);
 };
 
 }

@@ -24,7 +24,18 @@ double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdg
   ConstWayPtr w1 = dynamic_pointer_cast<const Way>(e1->getMembers()[0]);
   ConstWayPtr w2 = dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
 
-  return ProbabilityOfMatch::getInstance().expertProbability(_map, w1, w2);
+  double result;
+
+  if (isCandidateMatch(e1, e2) == false)
+  {
+    result = 0.0;
+  }
+  else
+  {
+    result = ProbabilityOfMatch::getInstance().expertProbability(_map, w1, w2);
+  }
+
+  return result;
 }
 
 Envelope NetworkDetails::getEnvelope(ConstNetworkEdgePtr e)
@@ -68,7 +79,9 @@ Meters NetworkDetails::getSearchRadius(ConstNetworkVertexPtr v)
 
 bool NetworkDetails::isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
 {
-  Meters ce = max(getSearchRadius(e1), getSearchRadius(e2));
+  Meters ce1 = getSearchRadius(e1);
+  Meters ce2 = getSearchRadius(e2);
+  Meters ce = sqrt(ce1 * ce1 + ce2 * ce2);
 
   assert(e1->getMembers().size() == 1 && e2->getMembers().size() == 1);
 
