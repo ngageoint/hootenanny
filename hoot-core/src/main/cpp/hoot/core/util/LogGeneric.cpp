@@ -44,12 +44,14 @@ void Log::init()
 
 void Log::log(WarningLevel level, const string& str)
 {
+  log(level, str, "...?", "", -1);
+  return;
   if (level >= _level)
   {
     QDateTime dt = QDateTime::currentDateTime();
 
     // takes the form: "09:34:21.635 WARN  <str>"
-    cout << dt.toString("hh:mm:ss.zzz") << " " << setw(5) << left << getLevelString(level) << " " <<
+    cout << dt.toString("hh:mm:ss.zzz") << " " << setw(5) << left << getLevelString(level) << " ...?(  -1) " <<
             str << endl;
   }
 }
