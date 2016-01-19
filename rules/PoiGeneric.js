@@ -44,7 +44,7 @@ var weightedWordDistance = new hoot.NameExtractor(
 
 var distances = [
 
-    {k:'amenity',                             match:250,      review:500},
+    {k:'amenity',                             match:100,      review:200},
     {k:'amenity',  v:'grave_yard',            match:500,      review:1000},
     {k:'building',                            match:100,      review:200},
     {k:'building',  v:'hospital',             match:300,      review:500},
@@ -67,6 +67,7 @@ var distances = [
     {k:'shop',                                match:100,      review:200},
     {k:'sport',                               match:50,       review:100},
     {k:'station',                             match:100,      review:200},
+    {k:'station',   v:'light_rail',           match:500,      review:1000},
     {k:'tourism',                             match:100,      review:200},
     // hotel campuses can be quite large
     {k:'tourism',   v:'hotel',                match:200,      review:400},
