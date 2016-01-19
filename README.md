@@ -1,5 +1,7 @@
 # Introduction
 
+[![Join the chat at https://gitter.im/ngageoint/hootenanny](https://badges.gitter.im/ngageoint/hootenanny.svg)](https://gitter.im/ngageoint/hootenanny?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Hootenanny was developed to provide an open source, standards-based approach to geospatial vector data conflation. Hootenanny is designed to facilitate automated and semi-automated conflation of critical foundation GEOINT features in the topographic domain, namely roads (polylines), buildings (polygons), and points-of-interest (POI's) (points). Conflation happens at the dataset level, where the user's workflow determines the best reference dataset and source content, geometry and attributes, to transfer to the output map.
 
 If you have any support questions please contact Hootenanny.Help@DigitalGlobe.com.

@@ -627,10 +627,36 @@ translate = {
         return result;
     },
 
+
     isNumber : function(n)
     {
         return !isNaN(parseFloat(n)) && isFinite(n);
     },
+
+
+    // Chop a datetime field down to a single value and get it to 20 characters long for export to MGCP & TDS
+    chopDateTime : function(rawDateTime)
+    {
+        var finalDateTime = '';
+
+        var tmpList = rawDateTime.split(';');
+
+        // NOTE: This is a workaround untill we can get the "reference dataset" datetime
+        // Sort the list so we grab the earliest date.
+        tmpList.sort();
+
+        finalDateTime = tmpList[0];
+
+        // Try chopping the milliseconds off the datetime
+        if (finalDateTime.length > 20)
+        {
+            finalDateTime = finalDateTime.replace(/\.\d\d\dZ$/,'Z');
+        }
+
+        return finalDateTime;
+    },
+
+
 
     // applySimpleTxtBiased - Apply 0ne2one rules for Text Attributes
     // The "direction is either "forward" or "backward" - convert to or from

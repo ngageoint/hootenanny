@@ -9,11 +9,12 @@ then
 fi
 
 # vars
-BLANKFILE="/tmp/blank.osm"
-LOG="/tmp/makeOscLog.txt"
+BLANKFILE="$HOOT_HOME/tmp/blank.osm"
+LOG="$HOOT_HOME/tmp/makeOscLog.txt"
 INPUT=`echo $1|sed s/.osm//`
 
 # create log
+mkdir -p $HOOT_HOME/tmp
 echo "Creating log for makeOsc" >& $LOG
 
 # test if blank.osm file exists
