@@ -909,7 +909,7 @@ mgcp = {
 
         if (attrs.SRT in srtFix) attrs.SRT = srtFix[attrs.SRT];
 
-        // Fix the Source DateTime
+        // Chop the milliseconds off the "source:datetime"
         if (attrs.SDV)
         {
             attrs.SDV = translate.chopDateTime(attrs.SDV);

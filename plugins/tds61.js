@@ -1613,8 +1613,7 @@ tds61 = {
         // Until we get an answer, we are going to take the first value in the list.
         if (attrs.ZI001_SDV)
         {
-            var tmpList = attrs.ZI001_SDV.split(';');
-            attrs.ZI001_SDV = tmpList[0];
+            attrs.ZI001_SDV = translate.chopDateTime(attrs.ZI001_SDV);
         }
 
 
