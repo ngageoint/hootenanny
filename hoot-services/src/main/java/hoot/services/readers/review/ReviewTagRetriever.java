@@ -26,6 +26,14 @@ public class ReviewTagRetriever {
 		this._conn = cn;
 	}
 	
+	/**
+	 * Retrieves single review tag using map id and relation id.
+	 * 
+	 * @param mapId
+	 * @param relationId
+	 * @return
+	 * @throws Exception
+	 */
 	public List<ReviewTags> retrieve(final long mapId, final long relationId) throws Exception
 	{		
 
@@ -45,6 +53,16 @@ public class ReviewTagRetriever {
 	}
 	
 	
+	/**
+	 * Retrieves all review tags
+	 * 
+	 * @param orderByCol - order by column to sort
+	 * @param isAsc - is order by asc | desc
+	 * @param limit - limit for numbers of returned results
+	 * @param offset - offset row for paging
+	 * @return - list of Review tags
+	 * @throws Exception
+	 */
 	public List<ReviewTags> retrieveAll(final String orderByCol, 
 			final boolean isAsc, final long limit, final long offset) throws Exception
 	{		
@@ -65,6 +83,12 @@ public class ReviewTagRetriever {
 	}
 	
 	
+	/**
+	 * Get the total counts of all review tags
+	 * 
+	 * @return - numbers of toal count
+	 * @throws Exception
+	 */
 	public long getTagsCount() throws Exception
 	{
 		long res = -1;
@@ -83,6 +107,14 @@ public class ReviewTagRetriever {
 		return res;
 	}
 	
+	/**
+	 * SQL Query for retrieving review tag
+	 * 
+	 * @param mapId
+	 * @param relationId
+	 * @return - SQLQuery
+	 * @throws Exception
+	 */
 	protected SQLQuery _getQuery(final long mapId, final long relationId) throws Exception
 	{
 		SQLQuery query = new SQLQuery(this._conn, DbUtils.getConfiguration());
@@ -100,6 +132,16 @@ public class ReviewTagRetriever {
 		return query;
 	}
 	
+	/**
+	 * SQL Query for retrieving all tags
+	 * 
+	 * @param orderByCol
+	 * @param isAsc
+	 * @param limit
+	 * @param offset
+	 * @return - SQLQuery
+	 * @throws Exception
+	 */
 	protected SQLQuery _getAllQuery(final String orderByCol, 
 			final boolean isAsc, final long limit, final long offset) throws Exception
 	{
@@ -128,6 +170,13 @@ public class ReviewTagRetriever {
 		return query;
 	}
 	
+	/**
+	 * Filter for allowed columns for order by
+	 * 
+	 * @param orderByCol - String representation of order by column
+	 * @param isAsc - asc | dsc
+	 * @return - OrderSpecifier
+	 */
 	protected OrderSpecifier _getSpecifier(final String orderByCol, 
 			final boolean isAsc)
 	{

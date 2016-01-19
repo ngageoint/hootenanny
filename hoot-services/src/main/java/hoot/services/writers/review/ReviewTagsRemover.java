@@ -23,6 +23,13 @@ public class ReviewTagsRemover {
 		_conn = cn;
 	}
 	
+	/**
+	 * Removes review tag.
+	 * 
+	 * @param request - Request containing mapid and relationid
+	 * @return - total numbers of removed
+	 * @throws Exception
+	 */
 	public long remove(final ReviewTagDelRequest request) throws Exception
 	{
 		long nDeleted = 0;
@@ -40,6 +47,13 @@ public class ReviewTagsRemover {
 	}
 	
 	
+	/**
+	 * Delete clause
+	 * 
+	 * @param request - Request containing mapid and relationid
+	 * @return - toal numbers of removed
+	 * @throws Exception
+	 */
 	protected SQLDeleteClause _createDelClause(final ReviewTagDelRequest request) throws Exception
 	{
 		SQLDeleteClause cl = null;

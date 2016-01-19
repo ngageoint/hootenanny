@@ -35,6 +35,14 @@ public class ReviewTagsSaver {
 	{
 		_conn = cn;
 	}
+	
+	/**
+	 * Saves review tags. It first checks to see if exists and if not insert else update
+	 * 
+	 * @param request - request object containing inserted/updated fields
+	 * @return - numbers of saved tags
+	 * @throws Exception
+	 */
 	public long save(final ReviewTagSaveRequest request) throws Exception
 	{
 		long nSaved = 0;
@@ -55,6 +63,14 @@ public class ReviewTagsSaver {
 		
 		return nSaved;
 	}
+	
+	/**
+	 * Inserts review tag into database
+	 * 
+	 * @param request - request object containing inserted fields
+	 * @return - total numbers of inserted
+	 * @throws Exception
+	 */
 	public long insert(final ReviewTagSaveRequest request) throws Exception
 	{
 		long nInserted = 0;
@@ -81,6 +97,39 @@ public class ReviewTagsSaver {
 
 	}
 	
+	/**
+	 * Updates review tag.
+	 * 
+	 * @param request - request object containing updated fields
+	 * @param reviewTagsDto - Current review tag
+	 * @return- total numbers of updated
+	 * @throws Exception
+	 */
+	public long update(final ReviewTagSaveRequest request, final ReviewTags reviewTagsDto) throws Exception
+	{
+		long nUpdated = 0;
+		
+		try
+		{
+			nUpdated = _getUpdateQuery(request, reviewTagsDto)
+	    .execute();		
+		}
+		catch (Exception ex)
+		{
+			log.error(ex.getMessage());
+			throw ex;
+		}
+		return nUpdated;
+	}
+	
+	
+	/**
+	 * Creates insert clause
+	 * 
+	 * @param request - request object containing inserted fields
+	 * @return - SQLInsertClause
+	 * @throws Exception
+	 */
 	protected SQLInsertClause _createInsertClause(final ReviewTagSaveRequest request) throws Exception
 	{
 		SQLInsertClause cl = null;
@@ -104,23 +153,15 @@ public class ReviewTagsSaver {
 		return cl;
 	}
 	
-	public long update(final ReviewTagSaveRequest request, final ReviewTags reviewTagsDto) throws Exception
-	{
-		long nUpdated = 0;
-		
-		try
-		{
-			nUpdated = _getUpdateQuery(request, reviewTagsDto)
-	    .execute();		
-		}
-		catch (Exception ex)
-		{
-			log.error(ex.getMessage());
-			throw ex;
-		}
-		return nUpdated;
-	}
 	
+	/**
+	 * Creates update clause
+	 * 
+	 * @param request - request object containing updated fields
+	 * @param reviewTagsDto - Current review tag
+	 * @return - SQLUpdateClause
+	 * @throws Exception
+	 */
 	protected SQLUpdateClause _getUpdateQuery(final ReviewTagSaveRequest request,
 			final ReviewTags reviewTagsDto) throws Exception
 	{
@@ -149,6 +190,14 @@ public class ReviewTagsSaver {
 		return res;
 	}
 	
+	/**
+	 * Since QueryDSL does not support hstore this function creates QueryDSL Expression object
+	 * form tags json.
+	 * 
+	 * @param tags - json containing tags kv
+	 * @return - Expression Object for QueryDSL consumption
+	 * @throws Exception
+	 */
 	protected Object _jasonToHStore (final JSONObject tags) throws Exception
 	{
   	String hstoreStr = "";
