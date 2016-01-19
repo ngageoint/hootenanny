@@ -49,7 +49,8 @@ void Log::log(WarningLevel level, const string& str)
     QDateTime dt = QDateTime::currentDateTime();
 
     // takes the form: "09:34:21.635 WARN  <str>"
-    cout << dt.toString("hh:mm:ss.zzz") << " " << getLevelString(level) << "  " << str << endl;
+    cout << dt.toString("hh:mm:ss.zzz") << " " << setw(5) << left << getLevelString(level) << " " <<
+            str << endl;
   }
 }
 
@@ -60,9 +61,9 @@ void Log::log(WarningLevel level, const string& str, const string& filename,
   {
     QDateTime dt = QDateTime::currentDateTime();
 
-    // takes the form: "09:34:21.635 WARN  <filename>(<lineNumber>) - "
-    cout << dt.toString("hh:mm:ss.zzz") << " " << getLevelString(level) << "  " <<
-            filename << "(" << lineNumber << ")" << " - " << str << endl;
+    // takes the form: "09:34:21.635 WARN  <filename>(<lineNumber>) <str>"
+    cout << dt.toString("hh:mm:ss.zzz") << " " << setw(5) << left << getLevelString(level) << " " <<
+            ellipsisStr(filename) << "(" << setw(4) << right << lineNumber << ")" << " " << str << endl;
   }
 }
 

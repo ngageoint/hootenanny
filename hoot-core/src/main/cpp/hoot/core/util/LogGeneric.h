@@ -28,6 +28,7 @@
 #define LOGGENERIC_H
 
 // Standard
+#include <iomanip>
 #include <sstream>
 
 #include "Log.h"
@@ -36,7 +37,7 @@
   if ((level) >= hoot::Log::getInstance().getLevel()) \
   { \
     std::stringstream ss_; \
-    ss_ << __FILE__ << "(" << __LINE__ << ") " << message; \
+    ss_ << hoot::Log::ellipsisStr(__FILE__) << "(" << std::setw(4) << __LINE__ << ") " << message; \
     hoot::Log::getInstance().log((level), ss_.str()); \
   }}
 
