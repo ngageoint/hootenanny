@@ -48,6 +48,7 @@ var distances = [
     {k:'amenity',  v:'grave_yard',            match:500,      review:1000},
     {k:'building',                            match:100,      review:200},
     {k:'building',  v:'hospital',             match:300,      review:500},
+    {k:'building',  v:'train_station',        match:500,      review:1000},
     {k:'barrier',   v:'toll_booth',           match:25,       review:50},
     {k:'barrier',   v:'border_control',       match:50,       review:100},
     {k:'historic',                            match:100,      review:200},
