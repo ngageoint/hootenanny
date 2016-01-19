@@ -909,6 +909,13 @@ mgcp = {
 
         if (attrs.SRT in srtFix) attrs.SRT = srtFix[attrs.SRT];
 
+        // Fix the Source DateTime
+        if (attrs.SDV)
+        {
+            attrs.SDV = translate.chopDateTime(attrs.SDV);
+        }
+
+
     }, // End of applyToMgcpPostProcessing
 
     // ##### End of the xxToMgcpxx Block #####

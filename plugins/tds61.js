@@ -863,13 +863,17 @@ tds61 = {
         } // End crossing_point
 
 
-        // Add a building tag to buildings if we don't have one
+        // Add a building tag to Buildings and Fortified Buildings if we don't have one
         // We can't do this in the funky rules function as it uses "attrs" _and_ "tags"
-        if (attrs.F_CODE == 'AL013' && !(tags.building)) tags.building = 'yes';
+        if ((attrs.F_CODE == 'AL013' || attrs.F_CODE == 'AH055') && !(tags.building))
+        {
+            tags.building = 'yes';
+        }
 
         // facility list is used for translating between buildings and facilities based on use
-        // format:  "use":"building or amenity"
+        // format:  "use","building or amenity"
         // var facilityList = {'education':'school', 'healthcare':'hospital', 'university':'university'};
+
 
         // Fix the building 'use' tag. If the building has a 'use' and no specific building tag. Give it one
         if (tags.building == 'yes' && tags.use)
@@ -879,12 +883,24 @@ tds61 = {
                 tags.building = 'industrial';
             }
             // Sort out shops
+            /*
             else if (tds61.rules.shopList.indexOf(tags.use) > -1)
             {
                 tags.shop = tags.use;
                 delete tags.use;
             }
-      /*
+            */
+            //else if (tds61.rules.shopList.indexOf(tags.use) > -1)
+            else if (hoot.OsmSchema.getTagVertex("shop=" + tags.use).name != "shop=*")
+            {
+                hoot.warn(hoot.OsmSchema.getTagVertex("shop=" + tags.use));
+                hoot.warn(hoot.OsmSchema.isAncestor("shop=" + tags.use, "shop"));
+                hoot.warn(tags.use);
+                tags.shop = tags.use;
+                delete tags.use;
+            }
+
+        /*
             else if (tags.use in facilityList)
             {
                 tags.building = facilityList[tags.use];
@@ -892,6 +908,33 @@ tds61 = {
             }
        */
         } // End building & use tags
+
+        // Education:
+        if (tags['isced:level'] || tags.use == 'education')
+        {
+            if (tags.building == 'yes')
+            {
+                tags.building = 'school'
+            }
+            else if (tags.facility)
+            {
+                tags.amenity = 'school';
+            }
+        }
+
+        if (tags.use == 'vocational_education')
+        {
+            if (tags.building == 'yes')
+            {
+                tags.building = 'college'
+            }
+            else if (tags.facility)
+            {
+                tags.amenity = 'college';
+            }
+        }
+
+
 
         // A facility is an area. Therefore "use" becomes "amenity". "Building" becomes "landuse"
         if (tags.facility && tags.use)
@@ -949,6 +992,25 @@ tds61 = {
         // Not sure about adding a Highway tag to this.
         // if (attrs.F_CODE == 'AQ040' && !(tags.highway)) tags.highway = 'yes';
 
+        // Denominations without religions
+        if (tags.denomination)
+        {
+            switch (tags.denomination)
+            {
+                case 'roman_catholic':
+                case 'orthodox':
+                case 'protestant':
+                case 'chaldean_catholic':
+                case 'nestorian': // Not sure about this
+                    tags.religion = 'christian';
+                    break;
+
+                case 'shia':
+                case 'sunni':
+                    tags.religion = 'muslim';
+                    break;
+            } // End switch
+        }
 
     }, // End of applyToOsmPostProcessing
   
@@ -1031,8 +1093,9 @@ tds61 = {
             ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
             ["(t.shop || t.office) &&  !(t.building)","a.F_CODE = 'AL013'"],
             ["t.social_facility == 'shelter'","t.social_facility = t['social_facility:for']; delete t.amenity; delete t['social_facility:for']"],
-            ["!(t.water) && t.natural == 'water'","t.water = 'lake'"],
+            ["t['tower:type'] == 'minaret' && t.man_made == 'tower'","delete t.man_made"],
             ["t.use == 'islamic_prayer_hall' && t.amenity == 'place_of_worship'","delete t.amenity"],
+            ["!(t.water) && t.natural == 'water'","t.water = 'lake'"],
             ["t.wetland && t.natural == 'wetland'","delete t.natural"],
             ["t.water == 'river'","t.waterway = 'river'"],
             ["t.waterway == 'riverbank'","t.waterway = 'river'"]

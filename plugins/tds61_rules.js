@@ -1324,7 +1324,7 @@ tds61.rules = {
      ['FFN','257','use','fabricated_metal_product_manufacturing'], // Fabricated Metal Product Manufacture
      ['FFN','260','use','electronic_equipment_manufacturing'], // Electronic Equipment Manufacture
      ['FFN','270','use','electrical_equipment_manufacturing'], // Electrical Equipment Manufacture
-     ['FFN','272','shop','propane'], // Propane Sale
+     ['FFN','272','shop','gas'], // Propane Sale
      ['FFN','280','use','machinery_manufacturing'], // Machinery Manufacture
      ['FFN','289','use','transportation_equipment_manufacturing'], // Transportation Equipment Manufacturing
      ['FFN','290','use','motor_vehicle_manufacturing'], // Motor Vehicle Manufacture
@@ -1368,11 +1368,11 @@ tds61.rules = {
      ['FFN','464','shop','specialized'], // Specialized Store
      ['FFN','465','shop','non-specialized'], // Non-specialized Store
      ['FFN','466','shop','convenience'], // Convenience Store
-     ['FFN','470','shop','fuel'], // Petrol Sale -- links to AQ170 Motor Vehicle Station
+     ['FFN','470','amenity','fuel'], // Petrol Sale -- links to AQ170 Motor Vehicle Station
      ['FFN','473','amenity','sales_yard'], // Sales Yard
      ['FFN','474','shop','precious_metal'], // Precious Metal Merchant
      ['FFN','475','amenity','marketplace'], // Market
-     ['FFN','476','shop','grocery'], // Grocery
+     ['FFN','476','shop','supermarket'], // Grocery
      ['FFN','477','amenity','pharmacy'], // Pharmacy
      ['FFN','478','shop','pet'], // Pet-shop
      ['FFN','480','use','transportation'], // Transport
@@ -1518,9 +1518,9 @@ tds61.rules = {
      ['FFN','847','use','emergency_operations'], // Emergency Operations
      ['FFN','848','use','civil_intelligence'], // Civil Intelligence
      ['FFN','850','use','education'], // Education
-     ['FFN','851','use','primary_education'], // Primary Education
-     ['FFN','852','use','secondary_education'], // Secondary Education
-     ['FFN','855','use','higher_education'], // Higher Education
+     ['FFN','851','isced:level','1'], // Primary Education
+     ['FFN','852','isced:level','2,3'], // Secondary Education
+     ['FFN','855','building','university'], // Higher Education
      ['FFN','857','use','vocational_education'], // Vocational Education
      ['FFN','860','use','healthcare'], // Human Health Activities
      ['FFN','861','use','in-patient_care'], // In-patient Care
@@ -1565,7 +1565,7 @@ tds61.rules = {
      ['FFN','954','amenity','club'], // Club
      ['FFN','955','leisure','yacht_club'], // Yacht-club
      ['FFN','961','shop','laundry'], // Laundry
-     ['FFN','962','shop','beauty_treatment'], // Beauty Treatment
+     ['FFN','962','shop','beauty'], // Beauty Treatment
      ['FFN','963','shop','funeral_directors'], // Funeral Services
      ['FFN','964','amenity','crematorium'], // Cremation
      ['FFN','965','amenity','mortuary'], // Mortuary Services
@@ -4259,18 +4259,18 @@ tds61.rules = {
      // ['ZI037_REL','-999999',undefined,undefined], // No Information
      ['ZI037_REL','1','religion','buddhist'], // Buddhism
      ['ZI037_REL','2','religion','muslim'], // Islam
-     ['ZI037_REL','3','religion','roman_catholic'], // Roman Catholic
+     ['ZI037_REL','3','denomination','roman_catholic'], // Roman Catholic
      ['ZI037_REL','4','religion','christian'], // Christian
      ['ZI037_REL','5','religion','jewish'], // Judaism
-     ['ZI037_REL','6','religion','orthodox'], // Orthodox
-     ['ZI037_REL','7','religion','protestant'], // Protestant
+     ['ZI037_REL','6','denomination','orthodox'], // Orthodox
+     ['ZI037_REL','7','denomination','protestant'], // Protestant
      ['ZI037_REL','8','religion','shinto'], // Shinto
      ['ZI037_REL','9','religion','hindu'], // Hinduism
-     ['ZI037_REL','10','religion','shia'], // Shia
-     ['ZI037_REL','11','religion','sunni'], // Sunni
-     ['ZI037_REL','12','religion','nestorian'], // Nestorian
-     ['ZI037_REL','13','religion','chaldean'], // Chaldean
-     ['ZI037_REL','14','religion','mixed_and/or_no_designation'], // Mixed and/or No Designation
+     ['ZI037_REL','10','denomination','shia'], // Shia
+     ['ZI037_REL','11','denomination','sunni'], // Sunni
+     ['ZI037_REL','12','denomination','nestorian'], // Nestorian
+     ['ZI037_REL','13','denomination','chaldean_catholic'], // Chaldean
+     ['ZI037_REL','14','religion','mixed_or_none'], // Mixed and/or No Designation
      ['ZI037_REL','999','religion','other'], // Other
 
      // ZI037_RFA - Religious Information : Religious Facility Type
@@ -4279,7 +4279,7 @@ tds61.rules = {
      ['ZI037_RFA','2','building','chapel'], // Chapel
      ['ZI037_RFA','3','building','church'], // Church
      ['ZI037_RFA','4','building','marabout'], // Marabout
-     ['ZI037_RFA','5','building','minaret'], // Minaret
+     ['ZI037_RFA','5','tower:type','minaret'], // Minaret // Fixed in pre/post processing
      ['ZI037_RFA','6','building','mission'], // Mission
      ['ZI037_RFA','7','building','mosque'], // Mosque
      ['ZI037_RFA','8','building','pagoda'], // Pagoda
@@ -4398,9 +4398,17 @@ tds61.rules = {
      [undefined,undefined,'building','industrial'], // Industrial
      [undefined,undefined,'man_made','works'], // Works
      ['FFN','2','building','farm'], // Agriculture
-     ['FFN','850','amenity','kindergarten'], // Education
+
      ['FFN','850','building','school'],
-     ['FFN','855','building','university'], 
+     ['FFN','850','isced:level','0'], // Education
+     ['FFN','850','amenity','kindergarten'], // Education
+     // ['FFN','851','isced:level','1'], // Primary Education
+     ['FFN','852','isced:level','2'], // Secondary Education
+     ['FFN','852','isced:level','3'], // Secondary Education
+     // ['FFN','852','isced:level','2,3'], // Secondary Education
+     ['FFN','855','building','university'],
+     ['FFN','857','building','college'], // Vocational Education
+
      ['FFN','572','amenity','cafe'], // Restaurant
      ['FFN','572','building','restaurant'], // Restaurant
 
@@ -4429,6 +4437,7 @@ tds61.rules = {
      [undefined,undefined,'amenity','school'], //  converted in pre processing
      [undefined,undefined,'amenity','hospital'], //  converted in pre processing
      [undefined,undefined,'amenity','university'], //  converted in pre processing
+     [undefined,undefined,'amenity','college'], //  converted in pre processing
      [undefined,undefined,'amenity','house_of_worship'], //  converted in pre processing
 
      // From UFD
@@ -4472,7 +4481,6 @@ tds61.rules = {
 
      // ### From OSM - This list could never end.....
      ['FFN','464','shop','books'], // Specialized Store
-     ['FFN','465','shop','supermarket'], // Non-specialized
      ['FFN','563','building','house'], // Residence
      ['FFN','558','building','dependents_housing'], // Dependents Housing
      ['FFN','610','office','telecommunication'], // telecommunication
