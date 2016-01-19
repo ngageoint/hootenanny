@@ -10,7 +10,7 @@
 		<!-- review tags table -->
         <createTable tableName="review_tags">
             <column name="id" type="bigserial" autoIncrement="true">
-            	<constraints primaryKey="true" nullable="false"/>
+            	<constraints nullable="false"/>
             </column>
             <column name="map_id" type="bigint">
             	<constraints nullable="false"/>
@@ -37,6 +37,10 @@
             </column>
             
         </createTable>
+		<addPrimaryKey 
+            columnNames="map_id, relation_id"
+            constraintName="pk_review_tags"
+            tableName="review_tags"/>
         <addForeignKeyConstraint 
         	constraintName="review_tags_map_id_fkey" 
         	baseTableName="review_tags" 
@@ -47,44 +51,6 @@
        		<column name="map_id"></column>
        	</createIndex>
 
-
-
-		<!-- review tag notes table -->
-        <createTable tableName="review_tag_notes">
-            <column name="id" type="bigserial" autoIncrement="true">
-            	<constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="tag_id" type="bigint">
-            	<constraints nullable="false"/>
-            </column>
-			<column name="note" type="hstore">
-            	<constraints nullable="false"/>
-            </column>
-            
-			<!-- See the modifySql command at the end for the "WITHOUT TIME ZONE" bit -->
-            <column name="created_at" type="timestamp">
-            	<constraints nullable="false"/>
-            </column>
-			<column name="last_modified_at" type="timestamp">
-            	<constraints nullable="true"/>
-            </column>
-			<column name="created_by" type="bigint">
-            	<constraints nullable="true"/>
-            </column>
-			<column name="last_modified_by" type="bigint">
-            	<constraints nullable="true"/>
-            </column>
-            
-        </createTable>
-        <addForeignKeyConstraint 
-        	constraintName="review_tag_notes_tag_id_fkey" 
-        	baseTableName="review_tag_notes" 
-        	baseColumnNames="tag_id" 
-        	referencedTableName="review_tags" 
-        	referencedColumnNames="id"/>		
-       	<createIndex tableName="review_tag_notes" indexName="review_tag_notes_tag_id_idx">
-       		<column name="tag_id"></column>
-       	</createIndex>
 
 		<!-- There isn't an obvious way to specify without time zone in liquibase -->
 		<modifySql dbms="postgresql">

@@ -34,7 +34,10 @@ import hoot.services.HootProperties;
 import hoot.services.controllers.osm.MapResource;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
+import hoot.services.db2.QReviewTags;
+import hoot.services.db2.ReviewTags;
 import hoot.services.geo.BoundingBox;
+import hoot.services.models.review.ReviewTagDelResponse;
 import hoot.services.models.osm.ElementInfo;
 import hoot.services.models.review.AllReviewableItems;
 import hoot.services.models.review.ReviewRef;
@@ -43,18 +46,24 @@ import hoot.services.models.review.ReviewResolverRequest;
 import hoot.services.models.review.ReviewResolverResponse;
 import hoot.services.models.review.ReviewRefsResponse;
 import hoot.services.models.review.ReviewRefsResponses;
-import hoot.services.models.review.ReviewTagGetResponse;
+import hoot.services.models.review.ReviewTagDelRequest;
 import hoot.services.models.review.ReviewTagSaveRequest;
+import hoot.services.models.review.ReviewTagsGetResponse;
 import hoot.services.models.review.ReviewTagsSaveResponse;
+import hoot.services.models.review.ReviewTagsStatResponse;
 import hoot.services.models.review.ReviewableItem;
 import hoot.services.models.review.ReviewableStatistics;
 import hoot.services.readers.review.ReviewReferencesRetriever;
+import hoot.services.readers.review.ReviewTagRetriever;
 import hoot.services.readers.review.ReviewableReader;
 import hoot.services.review.ReviewUtils;
 import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.writers.review.ReviewResolver;
+import hoot.services.writers.review.ReviewTagsRemover;
+import hoot.services.writers.review.ReviewTagsSaver;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -77,6 +86,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.mysema.query.sql.SQLQuery;
+import com.mysema.query.types.OrderSpecifier;
 
 /**
  * Service endpoint for the conflated data review process
@@ -599,60 +609,348 @@ public class ReviewResource
 	
 	
 	
-
+	/**
+	 * <NAME>Review tag save</NAME>
+	 * <DESCRIPTION>
+	 * To create or update review tag
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * <request>
+	 *  ReviewTagSaveRequest class
+	 * </request>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	json containing created/updated tag id
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/tags/save</URL>
+	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
+	 * 	<INPUT>
+	 * {
+	 *  "mapId":1,
+	 *  "relationId":3,
+	 *  "detail": {"k1":"v1","l3":"v3"},
+	 *  "userId":-1
+	 *  }
+	 *	</INPUT>
+	 * <OUTPUT>
+   * {
+   *     "tagid": 1
+   * }
+	 * </OUTPUT>
+	 * </EXAMPLE>
+   * @param request
+   * @return
+   * @throws Exception
+   */
   @POST
-  @Path("/tag/save")
+  @Path("/tags/save")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public ReviewTagsSaveResponse createReviewTag(
   	final ReviewTagSaveRequest request) 
   	throws Exception
   {
-  	log.debug("Returning review references...");
   	
   	ReviewTagsSaveResponse response = new ReviewTagsSaveResponse();
-  	Connection conn = DbUtils.createConnection();
-  	try
+  	
+  	try(Connection conn = DbUtils.createConnection())
   	{
-  		
+  		ReviewTagsSaver saver = new ReviewTagsSaver(conn);
+  		long nSaved = saver.save(request);
+  		response.setSavedCount(nSaved);
   	}
-    finally
-    {
-      DbUtils.closeConnection(conn);
-    }
-  	
-  	log.debug("response : " + StringUtils.abbreviate(response.toString(), 1000));
-  	return response;
-  }
-  
-  @GET
-  @Path("/tag/{reviewtagid}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public ReviewTagGetResponse getReviewTag(@PathParam("reviewtagid") 
-  		final long reviewTagId) throws Exception
-  {
-  	ReviewTagGetResponse response = new  ReviewTagGetResponse();
-  	
+  	catch(Exception ex)
+  	{
+  		ResourceErrorHandler.handleError(
+	        "Error saving review tag: " + " (" + 
+	          ex.getMessage() + ")", 
+	        Status.BAD_REQUEST,
+	        log);
+  	}
+   
   	return response;
   }
   
   
-  /*
-   * tag/create (map + relation) create since it is new so we do not know where to put
-   * ReviewTagSaveRequest
-   * ReviewTagSaveResponse
-   * 
-tag/get (map + relation)
-ReviewTagGetRequest
-ReviewTagGetResponse
-
-tag/modify (tag id) PUT since we know where to put
-ReviewTagModReqeust
-ReviewTagModResponse
-
-tag/delete (tag id)
-ReviewTagDelRequest
-ReviewTagDelResponse
+	/**
+	 * <NAME>Review tag retrieve</NAME>
+	 * <DESCRIPTION>
+	 * To retrieve review tag
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * <mapId>
+	 *  map Id
+	 * </mapId>
+	 * <relationId>
+	 *  relation id
+	 * </relationId>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	json containing list of review tags
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/tags/get?mapId=1&relationId=2</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 * <OUTPUT>
+   * {
+   *     "reviewTags":
+   *     [
+   *         {
+   *             "createdAt": 1453229299354,
+   *             "createdBy": -1,
+   *             "detail":
+   *             {
+   *                 "type": "hstore",
+   *                 "value": ""k1"=>"v1", "l3"=>"v3""
+   *             },
+   *             "id": 2,
+   *             "lastModifiedAt": null,
+   *             "lastModifiedBy": null,
+   *             "mapId": 1,
+   *             "relationId": 2
+   *         }
+   *     ]
+   * }
+	 * </OUTPUT>
+	 * </EXAMPLE>
+   * @param mapid
+   * @param relid
+   * @return
+   * @throws Exception
    */
+  @GET
+  @Path("/tags/get")
+  @Produces(MediaType.APPLICATION_JSON)
+  public ReviewTagsGetResponse getReviewTag(@QueryParam("mapId") String mapid,
+  		@QueryParam("relationId") String relid) throws Exception
+  {
+  	ReviewTagsGetResponse response = new  ReviewTagsGetResponse();
+  	
+  	try(Connection conn = DbUtils.createConnection())
+  	{
+  		long mapId = Long.parseLong(mapid);
+  		long relationId = Long.parseLong(relid);
+  		ReviewTagRetriever retriever = new ReviewTagRetriever(conn);
+  		List<ReviewTags>res = retriever.retrieve(mapId, relationId);
+  		response.setReviewTags(res);
+  	}
+  	catch(Exception ex)
+  	{
+  		ResourceErrorHandler.handleError(
+	        "Error getting review tag: " + " (" + 
+	          ex.getMessage() + ")", 
+	        Status.BAD_REQUEST,
+	        log);
+  	}
+  	return response;
+  }
   
+	/**
+	 * <NAME>Review tag retrieve all</NAME>
+	 * <DESCRIPTION>
+	 * To retrieve all review tag
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * <orderBy>
+	 *  order by column [createdAt | createdBy |  id | lastModifiedAt | lastModifiedBy | mapId | relationId]
+	 * </orderBy>
+	 * <asc>
+	 *  is ascending [true | false]
+	 * </asc>
+	 * <limit>
+	 *  Limit count for paging . 
+	 * </limit>
+	 * <offset>
+	 *  offset index for paging . 
+	 * </offset>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	json containing list of review tags
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/tags/getall?orderBy=createdAt&asc=false&limit=2&offset=1</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 * <OUTPUT>
+   * {
+   *     "reviewTags":
+   *     [
+   *         {
+   *             "createdAt": 1453229299354,
+   *             "createdBy": -1,
+   *             "detail":
+   *             {
+   *                 "type": "hstore",
+   *                 "value": ""k1"=>"v1", "l3"=>"v3""
+   *             },
+   *             "id": 2,
+   *             "lastModifiedAt": null,
+   *             "lastModifiedBy": null,
+   *             "mapId": 1,
+   *             "relationId": 2
+   *         }
+   *     ]
+   * }
+	 * </OUTPUT>
+	 * </EXAMPLE>
+   * @param orderByCol
+   * @param asc
+   * @param limitSize
+   * @param offset
+   * @return
+   * @throws Exception
+   */
+  @GET
+  @Path("/tags/getall")
+  @Produces(MediaType.APPLICATION_JSON)
+  public ReviewTagsGetResponse getAllReviewTag(@QueryParam("orderBy") String orderByCol,
+  		@QueryParam("asc") String asc, @QueryParam("limit") String limitSize,
+  		 @QueryParam("offset") String offset) throws Exception
+  {
+  	ReviewTagsGetResponse response = new  ReviewTagsGetResponse();
+  	
+  	try(Connection conn = DbUtils.createConnection())
+  	{
+
+  		boolean isAsc = true;
+  		if(asc != null)
+  		{
+  			isAsc = (asc.equalsIgnoreCase("true"));
+  		}
+  		
+  		long limit = -1;
+  		
+  		if(limitSize != null)
+  		{
+  			limit = Long.parseLong(limitSize);
+  		}
+  		
+  		long offsetCnt = -1;
+  		if(offset != null)
+  		{
+  			offsetCnt = Long.parseLong(offset);
+  		}
+  		
+  		ReviewTagRetriever retriever = new ReviewTagRetriever(conn);
+  		List<ReviewTags>res = retriever.retrieveAll(orderByCol, isAsc, limit, offsetCnt);
+  		response.setReviewTags(res);
+  	}
+  	catch(Exception ex)
+  	{
+  		ResourceErrorHandler.handleError(
+	        "Error getting review tag: " + " (" + 
+	          ex.getMessage() + ")", 
+	        Status.BAD_REQUEST,
+	        log);
+  	}
+  	return response;
+  }
+  
+	/**
+	 * <NAME>Review tag stat</NAME>
+	 * <DESCRIPTION>
+	 * To retrieve review tags stat
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	json stat info
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/tags/stat</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 * <OUTPUT>
+   * 
+   * {
+   *     "totalCount": 2
+   * }
+	 * </OUTPUT>
+	 * </EXAMPLE>
+   * @return
+   * @throws Exception
+   */
+  @GET
+  @Path("/tags/stat")
+  @Produces(MediaType.APPLICATION_JSON)
+  public ReviewTagsStatResponse getAllReviewTagStat() throws Exception
+  {
+  	ReviewTagsStatResponse response = new ReviewTagsStatResponse();
+  	try(Connection conn = DbUtils.createConnection())
+  	{
+  		ReviewTagRetriever retriever = new ReviewTagRetriever(conn);
+  		long nCnt = retriever.getTagsCount();
+  		response.setTotalCount(nCnt);
+  	}
+  	catch(Exception ex)
+  	{
+  		ResourceErrorHandler.handleError(
+	        "Error getting review tag counts: " + " (" + 
+	          ex.getMessage() + ")", 
+	        Status.BAD_REQUEST,
+	        log);
+  	}
+  	return response;
+  }
+  
+	/**
+	 * <NAME>Review tag delete</NAME>
+	 * <DESCRIPTION>
+	 * To delete review tag
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * <ReviewTagDelRequest>
+	 *  Delete request
+	 * </ReviewTagDelRequest>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	json containing total numbers of deleted
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/tag/delete</URL>
+	 * 	<REQUEST_TYPE>DELETE</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 * <OUTPUT>
+   * 
+   * {
+   *     "deleteCount": 2
+   * }
+	 * </OUTPUT>
+	 * </EXAMPLE>
+   * @param request
+   * @return
+   * @throws Exception
+   */
+  @DELETE
+  @Path("/tags/delete")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ReviewTagDelResponse delReviewTag(ReviewTagDelRequest request) throws Exception
+  {
+  	ReviewTagDelResponse response = new  ReviewTagDelResponse();
+  	
+  	try(Connection conn = DbUtils.createConnection())
+  	{
+  		ReviewTagsRemover remover = new ReviewTagsRemover(conn);
+  		long nDel = remover.remove(request);
+  		response.setDeleteCount(nDel);
+  	}
+  	catch(Exception ex)
+  	{
+  		ResourceErrorHandler.handleError(
+	        "Error deleting review tag: " + " (" + 
+	          ex.getMessage() + ")", 
+	        Status.BAD_REQUEST,
+	        log);
+  	}
+  	return response;
+  }
+  
+
 }

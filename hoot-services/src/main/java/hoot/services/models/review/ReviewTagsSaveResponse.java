@@ -1,15 +1,28 @@
 package hoot.services.models.review;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class ReviewTagsSaveResponse {
-	private long tagId;
+	private long savedCount;
 	
-	public void setTagId(final long newTagId) 
+	public void setSavedCount(final long nSaved) 
 	{
-		this.tagId = newTagId;
+		this.savedCount = nSaved;
 	}
 	
 	public long getTagid()
 	{
-		return this.tagId;
+		return this.savedCount;
+	}
+	
+	public ReviewTagsSaveResponse (final long nSaved)
+	{
+		this.savedCount = nSaved;
+	}
+	
+	public ReviewTagsSaveResponse()
+	{
+		
 	}
 }
