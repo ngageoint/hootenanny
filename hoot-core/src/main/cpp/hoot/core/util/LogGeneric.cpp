@@ -32,6 +32,7 @@
 #include <QDebug>
 
 // Standard
+#include <iomanip>
 #include <iostream>
 using namespace std;
 

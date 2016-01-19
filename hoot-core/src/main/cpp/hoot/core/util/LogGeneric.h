@@ -28,7 +28,6 @@
 #define LOGGENERIC_H
 
 // Standard
-#include <iomanip>
 #include <sstream>
 
 #include "Log.h"
