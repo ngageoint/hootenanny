@@ -398,16 +398,6 @@ bool OgrReader::isReasonablePath(QString path)
   return OgrUtilities::getInstance().isReasonableUrl(path);
 }
 
-bool OgrReader::isReasonableDatabase(QString url)
-{
-  return OgrUtilities::getInstance().isReasonableDatabase(url);
-}
-
-bool OgrReader::isReasonableFilepath(QString path)
-{
-  return OgrUtilities::getInstance().isReasonableFilepath(path);
-}
-
 long OgrReader::getFeatureCount(QString path, QString layer)
 {
   _d->open(path, layer);

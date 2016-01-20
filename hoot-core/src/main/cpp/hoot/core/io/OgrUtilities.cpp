@@ -148,34 +148,21 @@ shared_ptr<OGRDataSource> OgrUtilities::createDataSource(QString url)
 
 bool OgrUtilities::isReasonableUrl(QString url)
 {
-  return (isReasonableFilepath(url) || isReasonableDatabase(url));
-}
-
-bool OgrUtilities::isReasonableDatabase(QString url)
-{
-  bool reasonable = false;
-
-  int i = 0;
-  while (beginName[i][0] != NULL)
-  {
-    if (url.startsWith(beginName[i][0]))
-    {
-      reasonable = true;
-    }
-    i++;
-  }
-
-  return reasonable;
-}
-
-bool OgrUtilities::isReasonableFilepath(QString url)
-{
   bool reasonable = false;
 
   int i = 0;
   while (extensions[i][0] != NULL)
   {
     if (url.endsWith(extensions[i][0]))
+    {
+      reasonable = true;
+    }
+    i++;
+  }
+  i = 0;
+  while (beginName[i][0] != NULL)
+  {
+    if (url.startsWith(beginName[i][0]))
     {
       reasonable = true;
     }
