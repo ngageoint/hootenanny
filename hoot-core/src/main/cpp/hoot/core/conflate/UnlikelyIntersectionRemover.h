@@ -67,7 +67,6 @@ public:
 
 protected:
 
-  //shared_ptr<const OsmMap> _inputMap;
   shared_ptr<OsmMap> _result;
 
   void _evaluateAndSplit(long intersectingNode, const set<long>& wayIds);

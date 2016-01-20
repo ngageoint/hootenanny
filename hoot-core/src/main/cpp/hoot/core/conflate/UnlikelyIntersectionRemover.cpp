@@ -191,7 +191,7 @@ void UnlikelyIntersectionRemover::_splitIntersection(long intersectingNode,
 void UnlikelyIntersectionRemover::apply(shared_ptr<OsmMap>& map)
 {
   _result = map;
-  //map = removeIntersections();
+
   NodeToWayMap n2w(*_result);
 
   // go through each node
