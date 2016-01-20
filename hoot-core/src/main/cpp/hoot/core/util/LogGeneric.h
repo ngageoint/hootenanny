@@ -36,8 +36,8 @@
   if ((level) >= hoot::Log::getInstance().getLevel()) \
   { \
     std::stringstream ss_; \
-    ss_ << __FILE__ << "(" << __LINE__ << ") " << message; \
-    hoot::Log::getInstance().log((level), ss_.str()); \
+    ss_ << message; \
+    hoot::Log::getInstance().log((level), ss_.str(), __FILE__, "", __LINE__); \
   }}
 
 #define LOG_DEBUG(str) { LOG_LEVEL(hoot::Log::Debug, str) }

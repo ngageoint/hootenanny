@@ -909,6 +909,14 @@ mgcp = {
 
         if (attrs.SRT in srtFix) attrs.SRT = srtFix[attrs.SRT];
 
+                // Chop the milliseconds off the "source:datetime"
+        if (attrs.SDV)
+        {
+            // Look for more than one datetime
+            attrs.SDV = translate.chopDateTime(attrs.SDV);
+        }
+
+
     }, // End of applyToMgcpPostProcessing
 
     // ##### End of the xxToMgcpxx Block #####
