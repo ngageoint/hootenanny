@@ -52,11 +52,6 @@ UnlikelyIntersectionRemover::UnlikelyIntersectionRemover()
 
 }
 
-UnlikelyIntersectionRemover::UnlikelyIntersectionRemover(shared_ptr<const OsmMap> map)
-{
-  _inputMap = map;
-}
-
 void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const set<long>& wayIds)
 {
   //
@@ -168,33 +163,10 @@ double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode, shared
   return p;
 }
 
-shared_ptr<OsmMap> UnlikelyIntersectionRemover::removeIntersections(shared_ptr<const OsmMap> map)
+void UnlikelyIntersectionRemover::removeIntersections(shared_ptr<OsmMap> map)
 {
-  UnlikelyIntersectionRemover uir(map);
-  return uir.removeIntersections();
-}
-
-shared_ptr<OsmMap> UnlikelyIntersectionRemover::removeIntersections()
-{
-  shared_ptr<OsmMap> result(new OsmMap(_inputMap));
-  _result = result;
-
-  // create a map from nodes to ways
-  NodeToWayMap n2w(*_inputMap);
-
-  // go through each node
-  for (NodeToWayMap::const_iterator it = n2w.begin(); it != n2w.end(); ++it)
-  {
-    // if the node is part of multiple ways
-    if (it->second.size() > 1)
-    {
-      // evaluate and split the intersection
-      _evaluateAndSplit(it->first, it->second);
-    }
-  }
-
-  _result.reset();
-  return result;
+  UnlikelyIntersectionRemover uir;
+  uir.apply(map);
 }
 
 void UnlikelyIntersectionRemover::_splitIntersection(long intersectingNode,
@@ -218,7 +190,20 @@ void UnlikelyIntersectionRemover::_splitIntersection(long intersectingNode,
 
 void UnlikelyIntersectionRemover::apply(shared_ptr<OsmMap>& map)
 {
-  map = removeIntersections(map);
+  _result = map;
+  //map = removeIntersections();
+  NodeToWayMap n2w(*_result);
+
+  // go through each node
+  for (NodeToWayMap::const_iterator it = n2w.begin(); it != n2w.end(); ++it)
+  {
+    // if the node is part of multiple ways
+    if (it->second.size() > 1)
+    {
+      // evaluate and split the intersection
+      _evaluateAndSplit(it->first, it->second);
+    }
+  }
 }
 
 }
