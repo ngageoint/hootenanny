@@ -107,6 +107,8 @@ public:
   log4cxx::LoggerPtr _logger;
 #endif
 
+  static string ellipsisStr(const string& str, uint count = 33);
+
 private:
   WarningLevel _level;
   static Log* _theInstance;
