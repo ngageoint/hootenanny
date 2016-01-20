@@ -11,7 +11,7 @@ public class ReviewBookmarksSaveResponse {
 		this.savedCount = nSaved;
 	}
 	
-	public long getTagid()
+	public long getSavedCount()
 	{
 		return this.savedCount;
 	}

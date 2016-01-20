@@ -610,9 +610,9 @@ public class ReviewResource
 	
 	
 	/**
-	 * <NAME>Review tag save</NAME>
+	 * <NAME>Review bookmark save</NAME>
 	 * <DESCRIPTION>
-	 * To create or update review tag
+	 * To create or update review bookmark
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * <request>
@@ -620,10 +620,10 @@ public class ReviewResource
 	 * </request>
 	 * </PARAMETERS>
 	 * <OUTPUT>
-	 * 	json containing created/updated tag id
+	 * 	json containing created/updated bookmark id
 	 * </OUTPUT>
 	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/tags/save</URL>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/bookmarks/save</URL>
 	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
 	 * 	<INPUT>
 	 * {
@@ -635,7 +635,7 @@ public class ReviewResource
 	 *	</INPUT>
 	 * <OUTPUT>
    * {
-   *     "tagid": 1
+   *     "bookmarkid": 1
    * }
 	 * </OUTPUT>
 	 * </EXAMPLE>
@@ -644,7 +644,7 @@ public class ReviewResource
    * @throws Exception
    */
   @POST
-  @Path("/tags/save")
+  @Path("/bookmarks/save")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public ReviewBookmarksSaveResponse createReviewBookmark(
@@ -663,7 +663,7 @@ public class ReviewResource
   	catch(Exception ex)
   	{
   		ResourceErrorHandler.handleError(
-	        "Error saving review tag: " + " (" + 
+	        "Error saving review bookmark: " + " (" + 
 	          ex.getMessage() + ")", 
 	        Status.BAD_REQUEST,
 	        log);
@@ -674,9 +674,9 @@ public class ReviewResource
   
   
 	/**
-	 * <NAME>Review tag retrieve</NAME>
+	 * <NAME>Review bookmark retrieve</NAME>
 	 * <DESCRIPTION>
-	 * To retrieve review tag
+	 * To retrieve review bookmark
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * <mapId>
@@ -687,10 +687,10 @@ public class ReviewResource
 	 * </relationId>
 	 * </PARAMETERS>
 	 * <OUTPUT>
-	 * 	json containing list of review tags
+	 * 	json containing list of review bookmarks
 	 * </OUTPUT>
 	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/tags/get?mapId=1&relationId=2</URL>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/bookmarks/get?mapId=1&relationId=2</URL>
 	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
 	 * 	<INPUT>
 	 *	</INPUT>
@@ -722,7 +722,7 @@ public class ReviewResource
    * @throws Exception
    */
   @GET
-  @Path("/tags/get")
+  @Path("/bookmarks/get")
   @Produces(MediaType.APPLICATION_JSON)
   public ReviewBookmarksGetResponse getReviewBookmark(@QueryParam("mapId") String mapid,
   		@QueryParam("relationId") String relid) throws Exception
@@ -740,7 +740,7 @@ public class ReviewResource
   	catch(Exception ex)
   	{
   		ResourceErrorHandler.handleError(
-	        "Error getting review tag: " + " (" + 
+	        "Error getting review bookmark: " + " (" + 
 	          ex.getMessage() + ")", 
 	        Status.BAD_REQUEST,
 	        log);
@@ -749,9 +749,9 @@ public class ReviewResource
   }
   
 	/**
-	 * <NAME>Review tag retrieve all</NAME>
+	 * <NAME>Review bookmark retrieve all</NAME>
 	 * <DESCRIPTION>
-	 * To retrieve all review tag
+	 * To retrieve all review bookmark
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * <orderBy>
@@ -768,10 +768,10 @@ public class ReviewResource
 	 * </offset>
 	 * </PARAMETERS>
 	 * <OUTPUT>
-	 * 	json containing list of review tags
+	 * 	json containing list of review bookmarks
 	 * </OUTPUT>
 	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/tags/getall?orderBy=createdAt&asc=false&limit=2&offset=1</URL>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/bookmarks/getall?orderBy=createdAt&asc=false&limit=2&offset=1</URL>
 	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
 	 * 	<INPUT>
 	 *	</INPUT>
@@ -805,7 +805,7 @@ public class ReviewResource
    * @throws Exception
    */
   @GET
-  @Path("/tags/getall")
+  @Path("/bookmarks/getall")
   @Produces(MediaType.APPLICATION_JSON)
   public ReviewBookmarksGetResponse getAllReviewBookmark(@QueryParam("orderBy") String orderByCol,
   		@QueryParam("asc") String asc, @QueryParam("limit") String limitSize,
@@ -842,7 +842,7 @@ public class ReviewResource
   	catch(Exception ex)
   	{
   		ResourceErrorHandler.handleError(
-	        "Error getting review tag: " + " (" + 
+	        "Error getting review bookmark: " + " (" + 
 	          ex.getMessage() + ")", 
 	        Status.BAD_REQUEST,
 	        log);
@@ -851,9 +851,9 @@ public class ReviewResource
   }
   
 	/**
-	 * <NAME>Review tag stat</NAME>
+	 * <NAME>Review bookmark stat</NAME>
 	 * <DESCRIPTION>
-	 * To retrieve review tags stat
+	 * To retrieve review bookmarks stat
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * </PARAMETERS>
@@ -861,7 +861,7 @@ public class ReviewResource
 	 * 	json stat info
 	 * </OUTPUT>
 	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/tags/stat</URL>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/bookmarks/stat</URL>
 	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
 	 * 	<INPUT>
 	 *	</INPUT>
@@ -876,7 +876,7 @@ public class ReviewResource
    * @throws Exception
    */
   @GET
-  @Path("/tags/stat")
+  @Path("/bookmarks/stat")
   @Produces(MediaType.APPLICATION_JSON)
   public ReviewBookmarksStatResponse getAllReviewBookmarkStat() throws Exception
   {
@@ -884,13 +884,13 @@ public class ReviewResource
   	try(Connection conn = DbUtils.createConnection())
   	{
   		ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
-  		long nCnt = retriever.getTagsCount();
+  		long nCnt = retriever.getbookmarksCount();
   		response.setTotalCount(nCnt);
   	}
   	catch(Exception ex)
   	{
   		ResourceErrorHandler.handleError(
-	        "Error getting review tag counts: " + " (" + 
+	        "Error getting review bookmark counts: " + " (" + 
 	          ex.getMessage() + ")", 
 	        Status.BAD_REQUEST,
 	        log);
@@ -899,9 +899,9 @@ public class ReviewResource
   }
   
 	/**
-	 * <NAME>Review tag delete</NAME>
+	 * <NAME>Review bookmark delete</NAME>
 	 * <DESCRIPTION>
-	 * To delete review tag
+	 * To delete review bookmark
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * <ReviewBookmarkDelRequest>
@@ -912,7 +912,7 @@ public class ReviewResource
 	 * 	json containing total numbers of deleted
 	 * </OUTPUT>
 	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/tag/delete</URL>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/bookmarks/delete</URL>
 	 * 	<REQUEST_TYPE>DELETE</REQUEST_TYPE>
 	 * 	<INPUT>
 	 *  {
@@ -932,7 +932,7 @@ public class ReviewResource
    * @throws Exception
    */
   @DELETE
-  @Path("/tags/delete")
+  @Path("/bookmarks/delete")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public ReviewBookmarkDelResponse delReviewBookmark(ReviewBookmarkDelRequest request) throws Exception
@@ -948,7 +948,7 @@ public class ReviewResource
   	catch(Exception ex)
   	{
   		ResourceErrorHandler.handleError(
-	        "Error deleting review tag: " + " (" + 
+	        "Error deleting review bookmark: " + " (" + 
 	          ex.getMessage() + ")", 
 	        Status.BAD_REQUEST,
 	        log);

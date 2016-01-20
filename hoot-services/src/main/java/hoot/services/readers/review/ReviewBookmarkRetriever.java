@@ -89,7 +89,7 @@ public class ReviewBookmarkRetriever {
 	 * @return - numbers of toal count
 	 * @throws Exception
 	 */
-	public long getTagsCount() throws Exception
+	public long getbookmarksCount() throws Exception
 	{
 		long res = -1;
 		
