@@ -1,8 +1,8 @@
 package hoot.services.writers.review;
 
 import hoot.services.db.DbUtils;
-import hoot.services.db2.QReviewTags;
-import hoot.services.models.review.ReviewTagDelRequest;
+import hoot.services.db2.QReviewBookmarks;
+import hoot.services.models.review.ReviewBookmarkDelRequest;
 
 import java.sql.Connection;
 
@@ -12,13 +12,13 @@ import org.slf4j.LoggerFactory;
 import com.mysema.query.sql.Configuration;
 import com.mysema.query.sql.dml.SQLDeleteClause;
 
-public class ReviewTagsRemover {
+public class ReviewBookmarksRemover {
 	@SuppressWarnings("unused")
-  private static final Logger log = LoggerFactory.getLogger(ReviewTagsRemover.class);
+  private static final Logger log = LoggerFactory.getLogger(ReviewBookmarksRemover.class);
 	
 	private Connection _conn;
 	
-	public ReviewTagsRemover(final Connection cn) 
+	public ReviewBookmarksRemover(final Connection cn) 
 	{
 		_conn = cn;
 	}
@@ -30,7 +30,7 @@ public class ReviewTagsRemover {
 	 * @return - total numbers of removed
 	 * @throws Exception
 	 */
-	public long remove(final ReviewTagDelRequest request) throws Exception
+	public long remove(final ReviewBookmarkDelRequest request) throws Exception
 	{
 		long nDeleted = 0;
 		
@@ -54,17 +54,17 @@ public class ReviewTagsRemover {
 	 * @return - toal numbers of removed
 	 * @throws Exception
 	 */
-	protected SQLDeleteClause _createDelClause(final ReviewTagDelRequest request) throws Exception
+	protected SQLDeleteClause _createDelClause(final ReviewBookmarkDelRequest request) throws Exception
 	{
 		SQLDeleteClause cl = null;
 		
 		try
 		{
-			QReviewTags reviewTags = QReviewTags.reviewTags;
+			QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
 			Configuration configuration = DbUtils.getConfiguration();
-			cl = new SQLDeleteClause(_conn, configuration, reviewTags)
-			.where(reviewTags.mapId.eq(request.getMapId()), 
-					reviewTags.relationId.eq(request.getRelationId()));
+			cl = new SQLDeleteClause(_conn, configuration, reviewBookmarks)
+			.where(reviewBookmarks.mapId.eq(request.getMapId()), 
+					reviewBookmarks.relationId.eq(request.getRelationId()));
 		}
 		catch (Exception ex)
 		{

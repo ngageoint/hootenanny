@@ -34,10 +34,10 @@ import hoot.services.HootProperties;
 import hoot.services.controllers.osm.MapResource;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
-import hoot.services.db2.QReviewTags;
-import hoot.services.db2.ReviewTags;
+import hoot.services.db2.QReviewBookmarks;
+import hoot.services.db2.ReviewBookmarks;
 import hoot.services.geo.BoundingBox;
-import hoot.services.models.review.ReviewTagDelResponse;
+import hoot.services.models.review.ReviewBookmarkDelResponse;
 import hoot.services.models.osm.ElementInfo;
 import hoot.services.models.review.AllReviewableItems;
 import hoot.services.models.review.ReviewRef;
@@ -46,21 +46,21 @@ import hoot.services.models.review.ReviewResolverRequest;
 import hoot.services.models.review.ReviewResolverResponse;
 import hoot.services.models.review.ReviewRefsResponse;
 import hoot.services.models.review.ReviewRefsResponses;
-import hoot.services.models.review.ReviewTagDelRequest;
-import hoot.services.models.review.ReviewTagSaveRequest;
-import hoot.services.models.review.ReviewTagsGetResponse;
-import hoot.services.models.review.ReviewTagsSaveResponse;
-import hoot.services.models.review.ReviewTagsStatResponse;
+import hoot.services.models.review.ReviewBookmarkDelRequest;
+import hoot.services.models.review.ReviewBookmarkSaveRequest;
+import hoot.services.models.review.ReviewBookmarksGetResponse;
+import hoot.services.models.review.ReviewBookmarksSaveResponse;
+import hoot.services.models.review.ReviewBookmarksStatResponse;
 import hoot.services.models.review.ReviewableItem;
 import hoot.services.models.review.ReviewableStatistics;
 import hoot.services.readers.review.ReviewReferencesRetriever;
-import hoot.services.readers.review.ReviewTagRetriever;
+import hoot.services.readers.review.ReviewBookmarkRetriever;
 import hoot.services.readers.review.ReviewableReader;
 import hoot.services.review.ReviewUtils;
 import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.writers.review.ReviewResolver;
-import hoot.services.writers.review.ReviewTagsRemover;
-import hoot.services.writers.review.ReviewTagsSaver;
+import hoot.services.writers.review.ReviewBookmarksRemover;
+import hoot.services.writers.review.ReviewBookmarksSaver;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -616,7 +616,7 @@ public class ReviewResource
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
 	 * <request>
-	 *  ReviewTagSaveRequest class
+	 *  ReviewBookmarkSaveRequest class
 	 * </request>
 	 * </PARAMETERS>
 	 * <OUTPUT>
@@ -647,16 +647,16 @@ public class ReviewResource
   @Path("/tags/save")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public ReviewTagsSaveResponse createReviewTag(
-  	final ReviewTagSaveRequest request) 
+  public ReviewBookmarksSaveResponse createReviewBookmark(
+  	final ReviewBookmarkSaveRequest request) 
   	throws Exception
   {
   	
-  	ReviewTagsSaveResponse response = new ReviewTagsSaveResponse();
+  	ReviewBookmarksSaveResponse response = new ReviewBookmarksSaveResponse();
   	
   	try(Connection conn = DbUtils.createConnection())
   	{
-  		ReviewTagsSaver saver = new ReviewTagsSaver(conn);
+  		ReviewBookmarksSaver saver = new ReviewBookmarksSaver(conn);
   		long nSaved = saver.save(request);
   		response.setSavedCount(nSaved);
   	}
@@ -696,7 +696,7 @@ public class ReviewResource
 	 *	</INPUT>
 	 * <OUTPUT>
    * {
-   *     "reviewTags":
+   *     "reviewBookmarks":
    *     [
    *         {
    *             "createdAt": 1453229299354,
@@ -724,18 +724,18 @@ public class ReviewResource
   @GET
   @Path("/tags/get")
   @Produces(MediaType.APPLICATION_JSON)
-  public ReviewTagsGetResponse getReviewTag(@QueryParam("mapId") String mapid,
+  public ReviewBookmarksGetResponse getReviewBookmark(@QueryParam("mapId") String mapid,
   		@QueryParam("relationId") String relid) throws Exception
   {
-  	ReviewTagsGetResponse response = new  ReviewTagsGetResponse();
+  	ReviewBookmarksGetResponse response = new  ReviewBookmarksGetResponse();
   	
   	try(Connection conn = DbUtils.createConnection())
   	{
   		long mapId = Long.parseLong(mapid);
   		long relationId = Long.parseLong(relid);
-  		ReviewTagRetriever retriever = new ReviewTagRetriever(conn);
-  		List<ReviewTags>res = retriever.retrieve(mapId, relationId);
-  		response.setReviewTags(res);
+  		ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
+  		List<ReviewBookmarks>res = retriever.retrieve(mapId, relationId);
+  		response.setReviewBookmarks(res);
   	}
   	catch(Exception ex)
   	{
@@ -777,7 +777,7 @@ public class ReviewResource
 	 *	</INPUT>
 	 * <OUTPUT>
    * {
-   *     "reviewTags":
+   *     "reviewBookmarks":
    *     [
    *         {
    *             "createdAt": 1453229299354,
@@ -807,11 +807,11 @@ public class ReviewResource
   @GET
   @Path("/tags/getall")
   @Produces(MediaType.APPLICATION_JSON)
-  public ReviewTagsGetResponse getAllReviewTag(@QueryParam("orderBy") String orderByCol,
+  public ReviewBookmarksGetResponse getAllReviewBookmark(@QueryParam("orderBy") String orderByCol,
   		@QueryParam("asc") String asc, @QueryParam("limit") String limitSize,
   		 @QueryParam("offset") String offset) throws Exception
   {
-  	ReviewTagsGetResponse response = new  ReviewTagsGetResponse();
+  	ReviewBookmarksGetResponse response = new  ReviewBookmarksGetResponse();
   	
   	try(Connection conn = DbUtils.createConnection())
   	{
@@ -835,9 +835,9 @@ public class ReviewResource
   			offsetCnt = Long.parseLong(offset);
   		}
   		
-  		ReviewTagRetriever retriever = new ReviewTagRetriever(conn);
-  		List<ReviewTags>res = retriever.retrieveAll(orderByCol, isAsc, limit, offsetCnt);
-  		response.setReviewTags(res);
+  		ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
+  		List<ReviewBookmarks>res = retriever.retrieveAll(orderByCol, isAsc, limit, offsetCnt);
+  		response.setReviewBookmarks(res);
   	}
   	catch(Exception ex)
   	{
@@ -878,12 +878,12 @@ public class ReviewResource
   @GET
   @Path("/tags/stat")
   @Produces(MediaType.APPLICATION_JSON)
-  public ReviewTagsStatResponse getAllReviewTagStat() throws Exception
+  public ReviewBookmarksStatResponse getAllReviewBookmarkStat() throws Exception
   {
-  	ReviewTagsStatResponse response = new ReviewTagsStatResponse();
+  	ReviewBookmarksStatResponse response = new ReviewBookmarksStatResponse();
   	try(Connection conn = DbUtils.createConnection())
   	{
-  		ReviewTagRetriever retriever = new ReviewTagRetriever(conn);
+  		ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
   		long nCnt = retriever.getTagsCount();
   		response.setTotalCount(nCnt);
   	}
@@ -904,9 +904,9 @@ public class ReviewResource
 	 * To delete review tag
 	 * </DESCRIPTION>
 	 * <PARAMETERS>
-	 * <ReviewTagDelRequest>
+	 * <ReviewBookmarkDelRequest>
 	 *  Delete request
-	 * </ReviewTagDelRequest>
+	 * </ReviewBookmarkDelRequest>
 	 * </PARAMETERS>
 	 * <OUTPUT>
 	 * 	json containing total numbers of deleted
@@ -915,11 +915,15 @@ public class ReviewResource
 	 * 	<URL>http://localhost:8080/hoot-services/job/review/tag/delete</URL>
 	 * 	<REQUEST_TYPE>DELETE</REQUEST_TYPE>
 	 * 	<INPUT>
+	 *  {
+	 * "mapId":397,
+	 * "relationId":3
+	 * }
 	 *	</INPUT>
 	 * <OUTPUT>
    * 
    * {
-   *     "deleteCount": 2
+   *     "deleteCount": 1
    * }
 	 * </OUTPUT>
 	 * </EXAMPLE>
@@ -931,13 +935,13 @@ public class ReviewResource
   @Path("/tags/delete")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public ReviewTagDelResponse delReviewTag(ReviewTagDelRequest request) throws Exception
+  public ReviewBookmarkDelResponse delReviewBookmark(ReviewBookmarkDelRequest request) throws Exception
   {
-  	ReviewTagDelResponse response = new  ReviewTagDelResponse();
+  	ReviewBookmarkDelResponse response = new  ReviewBookmarkDelResponse();
   	
   	try(Connection conn = DbUtils.createConnection())
   	{
-  		ReviewTagsRemover remover = new ReviewTagsRemover(conn);
+  		ReviewBookmarksRemover remover = new ReviewBookmarksRemover(conn);
   		long nDel = remover.remove(request);
   		response.setDeleteCount(nDel);
   	}

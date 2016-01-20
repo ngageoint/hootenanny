@@ -9,7 +9,7 @@ import org.junit.experimental.categories.Category;
 
 import com.mysema.query.sql.SQLQuery;
 
-public class ReviewTagsRetrieverTest {
+public class ReviewBookmarksRetrieverTest {
 	
 	@Test
   @Category(UnitTest.class)
@@ -17,12 +17,12 @@ public class ReviewTagsRetrieverTest {
 	{
 		Connection conn = null;
   	
-		ReviewTagRetriever r = new  ReviewTagRetriever(conn);
+		ReviewBookmarkRetriever r = new  ReviewBookmarkRetriever(conn);
 		SQLQuery q = r._getQuery(1, 2);
 		
 		String actual = q.toString();
-		String expected = "from \"review_tags\" \"review_tags\"\n" + 
-				"where \"review_tags\".\"map_id\" = ? and \"review_tags\".\"relation_id\" = ?";
+		String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n" + 
+				"where \"review_bookmarks\".\"map_id\" = ? and \"review_bookmarks\".\"relation_id\" = ?";
 		
 		org.junit.Assert.assertEquals(expected, actual);
   	
@@ -35,12 +35,12 @@ public class ReviewTagsRetrieverTest {
 	{
 		Connection conn = null;
   	
-		ReviewTagRetriever r = new  ReviewTagRetriever(conn);
+		ReviewBookmarkRetriever r = new  ReviewBookmarkRetriever(conn);
 		SQLQuery q = r._getAllQuery("createdAt", true, -1, -1);
 		
 		String actual = q.toString();
-		String expected = "from \"review_tags\" \"review_tags\"\n" + 
-				"order by \"review_tags\".\"created_at\" asc";
+		String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n" + 
+				"order by \"review_bookmarks\".\"created_at\" asc";
 		
 		org.junit.Assert.assertEquals(expected, actual);
   	
@@ -53,12 +53,12 @@ public class ReviewTagsRetrieverTest {
 	{
 		Connection conn = null;
   	
-		ReviewTagRetriever r = new  ReviewTagRetriever(conn);
+		ReviewBookmarkRetriever r = new  ReviewBookmarkRetriever(conn);
 		SQLQuery q = r._getAllQuery("createdAt", false, -1, -1);
 		
 		String actual = q.toString();
-		String expected = "from \"review_tags\" \"review_tags\"\n" + 
-				"order by \"review_tags\".\"created_at\" desc";
+		String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n" + 
+				"order by \"review_bookmarks\".\"created_at\" desc";
 		
 		org.junit.Assert.assertEquals(expected, actual);
   	
@@ -71,12 +71,12 @@ public class ReviewTagsRetrieverTest {
 	{
 		Connection conn = null;
   	
-		ReviewTagRetriever r = new  ReviewTagRetriever(conn);
+		ReviewBookmarkRetriever r = new  ReviewBookmarkRetriever(conn);
 		SQLQuery q = r._getAllQuery("id", true, 100, -1);
 		
 		String actual = q.toString();
-		String expected = "from \"review_tags\" \"review_tags\"\n" + 
-				"order by \"review_tags\".\"id\" asc\n" + 
+		String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n" + 
+				"order by \"review_bookmarks\".\"id\" asc\n" + 
 				"limit ?";
 		
 		org.junit.Assert.assertEquals(expected, actual);
@@ -90,12 +90,12 @@ public class ReviewTagsRetrieverTest {
 	{
 		Connection conn = null;
   	
-		ReviewTagRetriever r = new  ReviewTagRetriever(conn);
+		ReviewBookmarkRetriever r = new  ReviewBookmarkRetriever(conn);
 		SQLQuery q = r._getAllQuery("id", true, 100, 123);
 		
 		String actual = q.toString();
-		String expected = "from \"review_tags\" \"review_tags\"\n" + 
-				"order by \"review_tags\".\"id\" asc\n" + 
+		String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n" + 
+				"order by \"review_bookmarks\".\"id\" asc\n" + 
 				"limit ?\n" + 
 				"offset ?";
 		

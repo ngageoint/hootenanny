@@ -2,10 +2,10 @@ package hoot.services.writers.review;
 
 
 import hoot.services.db.DbUtils;
-import hoot.services.db2.QReviewTags;
-import hoot.services.db2.ReviewTags;
-import hoot.services.models.review.ReviewTagSaveRequest;
-import hoot.services.readers.review.ReviewTagRetriever;
+import hoot.services.db2.QReviewBookmarks;
+import hoot.services.db2.ReviewBookmarks;
+import hoot.services.models.review.ReviewBookmarkSaveRequest;
+import hoot.services.readers.review.ReviewBookmarkRetriever;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
@@ -25,13 +25,13 @@ import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 import com.mysema.query.support.Expressions;
 
-public class ReviewTagsSaver {
+public class ReviewBookmarksSaver {
 	@SuppressWarnings("unused")
-  private static final Logger log = LoggerFactory.getLogger(ReviewTagsSaver.class);
+  private static final Logger log = LoggerFactory.getLogger(ReviewBookmarksSaver.class);
 	
 	private Connection _conn;
 	
-	public ReviewTagsSaver(final Connection cn) 
+	public ReviewBookmarksSaver(final Connection cn) 
 	{
 		_conn = cn;
 	}
@@ -43,12 +43,12 @@ public class ReviewTagsSaver {
 	 * @return - numbers of saved tags
 	 * @throws Exception
 	 */
-	public long save(final ReviewTagSaveRequest request) throws Exception
+	public long save(final ReviewBookmarkSaveRequest request) throws Exception
 	{
 		long nSaved = 0;
-		ReviewTagRetriever retriever = new ReviewTagRetriever(_conn);
+		ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(_conn);
 		
-		List<ReviewTags> res = retriever.retrieve(request.getMapId(), request.getRelationId());
+		List<ReviewBookmarks> res = retriever.retrieve(request.getMapId(), request.getRelationId());
 		
 		if(res.size() == 0)
 		{
@@ -71,7 +71,7 @@ public class ReviewTagsSaver {
 	 * @return - total numbers of inserted
 	 * @throws Exception
 	 */
-	public long insert(final ReviewTagSaveRequest request) throws Exception
+	public long insert(final ReviewBookmarkSaveRequest request) throws Exception
 	{
 		long nInserted = 0;
 		try
@@ -101,17 +101,17 @@ public class ReviewTagsSaver {
 	 * Updates review tag.
 	 * 
 	 * @param request - request object containing updated fields
-	 * @param reviewTagsDto - Current review tag
+	 * @param reviewBookmarksDto - Current review tag
 	 * @return- total numbers of updated
 	 * @throws Exception
 	 */
-	public long update(final ReviewTagSaveRequest request, final ReviewTags reviewTagsDto) throws Exception
+	public long update(final ReviewBookmarkSaveRequest request, final ReviewBookmarks reviewBookmarksDto) throws Exception
 	{
 		long nUpdated = 0;
 		
 		try
 		{
-			nUpdated = _getUpdateQuery(request, reviewTagsDto)
+			nUpdated = _getUpdateQuery(request, reviewBookmarksDto)
 	    .execute();		
 		}
 		catch (Exception ex)
@@ -130,7 +130,7 @@ public class ReviewTagsSaver {
 	 * @return - SQLInsertClause
 	 * @throws Exception
 	 */
-	protected SQLInsertClause _createInsertClause(final ReviewTagSaveRequest request) throws Exception
+	protected SQLInsertClause _createInsertClause(final ReviewBookmarkSaveRequest request) throws Exception
 	{
 		SQLInsertClause cl = null;
 		try
@@ -139,9 +139,9 @@ public class ReviewTagsSaver {
 			
 	  	final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 	  	
-	  	QReviewTags reviewTags = QReviewTags.reviewTags;
-	  	cl = new SQLInsertClause(_conn, configuration,reviewTags)
-	  	.columns(reviewTags.mapId, reviewTags.relationId, reviewTags.createdAt, reviewTags.createdBy, reviewTags.detail)
+	  	QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
+	  	cl = new SQLInsertClause(_conn, configuration,reviewBookmarks)
+	  	.columns(reviewBookmarks.mapId, reviewBookmarks.relationId, reviewBookmarks.createdAt, reviewBookmarks.createdBy, reviewBookmarks.detail)
 	  	.values(request.getMapId(), request.getRelationId(), now, request.getUserid(),
 	  			_jasonToHStore(request.getDetail()));
 		}
@@ -158,12 +158,12 @@ public class ReviewTagsSaver {
 	 * Creates update clause
 	 * 
 	 * @param request - request object containing updated fields
-	 * @param reviewTagsDto - Current review tag
+	 * @param reviewBookmarksDto - Current review tag
 	 * @return - SQLUpdateClause
 	 * @throws Exception
 	 */
-	protected SQLUpdateClause _getUpdateQuery(final ReviewTagSaveRequest request,
-			final ReviewTags reviewTagsDto) throws Exception
+	protected SQLUpdateClause _getUpdateQuery(final ReviewBookmarkSaveRequest request,
+			final ReviewBookmarks reviewBookmarksDto) throws Exception
 	{
 		SQLUpdateClause res = null;
 		
@@ -171,16 +171,16 @@ public class ReviewTagsSaver {
 		{
 			final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 	
-			reviewTagsDto.setLastModifiedAt(now);
-			reviewTagsDto.setLastModifiedBy(request.getUserid());
+			reviewBookmarksDto.setLastModifiedAt(now);
+			reviewBookmarksDto.setLastModifiedBy(request.getUserid());
 			
-			reviewTagsDto.setDetail(_jasonToHStore(request.getDetail()));
+			reviewBookmarksDto.setDetail(_jasonToHStore(request.getDetail()));
 			
 			Configuration configuration = DbUtils.getConfiguration();
-			QReviewTags reviewTags = QReviewTags.reviewTags;
-			res = new SQLUpdateClause(_conn, configuration, reviewTags)
-	    .populate(reviewTagsDto)
-	    .where(reviewTags.id.eq(reviewTagsDto.getId()));
+			QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
+			res = new SQLUpdateClause(_conn, configuration, reviewBookmarks)
+	    .populate(reviewBookmarksDto)
+	    .where(reviewBookmarks.id.eq(reviewBookmarksDto.getId()));
 		}
 		catch (Exception ex)
 		{

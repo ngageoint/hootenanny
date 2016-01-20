@@ -3,7 +3,7 @@ package hoot.services.models.review;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class ReviewTagDelRequest {
+public class ReviewBookmarkDelRequest {
 	private long mapId;
 	public long getMapId() { return mapId; }
   public void setMapId(final long id) { this.mapId = id; }
@@ -12,13 +12,13 @@ public class ReviewTagDelRequest {
   public long getRelationId() { return this.relationId;}
   public void setRelationId(final long relId) {this.relationId = relId;}
   
-  public ReviewTagDelRequest(final long mpId, final long relId)
+  public ReviewBookmarkDelRequest(final long mpId, final long relId)
   {
   	this.mapId = mpId;
   	this.relationId = relId;
   }
   
-  public ReviewTagDelRequest()
+  public ReviewBookmarkDelRequest()
   {
   }
 }

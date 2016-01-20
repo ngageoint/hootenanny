@@ -6,7 +6,7 @@ import org.json.simple.JSONObject;
 
 
 @XmlRootElement
-public class ReviewTagSaveRequest {
+public class ReviewBookmarkSaveRequest {
 	private long mapId;
 	public long getMapId() { return mapId; }
   public void setMapId(final long id) { this.mapId = id; }
@@ -23,7 +23,7 @@ public class ReviewTagSaveRequest {
   public long getUserid() { return this.userId; }
   public void setUserId(final long uid) { this.userId = uid; }
   
-  public ReviewTagSaveRequest(final long mapid, final long relationid, 
+  public ReviewBookmarkSaveRequest(final long mapid, final long relationid, 
   		final JSONObject reviewDetail, final long uid) {
   	this.mapId = mapid;
   	this.relationId = relationid;
@@ -31,6 +31,6 @@ public class ReviewTagSaveRequest {
   	this.userId = uid;
   }
   
-  public ReviewTagSaveRequest() {
+  public ReviewBookmarkSaveRequest() {
   }
 }

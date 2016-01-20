@@ -3,7 +3,7 @@ package hoot.services.models.review;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class ReviewTagsStatResponse {
+public class ReviewBookmarksStatResponse {
 	private long totalCount;
 	
 	public void setTotalCount(final long cnt)
@@ -16,10 +16,10 @@ public class ReviewTagsStatResponse {
 		return this.totalCount;
 	}
 	
-	public ReviewTagsStatResponse(final long cnt)
+	public ReviewBookmarksStatResponse(final long cnt)
 	{
 		this.totalCount = cnt;
 	}
 	
-	public ReviewTagsStatResponse(){}
+	public ReviewBookmarksStatResponse(){}
 }

@@ -8,7 +8,7 @@
 			review tags table to share/publish user specified review items
 		</comment>
 		<!-- review tags table -->
-        <createTable tableName="review_tags">
+        <createTable tableName="review_bookmarks">
             <column name="id" type="bigserial" autoIncrement="true">
             	<constraints nullable="false"/>
             </column>
@@ -39,15 +39,15 @@
         </createTable>
 		<addPrimaryKey 
             columnNames="map_id, relation_id"
-            constraintName="pk_review_tags"
-            tableName="review_tags"/>
+            constraintName="pk_review_bookmarks"
+            tableName="review_bookmarks"/>
         <addForeignKeyConstraint 
-        	constraintName="review_tags_map_id_fkey" 
-        	baseTableName="review_tags" 
+        	constraintName="review_bookmarks_map_id_fkey" 
+        	baseTableName="review_bookmarks" 
         	baseColumnNames="map_id" 
         	referencedTableName="maps" 
         	referencedColumnNames="id"/>
-       	<createIndex tableName="review_tags" indexName="review_tags_map_id_idx">
+       	<createIndex tableName="review_bookmarks" indexName="review_bookmarks_map_id_idx">
        		<column name="map_id"></column>
        	</createIndex>
 

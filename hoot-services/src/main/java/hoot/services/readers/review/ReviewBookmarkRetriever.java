@@ -10,18 +10,18 @@ import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.types.OrderSpecifier;
 
 import hoot.services.db.DbUtils;
-import hoot.services.db2.QReviewTags;
-import hoot.services.db2.ReviewTags;
+import hoot.services.db2.QReviewBookmarks;
+import hoot.services.db2.ReviewBookmarks;
 
-public class ReviewTagRetriever {
+public class ReviewBookmarkRetriever {
 
 	@SuppressWarnings("unused")
-  private static final Logger log = LoggerFactory.getLogger(ReviewTagRetriever.class);
+  private static final Logger log = LoggerFactory.getLogger(ReviewBookmarkRetriever.class);
 	
 	private Connection _conn;
-	private QReviewTags _reviewTags = QReviewTags.reviewTags;
+	private QReviewBookmarks _reviewBookmarks = QReviewBookmarks.reviewBookmarks;
 	
-	public ReviewTagRetriever(final Connection cn)
+	public ReviewBookmarkRetriever(final Connection cn)
 	{
 		this._conn = cn;
 	}
@@ -34,15 +34,15 @@ public class ReviewTagRetriever {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<ReviewTags> retrieve(final long mapId, final long relationId) throws Exception
+	public List<ReviewBookmarks> retrieve(final long mapId, final long relationId) throws Exception
 	{		
 
 		
-		List<ReviewTags> res = null;
+		List<ReviewBookmarks> res = null;
 		try
 		{
 			SQLQuery query = _getQuery(mapId, relationId);
-			res = query.list(_reviewTags);
+			res = query.list(_reviewBookmarks);
 		}
 		catch (Exception ex)
 		{
@@ -63,16 +63,16 @@ public class ReviewTagRetriever {
 	 * @return - list of Review tags
 	 * @throws Exception
 	 */
-	public List<ReviewTags> retrieveAll(final String orderByCol, 
+	public List<ReviewBookmarks> retrieveAll(final String orderByCol, 
 			final boolean isAsc, final long limit, final long offset) throws Exception
 	{		
 
 		
-		List<ReviewTags> res = null;
+		List<ReviewBookmarks> res = null;
 		try
 		{
 			SQLQuery query = _getAllQuery(orderByCol, isAsc, limit, offset);
-			res = query.list(_reviewTags);
+			res = query.list(_reviewBookmarks);
 		}
 		catch (Exception ex)
 		{
@@ -96,7 +96,7 @@ public class ReviewTagRetriever {
 		try
 		{
 			SQLQuery query = new SQLQuery(this._conn, DbUtils.getConfiguration());
-			res = query.from(_reviewTags).count();
+			res = query.from(_reviewBookmarks).count();
 		}
 		catch (Exception ex)
 		{
@@ -120,8 +120,8 @@ public class ReviewTagRetriever {
 		SQLQuery query = new SQLQuery(this._conn, DbUtils.getConfiguration());
 		try
 		{
-			query.from(_reviewTags)
-			.where(_reviewTags.mapId.eq(mapId).and(_reviewTags.relationId.eq(relationId)));
+			query.from(_reviewBookmarks)
+			.where(_reviewBookmarks.mapId.eq(mapId).and(_reviewBookmarks.relationId.eq(relationId)));
 		}
 		catch (Exception ex)
 		{
@@ -148,7 +148,7 @@ public class ReviewTagRetriever {
 		SQLQuery query = new SQLQuery(this._conn, DbUtils.getConfiguration());
 		try
 		{
-			query.from(_reviewTags).orderBy(_getSpecifier(orderByCol, isAsc));
+			query.from(_reviewBookmarks).orderBy(_getSpecifier(orderByCol, isAsc));
 			if(limit > -1)
 			{
 				query.limit(limit);
@@ -180,7 +180,7 @@ public class ReviewTagRetriever {
 	protected OrderSpecifier _getSpecifier(final String orderByCol, 
 			final boolean isAsc)
 	{
-		OrderSpecifier res = _reviewTags.id.asc();
+		OrderSpecifier res = _reviewBookmarks.id.asc();
 		try
 		{
 			if(orderByCol != null)
@@ -188,35 +188,35 @@ public class ReviewTagRetriever {
 				switch(orderByCol)
 				{
 				case "id" :
-					res =  (isAsc) ? _reviewTags.id.asc() : _reviewTags.id.desc();				
+					res =  (isAsc) ? _reviewBookmarks.id.asc() : _reviewBookmarks.id.desc();				
 					break;
 				case "createdAt" :
-					res = (isAsc) ? _reviewTags.createdAt.asc() : _reviewTags.createdAt.desc();	
+					res = (isAsc) ? _reviewBookmarks.createdAt.asc() : _reviewBookmarks.createdAt.desc();	
 					break;
 				case "createdBy" :
-					res = (isAsc) ? _reviewTags.createdBy.asc() : _reviewTags.createdBy.desc();	
+					res = (isAsc) ? _reviewBookmarks.createdBy.asc() : _reviewBookmarks.createdBy.desc();	
 					break;
 				case "lastModifiedAt" :
-					res = (isAsc) ? _reviewTags.lastModifiedAt.asc() : _reviewTags.lastModifiedAt.desc();	
+					res = (isAsc) ? _reviewBookmarks.lastModifiedAt.asc() : _reviewBookmarks.lastModifiedAt.desc();	
 					break;
 				case "lastModifiedBy" :
-					res = (isAsc) ? _reviewTags.lastModifiedBy.asc() : _reviewTags.lastModifiedBy.desc();	
+					res = (isAsc) ? _reviewBookmarks.lastModifiedBy.asc() : _reviewBookmarks.lastModifiedBy.desc();	
 					break;
 				case "mapId" :
-					res = (isAsc) ? _reviewTags.mapId.asc() : _reviewTags.mapId.desc();	
+					res = (isAsc) ? _reviewBookmarks.mapId.asc() : _reviewBookmarks.mapId.desc();	
 					break;
 				case "relationId" :
-					res = (isAsc) ? _reviewTags.relationId.asc() : _reviewTags.relationId.desc();	
+					res = (isAsc) ? _reviewBookmarks.relationId.asc() : _reviewBookmarks.relationId.desc();	
 					break;
 				default :
-					res = _reviewTags.id.asc();
+					res = _reviewBookmarks.id.asc();
 					break;				
 				}
 			}
 		}
 		catch(Exception ex)
 		{
-			log.warn("Defualting to reviewtags.id asc order: " + ex.getMessage());
+			log.warn("Defualting to reviewBookmarks.id asc order: " + ex.getMessage());
 		}
 		
 		

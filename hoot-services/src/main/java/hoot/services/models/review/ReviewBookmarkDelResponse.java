@@ -3,7 +3,7 @@ package hoot.services.models.review;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class ReviewTagDelResponse {
+public class ReviewBookmarkDelResponse {
 	private long deleteCount;
 	public long getDeleteCount()
 	{
@@ -15,12 +15,12 @@ public class ReviewTagDelResponse {
 		this.deleteCount = nDel;
 	}
 	
-	public ReviewTagDelResponse(final long nDel)
+	public ReviewBookmarkDelResponse(final long nDel)
 	{
 		this.deleteCount = nDel;
 	}
 	
-	public ReviewTagDelResponse()
+	public ReviewBookmarkDelResponse()
 	{
 		
 	}

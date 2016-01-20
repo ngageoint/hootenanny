@@ -3,7 +3,7 @@ package hoot.services.models.review;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class ReviewTagsSaveResponse {
+public class ReviewBookmarksSaveResponse {
 	private long savedCount;
 	
 	public void setSavedCount(final long nSaved) 
@@ -16,12 +16,12 @@ public class ReviewTagsSaveResponse {
 		return this.savedCount;
 	}
 	
-	public ReviewTagsSaveResponse (final long nSaved)
+	public ReviewBookmarksSaveResponse (final long nSaved)
 	{
 		this.savedCount = nSaved;
 	}
 	
-	public ReviewTagsSaveResponse()
+	public ReviewBookmarksSaveResponse()
 	{
 		
 	}
