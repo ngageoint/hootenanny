@@ -94,6 +94,22 @@ public:
     }
   }
 
+  double getTotalCost(const vector<SingleAssignmentProblemSolver<ActorTask, ActorTask>::ResultPair>& pairs)
+  {
+    CostFunction costFunction;
+    double totalCost = 0.0;
+    for (vector<SingleAssignmentProblemSolver<ActorTask, ActorTask>::ResultPair>::const_iterator it = pairs.begin();
+         it != pairs.end(); it++)
+    {
+      SingleAssignmentProblemSolver<ActorTask, ActorTask>::ResultPair pair = *it;
+      if (pair.actor != NULL && pair.task != NULL)
+      {
+        totalCost += costFunction.cost(pair.actor, pair.task);
+      }
+    }
+    return totalCost;
+  }
+
   void runTest1()
   {
     CostFunction cost;
@@ -106,7 +122,7 @@ public:
 
     vector<SingleAssignmentProblemSolver<ActorTask, ActorTask>::ResultPair> pairs =
       solver.calculatePairing();
-    HOOT_STR_EQUALS("[4]{4 4, 7 3, 6 6, 5 null}", pairs);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(55, getTotalCost(pairs), 0.1);
   }
 
   void runTest2()
@@ -121,7 +137,7 @@ public:
 
     vector<SingleAssignmentProblemSolver<ActorTask, ActorTask>::ResultPair> pairs =
       solver.calculatePairing();
-    HOOT_STR_EQUALS("[7]{9 1, 5 2, 4 4, 7 3, 6 6, 8 null, 10 null}", pairs);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(58, getTotalCost(pairs), 0.1);
   }
 
 };

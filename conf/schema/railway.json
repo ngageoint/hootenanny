@@ -157,6 +157,20 @@
     },
     {
         "isA": "railway",
+        "name": "railway=tram_stop",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "public_transport=stop_position",
+                "weight": [
+                    0.8,
+                    0.4
+                ]
+            }
+        ]
+    },
+    {
+        "isA": "railway",
         "name": "railway=subway_entrance",
         "objectType": "tag",
         "similarTo": [

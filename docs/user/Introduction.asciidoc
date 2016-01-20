@@ -125,7 +125,7 @@ See also:
 .Horizontal Conflation.  This is a good candidate for Horizontal Conflation because there is a small amount of overlap between the two data sets.  
 image::user/images/HorizontalConflation.png[]
 
-Programatically there is no difference between Vertical and Horizontal conflation. The difference is solely conceptual. 
+Programmatically there is no difference between Vertical and Horizontal conflation. The difference is solely conceptual. 
 
 [[UnsupportedHorizontalConflation]]
 .Unsupported Horizontal Conflation due to the complete lack of overlap between the two data sets.

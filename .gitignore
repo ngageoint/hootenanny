@@ -162,5 +162,4 @@ inputFeatures.png
 docs/developer/restDocs/
 docs/developer/wpsDocs/
 log4j.xml
-mapedit-export-server/node_modules
 Vagrant.marker

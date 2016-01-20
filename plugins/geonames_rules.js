@@ -72,7 +72,7 @@ geonames.rules = {
         'ASYL':{'amenity':'social_facility', 'social_facility:for':'mental_health'}, //  asylum: a facility where the insane are cared for and protected
         'ATHF':{'leisure':'pitch'}, //  athletic field: a tract of land used for playing team sports, and athletic track and field events
         'ATM':{'amenity':'atm'}, //  automatic teller machine: An unattended electronic machine in a public place, connected to a data system and related equipment and activated by a bank customer to obtain cash withdrawals and other banking services. 
-        'ATOL':{'place':'atol'}, //  atoll(s): a ring-shaped coral reef which has closely spaced islands on it encircling a lagoon
+        'ATOL':{'place':'atoll'}, //  atoll(s): a ring-shaped coral reef which has closely spaced islands on it encircling a lagoon
         'BANK':{'amenity':'bank'}, //  bank: A business establishment in which money is kept for saving or commercial purposes or is invested, supplied for loans, or exchanged. 
         'BAR':{'poi':'underwater_bar'}, //  bar: a shallow ridge or mound of coarse unconsolidated material in a stream channel, at the mouth of a stream, estuary, or lagoon and in the wave-break zone along coasts
         'BAY':{'natural':'bay'}, //  bay: a coastal indentation between two capes or headlands, larger than a cove but smaller than a gulf

@@ -88,7 +88,8 @@ namespace Tgs
       QDir d("C:\\GisData\\Urgent\\Ottawa\\extracted_objects_v7\\" + QString::fromStdString(obj));
       vector<string> result;
 
-      QStringList allDirs = d.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+      QStringList allDirs = d.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::NoFilter,
+        QDir::Name);
 
       for (int i = 0; i < allDirs.size(); i++)
       {

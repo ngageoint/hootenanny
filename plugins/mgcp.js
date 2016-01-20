@@ -909,6 +909,14 @@ mgcp = {
 
         if (attrs.SRT in srtFix) attrs.SRT = srtFix[attrs.SRT];
 
+                // Chop the milliseconds off the "source:datetime"
+        if (attrs.SDV)
+        {
+            // Look for more than one datetime
+            attrs.SDV = translate.chopDateTime(attrs.SDV);
+        }
+
+
     }, // End of applyToMgcpPostProcessing
 
     // ##### End of the xxToMgcpxx Block #####
@@ -1040,6 +1048,9 @@ mgcp = {
             mgcp.rules.one2one.push.apply(mgcp.rules.one2one,mgcp.rules.one2oneOut);
 
             mgcp.lookup = translate.createBackwardsLookup(mgcp.rules.one2one);
+
+            // Debug
+            // translate.dumpOne2OneLookup(mgcp.lookup);
 
             // Build a list of things to ignore and flip is backwards
             mgcp.ignoreList = translate.flipList(translate.joinList(mgcp.rules.numBiased, mgcp.rules.txtBiased));

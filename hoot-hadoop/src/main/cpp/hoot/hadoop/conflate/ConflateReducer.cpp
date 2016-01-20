@@ -44,7 +44,7 @@
 #include <pp/Hdfs.h>
 
 // Qt
-#include <QUuid>
+//#include <QUuid>
 
 #include "ConflateMapper.h"
 

@@ -43,29 +43,37 @@ var weightedWordDistance = new hoot.NameExtractor(
                 {"levenshtein.distance.alpha": 1.5}))));
 
 var distances = [
-    {k:'historic',                      match:100,      review:200},
-    {k:'place',                         match:500,      review:1000},
-    {k:'place',     v:'built_up_area',  match:1000,     review:2000},
-    {k:'place',     v:'city',           match:2500,     review:5000},
-    {k:'place',     v:'locality',       match:2000,     review:3000},
-    {k:'place',     v:'neighborhood',   match:1000,     review:2000},
-    {k:'place',     v:'populated',      match:2000,     review:3000},
-    {k:'place',     v:'suburb',         match:1000,     review:2000},
-    {k:'place',     v:'village',        match:2000,     review:3000},
-    {k:'waterway',                      match:1000,     review:2000},
-    {k:'amenity',                       match:100,      review:200},
-    {k:'landuse',                       match:200,      review:600},
-    {k:'leisure',                       match:100,      review:200},
-    {k:'tourism',                       match:100,      review:200},
+
+    {k:'amenity',                             match:100,      review:200},
+    {k:'amenity',  v:'grave_yard',            match:500,      review:1000},
+    {k:'building',                            match:100,      review:200},
+    {k:'building',  v:'hospital',             match:300,      review:500},
+    {k:'building',  v:'train_station',        match:500,      review:1000},
+    {k:'barrier',   v:'toll_booth',           match:25,       review:50},
+    {k:'barrier',   v:'border_control',       match:50,       review:100},
+    {k:'historic',                            match:100,      review:200},
+    {k:'landuse',                             match:500,      review:1000},
+    {k:'leisure',                             match:250,      review:500},
+    {k:'man_made',                            match:100,      review:200},
+    {k:'natural',                             match:500,      review:1000},
+    {k:'place',                               match:500,      review:1000},
+    {k:'place',     v:'built_up_area',        match:1000,     review:2000},
+    {k:'place',     v:'locality',             match:2000,     review:3000},
+    {k:'place',     v:'populated',            match:2000,     review:3000},
+    {k:'place',     v:'region',               match:1000,     review:2000},
+    {k:'place',     v:'village',              match:2000,     review:3000},
+    {k:'power',                               match:25,       review:50},
+    {k:'railway',                             match:250,      review:500},
+    {k:'railway',   v:'station',              match:500,      review:1000},
+    {k:'shop',                                match:100,      review:200},
+    {k:'sport',                               match:50,       review:100},
+    {k:'station',                             match:100,      review:200},
+    {k:'station',   v:'light_rail',           match:500,      review:1000},
+    {k:'tourism',                             match:100,      review:200},
     // hotel campuses can be quite large
-    {k:'tourism',   v:'hotel',          match:200,      review:400},
-    {k:'shop',                          match:100,      review:200},
-    {k:'station',                       match:100,      review:200},
-    {k:'transport',                     match:100,      review:200},
-    {k:'railway',                       match:500,      review:1000},
-    {k:'natural',                       match:1000,     review:1500},
-    {k:'building',  v:'hospital',       match:300,      review:500},
-    {k:'barrier', v:'toll_booth',       match:25,       review:50},
+    {k:'tourism',   v:'hotel',                match:200,      review:400},
+    {k:'transport',  v:'station',             match:500,      review:1000},
+
 ];
 
 function distance(e1, e2) {
@@ -89,11 +97,12 @@ exports.getSearchRadius = function(e) {
     var tags = e.getTags();
 
     var radius = e.getCircularError();
+
     for (var i = 0; i < distances.length; i++) {
         if (tags.contains(distances[i].k) &&
             (distances[i].v == undefined ||
              tags.get(distances[i].k) == distances[i].v)) {
-            radius = Math.max(distances[i].review);
+            radius = Math.max(radius, distances[i].review);
         }
     }
 
@@ -164,21 +173,33 @@ function additiveScore(map, e1, e2) {
 
     var reason = result.reasons;
 
-    var searchRadius = Math.max(exports.getSearchRadius(e1), 
-        exports.getSearchRadius(e2));
+    var t1 = e1.getTags().toDict();
+    var t2 = e2.getTags().toDict();
+
+    // if there is no type information to compare the name becomes more
+    // important
+    var oneGeneric = hasTypeTag(e1) == false || hasTypeTag(e2) == false;
+
+    var e1SearchRadius = exports.getSearchRadius(e1);
+    var e2SearchRadius = exports.getSearchRadius(e2);
+    var searchRadius;
+    if (oneGeneric)
+    {
+      searchRadius = Math.max(e1SearchRadius, e2SearchRadius);
+    }
+    else
+    {
+      searchRadius = Math.min(e1SearchRadius, e2SearchRadius);
+    }
 
     var d = distance(e1, e2);
 
     if (d > searchRadius) {
+        hoot.debug(
+          "distance: " + d + " greater than search radius: " + searchRadius + "; returning score: " +
+          result.score);
         return result;
     }
-
-    // if there is no type information to compare the name becomes more 
-    // important
-    var oneGeneric = hasTypeTag(e1) == false || hasTypeTag(e2) == false;
-
-    var t1 = e1.getTags().toDict();
-    var t2 = e2.getTags().toDict();
 
     var mean = translateMeanWordSetLevenshtein_1_5.extract(map, e1, e2);
     var weightedWordDistanceScore = weightedWordDistance.extract(map, e1, e2);
@@ -291,8 +312,10 @@ function additiveScore(map, e1, e2) {
     result.score = score;
     result.reasons = reason;
 
-    hoot.debug(reason);
-    hoot.debug(score);
+    hoot.debug("e1: " + e1.getId());
+    hoot.debug("e2: " + e2.getId());
+    hoot.debug("reason: " + reason);
+    hoot.debug("score: " + score);
 
     return result;
 }

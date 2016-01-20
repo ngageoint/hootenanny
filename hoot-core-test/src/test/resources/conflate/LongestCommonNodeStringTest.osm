@@ -16,41 +16,19 @@
     <node visible="true" id="-14" lat="38.8544595317577688" lon="-104.8996123747631088"/>
     <node visible="true" id="-15" lat="38.8540969477935292" lon="-104.8970152611187530"/>
     <node visible="true" id="-16" lat="38.8544428995062887" lon="-104.9003598992495370"/>
-    <way visible="true" id="-10">
-        <nd ref="-3"/>
-        <nd ref="-2"/>
-        <tag k="note" v="1"/>
-        <tag k="highway" v="road"/>
-        <tag k="accuracy" v="15"/>
-    </way>
-    <way visible="true" id="-9">
-        <nd ref="-10"/>
-        <nd ref="-11"/>
-        <tag k="note" v="4"/>
-        <tag k="highway" v="road"/>
-        <tag k="accuracy" v="15"/>
-    </way>
-    <way visible="true" id="-8">
-        <nd ref="-5"/>
-        <nd ref="-6"/>
-        <nd ref="-7"/>
-        <tag k="note" v="4"/>
-        <tag k="highway" v="road"/>
-        <tag k="accuracy" v="15"/>
-    </way>
     <way visible="true" id="-7">
         <nd ref="-13"/>
         <nd ref="-12"/>
         <nd ref="-15"/>
         <tag k="highway" v="road"/>
-        <tag k="accuracy" v="15"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-5">
         <nd ref="-16"/>
         <nd ref="-14"/>
         <nd ref="-13"/>
         <tag k="highway" v="road"/>
-        <tag k="accuracy" v="15"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-4">
         <nd ref="-7"/>
@@ -59,7 +37,19 @@
         <nd ref="-10"/>
         <tag k="note" v="3"/>
         <tag k="highway" v="road"/>
-        <tag k="accuracy" v="15"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3">
+        <nd ref="-5"/>
+        <nd ref="-6"/>
+        <nd ref="-7"/>
+        <nd ref="-8"/>
+        <nd ref="-9"/>
+        <nd ref="-10"/>
+        <nd ref="-11"/>
+        <tag k="note" v="4"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-2">
         <nd ref="-2"/>
@@ -67,6 +57,14 @@
         <nd ref="-4"/>
         <tag k="note" v="2"/>
         <tag k="highway" v="road"/>
-        <tag k="accuracy" v="15"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-1">
+        <nd ref="-3"/>
+        <nd ref="-2"/>
+        <nd ref="-1"/>
+        <tag k="note" v="1"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
     </way>
 </osm>

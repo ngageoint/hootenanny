@@ -8694,6 +8694,7 @@
         <nd ref="-52"/>
         <nd ref="-53"/>
         <nd ref="-54"/>
+        <tag k="alt_name" v="E St NW"/>
         <tag k="name" v="Ellipse Rd NW"/>
         <tag k="highway" v="unclassified"/>
         <tag k="error:circular" v="5"/>
@@ -10342,6 +10343,7 @@
         <nd ref="-79"/>
         <nd ref="-80"/>
         <nd ref="-16"/>
+        <tag k="alt_name" v="South Pl NW"/>
         <tag k="name" v="Executive Ave NW"/>
         <tag k="highway" v="unclassified"/>
         <tag k="error:circular" v="5"/>
@@ -10349,6 +10351,7 @@
     <way visible="true" id="-493" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-212"/>
         <nd ref="-79"/>
+        <tag k="alt_name" v="South Pl NW"/>
         <tag k="name" v="Executive Ave NW"/>
         <tag k="highway" v="unclassified"/>
         <tag k="error:circular" v="5"/>
@@ -10482,6 +10485,7 @@
         <nd ref="-70"/>
         <nd ref="-71"/>
         <nd ref="-3"/>
+        <tag k="alt_name" v="15th St NW"/>
         <tag k="name" v="Raoul Wallenberg Pl SW"/>
         <tag k="highway" v="unclassified"/>
         <tag k="error:circular" v="5"/>
@@ -10489,6 +10493,7 @@
     <way visible="true" id="-483" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-215"/>
         <nd ref="-65"/>
+        <tag k="alt_name" v="15th St NW"/>
         <tag k="name" v="Raoul Wallenberg Pl SW"/>
         <tag k="highway" v="unclassified"/>
         <tag k="error:circular" v="5"/>
@@ -10927,6 +10932,7 @@
     <way visible="true" id="-426" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13"/>
         <nd ref="-220"/>
+        <tag k="alt_name" v="US Hwy 50"/>
         <tag k="name" v="Constitution Ave NW"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
@@ -10934,6 +10940,7 @@
     <way visible="true" id="-425" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-12"/>
         <nd ref="-13"/>
+        <tag k="alt_name" v="US Hwy 50"/>
         <tag k="name" v="Constitution Ave NW"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
@@ -10945,6 +10952,7 @@
         <nd ref="-10"/>
         <nd ref="-11"/>
         <nd ref="-12"/>
+        <tag k="alt_name" v="US Hwy 50"/>
         <tag k="name" v="Constitution Ave NW"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
@@ -11003,6 +11011,7 @@
         <nd ref="-5"/>
         <nd ref="-6"/>
         <nd ref="-7"/>
+        <tag k="alt_name" v="US Hwy 50"/>
         <tag k="name" v="Constitution Ave NW"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
@@ -11010,6 +11019,7 @@
     <way visible="true" id="-415" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3"/>
         <nd ref="-4"/>
+        <tag k="alt_name" v="US Hwy 50"/>
         <tag k="name" v="Constitution Ave NW"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
@@ -11018,6 +11028,7 @@
         <nd ref="-1"/>
         <nd ref="-2"/>
         <nd ref="-3"/>
+        <tag k="alt_name" v="US Hwy 50"/>
         <tag k="name" v="Constitution Ave NW"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
@@ -11025,6 +11036,7 @@
     <way visible="true" id="-411" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-219"/>
         <nd ref="-1"/>
+        <tag k="alt_name" v="US Hwy 50"/>
         <tag k="name" v="Constitution Ave NW"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
