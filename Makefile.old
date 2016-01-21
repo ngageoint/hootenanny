@@ -48,7 +48,9 @@ clean: Makefile.qmake services-clean
 	rm -rf `find test-files/cases -type d -empty`
 	rm -rf `find test-files/cases -type d -empty`
 	cd docs; $(MAKE) clean
+ifeq ($(BUILD_SERVICES),services)
 	scripts/CleanOsmApiDB.sh
+endif
 
 clean-db: services-clean-db
 

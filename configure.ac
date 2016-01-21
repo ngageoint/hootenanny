@@ -24,7 +24,7 @@ LT_INIT
 # GDAL
 m4_include([m4/ax_lib_gdal.m4])
 AX_LIB_GDAL([1.4.4])
-LIBS="$LIBS $GDAL_LDFLAGS $GDAL_DEP_LDFLAGS"
+LIBS="$LIBS $GDAL_LDFLAGS"
 CPPFLAGS="$CPPFLAGS $GDAL_CFLAGS"
 if test "${GDAL_VERSION}" = "1.9.1" ; then
   AC_MSG_WARN(["GDAL v1.9.1 is known to have a bug in FileGDB export where the file can't be opened by ArcMap 10.2. GDAL v1.10.1 is known to work."]);
