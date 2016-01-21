@@ -1,4 +1,4 @@
-Reprojecting 0 / 135         
+Reprojecting 0 / 135
 18:20:40.713 INFO  .../core/ops/CalculateStatsOp.cpp(  94) Calculating map statistics...
 18:20:40.714 INFO  .../core/ops/CalculateStatsOp.cpp( 512) Map statistics calculated.
 Stat Name	test-output/cmd/ServiceDbTest/output.osm

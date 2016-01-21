@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<changeSet author="jong.choi" id="16" context="default">
+		<comment>
+			review tags table to share/publish user specified review items
+		</comment>
+		<!-- review tags table -->
+        <createTable tableName="review_bookmarks">
+            <column name="id" type="bigserial" autoIncrement="true">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="map_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+			<column name="relation_id" type="bigint">
+            	<constraints nullable="false"/>
+            </column>
+			<column name="detail" type="hstore">
+            	<constraints nullable="true"/>
+            </column>
+            
+			<!-- See the modifySql command at the end for the "WITHOUT TIME ZONE" bit -->
+            <column name="created_at" type="timestamp">
+            	<constraints nullable="false"/>
+            </column>
+			<column name="last_modified_at" type="timestamp">
+            	<constraints nullable="true"/>
+            </column>
+			<column name="created_by" type="bigint">
+            	<constraints nullable="true"/>
+            </column>
+			<column name="last_modified_by" type="bigint">
+            	<constraints nullable="true"/>
+            </column>
+            
+        </createTable>
+		<addPrimaryKey 
+            columnNames="map_id, relation_id"
+            constraintName="pk_review_bookmarks"
+            tableName="review_bookmarks"/>
+        <addForeignKeyConstraint 
+        	constraintName="review_bookmarks_map_id_fkey" 
+        	baseTableName="review_bookmarks" 
+        	baseColumnNames="map_id" 
+        	referencedTableName="maps" 
+        	referencedColumnNames="id"/>
+       	<createIndex tableName="review_bookmarks" indexName="review_bookmarks_map_id_idx">
+       		<column name="map_id"></column>
+       	</createIndex>
+
+
+		<!-- There isn't an obvious way to specify without time zone in liquibase -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE"/>
+		</modifySql>
+	</changeSet>
+</databaseChangeLog>

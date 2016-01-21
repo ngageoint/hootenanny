@@ -1507,6 +1507,13 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 The search radius to use when conflating waterways.  Not used if
 waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 
+=== services.db.reader.email
+
+* Data Type: string
+* Default Value: ``
+
+Email address of the DG reader user.  Can be set here for debugging and testing.
+
 === services.db.reader.max.elements.per.partial.map
 * Data Type: int
 * Default Value: `50000`

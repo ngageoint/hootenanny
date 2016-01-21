@@ -1028,7 +1028,7 @@ void ServicesDbReader::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
-  setUserEmail(configOptions.getServicesDbWriterEmail());
+  setUserEmail(configOptions.getServicesDbReaderEmail());
   setBoundingBox(configOptions.getConvertBoundingBox());
 }
 
