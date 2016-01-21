@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/perty/PertyOp.h>
 #include <hoot/core/util/Settings.h>
@@ -42,14 +42,6 @@ public:
   static string className() { return "hoot::PertyCmd"; }
 
   PertyCmd() { }
-
-  virtual QString getHelp() const
-  {
-    return getName() + " (input) (output)\n"
-        "  Apply perty manipulations to input and write to output.\n"
-        "  * input - Input (e.g. .osm file).\n"
-        "  * output - Output file (e.g. .osm file).";
-  }
 
   virtual QString getName() const { return "perty"; }
 
@@ -67,7 +59,7 @@ public:
     PertyOp perty;
     perty.apply(map);
 
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     saveMap(map, args[1]);
 

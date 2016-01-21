@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OgrWriter.h"
 
@@ -36,7 +36,7 @@
 
 // hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/RelationData.h>
@@ -275,9 +275,10 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
   }
   else
   {
+    LOG_INFO("Layer: " << layerName << " not found.  Creating layer...");
     // Layer does not exist
     poLayer = _ds->CreateLayer(layerName.toAscii(),
-                  MapReprojector::createWgs84Projection()->Clone(), gtype, options.getCrypticOptions());
+                  MapProjector::createWgs84Projection()->Clone(), gtype, options.getCrypticOptions());
 
     if( poLayer == NULL )
     {
@@ -390,13 +391,14 @@ void OgrWriter::open(QString url)
 
 void OgrWriter::setConfiguration(const Settings& conf)
 {
-  setCreateAllLayers(conf.getBool(createAllLayersKey(), false));
-  setScriptPath(conf.getString(scriptKey(), ""));
-  setPrependLayerName(conf.getString(preLayerNameKey(), ""));
+  ConfigOptions configOptions(conf);
+  setCreateAllLayers(configOptions.getOgrWriterCreateAllLayers());
+  setScriptPath(configOptions.getOgrWriterScript());
+  setPrependLayerName(configOptions.getOgrWriterPreLayerName());
 
-  _appendData = ConfigOptions(conf).getOgrAppendData();
+  _appendData = configOptions.getOgrAppendData();
 
-  QString strictStr = conf.getString(strictCheckingKey(), strictCheckingDefault());
+  QString strictStr = configOptions.getOgrStrictChecking();
   if (strictStr == "on")
   {
     _strictChecking = StrictOn;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <hoot/core/HootConfig.h>
@@ -72,6 +72,8 @@ using namespace std;
 
 namespace hoot
 {
+
+QString OsmSchema::_layerNameKey = "hoot:layername";
 
 typedef boost::adjacency_list<
   // Use listS for storing VertexList -- faster, but not as space efficient (no biggie)
@@ -1596,11 +1598,6 @@ bool OsmSchema::isBuilding(const Tags& t, ElementType type) const
   if ((type != ElementType::Node) && (hasCategory(t, "building") == true))
   {
     result = true;
-  }
-
-  if ( result == true )
-  {
-    LOG_DEBUG("In OsmSchema::isBuilding, returning true")
   }
 
   return result;

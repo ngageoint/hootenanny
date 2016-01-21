@@ -29,6 +29,7 @@
 // Convert TDSv61 to/from OSM+
 //
 
+hoot.require('SchemaTools');
 hoot.require('tds61');
 hoot.require('tds61_schema');
 hoot.require('tds61_rules');

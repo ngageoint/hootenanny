@@ -53,8 +53,7 @@ public:
   /**
    * Not implemented.
    */
-  virtual Match* createMatch(const ConstOsmMapPtr&, ElementId, ElementId)
-  { throw NotImplementedException(); }
+  virtual Match* createMatch(const ConstOsmMapPtr&, ElementId, ElementId);
 
   /**
    * Search the provided map for POI matches and add the matches to the matches vector.

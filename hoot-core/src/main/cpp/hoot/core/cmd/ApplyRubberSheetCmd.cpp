@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/RubberSheet.h>
@@ -46,18 +46,6 @@ public:
   static string className() { return "hoot::ApplyRubberSheetCmd"; }
 
   ApplyRubberSheetCmd() { }
-
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return getName() + " (transform.rs) (input) (output)\n"
-        "\n"
-        "  Creates a transform file for rubber sheeting inputs.\n"
-        "  * transform.rs - Transform rubber sheet spec for moving the input.\n"
-        "  * input - Input (e.g. .osm file).\n"
-        "  * output - Write transformed result to this file. (e.g. .osm file).\n";
-  }
 
   virtual QString getName() const { return "apply-rubber-sheet"; }
 
@@ -78,7 +66,7 @@ public:
     LOG_WARN("has way -1108: " << map->containsWay(-1108));
 
     // make sure rubber sheeting isn't applied during cleaning.
-    QStringList l = conf().getList(MapCleaner::opsKey(), "");
+    QStringList l = ConfigOptions().getMapCleanerTransforms();
     l.removeAll(QString::fromStdString(RubberSheet::className()));
     conf().set(MapCleaner::opsKey(), l);
     MapCleaner().apply(map);
@@ -95,7 +83,7 @@ public:
 
     rs.applyTransform(map);
 
-    MapReprojector::reprojectToWgs84(map);
+    MapProjector::projectToWgs84(map);
 
     saveMap(map, outputPath);
 

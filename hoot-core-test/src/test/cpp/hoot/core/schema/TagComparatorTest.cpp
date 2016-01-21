@@ -166,11 +166,11 @@ public:
 
         Tags t2;
         t2["highway"] = "primary";
-        t2["surface"] = "asphault";
+        t2["surface"] = "asphalt";
 
         Tags expected;
         expected["highway"] = "primary";
-        expected["surface"] = "asphault";
+        expected["surface"] = "asphalt";
 
         Tags avg;
         uut.averageTags(t1, t2, avg);
@@ -455,7 +455,7 @@ public:
       Tags t2;
       t2["highway"] = "primary";
       t2["oneway"] = "true";
-      t2["surface"] = "asphault";
+      t2["surface"] = "asphalt";
 
       CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, uut.compareTags(t1, t2), 0.001);
     }
@@ -464,7 +464,7 @@ public:
       Tags t1;
       t1["highway"] = "residential";
       t1["oneway"] = "false";
-      t1["surface"] = "asphault";
+      t1["surface"] = "asphalt";
 
       Tags t2;
       t2["highway"] = "road";
@@ -478,7 +478,7 @@ public:
       Tags t1;
       t1["highway"] = "primary";
       t1["oneway"] = "1";
-      t1["surface"] = "asphault";
+      t1["surface"] = "asphalt";
 
       Tags t2;
       t2["highway"] = "residential";
@@ -602,7 +602,7 @@ public:
 
         Tags t2;
         t2["highway"] = "primary";
-        t2["surface"] = "asphault";
+        t2["surface"] = "asphalt";
 
         Tags expected;
         expected["highway"] = "road";

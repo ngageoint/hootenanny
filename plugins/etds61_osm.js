@@ -33,6 +33,9 @@
     MattJ, Sept 14
 */
 
+// For the new fuzy rules
+hoot.require('SchemaTools')
+
 // For the OSM+ to NFDD translation
 hoot.require('tds61')
 hoot.require('tds61_rules')

@@ -33,7 +33,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
@@ -69,7 +69,7 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/UndividedHighway.osm", map);
 
-    MapReprojector::reprojectToOrthographic(map);
+    MapProjector::projectToOrthographic(map);
 
     long left = map->findWays("note", "0")[0];
     long right = map->findWays("note", "1")[0];
@@ -100,7 +100,7 @@ public:
     qDebug() << uut3.calculateScore(after);
     uut3.applyManipulation(after, ignored1, ignored2);
 
-    MapReprojector::reprojectToWgs84(after);
+    MapProjector::projectToWgs84(after);
 
     OsmWriter writer;
     writer.write(after, "test-output/DividedHighwayManipulatorTest.osm");

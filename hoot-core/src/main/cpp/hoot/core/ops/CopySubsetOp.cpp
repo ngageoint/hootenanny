@@ -80,6 +80,13 @@ CopySubsetOp::CopySubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eid
 {
 }
 
+CopySubsetOp::CopySubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2) :
+  _from(from)
+{
+  _eids.insert(eid1);
+  _eids.insert(eid2);
+}
+
 void CopySubsetOp::apply(shared_ptr<OsmMap> &map)
 {
   AddAllVisitor v(_from, map);

@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
@@ -77,7 +77,7 @@ public:
 
       MapCleaner().apply(map);
 
-      MapReprojector::reprojectToWgs84(map);
+      MapProjector::projectToWgs84(map);
 
       QDir().mkpath("test-output/conflate");
       OsmWriter writer;

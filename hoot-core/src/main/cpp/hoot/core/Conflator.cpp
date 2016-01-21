@@ -31,7 +31,7 @@ using namespace boost;
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/elements/ElementId.h>
@@ -70,10 +70,9 @@ Conflator::Conflator()
   _debug = false;
   _vectorError = 15.0;
   _maxDividedSeparation = 25.0;
-  _createBogusReviewTags = conf().getBool(createBogusReviewTagsKey(), false);
+  _createBogusReviewTags = ConfigOptions().getCreateBogusReviewTags();
 
-  QStringList manipulatorNames = conf().getList(manipulatorsKey(),
-    QString::fromStdString(WayMerger::className()));
+  QStringList manipulatorNames = ConfigOptions().getConflatorManipulators();
 
   for (int i = 0; i < manipulatorNames.size(); i++)
   {
@@ -82,7 +81,7 @@ Conflator::Conflator()
   }
 
   _maxIterations = -1;
-  _minValidScore = conf().getDouble("conflator.min.valid.score", 0.01);
+  _minValidScore = ConfigOptions().getConflatorMinValidScore();
 }
 
 void Conflator::_applyManipulations()
@@ -323,7 +322,7 @@ void Conflator::_saveMap(QString path)
   LOG_INFO("Writing debug .osm file..." << path.toStdString());
 
   shared_ptr<OsmMap> wgs84(new OsmMap(_map));
-  MapReprojector::reprojectToWgs84(wgs84);
+  MapProjector::projectToWgs84(wgs84);
   OsmWriter writer;
   writer.setIncludeHootInfo(true);
   writer.setIncludeIds(true);

@@ -33,7 +33,7 @@
 
 // Hoot
 #include <hoot/core/Exception.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
@@ -68,7 +68,7 @@ public:
     env.MaxX = 1;
     env.MinY = 0;
     env.MaxY = 1;
-    MapReprojector::reprojectToPlanar(map, env);
+    MapProjector::projectToPlanar(map, env);
 
     map->resetCounters();
     for (int i = 0; i < 10; i++)

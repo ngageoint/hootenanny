@@ -189,7 +189,7 @@ void TestUtils::resetEnvironment()
   ConfigOptions::populateDefaults(conf());
   conf().set("HOOT_HOME", getenv("HOOT_HOME"));
 
-  // Sometimes we add new projections to the MapReprojector, when this happens it may pick a new
+  // Sometimes we add new projections to the MapProjector, when this happens it may pick a new
   // projection and subtly change the results.
   conf().set(ConfigOptions::getTestForceOrthographicProjectionKey(), true);
 

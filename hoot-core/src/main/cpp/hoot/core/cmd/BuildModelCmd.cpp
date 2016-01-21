@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/MatchCreator.h>
@@ -54,18 +54,6 @@ public:
   static string className() { return "hoot::BuildModelCmd"; }
 
   BuildModelCmd() { }
-
-  virtual QString getHelp() const
-  {
-    // 80 columns
-    //  | <---                                                                      ---> |
-    return "build-model (ref1 ref2) [ref1 ref2 ...] (output)\n"
-        "  Reads the inputs, generates a model and writes the result to a .arff and \n"
-        "  .rf files.\n"
-        "  * input1 - Input with REF1 tags (e.g. .osm file).\n"
-        "  * input2 - Input with REF2 tags (e.g. .osm file).\n"
-        "  * output - Output model base name.";
-  }
 
   virtual QString getName() const { return "build-model"; }
 

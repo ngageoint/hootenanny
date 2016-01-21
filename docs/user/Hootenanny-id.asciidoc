@@ -207,6 +207,10 @@ The following table provides all of the available shortcut keys for accessing Ho
 | 1 | Create new Point feature
 | 2 | Create new Line feature
 | 3 | Create new Area feature
+| 6 | Measure Length
+| 7 | Measure Area
+| 8 | Clip to Bounding Box
+| 9 | Clip to Visual Extent
 | ctrl + z | Undo
 | ctrl + y | Redo
 | ctrl + s | Save
@@ -318,7 +322,7 @@ During conflation, the attributes of reference data are used to update any secon
 
 ===== Conflation Performance Report
 
-Hootenanny will generate a conflation performance report containing various statistics for a particular conflation job. These parameters are discussed in more detail in the Hootenanny User Guide, Conflation Statistics Report section. To generate a report for a job, set the 'Generate Report = True' flag. A pdf document containing the performance report and its contents will be available for download from the Manage | <<HootStatsReport,Report>> tab.
+Hootenanny will generate a conflation performance report containing various statistics for a particular conflation job. These parameters are discussed in more detail in the Hootenanny User Guide, Conflation Statistics Report section. To generate a report for a job, set the 'Generate Report = True' flag. A pdf document containing the performance report and its contents will be available for download from the Manage | <<HootStatsReport,Report>> Settings.
 
 .Sample page from Hootenanny Conflation Statistics Report.
 image::user/images/id/hoot_csr.png[scaledwidth="50%"]
@@ -334,7 +338,7 @@ When conflating data it is inevitable that conflicts may arise due to the lack o
 
 From the UI perspective, the term "Conflict" is used synonymously with "Review" but not all reviews are conflicts. Each type of data (POI, Buildings, Roads, etc.) when conflated introduce their own unique types of conflicts where the user is advised to take some action of either merging two POIs together, editing a layer geometry to eliminate any potential conflict or resolve the item as is to maintain as a separate feature.  No single solution can be provided to address a particular conflation conflict but rather it is up to the user to take the necessary steps based on the review text presented to reduce the likelihood that erroneous data will get introduced during the conflation process. 
 
-During review, a single feature is compared with another (based on convergence of geometry and attribution) to determine whether a merge or alternative action is required. Note that feature merging is only available for POI to POI conflation. Otherwise the user can modify  Features flagged for review will appear highlighted on the map in either red or blue corresponding to the Reference and Secondary input data.  Clicking in any of the highlighted fields in the review table will select the feature in question and display its attribute in the left tag panel (see <<ReferenceConflictReview>>).  Users can hide the table by clicking on the Hide/Show Table button located in the conflict review bar at the bottom.  In order to complete the review process, all reviews must be resolved either by stepping through each individually or by clicking the _Complete Review_ button to resolve remaining reviews and either export the data to the desired output format or add another layer for conflation.
+During review, a single feature is compared with another (based on convergence of geometry and attribution) to determine whether a merge or alternative action is required. Note that feature merging is only available for POI to POI conflation. Otherwise the user can modify  Features flagged for review will appear highlighted on the map in either red or blue corresponding to the Reference and Secondary input data.  Clicking in any of the highlighted fields in the review table will select the feature in question and display its attribute in the left tag panel (see <<ReferenceConflictReview>>).  Users can toggle the review items table by clicking on the _Hide/Show Table_ button located in the conflict review bar at the bottom.  In order to complete the review process, all reviews must be resolved either by stepping through each individually or by clicking the _Complete Review_ button to resolve remaining reviews and either export the data to the desired output format or add another layer for conflation.
 
 NOTE: Although reviews occur between single pairs of features, a review set may actually contain 1:Many features which will appear within the UI under the review note as 1 of X count.  
 
@@ -342,8 +346,9 @@ NOTE: Although reviews occur between single pairs of features, a review set may 
 
 When features are flagged as needing review, a number of different review notes may appear to provide some guidance to the user.  The review notes are general and don't provide the specific reasons why a pair of features are being reviewed against one another.  The following sections are meant to be a supplemental guide for users to help them evaluate the particular review scenarios.
 
-1. POI Review Text
+1) POI Review Text
 
+|======
 | *Review Note* | *Description* 
 | similar names | The name score is in the range (0.987403, 1.2)
 | very similar names | The name score is in the range [1.2, +∞)
@@ -353,20 +358,9 @@ When features are flagged as needing review, a number of different review notes 
 | similar name and place type | The names are very similar and the place types are similar
 | generic type to place match | One of the POIs is a generic type (e.g. poi=yes) and the other is a place (e.g. place=town)
 | similar POI type | The two POIs have a similar type (e.g. amenity=restaurant vs. amenity=café)
+|======
 
-2. Building Review Text
-
-Building review explanations were generated before they were exposed to the UI. These are primarily helpful in debugging but not for providing users with meaningful text to make decisions.
-
-Building Review Examples:
-
-* BuildingMatch: Relation:-4054, Way:-33199 p: match: 0.15 miss: 0.25 review: 0.6
-* Relation:-4054, Way:-33199 - Element identifiers for the first and second element being reviewed.
-* match: 0.15 – Probability of a match as determined by the classifier
-* miss: 0.25 – Probability of a miss as determined by the classifier
-* review: 0.6 – Probability of a review as determined by the classifier
-
-3. Highway Review Text
+2) Highway Review Text
 
 The review for highways tends to be a bit more complex due to the nature by which road features are handled within Hoot.  The following is meant to be a guide for helping address review scenarios.
 
@@ -398,12 +392,6 @@ E. *Review Text*: _No valid matching subline found_
 * *User Action*: Review this feature manually, as Hootenanny can not determine automatically whether it matches any feature in the opposite input dataset.
 * *Possible Improvements*: General improvements to road conflation (e.g. intersection matching) will reduce the frequency of this issue.
  
-===== Multi-user Review Scenarios
-
-It is possible for multiple concurrent users to edit the same layer to resolve reviews generated for larger conflated data scenarios.  The current approach that Hootenanny supports is to allow anyone with access to the same deployed instance of Hootenanny to load any layer in the database with the caveat that any features reviewed by active users will appear as "locked" to prevent any unauthorized modifications to these features.  By utilizing a time-based locking mechanism, Hootenanny prevents the same feature from being reviewed twice by concurrent users. Note that is not intended as a long term solution to address user authentication and security. For more fine grained control of feature/layer editing a robust user authentication and security profile will be required. 
-
-Using a quick example, if a conflation job produces a merged layer with 100 open reviews, the first user (user1) who loads the merged layer automatically locks the unresolved review pair loaded in their browser session. If a second user (user2) then simultaneously loads this layer, a different review will be presented to user2 and the total number of locked features will increase to 2 corresponding to the reviews of user1 and user2s. This number of locked features increases as new users add the same merged layer and then decreases as reviews get resolved or as the time duration that features are locked (~2 minutes) expires.  When a review is locked, it cannot be resolved by anyone other than the user who is reviewing it unless they hit the resolve all remaining reviews. Also note that review status changes are committed to the Hootenanny database on a per-review basis and cannot be undone using the undo/redo buttons.
-
 [[MapInMap]]
 ===== Map-in-Map
 
@@ -413,6 +401,12 @@ Depending on the density of data flagged for review, the features are represente
 
 .Map-in-Map with unreviewed features displayed (yellow dots).  Shown here is a POI review of a conflation between OpenStreetMap POIs and Geoname POIs within Sao Paulo, Brazil (Imagery is DigitalGlobe GBM Basemap).  
 image::user/images/id/hoot_mapinmap_review.png[scaledwidth="75%"] 
+
+NOTE: The Map-in-Map overview display of review features was temporarily disabled in version 0.2.19 but has been re-implemented with subsequent versions.  
+
+===== Multi-user Conflict Reviewing
+
+Hootenanny supports the notion of multi-user layer editing in the context of conflation reviews by adding business logic to the application that minimizes the likelihood that different users loading the same layer will be presented with the exact same review.  Bear in mind that datasets containing fewer reviews (<50) will have a higher likelihood of two different users encountering the same conflict at the same time but given that most reviews require on average 15-20 seconds to resolve, the possible of simultaneous editing is relatively low.  The ideal scenario for multi-user conflict reviewing is when a conflation job generates a large number of reviews in excess of several hundred or thousand where this work can be parsed out among users accessing the same layer to minimize down time when conflating data.
 
 ==== Conflation Examples
 
@@ -489,8 +483,10 @@ Points of Interest (POI) to POI conflation is supported within Hootenanny (with 
 Unlike linear and polygon features, the review process for POIs provides the ability to _merge_ attribution and geometry when reviewing conflicts. Merge combines the two POIs attribution into a single POI with the reference geometry and a combination of non-reference/reference attribution. When determining an appropriate action, a user must first consider whether the points represent two separate POIs, a single POI, or an invalid POI in which case the user might move or delete the POI(s) in question.  In this example, a link:$$https://www.arcgis.com/home/item.html?id=f323f677b3f34fe08956b8fcce3ace44$$[DC POI] dataset containing locations and attributes of _Address Alias_ points composed of a variety of link:$$http://geospatial.dcgis.dc.gov/dc_kmz/metadata/AddressAliasPt.html$$[features] as part of the Master Address Repository (MAR) for the D.C. Office of the Chief Technology Officer (OCTO) and participating D.C. government agencies is conflated against link:$$http://www.mapcruzin.com/free-united-states-shapefiles/free-district-of-columbia-arcgis-maps-shapefiles.htm$$[mapcruzin] POI data derived from OSM. Conflating these two POI datasets produces 62 reviews with a range of conflict review notes to step through and take appropriate actions of either merging or accepting as two separate POIs. 
 
 [[POI2POIConflictReview]]
-.Reviewing Washington, D.C. POI conflicts in Hootenanny using the DC POI and mapcruzen data. The figure shows two POIs representing what could either be the same location or two entirely different entities.  In this case the user would need to determine whether the feature highlighted in red, "Reed Elementary School", should be merged with the feature highlighted in blue, "MARIE REED ELEMENTARY SCHOOL".  Hovering over the merge button displays an arrow indicating the directionality of the merge.  
+.Reviewing Washington, D.C. POI conflicts in Hootenanny using the DC POI and mapcruzen data. The figure shows two POIs representing what could either be the same location or two entirely different entities.  In this case the user would need to determine whether the feature highlighted in red, "Reed Elementary School", should be merged with the feature highlighted in blue, "MARIE REED ELEMENTARY SCHOOL".  A red arrow will appear when hovering over the merge button indicating the proposed merge direction but this can be reversed by hitting the Ctrl key and merge button simultaneously. 
 image::user/images/id/hoot_poi_conflate.png[]
+
+NOTE: A POI merge can occur in either direction depending on the users preference.  In most cases clicking merge will merge the secondary dataset POI into the reference POI combining relevant attributes but this can be reversed by holding down the ctrl key when clicking the merge button.  This will not work when using the merge "m" short-cut key.
 
 [[HootiD_GenericRiverConflation]]
 ==== Advanced Conflation Example: Generic River Conflation
@@ -506,11 +502,11 @@ image::user/images/id/hoot_waterway.png[scaledwidth="25%"]
 After both conflation and reviews have been completed, users can export the conflated dataset using a selected translation schema and output file format. Click on the _Export Data_ button shown below to display the export configuration page.  
 
 .Exporting Conflated Results button.
-image::user/images/id/hoot_export_results.png[] 
+image::user/images/id/hoot_export_results.png[scaledwidth="25%"] 
 
 [[hootexport]]
 .Export Options from Hootenanny. 
-image::user/images/id/hoot_export_options.png[scaledwidth="50%"] 
+image::user/images/id/hoot_export_options.png[scaledwidth="25%"] 
 
 ===== Export Translation Schema
 
@@ -527,14 +523,14 @@ This is the output name of the exported file.
 [[Hoot-iD_Manage]]
 === Manage Hootenanny
 
-The _Manage_ capabilities within Hootenanny provide a set of tools and data management options to help transform data into more valuable end products for the analyst. For example, an analyst can use the _Translation Assistant_ to create a custom translation between two different tag schemas for generating agency standard products used for foundation GEOINT content. Data can also be exported from the _Datasets_ tab to different file formats supported by desktop GIS applications and translated to a specific data schema to evaluate compliance to standard specifications using tools like the Geospatial Analysis Integrity Toolkit (GAIT). 
+The _Manage_ capabilities within Hootenanny provide a set of administrative tools and data management options for users. For example, a user can use the _Translation Assistant_ to create a custom translation between two different tag schemas for generating agency standard products used for foundation GEOINT content. Data can also be imported/exported from the _Datasets_ settings to different file formats supported by desktop GIS applications and translated to a specific data schema to evaluate compliance to standard specifications using tools like the Geospatial Analysis Integrity Toolkit (GAIT). 
 
-This section presents an overview of the functionality in each "Manage" tab and whenever relevant, provides a set of example workflows to showcase how the tool can be implemented using real world datasets.
+This section presents an overview of the functionality in each setting and provides a set of example workflows to showcase how the tool can be implemented using real world datasets.
 
-Click on the Manage link in the top right-hand side of the user interface.
+Click on the _Manage_ link in the top right-hand side of the user interface.
 
-.Manage Button
-image::user/images/id/hoot_manage.png[scaledwidth="10%"]
+.Manage Settings in Hootenanny.  A. Vertically displayed settings allow users to select different menu options for each setting.  B. The primary window for updating or interacting with elements associated with each setting. C. The toggle to return to map/manage view. 
+image::user/images/id/hoot_ui_manage.png[scaledwidth="75%"]
 
 [[TranslationAssistant]]
 ==== Translation Assistant
@@ -545,7 +541,7 @@ NOTE:  Validation for some schemas, such as TDS, is more strict (does not suppor
 
 The Translation Assistant provides users with a UI driven tool to merge and translate datasets with varying schemas into common data models using standard tag schemas (OSM, TDS, etc.). The output generated from the Translation Assistant is a custom translation script that will be used to prepare data for the conflation feature matching process. 
 
-To access the Translation Assistant, click on the Manage button and then the Translation Assistant tab to open, as shown in the figure below.
+To access the Translation Assistant, click on the Manage button and then the Translation Assistant settings page to open, as shown in the figure below.
 
 .Translation Assistant
 image::user/images/id/hoot_TA_open.png[scaledwidth="60%"] 
@@ -616,72 +612,61 @@ When the user is satisfied that their translation is sufficiently populated with
 .Adding the translation to list of internal Hootenanny translations.
 image::user/images/id/hoot_addtranslation.png[scaledwidth="25%"]
 
-.Creating a new translation.
-image::user/images/id/hoot_save_translationfile.png[scaledwidth="25%"]
-
 [[HootiD-Translation]]
 ==== Translations
 
-The Translation tab contains all of the predefined translations (MGCP, OSM, TDSv40, TDSv61) in addition to any custom translations that have been saved. To add a new translation, click on the _Add New Translation_ button. Populate the Name and Description fields in this form and copy/paste the javascript generated from the saved custom translation. This will save your custom translation to the list of available translations. Note that the translation will not save if it contains any malformated javascript.
+The Translation settings page contains all of the predefined translations (MGCP, OSM, TDSv40, TDSv61) in addition to any custom translations that have been generated from the translation assistant. To add a new translation, click on the _Add New Translation_ button. Populate the Name and Description fields in this form and copy/paste your _Translation Assistant_ generated javascript.  Note that the translation assistant adds the translation file to the list of available translations as part of the custom translation workflow so users are not required to use the add new translation option and manually paste in their generated translation file.  The pre-defined translations are displayed as read-only and cannot be edited by users however any custom translation will be editable by clicking on the folder icon and editing any javascript as needed.  
 
-.Managing Translations. Clicking on the Translation tab opens the list of available translation files that can be used for importing new data. 
+.Managing Translations. Clicking on the Translation page opens the list of available translation files that can be used for importing new data.  To modify a given translation file (only applicable for read/write capable custom translation files), click on the folder icon and edit the javascript as needed.  To delete click on the trash can icon.
 image::user/images/id/hoot_translation_tab.png[scaledwidth="75%"] 
 
-.Add new translation form. Clicking Add New Translation opens a dialog box to enter custom translation info. 
-image::user/images/id/hoot_new_translation.png[scaledwidth="50%"]  
-
 [[Hoot-iD_Datasets]]
-==== Managing Data into Hootenanny
+==== Datasets
 
-The Dataset tab provides users with different tools for managing data that they wish to use in Hootenanny including importing from source (shapefile, osm, geonames, FGDB), organizing data into a folder structure, renaming/deleting/moving data that has been already ingested, and exporting data from Hootenanny into different formats and translation schemas.  To access this feature click on the Manage button in the top right corner and then open the Datasets tab to expose the options.  
+The Datasets settings page provides users with options for managing data that they wish to use in Hootenanny including importing from source (shapefile, osm, geonames, FGDB), organizing data into a folder structure, renaming/deleting/moving data that has been already ingested, and exporting data from Hootenanny into pre-defined output formats and translation schemas.  To access this feature click on the Datasets setting button.  
 
-.Manage Datasets tab. Users can refresh the view, add a new folder, and add data using the buttons shown. Any dataset or folder that has been added will appear here.  
+.Datasets settings. Users can add new datasets, add a new folder and manage existing datasets.  
 image::user/images/id/hoot_dataset_tab.png[scaledwidth="75%"] 
 
-===== Adding Folders
+===== Adding Datasets
 
-To add a new folder, click on the Add Folder button and enter the name of the folder they wish to create.  The first folder created will always live at the root level. 
-
-.Add new folder.  Click the Add New folder button to open the dialog box.
-image::user/images/id/hoot_add_folder.png[scaledwidth="25%"]
-
-Once a new folder has been created, users can either add data directly by right-mouse clicking on the folder to expose the Add Dataset option or by simply clicking on the Add data button to open the add data dialog.  
-
-===== Importing Data
-
-When users click on Add Data, a dialog box including different options is presented. These options include selecting the type of data to import (shapefile, osm, .zip containing shapefile or fgdb, a FGDB data folder, geonames file from geonames.org), a browser button to locate the data, the name you wish to save the layer as, the folder path where the data should reside (root is default), any new folder name if needed, and the appropriate Translation Schema.    
-
-To import data into Hootenanny, click on the _Add Dataset_ button in the Dataset tab to bring up the Add Data menu shown in <<AddNewData>>. For _Import Type_, users can select either a single file (.osm, .shp, .zip), a GEONAMES dataset from geonames.org or a folder for  ESRI FileGeoDatabase (FGDB) files. It is possible to merge multiple files in a single zip file during import but note that these datasets will get merged into a single layer in Hootenanny. Currently there is no support for importing zip files containing one or more .osm files (multiple .osm files can be merged into a single layer as long as they are not inside of a .zip).
+When users click on Add Data, a dialog box including different options for importing datasets appears. For _Import Type_, users can select either .zip file containing a single or multiple shapefiles (multiple shapefiles will get merged into a single layer during import), a shapefile, a .osm file, a geonames text file from geonames.org (renamed to x.geonames) or a ESRI FileGeoDatabase (FGDB) directory.  
 
 [[AddNewData]]
 .Importing data into Hootenanny. 
-image::user/images/id/hoot_add_dataset.png[scaledwidth="25%"]
-
-With data and folders displayed in the dataset tab, users can employ different options for managing their data including deleting the folder or layer, modifying the name or folder path of the layer, or adding additional folders and data as required using the right-click or path specification. It is important to note when deleting a folder, only the top-level or specified folder and its contents are deleted but any recursive folders and datasets remain.  In other words, it is not possible to delete an entire data directory tree by deleting the top level folder.  Users must select each subfolder to delete until all are removed within a hierarchical directory structure.   
+image::user/images/id/hoot_add_dataset.png[scaledwidth="75%"] 
 
 *_Bulk Import_*
 
-Using the Hootenanny bulk importer, users can add multiple datasets in a import single job.  To access this right-click on the Add Datasets button as shown below and select the Bulk Import option.  A Bulk Add Data dialog box will appear allowing users to create a bulk import job by adding new rows for each dataset they wish to import.  Note that all options except for defining a new folder are available here.  After adding the relevant datasets, click on the Import button.
+To ingest multiple datasets in bulk mode, Hootenanny provides a bulk importer where additional data can be added as rows to a form that handles the ingest data job.  To access this feature, right-click on the Add Datasets button as shown below and select the Bulk Import option.  A _Bulk Importer_ menu will appear with each row representing a unique dataset to import along with any relevant import options.  Click import when finished to submit the job.
 
 [[HootBulkImport]]
 .Bulk Import in Hootenanny.  To access right-click on the Add Dataset button and populate each field.  Note that larger datasets will require more time to import. 
-image::user/images/id/hoot_bulkimport.png[scaledwidth="25%"]
+image::user/images/id/hoot_bulkimport.png[scaledwidth="75%"]
+
+===== Adding Folders
+
+To add a new folder, click on the Add Folder button and enter the name of the folder they wish to create.  Any sub folders can be created by right-clicking on the folder and selecting Add Folder or selecting a new output folder name in the add dataset menu.  When deleting a folder, all data contained in the folder will be removed with the exception of any subfolders, which will then become the next directory within the newly deleted folder.  For example, if your folder structure consists of a parent named TEST containing dataset1 and subfolders TEST2 (containing dataset2) and TEST3 (containing dataset3). Deleting the TEST folder will remove only dataset1 and bring the folders, TEST2 and TEST3 to the root level.  The data within those folders will remain intact.
+
+.Add folder.  Click the Add folder button to open the relevant menu options.
+image::user/images/id/hoot_add_folder.png[scaledwidth="25%"]
 
 ===== Export Data 
 
-To export a dataset, right-mouse click on a dataset and select the Export Dataset option to open the Export dialog box shown in <<hootexport>>.  The export options available from Hootenanny are discussed in <<HootiD_Exporting>>. 
+To export a dataset, right-mouse click on a dataset and select the Export Dataset option to open the Export dialog box shown in <<hootexport>>.  The various export options are discussed in detail in <<HootiD_Exporting>>. 
 
 [[right-click_export]]
 .Export from dataset.
-image::user/images/id/hoot_export_rtclick.png[scaledwidth="25%"]
+image::user/images/id/hoot_export_rtclick.png[scaledwidth="75%"]
 
-NOTE: To select multiple datasets 
+NOTE: Datasets must be selected (highlighted in yellow) to export. When selecting more than one dataset only delete and move are available options. 
 
 ===== Other Data Manage Options
 
-Layers can be managed simply by right-clicking over an individual or multiple selected (using the ctrl key) datasets and picking an appropriate action from the list of presented options.
+Layers can be managed by right-clicking on selected datasets to expose different menu options.  Note that the options presented will depend on the number of files are selected.
+
 .Manage data options available from Right-click.
-image::user/images/id/hoot_manageoptions.png[scaledwidth="25%"]
+image::user/images/id/hoot_manageoptions.png[scaledwidth="15%"]
 
 To delete, move or rename an existing dataset(s), right click over the highlighted layers and select the appropriate option.  
 
@@ -701,7 +686,7 @@ Once complete, users can load this newly generated validation layer and Hootenan
 .Reported: You cannot determine the point using the provided imagery (missing coverage, clouds, etc.). Shortcut key = 3.  
 
 .Validating a layer of Washington, D.C. Points of Interest in Hootenanny against the DigitalGlobe GBM/EGD basemap.
-image::user/images/id/hoot_validate_layer.png[scaledwidth="50%"]
+image::user/images/id/hoot_validate_layer.png[scaledwidth="75%"]
 
 NOTE: Panning the map during Validation causes the highlighted POI to become unselected and removes the validation options. To resume validation, click the Select button at the bottom.
 
@@ -728,7 +713,7 @@ URL:  http://localhost:8080/hoot-services/ogc/ex_f7e41fccf46343b6987d003c5a83c9a
 
 Hootenanny provides users with the capability to generate their own custom basemap service using a georeferenced image. Currently Hootenanny only supports GeoTIFF or png file types. To generate a new basemap that can be displayed in Hootenanny, click on the Basemap tab and the _New Basemap_ button. Use the file browser to upload your local georeferenced image (GeoTIFF or png only). 
 
-.Creating New Basemaps
+.Creating New Basemaps for Hootenanny.  Click on the + New Basemap and select an appropriate georeferenced image.  
 image::user/images/id/hoot_basemap.png[] 
 
 When the file has finished processing, you will see a crossed through eye indicating that the basemap is available but disabled. To enable, simply click on the eye icon and select it from the available background imagery layers. Note that larger imagery files will take additional time to process on the server.
@@ -762,13 +747,10 @@ image::user/images/id/hoot_csr_tab.png[]
 
 === About Hootenanny
 
-The version of Hootenanny can be found by clicking on the Hootenanny link located in the top left hand corner of the UI. Having this information available is particularly useful when troubleshooting or testing.
-
-.About Hoot
-image::user/images/id/hoot_about.png[] 
+The version of Hootenanny can be found by clicking on the Hootenanny link located in the top left hand corner of the UI. Having the version information readily available is particularly useful when troubleshooting or testing.
 
 .Hootenanny Version info
-image::user/images/id/hoot_version.png[] 
+image::user/images/id/hoot_about.png[] 
 
 [[Advanced_Conflation_Options]]
 == Appendix: Hootenanny Advanced Parameters

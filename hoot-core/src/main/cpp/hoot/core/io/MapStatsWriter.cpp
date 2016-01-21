@@ -32,7 +32,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/OsmUtils.h>
-#include <hoot/core/MapReprojector.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/StatsComposer.h>
@@ -170,7 +170,7 @@ void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& stat
   conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
   shared_ptr<OsmMap> map(new OsmMap());
   OsmUtils::loadMap(map, mapInputPath, true, Status::Invalid);
-  MapReprojector::reprojectToPlanar(map);
+  MapProjector::projectToPlanar(map);
 
   QList< QList<SingleStat> > allStats;
   shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());

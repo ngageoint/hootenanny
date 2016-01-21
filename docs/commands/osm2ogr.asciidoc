@@ -1,20 +1,29 @@
-
 [[osm2ogr]]
 == osm2ogr
 
 === Description
-This method provides conversion from .osm to either Shapefile or FileGDB. The OGR libraries are used on the back end so other formats such as PostGIS and SQLite will likely work, but are not tested. This translation process provides very fine grained control to the user and can be quite complex. If you just want to export to a Shapefile with some simple columns please look at +--osm2shp+ first.
+
+This method provides conversion from .osm to either Shapefile or FileGDB. The
+OGR libraries are used on the back end so other formats such as PostGIS and
+SQLite will likely work, but are not tested. This translation process provides
+very fine grained control to the user and can be quite complex. If you just want
+to export to a Shapefile with some simple columns please look at +--osm2shp+
+first.
 
 * +translation+ - JavaScript file name.
 * +input.osm+ - An OSM compatible input format (e.g. .osm or .osm.pbf)
-* +output+ - Output file name. The format is determined by extension. FileGDB (*.gdb) and Shapefile (*.shp) have been tested but other OGR compatible formats will likely work.
+* +output+ - Output file name. The format is determined by extension. FileGDB
+  (*.gdb) and Shapefile (*.shp) have been tested but other OGR compatible
+  formats will likely work.
 
 === Usage
+
 --------------------------------------
 osm2ogr (translation) (input.osm) (output)
 --------------------------------------
 
 ==== Example
+
 --------------------------------------
 hoot osm2ogr MyTranslation.js MyInput.osm MyOutput.gdb
 --------------------------------------

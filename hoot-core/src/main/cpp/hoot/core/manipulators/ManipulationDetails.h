@@ -57,12 +57,6 @@ public:
    * this manipulation.
    */
   virtual set<ElementId> getMatchedElements() const = 0;
-
-  /**
-   * Returns a map of features that went into determining this as a match and their values. The
-   * QVariant can either be a QString (nominal) or double (numeric).
-   */
-  virtual map<QString, double> getFeatures(const shared_ptr<const OsmMap>& m) const = 0;
 };
 
 }

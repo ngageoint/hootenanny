@@ -1,5 +1,5 @@
 #!/bin/bash
-#set -e
+set -e
 
 mkdir -p test-output/translation/
 
