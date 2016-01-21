@@ -188,7 +188,9 @@ plugins/etds61_osm_rules.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv
 
 # Build osmapi db
 osmapidb: conf/DatabaseConfig.sh
+ifeq ($(BUILD_SERVICES),services)
 	scripts/SetupOsmApiDB.sh
+endif
 
 # Build automatically generated JS files
 js-make: $(SCHEMA_FILES) plugins/config.js
