@@ -34,7 +34,10 @@ import hoot.services.HootProperties;
 import hoot.services.controllers.osm.MapResource;
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QMaps;
+import hoot.services.db2.QReviewBookmarks;
+import hoot.services.db2.ReviewBookmarks;
 import hoot.services.geo.BoundingBox;
+import hoot.services.models.review.ReviewBookmarkDelResponse;
 import hoot.services.models.osm.ElementInfo;
 import hoot.services.models.review.AllReviewableItems;
 import hoot.services.models.review.ReviewRef;
@@ -43,19 +46,29 @@ import hoot.services.models.review.ReviewResolverRequest;
 import hoot.services.models.review.ReviewResolverResponse;
 import hoot.services.models.review.ReviewRefsResponse;
 import hoot.services.models.review.ReviewRefsResponses;
+import hoot.services.models.review.ReviewBookmarkDelRequest;
+import hoot.services.models.review.ReviewBookmarkSaveRequest;
+import hoot.services.models.review.ReviewBookmarksGetResponse;
+import hoot.services.models.review.ReviewBookmarksSaveResponse;
+import hoot.services.models.review.ReviewBookmarksStatResponse;
 import hoot.services.models.review.ReviewableItem;
 import hoot.services.models.review.ReviewableStatistics;
 import hoot.services.readers.review.ReviewReferencesRetriever;
+import hoot.services.readers.review.ReviewBookmarkRetriever;
 import hoot.services.readers.review.ReviewableReader;
 import hoot.services.review.ReviewUtils;
 import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.writers.review.ReviewResolver;
+import hoot.services.writers.review.ReviewBookmarksRemover;
+import hoot.services.writers.review.ReviewBookmarksSaver;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -73,6 +86,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.mysema.query.sql.SQLQuery;
+import com.mysema.query.types.OrderSpecifier;
 
 /**
  * Service endpoint for the conflated data review process
@@ -592,4 +606,355 @@ public class ReviewResource
 		}
 		return ret;
 	}
+	
+	
+	
+	/**
+	 * <NAME>Review bookmark save</NAME>
+	 * <DESCRIPTION>
+	 * To create or update review bookmark
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * <request>
+	 *  ReviewBookmarkSaveRequest class
+	 * </request>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	json containing created/updated bookmark id
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/bookmarks/save</URL>
+	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
+	 * 	<INPUT>
+	 * {
+	 *  "mapId":1,
+	 *  "relationId":3,
+	 *  "detail": {"k1":"v1","l3":"v3"},
+	 *  "userId":-1
+	 *  }
+	 *	</INPUT>
+	 * <OUTPUT>
+   * {
+   *     "bookmarkid": 1
+   * }
+	 * </OUTPUT>
+	 * </EXAMPLE>
+   * @param request
+   * @return
+   * @throws Exception
+   */
+  @POST
+  @Path("/bookmarks/save")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ReviewBookmarksSaveResponse createReviewBookmark(
+  	final ReviewBookmarkSaveRequest request) 
+  	throws Exception
+  {
+  	
+  	ReviewBookmarksSaveResponse response = new ReviewBookmarksSaveResponse();
+  	
+  	try(Connection conn = DbUtils.createConnection())
+  	{
+  		ReviewBookmarksSaver saver = new ReviewBookmarksSaver(conn);
+  		long nSaved = saver.save(request);
+  		response.setSavedCount(nSaved);
+  	}
+  	catch(Exception ex)
+  	{
+  		ResourceErrorHandler.handleError(
+	        "Error saving review bookmark: " + " (" + 
+	          ex.getMessage() + ")", 
+	        Status.BAD_REQUEST,
+	        log);
+  	}
+   
+  	return response;
+  }
+  
+  
+	/**
+	 * <NAME>Review bookmark retrieve</NAME>
+	 * <DESCRIPTION>
+	 * To retrieve review bookmark
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * <mapId>
+	 *  map Id
+	 * </mapId>
+	 * <relationId>
+	 *  relation id
+	 * </relationId>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	json containing list of review bookmarks
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/bookmarks/get?mapId=1&relationId=2</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 * <OUTPUT>
+   * {
+   *     "reviewBookmarks":
+   *     [
+   *         {
+   *             "createdAt": 1453229299354,
+   *             "createdBy": -1,
+   *             "detail":
+   *             {
+   *                 "type": "hstore",
+   *                 "value": ""k1"=>"v1", "l3"=>"v3""
+   *             },
+   *             "id": 2,
+   *             "lastModifiedAt": null,
+   *             "lastModifiedBy": null,
+   *             "mapId": 1,
+   *             "relationId": 2
+   *         }
+   *     ]
+   * }
+	 * </OUTPUT>
+	 * </EXAMPLE>
+   * @param mapid
+   * @param relid
+   * @return
+   * @throws Exception
+   */
+  @GET
+  @Path("/bookmarks/get")
+  @Produces(MediaType.APPLICATION_JSON)
+  public ReviewBookmarksGetResponse getReviewBookmark(@QueryParam("mapId") String mapid,
+  		@QueryParam("relationId") String relid) throws Exception
+  {
+  	ReviewBookmarksGetResponse response = new  ReviewBookmarksGetResponse();
+  	
+  	try(Connection conn = DbUtils.createConnection())
+  	{
+  		long mapId = Long.parseLong(mapid);
+  		long relationId = Long.parseLong(relid);
+  		ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
+  		List<ReviewBookmarks>res = retriever.retrieve(mapId, relationId);
+  		response.setReviewBookmarks(res);
+  	}
+  	catch(Exception ex)
+  	{
+  		ResourceErrorHandler.handleError(
+	        "Error getting review bookmark: " + " (" + 
+	          ex.getMessage() + ")", 
+	        Status.BAD_REQUEST,
+	        log);
+  	}
+  	return response;
+  }
+  
+	/**
+	 * <NAME>Review bookmark retrieve all</NAME>
+	 * <DESCRIPTION>
+	 * To retrieve all review bookmark
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * <orderBy>
+	 *  order by column [createdAt | createdBy |  id | lastModifiedAt | lastModifiedBy | mapId | relationId]
+	 * </orderBy>
+	 * <asc>
+	 *  is ascending [true | false]
+	 * </asc>
+	 * <limit>
+	 *  Limit count for paging . 
+	 * </limit>
+	 * <offset>
+	 *  offset index for paging . 
+	 * </offset>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	json containing list of review bookmarks
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/bookmarks/getall?orderBy=createdAt&asc=false&limit=2&offset=1</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 * <OUTPUT>
+   * {
+   *     "reviewBookmarks":
+   *     [
+   *         {
+   *             "createdAt": 1453229299354,
+   *             "createdBy": -1,
+   *             "detail":
+   *             {
+   *                 "type": "hstore",
+   *                 "value": ""k1"=>"v1", "l3"=>"v3""
+   *             },
+   *             "id": 2,
+   *             "lastModifiedAt": null,
+   *             "lastModifiedBy": null,
+   *             "mapId": 1,
+   *             "relationId": 2
+   *         }
+   *     ]
+   * }
+	 * </OUTPUT>
+	 * </EXAMPLE>
+   * @param orderByCol
+   * @param asc
+   * @param limitSize
+   * @param offset
+   * @return
+   * @throws Exception
+   */
+  @GET
+  @Path("/bookmarks/getall")
+  @Produces(MediaType.APPLICATION_JSON)
+  public ReviewBookmarksGetResponse getAllReviewBookmark(@QueryParam("orderBy") String orderByCol,
+  		@QueryParam("asc") String asc, @QueryParam("limit") String limitSize,
+  		 @QueryParam("offset") String offset) throws Exception
+  {
+  	ReviewBookmarksGetResponse response = new  ReviewBookmarksGetResponse();
+  	
+  	try(Connection conn = DbUtils.createConnection())
+  	{
+
+  		boolean isAsc = true;
+  		if(asc != null)
+  		{
+  			isAsc = (asc.equalsIgnoreCase("true"));
+  		}
+  		
+  		long limit = -1;
+  		
+  		if(limitSize != null)
+  		{
+  			limit = Long.parseLong(limitSize);
+  		}
+  		
+  		long offsetCnt = -1;
+  		if(offset != null)
+  		{
+  			offsetCnt = Long.parseLong(offset);
+  		}
+  		
+  		ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
+  		List<ReviewBookmarks>res = retriever.retrieveAll(orderByCol, isAsc, limit, offsetCnt);
+  		response.setReviewBookmarks(res);
+  	}
+  	catch(Exception ex)
+  	{
+  		ResourceErrorHandler.handleError(
+	        "Error getting review bookmark: " + " (" + 
+	          ex.getMessage() + ")", 
+	        Status.BAD_REQUEST,
+	        log);
+  	}
+  	return response;
+  }
+  
+	/**
+	 * <NAME>Review bookmark stat</NAME>
+	 * <DESCRIPTION>
+	 * To retrieve review bookmarks stat
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	json stat info
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/bookmarks/stat</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 * <OUTPUT>
+   * 
+   * {
+   *     "totalCount": 2
+   * }
+	 * </OUTPUT>
+	 * </EXAMPLE>
+   * @return
+   * @throws Exception
+   */
+  @GET
+  @Path("/bookmarks/stat")
+  @Produces(MediaType.APPLICATION_JSON)
+  public ReviewBookmarksStatResponse getAllReviewBookmarkStat() throws Exception
+  {
+  	ReviewBookmarksStatResponse response = new ReviewBookmarksStatResponse();
+  	try(Connection conn = DbUtils.createConnection())
+  	{
+  		ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
+  		long nCnt = retriever.getbookmarksCount();
+  		response.setTotalCount(nCnt);
+  	}
+  	catch(Exception ex)
+  	{
+  		ResourceErrorHandler.handleError(
+	        "Error getting review bookmark counts: " + " (" + 
+	          ex.getMessage() + ")", 
+	        Status.BAD_REQUEST,
+	        log);
+  	}
+  	return response;
+  }
+  
+	/**
+	 * <NAME>Review bookmark delete</NAME>
+	 * <DESCRIPTION>
+	 * To delete review bookmark
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * <ReviewBookmarkDelRequest>
+	 *  Delete request
+	 * </ReviewBookmarkDelRequest>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	json containing total numbers of deleted
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/job/review/bookmarks/delete</URL>
+	 * 	<REQUEST_TYPE>DELETE</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *  {
+	 * "mapId":397,
+	 * "relationId":3
+	 * }
+	 *	</INPUT>
+	 * <OUTPUT>
+   * 
+   * {
+   *     "deleteCount": 1
+   * }
+	 * </OUTPUT>
+	 * </EXAMPLE>
+   * @param request
+   * @return
+   * @throws Exception
+   */
+  @DELETE
+  @Path("/bookmarks/delete")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ReviewBookmarkDelResponse delReviewBookmark(ReviewBookmarkDelRequest request) throws Exception
+  {
+  	ReviewBookmarkDelResponse response = new  ReviewBookmarkDelResponse();
+  	
+  	try(Connection conn = DbUtils.createConnection())
+  	{
+  		ReviewBookmarksRemover remover = new ReviewBookmarksRemover(conn);
+  		long nDel = remover.remove(request);
+  		response.setDeleteCount(nDel);
+  	}
+  	catch(Exception ex)
+  	{
+  		ResourceErrorHandler.handleError(
+	        "Error deleting review bookmark: " + " (" + 
+	          ex.getMessage() + ")", 
+	        Status.BAD_REQUEST,
+	        log);
+  	}
+  	return response;
+  }
+  
+
 }

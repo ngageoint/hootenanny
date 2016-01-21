@@ -54,7 +54,7 @@ var schemaMap = {};
 schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_schema.js');
 schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_schema.js');
 
-
+/*
 try {
 	var schemaPath = HOOT_HOME + '/plugins-local/hgis20_schema.js';
     var fPath = fs.lstatSync(schemaPath);
@@ -92,7 +92,7 @@ try {
 catch (e) {
     // ...
 }
-
+*/
 // Argument parser
 process.argv.forEach(function (val, index, array) {
 	// port arg
