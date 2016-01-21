@@ -1,11 +1,11 @@
-Reprojecting 0 / 135
-18:20:40.713 INFO  .../core/ops/CalculateStatsOp.cpp(  94) Calculating map statistics...
-18:20:40.714 INFO  .../core/ops/CalculateStatsOp.cpp( 512) Map statistics calculated.
+Reprojecting 0 / 136         
+19:25:37.057 INFO  .../core/ops/CalculateStatsOp.cpp(  94) Calculating map statistics...
+19:25:37.057 INFO  .../core/ops/CalculateStatsOp.cpp( 512) Map statistics calculated.
 Stat Name	test-output/cmd/ServiceDbTest/output.osm
-Node Count	135
-Way Count	22
+Node Count	136
+Way Count	23
 Relation Count	1
-Minimum Node ID	-295
+Minimum Node ID	-299
 Maximum Node ID	-1
 Minimum Way ID	-252
 Maximum Way ID	-1
