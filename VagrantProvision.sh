@@ -30,7 +30,8 @@ fi
 # Install deps for Cucumber tests
 sudo apt-get install ruby ruby-dev xvfb
 sudo gem install mime-types -v 2.6.2
-sudo gem install cucumber capybara capybara-webkit selenium-webdriver rspec capybara-screenshot
+sudo gem install capybara -v 2.5.0
+sudo gem install cucumber capybara-webkit selenium-webdriver rspec capybara-screenshot
 
 sudo apt-get autoremove -y
 
