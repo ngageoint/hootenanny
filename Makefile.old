@@ -285,7 +285,7 @@ LocalConfig.pri:
 	cp LocalConfig.pri.orig LocalConfig.pri
 
 Makefile.qmake: Hootenanny.pro Configure.pri LocalConfig.pri
-	qmake
+	qmake-qt4
 
 tmp/schema.dot: qt-make
 	HootTest --single hoot::OsmSchemaTest
