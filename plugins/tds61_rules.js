@@ -4492,24 +4492,7 @@ tds61.rules = {
 
     // ##### End of One2One Rules #####
 
-    // ##### Start of shopList #####
-    // This list is taken from the top 100 values for "shop" on taginfo with the values in the one2one rules removed
-    // http://taginfo.openstreetmap.org/api/4/key/values?key=shop&filter=all&lang=en&sortname=count&sortorder=desc&page=1&rp=100&qtype=value&format=json_pretty
-    shopList : [
-        "alcohol", "antiques", "art", "baby_goods", "bag", "bakery", "bathroom_furnishing", "beauty", "bed",
-        "beverages", "bicycle", "bookmaker", "books", "boutique", "butcher", "car", "car_parts", "carpet",
-        "charity", "chemist", "clothes", "computer", "confectionery", "copyshop", "cosmetics", "craft",
-        "curtain", "deli", "department_store", "doityourself", "dry_cleaning", "electronics", "energy", "erotic",
-        "estate_agent", "fabric", "farm", "fashion", "fishmonger", "florist", "food", "frame", "funeral_directors",
-        "furniture", "garden_centre", "general", "gift", "greengrocer", "hairdresser", "hardware", "hearing_aids",
-        "hifi", "houseware", "ice_cream", "interior_decoration", "jewelry", "kiosk", "kitchen", "locksmith",
-        "lottery", "mall", "massage", "medical_supply", "mobile_phone", "motorcycle", "music", "musical_instrument",
-        "newsagent", "no", "optician", "organic", "outdoor", "paint", "pawnbroker", "seafood", "second_hand",
-        "shoes", "sports", "stationery", "supermarket", "tailor", "tattoo", "tea", "ticket", "tobacco", "toys",
-        "trade", "tyres", "vacant", "variety_store", "video", "video_games", "wine"
-    ],
-    // ##### End of shopList #####
-
+   
     // ##### Start of fuzzyTable #####
     // This list uses the new IsA, IsSimilar etc functions to map a number of input values to a single output
     fuzzyTable : [

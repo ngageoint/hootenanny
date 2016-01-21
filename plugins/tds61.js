@@ -870,10 +870,6 @@ tds61 = {
             tags.building = 'yes';
         }
 
-        // facility list is used for translating between buildings and facilities based on use
-        // format:  "use","building or amenity"
-        // var facilityList = {'education':'school', 'healthcare':'hospital', 'university':'university'};
-
 
         // Fix the building 'use' tag. If the building has a 'use' and no specific building tag. Give it one
         if (tags.building == 'yes' && tags.use)
@@ -882,31 +878,17 @@ tds61 = {
             {
                 tags.building = 'industrial';
             }
+            // NOTE: Shops have been rempved from "use"
             // Sort out shops
-            /*
-            else if (tds61.rules.shopList.indexOf(tags.use) > -1)
-            {
-                tags.shop = tags.use;
-                delete tags.use;
-            }
-            */
-            //else if (tds61.rules.shopList.indexOf(tags.use) > -1)
-            else if (hoot.OsmSchema.getTagVertex("shop=" + tags.use).name != "shop=*")
-            {
-                hoot.warn(hoot.OsmSchema.getTagVertex("shop=" + tags.use));
-                hoot.warn(hoot.OsmSchema.isAncestor("shop=" + tags.use, "shop"));
-                hoot.warn(tags.use);
-                tags.shop = tags.use;
-                delete tags.use;
-            }
+            // else if (hoot.OsmSchema.getTagVertex("shop=" + tags.use).name != "shop=*")
+            // {
+            //    hoot.warn(hoot.OsmSchema.getTagVertex("shop=" + tags.use));
+            //    hoot.warn(hoot.OsmSchema.isAncestor("shop=" + tags.use, "shop"));
+            //    hoot.warn(tags.use);
+            //    tags.shop = tags.use;
+            //    delete tags.use;
+            // }
 
-        /*
-            else if (tags.use in facilityList)
-            {
-                tags.building = facilityList[tags.use];
-                // delete tags.use;
-            }
-       */
         } // End building & use tags
 
         // Education:
@@ -943,12 +925,6 @@ tds61 = {
             {
                 tags.man_made = 'works';
             }
-       /*
-            else if (tags.use in facilityList) 
-            {
-                tags.amenity = facilityList[tags.use];
-            }
-        */
         }
 
 
@@ -992,7 +968,7 @@ tds61 = {
         // Not sure about adding a Highway tag to this.
         // if (attrs.F_CODE == 'AQ040' && !(tags.highway)) tags.highway = 'yes';
 
-        // Denominations without religions
+        // Denominations without religions - from ZI037_REL which has some denominations as religions
         if (tags.denomination)
         {
             switch (tags.denomination)
@@ -1010,6 +986,12 @@ tds61 = {
                     tags.religion = 'muslim';
                     break;
             } // End switch
+        }
+
+        // Religious buildings: Church, Pagoda, Temple etc
+        if (attrs.ZI037_REL && tags.amenity !== 'place_of_worship')
+        {
+            tags.amenity = 'place_of_worship';
         }
 
     }, // End of applyToOsmPostProcessing
@@ -1602,6 +1584,7 @@ tds61 = {
             attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
             delete attrs.ZI005_FNA3;
         }
+
 
         // The ZI001_SDV (source date time) field can only be 20 characters long. When we conflate features,
         // we concatenate the tag values for this field.
