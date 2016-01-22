@@ -147,19 +147,6 @@ Translator& Translator::getInstance()
     _theInstance->_streetTypes.insert("freeway");
     _theInstance->_streetTypes.insert("tollway");
     _theInstance->_streetTypes.insert("road");
-
-    QMap<QString, QStringList> map = _theInstance->_dictionary->getTable();
-    QString ss = "\n";
-    for (QMap<QString, QStringList>::iterator it = map.begin(); it != map.end(); it++)
-    {
-      ss = ss.append("Key: ").append(it.key()).append("\n");
-      QStringList list = it.value();
-      for (QStringList::iterator s = list.begin(); s != list.end(); s++)
-      {
-        ss = ss.append("  -> ").append(s->append("\n"));
-      }
-    }
-//    LOG_WARN(ss);
   }
   return *_theInstance;
 }
