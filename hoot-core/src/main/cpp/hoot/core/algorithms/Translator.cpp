@@ -79,9 +79,10 @@ public:
 
       _loadTags(pt);
     }
-    catch (std::exception ex)
+    catch (std::exception e)
     {
-      cerr << ex.what() << endl;
+      QString reason = e.what();
+      throw HootException("Error parsing JSON. " + reason);
     }
   }
 
