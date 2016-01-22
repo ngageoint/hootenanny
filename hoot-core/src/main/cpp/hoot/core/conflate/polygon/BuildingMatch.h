@@ -82,12 +82,15 @@ public:
 
   virtual QString toString() const;
 
+  virtual QString explain() const;
+
 private:
 
   ElementId _eid1, _eid2;
   static QString _matchName;
   MatchClassification _p;
   shared_ptr<const BuildingRfClassifier> _rf;
+  QString _explainText;
 
   void _calculateClassification(const ConstOsmMapPtr& map);
 };
