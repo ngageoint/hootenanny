@@ -37,16 +37,17 @@
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/Soundex.h>
 #include <hoot/core/conflate/MatchType.h>
-#include <hoot/core/conflate/polygon/extractors/BufferedOverlapExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/CentroidDistanceExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/CompactnessExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/OverlapExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/SmallerOverlapExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
 #include <hoot/core/conflate/MatchThreshold.h>
+#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/index/ElementToRelationMap.h>
+#include <hoot/core/index/OsmMapIndex.h>
 
 // Standard
 #include <sstream>
@@ -66,9 +67,19 @@ BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map, shared_ptr<const Buildin
   Match(mt),
   _eid1(eid1),
   _eid2(eid2),
-  _rf(rf)
+  _rf(rf),
+  _explainText("")
 {
   _p = _rf->classify(map, _eid1, _eid2);
+
+  //If the buildings aren't matched and they overlap at all, then make them be reviewed.
+  if (getType() == MatchType::Miss &&
+      (OverlapExtractor().extract(*map, map->getElement(eid1), map->getElement(eid2)) > 0.0))
+  {
+    _p.clear();
+    _p.setReviewP(1.0);
+    _explainText = "Unmatched buildings are overlapping.";
+  }
 }
 
 map<QString, double> BuildingMatch::getFeatures(const shared_ptr<const OsmMap>& m) const
@@ -105,7 +116,20 @@ QString BuildingMatch::toString() const
 {
   stringstream ss;
   ss << "BuildingMatch: " << _eid1 << ", " << _eid2 << " p: " << _p.toString();
+  if (getType() == MatchType::Review)
+  {
+    ss << " note: " << _explainText;
+  }
   return QString::fromStdString(ss.str());
+}
+
+QString BuildingMatch::explain() const
+{
+  if (!_explainText.isEmpty())
+  {
+    return _explainText;
+  }
+  return toString();
 }
 
 }
