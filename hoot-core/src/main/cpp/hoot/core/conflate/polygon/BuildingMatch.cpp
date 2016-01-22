@@ -70,12 +70,18 @@ BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map, shared_ptr<const Buildin
   _rf(rf),
   _explainText("")
 {
+  //LOG_DEBUG("Classifying building pair: " << eid1 << "; " << eid2);
+
   _p = _rf->classify(map, _eid1, _eid2);
 
   //If the buildings aren't matched and they overlap at all, then make them be reviewed.
   if (getType() == MatchType::Miss &&
       (OverlapExtractor().extract(*map, map->getElement(eid1), map->getElement(eid2)) > 0.0))
   {
+    //LOG_DEBUG("Building miss overlap:");
+    //LOG_VARD(eid1);
+    //LOG_VARD(eid2);
+
     _p.clear();
     _p.setReviewP(1.0);
     _explainText = "Unmatched buildings are overlapping.";
