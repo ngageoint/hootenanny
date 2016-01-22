@@ -794,6 +794,7 @@ tds61 = {
             var rulesList = [
             ["t.navigationaid && !(t.aeroway)","t.aeroway = 'navigationaid'"],
             ["t.amenity == 'stop' && t['transport:type'] == 'bus'","t.highway = 'bus_stop'"],
+            ["t.diplomatic && !(t.amenity)","t.amenity = 'embassy'"],
             ["t.boundary == 'protected_area' && !(t.protect_class)","t.protect_class = '4'"],
             ["t.bunker_type && !(t.military)","t.military = 'bunker'"],
             ["t.control_tower == 'yes' && t.use == 'air_traffic_control'","t['tower:type'] = 'observation'"],
@@ -1034,6 +1035,7 @@ tds61 = {
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
             ["t.control_tower && t.man_made == 'tower'","delete t.man_made"],
             ["t.crossing == 'tank' && t.highway == 'crossing'","delete t.highway"],
+            ["t.diplomatic && t.amenity == 'embassy'","delete t.amenity"],
             ["t.dock && t.waterway == 'dock'","delete t.waterway"],
             ["t.golf == 'driving_range' && t.leisure == 'golf_course'","delete t.leisure"],
             ["t.highway == 'bus_stop'","t['transport:type'] = 'bus'"],

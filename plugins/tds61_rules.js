@@ -1494,10 +1494,10 @@ tds61.rules = {
      ['FFN','819','office','legislative_activities'], // Legislative Activities
      ['FFN','821','use','polling_station'], // Polling Station
      ['FFN','822','use','civil_activities'], // Civil Activities
-     ['FFN','825','amenity','diplomatic_building'], // Diplomacy
-     ['FFN','826','amenity','diplomatic_mission'], // Diplomatic Mission
-     ['FFN','827','amenity','embassy'], // Embassy
-     ['FFN','828','amenity','consul'], // Consul
+     ['FFN','825','amenity','diplomacy'], // Diplomacy
+     ['FFN','826','diplomatic','mission'], // Diplomatic Mission
+     ['FFN','827','diplomatic','embassy'], // Embassy
+     ['FFN','828','diplomatic','consulate'], // Consul
      ['FFN','829','use','maritime_defense'], // Maritime Defense
      ['FFN','830','use','public_order_safety_and_security_services'], // Public Order, Safety and Security Services
      ['FFN','831','use','public_order'], // Public Order
@@ -4341,7 +4341,7 @@ tds61.rules = {
      ['ZI001_VSC','Stereoscopic Imagery','source:vertical_source:type','stereoscopic_imagery'],
      ['ZI001_SRT','NTM Imagery','source:non_spatial_source:type','ntm_imagery'],
 
-     ['ZI016_ROC','-999999',undefined,undefined], // No Information
+     // ['ZI016_ROC','-999999',undefined,undefined], // No Information
      ['ZI016_ROC','1','surface','ground'], // Unimproved
      ['ZI016_ROC','2','surface','compacted'], // Stabilized earth
      ['ZI016_ROC','3','surface','unpaved'], // Flexible Pavement
@@ -4399,6 +4399,8 @@ tds61.rules = {
      [undefined,undefined,'man_made','works'], // Works
      ['FFN','2','building','farm'], // Agriculture
 
+     ['FFN','827','amenity','embassy'], // Embassy
+
      ['FFN','850','building','school'],
      ['FFN','850','isced:level','0'], // Education
      ['FFN','850','amenity','kindergarten'], // Education
@@ -4411,6 +4413,7 @@ tds61.rules = {
 
      ['FFN','572','amenity','cafe'], // Restaurant
      ['FFN','572','building','restaurant'], // Restaurant
+
 
      // Extra road stuff - see similarTable
      // ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM

@@ -740,6 +740,7 @@ tds = {
             ["t.boundary == 'protected_area' && !(t.protect_class)","t.protect_class = '4';"],
             ["t.control_tower == 'yes' && t.use == 'air_traffic_control'","t['tower:type'] = 'observation'"],
             ["t.desert_surface","t.surface = t.desert_surface; delete t.desert_surface"],
+            ["t.diplomatic && !(t.amenity)","t.amenity = 'embassy'"],
             ["t['generator:source'] == 'wind'","t.power = 'generator'"],
             ["t.historic == 'castle' && !(t.ruins) && !(t.building)","t.building = 'yes'"],
             ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
@@ -818,6 +819,32 @@ tds = {
        */
         }
 
+        // Education:
+        if (tags['isced:level'] || tags.use == 'education')
+        {
+            if (tags.building == 'yes')
+            {
+                tags.building = 'school'
+            }
+            else if (tags.facility)
+            {
+                tags.amenity = 'school';
+            }
+        }
+
+        if (tags.use == 'vocational_education')
+        {
+            if (tags.building == 'yes')
+            {
+                tags.building = 'college'
+            }
+            else if (tags.facility)
+            {
+                tags.amenity = 'college';
+            }
+        }
+
+
         // A facility is an area. Therefore "use" becomes "amenity". "Building" becomes "landuse"
         if (tags.facility && tags.use)
         {
@@ -852,6 +879,32 @@ tds = {
            delete tags.works
         }
      */
+
+        // Denominations without religions - from ZI037_REL which has some denominations as religions
+        if (tags.denomination)
+        {
+            switch (tags.denomination)
+            {
+                case 'roman_catholic':
+                case 'orthodox':
+                case 'protestant':
+                case 'chaldean_catholic':
+                case 'nestorian': // Not sure about this
+                    tags.religion = 'christian';
+                    break;
+
+                case 'shia':
+                case 'sunni':
+                    tags.religion = 'muslim';
+                    break;
+            } // End switch
+        }
+
+        // Religious buildings: Church, Pagoda, Temple etc
+        if (attrs.ZI037_REL && tags.amenity !== 'place_of_worship')
+        {
+            tags.amenity = 'place_of_worship';
+        }
 
 
     /* Putting this on hold as it will impact conflation
@@ -914,6 +967,7 @@ tds = {
             ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.control_tower && t.man_made == 'tower'","delete t.man_made"],
+            ["t.diplomatic && t.amenity == 'embassy'","delete t.amenity"],
             ["t.highway == 'stop'","a.F_CODE = 'AQ062'"],
             ["t.highway == 'give-way'","a.F_CODE = 'AQ062'"],
             ["t.highway == 'bus_stop'","t['transport:type'] = 'bus'"],
@@ -954,6 +1008,7 @@ tds = {
             ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
             ["(t.shop || t.office) &&  !(t.building)","a.F_CODE = 'AL013'"],
             ["t.social_facility == 'shelter'","t.social_facility = t['social_facility:for']; delete t.amenity; delete t['social_facility:for']"],
+            ["t['tower:type'] == 'minaret' && t.man_made == 'tower'","delete t.man_made"],
             ["!(t.water) && t.natural == 'water'","t.water = 'lake'"],
             ["t.use == 'islamic_prayer_hall' && t.amenity == 'place_of_worship'","delete t.amenity"],
             ["t.wetland && t.natural == 'wetland'","delete t.natural"],
