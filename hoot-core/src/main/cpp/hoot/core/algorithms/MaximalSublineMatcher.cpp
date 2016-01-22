@@ -49,14 +49,12 @@ WaySublineMatchString MaximalSublineMatcher::findMatch(const ConstOsmMapPtr &map
 {
   Meters mrd = maxRelevantDistance == -1 ? way1->getCircularError() + way2->getCircularError() :
     maxRelevantDistance;
-//  LOG_INFO("min split size: " << _minSplitSize << " _maxAngle " << _maxAngle << " mrd: " << mrd);
+  //LOG_INFO("min split size: " << _minSplitSize << " _maxAngle " << _maxAngle << " mrd: " << mrd);
 //  assert(_minSplitSize >= 0.0 && _maxAngle >= 0.0 && mrd >= 0.0);
 
   MaximalSubline::ThresholdMatchCriteria* threshold =
     new MaximalSubline::ThresholdMatchCriteria(mrd, _maxAngle);
-  // This should use the _minSplitSize rather than mrd, but that causes some tests to fail. We
-  // should look into the problem and solve it. See #6159
-  MaximalSubline ms(threshold, mrd);
+  MaximalSubline ms(threshold, _minSplitSize);
 
   vector<WaySublineMatch> matches = ms.findAllMatches(map, way1, way2, score);
 
