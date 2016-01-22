@@ -57,7 +57,6 @@ bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
     const Match* match = (*it);
-    //MatchType type = _mt.getType(*(*it));
     MatchType type = match->getType();
     if (type == MatchType::Review)
     {
