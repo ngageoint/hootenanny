@@ -188,7 +188,9 @@ plugins/etds61_osm_rules.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv
 
 # Build osmapi db
 osmapidb: conf/DatabaseConfig.sh
+ifeq ($(BUILD_SERVICES),services)
 	scripts/SetupOsmApiDB.sh
+endif
 
 # Build automatically generated JS files
 js-make: $(SCHEMA_FILES) plugins/config.js
@@ -283,7 +285,7 @@ LocalConfig.pri:
 	cp LocalConfig.pri.orig LocalConfig.pri
 
 Makefile.qmake: Hootenanny.pro Configure.pri LocalConfig.pri
-	qmake
+	qmake-qt4
 
 tmp/schema.dot: qt-make
 	HootTest --single hoot::OsmSchemaTest
