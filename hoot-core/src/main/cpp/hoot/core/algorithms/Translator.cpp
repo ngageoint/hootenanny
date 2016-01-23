@@ -71,7 +71,6 @@ public:
 
   void load(QString path)
   {
-    ifstream is(path.toAscii().data());
     try
     {
       pt::ptree pt;
@@ -91,7 +90,7 @@ private:
 
   void _loadTags(pt::ptree& tree)
   {
-    BOOST_FOREACH(pt::ptree::value_type& translation, tree.get_child(""))
+    BOOST_FOREACH(pt::ptree::value_type& translation, tree.get_child("Dictionary"))
     {
       int i = 0;
       QString from;
