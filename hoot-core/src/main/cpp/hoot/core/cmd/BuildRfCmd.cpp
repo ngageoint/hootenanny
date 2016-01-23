@@ -42,8 +42,10 @@
 #include <iostream>
 
 // Tgs
-#include <tgs/RandomForest/RandomForest.h>
+#include <tgs/RandomForest/MultithreadedRandomForest.h>
 #include <tgs/System/DisableCout.h>
+
+#include <QTime>
 
 namespace hoot
 {
@@ -76,7 +78,7 @@ public:
 
     srand(0);
     LOG_DEBUG("Building Random Forest");
-    RandomForest rf;
+    MultithreadedRandomForest mrf;
     auto_ptr<DisableCout> dc;
     if (Log::getInstance().getLevel() >= Log::Warn)
     {
@@ -84,18 +86,20 @@ public:
       dc.reset(new DisableCout());
     }
     int numFactors = min(df->getNumFactors(), max<unsigned int>(3, df->getNumFactors() / 5));
-    rf.trainMulticlass(df, 40, numFactors);
+    LOG_VAR(QTime::currentTime().toString());
+    mrf.trainMulticlass(df, 40, numFactors);
     dc.reset();
 
     double error;
     double sigma;
-    rf.findAverageError(df, error, sigma);
+    mrf.findAverageError(df, error, sigma);
     LOG_INFO("Error: " << error << " sigma: " << sigma);
 
     ofstream fileStream;
     fileStream.open((output).toStdString().data());
-    rf.exportModel(fileStream);
+    mrf.exportModel(fileStream);
     fileStream.close();
+    LOG_VAR(QTime::currentTime().toString());
 
     return 0;
   }

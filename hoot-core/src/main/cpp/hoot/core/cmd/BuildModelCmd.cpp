@@ -41,7 +41,8 @@
 #include <iostream>
 
 // Tgs
-#include <tgs/RandomForest/RandomForest.h>
+//#include <tgs/RandomForest/RandomForest.h>
+#include <tgs/RandomForest/MultithreadedRandomForest.h>
 #include <tgs/System/DisableCout.h>
 
 namespace hoot
@@ -111,7 +112,7 @@ public:
     shared_ptr<DataFrame> df = mfe.getSamples().toDataFrame(-1);
 
     srand(0);
-    RandomForest rf;
+    MultithreadedRandomForest mrf;
     auto_ptr<DisableCout> dc;
     if (Log::getInstance().getLevel() >= Log::Warn)
     {
@@ -119,17 +120,17 @@ public:
       dc.reset(new DisableCout());
     }
     int numFactors = min(df->getNumFactors(), max<unsigned int>(3, df->getNumFactors() / 5));
-    rf.trainMulticlass(df, 40, numFactors);
+    mrf.trainMulticlass(df, 40, numFactors);
     dc.reset();
 
     double error;
     double sigma;
-    rf.findAverageError(df, error, sigma);
+    mrf.findAverageError(df, error, sigma);
     LOG_INFO("Error: " << error << " sigma: " << sigma);
 
     ofstream fileStream;
     fileStream.open((output + ".rf").toStdString().data());
-    rf.exportModel(fileStream);
+    mrf.exportModel(fileStream);
     fileStream.close();
 
     return 0;
