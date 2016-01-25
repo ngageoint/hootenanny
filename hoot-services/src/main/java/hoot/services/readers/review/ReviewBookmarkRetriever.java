@@ -27,7 +27,7 @@ public class ReviewBookmarkRetriever {
 	}
 	
 	/**
-	 * Retrieves all bookmarks for mapId+relationId using map id and relation id.
+	 * Retrieves single review tag using map id and relation id.
 	 * 
 	 * @param mapId
 	 * @param relationId
@@ -42,33 +42,6 @@ public class ReviewBookmarkRetriever {
 		try
 		{
 			SQLQuery query = _getQuery(mapId, relationId);
-			res = query.list(_reviewBookmarks);
-		}
-		catch (Exception ex)
-		{
-			log.error(ex.getMessage());
-			throw ex;
-		}
-		return res;
-	}
-	
-	
-	/**
-	 * Retrieves all bookmarks for mapId+relationId using map id and relation id.
-	 * 
-	 * @param mapId
-	 * @param relationId
-	 * @return
-	 * @throws Exception
-	 */
-	public List<ReviewBookmarks> retrieve(final long boookMarkId) throws Exception
-	{		
-
-		
-		List<ReviewBookmarks> res = null;
-		try
-		{
-			SQLQuery query = _getQuery(boookMarkId);
 			res = query.list(_reviewBookmarks);
 		}
 		catch (Exception ex)
@@ -149,24 +122,6 @@ public class ReviewBookmarkRetriever {
 		{
 			query.from(_reviewBookmarks)
 			.where(_reviewBookmarks.mapId.eq(mapId).and(_reviewBookmarks.relationId.eq(relationId)));
-		}
-		catch (Exception ex)
-		{
-			log.error(ex.getMessage());
-			throw ex;
-		}
-		
-		return query;
-	}
-	
-	
-	protected SQLQuery _getQuery(final long bookmarkId) throws Exception
-	{
-		SQLQuery query = new SQLQuery(this._conn, DbUtils.getConfiguration());
-		try
-		{
-			query.from(_reviewBookmarks)
-			.where(_reviewBookmarks.id.eq(bookmarkId));
 		}
 		catch (Exception ex)
 		{

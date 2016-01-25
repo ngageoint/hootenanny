@@ -10,7 +10,7 @@
 		<!-- review tags table -->
         <createTable tableName="review_bookmarks">
             <column name="id" type="bigserial" autoIncrement="true">
-            	<constraints primaryKey="true" nullable="false"/>
+            	<constraints nullable="false"/>
             </column>
             <column name="map_id" type="bigint">
             	<constraints nullable="false"/>
@@ -37,6 +37,10 @@
             </column>
             
         </createTable>
+		<addPrimaryKey 
+            columnNames="map_id, relation_id"
+            constraintName="pk_review_bookmarks"
+            tableName="review_bookmarks"/>
         <addForeignKeyConstraint 
         	constraintName="review_bookmarks_map_id_fkey" 
         	baseTableName="review_bookmarks" 

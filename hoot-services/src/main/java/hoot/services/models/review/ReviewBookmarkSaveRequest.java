@@ -7,10 +7,6 @@ import org.json.simple.JSONObject;
 
 @XmlRootElement
 public class ReviewBookmarkSaveRequest {
-	private long bookmarkId;
-	public long getBookmarkId() { return bookmarkId; }
-	public void setBookmarkId(final long id) { this.bookmarkId = id; }
-	
 	private long mapId;
 	public long getMapId() { return mapId; }
   public void setMapId(final long id) { this.mapId = id; }

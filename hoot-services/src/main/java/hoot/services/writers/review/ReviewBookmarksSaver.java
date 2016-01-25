@@ -48,28 +48,18 @@ public class ReviewBookmarksSaver {
 		long nSaved = 0;
 		ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(_conn);
 		
+		List<ReviewBookmarks> res = retriever.retrieve(request.getMapId(), request.getRelationId());
 		
-		
-		if(request.getBookmarkId() > -1) 
-		{
-			List<ReviewBookmarks> res = retriever.retrieve(request.getBookmarkId());
-			if(res.size() == 0)
-			{
-				// insert
-				nSaved = insert(request);
-			}
-			else
-			{
-				// update
-				nSaved = update(request, res.get(0));
-			}
-		}
-		else 
+		if(res.size() == 0)
 		{
 			// insert
 			nSaved = insert(request);
 		}
-		
+		else
+		{
+			// update
+			nSaved = update(request, res.get(0));
+		}
 		
 		return nSaved;
 	}
