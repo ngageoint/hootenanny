@@ -118,6 +118,12 @@ private:
       //  Skip comments
       if (name.startsWith("#"))
         continue;
+      if (!_s->hasKey(name))
+      {
+        LOG_WARN("Unknown JSON setting: (" << name << ")");
+        //  Don't allow unknown settings to be loaded
+        continue;
+      }
       //  Set key/value pair as name and data, data() turns everything to a string
       _s->set(name, QString::fromUtf8(element.second.data().c_str()));
     }
