@@ -724,17 +724,31 @@ public class ReviewResource
   @GET
   @Path("/bookmarks/get")
   @Produces(MediaType.APPLICATION_JSON)
-  public ReviewBookmarksGetResponse getReviewBookmark(@QueryParam("mapId") String mapid,
+  public ReviewBookmarksGetResponse getReviewBookmark(@QueryParam("bookmarkId") String bookmarkid, 
+  		@QueryParam("mapId") String mapid,
   		@QueryParam("relationId") String relid) throws Exception
   {
   	ReviewBookmarksGetResponse response = new  ReviewBookmarksGetResponse();
   	
   	try(Connection conn = DbUtils.createConnection())
   	{
+  		long bookmarkId = -1;
+  		if(bookmarkid != null)
+  		{
+  			bookmarkId = Long.parseLong(bookmarkid);
+  		}
   		long mapId = Long.parseLong(mapid);
   		long relationId = Long.parseLong(relid);
   		ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
-  		List<ReviewBookmarks>res = retriever.retrieve(mapId, relationId);
+  		List<ReviewBookmarks>res = null;
+  		if(bookmarkId > -1)
+  		{
+  			res = retriever.retrieve(bookmarkId);
+  		}
+  		else
+  		{
+  			res = retriever.retrieve(mapId, relationId);
+  		}
   		response.setReviewBookmarks(res);
   	}
   	catch(Exception ex)
