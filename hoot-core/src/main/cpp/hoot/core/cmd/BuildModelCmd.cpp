@@ -113,6 +113,7 @@ public:
 
     srand(0);
     MultithreadedRandomForest mrf;
+
     auto_ptr<DisableCout> dc;
     if (Log::getInstance().getLevel() >= Log::Warn)
     {

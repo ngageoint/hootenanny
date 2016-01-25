@@ -992,7 +992,7 @@ namespace Tgs
   }
 
   void DataFrame::makeBalancedBoostrapAndOobSets(std::vector<unsigned int> & bootstrap, 
-    std::vector<unsigned int> & oob)
+    std::vector<unsigned int> & oob, unsigned int seed)
   {
     try
     {
@@ -1042,7 +1042,7 @@ namespace Tgs
         {
           for(itr = idxSortedByClass.begin(); itr != idxSortedByClass.end(); ++itr)
           {
-            r = ((double)rand() / ((double)(RAND_MAX)+(double)(1)));
+            r = ((double)rand_r(&seed) / ((double)(RAND_MAX)+(double)(1)));
 
             unsigned int rndIdx = (unsigned int)(r * (double)itr->second.size());
             bootstrap[pickCtr] = itr->second[rndIdx];
@@ -1170,7 +1170,7 @@ namespace Tgs
 
 
   void DataFrame::makeBoostrapAndOobSets(std::vector<unsigned int> & bootstrap, 
-    std::vector<unsigned int> & oob)
+    std::vector<unsigned int> & oob, unsigned int seed)
   {
     try
     {
@@ -1194,7 +1194,7 @@ namespace Tgs
 
         for(unsigned int j = 0; j < bootstrap.size(); j++)
         {
-          r = ((double)rand() / ((double)(RAND_MAX)+(double)(1)));
+          r = ((double)rand_r(&seed) / ((double)(RAND_MAX)+(double)(1)));
 
           unsigned int rndIdx = (unsigned int)(r * (double)_data.size());
           bootstrap[j] = rndIdx;

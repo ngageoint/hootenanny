@@ -321,7 +321,7 @@ namespace Tgs
     * @param oob  the output container to hold indices to data vectors for the out of bag set
     */
     void makeBalancedBoostrapAndOobSets(std::vector<unsigned int> & bootstrap, 
-      std::vector<unsigned int> & oob);
+      std::vector<unsigned int> & oob, unsigned int seed = 0);
 
     /**
     *  Creates balanced binary bootstrap and out of bag sets with replacement
@@ -345,7 +345,7 @@ namespace Tgs
     * @param oob  the output container to hold indices to data vectors for the out of bag set
     */
     void makeBoostrapAndOobSets(std::vector<unsigned int> & bootstrap, 
-      std::vector<unsigned int> & oob);
+      std::vector<unsigned int> & oob, unsigned int seed = 0);
 
     /**
      * Returns what DataFrame considers a null value (NaN in double land).

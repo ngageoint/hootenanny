@@ -46,6 +46,8 @@ namespace Tgs
 {
   unsigned int RandomTree::_idCtr = 0;
 
+  static unsigned int idCtr = 0; //id for TreeNode
+
   RandomTree::RandomTree()
   {
     try
@@ -381,7 +383,6 @@ namespace Tgs
       //Warning suppression
       posClass = posClass;
 
-      //std::cout << "Train Tree" << std::endl;
       _factPerNode = numFactors;
 
       //Build bootstrap and oob sets (on data vector indices)
@@ -401,7 +402,6 @@ namespace Tgs
       _root->rightChild.reset();
       _root->isPure = false;
 
-      //std::cout << "Build Tree" << std::endl;
       _build(data, bootstrapSet, _root, nodeSize);
     }
     catch(const Tgs::Exception & e)
@@ -417,7 +417,6 @@ namespace Tgs
     {
       srand((unsigned int)_treeId);
 
-      //std::cout << "Train Tree" << std::endl;
       _factPerNode = numFactors;
 
       //Build bootstrap and oob sets (on data vector indices)
@@ -425,11 +424,11 @@ namespace Tgs
 
       if(balanced)
       {
-        data->makeBalancedBoostrapAndOobSets(bootstrapSet, _oobSet);
+        data->makeBalancedBoostrapAndOobSets(bootstrapSet, _oobSet, _treeId);
       }
       else
       {
-        data->makeBoostrapAndOobSets(bootstrapSet, _oobSet);
+        data->makeBoostrapAndOobSets(bootstrapSet, _oobSet, _treeId);
       }
 
       _root = boost::shared_ptr<TreeNode>(new TreeNode());
@@ -437,7 +436,6 @@ namespace Tgs
       _root->rightChild.reset();
       _root->isPure = false;
 
-      //std::cout << "Build Tree" << std::endl;
       _build(data, bootstrapSet, _root, nodeSize);
     }
     catch(const Tgs::Exception & e)
@@ -454,7 +452,6 @@ namespace Tgs
       //Warning suppression
       balanced = balanced;
 
-      //std::cout << "Train Tree" << std::endl;
       _factPerNode = numFactors;
 
       //Build bootstrap and oob sets (on data vector indices)
@@ -467,7 +464,6 @@ namespace Tgs
       _root->rightChild.reset();
       _root->isPure = false;
 
-      //std::cout << "Build Tree" << std::endl;
       _build(data, bootstrapSet, _root, nodeSize);
     }
     catch(const Tgs::Exception & e)
@@ -482,7 +478,6 @@ namespace Tgs
   {
     try
     {
-      static unsigned int idCtr = 0;
       node->leftChild.reset();
       node->rightChild.reset();
 
@@ -497,8 +492,7 @@ namespace Tgs
         node->rangeMin = node->rangeMax = 0;
 
         node->dataList = dataSet;
-        idCtr++;
-        node->nodeId = idCtr;
+
       }
       else  //Data is not pure
       {
@@ -567,8 +561,6 @@ namespace Tgs
           node->purityDelta = 0;
 
           node->dataList = dataSet;
-          idCtr++;
-          node->nodeId = idCtr;
         }
       }
     }
@@ -673,8 +665,9 @@ namespace Tgs
       if(node)
       {
         QDomElement treeDomNode = modelDoc.createElement("TreeNode");
-
-        treeDomNode.setAttribute("id", node->nodeId);
+        //use static id here to make sure the output ids in consistant order when using muilti-thread
+        idCtr++;
+        treeDomNode.setAttribute("id", idCtr);
 
         if(node->isPure)
         {
