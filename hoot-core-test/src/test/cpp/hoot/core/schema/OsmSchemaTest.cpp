@@ -28,7 +28,6 @@
 // Hoot
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/schema/JsonSchemaLoader.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Log.h>
 

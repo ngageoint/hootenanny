@@ -46,7 +46,6 @@ using namespace boost;
 
 // Hoot
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/schema/JsonSchemaLoader.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/OsmSchemaLoaderFactory.h>
 #include <hoot/core/util/ConfPath.h>
