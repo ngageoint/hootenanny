@@ -466,6 +466,13 @@ void Settings::parseCommonArguments(QStringList& args)
       {
         throw HootException("define must takes the form key=value.");
       }
+      if (!conf().hasKey(kvl[0]))
+      {
+        LOG_WARN("Unknown settings option: (" << kvl[0] << ")");
+        // move on to the next argument, don't keep an invalid option
+        args = args.mid(2);
+        continue;
+      }
       if (append)
       {
         QStringList values = kvl[1].split(";", QString::SkipEmptyParts);
