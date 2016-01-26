@@ -649,7 +649,6 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/polygon/extractors/AbstractDistanceExtractor.h \
     src/main/cpp/hoot/core/util/GeometryConverter.h \
     src/main/cpp/hoot/core/algorithms/VertexHausdorffDistance.h \
-    src/main/cpp/hoot/core/conflate/polygon/BuildingMergeManipulation.h \
     src/main/cpp/hoot/core/elements/ElementId.h \
     src/main/cpp/hoot/core/elements/ElementType.h \
     src/main/cpp/hoot/core/manipulators/WayManipulator.h \
@@ -777,7 +776,6 @@ HEADERS += \
     src/main/cpp/hoot/core/io/schema/StringFieldDefinition.h \
     src/main/cpp/hoot/core/io/schema/DoubleFieldDefinition.h \
     src/main/cpp/hoot/core/io/schema/IntegerFieldDefinition.h \
-    src/main/cpp/hoot/core/conflate/polygon/BuildingMergeManipulator.h \
     src/main/cpp/hoot/core/index/metric-hybrid/FqTree.h \
     src/main/cpp/hoot/core/index/metric-hybrid/RFqHybridTree.h \
     src/main/cpp/hoot/core/index/metric-hybrid/RTree.h \

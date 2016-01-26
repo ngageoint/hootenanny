@@ -118,6 +118,12 @@ private:
       //  Skip comments
       if (name.startsWith("#"))
         continue;
+      if (!_s->hasKey(name))
+      {
+        LOG_WARN("Unknown JSON setting: (" << name << ")");
+        //  Don't allow unknown settings to be loaded
+        continue;
+      }
       //  Set key/value pair as name and data, data() turns everything to a string
       _s->set(name, QString::fromUtf8(element.second.data().c_str()));
     }
@@ -470,6 +476,13 @@ void Settings::parseCommonArguments(QStringList& args)
       if (kvl.size() != 2)
       {
         throw HootException("define must takes the form key=value.");
+      }
+      if (!conf().hasKey(kvl[0]))
+      {
+        LOG_WARN("Unknown settings option: (" << kvl[0] << ")");
+        // move on to the next argument, don't keep an invalid option
+        args = args.mid(2);
+        continue;
       }
       if (append)
       {
