@@ -46,7 +46,7 @@ namespace Tgs
 {
   unsigned int RandomTree::_idCtr = 0;
 
-  static unsigned int idCtr = 0; //id for TreeNode
+  unsigned int RandomTree::idCtr = 0; //id for TreeNode
 
   RandomTree::RandomTree()
   {
