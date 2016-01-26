@@ -37,6 +37,9 @@
 
 #include "Sparse2dMatrix.h"
 
+// OpenCV
+#include <opencv/cv.h>
+
 namespace hoot
 {
 class Sparse2dMatrix;
@@ -223,6 +226,12 @@ private:
   void _snapToEnd(WayLocation& wl, double thresh = -1) { _snapToTerminal(wl, false, thresh); }
   void _snapToStart(WayLocation& wl, double thresh = -1) { _snapToTerminal(wl, true, thresh); }
   void _snapToTerminal(WayLocation& wl, bool startOfLines = true, double threshold = -1);
+
+  bool _checkForSortedSecondSubline(const vector<WaySublineMatch>& rawSublineMatches);
+  bool _rawSublinesTooSmall(const vector<WaySublineMatch>& rawSublineMatches);
+  cv::Mat _createConstraintMatrix(const vector<int>& starts, const vector<int>& ends,
+                                  const vector< pair<WayLocation, WayLocation> >& pairs,
+                                  vector<int>& matchIndexes);
 
 };
 

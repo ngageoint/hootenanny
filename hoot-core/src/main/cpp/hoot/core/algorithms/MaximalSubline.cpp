@@ -40,9 +40,6 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 
-// OpenCV
-#include <opencv/cv.h>
-
 namespace hoot
 {
 
@@ -573,6 +570,86 @@ bool lessThan(const WaySublineMatch& ws1, const WaySublineMatch& ws2)
   return ws1.getSubline1().getStart() < ws2.getSubline1().getStart();
 }
 
+bool MaximalSubline::_checkForSortedSecondSubline(const vector<WaySublineMatch>& rawSublineMatches)
+{
+  for (size_t i = 2; i < rawSublineMatches.size(); i++)
+  {
+    if (rawSublineMatches[i].getSubline2().getStart() >
+        rawSublineMatches[i - 1].getSubline2().getStart())
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool MaximalSubline::_rawSublinesTooSmall(const vector<WaySublineMatch>& rawSublineMatches)
+{
+  for (size_t i = 0; i < rawSublineMatches.size(); i++)
+  {
+
+    if (rawSublineMatches[i].getSubline1().getLength() < _spacing * 2 ||
+        rawSublineMatches[i].getSubline2().getLength() < _spacing * 2)
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+cv::Mat MaximalSubline::_createConstraintMatrix(const vector<int>& starts, const vector<int>& ends,
+                                                const vector< pair<WayLocation, WayLocation> >& pairs,
+                                                vector<int>& matchIndexes)
+{
+  // create the matrix of constraints.
+  vector<int> finalStarts;
+  vector<int> finalEnds;
+
+  if (starts[0] != 0)
+  {
+    finalStarts.push_back(0);
+    finalEnds.push_back(starts[0] + (ends[0] - starts[0]) / 3);
+  }
+
+  for (size_t i = 0; i < starts.size(); i++)
+  {
+    if (starts[i] == numeric_limits<int>::max())
+    {
+      // Due to poor subline pair matching we cannot properly snap these intersections. Warn the
+      // user and move on. It is likely they aren't a good match anyways.
+      throw HootException("A solid set of point pair matches could not be found.");
+    }
+    matchIndexes[i] = finalStarts.size();
+    finalStarts.push_back(starts[i]);
+    finalEnds.push_back(ends[i]);
+
+    if (i != starts.size() - 1)
+    {
+      finalStarts.push_back(ends[i] - (ends[i] - starts[i]) / 3);
+      finalEnds.push_back(starts[i + 1] + (ends[i + 1] - starts[i + 1]) / 3);
+    }
+  }
+
+  int last = ends.size() - 1;
+  if ((size_t)ends[last] != pairs.size() - 1)
+  {
+    finalStarts.push_back(ends[last] - (ends[last] - starts[last]) / 3);
+    finalEnds.push_back(pairs.size() - 1);
+  }
+
+  //LOG_DEBUG("finalStarts: " << finalStarts);
+  //LOG_DEBUG("finalEnds: " << finalEnds);
+
+  Mat ranges(finalStarts.size(), 2, CV_32S);
+  for (size_t i = 0; i < finalStarts.size(); i++)
+  {
+    ranges.at<int>(i, 0) = finalStarts[i];
+    ranges.at<int>(i, 1) = finalEnds[i];
+  }
+
+  return ranges;
+}
+
 /// @todo this is in desperate need of a rewrite by someone with more rest than myself. -JRS
 vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr& map,
   const ConstWayPtr& w1, const ConstWayPtr& w2, vector<WaySublineMatch>& rawSublineMatches)
@@ -582,25 +659,17 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
 
   // make sure that ordering by subline1 results in sorted subline2s. If this isn't the case then
   // there isn't much we can do.
-  for (size_t i = 2; i < rawSublineMatches.size(); i++)
+  if (!_checkForSortedSecondSubline(rawSublineMatches))
   {
-    if (rawSublineMatches[i].getSubline2().getStart() >
-      rawSublineMatches[i - 1].getSubline2().getStart())
-    {
-      LOG_WARN("Way matches sublines out of order. This is unusual and may give a sub-optimal "
-        "result.");
-      return rawSublineMatches;
-    }
+    LOG_WARN("Way matches sublines out of order. This is unusual and may give a sub-optimal "
+      "result.");
+    return rawSublineMatches;
   }
 
-  for (size_t i = 0; i < rawSublineMatches.size(); i++)
+  // if any of the raw sublines are crazy small, then don't try to snap the intersections.
+  if (_rawSublinesTooSmall(rawSublineMatches))
   {
-    // if any of the raw sublines are crazy small, then don't try to snap the intersections.
-    if (rawSublineMatches[i].getSubline1().getLength() < _spacing * 2 ||
-        rawSublineMatches[i].getSubline2().getLength() < _spacing * 2)
-    {
-      return rawSublineMatches;
-    }
+    return rawSublineMatches;
   }
 
   ////
@@ -666,55 +735,18 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
   //LOG_DEBUG("starts: " << starts);
   //LOG_DEBUG("ends: " << ends);
 
-  // create the matrix of constraints.
-  vector<int> finalStarts;
-  vector<int> finalEnds;
-
-  if (starts[0] != 0)
-  {
-    finalStarts.push_back(0);
-    finalEnds.push_back(starts[0] + (ends[0] - starts[0]) / 3);
-  }
-
   // this maps finalStarts indexes to the rawSublineMatches indexes. E.g.
   // rawSublineMatches[i] maps to finalStarts[matchIndexes[i]]
   vector<int> matchIndexes(starts.size());
-
-  for (size_t i = 0; i < starts.size(); i++)
+  cv::Mat ranges;
+  try
   {
-    if (starts[i] == numeric_limits<int>::max())
-    {
-      // Due to poor subline pair matching we cannot properly snap these intersections. Warn the
-      // user and move on. It is likely they aren't a good match anyways.
-      LOG_WARN("A solid set of point pair matches could not be found.");
-      return rawSublineMatches;
-    }
-    matchIndexes[i] = finalStarts.size();
-    finalStarts.push_back(starts[i]);
-    finalEnds.push_back(ends[i]);
-
-    if (i != starts.size() - 1)
-    {
-      finalStarts.push_back(ends[i] - (ends[i] - starts[i]) / 3);
-      finalEnds.push_back(starts[i + 1] + (ends[i + 1] - starts[i + 1]) / 3);
-    }
+    ranges = _createConstraintMatrix(starts, ends, pairs, matchIndexes);
   }
-
-  int last = ends.size() - 1;
-  if ((size_t)ends[last] != pairs.size() - 1)
+  catch (const HootException& e)
   {
-    finalStarts.push_back(ends[last] - (ends[last] - starts[last]) / 3);
-    finalEnds.push_back(pairs.size() - 1);
-  }
-
-  //LOG_DEBUG("finalStarts: " << finalStarts);
-  //LOG_DEBUG("finalEnds: " << finalEnds);
-
-  Mat ranges(finalStarts.size(), 2, CV_32S);
-  for (size_t i = 0; i < finalStarts.size(); i++)
-  {
-    ranges.at<int>(i, 0) = finalStarts[i];
-    ranges.at<int>(i, 1) = finalEnds[i];
+    LOG_WARN(e.getWhat());
+    return rawSublineMatches;
   }
 
   // run ExpectationIntersection to determine new intersection points.
@@ -753,7 +785,6 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
       //LOG_DEBUG("offset2: " << offset2 << " r: " << r);
       w1Start = WayLocation(map, w1, offset1);
       w2Start = WayLocation(map, w2, offset2);
-
     }
 
     //LOG_DEBUG_VAR(w1Start);
