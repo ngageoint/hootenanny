@@ -48,8 +48,6 @@
 //Qt
 #include <QFile>
 
-#include "BuildingMergeManipulator.h"
-
 namespace hoot
 {
 
