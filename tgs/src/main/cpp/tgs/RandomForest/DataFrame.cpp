@@ -1310,7 +1310,7 @@ namespace Tgs
   }
 
   void DataFrame::selectRandomFactors(unsigned int numFactors,
-    std::vector<unsigned int> & fIndices)
+    std::vector<unsigned int> & fIndices, unsigned int seed)
   {
     try
     {
@@ -1330,7 +1330,7 @@ namespace Tgs
 
         for(unsigned int k = 0; k < numFactors; k++)
         {
-          double rr = (double)rand();
+          double rr = (double)rand_r(&seed);
           r = (rr / ((double)(RAND_MAX)+(double)(1)));
 
           unsigned int rndIdx = (unsigned int)(r * (double)candidateFactors.size());

@@ -398,7 +398,8 @@ namespace Tgs
     * @param fIndices a list of the resulting factor indices that
     * has already been resized to the number of requested factors
     */
-    void selectRandomFactors(unsigned int numFactors, std::vector<unsigned int> & fIndices);
+    void selectRandomFactors(unsigned int numFactors, std::vector<unsigned int> & fIndices,
+                             unsigned int seed = 0);
 
     /**
     * Adds all factors to the active factor list.

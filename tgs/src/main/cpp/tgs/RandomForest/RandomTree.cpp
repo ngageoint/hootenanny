@@ -502,7 +502,7 @@ namespace Tgs
         double splitVal = 0.0;
         double purityDelta = 0.0;
 
-        data->selectRandomFactors(_factPerNode, factors);
+        data->selectRandomFactors(_factPerNode, factors, _treeId);
 
         bool splitPossible = _igc.findDataSplit(*data, factors, dataSet, splitIdx, fIdx, splitVal,
           purityDelta);
@@ -665,7 +665,7 @@ namespace Tgs
       if(node)
       {
         QDomElement treeDomNode = modelDoc.createElement("TreeNode");
-        //use static id here to make sure the output ids in consistant order when using muilti-thread
+        //use static id here to make sure the output ids in consistant order when using muilti-threads
         idCtr++;
         treeDomNode.setAttribute("id", idCtr);
 

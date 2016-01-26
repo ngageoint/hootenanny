@@ -41,7 +41,6 @@
 #include <iostream>
 
 // Tgs
-//#include <tgs/RandomForest/RandomForest.h>
 #include <tgs/RandomForest/MultithreadedRandomForest.h>
 #include <tgs/System/DisableCout.h>
 
