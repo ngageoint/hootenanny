@@ -74,7 +74,7 @@ mgcp = {
                 {
                     if (attrList.indexOf(val) == -1)
                     {
-                        logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
+                        hoot.logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
                         delete attrs[val];
                     }
                 }
@@ -89,7 +89,7 @@ mgcp = {
         }
         else
         {
-            logVerbose('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
+            hoot.logVerbose('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
         }
 
         // No quick and easy way to do this unless we build yet another lookup table
@@ -125,7 +125,7 @@ mgcp = {
             // Check if it is a valid enumerated value
             if (enumValueList.indexOf(attrValue) == -1)
             {
-                if (config.getOgrDebugDumpvalidate() == 'true') logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
+                if (config.getOgrDebugDumpvalidate() == 'true') hoot.logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
 
                 var othVal = '(' + enumName + ':' + attrValue + ')';
 
@@ -135,14 +135,14 @@ mgcp = {
                     // No: Set the offending enumerated value to the default value
                     attrs[enumName] = feature.columns[i].defValue;
 
-                    logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
+                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
                 }
                 else
                 {
                     // Yes: Set the offending enumerated value to the "other" value
                     attrs[enumName] = '999';
 
-                    logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
+                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
                 }
             }
         } // End Validate Enumerations
@@ -824,7 +824,7 @@ mgcp = {
         // MCC and RST both have mappings to surface=XXX.
         if (fCode == 'AQ040' && attrs.RST)
         {
-            // logWarn('Found RST = ' + attrsi.RST + ' in AQ040'); // Should not get this
+            // hoot.logWarn('Found RST = ' + attrsi.RST + ' in AQ040'); // Should not get this
             var convSurf = { 1:5, 2:46, 5:104, 6:104, 8:104, 999:999 };
 
             attrs.MCC = convSurf[attrs.RST];
@@ -871,7 +871,7 @@ mgcp = {
         if (fCode == 'EA010' && attrs.CSP == '15')
         {
             attrs.F_CODE = 'EA040';
-            // logVerbose('TRD3 feature EA010 changed to TRD4 EA040 - some data has been dropped');
+            // hoot.logVerbose('TRD3 feature EA010 changed to TRD4 EA040 - some data has been dropped');
         }
 
         if (mgcp.mgcpPostRules == undefined)
@@ -1088,7 +1088,7 @@ mgcp = {
         if (!(layerNameLookup[tableName]))
         {
             // tableName = layerNameLookup[tableName];
-            logError('FCODE and Geometry: ' + tableName + ' is not in the schema');
+            hoot.logVerbose('FCODE and Geometry: ' + tableName + ' is not in the schema');
 
             tableName = 'o2s_' + geometryType.toString().charAt(0);
 
@@ -1118,7 +1118,7 @@ mgcp = {
                 // Not good. Will fix with the rewrite of the tag splitting code
                 if (str.length > 1012)
                 {
-                    logError('o2s tags truncated to fit in available space.');
+                    hoot.logVerbose('o2s tags truncated to fit in available space.');
                     str = str.substring(0,1012);
                 }
 

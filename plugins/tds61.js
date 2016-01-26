@@ -260,7 +260,7 @@ tds61 = {
                             delete othList[val];
                         }
 
-                        logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
+                        hoot.logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
                         delete attrs[val];
                     }
         	    }
@@ -285,7 +285,7 @@ tds61 = {
         }
         else
         {
-            logVerbose('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
+            hoot.logVerbose('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
 		} // End Drop attrs
 
         // Repack the OTH field
@@ -337,7 +337,7 @@ tds61 = {
                     // Set the offending enumerated value to the default value
                     attrs[enumName] = feature.columns[i].defValue;
 
-                    logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
+                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
 
                     attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,othVal,';');
                 }
@@ -346,7 +346,7 @@ tds61 = {
                     // Set the offending enumerated value to the "other" value
                     attrs[enumName] = '999';
 
-                    logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting OTH and ' + enumName + ' to Other (999)');
+                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting OTH and ' + enumName + ' to Other (999)');
 
                     attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
                 }
@@ -1667,7 +1667,7 @@ tds61 = {
             }
             else
             {
-                hoot.logError('Translation for FCODE ' + attrs.F_CODE + ' not found');
+                hoot.logVerbose('Translation for FCODE ' + attrs.F_CODE + ' not found');
             }
         }
 
@@ -1817,7 +1817,7 @@ tds61 = {
 
         if (!(nfddAttrLookup[gFcode])) 
         {
-            logError('FCODE and Geometry: ' + gFcode + ' is not in the schema');
+            hoot.logVerbose('FCODE and Geometry: ' + gFcode + ' is not in the schema');
 
             tableName = 'o2s_' + geometryType.toString().charAt(0);
 
@@ -1849,7 +1849,7 @@ tds61 = {
                 // Not good. Will fix with the rewrite of the tag splitting code
                 if (str.length > 1012)
                 {
-                    logError('o2s tags truncated to fit in available space.');
+                    hoot.logVerbose('o2s tags truncated to fit in available space.');
                     str = str.substring(0,1012);
                 }
 
