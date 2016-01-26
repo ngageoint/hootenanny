@@ -232,6 +232,15 @@ private:
   cv::Mat _createConstraintMatrix(const vector<int>& starts, const vector<int>& ends,
                                   const vector< pair<WayLocation, WayLocation> >& pairs,
                                   vector<int>& matchIndexes);
+  void _calculateSnapStarts(const WaySublineMatch& rawSublineMatch, const int matchIndex,
+                            const vector<double>& splits,
+                            const vector< pair<WayLocation, WayLocation> >& pairs,
+                            const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2,
+                            WayLocation& w1Start, WayLocation& w2Start);
+  void _calculateSnapEnds(const int matchIndex, const vector<double>& splits,
+                          const vector< pair<WayLocation, WayLocation> >& pairs,
+                          const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2,
+                          WayLocation& w1End, WayLocation& w2End);
 
 };
 
