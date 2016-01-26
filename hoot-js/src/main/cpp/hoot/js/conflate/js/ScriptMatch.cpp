@@ -105,6 +105,10 @@ void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Obj
     _p.setReviewP(_script->toNumber(v, "review", 0));
 
     _explainText = vm["explain"].toString();
+    if (_explainText.isEmpty())
+    {
+      _explainText = _threshold->getTypeDetail(_p);
+    }
     if (_threshold->getType(_p) == MatchType::Review)
     {
       if (_explainText.isEmpty())
