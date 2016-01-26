@@ -64,6 +64,30 @@ MatchType MatchThreshold::getType(const MatchClassification& mc) const
   }
 }
 
+QString MatchThreshold::getTypeDetail(const MatchClassification& mc) const
+{
+  if (mc.getReviewP() >= _reviewThreshold)
+  {
+    return "The feature pair met the threshold for review.";
+  }
+  else if (mc.getMatchP() >= _matchThreshold && mc.getMissP() >= _missThreshold)
+  {
+    return "The feature pair met neither the threshold for a match or a miss.";
+  }
+  else if (mc.getMatchP() >= _matchThreshold)
+  {
+    return "The feature pair met the threshold for a match.";
+  }
+  else if (mc.getMissP() >= _missThreshold)
+  {
+    return "The feature pair met the threshold for a miss.";
+  }
+  else
+  {
+    return "The feature pair met neither the threshold for a match, miss, or review (review by default).";
+  }
+}
+
 QString MatchThreshold::toString() const
 {
   return QString("Thresholds; Match: %1 Miss: %2 Review: %3").arg(_matchThreshold).
