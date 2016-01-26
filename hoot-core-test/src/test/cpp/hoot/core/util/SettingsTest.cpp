@@ -68,48 +68,52 @@ public:
   void replaceTest()
   {
     Settings uut;
-    uut.set("foo", "2");
-    uut.set("two", 2);
-    uut.set("one", "1");
-    uut.set("bar", "${foo}");
-    CPPUNIT_ASSERT_EQUAL(QString("2"), uut.getString("bar"));
+    uut.loadDefaults();
+    uut.set("perty.algorithm", "2");
+    uut.set("perty.test.num.runs", 2);
+    uut.set("osm.map.writer.factory.writer", "1");
+    uut.set("osm.map.reader.factory.reader", "${perty.algorithm}");
+    CPPUNIT_ASSERT_EQUAL(QString("2"), uut.getString("osm.map.reader.factory.reader"));
 
-    uut.set("bar", "${foo} ${one}");
-    CPPUNIT_ASSERT_EQUAL(QString("2 1"), uut.getString("bar"));
+    uut.set("osm.map.reader.factory.reader", "${perty.algorithm} ${osm.map.writer.factory.writer}");
+    CPPUNIT_ASSERT_EQUAL(QString("2 1"), uut.getString("osm.map.reader.factory.reader"));
 
-    uut.set("foo", "${one}");
-    CPPUNIT_ASSERT_EQUAL(QString("1 1"), uut.getString("bar"));
+    uut.set("osm.map.reader.factory.reader", "${osm.map.writer.factory.writer} ${osm.map.writer.factory.writer}");
+    CPPUNIT_ASSERT_EQUAL(QString("1 1"), uut.getString("osm.map.reader.factory.reader"));
 
-    uut.set("foo", "${doesnt.exist}");
-    CPPUNIT_ASSERT_EQUAL(QString(""), uut.getString("foo"));
+    uut.set("perty.algorithm", "${doesnt.exist}");
+    CPPUNIT_ASSERT_EQUAL(QString(""), uut.getString("perty.algorithm"));
 
     HOOT_STR_EQUALS("", uut.getValue("${doesnt.exist}"));
-    HOOT_STR_EQUALS("1", uut.getValue("${one}"));
-    HOOT_STR_EQUALS(1, uut.getDoubleValue("${one}"));
-    HOOT_STR_EQUALS(2, uut.getDoubleValue("${two}"));
+    HOOT_STR_EQUALS("1", uut.getValue("${osm.map.writer.factory.writer}"));
+    HOOT_STR_EQUALS(1, uut.getDoubleValue("${osm.map.writer.factory.writer}"));
+    HOOT_STR_EQUALS(2, uut.getDoubleValue("${perty.test.num.runs}"));
   }
 
   void storeTest()
   {
     Settings uut;
-    uut.set("foo", "2");
-    uut.set("one", "1");
-    uut.set("bar", "${foo}");
+    uut.loadDefaults();
+    uut.set("perty.algorithm", "2");
+    uut.set("osm.map.writer.factory.writer", "1");
+    uut.set("osm.map.reader.factory.reader", "${perty.algorithm}");
 
     QDir().mkpath("test-output/utils");
     uut.storeJson("test-output/utils/SettingsTest.json");
 
     Settings uut2;
+    uut2.loadDefaults();
     uut2.loadJson("test-output/utils/SettingsTest.json");
-    HOOT_STR_EQUALS(uut.getString("foo"), "2");
-    HOOT_STR_EQUALS(uut.getString("one"), "1");
-    HOOT_STR_EQUALS(uut.getString("bar"), "2");
+    HOOT_STR_EQUALS(uut.getString("perty.algorithm"), "2");
+    HOOT_STR_EQUALS(uut.getString("osm.map.writer.factory.writer"), "1");
+    HOOT_STR_EQUALS(uut.getString("osm.map.reader.factory.reader"), "2");
 
     Settings uut3;
+    uut3.loadDefaults();
     uut3.loadFromString(uut.toString());
-    HOOT_STR_EQUALS(uut.getString("foo"), "2");
-    HOOT_STR_EQUALS(uut.getString("one"), "1");
-    HOOT_STR_EQUALS(uut.getString("bar"), "2");
+    HOOT_STR_EQUALS(uut.getString("perty.algorithm"), "2");
+    HOOT_STR_EQUALS(uut.getString("osm.map.writer.factory.writer"), "1");
+    HOOT_STR_EQUALS(uut.getString("osm.map.reader.factory.reader"), "2");
   }
 };
 
