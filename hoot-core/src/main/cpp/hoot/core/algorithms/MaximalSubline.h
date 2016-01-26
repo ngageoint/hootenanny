@@ -227,8 +227,8 @@ private:
   void _snapToStart(WayLocation& wl, double thresh = -1) { _snapToTerminal(wl, true, thresh); }
   void _snapToTerminal(WayLocation& wl, bool startOfLines = true, double threshold = -1);
 
-  bool _checkForSortedSecondSubline(const vector<WaySublineMatch>& rawSublineMatches);
-  bool _rawSublinesTooSmall(const vector<WaySublineMatch>& rawSublineMatches);
+  bool _checkForSortedSecondSubline(const vector<WaySublineMatch>& rawSublineMatches) const;
+  bool _rawSublinesTooSmall(const vector<WaySublineMatch>& rawSublineMatches) const;
   cv::Mat _createConstraintMatrix(const vector<int>& starts, const vector<int>& ends,
                                   const vector< pair<WayLocation, WayLocation> >& pairs,
                                   vector<int>& matchIndexes);
@@ -241,6 +241,10 @@ private:
                           const vector< pair<WayLocation, WayLocation> >& pairs,
                           const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2,
                           WayLocation& w1End, WayLocation& w2End);
+  void _calculatePointPairMatches(const double way1CircularError, const double way2CircularError,
+                                  const vector<WaySublineMatch>& rawSublineMatches,
+                                  const vector< pair<WayLocation, WayLocation> >& pairs,
+                                  cv::Mat& m, vector<int>& starts, vector<int>& ends);
 
 };
 
