@@ -42,7 +42,7 @@ function translateToOsm(attrs, layerName)
 {
     tags = {};
 
-    if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+    if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
 
     // Simple one to one rules
     // attr:tag

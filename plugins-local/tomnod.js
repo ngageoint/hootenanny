@@ -69,7 +69,7 @@ tomnod = {
             tags['tomnod:id'] = values[1].trim();
         }
 
-        if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
 
         // Assign tags based on Feature Code
         if (tomnod.rules.one2one[attrs.TOMNOD_TYPE])
@@ -81,7 +81,7 @@ tomnod = {
         }
         else
         {
-            logWarn('No rule for Tomnod Type: ' + attrs.TOMNOD_TYPE + '  from: ' + attrs.NAME);
+            logVerbose('No rule for Tomnod Type: ' + attrs.TOMNOD_TYPE + '  from: ' + attrs.NAME);
         }
 
         // Metadata

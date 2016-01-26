@@ -259,7 +259,7 @@ facc = {
     { 
         tags = {};  // The final output Tag list
 
-        if (getHootConfig('ogr.debug.dumpattrs') == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        if (getHootConfig('ogr.debug.dumptags') == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
 
         // Very simple dump
         for (var i in attrs) tags[i] = attrs[i];

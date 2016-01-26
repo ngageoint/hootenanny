@@ -65,7 +65,7 @@ wikimapia = {
         } // End in Attrs loop
 
         // Debug
-        if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
 
         // Metadata
         tags.source = 'wikimapia';

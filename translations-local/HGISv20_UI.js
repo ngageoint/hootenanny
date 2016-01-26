@@ -74,7 +74,7 @@ function translateToOgr(tags, elementType, geometryType)
         output[i]['attrs']['HGIS_Layer'] = output[i]['tableName'];
 
         // Debug
-//         if (config.getOgrDebugDumpattrs() == 'true')
+//         if (config.getOgrDebugDumptags() == 'true')
 //         {
 //             print('Tablename: ' + output[i]['tableName'])
 //             for (var t in output[i]['attrs'])

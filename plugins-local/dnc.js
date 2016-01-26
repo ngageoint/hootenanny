@@ -129,7 +129,7 @@ dnc = {
         // print('LayerName = ' + layerName.toString().toLowerCase())
         
         // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
 
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
         // the fcode one2one rules
@@ -176,7 +176,7 @@ dnc = {
             }
             else
             {
-                hoot.logWarn('Translation for FCODE ' + attrs.F_CODE + ' not found');
+                hoot.logError('Translation for FCODE ' + attrs.F_CODE + ' not found');
             }
         }
 

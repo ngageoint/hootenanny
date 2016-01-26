@@ -108,7 +108,7 @@ hgis20 = {
         }
         else
         {
-            logWarn('Validate: No attrList for ' + tableName + ' ' + geometryType);
+            logVerbose('Validate: No attrList for ' + tableName + ' ' + geometryType);
         } // End Drop attrs
 
         // No quick and easy way to do this unless we build yet another lookup table
@@ -912,7 +912,7 @@ hgis20 = {
         tags = {};  // The final output Tag list
 
         // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
 
         if (hgis20.layerLookup == undefined)
         {
@@ -958,7 +958,7 @@ hgis20 = {
         }
 //         else
 //         {
-//             hoot.logWarn('Default Translation for ' + layerName + ' not found');
+//             hoot.logError('Default Translation for ' + layerName + ' not found');
 //         }
 
         // one 2 one
@@ -1129,7 +1129,7 @@ hgis20 = {
 
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
-            if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+            if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
 
             for (var i in tags)
             {
@@ -1169,7 +1169,7 @@ hgis20 = {
         } // End o2s
 
         // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true')
+        if (config.getOgrDebugDumptags() == 'true')
         {
             print('TableName: ' + tableName + '  Geom: ' + geometryType);
             for (var i in attrs) print('Out Attrs:' + i + ': :' + attrs[i] + ':');

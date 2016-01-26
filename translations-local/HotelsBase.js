@@ -38,7 +38,7 @@ function translateAttributes(attrs, layerName)
 {
         tags = {};  // The final output Tag list
 
-        if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
 
         tags.tourism = 'hotel';
 
