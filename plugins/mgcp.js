@@ -89,7 +89,7 @@ mgcp = {
         }
         else
         {
-            logWarn('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
+            logVerbose('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
         }
 
         // No quick and easy way to do this unless we build yet another lookup table
@@ -135,14 +135,14 @@ mgcp = {
                     // No: Set the offending enumerated value to the default value
                     attrs[enumName] = feature.columns[i].defValue;
 
-                    logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
+                    logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
                 }
                 else
                 {
                     // Yes: Set the offending enumerated value to the "other" value
                     attrs[enumName] = '999';
 
-                    logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
+                    logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
                 }
             }
         } // End Validate Enumerations
@@ -871,7 +871,7 @@ mgcp = {
         if (fCode == 'EA010' && attrs.CSP == '15')
         {
             attrs.F_CODE = 'EA040';
-            // logWarn('TRD3 feature EA010 changed to TRD4 EA040 - some data has been dropped');
+            // logVerbose('TRD3 feature EA010 changed to TRD4 EA040 - some data has been dropped');
         }
 
         if (mgcp.mgcpPostRules == undefined)
@@ -927,7 +927,7 @@ mgcp = {
         // fCode = '';
 
         // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true')
+        if (config.getOgrDebugDumptags() == 'true')
         {
             print('');
             print('#####');
@@ -1093,7 +1093,7 @@ mgcp = {
             tableName = 'o2s_' + geometryType.toString().charAt(0);
 
             // Dump out what attributes we have converted before they get wiped out
-            if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+            if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
 
             for (var i in tags)
             {
@@ -1150,16 +1150,14 @@ mgcp = {
         } // End else
 
         // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true' || config.getOgrDebugDumptags() == 'true')
+        if (config.getOgrDebugDumptags() == 'true')
         {
             print('TableName: ' + tableName + '  FCode: ' + attrs.F_CODE + '  Geom: ' + geometryType);
-            if (tableName2 !== '') print('TableName2: ' + tableName2 + '  FCode: ' + attrs2.F_CODE + '  Geom: ' + geometryType);
-        }
 
-        // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true')
-        {
+            if (tableName2 !== '') print('TableName2: ' + tableName2 + '  FCode: ' + attrs2.F_CODE + '  Geom: ' + geometryType);
+
             for (var i in attrs) print('Out Attrs:' + i + ': :' + attrs[i] + ':');
+
             if (attrs2.F_CODE) for (var i in attrs2) print('2Out Attrs:' + i + ': :' + attrs2[i] + ':');
             print('');
         }

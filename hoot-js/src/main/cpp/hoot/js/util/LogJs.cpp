@@ -58,6 +58,7 @@ void LogJs::Init(Handle<Object> exports)
   exports->Set(String::NewSymbol("log"), FunctionTemplate::New(logInfo)->GetFunction());
   exports->Set(String::NewSymbol("debug"), FunctionTemplate::New(logDebug)->GetFunction());
   exports->Set(String::NewSymbol("logDebug"), FunctionTemplate::New(logDebug)->GetFunction());
+  exports->Set(String::NewSymbol("logVerbose"), FunctionTemplate::New(logVerbose)->GetFunction());
   exports->Set(String::NewSymbol("logInfo"), FunctionTemplate::New(logInfo)->GetFunction());
   exports->Set(String::NewSymbol("warn"), FunctionTemplate::New(logWarn)->GetFunction());
   exports->Set(String::NewSymbol("logWarn"), FunctionTemplate::New(logWarn)->GetFunction());
@@ -136,6 +137,14 @@ Handle<Value> LogJs::logDebug(const Arguments& args)
   HandleScope scope;
 //  Context::Scope context_scope(Context::GetCurrent());
   log(args, Log::Debug);
+  return scope.Close(Undefined());
+}
+
+Handle<Value> LogJs::logVerbose(const Arguments& args)
+{
+  HandleScope scope;
+//  Context::Scope context_scope(Context::GetCurrent());
+  log(args, Log::Verbose);
   return scope.Close(Undefined());
 }
 

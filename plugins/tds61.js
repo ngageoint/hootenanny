@@ -285,7 +285,7 @@ tds61 = {
         }
         else
         {
-            logWarn('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
+            logVerbose('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
 		} // End Drop attrs
 
         // Repack the OTH field
@@ -337,7 +337,7 @@ tds61 = {
                     // Set the offending enumerated value to the default value
                     attrs[enumName] = feature.columns[i].defValue;
 
-                    logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
+                    logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
 
                     attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,othVal,';');
                 }
@@ -346,7 +346,7 @@ tds61 = {
                     // Set the offending enumerated value to the "other" value
                     attrs[enumName] = '999';
 
-                    logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting OTH and ' + enumName + ' to Other (999)');
+                    logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting OTH and ' + enumName + ' to Other (999)');
 
                     attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
                 }
@@ -1615,7 +1615,7 @@ tds61 = {
         tags = {};  // The final output Tag list
 
         // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true')
+        if (config.getOgrDebugDumptags() == 'true')
         {
             print('In Layername: ' + layerName);
             for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
@@ -1667,7 +1667,7 @@ tds61 = {
             }
             else
             {
-                hoot.logWarn('Translation for FCODE ' + attrs.F_CODE + ' not found');
+                hoot.logError('Translation for FCODE ' + attrs.F_CODE + ' not found');
             }
         }
 
@@ -1823,7 +1823,7 @@ tds61 = {
 
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
-            if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+            if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
 
             for (var i in tags)
             {
@@ -1899,11 +1899,12 @@ tds61 = {
         } // End else We have a feature
 
         // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true' || config.getOgrDebugDumptags() == 'true')
+        if (config.getOgrDebugDumptags() == 'true')
         {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
                 print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
+
                 for (var j in returnData[i]['attrs']) print('Out Attrs:' + j + ': :' + returnData[i]['attrs'][j] + ':');
             }
             print('');
