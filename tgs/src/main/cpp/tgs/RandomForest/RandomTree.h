@@ -270,8 +270,9 @@ namespace Tgs
     boost::shared_ptr<TreeNode> _root; /// The root node for the tree
 
     static unsigned int _idCtr;  //Each new tree is assigned a unique id
-    
 
+    static unsigned int idCtr;  //Id for TreeNode
+    
   };
 }
 #endif
