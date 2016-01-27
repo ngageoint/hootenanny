@@ -57,6 +57,8 @@ import hoot.services.db2.QMaps;
 import hoot.services.db2.QUsers;
 import hoot.services.models.osm.Element.ElementType;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -989,6 +991,35 @@ public class DbUtils
       	//conn.setAutoCommit(true);
       }
     }
+
+  /**
+   *
+   *
+   * @param input
+   * @return String
+   * @throws Exception
+   */
+  public static String escapeJson(String input) throws Exception
+  {
+    JSONParser parser = new JSONParser();
+    JSONObject json = (JSONObject)parser.parse(input);
+
+    //Special handling of ADV_OPTIONS
+    String key = "ADV_OPTIONS";
+    if (json.containsKey(key)) {
+      String advopts = json.get(key).toString();
+      String cleanup = advopts.replaceAll("-D \"", "'").replaceAll("=", "': '").replaceAll("\"", "',").replaceAll("'", "\"");
+      //wrap with curly braces and remove trailing comma
+      cleanup = "{" + cleanup.substring(0, cleanup.length() - 1) + "}";
+      //System.out.println(cleanup);
+      JSONObject obj = (JSONObject)parser.parse(cleanup);
+
+      json.put(key, obj);
+    }
+    //System.out.println(JSONObject.escape(json.toString()).toString());
+
+    return JSONObject.escape(json.toString());
+  }
 
   /**
    *
