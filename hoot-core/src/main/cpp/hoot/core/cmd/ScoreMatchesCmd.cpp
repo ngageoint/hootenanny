@@ -193,7 +193,7 @@ public:
       MapProjector::projectToWgs84(mapCopy);
       OsmUtils::saveMap(mapCopy, "/tmp/score-matches-before-prep.osm");
 
-      MatchScoringMapPreparer().prepMap(map, ConfigOptions::getScoreMatchesRemoveNodesKey());
+      MatchScoringMapPreparer().prepMap(map, ConfigOptions().getScoreMatchesRemoveNodes());
       maps.push_back(map);
     }
 
