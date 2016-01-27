@@ -68,23 +68,45 @@ QString MatchThreshold::getTypeDetail(const MatchClassification& mc) const
 {
   if (mc.getReviewP() >= _reviewThreshold)
   {
-    return "The feature pair met the threshold for review.";
+    return QString("The feature pair met the threshold for review.") +
+           QString("  review score: %1, review threshold: %2")
+             .arg(mc.getReviewP())
+             .arg(_reviewThreshold);
   }
   else if (mc.getMatchP() >= _matchThreshold && mc.getMissP() >= _missThreshold)
   {
-    return "The feature pair met neither the threshold for a match or a miss.";
+    return QString("The feature pair met neither the threshold for a match or a miss.")  +
+           QString("  match score: %1, miss score: %2, match threshold: %3, miss threshold: %4")
+             .arg(mc.getMatchP())
+             .arg(mc.getMissP())
+             .arg(_matchThreshold)
+             .arg(_missThreshold);
+
   }
   else if (mc.getMatchP() >= _matchThreshold)
   {
-    return "The feature pair met the threshold for a match.";
+    return QString("The feature pair met the threshold for a match.") +
+           QString("  match score: %1, match threshold: %2")
+             .arg(mc.getMatchP())
+             .arg(_matchThreshold);
   }
   else if (mc.getMissP() >= _missThreshold)
   {
-    return "The feature pair met the threshold for a miss.";
+    return QString("The feature pair met the threshold for a miss.");
+           QString("  miss score: %1, miss threshold: %2")
+             .arg(mc.getMissP())
+             .arg(_missThreshold);
   }
   else
   {
-    return "The feature pair met neither the threshold for a match, miss, or review (review by default).";
+    return QString("The feature pair met neither the threshold for a match, miss, or review (set to review by default).") +
+           QString("  match score: %1, miss score: %2, review score: %3, match threshold: %4, miss threshold: %5, review threshold: %6")
+             .arg(mc.getMatchP())
+             .arg(mc.getMissP())
+             .arg(mc.getReviewP())
+             .arg(_matchThreshold)
+             .arg(_missThreshold)
+             .arg(_reviewThreshold);
   }
 }
 
