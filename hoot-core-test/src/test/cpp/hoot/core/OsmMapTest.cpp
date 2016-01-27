@@ -529,15 +529,15 @@ public:
       CPPUNIT_ASSERT( (-5 + i) == way->getId() );
       if ( i == 1 )
       {
-        const int correctSize = 4;
-        CPPUNIT_ASSERT( nodeIds.size() == correctSize );
+        const size_t correctSize = 4;
+        CPPUNIT_ASSERT(nodeIds.size() == correctSize);
         long correctIds[correctSize] = { -35, -34, -33, -30 };
         std::vector<long> correctIdVector(correctIds, correctIds + sizeof(correctIds) / sizeof(long));
         CPPUNIT_ASSERT(correctIdVector == nodeIds);
       }
       else if ( i == 2 )
       {
-        const int correctSize = 30;
+        const size_t correctSize = 30;
         CPPUNIT_ASSERT( nodeIds.size() == correctSize );
         long correctIds[correctSize] = { -3, -24, -5, -26, -7, -32, -31, -30, -36, -29, -28, -27, -26,
                                 -25, -24, -23, -22, -21, -30, -19, -28, -17, -26, -15, -24,
@@ -547,7 +547,7 @@ public:
       }
       else if ( i == 3 )
       {
-        const int correctSize = 3;
+        const size_t correctSize = 3;
         CPPUNIT_ASSERT( nodeIds.size() == correctSize );
         long correctIds[correctSize] = { -33, -28, -7 };
         std::vector<long> correctIdVector(correctIds, correctIds + sizeof(correctIds) / sizeof(long));
@@ -555,7 +555,7 @@ public:
       }
       else if (i == 4 )
       {
-        const int correctSize = 3;
+        const size_t correctSize = 3;
         CPPUNIT_ASSERT( nodeIds.size() == correctSize );
         long correctIds[correctSize] = { -32, -22, -1 };
         std::vector<long> correctIdVector(correctIds, correctIds + sizeof(correctIds) / sizeof(long));

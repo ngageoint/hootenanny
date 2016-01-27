@@ -61,6 +61,8 @@ public:
     int count = 1000;
     Mat m = Mat::zeros(count, 2, CV_64F);
 
+// Older GCC in CentOS 6 gives a bunch of false warnings.
+#pragma GCC diagnostic ignored "-Wunused-parameter"
     boost::minstd_rand rng;
     boost::normal_distribution<> ndx;
     boost::normal_distribution<> ndy;
@@ -70,6 +72,7 @@ public:
     boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<> > vary(rng, ndy);
 
     uni(rng);
+#pragma GCC diagnostic warning "-Wunused-parameter"
 
     for (int i = 0; i < count; i++)
     {

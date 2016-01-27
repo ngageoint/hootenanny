@@ -93,7 +93,7 @@ public:
 
 private:
 
-  long _maxSize;
+  size_t _maxSize;
 
   friend class LruCacheTest;
   CacheList _cacheList;
