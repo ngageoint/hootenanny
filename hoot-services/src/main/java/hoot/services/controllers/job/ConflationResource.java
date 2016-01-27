@@ -118,6 +118,9 @@ public class ConflationResource extends JobControllerBase {
 	 * <AUTO_TUNNING>
 	 * 	Not used. Always false
 	 * </AUTO_TUNNING>
+	 * <COLLECT_STATS>
+	 * 	true to collect conflation statistics
+	 * </COLLECT_STATS>
 	 * <GENERATE_REPORT>
 	 * 	true to generate conflation report
 	 * </GENERATE_REPORT>
@@ -205,8 +208,10 @@ public class ConflationResource extends JobControllerBase {
 			//when this updateMapsTagsCommand job is run, the
 			//file will be read and its contents placed in the
 			//stats tag.
-			String statsName = _homeFolder + "/" + _rptStorePath + "/" + confOutputName + "-stats.csv";
-			tags.put("stats", statsName);
+			if (oParams.get("COLLECT_STATS") != null && oParams.get("COLLECT_STATS").toString().equalsIgnoreCase("true")) {
+				String statsName = _homeFolder + "/" + _rptStorePath + "/" + confOutputName + "-stats.csv";
+				tags.put("stats", statsName);
+			}
 
 			JSONArray mapTagsArgs = new JSONArray();
 			JSONObject param = new JSONObject();

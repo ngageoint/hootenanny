@@ -18,8 +18,7 @@ OP_OUTPUT=$(OUTPUT_DIR)/$(jobid).osm
 OP_OUTPUT_RENUM=$(OUTPUT_DIR)/$(jobid)_renum.osm
 DB_OUTPUT=$(DB_URL)/$(OUTPUT_NAME)
 OP_REPORT_CONF_TYPE=advancedConflation
-OP_STAT= --stats > $(HOOT_HOME)/data/reports/$(OUTPUT_NAME)-stats.csv
-HOOT_OPTS+= --error
+OP_STAT=
 OP_CMD=
 
 OP_CONFLATE_TYPE=--conflate
@@ -54,7 +53,10 @@ ifeq "$(GENERATE_REPORT)" "true"
 	OP_CMD=$(subst ;,!semi!,$(HOOT_OPTS))
 endif
 
-
+ifeq "$(COLLECT_STATS)" "true"
+	OP_STAT= --stats > $(HOOT_HOME)/data/reports/$(OUTPUT_NAME)-stats.csv
+	HOOT_OPTS+= --error
+endif
 
 
 ###

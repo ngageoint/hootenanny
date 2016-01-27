@@ -1212,11 +1212,11 @@ public class MapResource
 					String statsName = tags.get(statsKey).toString();
 					File statsFile = new File(statsName);
 					if(statsFile.exists()) {
-						System.out.println("Found " + statsName);
+						log.debug("Found " + statsName);
 						String stats = FileUtils.readFileToString(statsFile, "UTF-8");
 						tags.put(statsKey, stats);
 					} else {
-						System.out.println("Can't find " + statsName);
+						log.error("Can't find " + statsName);
 						tags.remove(statsKey);
 					}
 				}
