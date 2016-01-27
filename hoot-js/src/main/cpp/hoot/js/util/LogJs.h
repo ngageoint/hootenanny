@@ -53,6 +53,7 @@ private:
   static v8::Handle<v8::Value> log(const v8::Arguments& args, Log::WarningLevel level);
   static v8::Handle<v8::Value> debug(const v8::Arguments& args);
   static v8::Handle<v8::Value> logDebug(const v8::Arguments& args);
+  static v8::Handle<v8::Value> logVerbose(const v8::Arguments& args);
   static v8::Handle<v8::Value> logInfo(const v8::Arguments& args);
   static v8::Handle<v8::Value> logWarn(const v8::Arguments& args);
   static v8::Handle<v8::Value> logError(const v8::Arguments& args);

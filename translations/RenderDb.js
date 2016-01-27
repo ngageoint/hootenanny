@@ -113,7 +113,7 @@ function translateToOgr(tags, elementType, geometryType)
     }
 
     // Debug:
-    if (config.getOgrDebugDumpattrs() == 'true')
+    if (config.getOgrDebugDumptags() == 'true')
     {
         for (var i in tags) print('Out Tags :' + i + ': :' + tags[i] + ':');
         print('');

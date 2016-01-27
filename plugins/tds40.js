@@ -263,7 +263,7 @@ tds = {
                             delete othList[val];
                         }
 
-                        logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
+                        hoot.logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
                         delete attrs[val];
                     }
                 }
@@ -288,7 +288,7 @@ tds = {
         }
         else
         {
-            logWarn('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
+            hoot.logVerbose('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
     } // End Drop attrs
 
         // Repack the OTH field
@@ -340,7 +340,7 @@ tds = {
                     // Set the offending enumerated value to the default value
                     attrs[enumName] = feature.columns[i].defValue;
 
-                    logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
+                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
 
                     attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,othVal,';');
                 }
@@ -349,7 +349,7 @@ tds = {
                     // Set the offending enumerated value to the "other" value
                     attrs[enumName] = '999';
 
-                    logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting OTH and ' + enumName + ' to Other (999)');
+                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting OTH and ' + enumName + ' to Other (999)');
 
                     attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
                 }
@@ -1414,7 +1414,7 @@ tds = {
         tags = {};  // The final output Tag list
 
         // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
 
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
         // the fcode one2one rules
@@ -1567,12 +1567,12 @@ tds = {
 
         if (!(nfddAttrLookup[gFcode]))
         {
-            logError('FCODE and Geometry: ' + gFcode + ' is not in the schema');
+            hoot.logVerbose('FCODE and Geometry: ' + gFcode + ' is not in the schema');
 
             tableName = 'o2s_' + geometryType.toString().charAt(0);
 
             // Dump out what attributes we have converted before they get wiped out
-            if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+            if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
 
             for (var i in tags)
             {
@@ -1598,7 +1598,7 @@ tds = {
                 // Not good. Will fix with the rewrite of the tag splitting code
                 if (str.length > 1012)
                 {
-                    logError('o2s tags truncated to fit in available space.');
+                    hoot.logVerbose('o2s tags truncated to fit in available space.');
                     str = str.substring(0,1012);
                 }
 
@@ -1660,17 +1660,16 @@ tds = {
         } // End else We have a feature
 
         // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true' || config.getOgrDebugDumptags() == 'true')
+        if (config.getOgrDebugDumptags() == 'true')
         {
             print('TableName: ' + tableName + '  FCode: ' + attrs.F_CODE + '  Geom: ' + geometryType);
-            if (tableName2 !== '') print('TableName2: ' + tableName2 + '  FCode: ' + attrs2.F_CODE + '  Geom: ' + geometryType);
-        }
 
-        // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true')
-        {
+            if (tableName2 !== '') print('TableName2: ' + tableName2 + '  FCode: ' + attrs2.F_CODE + '  Geom: ' + geometryType);
+
             for (var i in attrs) print('Out Attrs:' + i + ': :' + attrs[i] + ':');
+
             if (attrs2.F_CODE) for (var i in attrs2) print('2Out Attrs:' + i + ': :' + attrs2[i] + ':');
+
             print('');
         }
 
