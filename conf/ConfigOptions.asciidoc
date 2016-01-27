@@ -1453,6 +1453,13 @@ weighting is determined based on the circular error.
 
 Export some of the images used when evaluating the graph connections between two maps (`score` command).
 
+=== score.matches.remove.nodes
+
+* Data Type: bool
+* Default Value: `false`
+
+Remove REF tags from nodes before match scoring when using the score-matches command.
+
 === script.match.scripts
 
 * Data Type: list
