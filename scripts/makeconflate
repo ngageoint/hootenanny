@@ -18,7 +18,8 @@ OP_OUTPUT=$(OUTPUT_DIR)/$(jobid).osm
 OP_OUTPUT_RENUM=$(OUTPUT_DIR)/$(jobid)_renum.osm
 DB_OUTPUT=$(DB_URL)/$(OUTPUT_NAME)
 OP_REPORT_CONF_TYPE=advancedConflation
-OP_STAT=
+OP_STAT= --stats > $(HOOT_HOME)/data/reports/$(OUTPUT_NAME)-stats.csv
+HOOT_OPTS+= --error
 OP_CMD=
 
 OP_CONFLATE_TYPE=--conflate
@@ -38,18 +39,18 @@ ifeq "$(CONFLATION_TYPE)" "Reference"
 endif
 
 
-ifeq "$(INPUT1_TYPE)" "DB" 
+ifeq "$(INPUT1_TYPE)" "DB"
 	OP_INPUT1=$(DB_URL)/$(INPUT1)
 endif
 
-ifeq "$(INPUT2_TYPE)" "DB" 
+ifeq "$(INPUT2_TYPE)" "DB"
 	OP_INPUT2=$(DB_URL)/$(INPUT2)
 endif
 
 
 ifeq "$(GENERATE_REPORT)" "true"
 	HOOT_OPTS+= -D stats.format=asciidoc -D stats.output=$(HOOT_HOME)/data/reports/$(jobid)/reportBody -D conflate.stats.types=$(OP_REPORT_CONF_TYPE)
-	OP_STAT= --stats	
+	OP_STAT= --stats
 	OP_CMD=$(subst ;,!semi!,$(HOOT_OPTS))
 endif
 
@@ -59,7 +60,7 @@ endif
 ###
 # Conflate
 ###
-step1: 
+step1:
 ifeq "$(GENERATE_REPORT)" "true"
 	mkdir -p $(HOOT_HOME)/data/reports/$(jobid)
 	cp -a $(HOOT_HOME)/report/. $(HOOT_HOME)/data/reports/$(jobid)
@@ -69,8 +70,8 @@ ifeq "$(GENERATE_REPORT)" "true"
 	cd $(HOOT_HOME)/data/reports/$(jobid) && a2x -a docinfo --dblatex-opts "-P latex.output.revhistory=0 -P latex.unicode.use=1 -s reportStyle.sty --param doc.publisher.show=0" -a HasLatexMath -a 'revdate=v`$HOOT_HOME/bin/hoot version --error | sed "s/Hootenanny \([^ ]*\) Built.*/\\1/g"`, `date "+%B %d, %Y"`' -a "input1=$(OP_INPUT1)" -a "input2=$(OP_INPUT2)" -a "output=$(DB_OUTPUT)" -a "args=" -a "cmd1=hoot $(OP_CONFLATE_TYPE) $(OP_CMD) $(OP_INPUT2)  $(OP_STAT)" -v -f pdf report.asciidoc
 	echo '{"name":"$(OUTPUT_NAME)","description":"$(OUTPUT_NAME)","created":"$(TIME_STAMP)","reportpath":"$(HOOT_HOME)/data/reports/$(jobid)/report.pdf"}' > $(HOOT_HOME)/data/reports/$(jobid)/meta.data
 endif
-	
-	
 
-	
+
+
+
 

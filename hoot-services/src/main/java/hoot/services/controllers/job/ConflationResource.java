@@ -54,6 +54,7 @@ public class ConflationResource extends JobControllerBase {
 	protected static String _tileServerPath = null;
 	protected static String _homeFolder = null;
 	protected static String _confAdvOptsScript = null;
+	protected static String _rptStorePath = null;
 
 	public ConflationResource()
 	{
@@ -79,6 +80,10 @@ public class ConflationResource extends JobControllerBase {
 				_confAdvOptsScript = HootProperties.getProperty("confAdvOptsScript");
 			}
 
+			if (_rptStorePath ==  null)
+			{
+				_rptStorePath = HootProperties.getProperty("reportDataPath");
+			}
 		}
 		catch (Exception ex)
 		{
@@ -195,6 +200,14 @@ public class ConflationResource extends JobControllerBase {
 			//System.out.println(params);
 			//Need to reformat the list of hoot command options to json properties
 			tags.put("params", DbUtils.escapeJson(params));
+			//Hack alert!
+			//Write stats file name to tags, if the file exists
+			//when this updateMapsTagsCommand job is run, the
+			//file will be read and its contents placed in the
+			//stats tag.
+			String statsName = _homeFolder + "/" + _rptStorePath + "/" + confOutputName + "-stats.csv";
+			tags.put("stats", statsName);
+
 			JSONArray mapTagsArgs = new JSONArray();
 			JSONObject param = new JSONObject();
 			param.put("value", tags);
