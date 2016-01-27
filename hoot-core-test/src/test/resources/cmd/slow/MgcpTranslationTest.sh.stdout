@@ -1,316 +1,107 @@
-23:02:30.950 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:30.950 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:30.950 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
-23:02:30.950 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:30.951 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:30.951 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:30.954 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:30.954 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
-23:02:30.957 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-output/translation/MgcpTestLines.shp MgcpTestLines
-23:02:30.965 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:30.965 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:30.965 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
-23:02:30.965 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:30.966 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:30.966 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:30.968 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:30.969 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
-Loading test-output/translation/MgcpTestLines.shp MgcpTestLines 0 / 2   23:02:30.974 WARN  ...src/hoot/rules/lib/HootLib.js"(  55) "Expected a number for:: LTN got asdf instead. Dropping LTN"
-
+11:08:34.370 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-output/translation/MgcpTestLines.shp MgcpTestLines
+Loading test-output/translation/MgcpTestLines.shp MgcpTestLines 0 / 2   
 Reprojecting 0 / 6         
-23:02:30.991 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-23:02:30.991 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+11:08:34.401 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+11:08:34.401 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
 MergeNearbyNodes 6 elapsed: 0ms        
-23:02:30.991 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+11:08:34.401 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 2        Ways: 2 / 2        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 6         
-23:02:31.165 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:31.165 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:31.165 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
-23:02:31.165 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:31.165 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:31.166 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:31.168 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:31.169 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
-23:02:31.170 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/MGCPv3/AAL015.shp AAL015
-23:02:31.177 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:31.177 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:31.178 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
-23:02:31.178 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:31.178 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:31.179 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:31.181 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:31.181 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+11:08:34.569 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/AAL015.shp AAL015
 Loading test-files/MGCPv3/AAL015.shp AAL015 0 / 8   
 Reprojecting 0 / 40         
-23:02:31.203 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-23:02:31.203 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+11:08:34.623 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+11:08:34.623 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
 MergeNearbyNodes 0 1    MergeNearbyNodes 32 elapsed: 0ms        
-23:02:31.203 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+11:08:34.623 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 8        Ways: 8 / 8        
 Relations: 0 / 0        
 Combining Parts: 0 / 8        Combining Parts: 8 / 8        
 Reprojecting 0 / 32         
-23:02:31.378 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:31.378 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:31.378 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MGCP_TRD4.js
-23:02:31.378 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:31.378 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:31.379 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/schema/__init__.js
-23:02:31.400 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:31.403 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:31.403 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
-23:02:31.644 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:31.644 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:31.644 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
-23:02:31.644 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:31.644 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:31.645 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:31.647 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:31.648 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
-23:02:31.649 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/MGCPv3/AAL020.shp AAL020
-23:02:31.656 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:31.656 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:31.656 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
-23:02:31.656 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:31.657 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:31.657 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:31.660 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:31.660 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+11:08:34.964 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: AAL015 not found.  Creating layer...
+11:08:35.058 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/AAL020.shp AAL020
 Loading test-files/MGCPv3/AAL020.shp AAL020 0 / 10   
 Reprojecting 0 / 50         
-23:02:31.682 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-23:02:31.682 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
-MergeNearbyNodes 50 elapsed: 0ms        
-23:02:31.682 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+11:08:35.111 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+11:08:35.111 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+MergeNearbyNodes 50 elapsed: 1ms        
+11:08:35.112 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 10        Ways: 10 / 10        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 50         
-23:02:31.853 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:31.853 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:31.853 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MGCP_TRD4.js
-23:02:31.853 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:31.854 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:31.854 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/schema/__init__.js
-23:02:31.875 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:31.877 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:31.878 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
-23:02:32.125 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:32.125 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:32.125 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
-23:02:32.125 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:32.125 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:32.126 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:32.128 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:32.129 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
-23:02:32.130 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/MGCPv3/LAN010.shp LAN010
-23:02:32.137 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:32.137 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:32.137 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
-23:02:32.137 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:32.138 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:32.138 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:32.141 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:32.141 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+11:08:35.461 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: AAL020 not found.  Creating layer...
+11:08:35.555 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/LAN010.shp LAN010
 Loading test-files/MGCPv3/LAN010.shp LAN010 0 / 6   
 Reprojecting 0 / 18         
-23:02:32.163 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-23:02:32.164 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+11:08:35.584 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+11:08:35.584 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
 MergeNearbyNodes 18 elapsed: 0ms        
-23:02:32.164 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+11:08:35.584 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 6        Ways: 6 / 6        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 18         
-23:02:32.340 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:32.340 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:32.340 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MGCP_TRD4.js
-23:02:32.340 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:32.341 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:32.341 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/schema/__init__.js
-23:02:32.362 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:32.364 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:32.365 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
-23:02:32.607 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:32.607 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:32.607 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
-23:02:32.607 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:32.608 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:32.608 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:32.611 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:32.611 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
-23:02:32.612 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/MGCPv3/LAP010.shp LAP010
-23:02:32.620 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:32.620 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:32.620 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
-23:02:32.620 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:32.620 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:32.621 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:32.623 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:32.624 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+11:08:35.939 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: LAN010 not found.  Creating layer...
+11:08:36.031 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/LAP010.shp LAP010
 Loading test-files/MGCPv3/LAP010.shp LAP010 0 / 3   
 Reprojecting 0 / 9         
-23:02:32.652 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-23:02:32.653 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+11:08:36.070 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+11:08:36.070 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
 MergeNearbyNodes 0 1    MergeNearbyNodes 6 elapsed: 0ms        
-23:02:32.653 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+11:08:36.070 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 3        Ways: 3 / 3        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 6         
-23:02:32.826 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:32.826 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:32.826 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MGCP_TRD4.js
-23:02:32.826 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:32.827 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:32.827 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/schema/__init__.js
-23:02:32.848 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:32.850 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:32.851 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
-23:02:33.091 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:33.091 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:33.091 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
-23:02:33.091 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:33.092 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:33.092 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:33.095 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:33.095 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
-23:02:33.096 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/MGCPv3/LAP030.shp LAP030
-23:02:33.103 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:33.103 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:33.104 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
-23:02:33.104 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:33.104 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:33.105 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:33.107 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:33.107 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+11:08:36.442 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: LAP010 not found.  Creating layer...
+11:08:36.535 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/LAP030.shp LAP030
 Loading test-files/MGCPv3/LAP030.shp LAP030 0 / 6   
 Reprojecting 0 / 12         
-23:02:33.134 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-23:02:33.134 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+11:08:36.570 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+11:08:36.571 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
 MergeNearbyNodes 12 elapsed: 0ms        
-23:02:33.134 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+11:08:36.571 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 6        Ways: 6 / 6        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 12         
-23:02:33.308 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:33.308 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:33.308 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MGCP_TRD4.js
-23:02:33.308 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:33.309 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:33.309 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/schema/__init__.js
-23:02:33.330 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:33.333 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:33.333 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
-23:02:33.573 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:33.573 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:33.573 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
-23:02:33.573 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:33.573 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:33.574 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:33.576 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:33.577 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
-23:02:33.577 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/MGCPv3/LAP050.shp LAP050
-23:02:33.585 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:33.585 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:33.585 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
-23:02:33.585 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:33.586 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:33.586 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:33.589 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:33.589 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+11:08:36.939 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: LAP030 not found.  Creating layer...
+11:08:37.030 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/LAP050.shp LAP050
 Loading test-files/MGCPv3/LAP050.shp LAP050 0 / 6   
 Reprojecting 0 / 12         
-23:02:33.613 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-23:02:33.613 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+11:08:37.062 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+11:08:37.062 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
 MergeNearbyNodes 12 elapsed: 0ms        
-23:02:33.613 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+11:08:37.062 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 6        Ways: 6 / 6        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 12         
-23:02:33.780 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:33.780 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:33.780 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MGCP_TRD4.js
-23:02:33.780 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:33.781 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:33.781 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/schema/__init__.js
-23:02:33.802 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:33.805 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:33.805 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
-23:02:34.049 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:34.049 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:34.049 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
-23:02:34.049 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:34.050 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:34.050 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:34.053 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:34.053 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
-23:02:34.054 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/MGCPv3/LBH140.shp LBH140
-23:02:34.061 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:34.061 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:34.062 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
-23:02:34.062 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:34.062 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:34.063 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:34.065 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:34.065 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+11:08:37.427 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: LAP050 not found.  Creating layer...
+11:08:37.520 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/LBH140.shp LBH140
 Loading test-files/MGCPv3/LBH140.shp LBH140 0 / 15   
 Reprojecting 0 / 30         
-23:02:34.083 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-23:02:34.083 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+11:08:37.544 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+11:08:37.544 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
 MergeNearbyNodes 30 elapsed: 0ms        
-23:02:34.083 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+11:08:37.544 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 15        Ways: 15 / 15        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 30         
-23:02:34.252 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:34.252 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:34.252 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MGCP_TRD4.js
-23:02:34.252 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:34.253 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:34.253 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/schema/__init__.js
-23:02:34.274 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:34.277 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:34.277 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
-23:02:34.523 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:34.523 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:34.523 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
-23:02:34.523 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:34.524 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:34.524 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:34.526 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:34.527 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
-23:02:34.528 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 175) Reading: test-files/MGCPv3/PAL015.shp PAL015
-23:02:34.535 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:34.535 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:34.535 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MgcpTest.js
-23:02:34.536 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:34.536 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:34.536 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:34.539 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:34.539 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+11:08:37.915 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: LBH140 not found.  Creating layer...
+11:08:38.006 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-files/MGCPv3/PAL015.shp PAL015
 Loading test-files/MGCPv3/PAL015.shp PAL015 0 / 40   
 Reprojecting 0 / 40         
-23:02:34.565 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-23:02:34.565 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+11:08:38.035 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
+11:08:38.035 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
 MergeNearbyNodes 40 elapsed: 0ms        
-23:02:34.565 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+11:08:38.036 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 0        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 40         
-23:02:34.739 INFO  .../cpp/hoot/js/PluginContext.cpp(  69) Loading system include: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:34.740 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: /home/matt/dg/src/hoot/rules/lib/HootLib.js
-23:02:34.740 INFO  .../cpp/hoot/js/PluginContext.cpp( 127) filename: translations/MGCP_TRD4.js
-23:02:34.740 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/config/__init__.js
-23:02:34.740 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/__init__.js
-23:02:34.741 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/schema/__init__.js
-23:02:34.761 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/mgcp/rules/__init__.js
-23:02:34.763 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/fcode_common/__init__.js
-23:02:34.764 INFO  ...cpp/hoot/js/util/RequireJs.cpp( 143) Loading script: /home/matt/dg/src/hoot/plugins/script/translate/__init__.js
+11:08:38.404 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 279) Layer: PAL015 not found.  Creating layer...
