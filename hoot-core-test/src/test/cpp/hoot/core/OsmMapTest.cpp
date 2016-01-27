@@ -290,7 +290,7 @@ public:
     shared_ptr<OsmMap> mapA(new OsmMap());
     reader.read("test-files/ToyTestA.osm", mapA);
 
-    const char* exceptionMsg;
+    const char* exceptionMsg = "<wrong>";
     try
     {
       mapA->append(mapA);

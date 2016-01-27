@@ -56,13 +56,17 @@ class TDistributionTest : public CppUnit::TestFixture
 
 public:
 
+// The older version of GCC in CentOS 6 gives a bunch of false warnings.
+#define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
+#if GCC_VERSION < 40800
+# pragma GCC diagnostic ignored "-Wuninitialized"
+#endif
+
   void runTest2D()
   {
     int count = 1000;
     Mat m = Mat::zeros(count, 2, CV_64F);
 
-// Older GCC in CentOS 6 gives a bunch of false warnings.
-#pragma GCC diagnostic ignored "-Wunused-parameter"
     boost::minstd_rand rng;
     boost::normal_distribution<> ndx;
     boost::normal_distribution<> ndy;
@@ -72,7 +76,6 @@ public:
     boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<> > vary(rng, ndy);
 
     uni(rng);
-#pragma GCC diagnostic warning "-Wunused-parameter"
 
     for (int i = 0; i < count; i++)
     {
