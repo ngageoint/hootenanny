@@ -4,7 +4,6 @@ TAR=tar
 EXCLUDE_DIRS=grep -E -v ".*/$$"
 confdir=$(prefix)/conf
 plugindir=$(prefix)/plugins
-UNINSTALL_MANIFEST=$(confdir)/HootUninstallManifest.txt
 
 always:
 
@@ -74,9 +73,11 @@ conf/DatabaseConfig.sh:
 install-other:
 	mkdir -p tmp
 	$(TAR) cf tmp/other.tar conf plugins scripts translations
-	cat tmp/other.tar | $(TAR) --list | $(EXCLUDE_DIRS) >> $(UNINSTALL_MANIFEST)
-	cat tmp/other.tar | $(TAR) x -C $(prefix)
+	mkdir -p $(localstatedir)
+	cat tmp/other.tar | $(TAR) x -C $(localstatedir)
 	rm -f tmp/other.tar
+	mkdir -p $(sysconfdir)
+	echo "export HOOT_HOME=$(localstatedir)" > $(sysconfdir)/profile.d/hoot.sh
 
 install-data-local: install-other
 
@@ -84,16 +85,10 @@ install-exec-local:
 	mkdir -p $(bindir) $(libdir) $(confdir)
 	$(INSTALL) bin/* $(bindir)
 	$(INSTALL) lib/* $(libdir)
-	ls bin/* lib/* >> $(UNINSTALL_MANIFEST)
 	test $(HAS_HADOOP) && $(INSTALL) pretty-pipes/bin/* $(bindir) || true
 	test $(HAS_HADOOP) && $(INSTALL) pretty-pipes/lib/* $(libdir) || true
-	test $(HAS_HADOOP) && (cd pretty-pipes ; ls bin/* >> $(UNINSTALL_MANIFEST)) || true
-	test $(HAS_HADOOP) && (cd pretty-pipes ; ls lib/* >> $(UNINSTALL_MANIFEST)) || true
 
 # Clean out all install files and then remove the empty directories.
 uninstall-local:
-	cd $(prefix) && test -f $(UNINSTALL_MANIFEST) && xargs -a $(UNINSTALL_MANIFEST) -d "\n" rm -f || true
-	rm -f $(UNINSTALL_MANIFEST)
-	find $(confdir) $(plugindir) $(bindir) $(libdir) -depth -type d -empty -exec rmdir {} \;
 
 SUBDIRS=stub
