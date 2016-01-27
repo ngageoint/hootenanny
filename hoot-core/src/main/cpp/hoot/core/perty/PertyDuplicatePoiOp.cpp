@@ -43,7 +43,7 @@
 // The older version of GCC in CentOS 6 gives a bunch of false warnings.
 #define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
 #if GCC_VERSION < 40800
-#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wuninitialized"
 #endif
 
 namespace hoot
