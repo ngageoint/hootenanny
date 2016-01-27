@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -57,6 +57,8 @@ import hoot.services.db2.QMaps;
 import hoot.services.db2.QUsers;
 import hoot.services.models.osm.Element.ElementType;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -109,7 +111,7 @@ public class DbUtils
     DELETE
   }
 
-	public enum nwr_enum 
+	public enum nwr_enum
 	{
 		 node,
 		 way,
@@ -208,8 +210,8 @@ public class DbUtils
   }
 
   /**
-   * 
-   * 
+   *
+   *
    * @param conn
    * @return
    * @throws Exception
@@ -280,10 +282,10 @@ public class DbUtils
 
     return mapIds;
   }
-  
+
   /**
-   * 
-   * 
+   *
+   *
    * @param conn
    * @param mapId
    * @return
@@ -293,12 +295,12 @@ public class DbUtils
   {
   	QMaps maps = QMaps.maps;
     SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-    
+
     String displayName = query.from(maps).where(maps.id.eq(mapId)).uniqueResult(maps.displayName);
-    
+
     return displayName;
   }
-  
+
   //TODO: use reflection to get these three element count queries down to one
 
   /**
@@ -401,8 +403,8 @@ public class DbUtils
   }
 
   /**
-   * 
-   * 
+   *
+   *
    * @param mapId
    * @throws Exception
    */
@@ -425,8 +427,8 @@ public class DbUtils
   // remove this. replace by calling hoot core layer delete native command
 
   /**
-   * 
-   * 
+   *
+   *
    * @param conn
    * @param mapId
    * @throws Exception
@@ -484,10 +486,10 @@ public class DbUtils
   }
 
   //remove this. replace by calling hoot core layer delete native command
- 
+
   /**
-   * 
-   * 
+   *
+   *
    * @param conn
    * @param mapName
    * @throws Exception
@@ -497,7 +499,7 @@ public class DbUtils
 		Configuration configuration = getConfiguration();
 
 		QMaps maps = QMaps.maps;
-  	List<Long> mapIds = 
+  	List<Long> mapIds =
   		new SQLQuery(conn, configuration)
   	    .from(maps)
 		    .where(maps.displayName.equalsIgnoreCase(mapName))
@@ -541,10 +543,10 @@ public class DbUtils
   }
 
   // TODO: remove
-  
+
   /**
-   * 
-   * 
+   *
+   *
    * @param conn
    * @return
    */
@@ -558,8 +560,8 @@ public class DbUtils
   }
 
   /**
-   * 
-   * 
+   *
+   *
    * @param conn
    * @return
    * @throws Exception
@@ -592,14 +594,14 @@ public class DbUtils
   //I make a change to the schema in liquibase, it will never be picked up unless this static code
   //is also changed.  See #6777
   /**
-   * 
-   * 
+   *
+   *
    * @param mapId
    * @throws Exception
    */
   public static void createMap(final long mapId) throws Exception
   {
-  	try 
+  	try
   	{
 			String dbname = HootProperties.getProperty("dbName");
 
@@ -709,8 +711,8 @@ public class DbUtils
 
 	  	ddm.createTable(createTblSql, dbname);
 
-		} 
-  	catch (Exception e) 
+		}
+  	catch (Exception e)
   	{
 			log.error(e.getMessage());
 			throw e;
@@ -718,8 +720,8 @@ public class DbUtils
   }
 
   /**
-   * 
-   * 
+   *
+   *
    * @param userId
    * @param conn
    * @return
@@ -754,8 +756,8 @@ public class DbUtils
   }
 
   /**
-   * 
-   * 
+   *
+   *
    * @param jobId
    * @param status
    * @param conn
@@ -790,7 +792,7 @@ public class DbUtils
 
   	QJobStatus jobStatusTbl = QJobStatus.jobStatus;
   	SQLQuery query = new SQLQuery(conn, configuration);
-  	JobStatus stat = 
+  	JobStatus stat =
   		query
   		  .from(jobStatusTbl)
   		  .where(jobStatusTbl.jobId.eq(jobId))
@@ -841,7 +843,7 @@ public class DbUtils
   {
   	QJobStatus jobStatusTbl = QJobStatus.jobStatus;
   	SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
-  	JobStatus stat = 
+  	JobStatus stat =
   		query
   		  .from(jobStatusTbl)
   		  .where(jobStatusTbl.jobId.eq(jobId))
@@ -849,10 +851,10 @@ public class DbUtils
 
     return stat.getStatus();
   }
-  
+
   /**
-   * 
-   * 
+   *
+   *
    * @param mapId
    * @param records
    * @param t
@@ -863,12 +865,12 @@ public class DbUtils
    * @return
    * @throws Exception
    */
-  public static long batchRecords(final long mapId, final List<?> records, 
-    com.mysema.query.sql.RelationalPathBase<?> t, List<List<BooleanExpression>> predicateslist, 
+  public static long batchRecords(final long mapId, final List<?> records,
+    com.mysema.query.sql.RelationalPathBase<?> t, List<List<BooleanExpression>> predicateslist,
     final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
    {
-  	  log.debug("Batch element " + recordBatchType.toString() + "..."); 
-  	
+  	  log.debug("Batch element " + recordBatchType.toString() + "...");
+
   	  try
       {
         Configuration configuration = getConfiguration(mapId);
@@ -876,7 +878,7 @@ public class DbUtils
         switch (recordBatchType)
         {
           case INSERT:
-          	
+
           	SQLInsertClause insert = new SQLInsertClause(conn, configuration, t);
           	long nBatch = 0;
           	for (int i=0; i<records.size(); i++)
@@ -887,7 +889,7 @@ public class DbUtils
 
           		if (maxRecordBatchSize > -1 && i > 0)
           		{
-	          		if (i % maxRecordBatchSize == 0) 
+	          		if (i % maxRecordBatchSize == 0)
 	          		{
 	          			insert.execute();
 
@@ -926,7 +928,7 @@ public class DbUtils
 
           		if (maxRecordBatchSize > -1 && i > 0)
           		{
-	          		if (i % maxRecordBatchSize == 0) 
+	          		if (i % maxRecordBatchSize == 0)
 	          		{
 	          			update.execute();
 
@@ -964,7 +966,7 @@ public class DbUtils
         			nBatchDel++;
         			if (maxRecordBatchSize > -1 && i > 0)
         			{
-	        			if(i % maxRecordBatchSize == 0) 
+	        			if(i % maxRecordBatchSize == 0)
 	        			{
 	          			delete.execute();
 
@@ -991,15 +993,44 @@ public class DbUtils
     }
 
   /**
-   * 
-   * 
+   *
+   *
+   * @param input
+   * @return String
+   * @throws Exception
+   */
+  public static String escapeJson(String input) throws Exception
+  {
+    JSONParser parser = new JSONParser();
+    JSONObject json = (JSONObject)parser.parse(input);
+
+    //Special handling of ADV_OPTIONS
+    String key = "ADV_OPTIONS";
+    if (json.containsKey(key)) {
+      String advopts = json.get(key).toString();
+      String cleanup = advopts.replaceAll("-D \"", "'").replaceAll("=", "': '").replaceAll("\"", "',").replaceAll("'", "\"");
+      //wrap with curly braces and remove trailing comma
+      cleanup = "{" + cleanup.substring(0, cleanup.length() - 1) + "}";
+      //System.out.println(cleanup);
+      JSONObject obj = (JSONObject)parser.parse(cleanup);
+
+      json.put(key, obj);
+    }
+    //System.out.println(JSONObject.escape(json.toString()).toString());
+
+    return JSONObject.escape(json.toString());
+  }
+
+  /**
+   *
+   *
    * @param tags
    * @param mapId
    * @param conn
    * @return
    * @throws SQLException
    */
-  public static long updateMapsTableTags(final Map<String, String> tags, final long mapId, 
+  public static long updateMapsTableTags(final Map<String, String> tags, final long mapId,
   	final Connection conn) throws SQLException
   {
   	long execResult = -1;
@@ -1007,13 +1038,13 @@ public class DbUtils
     try
     {
     	String sql = null;
-      
-    	sql = "update maps set tags=? " +
-					"where id=?";
+
+      sql = "update maps set tags = COALESCE(tags, '') || ?::hstore " +
+        "where id=?";
     	ps = conn.prepareStatement(sql);
     	String hstoreStr = "";
 			Iterator it = tags.entrySet().iterator();
-	    while (it.hasNext()) 
+	    while (it.hasNext())
 	    {
 	        Map.Entry pairs = (Map.Entry)it.next();
 	        if (hstoreStr.length() > 0)
@@ -1024,7 +1055,7 @@ public class DbUtils
 	    }
 			ps.setObject(1, hstoreStr, Types.OTHER);
 			ps.setLong(2, mapId);
-		
+
 			execResult = ps.executeUpdate();
     }
     finally
@@ -1036,39 +1067,39 @@ public class DbUtils
     }
     return execResult;
   }
-  
+
   /**
-   * 
-   * 
+   *
+   *
    * @param mapId
    * @param conn
    * @return
    * @throws Exception
    */
-  public static Map<String, String> getMapsTableTags(final long mapId, final Connection conn) 
+  public static Map<String, String> getMapsTableTags(final long mapId, final Connection conn)
   	throws Exception
   {
   	Map<String, String> tags = new HashMap<String, String>();
   	QMaps  mp = QMaps.maps;
-  	
-  	List<Object> res = 
+
+  	List<Object> res =
   		new SQLQuery(conn, DbUtils.getConfiguration(mapId))
   	    .from(mp)
   	    .where(mp.id.eq(mapId))
   	    .list(mp.tags);
-  	
+
   	if (res.size() > 0)
   	{
   		Object oTag = res.get(0);
   		tags = PostgresUtils.postgresObjToHStore((org.postgresql.util.PGobject)oTag);
   	}
-  	
+
   	return tags;
   }
 
   /**
-   * 
-   * 
+   *
+   *
    * @param mapId
    * @param records
    * @param recordBatchType
@@ -1077,7 +1108,7 @@ public class DbUtils
    * @return
    * @throws Exception
    */
-	public static long batchRecordsDirectNodes(final long mapId, final List<?> records, 
+	public static long batchRecordsDirectNodes(final long mapId, final List<?> records,
 		final RecordBatchType recordBatchType,  Connection conn, int maxRecordBatchSize) throws Exception
 	{
 		log.debug("Batch node " + recordBatchType.toString() + "...");
@@ -1237,8 +1268,8 @@ public class DbUtils
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @param mapId
 	 * @param records
 	 * @param recordBatchType
@@ -1247,7 +1278,7 @@ public class DbUtils
 	 * @return
 	 * @throws Exception
 	 */
-	public static long batchRecordsDirectWays(final long mapId, final List<?> records, 
+	public static long batchRecordsDirectWays(final long mapId, final List<?> records,
 		final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
 	{
 		log.debug("Batch way " + recordBatchType.toString() + "...");
@@ -1398,8 +1429,8 @@ public class DbUtils
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @param mapId
 	 * @param records
 	 * @param recordBatchType
@@ -1408,7 +1439,7 @@ public class DbUtils
 	 * @return
 	 * @throws Exception
 	 */
-	public static long batchRecordsDirectRelations(final long mapId, final List<?> records, 
+	public static long batchRecordsDirectRelations(final long mapId, final List<?> records,
 		final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
 	{
 		log.debug("Batch relation " + recordBatchType.toString() + "...");
@@ -1558,7 +1589,7 @@ public class DbUtils
 
 	/**
 	 * Returns table size in byte
-	 * 
+	 *
 	 * @param tableName
 	 * @return
 	 * @throws Exception
@@ -1572,7 +1603,7 @@ public class DbUtils
 		{
 			conn = DbUtils.createConnection();
 			stmt = conn.createStatement();
-			
+
 			String sql = "select pg_total_relation_size('" + tableName + "') as tablesize";
 			ResultSet rs = stmt.executeQuery(sql);
       //STEP 5: Extract data from result set
@@ -1610,20 +1641,20 @@ public class DbUtils
 				log.equals(se.getMessage());
 			}// end finally try
 		}// end try
-		
+
 		return ret;
 	}
-	
+
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @param result
 	 * @param elementType
 	 * @return
-	 * @throws SQLException 
+	 * @throws SQLException
 	 * @todo change back to original element generic code
 	 */
-	public static Object resultToObj(final ResultSet rs, final ElementType elementType) 
+	public static Object resultToObj(final ResultSet rs, final ElementType elementType)
 		throws SQLException
 	{
 		if (elementType == ElementType.Node)
