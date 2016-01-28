@@ -55,6 +55,7 @@ endif
 
 ifeq "$(COLLECT_STATS)" "true"
 	OP_STAT= --stats > $(HOOT_HOME)/data/reports/$(OUTPUT_NAME)-stats.csv
+	# don't include non-error log messages in stdout because we are redirecting to file
 	HOOT_OPTS+= --error
 endif
 
