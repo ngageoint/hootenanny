@@ -54,7 +54,7 @@ public class DbUtilsTest {
     public void testUpdateMapsTableTags() throws Exception
     {
         Connection conn = DbUtils.createConnection();
-        long userId = 1;
+        long userId = DbUtils.insertUser(conn);
         long mapId = DbUtils.insertMap(userId, conn);
         JSONParser parser = new JSONParser();
         try {
@@ -144,11 +144,9 @@ public class DbUtilsTest {
             Assert.assertEquals(v4, checkTags.get(k4));
             Assert.assertEquals(v6, checkTags.get(k6));
 
-
-        // } catch (Exception ex) {
-        //     throw(ex);
         } finally {
             DbUtils.deleteOSMRecord(conn, mapId);
+            DbUtils.deleteUser(conn, userId);
         }
     }
 

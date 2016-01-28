@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -87,6 +87,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
       conn = DbUtils.createConnection();
       OsmTestUtils.conn = conn;
       ReviewTestUtils.conn = conn;
+      userId = DbUtils.insertUser(conn);
     }
     catch (Exception e)
     {
@@ -101,13 +102,6 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
   {
     try
     {
-    	//TODO: This is going to result in a lot of users created by the services test, now that
-    	//we don't clear out the database automatically between tests.  Only inserting one user is
-    	//causing UserResourceTest failures for a not so obvious reason.
-    	//if (userId == -1)
-    	//{
-    		userId = DbUtils.insertUser(conn);
-    	//}
     	mapId = DbUtils.insertMap(userId, conn);
 
       OsmTestUtils.userId = userId;
@@ -148,6 +142,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
   {
     try
     {
+      DbUtils.deleteUser(conn, userId);
     	OsmTestUtils.conn = null;
     	ReviewTestUtils.conn = null;
     }
