@@ -74,17 +74,28 @@ install-other:
 	mkdir -p tmp
 	$(TAR) cf tmp/other.tar conf plugins scripts translations
 	mkdir -p $(localstatedir)
-	cat tmp/other.tar | $(TAR) x -C $(localstatedir)
+	cat tmp/other.tar | $(TAR) xv -C $(localstatedir)
 	rm -f tmp/other.tar
-	mkdir -p $(sysconfdir)
-	echo "export HOOT_HOME=$(localstatedir)" > $(sysconfdir)/profile.d/hoot.sh
+	mkdir -p $(sysconfdir)/profile.d/
+	echo "export HOOT_HOME=$(localstatedir)" > $(sysconfdir)/profile.d/hootenanny.sh
+	export HOOT_HOME=`pwd`
+	cd $HOOT_HOME/hoot-core/src/main/cpp/
+	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -)
+	cd $HOOT_HOME/hoot-js/src/main/cpp/
+	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -)
+	cd $HOOT_HOME/hoot-rnd/src/main/cpp/
+	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -)
 
 install-data-local: install-other
 
 install-exec-local:
 	mkdir -p $(bindir) $(libdir) $(confdir)
 	$(INSTALL) bin/* $(bindir)
-	$(INSTALL) lib/* $(libdir)
+	rm $(bindir)/HootEnv.sh
+	mkdir -p $(localstatedir)/bin/
+	cp bin/HootEnv.sh $(localstatedir)/bin/
+	cp -l $(localstatedir)/bin/HootEnv.sh $(bindir)
+	cp -a lib/* $(libdir)
 	test $(HAS_HADOOP) && $(INSTALL) pretty-pipes/bin/* $(bindir) || true
 	test $(HAS_HADOOP) && $(INSTALL) pretty-pipes/lib/* $(libdir) || true
 
