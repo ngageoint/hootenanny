@@ -76,14 +76,17 @@ install-other:
 	mkdir -p $(localstatedir)
 	cat tmp/other.tar | $(TAR) xv -C $(localstatedir)
 	rm -f tmp/other.tar
+	mkdir -p $(docdir)
+	cp INSTALL LICENSE AUTHORS COPYING GPLv3 README* docs/*.pdf $(docdir)
 	mkdir -p $(sysconfdir)/profile.d/
 	echo "export HOOT_HOME=$(localstatedir)" > $(sysconfdir)/profile.d/hootenanny.sh
-	export HOOT_HOME=`pwd`
-	cd $(HOOT_HOME)/hoot-core/src/main/cpp/
-	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -)
-	cd $(HOOT_HOME)/hoot-js/src/main/cpp/
-	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -)
-	cd $(HOOT_HOME)/hoot-rnd/src/main/cpp/
+	mkdir -p $(includedir)
+	export HOOT_HOME=`pwd`; \
+	cd $$HOOT_HOME/hoot-core/src/main/cpp/; \
+	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -); \
+	cd $$HOOT_HOME/hoot-js/src/main/cpp; \
+	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -); \
+	cd $$HOOT_HOME/hoot-rnd/src/main/cpp/; \
 	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -)
 
 install-data-local: install-other
