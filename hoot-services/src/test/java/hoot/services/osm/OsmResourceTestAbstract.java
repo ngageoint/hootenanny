@@ -142,7 +142,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest
   {
     try
     {
-      DbUtils.deleteUser(conn, userId);
+      //DbUtils.deleteUser(conn, userId);
     	OsmTestUtils.conn = null;
     	ReviewTestUtils.conn = null;
     }
