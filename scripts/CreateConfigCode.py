@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/python
 
 """
 Creates C++ code for the available configuration options. This forces the 
