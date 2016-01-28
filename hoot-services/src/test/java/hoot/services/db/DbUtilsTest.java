@@ -33,6 +33,9 @@ import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -51,7 +54,7 @@ public class DbUtilsTest {
     public void testUpdateMapsTableTags() throws Exception
     {
         Connection conn = DbUtils.createConnection();
-        long userId = 1;
+        long userId = DbUtils.insertUser(conn);
         long mapId = DbUtils.insertMap(userId, conn);
         JSONParser parser = new JSONParser();
         try {
@@ -73,7 +76,7 @@ public class DbUtilsTest {
 
             // Test tag append
             Map<String, String> tagsAppend = new HashMap<String, String>();
-            String k3 = "stats";
+            String k3 = "key";
             String v3 = "value";
             tagsAppend.put(k3, v3);
             result = DbUtils.updateMapsTableTags(tagsAppend, mapId, conn);
@@ -88,7 +91,7 @@ public class DbUtilsTest {
 
             // Test tag update
             Map<String, String> tagsUpdate = new HashMap<String, String>();
-            String k4 = "stats";
+            String k4 = "key";
             String v4 = "change";
             tagsUpdate.put(k4, v4);
             result = DbUtils.updateMapsTableTags(tagsUpdate, mapId, conn);
@@ -105,7 +108,7 @@ public class DbUtilsTest {
             Map<String, String> tagsJson = new HashMap<String, String>();
             String k5 = "params";
             String v5 = "{\"INPUT1\":\"4835\",\"INPUT2\":\"4836\",\"OUTPUT_NAME\":\"Merged_525_stats\",\"CONFLATION_TYPE\":\"Reference\",\"GENERATE_REPORT\":\"false\",\"TIME_STAMP\":\"1453777469448\",\"REFERENCE_LAYER\":\"1\",\"AUTO_TUNNING\":\"false\",\"ADV_OPTIONS\":\"-D \\\"map.cleaner.transforms=hoot::ReprojectToPlanarOp;hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;hoot::DualWaySplitter;hoot::ImpliedDividedMarker;hoot::DuplicateNameRemover;hoot::SmallWayMerger;hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;hoot::NoInformationElementRemover\\\" -D \\\"small.way.merger.threshold=15\\\" -D \\\"unify.optimizer.time.limit=30\\\" -D \\\"ogr.split.o2s=false\\\" -D \\\"ogr.tds.add.fcsubtype=true\\\" -D \\\"ogr.tds.structure=true\\\" -D \\\"duplicate.name.case.sensitive=true\\\" -D \\\"conflate.match.highway.classifier=hoot::HighwayRfClassifier\\\" -D \\\"match.creators=hoot::HighwayMatchCreator;hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::ScriptMatchCreator,LinearWaterway.js\\\" -D \\\"merger.creators=hoot::HighwaySnapMergerCreator;hoot::BuildingMergerCreator;hoot::ScriptMergerCreator\\\" -D \\\"search.radius.highway=-1\\\" -D \\\"highway.matcher.heading.delta=5.0\\\" -D \\\"highway.matcher.max.angle=60\\\" -D \\\"way.merger.min.split.size=5\\\" -D \\\"conflate.enable.old.roads=false\\\" -D \\\"way.subline.matcher=hoot::MaximalNearestSublineMatcher\\\" -D \\\"waterway.angle.sample.distance=20.0\\\" -D \\\"waterway.matcher.heading.delta=150.0\\\" -D \\\"waterway.auto.calc.search.radius=true\\\" -D \\\"search.radius.waterway=-1\\\" -D \\\"waterway.rubber.sheet.minimum.ties=5\\\" -D \\\"waterway.rubber.sheet.ref=true\\\" -D \\\"osm.writer.include.debug=false\\\"\",\"INPUT1_TYPE\":\"DB\",\"INPUT2_TYPE\":\"DB\",\"USER_EMAIL\":\"test@test.com\"}";
-                tagsJson.put(k5, DbUtils.escapeJson(v5));
+            tagsJson.put(k5, DbUtils.escapeJson(v5));
             result = DbUtils.updateMapsTableTags(tagsJson, mapId, conn);
             Assert.assertTrue(result > -1);
             checkTags = DbUtils.getMapsTableTags(mapId, conn);
@@ -123,10 +126,27 @@ public class DbUtilsTest {
             Assert.assertEquals("4835", oParams.get("INPUT1").toString());
             Assert.assertEquals("15", ((JSONObject)oParams.get("ADV_OPTIONS")).get("small.way.merger.threshold").toString());
 
-        // } catch (Exception ex) {
-        //     throw(ex);
+
+            //Test stats tag value
+            Map<String, String> tagsStats = new HashMap<String, String>();
+            String k6 = "stats";
+            String v6 = IOUtils.toString(this.getClass().getResourceAsStream("conflation-stats.csv"), "UTF-8");
+            tagsStats.put(k6, v6);
+            result = DbUtils.updateMapsTableTags(tagsStats, mapId, conn);
+            Assert.assertTrue(result > -1);
+            checkTags = DbUtils.getMapsTableTags(mapId, conn);
+            Assert.assertTrue(checkTags.containsKey(k1));
+            Assert.assertTrue(checkTags.containsKey(k2));
+            Assert.assertTrue(checkTags.containsKey(k4));
+            Assert.assertTrue(checkTags.containsKey(k6));
+            Assert.assertEquals(v1, checkTags.get(k1));
+            Assert.assertEquals(v2, checkTags.get(k2));
+            Assert.assertEquals(v4, checkTags.get(k4));
+            Assert.assertEquals(v6, checkTags.get(k6));
+
         } finally {
             DbUtils.deleteOSMRecord(conn, mapId);
+            DbUtils.deleteUser(conn, userId);
         }
     }
 

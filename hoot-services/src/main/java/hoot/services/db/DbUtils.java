@@ -590,6 +590,22 @@ public class DbUtils
     return newId.longValue();
   }
 
+  /**
+   *
+   *
+   * @param conn
+   * @return
+   * @throws Exception
+   */
+  public static void deleteUser(Connection conn, long userId) throws Exception
+  {
+      Configuration configuration = getConfiguration();
+      QUsers users = QUsers.users;
+      new SQLDeleteClause(conn, configuration, users)
+        .where(users.id.eq(userId))
+        .execute();
+  }
+
   //TODO: this code needs to be changed to dynamically read in the data types from querydsl.  If
   //I make a change to the schema in liquibase, it will never be picked up unless this static code
   //is also changed.  See #6777
