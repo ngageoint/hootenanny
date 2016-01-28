@@ -72,7 +72,7 @@ conf/DatabaseConfig.sh:
 # Use some tar fanciness to grab all the files in conf, plugins, translations and scripts
 install-other:
 	mkdir -p tmp
-	$(TAR) cf tmp/other.tar conf plugins scripts translations
+	$(TAR) cf tmp/other.tar conf plugins scripts translations rules
 	mkdir -p $(localstatedir)
 	cat tmp/other.tar | $(TAR) xv -C $(localstatedir)
 	rm -f tmp/other.tar
