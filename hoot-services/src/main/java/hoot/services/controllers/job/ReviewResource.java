@@ -675,6 +675,7 @@ public class ReviewResource
   				if(!note.containsKey("id"))
   				{
   					String sNewId = UUID.randomUUID().toString();
+  					sNewId = sNewId.replace('-', '0');
   					note.put("id", sNewId);
   					Calendar calendar = Calendar.getInstance();
   					long now = calendar.getTimeInMillis();
