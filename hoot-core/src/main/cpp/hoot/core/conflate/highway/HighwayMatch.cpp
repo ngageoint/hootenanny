@@ -74,9 +74,12 @@ HighwayMatch::HighwayMatch(const shared_ptr<HighwayClassifier>& classifier,
       // calculate the match score
       _c = _classifier->classify(map, eid1, eid2, _sublineMatch);
       stringstream ss;
-      ss << "HighwayMatch " << _eid1.toString() << " " << _eid2.toString() << " P: "
-         << _c.toString() << " features: " << getFeatures(map);
+      ss << mt->getTypeDetail(_c);
       _explainText = QString::fromUtf8(ss.str().data());
+
+      stringstream ss2;
+      ss2 << toString() << " features: " << getFeatures(map);
+      //LOG_DEBUG(QString::fromUtf8(ss2.str().data()));
     }
     else
     {
