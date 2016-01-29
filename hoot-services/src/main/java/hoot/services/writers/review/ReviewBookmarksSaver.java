@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,18 +49,28 @@ public class ReviewBookmarksSaver {
 		long nSaved = 0;
 		ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(_conn);
 		
-		List<ReviewBookmarks> res = retriever.retrieve(request.getMapId(), request.getRelationId());
 		
-		if(res.size() == 0)
+		
+		if(request.getBookmarkId() > -1) 
+		{
+			List<ReviewBookmarks> res = retriever.retrieve(request.getBookmarkId());
+			if(res.size() == 0)
+			{
+				// insert
+				nSaved = insert(request);
+			}
+			else
+			{
+				// update
+				nSaved = update(request, res.get(0));
+			}
+		}
+		else 
 		{
 			// insert
 			nSaved = insert(request);
 		}
-		else
-		{
-			// update
-			nSaved = update(request, res.get(0));
-		}
+		
 		
 		return nSaved;
 	}
@@ -212,7 +223,33 @@ public class ReviewBookmarksSaver {
 				{
 					hstoreStr += ",";
 				}
-				hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + pairs.getValue()
+
+				String jsonStr = "";
+				Object oVal = tags.get(pairs.getKey());
+				if(oVal instanceof JSONObject)
+				{
+					jsonStr = ((JSONObject)oVal).toJSONString();
+				}
+				else if(oVal instanceof JSONArray)
+				{
+					jsonStr = ((JSONArray)oVal).toJSONString();
+				}
+				else if(oVal instanceof Map)
+				{
+					jsonStr = JSONObject.toJSONString((Map)oVal);
+				}
+				else if(oVal instanceof List)
+				{
+					jsonStr = JSONArray.toJSONString((List) oVal);
+				}
+				else
+				{
+					jsonStr = oVal.toString();
+				}
+				jsonStr = jsonStr.replace("\\", "\\\\");
+				jsonStr = jsonStr.replace("'", "''");
+				jsonStr = jsonStr.replace("\"", "\\\"");
+				hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + jsonStr
 				    + "\"";
 			}
   	}

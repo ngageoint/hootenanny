@@ -50,7 +50,7 @@ public class ReviewBookmarksRemover {
 	/**
 	 * Delete clause
 	 * 
-	 * @param request - Request containing mapid and relationid
+	 * @param request - Request containing bookmarkid
 	 * @return - toal numbers of removed
 	 * @throws Exception
 	 */
@@ -63,8 +63,7 @@ public class ReviewBookmarksRemover {
 			QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
 			Configuration configuration = DbUtils.getConfiguration();
 			cl = new SQLDeleteClause(_conn, configuration, reviewBookmarks)
-			.where(reviewBookmarks.mapId.eq(request.getMapId()), 
-					reviewBookmarks.relationId.eq(request.getRelationId()));
+			.where(reviewBookmarks.id.eq(request.getBookmarkId()));
 		}
 		catch (Exception ex)
 		{
