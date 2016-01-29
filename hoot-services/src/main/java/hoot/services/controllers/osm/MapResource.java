@@ -1215,6 +1215,7 @@ public class MapResource
 						log.debug("Found " + statsName);
 						String stats = FileUtils.readFileToString(statsFile, "UTF-8");
 						tags.put(statsKey, stats);
+						statsFile.delete();
 					} else {
 						log.error("Can't find " + statsName);
 						tags.remove(statsKey);
