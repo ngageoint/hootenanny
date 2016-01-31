@@ -86,6 +86,11 @@ BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map, shared_ptr<const Buildin
     _p.setReviewP(1.0);
     _explainText = "Unmatched buildings are overlapping.";
   }
+  else
+  {
+    _explainText = mt->getTypeDetail(_p);
+  }
+  //LOG_DEBUG(toString());
 }
 
 map<QString, double> BuildingMatch::getFeatures(const shared_ptr<const OsmMap>& m) const
@@ -122,20 +127,11 @@ QString BuildingMatch::toString() const
 {
   stringstream ss;
   ss << "BuildingMatch: " << _eid1 << ", " << _eid2 << " p: " << _p.toString();
-  if (getType() == MatchType::Review)
-  {
-    ss << " note: " << _explainText;
-  }
+  //if (getType() == MatchType::Review)
+  //{
+    //ss << " note: " << _explainText;
+  //}
   return QString::fromStdString(ss.str());
-}
-
-QString BuildingMatch::explain() const
-{
-  if (!_explainText.isEmpty())
-  {
-    return _explainText;
-  }
-  return toString();
 }
 
 }
