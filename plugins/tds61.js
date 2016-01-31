@@ -281,7 +281,7 @@ tds61 = {
                             }
                             else
                             {
-                                hoot.logWarn('Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + tds61.rules.txtLength[val] + ' characters.');
+                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + tds61.rules.txtLength[val] + ' characters.');
                                 // Still too long. Chop to the maximum length.
                                 attrs[val] = tStr[0].substring(0,tds61.rules.txtLength[val]);
                             }
@@ -322,7 +322,7 @@ tds61 = {
                             }
                             else
                             {
-                                hoot.logWarn('Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + tds61.rules.txtLength[val] + ' characters.');
+                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + tds61.rules.txtLength[val] + ' characters.');
                                 // Still too long. Chop to the maximum length.
                                 attrs[val] = tStr[0].substring(0,tds61.rules.txtLength[val]);
                             }

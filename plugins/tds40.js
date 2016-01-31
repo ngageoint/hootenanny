@@ -286,7 +286,7 @@ tds = {
                             {
                                 // Still too long. Chop to the maximum length.
                                 attrs[val] = tStr[0].substring(0,tds.rules.txtLength[val]);
-                                hoot.logWarn('Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncateing to ' + tds.rules.txtLength[val] + ' characters.');
+                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncateing to ' + tds.rules.txtLength[val] + ' characters.');
                             }
                         } // End text attr length > max length
                     } // End in txtLength
@@ -326,7 +326,7 @@ tds = {
                             {
                                 // Still too long. Chop to the maximum length.
                                 attrs[val] = tStr[0].substring(0,tds.rules.txtLength[val]);
-                                hoot.logWarn('Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncateing to ' + tds.rules.txtLength[val] + ' characters.');
+                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncateing to ' + tds.rules.txtLength[val] + ' characters.');
                             }
                         } // End text attr length > max length
                     } // End in txtLength
@@ -335,8 +335,8 @@ tds = {
         }
         else
         {
-            hoot.logVerbose('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
-    } // End Drop attrs
+            hoot.logWarn('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
+        } // End Drop attrs
 
         // Repack the OTH field
         if (Object.keys(othList).length > 0)
