@@ -4522,6 +4522,21 @@ tds61.rules = {
     ],
     // ##### End of fuzzyTable #####
 
+    // ##### Start of txtLength #####
+    // This list is for validateing the lengths of text attributes prior to export
+    txtLength : {
+     'BA000_VDR':80, 'BEN':15, 'BRN':24, 'CID':20, 'CUD':20, 'ETZ':24, 'F_CODE':5, 'GB052_RIDH':14, 'GB052_RIDL':14,
+     'IKO':14, 'MDE':20, 'NA8':80, 'PDA':14, 'PSE':14, 'RIN_RTN':24, 'RIN_RTN2':24, 'RIN_RTN3':24, 'RTN':24, 'RTN2':24,
+     'RTN3':24, 'SAX_RS3':14, 'SAX_RS4':14, 'SAX_RS6':14, 'SAX_RX1':254, 'SAX_RX2':254, 'SAX_RX5':254, 'SAX_RX6':254,
+     'SAX_RX7':254, 'SAX_RX8':14, 'SAX_RY1':254, 'SAX_RY2':254, 'SSE':14, 'UFI':254, 'URI':254, 'VCS_VCR':132, 'VOI':14,
+     'WPI':14, 'ZI001_SDV':20, 'ZI001_VSD':20, 'ZI002_UFI':254, 'ZI005_FNA':200, 'ZI005_FNA2':200, 'ZI005_FNA3':200,
+     'ZI005_NFN':18, 'ZI005_NFN2':18, 'ZI005_NFN3':18, 'ZI026T_UFI':254, 'ZI027T_UFI':254, 'ZI028_UFI':254, 'ZI031S_URI':254,
+     'ZI031T_URI':254, 'ZI039S_UFI':254, 'ZI039T_UFI':254, 'ZSAX_RS0':14,
+     'ZSAX_RX0':254, 'ZSAX_RX3':254, 'ZSAX_RX4':254
+    },
+    // ##### End of txtLength #####
+
+
     // ##### Start of Thematic Group Rules #####
     thematicGroupList : {
         'PAA010':'IndustryPnt', // Industry
