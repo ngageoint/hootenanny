@@ -265,7 +265,31 @@ tds = {
 
                         hoot.logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
                         delete attrs[val];
+
+                        // Since we deleted the attribute, Skip the text check
+                        continue;
                     }
+                    
+                    // Now check the length of the text fields
+                    // We need more info from the customer about this: What to do if it is too long
+                    if (val in tds.rules.txtLength)
+                    {
+                        if (attrs[val].length > tds.rules.txtLength[val])
+                        {
+                            // First try splitting the attribute and grabbing the first value
+                            var tStr = attrs[val].split(';');
+                            if (tStr[0].length <= tds.rules.txtLength[val])
+                            {
+                                attrs[val] = tStr[0];
+                            }
+                            else
+                            {
+                                // Still too long. Chop to the maximum length.
+                                attrs[val] = tStr[0].substring(0,tds.rules.txtLength[val]);
+                                hoot.logWarn('Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncateing to ' + tds.rules.txtLength[val] + ' characters.');
+                            }
+                        } // End text attr length > max length
+                    } // End in txtLength
                 }
             }
             else
@@ -282,8 +306,31 @@ tds = {
                         }
 
                         delete attrs[val];
+
+                        // Since we deleted the attribute, Skip the text check
+                        continue;
                     }
-                }
+                    // Now check the length of the text fields
+                    // We need more info from the customer about this: What to do if it is too long
+                    if (val in tds.rules.txtLength)
+                    {
+                        if (attrs[val].length > tds.rules.txtLength[val])
+                        {
+                            // First try splitting the attribute and grabbing the first value
+                            var tStr = attrs[val].split(';');
+                            if (tStr[0].length <= tds.rules.txtLength[val])
+                            {
+                                attrs[val] = tStr[0];
+                            }
+                            else
+                            {
+                                // Still too long. Chop to the maximum length.
+                                attrs[val] = tStr[0].substring(0,tds.rules.txtLength[val]);
+                                hoot.logWarn('Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncateing to ' + tds.rules.txtLength[val] + ' characters.');
+                            }
+                        } // End text attr length > max length
+                    } // End in txtLength
+                } // End attrs loop
             }
         }
         else
@@ -1389,10 +1436,11 @@ tds = {
         if (attrs.HGT > 46 && !(attrs.LMC)) attrs.LMC = '1001';
 
         // Alt_Name:  AL020 Built Up Area is the _ONLY_ feature in TDS that has a secondary name.
-        // We are going to push the Alt Name onto the end of the standard name field - ZI005_FNA
         if (attrs.ZI005_FNA2 && attrs.F_CODE !== 'AL020')
         {
-            attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
+            // We were going to push the Alt Name onto the end of the standard name field - ZI005_FNA
+            // but this causes problems so until the customer gives us more direction, we are going to drop it.
+            // attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
 
             delete attrs.ZI005_FNA2;
         }
