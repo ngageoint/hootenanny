@@ -276,22 +276,36 @@ are merged.
 
 [[GenericConflationQuality]]
 .Conflation Quality
-[gnuplot, algorithms/GenericLineTestGraph.png]
-------
-set title "Random Forest vs. Generic Line Road Conflation Performance\nHigher is Better"
-set auto x
-set yrange [.5:1.1]
-set style data histogram
-set style histogram cluster errorbars gap 1
-set style fill solid 0.5 border -1
-set boxwidth 0.9
-set xtic rotate by -70 scale 0 font "arial,10"
-set ylabel "Score"
-set bmargin 7
-#plot "-" using 2:xticlabels(1) title columnheader(2)
-plot "algorithms/GenericLineTest.dat" using 2:3:4:xticlabels(1) title columnheader(2), \
-    '' using 5:6:7 fill solid 0.5 title columnheader(5)
-------
+image::algorithms/GenericLineTestGraph.png[Random Forest vs. Generic Line Road Conflation Performance,scalewidth="50%"]
+#TODO: replace with MPL - #267
+#[gnuplot, algorithms/GenericLineTestGraph.png]
+#------
+#set title "Random Forest vs. Generic Line Road Conflation Performance\nHigher is Better"
+#set auto x
+#set yrange [.5:1.1]
+#set style data histogram
+#set style histogram cluster errorbars gap 1
+#set style fill solid 0.5 border -1
+#set boxwidth 0.9
+#set xtic rotate by -70 scale 0 font "arial,10"
+#set ylabel "Score"
+#set bmargin 7
+#plot "algorithms/GenericLineTest.dat" using 2:3:4:xticlabels(1) title columnheader(2), \
+#    '' using 5:6:7 fill solid 0.5 title columnheader(5)
+#------
+# start at an attempt with MPL to do the same thing as the above gnuplot code
+#["mpl", "algorithms/GenericLineTestGraph.png"]
+#---------------------------
+#figure(figsize=(5,2.5))
+#title('Random Forest vs. Generic Line Road Conflation Performance\nHigher is Better')
+#ylabel('Score')
+#ylim(0.5,1.1)
+#data = genfromtxt('/data/hoot/docs/algorithms/GenericLineTest3.dat', delimiter=',', missing_values=0, names=True, dtype=None)
+#xticks(arange(2), (data[0][0], data[1][0]), rotation=17)
+#margins(20)
+#subplots_adjust(bottom=0.15)
+#tick_params(labelsize=10)
+#--------------------------
 
 In <<GenericConflationQuality>> 90% confidence interval error bars are presented
 when relevant.  For some tests no confidence intervals are generated and have
@@ -306,24 +320,25 @@ for this requires more investigation.
 
 [[Conflation Speed]]
 .Conflation Speed
-[gnuplot, algorithms/GenericLineTestTimingGraph.png]
-------
-set title "Random Forest vs. Generic Line Road Conflation Timing\nLower is Better"
-set auto x
-set yrange [0:400]
-set style data histogram
-set style histogram cluster gap 1
-set style fill pattern 2 border -1
-set boxwidth 0.9
-set xtic rotate by -70 scale 0 font "arial,10"
-set ylabel "Time Elapsed in Seconds"
-set bmargin 7
-#plot "-" using 2:xticlabels(1) title columnheader(2)
+image::algorithms/GenericLineTestTimingGraph.png[Random Forest vs. Generic Line Road Conflation Timing,scalewidth="50%"]
+#TODO: replace with MPL - #267
+#[gnuplot, algorithms/GenericLineTestTimingGraph.png]
+#------
+#set title "Random Forest vs. Generic Line Road Conflation Timing\nLower is Better"
+#set auto x
+#set yrange [0:400]
+#set style data histogram
+#set style histogram cluster gap 1
+#set style fill pattern 2 border -1
+#set boxwidth 0.9
+#set xtic rotate by -70 scale 0 font "arial,10"
+#set ylabel "Time Elapsed in Seconds"
+#set bmargin 7
 # The sed silliness limits to only use the rows that contain timing data
-plot "<(sed -n '1,5p;9p;13,1000p' algorithms/GenericLineTest.dat)" \
-  using 8:xticlabels(1) title columnheader(8), \
-  '' using 9 fill pattern 2 title columnheader(9)
-------
+#plot "<(sed -n '1,5p;9p;13,1000p' algorithms/GenericLineTest.dat)" \
+#  using 8:xticlabels(1) title columnheader(8), \
+#  '' using 9 fill pattern 2 title columnheader(9)
+#------
 
 The image above shows the conflation speed for some of the test runs discussed
 above. The Perty test runs include the entire perty operation (perturbing,
