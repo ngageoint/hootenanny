@@ -31,7 +31,7 @@
 
 MassNh = {
     // ##### Start of the xxToOsmxx Block #####
-    applyToOsmPreProcessing: function(attrs, layerName) 
+    applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
         // List of data values to drop/ignore
         var ignoreList = { '0':1, '-999999':1, 'noinformation':1 };
@@ -123,7 +123,7 @@ MassNh = {
 
     }, // End of applyToOsmPreProcessing
 
-    applyToOsmPostProcessing : function (attrs, tags, layerName)
+    applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
         // New TDSv61 Attribute - ROR (Road Interchange Ramp)
         if (tags.highway && tags.link_road == 'yes')
@@ -411,7 +411,7 @@ MassNh = {
 
     // toOsm - Translate Attrs to Tags
     // This is the main routine to convert _TO_ OSM
-    toOsm : function(attrs, layerName)
+    toOsm : function(attrs, layerName, geometryType)
     {
         tags = {};  // The final output Tag list
 
@@ -435,7 +435,7 @@ MassNh = {
         }
 
         // pre processing
-        MassNh.applyToOsmPreProcessing(attrs, layerName);
+        MassNh.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
         // one 2 one
         translate.applyOne2One(attrs, tags, MassNh.lookup, {'k':'v'}, MassNh.ignoreList);
@@ -446,7 +446,7 @@ MassNh = {
         translate.applySimpleTxtBiased(attrs, tags, MassNh.rules.txtBiased, 'forward');
 
         // post processing
-        MassNh.applyToOsmPostProcessing(attrs, tags, layerName);
+        MassNh.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
         
         // Debug:
         if (config.getOgrDebugDumptags() == 'true') 

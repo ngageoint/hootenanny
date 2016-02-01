@@ -27,8 +27,8 @@
 
 /*
     MGCP conversion script for TRD3 and TRD4
-        MGCP -> OSM, and
-        OSM -> MGCP
+        MGCP [TRD3 | TRD4] -> OSM, and
+        OSM -> MGCP TRD4
 
     Based on TableExample.js script by Jason S.
 
@@ -190,7 +190,7 @@ mgcp = {
         if (newAttrs.F_CODE)
         {
             // pre processing
-            mgcp.applyToMgcpPreProcessing(tags,newAttrs, geometryType);
+            mgcp.applyToMgcpPreProcessing(tags, newAttrs, geometryType);
 
             // one 2 one
             translate.applyOne2One(tags, newAttrs, mgcp.lookup, mgcp.fcodeLookup, mgcp.ignoreList);
@@ -213,7 +213,7 @@ mgcp = {
 
 
     // ##### Start of the xxToOsmxx Block #####
-    applyToOsmPreProcessing: function(attrs, layerName)
+    applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
         // The swap list. These are the same attr, just named differently
         // These may get converted back on output.
@@ -383,7 +383,7 @@ mgcp = {
     }, // End of applyToOsmPreProcessing
 
     // Post Processing: Lots of cleanup
-    applyToOsmPostProcessing : function (attrs, tags, layerName)
+    applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
         // Calculate accuracy: taken straight from facc.py
         // 1/30 inch * SCALE for standard
@@ -545,6 +545,40 @@ mgcp = {
 
         // if (tags.building == 'train_station' && !(tags.railway)) tags.railway = 'station';
 
+        // AL020 (Built-up Area) should become a Place.
+        // NOTE: This is a bit vague...
+        if (fCode == 'AL020')
+        {
+            print ('We Got AL020 Points');
+            tags.place = 'yes'; // Catch All
+
+            if (tags['place:importance'])
+                switch (tags['place:importance'])
+                {
+                    case 'first':
+                        tags.place = 'city';
+                        tags.capital = 'yes'
+                        break;
+
+                    case 'second':
+                        tags.place = 'city';
+                        break;
+
+                    case 'third':
+                    case 'fourth':
+                        tags.place = 'town';
+                        break;
+
+                    case 'fifth':
+                        tags.place = 'village';
+                        break;
+
+                    case 'sixth':
+                        tags.place = 'hamlet';
+                        break;
+                } // End switch
+        } // End AL020
+
     }, // End of applyToOsmPostProcessing
 
     // ##### Start of the xxToMgcpxx Block #####
@@ -686,11 +720,11 @@ mgcp = {
                 case 'neighbourhood':
                 case 'quarter':
                 case 'village':
+                case 'hamlet':
                     attrs.F_CODE = 'AL020'; // Built Up Area
                     delete tags.place;
                     break;
 
-                case 'hamlet':
                 case 'isolated_dwelling':
                     attrs.F_CODE = 'AL105'; // Settlement
                     delete tags.place;
@@ -921,7 +955,7 @@ mgcp = {
     // ##### End of the xxToMgcpxx Block #####
 
     // toOsm - Translate Attrs to Tags
-    toOsm : function(attrs, layerName)
+    toOsm : function(attrs, layerName, geometryType)
     {
         tags = {};  // This is the output
         // fCode = '';
@@ -929,8 +963,7 @@ mgcp = {
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
-            print('');
-            print('#####');
+            print('In Layername: ' + layerName);
             for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
         }
 
@@ -967,7 +1000,7 @@ mgcp = {
         }
 
         // pre processing
-        mgcp.applyToOsmPreProcessing(attrs, layerName);
+        mgcp.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
         // Use the FCODE to add some tags.
         if (attrs.F_CODE)
@@ -986,13 +1019,17 @@ mgcp = {
         translate.applySimpleTxtBiased(attrs, tags,  mgcp.rules.txtBiased,'forward');
 
         // post processing
-        mgcp.applyToOsmPostProcessing(attrs, tags, layerName);
+        mgcp.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         // Debug: Add the FCODE to the tags
         if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
+            print('');
+        }
 
         return tags;
     }, // End of ToOsm
@@ -1024,8 +1061,7 @@ mgcp = {
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
-            print ('');
-            print ('#####');
+            print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
             for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
         }
 

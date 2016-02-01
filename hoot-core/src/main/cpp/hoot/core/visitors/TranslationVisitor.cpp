@@ -71,9 +71,10 @@ void TranslationVisitor::visit(const ConstElementPtr& ce)
 
   if (tags.getNonDebugCount() > 0)
   {
+    GeometryTypeId gtype = ElementConverter::getGeometryType(e, false);
+
     if (_toOgr)
     {
-      GeometryTypeId gtype = ElementConverter::getGeometryType(e, false);
 
       vector<Tags> allTags = _togr->translateToOgrTags(tags, e->getElementType(), gtype);
 
@@ -94,7 +95,31 @@ void TranslationVisitor::visit(const ConstElementPtr& ce)
       {
         layerName = tags[OsmSchema::layerNameKey()].toUtf8();
       }
-      _t.translateToOsm(tags, layerName.data());
+
+      QByteArray geomType;
+
+      switch (gtype)
+      {
+      case GEOS_POINT:
+      case GEOS_MULTIPOINT:
+        geomType = "Point";
+        break;
+      case GEOS_LINESTRING:
+      case GEOS_MULTILINESTRING:
+        geomType = "Line";
+        break;
+      case GEOS_POLYGON:
+      case GEOS_MULTIPOLYGON:
+        geomType = "Area";
+        break;
+      case GEOS_GEOMETRYCOLLECTION:
+        geomType = "Collection";
+        break;
+      default:
+        throw InternalErrorException("Unexpected geometry type.");
+      }
+
+      _t.translateToOsm(tags, layerName.data(), geomType);
 
       if (tags.contains(_circularErrorKey))
       {
