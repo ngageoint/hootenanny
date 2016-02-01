@@ -600,7 +600,6 @@ mgcp = {
         // NOTE: This is a bit vague...
         if (fCode == 'AL020')
         {
-            print ('We Got AL020 Points');
             tags.place = 'yes'; // Catch All
 
             if (tags['place:importance'])
