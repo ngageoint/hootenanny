@@ -4334,6 +4334,17 @@ tds.rules = {
 
     // ##### End of One2One Rules #####
 
+   // ##### Start of txtLength #####
+    // This list is for validateing the lengths of text attributes prior to export
+    txtLength : {
+     'BA000_VDR':80, 'BRN':24, 'CID':20, 'CPS':30, 'EQC':30, 'ETS':30, 'ETZ':24, 'GB052_RIDH':14, 'GB052_RIDL':14,
+     'HZD':30, 'IC2':14, 'IKO':14, 'MDE':20, 'NA8':80, 'RCG':30, 'RTN2':24, 'RTN':24, 'RTN3':24, 'SSE':14, 'UFI':254,
+     'URI':254, 'VDT':30, 'VOI':14, 'WPI':14, 'ZI001_NSD':20, 'ZI001_NSP':30, 'ZI001_SSD':20, 'ZI001_SSY':30, 'ZI001_VSC':30,
+     'ZI001_VSD':20, 'ZI004_RCG':30, 'ZI005_FNA1':200, 'ZI005_FNA':200, 'ZI005_FNA2':200, 'ZI005_NFN1':18, 'ZI005_NFN':18,
+     'ZI005_NFN2':18, 'ZSAX_RS0':2, 'ZSAX_RX3':254, 'ZSAX_RX4':254
+    },
+    // ##### End of txtLength #####
+
     // ##### Start of Thematic Group Rules #####
     thematicGroupList : {
        'PGB230':'AeronauticPnt', // AircraftHangar
