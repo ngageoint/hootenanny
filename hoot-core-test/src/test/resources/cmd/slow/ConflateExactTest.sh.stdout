@@ -1,6 +1,6 @@
-12:21:50.917 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-12:21:50.917 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:note = The feature pair met neither the threshold for a match, miss, or review (set to review by default).  match score: 0.55, miss score: 0.45, review score: 0, match threshold: 0.6, miss threshold: 0.6, review threshold: 0.6
-12:21:50.917 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:note = BuildingMatch: Way:-718, Way:-2787 p: match: 0.55 miss: 0.45 review: 0 note: 
-12:21:50.917 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-12:21:50.917 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:note = The feature pair met neither the threshold for a match, miss, or review (set to review by default).  match score: 0.425, miss score: 0.175, review score: 0.4, match threshold: 0.6, miss threshold: 0.6, review threshold: 0.6
-12:21:50.917 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:note = BuildingMatch: Way:-853, Way:-2521 p: match: 0.425 miss: 0.175 review: 0.4 note: 
+11:12:14.042 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+11:12:14.042 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:note = The feature pair with match score: 0.55, miss score: 0.45, and review score: 0 met neither the threshold for a match (0.6), miss(0.6), nor review (0.6) (pair set to be reviewed by default).
+11:12:14.042 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:note = BuildingMatch: Way:-718, Way:-2787 p: match: 0.55 miss: 0.45 review: 0 note: 
+11:12:14.042 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+11:12:14.042 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:note = The feature pair with match score: 0.425, miss score: 0.175, and review score: 0.4 met neither the threshold for a match (0.6), miss(0.6), nor review (0.6) (pair set to be reviewed by default).
+11:12:14.042 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:note = BuildingMatch: Way:-853, Way:-2521 p: match: 0.425 miss: 0.175 review: 0.4 note: 

@@ -68,15 +68,13 @@ QString MatchThreshold::getTypeDetail(const MatchClassification& mc) const
 {
   if (mc.getReviewP() >= _reviewThreshold)
   {
-    return QString("The feature pair met the threshold for review.") +
-           QString("  review score: %1, review threshold: %2")
+    return QString("The feature pair with a review score of %1 met the review threshold of %2.")
              .arg(mc.getReviewP())
              .arg(_reviewThreshold);
   }
   else if (mc.getMatchP() >= _matchThreshold && mc.getMissP() >= _missThreshold)
   {
-    return QString("The feature pair met neither the threshold for a match or a miss.")  +
-           QString("  match score: %1, miss score: %2, match threshold: %3, miss threshold: %4")
+    return QString("The feature pair with a match score of %1 and a miss score of %2 met neither the threshold for a match at %3 nor that for a miss at %4.")
              .arg(mc.getMatchP())
              .arg(mc.getMissP())
              .arg(_matchThreshold)
@@ -85,22 +83,19 @@ QString MatchThreshold::getTypeDetail(const MatchClassification& mc) const
   }
   else if (mc.getMatchP() >= _matchThreshold)
   {
-    return QString("The feature pair met the threshold for a match.") +
-           QString("  match score: %1, match threshold: %2")
+    return QString("The feature pair with a match score of %1 met the threshold for a match at %2.")
              .arg(mc.getMatchP())
              .arg(_matchThreshold);
   }
   else if (mc.getMissP() >= _missThreshold)
   {
-    return QString("The feature pair met the threshold for a miss.");
-           QString("  miss score: %1, miss threshold: %2")
+    return QString("The feature pair with a miss score of %1 met the threshold for a miss at %2.")
              .arg(mc.getMissP())
              .arg(_missThreshold);
   }
   else
   {
-    return QString("The feature pair met neither the threshold for a match, miss, or review (set to review by default).") +
-           QString("  match score: %1, miss score: %2, review score: %3, match threshold: %4, miss threshold: %5, review threshold: %6")
+    return QString("The feature pair with match score: %1, miss score: %2, and review score: %3 met neither the threshold for a match (%4), miss(%5), nor review (%6) (pair set to be reviewed by default).")
              .arg(mc.getMatchP())
              .arg(mc.getMissP())
              .arg(mc.getReviewP())
