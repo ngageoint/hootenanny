@@ -72,13 +72,15 @@ conf/DatabaseConfig.sh:
 # Use some tar fanciness to grab all the files in conf, plugins, translations and scripts
 install-other:
 	mkdir -p tmp
-	$(TAR) cf tmp/other.tar conf plugins scripts translations rules
+	$(TAR) cf tmp/other.tar conf plugins scripts translations rules report
 	mkdir -p $(localstatedir)
 	cat tmp/other.tar | $(TAR) xv -C $(localstatedir)
 	rm -f tmp/other.tar
 	mkdir -p $(docdir)
 	cp INSTALL LICENSE AUTHORS COPYING GPLv3 README* docs/*.pdf $(docdir)
 	mkdir -p $(sysconfdir)/profile.d/
+	mkdir -p $(sysconfdir)/asciidoc/filters/
+	cp -R docs/filters/gnuplot/ $(sysconfdir)/asciidoc/filters/
 	echo "export HOOT_HOME=$(localstatedir)" > $(sysconfdir)/profile.d/hootenanny.sh
 	mkdir -p $(includedir)
 	export HOOT_HOME=`pwd`; \
