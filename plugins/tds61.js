@@ -262,7 +262,31 @@ tds61 = {
 
                         hoot.logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
                         delete attrs[val];
+
+                        // Since we deleted the attribute, Skip the text check
+                        continue;
                     }
+
+                    // Now check the length of the text fields
+                    // We need more info from the customer about this: What to do if it is too long
+                    if (val in tds61.rules.txtLength)
+                    {
+                        if (attrs[val].length > tds61.rules.txtLength[val])
+                        {
+                            // First try splitting the attribute and grabbing the first value
+                            var tStr = attrs[val].split(';');
+                            if (tStr[0].length <= tds61.rules.txtLength[val])
+                            {
+                                attrs[val] = tStr[0];
+                            }
+                            else
+                            {
+                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + tds61.rules.txtLength[val] + ' characters.');
+                                // Still too long. Chop to the maximum length.
+                                attrs[val] = tStr[0].substring(0,tds61.rules.txtLength[val]);
+                            }
+                        } // End text attr length > max length
+                    } // End in txtLength
         	    }
             }
             else
@@ -279,8 +303,32 @@ tds61 = {
                         }
 
                         delete attrs[val];
+
+                        // Since we deleted the attribute, Skip the text check
+                        continue;
                     }
-        	    }
+
+                    // Now check the length of the text fields
+                    // We need more info from the customer about this: What to do if it is too long
+                    if (val in tds61.rules.txtLength)
+                    {
+                        if (attrs[val].length > tds61.rules.txtLength[val])
+                        {
+                            // First try splitting the attribute and grabbing the first value
+                            var tStr = attrs[val].split(';');
+                            if (tStr[0].length <= tds61.rules.txtLength[val])
+                            {
+                                attrs[val] = tStr[0];
+                            }
+                            else
+                            {
+                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + tds61.rules.txtLength[val] + ' characters.');
+                                // Still too long. Chop to the maximum length.
+                                attrs[val] = tStr[0].substring(0,tds61.rules.txtLength[val]);
+                            }
+                        } // End text attr length > max length
+                    } // End in txtLength
+        	    } // End attrs loop
             }
         }
         else
@@ -1571,19 +1619,21 @@ tds61 = {
 
         // Alt_Name:  AL020 Built Up Area & ZD070 Water Measurement Location are the _ONLY_ features in TDS
         // that have a secondary name.
-        // We are going to push the Alt Name onto the end of the standard name field - ZI005_FNA
         if (attrs.ZI005_FNA2 && (attrs.F_CODE !== 'AL020' && attrs.F_CODE !== 'ZD070'))
         {
-            attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
+            // We were going to push the Alt Name onto the end of the standard name field - ZI005_FNA
+            // but this causes problems so until the customer gives us more direction, we are going to drop it.
+            // attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
             delete attrs.ZI005_FNA2;
         }
 
         // Alt_Name2:  ZD070 Water Measurement Location is the _ONLY_ feature in TDS that has a
         // third name.
-        // We are going to push the Alt Name onto the end of the standard name field - ZI005_FNA
         if (attrs.ZI005_FNA3 && attrs.F_CODE !== 'ZD070')
         {
-            attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
+            // We were going to push the Alt Name onto the end of the standard name field - ZI005_FNA
+            // but this causes problems so until the customer gives us more direction, we are going to drop it.
+            // attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
             delete attrs.ZI005_FNA3;
         }
 

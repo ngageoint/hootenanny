@@ -36,5 +36,14 @@
             "name": "leisure=recreation_ground",
             "weight": 0.9
         }
+    },
+    {
+        "isA": "landuse",
+        "name": "landuse=built_up_area",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "place=village",
+            "weight": 0.9
+        }
     }
 ]

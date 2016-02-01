@@ -76,20 +76,71 @@ mgcp = {
                     {
                         hoot.logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
                         delete attrs[val];
+
+                        // Since we deleted the attribute, Skip the text check
+                        continue;
                     }
+
+                    // Now check the length of the text fields
+                    // We need more info from the customer about this: What to do if it is too long
+                    if (val in mgcp.rules.txtLength)
+                    {
+                        if (attrs[val].length > mgcp.rules.txtLength[val])
+                        {
+                            // First try splitting the attribute and grabbing the first value
+                            var tStr = attrs[val].split(';');
+                            if (tStr[0].length <= mgcp.rules.txtLength[val])
+                            {
+                                attrs[val] = tStr[0];
+                            }
+                            else
+                            {
+                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + mgcp.rules.txtLength[val] + ' characters.');
+                                // Still too long. Chop to the maximum length.
+                                attrs[val] = tStr[0].substring(0,mgcp.rules.txtLength[val]);
+                            }
+                        } // End text attr length > max length
+                    } // End in txtLength
                 }
             }
             else
             {
                 for (var val in attrs)
                 {
-                    if (attrList.indexOf(val) == -1) delete attrs[val];
+                    if (attrList.indexOf(val) == -1)
+                    {
+                        delete attrs[val];
+
+                        // Since we deleted the attribute, Skip the text check
+                        continue;
+                    }
+
+                    // Now check the length of the text fields
+                    // We need more info from the customer about this: What to do if it is too long
+                    if (val in mgcp.rules.txtLength)
+                    {
+                        if (attrs[val].length > mgcp.rules.txtLength[val])
+                        {
+                            // First try splitting the attribute and grabbing the first value
+                            var tStr = attrs[val].split(';');
+                            if (tStr[0].length <= mgcp.rules.txtLength[val])
+                            {
+                                attrs[val] = tStr[0];
+                            }
+                            else
+                            {
+                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + mgcp.rules.txtLength[val] + ' characters.');
+                                // Still too long. Chop to the maximum length.
+                                attrs[val] = tStr[0].substring(0,mgcp.rules.txtLength[val]);
+                            }
+                        } // End text attr length > max length
+                    } // End in txtLength
                 }
-            }
+            } // End getOgrDebugDumpvalidate
         }
         else
         {
-            hoot.logVerbose('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
+            hoot.logWarn('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
         }
 
         // No quick and easy way to do this unless we build yet another lookup table
