@@ -80,7 +80,7 @@ install-other:
 	cp INSTALL LICENSE AUTHORS COPYING GPLv3 README* docs/*.pdf $(docdir)
 	mkdir -p $(sysconfdir)/profile.d/
 	mkdir -p $(sysconfdir)/asciidoc/filters/
-	cp -R docs/filters/gnuplot/ $(sysconfdir)/asciidoc/filters/
+	cp -R docs/filters/* $(sysconfdir)/asciidoc/filters/
 	echo "export HOOT_HOME=$(localstatedir)" > $(sysconfdir)/profile.d/hootenanny.sh
 	mkdir -p $(includedir)
 	export HOOT_HOME=`pwd`; \
