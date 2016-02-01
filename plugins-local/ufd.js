@@ -35,7 +35,7 @@
 
 ufd = {
     // ##### Start of the xxToOsmxx Block #####
-    applyToOsmPreProcessing: function(attrs, layerName)
+    applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
         // This is a handy loop. We use it to:
         // 1) Remove all of the "No Information" and -999999 fields
@@ -173,7 +173,7 @@ ufd = {
 
     }, // End of applyToOsmPreProcessing
 
-    applyToOsmPostProcessing : function (attrs, tags, layerName)
+    applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
         /*
         // figure out the names
@@ -433,7 +433,7 @@ ufd = {
     }, // End of applyToOsmPostProcessing
 
     // toOsm - Translate Attrs to Tags
-    toOsm : function(attrs, layerName)
+    toOsm : function(attrs, layerName, geometryType)
     {
         tags = {};
 
@@ -472,7 +472,7 @@ ufd = {
         }
 
         // pre processing
-        ufd.applyToOsmPreProcessing(attrs, layerName);
+        ufd.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
         // Use the FCODE to add some tags.
         if (attrs.F_CODE)
@@ -497,12 +497,13 @@ ufd = {
         translate.applySimpleTxtBiased(attrs, tags, ufd.rules.txtBiased, 'forward');
 
         // post processing
-        ufd.applyToOsmPostProcessing(attrs, tags, layerName);
-
-        if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
+        ufd.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         // debug: Add the FCODE to the tags
         if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+
+        if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
+
 
         return tags;
     } // End of ToOsm

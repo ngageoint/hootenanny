@@ -122,7 +122,7 @@ function applyClassRules(attrs, tags)
 
 // A translateAttributes method that is very similar to the python translate 
 // attributes
-function translateAttributes(attrs, layerName) 
+function translateAttributes(attrs, layerName, geometryType)
 { 
     tags = {};
     tags['name'] = attrs['name']

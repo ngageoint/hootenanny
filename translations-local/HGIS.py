@@ -6,7 +6,7 @@ def helperFunction(tags, attrs):
    #     tags['name'] = attrs['NAME_ENGLI']
     return tags 
 
-def translateAttributes(attrs, layerName):
+def translateAttributes(attrs, layerName, geometryType):
     # Intialize our results object
     tags = {}
 

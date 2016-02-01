@@ -37,9 +37,9 @@ hoot.require('config')
 
 // IMPORT
 // translateAttributes - takes 'attrs' and returns OSM 'tags'
-function translateAttributes(attrs, layerName)
+function translateAttributes(attrs, layerName, geometryType)
 {
-    return wikimapia.toOsm(attrs, layerName);
+    return wikimapia.toOsm(attrs, layerName, geometryType);
 
 } // End of Translate Attributes
 

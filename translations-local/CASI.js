@@ -38,7 +38,7 @@ hoot.require('translate');
 // translateAttributes - takes 'attrs' and returns OSM 'tags'
 // translateToOsm - takes 'attrs' and returns OSM 'tags'
 // function translateAttributes(attrsdd, layerName)
-function translateToOsm(attrs, layerName)
+function translateToOsm(attrs, layerName, geometryType)
 {
     tags = {};
 

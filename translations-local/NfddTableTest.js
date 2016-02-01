@@ -133,7 +133,7 @@ function finalize()
 // Set up an empty schema. This will go somewhere else later
 schema = [];
 
-function translateAttributes(attrs, layerName) 
+function translateAttributes(attrs, layerName, geometryType)
 { 
     // this gets called from Hoot
     tags = {}; 

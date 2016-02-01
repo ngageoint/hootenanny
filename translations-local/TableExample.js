@@ -53,7 +53,7 @@ for (var r in one2one)
 
 // A translateAttributes method that is very similar to the python translate 
 // attributes
-function translateAttributes(attrs, layerName) 
+function translateAttributes(attrs, layerName, geometryType)
 { 
     var tags = {};
 

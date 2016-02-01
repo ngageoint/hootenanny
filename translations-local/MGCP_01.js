@@ -300,7 +300,7 @@ var lookup = createLookup(one2one);
 
 // A translateAttributes method that is very similar to the python translate 
 // attributes
-function translateAttributes(attrs, layerName) 
+function translateAttributes(attrs, layerName, geometryType)
 { 
     tags = {};
     // pre processing

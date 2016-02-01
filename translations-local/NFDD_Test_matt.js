@@ -62,7 +62,7 @@ function translateToOgr(tags, elementType, geometryType)
 
 // IMPORT
 // TranslateAttributes converts from Attributes to OSM tags
-function translateAttributes(attrs, layerName)
+function translateAttributes(attrs, layerName, geometryType)
 {
     var tags = {};
 

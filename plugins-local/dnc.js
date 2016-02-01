@@ -34,7 +34,7 @@
 
 dnc = {
     // ##### Start of the xxToOsmxx Block #####
-    applyToOsmPreProcessing: function(attrs, layerName) 
+    applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
         // List of data values to drop/ignore
         var ignoreList = { 'UNK':1, 'N/A':1, 'noinformation':1, '-32768':1 };
@@ -76,7 +76,7 @@ dnc = {
 
     }, // End of applyToOsmPreProcessing
 
-    applyToOsmPostProcessing : function (attrs, tags, layerName)
+    applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
         // DNC doesn't have a lot of info for land features
         if (attrs.F_CODE == 'AP020') tags.junction = 'yes';
@@ -121,7 +121,7 @@ dnc = {
 
     // toOsm - Translate Attrs to Tags
     // This is the main routine to convert _TO_ OSM
-    toOsm : function(attrs, layerName)
+    toOsm : function(attrs, layerName, geometryType)
     {
         tags = {};  // The final output Tag list
 
@@ -162,7 +162,7 @@ dnc = {
         }
 
         // pre processing
-        dnc.applyToOsmPreProcessing(attrs, layerName);
+        dnc.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
         // Use the FCODE to add some tags.
         if (attrs.F_CODE)
@@ -188,7 +188,7 @@ dnc = {
         translate.applySimpleTxtBiased(attrs, tags, dnc.rules.txtBiased, 'forward');
 
         // post processing
-        dnc.applyToOsmPostProcessing(attrs, tags, layerName);
+        dnc.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         // debug: Add the FCODE to the tags
         if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;

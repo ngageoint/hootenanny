@@ -10,7 +10,7 @@ def helperFunction(tags, attrs):
         tags['shape_length'] = attrs['SHAPE_Leng']
     return tags 
 
-def translateAttributes(attrs, layerName):
+def translateAttributes(attrs, layerName, geometryType):
     # Intialize our results object
     tags = {}
 

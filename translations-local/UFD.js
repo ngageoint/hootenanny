@@ -35,7 +35,7 @@ hoot.require('fcode_common')
 hoot.require('translate')
 hoot.require('config')
 
-function translateAttributes(attrs, layerName)
+function translateToOsm(attrs, layerName, geometryType)
 {
-    return ufd.toOsm(attrs, layerName);
+    return ufd.toOsm(attrs, layerName, geometryType);
 }

@@ -36,9 +36,9 @@ hoot.require('fcode_common')
 // IMPORT
 // translateAttributes - takes 'attrs' and returns OSM 'tags'
 // function translateAttributes(attrs, layerName)
-function translateToOsm(attrs, layerName)
+function translateToOsm(attrs, layerName, geometryType)
 {
-    return facc.toOsm(attrs, layerName);
+    return facc.toOsm(attrs, layerName, geometryType);
 
 } // End of Translate Attributes
 

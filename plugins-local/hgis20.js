@@ -201,7 +201,7 @@ hgis20 = {
     }, // End twoFeatures
 
     // ##### Start of the xxToOsmxx Block #####
-    applyToOsmPreProcessing: function(attrs, layerName) 
+    applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
         // This is a handy loop. We use it to:
         // 1) Remove all of the "No Information" and -999999 fields
@@ -301,7 +301,7 @@ hgis20 = {
 
     }, // End of applyToOsmPreProcessing
 
-    applyToOsmPostProcessing : function (attrs, tags, layerName)
+    applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
         // Metadata
         attrs.source = translate.appendValue(attrs.source,'hgisv20:' + layerName.toLowerCase(),';');
@@ -907,7 +907,7 @@ hgis20 = {
 
     // toOsm - Translate Attrs to Tags
     // This is the main routine to convert _TO_ OSM
-    toOsm : function(attrs, layerName)
+    toOsm : function(attrs, layerName, geometryType)
     {
         tags = {};  // The final output Tag list
 
@@ -948,7 +948,7 @@ hgis20 = {
         }
 
         // pre processing
-        hgis20.applyToOsmPreProcessing(attrs, layerName);
+        hgis20.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
         // Use the layerName to add some tags.
         var ftag = hgis20.layerLookup['XtableName'][layerName];
@@ -969,7 +969,7 @@ hgis20 = {
         translate.applySimpleTxtBiased(attrs, tags, hgis20.rules.txtBiased, 'forward');
 
         // post processing
-        hgis20.applyToOsmPostProcessing(attrs, tags, layerName);
+        hgis20.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
         
         // Debug:
         if (config.getOgrDebugDumptags() == 'true') 

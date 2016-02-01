@@ -37,7 +37,7 @@
 tomnod = {
     // toOsm - Translate Attrs to Tags
     // This is the main routine to convert _TO_ OSM
-    toOsm : function(attrs, layerName)
+    toOsm : function(attrs, layerName, geometryType)
     { 
         tags = {};  // The final output Tag list
 

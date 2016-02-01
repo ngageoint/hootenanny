@@ -37,7 +37,7 @@
 
 navteq = {
     // ##### Start of the xxToOsmxx Block #####
-    applyToOsmPreProcessing: function(attrs, layerName) 
+    applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
         // List of data values to drop/ignore
         var ignoreList = { 'NULL':1, '-999999':1, 'noinformation':1 };
@@ -84,7 +84,7 @@ navteq = {
 
     }, // End of applyToOsmPreProcessing
 
-    applyToOsmPostProcessing : function (attrs, tags, layerName)
+    applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
         // The is the problem layer
         if (layerName == 'RailRds' && !(tags.railway)) tags.railway = 'rail';
@@ -186,7 +186,7 @@ navteq = {
 
     // toOsm - Translate Attrs to Tags
     // This is the main routine to convert TO OSM
-    toOsm : function(attrs, layerName)
+    toOsm : function(attrs, layerName, geometryType)
     { 
         tags = {};  // The final output Tag list
 
@@ -198,7 +198,7 @@ navteq = {
         }
 
         // pre processing
-        navteq.applyToOsmPreProcessing(attrs, layerName);
+        navteq.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
         // one 2 one
         translate.applyOne2One(attrs, tags, navteq.lookup, {'k':'v'}, navteq.rules.txtBiased);
@@ -207,7 +207,7 @@ navteq = {
         translate.applySimpleTxtBiased(attrs, tags, navteq.rules.txtBiased, 'forward');
 
         // post processing
-        navteq.applyToOsmPostProcessing(attrs, tags, layerName);
+        navteq.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
 

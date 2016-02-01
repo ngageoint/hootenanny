@@ -2,7 +2,7 @@
 
 import facc
 
-def translateAttributes(attrs, layerName):
+def translateAttributes(attrs, layerName, geometryType):
     if not attrs: return
 
     # Guess the FCODE based on the input filename

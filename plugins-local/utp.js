@@ -32,7 +32,7 @@
 
 utp = {
     // ##### Start of the xxToOsmxx Block #####
-    applyToOsmPreProcessing: function(attrs, layerName) 
+    applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
         // Convert all of the Attrs to uppercase - if needed - makes life easier later
         for (var col in attrs)
@@ -195,7 +195,7 @@ utp = {
 
     }, // End of applyToOsmPreProcessing
 
-    applyToOsmPostProcessing : function (attrs, tags, layerName)
+    applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
         // Built-up-areas & Settlements vs Buildings
         // If we have a BUA, change the building tags to settlement:type
@@ -295,7 +295,7 @@ utp = {
 
     // toOsm - Translate Attrs to Tags
     // This is the main routine to convert TO OSM
-    toOsm : function(attrs, layerName)
+    toOsm : function(attrs, layerName, geometryType)
     { 
         tags = {};  // The final output Tag list
 
@@ -337,7 +337,7 @@ utp = {
         }
 
         // pre processing
-        utp.applyToOsmPreProcessing(attrs, layerName);
+        utp.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
         // Use the FCODE to add some tags.
         if (attrs.F_CODE)
@@ -356,13 +356,13 @@ utp = {
         translate.applySimpleTxtBiased(attrs, tags, utp.rules.txtBiased, 'forward');
 
         // post processing
-        utp.applyToOsmPostProcessing(attrs, tags, layerName);
-
-        // Debug:
-        if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
+        utp.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         // If needed, Add the FCODE to the tags
         if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+
+        // Debug:
+        if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('Out Tags: ' + i + ': :' + tags[i] + ':');
 
         return tags;
     }, // End of toOsm
