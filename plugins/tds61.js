@@ -260,9 +260,33 @@ tds61 = {
                             delete othList[val];
                         }
 
-                        logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
+                        hoot.logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
                         delete attrs[val];
+
+                        // Since we deleted the attribute, Skip the text check
+                        continue;
                     }
+
+                    // Now check the length of the text fields
+                    // We need more info from the customer about this: What to do if it is too long
+                    if (val in tds61.rules.txtLength)
+                    {
+                        if (attrs[val].length > tds61.rules.txtLength[val])
+                        {
+                            // First try splitting the attribute and grabbing the first value
+                            var tStr = attrs[val].split(';');
+                            if (tStr[0].length <= tds61.rules.txtLength[val])
+                            {
+                                attrs[val] = tStr[0];
+                            }
+                            else
+                            {
+                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + tds61.rules.txtLength[val] + ' characters.');
+                                // Still too long. Chop to the maximum length.
+                                attrs[val] = tStr[0].substring(0,tds61.rules.txtLength[val]);
+                            }
+                        } // End text attr length > max length
+                    } // End in txtLength
         	    }
             }
             else
@@ -279,13 +303,37 @@ tds61 = {
                         }
 
                         delete attrs[val];
+
+                        // Since we deleted the attribute, Skip the text check
+                        continue;
                     }
-        	    }
+
+                    // Now check the length of the text fields
+                    // We need more info from the customer about this: What to do if it is too long
+                    if (val in tds61.rules.txtLength)
+                    {
+                        if (attrs[val].length > tds61.rules.txtLength[val])
+                        {
+                            // First try splitting the attribute and grabbing the first value
+                            var tStr = attrs[val].split(';');
+                            if (tStr[0].length <= tds61.rules.txtLength[val])
+                            {
+                                attrs[val] = tStr[0];
+                            }
+                            else
+                            {
+                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + tds61.rules.txtLength[val] + ' characters.');
+                                // Still too long. Chop to the maximum length.
+                                attrs[val] = tStr[0].substring(0,tds61.rules.txtLength[val]);
+                            }
+                        } // End text attr length > max length
+                    } // End in txtLength
+        	    } // End attrs loop
             }
         }
         else
         {
-            logWarn('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
+            hoot.logVerbose('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
 		} // End Drop attrs
 
         // Repack the OTH field
@@ -337,7 +385,7 @@ tds61 = {
                     // Set the offending enumerated value to the default value
                     attrs[enumName] = feature.columns[i].defValue;
 
-                    logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
+                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
 
                     attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,othVal,';');
                 }
@@ -346,7 +394,7 @@ tds61 = {
                     // Set the offending enumerated value to the "other" value
                     attrs[enumName] = '999';
 
-                    logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting OTH and ' + enumName + ' to Other (999)');
+                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting OTH and ' + enumName + ' to Other (999)');
 
                     attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
                 }
@@ -499,7 +547,7 @@ tds61 = {
 
 // #####################################################################################################
     // ##### Start of the xxToOsmxx Block #####
-    applyToOsmPreProcessing: function(attrs, layerName) 
+    applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
         // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
         // but renamed in different features. We swap these so that there is only one
@@ -707,7 +755,7 @@ tds61 = {
 
 
 // #####################################################################################################
-    applyToOsmPostProcessing : function (attrs, tags, layerName)
+    applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
         // Roads. TDSv61 are a bit simpler than TDSv30 & TDSv40
         if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
@@ -794,6 +842,7 @@ tds61 = {
             var rulesList = [
             ["t.navigationaid && !(t.aeroway)","t.aeroway = 'navigationaid'"],
             ["t.amenity == 'stop' && t['transport:type'] == 'bus'","t.highway = 'bus_stop'"],
+            ["t.diplomatic && !(t.amenity)","t.amenity = 'embassy'"],
             ["t.boundary == 'protected_area' && !(t.protect_class)","t.protect_class = '4'"],
             ["t.bunker_type && !(t.military)","t.military = 'bunker'"],
             ["t.control_tower == 'yes' && t.use == 'air_traffic_control'","t['tower:type'] = 'observation'"],
@@ -863,13 +912,13 @@ tds61 = {
         } // End crossing_point
 
 
-        // Add a building tag to buildings if we don't have one
+        // Add a building tag to Buildings and Fortified Buildings if we don't have one
         // We can't do this in the funky rules function as it uses "attrs" _and_ "tags"
-        if (attrs.F_CODE == 'AL013' && !(tags.building)) tags.building = 'yes';
+        if ((attrs.F_CODE == 'AL013' || attrs.F_CODE == 'AH055') && !(tags.building))
+        {
+            tags.building = 'yes';
+        }
 
-        // facility list is used for translating between buildings and facilities based on use
-        // format:  "use":"building or amenity"
-        // var facilityList = {'education':'school', 'healthcare':'hospital', 'university':'university'};
 
         // Fix the building 'use' tag. If the building has a 'use' and no specific building tag. Give it one
         if (tags.building == 'yes' && tags.use)
@@ -878,20 +927,45 @@ tds61 = {
             {
                 tags.building = 'industrial';
             }
+            // NOTE: Shops have been rempved from "use"
             // Sort out shops
-            else if (tds61.rules.shopList.indexOf(tags.use) > -1)
-            {
-                tags.shop = tags.use;
-                delete tags.use;
-            }
-      /*
-            else if (tags.use in facilityList)
-            {
-                tags.building = facilityList[tags.use];
-                // delete tags.use;
-            }
-       */
+            // else if (hoot.OsmSchema.getTagVertex("shop=" + tags.use).name != "shop=*")
+            // {
+            //    hoot.warn(hoot.OsmSchema.getTagVertex("shop=" + tags.use));
+            //    hoot.warn(hoot.OsmSchema.isAncestor("shop=" + tags.use, "shop"));
+            //    hoot.warn(tags.use);
+            //    tags.shop = tags.use;
+            //    delete tags.use;
+            // }
+
         } // End building & use tags
+
+        // Education:
+        if (tags['isced:level'] || tags.use == 'education')
+        {
+            if (tags.building == 'yes')
+            {
+                tags.building = 'school'
+            }
+            else if (tags.facility)
+            {
+                tags.amenity = 'school';
+            }
+        }
+
+        if (tags.use == 'vocational_education')
+        {
+            if (tags.building == 'yes')
+            {
+                tags.building = 'college'
+            }
+            else if (tags.facility)
+            {
+                tags.amenity = 'college';
+            }
+        }
+
+
 
         // A facility is an area. Therefore "use" becomes "amenity". "Building" becomes "landuse"
         if (tags.facility && tags.use)
@@ -900,12 +974,6 @@ tds61 = {
             {
                 tags.man_made = 'works';
             }
-       /*
-            else if (tags.use in facilityList) 
-            {
-                tags.amenity = facilityList[tags.use];
-            }
-        */
         }
 
 
@@ -949,6 +1017,31 @@ tds61 = {
         // Not sure about adding a Highway tag to this.
         // if (attrs.F_CODE == 'AQ040' && !(tags.highway)) tags.highway = 'yes';
 
+        // Denominations without religions - from ZI037_REL which has some denominations as religions
+        if (tags.denomination)
+        {
+            switch (tags.denomination)
+            {
+                case 'roman_catholic':
+                case 'orthodox':
+                case 'protestant':
+                case 'chaldean_catholic':
+                case 'nestorian': // Not sure about this
+                    tags.religion = 'christian';
+                    break;
+
+                case 'shia':
+                case 'sunni':
+                    tags.religion = 'muslim';
+                    break;
+            } // End switch
+        }
+
+        // Religious buildings: Church, Pagoda, Temple etc
+        if (attrs.ZI037_REL && tags.amenity !== 'place_of_worship')
+        {
+            tags.amenity = 'place_of_worship';
+        }
 
     }, // End of applyToOsmPostProcessing
   
@@ -990,6 +1083,7 @@ tds61 = {
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
             ["t.control_tower && t.man_made == 'tower'","delete t.man_made"],
             ["t.crossing == 'tank' && t.highway == 'crossing'","delete t.highway"],
+            ["t.diplomatic && t.amenity == 'embassy'","delete t.amenity"],
             ["t.dock && t.waterway == 'dock'","delete t.waterway"],
             ["t.golf == 'driving_range' && t.leisure == 'golf_course'","delete t.leisure"],
             ["t.highway == 'bus_stop'","t['transport:type'] = 'bus'"],
@@ -1031,8 +1125,9 @@ tds61 = {
             ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
             ["(t.shop || t.office) &&  !(t.building)","a.F_CODE = 'AL013'"],
             ["t.social_facility == 'shelter'","t.social_facility = t['social_facility:for']; delete t.amenity; delete t['social_facility:for']"],
-            ["!(t.water) && t.natural == 'water'","t.water = 'lake'"],
+            ["t['tower:type'] == 'minaret' && t.man_made == 'tower'","delete t.man_made"],
             ["t.use == 'islamic_prayer_hall' && t.amenity == 'place_of_worship'","delete t.amenity"],
+            ["!(t.water) && t.natural == 'water'","t.water = 'lake'"],
             ["t.wetland && t.natural == 'wetland'","delete t.natural"],
             ["t.water == 'river'","t.waterway = 'river'"],
             ["t.waterway == 'riverbank'","t.waterway = 'river'"]
@@ -1524,21 +1619,24 @@ tds61 = {
 
         // Alt_Name:  AL020 Built Up Area & ZD070 Water Measurement Location are the _ONLY_ features in TDS
         // that have a secondary name.
-        // We are going to push the Alt Name onto the end of the standard name field - ZI005_FNA
         if (attrs.ZI005_FNA2 && (attrs.F_CODE !== 'AL020' && attrs.F_CODE !== 'ZD070'))
         {
-            attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
+            // We were going to push the Alt Name onto the end of the standard name field - ZI005_FNA
+            // but this causes problems so until the customer gives us more direction, we are going to drop it.
+            // attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
             delete attrs.ZI005_FNA2;
         }
 
         // Alt_Name2:  ZD070 Water Measurement Location is the _ONLY_ feature in TDS that has a
         // third name.
-        // We are going to push the Alt Name onto the end of the standard name field - ZI005_FNA
         if (attrs.ZI005_FNA3 && attrs.F_CODE !== 'ZD070')
         {
-            attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
+            // We were going to push the Alt Name onto the end of the standard name field - ZI005_FNA
+            // but this causes problems so until the customer gives us more direction, we are going to drop it.
+            // attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
             delete attrs.ZI005_FNA3;
         }
+
 
         // The ZI001_SDV (source date time) field can only be 20 characters long. When we conflate features,
         // we concatenate the tag values for this field.
@@ -1562,12 +1660,12 @@ tds61 = {
 
     // toOsm - Translate Attrs to Tags
     // This is the main routine to convert _TO_ OSM
-    toOsm : function(attrs, layerName)
+    toOsm : function(attrs, layerName, geometryType)
     {
         tags = {};  // The final output Tag list
 
         // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true')
+        if (config.getOgrDebugDumptags() == 'true')
         {
             print('In Layername: ' + layerName);
             for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
@@ -1605,7 +1703,7 @@ tds61 = {
         }
 
         // pre processing
-        tds61.applyToOsmPreProcessing(attrs, layerName);
+        tds61.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
         // Use the FCODE to add some tags.
         if (attrs.F_CODE)
@@ -1619,7 +1717,7 @@ tds61 = {
             }
             else
             {
-                hoot.logWarn('Translation for FCODE ' + attrs.F_CODE + ' not found');
+                hoot.logVerbose('Translation for FCODE ' + attrs.F_CODE + ' not found');
             }
         }
 
@@ -1635,7 +1733,7 @@ tds61 = {
         if (attrs.OTH) translate.processOTH(attrs, tags, tds61.lookup);
 
         // post processing
-        tds61.applyToOsmPostProcessing(attrs, tags, layerName);
+        tds61.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         // Debug:
         if (config.getOgrDebugDumptags() == 'true') 
@@ -1769,13 +1867,13 @@ tds61 = {
 
         if (!(nfddAttrLookup[gFcode])) 
         {
-            logError('FCODE and Geometry: ' + gFcode + ' is not in the schema');
+            hoot.logVerbose('FCODE and Geometry: ' + gFcode + ' is not in the schema');
 
             tableName = 'o2s_' + geometryType.toString().charAt(0);
 
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
-            if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+            if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
 
             for (var i in tags)
             {
@@ -1801,7 +1899,7 @@ tds61 = {
                 // Not good. Will fix with the rewrite of the tag splitting code
                 if (str.length > 1012)
                 {
-                    logError('o2s tags truncated to fit in available space.');
+                    hoot.logVerbose('o2s tags truncated to fit in available space.');
                     str = str.substring(0,1012);
                 }
 
@@ -1851,11 +1949,12 @@ tds61 = {
         } // End else We have a feature
 
         // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true' || config.getOgrDebugDumptags() == 'true')
+        if (config.getOgrDebugDumptags() == 'true')
         {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
                 print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
+
                 for (var j in returnData[i]['attrs']) print('Out Attrs:' + j + ': :' + returnData[i]['attrs'][j] + ':');
             }
             print('');

@@ -17,7 +17,6 @@
 #include "MapStatsDriver.h"
 
 // Hoot
-#include <hoot/core/schema/JsonSchemaLoader.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Settings.h>
