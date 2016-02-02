@@ -1,1 +1,1 @@
-The input village and built up area should match.
+The input villages and built up areas should match.

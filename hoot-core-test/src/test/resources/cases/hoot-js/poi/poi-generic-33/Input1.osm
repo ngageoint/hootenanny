@@ -4,4 +4,12 @@
       <tag k='name' v='somewhere' />
       <tag k='place' v='village' />
     </node>
+    <node id='-339997' visible='true' lat='2.2666934' lon='22.3062313'>
+      <tag k='name' v='Place1' />
+      <tag k='place' v='village' />
+    </node>
+    <node id='-339988' visible='true' lat='2.8672986' lon='22.3670613'>
+      <tag k='name' v='Place2' />
+      <tag k='place' v='village' />
+    </node>
 </osm>
