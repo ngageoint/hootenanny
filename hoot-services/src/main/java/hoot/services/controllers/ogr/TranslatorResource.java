@@ -129,7 +129,6 @@ public class TranslatorResource extends ServerControllerBase{
 		{
 			// Make sure to wipe out previosuly running servers.
 			stopServer(homeFolder + "/scripts/" + translationServerScript);
-			
 	
 			// Probably an overkill but just in-case using synch lock
 			synchronized(portLock)
@@ -162,7 +161,8 @@ public class TranslatorResource extends ServerControllerBase{
   	// should not be reliable since there are many path where it will not be invoked.
 		try
 		{  
-			stopServer(homeFolder + "/scripts/" + translationServerScript);
+			//stopServer(homeFolder + "/scripts/" + translationServerScript);
+			transProc.destroy();
 		}
 		catch (Exception ex)
 		{

@@ -136,7 +136,8 @@ public class P2PResource extends ServerControllerBase {
   	// should not be reliable since there are many path where it will not be invoked.
 		try
 		{  
-			stopServer(homeFolder + "/scripts/" + P2PServerScript);
+			//stopServer(homeFolder + "/scripts/" + P2PServerScript);
+			_P2PProc.destroy();
 		}
 		catch (Exception ex)
 		{
