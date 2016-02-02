@@ -473,7 +473,7 @@ public class DbUtils
   {
     try
     {
-      String dbname = "renderdb_" + mapName;
+      String dbname = conn.getCatalog() + "_renderdb_" + mapName;
       DataDefinitionManager ddm = new DataDefinitionManager();
       ddm.deleteDb(dbname, false);
     }
