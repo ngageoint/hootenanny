@@ -498,7 +498,7 @@ tds = {
 
 
     // ##### Start of the xxToOsmxx Block #####
-    applyToOsmPreProcessing: function(attrs, layerName)
+    applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
         // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
         // but renamed in different features. Some of these were done during the move from TDSv30 to
@@ -698,7 +698,7 @@ tds = {
 
     }, // End of applyToOsmPreProcessing
 
-    applyToOsmPostProcessing : function (attrs, tags, layerName)
+    applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
      /* Now sort out Roads
         HCT, TYP, RTY etc are related. No easy way to use one2one rules
@@ -1451,7 +1451,7 @@ tds = {
 
     // toOsm - Translate Attrs to Tags
     // This is the main routine to convert _TO_ OSM
-    toOsm : function(attrs, layerName)
+    toOsm : function(attrs, layerName, geometryType)
     {
         // This is filtered by the layerNameFilter function.
         //
@@ -1495,7 +1495,7 @@ tds = {
         }
 
         // pre processing
-        tds.applyToOsmPreProcessing(attrs, layerName);
+        tds.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
         // Use the FCODE to add some tags.
         if (attrs.F_CODE)
@@ -1518,7 +1518,7 @@ tds = {
         if (attrs.OTH) translate.processOTH(attrs, tags, tds.lookup);
 
         // post processing
-        tds.applyToOsmPostProcessing(attrs, tags, layerName);
+        tds.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')

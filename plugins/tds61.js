@@ -547,7 +547,7 @@ tds61 = {
 
 // #####################################################################################################
     // ##### Start of the xxToOsmxx Block #####
-    applyToOsmPreProcessing: function(attrs, layerName) 
+    applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
         // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
         // but renamed in different features. We swap these so that there is only one
@@ -755,7 +755,7 @@ tds61 = {
 
 
 // #####################################################################################################
-    applyToOsmPostProcessing : function (attrs, tags, layerName)
+    applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
         // Roads. TDSv61 are a bit simpler than TDSv30 & TDSv40
         if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
@@ -1660,7 +1660,7 @@ tds61 = {
 
     // toOsm - Translate Attrs to Tags
     // This is the main routine to convert _TO_ OSM
-    toOsm : function(attrs, layerName)
+    toOsm : function(attrs, layerName, geometryType)
     {
         tags = {};  // The final output Tag list
 
@@ -1703,7 +1703,7 @@ tds61 = {
         }
 
         // pre processing
-        tds61.applyToOsmPreProcessing(attrs, layerName);
+        tds61.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
         // Use the FCODE to add some tags.
         if (attrs.F_CODE)
@@ -1733,7 +1733,7 @@ tds61 = {
         if (attrs.OTH) translate.processOTH(attrs, tags, tds61.lookup);
 
         // post processing
-        tds61.applyToOsmPostProcessing(attrs, tags, layerName);
+        tds61.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         // Debug:
         if (config.getOgrDebugDumptags() == 'true') 

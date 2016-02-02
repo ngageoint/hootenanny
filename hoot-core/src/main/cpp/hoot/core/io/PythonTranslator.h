@@ -60,7 +60,7 @@ protected:
 
   virtual void _finalize();
 
-  virtual void _translateToOsm(Tags& t, const char *layerName);
+  virtual void _translateToOsm(Tags& t, const char *layerName, const char* geomType);
 };
 
 }

@@ -54,7 +54,7 @@ geonames = {
 
     // toOsm - Translate Attrs to Tags
     // This is the main routine to convert TO OSM
-    toOsm : function(attrs, layerName)
+    toOsm : function(attrs, layerName, geometryType)
     { 
         tags = {};  // The final output Tag list
 
