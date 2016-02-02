@@ -87,8 +87,6 @@ namespace Tgs
   {
     try
     {
-      std::cerr << "DEBUG MTRF TRAINMULTI" << std::endl;
-
       data->validateData();
 
       _trainInputs.data = data;
