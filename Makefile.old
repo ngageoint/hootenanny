@@ -329,6 +329,7 @@ conf/words.sqlite: conf/words1.sqlite
 # If you create a new words.sqlite please just increment the number rather than
 # replacing the old file. This way we can maintain the history.
 conf/words1.sqlite:
+	([ -e /tmp/words1.sqlite ] && test `sha1sum /tmp/words1.sqlite` == '4f7333e8e084927fafda3047183302407961b851  /tmp/words1.sqlite' && cp /tmp/words1.sqlite conf/) || \
 	wget -N -P conf/ https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/words1.sqlite || echo "Failure downloading words1.sqlite. Build will continue, but conflation accuracy may suffer."
 
 bin/HootEnv.sh: scripts/HootEnv.sh
