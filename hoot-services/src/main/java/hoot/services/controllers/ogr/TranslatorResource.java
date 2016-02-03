@@ -161,6 +161,9 @@ public class TranslatorResource extends ServerControllerBase{
   	// should not be reliable since there are many path where it will not be invoked.
 		try
 		{  
+			//Destroy the reference to the process directly here via the Java API vs having the base 
+			//class kill it with a unix command.  Killing it via command causes the stxxl temp files 
+			//created by hoot threads not to be cleaned up.
 			//stopServer(homeFolder + "/scripts/" + translationServerScript);
 			transProc.destroy();
 		}
