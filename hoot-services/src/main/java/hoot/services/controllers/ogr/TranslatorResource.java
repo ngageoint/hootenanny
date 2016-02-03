@@ -39,18 +39,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Path("")
-public class TranslatorResource extends ServerControllerBase{
-
-
-
+public class TranslatorResource extends ServerControllerBase
+{
   private static final Logger log = LoggerFactory.getLogger(TranslatorResource.class);
-
 
   private static String homeFolder = null;
   private static String translationServerPort = null;
@@ -62,66 +58,60 @@ public class TranslatorResource extends ServerControllerBase{
   
   private static String currentPort = null;
   private static Process transProc = null;
-
-
-  private static MultiThreadedHttpConnectionManager connectionManager = 
-  		new MultiThreadedHttpConnectionManager();
-	@SuppressWarnings("unused")
-  private static org.apache.commons.httpclient.HttpClient mclient = new org.apache.commons.httpclient.HttpClient(connectionManager);;
-	
 	
   public TranslatorResource()
   {
-
-    if(homeFolder ==  null){
-	    try {
-	    	homeFolder = HootProperties.getProperty("homeFolder");
-			} catch (IOException e) {
+		if (homeFolder == null)
+		{
+			try
+			{
+				homeFolder = HootProperties.getProperty("homeFolder");
+			}
+			catch (IOException e)
+			{
 				log.error(e.getMessage());
 			}
-    }
+		}
 
-    if(translationServerPort ==  null){
-	    try {
-	    	translationServerPort = HootProperties.getProperty("translationServerPort");
-			} catch (IOException e) {
+		if (translationServerPort == null)
+		{
+			try
+			{
+				translationServerPort = HootProperties.getProperty("translationServerPort");
+			}
+			catch (IOException e)
+			{
 				log.error(e.getMessage());
 			}
-    }
+		}
 
-    if(translationServerThreadCount ==  null){
-	    try {
-	    	translationServerThreadCount = HootProperties.getProperty("translationServerThreadCount");
-			} catch (IOException e) {
+		if (translationServerThreadCount == null)
+		{
+			try
+			{
+				translationServerThreadCount = HootProperties.getProperty("translationServerThreadCount");
+			}
+			catch (IOException e)
+			{
 				log.error(e.getMessage());
 			}
-    }
+		}
 
-    if(translationServerScript ==  null){
-	    try {
-	    	translationServerScript = HootProperties.getProperty("translationServerScript");
-			} catch (IOException e) {
+		if (translationServerScript == null)
+		{
+			try
+			{
+				translationServerScript = HootProperties.getProperty("translationServerScript");
+			}
+			catch (IOException e)
+			{
 				log.error(e.getMessage());
 			}
-    }
-    
-    // Use this with synchronized if needing configuration
-    /*
-    if(mclient == null)
-    {
-	    HttpConnectionManagerParams params = new HttpConnectionManagerParams();
-	    params.setDefaultMaxConnectionsPerHost(2);
-	    params.setMaxTotalConnections(3);
-	
-	    connectionManager.setParams(params);
-	    mclient = new org.apache.commons.httpclient.HttpClient(connectionManager);
-    }*/
+		}
   }
 
-
-
-  public void startTranslationService() {
-
+  public void startTranslationService() 
+  {
   	// set default default port and threadcount
   	String currPort = translationServerPort;
   	String currThreadCnt = translationServerThreadCount;
@@ -140,7 +130,6 @@ public class TranslatorResource extends ServerControllerBase{
 			{
 				transProc = startServer(currPort, currThreadCnt, homeFolder + "/scripts/" + translationServerScript);
 			}
-
 		}
 		catch (Exception ex)
 		{
@@ -149,14 +138,10 @@ public class TranslatorResource extends ServerControllerBase{
 		    Status.INTERNAL_SERVER_ERROR,
 			log);
 		}
-  	
   }
 
- 
-  
-  
- 
-  public void stopTranslationService() {
+  public void stopTranslationService() 
+  {
   	// This also gets called automatically from HootServletContext when service exits but
   	// should not be reliable since there are many path where it will not be invoked.
 		try
@@ -174,7 +159,6 @@ public class TranslatorResource extends ServerControllerBase{
 		    Status.INTERNAL_SERVER_ERROR,
 			log);
 		}
-  
   }
   
   /**
@@ -199,10 +183,9 @@ public class TranslatorResource extends ServerControllerBase{
   @GET
   @Path("/translationserver/status")
   @Produces(MediaType.TEXT_PLAIN)
-  public Response isTranslationServiceRunning() {
+  public Response isTranslationServiceRunning() 
+  {
   	boolean isRunning = false;
-  	
-  	
 		try
 		{
 			isRunning = getStatus(transProc);
