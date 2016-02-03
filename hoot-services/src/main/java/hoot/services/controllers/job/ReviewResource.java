@@ -788,7 +788,7 @@ public class ReviewResource
   			Object oDetail = mk.getDetail();
   			Map<String, String> hstoreMap = PostgresUtils.postgresObjToHStore((org.postgresql.util.PGobject)oDetail);
   			JSONObject oBmkDetail = new JSONObject();
-  			appendHstoreElement(hstoreMap.get("bookmarkdetail"), oBmkDetail, "bookmarkdetail");
+  			_appendHstoreElement(hstoreMap.get("bookmarkdetail"), oBmkDetail, "bookmarkdetail");
 
   			String bmkNotes = hstoreMap.get("bookmarknotes");
   			if(bmkNotes != null && bmkNotes.length() > 0)
@@ -801,7 +801,7 @@ public class ReviewResource
 	  			oBmkDetail.put("bookmarknotes", oParsed);	  			
   			}
   			
-  			appendHstoreElement(hstoreMap.get("bookmarkreviewitem"), oBmkDetail, "bookmarkreviewitem");
+  			_appendHstoreElement(hstoreMap.get("bookmarkreviewitem"), oBmkDetail, "bookmarkreviewitem");
   			
   			if(oBmkDetail != null)
   			{
@@ -825,7 +825,15 @@ public class ReviewResource
   	return response;
   }
   
-  protected void appendHstoreElement(final String rawElem, final JSONObject oBmkDetail, final String elemName) throws Exception
+  /**
+   * Helper function to handle JSON string conversion to Hstore friendly format
+   * 
+   * @param rawElem
+   * @param oBmkDetail
+   * @param elemName
+   * @throws Exception
+   */
+  protected void _appendHstoreElement(final String rawElem, final JSONObject oBmkDetail, final String elemName) throws Exception
   {
   	String bmkElem = rawElem;
 		if(bmkElem != null && bmkElem.length() > 0)
@@ -901,7 +909,8 @@ public class ReviewResource
   @Produces(MediaType.APPLICATION_JSON)
   public ReviewBookmarksGetResponse getAllReviewBookmark(@QueryParam("orderBy") String orderByCol,
   		@QueryParam("asc") String asc, @QueryParam("limit") String limitSize,
-  		 @QueryParam("offset") String offset) throws Exception
+  		 @QueryParam("offset") String offset, @QueryParam("filterby") String filterBy
+  		 , @QueryParam("filterbyval") String filterByVal) throws Exception
   {
   	ReviewBookmarksGetResponse response = new  ReviewBookmarksGetResponse();
   	
@@ -927,8 +936,21 @@ public class ReviewResource
   			offsetCnt = Long.parseLong(offset);
   		}
   		
+  		String filterByCol = null;
+  		Long filterVal = null;
+  		
+  		if(filterBy != null && filterBy.length()>0 && 
+  				filterByVal != null && filterByVal.length() > 0)
+  		{
+  			if(filterBy.equalsIgnoreCase("createdBy"))
+  			{
+  				filterByCol = "createdBy";
+  				filterVal = Long.parseLong(filterByVal);
+  			}
+  		}
+  		
   		ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
-  		List<ReviewBookmarks>res = retriever.retrieveAll(orderByCol, isAsc, limit, offsetCnt);
+  		List<ReviewBookmarks>res = retriever.retrieveAll(orderByCol, isAsc, limit, offsetCnt, filterByCol, filterVal);
   		
   		for(ReviewBookmarks mk : res)
   		{
