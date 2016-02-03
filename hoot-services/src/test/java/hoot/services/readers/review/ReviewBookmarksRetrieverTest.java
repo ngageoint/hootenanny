@@ -139,5 +139,23 @@ public class ReviewBookmarksRetrieverTest {
 		org.junit.Assert.assertEquals(expected, actual);
   	
 	}
+	
+	@Test
+  @Category(UnitTest.class)
+	public void testRetrieveAllOrderByCreatedAtWithMapIdFilter() throws Exception
+	{
+		Connection conn = null;
+  	
+		ReviewBookmarkRetriever r = new  ReviewBookmarkRetriever(conn);
+		SQLQuery q = r._getAllQuery("createdAt", true, -1, -1, "mapId", (long)10);
+		
+		String actual = q.toString();
+		String expected = "from \"review_bookmarks\" \"review_bookmarks\"\n" + 
+				"where \"review_bookmarks\".\"map_id\" = ?\n" + 
+				"order by \"review_bookmarks\".\"created_at\" asc";
+		
+		org.junit.Assert.assertEquals(expected, actual);
+  	
+	}
 
 }

@@ -204,6 +204,8 @@ public class ReviewBookmarkRetriever {
 		{
 			if(filterCol != null && filterVal != null && filterCol.equalsIgnoreCase("createdBy")) {
 				query.from(_reviewBookmarks).where(b.createdBy.eq((Long)filterVal)).orderBy(_getSpecifier(orderByCol, isAsc));
+			} else if(filterCol != null && filterVal != null && filterCol.equalsIgnoreCase("mapId")) {
+				query.from(_reviewBookmarks).where(b.mapId.eq((Long)filterVal)).orderBy(_getSpecifier(orderByCol, isAsc));
 			} else {
 				query.from(_reviewBookmarks).orderBy(_getSpecifier(orderByCol, isAsc));
 			}

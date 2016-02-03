@@ -946,6 +946,11 @@ public class ReviewResource
   			{
   				filterByCol = "createdBy";
   				filterVal = Long.parseLong(filterByVal);
+  			} 
+  			else if(filterBy.equalsIgnoreCase("mapId"))
+  			{
+  				filterByCol = "mapId";
+  				filterVal = Long.parseLong(filterByVal);
   			}
   		}
   		
