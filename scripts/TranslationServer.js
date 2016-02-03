@@ -107,6 +107,7 @@ var getCapabilities = function(request, response)
 // OSM to TDS request handler
 var osmtotds = function(request, response)
 {
+	var hoot = require(HOOT_HOME + '/lib/HootJs');
 	if(request.method === "POST"){
 		var alldata = "";
 		request.on('data', function(data){
@@ -171,6 +172,7 @@ var osmtotds = function(request, response)
 // TDS to OSM handler
 var tdstoosm = function(request, response)
 {
+	var hoot = require(HOOT_HOME + '/lib/HootJs');
 	if(request.method === "POST"){
 		var alldata = "";
 		request.on('data', function(data){
