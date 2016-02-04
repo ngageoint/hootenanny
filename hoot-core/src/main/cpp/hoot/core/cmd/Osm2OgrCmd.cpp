@@ -86,9 +86,10 @@ public:
       shared_ptr<ElementInputStream> streamReader = dynamic_pointer_cast<ElementInputStream>(reader);
       shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
 
-      while (streamReader->hasMoreElements() == true)
+      while (streamReader->hasMoreElements())
       {
-        streamWriter->writeElement(*streamReader);
+        ElementPtr element = streamReader->readNextElement();
+        streamWriter->writeElement(element);
       }
     }
     else

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,47 +22,33 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENTOUTPUTSTREAM_H
-#define ELEMENTOUTPUTSTREAM_H
+#include "ProjectToGeographicVisitor.h"
 
-#include <hoot/core/elements/Element.h>
+// GEOS
+#include <geos/geom/Geometry.h>
+
+// hoot
+#include <hoot/core/Factory.h>
+#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/MapProjector.h>
 
 namespace hoot
 {
-class ElementInputStream;
 
+HOOT_FACTORY_REGISTER(ElementVisitor, ProjectToGeographicVisitor)
 
-/**
- * Element output stream interface.
- */
-class ElementOutputStream
+ProjectToGeographicVisitor::ProjectToGeographicVisitor()
 {
-public:
+}
 
-  ElementOutputStream();
-  virtual ~ElementOutputStream();
-
-  /**
-   * Close the output stream. It can safely be expected that if close isn't called explicitly it
-   * will be called by the destructor.
-   */
-  virtual void close() = 0;
-
-  /**
-   * @brief writeElement
-   */
-  virtual void writeElement(ElementInputStream& inputStream) = 0;
-  virtual void writeElement(ElementPtr& element) = 0;
-
-  /**
-   * Read elements from the input stream and write to the output stream. There may be a better place
-   * for this to live, but it works for now.
-   */
-  static void writeAllElements(ElementInputStream& eis, ElementOutputStream& eos);
-};
+void ProjectToGeographicVisitor::visit(const shared_ptr<Element>& e)
+{
+  const shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e);
+  MapProjector::getInstance().project(g, _map->getProjection(), MapProjector::getInstance().createWgs84Projection());
 
 }
 
-#endif // ELEMENTOUTPUTSTREAM_H
+}
+

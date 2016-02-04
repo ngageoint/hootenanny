@@ -249,6 +249,13 @@ void ElementCacheLRU::writeElement(ElementInputStream& inputStream)
   addElement(newElement);
 }
 
+void ElementCacheLRU::writeElement(ElementPtr &element)
+{
+  //  Check projection
+  ConstElementPtr el = element;
+  addElement(el);
+}
+
 /*
 ConstWayPtr ElementCacheLRU::getWay(long wayId)
 {

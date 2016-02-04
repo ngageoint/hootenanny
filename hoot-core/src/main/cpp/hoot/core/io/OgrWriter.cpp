@@ -712,6 +712,11 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
     _writePartial(cacheProvider, newRelation);
 }
 
+void OgrWriter::writeElement(ElementPtr &element)
+{
+  writeElement(element, false);
+}
+
 void OgrWriter::writeElement(ElementInputStream& inputStream)
 {
   writeElement(inputStream, false);
@@ -723,11 +728,17 @@ void OgrWriter::writeElement(ElementInputStream& inputStream, bool debug)
   assert( inputStream.getProjection()->IsSame(&_wgs84) == true );
   ElementPtr nextElement = inputStream.readNextElement();
 
+  writeElement(nextElement, debug);
+}
+
+void OgrWriter::writeElement(ElementPtr &element, bool debug)
+{
+//TODO:
   // TERRY TESTING COULD BE CATASTROPHIC
-  Tags sourceTags = nextElement->getTags();
+  Tags sourceTags = element->getTags();
   Tags destTags;
-  for (Tags::const_iterator it = nextElement->getTags().begin();
-       it != nextElement->getTags().end(); ++it)
+  for (Tags::const_iterator it = element->getTags().begin();
+       it != element->getTags().end(); ++it)
   {
     if (sourceTags[it.key()] != "")
     {
@@ -735,32 +746,32 @@ void OgrWriter::writeElement(ElementInputStream& inputStream, bool debug)
     }
   }
   // Now that all the empties are gone, update our element
-  nextElement->setTags(destTags);
+  element->setTags(destTags);
 
   if ( debug == true )
   {
-    LOG_DEBUG(nextElement->toString());
+    LOG_DEBUG(element->toString());
   }
 
-  PartialOsmMapWriter::writePartial(nextElement);
+  PartialOsmMapWriter::writePartial(element);
   /*
-  if ( nextElement->getElementType().getEnum() == ElementType::Node )
+  if ( element->getElementType().getEnum() == ElementType::Node )
   {
-    //LOG_DEBUG("\n" << nextElement->toString());
+    //LOG_DEBUG("\n" << element->toString());
 
-    const long nodeID = nextElement->getId();
+    const long nodeID = element->getId();
     if ( (nodeID >= -265198) && (nodeID <= -265167) )
     {
-      LOG_DEBUG("\n" << nextElement->toString());
-      PartialOsmMapWriter::writePartial(nextElement);
+      LOG_DEBUG("\n" << element->toString());
+      PartialOsmMapWriter::writePartial(element);
     }
   }
-  else if ((nextElement->getElementType().getEnum() == ElementType::Way) &&
-           (nextElement->getId() == -23189) )
+  else if ((element->getElementType().getEnum() == ElementType::Way) &&
+           (element->getId() == -23189) )
   {
     LOG_DEBUG("Writing Little Mill Creek -23189");
-    LOG_DEBUG("\n" << nextElement->toString());
-    PartialOsmMapWriter::writePartial(nextElement);
+    LOG_DEBUG("\n" << element->toString());
+    PartialOsmMapWriter::writePartial(element);
   }
   */
 }
