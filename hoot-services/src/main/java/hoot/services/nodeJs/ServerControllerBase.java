@@ -35,12 +35,14 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ServerControllerBase {
+public class ServerControllerBase 
+{
 	private static final Logger log = LoggerFactory.getLogger(ServerControllerBase.class);
 	
   private Process _serverProc = null;
 	
-	protected Process startServer(final String currPort, final String currThreadCnt, final String serverScript) throws Exception
+	protected Process startServer(final String currPort, final String currThreadCnt, 
+	final String serverScript) throws Exception
 	{
 		List<String> command = new ArrayList<String>();
 		command.add("node");
@@ -91,9 +93,10 @@ public class ServerControllerBase {
     }
 
 		// And then gets the status
-		if(transServerPID != null && transServerPID > 0)
+		if (transServerPID != null && transServerPID > 0)
 		{
-			try {
+			try 
+			{
 		    Runtime runtime = Runtime.getRuntime();
 		    
 		    Process statusProcess = runtime.exec(new String[] { "kill", "-0", ""+transServerPID });
@@ -102,24 +105,21 @@ public class ServerControllerBase {
 		    _processStreamHandler(statusProcess, false); 
 		    
 		    int exitCode = statusProcess.waitFor();
-		    if(exitCode == 0)
+		    if (exitCode == 0)
 		    {
 		    	isRunning = true;
 		    }
-
 		  }
-		  catch (Exception e) {
+		  catch (Exception e) 
+			{
 		  	isRunning = false;
-		  }
-	    
+		  }   
 		}
 		return isRunning;
 	}
 	
-	
   private void _closeAllServers(final String processSignature)
   {
-
   	try
 		{
   		// Note that we kill process that contains the name of server script
@@ -133,13 +133,12 @@ public class ServerControllerBase {
 		}
   	finally
   	{
-  		
   	}
   }
   
   private void _processStreamHandler(final Process proc, boolean doSendToStdout)
   {
- // usually we should not get any output but just in case if we get some error..
+    // usually we should not get any output but just in case if we get some error..
     InputStreamReader stdStream = null;
     BufferedReader stdInput = null;
 
@@ -155,21 +154,22 @@ public class ServerControllerBase {
 	    stdError = new BufferedReader(stdErrStream);
 
 			String s = null;
-			while ((s = stdInput.readLine()) != null) {
-			    log.info(s);
-			    if(doSendToStdout)
-			    {
-			    	System.out.println(s);
-			    }
+			while ((s = stdInput.readLine()) != null) 
+			{
+			  log.info(s);
+			  if (doSendToStdout)
+			  {
+			   System.out.println(s);
+			  }
 			}
 			
-
-			while ((s = stdError.readLine()) != null) {
-			    log.error(s);
-			    if(doSendToStdout)
-			    {
-			    	System.out.println(s);
-			    }
+			while ((s = stdError.readLine()) != null) 
+			{
+			  log.error(s);
+			  if (doSendToStdout)
+			  {
+			    System.out.println(s);
+			  }
 			}
     }
     catch(Exception e)
