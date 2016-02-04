@@ -20,6 +20,9 @@ var HOOT_HOME = process.env.HOOT_HOME;
 //Moving hoot init to the request handler allows stxxl temp file cleanup to happen properly.
 //hoot = require(HOOT_HOME + '/lib/HootJs');
 
+var osmToTdsMap = {};
+var tdsToOsmMap = {};
+
 // Argument parser
 process.argv.forEach(function (val, index, array) {
 	// port arg
@@ -104,10 +107,26 @@ var getCapabilities = function(request, response)
 	}	
 }
 
+var populateOsmToTdsmap = function()
+{
+	var hoot = require(HOOT_HOME + '/lib/HootJs');
+	if(!osmToTdsMap['TDSv40']) {
+		osmToTdsMap['TDSv40'] = new hoot.TranslationOp({
+									'translation.script':HOOT_HOME + '/translations/OSM_to_englishTDS.js',
+									'translation.direction':'toogr'});
+	}
+
+	if(!osmToTdsMap['TDSv61']) {
+		osmToTdsMap['TDSv61'] = new hoot.TranslationOp({
+					    	'translation.script':HOOT_HOME + '/translations/OSM_to_englishTDS61.js',
+					    	'translation.direction':'toogr'});
+	}
+} 
+
 // OSM to TDS request handler
 var osmtotds = function(request, response)
 {
-	var hoot = require(HOOT_HOME + '/lib/HootJs');
+	
 	if(request.method === "POST"){
 		var alldata = "";
 		request.on('data', function(data){
@@ -115,14 +134,7 @@ var osmtotds = function(request, response)
 		});
 
 		request.on('end', function(data){
-			
-			var osmToTdsMap = {};
-			osmToTdsMap['TDSv40'] = new hoot.TranslationOp({
-					    	'translation.script':HOOT_HOME + '/translations/OSM_to_englishTDS.js',
-					    	'translation.direction':'toogr'});
-			osmToTdsMap['TDSv61'] = new hoot.TranslationOp({
-					    	'translation.script':HOOT_HOME + '/translations/OSM_to_englishTDS61.js',
-					    	'translation.direction':'toogr'});
+			populateOsmToTdsmap();
 			
 			postHandler(alldata, response, osmToTdsMap);
 		});
@@ -169,10 +181,28 @@ var osmtotds = function(request, response)
 	}	
 }
 
+
+var populateTdsToOsmMap = function() 
+{
+	var hoot = require(HOOT_HOME + '/lib/HootJs');
+	if(!tdsToOsmMap['TDSv40'])
+	{
+		tdsToOsmMap['TDSv40'] = new hoot.TranslationOp({
+					    	'translation.script':HOOT_HOME + '/translations/englishTDS_to_OSM.js',
+					    	'translation.direction':'toosm'});
+	}
+
+	if(!tdsToOsmMap['TDSv61'])
+	{
+		tdsToOsmMap['TDSv61'] = new hoot.TranslationOp({
+					    	'translation.script':HOOT_HOME + '/translations/englishTDS61_to_OSM.js',
+					    	'translation.direction':'toosm'});
+	}
+}
 // TDS to OSM handler
 var tdstoosm = function(request, response)
 {
-	var hoot = require(HOOT_HOME + '/lib/HootJs');
+	
 	if(request.method === "POST"){
 		var alldata = "";
 		request.on('data', function(data){
@@ -180,14 +210,7 @@ var tdstoosm = function(request, response)
 		});
 
 		request.on('end', function(data){
-			
-			var tdsToOsmMap = {};
-			tdsToOsmMap['TDSv40'] = new hoot.TranslationOp({
-					    	'translation.script':HOOT_HOME + '/translations/englishTDS_to_OSM.js',
-					    	'translation.direction':'toosm'});
-			tdsToOsmMap['TDSv61'] = new hoot.TranslationOp({
-					    	'translation.script':HOOT_HOME + '/translations/englishTDS61_to_OSM.js',
-					    	'translation.direction':'toosm'});
+			populateTdsToOsmMap();
 			
 			postHandler(alldata, response, tdsToOsmMap);
 		});
