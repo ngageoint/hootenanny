@@ -65,11 +65,6 @@ if(cluster.isMaster){
 
 		function(request, response){
 
-			var hoot = require(HOOT_HOME + '/lib/HootJs');
-
-			//createUuid = hoot.UuidHelper.createUuid;
-			//logWarn = hoot.logWarn; 
-			
 			// we sends request based on requested path
 			var subPath = url.parse(request.url).pathname; 
 
