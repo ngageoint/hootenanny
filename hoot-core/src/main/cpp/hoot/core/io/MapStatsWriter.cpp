@@ -186,12 +186,8 @@ void MapStatsWriter::writeStatsToJson(QList< QList<SingleStat> >& stats, const Q
           if (!value.trimmed().isEmpty())
           {
             child.put("", value.trimmed().toStdString());
+            children.push_back(std::make_pair("", child));
           }
-          else
-          {
-            child.put("","");
-          }
-          children.push_back(std::make_pair("", child));
         }
         pt.add_child(statrow.at(0).toStdString(), children);
       }
