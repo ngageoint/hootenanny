@@ -20,7 +20,7 @@ This guide is intended as a general purpose reference to understand various comp
 Hootenanny can be accessed from a web browser using the standard URL http://(your_servername):port/hootenanny-id/. The current version of Hootenanny iD is only supported in Chrome (recommended) and/or Chromium.
 
 [[HootiD-UILayout]]
-.Hootenanny User Interface Layout. *A*: Layer editing tool bar for adding/editing Points, Lines and Polygons and Saving edits; *B*: Map navigation and background layer configuration tool bar (DigitalGlobe Global Basemap selected as background layer); *C*: Layer display; *D*: Hootenanny version info (click on Hootenanny); *E*: Hootenanny UI Manage link; *F*: Map View. San Diego, CA; Basemap Imagery is DigitalGlobe GlobalBasemap (GBM).
+.Hootenanny User Interface Layout. *A*: Hootenanny version info (click on Hootenanny). *B*: Manage/Return to Map toggle. *C*: Map tools for measuring, cropping, and editing features. *D*: Overview map available using `/`. *E*: Map navigation and background layer configuration tool bar (DigitalGlobe Global Basemap selected as background layer). *F*: Add Reference Dataset button. *G*: Layer directory structure with scrolling and resize options. *H*: Recently Used Layers dropdown lists most recent layers accessed. *I*: Layer color picker. *J* Add layer button (layer must be selected i.e. highlighted in yellow to add to map). *K*: Add Secondary Dataset button.  *L*: Sidebar resizing. *M*: Hoot scale bar (meters or imperial). *N*: WGS84 degrees, minutes, seconds. *O*: Map View. Basemap Imagery is DigitalGlobe GlobalBasemap (GBM).
 image::user/images/id/hoot_UI_layout.png[]
 
 === Adding Layers to the Map
@@ -28,25 +28,25 @@ image::user/images/id/hoot_UI_layout.png[]
 During conflation, source datasets are merged based on user-specified conflation parameters to create an output layer that is ultimately superior in terms of complete geometry and attribution. Two datasets are required to perform a conflation; _Reference_ and _Secondary_ Data. To add a new Reference Dataset to the map, click on the _Add Reference Dataset_ button on the left side. A list of available layers will appear in the drop down menu as shown in <<hoot_add_datasets>>. Note that in order to add a layer it must be <<Hoot-iD_Datasets,imported>> into Hootenanny using the workflow described in <<Hoot-iD_Datasets>>.
 
 [[hoot_add_datasets]]
-.Adding Datasets.  Click on Add Reference/Secondary Dataset button to expose list of available layers and folders.  Click on the folder to expand contents and select the layer (highlighted in yellow).  To modify the layer color click on the palette or select OSM symbology then add to map.
+.Adding Datasets.  Click on Add Reference/Secondary Dataset button to display a list of available layers and folders.  Clicking on the folder icon e.g. dc, expands the contents showing all layers and subfolders.  In order to add a layer to the map it must be selected (highlighted in yellow).  To modify the layer color click on the palette or select OSM symbology then add to map. Recently used layers can be added using the dropdown menu shown. The size of the panel can be expanded to increase/decrease the width of the panel by dragging the sidebar (L in <<HootiD-UILayout>>) to the desired size. 
 image::user/images/id/hoot_addlayer_folder.png[scaledwidth="25%"]
 
 [[HootiD-Addinglayers]]
-.Displaying Haiti roads layers in Hootenanny. datasets shown are extracted OSM highway data (blue) and MGCP data (pink) from link:$$http://www.arcgis.com/home/item.html?id=1a253aad38274c1a93b17eafdf885853as$$[ESRI] website; DigitalGlobe GlobalBasemap (GBM).
+.Displaying Haiti roads layers in Hootenanny. datasets shown are extracted OSM highway data (pink) and MGCP data (yellow); DigitalGlobe GlobalBasemap (GBM).
 image::user/images/id/hoot_Haiti_roads.png[]
 
 To zoom to the layer extent simply right-click on the layer and click on the Zoom to Layer button that appears on the layer name.  This is useful when panning or zooming outside of the viewable extent or scale of the data.
 
 [Hoot_zoomtolayer]]
-.Zooming to Layer extent.  Right click on the layer name and select zoom to layer.
+.Zooming to Layer extent. Right click on the layer name and select zoom to layer.
 image::user/images/id/hoot_zoom-to-layer.png[scaledwidth="25%"]
 
-When adding a layer with a large extent or a dense feature count, it is likely that the data will not be visible at the initial data extent.  To confirm whether this limitation is impacting the display of features for a given layer, we have added a yellow warning icon that will display warning messages such as "Features are loaded, but are currently not visible. Try zooming in for better results." when a user hovers the icon with their mouse cursor.
+=== Data display in Hootenanny using Mapnik
 
-.Warning Message indicating features present but not visible at current zoom scale.
-image::user/images/id/hoot_alert.png[scaledwidth="50%"]
+Displaying a layer that has a dense feature count or large extent can be a challenge within Hootenanny due to the resources required to render the features on the map.  To better support this constraint, we have integrated link:$$mapnik.org$$[Mapnik], an open source toolkit for rendering map data.  Mapnik is preconfigured during install and will run as a parallel node-mapnik server rendering data dynamically based on the user's layer color selection.  Note that although data may be rendered on the map, it does not become selectable i.e. to edit or display tags, until the user zooms to an appropriate zoom level (data dependent).  
 
-NOTE: The order in which layers are added to Hootenanny is important. For Reference and Average conflation, the reference data is assumed to contain the reference geometry during conflation and whichever layer is selected to contain the reference attribution provided in the conflation options. For Cookie Cutter & Horizontal conflation, the reference data are typically higher fidelity dense urban data while the secondary data source are sparser regional level map data.
+.Mapnik rendering with warning message indicating features not editable at current zoom level.  Washington, D.C. Street Centerline data downloaded from DCGIS Open Data's data catalog. DigitalGlobe GBM basemap.
+image::user/images/id/hoot_mapnik_rendering.png[scaledwidth="75%"]
 
 [[HootiD-EditingLayers]]
 === Editing Features in Hootenanny
@@ -54,7 +54,7 @@ NOTE: The order in which layers are added to Hootenanny is important. For Refere
 Similar to editing data in link:$$http://wiki.openstreetmap.org/wiki/Editing$$[OpenStreetMap.org], users can select any point, line or polygon feature and modify both the geometry and attribution displayed. To aid the user during the editing process, Hootenanny provides the additional functionality of allowing users to toggle between different display tag schemas (OSM, TDS 6.1, and TDS 4.0) by changing the Filter By Type drop down to the desired tag format.  This does _not_ modify the underlying data but merely changes the displayed tag schema in the left panel.
 
 [[Filter-by-Type]]
-.Changing the displayed tag schema in Hootenanny. The left image shows the selected feature displayed in OSM while right side shows the identical feature in TDSv61. Note the differences in the _All Tags_ (e.g. TDS uses F_CODE). Haiti OSM highway data displayed with DigitalGlobeBasemap (GBM) as background imagery.
+.Changing the displayed tag schema in Hootenanny using the Filter By Type dropdown. The left image shows the selected feature displayed in OSM while right side shows the identical feature in TDSv61. DigitalGlobe GBM basemap.
 image::user/images/id/hoot_OSMvTDS.png[scaledwidth="75%"]
 
 ==== Modifying Layer Attributes
@@ -67,7 +67,7 @@ image::user/images/id/hoot_preset_info.png[scaledwidth="25%"]
 
 The _All Tags_ section shown below contains all of the feature tags for a layer that have been translated from their native data structure to Hootenanny during <<Hoot-iD_Datasets,import>>. If an expected tag does not appear, it might be a good time to revisit the translation steps described in <<TranslationAssistant>>, <<HootiD-Translation>> or review the original source data. New fields can be added by clicking on the Add Field drop down menu and selecting an appropriate value. Additional tags can be added by clicking on the '+' button at the bottom of the All tags shown below. To delete or display additional info about a tag, click on either the trash can or info icons that appear next to each tag. Note that any changes will not be final to a layer until the user clicks on Save to commit the edits to the Hootenanny database. For OSM tags, users can check the 'Sort A-Z' box to sort tags in alphabetical order.
 
-.Displaying all OSM feature tags in Hootenanny.
+.Displaying all OSM feature tags in Hootenanny. Note check boxes are shown for tags that a user might copy/paste into a matching feature.
 image::user/images/id/hoot_alltags_OSM.png[scaledwidth="25%"]
 
 [[ModifyLayerGeometry]]
@@ -75,47 +75,66 @@ image::user/images/id/hoot_alltags_OSM.png[scaledwidth="25%"]
 
 To modify the feature geometry, click on the feature to expose the editing palette that pertains to the particular selected feature. Note that each unique geometry type and shape present their own options that may not display for other features. For instance, selecting a linear feature exposes editing options to straighten or change the directionality whereas clicking on a feature that traces a square, rectangle or circular path exposes options to make the feature a square or circle. Editing options include adding additional nodes by double clicking on a line segment, moving a node to manually modify the shape or path of a line or polygon, moving a point, and deleting features. For a list of shortcut keys to each operation, see <<Hoot-iD_Shortcuts, short-cuts>>.
 
-.Editing layer geometry in Hootenanny. Port Au Prince, Haiti; OSM Highway data (blue) and MGCP data (pink) from link:$$http://www.arcgis.com/home/item.html?id=1a253aad38274c1a93b17eafdf885853as$$[ESRI] website; DigitalGlobe GlobalBasemap (GBM).
+.Editing layer geometry in Hootenanny. Port Au Prince, Haiti; OSM Highway data (pink) selected and geometry editing palette options display; DigitalGlobe GlobalBasemap (GBM).
 image::user/images/id/hoot_edit_geom.png[scaledwidth="50%"]
 
 In order to save any edits applied to a layer click on the _Save_ button displayed on top in the map view or to revert to a previous edit. Save will commit any edits on a particular layer to the hoot database where as the Undo/Redo buttons will step back/forward through any modifications applied to either that layer’s geometry or attribution. The number displayed next to the Save button indicates the number of edits that will be committed to the database for a given session.
 
-.Saving edits in Hootenanny. The user applied the editing option to square the corners of line feature to expose the Save button above. The number of edits made before committing (2 in this example) is displayed in addition to options for undo/redo changes. Port Au Prince, Haiti; OSM Highway data (blue) and MGCP data (pink) from link:$$http://www.arcgis.com/home/item.html?id=1a253aad38274c1a93b17eafdf885853as$$[ESRI] website; DigitalGlobe GlobalBasemap (GBM).
+.Saving edits in Hootenanny. The user applied the editing option to square the corners of line feature to expose the Save button above. The number of edits made before committing (2 in this example) is displayed in addition to options for undo/redo changes. Port Au Prince, Haiti; OSM Highway data (pink); DigitalGlobe GlobalBasemap (GBM).
 image::user/images/id/hoot_edit_save.png[scaledwidth="75%"]
 
 === Adding New Features
 
 It is also possible to create new features for a given layer in Hootenanny iD but any new feature added must be done with at least one layer present. Note that any new features added without an associated layer cannot be saved. The ability to create new features within the GUI is a key component of the OpenStreetMap version of iD Editor and additional background and editing workflows can be found online via link:$$https://www.openstreetmap.org/edit?editor=id$$[OpenStreetMap-iD's] help menu. A brief background is provided here for general user orientation.
 
-To add a new point, click on the Point button appearing in the Map Viewer or use the '1' shortcut key. Points can be used to represent features such as shops, restaurants, parks and monuments, etc. They mark a specific location and describe the feature based on the OSM/TDS tag relationship. Once a new point is added to the map, a panel will appear on the map prompting you to select an appropriate feature type (park, cafe, etc) and any associated tags. Note that even though OSM values are presented, the data is stored on the database using the TDS tag equivalent. The next time it is edited within Hootenanny it will display the values using the english translated LTDS schema.
+To add a new point, click on the Point button appearing in the Map Viewer or use the 1 shortcut key. Points can be used to represent features such as shops, restaurants, parks and monuments, etc. They mark a specific location and describe the feature based on the OSM/TDS tag relationship. Once a new point is added to the map, a panel will appear on the map prompting you to select an appropriate feature type (park, cafe, etc) and any associated tags. Note that even though OSM values are presented, the data is stored on the database using the TDS tag equivalent. The next time it is edited within Hootenanny it will display the values using the english translated LTDS schema.
 
-.Adding a new point in Hootenanny. A cafe POI was generated with name = 'Starbucks' and other associated attribution. Washington, D.C.; OSM vector data; DigitalGlobe GlobalBasemap (GBM).
+.Adding a new point in Hootenanny. In this example a new Point is added to the Haiti OSM roads data indicating that the feature represents a Hospital Grounds `amenity=hospital`. DigitalGlobe GlobalBasemap (GBM).
 image::user/images/id/hoot_adddata.png[scaledwidth="75%"]
 
-To add a new linear feature, click on the Line button or use the '2' shortcut key and begin digitizing on the map. A pop-up message will appear if you would like to snap to an existing linear feature. Click on a single location to begin the linear feature and then continue clicking until feature has been completed. Double-click to complete the process and edit any attribution as needed. Repeat process for a new Area feature. Click Save to save all edits or step back/forward using the undo/redo buttons as needed.
+To add a new linear feature, click on the Line button or use the 2 shortcut key and begin digitizing on the map. A pop-up message will appear if you would like to snap to an existing linear feature. Click on a single location to begin the linear feature and then continue clicking until feature has been completed. Double-click to complete the process and edit any attribution as needed. Repeat process for a new Area feature (shortcut = 3). Click Save to save all edits or step back/forward using the undo/redo buttons as needed.
 
-NOTE: clicking 'i' will display the length or area of a selected feature but note that the recommended tool for measuring is discussed <<Hoot_measure,here>>.
+NOTE: clicking the i key will display the length or area of a selected feature but note that the recommended tool for measuring is discussed <<Hoot_measure,here>>.
 
-==== Copying Features/Tags
+==== Copying Features/Tags in Hootenanny
 
-In certain circumstances it may be useful to utilize copy/paste functionality when editing layers and addressing conflict reviews within Hootenanny.  For example, if users need to create multiple copies of a selected feature (or set of features) within the same map layer (e.g. foot path, bridge, secondary road, POI, etc...) or they would like to copy attributes from a feature (or multiple selected features) in the reference layer to similar feature in the secondary layer when reviewing conflicts, they could use the following currently supported work flows.
+In certain circumstances it may be useful to utilize copy/paste functionality when editing layers and addressing conflict reviews within Hootenanny.  For example, if users need to create multiple copies of a selected feature (or set of features) within the same map layer (e.g. foot path, bridge, secondary road, POI, etc...) or they would like to copy tags from one feature to another similar feature, the following workflows can be used. 
+
+NOTE: Currently users can only copy/paste geometry and tags of any feature(s) within a single "active" layer or copy selected tags from a feature(s) and either overwrite or merge them with the tags from selected feature(s) in either layer.  It is currently _not_ possible to copy/paste a feature from the Reference Dataset to the Secondary Dataset (or vice-versa) manually and if attempted the application will enter a idle state requiring refresh.
 
 ===== Copying Features/Tags Within a Single Layer
 
-To copy a feature(s) within a single layer, select the feature or set of features that you wish to copy using the left-mouse button or by clicking on the red/blue conflict review table field.  Note that you can select multiple features by pressing the _shift_ key as you select each feature.  When multiple features are selected they will appear listed on the left under the _Selected_ items. Type `Ctrl + c` to copy the selected feature(s) and then `Ctrl + v` to display the copied feature(s) on the map.  Once the copied feature(s) appear on the map they can be placed in the desired location.
+To copy a feature(s) within a single layer, select the feature or set of features that you wish to copy using the left-mouse button (for multiple features press the _shift_ key during selection).  Use the `Ctrl + c` to copy the selected feature(s) and then `Ctrl + v` to display a duplicate feature(s) that can be placed anywhere on the map.   
 
-.Copying Feature Geometry/Tags within a Layer.  The selected item, a Monument named Major General Rochambeau is copied and pasted.  Note that the `name` tag is not copied to the newly created feature.
+.Copying Feature Geometry/Tags within a Layer.  The selected item, a Monument named Major General Rochambeau is copied and pasted.  Note that the `name` tag is not copied to the newly created feature since it is assumed to be unique.
 image::user/images/id/hoot_copy_feature.png[scaledwidth="75%"]
 
-To copy tags within a single layer from one feature to another (or multiple selected features), select the feature to copy and type `Ctrl + c`, then select the target feature(s) to paste and use `Shift + Ctrl + v`.  This will replace all of the selected feature tags (except name and those listed in the note below) with the copied source tags.
+NOTE: If only specific tags are needed to manually copy from one feature to another within a single layer do not use Ctrl + c but instead check the box next to each tag in the 'All Tags' list and follow the steps described <<CopyTagsFeatures,below>>.
 
-NOTE: Hootenanny does not currently support copying feature geometry between multiple layers and excludes certain tags such as the feature name, uuid, etc. due to inherited OSM iD functionality.  If a user attempts to paste a set of copied features into a secondary layer the application session will likely be disrupted.
+===== Copying Tags Between Features
 
-===== Copying Tags Between Two Layers
+When <<HootConflictReview,reviewing>> conflicts or editing features it is often useful to be able to copy tags from a selected feature and either append or overwrite the tags of another feature that can be within the same layer or in a different layer.  For example, when conflating two layers a selected set of features can be flagged for the user to review whereby users will be required to iterate through each pair of presented conflicts and determine whether any action is needed. This is explained using the following POI scenario involving OSM and MGCP place name features in the Democratic Republic of the Congo (2°58'40.82" N 22°20'45.08" E). 
 
-When <<HootConflictReview,reviewing>> conflicts or performing any manual editing with two layers, it maybe useful to copy tags from a selected feature(s) in the Reference layer to a feature(s) in a Secondary layer.  For example, if during conflation a set of features has been identified as needing review, a user can use the copy/paste tag functionality to ensure that a set of attributes are included in the merged output.  Click on any field in either the blue/red conflict review table (selecting either the blue/red field will depend on which represents the reference or secondary layer) to select a feature to copy from (or by clicking on the feature geometry) and hit `Ctrl + c` to copy the tags.  Then select to target feature(s) to paste to by clicking on target field and hit `Shift + Ctrl + v`.  This will copy all of the tags to the selected feature(s).  You may see a pop-up message indicating that an error occurred due to two active layer being present.  If that is the case you can turn off the source layer by unchecking it from the background settings (shortcut key = b) temporarily before pasting.  If you have all tags displayed you will notice that in addition to the pre-existing tags all copied tags from the source feature will appear listed.
+[[CopyTagsFeatures]]
+1) Select a source point (orange highlighted marker) and check the boxes next to each tag in the All Tags list that you wish to copy to the other feature. 
 
-NOTE: Any duplicate tags in the target feature will be overwritten during copy/paste.
+.List of tags from source feature with selected tags checked.  Data sources are OSM (pink) and MGCP (orange) POI data in the Democratic Republic of the Congo (2°58'40.82" N 22°20'45.08" E). DigitalGlobe GlobalBasemap (GBM).
+image::user/images/id/hoot_copysourcetags.png[scaledwidth="50%"]
+
+2) Select a target point (pink highlighted marker) and expand the All Tags list to display the existing tags. Note that the name in this selected OSM POI is "Badjoki" whereas in the MGCP feature it is "Bodjoki".   
+
+.List of tags in selected target POI (orange highlighted marker). Data sources are OSM (pink) and MGCP (orange) POI data in the Democratic Republic of the Congo (2°58'40.82" N 22°20'45.08" E). DigitalGlobe GlobalBasemap (GBM).
+image::user/images/id/hoot_selecttargetPOI.png[scaledwidth="50%"]
+
+3) To append the copied tags, select the OSM POI (pink highlighted marker) and hit `Ctrl + Alt + v`.  Note that this action will produce a semicolon delimited list for any existing value e.g. name, source along with any new tags added from the source POI e.g. `landuse = built_up_area`; `place:importance=fifth`; `place=village`, etc.  To commit changes click the Save button or to undo click the undo button.
+
+.Copying tags using append (`Ctrl + Alt + v`).  Data sources are OSM (pink) and MGCP (orange) POI data in the Democratic Republic of the Congo (2°58'40.82" N 22°20'45.08" E). DigitalGlobe GlobalBasemap (GBM). Red boxes appear over the modified tags.
+image::user/images/id/hoot_appendtags.png[scaledwidth="50%"]
+
+4) To overwrite the copied tags in the target feature, select the OSM POI feature and `Ctrl + Shift + v`.  Note that this action will overwrite any existing tag values. 
+ 
+.Copying tags using overwrite (`Ctrl + Shift + v`). Data sources are OSM (pink) and MGCP (orange) POI data in the Democratic Republic of the Congo (2°58'40.82" N 22°20'45.08" E). DigitalGlobe GlobalBasemap (GBM). Red boxes appear over the modified tags.
+image::user/images/id/hoot_overwritetags.png[scaledwidth="50%"]
 
 === Hootenanny Map Tools
 
@@ -146,10 +165,12 @@ NOTE: The DigitalGlobe GBM/EGD basemap is not enabled by default due to user acc
 
 ==== Image Carousel
 
-The image carousel displays all of the available images by timestamp and sensor that are in the DigitalGlobe GBM/EGD service if the service has been enabled. Users can select a particular DigitalGlobe image from the listed sensors/dates displayed in the carousel by clicking on the Image Carousel button or typing the 'c' shortcut key.
+The image carousel displays all of the available images by timestamp and sensor that are in the DigitalGlobe GBM/EGD service if the service has been enabled. Users can select a particular DigitalGlobe image from the listed sensors/dates displayed in the carousel by clicking on the Image Carousel button (highlighted in blue below) or typing the 'c' shortcut key.
 
-.DG Image Carousel. Washington, D.C.; link:$$http://dcatlas.dcgis.dc.gov/catalog/download.asp?downloadID=88&downloadTYPE=ESRI$$[DC GIS Roads]; DigitalGlobe GlobalBasemap (GBM).
+.DigitalGlobe GBM Image Carousel displayed with Washington, D.C. Street Centerline roads on DigitalGlobe GlobalBasemap (GBM) imagery.
 image::user/images/id/hoot_image_carousel.png[]
+
+NOTE: The image carousel thumbnails do not appear, only the image acquisition date and sensor type (e.g. WV02, WV01, WV03_VNIR, etc...).
 
 ==== Map Data
 
@@ -167,16 +188,15 @@ The Tools button provides users with a quick set of customized tools for measuri
 
 [[Hoot_Tools]]
 .Tools button shown in Hoot UI.
-image::user/images/id/hoot_tools.png[scaledwidth="50%"]
+image::user/images/id/hoot_tools.png[scaledwidth="75%"]
 
 [[Hoot_measure]]
 ===== Measurement Tools
 
 There are two measurement tools currently provided; Measure linear distance or length of an object and measure the area of an object. To measure the length of an object on the map, click on the Tools button and select Measurement Tools | Measure Length.  The cursor will then change into crosshairs indicating that you are able to measure a feature by drawing a line.  To continue a drawing, left click to add nodes as needed.  To complete the measurement double-click. To measure an area/perimeter of a feature, select the Measure Area option and click on the screen to add nodes and double click to complete the measurement.  The measurement values will appear with the perimeter value listed above the area.
 
-[[Hoot_Area_Measure]]
 .Measuring area in Hootenanny.
-image::user/images/id/hoot_measure_area.png[scaledwidth="50%"]
+image::user/images/id/hoot_measure_area.png[scaledwidth="75%"]
 
 NOTE: The pan/zoom functions are disabled when measuring an object due to the way that measurements are captured on the screen. Clicking on the map after completing the measurement will cause the value to disappear from the screen. It is also possible to display the measurement of a selected layer geometry by clicking the `i` key.
 
@@ -188,13 +208,13 @@ Once a bounding box (or visual extent) has been selected, a dialog box will pop 
 
 [[Hoot_Clip_Map]]
 .Clipping a layer using a defined bounding box.  This image shows the user selecting the bounding box option, creating a rectangular clip area and submitting the job to the server. The imagery basemap displayed is the DigitalGlobe GBM service.
-image::user/images/id/hoot_clip.png[scaledwidth="50%"]
+image::user/images/id/hoot_clip.png[scaledwidth="75%"]
 
 ==== Help
 
-To access help for the standard features within iD, click on the bookmark icon below the Background Settings button or type the 'h' shortcut key. This feature is included within the standard iD Editor and includes background information on all OSM editing related functionality. It has been included in Hootenanny for continuity purposes noting that numerous tutorials on standard iD functionality such as adding/editing OSM features can be found in this help guide.
+To access the help for Hootenanny, click on the bookmark icon below the Background Settings button or type the 'h' shortcut key. Each section provides relevant background on different functionality found within the Hootenanny UI. Users can navigate between sections by clicking on the section title e.g. Adding Layers and scrolling through the contents.
 
-.Accessing the iD editor Help page within Hootenanny.
+.Accessing the Hootenanny Help Menu.
 image::user/images/id/hoot_helpmenu.png[scaledwidth="25%"]
 
 [[Hoot-iD_Shortcuts]]
@@ -214,10 +234,11 @@ The following table provides all of the available shortcut keys for accessing Ho
 | Ctrl + z | Undo
 | Ctrl + y | Redo
 | Ctrl + s | Save
-| Ctrl + c | Copies feature geometry/tags
+| Ctrl + c | Copies feature geometry and tags
 | Ctrl + v | Pastes selected feature geometry/tags
+| Ctrl + Shift + v | Pastes selected tags using the overwrite option
+| Ctrl + Alt + v | Pastes selected tags using the append option
 | Ctrl + Backspace | Deletes object permanently
-| Shift + Ctrl + v | Pastes copied source layer tags into selected target layer tags
 | Shift + Left mouse click | selects multiple features geometry/tags within layer
 | Alt + b | Switches b/w layers during post-conflation conflict review
 | Alt + n | Toggles layer visibility on/off
@@ -245,59 +266,53 @@ The following table provides all of the available shortcut keys for accessing Ho
 | F11 | sets browser to full screen
 |======
 
+
 ===  Conflation Workflows
 
-In order to view the available map conflation options, two layers must be added to the map as shown in <<HootiD-conflationoptions>>. Once added, click on the _Conflate_ button in the left panel to set up each conflation option.
+When conflating data in Hootenanny, users must have both a Reference Dataset and a Secondary Dataset loaded in the map. Once the layers have been selected, the _Conflate_ button will appear with various options that can be selected by the user.  The following section(s) highlight those options as well as explore different types of conflation strategies using publicly available datasets.  When users are ready to conflate they will need to populate the following fields. 
 
 [[HootiD-conflationoptions]]
-.Performing a reference conflation of Haiti Roads data in Hootenanny. Port Au Prince, Haiti; OSM Highway data (blue) and MGCP data (pink) from link:$$http://www.arcgis.com/home/item.html?id=1a253aad38274c1a93b17eafdf885853as$$[ESRI] website; DigitalGlobe GlobalBasemap (GBM).
-image::user/images/id/hoot_refconf_haitiroads.png[]
+.Conflation options displayed in lower left panel. In this example, a reference conflation between OSM roads (pink) and MGCP roads (blue) in Port Au Prince, Haiti is displayed on DigitalGlobe GlobalBasemap (GBM).
+image::user/images/id/hoot_conflation_new.png[]
 
-NOTE: The Reference layer is assumed to contain the reference geometry when selecting Reference / Horizontal conflation. When performing Cookie Cutter & Horizontal conflation, the Reference layer determines the alpha-shape used for the cookie cut operation while the Secondary layer is used as the dough from which the data is clipped.
+*_Save As_*:  The name you would like to save the merged layer as. By default, a file name Merged_* is populated in this field but this can be overwritten manually by entering a specific layer name.  If no value is provided a default name will be provided.
 
-==== Conflation Options
+*_Path_*:  The existing folder path where you want to save the conflated output. To create a new folder to save the output enter that in the _New Folder Name_ field.
 
-The following section provides background on the available parameters that can be configured for a conflation job using Hootenanny.
+*_New Folder Name_* (optional): The name of any new folder you want to save the output to.  Note that it will be created at the folder level specified in the Path.  Leave blank if no new folder is required.
 
-===== Save As
+*_Type_*:  This is the type of conflation you want to run.  Note that there are four conflation options available: _Reference Conflation_, _Average Conflation_, _Cookie Cutter & Horizontal Conflation_ and _Advanced Conflation_.  
 
-The name of the conflated data output that you would like to save. By default, a file name Merged_* is populated in this field but this can be overwritten manually by entering a specific layer name.
+[[HootiD-AttributionRefLayer]]
+*_Attribute Reference Layer_*:  By default, the Reference layer contains both the geometry and attribution that dictates the merged features. In many cases, however, reference geometry and attribution exists across multiple layers and therefore we provide the ability to utilize the Secondary layer as the reference attribution for cases where the secondary layer is determined to contain the most accurate tag information while the reference layer contains the most accurate geometry.
 
-===== Path
+=== Types of Conflation
 
-The existing folder path where you want to save the conflated output. To create a new folder to save the output enter that in the _New Folder Name_ field.
+==== Reference Conflation
 
-===== New Folder Name
+Reference conflation assumes that the Reference Dataset contains the most accurate geometry/tag info with the Secondary Dataset containing the non-authoritative features to merge.  By default, Hootenanny assumes that the Reference Dataset contains the reference tag values but users have the option to set this to the secondary dataset by selecting that layer in the Attribute Reference Layer dropdown list. 
 
-The name of a new folder if you wish to create one to save the output.  Note that it will be created at the level specified in the Path.  Leave blank if no new folder is required.
+When using Reference Conflation the output is assumed to contain the following:
 
-NOTE: By default the output folder path will be the same as the input layers unless the two input folders are not the same.
+1) Matched feature geometry/tags from the Secondary Dataset into the Reference Dataset.
 
-===== Type
+2) Unmatched feature geometry/tags from both the Reference and Secondary Datasets.  
 
-There are *four* types of conflation that are exposed in the UI: *_Reference, Average, Cookie Cutter & Horizontal_* and *_Advanced_*.
+NOTE: If a required tag has a null or missing value, a default value will get assigned based on the output specification for that field and data type.
 
-1) *_Reference Conflation_*
+==== Average Conflation
 
-_Reference_ conflation assumes that the reference layer (layer 1) contains the most accurate geometry but provides the user with the option to select either input source as the attribute reference and is the default conflation option if no other is selected. If a user sets layer 1 as the reference geometry and layer 2 as the attribute reference, the conflated map would contain the following:
+Average conflation maintains the general shape of the two inputs, produces close to an exact average, and avoids large data perturbations. Using the road data example, the operator starts by averaging the first two nodes for a road, then moves along each segment or way, averaging nodes together and at the end of the feature averages the final two nodes. To determine the average value for each way, it first calculates the maximal nearest subline, assigns a weight based on the circular error (lowest error, highest weight and vice-versa), and returns the weighted average of the two geometries.
 
-* matched feature geometry - layer 1 (as defined by first dataset loaded)
-* unmatched feature geometry - layer 1 and layer 2
-* matched attribute fields - layer 2 (as defined by the attribute reference layer)
-* unmatched attribute fields - if the attribute is populated it will be transferred to the conflated map from the appropriate input source. If not, a default value will get assigned based on the output specification for that field and data type.
+NOTE: Average conflation will modify the merged layer geometry for any matching features.  For this reason caution should be applied and the output should be verified by a qualified data steward for any inaccurate intersections generated in the process.
 
-2) *_Average Conflation_*
+==== Cookie Cutter & Horizontal Conflation
 
-_Average_ conflation maintains the general shape of the two inputs, produces close to an exact average, and avoids large data perturbations. Using the road data example, the operator starts by averaging the first two nodes for a road, then moves along each segment or way, averaging nodes together and at the end of the feature averages the final two nodes. To determine the average value for each way, it first calculates the maximal nearest subline, assigns a weight based on the circular error (lowest error, highest weight and vice-versa), and returns the weighted average of the two geometries.
+Cookie Cutter & Horizontal Conflation is intended for use cases where a lower quality dataset such as a rural road network generated from a low resolution map needs to be conflated with a more accurate or precise dataset such as a urban centerline layer digitized from accurate high resolution imagery. In this scenario, the higher quality data (typically representing an urban area a city core) is buffered and cut, then stitched into the coarse resolution road layer using edge matching routines to create blend of the two layers. To walk through a sample Horizontal Conflation use case see <<HootiD-HorizontalConflationExample>>.  Additional background on Cookie Cutter and Horizontal conflation can also be found in the link:$$https://github.com/ngageoint/hootenanny/releases/download/v0.2.20/Hootenanny.-.User.Guide.pdf$$[Hootenanny User Guide]. When using this method the following settings are applied.
 
-3) *_Cookie Cutter & Horizontal Conflation_*
-
-_Cookie Cutter & Horizontal Conflation_ is intended for use cases where a coarse country wide dataset would need to be conflated with a highly detailed and high quality city level dataset. When employing this conflation type, a polygon that approximates the bounds of the more detailed dataset is cut from the coarser data prior to conflation (Cookie Cutter operation). In this case the Reference layer contains the reference geometry layer i.e. the cookie cutter, whereas the Secondary layer is the dough from which the area is clipped. The following conditions apply when using a > 2 km x 2 km reference dataset. To walk through a sample Horizontal Conflation use case see <<HootiD-HorizontalConflationExample>>.  Additional background on Cookie Cutter and Horizontal conflation can be found in the link:$$https://github.com/ngageoint/hootenanny/releases/download/v0.2.17/Hootenanny.-.User.Guide.pdf$$[Hootenanny User Guide].
-
-* The bounds of layer 1 will be approximated with an alpha shape (e.g. cookie-cut) that is created by generating a convex hull for a set of data points read in the input.
-* The bounds of layer 1 will be buffered by -1km on all sides. This improves the chances of merging seems between the two layers. Note that this operation works better at the city scale then at the regional scale.
-* Layer 2 (dough) is cut by the alpha shape generated by hoot from layer 1.
-* Based on the above conditions the two layers are conflated.
+* The bounds of the Reference layer (cookie cut portion) are approximated using an alpha shape (e.g. cookie-cut) that is created by generating a convex hull around the layer.
+* The bounds of the Reference layer are buffered by 1km on each side of the convex hull (2 km distance in total). This improves the chances of merging seams between the two layers. Note that this operation works better at the city scale then at a regional or larger scale.
+* The Secondary layer (dough portion) is cut by the alpha shape generated from the Reference layer and matched to road features within the Secondary layer that fall within the buffered retion.
 
 [[HootiD-convexhull]]
 .Example of alpha shape generated with a 1km buffer around a "contrived" urban area (not an actual physical location). The blue line represents the convex hull and the red the alpha shape with the applied -1 km buffer.
@@ -305,9 +320,9 @@ image::user/images/id/hoot_convexhull_example.png[scaledwidth="40%"]
 
 NOTE: In the user interface there is no way to tune or modify the generated alpha-shape. You can however configure the alpha-value from the command line (see alpha-shape in User Guide). In either case, the generated alpha-shape will always approximate the bounds of the data regardless of shape of the urban area.
 
-4) *_Advanced Conflation_*
+==== Advanced Conflation 
 
-The _Advanced Conflation_ options provide users with the ability to customize a particular conflation job using a set of exposed advanced <<Advanced_Conflation_Options,options>>. These are intended for use cases where there is intimate familiarity with both the configuration parameters and the unique set of conditions that warrant their use. For example, to modify any of the Cleaning or Rubber Sheeting options when conflating rivers, users can simply expand the Cleaning Options and Waterway Options panels and modify accordingly. Note that caution should be exercised when applying these as their use may produce unexpected results.
+Advanced Conflation allows users to customize a particular conflation job using a set of exposed advanced <<Advanced_Conflation_Options,options>>. These are intended for use cases where there is intimate familiarity with both the configuration parameters and the unique set of conditions that warrant their use. For example, to modify any of the Cleaning or Rubber Sheeting options when conflating rivers, users can simply expand the Cleaning Options and Waterway Options panels and modify accordingly. Note that caution should be exercised when applying these as their use may produce unexpected results.
 
 The advanced parameters are accessed by clicking on the triangle next the Type highlighted in the red box in <<HootiD-advanced>>. Background on each Advanced Conflation option can be found in <<Advanced_Conflation_Options>>.
 
@@ -315,20 +330,8 @@ The advanced parameters are accessed by clicking on the triangle next the Type h
 .Advanced Conflation Options. To access the Advanced Conflation Options click on triangle highlighted in the red box next to the Type.
 image::user/images/id/hoot_advanced_conflate.png[scaledwidth="50%"]
 
-[[HootiD-AttributionRefLayer]]
-===== Attribute Reference Layer
-
-During conflation, the attributes of reference data are used to update any secondary data. By default, the reference layer contains both the reference geometry and attribution. In many cases, however, reference geometry and attribution exists across multiple layers hence the need for conflation. To support this use case, select either the reference or secondary layer as the attribute reference layer.
-
-===== Conflation Performance Report
-
-Hootenanny will generate a conflation performance report containing various statistics for a particular conflation job. These parameters are discussed in more detail in the Hootenanny User Guide, Conflation Statistics Report section. To generate a report for a job, set the 'Generate Report = True' flag. A pdf document containing the performance report and its contents will be available for download from the Manage | <<HootStatsReport,Report>> Settings.
-
-.Sample page from Hootenanny Conflation Statistics Report.
-image::user/images/id/hoot_csr.png[scaledwidth="50%"]
-
 [[HootConflictReview]]
-==== Reviewing Conflicts
+=== Reviewing Conflicts in Hootenanny
 
 When conflating data it is inevitable that conflicts may arise due to the lack of a clear solution as a result of ambiguous relationships between matched features. When this occurs, reviewable items are flagged and presented to the user in the UI through an iterative review process where the user must decide a particular action, e.g. accept as resolved, modify or delete, merge, before merging the final conflated output. In Hootenanny core, the concept of a "Review" is used to refer to something that needs to be reviewed by the user. This could include any of the following:
 
@@ -338,103 +341,53 @@ When conflating data it is inevitable that conflicts may arise due to the lack o
 
 From the UI perspective, the term "Conflict" is used synonymously with "Review" but not all reviews are conflicts. Each type of data (POI, Buildings, Roads, etc.) when conflated introduce their own unique types of conflicts where the user is advised to take some action of either merging two POIs together, editing a layer geometry to eliminate any potential conflict or resolve the item as is to maintain as a separate feature.  No single solution can be provided to address a particular conflation conflict but rather it is up to the user to take the necessary steps based on the review text presented to reduce the likelihood that erroneous data will get introduced during the conflation process.
 
-During review, a single feature is compared with another (based on convergence of geometry and attribution) to determine whether a merge or alternative action is required. Note that feature merging is only available for POI to POI conflation. Otherwise the user can modify  Features flagged for review will appear highlighted on the map in either red or blue corresponding to the Reference and Secondary input data.  Clicking in any of the highlighted fields in the review table will select the feature in question and display its attribute in the left tag panel (see <<ReferenceConflictReview>>).  Users can toggle the review items table by clicking on the _Hide/Show Table_ button located in the conflict review bar at the bottom.  In order to complete the review process, all reviews must be resolved either by stepping through each individually or by clicking the _Complete Review_ button to resolve remaining reviews and either export the data to the desired output format or add another layer for conflation.
+During review, a single feature is compared with another (based on convergence of geometry and attribution) to determine whether a merge or alternative action is required. Note that feature merging is only available for POI to POI conflation. Otherwise the user can modify  Features flagged for review will appear highlighted on the map in either red or blue corresponding to the Reference and Secondary input data.  Clicking in any of the highlighted fields in the review table will select the feature in question and display its attribute in the left tag panel (see <<ReferenceConflictReview>>).  Users can toggle the review items table by clicking on the _Hide/Show Table_ button located in the conflict review bar at the bottom.  In order to complete the review process, all reviews must be resolved either by stepping through each individually or by clicking the _Complete Review_ button to resolve remaining reviews and either export the data to the desired output format or add another layer for conflation.  Note that the colors in the merged layer have significance.  Green features represent those which have been merged, and any other colored features are those that originate from the input layers (color corresponds the input color used prior to conflation).
 
 NOTE: Although reviews occur between single pairs of features, a review set may actually contain 1:Many features which will appear within the UI under the review note as 1 of X count.
 
-===== Review Text
+==== Review Text
 
-When features are flagged as needing review, a number of different review notes may appear to provide some guidance to the user.  The review notes are general and don't provide the specific reasons why a pair of features are being reviewed against one another.  The following sections are meant to be a supplemental guide for users to help them evaluate the particular review scenarios.
-
-1) POI Review Text
-
-|======
-| *Review Note* | *Description*
-| similar names | The name score is in the range (0.987403, 1.2)
-| very similar names | The name score is in the range [1.2, +∞)
-| very close together | The distance between the POIs is <= search radius * 0.2
-| no place match | At least one of the POIs is a place and the place types are not considered at all similar
-| poor place match | At least one of the POIs is a place and the place types are not considered very similar
-| similar name and place type | The names are very similar and the place types are similar
-| generic type to place match | One of the POIs is a generic type (e.g. poi=yes) and the other is a place (e.g. place=town)
-| similar POI type | The two POIs have a similar type (e.g. amenity=restaurant vs. amenity=café)
-|======
-
-2) Highway Review Text
-
-The review for highways tends to be a bit more complex due to the nature by which road features are handled within Hoot.  The following is meant to be a guide for helping address review scenarios.
-
-A. *Review Text*: _Elements contain too many ways and the computational complexity is unreasonable_
-
-* *Reason*: A multiline string geometry was attempted to be conflated that had more lines in it than Hootenanny can conflate in a reasonable amount of time using its current algorithms. Currently, that is when both input sublines to conflate contain more than four lines, or if the sum of lines they contain is greater than seven.
-* *User Action*: Review this feature manually. It can only be automatically conflated by developing new conflation algorithms that can handle multilinestring input data of this size.
-* *Possible Improvements*: We are using an exhaustive search now to find the best subline pairings, replacing that with a heuristic should make the computational complexity reasonable.
-
-B. *Review Text*: _Expected a matching subline, but got an empty match_
-
-* *Reason*: This is the a result of the "Delayed Detection of Complex Road Conflict"
-* *User Action*: Review this feature manually, and report this behavior to the Hootenanny development team for further examination.
-* *Possible Improvements*: Spending time investigating specific situations where this comes up may lead to a solution that reduces or eliminates this review.
-
-C. *Review Text*: _MultiLineString relations can only contain ways when matching sublines_
-
-* *Reason*: A input being conflated of geometry type multiline string contained an OSM feature type other than a way (nodes or relations). This will likely only happen in OSM data.
-* *User Action*: Review this feature manually. This is invalid input data for Hootenanny conflation purposes and cannot be conflated automatically. Open up the relation and see what is inside. If there is a “highway” relation that contains non-way types it is likely invalid. If the solution isn’t clear then contact the developers.
-
-D. *Review Text*: _Multiple overlapping way matches were found within one set of ways_
-
-* *Reason*: If this occurs there is an internal logic error in Hoot.
-* *User Action*: If this appears it is an internal error. Please report this to hootenanny.help@digitalglobe.com.
-
-E. *Review Text*: _No valid matching subline found_
-
-* *Reason*: When conflating two linear inputs, Hootenanny could not find a corresponding matching subline part in one of the inputs.
-* *User Action*: Review this feature manually, as Hootenanny can not determine automatically whether it matches any feature in the opposite input dataset.
-* *Possible Improvements*: General improvements to road conflation (e.g. intersection matching) will reduce the frequency of this issue.
+When features are flagged as needing review, a number of different review notes may appear to provide some guidance to the user.  The review notes are general and don't provide the specific reasons why a pair of features are being reviewed against one another but do provide some context for understanding why a review may have occurred.  For example, the Review Note: The feature pair with a review score of 0.375 met the review threshold of 0.25 provides the review score and the threshold value which could be compared against other features with similar score and threshold values. Often when conflating POI data, review notes such as _Somewhat similar (200m) - very similar names and generic type, very close together, generic type to place match_ or _Somewhat similar (26m) - very close together, similar POI type_ will appear.  Those provide an indication of the reasons for being flagged and the distance between the POIs in the particular review.  Any specific questions regarding the reviews and required action can be addressed to Hootenanny.Help@digitalglobe.com.
 
 [[MapInMap]]
-===== Map-in-Map
+==== Map-in-Map
 
-In Hootenanny, the concept of Map-in-Map is used here to describe an inset or overview map that contains additional spatial information relating to the conflation i.e where reviews occur within the AOI. When a conflation job completes and reviews are generated, users can display an overview map showing colored points representing the location (or centroid of the location) where unresolved, merged, and currently reviewed features occur for the corresponding AOI.  To view this map, press the '/' key when reviewing features and the smaller overview map should display a set of points representing the review layer.
+In Hootenanny, the concept of Map-in-Map is used here to describe an inset or overview map that contains additional spatial information relating to the conflation i.e where reviews occur within the AOI. When a conflation job completes and reviews are generated, users can display an overview map showing colored points representing the location (or centroid of the location) where unresolved, merged, and currently reviewed features occur for the corresponding AOI.  To view this map, press the `/` key when reviewing features and the smaller overview map should display a set of points representing the review layer.
 
 Depending on the density of data flagged for review, the features are represented in the following manner: yellow dots corresponding to the location of unresolved reviews; a single red dot indicating the currently reviewed feature in the user's session; and green dots representing any resolved or merged features.  This visual aid becomes useful particularly when multiple users are editing the same layer simultaneously since it provides a map of the spatial distribution of reviews in real or near-real time.
 
 .Map-in-Map with unreviewed features displayed (yellow dots).  Shown here is a POI review of a conflation between OpenStreetMap POIs and Geoname POIs within Sao Paulo, Brazil (Imagery is DigitalGlobe GBM Basemap).
 image::user/images/id/hoot_mapinmap_review.png[scaledwidth="75%"]
 
-NOTE: The Map-in-Map overview display of review features was temporarily disabled in version 0.2.19 but has been re-implemented with subsequent versions.
+==== Multi-user Conflict Reviewing
 
-===== Multi-user Conflict Reviewing
+Hootenanny supports the ability for multiple users to review the same merged output layer containing any number of generated reviews.  Using the given scenario of a reference conflation between two POI layers resulting in 15K reviews, any user with access to the same Hootenanny deployment can load the merged layer containing the unresolved reviews and take any necessary action to resolve them.  To mitigate any toe-stepping that might occur due to multiple users accessing the same review pair simultaneously, reviews are presented in a randomized order such that there is a fairly low probability of two users getting the same review at the same time (assuming that the review count is high and the number of reviewers is low).  For those instances where a review is presented to two users simultaneously, the user that resolves their review first by clicking on the Resolved button will commit the change to the database.  
 
-Hootenanny supports the notion of multi-user layer editing in the context of conflation reviews by adding business logic to the application that minimizes the likelihood that different users loading the same layer will be presented with the exact same review.  Bear in mind that datasets containing fewer reviews (<50) will have a higher likelihood of two different users encountering the same conflict at the same time but given that most reviews require on average 15-20 seconds to resolve, the possible of simultaneous editing is relatively low.  The ideal scenario for multi-user conflict reviewing is when a conflation job generates a large number of reviews in excess of several hundred or thousand where this work can be parsed out among users accessing the same layer to minimize down time when conflating data.
-
-==== Conflation Examples
+=== Conflation Examples
 
 The following conflation examples are provided as guidance to help users better understand potential conflation and review issues that may arise keeping in mind that each scenario will vary tremendously from one to another depending on the characteristics of the source input data.
 
 ===== Reference Conflation: Washington DC GIS Roads against Census Tiger data.
 
-The following example provides a simple use case conflating DC GIS Roads data against Tiger Census data using _Reference_ conflation.
+The following workflow describes a simple use case conflating DC GIS Roads data against Tiger Census data derived from the source data below. In this example, the datasets DcGisRoads.osm and DcTigerRoads can be found in the `%HOOT_HOME/test-files/` directory where Hootenanny is installed (see <<Hoot-iD_Datasets,Data Ingest>>). 
 
-For this example we’ll be using files obtained from the following sources (see <<Hoot-iD_Datasets,Importing Data>> for background on importing data into Hootenanny). For background on translating these particular data sources using the appropriate OSM tag schema see the Hootenanny User Guide, Common Use Cases. Custom translation within Hootenanny is covered further <<HootiD-Translation, here>>.
+* Tiger Roads Source data: ftp://ftp2.census.gov/geo/tiger/TIGER2012/ROADS/tl_2012_11001_roads.zip
+* DC GIS Roads Source data: http://dcatlas.dcgis.dc.gov/catalog/download.asp?downloadID=88&downloadTYPE=ESRI
 
-* Tiger Roads - ftp://ftp2.census.gov/geo/tiger/TIGER2012/ROADS/tl_2012_11001_roads.zip
-* DC GIS Roads - http://dcatlas.dcgis.dc.gov/catalog/download.asp?downloadID=88&downloadTYPE=ESRI
+Once the DcGisRoads and DcTigerRoads datasets have been ingested and loaded into the map as the Reference and Secondary Dataset respectively, click on the conflate button to expose the conflation options. Provide an output name, select type = Reference, leave the remaining options as default and click the _Conflate_ button.  Conflating these two layers will typically produce anywhere from 5-8 reviews.
 
-Once the two datasets have been loaded to the map, click the conflate button to expose the configuration options. Type an output name, select type = reference, select the Attribute Reference Layer, Report Generation option and click the conflate button.
+.Hootenanny Reference conflation using DcGisRoads (blue) and DcTigerRoads (yellow) displayed on DigitalGlobe GBM.  
+image::user/images/id/hoot_reference_conflation.png[] 
 
-.Hootenanny reference conflation parameters. Note that Type is set to reference and the Attribute Reference Layer is DcGisRoads (attributes from the DcGisRoads layer will be used as the reference attribution during conflation).
-image::user/images/id/hoot_reference_conflation.png[scaledwidth="75%"]
-
-During the review process a _Review Note_ is displayed (red box in <<ReferenceConflictReview>>) in addition to the total number of conflicts, which in this subset of data include a total of 4 reviews with their status (unreviewed/resolved). Some reviews may not be entirely obvious due to the complex nature in which relationships are analyzed by the associated match/merger algorithms.  In all cases it is best to refer to the User/Algorithms guide for additional documentation and background on the types of conflicts that may occur between two datasets.
+After the automatically merged features have completed, a number of reviewed features will be presented along with a corresponding review note and count e.g. Reviews remaining: 5 (Resolved: 0). Note that for road reviews, many of the actions required may not be entirely intuitive and for this reason its best to work with a data steward with intimate knowledge of the source data using any supplemental background provided in either the User/Algorithms guides.   
 
 [[ReferenceConflictReview]]
-.Reviewing Conflicts in Hootenanny. Washington, D.C.; Conflated DCRoads and OSM data; DigitalGlobe GlobalBasemap (GBM).
+.Reviewing Conflicts in Hootenanny using DcGisRoads and DcTigerRoads. DigitalGlobe GlobalBasemap (GBM).
 image::user/images/id/hoot_reviewconflict_dc.png[]
 
-When reviewing conflicts, users must either accept the conflict 'as is' by clicking on the _Resolved_ button (shortcut = r) or modify the feature under review accordingly using the options described in <<ModifyLayerGeometry>>. Any edit committed by the user must be saved in the database before completing the review by clicking on the _Save_ button on the top. Once all identified conflicts have been addressed, click on the save button under the merged layer and either export into an appropriate output format or add another dataset to conflate against.  Clicking on the Save button at any time prior to resolving all reviews presents users with the option to either discard or accept all reviews regardless of any action through the iterative step through process.  For this example, the reference conflation has identified 4 potential conflicts.  The first conflict, 'Complex conflict causes an empty match' indicates that a multiple matching line segments have caused extra difficulty during the line matching process and therefore the user should step through the flagged segments to determine whether they should be included in the final merged output.  Additional information on each type of review can be found in the User Guide in _Feature Review_ section.  Once all reviews have been addressed the layer will be saved and an option to either Export the data or add another dataset is presented to the user.
+When reviewing each conflict, users can either accept the conflict 'as is' by clicking on the _Resolved_ button (shortcut = r) or modify the feature under review accordingly using the options described in previous sections covering editing feature geometry/tags.  To display the Reference (red) or Secondary (blue) review feature tags, click on either the red or blue review fields and note the tags displayed on the left panel. Note that if any geometry or tag information is subsequently modified during the review process, users will be need to click the save button to commit those changes to the database (clicking resolve will not commit any feature or tag editing modifications).  If no geometry/tag information is modified, clicking the resolve button is sufficient.   Once all reviews have been resolved, a message will pop-up in the upper right corner stating that there are no more available features to review and a Complete Review button will appear under the merged layer name. Clicking on that will allow users to either export the data using the provided layer export options or Add Another Dataset to continue with the conflation process.  
 
-.Saving conflated data options.
+.Completing the Review Process in Hootenanny. Users can choose to <<HootiD_Exporting, Export>> the data or Add another dataset to conflate.  The layer colors displayed on the map correspond to the Reference (blue for DcGisRoads) and Secondary (yellow for DcTigerRoads) layers and green for any merged features.
 image::user/images/id/hoot_save_output.png[]
 
 [[HootiD-HorizontalConflationExample]]
@@ -465,25 +418,23 @@ image::user/images/id/hoot_boulder_postconflate.png[scaledwidth="30%"]
 
 Viewing the workflow within the Hootenanny UI, the Boulder Streets data is added as the Reference dataset and the OSM Boulder Highway dataset as the Secondary data source. The user selects _Cookie Cutter & Horizontal_ as the Conflation Type and picks a layer to represent the Attribute Reference Layer then clicks Conflate.
 
-.Two Boulder, CO roads layers added to Hootenanny. Boulder, CO; Boulder city street centerline (pink), OSM highways (blue); DigitalGlobe GlobalBasemap (GBM).
+.Two Boulder, Colorado roads conflated using Cookie Cutter and Horizontal Conflation. Shown here are Boulder City Street centerlines (pink) as the Reference layer and OSM highways (blue) as the Secondary layer with DigitalGlobe GlobalBasemap (GBM). Note the use of OSM data is not an indication of the data quality but simply used here as an example of a larger dataset covering the greater Boulder metropolitan region.  
 image::user/images/id/hoot_boulder_preconflate.png[]
 
 The final conflated layer represents the merger of the Boulder streets layer and the OSM highways data with all duplicates removed and cookie-cut roads joined. Once the conflation process has completed, the resulting dataset can be exported as a shapefile, FGDB, or WFS from the UI following the steps outlined <<Hoot-iD_Datasets,here>>.
 
-.Boulder cookie-cutter and horizontal conflation output (green). Boulder, CO; Conflated roads dataset; DigitalGlobe GlobalBasemap (GBM).
+.Boulder cookie-cutter and horizontal conflation output (green) displayed on DigitalGlobe GlobalBasemap (GBM).
 image::user/images/id/hoot_boulder_merged.png[]
-
-NOTE: Using these particular datasets in Horizontal & Cookie Cutter Conflation does not produce any conflicts for the user to review.
 
 [[Poi2PoiConflation]]
 ===== POI to POI conflation: Washington, D.C.
 
-Points of Interest (POI) to POI conflation is supported within Hootenanny (with conflict review) by default when any two layers containing POIs are added to the map. POIs are compared against one another and scored based on a variety of tag/conditions (see Algorithms/User Guide for more background on Unifying conflation scoring).
+Points of Interest (POI) to POI conflation is supported within Hootenanny by default when any two layers containing POIs are added to the map. POIs are compared against one another and scored based on a variety of tag/conditions (see Algorithms/User Guide for more background on Unifying conflation scoring).
 
-Unlike linear and polygon features, the review process for POIs provides the ability to _merge_ attribution and geometry when reviewing conflicts. Merge combines the two POIs attribution into a single POI with the reference geometry and a combination of non-reference/reference attribution. When determining an appropriate action, a user must first consider whether the points represent two separate POIs, a single POI, or an invalid POI in which case the user might move or delete the POI(s) in question.  In this example, a link:$$https://www.arcgis.com/home/item.html?id=f323f677b3f34fe08956b8fcce3ace44$$[DC POI] dataset containing locations and attributes of _Address Alias_ points composed of a variety of link:$$http://geospatial.dcgis.dc.gov/dc_kmz/metadata/AddressAliasPt.html$$[features] as part of the Master Address Repository (MAR) for the D.C. Office of the Chief Technology Officer (OCTO) and participating D.C. government agencies is conflated against link:$$http://www.mapcruzin.com/free-united-states-shapefiles/free-district-of-columbia-arcgis-maps-shapefiles.htm$$[MapCruzin] POI data derived from OSM. Conflating these two POI datasets produces 62 reviews with a range of conflict review notes to step through and take appropriate actions of either merging or accepting as two separate POIs.
+Unlike linear and polygon features, the review process for POIs provides the capability to _merge_ attribution and geometry when reviewing conflicts. Merge combines the two POIs attribution into a single POI with the reference geometry and a combination of non-reference/reference attribution. When determining an appropriate action, a user must first consider whether the points represent two separate POIs, a single POI, or an invalid POI in which case the user might move or delete the POI(s) in question.  In this example, a link:$$https://www.arcgis.com/home/item.html?id=f323f677b3f34fe08956b8fcce3ace44$$[DC POI] dataset containing locations and attributes of _Address Alias_ points composed of a variety of link:$$http://geospatial.dcgis.dc.gov/dc_kmz/metadata/AddressAliasPt.html$$[features] as part of the Master Address Repository (MAR) for the D.C. Office of the Chief Technology Officer (OCTO) and participating D.C. government agencies is conflated against link:$$http://www.mapcruzin.com/free-united-states-shapefiles/free-district-of-columbia-arcgis-maps-shapefiles.htm$$[MapCruzin] POI data derived from OSM. Conflating these two POI datasets produces 62 reviews with a range of conflict review notes to step through and take appropriate actions of either merging or accepting as two separate POIs.
 
 [[POI2POIConflictReview]]
-.Reviewing Washington, D.C. POI conflicts in Hootenanny using the DC POI and MapCruzin data. The figure shows two POIs representing what could either be the same location or two entirely different entities.  In this case the user would need to determine whether the feature highlighted in red, "Reed Elementary School", should be merged with the feature highlighted in blue, "MARIE REED ELEMENTARY SCHOOL".  A red arrow will appear when hovering over the merge button indicating the proposed merge direction but this can be reversed by hitting the Ctrl key and merge button simultaneously.
+.Reviewing Washington, D.C. POI conflicts in Hootenanny using the DC POI and MapCruzin data. The figure shows two POIs representing what could either be the same location or two entirely different entities.  In this case the user would need to determine whether the feature highlighted in red, "Reed Elementary School", should be merged with the feature highlighted in blue, "MARIE REED ELEMENTARY SCHOOL".  A red arrow will appear when hovering over the merge button indicating the proposed merge direction but this can be reversed by hitting the `Ctrl` key and merge button simultaneously.
 image::user/images/id/hoot_poi_conflate.png[]
 
 NOTE: A POI merge can occur in either direction depending on the users preference.  In most cases clicking merge will merge the secondary dataset POI into the reference POI combining relevant attributes but this can be reversed by holding down the Ctrl key when clicking the merge button.  This will not work when using the merge "m" short-cut key.
@@ -550,7 +501,7 @@ To begin the process, users select the tag schema they want to use to define the
 
 Users must upload the dataset files for which they want to define a translation. If the _Upload file(s)_ dialog is open, files chosen can be one or more shapefiles, consisting of .shp, .shx, and .dbf components at a minimum; or a zip file containing one or more shapefiles, or a folder that is a file geodatabase. If the _Upload folder_ dialog is opened, the chosen folder can contain one or more shapefiles or be a file geodatabase.
 
-NOTE:  If the uploaded dataset contains more than one layer a drop-down will be added to the UI and translation mappings should be defined for every attribute of each layer.
+NOTE:  If the uploaded dataset contains more than one Feature Class a drop-down will be added to the UI and translation mappings can be defined per Feature Class.  At minimum, an FCODE e.g. AL015 or feature type e.g. highway = road is required for each feature class in order to save the translation file.
 
 The translation mappings are defined at the attribute level and support one-to-one, one-to-many and many-to-one attribute-tag associations. To better illustrate the utility of this tool, a walk through example is provided using the Washington, D.C. Street Centerline data downloaded from DCGIS Open Data's data catalog (http://opendata.dc.gov/). For this example we will be using a downloaded link:$$http://opendata.dc.gov/datasets/f3b0c6a6ff5f4493b85d858e67b7400b_43.zip$$[shapefile] from the site and mapping it to the OSM Tag Schema.
 
