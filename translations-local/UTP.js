@@ -54,7 +54,7 @@ function initialize()
 
 // IMPORT
 // translateAttributes - takes 'attrs' and returns OSM 'tags'
-function translateAttributes(attrs, layerName)
+function translateAttributes(attrs, layerName, geometryType)
 {
     if (typeof utp !== 'undefined')
     {
