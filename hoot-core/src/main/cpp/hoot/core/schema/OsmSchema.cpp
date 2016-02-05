@@ -1770,15 +1770,7 @@ void OsmSchema::loadDefault()
   delete d;
   d = new OsmSchemaData();
 
-#warning remove me
-  if (path.contains("old"))
-  {
-    JsonSchemaLoader(*this).load(path);
-  }
-  else
-  {
-    OsmSchemaLoaderFactory::getInstance().createLoader(path)->load(path, *this);
-  }
+  OsmSchemaLoaderFactory::getInstance().createLoader(path)->load(path, *this);
 }
 
 double OsmSchema::score(const QString& kvp1, const QString& kvp2)

@@ -119,7 +119,7 @@ void TileOpDriver::apply(QString in, vector<Envelope> envelopes, double buffer,
     {
       QStringList filters;
       filters << "*.csv";
-      QFileInfoList fil = gdalDir.entryInfoList(filters, QDir::Files);
+      QFileInfoList fil = gdalDir.entryInfoList(filters, QDir::Files, QDir::Name);
       for (int i = 0; i < fil.size(); i++)
       {
         LOG_INFO("Adding GDAL_DATA file: " << fil[i].absoluteFilePath());

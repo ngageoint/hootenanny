@@ -20,6 +20,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/UuidHelper.h>
 
 // Pretty Pipes
 #include <pp/Hdfs.h>
@@ -27,9 +28,6 @@
 #include <pp/io/CppSeqFileRecordWriter.h>
 #include <pp/io/CppSeqFileRecordReader.h>
 using namespace pp;
-
-// Qt
-#include <QUuid>
 
 // Standard
 #include <vector>
@@ -77,7 +75,7 @@ const cv::Mat& PaintNodesDriver::calculateDensity(const Envelope& e, double pixe
     job.setName("Paint Nodes " + input.toStdString());
 
     fs.mkdirs("tmp");
-    QString output = "tmp/" + QUuid::createUuid().toString().replace("{", "").replace("}", "") +
+    QString output = "tmp/" + UuidHelper::createUuid().toString().replace("{", "").replace("}", "") +
         "-PaintNodes";
 
     // set the input/output
@@ -147,7 +145,7 @@ void PaintNodesDriver::_loadOutputDir(const QString& output)
 
   Hdfs fs;
 
-  vector<FileStatus> status = fs.listStatus(output.toStdString());
+  vector<FileStatus> status = fs.listStatus(output.toStdString(), true);
   for (size_t i = 0; i < status.size(); i++)
   {
     QString fn = QString::fromStdString(status[i].getPath());

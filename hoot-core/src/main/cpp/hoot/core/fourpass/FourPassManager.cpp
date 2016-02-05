@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "FourPassManager.h"
@@ -36,10 +36,6 @@
 #include <hoot/core/conflate/TileBoundsCalculator.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/NotImplementedException.h>
-
-// Qt
-#include <QDir>
-#include <QUuid>
 
 // Standard
 #include <set>

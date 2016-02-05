@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LOGGENERIC_H
 #define LOGGENERIC_H
@@ -36,8 +36,8 @@
   if ((level) >= hoot::Log::getInstance().getLevel()) \
   { \
     std::stringstream ss_; \
-    ss_ << __FILE__ << "(" << __LINE__ << ") " << message; \
-    hoot::Log::getInstance().log((level), ss_.str()); \
+    ss_ << message; \
+    hoot::Log::getInstance().log((level), ss_.str(), __FILE__, "", __LINE__); \
   }}
 
 #define LOG_DEBUG(str) { LOG_LEVEL(hoot::Log::Debug, str) }

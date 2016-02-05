@@ -35,7 +35,7 @@
 #include <pp/Hdfs.h>
 
 // Qt
-#include <QUuid>
+//#include <QUuid>
 
 // Tgs
 #include <tgs/System/SystemInfo.h>

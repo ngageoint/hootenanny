@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Job.h"
@@ -109,7 +109,7 @@ QString Job::_getFiles()
     QDir d(QString::fromStdString(_libraryDir[i]));
     if (d.exists())
     {
-      QFileInfoList fil = d.entryInfoList(libFilter, QDir::Files);
+      QFileInfoList fil = d.entryInfoList(libFilter, QDir::Files, QDir::Name);
       for (int i = 0; i < fil.size(); i++)
       {
         result << fil.at(i).absoluteFilePath();

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayMatch.h"
 
@@ -73,7 +73,6 @@ HighwayMatch::HighwayMatch(const shared_ptr<HighwayClassifier>& classifier,
     {
       // calculate the match score
       _c = _classifier->classify(map, eid1, eid2, _sublineMatch);
-#warning very slow
       stringstream ss;
       ss << "HighwayMatch " << _eid1.toString() << " " << _eid2.toString() << " P: "
          << _c.toString() << " features: " << getFeatures(map);

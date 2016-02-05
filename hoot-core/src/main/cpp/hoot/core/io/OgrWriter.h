@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OGRWRITER_H
@@ -156,6 +156,8 @@ protected:
   void _createLayer(shared_ptr<const Layer> layer);
 
   OGRLayer* _getLayer(const QString layerName);
+
+  OGRLayer* _getLayerByName(const QString layerName);
 
   shared_ptr<Geometry> _toMulti(shared_ptr<Geometry> from);
 

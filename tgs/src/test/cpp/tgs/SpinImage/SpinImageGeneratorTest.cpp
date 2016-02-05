@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Standard Includes
@@ -88,7 +88,8 @@ namespace Tgs
       QDir d("C:\\GisData\\Urgent\\Ottawa\\extracted_objects_v7\\" + QString::fromStdString(obj));
       vector<string> result;
 
-      QStringList allDirs = d.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+      QStringList allDirs = d.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::NoFilter,
+        QDir::Name);
 
       for (int i = 0; i < allDirs.size(); i++)
       {

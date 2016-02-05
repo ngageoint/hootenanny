@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DUPLICATEWAYREMOVER_H
@@ -61,6 +61,19 @@ public:
    */
   static void removeDuplicates(shared_ptr<OsmMap> map);
 
+  /**
+   * see duplicate.way.remover.strict.tag.matching
+   */
+  bool getStrictTagMatching() { return _strictTagMatching; }
+
+  /**
+   * see duplicate.way.remover.strict.tag.matching
+   */
+  void setStrictTagMatching(bool strictTagMatching)
+  {
+    _strictTagMatching = strictTagMatching;
+  }
+
 protected:
 
   shared_ptr<OsmMap> _map;
@@ -73,6 +86,10 @@ protected:
 
   void _replaceMultiple(const shared_ptr<const Way>& oldWay,
     const shared_ptr<Way>& newWay1, const shared_ptr<Way>& newWay2);
+
+ private:
+
+  bool _strictTagMatching;
 };
 
 }

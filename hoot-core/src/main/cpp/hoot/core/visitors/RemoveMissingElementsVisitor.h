@@ -45,7 +45,7 @@ public:
 
   virtual void setOsmMap(OsmMap* map) { _v->setOsmMap(map);}
 
-  virtual void setOsmMap(const OsmMap* map) { throw NotImplementedException("Set Map with const is not supported"); }
+  virtual void setOsmMap(const OsmMap* /*map*/) { throw NotImplementedException("Set Map with const is not supported"); }
 
   virtual void visit(const ConstElementPtr& e);
 

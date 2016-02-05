@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // The Hadoop "emit" function overlaps with Qt's emit keyword.
@@ -380,12 +380,12 @@ int main(int argc, char *argv[])
   QStringList classPath;
   QStringList jars;
   jars << "*.jar" << "*.JAR";
-  QFileInfoList fiLib = QDir(hadoopHome + "/lib/").entryInfoList(jars, QDir::Files);
+  QFileInfoList fiLib = QDir(hadoopHome + "/lib/").entryInfoList(jars, QDir::Files, QDir::Name);
   for (int i = 0; i < fiLib.size(); i++)
   {
     classPath << fiLib[i].absoluteFilePath();
   }
-  QFileInfoList fi = QDir(hadoopHome).entryInfoList(jars, QDir::Files);
+  QFileInfoList fi = QDir(hadoopHome).entryInfoList(jars, QDir::Files, QDir::Name);
   for (int i = 0; i < fi.size(); i++)
   {
     classPath << fi[i].absoluteFilePath();

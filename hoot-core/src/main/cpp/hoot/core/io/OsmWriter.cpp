@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmWriter.h"
 
@@ -228,7 +228,7 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
   }
 
   // sort the values to give consistent results.
-  qSort(nids.begin(), nids.end(), qGreater<long>());
+  qSort(nids.begin(), nids.end(), qLess<long>());
   for (int i = 0; i < nids.size(); i++)
   {
     const Node* n = map->getNode(nids[i]).get();
@@ -282,10 +282,18 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
 
 void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
 {
+  QList<long> wids;
   WayMap::const_iterator it = map->getWays().begin();
-  while (it != map->getWays().end())
+  while (it != map->getWays().end()) {
+    wids.append(it->first);
+    ++it;
+  }
+
+  // sort the values to give consistent results.
+  qSort(wids.begin(), wids.end(), qLess<long>());
+  for (int i = 0; i < wids.size(); i++)
   {
-    const Way* w = it->second.get();
+    const Way* w = map->getWay(wids[i]).get();
     writer.writeStartElement("way");
     writer.writeAttribute("visible", "true");
     writer.writeAttribute("id", QString::number(w->getId()));
@@ -343,17 +351,23 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
     }
 
     writer.writeEndElement();
-
-    ++it;
   }
 }
 
 void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
 {
+  QList<long> rids;
   RelationMap::const_iterator it = map->getRelationMap().begin();
-  while (it != map->getRelationMap().end())
+  while (it != map->getRelationMap().end()) {
+    rids.append(it->first);
+    ++it;
+  }
+
+  // sort the values to give consistent results.
+  qSort(rids.begin(), rids.end(), qLess<long>());
+  for (int i = 0; i < rids.size(); i++)
   {
-    const shared_ptr<Relation>& r = it->second;
+    const shared_ptr<const Relation> r = map->getRelation(rids[i]);
     writer.writeStartElement("relation");
     writer.writeAttribute("visible", "true");
     writer.writeAttribute("id", QString::number(r->getId()));
@@ -416,8 +430,6 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
     }
 
     writer.writeEndElement();
-
-    ++it;
   }
 }
 

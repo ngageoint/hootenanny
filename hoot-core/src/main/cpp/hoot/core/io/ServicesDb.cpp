@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ServicesDb.h"
 
@@ -471,13 +471,16 @@ QString ServicesDb::_escapeTags(const Tags& tags) const
 
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    // this doesn't appear to be working, but I think it is implementing the spec as described here:
-    // http://www.postgresql.org/docs/9.0/static/hstore.html
-    // The spec described above does seem to work on the psql command line. Curious.
-    QString k = QString(it.key()).replace(f1, "\\\\").replace(f2, "\\\"");
-    QString v = QString(it.value()).replace(f1, "\\\\").replace(f2, "\\\"");
+    if (it.value().isEmpty() == false && it.key().isEmpty() == false)
+    {
+      // this doesn't appear to be working, but I think it is implementing the spec as described here:
+      // http://www.postgresql.org/docs/9.0/static/hstore.html
+      // The spec described above does seem to work on the psql command line. Curious.
+      QString k = QString(it.key()).replace(f1, "\\\\").replace(f2, "\\\"");
+      QString v = QString(it.value()).replace(f1, "\\\\").replace(f2, "\\\"");
 
-    l << QString("\"%1\"=>\"%2\"").arg(k).arg(v);
+      l << QString("\"%1\"=>\"%2\"").arg(k).arg(v);
+    }
   }
   return l.join(",");
 }
