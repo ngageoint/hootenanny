@@ -1338,10 +1338,10 @@ tds.rules = {
      ['FFN','819','office','legislative_activities'], // Legislative Activities
      ['FFN','821','use','polling_station'], // Polling Station
      ['FFN','822','use','civil_activities'], // Civil Activities
-     ['FFN','825','amenity','diplomatic_building'], // Diplomacy
-     ['FFN','826','amenity','diplomatic_mission'], // Diplomatic Mission
-     ['FFN','827','amenity','embassy'], // Embassy
-     ['FFN','828','amenity','consul'], // Consul
+     ['FFN','825','amenity','diplomacy'], // Diplomacy
+     ['FFN','826','diplomatic','mission'], // Diplomatic Mission
+     ['FFN','827','diplomatic','embassy'], // Embassy
+     ['FFN','828','diplomatic','consulate'], // Consul
      ['FFN','829','use','maritime_defense'], // Maritime Defense
      ['FFN','830','use','public_order_safety_and_security_services'], // Public Order, Safety and Security Services
      ['FFN','831','use','public_order'], // Public Order
@@ -1362,9 +1362,9 @@ tds.rules = {
      ['FFN','847','use','emergency_operations'], // Emergency Operations
      ['FFN','848','use','civil_intelligence'], // Civil Intelligence
      ['FFN','850','use','education'], // Education
-     ['FFN','851','use','primary_education'], // Primary Education
-     ['FFN','852','use','secondary_education'], // Secondary Education
-     ['FFN','855','use','higher_education'], // Higher Education
+     ['FFN','851','isced:level','1'], // Primary Education
+     ['FFN','852','isced:level','2,3'], // Secondary Education
+     ['FFN','855','building','university'], // Higher Education
      ['FFN','857','use','vocational_education'], // Vocational Education
      ['FFN','860','use','healthcare'], // Human Health Activities
      ['FFN','861','use','in-patient_care'], // In-patient Care
@@ -3908,17 +3908,17 @@ tds.rules = {
      // ['ZI037_REL','-999999',undefined,undefined], // No Information
      ['ZI037_REL','1','religion','buddhist'], // Buddhism
      ['ZI037_REL','2','religion','muslim'], // Islam
-     ['ZI037_REL','3','religion','roman_catholic'], // Roman Catholic
+     ['ZI037_REL','3','denomination','roman_catholic'], // Roman Catholic
      ['ZI037_REL','4','religion','christian'], // Christian
      ['ZI037_REL','5','religion','jewish'], // Judaism
-     ['ZI037_REL','6','religion','orthodox'], // Orthodox
-     ['ZI037_REL','7','religion','protestant'], // Protestant
+     ['ZI037_REL','6','denomination','orthodox'], // Orthodox
+     ['ZI037_REL','7','denomination','protestant'], // Protestant
      ['ZI037_REL','8','religion','shinto'], // Shinto
      ['ZI037_REL','9','religion','hindu'], // Hinduism
-     ['ZI037_REL','10','religion','shia'], // Shia
-     ['ZI037_REL','11','religion','sunni'], // Sunni
-     ['ZI037_REL','12','religion','nestorian'], // Nestorian
-     ['ZI037_REL','13','religion','chaldean'], // Chaldean
+     ['ZI037_REL','10','denomination','shia'], // Shia
+     ['ZI037_REL','11','denomination','sunni'], // Sunni
+     ['ZI037_REL','12','denomination','nestorian'], // Nestorian
+     ['ZI037_REL','13','denomination','chaldean_catholic'], // Chaldean
      ['ZI037_REL','999','religion','other'], // Other
 
      // ZI037_RFA - Religious Information : Religious Facility Type
@@ -3927,7 +3927,7 @@ tds.rules = {
      ['ZI037_RFA','2','building','chapel'], // Chapel
      ['ZI037_RFA','3','building','church'], // Church
      ['ZI037_RFA','4','building','marabout'], // Marabout
-     ['ZI037_RFA','5','building','minaret'], // Minaret
+     ['ZI037_RFA','5','tower:type','minaret'], // Minaret // Fixed in pre/post processing
      ['ZI037_RFA','6','building','mission'], // Mission
      ['ZI037_RFA','7','building','mosque'], // Mosque
      ['ZI037_RFA','8','building','pagoda'], // Pagoda
@@ -4237,8 +4237,19 @@ tds.rules = {
      [undefined,undefined,'building','industrial'], // Industrial
      [undefined,undefined,'man_made','works'], // Works
      ['FFN','2','building','farm'], // Agriculture
-     ['FFN','850','building','school'], 
-     ['FFN','855','building','university'], 
+
+     ['FFN','827','amenity','embassy'], // Embassy
+
+     ['FFN','850','building','school'],
+     ['FFN','850','isced:level','0'], // Education
+     ['FFN','850','amenity','kindergarten'], // Education
+     // ['FFN','851','isced:level','1'], // Primary Education
+     ['FFN','852','isced:level','2'], // Secondary Education
+     ['FFN','852','isced:level','3'], // Secondary Education
+     // ['FFN','852','isced:level','2,3'], // Secondary Education
+     ['FFN','855','building','university'],
+     ['FFN','857','building','college'], // Vocational Education
+
      ['FFN','572','amenity','cafe'], // Restaurant
      ['FFN','572','building','restaurant'], // Restaurant
 
@@ -4267,6 +4278,7 @@ tds.rules = {
      [undefined,undefined,'amenity','school'], //  converted in pre processing
      [undefined,undefined,'amenity','hospital'], //  converted in pre processing
      [undefined,undefined,'amenity','university'], //  converted in pre processing
+     [undefined,undefined,'amenity','college'], //  converted in pre processing
      [undefined,undefined,'amenity','house_of_worship'], //  converted in pre processing
 
      // From UFD
@@ -4321,6 +4333,17 @@ tds.rules = {
    ], // End one2oneOut
 
     // ##### End of One2One Rules #####
+
+   // ##### Start of txtLength #####
+    // This list is for validateing the lengths of text attributes prior to export
+    txtLength : {
+     'BA000_VDR':80, 'BRN':24, 'CID':20, 'CPS':30, 'EQC':30, 'ETS':30, 'ETZ':24, 'GB052_RIDH':14, 'GB052_RIDL':14,
+     'HZD':30, 'IC2':14, 'IKO':14, 'MDE':20, 'NA8':80, 'RCG':30, 'RTN2':24, 'RTN':24, 'RTN3':24, 'SSE':14, 'UFI':254,
+     'URI':254, 'VDT':30, 'VOI':14, 'WPI':14, 'ZI001_NSD':20, 'ZI001_NSP':30, 'ZI001_SSD':20, 'ZI001_SSY':30, 'ZI001_VSC':30,
+     'ZI001_VSD':20, 'ZI004_RCG':30, 'ZI005_FNA1':200, 'ZI005_FNA':200, 'ZI005_FNA2':200, 'ZI005_NFN1':18, 'ZI005_NFN':18,
+     'ZI005_NFN2':18, 'ZSAX_RS0':2, 'ZSAX_RX3':254, 'ZSAX_RX4':254
+    },
+    // ##### End of txtLength #####
 
     // ##### Start of Thematic Group Rules #####
     thematicGroupList : {

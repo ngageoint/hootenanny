@@ -27,21 +27,30 @@
 package hoot.services.controllers.osm;
 
 import java.sql.Connection;
+import java.util.List;
 
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QUsers;
 import hoot.services.db2.Users;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.osm.User;
+import hoot.services.models.review.ReviewBookmarkSaveRequest;
+import hoot.services.models.review.ReviewBookmarksSaveResponse;
+import hoot.services.models.user.UserSaveResponse;
+import hoot.services.models.user.UsersGetResponse;
+import hoot.services.readers.users.UsersRetriever;
 import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.writers.osm.UserResponseWriter;
+import hoot.services.writers.user.UserSaver;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -178,5 +187,113 @@ public class UserResource
         .ok(new DOMSource(responseDoc), MediaType.APPLICATION_XML)
         .header("Content-type", MediaType.APPLICATION_XML)
         .build();
+  }
+  
+  
+	/**
+	 * <NAME>User Get Save Service </NAME>
+	 * <DESCRIPTION>
+	 * 	This rest end point retrieves user based on user email. If it does not exist then it creates first.
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * <userEmail>
+	 *  User email to save/get
+	 * </userEmail>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	JSON Object containin user detail
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/osm/user/-1?userEmail=test@test.com</URL>
+	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 * <OUTPUT>
+	 * {"user":{"displayName":"test@test.com","email":"test@test.com","id":29}}
+	 * </OUTPUT>
+	 * </EXAMPLE>
+	 *
+   * Service method endpoint for retrieving OSM user information
+   *
+   * @param userId ID of the user to retrieve information for
+   * @return Response with the requested user's information
+   * @throws Exception
+   */
+  @POST
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public UserSaveResponse getSaveUser(@QueryParam("userEmail") final String userEmail) throws Exception
+  {
+  	UserSaveResponse response = new UserSaveResponse();
+  	try(Connection conn = DbUtils.createConnection())
+  	{
+  		UserSaver saver = new UserSaver(conn);
+  		Users user = saver.getOrSaveByEmail(userEmail);
+  		if(user == null)
+  		{
+  			throw new Exception("SQL Insert failed.");
+  		}
+  		
+  		response = new UserSaveResponse(user);
+  	}
+  	catch(Exception ex)
+  	{
+  		ResourceErrorHandler.handleError(
+	        "Error saving user: " + " (" + 
+	          ex.getMessage() + ")", 
+	        Status.BAD_REQUEST,
+	        log);
+  	}
+  	return response;
+  }
+  
+  
+  /**
+	 * <NAME>Users get all service </NAME>
+	 * <DESCRIPTION>
+	 * 	This rest end point retrieves all users based on user email.
+	 * </DESCRIPTION>
+	 * <PARAMETERS>
+	 * </PARAMETERS>
+	 * <OUTPUT>
+	 * 	JSONArray Object containin users detail
+	 * </OUTPUT>
+	 * <EXAMPLE>
+	 * 	<URL>http://localhost:8080/hoot-services/osm/user/-1/all</URL>
+	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
+	 * 	<INPUT>
+	 *	</INPUT>
+	 * <OUTPUT>
+	 * {"users":[{"displayName":"test@test.com","email":"test@test.com","id":29}, ..]}
+	 * </OUTPUT>
+	 * </EXAMPLE>
+	 *
+   * Service method endpoint for retrieving OSM user information
+   *
+   * @param userId ID of the user to retrieve information for
+   * @return Response with the requested user's information
+   * @throws Exception
+   */
+  @GET
+  @Path("/all")
+  @Produces(MediaType.APPLICATION_JSON)
+  public UsersGetResponse  getAllUsers() throws Exception
+  {
+  	UsersGetResponse response = new UsersGetResponse();
+  	try(Connection conn = DbUtils.createConnection())
+  	{
+  		UsersRetriever retreiver = new UsersRetriever(conn);
+  		List<Users> res = retreiver.retrieveAll();
+  		response = new UsersGetResponse(res);
+  	}
+  	catch (Exception ex)
+  	{
+  		ResourceErrorHandler.handleError(
+	        "Error getting all users: " + " (" + 
+	          ex.getMessage() + ")", 
+	        Status.BAD_REQUEST,
+	        log);
+  	}
+  	return response;
   }
 }

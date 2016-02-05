@@ -81,7 +81,7 @@ void FindIntersectionsOp::apply(shared_ptr<OsmMap>& map)
   // split ways up on intersections. This must come before DualWaySplitter. The DualWaySplitter
   // assumes that all intersections are on end nodes.
   IntersectionSplitter::splitIntersections(map);
-  map = UnlikelyIntersectionRemover::removeIntersections(map);
+  UnlikelyIntersectionRemover::removeIntersections(map);
   LOG_INFO("Assuming drives on right.");
 //  map = DualWaySplitter::splitAll(map, DualWaySplitter::Right, 12.5);
 //  map = ImpliedDividedMarker::markDivided(map);

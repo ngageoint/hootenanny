@@ -34,7 +34,7 @@ hoot.require('fcode_common')
 hoot.require('translate')
 
 
-function translateAttributes(attrs, layerName)
+function translateAttributes(attrs, layerName, geometryType)
 {
-    return mgcp.toOsm(attrs, layerName);
+    return mgcp.toOsm(attrs, layerName, geometryType);
 }
