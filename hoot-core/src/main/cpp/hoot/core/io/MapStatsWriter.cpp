@@ -173,23 +173,38 @@ void MapStatsWriter::writeStatsToJson(QList< QList<SingleStat> >& stats, const Q
   {
     pt::ptree pt;
     QStringList allStats = statsToString(stats, "\t").split("\n");
-    for (int i = 0; i < allStats.size()-1; i++)
+    for (int i = 0; i < allStats.size(); i++)
     {
-      pt::ptree children;
       QStringList statrow = allStats.at(i).split("\t");
       if (statrow.size() > 0 && !statrow[0].isEmpty())
       {
+        QStringList tmpValues;
+        //filter out empty values, first one in array is key, so the loop starts with 1
         for (int j = 1; j < statrow.size(); j++)
         {
-          pt::ptree child;
-          QString value = statrow.at(j);
-          if (!value.trimmed().isEmpty())
+          if (!statrow.at(j).trimmed().isEmpty())
           {
-            child.put("", value.trimmed().toStdString());
-            children.push_back(std::make_pair("", child));
+            tmpValues << statrow.at(j).trimmed();
           }
         }
-        pt.add_child(statrow.at(0).toStdString(), children);
+        //if only one value in the array, do not use array in json file
+        if (tmpValues.size() == 1)
+        {
+          pt::ptree child;
+          child.put("", tmpValues.at(0).toStdString());
+          pt.add_child(statrow.at(0).toStdString(), child);
+        }
+        else
+        {
+          pt::ptree children;
+          for (int j = 0; j < tmpValues.size(); j++)
+          {
+            pt::ptree child;
+            child.put("", tmpValues.at(j).toStdString());
+            children.push_back(std::make_pair("", child));
+          }
+          pt.add_child(statrow.at(0).toStdString(), children);
+        }
       }
     }
     pt::write_json(statsOutputFilePath.toStdString(), pt);
