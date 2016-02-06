@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -46,13 +46,15 @@ public class ConflationResourceTest {
 	public void testProcess() throws Exception
 	{
 		String params = "{\"INPUT1_TYPE\":\"DB\",\"INPUT1\":\"DcGisRoads\",\"INPUT2_TYPE\":\"DB\",\"INPUT2\":\"DcTigerRoads\",";
-		params += "\"OUTPUT_NAME\":\"Merged_Roads_e0d\",\"CONFLATION_TYPE\":\"Reference\",\"MATCH_THRESHOLD\":\"0.6\",\"MISS_THRESHOLD\":\"0.6\",\"USER_EMAIL\":\"test@test.com\"}";
+		params += "\"OUTPUT_NAME\":\"Merged_Roads_e0d\",\"CONFLATION_TYPE\":\"Reference\",\"MATCH_THRESHOLD\":\"0.6\",\"MISS_THRESHOLD\":\"0.6\",\"USER_EMAIL\":\"test@test.com\",\"COLLECT_STATS\":\"false\"}";
 
 		String jobArgs = "\"exec\":\"makeconflate\",\"params\":[{\"USER_EMAIL\":\"test@test.com\"},{\"CONFLATION_TYPE\":\"Reference\"},"
 				+ "{\"MATCH_THRESHOLD\":\"0.6\"},{\"INPUT1_TYPE\":\"DB\"},{\"MISS_THRESHOLD\":\"0.6\"},{\"INPUT2_TYPE\":\"DB\"},"
-				+ "{\"INPUT2\":\"DcTigerRoads\"},{\"INPUT1\":\"DcGisRoads\"},{\"OUTPUT_NAME\":\"Merged_Roads_e0d\"},"
+				+ "{\"INPUT2\":\"DcTigerRoads\"},{\"INPUT1\":\"DcGisRoads\"},{\"COLLECT_STATS\":\"false\"},{\"OUTPUT_NAME\":\"Merged_Roads_e0d\"},"
 				+ "{\"IS_BIG\":\"false\"}],\"exectype\":\"make\"},{\"class\":\"hoot.services.controllers.osm.MapResource\","
 				+ "\"method\":\"updateTagsDirect\",\"params\":[{\"isprimitivetype\":\"false\",\"value\":{\"input2\":\"DcTigerRoads\","
+				//+ "\"stats\":\"\\/home\\/vagrant\\/hoot\\/data\\/reports\\/Merged_Roads_e0d-stats.csv\","
+				+ "\"params\":\"{\\\\\\\"USER_EMAIL\\\\\\\":\\\\\\\"test@test.com\\\\\\\",\\\\\\\"MATCH_THRESHOLD\\\\\\\":\\\\\\\"0.6\\\\\\\",\\\\\\\"CONFLATION_TYPE\\\\\\\":\\\\\\\"Reference\\\\\\\",\\\\\\\"MISS_THRESHOLD\\\\\\\":\\\\\\\"0.6\\\\\\\",\\\\\\\"INPUT1_TYPE\\\\\\\":\\\\\\\"DB\\\\\\\",\\\\\\\"INPUT2\\\\\\\":\\\\\\\"DcTigerRoads\\\\\\\",\\\\\\\"INPUT2_TYPE\\\\\\\":\\\\\\\"DB\\\\\\\",\\\\\\\"COLLECT_STATS\\\\\\\":\\\\\\\"false\\\\\\\",\\\\\\\"INPUT1\\\\\\\":\\\\\\\"DcGisRoads\\\\\\\",\\\\\\\"OUTPUT_NAME\\\\\\\":\\\\\\\"Merged_Roads_e0d\\\\\\\"}\","
 				+ "\"input1\":\"DcGisRoads\"},\"paramtype\":\"java.util.Map\"},{\"isprimitivetype\":\"false\",\"value\":\"Merged_Roads_e0d\","
 				+ "\"paramtype\":\"java.lang.String\"}],\"exectype\":\"reflection\"},{\"class\":\"hoot.services.controllers.ingest.RasterToTilesService\","
 				+ "\"method\":\"ingestOSMResourceDirect\",\"params\":[{\"isprimitivetype\":\"false\",\"value\":\"Merged_Roads_e0d\",\"paramtype\":\"java.lang.String\"},"

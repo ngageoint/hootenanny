@@ -168,6 +168,14 @@ function logWarn(e)
 }
 
 /**
+ * Wrapper for logVerbose for backward compatibility.
+ */
+function logVerbose(e)
+{
+    return hoot.logVerbose(e);
+}
+
+/**
  * Wrapper for logError for backward compatibility.
  */
 function logError(e)

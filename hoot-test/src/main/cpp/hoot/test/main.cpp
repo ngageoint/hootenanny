@@ -295,6 +295,7 @@ int main(int argc, char *argv[])
             "--all-names - Only print the names of all the tests.\n"
             "--warn - Show warning messages and above.\n"
             "--info - Show info messages and above.\n"
+            "--verbose - Show verbose messages and above.\n"
             "--debug - Show debug messages and above.\n"
             "--diff - Print diff when a script test fails.\n"
             "--include=[regex] - Include only tests that match the specified regex.\n"
@@ -431,6 +432,10 @@ int main(int argc, char *argv[])
     if (args.contains("--debug"))
     {
       Log::getInstance().setLevel(Log::Debug);
+    }
+    if (args.contains("--verbose"))
+    {
+      Log::getInstance().setLevel(Log::Verbose);
     }
     if (args.contains("--info"))
     {

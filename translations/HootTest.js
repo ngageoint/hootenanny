@@ -37,7 +37,7 @@
 //  90% of this code is taken from the standard NFDD translation script.
 //
 
-function translateAttributes(attrs, layerName)
+function translateAttributes(attrs, layerName, geometryType)
 {
         return attrs; // Do Nothing
 

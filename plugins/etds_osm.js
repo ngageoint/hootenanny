@@ -183,7 +183,7 @@ etds_osm = {
         tags = {}; // The final OSM+ tags
 
         // pre processing
-        tds.applyToOsmPreProcessing(nAttrs, '');
+        tds.applyToOsmPreProcessing(nAttrs, '', geometryType);
         
         // Debug:
         // if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('After PreProc:' + i + ': :' + tags[i] + ':');
@@ -205,7 +205,7 @@ etds_osm = {
         if (nAttrs.OTH) translate.processOTH(nAttrs, tags, tds.lookup);
 
         // post processing
-        tds.applyToOsmPostProcessing(nAttrs, tags, '');
+        tds.applyToOsmPostProcessing(nAttrs, tags, '', geometryType);
 
         // If we have a second FCODE, re run the translation with it
         if (fCode2 !== '')
@@ -213,7 +213,7 @@ etds_osm = {
             nAttrs.F_CODE = fCode2;
 
             // pre processing
-            tds.applyToOsmPreProcessing(nAttrs, '');
+            tds.applyToOsmPreProcessing(nAttrs, '', geometryType);
 
             // Debug:
             // if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('After 2nd PreProc:' + i + ': :' + tags[i] + ':');
@@ -232,7 +232,7 @@ etds_osm = {
             // if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('After 2nd Simple:' + i + ': :' + tags[i] + ':');
 
             // post processing
-            tds.applyToOsmPostProcessing(nAttrs, tags, '');
+            tds.applyToOsmPostProcessing(nAttrs, tags, '', geometryType);
         }
 
         // Debug:

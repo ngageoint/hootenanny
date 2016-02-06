@@ -53,10 +53,10 @@ function getDbSchema()
 
 // IMPORT
 // translateAttributes - takes 'attrs' and returns OSM 'tags'
-// function translateAttributes(attrs, layerName)
-function translateToOsm(attrs, layerName)
+// function translateAttributes(attrs, layerName, geometryType)
+function translateToOsm(attrs, layerName, geometryType)
 {
-    return mgcp.toOsm(attrs, layerName);
+    return mgcp.toOsm(attrs, layerName, geometryType);
 
 } // End of Translate Attributes
 

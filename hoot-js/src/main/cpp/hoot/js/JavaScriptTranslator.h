@@ -155,7 +155,7 @@ protected:
   QVariantList _translateToOgrVariants(Tags& tags,
     ElementType elementType, geos::geom::GeometryTypeId geometryType);
 
-  virtual void _translateToOsm(Tags& t, const char *layerName);
+  virtual void _translateToOsm(Tags& t, const char *layerName, const char* geomType);
 
 };
 

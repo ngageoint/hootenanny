@@ -81,7 +81,7 @@ function translateToOgr(tags, elementType, geometryType)
 // - highway tag to NFDDv4's TYP column
 // This is far from complete, but demonstrates the concepts.
 //
-function translateToOsm(attrs, layerName) 
+function translateToOsm(attrs, layerName, geometryType)
 { 
     tags = {}; 
 

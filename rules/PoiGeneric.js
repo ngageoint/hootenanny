@@ -53,11 +53,12 @@ var distances = [
     {k:'barrier',   v:'border_control',       match:50,       review:100},
     {k:'historic',                            match:100,      review:200},
     {k:'landuse',                             match:500,      review:1000},
+    {k:'landuse',   v:'built_up_area',        match:2000,     review:3000},
     {k:'leisure',                             match:250,      review:500},
     {k:'man_made',                            match:100,      review:200},
     {k:'natural',                             match:500,      review:1000},
     {k:'place',                               match:500,      review:1000},
-    {k:'place',     v:'built_up_area',        match:1000,     review:2000},
+    {k:'place',     v:'built_up_area',        match:2000,     review:3000},
     {k:'place',     v:'locality',             match:2000,     review:3000},
     {k:'place',     v:'populated',            match:2000,     review:3000},
     {k:'place',     v:'region',               match:1000,     review:2000},
@@ -179,9 +180,16 @@ function additiveScore(map, e1, e2) {
     // if there is no type information to compare the name becomes more
     // important
     var oneGeneric = hasTypeTag(e1) == false || hasTypeTag(e2) == false;
+    if (oneGeneric)
+    {
+      hoot.debug("One element in the pair is generic.");
+    }
+
 
     var e1SearchRadius = exports.getSearchRadius(e1);
+    hoot.debug("e1SearchRadius: " + e1SearchRadius);
     var e2SearchRadius = exports.getSearchRadius(e2);
+    hoot.debug("e2SearchRadius: " + e2SearchRadius);
     var searchRadius;
     if (oneGeneric)
     {
@@ -194,7 +202,10 @@ function additiveScore(map, e1, e2) {
 
     var d = distance(e1, e2);
 
-    if (d > searchRadius) {
+    if (d > searchRadius)
+    {
+        hoot.debug("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
+        hoot.debug("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
         hoot.debug(
           "distance: " + d + " greater than search radius: " + searchRadius + "; returning score: " +
           result.score);
@@ -312,8 +323,8 @@ function additiveScore(map, e1, e2) {
     result.score = score;
     result.reasons = reason;
 
-    hoot.debug("e1: " + e1.getId());
-    hoot.debug("e2: " + e2.getId());
+    hoot.debug("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
+    hoot.debug("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
     hoot.debug("reason: " + reason);
     hoot.debug("score: " + score);
 
