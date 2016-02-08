@@ -733,8 +733,6 @@ void OgrWriter::writeElement(ElementInputStream& inputStream, bool debug)
 
 void OgrWriter::writeElement(ElementPtr &element, bool debug)
 {
-//TODO:
-  // TERRY TESTING COULD BE CATASTROPHIC
   Tags sourceTags = element->getTags();
   Tags destTags;
   for (Tags::const_iterator it = element->getTags().begin();
@@ -754,6 +752,7 @@ void OgrWriter::writeElement(ElementPtr &element, bool debug)
   }
 
   PartialOsmMapWriter::writePartial(element);
+  // TERRY TESTING COULD BE CATASTROPHIC
   /*
   if ( element->getElementType().getEnum() == ElementType::Node )
   {
