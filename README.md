@@ -1,7 +1,5 @@
 # Introduction
 
-![Hootenanny](https://github.com/ngageoint/hootenanny/blob/master/docs/user/images/id/hoot_Haiti_roads.png​)
-
 [![Join the chat at https://gitter.im/ngageoint/hootenanny](https://badges.gitter.im/ngageoint/hootenanny.svg)](https://gitter.im/ngageoint/hootenanny?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Hootenanny was developed to provide an open source, standards-based approach to geospatial vector 
