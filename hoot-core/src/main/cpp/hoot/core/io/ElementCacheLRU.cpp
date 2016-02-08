@@ -251,7 +251,6 @@ void ElementCacheLRU::writeElement(ElementInputStream& inputStream)
 
 void ElementCacheLRU::writeElement(ElementPtr &element)
 {
-  //  Check projection
   ConstElementPtr el = element;
   addElement(el);
 }
