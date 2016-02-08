@@ -11,6 +11,8 @@ attributes, to transfer to the output map.
 
 If you have any support questions please contact Hootenanny.Help@DigitalGlobe.com.
 
+[FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
+
 # Installing Hootenanny 
 
 Hootenanny has been tested on both CentOS/RHEL 6.x and Ubuntu 14.04.  Ubuntu receives more 
