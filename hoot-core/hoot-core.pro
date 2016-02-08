@@ -454,7 +454,6 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/SearchRadiusCalculator.cpp \
     src/main/cpp/hoot/core/io/ElementOutputStream.cpp \
     src/main/cpp/hoot/core/io/ElementInputStream.cpp \
-    src/main/cpp/hoot/core/io/VisitorElementInputStream.cpp \
     src/main/cpp/hoot/core/visitors/TranslationVisitor.cpp \
     src/main/cpp/hoot/core/io/ElementVisitorInputStream.cpp \
     src/main/cpp/hoot/core/io/ElementCacheLRU.cpp \
@@ -930,7 +929,6 @@ HEADERS += \
     src/main/cpp/hoot/core/elements/ElementVisitor.h \
     src/main/cpp/hoot/core/io/ElementInputStream.h \
     src/main/cpp/hoot/core/io/ElementOutputStream.h \
-    src/main/cpp/hoot/core/io/VisitorElementInputStream.h \
     src/main/cpp/hoot/core/visitors/TranslationVisitor.h \
     src/main/cpp/hoot/core/io/ElementVisitorInputStream.h \
     src/main/cpp/hoot/core/io/ElementCache.h \

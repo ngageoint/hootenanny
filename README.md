@@ -2,9 +2,16 @@
 
 [![Join the chat at https://gitter.im/ngageoint/hootenanny](https://badges.gitter.im/ngageoint/hootenanny.svg)](https://gitter.im/ngageoint/hootenanny?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Hootenanny was developed to provide an open source, standards-based approach to geospatial vector data conflation. Hootenanny is designed to facilitate automated and semi-automated conflation of critical foundation GEOINT features in the topographic domain, namely roads (polylines), buildings (polygons), and points-of-interest (POI's) (points). Conflation happens at the dataset level, where the user's workflow determines the best reference dataset and source content, geometry and attributes, to transfer to the output map.
+Hootenanny was developed to provide an open source, standards-based approach to geospatial vector 
+data conflation. Hootenanny is designed to facilitate automated and semi-automated conflation of 
+critical foundation GEOINT features in the topographic domain, namely roads (polylines), buildings 
+(polygons), and points-of-interest (POI's) (points). Conflation happens at the dataset level, where
+ the user's workflow determines the best reference dataset and source content, geometry and 
+attributes, to transfer to the output map.
 
 If you have any support questions please contact Hootenanny.Help@DigitalGlobe.com.
+
+[FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
 
 # Installing Hootenanny 
 
@@ -12,19 +19,27 @@ Hootenanny has been tested on both CentOS/RHEL 6.x and Ubuntu 14.04.  Ubuntu rec
 active development, has more streamlined installation instructions, and is the recommended operating
 system to run Hootenanny on. 
 
-To quickly run Hootenanny on Ubuntu, refer to the Vagrant (VM container) set up instructions in
-VAGRANT.md.  For additional notes on configuring a Hootenanny development environment on Ubuntu, 
-see the Hootenanny - Developers Guide document.
+To quickly run Hootenanny on Ubuntu, follow the Ubuntu Vagrant section in the 
+Hootenanny - Installation Instructions document included with each release.  For additional notes 
+on configuring a Hootenanny development environment on Ubuntu, see the Hootenanny - Developer Guide 
+document included with each release.
 
-To run Hootenanny on CentOS/RHEL, follow the Hootenanny - Installation Instructions document.  
-There is currently no Vagrant set up available for CentOS/RHEL, but there may be one in the future.  
-Following the CentOS/RHEL installation instructions is currently more complicated than installing 
-Hootenanny on Ubuntu and requires a higher level of Linux expertise.  Setting up a Hootenanny 
-development environment on CentOS/RHEL is neither advised nor supported.
+To run Hootenanny on CentOS/RHEL, follow the CentOS/RHEL section in the 
+Hootenanny - Installation Instructions document included with each release.  There is currently no 
+Vagrant setup available for CentOS/RHEL.  Following the CentOS/RHEL installation instructions is 
+currently more complicated than installing Hootenanny on Ubuntu and requires a higher level of 
+UNIX expertise.  Setting up a Hootenanny development environment on CentOS/RHEL is neither advised 
+nor supported.
 
 Running Hootenanny with Hadoop is optional.  Hootenanny has been tested on Hadoop 0.20.2.  Neither 
 the Ubuntu nor CentOS/RHEL installation documents currently include instructions for installing 
-Hadoop, but the Developer's Guide has instructions for setting up a pseudo-distributed test cluster.
+Hadoop, but the Developer Guide has instructions for setting up a pseudo-distributed test cluster.
+
+# Using Hootenanny
+
+Refer to the Hootenanny - User Guide and Hootenanny - User Interface Guide included with each
+release for details on using the Hootenanny software.  For more in depth information on the 
+technology behind Hootenanny, see the Hootenanny - Algorithms document.
 
 # Redistribution
 
