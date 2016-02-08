@@ -34,6 +34,7 @@
 #include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 
 namespace hoot
 {
@@ -86,9 +87,18 @@ public:
       shared_ptr<ElementInputStream> streamReader = dynamic_pointer_cast<ElementInputStream>(reader);
       shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
 
+      shared_ptr<OGRSpatialReference> projection = streamReader->getProjection();
+      ProjectToGeographicVisitor visitor;
+      bool notGeographic = !projection->IsGeographic();
+
+      if (notGeographic)
+        visitor.initialize(projection);
+
       while (streamReader->hasMoreElements())
       {
         ElementPtr element = streamReader->readNextElement();
+        if (notGeographic)
+          visitor.visit(element);
         streamWriter->writeElement(element);
       }
     }

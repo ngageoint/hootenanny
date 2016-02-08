@@ -71,39 +71,32 @@ public:
   static void emptyErrorHandler(CPLErr, int, const char *) { }
 };
 
-class ReprojectCoordinateFilter : public CoordinateFilter
+ReprojectCoordinateFilter::ReprojectCoordinateFilter(OGRCoordinateTransformation* t)
 {
-public:
+  _transform = t;
+}
 
-  ReprojectCoordinateFilter(OGRCoordinateTransformation* t)
+void ReprojectCoordinateFilter::filter_rw(Coordinate* c) const
+{
+  project(c);
+}
+
+void ReprojectCoordinateFilter::project(Coordinate* c) const
+{
+  double inx = c->x;
+  double iny = c->y;
+  if (_transform->Transform(1, &c->x, &c->y) == FALSE)
   {
-    _transform = t;
+    QString err = QString("Error projecting point. Is the point outside of the projection's "
+                          "bounds?");
+    LOG_WARN("Source Point, x:" << inx << " y: " << iny);
+    LOG_WARN("Source SRS: " << MapProjector::toWkt(_transform->GetSourceCS()));
+    LOG_WARN("Target Point, x:" << c->x << " y: " << c->y);
+    LOG_WARN("Target SRS: " << MapProjector::toWkt(_transform->GetTargetCS()));
+    throw IllegalArgumentException(err);
   }
+}
 
-  virtual void filter_rw(Coordinate* c) const
-  {
-    project(c);
-  }
-
-  void project(Coordinate* c) const
-  {
-    double inx = c->x;
-    double iny = c->y;
-    if (_transform->Transform(1, &c->x, &c->y) == FALSE)
-    {
-      QString err = QString("Error projecting point. Is the point outside of the projection's "
-                            "bounds?");
-      LOG_WARN("Source Point, x:" << inx << " y: " << iny);
-      LOG_WARN("Source SRS: " << MapProjector::toWkt(_transform->GetSourceCS()));
-      LOG_WARN("Target Point, x:" << c->x << " y: " << c->y);
-      LOG_WARN("Target SRS: " << MapProjector::toWkt(_transform->GetTargetCS()));
-      throw IllegalArgumentException(err);
-    }
-  }
-
-private:
-  OGRCoordinateTransformation* _transform;
-};
 
 bool MapProjector::_angleLessThan(const MapProjector::PlanarTestResult& p1,
   const MapProjector::PlanarTestResult& p2)

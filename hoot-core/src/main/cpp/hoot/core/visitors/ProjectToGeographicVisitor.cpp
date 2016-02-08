@@ -40,14 +40,41 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, ProjectToGeographicVisitor)
 
 ProjectToGeographicVisitor::ProjectToGeographicVisitor()
+  : _transform(0)
 {
+}
+
+ProjectToGeographicVisitor::~ProjectToGeographicVisitor()
+{
+  if (_transform)
+    OGRCoordinateTransformation::DestroyCT(_transform);
+}
+
+void ProjectToGeographicVisitor::initialize(shared_ptr<OGRSpatialReference>& projection)
+{
+  _transform = OGRCreateCoordinateTransformation(projection.get(), MapProjector::createWgs84Projection().get());
+  _rcf = shared_ptr<ReprojectCoordinateFilter>(new ReprojectCoordinateFilter(_transform));
 }
 
 void ProjectToGeographicVisitor::visit(const shared_ptr<Element>& e)
 {
-  const shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e);
-  MapProjector::getInstance().project(g, _map->getProjection(), MapProjector::getInstance().createWgs84Projection());
+  if (e->getElementType().getEnum() == ElementType::Node)
+  {
+    boost::shared_ptr<Node> node = dynamic_pointer_cast<Node>(e);
+    Coordinate coord = node->toCoordinate();
+    try
+    {
+      _rcf->project(&coord);
+    }
+    catch(IllegalArgumentException& e)
+    {
+      LOG_WARN("Failure projecting node: " << node->toString());
+      throw e;
+    }
 
+    node->setX(coord.x);
+    node->setY(coord.y);
+  }
 }
 
 }

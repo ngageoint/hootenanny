@@ -27,10 +27,16 @@
 #ifndef PROJECTTOGEOGRAPHICVISITOR_H
 #define PROJECTTOGEOGRAPHICVISITOR_H
 
+// GDAL
+#include <ogr_geometry.h>
+#include <ogr_spatialref.h>
+
 #include "ElementOsmMapVisitor.h"
 
 namespace hoot
 {
+
+class ReprojectCoordinateFilter;
 
 class ProjectToGeographicVisitor : public ElementOsmMapVisitor
 {
@@ -38,9 +44,16 @@ public:
   static string className() { return "hoot::ProjectToGeographicVisitor"; }
 
   ProjectToGeographicVisitor();
+  ~ProjectToGeographicVisitor();
+
+  void initialize(shared_ptr<OGRSpatialReference>& projection);
 
   virtual void visit(const shared_ptr<Element>& e);
 
+private:
+
+  OGRCoordinateTransformation* _transform;
+  shared_ptr<ReprojectCoordinateFilter> _rcf;
 };
 
 }
