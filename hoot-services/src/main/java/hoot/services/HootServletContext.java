@@ -46,7 +46,6 @@ public class HootServletContext implements ServletContextListener {
 		_P2PRes = new P2PResource();
 		_P2PRes.startP2PService();
 		
-		
 		// Doing this to make sure we create ingest folder
 		_BRes = new BasemapResource();
 		_BRes.createTileServerPath();

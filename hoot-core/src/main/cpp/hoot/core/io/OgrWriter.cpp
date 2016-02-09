@@ -733,47 +733,30 @@ void OgrWriter::writeElement(ElementInputStream& inputStream, bool debug)
 
 void OgrWriter::writeElement(ElementPtr &element, bool debug)
 {
-//TODO:
-  // TERRY TESTING COULD BE CATASTROPHIC
-  Tags sourceTags = element->getTags();
-  Tags destTags;
-  for (Tags::const_iterator it = element->getTags().begin();
-       it != element->getTags().end(); ++it)
+  //Unfortunately, this check also has to happen in addition to checking hasMoreElements.  See
+  //explanation in ServicesDbReader::readNextElement.
+  if (element.get())
   {
-    if (sourceTags[it.key()] != "")
+    Tags sourceTags = element->getTags();
+    Tags destTags;
+    for (Tags::const_iterator it = element->getTags().begin();
+         it != element->getTags().end(); ++it)
     {
-      destTags.appendValue(it.key(), it.value());
+      if (sourceTags[it.key()] != "")
+      {
+        destTags.appendValue(it.key(), it.value());
+      }
     }
-  }
-  // Now that all the empties are gone, update our element
-  element->setTags(destTags);
+    // Now that all the empties are gone, update our element
+    element->setTags(destTags);
 
-  if ( debug == true )
-  {
-    LOG_DEBUG(element->toString());
-  }
-
-  PartialOsmMapWriter::writePartial(element);
-  /*
-  if ( element->getElementType().getEnum() == ElementType::Node )
-  {
-    //LOG_DEBUG("\n" << element->toString());
-
-    const long nodeID = element->getId();
-    if ( (nodeID >= -265198) && (nodeID <= -265167) )
+    if ( debug == true )
     {
-      LOG_DEBUG("\n" << element->toString());
-      PartialOsmMapWriter::writePartial(element);
+      LOG_DEBUG(element->toString());
     }
-  }
-  else if ((element->getElementType().getEnum() == ElementType::Way) &&
-           (element->getId() == -23189) )
-  {
-    LOG_DEBUG("Writing Little Mill Creek -23189");
-    LOG_DEBUG("\n" << element->toString());
+
     PartialOsmMapWriter::writePartial(element);
   }
-  */
 }
 
 void OgrWriter::setCacheCapacity(unsigned long maxElementsPerType)

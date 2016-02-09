@@ -64,6 +64,9 @@ endif
 # Conflate
 ###
 step1:
+ifeq "$(COLLECT_STATS)" "true"
+	mkdir -p $(HOOT_HOME)/data/reports
+endif
 ifeq "$(GENERATE_REPORT)" "true"
 	mkdir -p $(HOOT_HOME)/data/reports/$(jobid)
 	cp -a $(HOOT_HOME)/report/. $(HOOT_HOME)/data/reports/$(jobid)
