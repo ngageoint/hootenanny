@@ -66,8 +66,8 @@ private:
    */
   bool _directConnect(const ConstOsmMapPtr &map, shared_ptr<Way> w) const;
 
-  void _markNeedsReview(const OsmMapPtr& map, ElementPtr e1, ElementPtr e2, QString reviewType,
-    QString note) const;
+  void _markNeedsReview(const OsmMapPtr& map, ElementPtr e1, ElementPtr e2, QString note,
+                        QString reviewType) const;
 
   void _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
                    vector< pair<ElementId, ElementId> >& replaced) const;
