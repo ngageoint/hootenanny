@@ -95,7 +95,7 @@ QString MatchThreshold::getTypeDetail(const MatchClassification& mc) const
   }
   else
   {
-    return QString("The feature pair with match score: %1, miss score: %2, and review score: %3 met neither the threshold for a match (%4), miss(%5), nor review (%6) (pair set to be reviewed by default).")
+    return QString("The feature pair with match score: %1, miss score: %2, and review score: %3 met neither the threshold for a match (%4), miss (%5), nor review (%6) (pair set to be reviewed by default).")
              .arg(mc.getMatchP())
              .arg(mc.getMissP())
              .arg(mc.getReviewP())
