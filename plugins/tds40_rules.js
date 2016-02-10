@@ -2721,8 +2721,8 @@ tds.rules = {
 
      // SEP - Divided
      // ['SEP','-999999',undefined,undefined], // No Information
-     ['SEP','1000','divider','no'],
-     ['SEP','1001','divider','yes'],
+     ['SEP','1000','is_divided','no'],
+     ['SEP','1001','is_divided','yes'],
 
      // SGCC - Surface Slope (interval closure)
      ['SGCC','2','incline:interval:closure','open_interval'], // Open Interval
