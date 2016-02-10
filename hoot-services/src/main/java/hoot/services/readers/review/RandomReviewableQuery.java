@@ -108,7 +108,12 @@ public class RandomReviewableQuery  extends ReviewableQueryBase implements IRevi
 			}
 			
 			ret.setRelationId(relId);
-			ret.setSortOrder(Long.parseLong(seqId));
+			long nSeq = -1;
+			if(seqId != null)
+			{
+				nSeq = Long.parseLong(seqId);
+			}
+			ret.setSortOrder(nSeq);
 			ret.setResultCount(nResCnt);
 		}
 
