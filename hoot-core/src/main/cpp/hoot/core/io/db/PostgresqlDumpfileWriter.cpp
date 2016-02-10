@@ -206,7 +206,7 @@ void PostgresqlDumpfileWriter::finalizePartial()
     // Write close marker for table
     if ( (*it != "byte_order_mark") && (*it != "sequence_updates") )
     {
-      *(_outputSections[*it].second) << QString("\\.\n\n\n").toUtf8();
+      *(_outputSections[*it].second) << QString("\\.\n\n\n");
     }
 
     // Flush any residual content from text stream/file
@@ -495,7 +495,7 @@ void PostgresqlDumpfileWriter::_writeNodeToTables(
     datestring,
     tileNumberString );
 
-  *(_outputSections["current_nodes"].second) << outputLine.toUtf8();
+  *(_outputSections["current_nodes"].second) << outputLine;
 
   outputLine = QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n").arg(
     QString::number(nodeDbId),
@@ -505,7 +505,7 @@ void PostgresqlDumpfileWriter::_writeNodeToTables(
     datestring,
     tileNumberString );
 
-  *(_outputSections["nodes"].second) << outputLine.toUtf8();
+  *(_outputSections["nodes"].second) << outputLine;
 }
 
 void PostgresqlDumpfileWriter::_writeTagsToTables(
@@ -523,8 +523,8 @@ void PostgresqlDumpfileWriter::_writeTagsToTables(
     const QString key = _escapeCopyToData( it.key() );
     const QString value = _escapeCopyToData( it.value() );
 
-    *currentTable << currentTableFormatString.arg(nodeDbIdString, key, value ).toUtf8();
-    *historicalTable << historicalTableFormatString.arg(nodeDbIdString, key, value ).toUtf8();
+    *currentTable << currentTableFormatString.arg(nodeDbIdString, key, value );
+    *historicalTable << historicalTableFormatString.arg(nodeDbIdString, key, value );
   }
 }
 
@@ -549,14 +549,14 @@ void PostgresqlDumpfileWriter::_writeWayToTables(const ElementIdDatatype wayDbId
       .arg(changesetId)
       .arg(datestring);
 
-  *(_outputSections["current_ways"].second) << outputLine.toUtf8();
+  *(_outputSections["current_ways"].second) << outputLine;
 
   outputLine = QString("%1\t%2\t%3\t1\tt\t\\N\n")
       .arg(wayDbId)
       .arg(changesetId)
       .arg(datestring);
 
-  *(_outputSections["ways"].second) << outputLine.toUtf8();
+  *(_outputSections["ways"].second) << outputLine;
 }
 
 void PostgresqlDumpfileWriter::_writeWaynodesToTables( const ElementIdDatatype dbWayId,
@@ -577,8 +577,8 @@ void PostgresqlDumpfileWriter::_writeWaynodesToTables( const ElementIdDatatype d
     {
       const QString dbNodeIdString = QString::number( _idMappings.nodeIdMap->at(*it) );
       const QString nodeIndexString( QString::number(nodeIndex) );
-      *currentWayNodesStream << currentWaynodesFormat.arg(dbWayIdString, dbNodeIdString, nodeIndexString).toUtf8();
-      *wayNodesStream << waynodesFormat.arg(dbWayIdString, dbNodeIdString, nodeIndexString).toUtf8();
+      *currentWayNodesStream << currentWaynodesFormat.arg(dbWayIdString, dbNodeIdString, nodeIndexString);
+      *wayNodesStream << waynodesFormat.arg(dbWayIdString, dbNodeIdString, nodeIndexString);
     }
     else
     {
@@ -611,14 +611,14 @@ void PostgresqlDumpfileWriter::_writeRelationToTables(const ElementIdDatatype re
       .arg(changesetId)
       .arg(datestring);
 
-  *(_outputSections["current_relations"].second) << outputLine.toUtf8();
+  *(_outputSections["current_relations"].second) << outputLine;
 
   outputLine = QString("%1\t%2\t%3\t1\tt\t\\N\n")
       .arg(relationDbId)
       .arg(changesetId)
       .arg(datestring);
 
-  *(_outputSections["relations"].second) << outputLine.toUtf8();
+  *(_outputSections["relations"].second) << outputLine;
 }
 
 void PostgresqlDumpfileWriter::_writeRelationMembersToTables( const ConstRelationPtr& relation )
@@ -707,9 +707,9 @@ void PostgresqlDumpfileWriter::_writeRelationMember( const ElementIdDatatype sou
   const QString relationMembersFormat("%1\t%2\t%3\t%4\t1\t%5\n");
 
   *currentRelationMembersStream << currentRelationMemberFormat.arg(
-    dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString).toUtf8();
+    dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString);
   *relationMembersStream        << relationMembersFormat.arg(
-    dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString).toUtf8();
+    dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString);
 
   _writeStats.relationMembersWritten++;
 }
@@ -743,7 +743,7 @@ void PostgresqlDumpfileWriter::_createTable( const QString& tableName, const QSt
     _outputSections[tableName].second->setGenerateByteOrderMark(true);
   }
 
-  *(_outputSections[tableName].second) << tableHeader.toUtf8();
+  *(_outputSections[tableName].second) << tableHeader;
 }
 
 void PostgresqlDumpfileWriter::_incrementChangesInChangeset()
@@ -831,7 +831,7 @@ void PostgresqlDumpfileWriter::_writeChangesetToTable()
     QString::number(_configData.changesetUserId),
     datestring,
     datestring,
-    QString::number(_changesetData.changesInChangeset) ).toUtf8();
+    QString::number(_changesetData.changesInChangeset) );
 }
 
 void PostgresqlDumpfileWriter::_writeSequenceUpdates()
