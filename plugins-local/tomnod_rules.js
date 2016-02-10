@@ -49,9 +49,9 @@ tomnod.rules = {
         'avalanche':{'hazard_type':'avalanche'}, // avalanche
         'Belgium':{'poi:type':'belgium'}, // Belgium
         // 'Big Truck':{'poi:type':'big_truck'}, // Big Truck
-        'Blocked Road/Bridge':{'highway':'road', 'condition':'damaged'}, // Damaged, Destroyed, or Impassible Roads/Bridges
+        'Blocked Road/Bridge':{'highway':'road','condition':'damaged'}, // Damaged, Destroyed, or Impassible Roads/Bridges
         'block':{'poi:type':'block'}, // block of metal
-        'Blue Tarp Roof':{'building':'yes', 'roof:material':'blue_tarp'}, // Blue Tarp Roof
+        'Blue Tarp Roof':{'building':'yes','roof:material':'blue_tarp'}, // Blue Tarp Roof
         'Bosnia And Herzegovina':{'poi:type':'bosnia_and_herzegovina'}, // Bosnia And Herzegovina
         'Brazil':{'poi:type':'brazil'}, // Brazil
         'Brick Kiln':{'man_made':'kiln'}, // Brick Kiln
@@ -60,11 +60,11 @@ tomnod.rules = {
         'Building':{'building':'yes'}, // Tag all man-made structures
         'Burial Site/Cemetery':{'poi:type':'burial_site_cemetery'}, // Burial Site/Cemetery
         'Burned Area':{'damage':'fire'}, // Burned Area
-        'Burned Building':{'building':'yes', 'condition':'damaged', 'damage':'fire'}, // Burned Building
-        'Burned Dwelling':{'building':'yes', 'condition':'damaged', 'use':'residential', 'damage':'fire'}, // Burned Dwelling
+        'Burned Building':{'building':'yes','condition':'damaged','damage':'fire'}, // Burned Building
+        'Burned Dwelling':{'building':'yes','condition':'damaged','use':'residential','damage':'fire'}, // Burned Dwelling
         'Burned Trees':{'poi:type':'burned_trees'}, // Smaller burn scars, Sometimes Scars that look linear.  
         'Burning Fire':{'poi:type':'burning_fire'}, // Burning Fire
-        'Burn Scar':{'natural':'wood', 'damage':'fire'}, // Tag the center of all burn scars
+        'Burn Scar':{'natural':'wood','damage':'fire'}, // Tag the center of all burn scars
         'Cameroon':{'poi:type':'cameroon'}, // Cameroon
         'Camp':{'poi:type':'camp'}, // Look for shadows of tents
         'campsite':{'tourism':'camp_site'}, // campsite
@@ -72,9 +72,9 @@ tomnod.rules = {
         'Chile':{'poi:type':'chile'}, // Chile
         'Clearing with Man-made Objects':{'poi:type':'clearing_with_man-made_objects'}, // Any small or large clearing containing man-made tools, tents, fire pits, storage containers, or infrastructure
         'Colombia':{'poi:type':'colombia'}, // Colombia
-        'Commercial Building':{'building':'yes', 'use':'commercial'}, // Commercial Building
-        'Commercial/Industrial Building':{'building':'yes', 'use':'commercial_industrial'}, // Commercial/Industrial Building
-        'Communication Tower':{'man_made':'tower', 'tower:type':'communication'}, // Communication Tower
+        'Commercial Building':{'building':'yes','use':'commercial'}, // Commercial Building
+        'Commercial/Industrial Building':{'building':'yes','use':'commercial_industrial'}, // Commercial/Industrial Building
+        'Communication Tower':{'man_made':'tower','tower:type':'communication'}, // Communication Tower
         'Communication Tower/Satellite Dish':{'poi:type':'communication_tower_satellite_dish'}, // Communication Towers or Satellite Dishes
         'Construction':{'construction':'yes'}, // Construction
         'Contains Driveway':{'poi:type':'contains_driveway'}, // Contains Driveway
@@ -82,19 +82,19 @@ tomnod.rules = {
         'Crate':{'poi:type':'crate'}, // Crates next to shipping containers.  They look much smaller than shipping containers, and are usually in groups.
         'Croatia':{'poi:type':'croatia'}, // Croatia
         "Cu00f4te d''''Ivoire":{'poi:type':'cote_divoire'}, // Cu00f4te d''''Ivoire ### Need to FIx
-        'Damaged Building':{'building':'yes', 'condition':'damaged'}, // Damaged Building
-        'damaged building / roof tarp':{'building':'yes', 'condition':'damaged', 'roof:material':'tarp'}, // damaged building / roof tarp
-        'Damaged Commercial':{'building':'yes', 'condition':'damaged', 'use':'commercial'}, // Any Commercial or Industrial building that shows damage.
+        'Damaged Building':{'building':'yes','condition':'damaged'}, // Damaged Building
+        'damaged building / roof tarp':{'building':'yes','condition':'damaged','roof:material':'tarp'}, // damaged building / roof tarp
+        'Damaged Commercial':{'building':'yes','condition':'damaged','use':'commercial'}, // Any Commercial or Industrial building that shows damage.
         'Damaged Feature':{'damage':'yes'}, // Any building, road or other feature marked as damaged
         'Damaged Feature':{'damage':'yes'}, // Tag any building or road with a damage icon.  
-        'Damaged Large Building':{'building':'yes', 'condition':'damaged'}, // Damaged Large Building/Landmark
-        'Damaged Residence':{'building':'yes', 'condition':'damaged', 'use':'residential'}, // Damaged Residence
-        'Damaged Road/Bridge':{'highway':'road', 'condition':'damaged'}, // Impassible Roads/Bridges
+        'Damaged Large Building':{'building':'yes','condition':'damaged'}, // Damaged Large Building/Landmark
+        'Damaged Residence':{'building':'yes','condition':'damaged','use':'residential'}, // Damaged Residence
+        'Damaged Road/Bridge':{'highway':'road','condition':'damaged'}, // Impassible Roads/Bridges
         // 'Dark Boat':{'poi:type':'dark_boat'}, // Dark Boat
         'debris':{'poi:type':'debris'}, // debris
         // 'Denver Bronco':{'poi:type':'denver_bronco'}, // Denver Bronco
-        'Destroyed Building':{'building':'yes', 'condition':'destroyed'}, // Destroyed Building
-        'Destroyed/Damaged Building':{'building':'yes', 'condition':'damaged'}, // Destroyed/Damaged Building
+        'Destroyed Building':{'building':'yes','condition':'destroyed'}, // Destroyed Building
+        'Destroyed/Damaged Building':{'building':'yes','condition':'damaged'}, // Destroyed/Damaged Building
         'Different Roof':{'poi:type':'different_roof'}, // A building with a different roof than in the before image
         'Dirt Road':{'highway':'track'}, // Dirt Road
         'Displaced Persons Camp':{'idp:camp_type':'unspecified'}, // Displaced Persons Camp
@@ -102,7 +102,7 @@ tomnod.rules = {
         'Dock/Pier/Shipyard':{'poi:type':'dock_pier_shipyard'}, // Dock/Pier/Shipyard
         'Double Copter':{'poi:type':'double_copter'}, // Double Copter
         'downed trees':{'poi:type':'downed_trees'}, // downed trees
-        'Dwelling':{'building':'yes', 'use':'residential'}, // Dwelling
+        'Dwelling':{'building':'yes','use':'residential'}, // Dwelling
         'Ecuador':{'poi:type':'ecuador'}, // Ecuador
         // 'Elephant':{'poi:type':'elephant'}, // Elephant
         'England':{'poi:type':'england'}, // England
@@ -110,16 +110,16 @@ tomnod.rules = {
         'Factory/Power Plant':{'poi:type':'factory_power_plant'}, // Factory/Power Plant
         'Fighter Jet':{'poi:type':'fighter_jet'}, // Fighter Jet
         'Fire':{'poi:type':'fire'}, // Fire with Smoke Plume
-        'Fishing Weir':{'waterway':'weir', 'fishing':'yes'}, // Fishing Weir
+        'Fishing Weir':{'waterway':'weir','fishing':'yes'}, // Fishing Weir
         'Flare':{'poi:type':'flare'}, // Flare
         'Flooded Area':{'flooding':'yes'}, // Flooded Area
-        'Flooded Building':{'building':'yes', 'damage':'flooded'}, // Flooded Building
-        'Flooded Commercial':{'building':'yes', 'use':'commercial', 'damage':'flooded'}, // Flooded Commercial
-        'Flooded Dwelling':{'building':'yes', 'use':'residential', 'damage':'flooded'}, // Dwellings inundated with flood water
-        'Flooded Industrial / Commercial':{'building':'yes', 'use':'industrial_commercial', 'damage':'flooded'}, // Flooded Industrial/Commercial
-        'Flooded Industrial':{'building':'yes', 'use':'industrial', 'damage':'flooded'}, // Flooded Industrial
-        'Flooded Residence':{'building':'yes', 'use':'residential', 'damage':'flooded'}, // Flooded Residence
-        'Flooded Road':{'highway':'road', 'condition':'flooded'}, // Flooded Road
+        'Flooded Building':{'building':'yes','damage':'flooded'}, // Flooded Building
+        'Flooded Commercial':{'building':'yes','use':'commercial','damage':'flooded'}, // Flooded Commercial
+        'Flooded Dwelling':{'building':'yes','use':'residential','damage':'flooded'}, // Dwellings inundated with flood water
+        'Flooded Industrial / Commercial':{'building':'yes','use':'industrial_commercial','damage':'flooded'}, // Flooded Industrial/Commercial
+        'Flooded Industrial':{'building':'yes','use':'industrial','damage':'flooded'}, // Flooded Industrial
+        'Flooded Residence':{'building':'yes','use':'residential','damage':'flooded'}, // Flooded Residence
+        'Flooded Road':{'highway':'road','condition':'flooded'}, // Flooded Road
         'Flooded Vehicle':{'poi:type':'flooded_vehicle'}, // Flooded Vehicle
         'flooding':{'flooding':'yes'}, // flooding
         'France':{'poi:type':'france'}, // France
@@ -136,11 +136,11 @@ tomnod.rules = {
         'Honduras':{'poi:type':'honduras'}, // Honduras
         'House':{'building':'house'}, // House
         'human activity':{'poi:type':'human_activity'}, // human activity
-        'Hut without Roof':{'building':'hut', 'roof':'no'}, // Hut without Roof
+        'Hut without Roof':{'building':'hut','roof':'no'}, // Hut without Roof
         'Hut With Roof':{'building':'hut'}, // Hut with Roof
         'Iconic Structure':{'landmark':'yes'}, // Landmark or other important Structure
         // 'Image Artifact':{'poi:type':'image_artifact'}, // Any imperfections on the image
-        'Impassible Road/Bridge':{'highway':'road', 'condition':'damaged'}, // Roads/Bridges that are impassible due to damage/destruction/blockage
+        'Impassible Road/Bridge':{'highway':'road','condition':'damaged'}, // Roads/Bridges that are impassible due to damage/destruction/blockage
         // 'Interesting Formations':{'poi:type':'interesting_formations'}, // things in interesting formations with Radial Symmetry 
         'Iran':{'poi:type':'iran'}, // Iran
         'Italy':{'poi:type':'italy'}, // Italy
@@ -157,7 +157,7 @@ tomnod.rules = {
         // 'Lines of People':{'poi:type':'lines_of_people'}, // Lines of People
         'looting pit':{'poi:type':'looting_pit'}, // Evidence of a looted archaeological site. A pit in the ground, perhaps with disturbed soil or vehicle tracks nearby.
         'Major Destruction':{'destruction':'yes'}, // Major Destruction
-        'Man-Made Body of Water':{'wayer':'reservoir', 'natural':'water'}, // Man-Made Body of Water
+        'Man-Made Body of Water':{'wayer':'reservoir','natural':'water'}, // Man-Made Body of Water
         'Man-Made Object in trees (NOT URBAN)':{'poi:type':'man-made_object_in_trees_(not_urban)'}, // any manmade objects in the trees.  Do not tag cities or towns.
         'Market':{'amenity':'marketplace'}, // Market
         'Mexico':{'poi:type':'mexico'}, // Mexico
@@ -167,7 +167,7 @@ tomnod.rules = {
         'Missile':{'missile':'other'}, // Oblong, thin, truck-length objects 
         'Missile Storage':{'poi:type':'missile_storage'}, // A group of nodal launch pad looking sites
         'Missing Building':{'poi:type':'missing_building'}, // Missing Building
-        'Muscles':{'historic':'ruin', 'mongolian_horde':'yes'}, // To crush your enemies, to see them driven before you, and to hear the lamentations of their women.
+        'Muscles':{'historic':'ruin','mongolian_horde':'yes'}, // To crush your enemies, to see them driven before you, and to hear the lamentations of their women.
         'Netherlands':{'poi:type':'netherlands'}, // Netherlands
         'New Building':{'poi:type':'new_building'}, // Any building that looks new or was not visible in previous images. Focus on the outskirts of villages, as well as more remote, less populated, wooded or mountainous areas.
         'Nigeria':{'poi:type':'nigeria'}, // Nigeria
@@ -177,7 +177,7 @@ tomnod.rules = {
         'Other':{'poi:type':'other'}, // other object of interest
         'Parking Lot/Garage':{'amenity':'parking'}, // Parking Lot/Garage
         'Park / Stadium':{'leisure':'park'}, // Outdoor space for recreation, sport or leisure
-        // 'Partial Australian Tree Fern':{'natural':'fern', 'fern:type':'australian_tree_fern'}, // A Partial Australian Tree Fern is partially hidden by other vegetation or is not fully grown.
+        // 'Partial Australian Tree Fern':{'natural':'fern','fern:type':'australian_tree_fern'}, // A Partial Australian Tree Fern is partially hidden by other vegetation or is not fully grown.
         // 'person':{'poi:type':'person'}, // person
         'Points of Interest':{'poi:type':'points_of_interest'}, // Points of Interest
         // '_':{'poi:type':'_'}, // This. ## ???
@@ -186,9 +186,9 @@ tomnod.rules = {
         'Radars':{'poi:type':'radars'}, // Radars
         // 'Raft':{'poi:type':'raft'}, // Life Raft
         // 'Religious Site':{'amenity':'place_of_worship'}, // Religious Site
-        'Religious Site':{'amenity':'place_of_worship', 'building':'mosque'}, // Religious Site (Mosque)
+        'Religious Site':{'amenity':'place_of_worship','building':'mosque'}, // Religious Site (Mosque)
         'Remote Industrial Site':{'poi:type':'remote_industrial_site'}, // Industrial Site
-        'Residential Dwelling':{'building':'yes', 'use':'residential'}, // houses/apartments
+        'Residential Dwelling':{'building':'yes','use':'residential'}, // houses/apartments
         'Road Block/Barricade':{'poi:type':'road_block_barricade'}, // Road Block/Barricade
         'Road':{'highway':'road'}, // Road/Trail
         'Rubble':{'poi:type':'rubble'}, // Rubble
@@ -199,7 +199,7 @@ tomnod.rules = {
         'Shipping Container':{'poi:type':'shipping_container'}, // Shipping Container
         'Shopping Center/Market':{'poi:type':'shopping_center_market'}, // Shopping Center/Market
         // 'Small Aircraft':{'poi:type':'small_aircraft'}, // Small Plane, Aircraft, or UAV
-        'Small Dwelling':{'building':'yes', 'use':'residential'}, // Small Dwelling
+        'Small Dwelling':{'building':'yes','use':'residential'}, // Small Dwelling
         // 'Smoke Plume':{'poi:type':'smoke_plume'}, // Smoke Plume
         // 'Something Fine!':{'poi:type':'something_fine!'}, // Signs of Super San Diego Sights
         // 'Something Interesting/Artistic':{'poi:type':'something_interesting_artistic'}, // Something Interesting/Artistic
@@ -222,7 +222,7 @@ tomnod.rules = {
         'Train/Bus Station':{'poi:type':'train_bus_station'}, // A bus stop, train station or other public transit facility
         'truck':{'poi:type':'truck'}, // truck
         // 'UAV':{'poi:type':'uav'}, // Very small aircraft
-        'Unoccupied Dwelling':{'building':'yes', 'use':'residential', 'occupied':'no'}, // Unoccupied Dwelling
+        'Unoccupied Dwelling':{'building':'yes','use':'residential','occupied':'no'}, // Unoccupied Dwelling
         'Uruguay':{'poi:type':'uruguay'}, // Uruguay
         'USA':{'poi:type':'usa'}, // USA
         // 'Vehicle':{'poi:type':'vehicle'}, // Car, truck, bus or any other vehicle

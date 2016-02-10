@@ -70,7 +70,7 @@ wikimapia.rules = {
         "restaurant":{'amenity':'restaurant'}, //  Count: 465340
         "eatery":{'amenity':'restaurant'}, //  Count: 465340
         "administrative division":{'boundary':'administrative'}, //  Count: 436874
-        "lake":{'natural':'water', 'water':'lake'}, //  Count: 428926
+        "lake":{'natural':'water','water':'lake'}, //  Count: 428926
         "production":{'industrial':'yes'}, //  Count: 395727
         "industry":{'industrial':'yes'}, //  Count: 395727
         "sports center":{'leisure':'sports_centre'}, //  Count: 347537
@@ -2414,7 +2414,7 @@ wikimapia.rules = {
         "diagnostic centre":{'healthcare:specialty':'diagnostic'}, //  Count: 510
         "sports bar":{'amenity':'bar'}, //  Count: 509
         "2011_construction":{'building:architecture':'2011_construction'}, //  Count: 508
-        "asilo":{'amenity':'social_facility', 'social_facility:for':'mental_health'}, //  Count: 508
+        "asilo":{'amenity':'social_facility','social_facility:for':'mental_health'}, //  Count: 508
         "enclave":{'boundary':'political'}, //  Count: 507
         "chamber of commerce":{'office':'administrative','administrative':'chamber_of_commerce'}, //  Count: 506
         "magistrates' court":{'amenity':'courthouse'}, //  Count: 506

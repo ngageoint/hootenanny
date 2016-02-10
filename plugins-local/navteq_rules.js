@@ -54,76 +54,76 @@ navteq.rules = {
 
     one2one : [
      // AR_PEDEST - Pedestrian allowed?
-     ['AR_PEDEST','Y','foot','yes'], 
-     ['AR_PEDEST','N','foot','no'], 
+     ['AR_PEDEST','Y','foot','yes'],
+     ['AR_PEDEST','N','foot','no'],
 
      // AR_TRAFF - Through Route
      ['AR_TRAFF','Y','highway:through_route','yes'],
-     ['AR_TRAFF','N','highway:through_route','no'], 
+     ['AR_TRAFF','N','highway:through_route','no'],
 
      // BRIDGE - 
-     ['BRIDGE','Y','bridge','yes'], 
-     ['BRIDGE','N',undefined,undefined], 
+     ['BRIDGE','Y','bridge','yes'],
+     ['BRIDGE','N',undefined,undefined],
 
      // CONTRACC - Controlled Access
-     ['CONTRACC','Y','controlled_access','yes'], 
-     ['CONTRACC','N','controlled_access','no'], 
+     ['CONTRACC','Y','controlled_access','yes'],
+     ['CONTRACC','N','controlled_access','no'],
 
      // DIR_TRAVEL - 
-     ['DIR_TRAVEL','B','oneway','no'], 
-     ['DIR_TRAVEL','T','oneway','yes'], 
-     ['DIR_TRAVEL','F','oneway','yes'], 
+     ['DIR_TRAVEL','B','oneway','no'],
+     ['DIR_TRAVEL','T','oneway','yes'],
+     ['DIR_TRAVEL','F','oneway','yes'],
 
      // DIVIDER - 
-     ['DIVIDER','L','divider','yes'], 
-     ['DIVIDER','A','divider','yes'], 
-     ['DIVIDER','1','divider','yes'], 
-     ['DIVIDER','2','divider','yes'], 
-     ['DIVIDER','N','divider','no'], 
+     ['DIVIDER','L','divider','yes'],
+     ['DIVIDER','A','divider','yes'],
+     ['DIVIDER','1','divider','yes'],
+     ['DIVIDER','2','divider','yes'],
+     ['DIVIDER','N','divider','no'],
 
      // DIVIDERLEG - Legal divider not a physical one 
-     ['DIVIDERLEG','Y','divider:legal','yes'], 
-     ['DIVIDERLEG','N',undefined,undefined], 
+     ['DIVIDERLEG','Y','divider:legal','yes'],
+     ['DIVIDERLEG','N',undefined,undefined],
 
      // FUNC_CLASS - The class of the road
-     ['FUNC_CLASS','1','highway','motorway'], 
-     ['FUNC_CLASS','2','highway','primary'], 
-     ['FUNC_CLASS','3','highway','secondary'], 
-     ['FUNC_CLASS','4','highway','residential'], 
-     ['FUNC_CLASS','5','highway','residential'], 
+     ['FUNC_CLASS','1','highway','motorway'],
+     ['FUNC_CLASS','2','highway','primary'],
+     ['FUNC_CLASS','3','highway','secondary'],
+     ['FUNC_CLASS','4','highway','residential'],
+     ['FUNC_CLASS','5','highway','residential'],
 
      // LANE_CAT
-     ['LANE_CAT','1','lanes','1'], 
+     ['LANE_CAT','1','lanes','1'],
      ['LANE_CAT','2','lanes','2'],  // 2-3 lanes
      ['LANE_CAT','3','lanes','4'],  // 4 or more lanes
 
      // PAVED - 
-     ['PAVED','Y','surface','paved'], 
-     ['PAVED','N','surface','unpaved'], 
+     ['PAVED','Y','surface','paved'],
+     ['PAVED','N','surface','unpaved'],
      
      // POIACCESS - Access road to a POI
-     // ['POIACCESS','Y','poiaccess','yes'], 
-     // ['POIACCESS','N','poiaccess','no'], 
+     // ['POIACCESS','Y','poiaccess','yes'],
+     // ['POIACCESS','N','poiaccess','no'],
 
      // PRIVATE - 
-     ['PRIVATE','Y','access','private'], 
-     ['PRIVATE','N','access','yes'], 
+     ['PRIVATE','Y','access','private'],
+     ['PRIVATE','N','access','yes'],
      
      // RAMP - See Custom Rules
-     ['RAMP','Y','ramp','yes'], 
-     ['RAMP','N',undefined,undefined], 
+     ['RAMP','Y','ramp','yes'],
+     ['RAMP','N',undefined,undefined],
 
      // ROUNDABOUT - 
-     ['ROUNDABOUT','Y','junction','roundabout'], 
-     ['ROUNDABOUT','N',undefined,undefined], 
+     ['ROUNDABOUT','Y','junction','roundabout'],
+     ['ROUNDABOUT','N',undefined,undefined],
 
      // ROUTE_TYPE - I can't find any logic in the classifications of this
-     // ['ROUTE_TYPE','1','rt','yes'], 
-     // ['ROUTE_TYPE','2','rt','yes'], 
-     // ['ROUTE_TYPE','3','rt','yes'], 
-     // ['ROUTE_TYPE','4','rt','yes'], 
-     // ['ROUTE_TYPE','5','rt','yes'], 
-     // ['ROUTE_TYPE','1','rt','yes'], 
+     // ['ROUTE_TYPE','1','rt','yes'],
+     // ['ROUTE_TYPE','2','rt','yes'],
+     // ['ROUTE_TYPE','3','rt','yes'],
+     // ['ROUTE_TYPE','4','rt','yes'],
+     // ['ROUTE_TYPE','5','rt','yes'],
+     // ['ROUTE_TYPE','1','rt','yes'],
 
      // SPECTRFIG - Special Traffic Figure
      ['SPECTRFIG','Y','junction','roundabout'], // Like roundabout??
@@ -140,12 +140,12 @@ navteq.rules = {
      ['SPEED_CAT','8','maxspeed','11_kph'], // Less than 11 kph / 6 mph
 
      // TOLLWAY 
-     ['TOLLWAY','Y','toll','yes'], 
+     ['TOLLWAY','Y','toll','yes'],
      ['TOLLWAY','N',undefined,undefined],
 
      // TUNNEL - 
-     ['TUNNEL','Y','tunnel','yes'], 
-     ['TUNNEL','N',undefined,undefined], 
+     ['TUNNEL','Y','tunnel','yes'],
+     ['TUNNEL','N',undefined,undefined],
 
      // Facility Type - Transportation Hubs, Shopping etc
      ['FAC_TYPE','2084','man_made','winery'], // Winery
@@ -307,17 +307,17 @@ navteq.rules = {
      ['FEAT_COD','1900403','aeroway','aerodrome'], // AIRPORT
      ['FEAT_TYPE','BAY/HARBOUR','natural','bay'], 
      ['FEAT_COD','507116','natural','bay'], // BAY/HARBOUR
-     ['FEAT_TYPE','BEACH','natural','beach'], 
+     ['FEAT_TYPE','BEACH','natural','beach'],
      ['FEAT_COD','509998','natural','beach'], // BEACH
      ['FEAT_TYPE','BUSINESS/COMMERCE','office','yes'], // Not good
      ['FEAT_COD','2009000','office','yes'], // BUSINESS/COMMERCE BUILDING/LANDMARK
      ['FEAT_TYPE','CARTOGRAPHIC COUNTRY BOUNDARY',undefined,undefined], // CARTOGRAPHIC COUNTRY BOUNDARY
      ['FEAT_COD','908000',undefined,undefined], // CARTOGRAPHIC COUNTRY BOUNDARY
-     ['FEAT_TYPE','CANAL/WATER CHANNEL','waterway','canal'], 
+     ['FEAT_TYPE','CANAL/WATER CHANNEL','waterway','canal'],
      ['FEAT_COD','500414','waterway','canal'], // CANAL/WATER CHANNEL
-     ['FEAT_TYPE','CEMETERY','landuse','cemetery'], 
+     ['FEAT_TYPE','CEMETERY','landuse','cemetery'],
      ['FEAT_COD','2000420','landuse','cemetery'], // CEMETERY
-     ['FEAT_TYPE','CONVENTION/EXHIBITION','amenity','conference_centre'], 
+     ['FEAT_TYPE','CONVENTION/EXHIBITION','amenity','conference_centre'],
      ['FEAT_COD','2009001','amenity','conference_centre'], // CONVENTION/EXHIBITION BUILDING/LANDMARK
      ['FEAT_TYPE','CULTURAL','amenity','cultural'], // Not good
      ['FEAT_COD','2009002','amenity','cultural'], // CULTURAL BUILDING/LANDMARK
@@ -327,47 +327,47 @@ navteq.rules = {
      ['FEAT_COD','2009003','amenity','education'], // EDUCATION BUILDING/LANDMARK
      ['FEAT_TYPE','GOVERNMENT','office','government'], 
      ['FEAT_COD','2009005','office','government'], // GOVERNMENT BUILDING/LANDMARK
-     ['FEAT_TYPE','GOLF COURSE','leisure','golf_course'], 
+     ['FEAT_TYPE','GOLF COURSE','leisure','golf_course'],
      ['FEAT_COD','2000123','leisure','golf_course'], // GOLF COURSE
-     ['FEAT_TYPE','HOSPITAL','amenity','hospital'], 
+     ['FEAT_TYPE','HOSPITAL','amenity','hospital'],
      ['FEAT_COD','2000408','amenity','hospital'], // HOSPITAL
-     ['FEAT_TYPE','HISTORICAL','historic','yes'], 
+     ['FEAT_TYPE','HISTORICAL','historic','yes'],
      ['FEAT_COD','2009006','historic','yes'], // HISTORICAL BUILDING/LANDMARK
-     ['FEAT_TYPE','INDUSTRIAL COMPLEX','landuse','industrial'], 
+     ['FEAT_TYPE','INDUSTRIAL COMPLEX','landuse','industrial'],
      ['FEAT_COD','2000200','landuse','industrial'], // INDUSTRIAL COMPLEX
-     ['FEAT_TYPE','ISLAND','place','island'], 
+     ['FEAT_TYPE','ISLAND','place','island'],
      ['FEAT_COD','509999','place','island'], // ISLAND
-     ['FEAT_TYPE','LAKE','water','lake'], 
+     ['FEAT_TYPE','LAKE','water','lake'],
      ['FEAT_COD','500421','water','lake'], // LAKE
      ['FEAT_TYPE','MEDICAL','amenity','medical'], // Not good
      ['FEAT_COD','2009007','amenity','medical'], // MEDICAL BUILDING/LANDMARK
      ['FEAT_TYPE','OCEAN','place','sea'], // OCEAN
-     ['FEAT_COD','500116','place','sea'], 
+     ['FEAT_COD','500116','place','sea'],
      ['FEAT_TYPE','PEDESTRIAN ZONE','highway','pedestrian'], // Should think about this
      ['FEAT_COD','900158','highway','pedestrian'], // PEDESTRIAN ZONE
-     ['FEAT_TYPE','PARK (CITY/COUNTY)','leisure','park'], 
+     ['FEAT_TYPE','PARK (CITY/COUNTY)','leisure','park'],
      ['FEAT_COD','900150','leisure','park'], // PARK (CITY/COUNTY)
-     ['FEAT_TYPE','PARK (STATE)','leisure','park'], 
+     ['FEAT_TYPE','PARK (STATE)','leisure','park'],
      ['FEAT_COD','900130','leisure','park'], // PARK (STATE)
      ['FEAT_TYPE','PARK IN WATER','leisure','park'],  // Not sure about this
      ['FEAT_COD','900140','leisure','park'], // PARK IN WATER
      ['FEAT_TYPE','PARK/MONUMENT (NATIONAL)','boundary','national_park'], // Need to think about this
      ['FEAT_COD','900103','boundary','national_park'], // PARK/MONUMENT (NATIONAL)
-     ['FEAT_TYPE','PARKING LOT','amenity','parking'], 
+     ['FEAT_TYPE','PARKING LOT','amenity','parking'],
      ['FEAT_COD','1700215','amenity','parking'], // PARKING LOT
-     ['FEAT_TYPE','RETAIL','shop','yes'], 
+     ['FEAT_TYPE','RETAIL','shop','yes'],
      ['FEAT_COD','2009010','shop','yes'], // RETAIL BUILDING/LANDMARK
-     ['FEAT_TYPE','RIVER','waterway','river'], 
+     ['FEAT_TYPE','RIVER','waterway','river'],
      ['FEAT_COD','500412','waterway','river'], // RIVER
-     ['FEAT_TYPE','SHOPPING CENTRE','shop','shopping_centre'], 
+     ['FEAT_TYPE','SHOPPING CENTRE','shop','shopping_centre'],
      ['FEAT_COD','2000124','shop','shopping_centre'], // SHOPPING CENTRE
      ['FEAT_TYPE','SPORTS COMPLEX','leisure','sports_complex'], // Not good
      ['FEAT_COD','2000457','leisure','sports_complex'], // SPORTS COMPLEX
      ['FEAT_TYPE','SPORTS','leisure','sports_complex'], // Not good
      ['FEAT_COD','2009011','leisure','sports_complex'], // SPORTS BUILDING/LANDMARK
-     ['FEAT_TYPE','TOURIST','tourism','yes'], 
+     ['FEAT_TYPE','TOURIST','tourism','yes'],
      ['FEAT_COD','2009012','tourism','yes'], // TOURIST BUILDING/LANDMARK
-     ['FEAT_TYPE','TRANSPORTATION','amenity','transportation'], 
+     ['FEAT_TYPE','TRANSPORTATION','amenity','transportation'],
      ['FEAT_COD','2009013','amenity','transportation'], // TRANSPORTATION BUILDING/LANDMARK
      ['FEAT_TYPE','UNDEFINED TRAFFIC AREA','traffic','unknown'], // No Idea
      ['FEAT_COD','900159','traffic','unknown'], // UNDEFINED TRAFFIC AREA
@@ -403,73 +403,73 @@ navteq.rules = {
      ['FEAT_COD','900156','landuse','built_up_area'], // BUILT UP AREA
 
      // FOOD_TYPE - Restaurant Cuisine Type
-     ['FOOD_TYPE','AFRICAN FOOD','cuisine','african'], 
-     ['FOOD_TYPE','AMERICAN FOOD','cuisine','american'], 
+     ['FOOD_TYPE','AFRICAN FOOD','cuisine','african'],
+     ['FOOD_TYPE','AMERICAN FOOD','cuisine','american'],
      ['FOOD_TYPE','AUSTRALIAN FOOD','cuisine','australian'], // Really??
-     ['FOOD_TYPE','AUSTRIAN FOOD','cuisine','austrian'], 
-     ['FOOD_TYPE','BALKAN FOOD','cuisine','balkan'], 
-     ['FOOD_TYPE','BARBECUE/SOUTHERN','cuisine','barbeque_southern'], 
-     ['FOOD_TYPE','BELGIAN FOOD','cuisine','belgian'], 
-     ['FOOD_TYPE','BISTRO','cuisine','bistro'], 
-     ['FOOD_TYPE','BOHEMIAN FOOD','cuisine','bohemian'], 
-     ['FOOD_TYPE','BRASILIAN FOOD','cuisine','brasilian'], 
-     ['FOOD_TYPE','BREWPUB','cuisine','brewpub'], 
-     ['FOOD_TYPE','BRITISH ISLES FOOD','cuisine','british'], 
+     ['FOOD_TYPE','AUSTRIAN FOOD','cuisine','austrian'],
+     ['FOOD_TYPE','BALKAN FOOD','cuisine','balkan'],
+     ['FOOD_TYPE','BARBECUE/SOUTHERN','cuisine','barbeque_southern'],
+     ['FOOD_TYPE','BELGIAN FOOD','cuisine','belgian'],
+     ['FOOD_TYPE','BISTRO','cuisine','bistro'],
+     ['FOOD_TYPE','BOHEMIAN FOOD','cuisine','bohemian'],
+     ['FOOD_TYPE','BRASILIAN FOOD','cuisine','brasilian'],
+     ['FOOD_TYPE','BREWPUB','cuisine','brewpub'],
+     ['FOOD_TYPE','BRITISH ISLES FOOD','cuisine','british'],
      ['FOOD_TYPE','BURGERS','cuisine','burgers'],
-     ['FOOD_TYPE','CAJUN/CARIBBEAN FOOD','cuisine','cajun_caribbean'], 
-     ['FOOD_TYPE','CALIFORNIAN FOOD','cuisine','californian'], 
-     ['FOOD_TYPE','CANADIAN FOOD','cuisine','canadian'], 
+     ['FOOD_TYPE','CAJUN/CARIBBEAN FOOD','cuisine','cajun_caribbean'],
+     ['FOOD_TYPE','CALIFORNIAN FOOD','cuisine','californian'],
+     ['FOOD_TYPE','CANADIAN FOOD','cuisine','canadian'],
      ['FOOD_TYPE','CHICKEN','cuisine','chicken'],
      ['FOOD_TYPE','CHILEAN FOOD','cuisine','chilean'],
-     ['FOOD_TYPE','CHINESE FOOD','cuisine','chinese'], 
-     ['FOOD_TYPE','CONTINENTAL FOOD','cuisine','continental'], 
-     ['FOOD_TYPE','DUTCH FOOD','cuisine','dutch'], 
-     ['FOOD_TYPE','EAST EUROPEAN FOOD','cuisine','east_european'], 
+     ['FOOD_TYPE','CHINESE FOOD','cuisine','chinese'],
+     ['FOOD_TYPE','CONTINENTAL FOOD','cuisine','continental'],
+     ['FOOD_TYPE','DUTCH FOOD','cuisine','dutch'],
+     ['FOOD_TYPE','EAST EUROPEAN FOOD','cuisine','east_european'],
      ['FOOD_TYPE','FAST FOOD','amenity','fast_food'], // There is always one.....
      ['FOOD_TYPE','FILIPINO FOOD','cuisine','filipino'],
-     ['FOOD_TYPE','FRENCH FOOD','cuisine','french'], 
+     ['FOOD_TYPE','FRENCH FOOD','cuisine','french'],
      ['FOOD_TYPE','FUSION','cuisine','fusion'],
-     ['FOOD_TYPE','GERMAN FOOD','cuisine','german'], 
-     ['FOOD_TYPE','GREEK FOOD','cuisine','greek'], 
-     ['FOOD_TYPE','GRILL','cuisine','grill'], 
-     ['FOOD_TYPE','HAWAIIAN/POLYNESIAN FOOD','cuisine','hawaiian_polynesian'], 
-     ['FOOD_TYPE','HUNGARIAN FOOD','cuisine','hungarian'], 
+     ['FOOD_TYPE','GERMAN FOOD','cuisine','german'],
+     ['FOOD_TYPE','GREEK FOOD','cuisine','greek'],
+     ['FOOD_TYPE','GRILL','cuisine','grill'],
+     ['FOOD_TYPE','HAWAIIAN/POLYNESIAN FOOD','cuisine','hawaiian_polynesian'],
+     ['FOOD_TYPE','HUNGARIAN FOOD','cuisine','hungarian'],
      ['FOOD_TYPE','ICE CREAM','cuisine','ice_cream'],
-     ['FOOD_TYPE','INDIAN FOOD','cuisine','indian'], 
+     ['FOOD_TYPE','INDIAN FOOD','cuisine','indian'],
      ['FOOD_TYPE','INDONESIAN FOOD','cuisine','indonesian'],
-     ['FOOD_TYPE','INDONESIAN/MALAYSIAN FOOD','cuisine','indonesian_malaysian'], 
-     ['FOOD_TYPE','INTERNATIONAL FOOD','cuisine','international'], 
-     ['FOOD_TYPE','ITALIAN FOOD','cuisine','italian'], 
-     ['FOOD_TYPE','JAPANESE FOOD','cuisine','japanese'], 
-     ['FOOD_TYPE','JEWISH/KOSHER FOOD','cuisine','jewish_kosher'], 
-     ['FOOD_TYPE','KOREAN FOOD','cuisine','korean'], 
-     ['FOOD_TYPE','LATIN AMERICAN FOOD','cuisine','latin_american'], 
+     ['FOOD_TYPE','INDONESIAN/MALAYSIAN FOOD','cuisine','indonesian_malaysian'],
+     ['FOOD_TYPE','INTERNATIONAL FOOD','cuisine','international'],
+     ['FOOD_TYPE','ITALIAN FOOD','cuisine','italian'],
+     ['FOOD_TYPE','JAPANESE FOOD','cuisine','japanese'],
+     ['FOOD_TYPE','JEWISH/KOSHER FOOD','cuisine','jewish_kosher'],
+     ['FOOD_TYPE','KOREAN FOOD','cuisine','korean'],
+     ['FOOD_TYPE','LATIN AMERICAN FOOD','cuisine','latin_american'],
      ['FOOD_TYPE','MALAYSIAN FOOD','cuisine','malaysian'],
      ['FOOD_TYPE','MALTESE FOOD','cuisine','maltese'],
-     ['FOOD_TYPE','MEXICAN FOOD','cuisine','mexican'], 
-     ['FOOD_TYPE','MIDDLE EASTERN FOOD','cuisine','middle_eastern'], 
+     ['FOOD_TYPE','MEXICAN FOOD','cuisine','mexican'],
+     ['FOOD_TYPE','MIDDLE EASTERN FOOD','cuisine','middle_eastern'],
      ['FOOD_TYPE','MOROCCAN FOOD','cuisine','moroccan'],
-     ['FOOD_TYPE','OTHER','cuisine','other'], 
+     ['FOOD_TYPE','OTHER','cuisine','other'],
      ['FOOD_TYPE','PASTRIES','cuisine','pastries'],
      ['FOOD_TYPE','PIZZA','cuisine','pizza'],
-     ['FOOD_TYPE','POLISH FOOD','cuisine','polish'], 
-     ['FOOD_TYPE','PORTUGUESE FOOD','cuisine','portuguese'], 
-     ['FOOD_TYPE','RUSSIAN FOOD','cuisine','russian'], 
-     ['FOOD_TYPE','SANDWICH','cuisine','sandwich'], 
-     ['FOOD_TYPE','SCANDINAVIAN FOOD','cuisine','scandinavian'], 
-     ['FOOD_TYPE','SEAFOOD','cuisine','seafood'], 
+     ['FOOD_TYPE','POLISH FOOD','cuisine','polish'],
+     ['FOOD_TYPE','PORTUGUESE FOOD','cuisine','portuguese'],
+     ['FOOD_TYPE','RUSSIAN FOOD','cuisine','russian'],
+     ['FOOD_TYPE','SANDWICH','cuisine','sandwich'],
+     ['FOOD_TYPE','SCANDINAVIAN FOOD','cuisine','scandinavian'],
+     ['FOOD_TYPE','SEAFOOD','cuisine','seafood'],
      ['FOOD_TYPE','SNACKS & BEVERAGES','cuisine','snacks_and_beverages'],
-     ['FOOD_TYPE','SOUTH AMERICAN FOOD','cuisine','south_american'], 
-     ['FOOD_TYPE','SOUTHEAST ASIAN FOOD','cuisine','southeast_asian'], 
+     ['FOOD_TYPE','SOUTH AMERICAN FOOD','cuisine','south_american'],
+     ['FOOD_TYPE','SOUTHEAST ASIAN FOOD','cuisine','southeast_asian'],
      ['FOOD_TYPE','SOUTHWESTERN FOOD','cuisine','southwestern'],
-     ['FOOD_TYPE','SPANISH FOOD','cuisine','spanish'], 
-     ['FOOD_TYPE','STEAK HOUSE','cuisine','steak_house'], 
-     ['FOOD_TYPE','SWISS FOOD','cuisine','swiss'], 
-     ['FOOD_TYPE','THAI FOOD','cuisine','thai'], 
-     ['FOOD_TYPE','TURKISH FOOD','cuisine','turkish'], 
-     ['FOOD_TYPE','UNKNOWN','cuisine','unknown'], 
-     ['FOOD_TYPE','VEGETARIAN FOOD','cuisine','vegetarian'], 
-     ['FOOD_TYPE','VIETNAMESE FOOD','cuisine','vietnamese'], 
+     ['FOOD_TYPE','SPANISH FOOD','cuisine','spanish'],
+     ['FOOD_TYPE','STEAK HOUSE','cuisine','steak_house'],
+     ['FOOD_TYPE','SWISS FOOD','cuisine','swiss'],
+     ['FOOD_TYPE','THAI FOOD','cuisine','thai'],
+     ['FOOD_TYPE','TURKISH FOOD','cuisine','turkish'],
+     ['FOOD_TYPE','UNKNOWN','cuisine','unknown'],
+     ['FOOD_TYPE','VEGETARIAN FOOD','cuisine','vegetarian'],
+     ['FOOD_TYPE','VIETNAMESE FOOD','cuisine','vietnamese'],
 
      // CHAIN_ID - What 'chain' is the poi
      ['CHAIN_ID','0',undefined,undefined],

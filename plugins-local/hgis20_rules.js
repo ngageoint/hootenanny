@@ -1854,7 +1854,7 @@ hgis20.rules = {
     // ##### End of One2One Rules #####
 
     // Month list: Used to make the months pretty
-    monthList : ['January', 'February','March','April','May','June','July','August','September','October','November','December'],
+    monthList : ['January','February','March','April','May','June','July','August','September','October','November','December'],
 
     // List of unique attributes for each layer
     uniqList : {
