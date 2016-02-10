@@ -1,6 +1,10 @@
 
 SHELL=/bin/bash
 
+ifneq (,$(wildcard /etc/redhat-release))  
+  $(error Building Hootenanny documentation is not supported on CentOS/RHEL.  It can be built on Ubuntu or downloaded from: https://github.com/ngageoint/hootenanny/releases)
+endif
+
 # If the silent flag is passed to make then make a2x quiet
 ifneq (,$(findstring s,$(MAKEFLAGS)))
 »···A2X_QUIET=""
