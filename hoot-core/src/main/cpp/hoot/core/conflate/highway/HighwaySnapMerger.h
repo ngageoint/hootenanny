@@ -91,6 +91,9 @@ private:
     const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
 
   bool _doesWayConnect(long node1, long node2, const ConstWayPtr& w) const;
+
+  // for white box testing.
+  friend class HighwaySnapMergerTest;
 };
 
 typedef boost::shared_ptr<HighwaySnapMerger> HighwaySnapMergerPtr;

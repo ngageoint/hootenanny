@@ -144,9 +144,15 @@ void TestUtils::dumpString(const string& str)
   cout << "size_t dataSize = " << str.size() << ";" << endl;
 }
 
-ElementPtr TestUtils::getElement(OsmMapPtr map, QString note)
+ElementPtr TestUtils::getElementWithNote(OsmMapPtr map, QString note)
 {
-  TagCriterion tc("note", note);
+  return getElementWithTag(map, "note", note);
+}
+
+ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString tagKey,
+                                        const QString tagValue)
+{
+  TagCriterion tc(tagKey, tagValue);
   set<ElementId> bag;
   GetElementIdsVisitor v(bag);
   FilteredVisitor fv(tc, v);
@@ -154,7 +160,7 @@ ElementPtr TestUtils::getElement(OsmMapPtr map, QString note)
 
   if (bag.size() != 1)
   {
-    throw HootException("Could not find an expected element with note: " + note);
+    throw HootException("Could not find an expected element with tag: " + tagKey + "=" + tagValue);
   }
 
   return map->getElement(*bag.begin());
