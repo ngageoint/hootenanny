@@ -115,8 +115,6 @@ shared_ptr<OsmMap> PertyMatchScorer::_loadReferenceMap(const QString referenceMa
 
   shared_ptr<AddRef1Visitor> addRef1Visitor(new AddRef1Visitor());
   referenceMap->visitRw(*addRef1Visitor);
-  /// @todo this could eventually be replaced with a SetTagVisitor passed in from the command line
-  //instead
   shared_ptr<SetTagVisitor> setAccuracyVisitor(
     new SetTagVisitor("error:circular", QString::number(_searchDistance)));
   referenceMap->visitRw(*setAccuracyVisitor);

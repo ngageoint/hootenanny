@@ -52,7 +52,7 @@ public:
   /**
    *  @todo is this needed?
    */
-  virtual void initializePartial() = 0;
+  //virtual void initializePartial() = 0;
 
   void setMaxElementsPerMap(long maxElements) { _maxElementsPerMap = maxElements; }
 

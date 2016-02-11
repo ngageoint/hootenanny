@@ -846,7 +846,6 @@ shared_ptr<Element> ServicesDbReader::_resultToElement(QSqlQuery& resultIterator
   if (resultIterator.next())
   {
     shared_ptr<Element> element;
-    /// @todo this section could be simplified
     switch (elementType.getEnum())
     {
       case ElementType::Node:

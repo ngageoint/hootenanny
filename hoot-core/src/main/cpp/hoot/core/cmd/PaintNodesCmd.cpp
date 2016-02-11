@@ -69,7 +69,7 @@ class PaintNodesCmd : public BaseCommand
         long nodeCount = 0;
         Envelope result;
         reader->setUseDataSourceIds(true);
-        r->initializePartial();
+        //r->initializePartial();
         while (r->hasMoreElements())
         {
           ElementPtr e = r->readNextElement();
@@ -105,7 +105,7 @@ class PaintNodesCmd : public BaseCommand
     {
       shared_ptr<PartialOsmMapReader> r = dynamic_pointer_cast<PartialOsmMapReader>(reader);
       r->setUseDataSourceIds(true);
-      r->initializePartial();
+      //r->initializePartial();
 
       int width = ceil(envelope.getWidth() / pixelSize);
       int height = ceil(envelope.getHeight() / pixelSize);

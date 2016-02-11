@@ -943,20 +943,19 @@ void PbfReader::read(QString path, shared_ptr<OsmMap> map)
     QFileInfoList files = d.entryInfoList(filter, QDir::Files, QDir::Name);
     for (int i = 0; i < files.size(); i++)
     {
-      readFile(files.at(i).filePath(), map);
+      _readFile(files.at(i).filePath(), map);
     }
   }
   else
   {
-    readFile(path, map);
+    _readFile(path, map);
   }
 
   ReportMissingElementsVisitor v(true);
   map->visitRw(v);
 }
 
-/// @todo this method can probably go away
-void PbfReader::readFile(QString path, shared_ptr<OsmMap> map)
+void PbfReader::_readFile(QString path, shared_ptr<OsmMap> map)
 {
   fstream input(path.toUtf8().constData(), ios::in | ios::binary);
 

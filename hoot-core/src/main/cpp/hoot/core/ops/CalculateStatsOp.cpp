@@ -211,7 +211,6 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     const double conflatedFeatureCount =
       fmax(featuresProcessedDuringConflationCount - numFeaturesMarkedForReview, 0);
     long unconflatableFeatureCount = -1.0;
-    /// @todo is this right?
     if (!_inputIsConflatedMapOutput)
     {
       unconflatableFeatureCount = fmax((featureCount - conflatableFeatureCount), (long)0);

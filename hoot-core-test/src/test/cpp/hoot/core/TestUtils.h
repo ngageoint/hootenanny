@@ -131,11 +131,6 @@ public:
   static ElementPtr getElementWithTag(OsmMapPtr map, const QString tagKey, const QString tagValue);
 
   /**
-   * Return the way with the note value 'note'. Bad things will happen if it doesn't exist.
-   */
-  static WayPtr getWay(OsmMapPtr map, QString note);
-
-  /**
    * Resets the test environment to a known state.
    */
   static void resetEnvironment();

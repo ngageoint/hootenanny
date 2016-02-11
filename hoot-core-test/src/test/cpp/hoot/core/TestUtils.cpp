@@ -166,20 +166,6 @@ ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString tagKey,
   return map->getElement(*bag.begin());
 }
 
-WayPtr TestUtils::getWay(OsmMapPtr map, QString note)
-{
-  std::vector<long> wids = map->findWays("note", note);
-  if (wids.size() == 0)
-  {
-    throw HootException("Could not find a way with note: " + note);
-  }
-  if (wids.size() > 1)
-  {
-    throw HootException("Found more than one way with note: " + note);
-  }
-  return map->getWay(wids[0]);
-}
-
 std::string TestUtils::readFile(QString f1)
 {
   QFile fpTest(f1);

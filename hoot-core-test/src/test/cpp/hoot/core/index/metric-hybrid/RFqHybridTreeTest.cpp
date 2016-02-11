@@ -473,8 +473,8 @@ public:
   void runRandomQueryTest()
   {
     shared_ptr<OsmMap> map(new OsmMap());
-    PbfReader(true).readFile("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
-//    PbfReader(true).readFile("/scratch/gis-data/geonames.org/tmp/GeoNamesOrgAfghanistan.osm.pbf",
+    PbfReader(true).read("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
+//    PbfReader(true).read("/scratch/gis-data/geonames.org/tmp/GeoNamesOrgAfghanistan.osm.pbf",
 //                             map);
 
     MapProjector::projectToPlanar(map);
