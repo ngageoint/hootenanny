@@ -399,7 +399,6 @@ void OgrWriter::open(QString url)
     }
   }
 
-
   if (_createAllLayers)
   {
     for (size_t i = 0; i < _schema->getLayerCount(); ++i)
@@ -537,10 +536,8 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
       g.reset((GeometryFactory::getDefaultInstance()->createEmptyGeometry()));
     }
 
-    /*
-    LOG_DEBUG("After conversion to geometry, element is now a " <<
-             g->getGeometryType() );
-    */
+    /*LOG_DEBUG("After conversion to geometry, element is now a " <<
+             g->getGeometryType() );*/
 
     Tags t = e->getTags();
     t["error:circular"] = QString::number(e->getCircularError());
@@ -571,7 +568,6 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
 void OgrWriter::finalizePartial()
 {
   // TODO: implement
-  ;
 }
 
 void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Node>& newNode)
@@ -583,17 +579,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Node>& newNode)
 
   // It's a base datatype, so can write immediately
 
-  //LOG_DEBUG("Writing node: \n" << newNode->toString());
-
-  // DEBUG ONLY REMOVE -- if we're not Queen Anne's county, MD, bail
-  /*
-  if ( newNode->getId() > -642 || newNode->getId() < -733)
-  {
-    return;
-  }
-  */
-
-  //LOG_INFO("Writing node " << newNode->getId() << " as it's in our range");
+  //LOG_DEBUG("Writing node " << newNode->getId() << " as it's in our range");
 
   _writePartial(cacheProvider, newNode);
 }
@@ -620,11 +606,9 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Way>& newWay)
   {
     if ( _elementCache->containsNode(*nodeIdIterator) == true )
     {
-      /*
-      LOG_DEBUG("Way " << newWay->getId() << " contains node " << *nodeIdIterator <<
+      /*LOG_DEBUG("Way " << newWay->getId() << " contains node " << *nodeIdIterator <<
                    ": " << _elementCache->getNode(*nodeIdIterator)->getX() << ", " <<
-                  _elementCache->getNode(*nodeIdIterator)->getY() );
-      */
+                  _elementCache->getNode(*nodeIdIterator)->getY() );*/
     }
     else
     {
@@ -635,7 +619,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Way>& newWay)
     }
   }
 
-  //LOG_INFO("Writing way " << newWay->getId() );
+  //LOG_DEBUG("Writing way " << newWay->getId() );
 
   // Add to the element cache
   ConstElementPtr constWay(newWay);
