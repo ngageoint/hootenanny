@@ -462,6 +462,7 @@ def processRules(path,attributes):
             comment = line.split('//')
 
             (attr,vString) = comment[0].split(":{'")
+            attr = attr.replace("'",'')
 
             if attributes and not attr in attributes:
                 continue
