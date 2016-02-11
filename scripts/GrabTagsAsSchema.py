@@ -1,24 +1,35 @@
 #!/usr/bin/python
-import datetime
-import json
-import os
-import sys
-import urllib2
+
+#/*
+#* This file is part of Hootenanny.
+#*
+#* Hootenanny is free software: you can redistribute it and/or modify
+#* it under the terms of the GNU General Public License as published by
+#* the Free Software Foundation, either version 3 of the License, or
+#* (at your option) any later version.
+#*
+#* This program is distributed in the hope that it will be useful,
+#* but WITHOUT ANY WARRANTY; without even the implied warranty of
+#* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#* GNU General Public License for more details.
+#*
+#* You should have received a copy of the GNU General Public License
+#* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#*
+#* --------------------------------------------------------------------
+#*
+#* The following copyright notices are generated automatically. If you
+#* have a new notice to add, please use the format:
+#* " * @copyright Copyright ..."
+#* This will properly maintain the copyright information. DigitalGlobe
+#* copyrights will be updated automatically.
+#*
+#* @copyright Copyright (C) 2012, 2013 DigitalGlobe (http://www.digitalglobe.com/)
+#*/
+
+import sys, os, json, datetime, urllib2, argparse
 from pprint import pprint
 from time import sleep
-
-if len(sys.argv) < 3:
-    print "%s (input file) (output dir) [key1, key2, ...]" % sys.argv[0]
-    sys.exit(-1)
-
-inputFile = sys.argv[1]
-outputDir = sys.argv[2]
-keys = sys.argv[3:]
-
-allTags = []
-
-schema = []
-aliases = {}
 
 def compareTags(t1, t2):
     if (t1['name'] < t2['name']):
@@ -28,6 +39,7 @@ def compareTags(t1, t2):
     else:
         return 0
 
+
 def getUrl(url):
     try:
         sleep(0.5)
@@ -35,6 +47,7 @@ def getUrl(url):
     except:
         print "Failed to get URL: " + url
         raise
+
 
 def filterKeys(keys):
     result = []
@@ -98,15 +111,21 @@ def filterKeys(keys):
             result.append(k)
 
     return result
+# End filterKeys
+
 
 def findKey(name):
     global schema
     if name in aliases:
         return findKey(aliases[name])
+
     for t in schema:
         if t['name'] == name:
             return t
+
     return None
+# End findKey
+
 
 def getAllKeys(minCount):
     page = 1
@@ -123,30 +142,42 @@ def getAllKeys(minCount):
         page = page + 1
 
     return result
+# End getAllKeys
+
 
 def getDataType(s):
+    if not s:
+        return None
+
     if 'dataType' in s:
         return s['dataType']
+
     if 'isA' in s:
         return getDataType(findKey(s['isA']))
+
     return None
+# End getDataType
+
 
 def getWikiDetails(k, v):
     data = getUrl("http://taginfo.openstreetmap.org/api/4/tag/wiki_pages?key=%s&value=%s&format=json_pretty" % \
         (urlQuote(k), urlQuote(v)))
     values = json.load(data)
     result = None
-    for v in values:
+    for v in values['data']:
+        #print 'v:',v
         if v['lang'] == 'en':
             result = v
 
     if result == None:
-        if len(values) > 0:
-            result = values[0]
+        if len(values['data']) > 0:
+            result = values['data'][0]
         else:
             result = {}
 
     return result
+# End getWikiDetails
+
 
 def grabValuesForKey(k):
     tags = []
@@ -160,6 +191,8 @@ def grabValuesForKey(k):
             done = True
         page = page + 1
     return tags
+# End grabValuesForKey
+
 
 # What file name should this tag be put into?
 def getKeyCategory(tag):
@@ -192,6 +225,8 @@ def getKeyCategory(tag):
         return key
     else:
         return key
+# End getKeyCategory
+
 
 def getTag(kvp):
     for e in schema:
@@ -203,22 +238,51 @@ def getTag(kvp):
     }
     schema.append(t)
     return t
+# End getTag
+
+
+def getEnumeratedTag(key,value):
+    haveEnum = False
+    for e in schema:
+        if 'name' in e and e['name'] == key:
+            if 'dataType' in e:
+                haveEnum = True
+                break
+
+    if not haveEnum:
+        eTag = {
+            'dataType':'enumeration',
+            'objectType':'tag',
+            'influence':1,
+            'name':key
+        }
+        schema.append(eTag)
+
+    tag = getTag(key + '=' + value)
+    tag['isA'] = key
+
+    return tag
+# End getTag
+
 
 def insertAliases(t):
     if 'aliases' in t:
         for a in t['aliases']:
             aliases[a] = t['name']
+# End insertAliases
+
 
 def readValuesIntoSchema(k):
     s = findKey(k)
+
     if s:
         dataType = getDataType(s)
         if dataType and dataType != 'enumeration':
-            print "Skipping read values for %s." % k
+            print "Skipping read values for %s." % (k)
             return
 
     tags = grabValuesForKey(k)
-    print "Reading %d tags." % (len(tags))
+    print "Reading %d tags for key %s." % (len(tags),k)
 
     for t in tags:
         if (t['count'] > 200 or t['in_wiki'] == True):
@@ -226,8 +290,21 @@ def readValuesIntoSchema(k):
             if name not in aliases:
                 st = getTag(k + '=' + t['value'])
                 st['tagInfoCount'] = t['count']
+
+                # Try and add an "isA" attribute
+                tCat = getKeyCategory(st)
+                tTag = findKey(tCat)
+                #print 'tTag:',tTag,'tCat:',tCat
+
+                if tTag:
+                    if 'isA' in tTag:
+                        st['isA'] = tTag['isA']
+                    else:
+                        st['isA'] = tCat
+
                 if t['description'] != '':
                     st['tagInfoDescription'] = t['description']
+
                 wiki = getWikiDetails(k, t['value'])
                 geom = []
                 if len(wiki) > 0:
@@ -243,6 +320,7 @@ def readValuesIntoSchema(k):
                         st['geometries'] = geom
             else:
                 print "Ignoring alias: " + name
+# End readValuesIntoSchema
 
 
 # Read all tags out of schema files
@@ -261,12 +339,18 @@ def readSchemaFile(path):
         else:
             schema.append(i)
             insertAliases(i)
+# End readSchemaFile
+
 
 def toJson(v):
     return json.dumps(v, sort_keys=True, indent=4, separators=(',', ': '))
+# End toJson
+
 
 def urlQuote(s):
     return urllib2.quote(s.encode('utf8'))
+# End urlQuote
+
 
 def writeSchemaFile(path):
     global schema
@@ -285,7 +369,7 @@ def writeSchemaFile(path):
 
     top = []
     for (sk, sv) in sorted(sortedKeys.iteritems()):
-        print sk
+        print 'Writeing %s JSON file' % (sk)
         top.append({'import':sk + '.json'})
         sv = sorted(sv, cmp=compareTags)
         fp = open(path + '/' + sk + '.json', 'w')
@@ -293,32 +377,199 @@ def writeSchemaFile(path):
 
     fp = open(path + '/schema.json', 'w')
     fp.write(toJson(top))
-
-# Find all the keys that need to be updated
-if len(keys) == 0:
-    keys = filterKeys(getAllKeys(100000))
-    keys.sort()
-
-readSchemaFile(inputFile)
-
-# Read requested tags from taginfo and update schema
-for k in keys:
-    print k
-    readValuesIntoSchema(k)
-
-# Export tags from schema into new schema directory
-
-writeSchemaFile(outputDir)
+# End writeSchemaFile
 
 
-#for tinfo in allTags:
-#    if (tinfo['count'] > 100):
-#        print '    "tag": {'
-#        print '        "name": "%s=%s",' % (key, tinfo['value'])
-#        if (tinfo['description'] != '' and tinfo['description'].strip() != '???'):
-#            print '        "description": "%s",' %(tinfo['description'])
-#        print '        "isA": "%s",' % (key)
-#        print '        "#": "Count in tag info is %d on %s"' % \
-#            (tinfo['count'], datetime.date.today())
-#        print '    },'
+def addKey(key):
+    global keys
+
+    if not key in keys:
+        keys.append(key)
+# End addKey
+
+
+def processRules(path,attributes):
+    #d = os.path.dirname(path)
+    fp = open(path, 'r')
+
+    inOne2One = False
+    inTxtBiased = False
+    inNumBiased = False
+
+    for line in fp:
+        line = line.strip()
+
+        # Skip empty lines
+        if line == '':
+            continue
+
+        # Skip comments
+        if line[0] == '/' or line[0] =='*':
+            continue
+
+        if line.find('txtBiased') == 0:
+            inTxtBiased = True
+            continue
+
+        if line.find('numBiased') == 0:
+            inNumBiased = True
+            continue
+
+        if line.find('one2one ') == 0 or line.find('one2oneIn') == 0:
+            inOne2One = True
+            continue
+
+        # End of a section. NOTE: The sections can not overlap
+        if line.find('},') == 0 or line.find('],') == 0:
+            inTxtBiased = False
+            inNumBiased = False
+            inOne2One = False
+            continue
+
+        # Sort out Text and Number attributes
+        if line[0] == "'" and (inTxtBiased or inNumBiased):
+            # Line should look like this:
+            # 'NAM':'name', // Name
+            comment = line.split('//')
+
+            (key,value) = comment[0].replace("',",'').split("':'")
+            key = key.replace("'",'')
+            value = value.strip()
+
+            if attributes and not key in attributes:
+                continue
+
+            # Add this to the list of keys we look for in TagInfo
+            addKey(value)
+
+            st = getTag(value)
+
+            if len(comment) > 1:
+                st['tagInfoDescription'] = comment[1].strip()
+
+            if inTxtBiased:
+                st['dataType'] = 'text'
+                continue
+
+            if inNumBiased:
+                st['dataType'] = 'real'
+                continue
+
+        # Sort out one2one - Geonames style
+        if line[0] == "'" and inOne2One:
+            # Line should look like this for one2one rules in Geonames etc
+            # 'ASYL':{'amenity':'social_facility', 'social_facility:for':'mental_health'}, //  asylum: a facility
+            comment = line.split('//')
+
+            (attr,vString) = comment[0].split(":{'")
+
+            if attributes and not attr in attributes:
+                continue
+
+            values = vString.strip().replace("'},",'').split("','")
+
+            for tKey in values:
+                (key,value) = tKey.split("':'")
+
+                # Add this to the list of keys we look for in TagInfo
+                addKey(key)
+
+                st = getTag(key.strip() + '=' + value.strip())
+                st['tagInfoCount'] = 0
+
+                # Not using the comment field at the moment
+                #if len(comment) > 1:
+                    #st['tagInfoDescription'] = comment[1].strip()
+            continue
+
+        # Sort out one2one - Standard type
+        # NOTE: These are enumerated and make enumerated types
+        if line[0] == "[" and inOne2One:
+            # Skip empty values
+            if line.find('undefined') > -1:
+                continue
+
+            # Line should look like this for the tandard one2one rules
+            # ['AZC','1000','artificial','no'], // Natural
+            comment = line.strip().split('//')
+
+            (attr,aVal,key,value) = comment[0].replace("'],",'').replace("['",'').split("','")
+
+            if attributes and not attr in attributes:
+                continue
+
+            # Add this to the list of keys we look for in TagInfo
+            addKey(key.strip())
+
+            st = getEnumeratedTag(key,value.strip())
+            st['tagInfoCount'] = 0
+
+            if len(comment) > 1:
+                st['tagInfoDescription'] = comment[1].strip()
+
+            continue
+
+# End processRules
+
+
+###########
+# Main Starts Here
+#
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Update the Hootenanny OSM schema')
+    parser.add_argument('-q','--quiet', help="Don't print warning messages.",action='store_true')
+    parser.add_argument('--noTaginfo', help="Don't pull tags from TagInfo",action='store_true', default=False)
+    parser.add_argument('--maxKeys', help="Maximum number of keys to pull from TagInfo",action='store', default=100000)
+    parser.add_argument('--rulesFile', nargs='?', help='Read a *_rules.js file to get tags', action='store')
+    parser.add_argument('--attributes', nargs='*', help='Only process these attributes from a rules file: attribute, attribute, attribute,...', action='store')
+    parser.add_argument('inputFile', help='The input JSON schema file', action='store')
+    parser.add_argument('outputDir', help='The output directory', action='store')
+    parser.add_argument('keys', nargs='*', help='Keys to process: key1,key2,key3...', action='store')
+
+    args = parser.parse_args()
+
+    inputFile = args.inputFile
+    outputDir = args.outputDir
+    rulesFile = args.rulesFile
+    keys = args.keys
+    attributes = args.attributes
+
+    allTags = []
+    schema = []
+    aliases = {}
+
+
+    readSchemaFile(inputFile)
+
+    if rulesFile:
+        processRules(rulesFile,attributes)
+
+    # If we dont have any keys - from rules files or the command line - go get a stack them from Taginfo
+    if len(keys) == 0:
+        print 'About to grab %d keys from TagInfo' % (args.maxKeys)
+        keys = filterKeys(getAllKeys(args.maxKeys))
+        keys.sort()
+    else:
+        keys = filterKeys(keys)
+        keys.sort()
+
+    # Read requested tags from taginfo and update the schema
+    if not args.noTaginfo:
+        for k in keys:
+            readValuesIntoSchema(k)
+
+    # Export tags from schema into new schema directory
+    writeSchemaFile(outputDir)
+
+
+    #for tinfo in allTags:
+    #    if (tinfo['count'] > 100):
+    #        print '    "tag": {'
+    #        print '        "name": "%s=%s",' % (key, tinfo['value'])
+    #        if (tinfo['description'] != '' and tinfo['description'].strip() != '???'):
+    #            print '        "description": "%s",' %(tinfo['description'])
+    #        print '        "isA": "%s",' % (key)
+    #        print '        "#": "Count in tag info is %d on %s"' % \
+    #            (tinfo['count'], datetime.date.today())
+    #        print '    },'
 
