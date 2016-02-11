@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-function translateAttributes(attrs, layerName)
+function translateAttributes(attrs, layerName, geometryType)
 {
     if ("error_circ" in attrs)
     {

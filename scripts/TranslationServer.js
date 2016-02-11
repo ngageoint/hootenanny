@@ -12,87 +12,17 @@ var fs = require('fs');
 // default port
 var serverPort = 8233;
 
-var HOOT_HOME = process.env.HOOT_HOME;
-var availableTrans = {'TDSv40':{'isvailable':'true'}, 'TDSv61':{'isvailable':'true'}};
-hoot = require(HOOT_HOME + '/lib/HootJs');
-
-
-createUuid = hoot.UuidHelper.createUuid;
-logWarn = hoot.logWarn;
-
-var translationsMap = {};
-translationsMap['TDSv40'] = require(HOOT_HOME + '/plugins/etds_osm.js'); 
-translationsMap['TDSv61'] = require(HOOT_HOME + '/plugins/etds61_osm.js'); 
-
-
 var util = require('util');
 var nCPU = os.cpus().length;
 
+var availableTrans = {'TDSv40':{'isvailable':'true'}, 'TDSv61':{'isvailable':'true'}};
+var HOOT_HOME = process.env.HOOT_HOME;
+//Moving hoot init to the request handler allows stxxl temp file cleanup to happen properly.
+//hoot = require(HOOT_HOME + '/lib/HootJs');
 
 var osmToTdsMap = {};
-osmToTdsMap['TDSv40'] = new hoot.TranslationOp({
-		    	'translation.script':HOOT_HOME + '/translations/OSM_to_englishTDS.js',
-		    	'translation.direction':'toogr'});
-osmToTdsMap['TDSv61'] = new hoot.TranslationOp({
-		    	'translation.script':HOOT_HOME + '/translations/OSM_to_englishTDS61.js',
-		    	'translation.direction':'toogr'});
-
-
-
 var tdsToOsmMap = {};
-tdsToOsmMap['TDSv40'] = new hoot.TranslationOp({
-		    	'translation.script':HOOT_HOME + '/translations/englishTDS_to_OSM.js',
-		    	'translation.direction':'toosm'});
-tdsToOsmMap['TDSv61'] = new hoot.TranslationOp({
-		    	'translation.script':HOOT_HOME + '/translations/englishTDS61_to_OSM.js',
-		    	'translation.direction':'toosm'});
 
-
-// Gets the translation schema for field population for a fcode
-// TODO: In the future we should get this from caller
-var schemaMap = {};
-schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_schema.js');
-schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_schema.js');
-
-/*
-try {
-	var schemaPath = HOOT_HOME + '/plugins-local/hgis20_schema.js';
-    var fPath = fs.lstatSync(schemaPath);
-
-    if (fPath.isFile()) {
-        schemaMap['HGISv20'] = require(schemaPath);
-    }
-
-
-    var tds2OsmPath = HOOT_HOME + '/translations-local/HGISv20.js';
-    fPath = fs.lstatSync(tds2OsmPath);
-
-    if (fPath.isFile()) {
-        tdsToOsmMap['HGISv20'] = new hoot.TranslationOp({
-		    	'translation.script':tds2OsmPath,
-		    	'translation.direction':'toosm'});
-    }
-
-    var osm2tdsPath = HOOT_HOME + '/translations-local/HGISv20_UI.js';
-    fPath = fs.lstatSync(osm2tdsPath);
-
-    if (fPath.isFile()) {
-    	availableTrans['HGISv20'] = {'isvailable':'true', 'meta':{'filtertagname':'name', 'filterkey':'HGIS_Layer'}};
-    	osmToTdsMap['HGISv20'] = new hoot.TranslationOp({
-		    	'translation.script':osm2tdsPath,
-		    	'translation.direction':'toogr'});
-    }
-
-    var transPath = HOOT_HOME + '/plugins-local/hgis20.js';
-    fPath = fs.lstatSync(transPath);
-    if (fPath.isFile()) {
-    	translationsMap['HGISv20'] = require(transPath);
-    }
-}
-catch (e) {
-    // ...
-}
-*/
 // Argument parser
 process.argv.forEach(function (val, index, array) {
 	// port arg
@@ -113,7 +43,6 @@ process.argv.forEach(function (val, index, array) {
 		if(nThreadCnt > 0){
 			nCPU = nThreadCnt;
 		}
-  		
   	}
   }
 });
@@ -130,7 +59,6 @@ if(cluster.isMaster){
     	cluster.fork();
 	})
 } else {
-
 	// We create child process http server
 	// and we all listen on serverPort
 	http.createServer(
@@ -162,7 +90,6 @@ if(cluster.isMaster){
 	).listen(serverPort);
 }
 
-
 var getCapabilities = function(request, response)
 {
 	if(request.method === "GET"){
@@ -175,10 +102,26 @@ var getCapabilities = function(request, response)
 	}	
 }
 
+var populateOsmToTdsmap = function()
+{
+	var hoot = require(HOOT_HOME + '/lib/HootJs');
+	if(!osmToTdsMap['TDSv40']) {
+		osmToTdsMap['TDSv40'] = new hoot.TranslationOp({
+									'translation.script':HOOT_HOME + '/translations/OSM_to_englishTDS.js',
+									'translation.direction':'toogr'});
+	}
+
+	if(!osmToTdsMap['TDSv61']) {
+		osmToTdsMap['TDSv61'] = new hoot.TranslationOp({
+					    	'translation.script':HOOT_HOME + '/translations/OSM_to_englishTDS61.js',
+					    	'translation.direction':'toogr'});
+	}
+} 
 
 // OSM to TDS request handler
 var osmtotds = function(request, response)
 {
+	
 	if(request.method === "POST"){
 		var alldata = "";
 		request.on('data', function(data){
@@ -186,6 +129,8 @@ var osmtotds = function(request, response)
 		});
 
 		request.on('end', function(data){
+			populateOsmToTdsmap();
+			
 			postHandler(alldata, response, osmToTdsMap);
 		});
 	} else if(request.method === "GET"){
@@ -196,6 +141,13 @@ var osmtotds = function(request, response)
 		var featWGeomMatchSchema = null;
 		var geom = params.geom;
 		var trns = params.translation;
+		
+		//Gets the translation schema for field population for a fcode
+		// TODO: In the future we should get this from caller
+		var schemaMap = {};
+		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_schema.js');
+		schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_schema.js');
+		
 		var schema = schemaMap['TDSv61'].getDbSchema();
 		if(trns){
 			var schModule = schemaMap[trns];
@@ -224,9 +176,28 @@ var osmtotds = function(request, response)
 	}	
 }
 
+
+var populateTdsToOsmMap = function() 
+{
+	var hoot = require(HOOT_HOME + '/lib/HootJs');
+	if(!tdsToOsmMap['TDSv40'])
+	{
+		tdsToOsmMap['TDSv40'] = new hoot.TranslationOp({
+					    	'translation.script':HOOT_HOME + '/translations/englishTDS_to_OSM.js',
+					    	'translation.direction':'toosm'});
+	}
+
+	if(!tdsToOsmMap['TDSv61'])
+	{
+		tdsToOsmMap['TDSv61'] = new hoot.TranslationOp({
+					    	'translation.script':HOOT_HOME + '/translations/englishTDS61_to_OSM.js',
+					    	'translation.direction':'toosm'});
+	}
+}
 // TDS to OSM handler
 var tdstoosm = function(request, response)
 {
+	
 	if(request.method === "POST"){
 		var alldata = "";
 		request.on('data', function(data){
@@ -234,6 +205,8 @@ var tdstoosm = function(request, response)
 		});
 
 		request.on('end', function(data){
+			populateTdsToOsmMap();
+			
 			postHandler(alldata, response, tdsToOsmMap);
 		});
 	} else if(request.method === "GET"){
@@ -247,6 +220,10 @@ var tdstoosm = function(request, response)
 		var params = url_parts.query;
 
 		var translation = params.translation;
+		
+		var translationsMap = {};
+		translationsMap['TDSv40'] = require(HOOT_HOME + '/plugins/etds_osm.js'); 
+		translationsMap['TDSv61'] = require(HOOT_HOME + '/plugins/etds61_osm.js');
 
 		var transScript = translationsMap[translation];
 		if(transScript) {
@@ -287,6 +264,13 @@ var getTaginfoKeyFields = function(request, response)
 		} 
 
 		var trns = params.translation;
+		
+		//Gets the translation schema for field population for a fcode
+		// TODO: In the future we should get this from caller
+		var schemaMap = {};
+		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_schema.js');
+		schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_schema.js');
+		
 		var schema = schemaMap['TDSv61'].getDbSchema();
 		if(trns){
 			var schModule = schemaMap[trns];
@@ -361,6 +345,13 @@ var getTaginfoKeys = function(request, response)
 		// Line, Point, Area
 		var geom = params.rawgeom;
 		var trns = params.translation;
+		
+		//Gets the translation schema for field population for a fcode
+		// TODO: In the future we should get this from caller
+		var schemaMap = {};
+		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_schema.js');
+		schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_schema.js');
+		
 		var schema = schemaMap['TDSv61'].getDbSchema();
 		if(trns){
 			var schModule = schemaMap[trns];
@@ -421,6 +412,8 @@ var getTaginfoKeys = function(request, response)
 // This is where all interesting things happen interfacing with hoot core lib directly
 var postHandler = function(data, response, translatorMap)
 {
+	var hoot = require(HOOT_HOME + '/lib/HootJs');
+	
 	var msg = JSON.parse(data);
     var resArr = [];
     var start = new Date().getTime();
@@ -468,7 +461,12 @@ var getFilteredSchema = function(request, response) {
 		var translation = params.translation;
 		var maxLevDistance = 1*params.maxlevdst;
 		var limitResult = 1*params.limit;
-
+		
+		//Gets the translation schema for field population for a fcode
+		// TODO: In the future we should get this from caller
+		var schemaMap = {};
+		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_schema.js');
+		schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_schema.js');
 
 		var schema = schemaMap['TDSv61'].getDbSchema();
 		if(translation){
@@ -569,10 +567,5 @@ var getLevenshteinDistance = function(s, t) {
 	}
 
 	return v1[t.length];
-
 }
-
-
-
-
 

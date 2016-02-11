@@ -78,13 +78,13 @@ void ScriptTranslator::strictError(const QString& s)
   }
 }
 
-void ScriptTranslator::translateToOsm(Tags& tags, const char *layerName)
+void ScriptTranslator::translateToOsm(Tags& tags, const char *layerName, const char* geomType)
 {
   if (!_initialized)
   {
     _init();
     _initialized = true;
   }
-  _translateToOsm(tags, layerName);
+  _translateToOsm(tags, layerName, geomType);
 }
 }

@@ -263,9 +263,33 @@ tds = {
                             delete othList[val];
                         }
 
-                        logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
+                        hoot.logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
                         delete attrs[val];
+
+                        // Since we deleted the attribute, Skip the text check
+                        continue;
                     }
+                    
+                    // Now check the length of the text fields
+                    // We need more info from the customer about this: What to do if it is too long
+                    if (val in tds.rules.txtLength)
+                    {
+                        if (attrs[val].length > tds.rules.txtLength[val])
+                        {
+                            // First try splitting the attribute and grabbing the first value
+                            var tStr = attrs[val].split(';');
+                            if (tStr[0].length <= tds.rules.txtLength[val])
+                            {
+                                attrs[val] = tStr[0];
+                            }
+                            else
+                            {
+                                // Still too long. Chop to the maximum length.
+                                attrs[val] = tStr[0].substring(0,tds.rules.txtLength[val]);
+                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncateing to ' + tds.rules.txtLength[val] + ' characters.');
+                            }
+                        } // End text attr length > max length
+                    } // End in txtLength
                 }
             }
             else
@@ -282,14 +306,37 @@ tds = {
                         }
 
                         delete attrs[val];
+
+                        // Since we deleted the attribute, Skip the text check
+                        continue;
                     }
-                }
+                    // Now check the length of the text fields
+                    // We need more info from the customer about this: What to do if it is too long
+                    if (val in tds.rules.txtLength)
+                    {
+                        if (attrs[val].length > tds.rules.txtLength[val])
+                        {
+                            // First try splitting the attribute and grabbing the first value
+                            var tStr = attrs[val].split(';');
+                            if (tStr[0].length <= tds.rules.txtLength[val])
+                            {
+                                attrs[val] = tStr[0];
+                            }
+                            else
+                            {
+                                // Still too long. Chop to the maximum length.
+                                attrs[val] = tStr[0].substring(0,tds.rules.txtLength[val]);
+                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncateing to ' + tds.rules.txtLength[val] + ' characters.');
+                            }
+                        } // End text attr length > max length
+                    } // End in txtLength
+                } // End attrs loop
             }
         }
         else
         {
-            logWarn('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
-    } // End Drop attrs
+            hoot.logWarn('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
+        } // End Drop attrs
 
         // Repack the OTH field
         if (Object.keys(othList).length > 0)
@@ -340,7 +387,7 @@ tds = {
                     // Set the offending enumerated value to the default value
                     attrs[enumName] = feature.columns[i].defValue;
 
-                    logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
+                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
 
                     attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,othVal,';');
                 }
@@ -349,7 +396,7 @@ tds = {
                     // Set the offending enumerated value to the "other" value
                     attrs[enumName] = '999';
 
-                    logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting OTH and ' + enumName + ' to Other (999)');
+                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting OTH and ' + enumName + ' to Other (999)');
 
                     attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
                 }
@@ -451,7 +498,7 @@ tds = {
 
 
     // ##### Start of the xxToOsmxx Block #####
-    applyToOsmPreProcessing: function(attrs, layerName)
+    applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
         // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
         // but renamed in different features. Some of these were done during the move from TDSv30 to
@@ -651,7 +698,7 @@ tds = {
 
     }, // End of applyToOsmPreProcessing
 
-    applyToOsmPostProcessing : function (attrs, tags, layerName)
+    applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
      /* Now sort out Roads
         HCT, TYP, RTY etc are related. No easy way to use one2one rules
@@ -1389,10 +1436,11 @@ tds = {
         if (attrs.HGT > 46 && !(attrs.LMC)) attrs.LMC = '1001';
 
         // Alt_Name:  AL020 Built Up Area is the _ONLY_ feature in TDS that has a secondary name.
-        // We are going to push the Alt Name onto the end of the standard name field - ZI005_FNA
         if (attrs.ZI005_FNA2 && attrs.F_CODE !== 'AL020')
         {
-            attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
+            // We were going to push the Alt Name onto the end of the standard name field - ZI005_FNA
+            // but this causes problems so until the customer gives us more direction, we are going to drop it.
+            // attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
 
             delete attrs.ZI005_FNA2;
         }
@@ -1403,7 +1451,7 @@ tds = {
 
     // toOsm - Translate Attrs to Tags
     // This is the main routine to convert _TO_ OSM
-    toOsm : function(attrs, layerName)
+    toOsm : function(attrs, layerName, geometryType)
     {
         // This is filtered by the layerNameFilter function.
         //
@@ -1414,7 +1462,7 @@ tds = {
         tags = {};  // The final output Tag list
 
         // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
 
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
         // the fcode one2one rules
@@ -1447,7 +1495,7 @@ tds = {
         }
 
         // pre processing
-        tds.applyToOsmPreProcessing(attrs, layerName);
+        tds.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
         // Use the FCODE to add some tags.
         if (attrs.F_CODE)
@@ -1470,7 +1518,7 @@ tds = {
         if (attrs.OTH) translate.processOTH(attrs, tags, tds.lookup);
 
         // post processing
-        tds.applyToOsmPostProcessing(attrs, tags, layerName);
+        tds.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
@@ -1567,12 +1615,12 @@ tds = {
 
         if (!(nfddAttrLookup[gFcode]))
         {
-            logError('FCODE and Geometry: ' + gFcode + ' is not in the schema');
+            hoot.logVerbose('FCODE and Geometry: ' + gFcode + ' is not in the schema');
 
             tableName = 'o2s_' + geometryType.toString().charAt(0);
 
             // Dump out what attributes we have converted before they get wiped out
-            if (config.getOgrDebugDumpattrs() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+            if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
 
             for (var i in tags)
             {
@@ -1598,7 +1646,7 @@ tds = {
                 // Not good. Will fix with the rewrite of the tag splitting code
                 if (str.length > 1012)
                 {
-                    logError('o2s tags truncated to fit in available space.');
+                    hoot.logVerbose('o2s tags truncated to fit in available space.');
                     str = str.substring(0,1012);
                 }
 
@@ -1660,17 +1708,16 @@ tds = {
         } // End else We have a feature
 
         // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true' || config.getOgrDebugDumptags() == 'true')
+        if (config.getOgrDebugDumptags() == 'true')
         {
             print('TableName: ' + tableName + '  FCode: ' + attrs.F_CODE + '  Geom: ' + geometryType);
-            if (tableName2 !== '') print('TableName2: ' + tableName2 + '  FCode: ' + attrs2.F_CODE + '  Geom: ' + geometryType);
-        }
 
-        // Debug:
-        if (config.getOgrDebugDumpattrs() == 'true')
-        {
+            if (tableName2 !== '') print('TableName2: ' + tableName2 + '  FCode: ' + attrs2.F_CODE + '  Geom: ' + geometryType);
+
             for (var i in attrs) print('Out Attrs:' + i + ': :' + attrs[i] + ':');
+
             if (attrs2.F_CODE) for (var i in attrs2) print('2Out Attrs:' + i + ': :' + attrs2[i] + ':');
+
             print('');
         }
 

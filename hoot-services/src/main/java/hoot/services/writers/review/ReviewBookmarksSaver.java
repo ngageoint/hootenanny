@@ -1,3 +1,29 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ */
 package hoot.services.writers.review;
 
 
@@ -15,6 +41,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,18 +75,28 @@ public class ReviewBookmarksSaver {
 		long nSaved = 0;
 		ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(_conn);
 		
-		List<ReviewBookmarks> res = retriever.retrieve(request.getMapId(), request.getRelationId());
 		
-		if(res.size() == 0)
+		
+		if(request.getBookmarkId() > -1) 
+		{
+			List<ReviewBookmarks> res = retriever.retrieve(request.getBookmarkId());
+			if(res.size() == 0)
+			{
+				// insert
+				nSaved = insert(request);
+			}
+			else
+			{
+				// update
+				nSaved = update(request, res.get(0));
+			}
+		}
+		else 
 		{
 			// insert
 			nSaved = insert(request);
 		}
-		else
-		{
-			// update
-			nSaved = update(request, res.get(0));
-		}
+		
 		
 		return nSaved;
 	}
@@ -212,7 +249,33 @@ public class ReviewBookmarksSaver {
 				{
 					hstoreStr += ",";
 				}
-				hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + pairs.getValue()
+
+				String jsonStr = "";
+				Object oVal = tags.get(pairs.getKey());
+				if(oVal instanceof JSONObject)
+				{
+					jsonStr = ((JSONObject)oVal).toJSONString();
+				}
+				else if(oVal instanceof JSONArray)
+				{
+					jsonStr = ((JSONArray)oVal).toJSONString();
+				}
+				else if(oVal instanceof Map)
+				{
+					jsonStr = JSONObject.toJSONString((Map)oVal);
+				}
+				else if(oVal instanceof List)
+				{
+					jsonStr = JSONArray.toJSONString((List) oVal);
+				}
+				else
+				{
+					jsonStr = oVal.toString();
+				}
+				jsonStr = jsonStr.replace("\\", "\\\\");
+				jsonStr = jsonStr.replace("'", "''");
+				jsonStr = jsonStr.replace("\"", "\\\"");
+				hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + jsonStr
 				    + "\"";
 			}
   	}

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LOG_H
@@ -61,6 +61,7 @@ public:
   {
     None = 0,
     Debug = 1000,
+    Verbose = 1500,
     Info = 2000,
     Warn = 3000,
     Error = 4000,
@@ -152,6 +153,7 @@ private:
 
 /// print out a variable along w/ it's value. E.g. int a = 3; LOG_VAR(a); => logs "a: 3"
 #define LOG_VARD(var) LOG_DEBUG(#var << ": " << (var))
+#define LOG_VARV(var) LOG_VERBOSE(#var << ": " << (var))
 #define LOG_VARI(var) LOG_INFO(#var << ": " << (var))
 #define LOG_VARW(var) LOG_WARN(#var << ": " << (var))
 #define LOG_VARE(var) LOG_ERROR(#var << ": " << (var))

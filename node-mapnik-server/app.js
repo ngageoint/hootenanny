@@ -63,7 +63,7 @@ var acquire = function(id, name, color, stylesheet, options, callback) {
                     if (options.bufferSize) {
                         obj.bufferSize = options.bufferSize;
                     }
-                    var db = 'renderdb_' + name;
+                    var db = process.env['DB_NAME'] + '_renderdb_' + name;
                     getLayers(db, function(rows) {
                       rows.forEach(function(r) {
                         var d = r.f_table_name;
