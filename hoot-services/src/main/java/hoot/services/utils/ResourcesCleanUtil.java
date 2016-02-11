@@ -106,7 +106,7 @@ public class ResourcesCleanUtil implements Executable {
 		return res;
 	}
 
-	// TODO; Change mapName to mapId
+	// TODO: Change mapName to mapId
 	protected void _deleteIngestResource(final String mapName, final int nMapCnt)
 			throws NullPointerException, FileNotFoundException, IOException, Exception
 	{

@@ -58,8 +58,6 @@ public class LTDSTranslateProcesslet extends BaseProcesslet {
 	 */
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
-
 	}
 
 	/* (non-Javadoc)
@@ -67,9 +65,6 @@ public class LTDSTranslateProcesslet extends BaseProcesslet {
 	 */
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
-
-
 	}
 	
 	@Override

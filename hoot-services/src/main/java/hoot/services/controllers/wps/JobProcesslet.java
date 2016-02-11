@@ -222,8 +222,6 @@ public class JobProcesslet extends BaseProcesslet {
 	 */
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
-
 	}
 
 
@@ -232,9 +230,6 @@ public class JobProcesslet extends BaseProcesslet {
 	 */
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
-
-
 	}
 
 }

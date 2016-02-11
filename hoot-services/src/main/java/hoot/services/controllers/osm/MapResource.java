@@ -411,7 +411,7 @@ public class MapResource
 		osmElem.appendChild(wayElem);
 
 		Transformer tf = TransformerFactory.newInstance().newTransformer();
-		// TODO: Fortify may require this instead but it doesn't work.
+		// Fortify may require this, but it doesn't work.
 		// TransformerFactory transformerFactory =
 		// XmlDocumentBuilder.getSecureTransformerFactory();
 		tf.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
