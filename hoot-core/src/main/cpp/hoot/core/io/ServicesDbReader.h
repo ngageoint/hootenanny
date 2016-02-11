@@ -133,7 +133,7 @@ private:
 
   //indexes are 0 based and indicate the next record that should be returned by a partial query
 
-  //TODO: consolidate these into a map
+  /// @todo consolidate these into a map
   long _nodeIndex;
   long _totalNumMapNodes;
 

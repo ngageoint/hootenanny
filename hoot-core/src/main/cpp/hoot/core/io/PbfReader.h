@@ -155,7 +155,7 @@ public:
   /**
    * The read command called after open.
 
-     TODO: this can probably replace read::(QString, map) and readFile can be made private
+     @todo this can probably replace read::(QString, map) and readFile can be made private
    */
   virtual void read(shared_ptr<OsmMap> map);
 
@@ -196,7 +196,7 @@ private:
   // Bend over backwards to keep the PBF headers out of the normal build. They're quite large.
   PbfReaderData* _d;
   vector<QString> _strings;
-  //TODO: Possibly, it makes sense to replace _map with _partialMap (then rename to _map in base
+  /// @todo Possibly, it makes sense to replace _map with _partialMap (then rename to _map in base
   //class), which was added to PartialOsmMapReader after it was implemented on this class.  So far
   //I've had difficulty making the substitution work with non-partial reading code, so leaving it
   //as is for now.
@@ -228,7 +228,7 @@ private:
   RelationMap::const_iterator _relationsItr;
 
   //partial read elements read counters
-  //TODO: consolidate these into a single collection
+  /// @todo consolidate these into a single collection
   long _partialNodesRead;
   long _partialWaysRead;
   long _partialRelationsRead;

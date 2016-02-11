@@ -567,7 +567,7 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
 
 void OgrWriter::finalizePartial()
 {
-  // TODO: implement
+  /// @todo implement
 }
 
 void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Node>& newNode)

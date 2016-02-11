@@ -279,7 +279,7 @@ public:
     double bestScore;
     vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, bestScore);
     LOG_VAR(m);
-    /// TODO: not valid compare
+    /// @todo not valid compare
 //    HOOT_STR_EQUALS(
 //      "[1]{subline 1: start: way: -18 index: 2 fraction: 0.440972029332128 end: way: -18 index: 2 fraction: 0.553077811243426\n"
 //      "subline 2: start: way: -17 index: 2 fraction: 0 end: way: -17 index: 3 fraction: 0}",

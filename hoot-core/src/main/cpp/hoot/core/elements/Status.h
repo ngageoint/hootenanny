@@ -73,7 +73,6 @@ public:
 
   bool isUnknown() { return _type == Unknown1 || _type == Unknown2; }
 
-  //TODO: I think there is a better way to do this with an array of strings mirroring the enum...
   static Type fromString(QString typeString)
   {
     typeString = typeString.toLower();

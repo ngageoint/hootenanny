@@ -76,7 +76,6 @@ public:
       typeString == "unknown";
   }
 
-  //TODO: I think there is a better way to do this with an array of strings mirroring the enum...
   static Type fromString(QString typeString)
   {
     typeString = typeString.toLower();

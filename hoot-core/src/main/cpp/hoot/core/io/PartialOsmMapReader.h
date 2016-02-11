@@ -50,7 +50,7 @@ public:
   long getMaxElementsPerMap() { return _maxElementsPerMap; }
 
   /**
-   *  TODO: is this needed?
+   *  @todo is this needed?
    */
   virtual void initializePartial() = 0;
 

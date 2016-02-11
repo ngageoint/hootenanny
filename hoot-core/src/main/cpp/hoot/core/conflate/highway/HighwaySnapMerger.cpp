@@ -356,7 +356,7 @@ void HighwaySnapMerger::_removeSpans(shared_ptr<OsmMap> map, const WayPtr& w1, c
           // about connections (e.g. lollipop style).
           if (_directConnect(map, w))
           {
-            // @todo This should likely remove the way even if it is part of another relation.
+            /// @todo This should likely remove the way even if it is part of another relation.
             RecursiveElementRemover(w->getElementId()).apply(map);
           }
         }

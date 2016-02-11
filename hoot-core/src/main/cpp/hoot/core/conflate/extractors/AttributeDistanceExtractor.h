@@ -43,7 +43,7 @@ public:
   static string className() { return "hoot::AttributeDistanceExtractor"; }
 
   AttributeDistanceExtractor(QString key) : _key(key) {}
-  //TODO: is _key even used?
+  /// @todo is _key even used?
   AttributeDistanceExtractor(ValueAggregator* wayAgg = 0) : WayFeatureExtractor(wayAgg) {}
 
   virtual string getClassName() const { return className(); }
