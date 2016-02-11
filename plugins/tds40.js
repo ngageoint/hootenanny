@@ -529,6 +529,9 @@ tds = {
         // List of data values to drop/ignore
         var ignoreList = { '-999999.0':1, '-999999':1, 'noinformation':1 };
 
+        // List of attributes that can't have '0' as a value
+        var noZeroList = ['BNF','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','VST','WD1','WD2','WT2','ZI016_WD1'];
+
         // This is a handy loop. We use it to:
         // 1) Remove all of the "No Information" and -999999 fields
         // 2) Convert all of the Attrs to uppercase - if needed
@@ -547,6 +550,13 @@ tds = {
             {
                 delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
                 continue;
+            }
+
+            // Remove attributes with '0' values if they can't be '0'
+            if (noZeroList.indexOf(col) > -1 && attrs[col] == '0')
+            {
+                delete attrs[col];
+                continue
             }
 
             // Push the attribute to upper case - if needed
