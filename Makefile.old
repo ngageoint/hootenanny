@@ -49,7 +49,9 @@ clean: Makefile.qmake services-clean
 	rm -rf `find test-files/cases -type d -empty`
 	rm -rf `find test-files/cases -type d -empty`
 	cd docs; $(MAKE) clean
+ifeq ($(BUILD_SERVICES),services)
 	scripts/CleanOsmApiDB.sh
+endif
 
 clean-db: services-clean-db
 
@@ -189,7 +191,9 @@ plugins/etds61_osm_rules.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv
 
 # Build osmapi db
 osmapidb: conf/DatabaseConfig.sh
+ifeq ($(BUILD_SERVICES),services)
 	scripts/SetupOsmApiDB.sh
+endif
 
 # Build automatically generated JS files
 js-make: $(SCHEMA_FILES) plugins/config.js
@@ -284,7 +288,7 @@ LocalConfig.pri:
 	cp LocalConfig.pri.orig LocalConfig.pri
 
 Makefile.qmake: Hootenanny.pro Configure.pri LocalConfig.pri
-	qmake
+	qmake-qt4
 
 tmp/schema.dot: qt-make
 	HootTest --single hoot::OsmSchemaTest
@@ -326,6 +330,7 @@ conf/words.sqlite: conf/words1.sqlite
 # If you create a new words.sqlite please just increment the number rather than
 # replacing the old file. This way we can maintain the history.
 conf/words1.sqlite:
+	([ -e /tmp/words1.sqlite ] && test "`sha1sum /tmp/words1.sqlite`" == '4f7333e8e084927fafda3047183302407961b851  /tmp/words1.sqlite' && cp /tmp/words1.sqlite conf/) || \
 	wget -N -P conf/ https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/words1.sqlite || echo "Failure downloading words1.sqlite. Build will continue, but conflation accuracy may suffer."
 
 bin/HootEnv.sh: scripts/HootEnv.sh

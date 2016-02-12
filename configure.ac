@@ -24,7 +24,7 @@ LT_INIT
 # GDAL
 m4_include([m4/ax_lib_gdal.m4])
 AX_LIB_GDAL([1.4.4])
-LIBS="$LIBS $GDAL_LDFLAGS $GDAL_DEP_LDFLAGS"
+LIBS="$LIBS $GDAL_RPATH $GDAL_LDFLAGS"
 CPPFLAGS="$CPPFLAGS $GDAL_CFLAGS"
 if test "${GDAL_OGR_ENABLED}" = "yes" ; then
   ogrinfo --formats > /dev/null

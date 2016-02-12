@@ -2,4 +2,22 @@ completed test 1
 passed test 2
 passed test 3
 passed test 4
-Total Unmatched Features is 1, expected a value between 0 and 0
+Output files:
+areaHistogram.png
+conflatedFeature.png
+csr2.osm
+csr.asciidoc
+csr.html
+csr.osm
+csr.pdf
+csrStats.txt
+distancesHistogram.png
+featureCountHistogram1.png
+inputFeatures.png
+poiHistogram.png
+summaryChart.png
+tagCountHistogram1.png
+tagCountHistogram2.png
+uniqueHistogram.png
+PDF size in range.
+completed test 5

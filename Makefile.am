@@ -4,7 +4,6 @@ TAR=tar
 EXCLUDE_DIRS=grep -E -v ".*/$$"
 confdir=$(prefix)/conf
 plugindir=$(prefix)/plugins
-UNINSTALL_MANIFEST=$(confdir)/HootUninstallManifest.txt
 
 always:
 
@@ -73,27 +72,39 @@ conf/DatabaseConfig.sh:
 # Use some tar fanciness to grab all the files in conf, plugins, translations and scripts
 install-other:
 	mkdir -p tmp
-	$(TAR) cf tmp/other.tar conf plugins scripts translations
-	cat tmp/other.tar | $(TAR) --list | $(EXCLUDE_DIRS) >> $(UNINSTALL_MANIFEST)
-	cat tmp/other.tar | $(TAR) x -C $(prefix)
+	$(TAR) cf tmp/other.tar conf plugins scripts translations rules report
+	mkdir -p $(localstatedir)
+	cat tmp/other.tar | $(TAR) xv -C $(localstatedir)
 	rm -f tmp/other.tar
+	mkdir -p $(docdir)
+	cp INSTALL LICENSE AUTHORS COPYING GPLv3 README* docs/*.pdf $(docdir)
+	mkdir -p $(sysconfdir)/profile.d/
+	mkdir -p $(sysconfdir)/asciidoc/filters/
+	cp -R docs/filters/* $(sysconfdir)/asciidoc/filters/
+	echo "export HOOT_HOME=$(localstatedir)" > $(sysconfdir)/profile.d/hootenanny.sh
+	mkdir -p $(includedir)
+	export HOOT_HOME=`pwd`; \
+	cd $$HOOT_HOME/hoot-core/src/main/cpp/; \
+	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -); \
+	cd $$HOOT_HOME/hoot-js/src/main/cpp; \
+	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -); \
+	cd $$HOOT_HOME/hoot-rnd/src/main/cpp/; \
+	(find . -name '*.h' -print | tar --create --files-from -) | (cd $(includedir) && tar xvfp -)
 
 install-data-local: install-other
 
 install-exec-local:
 	mkdir -p $(bindir) $(libdir) $(confdir)
 	$(INSTALL) bin/* $(bindir)
-	$(INSTALL) lib/* $(libdir)
-	ls bin/* lib/* >> $(UNINSTALL_MANIFEST)
+	rm $(bindir)/HootEnv.sh
+	mkdir -p $(localstatedir)/bin/
+	cp bin/HootEnv.sh $(localstatedir)/bin/
+	cp -l $(localstatedir)/bin/HootEnv.sh $(bindir)
+	cp -a lib/* $(libdir)
 	test $(HAS_HADOOP) && $(INSTALL) pretty-pipes/bin/* $(bindir) || true
 	test $(HAS_HADOOP) && $(INSTALL) pretty-pipes/lib/* $(libdir) || true
-	test $(HAS_HADOOP) && (cd pretty-pipes ; ls bin/* >> $(UNINSTALL_MANIFEST)) || true
-	test $(HAS_HADOOP) && (cd pretty-pipes ; ls lib/* >> $(UNINSTALL_MANIFEST)) || true
 
 # Clean out all install files and then remove the empty directories.
 uninstall-local:
-	cd $(prefix) && test -f $(UNINSTALL_MANIFEST) && xargs -a $(UNINSTALL_MANIFEST) -d "\n" rm -f || true
-	rm -f $(UNINSTALL_MANIFEST)
-	find $(confdir) $(plugindir) $(bindir) $(libdir) -depth -type d -empty -exec rmdir {} \;
 
 SUBDIRS=stub

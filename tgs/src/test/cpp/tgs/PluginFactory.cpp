@@ -40,10 +40,8 @@
 #define SA_VERSION "3.2.0"
 #endif
 
-#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 CPPUNIT_PLUGIN_IMPLEMENT();
-#pragma GCC diagnostic pop
 
 boost::any createObjectNoParams(const std::string& className)
 {
