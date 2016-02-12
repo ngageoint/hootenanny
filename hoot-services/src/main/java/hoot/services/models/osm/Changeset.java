@@ -94,7 +94,7 @@ public class Changeset extends Changesets
    * @param changesetDoc changeset create XML
    * @param mapId ID of the map owning the changeset
    * @param userId ID of the user creating the changeset
-   * @param conn JDBC Connection
+   * @param dbConn JDBC Connection
    * @return ID of the created changeset
    * @throws Exception
    */
@@ -149,7 +149,7 @@ public class Changeset extends Changesets
    * Closes a changeset
    *
    * @param changesetId ID of the changeset to close
-   * @param conn JDBC Connection
+   * @param dbConn JDBC Connection
    * @throws Exception
    */
   public static void closeChangeset(final long mapId, final long changesetId, Connection dbConn) throws Exception
@@ -435,7 +435,7 @@ public class Changeset extends Changesets
    *
    * @param mapId corresponding map ID for the node
    * @param userId corresponding user ID for the node
-   * @param conn JDBC Connection
+   * @param dbConn JDBC Connection
    * @return ID of the inserted changeset
    * @throws Exception
    */
@@ -484,7 +484,7 @@ public class Changeset extends Changesets
    * Determines whether the changeset is available for update
    *
    * @throws Exception
-   * @todo verify user updating changeset is the same one that created it; otherwise return 409
+   * //TODO: verify user updating changeset is the same one that created it; otherwise return 409
    */
   public void verifyAvailability() throws Exception
   {
@@ -535,7 +535,6 @@ public class Changeset extends Changesets
   * Determines whether the current number of changes associated with this changeset plus some
   * new set of changes exceeds the maximum allowed threshold.
   *
-  * @param newChangeCount number of new changes
   * @return true; if the changeset entity count is exceeded; false otherwise
   * @throws IOException if unable to open the services configuration file
   * @throws NumberFormatException

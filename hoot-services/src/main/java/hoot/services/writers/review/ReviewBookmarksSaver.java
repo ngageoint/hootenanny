@@ -137,7 +137,7 @@ public class ReviewBookmarksSaver
 	 * 
 	 * @param request - request object containing updated fields
 	 * @param reviewBookmarksDto - Current review tag
-	 * @return- total numbers of updated
+	 * @return total numbers of updated
 	 * @throws Exception
 	 */
 	public long update(final ReviewBookmarkSaveRequest request, final ReviewBookmarks reviewBookmarksDto) throws Exception

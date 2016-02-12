@@ -154,8 +154,6 @@ public class ExportJobResource extends JobControllerBase {
 	 *	</INPUT>
 	 * <OUTPUT>{"jobid":"24d1400e-434e-45e0-9afe-372215490be2"}</OUTPUT>
 	 * </EXAMPLE>
-	 * @param params
-	 * @return
 	 */
 	@POST
 	@Path("/execute")
@@ -287,10 +285,6 @@ public class ExportJobResource extends JobControllerBase {
 	 *	</INPUT>
 	 * <OUTPUT>Octet stream</OUTPUT>
 	 * </EXAMPLE>
-	 * @param id
-	 * @param outputname
-	 * @param remove
-	 * @return
 	 */
 	@GET
 	@Path("/{id}")
@@ -366,8 +360,6 @@ public class ExportJobResource extends JobControllerBase {
 	 *	</INPUT>
 	 * <OUTPUT>{"id":"ex_eed379c0b9f7469d80ab32c71550883b"}</OUTPUT>
 	 * </EXAMPLE>
-	 * @param id
-	 * @return
 	 */
 	@GET
 	@Path("/wfs/remove/{id}")
@@ -414,7 +406,6 @@ public class ExportJobResource extends JobControllerBase {
 	 *	</INPUT>
 	 * <OUTPUT>[{"id":"ex_eed379c0b9f7469d80ab32c71550883b"}]</OUTPUT>
 	 * </EXAMPLE>
-	 * @return
 	 */
 	@GET
 	@Path("/wfs/resources")
@@ -465,7 +456,6 @@ public class ExportJobResource extends JobControllerBase {
 	 *	</INPUT>
 	 * <OUTPUT>[{"description":"LTDS 4.0","name":"NFDD"},{"description":"MGCP","name":"MGCP"},{"description":"UTP","name":"UTP"}]</OUTPUT>
 	 * </EXAMPLE>
-	 * @return
 	 */
 	@GET
 	@Path("/resources")

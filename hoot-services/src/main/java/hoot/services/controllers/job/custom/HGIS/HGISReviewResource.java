@@ -97,9 +97,6 @@ public class HGISReviewResource extends HGISResource {
    * </OUTPUT>
 	 * </EXAMPLE>
    * This resource prepares existing map for 30% of random HGIS specific validation
-   * @param request
-   * @return
-   * @throws Exception
    */
   @POST
   @Path("/preparevalidation")

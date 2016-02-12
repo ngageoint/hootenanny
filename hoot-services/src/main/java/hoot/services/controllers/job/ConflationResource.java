@@ -145,8 +145,6 @@ public class ConflationResource extends JobControllerBase {
 	 * <OUTPUT>
          * </OUTPUT>
 	 * </EXAMPLE>
-	 * @param params
-	 * @return
 	 */
 	@POST
 	@Path("/execute")

@@ -76,7 +76,7 @@ import com.mysema.query.sql.SQLQuery;
  * referenced way is written. This design does cause the code to be less intuitive, unfortunately, 
  * but hopefully should result in increased write performance.
  * 
- * @todo All element type specific db writing code should be made generic again like it was before
+ * //TODO: All element type specific db writing code should be made generic again like it was before
  * the jooq to querydsl conversion.
  */
 public class ChangesetDbWriter

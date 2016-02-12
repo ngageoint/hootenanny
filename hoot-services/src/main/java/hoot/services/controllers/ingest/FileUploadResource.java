@@ -110,11 +110,6 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 	 * </INPUT>
 	 * <OUTPUT>[{"jobid":"1234-456-789","input":"1234.osm","output":"test_output", "status":"running"}]</OUTPUT>
 	 * </EXAMPLE>
-	 * @param translation
-	 * @param inputType
-	 * @param inputName
-	 * @param request
-	 * @return
 	 */
 
 	@POST

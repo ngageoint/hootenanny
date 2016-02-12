@@ -103,9 +103,6 @@ public class ReportsResource {
 	 * </INPUT>
 	 * <OUTPUT>Octet stream</OUTPUT>
 	 * </EXAMPLE>
-	 * @param id
-	 * @param name
-	 * @return
 	 */
 	@GET
   @Path("/get")
@@ -146,8 +143,7 @@ public class ReportsResource {
 	 * </INPUT>
 	 * <OUTPUT>[{"name":"test name", "description":"test desc", "created":"12345675666", 
 	 * "reportpath":"/projects/hoot/reports/123-456-789/report.pdf"},...]</OUTPUT>
-	 * </EXAMPLE>
-	 * @return
+	 * </EXAMPLE>O
 	 */
 	@GET
   @Path("/list")
@@ -187,8 +183,6 @@ public class ReportsResource {
 	 * </INPUT>
 	 * <OUTPUT>{"id":"123-456", "deleted":"true"}</OUTPUT>
 	 * </EXAMPLE>
-	 * @param id
-	 * @return
 	 */
 	@GET
   @Path("/delete")

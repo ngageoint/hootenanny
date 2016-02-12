@@ -51,7 +51,7 @@ public class ModelDaoUtils
    * types.
    * 
    * @param requestStr can be either a map ID or a map name
-   * @param conn JDBC Connection
+   * @param dbConn JDBC Connection
    * @return if a record ID string is passed in, it is verified and returned; if a record name 
    * string is passed in, it is verified that only one record of the requested type exists with 
    * the given name, and its ID is returned

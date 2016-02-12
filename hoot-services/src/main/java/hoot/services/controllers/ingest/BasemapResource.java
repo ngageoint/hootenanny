@@ -161,10 +161,6 @@ public class BasemapResource extends JobControllerBase {
 	 * <INPUT>None</INPUT>
 	 * <OUTPUT>[{"name":"MyBasemap","jobid":"1234567"}]</OUTPUT>
 	 * </EXAMPLE>
-	 * @param inputName
-	 * @param projection
-	 * @param request
-	 * @return
 	 */
 	@POST
 	@Path("/upload")

@@ -449,7 +449,7 @@ public class MapResource
 	 *
 	 * @param mapId
 	 *          ID of the map to query
-	 * @param bbox
+	 * @param BBox
 	 *          geographic bounding box the requested entities should reside in
 	 * @param multiLayerUniqueElementIds
 	 *          if true, returned element IDs are prepended with <map id>_<first
@@ -802,10 +802,6 @@ public class MapResource
 	 * :8080/hoot-services/osm/api/0.6/map/delete?mapId=123456</URL>
 	 * <REQUEST_TYPE>POST</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT>{"jobId":
 	 * "b9462277-73bc-41ea-94ec-c7819137b00b" }</OUTPUT> </EXAMPLE>
-	 *
-	 * @param mapId
-	 * @return
-	 * @throws Exception
 	 */
 	@POST
 	@Path("/delete")
@@ -839,10 +835,6 @@ public class MapResource
 	 * &inputType='Dataset'&modName='New Dataset'</URL>
 	 * <REQUEST_TYPE>POST</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT>{"jobId":
 	 * "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT> </EXAMPLE>
-	 *
-	 * @param mapId
-	 * @return
-	 * @throws Exception
 	 */
 	@POST
 	@Path("/modify")
@@ -908,10 +900,6 @@ public class MapResource
 	 * ={foldername}&parentId={parentId}</URL> <REQUEST_TYPE>POST</REQUEST_TYPE>
 	 * <INPUT> </INPUT> <OUTPUT>{"jobId":
 	 * "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT> </EXAMPLE>
-	 *
-	 * @param mapId
-	 * @return
-	 * @throws Exception
 	 */
 	@POST
 	@Path("/addfolder")
@@ -974,10 +962,6 @@ public class MapResource
 	 * ?folderId={folderId}</URL> <REQUEST_TYPE>POST</REQUEST_TYPE> <INPUT>
 	 * </INPUT> <OUTPUT>{"jobId":
 	 * "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT> </EXAMPLE>
-	 *
-	 * @param mapId
-	 * @return
-	 * @throws Exception
 	 */
 	@POST
 	@Path("/deletefolder")
@@ -1047,10 +1031,6 @@ public class MapResource
 	 * /updateParentId?folderId={folderId}</URL>
 	 * <REQUEST_TYPE>POST</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT>{"jobId":
 	 * "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT> </EXAMPLE>
-	 *
-	 * @param folderId
-	 * @return
-	 * @throws Exception
 	 */
 	@POST
 	@Path("/updateParentId")
@@ -1105,10 +1085,6 @@ public class MapResource
 	 * ={foldername}&parentId={parentId}</URL> <REQUEST_TYPE>POST</REQUEST_TYPE>
 	 * <INPUT> </INPUT> <OUTPUT>{"jobId":
 	 * "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT> </EXAMPLE>
-	 *
-	 * @param mapId
-	 * @return
-	 * @throws Exception
 	 */
 	@POST
 	@Path("/linkMapFolder")

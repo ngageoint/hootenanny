@@ -13,8 +13,6 @@ endif
 
 default: build
 
-#add -X param temporarily to mvn command to debug mvn execution
-
 ./src/main/resources/db/liquibase.properties: ./src/main/resources/db/liquibase.properties.in ../conf/DatabaseConfig.sh
 	../scripts/ReplaceEnvironmentVariables.sh ./src/main/resources/db/liquibase.properties.in ./src/main/resources/db/liquibase.properties
 
@@ -38,6 +36,7 @@ build-info:
 
 config: ./src/main/resources/db/liquibase.properties src/main/resources/db/spring-database.xml src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml pom.xml src/main/resources/conf/hoot-services.conf src/main/resources/log4j.xml
 
+#add -X param temporarily to mvn-build command to debug mvn execution
 build: build-info config
 	# If there isn't a local copy of the properties, copy the global version.
 	# [ -f src/main/resources/conf/hoot-services.conf ] || cp src/main/resources/conf/hoot-services.conf.orig src/main/resources/conf/hoot-services.conf
@@ -47,7 +46,6 @@ ifneq ($(MVN_QUIET),)
 else
 	../scripts/mvn-build $(MVN_QUIET) build
 endif
-	#mvn -q compile com.sun.jersey.contribs:maven-wadl-plugin:generate 2> >( $(FILTER) >&2 )
 	
 	cp target/hoot-services-*.war ../bin
 

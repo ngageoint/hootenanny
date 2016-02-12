@@ -14,7 +14,6 @@ else
 	A2X_QUIET=-v
 endif
 
-
 define buildAsciidoc
 	mkdir -p tmp
 	git log --simplify-by-decoration --no-merges "--pretty=%h|$$|%ct|$$|%s|$$|%aN" `find $(filter-out tmp/asciidoc-config,$^) || true` | node ParseRevisions.js > $(patsubst %.asciidoc,%-docinfo.xml,$<)
@@ -33,8 +32,7 @@ all: \
 	Hootenanny\ -\ User\ Interface\ Guide.pdf \
 	Hootenanny\ -\ Installation\ Instructions.pdf \
 	Hootenanny\ -\ Developer\ Guide.pdf \
-        Hootenanny\ -\ Algorithms.pdf \
-	# Hootenanny\ -\ Web\ Architecture\ Guide.pdf \
+  Hootenanny\ -\ Algorithms.pdf \
 
 # A generic dep for all asciidoc documents. Make sure the environment is setup
 # properly.
@@ -129,17 +127,6 @@ Hootenanny\ -\ Developer\ Guide.pdf: \
 	tmp/rules-template-doxygen \
 	user/*.asciidoc
 	$(call buildAsciidoc)
-
-# Hootenanny\ -\ Web\ Architecture\ Guide.pdf: \
-#	HootenannyWebArchitecture.asciidoc \
-#	tmp/asciidoc-config \
-#	../HOOT_VERSION_FILE \
-#	docinfo.xml \
-#	styles/* \
-#	../hoot-services/src/main/webapp/WEB-INF/workspace/processes/*.xml
-#	$$HOOT_HOME/scripts/makeWpsDocs.sh $(A2X_QUIET)
-#	$$HOOT_HOME/scripts/makeRestDocs.sh $(A2X_QUIET)
-#	$(call buildAsciidoc)
 
 Hootenanny\ -\ Installation\ Instructions.pdf: \
 	HootenannyInstallDocs.asciidoc \

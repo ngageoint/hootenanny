@@ -213,7 +213,6 @@ public class UserResource
 	 *
    * Service method endpoint for retrieving OSM user information
    *
-   * @param userId ID of the user to retrieve information for
    * @return Response with the requested user's information
    * @throws Exception
    */
@@ -268,7 +267,6 @@ public class UserResource
 	 *
    * Service method endpoint for retrieving OSM user information
    *
-   * @param userId ID of the user to retrieve information for
    * @return Response with the requested user's information
    * @throws Exception
    */

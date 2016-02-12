@@ -26,9 +26,6 @@
  */
 package hoot.services.command;
 
-/**
- * 
- */
 public class CommandResult {
 
     private String command;
@@ -36,12 +33,6 @@ public class CommandResult {
     private String stdout;
     private String stderr;
 
-    /**
-     * @param cmdString
-     * @param out
-     * @param string
-     * @param string2
-     */
     public CommandResult(String cmdString, int result, String stdoutString, String stderrString) {
         
         this.command = cmdString;

@@ -175,10 +175,6 @@ public class CustomScriptResource
 	 * </INPUT>
 	 * <OUTPUT>[{"NAME":"MyTest","DESCRIPTION":"my description"}]</OUTPUT>
 	 * </EXAMPLE>
-   * @param script
-   * @param scriptName
-   * @param scriptDescription
-   * @return
    */
   @SuppressWarnings("unchecked")
   @POST
@@ -246,7 +242,6 @@ public class CustomScriptResource
 	 * </INPUT>
 	 * <OUTPUT>[{"NAME":"MyTest","DESCRIPTION":"my description"}]</OUTPUT>
 	 * </EXAMPLE>
-   * @return
    */
   @SuppressWarnings("unchecked")
   @GET
@@ -446,8 +441,6 @@ public class CustomScriptResource
 	 * 	}
 	 * </OUTPUT>
 	 * </EXAMPLE>
-   * @param scriptName
-   * @return
    */
   @GET
   @Path("/getscript")
@@ -553,8 +546,6 @@ public class CustomScriptResource
 	 * 	}
 	 * </OUTPUT>
 	 * </EXAMPLE>
-   * @param scriptPath
-   * @return
    */
   @GET
   @Path("/getdefaultscript")
@@ -634,8 +625,6 @@ public class CustomScriptResource
 	 * [{"NAME":"My Test6","DESCRIPTION":"my description"}]
 	 * </OUTPUT>
 	 * </EXAMPLE>
-   * @param scriptName
-   * @return
    */
   @SuppressWarnings("unchecked")
   @GET

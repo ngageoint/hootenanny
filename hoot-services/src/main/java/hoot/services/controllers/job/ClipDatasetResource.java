@@ -99,8 +99,6 @@ public class ClipDatasetResource extends JobControllerBase {
 	 * }</INPUT>
 	 * <OUTPUT></OUTPUT>
 	 * </EXAMPLE>
-	 * @param params
-	 * @return
 	 */
 	@POST
 	@Path("/execute")

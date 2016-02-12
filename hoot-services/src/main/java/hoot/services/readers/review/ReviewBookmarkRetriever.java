@@ -54,16 +54,9 @@ public class ReviewBookmarkRetriever
 	
 	/**
 	 * Retrieves all bookmarks for mapId+relationId using map id and relation id.
-	 * 
-	 * @param mapId
-	 * @param relationId
-	 * @return
-	 * @throws Exception
 	 */
 	public List<ReviewBookmarks> retrieve(final long mapId, final long relationId) throws Exception
 	{		
-
-		
 		List<ReviewBookmarks> res = null;
 		try
 		{
@@ -81,16 +74,9 @@ public class ReviewBookmarkRetriever
 	
 	/**
 	 * Retrieves all bookmarks for mapId+relationId using map id and relation id.
-	 * 
-	 * @param mapId
-	 * @param relationId
-	 * @return
-	 * @throws Exception
 	 */
 	public List<ReviewBookmarks> retrieve(final long boookMarkId) throws Exception
 	{		
-
-		
 		List<ReviewBookmarks> res = null;
 		try
 		{

@@ -310,8 +310,6 @@ public class ChangesetResource
    * @return response acknowledging the result of the update operation with updated entity ID 
    * information
    * @throws Exception
-   * @see http://wiki.openstreetmap.org/wiki/API_0.6 and 
-   * http://wiki.openstreetmap.org/wiki/OsmChange
    */
   @POST
   @Path("/{changesetId}/upload")
@@ -401,10 +399,9 @@ public class ChangesetResource
   /**
    * Service method endpoint for closing a changeset
    * 
-   * @param changeSetId ID of the changeset to close
+   * @param changesetId ID of the changeset to close
    * @return HTTP status code indicating the status of the closing of the changeset
    * @throws Exception 
-   * @see http://wiki.openstreetmap.org/wiki/API_0.6 and
    */
   @PUT
   @Path("/{changesetId}/close")

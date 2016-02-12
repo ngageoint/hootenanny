@@ -254,7 +254,7 @@ rebuild-db:
 HOOT_TARNAME=hootenanny-$(HOOT_VERSION)
 dist: archive
 archive: default docs
-	if [ "$(BUILD_SERVICES)" == "services" ]; then cp hoot-services/target/hoot-services-*.war hootenanny-services-$(HOOT_VERSION).war; fi
+	if [ "$(BUILD_SERVICES)" == "services" ]; then cp hoot-services/target/hoot-services-*.war hootenanny-services-$(HOOT_VERSION).war; tar -cvzf docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz hoot-services/target/site/apidocs; fi
 	rm -f $(HOOT_TARNAME).tar.gz
 	scripts/git-archive-all.sh --prefix $(HOOT_TARNAME)/ $(HOOT_TARNAME).tar
 	mkdir -p $(HOOT_TARNAME)

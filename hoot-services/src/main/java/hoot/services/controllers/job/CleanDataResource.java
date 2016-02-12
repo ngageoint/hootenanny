@@ -103,8 +103,6 @@ public class CleanDataResource  extends JobControllerBase {
 	 * }</INPUT>
 	 * <OUTPUT>{"jobid":"0df81145-5f3b-46f4-9937-64ade48fd604"}</OUTPUT>
 	 * </EXAMPLE>
-	 * @param params
-	 * @return
 	 */
 	@POST
 	@Path("/execute")

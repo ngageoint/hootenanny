@@ -518,8 +518,8 @@ public class ElementResource
    * Returns a single element item's XML for a given map without its element children
    * 
    * @param mapId ID of the map the element belongs to
-   * @param elementId OSM element ID of the element to retrieve
-   * @param elementType OSM element type of the element to retrieve; valid values are: node, way, 
+   * @param elementIds OSM element IDs of the elements to retrieve
+   * @param elemType OSM element type of the element to retrieve; valid values are: node, way, 
    * or relation
    * @return element XML document
    * @throws Exception

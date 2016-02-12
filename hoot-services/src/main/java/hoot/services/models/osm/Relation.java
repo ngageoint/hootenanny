@@ -145,7 +145,7 @@ public class Relation extends Element
 	/**
 	 * Returns an XML representation of the element; does not add tags
 	 *
-	 * @param parent XML node this element should be attached under
+	 * @param parentXml XML node this element should be attached under
 	 * @param modifyingUserId ID of the user which created this element
 	 * @param modifyingUserDisplayName user display name of the user which created this element
 	 * @param multiLayerUniqueElementIds if true, IDs are prepended with <map id>_<first letter of the

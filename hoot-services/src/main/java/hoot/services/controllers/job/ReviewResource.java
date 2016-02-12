@@ -313,8 +313,6 @@ public class ReviewResource
 	 * {"mapId":15,"relationId":-1,"sortOrder":-1,"resultCount":0}
 	 * </OUTPUT>
 	 * </EXAMPLE>
-	 * @param mapId
-	 * @return
 	 */
 	@GET
 	@Path("/random")
@@ -370,9 +368,6 @@ public class ReviewResource
 	 * {"mapId":15,"relationId":-1,"sortOrder":3,"resultCount":0}
 	 * </OUTPUT>
 	 * </EXAMPLE>
-	 * @param mapId
-	 * @param offsetSeqId
-	 * @return
 	 */
 	@GET
 	@Path("/next")
@@ -442,9 +437,6 @@ public class ReviewResource
 	 * {"mapId":15,"relationId":-1,"sortOrder":3,"resultCount":0}
 	 * </OUTPUT>
 	 * </EXAMPLE>
-	 * @param mapId
-	 * @param offsetSeqId
-	 * @return
 	 */
 	@GET
 	@Path("/reviewable")
@@ -472,8 +464,6 @@ public class ReviewResource
 		return ret;
 	}
 	
-	//
-	
 	/**
 	 * <NAME>Review Service Get Reviewable Statistics</NAME>
 	 * <DESCRIPTION>
@@ -496,8 +486,6 @@ public class ReviewResource
 	 * {"totalCount":5,"unreviewedCount":0}
 	 * </OUTPUT>
 	 * </EXAMPLE>
-	 * @param mapId
-	 * @return
 	 */
 	@GET
 	@Path("/statistics")
@@ -523,7 +511,6 @@ public class ReviewResource
 		return ret;
 	}
 	
-	
 	/**
 	 * <NAME>Review Service Get geojson for all reviewable items</NAME>
 	 * <DESCRIPTION>
@@ -534,7 +521,7 @@ public class ReviewResource
 	 *  Target map id
 	 * </mapid>
 	 * <minlon>
-	 *  Minimum longitude
+	 * Minimum longitude
 	 * </minlon>
 	 * <minlat>
 	 *  Minimum latitude
@@ -558,12 +545,6 @@ public class ReviewResource
 	 * GeoJson
 	 * </OUTPUT>
 	 * </EXAMPLE>
-	 * @param mapId
-	 * @param minLon
-	 * @param minLat
-	 * @param maxLon
-	 * @param maxLat
-	 * @return
 	 */
 	@GET
 	@Path("/allreviewables")
@@ -572,10 +553,8 @@ public class ReviewResource
 			@QueryParam("minlon") String minLon,
 			@QueryParam("minlat") String minLat,
 			@QueryParam("maxlon") String maxLon,
-			@QueryParam("maxlat") String maxLat
-			)
+			@QueryParam("maxlat") String maxLat)
 	{
-
 		JSONObject ret = new JSONObject();
 		ret.put("type", "FeatureCollection");
 		ret.put("features", new JSONArray());
@@ -609,8 +588,6 @@ public class ReviewResource
 		return ret;
 	}
 	
-	
-	
 	/**
 	 * <NAME>Review bookmark save</NAME>
 	 * <DESCRIPTION>
@@ -641,8 +618,6 @@ public class ReviewResource
    * }
 	 * </OUTPUT>
 	 * </EXAMPLE>
-   * @param request
-   * @return
    * @throws Exception
    */
   @POST
@@ -703,7 +678,6 @@ public class ReviewResource
   	return response;
   }
   
-  
 	/**
 	 * <NAME>Review bookmark retrieve</NAME>
 	 * <DESCRIPTION>
@@ -747,9 +721,6 @@ public class ReviewResource
    * }
 	 * </OUTPUT>
 	 * </EXAMPLE>
-   * @param mapid
-   * @param relid
-   * @return
    * @throws Exception
    */
   @GET
@@ -776,8 +747,6 @@ public class ReviewResource
     		long relationId = Long.parseLong(relid);
   			res = retriever.retrieve(mapId, relationId);
   		}
-  		
-  		
   		
   		for(ReviewBookmarks mk : res)
   		{
@@ -819,9 +788,6 @@ public class ReviewResource
   /**
    * Helper function to handle JSON string conversion to Hstore friendly format
    * 
-   * @param rawElem
-   * @param oBmkDetail
-   * @param elemName
    * @throws Exception
    */
   protected void _appendHstoreElement(final String rawElem, final JSONObject oBmkDetail, final String elemName) throws Exception
@@ -888,11 +854,6 @@ public class ReviewResource
    * }
 	 * </OUTPUT>
 	 * </EXAMPLE>
-   * @param orderByCol
-   * @param asc
-   * @param limitSize
-   * @param offset
-   * @return
    * @throws Exception
    */
   @GET
@@ -1004,7 +965,6 @@ public class ReviewResource
    * }
 	 * </OUTPUT>
 	 * </EXAMPLE>
-   * @return
    * @throws Exception
    */
   @GET
@@ -1059,8 +1019,6 @@ public class ReviewResource
    * }
 	 * </OUTPUT>
 	 * </EXAMPLE>
-   * @param request
-   * @return
    * @throws Exception
    */
   @DELETE

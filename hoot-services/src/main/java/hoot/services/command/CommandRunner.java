@@ -549,12 +549,6 @@ public class CommandRunner implements ICommandRunner {
         }
     }
 
-    /**
-     * @param externalInstallerName
-     * @param file
-     * @param env
-     * @return
-     */
     public CommandResult exec ( String[] pCmd, File dir, String[] env ) throws IOException, InterruptedException {
         StringWriter out = new StringWriter ();
         StringWriter err = new StringWriter ();
@@ -563,14 +557,6 @@ public class CommandRunner implements ICommandRunner {
         return result;
     }
 
-    /**
-     * @param cmd
-     * @param dir
-     * @param out
-     * @param err
-     * @param env
-     * @return
-     */
     private CommandResult exec ( String[] pCmd, File dir, StringWriter pOut, StringWriter pErr, String[] env )
             throws IOException, InterruptedException {
 

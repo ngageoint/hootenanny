@@ -178,7 +178,6 @@ public class TranslatorResource extends ServerControllerBase
 	 *	</INPUT>
 	 * <OUTPUT>{"isRunning":"true","port":"8094"}</OUTPUT>
 	 * </EXAMPLE>
-   * @return
    */  
   @GET
   @Path("/translationserver/status")

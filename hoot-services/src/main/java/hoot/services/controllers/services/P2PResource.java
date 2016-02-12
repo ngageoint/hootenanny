@@ -119,7 +119,6 @@ public class P2PResource extends ServerControllerBase
 	 *	</INPUT>
 	 * <OUTPUT>{"isRunning":"false"}</OUTPUT>
 	 * </EXAMPLE>
-   * @return
    */
   @GET
   @Path("/p2pserver/stop")
@@ -165,7 +164,6 @@ public class P2PResource extends ServerControllerBase
 	 *	</INPUT>
 	 * <OUTPUT>{"isRunning":"true","port":"8096"}</OUTPUT>
 	 * </EXAMPLE>
-   * @return
    */  
   @GET
   @Path("/p2pserver/status")

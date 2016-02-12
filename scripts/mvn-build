@@ -194,4 +194,6 @@ fi
 
 # The grep removes some silly messages that can't be removed.
 mvn $ARGS | grep -v -F "Groovy: [scmModified"$'\n'"execute contextualize" | grep -v "Outputting log4j snippets" || true
+# the greps below aren't removing the text
+mvn javadoc:javadoc # | egrep -v 'Generating*' || egrep -v -F 'Loading source files for package*' || true
 exit ${PIPESTATUS[0]}

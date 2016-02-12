@@ -108,8 +108,6 @@ public class ETLResource  extends JobControllerBase {
 	 *	</INPUT>
 	 * <OUTPUT>{"jobid":"4dea2839-af7d-4bb6-bade-a52a28232307"}</OUTPUT>
 	 * </EXAMPLE>
-	 * @param params
-	 * @return
 	 */
 	@POST
 	@Path("/load")

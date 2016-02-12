@@ -395,10 +395,6 @@ public class JobResource
   /**
    * Processes requested job. Parameter is in String in JSON format
    *
-   * @param jobId
-   * @param params
-   * @param request
-   * @return
    * @throws SQLException
    */
   @POST
@@ -560,7 +556,6 @@ public class JobResource
   /**
    * Raw call to terminate job
    *
-   * @param childId
    * @throws Exception
    */
   protected void _terminateJob(String childId) throws Exception
@@ -570,11 +565,7 @@ public class JobResource
 
   /**
    * Terminate Job and its children jobs
-   *
-   * @param jobId
-   * @return
    */
-
   public String terminateJob(String jobId, String mapId) throws Exception
   {
   	/*
@@ -666,10 +657,6 @@ public class JobResource
 	 * }
 	 * </OUTPUT>
 	 * </EXAMPLE>
-   *
-   * @param jobId
-   * @param request
-   * @return
    */
   @GET
   @Path("/status/{jobId}")
@@ -790,9 +777,6 @@ public class JobResource
 
   /**
    * Return job status
-   *
-   * @param jobId
-   * @return
    */
   @SuppressWarnings("unchecked")
   protected JSONObject getJobStatusObj(String jobId) throws Exception

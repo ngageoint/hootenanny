@@ -89,9 +89,6 @@ public class HGISFilterResource extends HGISResource {
    * </OUTPUT>
 	 * </EXAMPLE>
    * This resource produces layer that filters Non HGIS POIs.
-   * @param request
-   * @return
-   * @throws Exception
    */
 	@POST
   @Path("/filternonhgispois")

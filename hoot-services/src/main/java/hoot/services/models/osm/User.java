@@ -60,7 +60,6 @@ public class User extends Users
    *
    * @param parentXml XML node this node should be attached under
    * @return an XML node
-   * @see http://wiki.openstreetmap.org/wiki/API_0.6
    */
   private Element detailsToXml(final Element parentXml, final long changesetsCount)
   {
@@ -92,7 +91,6 @@ public class User extends Users
    *
    * @param parentXml XML node this node should be attached under
    * @return an XML node
-   * @see http://wiki.openstreetmap.org/wiki/API_0.6
    */
   public Element toXml(final Element parentXml, final long changesetsCount)
   {

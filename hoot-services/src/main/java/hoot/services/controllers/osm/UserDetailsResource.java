@@ -86,7 +86,7 @@ public class UserDetailsResource
    *
    * @return Response with user detail information
    * @throws Exception
-   * @todo update to get actual logged in user once security is implemented
+   * //TODO: update to get actual logged in user once security is implemented
    */
   @GET
   @Consumes(MediaType.TEXT_PLAIN)
