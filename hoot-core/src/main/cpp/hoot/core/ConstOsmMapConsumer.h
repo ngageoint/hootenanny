@@ -24,48 +24,26 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ADDUUIDVISITOR_H
-#define ADDUUIDVISITOR_H
+#ifndef CONSTOSMMAPCONSUMER_H
+#define CONSTOSMMAPCONSUMER_H
 
-// hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include "OsmMapConsumer.h"
 
 namespace hoot
 {
-using namespace std;
+class OsmMap;
 
-/**
- * Adds a UUID with a specific key. If you want to limit the features that will be tagged then look
- * into FilteredVisitor.
- */
-class AddUuidVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class ConstOsmMapConsumer : public OsmMapConsumer
 {
 public:
+  virtual void setOsmMap(const OsmMap* map) = 0;
 
-  static string className() { return "hoot::AddUuidVisitor"; }
-
-  AddUuidVisitor(QString key);
-
-  virtual ~AddUuidVisitor() {}
-
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
-
-  /**
-   * AddUuidVisitor requires a read/write map.
-   */
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
-
-  /**
-   * Adds a tag with a UUID to all valid elements.
-   */
-  virtual void visit(const ConstElementPtr& e);
-
-private:
-  OsmMap* _map;
-  QString _key;
+  virtual void setOsmMap(OsmMap* map)
+  {
+    setOsmMap((const OsmMap*)map);
+  }
 };
 
 }
 
-#endif // ADDUUIDVISITOR_H
+#endif // CONSTOSMMAPCONSUMER_H

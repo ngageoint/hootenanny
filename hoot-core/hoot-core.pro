@@ -636,6 +636,7 @@ HEADERS += \
     src/main/cpp/hoot/core/ops/RemoveDuplicateReviewsOp.h \
     src/main/cpp/hoot/core/ops/VisitorOp.h \
     src/main/cpp/hoot/core/OsmMapConsumer.h \
+    src/main/cpp/hoot/core/ConstOsmMapConsumer.h \
     src/main/cpp/hoot/core/ops/NamedOp.h \
     src/main/cpp/hoot/core/visitors/ReportMissingElementsVisitor.h \
     src/main/cpp/hoot/core/visitors/KeepBuildingsVisitor.h \

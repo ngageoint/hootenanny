@@ -28,13 +28,13 @@
 #define POIPOLYGONMERGERCREATOR_H
 
 // hoot
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/conflate/MergerCreator.h>
 
 namespace hoot
 {
 
-class PoiPolygonMergerCreator : public MergerCreator, public OsmMapConsumer
+class PoiPolygonMergerCreator : public MergerCreator, public ConstOsmMapConsumer
 {
 public:
 

@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 
@@ -41,7 +41,7 @@ namespace hoot
 /**
  * A filter that will either keep or remove matches.
  */
-class BuildingCriterion : public ElementCriterion, public OsmMapConsumer
+class BuildingCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
 

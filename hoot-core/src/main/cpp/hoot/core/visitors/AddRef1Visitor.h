@@ -28,7 +28,7 @@
 #define ADDREF1VISITOR_H
 
 // hoot
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -38,7 +38,7 @@ using namespace std;
 
 class AddRef1Visitor :
     public ElementVisitor,
-    public OsmMapConsumer,
+    public ConstOsmMapConsumer,
     public Configurable
 {
 public:
