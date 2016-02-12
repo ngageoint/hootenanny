@@ -139,28 +139,15 @@ public class BasemapResource extends JobControllerBase {
 		}
 	}
 
-
 	/**
-	 * <NAME>Basemap Upload Service</NAME>
-	 * <DESCRIPTION>Upload file and create TMS tiles.</DESCRIPTION>
-	 * <PARAMETERS>
-	 * <INPUT_NAME>
-	 * 	Name of basemap;
-	 * </INPUT_NAME>
-	 * <PROJECTION>
-	 * 	Projection to apply. defaults to EPSG:4326
-	 * </PROJECTION>
-	 * </PARAMETERS>
-	 * <INPUT>multipart data</INPUT>
-	 * <OUTPUT>
-	 * 	JSON Array containing JSON of job id
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/ingest/basemap/upload?INPUT_NAME=MyBasemap</URL>
-	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * <INPUT>None</INPUT>
-	 * <OUTPUT>[{"name":"MyBasemap","jobid":"1234567"}]</OUTPUT>
-	 * </EXAMPLE>
+	 * Upload dataset file and create TMS tiles.
+	 * 
+	 * POST hoot-services/ingest/basemap/upload?INPUT_NAME=MyBasemap
+	 * 
+	 * @param inputName Name of basemap
+	 * @param projection rojection to apply. defaults to EPSG:4326
+	 * @param request multipart data
+	 * @return JSON Array containing JSON of job id
 	 */
 	@POST
 	@Path("/upload")
@@ -301,22 +288,12 @@ public class BasemapResource extends JobControllerBase {
 	}
 
 	/**
-  * <NAME>Get Basemaps List Service</NAME>
-  * <DESCRIPTION>Service method endpoint for retrieving the uploaded basemaps list.</DESCRIPTION>
-  * <PARAMETERS></PARAMETERS>
-	* <OUTPUT>
-	* 	JSON Array containing basemap information
-	* </OUTPUT>
-	* <EXAMPLE>
-	* 	<URL>http://localhost:8093/hoot-services/ingest/basemap/getlist</URL>
-	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	* <INPUT>None</INPUT>
-  * <OUTPUT>
-	* [{"status":"enabled","name":"TestMap","jobid":"123-456-789"},{"status":"enabled","name":"TestMap2","jobid":"123-456-789"}]
-	* </OUTPUT>
-  * </EXAMPLE>
-  * 
-  */
+	 * Service method endpoint for retrieving the uploaded basemaps list.
+	 * 
+	 * GET hoot-services/ingest/basemap/getlist
+	 * 
+	 * @return JSON Array containing basemap information
+	 */
 	@GET
 	@Path("/getlist")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -454,29 +431,14 @@ public class BasemapResource extends JobControllerBase {
 	}
 
 	/**
-  * <NAME>Enable Basemap Service</NAME>
-  * <DESCRIPTION>Service method endpoint for enabling a basemap.</DESCRIPTION>
-  * <PARAMETERS>
-  * <NAME>
-  * Name of a basemap
-  * </NAME>
-  * <ENABLE>
-  * true/false
-  * </ENABLE>
-  * </PARAMETERS>
-	* <OUTPUT>
-	* 	JSON containing enable state
-	* </OUTPUT>
-	* <EXAMPLE>
-	* 	<URL>http://localhost:8093/hoot-services/ingest/basemap/enable?NAME=abc&ENABLE=true</URL>
-	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	* <INPUT>{"name":"abc","isenabled":"true"}</INPUT>
-  * <OUTPUT>
-	* {"name":"abc","isenabled":"true"}
-	* </OUTPUT>
-  * </EXAMPLE>
-  * 
-  */
+	 * Service method endpoint for enabling a basemap.
+	 * 
+	 * GET hoot-services/ingest/basemap/enable?NAME=abc&ENABLE=true
+	 * 
+	 * @param bmName Name of a basemap
+	 * @param enable true/false
+	 * @return JSON containing enable state
+	 */
 	@GET
 	@Path("/enable")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -532,34 +494,20 @@ public class BasemapResource extends JobControllerBase {
 	}
 
 	/**
-  * <NAME>Delete Basemap Service</NAME>
-  * <DESCRIPTION>Service method endpoint for deleting a basemap.</DESCRIPTION>
-  * <PARAMETERS>
-  * <NAME>
-  * Name of a basemap
-  * </NAME>
-  * </PARAMETERS>
-	* <OUTPUT>
-	* 	JSON containing enable state
-	* </OUTPUT>
-	* <EXAMPLE>
-	* 	<URL>http://localhost:8093/hoot-services/ingest/basemap/delete?NAME=abc</URL>
-	* 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	* <INPUT>
-	* {"name":"abc"}
-	* </INPUT>
-  * <OUTPUT>
-	* {"name":"abc"}
-	* </OUTPUT>
-  * </EXAMPLE>
-  * 
-  */
+	 * Service method endpoint for deleting a basemap.
+	 * 
+	 * GET hoot-services/ingest/basemap/delete?NAME=abc
+	 * 
+	 * //TODO: this should be an HTTP DELETE
+	 * 
+	 * @param bmName Name of a basemap
+	 * @return JSON containing enable state
+	 */
 	@GET
 	@Path("/delete")
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response deleteBasemap(@QueryParam("NAME") final String bmName)
 	{
-
 		try
 		{
 			_deleteBaseMap(bmName);

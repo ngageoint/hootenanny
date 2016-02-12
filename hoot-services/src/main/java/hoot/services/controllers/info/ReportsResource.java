@@ -81,28 +81,14 @@ public class ReportsResource {
 		}
 	}
 	
-	
 	/**
-	 * <NAME>Report Service Get Report File</NAME>
-	 * <DESCRIPTION>Gets the file stream of requested report.</DESCRIPTION>
-	 * <PARAMETERS>
-	 * <id>
-	 * Report id
-	 * </id>
-	 * <reportname>
-	 * Name of file to output
-	 * </reportname>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	OCTET Stream of report pdf
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/info/reports/get?id=123-456&reportname=hello</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 * </INPUT>
-	 * <OUTPUT>Octet stream</OUTPUT>
-	 * </EXAMPLE>
+	 * Gets the file stream of requested report.
+	 * 
+	 * GET hoot-services/info/reports/get?id=123-456&reportname=hello
+	 * 
+	 * @param id Report id
+	 * @param name Name of file to output
+	 * @return OCTET Stream of report pdf
 	 */
 	@GET
   @Path("/get")
@@ -127,23 +113,12 @@ public class ReportsResource {
 		return rBuild.build();
 	}
 	
-	
 	/**
-	 * <NAME>Report Service Get List of All Reports</NAME>
-	 * <DESCRIPTION>Gets list of all available reports.</DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON Array of reports meta data
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/info/reports/list</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 * </INPUT>
-	 * <OUTPUT>[{"name":"test name", "description":"test desc", "created":"12345675666", 
-	 * "reportpath":"/projects/hoot/reports/123-456-789/report.pdf"},...]</OUTPUT>
-	 * </EXAMPLE>O
+	 * Gets list of all available reports.
+	 * 
+	 * hoot-services/info/reports/list
+	 * 
+	 * @return JSON Array of reports meta data
 	 */
 	@GET
   @Path("/list")
@@ -166,23 +141,12 @@ public class ReportsResource {
   }
 	
 	/**
-	 * <NAME>Report Service Delete Report</NAME>
-	 * <DESCRIPTION>Deletes requested report.</DESCRIPTION>
-	 * <PARAMETERS>
-	 * <id>
-	 * Report id for deletion
-	 * </id>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON Object
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/info/reports/delete?id=123-456</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 * </INPUT>
-	 * <OUTPUT>{"id":"123-456", "deleted":"true"}</OUTPUT>
-	 * </EXAMPLE>
+	 * Deletes requested report
+	 * 
+	 * hoot-services/info/reports/delete?id=123-456
+	 * 
+	 * @param id Report id for deletion
+	 * @return JSON Object
 	 */
 	@GET
   @Path("/delete")

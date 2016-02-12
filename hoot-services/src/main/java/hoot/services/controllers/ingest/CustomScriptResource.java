@@ -119,25 +119,10 @@ public class CustomScriptResource
     }
   }
 
-	/**
-	 * <NAME>Custom Script Service Save</NAME>
-	 * <DESCRIPTION>Create or update user provided script into file.</DESCRIPTION>
-	 * <PARAMETERS>
-	 * <SCRIPT_NAME>
-	 * 	Name of script. If exists then it will be updated
-	 * </SCRIPT_NAME>
-	 * <SCRIPT_DESCRIPTION>
-	 * 	Script description.
-	 * </SCRIPT_DESCRIPTION>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON Array containing JSON of name and description of created script
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/ingest/customscript/save?SCRIPT_NAME=MyTest&SCRIPT_DESCRIPTION=my description</URL>
-	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * 	<INPUT>
-	 * 	// A non-standard extension to include additional js files within the same dir
+  /**
+   * Create or update user provided script into file.
+   * 
+   * // A non-standard extension to include additional js files within the same dir
 	 * 	// sub-tree.
 	 * 	require("example")
 	 *
@@ -172,9 +157,11 @@ public class CustomScriptResource
 	 * 	    }
 	 * 	    return tags;
 	 * 	}
-	 * </INPUT>
-	 * <OUTPUT>[{"NAME":"MyTest","DESCRIPTION":"my description"}]</OUTPUT>
-	 * </EXAMPLE>
+   * 
+   * @param script Name of script. If exists then it will be updated
+   * @param scriptName Name of script. If exists then it will be updated
+   * @param scriptDescription Script description.
+   * @return Script
    */
   @SuppressWarnings("unchecked")
   @POST
@@ -227,21 +214,12 @@ public class CustomScriptResource
     return response;
   }
 
-	/**
-	 * <NAME>Custom Script Service Get Scripts List</NAME>
-	 * <DESCRIPTION>Gets the list of available scripts.</DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON Array containing JSON of name and description of all available scripts
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/ingest/customscript/getlist</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 * </INPUT>
-	 * <OUTPUT>[{"NAME":"MyTest","DESCRIPTION":"my description"}]</OUTPUT>
-	 * </EXAMPLE>
+  /**
+   * Gets the list of available scripts.
+   * 
+   * GET hoot-services/ingest/customscript/getlist
+   * 
+   * @return JSON Array containing JSON of name and description of all available scripts
    */
   @SuppressWarnings("unchecked")
   @GET
@@ -387,24 +365,12 @@ public class CustomScriptResource
   	return filesList;
   }
 
-	/**
-	 * <NAME>Custom Script Service Get Script</NAME>
-	 * <DESCRIPTION>Returns the specified script.</DESCRIPTION>
-	 * <PARAMETERS>
-	 * <SCRIPT_NAME>
-	 * Name of the script to retrieve.
-	 * </SCRIPT_NAME>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	Requested translation script
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/ingest/customscript/getscript?SCRIPT_NAME=MyTest</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 * </INPUT>
-	 * <OUTPUT>
-	 * 	// A non-standard extension to include additional js files within the same dir
+  /**
+   * Returns the specified script.
+   * 
+   * GET hoot-services/ingest/customscript/getscript?SCRIPT_NAME=MyTest
+   * 
+   * * 	// A non-standard extension to include additional js files within the same dir
 	 * 	// sub-tree.
 	 * 	require("example")
 	 *
@@ -439,8 +405,9 @@ public class CustomScriptResource
 	 * 	    }
 	 * 	    return tags;
 	 * 	}
-	 * </OUTPUT>
-	 * </EXAMPLE>
+   * 
+   * @param scriptName Name of the script to retrieve.
+   * @return Requested translation script
    */
   @GET
   @Path("/getscript")
@@ -492,24 +459,12 @@ public class CustomScriptResource
     return Response.ok(script, MediaType.TEXT_PLAIN).build();
   }
 
-	/**
-	 * <NAME>Custom Script Service Get Default Script</NAME>
-	 * <DESCRIPTION>Returns the default script.</DESCRIPTION>
-	 * <PARAMETERS>
-	 * <SCRIPT_PATH>
-	 * Relative path of default translation script. (Relative to hoot home path)
-	 * </SCRIPT_PATH>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	Requested translation script
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/ingest/customscript/getscript?SCRIPT_PATH=customscript/testdefault.js</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 * </INPUT>
-	 * <OUTPUT>
-	 * 	// A non-standard extension to include additional js files within the same dir
+  /**
+   * Returns the default script.
+   * 
+   * GET hoot-services/ingest/customscript/getscript?SCRIPT_PATH=customscript/testdefault.js
+   * 
+   *  // A non-standard extension to include additional js files within the same dir
 	 * 	// sub-tree.
 	 * 	require("example")
 	 *
@@ -544,8 +499,9 @@ public class CustomScriptResource
 	 * 	    }
 	 * 	    return tags;
 	 * 	}
-	 * </OUTPUT>
-	 * </EXAMPLE>
+   * 
+   * @param scriptPath Relative path of default translation script. (Relative to hoot home path)
+   * @return Requested translation script
    */
   @GET
   @Path("/getdefaultscript")
@@ -604,27 +560,15 @@ public class CustomScriptResource
     return Response.ok(script, MediaType.TEXT_PLAIN).build();
   }
 
-
-	/**
-	 * <NAME>Custom Script Service Delete Script</NAME>
-	 * <DESCRIPTION>Deletes the specified script.</DESCRIPTION>
-	 * <PARAMETERS>
-	 * <SCRIPT_NAME>
-	 * Name of the script to delete.
-	 * </SCRIPT_NAME>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON Array containing JSON of name and description of deleted scripts
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/ingest/customscript/deletescript?SCRIPT_NAME=My Test6</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 * </INPUT>
-	 * <OUTPUT>
-	 * [{"NAME":"My Test6","DESCRIPTION":"my description"}]
-	 * </OUTPUT>
-	 * </EXAMPLE>
+  /**
+   * Deletes the specified script.
+   * 
+   * GET hoot-services/ingest/customscript/deletescript?SCRIPT_NAME=My Test6
+   * 
+   *  //TODO: should be an HTTP DELETE
+   * 
+   * @param scriptName Name of the script to delete.
+   * @return JSON Array containing JSON of name and description of deleted scripts
    */
   @SuppressWarnings("unchecked")
   @GET

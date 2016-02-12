@@ -183,7 +183,7 @@
         <configuration>
           <!-- This can been disabled to prevent build breakage....but then you could end up with 
           no docs. -->
-          <failOnError>true</failOnError>
+          <failOnError>false</failOnError>
           <excludePackageNames>hoot.services.db2</excludePackageNames>
           <!-- the version isn't right here; if fixed, then we could use the default param -->
           <doctitle>${project.name} API</doctitle>

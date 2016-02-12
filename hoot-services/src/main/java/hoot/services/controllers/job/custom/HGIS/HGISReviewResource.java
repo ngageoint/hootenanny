@@ -88,8 +88,8 @@ public class HGISReviewResource extends HGISResource {
 	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
 	 * 	<INPUT>
 	 * {
-	*		 "sourceMap":"AllDataTypesA",
-	*		"outputMap":"AllDataTypesAtest1"
+	*		 "sourceMap":"AllDataTypesA",  //Name of source layer
+	*		"outputMap":"AllDataTypesAtest1"  //Name of new output layer with reviewables
 	*		}
 	 *	</INPUT>
 	 * <OUTPUT>
@@ -98,6 +98,20 @@ public class HGISReviewResource extends HGISResource {
 	 * </EXAMPLE>
    * This resource prepares existing map for 30% of random HGIS specific validation
    */
+	/**
+	 * This resource prepares existing map for 30% of random HGIS specific validation.
+	 * 
+	 * POST hoot-services/job/review/custom/HGIS/preparevalidation
+	 * 
+	 *  {
+	 *		 "sourceMap":"AllDataTypesA",
+	 *		"outputMap":"AllDataTypesAtest1"
+	 *		}
+	 * 
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
   @POST
   @Path("/preparevalidation")
   @Consumes(MediaType.APPLICATION_JSON)
