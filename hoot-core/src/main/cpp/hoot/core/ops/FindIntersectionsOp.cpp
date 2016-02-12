@@ -68,7 +68,6 @@ void FindIntersectionsOp::apply(shared_ptr<OsmMap>& map)
   VisitorOp(new RemoveElementsVisitor(rFilter)).apply(map);
   LOG_INFO(QString("%1 Relations found, after removal").arg(map->getRelationMap().size()));
 
-
   /// @todo move this to a config file.
   // pragmatically remove "bad" data in OSM afghanistan
   map->removeWays(TagFilter(Filter::FilterMatches, "source", "AIMS"));

@@ -542,13 +542,12 @@ public class DbUtils
     return recordCtr > 0;
   }
 
-  // TODO: remove
-
   /**
    *
    *
    * @param conn
    * @return
+   * @todo remove
    */
   public static long getTestUserId(Connection conn)
   {
@@ -606,14 +605,14 @@ public class DbUtils
         .execute();
   }
 
-  //TODO: this code needs to be changed to dynamically read in the data types from querydsl.  If
-  //I make a change to the schema in liquibase, it will never be picked up unless this static code
-  //is also changed.  See #6777
   /**
    *
    *
    * @param mapId
    * @throws Exception
+   * @todo This code needs to be changed to dynamically read in the data types from querydsl.  If
+     I make a change to the schema in liquibase, it will never be picked up unless this static code
+     is also changed.  See r6777
    */
   public static void createMap(final long mapId) throws Exception
   {

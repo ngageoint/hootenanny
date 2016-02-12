@@ -46,7 +46,7 @@ MapCleaner::MapCleaner()
 
 void MapCleaner::apply(shared_ptr<OsmMap>& map)
 {
-  /// @todo move this to a config file.
+  /// @todo move this to a config file. - #322
   // pragmatically remove "bad" data in OSM afghanistan
   map->removeWays(TagFilter(Filter::FilterMatches, "source", "AIMS"));
 

@@ -266,7 +266,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
   @Category(UnitTest.class)
   public void testGetInvalidUserId() throws Exception
   {
-  	//TODO: not the best change in the world, since the ID *could* exist
+  	//TODO: change this to something randomly generated and very large
     final long invalidUserId = /*2*/999999;
     try
     {
@@ -329,7 +329,7 @@ public class UserResourceTest extends OsmResourceTestAbstract
   @Category(UnitTest.class)
   public void testGetDetails() throws Exception
   {
-    //TODO: authentication doesn't exist yet, so this just looks for the first user from a select
+    //authentication doesn't exist yet, so this just looks for the first user from a select
     //This test is essentially the same as testGet now but will change after authentication is
     //implemented.
     try

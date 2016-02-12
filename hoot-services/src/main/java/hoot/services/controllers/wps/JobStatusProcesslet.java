@@ -96,8 +96,6 @@ public class JobStatusProcesslet extends BaseProcesslet {
 	 */
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
-
 	}
 
 
@@ -106,9 +104,6 @@ public class JobStatusProcesslet extends BaseProcesslet {
 	 */
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
-
-
 	}
 
 }

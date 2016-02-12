@@ -56,15 +56,15 @@ public:
 
     BuildingCriterion uut;
     uut.setOsmMap(map.get());
-    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElement(map, "targetandbestbuy")));
-    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElement(map, "target")));
-    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElement(map, "bestbuy")));
-    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElement(map, "pho")));
-    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElement(map, "panera")));
-    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElement(map, "freddys")));
-    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElement(map, "jewelry")));
-    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElement(map, "paneragroup")));
-    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElement(map, "jewelryandfreddys")));
+    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "targetandbestbuy")));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "target")));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "bestbuy")));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "pho")));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "panera")));
+    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "freddys")));
+    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "jewelry")));
+    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "paneragroup")));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "jewelryandfreddys")));
   }
 };
 

@@ -199,8 +199,8 @@ public class ChangesetDbWriter
    * Parses and returns an OSM element from OSM changeset diff input XML data
    * 
    * @param xml xml data to construct the elements from
-   * @param oldId TODO
-   * @param newId TODO
+   * @param oldId 
+   * @param newId 
    * @param elementType type of elements being parsed
    * @param entityChangeType type of request database change to be performed on
    * the elements
@@ -286,7 +286,7 @@ public class ChangesetDbWriter
         	"current_" + elementType.toString().toLowerCase() + "s_" + 
         	String.valueOf(requestChangesetMapId) + "_id_seq"));
 
-    // TODO: this is a bigtime hack put in place b/c I was getting dupe IDs...really needs to be
+    // This is a bigtime hack put in place b/c I was getting dupe IDs...really needs to be
     // fixed; I need to generate the IDs myself, rather than letting the db do it automatically,
     // so I have the new IDs to send back in the changeset upload response...there might be a way
     // to let the db auto-gen them and then return those, but I'm not sure how that would work yet.

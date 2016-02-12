@@ -846,7 +846,6 @@ shared_ptr<Element> ServicesDbReader::_resultToElement(QSqlQuery& resultIterator
   if (resultIterator.next())
   {
     shared_ptr<Element> element;
-    //TODO: this section could be simplified
     switch (elementType.getEnum())
     {
       case ElementType::Node:
@@ -937,7 +936,7 @@ shared_ptr<Way> ServicesDbReader::_resultToWay(const QSqlQuery& resultIterator, 
   way->setTags(ServicesDb::unescapeTags(resultIterator.value(ServicesDb::WAYS_TAGS)));
   _addTagsToElement(way);
 
-  //TODO: read these out in batch at the same time the element results are read
+  /// @todo read these out in batch at the same time the element results are read
   vector<long> nodeIds = _database.selectNodeIdsForWay(wayId);
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
@@ -958,7 +957,7 @@ shared_ptr<Way> ServicesDbReader::_resultToWay_OsmApi(const QSqlQuery& resultIte
       newWayId,
       ServicesDb::DEFAULT_ELEMENT_CIRCULAR_ERROR));
 
-  //TODO: read these out in batch at the same time the element results are read
+  /// @todo read these out in batch at the same time the element results are read
   vector<long> nodeIds = _database.selectNodeIdsForWay(wayId);
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
@@ -984,12 +983,12 @@ shared_ptr<Relation> ServicesDbReader::_resultToRelation(const QSqlQuery& result
       OsmUtils::fromTimeString(
         resultIterator.value(ServicesDb::RELATIONS_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ")),
       ServicesDb::DEFAULT_ELEMENT_CIRCULAR_ERROR/*,
-      "collection"*/));  //TODO: services db doesn't support relation "type" yet
+      "collection"*/));  /// @todo services db doesn't support relation "type" yet
 
   relation->setTags(ServicesDb::unescapeTags(resultIterator.value(ServicesDb::RELATIONS_TAGS)));
   _addTagsToElement(relation);
 
-  //TODO: read these out in batch at the same time the element results are read
+  /// @todo read these out in batch at the same time the element results are read
   vector<RelationData::Entry> members = _database.selectMembersForRelation(relationId);
   for (size_t i = 0; i < members.size(); ++i)
   {
@@ -1011,9 +1010,9 @@ shared_ptr<Relation> ServicesDbReader::_resultToRelation_OsmApi(const QSqlQuery&
       _status,
       newRelationId,
       ServicesDb::DEFAULT_ELEMENT_CIRCULAR_ERROR/*,
-      "collection"*/));  //TODO: services db doesn't support relation "type" yet
+      "collection"*/));  /// @todo services db doesn't support relation "type" yet
 
-  //TODO: read these out in batch at the same time the element results are read
+  /// @todo read these out in batch at the same time the element results are read
   vector<RelationData::Entry> members = _database.selectMembersForRelation(relationId);
   for (size_t i = 0; i < members.size(); ++i)
   {

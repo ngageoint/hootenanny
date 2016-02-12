@@ -131,7 +131,7 @@ void BuildingMerger::apply(const OsmMapPtr& map,
 
   // if we created a relation, we now need to make sure the building part information is added
   // properly
-  /// @todo synchronize building parts See ticket #2880
+  /// @todo synchronize building parts See ticket r2880
   //_synchronizeParts(keeper);
 
   set< pair<ElementId, ElementId> > replacedSet;

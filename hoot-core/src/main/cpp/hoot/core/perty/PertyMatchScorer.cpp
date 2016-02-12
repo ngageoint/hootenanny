@@ -111,13 +111,10 @@ shared_ptr<OsmMap> PertyMatchScorer::_loadReferenceMap(const QString referenceMa
 
   shared_ptr<OsmMap> referenceMap(new OsmMap());
   OsmUtils::loadMap(referenceMap, referenceMapInputPath, false, Status::Unknown1);
-  //TODO: should this be removed?
   MapCleaner().apply(referenceMap);
 
   shared_ptr<AddRef1Visitor> addRef1Visitor(new AddRef1Visitor());
   referenceMap->visitRw(*addRef1Visitor);
-  //TODO: this could eventually be replaced with a SetTagVisitor passed in from the command line
-  //instead
   shared_ptr<SetTagVisitor> setAccuracyVisitor(
     new SetTagVisitor("error:circular", QString::number(_searchDistance)));
   referenceMap->visitRw(*setAccuracyVisitor);
@@ -148,13 +145,12 @@ void PertyMatchScorer::_loadPerturbedMap(const QString perturbedMapInputPath,
   //since updates to the names of the ref tags on this map will propagate to the map copied from
   shared_ptr<OsmMap> perturbedMap(new OsmMap());
   OsmUtils::loadMap(perturbedMap, perturbedMapInputPath, false, Status::Unknown2);
-  //TODO: should this be removed?
   MapCleaner().apply(perturbedMap);
 
   shared_ptr<TagRenameKeyVisitor> tagRenameKeyVisitor(new TagRenameKeyVisitor("REF1", "REF2"));
   perturbedMap->visitRw(*tagRenameKeyVisitor);
-  //TODO: this could eventually be replaced with a SetTagVisitor passed in from the command line
-  //instead
+  // This could be replaced with a SetTagVisitor passed in from the command line
+  // instead.
   shared_ptr<SetTagVisitor> setAccuracyVisitor(
     new SetTagVisitor("error:circular", QString::number(_searchDistance)));
   perturbedMap->visitRw(*setAccuracyVisitor);

@@ -95,9 +95,10 @@ public class UserDetailsResource
   {
     log.debug("Retrieving logged in user details...");
 
-    //TODO: finish - For now, we're just grabbing the first user in the db, since we don't have
-    //any authentication in place to get the correct user.  Worst case, for now, you see incorrect
-    //user information from iD editor...not a big deal since authentication doesn't exist anyway.
+    //For now, we're just grabbing the first user in the db, since we don't have any authentication 
+    //in place to get the correct user.  Worst case, for now, you see incorrect user information 
+    //from iD editor...not a big deal since authentication doesn't exist anyway.  When hoot gets
+    //user authentication, then this obviously has to be updated.
     Connection conn = DbUtils.createConnection();
     long userId = -1;
     try

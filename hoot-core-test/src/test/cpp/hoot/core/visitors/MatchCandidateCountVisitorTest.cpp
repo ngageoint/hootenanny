@@ -151,7 +151,7 @@ public:
     QMap<QString, long> matchCandidateCountsByMatchCreator =
       any_cast<QMap<QString, long> >(uut3.getData());
     CPPUNIT_ASSERT_EQUAL(5, matchCandidateCountsByMatchCreator.size());
-    //TODO: These don't add up to the total...is there some overlap here?
+    //These don't add up to the total...is there some overlap here?
     CPPUNIT_ASSERT_EQUAL((long)18, matchCandidateCountsByMatchCreator["hoot::BuildingMatchCreator"]);
     CPPUNIT_ASSERT_EQUAL((long)8, matchCandidateCountsByMatchCreator["hoot::HighwayMatchCreator"]);
     CPPUNIT_ASSERT_EQUAL((long)21, matchCandidateCountsByMatchCreator["hoot::PlacesPoiMatchCreator"]);
@@ -187,7 +187,7 @@ public:
     QMap<QString, long> matchCandidateCountsByMatchCreator =
       any_cast<QMap<QString, long> >(uut3.getData());
     CPPUNIT_ASSERT_EQUAL(4, matchCandidateCountsByMatchCreator.size());
-    //TODO: These don't add up to the total...is there some overlap here?
+    //These don't add up to the total...is there some overlap here?
     CPPUNIT_ASSERT_EQUAL((long)18, matchCandidateCountsByMatchCreator["hoot::BuildingMatchCreator"]);
     CPPUNIT_ASSERT_EQUAL((long)8, matchCandidateCountsByMatchCreator["hoot::HighwayMatchCreator"]);
     CPPUNIT_ASSERT_EQUAL((long)21, matchCandidateCountsByMatchCreator["hoot::PlacesPoiMatchCreator"]);

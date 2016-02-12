@@ -387,7 +387,7 @@ public class Map extends Maps
 	      	    .from(currentWayNodes)
 	  			    .where(currentWayNodes.nodeId.in(pageList))
 	  			    .list(currentWayNodes.wayId);
-	      	//TODO: should this be an assert instead?
+	      	//TODO: should this be an assert instead?  Regardless, fix the error handling.
 	      	if (wayIds.addAll(pageWayIds) == false)
 	      	{
 	      		// error

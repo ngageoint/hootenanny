@@ -131,7 +131,7 @@ public:
       //https://insightcloud.digitalglobe.com/redmine/issues/4775 , comments 61 through 63
       //This assertion will fail since UUID's in the conflated output may be repeated
       //across multiple elements.  Ticket 5496 will address this.
-      /// @todo Address this issue with ticket 5496.
+      /// @todo Address this issue with r5496.
       //assert(_uuidToEid.count(uuid) == 0);
       _uuidToEid[uuid] = e->getElementId();
     }
@@ -507,7 +507,7 @@ bool MatchComparator::_isNeedsReview(QString uuid1, QString uuid2, const ConstOs
 
   if (eid1.isNull() || eid2.isNull())
   {
-    /// @todo Change this back to LOG_WARN after addressing 5560
+    /// @todo Change this back to LOG_WARN after addressing r5560
     LOG_INFO("Couldn't find an expected element.");
     return false;
   }

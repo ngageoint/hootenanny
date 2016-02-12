@@ -28,7 +28,6 @@ package hoot.services.command;
 
 /**
  * 
- * TODO Document hoot.services.utils.CommandResult
  */
 public class CommandResult {
 
