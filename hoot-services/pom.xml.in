@@ -176,6 +176,7 @@
         </dependency>
       </dependencies>
     </plugin>
+    <!-- output from javadoc will go to hoot-services/target/site/apidocs by default -->
     <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>

@@ -100,35 +100,15 @@ public class ChangesetResource
   }
   
   /**
-	 * <NAME>Changeset Create</NAME>
-	 * <DESCRIPTION>
-	 * The Hootenanny Changeset Service implements a subset of the OSM
-	 * Changeset Service v0.6. It supports the OSM changeset upload process only.
-	 * It does not support the browsing of changeset contents.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 *  <mapId>
-	 *  string; ID or name of the map to which the created changeset will belong
-	 *  </mapId>
-	 *  <changesetData>
-	 *  XML; payload data; an empty OSM xml changeset
-	 *  </changesetData>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	ID of the created changeset
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/changeset/create?mapId=dc-admin</URL>
-	 * 	<REQUEST_TYPE>PUT</REQUEST_TYPE>
-	 * 	<INPUT>
-	 * Changeset OSM XML
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * 1
-	 * </OUTPUT>
-	 * </EXAMPLE>
-   *
    * Service method endpoint for creating a new OSM changeset
+   * 
+   * The Hootenanny Changeset Service implements a subset of the OSM Changeset Service v0.6. It 
+   * supports the OSM changeset upload process only.  It does not support the browsing of changeset 
+   * contents.
+   * 
+   * PUT hoot-services/osm/api/0.6/changeset/create?mapId=dc-admin
+   * 
+   * payload = OSM changeset XML
    * 
    * @param changesetData changeset create data
    * @param mapId ID of the map the changeset belongs to
@@ -258,33 +238,6 @@ public class ChangesetResource
   }
   
   /**
-	 * <NAME>Changeset Upload</NAME>
-	 * <DESCRIPTION>
-	 * The Hootenanny Changeset Service implements a subset of the OSM
-	 * Changeset Service v0.6. It supports the OSM changeset upload process only.
-	 * It does not support the browsing of changeset contents.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 *  <changesetId>
-	 *   long; ID of the changeset the changes should be uploaded into
-	 *  </changesetId>
-	 *  <changeset>
-	 *  XML (payload data); a populated OSM xml changeset
-	 *  </changeset>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	an OSM xml changeset upload response
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/changeset/1/upload</URL>
-	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * 	<INPUT>
-	 * OSM Changeset XML
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * an OSM xml changeset upload response
-	 * </OUTPUT>
-	 * </EXAMPLE>
    * Service method endpoint for creating a pre-flight request for uploading changeset diff data; 
    * 
    * required for CORS (http://en.wikipedia.org/wiki/Cross-origin_resource_sharing) support

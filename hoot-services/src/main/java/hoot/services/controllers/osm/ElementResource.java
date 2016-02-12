@@ -84,36 +84,6 @@ public class ElementResource
   }
   
   /**
-	 * <NAME>Element Service - Get Element By ID </NAME>
-	 * <DESCRIPTION>
-	 * 	Allows for retrieving a node, way, or relation by numeric OSM element ID. Child element of ways
-	 * and relations are not added to the output (use the "full" method for that functionality).
-	 * The ID of the map owning the element must be specified in the query string.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 *  <mapId>
-	 *  string; ID or name of the map the requested element belongs to
-	 *  </mapId>
-	 *  <elementId>
-	 *   long; OSM ID of the requested element
-	 *  </elementId>
-	 *  <elementType>
-	 *  string; OSM type of the requested element; valid values are "node", "way", or "relation"
-	 *  </elementType>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	XML representation of the requested element
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/node/1?mapId=1</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-	 *  OSM XML
-	 * </OUTPUT>
-	 * </EXAMPLE>
-   *
    * Returns a single element item's XML for a given map without its element children
    * 
    * @param mapId ID of the map the element belongs to
@@ -166,31 +136,6 @@ public class ElementResource
   }
   
   /**
-	 * <NAME>Element Service - Get Element By ID Get Element By Unique ID </NAME>
-	 * <DESCRIPTION>
-	 * 	Convenience method which allows for retrieving a node, way, or relation by an OSM unique element ID.
-	 * Child element of ways and relations are not added to the output (use the "full" method for that functionality). The ID of
-	 * the map owning the element does not need to be specified in the query string because the information already exists in the
-	 * element ID. This method is not part of the OSM API.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 *  <elementId>
-	 *   long; OSM ID of the requested element
-	 *  </elementId>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	XML representation of the requested element
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/element/1_n_1</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-	 *  OSM XML
-	 * </OUTPUT>
-	 * </EXAMPLE>
-   *
    * Returns a single element item's XML for a given map without its element children
    * 
    * @param elementId a "hoot" formatted element id of the format: 
@@ -245,36 +190,6 @@ public class ElementResource
   }
   
   /**
-	 * <NAME>Element Service - Get Full Element By ID </NAME>
-	 * <DESCRIPTION>
-	 * 	Convenience method which allows for retrieving a way or relation and all of its child elements
-	 *  (way nodes or relation members) by numeric OSM element ID. The ID of the map owning the element
-	 *   must be specified in the query string.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 *  <mapId>
-	 *  string; ID or name of the map the requested element belongs to
-	 *  </mapId>
-	 *  <elementId>
-	 *   long; OSM ID of the requested element
-	 *  </elementId>
-	 *  <elementType>
-	 *  string; OSM type of the requested element; valid values are "node", "way", or "relation"
-	 *  </elementType>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	XML representation of the requested element
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/node/1/full?mapId=1</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-	 *  OSM XML
-	 * </OUTPUT>
-	 * </EXAMPLE>
-   *
    * Returns a single element item's XML for a given map with all of its element children
    * 
    * @param mapId ID of the map the element belongs to
@@ -327,33 +242,6 @@ public class ElementResource
   }
   
   /**
-	 * <NAME>Element Service - Get Full Element By Unique ID </NAME>
-	 * <DESCRIPTION>
-	 * 	Convenience method which allows for retrieving a way or relation and all of its child
-	 * elements (way nodes or relation members) by an OSM unique element ID. The ID of the map owning
-	 * the element does not need to be specified in the query string because the information already exists
-	 * in the element ID. This method is not part of the OSM API.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 *  <elementId>
-	 *   string; ID for the requested element unique across all maps of the form:
-	 *   <map id>_<first letter of the element type>_<element id>; valid values for
-	 *    <first letter of the element type> are: "w" or "r"
-	 *  </elementId>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	XML representation of the requested element
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/element/1_n_1/full</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-	 *  OSM XML
-	 * </OUTPUT>
-	 * </EXAMPLE>
-   *
    * Returns a single element item's XML for a given map with all of its element children
    * 
    * @param elementId a "hoot" formatted element id of the format: 
@@ -485,36 +373,6 @@ public class ElementResource
   }
   
   /**
-	 * <NAME>Element Service - Get Elements By IDs </NAME>
-	 * <DESCRIPTION>
-	 * 	Allows for retrieving multiple nodes, ways, or relations by numeric OSM element ID. Child element of ways
-	 * and relations are not added to the output (use the "full" method for that functionality).
-	 * The ID of the map owning the element must be specified in the query string.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 *  <mapId>
-	 *  string; ID or name of the map the requested element belongs to
-	 *  </mapId>
-	 *  <elementIds>
-	 *   string; OSM IDs of the requested elements
-	 *  </elementIds>
-	 *  <elementType>
-	 *  string; OSM type of the requested element; valid values are "node", "way", or "relation"
-	 *  </elementType>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	XML representation of the requested element
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/node/1?mapId=1</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-	 *  OSM XML
-	 * </OUTPUT>
-	 * </EXAMPLE>
-   *
    * Returns a single element item's XML for a given map without its element children
    * 
    * @param mapId ID of the map the element belongs to

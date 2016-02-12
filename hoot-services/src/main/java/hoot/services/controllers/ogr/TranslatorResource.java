@@ -160,25 +160,14 @@ public class TranslatorResource extends ServerControllerBase
 			log);
 		}
   }
-  
+    
   /**
-	 * <NAME>Translation Service Node Server status</NAME>
-	 * <DESCRIPTION>
-	 *  Gets current status of translation server.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON containing state and port it is running
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/ogr/translationserver/status</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>{"isRunning":"true","port":"8094"}</OUTPUT>
-	 * </EXAMPLE>
-   */  
+   * Gets current status of translation server.
+   * 
+   * GET hoot-services/ogr/translationserver/status
+   * 
+   * @return JSON containing state and port it is running
+   */
   @GET
   @Path("/translationserver/status")
   @Produces(MediaType.TEXT_PLAIN)

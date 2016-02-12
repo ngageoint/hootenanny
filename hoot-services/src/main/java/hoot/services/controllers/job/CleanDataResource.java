@@ -68,41 +68,24 @@ public class CleanDataResource  extends JobControllerBase {
 	}
 
 	/**
-	 * <NAME>Data Cleaning Service</NAME>
-	 * <DESCRIPTION>Clean Data service represents REST and WPS end points for hoot --cleanup which is defined as
+	 * Clean Data service represents REST and WPS end points for hoot --cleanup which is defined as
 	 * --cleanup (input) (output).
 	 * Removes common erroneous data scenarios from input and writes to output. * input - Input (e.g. .osm file).
 	 * output - Output file (e.g. .osm file).
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * 	<INPUT_TYPE>
-	 * 	[OMS|DB]
-	 * 	</INPUT_TYPE>
-	 * 	<INPUT>
-	 * 	When DB Type then name of the map record. If OSM then the relative (to HOOT_HOME) path of osm file.
-	 * 	</INPUT>
-	 * 	<OUTPUT_TYPE>
-	 * 	[OMS|DB]
-	 * 	</OUTPUT_TYPE>
-	 * 	<OUTPUT>
-	 * 	When DB Type then name of the map record. If OSM then the relative (to HOOT_HOME) path of output osm file.
-	 * 	</OUTPUT>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * Job Id
-	 * </OUTPUT>
-	 * <URL>http://localhost:8080/hoot-services/job/cleandata/execute</URL>
-	 * <EXAMPLE>
-	 * 	
-	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * 	<INPUT>{
+	 * 
+	 * When DB Type then name of the map record. If OSM then the relative (to HOOT_HOME) path of osm file.
+	 * 
+	 * POST hoot-services/job/cleandata/execute
+	 * 
+	 * {
    * "INPUT_TYPE":"DB",
    * "INPUT":"DcGisRoads",
    * "OUTPUT_TYPE":"DB",
    * "OUTPUT":"DcGisRoadsOUt5"
-	 * }</INPUT>
-	 * <OUTPUT>{"jobid":"0df81145-5f3b-46f4-9937-64ade48fd604"}</OUTPUT>
-	 * </EXAMPLE>
+	 * }
+	 * 
+	 * @param params [OMS|DB]
+	 * @return Job Id
 	 */
 	@POST
 	@Path("/execute")

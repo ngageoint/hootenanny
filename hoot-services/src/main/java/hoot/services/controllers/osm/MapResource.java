@@ -117,16 +117,9 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Map Service - List Layers </NAME> <DESCRIPTION> Returns a list of all
-	 * map layers in the services database. </DESCRIPTION> <PARAMETERS>
-	 * </PARAMETERS> <OUTPUT> a JSON object containing a list of map layers
-	 * </OUTPUT> <EXAMPLE>
-	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map/layers</URL>
-	 * <REQUEST_TYPE>GET</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT> { "layers": [ {
-	 * "id": 1, "name": "layer 1", }, { "id": 2, "name": "layer 2", } ] }
-	 * </OUTPUT> </EXAMPLE>
-	 *
 	 * Returns a list of all map layers in the services database
+	 * 
+	 * GET hoot-services/osm/api/0.6/map/layers
 	 *
 	 * @return a JSON object containing a list of map layers
 	 * @throws Exception
@@ -226,19 +219,13 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Map Service - List Links </NAME> <DESCRIPTION> Returns a list of all
-	 * folder-map links. </DESCRIPTION> <PARAMETERS> </PARAMETERS> <OUTPUT> a JSON
-	 * object containing a list of folders </OUTPUT> <EXAMPLE>
-	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map/links</URL>
-	 * <REQUEST_TYPE>GET</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT> { "links": [ {
-	 * "mapid": 1, "folderid":1 } ] } </OUTPUT> </EXAMPLE>
-	 *
 	 * Returns a list of all folders in the services database
+	 * 
+	 * GET hoot-services/osm/api/0.6/map/links
 	 *
 	 * @return a JSON object containing a list of folders
 	 * @throws Exception
 	 */
-
 	@GET
 	@Path("/links")
 	@Consumes(MediaType.TEXT_PLAIN)
@@ -426,26 +413,7 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Map Service - Query </NAME> <DESCRIPTION> The Hootenanny Map Service
-	 * is similar to the query portion of the OSM Map Service design, except that
-	 * a map ID must also be specified when using it. The Map service first
-	 * attempts to parse the request map identifier as a numerical user ID, and
-	 * then if unsuccessful, attempts to parse it as a map name string.
-	 * </DESCRIPTION> <PARAMETERS> <mapId> string; ID or name of the map to query
-	 * </mapId> <bbox> string; geographic bounding box to restrict the map query
-	 * to of the form: minimum longitude, minimum latitude, maximum longitude,
-	 * maximum latitude; in WGS84 degrees </bbox> <multiLayerUniqueElementIds>
-	 * boolean; if true, returned element IDs are prepended with [map id]_[first
-	 * letter of the element type]_ </multiLayerUniqueElementIds> </PARAMETERS>
-	 * <OUTPUT> XML representation of each element which satisfied the map query
-	 * </OUTPUT> <EXAMPLE>
-	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map?
-	 * mapId=dc-admin&bbox
-	 * =-77.09655761718749,38.89958342598271,-77.09106445312499,
-	 * 38.90385833966776&multiLayerUniqueElementIds=false</URL>
-	 * <REQUEST_TYPE>GET</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT> OSM XML
-	 * </OUTPUT> </EXAMPLE> Service method endpoint for retrieving OSM entity data
-	 * for a given map
+	 * GET hoot-services/osm/api/0.6/map?mapId=dc-admin&bbox
 	 *
 	 * @param mapId
 	 *          ID of the map to query
@@ -792,16 +760,15 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Clean Map Data Service</NAME> <DESCRIPTION> Clean map data service
-	 * provides the ability to remove an associated map record.
-	 * </DESCRIPTION> <PARAMETERS> <mapId> ID of map record to be
-	 * deleted
-	 * http://localhost:8080/hoot-services/osm/api/0.6/map/delete?mapId={Map ID}
-	 * </mapId> </PARAMETERS> <OUTPUT> Job ID </OUTPUT> <EXAMPLE>
-	 * <URL>http://localhost
-	 * :8080/hoot-services/osm/api/0.6/map/delete?mapId=123456</URL>
-	 * <REQUEST_TYPE>POST</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT>{"jobId":
-	 * "b9462277-73bc-41ea-94ec-c7819137b00b" }</OUTPUT> </EXAMPLE>
+	 * Deletes a map
+	 * 
+	 * POST hoot-services/osm/api/0.6/map/delete?mapId={Map ID}
+	 *   
+	 *   //TODO: should be an HTTP DELETE
+	 * 
+	 * @param mapId ID of map record to be deleted
+	 * @return id of the deleted map
+	 * @throws Exception
 	 */
 	@POST
 	@Path("/delete")
@@ -824,17 +791,16 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Modify Dataset or Folder Name</NAME> <DESCRIPTION> Modify Dataset or
-	 * Folder Name provides the ability to change the name of a dataset or Folder.
-	 * </DESCRIPTION> <PARAMETERS> <mapId> ID of map record or folder to be
-	 * modified </mapId> <modName> The new name for the dataset </modName>
-	 * <inputType> Flag for either dataset or folder </inputType> </PARAMETERS>
-	 * <OUTPUT> jobId Success = True/False </OUTPUT> <EXAMPLE>
-	 * <URL>http://localhost
-	 * :8080/hoot-services/osm/api/0.6/map/modify?mapId=123456
-	 * &inputType='Dataset'&modName='New Dataset'</URL>
-	 * <REQUEST_TYPE>POST</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT>{"jobId":
-	 * "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT> </EXAMPLE>
+	 * 
+	 * POST hoot-services/osm/api/0.6/map/modify?mapId=123456&inputType='Dataset'&modName='New Dataset'
+	 * 
+	 *   //TODO: should be an HTTP PUT
+	 * 
+	 * @param mapId ID of map record or folder to be modified
+	 * @param _modName The new name for the dataset 
+	 * @param inputType  Flag for either dataset or folder
+	 * @return jobId Success = True/False
+	 * @throws Exception
 	 */
 	@POST
 	@Path("/modify")
@@ -891,15 +857,14 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Add Folder </NAME> <DESCRIPTION> Adds new folder. </DESCRIPTION>
-	 * <PARAMETERS> <folderName> Display name of folder </folderName> <parentId>
-	 * The parent folder of the new folder. If at root level, is equal to 0.
-	 * </parentId> </PARAMETERS> <OUTPUT> jobId Success = True/False </OUTPUT> <EXAMPLE>
-	 * <URL>http
-	 * ://localhost:8080/hoot-services/osm/api/0.6/map/addfolder?folderName
-	 * ={foldername}&parentId={parentId}</URL> <REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * <INPUT> </INPUT> <OUTPUT>{"jobId":
-	 * "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT> </EXAMPLE>
+	 * Adds new dataset folder
+	 * 
+	 * POST hoot-services/osm/api/0.6/map/addfolder?folderName={foldername}&parentId={parentId}
+	 * 
+	 * @param folderName Display name of folder
+	 * @param parentId The parent folder of the new folder. If at root level, is equal to 0.
+	 * @return jobId Success = True/False
+	 * @throws Exception
 	 */
 	@POST
 	@Path("/addfolder")
@@ -950,18 +915,17 @@ public class MapResource
 		res.put("folderId", newId);
 		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
 	}
-
+	
 	/**
-	 * <NAME>Delete Folder </NAME> <DESCRIPTION> Deletes folder. </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <folderId> Folder Id </folderId>
-	 * </PARAMETERS>
-	 * <OUTPUT> jobId </OUTPUT>
-	 * <EXAMPLE>
-	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map/deletefolder
-	 * ?folderId={folderId}</URL> <REQUEST_TYPE>POST</REQUEST_TYPE> <INPUT>
-	 * </INPUT> <OUTPUT>{"jobId":
-	 * "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT> </EXAMPLE>
+	 * Deletes a dataset folder.
+	 * 
+	 * POST hoot-services/osm/api/0.6/map/deletefolder?folderId={folderId}
+	 * 
+	 *   //TODO: should be an HTTP DELETE
+	 * 
+	 * @param folderId Folder Id
+	 * @return jobId
+	 * @throws Exception
 	 */
 	@POST
 	@Path("/deletefolder")
@@ -1020,25 +984,24 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Update Parent ID </NAME>
-	 * <DESCRIPTION> Modifies the parent ID of a folder. </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <folderId> ID of folder </folderId>
-	 * </PARAMETERS>
-	 * <OUTPUT> jobId Success = True/False </OUTPUT>
-	 * <EXAMPLE>
-	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map
-	 * /updateParentId?folderId={folderId}</URL>
-	 * <REQUEST_TYPE>POST</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT>{"jobId":
-	 * "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT> </EXAMPLE>
+	 * 
+	 * POST hoot-services/osm/api/0.6/map/updateParentId?folderId={folderId}
+	 *  
+	 *  //TODO: should be an HTTP PUT
+	 * 
+	 * @param folderId ID of folder
+	 * @param parentId ?
+	 * @param newRecord ?
+	 * @return jobId Success = True/False
+	 * @throws Exception
 	 */
 	@POST
 	@Path("/updateParentId")
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response updateParentId(@QueryParam("folderId") final String folderId,
-			@QueryParam("parentId") final String parentId,
-			@QueryParam("newRecord") final Boolean newRecord) throws Exception
+		@QueryParam("parentId") final String parentId, 
+		@QueryParam("newRecord") final Boolean newRecord) throws Exception
 	{
 		Long _folderId = Long.parseLong(folderId);
 		Long _parentId = Long.parseLong(parentId);
@@ -1069,22 +1032,13 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Link Map and Folder </NAME>
-	 * <DESCRIPTION> Adds or modifies record in
-	 * folder_map_mappings if layer is created or modified. </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <folderId> ID of folder </folderId>
-	 * <mapId> ID of map. </mapId>
-	 * <updateType> new: creates new link;
-	 * update: updates link delete: deletes link </updateType>
-	 * </PARAMETERS>
-	 * <OUTPUT> jobId
-	 * Success = True/False </OUTPUT> <EXAMPLE>
-	 * <URL>http://localhost:8080/hoot-services
-	 * /osm/api/0.6/map/addfolder?folderName
-	 * ={foldername}&parentId={parentId}</URL> <REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * <INPUT> </INPUT> <OUTPUT>{"jobId":
-	 * "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT> </EXAMPLE>
+	 * Adds or modifies record in folder_map_mappings if layer is created or modified
+	 * 
+	 * @param folderId ID of folder
+	 * @param mapId ID of map
+	 * @param updateType new: creates new link; update: updates link delete: deletes link
+	 * @return jobId Success = True/False
+	 * @throws Exception
 	 */
 	@POST
 	@Path("/linkMapFolder")

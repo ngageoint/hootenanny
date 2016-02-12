@@ -69,36 +69,19 @@ public class ClipDatasetResource extends JobControllerBase {
 		}
 	}
 	
-
 	/**
-	 * <NAME>Clip Dataset Service</NAME>
-	 * <DESCRIPTION>
 	 * This service will clip a dataset to a bounding box and create a new output dataset within those dimensions.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <BBOX>
-	 * The upper left and lower right of the bounding box to clip the dataset
-	 * </BBOX>	
-	 * <INPUT_NAME>
-	 * 	The name of the dataset to be clipped
-	 * 	</INPUT)NAME>
-	 * 	<OUTPUT_NAME>
-	 * 	The output name of the new dataset.
-	 * 	</OUTPUT_NAME>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * New dataset
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/clipdataset/execute</URL>
-	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * 	<INPUT>{
-   * "BBOX" : "{"LR":[-77.04813267598544,38.89292259454727],"UL":[-77.04315011486628,38.89958152667718]}",
-   * "INPUT_NAME" : "DcRoads",
-   * "OUTPUT_NAME" : "DcRoads_Clip"
-	 * }</INPUT>
-	 * <OUTPUT></OUTPUT>
-	 * </EXAMPLE>
+	 * 
+	 * POST hoot-services/job/clipdataset/execute
+	 * 
+	 * {
+   * "BBOX" : "{"LR":[-77.04813267598544,38.89292259454727],"UL":[-77.04315011486628,38.89958152667718]}", //The upper left and lower right of the bounding box to clip the dataset
+   * "INPUT_NAME" : "DcRoads", //The name of the dataset to be clipped
+   * "OUTPUT_NAME" : "DcRoads_Clip" //The output name of the new dataset.
+	 * }
+	 * 
+	 * @param params JSON input params; see description
+	 * @return a job id
 	 */
 	@POST
 	@Path("/execute")

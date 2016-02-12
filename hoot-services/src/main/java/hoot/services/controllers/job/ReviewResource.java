@@ -124,30 +124,18 @@ public class ReviewResource
   }
 
   /**
-   * <NAME>Resolve All Reviews</NAME>
-	 * <DESCRIPTION>
-	 * Resolves all reviews for a given map
+   * Resolves all reviews for a given map
    * 
    * Have to use a request object here, rather than a single map ID query param, since d3 can't
    * send plain text in a PUT statement.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <request>
-	 *  a JSON request containing the map ID for the reviews to be resolved
-	 * </request>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	a JSON response with the changeset ID used to resolve the reviews
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/resolveall?TODO</URL>
-	 *  <REQUEST_TYPE>PUT</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 *  <OUTPUT>
-	 *   TODO
-	 *  </OUTPUT>
-	 * </EXAMPLE>
+   * 
+   * PUT hoot-services/job/review/resolveall
+   * 
+   * //TODO: JSON input example
+   * 
+   * @param request a JSON request containing the map ID for the reviews to be resolved
+   * @return a JSON response with the changeset ID used to resolve the reviews
+   * @throws Exception
    */
   @PUT
   @Path("/resolveall")
@@ -221,33 +209,21 @@ public class ReviewResource
   }
   
   /**
-   * <NAME>Get Review References</NAME>
-	 * <DESCRIPTION>
-	 * Returns any review references to the elements associated with the ID's passed in
+   * Returns any review references to the elements associated with the ID's passed in
 	 * 
 	 * Technically, this should be a GET request, but since the size of the input could potentially
    * be large, making it a POST request to get past any size limit restrictions on GET requests.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <request>
-	 *  JSON request containing a collection of elements for which review references are to be 
+   * 
+   * POST hoot-services/job/review/refs
+   * 
+   *  //TODO: input data example
+   * 
+   * @param request JSON request containing a collection of elements for which review references are to be 
 	 *  retrieved
-	 * </request>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	an array of review references in JSON; one set of references for each query element passed in;
+   * @return an array of review references in JSON; one set of references for each query element passed in;
    *  The returned ReviewRef object extends the ElementInfo object to add the associated review 
    *  relation id.
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/refs?TODO</URL>
-	 *  <REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 *  <OUTPUT>
-	 *   TODO
-	 *  </OUTPUT>
-	 * </EXAMPLE>
+   * @throws Exception
    */
   @POST
   @Path("/refs")
@@ -290,36 +266,20 @@ public class ReviewResource
   	return response;
   }
   
-	/**
-	 * <NAME>Review Service Get Random Reviewable</NAME>
-	 * <DESCRIPTION>
-	 * To retrieve the random reviewable item. If a reviewable is not available
+  /**
+   * To retrieve the random reviewable item. If a reviewable is not available
 	 * then return 0 result count
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <mapid>
-	 *  Target map id
-	 * </mapid>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON in ReviewableItem format
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/random?mapid=15</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * {"mapId":15,"relationId":-1,"sortOrder":-1,"resultCount":0}
-	 * </OUTPUT>
-	 * </EXAMPLE>
-	 */
+	 * 
+	 * GET hoot-services/job/review/random?mapid=15
+   * 
+   * @param mapId Target map id
+   * @return JSON in ReviewableItem format
+   */
 	@GET
 	@Path("/random")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ReviewableItem getRandomReviewable(@QueryParam("mapid") String mapId)
 	{
-
 		ReviewableItem ret = new ReviewableItem(-1, -1,-1);
 		try(Connection conn = DbUtils.createConnection())
 		{
@@ -338,36 +298,16 @@ public class ReviewResource
 		return ret;
 	}
 	
-	//
-	
-	
-	
 	/**
-	 * <NAME>Review Service Get Next Reviewable</NAME>
-	 * <DESCRIPTION>
-	 * To retrieve the next reviewable item based on offset sequence id. If next reviewable is not available
-	 * then try to get random reviewable item. 
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <mapid>
-	 *  Target map id
-	 * </mapid>
-	 * <offsetseqid>
-	 * 	Current Offset sequence id which gets incremented to  offsetseqid+1.
-	 * </offsetseqid>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON in ReviewableItem format
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/next?mapid=15&offsetseqid=2</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * {"mapId":15,"relationId":-1,"sortOrder":3,"resultCount":0}
-	 * </OUTPUT>
-	 * </EXAMPLE>
+	 * To retrieve the next reviewable item based on offset sequence id. If next reviewable is not 
+	 * available then try to get random reviewable item. 
+	 * 
+	 * GET hoot-services/job/review/next?mapid=15&offsetseqid=2
+	 * 
+	 * @param mapId Target map id
+	 * @param offsetSeqId Current Offset sequence id which gets incremented to offsetseqid+1.
+	 * @param direction ?
+	 * @return JSON in ReviewableItem format
 	 */
 	@GET
 	@Path("/next")
@@ -410,33 +350,15 @@ public class ReviewResource
 		return ret;
 	}
 	
-	
 	/**
-	 * <NAME>Review Service Get Reviewable</NAME>
-	 * <DESCRIPTION>
 	 * To retrieve the reviewable item based on offset sequence id. If reviewable is not available
 	 * then return 0 result count
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <mapid>
-	 *  Target map id
-	 * </mapid>
-	 * <offsetseqid>
-	 * 	Offset sequence id.
-	 * </offsetseqid>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON in ReviewableItem format
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/next?mapid=15&offsetseqid=2</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * {"mapId":15,"relationId":-1,"sortOrder":3,"resultCount":0}
-	 * </OUTPUT>
-	 * </EXAMPLE>
+	 * 
+	 * GET hoot-services/job/review/next?mapid=15&offsetseqid=2
+	 * 
+	 * @param mapId Target map id
+	 * @param offsetSeqId Offset sequence id.
+	 * @return JSON in ReviewableItem format
 	 */
 	@GET
 	@Path("/reviewable")
@@ -463,29 +385,14 @@ public class ReviewResource
 		}
 		return ret;
 	}
-	
+  
 	/**
-	 * <NAME>Review Service Get Reviewable Statistics</NAME>
-	 * <DESCRIPTION>
 	 * To retrieve the reviewable statistics for a map
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <mapid>
-	 *  Target map id
-	 * </mapid>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON in ReviewableStatistics format
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/statistics?mapid=15</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * {"totalCount":5,"unreviewedCount":0}
-	 * </OUTPUT>
-	 * </EXAMPLE>
+	 * 
+	 * GET hoot-services/job/review/statistics?mapid=15
+	 * 
+	 * @param mapId Target map id
+	 * @return JSON in ReviewableStatistics format
 	 */
 	@GET
 	@Path("/statistics")
@@ -512,39 +419,16 @@ public class ReviewResource
 	}
 	
 	/**
-	 * <NAME>Review Service Get geojson for all reviewable items</NAME>
-	 * <DESCRIPTION>
-	 * To retrieve GeoJson of all reviewable items within bouding box
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <mapid>
-	 *  Target map id
-	 * </mapid>
-	 * <minlon>
-	 * Minimum longitude
-	 * </minlon>
-	 * <minlat>
-	 *  Minimum latitude
-	 * </minlat>
-	 * <maxlon>
-	 *  Maximum longitude
-	 * </maxlon>
-	 * <maxlat>
-	 *  Maximum latitude
-	 * </maxlat>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	GeoJson containing reviewable bounding box and state
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/allreviewables?mapid=53&minlon=-180&minlat=-90&maxlon=180&maxlat=90</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * GeoJson
-	 * </OUTPUT>
-	 * </EXAMPLE>
+	 * To retrieve GeoJson of all reviewable items within bounding box
+	 * 
+	 * GET hoot-services/job/review/allreviewables?mapid=53&minlon=-180&minlat=-90&maxlon=180&maxlat=90
+	 * 
+	 * @param mapId Target map id
+	 * @param minLon Target map id
+	 * @param minLat Minimum latitude
+	 * @param maxLon Maximum longitude
+	 * @param maxLat Maximum latitude
+	 * @return GeoJson containing reviewable bounding box and state
 	 */
 	@GET
 	@Path("/allreviewables")
@@ -589,37 +473,20 @@ public class ReviewResource
 	}
 	
 	/**
-	 * <NAME>Review bookmark save</NAME>
-	 * <DESCRIPTION>
 	 * To create or update review bookmark
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <request>
-	 *  ReviewBookmarkSaveRequest class
-	 * </request>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	json containing created/updated bookmark id
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/bookmarks/save</URL>
-	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * 	<INPUT>
-	 * {
+	 * 
+	 * POST hoot-services/job/review/bookmarks/save
+	 * * {
 	 *  "mapId":1,
 	 *  "relationId":3,
 	 *  "detail": {"k1":"v1","l3":"v3"},
 	 *  "userId":-1
 	 *  }
-	 *	</INPUT>
-	 * <OUTPUT>
-   * {
-   *     "bookmarkid": 1
-   * }
-	 * </OUTPUT>
-	 * </EXAMPLE>
-   * @throws Exception
-   */
+	 * 
+	 * @param request ReviewBookmarkSaveRequest class
+	 * @return json containing created/updated bookmark id
+	 * @throws Exception
+	 */
   @POST
   @Path("/bookmarks/save")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -678,29 +545,11 @@ public class ReviewResource
   	return response;
   }
   
-	/**
-	 * <NAME>Review bookmark retrieve</NAME>
-	 * <DESCRIPTION>
-	 * To retrieve review bookmark
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <mapId>
-	 *  map Id
-	 * </mapId>
-	 * <relationId>
-	 *  relation id
-	 * </relationId>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	json containing list of review bookmarks
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/bookmarks/get?mapId=1&relationId=2</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-   * {
+  /**
+   * To retrieve review bookmark
+   * 
+   * GET hoot-services/job/review/bookmarks/get?mapId=1&relationId=2
+   * * {
    *     "reviewBookmarks":
    *     [
    *         {
@@ -719,8 +568,11 @@ public class ReviewResource
    *         }
    *     ]
    * }
-	 * </OUTPUT>
-	 * </EXAMPLE>
+   * 
+   * @param bookmarkid bookmark id
+   * @param mapid map Id
+   * @param relid relation id
+   * @return json containing list of review bookmarks
    * @throws Exception
    */
   @GET
@@ -805,35 +657,11 @@ public class ReviewResource
 		}
   }
   
-	/**
-	 * <NAME>Review bookmark retrieve all</NAME>
-	 * <DESCRIPTION>
-	 * To retrieve all review bookmark
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <orderBy>
-	 *  order by column [createdAt | createdBy |  id | lastModifiedAt | lastModifiedBy | mapId | relationId]
-	 * </orderBy>
-	 * <asc>
-	 *  is ascending [true | false]
-	 * </asc>
-	 * <limit>
-	 *  Limit count for paging . 
-	 * </limit>
-	 * <offset>
-	 *  offset index for paging . 
-	 * </offset>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	json containing list of review bookmarks
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/bookmarks/getall?orderBy=createdAt&asc=false&limit=2&offset=1</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-   * {
+  /**
+   * To retrieve all review bookmarks
+   * 
+   * GET hoot-services/job/review/bookmarks/getall?orderBy=createdAt&asc=false&limit=2&offset=1
+   * * {
    *     "reviewBookmarks":
    *     [
    *         {
@@ -852,8 +680,14 @@ public class ReviewResource
    *         }
    *     ]
    * }
-	 * </OUTPUT>
-	 * </EXAMPLE>
+   * 
+   * @param orderByCol order by column [createdAt | createdBy |  id | lastModifiedAt | lastModifiedBy | mapId | relationId]
+   * @param asc is ascending [true | false]
+   * @param limitSize Limit count for paging
+   * @param offset offset index for paging
+   * @param filterBy ?
+   * @param filterByVal ?
+   * @return json containing list of review bookmarks
    * @throws Exception
    */
   @GET
@@ -943,28 +777,12 @@ public class ReviewResource
   	return response;
   }
   
-	/**
-	 * <NAME>Review bookmark stat</NAME>
-	 * <DESCRIPTION>
-	 * To retrieve review bookmarks stat
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	json stat info
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/bookmarks/stat</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
+  /**
+   * To retrieve review bookmarks stat
    * 
-   * {
-   *     "totalCount": 2
-   * }
-	 * </OUTPUT>
-	 * </EXAMPLE>
+   * GET hoot-services/job/review/bookmarks/stat
+   * 
+   * @return json stat info
    * @throws Exception
    */
   @GET
@@ -990,35 +808,17 @@ public class ReviewResource
   	return response;
   }
   
-	/**
-	 * <NAME>Review bookmark delete</NAME>
-	 * <DESCRIPTION>
-	 * To delete review bookmark
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <ReviewBookmarkDelRequest>
-	 *  Delete request
-	 * </ReviewBookmarkDelRequest>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	json containing total numbers of deleted
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/bookmarks/delete</URL>
-	 * 	<REQUEST_TYPE>DELETE</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *  {
+  /**
+   * To delete review bookmark
+   * 
+   * DELETE hoot-services/job/review/bookmarks/delete
+   *  {
 	 * "mapId":397,
 	 * "relationId":3
 	 * }
-	 *	</INPUT>
-	 * <OUTPUT>
-   * 
-   * {
-   *     "deleteCount": 1
-   * }
-	 * </OUTPUT>
-	 * </EXAMPLE>
+	 * 
+   * @param bmkId id of the bookmark to delete
+   * @return json containing total numbers of deleted
    * @throws Exception
    */
   @DELETE

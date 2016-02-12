@@ -110,50 +110,22 @@ public class ExportJobResource extends JobControllerBase {
 			log.error(ex.getMessage());
 		}
 	}
-
+	
 	/**
-	 * <NAME>Export Service Job Execute</NAME>
-	 * <DESCRIPTION>
-	 * 	Asynchronous export service.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <translation>
-	 * 	Translation script name.
-	 * </translation>
-	 * <inputtype>
-	 *  [db | file] db means input from hoot db will be used. file mean a file path will be specified.
-	 * </inputtype>
-	 * <input>
-	 * Input name. for inputtype = db then specify name from hoot db. For inputtype=file, specify full path to a file.
-	 * </input>
-	 * <outputtype>
-	 * 	[gdb | shp | wfs]. gdb will produce file gdb, shp will output shapefile. if outputtype = wfs then a wfs front end will be created
-	 * </outputtype>
-	 * <USER_EMAIL>
-	 * Email address of the user requesting the job.
-	 * </USER_EMAIL>
-	 * <append>
-	 * Denotes if export should append to FGDB template
-	 * </append>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	Job ID
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/export/execute</URL>
-	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * 	<INPUT>
+	 * Asynchronous export service.
+	 * 
+	 * POST hoot-services/job/export/execute
+	 * 
 	 * {
-   * "translation":"MGCP.js",
-   * "inputtype":"db",
-   * "input":"ToyTestA",
-   * "outputtype":"gdb",
-   * "removereview" : "false"
-   *
+   * "translation":"MGCP.js", //Translation script name.
+   * "inputtype":"db", //[db | file] db means input from hoot db will be used. file mean a file path will be specified.
+   * "input":"ToyTestA", //Input name. for inputtype = db then specify name from hoot db. For inputtype=file, specify full path to a file.
+   * "outputtype":"gdb", //[gdb | shp | wfs]. gdb will produce file gdb, shp will output shapefile. if outputtype = wfs then a wfs front end will be created
+   * "removereview" : "false" //?
    * }
-	 *	</INPUT>
-	 * <OUTPUT>{"jobid":"24d1400e-434e-45e0-9afe-372215490be2"}</OUTPUT>
-	 * </EXAMPLE>
+	 * 
+	 * @param params
+	 * @return Job ID
 	 */
 	@POST
 	@Path("/execute")
@@ -261,30 +233,15 @@ public class ExportJobResource extends JobControllerBase {
 		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
 	}
 
-
 	/**
-	 * <NAME>Export Service Get Job Output</NAME>
-	 * <DESCRIPTION>
 	 * To retrieve the output from job make Get request.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <outputname>
-	 *  parameter overrides the output file name with the user defined name. If not specified then defaults to job id as name.
-	 * </outputname>
-	 * <removecache>
-	 *  parameter controls if the output file from export job should be delete when Get request completes.
-	 * </removecache>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	Octet stream
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>"http://localhost:8080/hoot-services/job/export/[job id from export job]?outputname=[user defined name]&removecache=[true | false]"</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>Octet stream</OUTPUT>
-	 * </EXAMPLE>
+	 * 
+	 * GET hoot-services/job/export/[job id from export job]?outputname=[user defined name]&removecache=[true | false]
+	 * 
+	 * @param id ?
+	 * @param outputname parameter overrides the output file name with the user defined name. If not specified then defaults to job id as name.
+	 * @param remove parameter controls if the output file from export job should be delete when Get request completes.
+	 * @return Octet stream
 	 */
 	@GET
 	@Path("/{id}")
@@ -342,24 +299,15 @@ public class ExportJobResource extends JobControllerBase {
 		return rBuild.build();
 	}
 
-
 	/**
-	 * <NAME>Export Service Remove WFS</NAME>
-	 * <DESCRIPTION>
 	 * Removes specified WFS resource.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	Removed id
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/export/wfs/remove/ex_eed379c0b9f7469d80ab32c71550883b</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>{"id":"ex_eed379c0b9f7469d80ab32c71550883b"}</OUTPUT>
-	 * </EXAMPLE>
+	 * 
+	 * GET hoot-services/job/export/wfs/remove/ex_eed379c0b9f7469d80ab32c71550883b
+	 * 
+	 *  //TODO: should be an HTTP DELETE
+	 * 
+	 * @param id id of the wfs resource to remove
+	 * @return Removed id
 	 */
 	@GET
 	@Path("/wfs/remove/{id}")
@@ -390,22 +338,11 @@ public class ExportJobResource extends JobControllerBase {
 	}
 
 	/**
-	 * <NAME>Export Service Get WFS List</NAME>
-	 * <DESCRIPTION>
-	 * 	Lists all wfs resources.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	List of wfs resources
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/export/wfs/resources</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>[{"id":"ex_eed379c0b9f7469d80ab32c71550883b"}]</OUTPUT>
-	 * </EXAMPLE>
+	 * Lists all wfs resources.
+	 * 
+	 * GET hoot-services/job/export/wfs/resources
+	 * 
+	 * @return List of wfs resources
 	 */
 	@GET
 	@Path("/wfs/resources")
@@ -438,24 +375,13 @@ public class ExportJobResource extends JobControllerBase {
 		return Response.ok(srvList.toString(), MediaType.TEXT_PLAIN).build();
 	}
 
-
 	/**
-	 * <NAME>Export Service Get List of Translation Scripts For Export</NAME>
-	 * <DESCRIPTION>
-	 * 	Based on the existence of translation script extension, it will send the list of available translations script for export.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	List of translation script resources
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/export/resources</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>[{"description":"LTDS 4.0","name":"NFDD"},{"description":"MGCP","name":"MGCP"},{"description":"UTP","name":"UTP"}]</OUTPUT>
-	 * </EXAMPLE>
+	 * Based on the existence of translation script extension, it will send the list of available 
+	 * translations script for export.
+	 * 
+	 * GET hoot-services/job/export/resources
+	 * 
+	 * @return List of translation script resources
 	 */
 	@GET
 	@Path("/resources")
