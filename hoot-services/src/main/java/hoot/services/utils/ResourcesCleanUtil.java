@@ -30,7 +30,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
-import java.util.List;
+//import java.util.List;
 
 import hoot.services.HootProperties;
 import hoot.services.db.DbUtils;
@@ -85,8 +85,8 @@ public class ResourcesCleanUtil implements Executable {
 	  {
 	    log.debug("Initializing database connection...");
 
-	    List<Long> ids = DbUtils.getMapIdsByName( conn, mapId);
-	    int nMapCnt = ids.size();
+	    //List<Long> ids = DbUtils.getMapIdsByName( conn, mapId);
+	    //int nMapCnt = ids.size();
 
 	    DbUtils.deleteOSMRecordByName(conn, mapId);
 	    DbUtils.deleteRenderDb(conn, mapId);

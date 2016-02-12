@@ -62,13 +62,14 @@ public class ConflateProcesslet extends JobProcesslet {
 		JSONArray args = parseRequestParams(in);
 		
 		try {		
-			String confOutputName = null;
+			@SuppressWarnings("unused")
+      String confOutputName = null;
 			for(int i=0; i<args.size(); i++)
 			{
 				JSONObject arg = (JSONObject)args.get(i);
 				Object val = arg.get("OUTPUT_NAME");
 				
-				if(val != null)
+				if (val != null)
 				{
 					confOutputName = val.toString();
 					break;

@@ -33,17 +33,12 @@ import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -119,7 +114,9 @@ public class DbUtilsTest {
             Assert.assertEquals(v1, checkTags.get(k1));
             Assert.assertEquals(v2, checkTags.get(k2));
             Assert.assertEquals(v4, checkTags.get(k4));
-            Assert.assertEquals((JSONObject)parser.parse(DbUtils.escapeJson(v5).replaceAll("\\\\\"", "\"")), (JSONObject)parser.parse(checkTags.get(k5).replaceAll("\\\\\"", "\"")));
+            Assert.assertEquals(
+              parser.parse(DbUtils.escapeJson(v5).replaceAll("\\\\\"", "\"")), 
+              parser.parse(checkTags.get(k5).replaceAll("\\\\\"", "\"")));
 
             //Test that we can parse back into json
             JSONObject oParams = (JSONObject)parser.parse(checkTags.get(k5).replaceAll("\\\\\"", "\""));

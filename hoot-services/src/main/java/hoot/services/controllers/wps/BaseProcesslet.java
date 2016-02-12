@@ -52,6 +52,7 @@ public abstract class BaseProcesslet implements Processlet
 
   protected static String coreJobServerUrl = null;
 
+  @SuppressWarnings("unused")
   private ClassPathXmlApplicationContext appContext;
 
   /**

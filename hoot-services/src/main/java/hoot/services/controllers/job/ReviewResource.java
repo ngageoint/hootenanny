@@ -29,7 +29,6 @@ package hoot.services.controllers.job;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -39,7 +38,6 @@ import hoot.services.controllers.osm.MapResource;
 import hoot.services.db.DbUtils;
 import hoot.services.db.postgres.PostgresUtils;
 import hoot.services.db2.QMaps;
-import hoot.services.db2.QReviewBookmarks;
 import hoot.services.db2.ReviewBookmarks;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.review.ReviewBookmarkDelResponse;
@@ -73,7 +71,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -92,7 +89,6 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.types.OrderSpecifier;
 
 /**
  * Service endpoint for the conflated data review process
@@ -803,14 +799,9 @@ public class ReviewResource
   			
   			_appendHstoreElement(hstoreMap.get("bookmarkreviewitem"), oBmkDetail, "bookmarkreviewitem");
   			
-  			if(oBmkDetail != null)
-  			{
-  				mk.setDetail(oBmkDetail);
-  			}
-  			
+  			assert(oBmkDetail != null);
+  		  mk.setDetail(oBmkDetail);
   		}
-  		
-  		
   		
   		response.setReviewBookmarks(res);
   	}

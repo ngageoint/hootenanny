@@ -32,7 +32,7 @@ During conflation, source datasets are merged based on user-specified conflation
 image::user/images/id/hoot_addlayer_folder.png[scaledwidth="25%"]
 
 [[HootiD-Addinglayers]]
-.Displaying Haiti roads layers in Hootenanny. datasets shown are extracted OSM highway data (pink) and MGCP data (yellow); DigitalGlobe GlobalBasemap (GBM).
+.Displaying Haiti roads layers in Hootenanny. The datasets shown are extracted OSM highway data (pink) and MGCP data (yellow); DigitalGlobe GlobalBasemap (GBM).
 image::user/images/id/hoot_Haiti_roads.png[]
 
 To zoom to the layer extent simply right-click on the layer and click on the Zoom to Layer button that appears on the layer name.  This is useful when panning or zooming outside of the viewable extent or scale of the data.
@@ -174,13 +174,13 @@ NOTE: The image carousel thumbnails do not appear, only the image acquisition da
 
 ==== Map Data
 
-The Map data settings allow users to add map overlay information such as a photo overlay from link:$$http://www.mapillary.com/map$$[Mapillary] or a local GPX file, modify the display settings for vector data, and filter existing Map Features. _Mapillary_ is a crowd source platform that allows users to upload street level photos (not commonly used for conflation but part of the core OSM iD interface) when available. Users can also drag and drop a local GPX (GPS generated dataset) or use the file browser to add.
+The Map data settings (shortcut key = F) allow users to add map overlay information such as a photo overlay from link:$$http://www.mapillary.com/map$$[Mapillary] or a local GPX file, modify the display settings for vector data, and filter existing Map Features. _Mapillary_ is a crowd source platform that allows users to upload street level photos (not commonly used for conflation but part of the core OSM iD interface) when available. Users can also drag and drop a local GPX (GPS generated dataset) or use the file browser to add.
 
-Fill Areas allows users to select from three different options for displaying relevant vector data. The first option is _No Fill_ or Wireframe (shortcut key = W) which makes it easier to display background imagery. _Partial Fill_ displays fill areas around their inner edges only. _Full Fill_ displays features with complete fill turned. Finally, users can filter Map Features of interest by simply checking or unchecking the boxes next to the common map features such as Points, Major Roads, Buildings, etc. To access the settings click on the Map Data (shortcut key = F) highlighted in blue in <<Hoot-iD_MapData>>.
+Fill Areas allows users to select from three different options for displaying relevant vector data. The first option is _No Fill_ or Wireframe (shortcut key = W) which makes it easier to display background imagery. _Partial Fill_ displays fill areas around their inner edges only. _Full Fill_ displays features with complete fill turned. Users can adjust the _Line Width_ by unchecking the _use default value_ and setting the width value accordingly. To filter out different features of interest, simply check or uncheck the boxes next to each associated map feature found in _Map Features_ such as Points, Major Roads, Buildings, etc.  
 
 [[Hoot-iD_MapData]]
-.Map datasettings in Hootenanny.
-image::user/images/id/hoot_mapdata.png[scaledwidth="25%"]
+.Map Data options shown with DcGisRoads displayed on DigitalGlobe GBM. The default line width is used in this figure.
+image::user/images/id/hoot_mapdata.png[scaledwidth="75%"]
 
 ==== Tools
 
@@ -272,7 +272,7 @@ The following table provides all of the available shortcut keys for accessing Ho
 When conflating data in Hootenanny, users must have both a Reference Dataset and a Secondary Dataset loaded in the map. Once the layers have been selected, the _Conflate_ button will appear with various options that can be selected by the user.  The following section(s) highlight those options as well as explore different types of conflation strategies using publicly available datasets.  When users are ready to conflate they will need to populate the following fields. 
 
 [[HootiD-conflationoptions]]
-.Conflation options displayed in lower left panel. In this example, a reference conflation between OSM roads (pink) and MGCP roads (blue) in Port Au Prince, Haiti is displayed on DigitalGlobe GlobalBasemap (GBM).
+.Conflation options displayed in lower left panel. In this example, a reference conflation between OSM roads (pink) and MGCP roads (orange) in Port Au Prince, Haiti is displayed on DigitalGlobe GlobalBasemap (GBM).
 image::user/images/id/hoot_conflation_new.png[]
 
 *_Save As_*:  The name you would like to save the merged layer as. By default, a file name Merged_* is populated in this field but this can be overwritten manually by entering a specific layer name.  If no value is provided a default name will be provided.
@@ -285,6 +285,18 @@ image::user/images/id/hoot_conflation_new.png[]
 
 [[HootiD-AttributionRefLayer]]
 *_Attribute Reference Layer_*:  By default, the Reference layer contains both the geometry and attribution that dictates the merged features. In many cases, however, reference geometry and attribution exists across multiple layers and therefore we provide the ability to utilize the Secondary layer as the reference attribution for cases where the secondary layer is determined to contain the most accurate tag information while the reference layer contains the most accurate geometry.
+
+[[HootStats]]
+*_Collect Stats?_*: True/False. Allows users to collect statistics about the performance of a conflation job such as the counts of pois, highways, buildings or the percentage of merged/reviewed features and display them underneath the layer as shown in <<Hootlayerstats>>. To enable this switch the drop-down from false to true.  To view the stats collected, click on the `i` next to the layer name and expand the Statistics as shown below.
+
+[[Hootlayerstats]]
+.Hootenanny merged layer statistics. To view click on the `i` highlighted in the red box and expand the relevant sections e.g. Parameters, Options, Statistics, Statistics (Raw). Note that the sidebar is expanded to view the full table.
+image::user/images/id/Hoot_layertoggle.png[scaledwidth="25%"]
+image::user/images/id/Hoot_layerinfo.png[]
+
+=== Conflation Info and Statistics
+
+Hootenanny provides users with the ability to generate statistics and display information pertaining to each conflation and associated input layers. Statistics are collected when users set the collect stats option to _true_ for a given conflation as described <<HootStats,here>>.  If collect stats = false, Hootenanny will display only the conflation parameters i.e. the Reference/Secondary layer names and Conflation Type, and Options, i.e. what args were included in the conflation job, for the merged layer after the conflation job has completed. When the Collect Stats option is set to true, Hootenanny will generate statistics such as the counts for all nodes, ways and relations in each of the input and output layers (similarly for counts of pois, roads, and buildings), counts of unmatched, merged, and review features as well as percentages for each.  These formatted statistics are displayed in the _Statistics_ section of the layer info shown in <<Hootlayerstats>>.  In addition to these stats, users can also view the raw statistics that Hootenanny collects when this option has been enabled.  These values appear as comma separated lists (e.g. Total Conflatable Features = 374,227,0) pertaining to the Reference Layer, Secondary Layer, and Merged Output Layer next to each statistic parameter.  
 
 === Types of Conflation
 
@@ -333,7 +345,7 @@ image::user/images/id/hoot_advanced_conflate.png[scaledwidth="50%"]
 [[HootConflictReview]]
 === Reviewing Conflicts in Hootenanny
 
-When conflating data it is inevitable that conflicts may arise due to the lack of a clear solution as a result of ambiguous relationships between matched features. When this occurs, reviewable items are flagged and presented to the user in the UI through an iterative review process where the user must decide a particular action, e.g. accept as resolved, modify or delete, merge, before merging the final conflated output. In Hootenanny core, the concept of a "Review" is used to refer to something that needs to be reviewed by the user. This could include any of the following:
+When conflating data it is inevitable that conflicts may arise due to the ambiguous relationships between matched features. When this occurs, reviewable items are flagged and presented to the user in the UI through an iterative review process where further user is required. This occurance of getting reviews during a conflation is often the result of any of the following circumstances:
 
 * Invalid Input
 * Conflicting matches – In the core conflict refers to two matches that cannot be applied to the same map.
@@ -341,9 +353,13 @@ When conflating data it is inevitable that conflicts may arise due to the lack o
 
 From the UI perspective, the term "Conflict" is used synonymously with "Review" but not all reviews are conflicts. Each type of data (POI, Buildings, Roads, etc.) when conflated introduce their own unique types of conflicts where the user is advised to take some action of either merging two POIs together, editing a layer geometry to eliminate any potential conflict or resolve the item as is to maintain as a separate feature.  No single solution can be provided to address a particular conflation conflict but rather it is up to the user to take the necessary steps based on the review text presented to reduce the likelihood that erroneous data will get introduced during the conflation process.
 
-During review, a single feature is compared with another (based on convergence of geometry and attribution) to determine whether a merge or alternative action is required. Note that feature merging is only available for POI to POI conflation. Otherwise the user can modify  Features flagged for review will appear highlighted on the map in either red or blue corresponding to the Reference and Secondary input data.  Clicking in any of the highlighted fields in the review table will select the feature in question and display its attribute in the left tag panel (see <<ReferenceConflictReview>>).  Users can toggle the review items table by clicking on the _Hide/Show Table_ button located in the conflict review bar at the bottom.  In order to complete the review process, all reviews must be resolved either by stepping through each individually or by clicking the _Complete Review_ button to resolve remaining reviews and either export the data to the desired output format or add another layer for conflation.  Note that the colors in the merged layer have significance.  Green features represent those which have been merged, and any other colored features are those that originate from the input layers (color corresponds the input color used prior to conflation).
+During review mode, the user is presented with a pair of features where they must take an appropriate action in order to resolve the review.  Depending on the features involved, a user can decide either to maintain these as separate features (as is) by clicking _Resolved_ (H), merge them into a single feature (POI 2 POI only) by clicking _Merge_ (E) then Resolved, or modify the feature geometry manually (see <<ModifyLayerGeometry>>).  Note with each review there is an accompaning review note (B) that provides a short detail on the reasons for reviewing the features in question but rarely does this provide enough information to take a specific action.  In depth knowledge of the datasets and coverage area by an appropriate data steward is typically required to provide the necessary guidance to take an action for a review.    
 
-NOTE: Although reviews occur between single pairs of features, a review set may actually contain 1:Many features which will appear within the UI under the review note as 1 of X count.
+[[ReviewMode_Layout]]
+.Layout of Review Mode in Hootenanny: *A*: Overview with map-in-map results; *B*: Review note and counts; *C*: Share Review; *D*: Hide/Show Table; *E*: Merge feature (POI only); *F*: Preview Review; *G*: Next Review; *H*: Resolve Review; *I*: Review table (Red is Reference, Blue is Secondary); *J*: Attribute panel showing selected Reference POI tags; *K*: Highlighted Red/Blue reviewed POIs. Latvia POI data (OSM and geonames) displayed on DigitalGlobe GBM. 
+image::user/images/id/Hoot_reviewmode_layout.png[]
+
+Clicking on any of the highlighted fields in the review table (I) selects the feature (either red/blue) in question and display its attribute in the left tag panel (item J in <<ReviewMode_Layout>>).  Users can toggle the review items table by clicking on the _Hide/Show Table_ button located in the conflict review bar at the bottom.  In order to complete the review process, all reviews must be resolved either by stepping through each individually or by clicking the _Complete Review_ button to resolve all remaining reviews.  After resolving reviews users can either export the data to the desired output format or add another layer for additional conflation.  Note that features displayed in green represent those which have been merged prior to the review and other colors represent the original input layers. 
 
 ==== Review Text
 
@@ -356,12 +372,20 @@ In Hootenanny, the concept of Map-in-Map is used here to describe an inset or ov
 
 Depending on the density of data flagged for review, the features are represented in the following manner: yellow dots corresponding to the location of unresolved reviews; a single red dot indicating the currently reviewed feature in the user's session; and green dots representing any resolved or merged features.  This visual aid becomes useful particularly when multiple users are editing the same layer simultaneously since it provides a map of the spatial distribution of reviews in real or near-real time.
 
-.Map-in-Map with unreviewed features displayed (yellow dots).  Shown here is a POI review of a conflation between OpenStreetMap POIs and Geoname POIs within Sao Paulo, Brazil (Imagery is DigitalGlobe GBM Basemap).
+.Hootenanny Review mode with Map-in-Map overview displaying unreviewed features (yellow dots), current reviewed feature (red dots), and resolved features (green dots). In this example, a user is reviewing several POI review conflicts for a conflation between OpenStreetMap POIs and Geoname POIs within Riga, Latvia (Imagery is DigitalGlobe GBM Basemap).
 image::user/images/id/hoot_mapinmap_review.png[scaledwidth="75%"]
 
 ==== Multi-user Conflict Reviewing
 
 Hootenanny supports the ability for multiple users to review the same merged output layer containing any number of generated reviews.  Using the given scenario of a reference conflation between two POI layers resulting in 15K reviews, any user with access to the same Hootenanny deployment can load the merged layer containing the unresolved reviews and take any necessary action to resolve them.  To mitigate any toe-stepping that might occur due to multiple users accessing the same review pair simultaneously, reviews are presented in a randomized order such that there is a fairly low probability of two users getting the same review at the same time (assuming that the review count is high and the number of reviewers is low).  For those instances where a review is presented to two users simultaneously, the user that resolves their review first by clicking on the Resolved button will commit the change to the database.  
+
+[[HootShareReviews]]
+==== Sharing/Saving Reviews
+
+To assist with the multi-user conflict reviewing, there is a new mechanism to allow users to better collaborate on reviews using the _Save Review_ (*C* in <<ReviewMode_Layout>>) option.  When a user encounters a review that requires additional feedback prior to resolving, they can click the Save Review button.  This will pop-up a dialog box allowing them to enter some details about the review which others can then open separately as a bookmark from the Review Bookmarks in Manage.  A second user can then open the review bookmark, add additional comments and view that review to take any additional action required.
+
+.Share Review.  Clicking the Share Review button pops up a dialog box where a user can enter a title, description, note and email to associate with an unresolved review. 
+image::user/images/id/hoot_sharereview.png[scaledwidth="25%"]
 
 === Conflation Examples
 
@@ -434,10 +458,10 @@ Points of Interest (POI) to POI conflation is supported within Hootenanny by def
 Unlike linear and polygon features, the review process for POIs provides the capability to _merge_ attribution and geometry when reviewing conflicts. Merge combines the two POIs attribution into a single POI with the reference geometry and a combination of non-reference/reference attribution. When determining an appropriate action, a user must first consider whether the points represent two separate POIs, a single POI, or an invalid POI in which case the user might move or delete the POI(s) in question.  In this example, a link:$$https://www.arcgis.com/home/item.html?id=f323f677b3f34fe08956b8fcce3ace44$$[DC POI] dataset containing locations and attributes of _Address Alias_ points composed of a variety of link:$$http://geospatial.dcgis.dc.gov/dc_kmz/metadata/AddressAliasPt.html$$[features] as part of the Master Address Repository (MAR) for the D.C. Office of the Chief Technology Officer (OCTO) and participating D.C. government agencies is conflated against link:$$http://www.mapcruzin.com/free-united-states-shapefiles/free-district-of-columbia-arcgis-maps-shapefiles.htm$$[MapCruzin] POI data derived from OSM. Conflating these two POI datasets produces 62 reviews with a range of conflict review notes to step through and take appropriate actions of either merging or accepting as two separate POIs.
 
 [[POI2POIConflictReview]]
-.Reviewing Washington, D.C. POI conflicts in Hootenanny using the DC POI and MapCruzin data. The figure shows two POIs representing what could either be the same location or two entirely different entities.  In this case the user would need to determine whether the feature highlighted in red, "Reed Elementary School", should be merged with the feature highlighted in blue, "MARIE REED ELEMENTARY SCHOOL".  A red arrow will appear when hovering over the merge button indicating the proposed merge direction but this can be reversed by hitting the `Ctrl` key and merge button simultaneously.
+.Reviewing Washington, D.C. POI conflicts in Hootenanny using the DC POI and MapCruzin data. In this case the user is determining whether the feature highlighted in blue, "Reed Elementary School", should be merged with the feature highlighted in red, "MARIE REED ELEMENTARY SCHOOL".  A red arrow appears when hovering over the merge button indicating the proposed merge direction but this can be reversed by hitting the `Ctrl` key and merge button simultaneously.
 image::user/images/id/hoot_poi_conflate.png[]
 
-NOTE: A POI merge can occur in either direction depending on the users preference.  In most cases clicking merge will merge the secondary dataset POI into the reference POI combining relevant attributes but this can be reversed by holding down the Ctrl key when clicking the merge button.  This will not work when using the merge "m" short-cut key.
+NOTE: A POI merge can occur in either direction depending on the users preference.  In most cases clicking merge will merge the secondary dataset POI into the reference POI combining relevant attributes but this can be reversed by holding down the Ctrl key when clicking the merge button.  This will not work when using the merge `m` short-cut key.
 
 [[HootiD_GenericRiverConflation]]
 ==== Advanced Conflation Example: Generic River Conflation
@@ -695,6 +719,23 @@ The Reports tab contains all of the generated reports for conflation jobs where 
 
 .Hootenanny Conflation Statistic Reports
 image::user/images/id/hoot_csr_tab.png[]
+
+
+===== Review Bookmarks
+
+The Review Bookmarks tab shown in <<ViewingReviewBookmark>> stores all of the shared reviews described in <<HootShareReviews>>.  Users can open any review and read any pertinent notes or comments, then if necessary add any relevant additional comments.  These notes will persist with the review bookmark for the duration of its lifecycle or until the user clicks the trashcan icon to delete them.  
+
+Note that when adding comments to an existing review they will appear from an anonymous user unless you click on the user icon in the upper right corner to _Set User For Session_.  
+
+[[ViewingReviewBookmark]]
+.Hootenanny Review Bookmarks.
+image::user/images/id/hoot_reviewbookmarks.png[]
+
+Clicking on the magnifying glass next to the refresh icon for each review will open a pop-up message asking if you would like to navigate to the review item on the map.  Note that when the review is resolved, this feature is no longer available and the review bookmark will appear with the status, Resolved. 
+
+[[EditingReviewBookmark]]
+.Opening a review in the Review Bookmarks tab.  Comments and notes can be added by clicking on the `+` symbol in the right corner.  To open the map to this review click on the magnifier glass in the top right corner and a pop-up message will provide feedback for returning to review mode in the map.
+image::user/images/id/hoot_openreview.png["75%"]
 
 === About Hootenanny
 

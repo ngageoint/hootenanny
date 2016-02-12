@@ -35,7 +35,6 @@ import hoot.services.readers.review.ReviewBookmarkRetriever;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
-import java.sql.Types;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
@@ -47,13 +46,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mysema.query.sql.Configuration;
-import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 import com.mysema.query.support.Expressions;
 
-public class ReviewBookmarksSaver {
-	@SuppressWarnings("unused")
+public class ReviewBookmarksSaver 
+{
   private static final Logger log = LoggerFactory.getLogger(ReviewBookmarksSaver.class);
 	
 	private Connection _conn;
