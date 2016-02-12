@@ -28,7 +28,7 @@
 #define FINDINTERSECTIONSVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/filters/ElementCriterion.h>
 
@@ -38,7 +38,7 @@ namespace hoot
 /**
  * Finds all intersections (nodes), adds some parameters to them and records their node ids
  */
-class FindIntersectionsVisitor : public ElementVisitor, public OsmMapConsumer
+class FindIntersectionsVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

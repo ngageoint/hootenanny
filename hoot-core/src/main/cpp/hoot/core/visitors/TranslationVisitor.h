@@ -31,7 +31,7 @@
 #include <boost/shared_ptr.hpp>
 
 // Hoot
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/io/ScriptToOgrTranslator.h>
@@ -43,7 +43,7 @@
 namespace hoot
 {
 
-class TranslationVisitor : public ElementVisitor, public OsmMapConsumer
+class TranslationVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
