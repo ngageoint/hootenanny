@@ -34,8 +34,6 @@ import hoot.services.db2.QUsers;
 import hoot.services.db2.Users;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.osm.User;
-import hoot.services.models.review.ReviewBookmarkSaveRequest;
-import hoot.services.models.review.ReviewBookmarksSaveResponse;
 import hoot.services.models.user.UserSaveResponse;
 import hoot.services.models.user.UsersGetResponse;
 import hoot.services.readers.users.UsersRetriever;

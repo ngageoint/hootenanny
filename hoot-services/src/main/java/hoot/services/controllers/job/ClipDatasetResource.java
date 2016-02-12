@@ -41,7 +41,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+//import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,9 +110,9 @@ public class ClipDatasetResource extends JobControllerBase {
 	{		String jobId = UUID.randomUUID().toString();
 		try
 		{
-			JSONParser pars = new JSONParser();
-			JSONObject oParams = (JSONObject)pars.parse(params);
-			String clipOutputName = oParams.get("OUTPUT_NAME").toString();
+			//JSONParser pars = new JSONParser();
+			//JSONObject oParams = (JSONObject)pars.parse(params);
+			//String clipOutputName = oParams.get("OUTPUT_NAME").toString();
 
 			JSONArray commandArgs = parseParams(params);
 			JSONObject clipCommand = _createMakeScriptJobReq(commandArgs);
