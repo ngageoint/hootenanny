@@ -39,6 +39,7 @@
 #include <hoot/core/filters/PoiCriterion.h>
 #include <hoot/core/filters/StatsAreaFilter.h>
 #include <hoot/core/filters/StatusCriterion.h>
+#include <hoot/core/filters/TagContainsFilter.h>
 #include <hoot/core/filters/TagCriterion.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/visitors/CalculateAreaVisitor.h>
@@ -235,6 +236,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     double conflatablePoiCount = 0.0;
     double conflatableHighwayCount = 0.0;
     double conflatableBuildingCount = 0.0;
+    double conflatableWaterwayCount = 0.0;
     //TODO: This isn't very extensible to hardcode the matchup between each match creator and each
     //feature type (e.g. hoot::PlacesPoiMatchCreator matches up with POI type).  Need a more
     //maintainable way to do this if many more feature types get added.
@@ -271,6 +273,10 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
         else if (matchCreatorName == "hoot::BuildingMatchCreator")
         {
           conflatableBuildingCount = conflatableFeatureCountForFeatureType;
+        }
+        else if (matchCreatorDescriptions.at(i).description == "Linear Waterway")
+        {
+          conflatableWaterwayCount = conflatableFeatureCountForFeatureType;
         }
       }
     }
@@ -470,6 +476,62 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     _stats.append(
       SingleStat("Percentage of Unmatched Buildings", percentageOfTotalBuildingsUnconflated));
 
+    const double totalWaterways =
+      _applyVisitor(constMap, FilteredVisitor(new TagContainsFilter(Filter::KeepMatches, "type", "waterway"), new FeatureCountVisitor()));
+    _stats.append(SingleStat("Waterway Count", totalWaterways));
+
+    _stats.append(SingleStat("Conflatable Waterways", conflatableWaterwayCount));
+    const double waterwaysProcessedByConflation =
+      _applyVisitor(constMap, FilteredVisitor(
+        ChainCriterion(new StatusCriterion(Status::Conflated), new TagContainsFilter(Filter::KeepMatches, "type", "waterway")), new FeatureCountVisitor()));
+    const double waterwaysMarkedForReview =
+      _applyVisitor(constMap, FilteredVisitor(
+        ChainCriterion(new NeedsReviewCriterion(constMap), new TagContainsFilter(Filter::KeepMatches, "type", "waterway")), new FeatureCountVisitor()));
+    const double conflatedWaterwayCount = fmax(waterwaysProcessedByConflation - waterwaysMarkedForReview, 0);
+    _stats.append(SingleStat("Conflated Waterways", conflatedWaterwayCount));
+    _stats.append(SingleStat("Waterways Marked for Review", waterwaysMarkedForReview));
+    const double numWaterwayReviewsToBeMade =
+      _applyVisitor(
+        constMap,
+         FilteredVisitor(
+            new TagContainsFilter(Filter::KeepMatches, "type", "waterway"),
+            new CountUniqueReviewsVisitor()));
+    _stats.append(SingleStat("Number of Waterway Reviews to be Made", numWaterwayReviewsToBeMade));
+    const double unconflatedWaterwayCount =
+      _applyVisitor(
+        constMap,
+        FilteredVisitor(
+          ChainCriterion(
+            new NotCriterion(new StatusCriterion(Status::Conflated)),
+            new NotCriterion(new NeedsReviewCriterion(constMap)),
+            new TagContainsFilter(Filter::KeepMatches, "type", "waterway")),
+          new FeatureCountVisitor()));
+    _stats.append(SingleStat("Unmatched Waterways", unconflatedBuildingCount));
+//    _stats.append(SingleStat("Meters Squared of Buildings Processed by Conflation",
+//      _applyVisitor(constMap, FilteredVisitor(ChainCriterion(new StatusCriterion(Status::Conflated),
+//        contains.get(), new CalculateAreaVisitor()))));
+    double percentageOfTotalWaterwaysConflated = 0.0;
+    if (totalWaterways > 0.0)
+    {
+      percentageOfTotalWaterwaysConflated = ((double)conflatedWaterwayCount / (double)totalWaterways) * 100.0;
+    }
+    _stats.append(
+      SingleStat("Percentage of Waterways Conflated", percentageOfTotalWaterwaysConflated));
+    double percentageOfTotalWaterwaysMarkedForReview = 0.0;
+    if (totalWaterways > 0.0)
+    {
+      percentageOfTotalWaterwaysMarkedForReview = ((double)waterwaysMarkedForReview / (double)totalWaterways) * 100.0;
+    }
+    _stats.append(
+      SingleStat("Percentage of Waterways Marked for Review", percentageOfTotalWaterwaysMarkedForReview));
+    double percentageOfTotalWaterwaysUnconflated = 0.0;
+    if (totalWaterways > 0.0)
+    {
+      percentageOfTotalWaterwaysUnconflated = ((double)unconflatedWaterwayCount / (double)totalWaterways) * 100.0;
+    }
+    _stats.append(
+      SingleStat("Percentage of Unmatched Waterways", percentageOfTotalWaterwaysUnconflated));
+//*/
     LongestTagVisitor v2;
     _applyVisitor(constMap, &v2);
     _stats.append(SingleStat("Longest Tag", v2.getStat()));
