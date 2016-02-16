@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
 // Qt
@@ -44,7 +44,7 @@ using namespace std;
 /**
  * Counts all the unique names.
  */
-class UniqueNamesVisitor : public ElementVisitor, public OsmMapConsumer, public SingleStatistic
+class UniqueNamesVisitor : public ElementVisitor, public ConstOsmMapConsumer, public SingleStatistic
 {
 public:
 

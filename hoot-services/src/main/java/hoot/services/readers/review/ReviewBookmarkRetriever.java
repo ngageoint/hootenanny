@@ -34,16 +34,14 @@ import org.slf4j.LoggerFactory;
 
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.types.OrderSpecifier;
-import com.mysema.query.types.Path;
-import com.mysema.query.types.path.NumberPath;
 
 import hoot.services.db.DbUtils;
 import hoot.services.db2.QReviewBookmarks;
 import hoot.services.db2.ReviewBookmarks;
 
-public class ReviewBookmarkRetriever {
+public class ReviewBookmarkRetriever 
+{
 
-	@SuppressWarnings("unused")
   private static final Logger log = LoggerFactory.getLogger(ReviewBookmarkRetriever.class);
 	
 	private Connection _conn;
@@ -56,16 +54,9 @@ public class ReviewBookmarkRetriever {
 	
 	/**
 	 * Retrieves all bookmarks for mapId+relationId using map id and relation id.
-	 * 
-	 * @param mapId
-	 * @param relationId
-	 * @return
-	 * @throws Exception
 	 */
 	public List<ReviewBookmarks> retrieve(final long mapId, final long relationId) throws Exception
 	{		
-
-		
 		List<ReviewBookmarks> res = null;
 		try
 		{
@@ -83,16 +74,9 @@ public class ReviewBookmarkRetriever {
 	
 	/**
 	 * Retrieves all bookmarks for mapId+relationId using map id and relation id.
-	 * 
-	 * @param mapId
-	 * @param relationId
-	 * @return
-	 * @throws Exception
 	 */
 	public List<ReviewBookmarks> retrieve(final long boookMarkId) throws Exception
 	{		
-
-		
 		List<ReviewBookmarks> res = null;
 		try
 		{

@@ -141,7 +141,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 		    .where(changesets.id.eq(changesetId)).singleResult(changesets);
 		final Timestamp now = new Timestamp(Calendar.getInstance()
 		    .getTimeInMillis());*/
-		// TODO: this check causes intermittent test failures
+		// this check causes intermittent test failures
 		// Thread.sleep(1000);
 		// Assert.assertTrue(changeset.getClosedAt().before(now));
 

@@ -380,7 +380,6 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/RfExtractorClassifier.cpp \
     src/main/cpp/hoot/core/cmd/CropMapCmd.cpp \
     src/main/cpp/hoot/core/util/MultiPolygonCreator.cpp \
-    src/main/cpp/hoot/core/io/db/SequenceIdReserver.cpp \
     src/main/cpp/hoot/core/io/db/InternalIdReserver.cpp \
     src/main/cpp/hoot/core/conflate/ReviewMarker.cpp \
     src/main/cpp/hoot/core/cmd/AttributeCoOccuranceCmd.cpp \
@@ -637,6 +636,7 @@ HEADERS += \
     src/main/cpp/hoot/core/ops/RemoveDuplicateReviewsOp.h \
     src/main/cpp/hoot/core/ops/VisitorOp.h \
     src/main/cpp/hoot/core/OsmMapConsumer.h \
+    src/main/cpp/hoot/core/ConstOsmMapConsumer.h \
     src/main/cpp/hoot/core/ops/NamedOp.h \
     src/main/cpp/hoot/core/visitors/ReportMissingElementsVisitor.h \
     src/main/cpp/hoot/core/visitors/KeepBuildingsVisitor.h \
@@ -854,7 +854,6 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/polygon/BuildingRfClassifier.h \
     src/main/cpp/hoot/core/conflate/RfExtractorClassifier.h \
     src/main/cpp/hoot/core/util/MultiPolygonCreator.h \
-    src/main/cpp/hoot/core/io/db/SequenceIdReserver.h \
     src/main/cpp/hoot/core/io/db/InternalIdReserver.h \
     src/main/cpp/hoot/core/conflate/ReviewMarker.h \
     src/main/cpp/hoot/core/visitors/LongestTagVisitor.h \

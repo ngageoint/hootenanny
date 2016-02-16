@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/python
 
 """
 Removes every translation script from the passed in list via the web services and then re-adds the 

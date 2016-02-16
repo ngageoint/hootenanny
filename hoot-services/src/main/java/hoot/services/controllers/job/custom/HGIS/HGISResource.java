@@ -138,10 +138,6 @@ public class HGISResource extends JobControllerBase
   /**
    * Default parameter creator. Child class probably will override this to meet its need.
    * TODO: We would need to figure out the transport object and replace jsonarray with it
-   * 
-   * @param in
-   * @param out
-   * @return
    */
   protected final JSONArray _createParamObj(final String in, final String out)
   {

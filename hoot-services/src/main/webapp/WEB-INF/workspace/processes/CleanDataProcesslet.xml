@@ -9,16 +9,8 @@
 	<JavaClass>hoot.services.controllers.wps.CleanDataProcesslet</JavaClass>
   <Title>Clean Data Service</Title>
   <Abstract><![CDATA[
-  <DESCRIPTION>
   Clean Data service represents Rest and WPS end point for hoot cleanup which is defined as cleanup (input) (output)
   Removes common erroneous data scenarios from input and writes to output. * input - Input (e.g. .osm file). * output - Output file (e.g. .osm file)
-  </DESCRIPTION>
-  <EXAMPLE>
-  <URL>http://localhost:8080/hoot-services/ogc</URL>
-  <REQUEST_TYPE>POST</REQUEST_TYPE>
-  <INPUT></INPUT>
-   <OUTPUT></OUTPUT>
-   </EXAMPLE>
   ]]></Abstract>
 	<!-- deegree doesn't honor optional input parameters for HTTP GET requests (only POSTs), so 
     don't make any of them optional; by default input params are required -->

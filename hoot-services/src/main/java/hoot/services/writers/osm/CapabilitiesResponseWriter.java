@@ -48,7 +48,6 @@ public class CapabilitiesResponseWriter
    * Writes the capabilities response to an XML document
    * 
    * @return an XML document
-   * @example see http://wiki.openstreetmap.org/wiki/API_0.6#Capabilities:_GET_.2Fapi.2Fcapabilities
    */
   public Document writeResponse()
   {

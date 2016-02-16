@@ -261,10 +261,6 @@ public class JobStatusManager
   /**
    * Updates job. This one should be used to any storage behavior like add or
    * update Since the serialization routine can change.
-   *
-   * @param jobId
-   * @param status
-   * @return
    */
   private boolean updateJob(String jobId, int status, String statusDetail) throws Exception
   {

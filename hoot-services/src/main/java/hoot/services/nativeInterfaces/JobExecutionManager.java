@@ -46,9 +46,7 @@ public class JobExecutionManager
   private static final Logger log = LoggerFactory.getLogger(JobExecutionManager.class);
 
   private INativeInterface nativeInterface;
-  /**
-   * @return
-   */
+
   public INativeInterface getNativeInterface()
   {
     return nativeInterface;

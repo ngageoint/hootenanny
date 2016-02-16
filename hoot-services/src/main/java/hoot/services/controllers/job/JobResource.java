@@ -395,10 +395,6 @@ public class JobResource
   /**
    * Processes requested job. Parameter is in String in JSON format
    *
-   * @param jobId
-   * @param params
-   * @param request
-   * @return
    * @throws SQLException
    */
   @POST
@@ -560,7 +556,6 @@ public class JobResource
   /**
    * Raw call to terminate job
    *
-   * @param childId
    * @throws Exception
    */
   protected void _terminateJob(String childId) throws Exception
@@ -570,11 +565,7 @@ public class JobResource
 
   /**
    * Terminate Job and its children jobs
-   *
-   * @param jobId
-   * @return
    */
-
   public String terminateJob(String jobId, String mapId) throws Exception
   {
   	/*
@@ -641,35 +632,15 @@ public class JobResource
   	return _jobExecMan.getProgress(jobId);
   }
 
-	/**
-	 * <NAME>Job Service</NAME>
-	 * <DESCRIPTION>
-	 * This service allows for executing Hootenanny tasks and tracking the status of Hootenanny jobs
-	 * launched by other web services. Not all Hootenanny web services create jobs which can be tracked by this service.
-	 * `http://localhost:8080/hoot-services/job/status/{Job Id}`
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON structure containing information about the job
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/status/38400000-8cf0-11bd-b23e-10b96e4ef00</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * {
-	 *   "jobId": "38400000-8cf0-11bd-b23e-10b96e4ef00d",
-	 *   "status": "COMPLETE",
-	 *   "statusDetail": "This job finished in 2:32 and was successful."
-	 * }
-	 * </OUTPUT>
-	 * </EXAMPLE>
-   *
-   * @param jobId
-   * @param request
-   * @return
+  /**
+   * This service allows for executing Hootenanny tasks and tracking the status of Hootenanny jobs
+	 * launched by other web services. Not all Hootenanny web services create jobs which can be 
+	 * tracked by this service. 
+	 * 
+	 * GET hoot-services/job/status/{Job Id}
+   * 
+   * @param jobId id of the job to track
+   * @return job status JSON
    */
   @GET
   @Path("/status/{jobId}")
@@ -790,9 +761,6 @@ public class JobResource
 
   /**
    * Return job status
-   *
-   * @param jobId
-   * @return
    */
   @SuppressWarnings("unchecked")
   protected JSONObject getJobStatusObj(String jobId) throws Exception

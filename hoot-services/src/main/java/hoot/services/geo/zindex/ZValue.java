@@ -27,7 +27,7 @@
 package hoot.services.geo.zindex;
 
 /**
- * @TODO Prototype -- Requires things like basic error checking.
+ * //TODO: Prototype -- Requires things like basic error checking.
  * 
  * This class is re-entrant but not thread safe.
  */
@@ -74,9 +74,6 @@ final public class ZValue
   /**
    * Calculates the z value by interleaving values that are already scaled to
    * the proper space.
-   * 
-   * @param point
-   * @return
    */
   public long calculate(long[] point)
   {
@@ -100,10 +97,6 @@ final public class ZValue
 
   /**
    * Calculates the non-interleaved component for one dimension.
-   * 
-   * @param v
-   * @param d
-   * @return
    */
   public long calculateComponent(double v, int d)
   {
@@ -150,7 +143,6 @@ final public class ZValue
   
   /**
    * Returns the maximum value in any one dimension (number of bins in that direction - 1).
-   * @return
    */
   public long getMaxDimensionRange()
   {

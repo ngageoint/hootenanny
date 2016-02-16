@@ -177,8 +177,7 @@ nodesep=1.75;
 node [shape=record,width=1.5,height=.75,style=filled,fillcolor="#e7e7f3",fontsize=10];
 edge [arrowhead=none, arrowtail=none,fontsize=9];
 db [label="PostgreSQL\nDatabase\n(WGS84 100 nanodegrees)",shape=record,width=2,height=1,style=filled,fillcolor="#e7e7f3"];
-ui [shape=record,label="Web\nBrowser|{Data\nStructures\n(WGS84 IEEE
-754)|Visualize\n(Web Mercator\nIEEE 754)}"];
+ui [shape=record,label="Web\nBrowser|{Data\nStructures\n(WGS84 IEEE 754)|Visualize\n(Web Mercator\nIEEE 754)}"];
 services [label="Web\nServices\n(WGS84 IEEE 754)"];
 core [label="Hoot\nCore\n(IEEE 754)"];
 core -> db;

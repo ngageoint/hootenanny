@@ -36,7 +36,7 @@ import java.util.Vector;
  * Yes, ZCurve Ranger. Picture a guy wearing a space helmet in blue spandex
  * covered in Zs.
  * 
- * @TODO Prototype -- Requires things like basic error checking.
+ * //TODO: Prototype -- Requires things like basic error checking.
  */
 public class ZCurveRanger
 {

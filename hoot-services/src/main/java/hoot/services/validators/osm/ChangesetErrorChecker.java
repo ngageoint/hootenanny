@@ -226,7 +226,7 @@ public class ChangesetErrorChecker
    * 
    * 
    * @throws Exception
-   * @todo is this check actually necessary?
+   * //TODO: is this check actually necessary?
    */
   public void checkForElementVisibilityErrors() throws Exception
   {
@@ -304,12 +304,6 @@ public class ChangesetErrorChecker
 		}
   }
   
-  /**
-   * 
-   * 
-   * @return
-   * @throws Exception
-   */
   public Map<Long, CurrentNodes> checkForElementExistenceErrors() throws Exception
   {
   	log.debug("Checking for element existence errors...");

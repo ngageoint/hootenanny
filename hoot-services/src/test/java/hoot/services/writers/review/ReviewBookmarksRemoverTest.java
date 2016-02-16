@@ -29,7 +29,6 @@ package hoot.services.writers.review;
 import java.sql.Connection;
 
 import hoot.services.UnitTest;
-import hoot.services.db.DbUtils;
 import hoot.services.models.review.ReviewBookmarkDelRequest;
 
 import org.junit.Test;
@@ -45,7 +44,7 @@ public class ReviewBookmarksRemoverTest {
 		Connection conn = null;
   	try
   	{
-  		ReviewBookmarkDelRequest request = new ReviewBookmarkDelRequest((long)1);
+  		ReviewBookmarkDelRequest request = new ReviewBookmarkDelRequest(1);
   		ReviewBookmarksRemover remover = new ReviewBookmarksRemover(conn);
   		SQLDeleteClause del = remover._createDelClause(request);
   		

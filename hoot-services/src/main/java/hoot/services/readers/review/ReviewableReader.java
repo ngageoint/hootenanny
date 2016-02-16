@@ -28,7 +28,6 @@ package hoot.services.readers.review;
 
 import java.sql.Connection;
 
-import hoot.services.db.DbUtils;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.review.AllReviewableItems;
 import hoot.services.models.review.ReviewableItem;

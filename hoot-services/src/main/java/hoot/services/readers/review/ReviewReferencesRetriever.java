@@ -161,7 +161,7 @@ public class ReviewReferencesRetriever
   /**
    * Retrieves all other unresolved element references to reviews for a given element
    * 
-   * @param requestingElementInfo element whose review references are to be retrieved
+   * @param queryElementInfo element whose review references are to be retrieved
    * @return a list containing all features the input feature needs to be reviewed with
    * @throws Exception 
    * @throws InvocationTargetException 
@@ -238,7 +238,7 @@ public class ReviewReferencesRetriever
   /**
    * Retrieves all other unresolved element references to reviews for a given element
    * 
-   * @param requestingElementInfo element whose review references are to be retrieved
+   * @param queryElementInfo element whose review references are to be retrieved
    * @return a list containing all features the input feature needs to be reviewed with
    * @throws Exception 
    * @throws InvocationTargetException 

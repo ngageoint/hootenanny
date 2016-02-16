@@ -172,5 +172,5 @@ namespace Tgs
   };
 }
 
-// @todo Disabled. See #7251 for details.
+// @todo Disabled. See r7251 for details.
 // CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Tgs::ConsistencySubsetEvaluatorTest, PluginFactory::testName());

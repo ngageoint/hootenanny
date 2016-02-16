@@ -34,7 +34,7 @@ using namespace boost;
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/elements/ElementVisitor.h>
@@ -872,7 +872,7 @@ bool OsmMap::validate(bool strict) const
 
 void OsmMap::visitRo(ElementVisitor& visitor) const
 {
-  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
+  ConstOsmMapConsumer* consumer = dynamic_cast<ConstOsmMapConsumer*>(&visitor);
   if (consumer != 0)
   {
     consumer->setOsmMap(this);
