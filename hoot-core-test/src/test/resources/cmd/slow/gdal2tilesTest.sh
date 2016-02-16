@@ -19,7 +19,7 @@ rm -rf $OUTPUT_DIR/*
 mkdir $OUTPUT_TILES
 
 # 1. Make sure gdal2tiles.py can run
-if ! which gdal2tiles.py; then
+if ! which gdal2tiles.py > /dev/null; then
     echo "Cant find gdal2tiles.py"
     exit 1
 fi
