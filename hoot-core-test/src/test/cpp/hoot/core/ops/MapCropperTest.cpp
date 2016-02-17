@@ -50,7 +50,7 @@ using namespace boost;
 #include <geos/io/WKTReader.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/Envelope.h>
-#include <geos/geom/LineString.h>
+#include <geos/geom/Polygon.h>
 
 // Qt
 #include <QDebug>
@@ -258,22 +258,35 @@ public:
 
     MapCropper::crop(map, env);
 
+    //compare relations
+    const RelationMap relations = map->getRelationMap();
+    HOOT_STR_EQUALS(1, relations.size());
+    QString relationStr = "relation(-1592)type: multipolygonmembers:   Entry: role: outer, eid: Way:-1556  Entry: role: inner, eid: Way:-1552tags: landuse = farmlandstatus: invalid";
+    for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
+    {
+      const shared_ptr<Relation>& r = it->second;
+      HOOT_STR_EQUALS(relationStr, r->toString().replace("\n",""));
+    }
+
+    //compare ways
+    int count = 0;
     const WayMap ways = map->getWays();
     HOOT_STR_EQUALS(2, ways.size());
-
-    int count = 0;
     for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
     {
       const shared_ptr<Way>& w = it->second;
-      shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
-      const Envelope& e = *(ls->getEnvelopeInternal());
+      shared_ptr<Polygon> pl = ElementConverter(map).convertToPolygon(w);
+      const Envelope& e = *(pl->getEnvelopeInternal());
+      double area = pl->getArea();
       if (count == 0)
       {
         HOOT_STR_EQUALS("Env[0.303878:0.336159,0.220255:0.270199]", e.toString());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00150737, area, 0.00001);
       }
       else
       {
         HOOT_STR_EQUALS("Env[0.314996:0.328946,0.231514:0.263127]", e.toString());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.000401258, area, 0.00001);
       }
       count++;
     }
