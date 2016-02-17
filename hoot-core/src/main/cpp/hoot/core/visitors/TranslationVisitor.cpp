@@ -73,6 +73,12 @@ void TranslationVisitor::visit(const ConstElementPtr& ce)
   {
     GeometryTypeId gtype = ElementConverter::getGeometryType(e, false);
 
+    // If we don't know what it is, no point in translating it.
+    if (gtype == ElementConverter::UNKNOWN_GEOMETRY)
+    {
+      return;
+    }
+
     if (_toOgr)
     {
 
@@ -116,6 +122,7 @@ void TranslationVisitor::visit(const ConstElementPtr& ce)
         geomType = "Collection";
         break;
       default:
+        LOG_ERROR("TransVisit Geometry Type = " << gtype);
         throw InternalErrorException("Unexpected geometry type.");
       }
 
