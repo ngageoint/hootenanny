@@ -1,4 +1,4 @@
-#!/usr/bin/nodejs
+#!/usr/bin/env node
 /**
  * This is a small example that loads, cleans and conflates two files. There
  * is also a little bonus ways splitting on just one of the input files.

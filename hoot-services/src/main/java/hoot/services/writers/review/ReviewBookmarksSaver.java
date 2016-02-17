@@ -35,24 +35,23 @@ import hoot.services.readers.review.ReviewBookmarkRetriever;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
-import java.sql.Types;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mysema.query.sql.Configuration;
-import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 import com.mysema.query.support.Expressions;
 
-public class ReviewBookmarksSaver {
-	@SuppressWarnings("unused")
+public class ReviewBookmarksSaver 
+{
   private static final Logger log = LoggerFactory.getLogger(ReviewBookmarksSaver.class);
 	
 	private Connection _conn;
@@ -74,18 +73,28 @@ public class ReviewBookmarksSaver {
 		long nSaved = 0;
 		ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(_conn);
 		
-		List<ReviewBookmarks> res = retriever.retrieve(request.getMapId(), request.getRelationId());
 		
-		if(res.size() == 0)
+		
+		if(request.getBookmarkId() > -1) 
+		{
+			List<ReviewBookmarks> res = retriever.retrieve(request.getBookmarkId());
+			if(res.size() == 0)
+			{
+				// insert
+				nSaved = insert(request);
+			}
+			else
+			{
+				// update
+				nSaved = update(request, res.get(0));
+			}
+		}
+		else 
 		{
 			// insert
 			nSaved = insert(request);
 		}
-		else
-		{
-			// update
-			nSaved = update(request, res.get(0));
-		}
+		
 		
 		return nSaved;
 	}
@@ -128,7 +137,7 @@ public class ReviewBookmarksSaver {
 	 * 
 	 * @param request - request object containing updated fields
 	 * @param reviewBookmarksDto - Current review tag
-	 * @return- total numbers of updated
+	 * @return total numbers of updated
 	 * @throws Exception
 	 */
 	public long update(final ReviewBookmarkSaveRequest request, final ReviewBookmarks reviewBookmarksDto) throws Exception
@@ -238,7 +247,33 @@ public class ReviewBookmarksSaver {
 				{
 					hstoreStr += ",";
 				}
-				hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + pairs.getValue()
+
+				String jsonStr = "";
+				Object oVal = tags.get(pairs.getKey());
+				if(oVal instanceof JSONObject)
+				{
+					jsonStr = ((JSONObject)oVal).toJSONString();
+				}
+				else if(oVal instanceof JSONArray)
+				{
+					jsonStr = ((JSONArray)oVal).toJSONString();
+				}
+				else if(oVal instanceof Map)
+				{
+					jsonStr = JSONObject.toJSONString((Map)oVal);
+				}
+				else if(oVal instanceof List)
+				{
+					jsonStr = JSONArray.toJSONString((List) oVal);
+				}
+				else
+				{
+					jsonStr = oVal.toString();
+				}
+				jsonStr = jsonStr.replace("\\", "\\\\");
+				jsonStr = jsonStr.replace("'", "''");
+				jsonStr = jsonStr.replace("\"", "\\\"");
+				hstoreStr += "\"" + pairs.getKey() + "\"=>\"" + jsonStr
 				    + "\"";
 			}
   	}

@@ -36,9 +36,6 @@
 #include <boost/graph/properties.hpp>
 #if HOOT_HAVE_BOOST_PROPERTY_MAP_PROPERTY_MAP_HPP
 # include <boost/property_map/property_map.hpp>
-#elif HOOT_HAVE_BOOST_PROPERTY_MAP_HPP
-// use the old include file so it works on boost releases < 1.40 (e.g. RHEL 5)
-# include <boost/property_map.hpp>
 #else
 # error "Boost properties include not found during configure."
 #endif
@@ -46,7 +43,6 @@ using namespace boost;
 
 // Hoot
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/schema/JsonSchemaLoader.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/OsmSchemaLoaderFactory.h>
 #include <hoot/core/util/ConfPath.h>

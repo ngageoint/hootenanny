@@ -376,11 +376,7 @@ public class ProcessStreamInterface implements INativeInterface {
 	/**
 	 * Creates direct exec call
 	 * like hoot --ogr2osm target input output if the "exectype" is "hoot"
-	 *
-	 * @param cmd
-	 * @return
 	 */
-
 	private String[] createCmdArray(JSONObject cmd){
 		ArrayList<String> execCmd = new ArrayList<String>();
 		try
@@ -414,9 +410,6 @@ public class ProcessStreamInterface implements INativeInterface {
 	/**
 	 * Creates command for make file script based call if exectype = "make"
 	 * output looks like make -f [some makefile] [any argument make file uses]
-	 *
-	 * @param cmd
-	 * @return
 	 */
 	private String[] createScriptCmdArray(JSONObject cmd) {
 		ArrayList<String> execCmd = new ArrayList<String>();
@@ -456,11 +449,6 @@ public class ProcessStreamInterface implements INativeInterface {
 		return Arrays.copyOf(objectArray, objectArray.length, String[].class);
 	}
 
-
-	/**
-	 * @param cmd
-	 * @return
-	 */
 	private String[] createBashScriptCmdArray(JSONObject cmd) {
 		ArrayList<String> execCmd = new ArrayList<String>();
 

@@ -132,7 +132,7 @@ public class WfsManager {
     }
 
     TransformerFactory transformerFactory = TransformerFactory.newInstance();
-    //TODO: Fortify may require this instead but it doesn't work.
+    //Fortify may require this, but it doesn't work.
     //TransformerFactory transformerFactory = XmlDocumentBuilder.getSecureTransformerFactory();
 		Transformer transformer = transformerFactory.newTransformer();
 		//transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");

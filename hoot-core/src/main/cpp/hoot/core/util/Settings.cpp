@@ -34,12 +34,11 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 
-// json-spirit
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#include <json_spirit_reader.h>
-#include <json_spirit_reader_template.h>
-#pragma GCC diagnostic warning "-Wunused-parameter"
-using namespace json_spirit;
+// Boost
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/foreach.hpp>
+namespace pt = boost::property_tree;
 
 // Qt
 #include <QStringList>
@@ -54,9 +53,6 @@ using namespace std;
 namespace hoot
 {
 
-/**
- * I'm keeping this out of a header file b/c the json_spirit headers are very expensive to include.
- */
 class JsonLoader
 {
 public:
@@ -85,16 +81,15 @@ public:
 
   void load(istream& is)
   {
-    Value value;
     try
     {
-      read_stream_or_throw(is, value);
-      _loadTags(value);
+      pt::ptree pt;
+      pt::read_json(is, pt);
+      _loadTags(pt);
     }
-    catch (Error_position& ep)
+    catch (std::exception e)
     {
-      QString reason = QString("Reason: %1 line: %2 col: %3").
-          arg(QString::fromStdString(ep.reason_)).arg(ep.line_).arg(ep.column_);
+      QString reason = e.what();
       throw HootException("Error parsing JSON " + reason);
     }
   }
@@ -111,54 +106,28 @@ public:
     load(ss);
   }
 
-  static QVariant toVariant(const Value& value)
-  {
-    if (value.type() == str_type)
-    {
-      return QVariant(QString::fromStdString(value.get_str()));
-    }
-    if (value.type() == int_type)
-    {
-      return QVariant(value.get_int());
-    }
-    if (value.type() == real_type)
-    {
-      return QVariant(value.get_real());
-    }
-    else
-    {
-      throw HootException("Unsupported type.");
-    }
-  }
-
 private:
 
   Settings* _s;
 
-  void _loadTags(const Value& value)
+  void _loadTags(pt::ptree& tree)
   {
-    if (value.type() != obj_type)
+    BOOST_FOREACH(pt::ptree::value_type& element, tree.get_child(""))
     {
-      throw HootException("Expected a list of tags at the top level.");
-    }
-    else
-    {
-      const Object& obj = value.get_obj();
-
-      for (size_t i = 0; i < obj.size(); i++)
+      QString name = QString::fromUtf8(element.first.c_str());
+      //  Skip comments
+      if (name.startsWith("#"))
+        continue;
+      if (!_s->hasKey(name))
       {
-        QString k = QString::fromStdString(obj[i].name_);
-        if (k.startsWith("#"))
-        {
-          // comment
-          continue;
-        }
-        QVariant v = toVariant(obj[i].value_);
-        _s->set(k, v.toString());
+        LOG_WARN("Unknown JSON setting: (" << name << ")");
+        //  Don't allow unknown settings to be loaded
+        continue;
       }
+      //  Set key/value pair as name and data, data() turns everything to a string
+      _s->set(name, QString::fromUtf8(element.second.data().c_str()));
     }
   }
-
 };
 
 Settings* Settings::_theInstance = NULL;
@@ -463,6 +432,11 @@ void Settings::parseCommonArguments(QStringList& args)
       Log::getInstance().setLevel(Log::Debug);
       args = args.mid(1);
     }
+    else if (args[0] == "--verbose")
+    {
+      Log::getInstance().setLevel(Log::Verbose);
+      args = args.mid(1);
+    }
     else if (args[0] == "--info")
     {
       Log::getInstance().setLevel(Log::Info);
@@ -502,6 +476,13 @@ void Settings::parseCommonArguments(QStringList& args)
       if (kvl.size() != 2)
       {
         throw HootException("define must takes the form key=value.");
+      }
+      if (!conf().hasKey(kvl[0]))
+      {
+        LOG_WARN("Unknown settings option: (" << kvl[0] << ")");
+        // move on to the next argument, don't keep an invalid option
+        args = args.mid(2);
+        continue;
       }
       if (append)
       {

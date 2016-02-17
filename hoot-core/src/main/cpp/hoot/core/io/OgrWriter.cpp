@@ -399,7 +399,6 @@ void OgrWriter::open(QString url)
     }
   }
 
-
   if (_createAllLayers)
   {
     for (size_t i = 0; i < _schema->getLayerCount(); ++i)
@@ -537,10 +536,8 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
       g.reset((GeometryFactory::getDefaultInstance()->createEmptyGeometry()));
     }
 
-    /*
-    LOG_DEBUG("After conversion to geometry, element is now a " <<
-             g->getGeometryType() );
-    */
+    /*LOG_DEBUG("After conversion to geometry, element is now a " <<
+             g->getGeometryType() );*/
 
     Tags t = e->getTags();
     t["error:circular"] = QString::number(e->getCircularError());
@@ -570,8 +567,7 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
 
 void OgrWriter::finalizePartial()
 {
-  // TODO: implement
-  ;
+  /// @todo implement
 }
 
 void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Node>& newNode)
@@ -583,17 +579,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Node>& newNode)
 
   // It's a base datatype, so can write immediately
 
-  //LOG_DEBUG("Writing node: \n" << newNode->toString());
-
-  // DEBUG ONLY REMOVE -- if we're not Queen Anne's county, MD, bail
-  /*
-  if ( newNode->getId() > -642 || newNode->getId() < -733)
-  {
-    return;
-  }
-  */
-
-  //LOG_INFO("Writing node " << newNode->getId() << " as it's in our range");
+  //LOG_DEBUG("Writing node " << newNode->getId() << " as it's in our range");
 
   _writePartial(cacheProvider, newNode);
 }
@@ -620,11 +606,9 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Way>& newWay)
   {
     if ( _elementCache->containsNode(*nodeIdIterator) == true )
     {
-      /*
-      LOG_DEBUG("Way " << newWay->getId() << " contains node " << *nodeIdIterator <<
+      /*LOG_DEBUG("Way " << newWay->getId() << " contains node " << *nodeIdIterator <<
                    ": " << _elementCache->getNode(*nodeIdIterator)->getX() << ", " <<
-                  _elementCache->getNode(*nodeIdIterator)->getY() );
-      */
+                  _elementCache->getNode(*nodeIdIterator)->getY() );*/
     }
     else
     {
@@ -635,7 +619,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Way>& newWay)
     }
   }
 
-  //LOG_INFO("Writing way " << newWay->getId() );
+  //LOG_DEBUG("Writing way " << newWay->getId() );
 
   // Add to the element cache
   ConstElementPtr constWay(newWay);
@@ -720,49 +704,33 @@ void OgrWriter::writeElement(ElementInputStream& inputStream)
 void OgrWriter::writeElement(ElementInputStream& inputStream, bool debug)
 {
   // Make sure incoming element is in WGS84
-  assert( inputStream.getProjection()->IsSame(&_wgs84) == true );
+  assert(inputStream.getProjection()->IsSame(&_wgs84) == true);
   ElementPtr nextElement = inputStream.readNextElement();
-
-  // TERRY TESTING COULD BE CATASTROPHIC
-  Tags sourceTags = nextElement->getTags();
-  Tags destTags;
-  for (Tags::const_iterator it = nextElement->getTags().begin();
-       it != nextElement->getTags().end(); ++it)
+  //Unfortunately, this check also has to happen in addition to checking hasMoreElements.  See
+  //explanation in ServicesDbReader::readNextElement.
+  if (nextElement.get())
   {
-    if (sourceTags[it.key()] != "")
+    // TERRY TESTING COULD BE CATASTROPHIC
+    Tags sourceTags = nextElement->getTags();
+    Tags destTags;
+    for (Tags::const_iterator it = nextElement->getTags().begin();
+         it != nextElement->getTags().end(); ++it)
     {
-      destTags.appendValue(it.key(), it.value());
+      if (sourceTags[it.key()] != "")
+      {
+        destTags.appendValue(it.key(), it.value());
+      }
     }
-  }
-  // Now that all the empties are gone, update our element
-  nextElement->setTags(destTags);
+    // Now that all the empties are gone, update our element
+    nextElement->setTags(destTags);
 
-  if ( debug == true )
-  {
-    LOG_DEBUG(nextElement->toString());
-  }
-
-  PartialOsmMapWriter::writePartial(nextElement);
-  /*
-  if ( nextElement->getElementType().getEnum() == ElementType::Node )
-  {
-    //LOG_DEBUG("\n" << nextElement->toString());
-
-    const long nodeID = nextElement->getId();
-    if ( (nodeID >= -265198) && (nodeID <= -265167) )
+    if (debug == true)
     {
-      LOG_DEBUG("\n" << nextElement->toString());
-      PartialOsmMapWriter::writePartial(nextElement);
+      LOG_DEBUG(nextElement->toString());
     }
-  }
-  else if ((nextElement->getElementType().getEnum() == ElementType::Way) &&
-           (nextElement->getId() == -23189) )
-  {
-    LOG_DEBUG("Writing Little Mill Creek -23189");
-    LOG_DEBUG("\n" << nextElement->toString());
+
     PartialOsmMapWriter::writePartial(nextElement);
   }
-  */
 }
 
 void OgrWriter::setCacheCapacity(unsigned long maxElementsPerType)

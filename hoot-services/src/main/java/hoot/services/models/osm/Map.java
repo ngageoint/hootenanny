@@ -80,7 +80,7 @@ import com.mysema.query.types.expr.BooleanExpression;
 
    ...although I haven't had to do that yet.
 
-   @todo This class needs to conduct its queries within a read-only transaction so that it
+   //TODO: This class needs to conduct its queries within a read-only transaction so that it
    doesn't read invalid information while writers are writing elements at the same time it queries
    elements out.
  */
@@ -222,12 +222,6 @@ public class Map extends Maps
     }
   }
 
-  /**
-   * 
-   * @param bounds
-   * @return
-   * @throws Exception
-   */
   public JSONObject retrieveNodesMBR(final BoundingBox bounds) throws Exception
   {
   	JSONObject ret = new JSONObject();
@@ -258,12 +252,6 @@ public class Map extends Maps
     return ret;
   }
 
-  /**
-   * 
-   * @param bounds
-   * @return
-   * @throws Exception
-   */
   public long getNodesCount(final BoundingBox bounds) throws Exception
   {
   	long ret = 0;
@@ -283,13 +271,7 @@ public class Map extends Maps
 
     return ret;
   }
-
-  /**
-   * 
-   * @param bounds
-   * @return
-   * @throws Exception
-   */
+  
   public JSONObject retrieveANode(final BoundingBox bounds) throws Exception
   {
   	JSONObject ret = new JSONObject();
@@ -387,7 +369,7 @@ public class Map extends Maps
 	      	    .from(currentWayNodes)
 	  			    .where(currentWayNodes.nodeId.in(pageList))
 	  			    .list(currentWayNodes.wayId);
-	      	//TODO: should this be an assert instead?
+	      	//TODO: should this be an assert instead?  Regardless, fix the error handling.
 	      	if (wayIds.addAll(pageWayIds) == false)
 	      	{
 	      		// error
@@ -809,7 +791,7 @@ public class Map extends Maps
    * @param bounds geospatial bounds the returned nodes should fall within
    * @return a collection of elements mapped to their IDs, grouped by element type
    * @throws Exception if the number of nodes requested is larger than the maximum number allowed
-   * @todo get the readonly transaction working; see
+   * //TODO: get the readonly transaction working; see
    * MapResourceTest::testReadTransactionWithoutFailure
    */
   public java.util.Map<ElementType, java.util.Map<Long, Tuple>> query(final BoundingBox bounds)
@@ -922,7 +904,7 @@ public class Map extends Maps
    * @param bounds geospatial bounds the returned nodes should fall within
    * @return a collection of element IDs, grouped by element type
    * @throws Exception if the number of nodes requested is larger than the maximum number allowed
-   * @todo see query
+   * //TODO: see query
    */
   public java.util.Map<ElementType, Set<Long>> queryForElementIds(final BoundingBox bounds)
     throws Exception
@@ -992,7 +974,7 @@ public class Map extends Maps
   /**
    * Converts a set of database records into an object returnable by a web service
    *
-   * @param folderRecordSet set of map layer records
+   * @param linkRecordSet set of map layer records
    * @return folders web service object
    */
   public static LinkRecords mapLinkRecordsToLinks(List<FolderMapMappings> linkRecordSet)

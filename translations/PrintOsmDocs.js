@@ -180,7 +180,7 @@ function finalize()
 
 
 // We are not using this any more.
-function translateToOsm(attrs, layerName) 
+function translateToOsm(attrs, layerName, geometryType)
 { 
     return null;
 }

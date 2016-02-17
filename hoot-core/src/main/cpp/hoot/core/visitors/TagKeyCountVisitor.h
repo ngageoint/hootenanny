@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
 #include "SingleStatistic.h"
@@ -40,7 +40,7 @@ namespace hoot
 /**
  * Counts the number of tags in all elements with the given key
  */
-class TagKeyCountVisitor : public ElementVisitor, public OsmMapConsumer, public SingleStatistic
+class TagKeyCountVisitor : public ElementVisitor, public ConstOsmMapConsumer, public SingleStatistic
 {
   public:
 

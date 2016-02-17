@@ -37,7 +37,7 @@ ElementVisitorInputStream::ElementVisitorInputStream(const shared_ptr<ElementInp
   _elementSource(elementSource),
   _visitor(visitor)
 {
-  ;
+
 }
 
 ElementPtr ElementVisitorInputStream::readNextElement()

@@ -787,19 +787,12 @@ If the output file/layer exists when exporting, append the data instead of tryin
 
 Debugging: Add the FCODE as the OSM source:fcode tag during translation.
 
-=== ogr.debug.dumpattrs
-
-* Data Type: bool
-* Default Value: `false`
-
-Debugging: Print out Attribute values during translation.
-
 === ogr.debug.dumptags
 
 * Data Type: bool
 * Default Value: `false`
 
-Debugging: Print out OSM Tag values during translation.
+Debugging: Print out Attributes and OSM Tag values during translation. For each feature, this will show what keys and values go into the translation and what the translated output is.
 
 === ogr.debug.lookupclash
 
@@ -813,7 +806,7 @@ Debugging: When building internal lookup tables, print values that clash.
 * Data Type: bool
 * Default Value: `false`
 
-Debugging: Print the columns that are not matched during one2one translation. This will show all ATTR columns and values that do not match a one2one rule.
+Debugging: Print the columns that are not matched during one2one translation. This will show all Attribute columns and values that do not match a one2one rule.
 
 
 === ogr.debug.dumpvalidate
@@ -1460,6 +1453,13 @@ weighting is determined based on the circular error.
 
 Export some of the images used when evaluating the graph connections between two maps (`score` command).
 
+=== score.matches.remove.nodes
+
+* Data Type: bool
+* Default Value: `false`
+
+Remove REF tags from nodes before match scoring when using the score-matches command.
+
 === script.match.scripts
 
 * Data Type: list
@@ -1506,6 +1506,13 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 
 The search radius to use when conflating waterways.  Not used if
 waterway.auto.calc.search.radius = true.  See `search.radius.default`.
+
+=== services.db.reader.email
+
+* Data Type: string
+* Default Value: ``
+
+Email address of the DG reader user.  Can be set here for debugging and testing.
 
 === services.db.reader.max.elements.per.partial.map
 * Data Type: int

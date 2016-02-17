@@ -28,7 +28,7 @@
 #include "AttributeCoOccurence.h"
 
 // Hoot
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
 #include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
@@ -49,7 +49,7 @@ namespace hoot
 /**
  * Traverses the OsmMap and creates a map from REF tags to ElementIds.
  */
-class RefToEidVisitor : public ElementVisitor, public OsmMapConsumer
+class RefToEidVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
   typedef map<QString, set<ElementId> > RefToEid;
@@ -90,7 +90,7 @@ private:
 /**
  * Traverses the OsmMap and build a hashmap of Attribute Co-Occurence values.
  */
-class CoOccurenceVisitor : public ElementVisitor, public OsmMapConsumer
+class CoOccurenceVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
   // CoOccurenceVisitor(RefToEidVisitor::RefToEid refSet) : _refSet(refSet) {}

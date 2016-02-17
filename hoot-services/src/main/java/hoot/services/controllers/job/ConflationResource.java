@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.job;
 
+import hoot.services.db.DbUtils;
 import hoot.services.HootProperties;
 import hoot.services.utils.ResourceErrorHandler;
 
@@ -53,6 +54,7 @@ public class ConflationResource extends JobControllerBase {
 	protected static String _tileServerPath = null;
 	protected static String _homeFolder = null;
 	protected static String _confAdvOptsScript = null;
+	protected static String _rptStorePath = null;
 
 	public ConflationResource()
 	{
@@ -67,28 +69,38 @@ public class ConflationResource extends JobControllerBase {
 			{
 				_tileServerPath = HootProperties.getProperty("tileServerPath");
 			}
-			
+
 			if(_homeFolder == null)
 			{
 				_homeFolder = HootProperties.getProperty("homeFolder");
 			}
-			
+
 			if(_confAdvOptsScript == null)
 			{
 				_confAdvOptsScript = HootProperties.getProperty("confAdvOptsScript");
 			}
 
+			if (_rptStorePath ==  null)
+			{
+				_rptStorePath = HootProperties.getProperty("reportDataPath");
+			}
 		}
 		catch (Exception ex)
 		{
 			log.error(ex.getMessage());
 		}
 	}
+
 	/**
-	 * <NAME>Conflate Service</NAME>
-	 * <DESCRIPTION>Conflate service operates like a standard ETL service. The conflate service specifies the input files, conflation type, match threshold, miss threshold, and output file name. The conflation type can be specified as the average of the two input datasets or based on a single input file that is intended to be the reference dataset. It has two fronts, WPS and standard rest end point.</DESCRIPTION>
-	 * <PARAMETERS>
-	 * <INPUT1_TYPE>
+	 * Conflate service operates like a standard ETL service. The conflate service specifies the 
+	 * input files, conflation type, match threshold, miss threshold, and output file name. The 
+	 * conflation type can be specified as the average of the two input datasets or based on a 
+	 * single input file that is intended to be the reference dataset. It has two fronts, WPS and 
+	 * standard rest end point.
+	 * 
+	 * POST hoot-services/ogc
+	 * 
+	 * @param params <INPUT1_TYPE>
 	 * 	Conflation input type [OSM] | [OGR] | [DB]
 	 * </INPUT1_TYPE>
 	 * <INPUT1>
@@ -112,6 +124,9 @@ public class ConflationResource extends JobControllerBase {
 	 * <AUTO_TUNNING>
 	 * 	Not used. Always false
 	 * </AUTO_TUNNING>
+	 * <COLLECT_STATS>
+	 * 	true to collect conflation statistics
+	 * </COLLECT_STATS>
 	 * <GENERATE_REPORT>
 	 * 	true to generate conflation report
 	 * </GENERATE_REPORT>
@@ -119,25 +134,12 @@ public class ConflationResource extends JobControllerBase {
 	 * 	Time stamp used in generated report if GENERATE_REPORT is true
 	 * </TIME_STAMP>
 	 * <USER_EMAIL>
-	 * 	Email address of the user requesting the conflation job. 
+	 * 	Email address of the user requesting the conflation job.
 	 * </USER_EMAIL>
 	 * <ADV_OPTIONS>
 	 * Advanced options list for hoot-core command
 	 * </ADV_OPTIONS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	Job ID
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/ogc</URL>
-	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-         * </OUTPUT>
-	 * </EXAMPLE>
-	 * @param params
-	 * @return
+	 * @return Job ID
 	 */
 	@POST
 	@Path("/execute")
@@ -178,19 +180,32 @@ public class ConflationResource extends JobControllerBase {
 
 				}
 			}
-			
-			
-			
-			
+
+
+
+
 
 			JSONArray commandArgs = parseParams(oParams.toJSONString());
 			JSONObject conflationCommand = _createMakeScriptJobReq(commandArgs);
-			
+
 			// add map tags
 			// WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
 			Map<String, String> tags = new HashMap<String, String>();
 			tags.put("input1", input1Name);
 			tags.put("input2", input2Name);
+			//System.out.println(params);
+			//Need to reformat the list of hoot command options to json properties
+			tags.put("params", DbUtils.escapeJson(params));
+			//Hack alert!
+			//Write stats file name to tags, if the file exists
+			//when this updateMapsTagsCommand job is run, the
+			//file will be read and its contents placed in the
+			//stats tag.
+			if (oParams.get("COLLECT_STATS") != null && oParams.get("COLLECT_STATS").toString().equalsIgnoreCase("true")) {
+				String statsName = _homeFolder + "/" + _rptStorePath + "/" + confOutputName + "-stats.csv";
+				tags.put("stats", statsName);
+			}
+
 			JSONArray mapTagsArgs = new JSONArray();
 			JSONObject param = new JSONObject();
 			param.put("value", tags);
@@ -217,7 +232,7 @@ public class ConflationResource extends JobControllerBase {
 			rasterTilesparam.put("paramtype", String.class.getName());
 			rasterTilesparam.put("isprimitivetype", "false");
 			rasterTilesArgs.add(rasterTilesparam);
-			
+
 			rasterTilesparam = new JSONObject();
 			rasterTilesparam.put("value", userEmail);
 			rasterTilesparam.put("paramtype", String.class.getName());
@@ -251,5 +266,5 @@ public class ConflationResource extends JobControllerBase {
 		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
 	}
 
-	
+
 }

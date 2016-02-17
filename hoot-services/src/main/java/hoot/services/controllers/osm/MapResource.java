@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -46,6 +46,7 @@ import hoot.services.utils.ResourceErrorHandler;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.writers.osm.MapQueryResponseWriter;
 
+import java.io.File;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.SocketException;
@@ -76,6 +77,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -102,7 +104,7 @@ import com.mysema.query.types.template.NumberTemplate;
 public class MapResource
 {
 	private static final Logger log = LoggerFactory.getLogger(MapResource.class);
-	
+
 	private static QMaps maps = QMaps.maps;
 
 	@SuppressWarnings("unused")
@@ -115,16 +117,9 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Map Service - List Layers </NAME> <DESCRIPTION> Returns a list of all
-	 * map layers in the services database. </DESCRIPTION> <PARAMETERS>
-	 * </PARAMETERS> <OUTPUT> a JSON object containing a list of map layers
-	 * </OUTPUT> <EXAMPLE>
-	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map/layers</URL>
-	 * <REQUEST_TYPE>GET</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT> { "layers": [ {
-	 * "id": 1, "name": "layer 1", }, { "id": 2, "name": "layer 2", } ] }
-	 * </OUTPUT> </EXAMPLE>
-	 *
 	 * Returns a list of all map layers in the services database
+	 * 
+	 * GET hoot-services/osm/api/0.6/map/layers
 	 *
 	 * @return a JSON object containing a list of map layers
 	 * @throws Exception
@@ -224,19 +219,13 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Map Service - List Links </NAME> <DESCRIPTION> Returns a list of all
-	 * folder-map links. </DESCRIPTION> <PARAMETERS> </PARAMETERS> <OUTPUT> a JSON
-	 * object containing a list of folders </OUTPUT> <EXAMPLE>
-	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map/links</URL>
-	 * <REQUEST_TYPE>GET</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT> { "links": [ {
-	 * "mapid": 1, "folderid":1 } ] } </OUTPUT> </EXAMPLE>
-	 *
 	 * Returns a list of all folders in the services database
+	 * 
+	 * GET hoot-services/osm/api/0.6/map/links
 	 *
 	 * @return a JSON object containing a list of folders
 	 * @throws Exception
 	 */
-
 	@GET
 	@Path("/links")
 	@Consumes(MediaType.TEXT_PLAIN)
@@ -325,10 +314,10 @@ public class MapResource
 		boundsElem.setAttribute("maxlat", maxlat);
 		boundsElem.setAttribute("maxlon", maxlon);
 		osmElem.appendChild(boundsElem);
-		
+
 		//The ID's for these fabricated nodes were stepping on the ID's of actual nodes, so their
 		//ID's need to be made negative and large, so they have no chance of stepping on anything.
-		
+
 		final long node1Id = Long.MIN_VALUE + 3;
 		final long node2Id = Long.MIN_VALUE + 2;
 		final long node3Id = Long.MIN_VALUE + 1;
@@ -409,7 +398,7 @@ public class MapResource
 		osmElem.appendChild(wayElem);
 
 		Transformer tf = TransformerFactory.newInstance().newTransformer();
-		// TODO: Fortify may require this instead but it doesn't work.
+		// Fortify may require this, but it doesn't work.
 		// TransformerFactory transformerFactory =
 		// XmlDocumentBuilder.getSecureTransformerFactory();
 		tf.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
@@ -424,30 +413,11 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Map Service - Query </NAME> <DESCRIPTION> The Hootenanny Map Service
-	 * is similar to the query portion of the OSM Map Service design, except that
-	 * a map ID must also be specified when using it. The Map service first
-	 * attempts to parse the request map identifier as a numerical user ID, and
-	 * then if unsuccessful, attempts to parse it as a map name string.
-	 * </DESCRIPTION> <PARAMETERS> <mapId> string; ID or name of the map to query
-	 * </mapId> <bbox> string; geographic bounding box to restrict the map query
-	 * to of the form: minimum longitude, minimum latitude, maximum longitude,
-	 * maximum latitude; in WGS84 degrees </bbox> <multiLayerUniqueElementIds>
-	 * boolean; if true, returned element IDs are prepended with [map id]_[first
-	 * letter of the element type]_ </multiLayerUniqueElementIds> </PARAMETERS>
-	 * <OUTPUT> XML representation of each element which satisfied the map query
-	 * </OUTPUT> <EXAMPLE>
-	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map?
-	 * mapId=dc-admin&bbox
-	 * =-77.09655761718749,38.89958342598271,-77.09106445312499,
-	 * 38.90385833966776&multiLayerUniqueElementIds=false</URL>
-	 * <REQUEST_TYPE>GET</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT> OSM XML
-	 * </OUTPUT> </EXAMPLE> Service method endpoint for retrieving OSM entity data
-	 * for a given map
+	 * GET hoot-services/osm/api/0.6/map?mapId=dc-admin&bbox
 	 *
 	 * @param mapId
 	 *          ID of the map to query
-	 * @param bbox
+	 * @param BBox
 	 *          geographic bounding box the requested entities should reside in
 	 * @param multiLayerUniqueElementIds
 	 *          if true, returned element IDs are prepended with <map id>_<first
@@ -465,7 +435,7 @@ public class MapResource
 			@QueryParam("bbox") final String BBox,
 			@QueryParam("extent") final String extent,
 			@QueryParam("autoextent") final String auto,
-			@DefaultValue("false") @QueryParam("multiLayerUniqueElementIds") 
+			@DefaultValue("false") @QueryParam("multiLayerUniqueElementIds")
 			final boolean multiLayerUniqueElementIds)
 			throws Exception
 	{
@@ -690,12 +660,12 @@ public class MapResource
 
 			Map currMap = new Map(mapIdNum, conn);
 			final JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
-			
-			if(extents.get("minlat") == null || extents.get("maxlat") == null || 
+
+			if(extents.get("minlat") == null || extents.get("maxlat") == null ||
 					extents.get("minlon") == null || extents.get("maxlon") == null)
 			{
 				throw new Exception("Map is empty.");
-				
+
 			}
 			final JSONObject anode = currMap.retrieveANode(queryBounds);
 			long nodeCnt = currMap.getNodesCount(queryBounds);
@@ -790,19 +760,14 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Clean Map Data Service</NAME> <DESCRIPTION> Clean map data service
-	 * provides the ability to remove an associated map record.
-	 * </DESCRIPTION> <PARAMETERS> <mapId> ID of map record to be
-	 * deleted
-	 * http://localhost:8080/hoot-services/osm/api/0.6/map/delete?mapId={Map ID}
-	 * </mapId> </PARAMETERS> <OUTPUT> Job ID </OUTPUT> <EXAMPLE>
-	 * <URL>http://localhost
-	 * :8080/hoot-services/osm/api/0.6/map/delete?mapId=123456</URL>
-	 * <REQUEST_TYPE>POST</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT>{"jobId":
-	 * "b9462277-73bc-41ea-94ec-c7819137b00b" }</OUTPUT> </EXAMPLE>
+	 * Deletes a map
 	 * 
-	 * @param mapId
-	 * @return
+	 * POST hoot-services/osm/api/0.6/map/delete?mapId={Map ID}
+	 *   
+	 *   //TODO: should be an HTTP DELETE
+	 * 
+	 * @param mapId ID of map record to be deleted
+	 * @return id of the deleted map
 	 * @throws Exception
 	 */
 	@POST
@@ -826,20 +791,15 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Modify Dataset or Folder Name</NAME> <DESCRIPTION> Modify Dataset or
-	 * Folder Name provides the ability to change the name of a dataset or Folder.
-	 * </DESCRIPTION> <PARAMETERS> <mapId> ID of map record or folder to be
-	 * modified </mapId> <modName> The new name for the dataset </modName>
-	 * <inputType> Flag for either dataset or folder </inputType> </PARAMETERS>
-	 * <OUTPUT> jobId Success = True/False </OUTPUT> <EXAMPLE>
-	 * <URL>http://localhost
-	 * :8080/hoot-services/osm/api/0.6/map/modify?mapId=123456
-	 * &inputType='Dataset'&modName='New Dataset'</URL>
-	 * <REQUEST_TYPE>POST</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT>{"jobId":
-	 * "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT> </EXAMPLE>
 	 * 
-	 * @param mapId
-	 * @return
+	 * POST hoot-services/osm/api/0.6/map/modify?mapId=123456&inputType='Dataset'&modName='New Dataset'
+	 * 
+	 *   //TODO: should be an HTTP PUT
+	 * 
+	 * @param mapId ID of map record or folder to be modified
+	 * @param _modName The new name for the dataset 
+	 * @param inputType  Flag for either dataset or folder
+	 * @return jobId Success = True/False
 	 * @throws Exception
 	 */
 	@POST
@@ -897,18 +857,13 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Add Folder </NAME> <DESCRIPTION> Adds new folder. </DESCRIPTION>
-	 * <PARAMETERS> <folderName> Display name of folder </folderName> <parentId>
-	 * The parent folder of the new folder. If at root level, is equal to 0.
-	 * </parentId> </PARAMETERS> <OUTPUT> jobId Success = True/False </OUTPUT> <EXAMPLE>
-	 * <URL>http
-	 * ://localhost:8080/hoot-services/osm/api/0.6/map/addfolder?folderName
-	 * ={foldername}&parentId={parentId}</URL> <REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * <INPUT> </INPUT> <OUTPUT>{"jobId":
-	 * "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT> </EXAMPLE>
+	 * Adds new dataset folder
 	 * 
-	 * @param mapId
-	 * @return
+	 * POST hoot-services/osm/api/0.6/map/addfolder?folderName={foldername}&parentId={parentId}
+	 * 
+	 * @param folderName Display name of folder
+	 * @param parentId The parent folder of the new folder. If at root level, is equal to 0.
+	 * @return jobId Success = True/False
 	 * @throws Exception
 	 */
 	@POST
@@ -960,21 +915,16 @@ public class MapResource
 		res.put("folderId", newId);
 		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
 	}
-
+	
 	/**
-	 * <NAME>Delete Folder </NAME> <DESCRIPTION> Deletes folder. </DESCRIPTION>
-	 * <PARAMETERS> 
-	 * <folderId> Folder Id </folderId> 
-	 * </PARAMETERS>
-	 * <OUTPUT> jobId </OUTPUT>
-	 * <EXAMPLE>
-	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map/deletefolder
-	 * ?folderId={folderId}</URL> <REQUEST_TYPE>POST</REQUEST_TYPE> <INPUT>
-	 * </INPUT> <OUTPUT>{"jobId":
-	 * "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT> </EXAMPLE>
+	 * Deletes a dataset folder.
 	 * 
-	 * @param mapId
-	 * @return
+	 * POST hoot-services/osm/api/0.6/map/deletefolder?folderId={folderId}
+	 * 
+	 *   //TODO: should be an HTTP DELETE
+	 * 
+	 * @param folderId Folder Id
+	 * @return jobId
 	 * @throws Exception
 	 */
 	@POST
@@ -1034,20 +984,15 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Update Parent ID </NAME> 
-	 * <DESCRIPTION> Modifies the parent ID of a folder. </DESCRIPTION> 
-	 * <PARAMETERS> 
-	 * <folderId> ID of folder </folderId>
-	 * </PARAMETERS>
-	 * <OUTPUT> jobId Success = True/False </OUTPUT> 
-	 * <EXAMPLE>
-	 * <URL>http://localhost:8080/hoot-services/osm/api/0.6/map
-	 * /updateParentId?folderId={folderId}</URL>
-	 * <REQUEST_TYPE>POST</REQUEST_TYPE> <INPUT> </INPUT> <OUTPUT>{"jobId":
-	 * "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT> </EXAMPLE>
 	 * 
-	 * @param folderId
-	 * @return
+	 * POST hoot-services/osm/api/0.6/map/updateParentId?folderId={folderId}
+	 *  
+	 *  //TODO: should be an HTTP PUT
+	 * 
+	 * @param folderId ID of folder
+	 * @param parentId ?
+	 * @param newRecord ?
+	 * @return jobId Success = True/False
 	 * @throws Exception
 	 */
 	@POST
@@ -1055,8 +1000,8 @@ public class MapResource
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response updateParentId(@QueryParam("folderId") final String folderId,
-			@QueryParam("parentId") final String parentId,
-			@QueryParam("newRecord") final Boolean newRecord) throws Exception
+		@QueryParam("parentId") final String parentId, 
+		@QueryParam("newRecord") final Boolean newRecord) throws Exception
 	{
 		Long _folderId = Long.parseLong(folderId);
 		Long _parentId = Long.parseLong(parentId);
@@ -1087,25 +1032,12 @@ public class MapResource
 	}
 
 	/**
-	 * <NAME>Link Map and Folder </NAME> 
-	 * <DESCRIPTION> Adds or modifies record in
-	 * folder_map_mappings if layer is created or modified. </DESCRIPTION>
-	 * <PARAMETERS> 
-	 * <folderId> ID of folder </folderId> 
-	 * <mapId> ID of map. </mapId> 
-	 * <updateType> new: creates new link;
-	 * update: updates link delete: deletes link </updateType>
-	 * </PARAMETERS>
-	 * <OUTPUT> jobId
-	 * Success = True/False </OUTPUT> <EXAMPLE>
-	 * <URL>http://localhost:8080/hoot-services
-	 * /osm/api/0.6/map/addfolder?folderName
-	 * ={foldername}&parentId={parentId}</URL> <REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * <INPUT> </INPUT> <OUTPUT>{"jobId":
-	 * "b9462277-73bc-41ea-94ec-c7819137b00b";"Success":true }</OUTPUT> </EXAMPLE>
+	 * Adds or modifies record in folder_map_mappings if layer is created or modified
 	 * 
-	 * @param mapId
-	 * @return
+	 * @param folderId ID of folder
+	 * @param mapId ID of map
+	 * @param updateType new: creates new link; update: updates link delete: deletes link
+	 * @return jobId Success = True/False
 	 * @throws Exception
 	 */
 	@POST
@@ -1130,7 +1062,7 @@ public class MapResource
 
 		/*
 		 * long _mapId = 0;
-		 * 
+		 *
 		 * try { _mapId = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps,
 		 * maps.id, maps.displayName); } catch (Exception e){ _mapId = 0; }
 		 */
@@ -1200,6 +1132,25 @@ public class MapResource
 				long mapId = mapIds.get(mapIds.size() - 1);
 				jobStatusManager = new JobStatusManager(conn);
 				jobStatusManager.addJob(jobId);
+
+				//Hack alert!
+				//Add special handling of stats tag key
+				//We need to read the file in here, because the file doesn't exist at the time
+				//the updateMapsTagsCommand job is created in ConflationResource.java
+				String statsKey = "stats";
+				if (tags.containsKey(statsKey)) {
+					String statsName = tags.get(statsKey).toString();
+					File statsFile = new File(statsName);
+					if(statsFile.exists()) {
+						log.debug("Found " + statsName);
+						String stats = FileUtils.readFileToString(statsFile, "UTF-8");
+						tags.put(statsKey, stats);
+						statsFile.delete();
+					} else {
+						log.error("Can't find " + statsName);
+						tags.remove(statsKey);
+					}
+				}
 
 				DbUtils.updateMapsTableTags(tags, mapId, conn);
 				jobStatusManager.setComplete(jobId);
@@ -1285,14 +1236,14 @@ public class MapResource
 
 		return Response.ok(ret.toString(), MediaType.APPLICATION_JSON).build();
 	}
-	
+
 	public static long validateMap(final String mapId, Connection conn)
 	{
 		long mapIdNum = -1;
   	try
   	{
   	  //input mapId may be a map ID or a map name
-      mapIdNum = 
+      mapIdNum =
       	ModelDaoUtils.getRecordIdForInputString(
       		mapId, conn, maps, maps.id, maps.displayName);
       assert(mapIdNum != -1);
@@ -1302,19 +1253,19 @@ public class MapResource
       if (e.getMessage().startsWith("Multiple records exist"))
       {
         ResourceErrorHandler.handleError(
-          e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
+          e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"),
           Status.NOT_FOUND,
           log);
       }
       else if (e.getMessage().startsWith("No record exists"))
       {
         ResourceErrorHandler.handleError(
-          e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"), 
+          e.getMessage().replaceAll("records", "maps").replaceAll("record", "map"),
           Status.NOT_FOUND,
           log);
       }
       ResourceErrorHandler.handleError(
-        "Error requesting map with ID: " + mapId + " (" + e.getMessage() + ")", 
+        "Error requesting map with ID: " + mapId + " (" + e.getMessage() + ")",
         Status.BAD_REQUEST,
         log);
     }

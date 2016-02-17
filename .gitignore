@@ -35,8 +35,6 @@ docs/*.html
 docs/*.xml
 docs/*.text
 docs/~*.docx
-docs/algorithms/GenericLineTestGraph.png
-docs/algorithms/GenericLineTestTimingGraph.png
 docs/Exploratory Funds Presentation.ppt
 docs/docbook-xsl.css
 docs/ref

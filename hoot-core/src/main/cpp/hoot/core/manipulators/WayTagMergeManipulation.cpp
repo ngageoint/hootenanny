@@ -40,7 +40,7 @@ WayTagMergeManipulation::WayTagMergeManipulation(long leftId, long rightId,
 {
 }
 
-/// @todo See ticket #2881
+/// @todo See ticket r2881
 void WayTagMergeManipulation::applyManipulation(shared_ptr<OsmMap> wm,
   set<ElementId>& impactedElements, set<ElementId>& newElements) const
 {

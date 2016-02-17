@@ -39,9 +39,9 @@ import hoot.services.db.DbUtils;
 import hoot.services.db2.QReviewBookmarks;
 import hoot.services.db2.ReviewBookmarks;
 
-public class ReviewBookmarkRetriever {
+public class ReviewBookmarkRetriever 
+{
 
-	@SuppressWarnings("unused")
   private static final Logger log = LoggerFactory.getLogger(ReviewBookmarkRetriever.class);
 	
 	private Connection _conn;
@@ -53,21 +53,34 @@ public class ReviewBookmarkRetriever {
 	}
 	
 	/**
-	 * Retrieves single review tag using map id and relation id.
-	 * 
-	 * @param mapId
-	 * @param relationId
-	 * @return
-	 * @throws Exception
+	 * Retrieves all bookmarks for mapId+relationId using map id and relation id.
 	 */
 	public List<ReviewBookmarks> retrieve(final long mapId, final long relationId) throws Exception
 	{		
-
-		
 		List<ReviewBookmarks> res = null;
 		try
 		{
 			SQLQuery query = _getQuery(mapId, relationId);
+			res = query.list(_reviewBookmarks);
+		}
+		catch (Exception ex)
+		{
+			log.error(ex.getMessage());
+			throw ex;
+		}
+		return res;
+	}
+	
+	
+	/**
+	 * Retrieves all bookmarks for mapId+relationId using map id and relation id.
+	 */
+	public List<ReviewBookmarks> retrieve(final long boookMarkId) throws Exception
+	{		
+		List<ReviewBookmarks> res = null;
+		try
+		{
+			SQLQuery query = _getQuery(boookMarkId);
 			res = query.list(_reviewBookmarks);
 		}
 		catch (Exception ex)
@@ -90,14 +103,16 @@ public class ReviewBookmarkRetriever {
 	 * @throws Exception
 	 */
 	public List<ReviewBookmarks> retrieveAll(final String orderByCol, 
-			final boolean isAsc, final long limit, final long offset) throws Exception
+			final boolean isAsc, final long limit, final long offset,
+			final String filterCol, final Object filterVal) throws Exception
 	{		
 
 		
 		List<ReviewBookmarks> res = null;
 		try
 		{
-			SQLQuery query = _getAllQuery(orderByCol, isAsc, limit, offset);
+			SQLQuery query = _getAllQuery(orderByCol, isAsc, limit, offset, 
+					filterCol, filterVal);
 			res = query.list(_reviewBookmarks);
 		}
 		catch (Exception ex)
@@ -107,6 +122,8 @@ public class ReviewBookmarkRetriever {
 		}
 		return res;
 	}
+	
+	
 	
 	
 	/**
@@ -158,6 +175,24 @@ public class ReviewBookmarkRetriever {
 		return query;
 	}
 	
+	
+	protected SQLQuery _getQuery(final long bookmarkId) throws Exception
+	{
+		SQLQuery query = new SQLQuery(this._conn, DbUtils.getConfiguration());
+		try
+		{
+			query.from(_reviewBookmarks)
+			.where(_reviewBookmarks.id.eq(bookmarkId));
+		}
+		catch (Exception ex)
+		{
+			log.error(ex.getMessage());
+			throw ex;
+		}
+		
+		return query;
+	}
+	
 	/**
 	 * SQL Query for retrieving all tags
 	 * 
@@ -169,12 +204,23 @@ public class ReviewBookmarkRetriever {
 	 * @throws Exception
 	 */
 	protected SQLQuery _getAllQuery(final String orderByCol, 
-			final boolean isAsc, final long limit, final long offset) throws Exception
+			final boolean isAsc, final long limit, final long offset,
+			final String filterCol, final Object filterVal) throws Exception
 	{
+		QReviewBookmarks b = QReviewBookmarks.reviewBookmarks;
+			
 		SQLQuery query = new SQLQuery(this._conn, DbUtils.getConfiguration());
 		try
 		{
-			query.from(_reviewBookmarks).orderBy(_getSpecifier(orderByCol, isAsc));
+			if(filterCol != null && filterVal != null && filterCol.equalsIgnoreCase("createdBy")) {
+				query.from(_reviewBookmarks).where(b.createdBy.eq((Long)filterVal)).orderBy(_getSpecifier(orderByCol, isAsc));
+			} else if(filterCol != null && filterVal != null && filterCol.equalsIgnoreCase("mapId")) {
+				query.from(_reviewBookmarks).where(b.mapId.eq((Long)filterVal)).orderBy(_getSpecifier(orderByCol, isAsc));
+			} else {
+				query.from(_reviewBookmarks).orderBy(_getSpecifier(orderByCol, isAsc));
+			}
+			
+			
 			if(limit > -1)
 			{
 				query.limit(limit);

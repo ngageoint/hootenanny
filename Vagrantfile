@@ -96,8 +96,8 @@ Vagrant.configure(2) do |config|
   #   sudo apt-get update
   #   sudo apt-get install -y apache2
   # SHELL
-  config.vm.provision :shell, :path => "VagrantProvision.sh"
-  config.vm.provision :shell, :inline => "sudo service tomcat6 restart", run: "always"
-  config.vm.provision :shell, :inline => "sudo service node-mapnik-server start", run: "always"
+  config.vm.provision :shell, :privileged => false, :path => "VagrantProvision.sh"
+  config.vm.provision :shell, :privileged => false, :inline => "sudo service tomcat6 restart", run: "always"
+  config.vm.provision :shell, :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
 
 end

@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
@@ -40,7 +40,7 @@ using namespace std;
  * all missing references are removed. Note: This may not give desired results if your data
  * shouldn't contain missing references.
  */
-class ReportMissingElementsVisitor : public ElementVisitor, public OsmMapConsumer
+class ReportMissingElementsVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

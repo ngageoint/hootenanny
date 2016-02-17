@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
@@ -41,7 +42,7 @@ QMutex RemoveRef2Visitor::_mutex;
 /**
  * Traverses the OsmMap and creates a map from uuid tags to ElementIds.
  */
-class Ref1ToEidVisitor : public ElementVisitor, public OsmMapConsumer
+class Ref1ToEidVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

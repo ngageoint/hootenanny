@@ -68,48 +68,26 @@ public class ETLResource  extends JobControllerBase {
 	}
 
 	/**
-	 * <NAME>ETL Service</NAME>
-	 * <DESCRIPTION>
-	 * THIS REST END POINT IS DEPRECATED.
-	 * 	For ETL service, there are 2 types of services are available: Standard REST endpoint and WPS endpoint. Both are accessed by POST.
-	 *	Both ETL services ends up at hoot command shell and use makeetl make file. makeetl make file handles 2 types of ETL formats: OGR and OSM. 
-	 *	For OGR, it translates the INPUT shapefile into hoot db using provided translation file. Also, multiple inputs can be listed using semicolon as a separator.
-	 * For OSM, it directly converts
-	 * the INPUT osm file into hoot db. makeetl file assumes that the specified translation file and INPUT files resides in an common parent directory
-	 * where current default is at HOOT_HOME.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <TRANSLATION>
-	 * 	relative path of translation script. (relative to HOOT_HOME)
-	 * </TRANSLATION>
-	 * <INPUT_TYPE>
-	 * 	[ OSM | OGR ]
-	 * </INPUT_TYPE>
-	 * <INPUT>
-	 * 	 relative path of input file. (relative to HOOT_HOME)
-	 * </INPUT>
-	 * <INPUT_NAME>
-	 * 	 Name stored in hoot db.
-	 * </INPUT_NAME>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	Job ID
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/etl/load</URL>
-	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *{
-   * "TRANSLATION":"translations/MGCP.js",
-   * "INPUT_TYPE":"OSM",
-   * "INPUT":"test-files/ToyTestA.osm",
-   *     "INPUT_NAME":"ToyTestA"
+	 * For ETL service, there are 2 types of services are available: Standard REST endpoint and WPS 
+	 * endpoint. Both are accessed by POST.  Both ETL services ends up at hoot command shell and 
+	 * use makeetl make file. makeetl make file handles 2 types of ETL formats: OGR and OSM. For OGR, 
+	 * it translates the INPUT shapefile into hoot db using provided translation file. Also, multiple 
+	 * inputs can be listed using semicolon as a separator.  For OSM, it directly converts the INPUT 
+	 * osm file into hoot db. makeetl file assumes that the specified translation file and INPUT files 
+	 * resides in an common parent directory where current default is at HOOT_HOME.
+	 * 
+	 * POST hoot-services/job/etl/load
+	 * 
+	 * {
+   * "TRANSLATION":"translations/MGCP.js", //relative path of translation script. (relative to HOOT_HOME)
+   * "INPUT_TYPE":"OSM", [ OSM | OGR ]
+   * "INPUT":"test-files/ToyTestA.osm", relative path of input file. (relative to HOOT_HOME)
+   * "INPUT_NAME":"ToyTestA" Name stored in hoot db.
    * }
-	 *	</INPUT>
-	 * <OUTPUT>{"jobid":"4dea2839-af7d-4bb6-bade-a52a28232307"}</OUTPUT>
-	 * </EXAMPLE>
-	 * @param params
-	 * @return
+	 * 
+	 * @param params input parameters; see description
+	 * @return Job ID
+	 * @deprecated
 	 */
 	@POST
 	@Path("/load")

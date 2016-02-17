@@ -134,10 +134,6 @@ public class JobProcesslet extends BaseProcesslet {
 		}
 	}
 	
-	/**
-	 * @param args
-	 * @return
-	 */
 	public String createPostBody(JSONArray args){
 		return _createPostBody(args).toString();
 	}
@@ -222,8 +218,6 @@ public class JobProcesslet extends BaseProcesslet {
 	 */
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
-
 	}
 
 
@@ -232,9 +226,6 @@ public class JobProcesslet extends BaseProcesslet {
 	 */
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
-
-
 	}
 
 }

@@ -58,6 +58,14 @@ public:
   MatchType getType(const Match& m) const { return getType(m.getClassification()); }
   MatchType getType(const MatchClassification& mc) const;
 
+  /**
+   * Returns human readable information about the match type
+   *
+   * @param mc match classification
+   * @return match type information
+   */
+  QString getTypeDetail(const MatchClassification& mc) const;
+
   QString toString() const;
 
 private:

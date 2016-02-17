@@ -103,7 +103,6 @@ SOURCES += \
     src/test/cpp/hoot/core/MapProjectorTest.cpp \
     src/test/cpp/hoot/core/util/GeometryUtilsTest.cpp \
     src/test/cpp/hoot/core/elements/TagsTest.cpp \
-    src/test/cpp/hoot/core/conflate/polygon/BuildingMergeManipulatorTest.cpp \
     src/test/cpp/hoot/core/perty/BigPertyOpTest.cpp \
     src/test/cpp/hoot/core/index/metric-hybrid/FqTreeTest.cpp \
     src/test/cpp/hoot/core/index/metric-hybrid/RTreeTest.cpp \

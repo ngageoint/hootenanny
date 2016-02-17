@@ -231,7 +231,7 @@ public:
   void runRandomQueryTest()
   {
     shared_ptr<OsmMap> map(new OsmMap());
-    PbfReader(true).readFile("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
+    PbfReader(true).read("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
 
     set<QString> bag;
     GetTagValuesVisitor v1("name", bag, true);

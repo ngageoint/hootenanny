@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
 // tgs
@@ -42,7 +42,7 @@ using namespace std;
 /**
  * Base class to ease OsmMapConsumer usage.
  */
-class WayVisitor : public ElementVisitor, public OsmMapConsumer
+class WayVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

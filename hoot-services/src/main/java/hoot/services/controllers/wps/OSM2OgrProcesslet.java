@@ -62,8 +62,6 @@ public class OSM2OgrProcesslet extends BaseProcesslet {
 	 */
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
-
 	}
 
 	/* (non-Javadoc)
@@ -71,9 +69,6 @@ public class OSM2OgrProcesslet extends BaseProcesslet {
 	 */
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
-
-
 	}
 	
 	/* (non-Javadoc)

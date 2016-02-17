@@ -120,8 +120,8 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
     throw HootException("If the node bounds is set the projection must be geographic.");
   }
 
-  // @todo visit the elements from the most senior (e.g. relation that has no parents) to the
-  // most junior (nodes).
+  /// @todo visit the elements from the most senior (e.g. relation that has no parents) to the
+  /// most junior (nodes).
 
   // go through all the ways
   const WayMap ways = result->getWays();

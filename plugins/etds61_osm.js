@@ -149,7 +149,7 @@ etds61_osm = {
         tags = {}; // The final OSM+ tags
 
         // pre processing
-        tds61.applyToOsmPreProcessing(nAttrs, '');
+        tds61.applyToOsmPreProcessing(nAttrs, '', geometryType);
         
         // Debug:
         // if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('After PreProc:' + i + ': :' + tags[i] + ':');
@@ -171,7 +171,7 @@ etds61_osm = {
         // if (nAttrs.OTH) translate.processOTH(nAttrs, tags, tds61.lookup);
 
         // post processing
-        tds61.applyToOsmPostProcessing(nAttrs, tags, '');
+        tds61.applyToOsmPostProcessing(nAttrs, tags, '', geometryType);
 
         // If we have a second FCODE, re run the translation with it
         if (fCode2 !== '')

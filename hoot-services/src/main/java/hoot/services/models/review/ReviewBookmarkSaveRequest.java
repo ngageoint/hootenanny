@@ -29,10 +29,15 @@ package hoot.services.models.review;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 
 @XmlRootElement
 public class ReviewBookmarkSaveRequest {
+	private long bookmarkId;
+	public long getBookmarkId() { return bookmarkId; }
+	public void setBookmarkId(final long id) { this.bookmarkId = id; }
+	
 	private long mapId;
 	public long getMapId() { return mapId; }
   public void setMapId(final long id) { this.mapId = id; }
@@ -43,7 +48,18 @@ public class ReviewBookmarkSaveRequest {
   
   private JSONObject detail;
   public JSONObject getDetail() { return this.detail;}
-  public void setDetail(final JSONObject d) {this.detail = d;}
+  public void setDetail(final JSONObject d) throws Exception {
+	  	String jsonStr = d.toJSONString();
+	  	JSONParser p = new JSONParser();
+	  	try
+	  	{
+	  		this.detail = (JSONObject)p.parse(jsonStr);
+	  	}
+	  	catch (Exception ex)
+	  	{
+	  		throw new Exception("Failed to parse review bookmark detail parameter to JSON: " + ex.getMessage());
+	  	}
+  	}
   
   private long userId;
   public long getUserid() { return this.userId; }

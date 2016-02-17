@@ -8,17 +8,7 @@
   <Identifier>ReportsDeleteReport</Identifier>
 	<JavaClass>hoot.services.controllers.wps.ReportsDeleteReportProcesslet</JavaClass>
 	<Title>Reports Delete Report Service</Title>
-  <Abstract><![CDATA[
-  <DESCRIPTION>
-  Deletes requested report.
-  </DESCRIPTION>
-  <EXAMPLE>
-  <URL>http://localhost:8080/hoot-services/ogc</URL>
-  <REQUEST_TYPE>POST</REQUEST_TYPE>
-  <INPUT>WPS XML with id</INPUT>
-   <OUTPUT>Delete status</OUTPUT>
-   </EXAMPLE>
-  ]]></Abstract>
+  <Abstract>Deletes requested report.</Abstract>
 	<!-- deegree doesn't honor optional input parameters for HTTP GET requests (only POSTs), so 
     don't make any of them optional; by default input params are required -->
 	<InputParameters>

@@ -52,7 +52,7 @@ public class RandomReviewableQuery  extends ReviewableQueryBase implements IRevi
 		try
 		{
 			//TODO: Since this code will affect all subsequent calls to random(), it is better moved to
-			//a more centralized location.  Given that this is the only class useing random() in a SQL
+			//a more centralized location.  Given that this is the only class using random() in a SQL
 			//query so far, no harm is done for the time being.
 			if (Boolean.parseBoolean(
 		      HootProperties.getInstance().getProperty(
@@ -108,7 +108,12 @@ public class RandomReviewableQuery  extends ReviewableQueryBase implements IRevi
 			}
 			
 			ret.setRelationId(relId);
-			ret.setSortOrder(Long.parseLong(seqId));
+			long nSeq = -1;
+			if(seqId != null)
+			{
+				nSeq = Long.parseLong(seqId);
+			}
+			ret.setSortOrder(nSeq);
 			ret.setResultCount(nResCnt);
 		}
 

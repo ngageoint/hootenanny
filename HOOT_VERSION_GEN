@@ -19,13 +19,13 @@ if test -f version
 then
         VN=$(cat version) || VN="$DEF_VER"
 elif test "$HAS_GIT" = "true" &&
-        VN=$(git describe --match "v[0-9]*" --abbrev=7 --tags HEAD 2>/dev/null) &&
+        VN=$(git describe --match "v[0-9]*" --abbrev=7 --tags HEAD 2>/dev/null | sed -e s/-/_/g) &&
         case "$VN" in
         *$LF*) (exit 1) ;;
         v[0-9]*)
                 git update-index -q --refresh
                 test -z "$(git diff-index --name-only HEAD --)" ||
-                VN="$VN-dirty" ;;
+                VN=$VN"_dirty" ;;
         esac
 then
         #VN=$(echo "$VN" | sed -e 's/-/./g');

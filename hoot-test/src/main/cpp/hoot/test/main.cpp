@@ -210,10 +210,10 @@ void populateAllTests(CppUnit::TestSuite *suite, bool printDiff)
 {
   CppUnit::TestFactoryRegistry &registry = CppUnit::TestFactoryRegistry::getRegistry();
   suite->addTest(registry.makeTest());
-  suite->addTest(new ScriptTestSuite("hoot-core-test/src/test/resources/cmd/current/", printDiff));
-  suite->addTest(new ScriptTestSuite("hoot-core-test/src/test/resources/cmd/quick/", printDiff));
-  suite->addTest(new ScriptTestSuite("hoot-core-test/src/test/resources/cmd/slow/", printDiff));
-  suite->addTest(new ScriptTestSuite("hoot-core-test/src/test/resources/cmd/glacial/", printDiff));
+  suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff));
+  suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff));
+  suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff));
+  suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/", printDiff));
   suite->addTest(new ConflateCaseTestSuite("test-files/cases"));
   suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
   suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
@@ -295,6 +295,7 @@ int main(int argc, char *argv[])
             "--all-names - Only print the names of all the tests.\n"
             "--warn - Show warning messages and above.\n"
             "--info - Show info messages and above.\n"
+            "--verbose - Show verbose messages and above.\n"
             "--debug - Show debug messages and above.\n"
             "--diff - Print diff when a script test fails.\n"
             "--include=[regex] - Include only tests that match the specified regex.\n"
@@ -347,16 +348,16 @@ int main(int argc, char *argv[])
         listener = new HootTestListener(true);
         Log::getInstance().setLevel(Log::Info);
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
-        rootSuite->addTest(new ScriptTestSuite("hoot-core-test/src/test/resources/cmd/current/",
+        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/current/",
           printDiff));
       }
       if (args.contains("--quick"))
       {
         listener = new HootTestListener(false, 1.0);
         rootSuite->addTest(registry.makeTest());
-        rootSuite->addTest(new ScriptTestSuite("hoot-core-test/src/test/resources/cmd/current/",
+        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/current/",
                                                printDiff));
-        rootSuite->addTest(new ScriptTestSuite("hoot-core-test/src/test/resources/cmd/quick/",
+        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/quick/",
                                                printDiff));
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
@@ -366,11 +367,11 @@ int main(int argc, char *argv[])
       {
         listener = new HootTestListener(false, 30.0);
         rootSuite->addTest(registry.makeTest());
-        rootSuite->addTest(new ScriptTestSuite("hoot-core-test/src/test/resources/cmd/current/",
+        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/current/",
                                                printDiff));
-        rootSuite->addTest(new ScriptTestSuite("hoot-core-test/src/test/resources/cmd/quick/",
+        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/quick/",
                                                printDiff));
-        rootSuite->addTest(new ScriptTestSuite("hoot-core-test/src/test/resources/cmd/slow/",
+        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/slow/",
                                                printDiff));
         rootSuite->addTest(new ConflateCaseTestSuite("test-files/cases"));
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
@@ -383,13 +384,13 @@ int main(int argc, char *argv[])
       {
         listener = new HootTestListener(false, 900.0);
         rootSuite->addTest(registry.makeTest());
-        rootSuite->addTest(new ScriptTestSuite("hoot-core-test/src/test/resources/cmd/current/",
+        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/current/",
                                                printDiff));
-        rootSuite->addTest(new ScriptTestSuite("hoot-core-test/src/test/resources/cmd/quick/",
+        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/quick/",
                                                printDiff));
-        rootSuite->addTest(new ScriptTestSuite("hoot-core-test/src/test/resources/cmd/slow/",
+        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/slow/",
                                                printDiff));
-        rootSuite->addTest(new ScriptTestSuite("hoot-core-test/src/test/resources/cmd/glacial/",
+        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/glacial/",
                                                printDiff));
         rootSuite->addTest(new ConflateCaseTestSuite("test-files/cases"));
         rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
@@ -431,6 +432,10 @@ int main(int argc, char *argv[])
     if (args.contains("--debug"))
     {
       Log::getInstance().setLevel(Log::Debug);
+    }
+    if (args.contains("--verbose"))
+    {
+      Log::getInstance().setLevel(Log::Verbose);
     }
     if (args.contains("--info"))
     {

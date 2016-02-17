@@ -1543,7 +1543,7 @@ QString ServicesDb::_elementTypeToElementTableName_OsmApi(const ElementType& ele
     throw HootException("Unsupported element type.");
   }
 }
-//TODO: consolidate these exists queries into a single method
+/// @todo consolidate these exists queries into a single method
 
 bool ServicesDb::mapExists(const long id)
 {

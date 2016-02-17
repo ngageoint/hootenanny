@@ -29,7 +29,6 @@ package hoot.services.writers.review;
 import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.List;
 
 import hoot.services.UnitTest;
 import hoot.services.db2.ReviewBookmarks;
@@ -39,9 +38,7 @@ import org.json.simple.JSONObject;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import com.mysema.query.sql.SQLBindings;
 import com.mysema.query.sql.dml.SQLInsertClause;
-import com.mysema.query.sql.dml.SQLUpdateClause;
 
 public class ReviewBookmarksSaverTest {
 
@@ -120,10 +117,7 @@ public class ReviewBookmarksSaverTest {
   		ReviewBookmarkSaveRequest req = new ReviewBookmarkSaveRequest(1, 2, o, -2);
   		ReviewBookmarksSaver tagsSaver = new ReviewBookmarksSaver(conn);
   		
-  		SQLUpdateClause cl = tagsSaver._getUpdateQuery(req, dto);
-  		
-  		List<SQLBindings> bn = cl.getSQL();
-  		String actual = cl.toString();
+  		/*SQLUpdateClause cl =*/ tagsSaver._getUpdateQuery(req, dto);
   		
   		String expected = "update \"review_bookmarks\"\n" + 
   				"set \"last_modified_by\" = ?, \"id\" = ?, \"created_by\" = ?, \"created_at\" = ?, \"detail\" = '\"test4\"=>\"val4\",\"test3\"=>\"val3\"', \"last_modified_at\" = ?\n" + 
@@ -138,7 +132,7 @@ public class ReviewBookmarksSaverTest {
   	}
   	catch(Exception ex)
   	{
-  		String err = ex.getMessage();
+  		//String err = ex.getMessage();
   	}
     finally
     {

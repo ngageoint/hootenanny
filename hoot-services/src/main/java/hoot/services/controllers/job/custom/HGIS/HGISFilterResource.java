@@ -61,38 +61,20 @@ public class HGISFilterResource extends HGISResource {
 		}
 	}
 	
-  /**
-  * <NAME>Filter Non HGIS POIs Service</NAME>
-	 * <DESCRIPTION>This resource produces layer that filters Non HGIS POIs.</DESCRIPTION>
-	 * <PARAMETERS>
-	 * <source>
-	 * 	Name of source layer
-	 * </source>
-	 * <output>
-	 * 	Name of new outupt layer
-	 * </output>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	Job ID
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/filter/custom/HGIS/filternonhgispois</URL>
-	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * 	<INPUT>
-	 * {
-	*		 "source":"AllDataTypesA",
-	*		"output":"AllDataTypesAtest1"
-	*		}
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * {"jobId":"91133065-ecb3-4476-9090-fb4bc3fabdf7"}
-   * </OUTPUT>
-	 * </EXAMPLE>
-   * This resource produces layer that filters Non HGIS POIs.
-   * @param request
-   * @return
-   * @throws Exception
-   */
+	/**
+	 * This resource produces layer that filters Non HGIS POIs.
+	 * 
+	 * POST  hoot-services/job/filter/custom/HGIS/filternonhgispois
+	 * 
+	 *   {
+	 *		 "source":"AllDataTypesA",
+	 *		"output":"AllDataTypesAtest1"
+	 *		}
+	 * 
+	 * @param request
+	 * @return Job ID
+	 * @throws Exception
+	 */
 	@POST
   @Path("/filternonhgispois")
   @Consumes(MediaType.APPLICATION_JSON)

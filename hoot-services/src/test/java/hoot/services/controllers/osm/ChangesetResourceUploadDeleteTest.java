@@ -1462,7 +1462,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
   }
 
   /**
-   * @todo this method is nearly identical to testUploadDelete
+   * //TODO: this method is nearly identical to testUploadDelete
    */
   @Test
   @Category(UnitTest.class)

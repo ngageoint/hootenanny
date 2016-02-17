@@ -38,12 +38,18 @@ else
   echo "passed test 4"
 fi
 
+# Make sure the expected files are listed.
+echo Output files:
+ls test-output/cmd/csr/
+
+# Size on yubyub, Ubuntu 14.04, 2016-02-01 - 192002
+PDF_SIZE=`wc -c test-output/cmd/csr/csr.pdf | cut -d' ' -f1`
+[ $PDF_SIZE -lt 150000 ] && echo PDF is smaller than expected
+[ $PDF_SIZE -gt 250000 ] && echo PDF is bigger than expected
+[ $PDF_SIZE -gt 150000 ] && [ $PDF_SIZE -lt 250000 ] && echo PDF size in range.
+
 # TEST 5: test a sampling of the stats in the output of the stats command
 # - will output difference if fails
-python scripts/CheckThreeScores.py test-output/cmd/csr/csrStats.txt "Node Count,35,37,64,66,36,38" "Way Count,3,5,3,5,8,10" "Highway Count,3,5,3,5,8,10" "Total Unmatched Features,3,5,3,5,0,0"
+python scripts/CheckThreeScores.py test-output/cmd/csr/csrStats.txt "Node Count,35,37,64,66,36,38" "Way Count,3,5,3,5,8,10" "Highway Count,3,5,3,5,8,10" "Total Unmatched Features,3,5,3,5,0,1"
 echo "completed test 5"
 
-# TEST 6: test all of the tokens used in the report.  make sure they are all there so someone cannot break the code
-#   by renaming the stats tokens at random
-# - will output difference if fails
-python scripts/CheckTokens.py test-output/cmd/csr/csrStats.txt 'Node Count' 'Way Count' 'Relation Count' 'Total Feature Tags' 'Total Feature Information Tags' 'Total Feature Metadata Tags' 'Unique Names' 'Meters of Linear Features' 'Meters Squared of Area Features' 'POI Count' 'Highway Count' 'Meters of Highway' 'Highway Unique Name Count' 'Total Building Count' 'Meters Squared of Buildings' 'Building Unique Name Count' 'Total Feature Count' 'Total Conflated Features' 'Percentage of Total Features Conflated' 'Total Unmatched Features' 'Percentage of Total Features Unmatched' 'Conflated POIs' 'Conflated Highways' 'Meters of Conflated Highway' 'Conflated Buildings' 'Meters Squared of Conflated Buildings' 'Total Features Marked for Review' 'Percentage of Total Features Marked for Review' 'Longest Tag' 'Translated Populated Tag Percent' 'Translated Populated Tag Count' 'Translated Default Tag Count' 'Translated Null Tag Count' 'Building Translated Populated Tag Percent' 'Highway Translated Populated Tag Percent' 'POI Translated Populated Tag Percent' 'Read Inputs Time (sec)' 'Time to Calculate Stats for Input 1 (sec)' 'Time to Calculate Stats for Input 2 (sec)' 'Apply Named Ops Time (sec)' 'Apply Pre Ops Time (sec)' 'Project to Planar Time (sec)' 'Find Matches Time (sec)' 'Number of Matches Found' 'Number of Matches Found per Second' 'Number of Matches Before Whole Groups' 'Number of Whole Groups' 'Optimize Matches Time (sec)' 'Number of Optimized Matches' 'Number of Matches Optimized per Second' 'Create Mergers Time (sec)' 'Apply Mergers Time (sec)' 'Mergers Applied per Second' 'Apply Post Ops Time (sec)' 'Conflation Time (sec)' 'Project to WGS84 Time (sec)' 'Time to Calculate Stats for Output (sec)' 'Write Output Time (sec)' 'Total Time Elapsed (sec)' 'Bytes Read' 'Bytes Written'

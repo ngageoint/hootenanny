@@ -146,6 +146,9 @@ private:
   void _reset();
 
   void _validateConflictSubset(const ConstOsmMapPtr& map, vector<const Match *> matches);
+
+  void _printMatches(vector<const Match*> matches);
+  void _printMatches(vector<const Match*> matches, const MatchType& typeFilter);
 };
 
 }
