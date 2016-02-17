@@ -8,6 +8,8 @@ If you have any support questions please create an Issue in this repo or contact
 
 # Specifications
 
+We actively maintain and update our [Frequently Asked Questions page](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions) so please refer to that page for any questions about general Hootenanny capabilities.
+
 ## Conflation
 Hootenanny currently supports the conflation of POIs, Building polygons, Transportation polylines (highways, cart tracks, trails, bridges, and tunnels), and Waterway polylines (hydrologic features such as rivers, streams, drainage, and ditches).   When conflating these features, it is important to note that conflation occurs between similar feature types (e.g. POI to POI, Building to Building, Transportation polyline to Transportation polyline, etc.).
 
@@ -47,6 +49,9 @@ Once installed and configured, Hootenanny can be accessed from a browser by open
 
 * Note that the specific port designation can be configured from either the Vagrantfile (if using Vagrant installation approach) or from the Tomcat/conf/server.xml file.  
 
+## Hootenanny User Interface Guide
+The [Hootenanny User Interface Guide] (https://github.com/ngageoint/hootenanny/releases/download/v0.2.19/Hootenanny.-.User.Interface.Guide.pdf) contains all of the background required to walk through each functional component of the software.  Sample datasets can be acquired from the provided URLs in the guide or within the %HOOT_HOME/test-files directory.
+
 # Redistribution
 
 Hootenanny was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with DigitalGlobe.  The government has "unlimited rights" and is releasing this software to increase the impact of government instruments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the GNU General Public License. The GPL license is available in LICENSE.txt
@@ -60,9 +65,6 @@ Unless required by applicable law or agreed to in writing, software distributed 
 Imagery provided by permission from DigitalGlobe. Users are responsible for complying with terms of use for data and imagery they use in conjunction with Hootenanny. Specifically, the must properly protect and comply with all legal, copyright, and licensing terms.
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
-
-## Hootenanny User Interface Guide
-The [Hootenanny User Interface Guide] (https://github.com/ngageoint/hootenanny/releases/download/v0.2.19/Hootenanny.-.User.Interface.Guide.pdf) contains all of the background required to walk through each functional component of the software.  Sample datasets can be acquired from the provided URLs in the guide or within the %HOOT_HOME/test-files directory.
 
 # Developers
 
