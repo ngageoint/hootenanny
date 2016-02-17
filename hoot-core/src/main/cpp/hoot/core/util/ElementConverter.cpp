@@ -307,7 +307,6 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
 
       // We are going to throw an error so we save the type of relation
       relationType = r->getType();
-
       break;
 
     }
@@ -330,7 +329,7 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
   }
   else
   {
-    return GeometryTypeId(-1);
+    return GeometryTypeId(UNKNOWN_GEOMETRY);
   }
 }
 
