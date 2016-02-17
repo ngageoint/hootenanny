@@ -32,6 +32,9 @@
 #include <hoot/core/io/ObjectOutputStream.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/ElementConverter.h>
 using namespace hoot;
 
 // Boost
@@ -46,6 +49,8 @@ using namespace boost;
 // geos
 #include <geos/io/WKTReader.h>
 #include <geos/geom/Point.h>
+#include <geos/geom/Envelope.h>
+#include <geos/geom/LineString.h>
 
 // Qt
 #include <QDebug>
@@ -65,6 +70,7 @@ class MapCropperTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runGeometryTest);
   CPPUNIT_TEST(runSerializationTest);
   CPPUNIT_TEST(runConfigurationTest);
+  CPPUNIT_TEST(runMultiPolygonTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -241,6 +247,36 @@ public:
     }
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid bounds passed to map cropper"));
     HOOT_STR_EQUALS("Env[0:-1,0:-1]", cropper._envelope.toString());
+  }
+
+  void runMultiPolygonTest()
+  {
+    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapReaderFactory::read(map, "test-files/MultipolygonTest.osm",true);
+
+    Envelope env(0.30127,0.345,0.213,0.28154);
+
+    MapCropper::crop(map, env);
+
+    const WayMap ways = map->getWays();
+    HOOT_STR_EQUALS(2, ways.size());
+
+    int count = 0;
+    for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
+    {
+      const shared_ptr<Way>& w = it->second;
+      shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+      const Envelope& e = *(ls->getEnvelopeInternal());
+      if (count == 0)
+      {
+        HOOT_STR_EQUALS("Env[0.303878:0.336159,0.220255:0.270199]", e.toString());
+      }
+      else
+      {
+        HOOT_STR_EQUALS("Env[0.314996:0.328946,0.231514:0.263127]", e.toString());
+      }
+      count++;
+    }
   }
 
 };
