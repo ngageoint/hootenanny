@@ -122,7 +122,6 @@ void TranslationVisitor::visit(const ConstElementPtr& ce)
         geomType = "Collection";
         break;
       default:
-        LOG_ERROR("TransVisit Geometry Type = " << gtype);
         throw InternalErrorException("Unexpected geometry type.");
       }
 
