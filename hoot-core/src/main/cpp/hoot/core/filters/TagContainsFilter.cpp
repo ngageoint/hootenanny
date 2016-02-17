@@ -33,11 +33,25 @@
 namespace hoot
 {
 
+const QString TagContainsFilter::WILDCARD = "*";
+
 TagContainsFilter::TagContainsFilter(FilterType type, QString key, QString valueSubstring)
 {
   _type = type;
   _key.append(key);
   _valueSubstring.append(valueSubstring);
+}
+
+TagContainsFilter::TagContainsFilter(FilterType type, QString key)
+{
+  _type = type;
+  _key.append(key);
+  _valueSubstring.append(TagContainsFilter::WILDCARD);
+}
+
+void TagContainsFilter::addPair(QString key)
+{
+  addPair(key, TagContainsFilter::WILDCARD);
 }
 
 void TagContainsFilter::addPair(QString key, QString valueSubstring)
@@ -52,9 +66,20 @@ bool TagContainsFilter::isFiltered(const Element& e) const
 
   for (int i = 0; i < _key.size(); i++)
   {
-    if (e.getTags().contains(_key[i]) && e.getTags()[_key[i]].contains(_valueSubstring[i]))
+/*
+    if (e.getTags().contains(_key[i]) &&    //  Contains the right key
+        ( e.getTags()[_key[i]].contains(_valueSubstring[i]) ||  //  Value is equals
+          e.getTags()[_key[i]].compare(TagContainsFilter::WILDCARD) == 0 ))   //  Wildcard
     {
       matches = true;
+    }
+*/
+    if (e.getTags().contains(_key[i]))
+    {
+      if (e.getTags()[_key[i]].contains(_valueSubstring[i]))
+        matches = true;
+      else if (_valueSubstring[i] == TagContainsFilter::WILDCARD)
+        matches = true;
     }
   }
 

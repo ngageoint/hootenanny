@@ -39,8 +39,8 @@
 #include <hoot/core/filters/PoiCriterion.h>
 #include <hoot/core/filters/StatsAreaFilter.h>
 #include <hoot/core/filters/StatusCriterion.h>
-#include <hoot/core/filters/TagContainsFilter.h>
 #include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/filters/WaterwayCriterion.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/visitors/CalculateAreaVisitor.h>
 #include <hoot/core/visitors/CalculateAreaForStatsVisitor.h>
@@ -476,16 +476,16 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
       SingleStat("Percentage of Unmatched Buildings", percentageOfTotalBuildingsUnconflated));
 
     const double totalWaterways =
-      _applyVisitor(constMap, FilteredVisitor(new TagContainsFilter(Filter::KeepMatches, "type", "waterway"), new FeatureCountVisitor()));
+      _applyVisitor(constMap, FilteredVisitor(new WaterwayCriterion(Filter::KeepMatches), new FeatureCountVisitor()));
     _stats.append(SingleStat("Waterway Count", totalWaterways));
 
     _stats.append(SingleStat("Conflatable Waterways", conflatableWaterwayCount));
     const double waterwaysProcessedByConflation =
       _applyVisitor(constMap, FilteredVisitor(
-        ChainCriterion(new StatusCriterion(Status::Conflated), new TagContainsFilter(Filter::KeepMatches, "type", "waterway")), new FeatureCountVisitor()));
+        ChainCriterion(new StatusCriterion(Status::Conflated), new WaterwayCriterion(Filter::KeepMatches)), new FeatureCountVisitor()));
     const double waterwaysMarkedForReview =
       _applyVisitor(constMap, FilteredVisitor(
-        ChainCriterion(new NeedsReviewCriterion(constMap), new TagContainsFilter(Filter::KeepMatches, "type", "waterway")), new FeatureCountVisitor()));
+        ChainCriterion(new NeedsReviewCriterion(constMap), new WaterwayCriterion(Filter::KeepMatches)), new FeatureCountVisitor()));
     const double conflatedWaterwayCount = fmax(waterwaysProcessedByConflation - waterwaysMarkedForReview, 0);
     _stats.append(SingleStat("Conflated Waterways", conflatedWaterwayCount));
     _stats.append(SingleStat("Waterways Marked for Review", waterwaysMarkedForReview));
@@ -493,7 +493,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
       _applyVisitor(
         constMap,
          FilteredVisitor(
-            new TagContainsFilter(Filter::KeepMatches, "type", "waterway"),
+            new WaterwayCriterion(Filter::KeepMatches),
             new CountUniqueReviewsVisitor()));
     _stats.append(SingleStat("Number of Waterway Reviews to be Made", numWaterwayReviewsToBeMade));
     const double unconflatedWaterwayCount =
@@ -503,12 +503,12 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
           ChainCriterion(
             new NotCriterion(new StatusCriterion(Status::Conflated)),
             new NotCriterion(new NeedsReviewCriterion(constMap)),
-            new TagContainsFilter(Filter::KeepMatches, "type", "waterway")),
+            new WaterwayCriterion(Filter::KeepMatches)),
           new FeatureCountVisitor()));
-    _stats.append(SingleStat("Unmatched Waterways", unconflatedBuildingCount));
-//    _stats.append(SingleStat("Meters Squared of Buildings Processed by Conflation",
-//      _applyVisitor(constMap, FilteredVisitor(ChainCriterion(new StatusCriterion(Status::Conflated),
-//        contains.get(), new CalculateAreaVisitor()))));
+    _stats.append(SingleStat("Unmatched Waterways", unconflatedWaterwayCount));
+    _stats.append(SingleStat("Meters of Waterways Processed by Conflation",
+      _applyVisitor(constMap, FilteredVisitor(ChainCriterion(new StatusCriterion(Status::Conflated),
+        new WaterwayCriterion(Filter::KeepMatches)), new LengthOfWaysVisitor()))));
     double percentageOfTotalWaterwaysConflated = 0.0;
     if (totalWaterways > 0.0)
     {
@@ -530,7 +530,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     }
     _stats.append(
       SingleStat("Percentage of Unmatched Waterways", percentageOfTotalWaterwaysUnconflated));
-//*/
+
     LongestTagVisitor v2;
     _applyVisitor(constMap, &v2);
     _stats.append(SingleStat("Longest Tag", v2.getStat()));
@@ -556,6 +556,9 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
           new TranslatedTagCountVisitor(st)))));
       _stats.append(SingleStat("POI Translated Populated Tag Percent",
         _applyVisitor(constMap, FilteredVisitor(PoiCriterion(),
+          new TranslatedTagCountVisitor(st)))));
+      _stats.append(SingleStat("Waterway Translated Populated Tag Percent",
+        _applyVisitor(constMap, FilteredVisitor(WaterwayCriterion(Filter::KeepMatches),
           new TranslatedTagCountVisitor(st)))));
     }
     else

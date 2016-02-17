@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,43 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef TAGCONTAINSFILTER_H
-#define TAGCONTAINSFILTER_H
-
-// Qt
-#include <QStringList>
-
-#include "ElementCriterion.h"
+#include "WaterwayCriterion.h"
 
 namespace hoot
 {
 
-class TagContainsFilter : public BaseElementFilter
+WaterwayCriterion::WaterwayCriterion(FilterType type)
+  : TagContainsFilter(type, "type", "waterway")
 {
-public:
-  TagContainsFilter(FilterType type, QString key);
-  TagContainsFilter(FilterType type, QString key, QString valueSubstring);
-
-  /**
-   * Adds an additional pair to the search list. If any one of the pairs matches then it is
-   * considered a match.
-   */
-  void addPair(QString key);
-  void addPair(QString key, QString valueSubstring);
-  /**
-   * Wildcard string for valueSubstring which allows for matches that match only the key
-   */
-  static const QString WILDCARD;
-
-protected:
-  virtual bool isFiltered(const Element& e) const;
-
-  QStringList _key, _valueSubstring;
-  FilterType _type;
-};
+  addPair("waterway");
+  addPair("river_type");
+  addPair("river_flow");
+}
 
 }
 
-#endif // TAGCONTAINSFILTER_H
