@@ -31,17 +31,12 @@ namespace hoot
 {
 class OsmMap;
 
-/**
- * @todo this should be broken out into a const and non-const version. - #321
- */
 class OsmMapConsumer
 {
 public:
   virtual ~OsmMapConsumer() {}
 
-  virtual void setOsmMap(OsmMap* map) { setOsmMap((const OsmMap*)map); }
-
-  virtual void setOsmMap(const OsmMap* map) = 0;
+  virtual void setOsmMap(OsmMap* map) = 0;
 };
 
 }

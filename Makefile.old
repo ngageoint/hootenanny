@@ -49,7 +49,9 @@ clean: Makefile.qmake services-clean
 	rm -rf `find test-files/cases -type d -empty`
 	rm -rf `find test-files/cases -type d -empty`
 	cd docs; $(MAKE) clean
+ifeq ($(BUILD_SERVICES),services)
 	scripts/CleanOsmApiDB.sh
+endif
 
 clean-db: services-clean-db
 
@@ -189,7 +191,9 @@ plugins/etds61_osm_rules.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv
 
 # Build osmapi db
 osmapidb: conf/DatabaseConfig.sh
+ifeq ($(BUILD_SERVICES),services)
 	scripts/SetupOsmApiDB.sh
+endif
 
 # Build automatically generated JS files
 js-make: $(SCHEMA_FILES) plugins/config.js
@@ -254,13 +258,14 @@ rebuild-db:
 HOOT_TARNAME=hootenanny-$(HOOT_VERSION)
 dist: archive
 archive: default docs
-	if [ "$(BUILD_SERVICES)" == "services" ]; then cp hoot-services/target/hoot-services-*.war hootenanny-services-$(HOOT_VERSION).war; fi
+	if [ "$(BUILD_SERVICES)" == "services" ]; then cp hoot-services/target/hoot-services-*.war hootenanny-services-$(HOOT_VERSION).war; tar -cvzf docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz hoot-services/target/site/apidocs; fi
 	rm -f $(HOOT_TARNAME).tar.gz
 	scripts/git-archive-all.sh --prefix $(HOOT_TARNAME)/ $(HOOT_TARNAME).tar
 	mkdir -p $(HOOT_TARNAME)
 	cp Makefile.in aclocal.m4 configure config.h.in $(HOOT_TARNAME)
 	mkdir -p $(HOOT_TARNAME)/docs/
-	cp docs/*.pdf docs/*.html docs/*.text $(HOOT_TARNAME)/docs/
+	# Adding javadoc with a conditional so it is ignored if it doesn't exist.
+	cp docs/*.pdf docs/*.html docs/*.text `F=docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz; test -f $F && echo $F` $(HOOT_TARNAME)/docs/
 	# Copy the protocol buffer generated files. Eases a dependency when building
 	# on CentOS
 	mkdir -p $(HOOT_TARNAME)/hoot-core/src/main/cpp/hoot/core/proto/
@@ -284,7 +289,7 @@ LocalConfig.pri:
 	cp LocalConfig.pri.orig LocalConfig.pri
 
 Makefile.qmake: Hootenanny.pro Configure.pri LocalConfig.pri
-	qmake
+	qmake-qt4
 
 tmp/schema.dot: qt-make
 	HootTest --single hoot::OsmSchemaTest
@@ -326,6 +331,7 @@ conf/words.sqlite: conf/words1.sqlite
 # If you create a new words.sqlite please just increment the number rather than
 # replacing the old file. This way we can maintain the history.
 conf/words1.sqlite:
+	([ -e /tmp/words1.sqlite ] && test "`sha1sum /tmp/words1.sqlite`" == '4f7333e8e084927fafda3047183302407961b851  /tmp/words1.sqlite' && cp /tmp/words1.sqlite conf/) || \
 	wget -N -P conf/ https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/words1.sqlite || echo "Failure downloading words1.sqlite. Build will continue, but conflation accuracy may suffer."
 
 bin/HootEnv.sh: scripts/HootEnv.sh

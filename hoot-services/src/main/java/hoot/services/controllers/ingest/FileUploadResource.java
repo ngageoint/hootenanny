@@ -78,45 +78,20 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 		}
 	}
 
-
-	/**
-	 * <NAME>FileUpload Service</NAME>
-	 * <DESCRIPTION>
-	 * Purpose of this service is to provide ingest service for uploading shape and osm file and performing ETL operation on the uploaded file(s).
+  /**
+   * Purpose of this service is to provide ingest service for uploading shape and osm file and performing ETL operation on the uploaded file(s).
    * This service is multipart post service which accepts single or multiple files sent by multipart client.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * 	<TRANSLATION>
-	 * 	Translation script used during OGR ETL process.
-	 * 	</TRANSLATION>
-	 * 	<INPUT_TYPE>
-	 * 	[OSM | OGR ] OSM for osm file and OGR for shapefile.
-	 * 	</INPUT_TYPE>
-	 * 	<INPUT_NAME>
-	 * 	optional input name which is used in hoot db. Defaults to the file name.
-	 * 	</INPUT_NAME>
-	 * <USER_EMAIL>
-	 * Email address of the user requesting job
-	 * </USER_EMAIL>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * Array of job status
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/ingest/ingest/upload?TRANSLATION=NFDD.js&INPUT_TYPE=OSM&INPUT_NAME=ToyTest</URL>
-	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * 	<INPUT>
-	 * Multipart data
-	 * </INPUT>
-	 * <OUTPUT>[{"jobid":"1234-456-789","input":"1234.osm","output":"test_output", "status":"running"}]</OUTPUT>
-	 * </EXAMPLE>
-	 * @param translation
-	 * @param inputType
-	 * @param inputName
-	 * @param request
-	 * @return
-	 */
-
+   * 
+   * POST hoot-services/ingest/ingest/upload?TRANSLATION=NFDD.js&INPUT_TYPE=OSM&INPUT_NAME=ToyTest
+   * 
+   * @param translation Translation script used during OGR ETL process.
+   * @param inputType [OSM | OGR ] OSM for osm file and OGR for shapefile.
+   * @param inputName optional input name which is used in hoot db. Defaults to the file name.
+   * @param userEmail mail address of the user requesting job
+   * @param noneTranslation ?
+   * @param request ?
+   * @return Array of job status
+   */
 	@POST
 	@Path("/upload")
 	@Produces(MediaType.TEXT_PLAIN)

@@ -106,7 +106,6 @@ public class HootProperties
    * It looks for property from the local properties and if it does not find it then uses environmental variable.
    *
    * @param prop
-   * @return
    * @throws Exception
    */
   public synchronized static String getProperty(String prop) throws IOException

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,50 +22,40 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ADDUUIDVISITOR_H
-#define ADDUUIDVISITOR_H
+#ifndef PROJECTTOGEOGRAPHICVISITOR_H
+#define PROJECTTOGEOGRAPHICVISITOR_H
 
-// hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+// GDAL
+#include <ogr_geometry.h>
+#include <ogr_spatialref.h>
+
+#include "ElementOsmMapVisitor.h"
 
 namespace hoot
 {
-using namespace std;
 
-/**
- * Adds a UUID with a specific key. If you want to limit the features that will be tagged then look
- * into FilteredVisitor.
- */
-class AddUuidVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class ReprojectCoordinateFilter;
+
+class ProjectToGeographicVisitor : public ElementOsmMapVisitor
 {
 public:
+  static string className() { return "hoot::ProjectToGeographicVisitor"; }
 
-  static string className() { return "hoot::AddUuidVisitor"; }
+  ProjectToGeographicVisitor();
+  ~ProjectToGeographicVisitor();
 
-  AddUuidVisitor(QString key);
+  void initialize(shared_ptr<OGRSpatialReference>& projection);
 
-  virtual ~AddUuidVisitor() {}
-
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
-
-  /**
-   * AddUuidVisitor requires a read/write map.
-   */
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
-
-  /**
-   * Adds a tag with a UUID to all valid elements.
-   */
-  virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const shared_ptr<Element>& e);
 
 private:
-  OsmMap* _map;
-  QString _key;
+
+  OGRCoordinateTransformation* _transform;
+  shared_ptr<ReprojectCoordinateFilter> _rcf;
 };
 
 }
 
-#endif // ADDUUIDVISITOR_H
+#endif // PROJECTTOGEOGRAPHICVISITOR_H

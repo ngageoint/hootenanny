@@ -101,112 +101,12 @@ The iD editor is developed in JavaScript and can be easily customized for variou
 image::developer/images/hootiD-UI_download.png[]
 
 [[WebServiceAppendix]]
-== Hootenanny REST Services
+== Hootenanny Web Services Documentation
 
-The following section provides REST service descriptions, input parameters, URL request structure and example input/outputs grouped using the functionality classes INFO, INGEST, JOB, OGR, and OSM.   
+See docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz for documentation for all Hootenanny Java
+web services code.  Consult the documentation for *Resource.java classes only for documentation on
+public Hootenanny web service API methods.
 
-=== Hootenanny REST Services - INFO
-
-:leveloffset: 2
-include::restDocs/HootenannyRestReference_info.asciidoc[]
-:leveloffset: 0
-
-=== Hootenanny REST Services - INGEST
-
-:leveloffset: 2
-include::restDocs/HootenannyRestReference_ingest.asciidoc[]
-:leveloffset: 0
-
-
-=== Hootenanny REST Services - JOB
-
-:leveloffset: 2
-include::restDocs/HootenannyRestReference_job.asciidoc[]
-:leveloffset: 0
-
-
-=== Hootenanny REST Services - OGR
-
-:leveloffset: 2
-include::restDocs/HootenannyRestReference_ogr.asciidoc[]
-:leveloffset: 0
-
-
-=== Hootenanny REST Services - OSM
-
-:leveloffset: 2
-include::restDocs/HootenannyRestReference_osm.asciidoc[]
-:leveloffset: 0
-
-== Hootenanny WPS Services
-
-The following section provides WPS service descriptions, input parameters, URL request structure and example input/outputs.   
-
-=== Hootenanny WPS Services - Clean
-
-:leveloffset: 2
-include::wpsDocs/CleanDataProcesslet.asciidoc[]
-include::wpsDocs/CleanMapProcesslet.asciidoc[]
-:leveloffset: 0
-
-=== Hootenanny WPS Services - Conflate
-
-:leveloffset: 2
-include::wpsDocs/ConflateProcesslet.asciidoc[]
-:leveloffset: 0
-
-=== Hootenanny WPS Services - Cookie Cutter
-
-:leveloffset: 2
-include::wpsDocs/CookieCutterProcesslet.asciidoc[]
-:leveloffset: 0
-
-=== Hootenanny WPS Services - Custom Scripts
-
-:leveloffset: 2
-include::wpsDocs/CustomScriptSaveProcesslet.asciidoc[]
-include::wpsDocs/CustomScriptGetListProcesslet.asciidoc[]
-include::wpsDocs/CustomScriptGetScriptProcesslet.asciidoc[]
-include::wpsDocs/CustomScriptDeleteScriptProcesslet.asciidoc[]
-:leveloffset: 0
-
-=== Hootenanny WPS Services - ETL
-
-:leveloffset: 2
-include::wpsDocs/ETLProcesslet.asciidoc[]
-:leveloffset: 0
-
-=== Hootenanny WPS Services - Export
-
-:leveloffset: 2
-include::wpsDocs/ExportJobProcesslet.asciidoc[]
-include::wpsDocs/ExportProcesslet.asciidoc[]
-:leveloffset: 0
-
-=== Hootenanny WPS Services - Jobs
-
-:leveloffset: 2
-include::wpsDocs/JobStatusProcesslet.asciidoc[]
-:leveloffset: 0
-
-=== Hootenanny WPS Services - LTDS Translation
-
-:leveloffset: 2
-include::wpsDocs/LTDSTranslateProcesslet.asciidoc[]
-:leveloffset: 0
-
-=== Hootenanny WPS Services - OSM to OGR
-
-:leveloffset: 2
-include::wpsDocs/OSM2OgrProcesslet.asciidoc[]
-:leveloffset: 0
-
-=== Hootenanny WPS Services - Report Generation
-
-:leveloffset: 2
-include::wpsDocs/ReportsGetListProcesslet.asciidoc[]
-include::wpsDocs/ReportsDeleteReportProcesslet.asciidoc[]
-:leveloffset: 0
 
 
 

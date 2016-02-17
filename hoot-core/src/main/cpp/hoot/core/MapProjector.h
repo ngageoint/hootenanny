@@ -36,6 +36,7 @@
 
 // GEOS
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/Geometry.h>
 
 // Hoot
@@ -178,6 +179,20 @@ private:
   size_t _findBestScore(vector<PlanarTestResult>& results);
 
   static bool _scoreLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
+};
+
+class ReprojectCoordinateFilter : public CoordinateFilter
+{
+public:
+
+  ReprojectCoordinateFilter(OGRCoordinateTransformation* t);
+
+  virtual void filter_rw(Coordinate* c) const;
+
+  void project(Coordinate* c) const;
+
+private:
+  OGRCoordinateTransformation* _transform;
 };
 
 }

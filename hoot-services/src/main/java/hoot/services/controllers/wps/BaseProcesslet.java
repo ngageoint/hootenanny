@@ -96,9 +96,6 @@ public abstract class BaseProcesslet implements Processlet
   
   /**
    * Parses WPS xml to JSON format.
-   * 
-   * @param in
-   * @return
    */
   @SuppressWarnings("unchecked")
   protected JSONArray parseRequestParams(ProcessletInputs in)

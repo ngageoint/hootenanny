@@ -326,7 +326,7 @@ public class Way extends Element
    * Returns an XML representation of the element returned in a query; does not
    * add tags; assumes way nodes have already been written to the services db
    *
-   * @param parent XML node this element should be attached under
+   * @param parentXml XML node this element should be attached under
    * @param modifyingUserId ID of the user which created this element
    * @param modifyingUserDisplayName user display name of the user which created this element
    * @param multiLayerUniqueElementIds if true, IDs are prepended with <map id>_<first letter of the

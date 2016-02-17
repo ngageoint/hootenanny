@@ -134,10 +134,6 @@ public class JobProcesslet extends BaseProcesslet {
 		}
 	}
 	
-	/**
-	 * @param args
-	 * @return
-	 */
 	public String createPostBody(JSONArray args){
 		return _createPostBody(args).toString();
 	}

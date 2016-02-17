@@ -66,8 +66,6 @@ final public class LongBox
 
   /**
    * Returns true if at least one edge overlaps with one of the other boxes edges.
-   * @param b
-   * @return
    */
   public boolean edgeOverlaps(LongBox b)
   {

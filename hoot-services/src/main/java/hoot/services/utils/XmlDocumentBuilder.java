@@ -132,7 +132,7 @@ public class XmlDocumentBuilder
    * 
    * @return a TransformerFactory
    * @throws TransformerConfigurationException
-   * @todo could not get this code to run in JDK 1.7
+   * //TODO: could not get this code to run in JDK 1.7
    */
   /*public static TransformerFactory getSecureTransformerFactory() 
     throws TransformerConfigurationException
@@ -160,10 +160,6 @@ public class XmlDocumentBuilder
     return docBuilderFactory;
   }
   
-  /**
-   * 
-   * @return
-   */
   @SuppressWarnings("unused")
   private static DocumentBuilderFactory getNormalDocBuilderFactory() 
   {

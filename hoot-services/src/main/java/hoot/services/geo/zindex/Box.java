@@ -154,8 +154,6 @@ final public class Box
 
   /**
    * returns true if this box is inside "container"
-   * @param box
-   * @return
    */
   public boolean in(Box container)
   {

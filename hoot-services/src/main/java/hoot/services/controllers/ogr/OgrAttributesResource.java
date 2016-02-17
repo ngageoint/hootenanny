@@ -98,8 +98,6 @@ public class OgrAttributesResource extends JobControllerBase {
 	 * output: JSON of attributes
 	 * 
 	 * @param inputType : [FILE | DIR] where FILE type should represents zip,shp or OMS and DIR represents FGDB
-	 * @param request
-	 * @return
 	 */
 	@POST
 	@Path("/upload")

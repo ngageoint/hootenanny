@@ -1,19 +1,12 @@
 
 SHELL=/bin/bash
 
-ifneq ($(MAKECMDGOALS),clean)
-ifneq (,$(wildcard /etc/redhat-release))  
-  $(error Building Hootenanny documentation is not supported on CentOS/RHEL.  It can be built on Ubuntu or downloaded from: https://github.com/ngageoint/hootenanny/releases)
-endif
-endif
-
 # If the silent flag is passed to make then make a2x quiet
 ifneq (,$(findstring s,$(MAKEFLAGS)))
 »···A2X_QUIET=""
 else
 	A2X_QUIET=-v
 endif
-
 
 define buildAsciidoc
 	mkdir -p tmp
@@ -33,8 +26,7 @@ all: \
 	Hootenanny\ -\ User\ Interface\ Guide.pdf \
 	Hootenanny\ -\ Installation\ Instructions.pdf \
 	Hootenanny\ -\ Developer\ Guide.pdf \
-        Hootenanny\ -\ Algorithms.pdf \
-	# Hootenanny\ -\ Web\ Architecture\ Guide.pdf \
+  Hootenanny\ -\ Algorithms.pdf \
 
 # A generic dep for all asciidoc documents. Make sure the environment is setup
 # properly.
@@ -129,17 +121,6 @@ Hootenanny\ -\ Developer\ Guide.pdf: \
 	tmp/rules-template-doxygen \
 	user/*.asciidoc
 	$(call buildAsciidoc)
-
-# Hootenanny\ -\ Web\ Architecture\ Guide.pdf: \
-#	HootenannyWebArchitecture.asciidoc \
-#	tmp/asciidoc-config \
-#	../HOOT_VERSION_FILE \
-#	docinfo.xml \
-#	styles/* \
-#	../hoot-services/src/main/webapp/WEB-INF/workspace/processes/*.xml
-#	$$HOOT_HOME/scripts/makeWpsDocs.sh $(A2X_QUIET)
-#	$$HOOT_HOME/scripts/makeRestDocs.sh $(A2X_QUIET)
-#	$(call buildAsciidoc)
 
 Hootenanny\ -\ Installation\ Instructions.pdf: \
 	HootenannyInstallDocs.asciidoc \

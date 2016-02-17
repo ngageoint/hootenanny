@@ -462,7 +462,6 @@ public abstract class Element implements XmlSerializable, DbSerializable
    * to all of the elements with the passed in IDs
    *
    * @param mapId ID of the map owning the elements
-   * @param mapIdField services database table map ID field for the join table
    * @param relatedRecordTable services database table for the related record type
    * @param joinField services database table field which joins the related record to the parent
    * record
