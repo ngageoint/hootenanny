@@ -164,7 +164,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(36.36, calcStatsOp->getSingleStat("Percentage of Buildings Conflated"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Buildings Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(63.63, calcStatsOp->getSingleStat("Percentage of Unmatched Buildings"), 1e-1);
-/* FIXME!!! Add in some waterways */
+
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Waterway Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Waterways"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Waterways"));
@@ -191,7 +191,6 @@ public:
       0.6481481, calcStatsOp->getSingleStat("Highway Translated Populated Tag Percent"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.704545, calcStatsOp->getSingleStat("POI Translated Populated Tag Percent"), 1e-1);
-    /* FIXME! */
     CPPUNIT_ASSERT_EQUAL(
       isnan(calcStatsOp->getSingleStat("Waterway Translated Populated Tag Percent")), 1);
   }
@@ -295,7 +294,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(16.67, calcStatsOp->getSingleStat("Percentage of Buildings Conflated"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(16.67, calcStatsOp->getSingleStat("Percentage of Buildings Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(58.33, calcStatsOp->getSingleStat("Percentage of Unmatched Buildings"), 1e-1);
-/* FIXME! */
+
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Waterway Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Waterways"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Waterways"));
@@ -322,7 +321,6 @@ public:
       0.6481481, calcStatsOp->getSingleStat("Highway Translated Populated Tag Percent"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.704545, calcStatsOp->getSingleStat("POI Translated Populated Tag Percent"), 1e-1);
-    /* FIXME! */
     CPPUNIT_ASSERT_EQUAL(
       isnan(calcStatsOp->getSingleStat("Waterway Translated Populated Tag Percent")), 1);
   }
