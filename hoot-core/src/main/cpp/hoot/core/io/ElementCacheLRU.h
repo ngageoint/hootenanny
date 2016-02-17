@@ -99,6 +99,7 @@ public:
 
   // Functions for ElementOutputStream
   virtual void writeElement(ElementInputStream& inputStream);
+  virtual void writeElement(ElementPtr& element);
 
   // Functions for ElementProvider
 

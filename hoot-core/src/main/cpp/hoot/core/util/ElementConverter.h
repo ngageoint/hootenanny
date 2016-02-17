@@ -111,6 +111,8 @@ public:
   static geos::geom::GeometryTypeId getGeometryType(const ConstElementPtr& e,
     bool throwError=true, const bool statsFlag=false);
 
+  static const int UNKNOWN_GEOMETRY = -1;
+
 protected:
   ConstElementProviderPtr                 _constProvider;
   boost::shared_ptr<OGRSpatialReference>  _spatialReference;

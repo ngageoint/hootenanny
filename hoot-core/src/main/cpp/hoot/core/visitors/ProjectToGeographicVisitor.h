@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,47 +22,40 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENTOUTPUTSTREAM_H
-#define ELEMENTOUTPUTSTREAM_H
+#ifndef PROJECTTOGEOGRAPHICVISITOR_H
+#define PROJECTTOGEOGRAPHICVISITOR_H
 
-#include <hoot/core/elements/Element.h>
+// GDAL
+#include <ogr_geometry.h>
+#include <ogr_spatialref.h>
+
+#include "ElementOsmMapVisitor.h"
 
 namespace hoot
 {
-class ElementInputStream;
 
+class ReprojectCoordinateFilter;
 
-/**
- * Element output stream interface.
- */
-class ElementOutputStream
+class ProjectToGeographicVisitor : public ElementOsmMapVisitor
 {
 public:
+  static string className() { return "hoot::ProjectToGeographicVisitor"; }
 
-  ElementOutputStream();
-  virtual ~ElementOutputStream();
+  ProjectToGeographicVisitor();
+  ~ProjectToGeographicVisitor();
 
-  /**
-   * Close the output stream. It can safely be expected that if close isn't called explicitly it
-   * will be called by the destructor.
-   */
-  virtual void close() = 0;
+  void initialize(shared_ptr<OGRSpatialReference>& projection);
 
-  /**
-   * @brief writeElement
-   */
-  virtual void writeElement(ElementInputStream& inputStream) = 0;
-  virtual void writeElement(ElementPtr& element) = 0;
+  virtual void visit(const shared_ptr<Element>& e);
 
-  /**
-   * Read elements from the input stream and write to the output stream. There may be a better place
-   * for this to live, but it works for now.
-   */
-  static void writeAllElements(ElementInputStream& eis, ElementOutputStream& eos);
+private:
+
+  OGRCoordinateTransformation* _transform;
+  shared_ptr<ReprojectCoordinateFilter> _rcf;
 };
 
 }
 
-#endif // ELEMENTOUTPUTSTREAM_H
+#endif // PROJECTTOGEOGRAPHICVISITOR_H

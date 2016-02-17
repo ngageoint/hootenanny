@@ -264,7 +264,8 @@ archive: default docs
 	mkdir -p $(HOOT_TARNAME)
 	cp Makefile.in aclocal.m4 configure config.h.in $(HOOT_TARNAME)
 	mkdir -p $(HOOT_TARNAME)/docs/
-	cp docs/*.pdf docs/*.html docs/*.text docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz $(HOOT_TARNAME)/docs/
+	# Adding javadoc with a conditional so it is ignored if it doesn't exist.
+	cp docs/*.pdf docs/*.html docs/*.text `F=docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz; test -f $F && echo $F` $(HOOT_TARNAME)/docs/
 	# Copy the protocol buffer generated files. Eases a dependency when building
 	# on CentOS
 	mkdir -p $(HOOT_TARNAME)/hoot-core/src/main/cpp/hoot/core/proto/
