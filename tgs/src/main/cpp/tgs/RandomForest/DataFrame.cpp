@@ -369,9 +369,10 @@ namespace Tgs
 
   void DataFrame::exportData(std::ostream & fileStream, std::string tabDepth) const
   {
+    // https://github.com/ngageoint/hootenanny/issues/350
     //Its a *lot* of work to lose this method in hoot.  Making it a future task.
     //throw Exception(__LINE__, "This function has been deprecated.");
-#warning replace this with DataFrame::exportData(QDomDocument&, QDomElement&)
+//#warning replace this with DataFrame::exportData(QDomDocument&, QDomElement&)
 
     //Yes, this is awful. A real parser would be better (see above). Jason G.
     try
@@ -702,9 +703,10 @@ namespace Tgs
 
   void DataFrame::import(std::istream & fileStream)
   {
+    // https://github.com/ngageoint/hootenanny/issues/351
     //Its a *lot* of work to lose this method in hoot.  Making it a future task.
     //throw Exception(__LINE__, "This function has been deprecated.");
-#warning replace this with DataFrame::import(QDomElement&)
+//#warning replace this with DataFrame::import(QDomElement&)
 
     //Yes, this is awful. A real parser would be better. Jason G.
     try

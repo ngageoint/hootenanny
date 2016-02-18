@@ -184,7 +184,8 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
     auto_ptr<Match> ma(_createMatch(map, o1, o2));
 
     // return conflict only if it is a miss, a review is ok.
-#warning need to load this from a configuration
+    // need to load this from a configuration
+    // https://github.com/ngageoint/hootenanny/issues/353
     MatchThreshold mt;
     result = false;
     if (ma.get() == 0 ||
