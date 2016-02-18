@@ -42,7 +42,7 @@
 
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/util/LogLog4Cxx.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/Node.h>
