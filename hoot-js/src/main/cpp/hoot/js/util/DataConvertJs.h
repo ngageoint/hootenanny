@@ -140,7 +140,7 @@ inline void toCpp(v8::Handle<v8::Value> v, QStringList& o)
   }
   v8::Handle<v8::Array> arr = v8::Handle<v8::Array>::Cast(v);
 
-  //o.reserve(arr->Length());
+  o.reserve(arr->Length());
   for (uint32_t i = 0; i < arr->Length(); i++)
   {
     o.append(toCpp<QString>(arr->Get(i)));
@@ -156,8 +156,7 @@ inline void toCpp(v8::Handle<v8::Value> v, QVariantList& l)
   v8::Handle<v8::Array> arr = v8::Handle<v8::Array>::Cast(v);
 
   l.clear();
-  // Reserve was introduced in Qt 4.7 
-  //l.reserve(arr->Length());
+  l.reserve(arr->Length());
   for (uint32_t i = 0; i < arr->Length(); i++)
   {
     l.append(toCpp<QVariant>(arr->Get(i)));
