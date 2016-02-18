@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -34,8 +34,6 @@ import hoot.services.db2.QUsers;
 import hoot.services.db2.Users;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.osm.User;
-import hoot.services.models.review.ReviewBookmarkSaveRequest;
-import hoot.services.models.review.ReviewBookmarksSaveResponse;
 import hoot.services.models.user.UserSaveResponse;
 import hoot.services.models.user.UsersGetResponse;
 import hoot.services.readers.users.UsersRetriever;
@@ -81,28 +79,13 @@ public class UserResource
   }
 
 	/**
-	 * <NAME>User Service </NAME>
-	 * <DESCRIPTION>
-	 * 	This is currently implemented as a dummy method to appease iD.
-	 *  It always retrieves information for the first user record in the services database.
-	 *  It cannot properly be implemented until user authentication is first implemented.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	information about the currently logged in user in XML format
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/user/details</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * information about the currently logged in user in XML format
-	 * </OUTPUT>
-	 * </EXAMPLE>
-	 *
    * Service method endpoint for retrieving OSM user information
+   * 
+   * This is currently implemented as a dummy method to appease iD.  It always retrieves 
+   * information for the first user record in the services database.  It cannot properly be 
+   * implemented until user authentication is first implemented.
+   * 
+   * GET hoot-services/osm/api/0.6/user/details
    *
    * @param userId ID of the user to retrieve information for
    * @return Response with the requested user's information
@@ -189,33 +172,11 @@ public class UserResource
         .build();
   }
   
-  
-	/**
-	 * <NAME>User Get Save Service </NAME>
-	 * <DESCRIPTION>
-	 * 	This rest end point retrieves user based on user email. If it does not exist then it creates first.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * <userEmail>
-	 *  User email to save/get
-	 * </userEmail>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON Object containin user detail
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/osm/user/-1?userEmail=test@test.com</URL>
-	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * {"user":{"displayName":"test@test.com","email":"test@test.com","id":29}}
-	 * </OUTPUT>
-	 * </EXAMPLE>
-	 *
-   * Service method endpoint for retrieving OSM user information
-   *
-   * @param userId ID of the user to retrieve information for
+  /**
+   * Service method endpoint for retrieving OSM user information.  This rest end point retrieves 
+   * user based on user email. If it does not exist then it creates first.
+   * 
+   * @param userEmail User email to save/get
    * @return Response with the requested user's information
    * @throws Exception
    */
@@ -249,29 +210,11 @@ public class UserResource
   
   
   /**
-	 * <NAME>Users get all service </NAME>
-	 * <DESCRIPTION>
-	 * 	This rest end point retrieves all users based on user email.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSONArray Object containin users detail
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/osm/user/-1/all</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * {"users":[{"displayName":"test@test.com","email":"test@test.com","id":29}, ..]}
-	 * </OUTPUT>
-	 * </EXAMPLE>
-	 *
-   * Service method endpoint for retrieving OSM user information
+   * This rest end point retrieves all users based on user email.
+   * 
+   * GET hoot-services/osm/user/1/all
    *
-   * @param userId ID of the user to retrieve information for
-   * @return Response with the requested user's information
+   * @return JSONArray Object containing users detail
    * @throws Exception
    */
   @GET

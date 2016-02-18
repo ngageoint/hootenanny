@@ -32,13 +32,10 @@ import hoot.services.db2.QCurrentRelationMembers;
 import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.review.ReviewQueryMapper;
-import hoot.services.models.review.ReviewableItem;
 import hoot.services.models.review.ReviewableItemBbox;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 

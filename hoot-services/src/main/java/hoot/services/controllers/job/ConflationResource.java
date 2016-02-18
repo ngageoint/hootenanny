@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
@@ -90,11 +90,17 @@ public class ConflationResource extends JobControllerBase {
 			log.error(ex.getMessage());
 		}
 	}
+
 	/**
-	 * <NAME>Conflate Service</NAME>
-	 * <DESCRIPTION>Conflate service operates like a standard ETL service. The conflate service specifies the input files, conflation type, match threshold, miss threshold, and output file name. The conflation type can be specified as the average of the two input datasets or based on a single input file that is intended to be the reference dataset. It has two fronts, WPS and standard rest end point.</DESCRIPTION>
-	 * <PARAMETERS>
-	 * <INPUT1_TYPE>
+	 * Conflate service operates like a standard ETL service. The conflate service specifies the 
+	 * input files, conflation type, match threshold, miss threshold, and output file name. The 
+	 * conflation type can be specified as the average of the two input datasets or based on a 
+	 * single input file that is intended to be the reference dataset. It has two fronts, WPS and 
+	 * standard rest end point.
+	 * 
+	 * POST hoot-services/ogc
+	 * 
+	 * @param params <INPUT1_TYPE>
 	 * 	Conflation input type [OSM] | [OGR] | [DB]
 	 * </INPUT1_TYPE>
 	 * <INPUT1>
@@ -133,20 +139,7 @@ public class ConflationResource extends JobControllerBase {
 	 * <ADV_OPTIONS>
 	 * Advanced options list for hoot-core command
 	 * </ADV_OPTIONS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	Job ID
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/ogc</URL>
-	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>
-         * </OUTPUT>
-	 * </EXAMPLE>
-	 * @param params
-	 * @return
+	 * @return Job ID
 	 */
 	@POST
 	@Path("/execute")

@@ -31,7 +31,7 @@
 #include <geos/geom/MultiLineString.h>
 
 // hoot
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
 // standard
@@ -52,7 +52,7 @@ using namespace std;
  * relevant during tile based operations because not all elements may be completely represented
  * within a tile.
  */
-class IsCompleteVisitor : public ElementVisitor, public OsmMapConsumer
+class IsCompleteVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
   static string className() { return "hoot::IsCompleteVisitor"; }

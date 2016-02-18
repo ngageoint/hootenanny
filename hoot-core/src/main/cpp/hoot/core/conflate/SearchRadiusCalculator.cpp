@@ -90,7 +90,6 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
   }
   if (mapWithOnlyUnknown1And2->getElementCount() == 0)
   {
-    //TODO: is this the right setting to use here?
     _result = _circularError;
     LOG_WARN(
       "Unable to automatically calculate search radius.  All features have already been " <<
@@ -119,7 +118,6 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
     }
     catch (const HootException& e)
     {
-      //TODO: is this the right setting to use here?
       _result = _circularError;
       LOG_WARN(
         QString("Unable to automatically calculate search radius: ") + e.getWhat() + QString("\n") +
@@ -145,7 +143,6 @@ void SearchRadiusCalculator::_calculateSearchRadius(const vector<double>& tiePoi
 {
   if (tiePointDistances.size() < 2)
   {
-    //TODO: is this the right setting to use here?
     _result = _circularError;
     LOG_WARN(
       QString("Unable to automatically calculate search radius.  Not enough tie points.") +

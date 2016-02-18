@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.services;
 
@@ -103,23 +103,11 @@ public class P2PResource extends ServerControllerBase
   }
 
   /**
-	 * <NAME>POI to POI Service Node Server Stop</NAME>
-	 * <DESCRIPTION>
-	 *  Destroys all POI to POI server process where it effectively shutting them down.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON containing state
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/services/p2pserver/stop</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>{"isRunning":"false"}</OUTPUT>
-	 * </EXAMPLE>
-   * @return
+   * Destroys all POI to POI server process where it effectively shutting them down.
+   * 
+   * GET hoot-services/services/p2pserver/stop
+   * 
+   * @return JSON containing state
    */
   @GET
   @Path("/p2pserver/stop")
@@ -147,26 +135,14 @@ public class P2PResource extends ServerControllerBase
 		res.put("isRunning", "false");
 		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
   }
-  
+   
   /**
-	 * <NAME>POI to POI Service Node Server status</NAME>
-	 * <DESCRIPTION>
-	 *  Gets current status of P2P server.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON containing state and port it is running
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/services/p2pserver/status</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * 	<INPUT>
-	 *	</INPUT>
-	 * <OUTPUT>{"isRunning":"true","port":"8096"}</OUTPUT>
-	 * </EXAMPLE>
-   * @return
-   */  
+   * Gets current status of P2P server.
+   * 
+   * GET hoot-services/services/p2pserver/status
+   * 
+   * @return JSON containing state and port it is running
+   */
   @GET
   @Path("/p2pserver/status")
   @Produces(MediaType.TEXT_PLAIN)

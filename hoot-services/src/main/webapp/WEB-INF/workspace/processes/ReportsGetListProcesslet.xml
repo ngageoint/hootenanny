@@ -8,17 +8,7 @@
 	<Identifier>ReportsGetList</Identifier>
 	<JavaClass>hoot.services.controllers.wps.ReportsGetListProcesslet</JavaClass>
   <Title>Reports get list service</Title>
-  <Abstract><![CDATA[
-  <DESCRIPTION>
-  Gets list of all available reports.
-  </DESCRIPTION>
-  <EXAMPLE>
-  <URL>http://localhost:8080/hoot-services/ogc</URL>
-  <REQUEST_TYPE>POST</REQUEST_TYPE>
-  <INPUT>WPS input</INPUT>
-   <OUTPUT>WPS output</OUTPUT>
-   </EXAMPLE>
-  ]]></Abstract>
+  <Abstract>Gets list of all available reports.</Abstract>
 	<!-- deegree doesn't honor optional input parameters for HTTP GET requests (only POSTs), so 
     don't make any of them optional; by default input params are required -->
 	

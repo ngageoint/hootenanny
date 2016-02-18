@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 // tgs
 #include <tgs/SharedPtr.h>
@@ -41,7 +41,7 @@ using namespace std;
 /**
  * Base class to ease OsmMapConsumer usage.
  */
-class ElementOsmMapVisitor : public ElementVisitor, public OsmMapConsumer
+class ElementOsmMapVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

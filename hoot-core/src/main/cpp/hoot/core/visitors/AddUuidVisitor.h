@@ -28,7 +28,7 @@
 #define ADDUUIDVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
@@ -39,7 +39,7 @@ using namespace std;
  * Adds a UUID with a specific key. If you want to limit the features that will be tagged then look
  * into FilteredVisitor.
  */
-class AddUuidVisitor : public ElementVisitor, public OsmMapConsumer
+class AddUuidVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

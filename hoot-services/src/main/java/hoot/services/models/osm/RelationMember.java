@@ -97,7 +97,6 @@ public class RelationMember
    * @param role the member's role
    * @param elementType the member's element type
    * @param relationId the owning relation ID
-   * @param mapId the owning map ID
    * @param dbConn JDBC Connection
    * @return a relation member database record
    * @throws Exception

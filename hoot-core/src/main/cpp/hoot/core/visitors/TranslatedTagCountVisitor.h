@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/schema/Schema.h>
@@ -41,7 +41,7 @@ namespace hoot
 class Feature;
 class ScriptToOgrTranslator;
 
-class TranslatedTagCountVisitor : public ElementVisitor, public OsmMapConsumer, public SingleStatistic
+class TranslatedTagCountVisitor : public ElementVisitor, public ConstOsmMapConsumer, public SingleStatistic
 {
 public:
   static string className() { return "hoot::TranslatedTagCountVisitor"; }

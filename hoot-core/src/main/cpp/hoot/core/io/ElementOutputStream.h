@@ -54,6 +54,7 @@ public:
    * @brief writeElement
    */
   virtual void writeElement(ElementInputStream& inputStream) = 0;
+  virtual void writeElement(ElementPtr& element) = 0;
 
   /**
    * Read elements from the input stream and write to the output stream. There may be a better place

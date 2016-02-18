@@ -74,33 +74,19 @@ public class ErrorLogResource {
 		}
 	}
 	
-	
-	 /**
-   * <NAME>Logging Debug Log Service</NAME>
-   * <DESCRIPTION>Service method endpoint for retrieving the Hootenanny tomcat log.</DESCRIPTION>
-   * <PARAMETERS></PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON containing debug log
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/info/logging/debuglog</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * <INPUT>None</INPUT>
-   * <OUTPUT>
- 	 * {
-   * "log": " Reprojecting 2000 / 22601 Reprojecting 3000 / 22601 ..."
-   * } 
-   * </OUTPUT>
-   * </EXAMPLE>
-   * 
-   */
+	/**
+	 * Service method endpoint for retrieving the Hootenanny tomcat log.
+	 * 
+	 * GET hoot-services/info/logging/debuglog
+	 * 
+	 * @return JSON containing debug log
+	 */
 	@GET
   @Path("/debuglog")
   @Produces(MediaType.TEXT_PLAIN)
   public Response getDebugLog()
 	{
 		String logStr = null;
-
 		try
 		{
 			ErrorLog logging = new ErrorLog();
@@ -119,23 +105,13 @@ public class ErrorLogResource {
 		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
 	}
 
-	 /**
-  * <NAME>Logging Export Service</NAME>
-  * <DESCRIPTION>Service method endpoint for exporting logging information.</DESCRIPTION>
-  * <PARAMETERS></PARAMETERS>
-	 * <OUTPUT>
-	 * 	Octet stream
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/info/logging/export</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * <INPUT>None</INPUT>
-  * <OUTPUT>
-	* 	Binary octet stream
-  * </OUTPUT>
-  * </EXAMPLE>
-  * 
-  */
+	/**
+	 * Service method endpoint for exporting logging information.
+	 * 
+	 * GET hoot-services/info/logging/export
+	 * 
+	 * @return Binary octet stream
+	 */
 	@GET
   @Path("/export")
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
@@ -143,7 +119,6 @@ public class ErrorLogResource {
 	{
 		ErrorLog logging = new ErrorLog();
 		File out = null;
-
 		try
 		{
 			String outputPath = logging.generateExportLog();

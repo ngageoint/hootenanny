@@ -46,8 +46,6 @@ namespace hoot
    populated are being populated.  Detailed testing of the accuracy of the values of the statistics
    should occur in separate filter and visitor test classes (that's why value comparisons are a
    little lax in precision here).
-
-   TODO: add tests for input files as well
  */
 class CalculateStatsOpTest : public CppUnit::TestFixture
 {
@@ -224,7 +222,7 @@ public:
       25331.2, calcStatsOp->getSingleStat("Meters Squared of Buildings"), 1e-1);
     CPPUNIT_ASSERT_EQUAL(13.0, calcStatsOp->getSingleStat("Building Unique Name Count"));
 
-    //TODO: fix; totals don't add up...
+    //fix; totals don't add up...
     CPPUNIT_ASSERT_EQUAL(29.0, calcStatsOp->getSingleStat("Total Feature Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Conflatable Features"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Unconflatable Features"));
@@ -270,7 +268,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Highways Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(22.22, calcStatsOp->getSingleStat("Percentage of Unmatched Highways"), 1e-1);
 
-    //TODO: fix; totals don't add up...
+    //fix; totals don't add up...
     CPPUNIT_ASSERT_EQUAL(12.0, calcStatsOp->getSingleStat("Building Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Buildings"));
     CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Conflated Buildings"));
@@ -312,7 +310,7 @@ private:
     reader.read(inputFile, map);
 
     shared_ptr<CalculateStatsOp> calcStatsOp(new CalculateStatsOp());
-    //TODO: If we figure out the error messages logged by the script translator related stats are
+    //If we figure out the error messages logged by the script translator related stats are
     //invalid and fix them, then this log disablement can be removed.
     {
       DisableLog dl(Log::Fatal);

@@ -182,9 +182,6 @@ inline void toCpp(v8::Handle<v8::Value> v, QVariantMap& m)
   }
 }
 
-/**
- * @todo This method is completely untested and prepared for Matt to bang his head against.
- */
 inline void toCpp(v8::Handle<v8::Value> v, QVariant& qv)
 {
   if (v.IsEmpty() || v->IsUndefined() || v->IsNull())

@@ -1,4 +1,4 @@
-#!/usr/bin/nodejs
+#!/usr/bin/env node
 /**
  * This little example loads a file, translates it and collects some simple
  * stats.

@@ -36,6 +36,7 @@ clean: Makefile.qmake services-clean
 	rm -rf hoot-core/tmp/debug/* hoot-core-test/tmp/debug/* hoot-hadoop/tmp/debug/* tbs/tmp/debug/* hoot-rnd/tmp/debug/*
 	rm -rf bin/*
 	rm -f plugins/config.js
+	rm -f translations/*.pyc
 	rm -f $(SCHEMA_FILES)
 	# The following bits are due to moving files in git. Since the Output.osm
 	# file is written to the test-files/cases/**/ directory git won't remove
@@ -48,7 +49,9 @@ clean: Makefile.qmake services-clean
 	rm -rf `find test-files/cases -type d -empty`
 	rm -rf `find test-files/cases -type d -empty`
 	cd docs; $(MAKE) clean
+ifeq ($(BUILD_SERVICES),services)
 	scripts/CleanOsmApiDB.sh
+endif
 
 clean-db: services-clean-db
 
@@ -188,7 +191,9 @@ plugins/etds61_osm_rules.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv
 
 # Build osmapi db
 osmapidb: conf/DatabaseConfig.sh
+ifeq ($(BUILD_SERVICES),services)
 	scripts/SetupOsmApiDB.sh
+endif
 
 # Build automatically generated JS files
 js-make: $(SCHEMA_FILES) plugins/config.js
@@ -253,13 +258,14 @@ rebuild-db:
 HOOT_TARNAME=hootenanny-$(HOOT_VERSION)
 dist: archive
 archive: default docs
-	if [ "$(BUILD_SERVICES)" == "services" ]; then cp hoot-services/target/hoot-services-*.war hootenanny-services-$(HOOT_VERSION).war; fi
+	if [ "$(BUILD_SERVICES)" == "services" ]; then cp hoot-services/target/hoot-services-*.war hootenanny-services-$(HOOT_VERSION).war; tar -cvzf docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz hoot-services/target/site/apidocs; fi
 	rm -f $(HOOT_TARNAME).tar.gz
 	scripts/git-archive-all.sh --prefix $(HOOT_TARNAME)/ $(HOOT_TARNAME).tar
 	mkdir -p $(HOOT_TARNAME)
 	cp Makefile.in aclocal.m4 configure config.h.in $(HOOT_TARNAME)
 	mkdir -p $(HOOT_TARNAME)/docs/
-	cp docs/*.pdf docs/*.html docs/*.text $(HOOT_TARNAME)/docs/
+	# Adding javadoc with a conditional so it is ignored if it doesn't exist.
+	cp docs/*.pdf docs/*.html docs/*.text `F=docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz; test -f $F && echo $F` $(HOOT_TARNAME)/docs/
 	# Copy the protocol buffer generated files. Eases a dependency when building
 	# on CentOS
 	mkdir -p $(HOOT_TARNAME)/hoot-core/src/main/cpp/hoot/core/proto/
@@ -272,8 +278,16 @@ archive: default docs
 	cp plugins/mgcp_schema.js $(HOOT_TARNAME)/plugins/mgcp_schema.js
 	cp plugins/etds_rules.js $(HOOT_TARNAME)/plugins/etds_rules.js
 	cp plugins/etds61_rules.js $(HOOT_TARNAME)/plugins/etds61_rules.js
+	# Copy the buildInfo.json file for hoot services
 	if [ "$(BUILD_SERVICES)" == "services" ]; then mkdir -p $(HOOT_TARNAME)/hoot-ui/data; cp hoot-ui/data/buildInfo.json $(HOOT_TARNAME)/hoot-ui/data; fi
+	# Include the RF files in the tarball so they don't have to be rebuilt
+	mkdir -p $(HOOT_TARNAME)/conf/
+	cp conf/BuildingModel.rf $(HOOT_TARNAME)/conf/BuildingModel.rf
+	cp conf/HighwayModel.rf $(HOOT_TARNAME)/conf/HighwayModel.rf
+	cp conf/PoiModel.rf $(HOOT_TARNAME)/conf/PoiModel.rf
+	# Create the version file
 	echo $(HOOT_VERSION) > $(HOOT_TARNAME)/version
+	# tar the file and zip it
 	tar rf $(HOOT_TARNAME).tar \
 	$(HOOT_TARNAME)/*
 	rm -rf $(HOOT_TARNAME)
@@ -283,7 +297,7 @@ LocalConfig.pri:
 	cp LocalConfig.pri.orig LocalConfig.pri
 
 Makefile.qmake: Hootenanny.pro Configure.pri LocalConfig.pri
-	qmake
+	qmake-qt4
 
 tmp/schema.dot: qt-make
 	HootTest --single hoot::OsmSchemaTest
@@ -325,6 +339,7 @@ conf/words.sqlite: conf/words1.sqlite
 # If you create a new words.sqlite please just increment the number rather than
 # replacing the old file. This way we can maintain the history.
 conf/words1.sqlite:
+	([ -e /tmp/words1.sqlite ] && test "`sha1sum /tmp/words1.sqlite`" == '4f7333e8e084927fafda3047183302407961b851  /tmp/words1.sqlite' && cp /tmp/words1.sqlite conf/) || \
 	wget -N -P conf/ https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/words1.sqlite || echo "Failure downloading words1.sqlite. Build will continue, but conflation accuracy may suffer."
 
 bin/HootEnv.sh: scripts/HootEnv.sh

@@ -127,6 +127,10 @@ public:
 
   virtual void writePartial(const boost::shared_ptr<const hoot::Relation>&);
 
+  virtual void writeElement(ElementPtr& element);
+
+  virtual void writeElement(ElementPtr& element, bool debug);
+
   virtual void writeElement(ElementInputStream& inputStream);
 
   virtual void writeElement(ElementInputStream& inputStream, bool debug);

@@ -64,26 +64,34 @@ if(cluster.isMaster){
 	http.createServer(
 
 		function(request, response){
+			try
+			{
+				// we sends request based on requested path
+				var subPath = url.parse(request.url).pathname; 
 
-			// we sends request based on requested path
-			var subPath = url.parse(request.url).pathname; 
-
-			if(subPath == '/osmtotds'){
-				osmtotds(request, response);
-			} else if(subPath == '/tdstoosm') {
-				tdstoosm(request, response);
-			} else if(subPath == '/taginfo/key/values') {
-				getTaginfoKeyFields(request, response);
-			} else if(subPath == '/taginfo/keys/all') {
-				getTaginfoKeys(request, response);
-			} else if(subPath == '/schema') {
-				getFilteredSchema(request, response);
-			} else if(subPath == '/capabilities') {
-				getCapabilities(request, response);
-			} else {
-				response.writeHead(404, {"Content-Type": "text/plain", 'Access-Control-Allow-Origin' : '*'});
-				response.write("404 Not Found\n");
-				response.end();
+				if(subPath == '/osmtotds'){
+					osmtotds(request, response);
+				} else if(subPath == '/tdstoosm') {
+					tdstoosm(request, response);
+				} else if(subPath == '/taginfo/key/values') {
+					getTaginfoKeyFields(request, response);
+				} else if(subPath == '/taginfo/keys/all') {
+					getTaginfoKeys(request, response);
+				} else if(subPath == '/schema') {
+					getFilteredSchema(request, response);
+				} else if(subPath == '/capabilities') {
+					getCapabilities(request, response);
+				} else {
+					response.writeHead(404, {"Content-Type": "text/plain", 'Access-Control-Allow-Origin' : '*'});
+					response.write("404 Not Found\n");
+					response.end();
+				}
+			} 
+			catch (err)
+			{
+					response.writeHead(500, {"Content-Type": "text/plain", 'Access-Control-Allow-Origin' : '*'});
+					response.write("500 Internal Error: " + err + "\n");
+					response.end();
 			}
 
 		}
@@ -105,6 +113,8 @@ var getCapabilities = function(request, response)
 var populateOsmToTdsmap = function()
 {
 	var hoot = require(HOOT_HOME + '/lib/HootJs');
+	logVerbose = hoot.logVerbose;
+	logWarn = hoot.logWarn;
 	if(!osmToTdsMap['TDSv40']) {
 		osmToTdsMap['TDSv40'] = new hoot.TranslationOp({
 									'translation.script':HOOT_HOME + '/translations/OSM_to_englishTDS.js',
@@ -180,6 +190,8 @@ var osmtotds = function(request, response)
 var populateTdsToOsmMap = function() 
 {
 	var hoot = require(HOOT_HOME + '/lib/HootJs');
+	logVerbose = hoot.logVerbose;
+	logWarn = hoot.logWarn;
 	if(!tdsToOsmMap['TDSv40'])
 	{
 		tdsToOsmMap['TDSv40'] = new hoot.TranslationOp({
@@ -220,7 +232,12 @@ var tdstoosm = function(request, response)
 		var params = url_parts.query;
 
 		var translation = params.translation;
-		
+
+		hoot = require(HOOT_HOME + '/lib/HootJs');
+		createUuid = hoot.UuidHelper.createUuid;
+		logVerbose = hoot.logVerbose;
+		logWarn = hoot.logWarn;
+
 		var translationsMap = {};
 		translationsMap['TDSv40'] = require(HOOT_HOME + '/plugins/etds_osm.js'); 
 		translationsMap['TDSv61'] = require(HOOT_HOME + '/plugins/etds61_osm.js');
@@ -266,7 +283,7 @@ var getTaginfoKeyFields = function(request, response)
 		var trns = params.translation;
 		
 		//Gets the translation schema for field population for a fcode
-		// TODO: In the future we should get this from caller
+		// TODO: In the future we should get this from caller		
 		var schemaMap = {};
 		schemaMap['TDSv40'] = require(HOOT_HOME + '/plugins/tds40_schema.js');
 		schemaMap['TDSv61'] = require(HOOT_HOME + '/plugins/tds61_schema.js');
@@ -413,6 +430,8 @@ var getTaginfoKeys = function(request, response)
 var postHandler = function(data, response, translatorMap)
 {
 	var hoot = require(HOOT_HOME + '/lib/HootJs');
+	logVerbose = hoot.logVerbose;
+	logWarn = hoot.logWarn;
 	
 	var msg = JSON.parse(data);
     var resArr = [];

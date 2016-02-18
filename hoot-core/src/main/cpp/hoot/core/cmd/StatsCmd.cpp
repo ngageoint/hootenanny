@@ -33,11 +33,12 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/io/MapStatsWriter.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
 
-class NameSizesVisitor : public ElementVisitor, public OsmMapConsumer
+class NameSizesVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 
 };

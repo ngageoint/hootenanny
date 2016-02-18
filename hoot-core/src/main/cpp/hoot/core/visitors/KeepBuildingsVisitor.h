@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
@@ -39,7 +39,7 @@ using namespace std;
  * Removes all ways and relations that are not part of a building.
  * @todo This could do bad things if the element is in use.
  */
-class KeepBuildingsVisitor : public ElementVisitor, public OsmMapConsumer
+class KeepBuildingsVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

@@ -90,10 +90,10 @@ import com.mysema.query.sql.dml.SQLUpdateClause;
  * ChangesetResourceTests in this class as possible into this class, but there is probably still
  * more code that could be refactored into here.
  *
- * @todo The verify individual element methods in this class could be used by the
+ * //TODO: The verify individual element methods in this class could be used by the
  * ChangesetUploadResource tests and reduce their amount of code dramatically.
  *
- * @todo This class should add a method that writes a second test map with some data to verify
+ * //TODO: This class should add a method that writes a second test map with some data to verify
  * we're not working with any data from the wrong map.
  */
 public class OsmTestUtils

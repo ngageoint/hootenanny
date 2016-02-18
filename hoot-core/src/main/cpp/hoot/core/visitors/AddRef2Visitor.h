@@ -29,13 +29,13 @@
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
 using namespace std;
 
-class AddRef2Visitor : public ElementVisitor, public OsmMapConsumer
+class AddRef2Visitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

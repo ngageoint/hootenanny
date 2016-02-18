@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
 #include "SingleStatistic.h"
@@ -41,7 +41,7 @@ namespace hoot
  * A visitor for counting element tags.  It distinguishes between metadata and information tags,
  * and both are included in the total count.  Debug tags are not included in the total count.
  */
-class TagCountVisitor : public ElementVisitor, public OsmMapConsumer, public SingleStatistic
+class TagCountVisitor : public ElementVisitor, public ConstOsmMapConsumer, public SingleStatistic
 {
 public:
   static string className() { return "hoot::TagCountVisitor"; }

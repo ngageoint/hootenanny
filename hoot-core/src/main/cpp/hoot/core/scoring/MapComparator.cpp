@@ -162,9 +162,6 @@ public:
       compareRelation(re, e);
       break;
     }
-
-
-
   }
 
   void compareNode(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e)

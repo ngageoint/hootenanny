@@ -86,7 +86,7 @@ public class ExportProcesslet  implements Processlet {
 	 */
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
+		
 		try
 		{
 			if(delPath != null)
@@ -109,7 +109,6 @@ public class ExportProcesslet  implements Processlet {
 	 */
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
 
 
 	}

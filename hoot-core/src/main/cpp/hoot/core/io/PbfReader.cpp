@@ -929,7 +929,7 @@ void PbfReader::parse(istream* strm, shared_ptr<OsmMap> map)
   }
 }
 
-//TODO: this needs to be integrated with the OsmMapReader/PartialOsmMapReader interface somehow
+/// @todo this needs to be integrated with the OsmMapReader/PartialOsmMapReader interface somehow
 void PbfReader::read(QString path, shared_ptr<OsmMap> map)
 {
   if (_status == Status::Invalid)
@@ -946,20 +946,19 @@ void PbfReader::read(QString path, shared_ptr<OsmMap> map)
     QFileInfoList files = d.entryInfoList(filter, QDir::Files, QDir::Name);
     for (int i = 0; i < files.size(); i++)
     {
-      readFile(files.at(i).filePath(), map);
+      _readFile(files.at(i).filePath(), map);
     }
   }
   else
   {
-    readFile(path, map);
+    _readFile(path, map);
   }
 
   ReportMissingElementsVisitor v(true);
   map->visitRw(v);
 }
 
-//TODO: this method can probably go away
-void PbfReader::readFile(QString path, shared_ptr<OsmMap> map)
+void PbfReader::_readFile(QString path, shared_ptr<OsmMap> map)
 {
   fstream input(path.toUtf8().constData(), ios::in | ios::binary);
 
@@ -985,7 +984,7 @@ void PbfReader::read(shared_ptr<OsmMap> map)
   map->visitRw(v);
 }
 
-//TODO: make the partial reader handle dir inputs?
+/// @todo make the partial reader handle dir inputs?
 bool PbfReader::isSupported(QString urlStr)
 {
   QFileInfo fileInfo(urlStr);

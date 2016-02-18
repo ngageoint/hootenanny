@@ -38,7 +38,7 @@ _candidateCount(0)
   {
     vector<MatchCreator::Description> matchCreatorDescriptions = _matchCreators[i]->getAllCreators();
     sort(matchCreatorDescriptions.begin(), matchCreatorDescriptions.end(), _matchDescriptorCompare);
-    //TODO: Grabbing the first element doesn't seem right here, but its behavior has been expected
+    // Grabbing the first element doesn't seem right here, but its behavior has been expected
     //so far.
     LOG_VARD(matchCreatorDescriptions.at(0).className);
      _matchCreatorDescriptions.append(

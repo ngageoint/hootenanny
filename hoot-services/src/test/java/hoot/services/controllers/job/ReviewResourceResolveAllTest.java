@@ -95,7 +95,7 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract
   	
     //all review relations should have the incremented changeset id
     sql = "select count(*) from current_relations_" + mapId;
-    //TODO: don't think this is right...
+    //don't think this is right...
   	sql += " where tags->'type' = 'review' and tags->'hoot:review:needs' = 'no' and " +
       "changeset_id = " + response.getChangesetId();
   	try
