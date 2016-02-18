@@ -41,16 +41,12 @@ build: build-info config
 	# If there isn't a local copy of the properties, copy the global version.
 	# [ -f src/main/resources/conf/hoot-services.conf ] || cp src/main/resources/conf/hoot-services.conf.orig src/main/resources/conf/hoot-services.conf
 	rm -rf ./src/main/java/hoot/services/db2
-ifneq ($(MVN_QUIET),)
-	../scripts/mvn-build $(MVN_QUIET) build 2> >( $(FILTER) >&2 )
-else
 	../scripts/mvn-build $(MVN_QUIET) build
-endif
 	
 	cp target/hoot-services-*.war ../bin
 
 
-clean: pom.xml src/main/resources/log4j.xml
+clean: pom.xml src/main/resources/log4j.xml config
 	../scripts/mvn-build $(MVN_QUIET) clean
 	rm -f pom.xml
 	rm -f src/main/resources/log4j.xml
@@ -60,7 +56,7 @@ clean-db: clean-db-force
 clean-db-force:
 	../scripts/DeleteAllTables.sh
 	rm -rf ./src/main/java/hoot/services/db2
-	
+
 test: config
 	rm -rf ./src/main/java/hoot/services/db2
 ifneq ($(MVN_QUIET),)

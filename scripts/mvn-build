@@ -193,15 +193,26 @@ else
 fi
 
 # The grep removes some silly messages that can't be removed.
-mvn $ARGS | grep -v -F "Groovy: [scmModified"$'\n'"execute contextualize" | grep -v "Outputting log4j snippets" || true
-# the greps below aren't removing the text, someone else please fix :-(
-mvn javadoc:javadoc \
-    | egrep -v 'Generating*' \
+mvn $ARGS 2>&1 \
+    | grep -v -F "Groovy: [scmModified"$'\n'"execute contextualize" \
+    | grep -v "Outputting log4j snippets" \
+    | grep -v -e 'SLF4J:.*' \
+    || true
+# Use the return value of mvn, not the last grep
+[ ${PIPESTATUS[0]} == "0" ] && true || false
+
+# Remove verbose javadoc messages
+# The SLF4J problem should probably be fixed at the source rather than filtered.
+# https://github.com/ngageoint/hootenanny/issues/348#issuecomment-185770582
+mvn javadoc:javadoc 2>&1 \
+    | grep -v -e 'Generating.*' \
     | grep -v -e '\[INFO\].*' \
     | grep -v -e 'Constructing Javadoc information.*' \
     | grep -v -e 'Standard Doclet version .*' \
     | grep -v -e 'Loading source files for package .*' \
     | grep -v -e 'Building [^ ]* for all .*' \
-|| true
-# mvn javadoc:javadoc > /dev/null # making this silent is confusing a lot of people if the javadoc breaks...so don't make it silent
-exit ${PIPESTATUS[0]}
+    | grep -v -e 'SLF4J:.*' \
+    || true
+# Use the return value of mvn, not the last grep
+[ ${PIPESTATUS[0]} == "0" ] && true || false
+
