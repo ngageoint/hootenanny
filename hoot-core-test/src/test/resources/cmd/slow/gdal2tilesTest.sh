@@ -35,17 +35,13 @@ unzip -q -d $OUTPUT_DIR $INPUT_DIR/good_tiles.zip
 OLDFILES=`ls -R $OUTPUT_DIR/good_tiles | wc -l`
 NEWFILES=`ls -R $OUTPUT_TILES | wc -l`
 
-if [ "$NEWFILES" != "$OLDFILES" ] ; then
-    echo "gdal2tiles.py may not have run correctly. Expecting" $OLDFILES "tiles. Got" $NEWFILES
-    #exit 1
-fi
-
+[ $NEWFILES != $OLDFILES ] && echo "gdal2tiles.py: Expecting" $OLDFILES "tiles. Got" $NEWFILES
 
 OLDSIZE=`du -c $OUTPUT_DIR/good_tiles | grep total  | awk '{print $1}'`
 NEWSIZE=`du -c $OUTPUT_TILES | grep total | awk '{print $1}'`
 
-if [ "$NEWFILES" != "$OLDFILES" ] ; then
-    echo "gdal2tiles.py may not have run correctly. Expecting" $OLDSIZE "tile size. Got" $NEWSIZE
-    exit 1
-fi
+[ $NEWSIZE -gt $(($OLDSIZE + 10)) ] && echo "gdal2tiles.py: Expecting a tile size of" $OLDSIZE". Got" $NEWSIZE
+
+[ $NEWSIZE -lt $(($OLDSIZE - 10)) ] && echo "gdal2tiles.py: Expecting a tile size of" $OLDSIZE". Got" $NEWSIZE
+
 
