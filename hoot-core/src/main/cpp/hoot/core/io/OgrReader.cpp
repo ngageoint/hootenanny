@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OgrReader.h"
@@ -1133,7 +1133,34 @@ void OgrReaderInternal::_translate(Tags& t)
 {
   if (_translator.get() != 0)
   {
-    _translator->translateToOsm(t, _layer->GetLayerDefn()->GetName());
+    QByteArray geomType;
+
+    switch (wkbFlatten(_layer->GetGeomType()))
+    {
+    case wkbPoint:
+    case wkbMultiPoint:
+      geomType = "Point";
+      break;
+
+    case wkbLineString:
+    case wkbMultiLineString:
+      geomType = "Line";
+      break;
+
+    case wkbPolygon:
+    case wkbMultiPolygon:
+      geomType = "Area";
+      break;
+
+    case wkbGeometryCollection:
+      geomType = "Collection";
+      break;
+
+    default:
+      throw HootException("Unsupported geometry type.");
+    }
+
+    _translator->translateToOsm(t, _layer->GetLayerDefn()->GetName(), geomType);
   }
   else
   {

@@ -22,10 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
+import hoot.services.db.DbUtils;
 import hoot.services.HootProperties;
 import hoot.services.utils.ResourceErrorHandler;
 
@@ -53,6 +54,7 @@ public class ConflationResource extends JobControllerBase {
 	protected static String _tileServerPath = null;
 	protected static String _homeFolder = null;
 	protected static String _confAdvOptsScript = null;
+	protected static String _rptStorePath = null;
 
 	public ConflationResource()
 	{
@@ -67,17 +69,21 @@ public class ConflationResource extends JobControllerBase {
 			{
 				_tileServerPath = HootProperties.getProperty("tileServerPath");
 			}
-			
+
 			if(_homeFolder == null)
 			{
 				_homeFolder = HootProperties.getProperty("homeFolder");
 			}
-			
+
 			if(_confAdvOptsScript == null)
 			{
 				_confAdvOptsScript = HootProperties.getProperty("confAdvOptsScript");
 			}
 
+			if (_rptStorePath ==  null)
+			{
+				_rptStorePath = HootProperties.getProperty("reportDataPath");
+			}
 		}
 		catch (Exception ex)
 		{
@@ -112,6 +118,9 @@ public class ConflationResource extends JobControllerBase {
 	 * <AUTO_TUNNING>
 	 * 	Not used. Always false
 	 * </AUTO_TUNNING>
+	 * <COLLECT_STATS>
+	 * 	true to collect conflation statistics
+	 * </COLLECT_STATS>
 	 * <GENERATE_REPORT>
 	 * 	true to generate conflation report
 	 * </GENERATE_REPORT>
@@ -119,7 +128,7 @@ public class ConflationResource extends JobControllerBase {
 	 * 	Time stamp used in generated report if GENERATE_REPORT is true
 	 * </TIME_STAMP>
 	 * <USER_EMAIL>
-	 * 	Email address of the user requesting the conflation job. 
+	 * 	Email address of the user requesting the conflation job.
 	 * </USER_EMAIL>
 	 * <ADV_OPTIONS>
 	 * Advanced options list for hoot-core command
@@ -178,19 +187,32 @@ public class ConflationResource extends JobControllerBase {
 
 				}
 			}
-			
-			
-			
-			
+
+
+
+
 
 			JSONArray commandArgs = parseParams(oParams.toJSONString());
 			JSONObject conflationCommand = _createMakeScriptJobReq(commandArgs);
-			
+
 			// add map tags
 			// WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
 			Map<String, String> tags = new HashMap<String, String>();
 			tags.put("input1", input1Name);
 			tags.put("input2", input2Name);
+			//System.out.println(params);
+			//Need to reformat the list of hoot command options to json properties
+			tags.put("params", DbUtils.escapeJson(params));
+			//Hack alert!
+			//Write stats file name to tags, if the file exists
+			//when this updateMapsTagsCommand job is run, the
+			//file will be read and its contents placed in the
+			//stats tag.
+			if (oParams.get("COLLECT_STATS") != null && oParams.get("COLLECT_STATS").toString().equalsIgnoreCase("true")) {
+				String statsName = _homeFolder + "/" + _rptStorePath + "/" + confOutputName + "-stats.csv";
+				tags.put("stats", statsName);
+			}
+
 			JSONArray mapTagsArgs = new JSONArray();
 			JSONObject param = new JSONObject();
 			param.put("value", tags);
@@ -217,7 +239,7 @@ public class ConflationResource extends JobControllerBase {
 			rasterTilesparam.put("paramtype", String.class.getName());
 			rasterTilesparam.put("isprimitivetype", "false");
 			rasterTilesArgs.add(rasterTilesparam);
-			
+
 			rasterTilesparam = new JSONObject();
 			rasterTilesparam.put("value", userEmail);
 			rasterTilesparam.put("paramtype", String.class.getName());
@@ -251,5 +273,5 @@ public class ConflationResource extends JobControllerBase {
 		return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
 	}
 
-	
+
 }

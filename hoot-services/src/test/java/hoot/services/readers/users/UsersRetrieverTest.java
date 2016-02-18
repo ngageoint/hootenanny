@@ -22,45 +22,29 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
+package hoot.services.readers.users;
 
-#ifndef JSONSCHEMALOADER_H
-#define JSONSCHEMALOADER_H
+import java.sql.Connection;
 
-// Standard
-#include <set>
+import hoot.services.UnitTest;
 
-#include "OsmSchema.h"
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
-namespace hoot
-{
-  class JsonSchemaLoaderData;
-
-/**
- * Loads the specified schema into OsmSchema. This is broken out to isolate the JSON code from the
- * boost includes. The two do not play nicely together.
- */
-class JsonSchemaLoader
-{
-public:
-  JsonSchemaLoader(OsmSchema& schema);
-
-  virtual ~JsonSchemaLoader();
-
-  void load(QString path);
-
-  /**
-   * Returns a list of the absolute paths of files that are loaded into this schema. If "import"
-   * statements are used in the json file then all imported files are included in the dependency
-   * list.
-   */
-  set<QString> getDependencies();
-
-private:
-  JsonSchemaLoaderData* _d;
-};
-
+public class UsersRetrieverTest {
+	@Test
+  @Category(UnitTest.class)
+	public void testRetrieveAll() throws Exception
+	{
+		Connection conn = null;
+		UsersRetriever r = new UsersRetriever(conn);
+		String actual = r._getAllQuery().toString();
+		
+		String expected = "from \"users\" \"users\"\n" + 
+				"order by \"users\".\"display_name\" asc";
+		
+		org.junit.Assert.assertEquals(expected, actual);
+	}
 }
-
-#endif // JSONSCHEMALOADER_H

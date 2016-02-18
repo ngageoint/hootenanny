@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCRIPTTRANSLATOR_H
 #define SCRIPTTRANSLATOR_H
@@ -96,7 +96,7 @@ public:
    * Translates the specified tags. The result is placed back into the original tag set. The script
    * will be initialized if necessary.
    */
-  void translateToOsm(Tags& tags, const char *layerName);
+  void translateToOsm(Tags& tags, const char *layerName, const char* geomType);
 
 protected:
   bool _initialized;
@@ -130,7 +130,7 @@ protected:
   /**
    * Wrapped by translateToOsm().
    */
-  virtual void _translateToOsm(Tags& tags, const char *layerName) = 0;
+  virtual void _translateToOsm(Tags& tags, const char *layerName, const char* geomType) = 0;
 };
 
 }

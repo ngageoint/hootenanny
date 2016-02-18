@@ -30,18 +30,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class ReviewBookmarkDelRequest {
-	private long mapId;
-	public long getMapId() { return mapId; }
-  public void setMapId(final long id) { this.mapId = id; }
+	private long bookmarkId;
+	public long getBookmarkId() { return bookmarkId; }
+  public void setBookmarkId(final long id) { this.bookmarkId = id; }
   
-  private long relationId;
-  public long getRelationId() { return this.relationId;}
-  public void setRelationId(final long relId) {this.relationId = relId;}
   
-  public ReviewBookmarkDelRequest(final long mpId, final long relId)
+  
+  public ReviewBookmarkDelRequest(final long bmkId)
   {
-  	this.mapId = mpId;
-  	this.relationId = relId;
+  	this.bookmarkId = bmkId;
   }
   
   public ReviewBookmarkDelRequest()

@@ -542,7 +542,7 @@ mgcp.rules = {
         ['HWT','3','building','chapel'],
         ['HWT','4','building','church'],
         ['HWT','5','building','marabout'],
-        ['HWT','6','building','minaret'],
+        ['HWT','6','tower:type','minaret'], // Fixed in pre/post processing
         ['HWT','7','building','religious_community'],
         ['HWT','9','building','mosque'],
         ['HWT','11','building','pagoda'],
@@ -2327,6 +2327,14 @@ mgcp.rules = {
       ], // End one2oneOut
 
     // ##### End of One2One Rules #####
+    // ##### Start of txtLength #####
+    // This list is for validateing the lengths of text attributes prior to export
+    txtLength : {
+        'CCN':254, 'F_CODE':5, 'IKO':255, 'NA2':80, 'NAM':80, 'NFI':18, 'NFN':18, 'SDP':254, 'SDV':20,
+        'TEXT':254, 'TXT':254, 'UID':36, 'VOI':11
+    },
+    // ##### End of txtLength #####
+
 
 } // End of mgcp.rules
 

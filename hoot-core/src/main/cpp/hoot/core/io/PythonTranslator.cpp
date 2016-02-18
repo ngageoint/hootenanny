@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Python
@@ -143,9 +143,10 @@ void PythonTranslator::_finalize()
   Py_Finalize();
 }
 
-void PythonTranslator::_translateToOsm(Tags& tags, const char* layerName)
+void PythonTranslator::_translateToOsm(Tags& tags, const char* layerName, const char* geomType)
 {
   PyObject* layerNamePy = PyString_FromString(layerName);
+  PyObject* geomTypePy = PyString_FromString(geomType);
   PyObject* attrs = PyDict_New();
 
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); it++)
@@ -159,9 +160,10 @@ void PythonTranslator::_translateToOsm(Tags& tags, const char* layerName)
     Py_DECREF(value);
   }
 
-  PyObject* args = PyTuple_New(2);
+  PyObject* args = PyTuple_New(3);
   PyTuple_SetItem(args, 0, attrs);
   PyTuple_SetItem(args, 1, layerNamePy);
+  PyTuple_SetItem(args, 2, geomTypePy);
 
   PyObject* pyResult = PyObject_CallObject((PyObject*)_translateFunction, args);
 

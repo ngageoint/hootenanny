@@ -136,6 +136,8 @@ QString Log::getLevelString(WarningLevel l)
     return "NONE";
   case Debug:
     return "DEBUG";
+  case Verbose:
+    return "VERBOSE";
   case Info:
     return "INFO";
   case Warn:

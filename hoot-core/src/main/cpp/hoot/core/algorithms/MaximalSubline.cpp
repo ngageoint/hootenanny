@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MaximalSubline.h"
 
@@ -39,9 +39,6 @@
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
-
-// OpenCV
-#include <opencv/cv.h>
 
 namespace hoot
 {
@@ -573,99 +570,37 @@ bool lessThan(const WaySublineMatch& ws1, const WaySublineMatch& ws2)
   return ws1.getSubline1().getStart() < ws2.getSubline1().getStart();
 }
 
-/// @todo this is in desperate need of a rewrite by someone with more rest than myself. -JRS
-vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr& map,
-  const ConstWayPtr& w1, const ConstWayPtr& w2, vector<WaySublineMatch>& rawSublineMatches)
+bool MaximalSubline::_checkForSortedSecondSubline(const vector<WaySublineMatch>& rawSublineMatches) const
 {
-  // this only works if the rawSublineMatches are in order. We order by subline1
-  sort(rawSublineMatches.begin(), rawSublineMatches.end(), lessThan);
-
-  // make sure that ordering by subline1 results in sorted subline2s. If this isn't the case then
-  // there isn't much we can do.
   for (size_t i = 2; i < rawSublineMatches.size(); i++)
   {
     if (rawSublineMatches[i].getSubline2().getStart() >
-      rawSublineMatches[i - 1].getSubline2().getStart())
+        rawSublineMatches[i - 1].getSubline2().getStart())
     {
-      LOG_WARN("Way matches sublines out of order. This is unusual and may give a sub-optimal "
-        "result.");
-      return rawSublineMatches;
+      return false;
     }
   }
+  return true;
+}
 
+bool MaximalSubline::_rawSublinesTooSmall(const vector<WaySublineMatch>& rawSublineMatches) const
+{
   for (size_t i = 0; i < rawSublineMatches.size(); i++)
   {
-    // if any of the raw sublines are crazy small, then don't try to snap the intersections.
+
     if (rawSublineMatches[i].getSubline1().getLength() < _spacing * 2 ||
         rawSublineMatches[i].getSubline2().getLength() < _spacing * 2)
     {
-      return rawSublineMatches;
+      return true;
     }
   }
+  return false;
+}
 
-  ////
-  // calculate a series of point pair matches along the lines.
-  ////
-
-  // discretize the first line into a series of points.
-  vector< pair<WayLocation, WayLocation> > pairs;
-  pairs = _discretizePointPairs(map, w1, w2, rawSublineMatches);
-  assert(pairs.size() > 0);
-  //LOG_DEBUG_VAR(pairs);
-
-  // extract features on the point pairs and populate a matrix.
-  Meters acc = w1->getCircularError() + w2->getCircularError();
-
-  cv::Mat m(pairs.size(), 2, CV_64F);
-
-  size_t currentSubline = 0;
-
-  vector<int> starts(rawSublineMatches.size(), numeric_limits<int>::max());
-  vector<int> ends(rawSublineMatches.size(), 0);
-
-  for (size_t i = 0; i < pairs.size(); i++)
-  {
-    WayLocation& wl1 = pairs[i].first;
-    WayLocation& wl2 = pairs[i].second;
-    // If the rawSublineMatches is smaller than _spacing, then it may not directly overlap with
-    // one of the point pairs. To avoid this, we create a subline that surrounds the point pair
-    // and will guarantee that each rawSublineMatches will touch at least one point pair.
-    WaySubline ws1 = WaySubline(wl1.move(-_spacing / 2.0), wl1.move(_spacing / 2.0));
-    WaySubline ws2 = WaySubline(wl2.move(-_spacing / 2.0), wl2.move(_spacing / 2.0));
-
-    if (currentSubline < rawSublineMatches.size())
-    {
-      // figure out the first and last match for this subline.
-      if (rawSublineMatches[currentSubline].getSubline1().touches(ws1) ||
-          rawSublineMatches[currentSubline].getSubline2().touches(ws2))
-      {
-        starts[currentSubline] = min<int>(starts[currentSubline], i);
-        ends[currentSubline] = max<int>(ends[currentSubline], i);
-      }
-      else
-      {
-        // if this is past the current subline, advance to the right subline.
-        while (currentSubline < rawSublineMatches.size() &&
-               rawSublineMatches[currentSubline].getSubline1().getEnd() < ws1.getStart() &&
-               rawSublineMatches[currentSubline].getSubline2().getEnd() < ws2.getStart())
-        {
-          currentSubline++;
-        }
-      }
-    }
-
-    Meters distance = wl1.getCoordinate().distance(wl2.getCoordinate());
-    Radians angle1 = WayHeading::calculateHeading(wl1);
-    Radians angle2 = WayHeading::calculateHeading(wl2);
-    Radians angleDiff = WayHeading::deltaMagnitude(angle1, angle2);
-
-    m.at<double>(i, 0) = distance / acc;
-    m.at<double>(i, 1) = angleDiff;
-  }
-
-  //LOG_DEBUG("starts: " << starts);
-  //LOG_DEBUG("ends: " << ends);
-
+cv::Mat MaximalSubline::_createConstraintMatrix(const vector<int>& starts, const vector<int>& ends,
+                                                const vector< pair<WayLocation, WayLocation> >& pairs,
+                                                vector<int>& matchIndexes)
+{
   // create the matrix of constraints.
   vector<int> finalStarts;
   vector<int> finalEnds;
@@ -676,18 +611,13 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
     finalEnds.push_back(starts[0] + (ends[0] - starts[0]) / 3);
   }
 
-  // this maps finalStarts indexes to the rawSublineMatches indexes. E.g.
-  // rawSublineMatches[i] maps to finalStarts[matchIndexes[i]]
-  vector<int> matchIndexes(starts.size());
-
   for (size_t i = 0; i < starts.size(); i++)
   {
     if (starts[i] == numeric_limits<int>::max())
     {
       // Due to poor subline pair matching we cannot properly snap these intersections. Warn the
       // user and move on. It is likely they aren't a good match anyways.
-      LOG_WARN("A solid set of point pair matches could not be found.");
-      return rawSublineMatches;
+      throw HootException("A solid set of point pair matches could not be found.");
     }
     matchIndexes[i] = finalStarts.size();
     finalStarts.push_back(starts[i]);
@@ -717,6 +647,204 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
     ranges.at<int>(i, 1) = finalEnds[i];
   }
 
+  return ranges;
+}
+
+void MaximalSubline::_calculateSnapStarts(const WaySublineMatch& rawSublineMatch,
+                                          const int matchIndex, const vector<double>& splits,
+                                          const vector< pair<WayLocation, WayLocation> >& pairs,
+                                          const ConstOsmMapPtr& map, const ConstWayPtr& w1,
+                                          const ConstWayPtr& w2, WayLocation& w1Start,
+                                          WayLocation& w2Start)
+{
+  // if this is the first subline, then it starts at the beginning of the subline.
+  if (matchIndex == 0)
+  {
+    w1Start = WayLocation(rawSublineMatch.getSubline1().getStart());
+    w2Start = WayLocation(rawSublineMatch.getSubline2().getStart());
+  }
+  else
+  {
+    int wi = (int)splits[matchIndex - 1];
+    //LOG_DEBUG("start split: " << wi);
+    double r = splits[matchIndex - 1] - wi;
+    Meters offset1 =
+      pairs[wi].first.calculateDistanceOnWay() * r +
+      pairs[wi + 1].first.calculateDistanceOnWay() * (1 - r);
+    Meters offset2 =
+      pairs[wi].second.calculateDistanceOnWay() * r +
+      pairs[wi + 1].second.calculateDistanceOnWay() * (1 - r);
+
+    //LOG_DEBUG("offset1: " << offset1 << " r: " << r);
+    //LOG_DEBUG("offset2: " << offset2 << " r: " << r);
+    w1Start = WayLocation(map, w1, offset1);
+    w2Start = WayLocation(map, w2, offset2);
+  }
+
+  //LOG_DEBUG_VAR(w1Start);
+  //LOG_DEBUG_VAR(w2Start);
+
+  // if we are passed the point where we have a node pairing, then snap it back to a legit pair.
+  if (w1Start < pairs.front().first.move(-_spacing))
+  {
+    w1Start = pairs.front().first;
+  }
+  if (w2Start < pairs.front().second.move(-_spacing))
+  {
+    w2Start = pairs.front().second;
+  }
+
+  //LOG_DEBUG_VAR(w1Start);
+  //LOG_DEBUG_VAR(w2Start);
+}
+
+void MaximalSubline::_calculateSnapEnds(const int matchIndex, const vector<double>& splits,
+                                        const vector< pair<WayLocation, WayLocation> >& pairs,
+                                        const ConstOsmMapPtr& map, const ConstWayPtr& w1,
+                                        const ConstWayPtr& w2, WayLocation& w1End,
+                                        WayLocation& w2End)
+{
+  // convert the end split location into a WayLocation
+  if (matchIndex < (int)splits.size())
+  {
+    int wi = (int)splits[matchIndex];
+    //LOG_DEBUG("end split: " << wi << " matchIndexes[" << i << "]: " << mi);
+    double r = splits[matchIndex] - wi;
+    Meters offset1 =
+      pairs[wi].first.calculateDistanceOnWay() * r +
+      pairs[wi + 1].first.calculateDistanceOnWay() * (1 - r);
+    Meters offset2 =
+      pairs[wi].second.calculateDistanceOnWay() * r +
+      pairs[wi + 1].second.calculateDistanceOnWay() * (1 - r);
+
+    w1End = WayLocation(map, w1, offset1);
+    w2End = WayLocation(map, w2, offset2);
+
+    //LOG_DEBUG("offset1: " << offset1 << " r: " << r);
+    //LOG_DEBUG("offset2: " << offset2 << " r: " << r);
+  }
+
+  // if we are passed the point where we have a node pairing, then snap it back to a legit pair.
+  //LOG_DEBUG_VAR(w1End);
+  //LOG_DEBUG_VAR(pairs.back().first.move(_spacing));
+  if (w1End > pairs.back().first.move(_spacing))
+  {
+    w1End = pairs.back().first;
+  }
+  if (w2End > pairs.back().second.move(_spacing))
+  {
+    w2End = pairs.back().second;
+  }
+  //LOG_DEBUG("w1End: " << w1End.toString());
+  //LOG_DEBUG("w2End: " << w2End.toString());
+}
+
+void MaximalSubline::_calculatePointPairMatches(const double way1CircularError,
+                                                const double way2CircularError,
+                                                const vector<WaySublineMatch>& rawSublineMatches,
+                                                const vector< pair<WayLocation, WayLocation> >& pairs,
+                                                cv::Mat& m, vector<int>& starts, vector<int>& ends)
+{
+    // extract features on the point pairs and populate a matrix.
+    Meters acc = way1CircularError + way2CircularError;
+
+    size_t currentSubline = 0;
+
+    for (size_t i = 0; i < pairs.size(); i++)
+    {
+      WayLocation wl1 = pairs[i].first;
+      WayLocation wl2 = pairs[i].second;
+      // If the rawSublineMatches is smaller than _spacing, then it may not directly overlap with
+      // one of the point pairs. To avoid this, we create a subline that surrounds the point pair
+      // and will guarantee that each rawSublineMatches will touch at least one point pair.
+      WaySubline ws1 = WaySubline(wl1.move(-_spacing / 2.0), wl1.move(_spacing / 2.0));
+      WaySubline ws2 = WaySubline(wl2.move(-_spacing / 2.0), wl2.move(_spacing / 2.0));
+
+      if (currentSubline < rawSublineMatches.size())
+      {
+        // figure out the first and last match for this subline.
+        if (rawSublineMatches[currentSubline].getSubline1().touches(ws1) ||
+            rawSublineMatches[currentSubline].getSubline2().touches(ws2))
+        {
+          starts[currentSubline] = min<int>(starts[currentSubline], i);
+          ends[currentSubline] = max<int>(ends[currentSubline], i);
+        }
+        else
+        {
+          // if this is past the current subline, advance to the right subline.
+          while (currentSubline < rawSublineMatches.size() &&
+                 rawSublineMatches[currentSubline].getSubline1().getEnd() < ws1.getStart() &&
+                 rawSublineMatches[currentSubline].getSubline2().getEnd() < ws2.getStart())
+          {
+            currentSubline++;
+          }
+        }
+      }
+
+      Meters distance = wl1.getCoordinate().distance(wl2.getCoordinate());
+      Radians angle1 = WayHeading::calculateHeading(wl1);
+      Radians angle2 = WayHeading::calculateHeading(wl2);
+      Radians angleDiff = WayHeading::deltaMagnitude(angle1, angle2);
+
+      m.at<double>(i, 0) = distance / acc;
+      m.at<double>(i, 1) = angleDiff;
+    }
+
+    //LOG_DEBUG("starts: " << starts);
+    //LOG_DEBUG("ends: " << ends);
+}
+
+vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr& map,
+  const ConstWayPtr& w1, const ConstWayPtr& w2, vector<WaySublineMatch>& rawSublineMatches)
+{
+  // this only works if the rawSublineMatches are in order. We order by subline1
+  sort(rawSublineMatches.begin(), rawSublineMatches.end(), lessThan);
+
+  // make sure that ordering by subline1 results in sorted subline2s. If this isn't the case then
+  // there isn't much we can do.
+  if (!_checkForSortedSecondSubline(rawSublineMatches))
+  {
+    LOG_WARN("Way matches sublines out of order. This is unusual and may give a sub-optimal "
+      "result.");
+    return rawSublineMatches;
+  }
+
+  // if any of the raw sublines are crazy small, then don't try to snap the intersections.
+  if (_rawSublinesTooSmall(rawSublineMatches))
+  {
+    return rawSublineMatches;
+  }
+
+  ////
+  // calculate a series of point pair matches along the lines.
+  ////
+
+  // discretize the first line into a series of points.
+  vector< pair<WayLocation, WayLocation> > pairs;
+  pairs = _discretizePointPairs(map, w1, w2, rawSublineMatches);
+  assert(pairs.size() > 0);
+  //LOG_DEBUG_VAR(pairs);
+
+  vector<int> starts(rawSublineMatches.size(), numeric_limits<int>::max());
+  vector<int> ends(rawSublineMatches.size(), 0);
+  cv::Mat m(pairs.size(), 2, CV_64F);
+  _calculatePointPairMatches(
+    w1->getCircularError(), w2->getCircularError(), rawSublineMatches, pairs, m, starts, ends);
+
+  // this maps finalStarts indexes to the rawSublineMatches indexes. E.g.
+  // rawSublineMatches[i] maps to finalStarts[matchIndexes[i]]
+  vector<int> matchIndexes(starts.size());
+  cv::Mat ranges;
+  try
+  {
+    ranges = _createConstraintMatrix(starts, ends, pairs, matchIndexes);
+  }
+  catch (const HootException& e)
+  {
+    LOG_WARN(e.getWhat());
+    return rawSublineMatches;
+  }
+
   // run ExpectationIntersection to determine new intersection points.
   ExpectationIntersection ei;
   vector<double> splits = ei.snapMatches(m, ranges);
@@ -727,85 +855,17 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
 
   for (size_t i = 0; i < matchIndexes.size(); i++)
   {
-    size_t mi = matchIndexes[i];
-    WayLocation w1Start;
-    WayLocation w2Start;
-
     //LOG_DEBUG(rawSublineMatches[i]);
 
-    // if this is the first subline, then it starts at the beginning of the subline.
-    if (matchIndexes[i] == 0)
-    {
-      w1Start = WayLocation(rawSublineMatches[i].getSubline1().getStart());
-      w2Start = WayLocation(rawSublineMatches[i].getSubline2().getStart());
-    }
-    else
-    {
-      int wi = (int)splits[mi - 1];
-      //LOG_DEBUG("start split: " << wi);
-      double r = splits[mi - 1] - wi;
-      Meters offset1 = pairs[wi].first.calculateDistanceOnWay() * r +
-          pairs[wi + 1].first.calculateDistanceOnWay() * (1 - r);
-      Meters offset2 = pairs[wi].second.calculateDistanceOnWay() * r +
-          pairs[wi + 1].second.calculateDistanceOnWay() * (1 - r);
+    const int mi = matchIndexes[i];
 
-      //LOG_DEBUG("offset1: " << offset1 << " r: " << r);
-      //LOG_DEBUG("offset2: " << offset2 << " r: " << r);
-      w1Start = WayLocation(map, w1, offset1);
-      w2Start = WayLocation(map, w2, offset2);
-
-    }
-
-    //LOG_DEBUG_VAR(w1Start);
-    //LOG_DEBUG_VAR(w2Start);
-
-    // if we are passed the point where we have a node pairing, then snap it back to a legit pair.
-    if (w1Start < pairs.front().first.move(-_spacing))
-    {
-      w1Start = pairs.front().first;
-    }
-    if (w2Start < pairs.front().second.move(-_spacing))
-    {
-      w2Start = pairs.front().second;
-    }
-
-    //LOG_DEBUG_VAR(w1Start);
-    //LOG_DEBUG_VAR(w2Start);
+    WayLocation w1Start;
+    WayLocation w2Start;
+    _calculateSnapStarts(rawSublineMatches[i], mi, splits, pairs, map, w1, w2, w1Start, w2Start);
 
     WayLocation w1End(rawSublineMatches[i].getSubline1().getEnd());
     WayLocation w2End(rawSublineMatches[i].getSubline2().getEnd());
-
-    // convert the end split location into a WayLocation
-    if (matchIndexes[i] < (int)splits.size())
-    {
-      int wi = (int)splits[mi];
-      //LOG_DEBUG("end split: " << wi << " matchIndexes[" << i << "]: " << mi);
-      double r = splits[mi] - wi;
-      Meters offset1 = pairs[wi].first.calculateDistanceOnWay() * r +
-          pairs[wi + 1].first.calculateDistanceOnWay() * (1 - r);
-      Meters offset2 = pairs[wi].second.calculateDistanceOnWay() * r +
-          pairs[wi + 1].second.calculateDistanceOnWay() * (1 - r);
-
-      w1End = WayLocation(map, w1, offset1);
-      w2End = WayLocation(map, w2, offset2);
-
-      //LOG_DEBUG("offset1: " << offset1 << " r: " << r);
-      //LOG_DEBUG("offset2: " << offset2 << " r: " << r);
-    }
-
-    // if we are passed the point where we have a node pairing, then snap it back to a legit pair.
-    //LOG_DEBUG_VAR(w1End);
-    //LOG_DEBUG_VAR(pairs.back().first.move(_spacing));
-    if (w1End > pairs.back().first.move(_spacing))
-    {
-      w1End = pairs.back().first;
-    }
-    if (w2End > pairs.back().second.move(_spacing))
-    {
-      w2End = pairs.back().second;
-    }
-    //LOG_DEBUG("w1End: " << w1End.toString());
-    //LOG_DEBUG("w2End: " << w2End.toString());
+    _calculateSnapEnds(mi, splits, pairs, map, w1, w2, w1End, w2End);
 
     WaySubline ws1Expanded = rawSublineMatches[i].getSubline1().expand(
           max(_minSplitSize, _spacing));

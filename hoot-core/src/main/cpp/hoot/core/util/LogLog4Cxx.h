@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LOGLOG4CXX_H
@@ -48,6 +48,7 @@ log4cxx::LevelPtr toLog4CxxLevel(Log::WarningLevel l);
   }}
 
 #define LOG_DEBUG(str) { LOG_LEVEL(hoot::Log::Debug, str) }
+#define LOG_VERBOSE(str) { LOG_LEVEL(hoot::Log::Verbose, str) }
 #define LOG_INFO(str) { LOG_LEVEL(hoot::Log::Info, str) }
 #define LOG_WARN(str) { LOG_LEVEL(hoot::Log::Warn, str) }
 #define LOG_ERROR(str) { LOG_LEVEL(hoot::Log::Error, str) }

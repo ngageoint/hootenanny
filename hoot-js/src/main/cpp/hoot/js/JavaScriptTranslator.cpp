@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "JavaScriptTranslator.h"
@@ -904,7 +904,7 @@ QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
   return result;
 }
 
-void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName)
+void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName, const char* geomType)
 {
   _tags = &t;
 
@@ -917,16 +917,19 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName)
     tags->Set(toV8(it.key()), toV8(it.value()));
   }
 
-  Handle<Value> args[2];
+  Handle<Value> args[3];
   args[0] = tags;
   args[1] = toV8(layerName);
+  args[2] = toV8(geomType);
 
   Handle<Object> tObj = _gContext->getContext()->Global();
 
   // This has a variable since we don't know if it will be "translateToOsm" or "translateAttributes"
   Handle<v8::Function> tFunc = Handle<v8::Function>::Cast(tObj->Get(toV8(_toOsmFunctionName)));
   TryCatch trycatch;
-  Handle<Value> newTags = tFunc->Call(tObj, 2, args);
+
+  // NOTE: the "3" here is the number of arguments
+  Handle<Value> newTags = tFunc->Call(tObj, 3, args);
   HootExceptionJs::checkV8Exception(newTags, trycatch);
 
   double start = 0.00; // to stop warnings

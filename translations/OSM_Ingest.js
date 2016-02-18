@@ -31,7 +31,7 @@
 
 hoot.require('translate');
 
-function translateAttributes(attrs, layerName)
+function translateAttributes(attrs, layerName, geometryType)
 { 
     // Add UUID
     if (!(attrs.uuid)) attrs.uuid = createUuid();

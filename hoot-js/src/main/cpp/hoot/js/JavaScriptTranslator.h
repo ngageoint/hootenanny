@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef JAVASCRIPTTRANSLATOR_H
@@ -155,7 +155,7 @@ protected:
   QVariantList _translateToOgrVariants(Tags& tags,
     ElementType elementType, geos::geom::GeometryTypeId geometryType);
 
-  virtual void _translateToOsm(Tags& t, const char *layerName);
+  virtual void _translateToOsm(Tags& t, const char *layerName, const char* geomType);
 
 };
 

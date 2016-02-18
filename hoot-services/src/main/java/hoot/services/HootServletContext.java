@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services;
 
@@ -45,7 +45,6 @@ public class HootServletContext implements ServletContextListener {
 		
 		_P2PRes = new P2PResource();
 		_P2PRes.startP2PService();
-		
 		
 		// Doing this to make sure we create ingest folder
 		_BRes = new BasemapResource();

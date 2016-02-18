@@ -22,44 +22,33 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef BUILDINGMERGEMANIPULATOR_H
-#define BUILDINGMERGEMANIPULATOR_H
+package hoot.services.writers.user;
 
-// hoot
-#include <hoot/core/manipulators/Manipulator.h>
+import java.sql.Connection;
 
-namespace Tgs
-{
-  class RandomForest;
+import hoot.services.UnitTest;
+
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
+
+import com.mysema.query.sql.dml.SQLInsertClause;
+
+public class UserSaverTest {
+	@Test
+  @Category(UnitTest.class)
+	public void testInsert() throws Exception
+	{
+		Connection conn = null;
+		UserSaver saver = new UserSaver(conn);
+		SQLInsertClause cl = saver._createInsertClause("test@test.com");
+		
+		String actual = cl.toString();
+		
+		String expected = "insert into \"users\" (\"email\", \"display_name\")\n" + 
+				"values (?, ?)";
+		
+		org.junit.Assert.assertEquals(expected, actual);
+	}
 }
-
-namespace hoot
-{
-using namespace Tgs;
-
-class BuildingMergeManipulator : public Manipulator
-{
-public:
-
-  static QString modelPathKey() { return "building.model.path"; }
-
-  BuildingMergeManipulator();
-
-  static std::string className() { return "hoot::BuildingMergeManipulator"; }
-
-  virtual const vector< shared_ptr<Manipulation> >& findAllManipulations(
-          shared_ptr<const OsmMap> map);
-
-  virtual const vector< shared_ptr<Manipulation> >& findManipulations(
-      shared_ptr<const OsmMap> map, const vector<ElementId>& ids);
-
-private:
-  vector< shared_ptr<Manipulation> > _result;
-  auto_ptr<RandomForest> _rf;
-};
-
-}
-
-#endif // BUILDINGMERGEMANIPULATOR_H

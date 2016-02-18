@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptMatch.h"
 
@@ -105,6 +105,10 @@ void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Obj
     _p.setReviewP(_script->toNumber(v, "review", 0));
 
     _explainText = vm["explain"].toString();
+    if (_explainText.isEmpty())
+    {
+      _explainText = _threshold->getTypeDetail(_p);
+    }
     if (_threshold->getType(_p) == MatchType::Review)
     {
       if (_explainText.isEmpty())

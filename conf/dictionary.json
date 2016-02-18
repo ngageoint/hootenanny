@@ -1,4 +1,4 @@
-[
+{ "Dictionary" : [
     ["# This format only support one translation term for now. In time multiple translations should be supported which is why there are multiple entries for some words. Please put the closest match first."],
 
     ["#Abbreviations"],
@@ -64,4 +64,4 @@
     ["wisma", "home", "house"],
 
     ["#end"]
-]
+] }

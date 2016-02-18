@@ -137,7 +137,6 @@ SOURCES += \
     src/main/cpp/hoot/core/manipulators/DanglerRemover.cpp \
     src/main/cpp/hoot/core/manipulators/DanglerRemoverManipulation.cpp \
     src/main/cpp/hoot/core/conflate/SmallWayMerger.cpp \
-    src/main/cpp/hoot/core/schema/JsonSchemaLoader.cpp \
     src/main/cpp/hoot/core/conflate/TileConflator.cpp \
     src/main/cpp/hoot/core/algorithms/Translator.cpp \
     src/main/cpp/hoot/core/conflate/LargeWaySplitter.cpp \
@@ -459,7 +458,6 @@ SOURCES += \
     src/main/cpp/hoot/core/visitors/TranslationVisitor.cpp \
     src/main/cpp/hoot/core/io/ElementVisitorInputStream.cpp \
     src/main/cpp/hoot/core/io/ElementCacheLRU.cpp \
-    src/main/cpp/hoot/core/cmd/ExportCmd.cpp \
     src/main/cpp/hoot/core/visitors/MatchCandidateCountVisitor.cpp \
     src/main/cpp/hoot/core/algorithms/string/WeightedWordDistance.cpp \
     src/main/cpp/hoot/core/algorithms/string/TextFileWordWeightDictionary.cpp \
@@ -585,7 +583,6 @@ HEADERS += \
     src/main/cpp/hoot/core/manipulators/DanglerRemover.h \
     src/main/cpp/hoot/core/manipulators/DanglerRemoverManipulation.h \
     src/main/cpp/hoot/core/conflate/SmallWayMerger.h \
-    src/main/cpp/hoot/core/schema/JsonSchemaLoader.h \
     src/main/cpp/hoot/core/conflate/TileConflator.h \
     src/main/cpp/hoot/core/algorithms/Translator.h \
     src/main/cpp/hoot/core/conflate/LargeWaySplitter.h \
@@ -652,7 +649,6 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/polygon/extractors/AbstractDistanceExtractor.h \
     src/main/cpp/hoot/core/util/GeometryConverter.h \
     src/main/cpp/hoot/core/algorithms/VertexHausdorffDistance.h \
-    src/main/cpp/hoot/core/conflate/polygon/BuildingMergeManipulation.h \
     src/main/cpp/hoot/core/elements/ElementId.h \
     src/main/cpp/hoot/core/elements/ElementType.h \
     src/main/cpp/hoot/core/manipulators/WayManipulator.h \
@@ -780,7 +776,6 @@ HEADERS += \
     src/main/cpp/hoot/core/io/schema/StringFieldDefinition.h \
     src/main/cpp/hoot/core/io/schema/DoubleFieldDefinition.h \
     src/main/cpp/hoot/core/io/schema/IntegerFieldDefinition.h \
-    src/main/cpp/hoot/core/conflate/polygon/BuildingMergeManipulator.h \
     src/main/cpp/hoot/core/index/metric-hybrid/FqTree.h \
     src/main/cpp/hoot/core/index/metric-hybrid/RFqHybridTree.h \
     src/main/cpp/hoot/core/index/metric-hybrid/RTree.h \

@@ -45,13 +45,13 @@ public class ReviewBookmarksRemoverTest {
 		Connection conn = null;
   	try
   	{
-  		ReviewBookmarkDelRequest request = new ReviewBookmarkDelRequest((long)1, (long)2);
+  		ReviewBookmarkDelRequest request = new ReviewBookmarkDelRequest((long)1);
   		ReviewBookmarksRemover remover = new ReviewBookmarksRemover(conn);
   		SQLDeleteClause del = remover._createDelClause(request);
   		
   		String actual = del.toString();
   		String expected = "delete from \"review_bookmarks\"\n" + 
-  				"where \"review_bookmarks\".\"map_id\" = ? and \"review_bookmarks\".\"relation_id\" = ?";
+  				"where \"review_bookmarks\".\"id\" = ?";
   		
   		org.junit.Assert.assertEquals(expected, actual);
   	}
