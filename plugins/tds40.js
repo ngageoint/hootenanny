@@ -1568,7 +1568,12 @@ tds = {
         }
 
         // Start processing here
-        if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
+        // Debug
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
+            for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
+        }
 
         // The Nuke Option: If we have a relation, drop the feature and carry on
         if (tags['building:part']) return null;
