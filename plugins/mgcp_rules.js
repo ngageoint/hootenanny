@@ -2337,7 +2337,7 @@ mgcp.rules = {
 
     // ##### Start of intList #####
     // This list is for validateing the integer attributes prior to export
-    intList : [],
+    intList : ['LTN','NOS'],
     // ##### End of intList#####
 
 
