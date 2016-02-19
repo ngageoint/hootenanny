@@ -9,8 +9,6 @@ OUTPUT_DIR=test-output/gdal2tiles
 INPUT_FILE=$INPUT_DIR/RomanColosseum_WV2naturalcolor_clip.tif
 OUTPUT_TILES=$OUTPUT_DIR/new_tiles
 
-REFERENCE_TILES=$INPUT_DIR/good_tiles.zip
-
 OPT="-w none -z 0-20 -t new_tiles"
 
 mkdir -p $OUTPUT_DIR
@@ -30,18 +28,16 @@ gdal2tiles.py $OPT $INPUT_FILE $OUTPUT_TILES
 
 
 # 3. Compare the tiles to a known good set of tiles.
-unzip -q -d $OUTPUT_DIR $INPUT_DIR/good_tiles.zip
-
-OLDFILES=`ls -R $OUTPUT_DIR/good_tiles | wc -l`
 NEWFILES=`ls -R $OUTPUT_TILES | wc -l`
 
-[ $NEWFILES != $OLDFILES ] && echo "gdal2tiles.py: Expecting" $OLDFILES "tiles. Got" $NEWFILES
+# The expected number of files in the directory = 303
+[ $NEWFILES != 303 ] && echo "gdal2tiles.py: Expecting 303 files Got" $NEWFILES
 
-OLDSIZE=`du -c $OUTPUT_DIR/good_tiles | grep total  | awk '{print $1}'`
+# The expected size of the new tiles is 2700
 NEWSIZE=`du -c $OUTPUT_TILES | grep total | awk '{print $1}'`
 
-[ $NEWSIZE -gt $(($OLDSIZE + 10)) ] && echo "gdal2tiles.py: Expecting a tile size of" $OLDSIZE". Got" $NEWSIZE
+[ $NEWSIZE -gt 2710 ] && echo "gdal2tiles.py: Expecting a tile size of 2700. Got" $NEWSIZE
 
-[ $NEWSIZE -lt $(($OLDSIZE - 10)) ] && echo "gdal2tiles.py: Expecting a tile size of" $OLDSIZE". Got" $NEWSIZE
+[ $NEWSIZE -lt 2690 ] && echo "gdal2tiles.py: Expecting a tile size of 2700. Got" $NEWSIZE
 
 
