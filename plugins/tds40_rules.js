@@ -4346,6 +4346,11 @@ tds.rules = {
     },
     // ##### End of txtLength #####
 
+    // ##### Start of intList #####
+    // This list is for validateing the integer attributes prior to export
+    intList : [ 'BNF', 'DEV', 'DZC', 'LC1', 'LC2', 'LC3', 'LC4', 'LTN', 'NOS', 'NPL', 'VST' ],
+    // ##### End of intList#####
+
     // ##### Start of Thematic Group Rules #####
     thematicGroupList : {
        'PGB230':'AeronauticPnt', // AircraftHangar

@@ -289,7 +289,35 @@ tds = {
                                 hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncateing to ' + tds.rules.txtLength[val] + ' characters.');
                             }
                         } // End text attr length > max length
+                        // It's text fo skip the next test
+                        continue;
                     } // End in txtLength
+
+
+                    // Now check the Integer attributes
+                    if (tds.rules.intList.indexOf(val) > -1)
+                    {
+                        var tInt = parseInt(attrs[val],10);
+
+                        // If we dont get a number, push it to the OTH field.
+                        // This should not occur since we dropped all of the non numbers during the single
+                        // number rules
+                        if (isNaN(tInt))
+                        {
+                            var othVal = '(' + val + ':' + attrs[val] + ')';
+                            attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
+                            attrs[val] = '999';
+                        }
+                        else
+                        {
+                            if ((tInt + '') !== attrs[val])
+                            {
+                                hoot.logWarn('Converting ' + val + ' from ' + attrs[val] + ' to ' + tInt);
+                            }
+
+                            attrs[val] = tInt;
+                        }
+                    } // End in intList
                 }
             }
             else
@@ -329,7 +357,35 @@ tds = {
                                 hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncateing to ' + tds.rules.txtLength[val] + ' characters.');
                             }
                         } // End text attr length > max length
+                        // It's text fo skip the next test
+                        continue;
                     } // End in txtLength
+
+
+                    // Now check the Integer attributes
+                    if (tds.rules.intList.indexOf(val) > -1)
+                    {
+                        var tInt = parseInt(attrs[val],10);
+
+                        // If we dont get a number, push it to the OTH field.
+                        // This should not occur since we dropped all of the non numbers during the single
+                        // number rules
+                        if (isNaN(tInt))
+                        {
+                            var othVal = '(' + val + ':' + attrs[val] + ')';
+                            attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
+                            attrs[val] = '999';
+                        }
+                        else
+                        {
+                            if ((tInt + '') !== attrs[val])
+                            {
+                                hoot.logWarn('Converting ' + val + ' from ' + attrs[val] + ' to ' + tInt);
+                            }
+
+                            attrs[val] = tInt;
+                        }
+                    } // End in intList
                 } // End attrs loop
             }
         }

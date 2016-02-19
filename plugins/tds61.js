@@ -229,7 +229,7 @@ tds61 = {
     }, // End getDbSchema
 
     // validateAttrs: Clean up the supplied attr list by dropping anything that should not be part of the
-    //                feature, checking enumerated values and populateing the OTH field.
+    //                feature, checking values and populateing the OTH field.
     validateAttrs: function(geometryType,attrs) {
 
         // First, use the lookup table to quickly drop all attributes that are not part of the feature.
@@ -286,7 +286,37 @@ tds61 = {
                                 attrs[val] = tStr[0].substring(0,tds61.rules.txtLength[val]);
                             }
                         } // End text attr length > max length
+
+                        // It's text fo skip the next test
+                        continue;
                     } // End in txtLength
+
+                    // Now check the Integer attributes
+                    if (tds61.rules.intList.indexOf(val) > -1)
+                    {
+                        // Quick bitwise or to strip off anything after the decimal
+                        var tInt = attrs[val] | 0;
+
+                        // If we dont get a number, push it to the OTH field.
+                        // This should not occur since we dropped all of the non numbers during the single
+                        // number rules
+                        if (isNaN(tInt))
+                        {
+                            var othVal = '(' + val + ':' + attrs[val] + ')';
+                            attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
+                            attrs[val] = '999';
+                        }
+                        else
+                        {
+                            // Back to a string for a comparison
+                            if ((tInt + '') !== attrs[val])
+                            {
+                                hoot.logWarn('Converting ' + val + ' from ' + attrs[val] + ' to ' + tInt);
+                            }
+
+                            attrs[val] = tInt;
+                        }
+                    } // End in intList
         	    }
             }
             else
@@ -327,7 +357,36 @@ tds61 = {
                                 attrs[val] = tStr[0].substring(0,tds61.rules.txtLength[val]);
                             }
                         } // End text attr length > max length
+
+                        // It's text fo skip the next test
+                        continue;
                     } // End in txtLength
+
+
+                    // Now check the Integer attributes
+                    if (tds61.rules.intList.indexOf(val) > -1)
+                    {
+                        var tInt = parseInt(attrs[val],10);
+
+                        // If we dont get a number, push it to the OTH field.
+                        // This should not occur since we dropped all of the non numbers during the single
+                        // number rules
+                        if (isNaN(tInt))
+                        {
+                            var othVal = '(' + val + ':' + attrs[val] + ')';
+                            attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
+                            attrs[val] = '999';
+                        }
+                        else
+                        {
+                            if ((tInt + '') !== attrs[val])
+                            {
+                                hoot.logWarn('Converting ' + val + ' from ' + attrs[val] + ' to ' + tInt);
+                            }
+
+                            attrs[val] = tInt;
+                        }
+                    } // End in intList
         	    } // End attrs loop
             }
         }
