@@ -292,33 +292,7 @@ tds = {
                         // It's text fo skip the next test
                         continue;
                     } // End in txtLength
-
-
-                    // Now check the Integer attributes
-                    if (tds.rules.intList.indexOf(val) > -1)
-                    {
-                        var tInt = parseInt(attrs[val],10);
-
-                        // If we dont get a number, push it to the OTH field.
-                        // This should not occur since we dropped all of the non numbers during the single
-                        // number rules
-                        if (isNaN(tInt))
-                        {
-                            var othVal = '(' + val + ':' + attrs[val] + ')';
-                            attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
-                            attrs[val] = '999';
-                        }
-                        else
-                        {
-                            if ((tInt + '') !== attrs[val])
-                            {
-                                hoot.logWarn('Converting ' + val + ' from ' + attrs[val] + ' to ' + tInt);
-                            }
-
-                            attrs[val] = tInt;
-                        }
-                    } // End in intList
-                }
+                } // End attrs loop
             }
             else
             {
@@ -360,32 +334,6 @@ tds = {
                         // It's text fo skip the next test
                         continue;
                     } // End in txtLength
-
-
-                    // Now check the Integer attributes
-                    if (tds.rules.intList.indexOf(val) > -1)
-                    {
-                        var tInt = parseInt(attrs[val],10);
-
-                        // If we dont get a number, push it to the OTH field.
-                        // This should not occur since we dropped all of the non numbers during the single
-                        // number rules
-                        if (isNaN(tInt))
-                        {
-                            var othVal = '(' + val + ':' + attrs[val] + ')';
-                            attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
-                            attrs[val] = '999';
-                        }
-                        else
-                        {
-                            if ((tInt + '') !== attrs[val])
-                            {
-                                hoot.logWarn('Converting ' + val + ' from ' + attrs[val] + ' to ' + tInt);
-                            }
-
-                            attrs[val] = tInt;
-                        }
-                    } // End in intList
                 } // End attrs loop
             }
         }
@@ -538,7 +486,7 @@ tds = {
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
-            translate.applySimpleNumBiased(newAttrs, tags, tds.rules.numBiased, 'backward');
+            translate.applySimpleNumBiased(newAttrs, tags, tds.rules.numBiased, 'backward',tds.rules.intList);
             translate.applySimpleTxtBiased(newAttrs, tags, tds.rules.txtBiased, 'backward');
 
             // post processing
@@ -1576,7 +1524,8 @@ tds = {
         translate.applyOne2One(attrs, tags, tds.lookup, {'k':'v'}, tds.ignoreList);
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, tags, tds.rules.numBiased, 'forward');
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        translate.applySimpleNumBiased(attrs, tags, tds.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(attrs, tags, tds.rules.txtBiased, 'forward');
 
         // Crack open the OTH field and populate the appropriate attributes
@@ -1667,7 +1616,7 @@ tds = {
 
         // apply the simple number and text biased rules
         // Note: These are BACKWARD, not forward!
-        translate.applySimpleNumBiased(attrs, tags, tds.rules.numBiased, 'backward');
+        translate.applySimpleNumBiased(attrs, tags, tds.rules.numBiased, 'backward',tds.rules.intList);
         translate.applySimpleTxtBiased(attrs, tags, tds.rules.txtBiased, 'backward');
 
         // post processing

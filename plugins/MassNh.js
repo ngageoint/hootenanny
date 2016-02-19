@@ -442,7 +442,8 @@ MassNh = {
 
         
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, tags, MassNh.rules.numBiased, 'forward');
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        translate.applySimpleNumBiased(attrs, tags, MassNh.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(attrs, tags, MassNh.rules.txtBiased, 'forward');
 
         // post processing
