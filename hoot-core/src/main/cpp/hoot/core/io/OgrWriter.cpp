@@ -706,31 +706,27 @@ void OgrWriter::writeElement(ElementInputStream& inputStream, bool debug)
   // Make sure incoming element is in WGS84
   assert(inputStream.getProjection()->IsSame(&_wgs84) == true);
   ElementPtr nextElement = inputStream.readNextElement();
-  //Unfortunately, this check also has to happen in addition to checking hasMoreElements.  See
-  //explanation in ServicesDbReader::readNextElement.
-  if (nextElement.get())
+
+  // TERRY TESTING COULD BE CATASTROPHIC
+  Tags sourceTags = nextElement->getTags();
+  Tags destTags;
+  for (Tags::const_iterator it = nextElement->getTags().begin();
+       it != nextElement->getTags().end(); ++it)
   {
-    // TERRY TESTING COULD BE CATASTROPHIC
-    Tags sourceTags = nextElement->getTags();
-    Tags destTags;
-    for (Tags::const_iterator it = nextElement->getTags().begin();
-         it != nextElement->getTags().end(); ++it)
+    if (sourceTags[it.key()] != "")
     {
-      if (sourceTags[it.key()] != "")
-      {
-        destTags.appendValue(it.key(), it.value());
-      }
+      destTags.appendValue(it.key(), it.value());
     }
-    // Now that all the empties are gone, update our element
-    nextElement->setTags(destTags);
-
-    if (debug == true)
-    {
-      LOG_DEBUG(nextElement->toString());
-    }
-
-    PartialOsmMapWriter::writePartial(nextElement);
   }
+  // Now that all the empties are gone, update our element
+  nextElement->setTags(destTags);
+
+  if (debug == true)
+  {
+    LOG_DEBUG(nextElement->toString());
+  }
+
+  PartialOsmMapWriter::writePartial(nextElement);
 }
 
 void OgrWriter::setCacheCapacity(unsigned long maxElementsPerType)

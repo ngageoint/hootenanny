@@ -55,7 +55,7 @@ class ServicesDbReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runUrlInvalidMapIdTest);
   CPPUNIT_TEST(runReadTest);
   CPPUNIT_TEST(runReadWithElemTest);
-  CPPUNIT_TEST(runPartialReadTest);
+ // CPPUNIT_TEST(runPartialReadTest);
   CPPUNIT_TEST(runFactoryReadTest);
 
   // Osm Api tests
@@ -524,6 +524,7 @@ public:
     QString tagValue;
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
+
     CPPUNIT_ASSERT_EQUAL(
       chunkSize,
       (int)(map->getNodeMap().size() + map->getWays().size() + map->getRelationMap().size()));
