@@ -168,29 +168,20 @@ hgis20 = {
         // If we are making a second feature, process it.
         if (newAttrs.XtableName)
         {
-        // Debug
-        print('2F: XtableName: ' + newAttrs.XtableName);
-
             // Now go make a second feature
             // pre processing
             hgis20.applyToHgisPreProcessing(tags, newAttrs, geometryType);
-        print('2F: After Pre: ' + newAttrs.XtableName);
-
 
             // one 2 one - we call the version that knows about OTH fields
             translate.applyOne2One(tags, newAttrs, hgis20.lookup, hgis20.layerLookup, hgis20.ignoreList);
-        print('2F: After One2One: ' + newAttrs.XtableName);
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
-            translate.applySimpleNumBiased(newAttrs, tags, hgis20.rules.numBiased, 'backward');
-        print('2F: After Simple Num: ' + newAttrs.XtableName);
+            translate.applySimpleNumBiased(newAttrs, tags, hgis20.rules.numBiased, 'backward',hgis20.rules.intList);
             translate.applySimpleTxtBiased(newAttrs, tags, hgis20.rules.txtBiased, 'backward');
-        print('2F: After Simple Txt: ' + newAttrs.XtableName);
 
             // post processing
             hgis20.applyToHgisPostProcessing(tags, newAttrs, geometryType);
-        print('2F: After Post: ' + newAttrs.XtableName);
         }
 
         // Debug:
@@ -965,7 +956,8 @@ hgis20 = {
         translate.applyOne2One(attrs, tags, hgis20.lookup, {'k':'v'}, hgis20.ignoreList);
         
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, tags, hgis20.rules.numBiased, 'forward');
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        translate.applySimpleNumBiased(attrs, tags, hgis20.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(attrs, tags, hgis20.rules.txtBiased, 'forward');
 
         // post processing
@@ -1083,7 +1075,7 @@ hgis20 = {
 
         // apply the simple number and text biased rules
         // Note: These are BACKWARD, not forward!
-        translate.applySimpleNumBiased(attrs, tags, hgis20.rules.numBiased, 'backward');
+        translate.applySimpleNumBiased(attrs, tags, hgis20.rules.numBiased, 'backward',hgis20.rules.intList);
         translate.applySimpleTxtBiased(attrs, tags, hgis20.rules.txtBiased, 'backward');
 
         // post processing

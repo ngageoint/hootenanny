@@ -204,7 +204,8 @@ navteq = {
         translate.applyOne2One(attrs, tags, navteq.lookup, {'k':'v'}, navteq.rules.txtBiased);
 
         // apply the simple number and text biased rules
-        translate.applySimpleTxtBiased(attrs, tags, navteq.rules.txtBiased, 'forward');
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        translate.applySimpleTxtBiased(attrs, tags, navteq.rules.txtBiased, 'forward',[]);
 
         // post processing
         navteq.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);

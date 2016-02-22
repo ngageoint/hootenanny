@@ -1993,6 +1993,11 @@ hgis20.rules = {
    }, // End mapType
 
 
+   // ##### Start of intList #####
+   // This list is for validateing the integer attributes prior to export
+   intList : [ 'FATALITY', 'NO_TK_AREA', 'POPULATION', 'REP_AREA', 'REP_M', 'STATUS_YR', 'TL_AFFECT' ],
+   // ##### End of intList#####
+
    // Lookup table for layernames.
    // We use this for assigning a short name and validation
     layerNames : {

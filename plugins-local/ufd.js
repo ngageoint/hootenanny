@@ -493,7 +493,8 @@ ufd = {
         translate.applyOne2One(attrs, tags, ufd.lookup, {'k':'v'}, ufd.biasedList);
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, tags, ufd.rules.numBiased, 'forward');
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        translate.applySimpleNumBiased(attrs, tags, ufd.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(attrs, tags, ufd.rules.txtBiased, 'forward');
 
         // post processing

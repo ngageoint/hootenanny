@@ -184,7 +184,8 @@ dnc = {
         translate.applyOne2One(attrs, tags, dnc.lookup, {'k':'v'}, dnc.ignoreList);
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, tags, dnc.rules.numBiased, 'forward');
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        translate.applySimpleNumBiased(attrs, tags, dnc.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(attrs, tags, dnc.rules.txtBiased, 'forward');
 
         // post processing

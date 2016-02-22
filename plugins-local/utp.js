@@ -352,7 +352,8 @@ utp = {
         translate.applyOne2One(attrs, tags, utp.lookup, {'k':'v'}, utp.biasedList);
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, tags, utp.rules.numBiased, 'forward');
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        translate.applySimpleNumBiased(attrs, tags, utp.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(attrs, tags, utp.rules.txtBiased, 'forward');
 
         // post processing
