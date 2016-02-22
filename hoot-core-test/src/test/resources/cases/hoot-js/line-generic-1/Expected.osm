@@ -1,64 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549163432199904" lon="-104.8961568262599968"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549019130799920" lon="-104.8964787882100040"/>
-    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8548910904700122" lon="-104.8966733551499999"/>
-    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8548622301799966" lon="-104.8969235126400008"/>
-    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8548243510199924" lon="-104.8970439588400012"/>
-    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8547576114999984" lon="-104.8972176793199935"/>
-    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8546926756899964" lon="-104.8973821347099999"/>
-    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8546295435999980" lon="-104.8975512226400042"/>
-    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8546060945200011" lon="-104.8976786176599916"/>
-    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545700189999934" lon="-104.8978245428599934"/>
-    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545086905799906" lon="-104.8979496216000058"/>
-    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8544690074499997" lon="-104.8980052121600011"/>
-    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543734071099962" lon="-104.8980700678000062"/>
-    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543120785099987" lon="-104.8981163932599969"/>
-    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542741990600007" lon="-104.8981789326399934"/>
-    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542417309500081" lon="-104.8982831649200023"/>
-    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542110665999942" lon="-104.8983966623000015"/>
-    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541948325299984" lon="-104.8984754155899850"/>
-    <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541785984499981" lon="-104.8987371544399991"/>
-    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541587567999969" lon="-104.8988135914499793"/>
-    <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541136621199925" lon="-104.8988506518199983"/>
-    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8540505295099905" lon="-104.8988691820100030"/>
-    <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8539982195900038" lon="-104.8988691820100030"/>
-    <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8539441058499975" lon="-104.8988552843700006"/>
-    <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8538954034399993" lon="-104.8988205402699947"/>
-    <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8537619226000004" lon="-104.8987000940699943"/>
-    <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8537078086700092" lon="-104.8986607174300048"/>
-    <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8536609099000003" lon="-104.8986584011600058"/>
-    <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8536230301000032" lon="-104.8986746150699929"/>
-    <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535887578900017" lon="-104.8987000940699943"/>
-    <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535761312800005" lon="-104.8987626334500050"/>
-    <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535779350799899" lon="-104.8989919444799881"/>
-    <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535833464800007" lon="-104.8990915442199992"/>
-    <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535779350799899" lon="-104.8991656649599804"/>
-    <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535562894599948" lon="-104.8992258880600019"/>
-    <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535256248100040" lon="-104.8992606321500034"/>
-    <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8533939470800078" lon="-104.8993555993500024"/>
-    <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8533362252599943" lon="-104.8994042410800063"/>
-    <node visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8532929338599899" lon="-104.8994899431900052"/>
-    <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8532694843499939" lon="-104.8996219707500046"/>
-    <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8532676805399930" lon="-104.8997880601200023"/>
-    <node visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535732961699978" lon="-104.8997265932799934"/>
-    <node visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8538862746800078" lon="-104.8997029521899833"/>
-    <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542508008399921" lon="-104.8997596908100007"/>
-    <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543116507600033" lon="-104.8997596908100007"/>
-    <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549467092499938" lon="-104.8997596908100007"/>
-    <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549614373999930" lon="-104.8999833093500058"/>
-    <node visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549596336300098" lon="-104.9003909734099977"/>
-    <node visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549470072699989" lon="-104.9004674104200063"/>
-    <node visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549307733599960" lon="-104.9005623776100009"/>
-    <node visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8548694452500030" lon="-104.9007059865400038"/>
-    <node visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8547540039599895" lon="-104.9009352975700011"/>
-    <node visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8544527734400020" lon="-104.9015560587500033"/>
-    <node visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543571730699995" lon="-104.9017344117799837"/>
-    <node visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542940406799957" lon="-104.9018896020699998"/>
-    <node visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542146741700023" lon="-104.9020934340999958"/>
-    <node visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541136621199996" lon="-104.9023412753199977"/>
+    <node visible="true" id="-99" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549123596465193" lon="-104.8962457088148454"/>
+    <node visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549073243800009" lon="-104.8961823052599982"/>
     <node visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8540360991899973" lon="-104.9024200286000053"/>
-    <way visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
+    <node visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541136621199996" lon="-104.9023412753199977"/>
+    <node visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542146741700023" lon="-104.9020934340999958"/>
+    <node visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542940406799957" lon="-104.9018896020699998"/>
+    <node visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543571730699995" lon="-104.9017344117799837"/>
+    <node visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8544527734400020" lon="-104.9015560587500033"/>
+    <node visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8547540039599895" lon="-104.9009352975700011"/>
+    <node visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8548694452500030" lon="-104.9007059865400038"/>
+    <node visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549307733599960" lon="-104.9005623776100009"/>
+    <node visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549470072699989" lon="-104.9004674104200063"/>
+    <node visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549596336300098" lon="-104.9003909734099977"/>
+    <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549614373999930" lon="-104.8999833093500058"/>
+    <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549467092499938" lon="-104.8997596908100007"/>
+    <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543116507600033" lon="-104.8997596908100007"/>
+    <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542508008399921" lon="-104.8997596908100007"/>
+    <node visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8538862746800078" lon="-104.8997029521899833"/>
+    <node visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535732961699978" lon="-104.8997265932799934"/>
+    <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8532676805399930" lon="-104.8997880601200023"/>
+    <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8532694843499939" lon="-104.8996219707500046"/>
+    <node visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8532929338599899" lon="-104.8994899431900052"/>
+    <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8533362252599943" lon="-104.8994042410800063"/>
+    <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8533939470800078" lon="-104.8993555993500024"/>
+    <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535256248100040" lon="-104.8992606321500034"/>
+    <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535562894599948" lon="-104.8992258880600019"/>
+    <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535779350799899" lon="-104.8991656649599804"/>
+    <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535833464800007" lon="-104.8990915442199992"/>
+    <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535779350799899" lon="-104.8989919444799881"/>
+    <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535761312800005" lon="-104.8987626334500050"/>
+    <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535887578900017" lon="-104.8987000940699943"/>
+    <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8536230301000032" lon="-104.8986746150699929"/>
+    <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8536609099000003" lon="-104.8986584011600058"/>
+    <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8537078086700092" lon="-104.8986607174300048"/>
+    <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8537619226000004" lon="-104.8987000940699943"/>
+    <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8538954034399993" lon="-104.8988205402699947"/>
+    <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8539441058499975" lon="-104.8988552843700006"/>
+    <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8539982195900038" lon="-104.8988691820100030"/>
+    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8540505295099905" lon="-104.8988691820100030"/>
+    <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541136621199925" lon="-104.8988506518199983"/>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541587567999969" lon="-104.8988135914499793"/>
+    <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541785984499981" lon="-104.8987371544399991"/>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541948325299984" lon="-104.8984754155899850"/>
+    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542110665999942" lon="-104.8983966623000015"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542417309500081" lon="-104.8982831649200023"/>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542741990600007" lon="-104.8981789326399934"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543120785099987" lon="-104.8981163932599969"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543734071099962" lon="-104.8980700678000062"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8544690074499997" lon="-104.8980052121600011"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545086905799906" lon="-104.8979496216000058"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545700189999934" lon="-104.8978245428599934"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8546060945200011" lon="-104.8976786176599916"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8546295435999980" lon="-104.8975512226400042"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8546926756899964" lon="-104.8973821347099999"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8547576114999984" lon="-104.8972176793199935"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8548243510199924" lon="-104.8970439588400012"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8548622301799966" lon="-104.8969235126400008"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8548910904700122" lon="-104.8966733551499999"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549019130799920" lon="-104.8964787882100040"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549163432199904" lon="-104.8961568262599968"/>
+    <way visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-58"/>
         <nd ref="-57"/>
         <nd ref="-56"/>
@@ -81,7 +83,19 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-99"/>
+        <nd ref="-59"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-99"/>
+        <nd ref="-1"/>
+        <tag k="note" v="0b 2"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-41"/>
         <nd ref="-40"/>
         <nd ref="-39"/>
@@ -122,9 +136,16 @@
         <nd ref="-4"/>
         <nd ref="-3"/>
         <nd ref="-2"/>
-        <nd ref="-1"/>
+        <nd ref="-99"/>
         <tag k="note" v="0b 2;0"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="15"/>
     </way>
+    <relation visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-37" role=""/>
+        <tag k="note" v="0"/>
+        <tag k="highway" v="road"/>
+        <tag k="type" v="multilinestring"/>
+        <tag k="error:circular" v="15"/>
+    </relation>
 </osm>

@@ -1,23 +1,23 @@
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
-Node Count	338	176	410	
-Way Count	14	15	110	
-Relation Count	0	0	23	
-Total Feature Count	14	15	79	
+Node Count	338	176	423	
+Way Count	14	15	115	
+Relation Count	0	0	21	
+Total Feature Count	14	15	83	
 Total Conflatable Features	14	15	0	
 Percentage of Total Features Conflatable	100	100	0	
 Total Unconflatable Features	0	0	0	
 Percentage of Total Features Unconflatable	0	0	0	
-Total Features Processed By Conflation	0	0	23	
+Total Features Processed By Conflation	0	0	25	
 Number of Match Creators	1	1	1	
 Features Conflatable by: hoot::ScriptMatchCreator,LinearWaterway.js	14	15	0	
 Features Conflatable by: hoot::ScriptMatchCreator,LineStringGeneric.js	0	0	0	
-Total Conflated Features	0	0	23	
-Percentage of Total Features Conflated	0	0	29.11392405063291	
+Total Conflated Features	0	0	25	
+Percentage of Total Features Conflated	0	0	30.120481927710845	
 Total Features Marked for Review	0	0	0	
 Percentage of Total Features Marked for Review	0	0	0	
 Total Number of Reviews to be Made	0	0	0	
-Total Unmatched Features	14	15	56	
-Percentage of Total Features Unmatched	100	100	70.886075949367083	
+Total Unmatched Features	14	15	58	
+Percentage of Total Features Unmatched	100	100	69.879518072289159	
 POI Count	0	0	0	
 Conflatable POIs	0	0	0	
 Conflated POIs	0	0	0	
@@ -45,6 +45,6 @@ Unmatched Buildings	0	0	0
 Percentage of Buildings Conflated	0	0	0	
 Percentage of Buildings Marked for Review	0	0	0	
 Percentage of Unmatched Buildings	0	0	0	
-Difference Between Total Features in Output and Total Features in Inputs			50	
-Percentage Difference Between Total Features in Output and Total Features in Inputs			172.41379310344826	
+Difference Between Total Features in Output and Total Features in Inputs			54	
+Percentage Difference Between Total Features in Output and Total Features in Inputs			186.20689655172413	
 
