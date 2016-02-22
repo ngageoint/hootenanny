@@ -38,19 +38,16 @@ namespace hoot
 class TagContainsFilter : public BaseElementFilter
 {
 public:
-  TagContainsFilter(FilterType type, QString key);
   TagContainsFilter(FilterType type, QString key, QString valueSubstring);
+  TagContainsFilter(FilterType type, QStringList keys, QStringList valueSubstrings);
 
   /**
    * Adds an additional pair to the search list. If any one of the pairs matches then it is
    * considered a match.
    */
-  void addPair(QString key);
   void addPair(QString key, QString valueSubstring);
-  /**
-   * Wildcard string for valueSubstring which allows for matches that match only the key
-   */
-  static const QString WILDCARD;
+
+  virtual ElementCriterion* clone() { return new TagContainsFilter(_type, _key, _valueSubstring); }
 
 protected:
   virtual bool isFiltered(const Element& e) const;

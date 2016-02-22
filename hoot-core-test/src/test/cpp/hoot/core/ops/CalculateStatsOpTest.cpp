@@ -172,7 +172,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Waterway Reviews to be Made"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Unmatched Waterways"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      0.0, calcStatsOp->getSingleStat("Meters of Waterways Processed by Conflation"), 1e-1);
+      0.0, calcStatsOp->getSingleStat("Meters of Waterway Processed by Conflation"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Conflated"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Unmatched Waterways"), 1e-1);
@@ -302,7 +302,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Waterway Reviews to be Made"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Unmatched Waterways"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      0.0, calcStatsOp->getSingleStat("Meters of Waterways Processed by Conflation"), 1e-1);
+      0.0, calcStatsOp->getSingleStat("Meters of Waterway Processed by Conflation"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Conflated"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Unmatched Waterways"), 1e-1);

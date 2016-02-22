@@ -52,6 +52,8 @@ public:
     return review;
   }
 
+  virtual ElementCriterion* clone() { return new NeedsReviewCriterion(_map); }
+
 private:
   ConstOsmMapPtr& _map;
 };

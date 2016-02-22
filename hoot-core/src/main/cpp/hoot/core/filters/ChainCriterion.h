@@ -74,7 +74,15 @@ public:
     return true;
   }
 
+  virtual ElementCriterion* clone() { return new ChainCriterion(_filters); }
+
 protected:
+  ChainCriterion(vector< shared_ptr<ElementCriterion> > filters)
+  {
+    for (size_t i = 0; i < filters.size(); i++)
+      _filters.push_back(shared_ptr<ElementCriterion>(filters[i]->clone()));
+  }
+
   vector< shared_ptr<ElementCriterion> > _filters;
 };
 

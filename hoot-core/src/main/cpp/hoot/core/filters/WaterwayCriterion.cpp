@@ -26,15 +26,19 @@
  */
 #include "WaterwayCriterion.h"
 
+// hoot
+#include <hoot/core/Factory.h>
+#include <hoot/core/schema/OsmSchema.h>
+
 namespace hoot
 {
 
-WaterwayCriterion::WaterwayCriterion(FilterType type)
-  : TagContainsFilter(type, "type", "waterway")
+HOOT_FACTORY_REGISTER(ElementCriterion, WaterwayCriterion)
+
+bool WaterwayCriterion::isSatisfied(const shared_ptr<const Element> &e) const
 {
-  addPair("waterway");
-  addPair("river_type");
-  addPair("river_flow");
+  // if it is a linear waterway
+  return OsmSchema::getInstance().isLinearWaterway(*e.get());
 }
 
 }

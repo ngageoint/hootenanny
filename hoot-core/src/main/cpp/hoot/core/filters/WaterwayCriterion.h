@@ -27,7 +27,7 @@
 #ifndef WATERWAYCRITERION_H
 #define WATERWAYCRITERION_H
 
-#include "TagContainsFilter.h"
+#include "ElementCriterion.h"
 
 namespace hoot
 {
@@ -35,10 +35,16 @@ namespace hoot
 /**
  * A filter that will either keep or remove waterways.
  */
-class WaterwayCriterion : public TagContainsFilter
+class WaterwayCriterion : public ElementCriterion
 {
 public:
-  WaterwayCriterion(FilterType type);
+  static string className() { return "hoot::WaterwayCriterion"; }
+
+  WaterwayCriterion() {}
+
+  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
+
+  virtual ElementCriterion* clone() { return new WaterwayCriterion(); }
 
 };
 
