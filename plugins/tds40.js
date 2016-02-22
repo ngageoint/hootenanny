@@ -289,8 +289,10 @@ tds = {
                                 hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncateing to ' + tds.rules.txtLength[val] + ' characters.');
                             }
                         } // End text attr length > max length
+                        // It's text fo skip the next test
+                        continue;
                     } // End in txtLength
-                }
+                } // End attrs loop
             }
             else
             {
@@ -329,6 +331,8 @@ tds = {
                                 hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncateing to ' + tds.rules.txtLength[val] + ' characters.');
                             }
                         } // End text attr length > max length
+                        // It's text fo skip the next test
+                        continue;
                     } // End in txtLength
                 } // End attrs loop
             }
@@ -482,7 +486,7 @@ tds = {
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
-            translate.applySimpleNumBiased(newAttrs, tags, tds.rules.numBiased, 'backward');
+            translate.applySimpleNumBiased(newAttrs, tags, tds.rules.numBiased, 'backward',tds.rules.intList);
             translate.applySimpleTxtBiased(newAttrs, tags, tds.rules.txtBiased, 'backward');
 
             // post processing
@@ -1520,7 +1524,8 @@ tds = {
         translate.applyOne2One(attrs, tags, tds.lookup, {'k':'v'}, tds.ignoreList);
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, tags, tds.rules.numBiased, 'forward');
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        translate.applySimpleNumBiased(attrs, tags, tds.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(attrs, tags, tds.rules.txtBiased, 'forward');
 
         // Crack open the OTH field and populate the appropriate attributes
@@ -1563,7 +1568,12 @@ tds = {
         }
 
         // Start processing here
-        if (config.getOgrDebugDumptags() == 'true') for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
+        // Debug
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
+            for (var i in tags) print('In Tags: ' + i + ': :' + tags[i] + ':');
+        }
 
         // The Nuke Option: If we have a relation, drop the feature and carry on
         if (tags['building:part']) return null;
@@ -1611,7 +1621,7 @@ tds = {
 
         // apply the simple number and text biased rules
         // Note: These are BACKWARD, not forward!
-        translate.applySimpleNumBiased(attrs, tags, tds.rules.numBiased, 'backward');
+        translate.applySimpleNumBiased(attrs, tags, tds.rules.numBiased, 'backward',tds.rules.intList);
         translate.applySimpleTxtBiased(attrs, tags, tds.rules.txtBiased, 'backward');
 
         // post processing

@@ -1369,6 +1369,65 @@ If the name similarity score is greater than this then the names are considered 
 
 How far away from a polygon should name matches be considered reviews. This is a fixed value in meters that is added to the CE calculation.
 
+=== postgresql.dumpfile.writer.cache.size
+
+* Data Type: int
+* Default Value: `10000000`
+
+Maximum number of elements (nodes, ways, and relations) that can be held in memory before the system starts using disk-based storage.  Note that this limit applies to each element type individually, so worst case is that three times this value of elements can be stored in memory at the same time.
+
+=== postgresql.dumpfile.writer.changeset.user.id
+
+* Data Type: int
+* Default Value: `1`
+
+Value that will be set in the "user_id" field for all changesets added by the ingest operation
+
+=== postgresql.dumpfile.writer.start.id.changeset
+
+* Data Type: long
+* Default Value: `1`
+
+Starting ID value for changesets created in a PostgreSQL dumpfile.
+
+=== postgresql.dumpfile.writer.start.id.node
+
+* Data Type: long
+* Default Value: `1`
+
+Starting ID value for nodes created in a PostgreSQL dumpfile. 
+
+=== postgresql.dumpfile.writer.start.id.relation
+
+* Data Type: long
+* Default Value: `1`
+
+Starting ID value for relations created in a PostgreSQL dumpfile.
+
+=== postgresql.dumpfile.writer.start.id.way
+
+* Data Type: long
+* Default Value: `1`
+
+Starting ID value for ways created in a PostgreSQL dumpfile.
+
+=== postgresql.dumpfile.writer.user.email
+
+* Data Type: string
+* Default Value: ``
+
+If this value is set, the generated dumpfile will insert statements that add a user with the specified email address to
+the database.
+
+=== postgresql.dumpfile.writer.user.id
+
+* Data Type: int
+* Default Value: `1`
+
+If the `postgresql.dumpfile.writer.user.email` field is set, the user that is added to the database will be assigned
+the user id set by this field.
+
+
 === reader.add.source.datetime
 
 * Data Type: bool

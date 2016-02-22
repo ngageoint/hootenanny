@@ -67,47 +67,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ScriptTranslator, JavaScriptTranslator)
 
-/**
- * This works around a bug in Qt 4.6. It is fixed in 4.8.2, but this function works for both.
- *
- * In Qt 4.6 (and maybe other versions) the QScriptValue::toVariant() method will convert the
- * top level object (e.g. a list) to a QVariant properly, but all its children will not be converted
- * properly. In the case of a list of maps you get a list of strings. This method does the operation
- * recursively and is consistent with the Qt 4.8.2 QScriptValue::toVariant() functionality.
- */
-//QVariant toVariant(const QScriptValue& v)
-//{
-//  QVariant result;
-//  if (v.isArray())
-//  {
-//    QVariantList l;
-//    int length = v.property("length").toInteger();
-//    for (int i = 0; i < length; ++i)
-//    {
-//      l.append(toVariant(v.property(i)));
-//    }
-//    result = l;
-//  }
-//  else if (v.isObject())
-//  {
-//    QVariantMap m;
-//    QScriptValueIterator it(v);
-//    while (it.hasNext())
-//    {
-//      it.next();
-//      m[it.name()] = toVariant(it.value());
-//    }
-//    result = m;
-//  }
-//  else
-//  {
-//    result = v.toVariant();
-//  }
-
-//  return result;
-//}
-
-
 // Return the current time
 Handle<Value> jsGetTimeNow(const Arguments& /*args*/)
 {
@@ -136,7 +95,7 @@ JavaScriptTranslator::~JavaScriptTranslator()
 
 void JavaScriptTranslator::_checkError()
 {
-#warning fix me
+// https://github.com/ngageoint/hootenanny/issues/352
 // Not sure if we can make a v8 version of this. -Matt
 
 //  if (_engine->hasUncaughtException())

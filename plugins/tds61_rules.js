@@ -4536,6 +4536,14 @@ tds61.rules = {
     },
     // ##### End of txtLength #####
 
+    // ##### Start of intList #####
+    // This list is for validateing the integer attributes prior to export
+    intList : [
+    'BC040_LCN', 'BC040_LVN', 'BNF', 'DEV', 'DZC', 'LC1', 'LC2', 'LC3', 'LC4', 'LTN', 'NOS', 'NPL', 'ZI026_CTUL',
+    'ZI026_CTUU'
+    ],
+    // ##### End of intList#####
+
 
     // ##### Start of Thematic Group Rules #####
     thematicGroupList : {

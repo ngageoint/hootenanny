@@ -24,7 +24,10 @@ build: js-make qt-make pp-build services-build model-build conf/words.sqlite \
 	conf/WordsAbridged.sqlite osmapidb
 
 clean: Makefile.qmake services-clean
-	$(MAKE) -f Makefile.qmake clean
+	$(MAKE) -f Makefile.qmake clean 2>&1 \
+	  | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
+	  || true \
+	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
 	rm -f `find . -name Makefile.qmake`
 	rm -f `find . -name \*.gcov`
 	rm -f lib/*
@@ -212,7 +215,9 @@ conf/%.rf: conf/%.arff.bz2 qt-make
 	[ $< -nt $@ ] && hoot build-rf $< $@ || true
 
 qt-make: HOOT_VERSION_FILE Makefile.qmake hoot-core/src/main/cpp/hoot/core/HootConfig.h conf/LocalHoot.json tgs/src/main/cpp/tgs/TgsConfig.h hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h bin/hoot bin/HootTest
-	$(MAKE) -f Makefile.qmake
+	$(MAKE) -f Makefile.qmake 2>&1 | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
+	  || true \
+	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
 
 services-build:	HOOT_VERSION_FILE conf/DatabaseConfig.sh
 ifeq ($(BUILD_SERVICES),services)
@@ -297,7 +302,12 @@ LocalConfig.pri:
 	cp LocalConfig.pri.orig LocalConfig.pri
 
 Makefile.qmake: Hootenanny.pro Configure.pri LocalConfig.pri
-	qmake-qt4
+	# suppress the harmless warning about generated HootSwig.cxx
+	# All the true craziness is so we use the qmake return code rather than
+	# the grep code.
+	qmake-qt4 2>&1 | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
+	  || true \
+	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
 
 tmp/schema.dot: qt-make
 	HootTest --single hoot::OsmSchemaTest

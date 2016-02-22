@@ -229,7 +229,7 @@ tds61 = {
     }, // End getDbSchema
 
     // validateAttrs: Clean up the supplied attr list by dropping anything that should not be part of the
-    //                feature, checking enumerated values and populateing the OTH field.
+    //                feature, checking values and populateing the OTH field.
     validateAttrs: function(geometryType,attrs) {
 
         // First, use the lookup table to quickly drop all attributes that are not part of the feature.
@@ -286,8 +286,11 @@ tds61 = {
                                 attrs[val] = tStr[0].substring(0,tds61.rules.txtLength[val]);
                             }
                         } // End text attr length > max length
+
+                        // It's text fo skip the next test
+                        continue;
                     } // End in txtLength
-        	    }
+                } // End attrs loop
             }
             else
             {
@@ -327,6 +330,9 @@ tds61 = {
                                 attrs[val] = tStr[0].substring(0,tds61.rules.txtLength[val]);
                             }
                         } // End text attr length > max length
+
+                        // It's text fo skip the next test
+                        continue;
                     } // End in txtLength
         	    } // End attrs loop
             }
@@ -514,7 +520,7 @@ tds61 = {
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
-            translate.applySimpleNumBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], tds61.rules.numBiased, 'backward');
+            translate.applySimpleNumBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], tds61.rules.numBiased, 'backward',tds61.rules.intList);
             translate.applySimpleTxtBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], tds61.rules.txtBiased, 'backward');
 
             // post processing
@@ -1736,7 +1742,8 @@ tds61 = {
 
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, tags, tds61.rules.numBiased, 'forward');
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        translate.applySimpleNumBiased(attrs, tags, tds61.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(attrs, tags, tds61.rules.txtBiased, 'forward');
 
         // Crack open the OTH field and populate the appropriate attributes
@@ -1863,7 +1870,7 @@ tds61 = {
 
         // apply the simple number and text biased rules
         // Note: These are BACKWARD, not forward!
-        translate.applySimpleNumBiased(attrs, tags, tds61.rules.numBiased, 'backward');
+        translate.applySimpleNumBiased(attrs, tags, tds61.rules.numBiased, 'backward',tds61.rules.intList);
         translate.applySimpleTxtBiased(attrs, tags, tds61.rules.txtBiased, 'backward');
 
         // post processing

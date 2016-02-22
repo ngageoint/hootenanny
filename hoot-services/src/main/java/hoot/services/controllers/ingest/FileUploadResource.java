@@ -100,6 +100,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			@QueryParam("INPUT_NAME") final String inputName,
 			@QueryParam("USER_EMAIL") final String userEmail,
 			@QueryParam("NONE_TRANSLATION") final String noneTranslation,
+			@QueryParam("FGDB_FC") final String fgdbFeatureClasses,
 			@Context HttpServletRequest request)
 	{
 		String etlName = inputName;
@@ -192,7 +193,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			JSONArray jobArgs = _createNativeRequest(reqList, zipCnt, shpZipCnt,
 					fgdbZipCnt, osmZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 					zipList, translation, jobId, 
-					etlName, inputsList, userEmail, noneTranslation);
+					etlName, inputsList, userEmail, noneTranslation, fgdbFeatureClasses);
 			
 			//userEmail
 
@@ -224,7 +225,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			final int osmCnt, final int geonamesCnt,
 			final List<String> zipList, final String translation, final String jobId, 
 			final String etlName, final List<String> inputsList, final String userEmail,
-			final String isNoneTranslation) throws Exception
+			final String isNoneTranslation, final String fgdbFeatureClasses) throws Exception
 	{
 		JSONArray jobArgs = new JSONArray();
 		String curInputType = null;
@@ -331,6 +332,29 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 		param.put("INPUT", inputs );
 		param.put("INPUT_NAME", etlName);
 		param.put("USER_EMAIL", userEmail);
+		if(curInputType.equalsIgnoreCase("FGDB") && 
+				fgdbFeatureClasses != null && fgdbFeatureClasses.length()>0 )
+		{
+			Object oRq = reqList.get(0);
+			
+			if(oRq != null)
+			{
+				JSONObject jsonReq = (JSONObject)oRq;
+				String rawInput = jsonReq.get("name").toString();
+				String fgdbInput = "";
+				List<String> fgdbInputs = new ArrayList<>();
+				String[] cls = fgdbFeatureClasses.split(",");
+				
+				for(int i=0; i<cls.length; i++)
+				{
+					String cl = cls[i];
+					fgdbInputs.add(rawInput + "\\;" + cl);
+				}
+				
+				fgdbInput = StringUtils.join(fgdbInputs.toArray(), ' ');
+				param.put("INPUT", fgdbInput );
+			}
+		}
 		
 		
 		JSONArray commandArgs = parseParams(param.toJSONString());
