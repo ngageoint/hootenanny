@@ -195,11 +195,11 @@ else:
 def cppTypeMap(s):
     if s == 'string':
         return 'QString';
-    if s == 'int' or s == 'double' or s == 'bool':
+    if s == 'long' or s == 'int' or s == 'double' or s == 'bool':
         return s
     if s == 'list':
     	  return 'QStringList';
-    raise Exception("Expected a type of string, int, bool, double, or list.")
+    raise Exception("Expected a type of string, long, int, bool, double, or list.")
 
 def toCamelCase(s):
     l = list(s)

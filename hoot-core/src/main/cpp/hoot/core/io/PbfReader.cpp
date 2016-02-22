@@ -417,7 +417,10 @@ void PbfReader::_loadDenseNodes(const DenseNodes& dn)
 
         if (timestamp != 0 && nodes[i]->getTags().getInformationCount() > 0)
         {
-          QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
+          // QT 4.6 does not have fromMSecsSinceEpoch
+          //QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
+	  // same time, but friendly to earlier Qt version
+          QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
           QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
           nodes[i]->setTag("source:datetime", dts);
         }
@@ -1196,7 +1199,8 @@ void PbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)
 
       if (timestamp != 0)
       {
-        QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
+        //QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
+        QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
         QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
 
         t.set("source:datetime", dts);
