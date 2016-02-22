@@ -12,7 +12,7 @@ sudo bash -c "cat >> $HOME/.profile" <<EOT
 export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
 export HADOOP_HOME=/usr/local/hadoop
 export HOOT_HOME=/home/bwitham/hoot
-export PATH=$ECLIPSE_HOME:/usr/local/bin:/usr/local/lib:$PATH:/usr/lib/x86_64-linux-gnu:$HADOOP_HOME/bin:$HOOT_HOME/bin
+export PATH=/usr/local/bin:/usr/local/lib:$PATH:/usr/lib/x86_64-linux-gnu:$HADOOP_HOME/bin:$HOOT_HOME/bin
 EOT
 fi
 source $HOME/.profile
@@ -399,20 +399,22 @@ sudo apt-get install meld qtcreator distcc htop synergy gparted eclipse eclipse-
 sudo apt-get remove qt5-default 
 sudo apt-get autoremove
 
-if ! grep -i --quiet 'DISTCC_TCP_CORK=0' /etc/environment; then
-  sudo echo `DISTCC_TCP_CORK=0` >> /etc/environment
-fi
-mkdir -p $HOME/local/jars
-if [ -f $HOME/local/jars/josm-tested.jar ]; then
-  wget -P $HOME/local/jars -N http://josm.openstreetmap.de/josm-tested.jar
-fi
+if ! grep -i --quiet '-Xmx' /etc/default/eclipse.ini; then
+  echo "Configuring Eclipse..."
+sudo bash -c "cat >> /etc/default/eclipse.ini" <<EOT
 
-if ! grep -i --quiet HOOT $HOME/josm.sh; then
-sudo bash -c "cat >> $HOME/josm.sh" <<EOT
-#!/bin/bash
+-Dosgi.requiredJavaVersion=1.7
+-XX:MaxPermSize=2048m
+-Xms512m
+-Xmx2048m
+EOT
+fi
+if ! grep -i --quiet '--launcher.XXMaxPerSize' /etc/default/eclipse.ini; then
+  echo "Configuring Eclipse..."
+sudo bash -c "cat >> /etc/default/eclipse.ini" <<EOT
 
-cd $HOME/local/jars
-java -XX:MaxPermSize=1024m -Xmx8192m -jar josm-tested.jar
+--launcher.XXMaxPermSize
+2048m
 EOT
 fi
 
