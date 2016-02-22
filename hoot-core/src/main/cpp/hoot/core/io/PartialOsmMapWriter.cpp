@@ -98,5 +98,13 @@ void PartialOsmMapWriter::writeElement(ElementInputStream& in)
   writePartial(ele);
 }
 
+void PartialOsmMapWriter::writeElement(ElementPtr &element)
+{
+  if (element != 0)
+  {
+    writePartial(element);
+  }
+}
+
 
 }

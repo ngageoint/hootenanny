@@ -86,7 +86,8 @@ AC_DEFUN([AX_LIB_GDAL],
         GDAL_DEP_LDFLAGS="`$GDAL_CONFIG --dep-libs`"
 	dnl Only keep the -L parameters
 	dnl a `Quadrigaph'. @<:@ gives you [ and @:>@ gives you ].
-        GDAL_RPATH="`$GDAL_CONFIG --dep-libs | grep -o ' -L@<:@^ @:>@*' | sed -e "s/ -L\(.*\)/ -Wl,-rpath=\1/g" | tr '\n' ' '`"
+        GDAL_RPATH="`$GDAL_CONFIG --libs | grep -o -e '\(^\| \)-L@<:@^ @:>@*' | sed -e "s/-L\(.*\)/ -Wl,-rpath=\1/g" | tr '\n' ' '`"
+        GDAL_RPATH="$GDAL_RPATH `$GDAL_CONFIG --dep-libs | grep -o ' -L@<:@^ @:>@*' | sed -e "s/ -L\(.*\)/ -Wl,-rpath=\1/g" | tr '\n' ' '`"
 
         AC_DEFINE([HAVE_GDAL], [1], [Define to 1 if GDAL library are available])
 

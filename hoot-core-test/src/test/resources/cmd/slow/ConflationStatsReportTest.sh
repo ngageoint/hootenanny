@@ -45,8 +45,8 @@ ls test-output/cmd/csr/
 # Size on yubyub, Ubuntu 14.04, 2016-02-01 - 192002
 PDF_SIZE=`wc -c test-output/cmd/csr/csr.pdf | cut -d' ' -f1`
 [ $PDF_SIZE -lt 150000 ] && echo PDF is smaller than expected
-[ $PDF_SIZE -gt 250000 ] && echo PDF is bigger than expected
-[ $PDF_SIZE -gt 150000 ] && [ $PDF_SIZE -lt 250000 ] && echo PDF size in range.
+[ $PDF_SIZE -gt 350000 ] && echo PDF is bigger than expected
+[ $PDF_SIZE -gt 150000 ] && [ $PDF_SIZE -lt 350000 ] && echo PDF size in range.
 
 # TEST 5: test a sampling of the stats in the output of the stats command
 # - will output difference if fails

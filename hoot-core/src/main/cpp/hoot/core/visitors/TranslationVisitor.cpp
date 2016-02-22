@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include <vector>
 
@@ -72,6 +72,12 @@ void TranslationVisitor::visit(const ConstElementPtr& ce)
   if (tags.getNonDebugCount() > 0)
   {
     GeometryTypeId gtype = ElementConverter::getGeometryType(e, false);
+
+    // If we don't know what it is, no point in translating it.
+    if (gtype == ElementConverter::UNKNOWN_GEOMETRY)
+    {
+      return;
+    }
 
     if (_toOgr)
     {

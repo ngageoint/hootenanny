@@ -113,7 +113,7 @@ NOTE: If only specific tags are needed to manually copy from one feature to anot
 
 ===== Copying Tags Between Features
 
-When <<HootConflictReview,reviewing>> conflicts or editing features it is often useful to be able to copy tags from a selected feature and either append or overwrite the tags of another feature that can be within the same layer or in a different layer.  For example, when conflating two layers a selected set of features can be flagged for the user to review whereby users will be required to iterate through each pair of presented conflicts and determine whether any action is needed. This is explained using the following POI scenario involving OSM and MGCP place name features in the Democratic Republic of the Congo (2°58'40.82" N 22°20'45.08" E). 
+When <<HootConflictReview,reviewing>> conflicts or editing features it is often useful to be able to copy tags from a selected feature and either append or overwrite the tags of another feature that can be within the same layer or in a different layer.  For example, when conflating two layers a selected set of features are flagged for the user to review and determine whether any further action is required. This is explained using the following POI scenario involving OSM and MGCP place name features in the Democratic Republic of the Congo (2°58'40.82" N 22°20'45.08" E). 
 
 [[CopyTagsFeatures]]
 1) Select a source point (orange highlighted marker) and check the boxes next to each tag in the All Tags list that you wish to copy to the other feature. 
@@ -382,7 +382,7 @@ Hootenanny supports the ability for multiple users to review the same merged out
 [[HootShareReviews]]
 ==== Sharing/Saving Reviews
 
-To assist with the multi-user conflict reviewing, there is a new mechanism to allow users to better collaborate on reviews using the _Save Review_ (*C* in <<ReviewMode_Layout>>) option.  When a user encounters a review that requires additional feedback prior to resolving, they can click the Save Review button.  This will pop-up a dialog box allowing them to enter some details about the review which others can then open separately as a bookmark from the Review Bookmarks in Manage.  A second user can then open the review bookmark, add additional comments and view that review to take any additional action required.
+To assist with the multi-user conflict reviewing, there is a new mechanism to allow users to better collaborate on reviews using the _Share Review_ (*C* in <<ReviewMode_Layout>>) option.  When a user encounters a review that requires additional feedback prior to resolving, they can click the _Share Review_ button.  This will pop-up a dialog box allowing them to enter some details about the review which others can then open separately as a bookmark from the Review Bookmarks in Manage.  A second user can then open the review bookmark, add additional comments and view that review to take any additional action required.
 
 .Share Review.  Clicking the Share Review button pops up a dialog box where a user can enter a title, description, note and email to associate with an unresolved review. 
 image::user/images/id/hoot_sharereview.png[scaledwidth="25%"]
@@ -739,7 +739,7 @@ image::user/images/id/hoot_openreview.png["75%"]
 
 === About Hootenanny
 
-The version of Hootenanny can be found by clicking on the Hootenanny link located in the top left hand corner of the UI. Having the version information readily available is particularly useful when troubleshooting or testing.
+This tab provides all of the version information for Hootenanny Core, Web Services and iD Editor versions and provides a link to download the Hootenanny User Interface Guide.  
 
 .Hootenanny Version info
 image::user/images/id/hoot_about.png[]

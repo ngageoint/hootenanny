@@ -194,7 +194,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"fgdb_ogr", inputsList, "test@test.com", "false");
+				"fgdb_ogr", inputsList, "test@test.com", "false", null);
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -313,7 +313,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"fgdb_ogr", inputsList, "test@test.com", "false");
+				"fgdb_ogr", inputsList, "test@test.com", "false", null);
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -431,7 +431,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"osm", inputsList, "test@test.com", "false");
+				"osm", inputsList, "test@test.com", "false", null);
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -552,7 +552,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"ogr", inputsList, "test@test.com", "false");
+				"ogr", inputsList, "test@test.com", "false", null);
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -661,7 +661,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"ogr", inputsList, "test@test.com", "false");
+				"ogr", inputsList, "test@test.com", "false", null);
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -769,7 +769,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"osm", inputsList, "test@test.com", "false");
+				"osm", inputsList, "test@test.com", "false", null);
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -858,7 +858,7 @@ public class FileUploadResourceTest {
 		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
 				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
 				zipList, "TDSv61.js", jobId, 
-				"fgdb", inputsList, "test@test.com", "false");
+				"fgdb", inputsList, "test@test.com", "false", null);
 		
 		JSONObject req = (JSONObject)resA.get(0);
 		JSONArray params = (JSONArray) req.get("params");
@@ -891,6 +891,96 @@ public class FileUploadResourceTest {
 		org.junit.Assert.assertTrue(nP == 3);
 		FileUtils.forceDelete(workingDir);
 	}
+
+	
+	
+	@Test
+	@Category(UnitTest.class)
+	public void TestCreateNativeRequestFgdbWithFeatureClasses() throws Exception
+	{
+		String input = "DcGisRoads.gdb";
+		String jobId = "test-id-123";
+		String wkdirpath = homeFolder + "/upload/" + jobId;
+		File workingDir = new File(wkdirpath);
+		FileUtils.forceMkdir(workingDir);
+		org.junit.Assert.assertTrue(workingDir.exists());
+		
+		File srcDir = new File(homeFolder + "/test-files/service/FileUploadResourceTest/" + input);
+		File destDir = new File(wkdirpath + "/" + input);
+		FileUtils.copyDirectory(srcDir, destDir);
+		org.junit.Assert.assertTrue(destDir.exists());
+		
+		
+		
+
+		
+		FileUploadResource res = new FileUploadResource();
+
+		// Shape 1
+		JSONArray results = new JSONArray();
+		JSONObject zipStat = new JSONObject();
+		List<String>inputsList = new ArrayList<String>();
+		inputsList.add(input);
+		
+		res._buildNativeRequest(jobId, "DcGisRoads", "gdb",  input, 
+				results, zipStat);
+		
+		int shpCnt = 0;
+		int osmCnt = 0;
+		int fgdbCnt = 0;
+		int geonamesCnt = 0;
+		
+		int zipCnt = 0;
+		int shpZipCnt = 0;
+		int osmZipCnt = 0;
+		int fgdbZipCnt = 0;
+		int geonamesZipCnt = 0;
+		List<String> zipList = new ArrayList<String>();
+		
+		shpCnt += (Integer) zipStat.get("shpcnt");
+    fgdbCnt += (Integer) zipStat.get("fgdbcnt");
+    osmCnt += (Integer) zipStat.get("osmcnt");
+    geonamesCnt += (Integer) zipStat.get("osmcnt");
+  
+    
+		
+		JSONArray resA = res._createNativeRequest(results, zipCnt, shpZipCnt, fgdbZipCnt,osmZipCnt, geonamesZipCnt, 
+				shpCnt, fgdbCnt, osmCnt, geonamesCnt,
+				zipList, "TDSv61.js", jobId, 
+				"fgdb", inputsList, "test@test.com", "false", "feature1,feature2");
+		
+		JSONObject req = (JSONObject)resA.get(0);
+		JSONArray params = (JSONArray) req.get("params");
+		
+		int nP = 0;
+		
+		for(Object o : params)
+		{
+			JSONObject oJ = (JSONObject)o;
+			
+			if(oJ.get("INPUT") != null)
+			{
+				org.junit.Assert.assertTrue(oJ.get("INPUT").toString().equals("DcGisRoads.gdb\\;feature1 DcGisRoads.gdb\\;feature2"));
+				nP++;
+			}
+			
+			if(oJ.get("INPUT_PATH") != null)
+			{
+				org.junit.Assert.assertTrue(oJ.get("INPUT_PATH").toString().equals("upload/test-id-123"));
+				nP++;
+			}
+			
+			if(oJ.get("INPUT_TYPE") != null)
+			{
+				org.junit.Assert.assertTrue(oJ.get("INPUT_TYPE").toString().equals("FGDB"));
+				nP++;
+			}
+			
+		}
+		org.junit.Assert.assertTrue(nP == 3);
+		FileUtils.forceDelete(workingDir);
+	}
+
 
 	
 	@Ignore
@@ -1012,4 +1102,5 @@ public class FileUploadResourceTest {
 
 		FileUtils.forceDelete(workingDir);*/
 	}
+
 }

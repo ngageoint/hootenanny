@@ -696,6 +696,11 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
     _writePartial(cacheProvider, newRelation);
 }
 
+void OgrWriter::writeElement(ElementPtr &element)
+{
+  writeElement(element, false);
+}
+
 void OgrWriter::writeElement(ElementInputStream& inputStream)
 {
   writeElement(inputStream, false);
@@ -704,14 +709,18 @@ void OgrWriter::writeElement(ElementInputStream& inputStream)
 void OgrWriter::writeElement(ElementInputStream& inputStream, bool debug)
 {
   // Make sure incoming element is in WGS84
-  assert(inputStream.getProjection()->IsSame(&_wgs84) == true);
+  assert( inputStream.getProjection()->IsSame(&_wgs84) == true );
   ElementPtr nextElement = inputStream.readNextElement();
 
-  // TERRY TESTING COULD BE CATASTROPHIC
-  Tags sourceTags = nextElement->getTags();
+  writeElement(nextElement, debug);
+}
+
+void OgrWriter::writeElement(ElementPtr &element, bool debug)
+{
+  Tags sourceTags = element->getTags();
   Tags destTags;
-  for (Tags::const_iterator it = nextElement->getTags().begin();
-       it != nextElement->getTags().end(); ++it)
+  for (Tags::const_iterator it = element->getTags().begin();
+       it != element->getTags().end(); ++it)
   {
     if (sourceTags[it.key()] != "")
     {
@@ -719,14 +728,14 @@ void OgrWriter::writeElement(ElementInputStream& inputStream, bool debug)
     }
   }
   // Now that all the empties are gone, update our element
-  nextElement->setTags(destTags);
+  element->setTags(destTags);
 
-  if (debug == true)
+  if ( debug == true )
   {
-    LOG_DEBUG(nextElement->toString());
+    LOG_DEBUG(element->toString());
   }
 
-  PartialOsmMapWriter::writePartial(nextElement);
+  PartialOsmMapWriter::writePartial(element);
 }
 
 void OgrWriter::setCacheCapacity(unsigned long maxElementsPerType)

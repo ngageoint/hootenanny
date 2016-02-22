@@ -80,6 +80,8 @@ public:
 
   virtual void writeElement(ElementInputStream& in);
 
+  virtual void writeElement(ElementPtr& element);
+
 };
 
 }
