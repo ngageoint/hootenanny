@@ -54,8 +54,8 @@ class ServicesDbReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runUrlMissingMapIdTest);
   CPPUNIT_TEST(runUrlInvalidMapIdTest);
   CPPUNIT_TEST(runReadTest);
-  CPPUNIT_TEST(runReadWithElemTest);
- // CPPUNIT_TEST(runPartialReadTest);
+  //CPPUNIT_TEST(runReadWithElemTest);
+  CPPUNIT_TEST(runPartialReadTest);
   CPPUNIT_TEST(runFactoryReadTest);
 
   // Osm Api tests

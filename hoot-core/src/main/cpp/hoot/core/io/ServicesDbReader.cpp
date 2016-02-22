@@ -650,7 +650,7 @@ shared_ptr<Element> ServicesDbReader::_getElementUsingIterator()
   if (!_elementResultIterator.get() || !_elementResultIterator->isActive())
   {
     //no results available, so request some more results
-    _elementResultIterator = _database.selectElements(-1, _selectElementType, _maxElementsPerMap, 0);
+    _elementResultIterator = _database.selectElements(_selectElementType);
   }
 
   //results still available, so keep parsing through them
@@ -670,7 +670,6 @@ shared_ptr<Element> ServicesDbReader::_getElementUsingIterator()
   }
 
   assert(_selectElementType == element->getElementType());
-  _elementsRead++;
 
   return element;
 }
@@ -681,6 +680,7 @@ shared_ptr<Element> ServicesDbReader::readNextElement()
   {
     shared_ptr<Element> result = _nextElement;
     _nextElement.reset();
+    _elementsRead++;
     return result;
   }
   else
