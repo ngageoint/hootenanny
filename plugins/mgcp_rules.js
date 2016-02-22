@@ -2335,6 +2335,12 @@ mgcp.rules = {
     },
     // ##### End of txtLength #####
 
+    // ##### Start of intList #####
+    // This list is for validateing the integer attributes prior to export
+    intList : ['LTN','NOS'],
+    // ##### End of intList#####
+
+
 
 } // End of mgcp.rules
 
