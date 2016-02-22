@@ -45,6 +45,16 @@ Unmatched Buildings	0	0	0
 Percentage of Buildings Conflated	0	0	0	
 Percentage of Buildings Marked for Review	0	0	0	
 Percentage of Unmatched Buildings	0	0	0	
+Waterway Count	14	15	79	
+Conflatable Waterways	14	15	0	
+Conflated Waterways	0	0	23	
+Waterways Marked for Review	0	0	0	
+Number of Waterway Reviews to be Made	0	0	0	
+Unmatched Waterways	14	15	56	
+Meters of Waterway Processed by Conflation	0	0	7533.441935619483	
+Percentage of Waterways Conflated	0	0	29.11392405063291	
+Percentage of Waterways Marked for Review	0	0	0	
+Percentage of Unmatched Waterways	100	100	70.886075949367083	
 Difference Between Total Features in Output and Total Features in Inputs			50	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			172.41379310344826	
 

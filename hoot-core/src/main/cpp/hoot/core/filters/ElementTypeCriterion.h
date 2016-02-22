@@ -47,6 +47,8 @@ public:
     return e->getElementType() == _elementType;
   }
 
+  virtual ElementCriterion* clone() { return new ElementTypeCriterion(_elementType); }
+
 protected:
   ElementType::Type _elementType;
 };

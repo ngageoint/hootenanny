@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,49 +22,24 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef STATUSCRITERION_H
-#define STATUSCRITERION_H
+#include "WaterwayCriterion.h"
 
-#include "BaseFilter.h"
-#include "WayFilter.h"
-
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/util/ConfigOptions.h>
+// hoot
+#include <hoot/core/Factory.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
 
-/**
- * Matches when an element's status matches the status provided.
- */
-class StatusCriterion : public ElementCriterion, public Configurable
+HOOT_FACTORY_REGISTER(ElementCriterion, WaterwayCriterion)
+
+bool WaterwayCriterion::isSatisfied(const shared_ptr<const Element> &e) const
 {
-public:
-
-  static string className() { return "hoot::StatusCriterion"; }
-
-  StatusCriterion() { setConfiguration(conf()); }
-  StatusCriterion(Status s) : _status(s) { }
-
-  virtual bool isSatisfied(const shared_ptr<const Element>& e) const
-  {
-    return _status == e->getStatus();
-  }
-
-  virtual void setConfiguration(const Settings& conf)
-  {
-    _status = Status::fromString(ConfigOptions(conf).getStatusCriterionStatus());
-  }
-
-  virtual ElementCriterion* clone() { return new StatusCriterion(_status); }
-
-private:
-  Status _status;
-};
+  // if it is a linear waterway
+  return OsmSchema::getInstance().isLinearWaterway(*e.get());
+}
 
 }
 
-#endif // STATUSCRITERION_H

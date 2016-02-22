@@ -50,6 +50,9 @@ public:
   {
     return e->getTags().getInformationCount() == 0;
   }
+
+  virtual ElementCriterion* clone() { return new NoInformationCriterion(); }
+
 };
 
 }

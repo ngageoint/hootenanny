@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,47 +24,30 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef STATUSCRITERION_H
-#define STATUSCRITERION_H
+#ifndef WATERWAYCRITERION_H
+#define WATERWAYCRITERION_H
 
-#include "BaseFilter.h"
-#include "WayFilter.h"
-
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include "ElementCriterion.h"
 
 namespace hoot
 {
 
 /**
- * Matches when an element's status matches the status provided.
+ * A filter that will either keep or remove waterways.
  */
-class StatusCriterion : public ElementCriterion, public Configurable
+class WaterwayCriterion : public ElementCriterion
 {
 public:
+  static string className() { return "hoot::WaterwayCriterion"; }
 
-  static string className() { return "hoot::StatusCriterion"; }
+  WaterwayCriterion() {}
 
-  StatusCriterion() { setConfiguration(conf()); }
-  StatusCriterion(Status s) : _status(s) { }
+  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
 
-  virtual bool isSatisfied(const shared_ptr<const Element>& e) const
-  {
-    return _status == e->getStatus();
-  }
+  virtual ElementCriterion* clone() { return new WaterwayCriterion(); }
 
-  virtual void setConfiguration(const Settings& conf)
-  {
-    _status = Status::fromString(ConfigOptions(conf).getStatusCriterionStatus());
-  }
-
-  virtual ElementCriterion* clone() { return new StatusCriterion(_status); }
-
-private:
-  Status _status;
 };
 
 }
 
-#endif // STATUSCRITERION_H
+#endif // WATERWAYCRITERION_H

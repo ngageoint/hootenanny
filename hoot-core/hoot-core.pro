@@ -487,7 +487,8 @@ SOURCES += \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.cpp \
     src/main/cpp/hoot/core/visitors/RemoveMissingElementsVisitor.cpp \
-    src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.cpp
+    src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.cpp \
+    src/main/cpp/hoot/core/filters/WaterwayCriterion.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -969,5 +970,6 @@ HEADERS += \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.h \
     src/main/cpp/hoot/core/visitors/RemoveMissingElementsVisitor.h \
-    src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.h
+    src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.h \
+    src/main/cpp/hoot/core/filters/WaterwayCriterion.h
 

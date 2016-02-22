@@ -40,6 +40,13 @@ TagContainsFilter::TagContainsFilter(FilterType type, QString key, QString value
   _valueSubstring.append(valueSubstring);
 }
 
+TagContainsFilter::TagContainsFilter(FilterType type, QStringList keys, QStringList valueSubstrings)
+{
+  _type = type;
+  _key = keys;
+  _valueSubstring = valueSubstrings;
+}
+
 void TagContainsFilter::addPair(QString key, QString valueSubstring)
 {
   _key.append(key);
@@ -54,7 +61,8 @@ bool TagContainsFilter::isFiltered(const Element& e) const
   {
     if (e.getTags().contains(_key[i]) && e.getTags()[_key[i]].contains(_valueSubstring[i]))
     {
-      matches = true;
+        matches = true;
+        break;  //  Only one match is required
     }
   }
 

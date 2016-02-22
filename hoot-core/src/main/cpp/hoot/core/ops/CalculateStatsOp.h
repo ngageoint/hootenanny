@@ -45,8 +45,14 @@ class FilteredVisitor;
 
 class CalculateStatsOp : public ConstOsmMapOperation
 {
-
 public:
+
+  enum FeatureCalcType
+  {
+    None,
+    Length,
+    Area
+  };
 
   CalculateStatsOp(QString mapName = "", bool inputIsAConflatedMap = false);
   CalculateStatsOp(ElementCriterionPtr criterion, QString mapName = "", bool inputIsAConflatedMap = false);
@@ -95,6 +101,8 @@ private:
 
   static bool _matchDescriptorCompare(const MatchCreator::Description& m1,
                                       const MatchCreator::Description& m2);
+
+  void _generateFeatureStats(shared_ptr<const OsmMap>& map, QString description, float conflatableCount, FeatureCalcType type, ElementCriterion* criterion);
 };
 
 }
