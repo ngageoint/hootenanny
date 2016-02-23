@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
-#similar to the hoot vagrant setup, except not virtualized and with added developer tools; not actively supported and not guaranteed to be in sync with the latest hoot...use this as a reference ONLY as one possible way to set up a hoot developer environment
-#see the vagrant install for the latest and greatest hoot setup; USE THIS AT YOUR OWN RISK
+# This script:  
+#   - is similar to the hoot vagrant ubuntu setup without the vagrant part; meant for better performance on bare metal 
+#   - has added developer tools
+#   - lets you run the regression tests 
+#   - is not actively supported and not guaranteed to be in sync with the latest hoot setup (see the vagrant install for the latest and greatest hoot setup) 
+# Use this as one possible way to set up a Hootenanny developer environment.  USE THE SCRIPT AT YOUR OWN RISK
 
 cd ~
 mkdir -p hoot
@@ -395,7 +399,7 @@ fi
 sudo service tomcat7 stop
 # eclipse install here overwrites the existing standard tested tomcat 6 install; this environment assumes you'll be doing your tomcat debugging from eclipse...so not a big deal
 cd $HOME
-sudo apt-get install meld qtcreator distcc htop synergy gparted eclipse eclipse-jdt eclipse-pde eclipse-platform* libtomcat7-java
+sudo apt-get install -y meld qtcreator distcc htop synergy gparted eclipse eclipse-jdt eclipse-pde eclipse-platform* libtomcat7-java osmosis
 sudo apt-get remove qt5-default 
 sudo apt-get autoremove
 
@@ -418,6 +422,8 @@ sudo bash -c "cat >> /etc/default/eclipse.ini" <<EOT
 EOT
 fi
 
+# end developer tools extra setup
+
 cd $HOME
 if [ ! -d $HOOT_HOME/hoot-core ]; then
   git clone https://github.com/ngageoint/hootenanny.git hoot
@@ -429,8 +435,6 @@ source ./SetupEnv.sh
 if [ ! -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
     echo 'testJobStatusPollerTimeout=250' > $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
 fi
-
-# end developer tools extra setup
 
 # Update the init.d script for node-mapnik-server
 if [ ! -d /etc/init.d/node-mapnik-server ]; then
