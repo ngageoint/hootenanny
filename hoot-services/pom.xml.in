@@ -51,7 +51,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.18.1</version>
         <configuration>
-          <forkCount>8</forkCount>
+          <forkCount></forkCount>
           <reuseForks>true</reuseForks>
           <groups>hoot.services.UnitTest</groups>
           <skipTests>${skip.hoot.services.tests}</skipTests>
