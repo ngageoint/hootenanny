@@ -625,7 +625,8 @@ namespace Tgs
   {
     try
     {
-      std::string stdString(std::istreambuf_iterator<char>(fileStream), {});
+      std::istreambuf_iterator<char> eos;
+      std::string stdString(std::istreambuf_iterator<char>(fileStream), eos);
       QDomDocument modelDoc("XML");
       modelDoc.setContent(QString::fromStdString(stdString));
       QDomElement elem = modelDoc.documentElement();
