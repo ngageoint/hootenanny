@@ -182,7 +182,7 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>2.10.3</version>
         <configuration>
-          <!-- This can been disabled to prevent build breakage....but then you could end up with 
+          <!-- This has been disabled to prevent build breakage....but then you could end up with 
           no docs. -->
           <failOnError>false</failOnError>
           <excludePackageNames>hoot.services.db2</excludePackageNames>

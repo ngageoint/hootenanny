@@ -46,11 +46,14 @@ build: build-info config
 	
 	cp target/hoot-services-*.war ../bin
 
+docs: config
+	../scripts/mvn-build $(MVN_QUIET) docs
 
 clean: pom.xml src/main/resources/log4j.xml config
 	../scripts/mvn-build $(MVN_QUIET) clean
 	rm -f pom.xml
 	rm -f src/main/resources/log4j.xml
+	rm -rf target/site/apidocs
 
 # Both commands now do the same thing.
 clean-db: clean-db-force

@@ -13,6 +13,7 @@ usage() {
     echo "  integration    - run integration tests"
     echo "  clean          - clean the build"
     echo "  eclipse        - build eclipse files for the project"
+    echo "  docs           - build documentation"
     echo "args:"
     echo "  -f  --failfast            - fail fast tests (immediately stop on test failure)"
     echo "  -j  --javadocs            - include javadocs of dependencies (if available)"
@@ -108,6 +109,10 @@ while [ $# -gt 0 ] ; do
         PHASE="eclipse"
         shift 1
         ;;
+    "docs") 
+        PHASE="docs"
+        shift 1
+        ;;
     "-f" | "--failfast")
         ARGS=$ARGS" -Dmrgeo.failfast=true"
         shift 1
@@ -180,6 +185,9 @@ case $PHASE in
    run-eclipse
    exit 0
    ;;
+   "docs")
+   ARGS="$ARGS javadoc:javadoc"
+   ;;
 esac
 
 if [ "$QUIET" != "1" ]; then
@@ -193,18 +201,11 @@ else
 fi
 
 # The grep removes some silly messages that can't be removed.
+# The SLF4J problem should probably be fixed at the source rather than filtered.
+# https://github.com/ngageoint/hootenanny/issues/348#issuecomment-185770582
 mvn $ARGS 2>&1 \
     | grep -v -F "Groovy: [scmModified"$'\n'"execute contextualize" \
     | grep -v "Outputting log4j snippets" \
-    | grep -v -e 'SLF4J:.*' \
-    || true
-# Use the return value of mvn, not the last grep
-[ ${PIPESTATUS[0]} == "0" ] && true || false
-
-# Remove verbose javadoc messages
-# The SLF4J problem should probably be fixed at the source rather than filtered.
-# https://github.com/ngageoint/hootenanny/issues/348#issuecomment-185770582
-mvn javadoc:javadoc 2>&1 \
     | grep -v -e 'Generating.*' \
     | grep -v -e '\[INFO\].*' \
     | grep -v -e 'Constructing Javadoc information.*' \

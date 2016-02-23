@@ -65,7 +65,7 @@ check: test
 test: build ui-test services-test pp-test plugins-test
 	bin/HootTest $(HOOT_TEST_DIFF) --slow
 
-docs: always HOOT_VERSION_FILE
+docs: always HOOT_VERSION_FILE services-docs
 	cd docs; $(MAKE)
 
 test-quick: build services-test pp-test
@@ -224,6 +224,11 @@ ifeq ($(BUILD_SERVICES),services)
 	cd hoot-services && $(MAKE) -f Makefile build
 endif
 
+services-docs:
+ifeq ($(BUILD_SERVICES),services)
+	cd hoot-services && $(MAKE) -f Makefile docs
+endif
+
 services-clean:
 ifeq ($(BUILD_SERVICES),services)
 	cd hoot-services && $(MAKE) -f Makefile clean
@@ -269,8 +274,10 @@ archive: default docs
 	mkdir -p $(HOOT_TARNAME)
 	cp Makefile.in aclocal.m4 configure config.h.in $(HOOT_TARNAME)
 	mkdir -p $(HOOT_TARNAME)/docs/
-	# Adding javadoc with a conditional so it is ignored if it doesn't exist.
-	cp docs/*.pdf docs/*.html docs/*.text `F=docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz; test -f $F && echo $F` $(HOOT_TARNAME)/docs/
+	# Adding javadoc with a conditional so it is ignored if it doesn't exist. - This javadoc conditional didn't work for me, so adjusted - BDW
+	#cp docs/*.pdf docs/*.html docs/*.text `F=docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz; test -f $F && echo $F` $(HOOT_TARNAME)/docs/
+	cp docs/*.pdf docs/*.html docs/*.text $(HOOT_TARNAME)/docs/
+	if [ "$(BUILD_SERVICES)" == "services" ]; then cp docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz $(HOOT_TARNAME)/docs/; fi
 	# Copy the protocol buffer generated files. Eases a dependency when building
 	# on CentOS
 	mkdir -p $(HOOT_TARNAME)/hoot-core/src/main/cpp/hoot/core/proto/
