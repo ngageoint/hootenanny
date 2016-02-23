@@ -93,28 +93,6 @@ JavaScriptTranslator::~JavaScriptTranslator()
   close();
 }
 
-void JavaScriptTranslator::_checkError()
-{
-// https://github.com/ngageoint/hootenanny/issues/352
-// Not sure if we can make a v8 version of this. -Matt
-
-//  if (_engine->hasUncaughtException())
-//  {
-//    QString message = _engine->uncaughtException().toString();
-//    long lineNumber = _engine->uncaughtException().property("lineNumber").toNumber();
-//    QString fileName = _engine->uncaughtException().property("fileName").toString();
-//    QString error = QString("%1(%2) %3").arg(fileName).arg(lineNumber).arg(message);
-//    _error = true;
-//    LOG_WARN(error);
-//    LOG_WARN(_engine->uncaughtExceptionBacktrace());
-//    close();
-//    throw Exception(error);
-//  }
-
-// Stubbed
-//  LOG_WARN("Called _checkError")
-}
-
 vector<JavaScriptTranslator::TranslatedFeature> JavaScriptTranslator::_createAllFeatures(
   QVariantList list)
 {
@@ -213,9 +191,10 @@ void JavaScriptTranslator::_finalize()
 
     if (tObj->Has(String::NewSymbol("finalize")))
     {
-      _gContext->call(tObj,"finalize");
+      TryCatch trycatch;
+      Handle<Value> final = _gContext->call(tObj,"finalize");
+      HootExceptionJs::checkV8Exception(final, trycatch);
     }
-    _checkError();
   }
 
   _initialized = false;
@@ -275,9 +254,10 @@ void JavaScriptTranslator::_init()
   // Run Initiallise, if it exists
   if (tObj->Has(String::NewSymbol("initialize")))
   {
-    _gContext->call(tObj,"initialize");
+    TryCatch trycatch;
+    Handle<Value> initial = _gContext->call(tObj,"initialize");
+    HootExceptionJs::checkV8Exception(initial, trycatch);
   }
-  _checkError();
 
   // Sort out what the toOsm function is called
   if (tObj->Has(String::NewSymbol("translateToOsm")))
@@ -361,7 +341,7 @@ bool JavaScriptTranslator::isValidScript()
       }
       catch (const HootException& e)
       {
-        LOG_WARN("Error initializing JavaScript: " +  e.getWhat());
+        LOG_ERROR("Error initializing JavaScript: " +  e.getWhat());
         result = false;
       }
     }
@@ -835,7 +815,6 @@ QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
   {
     _timing.push_back((Tgs::Time::getTime() - start) * 1000.0);
   }
-  _checkError();
 
   QVariantList result;
   if (translated->IsNull() || translated->IsUndefined())
@@ -901,7 +880,6 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName, const
   {
     _timing.push_back((Tgs::Time::getTime() - start) * 1000.0);
   }
-  _checkError();
 
   t.clear();
 

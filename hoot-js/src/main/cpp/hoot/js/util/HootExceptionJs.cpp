@@ -166,7 +166,7 @@ void HootExceptionJs::throwAsHootException(TryCatch& tc)
       QString blank(start,' ');
       QString wave(end - start,'^');
 
-      throw HootException(QString("%1 (%2) \n%3\n%4").arg(fileName).arg(lineNumber).arg(sourceLine).arg(blank + wave));
+      throw HootException(QString("%1 (%2) \n%3\n%4 \n%5").arg(fileName).arg(lineNumber).arg(sourceLine).arg(blank + wave).arg(str(exception->ToString())));
     }
   }
 }
