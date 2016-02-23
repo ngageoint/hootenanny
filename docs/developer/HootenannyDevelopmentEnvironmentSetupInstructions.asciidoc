@@ -1,7 +1,7 @@
 
 == Hootenanny Development Environment Setup Instructions
 
-This document contains the current set of instructions to install the Hootenanny developer build environment within a VirtualBox virtual machine running Ubuntu 14.04.  An alternative more streamlined approach to installing Hootenanny can be taken using the Vagrant file instructions provided in <<HootenannyVagrantSetup>>.  If you do not want to work with VirtualBox or Vagrant, an unsupported script to install to bare metal summarizing the contents of this document is located at: $HOOT_HOME/scripts/HootDevEnvBareMetalUbuntu1404.sh
+This document contains the current set of instructions to install the Hootenanny developer build environment within a VirtualBox virtual machine running Ubuntu 14.04.  An alternative more streamlined approach to installing Hootenanny can be taken using the Vagrant file instructions provided in <<HootenannyVagrantSetup>>.  If you do not want to work with VirtualBox or Vagrant, an unsupported script to install to bare metal summarizing the contents of this document is located at: $HOOT_HOME/scripts/InstallHootDevelopmentEnvironment.sh
 
 === External Dependencies
 
