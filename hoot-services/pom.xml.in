@@ -51,6 +51,10 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.18.1</version>
         <configuration>
+          <!-- Using the following commented out lines would result in better test 
+          parallelism, but haven't been able to get them to work...so forking instead. -->
+          <!-- parallel>methods</parallel>
+          <useUnlimitedThreads>true</useUnlimitedThreads -->
           <forkCount></forkCount>
           <reuseForks>true</reuseForks>
           <groups>hoot.services.UnitTest</groups>
