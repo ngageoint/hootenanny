@@ -207,8 +207,7 @@ void MapStatsWriter::writeStatsToJson(QList< QList<SingleStat> >& stats, const Q
         }
       }
     }
-    //  Don't pretty print the JSON (false)
-    pt::write_json(statsOutputFilePath.toStdString(), pt, std::locale(), false);
+    pt::write_json(statsOutputFilePath.toStdString(), pt);
   }
   catch (std::exception e)
   {
