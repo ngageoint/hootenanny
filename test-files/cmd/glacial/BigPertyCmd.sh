@@ -6,7 +6,7 @@ function pass {
     touch /dev/null
 }
 
-TEST_FILES=hoot-core-test/src/test/resources/cmd/glacial/
+TEST_FILES=test-files/cmd/glacial/
 
 echo "Remove anything left over from a previous test run. We don't care if these fail."
 hadoop fs -rmr BigPertyTest* &> /dev/null || pass

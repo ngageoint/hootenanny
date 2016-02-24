@@ -39,8 +39,6 @@ vagrant plugin install vagrant-vmware-workstation
 
     `vagrant ssh`
     `cd hoot`
-    `rm test-files`
-    `ln -s hoot-core-test/src/test/resources test-files`
 
 # Vagrant Provisioning
 

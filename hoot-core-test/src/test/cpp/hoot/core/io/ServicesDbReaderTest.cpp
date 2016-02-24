@@ -467,9 +467,9 @@ public:
     ////////////////////////////////////////
     QString auth = "-h "+dbHost+" -p "+dbPort+" -U "+dbUser;
     QString cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
-      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/users.sql > /dev/null 2>&1; \
-      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1; \
-      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodesReadTest.sql > /dev/null 2>&1";
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/users.sql > /dev/null 2>&1; \
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/changesets.sql > /dev/null 2>&1; \
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/nodesReadTest.sql > /dev/null 2>&1";
 
     if( std::system(cmd.toStdString().c_str()) != 0 )
     {
