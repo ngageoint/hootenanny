@@ -472,9 +472,9 @@ public:
 
     // Insert nodes
     QString cmd = "export PGPASSWORD="+dbPassword+"; \
-      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/users.sql > /dev/null 2>&1; \
-      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/changesets.sql > /dev/null 2>&1; \
-      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/nodes.sql > /dev/null 2>&1";
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/users.sql > /dev/null 2>&1; \
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/changesets.sql > /dev/null 2>&1; \
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/nodes.sql > /dev/null 2>&1";
 
     if( std::system(cmd.toStdString().c_str()) != 0 )
     {
@@ -561,7 +561,7 @@ public:
     nodeIds.push_back(nodeId2);
 
     cmd = "export PGPASSWORD="+dbPassword+";\
-      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/ways.sql > /dev/null 2>&1";
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/ways.sql > /dev/null 2>&1";
     if( std::system(cmd.toStdString().c_str()) != 0 )
     {
       LOG_WARN("Failed postgres command.  Exiting test.");
@@ -633,7 +633,7 @@ public:
     ids.append(relationId);
 
     cmd = "export PGPASSWORD="+dbPassword+";\
-      psql "+auth+" -f ${HOOT_HOME}/hoot-core-test/src/test/resources/servicesdb/relations.sql > /dev/null 2>&1";
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/relations.sql > /dev/null 2>&1";
     if( std::system(cmd.toStdString().c_str()) != 0 )
     {
       LOG_WARN("Failed postgres command.  Exiting test.");
