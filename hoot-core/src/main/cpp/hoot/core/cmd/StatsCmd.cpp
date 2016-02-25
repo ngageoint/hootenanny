@@ -60,11 +60,29 @@ public:
       throw HootException(QString("%1 takes one parameter.").arg(getName()));
     }
 
+    const QString QUICK_SWITCH = "--quick";
+    const QString OUTPUT_SWITCH = "--output=";
+
+    QStringList inputs(args);
+
     bool quick = false;
-    if (args.contains("--quick"))
+    bool toFile = false;
+    QString output_filename = "";
+    //  Capture any flags and remove them before processing inputs
+    for (int i = 0; i < args.size(); i++)
     {
-      args.removeOne("--quick");
-      quick = true;
+      if (args[i].startsWith(OUTPUT_SWITCH))
+      {
+        output_filename = args[i];
+        output_filename.remove(OUTPUT_SWITCH);
+        toFile = true;
+        inputs.removeOne(args[i]);
+      }
+      else if (args[i] == QUICK_SWITCH)
+      {
+        quick = true;
+        inputs.removeOne(args[i]);
+      }
     }
 
     QString sep = "\t";
@@ -73,10 +91,10 @@ public:
 
     QList< QList<SingleStat> > allStats;
 
-    for (int i = 0; i < args.size(); i++)
+    for (int i = 0; i < inputs.size(); i++)
     {
       shared_ptr<OsmMap> map(new OsmMap());
-      loadMap(map, args[i], true, Status::Invalid);
+      loadMap(map, inputs[i], true, Status::Invalid);
 
       MapProjector::projectToPlanar(map);
 
@@ -86,9 +104,18 @@ public:
       allStats.append(cso->getStats());
     }
 
-    //MapStatsWriter().writeStats(allStats, args);
-    cout << "Stat Name\t" << args.join(sep) << endl;
-    cout << MapStatsWriter().statsToString(allStats, sep);
+    if (toFile)
+    {
+      if (output_filename.endsWith(".json", Qt::CaseInsensitive))
+        MapStatsWriter().writeStatsToJson(allStats, output_filename);
+      else
+        MapStatsWriter().writeStatsToText(allStats, output_filename);
+    }
+    else
+    {
+      cout << "Stat Name\t" << inputs.join(sep) << endl;
+      cout << MapStatsWriter().statsToString(allStats, sep);
+    }
 
     return 0;
   }

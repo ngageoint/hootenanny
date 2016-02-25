@@ -5,11 +5,14 @@
 +stats+ reads input and write out hootenanny map statistics such as node and way
 count. More capabilities will likely be added in future implementations.
 
+* +quick+ - Only calculate subset of statistics.
+* +output+ - Write the stats to +path+ file.
+* +path+ - Output file path, supported file types are text and json.
 * +input+ - The input map path.
 
 === Usage
 
 --------------------------------------
-stats (input) [input2, ...]
+stats [--quick] [--output=path] (input) [input2, ...]
 --------------------------------------
 
