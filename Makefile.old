@@ -274,7 +274,7 @@ archive: default docs
 	mkdir -p $(HOOT_TARNAME)
 	cp Makefile.in aclocal.m4 configure config.h.in $(HOOT_TARNAME)
 	mkdir -p $(HOOT_TARNAME)/docs/
-	# Adding javadoc with a conditional so it is ignored if it doesn't exist. - This javadoc conditional didn't work for me, so adjusted - BDW
+	# Adding javadoc with a conditional so it is ignored if it doesn't exist. - NOTE: This javadoc conditional didn't work for me, so adjusted - BDW
 	#cp docs/*.pdf docs/*.html docs/*.text `F=docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz; test -f $F && echo $F` $(HOOT_TARNAME)/docs/
 	cp docs/*.pdf docs/*.html docs/*.text $(HOOT_TARNAME)/docs/
 	if [ "$(BUILD_SERVICES)" == "services" ]; then cp docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz $(HOOT_TARNAME)/docs/; fi
@@ -304,6 +304,8 @@ archive: default docs
 	$(HOOT_TARNAME)/*
 	rm -rf $(HOOT_TARNAME)
 	gzip -9 $(HOOT_TARNAME).tar
+	# Put the docs in their own compressed file
+	tar -cvzf $(HOOT_TARNAME)-documentation.tar.gz docs/*.pdf docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz
 
 LocalConfig.pri:
 	cp LocalConfig.pri.orig LocalConfig.pri
