@@ -167,6 +167,11 @@ public class JobResource
 	  	  		{
 	  	  			// getting jobInfo from inside since it generates job id.
 	  	  			childJobInfo = _execReflection( jobId, job, jobStatusManager );
+	  	  			Object oWarn = childJobInfo.get("warnings");
+	  	  			if(oWarn != null)
+	  	  			{
+	  	  				warnings = oWarn.toString();
+	  	  			}
 	  	  		}
 	  	  		else if(excType.equalsIgnoreCase("reflection_sync"))
 	  	  		{
@@ -362,6 +367,12 @@ public class JobResource
 						if(currStat.equals(JobStatusManager.JOB_STATUS.FAILED.toString()))
 						{
 							throw new Exception(status.get("statusDetail").toString());
+						}
+						if(status.get("statusDetail") != null)
+						{
+							childJobInfo.put("warnings", status.get("statusDetail").toString());
+							childJobInfo.put("detail", "warning");
+							childJobInfo.put("status", JOB_STATUS.COMPLETE.toString());
 						}
 					}
 				}

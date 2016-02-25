@@ -129,6 +129,8 @@ public class RasterToTilesService extends JobControllerBase {
       Object oMinLat = extents.get("minlat");
       Object oMaxLat = extents.get("maxlat");
       
+      String warn = null;
+      
       // Make sure we have valid bbox. We may end up with invalid bbox and in that case we should
       // not produce raster density map
       if(oMinLon != null && oMaxLon != null && oMinLat != null && oMaxLat != null)
@@ -156,9 +158,21 @@ public class RasterToTilesService extends JobControllerBase {
 	
 				JobExecutionManager jobExecManager = 
 					(JobExecutionManager)appContext.getBean("jobExecutionManagerNative");
-				jobExecManager.exec(argStr);
+				JSONObject res = jobExecManager.exec(argStr);
+				Object oRes = res.get("warnings");
+				if(oRes != null)
+				{
+					warn = oRes.toString();
+				}
       }
-			jobStatusManager.setComplete(jobId);
+      if(warn == null)
+      {
+      	jobStatusManager.setComplete(jobId);
+      }
+      else
+      {
+      	jobStatusManager.setComplete(jobId, "WARNINGS: " + warn);
+      }
 		}
 		catch (Exception ex)
 		{
@@ -272,7 +286,7 @@ public class RasterToTilesService extends JobControllerBase {
 		}
 
 		JSONObject jsonArgs = _createPostBody(commandArgs);
-		jsonArgs.put("throwerror", "false");
+		jsonArgs.put("erroraswarning", "true");
 
 		return jsonArgs;
 	}

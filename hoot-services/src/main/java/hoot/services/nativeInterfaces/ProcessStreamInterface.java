@@ -211,21 +211,36 @@ public class ProcessStreamInterface implements INativeInterface {
 					}
 					else
 					{
-						boolean doThrowException = true;
-						if(cmd.containsKey("throwerror"))
+						boolean errorAsWarn = false;
+						if(cmd.containsKey("erroraswarning"))
 						{
-							doThrowException = Boolean.parseBoolean(cmd.get("throwerror").toString());
+							errorAsWarn = Boolean.parseBoolean(cmd.get("erroraswarning").toString());
 						}
-						if(doThrowException)
+						
+						if(errorAsWarn == true)
 						{
-							throw new Exception(err);
+							ret.put("warnings", err);
 						}
 						else
 						{
-							String stdOut = res.getStdout();
-							ret.put("stdout", stdOut);
-							ret.put("stderr", err);
+							boolean doThrowException = true;
+							if(cmd.containsKey("throwerror"))
+							{
+								doThrowException = Boolean.parseBoolean(cmd.get("throwerror").toString());
+							}
+							if(doThrowException)
+							{
+								throw new Exception(err);
+							}
+							else
+							{
+								String stdOut = res.getStdout();
+								ret.put("stdout", stdOut);
+								ret.put("stderr", err);
+							}
 						}
+						
+						
 					}
 				}
 			}

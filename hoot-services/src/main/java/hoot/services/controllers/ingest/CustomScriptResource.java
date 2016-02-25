@@ -370,7 +370,7 @@ public class CustomScriptResource
    * 
    * GET hoot-services/ingest/customscript/getscript?SCRIPT_NAME=MyTest
    * 
-   * * 	// A non-standard extension to include additional js files within the same dir
+   * 	// A non-standard extension to include additional js files within the same dir
 	 * 	// sub-tree.
 	 * 	require("example")
 	 *
@@ -621,6 +621,12 @@ public class CustomScriptResource
   }
 
 
+  /**
+   * Deletes requested script
+   * 
+   * @param deleteScriptsRequest
+   * @return ScriptsModifiedResponse
+   */
   @DELETE
   @Path("/deletescripts")
   @Consumes(MediaType.APPLICATION_JSON)
