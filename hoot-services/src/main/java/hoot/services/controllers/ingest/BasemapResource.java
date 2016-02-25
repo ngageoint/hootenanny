@@ -217,7 +217,11 @@ public class BasemapResource extends JobControllerBase {
 	        log.debug("Preparing Basemap Ingest for :" + fName);
 	        String inputFileName = "";
 	        String bmName = inputName;
-	        bmName = fName;
+	        
+	        if(bmName == null || bmName.length() == 0)
+	        {
+	        	bmName = fName;
+	        }
 
 
 	  			inputFileName = uploadedFilesPaths.get(fName);
