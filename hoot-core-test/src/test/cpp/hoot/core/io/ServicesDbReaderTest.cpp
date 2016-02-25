@@ -54,7 +54,6 @@ class ServicesDbReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runUrlMissingMapIdTest);
   CPPUNIT_TEST(runUrlInvalidMapIdTest);
   CPPUNIT_TEST(runReadTest);
-  //CPPUNIT_TEST(runReadWithElemTest);
   CPPUNIT_TEST(runPartialReadTest);
   CPPUNIT_TEST(runFactoryReadTest);
 
@@ -488,16 +487,6 @@ public:
     reader.open(ConfigOptions(s).getServicesDbTestUrlOsmapi());
     reader.read(map);
     verifyFullReadOutput_OsmApi(map);
-    reader.close();
-  }
-
-  void runReadWithElemTest()
-  {
-    ServicesDbReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
-    reader.open(ServicesDbTestUtils::getDbReadUrl(mapId,3,"node").toString());
-    reader.read(map);
-    verifySingleReadOutput(map);
     reader.close();
   }
 

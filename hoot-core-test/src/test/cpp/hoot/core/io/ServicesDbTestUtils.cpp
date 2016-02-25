@@ -98,22 +98,6 @@ QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId)
   return url;
 }
 
-QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId, const long elemId, const QString& elemType)
-{
-  //insert url example: postgresql://hoot:hoottest@localhost:5432/hoot/testMap
-  QString dbModifyUrl = getDbModifyUrl().toString();
-  QStringList modifyUrlParts = dbModifyUrl.split("/");
-  //read url example: postgresql://hoot:hoottest@localhost:5432/hoot/1
-  assert(mapId > 0);
-  QString dbReadUrl =
-    dbModifyUrl.remove("/" + modifyUrlParts[modifyUrlParts.size() - 1]) + "/" +
-      QString::number(mapId) + "?osm-element-id=" + QString::number((elemId)) +
-      "&osm-element-type=" + elemType;
-
-  QUrl url(dbReadUrl);
-  return url;
-}
-
 QUrl ServicesDbTestUtils::getOsmApiDbUrl()
 {
   Settings s = conf();
