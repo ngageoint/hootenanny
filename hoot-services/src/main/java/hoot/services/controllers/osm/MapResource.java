@@ -1159,14 +1159,20 @@ public class MapResource
 		}
 		catch (SQLException sqlEx)
 		{
-			jobStatusManager.setFailed(jobId, sqlEx.getMessage());
+			if (jobStatusManager != null)
+			{
+				jobStatusManager.setFailed(jobId, sqlEx.getMessage());
+			}
 			ResourceErrorHandler.handleError("Failure update map tags resource "
 					+ sqlEx.getMessage() + " SQLState: " + sqlEx.getSQLState(),
 					Status.INTERNAL_SERVER_ERROR, log);
 		}
 		catch (Exception ex)
 		{
-			jobStatusManager.setFailed(jobId, ex.getMessage());
+			if (jobStatusManager != null)
+			{
+				jobStatusManager.setFailed(jobId, ex.getMessage());
+			}
 			ResourceErrorHandler.handleError(
 					"Failure update map tags resource" + ex.getMessage(),
 					Status.INTERNAL_SERVER_ERROR, log);

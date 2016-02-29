@@ -685,7 +685,7 @@ public class CommandRunner implements ICommandRunner
 				for (String key : env.keySet())
 				{
 					_log.debug(String.format("  %s", new Object[] { key + "=" + env.get(key) }));
-					if (_log.isDebugEnabled())
+					if (_log.isDebugEnabled() && writer != null)
 					  writer.write(String.format("  %s%n", new Object[] { key + "=" + env.get(key) }));
 				}
 				if (_log.isDebugEnabled()) writer.close();

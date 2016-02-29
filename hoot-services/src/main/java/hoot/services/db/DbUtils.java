@@ -1503,20 +1503,26 @@ public class DbUtils
 		long ret = 0;
 		Connection conn = null;
 	  Statement stmt = null;
+	  ResultSet rs = null;
 		try
 		{
 			conn = DbUtils.createConnection();
 			stmt = conn.createStatement();
 
 			String sql = "select pg_total_relation_size('" + tableName + "') as tablesize";
-			ResultSet rs = stmt.executeQuery(sql);
-      //STEP 5: Extract data from result set
+		  rs = stmt.executeQuery(sql);
+		  
+		  if (rs == null)
+			{
+				throw new SQLException("Error executing getTableSizeInByte");
+			}
+		  
+			//STEP 5: Extract data from result set
       while (rs.next())
       {
          //Retrieve by column name
       	ret = rs.getLong("tablesize");
       }
-      rs.close();
 		}
 		catch (Exception e)
 		{
@@ -1525,6 +1531,7 @@ public class DbUtils
 		}
 		finally
 		{
+			if (rs != null) rs.close();
 			if (stmt != null)
 				stmt.close();
 			if (conn != null)

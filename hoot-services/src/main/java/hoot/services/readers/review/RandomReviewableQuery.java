@@ -94,13 +94,17 @@ public class RandomReviewableQuery  extends ReviewableQueryBase implements IRevi
 		long relId = -1;
 		String seqId = "-1";
 	
-		try(
-				Statement stmt = getConnection().createStatement();
-				ResultSet rs = stmt.executeQuery(_getQueryString())
-				)
+		try(Statement stmt = getConnection().createStatement();
+				ResultSet rs = stmt.executeQuery(_getQueryString()))
 		{
 			long nResCnt = 0;
-			while(rs.next())
+			
+			if (rs == null)
+			{
+				throw new SQLException("Error executing ReviewQueryMapper::execQuery");
+			}
+
+			while (rs.next())
 			{
 				relId = rs.getLong("relid");
 				seqId = rs.getString("seq");

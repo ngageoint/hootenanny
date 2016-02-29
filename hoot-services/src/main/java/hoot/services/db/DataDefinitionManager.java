@@ -76,7 +76,12 @@ public class DataDefinitionManager
 			String sql = "SELECT 1 FROM pg_database WHERE datname = '" + dbname + "'";
 			rs = stmt.executeQuery(sql);
 
-			// STEP 5: Extract data from result set
+			if (rs == null)
+			{
+				throw new Exception("Error executing checkDbExists");
+			}
+			
+		  // STEP 5: Extract data from result set
 			while (rs.next())
 			{
 				exists = true;
@@ -207,6 +212,12 @@ public class DataDefinitionManager
 			String sql = "SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_name LIKE "
 					+ "'" + filter_prefix + "_%'";
 			rs = stmt.executeQuery(sql);
+			
+			if (rs == null)
+			{
+				throw new SQLException("Error executing getTablesListy");
+			}
+			
 			// STEP 5: Extract data from result set
 			while (rs.next())
 			{
@@ -214,8 +225,6 @@ public class DataDefinitionManager
 				String tblName = rs.getString("table_name");
 				tblList.add(tblName);
 			}
-			rs.close();
-
 		}
 		catch (Exception e)
 		{
@@ -245,7 +254,6 @@ public class DataDefinitionManager
 			stmt = conn.createStatement();
 
 			stmt.executeUpdate(createTblSql);
-
 		}
 		catch (Exception e)
 		{
