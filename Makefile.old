@@ -305,7 +305,7 @@ archive: default docs
 	rm -rf $(HOOT_TARNAME)
 	gzip -9 $(HOOT_TARNAME).tar
 	# Put the docs in their own compressed file
-	tar -cvzf $(HOOT_TARNAME)-documentation.tar.gz docs/*.pdf docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz
+	tar -cvzf $(HOOT_TARNAME)-documentation.tar.gz docs/*.pdf `f=docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz; [ -a $f ] && echo $f`
 
 LocalConfig.pri:
 	cp LocalConfig.pri.orig LocalConfig.pri
