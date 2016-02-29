@@ -35,6 +35,7 @@
 #include <hoot/core/filters/HighwayFilter.h>
 #include <hoot/core/filters/LinearFilter.h>
 #include <hoot/core/filters/NeedsReviewCriterion.h>
+#include <hoot/core/filters/NoInformationCriterion.h>
 #include <hoot/core/filters/NotCriterion.h>
 #include <hoot/core/filters/PoiCriterion.h>
 #include <hoot/core/filters/StatsAreaFilter.h>
@@ -211,10 +212,12 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     const double numReviewsToBeMade = curv.getStat();
     const double conflatedFeatureCount =
       fmax(featuresProcessedDuringConflationCount - numFeaturesMarkedForReview, 0);
+    const double untaggedFeatureCount = _applyVisitor(constMap,FilteredVisitor(new NoInformationCriterion(),new FeatureCountVisitor()));
+    _stats.append(SingleStat("Untagged Feature Count", untaggedFeatureCount));
     long unconflatableFeatureCount = -1.0;
     if (!_inputIsConflatedMapOutput)
     {
-      unconflatableFeatureCount = fmax((featureCount - conflatableFeatureCount), (long)0);
+      unconflatableFeatureCount = fmax((featureCount - untaggedFeatureCount - conflatableFeatureCount), (long)0);
     }
     else
     {

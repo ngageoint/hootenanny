@@ -78,7 +78,7 @@ public:
     shared_ptr<CalculateStatsOp> calcStatsOp =
       _calcStats("test-files/ops/CalculateStatsOp/all-data-types.osm");
 //WARNING: Change this with the added stats!
-    CPPUNIT_ASSERT_EQUAL(84, calcStatsOp->getStats().size());
+    CPPUNIT_ASSERT_EQUAL(85, calcStatsOp->getStats().size());
 
     CPPUNIT_ASSERT_EQUAL(201.0, calcStatsOp->getSingleStat("Node Count"));
     CPPUNIT_ASSERT_EQUAL(22.0, calcStatsOp->getSingleStat("Way Count"));
@@ -109,6 +109,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(31.0, calcStatsOp->getSingleStat("Total Feature Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Conflatable Features"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Untagged Feature Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Unconflatable Features"));
     CPPUNIT_ASSERT_EQUAL(12.0, calcStatsOp->getSingleStat("Total Features Processed By Conflation"));
     CPPUNIT_ASSERT_EQUAL(12.0, calcStatsOp->getSingleStat("Total Conflated Features"));
@@ -207,7 +208,7 @@ public:
     shared_ptr<CalculateStatsOp> calcStatsOp =
       _calcStats("test-files/ops/CalculateStatsOp/all-data-types-with-reviews.osm");
 
-    CPPUNIT_ASSERT_EQUAL(84, calcStatsOp->getStats().size());
+    CPPUNIT_ASSERT_EQUAL(85, calcStatsOp->getStats().size());
 
     CPPUNIT_ASSERT_EQUAL(201.0, calcStatsOp->getSingleStat("Node Count"));
     CPPUNIT_ASSERT_EQUAL(21.0, calcStatsOp->getSingleStat("Way Count"));
@@ -239,6 +240,7 @@ public:
     //fix; totals don't add up...
     CPPUNIT_ASSERT_EQUAL(29.0, calcStatsOp->getSingleStat("Total Feature Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Conflatable Features"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Untagged Feature Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Unconflatable Features"));
     CPPUNIT_ASSERT_EQUAL(11.0, calcStatsOp->getSingleStat("Total Features Processed By Conflation"));
     CPPUNIT_ASSERT_EQUAL(4.0, calcStatsOp->getSingleStat("Total Features Marked for Review"));
