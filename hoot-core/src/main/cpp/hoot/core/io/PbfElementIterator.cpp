@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -40,6 +40,7 @@ PbfElementIterator::PbfElementIterator(QString path)
     fp->open(path.toUtf8().data(), ios::in | ios::binary);
     if (fp->is_open() == false)
     {
+      delete fp;
       throw HootException("Error opening " + path + " for writing.");
     }
     _init(fp);

@@ -465,14 +465,6 @@ int main(int argc, char *argv[])
     {
       LOG_ERROR(e.what());
     }
-    catch (const std::exception& e)
-    {
-      LOG_ERROR(e.what());
-    }
-    catch (...)
-    {
-      LOG_ERROR("Unknown test exception.");
-    }
 
     //not deleting rootSuite here, since CPPUnit takes ownership of it
     delete searchSuite;

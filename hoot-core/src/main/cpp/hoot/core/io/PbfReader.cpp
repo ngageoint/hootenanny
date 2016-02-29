@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -541,7 +541,7 @@ vector<PbfReader::BlobLocation> PbfReader::loadOsmDataBlobOffsets(istream& strm)
     {
       long pos = _in->tellg();
       printf("%.1f / %.1f - %.2f MB/s                  \r",
-        pos / 1.0e6, length / 1.0e6, 
+        pos / 1.0e6, length / 1.0e6,
         ((_in->tellg() - lastPos) / (t - last)) / 1.0e6);
       cout.flush();
       last = t;
@@ -554,7 +554,7 @@ vector<PbfReader::BlobLocation> PbfReader::loadOsmDataBlobOffsets(istream& strm)
   {
     // print the final summary
     printf("%.1f / %.1f - %.2f MB/s                  \n",
-      length / 1.0e6, length / 1.0e6, 
+      length / 1.0e6, length / 1.0e6,
       ((length) / (t - start)) / 1.0e6);
     cout.flush();
   }
@@ -1000,29 +1000,17 @@ bool PbfReader::isSupported(QString urlStr)
 void PbfReader::open(QString urlStr)
 {
   fstream* fp = new fstream();
-  try
+  fp->open(urlStr.toUtf8().data(), ios::in | ios::binary);
+  if (fp->is_open() == false)
   {
-    fp->open(urlStr.toUtf8().data(), ios::in | ios::binary);
-    if (fp->is_open() == false)
-    {
-      throw HootException("Error opening " + urlStr + " for reading.");
-    }
-    _in = fp;
-    _needToCloseInput = true;
+    delete fp;
+    throw HootException("Error opening " + urlStr + " for reading.");
+  }
+  _in = fp;
+  _needToCloseInput = true;
 
-    // Have to call initial partial to ensure stream functions work
-    initializePartial();
-  }
-  catch (const HootException& e)
-  {
-    delete fp;
-    throw e;
-  }
-  catch (const std::exception& e)
-  {
-    delete fp;
-    throw e;
-  }
+  // Have to call initial partial to ensure stream functions work
+  initializePartial();
 }
 
 void PbfReader::initializePartial()
