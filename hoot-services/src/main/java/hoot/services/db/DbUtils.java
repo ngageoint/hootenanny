@@ -1525,25 +1525,10 @@ public class DbUtils
 		}
 		finally
 		{
-			// finally block used to close resources
-			try
-			{
-				if (stmt != null)
-					stmt.close();
-			}
-			catch (SQLException se2)
-			{
-				log.equals(se2.getMessage());
-			}// nothing we can do
-			try
-			{
-				if (conn != null)
-					DbUtils.closeConnection(conn);
-			}
-			catch (SQLException se)
-			{
-				log.equals(se.getMessage());
-			}
+			if (stmt != null)
+				stmt.close();
+			if (conn != null)
+				DbUtils.closeConnection(conn);
 		}
 
 		return ret;

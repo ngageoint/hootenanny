@@ -89,12 +89,9 @@ public class DataDefinitionManager
 		}
 		finally
 		{
+			if (rs != null) rs.close();
 			if (stmt != null) stmt.close();
 			if (conn != null) conn.close();
-			if (rs != null)
-			{
-				rs.close();
-			}
 		}
 		return exists;
 	}
@@ -119,24 +116,9 @@ public class DataDefinitionManager
 		}
 		finally
 		{
-			// finally block used to close resources
-			try
-			{
-				if (stmt != null) stmt.close();
-			}
-			catch (SQLException se2)
-			{
-				log.equals(se2.getMessage());
-			}// nothing we can do
-			try
-			{
-				if (conn != null) conn.close();
-			}
-			catch (SQLException se)
-			{
-				log.equals(se.getMessage());
-			}// end finally try
-		}// end try
+			if (stmt != null) stmt.close();
+			if (conn != null) conn.close();
+		}
 	}
 
 	public void deleteTables(List<String> tables, String dbname) throws Exception
@@ -163,16 +145,9 @@ public class DataDefinitionManager
 				}
 				finally
 				{
-					try
+				  if (stmt != null)
 					{
-						if (stmt != null)
-						{
-							stmt.close();
-						}
-					}
-					catch (SQLException se2)
-					{
-						log.equals(se2.getMessage());
+						stmt.close();
 					}
 				}
 			}
@@ -183,15 +158,8 @@ public class DataDefinitionManager
 		}
 		finally
 		{
-			try
-			{
-				if (conn != null) conn.close();
-			}
-			catch (SQLException se)
-			{
-				log.equals(se.getMessage());
-			}// end finally try
-		}// end try
+			if (conn != null) conn.close();
+		}
 	}
 
 	public void deleteDb(String dbname, boolean force) throws Exception
@@ -219,24 +187,9 @@ public class DataDefinitionManager
 		}
 		finally
 		{
-			// finally block used to close resources
-			try
-			{
-				if (stmt != null) stmt.close();
-			}
-			catch (SQLException se2)
-			{
-				log.equals(se2.getMessage());
-			}// nothing we can do
-			try
-			{
-				if (conn != null) conn.close();
-			}
-			catch (SQLException se)
-			{
-				log.equals(se.getMessage());
-			}// end finally try
-		}// end try
+			if (stmt != null) stmt.close();
+			if (conn != null) conn.close();
+		}
 	}
 
 	public List<String> getTablesList(String dbName, String filter_prefix) throws Exception
@@ -301,24 +254,9 @@ public class DataDefinitionManager
 		}
 		finally
 		{
-			// finally block used to close resources
-			try
-			{
-				if (stmt != null) stmt.close();
-			}
-			catch (SQLException se2)
-			{
-				log.equals(se2.getMessage());
-			}// nothing we can do
-			try
-			{
-				if (conn != null) conn.close();
-			}
-			catch (SQLException se)
-			{
-				log.equals(se.getMessage());
-			}// end finally try
-		}// end try
+			if (stmt != null) stmt.close();
+			if (conn != null) conn.close();
+		}
 	}
 
 }

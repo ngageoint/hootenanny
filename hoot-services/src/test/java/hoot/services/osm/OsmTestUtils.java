@@ -1511,14 +1511,8 @@ public class OsmTestUtils
 
     finally
     {
-      try
-      {
-        if (stmt != null)
-          stmt.close();
-      }
-      catch (SQLException se2)
-      {
-      }
+      if (stmt != null)
+        stmt.close();
     }
   }
   
@@ -1726,14 +1720,8 @@ public class OsmTestUtils
 
 		finally
 		{
-			try
-			{
-				if (stmt != null)
-					stmt.close();
-			}
-			catch (SQLException se2)
-			{
-			}
+			if (stmt != null)
+				stmt.close();
 		}
 	}
 	

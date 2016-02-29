@@ -442,14 +442,8 @@ public class Node extends Element
   	}
   	finally
   	{
-  		try
-  		{
-  			if (stmt != null)
-  				stmt.close();
-  		}
-  		catch (SQLException se2)
-  		{
-  		}
+  		if (stmt != null)
+  			stmt.close();
   	}
   }
 }
