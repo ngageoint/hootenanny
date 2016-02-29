@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -306,160 +306,177 @@ int main(int argc, char *argv[])
   }
   else
   {
+    bool error = false;
     HootTestListener* listener;
-
-    bool printDiff = args.contains("--diff");
-
-    CppUnit::TestFactoryRegistry &registry = CppUnit::TestFactoryRegistry::getRegistry();
     CppUnit::TestSuite *searchSuite = new CppUnit::TestSuite( "Search Tests" );
-    if (args.contains("--all-names"))
-    {
-      populateAllTests(searchSuite, printDiff);
-      printNames(searchSuite);
-      delete searchSuite;
-      return 0;
-    }
-    else if (args.contains("--single"))
-    {
-      int i = args.indexOf("--single") + 1;
-      if (i >= args.size())
-      {
-        throw HootException("Expected a test name after --single.");
-      }
-      QString testName = args[i];
-
-      listener = new HootTestListener(false, -1);
-      Log::getInstance().setLevel(Log::Info);
-      CppUnit::TestSuite *searchSuite = new CppUnit::TestSuite( "Search Tests" );
-      populateAllTests(searchSuite, printDiff);
-
-      CppUnit::Test* t = findTest(searchSuite, testName);
-      if (t == 0)
-      {
-        throw HootException("Could not find the specified test: " + testName);
-      }
-
-      runner.addTest(t);
-    }
-    else
-    {
-      if (args.contains("--current"))
-      {
-        listener = new HootTestListener(true);
-        Log::getInstance().setLevel(Log::Info);
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/current/",
-          printDiff));
-      }
-      if (args.contains("--quick"))
-      {
-        listener = new HootTestListener(false, 1.0);
-        rootSuite->addTest(registry.makeTest());
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/current/",
-                                               printDiff));
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/quick/",
-                                               printDiff));
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
-      }
-      if (args.contains("--slow"))
-      {
-        listener = new HootTestListener(false, 30.0);
-        rootSuite->addTest(registry.makeTest());
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/current/",
-                                               printDiff));
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/quick/",
-                                               printDiff));
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/slow/",
-                                               printDiff));
-        rootSuite->addTest(new ConflateCaseTestSuite("test-files/cases"));
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
-      }
-      if (args.contains("--all") || args.contains("--glacial"))
-      {
-        listener = new HootTestListener(false, 900.0);
-        rootSuite->addTest(registry.makeTest());
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/current/",
-                                               printDiff));
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/quick/",
-                                               printDiff));
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/slow/",
-                                               printDiff));
-        rootSuite->addTest(new ScriptTestSuite("test-files/cmd/glacial/",
-                                               printDiff));
-        rootSuite->addTest(new ConflateCaseTestSuite("test-files/cases"));
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
-        rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest());
-      }
-
-      for (int i = 0; i < args.size(); i++)
-      {
-        if (args[i].startsWith("--exclude="))
-        {
-          CppUnit::TestSuite *newSuite = new CppUnit::TestSuite( "All tests" );
-          int equalsPos = args[i].indexOf('=');
-          QString regex = args[i].mid(equalsPos + 1);
-          LOG_WARN("Excluding pattern: " << regex);
-          filterPattern(rootSuite, newSuite, regex, false);
-          rootSuite = newSuite;
-        }
-        else if (args[i].startsWith("--include="))
-        {
-          CppUnit::TestSuite *newSuite = new CppUnit::TestSuite( "All tests" );
-          int equalsPos = args[i].indexOf('=');
-          QString regex = args[i].mid(equalsPos + 1);
-          LOG_WARN("Including only tests that match: " << regex);
-          filterPattern(rootSuite, newSuite, regex, true);
-          rootSuite = newSuite;
-        }
-      }
-
-      runner.addTest(rootSuite);
-      cout << "Test count: " << rootSuite->countTestCases() << endl;
-    }
-
     CppUnit::TextTestResult result;
 
-    if (args.contains("--debug"))
+    try
     {
-      Log::getInstance().setLevel(Log::Debug);
+      bool printDiff = args.contains("--diff");
+      CppUnit::TestFactoryRegistry &registry = CppUnit::TestFactoryRegistry::getRegistry();
+
+      if (args.contains("--all-names"))
+      {
+        populateAllTests(searchSuite, printDiff);
+        printNames(searchSuite);
+        delete searchSuite;
+        return 0;
+      }
+      else if (args.contains("--single"))
+      {
+        int i = args.indexOf("--single") + 1;
+        if (i >= args.size())
+        {
+          throw HootException("Expected a test name after --single.");
+        }
+        QString testName = args[i];
+
+        listener = new HootTestListener(false, -1);
+        Log::getInstance().setLevel(Log::Info);
+        CppUnit::TestSuite *searchSuite = new CppUnit::TestSuite( "Search Tests" );
+        populateAllTests(searchSuite, printDiff);
+
+        CppUnit::Test* t = findTest(searchSuite, testName);
+        if (t == 0)
+        {
+          throw HootException("Could not find the specified test: " + testName);
+        }
+
+        runner.addTest(t);
+      }
+      else
+      {
+        if (args.contains("--current"))
+        {
+          listener = new HootTestListener(true);
+          Log::getInstance().setLevel(Log::Info);
+          rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
+          rootSuite->addTest(new ScriptTestSuite("test-files/cmd/current/",
+            printDiff));
+        }
+        if (args.contains("--quick"))
+        {
+          listener = new HootTestListener(false, 1.0);
+          rootSuite->addTest(registry.makeTest());
+          rootSuite->addTest(new ScriptTestSuite("test-files/cmd/current/",
+                                                 printDiff));
+          rootSuite->addTest(new ScriptTestSuite("test-files/cmd/quick/",
+                                                 printDiff));
+          rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
+          rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
+          rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
+        }
+        if (args.contains("--slow"))
+        {
+          listener = new HootTestListener(false, 30.0);
+          rootSuite->addTest(registry.makeTest());
+          rootSuite->addTest(new ScriptTestSuite("test-files/cmd/current/",
+                                                 printDiff));
+          rootSuite->addTest(new ScriptTestSuite("test-files/cmd/quick/",
+                                                 printDiff));
+          rootSuite->addTest(new ScriptTestSuite("test-files/cmd/slow/",
+                                                 printDiff));
+          rootSuite->addTest(new ConflateCaseTestSuite("test-files/cases"));
+          rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
+          rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
+          rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
+          rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
+          rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
+        }
+        if (args.contains("--all") || args.contains("--glacial"))
+        {
+          listener = new HootTestListener(false, 900.0);
+          rootSuite->addTest(registry.makeTest());
+          rootSuite->addTest(new ScriptTestSuite("test-files/cmd/current/",
+                                                 printDiff));
+          rootSuite->addTest(new ScriptTestSuite("test-files/cmd/quick/",
+                                                 printDiff));
+          rootSuite->addTest(new ScriptTestSuite("test-files/cmd/slow/",
+                                                 printDiff));
+          rootSuite->addTest(new ScriptTestSuite("test-files/cmd/glacial/",
+                                                 printDiff));
+          rootSuite->addTest(new ConflateCaseTestSuite("test-files/cases"));
+          rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
+          rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
+          rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
+          rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
+          rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
+          rootSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest());
+        }
+
+        for (int i = 0; i < args.size(); i++)
+        {
+          if (args[i].startsWith("--exclude="))
+          {
+            CppUnit::TestSuite *newSuite = new CppUnit::TestSuite( "All tests" );
+            int equalsPos = args[i].indexOf('=');
+            QString regex = args[i].mid(equalsPos + 1);
+            LOG_WARN("Excluding pattern: " << regex);
+            filterPattern(rootSuite, newSuite, regex, false);
+            rootSuite = newSuite;
+          }
+          else if (args[i].startsWith("--include="))
+          {
+            CppUnit::TestSuite *newSuite = new CppUnit::TestSuite( "All tests" );
+            int equalsPos = args[i].indexOf('=');
+            QString regex = args[i].mid(equalsPos + 1);
+            LOG_WARN("Including only tests that match: " << regex);
+            filterPattern(rootSuite, newSuite, regex, true);
+            rootSuite = newSuite;
+          }
+        }
+
+        runner.addTest(rootSuite);
+        cout << "Test count: " << rootSuite->countTestCases() << endl;
+      }
+
+      if (args.contains("--debug"))
+      {
+        Log::getInstance().setLevel(Log::Debug);
+      }
+      if (args.contains("--verbose"))
+      {
+        Log::getInstance().setLevel(Log::Verbose);
+      }
+      if (args.contains("--info"))
+      {
+        Log::getInstance().setLevel(Log::Info);
+      }
+      if (args.contains("--warn"))
+      {
+        Log::getInstance().setLevel(Log::Warn);
+      }
+      if (args.contains("--names"))
+      {
+        listener->showTestNames(true);
+      }
+
+      // clear all user configuration so we have consistent tests.
+      conf().clear();
+      ConfigOptions::populateDefaults(conf());
+      LOG_DEBUG("HOOT_HOME: " + QString(getenv("HOOT_HOME")))
+      conf().set("HOOT_HOME", getenv("HOOT_HOME"));
+
+      result.addListener(listener);
+      runner.run(result);
     }
-    if (args.contains("--verbose"))
+    catch (const HootException& e)
     {
-      Log::getInstance().setLevel(Log::Verbose);
+      LOG_ERROR(e.what());
     }
-    if (args.contains("--info"))
+    catch (const std::exception& e)
     {
-      Log::getInstance().setLevel(Log::Info);
+      LOG_ERROR(e.what());
     }
-    if (args.contains("--warn"))
+    catch (...)
     {
-      Log::getInstance().setLevel(Log::Warn);
-    }
-    if (args.contains("--names"))
-    {
-      listener->showTestNames(true);
+      LOG_ERROR("Unknown test exception.");
     }
 
-    // clear all user configuration so we have consistent tests.
-    conf().clear();
-    ConfigOptions::populateDefaults(conf());
-    LOG_DEBUG("HOOT_HOME: " + QString(getenv("HOOT_HOME")))
-    conf().set("HOOT_HOME", getenv("HOOT_HOME"));
-
-    result.addListener(listener);
-    runner.run(result);
+    //not deleting rootSuite here, since CPPUnit takes ownership of it
     delete searchSuite;
     delete listener;
-    return result.failures().size() > 0 ? -1 : 0;
+    return result.failures().size() > 0 || error ? -1 : 0;
   }
 }
