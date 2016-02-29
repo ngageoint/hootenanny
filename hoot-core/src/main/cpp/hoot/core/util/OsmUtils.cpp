@@ -125,9 +125,9 @@ unsigned int OsmUtils::fromTimeString(QString timestamp)
   strptime(timestamp.toStdString().c_str(), "%Y-%m-%dT%H:%M:%SZ", &t);
 
   // calc time in seconds since epoch
-  return t.tm_sec + t.tm_min*60 + t.tm_hour*3600 + t.tm_yday*86400 +
+  return (unsigned int)(t.tm_sec + t.tm_min*60 + t.tm_hour*3600 + t.tm_yday*86400 +
     (t.tm_year-70)*31536000 + ((t.tm_year-69)/4)*86400 -
-    ((t.tm_year-1)/100)*86400 + ((t.tm_year+299)/400)*86400;
+    ((t.tm_year-1)/100)*86400 + ((t.tm_year+299)/400)*86400);
 }
 
 QString OsmUtils::currentTimeAsString()
