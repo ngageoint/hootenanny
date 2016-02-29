@@ -1543,8 +1543,8 @@ public class DbUtils
 			catch (SQLException se)
 			{
 				log.equals(se.getMessage());
-			}// end finally try
-		}// end try
+			}
+		}
 
 		return ret;
 	}

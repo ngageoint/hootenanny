@@ -232,38 +232,17 @@ public class AdvancedOptResource
 		{
 			if (frRef != null)
 			{
-				try
-				{
-					frRef.close();
-				}
-				catch (Exception ee)
-				{
-					throw ee;
-				}
+				frRef.close();
 			}
 
 			if (frHrz != null)
 			{
-				try
-				{
-					frHrz.close();
-				}
-				catch (Exception ee)
-				{
-					throw ee;
-				}
+				frHrz.close();
 			}
 
 			if (frAve != null)
 			{
-				try
-				{
-					frAve.close();
-				}
-				catch (Exception ee)
-				{
-					throw ee;
-				}
+			  frAve.close();
 			}
 		}
 	}

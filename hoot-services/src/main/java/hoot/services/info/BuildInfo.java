@@ -56,7 +56,7 @@ public class BuildInfo
 	    try
 	    {
 	    	buildInfoStrm = BuildInfo.class.getClassLoader().getResourceAsStream("build.info");
-        info.load(BuildInfo.class.getClassLoader().getResourceAsStream("build.info"));
+        info.load(buildInfoStrm);
 	    }
 	    finally
 	    {

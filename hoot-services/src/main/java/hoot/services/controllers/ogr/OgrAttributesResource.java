@@ -177,8 +177,14 @@ public class OgrAttributesResource extends JobControllerBase {
 	  				{
 	  					if (zis != null)
 	  					{
-	  						zis.closeEntry();
-			  	    	zis.close();
+	  						try
+	  						{
+	  							zis.closeEntry();
+	  						}
+	  						finally
+	  						{
+	  							zis.close();
+	  						} 	
 	  					}
 	  				}
 	  			}

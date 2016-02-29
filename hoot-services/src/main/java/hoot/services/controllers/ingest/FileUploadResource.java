@@ -500,11 +500,11 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 			zis = new ZipInputStream(new FileInputStream(zipFilePath));
 			ZipEntry ze = zis.getNextEntry();
 
-	  	while(ze!=null)
+	  	while (ze!=null)
 	  	{
 	  		String zipName = ze.getName();
 	  		// check to see if zipName ends with slash and remove
-	  		if(zipName.endsWith("/"))
+	  		if (zipName.endsWith("/"))
 	  		{
 	  			zipName = zipName.substring(0, zipName.length() - 1);
 	  		}
@@ -513,11 +513,10 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 	  		String ext = null;
 	  		
 	  		int partsLen = fileNameParts.length;
-	  		if(partsLen > 1)
+	  		if (partsLen > 1)
 	  		{
 	  			ext = fileNameParts[partsLen-1];
 	  		}
-	  		
 	  		
 	  		//See if there is extension and if none then throw error
 	  		if(ext == null) 
@@ -602,10 +601,15 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 		{
 			if (zis != null)
 			{
-				zis.closeEntry();
-		  	zis.close();
+				try
+				{
+					zis.closeEntry();
+				}
+				finally
+				{
+					zis.close();
+				}
 			}
 		}
-		
 	}
 }
