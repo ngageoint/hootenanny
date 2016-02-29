@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -138,7 +138,7 @@ public class DataDefinitionManager {
       }//end finally try
    }//end try
 	}
-  
+
 	public void deleteTables(List<String> tables, String dbname) throws Exception
 	{
 		Connection conn = null;
@@ -168,7 +168,7 @@ public class DataDefinitionManager {
 		         if (stmt!=null)
 		         {
 		        	 stmt.close();
-		         }  
+		         }
 		      }
 					catch(SQLException se2)
 					{
@@ -200,11 +200,16 @@ public class DataDefinitionManager {
 			Class.forName(POSTGRESQL_DRIVER);
 			conn = DriverManager.getConnection(DB_URL + db_name, userid, pwd);
 			stmt = conn.createStatement();
-			if(force)
-			{
-				String forceSql = "select pg_terminate_backend(procpid) from pg_stat_activity where datname='" + dbname + "'";
-				stmt.executeQuery(forceSql);
-			}
+            if(force)
+            {
+                //Get the column name from the db as it's version dependent
+                ResultSet rs = stmt.executeQuery("SELECT column_name FROM information_schema.columns WHERE table_name='pg_stat_activity' AND column_name like '%pid'");
+                rs.next();
+                String columnName = rs.getString("column_name");
+                rs.close();
+                String forceSql = "select pg_terminate_backend("+ columnName + ") from pg_stat_activity where datname='" + dbname + "'";
+                stmt.executeQuery(forceSql);
+            }
 			String sql = "DROP DATABASE \"" + dbname + "\"";
 			stmt.executeUpdate(sql);
 		}
