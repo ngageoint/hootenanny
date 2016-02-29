@@ -27,6 +27,7 @@
 package hoot.services.nodeJs;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public class ServerControllerBase
 		_closeAllServers(processSignature);
 	}
 	
-	private Integer getProcessId(final Process serverProc)
+	private static Integer getProcessId()
 	{
 		//this may not work with every JVM implementation
 		return Integer.parseInt(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
@@ -84,7 +85,7 @@ public class ServerControllerBase
 		Integer transServerPID = null;
 		if (serverProc.getClass().getName().equals("java.lang.UNIXProcess"))
     {
-			transServerPID = getProcessId(serverProc);
+			transServerPID = getProcessId();
     } 
 		else
     {
@@ -118,25 +119,14 @@ public class ServerControllerBase
 		return isRunning;
 	}
 	
-  private void _closeAllServers(final String processSignature)
+  private static void _closeAllServers(final String processSignature) throws IOException
   {
-  	try
-		{
-  		// Note that we kill process that contains the name of server script
-  		Process killProc = Runtime.getRuntime().exec("pkill -f " + processSignature);
-  		_processStreamHandler(killProc, false);
-		}
-		catch (Exception ex)
-		{
-			// We just log error
-		  log.error("Failed to clean server processes:" + ex.getMessage());
-		}
-  	finally
-  	{
-  	}
+		// Note that we kill process that contains the name of server script
+		Process killProc = Runtime.getRuntime().exec("pkill -f " + processSignature);
+		_processStreamHandler(killProc, false);
   }
   
-  private void _processStreamHandler(final Process proc, boolean doSendToStdout)
+  private static void _processStreamHandler(final Process proc, boolean doSendToStdout)
   {
     // usually we should not get any output but just in case if we get some error..
     InputStreamReader stdStream = null;

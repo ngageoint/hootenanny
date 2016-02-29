@@ -290,7 +290,7 @@ public class MapResource
 		return linkRecords;
 	}
 
-	private Document _generateExtentOSM(String maxlon, String maxlat,
+	private static Document _generateExtentOSM(String maxlon, String maxlat,
 			String minlon, String minlat) throws Exception
 	{
 		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -698,7 +698,7 @@ public class MapResource
 		return Response.ok(ret.toString(), MediaType.APPLICATION_JSON).build();
 	}
 
-	private void handleError(final Exception e, final String mapId,
+	private static void handleError(final Exception e, final String mapId,
 			final String requestSnippet)
 	{
 		if (e instanceof SocketException

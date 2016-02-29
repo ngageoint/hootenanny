@@ -199,28 +199,20 @@ public class WfsManager {
 		InputStream stream = new ByteArrayInputStream(content.getBytes("UTF-8"));
 		ResourceState<?> resStatus = fsMan.createResource(name, stream);
 		
-		if(resStatus.getType() == StateType.deactivated)
+		if (resStatus.getType() == StateType.deactivated)
 		{
 			ResourceState<FeatureStore> fsActivationState = fsMan.activate(name);
-			if(fsActivationState.getType() == StateType.init_ok)
+			if (fsActivationState.getType() == StateType.init_ok)
 			{
 				return fsActivationState.getResource();
 			}
-			else
-			{
-				log.error("Failed to activate featurestore");
-				throw new Exception("Failed to activate featurestore");
-			}
-		}
-		else
-		{
-			log.error("Failed to create featurestore");
-			throw new Exception("Failed to create featurestore");
+			log.error("Failed to activate featurestore");
+			throw new Exception("Failed to activate featurestore");
 		}
 		
+		log.error("Failed to create featurestore");
+		throw new Exception("Failed to create featurestore");
 	}
-	
-
 	
 	protected void _addToWfsStore(FeatureStore fstore) throws Exception
 	{

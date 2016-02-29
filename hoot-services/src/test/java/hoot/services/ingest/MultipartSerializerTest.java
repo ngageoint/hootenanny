@@ -150,7 +150,7 @@ public class MultipartSerializerTest {
     Map<String,String> uploadedFiles = new HashMap<String, String>();
     Map<String,String> uploadedFilesPaths = new HashMap<String, String>();
 
-		_ms._serializeUploadedFiles(fileItemsList, jobId,
+		_ms._serializeUploadedFiles(fileItemsList,
 				uploadedFiles, uploadedFilesPaths, wkdirpath);
 
 		org.junit.Assert.assertEquals("OSM", uploadedFiles.get("dummy1"));

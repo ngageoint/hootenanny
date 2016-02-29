@@ -68,23 +68,16 @@ public class Relation extends Element
 	
 	private List<RelationMember> membersCache = new ArrayList<RelationMember>();
 
-	public Relation(final long mapId, Connection dbConn)
+	public Relation(final long mapId, Connection dbConn) throws Exception
 	{
 		super(dbConn);
 		elementType = ElementType.Relation;
 
 		this.record = new CurrentRelations();
-	  //TODO: what's the purpose of this catch?
-		try
-		{
-			setMapId(mapId);
-		}
-		catch (Exception ex)
-		{
-		}
+		setMapId(mapId);
 	}
 
-	public Relation(final long mapId, Connection dbConn, final CurrentRelations record)
+	public Relation(final long mapId, Connection dbConn, final CurrentRelations record) throws Exception
 	{
 		super(dbConn);
 		elementType = ElementType.Relation;
@@ -97,15 +90,8 @@ public class Relation extends Element
 		relationRecord.setVisible(record.getVisible());
 		relationRecord.setTags(record.getTags());
 		this.record = relationRecord;
-
-	  //TODO: what's the purpose of this catch?
-		try
-		{
-			setMapId(mapId);
-		}
-		catch (Exception ex)
-		{
-		}
+		
+		setMapId(mapId);
 	}
 
 	/**
@@ -194,10 +180,7 @@ public class Relation extends Element
 		{
 			return element;
 		}
-		else
-		{
-			return elementWithTags;
-		}
+		return elementWithTags;
 	}
 
 	/*

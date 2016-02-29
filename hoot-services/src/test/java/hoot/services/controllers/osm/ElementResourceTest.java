@@ -70,7 +70,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
     super("hoot.services.controllers.osm");
   }
   
-  private void verifyFirstNodeWasReturned(final Document responseData, final String id, 
+  private static void verifyFirstNodeWasReturned(final Document responseData, final String id, 
     final long changesetId, final BoundingBox bounds) throws TransformerException, 
     XPathExpressionException, UnsupportedEncodingException
   {
@@ -97,7 +97,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
     	URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
   }
   
-  private void verifyFirstWayWasReturned(final Document responseData, final String id, 
+  private static void verifyFirstWayWasReturned(final Document responseData, final String id, 
     final long changesetId, final Set<Long> wayNodeIds) throws TransformerException, 
     XPathExpressionException, UnsupportedEncodingException
   {
@@ -137,7 +137,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract
     }
   }
   
-  private void verifyFirstRelationWasReturned(final Document responseData, final String id, 
+  private static void verifyFirstRelationWasReturned(final Document responseData, final String id, 
     final long changesetId, final List<RelationMember> relationMembers) throws TransformerException, 
     XPathExpressionException, UnsupportedEncodingException
   {

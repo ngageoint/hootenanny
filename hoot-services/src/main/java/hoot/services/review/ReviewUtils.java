@@ -128,9 +128,6 @@ public class ReviewUtils
     {
       throw new ProcessletException(new OWSException(message, exceptionCode));
     }
-    else
-    {
-      ResourceErrorHandler.handleError(message, status, log);
-    }
+    ResourceErrorHandler.handleError(message, status, log);
   }
 }

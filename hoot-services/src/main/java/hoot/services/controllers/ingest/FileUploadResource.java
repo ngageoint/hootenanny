@@ -110,7 +110,7 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 		{
 			// Save multipart data into file
 			log.debug("Starting ETL Process for:" + inputName);
-			Map<String,String> uploadedFiles = new HashMap<String, String>();;
+			Map<String,String> uploadedFiles = new HashMap<String, String>();
 			Map<String,String> uploadedFilesPaths = new HashMap<String, String>();
 
 			MultipartSerializer ser = new MultipartSerializer();
@@ -519,73 +519,70 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 	  		}
 	  		
 	  		//See if there is extension and if none then throw error
-	  		if(ext == null) 
+	  		if (ext == null) 
 	  		{
 	  			throw new Exception("Unknown file type.");
 	  		}
-	  		else
-	  		{
-	  			// for each type of extensions
-	  			for(int i=0; i<extList.length; i++)
-	  			{
-	  				if(ext.equalsIgnoreCase(extList[i]))
-	  				{
-	  					if(ze.isDirectory())
-	  					{
-	  						if(ext.equals("gdb"))
-	  						{
-		  						JSONObject contentType = new JSONObject();
-		  	  				contentType.put("type", "FGDB_ZIP");
-		  	  				contentType.put("name", fName + "/" + zipName);
-		  	  				contentTypes.add(contentType);
-		  	  				fgdbCnt++;
-	  						}
-	  						else
-	  						{
-	  							throw new Exception("Unknown folder type. Only gdb folder type is supported.");
-	  						}
-	  					}
-	  					else //file
-	  					{
-	  						if(ext.equals("shp"))
-	  						{
-	  							JSONObject contentType = new JSONObject();
-		  	  				contentType.put("type", "OGR_ZIP");
-		  	  				contentType.put("name", fName + "/" + zipName);
-		  	  				contentTypes.add(contentType);
-		  	  				shpCnt++;
-	  						}
-	  						else if(ext.equals("osm"))
-	  						{
-	  							JSONObject contentType = new JSONObject();
-		  	  				contentType.put("type", "OSM_ZIP");
-		  	  				contentType.put("name", fName + "/" + zipName);
-		  	  				contentTypes.add(contentType);
-		  	  				osmCnt++;
-	  						}
-	  						else if(ext.equals("geonames"))
-	  						{
-	  							JSONObject contentType = new JSONObject();
-		  	  				contentType.put("type", "GEONAMES_ZIP");
-		  	  				contentType.put("name", fName + "/" + zipName);
-		  	  				contentTypes.add(contentType);
-		  	  				geonamesCnt++;
-	  						}
-	  						else
-	  						{
-	  							// We will not throw error here since shape file can contain mutiple types of support files.
-	  							// We will let hoot-core decide if it can handle the zip.
-	  						}
-	  					}
-	  				}
-	  				// We do not allow mix of ogr and osm in zip
-	  				if((shpCnt + fgdbCnt) > 0 && osmCnt > 0 )
-	    			{
-	    				throw new Exception("Zip should not contain both osm and ogr types.");
-	    			}
-	  			}
-	  			
-	  		}
+	  		
+  			// for each type of extensions
+  			for(int i=0; i<extList.length; i++)
+  			{
+  				if(ext.equalsIgnoreCase(extList[i]))
+  				{
+  					if(ze.isDirectory())
+  					{
+  						if(ext.equals("gdb"))
+  						{
+	  						JSONObject contentType = new JSONObject();
+	  	  				contentType.put("type", "FGDB_ZIP");
+	  	  				contentType.put("name", fName + "/" + zipName);
+	  	  				contentTypes.add(contentType);
+	  	  				fgdbCnt++;
+  						}
+  						else
+  						{
+  							throw new Exception("Unknown folder type. Only gdb folder type is supported.");
+  						}
+  					}
+  					else //file
+  					{
+  						if(ext.equals("shp"))
+  						{
+  							JSONObject contentType = new JSONObject();
+	  	  				contentType.put("type", "OGR_ZIP");
+	  	  				contentType.put("name", fName + "/" + zipName);
+	  	  				contentTypes.add(contentType);
+	  	  				shpCnt++;
+  						}
+  						else if(ext.equals("osm"))
+  						{
+  							JSONObject contentType = new JSONObject();
+	  	  				contentType.put("type", "OSM_ZIP");
+	  	  				contentType.put("name", fName + "/" + zipName);
+	  	  				contentTypes.add(contentType);
+	  	  				osmCnt++;
+  						}
+  						else if(ext.equals("geonames"))
+  						{
+  							JSONObject contentType = new JSONObject();
+	  	  				contentType.put("type", "GEONAMES_ZIP");
+	  	  				contentType.put("name", fName + "/" + zipName);
+	  	  				contentTypes.add(contentType);
+	  	  				geonamesCnt++;
+  						}
+  						else
+  						{
+  							// We will not throw error here since shape file can contain mutiple types of support files.
+  							// We will let hoot-core decide if it can handle the zip.
+  						}
+  					}
+  				}
+  				// We do not allow mix of ogr and osm in zip
+  				if((shpCnt + fgdbCnt) > 0 && osmCnt > 0 )
+    			{
+    				throw new Exception("Zip should not contain both osm and ogr types.");
+    			}
+  			}
 	  		
 	  		ze = zis.getNextEntry();
 	  	}

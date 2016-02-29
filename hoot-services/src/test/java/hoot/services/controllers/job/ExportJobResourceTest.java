@@ -35,7 +35,6 @@ import javax.ws.rs.core.Response;
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
@@ -126,7 +125,7 @@ public class ExportJobResourceTest {
 		Response resp = exRes.getExportResources();
 		String result = resp.getEntity().toString();
 		
-		String homeFolder = HootProperties.getProperty("homeFolder");;
+		String homeFolder = HootProperties.getProperty("homeFolder");
 		String translationExtPath = HootProperties.getProperty("translationExtPath");
 		
 		String transExtPath = homeFolder + "/" + "/plugins-local/script/utp";
@@ -134,27 +133,17 @@ public class ExportJobResourceTest {
 		{
 			transExtPath = translationExtPath;
 		}
-		new JSONArray();
-		try
-		{
-			String expected = "";
-			File f = new File(transExtPath);
-			if(f.exists() && f.isDirectory())
-			{
-				
-				expected = "[{\"description\":\"LTDS 4.0\",\"name\":\"TDS\"},{\"description\":\"MGCP\",\"name\":\"MGCP\"},{\"description\":\"UTP\",\"name\":\"UTP\"}]";
-			}
-			else
-			{
-				expected = "[{\"description\":\"LTDS 4.0\",\"name\":\"TDS\"},{\"description\":\"MGCP\",\"name\":\"MGCP\"}]";
-			}
-			Assert.assertEquals(expected, result);
-		}
-		catch (Exception ex)
-		{
-			
-		}
-			
 		
+		String expected = "";
+		File f = new File(transExtPath);
+		if(f.exists() && f.isDirectory())
+		{
+			expected = "[{\"description\":\"LTDS 4.0\",\"name\":\"TDS\"},{\"description\":\"MGCP\",\"name\":\"MGCP\"},{\"description\":\"UTP\",\"name\":\"UTP\"}]";
+		}
+		else
+		{
+			expected = "[{\"description\":\"LTDS 4.0\",\"name\":\"TDS\"},{\"description\":\"MGCP\",\"name\":\"MGCP\"}]";
+		}
+		Assert.assertEquals(expected, result);	
 	}
 }

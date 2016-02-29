@@ -422,12 +422,9 @@ public class Changeset extends Changesets
     {
       return new BoundingBox();
     }
-    else
-    {
-      //this BoundingBox constructor requires that all values be valid (can't create an invalid
-      //empty bounds with this one)
-      return new BoundingBox(minLon, minLat, maxLon, maxLat);
-    }
+    //this BoundingBox constructor requires that all values be valid (can't create an invalid
+    //empty bounds with this one)
+    return new BoundingBox(minLon, minLat, maxLon, maxLat);
   }
 
   /**

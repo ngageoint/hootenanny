@@ -31,7 +31,7 @@ import hoot.services.controllers.ogr.TranslatorResource;
 import hoot.services.controllers.services.P2PResource;
 
 import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;;
+import javax.servlet.ServletContextListener;
 
 public class HootServletContext implements ServletContextListener {
 

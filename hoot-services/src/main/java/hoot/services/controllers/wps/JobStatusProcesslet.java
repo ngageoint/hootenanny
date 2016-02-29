@@ -69,7 +69,7 @@ public class JobStatusProcesslet extends BaseProcesslet {
 	}
 	
 	
-	private String getJobStatusRquest(String jobId) throws Exception{
+	private static String getJobStatusRquest(String jobId) throws Exception{
 		String ret = "";
 		
 		CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -84,6 +84,7 @@ public class JobStatusProcesslet extends BaseProcesslet {
 		    }
 		} finally {
 		    response.close();
+		    httpclient.close();
 		}
 		
 		

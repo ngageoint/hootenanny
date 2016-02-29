@@ -76,22 +76,22 @@ public class HGISResource extends JobControllerBase
 	}
 	
 	
-	protected final String  getDbName()
+	protected final static String  getDbName()
 	{
 		return _dbName;
 	}
 	
-	protected final String getDbUserId()
+	protected final static String getDbUserId()
 	{
 		return _dbUserId;
 	}
 	
-	protected final String getDbPassword()
+	protected final static String getDbPassword()
 	{
 		return _dbPassword;
 	}
 	
-	protected final String getDbHost()
+	protected final static String getDbHost()
 	{
 		return _dbHost;
 	}

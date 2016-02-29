@@ -27,6 +27,7 @@
 package hoot.services.controllers.ingest;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.UUID;
 
@@ -55,31 +56,24 @@ public class RasterToTilesService extends JobControllerBase {
 	protected static String _rasterToTilesPath = null;
 	private static ClassPathXmlApplicationContext appContext = null;
 
-	public RasterToTilesService()
+	public RasterToTilesService() throws IOException
 	{
-		try
+		File f = null;
+		if (processScriptName ==  null)
 		{
-			File f = null;
-			if (processScriptName ==  null)
-			{
-				processScriptName = HootProperties.getProperty("RasterToTiles");
-			}
-
-			if(_tileServerPath == null)
-			{
-				_tileServerPath = HootProperties.getProperty("tileServerPath");
-				f = new File(_tileServerPath);
-				FileUtils.forceMkdir(f);
-			}
-			if (appContext == null)
-	    {
-	      appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
-	    }
+			processScriptName = HootProperties.getProperty("RasterToTiles");
 		}
-		catch(Exception ex)
+
+		if(_tileServerPath == null)
 		{
-
+			_tileServerPath = HootProperties.getProperty("tileServerPath");
+			f = new File(_tileServerPath);
+			FileUtils.forceMkdir(f);
 		}
+		if (appContext == null)
+    {
+      appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
+    }
 	}
 
 	public String ingestOSMResourceDirect(String name, String userEmail) throws Exception

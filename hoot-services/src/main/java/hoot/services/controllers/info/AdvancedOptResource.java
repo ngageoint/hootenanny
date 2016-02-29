@@ -30,6 +30,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.Map;
@@ -99,7 +100,7 @@ public class AdvancedOptResource
 	@Path("/getoptions")
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response getOptions(@QueryParam("conftype") final String confType,
-		@QueryParam("force") final String isForce)
+		@QueryParam("force") final String isForce) throws IOException
 	{
 		FileReader fr = null;
 		JSONArray template = null;
@@ -182,14 +183,7 @@ public class AdvancedOptResource
 		{
 			if (fr != null)
 			{
-				try
-				{
-					fr.close();
-				}
-				catch (Exception ee)
-				{
-
-				}
+				fr.close();
 			}
 		}
 
@@ -264,7 +258,7 @@ public class AdvancedOptResource
 		}
 		catch (Exception e1)
 		{
-
+      log.debug(e1.getMessage());
 		}
 		return "";
 	}
@@ -469,9 +463,9 @@ public class AdvancedOptResource
 				}
 
 			}
-			else if (o instanceof JSONArray)
+			/*else if (o instanceof JSONArray)
 			{
-			}
+			}*/
 		}
 
 		// do recursion to visit each object and try to update value

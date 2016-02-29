@@ -54,7 +54,6 @@ import hoot.services.models.osm.Way;
 import hoot.services.utils.XmlUtils;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -303,12 +302,6 @@ public class OsmTestUtils
   }
 
   public static void verifyTestChangesetCreatedByRequest(final Long changesetId)
-  {
-    verifyTestChangesetCreatedByRequest(changesetId, true);
-  }
-
-  public static void verifyTestChangesetCreatedByRequest(final Long changesetId,
-    final boolean verifyTags)
   {
   	QChangesets changesets = QChangesets.changesets;
     hoot.services.db2.Changesets changeset =
@@ -1508,7 +1501,6 @@ public class OsmTestUtils
     {
       throw new Exception("Error inserting node.");
     }
-
     finally
     {
       if (stmt != null)

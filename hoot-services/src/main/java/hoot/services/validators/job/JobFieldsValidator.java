@@ -72,9 +72,9 @@ public class JobFieldsValidator {
 	// validate required fields list.
 
 
+	//TODO: If this isn't to be used anymore, get rid of it.
 	public boolean validateField( String fieldName, String fieldValue)
 	{
-
 	/*
 		String resourceName = _resourceName;
 		boolean isValid = true;

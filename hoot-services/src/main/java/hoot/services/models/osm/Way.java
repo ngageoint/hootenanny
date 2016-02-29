@@ -77,24 +77,17 @@ public class Way extends Element
   // temp collection of way node coordinates used to calculate the way's bounds
   private Map<Long, Coordinates> nodeCoordsCollection;
 
-  public Way(final long mapId, Connection dbConn)
+  public Way(final long mapId, Connection dbConn) throws Exception
   {
     super(dbConn);
 
     elementType = ElementType.Way;
 
     this.record = new CurrentWays();
-    //TODO: what's the purpose of this catch?
-    try
-    {
-    	setMapId(mapId);
-    }
-    catch (Exception ex)
-    {
-    }
+    setMapId(mapId);
   }
 
-  public Way(final long mapId, Connection dbConn, final CurrentWays record)
+  public Way(final long mapId, Connection dbConn, final CurrentWays record) throws Exception
   {
     super(dbConn);
     elementType = ElementType.Way;
@@ -107,14 +100,7 @@ public class Way extends Element
     wayRecord.setVisible(record.getVisible());
     wayRecord.setTags(record.getTags());
     this.record = wayRecord;
-     //TODO: what's the purpose of this catch?
-    try
-    {
-    	setMapId(mapId);
-    }
-    catch (Exception ex)
-    {
-    }
+    setMapId(mapId);
   }
 
   /**
@@ -138,10 +124,7 @@ public class Way extends Element
           .where(currentWayNodes.wayId.in(wayIds))
           .list(currentNodes);
     }
-    else
-    {
-      return new ArrayList<CurrentNodes>();
-    }
+    return new ArrayList<CurrentNodes>();
   }
 
   /*
@@ -280,10 +263,7 @@ public class Way extends Element
     // way nodes data
     // for this way must be in the services database and up to date, so get it
     // from there.
-    else
-    {
-      return new BoundingBox(new ArrayList<CurrentNodes>(getNodes()));
-    }
+    return new BoundingBox(new ArrayList<CurrentNodes>(getNodes()));
   }
   
   /**
@@ -385,10 +365,7 @@ public class Way extends Element
     {
       return element;
     }
-    else
-    {
-      return elementWithTags;
-    }
+    return elementWithTags;
   }
 
   private void validateWayNodesSize(final NodeList wayNodesXml) throws Exception

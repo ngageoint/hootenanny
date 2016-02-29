@@ -113,7 +113,7 @@ public class Map extends Maps
   /*
    * Retrieves all ranges of quad tiles that fall within the bounds
    */
-  private Vector<Range> getTileRanges(final BoundingBox bounds) throws NumberFormatException,
+  private static Vector<Range> getTileRanges(final BoundingBox bounds) throws NumberFormatException,
     IOException
   {
     log.debug("Retrieving tile ranges...");
@@ -135,7 +135,7 @@ public class Map extends Maps
   /*
    * Returns the SQL where condition for the calculated tile ranges
    */
-  private BooleanExpression getTileWhereCondition(final Vector<Range> tileIdRanges)
+  private static BooleanExpression getTileWhereCondition(final Vector<Range> tileIdRanges)
   {
     List<BooleanExpression> tileConditions = new ArrayList<BooleanExpression>();
     for (Range range : tileIdRanges)
@@ -164,7 +164,7 @@ public class Map extends Maps
    * Returns the geospatial where condition to apply with the tile conditions to
    * ensure nodes that fall outside the bounding box are not returned
    */
-  private BooleanExpression getGeospatialWhereCondition(final BoundingBox bounds)
+  private static BooleanExpression getGeospatialWhereCondition(final BoundingBox bounds)
   {
   	QCurrentNodes nodes = QCurrentNodes.currentNodes;
   	return 
@@ -174,7 +174,7 @@ public class Map extends Maps
   			.and(nodes.latitude.loe(bounds.getMaxLat()));
   }
 
-  private void validateQueryBounds(final BoundingBox bounds) throws Exception
+  private static void validateQueryBounds(final BoundingBox bounds) throws Exception
   {
     log.debug("Checking request bounds size...");
     final double maxQueryAreaDegrees =
@@ -227,7 +227,6 @@ public class Map extends Maps
   	JSONObject ret = new JSONObject();
     //get the intersecting tile ranges for the nodes
     final Vector<Range> tileIdRanges = getTileRanges(bounds);
-    new HashMap<ElementType, java.util.Map<Long, Tuple>>();
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
@@ -257,7 +256,6 @@ public class Map extends Maps
   	long ret = 0;
     //get the intersecting tile ranges for the nodes
     final Vector<Range> tileIdRanges = getTileRanges(bounds);
-    new HashMap<ElementType, java.util.Map<Long, Tuple>>();
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =
@@ -277,7 +275,6 @@ public class Map extends Maps
   	JSONObject ret = new JSONObject();
     //get the intersecting tile ranges for the nodes
     final Vector<Range> tileIdRanges = getTileRanges(bounds);
-    new HashMap<ElementType, java.util.Map<Long, Tuple>>();
     if (tileIdRanges.size() > 0)
     {
       BooleanExpression combinedGeospatialCondition =

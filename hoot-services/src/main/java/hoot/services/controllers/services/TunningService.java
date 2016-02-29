@@ -27,6 +27,7 @@
 package hoot.services.controllers.services;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.Collection;
 import java.util.Date;
@@ -74,16 +75,12 @@ public class TunningService  implements Executable {
 	
   public String getFinalStatusDetail() { return finalStatusDetail; }
   
-	public TunningService()
+	public TunningService() throws IOException
 	{
 		totalSize = new Double(0);
 		appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
-		try {
-			tempPath = HootProperties.getProperty("tempOutputPath");
-			coreScriptPath = HootProperties.getProperty("coreScriptPath");
-		} catch (Exception e) {
-		
-		}
+		tempPath = HootProperties.getProperty("tempOutputPath");
+		coreScriptPath = HootProperties.getProperty("coreScriptPath");
 	}
 	
 	public void exec(JSONObject command) throws Exception
@@ -103,10 +100,6 @@ public class TunningService  implements Executable {
 				DbUtils.getNodesCountByName(conn, input);
 				DbUtils.getWayCountByName(conn, input);
 				DbUtils.getRelationCountByName(conn, input);
-				
-				
-				
-				
 				
 				// if the count is greater than threshold then just use it and tell it too big
 				
@@ -134,14 +127,8 @@ public class TunningService  implements Executable {
 			 	
     	File outputFile = new File(tempOutputPath);
 
-    	JobSink sinkImplementation = parseOsm(Long.parseLong("0"), outputFile); 
+    	JobSink sinkImplementation = parseOsm(outputFile); 
   
-    	javax.management.MBeanServer mBeanServer = java.lang.management.ManagementFactory.getPlatformMBeanServer();
-    	Object attribute = mBeanServer.getAttribute(new javax.management.ObjectName("java.lang","type","OperatingSystem"), "TotalPhysicalMemorySize");
-    	long totalMemSize = Long.parseLong(attribute.toString());
-    	
-    	new Double(totalMemSize);
-    	
     	long endTime = new Date().getTime();
   		log.debug("Start:" + starttime + "  - End: " + endTime + " Diff:" + (endTime-starttime) + " TOTAL:" + totalSize
   				+ " NODES:" + sinkImplementation.getTotalNodes() + " Way:" + sinkImplementation.getTotalWay() + " Relations:" + 
@@ -169,7 +156,7 @@ public class TunningService  implements Executable {
 	}
 	
 	
-	private JobSink parseOsm(Long elemId, File inputOsmFile) throws Exception
+	private JobSink parseOsm(File inputOsmFile) throws Exception
   {
   	CompressionMethod compression = CompressionMethod.None;  
   	

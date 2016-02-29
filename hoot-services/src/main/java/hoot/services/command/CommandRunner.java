@@ -479,10 +479,10 @@ public class CommandRunner implements ICommandRunner
 	{
 
 		CharPump outpump = new CharPump(new BufferedReader(new InputStreamReader(
-		    pProcess.getInputStream())), pOut, pOrigCmd, interrupt);
+		    pProcess.getInputStream())), pOut, interrupt);
 		stdOutErrList.add(outpump);
 		CharPump errpump = new CharPump(new BufferedReader(new InputStreamReader(
-		    pProcess.getErrorStream())), pErr, pOrigCmd, interrupt);
+		    pProcess.getErrorStream())), pErr, interrupt);
 		stdOutErrList.add(errpump);
 		outpump.start();
 		errpump.start();
@@ -509,9 +509,8 @@ public class CommandRunner implements ICommandRunner
 
 		private MutableBoolean interrupt_sig;
 
-		public CharPump(Reader pIn, Writer pOut, String pCmd, MutableBoolean pInterrupt)
+		public CharPump(Reader pIn, Writer pOut, MutableBoolean pInterrupt)
 		{
-
 			interrupt_sig = pInterrupt;
 			iIn = pIn;
 			iOut = pOut;
@@ -665,7 +664,7 @@ public class CommandRunner implements ICommandRunner
 		return result;
 	}
 
-	private void logExec(String pCmdString, Map<String, String> unsortedEnv) throws IOException
+	private static void logExec(String pCmdString, Map<String, String> unsortedEnv) throws IOException
 	{
 		if (_log.isInfoEnabled())
 		{

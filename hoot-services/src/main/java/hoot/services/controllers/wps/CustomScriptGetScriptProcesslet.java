@@ -113,6 +113,7 @@ public class CustomScriptGetScriptProcesslet  extends BaseProcesslet {
 			}
 		} finally {
 		    response.close();
+		    httpclient.close();
 		}
 		
 		

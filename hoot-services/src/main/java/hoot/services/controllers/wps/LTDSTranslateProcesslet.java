@@ -111,7 +111,7 @@ public class LTDSTranslateProcesslet extends BaseProcesslet {
 	 * @param requestParams
 	 * @throws Exception 
 	 */
-	private String postJobRquest(String osmId, String translation, String requestParams) throws Exception{
+	private static String postJobRquest(String osmId, String translation, String requestParams) throws Exception{
 		String ret = "";
 		CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
 		try{

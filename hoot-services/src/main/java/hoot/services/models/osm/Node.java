@@ -27,7 +27,6 @@
 package hoot.services.models.osm;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -60,23 +59,16 @@ public class Node extends Element
 {
   private static final Logger log = LoggerFactory.getLogger(Node.class);
 
-  public Node(final Long mapId, Connection dbConnection)
+  public Node(final Long mapId, Connection dbConnection) throws Exception
   {
     super(dbConnection);
     elementType = ElementType.Node;
 
-    //TODO: what's the purpose of this catch?
-    try
-    {
-    	setMapId(mapId);
-    }
-    catch(Exception ex)
-    {
-    }
+    setMapId(mapId);
     this.record = new CurrentNodes();
   }
 
-  public Node(final Long mapId, Connection dbConnection, final CurrentNodes record)
+  public Node(final Long mapId, Connection dbConnection, final CurrentNodes record) throws Exception
   {
     super(dbConnection);
 
@@ -94,15 +86,7 @@ public class Node extends Element
     nodeRecord.setTags(record.getTags());
     this.record = nodeRecord;
 
-    //TODO: what's the purpose of this catch?
-    try
-    {
-    	setMapId(mapId);
-    }
-    catch(Exception ex)
-    {
-
-    }
+    setMapId(mapId);
   }
 
   /**
@@ -155,10 +139,7 @@ public class Node extends Element
           .where(currentNodes.id.in(nodeIds))
           .list(currentNodes);
     }
-    else
-    {
-      return new ArrayList<CurrentNodes>();
-    }
+    return new ArrayList<CurrentNodes>();
   }
     
   /**
@@ -246,10 +227,7 @@ public class Node extends Element
   	{
   		return element;
   	}
-  	else
-  	{
-  		return elementWithTags;
-  	}
+  	return elementWithTags;
   }
 
   /**

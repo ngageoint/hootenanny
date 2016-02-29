@@ -78,8 +78,5 @@ public class CustomScriptGetScriptProcessletTest {
     processlet.process(in, out, new ProcessExecution(null, null, null, null, out));
     
     verify(processlet).getRequest(Matchers.matches("testName"));
-		
-
-    
 	}	
 }

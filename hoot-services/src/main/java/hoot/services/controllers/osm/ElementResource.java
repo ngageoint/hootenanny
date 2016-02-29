@@ -301,7 +301,7 @@ public class ElementResource
         .build();
   }
   
-  private Document getElementXml(final String mapId, final long elementId, 
+  private static Document getElementXml(final String mapId, final long elementId, 
     final ElementType elementType, final boolean multiLayerUniqueElementIds, 
     final boolean addChildren, Connection  dbConn) throws Exception
   {
@@ -351,8 +351,6 @@ public class ElementResource
     }
     assert(elementRecords.size() == 1);
     
-
-		
     final Element element = 
       ElementFactory.getInstance().create(elementType, elementRecords.get(0), dbConn, Long.parseLong(mapId));
     
@@ -428,7 +426,7 @@ public class ElementResource
   }
 
 
-  private Document getElementsXml(final String mapId, final String[] elementIdsStr, 
+  private static Document getElementsXml(final String mapId, final String[] elementIdsStr, 
     final ElementType elementType, final boolean multiLayerUniqueElementIds, 
     final boolean addChildren, Connection  dbConn) throws Exception
   {

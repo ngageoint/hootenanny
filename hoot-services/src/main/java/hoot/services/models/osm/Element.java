@@ -542,10 +542,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
   			  .where(prototype.getElementIdField().in(elementIds))
   			  .count() == elementIds.size();
     }
-    else
-    {
-    	return 0 == elementIds.size();
-    }
+    return 0 == elementIds.size();
   }
 
   /**
@@ -578,10 +575,7 @@ public abstract class Element implements XmlSerializable, DbSerializable
               .and(prototype.getElementVisibilityField().eq(true)))
   			  .count() == elementIds.size();
     }
-    else
-    {
-    	return 0 == elementIds.size();
-    }
+    return 0 == elementIds.size();
   }
   
   /**

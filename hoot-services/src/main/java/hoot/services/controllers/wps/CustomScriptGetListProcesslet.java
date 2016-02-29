@@ -95,6 +95,7 @@ public class CustomScriptGetListProcesslet  extends BaseProcesslet {
 			}
 		} finally {
 		    response.close();
+		    httpclient.close();
 		}
 		
 		

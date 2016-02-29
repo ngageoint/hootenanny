@@ -71,10 +71,7 @@ public class InputParamsValidator extends InputParamsValidatorAbstract
       {
         return new BoundingBox((String)defaultValue);
       }
-      else
-      {
-        return new BoundingBox((String)inputParams.get("geospatialBounds"));
-      }
+      return new BoundingBox((String)inputParams.get("geospatialBounds"));
     }
     
     Object param = inputParams.get(name);

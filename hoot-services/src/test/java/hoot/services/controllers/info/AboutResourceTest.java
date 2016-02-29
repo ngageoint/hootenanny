@@ -66,7 +66,7 @@ public class AboutResourceTest extends JerseyTest
     super("hoot.services.controllers.info");
   }
   
-  private void mockBuildInfo() throws IOException
+  private static void mockBuildInfo() throws IOException
   {
 	  //mock the existence of the build info properties
 	  Properties buildInfoProps = new Properties();

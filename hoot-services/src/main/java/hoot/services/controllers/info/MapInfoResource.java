@@ -151,12 +151,11 @@ public class MapInfoResource {
 				long nsize = 0;
 				try
 				{
-					for(String table : maptables)
+					for (String table : maptables)
 					{
 						nsize += DbUtils.getTableSizeInByte(table + "_" +  mapId);
 					}					
 				}
-				catch (Exception exx){}
 				finally
 				{
 					jo.put("id", Long.parseLong(mapId));
@@ -164,7 +163,6 @@ public class MapInfoResource {
 					retval.put(jo);
 				}
 			}
-			
 		}
 		catch (Exception ex)
 		{

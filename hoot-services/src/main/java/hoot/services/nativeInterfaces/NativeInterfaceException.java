@@ -54,7 +54,7 @@ public class NativeInterfaceException extends Exception {
 	        {
 	        	return value;
 	        }
-	};
+	}
 
 
 	private NativeInterfaceException.HttpCode exceptionCode = NativeInterfaceException.HttpCode.SERVER_ERROR;

@@ -150,7 +150,7 @@ public class ChangesetDbWriter
    * Create/Modify requests cause the element ID to be incremented. Delete requests cause it to be 
    * unchanged.
    */
-  private long getNewElementId(final long oldElementId, final long nextElementId,
+  private static long getNewElementId(final long oldElementId, final long nextElementId,
     final EntityChangeType entityChangeType, final int elementCtr)
   {
     long newElementId;

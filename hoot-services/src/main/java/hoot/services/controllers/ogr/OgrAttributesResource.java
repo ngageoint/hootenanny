@@ -110,7 +110,7 @@ public class OgrAttributesResource extends JobControllerBase {
 		try
 		{
 			log.debug("Starting file upload for ogr attribute Process");
-			Map<String,String> uploadedFiles = new HashMap<String, String>();;
+			Map<String,String> uploadedFiles = new HashMap<String, String>();
 			Map<String,String> uploadedFilesPaths = new HashMap<String, String>();
 
 			MultipartSerializer ser = new MultipartSerializer();
@@ -131,9 +131,6 @@ public class OgrAttributesResource extends JobControllerBase {
 	
 	  			inputFileName = uploadedFilesPaths.get(fName);
 
-	  			
-
-	  			new JSONObject();
 	  			// If it is zip file then we crack open to see if it contains FGDB.
 	  			// If so then we add the folder location and desired output name which is fgdb name in the zip
 	  			if(ext.equalsIgnoreCase("ZIP"))

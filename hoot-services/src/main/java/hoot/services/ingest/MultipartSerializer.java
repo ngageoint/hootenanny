@@ -141,7 +141,7 @@ public class MultipartSerializer {
 	}
 
 
-	protected void _serializeUploadedFiles(List<FileItem> fileItemsList, String jobId,
+	protected void _serializeUploadedFiles(List<FileItem> fileItemsList,
 			Map<String,String> uploadedFiles, Map<String,String> uploadedFilesPaths, String repFolderPath) throws Exception
 	{
 
@@ -238,7 +238,7 @@ public class MultipartSerializer {
 			else
 			{
 				// Can be shapefile or zip file
-				_serializeUploadedFiles(fileItemsList, jobId,
+				_serializeUploadedFiles(fileItemsList,
 						uploadedFiles, uploadedFilesPaths, repFolderPath);
 			}
 		}

@@ -73,7 +73,7 @@ public class AboutResource
 		appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
 	}
 
-	private Properties getBuildInfo()
+	private static Properties getBuildInfo()
 	{
 		Properties buildInfo = null;
 		try

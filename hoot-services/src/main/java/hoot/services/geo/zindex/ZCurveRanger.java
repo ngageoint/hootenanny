@@ -345,12 +345,12 @@ public class ZCurveRanger
     return condenseRanges(result);
   }
 
-  public Vector<Range> decomposeRangeIterative(Box box, Box focusBox, int count)
+  public Vector<Range> decomposeRangeIterative(Box box, int count)
   {
-    return decomposeRangeIterative(toLongBox(box), toLongBox(focusBox), count);
+    return decomposeRangeIterative(toLongBox(box), count);
   }
 
-  public Vector<Range> decomposeRangeIterative(LongBox box, LongBox focusBox, int count)
+  public Vector<Range> decomposeRangeIterative(LongBox box, int count)
   {
     Vector<Range> result = new Vector<Range>();
     Vector<LongBox> completed = new Vector<LongBox>();

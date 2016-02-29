@@ -42,190 +42,211 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JobProcesslet extends BaseProcesslet {
-
-
+public class JobProcesslet extends BaseProcesslet
+{
 
 	private static final Logger log = LoggerFactory.getLogger(JobProcesslet.class);
 	private String processScriptName = null;
 	private JSONObject customParams = null;
 	protected String jobIdStr = java.util.UUID.randomUUID().toString();
-	
-	public JobProcesslet() throws Exception {
+
+	public JobProcesslet() throws Exception
+	{
 		super();
-		
+
 	}
 
-	
-	public String getProcessScriptName() {
+	public String getProcessScriptName()
+	{
 		return processScriptName;
 	}
 
-	public void setProcessScriptName(String processScriptName) {
+	public void setProcessScriptName(String processScriptName)
+	{
 		this.processScriptName = processScriptName;
 	}
-	
-	public void setCustomParams(JSONObject params) 
+
+	public void setCustomParams(JSONObject params)
 	{
 		customParams = params;
 	}
-	
-	public JSONObject getCustomParams() 
+
+	public JSONObject getCustomParams()
 	{
 		return customParams;
 	}
 
 	@Override
-	public void process(ProcessletInputs in, ProcessletOutputs out, ProcessletExecutionInfo info) 
-			throws ProcessletException {
-		
+	public void process(ProcessletInputs in, ProcessletOutputs out, ProcessletExecutionInfo info)
+			throws ProcessletException
+			{
+
 		JSONArray args = parseRequestParams(in);
-		
-		try {		
+
+		try
+		{
 			String commandStr = createPostBody(args);
 			postJobRquest(jobIdStr, commandStr);
-			
-			((LiteralOutput)out.getParameter("jobId")).setValue(jobIdStr);
-		} catch (Exception e) {
+
+			((LiteralOutput) out.getParameter("jobId")).setValue(jobIdStr);
+		}
+		catch (Exception e)
+		{
 			log.error(e.getMessage());
 		}
-		
 
-	}
-	
+			}
+
 	/**
 	 * Post Job request to jobExecutioner Servlet
 	 * 
 	 * @param jobId
 	 * @param requestParams
 	 */
-	protected void postJobRquest(String jobId, String requestParams) throws Exception {
+	protected void postJobRquest(String jobId, String requestParams) throws Exception
+	{
 		CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
-		try{
+		try
+		{
 			httpclient.start();
 			// Execute request
-			
-		    final HttpPost request1 = new HttpPost(coreJobServerUrl + "/hoot-services/job/" + jobId);
-		    StringEntity se = new StringEntity( requestParams);  
-		    request1.setEntity(se);
-		    httpclient.execute(request1, null);
-		} catch (Exception ee){
+
+			final HttpPost request1 = new HttpPost(coreJobServerUrl + "/hoot-services/job/" + jobId);
+			StringEntity se = new StringEntity(requestParams);
+			request1.setEntity(se);
+			httpclient.execute(request1, null);
+		}
+		catch (Exception ee)
+		{
 			log.error(ee.getMessage());
 		}
 		finally
 		{
+			httpclient.close();
 		}
 	}
-	
-	public void postChainJobRquest(String jobId, String requestParams) throws Exception {
+
+	public void postChainJobRquest(String jobId, String requestParams) throws Exception
+	{
 		CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
-		try{
+		try
+		{
 			httpclient.start();
-	    final HttpPost request1 = new HttpPost(coreJobServerUrl + "/hoot-services/job/chain/" + jobId);
-	    StringEntity se = new StringEntity( requestParams);  
-	    request1.setEntity(se);
-	    httpclient.execute(request1, null);
-			
-		} catch (Exception ee){
+			final HttpPost request1 = new HttpPost(coreJobServerUrl + "/hoot-services/job/chain/" + jobId);
+			StringEntity se = new StringEntity(requestParams);
+			request1.setEntity(se);
+			httpclient.execute(request1, null);
+
+		}
+		catch (Exception ee)
+		{
 			log.error(ee.getMessage());
 		}
 		finally
 		{
+			httpclient.close();
 		}
 	}
-	
-	public String createPostBody(JSONArray args){
+
+	public String createPostBody(JSONArray args)
+	{
 		return _createPostBody(args).toString();
 	}
-	
-	protected JSONObject _createPostBody(JSONArray args){
+
+	protected JSONObject _createPostBody(JSONArray args)
+	{
 		String resourceName = this.getClass().getSimpleName();
-		
+
 		JSONObject command = new JSONObject();
 		command.put("exectype", "make");
 		command.put("exec", processScriptName);
 		command.put("caller", resourceName);
-		
-		
-		if(customParams != null)
+
+		if (customParams != null)
 		{
 			Iterator it = customParams.entrySet().iterator();
-	    while (it.hasNext()) {
-	        Map.Entry pairs = (Map.Entry)it.next();
-	        String k = pairs.getKey().toString();
-	        String v = pairs.getValue().toString();
-	        
-	        boolean found = false;
-	        for(int i=0; i<args.size(); i++)
-	        {
-	        	JSONObject arg = (JSONObject)args.get(i);
-	        	Object o = arg.get(k);
-	        	if( o != null)
-	        	{
-	        		String oStr = o.toString();
-	        		if(oStr.length() > 0)
-	        		{
-	        			found = true;
-	        			break;
-	        		}
-	        	}
-	        }
-	        
-	        if(!found)
-	        {
-	        	JSONObject newParam = new JSONObject();
-		        newParam.put(k, v);
-		        args.add(newParam);
-	        }
-	        
-	    }
+			while (it.hasNext())
+			{
+				Map.Entry pairs = (Map.Entry) it.next();
+				String k = pairs.getKey().toString();
+				String v = pairs.getValue().toString();
+
+				boolean found = false;
+				for (int i = 0; i < args.size(); i++)
+				{
+					JSONObject arg = (JSONObject) args.get(i);
+					Object o = arg.get(k);
+					if (o != null)
+					{
+						String oStr = o.toString();
+						if (oStr.length() > 0)
+						{
+							found = true;
+							break;
+						}
+					}
+				}
+
+				if (!found)
+				{
+					JSONObject newParam = new JSONObject();
+					newParam.put(k, v);
+					args.add(newParam);
+				}
+
+			}
 		}
-		
+
 		command.put("params", args);
-		
+
 		return command;
 	}
-	
-	
+
 	protected JSONObject _createReflectionJobReq(JSONArray args, String className, String methodName)
 	{
 		this.getClass().getSimpleName();
-		
+
 		JSONObject command = new JSONObject();
 		command.put("exectype", "reflection");
 		command.put("class", className);
 		command.put("method", methodName);
 		command.put("params", args);
-		
+
 		return command;
 	}
 
-	protected JSONObject _createReflectionSycJobReq(JSONArray args, String className, String methodName)
+	protected JSONObject _createReflectionSycJobReq(JSONArray args, String className,
+			String methodName)
 	{
 		this.getClass().getSimpleName();
-		
+
 		JSONObject command = new JSONObject();
 		command.put("exectype", "reflection_sync");
 		command.put("class", className);
 		command.put("method", methodName);
 		command.put("params", args);
-		
+
 		return command;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see hoot.services.controllers.wps.BaseProcesslet#destroy()
 	 */
 	@Override
-	public void destroy() {
+	public void destroy()
+	{
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see hoot.services.controllers.wps.BaseProcesslet#init()
 	 */
 	@Override
-	public void init() {
+	public void init()
+	{
 	}
 
 }

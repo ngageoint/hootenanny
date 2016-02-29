@@ -92,9 +92,6 @@ public class JobExecutionManager
       throw new NativeInterfaceException(e.getMessage(),
           NativeInterfaceException.HttpCode.SERVER_ERROR);
     }
-    finally
-    {
-    }
   }
 
   public JSONObject execWithResult(JSONObject command) throws Exception
@@ -113,9 +110,6 @@ public class JobExecutionManager
       throw new NativeInterfaceException(e.getMessage(),
           NativeInterfaceException.HttpCode.SERVER_ERROR);
     }
-    finally
-    {
-    }
     return ret;
   }
 
@@ -131,9 +125,6 @@ public class JobExecutionManager
     {
       throw new NativeInterfaceException(e.getMessage(),
           NativeInterfaceException.HttpCode.SERVER_ERROR);
-    }
-    finally
-    {
     }
     return progress;
   }
