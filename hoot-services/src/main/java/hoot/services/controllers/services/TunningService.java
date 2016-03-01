@@ -124,7 +124,12 @@ public class TunningService  implements Executable {
 						throw new Exception(err);
 					}
 				
-				tempOutputPath = tempPath +  "/" + input + ".osm";      	  
+				tempOutputPath = tempPath +  "/" + input + ".osm";  
+				// fortify fix
+				if(!hoot.services.utils.FileUtils.validateFilePath(tempPath, tempOutputPath))
+				{
+					throw new Exception("input can not contain path.");
+				}
 			}
 			else 
 			{

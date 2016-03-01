@@ -85,7 +85,10 @@ public class ErrorLog {
     }
     finally
     {
-    	randomAccessFile.close();
+    	if(randomAccessFile != null)
+    	{
+    		randomAccessFile.close();
+    	}
     }
 	}
 
@@ -147,7 +150,10 @@ public class ErrorLog {
 		}
 		finally
 		{
-			raf.close();
+			if(raf != null)
+			{
+				raf.close();
+			}
 		}
 	}
 }

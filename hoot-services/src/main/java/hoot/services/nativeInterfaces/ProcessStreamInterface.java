@@ -245,7 +245,7 @@ public class ProcessStreamInterface implements INativeInterface {
 				}
 			}
 		} catch (Exception e){
-			if(res.getExitStatus() == -9999)
+			if(res != null && res.getExitStatus() == -9999)
 			{
 				throw new NativeInterfaceException("Failed to execute." + e.getMessage(),
 						NativeInterfaceException.HttpCode.USER_CANCEL);

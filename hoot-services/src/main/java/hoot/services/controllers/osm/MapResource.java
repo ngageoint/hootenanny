@@ -1166,7 +1166,10 @@ public class MapResource
 		}
 		catch (Exception ex)
 		{
-			jobStatusManager.setFailed(jobId, ex.getMessage());
+			if(jobStatusManager != null)
+			{
+				jobStatusManager.setFailed(jobId, ex.getMessage());
+			}
 			ResourceErrorHandler.handleError(
 					"Failure update map tags resource" + ex.getMessage(),
 					Status.INTERNAL_SERVER_ERROR, log);
