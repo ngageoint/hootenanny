@@ -58,6 +58,7 @@ public class LTDSTranslateProcesslet extends BaseProcesslet {
 	 */
 	@Override
 	public void destroy() {
+		//
 	}
 
 	/* (non-Javadoc)
@@ -65,6 +66,7 @@ public class LTDSTranslateProcesslet extends BaseProcesslet {
 	 */
 	@Override
 	public void init() {
+		//
 	}
 	
 	@Override

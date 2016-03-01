@@ -73,6 +73,7 @@ public class TunningService  implements Executable {
 	private String tempPath = null;
 	private String coreScriptPath = null;
 	
+  @Override
   public String getFinalStatusDetail() { return finalStatusDetail; }
   
 	public TunningService() throws IOException
@@ -83,7 +84,8 @@ public class TunningService  implements Executable {
 		coreScriptPath = HootProperties.getProperty("coreScriptPath");
 	}
 	
-	public void exec(JSONObject command) throws Exception
+	@Override
+  public void exec(JSONObject command) throws Exception
 	{
 
 		JSONObject res = new JSONObject();
@@ -176,7 +178,7 @@ public class TunningService  implements Executable {
   	    try {   	    	
   	        readerThread.join();
   	    } catch (InterruptedException e) {
-  	       
+  	       //
   	    }
   	}
   	
@@ -191,21 +193,24 @@ public class TunningService  implements Executable {
 	 * see CoreServiceContext.xml
 	 */
 	public void init(){
-
+		//
 	}
 
 	/**
 	 * see CoreServiceContext.xml
 	 */
 	public void destroy(){
-
+		//
 	}
 	
 	public class JobSink implements Sink
 	{
  		
-    public void release() { }
+    @Override
+    public void release() { /**/ }
+    @Override
     public void complete() {
+    	//
     }
     private Double totalOSMsize = (double)0;
     private Double totalNodeCnt = (double)0;
@@ -214,7 +219,7 @@ public class TunningService  implements Executable {
 
 		@Override
 		public void initialize(Map<String, Object> arg0) {
-	
+			//
 		}
 		
 		public double getTotalSize()

@@ -78,6 +78,7 @@ public class JobStatusManager
     };
     private int value;
 
+    @Override
     public abstract String toString();
 
     private JOB_STATUS(int value)

@@ -91,6 +91,7 @@ public class Range implements Comparable<Range>
     }
   }
 
+  @Override
   public String toString()
   {
     return String.format("%d : %d", _min, _max);

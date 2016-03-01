@@ -87,7 +87,8 @@ public class RandomReviewableQuery  extends ReviewableQueryBase implements IRevi
 		}
 	}
 	
-	public ReviewQueryMapper execQuery() throws SQLException, Exception
+	@Override
+  public ReviewQueryMapper execQuery() throws SQLException, Exception
 	{
 		ReviewableItem ret = new ReviewableItem(-1, getMapId(), -1);
 		

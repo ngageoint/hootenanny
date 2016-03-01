@@ -670,6 +670,7 @@ public class CustomScriptResource
         }
         catch (Exception e)
         {
+        	assert(f != null);
           log.error("Failed to read file header for script: " + f.getName() + e.getMessage());
         }
       }

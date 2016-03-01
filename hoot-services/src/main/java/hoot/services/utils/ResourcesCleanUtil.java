@@ -64,13 +64,15 @@ public class ResourcesCleanUtil implements Executable {
   private ClassPathXmlApplicationContext appContext;
 
 	private String finalStatusDetail;
+  @Override
   public String getFinalStatusDetail() { return finalStatusDetail; }
 	public ResourcesCleanUtil()
 	{
 		appContext = new ClassPathXmlApplicationContext(new String[] { "db/spring-database.xml" });
 	}
 
-	public void exec(JSONObject command) throws Exception
+	@Override
+  public void exec(JSONObject command) throws Exception
 	{
 		JSONObject res = deleteLayers(command.get("mapId").toString());
 		finalStatusDetail = res.toJSONString();
@@ -171,14 +173,14 @@ public class ResourcesCleanUtil implements Executable {
 	 * see CoreServiceContext.xml
 	 */
 	public void init(){
-
+		//
 	}
 
 	/**
 	 * see CoreServiceContext.xml
 	 */
 	public void destroy(){
-
+		//
 	}
 
 }

@@ -187,6 +187,7 @@ public class AdvancedOptResource
 			}
 		}
 
+		assert(template != null);
 		return Response.ok(template.toJSONString(), MediaType.APPLICATION_JSON)
 				.build();
 	}

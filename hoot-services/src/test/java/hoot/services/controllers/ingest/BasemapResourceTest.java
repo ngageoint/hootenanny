@@ -38,7 +38,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 public class BasemapResourceTest {
-	@BeforeClass
+	@SuppressWarnings("unused")
+  @BeforeClass
   public static void oneTimeSetup() {
       new BasemapResource();
 		org.junit.Assert.assertNotNull(BasemapResource._tileServerPath);

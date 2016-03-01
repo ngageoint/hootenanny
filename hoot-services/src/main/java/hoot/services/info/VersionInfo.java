@@ -51,6 +51,7 @@ public class VersionInfo
     
   }
   
+  @Override
   public String toString()
   {
     return "Name: " + name + "\nVersion: " + version + "\nBuilt By: " + builtBy;

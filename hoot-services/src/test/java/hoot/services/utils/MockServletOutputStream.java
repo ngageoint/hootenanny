@@ -42,6 +42,7 @@ public class MockServletOutputStream extends ServletOutputStream
    * (non-Javadoc)
    * @see java.io.OutputStream#write(int)
    */
+  @Override
   public void write(int i) throws IOException
   {
     baos.write(i);

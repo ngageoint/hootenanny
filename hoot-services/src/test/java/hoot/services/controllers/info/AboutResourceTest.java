@@ -77,6 +77,7 @@ public class AboutResourceTest extends JerseyTest
 	  PowerMockito.when(BuildInfo.getInstance()).thenReturn(buildInfoProps);
   }
   
+  @SuppressWarnings("null")
   @Test
   @Category(UnitTest.class)
   public void getServicesVersionInfo() throws IOException
@@ -103,6 +104,7 @@ public class AboutResourceTest extends JerseyTest
     Assert.assertEquals("testuser", responseData.getBuiltBy());
   }
   
+  @SuppressWarnings("null")
   @Test
   @Category(UnitTest.class)
   public void getServicesVersionDetail() throws IOException
@@ -137,6 +139,7 @@ public class AboutResourceTest extends JerseyTest
     Assert.assertTrue(responseData.getResources().length > 0);
   }
   
+  @SuppressWarnings("null")
   @Test
   @Category(UnitTest.class)
   public void getCoreVersionInfo() throws IOException
@@ -186,12 +189,13 @@ public class AboutResourceTest extends JerseyTest
     }
     
     //not a great way to test this, but haven't thought of anything better yet
+    @SuppressWarnings("null")
     String firstEnvInfo = responseData.getEnvironmentInfo()[0];
     Assert.assertFalse(firstEnvInfo.contains("Built"));
     Assert.assertTrue(firstEnvInfo.contains("VersionCmd"));
   }
   
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({ "unchecked", "null" })
   @Test
   @Category(UnitTest.class)
   public void getServicesVersionNoBuildFile() throws Exception

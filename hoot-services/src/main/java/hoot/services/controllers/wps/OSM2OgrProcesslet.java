@@ -67,6 +67,7 @@ public class OSM2OgrProcesslet extends BaseProcesslet
 	@Override
 	public void destroy()
 	{
+		//
 	}
 
 	/*
@@ -77,6 +78,7 @@ public class OSM2OgrProcesslet extends BaseProcesslet
 	@Override
 	public void init()
 	{
+		//
 	}
 
 	/*

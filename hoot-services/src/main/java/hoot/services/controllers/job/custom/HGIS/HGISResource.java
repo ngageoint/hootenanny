@@ -129,6 +129,7 @@ public class HGISResource extends JobControllerBase
    * @param mapName
    * @return output looks like postgresql://hoot:hoottest@localhost:5432/hoot1/BrazilOsmPois
    */
+  @SuppressWarnings("static-method")
   protected final String _generateDbMapParam(final String mapName)
   {
   	return "postgresql://" + getDbUserId() + ":" + getDbPassword() + "@" + getDbHost() + "/" + getDbName() + "/" + mapName;

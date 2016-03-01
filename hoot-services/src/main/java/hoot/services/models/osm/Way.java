@@ -246,6 +246,7 @@ public class Way extends Element
    * @return a bounding box
    * @throws Exception
    */
+  @Override
   public BoundingBox getBounds() throws Exception
   {
     // this is a little kludgy, but...first see if the related record data (way
@@ -273,6 +274,7 @@ public class Way extends Element
    *          xml data to construct the element from
    * @throws Exception
    */
+  @Override
   public void fromXml(final org.w3c.dom.Node xml) throws Exception
   {
     log.debug("Parsing way...");
@@ -316,6 +318,7 @@ public class Way extends Element
    * @return an XML element
    * @throws Exception
    */
+  @Override
   public org.w3c.dom.Element toXml(final org.w3c.dom.Element parentXml, final long modifyingUserId,
     final String modifyingUserDisplayName, final boolean multiLayerUniqueElementIds,
     final boolean addChildren) throws Exception
@@ -486,6 +489,7 @@ public class Way extends Element
    *
    * @return a table
    */
+  @Override
   public RelationalPathBase<?> getElementTable()
   {
     return currentWays;
@@ -496,6 +500,7 @@ public class Way extends Element
    *
    * @return a table field
    */
+  @Override
   public NumberPath<Long> getElementIdField()
   {
     return currentWays.id;
@@ -507,6 +512,7 @@ public class Way extends Element
    *
    * @return a table field
    */
+  @Override
   public BooleanPath getElementVisibilityField()
   {
     return currentWays.visible;
@@ -517,6 +523,7 @@ public class Way extends Element
    *
    * @return a table field
    */
+  @Override
   public NumberPath<Long> getElementVersionField()
   {
     return currentWays.version;
@@ -527,6 +534,7 @@ public class Way extends Element
    *
    * @return a table field
    */
+  @Override
   public NumberPath<Long> getChangesetIdField()
   {
     return currentWays.changesetId;
@@ -537,6 +545,7 @@ public class Way extends Element
    *
    * @return a table
    */
+  @Override
   public RelationalPathBase<?> getRelatedRecordTable()
   {
     return currentWayNodes;
@@ -548,6 +557,7 @@ public class Way extends Element
    *
    * @return a table field
    */
+  @Override
   public NumberPath<Long> getRelatedRecordJoinField()
   {
     return currentWayNodes.wayId;
@@ -569,6 +579,7 @@ public class Way extends Element
    *
    * @return a list of element types
    */
+  @Override
   public List<ElementType> getRelatedElementTypes()
   {
     return Arrays.asList(new ElementType[] { ElementType.Node });

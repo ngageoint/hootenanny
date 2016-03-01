@@ -67,7 +67,8 @@ public class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewa
 	 * @see hoot.services.readers.review.IReviewableQuery#execQuery()
 	 * Main entry point
 	 */
-	public ReviewQueryMapper execQuery() throws SQLException, Exception
+	@Override
+  public ReviewQueryMapper execQuery() throws SQLException, Exception
 	{
 		BoundingBox currBbox = new BoundingBox();
 		ReviewableItemBbox ret = new ReviewableItemBbox(currBbox, getMapId(), _relationId);

@@ -60,7 +60,8 @@ public class ReviewableQuery extends ReviewableQueryBase implements IReviewableQ
 				_seqId + "'";
 	}
 	
-	public ReviewQueryMapper execQuery() throws SQLException, Exception
+	@Override
+  public ReviewQueryMapper execQuery() throws SQLException, Exception
 	{
 		ReviewableItem ret = null;
 		try(Statement stmt = getConnection().createStatement();

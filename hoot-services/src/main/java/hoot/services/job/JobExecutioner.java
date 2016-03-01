@@ -92,7 +92,7 @@ public class JobExecutioner extends Thread
       try {
 				DbUtils.closeConnection(conn);
 			} catch (Exception e) {
-				
+				//
 			}
     }
   }

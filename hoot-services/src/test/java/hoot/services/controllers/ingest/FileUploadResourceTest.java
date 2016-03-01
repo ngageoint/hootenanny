@@ -893,7 +893,8 @@ public class FileUploadResourceTest {
 	}
 
 	
-	@Ignore
+	@SuppressWarnings("unused")
+  @Ignore
 	@Test
 	@Category(UnitTest.class)
 	public void TestserializeFGDB() throws Exception
@@ -954,7 +955,8 @@ public class FileUploadResourceTest {
 	}
 
 
-	@Ignore
+	@SuppressWarnings("unused")
+  @Ignore
 	@Test
 	@Category(UnitTest.class)
 	public void TestserializeUploadedFiles() throws Exception

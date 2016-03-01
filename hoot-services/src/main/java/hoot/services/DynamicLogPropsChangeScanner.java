@@ -45,7 +45,8 @@ public class DynamicLogPropsChangeScanner extends HttpServlet
 {
 	private static final Logger log = Logger.getLogger ( DynamicLogPropsChangeScanner.class );
 	
-	public void init()
+	@Override
+  public void init()
   {
 		try
 		{

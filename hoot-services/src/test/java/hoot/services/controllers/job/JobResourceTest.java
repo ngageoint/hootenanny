@@ -141,7 +141,8 @@ public class JobResourceTest {
 
 		class validParam2Matcher extends ArgumentMatcher<JSONObject>
 		{
-			public boolean matches(Object oParam)
+			@Override
+      public boolean matches(Object oParam)
 			{
 				JSONObject param = (JSONObject)oParam;
 				boolean val1 = param.get("class").toString().equals("hoot.services.controllers.ingest.RasterToTilesService");

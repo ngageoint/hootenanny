@@ -156,6 +156,7 @@ public class RasterToTilesService extends JobControllerBase {
 		}
 		catch (Exception ex)
 		{
+			assert(jobStatusManager != null);
 			jobStatusManager.setFailed(jobId, ex.getMessage());
 		  ResourceErrorHandler.handleError(
 			"Failure ingesting resource " + ex.toString(),

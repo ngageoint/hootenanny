@@ -301,6 +301,7 @@ public class ElementResource
         .build();
   }
   
+  @SuppressWarnings("null")
   private static Document getElementXml(final String mapId, final long elementId, 
     final ElementType elementType, final boolean multiLayerUniqueElementIds, 
     final boolean addChildren, Connection  dbConn) throws Exception
@@ -426,6 +427,7 @@ public class ElementResource
   }
 
 
+  @SuppressWarnings("null")
   private static Document getElementsXml(final String mapId, final String[] elementIdsStr, 
     final ElementType elementType, final boolean multiLayerUniqueElementIds, 
     final boolean addChildren, Connection  dbConn) throws Exception

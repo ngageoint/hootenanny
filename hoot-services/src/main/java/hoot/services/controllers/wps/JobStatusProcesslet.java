@@ -97,6 +97,7 @@ public class JobStatusProcesslet extends BaseProcesslet {
 	 */
 	@Override
 	public void destroy() {
+		//
 	}
 
 
@@ -105,6 +106,7 @@ public class JobStatusProcesslet extends BaseProcesslet {
 	 */
 	@Override
 	public void init() {
+		//
 	}
 
 }

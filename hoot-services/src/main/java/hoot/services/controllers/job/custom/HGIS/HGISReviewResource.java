@@ -173,12 +173,14 @@ public class HGISReviewResource extends HGISResource {
   	}
   	catch(SQLException | ReviewMapTagUpdateException se)
   	{
+  		assert(jobStatusManager != null);
   		jobStatusManager.setFailed(jobId);
   		log.error(se.getMessage());
   		throw se;
   	}
   	catch(Exception e)
   	{
+  		assert(jobStatusManager != null);
   		jobStatusManager.setFailed(jobId);
   		log.error(e.getMessage());
   		throw e;

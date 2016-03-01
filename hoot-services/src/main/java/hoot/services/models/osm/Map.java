@@ -425,6 +425,7 @@ public class Map extends Maps
 	        	}
 	        	else
 	        	{
+	        		assert(wayResults != null);
 	        		wayResults.putAll(
 	        			new SQLQuery(conn, DbUtils.getConfiguration(getId()))
 	        			  .from(currentWays)
@@ -556,6 +557,7 @@ public class Map extends Maps
 	          	}
 	          	else
 	          	{
+	          		assert(additionalNodeResults != null);
 	          		additionalNodeResults.putAll(
 	          			new SQLQuery(conn, DbUtils.getConfiguration(getId()))
 	          			  .from(currentnodes)
@@ -746,6 +748,7 @@ public class Map extends Maps
 	        	}
 	        	else
 	        	{
+	        		assert(relationResults != null);
 	        		relationResults.putAll(
 	        			new SQLQuery(conn, DbUtils.getConfiguration(getId()))
 	        			  .from(currentRelations)

@@ -64,7 +64,10 @@ public class HootProperties
       }
       finally
       {
-      	propsStrm.close();
+      	if (propsStrm != null)
+      	{
+      		propsStrm.close();
+      	}
       }
     }
 

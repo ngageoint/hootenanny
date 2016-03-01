@@ -98,6 +98,7 @@ public class Node extends Element
    * @return a bounding box
    * @throws Exception if the element has invalid coordinates
    */
+  @Override
   public BoundingBox getBounds() throws Exception
   {
     CurrentNodes nodeRecord = null;
@@ -148,6 +149,7 @@ public class Node extends Element
    * @param xml XML data to construct the element from
    * @throws Exception
    */
+  @Override
   public void fromXml(final org.w3c.dom.Node xml) throws Exception
   {
     log.debug("Parsing node...");
@@ -207,6 +209,7 @@ public class Node extends Element
    * @return an XML node
    * @throws Exception
    */
+  @Override
   public org.w3c.dom.Element toXml(final org.w3c.dom.Element parentXml, final long modifyingUserId,
     final String modifyingUserDisplayName, final boolean multiLayerUniqueElementIds,
     final boolean addChildren) throws Exception
@@ -233,6 +236,7 @@ public class Node extends Element
   /**
    * Returns the generated table identifier for this element
    */
+  @Override
   public RelationalPathBase<?> getElementTable()
   {
     return currentNodes;
@@ -243,6 +247,7 @@ public class Node extends Element
    *
    * @return a table field
    */
+  @Override
   public NumberPath<Long> getElementIdField()
   {
     return currentNodes.id;
@@ -253,6 +258,7 @@ public class Node extends Element
    *
    * @return a table field
    */
+  @Override
   public BooleanPath getElementVisibilityField()
   {
     return currentNodes.visible;
@@ -263,6 +269,7 @@ public class Node extends Element
    *
    * @return a table field
    */
+  @Override
   public NumberPath<Long> getElementVersionField()
   {
     return currentNodes.version;
@@ -273,6 +280,7 @@ public class Node extends Element
    *
    * @return a table field
    */
+  @Override
   public NumberPath<Long> getChangesetIdField()
   {
     return currentNodes.changesetId;
@@ -294,6 +302,7 @@ public class Node extends Element
    *
    * @return a list of element types
    */
+  @Override
   public List<ElementType> getRelatedElementTypes()
   {
     return null;
@@ -304,6 +313,7 @@ public class Node extends Element
    *
    * @return a table
    */
+  @Override
   public RelationalPathBase<?> getRelatedRecordTable()
   {
     return null;
@@ -315,6 +325,7 @@ public class Node extends Element
    *
    * @return a table field
    */
+  @Override
   public NumberPath<Long> getRelatedRecordJoinField()
   {
     return null;

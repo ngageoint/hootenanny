@@ -54,7 +54,8 @@ import org.mockito.Mockito;
 public class CustomScriptDeleteScriptProcessletTest {
 
   
-	@Test
+	@SuppressWarnings("unused")
+  @Test
 	@Category(IntegrationTest.class)
 	public void testProcess() throws Exception
 	{

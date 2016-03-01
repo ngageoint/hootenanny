@@ -89,7 +89,8 @@ public class ReviewableItem extends ReviewQueryMapper
 		_resultCount = cnt;
 	}
 
-	public String toString()
+	@Override
+  public String toString()
 	{
 		JSONObject o = new JSONObject();
 		o.put("sortorder", _sortOrder);

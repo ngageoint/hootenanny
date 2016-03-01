@@ -100,7 +100,8 @@ public class Relation extends Element
 	 * @param xml xml data to construct the element from
 	 * @throws Exception
 	 */
-	public void fromXml(final org.w3c.dom.Node xml) throws Exception
+	@Override
+  public void fromXml(final org.w3c.dom.Node xml) throws Exception
 	{
 		log.debug("Parsing relation...");
 
@@ -141,7 +142,8 @@ public class Relation extends Element
 	 * @return an XML element
 	 * @throws Exception
 	 */
-	public org.w3c.dom.Element toXml(final org.w3c.dom.Element parentXml,
+	@Override
+  public org.w3c.dom.Element toXml(final org.w3c.dom.Element parentXml,
 	    final long modifyingUserId, final String modifyingUserDisplayName,
 	    final boolean multiLayerUniqueElementIds, final boolean addChildren)
 	    throws Exception
@@ -359,7 +361,8 @@ public class Relation extends Element
 	 * @return a bounding box; null if the relation only contains other relations
 	 * @throws Exception
 	 */
-	public BoundingBox getBounds() throws Exception
+	@Override
+  public BoundingBox getBounds() throws Exception
 	{
 		BoundingBox bounds = null;
 		if (membersCache == null || membersCache.size() == 0)
@@ -521,7 +524,8 @@ public class Relation extends Element
 	 *
 	 * @return a table
 	 */
-	public RelationalPathBase<?> getElementTable()
+	@Override
+  public RelationalPathBase<?> getElementTable()
 	{
 		return currentRelations;
 	}
@@ -531,7 +535,8 @@ public class Relation extends Element
 	 *
 	 * @return a table field
 	 */
-	public NumberPath<Long> getElementIdField()
+	@Override
+  public NumberPath<Long> getElementIdField()
 	{
 		return currentRelations.id;
 	}
@@ -551,7 +556,8 @@ public class Relation extends Element
 	 *
 	 * @return a table field
 	 */
-	public BooleanPath getElementVisibilityField()
+	@Override
+  public BooleanPath getElementVisibilityField()
 	{
 		return currentRelations.visible;
 	}
@@ -561,7 +567,8 @@ public class Relation extends Element
 	 *
 	 * @return a table field
 	 */
-	public NumberPath<Long> getElementVersionField()
+	@Override
+  public NumberPath<Long> getElementVersionField()
 	{
 		return currentRelations.version;
 	}
@@ -571,7 +578,8 @@ public class Relation extends Element
 	 *
 	 * @return a table field
 	 */
-	public NumberPath<Long> getChangesetIdField()
+	@Override
+  public NumberPath<Long> getChangesetIdField()
 	{
 		return currentRelations.changesetId;
 	}
@@ -581,7 +589,8 @@ public class Relation extends Element
 	 *
 	 * @return a table
 	 */
-	public RelationalPathBase<?> getRelatedRecordTable()
+	@Override
+  public RelationalPathBase<?> getRelatedRecordTable()
 	{
 		return currentRelationMembers;
 	}
@@ -592,7 +601,8 @@ public class Relation extends Element
 	 *
 	 * @return a table field
 	 */
-	public NumberPath<Long> getRelatedRecordJoinField()
+	@Override
+  public NumberPath<Long> getRelatedRecordJoinField()
 	{
 		return currentRelationMembers.relationId;
 	}
@@ -603,7 +613,8 @@ public class Relation extends Element
 	 *
 	 * @return a list of element types
 	 */
-	public List<ElementType> getRelatedElementTypes()
+	@Override
+  public List<ElementType> getRelatedElementTypes()
 	{
 		return 
 			Arrays.asList(new ElementType[] { ElementType.Node, ElementType.Way, ElementType.Relation });

@@ -92,7 +92,8 @@ public class ReviewableStatisticsQuery extends ReviewableQueryBase implements IR
 		return recordCount;
 	}
 
-	public ReviewQueryMapper execQuery()  throws SQLException, Exception
+	@Override
+  public ReviewQueryMapper execQuery()  throws SQLException, Exception
 	{
 		long nTotal = getTotalReviewablesCount();
 		long nUnReviewed = getRemainingReviewablesCount();

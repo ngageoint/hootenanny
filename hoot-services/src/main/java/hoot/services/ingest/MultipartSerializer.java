@@ -144,8 +144,6 @@ public class MultipartSerializer {
 	protected void _serializeUploadedFiles(List<FileItem> fileItemsList,
 			Map<String,String> uploadedFiles, Map<String,String> uploadedFilesPaths, String repFolderPath) throws Exception
 	{
-
-
 		Iterator<FileItem> fileItemsIterator = fileItemsList.iterator();
 		while(fileItemsIterator.hasNext()){
 			FileItem fileItem = fileItemsIterator.next();
@@ -157,7 +155,6 @@ public class MultipartSerializer {
 		    log);
       }
       
-      
 			String uploadedPath = repFolderPath + "/" + fileName;
 			
 			boolean isPathSafe = _validatePath(homeFolder + "/upload", uploadedPath);
@@ -166,6 +163,7 @@ public class MultipartSerializer {
 				File file = new File(uploadedPath);
 				fileItem.write(file);
 	
+				assert(fileName != null);
 				String[] nameParts = fileName.split("\\.");
 				if(nameParts.length > 1){
 					String extension = nameParts[nameParts.length-1].toUpperCase();

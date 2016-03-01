@@ -89,7 +89,8 @@ public class ETLResource  extends JobControllerBase {
 	 * @return Job ID
 	 * @deprecated
 	 */
-	@POST
+	@Deprecated
+  @POST
 	@Path("/load")
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.TEXT_PLAIN)

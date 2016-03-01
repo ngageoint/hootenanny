@@ -38,7 +38,8 @@ public class HootServletContext implements ServletContextListener {
 	private TranslatorResource _transRes = null;
 	private P2PResource _P2PRes = null;
 	private BasemapResource _BRes = null;
-	public void contextInitialized(ServletContextEvent arg0) 
+	@Override
+  public void contextInitialized(ServletContextEvent arg0) 
 	{
 		_transRes = new TranslatorResource();
 		_transRes.startTranslationService();
@@ -51,7 +52,8 @@ public class HootServletContext implements ServletContextListener {
 		_BRes.createTileServerPath();
 	}
 	
-	public void contextDestroyed(ServletContextEvent arg0) 
+	@Override
+  public void contextDestroyed(ServletContextEvent arg0) 
 	{
 		_transRes.stopTranslationService();
 		_P2PRes.stopP2PService();

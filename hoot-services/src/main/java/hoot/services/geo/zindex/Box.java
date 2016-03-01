@@ -136,6 +136,7 @@ final public class Box
     return d;
   }
 
+  @Override
   public String toString()
   {
     String result = "{ ";

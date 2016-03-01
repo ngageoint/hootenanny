@@ -60,8 +60,16 @@ public class ServerControllerBase
 		// Also, if there is no handler to pump out the std and stderr stream for Processbuilder (Also applies to Runtime.exe)
 		// the outputs get built up and then end up locking up process. Quite nesty!
 		new Thread() {
-		    public void run() {
-		    	_processStreamHandler(_serverProc, true);
+		    @Override
+        public void run() {
+		    	try
+		    	{
+		    		_processStreamHandler(_serverProc, true);
+		    	}
+		    	catch (IOException e)
+		    	{
+		    		log.error(e.getMessage());
+		    	}
 		    }
 		}.start();
 		
@@ -126,7 +134,8 @@ public class ServerControllerBase
 		_processStreamHandler(killProc, false);
   }
   
-  private static void _processStreamHandler(final Process proc, boolean doSendToStdout)
+  private static void _processStreamHandler(final Process proc, boolean doSendToStdout) 
+  	throws IOException
   {
     // usually we should not get any output but just in case if we get some error..
     InputStreamReader stdStream = null;
@@ -168,18 +177,11 @@ public class ServerControllerBase
     }
     finally
     {
-    	try
-    	{
-    	stdStream.close();
-    	stdInput.close();
+    	if (stdStream != null) { stdStream.close(); }
+    	if (stdInput != null) { stdInput.close(); }
     	
-    	stdErrStream.close();
-    	stdError.close();
-    	}
-    	catch (Exception ex)
-    	{
-    		log.error("Failed to close streams.");
-    	}
+    	if (stdErrStream != null) { stdErrStream.close(); }
+    	if (stdError != null) { stdError.close(); }
     }
   }
 }

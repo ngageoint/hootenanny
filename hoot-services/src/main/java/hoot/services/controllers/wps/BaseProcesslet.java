@@ -80,7 +80,7 @@ public abstract class BaseProcesslet implements Processlet
   @Override
   public void destroy()
   {
-
+  	//
   }
 
   /*
@@ -91,7 +91,7 @@ public abstract class BaseProcesslet implements Processlet
   @Override
   public void init()
   {
-
+  	//
   }
   
   /**

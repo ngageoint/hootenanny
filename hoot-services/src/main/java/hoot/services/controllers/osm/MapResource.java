@@ -1009,7 +1009,6 @@ public class MapResource
 
 		QFolders folders = QFolders.folders;
 		Configuration configuration = DbUtils.getConfiguration();
-		new SQLQuery(conn, configuration);
 
 		try
 		{

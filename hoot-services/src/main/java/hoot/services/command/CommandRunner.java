@@ -80,12 +80,14 @@ public class CommandRunner implements ICommandRunner
 		}
 	}
 
-	public int getProcessState()
+	@Override
+  public int getProcessState()
 	{
 		return _processState;
 	}
 
-	public void terminateClean() throws Exception
+	@Override
+  public void terminateClean() throws Exception
 	{
 		sig_interrupt.setValue(true);
 
@@ -113,12 +115,14 @@ public class CommandRunner implements ICommandRunner
 		cleanUpProcess();
 	}
 
-	public String getStdOut()
+	@Override
+  public String getStdOut()
 	{
 		return _out.toString();
 	}
 
-	public CommandResult exec(String pCmd) throws IOException, InterruptedException
+	@Override
+  public CommandResult exec(String pCmd) throws IOException, InterruptedException
 	{
 		StringWriter out = new StringWriter();
 		StringWriter err = new StringWriter();
@@ -127,7 +131,8 @@ public class CommandRunner implements ICommandRunner
 		return result;
 	}
 
-	public CommandResult exec(String pCmd, Map<String, String> env, boolean includeSysEnv)
+	@Override
+  public CommandResult exec(String pCmd, Map<String, String> env, boolean includeSysEnv)
 	    throws IOException, InterruptedException
 	{
 
@@ -152,7 +157,8 @@ public class CommandRunner implements ICommandRunner
 		return exec(pCmd, env, dir);
 	}
 
-	public CommandResult exec(String[] pCmd) throws IOException, InterruptedException
+	@Override
+  public CommandResult exec(String[] pCmd) throws IOException, InterruptedException
 	{
 		_out = new StringWriter();
 		_err = new StringWriter();
@@ -167,7 +173,8 @@ public class CommandRunner implements ICommandRunner
 		return exec(pCmd, pEnv, true);
 	}
 
-	public CommandResult exec(String[] pCmd, Map<String, String> pEnv, boolean useSysEnv)
+	@Override
+  public CommandResult exec(String[] pCmd, Map<String, String> pEnv, boolean useSysEnv)
 	    throws IOException, InterruptedException
 	{
 		StringWriter out = new StringWriter();
@@ -299,7 +306,8 @@ public class CommandRunner implements ICommandRunner
 		return exec(pCmd, dir, null);
 	}
 
-	public CommandResult exec(String[] pCmd, Writer pOut, Writer pErr) throws IOException,
+	@Override
+  public CommandResult exec(String[] pCmd, Writer pOut, Writer pErr) throws IOException,
 	    InterruptedException
 	{
 		ProcessBuilder builder = new ProcessBuilder();
@@ -417,7 +425,8 @@ public class CommandRunner implements ICommandRunner
 		return result;
 	}
 
-	public CommandResult exec(String pCmdString, Writer pOut, Writer pErr) throws IOException,
+	@Override
+  public CommandResult exec(String pCmdString, Writer pOut, Writer pErr) throws IOException,
 	    InterruptedException
 	{
 		return exec(pCmdString.split(" "), pOut, pErr);
@@ -527,7 +536,8 @@ public class CommandRunner implements ICommandRunner
 			pumpLog.debug("CharPump will use buffer size = " + bufSize);
 		}
 
-		public void run()
+		@Override
+    public void run()
 		{
 			boolean ok = true;
 			char[] buf = new char[bufSize];
@@ -688,7 +698,7 @@ public class CommandRunner implements ICommandRunner
 					if (_log.isDebugEnabled() && writer != null)
 					  writer.write(String.format("  %s%n", new Object[] { key + "=" + env.get(key) }));
 				}
-				if (_log.isDebugEnabled()) writer.close();
+				if (_log.isDebugEnabled() && writer != null) writer.close();
 			}
 			catch (Exception e)
 			{

@@ -35,4 +35,5 @@ import org.junit.runner.RunWith;
 @org.junit.runners.Suite.SuiteClasses({AllTests.class})
 public class UnitTestSuite 
 {
+	//
 }

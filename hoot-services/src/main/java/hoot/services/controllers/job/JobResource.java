@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.job;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -106,7 +107,7 @@ public class JobResource
   	}
   	catch (Exception ee)
   	{
-
+  		//
   	}
   	 _initJob(jobId);
   	Runnable chainJobWorker = new processChainJobWorkerThread(jobId, jobs);
@@ -384,7 +385,7 @@ public class JobResource
 					try {
 				    Thread.sleep(_chainJosStatusPingInterval);
 					} catch (InterruptedException e) {
-
+						//
 					}
 				}
 			}
@@ -409,7 +410,7 @@ public class JobResource
   	}
   	catch (Exception ee)
   	{
-
+  		//
   	}
   	 _initJob(jobId);
   	Runnable jobWorker = new processJobWorkerThread(jobId, params);
@@ -805,49 +806,41 @@ public class JobResource
   /**
    * Constructor. execManager is the one that handles the execution through
    * configured Native Interface.
+   * @throws IOException 
+   * @throws NumberFormatException 
    */
-  public JobResource()
+  public JobResource() throws NumberFormatException, IOException
   {
     appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
     dbAppContext = new ClassPathXmlApplicationContext("db/spring-database.xml");
 
     _jobExecMan = ((JobExecutionManager)appContext.getBean("jobExecutionManagerNative"));
 
+  	_chainJosStatusPingInterval = Long.parseLong(HootProperties.getProperty("chainJosStatusPingInterval"));
 
-    try
-    {
-    	_chainJosStatusPingInterval = Long.parseLong(HootProperties.getProperty("chainJosStatusPingInterval"));
+  	if(_chainJosStatusPingInterval < 1000)
+  	{
+  		_chainJosStatusPingInterval = 1000;
+  	}
 
-    	if(_chainJosStatusPingInterval < 1000)
+
+  	synchronized(_jobThreadLock)
+  	{
+    	if(jobThreadExecutor ==  null)
     	{
-    		_chainJosStatusPingInterval = 1000;
+    		int threadpoolSize = 5;
+    		try
+    		{
+    			Integer.parseInt(HootProperties.getProperty("internalJobThreadSize"));
+    		}
+    		catch(Exception ex)
+    		{
+    			log.error("Failed to get internalJobThreadSize. Setting threadpool size to 5." );
+    		}
+    		log.debug("Threadpool Acquire");
+    		jobThreadExecutor = Executors.newFixedThreadPool(threadpoolSize);
     	}
-
-
-    	synchronized(_jobThreadLock)
-    	{
-	    	if(jobThreadExecutor ==  null)
-	    	{
-	    		int threadpoolSize = 5;
-	    		try
-	    		{
-	    			Integer.parseInt(HootProperties.getProperty("internalJobThreadSize"));
-	    		}
-	    		catch(Exception ex)
-	    		{
-	    			log.error("Failed to get internalJobThreadSize. Setting threadpool size to 5." );
-	    		}
-	    		log.debug("Threadpool Acquire");
-	    		jobThreadExecutor = Executors.newFixedThreadPool(threadpoolSize);
-	    	}
-    	}
-
-    }
-    catch (Exception ex)
-    {
-
-    }
-
+  	}
   }
 
 

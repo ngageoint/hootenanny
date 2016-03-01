@@ -36,4 +36,5 @@ import org.junit.runner.RunWith;
 @SuiteTypes({TEST_CLASSES})
 public class AllTests 
 {
+	//
 }

@@ -119,7 +119,8 @@ public class ProcessStreamInterface implements INativeInterface {
 	    }
 	}
 
-	public String getJobProgress(String jobId)
+	@Override
+  public String getJobProgress(String jobId)
 	{
 		String stdStr = "";
 		Object oCmdRunner = _progProcesses.get(jobId);
@@ -331,7 +332,8 @@ public class ProcessStreamInterface implements INativeInterface {
 	 * @param jobId : Job Id to terminate
 	 * @throws NativeInterfaceException
 	 */
-	public  void terminate(String jobId) throws NativeInterfaceException
+	@Override
+  public  void terminate(String jobId) throws NativeInterfaceException
 	{
 		try
 		{
@@ -355,14 +357,14 @@ public class ProcessStreamInterface implements INativeInterface {
 	 * see CoreServiceContext.xml
 	 */
 	public void init(){
-
+		//
 	}
 
 	/**
 	 * see CoreServiceContext.xml
 	 */
 	public void destroy(){
-
+		//
 	}
 
 	/**

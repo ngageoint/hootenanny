@@ -218,6 +218,13 @@ public class FileUploadResource extends hoot.services.controllers.job.JobControl
 		return Response.ok(resA.toJSONString(), MediaType.APPLICATION_JSON).build();
 	}
 	
+	/*
+	 * final int shpZipCnt,
+	 * final int osmZipCnt,
+	 * final int geonamesZipCnt,
+	 * final List<String> inputsList,
+	 */
+	
 	
 	protected JSONArray _createNativeRequest(final JSONArray reqList, final int zipCnt, final int shpZipCnt,
 			final int fgdbZipCnt, final int osmZipCnt, final int geonamesZipCnt, final int shpCnt, final int fgdbCnt, 

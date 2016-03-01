@@ -134,7 +134,7 @@ public class JobExecutionManager
    */
   public void destroy()
   {
-
+  	//
   }
 
   /**
@@ -142,6 +142,6 @@ public class JobExecutionManager
    */
   public void init()
   {
-
+  	//
   }
 }

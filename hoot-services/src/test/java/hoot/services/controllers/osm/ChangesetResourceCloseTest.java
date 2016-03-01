@@ -126,7 +126,8 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 		}
 	}
 
-	@Test(expected = Exception.class)
+	@SuppressWarnings("null")
+  @Test(expected = Exception.class)
 	@Category(UnitTest.class)
 	public void testCloseClosedChangeset() throws Exception
 	{
@@ -168,7 +169,8 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract
 		}
 	}
 
-	@Test(expected = Exception.class)
+	@SuppressWarnings("null")
+  @Test(expected = Exception.class)
 	@Category(UnitTest.class)
 	public void testCloseNonExistingChangeset() throws Exception
 	{
