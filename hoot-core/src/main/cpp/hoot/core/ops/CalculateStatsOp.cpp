@@ -363,23 +363,10 @@ bool CalculateStatsOp::_matchDescriptorCompare(const MatchCreator::Description& 
   return m1.className > m2.className;
 }
 
-/// @todo a little too much duplicated code in these two _applyVisitor's
-
 double CalculateStatsOp::_applyVisitor(shared_ptr<const OsmMap> &map, const FilteredVisitor& v)
 {
-  // this is a hack to let C++ pass v as a temporary. Bad Jason.
-  FilteredVisitor* fv = const_cast<FilteredVisitor*>(&v);
-  auto_ptr<FilteredVisitor> critFv;
-  if (_criterion)
-  {
-    critFv.reset(new FilteredVisitor(*_criterion, *fv));
-    fv = critFv.get();
-  }
-  SingleStatistic* ss = dynamic_cast<SingleStatistic*>(&v.getChildVisitor());
-  assert(ss != 0);
-
-  map->visitRo(*fv);
-  return ss->getStat();
+  any emptyVisitorData;
+  return _applyVisitor(map, v, emptyVisitorData);
 }
 
 double CalculateStatsOp::_applyVisitor(shared_ptr<const OsmMap> &map, const FilteredVisitor& v,
