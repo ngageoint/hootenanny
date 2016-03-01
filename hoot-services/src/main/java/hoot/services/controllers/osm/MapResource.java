@@ -57,6 +57,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -818,7 +819,7 @@ public class MapResource
 		{
 			log.debug("Initializing database connection...");
 
-			if (_inputType.equals("dataset"))
+			if (_inputType.toLowerCase(Locale.ENGLISH).equals("dataset"))
 			{
 				QMaps maps = QMaps.maps;
 				Configuration configuration = DbUtils.getConfiguration();
@@ -829,7 +830,7 @@ public class MapResource
 
 				log.debug("Renamed map with id " + mapId + " " + _modName + "...");
 			}
-			else if (_inputType.equals("folder"))
+			else if (_inputType.toLowerCase(Locale.ENGLISH).equals("folder"))
 			{
 				QFolders folders = QFolders.folders;
 				Configuration configuration = DbUtils.getConfiguration();

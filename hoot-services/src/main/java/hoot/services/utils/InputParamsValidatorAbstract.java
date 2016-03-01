@@ -26,6 +26,8 @@
  */
 package hoot.services.utils;
 
+import java.util.Locale;
+
 
 /**
  * Abstract class for validating a set of input parameters to a method
@@ -57,8 +59,8 @@ public abstract class InputParamsValidatorAbstract
     }
     else if (type instanceof Boolean)
     { 
-      if (!paramValueStr.toLowerCase().equals("false") && 
-          !paramValueStr.toLowerCase().equals("true"))
+      if (!paramValueStr.toLowerCase(Locale.ENGLISH).equals("false") && 
+          !paramValueStr.toLowerCase(Locale.ENGLISH).equals("true"))
       {
         throw new Exception(
           "Invalid input parameter: " + name + " sent to: " + ReflectUtils.getCallingClassName());

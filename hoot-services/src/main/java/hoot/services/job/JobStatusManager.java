@@ -27,6 +27,7 @@
 package hoot.services.job;
 
 import java.sql.Connection;
+import java.util.Locale;
 
 import hoot.services.db.DbUtils;
 import hoot.services.db2.JobStatus;
@@ -108,15 +109,15 @@ public class JobStatusManager
 
     public static JOB_STATUS fromString(String statusStr)
     {
-      if (statusStr.toLowerCase().equals("running"))
+      if (statusStr.toLowerCase(Locale.ENGLISH).equals("running"))
       {
         return RUNNING;
       }
-      else if (statusStr.toLowerCase().equals("complete"))
+      else if (statusStr.toLowerCase(Locale.ENGLISH).equals("complete"))
       {
         return COMPLETE;
       }
-      else if (statusStr.toLowerCase().equals("failed"))
+      else if (statusStr.toLowerCase(Locale.ENGLISH).equals("failed"))
       {
         return FAILED;
       }
@@ -151,8 +152,6 @@ public class JobStatusManager
       log.error(jobId + " failed to add job status.");
     }
   }
-
-
 
   public void updateJob(String jobId, String statusDetail)
   {

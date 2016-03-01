@@ -34,6 +34,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -654,17 +655,18 @@ public abstract class Element implements XmlSerializable, DbSerializable
   {
     if (!StringUtils.isEmpty(elementTypeStr))
     {
-      if (elementTypeStr.toLowerCase().equals("node") || elementTypeStr.toLowerCase().equals("n"))
+      if (elementTypeStr.toLowerCase(Locale.ENGLISH).equals("node") || 
+      		elementTypeStr.toLowerCase(Locale.ENGLISH).equals("n"))
       {
         return ElementType.Node;
       }
-      else if (elementTypeStr.toLowerCase().equals("way") ||
-               elementTypeStr.toLowerCase().equals("w"))
+      else if (elementTypeStr.toLowerCase(Locale.ENGLISH).equals("way") ||
+               elementTypeStr.toLowerCase(Locale.ENGLISH).equals("w"))
       {
         return ElementType.Way;
       }
-      else if (elementTypeStr.toLowerCase().equals("relation") ||
-               elementTypeStr.toLowerCase().equals("r"))
+      else if (elementTypeStr.toLowerCase(Locale.ENGLISH).equals("relation") ||
+               elementTypeStr.toLowerCase(Locale.ENGLISH).equals("r"))
       {
         return ElementType.Relation;
       }
