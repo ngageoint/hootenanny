@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.NotFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
@@ -121,5 +122,15 @@ public class FileUtils
   	}
 
   	return ret;
+  }
+  
+  
+  public static boolean validateFilePath(final String expectedPath, final String actualPath) throws Exception
+  {
+  	boolean isValid = true;
+  	
+  	String path = FilenameUtils.getFullPathNoEndSeparator(actualPath);
+  	isValid = expectedPath.equals(path);
+  	return isValid;
   }
 }

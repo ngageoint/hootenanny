@@ -126,6 +126,12 @@ public class ResourcesCleanUtil implements Executable {
 	    	final String basePath = _ingestPath;
 	    	final String newPath = _ingestPath + "/" + mapName;
 
+	    	// Fortify fix
+	    	if(!hoot.services.utils.FileUtils.validateFilePath(_ingestPath, newPath))
+	    	{
+	    		throw new Exception("Map name can not contain path.");
+	    	}
+
 	    	boolean isValidated = false;
 	    	File fDel = new File(newPath);
 				String potentialPath = fDel.getCanonicalPath();

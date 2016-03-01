@@ -609,7 +609,8 @@ public class CommandRunner implements ICommandRunner
 	 * Main routine, for testing. The name of the executable to run and its arguments are the command
 	 * line arguments.
 	 */
-	public static void main(String[] pArgs)
+	// Disabled to prevent Commandline injection (Fortify)
+/*	public static void main(String[] pArgs)
 	{
 		try
 		{
@@ -632,7 +633,7 @@ public class CommandRunner implements ICommandRunner
 			System.err.println(e.toString());
 		}
 	}
-
+*/
 	public CommandResult exec(String[] pCmd, File dir, String[] env) throws IOException,
 	    InterruptedException
 	{
