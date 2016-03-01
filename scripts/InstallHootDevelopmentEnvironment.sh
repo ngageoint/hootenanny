@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # This script:  
-#   - is similar to the hoot vagrant ubuntu setup without the vagrant part; meant for better performance on bare metal 
-#   - has added developer tools
+#   - is similar to the hoot vagrant ubuntu setup without the vagrant part; meant for installing to bare metal 
+#   - has added developer tools and other goodies (hadoop, webex, etc.)
 #   - lets you run the regression tests 
 #   - is not actively supported and not guaranteed to be in sync with the latest hoot setup (see the vagrant install for the latest and greatest hoot setup) 
 # Use this as one possible way to set up a Hootenanny developer environment.  USE THE SCRIPT AT YOUR OWN RISK
@@ -399,9 +399,11 @@ fi
 sudo service tomcat7 stop
 # eclipse install here overwrites the existing standard tested tomcat 6 install; this environment assumes you'll be doing your tomcat debugging from eclipse...so not a big deal
 cd $HOME
-sudo apt-get install -y meld qtcreator distcc htop synergy gparted eclipse eclipse-jdt eclipse-pde eclipse-platform* libtomcat7-java osmosis
+sudo apt-get install -y meld qtcreator distcc htop synergy gparted eclipse eclipse-jdtlibpangoxft-1.0-0:i386 libxv1:i386 libpangox-1.0-0:i386 libgtk2.0-0 libxtst6 libxi-dev libasound2 libgtk2.0-0:i386 libxtst6:i386 libasound2:i386 libgcj14-awt:i386 eclipse-pde eclipse-platform* libtomcat7-java osmosis libpangoxft-1.0-0:i386 libxv1:i386 libpangox-1.0-0:i386 libgtk2.0-0 libxtst6 libxi-dev libasound2 libgtk2.0-0:i386 libxtst6:i386 libasound2:i386 libgcj14-awt:i386
 sudo apt-get remove qt5-default 
 sudo apt-get autoremove
+# If you're fed up with unity, then uncomment this for xfce; use 'xfce4-display-settings -m' for display config
+# sudo apt-get install xfce4
 
 if ! grep -i --quiet '-Xmx' /etc/default/eclipse.ini; then
   echo "Configuring Eclipse..."
