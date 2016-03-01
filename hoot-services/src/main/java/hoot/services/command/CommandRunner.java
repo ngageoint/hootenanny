@@ -532,7 +532,8 @@ public class CommandRunner implements ICommandRunner {
      * Main routine, for testing. The name of the executable to run and its
      * arguments are the command line arguments.
      */
-    public static void main ( String[] pArgs ) {
+    // Disabled to prevent Commandline injection (Fortify)
+/*    public static void main ( String[] pArgs ) {
         try {
             ICommandRunner runner = new CommandRunner ();
             if ( 1 == pArgs.length ) {
@@ -548,7 +549,7 @@ public class CommandRunner implements ICommandRunner {
             System.err.println ( e.toString () );
         }
     }
-
+*/
     public CommandResult exec ( String[] pCmd, File dir, String[] env ) throws IOException, InterruptedException {
         StringWriter out = new StringWriter ();
         StringWriter err = new StringWriter ();
@@ -601,10 +602,12 @@ public class CommandRunner implements ICommandRunner {
                 }
                 for ( String key : env.keySet () ) {
                     _log.debug ( String.format ( "  %s", new Object[] { key + "=" + env.get ( key ) } ) );
-                    if ( _log.isDebugEnabled () )
+                 // null validation for fortify
+                    if (  writer != null &&  _log.isDebugEnabled () )
                         writer.write ( String.format ( "  %s%n", new Object[] { key + "=" + env.get ( key ) } ) );
                 }
-                if ( _log.isDebugEnabled () )
+                // null validation for fortify
+                if ( writer != null && _log.isDebugEnabled () )
                     writer.close ();
             } catch ( Exception e ) {
                 _log.error ( "Unable to log exec call: " + ExceptionUtils.getStackTrace(e) );

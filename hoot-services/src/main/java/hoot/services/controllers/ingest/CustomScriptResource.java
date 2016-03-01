@@ -746,6 +746,10 @@ public class CustomScriptResource
       FileUtils.forceMkdir(getUploadDir());
     }
 
+    if(!hoot.services.utils.FileUtils.validateFilePath(scriptFolder, scriptFolder + "/" + name + ".js"))
+    {
+    	throw new Exception("Script name can not contain path.");
+    }
     File fScript = new File(scriptFolder + "/" + name + ".js");
 
     if (!fScript.exists())
