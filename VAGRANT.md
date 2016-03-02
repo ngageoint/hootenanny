@@ -2,6 +2,14 @@
 
 To download Vagrant for supported platforms, see [here](http://www.vagrantup.com/downloads.html)
 
+# Installing VirtualBox
+
+If choosing VirtualBox as your virtualization provider, see [here](https://www.virtualbox.org/wiki/Downloads).  
+
+You may have to enable hardware virtualization extensions in your BIOS before using it.
+
+If running on Ubuntu, you may have to install a newer version of VirtualBox than what is available in the public repositories in order for it to work correctly with Vagrant.
+
 # Setting up Hootennany with Vagrant & VirtualBox
 
 Once Vagrant has been installed, you can start an environment by checking out the hoot code, then changing to the directory which contains the Vagrantfile by typing:
