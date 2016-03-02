@@ -421,9 +421,9 @@ sudo apt-get autoremove
 # If you're fed up with unity, then uncomment this for xfce; use 'xfce4-display-settings -m' for display config
 # sudo apt-get install xfce4
 
-if ! grep -i --quiet '-Xmx' /etc/default/eclipse.ini; then
+if ! grep -i --quiet '-Xmx' /etc/eclipse.ini; then
   echo "Configuring Eclipse..."
-sudo bash -c "cat >> /etc/default/eclipse.ini" <<EOT
+sudo bash -c "cat >> /etc/eclipse.ini" <<EOT
 
 -Dosgi.requiredJavaVersion=1.7
 -XX:MaxPermSize=2048m
@@ -431,9 +431,9 @@ sudo bash -c "cat >> /etc/default/eclipse.ini" <<EOT
 -Xmx2048m
 EOT
 fi
-if ! grep -i --quiet '--launcher.XXMaxPerSize' /etc/default/eclipse.ini; then
+if ! grep -i --quiet '--launcher.XXMaxPerSize' /etc/eclipse.ini; then
   echo "Configuring Eclipse..."
-sudo bash -c "cat >> /etc/default/eclipse.ini" <<EOT
+sudo bash -c "cat >> /etc/eclipse.ini" <<EOT
 
 --launcher.XXMaxPermSize
 2048m
