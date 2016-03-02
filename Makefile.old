@@ -266,18 +266,19 @@ rebuild-db:
 	cd hoot-services && $(MAKE) -f Makefile build
 
 HOOT_TARNAME=hootenanny-$(HOOT_VERSION)
+JAVADOC_TARBALL=docs/hootenanny-services-javadoc-$(HOOT_VERSION).tar.gz
 dist: archive
 archive: default docs
-	if [ "$(BUILD_SERVICES)" == "services" ]; then cp hoot-services/target/hoot-services-*.war hootenanny-services-$(HOOT_VERSION).war; tar -cvzf docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz hoot-services/target/site/apidocs; fi
+	mkdir -p $(HOOT_TARNAME)/docs/
+	if [ "$(BUILD_SERVICES)" == "services" ]; then \
+	  cp hoot-services/target/hoot-services-*.war hootenanny-services-$(HOOT_VERSION).war; \
+	  tar czf $(HOOT_TARNAME)/$(JAVADOC_TARBALL) hoot-services/target/site/apidocs; fi
 	rm -f $(HOOT_TARNAME).tar.gz
 	scripts/git-archive-all.sh --prefix $(HOOT_TARNAME)/ $(HOOT_TARNAME).tar
-	mkdir -p $(HOOT_TARNAME)
-	cp Makefile.in aclocal.m4 configure config.h.in $(HOOT_TARNAME)
-	mkdir -p $(HOOT_TARNAME)/docs/
-	# Adding javadoc with a conditional so it is ignored if it doesn't exist. - NOTE: This javadoc conditional didn't work for me, so adjusted - BDW
-	#cp docs/*.pdf docs/*.html docs/*.text `F=docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz; test -f $F && echo $F` $(HOOT_TARNAME)/docs/
 	cp docs/*.pdf docs/*.html docs/*.text $(HOOT_TARNAME)/docs/
-	if [ "$(BUILD_SERVICES)" == "services" ]; then cp docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz $(HOOT_TARNAME)/docs/; fi
+	# Put the docs in their own compressed file
+	tar czf hootenanny-documentation-$(HOOT_VERSION).tar.gz $(HOOT_TARNAME)
+	cp Makefile.in aclocal.m4 configure config.h.in $(HOOT_TARNAME)
 	# Copy the protocol buffer generated files. Eases a dependency when building
 	# on CentOS
 	mkdir -p $(HOOT_TARNAME)/hoot-core/src/main/cpp/hoot/core/proto/
@@ -300,12 +301,9 @@ archive: default docs
 	# Create the version file
 	echo $(HOOT_VERSION) > $(HOOT_TARNAME)/version
 	# tar the file and zip it
-	tar rf $(HOOT_TARNAME).tar \
-	$(HOOT_TARNAME)/*
+	tar rf $(HOOT_TARNAME).tar $(HOOT_TARNAME)/*
 	rm -rf $(HOOT_TARNAME)
 	gzip -9 $(HOOT_TARNAME).tar
-	# Put the docs in their own compressed file
-	tar -cvzf $(HOOT_TARNAME)-documentation.tar.gz docs/*.pdf docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz
 
 LocalConfig.pri:
 	cp LocalConfig.pri.orig LocalConfig.pri
