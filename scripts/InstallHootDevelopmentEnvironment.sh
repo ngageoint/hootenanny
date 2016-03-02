@@ -415,7 +415,7 @@ fi
 sudo service tomcat7 stop
 # eclipse install here overwrites the existing standard tested tomcat 6 install; this environment assumes you'll be doing your tomcat debugging from eclipse...so not a big deal
 cd $HOME
-sudo apt-get install -y meld qtcreator distcc htop synergy gparted eclipse eclipse-jdtlibpangoxft-1.0-0:i386 libxv1:i386 libpangox-1.0-0:i386 libgtk2.0-0 libxtst6 libxi-dev libasound2 libgtk2.0-0:i386 libxtst6:i386 libasound2:i386 libgcj14-awt:i386 eclipse-pde eclipse-platform* libtomcat7-java osmosis libpangoxft-1.0-0:i386 libxv1:i386 libpangox-1.0-0:i386 libgtk2.0-0 libxtst6 libxi-dev libasound2 libgtk2.0-0:i386 libxtst6:i386 libasound2:i386 libgcj14-awt:i386 icedtea-plugin
+sudo apt-get install -y meld qtcreator distcc htop synergy gparted eclipse eclipse-jdt libpangoxft-1.0-0:i386 libxv1:i386 libpangox-1.0-0:i386 libgtk2.0-0 libxtst6 libxi-dev libasound2 libgtk2.0-0:i386 libxtst6:i386 libasound2:i386 libgcj14-awt:i386 eclipse-pde eclipse-platform* libtomcat7-java osmosis libpangoxft-1.0-0:i386 libxv1:i386 libpangox-1.0-0:i386 libgtk2.0-0 libxtst6 libxi-dev libasound2 libgtk2.0-0:i386 libxtst6:i386 libasound2:i386 libgcj14-awt:i386 icedtea-plugin
 sudo apt-get remove qt5-default 
 sudo apt-get autoremove
 # If you're fed up with unity, then uncomment this for xfce; use 'xfce4-display-settings -m' for display config
