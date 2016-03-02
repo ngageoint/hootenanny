@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This script:  
-#   - is similar to the hoot vagrant ubuntu setup without the vagrant part; meant for installing to bare metal
+#   - is similar to the hoot vagrant ubuntu 14.04 setup without the vagrant part; meant for installing to bare metal
 # for performance reasons
 #   - has added developer tools and other goodies (hadoop, webex, etc.)
 #   - lets you run the regression tests 
