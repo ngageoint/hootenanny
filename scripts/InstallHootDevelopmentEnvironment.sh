@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 # This script:  
-#   - is similar to the hoot vagrant ubuntu setup without the vagrant part; meant for installing to bare metal 
+#   - is similar to the hoot vagrant ubuntu setup without the vagrant part; meant for installing to bare metal
+# for performance reasons
 #   - has added developer tools and other goodies (hadoop, webex, etc.)
 #   - lets you run the regression tests 
 #   - is not actively supported and not guaranteed to be in sync with the latest hoot setup (see the vagrant install for the latest and greatest hoot setup) 
@@ -190,6 +191,17 @@ fi
 if [ "$POSTGRES_CONFIG_CHANGE" == "true" ]; then
   sudo service postgresql restart
 fi
+
+# In a bit of a backward fashion, install vagrant/vbox here so that you can quickly spin up a different 
+# configuration of hoot if needed, or troubleshoot the actual hoot vagrant install.
+wget https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.deb
+sudo dpkg -i vagrant_1.8.1_x86_64.deb
+sudo apt-get -f install -y
+wget http://download.virtualbox.org/virtualbox/5.0.14/virtualbox-5.0_5.0.14-105127~Ubuntu~trusty_amd64.deb
+sudo dpkg -i virtualbox-5.0_5.0.14-105127~Ubuntu~trusty_amd64.deb
+# Need to understand why this needs to be done...probably not great
+sudo rm -f /etc/apt/sources.list.d/virtualbox.list
+sudo apt-get -f install -y
 
 # Configure Tomcat
 if ! grep -i --quiet HOOT /etc/default/tomcat7; then
