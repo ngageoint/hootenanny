@@ -194,14 +194,18 @@ fi
 
 # In a bit of a backward fashion, install vagrant/vbox here so that you can quickly spin up a different 
 # configuration of hoot if needed, or troubleshoot the actual hoot vagrant install.
-wget https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.deb
-sudo dpkg -i vagrant_1.8.1_x86_64.deb
-sudo apt-get -f install -y
-wget http://download.virtualbox.org/virtualbox/5.0.14/virtualbox-5.0_5.0.14-105127~Ubuntu~trusty_amd64.deb
-sudo dpkg -i virtualbox-5.0_5.0.14-105127~Ubuntu~trusty_amd64.deb
-# Need to understand why this needs to be done...probably not great
-sudo rm -f /etc/apt/sources.list.d/virtualbox.list
-sudo apt-get -f install -y
+if [ ! -f vagrant_1.8.1_x86_64.deb ]; then
+  wget https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.deb
+  sudo dpkg -i vagrant_1.8.1_x86_64.deb
+  sudo apt-get -f install -y
+fi
+if [ ! -f virtualbox-5.0_5.0.14-105127~Ubuntu~trusty_amd64.deb ]; then
+  wget http://download.virtualbox.org/virtualbox/5.0.14/virtualbox-5.0_5.0.14-105127~Ubuntu~trusty_amd64.deb
+  sudo dpkg -i virtualbox-5.0_5.0.14-105127~Ubuntu~trusty_amd64.deb
+  # Need to understand why this needs to be done...probably not great
+  sudo rm -f /etc/apt/sources.list.d/virtualbox.list
+  sudo apt-get -f install -y
+fi
 
 # Configure Tomcat
 if ! grep -i --quiet HOOT /etc/default/tomcat7; then
