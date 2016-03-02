@@ -20,6 +20,12 @@ Once Vagrant has been installed, you can start an environment by checking out th
     git submodule update
     vagrant up
 
+Windows users should add the following options to the above clone command to handle line endings properly:
+
+```
+git clone https://github.com/ngageoint/hootenanny.git hoot --config core.autocrlf=input
+```
+
 # Other Virtualization Providers
 
 If you would like to use Parallels instead of VirtualBox, please run the following command:
