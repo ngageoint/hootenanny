@@ -2,7 +2,7 @@
 
 # This script:  
 #   - is similar to the hoot vagrant ubuntu 14.04 setup without the vagrant part; meant for installing to bare metal
-# for performance reasons
+# for performance reasons (faster compiles, etc.)
 #   - has added developer tools and other goodies (hadoop, webex, etc.)
 #   - lets you run the regression tests 
 #   - is not actively supported and not guaranteed to be in sync with the latest hoot setup (see the vagrant install for the latest and greatest hoot setup) 
@@ -38,7 +38,8 @@ if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
 fi
 
 # Install dependencies
-# use tomcat 7 here instead of tomcat 6 (what's tested with hoot), since eclipse installed from repos (installed in this script later) needs tomcat 7 (eclipse tomcat 6 install is a little cumbersome)
+# use tomcat 7 here instead of tomcat 6 (what's tested with hoot...I don't really like this...but), since eclipse 
+# installed from repos (installed in this script later) needs tomcat 7
 echo "Installing dependencies"
 sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat7 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane
 
@@ -420,6 +421,8 @@ sudo apt-get remove qt5-default
 sudo apt-get autoremove
 # If you're fed up with unity, then uncomment this for xfce; use 'xfce4-display-settings -m' for display config
 # sudo apt-get install xfce4
+
+# Eclipse configuration - You will still need to configure eclipse after this (web server integration, extensions, etc.)
 
 if ! grep -i --quiet '-Xmx' /etc/eclipse.ini; then
   echo "Configuring Eclipse..."
