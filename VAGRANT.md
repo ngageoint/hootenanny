@@ -1,6 +1,6 @@
 # Installing Vagrant
 
-To download Vagrant for supported platforms, see [here](http://www.vagrantup.com/downloads)
+To download Vagrant for supported platforms, see [here](http://www.vagrantup.com/downloads.html)
 
 # Setting up Hootennany with Vagrant & VirtualBox
 
