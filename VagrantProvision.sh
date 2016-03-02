@@ -52,15 +52,15 @@ if [ ! -f bin/chromedriver ]; then
 fi
 
 # Hoot Baseline is PostgreSQL 9.1 and PostGIS 1.5, so we need a deb file and
-# then remove 9.4
+# then remove 9.5
 if [ ! -f postgresql-9.1-postgis_1.5.3-2_amd64.deb ]; then
     echo "Installing PostgreSQL 9.1"
     wget http://launchpadlibrarian.net/86690107/postgresql-9.1-postgis_1.5.3-2_amd64.deb
     sudo dpkg -i postgresql-9.1-postgis_1.5.3-2_amd64.deb
     sudo apt-get -f install -y
-    # fixes missing dependency of postgis 1.5 by installing postgresql 9.1. 9.1 is installed listening on the default port, 5432. It unfortunately also installs postgres 9.4 but we remove that cleanly in the following steps, while leaving postgres 9.1 untouched
-    echo "Removing PostgreSQL 9.4"
-    sudo apt-get purge -y postgresql-9.4 postgresql-client-9.4 postgresql-9.4-postgis-scripts
+    # fixes missing dependency of postgis 1.5 by installing postgresql 9.1. 9.1 is installed listening on the default port, 5432. It unfortunately also installs postgres 9.5 but we remove that cleanly in the following steps, while leaving postgres 9.1 untouched
+    echo "Removing PostgreSQL 9.5"
+    sudo apt-get purge -y postgresql-9.5 postgresql-client-9.5 postgresql-9.5-postgis-scripts
     sudo apt-get install -y postgresql-contrib-9.1
 fi
 
