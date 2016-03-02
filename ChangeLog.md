@@ -1,3 +1,41 @@
+# Hootenanny Change Log: 2.22
+* [hootenanny-ui #232:](https://github.com/ngageoint/hootenanny-ui/issues/232) Output name in export dialog clears name when you click in the field
+* [hootenanny-ui #231:](https://github.com/ngageoint/hootenanny-ui/issues/231) Unchecking default Line width makes red/blue review highlights invisible
+* [hootenanny-ui #230:](https://github.com/ngageoint/hootenanny-ui/issues/230) Scalebar thickness gets adjusted when line width value changes
+* [hootenanny-ui #229:](https://github.com/ngageoint/hootenanny-ui/issues/229) Fix imagery validation UI code
+* [hootenanny-ui #224:](https://github.com/ngageoint/hootenanny-ui/issues/224) Publish basemap button feedback
+* [hootenanny-ui #223:](https://github.com/ngageoint/hootenanny-ui/issues/223) Move line width toggle to side bar menu
+* [hootenanny-ui #222:](https://github.com/ngageoint/hootenanny-ui/issues/222) Clip tools output name removes text when you click in the field
+* [hootenanny-ui #216:](https://github.com/ngageoint/hootenanny-ui/issues/216) Layer name has a fixed limit in the Add Dataset window
+* [hootenanny-ui #215:](https://github.com/ngageoint/hootenanny-ui/issues/215) Hovering over blue POI to show relation makes red POI display as blue
+* [hootenanny-ui #213:](https://github.com/ngageoint/hootenanny-ui/issues/213) POI merge failure
+* [hootenanny-ui #207:](https://github.com/ngageoint/hootenanny-ui/issues/207) Modify Folder Name Placeholder
+* [hootenanny-ui #201:](https://github.com/ngageoint/hootenanny-ui/issues/201) FileGDB Import creates default name from every file within FGDB
+* [hootenanny-ui #200:](https://github.com/ngageoint/hootenanny-ui/issues/200) Upload FileGDB on Firefox is not working
+* [hootenanny-ui #197:](https://github.com/ngageoint/hootenanny-ui/issues/197) Minimum Width for Review Table
+* [hootenanny-ui #166:](https://github.com/ngageoint/hootenanny-ui/issues/166) Make review highlight wider when selected in red/blue table
+* [hootenanny-ui #149:](https://github.com/ngageoint/hootenanny-ui/issues/149) Ability to save review
+* [hootenanny-ui #147:](https://github.com/ngageoint/hootenanny-ui/issues/147) Add options for coordinate display
+* [hootenanny-ui #131:](https://github.com/ngageoint/hootenanny-ui/issues/131) Edit Feature sidebar scroll issues
+* [hootenanny-ui #105:](https://github.com/ngageoint/hootenanny-ui/issues/105) Design the display of conflation stats in the UI
+* [hootenanny #329:](https://github.com/ngageoint/hootenanny/issues/329) Fix web service API docs
+* [hootenanny #321:](https://github.com/ngageoint/hootenanny/issues/321) Break OsmMapConsumer out into const and non-const versions
+* [hootenanny #305:](https://github.com/ngageoint/hootenanny/issues/305) Quick tests are stalling on CentOS 6.7
+* [hootenanny #304:](https://github.com/ngageoint/hootenanny/issues/304) Create 0.2.21 release
+* [hootenanny #303:](https://github.com/ngageoint/hootenanny/issues/303) Error importing raw Port Au Prince Haiti OSM metro extract
+* [hootenanny #301:](https://github.com/ngageoint/hootenanny/issues/301) Error when running hoot osm2ogr and using RenderDb.js translation
+* [hootenanny #299:](https://github.com/ngageoint/hootenanny/issues/299) Investigate conflation behavior between gdb and shapefile
+* [hootenanny #297:](https://github.com/ngageoint/hootenanny/issues/297) TDS translations incorrectly assign the "divider" tag for divided roads.
+* [hootenanny #296:](https://github.com/ngageoint/hootenanny/issues/296) Review note provides no context or information other than 'Highway'
+* [hootenanny #292:](https://github.com/ngageoint/hootenanny/issues/292) Provide prominent error if building the documents is attempting on CentOS/RHEL
+* [hootenanny #250:](https://github.com/ngageoint/hootenanny/issues/250) /tmp/StxxlConfig* files aren't being removed by hoot automatically
+* [hootenanny #176:](https://github.com/ngageoint/hootenanny/issues/176) Obscure WayAverager Bug (end and start are same node)
+* [hootenanny #174:](https://github.com/ngageoint/hootenanny/issues/174) Add Earth Mover's Distance to Building Matching
+* [hootenanny #171:](https://github.com/ngageoint/hootenanny/issues/171) Cleaning input datasets individually before conflation causes poorer conflation quality than if not done
+* [hootenanny #141:](https://github.com/ngageoint/hootenanny/issues/141) Possibly Remove the ExportCmd
+* [hootenanny #15:](https://github.com/ngageoint/hootenanny/issues/15) Data visualization limitations in iD making it difficult to address errors identified during conflation
+
+
 # Hootenanny Change Log: 0.2.21
 * [hootenanny-ui #190:](https://github.com/ngageoint/hootenanny-ui/issues/190) Add test-mode back into Help Menu
 * [hootenanny-ui #187:](https://github.com/ngageoint/hootenanny-ui/issues/187) Error when trying to export OSM
@@ -8,31 +46,17 @@
 * [hootenanny-ui #143:](https://github.com/ngageoint/hootenanny-ui/issues/143) Show selected settings 
 * [hootenanny-ui #132:](https://github.com/ngageoint/hootenanny-ui/issues/132) Refactor Help Menu
 * [hootenanny-ui #121:](https://github.com/ngageoint/hootenanny-ui/issues/121) Bulk Import Option does not show on Firefox
-* [hootenanny #293:](https://github.com/ngageoint/hootenanny/pull/293) 275 MGCP AL020 translation fix
-* [hootenanny #290:](https://github.com/ngageoint/hootenanny/pull/290) Remove reference to property_map header refd by older versions of boo…
-* [hootenanny #289:](https://github.com/ngageoint/hootenanny/pull/289) 276
-* [hootenanny #286:](https://github.com/ngageoint/hootenanny/pull/286) Validate the length of text attributes on export
 * [hootenanny #278:](https://github.com/ngageoint/hootenanny/issues/278) CentOS boost warning
 * [hootenanny #276:](https://github.com/ngageoint/hootenanny/issues/276) Investigate why POI conflation does not merge similarly named places in Congo data
 * [hootenanny #275:](https://github.com/ngageoint/hootenanny/issues/275) MGCP FCODE does not get translated when ingesting data
-* [hootenanny #274:](https://github.com/ngageoint/hootenanny/pull/274) 175
-* [hootenanny #273:](https://github.com/ngageoint/hootenanny/pull/273) Fixed LogLog4Cxx log level for Verbose
-* [hootenanny #272:](https://github.com/ngageoint/hootenanny/pull/272) 257, write conflation params to maps->tags column
 * [hootenanny #271:](https://github.com/ngageoint/hootenanny/issues/271) Validate text field lengths on export 
-* [hootenanny #270:](https://github.com/ngageoint/hootenanny/pull/270) Add logVerbose and remove a lot of logWarn from translations
-* [hootenanny #269:](https://github.com/ngageoint/hootenanny/pull/269) 159
+
 * [hootenanny #268:](https://github.com/ngageoint/hootenanny/issues/268) Add a "verbose" log level for translations
 * [hootenanny #267:](https://github.com/ngageoint/hootenanny/issues/267) Rework algorithms docs to use matplotlib
-* [hootenanny #265:](https://github.com/ngageoint/hootenanny/pull/265) Remove AsciiDoc warnings from docs build
 * [hootenanny #264:](https://github.com/ngageoint/hootenanny/issues/264) Remove AsciiDoc warnings from docs build
-* [hootenanny #263:](https://github.com/ngageoint/hootenanny/pull/263) Mechanism to prevent invalid configuration parameters from being passed into ConfigOptions
 * [hootenanny #258:](https://github.com/ngageoint/hootenanny/issues/258) FGDB export failing for MGCP, TDS61 on merged Latvia and Brazil POI data.
-* [hootenanny #252:](https://github.com/ngageoint/hootenanny/pull/252) User ogrinfo to check for errors with format related dependent libraries
-* [hootenanny #251:](https://github.com/ngageoint/hootenanny/pull/251) 155
-* [hootenanny #248:](https://github.com/ngageoint/hootenanny/pull/248) 182
 * [hootenanny #245:](https://github.com/ngageoint/hootenanny/issues/245) Remove JsonSchemaLoader & json_spirit
 * [hootenanny #241:](https://github.com/ngageoint/hootenanny/issues/241) If GDAL isn't installed properly configure complains in an odd spot
-* [hootenanny #239:](https://github.com/ngageoint/hootenanny/pull/239) Remove Export Command - Step 1
 * [hootenanny #233:](https://github.com/ngageoint/hootenanny/issues/233) LogGeneric causes some tests to fail on CentOS
 * [hootenanny #222:](https://github.com/ngageoint/hootenanny/issues/222) Rename ConflateNumReviewsTest so it is disabled when services are disabled.
 * [hootenanny #182:](https://github.com/ngageoint/hootenanny/issues/182) Update older translations due to OSM+ tagging changes in #6862
@@ -62,8 +86,6 @@
 * [hootenanny #179:](https://github.com/ngageoint/hootenanny/issues/179) 0.2.19 Translation Assist Upload Failing
 * [hootenanny #164:](https://github.com/ngageoint/hootenanny/issues/164) Import of Syria data fails
 * [hootenanny #154:](https://github.com/ngageoint/hootenanny/issues/154) WFS export generates error message
-* [hootenanny #147:](https://github.com/ngageoint/hootenanny/pull/147) add unit test for RemoveElementsVisitor
-* [hootenanny #146:](https://github.com/ngageoint/hootenanny/pull/146) 132
 * [hootenanny #142:](https://github.com/ngageoint/hootenanny/issues/142) Improve the command line help
 * [hootenanny #135:](https://github.com/ngageoint/hootenanny/issues/135) Add a test to ConvertCmdTest to convert from shp to osm
 * [hootenanny #132:](https://github.com/ngageoint/hootenanny/issues/132) Setting match.model.enabled to true causes hoot to crash
