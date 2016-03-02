@@ -486,4 +486,5 @@ echo "Building Hoot"
 make clean -sj$(nproc)
 make -sj$(nproc)
 make docs -sj$(nproc)
+make eclipse
 
