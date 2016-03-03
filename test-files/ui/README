@@ -1,4 +1,1 @@
-This tests the web services at a higher system level via URL invocation (higher level than Java services tests).
-
-These files use the older way of calling node.js commands directly to stimulate tests.  The functional tests here 
-should probably be moved into the new cucumber tests (#ngageoint/hootenanny-ui#25)/
+These test the user interface using Cucumber.  A separate feature should be written for each piece of UI functionality to be tested.
