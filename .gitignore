@@ -161,3 +161,4 @@ docs/developer/restDocs/
 docs/developer/wpsDocs/
 log4j.xml
 Vagrant.marker
+test-files/services-system/node_modules
