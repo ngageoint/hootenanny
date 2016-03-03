@@ -1,0 +1,5 @@
+These files use the older way of calling node.js commands directly to stimulate
+tests.
+
+The functional tests here should probably be moved into the new cucumber tests.
+We likely only want to keep the load tests in node.js.
