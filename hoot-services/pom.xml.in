@@ -53,6 +53,8 @@
         <configuration>
           <forkCount></forkCount>
           <reuseForks>true</reuseForks>
+          <showSuccess>false</showSuccess>
+          <printSummary>false</printSummary>
           <groups>hoot.services.UnitTest</groups>
           <skipTests>${skip.hoot.services.tests}</skipTests>
           <excludes>
@@ -81,6 +83,8 @@
         </dependencies>
         <configuration>
           <groups>hoot.services.IntegrationTest</groups>
+          <showSuccess>false</showSuccess>
+          <printSummary>false</printSummary>
           <skipTests>${skip.hoot.services.integrationTests}</skipTests>
           <redirectTestOutputToFile>${redirect-test-output-to-file}</redirectTestOutputToFile>
         </configuration>
