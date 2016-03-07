@@ -22,19 +22,18 @@ AC_DEFUN([UI_TESTS_INIT],[
       AC_CHECK_PROG(NPM_FOUND, npm, [yes], [no])
       AS_IF([test "x$NPM_FOUND" != "xyes"], [AC_MSG_ERROR([Unable to find npm.])])
 
-      have_ruby=yes
-      CHECK_RUBY(1.9,[],[have_ruby=no])
-      CHECK_GEM(1.8,[],[have_ruby=no])
-      CHECK_RUBY_GEM(selenium-cucumber, 2.1.4, [],[],[have_ruby=no])
-      CHECK_RUBY_GEM(capybara, 2.6.2, [],[],[have_ruby=no])
-      CHECK_RUBY_GEM(capybara-webkit, 1.8.0, [],[],[have_ruby=no])
-      CHECK_RUBY_GEM(rspec, 3.4.0, [],[],[have_ruby=no])
+      CHECK_RUBY(1.9)
+      CHECK_GEM(1.8)
+      CHECK_RUBY_GEM(selenium-cucumber, 2.1.4)
+      CHECK_RUBY_GEM(capybara, 2.6.2)
+      CHECK_RUBY_GEM(capybara-webkit, 1.8.0)
+      CHECK_RUBY_GEM(rspec, 3.4.0)
 
-      if test "$have_ruby" == "no"; then
-        AC_MSG_ERROR([Unable to find Cucumber related gems.])
-      fi
-  
-      # TODO: chromedriver?
+      AC_CHECK_PROG(CHROME_FOUND, google-chrome-stable, [yes], [no])
+      AS_IF([test "x$CHROME_FOUND" != "xyes"], [AC_MSG_ERROR([Unable to find chrome.])])
+      
+      AC_CHECK_PROG(CHROMEDRIVER_FOUND, chromedriver, [yes], [no])
+      AS_IF([test "x$CHROMEDRIVER_FOUND" != "xyes"], [AC_MSG_ERROR([Unable to find chromedriver.])])
       
       AC_SUBST(HAS_UI_TESTS, "uitests")
       echo Hootenanny UI tests enabled.
