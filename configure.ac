@@ -128,6 +128,8 @@ m4_include([m4/rnd.m4])
 RND_INIT()
 
 # Include UI tests
+m4_include([m4/ax_compare_version.m4])
+m4_include([m4/ruby.m4])
 m4_include([m4/ui-tests.m4])
 UI_TESTS_INIT()
 

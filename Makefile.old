@@ -112,8 +112,8 @@ plugins-test:
 	cd plugins; (command -v mocha &> /dev/null) && mocha test || echo Skipping mocha tests
 
 ui-test:
-ifeq ($(BUILD_UI),ui)
-	cd hoot-ui; npm test #&> /dev/null
+ifeq ($(BUILD_UI_TESTS),uitests)
+	echo "ui tests"
 endif
 
 pp-test-all:
