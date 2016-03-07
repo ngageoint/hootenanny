@@ -36,8 +36,8 @@ NEWFILES=`ls -R $OUTPUT_TILES | wc -l`
 # The expected size of the new tiles is 2700
 NEWSIZE=`du -c $OUTPUT_TILES | grep total | awk '{print $1}'`
 
-[ $NEWSIZE -gt 2710 ] && echo "gdal2tiles.py: Expecting a tile size of 2700. Got" $NEWSIZE
+[ $NEWSIZE -gt 2710 ] && echo "gdal2tiles.py: Expecting a tile size around 2700. Got" $NEWSIZE
 
-[ $NEWSIZE -lt 2690 ] && echo "gdal2tiles.py: Expecting a tile size of 2700. Got" $NEWSIZE
+[ $NEWSIZE -lt 2500 ] && echo "gdal2tiles.py: Expecting a tile size between 2500 and 2700. Got" $NEWSIZE
 
 
