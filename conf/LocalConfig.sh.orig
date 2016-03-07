@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Can this be put into the profile and then sourced?
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu/
+export HADOOP_HOME=$HOME/apps/hadoop/
+export JAVA_HOME=$HOME/local/java/
+
