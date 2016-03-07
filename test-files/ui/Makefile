@@ -8,14 +8,7 @@ ifneq (,$(findstring s,$(MAKEFLAGS)))
   ECHO=true
 endif
 
-FOUO=/fouo
-SO_DATA=$(FOUO)/gis-data/africom/somalia
-UTP_DATA=$(SO_DATA)/utp/UTP_Gaalkacyo_Shapefiles_LIMDIS
-UTP_LAYERS=Roads BuildingsOfInterest
-UTP_SHP=$(foreach type,$(UTP_LAYERS),tmp/utp/$(type).shp)
 CWD=$(shell pwd)
-
-MAG_MAAX_PATH=$(SO_DATA)/maax/SO_POI_Database_Mag.gdb/
 
 $(shell $(HOOT_HOME)/scripts/ReplaceEnvironmentVariables.sh DbSettings.inc.in DbSettings.inc)
 -include DbSettings.inc
