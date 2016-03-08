@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -88,10 +88,10 @@ LevelPtr toLog4CxxLevel(Log::WarningLevel l)
 void Log::init()
 {
   _logger = Logger::getLogger("hoot");
-  ConsoleAppender* ca = new ConsoleAppender(
-        new PatternLayout(ConfigOptions().getLogFormat().toStdString()));
+  LayoutPtr layout(new PatternLayout(ConfigOptions().getLogFormat().toStdString()));
+  AppenderPtr appender(new ConsoleAppender(layout));
   _logger->removeAllAppenders();
-  _logger->addAppender(ca);
+  _logger->addAppender(appender);
   _logger->setLevel(toLog4CxxLevel(Log::getLevel()));
 }
 
