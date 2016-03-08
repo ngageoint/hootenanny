@@ -158,7 +158,7 @@ public class OgrAttributesResource extends JobControllerBase
 										zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb"))
 								{
 									String fgdbZipName = zipName;
-									if (zipName.toLowerCase().endsWith(".gdb/"))
+									if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/"))
 									{
 										fgdbZipName = zipName.substring(0, zipName.length() - 1);
 									}

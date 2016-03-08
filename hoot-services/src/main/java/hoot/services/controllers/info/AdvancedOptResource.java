@@ -209,13 +209,13 @@ public class AdvancedOptResource
 			if (_horzOverride == null || _refOverride == null || doForce)
 			{
 				JSONParser par = new JSONParser();
-				frRef = new FileReader(_homeFolder + "/" + _refOverridePath);
+				frRef = new FileReader(_homeFolder + File.pathSeparator + _refOverridePath);
 				_refOverride = (JSONObject) par.parse(frRef);
 
-				frHrz = new FileReader(_homeFolder + "/" + _horzOverridePath);
+				frHrz = new FileReader(_homeFolder + File.pathSeparator + _horzOverridePath);
 				_horzOverride = (JSONObject) par.parse(frHrz);
 
-				frAve = new FileReader(_homeFolder + "/" + _aveOverridePath);
+				frAve = new FileReader(_homeFolder + File.pathSeparator + _aveOverridePath);
 				_aveOverride = (JSONObject) par.parse(frAve);
 			}
 		}
