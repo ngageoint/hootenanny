@@ -62,13 +62,28 @@ wikimapia = {
                 delete attrs[col];
                 // col = c; // For the rest of this loop iteration
             }
+
+            // This is a bit ugly
+            if (c.indexOf('DESCRI') > -1)
+            {
+                attrs.DESC = attrs[c];
+                delete attrs[c];
+            }
         } // End in Attrs loop
+
 
         // Debug
         if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');
 
         // Metadata
         tags.source = 'wikimapia';
+
+        if (attrs.ID && !(attrs.PLACE_ID))
+        {
+            attrs.PLACE_ID = attrs.ID;
+            delete attrs.ID;
+        }
+
         if (attrs.PLACE_ID)
         {
             tags.uuid = "wikimapia:" + attrs.PLACE_ID;
@@ -78,10 +93,45 @@ wikimapia = {
             tags.uuid = createUuid();
         }
 
+
         // Start translating attributes
+
+        // HGIS Wikimapia
         if (attrs.NAME) tags.name = attrs.NAME;
         if (attrs.DESC) tags.note = attrs.DESC;
         if (attrs.URL) tags['source:url'] = attrs.URL;
+
+        // Raw Wikimapia
+        if (attrs.TITLE) tags.name = attrs.TITLE;
+        if (attrs.DESCRIPTIO) tags.note = attrs.DESCRIPTIO;
+        if (attrs.WIKIPEDIA) tags.wikipedia = attrs.WIKIPEDIA;
+        if (attrs.COUNTRY) tags['is_in:country'] = attrs.COUNTRY;
+        if (attrs.STATE) tags['is_in:state'] = attrs.STATE;
+        if (attrs.PLACENAME) tags['is_in:place'] = attrs.PLACENAME;
+
+        if (attrs.TAGVALUE)
+        {
+            attrs.CATEGORY = attrs.TAGVALUE;
+            delete attrs.TAGVALUE;
+        }
+
+        if (attrs.NAMELIST)
+        {
+            var nList = JSON.parse(attrs.NAMELIST);
+            for (var i in nList)
+            {
+                // Change 'source_url:en' to 'source:url:en'
+                if (i.indexOf('source_url') > -1)
+                {
+                    tags[i.replace('_',':')] = nList[i];
+                }
+                else
+                {
+                    tags[i] = nList[i];
+                }
+
+            }
+        } // End NAMELIST
 
         // Feature Code
         if (attrs.CATEGORY)
