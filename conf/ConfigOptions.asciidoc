@@ -288,15 +288,6 @@ in meters.
 The buffer to add to the alpha shape before cutting by the cookie cutter map operation
 (CookieCutterOp). A negative value will make the shape smaller.  Value in meters.
 
-=== cookie.cutter.output.buffer
-
-* Data Type: double
-* Default Value: `0.0`
-
-Optional buffer value used by the cookie cutter map operation (CookieCutterOp).  If the buffer
-value is provided then the shape is buffered by this many meters before cutting. The buffer may be
-positive or negative.
-
 === cookie.cutter.output.crop
 
 * Data Type: bool
