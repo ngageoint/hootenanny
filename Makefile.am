@@ -43,16 +43,21 @@ tmp/schema.png:
 	$(MAKE) -f Makefile.old tmp/schema.png
 
 help:
-	@echo "help       - This help message."
-	@echo "build      - Build all source and populated/upgrade the DB if necessary."
-	@echo "clean      - Clean out all binaries. This will not modify the DB."
-	@echo "clean-all  - Clean out all binaries and remove all tables from the DB defined in liquibase.properties"
-	@echo "clean-db   - Remove all tables from the DB defined in liquibase.properties"
-	@echo "check      - Run all the tests that should be run before commit."
-	@echo "test-all   - Run all tests. Could take hours."
-	@echo "dist       - Make a distributable tarball."
-	@echo "coverage   - If configure was run with '--with-coverage' then it creates coverage reports."
-	@echo "eclipse    - Builds eclipse project files."
+	@echo "help          - This help message."
+	@echo "archive       - Make a distributable tarball."
+	@echo "build         - Build all source and populated/upgrade the DB if necessary."
+	@echo "check         - Run all the tests that should be run before commit."
+	@echo "clean         - Clean out all binaries. This will not modify the DB."
+	@echo "clean-all     - Clean out all binaries and remove all tables from the DB defined in liquibase.properties"
+	@echo "clean-db      - Remove all tables from the DB defined in liquibase.properties"
+	@echo "coverage      - If configure was run with '--with-coverage' then it creates coverage reports."
+	@echo "dist          - Make a distributable tarball."
+	@echo "eclipse       - Builds eclipse project files."
+	@echo "services-test - Run web services tests.  Takes minutes.  Must enable --with-services."
+	@echo "test          - Run slow tests.  Takes minutes."
+	@echo "test-all      - Run all tests.  Could take hours."
+	@echo "test-quick    - Run quick tests.  Takes seconds."
+	@echo "ui-test       - Run user interface tests.  Takes minutes.  Must enable --with-uitests and --with-services."
 
 test:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old test
@@ -65,6 +70,12 @@ test-all-no-core:
 
 test-quick:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old test-quick
+
+services-test:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old services-test
+
+ui-test:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old ui-test
 
 conf/DatabaseConfig.sh:
 	$(MAKE) -f Makefile.old conf/DatabaseConfig.sh

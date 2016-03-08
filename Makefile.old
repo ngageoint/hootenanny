@@ -66,16 +66,16 @@ clean-db: services-clean-db
 clean-all: clean clean-db
 
 check: test
-test: build services-test pp-test plugins-test ui-test
+test: build ui-test services-test pp-test plugins-test
 	bin/HootTest $(HOOT_TEST_DIFF) --slow
 
 docs: always HOOT_VERSION_FILE services-docs
 	cd docs; $(MAKE)
 
-test-quick: build services-test pp-test
+test-quick: build pp-test
 	bin/HootTest $(HOOT_TEST_DIFF) --quick
 
-test-all-no-core: build services-test-all pp-test plugins-test ui-test
+test-all-no-core: build ui-test-all services-test-all pp-test plugins-test
 
 test-all: test-all-no-core
 	bin/HootTest $(HOOT_TEST_DIFF) --glacial
@@ -115,13 +115,22 @@ plugins-test:
 	# Only run the plugins tests if mocha is installed.
 	cd plugins; (command -v mocha &> /dev/null) && mocha test || echo Skipping mocha tests
 
-ui-test:
+ui-test: services-build
 ifeq ($(BUILD_UI_TESTS),uitests)
-	echo "ui tests"
+ifeq ($(BUILD_SERVICES),services)
+	#echo "ui tests"
 	$$HOOT_HOME/scripts/DeployTomcat.sh
+	#echo "ui tests 2"
 	cd $$HOOT_HOME/test-files/ui
-	make
+	#echo "ui tests 3"
+	make test
+	#echo "ui tests 4"
+else
+	echo "UI tests must specify --with-services and --with-uitests."
 endif
+endif
+
+ui-test-all: ui-test
 
 pp-test-all:
 ifneq ($(HADOOP_HOME),)

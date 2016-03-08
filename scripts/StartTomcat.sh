@@ -15,15 +15,22 @@ function printOnError {
 }
 
 echo Tomcat home: $TOMCAT6_HOME
+#echo test5
 export CATALINA_BASE=$TOMCAT6_HOME
 export CATALINA_HOME=$TOMCAT6_HOME
 hoot version &> /dev/null || (echo Please make sure hoot is in your PATH.; exit -1)
 
+#echo test2
+
 [ -d $TOMCAT6_HOME/webapps ] || (echo Please set TOMCAT6_HOME; exit -1)
+
+echo Starting Tomcat.  Making connection attempts... 
 
 cd $TOMCAT6_HOME
 #printOnError bin/catalina.sh start
 bin/startup.sh
+
+#echo test3
 
 # Wait for tomcat to start
 COUNT=0
@@ -34,5 +41,7 @@ until [ "$VERSION_INFO" != "" ]; do
   let COUNT=COUNT+1
   [ $COUNT -gt 20 ] && (echo Tomcat didn\'t start; exit -1)
 done
+
+#echo test4
 
 exit 0
