@@ -55,6 +55,10 @@ clean: Makefile.qmake services-clean
 ifeq ($(BUILD_SERVICES),services)
 	scripts/CleanOsmApiDB.sh
 endif
+ifeq ($(BUILD_UI_TESTS),uitests)
+	cd $$HOOT_HOME/test-files/ui
+	make clean
+endif
 
 clean-db: services-clean-db
 
@@ -62,7 +66,7 @@ clean-db: services-clean-db
 clean-all: clean clean-db
 
 check: test
-test: build ui-test services-test pp-test plugins-test
+test: build services-test pp-test plugins-test ui-test
 	bin/HootTest $(HOOT_TEST_DIFF) --slow
 
 docs: always HOOT_VERSION_FILE services-docs
@@ -71,7 +75,7 @@ docs: always HOOT_VERSION_FILE services-docs
 test-quick: build services-test pp-test
 	bin/HootTest $(HOOT_TEST_DIFF) --quick
 
-test-all-no-core: ui-test build services-test-all pp-test plugins-test
+test-all-no-core: build services-test-all pp-test plugins-test ui-test
 
 test-all: test-all-no-core
 	bin/HootTest $(HOOT_TEST_DIFF) --glacial
@@ -114,6 +118,9 @@ plugins-test:
 ui-test:
 ifeq ($(BUILD_UI_TESTS),uitests)
 	echo "ui tests"
+	$$HOOT_HOME/scripts/DeployTomcat.sh
+	cd $$HOOT_HOME/test-files/ui
+	make
 endif
 
 pp-test-all:
