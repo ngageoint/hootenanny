@@ -56,8 +56,7 @@ ifeq ($(BUILD_SERVICES),services)
 	scripts/CleanOsmApiDB.sh
 endif
 ifeq ($(BUILD_UI_TESTS),uitests)
-	cd $$HOOT_HOME/test-files/ui
-	make clean
+	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile clean
 endif
 
 clean-db: services-clean-db
@@ -66,7 +65,7 @@ clean-db: services-clean-db
 clean-all: clean clean-db
 
 check: test
-test: build ui-test services-test pp-test plugins-test
+test: build services-test pp-test plugins-test
 	bin/HootTest $(HOOT_TEST_DIFF) --slow
 
 docs: always HOOT_VERSION_FILE services-docs
@@ -75,7 +74,7 @@ docs: always HOOT_VERSION_FILE services-docs
 test-quick: build pp-test
 	bin/HootTest $(HOOT_TEST_DIFF) --quick
 
-test-all-no-core: build ui-test-all services-test-all pp-test plugins-test
+test-all-no-core: build services-test-all ui-test pp-test plugins-test
 
 test-all: test-all-no-core
 	bin/HootTest $(HOOT_TEST_DIFF) --glacial
@@ -115,22 +114,15 @@ plugins-test:
 	# Only run the plugins tests if mocha is installed.
 	cd plugins; (command -v mocha &> /dev/null) && mocha test || echo Skipping mocha tests
 
-ui-test: services-build
+ui-test: build services-build
 ifeq ($(BUILD_UI_TESTS),uitests)
 ifeq ($(BUILD_SERVICES),services)
-	#echo "ui tests"
 	$$HOOT_HOME/scripts/DeployTomcat.sh
-	#echo "ui tests 2"
-	cd $$HOOT_HOME/test-files/ui
-	#echo "ui tests 3"
-	make test
-	#echo "ui tests 4"
+	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile test
 else
 	echo "UI tests must specify --with-services and --with-uitests."
 endif
 endif
-
-ui-test-all: ui-test
 
 pp-test-all:
 ifneq ($(HADOOP_HOME),)

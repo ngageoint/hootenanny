@@ -52,12 +52,14 @@ help:
 	@echo "clean-db      - Remove all tables from the DB defined in liquibase.properties"
 	@echo "coverage      - If configure was run with '--with-coverage' then it creates coverage reports."
 	@echo "dist          - Make a distributable tarball."
-	@echo "eclipse       - Builds eclipse project files."
-	@echo "services-test - Run web services tests.  Takes minutes.  Must enable --with-services."
-	@echo "test          - Run slow tests.  Takes minutes."
+	@echo "eclipse       - Builds Eclipse IDE project files."
+	@echo "pp-test       - Run the pretty-pipes tests.  Should take less than five minutes."
+	@echo "plugins-test  - Run the mocha plugins tests.  Should take less than five minutes."
+	@echo "services-test - Run web services slow tests.  Should take five to ten minutes.  Must enable --with-services configuration option."
+	@echo "test          - Run slow tests.  Should take five to ten minutes."
 	@echo "test-all      - Run all tests.  Could take hours."
-	@echo "test-quick    - Run quick tests.  Takes seconds."
-	@echo "ui-test       - Run user interface tests.  Takes minutes.  Must enable --with-uitests and --with-services."
+	@echo "test-quick    - Run quick tests.  Should take less than five minutes."
+	@echo "ui-test       - Run user interface tests.  May take several minutes.  Must enable --with-uitests and --with-services configuration options."
 
 test:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old test
@@ -76,6 +78,12 @@ services-test:
 
 ui-test:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old ui-test
+
+pp-test:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old pp-test
+
+plugins-test:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old plugins-test
 
 conf/DatabaseConfig.sh:
 	$(MAKE) -f Makefile.old conf/DatabaseConfig.sh

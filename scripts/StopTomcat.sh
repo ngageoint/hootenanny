@@ -17,7 +17,6 @@ fi
   export CATALINA_HOME=$TOMCAT6_HOME
 
   echo Tomcat home: $TOMCAT6_HOME
-  #echo test6
 
   [ -d $TOMCAT6_HOME/webapps ] || (echo Please set TOMCAT6_HOME; exit -1)
   
@@ -31,6 +30,4 @@ fi
 #else
   #echo Tomcat service not running.
 #fi
-
-#echo test1
 
