@@ -338,6 +338,7 @@ int main(int argc, char *argv[])
       if (t == 0)
       {
         delete searchSuite;
+        delete listener;
         throw HootException("Could not find the specified test: " + testName);
       }
 
