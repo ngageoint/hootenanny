@@ -29,11 +29,15 @@ fi
 
 sudo apt-get autoremove -y
 
-if ! grep --quiet ruby ~/.profile; then
-    echo "Adding ruby to path"
-    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin" >> ~/.profile
-    source ~/.profile
+if ! grep --quiet "export HOOT_HOME" ~/.profile; then
+    echo "Adding hoot home to profile"
+    echo "export HOOT_HOME=/home/vagrant/hoot" >> ~/.profile
 fi
+if ! grep --quiet "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:\$HOOT_HOME/bin" ~/.profile; then
+    echo "Adding path vars to profile"
+    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:\$HOOT_HOME/bin" >> ~/.profile
+fi
+source ~/.profile
 
 #sudo gem install mime-types -v 2.6.2
 #sudo gem install capybara -v 2.5.0
@@ -53,11 +57,6 @@ if [ ! -f bin/chromedriver ]; then
     mkdir -p $HOME/bin
     wget http://chromedriver.storage.googleapis.com/2.14/chromedriver_linux64.zip
     unzip -d $HOME/bin chromedriver_linux64.zip
-fi
-if ! grep --quiet "$HOME/bin" ~/.profile; then
-    echo "Adding chromedriver to path"
-    echo "export PATH=\$PATH:\$HOME/bin" >> ~/.profile
-    source ~/.profile
 fi
 
 # Hoot Baseline is PostgreSQL 9.1 and PostGIS 1.5, so we need a deb file and
@@ -257,11 +256,6 @@ touch Vagrant.marker
 
 # Hoot
 echo "Configuring Hoot"
-if ! grep --quiet HOOT_HOME ~/.profile; then
-    echo "Adding hoot home to profile"
-    echo "export PATH=\$PATH:\$HOOT_HOME/bin" >> ~/.profile
-    source ~/.profile
-fi
 cd $HOOT_HOME
 # Check that hoot-ui submodule has been init'd and updated
 if [ ! "$(ls -A hoot-ui)" ]; then
