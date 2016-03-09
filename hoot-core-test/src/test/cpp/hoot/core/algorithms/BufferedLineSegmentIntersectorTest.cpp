@@ -158,15 +158,15 @@ public:
     size_t count = 1000;
     for (size_t i = 0; i < count; i++)
     {
-      double r = Tgs::Random::instance()->s_generateDouble() * 3.0;
-      LineSegment ls1(Tgs::Random::instance()->s_generateDouble() * scale,
-                      Tgs::Random::instance()->s_generateDouble() * scale,
-                      Tgs::Random::instance()->s_generateDouble() * scale,
-                      Tgs::Random::instance()->s_generateDouble() * scale);
-      LineSegment ls2(Tgs::Random::instance()->s_generateDouble() * scale,
-                      Tgs::Random::instance()->s_generateDouble() * scale,
-                      Tgs::Random::instance()->s_generateDouble() * scale,
-                      Tgs::Random::instance()->s_generateDouble() * scale);
+      double r = Tgs::Random::instance()->s_generateUniform() * 3.0;
+      LineSegment ls1(Tgs::Random::instance()->s_generateUniform() * scale,
+                      Tgs::Random::instance()->s_generateUniform() * scale,
+                      Tgs::Random::instance()->s_generateUniform() * scale,
+                      Tgs::Random::instance()->s_generateUniform() * scale);
+      LineSegment ls2(Tgs::Random::instance()->s_generateUniform() * scale,
+                      Tgs::Random::instance()->s_generateUniform() * scale,
+                      Tgs::Random::instance()->s_generateUniform() * scale,
+                      Tgs::Random::instance()->s_generateUniform() * scale);
 
       LineSegment lsGeos;
       double start = Tgs::Time::getTime();

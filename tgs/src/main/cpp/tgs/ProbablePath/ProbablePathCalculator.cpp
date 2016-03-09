@@ -406,7 +406,7 @@ namespace Tgs
     map<int, float> patch;
     for (int i = 0; i < _patchCount; i++)
     {
-      float r = 1.0f + ((float)Tgs::Random::instance()->s_generateDouble() * 2.0f - 1.0f) * _variation;
+      float r = 1.0f + ((float)Tgs::Random::instance()->s_generateUniform() * 2.0f - 1.0f) * _variation;
       patch[Tgs::Random::instance()->s_generateInt() % (_rows * _cols)] = r;
     }
 
@@ -466,7 +466,7 @@ namespace Tgs
       }
       else
       {
-        float r = 1.0f + ((float)Tgs::Random::instance()->s_generateDouble() * 2.0f - 1.0f) * _variation;
+        float r = 1.0f + ((float)Tgs::Random::instance()->s_generateUniform() * 2.0f - 1.0f) * _variation;
         _currentValues[i] = r * _baseValues[i];
         if (_currentValues[i] < 1e-6)
         {

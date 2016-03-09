@@ -433,10 +433,10 @@ public:
       double indexTime = 0.0;
       for (int i = 0; i < testCount; i++)
       {
-        double x = Tgs::Random::instance()->s_generateDouble() * _bounds.getWidth() + _bounds.getMinX();
-        double y = Tgs::Random::instance()->s_generateDouble() * _bounds.getHeight() + _bounds.getMinY();
+        double x = Tgs::Random::instance()->s_generateUniform() * _bounds.getWidth() + _bounds.getMinX();
+        double y = Tgs::Random::instance()->s_generateUniform() * _bounds.getHeight() + _bounds.getMinY();
         Coordinate c(x, y);
-        //double radius = Tgs::Random::instance()->s_generateDouble() * 10;
+        //double radius = Tgs::Random::instance()->s_generateUniform() * 10;
         double radius = 112000;
         QString searchStr = _keys[Tgs::Random::instance()->s_generateInt() % _keys.size()].getMetricElement();
         int queryD = max(1, (int)(searchStr.size() * .2));

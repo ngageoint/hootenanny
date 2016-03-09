@@ -162,7 +162,7 @@ namespace Tgs
     {
       weight = _sourceWeight;
     }
-    double r = Tgs::Random::instance()->s_generateDouble() * weight;
+    double r = Tgs::Random::instance()->s_generateUniform() * weight;
     double last = 0.0;
     double sum = 0.0;
     for (map<string, AvailableNode>::const_iterator it = _availableNodes.begin(); 
@@ -371,7 +371,7 @@ namespace Tgs
 
   void CalculatorGenome::_mutate(double p, shared_ptr<CalculatorGenomeNode> node)
   {
-    double r = Tgs::Random::instance()->s_generateDouble();
+    double r = Tgs::Random::instance()->s_generateUniform();
 
     if (r <= p)
     {

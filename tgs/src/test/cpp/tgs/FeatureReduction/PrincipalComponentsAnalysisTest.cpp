@@ -165,8 +165,8 @@ namespace Tgs
       while (df.getNumDataVectors() < 10000)
       {
         // create a random point inside a circle
-        double x = 2.0 * Tgs::Random::instance()->s_generateDouble() - 1;
-        double y = 2.0 * Tgs::Random::instance()->s_generateDouble() - 1;
+        double x = 2.0 * Tgs::Random::instance()->s_generateUniform() - 1;
+        double y = 2.0 * Tgs::Random::instance()->s_generateUniform() - 1;
         if (sqrt(x * x + y * y) > 1.0)
         {
           continue;
@@ -269,7 +269,7 @@ namespace Tgs
         uut.compute(df);
         //cout << uut.getComponents();
 
-        DblVec p(Tgs::Random::instance()->s_generateDouble(), Tgs::Random::instance()->s_generateDouble());
+        DblVec p(Tgs::Random::instance()->s_generateUniform(), Tgs::Random::instance()->s_generateUniform());
         std::vector<double> result = uut.reprojectIntoPca(p);
         std::vector<double> rp = rotate(p, -(double)angle);
         std::vector<double> rpi = rotate(p, -(double)angle + 180);

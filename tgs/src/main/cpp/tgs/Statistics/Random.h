@@ -64,9 +64,10 @@ namespace Tgs
     void seed();
     void seed(unsigned int srand);
 
+    /*** Delete these functions later */
     void s_seed(unsigned int s_rand);
     int s_generateInt();
-    double s_generateDouble();
+    double s_generateUniform();
 
     /**
      * Randomizes the elements in the specified vector

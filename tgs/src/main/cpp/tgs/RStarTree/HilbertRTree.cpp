@@ -190,7 +190,7 @@ int HilbertRTree::_chooseWeightedChild(const std::vector<double>& weights)
   {
     return Tgs::Random::instance()->s_generateInt() % weights.size();
   }
-  double r = Tgs::Random::instance()->s_generateDouble() * sum;
+  double r = Tgs::Random::instance()->s_generateUniform() * sum;
   double incr = 0.0;
   for (unsigned int i = 0; i < weights.size(); i++)
   {

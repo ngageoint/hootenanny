@@ -162,7 +162,7 @@ namespace Tgs
       }
     }
 
-    double pick = Tgs::Random::instance()->s_generateDouble() * popSum;
+    double pick = Tgs::Random::instance()->s_generateUniform() * popSum;
     double s = 0;
     for (unsigned int i = 0; i < _population.size(); i++)
     {
@@ -255,8 +255,8 @@ namespace Tgs
 //         cout.flush();
 //       }
       // choose the act of 'god'
-      double act = Tgs::Random::instance()->s_generateDouble();
-      //double mutate = Tgs::Random::instance()->s_generateDouble();
+      double act = Tgs::Random::instance()->s_generateUniform();
+      //double mutate = Tgs::Random::instance()->s_generateUniform();
       // if they get a free pass, randomly select a genome and pass it on to the next gen
       if (act < _mutationProb)
       {

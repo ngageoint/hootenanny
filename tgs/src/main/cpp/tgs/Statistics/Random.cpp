@@ -107,7 +107,7 @@ namespace Tgs
     return rand();
   }
 
-  double Random::s_generateDouble()
+  double Random::s_generateUniform()
   {
     return ((double)rand() / (double)RAND_MAX);
   }
