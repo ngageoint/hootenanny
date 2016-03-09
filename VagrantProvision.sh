@@ -256,6 +256,7 @@ touch Vagrant.marker
 
 # Hoot
 echo "Configuring Hoot"
+echo HOOT_HOME: $HOOT_HOME
 cd $HOOT_HOME
 # Check that hoot-ui submodule has been init'd and updated
 if [ ! "$(ls -A hoot-ui)" ]; then
