@@ -29,7 +29,18 @@ fi
 
 sudo apt-get autoremove -y
 
-# Install Chrome browser for Cucumber
+if ! grep --quiet ruby ~/.profile; then
+    echo "Adding ruby to path"
+    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin" >> ~/.profile
+    source ~/.profile
+fi
+
+#sudo gem install mime-types -v 2.6.2
+#sudo gem install capybara -v 2.5.0
+sudo gem install --user-install selenium-cucumber capybara capybara-webkit rspec
+#sudo gem install --user-install selenium-cucumber capybara-webkit rspec
+#sudo gem install cucumber capybara-webkit selenium-webdriver rspec capybara-screenshot
+
 if [ ! -f google-chrome-stable_current_amd64.deb ]; then
     echo "Installing Chrome"
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -37,27 +48,13 @@ if [ ! -f google-chrome-stable_current_amd64.deb ]; then
     sudo apt-get -f install -y
 fi
 
-# Install gems for Cucumber
-if ! grep --quiet ruby ~/.profile; then
-    echo "Adding ruby to path"
-    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin" >> ~/.profile
-    source ~/.profile
-fi
-
-sudo gem install mime-types -v 2.6.2
-sudo gem install capybara -v 2.5.0
-#sudo gem install --user-install selenium-cucumber capybara capybara-webkit rspec
-sudo gem install --user-install selenium-cucumber capybara-webkit rspec
-#sudo gem install cucumber capybara-webkit selenium-webdriver rspec capybara-screenshot
-
-# Install Chromedriver for Cucumber
 if [ ! -f bin/chromedriver ]; then
     echo "Installing Chromedriver"
-    mkdir -p /home/vagrant/bin
+    mkdir -p $HOME/bin
     wget http://chromedriver.storage.googleapis.com/2.14/chromedriver_linux64.zip
-    unzip -d /home/vagrant/bin chromedriver_linux64.zip
+    unzip -d $HOME/bin chromedriver_linux64.zip
 fi
-if ! grep --quiet /home/vagrant/bin ~/.profile; then
+if ! grep --quiet "$HOME/bin" ~/.profile; then
     echo "Adding chromedriver to path"
     echo "export PATH=\$PATH:\$HOME/bin" >> ~/.profile
     source ~/.profile
@@ -121,7 +118,7 @@ if ! grep --quiet NODE_PATH ~/.profile; then
 fi
 
 # Module needed for OSM API db test
-if [ ! -d /home/vagrant/.cpan ]; then
+if [ ! -d $HOME/.cpan ]; then
     (echo y;echo o conf prerequisites_policy follow;echo o conf commit)|sudo cpan
     sudo perl -MCPAN -e 'install XML::Simple'
 fi
@@ -177,10 +174,6 @@ fi
 # Restart PostgreSQL
 sudo service postgresql restart
 
-# Configure and Build
-cd /home/vagrant/hoot
-source ./SetupEnv.sh
-
 # Check that hoot-ui submodule has been init'd and updated
 if [ ! "$(ls -A hoot-ui)" ]; then
     echo "hoot-ui is empty"
@@ -188,9 +181,14 @@ if [ ! "$(ls -A hoot-ui)" ]; then
     git submodule init && git submodule update
 fi
 
-export TOMCAT6_HOME=/var/lib/tomcat6
-
 # Configure Tomcat
+
+if ! grep --quiet TOMCAT6_HOME ~/.profile; then
+    echo "Adding Tomcat to profile"
+    echo "export TOMCAT6_HOME=/var/lib/tomcat6" >> ~/.profile
+    source ~/.profile
+fi
+
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
 echo "Configuring tomcat6 environment"
 sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
@@ -259,16 +257,20 @@ sudo cp node-mapnik-server/init.d/node-mapnik-server /etc/init.d
 sudo chmod a+x /etc/init.d/node-mapnik-server
 # npm modules are installed when tomcat is deployed, which occurs when the --with-uitests option is enabled.
 
-export HOOT_HOME=/home/vagrant/hoot
-
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'
 # if the marker file is older than this file (VagrantProvision.sh)
 touch Vagrant.marker
 
-# Build Hoot
+# Hoot
 echo "Configuring Hoot"
+if ! grep --quiet HOOT_HOME ~/.profile; then
+    echo "Adding hoot home to profile"
+    echo "export PATH=\$PATH:\$HOOT_HOME/bin" >> ~/.profile
+    source ~/.profile
+fi
 cd $HOOT_HOME
+source ./SetupEnv.sh
 cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
 aclocal && autoconf && autoheader && automake && ./configure --with-rnd --with-services --with-uitests
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then

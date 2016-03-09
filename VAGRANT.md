@@ -71,9 +71,9 @@ You should be able to log into the running VM by typing:
 
 Within this login shell, you can build the code, run the server or the tests. For example, to run the tests:
 
-    cd hoot
-    source SetupEnv.sh
-    make test
+    cd $HOOT_HOME
+    source ./SetupEnv.sh
+    make -sj$(nproc) test-all
 
 # Using Hootenanny
 
@@ -82,17 +82,17 @@ To access the web pages you access the site in your [local Chrome browser](http:
 To run hoot from commandline
 
     vagrant ssh
-    cd hoot
-    source SetupEnv.sh
+    cd $HOOT_HOME
+    source ./SetupEnv.sh
     hoot help
 
 
 If you've updated the code, you must connect to the vm via ssh to build and redeploy to Tomcat:
 
     vagrant ssh
-    cd hoot
-    source SetupEnv.sh
+    cd $HOOT_HOME
+    source ./SetupEnv.sh
     scripts/ezClean.sh
     scripts/ezBuildAll.sh
-    sudo -u tomcat6 scripts/vagrantDeployTomcat.sh
+    sudo -u tomcat6 scripts/DeployTomcat.sh
 

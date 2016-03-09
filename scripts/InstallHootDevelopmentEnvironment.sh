@@ -43,7 +43,7 @@ fi
 # use tomcat 7 here instead of tomcat 6 (what's tested with hoot...I don't really like this...but), since eclipse 
 # installed from repos (installed in this script later) needs tomcat 7
 echo "Installing dependencies"
-sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat7 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane ruby gcc make ruby-dev zlib1g-dev patch xvfb x11vnc unzip nodejs meld qtcreator distcc htop synergy gparted eclipse eclipse-jdt libpangoxft-1.0-0:i386 libxv1:i386 libpangox-1.0-0:i386 libgtk2.0-0 libxtst6 libxi-dev libasound2 libgtk2.0-0:i386 libxtst6:i386 libasound2:i386 libgcj14-awt:i386 eclipse-pde eclipse-platform* libtomcat7-java osmosis libpangoxft-1.0-0:i386 libxv1:i386 libpangox-1.0-0:i386 libgtk2.0-0 libxtst6 libxi-dev libasound2 libgtk2.0-0:i386 libxtst6:i386 libasound2:i386 libgcj14-awt:i386 icedtea-pluginsudo apt-get install -y meld qtcreator distcc htop synergy gparted eclipse eclipse-jdt libpangoxft-1.0-0:i386 libxv1:i386 libpangox-1.0-0:i386 libgtk2.0-0 libxtst6 libxi-dev libasound2 libgtk2.0-0:i386 libxtst6:i386 libasound2:i386 libgcj14-awt:i386 eclipse-pde eclipse-platform* libtomcat7-java osmosis libpangoxft-1.0-0:i386 libxv1:i386 libpangox-1.0-0:i386 libgtk2.0-0 libxtst6 libxi-dev libasound2 libgtk2.0-0:i386 libxtst6:i386 libasound2:i386 libgcj14-awt:i386 icedtea-plugin
+sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat7 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane ruby gcc make ruby-dev zlib1g-dev patch xvfb x11vnc unzip nodejs meld qtcreator distcc htop synergy gparted eclipse eclipse-jdt libpangoxft-1.0-0:i386 libxv1:i386 libpangox-1.0-0:i386 libgtk2.0-0 libxtst6 libxi-dev libasound2 libgtk2.0-0:i386 libxtst6:i386 libasound2:i386 libgcj14-awt:i386 eclipse-pde eclipse-platform* libtomcat7-java osmosis libpangoxft-1.0-0:i386 libxv1:i386 libpangox-1.0-0:i386 libgtk2.0-0 libxtst6 libxi-dev libasound2 libgtk2.0-0:i386 libxtst6:i386 libasound2:i386 libgcj14-awt:i386 icedtea-pluginsudo apt-get install -y meld qtcreator distcc htop synergy gparted eclipse eclipse-jdt libpangoxft-1.0-0:i386 libxv1:i386 libpangox-1.0-0:i386 libgtk2.0-0 libxtst6 libxi-dev libasound2 libgtk2.0-0:i386 libxtst6:i386 libasound2:i386 libgcj14-awt:i386 eclipse-pde eclipse-platform* libtomcat7-java osmosis libpangoxft-1.0-0:i386 libxv1:i386 libpangox-1.0-0:i386 libgtk2.0-0 libxtst6 libxi-dev libasound2 libgtk2.0-0:i386 libxtst6:i386 libasound2:i386 libgcj14-awt:i386 icedtea-plugin ruby ruby-dev xvfb gcc make zlib1g-dev patch x11vnc unzip nodejs
 sudo apt-get remove qt5-default 
 sudo apt-get autoremove
 if ! dpkg -l | grep --quiet wamerican-insane; then
@@ -54,10 +54,21 @@ if ! dpkg -l | grep --quiet wamerican-insane; then
     sudo dpkg-reconfigure dictionaries-common
 fi
 
-# If you're fed up with unity, then uncomment this for xfce; use 'xfce4-display-settings -m' for display config
+# If you're fed up with unity, then uncomment this for xfce; use 'xfce4-display-settings -m' after install for display config
 # sudo apt-get install xfce4
 
-# Install Chrome browser for Cucumber
+f ! grep --quiet ruby ~/.profile; then
+    echo "Adding ruby to path"
+    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin" >> ~/.profile
+    source ~/.profile
+fi
+
+#sudo gem install mime-types -v 2.6.2
+#sudo gem install capybara -v 2.5.0
+sudo gem install --user-install selenium-cucumber capybara capybara-webkit rspec
+#sudo gem install --user-install selenium-cucumber capybara-webkit rspec
+#sudo gem install cucumber capybara-webkit selenium-webdriver rspec capybara-screenshot
+
 if [ ! -f google-chrome-stable_current_amd64.deb ]; then
     echo "Installing Chrome"
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -65,19 +76,16 @@ if [ ! -f google-chrome-stable_current_amd64.deb ]; then
     sudo apt-get -f install -y
 fi
 
-gem install --user-install selenium-cucumber capybara capybara-webkit rspec
-if ! grep -i --quiet '.gem/ruby/' $HOME/.bashrc; then
-  echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin" >> $HOME/.bashrc
-  echo "export PATH=\$PATH:\$HOME/bin" >> $HOME/.bashrc
-fi
-source $HOME/.bashrc
-
-# Install Chromedriver
 if [ ! -f bin/chromedriver ]; then
     echo "Installing Chromedriver"
     mkdir -p $HOME/bin
-    wget http://chromedriver.storage.googleapis.com/2.20/chromedriver_linux64.zip
+    wget http://chromedriver.storage.googleapis.com/2.14/chromedriver_linux64.zip
     unzip -d $HOME/bin chromedriver_linux64.zip
+fi
+if ! grep --quiet "$HOME/bin" ~/.profile; then
+    echo "Adding chromedriver to path"
+    echo "export PATH=\$PATH:\$HOME/bin" >> ~/.profile
+    source ~/.profile
 fi
 
 # Hoot Baseline is PostgreSQL 9.1 and PostGIS 1.5, so we need a deb file and
@@ -405,7 +413,7 @@ EOT
   hadoop jar ./hadoop-0.20.2-examples.jar pi 2 100
 fi
 
-# Eclipse configuration - You will still need to configure eclipse after this (web server integration, extensions, etc.)
+# Eclipse configuration - You will still need to configure eclipse after this (web server integration, extensions, etc.; see Developer's Guide for details)
 
 if ! grep -i --quiet '-Xmx' /etc/eclipse.ini; then
   echo "Configuring Eclipse..."
@@ -426,8 +434,6 @@ sudo bash -c "cat >> /etc/eclipse.ini" <<EOT
 EOT
 fi
 
-# end developer tools extra setup
-
 cd $HOME
 if [ ! -d $HOOT_HOME/hoot-core ]; then
   git clone https://github.com/ngageoint/hootenanny.git hoot
@@ -435,20 +441,10 @@ fi
 cd hoot
 source ./SetupEnv.sh
 
-# Tweak dev environment to make tests run faster
-if [ ! -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
-    echo 'testJobStatusPollerTimeout=250' > $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
-fi
-
 # Update the init.d script for node-mapnik-server
-if [ ! -d /etc/init.d/node-mapnik-server ]; then
-  sudo cp node-mapnik-server/init.d/node-mapnik-server /etc/init.d
-  sudo chmod a+x /etc/init.d/node-mapnik-server
-  # Make sure all npm modules are installed
-  cd node-mapnik-server
-  sudo npm install
-  cd ..
-fi
+sudo cp node-mapnik-server/init.d/node-mapnik-server /etc/init.d
+sudo chmod a+x /etc/init.d/node-mapnik-server
+# npm modules are installed when tomcat is deployed, which occurs when the --with-uitests option is enabled.
 
 # Check that hoot-ui submodule has been init'd and updated
 if [ ! "$(ls -A hoot-ui)" ]; then
@@ -459,7 +455,7 @@ fi
 
 # Build Hoot
 echo "Configuring Hoot"
-aclocal && autoconf && autoheader && automake && ./configure -q --with-rnd --with-services
+aclocal && autoconf && autoheader && automake && ./configure -q --with-rnd --with-services --with-uitests
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri'
     cp LocalConfig.pri.orig LocalConfig.pri
