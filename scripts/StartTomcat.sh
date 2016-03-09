@@ -5,8 +5,6 @@ BASEDIR=$(dirname $0)
 if [ -f $BASEDIR/../Config.sh ]; then
   source $BASEDIR/../Config.sh
 else
-  # must be running in the hoot dir
-  export HOOT_HOME=$(dirname $0)
   source $HOOT_HOME/conf/Config.sh
 fi
 

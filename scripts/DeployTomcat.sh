@@ -6,8 +6,6 @@ BASEDIR=$(dirname $0)
 if [ -f $BASEDIR/../Config.sh ]; then
   source $BASEDIR/../Config.sh
 else
-  # must be running in the hoot dir
-  export HOOT_HOME=$(dirname $0)
   source $HOOT_HOME/conf/Config.sh
 fi
 
@@ -37,7 +35,7 @@ sed -i s/8096/$P2P_PORT/g $TOMCAT6_HOME/webapps/hootenanny-id/data/hootConfig.js
 # set the node-mapnik-server port as described in Config.sh
 sed -i s/8000/$NODE_MAPNIK_SERVER_PORT/g $TOMCAT6_HOME/webapps/hootenanny-id/data/hootConfig.json
 
-rm webapps/hootenanny-id/css/img
+rm -rf $TOMCAT6_HOME/webapps/hootenanny-id/css/img
 cp -R $TOMCAT6_HOME/webapps/hootenanny-id/dist/img $TOMCAT6_HOME/webapps/hootenanny-id/css/
 
 $HOOT_HOME/scripts/StartTomcat.sh

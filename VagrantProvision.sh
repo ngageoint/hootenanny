@@ -252,7 +252,9 @@ fi
 # Update the init.d script for node-mapnik-server
 sudo cp node-mapnik-server/init.d/node-mapnik-server /etc/init.d
 sudo chmod a+x /etc/init.d/node-mapnik-server
-# npm modules are installed when tomcat is deployed
+# npm modules are installed when tomcat is deployed, which occurs when the --with-uitests option is enabled.
+
+export HOOT_HOME=/home/vagrant/hoot
 
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'
@@ -271,11 +273,6 @@ echo "Building Hoot"
 make clean -sj$(nproc)
 make -sj$(nproc)
 make docs -sj$(nproc)
-
-# Deploy to Tomcat
-#echo "Deploying Hoot to Tomcat"
-##sudo -u tomcat6 scripts/vagrantDeployTomcat.sh
-#sudo -u tomcat6 scripts/DeployTomcat.sh
 
 # Run Tests
 #echo "Running tests"
