@@ -245,7 +245,7 @@ if [ ! -d /usr/share/tomcat6/.deegree ]; then
 fi
 
 # Update the init.d script for node-mapnik-server
-sudo cp node-mapnik-server/init.d/node-mapnik-server /etc/init.d
+sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
 sudo chmod a+x /etc/init.d/node-mapnik-server
 # npm modules are installed when tomcat is deployed, which occurs when the --with-uitests option is enabled.
 
