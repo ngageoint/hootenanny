@@ -48,7 +48,6 @@ vagrant plugin install vagrant-vmware-workstation
 
 # *On Windows hosts,*
 
-* Be sure to clone with the `--config core.autocrlf=input` option.
 * Windows hosts will also have to create a symlink that's in the git repo, but seems to be treated as a file when cloning to windows.
 
     `vagrant ssh`
