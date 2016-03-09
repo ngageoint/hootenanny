@@ -38,12 +38,12 @@ if [ ! -f google-chrome-stable_current_amd64.deb ]; then
 fi
 
 # Install gems for Cucumber
-sudo gem install --user-install selenium-cucumber capybara capybara-webkit rspec
 if ! grep --quiet ruby/1.9.1/bin ~/.profile; then
     echo "Adding ruby to path"
     echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin" >> ~/.profile
     source ~/.profile
 fi
+sudo gem install --user-install selenium-cucumber capybara capybara-webkit rspec
 
 # Install Chromedriver for Cucumber
 if [ ! -f bin/chromedriver ]; then
@@ -54,7 +54,7 @@ if [ ! -f bin/chromedriver ]; then
 fi
 if ! grep --quiet /home/vagrant/bin ~/.profile; then
     echo "Adding chromedriver to path"
-    echo "export PATH=\$PATH:\$HOME/bin" >> $~/.profile
+    echo "export PATH=\$PATH:\$HOME/bin" >> ~/.profile
     source ~/.profile
 fi
 
@@ -225,7 +225,7 @@ fi
 
 # Remove gdal libs installed by libgdal-dev that interfere with
 # renderdb-export-server using gdal libs compiled from source (fgdb support)
-if [ -f /usr/lib/libgdal.* ]; then
+if [ -f "/usr/lib/libgdal.*" ]; then
     echo "Removing GDAL libs installed by libgdal-dev"
     sudo rm /usr/lib/libgdal.*
 fi
@@ -263,6 +263,7 @@ touch Vagrant.marker
 
 # Build Hoot
 echo "Configuring Hoot"
+cd $HOOT_HOME
 aclocal && autoconf && autoheader && automake && ./configure -q --with-rnd --with-services --with-uitests
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri'
