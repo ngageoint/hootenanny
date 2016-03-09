@@ -176,10 +176,6 @@ plugins/tds40_schema.js: scripts/ConvertTDSv40Schema.py conf/nfdd/LTDSv40.csv.gz
 	mkdir -p $(@D)
 	$^ > $@ || (rm -f $@ ; exit -1)
 
-plugins/mgcp_schema.js: scripts/ConvertMGCPSchema.py conf/gait/MGCP4_SchemaInfo_GAIT21.txt.gz
-	mkdir -p $(@D)
-	$^ > $@ || (rm -f $@ ; exit -1)
-
 #### TDSv40
 plugins/tds40_full_schema.js: scripts/ConvertTDSv40Schema.py conf/nfdd/TDSv40.csv.gz
 	mkdir -p $(@D)
