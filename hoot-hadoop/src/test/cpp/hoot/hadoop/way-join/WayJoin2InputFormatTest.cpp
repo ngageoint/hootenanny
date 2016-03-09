@@ -31,6 +31,9 @@
 #include <pp/io/CppSeqFile.h>
 using namespace pp;
 
+// Tgs
+#include <tgs/Statistics/Random.h>
+
 // Standard
 #include <iostream>
 #include <stdlib.h>

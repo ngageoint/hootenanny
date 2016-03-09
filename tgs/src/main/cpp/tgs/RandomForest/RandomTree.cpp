@@ -40,7 +40,8 @@
 #include <vector>
 
 //TGS Includes
-#include "../TgsException.h"
+#include <tgs/TgsException.h>
+#include <tgs/Statistics/Random.h>
 
 namespace Tgs
 {
@@ -415,7 +416,7 @@ namespace Tgs
   {
     try
     {
-      srand((unsigned int)_treeId);
+      Tgs::Random::instance()->s_seed((unsigned int)_treeId);
 
       //std::cout << "Train Tree" << std::endl;
       _factPerNode = numFactors;

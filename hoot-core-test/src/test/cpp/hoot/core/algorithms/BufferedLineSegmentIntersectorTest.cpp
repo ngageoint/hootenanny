@@ -95,11 +95,6 @@ public:
     return true;
   }
 
-  double rnd()
-  {
-    return (double)rand() / (double)RAND_MAX;
-  }
-
   void runCircleTest()
   {
     {
@@ -151,7 +146,7 @@ public:
 
   void runRandomTest()
   {
-    srand(0);
+    Tgs::Random::instance()->s_seed(0);
     BufferedLineSegmentIntersector uut;
 
     double scale = 5;
@@ -163,9 +158,15 @@ public:
     size_t count = 1000;
     for (size_t i = 0; i < count; i++)
     {
-      double r = rnd() * 3.0;
-      LineSegment ls1(rnd() * scale, rnd() * scale, rnd() * scale, rnd() * scale);
-      LineSegment ls2(rnd() * scale, rnd() * scale, rnd() * scale, rnd() * scale);
+      double r = Tgs::Random::instance()->s_generateDouble() * 3.0;
+      LineSegment ls1(Tgs::Random::instance()->s_generateDouble() * scale,
+                      Tgs::Random::instance()->s_generateDouble() * scale,
+                      Tgs::Random::instance()->s_generateDouble() * scale,
+                      Tgs::Random::instance()->s_generateDouble() * scale);
+      LineSegment ls2(Tgs::Random::instance()->s_generateDouble() * scale,
+                      Tgs::Random::instance()->s_generateDouble() * scale,
+                      Tgs::Random::instance()->s_generateDouble() * scale,
+                      Tgs::Random::instance()->s_generateDouble() * scale);
 
       LineSegment lsGeos;
       double start = Tgs::Time::getTime();

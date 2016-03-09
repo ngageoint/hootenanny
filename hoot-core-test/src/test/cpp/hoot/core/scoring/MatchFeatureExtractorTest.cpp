@@ -41,6 +41,9 @@
 #include <hoot/core/manipulators/WayMerger.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
 
+// Tgs
+#include <tgs/Statistics/Random.h>
+
 // Qt
 #include <QDir>
 #include <QFile>
@@ -67,7 +70,7 @@ public:
   {
     OsmReader reader;
 
-    srand(0);
+    Tgs::Random::instance()->s_seed(0);
     OsmMap::resetCounters();
 
     shared_ptr<OsmMap> map(new OsmMap());
