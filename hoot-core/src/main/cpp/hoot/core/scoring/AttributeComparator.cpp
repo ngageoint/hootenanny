@@ -73,13 +73,13 @@ double AttributeComparator::compareMaps()
   for (int i = 0; i < _iterations * 4 && (int)scores.size() < _iterations; i++)
   {
     // generate a random source point
-    _r.x = Random::generateUniform() * (_projectedBounds.MaxX - _projectedBounds.MinX) +
+    _r.x = Random::instance()->generateUniform() * (_projectedBounds.MaxX - _projectedBounds.MinX) +
           _projectedBounds.MinX;
-    _r.y = Random::generateUniform() * (_projectedBounds.MaxY - _projectedBounds.MinY) +
+    _r.y = Random::instance()->generateUniform() * (_projectedBounds.MaxY - _projectedBounds.MinY) +
           _projectedBounds.MinY;
 
     // pick one map as the reference map
-    if (Random::coinToss())
+    if (Random::instance()->coinToss())
     {
       referenceMap = _mapP1;
       otherMap = _mapP2;

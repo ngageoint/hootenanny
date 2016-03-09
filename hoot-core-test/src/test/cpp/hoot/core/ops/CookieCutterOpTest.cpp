@@ -80,7 +80,6 @@ public:
     uut.setAlpha(1000.0);
     uut.setAlphaShapeBuffer(0.0);
     uut.setCrop(false);
-    uut.setOutputBuffer(0.0);
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);

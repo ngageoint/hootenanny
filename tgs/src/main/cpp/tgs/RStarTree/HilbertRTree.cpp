@@ -37,6 +37,7 @@ using namespace std;
 #include "HilbertCurve.h"
 #include "PageStore.h"
 #include "RTreeNode.h"
+#include <tgs/Statistics/Random.h>
 
 using namespace Tgs;
 
@@ -187,9 +188,9 @@ int HilbertRTree::_chooseWeightedChild(const std::vector<double>& weights)
   }
   if (sum == 0.0)
   {
-    return rand() % weights.size();
+    return Tgs::Random::instance()->s_generateInt() % weights.size();
   }
-  double r = (double)rand() / (double)RAND_MAX * sum;
+  double r = Tgs::Random::instance()->s_generateUniform() * sum;
   double incr = 0.0;
   for (unsigned int i = 0; i < weights.size(); i++)
   {
@@ -406,7 +407,7 @@ double HilbertRTree::_swapGrandChildNodes(int parentId, const std::vector<double
   int childIndex = _chooseWeightedChild(overlaps);
   int childId = parent->getChildNodeId(childIndex);
   RTreeNode* child = _getNode(childId);
-  int grandChildOffset = rand() % child->getChildCount();
+  int grandChildOffset = Tgs::Random::instance()->s_generateInt() % child->getChildCount();
 
   std::vector<double> tmp = overlaps;
   tmp[childIndex] = 0.0;
@@ -414,7 +415,7 @@ double HilbertRTree::_swapGrandChildNodes(int parentId, const std::vector<double
   int otherChildIndex = _chooseWeightedChild(tmp);
   int otherChildId = parent->getChildNodeId(otherChildIndex);
   RTreeNode* otherChild = _getNode(otherChildId);
-  int otherGrandChildOffset = rand() % otherChild->getChildCount();
+  int otherGrandChildOffset = Tgs::Random::instance()->s_generateInt() % otherChild->getChildCount();
   int otherGrandChildId = otherChild->getChildId(otherGrandChildOffset);
   Box otherGrandChildBox = otherChild->getChildEnvelope(otherGrandChildOffset).toBox();
 

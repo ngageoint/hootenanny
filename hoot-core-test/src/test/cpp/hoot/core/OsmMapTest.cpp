@@ -52,6 +52,7 @@ using namespace hoot;
 // TGS
 #include <tgs/RStarTree/KnnIterator.h>
 #include <tgs/RStarTree/RStarTreePrinter.h>
+#include <tgs/Statistics/Random.h>
 using namespace Tgs;
 
 #include "TestUtils.h"
@@ -407,7 +408,8 @@ public:
 
     for (int i = 0; i < 10; i++)
     {
-      KnnIterator it(tree.get(), rand() % 200 - 100, rand() % 200 - 100);
+      KnnIterator it(tree.get(), Tgs::Random::instance()->s_generateInt() % 200 - 100,
+                                 Tgs::Random::instance()->s_generateInt() % 200 - 100);
 
       double lastDistance = 0.0;
       while (it.hasNext())

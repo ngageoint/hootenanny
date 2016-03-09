@@ -44,6 +44,7 @@ using namespace std;
 #include <tgs/FeatureExtraction/ConstantCalculatorNodeSource.h>
 #include <tgs/FeatureExtraction/FitnessFunction.h>
 #include <tgs/FeatureExtraction/VectorCalculatorNodeSource.h>
+#include <tgs/Statistics/Random.h>
 #include "../PluginFactory.h"
 
 #define ASSERT_DBL_EQL(expected, actual) CPPUNIT_ASSERT_DOUBLES_EQUAL(expected, actual, 1e-4)
@@ -102,7 +103,7 @@ namespace Tgs
       std::vector<double> v;
       for (unsigned int i = 0; i < 10; i++)
       {
-        v.push_back(rand() % 100);
+        v.push_back(Tgs::Random::instance()->s_generateInt() % 100);
       }
 
       // testing equation ((3 * v) + sqrt(v)) - 2

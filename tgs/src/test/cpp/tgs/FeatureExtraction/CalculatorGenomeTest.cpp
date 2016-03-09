@@ -126,12 +126,12 @@ namespace Tgs
     // inspected. I hope to revisit.
     void initializeTest()
     {
-      srand(0);
+      Tgs::Random::instance()->s_seed(0);
 
       std::vector<double> v;
       for (unsigned int i = 0; i < 10; i++)
       {
-        v.push_back(rand() % 1000);
+        v.push_back(Tgs::Random::instance()->s_generateInt() % 1000);
       }
 
       for (unsigned int i = 0; i < 10; i++)
@@ -279,8 +279,8 @@ namespace Tgs
       v2.resize(SAMPLE_SIZE);
       for (int i = 0; i < SAMPLE_SIZE; i++)
       {
-        v1[i] = rand();
-        v2[i] = rand();
+        v1[i] = Tgs::Random::instance()->s_generateInt();
+        v2[i] = Tgs::Random::instance()->s_generateInt();
       }
 
       double vweight = 1.0 / (VARIABLE_SIZE + 2) * (params.find("variableWeight")->second.value);
@@ -307,7 +307,7 @@ namespace Tgs
         std::vector<double> bad;
         for (int i = 0; i < SAMPLE_SIZE; i++)
         {
-          bad.push_back(rand());
+          bad.push_back(Tgs::Random::instance()->s_generateInt());
         }
         shared_ptr<VectorCalculatorNodeSource> src(new VectorCalculatorNodeSource(bad));
         src->setLabel(strm.str() + "[]");
@@ -328,8 +328,8 @@ namespace Tgs
       {
         for (int i = 0; i < SAMPLE_SIZE; i++)
         {
-          v1[i] = rand();
-          v2[i] = rand();
+          v1[i] = Tgs::Random::instance()->s_generateInt();
+          v2[i] = Tgs::Random::instance()->s_generateInt();
         }
         fitness->setValues(v1, v2);
         good1->setSource(v1);
@@ -339,7 +339,7 @@ namespace Tgs
           std::vector<double> bad;
           for (int i = 0; i < SAMPLE_SIZE; i++)
           {
-            bad.push_back(rand());
+            bad.push_back(Tgs::Random::instance()->s_generateInt());
           }
           badGenome[j]->setSource(bad);
         }

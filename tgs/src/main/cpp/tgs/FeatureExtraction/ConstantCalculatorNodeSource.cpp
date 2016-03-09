@@ -79,7 +79,7 @@ namespace Tgs
       _sigma = 1.0;
     }
     //cout << "ConstantCalculatorNodeSource::mutate isn't implemented." << endl;
-    double newV = Random::generateGaussian(_v, _sigma); 
+    double newV = Random::instance()->generateGaussian(_v, _sigma);
     _oldVs.push_back(newV);
 
     double mean = 0.0;

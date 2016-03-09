@@ -31,6 +31,9 @@
 #include <stdlib.h>
 #include <time.h>
 
+//  Tgs
+#include <tgs/Statistics/Random.h>
+
 #include "WayJoin1Mapper.h"
 
 namespace hoot
@@ -50,7 +53,7 @@ WayJoin2Mapper::WayJoin2Mapper()
   _key = (KeyStruct*)_keyStr.data();
 
   _nodeMap.reset(new OsmMap());
-  srand(time(NULL));
+  Tgs::Random::instance()->s_seed(time(NULL));
 }
 
 void WayJoin2Mapper::_emitNode(const shared_ptr<Node>& n)
@@ -71,7 +74,7 @@ void WayJoin2Mapper::_flushNodes()
   {
     LOG_INFO("Flushing nodes. " << _nodeMap->getNodeMap().size());
     _key->elementType = NodesType;
-    _key->id = rand();
+    _key->id = Tgs::Random::instance()->s_generateInt();
     stringstream ss(stringstream::out);
     pp::DataOutputStream dos(ss);
 
