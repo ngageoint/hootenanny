@@ -40,6 +40,7 @@
 #include <tgs/RStarTree/KnnIteratorNd.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
 #include <tgs/RStarTree/Page.h>
+#include <tgs/Statistics/Random.h>
 
 #include "../PluginFactory.h"
 
@@ -108,7 +109,7 @@ public:
       testId[i] = i;
       for (int j = 0; j < dimensions; j++)
       {
-        double v = rand();
+        double v = Tgs::Random::instance()->s_generateInt();
         testData[i].setBounds(j, v, v);
       }
     }
@@ -124,9 +125,9 @@ public:
     tree->bulkInsert(testData, testId);
     std::vector<double> pt;
     pt.resize(3);
-    pt[0] = rand();
-    pt[1] = rand();
-    pt[2] = rand();
+    pt[0] = Tgs::Random::instance()->s_generateInt();
+    pt[1] = Tgs::Random::instance()->s_generateInt();
+    pt[2] = Tgs::Random::instance()->s_generateInt();
     KnnIteratorNd it(tree.get(), pt);
     std::vector<Distance> verficationData;
     for (unsigned int i = 0; i < 10; i++)
@@ -143,9 +144,9 @@ public:
       }
       CPPUNIT_ASSERT_EQUAL((int)verficationData.size(), idx);
 
-      pt[0] = rand();
-      pt[1] = rand();
-      pt[2] = rand();
+      pt[0] = Tgs::Random::instance()->s_generateInt();
+      pt[1] = Tgs::Random::instance()->s_generateInt();
+      pt[2] = Tgs::Random::instance()->s_generateInt();
       it.reset(pt);
     }
   }
