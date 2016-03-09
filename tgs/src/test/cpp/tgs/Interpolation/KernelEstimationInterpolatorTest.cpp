@@ -79,8 +79,8 @@ public:
     double n0 = Normal::normal(0, 0.5);
     for (size_t i = 0; i < 100; i++)
     {
-      d[0] = Random::generateUniform() * 2 - 1;
-      d[1] = Random::generateUniform() * 2 - 1;
+      d[0] = Random::instance()->generateUniform() * 2 - 1;
+      d[1] = Random::instance()->generateUniform() * 2 - 1;
       double e = sqrt(d[0] * d[0] + d[1] * d[1]);
       d[2] = Normal::normal(e, .5) / n0;
       df.addDataVector("", d);
@@ -100,14 +100,14 @@ public:
 
   void optimizationTest()
   {
-    srand(0);
+    Random::instance()->seed(0);
 
     shared_ptr<KernelEstimationInterpolator> di = buildRandom();
     KernelEstimationInterpolator& uut = *di;
     uut.setStopDelta(0.0001);
     uut.setSigma(-1);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.155, uut.getSigma(), 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.152, uut.getSigma(), 0.001);
 
 //    // write out as a .pgm image
 //    ofstream fs;
@@ -146,14 +146,14 @@ public:
 
   void serializationTest()
   {
-    srand(0);
+    Random::instance()->seed(0);
 
     shared_ptr<KernelEstimationInterpolator> di = buildRandom();
     KernelEstimationInterpolator& uut = *di;
     uut.setStopDelta(0.0001);
     uut.setSigma(0.3);
 
-    srand(0);
+    Tgs::Random::instance()->s_seed(0);
     double error = uut.estimateError();
 
     QBuffer buf;
@@ -166,7 +166,7 @@ public:
 
     KernelEstimationInterpolator copy;
     copy.readInterpolator(buf);
-    srand(0);
+    Tgs::Random::instance()->s_seed(0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(error, copy.estimateError(), 0.0001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3, copy.getSigma(), 0.0001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0001, copy.getStopDelta(), 0.0001);
@@ -174,7 +174,7 @@ public:
 
   void simpleTest()
   {
-    srand(0);
+    Random::instance()->seed(0);
     KernelEstimationInterpolator uut(.1);
 
     shared_ptr<DataFrame> dfPtr(new DataFrame());
@@ -192,8 +192,8 @@ public:
 
     for (size_t i = 0; i < 500; i++)
     {
-      d[0] = Random::generateUniform() * 2 - 1;
-      d[1] = Random::generateUniform() * 2 - 1;
+      d[0] = Random::instance()->generateUniform() * 2 - 1;
+      d[1] = Random::instance()->generateUniform() * 2 - 1;
       d[2] = Normal::normal(d[0], .5);
       df.addDataVector("", d);
     }
@@ -208,9 +208,9 @@ public:
     uut.setDependentColumns(dep);
 
     uut.setSigma(0.002);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3247, uut.estimateError(), 0.0001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3251, uut.estimateError(), 0.0001);
     uut.setSigma(0.008);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0721615, uut.estimateError(), 0.00001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0779994, uut.estimateError(), 0.00001);
   }
 
 };

@@ -41,6 +41,7 @@
 #include <QStringList>
 
 // Tgs
+#include <tgs/Statistics/Random.h>
 #include <tgs/System/Time.h>
 
 #include "../../TestUtils.h"
@@ -249,8 +250,8 @@ public:
 
     for (size_t i = 0; i < 1000; ++i)
     {
-      double x = rand() / (double)RAND_MAX * 100.0;
-      double y = rand() / (double)RAND_MAX * 100.0;
+      double x = Tgs::Random::instance()->s_generateUniform() * 100.0;
+      double y = Tgs::Random::instance()->s_generateUniform() * 100.0;
       keys.push_back(DummyData(x, y));
       values.push_back(i);
     }
@@ -271,10 +272,10 @@ public:
       double indexTime = 0.0;
       for (int i = 0; i < testCount; i++)
       {
-        double x = rand() / (double)RAND_MAX * 300.0 - 150.0;
-        double y = rand() / (double)RAND_MAX * 300.0 - 150.0;
+        double x = Tgs::Random::instance()->s_generateUniform() * 300.0 - 150.0;
+        double y = Tgs::Random::instance()->s_generateUniform() * 300.0 - 150.0;
         Coordinate c(x, y);
-        double radius = rand() / (double)RAND_MAX * 10;
+        double radius = Tgs::Random::instance()->s_generateUniform() * 10;
         double start = Tgs::Time::getTime();
         set<int> base = bruteForce(c, radius, keys);
         bruteForceTime += Tgs::Time::getTime() - start;

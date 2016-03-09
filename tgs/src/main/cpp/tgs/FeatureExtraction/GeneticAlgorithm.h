@@ -61,7 +61,7 @@ namespace Tgs
       int count = 0;
       do 
       {
-        v = Random::generateGaussian(value, sigma * temp);
+        v = Random::instance()->generateGaussian(value, sigma * temp);
         count++;
       } while ((v < min || v > max) && count < 10);
       // force the value within bounds, just in case we couldn't do it in ten tries

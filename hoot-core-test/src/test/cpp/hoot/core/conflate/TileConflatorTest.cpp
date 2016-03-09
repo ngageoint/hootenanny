@@ -38,6 +38,9 @@
 #include <hoot/core/util/Settings.h>
 using namespace hoot;
 
+// Tgs
+#include <tgs/Statistics/Random.h>
+
 // Boost
 using namespace boost;
 
@@ -66,7 +69,7 @@ public:
 
   void runToyTest()
   {
-    srand(0);
+    Tgs::Random::instance()->s_seed(0);
     OsmMap::resetCounters();
     Settings::getInstance().clear();
     conf().set(ConfigOptions().getUuidHelperRepeatableKey(), true);
