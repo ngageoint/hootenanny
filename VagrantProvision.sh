@@ -39,12 +39,10 @@ fi
 
 # Install gems for Cucumber
 sudo gem install --user-install selenium-cucumber capybara capybara-webkit rspec
-
-if ! grep --quiet ruby/1.9.1/bin $HOME/.bashrc; then
-    echo "Adding ruby and chromedriver to path"
-    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin" >> $HOME/.bashrc
-    echo "export PATH=\$PATH:\$HOME/bin" >> $HOME/.bashrc
-    source $HOME/.bashrc
+if ! grep --quiet ruby/1.9.1/bin ~/.profile; then
+    echo "Adding ruby to path"
+    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin" >> ~/.profile
+    source ~/.profile
 fi
 
 # Install Chromedriver for Cucumber
@@ -53,6 +51,11 @@ if [ ! -f bin/chromedriver ]; then
     mkdir -p /home/vagrant/bin
     wget http://chromedriver.storage.googleapis.com/2.14/chromedriver_linux64.zip
     unzip -d /home/vagrant/bin chromedriver_linux64.zip
+fi
+if ! grep --quiet /home/vagrant/bin ~/.profile; then
+    echo "Adding chromedriver to path"
+    echo "export PATH=\$PATH:\$HOME/bin" >> $~/.profile
+    source ~/.profile
 fi
 
 # Hoot Baseline is PostgreSQL 9.1 and PostGIS 1.5, so we need a deb file and
