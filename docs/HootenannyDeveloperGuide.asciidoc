@@ -4,9 +4,8 @@ DigitalGlobe, Inc.
 :Email: hootenanny@digitalglobe.com
 
 include::developer/HootenannyDevelopmentEnvironmentSetupInstructions.asciidoc[]
-include::developer/HootenannyDevelopmentVagrantSetup.asciidoc[]
 include::developer/HootenannyTroubleshooting.asciidoc[]
-include::developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc[]
-include::developer/HootenannyDevelopmentAdvancedOptionsInfo.asciidoc[]
 include::developer/HootenannyWebArchitecture_Intro.asciidoc[]
-include::developer/Cucumber.asciidoc[]
+include::developer/HootenannyDevelopmentAdvancedOptionsInfo.asciidoc[]
+include::developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc[]
+
