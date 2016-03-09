@@ -109,6 +109,7 @@ endif
 
 pp-test:
 ifneq ($(HADOOP_HOME),)
+	echo Running pretty-pipes tests...
 	cd pretty-pipes/pp-lib/ ; $(MAKE) -f Makefile.mvn test
 endif
 
