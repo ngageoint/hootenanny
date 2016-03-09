@@ -38,12 +38,17 @@ if [ ! -f google-chrome-stable_current_amd64.deb ]; then
 fi
 
 # Install gems for Cucumber
-if ! grep --quiet ruby/1.9.1/bin ~/.profile; then
+if ! grep --quiet ruby ~/.profile; then
     echo "Adding ruby to path"
     echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin" >> ~/.profile
     source ~/.profile
 fi
-sudo gem install --user-install selenium-cucumber capybara capybara-webkit rspec
+
+sudo gem install mime-types -v 2.6.2
+sudo gem install capybara -v 2.5.0
+#sudo gem install --user-install selenium-cucumber capybara capybara-webkit rspec
+sudo gem install --user-install selenium-cucumber capybara-webkit rspec
+#sudo gem install cucumber capybara-webkit selenium-webdriver rspec capybara-screenshot
 
 # Install Chromedriver for Cucumber
 if [ ! -f bin/chromedriver ]; then
@@ -264,6 +269,7 @@ touch Vagrant.marker
 # Build Hoot
 echo "Configuring Hoot"
 cd $HOOT_HOME
+cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
 aclocal && autoconf && autoheader && automake && ./configure -q --with-rnd --with-services --with-uitests
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri'
