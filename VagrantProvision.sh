@@ -270,7 +270,7 @@ touch Vagrant.marker
 echo "Configuring Hoot"
 cd $HOOT_HOME
 cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
-aclocal && autoconf && autoheader && automake && ./configure -q --with-rnd --with-services --with-uitests
+aclocal && autoconf && autoheader && automake && ./configure --with-rnd --with-services --with-uitests
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri'
     cp LocalConfig.pri.orig LocalConfig.pri
