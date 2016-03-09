@@ -249,18 +249,10 @@ if [ ! -d /usr/share/tomcat6/.deegree ]; then
     sudo chown tomcat6:tomcat6 /usr/share/tomcat6/.deegree
 fi
 
-# Tweak dev environment to make tests run faster
-if [ ! -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
-    echo 'testJobStatusPollerTimeout=250' > $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
-fi
-
 # Update the init.d script for node-mapnik-server
 sudo cp node-mapnik-server/init.d/node-mapnik-server /etc/init.d
 sudo chmod a+x /etc/init.d/node-mapnik-server
-# Make sure all npm modules are installed
-cd node-mapnik-server
-npm install
-cd ..
+# npm modules are installed when tomcat is deployed
 
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'

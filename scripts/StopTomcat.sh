@@ -22,8 +22,7 @@ fi
 
   [ -d $TOMCAT6_HOME/webapps ] || (echo Please set TOMCAT6_HOME; exit -1)
   
-  cd $TOMCAT6_HOME
-  bin/shutdown.sh || true
+  $TOMCAT6_HOME/bin/shutdown.sh || true
   sleep 10
   # If the stop didn't work kill it hard
   pkill -9 -f $TOMCAT6_HOME"/endorsed" || true

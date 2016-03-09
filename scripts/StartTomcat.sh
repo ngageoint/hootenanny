@@ -25,9 +25,8 @@ hoot version &> /dev/null || (echo Please make sure hoot is in your PATH.; exit 
 
 echo Starting Tomcat.  Making connection attempts... 
 
-cd $TOMCAT6_HOME
 #printOnError bin/catalina.sh start
-bin/startup.sh
+$TOMCAT6_HOME/bin/startup.sh
 
 # Wait for tomcat to start
 COUNT=0
