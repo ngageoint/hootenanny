@@ -17,7 +17,7 @@ fi
 
 # Install dependencies
 echo "Installing dependencies"
-sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane
+sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane ruby ruby-dev xvfb gcc make zlib1g-dev patch x11vnc unzip nodejs
 
 if ! dpkg -l | grep --quiet wamerican-insane; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
@@ -26,12 +26,6 @@ if ! dpkg -l | grep --quiet wamerican-insane; then
     sudo /usr/share/debconf/fix_db.pl
     sudo dpkg-reconfigure dictionaries-common
 fi
-
-# Install deps for Cucumber tests
-sudo apt-get install ruby ruby-dev xvfb
-sudo gem install mime-types -v 2.6.2
-sudo gem install capybara -v 2.5.0
-sudo gem install cucumber capybara-webkit selenium-webdriver rspec capybara-screenshot
 
 sudo apt-get autoremove -y
 
@@ -43,11 +37,21 @@ if [ ! -f google-chrome-stable_current_amd64.deb ]; then
     sudo apt-get -f install -y
 fi
 
-# Install Chromedriver
+# Install gems for Cucumber
+sudo gem install --user-install selenium-cucumber capybara capybara-webkit rspec
+
+if ! grep --quiet ruby/1.9.1/bin $HOME/.bashrc; then
+    echo "Adding ruby and chromedriver to path"
+    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin" >> $HOME/.bashrc
+    echo "export PATH=\$PATH:\$HOME/bin" >> $HOME/.bashrc
+    source $HOME/.bashrc
+fi
+
+# Install Chromedriver for Cucumber
 if [ ! -f bin/chromedriver ]; then
     echo "Installing Chromedriver"
     mkdir -p /home/vagrant/bin
-    wget http://chromedriver.storage.googleapis.com/2.20/chromedriver_linux64.zip
+    wget http://chromedriver.storage.googleapis.com/2.14/chromedriver_linux64.zip
     unzip -d /home/vagrant/bin chromedriver_linux64.zip
 fi
 
@@ -260,7 +264,7 @@ touch Vagrant.marker
 
 # Build Hoot
 echo "Configuring Hoot"
-aclocal && autoconf && autoheader && automake && ./configure -q --with-rnd --with-services
+aclocal && autoconf && autoheader && automake && ./configure -q --with-rnd --with-services --with-uitests
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri'
     cp LocalConfig.pri.orig LocalConfig.pri
@@ -271,11 +275,13 @@ make clean -sj$(nproc)
 make -sj$(nproc)
 make docs -sj$(nproc)
 
+# Deploy to Tomcat
+echo "Deploying Hoot to Tomcat"
+#sudo -u tomcat6 scripts/vagrantDeployTomcat.sh
+export TOMCAT6_HOME=/var/lib/tomcat6
+sudo -u tomcat6 scripts/DeployTomcat.sh
+
 # Run Tests
 #echo "Running tests"
 #make -sj$(nproc) test
 #make -sj$(nproc) test-all
-
-# Deploy to Tomcat
-echo "Deploying Hoot to Tomcat"
-sudo -u tomcat6 scripts/vagrantDeployTomcat.sh

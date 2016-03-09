@@ -18,6 +18,7 @@ HOOT_OPTS+= -D services.db.writer.overwrite.map=true -D services.db.writer.creat
 HOOT_OPTS+= -D "services.db.writer.email=test@test.com" -D "services.db.reader.email=test@test.com"
 
 test:
+	echo Running user interface tests...
 	rm -f tmp/TestRun.log*
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcGisRoads.osm $(DB_URL)/DcGisRoadsCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcTigerRoads.osm $(DB_URL)/DcTigerRoadsCucumber
