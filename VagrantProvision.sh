@@ -183,6 +183,8 @@ if [ ! "$(ls -A hoot-ui)" ]; then
     git submodule init && git submodule update
 fi
 
+export TOMCAT6_HOME=/var/lib/tomcat6
+
 # Configure Tomcat
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
 echo "Configuring tomcat6 environment"
@@ -279,10 +281,9 @@ make -sj$(nproc)
 make docs -sj$(nproc)
 
 # Deploy to Tomcat
-echo "Deploying Hoot to Tomcat"
-#sudo -u tomcat6 scripts/vagrantDeployTomcat.sh
-export TOMCAT6_HOME=/var/lib/tomcat6
-sudo -u tomcat6 scripts/DeployTomcat.sh
+#echo "Deploying Hoot to Tomcat"
+##sudo -u tomcat6 scripts/vagrantDeployTomcat.sh
+#sudo -u tomcat6 scripts/DeployTomcat.sh
 
 # Run Tests
 #echo "Running tests"
