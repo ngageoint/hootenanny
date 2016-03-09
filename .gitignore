@@ -93,6 +93,7 @@ Output.osm
 /output.pgm
 plugins/*_schema.js
 plugins/etds*_rules.js
+plugins/emgcp*_rules.js
 plugins-local
 translations-local
 **/*.pro.user*
