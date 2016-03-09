@@ -33,7 +33,7 @@ if ! grep --quiet "export HOOT_HOME" ~/.profile; then
     echo "Adding hoot home to profile"
     echo "export HOOT_HOME=/home/vagrant/hoot" >> ~/.profile
 fi
-if ! grep --quiet "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:\$HOOT_HOME/bin" ~/.profile; then
+if ! grep --quiet "\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:\$HOOT_HOME/bin" ~/.profile; then
     echo "Adding path vars to profile"
     echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:\$HOOT_HOME/bin" >> ~/.profile
 fi
@@ -177,8 +177,13 @@ sudo service postgresql restart
 
 if ! grep --quiet TOMCAT6_HOME ~/.profile; then
     echo "Adding Tomcat to profile"
-    echo "export TOMCAT6_HOME=/var/lib/tomcat6" >> ~/.profile
+    echo "export TOMCAT6_HOME=/usr/share/tomcat6" >> ~/.profile
     source ~/.profile
+    cd $TOMCAT6_HOME
+    sudo ln -s /var/lib/tomcat6/webapps webapps
+    sudo ln -s /var/lib/tomcat6/conf conf
+    sudo ln -s /var/log/tomcat6 log
+    cd ~
 fi
 
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
@@ -238,10 +243,10 @@ if ! grep -i --quiet 'allowLinking="true"' /etc/tomcat6/context.xml; then
 fi
 
 # Create directory for webapp
-if [ ! -d /usr/share/tomcat6/.deegree ]; then
+if [ ! -d $TOMCAT6_HOME/.deegree ]; then
     echo "Creating directory for webapp"
-    sudo mkdir /usr/share/tomcat6/.deegree
-    sudo chown tomcat6:tomcat6 /usr/share/tomcat6/.deegree
+    sudo mkdir $TOMCAT6_HOME/.deegree
+    sudo chown tomcat6:tomcat6 $TOMCAT6_HOME/.deegree
 fi
 
 # Update the init.d script for node-mapnik-server
@@ -266,7 +271,7 @@ if [ ! "$(ls -A hoot-ui)" ]; then
 fi
 source ./SetupEnv.sh
 cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
-aclocal && autoconf && autoheader && automake && ./configure --with-rnd --with-services --with-uitests
+aclocal && autoconf && autoheader && automake && ./configure -q --with-rnd --with-services --with-uitests
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri'
     cp LocalConfig.pri.orig LocalConfig.pri
@@ -274,8 +279,18 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
 fi
 echo "Building Hoot"
 make clean -sj$(nproc)
+# The services build won't always complete the first time, so we're allowing for multiple compiles here.
+echo "  - Make 01: Will take a while to build the training data"
+make -sj$(nproc) &> /dev/null || true
+echo "  - Make 02"
+make -s &> /dev/null || true
+echo "  - Make 03"
 make -sj$(nproc)
-make docs -sj$(nproc)
+make -sj$(nproc) docs 
+echo "Build Success"
+hoot version
+echo "Please follow the instructions in VAGRANT.md to run the Hootenanny tests to ensure the application is working correctly."
+echo "See the 'docs' directory for Hootenanny documentation files."
 
 # Run Tests
 #echo "Running tests"
