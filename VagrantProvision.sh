@@ -174,13 +174,6 @@ fi
 # Restart PostgreSQL
 sudo service postgresql restart
 
-# Check that hoot-ui submodule has been init'd and updated
-if [ ! "$(ls -A hoot-ui)" ]; then
-    echo "hoot-ui is empty"
-    echo "init'ing and updating submodule"
-    git submodule init && git submodule update
-fi
-
 # Configure Tomcat
 
 if ! grep --quiet TOMCAT6_HOME ~/.profile; then
@@ -270,6 +263,12 @@ if ! grep --quiet HOOT_HOME ~/.profile; then
     source ~/.profile
 fi
 cd $HOOT_HOME
+# Check that hoot-ui submodule has been init'd and updated
+if [ ! "$(ls -A hoot-ui)" ]; then
+    echo "hoot-ui is empty"
+    echo "init'ing and updating submodule"
+    git submodule init && git submodule update
+fi
 source ./SetupEnv.sh
 cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
 aclocal && autoconf && autoheader && automake && ./configure --with-rnd --with-services --with-uitests
