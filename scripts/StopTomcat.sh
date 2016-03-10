@@ -11,7 +11,7 @@ fi
 echo Stopping Tomcat...
 
 export CATALINA_BASE=$TOMCAT6_HOME
- export CATALINA_HOME=$TOMCAT6_HOME
+export CATALINA_HOME=$TOMCAT6_HOME
 
 echo Tomcat home: $TOMCAT6_HOME
 
@@ -19,9 +19,9 @@ echo Tomcat home: $TOMCAT6_HOME
   
 $TOMCAT6_HOME/bin/shutdown.sh || true
 sleep 10
-# If the stop didn't work kill it hard
-echo Forcing Tomcat shutdown...
-pkill -9 -f $TOMCAT6_HOME"/endorsed" || true
+# If the stop didn't work, kill it hard.
+#echo Forcing Tomcat shutdown...
+#pkill -9 -f $TOMCAT6_HOME"/endorsed" || true 
 
 echo Tomcat stopped.
 
