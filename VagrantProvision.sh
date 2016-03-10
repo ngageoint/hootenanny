@@ -288,12 +288,13 @@ make -sj$(nproc) &> /dev/null || true
 make -s &> /dev/null || true
 make -sj$(nproc)
 make -sj$(nproc) docs 
-echo "Build Success"
-echo "See the 'docs' directory for Hootenanny documentation files."
 hoot version
-echo "Running tests to ensure Hootenanny was installed correctly."
-make make -sj$(nproc) test-all
-echo "Tests finished.  Report any test errors to hootenanny.help@digitalglobe.com."
+echo "See the 'docs' directory for Hootenanny documentation files."
 echo "Run 'vagrant ssh' to log into the Hootenanny virtual machine."
+
+# If you wish to run the diagnostic tests, uncomment the following lines and then run: 'vagrant provision'.
+#echo "Running tests to ensure Hootenanny was installed correctly."
+#make make -sj$(nproc) test-all
+#echo "Tests finished.  Report any test errors to hootenanny.help@digitalglobe.com."
 
 
