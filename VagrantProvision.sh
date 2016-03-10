@@ -17,7 +17,7 @@ fi
 
 # Install dependencies
 echo "Installing dependencies"
-sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane ruby ruby-dev xvfb gcc make zlib1g-dev patch x11vnc unzip nodejs
+sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane ruby ruby-dev xvfb gcc make zlib1g-dev patch x11vnc unzip nodejs htop
 
 if ! dpkg -l | grep --quiet wamerican-insane; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
@@ -183,7 +183,10 @@ if ! grep --quiet TOMCAT6_HOME ~/.profile; then
     sudo ln -s /var/lib/tomcat6/webapps webapps
     sudo ln -s /var/lib/tomcat6/conf conf
     sudo ln -s /var/log/tomcat6 log
-    #sudo chown -R tomcat6:tomcat6 $TOMCAT6_HOME
+    # TODO: these chown's are probably not good...
+    sudo chown -R vagrant:vagrant $TOMCAT6_HOME
+    sudo chown -R vagrant:vagrant /var/lib/tomcat6
+    sudo chown -R vagrant:vagrant /etc/tomcat6
     cd ~
 fi
 
@@ -278,10 +281,9 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     cp LocalConfig.pri.orig LocalConfig.pri
     echo 'QMAKE_CXX=ccache g++' >> LocalConfig.pri
 fi
-echo "Building Hoot"
+echo "Building Hoot.  Will take several extra minutes to build the training data the first time Hootenanny is installed."
 make clean-all -sj$(nproc)
 # The services build won't always complete the first time without errors (for some unknown reason caused by the Maven pom), so we're executing multiple compiles here to get around that.
-echo "  - Make: During a fresh install, will take several extra minutes to build the training data."
 make -sj$(nproc) &> /dev/null || true
 make -s &> /dev/null || true
 make -sj$(nproc)
@@ -289,6 +291,9 @@ make -sj$(nproc) docs
 echo "Build Success"
 echo "See the 'docs' directory for Hootenanny documentation files."
 hoot version
-echo "Please now run: 'vagrant ssh', and then once logged in run: 'cd $HOOT_HOME && make make -sj$(nproc) test-all' to execute tests that ensure Hootenanny is working correctly."
+echo "Running tests to ensure Hootenanny was installed correctly."
+make make -sj$(nproc) test-all
+echo "Tests finished.  Report any test errors to hootenanny.help@digitalglobe.com."
+echo "Run 'vagrant ssh' to log into the Hootenanny virtual machine."
 
 

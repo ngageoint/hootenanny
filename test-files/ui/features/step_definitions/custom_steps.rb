@@ -118,10 +118,10 @@ When /^I wait ([0-9]*) ([a-z]+) to see "([^"]*)"$/ do |timeout, unit, text|
   else
     throw :badunits
   end
-  oldTimeout = Capybara.default_wait_time
-  Capybara.default_wait_time = Float(timeout) * multiplier
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = Float(timeout) * multiplier
   page.should have_content(text)
-  Capybara.default_wait_time = oldTimeout
+  Capybara.default_max_wait_time = oldTimeout
 end
 
 When /^I wait ([0-9]*) ([a-z]+) to not see "([^"]*)"$/ do |timeout, unit, text|
@@ -132,10 +132,10 @@ When /^I wait ([0-9]*) ([a-z]+) to not see "([^"]*)"$/ do |timeout, unit, text|
   else
     throw :badunits
   end
-  oldTimeout = Capybara.default_wait_time
-  Capybara.default_wait_time = Float(timeout) * multiplier
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = Float(timeout) * multiplier
   page.should have_no_content(text)
-  Capybara.default_wait_time = oldTimeout
+  Capybara.default_max_wait_time = oldTimeout
 end
 
 Then /^I resize the window$/ do

@@ -261,9 +261,8 @@ ui-test-build: services-build build
 ifeq ($(BUILD_UI_TESTS),uitests)
 ifeq ($(BUILD_SERVICES),services)
 	$$HOOT_HOME/scripts/DeployTomcat.sh
-	#sudo -u tomcat6 $$HOOT_HOME/scripts/DeployTomcat.sh $$HOOT_HOME/conf/Config.sh
 else
-	echo "UI build must specify both --with-services and --with-uitests."
+	echo "UI tests must specify both --with-services and --with-uitests."
 endif
 endif
 

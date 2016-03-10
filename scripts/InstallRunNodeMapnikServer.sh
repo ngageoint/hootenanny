@@ -3,6 +3,7 @@ if [ -z "$NODE_MAPNIK_SERVER_PORT" ]; then
     echo "Error: NODE_MAPNIK_SERVER_PORT not set."
     false
 else
+    rm -rf ~/tmp/npm*
     cd $HOOT_HOME
     source SetupEnv.sh
     source conf/DatabaseConfig.sh

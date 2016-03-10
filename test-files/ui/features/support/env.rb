@@ -19,7 +19,7 @@ Capybara.register_driver :chrome do |app|
 end
 Capybara.javascript_driver = DRIVER
 Capybara.default_driver = DRIVER
-Capybara.default_wait_time = 20
+Capybara.default_max_wait_time = 60
 #Capybara.ignore_hidden_elements = false
 
 if DRIVER == :webkit
