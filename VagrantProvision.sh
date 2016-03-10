@@ -183,6 +183,7 @@ if ! grep --quiet TOMCAT6_HOME ~/.profile; then
     sudo ln -s /var/lib/tomcat6/webapps webapps
     sudo ln -s /var/lib/tomcat6/conf conf
     sudo ln -s /var/log/tomcat6 log
+    #sudo chown -R tomcat6:tomcat6 $TOMCAT6_HOME
     cd ~
 fi
 
@@ -278,9 +279,9 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'QMAKE_CXX=ccache g++' >> LocalConfig.pri
 fi
 echo "Building Hoot"
-make clean -sj$(nproc)
+make clean-all -sj$(nproc)
 # The services build won't always complete the first time, so we're allowing for multiple compiles here.
-echo "  - Make 01: Will take a while to build the training data"
+echo "  - Make 01: During a fresh install, will take several minutes to build the training data."
 make -sj$(nproc) &> /dev/null || true
 echo "  - Make 02"
 make -s &> /dev/null || true
@@ -289,7 +290,7 @@ make -sj$(nproc)
 make -sj$(nproc) docs 
 echo "Build Success"
 hoot version
-echo "Please follow the instructions in VAGRANT.md to run the Hootenanny tests to ensure the application is working correctly."
+echo "Please now run 'make test-all' to execute the Hootenanny tests that ensure the application is working correctly."
 echo "See the 'docs' directory for Hootenanny documentation files."
 
 # Run Tests
