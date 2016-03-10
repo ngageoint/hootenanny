@@ -12,26 +12,18 @@ This document describes how to install Hootenanny.
 
 == Ubuntu Install Instructions
 
-Installation of Hootenanny on Ubuntu is done with Vagrant.  Follow the instructions to set up a 
-Hootenanny Vagrant instance in the README.md file.  To set up a Hootenanny development environment 
-on Ubuntu, see the Developer Guide.
+See the README.md Installation section.
 
 [[fullinstall]]
-== CentOS/ RHEL Install Instructions
+== CentOS/RHEL Install Instructions
 
-This section describes the steps for installing Hootenanny on a CentOS/RHEL 6.x system.  Setting
-up a Hootenanny development environment is not recommended on CentOS/RHEL and Ubuntu should be used
-for that purpose instead. 
- 
-Any modifications to the versions and package dependencies listed in the installation script 
-are not recommended, as parts of Hootenanny are very sensitive to its software dependency versions.
-If a package has already been installed but does not match the expected version, your install will 
-likely be unsupported. In such situations, the behavior of Hootenanny may range from inability to 
-compile code, to unexpected or severe runtime results that result in a failed install.  These 
-instructions have been tested on CentOS 6.5/6.6.  
+The Hootenanny install on CentOS/RHEL is a work in progress.  In the near future, an RPM based install will be to
+ensure the easiest installation possible.
 
-To install Hootenanny on CentOS/RHEL follow the instruction in 
-`hootenanny-$HOOT_VERSION/scripts/InstallHoot-CentOS-RHEL.sh`.
+For now, the script: `scripts/InstallHoot-CentOS-RHEL.sh` may be used to install.  This script requires custom 
+configuration as described within it.  It may require updating if you have installed certain Hootenanny 
+dependencies (Tomcat, Postgres, etc.) with non-standard methods.  It also may require that certain file 
+and directory permissions be relaxed within your the target environment.
 
 The script does not install Hadoop.
 
