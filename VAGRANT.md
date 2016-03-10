@@ -87,7 +87,6 @@ If you've updated the code, you must connect to the vm via ssh to build and rede
     vagrant ssh
     cd $HOOT_HOME
     source ./SetupEnv.sh
-    scripts/ezClean.sh
-    scripts/ezBuildAll.sh
-    sudo -u tomcat6 scripts/DeployTomcat.sh
+    make -sj$(nproc)
+    scripts/DeployTomcat.sh
 
