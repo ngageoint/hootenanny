@@ -199,12 +199,13 @@ if ! grep --quiet TOMCAT6_HOME ~/.profile; then
     sudo ln -s /var/lib/tomcat6/webapps webapps
     sudo ln -s /var/lib/tomcat6/conf conf
     sudo ln -s /var/log/tomcat6 log
-    # TODO: these chown's are probably not good...
-    sudo chown -R vagrant:vagrant $TOMCAT6_HOME
-    sudo chown -R vagrant:vagrant /var/lib/tomcat6
-    sudo chown -R vagrant:vagrant /etc/tomcat6
     cd ~
 fi
+# TODO: these chown's are probably not good, but are needed so that the ui tests can deploy code to tomcat
+sudo chown -R vagrant:vagrant $TOMCAT6_HOME
+sudo chown -R vagrant:vagrant /var/lib/tomcat6
+sudo chown -R vagrant:vagrant /etc/tomcat6
+sudo chown vagrant:vagrant /etc/default/tomcat6
 
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
 echo "Configuring tomcat6 environment..."
@@ -266,7 +267,8 @@ fi
 if [ ! -d $TOMCAT6_HOME/.deegree ]; then
     echo "Creating directory for webapp..."
     sudo mkdir $TOMCAT6_HOME/.deegree
-    sudo chown tomcat6:tomcat6 $TOMCAT6_HOME/.deegree
+    #sudo chown tomcat6:tomcat6 $TOMCAT6_HOME/.deegree
+    sudo chown vagrant:vagrant $TOMCAT6_HOME/.deegree
 fi
 
 echo "Updating the init.d script for node-mapnik-server..."
