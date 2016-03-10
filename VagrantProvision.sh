@@ -204,7 +204,7 @@ fi
 # TODO: these chown's are probably not good, but are needed so that the ui tests can deploy code to tomcat
 sudo chown -R vagrant:vagrant $TOMCAT6_HOME
 sudo chown -R vagrant:vagrant /var/lib/tomcat6
-sudo chown -R vagrant:vagrant /etc/tomcat6
+#sudo chown -R vagrant:vagrant /etc/tomcat6
 sudo chown vagrant:vagrant /etc/default/tomcat6
 
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
@@ -271,10 +271,12 @@ if [ ! -d $TOMCAT6_HOME/.deegree ]; then
     sudo chown vagrant:vagrant $TOMCAT6_HOME/.deegree
 fi
 
-echo "Updating the init.d script for node-mapnik-server..."
-sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
-sudo chmod a+x /etc/init.d/node-mapnik-server
-# npm modules are installed when tomcat is deployed, which occurs when the --with-uitests option is enabled.
+# npm modules are automatically installed when tomcat is deployed, which occurs when the --with-uitests option is enabled.
+if [ -f /etc/init.d/node-mapnik-server ]; then
+  echo "Updating the init.d script for node-mapnik-server..."
+  sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
+  sudo chmod a+x /etc/init.d/node-mapnik-server
+fi
 
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'
@@ -299,7 +301,7 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     cp LocalConfig.pri.orig LocalConfig.pri
     echo 'QMAKE_CXX=ccache g++' >> LocalConfig.pri
 fi
-echo "Building Hoot...  Will take several extra minutes to build the training data the initial time Hootenanny is installed here only."
+echo "Building Hoot...  Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
 #make clean-all -sj$(nproc)
 # The services build won't always complete the first time without errors (for some unknown reason caused by the Maven pom), so we're executing multiple compiles here to get around that.
 make -sj$(nproc) &> /dev/null || true
@@ -307,8 +309,9 @@ make -s &> /dev/null || true
 make -sj$(nproc)
 make -sj$(nproc) docs 
 hoot version
-echo "See the 'docs' directory for Hootenanny documentation files."
 echo "Run 'vagrant ssh' to log into the Hootenanny virtual machine."
+echo "See the 'docs' directory on the virtual machine for Hootenanny documentation files."
+echo "Access the web application at http://localhost:8888/hootenanny-id"
 
 # If you wish to run the diagnostic tests, uncomment the following lines and then run: 'vagrant provision'.
 #echo "Running tests to ensure Hootenanny was installed correctly..."
