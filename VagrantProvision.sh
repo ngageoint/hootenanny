@@ -209,9 +209,11 @@ fi
 # TODO: the validity of these chown's may be questionable...needed so that the ui tests 
 # can deploy code to tomcat
 sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME
+sudo mkdir -p /var/lib/tomcat6/logs
 sudo chown -R vagrant:tomcat6 /var/lib/tomcat6
 sudo chown -R vagrant:tomcat6 /etc/tomcat6
 sudo chown -R vagrant:tomcat6 /etc/default/tomcat6
+sudo chown -R tomcat6:tomcat6 /var/log/tomcat6
 
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
 echo "Configuring tomcat6 environment..."
@@ -273,11 +275,10 @@ fi
 if [ ! -d $TOMCAT6_HOME/.deegree ]; then
     echo "Creating directory for webapp..."
     sudo mkdir $TOMCAT6_HOME/.deegree
-    #sudo chown tomcat6:tomcat6 $TOMCAT6_HOME/.deegree
-    sudo chown vagrant:vagrant $TOMCAT6_HOME/.deegree
+    sudo chown vagrant:tomcat6 $TOMCAT6_HOME/.deegree
 fi
 
-if [ -f /etc/init.d/node-mapnik-server ]; then
+if [ ! -f /etc/init.d/node-mapnik-server ]; then
   echo "Installing node-mapnik-server..."
   sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
   sudo chmod a+x /etc/init.d/node-mapnik-server
@@ -302,6 +303,8 @@ if [ ! "$(ls -A hoot-ui)" ]; then
     echo "init'ing and updating submodule"
     git submodule init && git submodule update
 fi
+mkdir -p ingest/processed
+chown -R vagrant:tomcat6 ingest
 source ./SetupEnv.sh
 cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
 aclocal && autoconf && autoheader && automake && ./configure --with-rnd --with-services --with-uitests
@@ -316,15 +319,12 @@ echo "Building Hoot...  Will take several extra minutes to build the training da
 make -sj$(nproc) &> /dev/null || true
 make -s &> /dev/null || true
 make -sj$(nproc)
+scripts/DeployTomcat.sh
 make -sj$(nproc) docs 
 hoot version
-echo "Run 'vagrant ssh' to log into the Hootenanny virtual machine."
+echo "See VAGRANT.md for additional configuration instructions and then run 'vagrant ssh' to log into the Hootenanny virtual machine."
 echo "See the 'docs' directory on the virtual machine for Hootenanny documentation files."
 echo "Access the web application at http://localhost:8888/hootenanny-id"
-
-# If you wish to run the diagnostic tests, uncomment the following lines and then run: 'vagrant provision'.
-#echo "Running tests to ensure Hootenanny was installed correctly..."
-#make make -sj$(nproc) test-all
-#echo "Tests finished.  Report any test errors to hootenanny.help@digitalglobe.com."
+echo "If you wish to run the diagnostic tests, run: 'cd $HOOT_HOME && make -sj$(nproc) test-all'"
 
 
