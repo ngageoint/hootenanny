@@ -44,10 +44,15 @@ if [ $? -eq 1 ]; then
     echo "Installing selenium-cucumber gem..."
     sudo gem install --user-install selenium-cucumber
 fi
+gem list --local | grep -q mime-types
+if [ $? -eq 1 ]; then
+    echo "Installing mime-types gem..."
+    sudo gem install --user-install mime-types -v 2.6.2
+fi
 gem list --local | grep -q capybara
 if [ $? -eq 1 ]; then
     echo "Installing capybara gem..."
-    sudo gem install --user-install capybara
+    sudo gem install --user-install capybara -v 2.5.0
 fi
 gem list --local | grep -q capybara-webkit
 if [ $? -eq 1 ]; then
@@ -299,7 +304,7 @@ if [ ! "$(ls -A hoot-ui)" ]; then
 fi
 source ./SetupEnv.sh
 cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
-aclocal && autoconf && autoheader && automake && ./configure -q --with-rnd --with-services --with-uitests
+aclocal && autoconf && autoheader && automake && ./configure --with-rnd --with-services --with-uitests
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri'
     cp LocalConfig.pri.orig LocalConfig.pri
