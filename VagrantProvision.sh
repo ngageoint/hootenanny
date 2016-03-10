@@ -272,11 +272,14 @@ if [ ! -d $TOMCAT6_HOME/.deegree ]; then
     sudo chown vagrant:vagrant $TOMCAT6_HOME/.deegree
 fi
 
-# npm modules are automatically installed when tomcat is deployed, which occurs when the --with-uitests option is enabled.
 if [ -f /etc/init.d/node-mapnik-server ]; then
-  echo "Updating the init.d script for node-mapnik-server..."
+  echo "Installing node-mapnik-server..."
   sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
   sudo chmod a+x /etc/init.d/node-mapnik-server
+  # Make sure all npm modules are installed
+  cd node-mapnik-server
+  npm install
+  cd ..
 fi
 
 # Update marker file date now that dependency and config stuff has run

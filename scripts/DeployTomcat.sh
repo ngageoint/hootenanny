@@ -41,8 +41,3 @@ cp -R $TOMCAT6_HOME/webapps/hootenanny-id/dist/img $TOMCAT6_HOME/webapps/hootena
 
 $HOOT_HOME/scripts/StartTomcat.sh
 
-echo
-echo "= Restarting node-mapnik-server ="
-echo
-$HOOT_HOME/scripts/InstallRunNodeMapnikServer.sh
-
