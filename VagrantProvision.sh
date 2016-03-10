@@ -280,20 +280,15 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
 fi
 echo "Building Hoot"
 make clean-all -sj$(nproc)
-# The services build won't always complete the first time, so we're allowing for multiple compiles here.
-echo "  - Make 01: During a fresh install, will take several minutes to build the training data."
+# The services build won't always complete the first time without errors (for some unknown reason caused by the Maven pom), so we're executing multiple compiles here to get around that.
+echo "  - Make: During a fresh install, will take several extra minutes to build the training data."
 make -sj$(nproc) &> /dev/null || true
-echo "  - Make 02"
 make -s &> /dev/null || true
-echo "  - Make 03"
 make -sj$(nproc)
 make -sj$(nproc) docs 
 echo "Build Success"
-hoot version
-echo "Please now run 'make test-all' to execute the Hootenanny tests that ensure the application is working correctly."
 echo "See the 'docs' directory for Hootenanny documentation files."
+hoot version
+echo "Please now run: 'vagrant ssh', and then once logged in run: 'cd $HOOT_HOME && make make -sj$(nproc) test-all' to execute tests that ensure Hootenanny is working correctly."
 
-# Run Tests
-#echo "Running tests"
-#make -sj$(nproc) test
-#make -sj$(nproc) test-all
+
