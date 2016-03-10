@@ -70,6 +70,7 @@ test: build services-test pp-test plugins-test
 	bin/HootTest $(HOOT_TEST_DIFF) --slow
 
 docs: always HOOT_VERSION_FILE services-docs
+	echo Building documentation...
 	cd docs; $(MAKE)
 
 test-quick: build pp-test

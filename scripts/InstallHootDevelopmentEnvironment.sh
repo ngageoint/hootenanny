@@ -54,14 +54,20 @@ if ! dpkg -l | grep --quiet wamerican-insane; then
     sudo dpkg-reconfigure dictionaries-common
 fi
 
+sudo apt-get autoremove -y
+
 # If you're fed up with unity, then uncomment this for xfce; use 'xfce4-display-settings -m' after install for display config
 # sudo apt-get install xfce4
 
-f ! grep --quiet ruby ~/.profile; then
-    echo "Adding ruby to path"
-    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin" >> ~/.profile
-    source ~/.profile
+if ! grep --quiet "export HOOT_HOME" ~/.profile; then
+    echo "Adding hoot home to profile"
+    echo "export HOOT_HOME=/home/vagrant/hoot" >> ~/.profile
 fi
+if ! grep --quiet "\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:\$HOOT_HOME/bin" ~/.profile; then
+    echo "Adding path vars to profile"
+    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:\$HOOT_HOME/bin" >> ~/.profile
+fi
+source ~/.profile
 
 #sudo gem install mime-types -v 2.6.2
 #sudo gem install capybara -v 2.5.0

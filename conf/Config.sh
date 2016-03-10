@@ -1,11 +1,6 @@
 #!/bin/bash
 
-if [ -f $TOMCAT6_HOME/conf/server.xml ]; then
-  TOMCAT_SERVER_CONF=$TOMCAT6_HOME/conf/server.xml
-else
-  TOMCAT_SERVER_CONF=/etc/tomcat6/server.xml
-fi
-export TOMCAT_PORT=`cat $TOMCAT_SERVER_CONF | grep -e "<Connector.*HTTP\/1.1\"\w*" | grep -v SSL | sed -e "s/\s*<Connector.*port=\"\([0-9]*\)\" protocol=.*/\1/g"`
+export TOMCAT_PORT=`cat $TOMCAT6_HOME/conf/server.xml | grep -e "<Connector.*HTTP\/1.1\"\w*" | grep -v SSL | sed -e "s/\s*<Connector.*port=\"\([0-9]*\)\" protocol=.*/\1/g"`
 export NODEJS_PORT=$(($TOMCAT_PORT + 10))
 export P2P_PORT=$(($TOMCAT_PORT + 16))
 export NODE_MAPNIK_SERVER_PORT=$(($TOMCAT_PORT + 17))
