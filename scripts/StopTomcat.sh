@@ -7,6 +7,7 @@ if [ -f $BASEDIR/../Config.sh ]; then
 else
   source $HOOT_HOME/conf/Config.sh
 fi
+#source $1
 
 # see if its running - TODO: service running check not working
 #TOMCAT_PROCESS=`ps aux | grep tomcat | grep -v color=auto`
