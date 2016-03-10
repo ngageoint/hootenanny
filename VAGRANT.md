@@ -14,17 +14,12 @@ If running on Ubuntu, you may have to install a newer version of VirtualBox than
 
 Once Vagrant has been installed, you can start an environment by checking out the hoot code, then changing to the directory which contains the Vagrantfile by typing:
 
-    git clone git@github.com:ngageoint/hootenanny.git hoot
+    # Windows users will need to uncomment the line ending configuration option.
+    git clone git@github.com:ngageoint/hootenanny.git hoot #--config core.autocrlf=input
     cd hoot
     git submodule init
     git submodule update
     vagrant up
-
-Windows users should add the following options to the above clone command to handle line endings properly:
-
-```
-git clone https://github.com/ngageoint/hootenanny.git hoot --config core.autocrlf=input
-```
 
 # Other Virtualization Providers
 
