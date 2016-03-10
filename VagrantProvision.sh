@@ -201,11 +201,12 @@ if ! grep --quiet TOMCAT6_HOME ~/.profile; then
     sudo ln -s /var/log/tomcat6 log
     cd ~
 fi
-# TODO: these chown's are probably not good, but are needed so that the ui tests can deploy code to tomcat
-sudo chown -R vagrant:vagrant $TOMCAT6_HOME
-sudo chown -R vagrant:vagrant /var/lib/tomcat6
-#sudo chown -R vagrant:vagrant /etc/tomcat6
-sudo chown vagrant:vagrant /etc/default/tomcat6
+# TODO: the validity of these chown's may be questionable...needed so that the ui tests 
+# can deploy code to tomcat
+sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME
+sudo chown -R vagrant:tomcat6 /var/lib/tomcat6
+sudo chown -R vagrant:tomcat6 /etc/tomcat6
+sudo chown -R vagrant:tomcat6 /etc/default/tomcat6
 
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
 echo "Configuring tomcat6 environment..."
