@@ -167,7 +167,7 @@ namespace Tgs
             throw AllNullsException("While attempting to replace missing values (imputation) one "
               "or more classes were found to have 0 valid samples.");
           }
-          int index = (Tgs::Random::instance()->s_generateInt() * RAND_MAX + Tgs::Random::instance()->s_generateInt()) % sampleIndices[df.getTrainingLabel(i)].size();
+          int index = (Tgs::Random::instance()->generateInt() * RAND_MAX + Tgs::Random::instance()->generateInt()) % sampleIndices[df.getTrainingLabel(i)].size();
           double replacement = df.getDataElement(sampleIndices[df.getTrainingLabel(i)][index], 
             column);
           df.setDataElement(i, column, replacement);

@@ -92,7 +92,7 @@ public:
     names.push_back("banana");
     names.push_back("bandana");
 
-    Tgs::Random::instance()->s_seed(0);
+    Tgs::Random::instance()->seed(0);
 
     for (size_t i = 0; i < names.size(); ++i)
     {
@@ -105,46 +105,40 @@ public:
     CPPUNIT_ASSERT_EQUAL(string("FqNode: \n"
                                 "  d: 0\n"
                                 "  FqNode: \n"
+                                "    d: 0\n"
+                                "    FqNode: \n"
+                                "      d: 0\n"
+                                "      Leaf: \n"
+                                "        apple : 0\n"
+                                "  d: 5\n"
+                                "  FqNode: \n"
                                 "    d: 5\n"
                                 "    FqNode: \n"
                                 "      d: 5\n"
                                 "      Leaf: \n"
+                                "        car : 1\n"
+                                "        cat : 2\n"
                                 "        banana : 3\n"
-                                "  d: 1\n"
+                                "  d: 6\n"
                                 "  FqNode: \n"
                                 "    d: 6\n"
                                 "    FqNode: \n"
                                 "      d: 6\n"
                                 "      Leaf: \n"
-                                "        bandana : 4\n"
-                                "  d: 5\n"
-                                "  FqNode: \n"
-                                "    d: 0\n"
-                                "    FqNode: \n"
-                                "      d: 1\n"
-                                "      Leaf: \n"
-                                "        car : 1\n"
-                                "    d: 1\n"
-                                "    FqNode: \n"
-                                "      d: 0\n"
-                                "      Leaf: \n"
-                                "        cat : 2\n"
-                                "    d: 5\n"
-                                "    FqNode: \n"
-                                "      d: 5\n"
-                                "      Leaf: \n"
-                                "        apple : 0\n"), uut.toString().toStdString());
+                                "        bandana : 4\n"), uut.toString().toStdString());
 
     uut.setDepth(-1);
     uut.setBucketSize(10);
     uut.buildIndex(names, data);
     //LOG_INFO(TestUtils::toCString(uut.toString()));
+
     CPPUNIT_ASSERT_EQUAL(string("Leaf: \n"
                                 "  apple : 0\n"
                                 "  car : 1\n"
                                 "  cat : 2\n"
                                 "  banana : 3\n"
                                 "  bandana : 4\n"), uut.toString().toStdString());
+
 
     uut.setDepth(-1);
     uut.setBucketSize(2);
@@ -153,21 +147,18 @@ public:
     CPPUNIT_ASSERT_EQUAL(string("FqNode: \n"
                                 "  d: 0\n"
                                 "  Leaf: \n"
-                                "    apple : 0\n"
+                                "    cat : 2\n"
+                                "  d: 1\n"
+                                "  Leaf: \n"
+                                "    car : 1\n"
                                 "  d: 5\n"
-                                "  FqNode: \n"
-                                "    d: 0\n"
-                                "    Leaf: \n"
-                                "      car : 1\n"
-                                "    d: 1\n"
-                                "    Leaf: \n"
-                                "      cat : 2\n"
-                                "    d: 5\n"
-                                "    Leaf: \n"
-                                "      banana : 3\n"
+                                "  Leaf: \n"
+                                "    apple : 0\n"
+                                "    banana : 3\n"
                                 "  d: 6\n"
                                 "  Leaf: \n"
                                 "    bandana : 4\n"), uut.toString().toStdString());
+
   }
 
   void runQueryIndexTest()
@@ -266,7 +257,7 @@ public:
       double indexTime = 0.0;
       for (int i = 0; i < testCount; i++)
       {
-        QString n = names[Tgs::Random::instance()->s_generateInt() % names.size()].getMetricElement();
+        QString n = names[Tgs::Random::instance()->generateInt() % names.size()].getMetricElement();
         int D = max(1, (int)(n.size() * .2));
         double start = Tgs::Time::getTime();
         set<int> base = bruteForce(n, names, D);

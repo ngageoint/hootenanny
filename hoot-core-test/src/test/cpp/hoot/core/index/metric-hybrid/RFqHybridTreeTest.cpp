@@ -113,7 +113,7 @@ public:
     vector<RFqHybridDummyData> keys;
     vector<int> values;
 
-    Tgs::Random::instance()->s_seed(0);
+    Tgs::Random::instance()->seed(0);
     RFqHybridTree<RFqHybridDummyData, int, LevenshteinDistance> uut(1, 2, -1, -1);
     uut.buildIndex(keys, values);
 
@@ -134,7 +134,7 @@ public:
     keys.push_back(RFqHybridDummyData(3, 0, "cap", ElementId::node(c++)));
     keys.push_back(RFqHybridDummyData(4, 0, "bandana", ElementId::node(c++)));
 
-    Tgs::Random::instance()->s_seed(0);
+    Tgs::Random::instance()->seed(0);
 
     for (size_t i = 0; i < keys.size(); ++i)
     {
@@ -146,6 +146,7 @@ public:
       uut.buildIndex(keys, values);
 
       //LOG_INFO(TestUtils::toCString(uut.toString()));
+/*
       HOOT_STR_EQUALS("RNode: \n"
                       "  Env[0:1,0:1]\n"
                       "  FqNode: \n"
@@ -174,6 +175,36 @@ public:
                       "      Env[4:4,0:0]\n"
                       "      Leaf: \n"
                       "        Env[4:4,0:0] bandana Node:6 : 6\n", uut.toString());
+*/
+      HOOT_STR_EQUALS("RNode: \n"
+                      "  Env[0:1,0:1]\n"
+                      "  FqNode: \n"
+                      "    d: 0\n"
+                      "    Leaf: \n"
+                      "      Env[0:0,0:0] cat Node:0 : 0\n"
+                      "    d: 1\n"
+                      "    Leaf: \n"
+                      "      Env[1:1,0:0] car Node:1 : 1\n"
+                      "    d: 5\n"
+                      "    Leaf: \n"
+                      "      Env[0:0,1:1] banana Node:2 : 2\n"
+                      "  Env[1:4,0:1]\n"
+                      "  FqNode: \n"
+                      "    d: 1\n"
+                      "    RNode: \n"
+                      "      Env[2:2,0:0]\n"
+                      "      Leaf: \n"
+                      "        Env[2:2,0:0] bat Node:4 : 4\n"
+                      "      Env[3:3,0:0]\n"
+                      "      Leaf: \n"
+                      "        Env[3:3,0:0] cap Node:5 : 5\n"
+                      "    d: 5\n"
+                      "    Leaf: \n"
+                      "      Env[1:1,1:1] apple Node:3 : 3\n"
+                      "    d: 6\n"
+                      "    Leaf: \n"
+                      "      Env[4:4,0:0] bandana Node:6 : 6\n", uut.toString());
+
     }
 
     // test what happens if RTree has a smaller depth
@@ -183,6 +214,75 @@ public:
 
       //LOG_INFO(TestUtils::toCString(uut.toString()));
       HOOT_STR_EQUALS("RNode: \n"
+                      "  Env[0:1,0:1]\n"
+                      "  FqNode: \n"
+                      "    d: 0\n"
+                      "    RNode: \n"
+                      "      Env[1:1,0:0]\n"
+                      "      FqNode: \n"
+                      "        d: 2\n"
+                      "        FqNode: \n"
+                      "          d: 5\n"
+                      "          Leaf: \n"
+                      "            Env[1:1,0:0] car Node:1 : 1\n"
+                      "    d: 1\n"
+                      "    RNode: \n"
+                      "      Env[0:0,0:0]\n"
+                      "      FqNode: \n"
+                      "        d: 1\n"
+                      "        FqNode: \n"
+                      "          d: 5\n"
+                      "          Leaf: \n"
+                      "            Env[0:0,0:0] cat Node:0 : 0\n"
+                      "    d: 5\n"
+                      "    RNode: \n"
+                      "      Env[0:0,1:1]\n"
+                      "      FqNode: \n"
+                      "        d: 4\n"
+                      "        FqNode: \n"
+                      "          d: 5\n"
+                      "          Leaf: \n"
+                      "            Env[0:0,1:1] banana Node:2 : 2\n"
+                      "  Env[1:4,0:1]\n"
+                      "  FqNode: \n"
+                      "    d: 1\n"
+                      "    RNode: \n"
+                      "      Env[3:3,0:0]\n"
+                      "      FqNode: \n"
+                      "        d: 2\n"
+                      "        FqNode: \n"
+                      "          d: 4\n"
+                      "          Leaf: \n"
+                      "            Env[3:3,0:0] cap Node:5 : 5\n"
+                      "    d: 2\n"
+                      "    RNode: \n"
+                      "      Env[2:2,0:0]\n"
+                      "      FqNode: \n"
+                      "        d: 0\n"
+                      "        FqNode: \n"
+                      "          d: 5\n"
+                      "          Leaf: \n"
+                      "            Env[2:2,0:0] bat Node:4 : 4\n"
+                      "    d: 5\n"
+                      "    RNode: \n"
+                      "      Env[1:1,1:1]\n"
+                      "      FqNode: \n"
+                      "        d: 5\n"
+                      "        FqNode: \n"
+                      "          d: 0\n"
+                      "          Leaf: \n"
+                      "            Env[1:1,1:1] apple Node:3 : 3\n"
+                      "    d: 6\n"
+                      "    RNode: \n"
+                      "      Env[4:4,0:0]\n"
+                      "      FqNode: \n"
+                      "        d: 5\n"
+                      "        FqNode: \n"
+                      "          d: 6\n"
+                      "          Leaf: \n"
+                      "            Env[4:4,0:0] bandana Node:6 : 6\n", uut.toString());
+/*
+            "RNode: \n"
                       "  Env[0:1,0:1]\n"
                       "  FqNode: \n"
                       "    d: 5\n"
@@ -244,6 +344,7 @@ public:
                       "          d: 6\n"
                       "          Leaf: \n"
                       "            Env[4:4,0:0] bandana Node:6 : 6\n", uut.toString());
+*/
     }
   }
 
@@ -427,18 +528,18 @@ public:
       double indexBuildTime = Tgs::Time::getTime() - start;
       LOG_DEBUG("Built index.");
 
-      Tgs::Random::instance()->s_seed(0);
+      Tgs::Random::instance()->seed(0);
       int testCount = 500;
       double bruteForceTime = 0.0;
       double indexTime = 0.0;
       for (int i = 0; i < testCount; i++)
       {
-        double x = Tgs::Random::instance()->s_generateUniform() * _bounds.getWidth() + _bounds.getMinX();
-        double y = Tgs::Random::instance()->s_generateUniform() * _bounds.getHeight() + _bounds.getMinY();
+        double x = Tgs::Random::instance()->generateUniform() * _bounds.getWidth() + _bounds.getMinX();
+        double y = Tgs::Random::instance()->generateUniform() * _bounds.getHeight() + _bounds.getMinY();
         Coordinate c(x, y);
-        //double radius = Tgs::Random::instance()->s_generateUniform() * 10;
+        //double radius = Tgs::Random::instance()->generateUniform() * 10;
         double radius = 112000;
-        QString searchStr = _keys[Tgs::Random::instance()->s_generateInt() % _keys.size()].getMetricElement();
+        QString searchStr = _keys[Tgs::Random::instance()->generateInt() % _keys.size()].getMetricElement();
         int queryD = max(1, (int)(searchStr.size() * .2));
 
         start = Tgs::Time::getTime();
@@ -505,10 +606,10 @@ public:
 
 //      for (int j = 0; j < 5; j++)
 //      {
-//        result[0] = 2 + Tgs::Random::instance()->s_generateInt() % 8; // child count
-//        result[1] = 1 + Tgs::Random::instance()->s_generateInt() % 8; // bucket size
-//        result[2] = -1 + Tgs::Random::instance()->s_generateInt() % 20; // r depth
-//        result[3] = -1 + Tgs::Random::instance()->s_generateInt() % 30; // fq depth
+//        result[0] = 2 + Tgs::Random::instance()->generateInt() % 8; // child count
+//        result[1] = 1 + Tgs::Random::instance()->generateInt() % 8; // bucket size
+//        result[2] = -1 + Tgs::Random::instance()->generateInt() % 20; // r depth
+//        result[3] = -1 + Tgs::Random::instance()->generateInt() % 30; // fq depth
 //        optimizer.step(result, of->f(result));
 //      }
 
@@ -552,7 +653,7 @@ public:
     int iterations = 4;
     for (int i = 0; i < iterations; i++)
     {
-      Tgs::Random::instance()->s_seed(i);
+      Tgs::Random::instance()->seed(i);
       v[0] = bound(1, of->getBest().childCount + rdelta(delta), 10);
       v[1] = bound(1, of->getBest().bucketSize + rdelta(delta), 10);
       v[2] = bound(-1, of->getBest().rDepth + rdelta(delta), 40);
@@ -570,7 +671,7 @@ public:
 
   int rdelta(int delta)
   {
-    return Tgs::Random::instance()->s_generateInt() % (delta * 2 + 1) - delta;
+    return Tgs::Random::instance()->generateInt() % (delta * 2 + 1) - delta;
   }
 
   int bound(int min, int v, int max)

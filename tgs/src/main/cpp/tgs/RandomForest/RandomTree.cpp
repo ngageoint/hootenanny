@@ -416,7 +416,7 @@ namespace Tgs
   {
     try
     {
-      Tgs::Random::instance()->s_seed((unsigned int)_treeId);
+      Tgs::Random::instance()->seed((unsigned int)_treeId);
 
       //std::cout << "Train Tree" << std::endl;
       _factPerNode = numFactors;

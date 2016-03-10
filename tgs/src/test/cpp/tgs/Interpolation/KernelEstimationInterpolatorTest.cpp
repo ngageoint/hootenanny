@@ -153,7 +153,7 @@ public:
     uut.setStopDelta(0.0001);
     uut.setSigma(0.3);
 
-    Tgs::Random::instance()->s_seed(0);
+    Tgs::Random::instance()->seed(0);
     double error = uut.estimateError();
 
     QBuffer buf;
@@ -166,7 +166,7 @@ public:
 
     KernelEstimationInterpolator copy;
     copy.readInterpolator(buf);
-    Tgs::Random::instance()->s_seed(0);
+    Tgs::Random::instance()->seed(0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(error, copy.estimateError(), 0.0001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3, copy.getSigma(), 0.0001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0001, copy.getStopDelta(), 0.0001);

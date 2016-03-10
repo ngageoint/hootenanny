@@ -111,7 +111,7 @@ public:
     // ideally we'll circle back and update RF to use null values.
     shared_ptr<DataFrame> df = mfe.getSamples().toDataFrame(-1);
 
-    Tgs::Random::instance()->s_seed(0);
+    Tgs::Random::instance()->seed(0);
     RandomForest rf;
     auto_ptr<DisableCout> dc;
     if (Log::getInstance().getLevel() >= Log::Warn)
