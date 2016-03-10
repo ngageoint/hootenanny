@@ -7,7 +7,6 @@ if [ -f $BASEDIR/../Config.sh ]; then
 else
   source $HOOT_HOME/conf/Config.sh
 fi
-#source $1
 
 function printOnError {
     OUT=/tmp/HootDeploy$RANDOM.log

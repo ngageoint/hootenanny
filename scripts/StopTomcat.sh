@@ -7,27 +7,21 @@ if [ -f $BASEDIR/../Config.sh ]; then
 else
   source $HOOT_HOME/conf/Config.sh
 fi
-#source $1
 
-# see if its running - TODO: service running check not working
-#TOMCAT_PROCESS=`ps aux | grep tomcat | grep -v color=auto`
-#if [ ! -z "$TOMCAT_PROCESS" ]; then
-  echo Stopping Tomcat...
+echo Stopping Tomcat...
 
-  export CATALINA_BASE=$TOMCAT6_HOME
-  export CATALINA_HOME=$TOMCAT6_HOME
+export CATALINA_BASE=$TOMCAT6_HOME
+ export CATALINA_HOME=$TOMCAT6_HOME
 
-  echo Tomcat home: $TOMCAT6_HOME
+echo Tomcat home: $TOMCAT6_HOME
 
-  [ -d $TOMCAT6_HOME/webapps ] || (echo Please set TOMCAT6_HOME; exit -1)
+[ -d $TOMCAT6_HOME/webapps ] || (echo Please set TOMCAT6_HOME; exit -1)
   
-  $TOMCAT6_HOME/bin/shutdown.sh || true
-  sleep 10
-  # If the stop didn't work kill it hard
-  pkill -9 -f $TOMCAT6_HOME"/endorsed" || true
+$TOMCAT6_HOME/bin/shutdown.sh || true
+sleep 10
+# If the stop didn't work kill it hard
+echo Forcing Tomcat shutdown...
+pkill -9 -f $TOMCAT6_HOME"/endorsed" || true
 
-  echo Tomcat stopped.
-#else
-  #echo Tomcat service not running.
-#fi
+echo Tomcat stopped.
 
