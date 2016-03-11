@@ -3,6 +3,8 @@
 
 Hootenanny contains three distinct codebases: the core, the web services, and the user interface.  Each employs a different testing technology, which is described here.
 
+As a developer, you are expected to run the slow tests (see test suite descriptions) before pushing commits.  The codebase you run tests against can specifically reflect the changes in your commits  (e.g. If your commits are only in the user interface repository, then you may only choose to only run the user interface slow tests instead of running the slow tests for all three codebase repositories).  However, if any test (including glacial tests) is found to be failing as a result of your changes, you are expected to fix the problem.
+
 === Core Tests
 
 The Core Tests test everything that is accessible via the Hootenanny command line interface.  The core code is written in C++ and employs several different types of tests, which are described in the following sections.  The tests are also subdivided into different test suites with differing runtimes.
@@ -21,6 +23,14 @@ To run all the tests in a suite:
 --------------------
 HootTest --<suite-name>
 -------------------
+
+If you want to run the tests for the other codebases at the same time you run the Core Tests you can use the following commands:
+
+-------------------
+make test-quick
+make test # slow
+make test-all # glacial
+------------------
 
 quick is a subset of the slow suite, and quick and slow are subsets of the glacial suite.
 
@@ -41,7 +51,7 @@ HootTest --single hoot::AlphaShapeTest
 
 The core unit tests use CPPUnit.  The goal is to have one test class for each functional class.  See hoot-core-test/src/test/cpp project for examples.  
 
-To place a test into one of the four test suite groups listed in the previous section, a line similar to the following is placed at the end of the class:
+To place a test into one of the four test suites listed in the previous section, a line similar to the following is placed at the end of the test class:
 
 -----------------
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AlphaShapeTest, "quick");
@@ -197,7 +207,7 @@ This approach makes it very fast/easy to create new micro tests and run them wit
 
 === Web Services Tests
 
-The Web Services tests use test the Hootenanny web services interface.  Hootenanny web services tests are written in Java and use JUnit.  They also use a combination of Mockito, PowerMock, EasyMock to make testing easier with mock objects.
+The Web Services tests test the Hootenanny web services interface.  Hootenanny web services tests are written in Java and use JUnit, Jersey, and a combination of Mockito, PowerMock, EasyMock for mock objects.
 
 ==== Test Suites
 
@@ -215,57 +225,59 @@ To run both web services unit and integration tests:
 ./configure --with-services && make -sj($nproc) test-all
 -----------
 
-The above commands will run the corresponding Core Tests immediately after the web services test complete.  There currently is no method prevent that.
+The above commands will run the corresponding Core Tests immediately after the web services test complete.  There currently is no means to separate the two.
 
 h3. Web Services Unit Tests
 
-The web services unit tests are meant to test the Java web service code at the class level.  See hoot-services/src/test/java for examples.
+The Web Services Unit Tests are meant to test the Java web service code at the class level.  See hoot-services/src/test/java for test examples.
 
-To mark a web service test method as a unit test, place the following annotation in front of the method declaration:
+To mark a web service test method as a Unit Test, place the following annotation in front of the method declaration:
 
 -------------
 @Test
 @Category(UnitTest.class)
 -----------
 
-
+Unfortunately, we do have quite a few Web Services Tests labeled as Unit Tests which are technically Integration Tests, since they involve Jersey and Postgres (e.g. MapResourceTest).  The decision was made to leave these are Unit Tests, since they are critical and should be run with each commit push as part of the slow tests, but those tests should eventually be moved to the Integration Tests suite and corresponding class level Unit Tests written for them.
 
 h3. Web Services Integration Tests
 
-The Java integration tests will use "HttpUnit":http://httpunit.sourceforge.net/ and test from the HTTP request down through the Java services code, JNI interface and any underlying C++ code (search for hoot.services.IntegrationTest in the source code for examples). The integration tests will provide adequate coverage of services calls. The integration tests will be run before each release.  The "test-all" and "glacial" options will execute Java JUnit integration tests.
+The Web Services Integration Tests are meant to test the Java web service code across logical boundaries, such as HTTP, Postgres, OGC, etc.  See hoot-services/src/test/java for test examples.
 
-From the build script:
+To mark a web service test method as a Integration Test, place the following annotation in front of the method declaration:
+
+-------------
+@Test
+@Category(IntegrationTest.class)
 -----------
-aclocal && autoconf && ./configure --with-services && make -j8 test-all
-----------
-From the command line:
------------
-HootTest --glacial
----------
-
-==== Unit Tests
-
-d
-
-==== Integration Tests
-
-d
 
 === User Interface Tests
 
-The User Interface tests test the Hootenanny iD browser based application.
+The User Interface tests test the functionality of the Hootenanny iD browser based application and its interactions with the Hootenanny Web Services.
 
-"Cucumber":https://cukes.info/ is the top level interpreter of the "gherkin language":https://github.com/cucumber/cucumber/wiki/Gherkin that describes each test. There are many "good tutorials":https://github.com/cucumber/cucumber/wiki/Tutorials-and-Related-Blog-Posts on the web to get you started, but for a hootenanny specific example please see @features/DcConflate.feature@ and @features/step_definitions/custom_steps.rb@. This will display the simple aspects of writing Cucumber scripts.
+"Cucumber":https://cukes.info/ is the technology used to simulate browser interactions in the tests.  "Cucumber":https://cukes.info/ is the top level interpreter of the "gherkin language":https://github.com/cucumber/cucumber/wiki/Gherkin that describes each test. There are many "good tutorials":https://github.com/cucumber/cucumber/wiki/Tutorials-and-Related-Blog-Posts on the web to get you started, 
 
+Hootenanny User Interface Tests can be found in test-files/ui.  See @features/conflate.feature@ and @features/step_definitions/custom_steps.rb@ for examples.  Each piece of functionality being tesetd should be placed into its own *.feature file.  Common utility methods can be placed in @custom_steps.rb@.  Cucumber settings may be changed in @features/support/env.rb@.
 
+The User Interface Tests run as part of the slow test suite by default.  To run them with all other slow tests:  
+
+-----------------------
+./configure --with-services --with-uitests && make -sj($nproc) test
+-----------------------
+
+To run the User Interface Tests by themselves:
+
+-----------------------
+./configure --with-services --with-uitests && make -sj($nproc) ui-test
+-----------------------
 
 === Smoke Tests
 
-The Smoke Tests are manual tests run against the Hootenanny iD browser based application to verify the results of a Hootenanny installation.
+The Smoke Tests are manual tests run against the Hootenanny iD browser based application to verify the results of a Hootenanny installation.  The Smoke Test description are located here (TODO: fill in location).
 
 === Regression Tests
 
-The Regression Tests run Hootenanny command line operations against specific datasets to measure Hootenanny performance against particular scenarios.
+The Regression Tests run Hootenanny command line operations against specific datasets to measure Hootenanny performance against particular scenarios.  The tests are run against non-public data and, therefore, are kept in a private DigitalGlobe repository.  For more information about the tests, contact hootenanny.help@digitalglobe.com
 
 
 

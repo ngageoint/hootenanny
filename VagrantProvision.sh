@@ -325,6 +325,6 @@ hoot version
 echo "See VAGRANT.md for additional configuration instructions and then run 'vagrant ssh' to log into the Hootenanny virtual machine."
 echo "See the 'docs' directory on the virtual machine for Hootenanny documentation files."
 echo "Access the web application at http://localhost:8888/hootenanny-id"
-echo "If you wish to run the diagnostic tests, run: 'cd $HOOT_HOME && make -sj$(nproc) test-all'"
+echo "If you wish to run the diagnostic tests, log into the virtual machine and run: 'cd $HOOT_HOME && make -sj$(nproc) test-all'"
 
 
