@@ -103,7 +103,7 @@ public:
     {
         OsmReader reader;
 
-        Tgs::Random::instance()->s_seed(0);
+        Tgs::Random::instance()->seed(0);
 
 //        int argc = 0;
 //        char* argv[] = {""};
@@ -143,7 +143,7 @@ public:
     {
         OsmReader reader;
 
-        Tgs::Random::instance()->s_seed(0);
+        Tgs::Random::instance()->seed(0);
 
 //        int argc = 0;
 //        char* argv[] = {""};

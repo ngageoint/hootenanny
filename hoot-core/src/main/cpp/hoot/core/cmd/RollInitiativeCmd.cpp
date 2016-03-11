@@ -82,10 +82,10 @@ public:
          << "Greg Schmidt"
          << "Mike Benedict";
 
-    Tgs::Random::instance()->s_seed(time(0));
+    Tgs::Random::instance()->seed(time(0));
     for (int i = 0; i < pigs.size(); i++)
     {
-      pigs[i] = QString("%1 %2").arg(Tgs::Random::instance()->s_generateInt() % 20 + 1, 2).arg(pigs[i]);
+      pigs[i] = QString("%1 %2").arg(Tgs::Random::instance()->generateInt() % 20 + 1, 2).arg(pigs[i]);
     }
 
     pigs.sort();

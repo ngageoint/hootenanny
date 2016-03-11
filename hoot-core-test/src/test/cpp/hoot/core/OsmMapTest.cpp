@@ -408,8 +408,8 @@ public:
 
     for (int i = 0; i < 10; i++)
     {
-      KnnIterator it(tree.get(), Tgs::Random::instance()->s_generateInt() % 200 - 100,
-                                 Tgs::Random::instance()->s_generateInt() % 200 - 100);
+      KnnIterator it(tree.get(), Tgs::Random::instance()->generateInt() % 200 - 100,
+                                 Tgs::Random::instance()->generateInt() % 200 - 100);
 
       double lastDistance = 0.0;
       while (it.hasNext())

@@ -74,7 +74,7 @@ public:
     set<long> s;
     for (size_t i = 0; i < 100000; i++)
     {
-      long k = Tgs::Random::instance()->s_generateInt();
+      long k = Tgs::Random::instance()->generateInt();
       ks.push_back(k);
       s.insert(k);
       uut.insert(k);
@@ -90,7 +90,7 @@ public:
 //    size_t testCount = 0;
 //    for (size_t i = 0; i < tests; i++)
 //    {
-//      long k = Tgs::Random::instance()->s_generateInt();
+//      long k = Tgs::Random::instance()->generateInt();
 //      if (s.find(k) == s.end())
 //      {
 //        testCount++;

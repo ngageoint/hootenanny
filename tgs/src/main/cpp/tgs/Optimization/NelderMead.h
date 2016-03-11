@@ -381,7 +381,7 @@ public:
         Vector result;
         result.prepare(dimension);
         for (size_t i = 0; i<dimension; ++i) {
-            result[i] = 0.001*(Tgs::Random::instance()->s_generateInt()%1000);
+            result[i] = Tgs::Random::instance()->generateUniform();
         }
         return result;
     }

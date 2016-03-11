@@ -1044,7 +1044,7 @@ namespace Tgs
         {
           for(itr = idxSortedByClass.begin(); itr != idxSortedByClass.end(); ++itr)
           {
-            r = ((double)Tgs::Random::instance()->s_generateInt() / ((double)(RAND_MAX)+(double)(1)));
+            r = ((double)Tgs::Random::instance()->generateInt() / ((double)(RAND_MAX)+(double)(1)));
 
             unsigned int rndIdx = (unsigned int)(r * (double)itr->second.size());
             bootstrap[pickCtr] = itr->second[rndIdx];
@@ -1126,7 +1126,7 @@ namespace Tgs
         while(pickCtr < bootstrap.size())
         {
           //Pick a positive training example
-          r = ((double)Tgs::Random::instance()->s_generateInt() / ((double)(RAND_MAX)+(double)(1)));
+          r = ((double)Tgs::Random::instance()->generateInt() / ((double)(RAND_MAX)+(double)(1)));
           rndIdx = (unsigned int)(r * (double)posIndices.size());
           bootstrap[pickCtr] = posIndices[rndIdx];
           selectedPos[rndIdx] = true;
@@ -1134,7 +1134,7 @@ namespace Tgs
           pickCtr++;
 
           //Pick a negative training example
-          r = ((double)Tgs::Random::instance()->s_generateInt() / ((double)(RAND_MAX)+(double)(1)));
+          r = ((double)Tgs::Random::instance()->generateInt() / ((double)(RAND_MAX)+(double)(1)));
           rndIdx = (unsigned int)(r * (double)negIndices.size());
           bootstrap[pickCtr] = negIndices[rndIdx];
           selectedNeg[rndIdx] = true;
@@ -1196,7 +1196,7 @@ namespace Tgs
 
         for(unsigned int j = 0; j < bootstrap.size(); j++)
         {
-          r = ((double)Tgs::Random::instance()->s_generateInt() / ((double)(RAND_MAX)+(double)(1)));
+          r = ((double)Tgs::Random::instance()->generateInt() / ((double)(RAND_MAX)+(double)(1)));
 
           unsigned int rndIdx = (unsigned int)(r * (double)_data.size());
           bootstrap[j] = rndIdx;
@@ -1332,7 +1332,7 @@ namespace Tgs
 
         for(unsigned int k = 0; k < numFactors; k++)
         {
-          double rr = (double)Tgs::Random::instance()->s_generateInt();
+          double rr = (double)Tgs::Random::instance()->generateInt();
           r = (rr / ((double)(RAND_MAX)+(double)(1)));
 
           unsigned int rndIdx = (unsigned int)(r * (double)candidateFactors.size());

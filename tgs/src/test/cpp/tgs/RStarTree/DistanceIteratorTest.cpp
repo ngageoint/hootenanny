@@ -191,7 +191,7 @@ public:
     double result = 0.0;
     for (int i = 0; i < 10; i++)
     {
-      double r = Tgs::Random::instance()->s_generateUniform();
+      double r = Tgs::Random::instance()->generateUniform();
       r = r * 2.0 - 1.0;
       result += r;
     }

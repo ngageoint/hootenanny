@@ -69,7 +69,7 @@ public:
 
   void runToyTest()
   {
-    Tgs::Random::instance()->s_seed(0);
+    Tgs::Random::instance()->seed(0);
     OsmMap::resetCounters();
     Settings::getInstance().clear();
 
