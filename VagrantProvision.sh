@@ -260,6 +260,8 @@ if [ -f "/usr/lib/libgdal.*" ]; then
 fi
 
 # Create Tomcat context path for tile images
+mkdir -p $HOOT_HOME/ingest/processed
+chown -R vagrant:tomcat6 $HOOT_HOME/ingest
 if ! grep -i --quiet 'ingest/processed' /etc/tomcat6/server.xml; then
     echo "Adding Tomcat context path for tile images..."
     sudo sed -i.bak "s@<\/Host>@  <Context docBase=\"\/home\/vagrant\/hoot\/ingest\/processed\" path=\"\/static\" \/>\n      &@" /etc/tomcat6/server.xml
@@ -303,8 +305,6 @@ if [ ! "$(ls -A hoot-ui)" ]; then
     echo "init'ing and updating submodule"
     git submodule init && git submodule update
 fi
-mkdir -p ingest/processed
-chown -R vagrant:tomcat6 ingest
 source ./SetupEnv.sh
 cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
 aclocal && autoconf && autoheader && automake && ./configure --with-rnd --with-services --with-uitests
