@@ -277,7 +277,8 @@ To mark a web service test method as a Integration Test, place the following ann
 
 The User Interface tests test the functionality of the Hootenanny iD browser based application and its interactions with the Hootenanny Web Services.
 
-"Cucumber":https://cukes.info/ is the technology used to simulate browser interactions in the tests.  "Cucumber":https://cukes.info/ is the top level interpreter of the "gherkin language":https://github.com/cucumber/cucumber/wiki/Gherkin that describes each test. There are many "good tutorials":https://github.com/cucumber/cucumber/wiki/Tutorials-and-Related-Blog-Posts on the web to get you started, 
+
+https://cukes.info[Cucumber] is the technology used to simulate browser interactions in the tests.  https://cukes.info[Cucumber] is the top level interpreter of the "gherkin language":https://github.com/cucumber/cucumber/wiki/Gherkin that describes each test. There are many  https://github.com/cucumber/cucumber/wiki/Tutorials-and-Related-Blog-Posts[good tutorials] on the web to get you started, 
 
 Hootenanny User Interface Tests can be found in test-files/ui.  See @features/conflate.feature@ and @features/step_definitions/custom_steps.rb@ for examples.  Each piece of functionality being tesetd should be placed into its own *.feature file.  Common utility methods can be placed in @custom_steps.rb@.  Cucumber settings may be changed in @features/support/env.rb@.
 
@@ -301,7 +302,7 @@ The Smoke Tests are manual tests run against the Hootenanny iD browser based app
 
 The Regression Tests run Hootenanny command line operations against specific datasets to measure Hootenanny performance against particular scenarios.  The tests are run against non-public data and, therefore, are kept in a private DigitalGlobe repository and run on a nightly basis only.  For more information about the tests, contact hootenanny.help@digitalglobe.com
 
-If you have access to the regression test repository and wish to run them locally, the instructions to do so are "here":https://127.0.0.1:9443/redmine/projects/hootenany/wiki/Developer_-_Running_Regression_Tests
+If you have access to the regression test repository and wish to run them locally, the instructions to do so are https://127.0.0.1:9443/redmine/projects/hootenany/wiki/Developer_-_Running_Regression_Tests[here]
 
 Many of the regression tests score Hootenanny's conflation accuracy on a dataset and mark the test as passing or failing based on an allowable score range.  See hoot-tests/release_test.child/jakarta-spaghetti.release as an example.
 
@@ -311,7 +312,7 @@ The Load Tests test the scalability of the Hootenanny web services code and are 
 
 When run, the tests output an image with graph metrics on Hootenanny scalability for increasing levels of simulated users.  Here is an example set of test metrics:
 
-TODO: add image
+image::developer/images/LoadLatest.png[]
 
 === Test Coverage Reporting
 
@@ -345,7 +346,7 @@ If you want a new clean coverage result the you'll need to do make clean again b
 
 ==== Java Code Coverage ====
 
-Java code coverage is supplied by "Cobertura":http://cobertura.github.io/cobertura/ via Maven.  The following will generate code coverage reports for Hootenanny Java code:
+Java code coverage is supplied by http://cobertura.github.io/cobertura/[Cobertura] via Maven.  The following will generate code coverage reports for Hootenanny Java code:
 
 ----------
 make clean && ./configure --with-services --with-coverage && make -j($nproc) test && make -j($nproc) coverage
