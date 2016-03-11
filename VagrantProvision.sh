@@ -211,7 +211,7 @@ sudo mkdir -p $TOMCAT6_HOME/logs
 sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME/logs
 sudo chown -R vagrant:tomcat6 /var/lib/tomcat6
 sudo chown -R vagrant:tomcat6 /etc/tomcat6
-sudo chown -R vagrant:tomcat6 /etc/default/tomcat6
+#sudo chown -R vagrant:tomcat6 /etc/default/tomcat6
 sudo chown -R tomcat6:tomcat6 /var/log/tomcat6
 
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
