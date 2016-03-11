@@ -1,12 +1,9 @@
 #!/bin/bash
 
 export TOMCAT_PORT=`cat $TOMCAT6_HOME/conf/server.xml | grep -e "<Connector.*HTTP\/1.1\"\w*" | grep -v SSL | sed -e "s/\s*<Connector.*port=\"\([0-9]*\)\" protocol=.*/\1/g"`
-export NODEJS_PORT=$(($TOMCAT_PORT + 10))
 export TRANSLATION_PORT=$(($TOMCAT_PORT + 14))
 export P2P_PORT=$(($TOMCAT_PORT + 16))
-export NODE_MAPNIK_SERVER_PORT=$(($TOMCAT_PORT + 17))
-export HOOT_NODEJS_URL=http://`hostname`:$NODEJS_PORT
-export HOOT_SERVICES_URL=http://`hostname`:$TOMCAT_PORT/hoot-services
+export NODE_MAPNIK_SERVER_PORT=$(($TOMCAT_PORT - 80))
 
 SERVICES_LOCAL_CONF=$HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
 if [ ! -f $SERVICES_LOCAL_CONF ]; then
