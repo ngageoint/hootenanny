@@ -15,7 +15,6 @@ if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
     sudo apt-get upgrade -y
 fi
 
-# Install dependencies
 echo "Installing dependencies from repos..."
 sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane ruby ruby-dev xvfb zlib1g-dev patch x11vnc unzip htop
 
@@ -126,7 +125,6 @@ if ! ogrinfo --formats | grep --quiet FileGDB; then
     cd ~
 fi
 
-# Node.js modules
 if ! grep --quiet NODE_PATH ~/.profile; then
     echo "Installing node js dependencies..."
     sudo npm config set registry http://registry.npmjs.org/
@@ -191,7 +189,6 @@ if ! sysctl -e kernel.shmall | grep --quiet 2097152; then
     sudo sh -c "echo 'kernel.shmall=2097152' >> /etc/sysctl.conf"
 fi
 
-# Restart PostgreSQL
 sudo service postgresql restart
 
 # Configure Tomcat
@@ -233,7 +230,6 @@ PATH=$HOOT_HOME/bin:$PATH
 EOT
 fi
 
-# Change Tomcat umask to group write
 if ! grep -i --quiet 'umask 002' /etc/default/tomcat6; then
 echo "Changing Tomcat umask to group write..."
 sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
@@ -242,13 +238,11 @@ umask 002
 EOT
 fi
 
-# Change Tomcat java opts
 if grep -i --quiet '^JAVA_OPTS=.*\-Xmx128m' /etc/default/tomcat6; then
     echo "Changing Tomcat java opts..."
     sudo sed -i.bak "s@\-Xmx128m@\-Xms512m \-Xmx2048m \-XX:PermSize=512m \-XX:MaxPermSize=4096m@" /etc/default/tomcat6
 fi
 
-# Fix env var path for GDAL_DATA
 if grep -i --quiet 'gdal/1.10' /etc/default/tomcat6; then
     echo "Fixing Tomcat GDAL_DATA env var path..."
     sudo sed -i.bak s@^GDAL_DATA=.*@GDAL_DATA=\/usr\/local\/share\/gdal@ /etc/default/tomcat6
@@ -261,7 +255,6 @@ if [ -f "/usr/lib/libgdal.*" ]; then
     sudo rm /usr/lib/libgdal.*
 fi
 
-# Create Tomcat context path for tile images
 mkdir -p $HOOT_HOME/ingest/processed
 chown -R vagrant:tomcat6 $HOOT_HOME/ingest
 if ! grep -i --quiet 'ingest/processed' /etc/tomcat6/server.xml; then
@@ -269,13 +262,11 @@ if ! grep -i --quiet 'ingest/processed' /etc/tomcat6/server.xml; then
     sudo sed -i.bak "s@<\/Host>@  <Context docBase=\"\/home\/vagrant\/hoot\/ingest\/processed\" path=\"\/static\" \/>\n      &@" /etc/tomcat6/server.xml
 fi
 
-# Allow linking in Tomcat context
 if ! grep -i --quiet 'allowLinking="true"' /etc/tomcat6/context.xml; then
     echo "Set allowLinking to true in Tomcat context..."
     sudo sed -i.bak "s@^<Context>@<Context allowLinking=\"true\">@" /etc/tomcat6/context.xml
 fi
 
-# Create directory for webapp
 if [ ! -d $TOMCAT6_HOME/.deegree ]; then
     echo "Creating directory for webapp..."
     sudo mkdir $TOMCAT6_HOME/.deegree
