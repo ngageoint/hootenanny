@@ -203,7 +203,7 @@ if ! grep --quiet TOMCAT6_HOME ~/.profile; then
     sudo ln -s /var/log/tomcat6 log
     cd ~
 fi
-# TODO: the validity of these chown's may be questionable...needed so that the ui tests 
+# the validity of these chown's may be questionable; they're needed so that the ui tests 
 # can deploy code to tomcat
 sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME
 sudo mkdir -p /var/lib/tomcat6/logs
