@@ -85,9 +85,9 @@ namespace Tgs
     return rnd();
   }
 
-  void Random::seed(unsigned int srand)
+  void Random::seed(unsigned int s)
   {
-    _gen = boost::minstd_rand(srand);
+    _gen = boost::minstd_rand(s);
   }
 
   void Random::seed()

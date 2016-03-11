@@ -62,7 +62,7 @@ namespace Tgs
     int generateInt(int max);
 
     void seed();
-    void seed(unsigned int srand);
+    void seed(unsigned int s);
 
     /**
      * Randomizes the elements in the specified vector
