@@ -36,7 +36,6 @@
 
 // TGS
 #include <tgs/HashMap.h>
-#include <tgs/Statistics/Random.h>
 
 #include "Node.h"
 #include "SubTreeCallback.h"
@@ -402,7 +401,7 @@ private:
   const KeyType& _pickKey() const
   {
     // for now just use a random key as described in the paper.
-    const KeyType& result = (*_keys)[Tgs::Random::instance()->s_generateInt() % _keys->size()];
+    const KeyType& result = (*_keys)[rand() % _keys->size()];
 
     return result;
   }

@@ -55,12 +55,14 @@ public:
 
   void setAlpha(double alpha) { _alpha = alpha; }
   void setAlphaShapeBuffer(double alphaShapeBuffer) { _alphaShapeBuffer = alphaShapeBuffer; }
+  void setOutputBuffer(double outputBuffer) { _outputBuffer = outputBuffer; }
   void setCrop(bool crop) { _crop = crop; }
 
 private:
 
   double _alpha;
   double _alphaShapeBuffer;
+  double _outputBuffer;
   bool _crop;
 
 };

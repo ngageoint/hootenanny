@@ -37,9 +37,6 @@
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/util/Log.h>
 
-// TGS Includes
-#include <tgs/Statistics/Random.h>
-
 // Qt
 #include <QDir>
 
@@ -68,8 +65,8 @@ public:
   {
     for (int i = 0; i < count; i++)
     {
-      double x = Tgs::Random::instance()->generateUniform() * outerRadius * 2.0 - outerRadius;
-      double y = Tgs::Random::instance()->generateUniform() * outerRadius * 2.0 - outerRadius;
+      double x = Tgs::Random::generateUniform() * outerRadius * 2.0 - outerRadius;
+      double y = Tgs::Random::generateUniform() * outerRadius * 2.0 - outerRadius;
       double r = sqrt(x * x + y * y);
       if (r >= innerRadius && r <= outerRadius)
       {
@@ -82,7 +79,7 @@ public:
   {
     vector< pair<double, double> > points;
 
-    Tgs::Random::instance()->seed(0);
+    srand(0);
     createDonut(points, 0, 35, 10, 0, 250);
     //createDonut(points, 15, 20, 20, 0, 2000);
 
@@ -109,7 +106,7 @@ public:
     writer.write(map, "test-output/algorithms/AlphaDonut.osm");
 
     shared_ptr<Geometry> g = uut.toGeometry();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3349.4, g->getArea(), 0.1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3241.5, g->getArea(), 0.1);
   }
 
   void runTest()

@@ -45,7 +45,6 @@
 #include <tgs/RStarTree/MemoryPageStore.h>
 #include <tgs/RStarTree/RStarTree.h>
 #include <tgs/RStarTree/KnnIterator.h>
-#include <tgs/Statistics/Random.h>
 
 using namespace Tgs;
 
@@ -128,10 +127,10 @@ public:
      Box b(2);
      for (int i = 0; i < 1000; i++)
      {
-       double l1 = Tgs::Random::instance()->s_generateInt() % 10000;
-       double u1 = l1 + Tgs::Random::instance()->s_generateInt() % 100;
-       double l2 = Tgs::Random::instance()->s_generateInt() % 10000;
-       double u2 = l2 + Tgs::Random::instance()->s_generateInt() % 100;
+       double l1 = rand() % 10000;
+       double u1 = l1 + rand() % 100;
+       double l2 = rand() % 10000;
+       double u2 = l2 + rand() % 100;
        b.setBounds(0, l1, u1);
        b.setBounds(1, l2, u2);
        uut.insert(b, i);
@@ -154,10 +153,10 @@ public:
        Box b(2);
        for (int i = 0; i < 3000; i++)
        {
-         double l1 = Tgs::Random::instance()->s_generateInt() % 10000;
-         double u1 = l1 + Tgs::Random::instance()->s_generateInt() % 100;
-         double l2 = Tgs::Random::instance()->s_generateInt() % 10000;
-         double u2 = l2 + Tgs::Random::instance()->s_generateInt() % 100;
+         double l1 = rand() % 10000;
+         double u1 = l1 + rand() % 100;
+         double l2 = rand() % 10000;
+         double u2 = l2 + rand() % 100;
          b.setBounds(0, l1, u1);
          b.setBounds(1, l2, u2);
          uut.insert(b, i);
@@ -184,10 +183,10 @@ public:
 //      t.start();
      for (int i = 0; i < 20000; i++)
      {
-       double l1 = Tgs::Random::instance()->s_generateInt() % 10000;
-       double u1 = l1 + Tgs::Random::instance()->s_generateInt() % 100;
-       double l2 = Tgs::Random::instance()->s_generateInt() % 10000;
-       double u2 = l2 + Tgs::Random::instance()->s_generateInt() % 100;
+       double l1 = rand() % 10000;
+       double u1 = l1 + rand() % 100;
+       double l2 = rand() % 10000;
+       double u2 = l2 + rand() % 100;
        b.setBounds(0, l1, u1);
        b.setBounds(1, l2, u2);
        uut.insert(b, i);
@@ -200,8 +199,8 @@ public:
      double x, y;
      for (int i = 0; i < 2000; i++)
      {
-       x = Tgs::Random::instance()->s_generateInt() % 20000 - 5000;
-       y = Tgs::Random::instance()->s_generateInt() % 20000 - 5000;
+       x = rand() % 20000 - 5000;
+       y = rand() % 20000 - 5000;
        KnnIterator it(rst.get(), x, y);
        it.next();
 //        if (i % 1000 == 0)

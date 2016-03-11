@@ -161,14 +161,14 @@ double GraphComparator::compareMaps()
   for (int i = 0; i < _iterations && same < 4; i++)
   {
     // generate a random source point
-    _r.x = Random::instance()->generateUniform() * (_projectedBounds.MaxX - _projectedBounds.MinX) +
+    _r.x = Random::generateUniform() * (_projectedBounds.MaxX - _projectedBounds.MinX) +
           _projectedBounds.MinX;
-    _r.y = Random::instance()->generateUniform() * (_projectedBounds.MaxY - _projectedBounds.MinY) +
+    _r.y = Random::generateUniform() * (_projectedBounds.MaxY - _projectedBounds.MinY) +
           _projectedBounds.MinY;
 
     shared_ptr<OsmMap> referenceMap;
     // pick one map as the reference map
-    if (Random::instance()->coinToss())
+    if (Random::coinToss())
     {
       referenceMap = _mapP1;
     }

@@ -46,7 +46,6 @@ using namespace std;
 #include <tgs/SpinImage/SpinImage.h>
 #include <tgs/SpinImage/SpinImageGenerator.h>
 #include <tgs/SpinImage/SpinImageStack.h>
-#include <tgs/Statistics/Random.h>
 
 #include "../PluginFactory.h"
 
@@ -140,8 +139,8 @@ namespace Tgs
     {
       for (unsigned int i = 0; i < orig.size(); i++)
       {
-        int r1 = Tgs::Random::instance()->s_generateInt()() % orig.size();
-        int r2 = Tgs::Random::instance()->s_generateInt()() % orig.size();
+        int r1 = rand() % orig.size();
+        int r2 = rand() % orig.size();
         string tmp = orig[r1];
         orig[r1] = orig[r2];
         orig[r2] = tmp;
@@ -280,8 +279,8 @@ for (unsigned int si = 0; si < s.size(); si++)
 //         cout << "  Comparing..." << endl;
         for (int j = 0; j < SAMPLE_SIZE; j++)
         {
-          //SpinImage testImage = stack.getImage(Tgs::Random::instance()->s_generateInt()() % stack.getSize());
-          int randomIndex = Tgs::Random::instance()->s_generateInt()() % pc.getPoints().size();
+          //SpinImage testImage = stack.getImage(rand() % stack.getSize());
+          int randomIndex = rand() % pc.getPoints().size();
           gen.generateSingleImage(pc, randomIndex, testImage);
 
           for (unsigned int trainingStackIdx = 0; trainingStackIdx < stacks.size(); 
@@ -293,7 +292,7 @@ for (unsigned int si = 0; si < s.size(); si++)
   //           cout << " * comparing " << trainingType[trainingStackIdx];
             for (unsigned int imageIdx = 0; imageIdx < sig->getSize(); imageIdx++)
             {
-              int idx = Tgs::Random::instance()->s_generateInt()() % sig->getSize();
+              int idx = rand() % sig->getSize();
               double score = sig->getImage(idx)->compare(testImage);
               scores.push_back(score);
               if (score > bestScore)
@@ -405,9 +404,7 @@ for (unsigned int si = 0; si < s.size(); si++)
       // create a sphere of points, almost uniformly distributed
       for (int i = 0; i < testSize; i++)
       {
-        Point3d p(Tgs::Random::instance()->s_generateInt()() - RAND_MAX / 2.0,
-                  Tgs::Random::instance()->s_generateInt()() - RAND_MAX / 2.0,
-                  Tgs::Random::instance()->s_generateInt()() - RAND_MAX / 2.0);
+        Point3d p(rand() - RAND_MAX / 2.0, rand() - RAND_MAX / 2.0, rand() - RAND_MAX / 2.0);
         p.normalize();
         p = p * 10.0;
         pc.addPoint(CloudPoint(p.p1, p.p2, p.p3));

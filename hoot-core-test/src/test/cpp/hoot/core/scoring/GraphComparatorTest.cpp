@@ -35,9 +35,6 @@
 #include <hoot/core/util/OpenCv.h>
 using namespace hoot;
 
-#include <tgs/Statistics/Random.h>
-using namespace Tgs;
-
 // Boost
 using namespace boost;
 
@@ -67,7 +64,7 @@ public:
     {
         OsmReader reader;
 
-        Random::instance()->seed(0);
+        srand(0);
 
         shared_ptr<OsmMap> map(new OsmMap());
         reader.read("test-files/ToyTestA.osm", map);
@@ -93,17 +90,17 @@ public:
         uut.setIterations(3);
         uut.setPixelSize(10);
         uut.compareMaps();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.973938940267383, uut.getMeanScore(), 0.00001);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.000808379046947577, uut.getConfidenceInterval(), 0.00001);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.97431876806091, uut.getMedianScore(), 0.00001);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00085115719215034, uut.getStandardDeviation(), 0.00001);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.973744272810634, uut.getMeanScore(), 0.00001);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00177888445763033, uut.getConfidenceInterval(), 0.00001);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.973924616144161, uut.getMedianScore(), 0.00001);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00187302021970233, uut.getStandardDeviation(), 0.00001);
     }
 
     void runDenverDistanceTest()
     {
         OsmReader reader;
 
-        Tgs::Random::instance()->s_seed(0);
+        srand(0);
 
 //        int argc = 0;
 //        char* argv[] = {""};
@@ -143,7 +140,7 @@ public:
     {
         OsmReader reader;
 
-        Tgs::Random::instance()->s_seed(0);
+        srand(0);
 
 //        int argc = 0;
 //        char* argv[] = {""};

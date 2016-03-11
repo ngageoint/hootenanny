@@ -80,8 +80,8 @@ public:
     double n0 = Normal::normal(0, 0.5);
     for (size_t i = 0; i < 100; i++)
     {
-      d[0] = Random::instance()->generateUniform() * 2 - 1;
-      d[1] = Random::instance()->generateUniform() * 2 - 1;
+      d[0] = Random::generateUniform() * 2 - 1;
+      d[1] = Random::generateUniform() * 2 - 1;
       double e = sqrt(d[0] * d[0] + d[1] * d[1]);
       d[2] = Normal::normal(e, .5) / n0;
       df.addDataVector("", d);
@@ -101,7 +101,7 @@ public:
 
   void optimizationTest()
   {
-    Random::instance()->seed(0);
+    srand(0);
 
     shared_ptr<DelaunayInterpolator> di = buildRandom();
     DelaunayInterpolator& uut = *di;
@@ -111,17 +111,17 @@ public:
     vector<double> d(2);
     d[0] = 0.0;
     d[1] = 0.0;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.948, uut.interpolate(d)[0], 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.903, uut.interpolate(d)[0], 0.001);
     d[0] = 0.5;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.590, uut.interpolate(d)[0], 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.568, uut.interpolate(d)[0], 0.001);
     d[0] = 1.0;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.197, uut.interpolate(d)[0], 0.001);
-    d[0] = 1.5;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.131, uut.interpolate(d)[0], 0.001);
-    d[0] = 2.0;
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.057, uut.interpolate(d)[0], 0.001);
+    d[0] = 1.5;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.047, uut.interpolate(d)[0], 0.001);
+    d[0] = 2.0;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.036, uut.interpolate(d)[0], 0.001);
     d[0] = 0.1;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.954, uut.interpolate(d)[0], 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.917, uut.interpolate(d)[0], 0.001);
 
 //    // write out as a .pgm image
 //    ofstream fs;
@@ -160,12 +160,12 @@ public:
 
   void serializationTest()
   {
-    Random::instance()->seed(0);
+    srand(0);
 
     shared_ptr<DelaunayInterpolator> di = buildRandom();
     DelaunayInterpolator& uut = *di;
 
-    Random::instance()->seed(0);
+    srand(0);
     double error = uut.estimateError();
 
     QBuffer buf;
@@ -178,13 +178,13 @@ public:
 
     DelaunayInterpolator copy;
     copy.readInterpolator(buf);
-    Random::instance()->seed(0);
+    srand(0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(error, copy.estimateError(), 0.0001);
   }
 
   void simpleTest()
   {
-    Random::instance()->seed(0);
+    srand(0);
     DelaunayInterpolator uut;
 
     shared_ptr<DataFrame> dfPtr(new DataFrame());
@@ -202,8 +202,8 @@ public:
 
     for (size_t i = 0; i < 500; i++)
     {
-      d[0] = Random::instance()->generateUniform() * 2 - 1;
-      d[1] = Random::instance()->generateUniform() * 2 - 1;
+      d[0] = Random::generateUniform() * 2 - 1;
+      d[1] = Random::generateUniform() * 2 - 1;
       double e = sqrt(d[0] * d[0] + d[1] * d[1]);
       d[2] = Normal::normal(e, .5);
       df.addDataVector("", d);

@@ -40,7 +40,6 @@
 
 // tgs
 #include <tgs/Optimization/NelderMead.h>
-#include <tgs/Statistics/Random.h>
 
 namespace hoot
 {
@@ -58,7 +57,7 @@ public:
   void attributeCompare(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2, shared_ptr<OsmMap> outMap,
                         int& mean, int& confidence)
   {
-    Tgs::Random::instance()->s_seed(100);
+    srand(100);
 
     int iterations = 600;
     {
@@ -97,7 +96,7 @@ public:
   void graphCompare(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2, double& mean,
                     double& confidence)
   {
-    Tgs::Random::instance()->s_seed(0);
+    srand(0);
     GraphComparator graph(map1, map2);
     graph.setDebugImages(ConfigOptions().getScoreGraphDebugImages());
     graph.setIterations(1000);

@@ -37,9 +37,6 @@ using namespace pp;
 #include <hoot/hadoop/conflate/ConflateDriver.h>
 #include <hoot/hadoop/HadoopTileWorker.h>
 
-//  Tgs
-#include <tgs/Statistics/Random.h>
-
 #include "MapReduceTestFixture.h"
 
 namespace hoot
@@ -55,7 +52,7 @@ public:
 
   void testAll()
   {
-    Tgs::Random::instance()->s_seed(0);
+    srand(0);
     OsmMap::resetCounters();
     Settings::getInstance().clear();
     conf().set(ConfigOptions().getUuidHelperRepeatableKey(), true);

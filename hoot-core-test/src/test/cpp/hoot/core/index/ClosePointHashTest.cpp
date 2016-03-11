@@ -81,7 +81,7 @@ public:
 
   void runRandomTest()
   {
-    Tgs::Random::instance()->s_seed(0);
+    srand(0);
     double neighborDistance = 1.0;
     ClosePointHash cph(neighborDistance);
 
@@ -94,8 +94,8 @@ public:
 
     for (size_t i = 0; i < SIZE; i++)
     {
-      x.push_back(Random::instance()->s_generateUniform() * range * 2 - range);
-      y.push_back(Random::instance()->s_generateUniform() * range * 2 - range);
+      x.push_back(Random::generateUniform() * range * 2 - range);
+      y.push_back(Random::generateUniform() * range * 2 - range);
       cph.addPoint(x[i], y[i], i);
     }
 

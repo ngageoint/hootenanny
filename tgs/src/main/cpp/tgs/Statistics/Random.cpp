@@ -33,24 +33,16 @@
 
 namespace Tgs
 {
-  boost::shared_ptr<Random> Random::_instance;
-  unsigned int Random::_srand;
-  boost::minstd_rand Random::_gen;
-
-  Random::Random()
-  {
-    seed();
-  }
-
   double Random::generateGaussian(double mean, double sigma)
   {
     double x, y, r2;
+
     do
     {
       // choose x,y in uniform square (-1,-1) to (+1,+1)
 
-      x = -1 + 2 * generateUniform();
-      y = -1 + 2 * generateUniform();
+      x = -1 + 2 * ((double)rand() / (double)RAND_MAX);
+      y = -1 + 2 * ((double)rand() / (double)RAND_MAX);
 
       // see if it is in the unit circle 
       r2 = x * x + y * y;
@@ -63,52 +55,11 @@ namespace Tgs
 
   double Random::generateUniform()
   {
-    boost::variate_generator<boost::minstd_rand&, boost::uniform_real<> > rnd(_gen, boost::uniform_real<>(0, 1));
-    return rnd();
+    return (double)rand() / (double)RAND_MAX;
   }
 
   bool Random::coinToss()
   {
-    boost::variate_generator<boost::minstd_rand&, boost::uniform_int<> > rnd(_gen, boost::uniform_int<>(0, 1));
-    return rnd() == 1;
-  }
-
-  int Random::generateInt()
-  {
-    boost::variate_generator<boost::minstd_rand&, boost::uniform_int<> > rnd(_gen, boost::uniform_int<>(0, RAND_MAX));
-    return rnd();
-  }
-
-  int Random::generateInt(int max)
-  {
-    boost::variate_generator<boost::minstd_rand&, boost::uniform_int<> > rnd(_gen, boost::uniform_int<>(0, max));
-    return rnd();
-  }
-
-  void Random::seed(unsigned int srand)
-  {
-    _gen = boost::minstd_rand(srand);
-  }
-
-  void Random::seed()
-  {
-    boost::variate_generator<boost::minstd_rand&, boost::uniform_int<> > rnd(_gen, boost::uniform_int<>(0, RAND_MAX));
-    _gen = boost::minstd_rand((unsigned int)rnd());
-  }
-
-  /*** Delete these functions later */
-  void Random::s_seed(unsigned int s_rand)
-  {
-    srand(s_rand);
-  }
-
-  int Random::s_generateInt()
-  {
-    return rand();
-  }
-
-  double Random::s_generateUniform()
-  {
-    return ((double)rand() / (double)RAND_MAX);
+    return rand() % 2 == 1;
   }
 }

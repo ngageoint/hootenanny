@@ -43,7 +43,6 @@
 
 // Tgs
 #include <tgs/RandomForest/RandomForest.h>
-#include <tgs/Statistics/Random.h>
 #include <tgs/System/DisableCout.h>
 
 namespace hoot
@@ -75,7 +74,7 @@ public:
 
     shared_ptr<DataFrame> df = ar.read()->toDataFrame(-1);
 
-    Tgs::Random::instance()->s_seed(0);
+    srand(0);
     LOG_DEBUG("Building Random Forest");
     RandomForest rf;
     auto_ptr<DisableCout> dc;

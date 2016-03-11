@@ -35,9 +35,6 @@
 // Standard
 #include <time.h>
 
-// Tgs
-#include <tgs/Statistics/Random.h>
-
 namespace hoot
 {
 
@@ -82,10 +79,10 @@ public:
          << "Greg Schmidt"
          << "Mike Benedict";
 
-    Tgs::Random::instance()->s_seed(time(0));
+    srand(time(0));
     for (int i = 0; i < pigs.size(); i++)
     {
-      pigs[i] = QString("%1 %2").arg(Tgs::Random::instance()->s_generateInt() % 20 + 1, 2).arg(pigs[i]);
+      pigs[i] = QString("%1 %2").arg(rand() % 20 + 1, 2).arg(pigs[i]);
     }
 
     pigs.sort();

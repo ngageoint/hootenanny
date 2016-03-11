@@ -47,7 +47,6 @@
 
 // Tgs
 #include <tgs/Optimization/NelderMead.h>
-#include <tgs/Statistics/Random.h>
 #include <tgs/System/Time.h>
 
 #include "../../TestUtils.h"
@@ -113,7 +112,7 @@ public:
     vector<RFqHybridDummyData> keys;
     vector<int> values;
 
-    Tgs::Random::instance()->s_seed(0);
+    srand(0);
     RFqHybridTree<RFqHybridDummyData, int, LevenshteinDistance> uut(1, 2, -1, -1);
     uut.buildIndex(keys, values);
 
@@ -134,7 +133,7 @@ public:
     keys.push_back(RFqHybridDummyData(3, 0, "cap", ElementId::node(c++)));
     keys.push_back(RFqHybridDummyData(4, 0, "bandana", ElementId::node(c++)));
 
-    Tgs::Random::instance()->s_seed(0);
+    srand(0);
 
     for (size_t i = 0; i < keys.size(); ++i)
     {
@@ -427,18 +426,18 @@ public:
       double indexBuildTime = Tgs::Time::getTime() - start;
       LOG_DEBUG("Built index.");
 
-      Tgs::Random::instance()->s_seed(0);
+      srand(0);
       int testCount = 500;
       double bruteForceTime = 0.0;
       double indexTime = 0.0;
       for (int i = 0; i < testCount; i++)
       {
-        double x = Tgs::Random::instance()->s_generateUniform() * _bounds.getWidth() + _bounds.getMinX();
-        double y = Tgs::Random::instance()->s_generateUniform() * _bounds.getHeight() + _bounds.getMinY();
+        double x = rand() / (double)RAND_MAX * _bounds.getWidth() + _bounds.getMinX();
+        double y = rand() / (double)RAND_MAX * _bounds.getHeight() + _bounds.getMinY();
         Coordinate c(x, y);
-        //double radius = Tgs::Random::instance()->s_generateUniform() * 10;
+        //double radius = rand() / (double)RAND_MAX * 10;
         double radius = 112000;
-        QString searchStr = _keys[Tgs::Random::instance()->s_generateInt() % _keys.size()].getMetricElement();
+        QString searchStr = _keys[rand() % _keys.size()].getMetricElement();
         int queryD = max(1, (int)(searchStr.size() * .2));
 
         start = Tgs::Time::getTime();
@@ -505,10 +504,10 @@ public:
 
 //      for (int j = 0; j < 5; j++)
 //      {
-//        result[0] = 2 + Tgs::Random::instance()->s_generateInt() % 8; // child count
-//        result[1] = 1 + Tgs::Random::instance()->s_generateInt() % 8; // bucket size
-//        result[2] = -1 + Tgs::Random::instance()->s_generateInt() % 20; // r depth
-//        result[3] = -1 + Tgs::Random::instance()->s_generateInt() % 30; // fq depth
+//        result[0] = 2 + rand() % 8; // child count
+//        result[1] = 1 + rand() % 8; // bucket size
+//        result[2] = -1 + rand() % 20; // r depth
+//        result[3] = -1 + rand() % 30; // fq depth
 //        optimizer.step(result, of->f(result));
 //      }
 
@@ -552,7 +551,7 @@ public:
     int iterations = 4;
     for (int i = 0; i < iterations; i++)
     {
-      Tgs::Random::instance()->s_seed(i);
+      srand(i);
       v[0] = bound(1, of->getBest().childCount + rdelta(delta), 10);
       v[1] = bound(1, of->getBest().bucketSize + rdelta(delta), 10);
       v[2] = bound(-1, of->getBest().rDepth + rdelta(delta), 40);
@@ -570,7 +569,7 @@ public:
 
   int rdelta(int delta)
   {
-    return Tgs::Random::instance()->s_generateInt() % (delta * 2 + 1) - delta;
+    return rand() % (delta * 2 + 1) - delta;
   }
 
   int bound(int min, int v, int max)

@@ -43,7 +43,7 @@ namespace Tgs
   {
     //Set the random seed
     //clock_t t1 = clock();
-    //Tgs::Random::instance()->s_seed((unsigned int)t1);
+    //srand((unsigned int)t1);
   }
 
   RandomForest::~RandomForest()

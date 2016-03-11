@@ -36,9 +36,6 @@
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/PbfWriter.h>
 
-// Tgs
-#include <tgs/Statistics/Random.h>
-
 using namespace hoot;
 using namespace hoot::pb;
 
@@ -215,7 +212,7 @@ public:
     writer.includVersion(false);
 
     OsmMap::resetCounters();
-    Tgs::Random::instance()->s_seed(0);
+    srand(0);
 
     shared_ptr<OsmMap> map(new OsmMap());
     shared_ptr<Node> n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));

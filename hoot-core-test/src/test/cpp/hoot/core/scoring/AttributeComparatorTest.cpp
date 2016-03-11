@@ -34,8 +34,6 @@
 #include <hoot/core/util/OpenCv.h>
 using namespace hoot;
 
-// Tgs
-#include <tgs/Statistics/Random.h>
 
 // Boost
 using namespace boost;
@@ -64,7 +62,7 @@ public:
   {
     OsmReader reader;
 
-    Tgs::Random::instance()->s_seed(0);
+    srand(0);
 
     shared_ptr<OsmMap> map(new OsmMap());
     reader.read("test-files/DcGisRoads.osm", map);
@@ -79,8 +77,8 @@ public:
 //    LOG_INFO("ci: " << uut.getConfidenceInterval());
 //    Log::getInstance().setLevel(Log::Warn);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5257, uut.getMeanScore(), 0.001);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.1694, uut.getConfidenceInterval(), 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5714, uut.getMeanScore(), 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.1175, uut.getConfidenceInterval(), 0.001);
   }
 
 };

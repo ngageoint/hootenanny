@@ -39,7 +39,6 @@
 #include <tgs/RStarTree/MemoryPageStore.h>
 #include <tgs/RStarTree/RStarTree.h>
 #include <tgs/RStarTree/RTreeNode.h>
-#include <tgs/Statistics/Random.h>
 
 using namespace Tgs;
 
@@ -191,7 +190,7 @@ public:
     double result = 0.0;
     for (int i = 0; i < 10; i++)
     {
-      double r = Tgs::Random::instance()->s_generateUniform();
+      double r = (double)rand() / (double)RAND_MAX;
       r = r * 2.0 - 1.0;
       result += r;
     }

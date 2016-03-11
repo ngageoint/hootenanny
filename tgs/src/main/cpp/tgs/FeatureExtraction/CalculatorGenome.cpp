@@ -37,7 +37,6 @@ using namespace std;
 #include "../Xml/XmlHelper.h"
 #include "BasicMathCalculatorNode.h"
 #include "ConstantCalculatorNodeSource.h"
-#include <tgs/Statistics/Random.h>
 
 namespace Tgs
 {
@@ -117,7 +116,7 @@ namespace Tgs
   shared_ptr<CalculatorGenomeNode> CalculatorGenome::_chooseRandomNode()
   {
     int count = _countNodes(_root);
-    int nodeIndex = Tgs::Random::instance()->s_generateInt() % count;
+    int nodeIndex = rand() % count;
     return _findNode(nodeIndex);
   }
 
@@ -162,7 +161,7 @@ namespace Tgs
     {
       weight = _sourceWeight;
     }
-    double r = Tgs::Random::instance()->s_generateUniform() * weight;
+    double r = ((double)rand() / (double)RAND_MAX) * weight;
     double last = 0.0;
     double sum = 0.0;
     for (map<string, AvailableNode>::const_iterator it = _availableNodes.begin(); 
@@ -371,7 +370,7 @@ namespace Tgs
 
   void CalculatorGenome::_mutate(double p, shared_ptr<CalculatorGenomeNode> node)
   {
-    double r = Tgs::Random::instance()->s_generateUniform();
+    double r = (double)rand() / (double)RAND_MAX;
 
     if (r <= p)
     {
