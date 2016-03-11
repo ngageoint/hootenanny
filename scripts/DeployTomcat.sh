@@ -15,11 +15,15 @@ function printOnError {
     rm -f $OUT
 }
 
-echo Tomcat home: $TOMCAT6_HOME
+#echo Tomcat home: $TOMCAT6_HOME
 
 [ -d $TOMCAT6_HOME/webapps ] || (echo Please set TOMCAT6_HOME; exit -1)
 
-$HOOT_HOME/scripts/StopTomcat.sh
+if [ "$1" == "--quiet" ]; then
+  $HOOT_HOME/scripts/StopTomcat.sh > /dev/null
+else
+  $HOOT_HOME/scripts/StopTomcat.sh
+fi
 
 rm -rf $TOMCAT6_HOME/webapps/hoot-services/
 cp $HOOT_HOME/hoot-services/target/hoot-services-*.war $TOMCAT6_HOME/webapps/hoot-services.war
@@ -38,5 +42,9 @@ sed -i s/8000/$NODE_MAPNIK_SERVER_PORT/g $TOMCAT6_HOME/webapps/hootenanny-id/dat
 rm -rf $TOMCAT6_HOME/webapps/hootenanny-id/css/img
 cp -R $TOMCAT6_HOME/webapps/hootenanny-id/dist/img $TOMCAT6_HOME/webapps/hootenanny-id/css/
 
-$HOOT_HOME/scripts/StartTomcat.sh
+if [ "$1" == "--quiet" ]; then
+  $HOOT_HOME/scripts/StartTomcat.sh > /dev/null
+else
+  $HOOT_HOME/scripts/StartTomcat.sh
+fi
 
