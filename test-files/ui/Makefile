@@ -19,7 +19,11 @@ HOOT_OPTS+= -D "services.db.writer.email=test@test.com" -D "services.db.reader.e
 
 test:
 	echo Running user interface tests...
+ifneq (,$(findstring s,$(MAKEFLAGS)))
+	$(HOOT_HOME)/scripts/DeployTomcat.sh 2> >( $(FILTER) >&2 )
+else
 	$(HOOT_HOME)/scripts/DeployTomcat.sh
+endif
 	rm -f tmp/TestRun.log*
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcGisRoads.osm $(DB_URL)/DcGisRoadsCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/DcTigerRoads.osm $(DB_URL)/DcTigerRoadsCucumber
