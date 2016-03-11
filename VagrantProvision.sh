@@ -299,13 +299,8 @@ touch Vagrant.marker
 echo "Configuring Hoot..."
 echo HOOT_HOME: $HOOT_HOME
 cd $HOOT_HOME
-# Check that hoot-ui submodule has been init'd and updated
-if [ ! "$(ls -A hoot-ui)" ]; then
-    echo "hoot-ui is empty"
-    echo "init'ing and updating submodule"
-    git submodule init && git submodule update
-fi
 source ./SetupEnv.sh
+git submodule init && git submodule update
 cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
 aclocal && autoconf && autoheader && automake && ./configure --with-rnd --with-services --with-uitests
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then

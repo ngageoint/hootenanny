@@ -3,7 +3,7 @@
 
 Hootenanny contains three distinct codebases: the core, the web services, and the user interface.  Each employs a different testing technology, which is described here.
 
-As a developer, you are expected to run the slow tests (see test suite descriptions) before pushing commits.  The codebase you run tests against can specifically reflect the changes in your commits  (e.g. If your commits are only in the user interface repository, then you may only choose to only run the user interface slow tests instead of running the slow tests for all three codebase repositories).  However, if any test (including glacial tests) is found to be failing as a result of your changes, you are expected to fix the problem.
+As a developer, you are expected to run the slow tests (see test suite descriptions) before pushing commits.  The codebase you choose to run tests against can specifically reflect the changes in your commits in order to save time (e.g. If your commits are only in the user interface repository, then you may only choose to only run the user interface slow tests instead of running the slow tests for all three codebase repositories).  However, if any test in any suite and any codebase (including glacial tests) is found to be failing as a result of your changes, you are expected to fix the problem.
 
 === Core Tests
 
@@ -18,18 +18,20 @@ Core tests are divided into: current, quick, slow, and glacial.
 * slow - Tests that run in less than 30sec.
 * glacial - Tests that run in less than 15min. You shouldn't need tests that take longer than 15min.
 
-To run all the tests in a suite:
+To run all the tests in a suite, choose one of the following:
 
 --------------------
-HootTest --<suite-name>
+HootTest --quick
+HootTest --slow
+HootTest --glacial
 -------------------
 
-If you want to run the tests for the other codebases at the same time you run the Core Tests you can use the following commands:
+If you want to run the tests for all codebases at the same time, you can use the following commands:
 
 -------------------
-make test-quick
-make test # slow
-make test-all # glacial
+./configure && make -sj($nproc) test-quick
+./configure && make -sj($nproc) test       # slow
+./configure && make -sj($nproc) test-all   # glacial
 ------------------
 
 quick is a subset of the slow suite, and quick and slow are subsets of the glacial suite.
@@ -49,7 +51,7 @@ HootTest --single hoot::AlphaShapeTest
 
 ==== Unit Tests
 
-The core unit tests use CPPUnit.  The goal is to have one test class for each functional class.  See hoot-core-test/src/test/cpp project for examples.  
+The core unit tests use CPPUnit.  The goal is to have one test class for each functional class.  See hoot-core-test/src/test/cpp project for examples.  One CPPUnit test class may contain multiple CPPUnit tests.
 
 To place a test into one of the four test suites listed in the previous section, a line similar to the following is placed at the end of the test class:
 
@@ -70,23 +72,23 @@ This is most useful when testing operations that involve multiple parts of the s
 
 Note that is is generally desirable to make the test do as little as possible to fully exercise the system. When you write a test it will likely be run thousands of times by a number of people over its lifetime. No need to make them all wait 20sec for a test that could run in .1sec. It is likely worth taking an extra 20min to write an efficient test.
 
-What Do Command Line Tests Do?
+**What Do Command Line Tests Do?**
 
 The basic principal of the command line tests is that they verify that the stdout and stderr are consistent with a given baseline. To do this the following must occur:
 
-# Create an executable script to test some aspect of the system.
-# Use the script to generate a first cut output
-# Validate the output
-# When the output is correct, create a baseline output
+* Create an executable script to test some aspect of the system.
+* Use the script to generate a first cut output
+* Validate the output
+* When the output is correct, create a baseline output
 
 When your test runs it will do the following:
 
-# Find all the scripts to execute (the scripts to run are determined by looking for all executable files in the test-files/cmd/[current|quick|slow|glacial] directories. If the file ends in @.off@ it will be ignored.)
-# Run a script and capture the stdout and stderr
-# Remove meaningless bits from the stdout and stderr such as INFO statements, DEBUG statements and the elapsed time print outs.
-# Compare the meaningful bits from the test run to the baseline. If there are any difference, report an error.
+* Find all the scripts to execute (the scripts to run are determined by looking for all executable files in the test-files/cmd/[current|quick|slow|glacial] directories. If the file ends in @.off@ it will be ignored.)
+* Run a script and capture the stdout and stderr
+* Remove meaningless bits from the stdout and stderr such as INFO statements, DEBUG statements and the elapsed time print outs.
+* Compare the meaningful bits from the test run to the baseline. If there are any difference, report an error.
 
-An Example
+**An Example**
 
 To create a test make a shell script that is executable and place it in the @test-files/cmd/current/@ directory. The shell script should exercise some aspect of the system and the success/failure should be determined by the output. For instance:
 
@@ -182,7 +184,7 @@ We don't want the test to live in @current@ so we'll move it over to the appropr
 mv test-files/cmd/current/Example* test-files/cmd/quick/
 ------------
 
-Inconsistent Output
+**Inconsistent Output**
 
 Sometimes scripts have output values that change from run to run such as data/time stamps. Many of these values get stripped out automatically, but if there is something relevant to just your test you can remove it via grep/sed. If that isn't an option you may need to modify ScriptTest.cpp to be knowledgeable of your situation. Be careful, because it will modify the way that all tests are verified.
 
@@ -192,22 +194,42 @@ Frequently it is desirable to test one aspect of the conflation routines. E.g. d
 
 These tests are discovered/created from directories. For now, only one directory is searched for tests @test-files/cases/unifying/@. The test creation process goes as follows:
 
-# Search @test-files/cases/unifying@ for a config file (@Config.conf@), if there is one, push it onto the config file stack.
-# If there are directories, recursively search them for tests, but ignore any directories that end with @.off@
-# If there are no directories, search for @Input1.osm@, @Input2.osm@ and @Expected.osm@, if they're found then create a new test case for this directory.
+* Search @test-files/cases/unifying@ for a config file (@Config.conf@), if there is one, push it onto the config file stack.
+* If there are directories, recursively search them for tests, but ignore any directories that end with @.off@
+* If there are no directories, search for @Input1.osm@, @Input2.osm@ and @Expected.osm@, if they're found then create a new test case for this directory.
 
 When a test runs it runs as follows:
 
-# Load all the config files in turn starting with the highest level directory config file.
-# Verify that the test has all the required files.
-# Run the equivalent of a "--unify" command on the two input files and put the result in @Output.osm@.
-# Verify that @Expected.osm@ matches @Output.osm@.
+* Load all the config files in turn starting with the highest level directory config file.
+* Verify that the test has all the required files.
+* Run the equivalent of a "--unify" command on the two input files and put the result in @Output.osm@.
+* Verify that @Expected.osm@ matches @Output.osm@.
 
 This approach makes it very fast/easy to create new micro tests and run them with the rest of the test routines. At this time the micro tests run as part of _quick_ and up.
 
+==== Core Plugins Tests
+
+The Plugins Test test various translation related operations.  They may be invoked in isolation with:
+
+--------------
+./configure && make -sj($nproc) plugins-test
+--------------
+
+They run by default in the slow test suite.
+
+==== Core Pretty Pipes Tests
+
+These Pretty Pipes Test test the pretty-pipes submodule.  They may be invoked in isolation with:
+
+--------------
+./configure && make -sj($nproc) pp-test
+--------------
+
+They run by default in the quick test suite.
+
 === Web Services Tests
 
-The Web Services tests test the Hootenanny web services interface.  Hootenanny web services tests are written in Java and use JUnit, Jersey, and a combination of Mockito, PowerMock, EasyMock for mock objects.
+The Web Services tests test the Hootenanny web services interface.  Hootenanny web services tests are written in Java and use JUnit, Jersey, and a combination of Mockito, PowerMock, EasyMock for mock objects.  One JUnit test class may contain multiple JUnit tests.
 
 ==== Test Suites
 
@@ -227,7 +249,7 @@ To run both web services unit and integration tests:
 
 The above commands will run the corresponding Core Tests immediately after the web services test complete.  There currently is no means to separate the two.
 
-h3. Web Services Unit Tests
+===== Web Services Unit Tests =====
 
 The Web Services Unit Tests are meant to test the Java web service code at the class level.  See hoot-services/src/test/java for test examples.
 
@@ -240,7 +262,7 @@ To mark a web service test method as a Unit Test, place the following annotation
 
 Unfortunately, we do have quite a few Web Services Tests labeled as Unit Tests which are technically Integration Tests, since they involve Jersey and Postgres (e.g. MapResourceTest).  The decision was made to leave these are Unit Tests, since they are critical and should be run with each commit push as part of the slow tests, but those tests should eventually be moved to the Integration Tests suite and corresponding class level Unit Tests written for them.
 
-h3. Web Services Integration Tests
+===== Web Services Integration Tests =====
 
 The Web Services Integration Tests are meant to test the Java web service code across logical boundaries, such as HTTP, Postgres, OGC, etc.  See hoot-services/src/test/java for test examples.
 
@@ -273,60 +295,77 @@ To run the User Interface Tests by themselves:
 
 === Smoke Tests
 
-The Smoke Tests are manual tests run against the Hootenanny iD browser based application to verify the results of a Hootenanny installation.  The Smoke Test description are located here (TODO: fill in location).
+The Smoke Tests are manual tests run against the Hootenanny iD browser based application to verify the results of a Hootenanny installation.  The Smoke Test steps are located here (TODO: fill in location).
 
 === Regression Tests
 
-The Regression Tests run Hootenanny command line operations against specific datasets to measure Hootenanny performance against particular scenarios.  The tests are run against non-public data and, therefore, are kept in a private DigitalGlobe repository.  For more information about the tests, contact hootenanny.help@digitalglobe.com
+The Regression Tests run Hootenanny command line operations against specific datasets to measure Hootenanny performance against particular scenarios.  The tests are run against non-public data and, therefore, are kept in a private DigitalGlobe repository and run on a nightly basis only.  For more information about the tests, contact hootenanny.help@digitalglobe.com
 
+If you have access to the regression test repository and wish to run them locally, the instructions to do so are "here":https://127.0.0.1:9443/redmine/projects/hootenany/wiki/Developer_-_Running_Regression_Tests
 
+Many of the regression tests score Hootenanny's conflation accuracy on a dataset and mark the test as passing or failing based on an allowable score range.  See hoot-tests/release_test.child/jakarta-spaghetti.release as an example.
 
 === Load Tests
 
-The Load Tests test the scalability of the Hootenanny web services code.
+The Load Tests test the scalability of the Hootenanny web services code and are run as part of the nightly tests in a private DigitalGlobe repository.  These tests currently are not meant to be run in a local development environment.
 
+When run, the tests output an image with graph metrics on Hootenanny scalability for increasing levels of simulated users.  Here is an example set of test metrics:
 
+TODO: add image
 
 === Test Coverage Reporting
 
-h3. C++ Code Coverage
+Reports can be generated which detail how well unit test coverage is for Hootenanny code.  This coverage will only take into account CPPUnit tests in the C++ code and JUnit tests in the Java code (no test coverage currently available for the Javascript user interface code).
+
+==== C++ Code Coverage ====
 
 Code coverage is supplied now by @gcov@ and @lcov@, utilities for using GCC to generate coverage results. The code coverage commands are a bit cryptic, but they are baked into the top level makefile. To generate code coverage results do the following:
 
-# Run @make clean && ./configure --with-coverage && make -j8 test && make -j8 coverage@
-# When it is completed you will have the coverage results in _$HOOT_HOME/tmp/coverage/*/index.html_. There is a report for each of the main libraries.
+* Run: 
+
+--------------------
+make clean && ./configure --with-coverage && make -j($nproc) test && make -j($nproc) coverage
+-------------------
+
+* When it is completed you will have the coverage results in _$HOOT_HOME/tmp/coverage/*/index.html_. There is a report for each of the main libraries.
 
 If you want to get coverage results for a specific command do the following:
 
-# @make clean && ./configure --with-coverage && make -j8@
-# Run the command or commands you want to evaluate
-# @make -j8 coverage@
+---------------
+make clean && ./configure --with-coverage && make -j($nproc)
+---------------------------
+
+* Run the command or commands you want to evaluate:
+
+---------------------
+make -j($nproc) coverage
+-----------------------
 
 If you want a new clean coverage result the you'll need to do make clean again before you start the run. It is possible to clean just the coverage data, but that'll take a little work in Makefile land.
 
-h3. Java Code Coverage
+==== Java Code Coverage ====
 
 Java code coverage is supplied by "Cobertura":http://cobertura.github.io/cobertura/ via Maven.  The following will generate code coverage reports for Hootenanny Java code:
+
 ----------
-make clean && ./configure --with-services --with-coverage && make -j8 test && make -j8 coverage
+make clean && ./configure --with-services --with-coverage && make -j($nproc) test && make -j($nproc) coverage
 -----------
+
 A separate report for each project is output to: *<project dir>/target/site/cobertura/index.html*
 
 === General Test Writing Guidelines
 
-So far, a random collection of general guidelines for testing things in Hootenanny.  Feel free to add to it.  For more specific direction, find a book on test driven development.
-
-* Unit tests should strive to test at the single class level only when possible.
+* Unit tests should strive to test at the single class level only, when possible.
 * Unit tests should have nearly a one to one mapping to each class in code.  Use the code coverage report to see where your tests are deficient.
 * Unit tests should avoid interfacing with external entities, when possible. e.g. databases, web servers (Note: Many of the Java services tests violate this and should be updated).  Such tests that interface with external entities should then become integration tests instead.
-* Unit tests should cover as many error handling cases as possible.
+* Unit tests should cover as many exceptional error handling cases as is reasonable.
 * Use clear test method names to state what you are testing.
 * Make gratuitous use of asserts during testing.
 * Use comments in test methods where its not obvious in the code how/why you're testing something.
 * Care should be taken to categorize tests based on the amount of time they complete. e.g. don't put a longer running test in the C++ quick tests.  For the Java tests, longer running tests should most likely be put into the integration tests.
-* Small amounts of test data should be used for testing if possible.
-* During testing you can verify class output via asserts against the state of the output data or via file comparison of the output with known good output.  An advantage to using file comparison for testing output is that the test code is less verbose and tedious to maintain as the class evolves.  A disadvantage of using file comparison is that it is not always clear what the intentions of your test are and test breakers can easily overwrite your output if they do not understand how they broke the test.  Weigh these pros and cons when selecting the way you test.
+* Small amounts of test data should be used for testing if possible.  Do not check large test data files into the repository.
+* During testing you can verify test output via asserts against the state of the output data or via file comparison of the output with known good output.  An advantage to using file comparison for testing output is that the test code is less verbose and tedious to maintain as the class evolves.  A disadvantage of using file comparison is that it is not always clear what the intentions of your test are and individuals can inadvertently overwrite your intended test output if they do not understand why they broke the test.  Weigh these pros and cons when selecting which one of these test output verification methods you will use.
 * Do not overwrite generated test output used to verify a test unless you are sure that in doing so you are still preserving the integrity of the test.
-* In Java, Mockito is your friend when writing tests.  We haven't integrated any mock libraries for C++ yet but probably should.
-* Design a class so that testing of all of its members is possible.  In some cases, you may need to expose members only to the tests (use C++ friend keyword, etc.) or in Java, Mockito may help with this.
+* In Java, mock objects are your friend when writing tests.  No mock libraries have been integrated for C++ yet.
+* Design a class so that testing of all of its members is possible.  In some cases, you may need to expose members only to the tests.  e.g. Use C++ friend keyword, etc.; or in Java, Mockito may help with this.
 
