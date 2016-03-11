@@ -120,7 +120,7 @@ public:
       QDir().mkdir("test-output/conflate/");
       OsmWriter writer;
       // for testing we don't need a high precision.
-      writer.setPrecision(15);
+      writer.setPrecision(7);
       writer.write(map, "test-output/conflate/RubberSheetIo.osm");
 
       HOOT_FILE_EQUALS("test-files/conflate/RubberSheetIo.osm",
