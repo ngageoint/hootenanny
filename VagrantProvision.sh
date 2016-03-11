@@ -293,7 +293,7 @@ if [ ! -f /etc/init.d/node-mapnik-server ]; then
   sudo chmod a+x /etc/init.d/node-mapnik-server
   # Make sure all npm modules are installed
   cd node-mapnik-server
-  npm install
+  sudo npm install
   cd ..
 fi
 
