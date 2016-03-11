@@ -17,7 +17,7 @@ fi
 
 # Install dependencies
 echo "Installing dependencies from repos..."
-sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane ruby ruby-dev xvfb gcc make zlib1g-dev patch x11vnc unzip nodejs htop
+sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane ruby ruby-dev xvfb zlib1g-dev patch x11vnc unzip gcc make nodejs htop
 
 if ! dpkg -l | grep --quiet wamerican-insane; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
@@ -210,6 +210,8 @@ fi
 # can deploy code to tomcat
 sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME
 sudo mkdir -p /var/lib/tomcat6/logs
+sudo mkdir -p $TOMCAT6_HOME/logs
+sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME/logs
 sudo chown -R vagrant:tomcat6 /var/lib/tomcat6
 sudo chown -R vagrant:tomcat6 /etc/tomcat6
 sudo chown -R vagrant:tomcat6 /etc/default/tomcat6
