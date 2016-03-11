@@ -220,7 +220,7 @@ They run by default in the slow test suite.
 
 ==== Core Pretty Pipes Tests
 
-These Pretty Pipes Test test the pretty-pipes submodule.  They may be invoked in isolation with:
+The Pretty Pipes Test test the pretty-pipes submodule.  They may be invoked in isolation with:
 
 --------------
 ./configure && make -sj($nproc) pp-test
@@ -230,11 +230,11 @@ They run by default in the quick test suite.
 
 === Web Services Tests
 
-The Web Services tests test the Hootenanny web services interface.  Hootenanny web services tests are written in Java and use JUnit, Jersey, and a combination of Mockito, PowerMock, EasyMock for mock objects.  One JUnit test class may contain multiple JUnit tests.
+The Web Services tests test the Hootenanny web services interface.  There are two types of Hootenanny web services tests.  One type is written in Java and use JUnit, Jersey, and a combination of Mockito, PowerMock, EasyMock for mock objects.  One JUnit test class may contain multiple JUnit tests.  The other type is written in Javascript and uses a combination of mocha and chai for testing.
 
 ==== Test Suites
 
-Web services test methods may be placed into either the UnitTest or IntegrationTest categories.  The UnitTest suite corresponds to the slow test suite in the Core Tests, and the IntegrationTest suite corresponds to the glacial test suite.
+Java web services test methods may be placed into either the UnitTest or IntegrationTest categories.  The UnitTest suite corresponds to the slow test suite in the Core Tests, and the IntegrationTest suite corresponds to the glacial test suite.
 
 To run web services unit tests:
 
@@ -250,7 +250,9 @@ To run both web services unit and integration tests:
 
 The above commands will run the corresponding Core Tests immediately after the web services test complete.  There currently is no means to separate the two.
 
-===== Web Services Unit Tests =====
+The mocha based web services tests (see renderdb-export-server/test as an example) are not currently aligned with the test suites (TODO: verify).
+
+===== Java Web Services Unit Tests
 
 The Web Services Unit Tests are meant to test the Java web service code at the class level.  See hoot-services/src/test/java for test examples.
 
@@ -263,7 +265,7 @@ To mark a web service test method as a Unit Test, place the following annotation
 
 Unfortunately, we do have quite a few Web Services Tests labeled as Unit Tests which are technically Integration Tests, since they involve Jersey and Postgres (e.g. MapResourceTest).  The decision was made to leave these are Unit Tests, since they are critical and should be run with each commit push as part of the slow tests, but those tests should eventually be moved to the Integration Tests suite and corresponding class level Unit Tests written for them.
 
-===== Web Services Integration Tests =====
+===== Java Web Services Integration Tests
 
 The Web Services Integration Tests are meant to test the Java web service code across logical boundaries, such as HTTP, Postgres, OGC, etc.  See hoot-services/src/test/java for test examples.
 
@@ -274,14 +276,26 @@ To mark a web service test method as a Integration Test, place the following ann
 @Category(IntegrationTest.class)
 -----------
 
+===== Javascript Web Services Unit Tests
+
+These test may be run by entering the directly containing the test .js file and running:
+
+---------------
+npm install
+npm test
+---------------
+
+See renderdb-export-server/test as an example.
+
 === User Interface Tests
 
-The User Interface tests test the functionality of the Hootenanny iD browser based application and its interactions with the Hootenanny Web Services.
+The User Interface tests come in two types.  The first type uses Cucumber to test the functionality of the Hootenanny iD browser based application and its interactions with the Hootenanny Web Services.  The second type uses mocha to test at a more granular level.  Of the two, to date more attention has been paid to the Cucumber tests while the mocha user interface tests do not receive much attention and may be candidates for removal.
 
+==== Cucumber User Interface Tests
 
 https://cukes.info[Cucumber] is the technology used to simulate browser interactions in the tests.  https://cukes.info[Cucumber] is the top level interpreter of the "gherkin language":https://github.com/cucumber/cucumber/wiki/Gherkin that describes each test. There are many  https://github.com/cucumber/cucumber/wiki/Tutorials-and-Related-Blog-Posts[good tutorials] on the web to get you started, 
 
-Hootenanny User Interface Tests can be found in test-files/ui.  See @features/conflate.feature@ and @features/step_definitions/custom_steps.rb@ for examples.  Each piece of functionality being tesetd should be placed into its own *.feature file.  Common utility methods can be placed in @custom_steps.rb@.  Cucumber settings may be changed in @features/support/env.rb@.
+Hootenanny Cucumber User Interface Tests can be found in test-files/ui.  See @features/conflate.feature@ and @features/step_definitions/custom_steps.rb@ for examples.  Each piece of functionality being tesetd should be placed into its own *.feature file.  Common utility methods can be placed in @custom_steps.rb@.  Cucumber settings may be changed in @features/support/env.rb@.
 
 The User Interface Tests run as part of the slow test suite by default.  To run them with all other slow tests:  
 
@@ -293,7 +307,20 @@ To run the User Interface Tests by themselves:
 
 -----------------------
 ./configure --with-services --with-uitests && make -sj($nproc) ui-test
------------------------
+
+==== Mocha User Interface Tests
+
+These tests reside in hoot-ui/test/spec/hoot and are not known to be currently supported.  They may be run with:
+
+---------------
+cd hoot-ui/test/spec/hoot
+npm install
+npm test
+---------------
+
+=== iD Editor Tests
+
+Although outside of the scope of Hootenanny code, of note for diagnostic purposes are the iD Editor unit tests.  These can be found in hoot-ui/test/spec.
 
 === Smoke Tests
 
