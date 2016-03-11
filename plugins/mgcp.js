@@ -1249,8 +1249,22 @@ mgcp = {
             print('');
         }
 
-        // Send back the feature
+        // Swap F_CODE for FCODE. Too many lookup tables etc to change it earlier
+        if (attrs.F_CODE)
+        {
+            attrs.FCODE = attrs.F_CODE;
+            delete attrs.F_CODE;
+        }
+
         if (attrs2.F_CODE)
+        {
+            attrs2.FCODE = attrs2.F_CODE;
+            delete attrs2.F_CODE;
+        }
+
+
+        // Send back the feature
+        if (attrs2.FCODE)
         {
             return([{attrs: attrs, tableName: tableName},{attrs: attrs2, tableName: tableName2}]);
         }
