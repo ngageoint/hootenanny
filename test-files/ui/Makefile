@@ -32,6 +32,7 @@ endif
 	mkdir -p tmp
 	./SetupDisplay.sh cucumber &> tmp/TestRun.log.tmp && mv tmp/TestRun.log.tmp tmp/TestRun.log
 	# $(HOOT_HOME)/scripts/StopTomcat.sh
+	echo ""
 
 clean:
 	rm -rf tmp

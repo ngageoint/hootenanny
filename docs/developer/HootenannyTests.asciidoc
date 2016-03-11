@@ -21,6 +21,7 @@ Core tests are divided into: current, quick, slow, and glacial.
 To run all the tests in a suite, choose one of the following:
 
 --------------------
+HootTest --current
 HootTest --quick
 HootTest --slow
 HootTest --glacial
@@ -42,7 +43,7 @@ Here are some examples of more granularity when running tests:
 # Runs the glacial tests but excludes any test with 'Big' in the test file name.
 HootTest --glacial '--exclude=.*Big.*'
 
-# Runs the glacial tests but only includes any test with 'Big' in the test file name.
+# Runs the glacial tests but only includes tests with 'Big' in the test file name.
 HootTest --glacial '--include=.*Big.*'
 
 # Runs a single test
