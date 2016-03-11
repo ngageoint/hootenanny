@@ -53,7 +53,7 @@ WayJoin2Mapper::WayJoin2Mapper()
   _key = (KeyStruct*)_keyStr.data();
 
   _nodeMap.reset(new OsmMap());
-  Tgs::Random::instance()->seed(time(NULL));
+  Tgs::Random::instance()->s_seed(time(NULL));
 }
 
 void WayJoin2Mapper::_emitNode(const shared_ptr<Node>& n)
@@ -74,7 +74,7 @@ void WayJoin2Mapper::_flushNodes()
   {
     LOG_INFO("Flushing nodes. " << _nodeMap->getNodeMap().size());
     _key->elementType = NodesType;
-    _key->id = Tgs::Random::instance()->generateInt();
+    _key->id = Tgs::Random::instance()->s_generateInt();
     stringstream ss(stringstream::out);
     pp::DataOutputStream dos(ss);
 

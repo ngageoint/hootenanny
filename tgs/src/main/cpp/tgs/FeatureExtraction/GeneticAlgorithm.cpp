@@ -128,7 +128,7 @@ namespace Tgs
     }
 
     cout << "Shouldn't be here. :( " << sum << endl;
-    return Tgs::Random::instance()->generateInt() % _population.size();
+    return Tgs::Random::instance()->s_generateInt() % _population.size();
   }
 
   int GeneticAlgorithm::_selectMateRoulette()
@@ -146,7 +146,7 @@ namespace Tgs
     }
     if (popMin == popMax)
     {
-      return Tgs::Random::instance()->generateInt() % _population.size();
+      return Tgs::Random::instance()->s_generateInt() % _population.size();
     }
     if (popMin > 0)
     {
@@ -162,7 +162,7 @@ namespace Tgs
       }
     }
 
-    double pick = Tgs::Random::instance()->generateUniform() * popSum;
+    double pick = Tgs::Random::instance()->s_generateUniform() * popSum;
     double s = 0;
     for (unsigned int i = 0; i < _population.size(); i++)
     {
@@ -178,7 +178,7 @@ namespace Tgs
     }
 
     cout << "Shouldn't be here. :( " << popSum << endl;
-    return Tgs::Random::instance()->generateInt() % _population.size();
+    return Tgs::Random::instance()->s_generateInt() % _population.size();
   }
 
   int GeneticAlgorithm::_selectMateTournament()
@@ -255,8 +255,8 @@ namespace Tgs
 //         cout.flush();
 //       }
       // choose the act of 'god'
-      double act = Tgs::Random::instance()->generateUniform();
-      //double mutate = Tgs::Random::instance()->generateUniform();
+      double act = Tgs::Random::instance()->s_generateUniform();
+      //double mutate = Tgs::Random::instance()->s_generateUniform();
       // if they get a free pass, randomly select a genome and pass it on to the next gen
       if (act < _mutationProb)
       {

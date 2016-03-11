@@ -62,8 +62,8 @@ public:
 
     for (size_t i = 0; i < 100000; i++)
     {
-      long k = Tgs::Random::instance()->generateInt();
-      long v = Tgs::Random::instance()->generateInt();
+      long k = Tgs::Random::instance()->s_generateInt();
+      long v = Tgs::Random::instance()->s_generateInt();
       m[k] = v;
       t[k] = v;
     }
@@ -77,7 +77,7 @@ public:
     const map<long, long>& cm = m;
     for (size_t i = 0; i < 100000; i++)
     {
-      long k = Tgs::Random::instance()->generateInt();
+      long k = Tgs::Random::instance()->s_generateInt();
       CPPUNIT_ASSERT_EQUAL(cm.count(k), ct.count(k));
     }
   }
@@ -118,25 +118,25 @@ public:
 //    cout << "Inserting...asdf" << endl;
 //    for (size_t i = 0; i < iterations; i++)
 //    {
-//      long key = (long)Tgs::Random::instance()->generateInt() << 30 | Tgs::Random::instance()->generateInt();
-//      long value = (long)Tgs::Random::instance()->generateInt() << 30 | Tgs::Random::instance()->generateInt();
+//      long key = (long)Tgs::Random::instance()->s_generateInt() << 30 | Tgs::Random::instance()->s_generateInt();
+//      long value = (long)Tgs::Random::instance()->s_generateInt() << 30 | Tgs::Random::instance()->s_generateInt();
 //      if (doReadTest)
 //      {
 //        pairs.push_back(pair<long, long>(key, value));
 //      }
-//      //bar.push_back(Tgs::Random::instance()->generateInt());
+//      //bar.push_back(Tgs::Random::instance()->s_generateInt());
 //      foo.insert(std::pair<long, long>(key, value));
 //      //foo[key] = value;
 //      //foo.insert(std::pair<int, double>(key, value));
 //      //bax[key] = value;
 
 
-////      map<long, long>::const_iterator it = bax.find(keys[Tgs::Random::instance()->generateInt() % keys.size()]);
+////      map<long, long>::const_iterator it = bax.find(keys[Tgs::Random::instance()->s_generateInt() % keys.size()]);
 ////      assert(it != bax.end());
 
 //      if (doReadTest)
 //      {
-//        size_t ki = Tgs::Random::instance()->generateInt() % pairs.size();
+//        size_t ki = Tgs::Random::instance()->s_generateInt() % pairs.size();
 //        assert(foo[pairs[ki].first] == pairs[ki].second);
 //      }
 
@@ -157,13 +157,13 @@ public:
 //      lastStart = start;
 //      for (size_t i = 0; i < 10000000; i++)
 //      {
-//  //      map<long, long>::const_iterator it = bax.find(keys[Tgs::Random::instance()->generateInt() % keys.size()]);
+//  //      map<long, long>::const_iterator it = bax.find(keys[Tgs::Random::instance()->s_generateInt() % keys.size()]);
 //  //      assert(it != bax.end());
 
-//        //MapType::const_iterator it = constFoo.find(keys[Tgs::Random::instance()->generateInt() % keys.size()]);
+//        //MapType::const_iterator it = constFoo.find(keys[Tgs::Random::instance()->s_generateInt() % keys.size()]);
 //        //assert(it != foo.end());
-//        //assert(foo.count(keys[Tgs::Random::instance()->generateInt() % keys.size()]) == 1);
-//        size_t ki = Tgs::Random::instance()->generateInt() % pairs.size();
+//        //assert(foo.count(keys[Tgs::Random::instance()->s_generateInt() % keys.size()]) == 1);
+//        size_t ki = Tgs::Random::instance()->s_generateInt() % pairs.size();
 //        assert(foo[pairs[ki].first] == pairs[ki].second);
 
 //        if (i % reportInterval == 0)
@@ -202,26 +202,26 @@ public:
 //    cout << "Inserting...";
 //    for (size_t i = 0; i < iterations; i++)
 //    {
-//      long key = (long)Tgs::Random::instance()->generateInt() << 30 | Tgs::Random::instance()->generateInt();
-//      long value = (long)Tgs::Random::instance()->generateInt() << 30 | Tgs::Random::instance()->generateInt();
+//      long key = (long)Tgs::Random::instance()->s_generateInt() << 30 | Tgs::Random::instance()->s_generateInt();
+//      long value = (long)Tgs::Random::instance()->s_generateInt() << 30 | Tgs::Random::instance()->s_generateInt();
 //      if (doReadTest)
 //      {
 //        pairs.push_back(pair<long, long>(key, value));
 //      }
-//      //bar.push_back(Tgs::Random::instance()->generateInt());
+//      //bar.push_back(Tgs::Random::instance()->s_generateInt());
 //      //foo[key] = value;
 //      //foo.insert(key, value);
 //      bar.insert(std::pair<long, long>(key, value));
 //      //bax[key] = value;
 
-//  //      map<long, long>::const_iterator it = bax.find(keys[Tgs::Random::instance()->generateInt() % keys.size()]);
+//  //      map<long, long>::const_iterator it = bax.find(keys[Tgs::Random::instance()->s_generateInt() % keys.size()]);
 //  //      assert(it != bax.end());
 
 //      if (doReadTest)
 //      {
-//        size_t ki = Tgs::Random::instance()->generateInt() % pairs.size();
+//        size_t ki = Tgs::Random::instance()->s_generateInt() % pairs.size();
 //        assert(bar.count(pairs[ki].first) == 1);
-//        assert(bar.count(Tgs::Random::instance()->generateInt()) == 0);
+//        assert(bar.count(Tgs::Random::instance()->s_generateInt()) == 0);
 //      }
 
 //      if (i % reportInterval == 0)
@@ -240,14 +240,14 @@ public:
 //      lastStart = start;
 //      for (size_t i = 0; i < 10000000; i++)
 //      {
-//        if (Tgs::Random::instance()->generateInt() % 2 == 0)
+//        if (Tgs::Random::instance()->s_generateInt() % 2 == 0)
 //        {
-//          size_t ki = Tgs::Random::instance()->generateInt() % pairs.size();
+//          size_t ki = Tgs::Random::instance()->s_generateInt() % pairs.size();
 //          assert(bar[pairs[ki].first] == pairs[ki].second);
 //        }
 //        else
 //        {
-//          assert(bar.count(Tgs::Random::instance()->generateInt()) == 0);
+//          assert(bar.count(Tgs::Random::instance()->s_generateInt()) == 0);
 //        }
 
 //        if (i % reportInterval == 0)

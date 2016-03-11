@@ -117,7 +117,7 @@ namespace Tgs
   shared_ptr<CalculatorGenomeNode> CalculatorGenome::_chooseRandomNode()
   {
     int count = _countNodes(_root);
-    int nodeIndex = Tgs::Random::instance()->generateInt() % count;
+    int nodeIndex = Tgs::Random::instance()->s_generateInt() % count;
     return _findNode(nodeIndex);
   }
 
@@ -162,7 +162,7 @@ namespace Tgs
     {
       weight = _sourceWeight;
     }
-    double r = Tgs::Random::instance()->generateUniform() * weight;
+    double r = Tgs::Random::instance()->s_generateUniform() * weight;
     double last = 0.0;
     double sum = 0.0;
     for (map<string, AvailableNode>::const_iterator it = _availableNodes.begin(); 
@@ -371,7 +371,7 @@ namespace Tgs
 
   void CalculatorGenome::_mutate(double p, shared_ptr<CalculatorGenomeNode> node)
   {
-    double r = Tgs::Random::instance()->generateUniform();
+    double r = Tgs::Random::instance()->s_generateUniform();
 
     if (r <= p)
     {

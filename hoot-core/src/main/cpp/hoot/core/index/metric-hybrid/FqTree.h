@@ -402,7 +402,7 @@ private:
   const KeyType& _pickKey() const
   {
     // for now just use a random key as described in the paper.
-    const KeyType& result = (*_keys)[Tgs::Random::instance()->generateInt() % _keys->size()];
+    const KeyType& result = (*_keys)[Tgs::Random::instance()->s_generateInt() % _keys->size()];
 
     return result;
   }

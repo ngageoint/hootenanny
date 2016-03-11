@@ -85,14 +85,30 @@ namespace Tgs
     return rnd();
   }
 
-  void Random::seed(unsigned int s)
+  void Random::seed(unsigned int srand)
   {
-    _gen = boost::minstd_rand(s);
+    _gen = boost::minstd_rand(srand);
   }
 
   void Random::seed()
   {
     boost::variate_generator<boost::minstd_rand&, boost::uniform_int<> > rnd(_gen, boost::uniform_int<>(0, RAND_MAX));
     _gen = boost::minstd_rand((unsigned int)rnd());
+  }
+
+  /*** Delete these functions later */
+  void Random::s_seed(unsigned int s_rand)
+  {
+    srand(s_rand);
+  }
+
+  int Random::s_generateInt()
+  {
+    return rand();
+  }
+
+  double Random::s_generateUniform()
+  {
+    return ((double)rand() / (double)RAND_MAX);
   }
 }

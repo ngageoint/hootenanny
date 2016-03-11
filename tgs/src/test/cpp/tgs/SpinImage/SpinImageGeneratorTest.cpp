@@ -140,8 +140,8 @@ namespace Tgs
     {
       for (unsigned int i = 0; i < orig.size(); i++)
       {
-        int r1 = Tgs::Random::instance()->generateInt() % orig.size();
-        int r2 = Tgs::Random::instance()->generateInt() % orig.size();
+        int r1 = Tgs::Random::instance()->s_generateInt()() % orig.size();
+        int r2 = Tgs::Random::instance()->s_generateInt()() % orig.size();
         string tmp = orig[r1];
         orig[r1] = orig[r2];
         orig[r2] = tmp;

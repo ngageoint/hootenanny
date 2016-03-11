@@ -215,7 +215,7 @@ public:
     writer.includVersion(false);
 
     OsmMap::resetCounters();
-    Tgs::Random::instance()->seed(0);
+    Tgs::Random::instance()->s_seed(0);
 
     shared_ptr<OsmMap> map(new OsmMap());
     shared_ptr<Node> n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));

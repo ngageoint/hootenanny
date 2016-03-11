@@ -70,7 +70,7 @@ public:
   {
     OsmReader reader;
 
-    Tgs::Random::instance()->seed(0);
+    Tgs::Random::instance()->s_seed(0);
     OsmMap::resetCounters();
 
     shared_ptr<OsmMap> map(new OsmMap());

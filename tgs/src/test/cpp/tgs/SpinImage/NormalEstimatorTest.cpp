@@ -112,9 +112,9 @@ namespace Tgs
       // create a sphere of points, almost uniformly distributed
       for (int i = 0; i < testSize; i++)
       {
-        Point3d p(Tgs::Random::instance()->generateInt() - RAND_MAX / 2.0,
-                  Tgs::Random::instance()->generateInt() - RAND_MAX / 2.0,
-                  Tgs::Random::instance()->generateInt() - RAND_MAX / 2.0);
+        Point3d p(Tgs::Random::instance()->s_generateInt() - RAND_MAX / 2.0,
+                  Tgs::Random::instance()->s_generateInt() - RAND_MAX / 2.0,
+                  Tgs::Random::instance()->s_generateInt() - RAND_MAX / 2.0);
         p.normalize();
         p = p * 10.0;
         pc.addPoint(CloudPoint(p.p1, p.p2, p.p3));

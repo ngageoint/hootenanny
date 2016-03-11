@@ -103,7 +103,7 @@ namespace Tgs
       std::vector<double> v;
       for (unsigned int i = 0; i < 10; i++)
       {
-        v.push_back(Tgs::Random::instance()->generateInt() % 100);
+        v.push_back(Tgs::Random::instance()->s_generateInt() % 100);
       }
 
       // testing equation ((3 * v) + sqrt(v)) - 2

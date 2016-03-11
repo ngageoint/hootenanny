@@ -86,8 +86,8 @@ namespace Tgs
       }
       for (unsigned int i = 0; i < pc.getPoints().size(); i++)
       {
-        int r1 = Tgs::Random::instance()->generateInt() % rIndex.size();
-        int r2 = Tgs::Random::instance()->generateInt() % rIndex.size();
+        int r1 = Tgs::Random::instance()->s_generateInt() % rIndex.size();
+        int r2 = Tgs::Random::instance()->s_generateInt() % rIndex.size();
         int tmp = rIndex[r1];
         rIndex[r1] = rIndex[r2];
         rIndex[r2] = tmp;
