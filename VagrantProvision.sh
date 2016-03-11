@@ -273,6 +273,20 @@ if [ ! -d $TOMCAT6_HOME/.deegree ]; then
     sudo chown vagrant:tomcat6 $TOMCAT6_HOME/.deegree
 fi
 
+# Update marker file date now that dependency and config stuff has run
+# The make command will exit and provide a warning to run 'vagrant provision'
+# if the marker file is older than this file (VagrantProvision.sh)
+cd $HOOT_HOME
+touch Vagrant.marker
+
+# Hoot
+echo "Configuring Hoot..."
+echo HOOT_HOME: $HOOT_HOME
+cd $HOOT_HOME
+source ./SetupEnv.sh
+git submodule init && git submodule update
+cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
+
 if [ ! -f /etc/init.d/node-mapnik-server ]; then
   echo "Installing node-mapnik-server..."
   sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
@@ -283,18 +297,6 @@ if [ ! -f /etc/init.d/node-mapnik-server ]; then
   cd ..
 fi
 
-# Update marker file date now that dependency and config stuff has run
-# The make command will exit and provide a warning to run 'vagrant provision'
-# if the marker file is older than this file (VagrantProvision.sh)
-touch Vagrant.marker
-
-# Hoot
-echo "Configuring Hoot..."
-echo HOOT_HOME: $HOOT_HOME
-cd $HOOT_HOME
-source ./SetupEnv.sh
-git submodule init && git submodule update
-cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
 aclocal && autoconf && autoheader && automake && ./configure --with-rnd --with-services --with-uitests
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri'
@@ -310,6 +312,7 @@ make -sj$(nproc)
 scripts/DeployTomcat.sh
 make -sj$(nproc) docs 
 hoot version
+
 echo "See VAGRANT.md for additional configuration instructions and then run 'vagrant ssh' to log into the Hootenanny virtual machine."
 echo "See the 'docs' directory on the virtual machine for Hootenanny documentation files."
 echo "Access the web application at http://localhost:8888/hootenanny-id"
