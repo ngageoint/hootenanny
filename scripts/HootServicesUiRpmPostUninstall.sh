@@ -8,9 +8,10 @@ sudo service $PG_SERVICE start
 PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}')
 # Drop Hoot user and services db
 if sudo -u postgres psql -lqt | grep -i --quiet hoot; then
-    sudo -u postgres dropdb hoot
+    sudo -u postgres psql -d postgres -c "DROP OWNED by hoot"
+    #sudo -u postgres dropdb hoot
     sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='false' WHERE datname='wfsstoredb'"
-    sudo -u postgres dropdb wfsstoredb
+    #sudo -u postgres dropdb wfsstoredb
     sudo -u postgres dropuser hoot
 fi
 # configure Postgres settings
