@@ -214,8 +214,13 @@ if ! grep --quiet TOMCAT6_HOME ~/.profile; then
     cd ~
 fi
 
-# the validity of these chown's may be questionable; they're needed so that the ui tests 
-# can deploy code to tomcat
+# The validity of the Tomcat changes in this section may be questionable; 
+# they're needed so that the ui tests can deploy code to tomcat
+username=vagrant
+if groups $username | grep &>/dev/null '\btomcat6\b'; then
+    echo "Adding vagrant user to tomcat6 user group..."
+    sudo usermod -a -G tomcat6 vagrant
+fi
 sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME
 sudo mkdir -p /var/lib/tomcat6/logs
 sudo mkdir -p $TOMCAT6_HOME/logs
