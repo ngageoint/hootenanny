@@ -33,33 +33,77 @@
 
 namespace Tgs
 {
+  boost::shared_ptr<Random> Random::_instance;
+#if NEW_RAND
+  boost::minstd_rand Random::_gen;
+  boost::variate_generator<boost::minstd_rand&, boost::uniform_int<> Random::_rnd;
+#endif
+
+  Random::Random()
+  {
+#if NEW_RAND
+    seed();
+#endif
+  }
+
   double Random::generateGaussian(double mean, double sigma)
   {
     double x, y, r2;
-
     do
     {
       // choose x,y in uniform square (-1,-1) to (+1,+1)
-
-      x = -1 + 2 * ((double)rand() / (double)RAND_MAX);
-      y = -1 + 2 * ((double)rand() / (double)RAND_MAX);
-
-      // see if it is in the unit circle 
+      x = -1 + 2 * generateUniform();
+      y = -1 + 2 * generateUniform();
+      // see if it is in the unit circle
       r2 = x * x + y * y;
     }
     while (r2 > 1.0 || r2 == 0);
-
-    /* Box-Muller transform */
+    // Box-Muller transform
     return mean + sigma * y * sqrt (-2.0 * log (r2) / r2);
   }
 
   double Random::generateUniform()
   {
-    return (double)rand() / (double)RAND_MAX;
+    return generateInt() / (double)RAND_MAX;
   }
 
   bool Random::coinToss()
   {
-    return rand() % 2 == 1;
+    return (generateInt() % 2) == 1;
+  }
+
+  int Random::generateInt(int max)
+  {
+    return generateInt() % max;
+  }
+
+  int Random::generateInt()
+  {
+#if NEW_RAND
+    return _rnd();
+#else
+    return rand();
+#endif
+  }
+
+  void Random::seed(unsigned int s)
+  {
+#if NEW_RAND
+    _gen = boost::minstd_rand(s);
+    _rnd = boost::variate_generator<boost::minstd_rand&, boost::uniform_int<> >(_gen, boost::uniform_int<>(0, RAND_MAX));
+#else
+    srand(s);
+#endif
+  }
+
+  void Random::seed()
+  {
+#if NEW_RAND
+    boost::minstd_rand gen = boost::minstd_rand(time(0));
+    boost::variate_generator<boost::minstd_rand&, boost::uniform_int<> > rnd(gen, boost::uniform_int<>(0, RAND_MAX));
+    seed(rnd());
+#else
+    seed(0);
+#endif
   }
 }

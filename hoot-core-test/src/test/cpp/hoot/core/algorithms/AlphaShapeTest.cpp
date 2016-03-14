@@ -65,8 +65,8 @@ public:
   {
     for (int i = 0; i < count; i++)
     {
-      double x = Tgs::Random::generateUniform() * outerRadius * 2.0 - outerRadius;
-      double y = Tgs::Random::generateUniform() * outerRadius * 2.0 - outerRadius;
+      double x = Tgs::Random::instance()->generateUniform() * outerRadius * 2.0 - outerRadius;
+      double y = Tgs::Random::instance()->generateUniform() * outerRadius * 2.0 - outerRadius;
       double r = sqrt(x * x + y * y);
       if (r >= innerRadius && r <= outerRadius)
       {
@@ -79,7 +79,7 @@ public:
   {
     vector< pair<double, double> > points;
 
-    srand(0);
+    Tgs::Random::instance()->seed(0);
     createDonut(points, 0, 35, 10, 0, 250);
     //createDonut(points, 15, 20, 20, 0, 2000);
 
