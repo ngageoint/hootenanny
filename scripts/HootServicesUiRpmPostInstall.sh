@@ -7,9 +7,11 @@ sudo service $PG_SERVICE start
 PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}')
 
 # create Hoot services db
-if ! sudo -u postgres psql -lqt | grep -i --quiet hoot; then
+if ! sudo -u postgres psql -d postgres -c "\du" | cut -d \| -f 1 | grep -qw hoot; then
+    RAND_PW=$(pwgen -s 16 1)
     sudo -u postgres createuser --superuser hoot
-    sudo -u postgres psql -c "alter user hoot with password 'hoottest';"
+    sudo -u postgres psql -c "alter user hoot with password '$RAND_PW';"
+    sudo sed -i s/DB_PASSWORD=hoottest/DB_PASSWORD=$RAND_PW/ /var/lib/hootenanny/conf/DatabaseConfig.sh
     sudo -u postgres createdb hoot --owner=hoot
     sudo -u postgres createdb wfsstoredb --owner=hoot
     sudo -u postgres psql -d hoot -c 'create extension hstore;'
@@ -99,13 +101,13 @@ TOMCAT_HOME=/usr/share/tomcat6
 if [ ! -d $TOMCAT_HOME/.deegree ]; then
     echo "Creating .deegree directory for webapp"
     sudo mkdir $TOMCAT_HOME/.deegree
-    sudo chown root:tomcat $TOMCAT_HOME/.deegree
+    sudo chown tomcat:tomcat $TOMCAT_HOME/.deegree
 fi
 BASEMAP_HOME=/var/lib/hootenanny/ingest/processed
 if [ ! -d $BASEMAP_HOME ]; then
     echo "Creating ingest/processed directory for webapp"
     sudo mkdir -p $BASEMAP_HOME
-    sudo chown root:tomcat $BASEMAP_HOME
+    sudo chown tomcat:tomcat $BASEMAP_HOME
 fi
 sudo service tomcat6 restart
 
