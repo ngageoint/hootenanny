@@ -32,6 +32,8 @@
 #include <stdlib.h>
 #include <vector>
 
+#include <boost/shared_ptr.hpp>
+
 #include "../TgsExport.h"
 
 namespace Tgs
@@ -39,11 +41,24 @@ namespace Tgs
   class TGS_EXPORT Random
   {
   public:
-    static bool coinToss();
+    static boost::shared_ptr<Random> instance()
+    {
+      if (!_instance)
+        _instance.reset(new Random());
+      return _instance;
+    }
 
-    static double generateGaussian(double mean, double sigma);
+    bool coinToss();
 
-    static double generateUniform();
+    double generateGaussian(double mean, double sigma);
+
+    double generateUniform();
+
+    int generateInt();
+    int generateInt(int max);
+
+    void seed();
+    void seed(unsigned int s);
 
     /**
      * Randomizes the elements in the specified vector
@@ -52,12 +67,13 @@ namespace Tgs
     static void randomizeVector(std::vector<_T>& v)
     {
       for (unsigned int i = 0; i < v.size() * 2; i++)
-      {
-        int index1 = rand() % v.size();
-        int index2 = rand() % v.size();
-        std::swap(v[index1], v[index2]);
-      }
+        std::swap(v[Random::instance()->generateInt(v.size())], v[Random::instance()->generateInt(v.size())]);
     }
+  private:
+    Random();
+
+    static boost::shared_ptr<Random> _instance;
+
   };
 }
 

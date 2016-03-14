@@ -59,9 +59,9 @@ namespace Tgs
       double v;
       // try to generate a valid value from the gaussian distribution 10 times...
       int count = 0;
-      do 
+      do
       {
-        v = Random::generateGaussian(value, sigma * temp);
+        v = Random::instance()->generateGaussian(value, sigma * temp);
         count++;
       } while ((v < min || v > max) && count < 10);
       // force the value within bounds, just in case we couldn't do it in ten tries
@@ -74,7 +74,7 @@ namespace Tgs
   };
 
   /**
-   * An implementation of a generic genetic algorithm (GA). This is not modeled after any 
+   * An implementation of a generic genetic algorithm (GA). This is not modeled after any
    * specific GA.
    */
   class TGS_EXPORT GeneticAlgorithm
@@ -87,7 +87,7 @@ namespace Tgs
 
     /**
      * clear out the scores in case the fitness function changes between generations.
-     */ 
+     */
     void clearScoreCache() { _allScores.clear(); }
 
     void enableScoreCaching() { _scoreCaching = true; }

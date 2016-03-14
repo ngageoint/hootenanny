@@ -40,9 +40,9 @@ using namespace std;
 
 namespace Tgs
 {
-  void ConstantCalculatorNodeSource::_copyInternalData(const CalculatorGenomeNode& node) 
+  void ConstantCalculatorNodeSource::_copyInternalData(const CalculatorGenomeNode& node)
   {
-    const ConstantCalculatorNodeSource& tmp = 
+    const ConstantCalculatorNodeSource& tmp =
       dynamic_cast<const ConstantCalculatorNodeSource&>(node);
 
     _v = tmp._v;
@@ -78,8 +78,7 @@ namespace Tgs
     {
       _sigma = 1.0;
     }
-    //cout << "ConstantCalculatorNodeSource::mutate isn't implemented." << endl;
-    double newV = Random::generateGaussian(_v, _sigma); 
+    double newV = Random::instance()->generateGaussian(_v, _sigma);
     _oldVs.push_back(newV);
 
     double mean = 0.0;
@@ -96,7 +95,7 @@ namespace Tgs
     _v = newV;
   }
 
-  void ConstantCalculatorNodeSource::_saveInternals(std::ostream& s, 
+  void ConstantCalculatorNodeSource::_saveInternals(std::ostream& s,
     const std::string indent) const
   {
     s << indent << "<value>" << _v << "</value>" << endl;
