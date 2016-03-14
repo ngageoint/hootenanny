@@ -36,6 +36,7 @@
 #include <utility>
 
 #include "../TgsException.h"
+#include <tgs/Statistics/Random.h>
 
 namespace Tgs
 {
@@ -43,7 +44,7 @@ namespace Tgs
   {
     //Set the random seed
     //clock_t t1 = clock();
-    //srand((unsigned int)t1);
+    //Tgs::Random::instance()->seed((unsigned int)t1);
   }
 
   RandomForest::~RandomForest()

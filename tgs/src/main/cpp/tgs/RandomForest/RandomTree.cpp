@@ -41,6 +41,7 @@
 
 //TGS Includes
 #include "../TgsException.h"
+#include <tgs/Statistics/Random.h>
 
 namespace Tgs
 {
@@ -415,7 +416,7 @@ namespace Tgs
   {
     try
     {
-      srand((unsigned int)_treeId);
+      Tgs::Random::instance()->seed((unsigned int)_treeId);
 
       //std::cout << "Train Tree" << std::endl;
       _factPerNode = numFactors;

@@ -48,6 +48,7 @@ using namespace std;
 // Tgs
 #include <tgs/TgsException.h>
 #include <tgs/SharedPtr.h>
+#include <tgs/Statistics/Random.h>
 
 namespace Tgs
 {
@@ -380,7 +381,7 @@ public:
         Vector result;
         result.prepare(dimension);
         for (size_t i = 0; i<dimension; ++i) {
-            result[i] = 0.001*(rand()%1000);
+            result[i] = 0.001*(Tgs::Random::instance()->generateInt(1000));
         }
         return result;
     }

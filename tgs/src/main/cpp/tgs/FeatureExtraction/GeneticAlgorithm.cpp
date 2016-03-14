@@ -39,6 +39,9 @@ using namespace std;
 #include "../Statistics/Random.h"
 #include "../Statistics/Distribution.h"
 
+// Tgs
+#include <tgs/Statistics/Random.h>
+
 namespace Tgs
 {
   GeneticAlgorithm::GeneticAlgorithm(shared_ptr<Genome> seed, shared_ptr<FitnessFunction> fitness)
@@ -128,7 +131,7 @@ namespace Tgs
     }
 
     cout << "Shouldn't be here. :( " << sum << endl;
-    return rand() % _population.size();
+    return Tgs::Random::instance()->generateInt(_population.size());
   }
 
   int GeneticAlgorithm::_selectMateRoulette()
@@ -146,7 +149,7 @@ namespace Tgs
     }
     if (popMin == popMax)
     {
-      return rand() % _population.size();
+      return Tgs::Random::instance()->generateInt(_population.size());
     }
     if (popMin > 0)
     {
@@ -162,7 +165,7 @@ namespace Tgs
       }
     }
 
-    double pick = (double)rand() / (double)RAND_MAX * popSum;
+    double pick = Tgs::Random::instance()->generateUniform() * popSum;
     double s = 0;
     for (unsigned int i = 0; i < _population.size(); i++)
     {
@@ -178,7 +181,7 @@ namespace Tgs
     }
 
     cout << "Shouldn't be here. :( " << popSum << endl;
-    return rand() % _population.size();
+    return Tgs::Random::instance()->generateInt(_population.size());
   }
 
   int GeneticAlgorithm::_selectMateTournament()
@@ -255,8 +258,8 @@ namespace Tgs
 //         cout.flush();
 //       }
       // choose the act of 'god'
-      double act = (double)rand() / (double)RAND_MAX;
-      //double mutate = (double)rand() / (double)RAND_MAX;
+      double act = Tgs::Random::instance()->generateUniform();
+      //double mutate = Tgs::Random::instance()->generateUniform();
       // if they get a free pass, randomly select a genome and pass it on to the next gen
       if (act < _mutationProb)
       {

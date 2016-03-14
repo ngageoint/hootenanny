@@ -36,10 +36,12 @@ using namespace std;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
+// Tgs
 #include "../PluginFactory.h"
 #include <tgs/RStarTree/MemoryPageStore.h>
 #include <tgs/RStarTree/HilbertRTree.h>
 #include <tgs/RStarTree/KnnIterator.h>
+#include <tgs/Statistics/Random.h>
 
 namespace Tgs
 {
@@ -50,7 +52,7 @@ public:
   double d;
   int id;
 
-  Tmp() {};
+  Tmp() {}
 
   Tmp(double d, int id)
   {
@@ -106,13 +108,13 @@ public:
     boxes.reserve(testSize);
     fids.reserve(testSize);
     Box b(2);
-    srand(0);
+    Tgs::Random::instance()->seed(0);
     for (int i = 0; i < testSize; i++)
     {
-      double l1 = rand() % 10000;
-      double u1 = l1 + rand() % 100 - 50;
-      double l2 = rand() % 10000;
-      double u2 = l2 + rand() % 100 - 50;
+      double l1 = Tgs::Random::instance()->generateInt(10000);
+      double u1 = l1 + Tgs::Random::instance()->generateInt(100) - 50;
+      double l2 = Tgs::Random::instance()->generateInt(10000);
+      double u2 = l2 + Tgs::Random::instance()->generateInt(100) - 50;
       b.setBounds(0, l1, u1);
       b.setBounds(1, l2, u2);
       boxes.push_back(b);
@@ -288,13 +290,13 @@ public:
 
     int sampleSize = 100;
 
-    srand(0);
+    Tgs::Random::instance()->seed(0);
 //     t.restart();
     double x, y;
     for (int i = 0; i < sampleSize; i++)
     {
-      x = rand() - 3000;
-      y = rand() - 3000;
+      x = Tgs::Random::instance()->generateInt() - 3000;
+      y = Tgs::Random::instance()->generateInt() - 3000;
 
       KnnIterator it(&uut, x, y);
       CPPUNIT_ASSERT(it.next());
@@ -305,12 +307,12 @@ public:
     uut.greedyShuffle();
     validateTreeBounds(uut);
 
-    srand(0);
+    Tgs::Random::instance()->seed(0);
 //    t.restart();
     for (int i = 0; i < sampleSize; i++)
     {
-      x = rand() - 3000;
-      y = rand() - 3000;
+      x = Tgs::Random::instance()->generateInt() - 3000;
+      y = Tgs::Random::instance()->generateInt() - 3000;
 
       KnnIterator it(&uut, x, y);
       CPPUNIT_ASSERT(it.next());
@@ -361,8 +363,8 @@ public:
     double x, y;
     for (int i = 0; i < sampleSize; i++)
     {
-      x = rand() - 3000;
-      y = rand() - 3000;
+      x = Tgs::Random::instance()->generateInt() - 3000;
+      y = Tgs::Random::instance()->generateInt() - 3000;
 
       for (int j = 0; j < testSize; j++)
       {
@@ -410,12 +412,12 @@ public:
       }
     }
 
-    srand(0);
+    Tgs::Random::instance()->seed(0);
     double x, y;
     for (int i = 0; i < sampleSize; i++)
     {
-      x = rand() - 3000;
-      y = rand() - 3000;
+      x = Tgs::Random::instance()->generateInt() - 3000;
+      y = Tgs::Random::instance()->generateInt() - 3000;
 
       KnnIterator it(rst.get(), x, y);
       CPPUNIT_ASSERT(it.next());

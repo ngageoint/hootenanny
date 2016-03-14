@@ -45,6 +45,7 @@
 #include <tgs/RStarTree/MemoryPageStore.h>
 #include <tgs/RStarTree/RStarTree.h>
 #include <tgs/RStarTree/KnnIterator.h>
+#include <tgs/Statistics/Random.h>
 
 using namespace Tgs;
 
@@ -66,11 +67,11 @@ public:
      shared_ptr<MemoryPageStore> mps(new MemoryPageStore(2048));
      RStarTree uut(mps, 2);
      int maxChildCount = uut.getRoot()->getMaxChildCount();
- 
+
      CPPUNIT_ASSERT_EQUAL(0, uut.getRoot()->getChildCount());
- 
+
      Box all(2);
- 
+
      int cc = 0;
      for (int i = 0; i < maxChildCount; i++)
      {
@@ -85,9 +86,9 @@ public:
        CPPUNIT_ASSERT(b == uut.getRoot()->getChildEnvelope(cc).toBox());
        cc++;
      }
- 
+
      validateTreeEntries(uut, cc);
- 
+
      for (int i = 0; i < maxChildCount - 2; i++)
      {
        Box b(2);
@@ -100,7 +101,7 @@ public:
        cc++;
        validateTreeEntries(uut, cc);
      }
- 
+
      for (int i = 0; i < 1000; i++)
      {
        Box b(2);
@@ -118,26 +119,26 @@ public:
        }
      }
    }
- 
+
    void test2()
    {
      shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
      RStarTree uut(mps, 2);
- 
+
      Box b(2);
      for (int i = 0; i < 1000; i++)
      {
-       double l1 = rand() % 10000;
-       double u1 = l1 + rand() % 100;
-       double l2 = rand() % 10000;
-       double u2 = l2 + rand() % 100;
+       double l1 = Tgs::Random::instance()->generateInt(10000);
+       double u1 = l1 + Tgs::Random::instance()->generateInt(100);
+       double l2 = Tgs::Random::instance()->generateInt(10000);
+       double u2 = l2 + Tgs::Random::instance()->generateInt(100);
        b.setBounds(0, l1, u1);
        b.setBounds(1, l2, u2);
        uut.insert(b, i);
      }
      validateTreeBounds(uut);
    }
- 
+
 #ifdef WIN32
    void fileTest()
    {
@@ -153,10 +154,10 @@ public:
        Box b(2);
        for (int i = 0; i < 3000; i++)
        {
-         double l1 = rand() % 10000;
-         double u1 = l1 + rand() % 100;
-         double l2 = rand() % 10000;
-         double u2 = l2 + rand() % 100;
+         double l1 = Tgs::Random::instance()->generate(10000);
+         double u1 = l1 + Tgs::Random::instance()->generate(100);
+         double l2 = Tgs::Random::instance()->generate(10000);
+         double u2 = l2 + Tgs::Random::instance()->generate(100);
          b.setBounds(0, l1, u1);
          b.setBounds(1, l2, u2);
          uut.insert(b, i);
@@ -177,30 +178,30 @@ public:
      shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
      shared_ptr<RStarTree> rst(new RStarTree(mps, 2));
      RStarTree& uut = *rst;
- 
+
 //      Timer t;
      Box b(2);
 //      t.start();
      for (int i = 0; i < 20000; i++)
      {
-       double l1 = rand() % 10000;
-       double u1 = l1 + rand() % 100;
-       double l2 = rand() % 10000;
-       double u2 = l2 + rand() % 100;
+       double l1 = Tgs::Random::instance()->generateInt(10000);
+       double u1 = l1 + Tgs::Random::instance()->generateInt(100);
+       double l2 = Tgs::Random::instance()->generateInt(10000);
+       double u2 = l2 + Tgs::Random::instance()->generateInt(100);
        b.setBounds(0, l1, u1);
        b.setBounds(1, l2, u2);
        uut.insert(b, i);
      }
 //      std::cout << t.elapsed() << "sec" << std::endl;
- 
+
      std::cout << "Searching..." << std::endl;
 //      t.restart();
- 
+
      double x, y;
      for (int i = 0; i < 2000; i++)
      {
-       x = rand() % 20000 - 5000;
-       y = rand() % 20000 - 5000;
+       x = Tgs::Random::instance()->generateInt(20000) - 5000;
+       y = Tgs::Random::instance()->generateInt(20000) - 5000;
        KnnIterator it(rst.get(), x, y);
        it.next();
 //        if (i % 1000 == 0)
@@ -209,9 +210,8 @@ public:
 //        }
      }
 //      std::cout << t.elapsed() << "sec" << std::endl;
- 
    }
- 
+
    void validateTreeBounds(RStarTree& uut)
    {
      int rootId = uut.getRoot()->getId();
@@ -221,11 +221,11 @@ public:
      {
        const RTreeNode* n = uut.getNode(nodes.front());
        nodes.pop_front();
- 
+
        // make sure that only the root node has a parent of -1
        CPPUNIT_ASSERT((n->getParentId() == -1 && n->getId() == rootId) ||
          (n->getParentId() != -1 && n->getId() != rootId));
- 
+
        Box bounds(2);
        if (n->isLeafNode())
        {
@@ -252,7 +252,7 @@ public:
        }
      }
    }
- 
+
    void validateTreeEntries(RStarTree& uut, int cc)
    {
      //qDebug("*** Begin Validation ***");
@@ -262,18 +262,18 @@ public:
      {
        found[i] = false;
      }
- 
+
      int rootId = uut.getRoot()->getId();
      std::list<const RTreeNode*> nodes;
      nodes.push_back(uut.getRoot());
      while (nodes.size() > 0)
      {
        const RTreeNode* n = nodes.front();
- 
+
        // make sure that only the root node has a parent of -1
        CPPUNIT_ASSERT((n->getParentId() == -1 && n->getId() == rootId) ||
          (n->getParentId() != -1 && n->getId() != rootId));
-       
+
        nodes.pop_front();
        Box bounds(2);
        if (n->isLeafNode())
@@ -283,7 +283,7 @@ public:
          for (int i = 0; i < n->getChildCount(); i++)
          {
            int id = n->getChildUserId(i);
- 
+
            //if (i == 0)
            //{
            //  qDebug("  %d", id);
@@ -298,7 +298,7 @@ public:
            //  qDebug("  -> %d", id);
            //}
            //lastId = id;
- 
+
            CPPUNIT_ASSERT(id < (int)found.size());
            CPPUNIT_ASSERT(found[id] == false);
            found[id] = true;
@@ -324,7 +324,7 @@ public:
          CPPUNIT_ASSERT(bounds == n->calculateEnvelope());
        }
      }
- 
+
      for (unsigned int i = 0; i < found.size(); i++)
      {
        //if (found[i] != true)

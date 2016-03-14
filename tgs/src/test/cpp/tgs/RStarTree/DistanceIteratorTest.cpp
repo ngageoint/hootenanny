@@ -39,6 +39,7 @@
 #include <tgs/RStarTree/MemoryPageStore.h>
 #include <tgs/RStarTree/RStarTree.h>
 #include <tgs/RStarTree/RTreeNode.h>
+#include <tgs/Statistics/Random.h>
 
 using namespace Tgs;
 
@@ -66,21 +67,21 @@ public:
 //       }
 //     }
 //   }
-  
+
 //   void benchmark(int dimensions, int size, int iterations, int pageSize)
 //   {
 //     shared_ptr<MemoryPageStore> mps(new MemoryPageStore(pageSize));
 //     RStarTree uut(mps, dimensions);
-// 
+//
 //     Box b(dimensions);
 //     Timer t;
 //     t.start();
 //     std::vector< std::vector<double> > statFodder;
 //     std::vector<Box> boxes;
 //     std::vector<bool> found;
-// 
+//
 //     found.resize(size);
-// 
+//
 //     statFodder.resize(dimensions);
 //     for (int i = 0; i < size; i++)
 //     {
@@ -94,15 +95,15 @@ public:
 //       uut.insert(b, i);
 //     }
 //     double createTime = t.elapsed();
-// 
+//
 //     Stats stats;
 //     stats.calculate(statFodder[0]);
-// 
+//
 //     double lambda = stats.percentile75th - stats.percentile25th;
 //     double bw = 0.79 * lambda * pow((double)stats.size, -1./5.);
-// 
+//
 //     //printDetails(uut);
-// 
+//
 //     t.restart();
 //     std::vector<double> point;
 //     point.resize(dimensions);
@@ -117,7 +118,7 @@ public:
 //       {
 //         point[j] = generateRandomNormal();
 //       }
-// 
+//
 //       t.restart();
 //       for (int j = 0; j < size; j++)
 //       {
@@ -125,7 +126,7 @@ public:
 //         found[j] = d <= bw;
 //       }
 //       bruteForceTime += t.elapsed();
-// 
+//
 //       t.restart();
 //       DistanceIterator it(&uut, point, bw);
 //       while (it.next())
@@ -136,11 +137,11 @@ public:
 //       nodeHits += it.nodeHits;
 //       distCalcs += it.distCalcs;
 //     }
-// 
+//
 //     qDebug("%d\t%d\t%d\t%d\t%f\t%f\t%f\t%f\t%.2f",
 //       dimensions, size, pageSize, iterations, createTime, (double)totalCount / (double)iterations,
 //       treeTime, bruteForceTime, distCalcs / (double)iterations);
-// //     qDebug("  nodeHits: %f distCalcs: %f", nodeHits / (double)iterations, 
+// //     qDebug("  nodeHits: %f distCalcs: %f", nodeHits / (double)iterations,
 // //       distCalcs / (double)iterations);
 //   }
 
@@ -159,7 +160,7 @@ public:
       else if (point[i] < box.getLowerBound(i))
       {
         a = point[i] - box.getLowerBound(i);
-      } 
+      }
       c += a * a;
     }
     return sqrt(c);
@@ -190,7 +191,7 @@ public:
     double result = 0.0;
     for (int i = 0; i < 10; i++)
     {
-      double r = (double)rand() / (double)RAND_MAX;
+      double r = Tgs::Random::instance()->generateUniform();
       r = r * 2.0 - 1.0;
       result += r;
     }
@@ -212,12 +213,12 @@ public:
 //     int pointCount = 3000;
 //     shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
 //     RStarTree uut(mps, dimensions);
-//     
+//
 //     std::vector<Box> boxes;
 //     std::vector<int> ids;
 //     std::vector<bool> found;
 //     found.resize(pointCount);
-// 
+//
 // //     Timer t;
 // //     t.start();
 //     Box b(dimensions);
@@ -237,18 +238,18 @@ public:
 //     }
 // //    double populateTime = t.elapsed();
 // //    qDebug("Populate time: %f", populateTime);
-// 
+//
 //     Stats stats;
 //     stats.calculate(statFodder[0]);
-// 
+//
 //     double lambda = stats.percentile75th - stats.percentile25th;
 //     double bw = 0.79 * lambda * pow((double)stats.size, -1./5.);
-// 
+//
 //     double queryTime = 0.0;
 //     double bruteForceTime = 0.0;
-// 
+//
 // //    qDebug("bw: %f", bw);
-// 
+//
 //     double distance = bw * 4.0;
 //     std::vector<double> point;
 //     point.resize(dimensions);
@@ -260,7 +261,7 @@ public:
 //       {
 //         point[j] = generateRandomNormal();
 //       }
-// 
+//
 //       t.restart();
 //       for (int j = 0; j < pointCount; j++)
 //       {
@@ -268,7 +269,7 @@ public:
 //         found[j] = d <= distance;
 //       }
 //       bruteForceTime += t.elapsed();
-// 
+//
 //       t.restart();
 //       DistanceIterator it(&uut, point, distance);
 //       while (it.next())
@@ -282,7 +283,7 @@ public:
 //         found[it.getId()] = false;
 //       }
 //       queryTime += t.elapsed();
-// 
+//
 //       for (int j = 0; j < pointCount; j++)
 //       {
 //         if (found[j] == true)
@@ -294,7 +295,7 @@ public:
 //         }
 //       }
 //     }
-// 
+//
 // //     qDebug("Query time: %f", queryTime);
 // //     qDebug("Brute force time: %f", bruteForceTime);
 // //     qDebug("Average count %f", (double)totalCount / (double)testCount);
@@ -309,10 +310,10 @@ public:
 //         if (n->getChildUserId(i) == id)
 //         {
 //           qDebug("ID %d details:", id);
-//           qDebug(" Leaf node %d[%d] %f %s", n->getId(), i, 
+//           qDebug(" Leaf node %d[%d] %f %s", n->getId(), i,
 //             calculateDistance(point, n->getChildEnvelope(i).toBox()),
 //             n->getChildEnvelope(i).toBox().toString().c_str());
-//           qDebug("   Envelope: %f %s", 
+//           qDebug("   Envelope: %f %s",
 //             calculateDistance(point, n->calculateEnvelope()),
 //             n->calculateEnvelope().toString().c_str());
 //           return true;
@@ -325,10 +326,10 @@ public:
 //       {
 //         if (printDetails(tree, tree.getNode(n->getChildNodeId(i)), point, id))
 //         {
-//           qDebug(" Node %d[%d] %f %s", n->getId(), i, 
+//           qDebug(" Node %d[%d] %f %s", n->getId(), i,
 //             calculateDistance(point, n->getChildEnvelope(i).toBox()),
 //             n->getChildEnvelope(i).toBox().toString().c_str());
-//           qDebug("   Envelope: %f %s", 
+//           qDebug("   Envelope: %f %s",
 //             calculateDistance(point, n->calculateEnvelope()),
 //             n->calculateEnvelope().toString().c_str());
 //           return true;
@@ -337,13 +338,13 @@ public:
 //     }
 //     return false;
 //   }
-// 
+//
 //   void printDetails(RStarTree& tree)
 //   {
 //     const RTreeNode* n = tree.getRoot();
 //     for (int i = 0; i < n->getChildCount(); i++)
 //     {
-//       qDebug(" Node %d[%d] %s", n->getId(), i, 
+//       qDebug(" Node %d[%d] %s", n->getId(), i,
 //         n->getChildEnvelope(i).toBox().toString().c_str());
 //     }
 //     qDebug("   Envelope: %s", n->calculateEnvelope().toString().c_str());

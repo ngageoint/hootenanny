@@ -38,12 +38,15 @@ using namespace std;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
+// Tgs
 #include <tgs/StreamUtils.h>
 #include <tgs/FeatureExtraction/BasicMathCalculatorNode.h>
 #include <tgs/FeatureExtraction/CalculatorGenome.h>
 #include <tgs/FeatureExtraction/ConstantCalculatorNodeSource.h>
 #include <tgs/FeatureExtraction/FitnessFunction.h>
 #include <tgs/FeatureExtraction/VectorCalculatorNodeSource.h>
+#include <tgs/Statistics/Random.h>
+
 #include "../PluginFactory.h"
 
 #define ASSERT_DBL_EQL(expected, actual) CPPUNIT_ASSERT_DOUBLES_EQUAL(expected, actual, 1e-4)
@@ -102,7 +105,7 @@ namespace Tgs
       std::vector<double> v;
       for (unsigned int i = 0; i < 10; i++)
       {
-        v.push_back(rand() % 100);
+        v.push_back(Tgs::Random::instance()->generateInt(100));
       }
 
       // testing equation ((3 * v) + sqrt(v)) - 2
@@ -114,7 +117,7 @@ namespace Tgs
       // ((3 * v) + sqrt(v)) - 2
       root->setInput(BinaryCalculatorNode::V1(), add);
       root->setInput(BinaryCalculatorNode::V2(), new ConstantCalculatorNodeSource(2));
-      
+
       // ((3 * v) + sqrt(v))
       add->setInput(BinaryCalculatorNode::V1(), mult);
       add->setInput(BinaryCalculatorNode::V2(), sqrtNode);

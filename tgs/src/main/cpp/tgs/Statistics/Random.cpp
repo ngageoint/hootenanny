@@ -57,7 +57,7 @@ namespace Tgs
 
   double Random::generateUniform()
   {
-    return generateInt() / (double)RAND_MAX;
+    return (double)generateInt() / (double)RAND_MAX;
   }
 
   bool Random::coinToss()

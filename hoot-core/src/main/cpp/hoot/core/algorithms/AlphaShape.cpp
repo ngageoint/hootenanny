@@ -54,6 +54,7 @@ using namespace std;
 #include <tgs/DelaunayTriangulation/DelaunayTriangulation.h>
 #include <tgs/DisjointSet/DisjointSet.h>
 #include <tgs/RStarTree/HilbertCurve.h>
+#include <tgs/Statistics/Random.h>
 using namespace Tgs;
 
 namespace hoot
@@ -317,8 +318,8 @@ void AlphaShape::insert(const vector< pair<double, double> >& points)
   // randomize the input. By randomizing we take the complexity from O(n^2) to O(n lg(n))
   for (size_t i = 0; i < points.size() * 3; i++)
   {
-    int i1 = rand() % points.size() + 3;
-    int i2 = rand() % points.size() + 3;
+    int i1 = Tgs::Random::instance()->generateInt(points.size()) + 3;
+    int i2 = Tgs::Random::instance()->generateInt(points.size()) + 3;
     swap(randomized[i1], randomized[i2]);
   }
 
