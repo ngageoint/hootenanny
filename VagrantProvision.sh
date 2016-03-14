@@ -330,7 +330,8 @@ echo "Will take several extra minutes to build the training data the initial tim
 make -sj$(nproc) &> /dev/null || true
 make -s &> /dev/null || true
 make -sj$(nproc)
-scripts/DeployTomcat.sh
+echo "Deploying web application..."
+scripts/DeployTomcat.sh &> /dev/null
 make -sj$(nproc) docs 
 hoot version
 
