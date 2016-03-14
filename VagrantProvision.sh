@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source ~/.profile
+
 echo "Updating OS..."
 sudo apt-get update
 sudo apt-get upgrade -y
@@ -30,19 +32,18 @@ sudo apt-get autoremove -y
 
 # cucumber deps install for ui tests
 
-cd ~
-
-sudo apt-get install ruby ruby-dev xvfb zlib1g-dev patch x11vnc unzip
+sudo apt-get install -y ruby ruby-dev xvfb zlib1g-dev patch x11vnc unzip
 
 if ! grep --quiet "export HOOT_HOME" ~/.profile; then
     echo "Adding hoot home to profile..."
     echo "export HOOT_HOME=/home/vagrant/hoot" >> ~/.profile
+    source ~/.profile
 fi
 if ! grep --quiet "\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:\$HOOT_HOME/bin" ~/.profile; then
     echo "Adding path vars to profile..."
     echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:\$HOOT_HOME/bin" >> ~/.profile
+    source ~/.profile
 fi
-source ~/.profile
 
 gem list --local | grep -q selenium-cucumber
 if [ $? -eq 1 ]; then
@@ -70,6 +71,8 @@ if [ $? -eq 1 ]; then
     sudo gem install --user-install rspec
 fi
 
+cd ~
+
 if [ ! -f google-chrome-stable_current_amd64.deb ]; then
     echo "Installing Chrome..."
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -86,7 +89,7 @@ fi
 
 sudo apt-get autoremove -y
 
-# end cucumber install
+# end cucumber deps install
 
 # Hoot Baseline is PostgreSQL 9.1 and PostGIS 1.5, so we need a deb file and
 # then remove 9.5
@@ -208,14 +211,16 @@ if ! grep --quiet TOMCAT6_HOME ~/.profile; then
     echo "export TOMCAT6_HOME=/usr/share/tomcat6" >> ~/.profile
     source ~/.profile
     cd $TOMCAT6_HOME
+    # These sym links are needed so that the ui tests can deploy the services and iD 
+    # app to Tomcat using the Tomcat startup and shutdown scripts.
     sudo ln -s /var/lib/tomcat6/webapps webapps
     sudo ln -s /var/lib/tomcat6/conf conf
     sudo ln -s /var/log/tomcat6 log
     cd ~
 fi
 
-# The validity of the Tomcat changes in this section may be questionable; 
-# they're needed so that the ui tests can deploy code to tomcat
+# These permission changes needed so that the ui tests can deploy the services and iD app to 
+# Tomcat using the Tomcat startup and shutdown scripts.
 username=vagrant
 if groups $username | grep &>/dev/null '\btomcat6\b'; then
     echo "Adding vagrant user to tomcat6 user group..."
@@ -294,7 +299,7 @@ if ! grep -i --quiet 'allowLinking="true"' /etc/tomcat6/context.xml; then
 fi
 
 if [ ! -d $TOMCAT6_HOME/.deegree ]; then
-    echo "Creating directory for webapp..."
+    echo "Creating deegree directory for webapp..."
     sudo mkdir $TOMCAT6_HOME/.deegree
     sudo chown vagrant:tomcat6 $TOMCAT6_HOME/.deegree
 fi
@@ -325,9 +330,11 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     cp LocalConfig.pri.orig LocalConfig.pri
     echo 'QMAKE_CXX=ccache g++' >> LocalConfig.pri
 fi
-echo "Building Hoot...  Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
-#make clean-all -sj$(nproc)
-# The services build won't always complete the first time without errors (for some unknown reason caused by the Maven pom), so we're executing multiple compiles here to get around that.
+echo "Building Hoot... "
+echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
+# make clean-all -sj$(nproc)
+# The services build won't always complete the first time without errors (for some unknown reason caused by 
+# the Maven pom), so we're executing multiple compiles here to get around that.
 make -sj$(nproc) &> /dev/null || true
 make -s &> /dev/null || true
 make -sj$(nproc)
