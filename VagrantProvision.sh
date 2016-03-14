@@ -16,7 +16,7 @@ if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
 fi
 
 echo "Installing dependencies from repos..."
-sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane ruby ruby-dev xvfb zlib1g-dev patch x11vnc unzip htop
+sudo apt-get install -y texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake1.11 protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite wamerican-insane
 
 if ! dpkg -l | grep --quiet wamerican-insane; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
@@ -27,6 +27,10 @@ if ! dpkg -l | grep --quiet wamerican-insane; then
 fi
 
 sudo apt-get autoremove -y
+
+#cucumber install
+
+sudo apt-get install ruby ruby-dev xvfb zlib1g-dev patch x11vnc unzip
 
 if ! grep --quiet "export HOOT_HOME" ~/.profile; then
     echo "Adding hoot home to profile..."
@@ -77,6 +81,10 @@ if [ ! -f bin/chromedriver ]; then
     wget http://chromedriver.storage.googleapis.com/2.14/chromedriver_linux64.zip
     unzip -d $HOME/bin chromedriver_linux64.zip
 fi
+
+sudo apt-get autoremove -y
+
+# end cucumber install
 
 # Hoot Baseline is PostgreSQL 9.1 and PostGIS 1.5, so we need a deb file and
 # then remove 9.5
@@ -203,6 +211,7 @@ if ! grep --quiet TOMCAT6_HOME ~/.profile; then
     sudo ln -s /var/log/tomcat6 log
     cd ~
 fi
+
 # the validity of these chown's may be questionable; they're needed so that the ui tests 
 # can deploy code to tomcat
 sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME
