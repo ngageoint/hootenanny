@@ -7,11 +7,9 @@ PG_SERVICE=$(ls /etc/init.d | grep postgresql-)
 sudo service $PG_SERVICE start
 PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}')
 # Drop Hoot user and services db
-if sudo -u postgres psql -lqt | grep -i --quiet hoot; then
+if sudo -u postgres psql -d postgres -c "\du" | cut -d \| -f 1 | grep -qw hoot; then
     sudo -u postgres psql -d postgres -c "DROP OWNED by hoot"
-    #sudo -u postgres dropdb hoot
     sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='false' WHERE datname='wfsstoredb'"
-    #sudo -u postgres dropdb wfsstoredb
     sudo -u postgres dropuser hoot
 fi
 # configure Postgres settings
@@ -52,6 +50,11 @@ fi
 BASEMAP_HOME=/var/lib/hootenanny/ingest/processed
 if [ -d $BASEMAP_HOME ]; then
     sudo rm -rf $BASEMAP_HOME
+fi
+# Remove exploded hoot-services war remnants
+SERVICES_HOME=/var/lib/tomcat6/webapps/hoot-services
+if [ -d $SERVICES_HOME ]; then
+    sudo rm -rf $SERVICES_HOME
 fi
 sudo service tomcat6 start
 
