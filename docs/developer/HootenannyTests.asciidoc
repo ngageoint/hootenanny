@@ -6,7 +6,7 @@ Each employs a different testing technology, which is described here.
 
 === Test Suites
 
-Tests are divided into: current, quick, slow, and glacial.
+Tests are divided into the following groups: current, quick, slow, and glacial.
 
 * current - Used when you want to isolate a single test and work on it. No tests should be committed 
 in this directory.
