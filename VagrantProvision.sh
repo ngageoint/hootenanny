@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+cd ~
 source ~/.profile
 
 echo "Updating OS..."
@@ -29,15 +30,16 @@ fi
 
 sudo apt-get autoremove -y
 
-# cucumber deps install for ui tests
-
-sudo apt-get install -y ruby ruby-dev xvfb zlib1g-dev patch x11vnc unzip
-
 if ! grep --quiet "export HOOT_HOME" ~/.profile; then
     echo "Adding hoot home to profile..."
     echo "export HOOT_HOME=/home/vagrant/hoot" >> ~/.profile
     source ~/.profile
 fi
+
+# cucumber deps install for ui tests
+
+sudo apt-get install -y ruby ruby-dev xvfb zlib1g-dev patch x11vnc unzip
+
 if ! grep --quiet "\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:\$HOOT_HOME/bin" ~/.profile; then
     echo "Adding path vars to profile..."
     echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:\$HOOT_HOME/bin" >> ~/.profile
@@ -69,8 +71,6 @@ if [ $? -eq 1 ]; then
     echo "Installing rspec gem..."
     sudo gem install --user-install rspec
 fi
-
-cd ~
 
 if [ ! -f google-chrome-stable_current_amd64.deb ]; then
     echo "Installing Chrome..."
