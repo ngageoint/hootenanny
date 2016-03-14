@@ -30,6 +30,8 @@ sudo apt-get autoremove -y
 
 # cucumber deps install for ui tests
 
+cd ~
+
 sudo apt-get install ruby ruby-dev xvfb zlib1g-dev patch x11vnc unzip
 
 if ! grep --quiet "export HOOT_HOME" ~/.profile; then
@@ -223,6 +225,16 @@ sudo chown -R vagrant:tomcat6 /etc/tomcat6
 #sudo chown -R vagrant:tomcat6 /etc/default/tomcat6
 sudo chown -R tomcat6:tomcat6 /var/log/tomcat6
 
+cd $HOOT_HOME
+source ./SetupEnv.sh
+
+# Check that hoot-ui submodule has been init'd and updated
+if [ ! "$(ls -A hoot-ui)" ]; then
+    echo "hoot-ui is empty"
+    echo "init'ing and updating submodule"
+    git submodule init && git submodule update
+fi
+
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
 echo "Configuring tomcat6 environment..."
 sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
@@ -285,15 +297,11 @@ fi
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'
 # if the marker file is older than this file (VagrantProvision.sh)
-cd $HOOT_HOME
 touch Vagrant.marker
 
 # Hoot
 echo "Configuring Hoot..."
 echo HOOT_HOME: $HOOT_HOME
-cd $HOOT_HOME
-source ./SetupEnv.sh
-git submodule init && git submodule update
 cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
 
 if [ ! -f /etc/init.d/node-mapnik-server ]; then
