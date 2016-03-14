@@ -44,6 +44,8 @@ using namespace std;
 #include <tgs/StreamUtils.h>
 #include <tgs/RandomForest/DataFrame.h>
 #include <tgs/FeatureReduction/PrincipalComponentsAnalysis.h>
+#include <tgs/Statistics/Random.h>
+
 #include "../PluginFactory.h"
 #include "../FeatureSelection/GeneratedData.h"
 
@@ -163,8 +165,8 @@ namespace Tgs
       while (df.getNumDataVectors() < 10000)
       {
         // create a random point inside a circle
-        double x = 2.0 * ((double)rand() / (double)RAND_MAX) - 1;
-        double y = 2.0 * ((double)rand() / (double)RAND_MAX) - 1;
+        double x = 2.0 * Tgs::Random::instance()->generateUniform() - 1;
+        double y = 2.0 * Tgs::Random::instance()->generateUniform() - 1;
         if (sqrt(x * x + y * y) > 1.0)
         {
           continue;
@@ -258,7 +260,7 @@ namespace Tgs
     {
       for (unsigned int i = 0; i < 40; i++)
       {
-        double angle = rand() % 360;
+        double angle = Tgs::Random::instance()->generateInt(360);
         DataFrame df;
         populateSimpleDataFrame(df, angle);
 
@@ -267,7 +269,7 @@ namespace Tgs
         uut.compute(df);
         //cout << uut.getComponents();
 
-        DblVec p((double)rand() / (double)RAND_MAX, (double)rand() / (double)RAND_MAX);
+        DblVec p(Tgs::Random::instance()->generateUniform(), Tgs::Random::instance()->generateUniform());
         std::vector<double> result = uut.reprojectIntoPca(p);
         std::vector<double> rp = rotate(p, -(double)angle);
         std::vector<double> rpi = rotate(p, -(double)angle + 180);
