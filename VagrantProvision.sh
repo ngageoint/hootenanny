@@ -8,7 +8,6 @@ sudo apt-get upgrade -y
 sudo apt-get dist-upgrade -y
 sudo apt-get install ntp -y
 
-# Add the postgres repo
 if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
     echo "Adding PostgreSQL repository to apt..."
     sudo bash -c "echo 'deb http://apt.postgresql.org/pub/repos/apt/ '$(lsb_release -cs)'-pgdg main' > /etc/apt/sources.list.d/pgdg.list"
@@ -104,7 +103,6 @@ if [ ! -f postgresql-9.1-postgis_1.5.3-2_amd64.deb ]; then
     sudo apt-get install -y postgresql-contrib-9.1
 fi
 
-# Get GDAL & FileGDB_API source
 if [ ! -f gdal-1.10.1.tar.gz ]; then
     echo "Downloading GDAL source..."
     wget http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz
@@ -123,7 +121,6 @@ if [ ! -d /usr/local/FileGDB_API ]; then
     sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
 fi
 
-# Build GDAL w/ FileGDB
 if ! ogrinfo --formats | grep --quiet FileGDB; then
     echo "Building GDAL w/ FileGDB..."
     export PATH=/usr/local/lib:/usr/local/bin:$PATH
@@ -154,7 +151,6 @@ if [ ! -d $HOME/.cpan ]; then
     sudo perl -MCPAN -e 'install XML::Simple'
 fi
 
-# Create Services Database
 if ! sudo -u postgres psql -lqt | grep -i --quiet hoot; then
     echo "Creating Services Database..."
     sudo -u postgres createuser --superuser hoot
@@ -170,7 +166,6 @@ if ! sudo -u postgres psql -lqt | grep -i --quiet hoot; then
     sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on spatial_ref_sys TO PUBLIC;"
 fi
 
-# PostgreSQL Tuning
 if ! grep -i --quiet HOOT /etc/postgresql/9.1/main/postgresql.conf; then
 echo "Tuning PostgreSQL..."
 sudo -u postgres sed -i.bak s/^max_connections/\#max_connections/ /etc/postgresql/9.1/main/postgresql.conf
@@ -232,13 +227,11 @@ sudo mkdir -p $TOMCAT6_HOME/logs
 sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME/logs
 sudo chown -R vagrant:tomcat6 /var/lib/tomcat6
 sudo chown -R vagrant:tomcat6 /etc/tomcat6
-#sudo chown -R vagrant:tomcat6 /etc/default/tomcat6
 sudo chown -R tomcat6:tomcat6 /var/log/tomcat6
 
 cd $HOOT_HOME
 source ./SetupEnv.sh
 
-# Check that hoot-ui submodule has been init'd and updated
 if [ ! "$(ls -A hoot-ui)" ]; then
     echo "hoot-ui is empty"
     echo "init'ing and updating submodule"
@@ -309,7 +302,6 @@ fi
 # if the marker file is older than this file (VagrantProvision.sh)
 touch Vagrant.marker
 
-# Hoot
 echo "Configuring Hoot..."
 echo HOOT_HOME: $HOOT_HOME
 cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
