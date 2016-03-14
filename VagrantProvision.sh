@@ -28,7 +28,7 @@ fi
 
 sudo apt-get autoremove -y
 
-#cucumber install
+# cucumber deps install for ui tests
 
 sudo apt-get install ruby ruby-dev xvfb zlib1g-dev patch x11vnc unzip
 
