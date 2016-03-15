@@ -6,12 +6,16 @@ sudo service $PG_SERVICE initdb
 sudo service $PG_SERVICE start
 PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}')
 
+sudo service tomcat6 start
+
 # create Hoot services db
 if ! sudo -u postgres psql -d postgres -c "\du" | cut -d \| -f 1 | grep -qw hoot; then
     RAND_PW=$(pwgen -s 16 1)
     sudo -u postgres createuser --superuser hoot
     sudo -u postgres psql -c "alter user hoot with password '$RAND_PW';"
-    sudo sed -i s/DB_PASSWORD=hoottest/DB_PASSWORD=$RAND_PW/ /var/lib/hootenanny/conf/DatabaseConfig.sh
+    sudo sed -i s/DB_PASSWORD=.*/DB_PASSWORD=$RAND_PW/ /var/lib/hootenanny/conf/DatabaseConfig.sh
+    sudo sed -i s/password\:\ hoottest/password\:\ $RAND_PW/ /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/liquibase.properties
+    sudo sed -i s/value=\"hoottest\"/value=\"$RAND_PW\"/ /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml
     sudo -u postgres createdb hoot --owner=hoot
     sudo -u postgres createdb wfsstoredb --owner=hoot
     sudo -u postgres psql -d hoot -c 'create extension hstore;'

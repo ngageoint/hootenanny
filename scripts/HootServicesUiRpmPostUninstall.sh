@@ -8,8 +8,13 @@ sudo service $PG_SERVICE start
 PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}')
 # Drop Hoot user and services db
 if sudo -u postgres psql -d postgres -c "\du" | cut -d \| -f 1 | grep -qw hoot; then
-    sudo -u postgres psql -d postgres -c "DROP OWNED by hoot"
     sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='false' WHERE datname='wfsstoredb'"
+    sudo -u postgres dropdb hoot
+    sudo -u postgres dropdb wfsstoredb
+    # Drop all render dbs
+    source /var/lib/hootenanny/conf/DatabaseConfig.sh
+    SQL=$(sudo -u postgres psql -t -A -d postgres -c "SELECT 'DROP DATABASE \"' || datname || '\";' FROM pg_database WHERE datname like '$DB_NAME_renderdb\_%';")
+    echo $SQL | sudo -u postgres psql -d postgres
     sudo -u postgres dropuser hoot
 fi
 # configure Postgres settings
@@ -29,7 +34,7 @@ fi
 # configure Tomcat environment
 TOMCAT_ENV=/usr/sbin/tomcat6
 if grep -i --quiet HOOT $TOMCAT_ENV; then
-    sudo -u tomcat mv $TOMCAT_ENV.orig $TOMCAT_ENV
+    sudo mv $TOMCAT_ENV.orig $TOMCAT_ENV
 fi
 # Restore original file
 TOMCAT_SRV=/etc/tomcat6/server.xml
