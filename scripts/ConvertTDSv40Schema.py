@@ -474,7 +474,7 @@ textFuncList = {
     'ZI001_SSY':'text_SSY',
     'ZI001_VSC':'text_VSC',
     'ZI004_RCG':'text_RCG',
-    'ZSAX_RS0':'text_RS0',
+    'ZSAX_RS0':'text_ZSAX_RS0',
     }
 
 dataType_list = {
@@ -487,10 +487,10 @@ dataType_list = {
     }
 
 default_list = {
-    'String':'No Information',
+    'String':'',
     'Real':'-999999.0',
     'Integer':'-999999',
-    'textEnumeration':'noInformation',
+    'textEnumeration':'',
     'enumeration':'-999999'
 }
 
@@ -1504,13 +1504,13 @@ text_SSY = {
 } # End text_SSY
 
 # Classification
-text_RS0 = {
+text_ZSAX_RS0 = {
     'TS':'TS',
     'S':'S',
     'R':'R',
     'C':'C',
     'U':'U'
-} # End text_RS0
+} # End text_ZSAX_RS0
 
 
 # The main loop to process a file
@@ -1560,12 +1560,10 @@ def processFile(fileName):
             if dataType in dataType_list:
                 aType = dataType_list[dataType]
                 aDefault = default_list[aType]
-                if aName == 'ZSAX_RS0': # This only has 2 characters. Can't fit 'noInformation' into 2 characters
-                    aDefault = 'U'
 
             if (dataType.find('StrucText') > -1):
                 aType = 'String'
-                aDefault = 'noInformation'
+                aDefault = ''
 
             if fieldValue.find('interval closure') > -1:
                 aDefault = '5'
@@ -1676,8 +1674,8 @@ def processFile(fileName):
                         continue
 
                     if aName == 'ZSAX_RS0': # Classification
-                        for i in text_RS0:
-                            tschema[fName]['columns'][aName]['enum'].append({'name':i,'value':text_RS0[i]})
+                        for i in text_ZSAX_RS0:
+                            tschema[fName]['columns'][aName]['enum'].append({'name':i,'value':text_ZSAX_RS0[i]})
                         continue
 
 
@@ -1685,6 +1683,12 @@ def processFile(fileName):
                 (eValue,eName) = fieldValue.split("=")
                 tValue = eValue.replace("'","").strip()
                 tschema[fName]['columns'][aName]['enum'].append({'name':eName.strip(),'value':tValue})
+                continue
+
+            continue # aName != ''
+
+        # Debug: Sanity checking
+        print '##### Missed:',tableName,fieldName,fieldValue,dataType,dataLength,dataMeasure,dataRange
 
     return tschema
 # End of processFile
@@ -1744,8 +1748,8 @@ elif args.fullschema:
     printVariableBody('text_VDT',text_VDT)
     printVariableBody('text_NSP',text_NSP)
     printVariableBody('text_SSY',text_SSY)
-    printVariableBody('text_RS0',text_RS0)
     printVariableBody('text_VSC',text_VSC)
+    printVariableBody('text_ZSAX_RS0',text_ZSAX_RS0)
     printJavascript(schema)
     printJSFooter()
 else:

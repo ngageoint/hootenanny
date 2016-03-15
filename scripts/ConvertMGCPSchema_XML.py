@@ -197,7 +197,7 @@ def printToEnglish(schema):
         fList[schema[i]['fcode']]['enum'] = []
         for j in schema[i]['columns']:
             eName = schema[i]['columns'][j]['name']
-            if eName == 'F_CODE':
+            if eName == 'FCODE':
                 continue
 
             if eName not in dList: # Default Values
@@ -255,7 +255,7 @@ def printFromEnglish(schema):
     sList = {}
     for i in schema:
         for j in schema[i]['columns']:
-            #if schema[i]['columns'][j]['name'] == 'F_CODE':
+            #if schema[i]['columns'][j]['name'] == 'FCODE':
                 #continue
 
             eDesc = schema[i]['columns'][j]['desc']
@@ -518,7 +518,7 @@ def readFeatures(xmlDoc,funcList):
             tSchema[rawfCode]['fcode'] = fCode
             tSchema[rawfCode]['geom'] = fGeometry
             tSchema[rawfCode]['columns'] = {}
-            tSchema[rawfCode]['columns']['F_CODE'] = { 'name':'F_CODE','desc':"Feature Code",'type':'String','optional':'R','defValue':'','length':'5'}
+            tSchema[rawfCode]['columns']['FCODE'] = { 'name':'FCODE','desc':"Feature Code",'type':'String','optional':'R','defValue':'','length':'5'}
 
 
         for node in feature.childNodes:
