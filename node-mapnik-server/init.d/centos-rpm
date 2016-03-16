@@ -1,13 +1,14 @@
 #!/bin/sh
 
 # Change the user and hoot_home as needed
+HOOT_HOME="/var/lib/hootenanny"
 USER="tomcat"
-APP_DIR="$HOOT_HOME/node-mapnik-server"
+APP_DIR="node-mapnik-server"
 NODE_APP="app.js"
 STYLE="hoot_style.xml"
 # Change the port as needed
 PORT="8000"
-PREREQS="source $HOOT_HOME/SetupEnv.sh && source $HOOT_HOME/conf/DatabaseConfig.sh"
+PREREQS="source conf/DatabaseConfig.sh"
 LOG_DIR="/var/log/node-mapnik-server"
 LOG_FILE="$LOG_DIR/app.log"
 NODE_EXEC=$(which node)
@@ -41,9 +42,15 @@ start_it() {
     chown $USER:$USER "$LOG_DIR"
 
     echo "Starting node app ..."
-    echo "cd $HOOT_HOME && $PREREQS && cd $APP_DIR && $NODE_EXEC $APP_DIR/$NODE_APP $STYLE $PORT 1>$LOG_FILE 2>&1 &" | sudo -i -u $USER
+    su -s /bin/bash -c "cd $HOOT_HOME && $PREREQS && cd $APP_DIR && $NODE_EXEC $HOOT_HOME/$APP_DIR/$NODE_APP $STYLE $PORT 1>$LOG_FILE 2>&1 &" $USER
     sleep 1
-    echo "Node app started with pid $(get_pid)"
+    PID=$(get_pid)
+    if [ -z "$PID" ];
+    then
+        echo "Node app failed to start.  Check the log at $LOG_FILE"
+    else
+        echo "Node app started with pid $PID"
+    fi
 }
 
 start_app() {
