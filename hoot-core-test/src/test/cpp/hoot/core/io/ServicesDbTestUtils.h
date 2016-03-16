@@ -27,7 +27,11 @@
 #ifndef SERVICESDBTESTUTILS_H
 #define SERVICESDBTESTUTILS_H
 
+// hoot
+#include <hoot/core/util/Settings.h>
+
 // Qt
+#include <QHash>
 #include <QUrl>
 #include <QVariant>
 
@@ -74,6 +78,9 @@ public:
    * Find a match in the test key list and return the index
    */
   static int findIndex(const QList<QString>& keys, const QString& key);
+
+private:
+  static Settings _readDbConfig();
 };
 
 }

@@ -1570,21 +1570,6 @@ Email address of the DG reader user.  Can be set here for debugging and testing.
 
 The maximum number of OSM elements that may be read from the services database into a single OSM map during a partial map read.
 
-=== services.db.test.url
-
-* Data Type: string
-* Default Value: `postgresql://hoot:hoottest@localhost:5432/hoot/testMap`
-
-Contains the DB URL for unit testing. This is typically only used by developers.
-
-=== services.db.test.url.osmapi
-
-* Data Type: string
-* Default Value: `postgresql://hoot:hoottest@localhost:5432/osmapi_test`
-
-Contains the DB URL for an OpenStreetMaps (OSM) API database for unit testing. This is
-typically only used by developers.
-
 === services.db.writer.create.user
 
 * Data Type: bool
