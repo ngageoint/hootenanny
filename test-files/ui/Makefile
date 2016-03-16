@@ -30,7 +30,11 @@ endif
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/unified/AllDataTypesA.osm $(DB_URL)/AllDataTypesACucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/unified/AllDataTypesB.osm $(DB_URL)/AllDataTypesBCucumber
 	mkdir -p tmp
+ifneq (,$(findstring s,$(MAKEFLAGS)))
 	./SetupDisplay.sh cucumber &> tmp/TestRun.log.tmp && mv tmp/TestRun.log.tmp tmp/TestRun.log
+else
+	./SetupDisplay.sh cucumber
+endif
 	# $(HOOT_HOME)/scripts/StopTomcat.sh
 	echo ""
 
