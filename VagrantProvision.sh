@@ -121,9 +121,10 @@ if ! ogrinfo --formats | grep --quiet FileGDB; then
 fi
 
 if ! grep --quiet NODE_PATH ~/.profile; then
-    echo "Installing node js dependencies..."
-    sudo npm config set registry http://registry.npmjs.org/
-    sudo npm install -g xml2js htmlparser imagemagick mocha@1.20.1 express@3.1.2 async html-to-text restler
+    # This is being done automatically when 'make docs' is run.
+    #echo "Installing node js dependencies..."
+    #sudo npm config set registry http://registry.npmjs.org/
+    #sudo npm install -g xml2js htmlparser imagemagick mocha@1.20.1 express@3.1.2 async html-to-text restler
     echo 'Adding NODE_PATH to user environment...'
     echo 'export NODE_PATH=/usr/local/lib/node_modules' >> ~/.profile
     source ~/.profile
@@ -267,7 +268,7 @@ fi
 
 if ! grep -i --quiet 'ingest/processed' /etc/tomcat6/server.xml; then
     echo "Adding Tomcat context path for tile images..."
-    sudo sed -i.bak 's@<\/Host>@  <Context docBase=\'"$HOOT_HOME"'\/ingest\/processed\" path=\"\/static\" \/>\n      &@' /etc/tomcat6/server.xml
+    sudo sed -i.bak 's@<\/Host>@  <Context docBase=\"'"$HOOT_HOME"'\/ingest\/processed\" path=\"\/static\" \/>\n      &@' /etc/tomcat6/server.xml
 fi
 
 if ! grep -i --quiet 'allowLinking="true"' /etc/tomcat6/context.xml; then
@@ -309,12 +310,12 @@ echo "Will take several extra minutes to build the training data the initial tim
 make clean-all -sj$(nproc)
 make -sj$(nproc)
 echo "Deploying web application..."
-scripts/DeployTomcat.sh &> /dev/null
+scripts/DeployTomcat.sh #&> /dev/null
 make -sj$(nproc) docs 
 hoot version
 
 echo "See VAGRANT.md for additional configuration instructions and then run 'vagrant ssh' to log into the Hootenanny virtual machine."
-echo "See the 'docs' directory on the virtual machine for Hootenanny documentation files."
+echo "See $HOOT_HOME/docs on the virtual machine for Hootenanny documentation."
 echo "Access the web application at http://localhost:8888/hootenanny-id"
 echo "If you wish to run the diagnostic tests, log into the virtual machine and run: 'cd $HOOT_HOME && make -sj$(nproc) test-all'"
 
