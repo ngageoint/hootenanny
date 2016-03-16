@@ -113,7 +113,6 @@ ifneq ($(HADOOP_HOME),)
 endif
 
 plugins-test:
-	echo Running plugins tests...
 	# Only run the plugins tests if mocha is installed.
 	cd plugins; (command -v mocha &> /dev/null) && mocha test || echo Skipping mocha tests
 
