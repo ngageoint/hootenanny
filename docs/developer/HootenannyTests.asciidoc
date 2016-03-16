@@ -355,16 +355,20 @@ attention and may be candidates for removal.
 ==== Cucumber User Interface Tests
 
 https://cukes.info[Cucumber] is the technology used to simulate browser interactions in the tests.  
-https://cukes.info[Cucumber] is the top level interpreter of the "gherkin language":https://github.com/cucumber/cucumber/wiki/Gherkin 
-that describes each test. There are many 
+https://cukes.info[Cucumber] is the top level interpreter of the 
+"gherkin language":https://github.com/cucumber/cucumber/wiki/Gherkin that describes each test. 
+There are many 
 https://github.com/cucumber/cucumber/wiki/Tutorials-and-Related-Blog-Posts[good tutorials] on the 
 web to get you started, 
 
-Hootenanny Cucumber User Interface Tests can be found in test-files/ui.  See 
-@features/conflate.feature@ and @features/step_definitions/custom_steps.rb@ for examples.  Each 
-piece of functionality being tested should be placed into its own *.feature file.  Common utility 
-methods can be placed in @custom_steps.rb@.  Cucumber settings may be changed in 
-@features/support/env.rb@.
+* Hootenanny Cucumber User Interface Tests can be found in test-files/ui. 
+* Cucumber settings may be changed in @features/support/env.rb@. 
+* Place common test methods in 
+@features/conflate.feature@ and @features/step_definitions/custom_steps.rb@.  
+* Each piece of functionality being tested should be placed into its own *.feature file.  
+* When running silent mode ('make -s'), Cucumber output will be written to 
+@test-files/ui/tmp/TestRun.log@.  When running without silent mode, Cucumber test output is written
+to the screen.
 
 The User Interface Tests run as part of the glacial test suite by default.  To run them with all 
 other tests:  
