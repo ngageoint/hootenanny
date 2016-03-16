@@ -46,31 +46,9 @@ if ! grep --quiet "\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:\$HOOT_HOME/bin" ~/.pro
     source ~/.profile
 fi
 
-gem list --local | grep -q selenium-cucumber
-if [ $? -eq 1 ]; then
-    echo "Installing selenium-cucumber gem..."
-    sudo gem install --user-install selenium-cucumber
-fi
-gem list --local | grep -q mime-types
-if [ $? -eq 1 ]; then
-    echo "Installing mime-types gem..."
-    sudo gem install --user-install mime-types -v 2.6.2
-fi
-gem list --local | grep -q capybara
-if [ $? -eq 1 ]; then
-    echo "Installing capybara gem..."
-    sudo gem install --user-install capybara -v 2.5.0
-fi
-gem list --local | grep -q capybara-webkit
-if [ $? -eq 1 ]; then
-    echo "Installing capybara-webkit gem..."
-    sudo gem install --user-install capybara-webkit
-fi
-gem list --local | grep -q rspec
-if [ $? -eq 1 ]; then
-    echo "Installing rspec gem..."
-    sudo gem install --user-install rspec
-fi
+sudo gem install mime-types -v 2.6.2
+sudo gem install capybara -v 2.5.0
+sudo gem install cucumber capybara-webkit selenium-webdriver rspec capybara-screenshot
 
 if [ ! -f google-chrome-stable_current_amd64.deb ]; then
     echo "Installing Chrome..."
@@ -306,15 +284,13 @@ echo "Configuring Hoot..."
 echo HOOT_HOME: $HOOT_HOME
 cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
 
-if [ ! -f /etc/init.d/node-mapnik-server ]; then
-  echo "Installing node-mapnik-server..."
-  sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
-  sudo chmod a+x /etc/init.d/node-mapnik-server
-  # Make sure all npm modules are installed
-  cd node-mapnik-server
-  sudo npm install
-  cd ..
-fi
+echo "Installing node-mapnik-server..."
+sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
+sudo chmod a+x /etc/init.d/node-mapnik-server
+# Make sure all npm modules are installed
+cd node-mapnik-server
+sudo npm install
+cd ..
 
 aclocal && autoconf && autoheader && automake && ./configure --with-rnd --with-services --with-uitests
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
@@ -324,11 +300,12 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
 fi
 echo "Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
-# make clean-all -sj$(nproc)
+make clean-all -sj$(nproc)
 # The services build won't always complete the first time without errors (for some unknown reason caused by 
 # the Maven pom), so we're executing multiple compiles here to get around that.
-make -sj$(nproc) &> /dev/null || true
-make -s &> /dev/null || true
+#make -sj$(nproc) &> /dev/null || true
+#make -s &> /dev/null || true
+#make -sj$(nproc)
 make -sj$(nproc)
 echo "Deploying web application..."
 scripts/DeployTomcat.sh &> /dev/null
