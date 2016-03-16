@@ -32,7 +32,14 @@ sudo apt-get autoremove -y
 
 if ! grep --quiet "export HOOT_HOME" ~/.profile; then
     echo "Adding hoot home to profile..."
-    echo "export HOOT_HOME=/home/vagrant/hoot" >> ~/.profile
+    echo "export HOOT_HOME=\$HOME/hoot" >> ~/.profile
+    echo "export PATH=\$PATH:\$HOOT_HOME/bin" >> ~/.profile
+    source ~/.profile
+fi
+
+if ! grep --quiet "export JAVA_HOME" ~/.profile; then
+    echo "Adding Java home to profile..."
+    echo "export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64" >> ~/.profile
     source ~/.profile
 fi
 
@@ -40,15 +47,21 @@ fi
 
 sudo apt-get install -y ruby ruby-dev xvfb zlib1g-dev patch x11vnc unzip
 
-if ! grep --quiet "\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:\$HOOT_HOME/bin" ~/.profile; then
+if ! grep --quiet "\$HOME/.gem/ruby/1.9.1/bin" ~/.profile; then
     echo "Adding path vars to profile..."
-    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:\$HOOT_HOME/bin" >> ~/.profile
+    echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin" >> ~/.profile
     source ~/.profile
 fi
 
 sudo gem install mime-types -v 2.6.2
 sudo gem install capybara -v 2.5.0
 sudo gem install cucumber capybara-webkit selenium-webdriver rspec capybara-screenshot
+
+if ! grep --quiet "\$HOME/bin" ~/.profile; then
+    echo "Adding path vars to profile..."
+    echo "export PATH=\$HOME/bin" >> ~/.profile
+    source ~/.profile
+fi
 
 if [ ! -f google-chrome-stable_current_amd64.deb ]; then
     echo "Installing Chrome..."
@@ -206,6 +219,8 @@ sudo chown -R vagrant:tomcat6 $TOMCAT6_HOME/logs
 sudo chown -R vagrant:tomcat6 /var/lib/tomcat6
 sudo chown -R vagrant:tomcat6 /etc/tomcat6
 sudo chown -R tomcat6:tomcat6 /var/log/tomcat6
+mkdir -p $HOOT_HOME/ingest/processed
+sudo chown -R vagrant:tomcat6 $HOOT_HOME/ingest
 
 cd $HOOT_HOME
 source ./SetupEnv.sh
@@ -218,12 +233,11 @@ fi
 
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
 echo "Configuring tomcat6 environment..."
+echo "#--------------\n
+# Hoot Settings\n
+#--------------\n
+HOOT_HOME=\$HOOT_HOME/hoot" >> ~/.profile
 sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
-
-#--------------
-# Hoot Settings
-#--------------
-HOOT_HOME=/home/vagrant/hoot
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT_HOME/pretty-pipes/lib
 GDAL_DATA=/usr/local/share/gdal
 GDAL_LIB_DIR=/usr/local/lib
@@ -257,11 +271,9 @@ if [ -f "/usr/lib/libgdal.*" ]; then
     sudo rm /usr/lib/libgdal.*
 fi
 
-mkdir -p $HOOT_HOME/ingest/processed
-chown -R vagrant:tomcat6 $HOOT_HOME/ingest
 if ! grep -i --quiet 'ingest/processed' /etc/tomcat6/server.xml; then
     echo "Adding Tomcat context path for tile images..."
-    sudo sed -i.bak "s@<\/Host>@  <Context docBase=\"\/home\/vagrant\/hoot\/ingest\/processed\" path=\"\/static\" \/>\n      &@" /etc/tomcat6/server.xml
+    sudo sed -i.bak "s@<\/Host>@  <Context docBase=\"\$HOOT_HOME\/ingest\/processed\" path=\"\/static\" \/>\n      &@" /etc/tomcat6/server.xml
 fi
 
 if ! grep -i --quiet 'allowLinking="true"' /etc/tomcat6/context.xml; then
@@ -301,11 +313,6 @@ fi
 echo "Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
 make clean-all -sj$(nproc)
-# The services build won't always complete the first time without errors (for some unknown reason caused by 
-# the Maven pom), so we're executing multiple compiles here to get around that.
-#make -sj$(nproc) &> /dev/null || true
-#make -s &> /dev/null || true
-#make -sj$(nproc)
 make -sj$(nproc)
 echo "Deploying web application..."
 scripts/DeployTomcat.sh &> /dev/null
