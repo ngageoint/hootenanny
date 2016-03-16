@@ -14,6 +14,11 @@ if ! sudo -u postgres psql -d postgres -c "\du" | cut -d \| -f 1 | grep -qw hoot
     sudo -u postgres createuser --superuser hoot
     sudo -u postgres psql -c "alter user hoot with password '$RAND_PW';"
     sudo sed -i s/DB_PASSWORD=.*/DB_PASSWORD=$RAND_PW/ /var/lib/hootenanny/conf/DatabaseConfig.sh
+    while [ ! -f /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml ]
+    do
+        echo "Waiting for hoot-services.war to deploy"
+        sleep 1
+    done
     sudo sed -i s/password\:\ hoottest/password\:\ $RAND_PW/ /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/liquibase.properties
     sudo sed -i s/value=\"hoottest\"/value=\"$RAND_PW\"/ /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml
     sudo -u postgres createdb hoot --owner=hoot
@@ -116,14 +121,19 @@ fi
 sudo service tomcat6 restart
 
 # Apply any database schema changes
+source /var/lib/hootenanny/conf/DatabaseConfig.sh
 cd $TOMCAT_HOME/webapps/hoot-services/WEB-INF
 liquibase --contexts=default,production \
     --changeLogFile=classes/db/db.changelog-master.xml \
     --promptForNonLocalDatabase=false \
-    --defaultsFile=classes/db/liquibase.properties \
+    --driver=org.postgresql.Driver
+    --url=jdbc:postgresql:$DB_NAME
+    --username=$DB_USER
+    --password=$DB_PASSWORD
+    --changeLogFile=db/db.changelog-master.json
     --logLevel=warning \
     --classpath=lib/postgresql-9.1-901-1.jdbc4.jar \
-    --url jdbc:postgresql:hoot update
+    update
 
 # Configuring firewall
 if ! sudo iptables --list-rules | grep -i --quiet 'dport 80'; then
