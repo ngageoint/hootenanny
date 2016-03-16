@@ -57,12 +57,6 @@ sudo gem install mime-types -v 2.6.2
 sudo gem install capybara -v 2.5.0
 sudo gem install cucumber capybara-webkit selenium-webdriver rspec capybara-screenshot
 
-if ! grep --quiet "\$HOME/bin" ~/.profile; then
-    echo "Adding path vars to profile..."
-    echo "export PATH=\$HOME/bin" >> ~/.profile
-    source ~/.profile
-fi
-
 if [ ! -f google-chrome-stable_current_amd64.deb ]; then
     echo "Installing Chrome..."
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -233,10 +227,10 @@ fi
 
 if ! grep -i --quiet HOOT /etc/default/tomcat6; then
 echo "Configuring tomcat6 environment..."
-echo "#--------------\n
-# Hoot Settings\n
-#--------------\n
-HOOT_HOME=\$HOOT_HOME/hoot" >> ~/.profile
+echo "#--------------
+# Hoot Settings
+#--------------
+HOOT_HOME=\$HOOT_HOME/hoot" >> /etc/default/tomcat6
 sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT_HOME/pretty-pipes/lib
 GDAL_DATA=/usr/local/share/gdal
@@ -273,7 +267,7 @@ fi
 
 if ! grep -i --quiet 'ingest/processed' /etc/tomcat6/server.xml; then
     echo "Adding Tomcat context path for tile images..."
-    sudo sed -i.bak "s@<\/Host>@  <Context docBase=\"\$HOOT_HOME\/ingest\/processed\" path=\"\/static\" \/>\n      &@" /etc/tomcat6/server.xml
+    sudo sed -i.bak 's@<\/Host>@  <Context docBase=\'"$HOOT_HOME"'\/ingest\/processed\" path=\"\/static\" \/>\n      &@' /etc/tomcat6/server.xml
 fi
 
 if ! grep -i --quiet 'allowLinking="true"' /etc/tomcat6/context.xml; then

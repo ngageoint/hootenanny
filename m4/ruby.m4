@@ -45,7 +45,7 @@ AC_DEFUN([CHECK_RUBY_GEM],
 [
   rubyGem=[$1]
   minRubyGemVersion=[$2]
-  acl_cv_gem=`$GEM list --local | grep "$1 (" | awk '{print $ 2}'| sed 's/(//g' | sed 's/)//g' | sed 's/,//g'`
+  acl_cv_gem=`$GEM list --local | egrep "^$1 \\(" | awk '{print $ 2}'| sed 's/(//g' | sed 's/)//g' | sed 's/,//g'`
   rubyGemVersion=$acl_cv_gem
   AC_MSG_CHECKING([for [$1] minimum version $minRubyGemVersion])
   if test x"$acl_cv_gem" == x; then
