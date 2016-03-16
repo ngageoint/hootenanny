@@ -1,15 +1,14 @@
 #!/bin/sh
 
 # Change the user and hoot_home as needed
-USER="vagrant"
-HOOT_HOME="/home/vagrant/hoot"
+USER="tomcat"
 APP_DIR="$HOOT_HOME/node-mapnik-server"
 NODE_APP="app.js"
 STYLE="hoot_style.xml"
 # Change the port as needed
 PORT="8000"
 PREREQS="source $HOOT_HOME/SetupEnv.sh && source $HOOT_HOME/conf/DatabaseConfig.sh"
-LOG_DIR="$APP_DIR/log"
+LOG_DIR="/var/log/node-mapnik-server"
 LOG_FILE="$LOG_DIR/app.log"
 NODE_EXEC=$(which node)
 
