@@ -74,10 +74,10 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AlphaShapeTest, "quick");
 ==== Core Command Line Tests
 
 The C++ portion of Hootenanny exposes functionality via a command line interface. This command line 
-interface is tested via simple shell scripts similar to the Signature Analyst way of testing. The 
-shell scripts output is compared against a known good output and these scripts are run via one or 
-more test suites within CPPUnit. The unit tests and integration tests should provide good coverage 
-of all the code from the command line interface down.
+interface is tested via simple shell scripts. The shell scripts output is compared against a known 
+good output and these scripts are run via one or more test suites within CPPUnit. The unit tests 
+and integration tests should provide good coverage of all the code from the command line interface 
+down.
 
 This is most useful when testing operations that involve multiple parts of the system, or exercise 
 the command line aspects of the system. Examples include:
@@ -299,7 +299,7 @@ The above commands will run the corresponding Core Tests immediately after the w
 complete.  There currently is no means to separate the two.
 
 The mocha based web services tests (see renderdb-export-server/test as an example) are not 
-currently aligned with the test suites (TODO: verify).
+currently aligned with the test suites.
 
 ===== Java Web Services Unit Tests
 
@@ -362,7 +362,7 @@ web to get you started,
 
 Hootenanny Cucumber User Interface Tests can be found in test-files/ui.  See 
 @features/conflate.feature@ and @features/step_definitions/custom_steps.rb@ for examples.  Each 
-piece of functionality being tesetd should be placed into its own *.feature file.  Common utility 
+piece of functionality being tested should be placed into its own *.feature file.  Common utility 
 methods can be placed in @custom_steps.rb@.  Cucumber settings may be changed in 
 @features/support/env.rb@.
 
@@ -408,8 +408,8 @@ Hootenanny performance against particular scenarios.  The tests are run against 
 therefore, are kept in a private DigitalGlobe repository and run on a nightly basis only.  For 
 more information about the tests, contact hootenanny.help@digitalglobe.com
 
-If you have access to the regression test repository and wish to run them locally, the instructions 
-to do so are https://127.0.0.1:9443/redmine/projects/hootenany/wiki/Developer_-_Running_Regression_Tests[here]
+If you have access to the regression test repository and wish to run them locally, contact
+hootenanny.help@digitalglobe.com for further instructions.
 
 Many of the regression tests score Hootenanny's conflation accuracy on a dataset and mark the test 
 as passing or failing based on an allowable score range.  See 

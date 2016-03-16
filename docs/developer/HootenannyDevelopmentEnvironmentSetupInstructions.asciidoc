@@ -13,7 +13,7 @@ If you want to build a development environment completely on bare metal for the 
 
 * Download https://github.com/ngageoint/hootenanny/blob/master/scripts/InstallHootDevelopmentEnvironment.sh to your home directory.
 * Edit your home path in the script and run it.  Hoot will be cloned and an (almost) complete development environment will be set up from scratch.  
-* If you use the installed Eclipse IDE for services Java development, there are some additional configuration steps you will need to complete as described here: https://127.0.0.1:9443/redmine/projects/hootenany/wiki/Developer_-_Install_IDEs
+* If you use the installed Eclipse IDE for services Java development, there are additional configuration steps you will need to complete.  See the Eclipse documentation for more details.
 
 The choice of development tools is personal, so you may want to tweak the script a bit.  In addition to development tools, the script also adds Hadoop support.  This script isn't guaranteed to always be up to date with the latest and greatest hoot, so you may want to look at Option #2.
 
