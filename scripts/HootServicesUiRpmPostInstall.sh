@@ -14,8 +14,7 @@ if ! sudo -u postgres psql -d postgres -c "\du" | cut -d \| -f 1 | grep -qw hoot
     sudo -u postgres createuser --superuser hoot
     sudo -u postgres psql -c "alter user hoot with password '$RAND_PW';"
     sudo sed -i s/DB_PASSWORD=.*/DB_PASSWORD=$RAND_PW/ /var/lib/hootenanny/conf/DatabaseConfig.sh
-    while [ ! -f /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml ]
-    do
+    while [ ! -f /var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml ]; do
         echo "Waiting for hoot-services.war to deploy"
         sleep 1
     done
