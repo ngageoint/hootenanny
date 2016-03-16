@@ -62,6 +62,7 @@ clean-db-force:
 	rm -rf ./src/main/java/hoot/services/db2
 
 test: config
+	echo Running services tests...
 	rm -rf ./src/main/java/hoot/services/db2
 ifneq ($(MVN_QUIET),)
 	../scripts/mvn-build $(MVN_QUIET) test 2> >( $(FILTER) >&2 )
