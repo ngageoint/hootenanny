@@ -40,10 +40,16 @@
 
 #include "../TgsExport.h"
 
-#define NEW_RAND false
+//#define NEW_RAND
 
 namespace Tgs
 {
+#ifdef NEW_RAND
+  typedef boost::minstd_rand random_type;
+  typedef boost::uniform_int<> number_type;
+  typedef boost::variate_generator<random_type&, number_type> generator_type;
+#endif
+
   class TGS_EXPORT Random
   {
   public:
@@ -80,9 +86,9 @@ namespace Tgs
 
     static boost::shared_ptr<Random> _instance;
 
-#if NEW_RAND
-    static boost::minstd_rand _gen;
-    static boost::variate_generator<boost::minstd_rand&, boost::uniform_int<> > _rnd;
+#ifdef NEW_RAND
+    static boost::shared_ptr<random_type> _gen;
+    static boost::shared_ptr<generator_type> _rnd;
 #endif
   };
 }

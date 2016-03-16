@@ -34,14 +34,14 @@
 namespace Tgs
 {
   boost::shared_ptr<Random> Random::_instance;
-#if NEW_RAND
-  boost::minstd_rand Random::_gen;
-  boost::variate_generator<boost::minstd_rand&, boost::uniform_int<> Random::_rnd;
+#ifdef NEW_RAND
+  boost::shared_ptr<random_type> Random::_gen;
+  boost::shared_ptr<generator_type> Random::_rnd;
 #endif
 
   Random::Random()
   {
-#if NEW_RAND
+#ifdef NEW_RAND
     seed();
 #endif
   }
@@ -79,8 +79,8 @@ namespace Tgs
 
   int Random::generateInt()
   {
-#if NEW_RAND
-    return _rnd();
+#ifdef NEW_RAND
+    return _rnd->operator ()();
 #else
     return rand();
 #endif
@@ -88,9 +88,9 @@ namespace Tgs
 
   void Random::seed(unsigned int s)
   {
-#if NEW_RAND
-    _gen = boost::minstd_rand(s);
-    _rnd = boost::variate_generator<boost::minstd_rand&, boost::uniform_int<> >(_gen, boost::uniform_int<>(0, RAND_MAX));
+#ifdef NEW_RAND
+    _gen.reset(new random_type(s));
+    _rnd.reset(new generator_type(*_gen, number_type(0, RAND_MAX)));
 #else
     srand(s);
 #endif
@@ -98,9 +98,9 @@ namespace Tgs
 
   void Random::seed()
   {
-#if NEW_RAND
-    boost::minstd_rand gen = boost::minstd_rand(time(0));
-    boost::variate_generator<boost::minstd_rand&, boost::uniform_int<> > rnd(gen, boost::uniform_int<>(0, RAND_MAX));
+#ifdef NEW_RAND
+    random_type gen = random_type(time(0));
+    generator_type rnd(gen, number_type(0, RAND_MAX));
     seed(rnd());
 #else
     seed(0);
