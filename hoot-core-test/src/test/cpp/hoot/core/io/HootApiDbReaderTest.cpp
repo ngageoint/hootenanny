@@ -70,10 +70,10 @@ public:
   void setUp()
   {
     mapId = -1;
-    ServicesDbTestUtils::deleteHootApiUser(userEmail());
+    ServicesDbTestUtils::deleteUser(userEmail());
     HootApiDb database;
 
-    database.open(ServicesDbTestUtils::getDbModifyHootApiUrl());
+    database.open(ServicesDbTestUtils::getDbModifyUrl());
     database.getOrCreateUser(userEmail(), "HootApiDbReaderTest");
     database.close();
 
@@ -85,10 +85,10 @@ public:
   void tearDown()
   {
     // HootApi DB
-    ServicesDbTestUtils::deleteHootApiUser(userEmail());
+    ServicesDbTestUtils::deleteUser(userEmail());
 
     HootApiDb database;
-    database.open(ServicesDbTestUtils::getDbModifyHootApiUrl());
+    database.open(ServicesDbTestUtils::getDbModifyUrl());
     database.deleteMap(mapId);
     database.close();
   }
@@ -137,7 +137,7 @@ public:
     ServicesDbWriter writer;
     writer.setUserEmail(userEmail());
     writer.setRemap(false);
-    writer.open(ServicesDbTestUtils::getDbModifyHootApiUrl().toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
     writer.write(map);
     writer.close();
     return writer.getMapId();
@@ -157,7 +157,7 @@ public:
   void runCalculateBoundsTest()
   {
     HootApiDbReader reader;
-    QString url = ServicesDbTestUtils::getHootDbReadUrl(mapId).toString();
+    QString url = ServicesDbTestUtils::getDbReadUrl(mapId).toString();
     LOG_VAR(url);
     reader.open(url);
     HOOT_STR_EQUALS("Env[0:0.4,0:0]", reader.calculateEnvelope().toString());

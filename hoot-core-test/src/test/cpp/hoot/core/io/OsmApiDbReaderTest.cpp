@@ -58,12 +58,9 @@ public:
 
   void tearDown()
   {
-    // Services DB
-    ServicesDbTestUtils::deleteUser(userEmail());
-
     // Osm Api DB
     OsmApiDb database;
-    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     database.deleteData();
     database.close();
   }
@@ -143,7 +140,7 @@ public:
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
 
     Settings s = conf();
-    reader.open(ConfigOptions(s).getServicesDbTestUrlOsmapi());
+    reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
     verifyFullReadOutput(map);
     reader.close();

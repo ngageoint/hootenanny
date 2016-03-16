@@ -35,8 +35,10 @@
 #include <hoot/core/io/ServicesDb.h>
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfPath.h>
 
 // Qt
+#include <QFile>
 #include <QStringList>
 
 // Tgs
@@ -78,18 +80,16 @@ void ServicesDbTestUtils::compareRecords(QString sql, QString expected, QVariant
 
 QUrl ServicesDbTestUtils::getDbModifyUrl()
 {
-  // don't use the default settings b/c they've been cleared for unit testing.
-  Settings s;
-  s.loadDefaults();
-  return QUrl(ConfigOptions(s).getServicesDbTestUrl());
-}
-
-QUrl ServicesDbTestUtils::getDbModifyHootApiUrl()
-{
-  // don't use the default settings b/c they've been cleared for unit testing.
-  Settings s;
-  s.loadDefaults();
-  return QUrl(ConfigOptions(s).getHootapiDbTestUrl());
+  // read the DB values from the DB config file.
+  Settings s = _readDbConfig();
+  QUrl result;
+  result.setScheme("postgresql");
+  result.setHost(s.get("DB_HOST").toString());
+  result.setPort(s.get("DB_PORT").toInt());
+  result.setUserName(s.get("DB_USER").toString());
+  result.setPassword(s.get("DB_PASSWORD").toString());
+  result.setPath("/" + s.get("DB_NAME").toString() + "/testMap");
+  return result;
 }
 
 QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId)
@@ -107,43 +107,24 @@ QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId)
   return url;
 }
 
-QUrl ServicesDbTestUtils::getHootDbReadUrl(const long mapId)
-{
-  //insert url example: postgresql://hoot:hoottest@localhost:5432/hoot/testMap
-  QString dbModifyUrl = getDbModifyHootApiUrl().toString();
-  QStringList modifyUrlParts = dbModifyUrl.split("/");
-  //read url example: postgresql://hoot:hoottest@localhost:5432/hoot/1
-  assert(mapId > 0);
-  QString dbReadUrl =
-    dbModifyUrl.remove("/" + modifyUrlParts[modifyUrlParts.size() - 1]) + "/" +
-    QString::number(mapId);
-
-  QUrl url(dbReadUrl);
-  return url;
-}
-
 QUrl ServicesDbTestUtils::getOsmApiDbUrl()
 {
-  Settings s = conf();
-  return QUrl(ConfigOptions(s).getOsmapiDbTestUrl());
+  // read the DB values from the DB config file.
+  Settings s = _readDbConfig();
+  QUrl result;
+  result.setScheme("postgresql");
+  result.setHost(s.get("DB_HOST").toString());
+  result.setPort(s.get("DB_PORT").toInt());
+  result.setUserName(s.get("DB_USER").toString());
+  result.setPassword(s.get("DB_PASSWORD").toString());
+  result.setPath("/" + s.get("DB_NAME_OSMAPI").toString());
+  return result;
 }
 
 void ServicesDbTestUtils::deleteUser(QString email)
 {
   ServicesDb database;
   database.open(getDbModifyUrl());
-
-  long userId = database.getUserId(email, false);
-  if (userId != -1)
-  {
-    database.deleteUser(userId);
-  }
-}
-
-void ServicesDbTestUtils::deleteHootApiUser(QString email)
-{
-  HootApiDb database;
-  database.open(getDbModifyHootApiUrl());
 
   long userId = database.getUserId(email, false);
   if (userId != -1)
@@ -161,6 +142,31 @@ int ServicesDbTestUtils::findIndex(const QList<QString>& keys, const QString& ke
 
   // didn't find a match so return -1
   return -1;
+}
+
+Settings ServicesDbTestUtils::_readDbConfig()
+{
+  Settings result;
+  QFile fp(ConfPath::getHootHome() + "/conf/DatabaseConfig.sh");
+  if (fp.open(QIODevice::ReadOnly) == false)
+  {
+    throw HootException("Error opening: " + fp.fileName());
+  }
+  QString s = QString::fromUtf8(fp.readAll());
+
+  QStringList sl = s.split('\n', QString::SkipEmptyParts);
+
+  foreach (QString s, sl)
+  {
+    QString key = s.section("=", 0, 0).remove("export ").trimmed();
+    QString value = s.section("=", 1).trimmed();
+    if (!key.startsWith("#") && key.length() > 0)
+    {
+      result.set(key, value);
+    }
+  }
+
+  return result;
 }
 
 }

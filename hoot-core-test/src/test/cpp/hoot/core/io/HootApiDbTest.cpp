@@ -32,7 +32,6 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/io/ServicesDb.h>
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
 

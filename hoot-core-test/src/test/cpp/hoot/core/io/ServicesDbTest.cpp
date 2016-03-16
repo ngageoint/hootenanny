@@ -121,13 +121,10 @@ public:
     Settings s = conf();
     ServicesDb db;
     CPPUNIT_ASSERT_EQUAL(ServicesDb::DBTYPE_UNSUPPORTED, db.getDatabaseType());
-    db.open(QUrl(ConfigOptions(s).getServicesDbTestUrlOsmapi()));
+    db.open(ServicesDbTestUtils::getOsmApiDbUrl());
     CPPUNIT_ASSERT_EQUAL(ServicesDb::DBTYPE_OSMAPI, db.getDatabaseType());
     db.close();
     CPPUNIT_ASSERT_EQUAL(ServicesDb::DBTYPE_UNSUPPORTED, db.getDatabaseType());
-
-    // Reset this back to default value
-    s.set(ConfigOptions(s).getServicesDbTestUrlOsmapiKey(), ConfigOptions(s).getServicesDbTestUrlOsmapiDefaultValue());
   }
 
   /***********************************************************************************************

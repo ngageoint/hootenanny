@@ -85,26 +85,22 @@ public:
    */
   void runOpenTest()
   {
-    Settings s = conf();
     OsmApiDb db;
 
-    db.open(QUrl(ConfigOptions(s).getOsmapiDbTestUrl()));
+    db.open(getOsmApiDbUrl());
     CPPUNIT_ASSERT_EQUAL(true, db.getDB().isOpen());
     db.close();
     CPPUNIT_ASSERT_EQUAL(false, db.getDB().isOpen());
-
-    // Reset this back to default value
-    s.set(ConfigOptions(s).getOsmapiDbTestUrlKey(), ConfigOptions(s).getOsmapiDbTestUrlDefaultValue());
   }
 
   void runSelectElementsTest()
   {
     OsmApiDb database;
-    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
+    database.open(getOsmApiDbUrl());
 
     // parse out the osm api dbname, dbuser, and dbpassword
     //example: postgresql://hoot:hoottest@localhost:5432/osmapi_test
-    QUrl dbUrl = ServicesDbTestUtils::getOsmApiDbUrl();
+    QUrl dbUrl = getOsmApiDbUrl();
     QString dbUrlString = dbUrl.toString();
     QStringList dbUrlParts = dbUrlString.split("/");
     QString dbName = dbUrlParts[dbUrlParts.size()-1];
@@ -373,7 +369,7 @@ public:
     OsmApiDb database;
 
     // tear down the osm api db
-    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
+    database.open(getOsmApiDbUrl());
     database.deleteData();
     database.close();
   }
