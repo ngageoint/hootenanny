@@ -35,6 +35,7 @@
 #include <geos/version.h>
 
 // hoot
+#include <hoot/core/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
@@ -112,7 +113,11 @@ void Hoot::_init()
     loadLibrary("HootRnd");
 # endif
 # ifdef HOOT_HAVE_NODEJS
-    loadLibrary("HootJs");
+    // sometimes HootJs is loaded by node.js before we get to init.
+    if (Factory::getInstance().hasClass(QString("hoot::HootJsLoaded")) == false)
+    {
+      loadLibrary("HootJs");
+    }
 # endif
 
 }
