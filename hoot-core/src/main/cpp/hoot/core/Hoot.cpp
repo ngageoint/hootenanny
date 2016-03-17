@@ -41,6 +41,7 @@
 #include <hoot/core/util/SignalCatcher.h>
 
 // Qt
+#include <QLibrary>
 #include <QString>
 
 // System
@@ -102,6 +103,36 @@ void Hoot::_init()
   }
 
   reinit();
+
+  // force load hoot hadoop if it is available.
+# ifdef HOOT_HAVE_HADOOP
+    loadLibrary("HootHadoop");
+# endif
+# ifdef HOOT_HAVE_RND
+    loadLibrary("HootRnd");
+# endif
+# ifdef HOOT_HAVE_NODEJS
+    loadLibrary("HootJs");
+# endif
+
+}
+
+void Hoot::loadLibrary(QString name)
+{
+  // this library sticks around in ram even after the object is destroyed.
+  QLibrary lib(name);
+  if (lib.load() == false)
+  {
+    // if the file doesn't exist, then we aren't too concerned.
+    if (lib.errorString().contains("No such file or directory"))
+    {
+      // no biggie.
+      LOG_WARN(lib.errorString());
+    // if the file does exist.
+    } else {
+      throw HootException("Error loading libary: " + lib.errorString());
+    }
+  }
 }
 
 void Hoot::reinit()

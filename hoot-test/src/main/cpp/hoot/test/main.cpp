@@ -55,7 +55,6 @@ using namespace geos::geom;
 using namespace hoot;
 
 // Qt
-#include <QLibrary>
 #include <QtGui/QApplication>
 #include <QString>
 #include <QStringList>
@@ -239,44 +238,9 @@ int main(int argc, char *argv[])
   CppUnit::TextUi::TestRunner runner;
   CppUnit::TestSuite *rootSuite = new CppUnit::TestSuite( "All tests" );
 
-  if (args.contains("--core") == false)
-  {
-#   if HOOT_HAVE_HADOOP
-      // force load hoot hadoop if it is available.
-      QLibrary libHootHadoop("HootHadoop");
-      if (libHootHadoop.load() == false && getenv("HADOOP_HOME") != NULL)
-      {
-        // no biggie.
-        LOG_WARN(libHootHadoop.errorString().toStdString());
-      }
-      // force load pretty pipes if it is available.
-      QLibrary libPp("PrettyPipesExample");
-      if (libPp.load() == false && getenv("HADOOP_HOME") != NULL)
-      {
-        // no biggie.
-        LOG_WARN(libPp.errorString().toStdString());
-      }
-#   else
-      LOG_WARN("Hadoop tests disabled.");
-#   endif
-    // force load R&D if it is available.
-    QLibrary libHootRnd("HootRnd");
-    if (libHootRnd.load() == false)
-    {
-      // no biggie.
-      LOG_WARN(libHootRnd.errorString().toStdString());
-    }
-# ifdef HOOT_HAVE_NODEJS
-    QLibrary libJs("HootJs");
-    if (libJs.load() == false)
-    {
-      // no biggie.
-      LOG_WARN(libJs.errorString().toStdString());
-    }
-#   else
-      LOG_WARN("HootJs tests disabled.");
-#endif
-  }
+# if HOOT_HAVE_HADOOP
+    Hoot::getInstance().loadLibrary("PrettyPipesExample");
+# endif
 
   // initialize OSM Schema so the time expense doesn't print in other tests.
   OsmSchema::getInstance();
@@ -289,7 +253,6 @@ int main(int argc, char *argv[])
             "--slow - Run the 'slow' tests and all above.\n"
             "--glacial - Run the 'glacial' tests and all above.\n"
             "--all - Run all the above tests.\n"
-            "--core - Only load tests in hoot-core-test.\n"
             "--single [test name] - Run only the test specified.\n"
             "--names - Show the names of all the tests as they run.\n"
             "--all-names - Only print the names of all the tests.\n"

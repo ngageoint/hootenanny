@@ -192,8 +192,8 @@ shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()
   {
     ConfigOptions config;
     _matchThreshold.reset(
-      new MatchThreshold(config.getPoiMatchThreshold(), config.getPoiMissThreshold(),
-                         config.getPoiReviewThreshold()));
+      new MatchThreshold(config.getPoiPolygonMatchThreshold(), config.getPoiPolygonMissThreshold(),
+                         config.getPoiPolygonReviewThreshold()));
   }
   return _matchThreshold;
 }
