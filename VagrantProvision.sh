@@ -310,7 +310,8 @@ echo "Will take several extra minutes to build the training data the initial tim
 make clean-all -sj$(nproc)
 make -sj$(nproc)
 echo "Deploying web application..."
-scripts/DeployTomcat.sh #&> /dev/null
+# vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
+scripts/CopyWebAppsToTomcat.sh #&> /dev/null
 make -sj$(nproc) docs 
 hoot version
 

@@ -3,8 +3,10 @@ set -e
 
 BASEDIR=$(dirname $0)
 if [ -f $BASEDIR/../Config.sh ]; then
+  # We're running tests in the CI environment.
   source $BASEDIR/../Config.sh
 else
+  # We're running tests in a development environment.
   source $HOOT_HOME/conf/Config.sh
 fi
 
