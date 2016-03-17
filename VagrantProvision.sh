@@ -121,10 +121,9 @@ if ! ogrinfo --formats | grep --quiet FileGDB; then
 fi
 
 if ! grep --quiet NODE_PATH ~/.profile; then
-    # This is being done automatically when 'make docs' is run.
-    #echo "Installing node js dependencies..."
-    #sudo npm config set registry http://registry.npmjs.org/
-    #sudo npm install -g xml2js htmlparser imagemagick mocha@1.20.1 express@3.1.2 async html-to-text restler
+    echo "Installing node js dependencies..."
+    sudo npm config set registry http://registry.npmjs.org/
+    sudo npm install -g xml2js htmlparser imagemagick mocha@1.20.1 express@3.1.2 async html-to-text restler
     echo 'Adding NODE_PATH to user environment...'
     echo 'export NODE_PATH=/usr/local/lib/node_modules' >> ~/.profile
     source ~/.profile
@@ -307,8 +306,7 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
 fi
 echo "Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
-make clean-all -sj$(nproc)
-make -sj$(nproc)
+make -s clean && make -sj$(nproc)
 echo "Deploying web application..."
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
 scripts/CopyWebAppsToTomcat.sh #&> /dev/null
