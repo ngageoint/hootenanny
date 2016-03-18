@@ -393,6 +393,8 @@ You have to add the --with-services option since the UI tests rely on the servic
 
 If a test errors out, you'll see the error message on the screen if you're not running in silent mode (-s).  If you are running the tests in silent mode, then you can look in test-files/ui/tmp for the error log.  Browser screenshots should also get written out in the tests directory when tests fail, if that's helpful.
 
+When writing tests, try to avoid creating test scenarios that are likely to change over time due to changes in other parts of the hoot code.  e.g. A test that expects an exact number of reviews from a conflation job.  However, this type of thing is not always completely possible to avoid in order to write good tests.
+
 If you work consistently in the hootenanny-id submodule, then you need to pay close attention to these tests.  If you don't work much in in the hootenanny-id submodule, then it is still possible you can break these tests with changes to either hoot-core/hoot-services code but less likely.
 
 ==== Mocha User Interface Tests
