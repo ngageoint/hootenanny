@@ -1,5 +1,5 @@
 #!/bin/sh
-echo "Hoot UI RPM PostUninstall"
+echo "Hoot Services-UI RPM PostUninstall"
 # Stop tomcat
 sudo service tomcat6 stop
 # Ensure Postgres is started

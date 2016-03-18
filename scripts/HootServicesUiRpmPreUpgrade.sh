@@ -1,2 +1,2 @@
 #!/bin/sh
-echo "Hoot UI RPM PreUpgrade"
+echo "Hoot Services-UI RPM PreUpgrade"

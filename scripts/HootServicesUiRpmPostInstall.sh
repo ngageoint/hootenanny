@@ -1,6 +1,6 @@
 #!/bin/sh
-echo "Hoot UI RPM PostInstall"
-# init and start Postgres
+echo "Hoot Services-UI RPM PostInstall"
+# init and tart Postgres
 PG_SERVICE=$(ls /etc/init.d | grep postgresql-)
 sudo service $PG_SERVICE initdb
 sudo service $PG_SERVICE start
@@ -9,7 +9,7 @@ PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1
 sudo service tomcat6 start
 
 # create Hoot services db
-if ! sudo -u postgres psql -d postgres -c "\du" | cut -d \| -f 1 | grep -qw hoot; then
+if ! sudo -u postgres psql -lqt | cut -d \| -f 1 | grep -qw hoot; then
     RAND_PW=$(pwgen -s 16 1)
     sudo -u postgres createuser --superuser hoot
     sudo -u postgres psql -c "alter user hoot with password '$RAND_PW';"
