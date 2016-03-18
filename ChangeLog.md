@@ -1,3 +1,40 @@
+# Hootenanny Change Log: 0.2.23
+* [hootenanny-ui #297:](https://github.com/ngageoint/hootenanny-ui/issues/297) Merge VersionInfo.js and About.js
+* [hootenanny-ui #290:](https://github.com/ngageoint/hootenanny-ui/issues/290) Export hangs after resolving all reviews with cropped Haiti Port Au Prince data
+* [hootenanny-ui #284:](https://github.com/ngageoint/hootenanny-ui/issues/284) When POI review loaded and if review against not in viewport we get entity not found error
+* [hootenanny-ui #282:](https://github.com/ngageoint/hootenanny-ui/issues/282) Consider changing dataset ingest "Success..." warning message from red to Green
+* [hootenanny-ui #281:](https://github.com/ngageoint/hootenanny-ui/issues/281) Clean up and refactor UI code
+* [hootenanny-ui #280:](https://github.com/ngageoint/hootenanny-ui/issues/280) Entity Editor - Filter by type change doesn't search
+* [hootenanny-ui #277:](https://github.com/ngageoint/hootenanny-ui/issues/277) Reduce returns on type search for entity editor
+* [hootenanny-ui #271:](https://github.com/ngageoint/hootenanny-ui/issues/271) Mitigate hoot UI 0.2.23 Fortify issues
+* [hootenanny-ui #266:](https://github.com/ngageoint/hootenanny-ui/issues/266) Make tag value comboboxes default to sort alphabetically
+* [hootenanny-ui #256:](https://github.com/ngageoint/hootenanny-ui/issues/256) Unmerged features in a review layer are white during initial layer load
+* [hootenanny-ui #254:](https://github.com/ngageoint/hootenanny-ui/issues/254) POIs are not merging immediately after pressing merge button
+* [hootenanny-ui #192:](https://github.com/ngageoint/hootenanny-ui/issues/192) Update Cookie Cutter Boundary Tolerance
+* [hootenanny-ui #162:](https://github.com/ngageoint/hootenanny-ui/issues/162) Determine best practice to change color of edited features
+* [hootenanny-ui #126:](https://github.com/ngageoint/hootenanny-ui/issues/126) Nothing to merge when 2 features are on top of each other
+* [hootenanny #454:](https://github.com/ngageoint/hootenanny/issues/454) Rename MGCP F_CODE field to FCODE 
+* [hootenanny #448:](https://github.com/ngageoint/hootenanny/issues/448) r7575
+* [hootenanny #447:](https://github.com/ngageoint/hootenanny/issues/447) Remove links to documentation in README landing page
+* [hootenanny #444:](https://github.com/ngageoint/hootenanny/issues/444) `cookie.cutter.output.buffer` is redundant
+* [hootenanny #440:](https://github.com/ngageoint/hootenanny/issues/440) Modify develop nightly test to report an error on failure
+* [hootenanny #439:](https://github.com/ngageoint/hootenanny/issues/439) Create a Vagrant test job for testing CentOS 6.7 core
+* [hootenanny #437:](https://github.com/ngageoint/hootenanny/issues/437) Separate node system tests into two versions: one with and one without public data
+* [hootenanny #435:](https://github.com/ngageoint/hootenanny/issues/435) Reduce verbose test output
+* [hootenanny #428:](https://github.com/ngageoint/hootenanny/issues/428) Fix the services nodejs system tests
+* [hootenanny #416:](https://github.com/ngageoint/hootenanny/issues/416) Archive fails to build if services are disabled.
+* [hootenanny #405:](https://github.com/ngageoint/hootenanny/issues/405) Mitigate hoot core 0.2.23 Fortify Python code injection issues
+* [hootenanny #404:](https://github.com/ngageoint/hootenanny/issues/404) Mitigate hoot services 0.2.23 Fortify Java access xml external entity injection issues
+* [hootenanny #402:](https://github.com/ngageoint/hootenanny/issues/402) Mitigate hoot services 0.2.23 Fortify Java access portability flaw issues
+* [hootenanny #400:](https://github.com/ngageoint/hootenanny/issues/400) Mitigate hoot services 0.2.23 Fortify Java access null dereference issues
+* [hootenanny #397:](https://github.com/ngageoint/hootenanny/issues/397) Mitigate hoot core 0.2.23 Fortify Python password management issues
+* [hootenanny #396:](https://github.com/ngageoint/hootenanny/issues/396) Mitigate hoot core 0.2.23 Fortify Python path manipulation issues
+* [hootenanny #395:](https://github.com/ngageoint/hootenanny/issues/395) Mitigate hoot services 0.2.23 Fortify Java unreleased resource issues
+* [hootenanny #392:](https://github.com/ngageoint/hootenanny/issues/392) Mitigate hoot core 0.2.23 Fortify C++ type mismatch issues
+* [hootenanny #391:](https://github.com/ngageoint/hootenanny/issues/391) Mitigate hoot core 0.2.23 Fortify C++ memory leak issues
+* [hootenanny #291:](https://github.com/ngageoint/hootenanny/issues/291) Prevent renderdb errors on selma jenkins
+* [hootenanny #242:](https://github.com/ngageoint/hootenanny/issues/242) perty nightly tests rerun tests if not cleaned and shouldn't
+
 # Hootenanny Change Log: 2.22
 * [hootenanny-ui #232:](https://github.com/ngageoint/hootenanny-ui/issues/232) Output name in export dialog clears name when you click in the field
 * [hootenanny-ui #231:](https://github.com/ngageoint/hootenanny-ui/issues/231) Unchecking default Line width makes red/blue review highlights invisible
