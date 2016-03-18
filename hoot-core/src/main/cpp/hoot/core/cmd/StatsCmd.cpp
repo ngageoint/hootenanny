@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -33,11 +33,12 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/io/MapStatsWriter.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
 
-class NameSizesVisitor : public ElementVisitor, public OsmMapConsumer
+class NameSizesVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 
 };

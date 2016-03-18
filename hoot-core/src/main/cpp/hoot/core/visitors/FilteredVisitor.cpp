@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "FilteredVisitor.h"
 
 // hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
@@ -78,7 +79,7 @@ void FilteredVisitor::addVisitor(const ElementVisitorPtr& v)
 
 void FilteredVisitor::setOsmMap(OsmMap* map)
 {
-  OsmMapConsumer* c = dynamic_cast<OsmMapConsumer*>(_visitor);
+  ConstOsmMapConsumer* c = dynamic_cast<ConstOsmMapConsumer*>(_visitor);
   if (c != 0)
   {
     c->setOsmMap(map);
@@ -88,7 +89,7 @@ void FilteredVisitor::setOsmMap(OsmMap* map)
 
 void FilteredVisitor::setOsmMap(const OsmMap* map)
 {
-  OsmMapConsumer* c = dynamic_cast<OsmMapConsumer*>(_visitor);
+  ConstOsmMapConsumer* c = dynamic_cast<ConstOsmMapConsumer*>(_visitor);
   if (c != 0)
   {
     c->setOsmMap(map);

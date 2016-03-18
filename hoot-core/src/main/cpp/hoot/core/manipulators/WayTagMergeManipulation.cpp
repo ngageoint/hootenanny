@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayTagMergeManipulation.h"
@@ -40,7 +40,7 @@ WayTagMergeManipulation::WayTagMergeManipulation(long leftId, long rightId,
 {
 }
 
-/// @todo See ticket #2881
+/// @todo See ticket r2881
 void WayTagMergeManipulation::applyManipulation(shared_ptr<OsmMap> wm,
   set<ElementId>& impactedElements, set<ElementId>& newElements) const
 {

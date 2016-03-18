@@ -22,42 +22,28 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef CONSTOSMMAPCONSUMER_H
+#define CONSTOSMMAPCONSUMER_H
 
-#ifndef VISITORELEMENTINPUTSTREAM_H
-#define VISITORELEMENTINPUTSTREAM_H
-
-// hoot
-#include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/io/ElementInputStream.h>
-
-#include <boost/shared_ptr.hpp>
-#include <ogr_spatialref.h>
+#include "OsmMapConsumer.h"
 
 namespace hoot
 {
+class OsmMap;
 
-class VisitorElementInputStream : public ElementInputStream
+class ConstOsmMapConsumer : public OsmMapConsumer
 {
 public:
-  VisitorElementInputStream(ElementInputStreamPtr source, ElementVisitorPtr visitor);
+  virtual void setOsmMap(const OsmMap* map) = 0;
 
-  virtual ~VisitorElementInputStream() {}
-
-  virtual void close() { _source->close(); }
-
-  virtual bool hasMoreElements() { return _source->hasMoreElements(); }
-
-  virtual ElementPtr readNextElement();
-
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
-
-private:
-  ElementInputStreamPtr _source;
-  ElementVisitorPtr _visitor;
+  virtual void setOsmMap(OsmMap* map)
+  {
+    setOsmMap((const OsmMap*)map);
+  }
 };
 
 }
 
-#endif // VISITORELEMENTINPUTSTREAM_H
+#endif // CONSTOSMMAPCONSUMER_H

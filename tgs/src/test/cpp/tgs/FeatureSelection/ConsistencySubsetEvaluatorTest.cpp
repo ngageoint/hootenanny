@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Standard Includes
@@ -172,5 +172,5 @@ namespace Tgs
   };
 }
 
-// @todo Disabled. See #7251 for details.
+// @todo Disabled. See r7251 for details.
 // CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Tgs::ConsistencySubsetEvaluatorTest, PluginFactory::testName());

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMerger.h"
 
@@ -131,7 +131,7 @@ void BuildingMerger::apply(const OsmMapPtr& map,
 
   // if we created a relation, we now need to make sure the building part information is added
   // properly
-  /// @todo synchronize building parts See ticket #2880
+  /// @todo synchronize building parts See ticket r2880
   //_synchronizeParts(keeper);
 
   set< pair<ElementId, ElementId> > replacedSet;

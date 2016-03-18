@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job.custom.HGIS;
 
@@ -68,39 +68,20 @@ public class HGISReviewResource extends HGISResource {
 		}
 	}
 	
-	
-  /**
-  * <NAME>HGIS Prepare Validation Review Service</NAME>
-	 * <DESCRIPTION>This resource prepares existing map for 30% of random HGIS specific validation.</DESCRIPTION>
-	 * <PARAMETERS>
-	 * <sourceMap>
-	 * 	Name of source layer
-	 * </sourceMap>
-	 * <outputMap>
-	 * 	Name of new outupt layer with reviewables
-	 * </outputMap>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	Job ID
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/job/review/custom/HGIS/preparevalidation</URL>
-	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * 	<INPUT>
-	 * {
-	*		 "sourceMap":"AllDataTypesA",
-	*		"outputMap":"AllDataTypesAtest1"
-	*		}
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * {"jobId":"91133065-ecb3-4476-9090-fb4bc3fabdf7"}
-   * </OUTPUT>
-	 * </EXAMPLE>
-   * This resource prepares existing map for 30% of random HGIS specific validation
-   * @param request
-   * @return
-   * @throws Exception
-   */
+	/**
+	 * This resource prepares existing map for 30% of random HGIS specific validation.
+	 * 
+	 * POST hoot-services/job/review/custom/HGIS/preparevalidation
+	 * 
+	 *  {
+	 *		 "sourceMap":"AllDataTypesA", //Name of source layer
+	 *		"outputMap":"AllDataTypesAtest1" //Name of new output layer with reviewables
+	 *		}
+	 * 
+	 * @param request
+	 * @return Job ID
+	 * @throws Exception
+	 */
   @POST
   @Path("/preparevalidation")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -192,12 +173,14 @@ public class HGISReviewResource extends HGISResource {
   	}
   	catch(SQLException | ReviewMapTagUpdateException se)
   	{
+  		assert(jobStatusManager != null);
   		jobStatusManager.setFailed(jobId);
   		log.error(se.getMessage());
   		throw se;
   	}
   	catch(Exception e)
   	{
+  		assert(jobStatusManager != null);
   		jobStatusManager.setFailed(jobId);
   		log.error(e.getMessage());
   		throw e;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SERVICESDBREADER_H
 #define SERVICESDBREADER_H
@@ -133,7 +133,6 @@ private:
 
   //indexes are 0 based and indicate the next record that should be returned by a partial query
 
-  //TODO: consolidate these into a map
   long _nodeIndex;
   long _totalNumMapNodes;
 

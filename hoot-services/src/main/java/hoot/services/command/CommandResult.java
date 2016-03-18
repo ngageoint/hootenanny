@@ -22,14 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.command;
 
-/**
- * 
- * TODO Document hoot.services.utils.CommandResult
- */
 public class CommandResult {
 
     private String command;
@@ -37,12 +33,6 @@ public class CommandResult {
     private String stdout;
     private String stderr;
 
-    /**
-     * @param cmdString
-     * @param out
-     * @param string
-     * @param string2
-     */
     public CommandResult(String cmdString, int result, String stdoutString, String stderrString) {
         
         this.command = cmdString;

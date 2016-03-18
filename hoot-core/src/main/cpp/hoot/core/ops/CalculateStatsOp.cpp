@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CalculateStatsOp.h"
 
@@ -211,7 +211,6 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     const double conflatedFeatureCount =
       fmax(featuresProcessedDuringConflationCount - numFeaturesMarkedForReview, 0);
     long unconflatableFeatureCount = -1.0;
-    //TODO: is this right?
     if (!_inputIsConflatedMapOutput)
     {
       unconflatableFeatureCount = fmax((featureCount - conflatableFeatureCount), (long)0);
@@ -235,7 +234,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     double conflatablePoiCount = 0.0;
     double conflatableHighwayCount = 0.0;
     double conflatableBuildingCount = 0.0;
-    //TODO: This isn't very extensible to hardcode the matchup between each match creator and each
+    /// @todo This isn't very extensible to hardcode the matchup between each match creator and each
     //feature type (e.g. hoot::PlacesPoiMatchCreator matches up with POI type).  Need a more
     //maintainable way to do this if many more feature types get added.
     for (vector< shared_ptr<MatchCreator> >::const_iterator matchCreatorItr = matchCreators.begin();
@@ -302,7 +301,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
         "Percentage of Total Features Unmatched",
         ((double)unconflatedFeatureCount / (double)featureCount) * 100.0));
 
-    //TODO: this code that creates the stats for each feature type needs to be genericized to one
+    /// @todo this code that creates the stats for each feature type needs to be genericized to one
     //set of stats code that can handle all features....a simple method that takes in the element
     //search criterion should do it (except for the custom status, like "meters of highway...", etc.
 
@@ -518,7 +517,7 @@ bool CalculateStatsOp::_matchDescriptorCompare(const MatchCreator::Description& 
   return m1.className > m2.className;
 }
 
-//TODO: a little too much duplicated code in these two _applyVisitor's
+/// @todo a little too much duplicated code in these two _applyVisitor's
 
 double CalculateStatsOp::_applyVisitor(shared_ptr<const OsmMap> &map, const FilteredVisitor& v)
 {

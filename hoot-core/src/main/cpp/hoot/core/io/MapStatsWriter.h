@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAP_STATS_WRITER
 #define MAP_STATS_WRITER
@@ -55,6 +55,14 @@ class MapStatsWriter
       @param sep stats string separator
       */
     void writeStats(const QString& mapInputPath, const QString& statsOutputFilePath, QString sep);
+
+    /**
+      Writes map stats to a file
+
+      @param map stats
+      @param statsOutputFilePath path of the output stats file
+      */
+    void writeStatsToJson(QList< QList<SingleStat> >& stats, const QString& statsOutputFilePath);
 
     /**
       Creates a string for map stats

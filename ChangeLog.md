@@ -35,7 +35,6 @@
 * [hootenanny #141:](https://github.com/ngageoint/hootenanny/issues/141) Possibly Remove the ExportCmd
 * [hootenanny #15:](https://github.com/ngageoint/hootenanny/issues/15) Data visualization limitations in iD making it difficult to address errors identified during conflation
 
-
 # Hootenanny Change Log: 0.2.21
 * [hootenanny-ui #190:](https://github.com/ngageoint/hootenanny-ui/issues/190) Add test-mode back into Help Menu
 * [hootenanny-ui #187:](https://github.com/ngageoint/hootenanny-ui/issues/187) Error when trying to export OSM

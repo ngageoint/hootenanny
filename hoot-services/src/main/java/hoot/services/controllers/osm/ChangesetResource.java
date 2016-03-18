@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -100,35 +100,15 @@ public class ChangesetResource
   }
   
   /**
-	 * <NAME>Changeset Create</NAME>
-	 * <DESCRIPTION>
-	 * The Hootenanny Changeset Service implements a subset of the OSM
-	 * Changeset Service v0.6. It supports the OSM changeset upload process only.
-	 * It does not support the browsing of changeset contents.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 *  <mapId>
-	 *  string; ID or name of the map to which the created changeset will belong
-	 *  </mapId>
-	 *  <changesetData>
-	 *  XML; payload data; an empty OSM xml changeset
-	 *  </changesetData>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	ID of the created changeset
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/changeset/create?mapId=dc-admin</URL>
-	 * 	<REQUEST_TYPE>PUT</REQUEST_TYPE>
-	 * 	<INPUT>
-	 * Changeset OSM XML
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * 1
-	 * </OUTPUT>
-	 * </EXAMPLE>
-   *
    * Service method endpoint for creating a new OSM changeset
+   * 
+   * The Hootenanny Changeset Service implements a subset of the OSM Changeset Service v0.6. It 
+   * supports the OSM changeset upload process only.  It does not support the browsing of changeset 
+   * contents.
+   * 
+   * PUT hoot-services/osm/api/0.6/changeset/create?mapId=dc-admin
+   * 
+   * payload = OSM changeset XML
    * 
    * @param changesetData changeset create data
    * @param mapId ID of the map the changeset belongs to
@@ -258,33 +238,6 @@ public class ChangesetResource
   }
   
   /**
-	 * <NAME>Changeset Upload</NAME>
-	 * <DESCRIPTION>
-	 * The Hootenanny Changeset Service implements a subset of the OSM
-	 * Changeset Service v0.6. It supports the OSM changeset upload process only.
-	 * It does not support the browsing of changeset contents.
-	 * </DESCRIPTION>
-	 * <PARAMETERS>
-	 *  <changesetId>
-	 *   long; ID of the changeset the changes should be uploaded into
-	 *  </changesetId>
-	 *  <changeset>
-	 *  XML (payload data); a populated OSM xml changeset
-	 *  </changeset>
-	 * </PARAMETERS>
-	 * <OUTPUT>
-	 * 	an OSM xml changeset upload response
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/osm/api/0.6/changeset/1/upload</URL>
-	 * 	<REQUEST_TYPE>POST</REQUEST_TYPE>
-	 * 	<INPUT>
-	 * OSM Changeset XML
-	 *	</INPUT>
-	 * <OUTPUT>
-	 * an OSM xml changeset upload response
-	 * </OUTPUT>
-	 * </EXAMPLE>
    * Service method endpoint for creating a pre-flight request for uploading changeset diff data; 
    * 
    * required for CORS (http://en.wikipedia.org/wiki/Cross-origin_resource_sharing) support
@@ -310,8 +263,6 @@ public class ChangesetResource
    * @return response acknowledging the result of the update operation with updated entity ID 
    * information
    * @throws Exception
-   * @see http://wiki.openstreetmap.org/wiki/API_0.6 and 
-   * http://wiki.openstreetmap.org/wiki/OsmChange
    */
   @POST
   @Path("/{changesetId}/upload")
@@ -401,10 +352,9 @@ public class ChangesetResource
   /**
    * Service method endpoint for closing a changeset
    * 
-   * @param changeSetId ID of the changeset to close
+   * @param changesetId ID of the changeset to close
    * @return HTTP status code indicating the status of the closing of the changeset
    * @throws Exception 
-   * @see http://wiki.openstreetmap.org/wiki/API_0.6 and
    */
   @PUT
   @Path("/{changesetId}/close")

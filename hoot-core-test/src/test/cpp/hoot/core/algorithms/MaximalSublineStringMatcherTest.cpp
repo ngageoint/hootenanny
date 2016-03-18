@@ -411,7 +411,7 @@ public:
 
       // @todo This test fails with the default subline matcher. The MaximalSublineMatcher
       // performs better, but has other flaws.
-      // #2701 should resolve this.
+      // r2701 should resolve this.
 //      HOOT_STR_EQUALS("score: 80\n"
 //        "matches:\n"
 //        "subline 1: start: way: -3 index: 0 fraction: 0 end: way: -3 index: 0 fraction: 0.4\n"

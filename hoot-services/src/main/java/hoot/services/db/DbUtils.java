@@ -209,13 +209,6 @@ public class DbUtils
   	return null;
   }
 
-  /**
-   *
-   *
-   * @param conn
-   * @return
-   * @throws Exception
-   */
   public static boolean closeConnection(Connection conn) throws Exception
   {
   	if (conn != null)
@@ -283,14 +276,6 @@ public class DbUtils
     return mapIds;
   }
 
-  /**
-   *
-   *
-   * @param conn
-   * @param mapId
-   * @return
-   * @throws Exception
-   */
   public static String getDisplayNameById(final Connection conn, final long mapId) throws Exception
   {
   	QMaps maps = QMaps.maps;
@@ -542,14 +527,6 @@ public class DbUtils
     return recordCtr > 0;
   }
 
-  // TODO: remove
-
-  /**
-   *
-   *
-   * @param conn
-   * @return
-   */
   public static long getTestUserId(Connection conn)
   {
   	QUsers users = QUsers.users;
@@ -559,13 +536,6 @@ public class DbUtils
     return query.from(users).singleResult(users.id);
   }
 
-  /**
-   *
-   *
-   * @param conn
-   * @return
-   * @throws Exception
-   */
   public static long insertUser(Connection conn) throws Exception
   {
   	Long newId = (long) -1;
@@ -590,13 +560,6 @@ public class DbUtils
     return newId.longValue();
   }
 
-  /**
-   *
-   *
-   * @param conn
-   * @return
-   * @throws Exception
-   */
   public static void deleteUser(Connection conn, long userId) throws Exception
   {
       Configuration configuration = getConfiguration();
@@ -606,14 +569,14 @@ public class DbUtils
         .execute();
   }
 
-  //TODO: this code needs to be changed to dynamically read in the data types from querydsl.  If
-  //I make a change to the schema in liquibase, it will never be picked up unless this static code
-  //is also changed.  See #6777
   /**
    *
    *
    * @param mapId
    * @throws Exception
+   * //TODO: This code needs to be changed to dynamically read in the data types from querydsl.  If
+     I make a change to the schema in liquibase, it will never be picked up unless this static code
+     is also changed.  See r6777
    */
   public static void createMap(final long mapId) throws Exception
   {
@@ -735,14 +698,6 @@ public class DbUtils
 		}
   }
 
-  /**
-   *
-   *
-   * @param userId
-   * @param conn
-   * @return
-   * @throws Exception
-   */
   public static long insertMap(final long userId, Connection conn) throws Exception
   {
   	Long newId = (long) -1;
@@ -868,19 +823,6 @@ public class DbUtils
     return stat.getStatus();
   }
 
-  /**
-   *
-   *
-   * @param mapId
-   * @param records
-   * @param t
-   * @param predicateslist
-   * @param recordBatchType
-   * @param conn
-   * @param maxRecordBatchSize
-   * @return
-   * @throws Exception
-   */
   public static long batchRecords(final long mapId, final List<?> records,
     com.mysema.query.sql.RelationalPathBase<?> t, List<List<BooleanExpression>> predicateslist,
     final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
@@ -1037,15 +979,6 @@ public class DbUtils
     return JSONObject.escape(json.toString());
   }
 
-  /**
-   *
-   *
-   * @param tags
-   * @param mapId
-   * @param conn
-   * @return
-   * @throws SQLException
-   */
   public static long updateMapsTableTags(final Map<String, String> tags, final long mapId,
   	final Connection conn) throws SQLException
   {
@@ -1084,14 +1017,6 @@ public class DbUtils
     return execResult;
   }
 
-  /**
-   *
-   *
-   * @param mapId
-   * @param conn
-   * @return
-   * @throws Exception
-   */
   public static Map<String, String> getMapsTableTags(final long mapId, final Connection conn)
   	throws Exception
   {
@@ -1113,17 +1038,6 @@ public class DbUtils
   	return tags;
   }
 
-  /**
-   *
-   *
-   * @param mapId
-   * @param records
-   * @param recordBatchType
-   * @param conn
-   * @param maxRecordBatchSize
-   * @return
-   * @throws Exception
-   */
 	public static long batchRecordsDirectNodes(final long mapId, final List<?> records,
 		final RecordBatchType recordBatchType,  Connection conn, int maxRecordBatchSize) throws Exception
 	{
@@ -1283,17 +1197,6 @@ public class DbUtils
 		return updateCount;
 	}
 
-	/**
-	 *
-	 *
-	 * @param mapId
-	 * @param records
-	 * @param recordBatchType
-	 * @param conn
-	 * @param maxRecordBatchSize
-	 * @return
-	 * @throws Exception
-	 */
 	public static long batchRecordsDirectWays(final long mapId, final List<?> records,
 		final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
 	{
@@ -1444,17 +1347,6 @@ public class DbUtils
 		return updateCount;
 	}
 
-	/**
-	 *
-	 *
-	 * @param mapId
-	 * @param records
-	 * @param recordBatchType
-	 * @param conn
-	 * @param maxRecordBatchSize
-	 * @return
-	 * @throws Exception
-	 */
 	public static long batchRecordsDirectRelations(final long mapId, final List<?> records,
 		final RecordBatchType recordBatchType, Connection conn, int maxRecordBatchSize) throws Exception
 	{
@@ -1605,30 +1497,32 @@ public class DbUtils
 
 	/**
 	 * Returns table size in byte
-	 *
-	 * @param tableName
-	 * @return
-	 * @throws Exception
 	 */
 	public static long getTableSizeInByte(final String tableName) throws Exception
 	{
 		long ret = 0;
 		Connection conn = null;
 	  Statement stmt = null;
+	  ResultSet rs = null;
 		try
 		{
 			conn = DbUtils.createConnection();
 			stmt = conn.createStatement();
 
 			String sql = "select pg_total_relation_size('" + tableName + "') as tablesize";
-			ResultSet rs = stmt.executeQuery(sql);
-      //STEP 5: Extract data from result set
+		  rs = stmt.executeQuery(sql);
+		  
+		  if (rs == null)
+			{
+				throw new SQLException("Error executing getTableSizeInByte");
+			}
+		  
+			//STEP 5: Extract data from result set
       while (rs.next())
       {
          //Retrieve by column name
       	ret = rs.getLong("tablesize");
       }
-      rs.close();
 		}
 		catch (Exception e)
 		{
@@ -1637,38 +1531,18 @@ public class DbUtils
 		}
 		finally
 		{
-			// finally block used to close resources
-			try
-			{
-				if (stmt != null)
-					stmt.close();
-			}
-			catch (SQLException se2)
-			{
-				log.equals(se2.getMessage());
-			}// nothing we can do
-			try
-			{
-				if (conn != null)
-					DbUtils.closeConnection(conn);
-			}
-			catch (SQLException se)
-			{
-				log.equals(se.getMessage());
-			}// end finally try
-		}// end try
+			if (rs != null) rs.close();
+			if (stmt != null)
+				stmt.close();
+			if (conn != null)
+				DbUtils.closeConnection(conn);
+		}
 
 		return ret;
 	}
 
 	/**
-	 *
-	 *
-	 * @param result
-	 * @param elementType
-	 * @return
-	 * @throws SQLException
-	 * @todo change back to original element generic code
+	 * //TODO: change back to original element generic code
 	 */
 	public static Object resultToObj(final ResultSet rs, final ElementType elementType)
 		throws SQLException

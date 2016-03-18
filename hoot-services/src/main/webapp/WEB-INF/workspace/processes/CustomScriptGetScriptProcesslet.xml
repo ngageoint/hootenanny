@@ -9,15 +9,7 @@
 	<JavaClass>hoot.services.controllers.wps.CustomScriptGetScriptProcesslet</JavaClass>
   <Title>Custom Script Get Script Service</Title>
   <Abstract><![CDATA[
-  <DESCRIPTION>
   Custom script service performs CRUD operation on user entered translation script. It has WPS and REST end points as described below. Returns the specified script.
-  </DESCRIPTION>
-  <EXAMPLE>
-  <URL>http://localhost:8080/hoot-services/ogc</URL>
-  <REQUEST_TYPE>POST</REQUEST_TYPE>
-  <INPUT></INPUT>
-   <OUTPUT></OUTPUT>
-   </EXAMPLE>
   ]]></Abstract>
 	<!-- deegree doesn't honor optional input parameters for HTTP GET requests (only POSTs), so 
     don't make any of them optional; by default input params are required -->

@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef UNIQUENAMESVISITOR_H
 #define UNIQUENAMESVISITOR_H
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
 // Qt
@@ -44,7 +44,7 @@ using namespace std;
 /**
  * Counts all the unique names.
  */
-class UniqueNamesVisitor : public ElementVisitor, public OsmMapConsumer, public SingleStatistic
+class UniqueNamesVisitor : public ElementVisitor, public ConstOsmMapConsumer, public SingleStatistic
 {
 public:
 

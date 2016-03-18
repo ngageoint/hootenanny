@@ -22,31 +22,40 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef PROJECTTOGEOGRAPHICVISITOR_H
+#define PROJECTTOGEOGRAPHICVISITOR_H
 
-#include "VisitorElementInputStream.h"
+// GDAL
+#include <ogr_geometry.h>
+#include <ogr_spatialref.h>
+
+#include "ElementOsmMapVisitor.h"
 
 namespace hoot
 {
 
-VisitorElementInputStream::VisitorElementInputStream(ElementInputStreamPtr source,
-  ElementVisitorPtr visitor) :
-  _source(source),
-  _visitor(visitor)
+class ReprojectCoordinateFilter;
+
+class ProjectToGeographicVisitor : public ElementOsmMapVisitor
 {
+public:
+  static string className() { return "hoot::ProjectToGeographicVisitor"; }
+
+  ProjectToGeographicVisitor();
+  ~ProjectToGeographicVisitor();
+
+  void initialize(shared_ptr<OGRSpatialReference>& projection);
+
+  virtual void visit(const shared_ptr<Element>& e);
+
+private:
+
+  OGRCoordinateTransformation* _transform;
+  shared_ptr<ReprojectCoordinateFilter> _rcf;
+};
+
 }
 
-ElementPtr VisitorElementInputStream::readNextElement()
-{
-  ElementPtr e = _source->readNextElement();
-  _visitor->visit(e);
-  return e;
-}
-
-boost::shared_ptr<OGRSpatialReference> VisitorElementInputStream::getProjection() const
-{
-  return _source->getProjection();
-}
-
-}
+#endif // PROJECTTOGEOGRAPHICVISITOR_H

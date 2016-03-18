@@ -144,9 +144,15 @@ void TestUtils::dumpString(const string& str)
   cout << "size_t dataSize = " << str.size() << ";" << endl;
 }
 
-ElementPtr TestUtils::getElement(OsmMapPtr map, QString note)
+ElementPtr TestUtils::getElementWithNote(OsmMapPtr map, QString note)
 {
-  TagCriterion tc("note", note);
+  return getElementWithTag(map, "note", note);
+}
+
+ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString tagKey,
+                                        const QString tagValue)
+{
+  TagCriterion tc(tagKey, tagValue);
   set<ElementId> bag;
   GetElementIdsVisitor v(bag);
   FilteredVisitor fv(tc, v);
@@ -154,24 +160,10 @@ ElementPtr TestUtils::getElement(OsmMapPtr map, QString note)
 
   if (bag.size() != 1)
   {
-    throw HootException("Could not find an expected element with note: " + note);
+    throw HootException("Could not find an expected element with tag: " + tagKey + "=" + tagValue);
   }
 
   return map->getElement(*bag.begin());
-}
-
-WayPtr TestUtils::getWay(OsmMapPtr map, QString note)
-{
-  std::vector<long> wids = map->findWays("note", note);
-  if (wids.size() == 0)
-  {
-    throw HootException("Could not find a way with note: " + note);
-  }
-  if (wids.size() > 1)
-  {
-    throw HootException("Found more than one way with note: " + note);
-  }
-  return map->getWay(wids[0]);
 }
 
 std::string TestUtils::readFile(QString f1)

@@ -78,7 +78,7 @@ public:
     database.getOrCreateUser(userEmail(), "ServicesDbReaderTest");
     database.close();
 
-    //TODO: inserting a map before all of these tests isn't actually necessary (url tests) and
+    //inserting a map before all of these tests isn't actually necessary (url tests) and
     //is probably slowing the test run down a little more than necessary
     mapId = populateMap();
   }
@@ -209,7 +209,7 @@ public:
       exceptionMsg = e.what();
     }
 
-    //TODO: I would rather this return: "URL does not contain valid map ID." from
+    //I would rather this return: "URL does not contain valid map ID." from
     //ServicesDbReader::open
     CPPUNIT_ASSERT_EQUAL(
       QString("An unsupported URL was passed in.").toStdString(), exceptionMsg.toStdString());

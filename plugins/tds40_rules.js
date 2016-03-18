@@ -56,35 +56,35 @@ tds.rules = {
      ['F_CODE','AL241','tower','communication'], 
      ['F_CODE','AL241','tower','yes'], // OSM
      ['F_CODE','AL241','man_made','mast'], // OSM
-     ['F_CODE','AM080','tower:type','water'], // 
+     ['F_CODE','AM080','tower:type','water'],
      ['F_CODE','AN060','railway','yes'], // Rail yards
      ['F_CODE','AP030','highway','motorway'], // Limited Access Motorway
      ['F_CODE','AP030','highway','motorway_link'], // Limited Access Motorway
      ['F_CODE','AP030','highway','trunk'], // Motorway
      ['F_CODE','AP030','highway','trunk_link'], // Motorway
-     ['F_CODE','AP030','highway','primary'], 
-     ['F_CODE','AP030','highway','primary_link'], 
+     ['F_CODE','AP030','highway','primary'],
+     ['F_CODE','AP030','highway','primary_link'],
      ['F_CODE','AP030','highway','secondary'],
      ['F_CODE','AP030','highway','secondary_link'],
-     ['F_CODE','AP030','highway','tertiary'], 
-     ['F_CODE','AP030','highway','tertiary_link'], 
-     ['F_CODE','AP030','highway','residential'], 
-     ['F_CODE','AP030','highway','unclassified'], 
-     ['F_CODE','AP030','highway','service'], 
-     ['F_CODE','AP030','highway','road'], 
+     ['F_CODE','AP030','highway','tertiary'],
+     ['F_CODE','AP030','highway','tertiary_link'],
+     ['F_CODE','AP030','highway','residential'],
+     ['F_CODE','AP030','highway','unclassified'],
+     ['F_CODE','AP030','highway','service'],
+     ['F_CODE','AP030','highway','road'],
      ['F_CODE','AP030','highway','yes'], // Just in case...
      ['F_CODE','AP040','barrier','lift_gate'], // Gate
      ['F_CODE','AP050','highway','footway'], // Trail
      ['F_CODE','AQ125','railway','station'], // Railway Station
      ['F_CODE','AQ125','highway','bus_stop'], // Transportaion Station
      ['F_CODE','AQ125','highway','bus_station'], // Transportaion Station
-     ['F_CODE','AQ125','public_transport','stop_position'], 
+     ['F_CODE','AQ125','public_transport','stop_position'],
      ['F_CODE','AQ141','parking','multi-story'], // Parking Garage
      ['F_CODE','AT042','power','pole'], // OSM
      ['F_CODE','AT042','power','tower'], // OSM
      ['F_CODE','BA030','place','islet'], // Island - From OSM
      ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
-     ['F_CODE','BH145','natural','sinkhole'], 
+     ['F_CODE','BH145','natural','sinkhole'],
      // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
      // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
      ['F_CODE','GB005','aeroway','sport_airport'], // Land Aerodrome
@@ -405,6 +405,7 @@ tds.rules = {
      ['ATC','4','aqueduct:type','underwater'], // Underwater
      ['ATC','5','aqueduct:type','surface'], // Surface
      ['ATC','6','aqueduct:type','qanat'], // Qanat
+
      // AWP - Aeronautical Obstacle Light Present
      // ['AWP','-999999',undefined,undefined],
      ['AWP','1000','light:obstacle','no'],
@@ -2720,8 +2721,8 @@ tds.rules = {
 
      // SEP - Divided
      // ['SEP','-999999',undefined,undefined], // No Information
-     ['SEP','1000','divider','no'],
-     ['SEP','1001','divider','yes'],
+     ['SEP','1000','is_divided','no'],
+     ['SEP','1001','is_divided','yes'],
 
      // SGCC - Surface Slope (interval closure)
      ['SGCC','2','incline:interval:closure','open_interval'], // Open Interval
@@ -2973,7 +2974,7 @@ tds.rules = {
 
      // THR - Through Route
      // ['THR','-999999',undefined,undefined], // No Information
-     ['THR','1000','highway:through_route','no'], 
+     ['THR','1000','highway:through_route','no'],
      ['THR','1001','highway:through_route','yes'], // Need to look at custom rules to deconflict this
 
      // TID - Tide Influenced
@@ -3017,7 +3018,7 @@ tds.rules = {
 
      // TRS - Transportation System Type
      // ['TRS','-999999',undefined,undefined], // No Information
-     ['TRS','999', 'transport:type','other'], // Other
+     ['TRS','999','transport:type','other'], // Other
      // ['TRS','0','transport:type','unknown'],
      ['TRS','1','transport:type','air'],
      ['TRS','2','transport:type','aqueduct'], // Aqueduct
@@ -4220,18 +4221,18 @@ tds.rules = {
     one2oneOut : [
      // OTH Filler.  These are to build OTH values
      ['RTN_ROI','999','highway','other'],
-     ['FFN','999','amenity','other'], 
-     ['FFN','999','building','other'], 
-     ['FFN','999','camp:type','other'], 
-     ['FFN','999','craft','other'], 
-     ['FFN','999','landuse','other'], 
-     ['FFN','999','leisure','other'], 
-     ['FFN','999','military','other'], 
-     ['FFN','999','office','other'], 
-     ['FFN','999','repair','other'], 
-     ['FFN','999','shop','other'], 
-     ['FFN','999','social_facility','other'], 
-     ['FFN','999','tourism','other'], 
+     ['FFN','999','amenity','other'],
+     ['FFN','999','building','other'],
+     ['FFN','999','camp:type','other'],
+     ['FFN','999','craft','other'],
+     ['FFN','999','landuse','other'],
+     ['FFN','999','leisure','other'],
+     ['FFN','999','military','other'],
+     ['FFN','999','office','other'],
+     ['FFN','999','repair','other'],
+     ['FFN','999','shop','other'],
+     ['FFN','999','social_facility','other'],
+     ['FFN','999','tourism','other'],
 
      // Fix up the building/use tags from FFN
      [undefined,undefined,'building','industrial'], // Industrial
@@ -4269,7 +4270,7 @@ tds.rules = {
      ['FFN','481','man_made','depot'], // not a good fit for depot terminal
      ['FFN','550','building','dwelling'], // Accomodation 
      ['FFN','811','building','public_service_outbuilding'], // Government - Not Good
-     ['FFN','811','amenity','government_administration_building'], // 
+     ['FFN','811','amenity','government_administration_building'],
      ['FFN','835','military','military_outbuilding'], // Military
      ['FFN','835','military','barracks'], // Military
      ['FFN','843','amenity','jail'], // Imprisonment
@@ -4283,16 +4284,16 @@ tds.rules = {
 
      // From UFD
      ['CAA','-999999','controlling_authority','unknown'],
-     ['FFN','190','use','oil_gas_facility'], //  
+     ['FFN','190','use','oil_gas_facility'],
 
      // From UTP
      // ['TTC','999','tower:type','radar'], //  Radar Tower -> Other
      ['FFN','482','amenity','bus_station'], // Station
      ['FFN','831','amenity','courthouse'], // Public Order - from spec
-     ['FFN','610','building','communication'], 
-     ['FFN','530','building','warehouse'], 
-     ['FFN','835','building','military'], 
-     // ['FFN','999','landuse','institutional'], //  
+     ['FFN','610','building','communication'],
+     ['FFN','530','building','warehouse'],
+     ['FFN','835','building','military'],
+     // ['FFN','999','landuse','institutional'],
      ['ZI014_PPO','83','product','oil'], // Petroleum
 
      // From NAVTEQ

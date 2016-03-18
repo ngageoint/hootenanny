@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ELEMENTCONVERTER_H
@@ -110,6 +110,8 @@ public:
    */
   static geos::geom::GeometryTypeId getGeometryType(const ConstElementPtr& e,
     bool throwError=true, const bool statsFlag=false);
+
+  static const int UNKNOWN_GEOMETRY = -1;
 
 protected:
   ConstElementProviderPtr                 _constProvider;

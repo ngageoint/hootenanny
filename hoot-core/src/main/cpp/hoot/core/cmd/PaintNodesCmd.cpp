@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -69,7 +69,7 @@ class PaintNodesCmd : public BaseCommand
         long nodeCount = 0;
         Envelope result;
         reader->setUseDataSourceIds(true);
-        r->initializePartial();
+        //r->initializePartial();
         while (r->hasMoreElements())
         {
           ElementPtr e = r->readNextElement();
@@ -105,7 +105,7 @@ class PaintNodesCmd : public BaseCommand
     {
       shared_ptr<PartialOsmMapReader> r = dynamic_pointer_cast<PartialOsmMapReader>(reader);
       r->setUseDataSourceIds(true);
-      r->initializePartial();
+      //r->initializePartial();
 
       int width = ceil(envelope.getWidth() / pixelSize);
       int height = ceil(envelope.getHeight() / pixelSize);

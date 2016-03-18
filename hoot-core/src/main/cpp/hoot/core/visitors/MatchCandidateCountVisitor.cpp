@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchCandidateCountVisitor.h"
 
@@ -38,7 +38,7 @@ _candidateCount(0)
   {
     vector<MatchCreator::Description> matchCreatorDescriptions = _matchCreators[i]->getAllCreators();
     sort(matchCreatorDescriptions.begin(), matchCreatorDescriptions.end(), _matchDescriptorCompare);
-    //TODO: Grabbing the first element doesn't seem right here, but its behavior has been expected
+    // Grabbing the first element doesn't seem right here, but its behavior has been expected
     //so far.
     LOG_VARD(matchCreatorDescriptions.at(0).className);
      _matchCreatorDescriptions.append(

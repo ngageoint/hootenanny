@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SampledAngleHistogramExtractor.h"
 
@@ -83,7 +83,7 @@ public:
         const double distance = currentLoc.getCoordinate().distance(lastLoc.getCoordinate());
         //calculate the heading using some distance around the way
         const double theta = WayHeading::calculateHeading(currentLoc, _headingDelta);
-        if (!isnan(theta))  //TODO: is this appropriate?
+        if (!isnan(theta))
         {
           _angleHistogram.addAngle(theta, distance);
         }

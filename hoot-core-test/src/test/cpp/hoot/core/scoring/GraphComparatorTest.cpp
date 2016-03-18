@@ -35,6 +35,9 @@
 #include <hoot/core/util/OpenCv.h>
 using namespace hoot;
 
+// Tgs
+#include <tgs/Statistics/Random.h>
+
 // Boost
 using namespace boost;
 
@@ -64,7 +67,7 @@ public:
     {
         OsmReader reader;
 
-        srand(0);
+        Tgs::Random::instance()->seed(0);
 
         shared_ptr<OsmMap> map(new OsmMap());
         reader.read("test-files/ToyTestA.osm", map);
@@ -100,7 +103,7 @@ public:
     {
         OsmReader reader;
 
-        srand(0);
+        Tgs::Random::instance()->seed(0);
 
 //        int argc = 0;
 //        char* argv[] = {""};
@@ -140,7 +143,7 @@ public:
     {
         OsmReader reader;
 
-        srand(0);
+        Tgs::Random::instance()->seed(0);
 
 //        int argc = 0;
 //        char* argv[] = {""};

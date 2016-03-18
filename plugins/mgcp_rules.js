@@ -484,7 +484,7 @@ mgcp.rules = {
 
         // FUC - Functional Use
         // ['FUC','0','use','unknown'], 
-        ['FUC','0',undefined, undefined], 
+        ['FUC','0',undefined,undefined], 
         ['FUC','1','use','industrial'], 
         ['FUC','2','use','commercial'], 
         ['FUC','3','use','institute'],
@@ -849,7 +849,7 @@ mgcp.rules = {
         // RIR - Railway in Road
         //['RIR','0','railway:in_road','unknown'], 
         ['RIR','0',undefined,undefined], 
-        ['RIR', '-999999',undefined,undefined], // In data, not in spec
+        ['RIR','-999999',undefined,undefined], // In data, not in spec
         ['RIR','1000','railway:in_road','separated'],
         ['RIR','1001','railway:in_road','yes'],
 
@@ -1188,7 +1188,7 @@ mgcp.rules = {
         ['TRS','13','transport:type','road'],
         ['TRS','14','transport:type','road_and_railway'],
         // ['TRS','998',undefined,undefined],
-        ['TRS','999', 'transport:type','other'],
+        ['TRS','999','transport:type','other'],
 
         // TTC - Tower Type
         //['TTC','0','tower:type','unknown'],
@@ -1253,7 +1253,7 @@ mgcp.rules = {
         ['VSP','999','vegetation:type','other'], // Other 
 
         // WCC - Watercourse Channel Type
-        ['WCC','0','waterway','yes'], 
+        ['WCC','0','waterway','yes'],
         ['WCC','1','waterway','stream'],
         ['WCC','2','waterway','braided_stream'],
         ['WCC','3','waterway','gorge'],
@@ -1292,8 +1292,8 @@ mgcp.rules = {
         // WTC - Road Weather Restriction
         ['WTC','-999999',undefined,undefined], // In data, not in spec
         // ['WTC','0','seasonal','unknown'], 
-        ['WTC','0',undefined,undefined], 
-        ['WTC','1','seasonal','no'], 
+        ['WTC','0',undefined,undefined],
+        ['WTC','1','seasonal','no'],
         ['WTC','2','seasonal','fair'], // possibly seasonal=
         ['WTC','3','seasonal','winter'],
         ['WTC','5','seasonal','not_winter'],
@@ -1446,11 +1446,11 @@ mgcp.rules = {
 
         // CUS - Communications Facility Type
         ['CUS','-32768',undefined,undefined], // Null
-        ['CUS','0',undefined,undefined], 
+        ['CUS','0',undefined,undefined],
         ['CUS','2',undefined,undefined], // In data but not in Spec
         ['CUS','4','building','ground_station'],
         // ['CUS','998',undefined,undefined], // NA
-        ['CUS','999','building','communications'], 
+        ['CUS','999','building','communications'],
 
         // DDC - Dwelling Type
         ['DDC','-32768',undefined,undefined], // Null
@@ -1524,7 +1524,7 @@ mgcp.rules = {
         ['ICF','5','building','warehouse'],
         ['ICF','10','product','oil'],
         ['ICF','11','building','aeration'],
-        ['ICF','12','product','woodword'],
+        ['ICF','12','product','woodwork'],
         ['ICF','13','product','lumber'],
         ['ICF','14','man_made','kiln'],
         ['ICF','18','building','processing'],
@@ -1649,16 +1649,16 @@ mgcp.rules = {
         ['MIN','9','mine:type','below_surface'],
 
         // NVS - Navigability Information
-        // ['NVS','0','navigation','unknown'], 
-        ['NVS','0',undefined,undefined], 
+        // ['NVS','0','navigation','unknown'],
+        ['NVS','0',undefined,undefined],
         ['NVS','3','navigation','yes'],
         ['NVS','999','navigation','other'],
 
         // OWO - Waterbody Overhead Obstruction
         ['OWO','-32768',undefined,undefined],  // Null
-        ['OWO','-999999',undefined,undefined], 
-        // ['OWO','0','pipeline:obstruction','unknown'], 
-        ['OWO','0',undefined,undefined], 
+        ['OWO','-999999',undefined,undefined],
+        // ['OWO','0','pipeline:obstruction','unknown'],
+        ['OWO','0',undefined,undefined],
         ['OWO','2',undefined,undefined], // In data but not in spec!
         ['OWO','1000','waterway:overhead_obstruction','no'], // Feature does not cross navigable water
         ['OWO','1001','waterway:overhead_obstruction','yes'],
@@ -1682,10 +1682,10 @@ mgcp.rules = {
         ['PSF','4','amenity','health_office'],
         ['PSF','5','amenity','post_office'],
         ['PSF','6','amenity','fire_station'],
-        ['PSF','8','amenity','motor_vehicle_station'],   
+        ['PSF','8','amenity','motor_vehicle_station'],
         ['PSF','9','amenity','water_police'],
         ['PSF','10','amenity','rescue_station'],
-        ['PSF','12','amenity','clinic'],                                           
+        ['PSF','12','amenity','clinic'],
         ['PSF','13','amenity','sanatorium'],
         ['PSF','16','amenity','fire_and_police'],
         ['PSF','19','amenity','public_service_outbuilding'],
@@ -1698,7 +1698,7 @@ mgcp.rules = {
         ['RES','1','amenity','astronomical_station'], // ??
         ['RES','2','man_made','observatory'],
         ['RES','3','building','research_centre'],
-        ['RES','4','monitoring:weather','yes'], 
+        ['RES','4','monitoring:weather','yes'],
         // ['RES','998',undefined,undefined],
         ['RES','999','building','research'],
 
@@ -1912,7 +1912,7 @@ mgcp.rules = {
         ['TFC','15','railway','station'],
         ['TFC','16','amenity','weighbridge'],
         ['TFC','17','aeroway','terminal'],
-        ['TFC','18','public_transport','station'], 
+        ['TFC','18','public_transport','station'],
         ['TFC','19','building','pilot_office'],
         ['TFC','20','building','pilot_lookout_station'],
         ['TFC','21','building','transportation_outbuilding'],
@@ -2169,10 +2169,10 @@ mgcp.rules = {
         ['FFN','860','building','hospital'],
         ['FFN','841','amenity','ranger_station'],
         ['FFN','860','amenity','health_office'],
-        ['FFN','343','amenity','motor_vehicle_station'],   
+        ['FFN','343','amenity','motor_vehicle_station'],
         ['FFN','841','amenity','water_police'],
         ['FFN','841','amenity','rescue_station'],
-        ['FFN','860','amenity','clinic'],                                           
+        ['FFN','860','amenity','clinic'],
         ['FFN','860','amenity','sanatorium'],
         ['FFN','841','amenity','fire_and_police'],
         ['FFN','811','amenity','public_service_outbuilding'],

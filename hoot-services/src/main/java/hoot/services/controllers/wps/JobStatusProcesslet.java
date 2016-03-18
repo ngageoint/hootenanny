@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.wps;
 
@@ -69,7 +69,7 @@ public class JobStatusProcesslet extends BaseProcesslet {
 	}
 	
 	
-	private String getJobStatusRquest(String jobId) throws Exception{
+	private static String getJobStatusRquest(String jobId) throws Exception{
 		String ret = "";
 		
 		CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -84,6 +84,7 @@ public class JobStatusProcesslet extends BaseProcesslet {
 		    }
 		} finally {
 		    response.close();
+		    httpclient.close();
 		}
 		
 		
@@ -96,8 +97,7 @@ public class JobStatusProcesslet extends BaseProcesslet {
 	 */
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
-
+		//
 	}
 
 
@@ -106,9 +106,7 @@ public class JobStatusProcesslet extends BaseProcesslet {
 	 */
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
-
-
+		//
 	}
 
 }

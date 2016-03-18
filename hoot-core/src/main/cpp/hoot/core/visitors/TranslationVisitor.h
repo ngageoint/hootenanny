@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TRANSLATIONVISITOR_H
 #define TRANSLATIONVISITOR_H
@@ -31,7 +31,7 @@
 #include <boost/shared_ptr.hpp>
 
 // Hoot
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/io/ScriptToOgrTranslator.h>
@@ -43,7 +43,7 @@
 namespace hoot
 {
 
-class TranslationVisitor : public ElementVisitor, public OsmMapConsumer
+class TranslationVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

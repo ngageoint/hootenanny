@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef KEEPHIGHWAYSVISITOR_H
 #define KEEPHIGHWAYSVISITOR_H
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
@@ -39,7 +39,7 @@ using namespace std;
  * Removes all ways and relations that are not part of a linear highway.
  * Note: You may have to run this multiple times to get the desired effect.
  */
-class KeepHighwaysVisitor : public ElementVisitor, public OsmMapConsumer
+class KeepHighwaysVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

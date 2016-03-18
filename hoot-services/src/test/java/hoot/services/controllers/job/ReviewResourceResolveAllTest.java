@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
@@ -95,7 +95,7 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract
   	
     //all review relations should have the incremented changeset id
     sql = "select count(*) from current_relations_" + mapId;
-    //TODO: don't think this is right...
+    //don't think this is right...
   	sql += " where tags->'type' = 'review' and tags->'hoot:review:needs' = 'no' and " +
       "changeset_id = " + response.getChangesetId();
   	try

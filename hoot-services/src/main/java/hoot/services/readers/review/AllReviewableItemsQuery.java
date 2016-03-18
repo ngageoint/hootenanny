@@ -39,16 +39,13 @@ import hoot.services.models.review.ReviewableItemBbox;
 import hoot.services.models.review.ReviewableItemBboxInfo;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -149,7 +146,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements
 				// we want have unique member relations bbox
 				for(Tuple rel : rels)
 				{
-					long relId = (long) rel.get(Expressions.path(Long.class, _currentRelMembersSubQPath, "member_id"));
+					long relId = rel.get(Expressions.path(Long.class, _currentRelMembersSubQPath, "member_id"));
 					if(!relsBbox.containsKey(relId))
 					{					
 						ReviewableItemBbox bbxInfo = _getRelationMemberBbox(relId);
@@ -163,9 +160,9 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements
 				Map<Long, ReviewableItemBboxInfo> reviewRelationWithRelationMembers  = new HashMap<>();
 				for(Tuple rel : rels)
 				{
-					long relId = (long) rel.get(Expressions.path(Long.class, _currentRelMembersSubQPath, "relation_id"));
-					long memId = (long) rel.get(Expressions.path(Long.class, _currentRelMembersSubQPath, "member_id"));
-					String needReview = (String)rel.get(Expressions.path(String.class, _reviewableCurrentRelSubQPath, "needreview"));
+					long relId = rel.get(Expressions.path(Long.class, _currentRelMembersSubQPath, "relation_id"));
+					long memId = rel.get(Expressions.path(Long.class, _currentRelMembersSubQPath, "member_id"));
+					String needReview = rel.get(Expressions.path(String.class, _reviewableCurrentRelSubQPath, "needreview"));
 					
 					BoundingBox memBbox = relsBbox.get(memId);
 					// we have relation member bbox and it is within the requested bbox
@@ -239,7 +236,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements
 	 * @param reviewRelationWithMembers - list of member bbox
 	 * @throws Exception
 	 */
-	private boolean _combineBbox(final Map<Long, ReviewableItemBboxInfo> allReviewables, 
+	private static boolean _combineBbox(final Map<Long, ReviewableItemBboxInfo> allReviewables, 
 			final Map<Long, ReviewableItemBboxInfo> reviewRelationWithMembers) throws Exception
 	{
 		boolean isOverFlow = false;
@@ -332,7 +329,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements
 	 * @return - BoundingBox
 	 * @throws Exception
 	 */
-	private BoundingBox _resultSetToBbox(final Tuple tup, final Path bboxPath) throws Exception
+	private static BoundingBox _resultSetToBbox(final Tuple tup, final Path bboxPath) throws Exception
 	{
 		BoundingBox bbox = null;
 		double minLon=-1, minLat=-1, maxLon=-1, maxLat=-1;
@@ -348,7 +345,7 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements
 		}
 		catch (Exception ex)
 		{
-			log.error(ex.getMessage());;
+			log.error(ex.getMessage());
 			throw ex;
 		}
 		return bbox;
@@ -380,10 +377,8 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements
 		
 		try
 		{
-	
-			Path currentNodeSubQPath = Expressions.path(Void.class, "currentNodeSubQ");
-			Path reviewRelJoinRelMemberJoinCurrentWayNodesSubQPath = Expressions.path(Void.class, "reviewRelJoinRelMemberJoinCurrentWayNodesSubQ");
-			Path reviewRelWayMembersCentroidSubQPath = Expressions.path(Void.class, "reviewRelWayMembersCentroidSubQ");
+			Path reviewRelWayMembersCentroidSubQPath = 
+			  Expressions.path(Void.class, "reviewRelWayMembersCentroidSubQ");
 			List<Tuple> tups = _getReviewableRelatioWithWayMembersCentroidInBboxQuery().list(
 					Expressions.path(Long.class, reviewRelWayMembersCentroidSubQPath, "relation_id"),
 						Expressions.path(String.class, reviewRelWayMembersCentroidSubQPath, "needreview"),
@@ -539,9 +534,8 @@ public class AllReviewableItemsQuery extends ReviewableQueryBase implements
 		
 		try
 		{
-			Path reviewRelJoinRelMemberJoinCurrentWayNodesSubQPath = Expressions.path(Void.class, "reviewRelJoinRelMemberJoinCurrentWayNodesSubQ");
-			Path currentNodeSubQPath = Expressions.path(Void.class, "currentNodeSubQ");
-			Path reviewRelNodeMembersCentroidSubQPath = Expressions.path(Void.class, "reviewRelNodeMembersCentroidSubQ");
+			Path reviewRelNodeMembersCentroidSubQPath = 
+			  Expressions.path(Void.class, "reviewRelNodeMembersCentroidSubQ");
 			List<Tuple> tups = _getReviewableRelatioWithNodeMembersCentroidInBboxQuery().list(
 					Expressions.path(Long.class, reviewRelNodeMembersCentroidSubQPath, "relation_id"),
 						Expressions.path(String.class, reviewRelNodeMembersCentroidSubQPath, "needreview"),

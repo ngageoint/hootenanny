@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.readers.review;
 
@@ -52,7 +52,7 @@ public class RandomReviewableQuery  extends ReviewableQueryBase implements IRevi
 		try
 		{
 			//TODO: Since this code will affect all subsequent calls to random(), it is better moved to
-			//a more centralized location.  Given that this is the only class useing random() in a SQL
+			//a more centralized location.  Given that this is the only class using random() in a SQL
 			//query so far, no harm is done for the time being.
 			if (Boolean.parseBoolean(
 		      HootProperties.getInstance().getProperty(
@@ -87,20 +87,25 @@ public class RandomReviewableQuery  extends ReviewableQueryBase implements IRevi
 		}
 	}
 	
-	public ReviewQueryMapper execQuery() throws SQLException, Exception
+	@Override
+  public ReviewQueryMapper execQuery() throws SQLException, Exception
 	{
 		ReviewableItem ret = new ReviewableItem(-1, getMapId(), -1);
 		
 		long relId = -1;
 		String seqId = "-1";
 	
-		try(
-				Statement stmt = getConnection().createStatement();
-				ResultSet rs = stmt.executeQuery(_getQueryString())
-				)
+		try(Statement stmt = getConnection().createStatement();
+				ResultSet rs = stmt.executeQuery(_getQueryString()))
 		{
 			long nResCnt = 0;
-			while(rs.next())
+			
+			if (rs == null)
+			{
+				throw new SQLException("Error executing ReviewQueryMapper::execQuery");
+			}
+
+			while (rs.next())
 			{
 				relId = rs.getLong("relid");
 				seqId = rs.getString("seq");
@@ -108,7 +113,12 @@ public class RandomReviewableQuery  extends ReviewableQueryBase implements IRevi
 			}
 			
 			ret.setRelationId(relId);
-			ret.setSortOrder(Long.parseLong(seqId));
+			long nSeq = -1;
+			if(seqId != null)
+			{
+				nSeq = Long.parseLong(seqId);
+			}
+			ret.setSortOrder(nSeq);
 			ret.setResultCount(nResCnt);
 		}
 

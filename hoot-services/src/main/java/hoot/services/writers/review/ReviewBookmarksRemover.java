@@ -58,20 +58,8 @@ public class ReviewBookmarksRemover {
 	 */
 	public long remove(final ReviewBookmarkDelRequest request) throws Exception
 	{
-		long nDeleted = 0;
-		
-		try
-		{
-			SQLDeleteClause cl = _createDelClause(request);
-			nDeleted = cl.execute();
-		}
-		catch (Exception ex)
-		{
-			
-		}
-		return nDeleted;
+		return _createDelClause(request).execute();
 	}
-	
 	
 	/**
 	 * Delete clause
@@ -82,20 +70,9 @@ public class ReviewBookmarksRemover {
 	 */
 	protected SQLDeleteClause _createDelClause(final ReviewBookmarkDelRequest request) throws Exception
 	{
-		SQLDeleteClause cl = null;
-		
-		try
-		{
-			QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
-			Configuration configuration = DbUtils.getConfiguration();
-			cl = new SQLDeleteClause(_conn, configuration, reviewBookmarks)
+		QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
+		Configuration configuration = DbUtils.getConfiguration();
+		return new SQLDeleteClause(_conn, configuration, reviewBookmarks)
 			.where(reviewBookmarks.id.eq(request.getBookmarkId()));
-		}
-		catch (Exception ex)
-		{
-			
-		}
-		
-		return cl;
 	}
 }

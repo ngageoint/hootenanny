@@ -81,4 +81,3 @@ In alphabetical order:
 * Ming Su (Ming.Su@digitalglobe.com)
 * Jason R. Surratt (Jason.Surratt@digitalglobe.com)
 * Brandon Witham (Brandon.Witham@digitalglobe.com)
-

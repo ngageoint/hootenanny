@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwaySnapMerger.h"
 
@@ -175,7 +175,7 @@ bool HighwaySnapMerger::_doesWayConnect(long node1, long node2, const ConstWayPt
 }
 
 void HighwaySnapMerger::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1, ElementPtr e2,
-  QString reviewType, QString note) const
+  QString note, QString reviewType) const
 {
   if (!e1 && !e2)
   {
@@ -241,7 +241,7 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   if (!match.isValid())
   {
     _markNeedsReview(result, e1, e2, "Complex conflict causes an empty match",
-      HighwayMatch::getHighwayMatchName());
+                     HighwayMatch::getHighwayMatchName());
     return;
   }
 
@@ -356,7 +356,7 @@ void HighwaySnapMerger::_removeSpans(shared_ptr<OsmMap> map, const WayPtr& w1, c
           // about connections (e.g. lollipop style).
           if (_directConnect(map, w))
           {
-            // @todo This should likely remove the way even if it is part of another relation.
+            /// @todo This should likely remove the way even if it is part of another relation.
             RecursiveElementRemover(w->getElementId()).apply(map);
           }
         }

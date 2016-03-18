@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.info;
 
@@ -63,329 +63,245 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 @Path("/about")
 public class AboutResource
 {
-  private static final Logger log = LoggerFactory.getLogger(AboutResource.class);
-  
-  private static ClassPathXmlApplicationContext appContext = null;
-  
-  
-  public AboutResource()
-  {
-    appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
-  }
-  
-  private Properties getBuildInfo()
-  {
-	Properties buildInfo = null;
-	try
+	private static final Logger log = LoggerFactory.getLogger(AboutResource.class);
+
+	private static ClassPathXmlApplicationContext appContext = null;
+
+
+	public AboutResource()
 	{
-      buildInfo = BuildInfo.getInstance();
+		appContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml");
 	}
-	catch (Exception e)
+
+	private static Properties getBuildInfo()
 	{
-	  log.warn(
-		"About Resource unable to find the services build.info file.  Web Services version " +
-		"information will be unavailable.");
-	  buildInfo = new Properties();
-	  buildInfo.setProperty("name", "unknown");
-	  buildInfo.setProperty("version", "unknown");
-	  buildInfo.setProperty("user", "unknown");
+		Properties buildInfo = null;
+		try
+		{
+			buildInfo = BuildInfo.getInstance();
+		}
+		catch (Exception e)
+		{
+			log.warn(
+					"About Resource unable to find the services build.info file.  Web Services version " +
+					"information will be unavailable.");
+			buildInfo = new Properties();
+			buildInfo.setProperty("name", "unknown");
+			buildInfo.setProperty("version", "unknown");
+			buildInfo.setProperty("user", "unknown");
+		}
+		return buildInfo;
 	}
-	return buildInfo;
-  }
-  
-  /**
-   * <NAME>Version Information Service</NAME>
-   * <DESCRIPTION>Service method endpoint for retrieving the Hootenanny services version.</DESCRIPTION>
-   * <PARAMETERS></PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON containing Hoot service version information
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/info/about/servicesVersionInfo</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * <INPUT>None</INPUT>
-   * <OUTPUT>
-   * {
-   *   "name": "Hootenanny Web Services",
-   *   "version": "0.2.16-53-g7a74f64",
-   *   "builtBy": "root"
-   * }
-   * </OUTPUT>
-   * </EXAMPLE>
-   * 
-   * @return a version string
-   * @throws Exception 
-   */
-  @GET
-  @Path("/servicesVersionInfo")
-  @Produces(MediaType.APPLICATION_JSON)
-  public VersionInfo getServicesVersionInfo()
-  {
-	VersionInfo versionInfo = null;
-    try
-    {
-      log.debug("Retrieving services version...");
-      
-      Properties buildInfo = getBuildInfo();
-      versionInfo = new VersionInfo();
-      versionInfo.setName(buildInfo.getProperty("name"));
-      versionInfo.setVersion(buildInfo.getProperty("version"));
-      versionInfo.setBuiltBy(buildInfo.getProperty("user"));
-      
-      log.debug("Returning response: " + versionInfo.toString() + " ...");
-    }
-    catch (Exception e) 
-    {
-      ResourceErrorHandler.handleError(
-        "Error retrieving services version info: " + e.getMessage(), 
-        Status.INTERNAL_SERVER_ERROR, 
-        log);
-    }
-    
-	return versionInfo;
-  }
-  
 
-  /**
-   * <NAME>Service Version Detail</NAME>
-   * <DESCRIPTION>Service method endpoint for retrieving detailed information about the Hootenanny Services environment.</DESCRIPTION>
-   * <PARAMETERS></PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON Array containing Hoot service configuration detail
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/info/about/servicesVersionDetail</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * <INPUT>None</INPUT>
-   * <OUTPUT>
-	 *	{
-	 *   "properties":
-	 *   [
-	 *	       {
-	 *	           "name": "BasemapRasterExtensions",
-	 *	           "value": "png,tif"
-	 *	       },
-	 *	       {
-	 *	           "name": "ErrorLogPath",
-	 *	           "value": "/var/log/tomcat6/catalina.out"
-	 *	       },
-	 *	       {
-	 *	           "name": "wfsStoreDb",
-	 *		           "value": "wfsstoredb"
-	 *	       },  
-	 *					.....
-	 *   ] 
-   * </OUTPUT>
-   * </EXAMPLE>
-   * 
-   * @return a ServicesDetail object
-   */
-
-  @GET
-  @Path("/servicesVersionDetail")
-  @Produces(MediaType.APPLICATION_JSON)
-  public ServicesDetail getServicesVersionDetail()
-  {
-	ServicesDetail servicesDetail = null;
-    try
-    {
-      log.debug("Retrieving services version...");
-      
-      servicesDetail = new ServicesDetail();
-      
-      List<Property> properties = new ArrayList<Property>();
-	  Properties props = HootProperties.getInstance();
-	  @SuppressWarnings("rawtypes")
-	  Iterator it = props.entrySet().iterator();
-	  while (it.hasNext()) 
-	  {
-		Property prop = new Property();
-	    @SuppressWarnings("rawtypes")
-		Map.Entry parsedProp = (Map.Entry)it.next();
-	    prop.setName((String)parsedProp.getKey());
-	    prop.setValue((String)parsedProp.getValue());
-	    properties.add(prop);
-	  }
-      servicesDetail.setProperties(properties.toArray(new Property[]{}));
-      
-      servicesDetail.setClassPath(System.getProperty("java.class.path", null));
-      
-      List<ServicesResource> resources = new ArrayList<ServicesResource>();
-      
-	  for (String url : ClassLoaderUtil.getMostJars())
-	  {
-		ServicesResource servicesResource = new ServicesResource();
-		servicesResource.setType("jar");
-		servicesResource.setUrl(url);
-		resources.add(servicesResource);
-	  }
-	  
-	  ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-	  Enumeration<URL> urls = classLoader.getResources("");
-	  while (urls.hasMoreElements())
-	  {
-	    URL resource = urls.nextElement();
-	    ServicesResource servicesResource = new ServicesResource();
-	    servicesResource.setType(resource.getProtocol());
-		servicesResource.setUrl(resource.toString());
-		resources.add(servicesResource);
-	  }
-	  
-	  servicesDetail.setResources(resources.toArray(new ServicesResource[]{}));
-      
-      log.debug("Returning response: " + " ...");
-    }
-    catch (Exception e) 
-    {
-      ResourceErrorHandler.handleError(
-        "Error retrieving services version info: " + e.getMessage(), 
-        Status.INTERNAL_SERVER_ERROR, 
-        log);
-    }
-    
-	return servicesDetail;
-  }
-  
-  @SuppressWarnings("unchecked")
-  private String getCoreInfo(boolean getDetailed) throws Exception
-  {
-	JSONObject command = new JSONObject();
-	command.put("exectype", "hoot");
-	command.put("exec", "version");
-	JSONArray params = new JSONArray();
-	if (getDetailed)
+	/**
+	 * Service method endpoint for retrieving the Hootenanny services version.
+	 * 
+	 * GET hoot-services/info/about/servicesVersionInfo
+	 * 
+	 * @return JSON containing Hoot service version information
+	 * @throws Exception 
+	 */
+	@GET
+	@Path("/servicesVersionInfo")
+	@Produces(MediaType.APPLICATION_JSON)
+	public VersionInfo getServicesVersionInfo()
 	{
-	  JSONObject param = new JSONObject();
-	  param.put("", "--debug");
-	  params.add(param);
+		VersionInfo versionInfo = null;
+		try
+		{
+			log.debug("Retrieving services version...");
+
+			Properties buildInfo = getBuildInfo();
+			versionInfo = new VersionInfo();
+			versionInfo.setName(buildInfo.getProperty("name"));
+			versionInfo.setVersion(buildInfo.getProperty("version"));
+			versionInfo.setBuiltBy(buildInfo.getProperty("user"));
+
+			log.debug("Returning response: " + versionInfo.toString() + " ...");
+		}
+		catch (Exception e) 
+		{
+			ResourceErrorHandler.handleError(
+					"Error retrieving services version info: " + e.getMessage(), 
+					Status.INTERNAL_SERVER_ERROR, 
+					log);
+		}
+
+		return versionInfo;
 	}
-	command.put("params", params);
-	command.put("caller", this.getClass().getSimpleName());
-	
-	return 
-	  ((JobExecutionManager)appContext.getBean(
-	    "jobExecutionManagerNative")).execWithResult(command).get("stdout").toString();
-  }
- 
 
-  /**
-   * <NAME>Hootenanny Core Version Information</NAME>
-   * <DESCRIPTION>Service method endpoint for retrieving the Hootenanny core (command line application) version.</DESCRIPTION>
-   * <PARAMETERS></PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON containing Hoot core version information
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * <URL>http://localhost:8080/hoot-services/info/about/coreVersionInfo</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * <INPUT>None</INPUT>	
-   * <OUTPUT>
-   * {
-   * 	"name": "Hootenanny Core",
-   * 	"version": "0.2.16-53-g7a74f64",
-   * 	"builtBy": "root"
-   * }
-   * </OUTPUT>
-   * </EXAMPLE>
-   * 
-   * @return a version info object
-   */
+	/**
+	 * Service method endpoint for retrieving detailed information about the Hootenanny Services 
+	 * environment.
+	 * 
+	 * GET hoot-services/info/about/servicesVersionDetail
+	 * 
+	 * @return JSON Array containing Hoot service configuration detail
+	 */
+	@GET
+	@Path("/servicesVersionDetail")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ServicesDetail getServicesVersionDetail()
+	{
+		ServicesDetail servicesDetail = null;
+		try
+		{
+			log.debug("Retrieving services version...");
 
-  @GET
-  @Path("/coreVersionInfo")
-  @Produces(MediaType.APPLICATION_JSON)
-  public VersionInfo getCoreVersionInfo()
-  {
-	VersionInfo versionInfo = null;
-    try
-    {
-      log.debug("Retrieving services version...");
-		  	
-      final String versionStr = getCoreInfo(false);
-      final String[] versionInfoParts = versionStr.split(" ");
-      versionInfo = new VersionInfo();
-      versionInfo.setName("Hootenanny Core");
-      versionInfo.setVersion(versionInfoParts[1]);
-      versionInfo.setBuiltBy(versionInfoParts[4]);
-      
-      log.debug("Returning response: " + versionInfo + " ...");
-    }
-    catch (Exception e) 
-    {
-      ResourceErrorHandler.handleError(
-        "Error retrieving core version info: " + e.getMessage(), 
-        Status.INTERNAL_SERVER_ERROR, 
-        log);
-    }
-    
-	return versionInfo;
-  }
-  
+			servicesDetail = new ServicesDetail();
 
+			List<Property> properties = new ArrayList<Property>();
+			Properties props = HootProperties.getInstance();
+			@SuppressWarnings("rawtypes")
+			Iterator it = props.entrySet().iterator();
+			while (it.hasNext()) 
+			{
+				Property prop = new Property();
+				@SuppressWarnings("rawtypes")
+				Map.Entry parsedProp = (Map.Entry)it.next();
+				prop.setName((String)parsedProp.getKey());
+				prop.setValue((String)parsedProp.getValue());
+				properties.add(prop);
+			}
+			servicesDetail.setProperties(properties.toArray(new Property[]{}));
 
-  /**
-   * <NAME>Hootenanny Core Version Detail</NAME>
-   * <DESCRIPTION>Service method endpoint for retrieving detailed environment information about the Hootenanny core (command line application).</DESCRIPTION>
-   * <PARAMETERS></PARAMETERS>
-	 * <OUTPUT>
-	 * 	JSON Array containing Hoot core version detail
-	 * </OUTPUT>
-	 * <EXAMPLE>
-	 * 	<URL>http://localhost:8080/hoot-services/info/about/coreVersionDetail</URL>
-	 * 	<REQUEST_TYPE>GET</REQUEST_TYPE>
-	 * <INPUT>None</INPUT>
-   * <OUTPUT>
-   * {
-   *    "environmentInfo":
-   *    [
-   *        "15:07:33.857 DEBUG src/main/cpp/hoot/core/cmd/VersionCmd.cpp(89) GEOS Version: 3.3.8",
-   *        "15:07:33.857 DEBUG src/main/cpp/hoot/core/cmd/VersionCmd.cpp(90) GDAL Version: 1.10.1",
-   *        "15:07:33.857 DEBUG src/main/cpp/hoot/core/cmd/VersionCmd.cpp(91) GLPK Version: 4.40",
-   *        "15:07:33.857 DEBUG src/main/cpp/hoot/core/cmd/VersionCmd.cpp(92) Qt Version: 4.8.6",
-   *        "15:07:33.857 DEBUG src/main/cpp/hoot/core/cmd/VersionCmd.cpp(96) Boost Version: 1.41.0",
-   *        "15:07:33.857 DEBUG src/main/cpp/hoot/core/cmd/VersionCmd.cpp(101) CppUnit Version: 1.12.1",
-   *        "15:07:33.859 DEBUG src/main/cpp/hoot/core/cmd/VersionCmd.cpp(104) Memory usage, vm: 348.8MB rss: 25.41MB"
-   *    ]
-   * }
-   * </OUTPUT>
-   * </EXAMPLE>
-   * 
-   * @return a version string
-   */
+			servicesDetail.setClassPath(System.getProperty("java.class.path", null));
 
-  @GET
-  @Path("/coreVersionDetail")
-  @Produces(MediaType.APPLICATION_JSON)
-  public CoreDetail getCoreVersionDetail()
-  {
-	CoreDetail coreDetail = null;
-    try
-    {
-      log.debug("Retrieving services version...");
-		  	
-      String versionStr = getCoreInfo(true);
-      //get rid of the first line that has the hoot core version info in it; call coreVersionInfo 
-      //for that
-      final String[] versionInfoParts = versionStr.split("\n");
-      List<String> versionInfoPartsModified = new ArrayList<String>();
-      versionStr = "";
-      for (int i = 1; i < versionInfoParts.length; i++)
-      {
-    	versionInfoPartsModified.add(versionInfoParts[i]);
-      }
-      coreDetail = new CoreDetail();
-      coreDetail.setEnvironmentInfo(versionInfoPartsModified.toArray(new String[]{}));
-      
-      log.debug("Returning response: " + coreDetail.toString() + " ...");
-    }
-    catch (Exception e) 
-    {
-      ResourceErrorHandler.handleError(
-        "Error retrieving core version info: " + e.getMessage(), 
-        Status.INTERNAL_SERVER_ERROR, 
-        log);
-    }
-    
-	return coreDetail;
-  }
+			List<ServicesResource> resources = new ArrayList<ServicesResource>();
+
+			for (String url : ClassLoaderUtil.getMostJars())
+			{
+				ServicesResource servicesResource = new ServicesResource();
+				servicesResource.setType("jar");
+				servicesResource.setUrl(url);
+				resources.add(servicesResource);
+			}
+
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			Enumeration<URL> urls = classLoader.getResources("");
+			while (urls.hasMoreElements())
+			{
+				URL resource = urls.nextElement();
+				ServicesResource servicesResource = new ServicesResource();
+				servicesResource.setType(resource.getProtocol());
+				servicesResource.setUrl(resource.toString());
+				resources.add(servicesResource);
+			}
+
+			servicesDetail.setResources(resources.toArray(new ServicesResource[]{}));
+
+			log.debug("Returning response: " + " ...");
+		}
+		catch (Exception e) 
+		{
+			ResourceErrorHandler.handleError(
+					"Error retrieving services version info: " + e.getMessage(), 
+					Status.INTERNAL_SERVER_ERROR, 
+					log);
+		}
+
+		return servicesDetail;
+	}
+
+	@SuppressWarnings("unchecked")
+	private String getCoreInfo(boolean getDetailed) throws Exception
+	{
+		JSONObject command = new JSONObject();
+		command.put("exectype", "hoot");
+		command.put("exec", "version");
+		JSONArray params = new JSONArray();
+		if (getDetailed)
+		{
+			JSONObject param = new JSONObject();
+			param.put("", "--debug");
+			params.add(param);
+		}
+		command.put("params", params);
+		command.put("caller", this.getClass().getSimpleName());
+
+		return 
+		  ((JobExecutionManager)appContext.getBean(
+				"jobExecutionManagerNative")).execWithResult(command).get("stdout").toString();
+	}
+
+	/**
+	 * Service method endpoint for retrieving the Hootenanny core (command line application) version.
+	 * 
+	 * GET hoot-services/info/about/coreVersionInfo</URL>
+	 * 
+	 * @return JSON containing Hoot core version information
+	 */
+	@GET
+	@Path("/coreVersionInfo")
+	@Produces(MediaType.APPLICATION_JSON)
+	public VersionInfo getCoreVersionInfo()
+	{
+		VersionInfo versionInfo = null;
+		try
+		{
+			log.debug("Retrieving services version...");
+
+			final String versionStr = getCoreInfo(false);
+			final String[] versionInfoParts = versionStr.split(" ");
+			versionInfo = new VersionInfo();
+			versionInfo.setName("Hootenanny Core");
+			versionInfo.setVersion(versionInfoParts[1]);
+			versionInfo.setBuiltBy(versionInfoParts[4]);
+
+			log.debug("Returning response: " + versionInfo + " ...");
+		}
+		catch (Exception e) 
+		{
+			ResourceErrorHandler.handleError(
+					"Error retrieving core version info: " + e.getMessage(), 
+					Status.INTERNAL_SERVER_ERROR, 
+					log);
+		}
+
+		return versionInfo;
+	}
+
+	/**
+	 * Service method endpoint for retrieving detailed environment information about the Hootenanny
+	 * core (command line application)
+	 * 
+	 * GET hoot-services/info/about/coreVersionDetail</URL>
+	 * 
+	 * @return JSON Array containing Hoot core version detail
+	 */
+	@GET
+	@Path("/coreVersionDetail")
+	@Produces(MediaType.APPLICATION_JSON)
+	public CoreDetail getCoreVersionDetail()
+	{
+		CoreDetail coreDetail = null;
+		try
+		{
+			log.debug("Retrieving services version...");
+
+			String versionStr = getCoreInfo(true);
+			//get rid of the first line that has the hoot core version info in it; call coreVersionInfo 
+			//for that
+			final String[] versionInfoParts = versionStr.split("\n");
+			List<String> versionInfoPartsModified = new ArrayList<String>();
+			versionStr = "";
+			for (int i = 1; i < versionInfoParts.length; i++)
+			{
+				versionInfoPartsModified.add(versionInfoParts[i]);
+			}
+			coreDetail = new CoreDetail();
+			coreDetail.setEnvironmentInfo(versionInfoPartsModified.toArray(new String[]{}));
+
+			log.debug("Returning response: " + coreDetail.toString() + " ...");
+		}
+		catch (Exception e) 
+		{
+			ResourceErrorHandler.handleError(
+					"Error retrieving core version info: " + e.getMessage(), 
+					Status.INTERNAL_SERVER_ERROR, 
+					log);
+		}
+
+		return coreDetail;
+	}
 }
