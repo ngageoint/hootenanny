@@ -483,8 +483,7 @@ public:
     ServicesDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
 
-    Settings s = conf();
-    reader.open(ConfigOptions(s).getServicesDbTestUrlOsmapi());
+    reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
     verifyFullReadOutput_OsmApi(map);
     reader.close();
