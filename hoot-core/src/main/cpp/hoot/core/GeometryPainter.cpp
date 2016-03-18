@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GeometryPainter.h"
@@ -257,76 +257,71 @@ void GeometryPainter::drawPolygon(QPainter& pt, const OGRPolygon* polygon, const
   QBrush brush = pt.brush();
   QPainter* lpt = NULL;
   QImage* image = NULL;
-  try
+
+  if (polygon->getNumInteriorRings() > 0)
   {
-    if (polygon->getNumInteriorRings() > 0)
+    image = new QImage(pt.window().size(), QImage::Format_ARGB32);
+    if (image->isNull() == true)
     {
-      image = new QImage(pt.window().size(), QImage::Format_ARGB32);
-      if (image->isNull() == true)
-      {
-        delete image;
-        throw Exception("Internal Error: GeometryPainter::drawPolygon "
-          "Error allocating image.");
-      }
-      image->fill(qRgba(0, 0, 0, 0));
-      lpt = new QPainter(image);
-      lpt->setMatrix(pt.matrix());
-      lpt->setPen(pen);
-      lpt->setBrush(brush);
+      delete image;
+      throw Exception("Internal Error: GeometryPainter::drawPolygon "
+                      "Error allocating image.");
     }
-    else
-    {
-      lpt = &pt;
-    }
-
-    const OGRLinearRing* ring = polygon->getExteriorRing();
-    QPolygonF qp;
-    _convertRingToQPolygon(ring, qp, m);
-
-    lpt->setPen(Qt::NoPen);
-    lpt->setBrush(brush);
-    lpt->drawPolygon(qp, Qt::WindingFill);
-
+    image->fill(qRgba(0, 0, 0, 0));
+    lpt = new QPainter(image);
+    lpt->setMatrix(pt.matrix());
     lpt->setPen(pen);
-    lpt->setBrush(Qt::NoBrush);
-    lpt->drawPolygon(qp);
-
-    if (polygon->getNumInteriorRings() > 0)
-    {
-      OGRPoint p;
-      for (int i = 0; i < polygon->getNumInteriorRings(); i++)
-      {
-        ring = polygon->getInteriorRing(i);
-
-        // draw the appropriate border around the section we erased.
-        _convertRingToQPolygon(ring, qp, m);
-
-        // clear out the hole
-        lpt->setPen(Qt::NoPen);
-        lpt->setBrush(QColor(0, 0, 0, 0));
-        lpt->setCompositionMode(QPainter::CompositionMode_Clear);
-        lpt->drawPolygon(qp, Qt::WindingFill);
-
-        lpt->setPen(pen);
-        lpt->setBrush(Qt::NoBrush);
-        lpt->setCompositionMode(QPainter::CompositionMode_SourceOver);
-        lpt->drawPolygon(qp, Qt::WindingFill);
-      }
-
-      lpt->end();
-
-      QMatrix m = pt.matrix();
-      pt.resetMatrix();
-      pt.drawImage(pt.window(), *image);
-      pt.setMatrix(m);
-    }
+    lpt->setBrush(brush);
   }
-  catch (const std::exception& e)
+  else
   {
-    delete lpt;
-    delete image;
-    throw e;
+    lpt = &pt;
   }
+
+  const OGRLinearRing* ring = polygon->getExteriorRing();
+  QPolygonF qp;
+  _convertRingToQPolygon(ring, qp, m);
+
+  lpt->setPen(Qt::NoPen);
+  lpt->setBrush(brush);
+  lpt->drawPolygon(qp, Qt::WindingFill);
+
+  lpt->setPen(pen);
+  lpt->setBrush(Qt::NoBrush);
+  lpt->drawPolygon(qp);
+
+  if (polygon->getNumInteriorRings() > 0)
+  {
+    OGRPoint p;
+    for (int i = 0; i < polygon->getNumInteriorRings(); i++)
+    {
+      ring = polygon->getInteriorRing(i);
+
+      // draw the appropriate border around the section we erased.
+      _convertRingToQPolygon(ring, qp, m);
+
+      // clear out the hole
+      lpt->setPen(Qt::NoPen);
+      lpt->setBrush(QColor(0, 0, 0, 0));
+      lpt->setCompositionMode(QPainter::CompositionMode_Clear);
+      lpt->drawPolygon(qp, Qt::WindingFill);
+
+      lpt->setPen(pen);
+      lpt->setBrush(Qt::NoBrush);
+      lpt->setCompositionMode(QPainter::CompositionMode_SourceOver);
+      lpt->drawPolygon(qp, Qt::WindingFill);
+    }
+
+    lpt->end();
+
+    QMatrix m = pt.matrix();
+    pt.resetMatrix();
+    pt.drawImage(pt.window(), *image);
+    pt.setMatrix(m);
+  }
+
+  delete lpt;
+  delete image;
 }
 
 void GeometryPainter::drawWay(QPainter& pt, const OsmMap* map, const Way* way, const QMatrix& m)

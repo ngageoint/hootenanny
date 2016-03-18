@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job.custom.HGIS;
 
@@ -76,22 +76,22 @@ public class HGISResource extends JobControllerBase
 	}
 	
 	
-	protected final String  getDbName()
+	protected final static String  getDbName()
 	{
 		return _dbName;
 	}
 	
-	protected final String getDbUserId()
+	protected final static String getDbUserId()
 	{
 		return _dbUserId;
 	}
 	
-	protected final String getDbPassword()
+	protected final static String getDbPassword()
 	{
 		return _dbPassword;
 	}
 	
-	protected final String getDbHost()
+	protected final static String getDbHost()
 	{
 		return _dbHost;
 	}
@@ -129,6 +129,7 @@ public class HGISResource extends JobControllerBase
    * @param mapName
    * @return output looks like postgresql://hoot:hoottest@localhost:5432/hoot1/BrazilOsmPois
    */
+  @SuppressWarnings("static-method")
   protected final String _generateDbMapParam(final String mapName)
   {
   	return "postgresql://" + getDbUserId() + ":" + getDbPassword() + "@" + getDbHost() + "/" + getDbName() + "/" + mapName;

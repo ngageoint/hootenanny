@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DataFrameDiscretizer.h"
@@ -37,6 +37,9 @@ using namespace std;
 #include "../TgsException.h"
 #include "../Progress.h"
 #include "FayyadMdlDiscretizer.h"
+
+// Tgs
+#include <tgs/Statistics/Random.h>
 
 namespace Tgs
 {
@@ -166,7 +169,7 @@ namespace Tgs
             throw AllNullsException("While attempting to replace missing values (imputation) one "
               "or more classes were found to have 0 valid samples.");
           }
-          int index = (rand() * RAND_MAX + rand()) % sampleIndices[df.getTrainingLabel(i)].size();
+          int index = (Tgs::Random::instance()->generateInt() * RAND_MAX + Tgs::Random::instance()->generateInt()) % sampleIndices[df.getTrainingLabel(i)].size();
           double replacement = df.getDataElement(sampleIndices[df.getTrainingLabel(i)][index], 
             column);
           df.setDataElement(i, column, replacement);

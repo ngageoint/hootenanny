@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -301,7 +301,8 @@ public class ElementResource
         .build();
   }
   
-  private Document getElementXml(final String mapId, final long elementId, 
+  @SuppressWarnings("null")
+  private static Document getElementXml(final String mapId, final long elementId, 
     final ElementType elementType, final boolean multiLayerUniqueElementIds, 
     final boolean addChildren, Connection  dbConn) throws Exception
   {
@@ -351,8 +352,6 @@ public class ElementResource
     }
     assert(elementRecords.size() == 1);
     
-
-		
     final Element element = 
       ElementFactory.getInstance().create(elementType, elementRecords.get(0), dbConn, Long.parseLong(mapId));
     
@@ -428,7 +427,8 @@ public class ElementResource
   }
 
 
-  private Document getElementsXml(final String mapId, final String[] elementIdsStr, 
+  @SuppressWarnings("null")
+  private static Document getElementsXml(final String mapId, final String[] elementIdsStr, 
     final ElementType elementType, final boolean multiLayerUniqueElementIds, 
     final boolean addChildren, Connection  dbConn) throws Exception
   {

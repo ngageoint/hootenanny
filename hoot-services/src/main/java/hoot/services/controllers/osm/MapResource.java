@@ -57,6 +57,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -290,7 +291,7 @@ public class MapResource
 		return linkRecords;
 	}
 
-	private Document _generateExtentOSM(String maxlon, String maxlat,
+	private static Document _generateExtentOSM(String maxlon, String maxlat,
 			String minlon, String minlat) throws Exception
 	{
 		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -698,7 +699,7 @@ public class MapResource
 		return Response.ok(ret.toString(), MediaType.APPLICATION_JSON).build();
 	}
 
-	private void handleError(final Exception e, final String mapId,
+	private static void handleError(final Exception e, final String mapId,
 			final String requestSnippet)
 	{
 		if (e instanceof SocketException
@@ -818,7 +819,7 @@ public class MapResource
 		{
 			log.debug("Initializing database connection...");
 
-			if (_inputType.equals("dataset"))
+			if (_inputType.toLowerCase(Locale.ENGLISH).equals("dataset"))
 			{
 				QMaps maps = QMaps.maps;
 				Configuration configuration = DbUtils.getConfiguration();
@@ -829,7 +830,7 @@ public class MapResource
 
 				log.debug("Renamed map with id " + mapId + " " + _modName + "...");
 			}
-			else if (_inputType.equals("folder"))
+			else if (_inputType.toLowerCase(Locale.ENGLISH).equals("folder"))
 			{
 				QFolders folders = QFolders.folders;
 				Configuration configuration = DbUtils.getConfiguration();
@@ -1009,7 +1010,6 @@ public class MapResource
 
 		QFolders folders = QFolders.folders;
 		Configuration configuration = DbUtils.getConfiguration();
-		new SQLQuery(conn, configuration);
 
 		try
 		{
@@ -1159,7 +1159,10 @@ public class MapResource
 		}
 		catch (SQLException sqlEx)
 		{
-			jobStatusManager.setFailed(jobId, sqlEx.getMessage());
+			if (jobStatusManager != null)
+			{
+				jobStatusManager.setFailed(jobId, sqlEx.getMessage());
+			}
 			ResourceErrorHandler.handleError("Failure update map tags resource "
 					+ sqlEx.getMessage() + " SQLState: " + sqlEx.getSQLState(),
 					Status.INTERNAL_SERVER_ERROR, log);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GraphComparator.h"
@@ -161,14 +161,14 @@ double GraphComparator::compareMaps()
   for (int i = 0; i < _iterations && same < 4; i++)
   {
     // generate a random source point
-    _r.x = Random::generateUniform() * (_projectedBounds.MaxX - _projectedBounds.MinX) +
+    _r.x = Random::instance()->generateUniform() * (_projectedBounds.MaxX - _projectedBounds.MinX) +
           _projectedBounds.MinX;
-    _r.y = Random::generateUniform() * (_projectedBounds.MaxY - _projectedBounds.MinY) +
+    _r.y = Random::instance()->generateUniform() * (_projectedBounds.MaxY - _projectedBounds.MinY) +
           _projectedBounds.MinY;
 
     shared_ptr<OsmMap> referenceMap;
     // pick one map as the reference map
-    if (Random::coinToss())
+    if (Random::instance()->coinToss())
     {
       referenceMap = _mapP1;
     }

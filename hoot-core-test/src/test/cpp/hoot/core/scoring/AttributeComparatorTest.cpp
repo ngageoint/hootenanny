@@ -34,6 +34,8 @@
 #include <hoot/core/util/OpenCv.h>
 using namespace hoot;
 
+// Tgs
+#include <tgs/Statistics/Random.h>
 
 // Boost
 using namespace boost;
@@ -62,7 +64,7 @@ public:
   {
     OsmReader reader;
 
-    srand(0);
+    Tgs::Random::instance()->seed(0);
 
     shared_ptr<OsmMap> map(new OsmMap());
     reader.read("test-files/DcGisRoads.osm", map);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.review;
 
@@ -128,9 +128,6 @@ public class ReviewUtils
     {
       throw new ProcessletException(new OWSException(message, exceptionCode));
     }
-    else
-    {
-      ResourceErrorHandler.handleError(message, status, log);
-    }
+    ResourceErrorHandler.handleError(message, status, log);
   }
 }

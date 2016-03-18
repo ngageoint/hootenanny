@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -57,7 +57,7 @@ public:
   void attributeCompare(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2, shared_ptr<OsmMap> outMap,
                         int& mean, int& confidence)
   {
-    srand(100);
+    Tgs::Random::instance()->seed(100);
 
     int iterations = 600;
     {
@@ -96,7 +96,7 @@ public:
   void graphCompare(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2, double& mean,
                     double& confidence)
   {
-    srand(0);
+    Tgs::Random::instance()->seed(0);
     GraphComparator graph(map1, map2);
     graph.setDebugImages(ConfigOptions().getScoreGraphDebugImages());
     graph.setIterations(1000);
