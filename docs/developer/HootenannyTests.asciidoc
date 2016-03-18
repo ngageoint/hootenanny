@@ -58,7 +58,7 @@ HootTest --glacial '--include=.*Big.*'
 HootTest --single hoot::AlphaShapeTest
 --------------
 
-==== Unit Tests
+==== Core Unit Tests
 
 The core unit tests use CPPUnit.  The goal is to have one test class for each functional class.  
 See hoot-core-test/src/test/cpp project for examples.  One CPPUnit test class may contain multiple 
@@ -343,6 +343,10 @@ npm test
 ---------------
 
 See renderdb-export-server/test as an example.
+
+==== nodejs System Tests (legacy)
+
+Of note, are a set of nodejs system tests which still run as part of the nightly regression testing.  These could be converted to Cucumber user interface tests at some point.
 
 === User Interface Tests
 
