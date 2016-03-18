@@ -117,6 +117,12 @@ if [ ! -d $BASEMAP_HOME ]; then
     sudo mkdir -p $BASEMAP_HOME
     sudo chown tomcat:tomcat $BASEMAP_HOME
 fi
+UPLOAD_HOME=/var/lib/hootenanny/upload
+if [ ! -d $UPLOAD_HOME ]; then
+    echo "Creating upload directory for webapp"
+    sudo mkdir -p $UPLOAD_HOME
+    sudo chown tomcat:tomcat $UPLOAD_HOME
+fi
 sudo service tomcat6 restart
 
 # Apply any database schema changes

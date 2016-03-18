@@ -11,6 +11,7 @@ if sudo -u postgres psql -d postgres -c "\du" | cut -d \| -f 1 | grep -qw hoot; 
     sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='false' WHERE datname='wfsstoredb'"
     sudo -u postgres dropdb hoot
     sudo -u postgres dropdb wfsstoredb
+    sudo -u postgres dropdb osmapi_test
     # Drop all render dbs
     source /var/lib/hootenanny/conf/DatabaseConfig.sh
     SQL=$(sudo -u postgres psql -t -A -d postgres -c "SELECT 'DROP DATABASE \"' || datname || '\";' FROM pg_database WHERE datname like '$DB_NAME_renderdb\_%';")
@@ -55,6 +56,11 @@ fi
 BASEMAP_HOME=/var/lib/hootenanny/ingest/processed
 if [ -d $BASEMAP_HOME ]; then
     sudo rm -rf $BASEMAP_HOME
+fi
+# Remove upload directory
+UPLOAD_HOME=/var/lib/hootenanny/upload
+if [ -d $UPLOAD_HOME ]; then
+    sudo rm -rf $UPLOAD_HOME
 fi
 # Remove exploded hoot-services war remnants
 SERVICES_HOME=/var/lib/tomcat6/webapps/hoot-services
