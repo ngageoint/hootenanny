@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
@@ -68,23 +68,16 @@ public class Relation extends Element
 	
 	private List<RelationMember> membersCache = new ArrayList<RelationMember>();
 
-	public Relation(final long mapId, Connection dbConn)
+	public Relation(final long mapId, Connection dbConn) throws Exception
 	{
 		super(dbConn);
 		elementType = ElementType.Relation;
 
 		this.record = new CurrentRelations();
-	  //TODO: what's the purpose of this catch?
-		try
-		{
-			setMapId(mapId);
-		}
-		catch (Exception ex)
-		{
-		}
+		setMapId(mapId);
 	}
 
-	public Relation(final long mapId, Connection dbConn, final CurrentRelations record)
+	public Relation(final long mapId, Connection dbConn, final CurrentRelations record) throws Exception
 	{
 		super(dbConn);
 		elementType = ElementType.Relation;
@@ -97,15 +90,8 @@ public class Relation extends Element
 		relationRecord.setVisible(record.getVisible());
 		relationRecord.setTags(record.getTags());
 		this.record = relationRecord;
-
-	  //TODO: what's the purpose of this catch?
-		try
-		{
-			setMapId(mapId);
-		}
-		catch (Exception ex)
-		{
-		}
+		
+		setMapId(mapId);
 	}
 
 	/**
@@ -114,7 +100,8 @@ public class Relation extends Element
 	 * @param xml xml data to construct the element from
 	 * @throws Exception
 	 */
-	public void fromXml(final org.w3c.dom.Node xml) throws Exception
+	@Override
+  public void fromXml(final org.w3c.dom.Node xml) throws Exception
 	{
 		log.debug("Parsing relation...");
 
@@ -155,7 +142,8 @@ public class Relation extends Element
 	 * @return an XML element
 	 * @throws Exception
 	 */
-	public org.w3c.dom.Element toXml(final org.w3c.dom.Element parentXml,
+	@Override
+  public org.w3c.dom.Element toXml(final org.w3c.dom.Element parentXml,
 	    final long modifyingUserId, final String modifyingUserDisplayName,
 	    final boolean multiLayerUniqueElementIds, final boolean addChildren)
 	    throws Exception
@@ -194,10 +182,7 @@ public class Relation extends Element
 		{
 			return element;
 		}
-		else
-		{
-			return elementWithTags;
-		}
+		return elementWithTags;
 	}
 
 	/*
@@ -376,7 +361,8 @@ public class Relation extends Element
 	 * @return a bounding box; null if the relation only contains other relations
 	 * @throws Exception
 	 */
-	public BoundingBox getBounds() throws Exception
+	@Override
+  public BoundingBox getBounds() throws Exception
 	{
 		BoundingBox bounds = null;
 		if (membersCache == null || membersCache.size() == 0)
@@ -538,7 +524,8 @@ public class Relation extends Element
 	 *
 	 * @return a table
 	 */
-	public RelationalPathBase<?> getElementTable()
+	@Override
+  public RelationalPathBase<?> getElementTable()
 	{
 		return currentRelations;
 	}
@@ -548,7 +535,8 @@ public class Relation extends Element
 	 *
 	 * @return a table field
 	 */
-	public NumberPath<Long> getElementIdField()
+	@Override
+  public NumberPath<Long> getElementIdField()
 	{
 		return currentRelations.id;
 	}
@@ -568,7 +556,8 @@ public class Relation extends Element
 	 *
 	 * @return a table field
 	 */
-	public BooleanPath getElementVisibilityField()
+	@Override
+  public BooleanPath getElementVisibilityField()
 	{
 		return currentRelations.visible;
 	}
@@ -578,7 +567,8 @@ public class Relation extends Element
 	 *
 	 * @return a table field
 	 */
-	public NumberPath<Long> getElementVersionField()
+	@Override
+  public NumberPath<Long> getElementVersionField()
 	{
 		return currentRelations.version;
 	}
@@ -588,7 +578,8 @@ public class Relation extends Element
 	 *
 	 * @return a table field
 	 */
-	public NumberPath<Long> getChangesetIdField()
+	@Override
+  public NumberPath<Long> getChangesetIdField()
 	{
 		return currentRelations.changesetId;
 	}
@@ -598,7 +589,8 @@ public class Relation extends Element
 	 *
 	 * @return a table
 	 */
-	public RelationalPathBase<?> getRelatedRecordTable()
+	@Override
+  public RelationalPathBase<?> getRelatedRecordTable()
 	{
 		return currentRelationMembers;
 	}
@@ -609,7 +601,8 @@ public class Relation extends Element
 	 *
 	 * @return a table field
 	 */
-	public NumberPath<Long> getRelatedRecordJoinField()
+	@Override
+  public NumberPath<Long> getRelatedRecordJoinField()
 	{
 		return currentRelationMembers.relationId;
 	}
@@ -620,7 +613,8 @@ public class Relation extends Element
 	 *
 	 * @return a list of element types
 	 */
-	public List<ElementType> getRelatedElementTypes()
+	@Override
+  public List<ElementType> getRelatedElementTypes()
 	{
 		return 
 			Arrays.asList(new ElementType[] { ElementType.Node, ElementType.Way, ElementType.Relation });

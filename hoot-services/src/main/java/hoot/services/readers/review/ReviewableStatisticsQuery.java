@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.readers.review;
 
@@ -54,43 +54,46 @@ public class ReviewableStatisticsQuery extends ReviewableQueryBase implements IR
 	{
   	long recordCount = 0;
  
-		try(
-				Statement stmt = getConnection().createStatement();
-				ResultSet rs = stmt.executeQuery(_getTotalReviewableCountQueryString())
-				)
+		try(Statement stmt = getConnection().createStatement();
+				ResultSet rs = stmt.executeQuery(_getTotalReviewableCountQueryString()))
 		{
-			while(rs.next())
+			if (rs == null)
+			{
+				throw new SQLException("Error executing getTotalReviewablesCount");
+			}
+	
+			while (rs.next())
       {
 				recordCount = rs.getLong("totalcnt");         
       }
-
 		}
 	
 		return recordCount;
-
 	}
 	
 	protected long getRemainingReviewablesCount()  throws SQLException, Exception
 	{
   	long recordCount = 0;
   	 
-		try(
-				Statement stmt = getConnection().createStatement();
-				ResultSet rs = stmt.executeQuery(_getUnreviewedCountQueryString())
-				)
+		try(Statement stmt = getConnection().createStatement();
+				ResultSet rs = stmt.executeQuery(_getUnreviewedCountQueryString()))
 		{
-			while(rs.next())
+			if (rs == null)
+			{
+				throw new SQLException("Error executing getRemainingReviewablesCount");
+			}
+			
+			while (rs.next())
       {
 				recordCount = rs.getLong("remaining");         
       }
-
 		}
 
 		return recordCount;
 	}
 
-	
-	public ReviewQueryMapper execQuery()  throws SQLException, Exception
+	@Override
+  public ReviewQueryMapper execQuery()  throws SQLException, Exception
 	{
 		long nTotal = getTotalReviewablesCount();
 		long nUnReviewed = getRemainingReviewablesCount();
@@ -110,5 +113,4 @@ public class ReviewableStatisticsQuery extends ReviewableQueryBase implements IR
 		return "select count(*) as remaining from current_relations_" + getMapId() + 
 				" where tags->'hoot:review:needs' = 'yes'";
 	}
-	
 }

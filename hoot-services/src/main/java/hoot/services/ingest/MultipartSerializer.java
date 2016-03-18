@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.ingest;
 
@@ -141,11 +141,9 @@ public class MultipartSerializer {
 	}
 
 
-	protected void _serializeUploadedFiles(List<FileItem> fileItemsList, String jobId,
+	protected void _serializeUploadedFiles(List<FileItem> fileItemsList,
 			Map<String,String> uploadedFiles, Map<String,String> uploadedFilesPaths, String repFolderPath) throws Exception
 	{
-
-
 		Iterator<FileItem> fileItemsIterator = fileItemsList.iterator();
 		while(fileItemsIterator.hasNext()){
 			FileItem fileItem = fileItemsIterator.next();
@@ -157,7 +155,6 @@ public class MultipartSerializer {
 		    log);
       }
       
-      
 			String uploadedPath = repFolderPath + "/" + fileName;
 			
 			boolean isPathSafe = _validatePath(homeFolder + "/upload", uploadedPath);
@@ -166,6 +163,7 @@ public class MultipartSerializer {
 				File file = new File(uploadedPath);
 				fileItem.write(file);
 	
+				assert(fileName != null);
 				String[] nameParts = fileName.split("\\.");
 				if(nameParts.length > 1){
 					String extension = nameParts[nameParts.length-1].toUpperCase();
@@ -238,7 +236,7 @@ public class MultipartSerializer {
 			else
 			{
 				// Can be shapefile or zip file
-				_serializeUploadedFiles(fileItemsList, jobId,
+				_serializeUploadedFiles(fileItemsList,
 						uploadedFiles, uploadedFilesPaths, repFolderPath);
 			}
 		}

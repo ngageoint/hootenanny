@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.osm;
 
@@ -54,7 +54,6 @@ import hoot.services.models.osm.Way;
 import hoot.services.utils.XmlUtils;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -303,12 +302,6 @@ public class OsmTestUtils
   }
 
   public static void verifyTestChangesetCreatedByRequest(final Long changesetId)
-  {
-    verifyTestChangesetCreatedByRequest(changesetId, true);
-  }
-
-  public static void verifyTestChangesetCreatedByRequest(final Long changesetId,
-    final boolean verifyTags)
   {
   	QChangesets changesets = QChangesets.changesets;
     hoot.services.db2.Changesets changeset =
@@ -1508,17 +1501,10 @@ public class OsmTestUtils
     {
       throw new Exception("Error inserting node.");
     }
-
     finally
     {
-      try
-      {
-        if (stmt != null)
-          stmt.close();
-      }
-      catch (SQLException se2)
-      {
-      }
+      if (stmt != null)
+        stmt.close();
     }
   }
   
@@ -1726,14 +1712,8 @@ public class OsmTestUtils
 
 		finally
 		{
-			try
-			{
-				if (stmt != null)
-					stmt.close();
-			}
-			catch (SQLException se2)
-			{
-			}
+			if (stmt != null)
+				stmt.close();
 		}
 	}
 	

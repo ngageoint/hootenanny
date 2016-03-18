@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -269,7 +269,6 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
         final Map<Long, CurrentNodes> nodes =
         		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentNodesTbl)
         		.map(currentNodesTbl.id, currentNodesTbl);
-        		;
         Assert.assertEquals(5, nodes.size());
 
         CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
@@ -288,7 +287,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
           nodeRecord.getTile());
         Assert.assertTrue(nodeRecord.getTimestamp().before(now));
         Assert.assertEquals(new Long(2), nodeRecord.getVersion());
-        Assert.assertEquals(new Boolean(true), nodeRecord.getVisible());;
+        Assert.assertEquals(new Boolean(true), nodeRecord.getVisible());
         Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject)nodeRecord.getTags());
         Assert.assertNotNull(tags);
         Assert.assertEquals(2, tags.size());
@@ -345,7 +344,6 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
 
         		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWaysTbl)
         		.map(currentWaysTbl.id, currentWaysTbl);
-        		;
         Assert.assertEquals(3, ways.size());
 
         CurrentWays wayRecord = ways.get(wayIdsArr[0]);
@@ -1888,7 +1886,6 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
         final Map<Long, CurrentNodes> nodes =
         		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentNodesTbl)
         		.map(currentNodesTbl.id, currentNodesTbl);
-        		;
         Assert.assertEquals(2, nodes.size());
 
         Assert.assertEquals(negativeNodeId, (long)nodeIdsArr[0]);
@@ -1949,7 +1946,6 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
         final Map<Long, CurrentWays> ways =
         		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWaysTbl)
         		.map(currentWaysTbl.id, currentWaysTbl);
-        		;
         Assert.assertEquals(2, ways.size());
 
         //verify the updated ways
@@ -2014,7 +2010,6 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract
         final Map<Long, CurrentRelations> relations =
         		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationsTbl)
         		.map(currentRelationsTbl.id, currentRelationsTbl);
-        		;
         Assert.assertEquals(2, relations.size());
 
         Assert.assertEquals(negativeRelationId, (long)relationIdsArr[0]);

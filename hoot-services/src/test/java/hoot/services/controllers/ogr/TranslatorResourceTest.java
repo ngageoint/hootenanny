@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ogr;
 
@@ -34,16 +34,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 //TODO: clean up ignored tests
-public class TranslatorResourceTest {
-	
-	@Ignore
-	@Test
-	@Category(UnitTest.class)
-	public void testParseOsm() throws Exception
-	{
-
-	}
-	
+public class TranslatorResourceTest 
+{
 	@Ignore
 	@Test
 	@Category(UnitTest.class)
@@ -53,13 +45,5 @@ public class TranslatorResourceTest {
 		/*Translator translator = new Translator();
 		translator.execOsmConversion(homeFolder + "/test-files/conflate/unified/AllDataTypesA.osm", 
 				homeFolder + "/test-output/OsmConversion.osm");*/
-	}
-	
-	@Ignore
-	@Test
-	@Category(UnitTest.class)
-	public void testTranslateToOgr() throws Exception
-	{
-
 	}
 }

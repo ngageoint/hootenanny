@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ProbablePathCalculator.h"
@@ -37,6 +37,9 @@
 #include "../StreamUtils.h"
 #include "../Heap/JHeap.h"
 #include "../TgsException.h"
+
+// Tgs
+#include <tgs/Statistics/Random.h>
 
 using namespace std;
 
@@ -405,8 +408,8 @@ namespace Tgs
     map<int, float> patch;
     for (int i = 0; i < _patchCount; i++)
     {
-      float r = 1.0f + ((float)rand() / (float)RAND_MAX * 2.0f - 1.0f) * _variation;
-      patch[rand() % (_rows * _cols)] = r;
+      float r = 1.0f + ((float)Tgs::Random::instance()->generateInt() / (float)RAND_MAX * 2.0f - 1.0f) * _variation;
+      patch[Tgs::Random::instance()->generateInt(_rows * _cols)] = r;
     }
 
     float maxValue = -1e10f;
@@ -465,7 +468,7 @@ namespace Tgs
       }
       else
       {
-        float r = 1.0f + ((float)rand() / (float)RAND_MAX * 2.0f - 1.0f) * _variation;
+        float r = 1.0f + ((float)Tgs::Random::instance()->generateInt() / (float)RAND_MAX * 2.0f - 1.0f) * _variation;
         _currentValues[i] = r * _baseValues[i];
         if (_currentValues[i] < 1e-6)
         {

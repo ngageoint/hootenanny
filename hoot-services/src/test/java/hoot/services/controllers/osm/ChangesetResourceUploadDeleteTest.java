@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -173,7 +173,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         final Map<Long, CurrentNodes> nodes =
         		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentNodesTbl)
         		.map(currentNodesTbl.id, currentNodesTbl);
-        		;
         Assert.assertEquals(4, nodes.size());
 
         CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
@@ -272,7 +271,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         final Map<Long, CurrentWays> ways =
         		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWaysTbl)
         		.map(currentWaysTbl.id, currentWaysTbl);
-        		;
+        		
         Assert.assertEquals(2, ways.size());
 
         CurrentWays wayRecord = ways.get(wayIdsArr[0]);
@@ -644,7 +643,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
         final Map<Long, CurrentNodes> nodes =
         		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentNodesTbl)
         		.map(currentNodesTbl.id, currentNodesTbl);
-        		;
         Assert.assertEquals(4, nodes.size());
 
         CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
@@ -1758,7 +1756,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       	final Map<Long, CurrentRelations> relations =
         		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationsTbl)
         		.map(currentRelationsTbl.id, currentRelationsTbl);
-        		;
         Assert.assertEquals(3, relations.size());
 
         //verify the previously existing relations
@@ -3054,7 +3051,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       	final Map<Long, CurrentRelations> relations =
         		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationsTbl)
         		.map(currentRelationsTbl.id, currentRelationsTbl);
-        		;
         Assert.assertEquals(2, relations.size());
 
         CurrentRelations relationRecord =
@@ -4239,7 +4235,6 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract
       	final Map<Long, CurrentRelations> relations =
         		new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationsTbl)
         		.map(currentRelationsTbl.id, currentRelationsTbl);
-        		;
         Assert.assertEquals(3, relations.size());
 
         //verify the previously existing relations

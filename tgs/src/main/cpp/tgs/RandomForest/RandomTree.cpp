@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RandomTree.h"
 
@@ -41,6 +41,7 @@
 
 //TGS Includes
 #include "../TgsException.h"
+#include <tgs/Statistics/Random.h>
 
 namespace Tgs
 {
@@ -415,7 +416,7 @@ namespace Tgs
   {
     try
     {
-      srand((unsigned int)_treeId);
+      Tgs::Random::instance()->seed((unsigned int)_treeId);
 
       //std::cout << "Train Tree" << std::endl;
       _factPerNode = numFactors;
