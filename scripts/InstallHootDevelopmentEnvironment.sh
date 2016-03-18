@@ -6,7 +6,6 @@
 #   - has added developer tools and other goodies
 #   - lets you run hoot on hadoop (this part *could* be moved to the vagrant install, if desired) - NOTE: The hadoop step unfortunately isn't fully automated yet...
 # you'll have to interact with the command prompt when it runs.
-#   - lets you run the regression tests
 #
 # Use this as one possible way to set up a Hootenanny developer environment.  Feel free to tweak your own version of it.
 #
@@ -18,6 +17,9 @@
 #  git submodule init
 #  git submodule update
 #  hoot/scripts/InstallHootDevelopmentEnvironment.sh
+#
+# Some of the tools installed (Eclipse, etc.) will require some additional manual configuration.
+#
 
 cd ~
 
