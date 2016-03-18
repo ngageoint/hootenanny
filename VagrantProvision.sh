@@ -289,6 +289,7 @@ touch Vagrant.marker
 echo "Configuring Hoot..."
 echo HOOT_HOME: $HOOT_HOME
 cp conf/DatabaseConfig.sh.orig conf/DatabaseConfig.sh
+cp conf/ServerConfig.sh.orig conf/ServerConfig.sh
 
 echo "Installing node-mapnik-server..."
 sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d

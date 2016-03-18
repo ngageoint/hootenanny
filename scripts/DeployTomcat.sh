@@ -8,7 +8,7 @@ if [ -f $BASEDIR/../Config.sh ]; then
   source $BASEDIR/../Config.sh
 else
   # We're running tests in a development environment.
-  source $HOOT_HOME/conf/Config.sh
+  source $HOOT_HOME/conf/ServerConfig.sh
 fi
 
 function printOnError {

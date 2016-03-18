@@ -11,7 +11,7 @@ fi
 
 # set the mapnik server to its port default
 NODE_MAPNIK_SERVER_PORT=8000
-# p2p port is configured by the services
+# p2p port is configured by the services, so parse it out of hoot-services.conf
 P2P_PORT=`sed '/^\#/d' $SERVICES_LOCAL_CONF | grep 'P2PServerPort'  | tail -n 1 | cut -d "=" -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'`
 if [[ -z "${P2P_PORT// }" ]]; then
   P2P_PORT=`sed '/^\#/d' $HOOT_HOME/hoot-services/src/main/resources/conf/hoot-services.conf | grep 'P2PServerPort'  | tail -n 1 | cut -d "=" -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'`
@@ -20,4 +20,5 @@ if [[ -z "${P2P_PORT// }" ]]; then
     P2P_PORT=8096
   fi
 fi
+# skipping translation server port, since clients query the service for its port (unlike the other services)
 
