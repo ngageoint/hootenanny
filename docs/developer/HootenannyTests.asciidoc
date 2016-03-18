@@ -58,7 +58,7 @@ HootTest --glacial '--include=.*Big.*'
 HootTest --single hoot::AlphaShapeTest
 --------------
 
-==== Unit Tests
+==== Core Unit Tests
 
 The core unit tests use CPPUnit.  The goal is to have one test class for each functional class.  
 See hoot-core-test/src/test/cpp project for examples.  One CPPUnit test class may contain multiple 
@@ -344,6 +344,10 @@ npm test
 
 See renderdb-export-server/test as an example.
 
+==== nodejs System Tests (legacy)
+
+Of note, are a set of nodejs system tests which still run as part of the nightly regression testing.  These could be converted to Cucumber user interface tests at some point.
+
 === User Interface Tests
 
 The User Interface tests come in two types.  The first type uses Cucumber to test the functionality 
@@ -353,6 +357,8 @@ has been paid to the Cucumber tests while the mocha user interface tests do not 
 attention and may be candidates for removal.
 
 ==== Cucumber User Interface Tests
+
+The purpose of these tests is to catch relatively simple errors that get introduced into UI workflows inadvertently, and not to be a bulletproof set of tests for the user interface.  Achieving such a thing really isn't feasible.  Also, since these tests exercise code in all three Hootenanny codebases, they can quickly reveal inconsistencies between both what the web services expect the command line API to be and what it actually is and what the user interface expects the web service API to be and what it actually is.  With this set of tests in place to catch basic errors, we can allow testers to spend more time testing complicated conflation scenarios instead of, for example, waiting for a typo on a single line of code to be fixed before they can complete regression testing.  
 
 https://cukes.info[Cucumber] is the technology used to simulate browser interactions in the tests.  
 https://cukes.info[Cucumber] is the top level interpreter of the 
@@ -382,6 +388,14 @@ To run the User Interface Tests by themselves:
 -----------------------
 ./configure --with-services --with-uitests && make -sj($nproc) ui-test
 -----------------------
+
+You have to add the --with-services option since the UI tests rely on the services to be deployed before they're run.
+
+If a test errors out, you'll see the error message on the screen if you're not running in silent mode (-s).  If you are running the tests in silent mode, then you can look in test-files/ui/tmp for the error log.  Browser screenshots should also get written out in the tests directory when tests fail, if that's helpful.
+
+When writing tests, try to avoid creating test scenarios that are likely to change over time due to changes in other parts of the hoot code.  e.g. A test that expects an exact number of reviews from a conflation job.  However, this type of thing is not always completely possible to avoid in order to write good tests.
+
+If you work consistently in the hootenanny-id submodule, then you need to pay close attention to these tests.  If you don't work much in in the hootenanny-id submodule, then it is still possible you can break these tests with changes to either hoot-core/hoot-services code but less likely.
 
 ==== Mocha User Interface Tests
 

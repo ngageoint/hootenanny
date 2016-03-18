@@ -55,7 +55,7 @@ fi
 
 sudo gem install mime-types -v 2.6.2
 sudo gem install capybara -v 2.5.0
-sudo gem install cucumber capybara-webkit selenium-webdriver rspec capybara-screenshot
+sudo gem install cucumber capybara-webkit selenium-webdriver rspec capybara-screenshot selenium-cucumber
 
 if [ ! -f google-chrome-stable_current_amd64.deb ]; then
     echo "Installing Chrome..."
