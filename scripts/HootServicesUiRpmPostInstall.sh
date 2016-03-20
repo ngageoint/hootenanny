@@ -29,8 +29,6 @@ if ! sudo -u postgres psql -lqt | cut -d \| -f 1 | grep -qw hoot; then
     sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on geography_columns TO PUBLIC;"
     sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on spatial_ref_sys TO PUBLIC;"
 fi
-# create the osm api test db
-sudo -i /var/lib/hootenanny/scripts/SetupOsmApiDB.sh
 # configure Postgres settings
 PG_HB_CONF=/var/lib/pgsql/$PG_VERSION/data/pg_hba.conf
 if ! sudo grep -i --quiet hoot $PG_HB_CONF; then
@@ -72,6 +70,9 @@ if ! grep --quiet 2097152 $SYSCTL_CONF; then
     #                 kernel.shmall=4294967296
 fi
 sudo service postgresql-$PG_VERSION restart
+
+# create the osm api test db
+sudo -i /var/lib/hootenanny/scripts/SetupOsmApiDB.sh
 
 # configure Tomcat environment
 TOMCAT_ENV=/usr/sbin/tomcat6
