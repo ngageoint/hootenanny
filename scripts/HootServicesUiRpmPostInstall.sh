@@ -30,7 +30,7 @@ if ! sudo -u postgres psql -lqt | cut -d \| -f 1 | grep -qw hoot; then
     sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on spatial_ref_sys TO PUBLIC;"
 fi
 # create the osm api test db
-sudo -i $HOOT_HOME/scripts/SetupOsmApiDB.sh
+sudo -i /var/lib/hootenanny/scripts/SetupOsmApiDB.sh
 # configure Postgres settings
 PG_HB_CONF=/var/lib/pgsql/$PG_VERSION/data/pg_hba.conf
 if ! sudo grep -i --quiet hoot $PG_HB_CONF; then
