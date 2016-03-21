@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # This script:  
-#   - is meant for installing to bare metal for performance reasons (faster compiles, etc.)
-#   - first calls into the vagrant ubuntu script for a base installation
+#   - is meant for installing hoot in a development enviroment to bare metal for performance reasons (faster compiles, etc.)
+#   - calls into the vagrant ubuntu script for the first part of the installation
 #   - has added developer tools and other goodies
 #   - lets you run hoot on hadoop (this part *could* be moved to the vagrant install, if desired) - NOTE: The hadoop step unfortunately isn't fully automated yet...
 # you'll have to interact with the command prompt when it runs.
@@ -14,8 +14,7 @@
 #  cd ~
 #  git clone git@github.com:ngageoint/hootenanny.git hoot
 #  cd hoot
-#  git submodule init
-#  git submodule update
+#  git submodule init && git submodule update
 #  hoot/scripts/InstallHootDevelopmentEnvironment.sh
 #
 # Some of the tools installed (Eclipse, etc.) will require additional manual configuration.
@@ -25,7 +24,7 @@ cd ~
 echo "Installing base dependencies..."
 hoot/scripts/VagrantProvision.sh
 
-# tomcat fix - Use tomcat 7 here instead of tomcat 6, since eclipse installed from repos needs tomcat 7.  I don't like changing the Tomcat version for the development environment, but the impact is minimal, and the eclipse installation can't be automated very easily if this isn't done.
+# Use tomcat 7 here instead of tomcat 6, since eclipse installed from repos needs tomcat 7.  I don't like changing the Tomcat version for the development environment, but the impact is minimal, and the eclipse installation can't be automated very easily if this isn't done.
 
 echo "Backing up Tomcat 6 settings..."
 mkdir -p ~/tmp
@@ -36,12 +35,14 @@ cp /etc/tomcat6/context.xml ~/tmp
 echo "Removing Tomcat 6..."
 sudo apt-get remove tomcat6
 sudo apt-get autoremove -y
+
+echo "Installing Tomcat 7..."
 sudo apt-get install -y libtomcat7-java
 
 echo "Restoring settings to Tomcat 7..."
 sudo cp ~/tmp/tomcat6 /etc/default
-sudo cp ~/tmp/server.xml /etc/tomcat7/
-sudo cp ~/tmp/context.xml /etc/tomcat7/
+sudo cp ~/tmp/server.xml /etc/tomcat7
+sudo cp ~/tmp/context.xml /etc/tomcat7
 # Do tomcat7 group permissions need to be set on these files in a developer environment?; Do sym links have to be made for the log dirs, etc?
 
 echo "Installing development environment dependencies..."
