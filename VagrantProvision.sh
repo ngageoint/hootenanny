@@ -86,7 +86,7 @@ if [ ! -f bin/osmosis ]; then
       wget http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.tgz
     fi 
     mkdir -p $HOME/bin/osmosis_src
-    tar -zxf osmosis-latest.tgz $HOME/bin/osmosis_src
+    tar -zxf osmosis-latest.tgz -C $HOME/bin/osmosis_src
     ln -s $HOME/bin/osmosis_src/bin/osmosis $HOME/bin/osmosis
 fi
 
@@ -128,7 +128,7 @@ if ! ogrinfo --formats | grep --quiet FileGDB; then
     export PATH=/usr/local/lib:/usr/local/bin:$PATH
     cd gdal-1.10.1
     sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
-    sudo make -sj$(nproc)
+    sudo make -s -j$(nproc)
     sudo make -s install
     cd swig/python
     python setup.py build
@@ -324,16 +324,16 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
 fi
 echo "### Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
-make -s clean && make -sj$(nproc)
+make -s clean && make -s -j$(nproc)
 echo "### Deploying web application..."
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
 scripts/CopyWebAppsToTomcat.sh #&> /dev/null
-make -sj$(nproc) docs 
+make -s -j$(nproc) docs 
 hoot version
 
 echo "See VAGRANT.md for additional configuration instructions and then run 'vagrant ssh' to log into the Hootenanny virtual machine."
 echo "See $HOOT_HOME/docs on the virtual machine for Hootenanny documentation."
 echo "Access the web application at http://localhost:8888/hootenanny-id"
-echo "If you wish to run the diagnostic tests, log into the virtual machine and run: 'cd $HOOT_HOME && make -sj$(nproc) test-all'"
+echo "If you wish to run the diagnostic tests, log into the virtual machine and run: 'cd $HOOT_HOME && make -s -j$(nproc) test-all'"
 
 
