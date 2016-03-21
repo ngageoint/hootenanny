@@ -76,7 +76,7 @@ test-quick: build pp-test
 	bin/HootTest $(HOOT_TEST_DIFF) --quick
 
 test-all-no-core: services-test-all pp-test plugins-test
-	make ui-test
+	$(MAKE) ui-test
 	
 test-all: test-all-no-core
 	bin/HootTest $(HOOT_TEST_DIFF) --glacial
