@@ -12,15 +12,24 @@ NetworkMatch::NetworkMatch(const ConstOsmMapPtr& /*map*/, const ElementId& eid1,
   _eid1(eid1),
   _eid2(eid2)
 {
-  // Send the score through a logistic function to keep the values in range. These values are
-  // arbitrary and may need tweaking.
-  // steepness
-  double k = 2.0;
-  // max value
-  double L = 1.0;
-  // score of 0.5 gives a probability of 0.5
-  double x0 = 0.5;
-  double p = L / (1 + pow(M_E, -k * (score - x0)));
+  double p;
+
+  if (score > 0.5)
+  {
+    // Send the score through a logistic function to keep the values in range. These values are
+    // arbitrary and may need tweaking.
+    // steepness
+    double k = 2.0;
+    // max value
+    double L = 1.0;
+    // score of 0.5 gives a probability of 0.5
+    double x0 = 0.5;
+    p = L / (1 + pow(M_E, -k * (score - x0)));
+  }
+  else
+  {
+    p = score;
+  }
   _classification.setMatchP(p);
   _classification.setMissP(1.0 - p);
   LOG_VAR(score);

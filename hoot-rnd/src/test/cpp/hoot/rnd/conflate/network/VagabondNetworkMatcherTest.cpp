@@ -73,7 +73,7 @@ public:
 //    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB2.osm", false,
 //      Status::Unknown2);
 
-    OsmMapReaderFactory::getInstance().read(map, "test-files/DcGisRoads.osm", true,
+    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/test-files/DcGisRoads.osm", true,
       Status::Unknown1);
     OsmMapReaderFactory::getInstance().read(map, "tmp/dcperb3.osm", false,
       Status::Unknown2);
@@ -113,6 +113,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(VagabondNetworkMatcherTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(VagabondNetworkMatcherTest, "slow");
 
 }

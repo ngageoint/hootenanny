@@ -58,11 +58,9 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matches,
   assert(matches.size() > 0);
 
   const NetworkMatch* m = dynamic_cast<const NetworkMatch*>(*matches.begin());
-  LOG_INFO(m->toString());
 
   if (m)
   {
-    LOG_INFO("Found a network merge");
     set< pair<ElementId, ElementId> > eids;
     if (matches.size() != 1)
     {
@@ -90,7 +88,6 @@ vector<MergerCreator::Description> NetworkMergerCreator::getAllCreators() const
 {
   vector<Description> result;
 
-LOG_INFO("Here");
   result.push_back(Description(className(), "Network Merge Creator", true));
 
   return result;

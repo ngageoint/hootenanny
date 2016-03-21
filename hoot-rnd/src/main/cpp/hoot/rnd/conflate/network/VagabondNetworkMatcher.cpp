@@ -17,14 +17,13 @@ QList<NetworkEdgeScorePtr> VagabondNetworkMatcher::getAllEdgeScores() const
 {
   QList<NetworkEdgeScorePtr> result;
 
-    LOG_VAR(_pr.size());
   for (PrHash::const_iterator it = _pr.begin(); it != _pr.end(); ++it)
   {
     NetworkEdgeScorePtr p(new NetworkEdgeScore(it.key()->e1, it.key()->e2, it.value() * _pr.size(),
       1));
     p->setUid(QString("%1").arg(it.key()->id));
-    LOG_VAR(it.key());
-    LOG_VAR(it.value());
+//    LOG_VAR(it.key());
+//    LOG_VAR(it.value());
     result.append(p);
   }
 
@@ -76,13 +75,13 @@ void VagabondNetworkMatcher::iteratePageRank()
     {
       double contribution = (_pr[from] / values.size()) * _dampen;
 
-      LOG_VAR(from);
+      //LOG_VAR(from);
       foreach (NetworkEdgePairPtr to, values)
       {
         newHash[to] = newHash[to] + contribution;
-        LOG_VAR(to);
-        LOG_VAR(newHash[to]);
-        LOG_VAR(contribution);
+//        LOG_VAR(to);
+//        LOG_VAR(newHash[to]);
+//        LOG_VAR(contribution);
       }
     }
     else
@@ -248,11 +247,6 @@ void VagabondNetworkMatcher::_calculateEdgePairs()
         AngleHistogramExtractor ahe;
         ahe.setSmoothing(toRadians(30.0));
         double ah = ahe.extract(*_map, e1->getMembers()[0], e2->getMembers()[0]);
-        if (nep->id == 271 || nep->id == 196)
-        {
-          LOG_VAR(nep);
-          LOG_VAR(ah);
-        }
 
         if (_details1->isCandidateMatch(nep->getFrom1(), nep->getFrom2()) &&
           _details1->isCandidateMatch(nep->getTo1(), nep->getTo2()))

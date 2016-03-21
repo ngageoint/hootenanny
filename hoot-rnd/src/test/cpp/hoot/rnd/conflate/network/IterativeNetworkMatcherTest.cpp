@@ -68,14 +68,14 @@ public:
   {
     OsmMapPtr map(new OsmMap());
 
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestD1.osm", true,
-      Status::Unknown1);
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestD2.osm", false,
-      Status::Unknown2);
-//    OsmMapReaderFactory::getInstance().read(map, "test-files/DcGisRoads.osm", true,
+//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestD1.osm", true,
 //      Status::Unknown1);
-//    OsmMapReaderFactory::getInstance().read(map, "tmp/dcperb.osm", false,
+//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestD2.osm", false,
 //      Status::Unknown2);
+    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/DcGisRoads.osm", true,
+      Status::Unknown1);
+    OsmMapReaderFactory::getInstance().read(map, "tmp/dcperb30.osm", false,
+      Status::Unknown2);
     MapCleaner().apply(map);
     MapProjector::projectToPlanar(map);
 
@@ -95,7 +95,7 @@ public:
     uut.matchNetworks(map, network1, network2);
 
     writeDebugMap(map, uut, 0);
-    for (int i = 1; i <= 100; ++i)
+    for (int i = 1; i <= 10; ++i)
     {
       LOG_VAR(i);
       uut.iterate();
@@ -106,6 +106,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(IterativeNetworkMatcherTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(IterativeNetworkMatcherTest, "slow");
 
 }
